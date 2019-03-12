@@ -1,0 +1,14 @@
+﻿{
+    "bindata": {},
+    "actions": [
+        {
+            "verb": "createContentType",
+            "description": "Spor et arbeidselement som du eller gruppen må fullføre.",
+            "id": "0x01080024FEF2F7FA284B7CB33E6635D636E380",
+            "name": "Prosjektoppgave",
+            "hidden": false
+        }
+    ],
+    "$schema": "schema.json",
+    "version": 1
+}

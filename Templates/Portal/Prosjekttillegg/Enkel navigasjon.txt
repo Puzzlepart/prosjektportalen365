@@ -1,0 +1,10 @@
+{
+    "Navigation": {
+        "QuickLaunch": [
+            {
+                "Url": "SitePages/Hjem.aspx",
+                "Title": "Hjem"
+            }
+        ]
+    }
+}

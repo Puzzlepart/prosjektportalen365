@@ -1,0 +1,631 @@
+<pnp:Lists xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    <pnp:ListInstance Title="Prosjekter" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Prosjekter" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableFolderCreation="false">
+        <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x0100805E9E4FEAAB4F0EABAB2600D30DB70C" Default="true" />
+        </pnp:ContentTypeBindings>
+    </pnp:ListInstance>
+    <pnp:ListInstance Title="Prosjektstatus" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Prosjektstatus" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableFolderCreation="false">
+        <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x010022252E35737A413FB56A1BA53862F6D5" Default="true" />
+        </pnp:ContentTypeBindings>
+    </pnp:ListInstance>
+    <pnp:ListInstance Title="Prosjektmaler" Description="" DocumentTemplate="" TemplateType="101" Url="Prosjektmaler" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0">
+        <pnp:Views RemoveExistingViews="true">
+            <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle maler" Url="{site}/Prosjektmaler/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/dlicon.png?rev=45">
+                <Query>
+                    <OrderBy>
+                        <FieldRef Name="FileLeafRef" />
+                    </OrderBy>
+                </Query>
+                <ViewFields>
+                    <FieldRef Name="LinkFilename" />
+                    <FieldRef Name="Title" />
+                    <FieldRef Name="GtDescription" />
+                    <FieldRef Name="_UIVersionString" />
+                </ViewFields>
+                <RowLimit Paged="TRUE">30</RowLimit>
+                <Aggregations Value="Off" />
+                <JSLink>clienttemplates.js</JSLink>
+            </View>
+        </pnp:Views>
+        <pnp:FieldRefs>
+            <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" />
+        </pnp:FieldRefs>
+    </pnp:ListInstance>
+    <pnp:ListInstance Title="Prosjekttillegg" Description="" DocumentTemplate="" TemplateType="101" Url="Prosjekttillegg" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0">
+    </pnp:ListInstance>
+    <pnp:ListInstance Title="Listeinnhold" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Listeinnhold" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false" ContentTypesEnabled="false" RemoveExistingContentTypes="true">
+        <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x0100B8B4EE61A547B247B49CFC21B67D5B7D" Default="true" />
+        </pnp:ContentTypeBindings>
+        <pnp:Views RemoveExistingViews="true">
+            <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Listeinnhold/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=44">
+                <Query>
+                    <OrderBy>
+                        <FieldRef Name="Title" />
+                    </OrderBy>
+                </Query>
+                <ViewFields>
+                    <FieldRef Name="Title" />
+                    <FieldRef Name="GtLccSourceList" />
+                    <FieldRef Name="GtLccDestinationLibrary" />
+                    <FieldRef Name="GtLccDestinationList" />
+                    <FieldRef Name="GtLccFields" />
+                    <FieldRef Name="GtLccDefault" />
+                    <FieldRef Name="Modified" />
+                </ViewFields>
+                <RowLimit Paged="TRUE">30</RowLimit>
+                <JSLink>clienttemplates.js</JSLink>
+            </View>
+        </pnp:Views>
+    </pnp:ListInstance>
+    <pnp:ListInstance Title="Fasesjekkliste" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Fasesjekkliste" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableFolderCreation="false">
+        <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x0100486B1F8AEA24486FBA1C1BA9146C360C" Default="true" />
+        </pnp:ContentTypeBindings>
+        <pnp:Views RemoveExistingViews="true">
+            <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Fasesjekkliste/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/issuelst.png?rev=44">
+                <Query>
+                    <OrderBy>
+                        <FieldRef Name="GtSortOrder" />
+                    </OrderBy>
+                </Query>
+                <ViewFields>
+                    <FieldRef Name="GtSortOrder" />
+                    <FieldRef Name="LinkTitle" />
+                    <FieldRef Name="GtProjectPhase" />
+                    <FieldRef Name="Modified" />
+                    <FieldRef Name="Editor" />
+                </ViewFields>
+                <RowLimit Paged="TRUE">100</RowLimit>
+                <Aggregations Value="Off" />
+                <JSLink>hierarchytaskslist.js</JSLink>
+            </View>
+        </pnp:Views>
+    </pnp:ListInstance>
+    <pnp:ListInstance Title="Prosjektkolonner" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Prosjektkolonner" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableFolderCreation="false">
+        <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x0100248005C277FADD45B7266F9151442472" Default="true" />
+        </pnp:ContentTypeBindings>
+        <pnp:Views RemoveExistingViews="true">
+            <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Prosjektkolonner/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/issuelst.png?rev=44">
+                <Query>
+                    <OrderBy>
+                        <FieldRef Name="GtSortOrder" />
+                    </OrderBy>
+                </Query>
+                <ViewFields>
+                    <FieldRef Name="GtSortOrder" />
+                    <FieldRef Name="LinkTitle" />
+                    <FieldRef Name="GtInternalName" />
+                    <FieldRef Name="GtManagedProperty" />
+                    <FieldRef Name="GtShowFieldProjectStatus" />
+                    <FieldRef Name="GtShowFieldFrontpage" />
+                    <FieldRef Name="GtShowFieldPortfolio" />
+                    <FieldRef Name="GtFieldDataType" />
+                    <FieldRef Name="GtIsRefinable" />
+                    <FieldRef Name="GtIsGroupable" />
+                </ViewFields>
+                <RowLimit Paged="TRUE">100</RowLimit>
+                <Aggregations Value="Off" />
+                <JSLink>hierarchytaskslist.js</JSLink>
+            </View>
+        </pnp:Views>
+        <pnp:DataRows KeyColumn="GtInternalName" UpdateBehavior="Overwrite">
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">Tittel</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">Title</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">Title</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">Prosjektnavn i økonomisystemet</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtProjectFinanceName</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtProjectFinanceNameOWSTEXT</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">Prosjektnummer</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtProjectNumber</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtProjectNumberOWSTEXT</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">Sak-/arkivreferanse</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtArchiveReference</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtArchiveReferenceOWSTEXT</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">Tjenesteområde</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtProjectServiceArea</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">RefinableString53</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">Prosjekttype</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtProjectType</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">RefinableString54</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">Fase</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtProjectPhase</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">RefinableString52</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">Prosjektleder</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtProjectManager</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">RefinableString51</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">90</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">Prosjekteier</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtProjectOwner</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">RefinableString50</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">Gevinstansvarlig</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtGainsResponsible</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">RefinableString70</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">110</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">Startdato</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtStartDate</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtStartDateOWSDATE</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">120</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">Sluttdato</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtEndDate</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtEndDateOWSDATE</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">130</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">Målsetting</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtProjectGoals</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtProjectGoalsOWSMTXT</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">140</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">Totalbudsjett for prosjektet</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtBudgetTotal</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtBudgetTotalOWSCURR</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Currency</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">150</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">Kostnader påløpt totalt</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtCostsTotal</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtCostsTotalOWSCURR</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Currency</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">160</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">Prognose for prosjektet</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtProjectForecast</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtProjectForecastOWSCURR</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Currency</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">170</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">Dato for siste rapportering av kostnader</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtBudgetLastReportDate</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtBudgetLastReportDateOWSDATE</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+                <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">180</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">Måned</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtMonthChoice</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtMonthChoiceOWSCHCS</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">190</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">{resource:SiteFields_GtOverallStatus_DisplayName}</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtOverallStatus</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtOverallStatusOWSMTXT</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">200</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusTime_DisplayName}</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtStatusTime</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtStatusTimeOWSCHCS</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">210</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusTimeComment_DisplayName}</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtStatusTimeComment</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtStatusTimeCommentOWSMTXT</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusBudget_DisplayName}</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtStatusBudget</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtStatusBudgetOWSCHCS</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">230</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusBudgetComment_DisplayName}</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtStatusBudgetComment</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtStatusBudgetCommentOWSMTXT</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusQuality_DisplayName}</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtStatusQuality</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtStatusQualityOWSCHCS</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">250</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusQualityComment_DisplayName}</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtStatusQualityComment</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtStatusQualityCommentOWSMTXT</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">260</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusRisk_DisplayName}</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtStatusRisk</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtStatusRiskOWSCHCS</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">270</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusRiskComment_DisplayName}</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtStatusRiskComment</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtStatusRiskCommentOWSMTXT</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">280</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusGainAchievement_DisplayName}</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtStatusGainAchievement</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtStatusGainAchievementOWSCHCS</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="GtSortOrder">290</pnp:DataValue>
+                <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusGainAchievementComment_DisplayName}</pnp:DataValue>
+                <pnp:DataValue FieldName="GtInternalName">GtStatusGainAchievementComment</pnp:DataValue>
+                <pnp:DataValue FieldName="GtManagedProperty">GtStatusGainAchievementCommentOWSMTXT</pnp:DataValue>
+                <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            </pnp:DataRow>
+        </pnp:DataRows>
+    </pnp:ListInstance>
+    <pnp:ListInstance Title="Statusseksjoner" TemplateType="100" Url="Lists/Statusseksjoner" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false">
+        <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82803" Default="true" />
+            <pnp:ContentTypeBinding ContentTypeID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82802" />
+            <pnp:ContentTypeBinding ContentTypeID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82804" />
+            <pnp:ContentTypeBinding ContentTypeID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82805" />
+        </pnp:ContentTypeBindings>
+        <pnp:Views>
+            <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Statusseksjoner/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=44">
+                <Query>
+                    <OrderBy>
+                        <FieldRef Name="GtSortOrder" />
+                    </OrderBy>
+                </Query>
+                <ViewFields>
+                    <FieldRef Name="GtSortOrder" />
+                    <FieldRef Name="ContentType" />
+                    <FieldRef Name="LinkTitle" />
+                    <FieldRef Name="GtSecShowInNavbar" />
+                    <FieldRef Name="GtSecShowInStatusSection" />
+                    <FieldRef Name="GtSecShowAsSection" />
+                    <FieldRef Name="Modified" />
+                </ViewFields>
+                <RowLimit Paged="TRUE">30</RowLimit>
+                <Aggregations Value="Off" />
+                <JSLink>clienttemplates.js</JSLink>
+            </View>
+        </pnp:Views>
+    </pnp:ListInstance>
+    <pnp:ListInstance Title="Datakilder" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Datakilder" RemoveExistingContentTypes="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false">
+        <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x0100A0AB42EFAB986D4A8E8038BC2391BEB2" Default="true" />
+        </pnp:ContentTypeBindings>
+        <pnp:Views>
+            <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Datakilder/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=44">
+                <Query>
+                    <OrderBy>
+                        <FieldRef Name="ID" />
+                    </OrderBy>
+                </Query>
+                <ViewFields>
+                    <FieldRef Name="LinkTitle" />
+                    <FieldRef Name="GtSearchQuery" />
+                </ViewFields>
+                <RowLimit Paged="TRUE">30</RowLimit>
+                <JSLink>clienttemplates.js</JSLink>
+            </View>
+        </pnp:Views>
+        <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">Alle prosjektleveranser</pnp:DataValue>
+                <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100D7B74DE815F946D3B0F99D19F9B36B68*</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">Alle risikoelementer</pnp:DataValue>
+                <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89701*</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">Alle ressursallokeringer</pnp:DataValue>
+                <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x010004EAFF7AFCC94C2680042E6881264120* OR ContentTypeId:0x010029F45E75BA9CE340A83EFFB2927E11F4*</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">Alle prosjekter</pnp:DataValue>
+                <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">Prosjektstatus</pnp:DataValue>
+                <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5*</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">Prosjektstatus (siste 7 dager)</pnp:DataValue>
+                <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* Created>{TODAY-7}</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">Prosjektstatus (siste 30 dager)</pnp:DataValue>
+                <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* Created>{TODAY-30}</pnp:DataValue>
+            </pnp:DataRow>
+        </pnp:DataRows>
+    </pnp:ListInstance>
+    <pnp:ListInstance Title="Ressursallokering" TemplateType="100" Url="Lists/Ressursallokering" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
+        <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x010029F45E75BA9CE340A83EFFB2927E11F4" Default="true" />
+        </pnp:ContentTypeBindings>
+        <pnp:Views>
+            <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Ressursallokering/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=44">
+                <Query>
+                    <OrderBy>
+                        <FieldRef Name="GtEndDate" Ascending="FALSE" />
+                    </OrderBy>
+                </Query>
+                <ViewFields>
+                    <FieldRef Name="GtResourceUser" />
+                    <FieldRef Name="Title" />
+                    <FieldRef Name="GtStartDate" />
+                    <FieldRef Name="GtEndDate" />
+                    <FieldRef Name="GtResourceAbsence" />
+                    <FieldRef Name="GtResourceLoad" />
+                    <FieldRef Name="GtResourceAbsenceComment" />
+                    <FieldRef Name="Modified" />
+                </ViewFields>
+                <RowLimit Paged="TRUE">100</RowLimit>
+                <Aggregations Value="Off" />
+                <JSLink>clienttemplates.js</JSLink>
+            </View>
+        </pnp:Views>
+        <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="false" DisplayName="Beskrivelse" />
+            <pnp:FieldRef ID="88d9b92c-efed-45d0-a586-86d9196b77d0" Name="GtResourceUser" Required="true" />
+            <pnp:FieldRef ID="e39c32db-a7da-4c93-9369-8aa5a7bde92d" Name="GtStartDate" Required="true" />
+            <pnp:FieldRef ID="16623c2a-3fd1-41c2-87e7-958583dd88da" Name="GtEndDate" Required="true" />
+            <pnp:FieldRef ID="028e49b1-b141-4d35-8998-a17d729960d4" Name="GtResourceAbsence" Required="true" />
+            <pnp:FieldRef ID="08ac9d56-f8eb-4a2c-868f-d39fc012fcd6" Name="GtResourceLoad" Required="true" />
+            <pnp:FieldRef ID="1dd2e8f2-bf4f-4a66-b0dc-ad992d10eb64" Name="GtResourceAbsenceComment" Required="false" />
+        </pnp:FieldRefs>
+        <pnp:Fields>
+            <Field ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Type="Text" Name="Title" StaticName="Title" DisplayName="Beskrivelse" />
+        </pnp:Fields>
+    </pnp:ListInstance>
+    <pnp:ListInstance Title="Porteføljevisninger" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Porteføljevisninger" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false">
+        <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x01001BE34662FF90874E9FEB29B37B6BB18C" Default="true" />
+        </pnp:ContentTypeBindings>
+        <pnp:Views RemoveExistingViews="true">
+            <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Porteføljevisninger/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=44">
+                <Query>
+                    <OrderBy>
+                        <FieldRef Name="GtSortOrder" />
+                    </OrderBy>
+                </Query>
+                <ViewFields>
+                    <FieldRef Name="Edit" />
+                    <FieldRef Name="GtSortOrder" />
+                    <FieldRef Name="LinkTitle" />
+                    <FieldRef Name="GtSearchQuery" />
+                    <FieldRef Name="GtPortfolioViewScope" />
+                    <FieldRef Name="GtPortfolioIsDefaultView" />
+                    <FieldRef Name="GtPortfolioFabricIcon" />
+                    <FieldRef Name="GtPortfolioColumns" />
+                    <FieldRef Name="GtPortfolioRefiners" />
+                    <FieldRef Name="GtPortfolioGroupBy" />
+                    <FieldRef Name="Modified" />
+                </ViewFields>
+                <RowLimit Paged="TRUE">30</RowLimit>
+                <JSLink>clienttemplates.js</JSLink>
+            </View>
+        </pnp:Views>
+    </pnp:ListInstance>
+    <pnp:ListInstance Title="Egendefinerte diagrammer" Description="" TemplateType="101" Url="CustomCharts" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="500" DraftVersionVisibility="0" EnableAttachments="false">
+        <pnp:Views>
+            <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle dokumenter" Url="{site}/CustomCharts/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/dlicon.png?rev=44">
+                <Query>
+                    <OrderBy>
+                        <FieldRef Name="FileLeafRef" />
+                    </OrderBy>
+                </Query>
+                <ViewFields>
+                    <FieldRef Name="LinkFilename" />
+                    <FieldRef Name="Title" />
+                </ViewFields>
+                <RowLimit Paged="TRUE">30</RowLimit>
+                <Aggregations Value="Off" />
+                <JSLink>clienttemplates.js</JSLink>
+            </View>
+        </pnp:Views>
+        <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
+        </pnp:FieldRefs>
+    </pnp:ListInstance>
+    <pnp:ListInstance Title="Grafkonfigurasjon" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Grafkonfigurasjon" EnableAttachments="false" EnableFolderCreation="false" ContentTypesEnabled="true" RemoveExistingContentTypes="true">
+        <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D01" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D02" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D03" Default="true" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D04" />
+        </pnp:ContentTypeBindings>
+        <pnp:Views>
+            <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Grafkonfigurasjon/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=45">
+                <Query>
+                    <OrderBy>
+                        <FieldRef Name="GtSortOrder" />
+                    </OrderBy>
+                </Query>
+                <ViewFields>
+                    <FieldRef Name="GtSortOrder" />
+                    <FieldRef Name="ContentType" />
+                    <FieldRef Name="LinkTitle" />
+                    <FieldRef Name="GtPiSubTitle" />
+                    <FieldRef Name="GtPiDataSourceLookup" />
+                    <FieldRef Name="GtPiFields" />
+                    <FieldRef Name="Modified" />
+                </ViewFields>
+                <RowLimit Paged="TRUE">30</RowLimit>
+                <Aggregations Value="Off" />
+                <JSLink>clienttemplates.js</JSLink>
+            </View>
+            <View MobileView="TRUE" Type="HTML" DisplayName="Kolonnebredde" Url="{site}/Lists/Grafkonfigurasjon/Kolonnebredde.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=45">
+                <Query>
+                    <OrderBy>
+                        <FieldRef Name="GtSortOrder" />
+                    </OrderBy>
+                </Query>
+                <ViewFields>
+                    <FieldRef Name="LinkTitle" />
+                    <FieldRef Name="GtPiWidthSm" />
+                    <FieldRef Name="GtPiWidthMd" />
+                    <FieldRef Name="GtPiWidthLg" />
+                    <FieldRef Name="GtPiWidthXl" />
+                    <FieldRef Name="GtPiWidthXxl" />
+                    <FieldRef Name="GtPiWidthXxxl" />
+                </ViewFields>
+                <RowLimit Paged="TRUE">30</RowLimit>
+                <Aggregations Value="Off" />
+                <JSLink>clienttemplates.js</JSLink>
+            </View>
+        </pnp:Views>
+        <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">Prosjekter i ulike faser</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">Tjenesteområder</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">Prosjekttype</pnp:DataValue>
+            </pnp:DataRow>
+        </pnp:DataRows>
+    </pnp:ListInstance>
+</pnp:Lists>

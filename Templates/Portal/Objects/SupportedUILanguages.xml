@@ -1,0 +1,3 @@
+<pnp:SupportedUILanguages xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    <pnp:SupportedUILanguage LCID="1044" />
+</pnp:SupportedUILanguages>

@@ -1,0 +1,25 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+.riskOverview {
+  .container {
+    margin: 0px auto;
+    .commandBar {
+      margin: 0px auto;
+    }
+    .header {
+      padding: 23px 32px 20px 32px;
+
+      .title {
+        font-size: 28px;
+        font-weight: 100;
+        margin: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
+    .listContainer {
+      padding: 0 32px 0 32px;
+    }
+  }
+}

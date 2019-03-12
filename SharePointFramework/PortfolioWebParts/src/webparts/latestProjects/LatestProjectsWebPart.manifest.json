@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "941fd73c-b957-41c3-8d4f-082268407f10",
+  "alias": "LatestProjectsWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "preconfiguredEntries": [{
+    "groupId": "5c03119e-3074-46fd-976b-c60198311f70", 
+    "group": { "default": "Other" },
+    "title": { "default": "Sist prosjekter" },
+    "description": { "default": " " },
+    "officeFabricIconFontName": "BuildQueueNew",
+    "properties": {  }
+  }]
+}

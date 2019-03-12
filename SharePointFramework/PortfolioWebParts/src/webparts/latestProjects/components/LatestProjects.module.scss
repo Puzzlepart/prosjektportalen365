@@ -1,0 +1,34 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+.latestProjects {
+    .title {
+        @include ms-font-xl;
+        color: "[theme: themePrimary, default: #0078d4]";
+        cursor: pointer;
+    }
+    .arrowIcon {
+      float: right;
+    }
+    .linksContainer {
+        padding: 5px;
+        margin-top: 3px;
+        .linkItem {
+          padding: 5px 0;
+            .projectLink {
+                @include ms-font-m;
+                text-decoration: none;
+                color: "[theme: themePrimary, default: #444444]";
+                &:visited {
+                    color: "[theme: themePrimary, default: #444444]";
+                }
+                &:hover, &:active {
+                    color: "[theme: themeTertiary, default: #444444]";
+                }
+            }
+            .subTitle {
+                @include ms-font-xs;
+                margin: 0;
+                opacity: 0.8;
+            }
+        }
+    }
+}

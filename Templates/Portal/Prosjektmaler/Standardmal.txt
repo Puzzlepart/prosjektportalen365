@@ -1,0 +1,1423 @@
+{
+    "ContentTypes": [
+        {
+            "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE897",
+            "Name": "Usikkerhet",
+            "Description": "",
+            "Group": "Prosjektportalen innholdstyper",
+            "FieldRefs": [
+                {
+                    "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
+                    "Name": "GtProjectPhase"
+                },
+                {
+                    "ID": "c755525b-3716-4ee8-a4f4-f9684808c009",
+                    "Name": "GtRiskProximity"
+                },
+                {
+                    "ID": "6219fd33-2f3c-42f5-9790-174143bfb99c",
+                    "Name": "GtRiskAction"
+                },
+                {
+                    "ID": "04cfd3c0-5f18-4906-bdca-b5f84b693437",
+                    "Name": "GtRiskStrategy"
+                },
+                {
+                    "ID": "2ae541a5-5ecc-481d-afb6-c03a6f1e71b4",
+                    "Name": "GtActionResponsible"
+                },
+                {
+                    "ID": "0e1b295d-2bfb-4ef6-ae92-e72068e56111",
+                    "Name": "GtRiskProbability"
+                },
+                {
+                    "ID": "554d32a0-0148-4b3c-bfc4-f101232ee501",
+                    "Name": "GtRiskConsequence"
+                },
+                {
+                    "ID": "8499bd48-4c5d-43ae-8e27-7968d49ca14f",
+                    "Name": "GtRiskFactor"
+                },
+                {
+                    "ID": "f81ebcb7-8791-44b0-9919-08ed5524b11d",
+                    "Name": "GtRiskProbabilityPostAction"
+                },
+                {
+                    "ID": "00f17233-d4c0-49d0-aebd-5004552abb17",
+                    "Name": "GtRiskConsequencePostAction"
+                },
+                {
+                    "ID": "62f0454d-1150-4d55-86ef-075f786d6e5c",
+                    "Name": "GtRiskFactorPostAction"
+                },
+                {
+                    "ID": "6c2da0dc-77b1-4152-b751-97adf436faa0",
+                    "Name": "GtRiskStatus"
+                },
+                {
+                    "ID": "6bd17911-c48a-4900-be61-54ae26207d78",
+                    "Name": "GtShowInPortfolio"
+                }
+            ]
+        },
+        {
+            "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE89701",
+            "Name": "Risiko",
+            "Description": "",
+            "Group": "Prosjektportalen innholdstyper"
+        },
+        {
+            "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE89702",
+            "Name": "Mulighet",
+            "Description": "",
+            "Group": "Prosjektportalen innholdstyper"
+        },
+        {
+            "ID": "0x010072C95831F8434782AB2FF6BE3E596F46",
+            "Name": "Interessent",
+            "Description": "",
+            "Group": "Prosjektportalen innholdstyper",
+            "FieldRefs": [
+                {
+                    "ID": "2847b3b0-ed22-4c47-b7c0-3ebfc83dae4a",
+                    "Name": "GtStakeholderGroup"
+                },
+                {
+                    "ID": "970ed1b2-9e71-45aa-8f8d-c391a15f067f",
+                    "Name": "GtStakeholderContext"
+                },
+                {
+                    "ID": "1150d6bd-c9ba-4014-bd74-7d559110841d",
+                    "Name": "GtStakeholderStrategy"
+                },
+                {
+                    "ID": "748ae9b5-223d-4daa-b8f8-dc14284b59db",
+                    "Name": "GtStakeholderInterest"
+                },
+                {
+                    "ID": "475d2ca1-5b8e-4479-96ae-81c0a89354f3",
+                    "Name": "GtStakeholderInfluence"
+                },
+                {
+                    "ID": "2bb7e155-3af4-4353-a460-8da404c4e748",
+                    "Name": "GtStakeholderInfluencePossibilty"
+                },
+                {
+                    "ID": "45d5b378-67ce-4f21-b622-fe54b27c83a6",
+                    "Name": "GtStakeholderActions"
+                }
+            ]
+        },
+        {
+            "ID": "0x010065CE65D51354419EA794C6FACD4FA2EB",
+            "Name": "Kommunikasjonselement",
+            "Description": "",
+            "Group": "Prosjektportalen innholdstyper",
+            "FieldRefs": [
+                {
+                    "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
+                    "Name": "GtProjectPhase"
+                },
+                {
+                    "ID": "bf340fba-c512-4a07-a543-cdf2d10c578e",
+                    "Name": "GtActionStatus"
+                },
+                {
+                    "ID": "4d5e69a2-2eb5-422c-af04-70b67697cd23",
+                    "Name": "GtActionChannel"
+                },
+                {
+                    "ID": "77450582-a061-4416-af17-6dfb99fa9036",
+                    "Name": "GtActionDate"
+                },
+                {
+                    "ID": "2ae541a5-5ecc-481d-afb6-c03a6f1e71b4",
+                    "Name": "GtActionResponsible"
+                }
+            ]
+        },
+        {
+            "ID": "0x0100486B1F8AEA24486FBA1C1BA9146C360C",
+            "Name": "Sjekkpunkt",
+            "Description": "",
+            "Group": "Prosjektportalen innholdstyper",
+            "FieldRefs": [
+                {
+                    "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
+                    "Name": "GtProjectPhase"
+                },
+                {
+                    "ID": "249527a3-c7f9-4ea5-9c33-f942c06c9215",
+                    "Name": "GtChecklistStatus"
+                },
+                {
+                    "ID": "509a6bfe-004e-41f9-bd73-9a0e02d5c4a7",
+                    "Name": "GtComment"
+                },
+                {
+                    "ID": "0e82c395-9ed9-43f9-871a-208215b18558",
+                    "Name": "GtSortOrder"
+                }
+            ]
+        },
+        {
+            "ID": "0x0100D7B74DE815F946D3B0F99D19F9B36B68",
+            "Name": "Prosjektleveranse",
+            "Description": "",
+            "Group": "Prosjektportalen innholdstyper",
+            "FieldRefs": [
+                {
+                    "ID": "99430a99-1354-418f-921f-7ddfdb6c0d7f",
+                    "Name": "GtDeliveryDescription"
+                },
+                {
+                    "ID": "219a5cdf-799c-48ee-8869-ea39e4b9a6aa",
+                    "Name": "GtDeliveryStartTime"
+                },
+                {
+                    "ID": "eb78509b-4109-474e-aca8-90d024a960de",
+                    "Name": "GtDeliveryEndTime"
+                },
+                {
+                    "ID": "c8e260c2-6887-4f9e-a713-7200246c3b1c",
+                    "Name": "GtDeliveryQualityExpectations"
+                },
+                {
+                    "ID": "149a30c2-056d-44f0-9cb5-29bfc632ca25",
+                    "Name": "GtDeliveryAcceptanceCriteria"
+                },
+                {
+                    "ID": "3dd7058b-0ba1-46e5-b40a-4f2f542638ea",
+                    "Name": "GtDeliveryQualityTolerance"
+                },
+                {
+                    "ID": "c845028e-3395-49d4-86fe-6d94992c38c2",
+                    "Name": "GtDeliveryQualityResponsible"
+                },
+                {
+                    "ID": "3bcfaa2c-e9bd-4a22-bf65-af4d68c308e7",
+                    "Name": "GtDeliveryAcceptanceMethod"
+                },
+                {
+                    "ID": "dc856c1d-0b98-4d38-9918-d7068f74bd8b",
+                    "Name": "GtDeliveryAcceptanceResponsible"
+                },
+                {
+                    "ID": "ce9474dd-407b-4480-951a-5381857fad6a",
+                    "Name": "GtDeliveryAcceptanceDate"
+                },
+                {
+                    "ID": "4322afd6-5f0f-4a22-819a-cb61668e6ede",
+                    "Name": "GtDeliveryStatus"
+                },
+                {
+                    "ID": "4393ed3c-1599-4ab3-8444-444ab35754bb",
+                    "Name": "GtDeliveryStatusComment"
+                }
+            ]
+        },
+        {
+            "ID": "0x01004EDD18CB92C14EBA97103D909C897810",
+            "Name": "Prosjektloggelement",
+            "Description": "",
+            "Group": "Prosjektportalen innholdstyper",
+            "FieldRefs": [
+                {
+                    "ID": "2391d165-5d13-46b7-87d2-e32040293210",
+                    "Name": "GtProjectLogType"
+                },
+                {
+                    "ID": "49b0ba6b-d1ec-4644-91b7-691a33524c90",
+                    "Name": "GtProjectLogReporter"
+                },
+                {
+                    "ID": "a3462545-ac76-4681-96b4-f883fea4b2ba",
+                    "Name": "GtProjectLogDescription"
+                },
+                {
+                    "ID": "7838332a-cf7f-47d5-924f-8c6d134935ea",
+                    "Name": "GtProjectLogResponsible"
+                },
+                {
+                    "ID": "7b424ee7-bcc8-490a-8c4c-01637da03347",
+                    "Name": "GtProjectLogConsequence"
+                },
+                {
+                    "ID": "6aad1f97-ba6f-4865-b325-9deea7bd0564",
+                    "Name": "GtProjectLogRecommendation"
+                },
+                {
+                    "ID": "832a2eeb-5709-40b4-9f7c-04ae67ddd86b",
+                    "Name": "GtProjectLogExperience"
+                },
+                {
+                    "ID": "6539658a-b186-402c-b224-9fb41cb48596",
+                    "Name": "GtProjectLogActors"
+                }
+            ]
+        },
+        {
+            "ID": "0x01007CFA9140CFBF430EB3A6CE7272E89CFB",
+            "Name": "Infoelement",
+            "Description": "",
+            "Group": "Prosjektportalen innholdstyper",
+            "FieldRefs": [
+                {
+                    "ID": "a3038ecc-69db-4179-b23b-5fdb0535b38c",
+                    "Name": "GtProjectInfoDescription",
+                    "Required": true
+                }
+            ]
+        },
+        {
+            "ID": "0x0101008D35AAEBAF8A44A9B3264C70348EB42B",
+            "Name": "Prosjektdokument",
+            "Description": "",
+            "Group": "Prosjektportalen innholdstyper",
+            "FieldRefs": [
+                {
+                    "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
+                    "Name": "GtProjectPhase"
+                }
+            ]
+        },
+        {
+            "ID": "0x010200C19C974828B24D469B69C22B2D1FFB63",
+            "Name": "Prosjekthendelse",
+            "Description": "",
+            "Group": "Prosjektportalen innholdstyper"
+        },
+        {
+            "ID": "0x01080024FEF2F7FA284B7CB33E6635D636E380",
+            "Name": "Prosjektoppgave",
+            "Description": "",
+            "Group": "Prosjektportalen innholdstyper",
+            "FieldRefs": [
+                {
+                    "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
+                    "Name": "GtProjectPhase"
+                }
+            ]
+        },
+        {
+            "ID": "0x01002CC709404B5B4751B6E1CD1CC0A3ED10",
+            "Name": "Milepæl",
+            "Group": "Prosjektportalen innholdstyper",
+            "FieldRefs": [
+                {
+                    "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
+                    "Name": "GtProjectPhase"
+                },
+                {
+                    "ID": "1fa322ec-6b56-4ea9-a1fd-2623e34083e6",
+                    "Name": "GtMilestonePlannedDate"
+                },
+                {
+                    "ID": "cbf2ae22-2c77-4ad0-a639-07fddfb5cd81",
+                    "Name": "GtMilestoneActualDate"
+                },
+                {
+                    "ID": "17a4b359-5819-4e7c-9894-a154320a661d",
+                    "Name": "GtMilestoneStatus"
+                },
+                {
+                    "ID": "dabdcbab-7bab-4fb2-8d65-85bd03809a8d",
+                    "Name": "GtMilestoneComment"
+                }
+            ]
+        },
+        {
+            "ID": "0x010039EAFDC2A1624C1BA1A444FC8FE85DEC",
+            "Name": "Gevinstoppfølging",
+            "Group": "Prosjektportalen innholdstyper",
+            "FieldRefs": [
+                {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title",
+                    "Hidden": true
+                },
+                {
+                    "ID": "5c6fafbb-aee4-4e46-b110-5c798916c2ca",
+                    "Name": "GtMeasurementDate"
+                },
+                {
+                    "ID": "70dc7c4a-54ec-4674-b238-2b2a889e1b49",
+                    "Name": "GtMeasurementValue"
+                },
+                {
+                    "ID": "0b78e51d-84d9-4885-9e79-2fe382a2ceb9",
+                    "Name": "GtMeasurementComment"
+                }
+            ]
+        },
+        {
+            "ID": "0x01004F466123309D46BAB9D5C6DE89A6CF67",
+            "Name": "Gevinst",
+            "Group": "Prosjektportalen innholdstyper",
+            "FieldRefs": [
+                {
+                    "ID": "a1a56abd-5b3d-45d2-8617-32b2f8b195de",
+                    "Name": "GtGainsType"
+                },
+                {
+                    "ID": "de5cf8b7-6823-4dac-b4a7-916c53bd3376",
+                    "Name": "GtPrereqProfitAchievement"
+                },
+                {
+                    "ID": "d79d8a58-1079-4a3a-9f27-02de9a3eace1",
+                    "Name": "GtGainsTurnover"
+                },
+                {
+                    "ID": "fcf9c850-8267-4452-8366-74b7a76da177",
+                    "Name": "GtGainsResponsible"
+                },
+                {
+                    "ID": "8d497830-9012-437c-aa65-4b05807f4415",
+                    "Name": "GtMeasureIndicator"
+                },
+                {
+                    "ID": "c5fc8781-7fbd-43a2-a215-c8c959bbab69",
+                    "Name": "GtStartValue"
+                },
+                {
+                    "ID": "8b399cb6-c53e-432c-8ffa-b48e2bfbbf71",
+                    "Name": "GtDesiredValue"
+                },
+                {
+                    "ID": "0d38db52-2040-44c1-823e-7642f76519ee",
+                    "Name": "GtMeasurementUnit"
+                },
+                {
+                    "ID": "b0d03734-a5b1-4e85-a752-45b2da8df7dd",
+                    "Name": "GtRealizationTime"
+                }
+            ]
+        },
+        {
+            "ID": "0x01001AF93A93F5534B5FBAF750572B11BB7F",
+            "Name": "Endring",
+            "Group": "Prosjektportalen innholdstyper",
+            "FieldRefs": [
+                {
+                    "ID": "68a5a2da-048c-4d2d-8ba4-5a8b32b60120",
+                    "Name": "GtProcess"
+                },
+                {
+                    "ID": "1fb52a28-81c4-405f-8da6-883c29b6b856",
+                    "Name": "GtChallengeDescription"
+                }
+            ]
+        },
+        {
+            "ID": "0x010004EAFF7AFCC94C2680042E6881264120",
+            "Name": "Ressursallokering",
+            "Group": "Prosjektportalen innholdstyper",
+            "FieldRefs": [
+                {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title",
+                    "Hidden": true
+                },
+                {
+                    "ID": "88d9b92c-efed-45d0-a586-86d9196b77d0",
+                    "Name": "GtResourceUser",
+                    "Required": true
+                },
+                {
+                    "ID": "3a0ae560-bd55-45d4-907f-5119bf0a83bb",
+                    "Name": "GtResourceRole",
+                    "Required": true
+                },
+                {
+                    "ID": "e39c32db-a7da-4c93-9369-8aa5a7bde92d",
+                    "Name": "GtStartDate",
+                    "Required": true
+                },
+                {
+                    "ID": "16623c2a-3fd1-41c2-87e7-958583dd88da",
+                    "Name": "GtEndDate",
+                    "Required": true
+                },
+                {
+                    "ID": "08ac9d56-f8eb-4a2c-868f-d39fc012fcd6",
+                    "Name": "GtResourceLoad",
+                    "Required": true
+                }
+            ]
+        }
+    ],
+    "SiteFields": [
+        "<Field ID=\"{149a30c2-056d-44f0-9cb5-29bfc632ca25}\" Name=\"GtDeliveryAcceptanceCriteria\" DisplayName=\"Akseptansekriterier\" Type=\"Note\" Group=\"{parameter:fieldsgroup}\" Description=\"Målbare definisjoner av kravene leveransen må møte før den kan aksepteres av interessentene\" AppendOnly=\"FALSE\" StaticName=\"GtDeliveryAcceptanceCriteria\"></Field>",
+        "<Field ID=\"{6539658a-b186-402c-b224-9fb41cb48596}\" Name=\"GtProjectLogActors\" DisplayName=\"Aktører\" Type=\"MultiChoice\" Group=\"{parameter:fieldsgroup}\" Description=\"\" FillInChoice=\"TRUE\" StaticName=\"GtProjectLogActors\"><CHOICES><CHOICE>Leverandører</CHOICE><CHOICE>Prosjektstyre</CHOICE><CHOICE>Prosjektgruppe</CHOICE><CHOICE>Referansegruppe</CHOICE><CHOICE>Andre interessenter</CHOICE></CHOICES></Field>",
+        "<Field ID=\"{6aad1f97-ba6f-4865-b325-9deea7bd0564}\" Name=\"GtProjectLogRecommendation\" DisplayName=\"Anbefaling\" Type=\"Note\" Group=\"{parameter:fieldsgroup}\" Description=\"Hva bør gjøres og hvorfor?\" UnlimitedLengthInDocumentLibrary=\"TRUE\" AppendOnly=\"FALSE\" StaticName=\"GtProjectLogRecommendation\"></Field>",
+        "<Field ID=\"{7838332a-cf7f-47d5-924f-8c6d134935ea}\" Name=\"GtProjectLogResponsible\" DisplayName=\"Ansvarlig\" Type=\"Choice\" Group=\"{parameter:fieldsgroup}\" Description=\"Hvem er ansvarlig for dette?\" FillInChoice=\"TRUE\" StaticName=\"GtProjectLogResponsible\"><CHOICES><CHOICE>Prosjekteier</CHOICE><CHOICE>Linjeorganisasjon</CHOICE><CHOICE>Prosjektleder</CHOICE><CHOICE>Prosjektgruppe</CHOICE><CHOICE>Leverandør</CHOICE><CHOICE>Referansegrupper</CHOICE><CHOICE>Andre</CHOICE></CHOICES></Field>",
+        "<Field ID=\"{970ed1b2-9e71-45aa-8f8d-c391a15f067f}\" Name=\"GtStakeholderContext\" DisplayName=\"Arena/Møteplass/Nettverk\" Type=\"Text\" Group=\"{parameter:fieldsgroup}\" Description=\"\" StaticName=\"GtStakeholderContext\"></Field>",
+        "<Field DisplayName=\"Belastning\" Description=\"Hvor stor belastning har personen?\" ID=\"{08ac9d56-f8eb-4a2c-868f-d39fc012fcd6}\" Name=\"GtResourceLoad\" Type=\"Number\" Group=\"{parameter:fieldsgroup}\" Percentage=\"TRUE\" StaticName=\"GtResourceLoad\" />",
+        "<Field ID=\"{a3038ecc-69db-4179-b23b-5fdb0535b38c}\" Name=\"GtProjectInfoDescription\" DisplayName=\"Beskrivelse\" Type=\"Note\" Group=\"{parameter:fieldsgroup}\" Description=\"\" UnlimitedLengthInDocumentLibrary=\"TRUE\" AppendOnly=\"FALSE\" StaticName=\"GtProjectInfoDescription\"></Field>",
+        "<Field Type=\"Note\" DisplayName=\"Beskrivelse\" UnlimitedLengthInDocumentLibrary=\"TRUE\" NumLines=\"6\" RichText=\"TRUE\" RichTextMode=\"FullHtml\" IsolateStyles=\"TRUE\" Group=\"{parameter:fieldsgroup}\" ID=\"{27d85299-57fd-4c76-a752-edafe1ca944e}\" StaticName=\"GtActionDescription\" Name=\"GtActionDescription\"></Field>",
+        "<Field Type=\"Note\" DisplayName=\"Beskrivelse av utfordring\" Description=\"\" NumLines=\"3\" RichText=\"FALSE\" RichTextMode=\"Compatible\" IsolateStyles=\"FALSE\" ID=\"{1fb52a28-81c4-405f-8da6-883c29b6b856}\" StaticName=\"GtChallengeDescription\" Name=\"GtChallengeDescription\" RestrictedMode=\"TRUE\" AppendOnly=\"FALSE\" Group=\"{parameter:fieldsgroup}\" />",
+        "<Field Type=\"DateTime\" DisplayName=\"Dato for måling\" Description=\"\" Format=\"DateOnly\" FriendlyDisplayFormat=\"Disabled\" ID=\"{5c6fafbb-aee4-4e46-b110-5c798916c2ca}\" StaticName=\"GtMeasurementDate\" Name=\"GtMeasurementDate\" Group=\"{parameter:fieldsgroup}\"><Default>[today]</Default></Field>",
+        "<Field ID=\"{cbf2ae22-2c77-4ad0-a639-07fddfb5cd81}\" Name=\"GtMilestoneActualDate\" StaticName=\"GtMilestoneActualDate\" DisplayName=\"Faktisk dato\" Type=\"DateTime\" Format=\"DateOnly\" FriendlyDisplayFormat=\"Disabled\" Group=\"{parameter:fieldsgroup}\" />",
+        "<Field ID=\"{325543a5-815d-485d-a9a5-e0773ad762e9}\" Name=\"GtProjectPhase\" DisplayName=\"Fase\" Type=\"TaxonomyFieldType\" WebId=\"{siteid}\" Group=\"{parameter:fieldsgroup}\" Description=\"\" Indexed=\"TRUE\" StaticName=\"GtProjectPhase\"><Customization><ArrayOfProperty><Property><Name>TextField</Name><Value xmlns:q6=\"http://www.w3.org/2001/XMLSchema\" p4:type=\"q6:string\" xmlns:p4=\"http://www.w3.org/2001/XMLSchema-instance\">{f55e826d-f1ac-44f4-a00c-d3b63598ec02}</Value></Property></ArrayOfProperty></Customization></Field>",
+        "<Field Type=\"Note\" DisplayName=\"Forutsetninger for gevinstoppnåelse\" Description=\"\" NumLines=\"3\" RichText=\"FALSE\" ID=\"{de5cf8b7-6823-4dac-b4a7-916c53bd3376}\" StaticName=\"GtPrereqProfitAchievement\" Name=\"GtPrereqProfitAchievement\" Group=\"{parameter:fieldsgroup}\" />",
+        "<Field Type=\"User\" DisplayName=\"Gevinstansvarlig\" Description=\"Ansvarlig for realisering av gevinst\" ShowField=\"ImnName\" UserSelectionMode=\"PeopleOnly\" UserSelectionScope=\"0\" ID=\"{fcf9c850-8267-4452-8366-74b7a76da177}\" StaticName=\"GtGainsResponsible\" Name=\"GtGainsResponsible\" Group=\"{parameter:fieldsgroup}\" />",
+        "<Field Type=\"Note\" DisplayName=\"Gevinstomsetting\" Description=\" Hvordan skal gevinsten realiseres?\" NumLines=\"3\" RichText=\"FALSE\" ID=\"{d79d8a58-1079-4a3a-9f27-02de9a3eace1}\" StaticName=\"GtGainsTurnover\" Name=\"GtGainsTurnover\" RestrictedMode=\"TRUE\" RichTextMode=\"Compatible\" IsolateStyles=\"FALSE\" AppendOnly=\"FALSE\" Group=\"{parameter:fieldsgroup}\" />",
+        "<Field Type=\"Choice\" DisplayName=\"Gevinsttype\" Format=\"RadioButtons\" ID=\"{a1a56abd-5b3d-45d2-8617-32b2f8b195de}\" StaticName=\"GtGainsType\" Name=\"GtGainsType\" Description=\"Direkte (økonomiske - NOK), Indirekte (frigjort tid - årsverk), Kvalitative (f.eks. omdømme)\" Group=\"{parameter:fieldsgroup}\"><Default>Direkte</Default><CHOICES><CHOICE>Direkte</CHOICE><CHOICE>Indirekte</CHOICE><CHOICE>Kvalitativ</CHOICE></CHOICES></Field>",
+        "<Field ID=\"{dc856c1d-0b98-4d38-9918-d7068f74bd8b}\" Name=\"GtDeliveryAcceptanceResponsible\" DisplayName=\"Godkjenningsansvar\" Type=\"User\" Group=\"{parameter:fieldsgroup}\" Description=\"Hvem har ansvaret for å godkjenne leveransen?\" StaticName=\"GtDeliveryAcceptanceResponsible\"></Field>",
+        "<Field ID=\"{3bcfaa2c-e9bd-4a22-bf65-af4d68c308e7}\" Name=\"GtDeliveryAcceptanceMethod\" DisplayName=\"Godkjenningsmetode\" Type=\"Note\" Group=\"{parameter:fieldsgroup}\" Description=\"Hvordan blir godkjenningen av leveransen bekreftet (test, brukerundersøkelse, demo, muntlig, skriftlig)?\" AppendOnly=\"FALSE\" StaticName=\"GtDeliveryAcceptanceMethod\"></Field>",
+        "<Field ID=\"{ce9474dd-407b-4480-951a-5381857fad6a}\" Name=\"GtDeliveryAcceptanceDate\" DisplayName=\"Godkjent dato\" Type=\"DateTime\" Group=\"{parameter:fieldsgroup}\" Description=\"\" Format=\"DateOnly\" StaticName=\"GtDeliveryAcceptanceDate\"></Field>",
+        "<Field ID=\"{748ae9b5-223d-4daa-b8f8-dc14284b59db}\" Name=\"GtStakeholderInterest\" DisplayName=\"Interesse\" Type=\"Note\" Group=\"{parameter:fieldsgroup}\" Description=\"\" AppendOnly=\"FALSE\" StaticName=\"GtStakeholderInterest\"></Field>",
+        "<Field ID=\"{2847b3b0-ed22-4c47-b7c0-3ebfc83dae4a}\" Name=\"GtStakeholderGroup\" DisplayName=\"Interessentgruppe\" Type=\"Choice\" Group=\"{parameter:fieldsgroup}\" Description=\"\" StaticName=\"GtStakeholderGroup\"><CHOICES><CHOICE>Medarbeidere</CHOICE><CHOICE>Ledelse</CHOICE><CHOICE>Innbyggere</CHOICE><CHOICE>Næringsliv</CHOICE><CHOICE>Frivillighet/Organisasjon</CHOICE><CHOICE>Fagforening</CHOICE><CHOICE>Andre offentlige aktører</CHOICE><CHOICE>Akademia</CHOICE><CHOICE>Virkemiddelapparat</CHOICE><CHOICE>Brukere</CHOICE></CHOICES></Field>",
+        "<Field ID=\"{00f17233-d4c0-49d0-aebd-5004552abb17}\" Name=\"GtRiskConsequencePostAction\" DisplayName=\"K etter tiltak\" Type=\"Number\" Group=\"{parameter:fieldsgroup}\" Description=\"Tall 0 til 5\" Min=\"0\" Max=\"5\" StaticName=\"GtRiskConsequencePostAction\"></Field>",
+        "<Field ID=\"{509a6bfe-004e-41f9-bd73-9a0e02d5c4a7}\" Name=\"GtComment\" DisplayName=\"Kommentar\" Type=\"Note\" Group=\"{parameter:fieldsgroup}\" Description=\"\" UnlimitedLengthInDocumentLibrary=\"TRUE\" AppendOnly=\"FALSE\" StaticName=\"GtComment\"></Field>",
+        "<Field DisplayName=\"Kommentar\" Description=\"Eventuelle kommentarer\" Title=\"Kommentar\" Type=\"Text\" Group=\"{parameter:fieldsgroup}\" ID=\"{1dd2e8f2-bf4f-4a66-b0dc-ad992d10eb64}\" StaticName=\"GtResourceAbsenceComment\" Name=\"GtResourceAbsenceComment\" />",
+        "<Field ID=\"{dabdcbab-7bab-4fb2-8d65-85bd03809a8d}\" Name=\"GtMilestoneComment\" StaticName=\"GtMilestoneComment\" DisplayName=\"Kommentar milepæl\" Type=\"Note\" Group=\"{parameter:fieldsgroup}\" UnlimitedLengthInDocumentLibrary=\"TRUE\" AppendOnly=\"FALSE\"></Field>",
+        "<Field Type=\"Note\" DisplayName=\"Kommentar til måling\" Description=\"\" NumLines=\"3\" RichText=\"FALSE\" ID=\"{0b78e51d-84d9-4885-9e79-2fe382a2ceb9}\" StaticName=\"GtMeasurementComment\" Name=\"GtMeasurementComment\" Group=\"{parameter:fieldsgroup}\" />",
+        "<Field Type=\"Text\" DisplayName=\"Kommunikasjonskanal\" MaxLength=\"255\" Group=\"{parameter:fieldsgroup}\" ID=\"{4d5e69a2-2eb5-422c-af04-70b67697cd23}\" StaticName=\"GtActionChannel\" Name=\"GtActionChannel\"></Field>",
+        "<Field ID=\"{7b424ee7-bcc8-490a-8c4c-01637da03347}\" Name=\"GtProjectLogConsequence\" DisplayName=\"Konsekvens\" Type=\"Note\" Group=\"{parameter:fieldsgroup}\" Description=\"Beskriv mer utfyllende hva dette kan føre til.\" UnlimitedLengthInDocumentLibrary=\"TRUE\" AppendOnly=\"FALSE\" StaticName=\"GtProjectLogConsequence\"></Field>",
+        "<Field ID=\"{554d32a0-0148-4b3c-bfc4-f101232ee501}\" Name=\"GtRiskConsequence\" DisplayName=\"Konsekvens (K)\" Type=\"Number\" Group=\"{parameter:fieldsgroup}\" Description=\"Tall 0 til 5\" Min=\"0\" Max=\"5\" StaticName=\"GtRiskConsequence\"></Field>",
+        "<Field ID=\"{c845028e-3395-49d4-86fe-6d94992c38c2}\" Name=\"GtDeliveryQualityResponsible\" DisplayName=\"Kvalitetsansvar\" Type=\"User\" Group=\"{parameter:fieldsgroup}\" Description=\"Hvem er ansvarlig for å levere kvaliteten på leveransen?\" StaticName=\"GtDeliveryQualityResponsible\"></Field>",
+        "<Field ID=\"{c8e260c2-6887-4f9e-a713-7200246c3b1c}\" Name=\"GtDeliveryQualityExpectations\" DisplayName=\"Kvalitetsforventninger\" Type=\"Note\" Group=\"{parameter:fieldsgroup}\" Description=\"Hvilke forventninger er uttalt til kvaliteten på leveransen?\" AppendOnly=\"FALSE\" StaticName=\"GtDeliveryQualityExpectations\"></Field>",
+        "<Field ID=\"{3dd7058b-0ba1-46e5-b40a-4f2f542638ea}\" Name=\"GtDeliveryQualityTolerance\" DisplayName=\"Kvalitetstoleranse\" Type=\"Note\" Group=\"{parameter:fieldsgroup}\" Description=\"Hvilke toleranser (slingringsmonn) gjelder for akseptansekriteriene?\" AppendOnly=\"FALSE\" StaticName=\"GtDeliveryQualityTolerance\"></Field>",
+        "<Field Type=\"Note\" DisplayName=\"Leveransebeskrivelse\" Description=\"\" UnlimitedLengthInDocumentLibrary=\"TRUE\" NumLines=\"6\" RichText=\"FALSE\" Group=\"{parameter:fieldsgroup}\" ID=\"{99430a99-1354-418f-921f-7ddfdb6c0d7f}\" StaticName=\"GtDeliveryDescription\" Name=\"GtDeliveryDescription\" RichTextMode=\"Compatible\" />",
+        "<Field ID=\"{4322afd6-5f0f-4a22-819a-cb61668e6ede}\" DisplayName=\"Leveransestatus\" Name=\"GtDeliveryStatus\" Type=\"Choice\" Group=\"{parameter:fieldsgroup}\" Description=\"\" Format=\"RadioButtons\" FillInChoice=\"FALSE\" StaticName=\"GtDeliveryStatus\"><Default>Ihht. plan</Default><CHOICES><CHOICE>Ihht. plan</CHOICE><CHOICE>Små avvik</CHOICE><CHOICE>Store avvik</CHOICE><CHOICE>Godkjent</CHOICE></CHOICES></Field>",
+        "<Field ID=\"{4393ed3c-1599-4ab3-8444-444ab35754bb}\" DisplayName=\"Kommentar, leveransestatus\" Name=\"GtDeliveryStatusComment\" Type=\"Note\" Group=\"{parameter:fieldsgroup}\" Description=\"Kommentar til leveransestatus angitt over\" NumLines=\"3\" UnlimitedLengthInDocumentLibrary=\"TRUE\" StaticName=\"GtDeliveryStatusComment\" />",
+        "<Field ID=\"{a3462545-ac76-4681-96b4-f883fea4b2ba}\" Name=\"GtProjectLogDescription\" DisplayName=\"Loggbeskrivelse\" Type=\"Note\" Group=\"{parameter:fieldsgroup}\" Description=\"Hva handler dette om?\" AppendOnly=\"FALSE\" StaticName=\"GtProjectLogDescription\"></Field>",
+        "<Field ID=\"{2391d165-5d13-46b7-87d2-e32040293210}\" Name=\"GtProjectLogType\" DisplayName=\"Loggelement\" Type=\"Choice\" Group=\"{parameter:fieldsgroup}\" Description=\"\" StaticName=\"GtProjectLogType\"><Default>Kommentar/Bekymring/Hendelse</Default><CHOICES><CHOICE>Kommentar/Bekymring/Hendelse</CHOICE><CHOICE>Endringsforespørsel</CHOICE><CHOICE>Avvik fra spesifikasjon</CHOICE><CHOICE>Beslutning</CHOICE></CHOICES></Field>",
+        "<Field ID=\"{49b0ba6b-d1ec-4644-91b7-691a33524c90}\" Name=\"GtProjectLogReporter\" DisplayName=\"Meldt av\" Type=\"User\" Group=\"{parameter:fieldsgroup}\" Description=\"Oppgi den personen som meldte saken. Det er prosjektleders ansvar å opprette en Emnerapport på basis av emnet som er valgt etter prosedyrene valgt for dette prosjektet.\" StaticName=\"GtProjectLogReporter\"></Field>",
+        "<Field ID=\"{2bb7e155-3af4-4353-a460-8da404c4e748}\" Name=\"GtStakeholderInfluencePossibilty\" DisplayName=\"Mulighet til påvirkning\" Type=\"Choice\" Group=\"{parameter:fieldsgroup}\" Description=\"\" StaticName=\"GtStakeholderInfluencePossibilty\"><CHOICES><CHOICE>Stor</CHOICE><CHOICE>Middels</CHOICE><CHOICE>Liten</CHOICE><CHOICE>Ingen</CHOICE></CHOICES></Field>",
+        "<Field Type=\"Choice\" DisplayName=\"Måleenhet\" Description=\"Se måleindikator for utdypning\" Format=\"Dropdown\" ID=\"{0d38db52-2040-44c1-823e-7642f76519ee}\" StaticName=\"GtMeasurementUnit\" Name=\"GtMeasurementUnit\" Group=\"{parameter:fieldsgroup}\"><Default>Antall</Default><CHOICES><CHOICE>Antall</CHOICE><CHOICE>Kroner</CHOICE><CHOICE>Prosent</CHOICE><CHOICE>Timer</CHOICE></CHOICES></Field>",
+        "<Field Type=\"Text\" DisplayName=\"Måleindikator\" Description=\"Hvordan skal gevinsten måles, eks: papirforbruk pr måned\" ID=\"{8d497830-9012-437c-aa65-4b05807f4415}\" StaticName=\"GtMeasureIndicator\" Name=\"GtMeasureIndicator\" Group=\"{parameter:fieldsgroup}\" />",
+        "<Field Type=\"Number\" DisplayName=\"Målt verdi\" Description=\"\" ID=\"{70dc7c4a-54ec-4674-b238-2b2a889e1b49}\" StaticName=\"GtMeasurementValue\" Name=\"GtMeasurementValue\" Group=\"{parameter:fieldsgroup}\" />",
+        "<Field DisplayName=\"Navn\" Description=\"\" ID=\"{88d9b92c-efed-45d0-a586-86d9196b77d0}\" Type=\"User\" Group=\"{parameter:fieldsgroup}\" StaticName=\"GtResourceUser\" Name=\"GtResourceUser\" ShowField=\"ImnName\" UserSelectionMode=\"PeopleOnly\" UserSelectionScope=\"0\" />",
+        "<Field ID=\"{c755525b-3716-4ee8-a4f4-f9684808c009}\" Name=\"GtRiskProximity\" DisplayName=\"Nærhet\" Type=\"Choice\" Group=\"{parameter:fieldsgroup}\" Description=\"\" StaticName=\"GtRiskProximity\"><CHOICES><CHOICE>Umiddelbart</CHOICE><CHOICE>I denne fasen</CHOICE><CHOICE>Innenfor prosjektet</CHOICE><CHOICE>Utenfor prosjektet</CHOICE></CHOICES></Field>",
+        "<Field ID=\"{1150d6bd-c9ba-4014-bd74-7d559110841d}\" Name=\"GtStakeholderStrategy\" DisplayName=\"Plan/strategi/prosjekt\" Type=\"Text\" Group=\"{parameter:fieldsgroup}\" Description=\"\" StaticName=\"GtStakeholderStrategy\"></Field>",
+        "<Field ID=\"{1fa322ec-6b56-4ea9-a1fd-2623e34083e6}\" Name=\"GtMilestonePlannedDate\" StaticName=\"GtMilestonePlannedDate\" DisplayName=\"Planlagt dato\" Type=\"DateTime\" Format=\"DateOnly\" FriendlyDisplayFormat=\"Disabled\" Group=\"{parameter:fieldsgroup}\" />",
+        "<Field Type=\"Text\" DisplayName=\"Prosess\" Description=\"\" ID=\"{68a5a2da-048c-4d2d-8ba4-5a8b32b60120}\" StaticName=\"GtProcess\" Name=\"GtProcess\" Group=\"{parameter:fieldsgroup}\" />",
+        "<Field ID=\"{475d2ca1-5b8e-4479-96ae-81c0a89354f3}\" Name=\"GtStakeholderInfluence\" DisplayName=\"Påvirkes i hvilken grad\" Type=\"Choice\" Group=\"{parameter:fieldsgroup}\" Description=\"\" StaticName=\"GtStakeholderInfluence\"><CHOICES><CHOICE>Stor</CHOICE><CHOICE>Middels</CHOICE><CHOICE>Liten</CHOICE><CHOICE>Ingen</CHOICE></CHOICES></Field>",
+        "<Field Type=\"DateTime\" DisplayName=\"Realiseringstidspunkt\" Description=\"Forventet tidspunkt for realisering av gevinsten\" Format=\"DateOnly\" FriendlyDisplayFormat=\"Disabled\" ID=\"{b0d03734-a5b1-4e85-a752-45b2da8df7dd}\" StaticName=\"GtRealizationTime\" Name=\"GtRealizationTime\" Group=\"{parameter:fieldsgroup}\" />",
+        "<Field ID=\"{8499bd48-4c5d-43ae-8e27-7968d49ca14f}\" Name=\"GtRiskFactor\" DisplayName=\"Risikofaktor\" Type=\"Calculated\" Group=\"{parameter:fieldsgroup}\" Description=\"\" ResultType=\"Number\" StaticName=\"GtRiskFactor\"><Formula>=GtRiskProbability*GtRiskConsequence</Formula><FieldRefs><FieldRef Name=\"GtRiskProbability\" ID=\"{0e1b295d-2bfb-4ef6-ae92-e72068e56111}\" /><FieldRef Name=\"GtRiskConsequence\" ID=\"{554d32a0-0148-4b3c-bfc4-f101232ee501}\" /></FieldRefs></Field>",
+        "<Field ID=\"{62f0454d-1150-4d55-86ef-075f786d6e5c}\" Name=\"GtRiskFactorPostAction\" DisplayName=\"Risikofaktor etter tiltak\" Type=\"Calculated\" Group=\"{parameter:fieldsgroup}\" Description=\"\" ResultType=\"Number\" StaticName=\"GtRiskFactorPostAction\"><Formula>=GtRiskProbabilityPostAction*GtRiskConsequencePostAction</Formula><FieldRefs><FieldRef Name=\"GtRiskProbabilityPostAction\" ID=\"{f81ebcb7-8791-44b0-9919-08ed5524b11d}\" /><FieldRef Name=\"GtRiskConsequencePostAction\" ID=\"{00f17233-d4c0-49d0-aebd-5004552abb17}\" /></FieldRefs></Field>",
+        "<Field DisplayName=\"Rolle\" Description=\"Hvilken rolle har personen?\" ID=\"{3a0ae560-bd55-45d4-907f-5119bf0a83bb}\" Type=\"TaxonomyFieldType\" WebId=\"{siteid}\" Group=\"{parameter:fieldsgroup}\" StaticName=\"GtResourceRole\" Name=\"GtResourceRole\"><Customization><ArrayOfProperty><Property><Name>TextField</Name><Value xmlns:q6=\"http://www.w3.org/2001/XMLSchema\" p4:type=\"q6:string\" xmlns:p4=\"http://www.w3.org/2001/XMLSchema-instance\">{7b9c4c84-e783-4266-90f1-9046fbe92930}</Value></Property></ArrayOfProperty></Customization></Field>",
+        "<Field ID=\"{f81ebcb7-8791-44b0-9919-08ed5524b11d}\" Name=\"GtRiskProbabilityPostAction\" DisplayName=\"S etter tiltak\" Type=\"Number\" Group=\"{parameter:fieldsgroup}\" Description=\"Tall 0 til 5\" Min=\"0\" Max=\"5\" StaticName=\"GtRiskProbabilityPostAction\"></Field>",
+        "<Field ID=\"{0e1b295d-2bfb-4ef6-ae92-e72068e56111}\" Name=\"GtRiskProbability\" DisplayName=\"Sannsynlighet (S)\" Type=\"Number\" Group=\"{parameter:fieldsgroup}\" Description=\"Tall 0 til 5\" Min=\"0\" Max=\"5\" StaticName=\"GtRiskProbability\"></Field>",
+        "<Field Type=\"Choice\" DisplayName=\"Siste beslutningspunktstatus\" Format=\"RadioButtons\" FillInChoice=\"FALSE\" Group=\"{parameter:fieldsgroup}\" ID=\"{13aa2254-728b-48bd-8d09-5aa5e20933e1}\" StaticName=\"GtLastGateStatus\" Name=\"GtLastGateStatus\" ShowInNewForm=\"FALSE\" ShowInEditForm=\"FALSE\"><CHOICES><CHOICE>Godkjent</CHOICE><CHOICE>Foreløpig godkjent</CHOICE><CHOICE>Avvist</CHOICE></CHOICES></Field>",
+        "<Field ID=\"{16623c2a-3fd1-41c2-87e7-958583dd88da}\" Name=\"GtEndDate\" DisplayName=\"Sluttdato\" Type=\"DateTime\" Group=\"{parameter:fieldsgroup}\" Description=\"\" Format=\"DateOnly\" StaticName=\"GtEndDate\"></Field>",
+        "<Field Type=\"DateTime\" DisplayName=\"Sluttidspunkt\" Description=\"\" Format=\"DateOnly\" FriendlyDisplayFormat=\"Disabled\" Group=\"{parameter:fieldsgroup}\" ID=\"{eb78509b-4109-474e-aca8-90d024a960de}\" StaticName=\"GtDeliveryEndTime\" Name=\"GtDeliveryEndTime\" />",
+        "<Field ID=\"{0e82c395-9ed9-43f9-871a-208215b18558}\" Name=\"GtSortOrder\" DisplayName=\"Sorteringsrekkefølge\" Type=\"Number\" Group=\"{parameter:fieldsgroup}\" Description=\"\" StaticName=\"GtSortOrder\"></Field>",
+        "<Field ID=\"{e39c32db-a7da-4c93-9369-8aa5a7bde92d}\" Name=\"GtStartDate\" DisplayName=\"Startdato\" Type=\"DateTime\" Group=\"{parameter:fieldsgroup}\" Description=\"\" Format=\"DateOnly\" StaticName=\"GtStartDate\"></Field>",
+        "<Field Type=\"DateTime\" DisplayName=\"Starttidspunkt\" Description=\"\" Format=\"DateOnly\" FriendlyDisplayFormat=\"Disabled\" Group=\"{parameter:fieldsgroup}\" ID=\"{219a5cdf-799c-48ee-8869-ea39e4b9a6aa}\" StaticName=\"GtDeliveryStartTime\" Name=\"GtDeliveryStartTime\" />",
+        "<Field Type=\"Number\" DisplayName=\"Startverdi\" Description=\"Resultatet fra nullmålingen\" ID=\"{c5fc8781-7fbd-43a2-a215-c8c959bbab69}\" StaticName=\"GtStartValue\" Name=\"GtStartValue\" Group=\"{parameter:fieldsgroup}\" />",
+        "<Field Type=\"Choice\" DisplayName=\"Status\" Format=\"Dropdown\" FillInChoice=\"FALSE\" Group=\"{parameter:fieldsgroup}\" ID=\"{bf340fba-c512-4a07-a543-cdf2d10c578e}\" StaticName=\"GtActionStatus\" Name=\"GtActionStatus\"><Default>Ikke påbegynt</Default><CHOICES><CHOICE>Ikke påbegynt</CHOICE><CHOICE>Påbegynt</CHOICE><CHOICE>Fullført</CHOICE><CHOICE>Utsatt</CHOICE></CHOICES></Field>",
+        "<Field ID=\"{249527a3-c7f9-4ea5-9c33-f942c06c9215}\" Name=\"GtChecklistStatus\" DisplayName=\"Status\" Type=\"Choice\" Group=\"{parameter:fieldsgroup}\" Description=\"\" StaticName=\"GtChecklistStatus\"><Default>Åpen</Default><CHOICES><CHOICE>Åpen</CHOICE><CHOICE>Utført</CHOICE><CHOICE>Ikke relevant</CHOICE><CHOICE>Arkivert</CHOICE></CHOICES></Field>",
+        "<Field ID=\"{17a4b359-5819-4e7c-9894-a154320a661d}\" Name=\"GtMilestoneStatus\" StaticName=\"GtMilestoneStatus\" DisplayName=\"Status milepæl\" Type=\"Choice\" Group=\"{parameter:fieldsgroup}\" FillInChoice=\"FALSE\"><CHOICES><CHOICE>Ikke i rute</CHOICE><CHOICE>I rute</CHOICE><CHOICE>Oppnådd</CHOICE><CHOICE>Ikke oppnådd</CHOICE></CHOICES></Field>",
+        "<Field Type=\"Choice\" DisplayName=\"Status usikkerhet\" Description=\"\" Format=\"RadioButtons\" FillInChoice=\"FALSE\" Group=\"{parameter:fieldsgroup}\" ID=\"{6c2da0dc-77b1-4152-b751-97adf436faa0}\" StaticName=\"GtRiskStatus\" Name=\"GtRiskStatus\"><Default>Identifisert</Default><CHOICES><CHOICE>Identifisert</CHOICE><CHOICE>Tiltak gjennomført</CHOICE><CHOICE>Ikke lenger aktuell</CHOICE></CHOICES></Field>",
+        "<Field ID=\"{832a2eeb-5709-40b4-9f7c-04ae67ddd86b}\" Name=\"GtProjectLogExperience\" DisplayName=\"Til erfaringslogg\" Type=\"Boolean\" Group=\"{parameter:fieldsgroup}\" Description=\"Huk av dersom dette skal vises i prosjektenes delte erfaringslogg.\" StaticName=\"GtProjectLogExperience\"></Field>",
+        "<Field ID=\"{45d5b378-67ce-4f21-b622-fe54b27c83a6}\" Name=\"GtStakeholderActions\" DisplayName=\"Tiltak\" Type=\"Note\" Group=\"{parameter:fieldsgroup}\" Description=\"Mulige strategier for å oppnå støtte eller redusere hindringer\" AppendOnly=\"FALSE\" StaticName=\"GtStakeholderActions\"></Field>",
+        "<Field ID=\"{6219fd33-2f3c-42f5-9790-174143bfb99c}\" Name=\"GtRiskAction\" DisplayName=\"Tiltak\" Type=\"Note\" Group=\"{parameter:fieldsgroup}\" Description=\"\" AppendOnly=\"FALSE\" StaticName=\"GtRiskAction\"></Field>",
+        "<Field ID=\"{2ae541a5-5ecc-481d-afb6-c03a6f1e71b4}\" Name=\"GtActionResponsible\" DisplayName=\"Tiltaksansvarlig\" Type=\"User\" Group=\"{parameter:fieldsgroup}\" Description=\"\" StaticName=\"GtActionResponsible\"></Field>",
+        "<Field ID=\"{77450582-a061-4416-af17-6dfb99fa9036}\" Name=\"GtActionDate\" DisplayName=\"Tiltaksdato\" Type=\"DateTime\" Group=\"{parameter:fieldsgroup}\" Description=\"\" Format=\"DateOnly\" StaticName=\"GtActionDate\"></Field>",
+        "<Field ID=\"{04cfd3c0-5f18-4906-bdca-b5f84b693437}\" Name=\"GtRiskStrategy\" DisplayName=\"Usikkerhetstrategi\" Type=\"Choice\" Group=\"{parameter:fieldsgroup}\" Description=\"\" StaticName=\"GtRiskStrategy\"><Default>Redusere</Default><CHOICES><CHOICE>Redusere</CHOICE><CHOICE>Overvåke</CHOICE><CHOICE>Unngå</CHOICE><CHOICE>Overføre</CHOICE><CHOICE>Dele</CHOICE><CHOICE>Akseptere</CHOICE><CHOICE>Øke</CHOICE><CHOICE>Utnytte</CHOICE></CHOICES></Field>",
+        "<Field ID=\"{6bd17911-c48a-4900-be61-54ae26207d78}\" Name=\"GtShowInPortfolio\" DisplayName=\"Vis i portefølje\" Type=\"Boolean\" Group=\"{parameter:fieldsgroup}\" Description=\"Huk av denne for å vise risikoen i oversikten på porteføljenivå\" StaticName=\"GtShowInPortfolio\"></Field>",
+        "<Field Type=\"Number\" DisplayName=\"Ønsket verdi\" Description=\"Verdi når gevinsten er realisert\" ID=\"{8b399cb6-c53e-432c-8ffa-b48e2bfbbf71}\" StaticName=\"GtDesiredValue\" Name=\"GtDesiredValue\" Group=\"{parameter:fieldsgroup}\" />"
+    ],
+    "Navigation": {
+        "QuickLaunch": [
+            {
+                "Url": "SitePages/Hjem.aspx",
+                "Title": "Hjem"
+            },
+            {
+                "Url": "SitePages/Prosjektstatus.aspx",
+                "Title": "Prosjektstatus"
+            },
+            {
+                "Url": "Lists/Prosjektlogg/AllItems.aspx",
+                "Title": "Prosjektlogg"
+            },
+            {
+                "Url": "Lists/Interessentregister/AllItems.aspx",
+                "Title": "Interessentregister"
+            },
+            {
+                "Url": "Lists/Kommunikasjonsplan/AllItems.aspx",
+                "Title": "Kommunikasjonsplan"
+            },
+            {
+                "Url": "Lists/Usikkerhet/AllItems.aspx",
+                "Title": "Usikkerhet"
+            },
+            {
+                "Url": "Lists/Mtekalender/calendar.aspx",
+                "Title": "Møtekalender"
+            },
+            {
+                "Url": "Dokumenter/Forms/AllItems.aspx",
+                "Title": "Dokumenter"
+            },
+            {
+                "Url": "Lists/Fasesjekkliste/AllItems.aspx",
+                "Title": "Fasesjekkliste"
+            },
+            {
+                "Url": "#",
+                "Title": "Notatblokk"
+            },
+            {
+                "Url": "#",
+                "Title": "Gevinstarbeid",
+                "Children": [
+                    {
+                        "Url": "Lists/Endringsanalyse/AllItems.aspx",
+                        "Title": "Endringsanalyse"
+                    },
+                    {
+                        "Url": "Lists/Gevinstanalyse og gevinstrealiseringsplan/AllItems.aspx",
+                        "Title": "Gevinstanalyse og gevinstrealiseringsplan"
+                    },
+                    {
+                        "Url": "Lists/Gevinstsoppflging/AllItems.aspx",
+                        "Title": "Gevinstoppfølging"
+                    },
+                    {
+                        "Url": "SitePages/Gevinstoversikt.aspx",
+                        "Title": "Gevinstoversikt"
+                    }
+                ]
+            },
+            {
+                "Url": "Lists/Prosjektleveranser/AllItems.aspx",
+                "Title": "Prosjektleveranser"
+            },
+            {
+                "Url": "Lists/Ressursallokering/AllItems.aspx",
+                "Title": "Ressursallokering"
+            },
+            {
+                "Url": "_layouts/15/viewlsts.aspx",
+                "Title": "Områdeinnhold"
+            }
+        ]
+    },
+    "WebSettings": {
+        "WelcomePage": "SitePages/Hjem.aspx"
+    },
+    "ClientSidePages": [
+        {
+            "Name": "Hjem.aspx",
+            "Title": "Hjem",
+            "PageLayoutType": "Home",
+            "CommentsDisabled": true,
+            "Sections": [
+                {
+                    "Columns": [
+                        {
+                            "Factor": 12,
+                            "Controls": [
+                                {
+                                    "Id": "4449d3dc-fa58-4982-b87c-5a893114e7b7",
+                                    "Properties": {
+                                        "description": "",
+                                        "phaseSubTextProperty": "",
+                                        "phaseField": "Fase",
+                                        "automaticReload": true,
+                                        "confirmPhaseChange": true,
+                                        "reloadTimeout": 0,
+                                        "updateViewsDocuments": true,
+                                        "updateViewsRisks": true,
+                                        "updateViewName": "Gjeldende fase",
+                                        "gutter": 15,
+                                        "fontSize": 13,
+                                        "entity": {
+                                            "listName": "Prosjekter",
+                                            "contentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
+                                            "fieldsGroupName": "{parameter:fieldsgroup}",
+                                            "siteIdFieldName": "GtSiteId"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Columns": [
+                        {
+                            "Factor": 8,
+                            "Controls": [
+                                {
+                                    "Id": "f92bf067-bc19-489e-a556-7fe95f508720",
+                                    "Properties": {
+                                        "isDocumentLibrary": true,
+                                        "selectedListId": "{listid:Dokumenter}",
+                                        "webpartHeightKey": 4
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Factor": 4,
+                            "Controls": [
+                                {
+                                    "Id": "b8bec0be-2354-443d-a3ca-24b36e8ea7dc",
+                                    "Properties": {
+                                        "title": "Prosjektinformasjon",
+                                        "entity": {
+                                            "listName": "Prosjekter",
+                                            "contentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
+                                            "fieldsGroupName": "{parameter:fieldsgroup}",
+                                            "siteIdFieldName": "GtSiteId"
+                                        }
+                                    }
+                                },
+                                {
+                                    "Id": "f92bf067-bc19-489e-a556-7fe95f508720",
+                                    "Properties": {
+                                        "isDocumentLibrary": false,
+                                        "selectedListId": "{listid:Usikkerhet}",
+                                        "webpartHeightKey": 4
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "Gevinstoversikt.aspx",
+            "Title": "Gevinstoversikt",
+            "PageLayoutType": "SingleWebPartAppPage",
+            "CommentsDisabled": true,
+            "Sections": [
+                {
+                    "Columns": [
+                        {
+                            "Factor": 12,
+                            "Controls": [
+                                {
+                                    "Id": "c7ff77cd-07e3-435e-971a-8845fa28ba8e",
+                                    "Properties": {
+                                        "title": "Gevinstoversikt"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "Prosjektstatus.aspx",
+            "Title": "Prosjektstatus",
+            "PageLayoutType": "SingleWebPartAppPage",
+            "CommentsDisabled": true,
+            "Sections": [
+                {
+                    "Columns": [
+                        {
+                            "Factor": 12,
+                            "Controls": [
+                                {
+                                    "Id": "681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6",
+                                    "Properties": {
+                                        "title": "Prosjektstatus",
+                                        "reportListName": "Prosjektstatus",
+                                        "reportCtId": "0x010022252E35737A413FB56A1BA53862F6D5",
+                                        "entity": {
+                                            "listName": "Prosjekter",
+                                            "contentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
+                                            "fieldsGroupName": "{parameter:fieldsgroup}",
+                                            "siteIdFieldName": "GtSiteId"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "Lists": [
+        {
+            "Title": "Fasesjekkliste",
+            "Description": "",
+            "Template": 100,
+            "ContentTypesEnabled": true,
+            "RemoveExistingContentTypes": true,
+            "ContentTypeBindings": [
+                {
+                    "ContentTypeID": "0x0100486B1F8AEA24486FBA1C1BA9146C360C"
+                }
+            ],
+            "AdditionalSettings": {
+                "EnableVersioning": true
+            },
+            "Views": [
+                {
+                    "Title": "Alle elementer",
+                    "ViewFields": [
+                        "LinkTitle",
+                        "GtProjectPhase",
+                        "GtChecklistStatus",
+                        "GtComment"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 50,
+                        "ViewQuery": "<OrderBy><FieldRef Name=\"GtSortOrder\" /><FieldRef Name=\"ID\" /></OrderBy><Where><Neq><FieldRef Name=\"GtChecklistStatus\" /><Value Type=\"Text\">Arkivert</Value></Neq>\n</Where>"
+                    }
+                },
+                {
+                    "Title": "Arkivert",
+                    "ViewFields": [
+                        "LinkTitle",
+                        "GtProjectPhase",
+                        "GtComment"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 50,
+                        "ViewQuery": "<OrderBy><FieldRef Name=\"GtSortOrder\" /><FieldRef Name=\"ID\" /></OrderBy><Where><Eq><FieldRef Name=\"GtChecklistStatus\" /><Value Type=\"Text\">Arkivert</Value></Eq>\n</Where>"
+                    }
+                },
+                {
+                    "Title": "Per status",
+                    "ViewFields": [
+                        "LinkTitle",
+                        "GtProjectPhase",
+                        "GtComment"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 50,
+                        "ViewQuery": "<GroupBy Collapse=\"TRUE\" GroupLimit=\"30\">\n  <FieldRef Name=\"GtChecklistStatus\" Ascending=\"FALSE\" />\n</GroupBy>\n<OrderBy><FieldRef Name=\"GtSortOrder\" /><FieldRef Name=\"ID\" />\n</OrderBy>"
+                    }
+                }
+            ]
+        },
+        {
+            "Title": "Informasjon",
+            "Description": "",
+            "Template": 100,
+            "ContentTypesEnabled": true,
+            "RemoveExistingContentTypes": true,
+            "ContentTypeBindings": [
+                {
+                    "ContentTypeID": "0x01007CFA9140CFBF430EB3A6CE7272E89CFB"
+                }
+            ],
+            "AdditionalSettings": {
+                "EnableVersioning": true
+            },
+            "Views": [
+                {
+                    "Title": "Alle elementer",
+                    "ViewFields": [
+                        "LinkTitle",
+                        "GtProjectInfoDescription"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 30,
+                        "Paged": true,
+                        "ViewQuery": ""
+                    }
+                }
+            ]
+        },
+        {
+            "Title": "Interessentregister",
+            "Description": "",
+            "Template": 100,
+            "ContentTypesEnabled": true,
+            "RemoveExistingContentTypes": true,
+            "ContentTypeBindings": [
+                {
+                    "ContentTypeID": "0x010072C95831F8434782AB2FF6BE3E596F46"
+                }
+            ],
+            "AdditionalSettings": {
+                "EnableVersioning": true
+            },
+            "Views": [
+                {
+                    "Title": "Alle elementer",
+                    "ViewFields": [
+                        "LinkTitle",
+                        "GtStakeholderGroup",
+                        "GtStakeholderContext",
+                        "GtStakeholderStrategy",
+                        "GtStakeholderInterest",
+                        "GtStakeholderInfluence",
+                        "GtStakeholderInfluencePossibilty",
+                        "GtStakeholderActions"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 30,
+                        "Paged": true,
+                        "ViewQuery": ""
+                    }
+                }
+            ]
+        },
+        {
+            "Title": "Kommunikasjonsplan",
+            "Description": "",
+            "Template": 100,
+            "ContentTypesEnabled": true,
+            "RemoveExistingContentTypes": true,
+            "ContentTypeBindings": [
+                {
+                    "ContentTypeID": "0x010065CE65D51354419EA794C6FACD4FA2EB"
+                }
+            ],
+            "AdditionalSettings": {
+                "EnableVersioning": true
+            },
+            "Fields": [
+                "<Field Type=\"LookupMulti\" DisplayName=\"Målgruppe\" List=\"{listid:Interessentregister}\" ShowField=\"Title\" ID=\"{d685f33f-51b5-4e9f-a314-4b3d9467a7e4}\" StaticName=\"GtCommunicationTarget\" Name=\"GtCommunicationTarget\" Mult=\"TRUE\" />"
+            ],
+            "Views": [
+                {
+                    "Title": "Alle elementer",
+                    "ViewFields": [
+                        "LinkTitle",
+                        "GtProjectPhase",
+                        "GtActionDate",
+                        "GtActionResponsible"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 10,
+                        "Paged": true,
+                        "ViewQuery": ""
+                    }
+                }
+            ]
+        },
+        {
+            "Title": "Milepæler",
+            "Description": "",
+            "Template": 100,
+            "ContentTypesEnabled": true,
+            "RemoveExistingContentTypes": true,
+            "ContentTypeBindings": [
+                {
+                    "ContentTypeID": "0x01002CC709404B5B4751B6E1CD1CC0A3ED10"
+                }
+            ],
+            "AdditionalSettings": {
+                "EnableVersioning": true
+            },
+            "Views": [
+                {
+                    "Title": "Alle elementer",
+                    "ViewFields": [
+                        "LinkTitle",
+                        "GtMilestonePlannedDate",
+                        "GtMilestoneActualDate",
+                        "GtMilestoneStatus",
+                        "GtMilestoneComment"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 30,
+                        "Paged": true,
+                        "ViewQuery": "<OrderBy><FieldRef Name=\"GtMilestonePlannedDate\" Ascending=\"TRUE\" /></OrderBy>"
+                    }
+                }
+            ]
+        },
+        {
+            "Title": "Prosjektlogg",
+            "Description": "",
+            "Template": 100,
+            "ContentTypesEnabled": true,
+            "RemoveExistingContentTypes": true,
+            "ContentTypeBindings": [
+                {
+                    "ContentTypeID": "0x01004EDD18CB92C14EBA97103D909C897810"
+                }
+            ],
+            "AdditionalSettings": {
+                "EnableVersioning": true
+            },
+            "Fields": [
+                "<Field Type=\"Lookup\" DisplayName=\"Påvirker leveranse\" List=\"{listid:Prosjektleveranser}\" ShowField=\"Title\" ID=\"{022cc93f-13df-4420-bd47-55e4fdae5d18}\" StaticName=\"GtProjectLogProductLookup\" Name=\"GtProjectLogProductLookup\" />"
+            ],
+            "Views": [
+                {
+                    "Title": "Alle elementer",
+                    "ViewFields": [
+                        "LinkTitle",
+                        "GtProjectLogType",
+                        "GtProjectLogReporter",
+                        "GtProjectLogResponsible",
+                        "GtProjectLogConsequence",
+                        "GtProjectLogRecommendation",
+                        "GtProjectLogExperience"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 30,
+                        "Paged": true,
+                        "ViewQuery": ""
+                    }
+                }
+            ]
+        },
+        {
+            "Title": "Prosjektleveranser",
+            "Description": "",
+            "Template": 100,
+            "ContentTypesEnabled": true,
+            "RemoveExistingContentTypes": true,
+            "ContentTypeBindings": [
+                {
+                    "ContentTypeID": "0x0100D7B74DE815F946D3B0F99D19F9B36B68"
+                }
+            ],
+            "AdditionalSettings": {
+                "EnableVersioning": true
+            },
+            "Fields": [
+                "<Field Type=\"LookupMulti\" DisplayName=\"Interessent(er)\" List=\"{listid:Interessentregister}\" ShowField=\"Title\" ID=\"{6d90e0b6-73e6-48fb-aa1e-b897b214f934}\" Name=\"GtDeliveryStakeholders\" StaticName=\"GtDeliveryStakeholders\" Name=\"GtDeliveryStakeholders\" Mult=\"TRUE\" />"
+            ],
+            "Views": [
+                {
+                    "Title": "Alle elementer",
+                    "ViewFields": [
+                        "LinkTitle",
+                        "GtDeliveryDescription",
+                        "GtDeliveryStartTime",
+                        "GtDeliveryEndTime",
+                        "GtDeliveryStatus",
+                        "GtDeliveryStatusComment",
+                        "GtDeliveryPhase"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 30,
+                        "Paged": true,
+                        "ViewQuery": ""
+                    }
+                },
+                {
+                    "Title": "Leveransefase",
+                    "ViewFields": [
+                        "LinkTitle",
+                        "GtDeliveryDescription",
+                        "GtDeliveryStartTime",
+                        "GtDeliveryEndTime",
+                        "GtDeliveryStatus",
+                        "GtDeliveryStatusComment"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 30,
+                        "Paged": true,
+                        "ViewQuery": "<GroupBy Collapse=\"FALSE\" GroupLimit=\"30\"><FieldRef Name=\"GtDeliveryPhase\" /></GroupBy>"
+                    }
+                }
+            ]
+        },
+        {
+            "Title": "Usikkerhet",
+            "Description": "",
+            "Template": 100,
+            "ContentTypesEnabled": true,
+            "RemoveExistingContentTypes": true,
+            "ContentTypeBindings": [
+                {
+                    "ContentTypeID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE89701"
+                },
+                {
+                    "ContentTypeID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE89702"
+                }
+            ],
+            "AdditionalSettings": {
+                "EnableVersioning": true
+            },
+            "Views": [
+                {
+                    "Title": "Alle elementer",
+                    "ViewFields": [
+                        "ID",
+                        "LinkTitle",
+                        "GtRiskProbability",
+                        "GtRiskConsequence",
+                        "GtRiskFactor",
+                        "GtRiskStatus",
+                        "GtRiskStrategy",
+                        "GtRiskAction",
+                        "GtRiskProbabilityPostAction",
+                        "GtRiskConsequencePostAction",
+                        "GtRiskFactorPostAction",
+                        "Modified"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 100,
+                        "Paged": true,
+                        "ViewQuery": "<FieldRef Name=\"GtRiskFactor\" Ascending=\"FALSE\" />"
+                    }
+                },
+                {
+                    "Title": "Aktuell risiko",
+                    "ViewFields": [
+                        "ID",
+                        "LinkTitle",
+                        "GtRiskProbability",
+                        "GtRiskConsequence",
+                        "GtRiskFactor",
+                        "GtRiskStatus",
+                        "GtRiskStrategy",
+                        "GtRiskAction",
+                        "Modified"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 100,
+                        "Paged": true,
+                        "ViewQuery": "<GroupBy Collapse=\"TRUE\" GroupLimit=\"30\"><FieldRef Name=\"GtRiskStatus\" Ascending=\"FALSE\" /></GroupBy><OrderBy><FieldRef Name=\"GtRiskFactor\" Ascending=\"FALSE\" /></OrderBy><Where><Neq>  <FieldRef Name=\"GtRiskStatus\" />  <Value Type=\"Text\">Ikke lenger aktuell</Value></Neq></Where>"
+                    }
+                },
+                {
+                    "Title": "Uakseptabel risiko",
+                    "ViewFields": [
+                        "ID",
+                        "LinkTitle",
+                        "GtRiskProbability",
+                        "GtRiskConsequence",
+                        "GtRiskFactor",
+                        "GtRiskStatus",
+                        "GtRiskStrategy",
+                        "GtRiskAction",
+                        "Modified"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 100,
+                        "Paged": true,
+                        "ViewQuery": "<GroupBy Collapse=\"TRUE\" GroupLimit=\"30\"><FieldRef Name=\"GtRiskStatus\" Ascending=\"FALSE\" /></GroupBy><OrderBy><FieldRef Name=\"GtRiskFactor\" Ascending=\"FALSE\" /></OrderBy><Where><And>  <Neq>    <FieldRef Name=\"GtRiskStatus\" />    <Value Type=\"Text\">Ikke lenger aktuell</Value>  </Neq>  <Gt>    <FieldRef Name=\"GtRiskFactor\" />    <Value Type=\"Number\">10</Value>  </Gt></And></Where>"
+                    }
+                },
+                {
+                    "Title": "Avklart risiko",
+                    "ViewFields": [
+                        "ID",
+                        "LinkTitle",
+                        "GtRiskProbability",
+                        "GtRiskConsequence",
+                        "GtRiskFactor",
+                        "GtRiskStatus",
+                        "GtRiskStrategy",
+                        "GtRiskAction",
+                        "GtRiskProbabilityPostAction",
+                        "GtRiskConsequencePostAction",
+                        "GtRiskFactorPostAction",
+                        "Modified"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 100,
+                        "Paged": true,
+                        "ViewQuery": "<OrderBy><FieldRef Name=\"GtRiskFactor\" Ascending=\"FALSE\" /></OrderBy><Where><Eq>  <FieldRef Name=\"GtRiskStatus\" />  <Value Type=\"Text\">Ikke lenger aktuell</Value></Eq></Where>"
+                    }
+                },
+                {
+                    "Title": "Uten ansvarlig",
+                    "ViewFields": [
+                        "ID",
+                        "LinkTitle",
+                        "GtRiskFactor",
+                        "GtRiskStatus",
+                        "GtRiskAction",
+                        "GtActionResponsible",
+                        "Modified"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 100,
+                        "Paged": true,
+                        "ViewQuery": " <OrderBy><FieldRef Name=\"GtRiskFactor\" Ascending=\"FALSE\" /></OrderBy><Where><IsNull>  <FieldRef Name=\"GtActionResponsible\" /></IsNull></Where>"
+                    }
+                },
+                {
+                    "Title": "Gjeldende fase",
+                    "ViewFields": [
+                        "ID",
+                        "LinkTitle"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 100,
+                        "Paged": true,
+                        "ViewQuery": ""
+                    }
+                }
+            ]
+        },
+        {
+            "Title": "Møtekalender",
+            "Description": "",
+            "Template": 106,
+            "ContentTypesEnabled": true,
+            "RemoveExistingContentTypes": true,
+            "ContentTypeBindings": [
+                {
+                    "ContentTypeID": "0x010200C19C974828B24D469B69C22B2D1FFB63"
+                }
+            ],
+            "AdditionalSettings": {
+                "EnableVersioning": true
+            }
+        },
+        {
+            "Title": "Dokumenter",
+            "Description": "",
+            "Template": 101,
+            "ContentTypesEnabled": false,
+            "RemoveExistingContentTypes": true,
+            "ContentTypeBindings": [
+                {
+                    "ContentTypeID": "0x0101008D35AAEBAF8A44A9B3264C70348EB42B"
+                }
+            ],
+            "AdditionalSettings": {
+                "EnableVersioning": true
+            },
+            "Views": [
+                {
+                    "Title": "Alle dokumenter",
+                    "ViewFields": [
+                        "DocIcon",
+                        "LinkFilename",
+                        "GtProjectPhase",
+                        "Modified",
+                        "Editor"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 30,
+                        "Paged": true,
+                        "ViewQuery": ""
+                    }
+                },
+                {
+                    "Title": "Gjeldende fase",
+                    "ViewFields": [
+                        "DocIcon",
+                        "LinkFilename",
+                        "Modified",
+                        "Editor"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 30,
+                        "Paged": true,
+                        "ViewQuery": ""
+                    }
+                }
+            ]
+        },
+        {
+            "Title": "Gevinstanalyse og gevinstrealiseringsplan",
+            "Description": "",
+            "Template": 100,
+            "ContentTypesEnabled": true,
+            "RemoveExistingContentTypes": true,
+            "ContentTypeBindings": [
+                {
+                    "ContentTypeID": "0x01004F466123309D46BAB9D5C6DE89A6CF67"
+                }
+            ],
+            "AdditionalSettings": {
+                "EnableVersioning": true
+            },
+            "Fields": [
+                "<Field Type=\"LookupMulti\" DisplayName=\"Endring\" List=\"{listid:Endringsanalyse}\" ShowField=\"LinkTitleNoMenu\" UnlimitedLengthInDocumentLibrary=\"FALSE\" RelationshipDeleteBehavior=\"None\" ID=\"{1d5752af-4d26-4aed-b20a-6229ac14ed5d}\" StaticName=\"GtChangeLookup\" Name=\"GtChangeLookup\" Group=\"\" Description=\"Foreslått endring fra endringsanalysen\" Mult=\"TRUE\" />"
+            ],
+            "FieldRefs": [
+                {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Required": true,
+                    "DisplayName": "Gevinst"
+                }
+            ],
+            "Views": [
+                {
+                    "Title": "Alle elementer",
+                    "ViewFields": [
+                        "LinkTitle",
+                        "GtChangeLookup",
+                        "GtGainsType",
+                        "GtGainsTurnover",
+                        "GtGainsResponsible",
+                        "GtMeasureIndicator",
+                        "GtStartValue",
+                        "GtDesiredValue",
+                        "GtMeasurementUnit",
+                        "GtRealizationTime"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 30,
+                        "Paged": true,
+                        "ViewQuery": ""
+                    }
+                },
+                {
+                    "Title": "Pr gevinsttype",
+                    "ViewFields": [
+                        "GtChangeLookup",
+                        "Title",
+                        "GtGainsTurnover",
+                        "GtGainsResponsible",
+                        "GtMeasureIndicator",
+                        "GtStartValue",
+                        "GtDesiredValue",
+                        "GtMeasurementUnit",
+                        "GtRealizationTime"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 30,
+                        "Paged": true,
+                        "ViewQuery": "<GroupBy Collapse=\"TRUE\" GroupLimit=\"30\"><FieldRef Name=\"GtGainsType\" Ascending=\"FALSE\" /></GroupBy><OrderBy><FieldRef Name=\"ID\" /></OrderBy>"
+                    }
+                }
+            ]
+        },
+        {
+            "Title": "Endringsanalyse",
+            "Description": "",
+            "Template": 100,
+            "ContentTypesEnabled": true,
+            "RemoveExistingContentTypes": true,
+            "ContentTypeBindings": [
+                {
+                    "ContentTypeID": "0x01001AF93A93F5534B5FBAF750572B11BB7F"
+                }
+            ],
+            "AdditionalSettings": {
+                "EnableVersioning": true
+            },
+            "FieldRefs": [
+                {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Required": true,
+                    "DisplayName": "Endring"
+                }
+            ],
+            "Views": [
+                {
+                    "Title": "Alle elementer",
+                    "ViewFields": [
+                        "LinkTitle",
+                        "GtProcess",
+                        "GtChallengeDescription"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 30,
+                        "Paged": true,
+                        "ViewQuery": "<OrderBy><FieldRef Name=\"ID\" /></OrderBy>"
+                    }
+                },
+                {
+                    "Title": "Pr prosess",
+                    "ViewFields": [
+                        "GtChallengeDescription",
+                        "LinkTitle"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 30,
+                        "Paged": true,
+                        "ViewQuery": "<GroupBy Collapse=\"TRUE\" GroupLimit=\"30\"><FieldRef Name=\"GtProcess\" Ascending=\"FALSE\" /></GroupBy><OrderBy><FieldRef Name=\"ID\" /></OrderBy>"
+                    }
+                }
+            ]
+        },
+        {
+            "Title": "Gevinstsoppfølging",
+            "Description": "",
+            "Template": 100,
+            "ContentTypesEnabled": true,
+            "RemoveExistingContentTypes": true,
+            "ContentTypeBindings": [
+                {
+                    "ContentTypeID": "0x010039EAFDC2A1624C1BA1A444FC8FE85DEC"
+                }
+            ],
+            "AdditionalSettings": {
+                "EnableVersioning": true
+            },
+            "FieldRefs": [
+                {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Required": false,
+                    "Hidden": true
+                }
+            ],
+            "Fields": [
+                "<Field Type=\"Lookup\" DisplayName=\"Gevinst\" List=\"{listid:Gevinstanalyse og gevinstrealiseringsplan}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
+                "<Field Type=\"Lookup\" DisplayName=\"Måleindikator\" List=\"{listid:Gevinstanalyse og gevinstrealiseringsplan}\" ShowField=\"GtMeasureIndicator\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{92ae8541-f35e-4c05-8518-b9abce2d0860}\"  StaticName=\"GtMeasureIndicatorLookup\" Name=\"GtMeasureIndicatorLookup\" />",
+                "<Field Type=\"Lookup\" DisplayName=\"Gevinst ID\" List=\"{listid:Gevinstanalyse og gevinstrealiseringsplan}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
+            ],
+            "Views": [
+                {
+                    "Title": "Alle elementer",
+                    "ViewFields": [
+                        "GtMeasurementDate",
+                        "GtMeasurementValue",
+                        "GtMeasureIndicatorLookup",
+                        "GtMeasurementComment"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 30,
+                        "Paged": true,
+                        "ViewQuery": "<GroupBy Collapse=\"TRUE\" GroupLimit=\"30\"><FieldRef Name=\"GtGainLookup\" /></GroupBy><OrderBy><FieldRef Name=\"GtMeasurementDate\" Ascending=\"FALSE\" /></OrderBy>"
+                    }
+                },
+                {
+                    "Title": "Flat visning",
+                    "ViewFields": [
+                        "GtGainLookup",
+                        "GtMeasurementDate",
+                        "GtMeasurementValue",
+                        "GtMeasureIndicatorLookup",
+                        "GtMeasurementComment"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 30,
+                        "Paged": true,
+                        "ViewQuery": "<OrderBy><FieldRef Name=\"GtGainLookup\" /><FieldRef Name=\"GtMeasurementDate\" Ascending=\"FALSE\" /></OrderBy>"
+                    }
+                }
+            ]
+        },
+        {
+            "Title": "Ressursallokering",
+            "Description": "",
+            "Template": 100,
+            "ContentTypesEnabled": false,
+            "RemoveExistingContentTypes": true,
+            "FieldRefs": [
+                {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Required": false,
+                    "Hidden": true
+                }
+            ],
+            "ContentTypeBindings": [
+                {
+                    "ContentTypeID": "0x010004EAFF7AFCC94C2680042E6881264120"
+                }
+            ],
+            "Views": [
+                {
+                    "Title": "Alle elementer",
+                    "ViewFields": [
+                        "ID",
+                        "GtResourceUser",
+                        "GtResourceRole",
+                        "GtStartDate",
+                        "GtEndDate",
+                        "GtResourceLoad",
+                        "GtApproved",
+                        "Modified",
+                        "Editor"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 100,
+                        "Paged": true,
+                        "ViewQuery": ""
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "875ca87a-e331-4ffb-bc69-0272fdf80e41",
+  "alias": "PortfolioInsightsWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "Porteføljeinnsikt"
+      },
+      "description": {
+        "default": " "
+      },
+      "officeFabricIconFontName": "PivotChart",
+      "properties": {}
+    }
+  ]
+}

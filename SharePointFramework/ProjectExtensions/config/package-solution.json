@@ -1,0 +1,13 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+    "solution": {
+        "name": "pp-project-extensions",
+        "id": "fe723971-d5c2-4698-91e3-c16e2f72fb5b",
+        "version": "0.5.4.0",
+        "includeClientSideAssets": true,
+        "skipFeatureDeployment": true
+    },
+    "paths": {
+        "zippedPackage": "solution/pp-project-extensions.sppkg"
+    }
+}

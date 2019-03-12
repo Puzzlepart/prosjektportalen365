@@ -1,0 +1,22 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+.projectCard {
+    object-fit: cover;
+    margin: 5px 10px 5px 0;
+    width: 240px;
+    box-sizing: border-box;
+    >div>div>i {
+        margin: 0 5px;
+    }
+    div>div>button:hover {
+        border-color: #5bc2e7;
+        background-color: #e6f2fa;
+    }
+    >a {
+        color: rgb(51, 51, 51);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-align: center;
+        border-top: 1px solid #dedede;
+        border-bottom: 1px solid #dedede;
+    }
+}

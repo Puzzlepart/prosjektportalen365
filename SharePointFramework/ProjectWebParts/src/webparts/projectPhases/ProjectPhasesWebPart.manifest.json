@@ -1,0 +1,44 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "4449d3dc-fa58-4982-b87c-5a893114e7b7",
+  "alias": "ProjectPhasesWebPart",
+  "componentType": "WebPart",
+  "version": "0.4.0",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "hiddenFromToolbox": false,
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "Fasevelger"
+      },
+      "description": {
+        "default": " "
+      },
+      "officeFabricIconFontName": "GitGraph",
+      "properties": {
+        "description": "",
+        "phaseSubTextProperty": "",
+        "phaseField": "Fase",
+        "automaticReload": true,
+        "confirmPhaseChange": true,
+        "reloadTimeout": 0,
+        "updateViewsDocuments": false,
+        "updateViewsTasks": false,
+        "updateViewsRisks": false,
+        "gutter": 15,
+        "fontSize": 13,
+        "entity": {
+          "listName": "Prosjekter",
+          "contentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
+          "fieldsGroupName": "Prosjektportalenkolonner",
+          "siteIdFieldName": "GtSiteId"
+        }
+      }
+    }
+  ]
+}

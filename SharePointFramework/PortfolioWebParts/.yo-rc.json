@@ -1,0 +1,11 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "packageManager": "pnpm",
+    "isCreatingSolution": false,
+    "environment": "spo",
+    "version": "1.7.1",
+    "libraryName": "portfolio-web-parts",
+    "libraryId": "00483367-68e2-4977-9cc3-6cf0de623daa",
+    "componentType": "webpart"
+  }
+}

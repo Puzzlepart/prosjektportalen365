@@ -1,0 +1,8 @@
+.react-calendar-timeline .rct-header .rct-label-group {    
+    background: #f4f4f4!important;
+    color: #444;
+}
+
+.react-calendar-timeline .rct-header-container.header-sticky > div {
+    width: 100% !important;
+}

@@ -1,0 +1,2 @@
+<pnp:RegionalSettings AdjustHijriDays="0" AlternateCalendarType="None" CalendarType="Gregorian" Collation="25" FirstDayOfWeek="Monday" FirstWeekOfYear="0" LocaleId="1044" ShowWeeks="false" Time24="true" TimeZone="4" WorkDayEndHour="8:00AM" WorkDays="62" WorkDayStartHour="8:00AM" 
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema" />

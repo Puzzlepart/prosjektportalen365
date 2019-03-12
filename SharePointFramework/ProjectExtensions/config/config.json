@@ -1,0 +1,27 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "project-setup-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/projectSetup/ProjectSetupApplicationCustomizer.js",
+          "manifest": "./src/extensions/projectSetup/ProjectSetupApplicationCustomizer.manifest.json"
+        }
+      ]
+    },
+    "project-upgrade-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/projectUpgrade/ProjectUpgradeApplicationCustomizer.js",
+          "manifest": "./src/extensions/projectUpgrade/ProjectUpgradeApplicationCustomizer.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "ProjectSetupApplicationCustomizerStrings": "lib/extensions/projectSetup/loc/{locale}.js",
+    "ProjectUpgradeApplicationCustomizerStrings": "lib/extensions/projectUpgrade/loc/{locale}.js"
+  }
+}

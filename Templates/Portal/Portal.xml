@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    <pnp:Preferences></pnp:Preferences>
+    <pnp:Localizations>
+        <pnp:Localization LCID="1044" Name="Norwegian" ResourceFile="no-NB.resx" />
+        <pnp:Localization LCID="1033" Name="English (US)" ResourceFile="no-NB.resx" />
+    </pnp:Localizations>
+    <pnp:Templates ID="CONTAINER-TEMPLATE-PP-PORTAL">
+        <pnp:ProvisioningTemplate ID="TEMPLATE-PP-PORTAL" Version="1" Scope="RootSite">
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields.xml" />
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes.xml" />
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists.xml" />
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/RegionalSettings.xml" />
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Navigation.xml" />
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SupportedUILanguages.xml" />
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Files.xml" />
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages.xml" />
+        </pnp:ProvisioningTemplate>
+    </pnp:Templates>
+</pnp:Provisioning>

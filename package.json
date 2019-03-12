@@ -1,0 +1,18 @@
+{
+  "name": "prosjektportalen-o365",
+  "version": "0.0.1",
+  "description": "Prosjektportalen Office 365",
+  "main": "n/a",
+  "scripts": {
+    "make-install": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Make.ps1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://puzzlepart.visualstudio.com/Prosjektportalen-O365/_git/Prosjektportalen-O365"
+  },
+  "keywords": [
+    "Prosjektportalen"
+  ],
+  "author": "",
+  "license": "MIT"
+}

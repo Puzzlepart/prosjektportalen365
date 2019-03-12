@@ -1,0 +1,36 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "57530c94-4fb2-4ca2-9279-16c57881fa19",
+  "alias": "RiskOverviewWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "hiddenFromToolbox": false,
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "Risikooversikt"
+      },
+      "description": {
+        "default": " "
+      },
+      "officeFabricIconFontName": "AsteriskSolid",
+      "properties": {
+        "dataSource": "Alle risikoelementer",
+        "showCommandBar": true,
+        "groupByOptions": [
+          {
+            "name": "Prosjekt",
+            "key": "SiteTitle"
+          }
+        ],
+        "excelExportEnabled": false
+      }
+    }
+  ]
+}

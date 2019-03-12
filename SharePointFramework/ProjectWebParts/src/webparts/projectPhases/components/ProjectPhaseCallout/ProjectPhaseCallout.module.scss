@@ -1,0 +1,38 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+.projectPhaseCallout {
+  padding: 20px;
+
+  .header {
+    margin: 0 0 5px 0;
+    .title {
+      font-size: 18px;
+    }
+  }
+  
+  .inner {
+    .content {
+      .subText {
+        max-width: 250px;
+        font-size: 14px;
+      }
+      .checkPointStatus {
+        margin: 0 0 15px 0;
+      }
+      .addText {
+        max-width: 250px;
+        font-size: 11px;
+
+        a, a:visited, a:link {          
+          color: "[theme: themePrimary, default: #444444]";
+          text-decoration: none;
+        }
+        a:hover, a:active {          
+          color: "[theme: themeTertiary, default: #444444]";
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}
+
