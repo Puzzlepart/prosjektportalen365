@@ -1,1 +1,0 @@
-# Installasjon av Prosjektportalen #

@@ -4,7 +4,7 @@
   "description": "Prosjektportalen 365",
   "main": "n/a",
   "scripts": {
-    "make-install": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Make.ps1"
+    "make-install": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Make-Install.ps1"
   },
   "repository": {
     "type": "git",
