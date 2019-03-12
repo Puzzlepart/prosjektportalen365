@@ -13,16 +13,4 @@
             <pnp:NavigationNode Title="Ressursallokering" Url="{site}/SitePages/Ressursallokering.aspx" />
         </pnp:StructuralNavigation>
     </pnp:GlobalNavigation>
-    <pnp:CurrentNavigation NavigationType="StructuralLocal">
-        <pnp:StructuralNavigation RemoveExistingNodes="true">
-            <pnp:NavigationNode Title="Hjem" Url="{site}/SitePages/Home.aspx" />
-            <!-- <pnp:NavigationNode Title="Porteføljeoversikt" Url="{site}/SitePages/Porteføljeoversikt.aspx" />
-            <pnp:NavigationNode Title="Porteføljeinnsikt" Url="{site}/SitePages/Porteføljeinnsikt.aspx" />
-            <pnp:NavigationNode Title="Gevinstoversikt" Url="{site}/SitePages/Gevinstoversikt.aspx" />
-            <pnp:NavigationNode Title="Erfaringslogg" Url="{site}/SitePages/Erfaringslogg.aspx" />
-            <pnp:NavigationNode Title="Leveranseoversikt" Url="{site}/SitePages/Leveranseoversikt.aspx" />
-            <pnp:NavigationNode Title="Risikooversikt" Url="{site}/SitePages/Risikooversikt.aspx" />
-            <pnp:NavigationNode Title="Ressursallokering" Url="{site}/SitePages/Ressursallokering.aspx" /> -->
-        </pnp:StructuralNavigation>
-    </pnp:CurrentNavigation>
 </pnp:Navigation>

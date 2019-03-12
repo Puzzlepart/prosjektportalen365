@@ -18,8 +18,7 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "Skip app packages")]
     [switch]$SkipAppPackages,
     [Parameter(Mandatory = $false, HelpMessage = "Skip site creation")]
-    [switch]$SkipSiteCreation
-    
+    [switch]$SkipSiteCreation    
 )
 
 
