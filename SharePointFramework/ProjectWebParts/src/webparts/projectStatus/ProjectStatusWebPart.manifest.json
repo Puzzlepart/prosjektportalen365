@@ -23,6 +23,7 @@
       "properties": {
         "title": "Prosjektstatus",
         "reportListName": "Prosjektstatus",
+        "sectionsListName": "Statusseksjoner",
         "reportCtId": "0x010022252E35737A413FB56A1BA53862F6D5",
         "entity": {
           "listName": "Prosjekter",

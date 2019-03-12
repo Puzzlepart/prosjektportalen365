@@ -1,16 +1,15 @@
 @import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
-
 .statusPropertySection {
     .container {
         @include ms-Grid;
-
-        .row {            
-            @include ms-Grid-row;      
-            
+        background-color: #EFF6FA;
+        border-top: 5px solid #035484;
+        margin-top: 30px;
+        .row {
+            @include ms-Grid-row;
             .statusPropertySectionHeader {
                 width: auto;
             }
-
             .statusPropertySectionFields {
                 margin-top: 25px;
                 display: -webkit-box;
@@ -21,25 +20,50 @@
                 -ms-flex-pack: distribute;
                 justify-content: space-around;
             }
-
             .column12 {
                 @include ms-Grid-col;
                 @include ms-sm12;
+                > div {
+                  margin: 20px -7px;
+                }
             }
-
             .column8 {
                 @include ms-Grid-col;
                 @include ms-sm8;
             }
-
             .column6 {
                 @include ms-Grid-col;
                 @include ms-sm6;
             }
-
             .column4 {
                 @include ms-Grid-col;
                 @include ms-sm4;
+            }
+            .sectionIconContainer {
+                width: 50px;
+                height: 50px;
+                position: absolute;
+                right: 0;
+                margin: 15px;
+                font-size: 40px;
+                color: #035484;
+                user-select: none;
+                cursor: pointer;
+                i {
+                    font-weight: bold;
+                }
+                a {
+                    color: #035484;
+                    &:hover {
+                        color: #035484;
+                    }
+                    &:active {
+                        color: #035484;
+                    }
+                    &:visited {
+                        color: #035484;
+                    }
+                }
             }
         }
     }

@@ -1,50 +1,89 @@
 @import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
-
 .projectStatus {
-  .container {
-    margin: 0;
-    padding: 0 40px 50px 25px;  
-  }
-
-  .row {
-    @include ms-Grid-row;
-  }
-
-  .projectStatusTopSection {
-    width: auto;
-
-    .title {
-      margin: 0 0 20px 0;
+    height: -webkit-fill-available;
+    .scrollablePane {
+        height: auto;
+        .container {
+            margin: 0;
+            padding: 0 40px 50px 25px;
+        }
+        .row {
+            @include ms-Grid-row;
+        }
+        .projectStatusTopSection {
+            width: auto;
+            .sticky {
+                .title {
+                    margin: 0;
+                    background-color: #939393;
+                    div>span {
+                        color: #fff;
+                    }
+                }
+                .navigation {
+                    z-index: 99;
+                    width: 100%;
+                    margin: 10px 0;
+                    .navLink {
+                        padding: 9px 10px;
+                        text-decoration: none;
+                        cursor: pointer;
+                        text-align: center;
+                        display: inline-block;
+                        >i {
+                            margin-right: 5px;
+                        }
+                    }
+                }
+            }
+            .projectStatusActions {
+                >button {
+                    margin-right: 8px;
+                }
+            }
+            .sections {
+                margin-top: 25px;
+            }
+            .column12 {
+                @include ms-Grid-col;
+                @include ms-sm12;
+            }
+            .column8 {
+                @include ms-Grid-col;
+                @include ms-sm8;
+            }
+            .column6 {
+                @include ms-Grid-col;
+                @include ms-sm6;
+            }
+            .column4 {
+                @include ms-Grid-col;
+                @include ms-sm4;
+            }
+        }
+        // Sticky header styles
+        .title {
+          margin: 0;
+          padding: 2px;
+          background-color: #939393;
+          div>span {
+              color: #fff;
+          }
+      }
+      .navigation {
+          z-index: 99;
+          width: 100%;
+          margin: 10px 0;
+          .navLink {
+              padding: 9px 10px;
+              text-decoration: none;
+              cursor: pointer;
+              text-align: center;
+              display: inline-block;
+              >i {
+                  margin-right: 5px;
+              }
+          }
+      }
     }
-  }
-
-  .projectStatusActions {
-    >button { 
-      margin-right: 8px;
-    }
-  }
-
-  .sections {
-    margin-top: 25px;
-  }
-
-  .column12 {
-    @include ms-Grid-col;
-    @include ms-sm12;
-  }
-
-  .column8 {
-    @include ms-Grid-col;
-    @include ms-sm8;
-  }
-
-  .column6 {
-    @include ms-Grid-col;
-    @include ms-sm6;
-  }
-
-  .column4 {
-    @include ms-Grid-col;
-    @include ms-sm4;
-  }
 }
