@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Logger, LogLevel } from '@pnp/logging';
 import styles from './ProjectStatus.module.scss';
+import '@pnp/polyfill-ie11';
 import { DisplayMode } from '@microsoft/sp-core-library';
 import { IProjectStatusProps } from './IProjectStatusProps';
 import { IProjectStatusState, IProjectStatusData } from './IProjectStatusState';
@@ -14,10 +15,16 @@ import SummarySection from './SummarySection';
 import StatusPropertySection from './StatusPropertySection';
 import ProjectStatusReport from '../models/ProjectStatusReport';
 import * as strings from 'ProjectStatusWebPartStrings';
+import SectionModel from './SectionModel';
+import { Element, Link } from 'react-scroll';
+import Navigation from './Navigation/Navigation';
+import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
+import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 
 
 export default class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private reportList;
+  private sectionsList;
 
   constructor(props: IProjectStatusProps) {
     super(props);
@@ -29,7 +36,7 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
     this.setState({ data, selectedReport: data.reports[0], isLoading: false });
   }
 
-  public render(): React.ReactElement<IProjectStatusProps> {
+  public render() {
     const { isLoading, data, selectedReport, showNewStatusReportModal } = this.state;
 
     if (isLoading) {
@@ -41,81 +48,106 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
       webPartTitleText = `${this.props.title} (${selectedReport.toString()})`;
     }
 
+    const baseProps = {
+      context: this.props.context,
+      report: this.state.selectedReport,
+      entityFields: this.state.data.entityFields,
+      entityItem: this.state.data.entityItem,
+    };
+
     return (
       <div className={styles.projectStatus}>
-        <div className={styles.container}>
-          <div className={`${styles.projectStatusTopSection} ${styles.row}`}>
-            <div className={`${styles.title} ${styles.column12}`}>
-              <WebPartTitle
-                displayMode={DisplayMode.Read}
-                title={webPartTitleText}
-                updateProperty={_title => { }} />
-            </div>
-            <div className={`${styles.projectStatusActions} ${styles.column8}`}>
-              <DefaultButton
-                text={strings.NewStatusReportModalHeaderText}
-                onClick={this.onOpenNewStatusReportModal}
-                iconProps={{ iconName: 'NewFolder' }} />
-              <DefaultButton
-                disabled={!selectedReport}
-                text={strings.EditReportButtonText}
-                href={this.getSelectedReportEditFormUrl()}
-                iconProps={{ iconName: 'Edit' }} />
-            </div>
-            <div className={styles.column4}>
-              <Dropdown
-                onChanged={this.onReportChanged}
-                defaultSelectedKey='0'
-                options={reportOptions}
-                disabled={reportOptions.length === 0} />
-            </div>
-            <div className={`${styles.sections} ${styles.column12}`}>
-              {this.renderSections()}
+        <ScrollablePane className={styles.scrollablePane}>
+          <div className={styles.container}>
+            <div className={`${styles.projectStatusTopSection} ${styles.row}`}>
+              <div className={styles.sticky}>
+                <Sticky stickyPosition={StickyPositionType.Header}>
+                  <div className={`${styles.title} ${styles.column12}`}>
+                    <WebPartTitle
+                      displayMode={DisplayMode.Read}
+                      title={webPartTitleText}
+                      updateProperty={_title => { }} />
+                  </div>
+                  <Navigation entityItem={baseProps.entityItem} sections={this.state.data.sections} />
+                </Sticky>
+              </div>
+              <div className={`${styles.projectStatusActions} ${styles.column8}`}>
+                <DefaultButton
+                  text={strings.NewStatusReportModalHeaderText}
+                  onClick={this.onOpenNewStatusReportModal}
+                  iconProps={{ iconName: 'NewFolder' }} />
+                <DefaultButton
+                  disabled={!selectedReport}
+                  text={strings.EditReportButtonText}
+                  href={this.getSelectedReportEditFormUrl()}
+                  iconProps={{ iconName: 'Edit' }} />
+              </div>
+              <div className={styles.column4}>
+                <Dropdown
+                  onChanged={this.onReportChanged}
+                  defaultSelectedKey='0'
+                  options={reportOptions}
+                  disabled={reportOptions.length === 0} />
+              </div>
+              <div className={`${styles.sections} ${styles.column12}`}>
+                {(this.state.selectedReport) && this._renderSections(this.state.data.sections, baseProps)}
+              </div>
             </div>
           </div>
-        </div>
-        {showNewStatusReportModal && (
-          <NewStatusReportModal
-            fields={data.reportFields}
-            onSave={this.onSaveReport}
-            onDismiss={this.onDismissNewStatusReportModal} />
-        )}
+          {showNewStatusReportModal && (
+            <NewStatusReportModal
+              fields={data.reportFields}
+              onSave={this.onSaveReport}
+              onDismiss={this.onDismissNewStatusReportModal} />
+          )}
+        </ScrollablePane>
       </div>
     );
   }
 
-  private renderSections() {
-    let sections = [];
-    if (this.state.selectedReport) {
-      const baseProps = {
-        context: this.props.context,
-        report: this.state.selectedReport,
-        entityFields: this.state.data.entityFields,
-        entityItem: this.state.data.entityItem,
-      };
-      const data = this.state.selectedReport.item;
-      sections.push(
-        <SummarySection
-          entity={this.props.entity} {...baseProps} />,
-        <StatusPropertySection
-          headerProps={{ label: 'Fremdrift', value: data.GtStatusTime, comment: data.GtStatusTimeComment, iconName: 'AwayStatus', iconSize: 50 }}
-          {...baseProps} />,
-        <StatusPropertySection
-          headerProps={{ label: 'Økonomi', value: data.GtStatusBudget, comment: data.GtStatusBudgetComment, iconName: 'Money', iconSize: 50 }}
-          fieldNames={['GtProjectFinanceName', 'GtBudgetTotal', 'GtCostsTotal', 'GtProjectForecast']}
-          {...baseProps} />,
-        <StatusPropertySection
-          headerProps={{ label: 'Kvalitet', value: data.GtStatusQuality, comment: data.GtStatusQualityComment, iconName: 'Equalizer', iconSize: 50 }}
-          {...baseProps} />,
-        <StatusPropertySection
-          headerProps={{ label: 'Risiko', value: data.GtStatusRisk, comment: data.GtStatusRiskComment, iconName: 'Warning', iconSize: 50 }}
-          {...baseProps} />,
-        <StatusPropertySection
-          headerProps={{ label: 'Gevinstoppnåelse', value: data.GtStatusGainAchievement, comment: data.GtStatusGainAchievementComment, iconName: 'Wines', iconSize: 50 }}
-          {...baseProps} />,
+  private _renderSections(sections: SectionModel[], baseProps: any) {
+    const report = baseProps.report.item;
+    let sortedSections = sections.sort((a, b) => a.sortOrder < b.sortOrder ? -1 : 1);
+    let index = -1;
+    return sortedSections.map((s => {
+      index++;
+      if (s.fieldName === strings.OverallStatusFieldName) {
+        return (
+          <SummarySection
+            entity={this.props.entity}
+            sections={sections}
+            {...baseProps} />
+        );
+      } else return (
+
+        (s.fieldName === 'GtStatusBudget') ?
+          <Element
+            id={s.getHtmlElementId()}
+            name={`section-${index}`}
+            className={styles.row}
+          >
+            <StatusPropertySection
+              section={s}
+              headerProps={{ label: s.name, value: report[s.fieldName], comment: report[s.commentFieldName], iconName: s.iconName, iconSize: 50 }}
+              {...baseProps}
+              fieldNames={['GtProjectFinanceName', 'GtBudgetTotal', 'GtCostsTotal', 'GtProjectForecast']}
+            />
+          </Element>
+          :
+          <Element
+            id={s.getHtmlElementId()}
+            name={`section-${index}`}
+            className={styles.row}
+          >
+            <StatusPropertySection
+              section={s}
+              headerProps={{ label: s.name, value: report[s.fieldName], comment: report[s.commentFieldName], iconName: s.iconName, iconSize: 50 }}
+              {...baseProps}
+            />
+          </Element>
       );
-    }
-    return sections;
+    }));
+
   }
 
   private getSelectedReportEditFormUrl(): string {
@@ -159,8 +191,9 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
 
   private async fetchData(): Promise<IProjectStatusData> {
     Logger.log({ message: '(ProjectStatus) fetchData: Fetching fields and reports', data: {}, level: LogLevel.Info });
-    const { hubSite, spEntityPortalService, reportListName } = this.props;
+    const { hubSite, spEntityPortalService, reportListName, sectionsListName } = this.props;
     this.reportList = hubSite.web.lists.getByTitle(reportListName);
+    this.sectionsList = hubSite.web.lists.getByTitle(sectionsListName);
     const [entityItem, entityFields] = await Promise.all([
       spEntityPortalService.getEntityItemFieldValues(this.props.context.pageContext.site.id.toString()),
       spEntityPortalService.getEntityFields(),
@@ -183,6 +216,8 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
     }));
     let reports = await this.reportList.items.filter(`GtSiteId eq '${this.props.context.pageContext.legacyPageContext.groupId}'`).get();
     reports = reports.map((r: any) => new ProjectStatusReport(r));
-    return { entityFields, entityItem, reportFields, reportEditFormUrl, reports };
+    let sections = await this.sectionsList.items.get();
+    sections = sections.map((r: any) => new SectionModel(r, entityItem));
+    return { entityFields, entityItem, reportFields, reportEditFormUrl, reports, sections };
   }
 }

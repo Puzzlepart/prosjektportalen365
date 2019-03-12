@@ -3,9 +3,11 @@
 .summarySection {
     .container {
         @include ms-Grid;
+        background-color: #EFF6FA;
+        padding: 10px 18px;
 
-        .row {            
-            @include ms-Grid-row;             
+        .row {
+            @include ms-Grid-row;
 
             .column12 {
                 @include ms-Grid-col;

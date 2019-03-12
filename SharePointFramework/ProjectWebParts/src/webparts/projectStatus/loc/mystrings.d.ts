@@ -1,4 +1,5 @@
 declare interface IProjectStatusWebPartStrings {
+  OverallStatusFieldName: string;
   LoadingText: string;
   SaveText: string;
   PickReportText: string;
