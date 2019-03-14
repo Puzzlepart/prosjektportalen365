@@ -18,6 +18,7 @@ dependencies:
   office-ui-fabric-react: 5.134.0
   react: 16.3.2
   react-dom: 16.3.2
+  react-scroll: 1.7.11
   sp-entityportal-service: 0.5.6
   sp-hubsite-service: 0.1.0
   spfx-jsom: 0.6.0
@@ -269,7 +270,7 @@ packages:
     dependencies:
       '@types/react': 16.4.2
       '@types/webpack-env': 1.13.1
-      '@uifabric/icons': /@uifabric/icons/5.8.0/react-dom@16.3.2+react@16.3.2
+      '@uifabric/icons': 5.8.0
       office-ui-fabric-react: /office-ui-fabric-react/5.131.0/react-dom@16.3.2+react@16.3.2
       react: 16.3.2
       react-dom: /react-dom/16.3.2/react@16.3.2
@@ -1286,14 +1287,6 @@ packages:
     dependencies:
       '@uifabric/styling': 5.37.0
       tslib: 1.9.3
-    dev: false
-    resolution:
-      integrity: sha512-EUhKxYlIPJshg4fQvCNTYSk0p7RhzEWeEAJBV4sao1SKmN0/pZBnkLbDqWjU5VUfdwZZYiIdaLRpM+pyzhniZw==
-  /@uifabric/icons/5.8.0/react-dom@16.3.2+react@16.3.2:
-    dependencies:
-      '@uifabric/styling': /@uifabric/styling/5.37.0/react-dom@16.3.2+react@16.3.2
-      tslib: 1.9.3
-    id: registry.npmjs.org/@uifabric/icons/5.8.0
     resolution:
       integrity: sha512-EUhKxYlIPJshg4fQvCNTYSk0p7RhzEWeEAJBV4sao1SKmN0/pZBnkLbDqWjU5VUfdwZZYiIdaLRpM+pyzhniZw==
   /@uifabric/merge-styles/5.17.1:
@@ -1307,7 +1300,6 @@ packages:
       '@uifabric/merge-styles': 5.17.1
       '@uifabric/utilities': 5.34.2
       tslib: 1.9.3
-    dev: false
     resolution:
       integrity: sha512-3hC0itW/hWSD5J4uANzUKk8XVGWUNkU+VLjEjWsQ6i5lvwFGaanR6Qy0bTkZdFGqFWMXe91CkBHV7HnvEx7tCA==
   /@uifabric/styling/5.37.0/react-dom@16.3.2+react@16.3.2:
@@ -1324,7 +1316,6 @@ packages:
       '@uifabric/merge-styles': 5.17.1
       prop-types: 15.6.2
       tslib: 1.9.3
-    dev: false
     peerDependencies:
       react: ^0.14.9 || ^15.0.1-0 || ^16.0.0-0
       react-dom: ^0.14.9 || ^15.0.1-0 || ^16.0.0-0
@@ -7062,6 +7053,10 @@ packages:
     dev: true
     resolution:
       integrity: sha1-+zB4RHU7Zrnxr6VOJix0UwfbqOU=
+  /lodash.throttle/4.1.1:
+    dev: false
+    resolution:
+      integrity: sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
   /lodash.uniq/4.5.0:
     dev: true
     resolution:
@@ -8035,7 +8030,7 @@ packages:
   /office-ui-fabric-react/5.131.0/react-dom@16.3.2+react@16.3.2:
     dependencies:
       '@microsoft/load-themed-styles': 1.8.52
-      '@uifabric/icons': /@uifabric/icons/5.8.0/react-dom@16.3.2+react@16.3.2
+      '@uifabric/icons': 5.8.0
       '@uifabric/merge-styles': 5.17.1
       '@uifabric/styling': /@uifabric/styling/5.37.0/react-dom@16.3.2+react@16.3.2
       '@uifabric/utilities': /@uifabric/utilities/5.34.2/react-dom@16.3.2+react@16.3.2
@@ -8913,6 +8908,14 @@ packages:
       object-assign: 4.1.1
     resolution:
       integrity: sha512-3pboPvLiWD7dkI3qf3KbUe6hKFKa52w+AE0VCqECtf+QHAKgOL37tTaNCnuX1nAAQ4ZhyP+kYVKf8rLmJ/feDQ==
+  /prop-types/15.7.2:
+    dependencies:
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
+      react-is: 16.8.4
+    dev: false
+    resolution:
+      integrity: sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
   /proxy-addr/2.0.4:
     dependencies:
       forwarded: 0.1.2
@@ -9092,6 +9095,20 @@ packages:
       react: ^16.0.0
     resolution:
       integrity: sha512-MMPko3zYncNrz/7gG17wJWUREZDvskZHXOwbttzl0F0L3wDmToyuETuo/r8Y5yvDejwYcRyWI1lvVBjLJWFwKA==
+  /react-is/16.8.4:
+    dev: false
+    resolution:
+      integrity: sha512-PVadd+WaUDOAciICm/J1waJaSvgq+4rHE/K70j0PFqKhkTBsPv/82UGQJNXAngz1fOQLLxI6z1sEDmJDQhCTAA==
+  /react-scroll/1.7.11:
+    dependencies:
+      lodash.throttle: 4.1.1
+      prop-types: 15.7.2
+    dev: false
+    peerDependencies:
+      react: ^15.5.4 || ^16.0.0
+      react-dom: ^15.5.4 || ^16.0.0
+    resolution:
+      integrity: sha512-MCWtt8KWTBzBlo9oFE7xgAhGcgbslsfQAuGZAfYlBTt3Pxi2CX+kh8OoTUVAuOwNlt9XkoWcvDTWQwtHzm2uOg==
   /react/16.3.2:
     dependencies:
       fbjs: 0.8.17
@@ -11959,6 +11976,7 @@ specifiers:
   office-ui-fabric-react: 5.134.0
   react: 16.3.2
   react-dom: 16.3.2
+  react-scroll: ^1.7.11
   sp-entityportal-service: ^0.5.6
   sp-hubsite-service: ^0.1.0
   spfx-jsom: ^0.6.0
