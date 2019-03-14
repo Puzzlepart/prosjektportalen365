@@ -1,6 +1,7 @@
 @import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
 .projectStatus {
     height: -webkit-fill-available;
+    position: absolute;
     .scrollablePane {
         height: auto;
         .container {
