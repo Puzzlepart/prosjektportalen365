@@ -25,7 +25,7 @@ ActionsCount | Title                                             | Filename     
 3            | Liste - Endringsanalyse                           | 000190 - Liste - Endringsanalyse                           | 190
 3            | Liste - Fasesjekkliste                            | 000200 - Liste - Fasesjekkliste                            | 200
 3            | Liste - Gevinstanalyse og gevinstrealiseringsplan | 000210 - Liste - Gevinstanalyse og gevinstrealiseringsplan | 210
-3            | Liste - Gevinstsoppfølging                        | 000220 - Liste - Gevinstsoppfølging                        | 220
+3            | Liste - Gevintsoppfølging                        | 000220 - Liste - Gevintsoppfølging                        | 220
 3            | Liste - Informasjon                               | 000230 - Liste - Informasjon                               | 230
 3            | Liste - Interessentregister                       | 000240 - Liste - Interessentregister                       | 240
 3            | Liste - Kommunikasjonsplan                        | 000250 - Liste - Kommunikasjonsplan                        | 250
