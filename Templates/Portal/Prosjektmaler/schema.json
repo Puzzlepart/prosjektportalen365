@@ -1,0 +1,648 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "additionalProperties": {
+    },
+    "definitions": {
+        "IClientSideControl": {
+            "properties": {
+                "Id": {
+                    "type": "string"
+                },
+                "Properties": {
+                    "additionalProperties": {
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "IClientSidePage": {
+            "properties": {
+                "CommentsDisabled": {
+                    "type": "boolean"
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "PageLayoutType": {
+                },
+                "Sections": {
+                    "items": {
+                        "$ref": "#/definitions/IClientSidePageSection"
+                    },
+                    "type": "array"
+                },
+                "Title": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "IClientSidePageColumn": {
+            "properties": {
+                "Controls": {
+                    "items": {
+                        "$ref": "#/definitions/IClientSideControl"
+                    },
+                    "type": "array"
+                },
+                "Factor": {
+                }
+            },
+            "type": "object"
+        },
+        "IClientSidePageSection": {
+            "properties": {
+                "Columns": {
+                    "items": {
+                        "$ref": "#/definitions/IClientSidePageColumn"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "IComposedLook": {
+            "properties": {
+                "BackgroundImageUrl": {
+                    "type": "string"
+                },
+                "ColorPaletteUrl": {
+                    "type": "string"
+                },
+                "FontSchemeUrl": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "IContentType": {
+            "properties": {
+                "Description": {
+                    "type": "string"
+                },
+                "FieldRefs": {
+                    "items": {
+                        "$ref": "#/definitions/IFieldRef"
+                    },
+                    "type": "array"
+                },
+                "Group": {
+                    "type": "string"
+                },
+                "ID": {
+                    "type": "string"
+                },
+                "Name": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "IContentTypeBinding": {
+            "properties": {
+                "ContentTypeID": {
+                    "type": "string"
+                },
+                "Name": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "ICustomAction": {
+            "additionalProperties": {
+                "type": "string"
+            },
+            "properties": {
+                "Description": {
+                    "type": "string"
+                },
+                "Location": {
+                    "type": "string"
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "Title": {
+                    "type": "string"
+                },
+                "Url": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "IFeature": {
+            "properties": {
+                "deactivate": {
+                    "type": "boolean"
+                },
+                "force": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "IFieldRef": {
+            "properties": {
+                "Hidden": {
+                    "type": "boolean"
+                },
+                "ID": {
+                    "type": "string"
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "Required": {
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "IFile": {
+            "properties": {
+                "Folder": {
+                    "type": "string"
+                },
+                "Overwrite": {
+                    "type": "boolean"
+                },
+                "Properties": {
+                    "additionalProperties": {
+                        "type": [
+                            "string",
+                            "number"
+                        ]
+                    },
+                    "type": "object"
+                },
+                "RemoveExistingWebParts": {
+                    "type": "boolean"
+                },
+                "Src": {
+                    "type": "string"
+                },
+                "Url": {
+                    "type": "string"
+                },
+                "WebParts": {
+                    "items": {
+                        "$ref": "#/definitions/IWebPart"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "IList": {
+            "properties": {
+                "AdditionalSettings": {
+                    "additionalProperties": {
+                        "type": [
+                            "string",
+                            "number",
+                            "boolean"
+                        ]
+                    },
+                    "properties": {
+                        "DefaultContentApprovalWorkflowId": {
+                            "type": "string"
+                        },
+                        "DefaultDisplayFormUrl": {
+                            "type": "string"
+                        },
+                        "DefaultEditFormUrl": {
+                            "type": "string"
+                        },
+                        "DefaultNewFormUrl": {
+                            "type": "string"
+                        },
+                        "Description": {
+                            "type": "string"
+                        },
+                        "Direction": {
+                            "type": "string"
+                        },
+                        "DocumentTemplateUrl": {
+                            "type": "string"
+                        },
+                        "DraftVersionVisibility": {
+                            "description": "Reader = 0; Author = 1; Approver = 2.",
+                            "type": "number"
+                        },
+                        "EnableAttachments": {
+                            "type": "boolean"
+                        },
+                        "EnableFolderCreation": {
+                            "type": "boolean"
+                        },
+                        "EnableMinorVersions": {
+                            "type": "boolean"
+                        },
+                        "EnableModeration": {
+                            "type": "boolean"
+                        },
+                        "EnableVersioning": {
+                            "type": "boolean"
+                        },
+                        "ForceCheckout": {
+                            "type": "boolean"
+                        },
+                        "Hidden": {
+                            "type": "boolean"
+                        },
+                        "IrmEnabled": {
+                            "type": "boolean"
+                        },
+                        "IrmExpire": {
+                            "type": "boolean"
+                        },
+                        "IrmReject": {
+                            "type": "boolean"
+                        },
+                        "IsApplicationList": {
+                            "type": "boolean"
+                        },
+                        "NoCrawl": {
+                            "type": "boolean"
+                        },
+                        "OnQuickLaunch": {
+                            "type": "boolean"
+                        },
+                        "Title": {
+                            "type": "string"
+                        },
+                        "ValidationFormula": {
+                            "type": "string"
+                        },
+                        "ValidationMessage": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "ContentTypeBindings": {
+                    "items": {
+                        "$ref": "#/definitions/IContentTypeBinding"
+                    },
+                    "type": "array"
+                },
+                "ContentTypesEnabled": {
+                    "type": "boolean"
+                },
+                "Description": {
+                    "type": "string"
+                },
+                "FieldRefs": {
+                    "items": {
+                        "$ref": "#/definitions/IListInstanceFieldRef"
+                    },
+                    "type": "array"
+                },
+                "Fields": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "RemoveExistingContentTypes": {
+                    "type": "boolean"
+                },
+                "Security": {
+                    "$ref": "#/definitions/IListSecurity"
+                },
+                "Template": {
+                    "type": "number"
+                },
+                "Title": {
+                    "type": "string"
+                },
+                "Views": {
+                    "items": {
+                        "$ref": "#/definitions/IListView"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "IListInstanceFieldRef": {
+            "properties": {
+                "DisplayName": {
+                    "type": "string"
+                },
+                "Hidden": {
+                    "type": "boolean"
+                },
+                "ID": {
+                    "type": "string"
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "Required": {
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "IListSecurity": {
+            "properties": {
+                "BreakRoleInheritance": {
+                    "type": "boolean"
+                },
+                "ClearSubscopes": {
+                    "type": "boolean"
+                },
+                "CopyRoleAssignments": {
+                    "type": "boolean"
+                },
+                "RoleAssignments": {
+                    "items": {
+                        "$ref": "#/definitions/IRoleAssignment"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "IListView": {
+            "properties": {
+                "AdditionalSettings": {
+                    "properties": {
+                        "DefaultView": {
+                            "type": "boolean"
+                        },
+                        "Hidden": {
+                            "type": "boolean"
+                        },
+                        "JSLink": {
+                            "type": "string"
+                        },
+                        "Paged": {
+                            "type": "boolean"
+                        },
+                        "RowLimit": {
+                            "type": "number"
+                        },
+                        "Scope": {
+                            "enum": [
+                                0,
+                                1
+                            ],
+                            "type": "number"
+                        },
+                        "ViewQuery": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "PersonalView": {
+                    "type": "boolean"
+                },
+                "Title": {
+                    "type": "string"
+                },
+                "ViewFields": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "INavigation": {
+            "properties": {
+                "QuickLaunch": {
+                    "items": {
+                        "$ref": "#/definitions/INavigationNode"
+                    },
+                    "type": "array"
+                },
+                "TopNavigationBar": {
+                    "items": {
+                        "$ref": "#/definitions/INavigationNode"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "INavigationNode": {
+            "properties": {
+                "Children": {
+                    "items": {
+                        "$ref": "#/definitions/INavigationNode"
+                    },
+                    "type": "array"
+                },
+                "IgnoreExisting": {
+                    "type": "boolean"
+                },
+                "Title": {
+                    "type": "string"
+                },
+                "Url": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "IPropertyBagEntry": {
+            "properties": {
+                "Indexed": {
+                    "type": "boolean"
+                },
+                "Key": {
+                    "type": "string"
+                },
+                "Overwrite": {
+                    "type": "boolean"
+                },
+                "Value": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "IRoleAssignment": {
+            "properties": {
+                "Principal": {
+                    "type": "string"
+                },
+                "RoleDefinition": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "IWebPart": {
+            "properties": {
+                "Contents": {
+                    "$ref": "#/definitions/IWebPartContents"
+                },
+                "ListView": {
+                    "properties": {
+                        "List": {
+                            "type": "string"
+                        },
+                        "View": {
+                            "$ref": "#/definitions/IListView"
+                        }
+                    },
+                    "type": "object"
+                },
+                "Order": {
+                    "type": "number"
+                },
+                "PropertyOverrides": {
+                    "items": {
+                        "$ref": "#/definitions/IWebPartPropertyOverride"
+                    },
+                    "type": "array"
+                },
+                "Title": {
+                    "type": "string"
+                },
+                "Zone": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "IWebPartContents": {
+            "properties": {
+                "FileSrc": {
+                    "type": "string"
+                },
+                "Xml": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "IWebPartPropertyOverride": {
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "IWebSettings": {
+            "additionalProperties": {
+                "type": [
+                    "string",
+                    "boolean"
+                ]
+            },
+            "properties": {
+                "AlternateCssUrl": {
+                    "type": "string"
+                },
+                "CustomMasterUrl": {
+                    "type": "string"
+                },
+                "MasterUrl": {
+                    "type": "string"
+                },
+                "QuickLaunchEnabled": {
+                    "type": "boolean"
+                },
+                "RecycleBinEnabled": {
+                    "type": "boolean"
+                },
+                "SaveSiteAsTemplateEnabled": {
+                    "type": "boolean"
+                },
+                "SiteLogoUrl": {
+                    "type": "string"
+                },
+                "TreeViewEnabled": {
+                    "type": "boolean"
+                },
+                "WelcomePage": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "properties": {
+        "ClientSidePages": {
+            "items": {
+                "$ref": "#/definitions/IClientSidePage"
+            },
+            "type": "array"
+        },
+        "ComposedLook": {
+            "$ref": "#/definitions/IComposedLook"
+        },
+        "ContentTypes": {
+            "items": {
+                "$ref": "#/definitions/IContentType"
+            },
+            "type": "array"
+        },
+        "CustomActions": {
+            "items": {
+                "$ref": "#/definitions/ICustomAction"
+            },
+            "type": "array"
+        },
+        "Features": {
+            "items": {
+                "$ref": "#/definitions/IFeature"
+            },
+            "type": "array"
+        },
+        "Files": {
+            "items": {
+                "$ref": "#/definitions/IFile"
+            },
+            "type": "array"
+        },
+        "Lists": {
+            "items": {
+                "$ref": "#/definitions/IList"
+            },
+            "type": "array"
+        },
+        "Navigation": {
+            "$ref": "#/definitions/INavigation"
+        },
+        "PropertyBagEntries": {
+            "items": {
+                "$ref": "#/definitions/IPropertyBagEntry"
+            },
+            "type": "array"
+        },
+        "SiteFields": {
+            "items": {
+                "type": "string"
+            },
+            "type": "array"
+        },
+        "Version": {
+            "type": "string"
+        },
+        "WebSettings": {
+            "$ref": "#/definitions/IWebSettings"
+        }
+    },
+    "type": "object"
+}
+

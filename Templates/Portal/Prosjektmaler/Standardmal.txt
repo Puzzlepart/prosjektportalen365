@@ -1,4 +1,5 @@
 {
+    "$schema": "./schema.json",
     "ContentTypes": [
         {
             "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE897",
