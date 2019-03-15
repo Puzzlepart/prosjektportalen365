@@ -400,19 +400,23 @@
             "FieldRefs": [
                 {
                     "ID": "8d497830-9012-437c-aa65-4b05807f4415",
-                    "Name": "GtMeasureIndicator"
+                    "Name": "GtMeasureIndicator",
+                    "Required": true
                 },
                 {
                     "ID": "c5fc8781-7fbd-43a2-a215-c8c959bbab69",
-                    "Name": "GtStartValue"
+                    "Name": "GtStartValue",
+                    "Required": true
                 },
                 {
                     "ID": "8b399cb6-c53e-432c-8ffa-b48e2bfbbf71",
-                    "Name": "GtDesiredValue"
+                    "Name": "GtDesiredValue",
+                    "Required": true
                 },
                 {
                     "ID": "0d38db52-2040-44c1-823e-7642f76519ee",
-                    "Name": "GtMeasurementUnit"
+                    "Name": "GtMeasurementUnit",
+                    "Required": true
                 }
             ]
         },
