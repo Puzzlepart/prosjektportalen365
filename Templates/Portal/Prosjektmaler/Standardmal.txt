@@ -1,5 +1,4 @@
 {
-    "$schema": "./schema.json",
     "ContentTypes": [
         {
             "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE897",
@@ -332,11 +331,6 @@
             "Name": "Gevinstoppfølging",
             "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
-                {
-                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
-                    "Name": "Title",
-                    "Hidden": true
-                },
                 {
                     "ID": "5c6fafbb-aee4-4e46-b110-5c798916c2ca",
                     "Name": "GtMeasurementDate"
@@ -1375,7 +1369,7 @@
             "Title": "Gevinstoppfølging",
             "Description": "",
             "Template": 100,
-            "ContentTypesEnabled": true,
+            "ContentTypesEnabled": false,
             "RemoveExistingContentTypes": true,
             "ContentTypeBindings": [
                 {
@@ -1388,8 +1382,7 @@
             "FieldRefs": [
                 {
                     "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
-                    "Required": false,
-                    "Hidden": true
+                    "Required": false
                 }
             ],
             "Fields": [
@@ -1407,7 +1400,7 @@
                     "AdditionalSettings": {
                         "RowLimit": 30,
                         "Paged": true,
-                        "ViewQuery": "<GroupBy Collapse=\"TRUE\" GroupLimit=\"30\"><FieldRef Name=\"GtGainLookup\" /></GroupBy><OrderBy><FieldRef Name=\"GtMeasurementDate\" Ascending=\"FALSE\" /></OrderBy>"
+                        "ViewQuery": "<GroupBy Collapse=\"TRUE\" GroupLimit=\"30\"><FieldRef Name=\"GtMeasureIndicatorLookup\" /></GroupBy><OrderBy><FieldRef Name=\"GtMeasurementDate\" Ascending=\"FALSE\" /></OrderBy>"
                     }
                 },
                 {
