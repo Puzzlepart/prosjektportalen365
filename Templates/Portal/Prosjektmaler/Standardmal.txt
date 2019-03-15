@@ -1353,6 +1353,7 @@
                     "Title": "Alle elementer",
                     "ViewFields": [
                         "LinkTitle",
+                        "GtGainLookup",
                         "GtMeasureIndicator",
                         "GtStartValue",
                         "GtDesiredValue",
