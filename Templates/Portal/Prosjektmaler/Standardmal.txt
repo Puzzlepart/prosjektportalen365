@@ -588,7 +588,7 @@
                         "Title": "Gevinstoppfølging"
                     },
                     {
-                        "Url": "Lists/Måleindikatorer/AllItems.aspx",
+                        "Url": "Lists/Mleindikatorer/AllItems.aspx",
                         "Title": "Måleindikatorer"
                     },
                     {
