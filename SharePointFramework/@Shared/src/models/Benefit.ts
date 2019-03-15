@@ -1,5 +1,5 @@
 import { IBenefitsSearchResult } from '../interfaces/IBenefitsSearchResult';
-import { BenefitBase, BenefitMeasurementIndicator } from './';
+import { BenefitBase } from './';
 
 export class Benefit extends BenefitBase {
     public type: string;

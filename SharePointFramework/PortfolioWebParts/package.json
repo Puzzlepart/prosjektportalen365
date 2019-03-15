@@ -1,6 +1,6 @@
 {
   "name": "portfolio-web-parts",
-  "version": "0.4.13",
+  "version": "0.4.14",
   "private": true,
   "engines": {
     "node": ">=0.10.0"
@@ -48,6 +48,7 @@
     "object-get": "^2.1.0",
     "office-ui-fabric-react": "5.134.0",
     "prop-types": "^15.7.2",
+    "prosjektportalen-spfx-shared": "link:C:/code/prosjektportalen365/SharePointFramework/@Shared/",
     "react": "16.3.2",
     "react-calendar-timeline": "^0.23.0",
     "react-dom": "16.3.2",

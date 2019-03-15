@@ -6,8 +6,8 @@ import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { DetailsList, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
 import { sp } from '@pnp/sp';
-import { IBenefitsSearchResult } from '../interfaces/IBenefitsSearchResult';
-import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from '../models';
+import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from 'prosjektportalen-spfx-shared/src/models';
+import { IBenefitsSearchResult } from 'prosjektportalen-spfx-shared/src/interfaces/IBenefitsSearchResult';
 import * as objectGet from 'object-get';
 import DataSourceService from '../../../common/services/DataSourceService';
 
