@@ -19,7 +19,9 @@
         "default": " "
       },
       "officeFabricIconFontName": "SizeLegacy",
-      "properties": {}
+      "properties": {
+        "dataSource": "Gevinstoversikt"
+      }
     }
   ]
 }

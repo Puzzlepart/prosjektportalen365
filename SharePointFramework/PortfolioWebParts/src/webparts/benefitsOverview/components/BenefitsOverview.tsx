@@ -2,9 +2,14 @@ import * as React from 'react';
 import styles from './BenefitsOverview.module.scss';
 import { IBenefitsOverviewProps, BenefitsOverviewDefaultProps } from './IBenefitsOverviewProps';
 import { IBenefitsOverviewState } from './IBenefitsOverviewState';
-import { CommandBar } from "office-ui-fabric-react/lib/CommandBar";
-import { DetailsList } from "office-ui-fabric-react/lib/DetailsList";
-import { Spinner, SpinnerType } from "office-ui-fabric-react/lib/Spinner";
+import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
+import { DetailsList, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
+import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
+import { sp } from '@pnp/sp';
+import { IBenefitsSearchResult } from '../interfaces/IBenefitsSearchResult';
+import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from '../models';
+import * as objectGet from 'object-get';
+import DataSourceService from '../../../common/services/DataSourceService';
 
 export default class BenefitsOverview extends React.Component<IBenefitsOverviewProps, IBenefitsOverviewState> {
   public static defaultProps = BenefitsOverviewDefaultProps;
@@ -44,7 +49,8 @@ export default class BenefitsOverview extends React.Component<IBenefitsOverviewP
           <div className={styles.listContainer}>
             <DetailsList
               items={this.state.items}
-              columns={this.props.columns} />
+              columns={this.props.columns}
+              onRenderItemColumn={(item: BenefitMeasurementIndicator, _index: number, column: IColumn) => objectGet(item, column.fieldName)} />
           </div>
         </div>
       </div>
@@ -54,11 +60,66 @@ export default class BenefitsOverview extends React.Component<IBenefitsOverviewP
   /**
    * Fetch items
    */
-  private fetchItems() {
-    return new Promise<any[]>((resolve) => {
-      window.setTimeout(() => {
-        resolve([]);
-      }, 2000);
-    });
+  private async fetchItems() {
+    try {
+      const dataSource = await DataSourceService.getByName(this.props.dataSource, this.props.context.pageContext.legacyPageContext.hubSiteId);
+      if (dataSource) {
+        const results = (await sp.search({
+          ...dataSource,
+          Querytext: '*',
+          RowLimit: 500,
+          TrimDuplicates: false,
+          SelectProperties: [
+            'Path',
+            'Title',
+            'ListItemId',
+            'SiteTitle',
+            'SiteId',
+            'ContentTypeID',
+            'GtDesiredValueOWSNMBR',
+            'GtMeasureIndicatorOWSTEXT',
+            'GtMeasurementUnitOWSCHCS',
+            'GtStartValueOWSNMBR',
+            'GtMeasurementValueOWSNMBR',
+            'GtMeasurementCommentOWSMTXT',
+            'GtMeasurementDateOWSDATE',
+            'GtGainsResponsibleOWSUSER',
+            'GtGainsTurnoverOWSMTXT',
+            'GtGainsTypeOWSCHCS',
+            'GtPrereqProfitAchievementOWSMTXT',
+            'GtRealizationTimeOWSDATE',
+            'GtGainLookupId',
+            'GtMeasureIndicatorLookupId',
+            'GtGainsResponsible'
+          ],
+        })).PrimarySearchResults as IBenefitsSearchResult[];
+
+        const benefits = results
+          .filter(res => res.ContentTypeID.indexOf('0x01004F466123309D46BAB9D5C6DE89A6CF67') === 0)
+          .map(res => new Benefit(res));
+
+        const measurements = results
+          .filter(res => res.ContentTypeID.indexOf('0x010039EAFDC2A1624C1BA1A444FC8FE85DEC') === 0)
+          .map(res => new BenefitMeasurement(res))
+          .sort((a, b) => b.date.getTime() - a.date.getTime());
+
+        const indicactors = results
+          .filter(res => res.ContentTypeID.indexOf('0x010073043EFE3E814A2BBEF96B8457623F95') === 0)
+          .map(res => {
+            let _indicator = new BenefitMeasurementIndicator(res)
+              .setMeasurements(measurements)
+              .setBenefit(benefits);
+            return _indicator;
+          })
+          .filter(i => i.benefit);
+
+        return indicactors;
+      } else {
+        throw `Finner ingen datakilde med navn '${this.props.dataSource}.'`;
+      }
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
   }
 }

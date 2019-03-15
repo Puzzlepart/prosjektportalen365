@@ -24,6 +24,7 @@ dependencies:
   jsom-ctx: 1.2.0
   moment: 2.24.0
   object-assign: 4.1.1
+  object-get: 2.1.0
   office-ui-fabric-react: 5.134.0
   prop-types: 15.7.2
   react: 16.3.2
@@ -8022,6 +8023,10 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-fn2Fi3gb18mRpBupde04EnVOmYw=
+  /object-get/2.1.0:
+    dev: false
+    resolution:
+      integrity: sha1-ciu9tgA576R8rTxtws5RqFwCxa4=
   /object-keys/0.4.0:
     dev: true
     resolution:
@@ -12089,6 +12094,7 @@ specifiers:
   moment: ^2.24.0
   node-fetch: ^2.3.0
   object-assign: ^4.1.1
+  object-get: ^2.1.0
   office-ui-fabric-react: 5.134.0
   prop-types: ^15.7.2
   react: 16.3.2

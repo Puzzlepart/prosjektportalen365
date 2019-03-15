@@ -4,12 +4,14 @@ import { IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
 import BenefitsOverview from './components/BenefitsOverview';
 import { IBenefitsOverviewProps } from './components/IBenefitsOverviewProps';
 import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
-
-export interface IBenefitsOverviewWebPartProps { }
+import { IBenefitsOverviewWebPartProps } from './IBenefitsOverviewWebPartProps';
 
 export default class BenefitsOverviewWebPart extends PortfolioBaseWebPart<IBenefitsOverviewWebPartProps> {
   public render(): void {
-    const element: React.ReactElement<IBenefitsOverviewProps> = React.createElement(BenefitsOverview, {});
+    const element: React.ReactElement<IBenefitsOverviewProps> = React.createElement(BenefitsOverview, {
+      ...this.properties,
+      context: this.context,
+    });
     super._render(this.manifest.alias, element);
   }
 
