@@ -74,7 +74,7 @@ export default class RiskOverview extends React.Component<IRiskOverviewProps, IR
    * Fetch items
    */
   private async fetchItems() {
-    const dataSource = await DataSourceService.getByName(this.props.dataSource);
+    const dataSource = await new DataSourceService(sp.web).getByName(this.props.dataSource);
     if (dataSource) {
       try {
         const { PrimarySearchResults } = await sp.search({

@@ -1,11 +1,10 @@
-import { sp, List } from '@pnp/sp';
 import { DataSource } from '../models/DataSource';
 
-export default new class DataSourceService {
-    private list: List;
+export default class DataSourceService {
+    private list: any;
 
-    constructor() {
-        this.list = sp.web.lists.getByTitle('Datakilder');
+    constructor(web: any) {
+        this.list = web.lists.getByTitle('Datakilder');
     }
 
     /**

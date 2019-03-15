@@ -126,7 +126,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
    * @returns {ITimelineData} Timeline data
    */
   private async fetchData(): Promise<ITimelineData<moment.Moment>> {
-    const dataSource = await DataSourceService.getByName(this.props.dataSource);
+    const dataSource = await new DataSourceService(sp.web).getByName(this.props.dataSource);
     if (dataSource) {
       try {
         const searchResults = (await sp.search({

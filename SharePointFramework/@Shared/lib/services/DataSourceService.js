@@ -33,11 +33,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { sp } from '@pnp/sp';
 import { DataSource } from '../models/DataSource';
-export default new (function () {
-    function DataSourceService() {
-        this.list = sp.web.lists.getByTitle('Datakilder');
+var DataSourceService = (function () {
+    function DataSourceService(web) {
+        this.list = web.lists.getByTitle('Datakilder');
     }
     /**
      * Get by name
@@ -66,4 +65,6 @@ export default new (function () {
     };
     return DataSourceService;
 }());
+export default DataSourceService;
+;
 //# sourceMappingURL=DataSourceService.js.map

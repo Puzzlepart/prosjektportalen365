@@ -62,7 +62,7 @@ export default class BenefitsOverview extends React.Component<IBenefitsOverviewP
    */
   private async fetchItems() {
     try {
-      const dataSource = await DataSourceService.getByName(this.props.dataSource, this.props.context.pageContext.legacyPageContext.hubSiteId);
+      const dataSource = await new DataSourceService(sp.web).getByName(this.props.dataSource, this.props.context.pageContext.legacyPageContext.hubSiteId);
       if (dataSource) {
         const results = (await sp.search({
           ...dataSource,

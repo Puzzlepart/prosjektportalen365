@@ -1,7 +1,12 @@
-import { List } from '@pnp/sp';
 import { DataSource } from '../models/DataSource';
-declare const _default: {
-    list: List;
+export default class DataSourceService {
+    private list;
+    constructor(web: any);
+    /**
+     * Get by name
+     *
+     * @param {string} name Name
+     * @param {string} hubSiteId Hub site id (optional)
+     */
     getByName(name: string, hubSiteId?: string): Promise<DataSource>;
-};
-export default _default;
+}
