@@ -3,7 +3,7 @@ import { ProjectListModel } from 'prosjektportalen-spfx-shared/lib/models/Projec
 interface IProjectCardProps {
   project: ProjectListModel;
   onClickHref: string;
-  showProjectInfo: (event: React.MouseEvent<any>, project: ProjectListModel) => void;
+  selectedProject: (event: React.MouseEvent<any>, project: ProjectListModel) => void;
 }
 
 export default IProjectCardProps;

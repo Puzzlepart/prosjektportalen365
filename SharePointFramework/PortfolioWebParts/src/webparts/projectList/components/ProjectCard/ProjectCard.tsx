@@ -5,7 +5,7 @@ import IProjectCardProps from './IProjectCardProps';
 import { DocumentCard, DocumentCardTitle, DocumentCardLocation, DocumentCardActivity, DocumentCardActions, DocumentCardType } from "office-ui-fabric-react/lib/DocumentCard";
 import getUserPhoto from 'prosjektportalen-spfx-shared/lib/helpers/getUserPhoto';
 
-export default ({ project, onClickHref, showProjectInfo }: IProjectCardProps): JSX.Element => {
+export default ({ project, onClickHref, selectedProject }: IProjectCardProps): JSX.Element => {
   return (
     <DocumentCard
       className={styles.projectCard}
@@ -19,7 +19,7 @@ export default ({ project, onClickHref, showProjectInfo }: IProjectCardProps): J
       <DocumentCardActivity
         activity={strings.ProjectManager}
         people={project.Manager ? [{ name: project.Manager.Title, profileImageSrc: getUserPhoto(project.Manager.Email) }] : []} />
-      <DocumentCardActions actions={[{ iconProps: { iconName: "OpenInNewWindow" }, onClick: event => showProjectInfo(event, project) }]} />
+      <DocumentCardActions actions={[{ iconProps: { iconName: "OpenInNewWindow" }, onClick: event => selectedProject(event, project) }]} />
     </DocumentCard>
   );
 };

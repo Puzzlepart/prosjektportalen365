@@ -29,21 +29,25 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
       return <Spinner label={strings.LoadingProjectsLabel} type={SpinnerType.large} />;
     }
     return (
-      <div className={styles.projectListWebPartContainer}>
-        {this.state.showProjectInfo && (
-          <Modal>
+      <div className={styles.projectList}>
+        {this.state.selectedProject && (
+          <Modal
+            isOpen={true}
+            containerClassName={styles.projectInfoModal}
+            onDismiss={_e => this.setState({ selectedProject: null })}>
             <ProjectInformation
-              entity={{ webUrl: '', ...this.props.entity }}
+              title={this.state.selectedProject.Title}
+              entity={{ webUrl: this.props.pageContext.site.absoluteUrl, ...this.props.entity }}
               hubSiteUrl={this.props.pageContext.site.absoluteUrl}
-              siteId={this.state.showProjectInfo.Id}
+              siteId={this.state.selectedProject.Id}
               hideEditPropertiesButton={true}
-              filterField='GtShowFieldFrontpage' />
+              filterField='GtShowFieldPortfolio' />
           </Modal>
         )}
-        <div className={styles.projectListSearchBox}>
+        <div className={styles.searchBox}>
           <SearchBox placeholder={strings.SearchBoxPlaceholderText} onChanged={this.onSearch} />
         </div>
-        <div className={styles.projectsContainer}>
+        <div className={styles.container}>
           {this.renderCards()}
         </div>
       </div>
@@ -53,21 +57,23 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   private renderCards() {
     const { projects } = this.getFilteredData();
     if (projects.length === 0) {
-      return <MessageBar>{strings.NoSearchResults}</MessageBar>;
+      return (
+        <MessageBar>{strings.NoSearchResults}</MessageBar>
+      );
     }
     return projects.map(project => (
       <ProjectCard
         project={project}
         onClickHref={project.Url}
-        showProjectInfo={this.onShowProjectInfo} />
+        selectedProject={this.onSelectProject} />
     ));
   }
 
   @autobind
-  private onShowProjectInfo(event: React.MouseEvent<any>, project: ProjectListModel) {
+  private onSelectProject(event: React.MouseEvent<any>, project: ProjectListModel) {
     event.stopPropagation();
     event.preventDefault();
-    this.setState({ showProjectInfo: project });
+    this.setState({ selectedProject: project });
   }
 
   private getFilteredData(): IProjectListData {

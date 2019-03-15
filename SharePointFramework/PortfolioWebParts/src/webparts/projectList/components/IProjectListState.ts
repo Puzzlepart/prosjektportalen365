@@ -7,7 +7,7 @@ export interface IProjectListData {
 export interface IProjectListState {
   isLoading: boolean;
   data?: IProjectListData;
-  showProjectInfo?: ProjectListModel;
+  selectedProject?: ProjectListModel;
   searchTerm?: string;
   projects: ProjectListModel[];
 }
