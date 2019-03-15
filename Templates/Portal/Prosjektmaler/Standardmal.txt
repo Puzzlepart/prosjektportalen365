@@ -1367,7 +1367,7 @@
             ]
         },
         {
-            "Title": "Gevintsoppfølging",
+            "Title": "Gevinstoppfølging",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
