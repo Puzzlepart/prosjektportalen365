@@ -1415,7 +1415,7 @@
                     "AdditionalSettings": {
                         "RowLimit": 30,
                         "Paged": true,
-                        "ViewQuery": "<OrderBy><FieldRef Name=\"GtGainLookup\" /><FieldRef Name=\"GtMeasurementDate\" Ascending=\"FALSE\" /></OrderBy>"
+                        "ViewQuery": "<OrderBy><FieldRef Name=\"GtMeasureIndicatorLookup\" /><FieldRef Name=\"GtMeasurementDate\" Ascending=\"FALSE\" /></OrderBy>"
                     }
                 }
             ]
