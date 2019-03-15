@@ -16,8 +16,6 @@ import { HubConfigurationService } from 'prosjektportalen-spfx-shared/lib/servic
 import HubSiteService from 'sp-hubsite-service';
 
 export default class ProjectInformation extends React.Component<IProjectInformationProps, IProjectInformationState> {
-  public static defaultProps: Partial<IProjectInformationProps> = { updateTitle: () => { } };
-
   constructor(props: IProjectInformationProps) {
     super(props);
     this.state = { isLoading: true, data: {} };
@@ -39,7 +37,7 @@ export default class ProjectInformation extends React.Component<IProjectInformat
           <WebPartTitle
             displayMode={DisplayMode.Read}
             title={this.props.title}
-            updateProperty={this.props.updateTitle} />
+            updateProperty={_ => { }} />
           {this.renderInner()}
         </div>
       </div>

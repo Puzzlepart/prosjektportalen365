@@ -8,7 +8,7 @@
   "scripts": {
     "serve": "gulp serve --locale=nb-no",
     "serve-nobrowser": "gulp serve --locale=nb-no --nobrowser",
-    "package": "gulp clean && gulp default --ship && gulp package-solution --ship",
+    "package": "gulp default --ship && gulp package-solution --ship",
     "deploy": "gulp uploadAppPkg && gulp deploySppkg",
     "package-deploy": "npm run package &&  npm run deploy",
     "package-deploy-patch": "npm version patch &&  npm run deploy",

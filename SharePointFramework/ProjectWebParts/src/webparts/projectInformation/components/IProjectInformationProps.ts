@@ -10,6 +10,5 @@ export interface IProjectInformationProps extends IProjectInformationWebPartProp
   webUrl?: string;
   isSiteAdmin?: boolean;
   filterField: string;
-  updateTitle?: (title: string) => void;
   hideEditPropertiesButton?: boolean;
 }
