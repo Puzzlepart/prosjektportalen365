@@ -1,7 +1,8 @@
+import { List } from '@pnp/sp';
 import { DataSource } from '../models/DataSource';
 
 export default class DataSourceService {
-    private list: any;
+    private list: List;
 
     constructor(web: any) {
         this.list = web.lists.getByTitle('Datakilder');

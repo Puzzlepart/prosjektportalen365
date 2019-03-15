@@ -5,6 +5,7 @@ import { BaseClientSideWebPart, IPropertyPaneConfiguration } from '@microsoft/sp
 import ProjectInformation from './components/ProjectInformation';
 import { IProjectInformationWebPartProps } from './IProjectInformationWebPartProps';
 import { IProjectInformationProps } from './components/IProjectInformationProps';
+import HubSiteService from 'sp-hubsite-service';
 import { sp } from '@pnp/sp';
 
 export default class ProjectInformationWebPart extends BaseClientSideWebPart<IProjectInformationWebPartProps> {
@@ -12,13 +13,17 @@ export default class ProjectInformationWebPart extends BaseClientSideWebPart<IPr
     sp.setup({ spfxContext: this.context });
   }
 
-  public render(): void {
+  public async render(): Promise<void> {
+    const hubSite = await HubSiteService.GetHubSiteById(this.context.pageContext.web.absoluteUrl, this.context.pageContext.legacyPageContext.hubSiteId);
     const element: React.ReactElement<IProjectInformationProps> = React.createElement(
       ProjectInformation,
       {
         ...this.properties,
         updateTitle: (title: string) => this.properties.title = title,
-        context: this.context,
+        hubSite,
+        siteId: this.context.pageContext.site.id.toString(),
+        webUrl: this.context.pageContext.web.absoluteUrl,
+        isSiteAdmin: this.context.pageContext.legacyPageContext.isSiteAdmin,
         filterField: 'GtShowFieldFrontpage'
       }
     );

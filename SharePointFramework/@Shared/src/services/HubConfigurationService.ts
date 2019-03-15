@@ -1,5 +1,4 @@
-
-import { IHubSite } from 'sp-hubsite-service';
+import { Web } from '@pnp/sp';
 
 export interface ISpItemProjectColumn {
     Title: string;
@@ -13,13 +12,13 @@ export interface ISpItemProjectColumn {
 }
 
 export class HubConfigurationService {
-    private hubSite: IHubSite;
+    private web: Web;
 
-    constructor(hubSite: IHubSite) {
-        this.hubSite = hubSite;
+    constructor(hubSiteUrl: string) {
+        this.web = new Web(hubSiteUrl);
     }
 
     public getProjectColumns(): Promise<ISpItemProjectColumn[]> {
-        return this.hubSite.web.lists.getByTitle('Prosjektkolonner').items.get<ISpItemProjectColumn[]>();
+        return this.web.lists.getByTitle('Prosjektkolonner').items.get<ISpItemProjectColumn[]>();
     }
 }

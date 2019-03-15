@@ -6,11 +6,12 @@ import { IProjectListState, IProjectListData } from './IProjectListState';
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
+import { Modal } from 'office-ui-fabric-react/lib/Modal';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import ProjectCard from './ProjectCard/ProjectCard';
 import { sp, QueryPropertyValueType } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
-import ProjectInfo from '../../../common/components/ProjectInfo/ProjectInfo';
+import ProjectInformation from 'prosjektportalen-spfx-projectwebparts/lib/webparts/projectInformation/components/ProjectInformation';
 import { ProjectListModel } from 'prosjektportalen-spfx-shared/lib/models/ProjectListModel';
 
 export default class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
@@ -29,12 +30,16 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
     }
     return (
       <div className={styles.projectListWebPartContainer}>
-        {this.state.showProjectInfo &&
-          <ProjectInfo
-            entity={this.props.entity}
-            pageContext={this.props.pageContext}
-            project={this.state.showProjectInfo}
-            onDismiss={(_event: any) => this.setState({ showProjectInfo: null })} />}
+        {this.state.showProjectInfo && (
+          <Modal>
+            <ProjectInformation
+              entity={{ webUrl: '', ...this.props.entity }}
+              hubSiteUrl={this.props.pageContext.site.absoluteUrl}
+              siteId={this.state.showProjectInfo.Id}
+              hideEditPropertiesButton={true}
+              filterField='GtShowFieldFrontpage' />
+          </Modal>
+        )}
         <div className={styles.projectListSearchBox}>
           <SearchBox placeholder={strings.SearchBoxPlaceholderText} onChanged={this.onSearch} />
         </div>

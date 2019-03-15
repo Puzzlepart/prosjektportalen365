@@ -77,7 +77,7 @@
   },
   "externals": {},
   "localizedResources": {
-    "CommonStrings": "lib/common/loc/{locale}.js",
+    "ProjectInformationWebPartStrings": "node_modules/prosjektportalen-spfx-projectwebparts/lib/webparts/projectInformation/loc/{locale}.js",
     "DeliveriesOverviewWebPartStrings": "lib/webparts/deliveriesOverview/loc/{locale}.js",
     "BenefitsOverviewWebPartStrings": "lib/webparts/benefitsOverview/loc/{locale}.js",
     "PortfolioOverviewWebPartStrings": "lib/webparts/portfolioOverview/loc/{locale}.js",

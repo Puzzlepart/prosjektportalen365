@@ -1,5 +1,3 @@
-import IStatusFieldsConfig, { IStatusProperties } from '../../../common/models/config/IStatusFieldsConfig';
-
 export enum SectionType {
   StatusSection,
   RiskSection,
@@ -26,7 +24,7 @@ export default class SectionModel {
   public customComponent: string;
   public statusValue: string;
   public statusComment?: string;
-  public statusProperties?: IStatusProperties;
+  public statusProperties?: any;
   private contentTypeId: string;
 
 
@@ -39,7 +37,7 @@ export default class SectionModel {
  * @param {any} project Project properties
  * @param {IStatusFieldsConfig} statusFieldsConfig Status fields config
  */
-  constructor(obj: any, project: any, statusFieldsConfig?: IStatusFieldsConfig) {
+  constructor(obj: any, _project: any, _statusFieldsConfig?: any) {
     this.name = obj.Title;
     this.iconName = obj.GtSecIcon;
     this.source = obj.GtSecSource;

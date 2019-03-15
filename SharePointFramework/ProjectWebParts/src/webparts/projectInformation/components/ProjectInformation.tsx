@@ -10,10 +10,10 @@ import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import ProjectPropertyModel from '../models/ProjectPropertyModel';
 import ProjectProperty from './ProjectProperty';
-import HubSiteService from 'sp-hubsite-service';
 import SpEntityPortalService from 'sp-entityportal-service';
 import * as strings from 'ProjectInformationWebPartStrings';
-import { HubConfigurationService } from '../../../common/services/HubConfigurationService';
+import { HubConfigurationService } from 'prosjektportalen-spfx-shared/lib/services/HubConfigurationService'
+import HubSiteService from 'sp-hubsite-service';
 
 export default class ProjectInformation extends React.Component<IProjectInformationProps, IProjectInformationState> {
   public static defaultProps: Partial<IProjectInformationProps> = { updateTitle: () => { } };
@@ -59,7 +59,7 @@ export default class ProjectInformation extends React.Component<IProjectInformat
     return (
       <div>
         {this.renderProperties()}
-        <div className={styles.editPropertiesButton} hidden={this.props.hideEditPropertiesButton || !this.props.context.pageContext.legacyPageContext.isSiteAdmin}>
+        <div className={styles.editPropertiesButton} hidden={this.props.hideEditPropertiesButton || !this.props.isSiteAdmin}>
           <DefaultButton
             text={strings.EditPropertiesText}
             href={this.state.data.editFormUrl}
@@ -96,14 +96,21 @@ export default class ProjectInformation extends React.Component<IProjectInformat
 
   private async fetchData(): Promise<IProjectInformationData> {
     try {
-      const { pageContext } = this.props.context;
-      const hubSite = await HubSiteService.GetHubSiteById(pageContext.web.absoluteUrl, pageContext.legacyPageContext.hubSiteId);
-      const spEntityPortalService = new SpEntityPortalService({ webUrl: hubSite.url, ...this.props.entity });
+      let { hubSite, hubSiteUrl, siteId, webUrl, context } = this.props;
+      if (context) {
+        if (!hubSiteUrl) {
+          hubSite = await HubSiteService.GetHubSiteById(context.pageContext.web.absoluteUrl, context.pageContext.legacyPageContext.hubSiteId);
+          hubSiteUrl = hubSite.url;
+        }
+        siteId = context.pageContext.site.id.toString();
+        webUrl = context.pageContext.web.absoluteUrl;
+      }
+      const spEntityPortalService = new SpEntityPortalService({ webUrl: hubSiteUrl, ...this.props.entity });
       const [columnConfig, entityItem, entityFields, editFormUrl] = await Promise.all([
-        new HubConfigurationService(hubSite).getProjectColumns(),
-        spEntityPortalService.getEntityItemFieldValues(pageContext.site.id.toString()),
+        new HubConfigurationService(hubSiteUrl).getProjectColumns(),
+        spEntityPortalService.getEntityItemFieldValues(siteId),
         spEntityPortalService.getEntityFields(),
-        spEntityPortalService.getEntityEditFormUrl(pageContext.site.id.toString(), pageContext.web.absoluteUrl),
+        spEntityPortalService.getEntityEditFormUrl(siteId, webUrl),
       ]);
       let properties = Object.keys(entityItem)
         .map(fieldName => ({
