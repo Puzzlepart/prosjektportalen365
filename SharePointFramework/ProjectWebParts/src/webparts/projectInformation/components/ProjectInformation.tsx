@@ -12,7 +12,7 @@ import ProjectPropertyModel from '../models/ProjectPropertyModel';
 import ProjectProperty from './ProjectProperty';
 import SpEntityPortalService from 'sp-entityportal-service';
 import * as strings from 'ProjectInformationWebPartStrings';
-import { HubConfigurationService } from 'prosjektportalen-spfx-shared/lib/services/HubConfigurationService'
+import { HubConfigurationService } from 'prosjektportalen-spfx-shared/lib/services/HubConfigurationService';
 import HubSiteService from 'sp-hubsite-service';
 
 export default class ProjectInformation extends React.Component<IProjectInformationProps, IProjectInformationState> {
@@ -130,6 +130,7 @@ export default class ProjectInformation extends React.Component<IProjectInformat
       const data = { properties, editFormUrl, itemId: entityItem.Id };
       return data;
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }

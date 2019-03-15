@@ -3,7 +3,7 @@
     "solution": {
         "name": "pp-project-web-parts",
         "id": "b69cb2f2-762d-425d-8e0b-d59c08918831",
-        "version": "0.1.5.0",
+        "version": "0.3.0.0",
         "includeClientSideAssets": true,
         "skipFeatureDeployment": true
     },
