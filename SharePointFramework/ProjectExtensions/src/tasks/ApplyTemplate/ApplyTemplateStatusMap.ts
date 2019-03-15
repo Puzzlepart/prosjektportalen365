@@ -1,6 +1,6 @@
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 
-export default {
+export const ApplyTemplateStatusMap: { [key: string]: { text: string, iconName: string } } = {
     Files: { text: strings.ApplyTemplateFiles, iconName: 'OpenFile' },
     Lists: { text: strings.ApplyTemplateLists, iconName: 'PageListSolid' },
     Navigation: { text: strings.ApplyTemplateNavigation, iconName: 'MiniLink' },

@@ -1,6 +1,6 @@
 import { IBaseTaskParams } from './IBaseTaskParams';
 
-export type OnProgressCallbackFunction = (status: string, iconName: string) => void;
+export type OnProgressCallbackFunction = (text: string, iconName: string) => void;
 
 export class BaseTask {
     public params: IBaseTaskParams;

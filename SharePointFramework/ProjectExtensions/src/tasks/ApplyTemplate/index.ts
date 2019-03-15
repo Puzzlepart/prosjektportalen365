@@ -1,7 +1,7 @@
 import { override } from '@microsoft/decorators';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { WebProvisioner, Web } from 'sp-js-provisioning';
-import ApplyTemplateStatusMap from './ApplyTemplateStatusMap';
+import { ApplyTemplateStatusMap } from './ApplyTemplateStatusMap';
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import * as stringFormat from 'string-format';
 import { IBaseTaskParams } from '../IBaseTaskParams';
@@ -26,7 +26,11 @@ export default class ApplyTemplate extends BaseTask {
                 parameters: { fieldsgroup: "Prosjektportalenkolonner" },
             });
             let template = await params.data.selectedTemplate.getSchema();
-            await provisioner.applyTemplate(template, null, status => onProgress(ApplyTemplateStatusMap[status].text, ApplyTemplateStatusMap[status].iconName));
+            await provisioner.applyTemplate(template, null, status => {
+                if (ApplyTemplateStatusMap[status]) {
+                    onProgress(ApplyTemplateStatusMap[status].text, ApplyTemplateStatusMap[status].iconName);
+                }
+            });
             for (let i = 0; i < params.data.selectedExtensions.length; i++) {
                 template = await params.data.selectedExtensions[i].getSchema();
                 onProgress(stringFormat(strings.ApplyExtensionText, params.data.selectedExtensions[i].title), 'ExternalBuild');

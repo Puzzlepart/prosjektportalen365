@@ -17,6 +17,7 @@ define([], function () {
     ProgressModalTitle: "Setter opp prosjektområdet",
     ProgressModalLabel: "Klargjør prosjektområdet",
     ProgressModalDescription: "Vennligst vent. Ikke lukk nettleservinduet.",
+    ErrorModalTitle: "Noe er galt",
     ApplyExtensionText: "Installer prosjekttilegget {0}",
     CopyListDataText: "Kopierer listeinnhold fra {0} til {1}",
     EditPropertiesLinkText: "Du kan allerede nå<A HREF=\"{0}\" TARGET=\"_BLANK\">redigere egenskaper</A> for prosjektet (åpnes i ny fane)."

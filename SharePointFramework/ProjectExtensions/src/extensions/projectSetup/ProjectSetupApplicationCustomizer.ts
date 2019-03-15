@@ -6,12 +6,11 @@ import { sp } from '@pnp/sp';
 import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import { IProjectSetupApplicationCustomizerProperties } from './IProjectSetupApplicationCustomizerProperties';
-import { ProgressModal, TemplateSelectModal } from '../../components';
+import { ProgressModal, IProgressModalProps, ErrorModal, IErrorModalProps, TemplateSelectModal } from '../../components';
 import HubSiteService from 'sp-hubsite-service';
 import IProjectSetupApplicationCustomizerData from './IProjectSetupApplicationCustomizerData';
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import { ListContentConfig, ProjectTemplate } from './../../models';
-import { IProgressModalProps } from './../../components/ProgressModal/IProgressModalProps';
 import { Tasks, IBaseTaskParams } from './../../tasks';
 
 export default class ProjectSetupApplicationCustomizer extends BaseApplicationCustomizer<IProjectSetupApplicationCustomizerProperties> {
@@ -38,7 +37,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
         this.renderProgressModal({ text: strings.ProgressModalLabel, subText: strings.ProgressModalDescription, iconName: 'Page' });
         await this.runTasks();
       } else {
-        Logger.log({ message: '(ProjectSetupApplicationCustomizer) onInit: The site is not connected to a hub', level: LogLevel.Error });
+        this.renderErrorModal({ errorText: 'Området er ikke koblet til en hub.' });
       }
     }
   }
@@ -80,6 +79,23 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   }
 
   /**
+   * Render ErrorModal
+   */
+  private renderErrorModal(props: IErrorModalProps) {
+    const errorModal = React.createElement(ErrorModal, {
+      key: 'ProjectSetupApplicationCustomizer_ProgressModal',
+      ...props,
+      isBlocking: false,
+      isDarkOverlay: true,
+    });
+    if (!this.progressModalContainer) {
+      this.progressModalContainer = document.createElement('DIV');
+      this.domElement.appendChild(this.progressModalContainer);
+    }
+    ReactDOM.render(errorModal, this.progressModalContainer);
+  }
+
+  /**
   * Run tasks
   */
   private async runTasks(): Promise<void> {
@@ -91,6 +107,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
       await this.removeCustomizer(this.componentId, !this.isDebug());
     } catch (error) {
       Logger.log({ message: `(ProjectSetupApplicationCustomizer) runTasks: ${error.task} failed with message ${error.message}`, level: LogLevel.Error });
+      this.renderErrorModal({ errorText: 'Det skjedde en feil under konfigureringen av området.' });
     }
   }
 
