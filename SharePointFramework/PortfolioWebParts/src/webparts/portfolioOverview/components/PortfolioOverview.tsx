@@ -19,8 +19,8 @@ import { PortfolioOverviewView, PortfolioOverviewColumn, IPortfolioOverviewConfi
 import * as stringFormat from 'string-format';
 import * as array_sort from 'array-sort';
 import * as array_unique from 'array-unique';
-import formatDate from '../../../common/helpers/formatDate';
-import tryParseCurrency from '../../../common/helpers/tryParseCurrency';
+import formatDate from 'prosjektportalen-spfx-shared/lib/helpers/formatDate';
+import tryParseCurrency from 'prosjektportalen-spfx-shared/lib/helpers/tryParseCurrency';
 import { IPortfolioOverviewFilter } from './PortfolioOverviewFilterPanel/PortfolioOverviewFilter';
 
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {

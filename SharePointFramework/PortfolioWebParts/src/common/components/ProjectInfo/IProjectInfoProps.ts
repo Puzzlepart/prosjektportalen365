@@ -1,5 +1,5 @@
-import ProjectListModel from "../../models/ProjectListModel";
-import { PageContext } from "@microsoft/sp-page-context";
+import { ProjectListModel } from 'prosjektportalen-spfx-shared/lib/models/ProjectListModel';
+import { PageContext } from '@microsoft/sp-page-context';
 
 export interface IProjectInfoProps {
   project?: ProjectListModel;

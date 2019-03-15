@@ -1,7 +1,7 @@
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { IDeliveriesOverviewWebPartProps } from '../IDeliveriesOverviewWebPartProps';
-import formatDate from '../../../common/helpers/formatDate';
+import formatDate from 'prosjektportalen-spfx-shared/lib/helpers/formatDate';
 
 export interface IDeliveriesOverviewProps extends IDeliveriesOverviewWebPartProps {
     context: WebPartContext;

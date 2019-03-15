@@ -1,4 +1,4 @@
-export default class ProjectPropertyModel {
+export class ProjectPropertyModel {
   public internalName: string;
   public displayName: string;
   public value?: string;

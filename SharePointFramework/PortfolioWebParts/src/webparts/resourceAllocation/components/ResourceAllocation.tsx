@@ -6,15 +6,15 @@ import styles from './ResourceAllocation.module.scss';
 import { IResourceAllocationProps } from './IResourceAllocationProps';
 import { IResourceAllocationState } from './IResourceAllocationState';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
-import { MessageBar, MessageBarType } from "office-ui-fabric-react/lib/MessageBar";
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import * as moment from 'moment';
 import { sp } from '@pnp/sp';
-import DataSourceService from '../../../common/services/DataSourceService';
-import { ITimelineData } from '../../../common/interfaces/ITimelineData';
+import DataSourceService from 'prosjektportalen-spfx-shared/lib/services/DataSourceService';
+import { ITimelineData } from 'prosjektportalen-spfx-shared/lib/interfaces/ITimelineData';
 import { IAllocationSearchResult } from '../models/IAllocationSearchResult';
-import { ITimelineGroup } from '../../../common/interfaces/ITimelineGroup';
-import { ITimelineItem } from '../../../common/interfaces/ITimelineItem';
-import tryParsePercentage from '../../../common/helpers/tryParsePercentage';
+import { ITimelineGroup } from 'prosjektportalen-spfx-shared/lib/interfaces/ITimelineGroup';
+import { ITimelineItem } from 'prosjektportalen-spfx-shared/lib/interfaces/ITimelineItem';
+import tryParsePercentage from 'prosjektportalen-spfx-shared/lib/helpers/tryParsePercentage';
 
 export default class ResourceAllocation extends React.Component<IResourceAllocationProps, IResourceAllocationState> {
   /**
@@ -105,8 +105,8 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
    * 
    * @returns {ITimelineItem[]} Timeline items
    */
-  private createItems(searchResults: IAllocationSearchResult[], groups: ITimelineGroup[], groupBy: string = 'RefinableString71'): ITimelineItem[] {
-    const items: ITimelineItem[] = searchResults.map((res, idx) => {
+  private createItems(searchResults: IAllocationSearchResult[], groups: ITimelineGroup[], groupBy: string = 'RefinableString71'): ITimelineItem<moment.Moment>[] {
+    const items: ITimelineItem<moment.Moment>[] = searchResults.map((res, idx) => {
       const [group] = groups.filter(grp => grp.title === res[groupBy]);
       const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, 'N/A');
       return {
@@ -125,7 +125,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
    * 
    * @returns {ITimelineData} Timeline data
    */
-  private async fetchData(): Promise<ITimelineData> {
+  private async fetchData(): Promise<ITimelineData<moment.Moment>> {
     const dataSource = await DataSourceService.getByName(this.props.dataSource);
     if (dataSource) {
       try {

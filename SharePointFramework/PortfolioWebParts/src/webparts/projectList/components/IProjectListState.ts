@@ -1,4 +1,4 @@
-import ProjectListModel from '../../../common/models/ProjectListModel';
+import { ProjectListModel } from 'prosjektportalen-spfx-shared/lib/models/ProjectListModel';
 
 export interface IProjectListData {
   projects?: ProjectListModel[];

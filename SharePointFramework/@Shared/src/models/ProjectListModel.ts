@@ -21,7 +21,7 @@ export interface ISPUser {
   UserId: any;
 }
 
-export default class ProjectListModel {
+export class ProjectListModel {
   public Id: string;
   public Title: string;
   public Url: string;

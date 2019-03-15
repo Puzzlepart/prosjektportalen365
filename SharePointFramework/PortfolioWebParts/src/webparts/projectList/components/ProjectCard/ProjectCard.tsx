@@ -3,7 +3,7 @@ import styles from './ProjectCard.module.scss';
 import * as strings from 'ProjectListWebPartStrings';
 import IProjectCardProps from './IProjectCardProps';
 import { DocumentCard, DocumentCardTitle, DocumentCardLocation, DocumentCardActivity, DocumentCardActions, DocumentCardType } from "office-ui-fabric-react/lib/DocumentCard";
-import getUserPhoto from '../../../../common/helpers/getUserPhoto';
+import getUserPhoto from 'prosjektportalen-spfx-shared/lib/helpers/getUserPhoto';
 
 export default ({ project, onClickHref, showProjectInfo }: IProjectCardProps): JSX.Element => {
   return (

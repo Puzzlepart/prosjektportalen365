@@ -8,7 +8,7 @@ import { CommandBar } from "office-ui-fabric-react/lib/CommandBar";
 import { MessageBar, MessageBarType } from "office-ui-fabric-react/lib/MessageBar";
 import { DetailsList } from "office-ui-fabric-react/lib/DetailsList";
 import { sp } from '@pnp/sp';
-import DataSourceService from '../../../common/services/DataSourceService';
+import DataSourceService from 'prosjektportalen-spfx-shared/lib/services/DataSourceService';
 
 export default class RiskOverview extends React.Component<IRiskOverviewProps, IRiskOverviewState> {
   public static defaultProps = RiskOverviewDefaultProps;

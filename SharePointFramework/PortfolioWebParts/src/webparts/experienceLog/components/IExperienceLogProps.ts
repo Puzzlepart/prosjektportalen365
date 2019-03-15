@@ -1,5 +1,5 @@
-import IGroupByOption from '../../../common/interfaces/IGroupByOption';
-import IExcelExportConfig from '../../../common/interfaces/IExcelExportConfig';
+import { IGroupByOption } from 'prosjektportalen-spfx-shared/lib/interfaces/IGroupByOption';
+import IExcelExportConfig from 'prosjektportalen-spfx-shared/lib/interfaces/IExcelExportConfig';
 import * as strings from 'ExperienceLogWebPartStrings';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { WebPartContext } from '@microsoft/sp-webpart-base';

@@ -5,17 +5,10 @@ import { sp } from '@pnp/sp';
 import * as moment from 'moment';
 
 export default class PortfolioBaseWebPart<T> extends BaseClientSideWebPart<T> {
-    private placeholder: HTMLElement;
-
     public render(): void { }
 
-    public _render(id: string, element: React.ReactElement<any>): void {
-        if (!this.placeholder) {
-            this.placeholder = document.createElement('DIV');
-            this.placeholder.id = id;
-            this.domElement.appendChild(this.placeholder);
-        }
-        ReactDom.render(element, this.placeholder);
+    public _render(_id: string, element: React.ReactElement<any>): void {
+        ReactDom.render(element, this.domElement);
     }
 
     protected async onInit(): Promise<void> {
@@ -25,6 +18,6 @@ export default class PortfolioBaseWebPart<T> extends BaseClientSideWebPart<T> {
     }
 
     protected onDispose(): void {
-        ReactDom.unmountComponentAtNode(this.placeholder);
+        ReactDom.unmountComponentAtNode(this.domElement);
     }
 }

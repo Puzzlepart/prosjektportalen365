@@ -6,10 +6,10 @@ import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { DetailsList, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
 import { sp } from '@pnp/sp';
-import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from 'prosjektportalen-spfx-shared/src/models';
-import { IBenefitsSearchResult } from 'prosjektportalen-spfx-shared/src/interfaces/IBenefitsSearchResult';
+import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from 'prosjektportalen-spfx-shared/lib/models';
+import { IBenefitsSearchResult } from 'prosjektportalen-spfx-shared/lib/interfaces/IBenefitsSearchResult';
 import * as objectGet from 'object-get';
-import DataSourceService from '../../../common/services/DataSourceService';
+import DataSourceService from 'prosjektportalen-spfx-shared/lib/services/DataSourceService';
 
 export default class BenefitsOverview extends React.Component<IBenefitsOverviewProps, IBenefitsOverviewState> {
   public static defaultProps = BenefitsOverviewDefaultProps;

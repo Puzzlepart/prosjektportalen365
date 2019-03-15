@@ -7,5 +7,15 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@pnp/common": "^1.3.0",
+    "@pnp/logging": "^1.3.0",
+    "@pnp/odata": "^1.3.0",
+    "@pnp/sp": "^1.3.0",
+    "es6-promise": "^4.2.6"
+  },
+  "devDependencies": {
+    "typescript": "2.4.2"
+  }
 }

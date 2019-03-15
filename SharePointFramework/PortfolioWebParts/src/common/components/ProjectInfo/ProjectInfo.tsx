@@ -1,13 +1,13 @@
 import * as React from 'react';
 import styles from './ProjectInfo.module.scss';
 import * as strings from 'CommonStrings';
-import { Modal } from "office-ui-fabric-react/lib/Modal";
+import { Modal } from 'office-ui-fabric-react/lib/Modal';
 import { IProjectInfoProps } from './IProjectInfoProps';
 import { IProjectInfoState } from './IProjectInfoState';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import HubSiteService from 'sp-hubsite-service';
 import SpEntityPortalService from 'sp-entityportal-service';
-import ProjectPropertyModel from '../../models/ProjectPropertyModel';
+import { ProjectPropertyModel } from 'prosjektportalen-spfx-shared/lib/models/ProjectPropertyModel';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Button } from 'office-ui-fabric-react/lib/Button';
 
@@ -36,7 +36,7 @@ export default class ProjectInfo extends React.Component<IProjectInfoProps, IPro
                 text={strings.ProjectLinkText}
                 onClick={() => location.replace(this.props.project.Url)} />
               <Button
-                iconProps={{ iconName: "BarChart4" }}
+                iconProps={{ iconName: 'BarChart4' }}
                 text={strings.ProjectStatusLinkText}
                 onClick={() => location.replace(`${this.props.project.Url}/SitePages/Prosjektstatus.aspx`)} />
               {this.renderProperties(this.state.data.properties.slice())}

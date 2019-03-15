@@ -3,7 +3,7 @@ import styles from './ProjectList.module.scss';
 import * as strings from 'ProjectListWebPartStrings';
 import { IProjectListProps } from './IProjectListProps';
 import { IProjectListState, IProjectListData } from './IProjectListState';
-import { Spinner, SpinnerType } from "office-ui-fabric-react/lib/Spinner";
+import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
@@ -11,7 +11,7 @@ import ProjectCard from './ProjectCard/ProjectCard';
 import { sp, QueryPropertyValueType } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
 import ProjectInfo from '../../../common/components/ProjectInfo/ProjectInfo';
-import ProjectListModel from '../../../common/models/ProjectListModel';
+import { ProjectListModel } from 'prosjektportalen-spfx-shared/lib/models/ProjectListModel';
 
 export default class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
   constructor(props: IProjectListProps) {
@@ -72,7 +72,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         .filter(project => {
           const matches = Object.keys(project).filter(key => {
             const value = project[key];
-            return value && typeof value === "string" && value.toLowerCase().indexOf(searchTerm) !== -1;
+            return value && typeof value === 'string' && value.toLowerCase().indexOf(searchTerm) !== -1;
           }).length;
           return matches > 0;
         })
@@ -97,7 +97,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         RowLimit: 500,
         SelectProperties: ['Title', 'Path', 'DepartmentId', 'SiteId', 'SiteLogo'],
         Properties: [{
-          Name: "EnableDynamicGroups",
+          Name: 'EnableDynamicGroups',
           Value: {
             BoolVal: true,
             QueryPropertyValueTypeIndex: QueryPropertyValueType.BooleanType

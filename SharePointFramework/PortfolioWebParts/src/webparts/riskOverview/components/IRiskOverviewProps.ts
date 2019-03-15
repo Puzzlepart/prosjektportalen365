@@ -1,6 +1,6 @@
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { IRiskOverviewWebPartProps } from '../IRiskOverviewWebPartProps';
-import tryParseInt from '../../../common/helpers/tryParseInt';
+import tryParseInt from 'prosjektportalen-spfx-shared/lib/helpers/tryParseInt';
 
 export interface IRiskOverviewProps extends IRiskOverviewWebPartProps {
     columns?: IColumn[];

@@ -1,6 +1,7 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import IGroupByOption from '../../../common/interfaces/IGroupByOption';
+import { IGroupByOption } from 'prosjektportalen-spfx-shared/lib/interfaces/IGroupByOption';
+
 import { IBenefitsOverviewWebPartProps } from '../IBenefitsOverviewWebPartProps';
 export interface IBenefitsOverviewProps extends IBenefitsOverviewWebPartProps {
     context: WebPartContext;

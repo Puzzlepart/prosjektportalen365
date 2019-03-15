@@ -7,7 +7,7 @@ import { DetailsList } from "office-ui-fabric-react/lib/DetailsList";
 import { IDeliveriesOverviewProps, DeliveriesOverviewDefaultProps } from './IDeliveriesOverviewProps';
 import { IDeliveriesOverviewState } from './IDeliveriesOverviewState';
 import { sp } from '@pnp/sp';
-import DataSourceService from '../../../common/services/DataSourceService';
+import DataSourceService from 'prosjektportalen-spfx-shared/lib/services/DataSourceService';
 
 export default class DeliveriesOverview extends React.Component<IDeliveriesOverviewProps, IDeliveriesOverviewState> {
   public static defaultProps = DeliveriesOverviewDefaultProps;
