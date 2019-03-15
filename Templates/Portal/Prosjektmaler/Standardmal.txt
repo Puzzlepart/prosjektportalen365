@@ -372,22 +372,6 @@
                     "Name": "GtGainsResponsible"
                 },
                 {
-                    "ID": "8d497830-9012-437c-aa65-4b05807f4415",
-                    "Name": "GtMeasureIndicator"
-                },
-                {
-                    "ID": "c5fc8781-7fbd-43a2-a215-c8c959bbab69",
-                    "Name": "GtStartValue"
-                },
-                {
-                    "ID": "8b399cb6-c53e-432c-8ffa-b48e2bfbbf71",
-                    "Name": "GtDesiredValue"
-                },
-                {
-                    "ID": "0d38db52-2040-44c1-823e-7642f76519ee",
-                    "Name": "GtMeasurementUnit"
-                },
-                {
                     "ID": "b0d03734-a5b1-4e85-a752-45b2da8df7dd",
                     "Name": "GtRealizationTime"
                 }
@@ -405,6 +389,29 @@
                 {
                     "ID": "1fb52a28-81c4-405f-8da6-883c29b6b856",
                     "Name": "GtChallengeDescription"
+                }
+            ]
+        },
+        {
+            "ID": "0x010073043EFE3E814A2BBEF96B8457623F95",
+            "Name": "Måleindikator",
+            "Group": "Prosjektportalen innholdstyper",
+            "FieldRefs": [
+                {
+                    "ID": "8d497830-9012-437c-aa65-4b05807f4415",
+                    "Name": "GtMeasureIndicator"
+                },
+                {
+                    "ID": "c5fc8781-7fbd-43a2-a215-c8c959bbab69",
+                    "Name": "GtStartValue"
+                },
+                {
+                    "ID": "8b399cb6-c53e-432c-8ffa-b48e2bfbbf71",
+                    "Name": "GtDesiredValue"
+                },
+                {
+                    "ID": "0d38db52-2040-44c1-823e-7642f76519ee",
+                    "Name": "GtMeasurementUnit"
                 }
             ]
         },
