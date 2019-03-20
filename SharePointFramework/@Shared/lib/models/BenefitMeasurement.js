@@ -21,9 +21,37 @@ var BenefitMeasurement = (function (_super) {
         _this.indicatorId = parseInt(result.GtMeasureIndicatorLookupId, 10);
         return _this;
     }
-    BenefitMeasurement.prototype.calculcateAchievement = function (_a) {
-        var startValue = _a.startValue, desiredValue = _a.desiredValue;
-        this.achievement = Math.round(((this.value - startValue) / (desiredValue - startValue)) * 100) + "%";
+    /**
+     * Calculate achievement
+     *
+     * @param {BenefitMeasurementIndicator} indicator Indicator
+     */
+    BenefitMeasurement.prototype.calculcateAchievement = function (indicator) {
+        this.indicator = indicator;
+        var achievement = Math.round(((this.value - this.indicator.startValue) / (this.indicator.desiredValue - this.indicator.startValue)) * 100);
+        this.achievement = achievement;
+        this.achievementStr = achievement + "%";
+        return this;
+    };
+    /**
+     * Set trend icon props
+     *
+     * @param {BenefitMeasurement} prevMeasurement Previous measurement
+     */
+    BenefitMeasurement.prototype.setTrendIconProps = function (prevMeasurement) {
+        var shouldIncrease = this.indicator.desiredValue > this.indicator.startValue;
+        if (this.achievement >= 100) {
+            this.trendIconProps = { iconName: "Trophy", style: { color: "gold" } };
+        }
+        if (prevMeasurement && prevMeasurement.value !== this.value) {
+            var hasIncreased = this.value > prevMeasurement.value;
+            if (shouldIncrease && hasIncreased || !shouldIncrease && !hasIncreased) {
+                this.trendIconProps = { iconName: "StockUp", style: { color: "green" } };
+            }
+            else {
+                this.trendIconProps = { iconName: "StockDown", style: { color: "red" } };
+            }
+        }
         return this;
     };
     return BenefitMeasurement;

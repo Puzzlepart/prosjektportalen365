@@ -25,9 +25,10 @@ var BenefitMeasurementIndicator = (function (_super) {
     }
     BenefitMeasurementIndicator.prototype.setMeasurements = function (measurements) {
         var _this = this;
-        this.measurements = measurements
-            .filter(function (m) { return m.indicatorId === _this.id && m.siteId === _this.siteId; })
-            .map(function (m) { return m.calculcateAchievement(_this); });
+        var _measurements = measurements.filter(function (m) { return m.indicatorId === _this.id && m.siteId === _this.siteId; });
+        _measurements = _measurements.map(function (m, i) { return m.calculcateAchievement(_this); });
+        _measurements = _measurements.map(function (m, i) { return m.setTrendIconProps(_measurements[i + 1]); });
+        this.measurements = _measurements;
         return this;
     };
     BenefitMeasurementIndicator.prototype.setBenefit = function (benefits) {
