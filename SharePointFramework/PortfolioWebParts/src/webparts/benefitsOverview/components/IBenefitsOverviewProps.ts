@@ -84,8 +84,8 @@ export const BenefitsOverviewDefaultProps: Partial<IBenefitsOverviewProps> = {
             isResizable: true,
         },
         {
-            key: 'measurements[0].achievement',
-            fieldName: 'measurements[0].achievement',
+            key: 'measurements[0].achievementStr',
+            fieldName: 'measurements[0].achievementStr',
             name: 'Måloppnåelse',
             minWidth: 100,
             maxWidth: 100,
