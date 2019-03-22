@@ -3,20 +3,29 @@ import { BenefitBase, BenefitMeasurementIndicator } from './';
 
 export class BenefitMeasurement extends BenefitBase {
     public date: Date;
+    public dateDisplay: string;
     public value: number;
+    public valueDisplay: string;
     public achievement: number;
-    public achievementStr: string;
+    public achievementDisplay: string;
     public trendIconProps: any;
     public indicatorId: number;
     private indicator: BenefitMeasurementIndicator;
 
     /**
-     *
-     */
-    constructor(result: IBenefitsSearchResult) {
+    * Creates a new instance of BenefitMeasurement
+    *
+    * @param {IBenefitsSearchResult} result Search result
+    * @param {number} fractionDigits Fraction digits for valueDisplay
+    */
+    constructor(result: IBenefitsSearchResult, fractionDigits: number = 2) {
         super(result);
         this.date = new Date(result.GtMeasurementDateOWSDATE);
-        this.value = parseInt(result.GtMeasurementValueOWSNMBR, 10);
+        this.dateDisplay = this.date.toLocaleDateString();
+        this.value = !isNaN(parseFloat(result.GtMeasurementValueOWSNMBR)) ? parseFloat(result.GtMeasurementValueOWSNMBR) : null;
+        if (this.value !== null) {
+            this.valueDisplay = this.value.toFixed(fractionDigits);
+        }
         this.indicatorId = parseInt(result.GtMeasureIndicatorLookupId, 10);
     }
 
@@ -24,12 +33,13 @@ export class BenefitMeasurement extends BenefitBase {
      * Calculate achievement
      *
      * @param {BenefitMeasurementIndicator} indicator Indicator
+     * @param {number} fractionDigits Fraction digits used for achievementDisplay
      */
-    public calculcateAchievement(indicator: BenefitMeasurementIndicator): BenefitMeasurement {
+    public calculcateAchievement(indicator: BenefitMeasurementIndicator, fractionDigits: number = 2): BenefitMeasurement {
         this.indicator = indicator;
-        let achievement = Math.round(((this.value - this.indicator.startValue) / (this.indicator.desiredValue - this.indicator.startValue)) * 100);
+        let achievement = (((this.value - this.indicator.startValue) / (this.indicator.desiredValue - this.indicator.startValue)) * 100);
         this.achievement = achievement;
-        this.achievementStr = `${achievement}%`;
+        this.achievementDisplay = `${achievement.toFixed(fractionDigits)}%`;
         return this;
     }
 
@@ -42,6 +52,7 @@ export class BenefitMeasurement extends BenefitBase {
         let shouldIncrease = this.indicator.desiredValue > this.indicator.startValue;
         if (this.achievement >= 100) {
             this.trendIconProps = { iconName: "Trophy", style: { color: "gold" } };
+            return this;
         }
         if (prevMeasurement && prevMeasurement.value !== this.value) {
             let hasIncreased = this.value > prevMeasurement.value;

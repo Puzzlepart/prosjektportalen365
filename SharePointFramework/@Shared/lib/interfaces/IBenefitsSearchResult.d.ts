@@ -1,4 +1,5 @@
 export interface IBenefitsSearchResult {
+    SPWebURL: string;
     Path: string;
     Title: string;
     ListItemId: string;

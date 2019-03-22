@@ -12,17 +12,32 @@ import { BenefitBase } from './';
 var BenefitMeasurementIndicator = (function (_super) {
     __extends(BenefitMeasurementIndicator, _super);
     /**
+     * Creates a new instance of BenefitMeasurementIndicator
      *
+     * @param {IBenefitsSearchResult} result Search result
+     * @param {number} fractionDigits Fraction digits for valueDisplay
      */
-    function BenefitMeasurementIndicator(result) {
+    function BenefitMeasurementIndicator(result, fractionDigits) {
+        if (fractionDigits === void 0) { fractionDigits = 2; }
         var _this = _super.call(this, result) || this;
         _this.indicator = result.GtMeasureIndicatorOWSTEXT;
-        _this.startValue = parseInt(result.GtStartValueOWSNMBR, 10);
-        _this.desiredValue = parseInt(result.GtDesiredValueOWSNMBR, 10);
+        _this.startValue = !isNaN(parseFloat(result.GtStartValueOWSNMBR)) ? parseFloat(result.GtStartValueOWSNMBR) : null;
+        if (_this.startValue !== null) {
+            _this.startValueDisplay = _this.startValue.toFixed(fractionDigits);
+        }
+        _this.desiredValue = !isNaN(parseFloat(result.GtDesiredValueOWSNMBR)) ? parseFloat(result.GtDesiredValueOWSNMBR) : null;
+        if (_this.desiredValue !== null) {
+            _this.desiredValueDisplay = _this.desiredValue.toFixed(fractionDigits);
+        }
         _this.unit = result.GtMeasurementUnitOWSCHCS;
         _this.benefitId = parseInt(result.GtGainLookupId, 10);
         return _this;
     }
+    /**
+     * Set measurements
+     *
+     * @param {BenefitMeasurement[]} measurements Measurements
+     */
     BenefitMeasurementIndicator.prototype.setMeasurements = function (measurements) {
         var _this = this;
         var _measurements = measurements.filter(function (m) { return m.indicatorId === _this.id && m.siteId === _this.siteId; });
@@ -31,6 +46,11 @@ var BenefitMeasurementIndicator = (function (_super) {
         this.measurements = _measurements;
         return this;
     };
+    /**
+     * Set benefit
+     *
+     * @param {Benefit[]} benefits Benefits
+     */
     BenefitMeasurementIndicator.prototype.setBenefit = function (benefits) {
         var _this = this;
         this.benefit = benefits.filter(function (b) { return b.id === _this.benefitId && b.siteId === _this.siteId; })[0];

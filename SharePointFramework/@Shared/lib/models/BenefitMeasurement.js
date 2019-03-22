@@ -12,12 +12,20 @@ import { BenefitBase } from './';
 var BenefitMeasurement = (function (_super) {
     __extends(BenefitMeasurement, _super);
     /**
-     *
-     */
-    function BenefitMeasurement(result) {
+    * Creates a new instance of BenefitMeasurement
+    *
+    * @param {IBenefitsSearchResult} result Search result
+    * @param {number} fractionDigits Fraction digits for valueDisplay
+    */
+    function BenefitMeasurement(result, fractionDigits) {
+        if (fractionDigits === void 0) { fractionDigits = 2; }
         var _this = _super.call(this, result) || this;
         _this.date = new Date(result.GtMeasurementDateOWSDATE);
-        _this.value = parseInt(result.GtMeasurementValueOWSNMBR, 10);
+        _this.dateDisplay = _this.date.toLocaleDateString();
+        _this.value = !isNaN(parseFloat(result.GtMeasurementValueOWSNMBR)) ? parseFloat(result.GtMeasurementValueOWSNMBR) : null;
+        if (_this.value !== null) {
+            _this.valueDisplay = _this.value.toFixed(fractionDigits);
+        }
         _this.indicatorId = parseInt(result.GtMeasureIndicatorLookupId, 10);
         return _this;
     }
@@ -25,12 +33,14 @@ var BenefitMeasurement = (function (_super) {
      * Calculate achievement
      *
      * @param {BenefitMeasurementIndicator} indicator Indicator
+     * @param {number} fractionDigits Fraction digits used for achievementDisplay
      */
-    BenefitMeasurement.prototype.calculcateAchievement = function (indicator) {
+    BenefitMeasurement.prototype.calculcateAchievement = function (indicator, fractionDigits) {
+        if (fractionDigits === void 0) { fractionDigits = 2; }
         this.indicator = indicator;
-        var achievement = Math.round(((this.value - this.indicator.startValue) / (this.indicator.desiredValue - this.indicator.startValue)) * 100);
+        var achievement = (((this.value - this.indicator.startValue) / (this.indicator.desiredValue - this.indicator.startValue)) * 100);
         this.achievement = achievement;
-        this.achievementStr = achievement + "%";
+        this.achievementDisplay = achievement.toFixed(fractionDigits) + "%";
         return this;
     };
     /**
@@ -42,6 +52,7 @@ var BenefitMeasurement = (function (_super) {
         var shouldIncrease = this.indicator.desiredValue > this.indicator.startValue;
         if (this.achievement >= 100) {
             this.trendIconProps = { iconName: "Trophy", style: { color: "gold" } };
+            return this;
         }
         if (prevMeasurement && prevMeasurement.value !== this.value) {
             var hasIncreased = this.value > prevMeasurement.value;
