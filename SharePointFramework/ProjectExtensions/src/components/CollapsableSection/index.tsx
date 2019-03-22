@@ -14,7 +14,7 @@ export default class CollapsableSection extends React.Component<ICollapsableSect
         const { isCollapsed } = this.state;
 
         return (
-            <div className={this.props.className}>
+            <div className={this.props.className} hidden={this.props.hidden}>
                 <div className={this.props.titleClassName} onClick={this.onToggleExpandState} style={{ position: 'relative' }}>
                     <span>{this.props.title}</span>
                     <span style={{ position: 'absolute', right: 0 }}><Icon iconName={isCollapsed ? 'ChevronDown' : 'ChevronUp'} /></span>

@@ -46,6 +46,7 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
                                 </div>
                             </div>
                             <CollapsableSection
+                                hidden={this.props.data.listContentConfig.length === 0}
                                 title={strings.ListContentTitle}
                                 className={styles.listContent}
                                 titleClassName={styles.listContentTitle}
@@ -60,6 +61,7 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
                                 ))}
                             </CollapsableSection>
                             <CollapsableSection
+                                hidden={this.props.data.extensions.length === 0}
                                 title={strings.ExtensionsTitle}
                                 className={styles.extensions}
                                 titleClassName={styles.extensionsTitle}
