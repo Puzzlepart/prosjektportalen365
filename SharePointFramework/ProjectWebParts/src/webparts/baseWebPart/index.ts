@@ -5,16 +5,11 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
 import { sp } from '@pnp/sp';
 import HubSiteService, { IHubSite } from 'sp-hubsite-service';
-import SpEntityPortalService from 'sp-entityportal-service';
+import SpEntityPortalService, { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
 
 export interface IBaseWebPartProps {
   title: string;
-  entity: {
-    listName: string;
-    contentTypeId: string;
-    fieldsGroupName: string;
-    siteIdFieldName: string;
-  };
+  entity: ISpEntityPortalServiceParams;
 }
 
 export default class BaseWebPart<P extends IBaseWebPartProps> extends BaseClientSideWebPart<P> {
