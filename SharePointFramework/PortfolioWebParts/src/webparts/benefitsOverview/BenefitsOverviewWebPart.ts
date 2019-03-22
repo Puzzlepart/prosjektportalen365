@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as strings from 'BenefitsOverviewWebPartStrings';
 import { Version } from '@microsoft/sp-core-library';
 import { IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
 import BenefitsOverview from './components/BenefitsOverview';
@@ -11,6 +12,10 @@ export default class BenefitsOverviewWebPart extends PortfolioBaseWebPart<IBenef
     const element: React.ReactElement<IBenefitsOverviewProps> = React.createElement(BenefitsOverview, {
       ...this.properties,
       context: this.context,
+      groupByColumns: [
+        { name: strings.SiteTitleLabel, key: 'siteTitle', fieldName: 'siteTitle', minWidth: 0 },
+        ...BenefitsOverview.defaultProps.groupByColumns,
+      ],
     });
     super._render(this.manifest.alias, element);
   }

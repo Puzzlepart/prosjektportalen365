@@ -15,7 +15,6 @@ export interface IBenefitsOverviewProps extends IBenefitsOverviewWebPartProps {
 export const BenefitsOverviewDefaultProps: Partial<IBenefitsOverviewProps> = {
     columns: BenefitsOverviewColumns,
     groupByColumns: [
-        { name: strings.SiteTitleLabel, key: 'siteTitle', fieldName: 'siteTitle', minWidth: 0 },
         { name: strings.BenefitTitleLabel, key: 'benefit.title', fieldName: 'benefit.title', minWidth: 0 },
         { name: strings.BenefitResponsibleLabel, key: 'benefit.responsible', fieldName: 'benefit.responsible', minWidth: 0 },
     ],
