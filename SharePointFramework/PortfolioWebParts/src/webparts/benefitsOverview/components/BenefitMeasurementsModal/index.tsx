@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as strings from 'BenefitsOverviewWebPartStrings';
 import styles from './BenefitMeasurementsModal.module.scss';
 import { Modal, IModalProps } from 'office-ui-fabric-react/lib/Modal';
 import { DetailsList, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
@@ -27,9 +28,12 @@ export default class BenefitMeasurementsModal extends React.PureComponent<IBenef
     }
 
     public render(): React.ReactElement<IBenefitMeasurementsModalProps> {
+        if (this.props.indicator.measurements.length === 0) {
+            return null;
+        }
         return (
             <div>
-                <a href='#' onClick={this.onOpenModal}>Vis alle målinger</a>
+                <a href='#' onClick={this.onOpenModal}>{strings.ShowAllMeasurementsLinkText}</a>
                 <Modal
                     isOpen={this.state.isOpen}
                     isDarkOverlay={true}

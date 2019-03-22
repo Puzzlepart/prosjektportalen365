@@ -3,9 +3,11 @@ import * as strings from 'BenefitsOverviewWebPartStrings';
 import styles from './BenefitsOverview.module.scss';
 import { IBenefitsOverviewProps, BenefitsOverviewDefaultProps } from './IBenefitsOverviewProps';
 import { IBenefitsOverviewState } from './IBenefitsOverviewState';
-import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
-import { DetailsList, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
+import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
+import { DetailsList, IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
+import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from 'prosjektportalen-spfx-shared/lib/models';
 import { IBenefitsSearchResult } from 'prosjektportalen-spfx-shared/lib/interfaces/IBenefitsSearchResult';
@@ -40,19 +42,25 @@ export default class BenefitsOverview extends React.Component<IBenefitsOverviewP
       return <Spinner label={strings.LoadingText} type={SpinnerType.large} />;
     }
 
+    let { items, columns, groups } = this.getFilteredData();
+
     return (
       <div className={styles.benefitsOverview}>
         <div className={styles.container}>
           <div className={styles.commandBar}>
-            <CommandBar items={[]} />
+            <CommandBar items={this.getCommandBarItems()} />
           </div>
           <div className={styles.header}>
-            <div className={styles.title}>Gevinstoversikt</div>
+            <div className={styles.title}>{strings.Title}</div>
+          </div>
+          <div className={styles.searchBox}>
+            <SearchBox onSearch={this.onSearch} labelText={strings.SearchBoxLabelText} />
           </div>
           <div className={styles.listContainer}>
             <DetailsList
-              items={this.state.items}
-              columns={this.props.columns}
+              items={items}
+              columns={columns}
+              groups={groups}
               onRenderItemColumn={this.onRenderItemColumn}
               onColumnHeaderClick={this.onColumnHeaderSort} />
           </div>
@@ -61,6 +69,25 @@ export default class BenefitsOverview extends React.Component<IBenefitsOverviewP
     );
   }
 
+  /**
+   * On search
+   * 
+   * Makes the search term lower case and sets state
+   * 
+   * @param {string} searchTerm Search term
+   */
+  @autobind
+  private onSearch(searchTerm: string) {
+    this.setState({ searchTerm: searchTerm.toLowerCase() });
+  }
+
+  /**
+   * On render item column
+   * 
+   * @param {BenefitMeasurementIndicator} item Item
+   * @param {number} index Index
+   * @param {IColumn} column Column
+   */
   @autobind
   private onRenderItemColumn(item: BenefitMeasurementIndicator, index: number, column: IColumn) {
     const fieldNameDisplay: string = objectGet(column, 'data.fieldNameDisplay');
@@ -70,9 +97,9 @@ export default class BenefitsOverview extends React.Component<IBenefitsOverviewP
   /**
    * Sorting on column header click
    *
-   * @param {React.MouseEvent} _event Event
-   * @param {IColumn} column Column
-   */
+* @param {React.MouseEvent} _event Event
+* @param {IColumn} column Column
+    */
   @autobind
   private onColumnHeaderSort(_event: React.MouseEvent<any>, column: IColumn): any {
     let { items, columns } = ({ ...this.state } as IBenefitsOverviewState);
@@ -94,6 +121,68 @@ export default class BenefitsOverview extends React.Component<IBenefitsOverviewP
       return _column;
     });
     this.setState({ items, columns });
+  }
+
+  /**
+   * Get command bar items
+   */
+  private getCommandBarItems(): ICommandBarItemProps[] {
+    const items: ICommandBarItemProps[] = [];
+
+    if (this.props.groupByColumns.length > 0) {
+      const noGrouping: IColumn = {
+        key: "NoGrouping",
+        fieldName: "NoGrouping",
+        name: strings.NoGroupingText,
+        minWidth: 0,
+      };
+      const subItems = [noGrouping, ...this.props.groupByColumns].map(item => ({
+        key: item.key,
+        name: item.name,
+        onClick: () => this.setState({ groupBy: item }),
+      }));
+      items.push({
+        key: "Group",
+        name: objectGet(this.state, 'groupBy.name') || strings.NoGroupingText,
+        iconProps: { iconName: "GroupedList" },
+        itemType: ContextualMenuItemType.Header,
+        onClick: event => event.preventDefault(),
+        subMenuProps: { items: subItems },
+      });
+    }
+
+    return items;
+  }
+
+  /**
+   * Get filtered data
+   */
+  private getFilteredData() {
+    let { items, columns, groupBy, searchTerm } = ({ ...this.state } as IBenefitsOverviewState);
+    let groups: IGroup[] = null;
+    if (groupBy && groupBy.key !== "NoGrouping") {
+      const itemsSortedByGroupBy = items.sort((a, b) => objectGet(a, groupBy.key) > objectGet(b, groupBy.key) ? -1 : 1);
+      const groupNames: string[] = itemsSortedByGroupBy.map(g => objectGet(g, groupBy.key));
+      groups = groupNames
+        .filter((value, index, self) => self.indexOf(value) === index)
+        .map((name, idx) => ({
+          key: `Group_${idx}`,
+          name: `${groupBy.name}: ${name}`,
+          startIndex: groupNames.indexOf(name, 0),
+          count: [].concat(groupNames).filter(n => n === name).length,
+          isCollapsed: false,
+          isShowingAll: true,
+          isDropEnabled: false,
+        }));
+    }
+    items = items.filter(item => {
+      return (
+        objectGet(item, 'title').toLowerCase().indexOf(searchTerm || '') !== -1
+        ||
+        objectGet(item, 'benefit.title').toLowerCase().indexOf(searchTerm || '') !== -1
+      );
+    });
+    return { items, columns, groups };
   }
 
   /**

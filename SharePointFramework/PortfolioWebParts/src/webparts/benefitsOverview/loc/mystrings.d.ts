@@ -1,4 +1,5 @@
 declare interface IBenefitsOverviewWebPartStrings {
+  Title: string;
   LoadingText: string;
   DataSourceNotFound: string;
   SiteTitleLabel: string;
@@ -13,6 +14,9 @@ declare interface IBenefitsOverviewWebPartStrings {
   MeasurementValueLabel: string;
   MeasurementAchievementLabel: string;
   LastMeasurementLabel: string;
+  ShowAllMeasurementsLinkText: string;
+  NoGroupingText: string;
+  SearchBoxLabelText: string;
 }
 
 declare module 'BenefitsOverviewWebPartStrings' {

@@ -3,8 +3,8 @@ import * as strings from 'BenefitsOverviewWebPartStrings';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { BenefitMeasurementIndicator } from 'prosjektportalen-spfx-shared/lib/models';
-import * as objectGet from 'object-get';
 import BenefitMeasurementsModal from './BenefitMeasurementsModal';
+import * as objectGet from 'object-get';
 
 export const BenefitsOverviewColumns: IColumn[] = [
   {
@@ -12,7 +12,7 @@ export const BenefitsOverviewColumns: IColumn[] = [
     fieldName: 'siteTitle',
     name: strings.SiteTitleLabel,
     minWidth: 100,
-    maxWidth: 150,
+    maxWidth: 180,
     isResizable: true,
     onRender: (item: BenefitMeasurementIndicator) => {
       const webUrl = objectGet(item, "webUrl");
@@ -24,8 +24,8 @@ export const BenefitsOverviewColumns: IColumn[] = [
     key: 'benefit.title',
     fieldName: 'benefit.title',
     name: strings.BenefitTitleLabel,
-    minWidth: 220,
-    maxWidth: 300,
+    minWidth: 100,
+    maxWidth: 180,
     isMultiline: true,
     isResizable: true,
   },
@@ -33,14 +33,16 @@ export const BenefitsOverviewColumns: IColumn[] = [
     key: 'benefit.responsible',
     fieldName: 'benefit.responsible',
     name: strings.BenefitResponsibleLabel,
-    minWidth: 100,
+    minWidth: 50,
+    maxWidth: 180,
     isResizable: true,
   },
   {
     key: 'title',
     fieldName: 'title',
     name: strings.TitleLabel,
-    minWidth: 100,
+    minWidth: 50,
+    maxWidth: 180,
     isMultiline: true,
     isResizable: true,
   },
@@ -48,24 +50,24 @@ export const BenefitsOverviewColumns: IColumn[] = [
     key: 'indicator',
     fieldName: 'indicator',
     name: strings.IndicatorLabel,
-    minWidth: 100,
-    maxWidth: 150,
+    minWidth: 50,
+    maxWidth: 80,
     isResizable: true,
   },
   {
     key: 'unit',
     fieldName: 'unit',
     name: strings.UnitLabel,
-    minWidth: 100,
-    maxWidth: 100,
+    minWidth: 50,
+    maxWidth: 80,
     isResizable: true,
   },
   {
     key: 'startValue',
     fieldName: 'startValue',
     name: strings.StartValueLabel,
-    minWidth: 100,
-    maxWidth: 100,
+    minWidth: 50,
+    maxWidth: 80,
     isResizable: true,
     data: { fieldNameDisplay: 'startValueDisplay' },
   },
@@ -73,8 +75,8 @@ export const BenefitsOverviewColumns: IColumn[] = [
     key: 'desiredValue',
     fieldName: 'desiredValue',
     name: strings.DesiredValueLabel,
-    minWidth: 100,
-    maxWidth: 100,
+    minWidth: 50,
+    maxWidth: 80,
     isResizable: true,
     data: { fieldNameDisplay: 'desiredValueDisplay' },
   },
@@ -82,8 +84,8 @@ export const BenefitsOverviewColumns: IColumn[] = [
     key: 'measurements[0].value',
     fieldName: 'measurements[0].value',
     name: strings.LastMeasurementLabel,
-    minWidth: 100,
-    maxWidth: 100,
+    minWidth: 50,
+    maxWidth: 80,
     isResizable: true,
     data: { fieldNameDisplay: 'measurements[0].valueDisplay' }
   },
@@ -91,8 +93,8 @@ export const BenefitsOverviewColumns: IColumn[] = [
     key: 'measurements[0].achievement',
     fieldName: 'measurements[0].achievement',
     name: strings.MeasurementAchievementLabel,
-    minWidth: 100,
-    maxWidth: 100,
+    minWidth: 50,
+    maxWidth: 80,
     isResizable: true,
     onRender: (item: BenefitMeasurementIndicator, _index: number, _column: IColumn) => {
       const colValue = objectGet(item, "measurements[0].achievementDisplay");

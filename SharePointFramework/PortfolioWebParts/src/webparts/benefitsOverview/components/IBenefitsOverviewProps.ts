@@ -2,7 +2,6 @@
 import * as strings from 'BenefitsOverviewWebPartStrings';
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import { IGroupByOption } from 'prosjektportalen-spfx-shared/lib/interfaces/IGroupByOption';
 import { IBenefitsOverviewWebPartProps } from '../IBenefitsOverviewWebPartProps';
 import { BenefitsOverviewColumns } from './BenefitsOverviewColumns';
 
@@ -10,10 +9,14 @@ import { BenefitsOverviewColumns } from './BenefitsOverviewColumns';
 export interface IBenefitsOverviewProps extends IBenefitsOverviewWebPartProps {
     context: WebPartContext;
     columns?: IColumn[];
-    groupByOptions?: IGroupByOption[];
+    groupByColumns?: IColumn[];
 }
 
 export const BenefitsOverviewDefaultProps: Partial<IBenefitsOverviewProps> = {
     columns: BenefitsOverviewColumns,
-    groupByOptions: [{ name: strings.SiteTitleLabel, key: 'SiteTitle' }],
+    groupByColumns: [
+        { name: strings.SiteTitleLabel, key: 'siteTitle', fieldName: 'siteTitle', minWidth: 0 },
+        { name: strings.BenefitTitleLabel, key: 'benefit.title', fieldName: 'benefit.title', minWidth: 0 },
+        { name: strings.BenefitResponsibleLabel, key: 'benefit.responsible', fieldName: 'benefit.responsible', minWidth: 0 },
+    ],
 };
