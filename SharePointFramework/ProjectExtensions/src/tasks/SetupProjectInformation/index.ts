@@ -25,7 +25,7 @@ export default class SetupProjectInformation extends BaseTask {
                 entity = await spEntityPortalService.getEntityItem(params.context.pageContext.legacyPageContext.siteId);
             } catch (error) {
                 Logger.log({ message: `(ProjectSetupApplicationCustomizer) SetupProjectInformation: Adding project to list '${params.properties.projectsList}' at ${params.data.hub.url}`, data: { groupId: groupId }, level: LogLevel.Info });
-                entity = await spEntityPortalService.newEntity(params.context.pageContext.legacyPageContext.groupId, params.context.pageContext.site.absoluteUrl, { GtSiteId: params.context.pageContext.site.id.toString }, params.data.hub.url);
+                entity = await spEntityPortalService.newEntity(params.context.pageContext.legacyPageContext.groupId, params.context.pageContext.site.absoluteUrl, { GtSiteId: params.context.pageContext.site.id.toString() }, params.data.hub.url);
             }
             return { ...params, entity };
         } catch (error) {

@@ -101,10 +101,8 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    * @param {Phase} phase Phase
    */
   private async updatePhase(phase: Phase) {
-    let properties: { [key: string]: string } = {};
-    properties[this.state.data.phaseTextField] = phase.toString();
-    Logger.log({ message: '(ProjectPhases) updatePhase', data: { properties }, level: LogLevel.Info });
-    await this.props.spEntityPortalService.updateEntityItem(this.props.context.pageContext, properties);
+    Logger.log({ message: '(ProjectPhases) updatePhase', data: { phase }, level: LogLevel.Info });
+    await this.props.spEntityPortalService.updateEntityItem(this.props.context.pageContext.site.id.toString(), { [this.state.data.phaseTextField]: phase.toString() });
   }
 
   /**
