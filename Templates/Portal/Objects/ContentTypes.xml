@@ -18,6 +18,7 @@
             <pnp:FieldRef ID="5af54348-bc38-4a18-a11f-0f84a96da4ea" Name="GtCostsTotal" />
             <pnp:FieldRef ID="9076c206-ca80-4e17-b6f4-6fa3b90c421a" Name="GtProjectForecast" />
             <pnp:FieldRef ID="f4623214-ab74-4160-82a7-37d46901bc1b" Name="GtBudgetLastReportDate" />
+            <pnp:FieldRef ID="167aef39-147b-40e1-befa-c1982af39d71" Name="GtGroupId" />
             <pnp:FieldRef ID="fba7ced6-9970-4b14-ab9c-7c809310d86d" Name="GtSiteId" />
             <pnp:FieldRef ID="871c1234-9ac5-4841-8b56-50839c34a7a1" Name="GtSiteUrl" />
         </pnp:FieldRefs>
