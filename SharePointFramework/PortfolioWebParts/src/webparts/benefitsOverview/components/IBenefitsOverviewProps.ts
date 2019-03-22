@@ -1,13 +1,12 @@
 
 import * as strings from 'BenefitsOverviewWebPartStrings';
-import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { IBenefitsOverviewWebPartProps } from '../IBenefitsOverviewWebPartProps';
 import { BenefitsOverviewColumns } from './BenefitsOverviewColumns';
 
 
 export interface IBenefitsOverviewProps extends IBenefitsOverviewWebPartProps {
-    context: WebPartContext;
+    hubSiteId?: string;
     columns?: IColumn[];
     groupByColumns?: IColumn[];
 }

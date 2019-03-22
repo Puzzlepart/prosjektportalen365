@@ -25,11 +25,9 @@ export default class ProjectListWebPart extends PortfolioBaseWebPart<IProjectLis
       ProjectList,
       {
         ...this.properties,
-        pageContext: this.context.pageContext,
-        spHttpClient: this.context.spHttpClient,
         web: this.web,
-        webServerRelativeUrl: this.context.pageContext.web.serverRelativeUrl,
-        webAbsoluteUrl: this.context.pageContext.web.absoluteUrl
+        siteId: this.context.pageContext.site.id.toString(),
+        siteAbsoluteUrl: this.context.pageContext.site.absoluteUrl,
       }
     );
     super._render(this.manifest.alias, element);

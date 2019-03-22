@@ -25,7 +25,7 @@
     ]
   },
   "include": [
-    "src/**/*.ts", "src/webparts/benefitsOverview/components/BenefitMeasurementsModal/BenefitMeasurementsModalColumns.tsx"
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules",

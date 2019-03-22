@@ -11,7 +11,7 @@ import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import ProjectCard from './ProjectCard/ProjectCard';
 import { sp, QueryPropertyValueType } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
-import ProjectInformation from 'prosjektportalen-spfx-projectwebparts/lib/webparts/projectInformation/components/ProjectInformation';
+import ProjectInformation from '../../../../../ProjectWebParts/lib/webparts/projectInformation/components/ProjectInformation';
 import { ProjectListModel } from 'prosjektportalen-spfx-shared/lib/models/ProjectListModel';
 
 export default class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
@@ -37,8 +37,8 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
             onDismiss={_e => this.setState({ selectedProject: null })}>
             <ProjectInformation
               title={this.state.selectedProject.Title}
-              entity={{ webUrl: this.props.pageContext.site.absoluteUrl, ...this.props.entity }}
-              hubSiteUrl={this.props.pageContext.site.absoluteUrl}
+              entity={{ webUrl: this.props.siteAbsoluteUrl, ...this.props.entity }}
+              hubSiteUrl={this.props.siteAbsoluteUrl}
               siteId={this.state.selectedProject.Id}
               hideEditPropertiesButton={true}
               filterField='GtShowFieldPortfolio' />
@@ -103,7 +103,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
       sp.web.siteUsers.usingCaching().get(),
       taxonomy.getDefaultSiteCollectionTermStore().getTermSetById(this.props.phaseTermSetId).terms.usingCaching().get(),
       sp.search({
-        Querytext: `DepartmentId:${this.props.pageContext.legacyPageContext.siteId} contentclass:STS_Site`,
+        Querytext: `DepartmentId:${this.props.siteId} contentclass:STS_Site`,
         TrimDuplicates: false,
         RowLimit: 500,
         SelectProperties: ['Title', 'Path', 'DepartmentId', 'SiteId', 'SiteLogo'],

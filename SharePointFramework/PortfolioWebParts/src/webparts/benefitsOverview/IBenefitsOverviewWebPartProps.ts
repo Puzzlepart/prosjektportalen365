@@ -1,3 +1,4 @@
 export interface IBenefitsOverviewWebPartProps { 
-    dataSource: string;
+    dataSource?: string;
+    queryTemplate?: string;
 }

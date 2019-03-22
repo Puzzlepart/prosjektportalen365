@@ -11,7 +11,7 @@ export default class BenefitsOverviewWebPart extends PortfolioBaseWebPart<IBenef
   public render(): void {
     const element: React.ReactElement<IBenefitsOverviewProps> = React.createElement(BenefitsOverview, {
       ...this.properties,
-      context: this.context,
+      hubSiteId: this.context.pageContext.legacyPageContext.hubSiteId,
       groupByColumns: [
         { name: strings.SiteTitleLabel, key: 'siteTitle', fieldName: 'siteTitle', minWidth: 0 },
         ...BenefitsOverview.defaultProps.groupByColumns,
