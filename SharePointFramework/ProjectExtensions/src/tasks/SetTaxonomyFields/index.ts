@@ -6,8 +6,10 @@ import { BaseTaskError } from '../BaseTaskError';
 import initSpfxJsom, { ExecuteJsomQuery, JsomContext } from 'spfx-jsom';
 
 export default class SetTaxonomyFields extends BaseTask {
+    public static taskName = 'SetTaxonomyFields';
+
     constructor() {
-        super('SetTaxonomyFields');
+        super(SetTaxonomyFields.taskName);
     }
 
     @override
@@ -30,7 +32,7 @@ export default class SetTaxonomyFields extends BaseTask {
             await ExecuteJsomQuery(jsomCtx);
             return params;
         } catch (error) {
-            throw new BaseTaskError('SetTaxonomyFields', error);
+            throw new BaseTaskError(SetTaxonomyFields.taskName, error);
         }
     }
 }

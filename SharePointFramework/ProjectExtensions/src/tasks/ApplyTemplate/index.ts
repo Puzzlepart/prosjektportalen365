@@ -8,8 +8,10 @@ import { IBaseTaskParams } from '../IBaseTaskParams';
 import { BaseTaskError } from '../BaseTaskError';
 
 export default class ApplyTemplate extends BaseTask {
+    public static taskName = 'ApplyTemplate';
+
     constructor() {
-        super('ApplyTemplate');
+        super(ApplyTemplate.taskName);
     }
 
     @override
@@ -38,8 +40,7 @@ export default class ApplyTemplate extends BaseTask {
             }
             return params;
         } catch (error) {
-            console.log(error);
-            throw new BaseTaskError('ApplyTemplate', error);
+            throw new BaseTaskError(ApplyTemplate.taskName, error);
         }
     }
 }

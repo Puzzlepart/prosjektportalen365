@@ -9,8 +9,10 @@ import { BaseTaskError } from '../BaseTaskError';
 import { ListContentConfig } from '../../models';
 
 export default class CopyListData extends BaseTask {
+    public static taskName = 'CopyListData';
+
     constructor() {
-        super('CopyListData');
+        super(CopyListData.taskName);
     }
 
     @override
@@ -65,7 +67,7 @@ export default class CopyListData extends BaseTask {
                 await destList.items.add(properties, ListItemEntityTypeFullName);
             }
         } catch (error) {
-            throw new BaseTaskError('CopyListData', error);
+            throw new BaseTaskError(CopyListData.taskName, error);
         }
     }
 }
