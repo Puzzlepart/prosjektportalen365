@@ -673,14 +673,6 @@
                                             "identityFieldName": "GtSiteId"
                                         }
                                     }
-                                },
-                                {
-                                    "Id": "f92bf067-bc19-489e-a556-7fe95f508720",
-                                    "Properties": {
-                                        "isDocumentLibrary": false,
-                                        "selectedListId": "{listid:Usikkerhet}",
-                                        "webpartHeightKey": 4
-                                    }
                                 }
                             ]
                         }
