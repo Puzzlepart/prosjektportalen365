@@ -393,11 +393,6 @@
             "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
-                    "ID": "8d497830-9012-437c-aa65-4b05807f4415",
-                    "Name": "GtMeasureIndicator",
-                    "Required": true
-                },
-                {
                     "ID": "c5fc8781-7fbd-43a2-a215-c8c959bbab69",
                     "Name": "GtStartValue",
                     "Required": true
@@ -493,7 +488,6 @@
         "<Field ID=\"{49b0ba6b-d1ec-4644-91b7-691a33524c90}\" Name=\"GtProjectLogReporter\" DisplayName=\"Meldt av\" Type=\"User\" Group=\"{parameter:fieldsgroup}\" Description=\"Oppgi den personen som meldte saken. Det er prosjektleders ansvar å opprette en Emnerapport på basis av emnet som er valgt etter prosedyrene valgt for dette prosjektet.\" StaticName=\"GtProjectLogReporter\"></Field>",
         "<Field ID=\"{2bb7e155-3af4-4353-a460-8da404c4e748}\" Name=\"GtStakeholderInfluencePossibilty\" DisplayName=\"Mulighet til påvirkning\" Type=\"Choice\" Group=\"{parameter:fieldsgroup}\" Description=\"\" StaticName=\"GtStakeholderInfluencePossibilty\"><CHOICES><CHOICE>Stor</CHOICE><CHOICE>Middels</CHOICE><CHOICE>Liten</CHOICE><CHOICE>Ingen</CHOICE></CHOICES></Field>",
         "<Field Type=\"Choice\" DisplayName=\"Måleenhet\" Description=\"Se måleindikator for utdypning\" Format=\"Dropdown\" ID=\"{0d38db52-2040-44c1-823e-7642f76519ee}\" StaticName=\"GtMeasurementUnit\" Name=\"GtMeasurementUnit\" Group=\"{parameter:fieldsgroup}\"><Default>Antall</Default><CHOICES><CHOICE>Antall</CHOICE><CHOICE>Kroner</CHOICE><CHOICE>Prosent</CHOICE><CHOICE>Timer</CHOICE></CHOICES></Field>",
-        "<Field Type=\"Text\" DisplayName=\"Måleindikator\" Description=\"Hvordan skal gevinsten måles, eks: papirforbruk pr måned\" ID=\"{8d497830-9012-437c-aa65-4b05807f4415}\" StaticName=\"GtMeasureIndicator\" Name=\"GtMeasureIndicator\" Group=\"{parameter:fieldsgroup}\" />",
         "<Field Type=\"Number\" DisplayName=\"Målt verdi\" Description=\"\" ID=\"{70dc7c4a-54ec-4674-b238-2b2a889e1b49}\" StaticName=\"GtMeasurementValue\" Name=\"GtMeasurementValue\" Group=\"{parameter:fieldsgroup}\" />",
         "<Field DisplayName=\"Navn\" Description=\"\" ID=\"{88d9b92c-efed-45d0-a586-86d9196b77d0}\" Type=\"User\" Group=\"{parameter:fieldsgroup}\" StaticName=\"GtResourceUser\" Name=\"GtResourceUser\" ShowField=\"ImnName\" UserSelectionMode=\"PeopleOnly\" UserSelectionScope=\"0\" />",
         "<Field ID=\"{c755525b-3716-4ee8-a4f4-f9684808c009}\" Name=\"GtRiskProximity\" DisplayName=\"Nærhet\" Type=\"Choice\" Group=\"{parameter:fieldsgroup}\" Description=\"\" StaticName=\"GtRiskProximity\"><CHOICES><CHOICE>Umiddelbart</CHOICE><CHOICE>I denne fasen</CHOICE><CHOICE>Innenfor prosjektet</CHOICE><CHOICE>Utenfor prosjektet</CHOICE></CHOICES></Field>",
@@ -1352,7 +1346,6 @@
                     "ViewFields": [
                         "LinkTitle",
                         "GtGainLookup",
-                        "GtMeasureIndicator",
                         "GtStartValue",
                         "GtDesiredValue",
                         "GtMeasurementUnit"
