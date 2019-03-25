@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Version } from '@microsoft/sp-core-library';
-import { IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
 import LatestProjects from './components/LatestProjects';
 import { ILatestProjectsProps } from './components/ILatestProjectsProps';
 import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
+import { Logger, LogLevel } from '@pnp/logging';
 
 export interface ILatestProjectsWebPartProps {
   title: string;
@@ -11,6 +11,7 @@ export interface ILatestProjectsWebPartProps {
 
 export default class LatestProjectsWebPart extends PortfolioBaseWebPart<ILatestProjectsWebPartProps> {
   public render(): void {
+    Logger.log({ message: '(LatestProjectsWebPart) render: Rendering <LatestProjects />', level: LogLevel.Info });
     const element: React.ReactElement<ILatestProjectsProps> = React.createElement(
       LatestProjects,
       {

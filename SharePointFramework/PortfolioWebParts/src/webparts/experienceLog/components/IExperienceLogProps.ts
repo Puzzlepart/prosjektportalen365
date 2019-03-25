@@ -1,18 +1,19 @@
-import { IGroupByOption } from 'prosjektportalen-spfx-shared/lib/interfaces/IGroupByOption';
 import IExcelExportConfig from 'prosjektportalen-spfx-shared/lib/interfaces/IExcelExportConfig';
 import * as strings from 'ExperienceLogWebPartStrings';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { WebPartContext } from '@microsoft/sp-webpart-base';
+import { IExperienceLogWebPartProps } from '../ExperienceLogWebPart';
 
-export interface IExperienceLogProps {
+export interface IExperienceLogProps extends IExperienceLogWebPartProps {
   context: WebPartContext;
   columns?: IColumn[];
-  groupByOptions?: IGroupByOption[];
+  groupByColumns?: IColumn[];
   excelExportEnabled?: boolean;
   excelExportConfig?: IExcelExportConfig;
 }
 
 export const ExperienceLogDefaultProps: Partial<IExperienceLogProps> = {
+  title: 'Erfaringslogg',
   columns: [
     {
       key: 'Title',
@@ -63,7 +64,7 @@ export const ExperienceLogDefaultProps: Partial<IExperienceLogProps> = {
       isResizable: true
     }
   ],
-  groupByOptions: [{ name: 'Prosjekt', key: 'SiteTitle' }],
+  groupByColumns: [{ name: 'Prosjekt', key: 'SiteTitle', fieldName: 'SiteTitle', minWidth: 100 }],
   excelExportEnabled: true,
   excelExportConfig: {
     fileNamePrefix: strings.ExcelExportFileNamePrefix,

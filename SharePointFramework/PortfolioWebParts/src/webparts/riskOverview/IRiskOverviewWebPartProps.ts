@@ -1,8 +1,8 @@
-import { IGroupByOption } from 'prosjektportalen-spfx-shared/lib/interfaces/IGroupByOption';
+import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 
 export interface IRiskOverviewWebPartProps {
     dataSource: string;
     showCommandBar: boolean;
-    groupByOptions: IGroupByOption[];
+    groupByColumns: IColumn[];
     excelExportEnabled: boolean;
 }

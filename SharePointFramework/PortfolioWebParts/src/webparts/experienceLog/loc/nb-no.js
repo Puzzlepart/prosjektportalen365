@@ -9,6 +9,8 @@ define([], function() {
     "ResponsibleColumnDisplayName": "Ansvarlig",
     "ConsequenceColumnDisplayName": "Konsekvens",
     "RecommendationColumnDisplayName": "Anbefaling",
-    "ActorsColumnDisplayName": "Aktører"
+    "ActorsColumnDisplayName": "Aktører",
+    "NoGroupingText": "Ingen gruppering",
+    "SearchBoxLabelText": "Søk i erfaringslogg...",
   }
 });

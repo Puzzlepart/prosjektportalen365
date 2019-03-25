@@ -9,6 +9,8 @@ declare interface IExperienceLogWebPartStrings {
   ConsequenceColumnDisplayName: string;
   RecommendationColumnDisplayName: string;
   ActorsColumnDisplayName: string;
+  NoGroupingText: string;
+  SearchBoxLabelText: string;
 }
 
 declare module 'ExperienceLogWebPartStrings' {

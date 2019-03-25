@@ -5,6 +5,7 @@ import ProjectList from './components/ProjectList';
 import { IProjectListProps } from './components/IProjectListProps';
 import { Web } from '@pnp/sp';
 import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
+import { Logger, LogLevel } from '@pnp/logging';
 
 
 export interface IProjectListWebPartProps {
@@ -13,7 +14,7 @@ export interface IProjectListWebPartProps {
     listName: string;
     contentTypeId: string;
     fieldsGroupName: string;
-    siteIdFieldName: string;
+    identityFieldName: string;
   };
 }
 
@@ -21,6 +22,7 @@ export default class ProjectListWebPart extends PortfolioBaseWebPart<IProjectLis
   private web: Web;
 
   public render(): void {
+    Logger.log({ message: '(ProjectListWebPart) render: Rendering <ProjectList />', level: LogLevel.Info });
     const element: React.ReactElement<IProjectListProps> = React.createElement(
       ProjectList,
       {

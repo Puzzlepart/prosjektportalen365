@@ -4,20 +4,26 @@ import { IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
 import ExperienceLog from './components/ExperienceLog';
 import { IExperienceLogProps } from './components/IExperienceLogProps';
 import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
+import { Logger, LogLevel } from '@pnp/logging';
 
-export interface IExperienceLogWebPartProps { }
+export interface IExperienceLogWebPartProps {
+  title: string;
+}
 
 export default class ExperienceLogWebPart extends PortfolioBaseWebPart<IExperienceLogWebPartProps> {
   public render(): void {
-    const element: React.ReactElement<IExperienceLogProps> = React.createElement(ExperienceLog, { context: this.context });
+    Logger.log({ message: '(ExperienceLogWebPart) render: Rendering <ExperienceLog />', level: LogLevel.Info });
+    const element: React.ReactElement<IExperienceLogProps> = React.createElement(ExperienceLog, { context: this.context, ...this.properties });
     super._render(this.manifest.alias, element);
   }
 
   protected async onInit(): Promise<void> {
+    Logger.log({ message: '(ExperienceLogWebPart) onInit: Initializing ExperienceLogWebPart', level: LogLevel.Info });
     await super.onInit();
   }
 
   protected onDispose(): void {
+    Logger.log({ message: '(ExperienceLogWebPart) onDispose: Disposing <ExperienceLog />', level: LogLevel.Info });
     super.onDispose();
   }
 

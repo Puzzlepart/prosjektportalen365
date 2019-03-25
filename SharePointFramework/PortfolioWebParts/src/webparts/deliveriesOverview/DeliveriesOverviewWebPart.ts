@@ -5,9 +5,11 @@ import DeliveriesOverview from './components/DeliveriesOverview';
 import { IDeliveriesOverviewProps } from './components/IDeliveriesOverviewProps';
 import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
 import { IDeliveriesOverviewWebPartProps } from './IDeliveriesOverviewWebPartProps';
+import { Logger, LogLevel } from '@pnp/logging';
 
 export default class DeliveriesOverviewWebPart extends PortfolioBaseWebPart<IDeliveriesOverviewWebPartProps> {
   public render(): void {
+    Logger.log({ message: '(DeliveriesOverviewWebPart) render: Rendering <DeliveriesOverview />', level: LogLevel.Info });
     const element: React.ReactElement<IDeliveriesOverviewProps> = React.createElement(
       DeliveriesOverview, { context: this.context, ...this.properties }
     );

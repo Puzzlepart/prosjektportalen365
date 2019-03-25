@@ -1,7 +1,7 @@
-import { IGroupByOption } from 'prosjektportalen-spfx-shared/lib/interfaces/IGroupByOption';
+import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 
 export interface IDeliveriesOverviewWebPartProps {
   dataSource: string;
-  groupByOptions: IGroupByOption[];
+  groupByColumns: IColumn[];
   excelExportEnabled: boolean;
 }
