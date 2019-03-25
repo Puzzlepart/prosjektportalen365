@@ -87,6 +87,7 @@
     "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js",
     "RiskOverviewWebPartStrings": "lib/webparts/riskOverview/loc/{locale}.js",
     "ResourceAllocationWebPartStrings": "lib/webparts/resourceAllocation/loc/{locale}.js",
-    "PortfolioInsightsWebPartStrings": "lib/webparts/portfolioInsights/loc/{locale}.js"
+    "PortfolioInsightsWebPartStrings": "lib/webparts/portfolioInsights/loc/{locale}.js",
+    "PortfolioWebPartsStrings": "lib/loc/{locale}.js"
   }
 }

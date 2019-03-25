@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as sharedStrings from 'PortfolioWebPartsStrings';
 import { Version } from '@microsoft/sp-core-library';
 import { IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
 import ExperienceLog from './components/ExperienceLog';
@@ -13,7 +14,11 @@ export interface IExperienceLogWebPartProps {
 export default class ExperienceLogWebPart extends PortfolioBaseWebPart<IExperienceLogWebPartProps> {
   public render(): void {
     Logger.log({ message: '(ExperienceLogWebPart) render: Rendering <ExperienceLog />', level: LogLevel.Info });
-    const element: React.ReactElement<IExperienceLogProps> = React.createElement(ExperienceLog, { context: this.context, ...this.properties });
+    const element: React.ReactElement<IExperienceLogProps> = React.createElement(ExperienceLog, {
+      context: this.context,
+      ...this.properties,
+      groupByColumns: [{ name: sharedStrings.SiteTitleLabel, key: 'SiteTitle', fieldName: 'SiteTitle', minWidth: 0 }],
+    });
     super._render(this.manifest.alias, element);
   }
 

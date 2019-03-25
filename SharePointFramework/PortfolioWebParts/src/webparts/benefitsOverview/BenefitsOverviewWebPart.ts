@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as strings from 'BenefitsOverviewWebPartStrings';
+import * as sharedStrings from 'PortfolioWebPartsStrings';
 import { Version } from '@microsoft/sp-core-library';
 import { IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
 import BenefitsOverview from './components/BenefitsOverview';
@@ -15,7 +15,7 @@ export default class BenefitsOverviewWebPart extends PortfolioBaseWebPart<IBenef
       ...this.properties,
       hubSiteId: this.context.pageContext.legacyPageContext.hubSiteId,
       groupByColumns: [
-        { name: strings.SiteTitleLabel, key: 'siteTitle', fieldName: 'siteTitle', minWidth: 0 },
+        { name: sharedStrings.SiteTitleLabel, key: 'siteTitle', fieldName: 'siteTitle', minWidth: 0 },
         ...BenefitsOverview.defaultProps.groupByColumns,
       ],
     });

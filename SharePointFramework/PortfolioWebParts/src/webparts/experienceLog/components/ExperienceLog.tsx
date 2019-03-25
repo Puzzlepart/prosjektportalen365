@@ -52,7 +52,7 @@ export default class ExperienceLog extends React.Component<IExperienceLogProps, 
             <div className={styles.title}>{this.props.title}</div>
           </div>
           <div className={styles.searchBox}>
-            <SearchBox onSearch={this.onSearch} labelText={strings.SearchBoxLabelText} />
+            <SearchBox onChange={this.onSearch} labelText={strings.SearchBoxLabelText} />
           </div>
           <div className={styles.listContainer}>
             <DetailsList

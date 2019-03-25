@@ -1,6 +1,6 @@
 {
   "name": "prosjektportalen-spfx-portfoliowebparts",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "private": true,
   "engines": {
     "node": ">=0.10.0"
@@ -71,7 +71,7 @@
     "bluebird": "^3.5.3",
     "gulp": "~3.9.1",
     "node-fetch": "^2.3.0",
-    "spfx-pkgdeploy": "^0.2.1",
+    "spfx-pkgdeploy": "^0.3.0",
     "tslint": "5.9.1",
     "tslint-microsoft-contrib": "^6.0.0",
     "typescript": "2.4.2"

@@ -3,7 +3,8 @@ import { IRiskOverviewWebPartProps } from '../IRiskOverviewWebPartProps';
 import tryParseInt from 'prosjektportalen-spfx-shared/lib/helpers/tryParseInt';
 
 export interface IRiskOverviewProps extends IRiskOverviewWebPartProps {
-    columns?: IColumn[];
+    columns?: IColumn[];    
+    groupByColumns: IColumn[];
 }
 
 export const RiskOverviewDefaultProps: Partial<IRiskOverviewProps> = {

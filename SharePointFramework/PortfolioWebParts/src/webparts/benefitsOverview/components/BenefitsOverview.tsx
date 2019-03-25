@@ -39,7 +39,13 @@ export default class BenefitsOverview extends React.Component<IBenefitsOverviewP
 
   public render(): React.ReactElement<IBenefitsOverviewProps> {
     if (this.state.isLoading) {
-      return <Spinner label={strings.LoadingText} type={SpinnerType.large} />;
+      return (
+        <div className={styles.benefitsOverview}>
+          <div className={styles.container}>
+            <Spinner label={strings.LoadingText} type={SpinnerType.large} />
+          </div>
+        </div>
+      );
     }
 
     let { items, columns, groups } = this.getFilteredData();
@@ -54,7 +60,7 @@ export default class BenefitsOverview extends React.Component<IBenefitsOverviewP
             <div className={styles.title}>{strings.Title}</div>
           </div>
           <div className={styles.searchBox}>
-            <SearchBox onSearch={this.onSearch} labelText={strings.SearchBoxLabelText} />
+            <SearchBox onChange={this.onSearch} labelText={strings.SearchBoxLabelText} />
           </div>
           <div className={styles.listContainer}>
             <DetailsList

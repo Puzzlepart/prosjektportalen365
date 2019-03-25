@@ -64,7 +64,6 @@ export const ExperienceLogDefaultProps: Partial<IExperienceLogProps> = {
       isResizable: true
     }
   ],
-  groupByColumns: [{ name: 'Prosjekt', key: 'SiteTitle', fieldName: 'SiteTitle', minWidth: 100 }],
   excelExportEnabled: true,
   excelExportConfig: {
     fileNamePrefix: strings.ExcelExportFileNamePrefix,

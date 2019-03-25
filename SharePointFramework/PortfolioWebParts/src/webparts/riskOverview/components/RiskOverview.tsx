@@ -19,7 +19,7 @@ export default class RiskOverview extends React.Component<IRiskOverviewProps, IR
    */
   constructor(props: IRiskOverviewProps) {
     super(props);
-    this.state = { isLoading: true };
+    this.state = { isLoading: true, columns: props.columns };
   }
 
   public async componentDidMount(): Promise<void> {
