@@ -6,17 +6,8 @@ import { IProjectListProps } from './components/IProjectListProps';
 import { Web } from '@pnp/sp';
 import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
 import { Logger, LogLevel } from '@pnp/logging';
-
-
-export interface IProjectListWebPartProps {
-  phaseTermSetId: string;
-  entity: {
-    listName: string;
-    contentTypeId: string;
-    fieldsGroupName: string;
-    identityFieldName: string;
-  };
-}
+import MSGraph from 'msgraph-helper';
+import { IProjectListWebPartProps } from './IProjectListWebPartProps';
 
 export default class ProjectListWebPart extends PortfolioBaseWebPart<IProjectListWebPartProps> {
   private web: Web;
@@ -37,6 +28,7 @@ export default class ProjectListWebPart extends PortfolioBaseWebPart<IProjectLis
 
   protected async onInit(): Promise<void> {
     await super.onInit();
+    await MSGraph.Init(this.context.msGraphClientFactory);
     this.web = new Web(this.context.pageContext.web.absoluteUrl);
   }
 

@@ -3,16 +3,16 @@ declare interface IProjectListWebPartStrings {
   BasicGroupName: string;
   DescriptionFieldLabel: string;
   NotSet: string;
-  LoadingProjectsLabel: string;
   ProjectOwner: string;
   ProjectManager: string;
   SearchBoxPlaceholderText: string;
   NoSearchResults: string;
-  Loading: string;
   MissingProperties: string;
   NoProperties: string;
   ProjectLinkText: string;
   ProjectStatusLinkText: string;
+  LoadingText: string;
+  ErrorText: string;
 }
 
 declare module 'ProjectListWebPartStrings' {

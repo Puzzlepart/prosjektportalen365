@@ -1,5 +1,5 @@
 import { Web } from "@pnp/sp";
-import { IProjectListWebPartProps } from "../ProjectListWebPart";
+import { IProjectListWebPartProps } from "../IProjectListWebPartProps";
 
 export interface IProjectListProps extends IProjectListWebPartProps {
   web: Web;
