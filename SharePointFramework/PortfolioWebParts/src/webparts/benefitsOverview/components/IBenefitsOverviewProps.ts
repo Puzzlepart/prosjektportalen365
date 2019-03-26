@@ -1,16 +1,36 @@
 
 import * as strings from 'BenefitsOverviewWebPartStrings';
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { IBenefitsOverviewWebPartProps } from '../IBenefitsOverviewWebPartProps';
 import { BenefitsOverviewColumns } from './BenefitsOverviewColumns';
 
 
-export interface IBenefitsOverviewProps extends IBenefitsOverviewWebPartProps {
-    columns?: IColumn[];
-    groupByColumns?: IColumn[];
-}
+export interface IBenefitsOverviewProps extends IBenefitsOverviewWebPartProps { }
 
 export const BenefitsOverviewDefaultProps: Partial<IBenefitsOverviewProps> = {
+    selectProperties: [
+        'Path',
+        'SPWebURL',
+        'Title',
+        'ListItemId',
+        'SiteTitle',
+        'SiteId',
+        'ContentTypeID',
+        'GtDesiredValueOWSNMBR',
+        'GtMeasureIndicatorOWSTEXT',
+        'GtMeasurementUnitOWSCHCS',
+        'GtStartValueOWSNMBR',
+        'GtMeasurementValueOWSNMBR',
+        'GtMeasurementCommentOWSMTXT',
+        'GtMeasurementDateOWSDATE',
+        'GtGainsResponsibleOWSUSER',
+        'GtGainsTurnoverOWSMTXT',
+        'GtGainsTypeOWSCHCS',
+        'GtPrereqProfitAchievementOWSMTXT',
+        'GtRealizationTimeOWSDATE',
+        'GtGainLookupId',
+        'GtMeasureIndicatorLookupId',
+        'GtGainsResponsible'
+    ],
     columns: BenefitsOverviewColumns,
     groupByColumns: [
         { name: strings.BenefitTitleLabel, key: 'benefit.title', fieldName: 'benefit.title', minWidth: 0 },

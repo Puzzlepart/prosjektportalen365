@@ -14,8 +14,15 @@ import { sp } from '@pnp/sp';
 import DataSourceService from 'prosjektportalen-spfx-shared/lib/services/DataSourceService';
 import * as objectGet from 'object-get';
 import * as stringFormat from 'string-format';
+import * as moment from 'moment';
 
 export default class AggregatedSearchList extends React.Component<IAggregatedSearchListProps, IAggregatedSearchListState> {
+    public static defaultProps: Partial<IAggregatedSearchListProps> = {
+        showCommandBar: true,
+        showSearchBox: true,
+        groupByColumns: [],
+    };
+
     /**
      * Constructor
      *
@@ -28,7 +35,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
 
     public async componentDidMount(): Promise<void> {
         try {
-            const items = await (this.props.customFetch ? this.props.customFetch(this.props) : this.fetchItems());
+            const items = await this.fetchItems();
             this.setState({ items, isLoading: false });
         } catch (error) {
             this.setState({ error, isLoading: false });
@@ -60,13 +67,13 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
         return (
             <div className={styles.aggregatedSearchList}>
                 <div className={styles.container}>
-                    <div className={styles.commandBar}>
+                    <div className={styles.commandBar} hidden={!this.props.showCommandBar}>
                         <CommandBar items={this.getCommandBarItems()} />
                     </div>
                     <div className={styles.header}>
                         <div className={styles.title}>{this.props.title}</div>
                     </div>
-                    <div className={styles.searchBox}>
+                    <div className={styles.searchBox} hidden={!this.props.showSearchBox}>
                         <SearchBox onChange={this.onSearch} labelText={stringFormat(PortfolioWebPartsStrings.SearchBoxLabelText, this.props.dataSource.toLowerCase())} />
                     </div>
                     <div className={styles.listContainer}>
@@ -142,7 +149,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
     private getCommandBarItems(): ICommandBarItemProps[] {
         const items: ICommandBarItemProps[] = [];
 
-        if (this.props.groupByColumns && this.props.groupByColumns.length > 0) {
+        if (this.props.groupByColumns.length > 0) {
             const noGrouping: IColumn = {
                 key: 'NoGrouping',
                 fieldName: 'NoGrouping',
@@ -161,6 +168,18 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
                 itemType: ContextualMenuItemType.Header,
                 onClick: event => event.preventDefault(),
                 subMenuProps: { items: subItems },
+            });
+        }
+        if (this.props.excelExportConfig) {
+            items.push({
+                key: "ExcelExport",
+                name: PortfolioWebPartsStrings.ExcelExportButtonLabel,
+                iconProps: {
+                    iconName: 'ExcelDocument',
+                    styles: { root: { color: "green !important" } },
+                },
+                disabled: this.state.isExporting,
+                onClick: event => { this.exportToExcel(event); }
             });
         }
 
@@ -195,26 +214,53 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
     }
 
     /**
+     * Export to Excel
+     */
+    @autobind
+    private async exportToExcel(event?: React.MouseEvent<any> | React.KeyboardEvent<any>): Promise<void> {
+        event.preventDefault();
+        const { sheetName, fileNamePrefix } = this.props.excelExportConfig;
+        this.setState({ isExporting: true });
+        const sheets = [];
+        let { items, columns } = this.getFilteredData();
+        let _columns = columns.filter(column => column.name);
+        sheets.push({
+            name: sheetName,
+            data: [
+                _columns.map(column => column.name),
+                ...items.map(item => _columns.map(column => objectGet(item, column.fieldName))),
+            ],
+        });
+        const fileName = stringFormat("{0}-{1}.xlsx", fileNamePrefix, moment(new Date().toISOString()).format('YYYY-MM-DD-HH-mm'));
+        // await ExportToExcel({ sheets: [sheet], fileName });
+        this.setState({ isExporting: false });
+    }
+
+    /**
      * Fetch items
      */
     private async fetchItems(): Promise<any[]> {
-        const dataSource = await new DataSourceService(sp.web).getByName(this.props.dataSource);
-        if (dataSource) {
-            const selectProperties = this.props.selectProperties || ['Path', 'SPWebUrl', ...this.props.columns.map(col => col.key)];
-            try {
-                const { PrimarySearchResults } = await sp.search({
-                    ...dataSource,
-                    Querytext: '*',
-                    RowLimit: 500,
-                    TrimDuplicates: false,
-                    SelectProperties: selectProperties,
-                });
-                return PrimarySearchResults;
-            } catch (err) {
-                throw err;
+        let { queryTemplate, dataSource } = this.props;
+        try {
+            if (!queryTemplate) {
+                const _dataSource = await new DataSourceService(sp.web).getByName(dataSource);
+                if (_dataSource) {
+                    queryTemplate = _dataSource.QueryTemplate;
+                } else {
+                    throw stringFormat(PortfolioWebPartsStrings.DataSourceNotFound, dataSource);
+                }
             }
-        } else {
-            throw stringFormat(PortfolioWebPartsStrings.DataSourceNotFound, this.props.dataSource);
+            const selectProperties = this.props.selectProperties || ['Path', 'SPWebUrl', ...this.props.columns.map(col => col.key)];
+            let results = (await sp.search({
+                QueryTemplate: queryTemplate,
+                Querytext: '*',
+                RowLimit: 500,
+                TrimDuplicates: false,
+                SelectProperties: selectProperties,
+            })).PrimarySearchResults;
+            return this.props.postFetch ? this.props.postFetch(results) : results;
+        } catch (error) {
+            throw stringFormat(PortfolioWebPartsStrings.DataSourceError, dataSource);
         }
     }
 }

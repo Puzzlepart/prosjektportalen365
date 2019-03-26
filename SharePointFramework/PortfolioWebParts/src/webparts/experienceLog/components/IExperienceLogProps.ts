@@ -12,7 +12,5 @@ export const ExperienceLogDefaultProps: Partial<IExperienceLogProps> = {
   excelExportConfig: {
     fileNamePrefix: strings.ExcelExportFileNamePrefix,
     sheetName: 'Sheet A',
-    buttonLabel: strings.ExcelExportButtonLabel,
-    buttonIcon: 'ExcelDocument',
   },
 };
