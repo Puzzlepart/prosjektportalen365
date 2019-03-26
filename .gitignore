@@ -1,3 +1,4 @@
 SharePointFramework/*/**/env.json
 SiteScripts/temp
 SiteScripts/config/env.json
+Templates/Portal/Objects/*.ps1

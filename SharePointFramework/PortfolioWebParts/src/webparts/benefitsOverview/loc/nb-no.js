@@ -2,7 +2,6 @@ define([], function () {
   return {
     "Title": "Gevinstoversikt",
     "LoadingText": "Laster gevinstoversikt...",
-    "DataSourceNotFound": "Finner ingen datakilde med navn '{0}'.",
     "SiteTitleLabel": "Prosjekt",
     "BenefitTitleLabel": "Gevinst",
     "TitleLabel": "Måleindikator",

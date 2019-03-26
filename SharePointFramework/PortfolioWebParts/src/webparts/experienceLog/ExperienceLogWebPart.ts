@@ -1,23 +1,19 @@
 import * as React from 'react';
-import * as sharedStrings from 'PortfolioWebPartsStrings';
+import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
 import { Version } from '@microsoft/sp-core-library';
 import { IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
 import ExperienceLog from './components/ExperienceLog';
 import { IExperienceLogProps } from './components/IExperienceLogProps';
 import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
 import { Logger, LogLevel } from '@pnp/logging';
-
-export interface IExperienceLogWebPartProps {
-  title: string;
-}
+import { IExperienceLogWebPartProps } from './IExperienceLogWebPartProps';
 
 export default class ExperienceLogWebPart extends PortfolioBaseWebPart<IExperienceLogWebPartProps> {
   public render(): void {
     Logger.log({ message: '(ExperienceLogWebPart) render: Rendering <ExperienceLog />', level: LogLevel.Info });
     const element: React.ReactElement<IExperienceLogProps> = React.createElement(ExperienceLog, {
-      context: this.context,
       ...this.properties,
-      groupByColumns: [{ name: sharedStrings.SiteTitleLabel, key: 'SiteTitle', fieldName: 'SiteTitle', minWidth: 0 }],
+      groupByColumns: [{ name: PortfolioWebPartsStrings.SiteTitleLabel, key: 'SiteTitle', fieldName: 'SiteTitle', minWidth: 0 }],
     });
     super._render(this.manifest.alias, element);
   }

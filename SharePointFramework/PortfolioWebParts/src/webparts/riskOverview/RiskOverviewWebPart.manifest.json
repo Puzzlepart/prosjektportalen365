@@ -21,15 +21,7 @@
       },
       "officeFabricIconFontName": "AsteriskSolid",
       "properties": {
-        "dataSource": "Alle risikoelementer",
-        "showCommandBar": true,
-        "groupByOptions": [
-          {
-            "name": "Prosjekt",
-            "key": "SiteTitle"
-          }
-        ],
-        "excelExportEnabled": false
+        "dataSource": "Alle risikoelementer"
       }
     }
   ]

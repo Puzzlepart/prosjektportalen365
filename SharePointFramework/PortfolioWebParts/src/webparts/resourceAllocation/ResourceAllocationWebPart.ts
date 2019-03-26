@@ -21,12 +21,4 @@ export default class ResourceAllocationWebPart extends PortfolioBaseWebPart<IRes
   protected onDispose(): void {
     super.onDispose();
   }
-
-  protected get dataVersion(): Version {
-    return Version.parse(this.manifest.version);
-  }
-
-  protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    return { pages: [] };
-  }
 }

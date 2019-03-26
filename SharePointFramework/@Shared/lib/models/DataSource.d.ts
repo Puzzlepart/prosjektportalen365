@@ -4,7 +4,6 @@ export declare class DataSource {
      * DataSource
      *
      * @param {string} searchQuery Search query
-     * @param {string} hubSiteId Hub site id (optional)
      */
-    constructor(searchQuery: string, hubSiteId?: string);
+    constructor(searchQuery: string);
 }

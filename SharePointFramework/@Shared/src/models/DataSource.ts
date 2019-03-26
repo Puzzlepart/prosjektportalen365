@@ -5,12 +5,8 @@ export class DataSource {
      * DataSource
      * 
      * @param {string} searchQuery Search query
-     * @param {string} hubSiteId Hub site id (optional)
      */
-    constructor(searchQuery: string, hubSiteId?: string) {
+    constructor(searchQuery: string) {
         this.QueryTemplate = searchQuery;
-        if(hubSiteId) {
-            this.QueryTemplate = `DepartmentId:{${hubSiteId}} ${this.QueryTemplate}`;
-        }
     }
 }

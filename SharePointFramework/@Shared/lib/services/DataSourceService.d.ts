@@ -1,12 +1,17 @@
 import { DataSource } from '../models/DataSource';
 export default class DataSourceService {
     private list;
-    constructor(web: any);
+    /**
+     * Creates a new instance of DataSourceService
+     *
+     * @param {any} web Web
+     * @param {string} listName List name
+     */
+    constructor(web: any, listName?: string);
     /**
      * Get by name
      *
      * @param {string} name Name
-     * @param {string} hubSiteId Hub site id (optional)
      */
-    getByName(name: string, hubSiteId?: string): Promise<DataSource>;
+    getByName(name: string): Promise<DataSource>;
 }

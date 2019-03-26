@@ -1,7 +1,5 @@
 declare interface IResourceAllocationWebPartStrings {
-  PropertyPaneDescription: string;
-  BasicGroupName: string;
-  DescriptionFieldLabel: string;
+  Title: string;
 }
 
 declare module 'ResourceAllocationWebPartStrings' {

@@ -3,13 +3,9 @@ var DataSource = (function () {
      * DataSource
      *
      * @param {string} searchQuery Search query
-     * @param {string} hubSiteId Hub site id (optional)
      */
-    function DataSource(searchQuery, hubSiteId) {
+    function DataSource(searchQuery) {
         this.QueryTemplate = searchQuery;
-        if (hubSiteId) {
-            this.QueryTemplate = "DepartmentId:{" + hubSiteId + "} " + this.QueryTemplate;
-        }
     }
     return DataSource;
 }());

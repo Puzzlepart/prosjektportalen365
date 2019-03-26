@@ -1,16 +1,12 @@
-define([], function() {
+define([], function () {
   return {
-    "LoadingText": "Laster loggelementer...",
+    "Title": "Erfaringslogg",
     "ExcelExportFileNamePrefix": "Erfaringslogg",
     "ExcelExportButtonLabel": "Eksporter til Excel",
-    "TitleColumnDisplayName": "Tittel",
-    "SiteTitleColumnDisplayName": "Prosjekt",
-    "DescriptionColumnDisplayName": "Loggbeskrivelse",
-    "ResponsibleColumnDisplayName": "Ansvarlig",
-    "ConsequenceColumnDisplayName": "Konsekvens",
-    "RecommendationColumnDisplayName": "Anbefaling",
-    "ActorsColumnDisplayName": "Aktører",
-    "NoGroupingText": "Ingen gruppering",
-    "SearchBoxLabelText": "Søk i erfaringslogg...",
+    "TitleLabel": "Tittel",
+    "DescriptionLabel": "Loggbeskrivelse",
+    "ResponsibleLabel": "Ansvarlig",
+    "ConsequenceLabel": "Konsekvens",
+    "RecommendationLabel": "Anbefaling"
   }
 });

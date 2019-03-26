@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as sharedStrings from 'PortfolioWebPartsStrings';
+import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
 import { Version } from '@microsoft/sp-core-library';
 import { IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
 import BenefitsOverview from './components/BenefitsOverview';
@@ -13,9 +13,8 @@ export default class BenefitsOverviewWebPart extends PortfolioBaseWebPart<IBenef
     Logger.log({ message: '(BenefitsOverviewWebPart) render: Rendering <BenefitsOverview />', level: LogLevel.Info });
     const element: React.ReactElement<IBenefitsOverviewProps> = React.createElement(BenefitsOverview, {
       ...this.properties,
-      hubSiteId: this.context.pageContext.legacyPageContext.hubSiteId,
       groupByColumns: [
-        { name: sharedStrings.SiteTitleLabel, key: 'siteTitle', fieldName: 'siteTitle', minWidth: 0 },
+        { name: PortfolioWebPartsStrings.SiteTitleLabel, key: 'siteTitle', fieldName: 'siteTitle', minWidth: 0 },
         ...BenefitsOverview.defaultProps.groupByColumns,
       ],
     });
@@ -34,9 +33,5 @@ export default class BenefitsOverviewWebPart extends PortfolioBaseWebPart<IBenef
 
   protected get dataVersion(): Version {
     return Version.parse(this.manifest.version);
-  }
-
-  protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    return { pages: [] };
   }
 }

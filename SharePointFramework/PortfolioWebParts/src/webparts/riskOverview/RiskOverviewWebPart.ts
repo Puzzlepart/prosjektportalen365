@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as sharedStrings from 'PortfolioWebPartsStrings';
+import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
 import { Version } from '@microsoft/sp-core-library';
 import { IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
 import RiskOverview from './components/RiskOverview';
@@ -13,7 +13,7 @@ export default class RiskOverviewWebPart extends PortfolioBaseWebPart<IRiskOverv
     Logger.log({ message: '(RiskOverviewWebPart) render: Rendering <RiskOverview />', level: LogLevel.Info });
     const element: React.ReactElement<IRiskOverviewProps> = React.createElement(RiskOverview, {
       ...this.properties,
-      groupByColumns: [{ name: sharedStrings.SiteTitleLabel, key: 'SiteTitle', fieldName: 'SiteTitle', minWidth: 0 }],
+      groupByColumns: [{ name: PortfolioWebPartsStrings.SiteTitleLabel, key: 'SiteTitle', fieldName: 'SiteTitle', minWidth: 0 }],
     });
     super._render(this.manifest.alias, element);
   }

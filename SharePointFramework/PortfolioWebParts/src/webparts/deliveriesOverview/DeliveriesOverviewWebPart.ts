@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as sharedStrings from 'PortfolioWebPartsStrings';
+import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
 import { Version } from '@microsoft/sp-core-library';
 import { IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
 import DeliveriesOverview from './components/DeliveriesOverview';
@@ -13,9 +13,8 @@ export default class DeliveriesOverviewWebPart extends PortfolioBaseWebPart<IDel
     Logger.log({ message: '(DeliveriesOverviewWebPart) render: Rendering <DeliveriesOverview />', level: LogLevel.Info });
     const element: React.ReactElement<IDeliveriesOverviewProps> = React.createElement(
       DeliveriesOverview, {
-        context: this.context,
         ...this.properties,
-        groupByColumns: [{ name: sharedStrings.SiteTitleLabel, key: 'SiteTitle', fieldName: 'SiteTitle', minWidth: 0 }],
+        groupByColumns: [{ name: PortfolioWebPartsStrings.SiteTitleLabel, key: 'SiteTitle', fieldName: 'SiteTitle', minWidth: 0 }],
       }
     );
     super._render(this.manifest.alias, element);

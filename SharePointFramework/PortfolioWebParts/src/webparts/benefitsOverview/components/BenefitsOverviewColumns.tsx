@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as strings from 'BenefitsOverviewWebPartStrings';
+import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { BenefitMeasurementIndicator } from 'prosjektportalen-spfx-shared/lib/models';
@@ -10,7 +11,7 @@ export const BenefitsOverviewColumns: IColumn[] = [
   {
     key: 'siteTitle',
     fieldName: 'siteTitle',
-    name: strings.SiteTitleLabel,
+    name: PortfolioWebPartsStrings.SiteTitleLabel,
     minWidth: 100,
     maxWidth: 180,
     isResizable: true,

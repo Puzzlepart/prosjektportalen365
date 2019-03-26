@@ -19,7 +19,9 @@
         "default": " "
       },
       "officeFabricIconFontName": "Backlog",
-      "properties": {}
+      "properties": {
+        "dataSource": "Alle loggelementer"
+      }
     }
   ]
 }

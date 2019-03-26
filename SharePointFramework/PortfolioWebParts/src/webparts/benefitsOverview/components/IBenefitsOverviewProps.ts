@@ -6,7 +6,6 @@ import { BenefitsOverviewColumns } from './BenefitsOverviewColumns';
 
 
 export interface IBenefitsOverviewProps extends IBenefitsOverviewWebPartProps {
-    hubSiteId?: string;
     columns?: IColumn[];
     groupByColumns?: IColumn[];
 }

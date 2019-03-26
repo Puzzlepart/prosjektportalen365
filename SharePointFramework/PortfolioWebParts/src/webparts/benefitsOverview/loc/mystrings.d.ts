@@ -1,8 +1,6 @@
 declare interface IBenefitsOverviewWebPartStrings {
   Title: string;
   LoadingText: string;
-  DataSourceNotFound: string;
-  SiteTitleLabel: string;
   BenefitTitleLabel: string;
   TitleLabel: string;
   BenefitResponsibleLabel: string;

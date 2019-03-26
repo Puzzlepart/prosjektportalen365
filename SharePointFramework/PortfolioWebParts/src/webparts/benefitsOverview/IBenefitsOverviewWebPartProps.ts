@@ -1,4 +1,3 @@
-export interface IBenefitsOverviewWebPartProps { 
-    dataSource?: string;
-    queryTemplate?: string;
-}
+import { IAggregatedSearchListProps } from "../../components/AggregatedSearchList/IAggregatedSearchListProps";
+
+export interface IBenefitsOverviewWebPartProps extends IAggregatedSearchListProps {}

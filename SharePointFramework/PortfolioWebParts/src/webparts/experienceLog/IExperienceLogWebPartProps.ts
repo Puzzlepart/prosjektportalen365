@@ -1,3 +1,3 @@
 import { IAggregatedSearchListProps } from "../../components/AggregatedSearchList/IAggregatedSearchListProps";
 
-export interface IRiskOverviewWebPartProps extends IAggregatedSearchListProps {}
+export interface IExperienceLogWebPartProps extends IAggregatedSearchListProps {}

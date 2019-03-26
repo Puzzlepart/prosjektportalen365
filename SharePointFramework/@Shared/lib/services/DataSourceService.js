@@ -35,16 +35,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { DataSource } from '../models/DataSource';
 var DataSourceService = (function () {
-    function DataSourceService(web) {
-        this.list = web.lists.getByTitle('Datakilder');
+    /**
+     * Creates a new instance of DataSourceService
+     *
+     * @param {any} web Web
+     * @param {string} listName List name
+     */
+    function DataSourceService(web, listName) {
+        if (listName === void 0) { listName = 'Datakilder'; }
+        this.list = web.lists.getByTitle(listName);
     }
     /**
      * Get by name
      *
      * @param {string} name Name
-     * @param {string} hubSiteId Hub site id (optional)
      */
-    DataSourceService.prototype.getByName = function (name, hubSiteId) {
+    DataSourceService.prototype.getByName = function (name) {
         return __awaiter(this, void 0, void 0, function () {
             var dataSource;
             return __generator(this, function (_a) {
@@ -53,7 +59,7 @@ var DataSourceService = (function () {
                     case 1:
                         dataSource = (_a.sent())[0];
                         if (dataSource) {
-                            return [2 /*return*/, new DataSource(dataSource.GtSearchQuery, hubSiteId)];
+                            return [2 /*return*/, new DataSource(dataSource.GtSearchQuery)];
                         }
                         else {
                             return [2 /*return*/, null];

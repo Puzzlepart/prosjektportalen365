@@ -3,7 +3,8 @@ import Timeline, { TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css';
 import './Timeline.overrides.css';
 import styles from './ResourceAllocation.module.scss';
-import { IResourceAllocationProps } from './IResourceAllocationProps';
+import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
+import { IResourceAllocationProps, ResourceAllocationDefaultProps } from './IResourceAllocationProps';
 import { IResourceAllocationState } from './IResourceAllocationState';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
@@ -15,8 +16,11 @@ import { IAllocationSearchResult } from '../models/IAllocationSearchResult';
 import { ITimelineGroup } from 'prosjektportalen-spfx-shared/lib/interfaces/ITimelineGroup';
 import { ITimelineItem } from 'prosjektportalen-spfx-shared/lib/interfaces/ITimelineItem';
 import tryParsePercentage from 'prosjektportalen-spfx-shared/lib/helpers/tryParsePercentage';
+import * as stringFormat from 'string-format';
 
 export default class ResourceAllocation extends React.Component<IResourceAllocationProps, IResourceAllocationState> {
+  public static defaultProps = ResourceAllocationDefaultProps;
+
   /**
    * Constructor
    *
@@ -57,7 +61,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
             <CommandBar items={[]} />
           </div>
           <div className={styles.header}>
-            <div className={styles.title}>Ressursallokering</div>
+            <div className={styles.title}>{this.props.title}</div>
           </div>
           <div className={styles.timeline}>
             <Timeline
@@ -143,7 +147,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
         throw '';
       }
     } else {
-      throw `Finner ingen datakilde med navn '${this.props.dataSource}.'`;
+      throw stringFormat(PortfolioWebPartsStrings.DataSourceNotFound, this.props.dataSource);
     }
   }
 }

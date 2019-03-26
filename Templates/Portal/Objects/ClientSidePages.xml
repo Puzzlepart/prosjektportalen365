@@ -46,7 +46,7 @@
         <pnp:Sections>
             <pnp:Section Order="1" Type="OneColumn">
                 <pnp:Controls>
-                    <pnp:CanvasControl WebPartType="Custom" JsonControlData="{}" ControlId="3ec6bcaf-28bc-4f2e-9e90-77e8cebf0b5f" Order="1" Column="1" />
+                    <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;dataSource&quot;:&quot;Alle loggelementer&quot;}" ControlId="3ec6bcaf-28bc-4f2e-9e90-77e8cebf0b5f" Order="1" Column="1" />
                 </pnp:Controls>
             </pnp:Section>
         </pnp:Sections>
@@ -56,7 +56,7 @@
         <pnp:Sections>
             <pnp:Section Order="1" Type="OneColumn">
                 <pnp:Controls>
-                    <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;dataSource&quot;:&quot;Alle prosjektleveranser&quot;,&quot;groupByOptions&quot;:[{&quot;name&quot;:&quot;Prosjekt&quot;,&quot;key&quot;:&quot;SiteTitle&quot;}],&quot;excelExportEnabled&quot;:false}" ControlId="d8558017-1e3b-4d13-82fa-2520e845297b" Order="1" Column="1" />
+                    <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;dataSource&quot;:&quot;Alle prosjektleveranser&quot;}" ControlId="d8558017-1e3b-4d13-82fa-2520e845297b" Order="1" Column="1" />
                 </pnp:Controls>
             </pnp:Section>
         </pnp:Sections>
@@ -66,7 +66,7 @@
         <pnp:Sections>
             <pnp:Section Order="1" Type="OneColumn">
                 <pnp:Controls>
-                    <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;dataSource&quot;:&quot;Alle risikoelementer&quot;,&quot;showCommandBar&quot;:true,&quot;groupByOptions&quot;:[{&quot;name&quot;:&quot;Prosjekt&quot;,&quot;key&quot;:&quot;SiteTitle&quot;}],&quot;excelExportEnabled&quot;:false}" ControlId="57530c94-4fb2-4ca2-9279-16c57881fa19" Order="1" Column="1" />
+                    <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;dataSource&quot;:&quot;Alle risikoelementer&quot;}" ControlId="57530c94-4fb2-4ca2-9279-16c57881fa19" Order="1" Column="1" />
                 </pnp:Controls>
             </pnp:Section>
         </pnp:Sections>

@@ -1,7 +1,3 @@
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
+import { IAggregatedSearchListProps } from '../../components/AggregatedSearchList/IAggregatedSearchListProps';
 
-export interface IDeliveriesOverviewWebPartProps {
-  dataSource: string;
-  groupByColumns: IColumn[];
-  excelExportEnabled: boolean;
-}
+export interface IDeliveriesOverviewWebPartProps extends IAggregatedSearchListProps { }

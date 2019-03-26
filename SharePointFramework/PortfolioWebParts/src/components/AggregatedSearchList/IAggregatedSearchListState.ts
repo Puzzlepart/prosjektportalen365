@@ -1,6 +1,6 @@
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 
-export interface IRiskOverviewState {
+export interface IAggregatedSearchListState {
     isLoading: boolean;
     items?: any[];
     columns: IColumn[];

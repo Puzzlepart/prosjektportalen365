@@ -20,6 +20,7 @@
       },
       "officeFabricIconFontName": "SizeLegacy",
       "properties": {
+        "title": "Gevinstoversikt",
         "dataSource": "Gevinstoversikt"
       }
     }
