@@ -50,15 +50,6 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         </div>
       );
     }
-    if (this.state.error) {
-      return (
-        <div className={styles.portfolioOverview}>
-          <div className={styles.container}>
-            <MessageBar messageBarType={this.state.error.type}>{this.state.error.message}</MessageBar>
-          </div>
-        </div>
-      );
-    }
     return (
       <div className={styles.portfolioOverview}>
         <div className={styles.container}>
@@ -197,6 +188,16 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
    * Render list
    */
   private renderList() {
+    if (this.state.error) {
+      return (
+        <div className={styles.portfolioOverview}>
+          <div className={styles.container}>
+            <MessageBar messageBarType={this.state.error.type}>{this.state.error.message}</MessageBar>
+          </div>
+        </div>
+      );
+    }
+
     const data = this.getFilteredData();
 
     return (
