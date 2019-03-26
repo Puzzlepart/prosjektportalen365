@@ -1,0 +1,30 @@
+﻿<pnp:ListInstance Title="Porteføljevisninger" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Porteføljevisninger" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    <pnp:ContentTypeBindings>
+        <pnp:ContentTypeBinding ContentTypeID="0x01001BE34662FF90874E9FEB29B37B6BB18C" Default="true" />
+    </pnp:ContentTypeBindings>
+    <pnp:Views RemoveExistingViews="true">
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Porteføljevisninger/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=44">
+            <Query>
+                <OrderBy>
+                    <FieldRef Name="GtSortOrder" />
+                </OrderBy>
+            </Query>
+            <ViewFields>
+                <FieldRef Name="Edit" />
+                <FieldRef Name="GtSortOrder" />
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtSearchQuery" />
+                <FieldRef Name="GtPortfolioViewScope" />
+                <FieldRef Name="GtPortfolioIsDefaultView" />
+                <FieldRef Name="GtPortfolioFabricIcon" />
+                <FieldRef Name="GtPortfolioColumns" />
+                <FieldRef Name="GtPortfolioRefiners" />
+                <FieldRef Name="GtPortfolioGroupBy" />
+                <FieldRef Name="Modified" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">30</RowLimit>
+            <JSLink>clienttemplates.js</JSLink>
+        </View>
+    </pnp:Views>
+</pnp:ListInstance>
