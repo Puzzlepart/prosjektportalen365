@@ -1,0 +1,1 @@
+﻿<Field DisplayName="Kategorikolonne" Description="Kolonnefor kategorisering. Velges fra listen Prosjektkolonner." Type="Lookup" Group="Prosjektportalenkolonner" WebId="{siteid}" List="{{listid:Prosjektkolonner}}" ShowField="Title" ID="{e3e71da7-e34b-4514-bc8f-5256e1f5c70f}" StaticName="GtPiCategoryField" Name="GtPiCategoryField" />

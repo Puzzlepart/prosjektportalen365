@@ -1,0 +1,1 @@
+﻿<Field DisplayName="{resource:SiteFields_GtResourceLoad_DisplayName}" Description="{resource:SiteFields_GtResourceLoad_Description}" ID="{08ac9d56-f8eb-4a2c-868f-d39fc012fcd6}" Name="GtResourceLoad" Type="Number" Group="Prosjektportalenkolonner" Percentage="TRUE" StaticName="GtResourceLoad" />

@@ -1,0 +1,1 @@
+﻿<Field DisplayName="Automatisk oppdatering" Description="Automatisk oppdatering av data" Type="Boolean" Group="Prosjektportalenkolonner" ID="{35e89cbd-753d-42a1-a21a-ae6ad25de22a}" StaticName="GtPiAutomaticRefreshEnabled" Name="GtPiAutomaticRefreshEnabled"><Default>0</Default></Field>

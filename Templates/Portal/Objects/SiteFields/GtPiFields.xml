@@ -1,0 +1,1 @@
+﻿<Field DisplayName="Felter" Description="Hvilke felter skal inkluderes i diagrammet/datakilden. Velges fra listen Prosjektkolonner." Type="LookupMulti" Group="Prosjektportalenkolonner" WebId="{siteid}" List="{{listid:Prosjektkolonner}}" ShowField="Title" Mult="TRUE" ID="{75f699b2-7ec6-4442-956d-7b35f409b521}" StaticName="GtPiFields" Name="GtPiFields" />

@@ -1,0 +1,1 @@
+﻿<Field DisplayName="Konfigurasjonsfil" Description="Konfigurasjonsfil for egendefinert diagram" Type="Lookup" List="{{listid:Egendefinerte diagrammer}}" ShowField="Title" Group="Prosjektportalenkolonner" ID="{4795a463-b396-4987-a2d1-532c78933cf9}" StaticName="GtPiCustomConfiguration" Name="GtPiCustomConfiguration" />

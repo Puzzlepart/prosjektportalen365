@@ -1,0 +1,1 @@
+﻿<Field Type="Text" DisplayName="{resource:SiteFields_GtSecList_DisplayName}" Description="{resource:SiteFields_GtSecList_Description}" Group="Prosjektportalenkolonner" ID="{4b5ca6f2-a470-4c11-a738-edd9d55fb096}" StaticName="GtSecList" Name="GtSecList"></Field>

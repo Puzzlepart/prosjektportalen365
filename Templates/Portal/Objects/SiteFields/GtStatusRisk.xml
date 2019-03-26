@@ -1,0 +1,1 @@
+﻿<Field Description="{resource:SiteFields_GtStatusRisk_Description}" DisplayName="{resource:SiteFields_GtStatusRisk_DisplayName}" Format="RadioButtons" Group="Prosjektportalenkolonner" ID="{fc8a879d-83bc-4670-b1f6-c9817e333614}" Name="GtStatusRisk" StaticName="GtStatusRisk" Type="Choice"><CHOICES><CHOICE>HÃ¸y</CHOICE><CHOICE>Lav</CHOICE><CHOICE>Medium</CHOICE></CHOICES></Field>

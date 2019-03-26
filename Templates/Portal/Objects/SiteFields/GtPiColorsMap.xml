@@ -1,0 +1,1 @@
+﻿<Field DisplayName="Farger" Description="Farger for verdien i formatet [VERDI1]:[FARGE1];[VERDI2]:[FARGE2]" Type="Note" Group="Prosjektportalenkolonner" ID="{a2d79665-fb4a-4367-830a-c0403bd724f0}" StaticName="GtPiColorsMap" Name="GtPiColorsMap" />

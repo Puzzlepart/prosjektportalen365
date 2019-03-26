@@ -1,0 +1,1 @@
+﻿<Field Decimals="0" Description="" DisplayName="{resource:SiteFields_GtProjectForecast_DisplayName}" Group="Prosjektportalenkolonner" ID="{9076c206-ca80-4e17-b6f4-6fa3b90c421a}" LCID="1044" Min="0" Name="GtProjectForecast" StaticName="GtProjectForecast" Type="Currency" />

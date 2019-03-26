@@ -1,0 +1,1 @@
+﻿<Field AppendOnly="FALSE" Description="{resource:SiteFields_GtStatusRiskComment_Description}" DisplayName="{resource:SiteFields_GtStatusRiskComment_DisplayName}" Group="Prosjektportalenkolonner" ID="{b5932b1d-bee4-410c-aac2-54a7cd9d5381}" Name="GtStatusRiskComment" NumLines="3" StaticName="GtStatusRiskComment" Type="Note" UnlimitedLengthInDocumentLibrary="TRUE" />

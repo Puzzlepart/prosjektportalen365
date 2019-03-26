@@ -1,0 +1,1 @@
+﻿<Field Description="{resource:SiteFields_GtGainsResponsible_Description}" DisplayName="{resource:SiteFields_GtGainsResponsible_DisplayName}" Group="Prosjektportalenkolonner" ID="{fcf9c850-8267-4452-8366-74b7a76da177}" Name="GtGainsResponsible" ShowField="ImnName" StaticName="GtGainsResponsible" Type="User" UserSelectionMode="PeopleOnly" UserSelectionScope="0" />

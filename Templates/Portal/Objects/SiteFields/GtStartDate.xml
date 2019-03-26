@@ -1,0 +1,1 @@
+﻿<Field Description="{resource:SiteFields_GtStartDate_Description}" DisplayName="{resource:SiteFields_GtStartDate_DisplayName}" Format="DateOnly" Group="Prosjektportalenkolonner" ID="{e39c32db-a7da-4c93-9369-8aa5a7bde92d}" Name="GtStartDate" StaticName="GtStartDate" Type="DateTime" />

@@ -1,0 +1,1 @@
+﻿<Field Description="{resource:SiteFields_GtProjectFinanceName_Description}" DisplayName="{resource:SiteFields_GtProjectFinanceName_DisplayName}" Group="Prosjektportalenkolonner" ID="{983d5ab3-0a6c-4f6a-a7b5-d34d52d73676}" Name="GtProjectFinanceName" StaticName="GtProjectFinanceName" Type="Text" />

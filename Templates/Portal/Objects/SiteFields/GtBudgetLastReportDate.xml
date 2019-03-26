@@ -1,0 +1,1 @@
+﻿<Field Description="{resource:SiteFields_GtBudgetLastReportDate_Description}" DisplayName="{resource:SiteFields_GtBudgetLastReportDate_DisplayName}" Format="DateOnly" FriendlyDisplayFormat="Disabled" Group="Prosjektportalenkolonner" ID="{f4623214-ab74-4160-82a7-37d46901bc1b}" Name="GtBudgetLastReportDate" StaticName="GtBudgetLastReportDate" Type="DateTime" />

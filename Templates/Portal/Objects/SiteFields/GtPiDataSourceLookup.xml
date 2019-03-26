@@ -1,0 +1,1 @@
+﻿<Field DisplayName="Datakilde" Description="Datakilde som skal brukes for dette diagrammet. Velges fra listen Datakilder." Type="Lookup" List="{{listid:Datakilder}}" ShowField="Title" Group="Prosjektportalenkolonner" ID="{2cc4ec68-b53f-45f6-8234-b577250abaf6}" StaticName="GtPiDataSourceLookup" Name="GtPiDataSourceLookup" />

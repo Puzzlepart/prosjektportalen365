@@ -1,0 +1,1 @@
+﻿<Field Type="Text" DisplayName="{resource:SiteFields_GtSearchQuery_DisplayName}" Description="{resource:SiteFields_GtSearchQuery_Description}" ID="{31e405e0-2890-439d-9c9f-42354154feda}" StaticName="GtSearchQuery" Name="GtSearchQuery" Group="Prosjektportalenkolonner" />

@@ -1,0 +1,1 @@
+﻿<Field Description="{resource:SiteFields_GtLccDestinationLibrary_Description}" DisplayName="{resource:SiteFields_GtLccDestinationLibrary_DisplayName}" Group="Prosjektportalenkolonner" ID="{91d0b1bf-0a05-44f1-9885-cab0f3c3b77c}" Name="GtLccDestinationLibrary" StaticName="GtLccDestinationLibrary" Type="Text" />

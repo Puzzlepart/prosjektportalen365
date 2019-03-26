@@ -1,0 +1,1 @@
+﻿<Field DisplayName="Kolonne(Y)" Description="Hvilken kolonne skal brukes for Y. Velges fra listen Prosjektkolonner." Type="Lookup" Group="Prosjektportalenkolonner" WebId="{siteid}" List="{{listid:Prosjektkolonner}}" ShowField="Title" ID="{49b90b9f-d6bb-4337-b5cc-9b9ea9914e97}" StaticName="GtPiFieldY" Name="GtPiFieldY" />

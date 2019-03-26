@@ -1,0 +1,1 @@
+﻿<Field Type="Boolean" DisplayName="{resource:SiteFields_GtPortfolioIsDefaultView_DisplayName}" Description="{resource:SiteFields_GtPortfolioIsDefaultView_Description}" ID="{3ccd363c-36ba-49aa-bf1e-52a2eb27a876}" StaticName="GtPortfolioIsDefaultView" Name="GtPortfolioIsDefaultView" Group="Prosjektportalenkolonner"><Default>0</Default></Field>

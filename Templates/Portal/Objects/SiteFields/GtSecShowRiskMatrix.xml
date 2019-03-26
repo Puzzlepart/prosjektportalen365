@@ -1,0 +1,1 @@
+﻿<Field Type="Boolean" DisplayName="{resource:SiteFields_GtSecShowRiskMatrix_DisplayName}" Description="{resource:SiteFields_GtSecShowRiskMatrix_Description}" Group="Prosjektportalenkolonner" ID="{f93b92b8-1a69-445f-b13f-0fc3ef924101}" StaticName="GtSecShowRiskMatrix" Name="GtSecShowRiskMatrix"><Default>1</Default></Field>

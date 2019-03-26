@@ -1,0 +1,1 @@
+﻿<Field Type="Text" DisplayName="{resource:SiteFields_GtPortfolioFabricIcon_DisplayName}" Description="{resource:SiteFields_GtPortfolioFabricIcon_Description}" ID="{b5fc712a-9908-4ba1-a8ac-7e51eca7a251}" StaticName="GtPortfolioFabricIcon" Name="GtPortfolioFabricIcon" Group="Prosjektportalenkolonner" />

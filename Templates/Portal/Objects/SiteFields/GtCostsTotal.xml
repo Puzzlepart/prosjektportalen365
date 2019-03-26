@@ -1,0 +1,1 @@
+﻿<Field Decimals="0" Description="{resource:SiteFields_GtCostsTotal_Description}" DisplayName="{resource:SiteFields_GtCostsTotal_DisplayName}" Group="Prosjektportalenkolonner" ID="{5af54348-bc38-4a18-a11f-0f84a96da4ea}" LCID="1044" Min="0" Name="GtCostsTotal" StaticName="GtCostsTotal" Type="Currency" />

@@ -1,0 +1,1 @@
+﻿<Field DisplayName="Bredde (1920px og oppover)" Description="Bredde (1-12) for 1920px til oppover" Type="Number" Min="1" Max="12" Decimals="0" Group="Prosjektportalenkolonner" ID="{41d29afe-b026-4417-9166-3e22dda59d78}" StaticName="GtPiWidthXxxl" Name="GtPiWidthXxxl"><Default>12</Default></Field>

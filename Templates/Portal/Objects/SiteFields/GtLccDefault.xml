@@ -1,0 +1,1 @@
+﻿<Field Description="{resource:SiteFields_GtLccDefault_Description}" DisplayName="{resource:SiteFields_GtLccDefault_DisplayName}" Group="Prosjektportalenkolonner" ID="{19c0c03c-678a-4c2a-ab9b-cb9ffd903012}" Name="GtLccDefault" StaticName="GtLccDefault" Type="Boolean"><Default>1</Default></Field>

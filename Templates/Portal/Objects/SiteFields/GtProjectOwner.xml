@@ -1,0 +1,1 @@
+﻿<Field Description="{resource:SiteFields_GtProjectOwner_Description}" DisplayName="{resource:SiteFields_GtProjectOwner_DisplayName}" Group="Prosjektportalenkolonner" ID="{3121ac55-d68e-4fcb-8fc8-3d8ed8a601b2}" Name="GtProjectOwner" StaticName="GtProjectOwner" Type="User" />

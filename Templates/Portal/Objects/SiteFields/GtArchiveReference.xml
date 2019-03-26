@@ -1,0 +1,1 @@
+﻿<Field Description="{resource:SiteFields_GtArchiveReference_Description}" DisplayName="{resource:SiteFields_GtArchiveReference_DisplayName}" Group="Prosjektportalenkolonner" ID="{a59fe220-36c3-464a-8cfc-40d6d04debd2}" Name="GtArchiveReference" StaticName="GtArchiveReference" Type="Text" />

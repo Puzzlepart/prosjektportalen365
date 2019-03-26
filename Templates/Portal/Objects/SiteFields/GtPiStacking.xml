@@ -1,0 +1,1 @@
+﻿<Field DisplayName="Stabling" Description="" Type="Choice" Group="Prosjektportalenkolonner" ID="{9c6285f2-0bf6-4092-8ca6-656859d797fd}" StaticName="GtPiStacking" Name="GtPiStacking"><Default>normal</Default><CHOICES><CHOICE>normal</CHOICE><CHOICE>percent</CHOICE></CHOICES></Field>

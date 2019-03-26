@@ -1,0 +1,1 @@
+﻿<Field DisplayName="Intervall (sekunder) for automatisk oppdatering" Description="" Type="Number" Min="5" Decimals="0" Group="Prosjektportalenkolonner" ID="{704bbe10-8da4-4f39-8e47-51f03ceaa6cb}" StaticName="GtPiAutomaticRefreshInterval" Name="GtPiAutomaticRefreshInterval" />

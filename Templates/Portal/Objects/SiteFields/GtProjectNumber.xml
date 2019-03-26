@@ -1,0 +1,1 @@
+﻿<Field Description="{resource:SiteFields_GtProjectNumber_Description}" DisplayName="{resource:SiteFields_GtProjectNumber_DisplayName}" Group="Prosjektportalenkolonner" ID="{64d45745-0dd0-4c21-979b-67fb13748bb1}" Name="GtProjectNumber" StaticName="GtProjectNumber" Type="Text" />

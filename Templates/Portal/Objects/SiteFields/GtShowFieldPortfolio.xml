@@ -1,0 +1,1 @@
+﻿<Field Type="Boolean" DisplayName="{resource:SiteFields_GtShowFieldPortfolio_DisplayName}" Description="{resource:SiteFields_GtShowFieldPortfolio_Description}" ID="{7441ace5-d9e4-4c1d-85fc-ce1614b056ca}" StaticName="GtShowFieldPortfolio" Name="GtShowFieldPortfolio" Group="Prosjektportalenkolonner" />

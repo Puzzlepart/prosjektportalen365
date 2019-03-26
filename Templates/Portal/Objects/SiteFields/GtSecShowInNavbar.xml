@@ -1,0 +1,1 @@
+﻿<Field Type="Boolean" DisplayName="{resource:SiteFields_GtSecShowInNavbar_DisplayName}" Description="{resource:SiteFields_GtSecShowInNavbar_Description}" Group="Prosjektportalenkolonner" ID="{1c6ac96b-0f62-4396-8e87-d7db512d96b9}" StaticName="GtSecShowInNavbar" Name="GtSecShowInNavbar"><Default>1</Default></Field>

@@ -1,0 +1,1 @@
+﻿<Field AppendOnly="FALSE" Description="{resource:SiteFields_GtProjectGoals_Description}" DisplayName="{resource:SiteFields_GtProjectGoals_DisplayName}" Group="Prosjektportalenkolonner" ID="{018f09b8-4954-41bb-a8f6-fa531b90b79f}" Name="GtProjectGoals" StaticName="GtProjectGoals" Type="Note" UnlimitedLengthInDocumentLibrary="TRUE" />

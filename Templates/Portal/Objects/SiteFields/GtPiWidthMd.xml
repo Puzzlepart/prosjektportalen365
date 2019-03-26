@@ -1,0 +1,1 @@
+﻿<Field DisplayName="Bredde (480px - 639px)" Description="Bredde (1-12) for 480px til 639px" Type="Number" Min="1" Max="12" Decimals="0" Group="Prosjektportalenkolonner" ID="{d25031a3-9fbb-48b7-8c3a-554805fc4eb9}" StaticName="GtPiWidthMd" Name="GtPiWidthMd"><Default>12</Default></Field>

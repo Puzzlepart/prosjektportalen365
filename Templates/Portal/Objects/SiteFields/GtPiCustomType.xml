@@ -1,0 +1,1 @@
+﻿<Field DisplayName="Diagramtype" Description="Type diagram" Type="Choice" Group="Prosjektportalenkolonner" ID="{e1457016-93d9-4eca-b05a-1a9491fa35db}" StaticName="GtPiCustomType" Name="GtPiCustomType"><CHOICES><CHOICE>pie</CHOICE><CHOICE>bar</CHOICE><CHOICE>column</CHOICE><CHOICE>bubble</CHOICE><CHOICE>scatter</CHOICE></CHOICES></Field>

@@ -1,0 +1,1 @@
+﻿<Field AppendOnly="FALSE" Description="{resource:SiteFields_GtOverallStatus_Description}" DisplayName="{resource:SiteFields_GtOverallStatus_DisplayName}" Group="Prosjektportalenkolonner" ID="{3e90aa95-4d32-4819-823f-10ae2fd412b5}" Name="GtOverallStatus" NumLines="6" StaticName="GtOverallStatus" Type="Note" UnlimitedLengthInDocumentLibrary="TRUE" />
