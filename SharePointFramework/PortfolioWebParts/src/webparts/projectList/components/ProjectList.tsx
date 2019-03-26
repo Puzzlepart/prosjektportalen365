@@ -57,9 +57,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   private renderCards() {
     const { projects } = this.getFilteredData();
     if (projects.length === 0) {
-      return (
-        <MessageBar>{strings.NoSearchResults}</MessageBar>
-      );
+      return <MessageBar>{strings.NoSearchResults}</MessageBar>;
     }
     return projects.map(project => (
       <ProjectCard
