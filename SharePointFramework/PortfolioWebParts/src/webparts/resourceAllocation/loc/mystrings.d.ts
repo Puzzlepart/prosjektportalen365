@@ -2,6 +2,7 @@ declare interface IResourceAllocationWebPartStrings {
   Title: string;
   ResourceLabel: string;
   RoleLabel: string;
+  InfoText: string;
 }
 
 declare module 'ResourceAllocationWebPartStrings' {

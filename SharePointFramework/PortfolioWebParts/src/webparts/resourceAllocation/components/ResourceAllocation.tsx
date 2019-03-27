@@ -19,7 +19,7 @@ import DataSourceService from 'prosjektportalen-spfx-shared/lib/services/DataSou
 import { IAllocationSearchResult } from '../models/IAllocationSearchResult';
 import tryParsePercentage from 'prosjektportalen-spfx-shared/lib/helpers/tryParsePercentage';
 import { ITimelineData, ITimelineGroup, ITimelineItem } from '../interfaces';
-import ResourceAllocationFilterPanel, { IResourceAllocationFilterProps, IResourceAllocationFilterItemProps } from './ResourceAllocationFilterPanel';
+import FilterPanel, { IFilterProps } from '../../../components/FilterPanel';
 import * as stringFormat from 'string-format';
 import * as objectGet from 'object-get';
 
@@ -33,7 +33,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
    */
   constructor(props: IResourceAllocationProps) {
     super(props);
-    this.state = { isLoading: true, activeFilters: {} };
+    this.state = { isLoading: true, showFilterPanel: false, activeFilters: {} };
   }
 
   public async componentDidMount(): Promise<void> {
@@ -65,8 +65,6 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
       );
     }
 
-    console.log(this.state.activeFilters);
-
     const { groups, items } = this.getFilteredData();
 
     return (
@@ -79,6 +77,11 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
           </div>
           <div className={styles.header}>
             <div className={styles.title}>{this.props.title}</div>
+          </div>
+          <div className={styles.infoText}>
+            <MessageBar>
+              <div dangerouslySetInnerHTML={{ __html: stringFormat(strings.InfoText, `../Lists/Ressursallokering/AllItems.aspx?Source=${encodeURIComponent(window.location.href)}`) }}></div>
+            </MessageBar>
           </div>
           <div className={styles.timeline}>
             <Timeline
@@ -97,11 +100,12 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
             </Timeline>
           </div>
         </div>
-        <ResourceAllocationFilterPanel
-          isOpen={true}
+        <FilterPanel
+          isOpen={this.state.showFilterPanel}
           headerText={PortfolioWebPartsStrings.FilterText}
           filters={this.getFilters()}
-          onFilterChange={this.onFilterChange} />
+          onFilterChange={this.onFilterChange}
+          onDismiss={() => this.setState({ showFilterPanel: false })} />
       </div>
     );
   }
@@ -124,7 +128,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
   /**
    * Get filters
    */
-  private getFilters(): IResourceAllocationFilterProps[] {
+  private getFilters(): IFilterProps[] {
     const columns = [
       { fieldName: 'project', name: PortfolioWebPartsStrings.SiteTitleLabel },
       { fieldName: 'resource', name: strings.ResourceLabel },
@@ -167,6 +171,10 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
         iconProps: { iconName: "Filter" },
         itemType: ContextualMenuItemType.Header,
         iconOnly: true,
+        onClick: _event => {
+          _event.preventDefault();
+          this.setState({ showFilterPanel: true });
+        }
       }
     ] as ICommandBarItemProps[];
     return { left: [], right };
@@ -183,7 +191,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
     return (
       <div {...getItemProps(item.itemProps)}>
         <div className="rct-item-content" style={{ maxHeight: `${itemContext.dimensions.height}` }}>
-          {itemContext.title}
+          {item.title}
         </div>
       </div>
     );

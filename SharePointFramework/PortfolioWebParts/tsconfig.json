@@ -25,7 +25,7 @@
     ]
   },
   "include": [
-    "src/**/*.ts", "src/webparts/experienceLog/components/ExperienceLogColumns.tsx"
+    "src/**/*.ts", "src/webparts/experienceLog/components/ExperienceLogColumns.tsx", "src/components/FilterPanel/FilterItem.tsx"
   ],
   "exclude": [
     "node_modules",
