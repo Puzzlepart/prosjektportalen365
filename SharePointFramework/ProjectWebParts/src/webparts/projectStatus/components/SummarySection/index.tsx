@@ -1,9 +1,8 @@
 import * as React from 'react';
-import styles from './SummarySection.module.scss';
 import * as strings from 'ProjectStatusWebPartStrings';
 import { ISummarySectionProps } from './ISummarySectionProps';
 import { ISummarySectionState } from './ISummarySectionState';
-import StatusSectionBase from '../StatusSectionBase';
+import StatusSectionBase from '../@StatusSectionBase';
 import StatusElement from '../StatusElement';
 import ProjectInformation from '../../../projectInformation/components/ProjectInformation';
 
@@ -12,47 +11,47 @@ export default class SummarySection extends StatusSectionBase<ISummarySectionPro
     super(props);
   }
 
+  /**
+   * Renders the <SummarySection /> component
+   */
   public render(): React.ReactElement<ISummarySectionProps> {
-    const data = this.props.report.item;
-
     return (
-      <div className={styles.summarySection}>
-        <div className={styles.container}>
-          <div className={styles.row}>
-            <div className={styles.column6}>
-              <ProjectInformation
-                title='Prosjektinformasjon'
-                context={this.props.context}
-                entity={this.props.entity}
-                filterField='GtShowFieldProjectStatus'
-                hideEditPropertiesButton={true} />
-            </div>
-            <div className={styles.column6}>
-              <div className={styles.container}>
-                <div className={styles.row}>
-                  {this.renderSections(data)}
-                </div>
+      <StatusSectionBase {...this.props}>
+        <div className='ms-Grid-row'>
+          <div className='ms-Grid-col ms-sm6'>
+            <ProjectInformation
+              title='Prosjektinformasjon'
+              context={this.props.context}
+              entity={this.props.entity}
+              filterField='GtShowFieldProjectStatus'
+              hideEditPropertiesButton={true} />
+          </div>
+          <div className='ms-Grid-col ms-sm6'>
+            <div className='ms-Grid'>
+              <div className='ms-Grid-row'>
+                {this.renderSections()}
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </StatusSectionBase>
     );
   }
 
   /**
-   *  Render sections
-   * @param data Section data
+   * Render sections
+   * 
+   * NOTE: Trying to figure out a way to avoid the strings.OverallStatusFieldName check
    */
-  private renderSections(data: any) {
-    return this.props.sections.map(s => {
-      return (
-        <div className={styles.column6}>
-          {(s.fieldName === strings.OverallStatusFieldName) ? <StatusElement label={s.name} value='' comment={data[s.fieldName]} iconName={s.iconName} height={150} />
-            : <StatusElement label={s.name} value={data[s.fieldName]} comment={data[s.commentFieldName]} iconName={s.iconName} height={150} />}
-        </div>
-      );
-    });
+  private renderSections() {
+    const { report, sections } = this.props;
+    return sections.map(s => (
+      <div className='ms-Grid-col ms-sm6'>
+        {s.fieldName === strings.OverallStatusFieldName
+          ? <StatusElement label={s.name} value='' comment={report.item[s.fieldName]} iconName={s.iconName} height={150} />
+          : <StatusElement label={s.name} value={report.item[s.fieldName]} comment={report.item[s.commentFieldName]} iconName={s.iconName} height={150} />}
+      </div>
+    ));
   }
 
 }

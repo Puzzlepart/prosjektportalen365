@@ -27,7 +27,8 @@ export default class BaseWebPart<P extends IBaseWebPartProps> extends BaseClient
     const { pageContext } = this.context;
     const { hubSiteId } = pageContext.legacyPageContext;
     this.hubSite = await HubSiteService.GetHubSiteById(pageContext.web.absoluteUrl, hubSiteId);
-    this.spEntityPortalService = new SpEntityPortalService({ webUrl: this.hubSite.url, ...this.properties.entity });
+    const params = { webUrl: this.hubSite.url, ...this.properties.entity };
+    this.spEntityPortalService = new SpEntityPortalService(params);
     sp.setup({ spfxContext: this.context });
   }
 

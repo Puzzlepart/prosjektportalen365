@@ -35,9 +35,8 @@ export default class SectionModel {
  *
  * @param {any} obj Section object
  * @param {any} project Project properties
- * @param {IStatusFieldsConfig} statusFieldsConfig Status fields config
  */
-  constructor(obj: any, _project: any, _statusFieldsConfig?: any) {
+  constructor(obj: any, _project: any) {
     this.name = obj.Title;
     this.iconName = obj.GtSecIcon;
     this.source = obj.GtSecSource;
@@ -54,13 +53,7 @@ export default class SectionModel {
     this.customComponent = obj.GtSecCustomComponent;
     this.contentTypeId = obj.ContentTypeId;
     this.statusProperties = {};
-
-    if (this.getType() === SectionType.RiskSection) {
-      this.fieldName = 'GtStatusRisk';
-    }
-
     this.commentFieldName = `${this.fieldName}Comment`;
-
   }
 
   /**
@@ -80,25 +73,4 @@ export default class SectionModel {
       return SectionType.ListSection;
     }
   }
-
-  public getHtmlElementId(element?: string): string {
-    if (element) {
-      return `section-${this.cleanString(this.name)}-${element}`;
-    } else {
-      return `section-${this.cleanString(this.name)}`;
-    }
-  }
-
-  private cleanString(str: string, length?: number): string {
-    str = str
-      .trim()
-      .toLowerCase()
-      .replace(/ /g, "-")
-      .replace(/å/g, "a")
-      .replace(/æ/g, "ae")
-      .replace(/ø/g, "o")
-      .replace(/[^a-z0-9-]/gi, "");
-    return str.substring(0, length ? length : Math.min(80, str.length));
-  }
-
 }

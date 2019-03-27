@@ -1,4 +1,4 @@
-import { IStatusSectionBaseProps } from "../StatusSectionBase/IStatusSectionBaseProps";
+import { IStatusSectionBaseProps } from "../@StatusSectionBase/IStatusSectionBaseProps";
 import SectionModel from "../SectionModel";
 
 export interface ISummarySectionProps extends IStatusSectionBaseProps {

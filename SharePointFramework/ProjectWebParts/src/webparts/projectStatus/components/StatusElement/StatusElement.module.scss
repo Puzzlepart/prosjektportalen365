@@ -1,62 +1,16 @@
-@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 .statusElement {
-    margin-top: 20px;
-    @include ms-Grid;
-    .row {
-        @include ms-Grid-row;
-        .column12 {
-            @include ms-Grid-col;
-            @include ms-sm12;
-        }
-        .column11 {
-            @include ms-Grid-col;
-            @include ms-sm11;
-        }
-        .column10 {
-            @include ms-Grid-col;
-            @include ms-sm10;
-        }
-        .column8 {
-            @include ms-Grid-col;
-            @include ms-sm8;
-        }
-        .column6 {
-            @include ms-Grid-col;
-            @include ms-sm6;
-        }
-        .column4 {
-            @include ms-Grid-col;
-            @include ms-sm4;
-        }
-        .column3 {
-            @include ms-Grid-col;
-            @include ms-sm3;
-        }
-        .column2 {
-            @include ms-Grid-col;
-            @include ms-sm2;
-            i {
-                font-size: 38px;
-                margin: -15px;
-            }
-        }
-        .column1 {
-            @include ms-Grid-col;
-            @include ms-sm1;
-        }
-    }
-    .statusElementBody {
-        .statusElementLabel {
-            font-size: 16px;
-            font-weight: 400;
-        }
-        .statusElementValue {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        .statusElementComment {
-            font-size: 12px;
-        }
-    }
+  margin: 20px 0 0 0;
+  .statusElementLabel {
+    font-size: 16px;
+    font-weight: 400;
+  }
+  .statusElementValue {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+  .statusElementComment {
+    font-size: 12px;
+  }
 }
