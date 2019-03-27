@@ -63,9 +63,9 @@ export class Filter extends React.Component<IFilterProps, IFilterState> {
     @autobind
     private onChanged(item: IFilterItemProps, checked: boolean) {
         const { items } = this.state;
-        items.filter(_item => _item.name === item.name)[0].selected = checked;
+        items.filter(_item => _item.value === item.value)[0].selected = checked;
         this.setState({ items });
-        const selectedItems = items.filter(i => i.selected).map(i => i.name);
+        const selectedItems = items.filter(i => i.selected).map(i => i.value);
         this.props.onFilterChange(this.props.column, selectedItems);
     }
 }
