@@ -1,5 +1,7 @@
 define([], function() {
   return {
-    "Title": "Ressursallokering"
+    "Title": "Ressursallokering",
+    "ResourceLabel": "Ressurs",
+    "RoleLabel": "Rolle"
   }
 });

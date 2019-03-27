@@ -1,1 +1,1 @@
-﻿<Field DisplayName="Tittel (Y-akse)" Description="Tittel pÃ¥ Y-aksen" Type="Text" Group="Prosjektportalenkolonner" ID="{c990240d-4c3b-4dfe-8abb-b6119b4b9856}" StaticName="GtPiYAxisTitle" Name="GtPiYAxisTitle" />
+﻿<Field DisplayName="Tittel (Y-akse)" Description="Tittel på Y-aksen" Type="Text" Group="Prosjektportalenkolonner" ID="{c990240d-4c3b-4dfe-8abb-b6119b4b9856}" StaticName="GtPiYAxisTitle" Name="GtPiYAxisTitle" />

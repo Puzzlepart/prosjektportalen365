@@ -1,14 +1,8 @@
 import * as React from 'react';
-import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
 import styles from './BenefitsOverview.module.scss';
 import { IBenefitsOverviewProps, BenefitsOverviewDefaultProps } from './IBenefitsOverviewProps';
 import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from 'prosjektportalen-spfx-shared/lib/models';
-import { IBenefitsSearchResult } from 'prosjektportalen-spfx-shared/lib/interfaces/IBenefitsSearchResult';
-import DataSourceService from 'prosjektportalen-spfx-shared/lib/services/DataSourceService';
-import { sp } from '@pnp/sp';
-import * as stringFormat from 'string-format';
 import AggregatedSearchList from '../../../components/AggregatedSearchList';
-import { IAggregatedSearchListProps } from '../../../components/AggregatedSearchList/IAggregatedSearchListProps';
 
 export default class BenefitsOverview extends React.Component<IBenefitsOverviewProps, {}> {
   public static defaultProps = BenefitsOverviewDefaultProps;
@@ -21,7 +15,7 @@ export default class BenefitsOverview extends React.Component<IBenefitsOverviewP
     super(props);
   }
 
-  public render() {
+  public render(): React.ReactElement<IBenefitsOverviewProps> {
     return (
       <div className={styles.benefitsOverview}>
         <AggregatedSearchList {...this.props} postFetch={this.mapMeasureIndicators} />

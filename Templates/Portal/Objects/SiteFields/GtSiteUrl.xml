@@ -1,1 +1,1 @@
-﻿<Field Description="" DisplayName="OmrÃ¥deadresse" Group="Prosjektportalenkolonner" ID="{871c1234-9ac5-4841-8b56-50839c34a7a1}" Name="GtSiteUrl" ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" StaticName="GtSiteUrl" Type="Text" />
+﻿<Field Description="" DisplayName="Områdeadresse" Group="Prosjektportalenkolonner" ID="{871c1234-9ac5-4841-8b56-50839c34a7a1}" Name="GtSiteUrl" ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" StaticName="GtSiteUrl" Type="Text" />

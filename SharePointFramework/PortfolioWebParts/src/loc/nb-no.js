@@ -7,6 +7,7 @@ define([], function () {
     "DataSourceError": "Det skjedde en feil under uthenting av data fra datakilde med navn '{0}'.",
     "DataLoadingText": "Laster {0}...",
     "SearchBoxLabelText": "Søk i {0}...",
-    "ExcelExportButtonLabel": "Eksporter til Excel"
+    "ExcelExportButtonLabel": "Eksporter til Excel",
+    "FilterText": "Filtrer"
   }
 });

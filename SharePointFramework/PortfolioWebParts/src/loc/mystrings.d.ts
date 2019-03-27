@@ -7,6 +7,7 @@ declare interface IPortfolioWebPartsStrings {
   DataLoadingText: string;
   SearchBoxLabelText: string;
   ExcelExportButtonLabel: string;
+  FilterText: string;
 }
 
 declare module 'PortfolioWebPartsStrings' {

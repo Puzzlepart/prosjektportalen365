@@ -1,6 +1,4 @@
-import IExcelExportConfig from 'prosjektportalen-spfx-shared/lib/interfaces/IExcelExportConfig';
 import * as strings from 'ExperienceLogWebPartStrings';
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { ExperienceLogColumns } from './ExperienceLogColumns';
 import { IExperienceLogWebPartProps } from '../IExperienceLogWebPartProps';
 

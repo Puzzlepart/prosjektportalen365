@@ -26,7 +26,8 @@ const PortfolioOverviewFilterPanel = ({ filters, onDismiss, isOpen, onFilterChan
                             onFilterChange={onFilterChange} />
                     ))}
             </div>
-        </Panel>);
+        </Panel>
+        );
 };
 
 export default PortfolioOverviewFilterPanel;

@@ -1,9 +1,16 @@
 import tryParseFloat from './tryParseFloat';
 
-export default (str: string, fallback: string): number | string => {
+/**
+ * 
+ * @param {string} str The string to parse
+ * @param {boolean} addPostfix Add postix (%)
+ * @param {string | number} fallback Fallback if parse fails
+ */
+export default (str: string, addPostfix: boolean = true, fallback: string | number): number | string => {
     var parsed = tryParseFloat(str, fallback);
     if (parsed === fallback) {
         return fallback;
     }
-    return `${((parsed as number) * 100)}%`;
+    let percentage = (parsed as number) * 100;
+    return addPostfix ? `${percentage}%` : percentage;
 };

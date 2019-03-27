@@ -1,8 +1,8 @@
-import { ITimelineData } from 'prosjektportalen-spfx-shared/lib/interfaces/ITimelineData';
-import * as moment from 'moment';
+import { ITimelineData } from '../interfaces';
 
 export interface IResourceAllocationState {
     isLoading: boolean;
-    data?: ITimelineData<moment.Moment>;
+    activeFilters: {[key: string]: string[] };
+    data?: ITimelineData;
     error?: string;
 }
