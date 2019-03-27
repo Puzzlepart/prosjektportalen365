@@ -19,7 +19,7 @@ import DataSourceService from 'prosjektportalen-spfx-shared/lib/services/DataSou
 import { IAllocationSearchResult } from '../models/IAllocationSearchResult';
 import tryParsePercentage from 'prosjektportalen-spfx-shared/lib/helpers/tryParsePercentage';
 import { ITimelineData, ITimelineGroup, ITimelineItem } from '../interfaces';
-import FilterPanel, { IFilterProps } from '../../../components/FilterPanel';
+import FilterPanel, { IFilterProps, IFilterItemProps } from '../../../components/FilterPanel';
 import * as stringFormat from 'string-format';
 import * as objectGet from 'object-get';
 
@@ -151,13 +151,13 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
    * On filter change 
    *
    * @param {IColumn} column Column
-   * @param {string[]} selectedItems Selected items
+   * @param {IFilterItemProps[]} selectedItems Selected items
    */
   @autobind
-  private onFilterChange(column: IColumn, selectedItems: string[]) {
+  private onFilterChange(column: IColumn, selectedItems: IFilterItemProps[]) {
     const { activeFilters } = ({ ...this.state } as IResourceAllocationState);
     if (selectedItems.length > 0) {
-      activeFilters[column.fieldName] = selectedItems;
+      activeFilters[column.fieldName] = selectedItems.map(i => i.value);
     } else {
       delete activeFilters[column.fieldName];
     }

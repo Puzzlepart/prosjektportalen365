@@ -8,7 +8,7 @@ import { IFilterItemProps, FilterItem } from './FilterItem';
 export interface IFilterProps {
     column: IColumn;
     items: IFilterItemProps[];
-    onFilterChange?: (column: IColumn, selectedItems: string[]) => void;
+    onFilterChange?: (column: IColumn, selectedItems: IFilterItemProps[]) => void;
 }
 
 export interface IFilterState {
@@ -65,7 +65,7 @@ export class Filter extends React.Component<IFilterProps, IFilterState> {
         const { items } = this.state;
         items.filter(_item => _item.value === item.value)[0].selected = checked;
         this.setState({ items });
-        const selectedItems = items.filter(i => i.selected).map(i => i.value);
+        const selectedItems = items.filter(i => i.selected);
         this.props.onFilterChange(this.props.column, selectedItems);
     }
 }

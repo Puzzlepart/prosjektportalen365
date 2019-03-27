@@ -13,22 +13,21 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import * as PortfolioOverviewConfig from '../config';
 import { fetchData, IRefinementResult } from '../data';
-import PortfolioOverviewFilterPanel from './PortfolioOverviewFilterPanel';
 import PortfolioOverviewFieldSelector from './PortfolioOverviewFieldSelector';
 import { PortfolioOverviewView, PortfolioOverviewColumn, IPortfolioOverviewConfiguration } from '../config';
-import * as stringFormat from 'string-format';
-import * as array_sort from 'array-sort';
-import * as array_unique from 'array-unique';
 import formatDate from 'prosjektportalen-spfx-shared/lib/helpers/formatDate';
 import tryParseCurrency from 'prosjektportalen-spfx-shared/lib/helpers/tryParseCurrency';
-import { IPortfolioOverviewFilter } from './PortfolioOverviewFilterPanel/PortfolioOverviewFilter';
+import FilterPanel, { IFilterProps, IFilterItemProps } from '../../../components/FilterPanel';
+import * as arraySort from 'array-sort';
+import * as arrayUnique from 'array-unique';
+import * as objectGet from 'object-get';
 
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = PortfolioOverviewDefaultProps;
 
   constructor(props: IPortfolioOverviewProps) {
     super(props);
-    this.state = { isLoading: true, searchTerm: '', currentFilters: {} };
+    this.state = { isLoading: true, searchTerm: '', activeFilters: {} };
   }
 
   public async componentDidMount() {
@@ -56,7 +55,6 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           {this.renderCommandBar()}
           {this.renderTitle()}
           {this.renderSearchBox()}
-          {this.renderStatusBar()}
           {this.renderList()}
           {this.renderFilterPanel()}
         </div>
@@ -164,27 +162,6 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   }
 
   /**
-  *  Render status bar
-  */
-  private renderStatusBar() {
-    const data = this.getFilteredData();
-    if (data.items.length === 0) {
-      return null;
-    }
-    const { currentFilters } = this.state;
-    const currentFiltersStr = [].concat.apply([], Object.keys(currentFilters).map(key => currentFilters[key])).join(', ');
-    let statusText = stringFormat(strings.ShowCount, data.items.length.toString(), this.state.items.length.toString());
-    if (currentFiltersStr) {
-      statusText = stringFormat(strings.ShowCountWithFilters, data.items.length.toString(), this.state.items.length.toString(), currentFiltersStr);
-    }
-    return (
-      <div className={styles.statusBar}>
-        <MessageBar>{statusText}</MessageBar>
-      </div>
-    );
-  }
-
-  /**
    * Render list
    */
   private renderList() {
@@ -210,7 +187,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           groups={data.groups}
           selectionMode={this.props.selectionMode}
           onRenderItemColumn={this.onRenderItemColumn}
-          onColumnHeaderClick={(_event, column) => this.onColumnSort(column)} />
+          onColumnHeaderClick={this.onColumnSort} />
       </div>
     );
   }
@@ -219,12 +196,16 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
    * Render filter panel
    */
   private renderFilterPanel() {
+    PortfolioOverviewFieldSelector.items = this.state.configuration.columns.map(col => ({
+      name: col.name,
+      value: col.fieldName,
+      selected: this.state.columns.indexOf(col) !== -1,
+    }));
     return (
-      <PortfolioOverviewFilterPanel
+      <FilterPanel
         isOpen={this.state.showFilterPanel}
         onDismiss={() => this.setState({ showFilterPanel: false })}
-        filters={this.state.filters}
-        showIcons={false}
+        filters={[PortfolioOverviewFieldSelector, ...this.state.filters]}
         onFilterChange={this.onFilterChange} />
     );
   }
@@ -237,97 +218,52 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
  * @param {IPortfolioOverviewConfig} configuration PortfolioOverviewConfig
  * @param {IPortfolioOverviewConfigViewConfig} viewConfig View configuration
  */
-  private getSelectedFiltersWithItems(refiners: IRefinementResult[], configuration: IPortfolioOverviewConfiguration, viewConfig: PortfolioOverviewView): any {
+  private getSelectedFiltersWithItems(refiners: IRefinementResult[], configuration: IPortfolioOverviewConfiguration, viewConfig: PortfolioOverviewView): IFilterProps[] {
     return configuration.refiners
       .filter(ref => refiners.filter(r => r.Name === ref.key).length > 0 && viewConfig.refiners.indexOf(ref) !== -1)
       .map(ref => {
         let entries = refiners.filter(r => r.Name === ref.key)[0].Entries;
         let items = entries
-          .map(entry => ({
-            name: entry.RefinementName,
-            value: entry.RefinementValue,
-          }))
+          .map(entry => ({ name: entry.RefinementName, value: entry.RefinementValue }))
           .sort((a, b) => a.value > b.value ? 1 : -1);
-        return { ...ref, items };
+        return { column: ref, items };
       });
   }
 
   /**
-    * Acts on filter change.
-    *
-    * @param {IDynamicPortfolioFilter} filter The filter that was changed
-    */
+   * On filter change 
+   *
+   * @param {IColumn} column Column
+   * @param {IFilterItemProps[]} selectedItems Selected items
+   */
   @autobind
-  private onFilterChange(filter: IPortfolioOverviewFilter): void {
-    const { items, currentFilters, filters } = this.state;
-
-    let updatedFilterState: Partial<IPortfolioOverviewState> = {};
-
-    switch (filter.key) {
-      case "Fields": {
-        updatedFilterState = {
-          fieldNames: filter.selected,
-          columns: this.state.configuration.columns.filter(field => filter.selected.indexOf(field.fieldName) !== -1),
-          filters: filters.map(f => (f.key === filter.key) ? filter : f),
-        };
-      }
-        break;
-      default: {
-        if (filter.selected.length > 0) {
-          currentFilters[filter.key] = filter.selected;
-        } else {
-          if (currentFilters.hasOwnProperty(filter.key)) {
-            delete currentFilters[filter.key];
-          }
-        }
-        let filterKeys = Object.keys(currentFilters);
-        let filteredItems = [];
-        if (filterKeys.length > 0) {
-          items.forEach(item => {
-            let shouldInclude = true;
-            filterKeys.forEach(filterKey => {
-              let values = item[filterKey].split(";");
-              if (values.length > 1) {
-                let matches = values.filter((value: string) => currentFilters[filterKey].indexOf(value) !== -1);
-                if (matches.length === 0) {
-                  shouldInclude = false;
-                }
-              } else {
-                if (currentFilters[filterKey].indexOf(values[0]) === -1) {
-                  shouldInclude = false;
-                }
-              }
-            });
-            if (shouldInclude) {
-              filteredItems.push(item);
-            }
-          });
-        } else {
-          filteredItems = items;
-        }
-        updatedFilterState = { currentFilters, filteredItems, filters: filters.map(f => (f.key === filter.key) ? filter : f) };
-      }
+  private onFilterChange(column: IColumn, selectedItems: IFilterItemProps[]) {
+    const { activeFilters } = ({ ...this.state } as IPortfolioOverviewState);
+    if (selectedItems.length > 0) {
+      activeFilters[column.fieldName] = selectedItems.map(i => i.value);
+    } else {
+      delete activeFilters[column.fieldName];
     }
-
-    this.setState(updatedFilterState);
+    this.setState({ activeFilters });
   }
 
   /**
-     * On column sort
-     *
-     * @param {IColumn} column The column config
-     */
-  private onColumnSort(column: IColumn): void {
-    const { filteredItems, columns } = this.state;
+   * On column sort
+   *
+   * @param {any} _event Event
+   * @param {IColumn} column The column config
+   */
+  private onColumnSort(_event: any, column: IColumn): void {
+    let { items, columns } = ({ ...this.state } as IPortfolioOverviewState);
 
     let isSortedDescending = column.isSortedDescending;
     if (column.isSorted) {
       isSortedDescending = !isSortedDescending;
     }
-    const items = array_sort(filteredItems, [column.fieldName], { reverse: !isSortedDescending });
+    items = arraySort(items, [column.fieldName], { reverse: !isSortedDescending });
     this.setState({
       currentSort: { fieldName: column.fieldName, isSortedDescending: isSortedDescending },
-      filteredItems: items,
+      items,
       columns: columns.map(col => {
         col.isSorted = (col.key === column.key);
         if (col.isSorted) {
@@ -339,7 +275,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   }
 
   /**
-   * On render item column
+   * On render item activeFilters
   *
   * @param {SearchResult} item Item
   * @param {number} _index Index
@@ -366,25 +302,30 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     }
   }
 
+
   /**
-   * Get filtered data
+   * Get groups
+   * 
+   * @param {any[]} items Items
+   * @param {PortfolioOverviewColumn}  groupBy Group by column
+   * @param {Object} currentSort Current sort 
    */
-  private getFilteredData() {
+  private getGroups(items: any[], groupBy: PortfolioOverviewColumn, currentSort: { fieldName: string; isSortedDescending: boolean; }): IGroup[] {
     let groups: IGroup[] = null;
-    if (this.state.groupBy) {
-      const itemsSort: any = { props: [this.state.groupBy.fieldName], opts: {} };
-      if (this.state.currentSort) {
-        itemsSort.props.push(this.state.currentSort.fieldName);
-        itemsSort.opts.reverse = !this.state.currentSort.isSortedDescending;
+    if (groupBy) {
+      const itemsSort: any = { props: [groupBy.fieldName], opts: {} };
+      if (currentSort) {
+        itemsSort.props.push(currentSort.fieldName);
+        itemsSort.opts.reverse = !currentSort.isSortedDescending;
       }
-      const groupItems: any[] = array_sort(this.state.filteredItems, itemsSort.props, itemsSort.opts);
-      const groupByValues: string[] = groupItems.map(g => g[this.state.groupBy.fieldName] ? g[this.state.groupBy.fieldName] : strings.NotSet);
-      const uniqueGroupValues: string[] = array_unique([].concat(groupByValues));
+      const groupItems: any[] = arraySort(items, itemsSort.props, itemsSort.opts);
+      const groupByValues: string[] = groupItems.map(g => g[groupBy.fieldName] ? g[groupBy.fieldName] : strings.NotSet);
+      const uniqueGroupValues: string[] = arrayUnique([].concat(groupByValues));
       groups = uniqueGroupValues
         .sort((a, b) => a > b ? 1 : -1)
         .map((name, idx) => ({
           key: `Group_${idx}`,
-          name: `${this.state.groupBy.name}: ${name}`,
+          name: `${groupBy.name}: ${name}`,
           startIndex: groupByValues.indexOf(name, 0),
           count: [].concat(groupByValues).filter(n => n === name).length,
           isCollapsed: false,
@@ -392,13 +333,33 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           isDropEnabled: false,
         }));
     }
-    let items = [].concat(this.state.filteredItems).filter(item => {
-      const fieldNames = this.state.columns.map(col => col.fieldName);
+    return groups;
+  }
+
+  /**
+   * Get filtered data
+   */
+  private getFilteredData() {
+    let { items, columns, searchTerm, groupBy, currentSort, activeFilters } = ({ ...this.state } as IPortfolioOverviewState);
+    const activeFiltersKeys = Object.keys(activeFilters);
+
+    let groups: IGroup[] = this.getGroups(items, groupBy, currentSort);
+    items = [].concat(items).filter(item => {
+      const fieldNames = columns.map(col => col.fieldName);
       return fieldNames.filter(fieldName => {
-        return item[fieldName] && item[fieldName].toLowerCase().indexOf(this.state.searchTerm) !== -1;
+        return item[fieldName] && item[fieldName].toLowerCase().indexOf(searchTerm) !== -1;
       }).length > 0;
     });
-    return { items, columns: this.state.columns, groups };
+    if (activeFiltersKeys.length > 0) {
+      items = activeFiltersKeys
+        .filter(key => key !== PortfolioOverviewFieldSelector.column.key)
+        .reduce((_items, key) => _items.filter(i => activeFilters[key].indexOf(objectGet(i, key)) !== -1), items);
+      const columnsFilter = activeFilters[PortfolioOverviewFieldSelector.column.key];
+      if (columnsFilter) {
+        columns = columns.filter(_column => columnsFilter.indexOf(_column.fieldName) !== -1);
+      }
+    }
+    return { items, columns, groups };
   }
 
   /**
@@ -439,22 +400,18 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         }
       }
     }
-    const fieldNames = configuration.columns.map(f => f.fieldName);
     const { items, refiners } = await fetchData(currentView, configuration, this.props.context);
 
     PortfolioOverviewFieldSelector.items = configuration.columns.map(col => ({
       name: col.name,
       value: col.fieldName,
       selected: currentView.columns.indexOf(col) !== -1,
-      readOnly: false,
     }));
-    let filters = this.getSelectedFiltersWithItems(refiners, configuration, currentView).concat([PortfolioOverviewFieldSelector]);
+    let filters = this.getSelectedFiltersWithItems(refiners, configuration, currentView);
 
     let updatedState: Partial<IPortfolioOverviewState> = {
       columns: currentView.columns,
-      fieldNames,
       items,
-      filteredItems: items,
       filters,
       currentView,
       configuration,
@@ -484,19 +441,11 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
 
     this.setState({ isChangingView: view });
     const { items, refiners } = await fetchData(view, this.state.configuration, this.props.context);
-    PortfolioOverviewFieldSelector.items = this.state.configuration.columns.map(col => ({
-      name: col.name,
-      value: col.fieldName,
-      selected: view.columns.indexOf(col) !== -1,
-      readOnly: false,
-    }));
-
-    let filters = this.getSelectedFiltersWithItems(refiners, this.state.configuration, view).concat([PortfolioOverviewFieldSelector]);
+    let filters = this.getSelectedFiltersWithItems(refiners, this.state.configuration, view);
 
     let updatedState: Partial<IPortfolioOverviewState> = {
       isChangingView: null,
       items,
-      filteredItems: items,
       filters: filters,
       currentView: view,
       columns: view.columns,

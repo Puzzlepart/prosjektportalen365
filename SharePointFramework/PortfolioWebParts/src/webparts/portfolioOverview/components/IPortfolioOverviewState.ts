@@ -1,6 +1,7 @@
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { PortfolioOverviewView, PortfolioOverviewColumn, IPortfolioOverviewConfiguration } from '../config';
+import { IFilterProps } from '../../../components/FilterPanel';
 
 export interface IPortfolioOverviewErrorMessage {
     message: string;
@@ -12,13 +13,11 @@ export interface IPortfolioOverviewState {
     isChangingView?: PortfolioOverviewView;
     configuration?: IPortfolioOverviewConfiguration;
     items?: any[];
-    filteredItems?: any[];
     columns?: IColumn[];
-    fieldNames?: string[];
     searchTerm?: string;
-    filters?: any[];
+    filters?: IFilterProps[];
     currentView?: PortfolioOverviewView;
-    currentFilters?: { [key: string]: string[] };
+    activeFilters?: { [key: string]: string[] };
     error?: IPortfolioOverviewErrorMessage;
     showFilterPanel?: boolean;
     groupBy?: PortfolioOverviewColumn;

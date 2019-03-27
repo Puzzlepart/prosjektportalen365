@@ -2,10 +2,11 @@ import * as React from 'react';
 import { Panel, IPanelProps } from 'office-ui-fabric-react/lib/Panel';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { IFilterProps, Filter } from './Filter';
+import { IFilterItemProps } from './FilterItem';
 
 export interface IFilterPanelProps extends IPanelProps {
     filters: IFilterProps[];
-    onFilterChange: (column: IColumn, selectedItems: string[]) => void;
+    onFilterChange: (column: IColumn, selectedItems: IFilterItemProps[]) => void;
 }
 
 export interface IFilterPanelState {
@@ -42,4 +43,4 @@ export default class FilterPanel extends React.Component<IFilterPanelProps, IFil
     }
 }
 
-export { IFilterProps };
+export { IFilterProps, IFilterItemProps };
