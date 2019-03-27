@@ -25,7 +25,7 @@ export class Filter extends React.Component<IFilterProps, IFilterState> {
     public render(): React.ReactElement<IFilterProps> {
         return (
             <div className={styles.filter}>
-                <div className={styles.filterSectionHeader}>
+                <div className={styles.filterSectionHeader} onClick={this.onToggleSectionContent}>
                     <span className={styles.titleText}>{this.props.column.name}</span>
                     <span className={styles.titleIcon}>
                         <Icon iconName={this.state.isCollapsed ? 'ChevronUp' : 'ChevronDown'} />
@@ -41,12 +41,25 @@ export class Filter extends React.Component<IFilterProps, IFilterState> {
     }
 
     /**
+     * On toggle section content
+     */
+    private onToggleSectionContent() {
+        this.setState((prevState: IFilterState) => ({ isCollapsed: !prevState.isCollapsed }));
+    }
+
+    /**
      * Render filter items
      */
     private renderItems() {
         return this.state.items.map(props => <FilterItem {...props} onChanged={(event, checked) => this.onChanged(props, checked)} />);
     }
 
+    /**
+     * On changed
+     * 
+     * @param {IFilterItemProps} item Item that was changed
+     * @param {boolean} checked Item checked
+     */
     @autobind
     private onChanged(item: IFilterItemProps, checked: boolean) {
         const { items } = this.state;
