@@ -166,6 +166,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
         name: PortfolioWebPartsStrings.FilterText,
         iconProps: { iconName: "Filter" },
         itemType: ContextualMenuItemType.Header,
+        iconOnly: true,
       }
     ] as ICommandBarItemProps[];
     return { left: [], right };
