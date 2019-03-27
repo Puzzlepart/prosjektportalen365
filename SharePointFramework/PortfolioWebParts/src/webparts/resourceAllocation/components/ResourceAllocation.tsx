@@ -139,7 +139,11 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
       items: this.state.data.items
         .map(i => objectGet(i, col.fieldName))
         .filter((value, index, self) => value && self.indexOf(value) === index)
-        .map(name => ({ name, selected: false }))
+        .map(name => {
+          const filter = this.state.activeFilters[col.fieldName];
+          const selected = filter ? filter.indexOf(name) !== -1 : false;
+          return { name, value: name, selected, };
+        }),
     }));
   }
 
@@ -193,7 +197,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
         <div className="rct-item-content" style={{ maxHeight: `${itemContext.dimensions.height}` }}>
           {item.title}
         </div>
-      </div>
+      </div >
     );
   }
 
