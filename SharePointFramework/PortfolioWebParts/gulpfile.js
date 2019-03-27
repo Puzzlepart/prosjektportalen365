@@ -2,14 +2,15 @@
 const fs = require('fs');
 const gulp = require('gulp');
 const build = require('@microsoft/sp-build-web');
-const spfxPkgDeploy = require('spfx-pkgdeploy').default;
+const spfx_pkgdeploy = require('spfx-pkgdeploy').default;
 build.addSuppression(`Warning - [sass] The local CSS class 'ms-Grid' is not camelCase and will not be type-safe.`);
+build.addSuppression(`Warning - [sass] The local CSS class '-webkit-filter' is not camelCase and will not be type-safe.`);
 
 try {
     var env = require('./config/env.json');
-    spfxPkgDeploy(build, require('./config/package-solution.json'), env);
+    spfx_pkgdeploy(build, require('./config/package-solution.json'), env);
 } catch (error) {
-    build.warn("Skipping spfxPkgDeploy due to missing config/env.json");
+    build.warn("Skipping spfx_pkgdeploy due to missing config/env.json");
 }
 
 gulp.task('version-sync', () => {

@@ -2,6 +2,13 @@
 {
   // Configure glob patterns for excluding files and folders in the file explorer.
   "files.exclude": {
+    "lib": true,
+    "dist": true,
+    "node_modules": true,
+    "sharepoint": true,
+    "temp": true,
+    "shrinkwrap.yaml": true,
+    "package-lock.json": true,
     "**/.git": true,
     "**/.DS_Store": true,
     "**/bower_components": true,
