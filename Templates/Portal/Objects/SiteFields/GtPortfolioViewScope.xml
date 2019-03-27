@@ -1,1 +1,0 @@
-﻿<Field DisplayName="Søkeomfang" Description="" FillInChoice="FALSE" Type="Choice" ID="{4c5c8f8a-88f8-44bc-ac17-62fdad7557ae}" Name="GtPortfolioViewScope" StaticName="GtPortfolioViewScope"><CHOICES><CHOICE>Innenfor porteføljen</CHOICE><CHOICE>Alle porteføljer</CHOICE></CHOICES></Field>

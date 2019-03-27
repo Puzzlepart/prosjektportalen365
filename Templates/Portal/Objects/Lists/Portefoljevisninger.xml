@@ -15,7 +15,6 @@
                 <FieldRef Name="GtSortOrder" />
                 <FieldRef Name="LinkTitle" />
                 <FieldRef Name="GtSearchQuery" />
-                <FieldRef Name="GtPortfolioViewScope" />
                 <FieldRef Name="GtPortfolioIsDefaultView" />
                 <FieldRef Name="GtPortfolioFabricIcon" />
                 <FieldRef Name="GtPortfolioColumns" />

@@ -10,6 +10,5 @@
         <pnp:FieldRef ID="503e35fd-ccee-4d66-af88-e016eab2f80b" Name="GtPortfolioRefiners" />
         <pnp:FieldRef ID="0d7a146d-b41e-4357-82c3-76fb49eac011" Name="GtPortfolioGroupBy" />
         <pnp:FieldRef ID="9f4ee969-ea00-4cc1-a466-a05c7db4156d" Name="GtPortfolioIsPersonalView" />
-        <pnp:FieldRef ID="4c5c8f8a-88f8-44bc-ac17-62fdad7557ae" Name="GtPortfolioViewScope" />
     </pnp:FieldRefs>
 </pnp:ContentType>
