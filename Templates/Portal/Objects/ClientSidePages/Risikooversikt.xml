@@ -1,0 +1,11 @@
+﻿<pnp:ClientSidePage PageName="Risikooversikt.aspx" PromoteAsNewsArticle="false" Overwrite="true" Layout="SingleWebPartAppPage" EnableComments="false" Title="Risikooversikt" 
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    <pnp:Sections>
+        <pnp:Section Order="1" Type="OneColumn">
+            <pnp:Controls>
+                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;dataSource&quot;:&quot;Alle risikoelementer&quot;}" ControlId="57530c94-4fb2-4ca2-9279-16c57881fa19" Order="1" Column="1" />
+            </pnp:Controls>
+        </pnp:Section>
+    </pnp:Sections>
+    <pnp:Header Type="None" />
+</pnp:ClientSidePage>

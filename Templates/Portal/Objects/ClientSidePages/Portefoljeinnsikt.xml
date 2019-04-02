@@ -1,0 +1,11 @@
+﻿<pnp:ClientSidePage PageName="Porteføljeinnsikt.aspx" PromoteAsNewsArticle="false" Overwrite="true" Layout="SingleWebPartAppPage" EnableComments="false" Title="Porteføljeinnsikt" 
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    <pnp:Sections>
+        <pnp:Section Order="1" Type="OneColumn">
+            <pnp:Controls>
+                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{}" ControlId="875ca87a-e331-4ffb-bc69-0272fdf80e41" Order="1" Column="1" />
+            </pnp:Controls>
+        </pnp:Section>
+    </pnp:Sections>
+    <pnp:Header Type="None" />
+</pnp:ClientSidePage>

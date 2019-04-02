@@ -1,85 +1,10 @@
 <pnp:ClientSidePages xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
-    <pnp:ClientSidePage PageName="Home.aspx" PromoteAsNewsArticle="false" Overwrite="true" Layout="Home" EnableComments="false" Title="Home">
-        <pnp:Sections>
-            <pnp:Section Order="1" Type="TwoColumnLeft">
-                <pnp:Controls>
-                    <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;phaseTermSetId&quot;:&quot;abcfc9d9-a263-4abb-8234-be973c46258a&quot;,&quot;entity&quot;:{&quot;listName&quot;:&quot;Prosjekter&quot;,&quot;contentTypeId&quot;:&quot;0x0100805E9E4FEAAB4F0EABAB2600D30DB70C&quot;,&quot;fieldsGroupName&quot;:&quot;Prosjektportalenkolonner&quot;,&quot;identityFieldName&quot;:&quot;GtSiteId&quot;}}" ControlId="54fbeb7d-e463-4dcc-8873-50a3ab2f0f68" Order="1" Column="1" />
-                    <!-- <pnp:CanvasControl WebPartType="NewsReel" JsonControlData="{ &quot;dataVersion&quot;: &quot;1.7&quot;, &quot;serverProcessedContent&quot;: {&quot;htmlStrings&quot;:{},&quot;searchablePlainTexts&quot;:{&quot;title&quot;:&quot;&quot;},&quot;imageSources&quot;:{},&quot;links&quot;:{&quot;baseUrl&quot;:&quot;{hosturl}{site}&quot;},&quot;componentDependencies&quot;:{&quot;layoutComponentId&quot;:&quot;0d8d5f97-0b3c-4ebc-91fc-194b69092eec&quot;}}, &quot;properties&quot;: {&quot;carouselSettings&quot;:{&quot;autoplay&quot;:false,&quot;autoplaySpeed&quot;:5,&quot;dots&quot;:true,&quot;lazyLoad&quot;:true,&quot;metadata&quot;:true,&quot;swipe&quot;:true},&quot;showChrome&quot;:true,&quot;layoutId&quot;:&quot;NewsHub&quot;,&quot;prefetchCount&quot;:12,&quot;filters&quot;:[{&quot;filterType&quot;:1,&quot;value&quot;:&quot;&quot;,&quot;values&quot;:[]}],&quot;newsDataSourceProp&quot;:2,&quot;dataProviderId&quot;:&quot;viewCounts&quot;,&quot;newsSiteList&quot;:[],&quot;renderItemsSliderValue&quot;:4,&quot;webId&quot;:&quot;{siteid}&quot;,&quot;siteId&quot;:&quot;{sitecollectionid}&quot;}}" ControlId="8c88f208-6c77-4bdb-86a0-0c47b4316588" Order="1" Column="2" /> -->
-                    <pnp:CanvasControl WebPartType="QuickLinks" JsonControlData="{ &quot;dataVersion&quot;: &quot;2.1&quot;, &quot;serverProcessedContent&quot;: {&quot;htmlStrings&quot;:{},&quot;searchablePlainTexts&quot;:{&quot;title&quot;:&quot;Lenker&quot;,&quot;items[0].title&quot;:&quot;Brukermanual Prosjektportalen 2.0&quot;,&quot;items[1].title&quot;:&quot;Prosjektveiviseren - En felles prosjektmodell for offentlig sektor&quot;,&quot;items[2].title&quot;:&quot;Kom i gang med Office 365&quot;,&quot;items[0].description&quot;:&quot;&quot;,&quot;items[1].description&quot;:&quot;&quot;,&quot;items[2].description&quot;:&quot;&quot;,&quot;items[0].altText&quot;:&quot;&quot;,&quot;items[1].altText&quot;:&quot;&quot;,&quot;items[2].altText&quot;:&quot;&quot;},&quot;imageSources&quot;:{&quot;items[0].rawPreviewImageUrl&quot;:&quot;{hosturl}{site}/_layouts/15/getpreview.ashx?guidFile=bb31891e%2D0fa0%2D43da%2Dbfa9%2Dccf15df8f493&amp;guidWeb=fcde26a5%2D0f5e%2D4ce4%2D9c4e%2D5d7667e77a32&amp;guidSite=1ecad762%2De067%2D422b%2Db425%2Dd3d2f4a08541&quot;},&quot;links&quot;:{&quot;baseUrl&quot;:&quot;{hosturl}{site}&quot;,&quot;items[0].sourceItem.url&quot;:&quot;{hosturl}/:b:/r/sites/ppdemo_v2/Delte%20dokumenter/Prosjektportalen%202%20brukermanual.pdf?csf=1&amp;e=eCKDxP&quot;,&quot;items[1].sourceItem.url&quot;:&quot;https://www.prosjektveiviseren.no/&quot;,&quot;items[2].sourceItem.url&quot;:&quot;https://portal.office.com/&quot;},&quot;componentDependencies&quot;:{&quot;layoutComponentId&quot;:&quot;706e33c8-af37-4e7b-9d22-6e5694d92a6f&quot;}}, &quot;properties&quot;: {&quot;items&quot;:[{&quot;sourceItem&quot;:{&quot;guids&quot;:{&quot;siteId&quot;:&quot;1ecad762-e067-422b-b425-d3d2f4a08541&quot;,&quot;webId&quot;:&quot;fcde26a5-0f5e-4ce4-9c4e-5d7667e77a32&quot;,&quot;listId&quot;:&quot;ba8a4701-8b85-45e7-b99c-5544c431866b&quot;,&quot;uniqueId&quot;:&quot;bb31891e-0fa0-43da-bfa9-ccf15df8f493&quot;},&quot;itemType&quot;:2,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:3,&quot;id&quot;:3},{&quot;sourceItem&quot;:{&quot;itemType&quot;:2,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:3,&quot;id&quot;:2},{&quot;sourceItem&quot;:{&quot;itemType&quot;:2,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:3,&quot;id&quot;:1}],&quot;isMigrated&quot;:true,&quot;layoutId&quot;:&quot;CompactCard&quot;,&quot;shouldShowThumbnail&quot;:true,&quot;buttonLayoutOptions&quot;:{&quot;showDescription&quot;:false,&quot;buttonTreatment&quot;:2,&quot;iconPositionType&quot;:2,&quot;textAlignmentVertical&quot;:2,&quot;textAlignmentHorizontal&quot;:2,&quot;linesOfText&quot;:2},&quot;listLayoutOptions&quot;:{&quot;showDescription&quot;:false,&quot;showIcon&quot;:true},&quot;waffleLayoutOptions&quot;:{&quot;iconSize&quot;:1,&quot;onlyShowThumbnail&quot;:false},&quot;hideWebPartWhenEmpty&quot;:true,&quot;dataProviderId&quot;:&quot;QuickLinks&quot;,&quot;webId&quot;:&quot;{siteid}&quot;,&quot;siteId&quot;:&quot;{sitecollectionid}&quot;}}" ControlId="c70391ea-0b10-4ee9-b2b4-006d3fcad0cd" Order="1" Column="2" />
-                    <pnp:CanvasControl WebPartType="Custom" JsonControlData="{ &quot;dataVersion&quot;: &quot;1.0&quot;, &quot;serverProcessedContent&quot;: {&quot;htmlStrings&quot;:{},&quot;searchablePlainTexts&quot;:{},&quot;imageSources&quot;:{},&quot;links&quot;:{}}, &quot;properties&quot;:{&quot;title&quot;:&quot;Siste prosjekter&quot;}}" ControlId="941fd73c-b957-41c3-8d4f-082268407f10" Order="3" Column="2" />
-                </pnp:Controls>
-            </pnp:Section>
-        </pnp:Sections>
-        <pnp:Header Type="None" />
-    </pnp:ClientSidePage>
-    <pnp:ClientSidePage PageName="Porteføljeoversikt.aspx" PromoteAsNewsArticle="false" Overwrite="true" Layout="SingleWebPartAppPage" EnableComments="false" Title="Porteføljeoversikt">
-        <pnp:Sections>
-            <pnp:Section Order="1" Type="OneColumn">
-                <pnp:Controls>
-                    <pnp:CanvasControl WebPartType="Custom" JsonControlData="{}" ControlId="e58e3d32-057a-4418-97ce-172b92482ba2" Order="1" Column="1" />
-                </pnp:Controls>
-            </pnp:Section>
-        </pnp:Sections>
-        <pnp:Header Type="None" />
-    </pnp:ClientSidePage>
-    <pnp:ClientSidePage PageName="Porteføljeinnsikt.aspx" PromoteAsNewsArticle="false" Overwrite="true" Layout="SingleWebPartAppPage" EnableComments="false" Title="Porteføljeinnsikt">
-        <pnp:Sections>
-            <pnp:Section Order="1" Type="OneColumn">
-                <pnp:Controls>
-                    <pnp:CanvasControl WebPartType="Custom" JsonControlData="{}" ControlId="875ca87a-e331-4ffb-bc69-0272fdf80e41" Order="1" Column="1" />
-                </pnp:Controls>
-            </pnp:Section>
-        </pnp:Sections>
-        <pnp:Header Type="None" />
-    </pnp:ClientSidePage>
-    <pnp:ClientSidePage PageName="Gevinstoversikt.aspx" PromoteAsNewsArticle="false" Overwrite="true" Layout="SingleWebPartAppPage" EnableComments="false" Title="Gevinstoversikt">
-        <pnp:Sections>
-            <pnp:Section Order="1" Type="OneColumn">
-                <pnp:Controls>
-                    <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;dataSource&quot;:&quot;Gevinstoversikt&quot;}" ControlId="5f925484-cfb4-42ce-9f90-79a874bb8a68" Order="1" Column="1" />
-                </pnp:Controls>
-            </pnp:Section>
-        </pnp:Sections>
-        <pnp:Header Type="None" />
-    </pnp:ClientSidePage>
-    <pnp:ClientSidePage PageName="Erfaringslogg.aspx" PromoteAsNewsArticle="false" Overwrite="true" Layout="SingleWebPartAppPage" EnableComments="false" Title="Erfaringslogg">
-        <pnp:Sections>
-            <pnp:Section Order="1" Type="OneColumn">
-                <pnp:Controls>
-                    <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;dataSource&quot;:&quot;Alle loggelementer&quot;}" ControlId="3ec6bcaf-28bc-4f2e-9e90-77e8cebf0b5f" Order="1" Column="1" />
-                </pnp:Controls>
-            </pnp:Section>
-        </pnp:Sections>
-        <pnp:Header Type="None" />
-    </pnp:ClientSidePage>
-    <pnp:ClientSidePage PageName="Leveranseoversikt.aspx" PromoteAsNewsArticle="false" Overwrite="true" Layout="SingleWebPartAppPage" EnableComments="false" Title="Leveranseoversikt">
-        <pnp:Sections>
-            <pnp:Section Order="1" Type="OneColumn">
-                <pnp:Controls>
-                    <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;dataSource&quot;:&quot;Alle prosjektleveranser&quot;}" ControlId="d8558017-1e3b-4d13-82fa-2520e845297b" Order="1" Column="1" />
-                </pnp:Controls>
-            </pnp:Section>
-        </pnp:Sections>
-        <pnp:Header Type="None" />
-    </pnp:ClientSidePage>
-    <pnp:ClientSidePage PageName="Risikooversikt.aspx" PromoteAsNewsArticle="false" Overwrite="true" Layout="SingleWebPartAppPage" EnableComments="false" Title="Risikooversikt">
-        <pnp:Sections>
-            <pnp:Section Order="1" Type="OneColumn">
-                <pnp:Controls>
-                    <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;dataSource&quot;:&quot;Alle risikoelementer&quot;}" ControlId="57530c94-4fb2-4ca2-9279-16c57881fa19" Order="1" Column="1" />
-                </pnp:Controls>
-            </pnp:Section>
-        </pnp:Sections>
-        <pnp:Header Type="None" />
-    </pnp:ClientSidePage>
-    <pnp:ClientSidePage PageName="Ressursallokering.aspx" PromoteAsNewsArticle="false" Overwrite="true" Layout="SingleWebPartAppPage" EnableComments="false" Title="Ressursallokering">
-        <pnp:Sections>
-            <pnp:Section Order="1" Type="OneColumn">
-                <pnp:Controls>
-                    <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;dataSource&quot;:&quot;Alle ressursallokeringer&quot;}" ControlId="2ef269b2-6370-4841-8b35-2185b7ccb22a" Order="1" Column="1" />
-                </pnp:Controls>
-            </pnp:Section>
-        </pnp:Sections>
-        <pnp:Header Type="None" />
-    </pnp:ClientSidePage>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Erfaringslogg.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Gevinstoversikt.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Home.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Leveranseoversikt.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Portefoljeinnsikt.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Portefoljeoversikt.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Ressursallokering.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Risikooversikt.xml" />
 </pnp:ClientSidePages>
