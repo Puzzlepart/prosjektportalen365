@@ -10,6 +10,8 @@ export interface IAggregatedSearchListProps {
     selectProperties?: string[];
     showCommandBar?: boolean;
     showSearchBox?: boolean;
+    loadingText?: string;
+    searchBoxLabelText?: string;
     excelExportConfig?: IExcelExportConfig;
     columns?: IColumn[];
     groupByColumns?: IColumn[];

@@ -47,7 +47,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
             return (
                 <div className={styles.aggregatedSearchList}>
                     <div className={styles.container}>
-                        <Spinner label={stringFormat(PortfolioWebPartsStrings.DataLoadingText, this.props.dataSource.toLowerCase())} type={SpinnerType.large} />
+                        <Spinner label={this.getLoadingText()} type={SpinnerType.large} />
                     </div>
                 </div>
             );
@@ -74,7 +74,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
                         <div className={styles.title}>{this.props.title}</div>
                     </div>
                     <div className={styles.searchBox} hidden={!this.props.showSearchBox}>
-                        <SearchBox onChange={this.onSearch} labelText={stringFormat(PortfolioWebPartsStrings.SearchBoxLabelText, this.props.dataSource.toLowerCase())} />
+                        <SearchBox onChange={this.onSearch} labelText={this.getSearchBoxLabelText()} />
                     </div>
                     <div className={styles.listContainer}>
                         <DetailsList
@@ -87,6 +87,20 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
                 </div>
             </div>
         );
+    }
+
+    private getLoadingText() {
+        if(this.props.loadingText) {
+            return this.props.loadingText;
+        }
+        return stringFormat(PortfolioWebPartsStrings.DataLoadingText, this.props.dataSource.toLowerCase());
+    }
+
+    private getSearchBoxLabelText() {
+        if(this.props.searchBoxLabelText) {
+            return this.props.searchBoxLabelText;
+        }
+        return stringFormat(PortfolioWebPartsStrings.SearchBoxLabelText, this.props.dataSource.toLowerCase());
     }
 
     /**

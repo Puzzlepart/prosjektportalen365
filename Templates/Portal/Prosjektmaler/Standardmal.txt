@@ -696,7 +696,8 @@
                                     "Properties": {
                                         "title": "Gevinstoversikt",
                                         "dataSource": "Gevinstoversikt (Prosjektnivå)",
-                                        "dataSourceSiteUrl": "{sitecollection}"
+                                        "dataSourceSiteUrl": "{sitecollection}",
+                                        "searchBoxLabelText": "Søk i gevinster..."
                                     }
                                 }
                             ]
