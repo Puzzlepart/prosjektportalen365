@@ -21,7 +21,11 @@
       "officeFabricIconFontName": "SizeLegacy",
       "properties": {
         "title": "Gevinstoversikt",
-        "dataSource": "Gevinstoversikt"
+        "dataSource": "Gevinstoversikt (Prosjektnivå)",
+        "searchBoxLabelText": "Søk i gevinster...",
+        "hiddenColumns": [
+          "siteTitle"
+        ]
       }
     }
   ]

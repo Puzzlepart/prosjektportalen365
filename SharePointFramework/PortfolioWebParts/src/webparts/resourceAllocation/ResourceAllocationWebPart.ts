@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { Version } from '@microsoft/sp-core-library';
-import { IPropertyPaneConfiguration, } from '@microsoft/sp-webpart-base';
 import ResourceAllocation from './components/ResourceAllocation';
 import { IResourceAllocationProps } from './components/IResourceAllocationProps';
 import PortfolioBaseWebPart from '../@portfolioBaseWebPart';

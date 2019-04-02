@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Logger, LogLevel } from '@pnp/logging';
 import { List } from '@pnp/sp';
+import { dateAdd } from "@pnp/common";
 import styles from './ProjectStatus.module.scss';
 import * as strings from 'ProjectStatusWebPartStrings';
 import '@pnp/polyfill-ie11';
@@ -14,8 +15,8 @@ import SummarySection from './SummarySection';
 import StatusSection from './StatusSection';
 import ListSection from './ListSection';
 import ProjectPropertiesSection from './ProjectPropertiesSection';
-import ProjectStatusReport from '../models/ProjectStatusReport';
-import SectionModel, { SectionType } from './SectionModel';
+import ProjectStatusReport, { IProjectStatusReportItem } from '../models/ProjectStatusReport';
+import SectionModel, { SectionType } from '../models/SectionModel';
 import { IStatusSectionBaseProps } from './@StatusSectionBase/IStatusSectionBaseProps';
 import getObjectValue from 'prosjektportalen-spfx-shared/lib/helpers/getObjectValue';
 
@@ -95,8 +96,23 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
    * Associate status item
    */
   private async associateStatusItem(): Promise<void> {
-    const [item] = await this.reportList.items.select('Id').orderBy('Id').top(1).get<{ Id: number }[]>();
-    await this.reportList.items.getById(item.Id).update({ GtSiteId: this.props.siteId });
+    let item: IProjectStatusReportItem;
+    try {
+      const dateTime = dateAdd(new Date(), 'minute', -1).toISOString();
+      [item] = await this.reportList.items
+        .filter(`AuthorId eq ${this.props.userId} and GtSiteId ne '${this.props.siteId}' and Created ge datetime'${dateTime}'`)
+        .select('Id', 'GtMonthChoice', 'Created')
+        .orderBy('Id', false)
+        .top(1)
+        .get<IProjectStatusReportItem[]>();
+    } catch (error) {}
+    if (item) {
+      const report = new ProjectStatusReport(item);
+      await this.reportList.items.getById(item.Id).update({
+        Title: `${this.props.webTitle} (${report.toString()})`,
+        GtSiteId: this.props.siteId,
+      });
+    }
     document.location.hash = '#';
   }
 
@@ -179,19 +195,26 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
    * Get selected report edit form url
    */
   private getSelectedReportEditFormUrl(): string {
-    const { selectedReport, data } = this.state;
-    if (selectedReport) {
-      return `${window.location.protocol}//${window.location.hostname}${data.reportListProps.DefaultEditFormUrl}?ID=${selectedReport.item.Id}&Source=${encodeURIComponent(window.location.href)}`;
-    }
-    return null;
+    return [
+      `${window.location.protocol}//${window.location.hostname}`,
+      getObjectValue(this.state, 'data.reportListProps.DefaultEditFormUrl', ''),
+      `?ID=`,
+      getObjectValue(this.state, 'selectedReport.item.Id', ''),
+      `&Source=`,
+      encodeURIComponent(window.location.href),
+    ].join('');
   }
 
   /**
    * Get report new form url
    */
   private getReportNewFormUrl(): string {
-    const { data } = this.state;
-    return `${window.location.protocol}//${window.location.hostname}${data.reportListProps.DefaultNewFormUrl}?Source=${encodeURIComponent(`${window.location.href}#NewStatus`)}`;
+    return [
+      `${window.location.protocol}//${window.location.hostname}`,
+      getObjectValue(this.state, 'data.reportListProps.DefaultNewFormUrl', ''),
+      `?Source=`,
+      encodeURIComponent(`${window.location.href.split('#')[0]}#NewStatus`)
+    ].join('');
   }
 
   /**
@@ -227,12 +250,12 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
       .select('DefaultEditFormUrl', 'DefaultNewFormUrl')
       .expand('DefaultEditFormUrl', 'DefaultNewFormUrl')
       .get();
-    let [reports, sections] = await Promise.all([
-      this.reportList.items.filter(`GtSiteId eq '${this.props.siteId}'`).get(),
+    const [reportItems, sectionItems] = await Promise.all([
+      this.reportList.items.filter(`GtSiteId eq '${this.props.siteId}'`).get<IProjectStatusReportItem[]>(),
       this.sectionsList.items.get(),
     ]);
-    reports = reports.map(r => new ProjectStatusReport(r));
-    sections = sections.map(s => new SectionModel(s));
+    const reports = reportItems.map(r => new ProjectStatusReport(r));
+    const sections = sectionItems.map(s => new SectionModel(s));
     return { entityFields, entityItem, reportListProps, reports, sections };
   }
 }

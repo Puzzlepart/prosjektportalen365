@@ -1,12 +1,13 @@
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
+import { IColumn, DetailsListLayoutMode, SelectionMode, ConstrainMode } from 'office-ui-fabric-react/lib/DetailsList';
 import IExcelExportConfig from 'prosjektportalen-spfx-shared/lib/interfaces/IExcelExportConfig';
+import { SearchResult } from '@pnp/sp';
 
 export interface IAggregatedSearchListProps {
     title: string;
     dataSource: string;
-    dataSourceSiteUrl?: string;
+    legacyPageContext?: any;
     queryTemplate?: string;
-    postFetch?: (results: any[]) => Promise<any[]>;
+    postFetch?: (results: SearchResult[]) => Promise<any[]>;
     selectProperties?: string[];
     showCommandBar?: boolean;
     showSearchBox?: boolean;
@@ -14,5 +15,8 @@ export interface IAggregatedSearchListProps {
     searchBoxLabelText?: string;
     excelExportConfig?: IExcelExportConfig;
     columns?: IColumn[];
+    layoutMode?: DetailsListLayoutMode;
+    constrainMode?: ConstrainMode;
+    selectionMode?: SelectionMode;
     groupByColumns?: IColumn[];
 }

@@ -1,5 +1,5 @@
 import ProjectStatusReport from "../models/ProjectStatusReport";
-import SectionModel from "./SectionModel";
+import SectionModel from "../models/SectionModel";
 
 export interface IProjectStatusData {
     entityFields?: any[];

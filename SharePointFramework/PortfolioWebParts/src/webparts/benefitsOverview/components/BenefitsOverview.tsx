@@ -3,9 +3,12 @@ import styles from './BenefitsOverview.module.scss';
 import { IBenefitsOverviewProps, BenefitsOverviewDefaultProps } from './IBenefitsOverviewProps';
 import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from 'prosjektportalen-spfx-shared/lib/models';
 import AggregatedSearchList from '../../../components/AggregatedSearchList';
+import { GetColumns } from './BenefitsOverviewColumns';
+import getObjectValue from 'prosjektportalen-spfx-shared/lib/helpers/getObjectValue';
 
 export default class BenefitsOverview extends React.Component<IBenefitsOverviewProps, {}> {
   public static defaultProps = BenefitsOverviewDefaultProps;
+
   /**
    * Constructor
    *
@@ -16,9 +19,15 @@ export default class BenefitsOverview extends React.Component<IBenefitsOverviewP
   }
 
   public render(): React.ReactElement<IBenefitsOverviewProps> {
+    const columns = GetColumns(this.props);
+    const groupByColumns = columns.filter(col => getObjectValue<boolean>(col, 'data.isGroupable', false));
     return (
       <div className={styles.benefitsOverview}>
-        <AggregatedSearchList {...this.props} postFetch={this.mapMeasureIndicators} />
+        <AggregatedSearchList
+          {...this.props}
+          columns={columns}
+          groupByColumns={groupByColumns}
+          postFetch={this.mapMeasureIndicators} />
       </div>
     );
   }

@@ -1,7 +1,14 @@
-export default class ProjectStatusReport {
-    public item: any;
+export interface IProjectStatusReportItem {
+    Id: number;
+    GtMonthChoice: string;
+    Created: string;
+    [key: string]: any;
+}
 
-    constructor(item: any) {
+export default class ProjectStatusReport {
+    public item: IProjectStatusReportItem;
+
+    constructor(item: IProjectStatusReportItem) {
         this.item = item;
     }
 

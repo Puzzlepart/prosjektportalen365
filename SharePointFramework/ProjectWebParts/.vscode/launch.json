@@ -22,10 +22,10 @@
       ]
     },
     {
-      "name": "Hosted workbench",
+      "name": "Hosted workbench (CRM 2019)",
       "type": "chrome",
       "request": "launch",
-      "url": "https://pzlcloud.sharepoint.com/sites/DigitaleOslo2022/_layouts/workbench.aspx",
+      "url": "https://pzlcloud.sharepoint.com/sites/CRM2019/_layouts/workbench.aspx",
       "webRoot": "${workspaceRoot}",
       "sourceMaps": true,
       "sourceMapPathOverrides": {

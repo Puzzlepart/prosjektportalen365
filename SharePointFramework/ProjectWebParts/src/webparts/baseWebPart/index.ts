@@ -9,11 +9,13 @@ import HubSiteService, { IHubSite } from 'sp-hubsite-service';
 import SpEntityPortalService, { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
 
 export interface IBaseWebPartProps {
-  title: string;  
+  title: string;
   context: WebPartContext;
   hubSite: IHubSite;
   spEntityPortalService: SpEntityPortalService;
   siteId: string;
+  userId: string;
+  webTitle: string;
   entity: ISpEntityPortalServiceParams;
 }
 
@@ -39,7 +41,14 @@ export default class BaseWebPart<P extends IBaseWebPartProps> extends BaseClient
 
   public render(): void { }
 
-  public _render(component, properties = {}) {
+  /**
+   * Renders the component if initialized
+   * 
+   * @param {any} component Component
+   * @param {Object} properties Properties
+   */
+  public _render(component: any, properties: Object = {}) {
+    this.context.statusRenderer.clearLoadingIndicator(this.domElement);
     if (this.isInitialized) {
       const element: React.ReactElement<any> = React.createElement(component, {
         ...(this.properties as any),
@@ -47,6 +56,8 @@ export default class BaseWebPart<P extends IBaseWebPartProps> extends BaseClient
         hubSite: this.hubSite,
         spEntityPortalService: this.spEntityPortalService,
         siteId: this.context.pageContext.site.id.toString(),
+        userId: this.context.pageContext.legacyPageContext.userId,
+        webTitle: this.context.pageContext.web.title,
         ...properties,
       });
       ReactDom.render(element, this.domElement);
