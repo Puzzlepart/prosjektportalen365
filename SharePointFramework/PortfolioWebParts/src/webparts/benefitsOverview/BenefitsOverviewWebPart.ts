@@ -1,9 +1,7 @@
 import * as React from 'react';
 import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
 import { Version } from '@microsoft/sp-core-library';
-import { IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
-import BenefitsOverview from './components/BenefitsOverview';
-import { IBenefitsOverviewProps } from './components/IBenefitsOverviewProps';
+import BenefitsOverview, { IBenefitsOverviewProps } from './components/BenefitsOverview';
 import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
 import { IBenefitsOverviewWebPartProps } from './IBenefitsOverviewWebPartProps';
 import { Logger, LogLevel } from '@pnp/logging';

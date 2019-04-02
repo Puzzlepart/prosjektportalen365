@@ -692,9 +692,10 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "c7ff77cd-07e3-435e-971a-8845fa28ba8e",
+                                    "Id": "5f925484-cfb4-42ce-9f90-79a874bb8a68",
                                     "Properties": {
-                                        "title": "Gevinstoversikt"
+                                        "title": "Gevinstoversikt",
+                                        "dataSource": "Gevinstoversikt (Prosjektnivå)"
                                     }
                                 }
                             ]
@@ -1327,7 +1328,7 @@
             ],
             "AdditionalSettings": {
                 "EnableVersioning": true
-            },            
+            },
             "Fields": [
                 "<Field Type=\"Lookup\" DisplayName=\"Gevinst\" List=\"{listid:Gevinstanalyse og gevinstrealiseringsplan}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
                 "<Field Type=\"Lookup\" DisplayName=\"Gevinst ID\" List=\"{listid:Gevinstanalyse og gevinstrealiseringsplan}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
@@ -1371,7 +1372,7 @@
                 }
             ],
             "Fields": [
-                "<Field Type=\"Lookup\" DisplayName=\"Måleindikator\" List=\"{listid:Måleindikatorer}\" ShowField=\"Title\" ID=\"{92ae8541-f35e-4c05-8518-b9abce2d0860}\"  StaticName=\"GtMeasureIndicatorLookup\" Name=\"GtMeasureIndicatorLookup\" />",                
+                "<Field Type=\"Lookup\" DisplayName=\"Måleindikator\" List=\"{listid:Måleindikatorer}\" ShowField=\"Title\" ID=\"{92ae8541-f35e-4c05-8518-b9abce2d0860}\"  StaticName=\"GtMeasureIndicatorLookup\" Name=\"GtMeasureIndicatorLookup\" />",
                 "<Field Type=\"Lookup\" DisplayName=\"Måleindikator ID\" List=\"{listid:Måleindikatorer}\" ShowField=\"ID\" FieldRef=\"92ae8541-f35e-4c05-8518-b9abce2d0860\" ReadOnly=\"TRUE\" ID=\"{571f95d9-4c0b-4b4d-8a0b-9a1771811f07}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtMeasureIndicatorLookup_ID\" Name=\"GtMeasureIndicatorLookup_ID\" />"
             ],
             "Views": [
