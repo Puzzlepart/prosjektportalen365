@@ -10,7 +10,7 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { DetailsList, IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
-import { sp } from '@pnp/sp';
+import { sp, Web } from '@pnp/sp';
 import DataSourceService from 'prosjektportalen-spfx-shared/lib/services/DataSourceService';
 import * as objectGet from 'object-get';
 import * as stringFormat from 'string-format';
@@ -186,13 +186,13 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
         return items;
     }
 
-
-
     /**
-     * Get filtered data
+     * Get groups
+     * 
+     * @param {any[]} items Items
+     * @param {IColumn} groupBy Group by
      */
-    private getFilteredData() {
-        let { items, columns, groupBy, searchTerm } = ({ ...this.state } as IAggregatedSearchListState);
+    private getGroups(items: any[], groupBy: IColumn): IGroup[] {
         let groups: IGroup[] = null;
         if (groupBy && groupBy.key !== 'NoGrouping') {
             const itemsSortedByGroupBy = items.sort((a, b) => objectGet(a, groupBy.key) > objectGet(b, groupBy.key) ? -1 : 1);
@@ -209,6 +209,15 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
                     isDropEnabled: false,
                 }));
         }
+        return groups;
+    }
+
+    /**
+     * Get filtered data
+     */
+    private getFilteredData() {
+        let { items, columns, groupBy, searchTerm } = ({ ...this.state } as IAggregatedSearchListState);
+        let groups = this.getGroups(items, groupBy);
         items = items.filter(item => JSON.stringify(item).toLowerCase().indexOf(searchTerm || '') !== -1);
         return { items, columns, groups };
     }
@@ -240,12 +249,13 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
      * Fetch items
      */
     private async fetchItems(): Promise<any[]> {
-        let { queryTemplate, dataSource } = this.props;
+        let { queryTemplate, dataSource, dataSourceSiteUrl } = this.props;
         try {
             if (!queryTemplate) {
-                const _dataSource = await new DataSourceService(sp.web).getByName(dataSource);
-                if (_dataSource) {
-                    queryTemplate = _dataSource.QueryTemplate;
+                const web = dataSourceSiteUrl ? new Web(dataSourceSiteUrl) : sp.web;
+                const { QueryTemplate } = await new DataSourceService(web).getByName(dataSource);
+                if (QueryTemplate) {
+                    queryTemplate = QueryTemplate;
                 } else {
                     throw stringFormat(PortfolioWebPartsStrings.DataSourceNotFound, dataSource);
                 }

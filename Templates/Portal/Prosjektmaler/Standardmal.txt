@@ -695,7 +695,8 @@
                                     "Id": "5f925484-cfb4-42ce-9f90-79a874bb8a68",
                                     "Properties": {
                                         "title": "Gevinstoversikt",
-                                        "dataSource": "Gevinstoversikt (Prosjektnivå)"
+                                        "dataSource": "Gevinstoversikt (Prosjektnivå)",
+                                        "dataSourceSiteUrl": "{sitecollection}"
                                     }
                                 }
                             ]

@@ -4,6 +4,7 @@ import IExcelExportConfig from 'prosjektportalen-spfx-shared/lib/interfaces/IExc
 export interface IAggregatedSearchListProps {
     title: string;
     dataSource: string;
+    dataSourceSiteUrl?: string;
     queryTemplate?: string;
     postFetch?: (results: any[]) => Promise<any[]>;
     selectProperties?: string[];
