@@ -3,6 +3,7 @@ import styles from './ProjectPropertiesSection.module.scss';
 import { IProjectPropertiesSectionProps } from './IProjectPropertiesSectionProps';
 import StatusSectionBase from '../@StatusSectionBase';
 import StatusElement from '../StatusElement';
+import StatusSectionField from '../StatusSectionField';
 
 
 export default class ProjectPropertiesSection extends StatusSectionBase<IProjectPropertiesSectionProps, {}> {
@@ -27,8 +28,18 @@ export default class ProjectPropertiesSection extends StatusSectionBase<IProject
       </StatusSectionBase>
     );
   }
-  
+
   public renderFields() {
+    if (this.props.model.viewFields) {
+      const { entityFields, entityItem } = this.props;
+      return this.props.model.viewFields.map(fn => {
+        const [fld] = entityFields.filter(ef => ef.InternalName === fn);
+        if (fld) {
+          return <StatusSectionField label={fld.Title} value={entityItem[fn]} />;
+        }
+        return null;
+      });
+    }
     return null;
   }
 }

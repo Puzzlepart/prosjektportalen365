@@ -5,6 +5,7 @@ define([], function() {
     "SaveText": "Lagre",
     "PickReportText": "Velg rapport",
     "NewStatusReportModalHeaderText": "Ny statusrapport",
-    "EditReportButtonText": "Rediger status"
+    "EditReportButtonText": "Rediger status",
+    "ListSectionDataErrorMessage": "Det skjedde en feil under uthenting av data for seksjonen. Er den riktig konfigurert?"
   }
 });

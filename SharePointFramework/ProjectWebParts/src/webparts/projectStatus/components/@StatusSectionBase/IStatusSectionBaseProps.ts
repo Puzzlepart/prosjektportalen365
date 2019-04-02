@@ -10,7 +10,6 @@ export interface IStatusSectionBaseProps {
   report: ProjectStatusReport;
   context: WebPartContext;
   data?: IProjectStatusData;
-  fieldNames?: string[];
 }
 
 export const StatusSectionDefaultProps: Partial<IStatusSectionBaseProps> = {};

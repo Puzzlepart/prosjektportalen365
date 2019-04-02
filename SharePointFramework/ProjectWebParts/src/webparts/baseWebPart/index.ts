@@ -4,11 +4,16 @@ import { Version } from '@microsoft/sp-core-library';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
 import { sp } from '@pnp/sp';
+import { WebPartContext } from '@microsoft/sp-webpart-base';
 import HubSiteService, { IHubSite } from 'sp-hubsite-service';
 import SpEntityPortalService, { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
 
 export interface IBaseWebPartProps {
-  title: string;
+  title: string;  
+  context: WebPartContext;
+  hubSite: IHubSite;
+  spEntityPortalService: SpEntityPortalService;
+  siteId: string;
   entity: ISpEntityPortalServiceParams;
 }
 
@@ -41,6 +46,7 @@ export default class BaseWebPart<P extends IBaseWebPartProps> extends BaseClient
         context: this.context,
         hubSite: this.hubSite,
         spEntityPortalService: this.spEntityPortalService,
+        siteId: this.context.pageContext.site.id.toString(),
         ...properties,
       });
       ReactDom.render(element, this.domElement);

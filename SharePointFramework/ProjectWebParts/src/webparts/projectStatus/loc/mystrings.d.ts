@@ -5,6 +5,7 @@ declare interface IProjectStatusWebPartStrings {
   PickReportText: string;
   NewStatusReportModalHeaderText: string;
   EditReportButtonText: string;
+  ListSectionDataErrorMessage: string;
 }
 
 declare module 'ProjectStatusWebPartStrings' {

@@ -4,13 +4,14 @@ import SectionModel from "./SectionModel";
 export interface IProjectStatusData {
     entityFields?: any[];
     entityItem?: any;
-    reportList?: { DefaultEditFormUrl: string, DefaultNewFormUrl: string };
+    reportListProps?: { DefaultEditFormUrl: string, DefaultNewFormUrl: string };
     reports?: ProjectStatusReport[];
     sections?: SectionModel[];
 }
 
 export interface IProjectStatusState {
     isLoading: boolean;
+    associateStatusItem: boolean;
     showNewStatusReportModal?: boolean;
     data?: IProjectStatusData;
     selectedReport?: ProjectStatusReport;

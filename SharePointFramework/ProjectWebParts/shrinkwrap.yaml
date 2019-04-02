@@ -15,6 +15,7 @@ dependencies:
   '@types/react': 16.4.2
   '@types/react-dom': 16.0.5
   '@types/webpack-env': 1.13.1
+  object-get: 2.1.0
   office-ui-fabric-react: 5.134.0
   prosjektportalen-spfx-shared: 'link:../@Shared'
   react: 16.3.2
@@ -8066,6 +8067,10 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-fn2Fi3gb18mRpBupde04EnVOmYw=
+  /object-get/2.1.0:
+    dev: false
+    resolution:
+      integrity: sha1-ciu9tgA576R8rTxtws5RqFwCxa4=
   /object-keys/0.4.0:
     dev: true
     resolution:
@@ -12133,6 +12138,7 @@ specifiers:
   bluebird: ^3.5.3
   gulp: ~3.9.1
   node-fetch: ^2.3.0
+  object-get: ^2.1.0
   office-ui-fabric-react: 5.134.0
   prosjektportalen-spfx-shared: 'link:C:/code/prosjektportalen365/SharePointFramework/@Shared/'
   react: 16.3.2

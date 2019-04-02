@@ -1,7 +1,8 @@
-import { sp, SearchResult, QueryPropertyValueType, SortDirection } from '@pnp/sp';
+import { sp, SearchResult, SearchResults, QueryPropertyValueType, SortDirection } from '@pnp/sp';
 import { IPortfolioOverviewConfiguration, PortfolioOverviewView } from '../config';
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import * as objectGet from 'object-get';
+import * as cleanDeep from 'clean-deep';
 
 export interface IRefinementResultEntry {
     RefinementCount: string;
@@ -39,6 +40,12 @@ export const DEFAULT_SEARCH_SETTINGS = {
     SortList: [{ Property: 'LastModifiedTime', Direction: SortDirection.Descending }],
 };
 
+function mapSearchResultData(results: SearchResults) {
+    let items: SearchResult[] = objectGet(results, 'PrimarySearchResults') || [];
+    items = items.map(item => cleanDeep({ ...item }));
+    return items;
+}
+
 /**
  * Query the REST Search API using @pnp/sp
  *
@@ -53,7 +60,7 @@ export async function fetchData(view: PortfolioOverviewView, configuration: IPor
                 ...DEFAULT_SEARCH_SETTINGS,
                 QueryTemplate: view.searchQuery,
                 SelectProperties: [...configuration.columns.map(f => f.fieldName), 'GtSiteIdOWSTEXT'],
-                Refiners: configuration.refiners.map(ref => ref.fieldName).join(','),                
+                Refiners: configuration.refiners.map(ref => ref.fieldName).join(','),
             }),
             sp.search({
                 ...DEFAULT_SEARCH_SETTINGS,
@@ -69,10 +76,10 @@ export async function fetchData(view: PortfolioOverviewView, configuration: IPor
         ]);
 
         let refiners = objectGet(projectsResults, 'RawSearchResults.PrimaryQueryResult.RefinementResults.Refiners') || [];
-        let projects: any[] = objectGet(projectsResults, 'PrimarySearchResults') || [];
-        let sites: any[] = objectGet(sitesResults, 'PrimarySearchResults') || [];
-        let statusReports: any[] = objectGet(statusReportsResults, 'PrimarySearchResults') || [];
-
+        let projects: any[] = mapSearchResultData(projectsResults);
+        let sites: any[] = mapSearchResultData(sitesResults);
+        let statusReports: any[] = mapSearchResultData(statusReportsResults);
+        
         let items = sites
             .map(site => {
                 const [project] = projects.filter(res => res.GtSiteIdOWSTEXT === site.SiteId);
