@@ -10,14 +10,6 @@
         }
       ]
     },
-    "benefits-overview-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/benefitsOverview/BenefitsOverviewWebPart.js",
-          "manifest": "./src/webparts/benefitsOverview/BenefitsOverviewWebPart.manifest.json"
-        }
-      ]
-    },
     "project-phases-web-part": {
       "components": [
         {
@@ -38,7 +30,6 @@
   "externals": {},
   "localizedResources": {
     "ProjectStatusWebPartStrings": "lib/webparts/projectStatus/loc/{locale}.js",
-    "BenefitsOverviewWebPartStrings": "lib/webparts/benefitsOverview/loc/{locale}.js",
     "ProjectPhasesWebPartStrings": "lib/webparts/projectPhases/loc/{locale}.js",
     "ProjectInformationWebPartStrings": "lib/webparts/projectInformation/loc/{locale}.js",
     "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js"
