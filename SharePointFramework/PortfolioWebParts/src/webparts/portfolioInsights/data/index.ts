@@ -39,15 +39,17 @@ export type SearchQueries = { [id: number]: SearchQuery };
  * @param {ChartConfiguration[]} charts Charts
  */
 function getSearchQueriesDistinct(charts: ChartConfiguration[]): SearchQueries {
-    return charts.reduce((obj, { searchQuery, fields }) => {
-        obj[searchQuery.Id] = obj[searchQuery.Id] || {
-            Querytext: '*',
-            QueryTemplate: searchQuery.GtSearchQuery,
-            RowLimit: 500,
-            TrimDuplicates: false,
-            SelectProperties: ['Title', 'GtSiteIdOWSTEXT'],
-        };
-        obj[searchQuery.Id].SelectProperties.push(...fields.map(fld => fld.fieldName));
+    return charts.reduce((obj, chart) => {
+        if (chart.searchQuery) {
+            obj[chart.searchQuery.Id] = obj[chart.searchQuery.Id] || {
+                Querytext: '*',
+                QueryTemplate: chart.searchQuery.GtSearchQuery,
+                RowLimit: 500,
+                TrimDuplicates: false,
+                SelectProperties: ['Title', 'GtSiteIdOWSTEXT'],
+            };
+            obj[chart.searchQuery.Id].SelectProperties.push(...chart.fields.map(fld => fld.fieldName));
+        }
         return obj;
     }, {});
 }
@@ -125,10 +127,12 @@ export async function fetchData(context: WebPartContext) {
         });
         let searchQueries = getSearchQueriesDistinct(charts);
         let chartData = await fetchChartData(searchQueries, context);
-        charts = charts.map(chart => {
-            chart.data = chartData[chart.searchQuery.Id];
-            return chart;
-        });
+        charts = charts
+            .filter(chart => chart.searchQuery)
+            .map(chart => {
+                chart.data = chartData[chart.searchQuery.Id];
+                return chart;
+            });
         return { charts };
     } catch (error) {
         console.log(error);
