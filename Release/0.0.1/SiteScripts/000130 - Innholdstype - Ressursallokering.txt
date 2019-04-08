@@ -1,0 +1,14 @@
+﻿{
+    "bindata": {},
+    "actions": [
+        {
+            "verb": "createContentType",
+            "description": "Opprett et nytt listeelement.",
+            "id": "0x010004EAFF7AFCC94C2680042E6881264120",
+            "name": "Ressursallokering",
+            "hidden": false
+        }
+    ],
+    "$schema": "schema.json",
+    "version": 1
+}

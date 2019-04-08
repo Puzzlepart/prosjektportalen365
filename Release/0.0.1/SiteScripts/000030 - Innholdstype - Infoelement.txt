@@ -1,0 +1,14 @@
+﻿{
+    "bindata": {},
+    "actions": [
+        {
+            "verb": "createContentType",
+            "description": "Opprett et nytt listeelement.",
+            "id": "0x01007CFA9140CFBF430EB3A6CE7272E89CFB",
+            "name": "Infoelement",
+            "hidden": false
+        }
+    ],
+    "$schema": "schema.json",
+    "version": 1
+}

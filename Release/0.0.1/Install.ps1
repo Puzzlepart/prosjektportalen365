@@ -87,7 +87,7 @@ if(-not $SkipTemplate.IsPresent) {
     Try {
         Set-PnPTraceLog -Level Debug -On
         Write-Host "[INFO] Applying PnP template [Portal] to [$PortfolioSiteUrl]"
-        Apply-PnPProvisioningTemplate .\Templates\Portal.pnp -Connection $PortfolioSiteConnection -ErrorAction Stop
+        Apply-PnPProvisioningTemplate ..\Templates\Portal\Portal.xml -Connection $PortfolioSiteConnection -ErrorAction Stop
     }
     Catch {
         Write-Host "[INFO] Failed to apply PnP template [Portal] to [$PortfolioSiteUrl]: $($_.Exception.Message)"
@@ -103,7 +103,7 @@ if(-not $SkipSiteDesign.IsPresent) {
     Try {
         Write-Host "[INFO] Installing site scripts"
         $SiteScripts = Get-PnPSiteScript -Connection $AdminSiteConnection
-        $SiteScriptSrc = Get-ChildItem "./SiteScripts/*.txt"
+        $SiteScriptSrc = Get-ChildItem "../SiteScripts/Src/*.txt"
         foreach ($s in $SiteScriptSrc) {
             $Title = $s.BaseName.Substring(9)
             $Content = (Get-Content -Path $s.FullName -Raw | Out-String)
@@ -146,9 +146,9 @@ if(-not $SkipAppPackages.IsPresent) {
     Try {
         Write-Host "[INFO] Installing SharePoint Framework app packages to [$AppCatalogUrl]"
         $AppPackages = @(
-            ".\Apps\pp-portfolio-web-parts.sppkg",
-            ".\Apps\pp-project-extensions.sppkg",
-            ".\Apps\pp-project-web-parts.sppkg"
+            "..\SharePointFramework\PortfolioWebParts\sharepoint\solution\pp-portfolio-web-parts.sppkg",
+            "..\SharePointFramework\ProjectExtensions\sharepoint\solution\pp-project-extensions.sppkg",
+            "..\SharePointFramework\ProjectWebParts\sharepoint\solution\pp-project-web-parts.sppkg"
         )
         $AppPackages | ForEach-Object {
             $AppPackage = Get-ChildItem $_.

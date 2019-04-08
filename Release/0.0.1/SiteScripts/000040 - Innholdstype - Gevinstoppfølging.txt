@@ -1,0 +1,14 @@
+﻿{
+    "bindata": {},
+    "actions": [
+        {
+            "verb": "createContentType",
+            "description": "Opprett et nytt listeelement.",
+            "id": "0x010039EAFDC2A1624C1BA1A444FC8FE85DEC",
+            "name": "Gevinstoppfølging",
+            "hidden": false
+        }
+    ],
+    "$schema": "schema.json",
+    "version": 1
+}

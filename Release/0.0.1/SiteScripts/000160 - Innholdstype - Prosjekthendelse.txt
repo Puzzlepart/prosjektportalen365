@@ -1,0 +1,14 @@
+﻿{
+    "bindata": {},
+    "actions": [
+        {
+            "verb": "createContentType",
+            "description": "Opprett et nytt møte, en ny tidsfrist eller en annen hendelse.",
+            "id": "0x010200C19C974828B24D469B69C22B2D1FFB63",
+            "name": "Prosjekthendelse",
+            "hidden": false
+        }
+    ],
+    "$schema": "schema.json",
+    "version": 1
+}

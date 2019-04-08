@@ -1,0 +1,15 @@
+﻿{
+    "bindata": {},
+    "actions": [
+        {
+            "verb": "associateExtension",
+            "title": "ProjectUpgradeApplicationCustomizer",
+            "location": "ClientSideExtension.ApplicationCustomizer",
+            "clientSideComponentId": "453a6c1e-e1d0-4b12-a3fc-690a36da1f0c",
+            "clientSideComponentProperties": "{}",
+            "scope": "Web"
+        }
+    ],
+    "$schema": "schema.json",
+    "version": 1
+}
