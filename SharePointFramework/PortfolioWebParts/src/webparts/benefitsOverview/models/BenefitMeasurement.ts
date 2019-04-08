@@ -1,9 +1,10 @@
-import { IBenefitsSearchResult } from '../interfaces/IBenefitsSearchResult';
 import { BenefitBase, BenefitMeasurementIndicator } from './';
+import { IBenefitsSearchResult } from '../interfaces/IBenefitsSearchResult';
 
 export class BenefitMeasurement extends BenefitBase {
     public date: Date;
     public dateDisplay: string;
+    public comment: string;
     public value: number;
     public valueDisplay: string;
     public achievement: number;
@@ -26,6 +27,7 @@ export class BenefitMeasurement extends BenefitBase {
         if (this.value !== null) {
             this.valueDisplay = this.value.toFixed(fractionDigits);
         }
+        this.comment = result.GtMeasurementCommentOWSMTXT;
         this.indicatorId = parseInt(result.GtMeasureIndicatorLookupId, 10);
     }
 

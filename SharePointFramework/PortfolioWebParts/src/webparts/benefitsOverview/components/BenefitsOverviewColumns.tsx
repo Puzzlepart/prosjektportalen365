@@ -3,10 +3,10 @@ import * as strings from 'BenefitsOverviewWebPartStrings';
 import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { Icon, IIconProps } from 'office-ui-fabric-react/lib/Icon';
-import { BenefitMeasurementIndicator } from 'prosjektportalen-spfx-shared/lib/models';
 import BenefitMeasurementsModal from './BenefitMeasurementsModal';
 import { IBenefitsOverviewProps } from './IBenefitsOverviewProps';
 import getObjectValue from 'prosjektportalen-spfx-shared/lib/helpers/getObjectValue';
+import { BenefitMeasurementIndicator } from '../models';
 
 export function GetColumns(props: IBenefitsOverviewProps): IColumn[] {
   let columns: IColumn[] = [
