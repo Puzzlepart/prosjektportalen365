@@ -2,11 +2,11 @@ import * as React from 'react';
 import * as strings from 'BenefitsOverviewWebPartStrings';
 import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import { Icon, IIconProps } from 'office-ui-fabric-react/lib/Icon';
 import BenefitMeasurementsModal from './BenefitMeasurementsModal';
 import { IBenefitsOverviewProps } from './IBenefitsOverviewProps';
 import getObjectValue from 'prosjektportalen-spfx-shared/lib/helpers/getObjectValue';
 import { BenefitMeasurementIndicator } from '../models';
+import BenefitMeasurementAchievement from './BenefitMeasurementAchievement';
 
 export function GetColumns(props: IBenefitsOverviewProps): IColumn[] {
   let columns: IColumn[] = [
@@ -17,9 +17,9 @@ export function GetColumns(props: IBenefitsOverviewProps): IColumn[] {
       minWidth: 100,
       maxWidth: 180,
       isResizable: true,
-      onRender: (item: BenefitMeasurementIndicator) => {
-        const webUrl = getObjectValue<string>(item, "webUrl", null);
-        const siteTitle = getObjectValue<string>(item, "siteTitle", null);
+      onRender: (indicator: BenefitMeasurementIndicator) => {
+        const webUrl = getObjectValue<string>(indicator, "webUrl", null);
+        const siteTitle = getObjectValue<string>(indicator, "siteTitle", null);
         return <a href={webUrl} target='_blank'>{siteTitle}</a>;
       },
       data: { isGroupable: true },
@@ -50,14 +50,6 @@ export function GetColumns(props: IBenefitsOverviewProps): IColumn[] {
       minWidth: 50,
       maxWidth: 180,
       isMultiline: true,
-      isResizable: true,
-    },
-    {
-      key: 'indicator',
-      fieldName: 'indicator',
-      name: strings.IndicatorLabel,
-      minWidth: 50,
-      maxWidth: 80,
       isResizable: true,
     },
     {
@@ -102,16 +94,10 @@ export function GetColumns(props: IBenefitsOverviewProps): IColumn[] {
       minWidth: 50,
       maxWidth: 80,
       isResizable: true,
-      onRender: (item: BenefitMeasurementIndicator, _index: number, _column: IColumn) => {
-        const colValue = getObjectValue(item, "measurements[0].achievementDisplay", null);
-        const trendIconProps = getObjectValue<IIconProps>(item, "measurements[0].trendIconProps", null);
-        if (colValue) {
-          return (
-            <span>
-              <span style={{ display: "inline-block", width: 20 }}>{trendIconProps && <Icon {...trendIconProps} />}</span>
-              <span>{colValue}</span>
-            </span>
-          );
+      onRender: (indicator: BenefitMeasurementIndicator, _index: number, _column: IColumn) => {
+        const measurement = getObjectValue(indicator, "measurements[0]", null);
+        if (measurement) {
+          return <BenefitMeasurementAchievement measurement={measurement} />;
         }
         return null;
       }
@@ -122,7 +108,7 @@ export function GetColumns(props: IBenefitsOverviewProps): IColumn[] {
       name: "",
       minWidth: 50,
       maxWidth: 80,
-      onRender: (item: BenefitMeasurementIndicator) => <BenefitMeasurementsModal indicator={item} />,
+      onRender: (indicator: BenefitMeasurementIndicator) => <BenefitMeasurementsModal indicator={indicator} />,
     },
   ];
   return columns.filter(col => getObjectValue<string[]>(props, 'hiddenColumns', []).indexOf(col.key) === -1);

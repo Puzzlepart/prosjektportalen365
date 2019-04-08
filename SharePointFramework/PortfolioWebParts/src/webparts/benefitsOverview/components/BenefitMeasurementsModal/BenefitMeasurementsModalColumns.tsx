@@ -1,9 +1,8 @@
 import * as React from 'react';
 import * as strings from 'BenefitsOverviewWebPartStrings';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import * as objectGet from 'object-get';
-import { BenefitMeasurementIndicator } from '../../models';
+import { BenefitMeasurement } from '../../models';
+import BenefitMeasurementAchievement from '../BenefitMeasurementAchievement';
 
 export const BenefitMeasurementsModalColumns: IColumn[] = [
     {
@@ -19,8 +18,8 @@ export const BenefitMeasurementsModalColumns: IColumn[] = [
         key: 'comment',
         fieldName: 'comment',
         name: strings.MeasurementCommentLabel,
-        minWidth: 100,
-        maxWidth: 150,
+        minWidth: 175,
+        maxWidth: 175,
         isMultiline: true,
         isResizable: true,
     },
@@ -31,19 +30,7 @@ export const BenefitMeasurementsModalColumns: IColumn[] = [
         minWidth: 100,
         maxWidth: 100,
         isResizable: true,
-        onRender: (item: BenefitMeasurementIndicator) => {
-            const colValue = objectGet(item, 'achievementDisplay');
-            const trendIconProps = objectGet(item, 'trendIconProps');
-            if (colValue) {
-                return (
-                    <span>
-                        <span style={{ display: 'inline-block', width: 20 }}>{trendIconProps && <Icon {...trendIconProps} />}</span>
-                        <span>{colValue}</span>
-                    </span>
-                );
-            }
-            return null;
-        },
+        onRender: (measurement: BenefitMeasurement) => <BenefitMeasurementAchievement measurement={measurement} />,
     },
     {
         key: 'dateDisplay',
