@@ -19,7 +19,7 @@ dependencies:
   react-dom: 16.3.2
   sp-entityportal-service: 0.6.2
   sp-hubsite-service: 0.1.0
-  sp-js-provisioning: 0.10.2
+  sp-js-provisioning: 0.10.3
   spfx-jsom: 0.6.0
   string-format: 2.0.0
 devDependencies:
@@ -215,10 +215,10 @@ packages:
   /@microsoft/load-themed-styles/1.8.64:
     resolution:
       integrity: sha512-FLFjtEzWBfvyCs2mR2oRfApIhv1dlEdRgNaTBOcPWaI7sJd+7CZ9EGlftEU0Qz2e7+yifYcWh1Rd0Qx0NPur8w==
-  /@microsoft/load-themed-styles/1.8.77:
+  /@microsoft/load-themed-styles/1.8.80:
     dev: false
     resolution:
-      integrity: sha512-uPw5bk3LCMmWzuS2qEZD8Ru7zDaDqFZzosY4SbGXhS/nYQX1PRwzn3bQu1oIj4z2dmXbtdpdumCj4FijiJqi0A==
+      integrity: sha512-8MVseQsqYFDu4mjH+Nwrd2pjKyrkEyEZx2OBDwp/OaO9ukYaT64fwD4C8OROQkdRy4k/y7hxxxBnKV//DGvP4Q==
   /@microsoft/loader-cased-file/1.7.1/webpack@3.6.0:
     dependencies:
       '@types/lodash': 4.14.74
@@ -853,6 +853,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-YsgBtpOJolRZpZZasWf6Dj4mS5QGAnxU/0s5jgwCQZT22Lf5IhxXC2R9/fURa/DI2742i9dCED6lQGDqoEz7rA==
+  /@pnp/common/1.3.2:
+    dependencies:
+      adal-angular: 1.0.17
+      tslib: 1.9.3
+    dev: false
+    resolution:
+      integrity: sha512-3n08lyGLeWm30ZBBxoVLOIQIRwWYZJ5se72m8LiNvzX0PvjGyUgVS1bkUKKNu5+jG0AwP+/OKzrmuRSb5+krLg==
   /@pnp/logging/1.2.10-3:
     dependencies:
       tslib: 1.9.3
@@ -871,21 +878,28 @@ packages:
     dev: false
     resolution:
       integrity: sha512-wIYcdNOjM6DSkWYtyGNwVe35JdVF9F58DTrdGQ40TRf5wJ9R8/bZQfq7KKJ4qYeHAOvjRT4DZwUi0Jaf+6bycg==
-  /@pnp/nodejs/1.3.1/50e5dc2c4ca7a56e51ba7cc4c856ee51:
+  /@pnp/logging/1.3.2:
     dependencies:
-      '@pnp/common': 1.3.1
-      '@pnp/logging': 1.3.1
+      tslib: 1.9.3
+    dev: false
+    resolution:
+      integrity: sha512-etK4LLGFC7HPsTxgmOpJMtHwg5U6MVhEDXCem35I0TdYo0mfvW+rO/LP1DGDnpUfEeox0hMm6rEumz8vBrHZDg==
+  /@pnp/nodejs/1.3.2/26e07b7664b251d8b1f7deefd81809cc:
+    dependencies:
+      '@pnp/common': 1.3.2
+      '@pnp/logging': 1.3.2
       adal-node: 0.1.28
+      https-proxy-agent: 2.2.1
       jsonwebtoken: 8.3.0
       node-fetch: 2.2.0
       tslib: 1.9.3
     dev: false
-    id: registry.npmjs.org/@pnp/nodejs/1.3.1
+    id: registry.npmjs.org/@pnp/nodejs/1.3.2
     peerDependencies:
-      '@pnp/common': 1.3.1
-      '@pnp/logging': 1.3.1
+      '@pnp/common': 1.3.2
+      '@pnp/logging': 1.3.2
     resolution:
-      integrity: sha512-h5zLokWffa4lMiDBzO0SkML+u1urnNh/htuBGzfmdRYtMQ+BVd3lhS0JZLzd7/9WajGT9xwgXx6od6OoZkdroA==
+      integrity: sha512-++jHggkj/eNdPu43szr5KdoAyB/K2kKMXw8VJcQnZ9CA9Iqs0OcsDb8KSK5RDTRtf0eE2H5wmkB6IZTHZQe3iA==
   /@pnp/odata/1.2.10-3:
     dependencies:
       tslib: 1.9.3
@@ -919,6 +933,18 @@ packages:
       '@pnp/logging': 1.3.1
     resolution:
       integrity: sha512-LtFOjQ8psB5IxN75q/klQ2c2OuoRtBA69adipru5giBxwbOaqbgNzObz6SH7hEr4KYbtL6//hpRof7JoSpyelA==
+  /@pnp/odata/1.3.2/26e07b7664b251d8b1f7deefd81809cc:
+    dependencies:
+      '@pnp/common': 1.3.2
+      '@pnp/logging': 1.3.2
+      tslib: 1.9.3
+    dev: false
+    id: registry.npmjs.org/@pnp/odata/1.3.2
+    peerDependencies:
+      '@pnp/common': 1.3.2
+      '@pnp/logging': 1.3.2
+    resolution:
+      integrity: sha512-47yShM69ZYiIBkZrk9zMve4kDAsLBdq0CmtSzmGLMh6ecnEJJzFklqO6W8pydrkqLniX5P0Ag7DDkQyWHbzvwA==
   /@pnp/sp/1.2.10-3:
     dependencies:
       tslib: 1.9.3
@@ -957,6 +983,20 @@ packages:
       '@pnp/odata': 1.3.1
     resolution:
       integrity: sha512-V0LcvymWFHNl/6dRd6uSyL47QsT8miRLMEJr3KtqZiXtgZ2Uwu2VKUwsDsUplnmMRrBv57b2ogm/6S843oZo2w==
+  /@pnp/sp/1.3.2/68ea358cc0acb942ca18a8cec8c38049:
+    dependencies:
+      '@pnp/common': 1.3.2
+      '@pnp/logging': 1.3.2
+      '@pnp/odata': /@pnp/odata/1.3.2/26e07b7664b251d8b1f7deefd81809cc
+      tslib: 1.9.3
+    dev: false
+    id: registry.npmjs.org/@pnp/sp/1.3.2
+    peerDependencies:
+      '@pnp/common': 1.3.2
+      '@pnp/logging': 1.3.2
+      '@pnp/odata': 1.3.2
+    resolution:
+      integrity: sha512-w5K485ZszVUc6dbnOPBrEWYEhYnn+M71a1xNKQ8XLqxeec2cnG3rxdSLJFI0QCLgnQRKaHoFriQrE/x8+ftdIg==
   /@pnpm/link-bins/1.0.3/@pnpm!logger@1.0.2:
     dependencies:
       '@pnpm/logger': 1.0.2
@@ -1372,7 +1412,7 @@ packages:
     dependencies:
       '@uifabric/set-version': 1.1.3
       '@uifabric/styling': /@uifabric/styling/6.45.2/react-dom@16.7.0+react@16.7.0
-      '@uifabric/utilities': /@uifabric/utilities/6.35.3/react-dom@16.7.0+react@16.7.0
+      '@uifabric/utilities': /@uifabric/utilities/6.35.4/react-dom@16.7.0+react@16.7.0
       react: 16.7.0
       react-dom: /react-dom/16.7.0/react@16.7.0
       tslib: 1.9.3
@@ -1453,10 +1493,10 @@ packages:
       integrity: sha512-3hC0itW/hWSD5J4uANzUKk8XVGWUNkU+VLjEjWsQ6i5lvwFGaanR6Qy0bTkZdFGqFWMXe91CkBHV7HnvEx7tCA==
   /@uifabric/styling/6.45.2/react-dom@16.7.0+react@16.7.0:
     dependencies:
-      '@microsoft/load-themed-styles': 1.8.77
+      '@microsoft/load-themed-styles': 1.8.80
       '@uifabric/merge-styles': 6.16.4
       '@uifabric/set-version': 1.1.3
-      '@uifabric/utilities': /@uifabric/utilities/6.35.3/react-dom@16.7.0+react@16.7.0
+      '@uifabric/utilities': /@uifabric/utilities/6.35.4/react-dom@16.7.0+react@16.7.0
       tslib: 1.9.3
     dev: false
     id: registry.npmjs.org/@uifabric/styling/6.45.2
@@ -1501,7 +1541,7 @@ packages:
       react-dom: '>=16.3.2-0 <17.0.0'
     resolution:
       integrity: sha512-ESyMQfJrIGy1uM0HQApW0gvKpQCZBWLLoQTGZIq8Z4ZcTUEYN4Te+6oImtn0dxI1CIK6fbQNtLvZb5fX82+jMA==
-  /@uifabric/utilities/6.35.3/react-dom@16.7.0+react@16.7.0:
+  /@uifabric/utilities/6.35.4/react-dom@16.7.0+react@16.7.0:
     dependencies:
       '@uifabric/merge-styles': 6.16.4
       '@uifabric/set-version': 1.1.3
@@ -1510,12 +1550,12 @@ packages:
       react-dom: /react-dom/16.7.0/react@16.7.0
       tslib: 1.9.3
     dev: false
-    id: registry.npmjs.org/@uifabric/utilities/6.35.3
+    id: registry.npmjs.org/@uifabric/utilities/6.35.4
     peerDependencies:
       react: '>=16.3.2-0 <17.0.0'
       react-dom: '>=16.3.2-0 <17.0.0'
     resolution:
-      integrity: sha512-dulGtSFvZLTfoMpb5C9E6y2M39m95P5NeXtF9On/cG/9xMnGPsewgFAj81G0amiV1b5MBtSqXWvCQ5EdusQ2YA==
+      integrity: sha512-iUOTZWUesm0R0LmeU5E5TvrlDF9boBWIkqorKU3+br0DN5AgCNq9dVHU+QFmsT82RiJLDIgEMeH45kNhOCEq9w==
   /@yarnpkg/lockfile/1.0.2:
     dev: true
     resolution:
@@ -1638,7 +1678,6 @@ packages:
   /agent-base/4.2.1:
     dependencies:
       es6-promisify: 5.0.0
-    dev: true
     engines:
       node: '>= 4.0.0'
     resolution:
@@ -3000,8 +3039,13 @@ packages:
     resolution:
       integrity: sha512-wPMUt6FnH2yzG95SA6mzjQOEKUU3aLaDEmzs1ti+1E9h+CsrZghRlqEM/EJ4KscsQVG8uNN4uVreUeT8+drlgg==
   /commander/2.19.0:
+    dev: true
     resolution:
       integrity: sha512-6tvAOO+D6OENvRAh524Dh9jcfKTYDQAqvqezbCW82xj5X0pSrcpxtvRKHLG0yBY6SD7PSDrJaj+0AiOcKVd1Xg==
+  /commander/2.20.0:
+    optional: true
+    resolution:
+      integrity: sha512-7j2y+40w61zy6YC2iRNpUe/NwhNyoXrYpHMrSunaMG64nRnaf96zO/KMQR4OyN/UnE5KLyEBnKHd4aG3rskjpQ==
   /component-bind/1.0.0:
     dev: true
     resolution:
@@ -3381,7 +3425,6 @@ packages:
   /debug/3.2.6:
     dependencies:
       ms: 2.1.1
-    dev: true
     resolution:
       integrity: sha512-mel+jf7nrtEl5Pn1Qx46zARXKDpBbvzezse7p7LqINmdoIk8PYP5SySaxEmYv6TZ0JyEKA1hsCId6DIhgITtWQ==
   /debuglog/1.0.1:
@@ -3834,7 +3877,6 @@ packages:
   /es6-promisify/5.0.0:
     dependencies:
       es6-promise: 4.2.6
-    dev: true
     resolution:
       integrity: sha1-UQnWLz5W6pZ8S2NQWu8IKRyKUgM=
   /es6-set/0.1.5:
@@ -5423,7 +5465,6 @@ packages:
     dependencies:
       agent-base: 4.2.1
       debug: 3.2.6
-    dev: true
     engines:
       node: '>= 4.5.0'
     resolution:
@@ -8153,13 +8194,13 @@ packages:
       integrity: sha512-SPpzhhDJz7rJYXNwrmJOAPaQaqqg1H2Gn05JDDZpfb4z2igvYVmuFP7nn0zn+R50uPIQbwyVKcvZCmjnh0Je/w==
   /office-ui-fabric-react/6.143.0/react-dom@16.7.0+react@16.7.0:
     dependencies:
-      '@microsoft/load-themed-styles': 1.8.77
+      '@microsoft/load-themed-styles': 1.8.80
       '@uifabric/foundation': /@uifabric/foundation/0.7.4/react-dom@16.7.0+react@16.7.0
       '@uifabric/icons': /@uifabric/icons/6.5.1/react-dom@16.7.0+react@16.7.0
       '@uifabric/merge-styles': 6.16.4
       '@uifabric/set-version': 1.1.3
       '@uifabric/styling': /@uifabric/styling/6.45.2/react-dom@16.7.0+react@16.7.0
-      '@uifabric/utilities': /@uifabric/utilities/6.35.3/react-dom@16.7.0+react@16.7.0
+      '@uifabric/utilities': /@uifabric/utilities/6.35.4/react-dom@16.7.0+react@16.7.0
       prop-types: 15.7.2
       react: 16.7.0
       react-dom: /react-dom/16.7.0/react@16.7.0
@@ -10299,20 +10340,20 @@ packages:
     dev: false
     resolution:
       integrity: sha512-RX8QB/sNP/16pff/iEdxO/0LMw7LS/oFEhEGuG+TNwEzfrmq3HQ+WoKE1XOoKIjlJT3/rC37jxIJpxweasDJfg==
-  /sp-js-provisioning/0.10.2:
+  /sp-js-provisioning/0.10.3:
     dependencies:
-      '@pnp/common': 1.3.1
-      '@pnp/logging': 1.3.1
-      '@pnp/nodejs': /@pnp/nodejs/1.3.1/50e5dc2c4ca7a56e51ba7cc4c856ee51
-      '@pnp/odata': /@pnp/odata/1.3.1/50e5dc2c4ca7a56e51ba7cc4c856ee51
-      '@pnp/sp': /@pnp/sp/1.3.1/a948b831638a1a15b9d3347bb5579569
+      '@pnp/common': 1.3.2
+      '@pnp/logging': 1.3.2
+      '@pnp/nodejs': /@pnp/nodejs/1.3.2/26e07b7664b251d8b1f7deefd81809cc
+      '@pnp/odata': /@pnp/odata/1.3.2/26e07b7664b251d8b1f7deefd81809cc
+      '@pnp/sp': /@pnp/sp/1.3.2/68ea358cc0acb942ca18a8cec8c38049
       gulp-typescript: 3.2.4
       object.omit: 3.0.0
       spfx-jsom: 0.6.0
       xml-js: 1.6.11
     dev: false
     resolution:
-      integrity: sha512-VJ7jG0U8i3Jr52+3FNZiFL93FzNPduAnu+mxHZIOkDO9wPajIoQIyjgbCk6zbtkbMPX0pim1jjqx/G/I8EeUvg==
+      integrity: sha512-ftZf/JyuZCyFmeop3OA0n+e7RaRAApEdsoxno+ust7qiijGdCbtXLQ0usc9f57iP/EBDwGJ8RYekhROnmnV3tw==
   /sp-pnp-js/3.0.10:
     dependencies:
       '@microsoft/microsoft-graph-types': 1.1.0
@@ -12168,7 +12209,7 @@ packages:
       validator: 8.2.0
     hasBin: true
     optionalDependencies:
-      commander: 2.19.0
+      commander: 2.20.0
     resolution:
       integrity: sha512-DUOKC/IhbkdLKKiV89gw9DUauTV8U/8yJl1sjf6MtDmzevLKOF2duNJ495S3MFVjqZarr+qNGCPbkg4mu4PpLw==
 registry: 'https://registry.npmjs.org/'
@@ -12206,7 +12247,7 @@ specifiers:
   react-dom: 16.3.2
   sp-entityportal-service: ^0.6.2
   sp-hubsite-service: ^0.1.0
-  sp-js-provisioning: ^0.10.2
+  sp-js-provisioning: ^0.10.3
   spfx-jsom: ^0.6.0
   spfx-pkgdeploy: ^0.3.0
   string-format: ^2.0.0

@@ -40,7 +40,7 @@
     "react-dom": "16.3.2",
     "sp-entityportal-service": "^0.6.2",
     "sp-hubsite-service": "^0.1.0",
-    "sp-js-provisioning": "^0.10.2",
+    "sp-js-provisioning": "^0.10.3",
     "spfx-jsom": "^0.6.0",
     "string-format": "^2.0.0"
   },
