@@ -1830,118 +1830,112 @@
   <data name="SiteFields_GtResourceLoad_Description" xml:space="preserve">
     <value>Hvor stor belastning har personen?</value>
   </data>
-  <data name="SiteFields__DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtDescription_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="SiteFields__DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtGroupId_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="SiteFields_GtDescription_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtIsGroupable_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="SiteFields_GtGroupId_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtIsRefinable_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="SiteFields_GtIsGroupable_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtMonthChoice_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="SiteFields_GtIsRefinable_DisplayName" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtMonthChoice_DisplayName" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtPiAutomaticRefreshEnabled_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiAutomaticRefreshEnabled_Description" xml:space="preserve">
     <value>Automatisk oppdatering av data</value>
   </data>
-  <data name="SiteFields_GtPiAutomaticRefreshInterval_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiAutomaticRefreshInterval_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="SiteFields_GtPiCategoryField_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiCategoryField_Description" xml:space="preserve">
     <value>Kolonnefor kategorisering. Velges fra listen Prosjektkolonner.</value>
   </data>
-  <data name="SiteFields_GtPiColorsMap_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiColorsMap_Description" xml:space="preserve">
     <value>Farger for verdien i formatet [VERDI1]:[FARGE1];[VERDI2]:[FARGE2]</value>
   </data>
-  <data name="SiteFields_GtPiCustomConfiguration_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiCustomConfiguration_Description" xml:space="preserve">
     <value>Konfigurasjonsfil for egendefinert diagram</value>
   </data>
-  <data name="SiteFields_GtPiCustomType_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiCustomType_Description" xml:space="preserve">
     <value>Type diagram</value>
   </data>
-  <data name="SiteFields_GtPiDataSourceLookup_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiDataSourceLookup_Description" xml:space="preserve">
     <value>Datakilde som skal brukes for dette diagrammet. Velges fra listen Datakilder.</value>
   </data>
-  <data name="SiteFields_GtPiExpandProperty_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiExpandProperty_Description" xml:space="preserve">
     <value>Om feltet er et brukerfelt (e.l.) må du velge en egenskap ? ekspandere</value>
   </data>
-  <data name="SiteFields_GtPiFields_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiFields_Description" xml:space="preserve">
     <value>Hvilke felter skal inkluderes i diagrammet/datakilden. Velges fra listen Prosjektkolonner.</value>
   </data>
-  <data name="SiteFields_GtPiFieldX_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiFieldX_Description" xml:space="preserve">
     <value>Hvilken kolonne skal brukes for X. Velges fra listen Prosjektkolonner.</value>
   </data>
-  <data name="SiteFields_GtPiFieldY_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiFieldY_Description" xml:space="preserve">
     <value>Hvilken kolonne skal brukes for Y. Velges fra listen Prosjektkolonner.</value>
   </data>
-  <data name="SiteFields_GtPiFieldZ_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiFieldZ_Description" xml:space="preserve">
     <value>Hvilken kolonne skal brukes for Z. Velges fra listen Prosjektkolonner.</value>
   </data>
-  <data name="SiteFields_GtPiShowLegend_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiShowLegend_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="SiteFields_GtPiStacking_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiStacking_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="SiteFields_GtPiSubTitle_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiSubTitle_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="SiteFields_GtPiValueOrder_DisplayName" xml:space="preserve">
-    <value>Rekkefølge for verdiene (f.eks. Konsept,Planlegge,Gjennomf?re,Avslutte,Realisere)</value>
+  <data name="SiteFields_GtPiValueOrder_Description" xml:space="preserve">
+    <value>Rekkefølge for verdiene (f.eks. Konsept,Planlegge,Gjennomføre,Avslutte,Realisere)</value>
   </data>
-  <data name="SiteFields_GtPiValueSuffix_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiValueSuffix_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="SiteFields_GtPiWidthLg_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiWidthLg_Description" xml:space="preserve">
     <value>Bredde (1-12) for 640px til 1023px</value>
   </data>
-  <data name="SiteFields_GtPiWidthMd_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiWidthMd_Description" xml:space="preserve">
     <value>Bredde (1-12) for 480px til 639px</value>
   </data>
-  <data name="SiteFields_GtPiWidthSm_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiWidthSm_Description" xml:space="preserve">
     <value>Bredde (1-12) for 320px til 479px</value>
   </data>
-  <data name="SiteFields_GtPiWidthXl_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiWidthXl_Description" xml:space="preserve">
     <value>Bredde (1-12) for 1024px til 1365px</value>
   </data>
-  <data name="SiteFields_GtPiWidthXxl_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiWidthXxl_Description" xml:space="preserve">
     <value>Bredde (1-12) for 1366px til 1919px</value>
   </data>
-  <data name="SiteFields_GtPiWidthXxxl_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiWidthXxxl_Description" xml:space="preserve">
     <value>Bredde (1-12) for 1920px til oppover</value>
   </data>
-  <data name="SiteFields_GtPiXAxisTitle_DisplayName" xml:space="preserve">
-    <value>Tittel p? X-aksen</value>
+  <data name="SiteFields_GtPiXAxisTitle_Description" xml:space="preserve">
+    <value>Tittel på X-aksen</value>
   </data>
-  <data name="SiteFields_GtPiYAxisTitle_DisplayName" xml:space="preserve">
-    <value>Tittel p? Y-aksen</value>
+  <data name="SiteFields_GtPiYAxisTitle_Description" xml:space="preserve">
+    <value>Tittel på Y-aksen</value>
   </data>
-  <data name="SiteFields_GtPiYMax_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiYMax_Description" xml:space="preserve">
     <value>Max verdi for Y-aksen</value>
   </data>
-  <data name="SiteFields_GtPiYMin_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiYMin_Description" xml:space="preserve">
     <value>Minimum verdi for Y-aksen</value>
   </data>
-  <data name="SiteFields_GtPiYTickInterval_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPiYTickInterval_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="SiteFields_GtProjectForecast_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtProjectForecast_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="SiteFields_GtSiteId_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtSiteId_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="SiteFields_GtSiteUrl_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtSiteUrl_Description" xml:space="preserve">
     <value></value>
   </data>
   <data name="ProjectList_Header" xml:space="preserve">
