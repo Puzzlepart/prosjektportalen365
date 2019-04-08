@@ -71,6 +71,9 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
     );
   }
 
+  /**
+   * Render cards
+   */
   private renderCards() {
     const projects = this.getFilteredProjects();
     if (projects.length === 0) {
@@ -84,6 +87,12 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
     ));
   }
 
+  /**
+   * On select project
+   * 
+   * @param {React.MouseEvent} event Event
+   * @param {ProjectListModel} project Project
+   */
   @autobind
   private onSelectProject(event: React.MouseEvent<any>, project: ProjectListModel) {
     event.stopPropagation();
@@ -91,6 +100,9 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
     this.setState({ selectedProject: project });
   }
 
+  /**
+   * Get filtered projects
+   */
   private getFilteredProjects() {
     let { projects, searchTerm } = ({ ...this.state } as IProjectListState);
     if (searchTerm) {
@@ -109,14 +121,26 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
     }
   }
 
+  /**
+   * On search
+   * 
+   * @param {string} searchTerm Search term
+   */
   @autobind
   private onSearch(searchTerm: string) {
     this.setState({ searchTerm: searchTerm.toLowerCase() });
   }
 
+  /**
+   * Fetch data
+   */
   private async fetchData(): Promise<ProjectListModel[]> {
     let [items, groups, users, phaseTerms] = await Promise.all([
-      sp.web.lists.getByTitle(this.props.entity.listName).items.usingCaching().get(),
+      sp.web.lists.getByTitle(this.props.entity.listName)
+        .items
+        .select('GtGroupId', 'GtSiteId', 'GtSiteUrl', 'GtProjectOwnerId', 'GtProjectManagerId', 'GtProjectPhase')
+        .usingCaching()
+        .get<{ GtGroupId: string, GtSiteId: string, GtSiteUrl: string, GtProjectOwnerId: number, GtProjectManagerId: number, GtProjectPhase: { TermGuid: string } }[]>(),
       MSGraph.Get<{ id: string, displayName: string }[]>(`/me/memberOf/$/microsoft.graph.group`, 'v1.0', ['id', 'displayName'], `groupTypes/any(a:a%20eq%20'unified')`),
       sp.web.siteUsers.usingCaching().get(),
       taxonomy.getDefaultSiteCollectionTermStore().getTermSetById(this.props.phaseTermSetId).terms.usingCaching().get(),
