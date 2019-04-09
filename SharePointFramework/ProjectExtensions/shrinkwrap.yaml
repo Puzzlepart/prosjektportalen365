@@ -19,7 +19,7 @@ dependencies:
   react-dom: 16.3.2
   sp-entityportal-service: 0.6.2
   sp-hubsite-service: 0.1.0
-  sp-js-provisioning: 0.10.5
+  sp-js-provisioning: 0.10.6
   spfx-jsom: 0.6.0
   string-format: 2.0.0
 devDependencies:
@@ -10344,7 +10344,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-RX8QB/sNP/16pff/iEdxO/0LMw7LS/oFEhEGuG+TNwEzfrmq3HQ+WoKE1XOoKIjlJT3/rC37jxIJpxweasDJfg==
-  /sp-js-provisioning/0.10.5:
+  /sp-js-provisioning/0.10.6:
     dependencies:
       '@pnp/common': 1.3.2
       '@pnp/logging': 1.3.2
@@ -10357,7 +10357,7 @@ packages:
       xml-js: 1.6.11
     dev: false
     resolution:
-      integrity: sha512-JTuUWSs5vxhjfZHSYsC4yNcH/wcChiLMbI3NYwz4JmD1MIX05NuB3htE7GTFBPsotGdLrYeB+3pNeAz+Q1UEcg==
+      integrity: sha512-poHbd+mgxmmpjwfkXqh72XPV/Me5qEOEKMsoq3MyffQBJ4jZ19O6Qg0z871fRpdMaZPe9QrsBLuGvmjo0opbJA==
   /sp-pnp-js/3.0.10:
     dependencies:
       '@microsoft/microsoft-graph-types': 1.1.0
@@ -12251,7 +12251,7 @@ specifiers:
   react-dom: 16.3.2
   sp-entityportal-service: ^0.6.2
   sp-hubsite-service: ^0.1.0
-  sp-js-provisioning: ^0.10.5
+  sp-js-provisioning: ^0.10.6
   spfx-jsom: ^0.6.0
   spfx-pkgdeploy: ^0.3.0
   string-format: ^2.0.0
