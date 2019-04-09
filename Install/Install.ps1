@@ -1,11 +1,9 @@
 Param(
     [Parameter(Mandatory = $true, HelpMessage = "N/A")]
-    [string]$AppCatalogUrl,
-    [Parameter(Mandatory = $true, HelpMessage = "N/A")]
-    [string]$Title,
-    [Parameter(Mandatory = $true, HelpMessage = "N/A")]
-    [string]$Alias,
-    [Parameter(Mandatory = $true, HelpMessage = "Stored credential from Windows Credential Manager")]
+    [string]$Url,
+    [Parameter(Mandatory = $false, HelpMessage = "N/A")]
+    [string]$Title = "Prosjektportalen",
+    [Parameter(Mandatory = $false, HelpMessage = "Stored credential from Windows Credential Manager")]
     [string]$GenericCredential,
     [Parameter(Mandatory = $false, HelpMessage = "Skip PnP template")]
     [switch]$SkipTemplate,
@@ -14,9 +12,12 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "Skip app packages")]
     [switch]$SkipAppPackages,
     [Parameter(Mandatory = $false, HelpMessage = "Skip site creation")]
-    [switch]$SkipSiteCreation    
+    [switch]$SkipSiteCreation,
+    [Parameter(Mandatory = $false, HelpMessage = "Skip site creation")]
+    [switch]$SiteDesignName = "Prosjektområde"
 )
 
+$sw = [Diagnostics.Stopwatch]::StartNew()
 
 function Connect-SharePoint {
     Param(
@@ -35,20 +36,14 @@ function Connect-SharePoint {
     return $Connection
 }
 
-[System.Uri]$AppCatalogUri = $AppCatalogUrl
-$AdminSiteUrl = (@($AppCatalogUri.Scheme, "://", $AppCatalogUri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
-$PortfolioSiteUrl = @($AppCatalogUri.Scheme, "://", $AppCatalogUri.Authority, "/sites/", $Alias) -join ""
-$AppCatalogSiteConnection = $null
+[System.Uri]$Uri = $Url
+$Alias = $Uri.Segments[$Uri.Segments.Segments.Length - 1]
 $AdminSiteConnection = $null
-$PortfolioSiteConnection = $null
+$AppCatalogSiteConnection = $null
+$SiteConnection = $null
+$AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
+$TenantAppCatalogUrl = $null
 
-Try {
-    $AppCatalogSiteConnection = Connect-SharePoint -Url $AppCatalogUrl -ErrorAction Stop
-}
-Catch {
-    Write-Host "[INFO] Failed to connect to [$AppCatalogUrl]: $($_.Exception.Message)"
-    exit 0
-}
 
 Try {
     $AdminSiteConnection = Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
@@ -58,16 +53,31 @@ Catch {
     exit 0
 }
 
-if(-not $SkipSiteCreation.IsPresent) {
+Try {
+    $TenantAppCatalogUrl = Get-PnPTenantAppCatalogUrl -Connection $AdminSiteConnection
+}
+Catch {
+    
+}
+
+Try {
+    $AppCatalogSiteConnection = Connect-SharePoint -Url $TenantAppCatalogUrl -ErrorAction Stop
+}
+Catch {
+    Write-Host "[INFO] Failed to connect to [$TenantAppCatalogUrl]: $($_.Exception.Message)"
+    exit 0
+}
+
+if (-not $SkipSiteCreation.IsPresent) {
     Try {
-        $PortfolioSite = Get-PnPTenantSite -Url $PortfolioSiteUrl -Connection $AdminSiteConnection -ErrorAction SilentlyContinue
+        $PortfolioSite = Get-PnPTenantSite -Url $Url -Connection $AdminSiteConnection -ErrorAction SilentlyContinue
         if ($null -eq $PortfolioSite) {
-            Write-Host "[INFO] Creating portfolio site at [$PortfolioSiteUrl]"
-            $PortfolioSiteUrl = New-PnPSite -Type TeamSite  -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Connection $AppCatalogSiteConnection -Lcid 1044
-            Write-Host "[INFO] Portfolio site created at [$PortfolioSiteUrl]" -ForegroundColor Green
+            Write-Host "[INFO] Creating portfolio site at [$Url]"
+            New-PnPSite -Type TeamSite  -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Connection $AppCatalogSiteConnection -Lcid 1044
+            Write-Host "[INFO] Portfolio site created at [$Url]" -ForegroundColor Green
         }
-        Register-PnPHubSite -Site $PortfolioSiteUrl -ErrorAction SilentlyContinue -Connection $AdminSiteConnection 
-        Write-Host "[INFO] Portfolio site [$PortfolioSiteUrl] promoted to hub site" -ForegroundColor Green
+        Register-PnPHubSite -Site $Url -ErrorAction SilentlyContinue -Connection $AdminSiteConnection 
+        Write-Host "[INFO] Portfolio site [$Url] promoted to hub site" -ForegroundColor Green
     }
     Catch {
         Write-Host "[INFO] Failed to create site and promote to hub site: $($_.Exception.Message)"
@@ -76,28 +86,28 @@ if(-not $SkipSiteCreation.IsPresent) {
 }
 
 Try {
-    $PortfolioSiteConnection = Connect-SharePoint -Url $PortfolioSiteUrl -ErrorAction Stop
+    $SiteConnection = Connect-SharePoint -Url $Url -ErrorAction Stop
 }
 Catch {
-    Write-Host "[INFO] Failed to connect to [$PortfolioSiteUrl]: $($_.Exception.Message)"
+    Write-Host "[INFO] Failed to connect to [$Url]: $($_.Exception.Message)"
     exit 0
 }
 
-if(-not $SkipTemplate.IsPresent) {
+if (-not $SkipTemplate.IsPresent) {
     Try {
         Set-PnPTraceLog -Level Debug -On
-        Write-Host "[INFO] Applying PnP template [Portal] to [$PortfolioSiteUrl]"
-        Apply-PnPProvisioningTemplate .\Templates\Portal.pnp -Connection $PortfolioSiteConnection -ErrorAction Stop
+        Write-Host "[INFO] Applying PnP template [Portal] to [$Url]"
+        Apply-PnPProvisioningTemplate .\Templates\Portal.pnp -Connection $SiteConnection -ErrorAction Stop
     }
     Catch {
-        Write-Host "[INFO] Failed to apply PnP template [Portal] to [$PortfolioSiteUrl]: $($_.Exception.Message)"
+        Write-Host "[INFO] Failed to apply PnP template [Portal] to [$Url]: $($_.Exception.Message)"
         exit 0
     }
     Set-PnPTraceLog -Off
 }
 
 
-if(-not $SkipSiteDesign.IsPresent) {
+if (-not $SkipSiteDesign.IsPresent) {
     $SiteScriptIds = @()
 
     Try {
@@ -125,15 +135,15 @@ if(-not $SkipSiteDesign.IsPresent) {
     Try {
         Write-Host "[INFO] Installing site design"
     
-        $SiteDesign = Get-PnPSiteDesign -Identity "Prosjektportalen" -Connection $AdminSiteConnection
+        $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName -Connection $AdminSiteConnection
 
         if ($null -ne $SiteDesign) {
-            Write-Host "[INFO] Updating existing site design [Prosjektportalen]"
+            Write-Host "[INFO] Updating existing site design [$SiteDesignName]"
             $SiteDesign = Set-PnPSiteDesign -Identity $SiteDesign -SiteScriptIds $SiteScriptIds -Description "" -Version "1" -Connection $AdminSiteConnection
         }
         else {
-            Write-Host "[INFO] Creating new site design [Prosjektportalen]"
-            $SiteDesign = Add-PnPSiteDesign -Title "Prosjektportalen" -SiteScriptIds $SiteScriptIds -Description "" -WebTemplate TeamSite -Connection $AdminSiteConnection
+            Write-Host "[INFO] Creating new site design [$SiteDesignName]"
+            $SiteDesign = Add-PnPSiteDesign -Title $SiteDesignName -SiteScriptIds $SiteScriptIds -Description "" -WebTemplate TeamSite -Connection $AdminSiteConnection
         }
     }
     Catch {
@@ -142,7 +152,7 @@ if(-not $SkipSiteDesign.IsPresent) {
     }
 }
 
-if(-not $SkipAppPackages.IsPresent) {
+if (-not $SkipAppPackages.IsPresent) {
     Try {
         Write-Host "[INFO] Installing SharePoint Framework app packages to [$AppCatalogUrl]"
         $AppPackages = @(
@@ -162,8 +172,10 @@ if(-not $SkipAppPackages.IsPresent) {
     }
 }
 
-Write-Host "[INFO] Installation done" -ForegroundColor Green
+$sw.Stop()
+
+Write-Host "[INFO] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
 
 Disconnect-PnPOnline -Connection $AppCatalogSiteConnection
 Disconnect-PnPOnline -Connection $AdminSiteConnection
-Disconnect-PnPOnline -Connection $PortfolioSiteConnection
+Disconnect-PnPOnline -Connection $SiteConnection

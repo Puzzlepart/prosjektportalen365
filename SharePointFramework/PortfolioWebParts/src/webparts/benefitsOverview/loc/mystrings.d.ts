@@ -10,6 +10,7 @@ declare interface IBenefitsOverviewWebPartStrings {
   DesiredValueLabel: string;
   MeasurementDateLabel: string;
   MeasurementValueLabel: string;
+  MeasurementCommentLabel: string;
   MeasurementAchievementLabel: string;
   LastMeasurementLabel: string;
   ShowAllMeasurementsLinkText: string;

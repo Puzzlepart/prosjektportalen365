@@ -253,6 +253,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
    * @param {any} _event Event
    * @param {IColumn} column The column config
    */
+  @autobind
   private onColumnSort(_event: any, column: IColumn): void {
     let { items, columns } = ({ ...this.state } as IPortfolioOverviewState);
 

@@ -10,6 +10,7 @@ define([], function () {
     "UnitLabel": "Måleenhet",
     "StartValueLabel": "Startverdi",
     "DesiredValueLabel": "Ønsket verdi",
+    "MeasurementCommentLabel": "Kommentar til måling",
     "MeasurementDateLabel": "Dato for måling",
     "MeasurementValueLabel": "Målt verdi",
     "MeasurementAchievementLabel": "Måloppnåelse",

@@ -1,2 +1,2 @@
-declare const _default: (dateStr: string) => string;
+declare const _default: (dateStr: string, fallback?: string) => string;
 export default _default;

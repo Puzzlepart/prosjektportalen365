@@ -548,10 +548,6 @@
                 "Title": "Usikkerhet"
             },
             {
-                "Url": "Lists/Mtekalender/calendar.aspx",
-                "Title": "Møtekalender"
-            },
-            {
                 "Url": "Dokumenter/Forms/AllItems.aspx",
                 "Title": "Dokumenter"
             },
@@ -1146,21 +1142,6 @@
                     }
                 }
             ]
-        },
-        {
-            "Title": "Møtekalender",
-            "Description": "",
-            "Template": 106,
-            "ContentTypesEnabled": true,
-            "RemoveExistingContentTypes": true,
-            "ContentTypeBindings": [
-                {
-                    "ContentTypeID": "0x010200C19C974828B24D469B69C22B2D1FFB63"
-                }
-            ],
-            "AdditionalSettings": {
-                "EnableVersioning": true
-            }
         },
         {
             "Title": "Dokumenter",

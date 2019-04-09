@@ -60,7 +60,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Økonomi</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* (GtProjectManagerOWSUSER:{User.Name} OR GtProjectOwnerOWSUSER:{User.Name})</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioIsDefaultView">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioFabricIcon">Money</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumns">1,7,14,15,16</pnp:DataValue>

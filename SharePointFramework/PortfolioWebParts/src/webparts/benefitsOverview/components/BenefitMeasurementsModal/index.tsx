@@ -4,8 +4,8 @@ import styles from './BenefitMeasurementsModal.module.scss';
 import { Modal, IModalProps } from 'office-ui-fabric-react/lib/Modal';
 import { DetailsList, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
-import { BenefitMeasurement, BenefitMeasurementIndicator } from 'prosjektportalen-spfx-shared/lib/models';
 import { BenefitMeasurementsModalColumns } from './BenefitMeasurementsModalColumns';
+import { BenefitMeasurementIndicator, BenefitMeasurement } from '../../models';
 import * as objectGet from 'object-get';
 
 export interface IBenefitMeasurementsModalProps extends IModalProps {

@@ -9,7 +9,7 @@
   },
   "serveConfigurations": {
     "default": {
-      "pageUrl": "https://pzlcloud.sharepoint.com/sites/Dynamic3652021/_layouts/15/viewlsts.aspx/_layouts/15/viewlsts.aspx",
+      "pageUrl": "https://pzlcloud.sharepoint.com/sites/Offentligeskytjenesterivinden/_layouts/15/viewlsts.aspx",
       "customActions": {
         "ce34553d-ab47-4107-8dd1-e980d953996d": {
           "location": "ClientSideExtension.ApplicationCustomizer",
@@ -27,7 +27,7 @@
       }
     },
     "projectSetup": {
-      "pageUrl": "https://pzlcloud.sharepoint.com/sites/Dynamic3652021/_layouts/15/viewlsts.aspx",
+      "pageUrl": "https://pzlcloud.sharepoint.com/sites/Offentligeskytjenesterivinden/_layouts/15/viewlsts.aspx",
       "customActions": {
         "ce34553d-ab47-4107-8dd1-e980d953996d": {
           "location": "ClientSideExtension.ApplicationCustomizer",

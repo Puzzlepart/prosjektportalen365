@@ -6,7 +6,7 @@ define([], function () {
     "NotSet": "Ikke satt",
     "ProjectOwner": "Prosjekteier",
     "ProjectManager": "Prosjektleder",
-    "SearchBoxPlaceholderText": "Søk i alle prosjekter...",
+    "SearchBoxPlaceholderText": "Søk i prosjekter du er medlem av...",
     "NoSearchResults": "Søket ga ingen resultater",
     "MissingProperties": "Prosjektet mangler egenskaper",
     "NoProperties": "Det er ikke satt noen egenskaper for prosjektet",

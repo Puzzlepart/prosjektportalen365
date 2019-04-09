@@ -3,6 +3,11 @@ declare interface IDeliveriesOverviewWebPartStrings {
   LoadingText: string;
   NoGroupingText: string;
   SearchBoxLabelText: string;
+  DeliveryDescriptionLabel: string;
+  DeliveryStartTimeLabel: string;
+  DeliveryEndTimeLabel: string;
+  DeliveryStatusLabel: string;
+  DeliveryStatusCommentLabel: string;
 }
 
 declare module 'DeliveriesOverviewWebPartStrings' {

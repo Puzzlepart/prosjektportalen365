@@ -1,10 +1,10 @@
 {
   "name": "prosjektportalen365",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Prosjektportalen 365",
   "main": "n/a",
   "scripts": {
-    "make-install": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Make-Install.ps1"
+    "build-release": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1"
   },
   "repository": {
     "type": "git",

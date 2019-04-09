@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styles from './BenefitsOverview.module.scss';
 import { IBenefitsOverviewProps, BenefitsOverviewDefaultProps } from './IBenefitsOverviewProps';
-import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from 'prosjektportalen-spfx-shared/lib/models';
 import AggregatedSearchList from '../../../components/AggregatedSearchList';
 import { GetColumns } from './BenefitsOverviewColumns';
 import getObjectValue from 'prosjektportalen-spfx-shared/lib/helpers/getObjectValue';
+import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from '../models';
 
 export default class BenefitsOverview extends React.Component<IBenefitsOverviewProps, {}> {
   public static defaultProps = BenefitsOverviewDefaultProps;

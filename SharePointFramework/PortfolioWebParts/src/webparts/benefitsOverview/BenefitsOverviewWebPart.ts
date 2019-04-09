@@ -7,7 +7,6 @@ import { Logger, LogLevel } from '@pnp/logging';
 
 export default class BenefitsOverviewWebPart extends PortfolioBaseWebPart<IBenefitsOverviewWebPartProps> {
   public render(): void {
-    console.log(this.context.pageContext.legacyPageContext.siteId, this.context.pageContext.legacyPageContext.hubSiteId);
     Logger.log({ message: '(BenefitsOverviewWebPart) render: Rendering <BenefitsOverview />', level: LogLevel.Info });
     const element: React.ReactElement<IBenefitsOverviewProps> = React.createElement(BenefitsOverview, { ...this.properties, legacyPageContext: this.context.pageContext.legacyPageContext });
     super._render(this.manifest.alias, element);
