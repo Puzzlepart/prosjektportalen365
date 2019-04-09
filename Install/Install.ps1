@@ -15,6 +15,7 @@ Param(
     [switch]$SkipSiteCreation    
 )
 
+$sw = [Diagnostics.Stopwatch]::StartNew()
 
 function Connect-SharePoint {
     Param(
@@ -132,7 +133,7 @@ if (-not $SkipSiteDesign.IsPresent) {
     Try {
         Write-Host "[INFO] Installing site design"
     
-        $SiteDesign = Get-PnPSiteDesign -Identity "Prosjektportalen" -Connection $AdminSiteConnection
+        $SiteDesign = Get-PnPSiteDesign -Identity "Prosjektområde" -Connection $AdminSiteConnection
 
         if ($null -ne $SiteDesign) {
             Write-Host "[INFO] Updating existing site design [Prosjektportalen]"
@@ -169,7 +170,9 @@ if (-not $SkipAppPackages.IsPresent) {
     }
 }
 
-Write-Host "[INFO] Installation done" -ForegroundColor Green
+$sw.Stop()
+
+Write-Host "[INFO] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
 
 Disconnect-PnPOnline -Connection $AppCatalogSiteConnection
 Disconnect-PnPOnline -Connection $AdminSiteConnection
