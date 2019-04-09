@@ -650,7 +650,16 @@
                                     "Properties": {
                                         "isDocumentLibrary": true,
                                         "selectedListId": "{listid:Dokumenter}",
+                                        "selectedViewId": "{listviewid:Dokumenter|Gjeldende fase}",                                        
                                         "webpartHeightKey": 4
+                                    }
+                                },
+                                {
+                                    "Id": "6676088b-e28e-4a90-b9cb-d0d0303cd2eb",
+                                    "Properties": {
+                                        "showPerPage": 5,
+                                        "title": "Møter og hendelser",
+                                        "timeSpanLimitInMonth": 6
                                     }
                                 }
                             ]
