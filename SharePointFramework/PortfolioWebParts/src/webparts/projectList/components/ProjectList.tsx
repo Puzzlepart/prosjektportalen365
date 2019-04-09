@@ -9,7 +9,7 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { Modal } from 'office-ui-fabric-react/lib/Modal';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import ProjectCard from './ProjectCard/ProjectCard';
-import { sp, QueryPropertyValueType } from '@pnp/sp';
+import { sp } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
 import ProjectInformation from '../../../../../ProjectWebParts/lib/webparts/projectInformation/components/ProjectInformation';
 import { ProjectListModel } from 'prosjektportalen-spfx-shared/lib/models/ProjectListModel';
@@ -47,26 +47,13 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
     }
     return (
       <div className={styles.projectList}>
-        {this.state.selectedProject && (
-          <Modal
-            isOpen={true}
-            containerClassName={styles.projectInfoModal}
-            onDismiss={_e => this.setState({ selectedProject: null })}>
-            <ProjectInformation
-              title={this.state.selectedProject.Title}
-              entity={{ webUrl: this.props.siteAbsoluteUrl, ...this.props.entity }}
-              hubSiteUrl={this.props.siteAbsoluteUrl}
-              siteId={this.state.selectedProject.Id}
-              hideEditPropertiesButton={true}
-              filterField='GtShowFieldPortfolio' />
-          </Modal>
-        )}
         <div className={styles.searchBox}>
           <SearchBox placeholder={strings.SearchBoxPlaceholderText} onChanged={this.onSearch} />
         </div>
         <div className={styles.container}>
           {this.renderCards()}
         </div>
+        {this.renderProjectInformation()}
       </div>
     );
   }
@@ -85,6 +72,29 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         onClickHref={project.Url}
         selectedProject={this.onSelectProject} />
     ));
+  }
+
+  /**
+   * Render <ProjectInformation /> in a <Modal />
+   */
+  private renderProjectInformation() {
+    if (this.state.selectedProject) {
+      return (
+        <Modal
+          isOpen={true}
+          containerClassName={styles.projectInfoModal}
+          onDismiss={() => this.setState({ selectedProject: null })}>
+          <ProjectInformation
+            title={this.state.selectedProject.Title}
+            entity={{ webUrl: this.props.siteAbsoluteUrl, ...this.props.entity }}
+            hubSiteUrl={this.props.siteAbsoluteUrl}
+            siteId={this.state.selectedProject.Id}
+            hideEditPropertiesButton={true}
+            filterField='GtShowFieldPortfolio' />
+        </Modal>
+      );
+    }
+    return null;
   }
 
   /**
@@ -134,16 +144,27 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   /**
    * Fetch data
    */
-  private async fetchData(): Promise<ProjectListModel[]> {
+  private async fetchData(web = sp.web): Promise<ProjectListModel[]> {
     let [items, groups, users, phaseTerms] = await Promise.all([
-      sp.web.lists.getByTitle(this.props.entity.listName)
+      web
+        .lists
+        .getByTitle(this.props.entity.listName)
         .items
         .select('GtGroupId', 'GtSiteId', 'GtSiteUrl', 'GtProjectOwnerId', 'GtProjectManagerId', 'GtProjectPhase')
         .usingCaching()
         .get<{ GtGroupId: string, GtSiteId: string, GtSiteUrl: string, GtProjectOwnerId: number, GtProjectManagerId: number, GtProjectPhase: { TermGuid: string } }[]>(),
       MSGraph.Get<{ id: string, displayName: string }[]>(`/me/memberOf/$/microsoft.graph.group`, 'v1.0', ['id', 'displayName'], `groupTypes/any(a:a%20eq%20'unified')`),
-      sp.web.siteUsers.usingCaching().get(),
-      taxonomy.getDefaultSiteCollectionTermStore().getTermSetById(this.props.phaseTermSetId).terms.usingCaching().get(),
+      web
+        .siteUsers
+        .select("Id", "Title", "Email")
+        .usingCaching()
+        .get<{ Id: number, Title: string, Email: string }[]>(),
+      taxonomy
+        .getDefaultSiteCollectionTermStore()
+        .getTermSetById(this.props.phaseTermSetId)
+        .terms
+        .usingCaching()
+        .get(),
     ]);
 
     let projects = items

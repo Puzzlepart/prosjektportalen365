@@ -46,21 +46,14 @@ $TenantAppCatalogUrl = $null
 
 Set-PnPTraceLog -On -Level Debug -LogFile InstallLog.txt
 
-
 Try {
-    $TenantAppCatalogUrl = Get-PnPTenantAppCatalogUrl -Connection $AdminSiteConnection
+    $AdminSiteConnection = Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
 }
 Catch {
-    
-}
-
-Try {
-    $AppCatalogSiteConnection = Connect-SharePoint -Url $TenantAppCatalogUrl -ErrorAction Stop
-}
-Catch {
-    Write-Host "[INFO] Failed to connect to [$TenantAppCatalogUrl]: $($_.Exception.Message)"
+    Write-Host "[INFO] Failed to connect to [$AdminSiteUrl]: $($_.Exception.Message)"
     exit 0
 }
+
 
 if (-not $SkipSiteCreation.IsPresent) {
     Try {
@@ -156,16 +149,11 @@ if (-not $SkipSiteDesign.IsPresent) {
 if (-not $SkipAppPackages.IsPresent) {
     Try {
         $TenantAppCatalogUrl = Get-PnPTenantAppCatalogUrl -Connection $AdminSiteConnection
-    }
-    Catch {
-        
-    }    
-    Try {
         $AppCatalogSiteConnection = Connect-SharePoint -Url $TenantAppCatalogUrl -ErrorAction Stop
     }
     Catch {
         Write-Host "[INFO] Failed to connect to [$TenantAppCatalogUrl]: $($_.Exception.Message)"
-        exit 0
+        exit 0 
     }
     Try {
         Write-Host "[INFO] Installing SharePoint Framework app packages to [$AppCatalogUrl]"
@@ -174,10 +162,7 @@ if (-not $SkipAppPackages.IsPresent) {
             ".\Apps\pp-project-extensions.sppkg",
             ".\Apps\pp-project-web-parts.sppkg"
         )
-        $AppPackages | ForEach-Object {
-            $AppPackage = Get-ChildItem $_.
-            Add-PnPApp -Path $AppPackage.FullName -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop -Connection $AppCatalogSiteConnection
-        }
+        $AppPackages | ForEach-Object { Add-PnPApp -Path $_ -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop -Connection $AppCatalogSiteConnection }
         Write-Host "[INFO] SharePoint Framework app packages successfully installed to [$AppCatalogUrl]" -ForegroundColor Green
     }
     Catch {
