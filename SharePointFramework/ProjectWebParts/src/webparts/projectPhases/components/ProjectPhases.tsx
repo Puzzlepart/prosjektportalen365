@@ -141,26 +141,18 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    * @param {string} phaseTermName Phase term name
    */
   private async modifiyFrontpageViews(phaseTermName: string) {
-    const { web, updateViewsDocuments, updateViewsRisks, updateViewName } = this.props;
-    const listsToUpdate = [updateViewsDocuments && strings.DocumentsListName, updateViewsRisks && strings.RiskRegisterListName].filter(l => l);
-    const viewsPromises = listsToUpdate.map(t => web.lists.getByTitle(t).views.get());
-    const viewsResult = await Promise.all(viewsPromises);
-    for (let i = 0; i < viewsResult.length; i++) {
-      const listName = listsToUpdate[i];
-      const [frontpageView] = viewsResult[i].filter(v => v.Title === updateViewName);
-      if (frontpageView) {
-        const pnpFrontpageView = web.lists.getByTitle(listName).views.getById(frontpageView.Id);
-        const { ViewQuery } = await pnpFrontpageView.select('ViewQuery').get();
-        const viewQueryDom = new DOMParser().parseFromString(`<Query>${ViewQuery}</Query>`, 'text/xml');
-        const orderByDomElement = viewQueryDom.getElementsByTagName('OrderBy')[0];
-        const orderBy = orderByDomElement ? orderByDomElement.outerHTML : '';
-        const newViewQuery = [orderBy, `<Where><Eq><FieldRef Name='GtProjectPhase' /><Value Type='Text'>${phaseTermName}</Value></Eq></Where>`].join('');
-        try {
-          await pnpFrontpageView.update({ ViewQuery: newViewQuery });
-          Logger.write(`(ProjectPhases) modifiyFrontpageViews: Successfully updated ViewQuery for view '${updateViewName}' for list '${listName}'`, LogLevel.Info);
-        } catch (err) {
-          Logger.write(`(ProjectPhases) modifiyFrontpageViews: Failed to update ViewQuery for view '${updateViewName}' for list '${listName}'`, LogLevel.Error);
-        }
+    const documentsViews = sp.web.lists.getByTitle(strings.DocumentsListName).views;
+    let [documentsFrontpageView] = await documentsViews.select('Id', 'ViewQuery').filter(`Title eq '${this.props.currentPhaseViewName}'`).get<{ Id: string, ViewQuery: string }[]>();
+    if (documentsFrontpageView) {
+      const viewQueryDom = new DOMParser().parseFromString(`<Query>${documentsFrontpageView.ViewQuery}</Query>`, 'text/xml');
+      const orderByDomElement = viewQueryDom.getElementsByTagName('OrderBy')[0];
+      const orderBy = orderByDomElement ? orderByDomElement.outerHTML : '';
+      const newViewQuery = [orderBy, `<Where><Eq><FieldRef Name='GtProjectPhase' /><Value Type='Text'>${phaseTermName}</Value></Eq></Where>`].join('');
+      try {
+        await documentsViews.getById(documentsFrontpageView.Id).update({ ViewQuery: newViewQuery });
+        Logger.write(`(ProjectPhases) modifiyFrontpageViews: Successfully updated ViewQuery for view '${this.props.currentPhaseViewName}' for list '${strings.DocumentsListName}'`, LogLevel.Info);
+      } catch (err) {
+        Logger.write(`(ProjectPhases) modifiyFrontpageViews: Failed to update ViewQuery for view '${this.props.currentPhaseViewName}' for list '${strings.DocumentsListName}'`, LogLevel.Error);
       }
     }
   }
@@ -196,7 +188,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    */
   private async fetchData(checklistData: ChecklistData): Promise<IProjectPhasesData> {
     Logger.log({ message: '(ProjectPhases) fetchData: Fetching TermSetId for selected field', level: LogLevel.Info });
-    const { web, spEntityPortalService, phaseField, context } = this.props;
+    const { spEntityPortalService, web, phaseField, context } = this.props;
     try {
       const [{ TermSetId: termSetId }, phaseTextField] = await Promise.all([
         web.fields.getByInternalNameOrTitle(phaseField).select('TermSetId').usingCaching().get(),
