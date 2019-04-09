@@ -14,7 +14,7 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "Skip site creation")]
     [switch]$SkipSiteCreation,
     [Parameter(Mandatory = $false, HelpMessage = "Skip site creation")]
-    [switch]$SiteDesignName = "Prosjektområde"
+    [string]$SiteDesignName = "Prosjektområde"
 )
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
@@ -44,14 +44,8 @@ $SiteConnection = $null
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
 $TenantAppCatalogUrl = $null
 
+Set-PnPTraceLog -On -Level Debug -LogFile InstallLog.txt
 
-Try {
-    $AdminSiteConnection = Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
-}
-Catch {
-    Write-Host "[INFO] Failed to connect to [$AdminSiteUrl]: $($_.Exception.Message)"
-    exit 0
-}
 
 Try {
     $TenantAppCatalogUrl = Get-PnPTenantAppCatalogUrl -Connection $AdminSiteConnection
@@ -73,7 +67,7 @@ if (-not $SkipSiteCreation.IsPresent) {
         $PortfolioSite = Get-PnPTenantSite -Url $Url -Connection $AdminSiteConnection -ErrorAction SilentlyContinue
         if ($null -eq $PortfolioSite) {
             Write-Host "[INFO] Creating portfolio site at [$Url]"
-            New-PnPSite -Type TeamSite  -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Connection $AppCatalogSiteConnection -Lcid 1044
+            New-PnPSite -Type TeamSite  -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Connection $AppCatalogSiteConnection -Lcid 1044 >$null 2>&1
             Write-Host "[INFO] Portfolio site created at [$Url]" -ForegroundColor Green
         }
         Register-PnPHubSite -Site $Url -ErrorAction SilentlyContinue -Connection $AdminSiteConnection 
@@ -86,6 +80,15 @@ if (-not $SkipSiteCreation.IsPresent) {
 }
 
 Try {
+    Write-Host "[INFO] Clearing QuickLaunch"    
+    Get-PnPNavigationNode -Location QuickLaunch | ForEach-Object { Remove-PnPNavigationNode -Identity $_.Id -Location QuickLaunch -Force }
+}
+Catch {
+    Write-Host "[INFO] Failed to clear QuickLaunch: $($_.Exception.Message)"
+    exit 0
+}
+
+Try {
     $SiteConnection = Connect-SharePoint -Url $Url -ErrorAction Stop
 }
 Catch {
@@ -95,7 +98,6 @@ Catch {
 
 if (-not $SkipTemplate.IsPresent) {
     Try {
-        Set-PnPTraceLog -Level Debug -On
         Write-Host "[INFO] Applying PnP template [Portal] to [$Url]"
         Apply-PnPProvisioningTemplate .\Templates\Portal.pnp -Connection $SiteConnection -ErrorAction Stop
     }
@@ -103,7 +105,6 @@ if (-not $SkipTemplate.IsPresent) {
         Write-Host "[INFO] Failed to apply PnP template [Portal] to [$Url]: $($_.Exception.Message)"
         exit 0
     }
-    Set-PnPTraceLog -Off
 }
 
 
@@ -153,6 +154,19 @@ if (-not $SkipSiteDesign.IsPresent) {
 }
 
 if (-not $SkipAppPackages.IsPresent) {
+    Try {
+        $TenantAppCatalogUrl = Get-PnPTenantAppCatalogUrl -Connection $AdminSiteConnection
+    }
+    Catch {
+        
+    }    
+    Try {
+        $AppCatalogSiteConnection = Connect-SharePoint -Url $TenantAppCatalogUrl -ErrorAction Stop
+    }
+    Catch {
+        Write-Host "[INFO] Failed to connect to [$TenantAppCatalogUrl]: $($_.Exception.Message)"
+        exit 0
+    }
     Try {
         Write-Host "[INFO] Installing SharePoint Framework app packages to [$AppCatalogUrl]"
         $AppPackages = @(
