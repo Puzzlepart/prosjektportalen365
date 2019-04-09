@@ -1,10 +1,10 @@
 Param(
-    [Parameter(Mandatory = $false, HelpMessage = "N/A")]
-    [string]$Url = "https://pzlcloud.sharepoint.com/sites/pp3test",
+    [Parameter(Mandatory = $true, HelpMessage = "N/A")]
+    [string]$Url,
     [Parameter(Mandatory = $false, HelpMessage = "N/A")]
     [string]$Title = "Prosjektportalen",
     [Parameter(Mandatory = $false, HelpMessage = "Stored credential from Windows Credential Manager")]
-    [string]$GenericCredential = "pzlcloud",
+    [string]$GenericCredential,
     [Parameter(Mandatory = $false, HelpMessage = "Skip PnP template")]
     [switch]$SkipTemplate,
     [Parameter(Mandatory = $false, HelpMessage = "Skip Site Design")]
@@ -12,7 +12,9 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "Skip app packages")]
     [switch]$SkipAppPackages,
     [Parameter(Mandatory = $false, HelpMessage = "Skip site creation")]
-    [switch]$SkipSiteCreation    
+    [switch]$SkipSiteCreation,
+    [Parameter(Mandatory = $false, HelpMessage = "Skip site creation")]
+    [switch]$SiteDesignName = "Prosjektområde"
 )
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
@@ -133,15 +135,15 @@ if (-not $SkipSiteDesign.IsPresent) {
     Try {
         Write-Host "[INFO] Installing site design"
     
-        $SiteDesign = Get-PnPSiteDesign -Identity "Prosjektområde" -Connection $AdminSiteConnection
+        $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName -Connection $AdminSiteConnection
 
         if ($null -ne $SiteDesign) {
-            Write-Host "[INFO] Updating existing site design [Prosjektområde]"
+            Write-Host "[INFO] Updating existing site design [$SiteDesignName]"
             $SiteDesign = Set-PnPSiteDesign -Identity $SiteDesign -SiteScriptIds $SiteScriptIds -Description "" -Version "1" -Connection $AdminSiteConnection
         }
         else {
-            Write-Host "[INFO] Creating new site design [Prosjektområde]"
-            $SiteDesign = Add-PnPSiteDesign -Title "Prosjektområde" -SiteScriptIds $SiteScriptIds -Description "" -WebTemplate TeamSite -Connection $AdminSiteConnection
+            Write-Host "[INFO] Creating new site design [$SiteDesignName]"
+            $SiteDesign = Add-PnPSiteDesign -Title $SiteDesignName -SiteScriptIds $SiteScriptIds -Description "" -WebTemplate TeamSite -Connection $AdminSiteConnection
         }
     }
     Catch {
