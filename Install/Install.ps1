@@ -136,12 +136,12 @@ if (-not $SkipSiteDesign.IsPresent) {
         $SiteDesign = Get-PnPSiteDesign -Identity "Prosjektområde" -Connection $AdminSiteConnection
 
         if ($null -ne $SiteDesign) {
-            Write-Host "[INFO] Updating existing site design [Prosjektportalen]"
+            Write-Host "[INFO] Updating existing site design [Prosjektområde]"
             $SiteDesign = Set-PnPSiteDesign -Identity $SiteDesign -SiteScriptIds $SiteScriptIds -Description "" -Version "1" -Connection $AdminSiteConnection
         }
         else {
-            Write-Host "[INFO] Creating new site design [Prosjektportalen]"
-            $SiteDesign = Add-PnPSiteDesign -Title "Prosjektportalen" -SiteScriptIds $SiteScriptIds -Description "" -WebTemplate TeamSite -Connection $AdminSiteConnection
+            Write-Host "[INFO] Creating new site design [Prosjektområde]"
+            $SiteDesign = Add-PnPSiteDesign -Title "Prosjektområde" -SiteScriptIds $SiteScriptIds -Description "" -WebTemplate TeamSite -Connection $AdminSiteConnection
         }
     }
     Catch {

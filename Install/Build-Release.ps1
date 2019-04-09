@@ -8,7 +8,7 @@ mkdir "$ReleasePath/Templates" >$null 2>&1
 mkdir "$ReleasePath/SiteScripts" >$null 2>&1
 mkdir "$ReleasePath/Apps" >$null 2>&1
 
-Write-Host "[INFO] Building release v$($PackageJson.version)"
+Write-Host "[INFO] Building release [v$($PackageJson.version)]"
 
 Write-Host "[INFO] Copying resources"
 Copy-Item -Path "$PSScriptRoot/../SiteScripts/Src/" -Filter *.txt -Destination "$ReleasePath/SiteScripts" -Recurse -Force
