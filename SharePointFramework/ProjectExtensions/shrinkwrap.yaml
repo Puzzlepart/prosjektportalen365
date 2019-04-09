@@ -19,7 +19,7 @@ dependencies:
   react-dom: 16.3.2
   sp-entityportal-service: 0.6.2
   sp-hubsite-service: 0.1.0
-  sp-js-provisioning: 0.10.3
+  sp-js-provisioning: 0.10.5
   spfx-jsom: 0.6.0
   string-format: 2.0.0
 devDependencies:
@@ -215,10 +215,10 @@ packages:
   /@microsoft/load-themed-styles/1.8.64:
     resolution:
       integrity: sha512-FLFjtEzWBfvyCs2mR2oRfApIhv1dlEdRgNaTBOcPWaI7sJd+7CZ9EGlftEU0Qz2e7+yifYcWh1Rd0Qx0NPur8w==
-  /@microsoft/load-themed-styles/1.8.80:
+  /@microsoft/load-themed-styles/1.8.82:
     dev: false
     resolution:
-      integrity: sha512-8MVseQsqYFDu4mjH+Nwrd2pjKyrkEyEZx2OBDwp/OaO9ukYaT64fwD4C8OROQkdRy4k/y7hxxxBnKV//DGvP4Q==
+      integrity: sha512-GbyCM+IOLF314lGjNP79HStJbIEmJ/CmL7rjbtk9BQYc5u5oAkYocf0qII3dIHwq9qabtdYnzKDWEYrIow1uVQ==
   /@microsoft/loader-cased-file/1.7.1/webpack@3.6.0:
     dependencies:
       '@types/lodash': 4.14.74
@@ -1214,8 +1214,12 @@ packages:
     resolution:
       integrity: sha512-DuIRlQbX4K+d5I+GMnv+UfnGh+ist0RdlvOp+JZ7ePJ6KQONCFQv/gKYSU1ZzbVdFSUCKZOltjmpFAGGv5MdYA==
   /@types/node/11.13.0:
+    dev: true
     resolution:
       integrity: sha512-rx29MMkRdVmzunmiA4lzBYJNnXsW/PhG4kMBy2ATsYaDjGGR75dCFEVVROKpNwlVdcUX3xxlghKQOeDPBJobng==
+  /@types/node/11.13.2:
+    resolution:
+      integrity: sha512-HOtU5KqROKT7qX/itKHuTtt5fV0iXbheQvrgbLNXFJQBY/eh+VS5vmmTAVlo3qIGMsypm0G4N1t2AXjy1ZicaQ==
   /@types/node/6.14.4:
     dev: true
     resolution:
@@ -1258,7 +1262,7 @@ packages:
       integrity: sha512-ewFXqrQHlFsgc09MK5jP5iR7vumV/BYayNC6PgJO2LPe8vrnNFyjQjSppfEngITi0qvfKtzFvgKymGheFM9UOA==
   /@types/react-dom/16.0.5:
     dependencies:
-      '@types/node': 11.13.0
+      '@types/node': 11.13.2
       '@types/react': 16.4.2
     resolution:
       integrity: sha512-ony2hEYlGXCLWNAWWgbsHR7qVvDbeMRFc5b43+7dhj3n+zXzxz81HV9Yjpc3JD8vLCiwYoSLqFCI6bD0+0zG2Q==
@@ -1493,7 +1497,7 @@ packages:
       integrity: sha512-3hC0itW/hWSD5J4uANzUKk8XVGWUNkU+VLjEjWsQ6i5lvwFGaanR6Qy0bTkZdFGqFWMXe91CkBHV7HnvEx7tCA==
   /@uifabric/styling/6.45.2/react-dom@16.7.0+react@16.7.0:
     dependencies:
-      '@microsoft/load-themed-styles': 1.8.80
+      '@microsoft/load-themed-styles': 1.8.82
       '@uifabric/merge-styles': 6.16.4
       '@uifabric/set-version': 1.1.3
       '@uifabric/utilities': /@uifabric/utilities/6.35.4/react-dom@16.7.0+react@16.7.0
@@ -8194,7 +8198,7 @@ packages:
       integrity: sha512-SPpzhhDJz7rJYXNwrmJOAPaQaqqg1H2Gn05JDDZpfb4z2igvYVmuFP7nn0zn+R50uPIQbwyVKcvZCmjnh0Je/w==
   /office-ui-fabric-react/6.143.0/react-dom@16.7.0+react@16.7.0:
     dependencies:
-      '@microsoft/load-themed-styles': 1.8.80
+      '@microsoft/load-themed-styles': 1.8.82
       '@uifabric/foundation': /@uifabric/foundation/0.7.4/react-dom@16.7.0+react@16.7.0
       '@uifabric/icons': /@uifabric/icons/6.5.1/react-dom@16.7.0+react@16.7.0
       '@uifabric/merge-styles': 6.16.4
@@ -10340,7 +10344,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-RX8QB/sNP/16pff/iEdxO/0LMw7LS/oFEhEGuG+TNwEzfrmq3HQ+WoKE1XOoKIjlJT3/rC37jxIJpxweasDJfg==
-  /sp-js-provisioning/0.10.3:
+  /sp-js-provisioning/0.10.5:
     dependencies:
       '@pnp/common': 1.3.2
       '@pnp/logging': 1.3.2
@@ -10353,7 +10357,7 @@ packages:
       xml-js: 1.6.11
     dev: false
     resolution:
-      integrity: sha512-ftZf/JyuZCyFmeop3OA0n+e7RaRAApEdsoxno+ust7qiijGdCbtXLQ0usc9f57iP/EBDwGJ8RYekhROnmnV3tw==
+      integrity: sha512-JTuUWSs5vxhjfZHSYsC4yNcH/wcChiLMbI3NYwz4JmD1MIX05NuB3htE7GTFBPsotGdLrYeB+3pNeAz+Q1UEcg==
   /sp-pnp-js/3.0.10:
     dependencies:
       '@microsoft/microsoft-graph-types': 1.1.0
@@ -12247,7 +12251,7 @@ specifiers:
   react-dom: 16.3.2
   sp-entityportal-service: ^0.6.2
   sp-hubsite-service: ^0.1.0
-  sp-js-provisioning: ^0.10.3
+  sp-js-provisioning: ^0.10.5
   spfx-jsom: ^0.6.0
   spfx-pkgdeploy: ^0.3.0
   string-format: ^2.0.0
