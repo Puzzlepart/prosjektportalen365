@@ -10,7 +10,7 @@ declare interface IProjectPhasesWebPartStrings {
   GutterFieldLabel: string;
   UpdateViewsDocumentsFieldLabel: string;
   UpdateViewsRisksFieldLabel: string;
-  UpdateViewNameFieldLabel: string;
+  CurrentPhaseViewNameFieldLabel: string;
   ConfirmPhaseChangeFieldLabel: string;
   PhaseSubTextPropertyFieldLabel: string;
   ConfirmPhaseDialogTitle: string;
@@ -18,8 +18,6 @@ declare interface IProjectPhasesWebPartStrings {
   PageReloadMessage: string;
   WebPartNotConfiguredMessage: string;
   DocumentsListName: string;
-  RiskRegisterListName: string;
-  TasksListName: string;
   PhaseChecklistName: string;
   Yes: string;
   No: string;

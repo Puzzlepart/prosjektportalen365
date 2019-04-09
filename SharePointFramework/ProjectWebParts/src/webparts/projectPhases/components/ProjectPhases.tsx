@@ -13,7 +13,6 @@ import styles from './ProjectPhases.module.scss';
 import { IProjectPhasesProps } from './IProjectPhasesProps';
 import { IProjectPhasesState, IProjectPhasesData } from './IProjectPhasesState';
 import * as strings from 'ProjectPhasesWebPartStrings';
-import * as format from 'string-format';
 import { ChecklistData } from './ChecklistData';
 
 export default class ProjectPhases extends React.Component<IProjectPhasesProps, IProjectPhasesState> {

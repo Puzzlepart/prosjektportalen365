@@ -79,14 +79,8 @@ export default class ProjectPhasesWebPart extends BaseWebPart<IProjectPhasesWebP
             {
               groupName: strings.ViewsGroupName,
               groupFields: [
-                PropertyPaneToggle('updateViewsDocuments', {
-                  label: strings.UpdateViewsDocumentsFieldLabel,
-                }),
-                PropertyPaneToggle('updateViewsRisks', {
-                  label: strings.UpdateViewsRisksFieldLabel,
-                }),
-                PropertyPaneTextField('updateViewName', {
-                  label: strings.UpdateViewNameFieldLabel,
+                PropertyPaneTextField('currentPhaseViewName', {
+                  label: strings.CurrentPhaseViewNameFieldLabel,
                 }),
               ]
             },
