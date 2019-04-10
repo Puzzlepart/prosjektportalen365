@@ -39,7 +39,7 @@ export default class PlannerConfiguration extends BaseTask {
                 defaultPlanBucket = await this.createBucket(defaultBucketName, groupPlan.id);
             }
             onProgress(stringFormat(strings.PlannerConfigurationText, title), 'PlannerLogo');
-            await this.createTasks(plannerConfig[title], groupPlan.id, defaultPlanBucket.id);
+            await this.createTasks(plannerConfig[title], groupPlan.id, defaultPlanBucket);
         }
         return groupPlans;
     }
@@ -74,12 +74,12 @@ export default class PlannerConfiguration extends BaseTask {
      * 
      * @param {string[]} tasks Tasks
      * @param {string} planId Plan Id 
-     * @param {string} bucketId Bucket Id 
+     * @param {IPlannerBucket} bucket Bucket 
      */
-    private async createTasks(tasks: string[], planId: string, bucketId: string) {
+    private async createTasks(tasks: string[], planId: string, bucket: IPlannerBucket) {
         for (let i = 0; i < tasks.length; i++) {
-            Logger.log({ message: `(ProjectSetupApplicationCustomizer) PlannerConfiguration: Creating task ${tasks[i]} in bucket ${bucketId}`, level: LogLevel.Info });
-            await MSGraphHelper.Post('planner/tasks', JSON.stringify({ title: tasks[i], bucketId, planId }));
+            Logger.log({ message: `(ProjectSetupApplicationCustomizer) PlannerConfiguration: Creating task ${tasks[i]} in bucket ${bucket.name}`, level: LogLevel.Info });
+            await MSGraphHelper.Post('planner/tasks', JSON.stringify({ title: tasks[i], bucketId: bucket.id, planId }));
         }
     }
 
