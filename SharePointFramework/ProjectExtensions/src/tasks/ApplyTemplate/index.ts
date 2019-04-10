@@ -17,22 +17,19 @@ export default class ApplyTemplate extends BaseTask {
 
     @override
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
-        const parameters = {
+        const parameters: { [key: string]: string } = {
             fieldsgroup: 'Prosjektportalenkolonner',
             defaultPlanId: params.groupPlans[0].id,
         };
+        const [noPhasePlan] = params.groupPlans.filter(p => p.title === 'Ingen fase');
+        if (noPhasePlan) {
+            parameters.noPhasePlanId = noPhasePlan.id;
+        }
         Logger.log({ message: '(ProjectSetupApplicationCustomizer) ApplyTemplate: Applying template to site', data: { parameters }, level: LogLevel.Info });
         try {
             const web = new Web(params.context.pageContext.web.absoluteUrl);
             const provisioner = new WebProvisioner(web);
-            provisioner.setup({
-                spfxContext: params.context,
-                logging: {
-                    prefix: '(ProjectSetupApplicationCustomizer) (ApplyTemplate)',
-                    activeLogLevel: 1
-                },
-                parameters,
-            });
+            provisioner.setup({ spfxContext: params.context, logging: { prefix: '(ProjectSetupApplicationCustomizer) (ApplyTemplate)', activeLogLevel: 1 }, parameters });
             let template = await params.data.selectedTemplate.getSchema();
             await provisioner.applyTemplate(template, null, status => {
                 if (ApplyTemplateStatusMap[status]) {
@@ -46,7 +43,7 @@ export default class ApplyTemplate extends BaseTask {
             }
             return params;
         } catch (error) {
-            Logger.log({ message: '(ProjectSetupApplicationCustomizer) ApplyTemplate: Failed to apply template to site', data: {  }, level: LogLevel.Error });
+            Logger.log({ message: '(ProjectSetupApplicationCustomizer) ApplyTemplate: Failed to apply template to site', data: {}, level: LogLevel.Error });
             throw new BaseTaskError(ApplyTemplate.taskName, error);
         }
     }

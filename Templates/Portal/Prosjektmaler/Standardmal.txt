@@ -552,6 +552,14 @@
                 "Title": "Dokumenter"
             },
             {
+                "Url": "SitePages/Oppgaver.aspx",
+                "Title": "Oppgaver"
+            },            
+            {
+                "Url": "SitePages/OppgaverUtenFase.aspx",
+                "Title": "Oppgaver uten fase"
+            },
+            {
                 "Url": "Lists/Fasesjekkliste/AllItems.aspx",
                 "Title": "Fasesjekkliste"
             },
@@ -648,7 +656,7 @@
                                     "Properties": {
                                         "title": "Oppgaver",
                                         "isFullScreen": false,
-                                        "plannerViewMode": "charts",
+                                        "plannerViewMode": "statuschart",
                                         "planId": "{parameter:defaultPlanId}"
                                     }
                                 }
@@ -693,6 +701,58 @@
                                             "fieldsGroupName": "{parameter:fieldsgroup}",
                                             "identityFieldName": "GtSiteId"
                                         }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "Oppgaver.aspx",
+            "Title": "Oppgaver",
+            "PageLayoutType": "SingleWebPartAppPage",
+            "CommentsDisabled": true,
+            "Sections": [
+                {
+                    "Columns": [
+                        {
+                            "Factor": 12,
+                            "Controls": [
+                                {
+                                    "Id": "39c4c1c2-63fa-41be-8cc2-f6c0b49b253d",
+                                    "Properties": {
+                                        "title": "Oppgaver",
+                                        "isFullScreen": true,
+                                        "plannerViewMode": "board",
+                                        "planId": "{parameter:defaultPlanId}"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "OppgaverUtenFase.aspx",
+            "Title": "Oppgaver uten fase",
+            "PageLayoutType": "SingleWebPartAppPage",
+            "CommentsDisabled": true,
+            "Sections": [
+                {
+                    "Columns": [
+                        {
+                            "Factor": 12,
+                            "Controls": [
+                                {
+                                    "Id": "39c4c1c2-63fa-41be-8cc2-f6c0b49b253d",
+                                    "Properties": {
+                                        "title": "Oppgaver uten fase",
+                                        "isFullScreen": true,
+                                        "plannerViewMode": "board",
+                                        "planId": "{parameter:noPhasePlanId}"
                                     }
                                 }
                             ]

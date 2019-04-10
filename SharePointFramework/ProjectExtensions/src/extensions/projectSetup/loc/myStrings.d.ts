@@ -18,6 +18,7 @@ declare interface IProjectSetupApplicationCustomizerStrings {
   ProgressModalDescription: string;
   ErrorModalTitle: string;
   ApplyExtensionText: string;
+  PlannerConfigurationText: string;
   CopyListDataText: string;
   EditPropertiesLinkText: string;
 }

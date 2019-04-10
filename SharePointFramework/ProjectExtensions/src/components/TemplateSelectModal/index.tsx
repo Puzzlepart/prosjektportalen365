@@ -35,12 +35,11 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
                     <div className={styles.templateSelectModalInner}>
                         <div className={styles.templateSelectModalBody}>
                             <div className={styles.modalTitle}>{strings.TemplateSelectModalTitle}</div>
-                            <div className={styles.templateSelect}>
+                            <div className={styles.templateSelect} hidden={this.getTemplateOptions().length === 1}>
                                 <div className={styles.templateSelectTitle}>{strings.TemplateSelectTitle}</div>
                                 <div className={styles.templateSelectDropdown}>
                                     <Dropdown
                                         defaultSelectedKey='0'
-                                        disabled={this.getTemplateOptions().length === 1}
                                         onChanged={this.onTemplateSelected}
                                         options={this.getTemplateOptions()} />
                                 </div>
@@ -84,6 +83,7 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
                             <MessageBar>{strings.TemplateSelectModalFooterText}</MessageBar>
                         </div>
                     </div>
+                    <div className={styles.setupVersion}>{this.props.version}</div>
                 </div>
             </Modal>
         );

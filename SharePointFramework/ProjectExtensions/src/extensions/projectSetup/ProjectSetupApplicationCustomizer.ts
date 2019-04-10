@@ -55,6 +55,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
         onSubmit: (data: IProjectSetupApplicationCustomizerData) => resolve(data),
         isBlocking: true,
         isDarkOverlay: true,
+        version: `v${this.manifest.version}`,
       });
       this.templateSelectModalContainer = document.createElement('DIV');
       this.domElement.appendChild(this.templateSelectModalContainer);
@@ -72,6 +73,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
       taskParams: this.taskParams,
       isBlocking: true,
       isDarkOverlay: true,
+      version: `v${this.manifest.version}`,
     });
     if (!this.progressModalContainer) {
       this.progressModalContainer = document.createElement('DIV');

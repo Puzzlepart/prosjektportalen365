@@ -26,6 +26,7 @@ export default class ProgressModal extends React.Component<IProgressModalProps, 
                         </div>
                     </div>
                     {(this.props.taskParams.entity && this.props.taskParams.entity.editFormUrl) && <EditPropertiesLink editFormUrl={this.props.taskParams.entity.editFormUrl} />}
+                    <div className={styles.setupVersion}>{this.props.version}</div>
                 </div>
             </Modal>
         );

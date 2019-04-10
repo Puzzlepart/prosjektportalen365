@@ -3,17 +3,10 @@ import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { Logger, LogLevel } from '@pnp/logging';
 import { IBaseTaskParams } from '../IBaseTaskParams';
 import MSGraphHelper from 'msgraph-helper';
-
-export interface IPlannerPlan {
-    id: string;
-    title: string;
-}
-
-export interface IPlannerBucket {
-    id: string;
-    name: string;
-    planId: string;
-}
+import * as strings from 'ProjectSetupApplicationCustomizerStrings';
+import * as stringFormat from 'string-format';
+import { IPlannerPlan } from './IPlannerPlan';
+import { IPlannerBucket } from './IPlannerBucket';
 
 export default class PlannerConfiguration extends BaseTask {
     public static taskName = 'SetupProjectInformation';
@@ -36,38 +29,39 @@ export default class PlannerConfiguration extends BaseTask {
 
     private async createTasks(tasks: string[], planId: string, bucketId: string) {
         for (let i = 0; i < tasks.length; i++) {
+            Logger.log({ message: `(ProjectSetupApplicationCustomizer) PlannerConfiguration: Creating task ${tasks[i]} in bucket ${bucketId}`, level: LogLevel.Info });
             await MSGraphHelper.Post('planner/tasks', JSON.stringify({ title: tasks[i], bucketId, planId }));
         }
     }
 
+    private getPlans(owner: string) {
+        return MSGraphHelper.Get<IPlannerPlan[]>(`groups/${owner}/planner/plans`, ['id', 'title']);
+    }
+
+    private getPlanBuckets(planId: string) {
+        return MSGraphHelper.Get<IPlannerBucket[]>(`planner/plans/${planId}/buckets`, ['id', 'name', 'planId']);
+    }
+
     @override
-    public async execute(params: IBaseTaskParams, _onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
+    public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         Logger.log({ message: '(ProjectSetupApplicationCustomizer) PlannerConfiguration: Setting up Plans, Buckets and Task', level: LogLevel.Info });
         try {
             const plannerTasks = await (await fetch(`${params.data.hub.url}/Konfigurasjonsfiler/Planneroppgaver.txt`, { credentials: 'include' })).json();
             params.groupPlans = [];
-            let existingGroupPlans = [];
-            try {
-                existingGroupPlans = await MSGraphHelper.Get<IPlannerPlan[]>(`groups/${params.context.pageContext.legacyPageContext.groupId}/planner/plans`, ['id', 'title']);
-            } catch (error) {
-                existingGroupPlans = [];
-            }
+            let existingGroupPlans = await this.getPlans(params.context.pageContext.legacyPageContext.groupId);
             const plans = Object.keys(plannerTasks);
             for (let i = 0; i < plans.length; i++) {
+                Logger.log({ message: `(ProjectSetupApplicationCustomizer) PlannerConfiguration: Creating plan ${plans[i]}`, level: LogLevel.Info });
                 let groupPlan = await this.ensurePlan(plans[i], existingGroupPlans, params.context.pageContext.legacyPageContext.groupId);
                 params.groupPlans.push(groupPlan);
-                let planBuckets = await MSGraphHelper.Get<IPlannerBucket[]>(`planner/plans/${groupPlan.id}/buckets`, ['id', 'name', 'planId']);
+                let planBuckets = await this.getPlanBuckets(groupPlan.id);
                 let [defaultPlanBucket] = planBuckets;
                 if (!defaultPlanBucket) {
-                    defaultPlanBucket = await this.createBucket('Ikke startet', groupPlan.id);
+                    let defaultPlanBucketName = 'Gjøremål';
+                    Logger.log({ message: `(ProjectSetupApplicationCustomizer) PlannerConfiguration: Creating default bucket ${defaultPlanBucketName} for plan ${plans[i]}`, level: LogLevel.Info });
+                    defaultPlanBucket = await this.createBucket(defaultPlanBucketName, groupPlan.id);
                 }
-                try {
-                    await Promise.all([
-                        this.createBucket('Pågår', groupPlan.id),
-                        this.createBucket('Utsatt', groupPlan.id),
-                        this.createBucket('Venter på andre', groupPlan.id),
-                    ]);
-                } catch (error) { }
+                onProgress(stringFormat(strings.PlannerConfigurationText, plans[i]), 'PlannerLogo');
                 await this.createTasks(plannerTasks[plans[i]], groupPlan.id, defaultPlanBucket.id);
             }
         } catch (error) {

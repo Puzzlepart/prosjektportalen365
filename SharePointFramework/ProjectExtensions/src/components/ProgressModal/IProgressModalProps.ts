@@ -7,4 +7,5 @@ export interface IProgressModalProps extends IModalProps {
     subText: string;
     iconName?: string;
     taskParams?: IBaseTaskParams;
+    version?: string;
 }

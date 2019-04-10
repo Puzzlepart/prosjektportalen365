@@ -5,4 +5,5 @@ import IProjectSetupApplicationCustomizerData from '../../extensions/projectSetu
 export interface ITemplateSelectModalProps extends IModalProps {
     data: IProjectSetupApplicationCustomizerData;
     onSubmit: (data: IProjectSetupApplicationCustomizerData) => void;
+    version: string;
 }

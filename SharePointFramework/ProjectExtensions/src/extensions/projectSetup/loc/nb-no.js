@@ -12,13 +12,14 @@ define([], function () {
     ListContentTitle: "Velg standardinnhold",
     ExtensionsTitle: "Velg prosjekttillegg",
     TemplateSelectModalTitle: "Oppsett av prosjektområde",
-    TemplateSelectModalSubmitButtonText: "Sett opp området", 
+    TemplateSelectModalSubmitButtonText: "Sett opp området",
     TemplateSelectModalFooterText: "Oppsettet av prosjektområdet tar omtrent 10 minutter. Ikke lukk nettleservinduet mens området settes opp.",
     ProgressModalTitle: "Setter opp prosjektområdet",
     ProgressModalLabel: "Klargjør prosjektområdet",
     ProgressModalDescription: "Vennligst vent. Ikke lukk nettleservinduet.",
     ErrorModalTitle: "Noe er galt",
     ApplyExtensionText: "Installer prosjekttilegget {0}",
+    PlannerConfigurationText: "Oppretter standardoppgaver i Planner for {0}",
     CopyListDataText: "Kopierer listeinnhold fra {0} til {1}",
     EditPropertiesLinkText: "Du kan allerede nå<A HREF=\"{0}\" TARGET=\"_BLANK\">redigere egenskaper</A> for prosjektet (åpnes i ny fane)."
   }
