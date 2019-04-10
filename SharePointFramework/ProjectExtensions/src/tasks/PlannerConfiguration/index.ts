@@ -100,13 +100,22 @@ export default class PlannerConfiguration extends BaseTask {
     }
 
     /**
+     * Get page name for plan
+     * 
+     * @param {string} plan Plan
+     */
+    private getPageName(plan: IPlannerPlan) {
+        return `Oppgaver ${plan.title}.aspx`.split(' ').join('-');
+    }
+
+    /**
      * Get client side page for plan
      * 
      * @param {IPlannerPlan} plan Plan 
      */
     private getClientSidePage(plan: IPlannerPlan) {
         return {
-            Name: `Oppgaver ${plan.title}.aspx`,
+            Name: this.getPageName(plan),
             Title: `Oppgaver (${plan.title})`,
             PageLayoutType: 'SingleWebPartAppPage',
             CommentsDisabled: true,
@@ -140,7 +149,7 @@ export default class PlannerConfiguration extends BaseTask {
      */
     private getNavigationNode(plan: IPlannerPlan) {
         return {
-            Url: `SitePages/Oppgaver ${plan.title}.aspx`,
+            Url: `SitePages/${this.getPageName(plan)}`,
             Title: plan.title
         };
     }
@@ -174,7 +183,7 @@ export default class PlannerConfiguration extends BaseTask {
         if (navigationParent) {
             navigationParentIndex = templateSchema.Navigation.QuickLaunch.indexOf(navigationParent);
         }
-        return groupPlans.reduce((_templateSchema, _groupPlan, index) => {
+        return groupPlans.reduce((_templateSchema, _groupPlan) => {
             _templateSchema.ClientSidePages.push(this.getClientSidePage(_groupPlan));
             if (navigationParentIndex !== -1) {
                 _templateSchema.Navigation.QuickLaunch[navigationParentIndex].Children.push(this.getNavigationNode(_groupPlan));

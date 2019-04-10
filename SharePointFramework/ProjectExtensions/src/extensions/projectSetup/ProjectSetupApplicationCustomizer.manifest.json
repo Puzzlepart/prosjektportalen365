@@ -4,7 +4,7 @@
   "alias": "ProjectSetupApplicationCustomizer",
   "componentType": "Extension",
   "extensionType": "ApplicationCustomizer",
-  "version": "0.6.9",
+  "version": "0.6.12",
   "manifestVersion": 2,
   "requiresCustomScript": false
 }
