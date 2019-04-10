@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import { override } from '@microsoft/decorators';
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base';
 import { sp } from '@pnp/sp';
@@ -9,9 +10,9 @@ import { IProjectSetupApplicationCustomizerProperties } from './IProjectSetupApp
 import { ProgressModal, IProgressModalProps, ErrorModal, IErrorModalProps, TemplateSelectModal } from '../../components';
 import HubSiteService from 'sp-hubsite-service';
 import IProjectSetupApplicationCustomizerData from './IProjectSetupApplicationCustomizerData';
-import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import { ListContentConfig, ProjectTemplate } from './../../models';
 import { Tasks, IBaseTaskParams } from './../../tasks';
+import MSGraphHelper from 'msgraph-helper';
 
 export default class ProjectSetupApplicationCustomizer extends BaseApplicationCustomizer<IProjectSetupApplicationCustomizerProperties> {
   private domElement: HTMLDivElement;
@@ -26,6 +27,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
       Logger.subscribe(new ConsoleListener());
       Logger.activeLogLevel = LogLevel.Info;
       sp.setup({ spfxContext: this.context });
+      await MSGraphHelper.Init(this.context.msGraphClientFactory, 'v1.0');
       this.data = await this.getData();
       if (this.data) {
         const topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top);
