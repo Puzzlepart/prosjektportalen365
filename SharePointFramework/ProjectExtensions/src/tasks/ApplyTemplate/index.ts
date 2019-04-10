@@ -1,5 +1,6 @@
 import { override } from '@microsoft/decorators';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
+import { Logger, LogLevel } from '@pnp/logging';
 import { WebProvisioner, Web } from 'sp-js-provisioning';
 import { ApplyTemplateStatusMap } from './ApplyTemplateStatusMap';
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
@@ -16,6 +17,11 @@ export default class ApplyTemplate extends BaseTask {
 
     @override
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
+        const parameters = {
+            fieldsgroup: 'Prosjektportalenkolonner',
+            defaultPlanId: params.groupPlans[0].id,
+        };
+        Logger.log({ message: '(ProjectSetupApplicationCustomizer) ApplyTemplate: Applying template to site', data: { parameters }, level: LogLevel.Info });
         try {
             const web = new Web(params.context.pageContext.web.absoluteUrl);
             const provisioner = new WebProvisioner(web);
@@ -25,7 +31,7 @@ export default class ApplyTemplate extends BaseTask {
                     prefix: '(ProjectSetupApplicationCustomizer) (ApplyTemplate)',
                     activeLogLevel: 1
                 },
-                parameters: { fieldsgroup: "Prosjektportalenkolonner" },
+                parameters,
             });
             let template = await params.data.selectedTemplate.getSchema();
             await provisioner.applyTemplate(template, null, status => {
@@ -40,6 +46,7 @@ export default class ApplyTemplate extends BaseTask {
             }
             return params;
         } catch (error) {
+            Logger.log({ message: '(ProjectSetupApplicationCustomizer) ApplyTemplate: Failed to apply template to site', data: {  }, level: LogLevel.Error });
             throw new BaseTaskError(ApplyTemplate.taskName, error);
         }
     }

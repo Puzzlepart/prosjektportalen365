@@ -45,6 +45,7 @@ export default class PlannerConfiguration extends BaseTask {
         Logger.log({ message: '(ProjectSetupApplicationCustomizer) PlannerConfiguration: Setting up Plans, Buckets and Task', level: LogLevel.Info });
         try {
             const plannerTasks = await (await fetch(`${params.data.hub.url}/Konfigurasjonsfiler/Planneroppgaver.txt`, { credentials: 'include' })).json();
+            params.groupPlans = [];
             let existingGroupPlans = [];
             try {
                 existingGroupPlans = await MSGraphHelper.Get<IPlannerPlan[]>(`groups/${params.context.pageContext.legacyPageContext.groupId}/planner/plans`, ['id', 'title']);
@@ -54,6 +55,7 @@ export default class PlannerConfiguration extends BaseTask {
             const plans = Object.keys(plannerTasks);
             for (let i = 0; i < plans.length; i++) {
                 let groupPlan = await this.ensurePlan(plans[i], existingGroupPlans, params.context.pageContext.legacyPageContext.groupId);
+                params.groupPlans.push(groupPlan);
                 let planBuckets = await MSGraphHelper.Get<IPlannerBucket[]>(`planner/plans/${groupPlan.id}/buckets`, ['id', 'name', 'planId']);
                 let [defaultPlanBucket] = planBuckets;
                 if (!defaultPlanBucket) {
