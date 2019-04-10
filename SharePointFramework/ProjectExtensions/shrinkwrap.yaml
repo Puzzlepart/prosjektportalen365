@@ -14,7 +14,7 @@ dependencies:
   '@types/react': 16.4.2
   '@types/react-dom': 16.0.5
   '@types/webpack-env': 1.13.1
-  msgraph-helper: 0.7.0
+  msgraph-helper: 0.7.1
   office-ui-fabric-react: 5.134.0
   react: 16.3.2
   react-dom: 16.3.2
@@ -7658,13 +7658,13 @@ packages:
   /ms/2.1.1:
     resolution:
       integrity: sha512-tgp+dl5cGk28utYktBsrFqA7HKgrhgPsg6Z/EfhWI4gl1Hwq8B/GmY/0oXZ6nF8hDVesS/FpnYaD/kOWhYQvyg==
-  /msgraph-helper/0.7.0:
+  /msgraph-helper/0.7.1:
     dependencies:
       '@microsoft/microsoft-graph-client': 1.5.2
       '@microsoft/sp-http': 1.8.0
     dev: false
     resolution:
-      integrity: sha512-ZbYoLM+dXI15QjooxHPU5hKblKuI0Pkk/XVLFeFvOOefIRCPdeA82Q43d2IuReeW1UAsdKjkvxSc4TIHiQNaVw==
+      integrity: sha512-sD9NVZaJuA0PXHIxcQ1UUcUB7s55Zs1+bjL79xVRgV85AkakKiyjV3HyAZNjRO3y91msfzRGdXdKgfzWB+AUXw==
   /multipipe/0.1.2:
     dependencies:
       duplexer2: 0.0.2
@@ -12261,7 +12261,7 @@ specifiers:
   ajv: ~5.2.2
   bluebird: ^3.5.3
   gulp: ~3.9.1
-  msgraph-helper: ^0.7.0
+  msgraph-helper: ^0.7.1
   node-fetch: ^2.3.0
   office-ui-fabric-react: 5.134.0
   react: 16.3.2
