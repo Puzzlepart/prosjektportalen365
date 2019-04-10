@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import { override } from '@microsoft/decorators';
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base';
-import { sp } from '@pnp/sp';
+import { sp, List } from '@pnp/sp';
 import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import { IProjectSetupApplicationCustomizerProperties } from './IProjectSetupApplicationCustomizerProperties';
@@ -13,6 +13,7 @@ import IProjectSetupApplicationCustomizerData from './IProjectSetupApplicationCu
 import { ListContentConfig, ProjectTemplate } from './../../models';
 import { Tasks, IBaseTaskParams } from './../../tasks';
 import MSGraphHelper from 'msgraph-helper';
+import ListLogger from '../../../../@Shared/lib/logging/ListLogger';
 
 export default class ProjectSetupApplicationCustomizer extends BaseApplicationCustomizer<IProjectSetupApplicationCustomizerProperties> {
   private domElement: HTMLDivElement;
@@ -37,6 +38,14 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
       sp.setup({ spfxContext: this.context });
       await MSGraphHelper.Init(this.context.msGraphClientFactory, 'v1.0');
       this.data = await this.getData();
+      const logList = this.data.hub.web.lists.getByTitle('Logg');
+      ListLogger.init(logList, {
+        webUrl: 'GtLogWebUrl',
+        scope: 'GtLogScope',
+        functionName: 'GtLogFunctionName',
+        message: 'GtLogMessage',
+        level: 'GtLogLevel',
+      });
       if (this.data) {
         const topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top);
         this.domElement = topPlaceholder.domElement;
@@ -130,10 +139,24 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   private async runTasks(): Promise<void> {
     Logger.log({ message: '(ProjectSetupApplicationCustomizer) runTasks', data: { properties: this.properties, tasks: Tasks.map(t => t.name) }, level: LogLevel.Info });
     try {
+      await ListLogger.log({
+        webUrl: document.location.href,
+        scope: 'ProjectSetupApplicationCustomizer',
+        functionName: 'runTasks',
+        message: 'Starting provisioning of project.',
+        level: 'Info',
+      });
       this.taskParams.templateSchema = await this.taskParams.data.selectedTemplate.getSchema();
       for (let i = 0; i < Tasks.length; i++) {
         this.taskParams = await Tasks[i].execute(this.taskParams, this.onTaskStatusUpdated);
       }
+      await ListLogger.log({
+        webUrl: document.location.href,
+        scope: 'ProjectSetupApplicationCustomizer',
+        functionName: 'runTasks',
+        message: 'Project successfully provisioned.',
+        level: 'Info',
+      });
       await this.removeCustomizer(this.componentId, !this.isDebug());
     } catch (error) {
       Logger.log({ message: `(ProjectSetupApplicationCustomizer) runTasks: ${error.task} failed with message ${error.message}`, level: LogLevel.Error });

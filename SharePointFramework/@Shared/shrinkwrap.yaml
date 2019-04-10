@@ -1,45 +1,70 @@
 dependencies:
-  '@pnp/common': 1.3.0
-  '@pnp/logging': 1.3.0
-  '@pnp/odata': 1.3.0
-  '@pnp/sp': 1.3.0
+  '@pnp/common': 1.3.2
+  '@pnp/logging': 1.3.2
+  '@pnp/odata': 1.3.2
+  '@pnp/sp': 1.3.2
+  '@pnp/sp-clientsvc': 1.3.2
+  '@pnp/sp-taxonomy': 1.3.2
   es6-promise: 4.2.6
   object-get: 2.1.0
 devDependencies:
   typescript: 2.4.2
 packages:
-  /@pnp/common/1.3.0:
+  /@pnp/common/1.3.2:
     dependencies:
       adal-angular: 1.0.17
       tslib: 1.9.3
     dev: false
     resolution:
-      integrity: sha512-Sjua2Nh/zdiVV1oFXE7YujNh79p5iEkSSINFEm5t1esA7fZOeTxiwGc9Tb4R9Nov0lww+fsvLMGSIywov3EJBA==
-  /@pnp/logging/1.3.0:
+      integrity: sha512-3n08lyGLeWm30ZBBxoVLOIQIRwWYZJ5se72m8LiNvzX0PvjGyUgVS1bkUKKNu5+jG0AwP+/OKzrmuRSb5+krLg==
+  /@pnp/logging/1.3.2:
     dependencies:
       tslib: 1.9.3
     dev: false
     resolution:
-      integrity: sha512-9xUpjV7gBTWMQ0KapZP8B2ax+jZzXZw0AGCnQCBzggGp5mwjudzY96gWxgOW4qZue32sdaGrlo/0iTpDTHOqQQ==
-  /@pnp/odata/1.3.0:
-    dependencies:
-      tslib: 1.9.3
-    dev: false
-    peerDependencies:
-      '@pnp/common': 1.3.0
-      '@pnp/logging': 1.3.0
-    resolution:
-      integrity: sha512-lUbW3eA13VaVmDc/ScvAyJuJZdR2/g32EhOE2QvwzWkVY6LDWbCGJth0D5HYVDkekZGH56JsJhNIx38qiX4RkQ==
-  /@pnp/sp/1.3.0:
+      integrity: sha512-etK4LLGFC7HPsTxgmOpJMtHwg5U6MVhEDXCem35I0TdYo0mfvW+rO/LP1DGDnpUfEeox0hMm6rEumz8vBrHZDg==
+  /@pnp/odata/1.3.2:
     dependencies:
       tslib: 1.9.3
     dev: false
     peerDependencies:
-      '@pnp/common': 1.3.0
-      '@pnp/logging': 1.3.0
-      '@pnp/odata': 1.3.0
+      '@pnp/common': 1.3.2
+      '@pnp/logging': 1.3.2
     resolution:
-      integrity: sha512-7/7wnUH1piqumeX+QFS9BNiuDg1tXX4/Z1vxbIKGvjmbLcIBh+PmsUmmf+TG8MXI0JQO/AeD6iXRhgLXTz+WBQ==
+      integrity: sha512-47yShM69ZYiIBkZrk9zMve4kDAsLBdq0CmtSzmGLMh6ecnEJJzFklqO6W8pydrkqLniX5P0Ag7DDkQyWHbzvwA==
+  /@pnp/sp-clientsvc/1.3.2:
+    dependencies:
+      tslib: 1.9.3
+    dev: false
+    peerDependencies:
+      '@pnp/common': 1.3.2
+      '@pnp/logging': 1.3.2
+      '@pnp/odata': 1.3.2
+      '@pnp/sp': 1.3.2
+    resolution:
+      integrity: sha512-QJMexQ6dyhux/VOVVldT+LDIiHiFMvsT/Z+EJW8ALD0GFxCcoc7j/hGtiaWVrorRU+BSUUghO7HFXzHMV707EA==
+  /@pnp/sp-taxonomy/1.3.2:
+    dependencies:
+      tslib: 1.9.3
+    dev: false
+    peerDependencies:
+      '@pnp/common': 1.3.2
+      '@pnp/logging': 1.3.2
+      '@pnp/odata': 1.3.2
+      '@pnp/sp': 1.3.2
+      '@pnp/sp-clientsvc': 1.3.2
+    resolution:
+      integrity: sha512-WPMlr9aM6NbaW2q7e4acGDkio9lj1j+4/tZ1SLz+yUbuqI+w7+34c3shdj/3BftPlkgifuK+yEIbGD2IK4x5Pg==
+  /@pnp/sp/1.3.2:
+    dependencies:
+      tslib: 1.9.3
+    dev: false
+    peerDependencies:
+      '@pnp/common': 1.3.2
+      '@pnp/logging': 1.3.2
+      '@pnp/odata': 1.3.2
+    resolution:
+      integrity: sha512-w5K485ZszVUc6dbnOPBrEWYEhYnn+M71a1xNKQ8XLqxeec2cnG3rxdSLJFI0QCLgnQRKaHoFriQrE/x8+ftdIg==
   /adal-angular/1.0.17:
     dev: false
     engines:
@@ -69,10 +94,12 @@ registry: 'https://registry.npmjs.org/'
 shrinkwrapMinorVersion: 9
 shrinkwrapVersion: 3
 specifiers:
-  '@pnp/common': ^1.3.0
-  '@pnp/logging': ^1.3.0
-  '@pnp/odata': ^1.3.0
-  '@pnp/sp': ^1.3.0
+  '@pnp/common': ^1.3.2
+  '@pnp/logging': ^1.3.2
+  '@pnp/odata': ^1.3.2
+  '@pnp/sp': ^1.3.2
+  '@pnp/sp-clientsvc': ^1.3.2
+  '@pnp/sp-taxonomy': ^1.3.2
   es6-promise: ^4.2.6
   object-get: ^2.1.0
   typescript: 2.4.2
