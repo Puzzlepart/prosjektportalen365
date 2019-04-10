@@ -160,6 +160,13 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
       await this.removeCustomizer(this.componentId, !this.isDebug());
     } catch (error) {
       Logger.log({ message: `(ProjectSetupApplicationCustomizer) runTasks: ${error.task} failed with message ${error.message}`, level: LogLevel.Error });
+      await ListLogger.log({
+        webUrl: document.location.href,
+        scope: 'ProjectSetupApplicationCustomizer',
+        functionName: 'runTasks',
+        message: `${error.task} failed with message ${error.message}`,
+        level: 'Error',
+      });
       this.renderErrorModal({ errorText: 'Det skjedde en feil under konfigureringen av området.' });
     }
   }
