@@ -641,16 +641,26 @@
                 {
                     "Columns": [
                         {
-                            "Factor": 8,
+                            "Factor": 12,
                             "Controls": [
                                 {
                                     "Id": "39c4c1c2-63fa-41be-8cc2-f6c0b49b253d",
                                     "Properties": {
                                         "title": "Oppgaver",
                                         "isFullScreen": false,
-                                        "plannerViewMode": "charts"
+                                        "plannerViewMode": "charts",
+                                        "planId": "{parameter:defaultPlanId}"
                                     }
-                                },
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Columns": [
+                        {
+                            "Factor": 8,
+                            "Controls": [
                                 {
                                     "Id": "f92bf067-bc19-489e-a556-7fe95f508720",
                                     "Properties": {

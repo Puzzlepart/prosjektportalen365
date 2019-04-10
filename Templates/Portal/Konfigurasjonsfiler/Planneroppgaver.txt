@@ -1,9 +1,15 @@
 {
-    "Realisere": [
-        "Sørge for at planlagte målinger og tiltak er gjennomført i henhold til gevinstrealiseringplanen",
-        "Måle om forventede gevinster er oppnådd eller er om det behov for ytterligere tiltak. I så fall utarbeidet en tiltaksplan",
-        "Gjennomføre avtalte effektmålinger for vedtak i Beslutningspunkt 6 (BP6)",
-        "Gjennomføre BP6 (sjekkliste) og vurdere om man har oppnådd ønsket effekt, og evt. vurdere nye tiltak"
+    "Ingen fase": [
+        "Beslutte utredning av idéen og utforme et førsteutkast til prosjektmandat",
+        "Definere en tydelig problemstilling som synliggjør behovet for nærmere utredning",
+        "Gjøre det tydelig hvordan eller av hvem utredningen skal finansieres",
+        "Vurdere om det er mest riktig å gjennomføre tiltaket som et prosjekt eller som en linjeoppgave",
+        "Vurdere om tiltaket er i henhold til virksomhetsstrategien",
+        "Vurdere om det finnes noen føringer (IT -politiske eller andre) som gjelder og må tas hensyn til i utredningen",
+        "Vurdere om det er behov for mer informasjon før det kan fattes en beslutning",
+        "Utforme endelig prosjektmandat og legge det fram til vedtak i Beslutningspunkt 1 (BP1)",
+        "Gjennomføre BP1 (sjekkliste og evt. faseovergang) og vurdere om vi skal gå videre til konseptfasen og utrede ulike konsepter for et mulig prosjekt",
+        "Hvis man i BP1 har vedtatt å gå videre til konseptfasen, utnevne en utredningsleder for konseptfasen"
     ],
     "Konsept": [
         "Etablere prosjektforslagsdokumentet for videre arbeid (på basis av prosjektmandatet)",
@@ -51,18 +57,6 @@
         "Ferdigstille faseplan for avslutningsfasen til vedtak i BP4",
         "Gjennomføre BP4 (sjekkliste og evt. faseovergang) og vurdere om man skal gå videre til avslutningsfasen"
     ],
-    "Ingen fase": [
-        "Beslutte utredning av idéen og utforme et førsteutkast til prosjektmandat",
-        "Definere en tydelig problemstilling som synliggjør behovet for nærmere utredning",
-        "Gjøre det tydelig hvordan eller av hvem utredningen skal finansieres",
-        "Vurdere om det er mest riktig å gjennomføre tiltaket som et prosjekt eller som en linjeoppgave",
-        "Vurdere om tiltaket er i henhold til virksomhetsstrategien",
-        "Vurdere om det finnes noen føringer (IT -politiske eller andre) som gjelder og må tas hensyn til i utredningen",
-        "Vurdere om det er behov for mer informasjon før det kan fattes en beslutning",
-        "Utforme endelig prosjektmandat og legge det fram til vedtak i Beslutningspunkt 1 (BP1)",
-        "Gjennomføre BP1 (sjekkliste og evt. faseovergang) og vurdere om vi skal gå videre til konseptfasen og utrede ulike konsepter for et mulig prosjekt",
-        "Hvis man i BP1 har vedtatt å gå videre til konseptfasen, utnevne en utredningsleder for konseptfasen"
-    ],
     "Avslutte": [
         "Komplettere evt. restanseliste og overlevere endelig leveranse til linjeorganisasjonen",
         "Levere evt. avtalt støtte til linjeorganisasjonen i innføringsfasen",
@@ -76,5 +70,11 @@
         "Utarbeide/samle nødvendig styringsdokumentasjon (sluttrapport, oppdatert prosjektbegrunnelse og gevinstrealiseringplan med restrisiko) til vedtak i Beslutningspunkt 5 (BP5)",
         "Gjennomføre BP5 (sjekkliste og evt. faseovergang) og vurdere om man skal avslutte prosjektet og gå til realiseringsfasen",
         "Formelt oppløse prosjektorganisasjonen (\u0027KickOut\u0027)"
+    ],
+    "Realisere": [
+        "Sørge for at planlagte målinger og tiltak er gjennomført i henhold til gevinstrealiseringplanen",
+        "Måle om forventede gevinster er oppnådd eller er om det behov for ytterligere tiltak. I så fall utarbeidet en tiltaksplan",
+        "Gjennomføre avtalte effektmålinger for vedtak i Beslutningspunkt 6 (BP6)",
+        "Gjennomføre BP6 (sjekkliste) og vurdere om man har oppnådd ønsket effekt, og evt. vurdere nye tiltak"
     ]
 }
