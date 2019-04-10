@@ -6,15 +6,12 @@ import * as strings from 'ProjectPhasesWebPartStrings';
 import { IProjectPhasesWebPartProps } from './IProjectPhasesWebPartProps';
 import ProjectPhases from './components/ProjectPhases';
 import BaseWebPart from '../baseWebPart';
+import MSGraphHelper from 'msgraph-helper';
 
 export default class ProjectPhasesWebPart extends BaseWebPart<IProjectPhasesWebPartProps> {
   private web: Web;
   private currentUserManageWeb: boolean = false;
   private optionsPhaseField: IPropertyPaneDropdownOption[] = [];
-
-  constructor() {
-    super();
-  }
 
   public async onInit() {
     await super.onInit();
@@ -25,6 +22,7 @@ export default class ProjectPhasesWebPart extends BaseWebPart<IProjectPhasesWebP
     ]);
     this.currentUserManageWeb = currentUserManageWeb;
     this.optionsPhaseField = taxonomyFields.map(field => ({ key: field.Title, text: field.Title }));
+    await MSGraphHelper.Init(this.context.msGraphClientFactory, 'v1.0');
     this.isInitialized = true;
   }
 
@@ -32,6 +30,8 @@ export default class ProjectPhasesWebPart extends BaseWebPart<IProjectPhasesWebP
     super._render(ProjectPhases, {
       currentUserManageWeb: this.currentUserManageWeb,
       webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
+      webServerRelativeUrl: this.context.pageContext.web.serverRelativeUrl,
+      groupId: this.context.pageContext.legacyPageContext.groupId,
       web: this.web,
       domElement: this.domElement,
     });

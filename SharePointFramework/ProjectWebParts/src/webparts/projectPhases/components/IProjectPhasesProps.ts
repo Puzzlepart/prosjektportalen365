@@ -7,6 +7,8 @@ import { IHubSite } from 'sp-hubsite-service';
 export interface IProjectPhasesProps extends IProjectPhasesWebPartProps {
   currentUserManageWeb: boolean;
   webAbsoluteUrl: string;
+  webServerRelativeUrl: string;
+  groupId: string;
   domElement: HTMLElement;
   web: Web;
   context: WebPartContext;

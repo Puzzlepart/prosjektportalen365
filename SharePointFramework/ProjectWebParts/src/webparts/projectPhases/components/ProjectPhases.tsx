@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Logger, LogLevel } from '@pnp/logging';
-import { sp } from '@pnp/sp';
+import { sp, ClientSidePage, ClientSideWebpart, CanvasColumn } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
@@ -14,6 +14,8 @@ import { IProjectPhasesProps } from './IProjectPhasesProps';
 import { IProjectPhasesState, IProjectPhasesData } from './IProjectPhasesState';
 import * as strings from 'ProjectPhasesWebPartStrings';
 import { ChecklistData } from './ChecklistData';
+import * as objectGet from 'object-get';
+import MSGraphHelper from 'msgraph-helper';
 
 export default class ProjectPhases extends React.Component<IProjectPhasesProps, IProjectPhasesState> {
   private phaseChecklist = sp.web.lists.getByTitle(strings.PhaseChecklistName);
@@ -122,7 +124,10 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
     try {
       this.setState({ isChangingPhase: true });
       await this.updatePhase(phase);
-      await this.modifiyFrontpageViews(phase.name);
+      await Promise.all([
+        this.modifiyFrontpageViews(phase.name),
+        this.updatePlannerWebPart(phase.name),
+      ]);
       this.setState({ data: { ...this.state.data, currentPhase: phase }, confirmPhase: null, isChangingPhase: false });
       if (this.props.automaticReload) {
         window.setTimeout(() => {
@@ -154,6 +159,36 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
         Logger.write(`(ProjectPhases) modifiyFrontpageViews: Failed to update ViewQuery for view '${this.props.currentPhaseViewName}' for list '${strings.DocumentsListName}'`, LogLevel.Error);
       }
     }
+  }
+
+  /**
+   * Update Planner Web Part
+   * 
+   * @param {string} phaseTermName Phase term name
+   * @param {string} plannerWebPartId Planner Web Part Id
+   */
+  private async updatePlannerWebPart(phaseTermName: string, plannerWebPartId: string = '39c4c1c2-63fa-41be-8cc2-f6c0b49b253d') {
+    try {
+      const [plans, partDefs, page] = await Promise.all([
+        MSGraphHelper.Get<{ id: string, title: string }[]>(`groups/${this.props.groupId}/planner/plans`, ['id', 'title']),
+        sp.web.getClientSideWebParts(),
+        ClientSidePage.fromFile(sp.web.getFileByServerRelativePath(`${this.props.webServerRelativeUrl}/SitePages/Hjem.aspx`)),
+      ]);
+      const [plan] = plans.filter(p => p.title === phaseTermName);
+      if (plan) {
+        const plannerControl = page.findControl(c => objectGet(c, 'json.webPartId') === plannerWebPartId);
+        const plannerPart = ClientSideWebpart.fromComponentDef(partDefs.filter(c => c.Id === plannerWebPartId)[0]);
+        plannerPart.setProperties<any>({
+          ...objectGet(plannerControl, 'data.webPartData.properties'),
+          planId: plan.id,
+        });
+        plannerPart.order = plannerControl.order;
+        plannerPart.column = plannerControl.column;
+        plannerControl.column.addControl(plannerPart);
+        plannerControl.remove();
+        await page.save();
+      }
+    } catch (error) { }
   }
 
   /**

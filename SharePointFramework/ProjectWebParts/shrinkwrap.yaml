@@ -3,18 +3,19 @@ dependencies:
   '@microsoft/sp-lodash-subset': 1.7.1
   '@microsoft/sp-office-ui-fabric-core': 1.7.1
   '@microsoft/sp-webpart-base': 1.7.1
-  '@pnp/common': 1.2.7
-  '@pnp/logging': 1.2.7
-  '@pnp/odata': 1.2.7
+  '@pnp/common': 1.3.2
+  '@pnp/logging': 1.3.2
+  '@pnp/odata': 1.3.2
   '@pnp/polyfill-ie11': 1.0.0
-  '@pnp/sp': 1.2.7
-  '@pnp/sp-clientsvc': 1.2.7
-  '@pnp/sp-taxonomy': 1.2.7
+  '@pnp/sp': 1.3.2
+  '@pnp/sp-clientsvc': 1.3.2
+  '@pnp/sp-taxonomy': 1.3.2
   '@pnp/spfx-controls-react': 1.11.0
   '@types/es6-promise': 0.0.33
   '@types/react': 16.4.2
   '@types/react-dom': 16.0.5
   '@types/webpack-env': 1.13.1
+  msgraph-helper: 0.7.1
   object-get: 2.1.0
   office-ui-fabric-react: 5.134.0
   prosjektportalen-spfx-shared: 'link:../@Shared'
@@ -237,10 +238,18 @@ packages:
       integrity: sha512-kJ2litpO+2Fr6eQNQA+v06t9WzcMQswq1r5N0OE38hrjWfk+cWuiDMmQtjUEfke9N8NcUeHkZo+iVg7klt1joQ==
   /@microsoft/microsoft-graph-client/1.1.0:
     dependencies:
-      es6-promise: 4.2.5
+      es6-promise: 4.2.6
       isomorphic-fetch: 2.2.1
     resolution:
       integrity: sha512-sDgchKZz1l3QJVNdkE1P1KpwTjupNt1mS9h1T0CiP+ayMN7IeFKfElB8IYtxFplNalZTmEq+iqoQFqUVpVMLfQ==
+  /@microsoft/microsoft-graph-client/1.5.2:
+    dependencies:
+      es6-promise: 4.2.6
+      isomorphic-fetch: 2.2.1
+      tslib: 1.9.3
+    dev: false
+    resolution:
+      integrity: sha512-lUsFLQMmi94r5+Eabmi5FBvlmxsqHPzdqm4suegFmcmnOI5+4OCLADORkRFRJXcWzTKB2ypR9x/mGv7f3r9DzA==
   /@microsoft/microsoft-graph-types/1.1.0:
     dev: true
     resolution:
@@ -543,6 +552,17 @@ packages:
       tslib: 1.8.1
     resolution:
       integrity: sha512-r/jDsbHsOY9hT9qPmdycaSa/ohOEIp8kblEHvU42BubCXBE3eW5SJuEeRWR+8nYbT2bb6H1RWAgOJ7NQGngJnw==
+  /@microsoft/sp-http/1.8.0:
+    dependencies:
+      '@microsoft/microsoft-graph-client': 1.1.0
+      '@microsoft/sp-core-library': 1.8.0
+      '@microsoft/sp-diagnostics': 1.8.0
+      '@types/adal-angular': 1.0.1
+      adal-angular: 1.0.16
+      tslib: 1.9.3
+    dev: false
+    resolution:
+      integrity: sha512-y2wJiBuu1SyzdHqcTOcYmfbi36rmbo6WjG91dG5MmyLqNn/bI7I0GLue2SBzBEX5CLKRBVa8yaiaaqTU0DQmdw==
   /@microsoft/sp-loader/1.7.1:
     dependencies:
       '@microsoft/office-ui-fabric-react-bundle': 1.7.1
@@ -773,6 +793,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-YsgBtpOJolRZpZZasWf6Dj4mS5QGAnxU/0s5jgwCQZT22Lf5IhxXC2R9/fURa/DI2742i9dCED6lQGDqoEz7rA==
+  /@pnp/common/1.3.2:
+    dependencies:
+      adal-angular: 1.0.17
+      tslib: 1.9.3
+    dev: false
+    resolution:
+      integrity: sha512-3n08lyGLeWm30ZBBxoVLOIQIRwWYZJ5se72m8LiNvzX0PvjGyUgVS1bkUKKNu5+jG0AwP+/OKzrmuRSb5+krLg==
   /@pnp/logging/1.0.1:
     dependencies:
       tslib: 1.8.1
@@ -791,6 +818,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-wIYcdNOjM6DSkWYtyGNwVe35JdVF9F58DTrdGQ40TRf5wJ9R8/bZQfq7KKJ4qYeHAOvjRT4DZwUi0Jaf+6bycg==
+  /@pnp/logging/1.3.2:
+    dependencies:
+      tslib: 1.9.3
+    dev: false
+    resolution:
+      integrity: sha512-etK4LLGFC7HPsTxgmOpJMtHwg5U6MVhEDXCem35I0TdYo0mfvW+rO/LP1DGDnpUfEeox0hMm6rEumz8vBrHZDg==
   /@pnp/odata/1.0.1/0b0d5991776e958e0e329d7bf4b49e05:
     dependencies:
       '@pnp/common': /@pnp/common/1.0.1/@pnp!logging@1.0.1
@@ -803,15 +836,6 @@ packages:
       '@pnp/logging': 1.0.1
     resolution:
       integrity: sha1-yE5s/MV2VdZj2IEFlgGT8yiOwAI=
-  /@pnp/odata/1.2.7:
-    dependencies:
-      tslib: 1.9.3
-    dev: false
-    peerDependencies:
-      '@pnp/common': 1.2.7
-      '@pnp/logging': 1.2.7
-    resolution:
-      integrity: sha512-7hgSZcC0mZd+6YaFWxT6l3QPu3HS2DknIECx/64YHEqF+0qXX6Tcg9Rtn7lsVt6kG3VXSnGnN0A5pCG6VaT5ag==
   /@pnp/odata/1.2.7/2f60dda3223b9f76cd6b54bcd199880e:
     dependencies:
       '@pnp/common': 1.2.7
@@ -836,6 +860,15 @@ packages:
       '@pnp/logging': 1.3.1
     resolution:
       integrity: sha512-LtFOjQ8psB5IxN75q/klQ2c2OuoRtBA69adipru5giBxwbOaqbgNzObz6SH7hEr4KYbtL6//hpRof7JoSpyelA==
+  /@pnp/odata/1.3.2:
+    dependencies:
+      tslib: 1.9.3
+    dev: false
+    peerDependencies:
+      '@pnp/common': 1.3.2
+      '@pnp/logging': 1.3.2
+    resolution:
+      integrity: sha512-47yShM69ZYiIBkZrk9zMve4kDAsLBdq0CmtSzmGLMh6ecnEJJzFklqO6W8pydrkqLniX5P0Ag7DDkQyWHbzvwA==
   /@pnp/polyfill-ie11/1.0.0:
     dependencies:
       '@types/core-js': 2.5.0
@@ -847,29 +880,29 @@ packages:
       '@pnp/sp': '*'
     resolution:
       integrity: sha512-9f2eT+u4nYc8K3WZyxlkHye7xAWK5Z6KYxqKs0ySYu/I3t9sPAVktE9VQ5jNR9+GPrY1OS+bMqcASDqBb6cpww==
-  /@pnp/sp-clientsvc/1.2.7:
+  /@pnp/sp-clientsvc/1.3.2:
     dependencies:
       tslib: 1.9.3
     dev: false
     peerDependencies:
-      '@pnp/common': 1.2.7
-      '@pnp/logging': 1.2.7
-      '@pnp/odata': 1.2.7
-      '@pnp/sp': 1.2.7
+      '@pnp/common': 1.3.2
+      '@pnp/logging': 1.3.2
+      '@pnp/odata': 1.3.2
+      '@pnp/sp': 1.3.2
     resolution:
-      integrity: sha512-YiwCXHXojUPa+rP0+stoAGnFSPhJGU4WzH3k0K5nQsKtf/PONW/8v4hU9TsuOm5relk8VNquXlUPq33xiZmufQ==
-  /@pnp/sp-taxonomy/1.2.7:
+      integrity: sha512-QJMexQ6dyhux/VOVVldT+LDIiHiFMvsT/Z+EJW8ALD0GFxCcoc7j/hGtiaWVrorRU+BSUUghO7HFXzHMV707EA==
+  /@pnp/sp-taxonomy/1.3.2:
     dependencies:
       tslib: 1.9.3
     dev: false
     peerDependencies:
-      '@pnp/common': 1.2.7
-      '@pnp/logging': 1.2.7
-      '@pnp/odata': 1.2.7
-      '@pnp/sp': 1.2.7
-      '@pnp/sp-clientsvc': 1.2.7
+      '@pnp/common': 1.3.2
+      '@pnp/logging': 1.3.2
+      '@pnp/odata': 1.3.2
+      '@pnp/sp': 1.3.2
+      '@pnp/sp-clientsvc': 1.3.2
     resolution:
-      integrity: sha512-74wDz2toFwK3mGg4W4XYbmV9BvOaDrfDpAsCP9DaiGU7AKtsIrlTcsO4WJpN8IFBIJPnCGSFsTRmNTefg+4iHw==
+      integrity: sha512-WPMlr9aM6NbaW2q7e4acGDkio9lj1j+4/tZ1SLz+yUbuqI+w7+34c3shdj/3BftPlkgifuK+yEIbGD2IK4x5Pg==
   /@pnp/sp/1.0.1/872a67f6865cfe6a0ad67cf8ae2a8949:
     dependencies:
       '@pnp/common': /@pnp/common/1.0.1/@pnp!logging@1.0.1
@@ -884,16 +917,6 @@ packages:
       '@pnp/odata': 1.0.1
     resolution:
       integrity: sha1-5XXJVqZWk9KRkI4yEdzWbc5KFWM=
-  /@pnp/sp/1.2.7:
-    dependencies:
-      tslib: 1.9.3
-    dev: false
-    peerDependencies:
-      '@pnp/common': 1.2.7
-      '@pnp/logging': 1.2.7
-      '@pnp/odata': 1.2.7
-    resolution:
-      integrity: sha512-shhqPNYBRV7jEO1TLtRzGk/Czd43WFJTqH19Gll2dt9MmTUzLj7Pyc9ioEsSXp6GdjtQ0Qz9e2hVX9UZboLxJQ==
   /@pnp/sp/1.2.7/5e4bfbec60dd1a26b5584e8bd12afffd:
     dependencies:
       '@pnp/common': 1.2.7
@@ -922,6 +945,16 @@ packages:
       '@pnp/odata': 1.3.1
     resolution:
       integrity: sha512-V0LcvymWFHNl/6dRd6uSyL47QsT8miRLMEJr3KtqZiXtgZ2Uwu2VKUwsDsUplnmMRrBv57b2ogm/6S843oZo2w==
+  /@pnp/sp/1.3.2:
+    dependencies:
+      tslib: 1.9.3
+    dev: false
+    peerDependencies:
+      '@pnp/common': 1.3.2
+      '@pnp/logging': 1.3.2
+      '@pnp/odata': 1.3.2
+    resolution:
+      integrity: sha512-w5K485ZszVUc6dbnOPBrEWYEhYnn+M71a1xNKQ8XLqxeec2cnG3rxdSLJFI0QCLgnQRKaHoFriQrE/x8+ftdIg==
   /@pnp/spfx-controls-react/1.11.0:
     dependencies:
       '@pnp/common': /@pnp/common/1.0.1/@pnp!logging@1.0.1
@@ -2969,8 +3002,13 @@ packages:
     resolution:
       integrity: sha512-wPMUt6FnH2yzG95SA6mzjQOEKUU3aLaDEmzs1ti+1E9h+CsrZghRlqEM/EJ4KscsQVG8uNN4uVreUeT8+drlgg==
   /commander/2.19.0:
+    dev: true
     resolution:
       integrity: sha512-6tvAOO+D6OENvRAh524Dh9jcfKTYDQAqvqezbCW82xj5X0pSrcpxtvRKHLG0yBY6SD7PSDrJaj+0AiOcKVd1Xg==
+  /commander/2.20.0:
+    optional: true
+    resolution:
+      integrity: sha512-7j2y+40w61zy6YC2iRNpUe/NwhNyoXrYpHMrSunaMG64nRnaf96zO/KMQR4OyN/UnE5KLyEBnKHd4aG3rskjpQ==
   /component-bind/1.0.0:
     dev: true
     resolution:
@@ -3803,8 +3841,12 @@ packages:
     resolution:
       integrity: sha512-OaU1hHjgJf+b0NzsxCg7NdIYERD6Hy/PEmFLTjw+b65scuisG3Kt4QoTvJ66BBkPZ581gr0kpoVzKnxniM8nng==
   /es6-promise/4.2.5:
+    dev: true
     resolution:
       integrity: sha512-n6wvpdE43VFtJq+lUDYDBFUwV8TZbuGXLV4D6wKafg13ldznKsyEvatubnmUe31zcvelSzOHF+XbaT+Bl9ObDg==
+  /es6-promise/4.2.6:
+    resolution:
+      integrity: sha512-aRVgGdnmW2OiySVPUC9e6m+plolMAJKjZnQlCwNSuK5yQ0JN61DZSO1X1Ufd1foqWRAlig0rhduTCHe7sVtK5Q==
   /es6-promisify/5.0.0:
     dependencies:
       es6-promise: 4.2.5
@@ -7631,6 +7673,13 @@ packages:
     dev: true
     resolution:
       integrity: sha512-tgp+dl5cGk28utYktBsrFqA7HKgrhgPsg6Z/EfhWI4gl1Hwq8B/GmY/0oXZ6nF8hDVesS/FpnYaD/kOWhYQvyg==
+  /msgraph-helper/0.7.1:
+    dependencies:
+      '@microsoft/microsoft-graph-client': 1.5.2
+      '@microsoft/sp-http': 1.8.0
+    dev: false
+    resolution:
+      integrity: sha512-sD9NVZaJuA0PXHIxcQ1UUcUB7s55Zs1+bjL79xVRgV85AkakKiyjV3HyAZNjRO3y91msfzRGdXdKgfzWB+AUXw==
   /multipipe/0.1.2:
     dependencies:
       duplexer2: 0.0.2
@@ -12105,7 +12154,7 @@ packages:
       validator: 8.2.0
     hasBin: true
     optionalDependencies:
-      commander: 2.19.0
+      commander: 2.20.0
     resolution:
       integrity: sha512-DUOKC/IhbkdLKKiV89gw9DUauTV8U/8yJl1sjf6MtDmzevLKOF2duNJ495S3MFVjqZarr+qNGCPbkg4mu4PpLw==
 registry: 'https://registry.npmjs.org/'
@@ -12120,13 +12169,13 @@ specifiers:
   '@microsoft/sp-tslint-rules': 1.7.1
   '@microsoft/sp-webpart-base': 1.7.1
   '@microsoft/sp-webpart-workbench': 1.7.1
-  '@pnp/common': ^1.2.7
-  '@pnp/logging': ^1.2.7
-  '@pnp/odata': ^1.2.7
+  '@pnp/common': ^1.3.2
+  '@pnp/logging': ^1.3.2
+  '@pnp/odata': ^1.3.2
   '@pnp/polyfill-ie11': ^1.0.0
-  '@pnp/sp': ^1.2.7
-  '@pnp/sp-clientsvc': ^1.2.7
-  '@pnp/sp-taxonomy': ^1.2.7
+  '@pnp/sp': ^1.3.2
+  '@pnp/sp-clientsvc': ^1.3.2
+  '@pnp/sp-taxonomy': ^1.3.2
   '@pnp/spfx-controls-react': ^1.11.0
   '@types/chai': 3.4.34
   '@types/es6-promise': 0.0.33
@@ -12137,6 +12186,7 @@ specifiers:
   ajv: ~5.2.2
   bluebird: ^3.5.3
   gulp: ~3.9.1
+  msgraph-helper: ^0.7.1
   node-fetch: ^2.3.0
   object-get: ^2.1.0
   office-ui-fabric-react: 5.134.0
