@@ -24,6 +24,14 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   @override
   public async onInit(): Promise<void> {
     if (this.context.pageContext.legacyPageContext.isSiteAdmin) {
+      this.injectStyle(`
+      .SPPageChrome {
+        opacity: 0.4;
+      }
+      .SPCanvas {
+        visibility: hidden;
+      }
+      `);
       Logger.subscribe(new ConsoleListener());
       Logger.activeLogLevel = LogLevel.Info;
       sp.setup({ spfxContext: this.context });
@@ -35,12 +43,29 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
         const templateInfo = await this.getTemplateInfo();
         ReactDOM.unmountComponentAtNode(this.templateSelectModalContainer);
         this.data = { ...this.data, ...templateInfo };
-        this.taskParams = { context: this.context, properties: this.properties, data: this.data };
+        this.taskParams = {
+          context: this.context,
+          properties: this.properties,
+          data: this.data,
+          templateParameters: { fieldsgroup: 'Prosjektportalenkolonner' },
+        };
         this.renderProgressModal({ text: strings.ProgressModalLabel, subText: strings.ProgressModalDescription, iconName: 'Page' });
         await this.runTasks();
       } else {
         this.renderErrorModal({ errorText: 'Området er ikke koblet til en hub.' });
       }
+    }
+  }
+
+  private injectStyle(css: string) {
+    let head = document.head || document.getElementsByTagName('head')[0];
+    let style = document.createElement('style');
+    head.appendChild(style);
+    style.type = 'text/css';
+    if (style['styleSheet']) {
+      style['styleSheet'].cssText = css;
+    } else {
+      style.appendChild(document.createTextNode(css));
     }
   }
 
@@ -105,6 +130,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   private async runTasks(): Promise<void> {
     Logger.log({ message: '(ProjectSetupApplicationCustomizer) runTasks', data: { properties: this.properties, tasks: Tasks.map(t => t.name) }, level: LogLevel.Info });
     try {
+      this.taskParams.templateSchema = await this.taskParams.data.selectedTemplate.getSchema();
       for (let i = 0; i < Tasks.length; i++) {
         this.taskParams = await Tasks[i].execute(this.taskParams, this.onTaskStatusUpdated);
       }

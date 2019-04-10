@@ -165,22 +165,16 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    * Update web part properties
    * 
    * @param {string} pageName Page name
-   * @param {ClientSidePageComponent[]} partDefs Part definitions
    * @param {string} webPartId Web Part Id
    * @param {Object} properties Properties
    */
-  private async updateWebPartProperties(pageName: string, partDefs: ClientSidePageComponent[], webPartId: string, properties: { [key: string]: string }) {
+  private async updateWebPartProperties(pageName: string, webPartId: string, properties: { [key: string]: string }) {
     const page = await ClientSidePage.fromFile(sp.web.getFileByServerRelativePath(`${this.props.webServerRelativeUrl}/SitePages/${pageName}.aspx`));
-    const control = page.findControl(c => objectGet(c, 'json.webPartId') === webPartId);
-    const newPart = ClientSideWebpart.fromComponentDef(partDefs.filter(c => c.Id === webPartId)[0]);
-    newPart.setProperties<any>({
+    const control = page.findControl<ClientSideWebpart>(c => objectGet(c, 'json.webPartId') === webPartId) as ClientSideWebpart;
+    control.setProperties<any>({
       ...objectGet(control, 'data.webPartData.properties'),
       ...properties,
     });
-    newPart.order = control.order;
-    newPart.column = control.column;
-    control.remove();
-    control.column.addControl(newPart);
     await page.save();
   }
 
@@ -192,14 +186,11 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    */
   private async updatePlannerWebPart(phaseTermName: string, plannerWebPartId: string = '39c4c1c2-63fa-41be-8cc2-f6c0b49b253d') {
     try {
-      const [plans, partDefs] = await Promise.all([
-        MSGraphHelper.Get<{ id: string, title: string }[]>(`groups/${this.props.groupId}/planner/plans`, ['id', 'title']),
-        sp.web.getClientSideWebParts(),
-      ]);
+      const plans = await MSGraphHelper.Get<{ id: string, title: string }[]>(`groups/${this.props.groupId}/planner/plans`, ['id', 'title']);
       const [plan] = plans.filter(p => p.title === phaseTermName);
       if (plan) {
-        await this.updateWebPartProperties('Hjem', partDefs, plannerWebPartId, { planId: plan.id });
-        await this.updateWebPartProperties('Oppgaver', partDefs, plannerWebPartId, { planId: plan.id });
+        await this.updateWebPartProperties('Hjem', plannerWebPartId, { planId: plan.id });
+        await this.updateWebPartProperties('Oppgaver', plannerWebPartId, { planId: plan.id });
       }
     } catch (error) { }
   }
