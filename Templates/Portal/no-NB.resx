@@ -3171,15 +3171,6 @@
   <data name="Lists_BenefitsAnalysis_Fields_Title_DisplayName" xml:space="preserve">
     <value>Gevinst</value>
   </data>
-  <data name="Lists_Log_Fields_LogLevel_DisplayName" xml:space="preserve">
-    <value>Loggnivå</value>
-  </data>
-  <data name="Lists_Log_Fields_Message_DisplayName" xml:space="preserve">
-    <value>Melding</value>
-  </data>
-  <data name="Lists_Log_Fields_Source_DisplayName" xml:space="preserve">
-    <value>Kilde</value>
-  </data>
   <data name="ProjectStatus_SnapshotHistory" xml:space="preserve">
     <value>Historikk ({0} tidligere)</value>
   </data>
