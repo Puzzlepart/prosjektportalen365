@@ -2,8 +2,8 @@ import * as React from 'react';
 import styles from './ProjectCard.module.scss';
 import * as strings from 'ProjectListWebPartStrings';
 import IProjectCardProps from './IProjectCardProps';
-import { Persona, PersonaSize, IPersonaSharedProps } from "office-ui-fabric-react/lib/Persona";
-import { DocumentCard, DocumentCardTitle, DocumentCardActions } from "office-ui-fabric-react/lib/DocumentCard";
+import { Persona, PersonaSize, IPersonaSharedProps } from 'office-ui-fabric-react/lib/Persona';
+import { DocumentCard, DocumentCardTitle, DocumentCardActions } from 'office-ui-fabric-react/lib/DocumentCard';
 
 
 /**
@@ -20,7 +20,7 @@ export const ProjectCardHeader = ({ project, shouldTruncateTitle }: IProjectCard
  * 
  * @param {IProjectCardProps} props Props 
  */
-export const ProjectCardContent = ({ project }: IProjectCardProps): JSX.Element => {
+export const ProjectCardContent = ({ project, showProjectOwner, showProjectManager}: IProjectCardProps): JSX.Element => {
   const defaultPersonaProps: IPersonaSharedProps = {
     primaryText: strings.NotSet,
     size: PersonaSize.size40,
@@ -31,10 +31,10 @@ export const ProjectCardContent = ({ project }: IProjectCardProps): JSX.Element 
   return (
     <div>
       <div className={styles.phase}>{project.Phase || strings.NotSet}</div>
-      <div className={styles.personaContainer}>
+      <div className={styles.personaContainer} hidden={!showProjectOwner}>
         <Persona {...ownerPersonaProps} />
       </div>
-      <div className={styles.personaContainer}>
+      <div className={styles.personaContainer} hidden={!showProjectManager}>
         <Persona {...managerPersonaProps} />
       </div>
     </div>

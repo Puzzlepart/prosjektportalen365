@@ -1,11 +1,9 @@
 import * as strings from 'ProjectListWebPartStrings';
 import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
-import { Web } from "@pnp/sp";
-import { IProjectListWebPartProps } from "../IProjectListWebPartProps";
+import { IProjectListWebPartProps } from '../IProjectListWebPartProps';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 
 export interface IProjectListProps extends IProjectListWebPartProps {
-  web: Web;
   siteAbsoluteUrl: string;
   columns?: IColumn[];
 }
@@ -37,4 +35,5 @@ export const ProjectListDefaultProps: Partial<IProjectListProps> = {
       minWidth: 100,
     },
   ],
+  sortBy: 'Title',
 };

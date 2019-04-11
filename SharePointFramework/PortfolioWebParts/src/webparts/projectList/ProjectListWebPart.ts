@@ -1,34 +1,24 @@
 import * as React from 'react';
+import * as strings from 'ProjectListWebPartStrings';
 import { Version } from '@microsoft/sp-core-library';
-import { IPropertyPaneConfiguration, } from '@microsoft/sp-webpart-base';
+import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
 import ProjectList from './components/ProjectList';
 import { IProjectListProps } from './components/IProjectListProps';
-import { Web } from '@pnp/sp';
 import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
 import { Logger, LogLevel } from '@pnp/logging';
 import MSGraph from 'msgraph-helper';
 import { IProjectListWebPartProps } from './IProjectListWebPartProps';
 
 export default class ProjectListWebPart extends PortfolioBaseWebPart<IProjectListWebPartProps> {
-  private web: Web;
-
   public render(): void {
     Logger.log({ message: '(ProjectListWebPart) render: Rendering <ProjectList />', level: LogLevel.Info });
-    const element: React.ReactElement<IProjectListProps> = React.createElement(
-      ProjectList,
-      {
-        ...this.properties,
-        web: this.web,
-        siteAbsoluteUrl: this.context.pageContext.site.absoluteUrl,
-      }
-    );
+    const element: React.ReactElement<IProjectListProps> = React.createElement(ProjectList, { ...this.properties, siteAbsoluteUrl: this.context.pageContext.site.absoluteUrl });
     super._render(this.manifest.alias, element);
   }
 
   protected async onInit(): Promise<void> {
     await super.onInit();
     await MSGraph.Init(this.context.msGraphClientFactory);
-    this.web = new Web(this.context.pageContext.web.absoluteUrl);
   }
 
   protected onDispose(): void {
@@ -40,6 +30,35 @@ export default class ProjectListWebPart extends PortfolioBaseWebPart<IProjectLis
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    return { pages: [] };
+    return {
+      pages: [
+        {
+          groups: [
+            {
+              groupName: strings.GeneralGroupName,
+              groupFields: [
+                PropertyPaneTextField('sortBy', {
+                  label: strings.SortByFieldLabel,
+                }),
+                PropertyPaneTextField('phaseTermSetId', {
+                  label: strings.PhaseTermSetIdFieldLabel,
+                }),                
+              ]
+            },
+            {
+              groupName: strings.TileViewGroupName,
+              groupFields: [
+                PropertyPaneToggle('showProjectOwner', {
+                  label: strings.ShowProjectOwnerFieldLabel,
+                }),
+                PropertyPaneToggle('showProjectManager', {
+                  label: strings.ShowProjectManagerFieldLabel,
+                })
+              ]
+            }
+          ]
+        }
+      ]
+    };
   }
 }

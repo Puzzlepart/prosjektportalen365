@@ -3,7 +3,7 @@
   "id": "54fbeb7d-e463-4dcc-8873-50a3ab2f0f68",
   "alias": "ProjectListWebPart",
   "componentType": "WebPart",
-  "version": "*",
+  "version": "0.6.0",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "preconfiguredEntries": [
@@ -26,7 +26,11 @@
           "contentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
           "fieldsGroupName": "Prosjektportalenkolonner",
           "identityFieldName": "GtSiteId"
-        }
+        },
+        "sortBy": "Title",
+        "showAsTiles": true,
+        "showProjectOwner": true,
+        "showProjectManager": true
       }
     }
   ]

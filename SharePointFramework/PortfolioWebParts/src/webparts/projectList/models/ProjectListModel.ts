@@ -16,6 +16,15 @@ export interface ISPUser {
     UserId: any;
 }
 
+export interface ISPProjectItem {
+    GtGroupId: string;
+    GtSiteId: string;
+    GtSiteUrl: string;
+    GtProjectOwnerId: number;
+    GtProjectManagerId: number;
+    GtProjectPhase: { TermGuid: string };
+}
+
 export class ProjectListModel {
     constructor(
         public Id: string,
@@ -24,7 +33,7 @@ export class ProjectListModel {
         public Logo?: string,
         public Phase?: string,
         public Manager?: IPersonaSharedProps,
-        public Owner?: IPersonaSharedProps ,
+        public Owner?: IPersonaSharedProps,
     ) {
 
     }

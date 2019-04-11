@@ -4,6 +4,8 @@ import { ProjectListModel } from "../../models/ProjectListModel";
 interface IProjectCardProps {
   project: ProjectListModel;
   shouldTruncateTitle: boolean;
+  showProjectOwner?: boolean;
+  showProjectManager?: boolean;
   actions: IButtonProps[];
 }
 

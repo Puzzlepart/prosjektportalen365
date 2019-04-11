@@ -16,7 +16,7 @@ import { taxonomy } from '@pnp/sp-taxonomy';
 import ProjectInformation from '../../../../../ProjectWebParts/lib/webparts/projectInformation/components/ProjectInformation';
 import MSGraph from 'msgraph-helper';
 import getObjectValue from '../../../../../@Shared/lib/helpers/getObjectValue';
-import { ProjectListModel, ISPUser } from '../models/ProjectListModel';
+import { ProjectListModel, ISPUser, ISPProjectItem } from '../models/ProjectListModel';
 import getUserPhoto from '../../../../../@Shared/lib/helpers/getUserPhoto';
 
 export default class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
@@ -24,11 +24,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
 
   constructor(props: IProjectListProps) {
     super(props);
-    this.state = {
-      projects: [],
-      isLoading: true,
-      showAsTiles: true,
-    };
+    this.state = { isLoading: true, showAsTiles: props.showAsTiles };
   }
 
   public async componentDidMount() {
@@ -93,9 +89,11 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         <ProjectCard
           project={project}
           shouldTruncateTitle={true}
+          showProjectOwner={this.props.showProjectOwner}
+          showProjectManager={this.props.showProjectManager}
           actions={[{
             id: 'ON_SELECT_PROJECT',
-            iconProps: { iconName: "OpenInNewWindow" },
+            iconProps: { iconName: 'OpenInNewWindow' },
             onClick: (event: React.MouseEvent<any>) => this.onCardAction(event, project),
           }]} />
       ));
@@ -172,15 +170,13 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   private getFilteredProjects() {
     let { projects, searchTerm } = ({ ...this.state } as IProjectListState);
     if (searchTerm) {
-      projects = projects
-        .filter(project => {
-          const matches = Object.keys(project).filter(key => {
-            const value = project[key];
-            return value && typeof value === 'string' && value.toLowerCase().indexOf(searchTerm) !== -1;
-          }).length;
-          return matches > 0;
-        })
-        .sort((a, b) => a.Title > b.Title ? 1 : -1);
+      projects = projects.filter(project => {
+        const matches = Object.keys(project).filter(key => {
+          const value = project[key];
+          return value && typeof value === 'string' && value.toLowerCase().indexOf(searchTerm) !== -1;
+        }).length;
+        return matches > 0;
+      });
       return projects;
     } else {
       return projects;
@@ -210,11 +206,11 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         .items
         .select('GtGroupId', 'GtSiteId', 'GtSiteUrl', 'GtProjectOwnerId', 'GtProjectManagerId', 'GtProjectPhase')
         .usingCaching()
-        .get<{ GtGroupId: string, GtSiteId: string, GtSiteUrl: string, GtProjectOwnerId: number, GtProjectManagerId: number, GtProjectPhase: { TermGuid: string } }[]>(),
+        .get<ISPProjectItem[]>(),
       MSGraph.Get<{ id: string, displayName: string }[]>(`/me/memberOf/$/microsoft.graph.group`, 'v1.0', ['id', 'displayName'], `groupTypes/any(a:a%20eq%20'unified')`),
       web
         .siteUsers
-        .select("Id", "Title", "Email")
+        .select('Id', 'Title', 'Email')
         .usingCaching()
         .get<ISPUser[]>(),
       taxonomy
@@ -236,7 +232,6 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         let [phase] = phaseTerms.filter(p => p.Id.indexOf(getObjectValue(item, 'GtProjectPhase.TermGuid', '')) !== -1);
 
         const model: ProjectListModel = { Id: item.GtSiteId, Title: group.displayName, Url: item.GtSiteUrl };
-
         if (manager) {
           model.Manager = { primaryText: manager.Title, imageUrl: getUserPhoto(manager.Email) };
         }
@@ -246,10 +241,10 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         if (phase) {
           model.Phase = phase.Name;
         }
-
         return model;
       })
-      .filter(p => p);
+      .filter(p => p)
+      .sort((a, b) => a[this.props.sortBy] < b[this.props.sortBy] ? -1 : (a[this.props.sortBy] > b[this.props.sortBy] ? 1 : 0));
 
     return projects;
   }

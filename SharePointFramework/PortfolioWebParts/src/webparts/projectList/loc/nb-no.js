@@ -12,6 +12,12 @@ define([], function () {
     "LoadingText": "Laster prosjekter du er medlem av...",
     "ErrorText": "Det skjedde en feil under uthenting av data.",
     "ShowAsListText": "Vis som liste",
-    "ShowAsTilesText": "Vis som fliser"
+    "ShowAsTilesText": "Vis som fliser",
+    "GeneralGroupName": "Generelt",
+    "SortByFieldLabel": "Sorteringsegenskap",
+    "PhaseTermSetIdFieldLabel": "Termsett ID for Fase",
+    "TileViewGroupName": "Flisevisning",
+    "ShowProjectOwnerFieldLabel": "Vis Prosjekteier",
+    "ShowProjectManagerFieldLabel": "Vis Prosjektleder"
   }
 });

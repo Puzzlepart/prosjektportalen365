@@ -15,6 +15,12 @@ declare interface IProjectListWebPartStrings {
   ErrorText: string;
   ShowAsListText: string;
   ShowAsTilesText: string;
+  GeneralGroupName: string;
+  SortByFieldLabel: string;
+  PhaseTermSetIdFieldLabel: string;
+  TileViewGroupName: string;
+  ShowProjectOwnerFieldLabel: string;
+  ShowProjectManagerFieldLabel: string;
 }
 
 declare module 'ProjectListWebPartStrings' {
