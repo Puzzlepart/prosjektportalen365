@@ -1,25 +1,16 @@
 import * as React from 'react';
 import styles from './Filter.module.scss';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
-import { IFilterItemProps, FilterItem } from './FilterItem';
-
-export interface IFilterProps {
-    column: IColumn;
-    items: IFilterItemProps[];
-    onFilterChange?: (column: IColumn, selectedItems: IFilterItemProps[]) => void;
-}
-
-export interface IFilterState {
-    isCollapsed: boolean;
-    items: IFilterItemProps[];
-}
+import { IFilterState } from './IFilterState';
+import { IFilterProps } from './IFilterProps';
+import { FilterItem } from '../FilterItem';
+import { IFilterItemProps } from '../FilterItem/IFilterItemProps';
 
 export class Filter extends React.Component<IFilterProps, IFilterState> {
     constructor(props: IFilterProps) {
         super(props);
-        this.state = { isCollapsed: false, items: props.items };
+        this.state = { isCollapsed: props.defaultCollapsed, items: props.items };
     }
 
     public render(): React.ReactElement<IFilterProps> {
@@ -43,6 +34,7 @@ export class Filter extends React.Component<IFilterProps, IFilterState> {
     /**
      * On toggle section content
      */
+    @autobind
     private onToggleSectionContent() {
         this.setState((prevState: IFilterState) => ({ isCollapsed: !prevState.isCollapsed }));
     }
@@ -69,3 +61,5 @@ export class Filter extends React.Component<IFilterProps, IFilterState> {
         this.props.onFilterChange(this.props.column, selectedItems);
     }
 }
+
+export { IFilterProps };

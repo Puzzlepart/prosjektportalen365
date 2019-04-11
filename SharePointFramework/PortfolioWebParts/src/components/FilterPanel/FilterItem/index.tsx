@@ -1,17 +1,9 @@
 import * as React from 'react';
 import styles from './FilterItem.module.scss';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
+import { IFilterItemProps } from './IFilterItemProps';
 
-export interface IFilterItemProps {
-    name: string;
-    value: string;
-    selected?: boolean;
-    onChanged?: (event: React.FormEvent<HTMLElement | HTMLInputElement>, checked: boolean) => void;
-}
-
-export interface IFilterItemState { }
-
-export class FilterItem extends React.Component<IFilterItemProps, IFilterItemState> {
+export class FilterItem extends React.PureComponent<IFilterItemProps, {}> {
     constructor(props: IFilterItemProps) {
         super(props);
         this.state = {};
