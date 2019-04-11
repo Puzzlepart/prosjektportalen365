@@ -204,10 +204,18 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     return (
       <FilterPanel
         isOpen={this.state.showFilterPanel}
-        onDismiss={() => this.setState({ showFilterPanel: false })}
+        onDismiss={this.onDismissFilterPanel}
         filters={[PortfolioOverviewFieldSelector, ...this.state.filters]}
         onFilterChange={this.onFilterChange} />
     );
+  }
+
+  /**
+   * On dismiss <FilterPabel />
+   */
+  @autobind
+  private onDismissFilterPanel() {
+    this.setState({ showFilterPanel: false });
   }
 
   /**

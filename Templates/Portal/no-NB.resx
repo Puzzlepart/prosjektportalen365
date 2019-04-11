@@ -1353,6 +1353,9 @@
   <data name="SiteFields_GtSiteUrl_DisplayName" xml:space="preserve">
     <value>Områdeadresse</value>
   </data>
+  <data name="SiteFields_GtColMinWidth_DisplayName" xml:space="preserve">
+    <value>Minimum bredde</value>
+  </data>
   <data name="SiteFields_GtSortOrder_Description" xml:space="preserve">
     <value />
   </data>
@@ -1666,10 +1669,10 @@
     <value></value>
   </data>
   <data name="SiteFields_GtManagedProperty_Description" xml:space="preserve">
-    <value></value>
+    <value>Navnet på den forvaltede egenskapen for denne kolonnen. Må settes om kolonnen skal kunne brukes i Porteføljeoversikten.</value>
   </data>
   <data name="SiteFields_GtInternalName_Description" xml:space="preserve">
-    <value></value>
+    <value>Internt feltnavn for denne kolonnen.</value>
   </data>
   <data name="SiteFields_GtDpOrder_Description" xml:space="preserve">
     <value></value>
@@ -1717,13 +1720,13 @@
     <value>Tekst som vises i Nytt prosjekt-dialogen</value>
   </data>
   <data name="SiteFields_GtShowFieldProjectStatus_Description" xml:space="preserve">
-    <value></value>
+    <value>Skal kolonnen være synlig i Prosjektinformasjon på Prosjektstatus-siden.</value>
   </data>
   <data name="SiteFields_GtShowFieldFrontpage_Description" xml:space="preserve">
-    <value></value>
+    <value>Skal kolonnen være synlig i Prosjektinformasjon på forsiden av prosjektet.</value>
   </data>
   <data name="SiteFields_GtShowFieldPortfolio_Description" xml:space="preserve">
-    <value></value>
+    <value />
   </data>
   <data name="SiteFields_GtKey_Description" xml:space="preserve">
     <value></value>
@@ -1780,7 +1783,7 @@
     <value></value>
   </data>
   <data name="SiteFields_GtFieldDataType_Description" xml:space="preserve">
-    <value></value>
+    <value>Datatype for denne kolonnen. Styrer hvordan kolonnen blir vist i Porteføljeoversikten.</value>
   </data>
   <data name="SiteFields_GtChrYTickInterval_Description" xml:space="preserve">
     <value></value>
@@ -1837,10 +1840,10 @@
     <value></value>
   </data>
   <data name="SiteFields_GtIsGroupable_Description" xml:space="preserve">
-    <value></value>
+    <value>Brukere kan gruppere på denne kolonnen i Portføljeoversikten.</value>
   </data>
   <data name="SiteFields_GtIsRefinable_Description" xml:space="preserve">
-    <value></value>
+    <value>Brukere kan filtrere på denne kolonnen i Portføljeoversikten.</value>
   </data>
   <data name="SiteFields_GtMonthChoice_Description" xml:space="preserve">
     <value></value>
@@ -1938,6 +1941,10 @@
   <data name="SiteFields_GtSiteUrl_Description" xml:space="preserve">
     <value></value>
   </data>
+  <data name="SiteFields_GtColMinWidth_Description" xml:space="preserve">
+    <value>Minimum bredde for denne kolonnen i piksler. Brukes blant annet i Porteføljeoversikten.</value>
+  </data>
+  
   <data name="ProjectList_Header" xml:space="preserve">
     <value>Prosjekter</value>
   </data>

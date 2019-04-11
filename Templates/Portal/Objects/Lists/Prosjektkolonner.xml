@@ -1,4 +1,4 @@
-﻿<pnp:ListInstance Title="Prosjektkolonner" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Prosjektkolonner" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableFolderCreation="false" 
+﻿<pnp:ListInstance Title="Prosjektkolonner" Description="" DocumentTemplate="" TemplateType="100" Hidden="true" Url="Lists/Prosjektkolonner" EnableVersioning="true" EnableAttachments="false" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableFolderCreation="false" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100248005C277FADD45B7266F9151442472" Default="true" />
@@ -19,6 +19,7 @@
                 <FieldRef Name="GtShowFieldFrontpage" />
                 <FieldRef Name="GtShowFieldPortfolio" />
                 <FieldRef Name="GtFieldDataType" />
+                <FieldRef Name="GtColMinWidth" />
                 <FieldRef Name="GtIsRefinable" />
                 <FieldRef Name="GtIsGroupable" />
             </ViewFields>
@@ -34,6 +35,7 @@
             <pnp:DataValue FieldName="GtInternalName">Title</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">Title</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
@@ -46,6 +48,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtProjectFinanceName</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectFinanceNameOWSTEXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
@@ -58,6 +61,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtProjectNumber</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectNumberOWSTEXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
@@ -70,6 +74,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtArchiveReference</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtArchiveReferenceOWSTEXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
@@ -82,6 +87,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtProjectServiceArea</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">RefinableString53</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
@@ -94,6 +100,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtProjectType</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">RefinableString54</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
@@ -106,6 +113,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtProjectPhase</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">RefinableString52</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
@@ -118,6 +126,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtProjectManager</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">RefinableString51</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
@@ -130,6 +139,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtProjectOwner</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">RefinableString50</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
@@ -141,6 +151,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtGainsResponsible</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">RefinableString70</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
@@ -153,6 +164,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtStartDate</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStartDateOWSDATE</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
@@ -165,6 +177,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtEndDate</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtEndDateOWSDATE</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
@@ -177,6 +190,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtProjectGoals</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectGoalsOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
@@ -189,6 +203,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtBudgetTotal</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBudgetTotalOWSCURR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Currency</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
@@ -201,6 +216,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtCostsTotal</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtCostsTotalOWSCURR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Currency</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
@@ -213,6 +229,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtProjectForecast</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectForecastOWSCURR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Currency</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
@@ -225,6 +242,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtBudgetLastReportDate</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBudgetLastReportDateOWSDATE</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
@@ -237,6 +255,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtMonthChoice</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtMonthChoiceOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">190</pnp:DataValue>
@@ -244,6 +263,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtOverallStatus</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtOverallStatusOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">200</pnp:DataValue>
@@ -251,6 +271,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtStatusTime</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusTimeOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">210</pnp:DataValue>
@@ -258,6 +279,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtStatusTimeComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusTimeCommentOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
@@ -265,6 +287,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtStatusBudget</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusBudgetOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">230</pnp:DataValue>
@@ -272,6 +295,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtStatusBudgetComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusBudgetCommentOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
@@ -279,6 +303,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtStatusQuality</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusQualityOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">250</pnp:DataValue>
@@ -286,6 +311,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtStatusQualityComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusQualityCommentOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">260</pnp:DataValue>
@@ -293,6 +319,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtStatusRisk</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusRiskOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">270</pnp:DataValue>
@@ -300,6 +327,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtStatusRiskComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusRiskCommentOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">280</pnp:DataValue>
@@ -307,6 +335,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtStatusGainAchievement</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusGainAchievementOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">290</pnp:DataValue>
@@ -314,6 +343,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtStatusGainAchievementComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusGainAchievementCommentOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
 </pnp:ListInstance>
