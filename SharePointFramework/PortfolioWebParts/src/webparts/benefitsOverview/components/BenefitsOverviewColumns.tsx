@@ -4,7 +4,7 @@ import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import BenefitMeasurementsModal from './BenefitMeasurementsModal';
 import { IBenefitsOverviewProps } from './IBenefitsOverviewProps';
-import getObjectValue from 'prosjektportalen-spfx-shared/lib/helpers/getObjectValue';
+import getObjectValue from '../../../../../@Shared/lib/helpers/getObjectValue';
 import { BenefitMeasurementIndicator } from '../models';
 import BenefitMeasurementAchievement from './BenefitMeasurementAchievement';
 

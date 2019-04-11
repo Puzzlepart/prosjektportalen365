@@ -1,5 +1,4 @@
-import { ProjectListModel } from 'prosjektportalen-spfx-shared/lib/models/ProjectListModel';
-
+import { ProjectListModel } from "../models/ProjectListModel";
 
 export interface IProjectListState {
   isLoading: boolean;
@@ -7,4 +6,5 @@ export interface IProjectListState {
   error?: any;
   selectedProject?: ProjectListModel;
   searchTerm?: string;
+  showAsTiles?: boolean;
 }

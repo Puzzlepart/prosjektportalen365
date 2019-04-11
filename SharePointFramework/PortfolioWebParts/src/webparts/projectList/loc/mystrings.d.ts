@@ -13,6 +13,8 @@ declare interface IProjectListWebPartStrings {
   ProjectStatusLinkText: string;
   LoadingText: string;
   ErrorText: string;
+  ShowAsListText: string;
+  ShowAsTilesText: string;
 }
 
 declare module 'ProjectListWebPartStrings' {

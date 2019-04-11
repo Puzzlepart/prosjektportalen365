@@ -3,7 +3,6 @@ define([], function() {
     "PropertyPaneDescription": "Beskrivelse",
     "BasicGroupName": "Gruppenavn",
     "DescriptionFieldLabel": "Beskrivelsesfelt",
-    "LoadingProjects": "Laster prosjekter..."
-
+    "LoadingProjects": "Laster siste prosjekter..."
   }
 });

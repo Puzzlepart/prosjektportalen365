@@ -2,24 +2,67 @@ import * as React from 'react';
 import styles from './ProjectCard.module.scss';
 import * as strings from 'ProjectListWebPartStrings';
 import IProjectCardProps from './IProjectCardProps';
-import { DocumentCard, DocumentCardTitle, DocumentCardLocation, DocumentCardActivity, DocumentCardActions, DocumentCardType } from "office-ui-fabric-react/lib/DocumentCard";
-import getUserPhoto from 'prosjektportalen-spfx-shared/lib/helpers/getUserPhoto';
+import { Persona, PersonaSize, IPersonaSharedProps } from "office-ui-fabric-react/lib/Persona";
+import { DocumentCard, DocumentCardTitle, DocumentCardActions } from "office-ui-fabric-react/lib/DocumentCard";
 
-export default ({ project, onClickHref, selectedProject }: IProjectCardProps): JSX.Element => {
+
+/**
+ * Project Card Header
+ * 
+ * @param {IProjectCardProps} props Props 
+ */
+export const ProjectCardHeader = ({ project, shouldTruncateTitle }: IProjectCardProps): JSX.Element => {
+  return <DocumentCardTitle title={project.Title} shouldTruncate={shouldTruncateTitle} />;
+};
+
+/**
+ * Project Card Content
+ * 
+ * @param {IProjectCardProps} props Props 
+ */
+export const ProjectCardContent = ({ project }: IProjectCardProps): JSX.Element => {
+  const defaultPersonaProps: IPersonaSharedProps = {
+    primaryText: strings.NotSet,
+    size: PersonaSize.size40,
+    imageShouldFadeIn: true,
+  };
+  const ownerPersonaProps = { ...defaultPersonaProps, ...project.Owner, secondaryText: strings.ProjectOwner };
+  const managerPersonaProps = { ...defaultPersonaProps, ...project.Manager, secondaryText: strings.ProjectManager };
+  return (
+    <div>
+      <div className={styles.phase}>{project.Phase || strings.NotSet}</div>
+      <div className={styles.personaContainer}>
+        <Persona {...ownerPersonaProps} />
+      </div>
+      <div className={styles.personaContainer}>
+        <Persona {...managerPersonaProps} />
+      </div>
+    </div>
+  );
+};
+
+/**
+ * Project Card Footer
+ * 
+ * @param {IProjectCardProps} props Props 
+ */
+export const ProjectCardFooter = ({ actions }: IProjectCardProps): JSX.Element => {
+  return <DocumentCardActions actions={actions} />;
+};
+
+/**
+ * Project Card
+ * 
+ * @param {IProjectCardProps} props Props  
+ */
+export default (props: IProjectCardProps): JSX.Element => {
   return (
     <DocumentCard
       className={styles.projectCard}
-      type={DocumentCardType.normal}
-      onClickHref={onClickHref}    >
-      <DocumentCardTitle title={project.Title} shouldTruncate={false} />
-      <DocumentCardLocation location={project.Phase || strings.NotSet} />
-      <DocumentCardActivity
-        activity={strings.ProjectOwner}
-        people={project.Owner ? [{ name: project.Owner.Title, profileImageSrc: getUserPhoto(project.Owner.Email) }] : []} />
-      <DocumentCardActivity
-        activity={strings.ProjectManager}
-        people={project.Manager ? [{ name: project.Manager.Title, profileImageSrc: getUserPhoto(project.Manager.Email) }] : []} />
-      <DocumentCardActions actions={[{ iconProps: { iconName: "OpenInNewWindow" }, onClick: event => selectedProject(event, project) }]} />
+      onClickHref={props.project.Url}>
+      <ProjectCardHeader {...props} />
+      <ProjectCardContent {...props} />
+      <ProjectCardFooter {...props} />
     </DocumentCard>
   );
 };

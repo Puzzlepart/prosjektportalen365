@@ -4,11 +4,10 @@ import * as strings from 'LatestProjectsWebPartStrings';
 import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
 import { ILatestProjectsProps } from './ILatestProjectsProps';
 import { ILatestProjectsState } from './ILatestProjectsState';
-import { SearchQuery, ISearchQueryBuilder, SearchQueryBuilder, sp, QueryPropertyValueType, SortDirection, SearchResult } from '@pnp/sp';
-import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http';
+import { sp, QueryPropertyValueType, SortDirection } from '@pnp/sp';
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
 import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
-import formatDate from 'prosjektportalen-spfx-shared/lib/helpers/formatDate';
+import formatDate from '../../../../../@Shared/lib/helpers/formatDate';
 
 export default class LatestProjects extends React.Component<ILatestProjectsProps, ILatestProjectsState> {
   constructor(props: ILatestProjectsProps) {

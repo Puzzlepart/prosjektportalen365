@@ -1,9 +1,10 @@
-import { ProjectListModel } from 'prosjektportalen-spfx-shared/lib/models/ProjectListModel';
+import {IButtonProps} from 'office-ui-fabric-react/lib/Button';
+import { ProjectListModel } from "../../models/ProjectListModel";
 
 interface IProjectCardProps {
   project: ProjectListModel;
-  onClickHref: string;
-  selectedProject: (event: React.MouseEvent<any>, project: ProjectListModel) => void;
+  shouldTruncateTitle: boolean;
+  actions: IButtonProps[];
 }
 
 export default IProjectCardProps;

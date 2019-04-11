@@ -11,8 +11,8 @@ import { DetailsList, DetailsListLayoutMode, SelectionMode, ConstrainMode, IColu
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import { sp } from '@pnp/sp';
-import DataSourceService from 'prosjektportalen-spfx-shared/lib/services/DataSourceService';
-import getObjectValue from 'prosjektportalen-spfx-shared/lib/helpers/getObjectValue';
+import DataSourceService from '../../../../@Shared/lib/services/DataSourceService';
+import getObjectValue from '../../../../@Shared/lib/helpers/getObjectValue';
 import HubSiteService from 'sp-hubsite-service';
 import * as stringFormat from 'string-format';
 import * as moment from 'moment';

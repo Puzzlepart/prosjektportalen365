@@ -1,24 +1,34 @@
 import * as React from 'react';
 import styles from './ProjectList.module.scss';
 import * as strings from 'ProjectListWebPartStrings';
-import { IProjectListProps } from './IProjectListProps';
+import { IProjectListProps, ProjectListDefaultProps } from './IProjectListProps';
 import { IProjectListState } from './IProjectListState';
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
+import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { DetailsList, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { Modal } from 'office-ui-fabric-react/lib/Modal';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import ProjectCard from './ProjectCard/ProjectCard';
-import { sp } from '@pnp/sp';
+import { sp, Web } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
 import ProjectInformation from '../../../../../ProjectWebParts/lib/webparts/projectInformation/components/ProjectInformation';
-import { ProjectListModel } from 'prosjektportalen-spfx-shared/lib/models/ProjectListModel';
 import MSGraph from 'msgraph-helper';
+import getObjectValue from '../../../../../@Shared/lib/helpers/getObjectValue';
+import { ProjectListModel, ISPUser } from '../models/ProjectListModel';
+import getUserPhoto from '../../../../../@Shared/lib/helpers/getUserPhoto';
 
 export default class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
+  public static defaultProps = ProjectListDefaultProps;
+
   constructor(props: IProjectListProps) {
     super(props);
-    this.state = { projects: [], isLoading: true };
+    this.state = {
+      projects: [],
+      isLoading: true,
+      showAsTiles: true,
+    };
   }
 
   public async componentDidMount() {
@@ -30,6 +40,9 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
     }
   }
 
+  /**
+   * Renders the <ProjectList /> component
+   */
   public render(): React.ReactElement<IProjectListProps> {
     if (this.state.isLoading) {
       return (
@@ -47,11 +60,20 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
     }
     return (
       <div className={styles.projectList}>
-        <div className={styles.searchBox}>
-          <SearchBox placeholder={strings.SearchBoxPlaceholderText} onChanged={this.onSearch} />
-        </div>
         <div className={styles.container}>
-          {this.renderCards()}
+          <div className={styles.searchBox}>
+            <SearchBox placeholder={strings.SearchBoxPlaceholderText} onChanged={this.onSearch} />
+          </div>
+          <div className={styles.viewToggle}>
+            <Toggle
+              offText={strings.ShowAsListText}
+              onText={strings.ShowAsTilesText}
+              defaultChecked={this.state.showAsTiles}
+              onChanged={showAsTiles => this.setState({ showAsTiles })} />
+          </div>
+          <div className={styles.projects}>
+            {this.renderProjects()}
+          </div>
         </div>
         {this.renderProjectInformation()}
       </div>
@@ -59,24 +81,53 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   }
 
   /**
-   * Render cards
+   * Render projects
    */
-  private renderCards() {
+  private renderProjects() {
     const projects = this.getFilteredProjects();
     if (projects.length === 0) {
       return <MessageBar>{strings.NoSearchResults}</MessageBar>;
     }
-    return projects.map(project => (
-      <ProjectCard
-        project={project}
-        onClickHref={project.Url}
-        selectedProject={this.onSelectProject} />
-    ));
+    if (this.state.showAsTiles) {
+      const cards = projects.map(project => (
+        <ProjectCard
+          project={project}
+          shouldTruncateTitle={true}
+          actions={[{
+            id: 'ON_SELECT_PROJECT',
+            iconProps: { iconName: "OpenInNewWindow" },
+            onClick: (event: React.MouseEvent<any>) => this.onCardAction(event, project),
+          }]} />
+      ));
+      return cards;
+    } else {
+      return (
+        <DetailsList
+          items={projects}
+          columns={this.props.columns}
+          onRenderItemColumn={this.onRenderItemColumn} />
+      );
+    }
   }
 
   /**
-   * Render <ProjectInformation /> in a <Modal />
+   * On render item column
+   * 
+   * @param {ProjectListModel} project Project
+   * @param {number} _index Index
+   * @param {IColumn} column Column
    */
+  private onRenderItemColumn(project: ProjectListModel, _index: number, column: IColumn) {
+    const colValue = getObjectValue(project, column.fieldName, null);
+    if (column.fieldName === 'Title') {
+      return <a href={project.Url}>{colValue}</a>;
+    }
+    return colValue;
+  }
+
+  /**
+  * Render <ProjectInformation /> in a <Modal />
+  */
   private renderProjectInformation() {
     if (this.state.selectedProject) {
       return (
@@ -98,16 +149,21 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   }
 
   /**
-   * On select project
-   * 
-   * @param {React.MouseEvent} event Event
-   * @param {ProjectListModel} project Project
-   */
+  * On select project
+  *
+  * @param {React.MouseEvent} event Event
+  * @param {ProjectListModel} project Project
+  */
   @autobind
-  private onSelectProject(event: React.MouseEvent<any>, project: ProjectListModel) {
-    event.stopPropagation();
+  private onCardAction(event: React.MouseEvent<any>, project: ProjectListModel) {
     event.preventDefault();
-    this.setState({ selectedProject: project });
+    event.stopPropagation();
+    switch (event.currentTarget.id) {
+      case 'ON_SELECT_PROJECT': {
+        this.setState({ selectedProject: project });
+      }
+        break;
+    }
   }
 
   /**
@@ -143,8 +199,10 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
 
   /**
    * Fetch data
+   * 
+   * @param {Web} web Web
    */
-  private async fetchData(web = sp.web): Promise<ProjectListModel[]> {
+  private async fetchData(web: Web = sp.web): Promise<ProjectListModel[]> {
     let [items, groups, users, phaseTerms] = await Promise.all([
       web
         .lists
@@ -158,7 +216,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         .siteUsers
         .select("Id", "Title", "Email")
         .usingCaching()
-        .get<{ Id: number, Title: string, Email: string }[]>(),
+        .get<ISPUser[]>(),
       taxonomy
         .getDefaultSiteCollectionTermStore()
         .getTermSetById(this.props.phaseTermSetId)
@@ -175,17 +233,21 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         }
         let [owner] = users.filter(user => user.Id === item.GtProjectOwnerId);
         let [manager] = users.filter(user => user.Id === item.GtProjectManagerId);
-        let phase = item.GtProjectPhase ? phaseTerms.filter(p => p.Id.indexOf(item.GtProjectPhase.TermGuid) !== -1)[0].Name : '';
+        let [phase] = phaseTerms.filter(p => p.Id.indexOf(getObjectValue(item, 'GtProjectPhase.TermGuid', '')) !== -1);
 
-        return ({
-          Id: item.GtSiteId,
-          Logo: null,
-          Manager: manager,
-          Owner: owner,
-          Phase: phase,
-          Title: group.displayName,
-          Url: item.GtSiteUrl,
-        } as ProjectListModel);
+        const model: ProjectListModel = { Id: item.GtSiteId, Title: group.displayName, Url: item.GtSiteUrl };
+
+        if (manager) {
+          model.Manager = { primaryText: manager.Title, imageUrl: getUserPhoto(manager.Email) };
+        }
+        if (owner) {
+          model.Owner = { primaryText: owner.Title, imageUrl: getUserPhoto(owner.Email) };
+        }
+        if (phase) {
+          model.Phase = phase.Name;
+        }
+
+        return model;
       })
       .filter(p => p);
 
