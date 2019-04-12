@@ -21,7 +21,9 @@ export default class SummarySection extends StatusSectionBase<ISummarySectionPro
           <div className='ms-Grid-col ms-sm6'>
             <ProjectInformation
               title='Prosjektinformasjon'
-              context={this.props.context}
+              hubSiteUrl={this.props.hubSite.url}
+              siteId={this.props.pageContext.site.id.toString()}
+              webUrl={this.props.pageContext.web.absoluteUrl}
               entity={this.props.entity}
               filterField='GtShowFieldProjectStatus'
               hideEditPropertiesButton={true} />

@@ -123,6 +123,7 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
    * @param {SectionModel} model Section model
    */
   private getSectionBaseProps(model: SectionModel): IStatusSectionBaseProps {
+    const { pageContext, hubSite } = this.props;
     const { selectedReport, data } = this.state;
     const baseProps: IStatusSectionBaseProps = {
       headerProps: {
@@ -134,7 +135,8 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
       },
       report: selectedReport,
       model,
-      pageContext: this.props.pageContext,
+      pageContext,
+      hubSite,
       data,
     };
     return baseProps;
