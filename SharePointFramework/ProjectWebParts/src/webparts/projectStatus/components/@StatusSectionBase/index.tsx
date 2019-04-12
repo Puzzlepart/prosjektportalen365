@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './StatusSectionBase.module.scss';
-import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import { IStatusSectionBaseProps } from './IStatusSectionBaseProps';
 import { IStatusSectionBaseState } from './IStatusSectionBaseState';
 

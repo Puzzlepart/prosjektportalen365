@@ -94,15 +94,7 @@ export default class ProjectInformation extends React.Component<IProjectInformat
 
   private async fetchData(): Promise<IProjectInformationData> {
     try {
-      let { hubSite, hubSiteUrl, siteId, webUrl, context } = this.props;
-      if (context) {
-        if (!hubSiteUrl) {
-          hubSite = await HubSiteService.GetHubSiteById(context.pageContext.web.absoluteUrl, context.pageContext.legacyPageContext.hubSiteId);
-          hubSiteUrl = hubSite.url;
-        }
-        siteId = context.pageContext.site.id.toString();
-        webUrl = context.pageContext.web.absoluteUrl;
-      }
+      let { hubSiteUrl, siteId, webUrl } = this.props;
       const spEntityPortalService = new SpEntityPortalService({ webUrl: hubSiteUrl, ...this.props.entity });
       const [columnConfig, entityItem, entityFields, editFormUrl] = await Promise.all([
         new HubConfigurationService(hubSiteUrl).getProjectColumns(),
@@ -128,7 +120,6 @@ export default class ProjectInformation extends React.Component<IProjectInformat
       const data = { properties, editFormUrl, itemId: entityItem.Id };
       return data;
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }

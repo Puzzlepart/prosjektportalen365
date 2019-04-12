@@ -1,4 +1,4 @@
-import { WebPartContext } from '@microsoft/sp-webpart-base';
+import { PageContext } from '@microsoft/sp-page-context';
 import ProjectStatusReport from "../../models/ProjectStatusReport";
 import { IProjectStatusData } from '../IProjectStatusState';
 import { IStatusElementProps } from '../StatusElement/IStatusElementProps';
@@ -8,7 +8,7 @@ export interface IStatusSectionBaseProps {
   model?: SectionModel;
   headerProps: IStatusElementProps;
   report: ProjectStatusReport;
-  context: WebPartContext;
+  pageContext: PageContext;
   data?: IProjectStatusData;
 }
 

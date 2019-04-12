@@ -25,14 +25,6 @@
           "manifest": "./src/webparts/projectInformation/ProjectInformationWebPart.manifest.json"
         }
       ]
-    },
-    "test-web-part-issue-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/testWebPartIssue/TestWebPartIssueWebPart.js",
-          "manifest": "./src/webparts/testWebPartIssue/TestWebPartIssueWebPart.manifest.json"
-        }
-      ]
     }
   },
   "externals": {},
@@ -40,7 +32,6 @@
     "ProjectStatusWebPartStrings": "lib/webparts/projectStatus/loc/{locale}.js",
     "ProjectPhasesWebPartStrings": "lib/webparts/projectPhases/loc/{locale}.js",
     "ProjectInformationWebPartStrings": "lib/webparts/projectInformation/loc/{locale}.js",
-    "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js",
-    "TestWebPartIssueWebPartStrings": "lib/webparts/testWebPartIssue/loc/{locale}.js"
+    "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js"
   }
 }
