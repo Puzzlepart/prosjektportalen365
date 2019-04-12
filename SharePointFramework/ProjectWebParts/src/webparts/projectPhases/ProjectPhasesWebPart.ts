@@ -6,29 +6,35 @@ import { sp } from '@pnp/sp';
 import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneSlider, PropertyPaneToggle, PropertyPaneDropdown, IPropertyPaneDropdownOption } from '@microsoft/sp-webpart-base';
 import * as strings from 'ProjectPhasesWebPartStrings';
 import { IProjectPhasesWebPartProps } from './IProjectPhasesWebPartProps';
-import ProjectPhases from './components/ProjectPhases';
+import ProjectPhases, { IProjectPhasesProps } from './components/ProjectPhases';
 import MSGraphHelper from 'msgraph-helper';
 import HubSiteService from 'sp-hubsite-service';
 import SpEntityPortalService from 'sp-entityportal-service';
 
 export default class ProjectPhasesWebPart extends BaseClientSideWebPart<IProjectPhasesWebPartProps> {
-  private _optionsPhaseField: IPropertyPaneDropdownOption[] = [];
+  private _taxonomyFields: { InternalName: string, Title: string }[];
   private _spEntityPortalService: SpEntityPortalService;
 
+  constructor() {
+    super();
+    this._taxonomyFields = [];
+  }
+
   public async onInit() {
+    this.context.statusRenderer.clearLoadingIndicator(this.domElement);
+    await MSGraphHelper.Init(this.context.msGraphClientFactory, 'v1.0');
+    sp.setup({ spfxContext: this.context });
     const [taxonomyFields, hubSite] = await Promise.all([
       sp.web.fields.select('InternalName', 'Title').filter(`TypeAsString eq 'TaxonomyFieldType'`).get(),
       HubSiteService.GetHubSiteById(this.context.pageContext.web.absoluteUrl, this.context.pageContext.legacyPageContext.hubSiteId),
     ]);
-    this._optionsPhaseField = taxonomyFields.map(field => ({ key: field.Title, text: field.Title }));
-    await MSGraphHelper.Init(this.context.msGraphClientFactory, 'v1.0');
-    sp.setup({ spfxContext: this.context });
     const params = { webUrl: hubSite.url, ...this.properties.entity };
+    this._taxonomyFields = taxonomyFields;
     this._spEntityPortalService = new SpEntityPortalService(params);
   }
 
   public render(): void {
-    const element: React.ReactElement<any> = React.createElement(ProjectPhases, {
+    const element: React.ReactElement<IProjectPhasesProps> = React.createElement(ProjectPhases, {
       spEntityPortalService: this._spEntityPortalService,
       pageContext: this.context.pageContext,
       ...this.properties,
@@ -46,7 +52,7 @@ export default class ProjectPhasesWebPart extends BaseClientSideWebPart<IProject
               groupFields: [
                 PropertyPaneDropdown('phaseField', {
                   label: strings.PhaseFieldFieldLabel,
-                  options: this._optionsPhaseField,
+                  options: this._taxonomyFields.map(field => ({ key: field.Title, text: field.Title })),
                 }),
                 PropertyPaneToggle('automaticReload', {
                   label: strings.AutomaticReloadFieldLabel,

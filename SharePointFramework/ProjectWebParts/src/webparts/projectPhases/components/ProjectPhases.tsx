@@ -250,3 +250,5 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
     }
   }
 }
+
+export { IProjectPhasesProps };
