@@ -1,17 +1,8 @@
-import { Web } from '@pnp/sp';
 import { IProjectPhasesWebPartProps } from "../IProjectPhasesWebPartProps";
-import { WebPartContext } from '@microsoft/sp-webpart-base';
+import { PageContext } from '@microsoft/sp-page-context';
 import SpEntityPortalService from 'sp-entityportal-service';
-import { IHubSite } from 'sp-hubsite-service';
 
 export interface IProjectPhasesProps extends IProjectPhasesWebPartProps {
-  currentUserManageWeb: boolean;
-  webAbsoluteUrl: string;
-  webServerRelativeUrl: string;
-  groupId: string;
-  domElement: HTMLElement;
-  web: Web;
-  context: WebPartContext;
-  hubSite: IHubSite;
   spEntityPortalService: SpEntityPortalService;
+  pageContext: PageContext;
 }

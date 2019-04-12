@@ -103,7 +103,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    */
   private async updatePhase(phase: Phase) {
     Logger.log({ message: '(ProjectPhases) updatePhase', data: { phase }, level: LogLevel.Info });
-    await this.props.spEntityPortalService.updateEntityItem(this.props.context.pageContext.site.id.toString(), { [this.state.data.phaseTextField]: phase.toString() });
+    await this.props.spEntityPortalService.updateEntityItem(this.props.pageContext.site.id.toString(), { [this.state.data.phaseTextField]: phase.toString() });
   }
 
   /**
@@ -131,7 +131,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
       this.setState({ data: { ...this.state.data, currentPhase: phase }, confirmPhase: null, isChangingPhase: false });
       if (this.props.automaticReload) {
         window.setTimeout(() => {
-          document.location.href = this.props.webAbsoluteUrl;
+          document.location.href = this.props.pageContext.web.absoluteUrl;
         }, (this.props.reloadTimeout * 5000));
       }
     } catch (err) {
@@ -169,7 +169,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    * @param {Object} properties Properties
    */
   private async updateWebPartProperties(pageName: string, webPartId: string, properties: { [key: string]: string }) {
-    const page = await ClientSidePage.fromFile(sp.web.getFileByServerRelativePath(`${this.props.webServerRelativeUrl}/SitePages/${pageName}.aspx`));
+    const page = await ClientSidePage.fromFile(sp.web.getFileByServerRelativePath(`${this.props.pageContext.web.serverRelativeUrl}/SitePages/${pageName}.aspx`));
     const control = page.findControl<ClientSideWebpart>(c => objectGet(c, 'json.webPartId') === webPartId) as ClientSideWebpart;
     control.setProperties<any>({
       ...objectGet(control, 'data.webPartData.properties'),
@@ -186,7 +186,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    */
   private async updatePlannerWebPart(phaseTermName: string, plannerWebPartId: string = '39c4c1c2-63fa-41be-8cc2-f6c0b49b253d') {
     try {
-      const plans = await MSGraphHelper.Get<{ id: string, title: string }[]>(`groups/${this.props.groupId}/planner/plans`, ['id', 'title']);
+      const plans = await MSGraphHelper.Get<{ id: string, title: string }[]>(`groups/${this.props.pageContext.legacyPageContext.groupId}/planner/plans`, ['id', 'title']);
       const [plan] = plans.filter(p => p.title === phaseTermName);
       if (plan) {
         await this.updateWebPartProperties('Hjem', plannerWebPartId, { planId: plan.id });
@@ -226,15 +226,15 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    */
   private async fetchData(checklistData: ChecklistData): Promise<IProjectPhasesData> {
     Logger.log({ message: '(ProjectPhases) fetchData: Fetching TermSetId for selected field', level: LogLevel.Info });
-    const { spEntityPortalService, web, phaseField, context } = this.props;
+    const { spEntityPortalService, phaseField, pageContext } = this.props;
     try {
       const [{ TermSetId: termSetId }, phaseTextField] = await Promise.all([
-        web.fields.getByInternalNameOrTitle(phaseField).select('TermSetId').usingCaching().get(),
-        web.fields.getByInternalNameOrTitle(`${phaseField}_0`).select('InternalName').usingCaching().get(),
+        sp.web.fields.getByInternalNameOrTitle(phaseField).select('TermSetId').usingCaching().get(),
+        sp.web.fields.getByInternalNameOrTitle(`${phaseField}_0`).select('InternalName').usingCaching().get(),
       ]);
       const [phaseTerms, entityItem] = await Promise.all([
         taxonomy.getDefaultSiteCollectionTermStore().getTermSetById(termSetId).terms.usingCaching().get(),
-        spEntityPortalService.getEntityItem(context.pageContext.site.id.toString()),
+        spEntityPortalService.getEntityItem(pageContext.site.id.toString()),
       ]);
       const phases = phaseTerms
         .filter(term => term.LocalCustomProperties.ShowOnFrontpage !== 'false')
