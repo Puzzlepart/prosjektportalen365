@@ -54,11 +54,13 @@
       }
     }
   }
+  
   .infoText {    
     @include ms-Grid-col;
     @include ms-sm12;
     margin: 15px 0 15px 0;
   }
+
   .submitButton {
     @include ms-Grid-col;
     @include ms-sm12;
