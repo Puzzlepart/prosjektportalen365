@@ -29,8 +29,8 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
             <Modal
                 isOpen={true}
                 onDismiss={this.props.onDismiss}
-                isBlocking={this.props.isBlocking}
-                isDarkOverlay={this.props.isDarkOverlay}>
+                isBlocking={true}
+                isDarkOverlay={true}>
                 <div className={styles.templateSelectModal}>
                     <div className={styles.templateSelectModalInner}>
                         <div className={styles.templateSelectModalBody}>

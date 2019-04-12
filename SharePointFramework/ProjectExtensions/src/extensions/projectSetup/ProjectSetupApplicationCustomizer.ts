@@ -14,14 +14,15 @@ import { ListContentConfig, ProjectTemplate } from './../../models';
 import { Tasks, IBaseTaskParams } from './../../tasks';
 import MSGraphHelper from 'msgraph-helper';
 import ListLogger from '../../../../@Shared/lib/logging/ListLogger';
+import injectStyles from '../../../../@Shared/lib/util/injectStyles';
 import { ProjectSetupError } from './ProjectSetupError';
 
 export default class ProjectSetupApplicationCustomizer extends BaseApplicationCustomizer<IProjectSetupApplicationCustomizerProperties> {
-  private domElement: HTMLDivElement;
-  private templateSelectModalContainer: HTMLElement;
-  private progressModalContainer: HTMLElement;
-  private data: IProjectSetupApplicationCustomizerData;
-  private taskParams: IBaseTaskParams;
+  private _domElement: HTMLDivElement;
+  private _templateSelectModalContainer: HTMLElement;
+  private _progressModalContainer: HTMLElement;
+  private _data: IProjectSetupApplicationCustomizerData;
+  private _taskParams: IBaseTaskParams;
 
   public constructor() {
     super();
@@ -31,12 +32,13 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
 
   @override
   public async onInit(): Promise<void> {
+    sp.setup({ spfxContext: this.context });
     const { isSiteAdmin, groupId, hubSiteId } = this.context.pageContext.legacyPageContext;
     if (isSiteAdmin && groupId) {
       try {
-        Logger.log({ message: '(ProjectSetupApplicationCustomizer) onInit: Initializing pre-conditionals before initializing setup', data: {}, level: LogLevel.Info });
+        Logger.log({ message: '(ProjectSetupApplicationCustomizer) onInit: Initializing pre-conditionals before initializing setup', level: LogLevel.Info });
         const topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top);
-        this.domElement = topPlaceholder.domElement;
+        this._domElement = topPlaceholder.domElement;
         if (this.context.pageContext.web.language !== 1044) {
           await this.removeCustomizer(this.componentId, false);
           throw new ProjectSetupError(strings.InvalidLanguageErrorMessage, strings.InvalidLanguageErrorStack);
@@ -56,16 +58,16 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
    */
   protected async initializeSetup() {
     try {
-      this.injectStyle(`.SPPageChrome { opacity: 0.4; } .SPCanvas { visibility: hidden; } `);
-      this.data = await this.getData();
-      this.initLogging(this.data.hub.web);
+      injectStyles(`.SPPageChrome { opacity: 0.4; } .SPCanvas { visibility: hidden; } `);
+      this._data = await this.getData();
+      this.initLogging(this._data.hub.web);
       const templateInfo = await this.getTemplateInfo();
-      ReactDOM.unmountComponentAtNode(this.templateSelectModalContainer);
-      this.data = { ...this.data, ...templateInfo };
-      this.taskParams = {
+      ReactDOM.unmountComponentAtNode(this._templateSelectModalContainer);
+      this._data = { ...this._data, ...templateInfo };
+      this._taskParams = {
         context: this.context,
         properties: this.properties,
-        data: this.data,
+        data: this._data,
         templateParameters: { fieldsgroup: strings.SiteFieldsGroupName },
       };
       this.renderProgressModal({ text: strings.ProgressModalLabel, subText: strings.ProgressModalDescription, iconName: 'Page' });
@@ -97,38 +99,19 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   }
 
   /**
-   * Inject style
-   * 
-   * @param {string} css CSS 
-   */
-  private injectStyle(css: string) {
-    let head = document.head || document.getElementsByTagName('head')[0];
-    let style = document.createElement('style');
-    head.appendChild(style);
-    style.type = 'text/css';
-    if (style['styleSheet']) {
-      style['styleSheet'].cssText = css;
-    } else {
-      style.appendChild(document.createTextNode(css));
-    }
-  }
-
-  /**
    * Render TemplateSelectModal
    */
   private getTemplateInfo(): Promise<IProjectSetupApplicationCustomizerData> {
     return new Promise(resolve => {
       const templateSelectModal = React.createElement(TemplateSelectModal, {
         key: 'ProjectSetupApplicationCustomizer_TemplateSelectModal',
-        data: this.data,
-        onSubmit: (data: IProjectSetupApplicationCustomizerData) => resolve(data),
-        isBlocking: true,
-        isDarkOverlay: true,
+        data: this._data,
+        onSubmit: (_data: IProjectSetupApplicationCustomizerData) => resolve(_data),
         version: `v${this.manifest.version}`,
       });
-      this.templateSelectModalContainer = document.createElement('DIV');
-      this.domElement.appendChild(this.templateSelectModalContainer);
-      ReactDOM.render(templateSelectModal, this.templateSelectModalContainer);
+      this._templateSelectModalContainer = document.createElement('DIV');
+      this._domElement.appendChild(this._templateSelectModalContainer);
+      ReactDOM.render(templateSelectModal, this._templateSelectModalContainer);
     });
   }
 
@@ -141,16 +124,14 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
     const progressModal = React.createElement(ProgressModal, {
       key: 'ProjectSetupApplicationCustomizer_ProgressModal',
       ...props,
-      taskParams: this.taskParams,
-      isBlocking: true,
-      isDarkOverlay: true,
+      taskParams: this._taskParams,
       version: `v${this.manifest.version}`,
     });
-    if (!this.progressModalContainer) {
-      this.progressModalContainer = document.createElement('DIV');
-      this.domElement.appendChild(this.progressModalContainer);
+    if (!this._progressModalContainer) {
+      this._progressModalContainer = document.createElement('DIV');
+      this._domElement.appendChild(this._progressModalContainer);
     }
-    ReactDOM.render(progressModal, this.progressModalContainer);
+    ReactDOM.render(progressModal, this._progressModalContainer);
   }
 
   /**
@@ -164,11 +145,11 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
       version: `v${this.manifest.version}`,
       ...props,
     });
-    if (!this.progressModalContainer) {
-      this.progressModalContainer = document.createElement('DIV');
-      this.domElement.appendChild(this.progressModalContainer);
+    if (!this._progressModalContainer) {
+      this._progressModalContainer = document.createElement('DIV');
+      this._domElement.appendChild(this._progressModalContainer);
     }
-    ReactDOM.render(errorModal, this.progressModalContainer);
+    ReactDOM.render(errorModal, this._progressModalContainer);
   }
 
   /**
@@ -178,9 +159,9 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
     Logger.log({ message: '(ProjectSetupApplicationCustomizer) runTasks', data: { properties: this.properties, tasks: Tasks.map(t => t.name) }, level: LogLevel.Info });
     try {
       await ListLogger.write('Starting provisioning of project.');
-      this.taskParams.templateSchema = await this.taskParams.data.selectedTemplate.getSchema();
+      this._taskParams.templateSchema = await this._taskParams.data.selectedTemplate.getSchema();
       for (let i = 0; i < Tasks.length; i++) {
-        this.taskParams = await Tasks[i].execute(this.taskParams, this.onTaskStatusUpdated);
+        this._taskParams = await Tasks[i].execute(this._taskParams, this.onTaskStatusUpdated);
       }
       await ListLogger.write('Project successfully provisioned.');
       await this.removeCustomizer(this.componentId, !this.isDebug());
@@ -222,22 +203,21 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   }
 
   /**
-   * Get data
+   * Get _data
    */
   private async getData(): Promise<IProjectSetupApplicationCustomizerData> {
     try {
-      sp.setup({ spfxContext: this.context });
       await MSGraphHelper.Init(this.context.msGraphClientFactory, 'v1.0');
-      let data: IProjectSetupApplicationCustomizerData = {};
-      data.hub = await HubSiteService.GetHubSiteById(this.context.pageContext.web.absoluteUrl, this.context.pageContext.legacyPageContext.hubSiteId);
-      const hubLists = data.hub.web.lists;
+      let _data: IProjectSetupApplicationCustomizerData = {};
+      _data.hub = await HubSiteService.GetHubSiteById(this.context.pageContext.web.absoluteUrl, this.context.pageContext.legacyPageContext.hubSiteId);
+      const hubLists = _data.hub.web.lists;
       const [templates, extensions, listContentConfig] = await Promise.all([
-        (async () => (await hubLists.getByTitle(this.properties.templatesLibrary).rootFolder.files.get()).map(file => new ProjectTemplate(file, data.hub.web)))(),
-        (async () => (await hubLists.getByTitle(this.properties.extensionsLibrary).rootFolder.files.get()).map(file => new ProjectTemplate(file, data.hub.web)))(),
-        (async () => (await hubLists.getByTitle(this.properties.contentConfigList).items.get()).map(item => new ListContentConfig(item, data.hub.web)))(),
+        (async () => (await hubLists.getByTitle(this.properties.templatesLibrary).rootFolder.files.get()).map(file => new ProjectTemplate(file, _data.hub.web)))(),
+        (async () => (await hubLists.getByTitle(this.properties.extensionsLibrary).rootFolder.files.get()).map(file => new ProjectTemplate(file, _data.hub.web)))(),
+        (async () => (await hubLists.getByTitle(this.properties.contentConfigList).items.get()).map(item => new ListContentConfig(item, _data.hub.web)))(),
       ]);
       return {
-        ...data,
+        ..._data,
         templates,
         extensions,
         listContentConfig,

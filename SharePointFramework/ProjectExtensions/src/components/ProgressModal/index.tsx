@@ -13,8 +13,8 @@ export default class ProgressModal extends React.Component<IProgressModalProps, 
             <Modal
                 isOpen={true}
                 onDismiss={this.props.onDismiss}
-                isBlocking={this.props.isBlocking}
-                isDarkOverlay={this.props.isDarkOverlay}>
+                isBlocking={true}
+                isDarkOverlay={true}>
                 <div className={styles.progressModal}>
                     <div className={styles.progressModalBody}>
                         <div className={styles.modalTitle}>{strings.ProgressModalTitle}</div>

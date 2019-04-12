@@ -13,11 +13,10 @@ import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import ProjectCard from './ProjectCard/ProjectCard';
 import { sp, Web } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
+import { sortAlphabetically, getObjectValue } from '../../../../../@Shared/lib/helpers';
 import ProjectInformation from '../../../../../ProjectWebParts/lib/webparts/projectInformation/components/ProjectInformation';
 import MSGraph from 'msgraph-helper';
-import getObjectValue from '../../../../../@Shared/lib/helpers/getObjectValue';
 import { ProjectListModel, ISPUser, ISPProjectItem } from '../models/ProjectListModel';
-import getUserPhoto from '../../../../../@Shared/lib/helpers/getUserPhoto';
 
 export default class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
   public static defaultProps = ProjectListDefaultProps;
@@ -30,9 +29,16 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   public async componentDidMount() {
     try {
       const projects = await this.fetchData();
+      let columns = this.props.columns.map(col => {
+        if (col.fieldName === this.props.sortBy) {
+          col.isSorted = true;
+          col.isSortedDescending = true;
+        }
+        return col;
+      });
       this.setState({
         projects,
-        listView: { projects, columns: this.props.columns },
+        listView: { projects, columns },
         isLoading: false,
       });
     } catch (error) {
@@ -142,11 +148,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
     if (column.isSorted) {
       isSortedDescending = !isSortedDescending;
     }
-    listView.projects = listView.projects.concat([]).sort((a, b) => {
-      let aValue = getObjectValue(a, column.fieldName, null);
-      let bValue = getObjectValue(b, column.fieldName, null);
-      return isSortedDescending ? (aValue > bValue ? -1 : 1) : (aValue > bValue ? 1 : -1);
-    });
+    listView.projects = listView.projects.concat([]).sort((a, b) => sortAlphabetically<ProjectListModel>(a, b, isSortedDescending, column.fieldName));
     listView.columns = listView.columns.map(_column => {
       _column.isSorted = (_column.key === column.key);
       if (_column.isSorted) {
@@ -235,6 +237,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         .getByTitle(this.props.entity.listName)
         .items
         .select('GtGroupId', 'GtSiteId', 'GtSiteUrl', 'GtProjectOwnerId', 'GtProjectManagerId', 'GtProjectPhase')
+        .orderBy('Title')
         .usingCaching()
         .get<ISPProjectItem[]>(),
       MSGraph.Get<{ id: string, displayName: string }[]>(`/me/memberOf/$/microsoft.graph.group`, 'v1.0', ['id', 'displayName'], `groupTypes/any(a:a%20eq%20'unified')`),
@@ -260,22 +263,11 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         let [owner] = users.filter(user => user.Id === item.GtProjectOwnerId);
         let [manager] = users.filter(user => user.Id === item.GtProjectManagerId);
         let [phase] = phaseTerms.filter(p => p.Id.indexOf(getObjectValue(item, 'GtProjectPhase.TermGuid', '')) !== -1);
-
-        const model: ProjectListModel = { Id: item.GtSiteId, Title: group.displayName, Url: item.GtSiteUrl };
-        if (manager) {
-          model.Manager = { primaryText: manager.Title, imageUrl: getUserPhoto(manager.Email) };
-        }
-        if (owner) {
-          model.Owner = { primaryText: owner.Title, imageUrl: getUserPhoto(owner.Email) };
-        }
-        if (phase) {
-          model.Phase = phase.Name;
-        }
-        model.LogoUrl = 'https://pzlcloud.sharepoint.com/sites/ppdemo_v2/SiteAssets/pp/img/ICO-Global-Project-11.png';
+        const model = new ProjectListModel(item.GtSiteId, group.displayName, item.GtSiteUrl, manager, owner, phase);
         return model;
       })
       .filter(p => p)
-      .sort((a, b) => a[this.props.sortBy] < b[this.props.sortBy] ? -1 : (a[this.props.sortBy] > b[this.props.sortBy] ? 1 : 0));
+      .sort((a, b) => sortAlphabetically(a, b, true, this.props.sortBy));
 
     return projects;
   }

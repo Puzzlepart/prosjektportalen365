@@ -23,7 +23,7 @@ define([], function () {
     CopyListDataText: "Kopierer listeinnhold fra {0} til {1}",
     EditPropertiesLinkText: "Du kan allerede nå<A HREF=\"{0}\" TARGET=\"_BLANK\">redigere egenskaper</A> for prosjektet (åpnes i ny fane).",
     InvalidLanguageErrorMessage: "Ugyldig språk for området",
-    InvalidLanguageErrorStack: "Språket som er satt for området støttes ikke.",
+    InvalidLanguageErrorStack: "Språket som er satt for området støttes ikke. Området må være opprettet med norsk språk.",
     NoHubSiteErrorMessage: "Området er ikke koblet til en hub",
     NoHubSiteErrorStack: "Området kan ikke settes opp uten å være koblet til en hub.",
     GetSetupDataErrorMessage: "Det skjedde en feil",
