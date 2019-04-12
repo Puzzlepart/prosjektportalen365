@@ -12,7 +12,7 @@ declare interface IProjectSetupApplicationCustomizerStrings {
   ExtensionsTitle: string;
   TemplateSelectModalTitle: string;
   TemplateSelectModalSubmitButtonText: string;
-  TemplateSelectModalFooterText: string;
+  TemplateSelectModalInfoText: string;
   ProgressModalTitle: string;
   ProgressModalLabel: string;
   ProgressModalDescription: string;

@@ -5,81 +5,67 @@
   padding: 40px;
   box-sizing: border-box;
   position: relative;
-  .templateSelectModalInner {
-    @include ms-Grid;
 
-    .templateSelectModalBody {
-      @include ms-Grid-row;
-      margin: 0 0 15px 0;
+  .templateSelect {
+    @include ms-Grid-col;
+    @include ms-sm12;
 
-      .modalTitle {
-        font-size: 26px;
-        font-weight: 100;
-        margin: 0 0 20px 0;
-      }
-
-      .templateSelect {
-        @include ms-Grid-col;
-        @include ms-sm12;
-
-        .templateSelectTitle {
-          font-size: 18px;
-        }
-
-        .templateSelectDropdown {
-          margin: 10px 0 25px 0;
-        }
-      }
-
-      .listContent {
-        @include ms-Grid-col;
-        @include ms-sm6;
-
-        .listContentTitle {
-          font-size: 18px;
-          cursor: pointer;
-        }
-
-        .listContentList {
-          margin: 10px 0 25px 0;
-
-          .listContentItem {
-            margin: 0 0 5px 0;
-          }
-        }
-      }
-
-      .extensions {
-        @include ms-Grid-col;
-        @include ms-sm6;
-
-        .extensionsTitle {
-          font-size: 18px;
-          cursor: pointer;
-        }
-
-        .extensionsList {
-          margin: 10px 0 25px 0;
-
-          .extensionItem {
-            margin: 0 0 5px 0;
-          }
-        }
-      }
+    .templateSelectTitle {
+      font-size: 18px;
     }
-    .templateSelectModalFooter {
-      @include ms-Grid-row;
-      margin: 0 0 5px 0;
 
-      .templateSelectModalSubmitButton {
-        margin: 0 0 15px 0;
+    .templateSelectDropdown {
+      margin: 10px 0 25px 0;
+    }
+  }
+
+  .listContent {
+    @include ms-Grid-col;
+    @include ms-sm6;
+
+    .listContentTitle {
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .listContentList {
+      margin: 10px 0 25px 0;
+
+      .listContentItem {
+        margin: 0 0 5px 0;
       }
     }
   }
-  .setupVersion {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    font-size: 10px;
+
+  .extensions {
+    @include ms-Grid-col;
+    @include ms-sm6;
+
+    .extensionsTitle {
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .extensionsList {
+      margin: 10px 0 25px 0;
+
+      .extensionItem {
+        margin: 0 0 5px 0;
+      }
+    }
+  }
+  .infoText {    
+    @include ms-Grid-col;
+    @include ms-sm12;
+    margin: 10px 0 10px 0;
+  }
+  .submitButton {
+    @include ms-Grid-col;
+    @include ms-sm12;
+    margin: 0 0 15px 0;
+
+    >button {
+      margin: 0;
+    }
   }
 }
