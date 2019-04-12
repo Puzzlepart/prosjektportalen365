@@ -22,10 +22,6 @@ export default class PortfolioInsightsWebPart extends PortfolioBaseWebPart<IPort
     super.onDispose();
   }
 
-  protected get dataVersion(): Version {
-    return Version.parse(this.manifest.version);
-  }
-
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return { pages: [] };
   }

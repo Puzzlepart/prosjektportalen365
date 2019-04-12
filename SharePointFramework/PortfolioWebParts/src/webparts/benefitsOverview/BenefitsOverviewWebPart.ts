@@ -21,8 +21,4 @@ export default class BenefitsOverviewWebPart extends PortfolioBaseWebPart<IBenef
     Logger.log({ message: '(BenefitsOverviewWebPart) onDispose: Disposing <BenefitsOverview />', level: LogLevel.Info });
     super.onDispose();
   }
-
-  protected get dataVersion(): Version {
-    return Version.parse(this.manifest.version);
-  }
 }

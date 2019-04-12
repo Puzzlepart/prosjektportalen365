@@ -1,7 +1,5 @@
 import * as React from 'react';
 import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
-import { Version } from '@microsoft/sp-core-library';
-import { IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
 import RiskOverview from './components/RiskOverview';
 import { IRiskOverviewProps } from './components/IRiskOverviewProps';
 import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
@@ -20,13 +18,5 @@ export default class RiskOverviewWebPart extends PortfolioBaseWebPart<IRiskOverv
 
   protected onDispose(): void {
     super.onDispose();
-  }
-
-  protected get dataVersion(): Version {
-    return Version.parse(this.manifest.version);
-  }
-
-  protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    return { pages: [] };
   }
 }

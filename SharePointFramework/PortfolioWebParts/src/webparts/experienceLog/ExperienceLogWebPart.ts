@@ -28,10 +28,6 @@ export default class ExperienceLogWebPart extends PortfolioBaseWebPart<IExperien
     super.onDispose();
   }
 
-  protected get dataVersion(): Version {
-    return Version.parse(this.manifest.version);
-  }
-
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return { pages: [] };
   }

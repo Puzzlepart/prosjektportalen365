@@ -31,12 +31,4 @@ export default class LatestProjectsWebPart extends PortfolioBaseWebPart<ILatestP
   protected async onInit(): Promise<void> {
     await super.onInit();
   }
-
-  protected onDispose(): void {
-    super.onDispose();
-  }
-
-  protected get dataVersion(): Version {
-    return Version.parse(this.manifest.version);
-  }
 }
