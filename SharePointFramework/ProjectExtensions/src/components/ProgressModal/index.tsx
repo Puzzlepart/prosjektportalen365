@@ -22,7 +22,7 @@ export default class ProgressModal extends React.PureComponent<IProgressModalPro
                     <ProgressIndicator label={this.props.text} description={this.props.subText} />
                 </div>
                 {(this.props.taskParams.entity && this.props.taskParams.entity.editFormUrl) && (
-                    <div classNames={styles.editPropertiesLink}>
+                    <div className={styles.editPropertiesLink}>
                         <EditPropertiesLink editFormUrl={this.props.taskParams.entity.editFormUrl} />
                     </div>
                 )}
