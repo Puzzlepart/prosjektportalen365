@@ -9,12 +9,16 @@ import { IBaseTaskParams } from '../IBaseTaskParams';
 import { BaseTaskError } from '../BaseTaskError';
 
 export default class ApplyTemplate extends BaseTask {
-    public static taskName = 'ApplyTemplate';
-
     constructor() {
-        super(ApplyTemplate.taskName);
+        super('ApplyTemplate');
     }
 
+    /**
+     * Execute ApplyTemplate
+     * 
+     * @param {IBaseTaskParams} params Params 
+     * @param {OnProgressCallbackFunction} onProgress On progress function
+     */
     @override
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         Logger.log({ message: '(ProjectSetupApplicationCustomizer) ApplyTemplate: Applying template to site', data: { parameters: params.templateParameters }, level: LogLevel.Info });
@@ -39,7 +43,7 @@ export default class ApplyTemplate extends BaseTask {
             return params;
         } catch (error) {
             Logger.log({ message: '(ProjectSetupApplicationCustomizer) ApplyTemplate: Failed to apply template to site', data: {}, level: LogLevel.Error });
-            throw new BaseTaskError(ApplyTemplate.taskName, error);
+            throw new BaseTaskError(this.name, strings.ApplyTemplateErrorMessage, error);
         }
     }
 }

@@ -30,11 +30,9 @@ export class ProjectListModel {
         public Id: string,
         public Title: string,
         public Url: string,
-        public Logo?: string,
+        public LogoUrl?: string,
         public Phase?: string,
         public Manager?: IPersonaSharedProps,
         public Owner?: IPersonaSharedProps,
-    ) {
-
-    }
+    ) {}
 }

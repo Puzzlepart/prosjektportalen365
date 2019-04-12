@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import { override } from '@microsoft/decorators';
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base';
-import { sp, List } from '@pnp/sp';
+import { sp } from '@pnp/sp';
 import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import { IProjectSetupApplicationCustomizerProperties } from './IProjectSetupApplicationCustomizerProperties';
@@ -14,6 +14,7 @@ import { ListContentConfig, ProjectTemplate } from './../../models';
 import { Tasks, IBaseTaskParams } from './../../tasks';
 import MSGraphHelper from 'msgraph-helper';
 import ListLogger from '../../../../@Shared/lib/logging/ListLogger';
+import { ProjectSetupError } from './ProjectSetupError';
 
 export default class ProjectSetupApplicationCustomizer extends BaseApplicationCustomizer<IProjectSetupApplicationCustomizerProperties> {
   private domElement: HTMLDivElement;
@@ -22,50 +23,84 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   private data: IProjectSetupApplicationCustomizerData;
   private taskParams: IBaseTaskParams;
 
+  public constructor() {
+    super();
+    Logger.subscribe(new ConsoleListener());
+    Logger.activeLogLevel = LogLevel.Info;
+  }
+
   @override
   public async onInit(): Promise<void> {
-    if (this.context.pageContext.legacyPageContext.isSiteAdmin) {
-      this.injectStyle(`
-      .SPPageChrome {
-        opacity: 0.4;
+    const { isSiteAdmin, groupId, hubSiteId } = this.context.pageContext.legacyPageContext;
+    if (isSiteAdmin && groupId) {
+      try {
+        Logger.log({ message: '(ProjectSetupApplicationCustomizer) onInit: Initializing pre-conditionals before initializing setup', data: {}, level: LogLevel.Info });
+        const topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top);
+        this.domElement = topPlaceholder.domElement;
+        if (this.context.pageContext.web.language !== 1044) {
+          await this.removeCustomizer(this.componentId, false);
+          throw new ProjectSetupError(strings.InvalidLanguageErrorMessage, strings.InvalidLanguageErrorStack);
+        } else if (!hubSiteId) {
+          throw new ProjectSetupError(strings.NoHubSiteErrorMessage, strings.NoHubSiteErrorStack);
+        } else {
+          this.initializeSetup();
+        }
+      } catch (error) {
+        this.renderErrorModal({ error });
       }
-      .SPCanvas {
-        visibility: hidden;
-      }
-      `);
-      Logger.subscribe(new ConsoleListener());
-      Logger.activeLogLevel = LogLevel.Info;
-      sp.setup({ spfxContext: this.context });
-      await MSGraphHelper.Init(this.context.msGraphClientFactory, 'v1.0');
+    }
+  }
+
+  /**
+   * Intiialize setup
+   */
+  protected async initializeSetup() {
+    try {
+      this.injectStyle(`.SPPageChrome { opacity: 0.4; } .SPCanvas { visibility: hidden; } `);
       this.data = await this.getData();
-      const logList = this.data.hub.web.lists.getByTitle('Logg');
-      ListLogger.init(logList, {
+      this.initLogging(this.data.hub.web);
+      const templateInfo = await this.getTemplateInfo();
+      ReactDOM.unmountComponentAtNode(this.templateSelectModalContainer);
+      this.data = { ...this.data, ...templateInfo };
+      this.taskParams = {
+        context: this.context,
+        properties: this.properties,
+        data: this.data,
+        templateParameters: { fieldsgroup: strings.SiteFieldsGroupName },
+      };
+      this.renderProgressModal({ text: strings.ProgressModalLabel, subText: strings.ProgressModalDescription, iconName: 'Page' });
+      await this.runTasks();
+    } catch (error) {
+      await ListLogger.write(`${error.taskName} failed with message ${error.message}`, 'Error');
+      this.renderErrorModal({ error });
+    }
+  }
+
+  /**
+   * Init logging
+   * 
+   * @param {Web} hubWeb Hub web
+   * @param {string} listName List name
+   */
+  protected initLogging(hubWeb: any, listName: string = 'Logg') {
+    ListLogger.init(
+      hubWeb.lists.getByTitle(listName), {
         webUrl: 'GtLogWebUrl',
         scope: 'GtLogScope',
         functionName: 'GtLogFunctionName',
         message: 'GtLogMessage',
         level: 'GtLogLevel',
-      });
-      if (this.data) {
-        const topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top);
-        this.domElement = topPlaceholder.domElement;
-        const templateInfo = await this.getTemplateInfo();
-        ReactDOM.unmountComponentAtNode(this.templateSelectModalContainer);
-        this.data = { ...this.data, ...templateInfo };
-        this.taskParams = {
-          context: this.context,
-          properties: this.properties,
-          data: this.data,
-          templateParameters: { fieldsgroup: 'Prosjektportalenkolonner' },
-        };
-        this.renderProgressModal({ text: strings.ProgressModalLabel, subText: strings.ProgressModalDescription, iconName: 'Page' });
-        await this.runTasks();
-      } else {
-        this.renderErrorModal({ errorText: 'Området er ikke koblet til en hub.' });
-      }
-    }
+      },
+      document.location.href,
+      'ProjectSetupApplicationCustomizer',
+    );
   }
 
+  /**
+   * Inject style
+   * 
+   * @param {string} css CSS 
+   */
   private injectStyle(css: string) {
     let head = document.head || document.getElementsByTagName('head')[0];
     let style = document.createElement('style');
@@ -99,6 +134,8 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
 
   /**
    * Render ProgressModal
+   * 
+   * @param {IProgressModalProps} props Props
    */
   private renderProgressModal(props: IProgressModalProps) {
     const progressModal = React.createElement(ProgressModal, {
@@ -118,13 +155,14 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
 
   /**
    * Render ErrorModal
+   * 
+   * @param {IProgressModalProps} props Props
    */
   private renderErrorModal(props: IErrorModalProps) {
     const errorModal = React.createElement(ErrorModal, {
       key: 'ProjectSetupApplicationCustomizer_ProgressModal',
+      version: `v${this.manifest.version}`,
       ...props,
-      isBlocking: false,
-      isDarkOverlay: true,
     });
     if (!this.progressModalContainer) {
       this.progressModalContainer = document.createElement('DIV');
@@ -139,38 +177,24 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   private async runTasks(): Promise<void> {
     Logger.log({ message: '(ProjectSetupApplicationCustomizer) runTasks', data: { properties: this.properties, tasks: Tasks.map(t => t.name) }, level: LogLevel.Info });
     try {
-      await ListLogger.log({
-        webUrl: document.location.href,
-        scope: 'ProjectSetupApplicationCustomizer',
-        functionName: 'runTasks',
-        message: 'Starting provisioning of project.',
-        level: 'Info',
-      });
+      await ListLogger.write('Starting provisioning of project.');
       this.taskParams.templateSchema = await this.taskParams.data.selectedTemplate.getSchema();
       for (let i = 0; i < Tasks.length; i++) {
         this.taskParams = await Tasks[i].execute(this.taskParams, this.onTaskStatusUpdated);
       }
-      await ListLogger.log({
-        webUrl: document.location.href,
-        scope: 'ProjectSetupApplicationCustomizer',
-        functionName: 'runTasks',
-        message: 'Project successfully provisioned.',
-        level: 'Info',
-      });
+      await ListLogger.write('Project successfully provisioned.');
       await this.removeCustomizer(this.componentId, !this.isDebug());
     } catch (error) {
-      Logger.log({ message: `(ProjectSetupApplicationCustomizer) runTasks: ${error.task} failed with message ${error.message}`, level: LogLevel.Error });
-      await ListLogger.log({
-        webUrl: document.location.href,
-        scope: 'ProjectSetupApplicationCustomizer',
-        functionName: 'runTasks',
-        message: `${error.task} failed with message ${error.message}`,
-        level: 'Error',
-      });
-      this.renderErrorModal({ errorText: 'Det skjedde en feil under konfigureringen av området.' });
+      throw error;
     }
   }
 
+  /**
+   * On task status updated
+   * 
+   * @param {string} status Status
+   * @param {string} iconName Icon name
+   */
   @autobind
   private onTaskStatusUpdated(status: string, iconName: string) {
     this.renderProgressModal({ text: strings.ProgressModalLabel, subText: status, iconName });
@@ -197,23 +221,29 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
     }
   }
 
+  /**
+   * Get data
+   */
   private async getData(): Promise<IProjectSetupApplicationCustomizerData> {
-    const { pageContext } = this.context;
-    const { hubSiteId } = pageContext.legacyPageContext;
-    if (hubSiteId) {
+    try {
+      sp.setup({ spfxContext: this.context });
+      await MSGraphHelper.Init(this.context.msGraphClientFactory, 'v1.0');
       let data: IProjectSetupApplicationCustomizerData = {};
-      data.hub = await HubSiteService.GetHubSiteById(pageContext.web.absoluteUrl, hubSiteId);
-      const templatesLibrary = data.hub.web.lists.getByTitle(this.properties.templatesLibrary);
-      const extensionsLibrary = data.hub.web.lists.getByTitle(this.properties.extensionsLibrary);
-      const listContentList = data.hub.web.lists.getByTitle(this.properties.contentConfigList);
+      data.hub = await HubSiteService.GetHubSiteById(this.context.pageContext.web.absoluteUrl, this.context.pageContext.legacyPageContext.hubSiteId);
+      const hubLists = data.hub.web.lists;
       const [templates, extensions, listContentConfig] = await Promise.all([
-        (async () => (await templatesLibrary.rootFolder.files.get()).map(file => new ProjectTemplate(file, data.hub.web)))(),
-        (async () => (await extensionsLibrary.rootFolder.files.get()).map(file => new ProjectTemplate(file, data.hub.web)))(),
-        (async () => (await listContentList.items.get()).map(item => new ListContentConfig(item, data.hub.web)))(),
+        (async () => (await hubLists.getByTitle(this.properties.templatesLibrary).rootFolder.files.get()).map(file => new ProjectTemplate(file, data.hub.web)))(),
+        (async () => (await hubLists.getByTitle(this.properties.extensionsLibrary).rootFolder.files.get()).map(file => new ProjectTemplate(file, data.hub.web)))(),
+        (async () => (await hubLists.getByTitle(this.properties.contentConfigList).items.get()).map(item => new ListContentConfig(item, data.hub.web)))(),
       ]);
-      return { ...data, templates, extensions, listContentConfig };
-    } else {
-      return null;
+      return {
+        ...data,
+        templates,
+        extensions,
+        listContentConfig,
+      };
+    } catch (e) {
+      throw new ProjectSetupError(strings.GetSetupDataErrorMessage, strings.GetSetupDataErrorStack);
     }
   }
 

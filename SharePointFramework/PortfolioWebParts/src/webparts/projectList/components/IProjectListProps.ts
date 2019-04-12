@@ -24,13 +24,13 @@ export const ProjectListDefaultProps: Partial<IProjectListProps> = {
     },
     {
       key: 'Owner.Title',
-      fieldName: 'Owner.Title',
+      fieldName: 'Owner.primaryText',
       name: strings.ProjectOwner,
       minWidth: 100,
     },
     {
       key: 'Manager.Title',
-      fieldName: 'Manager.Title',
+      fieldName: 'Manager.primaryText',
       name: strings.ProjectManager,
       minWidth: 100,
     },

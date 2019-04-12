@@ -4,6 +4,7 @@
     width: 650px;
     padding: 40px;
     box-sizing: border-box;
+    position: relative;  
 
     .errorModalBody {
         @include ms-Grid;
@@ -16,5 +17,11 @@
             font-weight: 100;
             margin: 0 0 20px 0;
         }
+    }
+    .setupVersion {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      font-size: 10px;
     }
 }

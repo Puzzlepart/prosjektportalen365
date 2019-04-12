@@ -3,26 +3,45 @@ import { ItemAddResult, List } from '@pnp/sp';
 export type ListLoggerEntryLevel = 'Info' | 'Warning' | 'Error';
 
 export class IListLoggerEntry {
-    webUrl: string;
-    scope: string;
+    webUrl?: string;
+    scope?: string;
     functionName?: string;
     message: string;
     level: ListLoggerEntryLevel;
 }
 
+export class IListLoggerMemberMap {
+    webUrl?: string;
+    scope?: string;
+    functionName?: string;
+    message?: string;
+    level?: string;
+}
+
 export default new class ListLogger {
     protected _list: any;
-    protected _memberMap: { [key: string]: string };
+    protected _memberMap: IListLoggerMemberMap;
+    protected _webUrl: string;
+    protected _scope: string;
 
     /**
      * Init ListLogger
      * 
      * @param {any} list List
-     * @param {Object} memberMap Member map
+     * @param {IListLoggerMemberMap} memberMap Member map 
+     * @param {string} webUrl Web URL
+     * @param {string} scope scope
      */
-    public init(list: any, memberMap: { [key: string]: string }) {
+    public init(
+        list: any,
+        memberMap: IListLoggerMemberMap,
+        webUrl?: string,
+        scope?: string,
+    ) {
         this._list = list;
         this._memberMap = memberMap;
+        this._webUrl = webUrl;
+        this._scope = scope;
     }
 
     /**
@@ -36,15 +55,35 @@ export default new class ListLogger {
     }
 
     /**
+     * Write message
+     * 
+     * @param {string} message Message
+     * @param {ListLoggerEntryLevel} level Level
+     * @param {string} functionName Function name
+     */
+    public write(message: string, level: ListLoggerEntryLevel = 'Info', functionName?: string) {
+        return this.log({ message, level, functionName });
+    }
+
+    /**
      * Get sp item for entry
      * 
      * @param {IListLoggerEntry} entry Entry
      */
     private getSpItem(entry: IListLoggerEntry) {
-        return Object.keys(this._memberMap).reduce((_item, key) => {
+        let item: { [key: string]: string } = {};
+
+        if (this._webUrl && this._memberMap.webUrl) {
+            item[this._memberMap.webUrl] = this._webUrl;
+        }
+        if (this._scope && this._memberMap.scope) {
+            item[this._memberMap.scope] = this._scope;
+        }
+        item = Object.keys(this._memberMap).reduce((_item, key) => {
             let fieldName = this._memberMap[key];
             _item[fieldName] = entry[key];
             return _item;
-        }, {});
+        }, item);
+        return item;
     }
 }

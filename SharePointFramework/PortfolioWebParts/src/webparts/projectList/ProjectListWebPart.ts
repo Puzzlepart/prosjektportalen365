@@ -48,6 +48,10 @@ export default class ProjectListWebPart extends PortfolioBaseWebPart<IProjectLis
             {
               groupName: strings.TileViewGroupName,
               groupFields: [
+                PropertyPaneToggle('showProjectLogo', {
+                  label: strings.ShowProjectLogoFieldLabel,
+                  disabled: true,
+                }),
                 PropertyPaneToggle('showProjectOwner', {
                   label: strings.ShowProjectOwnerFieldLabel,
                 }),

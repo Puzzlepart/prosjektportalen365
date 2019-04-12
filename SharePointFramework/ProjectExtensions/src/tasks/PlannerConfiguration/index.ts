@@ -8,12 +8,11 @@ import * as stringFormat from 'string-format';
 import { IPlannerPlan } from './IPlannerPlan';
 import { IPlannerBucket } from './IPlannerBucket';
 import { Schema } from 'sp-js-provisioning';
+import { BaseTaskError } from '../BaseTaskError';
 
 export default class PlannerConfiguration extends BaseTask {
-    public static taskName = 'SetupProjectInformation';
-
     constructor() {
-        super(PlannerConfiguration.taskName);
+        super('SetupProjectInformation');
     }
 
     /**
@@ -192,6 +191,12 @@ export default class PlannerConfiguration extends BaseTask {
         }, templateSchema);
     }
 
+    /**
+     * Execute PlannerConfiguration
+     * 
+     * @param {IBaseTaskParams} params Params 
+     * @param {OnProgressCallbackFunction} onProgress On progress function
+     */
     @override
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         Logger.log({ message: '(ProjectSetupApplicationCustomizer) PlannerConfiguration: Setting up Plans, Buckets and Task', level: LogLevel.Info });
@@ -202,6 +207,7 @@ export default class PlannerConfiguration extends BaseTask {
             params.templateSchema = this.updateTemplateSchema(groupPlans, params.templateSchema);
         } catch (error) {
             Logger.log({ message: '(ProjectSetupApplicationCustomizer) PlannerConfiguration: Failed to set up Plans, Buckets and Tasks', level: LogLevel.Warning });
+            throw new BaseTaskError(this.name, strings.PlannerConfigurationErrorMessage, error);
         }
         return params;
     }

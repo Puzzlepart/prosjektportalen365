@@ -1,3 +1,4 @@
+import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import { override } from '@microsoft/decorators';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { Logger, LogLevel } from '@pnp/logging';
@@ -6,12 +7,16 @@ import { BaseTaskError } from '../BaseTaskError';
 import initSpfxJsom, { ExecuteJsomQuery, JsomContext } from 'spfx-jsom';
 
 export default class SetTaxonomyFields extends BaseTask {
-    public static taskName = 'SetTaxonomyFields';
-
     constructor() {
-        super(SetTaxonomyFields.taskName);
+        super('SetTaxonomyFields');
     }
 
+    /**
+     * Execute CopyListData
+     * 
+     * @param {IBaseTaskParams} params Params 
+     * @param {OnProgressCallbackFunction} onProgress On progress function
+     */
     @override
     public async execute(params: IBaseTaskParams, _onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
@@ -32,7 +37,7 @@ export default class SetTaxonomyFields extends BaseTask {
             await ExecuteJsomQuery(jsomCtx);
             return params;
         } catch (error) {
-            throw new BaseTaskError(SetTaxonomyFields.taskName, error);
+            throw new BaseTaskError(this.name, strings.SetTaxonomyFieldsErrorMessage, error);
         }
     }
 }

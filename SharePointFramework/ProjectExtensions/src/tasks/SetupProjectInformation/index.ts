@@ -1,3 +1,4 @@
+import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import { override } from '@microsoft/decorators';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { Logger, LogLevel } from '@pnp/logging';
@@ -6,10 +7,8 @@ import { BaseTaskError } from '../BaseTaskError';
 import SpEntityPortalService from 'sp-entityportal-service';
 
 export default class SetupProjectInformation extends BaseTask {
-    public static taskName = 'SetupProjectInformation';
-
     constructor() {
-        super(SetupProjectInformation.taskName);
+        super('SetupProjectInformation');
     }
 
     @override
@@ -31,7 +30,7 @@ export default class SetupProjectInformation extends BaseTask {
             }
             return params;
         } catch (error) {
-            throw new BaseTaskError(SetupProjectInformation.taskName, error);
+            throw new BaseTaskError(this.name, strings.SetupProjectInformationErrorMessage, error);
         }
     }
 }

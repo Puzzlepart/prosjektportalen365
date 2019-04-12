@@ -1,6 +1,6 @@
 {
   "name": "project-extensions",
-  "version": "0.6.6",
+  "version": "0.7.0",
   "private": true,
   "engines": {
     "node": ">=0.10.0"
@@ -26,6 +26,7 @@
     "@microsoft/sp-dialog": "1.7.1",
     "@microsoft/sp-lodash-subset": "1.7.1",
     "@microsoft/sp-office-ui-fabric-core": "1.7.1",
+    "@microsoft/sp-page-context": "^1.7.1",
     "@microsoft/sp-webpart-base": "1.7.1",
     "@pnp/common": "^1.2.10-3",
     "@pnp/logging": "^1.2.10-3",

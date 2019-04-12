@@ -21,6 +21,18 @@ define([], function () {
     ApplyExtensionText: "Installer prosjekttilegget {0}",
     PlannerConfigurationText: "Oppretter standardoppgaver i Planner for {0}",
     CopyListDataText: "Kopierer listeinnhold fra {0} til {1}",
-    EditPropertiesLinkText: "Du kan allerede nå<A HREF=\"{0}\" TARGET=\"_BLANK\">redigere egenskaper</A> for prosjektet (åpnes i ny fane)."
+    EditPropertiesLinkText: "Du kan allerede nå<A HREF=\"{0}\" TARGET=\"_BLANK\">redigere egenskaper</A> for prosjektet (åpnes i ny fane).",
+    InvalidLanguageErrorMessage: "Ugyldig språk for området",
+    InvalidLanguageErrorStack: "Språket som er satt for området støttes ikke.",
+    NoHubSiteErrorMessage: "Området er ikke koblet til en hub",
+    NoHubSiteErrorStack: "Området kan ikke settes opp uten å være koblet til en hub.",
+    GetSetupDataErrorMessage: "Det skjedde en feil",
+    GetSetupDataErrorStack: "Det skjedde en feil under uthenting av data fra hubområdet.",
+    SiteFieldsGroupName: "Prosjektportalenkolonner",
+    ApplyTemplateErrorMessage: "Det skjedde en feil under konfigurering av området",
+    CopyListDataErrorMessage: "Det skjedde en feil under kopiering av listeinnhold",
+    PlannerConfigurationErrorMessage: "Det skjedde en feil under konfigurering av området",
+    SetTaxonomyFieldsErrorMessage: "Det skjedde en feil under konfigurering av taksonomifelter",
+    SetupProjectInformationErrorMessage: "Det skjedde en feil under initialisering av prosjektinformasjon"
   }
 });

@@ -11,8 +11,13 @@ import { DocumentCard, DocumentCardTitle, DocumentCardActions } from 'office-ui-
  * 
  * @param {IProjectCardProps} props Props 
  */
-export const ProjectCardHeader = ({ project, shouldTruncateTitle }: IProjectCardProps): JSX.Element => {
-  return <DocumentCardTitle title={project.Title} shouldTruncate={shouldTruncateTitle} />;
+export const ProjectCardHeader = ({ project, showProjectLogo, shouldTruncateTitle }: IProjectCardProps): JSX.Element => {
+  return (
+    <div>
+      <div hidden={!showProjectLogo}></div>
+      <DocumentCardTitle title={project.Title} shouldTruncate={shouldTruncateTitle} />
+    </div>
+  );
 };
 
 /**
@@ -20,7 +25,7 @@ export const ProjectCardHeader = ({ project, shouldTruncateTitle }: IProjectCard
  * 
  * @param {IProjectCardProps} props Props 
  */
-export const ProjectCardContent = ({ project, showProjectOwner, showProjectManager}: IProjectCardProps): JSX.Element => {
+export const ProjectCardContent = ({ project, showProjectOwner, showProjectManager }: IProjectCardProps): JSX.Element => {
   const defaultPersonaProps: IPersonaSharedProps = {
     primaryText: strings.NotSet,
     size: PersonaSize.size40,

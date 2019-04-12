@@ -19,6 +19,7 @@ declare interface IProjectListWebPartStrings {
   SortByFieldLabel: string;
   PhaseTermSetIdFieldLabel: string;
   TileViewGroupName: string;
+  ShowProjectLogoFieldLabel: string;
   ShowProjectOwnerFieldLabel: string;
   ShowProjectManagerFieldLabel: string;
 }

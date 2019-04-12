@@ -24,13 +24,17 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
 
   constructor(props: IProjectListProps) {
     super(props);
-    this.state = { isLoading: true, showAsTiles: props.showAsTiles };
+    this.state = { isLoading: true, searchTerm: '', showAsTiles: props.showAsTiles };
   }
 
   public async componentDidMount() {
     try {
       const projects = await this.fetchData();
-      this.setState({ projects, isLoading: false });
+      this.setState({
+        projects,
+        listView: { projects, columns: this.props.columns },
+        isLoading: false,
+      });
     } catch (error) {
       this.setState({ error, isLoading: false });
     }
@@ -80,7 +84,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
    * Render projects
    */
   private renderProjects() {
-    const projects = this.getFilteredProjects();
+    const projects = this.filterProjets(this.state.projects);
     if (projects.length === 0) {
       return <MessageBar>{strings.NoSearchResults}</MessageBar>;
     }
@@ -89,6 +93,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         <ProjectCard
           project={project}
           shouldTruncateTitle={true}
+          showProjectLogo={this.props.showProjectLogo}
           showProjectOwner={this.props.showProjectOwner}
           showProjectManager={this.props.showProjectManager}
           actions={[{
@@ -101,9 +106,10 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
     } else {
       return (
         <DetailsList
-          items={projects}
-          columns={this.props.columns}
-          onRenderItemColumn={this.onRenderItemColumn} />
+          items={this.filterProjets(this.state.listView.projects)}
+          columns={this.state.listView.columns}
+          onRenderItemColumn={this.onRenderItemColumn}
+          onColumnHeaderClick={this.onListSort} />
       );
     }
   }
@@ -121,6 +127,34 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
       return <a href={project.Url}>{colValue}</a>;
     }
     return colValue;
+  }
+
+  /**
+   * Sorting on column header click
+   *
+* @param {React.MouseEvent} _event Event
+* @param {IColumn} column Column
+    */
+  @autobind
+  private onListSort(_event: React.MouseEvent<any>, column: IColumn): any {
+    let { listView } = ({ ...this.state } as IProjectListState);
+    let isSortedDescending = column.isSortedDescending;
+    if (column.isSorted) {
+      isSortedDescending = !isSortedDescending;
+    }
+    listView.projects = listView.projects.concat([]).sort((a, b) => {
+      let aValue = getObjectValue(a, column.fieldName, null);
+      let bValue = getObjectValue(b, column.fieldName, null);
+      return isSortedDescending ? (aValue > bValue ? -1 : 1) : (aValue > bValue ? 1 : -1);
+    });
+    listView.columns = listView.columns.map(_column => {
+      _column.isSorted = (_column.key === column.key);
+      if (_column.isSorted) {
+        _column.isSortedDescending = isSortedDescending;
+      }
+      return _column;
+    });
+    this.setState({ listView });
   }
 
   /**
@@ -165,22 +199,18 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   }
 
   /**
-   * Get filtered projects
+   * Filter projects
+   * 
+   * @param {ProjectListModel[]} projects Projects
    */
-  private getFilteredProjects() {
-    let { projects, searchTerm } = ({ ...this.state } as IProjectListState);
-    if (searchTerm) {
-      projects = projects.filter(project => {
-        const matches = Object.keys(project).filter(key => {
-          const value = project[key];
-          return value && typeof value === 'string' && value.toLowerCase().indexOf(searchTerm) !== -1;
-        }).length;
-        return matches > 0;
-      });
-      return projects;
-    } else {
-      return projects;
-    }
+  private filterProjets(projects: ProjectListModel[]) {
+    return projects.filter(p => {
+      const matches = Object.keys(p).filter(key => {
+        const value = p[key];
+        return value && typeof value === 'string' && value.toLowerCase().indexOf(this.state.searchTerm) !== -1;
+      }).length;
+      return matches > 0;
+    });
   }
 
   /**
@@ -241,6 +271,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         if (phase) {
           model.Phase = phase.Name;
         }
+        model.LogoUrl = 'https://pzlcloud.sharepoint.com/sites/ppdemo_v2/SiteAssets/pp/img/ICO-Global-Project-11.png';
         return model;
       })
       .filter(p => p)

@@ -17,6 +17,7 @@ define([], function () {
     "SortByFieldLabel": "Sorteringsegenskap",
     "PhaseTermSetIdFieldLabel": "Termsett ID for Fase",
     "TileViewGroupName": "Flisevisning",
+    "ShowProjectLogoFieldLabel": "Vis logo",
     "ShowProjectOwnerFieldLabel": "Vis Prosjekteier",
     "ShowProjectManagerFieldLabel": "Vis Prosjektleder"
   }

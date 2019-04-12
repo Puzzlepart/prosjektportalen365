@@ -9,7 +9,7 @@
   },
   "serveConfigurations": {
     "default": {
-      "pageUrl": "https://pzlcloud.sharepoint.com/sites/Nyttfagiskolen/_layouts/15/viewlsts.aspx",
+      "pageUrl": "https://pzlcloud.sharepoint.com/sites/Ugyldigprosjekt3/_layouts/15/viewlsts.aspx",
       "customActions": {
         "ce34553d-ab47-4107-8dd1-e980d953996d": {
           "location": "ClientSideExtension.ApplicationCustomizer",
@@ -27,7 +27,7 @@
       }
     },
     "projectSetup": {
-      "pageUrl": "https://pzlcloud.sharepoint.com/sites/Nyttfagiskolen/_layouts/15/viewlsts.aspx",
+      "pageUrl": "https://pzlcloud.sharepoint.com/sites/Ugyldigprosjekt3/_layouts/15/viewlsts.aspx",
       "customActions": {
         "ce34553d-ab47-4107-8dd1-e980d953996d": {
           "location": "ClientSideExtension.ApplicationCustomizer",
@@ -45,7 +45,7 @@
       }
     },
     "projectUpgrade": {
-      "pageUrl": "https://pzlcloud.sharepoint.com/sites/Dynamic3652021/_layouts/15/viewlsts.aspx",
+      "pageUrl": "https://pzlcloud.sharepoint.com/sites/Ugyldigprosjekt3/_layouts/15/viewlsts.aspx",
       "customActions": {
         "453a6c1e-e1d0-4b12-a3fc-690a36da1f0c": {
           "location": "ClientSideExtension.ApplicationCustomizer",

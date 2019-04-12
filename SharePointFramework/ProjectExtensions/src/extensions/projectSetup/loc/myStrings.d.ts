@@ -1,4 +1,4 @@
-declare interface IProjectSetupApplicationCustomizerStrings { 
+declare interface IProjectSetupApplicationCustomizerStrings {
   ApplyTemplateFiles: string;
   ApplyTemplateLists: string;
   ApplyTemplateNavigation: string;
@@ -21,6 +21,18 @@ declare interface IProjectSetupApplicationCustomizerStrings {
   PlannerConfigurationText: string;
   CopyListDataText: string;
   EditPropertiesLinkText: string;
+  InvalidLanguageErrorMessage: string;
+  InvalidLanguageErrorStack: string;
+  NoHubSiteErrorMessage: string;
+  NoHubSiteErrorStack: string;
+  GetSetupDataErrorMessage: string;
+  GetSetupDataErrorStack: string;
+  SiteFieldsGroupName: string;
+  ApplyTemplateErrorMessage: string;
+  CopyListDataErrorMessage: string;
+  PlannerConfigurationErrorMessage: string;
+  SetTaxonomyFieldsErrorMessage: string;
+  SetupProjectInformationErrorMessage: string;
 }
 
 declare module 'ProjectSetupApplicationCustomizerStrings' {
