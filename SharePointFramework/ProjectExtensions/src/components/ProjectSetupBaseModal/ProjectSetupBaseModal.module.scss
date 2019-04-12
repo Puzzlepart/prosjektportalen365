@@ -1,12 +1,12 @@
-@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 
-.errorModal {
+.projectSetupBaseModal {    
     width: 650px;
     padding: 40px;
     box-sizing: border-box;
     position: relative;  
 
-    .errorModalBody {
+    .modalInner {
         @include ms-Grid;
         @include ms-Grid-row;
 
@@ -17,8 +17,13 @@
             font-weight: 100;
             margin: 0 0 20px 0;
         }
+        .modalBody {            
+            @include ms-Grid-col;
+            @include ms-sm12;
+        }
     }
-    .setupVersion {
+
+    .setupVersionString {
       position: absolute;
       right: 10px;
       bottom: 10px;

@@ -1,43 +1,26 @@
 @import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 
 .progressModal {
-  width: 650px;
-  padding: 40px;
-  box-sizing: border-box;
-  position: relative;  
-  .progressModalBody {
-    @include ms-Grid;
-    @include ms-Grid-row;
+  .progressIcon {
+    @include ms-Grid-col;
+    @include ms-sm2;
 
-    .modalTitle {
-      @include ms-Grid-col;
-      @include ms-sm12;
-      font-size: 26px;
-      font-weight: 100;
-      margin: 0 0 20px 0;
-    }
-
-    .progressIcon {
-      @include ms-Grid-col;
-      @include ms-sm2;
-
-      > i {
-        font-size: 42px;
-        display: block;
-        text-align: center;
-        margin-top: 12px;
-      }
-    }
-
-    .progressIndicator {
-      @include ms-Grid-col;
-      @include ms-sm10;
+    > i {
+      font-size: 42px;
+      display: block;
+      text-align: center;
+      margin-top: 12px;
     }
   }
-  .setupVersion {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    font-size: 10px;
+
+  .progressIndicator {
+    @include ms-Grid-col;
+    @include ms-sm10;
+  }
+  
+  .editPropertiesLink {    
+    @include ms-Grid-col;
+    @include ms-sm12;
+    margin: 15px 0 15px 0;
   }
 }

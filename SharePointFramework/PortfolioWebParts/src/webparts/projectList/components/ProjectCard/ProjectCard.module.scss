@@ -2,6 +2,7 @@
 .projectCard {
     object-fit: cover;
     margin: 5px 10px 5px 0;
+    padding: 5px 0 0 0;
     width: 240px;
     box-sizing: border-box;
     
@@ -14,7 +15,7 @@
         border-top: 1px solid #dedede;
         border-bottom: 1px solid #dedede;
         padding: 7px;
-        margin: 7px 0 7px 0;
+        margin: 0 0 7px 0;
     }
     
     .personaContainer {    

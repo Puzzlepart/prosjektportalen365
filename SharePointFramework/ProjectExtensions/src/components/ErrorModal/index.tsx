@@ -1,37 +1,18 @@
 import * as React from 'react';
-import styles from './ErrorModal.module.scss';
-import { Modal } from 'office-ui-fabric-react/lib/Modal';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import { autobind } from 'office-ui-fabric-react/lib/Utilities';
+import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
+import ProjectSetupBaseModal from '../ProjectSetupBaseModal';
 import { IErrorModalProps } from './IErrorModalProps';
 
-export default class ErrorModal extends React.PureComponent<IErrorModalProps, { isOpen?: boolean }> {
-    public constructor(props: IErrorModalProps) {
-        super(props);
-        this.state = { isOpen: true };
-    }
-
-    public render(): React.ReactElement<IErrorModalProps> {
+export default class ErrorModal extends React.PureComponent<IErrorModalProps, {}> {
+    public render() {
         return (
-            <Modal
-                isOpen={this.state.isOpen}
-                onDismiss={this.onDismiss}
+            <ProjectSetupBaseModal
+                title={this.props.error.message}
                 isBlocking={false}
                 isDarkOverlay={true}>
-                <div className={styles.errorModal}>
-                    <div className={styles.errorModalBody}>
-                        <div className={styles.modalTitle}>{this.props.error.message}</div>
-                        <MessageBar messageBarType={MessageBarType.error}>{this.props.error.stack}</MessageBar>
-                    </div>
-                    <div className={styles.setupVersion}>{this.props.version}</div>
-                </div>
-            </Modal>
+                <MessageBar messageBarType={this.props.error.type}>{this.props.error.stack}</MessageBar>
+            </ProjectSetupBaseModal>
         );
-    }
-
-    @autobind
-    protected onDismiss() {
-        this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
     }
 }
 

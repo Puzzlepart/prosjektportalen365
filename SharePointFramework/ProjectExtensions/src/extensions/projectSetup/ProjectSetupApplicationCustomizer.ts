@@ -4,15 +4,16 @@ import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import { override } from '@microsoft/decorators';
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base';
 import { sp } from '@pnp/sp';
+import HubSiteService from 'sp-hubsite-service';
+import MSGraphHelper from 'msgraph-helper';
 import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import { IProjectSetupApplicationCustomizerProperties } from './IProjectSetupApplicationCustomizerProperties';
 import { ProgressModal, IProgressModalProps, ErrorModal, IErrorModalProps, TemplateSelectModal } from '../../components';
-import HubSiteService from 'sp-hubsite-service';
 import IProjectSetupApplicationCustomizerData from './IProjectSetupApplicationCustomizerData';
 import { ListContentConfig, ProjectTemplate } from './../../models';
 import { Tasks, IBaseTaskParams } from './../../tasks';
-import MSGraphHelper from 'msgraph-helper';
 import ListLogger from '../../../../@Shared/lib/logging/ListLogger';
 import injectStyles from '../../../../@Shared/lib/util/injectStyles';
 import { ProjectSetupError } from './ProjectSetupError';
@@ -43,7 +44,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
           await this.removeCustomizer(this.componentId, false);
           throw new ProjectSetupError(strings.InvalidLanguageErrorMessage, strings.InvalidLanguageErrorStack);
         } else if (!hubSiteId) {
-          throw new ProjectSetupError(strings.NoHubSiteErrorMessage, strings.NoHubSiteErrorStack);
+          throw new ProjectSetupError(strings.NoHubSiteErrorMessage, strings.NoHubSiteErrorStack, MessageBarType.severeWarning);
         } else {
           this.initializeSetup();
         }
@@ -106,8 +107,8 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
       const templateSelectModal = React.createElement(TemplateSelectModal, {
         key: 'ProjectSetupApplicationCustomizer_TemplateSelectModal',
         data: this._data,
-        onSubmit: (_data: IProjectSetupApplicationCustomizerData) => resolve(_data),
-        version: `v${this.manifest.version}`,
+        onSubmit: (data: IProjectSetupApplicationCustomizerData) => resolve(data),
+        versionString: `v${this.manifest.version}`,
       });
       this._templateSelectModalContainer = document.createElement('DIV');
       this._domElement.appendChild(this._templateSelectModalContainer);
@@ -125,7 +126,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
       key: 'ProjectSetupApplicationCustomizer_ProgressModal',
       ...props,
       taskParams: this._taskParams,
-      version: `v${this.manifest.version}`,
+      versionString: `v${this.manifest.version}`,
     });
     if (!this._progressModalContainer) {
       this._progressModalContainer = document.createElement('DIV');
@@ -142,7 +143,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   private renderErrorModal(props: IErrorModalProps) {
     const errorModal = React.createElement(ErrorModal, {
       key: 'ProjectSetupApplicationCustomizer_ProgressModal',
-      version: `v${this.manifest.version}`,
+      versionString: `v${this.manifest.version}`,
       ...props,
     });
     if (!this._progressModalContainer) {
