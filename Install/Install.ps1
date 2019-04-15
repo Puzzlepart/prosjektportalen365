@@ -13,8 +13,10 @@ Param(
     [switch]$SkipAppPackages,
     [Parameter(Mandatory = $false, HelpMessage = "Skip site creation")]
     [switch]$SkipSiteCreation,
-    [Parameter(Mandatory = $false, HelpMessage = "Skip site creation")]
-    [string]$SiteDesignName = "Prosjektområde"
+    [Parameter(Mandatory = $false, HelpMessage = "Site design name")]
+    [string]$SiteDesignName = "Prosjektområde",
+    [Parameter(Mandatory = $false, HelpMessage = "Security group to give View access to site design")]
+    [string]$SiteDesignSecurityGroupId
 )
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
@@ -138,6 +140,13 @@ if (-not $SkipSiteDesign.IsPresent) {
         else {
             Write-Host "[INFO] Creating new site design [$SiteDesignName]"
             $SiteDesign = Add-PnPSiteDesign -Title $SiteDesignName -SiteScriptIds $SiteScriptIds -Description "" -WebTemplate TeamSite -Connection $AdminSiteConnection
+        }
+        if ([string]::IsNullOrEmpty($SiteDesignSecurityGroupId)) {
+            Write-Host "[INFO] You have not specified -SiteDesignSecurityGroupId. Everyone will have View access to site design [$SiteDesignName]" -ForegroundColor Yellow
+        }
+        else {            
+            Write-Host "[INFO] Granting group $SiteDesignSecurityGroupId View access to site design [$SiteDesignName]"
+            Grant-PnPSiteDesignRights -Identity $SiteDesign.Id.Guid -Principals @("c:0t.c|tenant|$SiteDesignSecurityGroupId")
         }
     }
     Catch {
