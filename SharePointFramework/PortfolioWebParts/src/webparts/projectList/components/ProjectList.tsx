@@ -21,6 +21,11 @@ import { ProjectListModel, ISPProjectItem, ISPUser, IGraphGroup } from '../model
 export default class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
   public static defaultProps = ProjectListDefaultProps;
 
+  /**
+   * Constructor
+   * 
+   * @param {IProjectListProps} props Props
+   */
   constructor(props: IProjectListProps) {
     super(props);
     this.state = { isLoading: true, searchTerm: '', showAsTiles: props.showAsTiles };
@@ -28,7 +33,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
 
   public async componentDidMount() {
     try {
-      const projects = await this.fetchData();
+      let projects = await this.getProjects();
       let columns = this.props.columns.map(col => {
         if (col.fieldName === this.props.sortBy) {
           col.isSorted = true;
@@ -41,6 +46,9 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         listView: { projects, columns },
         isLoading: false,
       });
+      if (this.props.showProjectLogo) {
+        this.getProjectLogos(20);
+      }
     } catch (error) {
       console.log(error);
       this.setState({ error, isLoading: false });
@@ -131,7 +139,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   private onRenderItemColumn(project: ProjectListModel, _index: number, column: IColumn) {
     const colValue = getObjectValue(project, column.fieldName, null);
     if (column.fieldName === 'Title') {
-      return <a href={project.Url}>{colValue}</a>;
+      return <a href={project.url}>{colValue}</a>;
     }
     return colValue;
   }
@@ -171,11 +179,11 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
           containerClassName={styles.projectInfoModal}
           onDismiss={() => this.setState({ selectedProject: null })}>
           <ProjectInformation
-            title={this.state.selectedProject.Title}
+            title={this.state.selectedProject.title}
             entity={{ webUrl: this.props.siteAbsoluteUrl, ...this.props.entity }}
             webUrl={this.props.siteAbsoluteUrl}
             hubSiteUrl={this.props.siteAbsoluteUrl}
-            siteId={this.state.selectedProject.Id}
+            siteId={this.state.selectedProject.siteId}
             hideEditPropertiesButton={true}
             filterField='GtShowFieldPortfolio' />
         </Modal>
@@ -232,6 +240,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
    * 
    * @param {ISPProjectItem[]} items Items
    * @param {IGraphGroup[]} groups Groups
+   * @param {Object} photos Photos
    * @param {ISPUser[]} users Users
    * @param {any[]} phaseTerms Phase terms
    */
@@ -245,7 +254,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         let [owner] = users.filter(user => user.Id === item.GtProjectOwnerId);
         let [manager] = users.filter(user => user.Id === item.GtProjectManagerId);
         let [phase] = phaseTerms.filter(p => p.Id.indexOf(getObjectValue(item, 'GtProjectPhase.TermGuid', '')) !== -1);
-        const model = new ProjectListModel(item.GtSiteId, group.displayName, item.GtSiteUrl, manager, owner, phase);
+        const model = new ProjectListModel(item.GtSiteId, group.id, group.displayName, item.GtSiteUrl, manager, owner, phase);
         return model;
       })
       .filter(p => p)
@@ -254,11 +263,37 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   }
 
   /**
+   * Get project logos (group photos)
+   * 
+   * @param {number} batchSize Batch size (defaults to 20)
+   */
+  private async getProjectLogos(batchSize: number = 20) {
+    let requests = this.state.projects.map(p => ({
+      id: p.groupId,
+      method: 'GET',
+      url: `groups/${p.groupId}/photo/$value`,
+    }));
+    while (requests.length > 0) {
+      const { responses } = await MSGraph.Batch(requests.splice(0, batchSize));
+      this.setState((prevState: IProjectListState) => {
+        const projects = prevState.projects.map(p => {
+          let [response] = responses.filter(r => r.id === p.groupId && r.status === 200);
+          if (response) {
+            p.logo = `data:image/png;base64, ${response.body}`;
+          }
+          return p;
+        });
+        return { projects };
+      });
+    }
+  }
+
+  /**
    * Fetch data
    * 
    * @param {Web} web Web
    */
-  private async fetchData(web: Web = sp.web): Promise<ProjectListModel[]> {
+  private async getProjects(web: Web = sp.web): Promise<ProjectListModel[]> {
     let [items, groups, users, phaseTerms] = await Promise.all([
       web
         .lists
@@ -268,7 +303,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         .orderBy('Title')
         .usingCaching()
         .get<ISPProjectItem[]>(),
-      MSGraph.Get<IGraphGroup[]>(`/me/memberOf/$/microsoft.graph.group`, 'v1.0', ['id', 'displayName'], `groupTypes/any(a:a%20eq%20'unified')`),
+      MSGraph.Get<IGraphGroup[]>(`/me/memberOf/$/microsoft.graph.group`,['id', 'displayName'], `groupTypes/any(a:a%20eq%20'unified')`),
       web
         .siteUsers
         .select('Id', 'Title', 'Email')
@@ -281,7 +316,8 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         .usingCaching()
         .get(),
     ]);
-    return this.mapProjects(items, groups, users, phaseTerms);
+    let projects = this.mapProjects(items, groups, users, phaseTerms);
+    return projects;
   }
 }
 

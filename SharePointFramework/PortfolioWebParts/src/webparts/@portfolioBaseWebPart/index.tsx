@@ -15,7 +15,6 @@ export default class PortfolioBaseWebPart<T> extends BaseClientSideWebPart<T> {
 
     protected async onInit(): Promise<void> {
         await super.onInit();
-        this.context.statusRenderer.clearLoadingIndicator(this.domElement);
         sp.setup({ spfxContext: this.context });
         Logger.subscribe(new ConsoleListener());
         Logger.activeLogLevel = LogLevel.Info;

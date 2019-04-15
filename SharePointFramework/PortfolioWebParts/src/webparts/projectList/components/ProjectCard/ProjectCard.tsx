@@ -4,6 +4,7 @@ import * as strings from 'ProjectListWebPartStrings';
 import IProjectCardProps from './IProjectCardProps';
 import { Persona, PersonaSize, IPersonaSharedProps } from 'office-ui-fabric-react/lib/Persona';
 import { DocumentCard, DocumentCardTitle, DocumentCardActions } from 'office-ui-fabric-react/lib/DocumentCard';
+import ImageFadeIn from 'react-image-fade-in';
 
 
 /**
@@ -13,9 +14,11 @@ import { DocumentCard, DocumentCardTitle, DocumentCardActions } from 'office-ui-
  */
 export const ProjectCardHeader = ({ project, showProjectLogo, shouldTruncateTitle }: IProjectCardProps): JSX.Element => {
   return (
-    <div>
-      <div hidden={!showProjectLogo}></div>
-      <DocumentCardTitle title={project.Title} shouldTruncate={shouldTruncateTitle} />
+    <div className={styles.header}>
+      <div className={styles.logo} hidden={!showProjectLogo}>
+       {project.logo && <ImageFadeIn opacityTransition={1.0} src={project.logo} />}
+      </div>
+      <DocumentCardTitle title={project.title} shouldTruncate={shouldTruncateTitle} />
     </div>
   );
 };
@@ -31,11 +34,11 @@ export const ProjectCardContent = ({ project, showProjectOwner, showProjectManag
     size: PersonaSize.size40,
     imageShouldFadeIn: true,
   };
-  const ownerPersonaProps = { ...defaultPersonaProps, ...project.Owner, secondaryText: strings.ProjectOwner };
-  const managerPersonaProps = { ...defaultPersonaProps, ...project.Manager, secondaryText: strings.ProjectManager };
+  const ownerPersonaProps = { ...defaultPersonaProps, ...project.owner, secondaryText: strings.ProjectOwner };
+  const managerPersonaProps = { ...defaultPersonaProps, ...project.manager, secondaryText: strings.ProjectManager };
   return (
     <div>
-      <div className={styles.phase}>{project.Phase || strings.NotSet}</div>
+      <div className={styles.phase}>{project.phase || strings.NotSet}</div>
       <div className={styles.personaContainer} hidden={!showProjectOwner}>
         <Persona {...ownerPersonaProps} />
       </div>
@@ -64,7 +67,7 @@ export default (props: IProjectCardProps): JSX.Element => {
   return (
     <DocumentCard
       className={styles.projectCard}
-      onClickHref={props.project.Url}>
+      onClickHref={props.project.url}>
       <ProjectCardHeader {...props} />
       <ProjectCardContent {...props} />
       <ProjectCardFooter {...props} />

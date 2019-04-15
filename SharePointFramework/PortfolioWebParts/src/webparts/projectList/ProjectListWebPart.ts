@@ -1,30 +1,34 @@
 import * as React from 'react';
+import * as ReactDom from 'react-dom';
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import * as strings from 'ProjectListWebPartStrings';
 import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
 import ProjectList from './components/ProjectList';
 import { IProjectListProps } from './components/IProjectListProps';
-import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
-import { Logger, LogLevel } from '@pnp/logging';
-import MSGraph from 'msgraph-helper';
 import { IProjectListWebPartProps } from './IProjectListWebPartProps';
+import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
+import { sp } from '@pnp/sp';
+import MSGraph from 'msgraph-helper';
 
-export default class ProjectListWebPart extends PortfolioBaseWebPart<IProjectListWebPartProps> {
+export default class ProjectListWebPart extends BaseClientSideWebPart<IProjectListWebPartProps> {
   public render(): void {
     Logger.log({ message: '(ProjectListWebPart) render: Rendering <ProjectList />', level: LogLevel.Info });
     const element: React.ReactElement<IProjectListProps> = React.createElement(ProjectList, {
       ...this.properties,
       siteAbsoluteUrl: this.context.pageContext.site.absoluteUrl,
-      hubSiteId: this.context.pageContext.legacyPageContext.hubSiteId,
     });
-    super._render(this.manifest.alias, element);
+    ReactDom.render(element, this.domElement);
   }
 
   protected async onInit(): Promise<void> {
     await MSGraph.Init(this.context.msGraphClientFactory);
+    sp.setup({ spfxContext: this.context });
+    Logger.subscribe(new ConsoleListener());
+    Logger.activeLogLevel = LogLevel.Info;
   }
 
   protected onDispose(): void {
-    super.onDispose();
+    ReactDom.unmountComponentAtNode(this.domElement);
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -48,7 +52,6 @@ export default class ProjectListWebPart extends PortfolioBaseWebPart<IProjectLis
               groupFields: [
                 PropertyPaneToggle('showProjectLogo', {
                   label: strings.ShowProjectLogoFieldLabel,
-                  disabled: true,
                 }),
                 PropertyPaneToggle('showProjectOwner', {
                   label: strings.ShowProjectOwnerFieldLabel,
