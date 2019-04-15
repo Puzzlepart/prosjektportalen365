@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Version } from '@microsoft/sp-core-library';
 import BenefitsOverview, { IBenefitsOverviewProps } from './components/BenefitsOverview';
 import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
 import { IBenefitsOverviewWebPartProps } from './IBenefitsOverviewWebPartProps';

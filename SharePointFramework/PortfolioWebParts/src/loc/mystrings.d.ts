@@ -9,6 +9,7 @@ declare interface IPortfolioWebPartsStrings {
   SearchBoxLabelText: string;
   ExcelExportButtonLabel: string;
   FilterText: string;
+  CreatedText: string;
 }
 
 declare module 'PortfolioWebPartsStrings' {

@@ -1,8 +1,6 @@
 define([], function() {
   return {
-    "PropertyPaneDescription": "Beskrivelse",
-    "BasicGroupName": "Gruppenavn",
-    "DescriptionFieldLabel": "Beskrivelsesfelt",
+    "EmptyMessage": "Fant ingen nye prosjekter.",
     "LoadingProjects": "Laster siste prosjekter..."
   }
 });

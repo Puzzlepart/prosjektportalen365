@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Version } from '@microsoft/sp-core-library';
 import { IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
 import PortfolioInsights from './components/PortfolioInsights';
 import { IPortfolioInsightsProps } from './components/IPortfolioInsightsProps';

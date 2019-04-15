@@ -1,34 +1,52 @@
-@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 .latestProjects {
-    .title {
-        @include ms-font-xl;
-        color: "[theme: themePrimary, default: #0078d4]";
-        cursor: pointer;
-    }
-    .arrowIcon {
-      float: right;
-    }
-    .linksContainer {
-        padding: 5px;
-        margin-top: 3px;
-        .linkItem {
-          padding: 5px 0;
-            .projectLink {
-                @include ms-font-m;
-                text-decoration: none;
-                color: "[theme: themePrimary, default: #444444]";
-                &:visited {
-                    color: "[theme: themePrimary, default: #444444]";
-                }
-                &:hover, &:active {
-                    color: "[theme: themeTertiary, default: #444444]";
-                }
-            }
-            .subTitle {
-                @include ms-font-xs;
-                margin: 0;
-                opacity: 0.8;
-            }
+  .title {
+    @include ms-font-xl;
+    color: "[theme: themePrimary, default: #0078d4]";
+    cursor: pointer;
+  }
+  .arrowIcon {
+    float: right;
+  }
+  .linksContainer {
+    padding: 5px;
+    margin-top: 3px;
+    .projectItem {
+      padding: 15px 2px;
+      border-bottom: 1px solid rgb(234, 234, 234);
+      .container {
+        height: 100%;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        overflow: hidden;
+        position: relative;
+
+        .created {
+          color: "[theme: themeTertiary, default: #444444]";
+          font-size: 12px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          width: 100%;
+          line-height: 1.4;
+          text-decoration: none;
+          word-break: break-word;
+          margin: 0 0 2px 0;
+          font-weight: 600;
         }
+
+        a {
+          color: rgb(51, 51, 51);
+          font-size: 15px;
+          font-weight: 600;
+          display: inline-block;
+          width: 100%;
+          text-decoration: none;
+          word-break: break-word;
+          padding: 0 0 4px 0;
+          margin: 3px 0 0 0;
+        }
+      }
     }
+  }
 }

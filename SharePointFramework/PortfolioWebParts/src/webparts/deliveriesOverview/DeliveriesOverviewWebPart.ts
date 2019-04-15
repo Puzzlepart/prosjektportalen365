@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
-import { Version } from '@microsoft/sp-core-library';
 import { IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
 import DeliveriesOverview from './components/DeliveriesOverview';
 import { IDeliveriesOverviewProps } from './components/IDeliveriesOverviewProps';

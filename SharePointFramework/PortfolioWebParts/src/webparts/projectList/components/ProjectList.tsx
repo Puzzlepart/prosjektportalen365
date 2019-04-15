@@ -172,6 +172,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
           <ProjectInformation
             title={this.state.selectedProject.Title}
             entity={{ webUrl: this.props.siteAbsoluteUrl, ...this.props.entity }}
+            webUrl={this.props.siteAbsoluteUrl}
             hubSiteUrl={this.props.siteAbsoluteUrl}
             siteId={this.state.selectedProject.Id}
             hideEditPropertiesButton={true}

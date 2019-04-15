@@ -1,13 +1,9 @@
 import * as React from 'react';
-import { Version } from '@microsoft/sp-core-library';
 import LatestProjects from './components/LatestProjects';
 import { ILatestProjectsProps } from './components/ILatestProjectsProps';
 import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
 import { Logger, LogLevel } from '@pnp/logging';
-
-export interface ILatestProjectsWebPartProps {
-  title: string;
-}
+import { ILatestProjectsWebPartProps } from './ILatestProjectsWebPartProps';
 
 export default class LatestProjectsWebPart extends PortfolioBaseWebPart<ILatestProjectsWebPartProps> {
   public render(): void {

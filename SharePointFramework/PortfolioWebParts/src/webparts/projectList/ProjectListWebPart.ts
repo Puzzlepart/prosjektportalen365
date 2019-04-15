@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as strings from 'ProjectListWebPartStrings';
-import { Version } from '@microsoft/sp-core-library';
 import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
 import ProjectList from './components/ProjectList';
 import { IProjectListProps } from './components/IProjectListProps';

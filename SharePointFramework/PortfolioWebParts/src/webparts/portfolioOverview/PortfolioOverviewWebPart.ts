@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Version } from '@microsoft/sp-core-library';
 import PortfolioOverview from './components/PortfolioOverview';
 import { IPortfolioOverviewProps } from './components/IPortfolioOverviewProps';
 import PortfolioBaseWebPart from '../@portfolioBaseWebPart';

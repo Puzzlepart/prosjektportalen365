@@ -9,6 +9,7 @@ define([], function () {
     "DataLoadingText": "Laster {0}...",
     "SearchBoxLabelText": "Søk i {0}...",
     "ExcelExportButtonLabel": "Eksporter til Excel",
-    "FilterText": "Filtrer"
+    "FilterText": "Filtrer",
+    "CreatedText": "Opprettet"
   }
 });
