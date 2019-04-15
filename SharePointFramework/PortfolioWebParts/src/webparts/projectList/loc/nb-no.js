@@ -10,7 +10,7 @@ define([], function () {
     "ProjectLinkText": "Gå til prosjektområde",
     "ProjectStatusLinkText": "Gå til prosjektstatus",
     "LoadingText": "Laster prosjekter du er medlem av...",
-    "ErrorText": "Det skjedde en feil under uthenting av data.",
+    "ErrorText": "Det skjedde en feil under uthenting av prosjekter.",
     "ShowAsListText": "Vis som liste",
     "ShowAsTilesText": "Vis som fliser",
     "GeneralGroupName": "Generelt",

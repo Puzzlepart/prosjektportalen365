@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { sp } from '@pnp/sp';
-import MSGraph from 'msgraph-helper';
 import * as moment from 'moment';
 import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
 
@@ -16,8 +15,6 @@ export default class PortfolioBaseWebPart<T> extends BaseClientSideWebPart<T> {
 
     protected async onInit(): Promise<void> {
         await super.onInit();
-        await MSGraph.Init(this.context.msGraphClientFactory);
-        this.context.statusRenderer.clearLoadingIndicator(this.domElement);
         sp.setup({ spfxContext: this.context });
         Logger.subscribe(new ConsoleListener());
         Logger.activeLogLevel = LogLevel.Info;

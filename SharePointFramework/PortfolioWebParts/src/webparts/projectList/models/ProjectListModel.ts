@@ -4,18 +4,15 @@ import { getUserPhoto } from '../../../../../@Shared/lib/helpers';
 import { ISPUser } from './ISPUser';
 
 export class ProjectListModel {
-    public Id: string;
-    public Title: string;
-    public Url: string;
-    public Manager: IPersonaSharedProps;
-    public Owner: IPersonaSharedProps;
-    public Phase: string;
-    public Logo: string;
+    public manager: IPersonaSharedProps;
+    public owner: IPersonaSharedProps;
+    public phase: string;
+    public logo: string;
 
     /**
      * Creates a new instance of ProjectListModel
      * 
-     * @param {string} id Id
+     * @param {string} siteId Site id
      * @param {string} title Title 
      * @param {string} url Url
      * @param {ISPUser} manager Manager 
@@ -23,24 +20,22 @@ export class ProjectListModel {
      * @param {ITermData & ITerm} phase Phase
      */
     constructor(
-        id: string,
-        title: string,
-        url: string,
+        public siteId: string,
+        public groupId: string,
+        public title: string,
+        public url: string,
         manager?: ISPUser,
         owner?: ISPUser,
         phase?: ITermData & ITerm,
     ) {
-        this.Id = id;
-        this.Title = title;
-        this.Url = url;
         if (manager) {
-            this.Manager = { primaryText: manager.Title, imageUrl: getUserPhoto(manager.Email) };
+            this.manager = { primaryText: manager.Title, imageUrl: getUserPhoto(manager.Email) };
         }
         if (owner) {
-            this.Owner = { primaryText: owner.Title, imageUrl: getUserPhoto(owner.Email) };
+            this.owner = { primaryText: owner.Title, imageUrl: getUserPhoto(owner.Email) };
         }
         if (phase) {
-            this.Phase = phase.Name;
+            this.phase = phase.Name;
         }
     }
 }
