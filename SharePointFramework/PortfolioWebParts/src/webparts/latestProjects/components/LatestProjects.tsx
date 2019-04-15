@@ -37,7 +37,7 @@ export default class LatestProjects extends React.Component<ILatestProjectsProps
           displayMode={this.props.displayMode}
           title={this.props.title}
           updateProperty={this.props.updateProperty} />
-        <div className={styles.linksContainer}>
+        <div className={styles.container}>
           {this.state.isLoading
             ? <Spinner label={strings.LoadingProjects} type={SpinnerType.large} />
             : this.renderProjectList()
@@ -56,7 +56,7 @@ export default class LatestProjects extends React.Component<ILatestProjectsProps
         let created = formatDate(site.Created);
         return (
           <div className={styles.projectItem}>
-            <div className={styles.container}>
+            <div className={styles.itemContainer}>
               <div className={styles.created}>
                 {PortfolioWebPartsStrings.CreatedText} {created}
               </div>

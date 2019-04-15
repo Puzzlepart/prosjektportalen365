@@ -1,6 +1,6 @@
 import { ITermData } from "@pnp/sp-taxonomy";
 
-export default class Phase {
+export class Phase {
     public term: ITermData;
     public id: string;
     public name: string;

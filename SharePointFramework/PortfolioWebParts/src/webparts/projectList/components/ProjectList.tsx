@@ -16,7 +16,7 @@ import { taxonomy } from '@pnp/sp-taxonomy';
 import { sortAlphabetically, getObjectValue } from '../../../../../@Shared/lib/helpers';
 import ProjectInformation from '../../../../../ProjectWebParts/lib/webparts/projectInformation/components/ProjectInformation';
 import MSGraph from 'msgraph-helper';
-import { ProjectListModel, ISPUser, ISPProjectItem } from '../models/ProjectListModel';
+import { ProjectListModel, ISPProjectItem, ISPUser, IGraphGroup } from '../models';
 
 export default class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
   public static defaultProps = ProjectListDefaultProps;
@@ -42,6 +42,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         isLoading: false,
       });
     } catch (error) {
+      console.log(error);
       this.setState({ error, isLoading: false });
     }
   }
@@ -227,34 +228,14 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   }
 
   /**
-   * Fetch data
+   * Map projects
    * 
-   * @param {Web} web Web
+   * @param {ISPProjectItem[]} items Items
+   * @param {IGraphGroup[]} groups Groups
+   * @param {ISPUser[]} users Users
+   * @param {any[]} phaseTerms Phase terms
    */
-  private async fetchData(web: Web = sp.web): Promise<ProjectListModel[]> {
-    let [items, groups, users, phaseTerms] = await Promise.all([
-      web
-        .lists
-        .getByTitle(this.props.entity.listName)
-        .items
-        .select('GtGroupId', 'GtSiteId', 'GtSiteUrl', 'GtProjectOwnerId', 'GtProjectManagerId', 'GtProjectPhase')
-        .orderBy('Title')
-        .usingCaching()
-        .get<ISPProjectItem[]>(),
-      MSGraph.Get<{ id: string, displayName: string }[]>(`/me/memberOf/$/microsoft.graph.group`, 'v1.0', ['id', 'displayName'], `groupTypes/any(a:a%20eq%20'unified')`),
-      web
-        .siteUsers
-        .select('Id', 'Title', 'Email')
-        .usingCaching()
-        .get<ISPUser[]>(),
-      taxonomy
-        .getDefaultSiteCollectionTermStore()
-        .getTermSetById(this.props.phaseTermSetId)
-        .terms
-        .usingCaching()
-        .get(),
-    ]);
-
+  private mapProjects(items: ISPProjectItem[], groups: IGraphGroup[], users: ISPUser[], phaseTerms: any[]): ProjectListModel[] {
     let projects = items
       .map(item => {
         let [group] = groups.filter(grp => grp.id === item.GtGroupId);
@@ -269,8 +250,38 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
       })
       .filter(p => p)
       .sort((a, b) => sortAlphabetically(a, b, true, this.props.sortBy));
-
     return projects;
+  }
+
+  /**
+   * Fetch data
+   * 
+   * @param {Web} web Web
+   */
+  private async fetchData(web: Web = sp.web): Promise<ProjectListModel[]> {
+    let [items, groups, users, phaseTerms] = await Promise.all([
+      web
+        .lists
+        .getByTitle(this.props.entity.listName)
+        .items
+        .select('GtGroupId', 'GtSiteId', 'GtSiteUrl', 'GtProjectOwnerId', 'GtProjectManagerId', 'GtProjectPhase')
+        .orderBy('Title')
+        .usingCaching()
+        .get<ISPProjectItem[]>(),
+      MSGraph.Get<IGraphGroup[]>(`/me/memberOf/$/microsoft.graph.group`, 'v1.0', ['id', 'displayName'], `groupTypes/any(a:a%20eq%20'unified')`),
+      web
+        .siteUsers
+        .select('Id', 'Title', 'Email')
+        .usingCaching()
+        .get<ISPUser[]>(),
+      taxonomy
+        .getDefaultSiteCollectionTermStore()
+        .getTermSetById(this.props.phaseTermSetId)
+        .terms
+        .usingCaching()
+        .get(),
+    ]);
+    return this.mapProjects(items, groups, users, phaseTerms);
   }
 }
 

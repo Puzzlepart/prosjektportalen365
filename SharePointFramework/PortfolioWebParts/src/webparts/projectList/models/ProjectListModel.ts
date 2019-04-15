@@ -1,31 +1,7 @@
 import { IPersonaSharedProps } from 'office-ui-fabric-react/lib/Persona';
 import { ITermData, ITerm } from '@pnp/sp-taxonomy';
 import { getUserPhoto } from '../../../../../@Shared/lib/helpers';
-
-export interface ISPUser {
-    'odata.type': string;
-    'odata.id': string;
-    'odata.editLink': string;
-    Id: number;
-    IsHiddenInUI: boolean;
-    LoginName: string;
-    Title: string;
-    PrincipalType: number;
-    Email: string;
-    IsEmailAuthenticationGuestUser: boolean;
-    IsShareByEmailGuestUser: boolean;
-    IsSiteAdmin: boolean;
-    UserId: any;
-}
-
-export interface ISPProjectItem {
-    GtGroupId: string;
-    GtSiteId: string;
-    GtSiteUrl: string;
-    GtProjectOwnerId: number;
-    GtProjectManagerId: number;
-    GtProjectPhase: { TermGuid: string };
-}
+import { ISPUser } from './ISPUser';
 
 export class ProjectListModel {
     public Id: string;
