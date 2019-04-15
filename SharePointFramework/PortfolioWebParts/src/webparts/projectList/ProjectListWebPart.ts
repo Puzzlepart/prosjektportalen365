@@ -11,12 +11,15 @@ import { IProjectListWebPartProps } from './IProjectListWebPartProps';
 export default class ProjectListWebPart extends PortfolioBaseWebPart<IProjectListWebPartProps> {
   public render(): void {
     Logger.log({ message: '(ProjectListWebPart) render: Rendering <ProjectList />', level: LogLevel.Info });
-    const element: React.ReactElement<IProjectListProps> = React.createElement(ProjectList, { ...this.properties, siteAbsoluteUrl: this.context.pageContext.site.absoluteUrl });
+    const element: React.ReactElement<IProjectListProps> = React.createElement(ProjectList, {
+      ...this.properties,
+      siteAbsoluteUrl: this.context.pageContext.site.absoluteUrl,
+      hubSiteId: this.context.pageContext.legacyPageContext.hubSiteId,
+    });
     super._render(this.manifest.alias, element);
   }
 
   protected async onInit(): Promise<void> {
-    await super.onInit();
     await MSGraph.Init(this.context.msGraphClientFactory);
   }
 
@@ -37,7 +40,7 @@ export default class ProjectListWebPart extends PortfolioBaseWebPart<IProjectLis
                 }),
                 PropertyPaneTextField('phaseTermSetId', {
                   label: strings.PhaseTermSetIdFieldLabel,
-                }),                
+                }),
               ]
             },
             {

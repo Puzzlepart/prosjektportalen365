@@ -4,17 +4,14 @@
     @include ms-font-xl;
     color: "[theme: themePrimary, default: #0078d4]";
     cursor: pointer;
-  }
-  .arrowIcon {
-    float: right;
-  }
-  .linksContainer {
+  }  
+  .container {
     padding: 5px;
-    margin-top: 3px;
+    margin: 3px 0 0 0;
     .projectItem {
       padding: 15px 2px;
       border-bottom: 1px solid rgb(234, 234, 234);
-      .container {
+      .itemContainer {
         height: 100%;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;

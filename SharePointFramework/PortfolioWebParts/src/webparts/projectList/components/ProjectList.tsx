@@ -11,12 +11,12 @@ import { DetailsList, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { Modal } from 'office-ui-fabric-react/lib/Modal';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import ProjectCard from './ProjectCard/ProjectCard';
-import { sp, Web } from '@pnp/sp';
+import { sp, Web, QueryPropertyValueType } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
 import { sortAlphabetically, getObjectValue } from '../../../../../@Shared/lib/helpers';
 import ProjectInformation from '../../../../../ProjectWebParts/lib/webparts/projectInformation/components/ProjectInformation';
 import MSGraph from 'msgraph-helper';
-import { ProjectListModel, ISPUser, ISPProjectItem } from '../models/ProjectListModel';
+import { ProjectListModel, ISPProjectItem, ISPUser } from '../models';
 
 export default class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
   public static defaultProps = ProjectListDefaultProps;
@@ -42,6 +42,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         isLoading: false,
       });
     } catch (error) {
+      console.log(error);
       this.setState({ error, isLoading: false });
     }
   }
@@ -227,34 +228,16 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   }
 
   /**
-   * Fetch data
+   * Map data
    * 
-   * @param {Web} web Web
+   * @param {ISPProjectItem[]} items Items
+   * @param {any[]} groups Groups
+   * @param {any[]} siteLogos Site logos
+   * @param {any[]} users Users
+   * @param {any[]} phaseTerms Phase terms
    */
-  private async fetchData(web: Web = sp.web): Promise<ProjectListModel[]> {
-    let [items, groups, users, phaseTerms] = await Promise.all([
-      web
-        .lists
-        .getByTitle(this.props.entity.listName)
-        .items
-        .select('GtGroupId', 'GtSiteId', 'GtSiteUrl', 'GtProjectOwnerId', 'GtProjectManagerId', 'GtProjectPhase')
-        .orderBy('Title')
-        .usingCaching()
-        .get<ISPProjectItem[]>(),
-      MSGraph.Get<{ id: string, displayName: string }[]>(`/me/memberOf/$/microsoft.graph.group`, 'v1.0', ['id', 'displayName'], `groupTypes/any(a:a%20eq%20'unified')`),
-      web
-        .siteUsers
-        .select('Id', 'Title', 'Email')
-        .usingCaching()
-        .get<ISPUser[]>(),
-      taxonomy
-        .getDefaultSiteCollectionTermStore()
-        .getTermSetById(this.props.phaseTermSetId)
-        .terms
-        .usingCaching()
-        .get(),
-    ]);
-
+  private mapData(items: ISPProjectItem[], groups: any[], siteLogos: any[], users: any[], phaseTerms: any[]): ProjectListModel[] {
+    console.log(siteLogos);
     let projects = items
       .map(item => {
         let [group] = groups.filter(grp => grp.id === item.GtGroupId);
@@ -269,8 +252,63 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
       })
       .filter(p => p)
       .sort((a, b) => sortAlphabetically(a, b, true, this.props.sortBy));
-
     return projects;
+  }
+
+  /**
+   * Fetch site logos using search
+   */
+  private async fetchSiteLogos() {
+    return (await sp.search({
+      Querytext: `DepartmentId:{${this.props.hubSiteId}} contentclass:STS_Site`,
+      TrimDuplicates: false,
+      RowLimit: 500,
+      SelectProperties: ['SiteLogo', 'SiteId'],
+      Properties: [{
+        Name: "EnableDynamicGroups",
+        Value: {
+          BoolVal: true,
+          QueryPropertyValueTypeIndex: QueryPropertyValueType.BooleanType
+        }
+      }]
+    })).PrimarySearchResults;
+  }
+
+  /**
+   * Fetch data
+   * 
+   * @param {Web} web Web
+   */
+  private async fetchData(web: Web = sp.web): Promise<ProjectListModel[]> {
+    let batch = sp.createBatch();
+    let [items, groups, siteLogos, users, phaseTerms] = await Promise.all([
+      web
+        .lists
+        .getByTitle(this.props.entity.listName)
+        .items
+        .select('GtGroupId', 'GtSiteId', 'GtSiteUrl', 'GtProjectOwnerId', 'GtProjectManagerId', 'GtProjectPhase')
+        .orderBy('Title')
+        .usingCaching()
+        .inBatch(batch)
+        .get<ISPProjectItem[]>(),
+      MSGraph.Get<{ id: string, displayName: string }[]>(`/me/memberOf/$/microsoft.graph.group`, 'v1.0', ['id', 'displayName'], `groupTypes/any(a:a%20eq%20'unified')`),
+      this.fetchSiteLogos(),
+      web
+        .siteUsers
+        .select('Id', 'Title', 'Email')
+        .usingCaching()
+        .inBatch(batch)
+        .get<ISPUser[]>(),
+      taxonomy
+        .getDefaultSiteCollectionTermStore()
+        .getTermSetById(this.props.phaseTermSetId)
+        .terms
+        .usingCaching()
+        .inBatch(batch)
+        .get(),
+      batch.execute(),
+    ]);
+    return this.mapData(items, groups, siteLogos, users, phaseTerms);
   }
 }
 

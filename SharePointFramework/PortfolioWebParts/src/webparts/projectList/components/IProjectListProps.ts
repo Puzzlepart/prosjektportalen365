@@ -5,6 +5,7 @@ import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 
 export interface IProjectListProps extends IProjectListWebPartProps {
   siteAbsoluteUrl: string;
+  hubSiteId: string;
   columns?: IColumn[];
 }
 
