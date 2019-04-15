@@ -11,9 +11,7 @@ export default class LatestProjectsWebPart extends PortfolioBaseWebPart<ILatestP
     const element: React.ReactElement<ILatestProjectsProps> = React.createElement(
       LatestProjects,
       {
-        context: this.context,
-        absoluteUrl: this.context.pageContext.web.absoluteUrl,
-        serverRelativeUrl: this.context.pageContext.web.serverRelativeUrl,
+        hubSiteId: this.context.pageContext.legacyPageContext.hubSiteId,
         displayMode: this.displayMode,
         updateProperty: (value: string) => {
           this.properties.title = value;

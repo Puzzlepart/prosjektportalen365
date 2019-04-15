@@ -11,6 +11,8 @@ import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
 import formatDate from '../../../../../@Shared/lib/helpers/formatDate';
 
 export default class LatestProjects extends React.Component<ILatestProjectsProps, ILatestProjectsState> {
+  public static defaultProps: Partial<ILatestProjectsProps> = { rowLimit: 5 };
+
   constructor(props: ILatestProjectsProps) {
     super(props);
     this.state = { isLoading: true, projects: [], showList: true };
@@ -18,7 +20,7 @@ export default class LatestProjects extends React.Component<ILatestProjectsProps
 
   public async componentDidMount() {
     try {
-      const projects = await this.fetchData(this.props.context.pageContext.legacyPageContext.hubSiteId);
+      const projects = await this.fetchData(this.props.hubSiteId);
       this.setState({ projects, isLoading: false });
     } catch (error) {
       this.setState({ projects: [], isLoading: false });
@@ -51,7 +53,7 @@ export default class LatestProjects extends React.Component<ILatestProjectsProps
   private renderProjectList() {
     if (this.state.projects.length > 0) {
       return this.state.projects.map(site => {
-        let created = formatDate(site['Created']);
+        let created = formatDate(site.Created);
         return (
           <div className={styles.projectItem}>
             <div className={styles.container}>
@@ -75,8 +77,8 @@ export default class LatestProjects extends React.Component<ILatestProjectsProps
     let result = await sp.search({
       Querytext: `DepartmentId:{${hubSiteId}} contentclass:STS_Site`,
       TrimDuplicates: false,
-      RowLimit: 5,
-      SelectProperties: ['Title', 'Path', 'DepartmentId', 'SiteId', 'Created'],
+      RowLimit: this.props.rowLimit,
+      SelectProperties: ['Title', 'Path', 'SiteId', 'Created'],
       SortList: [{
         Property: "Created",
         Direction: SortDirection.Descending
@@ -89,7 +91,7 @@ export default class LatestProjects extends React.Component<ILatestProjectsProps
         }
       }]
     });
-    let projects = result.PrimarySearchResults.filter(site => hubSiteId !== site['SiteId']);
+    let projects: any[] = result.PrimarySearchResults.filter(site => hubSiteId !== site['SiteId']);
     return projects;
   }
 }
