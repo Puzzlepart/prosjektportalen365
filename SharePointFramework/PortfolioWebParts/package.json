@@ -1,6 +1,6 @@
 {
   "name": "prosjektportalen-spfx-portfoliowebparts",
-  "version": "0.5.14",
+  "version": "0.5.15",
   "private": true,
   "engines": {
     "node": ">=0.10.0"

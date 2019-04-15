@@ -13,8 +13,10 @@ import { DocumentCard, DocumentCardTitle, DocumentCardActions } from 'office-ui-
  */
 export const ProjectCardHeader = ({ project, showProjectLogo, shouldTruncateTitle }: IProjectCardProps): JSX.Element => {
   return (
-    <div>
-      <div hidden={!showProjectLogo}></div>
+    <div className={styles.header}>
+      <div className={styles.logo} hidden={!showProjectLogo}>
+        <img src={project.Logo} />
+      </div>
       <DocumentCardTitle title={project.Title} shouldTruncate={shouldTruncateTitle} />
     </div>
   );

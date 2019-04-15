@@ -232,10 +232,11 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
    * 
    * @param {ISPProjectItem[]} items Items
    * @param {IGraphGroup[]} groups Groups
+   * @param {Object} photos Photos
    * @param {ISPUser[]} users Users
    * @param {any[]} phaseTerms Phase terms
    */
-  private mapProjects(items: ISPProjectItem[], groups: IGraphGroup[], users: ISPUser[], phaseTerms: any[]): ProjectListModel[] {
+  private mapProjects(items: ISPProjectItem[], groups: IGraphGroup[], photos: { [key: string]: any }, users: ISPUser[], phaseTerms: any[]): ProjectListModel[] {
     let projects = items
       .map(item => {
         let [group] = groups.filter(grp => grp.id === item.GtGroupId);
@@ -246,11 +247,40 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         let [manager] = users.filter(user => user.Id === item.GtProjectManagerId);
         let [phase] = phaseTerms.filter(p => p.Id.indexOf(getObjectValue(item, 'GtProjectPhase.TermGuid', '')) !== -1);
         const model = new ProjectListModel(item.GtSiteId, group.displayName, item.GtSiteUrl, manager, owner, phase);
+        model.Logo = photos[group.id];
         return model;
       })
       .filter(p => p)
       .sort((a, b) => sortAlphabetically(a, b, true, this.props.sortBy));
     return projects;
+  }
+
+  /**
+   * Get group photos
+   * 
+   * @param {IGraphGroup[]} groups Groups
+   * @param {number} batchSize Batch size
+   */
+  private async getGroupPhotos(groups: IGraphGroup[], batchSize: number = 15) {
+    let allRequests = groups.map((grp, idx) => ({
+      id: grp.id,
+      method: 'GET',
+      url: `groups/${grp.id}/photo/$value`,
+    }));
+    let batches = [];
+    while (allRequests.length > 0) {
+      batches.push(allRequests.splice(0, batchSize));
+    }
+    let results = await Promise.all(batches.map(requests => MSGraph.Post(`/$batch`, 'v1.0', { requests })));
+    let groupPhotos = results.reduce((obj, { responses }) => {
+      responses.forEach((response: { id: string, status: number, body: any }) => {
+        if (response.status === 200) {
+          obj[response.id] = `data:image/png;base64, ${response.body}`;
+        }
+      });
+      return obj;
+    }, {});
+    return groupPhotos;
   }
 
   /**
@@ -281,7 +311,8 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         .usingCaching()
         .get(),
     ]);
-    return this.mapProjects(items, groups, users, phaseTerms);
+    let photos = await this.getGroupPhotos(groups);
+    return this.mapProjects(items, groups, photos, users, phaseTerms);
   }
 }
 

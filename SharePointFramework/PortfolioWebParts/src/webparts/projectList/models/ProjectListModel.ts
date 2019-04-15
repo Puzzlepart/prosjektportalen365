@@ -10,6 +10,7 @@ export class ProjectListModel {
     public Manager: IPersonaSharedProps;
     public Owner: IPersonaSharedProps;
     public Phase: string;
+    public Logo: string;
 
     /**
      * Creates a new instance of ProjectListModel

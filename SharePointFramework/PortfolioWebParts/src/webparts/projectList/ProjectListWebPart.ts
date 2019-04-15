@@ -5,7 +5,6 @@ import ProjectList from './components/ProjectList';
 import { IProjectListProps } from './components/IProjectListProps';
 import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
 import { Logger, LogLevel } from '@pnp/logging';
-import MSGraph from 'msgraph-helper';
 import { IProjectListWebPartProps } from './IProjectListWebPartProps';
 
 export default class ProjectListWebPart extends PortfolioBaseWebPart<IProjectListWebPartProps> {
@@ -14,13 +13,12 @@ export default class ProjectListWebPart extends PortfolioBaseWebPart<IProjectLis
     const element: React.ReactElement<IProjectListProps> = React.createElement(ProjectList, {
       ...this.properties,
       siteAbsoluteUrl: this.context.pageContext.site.absoluteUrl,
-      hubSiteId: this.context.pageContext.legacyPageContext.hubSiteId,
     });
     super._render(this.manifest.alias, element);
   }
 
   protected async onInit(): Promise<void> {
-    await MSGraph.Init(this.context.msGraphClientFactory);
+    await super.onInit();
   }
 
   protected onDispose(): void {
@@ -48,7 +46,6 @@ export default class ProjectListWebPart extends PortfolioBaseWebPart<IProjectLis
               groupFields: [
                 PropertyPaneToggle('showProjectLogo', {
                   label: strings.ShowProjectLogoFieldLabel,
-                  disabled: true,
                 }),
                 PropertyPaneToggle('showProjectOwner', {
                   label: strings.ShowProjectOwnerFieldLabel,
