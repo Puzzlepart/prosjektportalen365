@@ -1,11 +1,5 @@
-import { ISPProjectItem } from './ISPProjectItem';
-import { ISPUser } from './ISPUser';
-import { Phase } from './Phase';
-import { ProjectListModel } from './ProjectListModel';
-
-export {
-    ISPProjectItem,
-    ISPUser,
-    Phase,
-    ProjectListModel,
-};
+export { ISPProjectItem } from './ISPProjectItem';
+export { ISPUser } from './ISPUser';
+export { IGraphGroup } from './IGraphGroup';
+export { Phase } from './Phase';
+export { ProjectListModel } from './ProjectListModel';

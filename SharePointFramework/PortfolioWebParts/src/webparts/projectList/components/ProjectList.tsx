@@ -11,12 +11,12 @@ import { DetailsList, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { Modal } from 'office-ui-fabric-react/lib/Modal';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import ProjectCard from './ProjectCard/ProjectCard';
-import { sp, Web, QueryPropertyValueType } from '@pnp/sp';
+import { sp, Web } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
 import { sortAlphabetically, getObjectValue } from '../../../../../@Shared/lib/helpers';
-// import ProjectInformation from '../../../../../ProjectWebParts/lib/webparts/projectInformation/components/ProjectInformation';
+import ProjectInformation from '../../../../../ProjectWebParts/lib/webparts/projectInformation/components/ProjectInformation';
 import MSGraph from 'msgraph-helper';
-import { ProjectListModel, ISPProjectItem, ISPUser } from '../models';
+import { ProjectListModel, ISPProjectItem, ISPUser, IGraphGroup } from '../models';
 
 export default class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
   public static defaultProps = ProjectListDefaultProps;
@@ -170,14 +170,14 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
           isOpen={true}
           containerClassName={styles.projectInfoModal}
           onDismiss={() => this.setState({ selectedProject: null })}>
-          {/* <ProjectInformation
+          <ProjectInformation
             title={this.state.selectedProject.Title}
             entity={{ webUrl: this.props.siteAbsoluteUrl, ...this.props.entity }}
             webUrl={this.props.siteAbsoluteUrl}
             hubSiteUrl={this.props.siteAbsoluteUrl}
             siteId={this.state.selectedProject.Id}
             hideEditPropertiesButton={true}
-            filterField='GtShowFieldPortfolio' /> */}
+            filterField='GtShowFieldPortfolio' />
         </Modal>
       );
     }
@@ -228,16 +228,14 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   }
 
   /**
-   * Map data
+   * Map projects
    * 
    * @param {ISPProjectItem[]} items Items
-   * @param {any[]} groups Groups
-   * @param {Object} siteLogos Site logos
-   * @param {any[]} users Users
+   * @param {IGraphGroup[]} groups Groups
+   * @param {ISPUser[]} users Users
    * @param {any[]} phaseTerms Phase terms
    */
-  private mapData(items: ISPProjectItem[], groups: any[], siteLogos: { [SiteId: string]: string }, users: any[], phaseTerms: any[]): ProjectListModel[] {
-    console.log(siteLogos);
+  private mapProjects(items: ISPProjectItem[], groups: IGraphGroup[], users: ISPUser[], phaseTerms: any[]): ProjectListModel[] {
     let projects = items
       .map(item => {
         let [group] = groups.filter(grp => grp.id === item.GtGroupId);
@@ -256,35 +254,12 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   }
 
   /**
-   * Fetch site logos using search
-   */
-  private async fetchSiteLogos(): Promise<{ [SiteId: string]: string }> {
-    let results = (await sp.search({
-      Querytext: `DepartmentId:{${this.props.hubSiteId}} contentclass:STS_Site`,
-      TrimDuplicates: false,
-      RowLimit: 500,
-      SelectProperties: ['SiteLogo', 'SiteId'],
-      Properties: [{
-        Name: "EnableDynamicGroups",
-        Value: {
-          BoolVal: true,
-          QueryPropertyValueTypeIndex: QueryPropertyValueType.BooleanType
-        }
-      }]
-    })).PrimarySearchResults as { SiteId: string, SiteLogo: string }[];
-    return results.reduce((obj, res) => {
-      obj[res.SiteId] = res.SiteLogo;
-      return obj;
-    }, {});
-  }
-
-  /**
    * Fetch data
    * 
    * @param {Web} web Web
    */
   private async fetchData(web: Web = sp.web): Promise<ProjectListModel[]> {
-    let [items, groups, siteLogos, users, phaseTerms] = await Promise.all([
+    let [items, groups, users, phaseTerms] = await Promise.all([
       web
         .lists
         .getByTitle(this.props.entity.listName)
@@ -293,8 +268,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         .orderBy('Title')
         .usingCaching()
         .get<ISPProjectItem[]>(),
-      MSGraph.Get<{ id: string, displayName: string }[]>(`/me/memberOf/$/microsoft.graph.group`, 'v1.0', ['id', 'displayName'], `groupTypes/any(a:a%20eq%20'unified')`),
-      this.fetchSiteLogos(),
+      MSGraph.Get<IGraphGroup[]>(`/me/memberOf/$/microsoft.graph.group`, 'v1.0', ['id', 'displayName'], `groupTypes/any(a:a%20eq%20'unified')`),
       web
         .siteUsers
         .select('Id', 'Title', 'Email')
@@ -307,7 +281,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         .usingCaching()
         .get(),
     ]);
-    return this.mapData(items, groups, siteLogos, users, phaseTerms);
+    return this.mapProjects(items, groups, users, phaseTerms);
   }
 }
 
