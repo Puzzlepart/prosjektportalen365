@@ -56,6 +56,6 @@ export default class ProjectPhaseCallout extends React.PureComponent<IProjectPha
     }
 
     protected getFilteredPhaseChecklistViewUrl(): string {
-        return `${strings.PhaseChecklistViewUrl}?FilterField1=GtProjectPhase&FilterValue1=${this.props.phase.model.term.Name}`;
+        return `${this.props.webAbsoluteUrl}/${strings.PhaseChecklistViewUrl}?FilterField1=GtProjectPhase&FilterValue1=${this.props.phase.model.term.Name}`;
     }
 }

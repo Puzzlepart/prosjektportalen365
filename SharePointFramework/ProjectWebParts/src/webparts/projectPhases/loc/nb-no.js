@@ -29,7 +29,7 @@ define([], function () {
     GoToPhaseChecklist: "Gå til fasesjekklisten",
     ChangePhaseText: "Endre til denne fasen",
     ConfirmChangePhase: "Vil du endre fase til {0}?",
-    PhaseChecklistViewUrl: "../Lists/Fasesjekkliste/AllItems.aspx",
+    PhaseChecklistViewUrl: "Lists/Fasesjekkliste/AllItems.aspx",
     CheckpointNotRelevantTooltipCommentEmpty: "Du kan ikke sette sjekkpunktet som 'Ikke relevant' uten å legge inn enn kommentar.",
     CheckpointNotRelevantTooltip: "Sjekkpunktet er ikke relevant",
     CheckpointStillOpenTooltipCommentEmpty: "Du kan ikke sette sjekkpunktet som 'Fortsatt åpen' uten å legge inn enn kommentar.",

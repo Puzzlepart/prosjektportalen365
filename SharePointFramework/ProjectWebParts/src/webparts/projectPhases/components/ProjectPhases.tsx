@@ -80,6 +80,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
             phase={this.state.phaseMouseOver}
             isCurrentPhase={currentPhase && (this.state.phaseMouseOver.model.id === currentPhase.id)}
             phaseSubTextProperty={this.props.phaseSubTextProperty}
+            webAbsoluteUrl={this.props.pageContext.web.absoluteUrl}
             onChangePhase={phase => this.setState({ confirmPhase: phase })}
             onDismiss={this.onProjectPhaseCalloutDismiss}
             gapSpace={5} />
