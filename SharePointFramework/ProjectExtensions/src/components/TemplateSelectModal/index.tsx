@@ -28,7 +28,7 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
         return (
             <ProjectSetupBaseModal
                 title={strings.TemplateSelectModalTitle}
-                isBlocking={true}
+                isBlocking={false}
                 isDarkOverlay={true}
                 containerClassName={styles.templateSelectModal}>
                 <div className={styles.templateSelect} hidden={this.getTemplateOptions().length === 1}>
