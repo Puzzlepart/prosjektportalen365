@@ -16,7 +16,8 @@
       }
     }
     .actions {
-      > button, > a {
+      > button,
+      > a {
         margin: 0 8px 0 0;
       }
     }
@@ -40,4 +41,8 @@
       @include ms-sm4;
     }
   }
+}
+
+div[class="commandBarWrapper"] {
+  display: none !important;
 }
