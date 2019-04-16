@@ -19,4 +19,5 @@
             <JSLink>clienttemplates.js</JSLink>
         </View>
     </pnp:Views>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>
