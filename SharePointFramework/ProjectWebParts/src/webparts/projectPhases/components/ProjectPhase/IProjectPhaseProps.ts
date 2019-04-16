@@ -5,5 +5,5 @@ export interface IProjectPhaseProps {
     isCurrentPhase?: boolean;
     changePhaseEnabled?: boolean;
     onChangePhaseHandler?: (phase: Phase) => void;
-    onOpenCallout: (target: HTMLSpanElement) => void;
+    onOpenCallout: (target: any) => void;
 }
