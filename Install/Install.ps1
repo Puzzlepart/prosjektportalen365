@@ -74,6 +74,10 @@ if (-not $SkipSiteCreation.IsPresent) {
     }
 }
 
+Write-Host "[INFO] Setting permissions for AssociatedMemberGroup" -ForegroundColor Green
+Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -RemoveRole Rediger
+Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -AddRole Lese
+
 Try {
     Write-Host "[INFO] Clearing QuickLaunch"    
     Get-PnPNavigationNode -Location QuickLaunch | ForEach-Object { Remove-PnPNavigationNode -Identity $_.Id -Location QuickLaunch -Force }
