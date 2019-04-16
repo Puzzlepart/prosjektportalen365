@@ -1,25 +1,28 @@
-import * as React from 'react';
+import { dateAdd } from '@pnp/common';
 import { Logger, LogLevel } from '@pnp/logging';
-import { sp, ClientSidePage, ClientSideWebpart, } from '@pnp/sp';
-import { dateAdd, } from '@pnp/common';
+import { ClientSidePage, ClientSideWebpart, sp } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import { autobind } from 'office-ui-fabric-react/lib/Utilities';
-import ChangePhaseDialog from './ChangePhaseDialog';
-import ProjectPhaseCallout from './ProjectPhaseCallout';
-import ProjectPhase from './ProjectPhase';
-import Phase from '../models/Phase';
-import styles from './ProjectPhases.module.scss';
-import { IProjectPhasesProps } from './IProjectPhasesProps';
-import { IProjectPhasesState, IProjectPhasesData } from './IProjectPhasesState';
-import * as strings from 'ProjectPhasesWebPartStrings';
-import { ChecklistData } from './ChecklistData';
-import * as objectGet from 'object-get';
 import MSGraphHelper from 'msgraph-helper';
+import * as objectGet from 'object-get';
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+import { autobind } from 'office-ui-fabric-react/lib/Utilities';
+import * as strings from 'ProjectPhasesWebPartStrings';
+import * as React from 'react';
+import SpEntityPortalService from 'sp-entityportal-service';
+import HubSiteService from 'sp-hubsite-service';
+import Phase from '../models/Phase';
+import ChangePhaseDialog from './ChangePhaseDialog';
+import { ChecklistData } from './ChecklistData';
+import { IProjectPhasesProps } from './IProjectPhasesProps';
+import { IProjectPhasesData, IProjectPhasesState } from './IProjectPhasesState';
+import ProjectPhase from './ProjectPhase';
+import ProjectPhaseCallout from './ProjectPhaseCallout';
+import styles from './ProjectPhases.module.scss';
 
 export default class ProjectPhases extends React.Component<IProjectPhasesProps, IProjectPhasesState> {
-  private phaseChecklist = sp.web.lists.getByTitle(strings.PhaseChecklistName);
+  private _spEntityPortalService: SpEntityPortalService;
+  private _phaseChecklist = sp.web.lists.getByTitle(strings.PhaseChecklistName);
 
   /**
    * Constructor
@@ -90,7 +93,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
           <ChangePhaseDialog
             activePhase={this.state.data.currentPhase}
             newPhase={this.state.confirmPhase}
-            phaseChecklist={this.phaseChecklist}
+            phaseChecklist={this._phaseChecklist}
             onDismiss={_ => this.setState({ confirmPhase: null })}
             onChangePhase={this.onChangePhase} />
         )}
@@ -105,7 +108,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    */
   private async updatePhase(phase: Phase) {
     Logger.log({ message: '(ProjectPhases) updatePhase', data: { phase }, level: LogLevel.Info });
-    await this.props.spEntityPortalService.updateEntityItem(this.props.pageContext.site.id.toString(), { [this.state.data.phaseTextField]: phase.toString() });
+    await this._spEntityPortalService.updateEntityItem(this.props.pageContext.site.id.toString(), { [this.state.data.phaseTextField]: phase.toString() });
   }
 
   /**
@@ -203,7 +206,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    */
   private async fetchChecklistData(): Promise<ChecklistData> {
     try {
-      const items = await this.phaseChecklist
+      const items = await this._phaseChecklist
         .items
         .select('GtChecklistStatus', 'GtProjectPhase')
         .get<{ GtChecklistStatus: string, GtProjectPhase: { TermGuid: string } }[]>();
@@ -233,12 +236,15 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    */
   private async fetchData(checklistData: ChecklistData, cachingOptions: any): Promise<IProjectPhasesData> {
     Logger.log({ message: '(ProjectPhases) fetchData: Fetching TermSetId for selected field', level: LogLevel.Info });
-    const { spEntityPortalService, phaseField, pageContext } = this.props;
+    const { phaseField, pageContext, entity } = this.props;
     try {
+      const hubSite = await HubSiteService.GetHubSiteById(pageContext.web.absoluteUrl, pageContext.legacyPageContext.hubSiteId);
+      const params = { webUrl: hubSite.url, ...entity };
+      this._spEntityPortalService = new SpEntityPortalService(params);
       const [{ TermSetId: termSetId }, phaseTextField] = await Promise.all([
         sp.web.fields.getByInternalNameOrTitle(phaseField).select('TermSetId').usingCaching({
           ...cachingOptions,
-          key: 'ProjectPhases_PhaseField_',
+          key: 'ProjectPhases_PhaseField_TermSetId',
         }).get(),
         sp.web.fields.getByInternalNameOrTitle(`${phaseField}_0`).select('InternalName').usingCaching({
           ...cachingOptions,
@@ -250,7 +256,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
           ...cachingOptions,
           key: 'ProjectPhases_PhaseTerms',
         }).get(),
-        spEntityPortalService.getEntityItem(pageContext.site.id.toString()),
+        this._spEntityPortalService.getEntityItem(pageContext.site.id.toString()),
       ]);
       const phases = phaseTerms
         .filter(term => term.LocalCustomProperties.ShowOnFrontpage !== 'false')
