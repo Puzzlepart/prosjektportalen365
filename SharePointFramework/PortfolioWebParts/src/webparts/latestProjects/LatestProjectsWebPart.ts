@@ -1,11 +1,13 @@
 import * as React from 'react';
+import * as ReactDom from 'react-dom';
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import LatestProjects from './components/LatestProjects';
 import { ILatestProjectsProps } from './components/ILatestProjectsProps';
-import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
+import { setupWebPart } from '../@setup';
 import { Logger, LogLevel } from '@pnp/logging';
 import { ILatestProjectsWebPartProps } from './ILatestProjectsWebPartProps';
 
-export default class LatestProjectsWebPart extends PortfolioBaseWebPart<ILatestProjectsWebPartProps> {
+export default class LatestProjectsWebPart extends BaseClientSideWebPart<ILatestProjectsWebPartProps> {
   public render(): void {
     Logger.log({ message: '(LatestProjectsWebPart) render: Rendering <LatestProjects />', level: LogLevel.Info });
     const element: React.ReactElement<ILatestProjectsProps> = React.createElement(
@@ -19,10 +21,15 @@ export default class LatestProjectsWebPart extends PortfolioBaseWebPart<ILatestP
         ...this.properties,
       }
     );
-    super._render(this.manifest.alias, element);
+    ReactDom.render(element, this.domElement);
   }
 
   protected async onInit(): Promise<void> {
-    await super.onInit();
+    Logger.log({ message: '(LatestProjectsWebPart) onInit: Initializing LatestProjectsWebPart', level: LogLevel.Info });
+    setupWebPart(this.context);
+  }
+
+  protected onDispose(): void {
+    ReactDom.unmountComponentAtNode(this.domElement);
   }
 }

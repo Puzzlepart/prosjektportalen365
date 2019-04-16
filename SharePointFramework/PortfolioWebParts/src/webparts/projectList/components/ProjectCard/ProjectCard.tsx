@@ -16,7 +16,7 @@ export const ProjectCardHeader = ({ project, showProjectLogo, shouldTruncateTitl
   return (
     <div className={styles.header}>
       <div className={styles.logo} hidden={!showProjectLogo}>
-       {project.logo && <ImageFadeIn opacityTransition={1.0} src={project.logo} />}
+       {project.logo && <ImageFadeIn opacityTransition={2} src={project.logo} />}
       </div>
       <DocumentCardTitle title={project.title} shouldTruncate={shouldTruncateTitle} />
     </div>

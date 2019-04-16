@@ -138,7 +138,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
    */
   private onRenderItemColumn(project: ProjectListModel, _index: number, column: IColumn) {
     const colValue = getObjectValue(project, column.fieldName, null);
-    if (column.fieldName === 'Title') {
+    if (column.fieldName === 'title') {
       return <a href={project.url}>{colValue}</a>;
     }
     return colValue;
