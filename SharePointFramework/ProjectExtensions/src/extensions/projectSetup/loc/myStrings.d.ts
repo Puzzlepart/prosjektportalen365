@@ -8,6 +8,9 @@ declare interface IProjectSetupApplicationCustomizerStrings {
   ApplyTemplateContentTypes: string;
   ApplyTemplateClientSidePages: string;
   TemplateSelectTitle: string;
+  SettingsTitle: string;
+  IncludeStandardFoldersLabel: string;
+  CopyPlannerTasksLabel: string;
   ListContentTitle: string;
   ExtensionsTitle: string;
   TemplateSelectModalTitle: string;

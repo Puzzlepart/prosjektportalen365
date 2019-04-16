@@ -19,14 +19,23 @@
     }
   }
 
+  .settings {
+    @include ms-Grid-col;
+    @include ms-sm12;
+
+    .settingsContent {
+      @include ms-Grid;
+      @include ms-Grid-row;
+      .settingsItem {
+        @include ms-Grid-col;
+        @include ms-sm6;
+      }
+    }
+  }
+
   .listContent {
     @include ms-Grid-col;
     @include ms-sm6;
-
-    .listContentTitle {
-      font-size: 18px;
-      cursor: pointer;
-    }
 
     .listContentList {
       margin: 10px 0 25px 0;
@@ -41,11 +50,6 @@
     @include ms-Grid-col;
     @include ms-sm6;
 
-    .extensionsTitle {
-      font-size: 18px;
-      cursor: pointer;
-    }
-
     .extensionsList {
       margin: 10px 0 25px 0;
 
@@ -54,8 +58,8 @@
       }
     }
   }
-  
-  .infoText {    
+
+  .infoText {
     @include ms-Grid-col;
     @include ms-sm12;
     margin: 15px 0 15px 0;
@@ -66,7 +70,7 @@
     @include ms-sm12;
     margin: 0 0 15px 0;
 
-    >button {
+    > button {
       margin: 0;
     }
   }
