@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Logger, LogLevel } from '@pnp/logging';
-import { sp, ClientSidePage, ClientSideWebpart, ClientSidePageComponent } from '@pnp/sp';
+import { sp, ClientSidePage, ClientSideWebpart, } from '@pnp/sp';
+import { dateAdd, } from '@pnp/common';
 import { taxonomy } from '@pnp/sp-taxonomy';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
@@ -33,7 +34,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
   public async componentDidMount() {
     if (this.props.phaseField) {
       const checklistData = await this.fetchChecklistData();
-      const data = await this.fetchData(checklistData);
+      const data = await this.fetchData(checklistData, { expiration: dateAdd(new Date(), "day", 1), storeName: "local" });
       this.setState({ isLoading: false, data });
     }
   }
@@ -228,17 +229,27 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    * Fetch phase terms
    * 
    * @param {ChecklistData} checklistData Check point status
+   * @param {any} cachingOptions Caching options
    */
-  private async fetchData(checklistData: ChecklistData): Promise<IProjectPhasesData> {
+  private async fetchData(checklistData: ChecklistData, cachingOptions: any): Promise<IProjectPhasesData> {
     Logger.log({ message: '(ProjectPhases) fetchData: Fetching TermSetId for selected field', level: LogLevel.Info });
     const { spEntityPortalService, phaseField, pageContext } = this.props;
     try {
       const [{ TermSetId: termSetId }, phaseTextField] = await Promise.all([
-        sp.web.fields.getByInternalNameOrTitle(phaseField).select('TermSetId').usingCaching().get(),
-        sp.web.fields.getByInternalNameOrTitle(`${phaseField}_0`).select('InternalName').usingCaching().get(),
+        sp.web.fields.getByInternalNameOrTitle(phaseField).select('TermSetId').usingCaching({
+          ...cachingOptions,
+          key: 'ProjectPhases_PhaseField_',
+        }).get(),
+        sp.web.fields.getByInternalNameOrTitle(`${phaseField}_0`).select('InternalName').usingCaching({
+          ...cachingOptions,
+          key: 'ProjectPhases_PhaseTextField_InternalName',
+        }).get(),
       ]);
       const [phaseTerms, entityItem] = await Promise.all([
-        taxonomy.getDefaultSiteCollectionTermStore().getTermSetById(termSetId).terms.usingCaching().get(),
+        taxonomy.getDefaultSiteCollectionTermStore().getTermSetById(termSetId).terms.usingCaching({
+          ...cachingOptions,
+          key: 'ProjectPhases_PhaseTerms',
+        }).get(),
         spEntityPortalService.getEntityItem(pageContext.site.id.toString()),
       ]);
       const phases = phaseTerms
