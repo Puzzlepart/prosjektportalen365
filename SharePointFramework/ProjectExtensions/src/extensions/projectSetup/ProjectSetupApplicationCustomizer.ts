@@ -10,7 +10,7 @@ import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import { IProjectSetupApplicationCustomizerProperties } from './IProjectSetupApplicationCustomizerProperties';
-import { ProgressModal, IProgressModalProps, ErrorModal, IErrorModalProps, TemplateSelectModal } from '../../components';
+import { ProgressModal, IProgressModalProps, ErrorModal, IErrorModalProps, TemplateSelectModal, ITemplateSelectModalState } from '../../components';
 import IProjectSetupApplicationCustomizerData from './IProjectSetupApplicationCustomizerData';
 import { ListContentConfig, ProjectTemplate } from './../../models';
 import { Tasks, IBaseTaskParams } from './../../tasks';
@@ -102,12 +102,12 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   /**
    * Render TemplateSelectModal
    */
-  private getTemplateInfo(): Promise<IProjectSetupApplicationCustomizerData> {
+  private getTemplateInfo(): Promise<ITemplateSelectModalState> {
     return new Promise(resolve => {
       const templateSelectModal = React.createElement(TemplateSelectModal, {
         key: 'ProjectSetupApplicationCustomizer_TemplateSelectModal',
         data: this._data,
-        onSubmit: (data: IProjectSetupApplicationCustomizerData) => resolve(data),
+        onSubmit: (state: ITemplateSelectModalState) => resolve(state),
         versionString: `v${this.manifest.version}`,
       });
       this._templateSelectModalContainer = document.createElement('DIV');

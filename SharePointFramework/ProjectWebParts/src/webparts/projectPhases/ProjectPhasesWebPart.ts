@@ -12,24 +12,14 @@ import HubSiteService from 'sp-hubsite-service';
 import SpEntityPortalService from 'sp-entityportal-service';
 
 export default class ProjectPhasesWebPart extends BaseClientSideWebPart<IProjectPhasesWebPartProps> {
-  private _taxonomyFields: { InternalName: string, Title: string }[];
   private _spEntityPortalService: SpEntityPortalService;
-
-  constructor() {
-    super();
-    this._taxonomyFields = [];
-  }
 
   public async onInit() {
     this.context.statusRenderer.clearLoadingIndicator(this.domElement);
     await MSGraphHelper.Init(this.context.msGraphClientFactory, 'v1.0');
     sp.setup({ spfxContext: this.context });
-    const [taxonomyFields, hubSite] = await Promise.all([
-      sp.web.fields.select('InternalName', 'Title').filter(`TypeAsString eq 'TaxonomyFieldType'`).get(),
-      HubSiteService.GetHubSiteById(this.context.pageContext.web.absoluteUrl, this.context.pageContext.legacyPageContext.hubSiteId),
-    ]);
+    const hubSite = await HubSiteService.GetHubSiteById(this.context.pageContext.web.absoluteUrl, this.context.pageContext.legacyPageContext.hubSiteId);
     const params = { webUrl: hubSite.url, ...this.properties.entity };
-    this._taxonomyFields = taxonomyFields;
     this._spEntityPortalService = new SpEntityPortalService(params);
   }
 
@@ -50,10 +40,6 @@ export default class ProjectPhasesWebPart extends BaseClientSideWebPart<IProject
             {
               groupName: strings.SettingsGroupName,
               groupFields: [
-                PropertyPaneDropdown('phaseField', {
-                  label: strings.PhaseFieldFieldLabel,
-                  options: this._taxonomyFields.map(field => ({ key: field.Title, text: field.Title })),
-                }),
                 PropertyPaneToggle('automaticReload', {
                   label: strings.AutomaticReloadFieldLabel,
                 }),

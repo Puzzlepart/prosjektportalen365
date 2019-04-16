@@ -199,15 +199,17 @@ export default class PlannerConfiguration extends BaseTask {
      */
     @override
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
-        Logger.log({ message: '(ProjectSetupApplicationCustomizer) PlannerConfiguration: Setting up Plans, Buckets and Task', level: LogLevel.Info });
-        try {
-            const plannerConfig = await (await fetch(`${params.data.hub.url}/Konfigurasjonsfiler/Planneroppgaver.txt`, { credentials: 'include' })).json();
-            let groupPlans = await this.createPlans(plannerConfig, params.context.pageContext.legacyPageContext.groupId, onProgress);
-            params.templateParameters = this.updateTemplateParameters(groupPlans, params.templateParameters);
-            params.templateSchema = this.updateTemplateSchema(groupPlans, params.templateSchema);
-        } catch (error) {
-            Logger.log({ message: '(ProjectSetupApplicationCustomizer) PlannerConfiguration: Failed to set up Plans, Buckets and Tasks', level: LogLevel.Warning });
-            throw new BaseTaskError(this.name, strings.PlannerConfigurationErrorMessage, error);
+        if (params.data.copyPlannerTasks) {
+            Logger.log({ message: '(ProjectSetupApplicationCustomizer) PlannerConfiguration: Setting up Plans, Buckets and Task', level: LogLevel.Info });
+            try {
+                const plannerConfig = await (await fetch(`${params.data.hub.url}/Konfigurasjonsfiler/Planneroppgaver.txt`, { credentials: 'include' })).json();
+                let groupPlans = await this.createPlans(plannerConfig, params.context.pageContext.legacyPageContext.groupId, onProgress);
+                params.templateParameters = this.updateTemplateParameters(groupPlans, params.templateParameters);
+                params.templateSchema = this.updateTemplateSchema(groupPlans, params.templateSchema);
+            } catch (error) {
+                Logger.log({ message: '(ProjectSetupApplicationCustomizer) PlannerConfiguration: Failed to set up Plans, Buckets and Tasks', level: LogLevel.Warning });
+                throw new BaseTaskError(this.name, strings.PlannerConfigurationErrorMessage, error);
+            }
         }
         return params;
     }

@@ -3,7 +3,6 @@ declare interface IProjectPhasesWebPartStrings {
   ViewsGroupName: string;
   LookAndFeelGroupName: string;
   PersistedPhasePropertyBagKey: string;
-  PhaseFieldFieldLabel: string;
   AutomaticReloadFieldLabel: string;
   ReloadTimeoutFieldLabel: string;
   FontSizeFieldLabel: string;

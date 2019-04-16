@@ -1,5 +1,13 @@
 import ProgressModal, { IProgressModalProps } from './ProgressModal';
 import ErrorModal, { IErrorModalProps } from './ErrorModal';
-import TemplateSelectModal from './TemplateSelectModal';
+import TemplateSelectModal, { ITemplateSelectModalProps, ITemplateSelectModalState } from './TemplateSelectModal';
 
-export { ProgressModal, IProgressModalProps, ErrorModal, IErrorModalProps, TemplateSelectModal };
+export {
+    ProgressModal,
+    IProgressModalProps,
+    ErrorModal,
+    IErrorModalProps,
+    TemplateSelectModal,
+    ITemplateSelectModalProps,
+    ITemplateSelectModalState,
+};

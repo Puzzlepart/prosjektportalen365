@@ -13,14 +13,18 @@ import { ITemplateSelectModalState } from './ITemplateSelectModalState';
 import { ProjectTemplate, ListContentConfig } from '../../models';
 
 export default class TemplateSelectModal extends React.Component<ITemplateSelectModalProps, ITemplateSelectModalState> {
+    /**
+     * 
+     * @param props Props
+     */
     constructor(props: ITemplateSelectModalProps) {
         super(props);
         this.state = {
             selectedTemplate: props.data.templates[0],
             selectedExtensions: [],
             selectedListConfig: props.data.listContentConfig.filter(lcc => lcc.isDefault),
-            listContentHidden: true,
-            extensionsHidden: true,
+            includeStandardFolders: false,
+            copyPlannerTasks: true,
         };
     }
 
@@ -53,15 +57,21 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
                     </div>
                 </div>
                 <CollapsableSection
-                    hidden={true}
                     title={strings.SettingsTitle}
                     className={styles.settings}
                     contentClassName={styles.settingsContent}>
                     <div className={styles.settingsItem}>
-                        <Toggle label={strings.IncludeStandardFoldersLabel} />
+                        <Toggle
+                            label={strings.IncludeStandardFoldersLabel}
+                            defaultChecked={this.state.includeStandardFolders}
+                            disabled={true}
+                            onChanged={includeStandardFolders => this.setState({ includeStandardFolders })} />
                     </div>
                     <div className={styles.settingsItem}>
-                        <Toggle label={strings.CopyPlannerTasksLabel} />
+                        <Toggle
+                            label={strings.CopyPlannerTasksLabel}
+                            defaultChecked={this.state.copyPlannerTasks}
+                            onChanged={copyPlannerTasks => this.setState({ copyPlannerTasks })} />
                     </div>
                 </CollapsableSection>
                 <CollapsableSection
@@ -112,8 +122,8 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
     /**
      * On extension item toggle
      * 
-     * @param extension Extension
-     * @param checked Checked
+     * @param {ProjectTemplate} extension Extension
+     * @param {boolean} checked Checked
      */
     private onExtensionItemToggle(extension: ProjectTemplate, checked: boolean): void {
         if (checked) {
@@ -130,8 +140,8 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
     /**
      * On list content item toggle
      * 
-     * @param listContentConfig List content config
-     * @param checked Checked
+     * @param {ListContentConfig} listContentConfig List content config
+     * @param {boolean} checked Checked
      */
     private onListContentItemToggle(listContentConfig: ListContentConfig, checked: boolean): void {
         if (checked) {
@@ -145,20 +155,32 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
         }
     }
 
+    /**
+     * On submit
+     */
     @autobind
     private onSubmit() {
-        const { selectedExtensions, selectedListConfig, selectedTemplate } = this.state;
-        this.props.onSubmit({ selectedExtensions, selectedListConfig, selectedTemplate });
+        this.props.onSubmit(this.state);
     }
 
+    /**
+     * On template selected
+     * 
+     * @param {IDropdownOption} opt Option
+     */
     @autobind
     private onTemplateSelected(opt: IDropdownOption) {
         this.setState({ selectedTemplate: (opt.data as ProjectTemplate) });
     }
 
+    /**
+     * Get template options
+     */
     private getTemplateOptions(): IDropdownOption[] {
         return this.props.data.templates.map((template, idx) => {
             return { key: `${idx}`, text: template.title, data: template };
         });
     }
 }
+
+export { ITemplateSelectModalProps, ITemplateSelectModalState };

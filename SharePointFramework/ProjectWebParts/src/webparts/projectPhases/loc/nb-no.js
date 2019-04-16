@@ -4,7 +4,6 @@ define([], function () {
     ViewsGroupName: "Visninger",
     LookAndFeelGroupName: "Utseende og funksjonalitet",
     PersistedPhasePropertyBagKey: "persisted_phase",
-    PhaseFieldFieldLabel: "Felt",
     AutomaticReloadFieldLabel: "Automatisk oppdatering",
     ReloadTimeoutFieldLabel: "Forsinkelse (s)",
     FontSizeFieldLabel: "Skriftstørrelse",
