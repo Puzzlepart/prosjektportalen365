@@ -168,15 +168,16 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    * @param {string} pageName Page name
    * @param {string} webPartId Web Part Id
    * @param {Object} properties Properties
+   * @param {boolean} publish Publish file
    */
-  private async updateWebPartProperties(pageName: string, webPartId: string, properties: { [key: string]: string }) {
+  private async updateWebPartProperties(pageName: string, webPartId: string, properties: { [key: string]: string }, publish: boolean = true) {
     const page = await ClientSidePage.fromFile(sp.web.getFileByServerRelativePath(`${this.props.pageContext.web.serverRelativeUrl}/SitePages/${pageName}.aspx`));
     const control = page.findControl<ClientSideWebpart>(c => objectGet(c, 'json.webPartId') === webPartId) as ClientSideWebpart;
     control.setProperties<any>({
-      ...objectGet(control, 'data.webPartData.properties'),
+      ...control.getProperties(),
       ...properties,
     });
-    await page.save();
+    await page.save(publish);
   }
 
   /**

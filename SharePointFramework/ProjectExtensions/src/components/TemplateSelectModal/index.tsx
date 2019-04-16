@@ -71,6 +71,7 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
                         <Toggle
                             label={strings.CopyPlannerTasksLabel}
                             defaultChecked={this.state.copyPlannerTasks}
+                            disabled={true}
                             onChanged={copyPlannerTasks => this.setState({ copyPlannerTasks })} />
                     </div>
                 </CollapsableSection>

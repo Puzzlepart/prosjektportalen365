@@ -24,7 +24,8 @@ declare interface IProjectPhasesWebPartStrings {
   Close: string;
   Skip: string;
   CheckPointsMarkedAsText: string;
-  GoToPhaseChecklist: string;
+  TasksLinkText: string;
+  PhaseChecklistLinkText: string;
   ChangePhaseText: string;
   ConfirmChangePhase: string;
   PhaseChecklistViewUrl: string;

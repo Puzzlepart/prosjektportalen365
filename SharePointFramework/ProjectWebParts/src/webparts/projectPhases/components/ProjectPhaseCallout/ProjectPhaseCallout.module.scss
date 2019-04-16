@@ -20,15 +20,27 @@
         margin: 0 0 15px 0;
       }
       .addText {
+        margin: 4px 0 0 0;
         max-width: 250px;
         font-size: 11px;
 
-        a, a:visited, a:link {          
+        .addTextIcon {
+          margin: 0 4px 0 0;
+          > i {
+            vertical-align: baseline;
+          }
+        }
+
+        .addTextLink {          
+          vertical-align: baseline;
+        }
+
+        .addTextLink, .addTextLink:visited, .addTextLink:link {          
           color: "[theme: themePrimary, default: #444444]";
           text-decoration: none;
           outline: none;
         }
-        a:hover, a:active {          
+        .addTextLink:hover, .addTextLink:active {          
           color: "[theme: themeTertiary, default: #444444]";
           text-decoration: none;
           outline: none;

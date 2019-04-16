@@ -1,6 +1,7 @@
 
 import * as React from 'react';
 import { Callout } from 'office-ui-fabric-react/lib/Callout';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { IProjectPhaseCalloutProps } from './IProjectPhaseCalloutProps';
 import styles from './ProjectPhaseCallout.module.scss';
 import * as strings from 'ProjectPhasesWebPartStrings';
@@ -42,10 +43,16 @@ export default class ProjectPhaseCallout extends React.PureComponent<IProjectPha
                                     })}
                                 </div>
                                 <div className={styles.addText}>
-                                    <a href={this.getFilteredPhaseChecklistViewUrl()}>{strings.GoToPhaseChecklist}</a>
+                                    <span className={styles.addTextIcon}><Icon iconName='PlannerLogo' /></span>
+                                    <a className={styles.addTextLink} href={this.getTasksPageUrl(this.props)}>{strings.TasksLinkText}</a>
+                                </div>
+                                <div className={styles.addText}>
+                                    <span className={styles.addTextIcon}><Icon iconName='CheckList' /></span>
+                                    <a className={styles.addTextLink} href={this.getFilteredPhaseChecklistViewUrl(this.props)}>{strings.PhaseChecklistLinkText}</a>
                                 </div>
                                 <div className={styles.addText} hidden={isCurrentPhase}>
-                                    <a href='#' onClick={_ => onChangePhase(phase.model)}>{strings.ChangePhaseText}</a>
+                                    <span className={styles.addTextIcon}><Icon iconName='TransitionPop' /></span>
+                                    <a className={styles.addTextLink} href='#' onClick={_ => onChangePhase(phase.model)}>{strings.ChangePhaseText}</a>
                                 </div>
                             </div>
                         </div>
@@ -55,7 +62,21 @@ export default class ProjectPhaseCallout extends React.PureComponent<IProjectPha
         );
     }
 
-    protected getFilteredPhaseChecklistViewUrl(): string {
-        return `${this.props.webAbsoluteUrl}/${strings.PhaseChecklistViewUrl}?FilterField1=GtProjectPhase&FilterValue1=${this.props.phase.model.term.Name}`;
+    /**
+     * Get tasks page url
+     * 
+     * @param {IProjectPhaseCalloutProps} param0 Props
+     */
+    protected getTasksPageUrl({ webAbsoluteUrl, phase }: IProjectPhaseCalloutProps): string {
+        return `${webAbsoluteUrl}/SitePages/Oppgaver-${phase.model.name}.aspx`;
+    }
+
+    /**
+     * Get filtered phase checklist view url
+     * 
+     * @param {IProjectPhaseCalloutProps} param0 Props
+     */
+    protected getFilteredPhaseChecklistViewUrl({ webAbsoluteUrl, phase }: IProjectPhaseCalloutProps): string {
+        return `${webAbsoluteUrl}/${strings.PhaseChecklistViewUrl}?FilterField1=GtProjectPhase&FilterValue1=${phase.model.name}`;
     }
 }
