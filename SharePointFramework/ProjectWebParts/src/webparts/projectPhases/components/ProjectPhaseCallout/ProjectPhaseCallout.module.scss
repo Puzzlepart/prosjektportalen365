@@ -26,10 +26,12 @@
         a, a:visited, a:link {          
           color: "[theme: themePrimary, default: #444444]";
           text-decoration: none;
+          outline: none;
         }
         a:hover, a:active {          
           color: "[theme: themeTertiary, default: #444444]";
           text-decoration: none;
+          outline: none;
         }
       }
     }
