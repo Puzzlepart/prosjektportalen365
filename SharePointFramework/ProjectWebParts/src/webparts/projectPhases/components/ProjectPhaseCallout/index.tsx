@@ -1,6 +1,7 @@
 
 import * as React from 'react';
 import { Callout } from 'office-ui-fabric-react/lib/Callout';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { IProjectPhaseCalloutProps } from './IProjectPhaseCalloutProps';
 import styles from './ProjectPhaseCallout.module.scss';
@@ -33,27 +34,28 @@ export default class ProjectPhaseCallout extends React.PureComponent<IProjectPha
                     <div className={styles.header}>
                         <span className={styles.title}>{phase.model.name}</span>
                     </div>
-                    <div className={styles.inner}>
-                        <div className={styles.content}>
-                            <p className={styles.subText}>{phase.model.term.LocalCustomProperties.PhasePurpose}</p>
-                            <div>
-                                <div className={styles.checkPointStatus} hidden={Object.keys(phase.model.checklistData.stats).length === 0}>
-                                    {Object.keys(phase.model.checklistData.stats).map(status => {
-                                        return <div className={styles.addText}><span>{phase.model.checklistData.stats[status]} {strings.CheckPointsMarkedAsText} {status}</span></div>;
-                                    })}
-                                </div>
-                                <div className={styles.addText}>
-                                    <span className={styles.addTextIcon}><Icon iconName='PlannerLogo' /></span>
-                                    <a className={styles.addTextLink} href={this.getTasksPageUrl(this.props)}>{strings.TasksLinkText}</a>
-                                </div>
-                                <div className={styles.addText}>
-                                    <span className={styles.addTextIcon}><Icon iconName='CheckList' /></span>
-                                    <a className={styles.addTextLink} href={this.getFilteredPhaseChecklistViewUrl(this.props)}>{strings.PhaseChecklistLinkText}</a>
-                                </div>
-                                <div className={styles.addText} hidden={isCurrentPhase}>
-                                    <span className={styles.addTextIcon}><Icon iconName='TransitionPop' /></span>
-                                    <a className={styles.addTextLink} href='#' onClick={_ => onChangePhase(phase.model)}>{strings.ChangePhaseText}</a>
-                                </div>
+                    <div className={styles.body}>
+                        <p className={styles.subText}>{phase.model.term.LocalCustomProperties.PhasePurpose}</p>
+                        <div>
+                            <div className={styles.stats} hidden={Object.keys(phase.model.checklistData.stats).length === 0}>
+                                {Object.keys(phase.model.checklistData.stats).map(status => {
+                                    return <div><span>{phase.model.checklistData.stats[status]} {strings.CheckPointsMarkedAsText} {status}</span></div>;
+                                })}
+                            </div>
+                            <div className={styles.actions}>
+                                <ActionButton
+                                    href={this.getPlannerPageUrl(this.props)}
+                                    text={strings.TasksLinkText}
+                                    iconProps={{ iconName: 'PlannerLogo' }} />
+                                <ActionButton
+                                    href={this.getFilteredPhaseChecklistViewUrl(this.props)}
+                                    text={strings.PhaseChecklistLinkText}
+                                    iconProps={{ iconName: 'CheckList' }} />
+                                <ActionButton
+                                    onClick={_ => onChangePhase(phase.model)}
+                                    text={strings.ChangePhaseText}
+                                    iconProps={{ iconName: 'TransitionPop' }}
+                                    disabled={isCurrentPhase} />
                             </div>
                         </div>
                     </div>
@@ -63,11 +65,11 @@ export default class ProjectPhaseCallout extends React.PureComponent<IProjectPha
     }
 
     /**
-     * Get tasks page url
+     * Get planner page url
      * 
      * @param {IProjectPhaseCalloutProps} param0 Props
      */
-    protected getTasksPageUrl({ webAbsoluteUrl, phase }: IProjectPhaseCalloutProps): string {
+    protected getPlannerPageUrl({ webAbsoluteUrl, phase }: IProjectPhaseCalloutProps): string {
         return `${webAbsoluteUrl}/SitePages/Oppgaver-${phase.model.name}.aspx`;
     }
 
