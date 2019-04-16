@@ -1,0 +1,8 @@
+﻿<pnp:ContentType ID="0x0100D20485A193174523B2070B1BF3243466" Name="Konfigurasjonselement" Group="Prosjektportalen innholdstyper" 
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    <pnp:FieldRefs>
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" />
+        <pnp:FieldRef ID="a2c95470-5762-407b-935f-412092a3a4cf" Name="GtKey" Required="true" />
+        <pnp:FieldRef ID="7711112c-e3f1-4a97-b162-c23dc78f4af4" Name="GtValue" Required="true" />
+    </pnp:FieldRefs>
+</pnp:ContentType>
