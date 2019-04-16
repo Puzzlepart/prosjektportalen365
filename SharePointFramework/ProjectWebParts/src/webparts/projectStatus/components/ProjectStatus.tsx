@@ -1,37 +1,44 @@
-import * as React from 'react';
-import { Logger, LogLevel } from '@pnp/logging';
-import { List } from '@pnp/sp';
 import { dateAdd } from "@pnp/common";
-import styles from './ProjectStatus.module.scss';
-import * as strings from 'ProjectStatusWebPartStrings';
+import { Logger, LogLevel } from '@pnp/logging';
 import '@pnp/polyfill-ie11';
-import { IProjectStatusProps } from './IProjectStatusProps';
-import { IProjectStatusState, IProjectStatusData } from './IProjectStatusState';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { List } from '@pnp/sp';
+// import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
+import { IContextualMenuItem, ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
-import SummarySection from './SummarySection';
-import StatusSection from './StatusSection';
-import ListSection from './ListSection';
-import ProjectPropertiesSection from './ProjectPropertiesSection';
+import * as strings from 'ProjectStatusWebPartStrings';
+import getObjectValue from 'prosjektportalen-spfx-shared/lib/helpers/getObjectValue';
+import * as React from 'react';
 import ProjectStatusReport, { IProjectStatusReportItem } from '../models/ProjectStatusReport';
 import SectionModel, { SectionType } from '../models/SectionModel';
 import { IStatusSectionBaseProps } from './@StatusSectionBase/IStatusSectionBaseProps';
-import getObjectValue from 'prosjektportalen-spfx-shared/lib/helpers/getObjectValue';
+import { IProjectStatusProps } from './IProjectStatusProps';
+import { IProjectStatusData, IProjectStatusState } from './IProjectStatusState';
+import ListSection from './ListSection';
+import ProjectPropertiesSection from './ProjectPropertiesSection';
+import styles from './ProjectStatus.module.scss';
+import StatusSection from './StatusSection';
+import SummarySection from './SummarySection';
 
 export default class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
-  private reportList: List;
-  private sectionsList: List;
+  private _reportList: List;
+  private _sectionsList: List;
 
+  /**
+   * Constructor
+   * 
+   * @param {IProjectStatusProps} props Props
+   */
   constructor(props: IProjectStatusProps) {
     super(props);
     this.state = {
       isLoading: true,
       associateStatusItem: document.location.hash === '#NewStatus',
     };
-    this.reportList = props.hubSite.web.lists.getByTitle(props.reportListName) as any;
-    this.sectionsList = props.hubSite.web.lists.getByTitle(props.sectionsListName) as any;
+    this._reportList = props.hubSite.web.lists.getByTitle(props.reportListName) as any;
+    this._sectionsList = props.hubSite.web.lists.getByTitle(props.sectionsListName) as any;
   }
 
   public async componentDidMount() {
@@ -46,7 +53,7 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
   /**
    * Renders the <ProjectStatus /> component
    */
-  public render() {
+  public render(): React.ReactElement<IProjectStatusProps> {
     if (this.state.isLoading) {
       return (
         <div className={styles.projectStatus}>
@@ -57,38 +64,52 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
       );
     }
 
-    let reportOptions = this.getReportOptions();
-    let title = this.getTitle();
-
     return (
       <div className={styles.projectStatus}>
         <div className={styles.container}>
+          {this.renderCommandBar()}
           <div className={`${styles.header} ${styles.column12}`}>
-            <div className={styles.title}>{title}</div>
+            <div className={styles.title}>{this.props.title}</div>
           </div>
-          <div className={`${styles.actions} ${styles.column8}`}>
-            <DefaultButton
-              text={strings.NewStatusReportModalHeaderText}
-              href={this.getReportNewFormUrl()}
-              iconProps={{ iconName: 'NewFolder' }} />
-            <DefaultButton
-              disabled={!this.state.selectedReport}
-              text={strings.EditReportButtonText}
-              href={this.getSelectedReportEditFormUrl()}
-              iconProps={{ iconName: 'Edit' }} />
-          </div>
-          <div className={styles.column4}>
-            <Dropdown
-              onChanged={this.onReportChanged}
-              defaultSelectedKey='0'
-              options={reportOptions}
-              disabled={reportOptions.length === 0} />
-          </div>
+
           <div className={`${styles.sections} ${styles.column12}`}>
             {this.state.selectedReport && this.renderSections()}
           </div>
         </div>
       </div>
+    );
+  }
+
+  private renderCommandBar() {
+    let reportOptions = this.getReportOptions();
+    let items: IContextualMenuItem[] = [
+      {
+        key: 'NewStatusReport',
+        name: strings.NewStatusReportModalHeaderText,
+        itemType: ContextualMenuItemType.Normal,
+        iconProps: { iconName: 'NewFolder' },
+        href: this.getReportNewFormUrl(),
+      },
+      {
+        key: 'EditReport',
+        name: strings.EditReportButtonText,
+        itemType: ContextualMenuItemType.Normal,
+        iconProps: { iconName: 'Edit' },
+        href: this.getSelectedReportEditFormUrl(),
+        disabled: !this.state.selectedReport,
+      },
+    ];
+    let farItems: IContextualMenuItem[] = [
+      {
+        key: 'ReportDropdown',
+        name: this.state.selectedReport ? this.state.selectedReport.toString() : '',
+        itemType: ContextualMenuItemType.Normal,
+        disabled: reportOptions.length === 0,
+        subMenuProps: { items: reportOptions }
+      },
+    ];
+    return (
+      <CommandBar items={items} farItems={farItems} />
     );
   }
 
@@ -99,16 +120,16 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
     let item: IProjectStatusReportItem;
     try {
       const dateTime = dateAdd(new Date(), 'minute', -1).toISOString();
-      [item] = await this.reportList.items
+      [item] = await this._reportList.items
         .filter(`AuthorId eq ${this.props.userId} and GtSiteId ne '${this.props.siteId}' and Created ge datetime'${dateTime}'`)
         .select('Id', 'GtMonthChoice', 'Created')
         .orderBy('Id', false)
         .top(1)
         .get<IProjectStatusReportItem[]>();
-    } catch (error) {}
+    } catch (error) { }
     if (item) {
       const report = new ProjectStatusReport(item);
-      await this.reportList.items.getById(item.Id).update({
+      await this._reportList.items.getById(item.Id).update({
         Title: `${this.props.webTitle} (${report.toString()})`,
         GtSiteId: this.props.siteId,
       });
@@ -181,17 +202,6 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
   }
 
   /**
-   * Get title
-   */
-  private getTitle() {
-    let title = this.props.title;
-    if (this.state.selectedReport) {
-      title = `${this.props.title} (${this.state.selectedReport.toString()})`;
-    }
-    return title;
-  }
-
-  /**
    * Get selected report edit form url
    */
   private getSelectedReportEditFormUrl(): string {
@@ -219,21 +229,26 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
 
   /**
    * On report changed
+   * 
+   * @param {ProjectStatusReport} report Report
    */
   @autobind
-  private onReportChanged(option: IDropdownOption) {
-    this.setState({ selectedReport: option.data });
+  private onReportChanged(report: ProjectStatusReport) {
+    this.setState({ selectedReport: report });
   }
 
   /**
    * Get report options
    */
-  private getReportOptions(): IDropdownOption[] {
-    let reportOptions: IDropdownOption[] = getObjectValue<ProjectStatusReport[]>(this.state, 'data.reports', []).map((report, idx) => ({
+  private getReportOptions(): IContextualMenuItem[] {
+    const reports = getObjectValue<ProjectStatusReport[]>(this.state, 'data.reports', []);
+    let reportOptions: IContextualMenuItem[] = reports.map((report, idx) => ({
       key: `${idx}`,
-      text: report.toString(),
-      data: report,
-    }));
+      name: report.toString(),
+      onClick: _ => this.onReportChanged(report),
+      canCheck: true,
+      isChecked: this.state.selectedReport ? report.item.Id === this.state.selectedReport.item.Id : false,
+    } as IContextualMenuItem));
     return reportOptions;
   }
 
@@ -246,13 +261,13 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
       this.props.spEntityPortalService.getEntityItemFieldValues(this.props.siteId),
       this.props.spEntityPortalService.getEntityFields(),
     ]);
-    let reportListProps = await this.reportList
+    let reportListProps = await this._reportList
       .select('DefaultEditFormUrl', 'DefaultNewFormUrl')
       .expand('DefaultEditFormUrl', 'DefaultNewFormUrl')
-      .get();
+      .get<{ DefaultEditFormUrl: string, DefaultNewFormUrl: string }>();
     const [reportItems, sectionItems] = await Promise.all([
-      this.reportList.items.filter(`GtSiteId eq '${this.props.siteId}'`).get<IProjectStatusReportItem[]>(),
-      this.sectionsList.items.get(),
+      this._reportList.items.filter(`GtSiteId eq '${this.props.siteId}'`).get<IProjectStatusReportItem[]>(),
+      this._sectionsList.items.get(),
     ]);
     const reports = reportItems.map(r => new ProjectStatusReport(r));
     const sections = sectionItems.map(s => new SectionModel(s));

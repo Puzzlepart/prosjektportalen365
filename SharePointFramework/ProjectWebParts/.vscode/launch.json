@@ -22,10 +22,10 @@
       ]
     },
     {
-      "name": "Hosted workbench (CRM 2019)",
+      "name": "Hosted workbench (VirksomhetsskiSchibsted)",
       "type": "chrome",
       "request": "launch",
-      "url": "https://pzlcloud.sharepoint.com/sites/CRM2019/_layouts/workbench.aspx",
+      "url": "https://pzlcloud.sharepoint.com/sites/VirksomhetsskiSchibsted/_layouts/workbench.aspx",
       "webRoot": "${workspaceRoot}",
       "sourceMaps": true,
       "sourceMapPathOverrides": {
