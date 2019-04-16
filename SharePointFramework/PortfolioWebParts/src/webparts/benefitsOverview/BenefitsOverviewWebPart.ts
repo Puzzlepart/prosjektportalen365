@@ -1,28 +1,28 @@
 import * as React from 'react';
-import { Version } from '@microsoft/sp-core-library';
+import * as ReactDom from 'react-dom';
 import BenefitsOverview, { IBenefitsOverviewProps } from './components/BenefitsOverview';
-import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
+import { setupWebPart } from '../@setup';
 import { IBenefitsOverviewWebPartProps } from './IBenefitsOverviewWebPartProps';
 import { Logger, LogLevel } from '@pnp/logging';
 
-export default class BenefitsOverviewWebPart extends PortfolioBaseWebPart<IBenefitsOverviewWebPartProps> {
+export default class BenefitsOverviewWebPart extends BaseClientSideWebPart<IBenefitsOverviewWebPartProps> {
   public render(): void {
     Logger.log({ message: '(BenefitsOverviewWebPart) render: Rendering <BenefitsOverview />', level: LogLevel.Info });
-    const element: React.ReactElement<IBenefitsOverviewProps> = React.createElement(BenefitsOverview, { ...this.properties, legacyPageContext: this.context.pageContext.legacyPageContext });
-    super._render(this.manifest.alias, element);
+    const element: React.ReactElement<IBenefitsOverviewProps> = React.createElement(BenefitsOverview, {
+      ...this.properties,
+      legacyPageContext: this.context.pageContext.legacyPageContext,
+    });
+    ReactDom.render(element, this.domElement);
   }
 
   protected async onInit(): Promise<void> {
     Logger.log({ message: '(BenefitsOverviewWebPart) onInit: Initializing BenefitsOverviewWebPart', level: LogLevel.Info });
-    await super.onInit();
+    setupWebPart(this.context);
   }
 
   protected onDispose(): void {
     Logger.log({ message: '(BenefitsOverviewWebPart) onDispose: Disposing <BenefitsOverview />', level: LogLevel.Info });
-    super.onDispose();
-  }
-
-  protected get dataVersion(): Version {
-    return Version.parse(this.manifest.version);
+    ReactDom.unmountComponentAtNode(this.domElement);
   }
 }

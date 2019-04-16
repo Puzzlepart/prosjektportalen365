@@ -1,32 +1,28 @@
 import * as React from 'react';
-import { Version } from '@microsoft/sp-core-library';
-import { IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
+import * as ReactDom from 'react-dom';
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import PortfolioInsights from './components/PortfolioInsights';
 import { IPortfolioInsightsProps } from './components/IPortfolioInsightsProps';
 import { IPortfolioInsightsWebPartProps } from './IPortfolioInsightsWebPartProps';
-import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
+import { setupWebPart } from '../@setup';
 import { Logger, LogLevel } from '@pnp/logging';
 
-export default class PortfolioInsightsWebPart extends PortfolioBaseWebPart<IPortfolioInsightsWebPartProps> {
+export default class PortfolioInsightsWebPart extends BaseClientSideWebPart<IPortfolioInsightsWebPartProps> {
   public render(): void {
     Logger.log({ message: '(PortfolioInsightsWebPart) render: Rendering <PortfolioInsights />', level: LogLevel.Info });
-    const element: React.ReactElement<IPortfolioInsightsProps> = React.createElement(PortfolioInsights, { context: this.context, ...this.properties });
-    super._render(this.manifest.alias, element);
+    const element: React.ReactElement<IPortfolioInsightsProps> = React.createElement(PortfolioInsights, {
+      context: this.context,
+      ...this.properties,
+    });
+    ReactDom.render(element, this.domElement);
   }
 
   protected async onInit(): Promise<void> {
-    await super.onInit();
+    Logger.log({ message: '(PortfolioInsightsWebPart) onInit: Initializing PortfolioInsightsWebPart', level: LogLevel.Info });
+    setupWebPart(this.context);
   }
 
   protected onDispose(): void {
-    super.onDispose();
-  }
-
-  protected get dataVersion(): Version {
-    return Version.parse(this.manifest.version);
-  }
-
-  protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    return { pages: [] };
+    ReactDom.unmountComponentAtNode(this.domElement);
   }
 }

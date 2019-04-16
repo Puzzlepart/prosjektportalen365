@@ -1,16 +1,30 @@
-@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 .projectList {
+  @include ms-Grid;
+  .container {
+    @include ms-Grid-row;
     .searchBox {
-        @include ms-font-m;
-    }   
-    .container {
-        margin: 10px 0 0 0;
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row;
-    }   
+      @include ms-Grid-col;
+      @include ms-sm9;
+      @include ms-font-m;
+    }
+    .viewToggle {
+      @include ms-Grid-col;
+      @include ms-sm3;
+      @include ms-font-m;
+    }
+    .projects {
+      @include ms-Grid-col;
+      @include ms-sm12;
+      margin: 10px 0 0 0;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+    }
+  }
 }
- 
+
 .projectInfoModal {
-    padding: 50px;
+  padding: 50px;
+  max-width: 50%;
 }

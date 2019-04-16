@@ -30,8 +30,8 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
       isLoading: true,
       associateStatusItem: document.location.hash === '#NewStatus',
     };
-    this.reportList = props.hubSite.web.lists.getByTitle(props.reportListName) as any;
-    this.sectionsList = props.hubSite.web.lists.getByTitle(props.sectionsListName) as any;
+    this.reportList = props.hubSite.web.lists.getByTitle(this.props.reportListName) as any;
+    this.sectionsList = props.hubSite.web.lists.getByTitle(this.props.sectionsListName) as any;
   }
 
   public async componentDidMount() {
@@ -96,21 +96,22 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
    * Associate status item
    */
   private async associateStatusItem(): Promise<void> {
+    const siteId = this.props.pageContext.site.id.toString();
     let item: IProjectStatusReportItem;
     try {
       const dateTime = dateAdd(new Date(), 'minute', -1).toISOString();
       [item] = await this.reportList.items
-        .filter(`AuthorId eq ${this.props.userId} and GtSiteId ne '${this.props.siteId}' and Created ge datetime'${dateTime}'`)
+        .filter(`AuthorId eq ${this.props.pageContext.legacyPageContext.userId} and GtSiteId ne '${siteId}' and Created ge datetime'${dateTime}'`)
         .select('Id', 'GtMonthChoice', 'Created')
         .orderBy('Id', false)
         .top(1)
         .get<IProjectStatusReportItem[]>();
-    } catch (error) {}
+    } catch (error) { }
     if (item) {
       const report = new ProjectStatusReport(item);
       await this.reportList.items.getById(item.Id).update({
-        Title: `${this.props.webTitle} (${report.toString()})`,
-        GtSiteId: this.props.siteId,
+        Title: `${this.props.pageContext.web.title} (${report.toString()})`,
+        GtSiteId: siteId,
       });
     }
     document.location.hash = '#';
@@ -122,7 +123,7 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
    * @param {SectionModel} model Section model
    */
   private getSectionBaseProps(model: SectionModel): IStatusSectionBaseProps {
-    const { context } = this.props;
+    const { pageContext, hubSite } = this.props;
     const { selectedReport, data } = this.state;
     const baseProps: IStatusSectionBaseProps = {
       headerProps: {
@@ -134,7 +135,8 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
       },
       report: selectedReport,
       model,
-      context,
+      pageContext,
+      hubSite,
       data,
     };
     return baseProps;
@@ -241,9 +243,10 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
    * Fetch data
    */
   private async fetchData(): Promise<IProjectStatusData> {
+    const siteId = this.props.pageContext.site.id.toString();
     Logger.log({ message: '(ProjectStatus) fetchData: Fetching fields and reports', data: {}, level: LogLevel.Info });
     const [entityItem, entityFields] = await Promise.all([
-      this.props.spEntityPortalService.getEntityItemFieldValues(this.props.siteId),
+      this.props.spEntityPortalService.getEntityItemFieldValues(siteId),
       this.props.spEntityPortalService.getEntityFields(),
     ]);
     let reportListProps = await this.reportList
@@ -251,7 +254,7 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
       .expand('DefaultEditFormUrl', 'DefaultNewFormUrl')
       .get();
     const [reportItems, sectionItems] = await Promise.all([
-      this.reportList.items.filter(`GtSiteId eq '${this.props.siteId}'`).get<IProjectStatusReportItem[]>(),
+      this.reportList.items.filter(`GtSiteId eq '${siteId}'`).get<IProjectStatusReportItem[]>(),
       this.sectionsList.items.get(),
     ]);
     const reports = reportItems.map(r => new ProjectStatusReport(r));
@@ -259,3 +262,5 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
     return { entityFields, entityItem, reportListProps, reports, sections };
   }
 }
+
+export { IProjectStatusProps };

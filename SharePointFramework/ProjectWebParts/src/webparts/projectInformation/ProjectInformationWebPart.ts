@@ -1,23 +1,29 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import { Version } from '@microsoft/sp-core-library';
-import { BaseClientSideWebPart, IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import ProjectInformation from './components/ProjectInformation';
 import { IProjectInformationWebPartProps } from './IProjectInformationWebPartProps';
 import { IProjectInformationProps } from './components/IProjectInformationProps';
 import { sp } from '@pnp/sp';
+import HubSiteService from 'sp-hubsite-service';
 
 export default class ProjectInformationWebPart extends BaseClientSideWebPart<IProjectInformationWebPartProps> {
+  private _hubSiteUrl: string;
+
   public async onInit() {
     sp.setup({ spfxContext: this.context });
+    const hubSite = await HubSiteService.GetHubSiteById(this.context.pageContext.web.absoluteUrl, this.context.pageContext.legacyPageContext.hubSiteId);
+    this._hubSiteUrl = hubSite.url;
   }
 
-  public async render(): Promise<void> {
+  public render(): void {
     const element: React.ReactElement<IProjectInformationProps> = React.createElement(
       ProjectInformation,
       {
         ...this.properties,
-        context: this.context,
+        hubSiteUrl: this._hubSiteUrl,
+        siteId: this.context.pageContext.site.id.toString(),
+        webUrl: this.context.pageContext.web.absoluteUrl,
         isSiteAdmin: this.context.pageContext.legacyPageContext.isSiteAdmin,
         filterField: 'GtShowFieldFrontpage'
       }
@@ -28,13 +34,5 @@ export default class ProjectInformationWebPart extends BaseClientSideWebPart<IPr
 
   protected onDispose(): void {
     ReactDom.unmountComponentAtNode(this.domElement);
-  }
-
-  protected get dataVersion(): Version {
-    return Version.parse(this.manifest.version);
-  }
-
-  protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    return { pages: [] };
   }
 }

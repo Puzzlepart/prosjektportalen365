@@ -1,25 +1,17 @@
 import * as React from 'react';
-import styles from './ErrorModal.module.scss';
-import * as strings from 'ProjectSetupApplicationCustomizerStrings';
-import { Modal } from 'office-ui-fabric-react/lib/Modal';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
+import ProjectSetupBaseModal from '../ProjectSetupBaseModal';
 import { IErrorModalProps } from './IErrorModalProps';
 
-export default class ErrorModal extends React.Component<IErrorModalProps, {}> {
-    public render(): React.ReactElement<IErrorModalProps> {
+export default class ErrorModal extends React.PureComponent<IErrorModalProps, {}> {
+    public render() {
         return (
-            <Modal
-                isOpen={true}
-                onDismiss={this.props.onDismiss}
-                isBlocking={this.props.isBlocking}
-                isDarkOverlay={this.props.isDarkOverlay}>
-                <div className={styles.errorModal}>
-                    <div className={styles.errorModalBody}>
-                        <div className={styles.modalTitle}>{strings.ErrorModalTitle}</div>
-                        <MessageBar messageBarType={MessageBarType.error}>{this.props.errorText}</MessageBar>
-                    </div>
-                </div>
-            </Modal>
+            <ProjectSetupBaseModal
+                title={this.props.error.message}
+                isBlocking={false}
+                isDarkOverlay={true}>
+                <MessageBar messageBarType={this.props.error.type}>{this.props.error.stack}</MessageBar>
+            </ProjectSetupBaseModal>
         );
     }
 }

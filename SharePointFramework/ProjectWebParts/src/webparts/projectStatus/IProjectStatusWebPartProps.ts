@@ -1,7 +1,9 @@
-import  { IBaseWebPartProps } from '../baseWebPart';
+import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
 
-export interface IProjectStatusWebPartProps extends IBaseWebPartProps {
+export interface IProjectStatusWebPartProps {
+    title: string;
     reportListName: string;
     sectionsListName: string;
     reportCtId: string;
+    entity: ISpEntityPortalServiceParams;
 }

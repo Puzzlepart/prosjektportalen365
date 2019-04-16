@@ -1,45 +1,69 @@
 import * as React from 'react';
-import { Version } from '@microsoft/sp-core-library';
-import { IPropertyPaneConfiguration, } from '@microsoft/sp-webpart-base';
+import * as ReactDom from 'react-dom';
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
+import * as strings from 'ProjectListWebPartStrings';
+import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
 import ProjectList from './components/ProjectList';
 import { IProjectListProps } from './components/IProjectListProps';
-import { Web } from '@pnp/sp';
-import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
-import { Logger, LogLevel } from '@pnp/logging';
-import MSGraph from 'msgraph-helper';
 import { IProjectListWebPartProps } from './IProjectListWebPartProps';
+import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
+import { sp } from '@pnp/sp';
+import MSGraph from 'msgraph-helper';
 
-export default class ProjectListWebPart extends PortfolioBaseWebPart<IProjectListWebPartProps> {
-  private web: Web;
-
+export default class ProjectListWebPart extends BaseClientSideWebPart<IProjectListWebPartProps> {
   public render(): void {
     Logger.log({ message: '(ProjectListWebPart) render: Rendering <ProjectList />', level: LogLevel.Info });
-    const element: React.ReactElement<IProjectListProps> = React.createElement(
-      ProjectList,
-      {
-        ...this.properties,
-        web: this.web,
-        siteAbsoluteUrl: this.context.pageContext.site.absoluteUrl,
-      }
-    );
-    super._render(this.manifest.alias, element);
+    const element: React.ReactElement<IProjectListProps> = React.createElement(ProjectList, {
+      ...this.properties,
+      siteAbsoluteUrl: this.context.pageContext.site.absoluteUrl,
+    });
+    ReactDom.render(element, this.domElement);
   }
 
   protected async onInit(): Promise<void> {
-    await super.onInit();
     await MSGraph.Init(this.context.msGraphClientFactory);
-    this.web = new Web(this.context.pageContext.web.absoluteUrl);
+    sp.setup({ spfxContext: this.context });
+    Logger.subscribe(new ConsoleListener());
+    Logger.activeLogLevel = LogLevel.Info;
   }
 
   protected onDispose(): void {
-    super.onDispose();
-  }
-
-  protected get dataVersion(): Version {
-    return Version.parse(this.manifest.version);
+    ReactDom.unmountComponentAtNode(this.domElement);
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    return { pages: [] };
+    return {
+      pages: [
+        {
+          groups: [
+            {
+              groupName: strings.GeneralGroupName,
+              groupFields: [
+                PropertyPaneTextField('sortBy', {
+                  label: strings.SortByFieldLabel,
+                }),
+                PropertyPaneTextField('phaseTermSetId', {
+                  label: strings.PhaseTermSetIdFieldLabel,
+                }),
+              ]
+            },
+            {
+              groupName: strings.TileViewGroupName,
+              groupFields: [
+                PropertyPaneToggle('showProjectLogo', {
+                  label: strings.ShowProjectLogoFieldLabel,
+                }),
+                PropertyPaneToggle('showProjectOwner', {
+                  label: strings.ShowProjectOwnerFieldLabel,
+                }),
+                PropertyPaneToggle('showProjectManager', {
+                  label: strings.ShowProjectManagerFieldLabel,
+                })
+              ]
+            }
+          ]
+        }
+      ]
+    };
   }
 }

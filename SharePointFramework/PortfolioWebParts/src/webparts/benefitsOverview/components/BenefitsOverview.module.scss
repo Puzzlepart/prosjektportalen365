@@ -3,3 +3,7 @@
 .benefitsOverview {
   max-width: auto;
 }
+
+div[class='commandBarWrapper'] {
+  display: none !important;
+}

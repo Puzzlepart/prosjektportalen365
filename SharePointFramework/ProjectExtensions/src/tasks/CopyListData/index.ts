@@ -9,12 +9,16 @@ import { BaseTaskError } from '../BaseTaskError';
 import { ListContentConfig } from '../../models';
 
 export default class CopyListData extends BaseTask {
-    public static taskName = 'CopyListData';
-
     constructor() {
-        super(CopyListData.taskName);
+        super('CopyListData');
     }
 
+    /**
+     * Execute CopyListData
+     * 
+     * @param {IBaseTaskParams} params Params 
+     * @param {OnProgressCallbackFunction} onProgress On progress function
+     */
     @override
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
@@ -25,10 +29,15 @@ export default class CopyListData extends BaseTask {
             }
             return params;
         } catch (error) {
-            throw new BaseTaskError('CopyListData', 'Unknown error');
+            throw new BaseTaskError(this.name, strings.CopyListDataErrorMessage, error);
         }
     }
 
+    /**
+     * Process list items
+     * 
+     * @param {ListContentConfig} listConfig List config
+     */
     private async processListItems(listConfig: ListContentConfig) {
         try {
             Logger.log({ message: '(ProjectSetupApplicationCustomizer) CopyListData: Processing list items', data: { listConfig }, level: LogLevel.Info });
@@ -39,7 +48,7 @@ export default class CopyListData extends BaseTask {
                 destList.select('ListItemEntityTypeFullName').get<{ ListItemEntityTypeFullName: string }>(),
             ]);
             for (let i = 0; i < sourceItems.length; i++) {
-                let properties = listConfig.fields.reduce((_properties, fieldName) => {
+                let properties = listConfig.fields.reduce((_properties: { [x: string]: any; }, fieldName: string) => {
                     let fieldValue = sourceItems[i][fieldName];
                     if (fieldValue) {
                         const [field] = sourceFields.filter(fld => fld.InternalName === fieldName);
@@ -67,7 +76,7 @@ export default class CopyListData extends BaseTask {
                 await destList.items.add(properties, ListItemEntityTypeFullName);
             }
         } catch (error) {
-            throw new BaseTaskError(CopyListData.taskName, error);
+            throw error;
         }
     }
 }

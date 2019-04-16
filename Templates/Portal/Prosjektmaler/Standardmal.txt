@@ -552,6 +552,11 @@
                 "Title": "Dokumenter"
             },
             {
+                "Url": "SitePages/Oppgaver.aspx",
+                "Title": "Oppgaver",
+                "Children": []
+            },
+            {
                 "Url": "Lists/Fasesjekkliste/AllItems.aspx",
                 "Title": "Fasesjekkliste"
             },
@@ -623,9 +628,7 @@
                                         "automaticReload": true,
                                         "confirmPhaseChange": true,
                                         "reloadTimeout": 0,
-                                        "updateViewsDocuments": true,
-                                        "updateViewsRisks": true,
-                                        "updateViewName": "Gjeldende fase",
+                                        "currentPhaseViewName": "Gjeldende fase",
                                         "gutter": 15,
                                         "fontSize": 13,
                                         "entity": {
@@ -646,11 +649,29 @@
                             "Factor": 8,
                             "Controls": [
                                 {
+                                    "Id": "39c4c1c2-63fa-41be-8cc2-f6c0b49b253d",
+                                    "Properties": {
+                                        "title": "Oppgaver",
+                                        "isFullScreen": false,
+                                        "plannerViewMode": "statuschart",
+                                        "planId": "{parameter:defaultPlanId}"
+                                    }
+                                },
+                                {
                                     "Id": "f92bf067-bc19-489e-a556-7fe95f508720",
                                     "Properties": {
                                         "isDocumentLibrary": true,
                                         "selectedListId": "{listid:Dokumenter}",
+                                        "selectedViewId": "{listviewid:Dokumenter|Gjeldende fase}",
                                         "webpartHeightKey": 4
+                                    }
+                                },
+                                {
+                                    "Id": "6676088b-e28e-4a90-b9cb-d0d0303cd2eb",
+                                    "Properties": {
+                                        "showPerPage": 5,
+                                        "title": "Møter og hendelser",
+                                        "timeSpanLimitInMonth": 6
                                     }
                                 }
                             ]
@@ -668,6 +689,40 @@
                                             "fieldsGroupName": "{parameter:fieldsgroup}",
                                             "identityFieldName": "GtSiteId"
                                         }
+                                    }
+                                },
+                                {
+                                    "Id": "a5df8fdf-b508-4b66-98a6-d83bc2597f63",
+                                    "Properties": {
+                                        "title": "Prosjektnyheter",
+                                        "showChrome": true,
+                                        "compactMode": true
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "Oppgaver.aspx",
+            "Title": "Oppgaver",
+            "PageLayoutType": "SingleWebPartAppPage",
+            "CommentsDisabled": true,
+            "Sections": [
+                {
+                    "Columns": [
+                        {
+                            "Factor": 12,
+                            "Controls": [
+                                {
+                                    "Id": "39c4c1c2-63fa-41be-8cc2-f6c0b49b253d",
+                                    "Properties": {
+                                        "title": "Oppgaver",
+                                        "isFullScreen": true,
+                                        "plannerViewMode": "board",
+                                        "planId": "{parameter:defaultPlanId}"
                                     }
                                 }
                             ]
@@ -1184,7 +1239,8 @@
                     "AdditionalSettings": {
                         "RowLimit": 30,
                         "Paged": true,
-                        "ViewQuery": ""
+                        "ViewQuery": "",
+                        "Scope": 1
                     }
                 }
             ]

@@ -1,16 +1,12 @@
 declare interface IProjectPhasesWebPartStrings {
   SettingsGroupName: string;
   ViewsGroupName: string;
-  LookAndFeelGroupName: string;
   PersistedPhasePropertyBagKey: string;
-  PhaseFieldFieldLabel: string;
   AutomaticReloadFieldLabel: string;
   ReloadTimeoutFieldLabel: string;
-  FontSizeFieldLabel: string;
-  GutterFieldLabel: string;
   UpdateViewsDocumentsFieldLabel: string;
   UpdateViewsRisksFieldLabel: string;
-  UpdateViewNameFieldLabel: string;
+  CurrentPhaseViewNameFieldLabel: string;
   ConfirmPhaseChangeFieldLabel: string;
   PhaseSubTextPropertyFieldLabel: string;
   ConfirmPhaseDialogTitle: string;
@@ -18,8 +14,6 @@ declare interface IProjectPhasesWebPartStrings {
   PageReloadMessage: string;
   WebPartNotConfiguredMessage: string;
   DocumentsListName: string;
-  RiskRegisterListName: string;
-  TasksListName: string;
   PhaseChecklistName: string;
   Yes: string;
   No: string;
@@ -27,7 +21,8 @@ declare interface IProjectPhasesWebPartStrings {
   Close: string;
   Skip: string;
   CheckPointsMarkedAsText: string;
-  GoToPhaseChecklist: string;
+  TasksLinkText: string;
+  PhaseChecklistLinkText: string;
   ChangePhaseText: string;
   ConfirmChangePhase: string;
   PhaseChecklistViewUrl: string;

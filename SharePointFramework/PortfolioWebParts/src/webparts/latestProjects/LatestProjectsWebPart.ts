@@ -1,23 +1,19 @@
 import * as React from 'react';
-import { Version } from '@microsoft/sp-core-library';
+import * as ReactDom from 'react-dom';
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import LatestProjects from './components/LatestProjects';
 import { ILatestProjectsProps } from './components/ILatestProjectsProps';
-import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
+import { setupWebPart } from '../@setup';
 import { Logger, LogLevel } from '@pnp/logging';
+import { ILatestProjectsWebPartProps } from './ILatestProjectsWebPartProps';
 
-export interface ILatestProjectsWebPartProps {
-  title: string;
-}
-
-export default class LatestProjectsWebPart extends PortfolioBaseWebPart<ILatestProjectsWebPartProps> {
+export default class LatestProjectsWebPart extends BaseClientSideWebPart<ILatestProjectsWebPartProps> {
   public render(): void {
     Logger.log({ message: '(LatestProjectsWebPart) render: Rendering <LatestProjects />', level: LogLevel.Info });
     const element: React.ReactElement<ILatestProjectsProps> = React.createElement(
       LatestProjects,
       {
-        context: this.context,
-        absoluteUrl: this.context.pageContext.web.absoluteUrl,
-        serverRelativeUrl: this.context.pageContext.web.serverRelativeUrl,
+        hubSiteId: this.context.pageContext.legacyPageContext.hubSiteId,
         displayMode: this.displayMode,
         updateProperty: (value: string) => {
           this.properties.title = value;
@@ -25,18 +21,15 @@ export default class LatestProjectsWebPart extends PortfolioBaseWebPart<ILatestP
         ...this.properties,
       }
     );
-    super._render(this.manifest.alias, element);
+    ReactDom.render(element, this.domElement);
   }
 
   protected async onInit(): Promise<void> {
-    await super.onInit();
+    Logger.log({ message: '(LatestProjectsWebPart) onInit: Initializing LatestProjectsWebPart', level: LogLevel.Info });
+    setupWebPart(this.context);
   }
 
   protected onDispose(): void {
-    super.onDispose();
-  }
-
-  protected get dataVersion(): Version {
-    return Version.parse(this.manifest.version);
+    ReactDom.unmountComponentAtNode(this.domElement);
   }
 }

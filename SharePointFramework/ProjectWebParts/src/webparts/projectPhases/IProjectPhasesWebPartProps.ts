@@ -1,14 +1,11 @@
-import  { IBaseWebPartProps } from '../baseWebPart';
+import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
 
-export interface IProjectPhasesWebPartProps extends IBaseWebPartProps {
+export interface IProjectPhasesWebPartProps {
     phaseField: string;
     automaticReload: boolean;
     reloadTimeout: number;
     confirmPhaseChange: boolean;
-    fontSize: number;
-    gutter: number;
-    updateViewsDocuments: boolean;
-    updateViewsRisks: boolean;
-    updateViewName: string;
+    currentPhaseViewName: boolean;
     phaseSubTextProperty: string;
+    entity: ISpEntityPortalServiceParams;
 }

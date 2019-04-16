@@ -2,31 +2,43 @@ import * as React from 'react';
 import styles from './ProjectPhase.module.scss';
 import { IProjectPhaseProps } from './IProjectPhaseProps';
 
-const ProjectPhase = (props: IProjectPhaseProps) => {
-    let phaseLetter: HTMLSpanElement;
-    let classNames = [styles.projectPhase];
-    if (props.isCurrentPhase) {
-        classNames.push(styles.isCurrentPhase);
+export default class ProjectPhase extends React.PureComponent<IProjectPhaseProps, {}> {
+    public render() {
+        return (
+            <li className={this.getClassName(this.props)}>
+                <a href='#' className={styles.container}>
+                    <div className={styles.phaseIcon}>
+                        <span
+                            className={styles.phaseLetter}
+                            ref='phaseLetter'
+                            onMouseOver={_event => this.props.onOpenCallout(this.refs['phaseLetter'])}>{this.props.phase.letter}</span>
+                        <span
+                            className={styles.phaseText}
+                            onMouseOver={_event => this.props.onOpenCallout(this.refs['phaseLetter'])}>{this.props.phase.name}</span>
+                        <span className={styles.phaseSubText}></span>
+                    </div>
+                </a>
+            </li>
+        );
     }
 
-    return (
-        <li className={classNames.join(' ')}>
-            <a href='#' className={styles.projectPhaseIcon}>
-                <div className={styles.projectPhaseIconContainer}>
-                    <span
-                        className={styles.phaseLetter}
-                        ref={ele => phaseLetter = ele}
-                        onMouseOver={_event => props.onOpenCallout(phaseLetter)}>{props.phase.letter}</span>
-                    <span
-                        className={styles.phaseText}
-                        onMouseOver={_event => props.onOpenCallout(phaseLetter)}>{props.phase.name}</span>
-                    <span className={styles.phaseSubText}></span>
-                </div>
-            </a>
-        </li>
-    );
-};
+    /**
+     * Get class name
+     * 
+     * @param {IProjectPhaseProps} param0 Props
+     */
+    protected getClassName({ isCurrentPhase, phase }: IProjectPhaseProps) {
+        let classNames = [styles.projectPhase];
+        if (isCurrentPhase) {
+            classNames.push(styles.isCurrentPhase);
+        }
+        if (phase.properties.PhaseLevel) {
+            let className = phase.properties.PhaseLevel.toLowerCase();
+            classNames.push(styles[className]);
+        }
+        return classNames.join(' ');
+    }
+}
 
-export default ProjectPhase;
 export { IProjectPhaseProps };
 

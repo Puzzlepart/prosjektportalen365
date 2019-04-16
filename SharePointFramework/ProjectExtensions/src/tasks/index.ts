@@ -8,8 +8,8 @@ import { IBaseTaskParams } from './IBaseTaskParams';
 export * from './BaseTask';
 
 const Tasks: BaseTask[] = [
-    new PlannerConfiguration(),
     new SetupProjectInformation(),
+    new PlannerConfiguration(),
     new ApplyTemplate(),
     new SetTaxonomyFields(),
     new CopyListData(),

@@ -7,4 +7,9 @@ export interface IProjectListWebPartProps {
         fieldsGroupName: string;
         identityFieldName: string;
     };
+    sortBy?: string;
+    showAsTiles?: boolean;
+    showProjectLogo?: boolean;
+    showProjectOwner?: boolean;
+    showProjectManager?: boolean;
 }

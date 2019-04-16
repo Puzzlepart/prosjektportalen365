@@ -1,22 +1,27 @@
 import * as React from 'react';
+import * as ReactDom from 'react-dom';
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import ResourceAllocation from './components/ResourceAllocation';
 import { IResourceAllocationProps } from './components/IResourceAllocationProps';
-import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
 import { IResourceAllocationWebPartProps } from './IResourceAllocationWebPartProps';
-import { Logger, LogLevel } from '@pnp/logging';
+import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
+import { sp } from '@pnp/sp';
 
-export default class ResourceAllocationWebPart extends PortfolioBaseWebPart<IResourceAllocationWebPartProps> {
-  public render(): void {
+export default class ResourceAllocationWebPart extends BaseClientSideWebPart<IResourceAllocationWebPartProps> {
+  public render() {
     Logger.log({ message: '(ResourceAllocationWebPart) render: Rendering <ResourceAllocation />', level: LogLevel.Info });
     const element: React.ReactElement<IResourceAllocationProps> = React.createElement(ResourceAllocation, { ...this.properties });
-    super._render(this.manifest.alias, element);
+    ReactDom.render(element, this.domElement);
   }
 
-  protected async onInit(): Promise<void> {
-    await super.onInit();
+  public async onInit() {
+    
+    sp.setup({ spfxContext: this.context });
+    Logger.subscribe(new ConsoleListener());
+    Logger.activeLogLevel = LogLevel.Info;
   }
 
   protected onDispose(): void {
-    super.onDispose();
+    ReactDom.unmountComponentAtNode(this.domElement);
   }
 }

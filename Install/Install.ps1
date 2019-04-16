@@ -13,8 +13,10 @@ Param(
     [switch]$SkipAppPackages,
     [Parameter(Mandatory = $false, HelpMessage = "Skip site creation")]
     [switch]$SkipSiteCreation,
-    [Parameter(Mandatory = $false, HelpMessage = "Skip site creation")]
-    [string]$SiteDesignName = "Prosjektområde"
+    [Parameter(Mandatory = $false, HelpMessage = "Site design name")]
+    [string]$SiteDesignName = "Prosjektområde",
+    [Parameter(Mandatory = $false, HelpMessage = "Security group to give View access to site design")]
+    [string]$SiteDesignSecurityGroupId
 )
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
@@ -46,7 +48,6 @@ $TenantAppCatalogUrl = $null
 
 Set-PnPTraceLog -On -Level Debug -LogFile InstallLog.txt
 
-
 Try {
     $AdminSiteConnection = Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
 }
@@ -54,6 +55,7 @@ Catch {
     Write-Host "[INFO] Failed to connect to [$AdminSiteUrl]: $($_.Exception.Message)"
     exit 0
 }
+
 
 if (-not $SkipSiteCreation.IsPresent) {
     Try {
@@ -71,6 +73,10 @@ if (-not $SkipSiteCreation.IsPresent) {
         exit 0
     }
 }
+
+Write-Host "[INFO] Setting permissions for AssociatedMemberGroup" -ForegroundColor Green
+Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -RemoveRole Rediger
+Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -AddRole Lese
 
 Try {
     Write-Host "[INFO] Clearing QuickLaunch"    
@@ -139,6 +145,13 @@ if (-not $SkipSiteDesign.IsPresent) {
             Write-Host "[INFO] Creating new site design [$SiteDesignName]"
             $SiteDesign = Add-PnPSiteDesign -Title $SiteDesignName -SiteScriptIds $SiteScriptIds -Description "" -WebTemplate TeamSite -Connection $AdminSiteConnection
         }
+        if ([string]::IsNullOrEmpty($SiteDesignSecurityGroupId)) {
+            Write-Host "[INFO] You have not specified -SiteDesignSecurityGroupId. Everyone will have View access to site design [$SiteDesignName]" -ForegroundColor Yellow
+        }
+        else {            
+            Write-Host "[INFO] Granting group $SiteDesignSecurityGroupId View access to site design [$SiteDesignName]"
+            Grant-PnPSiteDesignRights -Identity $SiteDesign.Id.Guid -Principals @("c:0t.c|tenant|$SiteDesignSecurityGroupId")
+        }
     }
     Catch {
         Write-Host "[INFO] Failed to install site design: $($_.Exception.Message)"
@@ -149,16 +162,11 @@ if (-not $SkipSiteDesign.IsPresent) {
 if (-not $SkipAppPackages.IsPresent) {
     Try {
         $TenantAppCatalogUrl = Get-PnPTenantAppCatalogUrl -Connection $AdminSiteConnection
-    }
-    Catch {
-        
-    }    
-    Try {
         $AppCatalogSiteConnection = Connect-SharePoint -Url $TenantAppCatalogUrl -ErrorAction Stop
     }
     Catch {
         Write-Host "[INFO] Failed to connect to [$TenantAppCatalogUrl]: $($_.Exception.Message)"
-        exit 0
+        exit 0 
     }
     Try {
         Write-Host "[INFO] Installing SharePoint Framework app packages to [$AppCatalogUrl]"
@@ -167,10 +175,7 @@ if (-not $SkipAppPackages.IsPresent) {
             ".\Apps\pp-project-extensions.sppkg",
             ".\Apps\pp-project-web-parts.sppkg"
         )
-        $AppPackages | ForEach-Object {
-            $AppPackage = Get-ChildItem $_.
-            Add-PnPApp -Path $AppPackage.FullName -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop -Connection $AppCatalogSiteConnection
-        }
+        $AppPackages | ForEach-Object { Add-PnPApp -Path $_ -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop -Connection $AppCatalogSiteConnection }
         Write-Host "[INFO] SharePoint Framework app packages successfully installed to [$AppCatalogUrl]" -ForegroundColor Green
     }
     Catch {

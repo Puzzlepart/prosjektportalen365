@@ -1,5 +1,5 @@
 import { IColumn, DetailsListLayoutMode, SelectionMode, ConstrainMode } from 'office-ui-fabric-react/lib/DetailsList';
-import IExcelExportConfig from 'prosjektportalen-spfx-shared/lib/interfaces/IExcelExportConfig';
+import IExcelExportConfig from '../../../../@Shared/lib/interfaces/IExcelExportConfig';
 import { SearchResult } from '@pnp/sp';
 
 export interface IAggregatedSearchListProps {

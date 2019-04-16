@@ -8,6 +8,7 @@ const PortfolioOverviewFieldSelector: IFilterProps = {
         minWidth: 0,
     },
     items: [],
+    defaultCollapsed: true,
 };
 
 export default PortfolioOverviewFieldSelector;

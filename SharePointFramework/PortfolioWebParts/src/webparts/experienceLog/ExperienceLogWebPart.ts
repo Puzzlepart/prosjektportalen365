@@ -1,38 +1,29 @@
 import * as React from 'react';
+import * as ReactDom from 'react-dom';
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
-import { Version } from '@microsoft/sp-core-library';
-import { IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
 import ExperienceLog from './components/ExperienceLog';
 import { IExperienceLogProps } from './components/IExperienceLogProps';
-import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
+import { setupWebPart } from '../@setup';
 import { Logger, LogLevel } from '@pnp/logging';
 import { IExperienceLogWebPartProps } from './IExperienceLogWebPartProps';
 
-export default class ExperienceLogWebPart extends PortfolioBaseWebPart<IExperienceLogWebPartProps> {
+export default class ExperienceLogWebPart extends BaseClientSideWebPart<IExperienceLogWebPartProps> {
   public render(): void {
     Logger.log({ message: '(ExperienceLogWebPart) render: Rendering <ExperienceLog />', level: LogLevel.Info });
     const element: React.ReactElement<IExperienceLogProps> = React.createElement(ExperienceLog, {
       ...this.properties,
       groupByColumns: [{ name: PortfolioWebPartsStrings.SiteTitleLabel, key: 'SiteTitle', fieldName: 'SiteTitle', minWidth: 0 }],
     });
-    super._render(this.manifest.alias, element);
+    ReactDom.render(element, this.domElement);
   }
 
   protected async onInit(): Promise<void> {
     Logger.log({ message: '(ExperienceLogWebPart) onInit: Initializing ExperienceLogWebPart', level: LogLevel.Info });
-    await super.onInit();
+    setupWebPart(this.context);
   }
 
   protected onDispose(): void {
-    Logger.log({ message: '(ExperienceLogWebPart) onDispose: Disposing <ExperienceLog />', level: LogLevel.Info });
-    super.onDispose();
-  }
-
-  protected get dataVersion(): Version {
-    return Version.parse(this.manifest.version);
-  }
-
-  protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    return { pages: [] };
+    ReactDom.unmountComponentAtNode(this.domElement);
   }
 }
