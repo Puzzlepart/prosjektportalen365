@@ -28,3 +28,7 @@
   padding: 50px;
   max-width: 50%;
 }
+
+div[class='commandBarWrapper'] {
+  display: none !important;
+}
