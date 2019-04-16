@@ -1,62 +1,10 @@
+import { DocumentCard } from 'office-ui-fabric-react/lib/DocumentCard';
 import * as React from 'react';
-import styles from './ProjectCard.module.scss';
-import * as strings from 'ProjectListWebPartStrings';
 import IProjectCardProps from './IProjectCardProps';
-import { Persona, PersonaSize, IPersonaSharedProps } from 'office-ui-fabric-react/lib/Persona';
-import { DocumentCard, DocumentCardTitle, DocumentCardActions } from 'office-ui-fabric-react/lib/DocumentCard';
-import ImageFadeIn from 'react-image-fade-in';
-
-
-/**
- * Project Card Header
- * 
- * @param {IProjectCardProps} props Props 
- */
-export const ProjectCardHeader = ({ project, showProjectLogo, shouldTruncateTitle }: IProjectCardProps): JSX.Element => {
-  return (
-    <div className={styles.header}>
-      <div className={styles.logo} hidden={!showProjectLogo}>
-       {project.logo && <ImageFadeIn opacityTransition={2} src={project.logo} />}
-      </div>
-      <DocumentCardTitle title={project.title} shouldTruncate={shouldTruncateTitle} />
-    </div>
-  );
-};
-
-/**
- * Project Card Content
- * 
- * @param {IProjectCardProps} props Props 
- */
-export const ProjectCardContent = ({ project, showProjectOwner, showProjectManager }: IProjectCardProps): JSX.Element => {
-  const defaultPersonaProps: IPersonaSharedProps = {
-    primaryText: strings.NotSet,
-    size: PersonaSize.size40,
-    imageShouldFadeIn: true,
-  };
-  const ownerPersonaProps = { ...defaultPersonaProps, ...project.owner, secondaryText: strings.ProjectOwner };
-  const managerPersonaProps = { ...defaultPersonaProps, ...project.manager, secondaryText: strings.ProjectManager };
-  return (
-    <div>
-      <div className={styles.phase}>{project.phase || strings.NotSet}</div>
-      <div className={styles.personaContainer} hidden={!showProjectOwner}>
-        <Persona {...ownerPersonaProps} />
-      </div>
-      <div className={styles.personaContainer} hidden={!showProjectManager}>
-        <Persona {...managerPersonaProps} />
-      </div>
-    </div>
-  );
-};
-
-/**
- * Project Card Footer
- * 
- * @param {IProjectCardProps} props Props 
- */
-export const ProjectCardFooter = ({ actions }: IProjectCardProps): JSX.Element => {
-  return <DocumentCardActions actions={actions} />;
-};
+import styles from './ProjectCard.module.scss';
+import { ProjectCardHeader } from './ProjectCardHeader';
+import { ProjectCardContent } from './ProjectCardContent';
+import { ProjectCardFooter } from './ProjectCardFooter';
 
 /**
  * Project Card
