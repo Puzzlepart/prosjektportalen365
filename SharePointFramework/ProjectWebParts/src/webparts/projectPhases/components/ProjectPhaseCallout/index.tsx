@@ -2,7 +2,6 @@
 import * as React from 'react';
 import { Callout } from 'office-ui-fabric-react/lib/Callout';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { IProjectPhaseCalloutProps } from './IProjectPhaseCalloutProps';
 import styles from './ProjectPhaseCallout.module.scss';
 import * as strings from 'ProjectPhasesWebPartStrings';

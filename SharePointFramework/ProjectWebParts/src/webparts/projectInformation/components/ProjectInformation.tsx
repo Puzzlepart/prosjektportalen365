@@ -1,19 +1,18 @@
-import * as React from 'react';
-import styles from './ProjectInformation.module.scss';
 import { DisplayMode } from '@microsoft/sp-core-library';
-import { IProjectInformationProps } from './IProjectInformationProps';
-import { IProjectInformationState } from './IProjectInformationState';
-import { IProjectInformationData } from './IProjectInformationData';
 import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import ProjectPropertyModel from '../models/ProjectPropertyModel';
-import ProjectProperty from './ProjectProperty';
-import SpEntityPortalService from 'sp-entityportal-service';
 import * as strings from 'ProjectInformationWebPartStrings';
 import { HubConfigurationService } from 'prosjektportalen-spfx-shared/lib/services/HubConfigurationService';
-import HubSiteService from 'sp-hubsite-service';
+import * as React from 'react';
+import SpEntityPortalService from 'sp-entityportal-service';
+import ProjectPropertyModel from '../models/ProjectPropertyModel';
+import { IProjectInformationData } from './IProjectInformationData';
+import { IProjectInformationProps } from './IProjectInformationProps';
+import { IProjectInformationState } from './IProjectInformationState';
+import styles from './ProjectInformation.module.scss';
+import ProjectProperty from './ProjectProperty';
 
 export default class ProjectInformation extends React.Component<IProjectInformationProps, IProjectInformationState> {
   constructor(props: IProjectInformationProps) {
