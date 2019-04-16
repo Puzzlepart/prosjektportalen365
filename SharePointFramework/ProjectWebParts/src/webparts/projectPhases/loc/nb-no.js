@@ -2,12 +2,9 @@ define([], function () {
   return {
     SettingsGroupName: "Innstillinger",
     ViewsGroupName: "Visninger",
-    LookAndFeelGroupName: "Utseende og funksjonalitet",
     PersistedPhasePropertyBagKey: "persisted_phase",
     AutomaticReloadFieldLabel: "Automatisk oppdatering",
     ReloadTimeoutFieldLabel: "Forsinkelse (s)",
-    FontSizeFieldLabel: "Skriftstørrelse",
-    GutterFieldLabel: "Avstand mellom fasene",
     UpdateViewsDocumentsFieldLabel: "Opppdater Dokumenter",
     UpdateViewsRisksFieldLabel: "Oppdater Usikkerhet",
     CurrentPhaseViewNameFieldLabel: "Visningsnavn for gjeldende fase",

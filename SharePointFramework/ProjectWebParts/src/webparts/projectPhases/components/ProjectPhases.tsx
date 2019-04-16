@@ -202,8 +202,11 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    */
   private async fetchChecklistData(): Promise<ChecklistData> {
     try {
-      const phaseChecklistItems = await this.phaseChecklist.items.get();
-      const checkPointStatuses: ChecklistData = phaseChecklistItems
+      const items = await this.phaseChecklist
+        .items
+        .select('GtChecklistStatus', 'GtProjectPhase')
+        .get<{ GtChecklistStatus: string, GtProjectPhase: { TermGuid: string } }[]>();
+      const checkPointStatuses: ChecklistData = items
         .filter(item => item.GtProjectPhase)
         .reduce((obj, item) => {
           const status = item.GtChecklistStatus.toLowerCase();

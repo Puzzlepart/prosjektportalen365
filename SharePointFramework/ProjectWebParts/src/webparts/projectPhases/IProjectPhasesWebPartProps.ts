@@ -5,8 +5,6 @@ export interface IProjectPhasesWebPartProps {
     automaticReload: boolean;
     reloadTimeout: number;
     confirmPhaseChange: boolean;
-    fontSize: number;
-    gutter: number;
     currentPhaseViewName: boolean;
     phaseSubTextProperty: string;
     entity: ISpEntityPortalServiceParams;

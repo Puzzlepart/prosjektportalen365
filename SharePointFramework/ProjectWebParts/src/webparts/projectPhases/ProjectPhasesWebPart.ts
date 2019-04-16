@@ -65,23 +65,6 @@ export default class ProjectPhasesWebPart extends BaseClientSideWebPart<IProject
                   label: strings.CurrentPhaseViewNameFieldLabel,
                 }),
               ]
-            },
-            {
-              groupName: strings.LookAndFeelGroupName,
-              groupFields: [
-                PropertyPaneSlider('fontSize', {
-                  label: strings.FontSizeFieldLabel,
-                  min: 10,
-                  max: 25,
-                  step: 1,
-                }),
-                PropertyPaneSlider('gutter', {
-                  label: strings.GutterFieldLabel,
-                  min: 10,
-                  max: 50,
-                  step: 2,
-                }),
-              ]
             }
           ]
         }

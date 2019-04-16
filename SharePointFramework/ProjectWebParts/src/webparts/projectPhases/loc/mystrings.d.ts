@@ -1,12 +1,9 @@
 declare interface IProjectPhasesWebPartStrings {
   SettingsGroupName: string;
   ViewsGroupName: string;
-  LookAndFeelGroupName: string;
   PersistedPhasePropertyBagKey: string;
   AutomaticReloadFieldLabel: string;
   ReloadTimeoutFieldLabel: string;
-  FontSizeFieldLabel: string;
-  GutterFieldLabel: string;
   UpdateViewsDocumentsFieldLabel: string;
   UpdateViewsRisksFieldLabel: string;
   CurrentPhaseViewNameFieldLabel: string;
