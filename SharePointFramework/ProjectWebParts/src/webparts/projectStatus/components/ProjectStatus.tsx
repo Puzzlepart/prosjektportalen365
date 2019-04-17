@@ -2,8 +2,6 @@ import { dateAdd } from "@pnp/common";
 import { Logger, LogLevel } from '@pnp/logging';
 import '@pnp/polyfill-ie11';
 import { List } from '@pnp/sp';
-// import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { IContextualMenuItem, ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
@@ -37,8 +35,8 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
       isLoading: true,
       associateStatusItem: document.location.hash === '#NewStatus',
     };
-    this.reportList = props.hubSite.web.lists.getByTitle(this.props.reportListName) as any;
-    this.sectionsList = props.hubSite.web.lists.getByTitle(this.props.sectionsListName) as any;
+    this._reportList = props.hubSite.web.lists.getByTitle(this.props.reportListName) as any;
+    this._sectionsList = props.hubSite.web.lists.getByTitle(this.props.sectionsListName) as any;
   }
 
   public async componentDidMount() {
@@ -121,7 +119,7 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
     let item: IProjectStatusReportItem;
     try {
       const dateTime = dateAdd(new Date(), 'minute', -1).toISOString();
-      [item] = await this.reportList.items
+      [item] = await this._reportList.items
         .filter(`AuthorId eq ${this.props.pageContext.legacyPageContext.userId} and GtSiteId ne '${siteId}' and Created ge datetime'${dateTime}'`)
         .select('Id', 'GtMonthChoice', 'Created')
         .orderBy('Id', false)
@@ -130,7 +128,7 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
     } catch (error) { }
     if (item) {
       const report = new ProjectStatusReport(item);
-      await this.reportList.items.getById(item.Id).update({
+      await this._reportList.items.getById(item.Id).update({
         Title: `${this.props.pageContext.web.title} (${report.toString()})`,
         GtSiteId: siteId,
       });
@@ -269,8 +267,8 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
       .expand('DefaultEditFormUrl', 'DefaultNewFormUrl')
       .get<{ DefaultEditFormUrl: string, DefaultNewFormUrl: string }>();
     const [reportItems, sectionItems] = await Promise.all([
-      this.reportList.items.filter(`GtSiteId eq '${siteId}'`).get<IProjectStatusReportItem[]>(),
-      this.sectionsList.items.get(),
+      this._reportList.items.filter(`GtSiteId eq '${siteId}'`).get<IProjectStatusReportItem[]>(),
+      this._sectionsList.items.get(),
     ]);
     const reports = reportItems.map(r => new ProjectStatusReport(r));
     const sections = sectionItems.map(s => new SectionModel(s));
