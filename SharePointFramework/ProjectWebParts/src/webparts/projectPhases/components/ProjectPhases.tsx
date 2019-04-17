@@ -261,7 +261,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
         }).get(),
       ]);
       const [phaseTerms, entityItem] = await Promise.all([
-        taxonomy.getDefaultSiteCollectionTermStore().getTermSetById(termSetId).terms.usingCaching({
+        taxonomy.getDefaultSiteCollectionTermStore().getTermSetById(termSetId).terms.select('Id', 'Name', 'LocalCustomProperties').usingCaching({
           ...cachingOptions,
           key: this.generateStorageKey('ProjectPhases', 'PhaseTerms'),
         }).get(),
@@ -269,7 +269,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
       ]);
       const phases = phaseTerms
         .filter(term => term.LocalCustomProperties.ShowOnFrontpage !== 'false')
-        .map(term => new Phase(term, checklistData[term.Id] || { stats: {}, items: [] }, term.LocalCustomProperties));
+        .map(term => new Phase(term.Name, term.Id, checklistData[term.Id] || { stats: {}, items: [] }, term.LocalCustomProperties));
       let currentPhase: Phase = null;
       if (entityItem && entityItem.GtProjectPhase) {
         [currentPhase] = phases.filter(p => p.id.indexOf(entityItem.GtProjectPhase.TermGuid) !== -1);
