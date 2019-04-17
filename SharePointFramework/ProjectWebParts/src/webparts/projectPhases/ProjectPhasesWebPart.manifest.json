@@ -27,16 +27,14 @@
         "automaticReload": true,
         "confirmPhaseChange": true,
         "reloadTimeout": 0,
-        "updateViewsDocuments": false,
-        "updateViewsTasks": false,
-        "updateViewsRisks": false,
+        "currentPhaseViewName": "Gjeldende fase",
         "gutter": 15,
         "fontSize": 13,
         "entity": {
           "listName": "Prosjekter",
           "contentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
-          "fieldsGroupName": "Prosjektportalenkolonner",
-          "siteIdFieldName": "GtSiteId"
+          "fieldsGroupName": "{parameter:fieldsgroup}",
+          "identityFieldName": "GtSiteId"
         }
       }
     }

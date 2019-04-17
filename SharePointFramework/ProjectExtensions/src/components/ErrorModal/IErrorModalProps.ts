@@ -1,6 +1,6 @@
+import { ProjectSetupError } from '../../extensions/projectSetup/ProjectSetupError';
+import { IProjectSetupBaseModalProps } from '../ProjectSetupBaseModal/IProjectSetupBaseModalProps';
 
-import { IModalProps } from 'office-ui-fabric-react/lib/Modal';
-
-export interface IErrorModalProps extends IModalProps {
-    errorText: string;
+export interface IErrorModalProps extends IProjectSetupBaseModalProps {
+    error: ProjectSetupError;
 }

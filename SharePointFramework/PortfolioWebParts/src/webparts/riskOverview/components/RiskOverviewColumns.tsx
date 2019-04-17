@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as strings from 'RiskOverviewWebPartStrings';
 import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import tryParseInt from 'prosjektportalen-spfx-shared/lib/helpers/tryParseInt';
+import tryParseInt from '../../../../../@Shared/lib/helpers/tryParseInt';
 
 export const RiskOverviewColumns: IColumn[] = [{
     key: 'Title',

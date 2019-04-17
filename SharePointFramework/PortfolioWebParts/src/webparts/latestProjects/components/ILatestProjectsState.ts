@@ -1,7 +1,5 @@
-import { SearchResult } from "@pnp/sp";
-
 export interface ILatestProjectsState {
   isLoading: boolean;
-  sites: SearchResult[];
+  projects: any[];
   showList: boolean;
 }

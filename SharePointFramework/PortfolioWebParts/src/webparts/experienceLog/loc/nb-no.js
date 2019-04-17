@@ -7,6 +7,7 @@ define([], function () {
     "DescriptionLabel": "Loggbeskrivelse",
     "ResponsibleLabel": "Ansvarlig",
     "ConsequenceLabel": "Konsekvens",
-    "RecommendationLabel": "Anbefaling"
+    "RecommendationLabel": "Anbefaling",
+    "ActorsLabel": "Aktører"
   }
 });

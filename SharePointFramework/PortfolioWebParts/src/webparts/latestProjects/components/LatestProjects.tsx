@@ -1,30 +1,35 @@
 import * as React from 'react';
 import styles from './LatestProjects.module.scss';
 import * as strings from 'LatestProjectsWebPartStrings';
+import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
 import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
 import { ILatestProjectsProps } from './ILatestProjectsProps';
 import { ILatestProjectsState } from './ILatestProjectsState';
-import { SearchQuery, ISearchQueryBuilder, SearchQueryBuilder, sp, QueryPropertyValueType, SortDirection, SearchResult } from '@pnp/sp';
-import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http';
+import { sp, QueryPropertyValueType, SortDirection } from '@pnp/sp';
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
 import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
-import formatDate from 'prosjektportalen-spfx-shared/lib/helpers/formatDate';
+import formatDate from '../../../../../@Shared/lib/helpers/formatDate';
 
 export default class LatestProjects extends React.Component<ILatestProjectsProps, ILatestProjectsState> {
+  public static defaultProps: Partial<ILatestProjectsProps> = { rowLimit: 5 };
+
   constructor(props: ILatestProjectsProps) {
     super(props);
-    this.state = { isLoading: true, sites: [], showList: true };
+    this.state = { isLoading: true, projects: [], showList: true };
   }
 
   public async componentDidMount() {
     try {
-      const sites = await this.fetchData();
-      this.setState({ sites, isLoading: false });
+      const projects = await this.fetchData(this.props.hubSiteId);
+      this.setState({ projects, isLoading: false });
     } catch (error) {
-      this.setState({ sites: [], isLoading: false });
+      this.setState({ projects: [], isLoading: false });
     }
   }
 
+  /**
+   * Renders the <LatestProjects /> component
+   */
   public render(): React.ReactElement<ILatestProjectsProps> {
     return (
       <div className={styles.latestProjects}>
@@ -32,7 +37,7 @@ export default class LatestProjects extends React.Component<ILatestProjectsProps
           displayMode={this.props.displayMode}
           title={this.props.title}
           updateProperty={this.props.updateProperty} />
-        <div className={styles.linksContainer}>
+        <div className={styles.container}>
           {this.state.isLoading
             ? <Spinner label={strings.LoadingProjects} type={SpinnerType.large} />
             : this.renderProjectList()
@@ -42,44 +47,51 @@ export default class LatestProjects extends React.Component<ILatestProjectsProps
     );
   }
 
+  /**
+   * Render project list
+   */
   private renderProjectList() {
-    if (this.state.sites.length > 0) {
-      return this.state.sites.map(site => {
-        let created = formatDate(site['Created']);
+    if (this.state.projects.length > 0) {
+      return this.state.projects.map(site => {
+        let created = formatDate(site.Created);
         return (
-          <div className={styles.linkItem}>
-            <a className={styles.projectLink} href={site.Path}>{site.Title}</a>
-            <p className={styles.subTitle}>Opprettet {created}</p>
+          <div className={styles.projectItem}>
+            <div className={styles.itemContainer}>
+              <div className={styles.created}>
+                {PortfolioWebPartsStrings.CreatedText} {created}
+              </div>
+              <a href={site.Path}>{site.Title}</a>
+            </div>
           </div>
         );
       });
-    } else return <MessageBar>Fant ingen nye prosjekter</MessageBar>;
+    } else return <MessageBar>{strings.EmptyMessage}</MessageBar>;
   }
 
-  private async fetchData() {
-    const { hubSiteId } = this.props.context.pageContext.legacyPageContext;
+  /**
+   * Fetch data
+   * 
+   * @param {string} hubSiteId Hub site ID
+   */
+  private async fetchData(hubSiteId: string) {
     let result = await sp.search({
       Querytext: `DepartmentId:{${hubSiteId}} contentclass:STS_Site`,
       TrimDuplicates: false,
-      RowLimit: 5,
-      SelectProperties: ['Title', 'Path', 'DepartmentId', 'SiteId', 'Created'],
-      SortList:
-        [
-          {
-            Property: "Created",
-            Direction: SortDirection.Descending
-          }
-        ],
+      RowLimit: this.props.rowLimit,
+      SelectProperties: ['Title', 'Path', 'SiteId', 'Created'],
+      SortList: [{
+        Property: "Created",
+        Direction: SortDirection.Descending
+      }],
       Properties: [{
         Name: "EnableDynamicGroups",
         Value: {
           BoolVal: true,
           QueryPropertyValueTypeIndex: QueryPropertyValueType.BooleanType
         }
-      }
-      ]
+      }]
     });
-    let sites = result.PrimarySearchResults.filter(site => hubSiteId !== site['SiteId']);
-    return sites;
+    let projects: any[] = result.PrimarySearchResults.filter(site => hubSiteId !== site['SiteId']);
+    return projects;
   }
 }

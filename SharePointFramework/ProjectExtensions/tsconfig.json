@@ -9,6 +9,7 @@
     "sourceMap": true,
     "experimentalDecorators": true,
     "skipLibCheck": true,
+    "noUnusedLocals": true,
     "outDir": "lib",
     "typeRoots": [
       "./node_modules/@types",

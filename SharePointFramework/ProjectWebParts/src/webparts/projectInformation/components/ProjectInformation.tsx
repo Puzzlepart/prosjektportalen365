@@ -1,19 +1,18 @@
-import * as React from 'react';
-import styles from './ProjectInformation.module.scss';
 import { DisplayMode } from '@microsoft/sp-core-library';
-import { IProjectInformationProps } from './IProjectInformationProps';
-import { IProjectInformationState } from './IProjectInformationState';
-import { IProjectInformationData } from './IProjectInformationData';
 import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import ProjectPropertyModel from '../models/ProjectPropertyModel';
-import ProjectProperty from './ProjectProperty';
-import SpEntityPortalService from 'sp-entityportal-service';
 import * as strings from 'ProjectInformationWebPartStrings';
 import { HubConfigurationService } from 'prosjektportalen-spfx-shared/lib/services/HubConfigurationService';
-import HubSiteService from 'sp-hubsite-service';
+import * as React from 'react';
+import SpEntityPortalService from 'sp-entityportal-service';
+import ProjectPropertyModel from '../models/ProjectPropertyModel';
+import { IProjectInformationData } from './IProjectInformationData';
+import { IProjectInformationProps } from './IProjectInformationProps';
+import { IProjectInformationState } from './IProjectInformationState';
+import styles from './ProjectInformation.module.scss';
+import ProjectProperty from './ProjectProperty';
 
 export default class ProjectInformation extends React.Component<IProjectInformationProps, IProjectInformationState> {
   constructor(props: IProjectInformationProps) {
@@ -94,15 +93,7 @@ export default class ProjectInformation extends React.Component<IProjectInformat
 
   private async fetchData(): Promise<IProjectInformationData> {
     try {
-      let { hubSite, hubSiteUrl, siteId, webUrl, context } = this.props;
-      if (context) {
-        if (!hubSiteUrl) {
-          hubSite = await HubSiteService.GetHubSiteById(context.pageContext.web.absoluteUrl, context.pageContext.legacyPageContext.hubSiteId);
-          hubSiteUrl = hubSite.url;
-        }
-        siteId = context.pageContext.site.id.toString();
-        webUrl = context.pageContext.web.absoluteUrl;
-      }
+      let { hubSiteUrl, siteId, webUrl } = this.props;
       const spEntityPortalService = new SpEntityPortalService({ webUrl: hubSiteUrl, ...this.props.entity });
       const [columnConfig, entityItem, entityFields, editFormUrl] = await Promise.all([
         new HubConfigurationService(hubSiteUrl).getProjectColumns(),
@@ -128,7 +119,6 @@ export default class ProjectInformation extends React.Component<IProjectInformat
       const data = { properties, editFormUrl, itemId: entityItem.Id };
       return data;
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }

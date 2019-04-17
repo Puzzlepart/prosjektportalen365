@@ -1,6 +1,7 @@
 declare interface IPortfolioWebPartsStrings {
   TitleLabel: string;
   SiteTitleLabel: string;
+  PhaseLabel: string;
   NoGroupingText: string;
   DataSourceNotFound: string;
   DataSourceError: string;
@@ -8,6 +9,7 @@ declare interface IPortfolioWebPartsStrings {
   SearchBoxLabelText: string;
   ExcelExportButtonLabel: string;
   FilterText: string;
+  CreatedText: string;
 }
 
 declare module 'PortfolioWebPartsStrings' {

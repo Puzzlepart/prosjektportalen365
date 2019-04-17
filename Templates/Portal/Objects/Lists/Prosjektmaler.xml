@@ -1,4 +1,4 @@
-﻿<pnp:ListInstance Title="Prosjektmaler" Description="" DocumentTemplate="" TemplateType="101" Url="Prosjektmaler" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" 
+﻿<pnp:ListInstance Title="Prosjektmaler" Description="" DocumentTemplate="" TemplateType="101" Url="Prosjektmaler" Hidden="true" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" EnableAttachments="false" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:Views RemoveExistingViews="true">
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle maler" Url="{site}/Prosjektmaler/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/dlicon.png?rev=45">
@@ -21,4 +21,5 @@
     <pnp:FieldRefs>
         <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" />
     </pnp:FieldRefs>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

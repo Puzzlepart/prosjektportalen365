@@ -1,49 +1,26 @@
-import * as React from 'react';
+import { BaseClientSideWebPart, IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
 import "@pnp/polyfill-ie11";
-import { Web, PermissionKind } from '@pnp/sp';
-import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneSlider, PropertyPaneToggle, PropertyPaneDropdown, IPropertyPaneDropdownOption } from '@microsoft/sp-webpart-base';
+import { sp } from '@pnp/sp';
+import MSGraphHelper from 'msgraph-helper';
 import * as strings from 'ProjectPhasesWebPartStrings';
+import * as React from 'react';
+import * as ReactDom from 'react-dom';
+import ProjectPhases, { IProjectPhasesProps } from './components/ProjectPhases';
 import { IProjectPhasesWebPartProps } from './IProjectPhasesWebPartProps';
-import ProjectPhases from './components/ProjectPhases';
-import BaseWebPart from '../baseWebPart';
 
-export default class ProjectPhasesWebPart extends BaseWebPart<IProjectPhasesWebPartProps> {
-  private web: Web;
-  private currentUserManageWeb: boolean = false;
-  private optionsPhaseField: IPropertyPaneDropdownOption[] = [];
-
-  constructor() {
-    super();
-  }
-
+export default class ProjectPhasesWebPart extends BaseClientSideWebPart<IProjectPhasesWebPartProps> {
   public async onInit() {
-    await super.onInit();
-    this.web = new Web(this.context.pageContext.web.absoluteUrl);
-    const [currentUserManageWeb, taxonomyFields] = await Promise.all([
-      this.getCurrentUserManageWeb(),
-      this.web.fields.select('InternalName', 'Title').filter(`TypeAsString eq 'TaxonomyFieldType'`).get(),
-    ]);
-    this.currentUserManageWeb = currentUserManageWeb;
-    this.optionsPhaseField = taxonomyFields.map(field => ({ key: field.Title, text: field.Title }));
-    this.isInitialized = true;
+    this.context.statusRenderer.clearLoadingIndicator(this.domElement);
+    await MSGraphHelper.Init(this.context.msGraphClientFactory, 'v1.0');
+    sp.setup({ spfxContext: this.context });
   }
 
   public render(): void {
-    super._render(ProjectPhases, {
-      currentUserManageWeb: this.currentUserManageWeb,
-      webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
-      web: this.web,
-      domElement: this.domElement,
+    const element: React.ReactElement<IProjectPhasesProps> = React.createElement(ProjectPhases, {
+      pageContext: this.context.pageContext,
+      ...this.properties,
     });
-  }
-
-  protected async getCurrentUserManageWeb(): Promise<boolean> {
-    try {
-      const currentUserManageWeb = await this.web.currentUserHasPermissions(PermissionKind.ManageWeb);
-      return currentUserManageWeb;
-    } catch (err) {
-      return false;
-    }
+    ReactDom.render(element, this.domElement);
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -54,10 +31,6 @@ export default class ProjectPhasesWebPart extends BaseWebPart<IProjectPhasesWebP
             {
               groupName: strings.SettingsGroupName,
               groupFields: [
-                PropertyPaneDropdown('phaseField', {
-                  label: strings.PhaseFieldFieldLabel,
-                  options: this.optionsPhaseField,
-                }),
                 PropertyPaneToggle('automaticReload', {
                   label: strings.AutomaticReloadFieldLabel,
                 }),
@@ -79,31 +52,8 @@ export default class ProjectPhasesWebPart extends BaseWebPart<IProjectPhasesWebP
             {
               groupName: strings.ViewsGroupName,
               groupFields: [
-                PropertyPaneToggle('updateViewsDocuments', {
-                  label: strings.UpdateViewsDocumentsFieldLabel,
-                }),
-                PropertyPaneToggle('updateViewsRisks', {
-                  label: strings.UpdateViewsRisksFieldLabel,
-                }),
-                PropertyPaneTextField('updateViewName', {
-                  label: strings.UpdateViewNameFieldLabel,
-                }),
-              ]
-            },
-            {
-              groupName: strings.LookAndFeelGroupName,
-              groupFields: [
-                PropertyPaneSlider('fontSize', {
-                  label: strings.FontSizeFieldLabel,
-                  min: 10,
-                  max: 25,
-                  step: 1,
-                }),
-                PropertyPaneSlider('gutter', {
-                  label: strings.GutterFieldLabel,
-                  min: 10,
-                  max: 50,
-                  step: 2,
+                PropertyPaneTextField('currentPhaseViewName', {
+                  label: strings.CurrentPhaseViewNameFieldLabel,
                 }),
               ]
             }

@@ -13,6 +13,15 @@ declare interface IProjectListWebPartStrings {
   ProjectStatusLinkText: string;
   LoadingText: string;
   ErrorText: string;
+  ShowAsListText: string;
+  ShowAsTilesText: string;
+  GeneralGroupName: string;
+  SortByFieldLabel: string;
+  PhaseTermSetIdFieldLabel: string;
+  TileViewGroupName: string;
+  ShowProjectLogoFieldLabel: string;
+  ShowProjectOwnerFieldLabel: string;
+  ShowProjectManagerFieldLabel: string;
 }
 
 declare module 'ProjectListWebPartStrings' {

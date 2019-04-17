@@ -1,16 +1,11 @@
+import { ProjectSetupError } from "../extensions/projectSetup/ProjectSetupError";
 
-export class BaseTaskError {
+export class BaseTaskError extends ProjectSetupError {
     constructor(
-        public task: string,
-        public message: any,
+        public taskName: string,
+        message: string,
+        stack: string
     ) {
-        this.task = task;
-        if (typeof message === 'string') {
-            this.message = message;
-        } else if (message.hasOwnProperty && message.hasOwnProperty('args')) {
-            this.message = (message.args as SP.ClientRequestFailedEventArgs).get_message();
-        } else {
-            this.message = 'Ukjent feil';
-        }
+        super(message, stack);
     }
 }

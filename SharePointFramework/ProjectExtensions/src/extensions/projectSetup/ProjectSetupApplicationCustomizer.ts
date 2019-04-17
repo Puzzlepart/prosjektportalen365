@@ -1,98 +1,156 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import { override } from '@microsoft/decorators';
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base';
 import { sp } from '@pnp/sp';
+import HubSiteService from 'sp-hubsite-service';
+import MSGraphHelper from 'msgraph-helper';
 import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import { IProjectSetupApplicationCustomizerProperties } from './IProjectSetupApplicationCustomizerProperties';
-import { ProgressModal, IProgressModalProps, ErrorModal, IErrorModalProps, TemplateSelectModal } from '../../components';
-import HubSiteService from 'sp-hubsite-service';
+import { ProgressModal, IProgressModalProps, ErrorModal, IErrorModalProps, TemplateSelectModal, ITemplateSelectModalState } from '../../components';
 import IProjectSetupApplicationCustomizerData from './IProjectSetupApplicationCustomizerData';
-import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import { ListContentConfig, ProjectTemplate } from './../../models';
 import { Tasks, IBaseTaskParams } from './../../tasks';
+import ListLogger from '../../../../@Shared/lib/logging/ListLogger';
+import injectStyles from '../../../../@Shared/lib/util/injectStyles';
+import { ProjectSetupError } from './ProjectSetupError';
 
 export default class ProjectSetupApplicationCustomizer extends BaseApplicationCustomizer<IProjectSetupApplicationCustomizerProperties> {
-  private domElement: HTMLDivElement;
-  private templateSelectModalContainer: HTMLElement;
-  private progressModalContainer: HTMLElement;
-  private data: IProjectSetupApplicationCustomizerData;
-  private taskParams: IBaseTaskParams;
+  private _domElement: HTMLDivElement;
+  private _templateSelectModalContainer: HTMLElement;
+  private _progressModalContainer: HTMLElement;
+  private _data: IProjectSetupApplicationCustomizerData;
+  private _taskParams: IBaseTaskParams;
+
+  public constructor() {
+    super();
+    Logger.subscribe(new ConsoleListener());
+    Logger.activeLogLevel = LogLevel.Info;
+  }
 
   @override
   public async onInit(): Promise<void> {
-    if (this.context.pageContext.legacyPageContext.isSiteAdmin) {
-      Logger.subscribe(new ConsoleListener());
-      Logger.activeLogLevel = LogLevel.Info;
-      sp.setup({ spfxContext: this.context });
-      this.data = await this.getData();
-      if (this.data) {
+    sp.setup({ spfxContext: this.context });
+    const { isSiteAdmin, groupId, hubSiteId } = this.context.pageContext.legacyPageContext;
+    if (isSiteAdmin && groupId) {
+      try {
+        Logger.log({ message: '(ProjectSetupApplicationCustomizer) onInit: Initializing pre-conditionals before initializing setup', level: LogLevel.Info });
         const topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top);
-        this.domElement = topPlaceholder.domElement;
-        const templateInfo = await this.getTemplateInfo();
-        ReactDOM.unmountComponentAtNode(this.templateSelectModalContainer);
-        this.data = { ...this.data, ...templateInfo };
-        this.taskParams = { context: this.context, properties: this.properties, data: this.data };
-        this.renderProgressModal({ text: strings.ProgressModalLabel, subText: strings.ProgressModalDescription, iconName: 'Page' });
-        await this.runTasks();
-      } else {
-        this.renderErrorModal({ errorText: 'Området er ikke koblet til en hub.' });
+        this._domElement = topPlaceholder.domElement;
+        if (this.context.pageContext.web.language !== 1044) {
+          await this.removeCustomizer(this.componentId, false);
+          throw new ProjectSetupError(strings.InvalidLanguageErrorMessage, strings.InvalidLanguageErrorStack);
+        } else if (!hubSiteId) {
+          throw new ProjectSetupError(strings.NoHubSiteErrorMessage, strings.NoHubSiteErrorStack, MessageBarType.severeWarning);
+        } else {
+          this.initializeSetup();
+        }
+      } catch (error) {
+        this.renderErrorModal({ error });
       }
     }
   }
 
   /**
+   * Intiialize setup
+   */
+  protected async initializeSetup() {
+    try {
+      injectStyles(`.SPPageChrome { opacity: 0.4; } .SPCanvas { visibility: hidden; } `);
+      this._data = await this.getData();
+      this.initLogging(this._data.hub.web);
+      const templateInfo = await this.getTemplateInfo();
+      ReactDOM.unmountComponentAtNode(this._templateSelectModalContainer);
+      this._data = { ...this._data, ...templateInfo };
+      this._taskParams = {
+        context: this.context,
+        properties: this.properties,
+        data: this._data,
+        templateParameters: { fieldsgroup: strings.SiteFieldsGroupName },
+      };
+      this.renderProgressModal({ text: strings.ProgressModalLabel, subText: strings.ProgressModalDescription, iconName: 'Page' });
+      await this.runTasks();
+    } catch (error) {
+      await ListLogger.write(`${error.taskName} failed with message ${error.message}`, 'Error');
+      this.renderErrorModal({ error });
+    }
+  }
+
+  /**
+   * Init logging
+   * 
+   * @param {Web} hubWeb Hub web
+   * @param {string} listName List name
+   */
+  protected initLogging(hubWeb: any, listName: string = 'Logg') {
+    ListLogger.init(
+      hubWeb.lists.getByTitle(listName), {
+        webUrl: 'GtLogWebUrl',
+        scope: 'GtLogScope',
+        functionName: 'GtLogFunctionName',
+        message: 'GtLogMessage',
+        level: 'GtLogLevel',
+      },
+      document.location.href,
+      'ProjectSetupApplicationCustomizer',
+    );
+  }
+
+  /**
    * Render TemplateSelectModal
    */
-  private getTemplateInfo(): Promise<IProjectSetupApplicationCustomizerData> {
+  private getTemplateInfo(): Promise<ITemplateSelectModalState> {
     return new Promise(resolve => {
       const templateSelectModal = React.createElement(TemplateSelectModal, {
         key: 'ProjectSetupApplicationCustomizer_TemplateSelectModal',
-        data: this.data,
-        onSubmit: (data: IProjectSetupApplicationCustomizerData) => resolve(data),
-        isBlocking: true,
-        isDarkOverlay: true,
+        data: this._data,
+        onSubmit: (state: ITemplateSelectModalState) => resolve(state),
+        versionString: `v${this.manifest.version}`,
       });
-      this.templateSelectModalContainer = document.createElement('DIV');
-      this.domElement.appendChild(this.templateSelectModalContainer);
-      ReactDOM.render(templateSelectModal, this.templateSelectModalContainer);
+      this._templateSelectModalContainer = document.createElement('DIV');
+      this._domElement.appendChild(this._templateSelectModalContainer);
+      ReactDOM.render(templateSelectModal, this._templateSelectModalContainer);
     });
   }
 
   /**
    * Render ProgressModal
+   * 
+   * @param {IProgressModalProps} props Props
    */
   private renderProgressModal(props: IProgressModalProps) {
     const progressModal = React.createElement(ProgressModal, {
       key: 'ProjectSetupApplicationCustomizer_ProgressModal',
       ...props,
-      taskParams: this.taskParams,
-      isBlocking: true,
-      isDarkOverlay: true,
+      taskParams: this._taskParams,
+      versionString: `v${this.manifest.version}`,
     });
-    if (!this.progressModalContainer) {
-      this.progressModalContainer = document.createElement('DIV');
-      this.domElement.appendChild(this.progressModalContainer);
+    if (!this._progressModalContainer) {
+      this._progressModalContainer = document.createElement('DIV');
+      this._domElement.appendChild(this._progressModalContainer);
     }
-    ReactDOM.render(progressModal, this.progressModalContainer);
+    ReactDOM.render(progressModal, this._progressModalContainer);
   }
 
   /**
    * Render ErrorModal
+   * 
+   * @param {IProgressModalProps} props Props
    */
   private renderErrorModal(props: IErrorModalProps) {
     const errorModal = React.createElement(ErrorModal, {
       key: 'ProjectSetupApplicationCustomizer_ProgressModal',
+      versionString: `v${this.manifest.version}`,
       ...props,
-      isBlocking: false,
-      isDarkOverlay: true,
     });
-    if (!this.progressModalContainer) {
-      this.progressModalContainer = document.createElement('DIV');
-      this.domElement.appendChild(this.progressModalContainer);
+    if (!this._progressModalContainer) {
+      this._progressModalContainer = document.createElement('DIV');
+      this._domElement.appendChild(this._progressModalContainer);
     }
-    ReactDOM.render(errorModal, this.progressModalContainer);
+    ReactDOM.render(errorModal, this._progressModalContainer);
   }
 
   /**
@@ -101,16 +159,24 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   private async runTasks(): Promise<void> {
     Logger.log({ message: '(ProjectSetupApplicationCustomizer) runTasks', data: { properties: this.properties, tasks: Tasks.map(t => t.name) }, level: LogLevel.Info });
     try {
+      await ListLogger.write('Starting provisioning of project.');
+      this._taskParams.templateSchema = await this._taskParams.data.selectedTemplate.getSchema();
       for (let i = 0; i < Tasks.length; i++) {
-        this.taskParams = await Tasks[i].execute(this.taskParams, this.onTaskStatusUpdated);
+        this._taskParams = await Tasks[i].execute(this._taskParams, this.onTaskStatusUpdated);
       }
+      await ListLogger.write('Project successfully provisioned.');
       await this.removeCustomizer(this.componentId, !this.isDebug());
     } catch (error) {
-      Logger.log({ message: `(ProjectSetupApplicationCustomizer) runTasks: ${error.task} failed with message ${error.message}`, level: LogLevel.Error });
-      this.renderErrorModal({ errorText: 'Det skjedde en feil under konfigureringen av området.' });
+      throw error;
     }
   }
 
+  /**
+   * On task status updated
+   * 
+   * @param {string} status Status
+   * @param {string} iconName Icon name
+   */
   @autobind
   private onTaskStatusUpdated(status: string, iconName: string) {
     this.renderProgressModal({ text: strings.ProgressModalLabel, subText: status, iconName });
@@ -137,23 +203,28 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
     }
   }
 
+  /**
+   * Get _data
+   */
   private async getData(): Promise<IProjectSetupApplicationCustomizerData> {
-    const { pageContext } = this.context;
-    const { hubSiteId } = pageContext.legacyPageContext;
-    if (hubSiteId) {
-      let data: IProjectSetupApplicationCustomizerData = {};
-      data.hub = await HubSiteService.GetHubSiteById(pageContext.web.absoluteUrl, hubSiteId);
-      const templatesLibrary = data.hub.web.lists.getByTitle(this.properties.templatesLibrary);
-      const extensionsLibrary = data.hub.web.lists.getByTitle(this.properties.extensionsLibrary);
-      const listContentList = data.hub.web.lists.getByTitle(this.properties.contentConfigList);
+    try {
+      await MSGraphHelper.Init(this.context.msGraphClientFactory, 'v1.0');
+      let _data: IProjectSetupApplicationCustomizerData = {};
+      _data.hub = await HubSiteService.GetHubSiteById(this.context.pageContext.web.absoluteUrl, this.context.pageContext.legacyPageContext.hubSiteId);
+      const hubLists = _data.hub.web.lists;
       const [templates, extensions, listContentConfig] = await Promise.all([
-        (async () => (await templatesLibrary.rootFolder.files.get()).map(file => new ProjectTemplate(file, data.hub.web)))(),
-        (async () => (await extensionsLibrary.rootFolder.files.get()).map(file => new ProjectTemplate(file, data.hub.web)))(),
-        (async () => (await listContentList.items.get()).map(item => new ListContentConfig(item, data.hub.web)))(),
+        (async () => (await hubLists.getByTitle(this.properties.templatesLibrary).rootFolder.files.get()).map(file => new ProjectTemplate(file, _data.hub.web)))(),
+        (async () => (await hubLists.getByTitle(this.properties.extensionsLibrary).rootFolder.files.get()).map(file => new ProjectTemplate(file, _data.hub.web)))(),
+        (async () => (await hubLists.getByTitle(this.properties.contentConfigList).items.get()).map(item => new ListContentConfig(item, _data.hub.web)))(),
       ]);
-      return { ...data, templates, extensions, listContentConfig };
-    } else {
-      return null;
+      return {
+        ..._data,
+        templates,
+        extensions,
+        listContentConfig,
+      };
+    } catch (e) {
+      throw new ProjectSetupError(strings.GetSetupDataErrorMessage, strings.GetSetupDataErrorStack);
     }
   }
 

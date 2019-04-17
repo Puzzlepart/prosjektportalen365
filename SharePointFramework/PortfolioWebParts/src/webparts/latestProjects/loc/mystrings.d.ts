@@ -1,7 +1,5 @@
 declare interface ILatestProjectsWebPartStrings {
-  PropertyPaneDescription: string;
-  BasicGroupName: string;
-  DescriptionFieldLabel: string;
+  EmptyMessage: string;
   LoadingProjects: string;
 }
 

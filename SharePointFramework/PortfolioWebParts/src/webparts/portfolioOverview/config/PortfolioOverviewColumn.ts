@@ -10,6 +10,7 @@ export interface IPortfolioOverviewColumnSpItem {
     GtShowFieldFrontpage?: boolean;
     GtShowFieldPortfolio?: boolean;
     GtFieldDataType?: string;
+    GtColMinWidth?: number;
     GtIsRefinable?: boolean;
     GtIsGroupable?: boolean;
 }
@@ -34,7 +35,6 @@ export class PortfolioOverviewColumn implements IColumn {
         this.id = item.Id;
         this.fieldName = item.GtManagedProperty;
         this.key = item.GtManagedProperty;
-        this.minWidth = 100;
         this.name = item.Title;
         this.sortOrder = item.GtSortOrder;
         this.internalName = item.GtInternalName;
@@ -45,5 +45,6 @@ export class PortfolioOverviewColumn implements IColumn {
         this.isRefinable = item.GtIsRefinable;
         this.isGroupable = item.GtIsGroupable;
         this.isResizable = true;
+        this.minWidth = item.GtColMinWidth || 100;
     }
 }

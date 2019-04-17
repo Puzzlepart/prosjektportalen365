@@ -1,27 +1,29 @@
 import * as React from 'react';
-import { Version } from '@microsoft/sp-core-library';
+import * as ReactDom from 'react-dom';
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import PortfolioOverview from './components/PortfolioOverview';
 import { IPortfolioOverviewProps } from './components/IPortfolioOverviewProps';
-import PortfolioBaseWebPart from '../@portfolioBaseWebPart';
+import { setupWebPart } from '../@setup';
 import { IPortfolioOverviewWebPartProps } from './IPortfolioOverviewWebPartProps';
 import { Logger, LogLevel } from '@pnp/logging';
 
-export default class PortfolioOverviewWebPart extends PortfolioBaseWebPart<IPortfolioOverviewWebPartProps> {
+export default class PortfolioOverviewWebPart extends BaseClientSideWebPart<IPortfolioOverviewWebPartProps> {
   public render(): void {
     Logger.log({ message: '(PortfolioOverviewWebPart) render: Rendering <PortfolioOverview />', level: LogLevel.Info });
-    const element: React.ReactElement<IPortfolioOverviewProps> = React.createElement(PortfolioOverview, { ...this.properties, title: 'Porteføljeoversikt', context: this.context });
-    super._render(this.manifest.alias, element);
+    const element: React.ReactElement<IPortfolioOverviewProps> = React.createElement(PortfolioOverview, {
+      ...this.properties,
+      title: 'Porteføljeoversikt',
+      context: this.context,
+    });
+    ReactDom.render(element, this.domElement);
   }
 
   protected async onInit(): Promise<void> {
-    await super.onInit();
+    Logger.log({ message: '(PortfolioOverviewWebPart) onInit: Initializing PortfolioOverviewWebPart', level: LogLevel.Info });
+    setupWebPart(this.context);
   }
 
   protected onDispose(): void {
-    super.onDispose();
-  }
-
-  protected get dataVersion(): Version {
-    return Version.parse(this.manifest.version);
+    ReactDom.unmountComponentAtNode(this.domElement);
   }
 }

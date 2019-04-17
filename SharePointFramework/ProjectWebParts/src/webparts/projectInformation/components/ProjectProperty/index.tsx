@@ -1,12 +1,12 @@
 import * as React from "react";
-import IProjectPropertyProps, { ProjectPropertyDefaultProps } from "./IProjectPropertyProps";
+import styles from './ProjectProperty.module.scss';
+import IProjectPropertyProps from "./IProjectPropertyProps";
 
 /**
  * Project Property
  */
 export default class ProjectProperty extends React.Component<IProjectPropertyProps, {}> {
     public static displayName = "ProjectProperty";
-    public static defaultProps = ProjectPropertyDefaultProps;
 
     /**
      * Constructor
@@ -20,25 +20,16 @@ export default class ProjectProperty extends React.Component<IProjectPropertyPro
     /**
      * Renders the component
      */
-    public render(): JSX.Element {
-        let labelClassName = ["_label", "ms-fontWeight-semibold"];
-        let valueClassName = ["_value"];
-        if (this.props.labelSize) {
-            labelClassName.push(`ms-font-${this.props.labelSize}`);
-        }
-        if (this.props.valueSize) {
-            valueClassName.push(`ms-font-${this.props.valueSize}`);
-        }
-
+    public render(): React.ReactElement<IProjectPropertyProps> {
         return (
             <div
-                className={`${this.props.model.internalName} prop`}
+                className={styles.projectProperty}
                 data-type={this.props.model.type}
                 data-required={this.props.model.required}
                 title={this.props.model.description}
                 style={this.props.style}>
-                <div className={labelClassName.join(" ")}>{this.props.model.displayName}</div>
-                <div className={valueClassName.join(" ")}>{this.props.model.value}</div>
+                <div className={styles.projectPropertyLabel}>{this.props.model.displayName}</div>
+                <div className={styles.projectPropertyValue}>{this.props.model.value}</div>
             </div>
         );
     }

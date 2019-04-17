@@ -1,17 +1,9 @@
 import * as React from 'react';
-import { Panel, IPanelProps } from 'office-ui-fabric-react/lib/Panel';
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import { IFilterProps, Filter } from './Filter';
-import { IFilterItemProps } from './FilterItem';
-
-export interface IFilterPanelProps extends IPanelProps {
-    filters: IFilterProps[];
-    onFilterChange: (column: IColumn, selectedItems: IFilterItemProps[]) => void;
-}
-
-export interface IFilterPanelState {
-    filters: IFilterProps[];
-}
+import { Panel } from 'office-ui-fabric-react/lib/Panel';
+import { IFilterPanelState } from './IFilterPanelState';
+import { IFilterPanelProps } from './IFilterPanelProps';
+import { Filter, IFilterProps } from './Filter';
+import { IFilterItemProps } from './FilterItem/IFilterItemProps';
 
 export default class FilterPanel extends React.Component<IFilterPanelProps, IFilterPanelState> {
     public static defaultProps: Partial<IFilterPanelProps> = {};

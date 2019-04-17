@@ -6,12 +6,22 @@
   "version": "*",
   "manifestVersion": 2,
   "requiresCustomScript": false,
-  "preconfiguredEntries": [{
-    "groupId": "5c03119e-3074-46fd-976b-c60198311f70", 
-    "group": { "default": "Other" },
-    "title": { "default": "Sist prosjekter" },
-    "description": { "default": " " },
-    "officeFabricIconFontName": "BuildQueueNew",
-    "properties": {  }
-  }]
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "Sist prosjekter"
+      },
+      "description": {
+        "default": " "
+      },
+      "officeFabricIconFontName": "BuildQueueNew",
+      "properties": {
+        "title": "Siste prosjekter"
+      }
+    }
+  ]
 }
