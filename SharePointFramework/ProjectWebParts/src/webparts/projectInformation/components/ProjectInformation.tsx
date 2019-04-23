@@ -15,6 +15,8 @@ import styles from './ProjectInformation.module.scss';
 import ProjectProperty from './ProjectProperty';
 
 export default class ProjectInformation extends React.Component<IProjectInformationProps, IProjectInformationState> {
+  public static defaultProps: Partial<IProjectInformationProps> = { title: 'Prosjektinformasjon' };
+
   constructor(props: IProjectInformationProps) {
     super(props);
     this.state = { isLoading: true, data: {} };
