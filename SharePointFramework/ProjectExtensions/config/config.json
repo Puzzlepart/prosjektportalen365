@@ -17,11 +17,20 @@
           "manifest": "./src/extensions/projectUpgrade/ProjectUpgradeApplicationCustomizer.manifest.json"
         }
       ]
+    },
+    "template-selector-command-set": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/templateSelector/TemplateSelectorCommandSet.js",
+          "manifest": "./src/extensions/templateSelector/TemplateSelectorCommandSet.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
   "localizedResources": {
     "ProjectSetupApplicationCustomizerStrings": "lib/extensions/projectSetup/loc/{locale}.js",
-    "ProjectUpgradeApplicationCustomizerStrings": "lib/extensions/projectUpgrade/loc/{locale}.js"
+    "ProjectUpgradeApplicationCustomizerStrings": "lib/extensions/projectUpgrade/loc/{locale}.js",
+    "TemplateSelectorCommandSetStrings": "lib/extensions/templateSelector/loc/{locale}.js"
   }
 }

@@ -7,7 +7,7 @@ Param(
     $Name,
     [Parameter(Mandatory = $false)]
     $Description = "Prosjektportalen 3.0",
-    [Parameter(Mandatory = $false)]
+    [Parameter(Mandatory = $true)]
     $Folder,
     [Parameter(Mandatory = $false)]
     [int]$First = 300

@@ -1,21 +1,22 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import { override } from '@microsoft/decorators';
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base';
+import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { sp } from '@pnp/sp';
-import HubSiteService from 'sp-hubsite-service';
 import MSGraphHelper from 'msgraph-helper';
-import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
-import { IProjectSetupApplicationCustomizerProperties } from './IProjectSetupApplicationCustomizerProperties';
-import { ProgressModal, IProgressModalProps, ErrorModal, IErrorModalProps, TemplateSelectModal, ITemplateSelectModalState } from '../../components';
-import IProjectSetupApplicationCustomizerData from './IProjectSetupApplicationCustomizerData';
-import { ListContentConfig, ProjectTemplate } from './../../models';
-import { Tasks, IBaseTaskParams } from './../../tasks';
+import * as strings from 'ProjectSetupApplicationCustomizerStrings';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import HubSiteService from 'sp-hubsite-service';
 import ListLogger from '../../../../@Shared/lib/logging/ListLogger';
 import injectStyles from '../../../../@Shared/lib/util/injectStyles';
+import { ErrorModal, IErrorModalProps, IProgressModalProps, ITemplateSelectModalState, ProgressModal, TemplateSelectModal } from '../../components';
+import { getHubFiles, getHubItems } from '../../data';
+import { ListContentConfig, ProjectTemplate } from './../../models';
+import { IBaseTaskParams, Tasks } from './../../tasks';
+import IProjectSetupApplicationCustomizerData from './IProjectSetupApplicationCustomizerData';
+import { IProjectSetupApplicationCustomizerProperties } from './IProjectSetupApplicationCustomizerProperties';
 import { ProjectSetupError } from './ProjectSetupError';
 
 export default class ProjectSetupApplicationCustomizer extends BaseApplicationCustomizer<IProjectSetupApplicationCustomizerProperties> {
@@ -208,14 +209,13 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
    */
   private async getData(): Promise<IProjectSetupApplicationCustomizerData> {
     try {
-      await MSGraphHelper.Init(this.context.msGraphClientFactory, 'v1.0');
+      await MSGraphHelper.Init(this.context.msGraphClientFactory);
       let _data: IProjectSetupApplicationCustomizerData = {};
       _data.hub = await HubSiteService.GetHubSiteById(this.context.pageContext.web.absoluteUrl, this.context.pageContext.legacyPageContext.hubSiteId);
-      const hubLists = _data.hub.web.lists;
       const [templates, extensions, listContentConfig] = await Promise.all([
-        (async () => (await hubLists.getByTitle(this.properties.templatesLibrary).rootFolder.files.get()).map(file => new ProjectTemplate(file, _data.hub.web)))(),
-        (async () => (await hubLists.getByTitle(this.properties.extensionsLibrary).rootFolder.files.get()).map(file => new ProjectTemplate(file, _data.hub.web)))(),
-        (async () => (await hubLists.getByTitle(this.properties.contentConfigList).items.get()).map(item => new ListContentConfig(item, _data.hub.web)))(),
+        getHubFiles(_data.hub, this.properties.templatesLibrary, ProjectTemplate),
+        getHubFiles(_data.hub, this.properties.extensionsLibrary, ProjectTemplate),
+        getHubItems(_data.hub, this.properties.contentConfigList, ListContentConfig),
       ]);
       return {
         ..._data,

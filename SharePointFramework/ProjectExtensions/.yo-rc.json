@@ -3,10 +3,10 @@
     "packageManager": "pnpm",
     "isCreatingSolution": false,
     "environment": "spo",
-    "version": "1.7.1",
+    "version": "1.8.1",
     "libraryName": "project-extensions",
     "libraryId": "773f8a12-1d75-44bc-ad98-a33a5d7aebca",
     "componentType": "extension",
-    "extensionType": "ApplicationCustomizer"
+    "extensionType": "ListViewCommandSet"
   }
 }
