@@ -5,6 +5,8 @@ Param(
     [string]$Title = "Prosjektportalen",
     [Parameter(Mandatory = $false, HelpMessage = "Stored credential from Windows Credential Manager")]
     [string]$GenericCredential,
+    [Parameter(Mandatory = $false, HelpMessage = "Use Web Login")]
+    [switch]$UseWebLogin,
     [Parameter(Mandatory = $false, HelpMessage = "Skip PnP template")]
     [switch]$SkipTemplate,
     [Parameter(Mandatory = $false, HelpMessage = "Skip Site Design")]
@@ -29,8 +31,13 @@ function Connect-SharePoint {
 
     $Connection = $null
     Try {
-        Write-Host "[INFO] Connecting to [$Url] using Windows Credentials Manager"
-        $Connection = Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ReturnConnection -ErrorAction Stop
+        if($UseWebLogin.IsPresent) {
+            Write-Host "[INFO] Connecting to [$Url] using Web Login"
+            $Connection = Connect-PnPOnline -Url $Url -UseWebLogin -ReturnConnection -ErrorAction Stop
+        } else {
+            Write-Host "[INFO] Connecting to [$Url] using Windows Credentials Manager"
+            $Connection = Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ReturnConnection -ErrorAction Stop
+        }
     }
     Catch {
     
