@@ -228,6 +228,15 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
     }
   }
 
+  /**
+   * Get storage key
+   * 
+   * @param {string[]} parts Parts
+   */
+  private generateStorageKey(...parts: string[]) {
+    return ['ProjectPhases', ...parts, this.props.pageContext.web.absoluteUrl].join('.');
+  }
+
   /***
    * Fetch phase terms
    * 
@@ -244,23 +253,23 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
       const [{ TermSetId: termSetId }, phaseTextField] = await Promise.all([
         sp.web.fields.getByInternalNameOrTitle(phaseField).select('TermSetId').usingCaching({
           ...cachingOptions,
-          key: 'ProjectPhases_PhaseField_TermSetId',
+          key: this.generateStorageKey('PhaseField', 'TermSetId'),
         }).get(),
         sp.web.fields.getByInternalNameOrTitle(`${phaseField}_0`).select('InternalName').usingCaching({
           ...cachingOptions,
-          key: 'ProjectPhases_PhaseTextField_InternalName',
+          key: this.generateStorageKey('PhaseTextField', 'InternalName'),
         }).get(),
       ]);
       const [phaseTerms, entityItem] = await Promise.all([
-        taxonomy.getDefaultSiteCollectionTermStore().getTermSetById(termSetId).terms.usingCaching({
+        taxonomy.getDefaultSiteCollectionTermStore().getTermSetById(termSetId).terms.select('Id', 'Name', 'LocalCustomProperties').usingCaching({
           ...cachingOptions,
-          key: 'ProjectPhases_PhaseTerms',
+          key: this.generateStorageKey('ProjectPhases', 'PhaseTerms'),
         }).get(),
         this._spEntityPortalService.getEntityItem(pageContext.site.id.toString()),
       ]);
       const phases = phaseTerms
         .filter(term => term.LocalCustomProperties.ShowOnFrontpage !== 'false')
-        .map(term => new Phase(term, checklistData[term.Id] || { stats: {}, items: [] }, term.LocalCustomProperties));
+        .map(term => new Phase(term.Name, term.Id, checklistData[term.Id] || { stats: {}, items: [] }, term.LocalCustomProperties));
       let currentPhase: Phase = null;
       if (entityItem && entityItem.GtProjectPhase) {
         [currentPhase] = phases.filter(p => p.id.indexOf(entityItem.GtProjectPhase.TermGuid) !== -1);

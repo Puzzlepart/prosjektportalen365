@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as strings from 'ProjectStatusWebPartStrings';
+import styles from './SummarySection.module.scss';
 import { ISummarySectionProps } from './ISummarySectionProps';
 import { ISummarySectionState } from './ISummarySectionState';
 import StatusSectionBase from '../@StatusSectionBase';
@@ -17,22 +18,19 @@ export default class SummarySection extends StatusSectionBase<ISummarySectionPro
   public render(): React.ReactElement<ISummarySectionProps> {
     return (
       <StatusSectionBase {...this.props}>
-        <div className='ms-Grid-row'>
-          <div className='ms-Grid-col ms-sm6'>
-            <ProjectInformation
-              title='Prosjektinformasjon'
-              hubSiteUrl={this.props.hubSite.url}
-              siteId={this.props.pageContext.site.id.toString()}
-              webUrl={this.props.pageContext.web.absoluteUrl}
-              entity={this.props.entity}
-              filterField='GtShowFieldProjectStatus'
-              hideEditPropertiesButton={true} />
-          </div>
-          <div className='ms-Grid-col ms-sm6'>
-            <div className='ms-Grid'>
-              <div className='ms-Grid-row'>
-                {this.renderSections()}
-              </div>
+        <div className={styles.projectInformation}>
+          <ProjectInformation
+            hubSiteUrl={this.props.hubSite.url}
+            siteId={this.props.pageContext.site.id.toString()}
+            webUrl={this.props.pageContext.web.absoluteUrl}
+            entity={this.props.entity}
+            filterField='GtShowFieldProjectStatus'
+            hideEditPropertiesButton={true} />
+        </div>
+        <div className={styles.sections}>
+          <div className='ms-Grid'>
+            <div className='ms-Grid-row'>
+              {this.renderSections()}
             </div>
           </div>
         </div>

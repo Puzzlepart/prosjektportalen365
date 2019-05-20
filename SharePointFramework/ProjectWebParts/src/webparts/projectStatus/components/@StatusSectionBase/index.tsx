@@ -14,10 +14,8 @@ export default class StatusSectionBase<P extends IStatusSectionBaseProps, S exte
     public render(): React.ReactElement<P> {
         return (
             <div className={styles.statusSection}>
-                <div className={`${styles.container} ms-Grid`}>
-                    <div className='ms-Grid-row'>
-                        {this.props.children}
-                    </div>
+                <div className={styles.container}>
+                    {this.props.children}
                 </div>
             </div>
         );

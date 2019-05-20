@@ -9,7 +9,6 @@
     "sourceMap": true,
     "experimentalDecorators": true,
     "skipLibCheck": true,
-    "noUnusedLocals": true,
     "outDir": "lib",
     "typeRoots": [
       "./node_modules/@types",
@@ -17,7 +16,7 @@
     ],
     "types": [
       "es6-promise",
-      "webpack-env",      
+      "webpack-env",
       "sharepoint"
     ],
     "lib": [

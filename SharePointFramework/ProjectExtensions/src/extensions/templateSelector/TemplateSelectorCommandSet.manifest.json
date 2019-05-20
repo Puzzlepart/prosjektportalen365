@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/command-set-extension-manifest.schema.json",
+  "id": "c9080212-e63e-47cc-8278-00ad38c3f5a5",
+  "alias": "TemplateSelectorCommandSet",
+  "componentType": "Extension",
+  "extensionType": "ListViewCommandSet",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "items": {
+    "OPEN_TEMPLATE_SELECTOR": {
+      "title": {
+        "default": " "
+      },
+      "type": "command"
+    }
+  }
+}

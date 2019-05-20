@@ -52,6 +52,18 @@
           "properties": {}
         }
       }
+    },
+    "templateSelector": {
+      "pageUrl": "https://pzlcloud.sharepoint.com/sites/ByggerplanerforRomerikebryggeripark/Delte%20dokumenter/Forms/AllItems.aspx",
+      "customActions": {
+        "c9080212-e63e-47cc-8278-00ad38c3f5a5": {
+          "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
+          "properties": {
+            "sampleTextOne": "One item is selected in the list",
+            "sampleTextTwo": "This command is always visible."
+          }
+        }
+      }
     }
   }
 }

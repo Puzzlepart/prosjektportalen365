@@ -5,7 +5,7 @@
     margin: 0;
     @include ms-Grid-row;
     .header {
-      padding: 0 32px 20px 32px;
+      padding: 10px 0 0 0;
       .title {
         font-size: 28px;
         font-weight: 100;
@@ -16,7 +16,8 @@
       }
     }
     .actions {
-      > button, > a {
+      > button,
+      > a {
         margin: 0 8px 0 0;
       }
     }
@@ -40,4 +41,8 @@
       @include ms-sm4;
     }
   }
+}
+
+div[class="commandBarWrapper"] {
+  display: none !important;
 }

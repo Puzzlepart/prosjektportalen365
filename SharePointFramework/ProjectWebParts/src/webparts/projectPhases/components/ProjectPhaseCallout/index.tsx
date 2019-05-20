@@ -11,7 +11,7 @@ export default class ProjectPhaseCallout extends React.PureComponent<IProjectPha
     /**
      * Constructor
      * 
-     * @param {IProjectPhaseCalloutProps} props Initial props
+     * @param {IProjectPhaseCalloutProps} props Props
      */
     constructor(props: IProjectPhaseCalloutProps) {
         super(props);
@@ -34,7 +34,7 @@ export default class ProjectPhaseCallout extends React.PureComponent<IProjectPha
                         <span className={styles.title}>{phase.model.name}</span>
                     </div>
                     <div className={styles.body}>
-                        <p className={styles.subText}>{phase.model.term.LocalCustomProperties.PhasePurpose}</p>
+                        <p className={styles.subText}>{phase.model.properties.PhasePurpose}</p>
                         <div>
                             <div className={styles.stats} hidden={Object.keys(phase.model.checklistData.stats).length === 0}>
                                 {Object.keys(phase.model.checklistData.stats).map(status => {
