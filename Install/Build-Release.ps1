@@ -11,7 +11,7 @@ mkdir "$ReleasePath/Apps" >$null 2>&1
 Write-Host "[INFO] Building release [v$($PackageJson.version)]"
 
 Write-Host "[INFO] Copying Install.ps1 and site script source files"
-Copy-Item -Path "$PSScriptRoot/../SiteScripts/Src/" -Filter *.txt -Destination "$ReleasePath/SiteScripts" -Recurse -Force
+Copy-Item -Path "$PSScriptRoot/../SiteScripts/Src/*.txt" -Filter *.txt -Destination "$ReleasePath/SiteScripts" -Force
 Copy-Item -Path "$PSScriptRoot/Install.ps1" -Destination $ReleasePath -Force
 
 foreach ($Solution in @("PortfolioWebParts", "ProjectExtensions", "ProjectWebParts")) {

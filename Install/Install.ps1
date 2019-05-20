@@ -171,11 +171,13 @@ if (-not $SkipAppPackages.IsPresent) {
     Try {
         Write-Host "[INFO] Installing SharePoint Framework app packages to [$AppCatalogUrl]"
         $AppPackages = @(
-            ".\Apps\pp-portfolio-web-parts.sppkg",
-            ".\Apps\pp-project-extensions.sppkg",
-            ".\Apps\pp-project-web-parts.sppkg"
+            "pp-portfolio-web-parts",
+            "pp-project-extensions",
+            "pp-project-web-parts"
         )
-        $AppPackages | ForEach-Object { Add-PnPApp -Path $_ -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop -Connection $AppCatalogSiteConnection }
+        foreach($AppPkg in $AppPackages) {
+            Add-PnPApp -Path ".\Apps\$($AppPkg).sppkg" -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop -Connection $AppCatalogSiteConnection
+        }
         Write-Host "[INFO] SharePoint Framework app packages successfully installed to [$AppCatalogUrl]" -ForegroundColor Green
     }
     Catch {
