@@ -14,7 +14,6 @@ export interface IPortfolioOverviewViewSpItem {
     GtPortfolioColumns: PortfolioOverviewColumn[];
     GtPortfolioRefiners: PortfolioOverviewColumn[];
     GtPortfolioGroupBy?: PortfolioOverviewColumn;
-    GtPortfolioViewScope?: string;
 }
 
 export class PortfolioOverviewView {
@@ -38,7 +37,6 @@ export class PortfolioOverviewView {
         this.isDefaultView = item.GtPortfolioIsDefaultView;
         this.iconName = item.GtPortfolioFabricIcon;
         this.isPersonal = item.GtPortfolioIsPersonalView;
-        this.scope = item.GtPortfolioViewScope;
         this.columns = item.GtPortfolioColumnsId.map(id => columns.filter(col => col.id === id)[0]).sort((a, b) => a.sortOrder - b.sortOrder);
         this.refiners = item.GtPortfolioRefinersId.map(id => columns.filter(col => col.id === id)[0]).sort((a, b) => a.sortOrder - b.sortOrder);
         this.groupBy = columns.filter(col => col.id === item.GtPortfolioGroupById)[0];

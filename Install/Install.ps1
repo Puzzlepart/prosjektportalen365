@@ -76,22 +76,21 @@ if (-not $SkipSiteCreation.IsPresent) {
         Write-Host "[INFO] Portfolio site [$Url] promoted to hub site" -ForegroundColor Green
     }
     Catch {
-        Write-Host "[INFO] Failed to create site and promote to hub site: $($_.Exception.Message)"
+        Write-Host "[ERROR] Failed to create site and promote to hub site: $($_.Exception.Message)"
         exit 0
     }
 }
 
-Write-Host "[INFO] Setting permissions for AssociatedMemberGroup" -ForegroundColor Green
+Write-Host "[INFO] Setting permissions for associated member group"
 Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -RemoveRole Rediger
 Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -AddRole Lese
 
 Try {
     Write-Host "[INFO] Clearing QuickLaunch"    
-    Get-PnPNavigationNode -Location QuickLaunch | ForEach-Object { Remove-PnPNavigationNode -Identity $_.Id -Location QuickLaunch -Force }
+    Get-PnPNavigationNode -Location QuickLaunch | ForEach-Object { Remove-PnPNavigationNode -Identity $_ -Force }
 }
 Catch {
-    Write-Host "[INFO] Failed to clear QuickLaunch: $($_.Exception.Message)"
-    exit 0
+    Write-Host "[WARNING] Failed to clear QuickLaunch: $($_.Exception.Message)"
 }
 
 Try {
@@ -108,7 +107,7 @@ if (-not $SkipTemplate.IsPresent) {
         Apply-PnPProvisioningTemplate .\Templates\Portal.pnp -Connection $SiteConnection -ErrorAction Stop
     }
     Catch {
-        Write-Host "[INFO] Failed to apply PnP template [Portal] to [$Url]: $($_.Exception.Message)"
+        Write-Host "[ERROR] Failed to apply PnP template [Portal] to [$Url]: $($_.Exception.Message)"
         exit 0
     }
 }
