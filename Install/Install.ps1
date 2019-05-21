@@ -105,6 +105,7 @@ if (-not $SkipTemplate.IsPresent) {
     Try {
         Write-Host "[INFO] Applying PnP template [Portal] to [$Url]"
         Apply-PnPProvisioningTemplate .\Templates\Portal.pnp -Connection $SiteConnection -ErrorAction Stop
+        Write-Host "[INFO] Successfully applied PnP template [Portal] to [$Url]" -ForegroundColor Green
     }
     Catch {
         Write-Host "[ERROR] Failed to apply PnP template [Portal] to [$Url]: $($_.Exception.Message)"
@@ -132,6 +133,7 @@ if (-not $SkipSiteDesign.IsPresent) {
             }
             $SiteScriptIds += $SiteScript.Id.Guid
         }
+        Write-Host "[INFO] Successfully installed site scripts" -ForegroundColor Green
     }
     Catch {
         Write-Host "[INFO] Failed to install site scripts: $($_.Exception.Message)"
@@ -139,7 +141,7 @@ if (-not $SkipSiteDesign.IsPresent) {
     }
 
     Try {
-        Write-Host "[INFO] Installing site design"
+        Write-Host "[INFO] Installing site design [$SiteDesignName]"
     
         $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName -Connection $AdminSiteConnection
 
@@ -158,6 +160,7 @@ if (-not $SkipSiteDesign.IsPresent) {
             Write-Host "[INFO] Granting group $SiteDesignSecurityGroupId View access to site design [$SiteDesignName]"
             Grant-PnPSiteDesignRights -Identity $SiteDesign.Id.Guid -Principals @("c:0t.c|tenant|$SiteDesignSecurityGroupId")
         }
+        Write-Host "[INFO] Successfully installed site design [$SiteDesignName]" -ForegroundColor Green
     }
     Catch {
         Write-Host "[INFO] Failed to install site design: $($_.Exception.Message)"
@@ -175,7 +178,7 @@ if (-not $SkipAppPackages.IsPresent) {
         exit 0 
     }
     Try {
-        Write-Host "[INFO] Installing SharePoint Framework app packages to [$AppCatalogUrl]"
+        Write-Host "[INFO] Installing SharePoint Framework app packages to [$TenantAppCatalogUrl]"
         $AppPackages = @(
             "pp-portfolio-web-parts",
             "pp-project-extensions",
@@ -184,10 +187,10 @@ if (-not $SkipAppPackages.IsPresent) {
         foreach($AppPkg in $AppPackages) {
             Add-PnPApp -Path ".\Apps\$($AppPkg).sppkg" -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop -Connection $AppCatalogSiteConnection
         }
-        Write-Host "[INFO] SharePoint Framework app packages successfully installed to [$AppCatalogUrl]" -ForegroundColor Green
+        Write-Host "[INFO] SharePoint Framework app packages successfully installed to [$TenantAppCatalogUrl]" -ForegroundColor Green
     }
     Catch {
-        Write-Host "[INFO] Failed to install app packages to [$AppCatalogUrl]: $($_.Exception.Message)"
+        Write-Host "[INFO] Failed to install app packages to [$TenantAppCatalogUrl]: $($_.Exception.Message)"
         exit 0
     }
 }
