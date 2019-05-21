@@ -184,8 +184,16 @@ if (-not $SkipAppPackages.IsPresent) {
 
 if (-not $SkipTemplate.IsPresent) {
     Try {
+        $DenyAddAndCustomizePagesStatusEnum = [Microsoft.Online.SharePoint.TenantAdministration.DenyAddAndCustomizePagesStatus]
+        $Site = Get-PnPTenantSite -Detailed -Url $Url -Connection $AdminSiteConnection
+        $Site.DenyAddAndCustomizePages = $DenyAddAndCustomizePagesStatusEnum::Disabled 
+        $Site.Update()
+        $Site.Context.ExecuteQuery()
         Write-Host "[INFO] Applying PnP template [Portal] to [$Url]"
         Apply-PnPProvisioningTemplate .\Templates\Portal.pnp -Connection $SiteConnection -ErrorAction Stop
+        $Site.DenyAddAndCustomizePages = $DenyAddAndCustomizePagesStatusEnum::Enabled 
+        $Site.Update()
+        $Site.Context.ExecuteQuery()
         Write-Host "[INFO] Successfully applied PnP template [Portal] to [$Url]" -ForegroundColor Green
     }
     Catch {
