@@ -1,4 +1,4 @@
-Param(
+﻿Param(
     [Parameter(Mandatory = $true, HelpMessage = "N/A")]
     [string]$Url,
     [Parameter(Mandatory = $false, HelpMessage = "N/A")]
