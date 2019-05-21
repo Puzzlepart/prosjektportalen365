@@ -101,19 +101,6 @@ Catch {
     exit 0
 }
 
-if (-not $SkipTemplate.IsPresent) {
-    Try {
-        Write-Host "[INFO] Applying PnP template [Portal] to [$Url]"
-        Apply-PnPProvisioningTemplate .\Templates\Portal.pnp -Connection $SiteConnection -ErrorAction Stop
-        Write-Host "[INFO] Successfully applied PnP template [Portal] to [$Url]" -ForegroundColor Green
-    }
-    Catch {
-        Write-Host "[ERROR] Failed to apply PnP template [Portal] to [$Url]: $($_.Exception.Message)"
-        exit 0
-    }
-}
-
-
 if (-not $SkipSiteDesign.IsPresent) {
     $SiteScriptIds = @()
 
@@ -191,6 +178,18 @@ if (-not $SkipAppPackages.IsPresent) {
     }
     Catch {
         Write-Host "[INFO] Failed to install app packages to [$TenantAppCatalogUrl]: $($_.Exception.Message)"
+        exit 0
+    }
+}
+
+if (-not $SkipTemplate.IsPresent) {
+    Try {
+        Write-Host "[INFO] Applying PnP template [Portal] to [$Url]"
+        Apply-PnPProvisioningTemplate .\Templates\Portal.pnp -Connection $SiteConnection -ErrorAction Stop
+        Write-Host "[INFO] Successfully applied PnP template [Portal] to [$Url]" -ForegroundColor Green
+    }
+    Catch {
+        Write-Host "[ERROR] Failed to apply PnP template [Portal] to [$Url]: $($_.Exception.Message)"
         exit 0
     }
 }
