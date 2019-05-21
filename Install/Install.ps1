@@ -87,7 +87,7 @@ Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -AddRole
 
 Try {
     Write-Host "[INFO] Clearing QuickLaunch"    
-    Get-PnPNavigationNode -Location QuickLaunch | ForEach-Object { Remove-PnPNavigationNode -Identity $_ -Force }
+    Get-PnPNavigationNode -Location QuickLaunch | Remove-PnPNavigationNode -Force 
 }
 Catch {
     Write-Host "[WARNING] Failed to clear QuickLaunch: $($_.Exception.Message)"
