@@ -86,14 +86,6 @@ Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -RemoveR
 Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -AddRole Lese
 
 Try {
-    Write-Host "[INFO] Clearing QuickLaunch"    
-    Get-PnPNavigationNode -Location QuickLaunch | Remove-PnPNavigationNode -Force 
-}
-Catch {
-    Write-Host "[WARNING] Failed to clear QuickLaunch: $($_.Exception.Message)"
-}
-
-Try {
     $SiteConnection = Connect-SharePoint -Url $Url -ErrorAction Stop
 }
 Catch {
@@ -172,7 +164,7 @@ if (-not $SkipAppPackages.IsPresent) {
             "pp-project-web-parts"
         )
         foreach($AppPkg in $AppPackages) {
-            Add-PnPApp -Path ".\Apps\$($AppPkg).sppkg" -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop -Connection $AppCatalogSiteConnection
+            Add-PnPApp -Path ".\Apps\$($AppPkg).sppkg" -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop -Connection $AppCatalogSiteConnection >$null 2>&1
         }
         Write-Host "[INFO] SharePoint Framework app packages successfully installed to [$TenantAppCatalogUrl]" -ForegroundColor Green
     }
@@ -184,15 +176,15 @@ if (-not $SkipAppPackages.IsPresent) {
 
 if (-not $SkipTemplate.IsPresent) {
     Try {
+        Write-Host "[INFO] Applying PnP template [Portal] to [$Url]"
         $DenyAddAndCustomizePagesStatusEnum = [Microsoft.Online.SharePoint.TenantAdministration.DenyAddAndCustomizePagesStatus]
         $Site = Get-PnPTenantSite -Detailed -Url $Url -Connection $AdminSiteConnection
         $Site.DenyAddAndCustomizePages = $DenyAddAndCustomizePagesStatusEnum::Disabled 
-        $Site.Update()
+        $Site.Update() >$null 2>&1
         $Site.Context.ExecuteQuery()
-        Write-Host "[INFO] Applying PnP template [Portal] to [$Url]"
         Apply-PnPProvisioningTemplate .\Templates\Portal.pnp -Connection $SiteConnection -ErrorAction Stop
         $Site.DenyAddAndCustomizePages = $DenyAddAndCustomizePagesStatusEnum::Enabled 
-        $Site.Update()
+        $Site.Update() >$null 2>&1
         $Site.Context.ExecuteQuery()
         Write-Host "[INFO] Successfully applied PnP template [Portal] to [$Url]" -ForegroundColor Green
     }
@@ -200,6 +192,15 @@ if (-not $SkipTemplate.IsPresent) {
         Write-Host "[ERROR] Failed to apply PnP template [Portal] to [$Url]: $($_.Exception.Message)"
         exit 0
     }
+}
+
+Try {
+    Write-Host "[INFO] Clearing QuickLaunch"    
+    Get-PnPNavigationNode -Location QuickLaunch | Remove-PnPNavigationNode -Force 
+    Write-Host "[INFO] Successfully cleared QuickLaunch" -ForegroundColor Green
+}
+Catch {
+    Write-Host "[WARNING] Failed to clear QuickLaunch: $($_.Exception.Message)"
 }
 
 $sw.Stop()
