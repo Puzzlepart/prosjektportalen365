@@ -2,19 +2,25 @@
 $sw = [Diagnostics.Stopwatch]::StartNew()
 
 $PackageJson = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Json
+
+#region Creating release path
 $ReleasePath = "$PSScriptRoot/../Release/$($PackageJson.version)"
 mkdir $ReleasePath >$null 2>&1
 mkdir "$ReleasePath/Templates" >$null 2>&1
 mkdir "$ReleasePath/SiteScripts" >$null 2>&1
 mkdir "$ReleasePath/Apps" >$null 2>&1
+#endregion
 
 Write-Host "[INFO] Building release [v$($PackageJson.version)]"
 
+#region Copying source files
 Write-Host "[INFO] Copying Install.ps1 and site script source files"
 Copy-Item -Path "$PSScriptRoot/../SiteScripts/Src/*.txt" -Filter *.txt -Destination "$ReleasePath/SiteScripts" -Force
 Copy-Item -Path "$PSScriptRoot/Install.ps1" -Destination $ReleasePath -Force
 (Get-Content "$ReleasePath/Install.ps1") -Replace 'VERSION_PLACEHOLDER', $PackageJson.version | Set-Content "$ReleasePath/Install.ps1"
+#endregion
 
+#region Package SharePoint Framework solutions
 foreach ($Solution in @("PortfolioWebParts", "ProjectExtensions", "ProjectWebParts")) {
     Set-Location "$PSScriptRoot\..\SharePointFramework\$Solution"
     $PackageSolutionJson = Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json
@@ -22,14 +28,17 @@ foreach ($Solution in @("PortfolioWebParts", "ProjectExtensions", "ProjectWebPar
     npm run-script package >$null 2>&1
     Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse | Where-Object{-not ($_.PSIsContainer -or (Test-Path "$ReleasePath/Apps/$_"))} | Copy-Item -Destination "$ReleasePath/Apps" -Force
 }
+#endregion
 
 Set-Location $PSScriptRoot
 
+#region Build PnP templates
 Write-Host "[INFO] Building [Portfolio] PnP template"
 Convert-PnPFolderToProvisioningTemplate -Out "$ReleasePath/Templates/Portfolio.pnp" -Folder "$PSScriptRoot/../Templates/Portfolio" -Force
 
 Write-Host "[INFO] Building [Taxonomy] PnP template"
 Convert-PnPFolderToProvisioningTemplate -Out "$ReleasePath/Templates/Taxonomy.pnp" -Folder "$PSScriptRoot/../Templates/Taxonomy" -Force
+#endregion
 
 $sw.Stop()
 
