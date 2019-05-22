@@ -4,7 +4,8 @@
   "description": "Prosjektportalen 365",
   "main": "n/a",
   "scripts": {
-    "build-release": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1"
+    "build-release": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1",
+    "postversion": "npm run-script build-release"
   },
   "repository": {
     "type": "git",

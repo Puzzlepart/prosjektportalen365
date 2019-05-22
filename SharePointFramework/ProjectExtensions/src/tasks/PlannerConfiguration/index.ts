@@ -12,7 +12,7 @@ import { BaseTaskError } from '../BaseTaskError';
 
 export default class PlannerConfiguration extends BaseTask {
     constructor() {
-        super('SetupProjectInformation');
+        super('PlannerConfiguration');
     }
 
     /**
@@ -207,8 +207,8 @@ export default class PlannerConfiguration extends BaseTask {
                 params.templateParameters = this.updateTemplateParameters(groupPlans, params.templateParameters);
                 params.templateSchema = this.updateTemplateSchema(groupPlans, params.templateSchema);
             } catch (error) {
-                Logger.log({ message: '(ProjectSetupApplicationCustomizer) PlannerConfiguration: Failed to set up Plans, Buckets and Tasks', level: LogLevel.Warning });
-                throw new BaseTaskError(this.name, strings.PlannerConfigurationErrorMessage, error);
+                Logger.log({ message: '(ProjectSetupApplicationCustomizer) PlannerConfiguration: Failed to set up Plans, Buckets and Tasks', data: error, level: LogLevel.Warning });
+                throw new BaseTaskError(this.name, strings.PlannerConfigurationErrorMessage, `${error.statusCode}: ${error.message}`);
             }
         }
         return params;
