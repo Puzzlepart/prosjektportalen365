@@ -46,7 +46,7 @@ function Connect-SharePoint {
 }
 
 [System.Uri]$Uri = $Url
-$Alias = $Uri.Segments[$Uri.Segments.Length - 1]
+$Alias = $Uri.Segments | Select-Object -Last 1
 $AdminSiteConnection = $null
 $AppCatalogSiteConnection = $null
 $SiteConnection = $null
