@@ -25,13 +25,17 @@ export async function getHubFiles<T>(hub: IHubSite, listName: string, model?: ne
  * @param {string[]} expands Expands
  */
 export async function getHubItems<T>(hub: IHubSite, listName: string, model?: new (item: any, web: Web) => T, query?: CamlQuery, expands?: string[]) {
-    let items: any[];
-    if (query) {
-        items = await hub.web.lists.getByTitle(listName).getItemsByCAMLQuery(query, ...expands);
-    } else {
-        items = await hub.web.lists.getByTitle(listName).items.get();
+    try {
+        let items: any[];
+        if (query) {
+            items = await hub.web.lists.getByTitle(listName).getItemsByCAMLQuery(query, ...expands);
+        } else {
+            items = await hub.web.lists.getByTitle(listName).items.get();
+        }
+        return model ? items.map(item => new model(item, hub.web)) : items;
+    } catch (error) {
+        throw error;
     }
-    return model ? items.map(item => new model(item, hub.web)) : items;
 }
 
 /**

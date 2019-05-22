@@ -11,10 +11,13 @@ import { getHubItems, getCurrentPhase } from '../../data';
 import { TemplateFile } from '../../models';
 
 export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<ITemplateSelectorCommandSetProperties> {
-  private _hub: IHubSite;
-  private _currentPhase: string;
   private _templates: TemplateFile[];
   private _container: Element;
+
+  constructor() {
+    super();
+    this._templates = [];
+  }
 
   @override
   public async onInit() {
@@ -22,11 +25,11 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
     if (OPEN_TEMPLATE_SELECTOR_COMMAND) {
       try {
         const { pageContext } = this.context;
-        this._hub = await HubSiteService.GetHubSiteById(pageContext.web.absoluteUrl, pageContext.legacyPageContext.hubSiteId);
-        this._currentPhase = await getCurrentPhase(this._hub, 'abcfc9d9-a263-4abb-8234-be973c46258a', pageContext.site.id.toString());
+        const hub = await HubSiteService.GetHubSiteById(pageContext.web.absoluteUrl, pageContext.legacyPageContext.hubSiteId);
+        const currentPhase = await getCurrentPhase(hub, this.properties.phaseTermSetId || 'abcfc9d9-a263-4abb-8234-be973c46258a', pageContext.site.id.toString());
         this._templates = await getHubItems(
-          this._hub,
-          'Dokumenter',
+          hub,
+          this.properties.templateLibrary || 'Malbibliotek',
           TemplateFile,
           {
             ViewXml: `<View>
@@ -36,7 +39,7 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
                         <Or>
                             <Eq>
                                 <FieldRef Name="GtProjectPhase" />
-                                <Value Type="Text">${this._currentPhase}</Value>
+                                <Value Type="Text">${currentPhase}</Value>
                             </Eq>
                             <Eq>
                                 <FieldRef Name="GtProjectPhase" />
@@ -53,8 +56,6 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
         </View>` },
           ['File'],
         );
-        OPEN_TEMPLATE_SELECTOR_COMMAND.title = strings.TemplateLibrarySelectModalTitle;
-        OPEN_TEMPLATE_SELECTOR_COMMAND.visible = true;
       } catch (error) { }
     }
   }
@@ -63,7 +64,7 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
   public onListViewUpdated(event: IListViewCommandSetListViewUpdatedParameters): void {
     const OPEN_TEMPLATE_SELECTOR_COMMAND: Command = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR');
     if (OPEN_TEMPLATE_SELECTOR_COMMAND) {
-      OPEN_TEMPLATE_SELECTOR_COMMAND.visible = event.selectedRows.length === 0;
+      OPEN_TEMPLATE_SELECTOR_COMMAND.visible = event.selectedRows.length === 0 && this._templates.length > 0;
     }
   }
 
