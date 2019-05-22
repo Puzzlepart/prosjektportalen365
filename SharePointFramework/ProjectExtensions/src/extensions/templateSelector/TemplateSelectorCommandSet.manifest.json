@@ -10,7 +10,7 @@
   "items": {
     "OPEN_TEMPLATE_SELECTOR": {
       "title": {
-        "default": " "
+        "default": "Hent dokumenter fra malbiblioteket"
       },
       "type": "command"
     }
