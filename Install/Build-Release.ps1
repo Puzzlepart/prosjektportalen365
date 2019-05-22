@@ -25,8 +25,8 @@ foreach ($Solution in @("PortfolioWebParts", "ProjectExtensions", "ProjectWebPar
 
 Set-Location $PSScriptRoot
 
-Write-Host "[INFO] Building [Portal] PnP template"
-Convert-PnPFolderToProvisioningTemplate -Out "$ReleasePath/Templates/Portal.pnp" -Folder "$PSScriptRoot/../Templates/Portal" -Force
+Write-Host "[INFO] Building [Portfolio] PnP template"
+Convert-PnPFolderToProvisioningTemplate -Out "$ReleasePath/Templates/Portfolio.pnp" -Folder "$PSScriptRoot/../Templates/Portfolio" -Force
 
 Write-Host "[INFO] Building [Taxonomy] PnP template"
 Convert-PnPFolderToProvisioningTemplate -Out "$ReleasePath/Templates/Taxonomy.pnp" -Folder "$PSScriptRoot/../Templates/Taxonomy" -Force

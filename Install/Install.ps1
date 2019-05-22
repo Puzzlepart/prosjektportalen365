@@ -33,10 +33,8 @@ function Connect-SharePoint {
     $Connection = $null
     Try {
         if($UseWebLogin.IsPresent) {
-            Write-Host "[INFO] Connecting to [$Url] using Web Login"
             $Connection = Connect-PnPOnline -Url $Url -UseWebLogin -ReturnConnection -ErrorAction Stop
         } else {
-            Write-Host "[INFO] Connecting to [$Url] using Windows Credentials Manager"
             $Connection = Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ReturnConnection -ErrorAction Stop
         }
     }
@@ -177,14 +175,14 @@ if (-not $SkipAppPackages.IsPresent) {
 
 if (-not $SkipTemplate.IsPresent) {
     Try {
-        Write-Host "[INFO] Applying PnP template [Portal] to [$Url]"
+        Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
         $DenyAddAndCustomizePagesStatusEnum = [Microsoft.Online.SharePoint.TenantAdministration.DenyAddAndCustomizePagesStatus]
         $Site = Get-PnPTenantSite -Detailed -Url $Url -Connection $AdminSiteConnection
         $Site.DenyAddAndCustomizePages = $DenyAddAndCustomizePagesStatusEnum::Disabled 
         $Site.Update() >$null 2>&1
         $Site.Context.ExecuteQuery()
-        Apply-PnPProvisioningTemplate .\Templates\Portal.pnp -Connection $SiteConnection -ErrorAction Stop
-        Write-Host "[INFO] Successfully applied PnP template [Portal] to [$Url]" -ForegroundColor Green
+        Apply-PnPProvisioningTemplate .\Templates\Portfolio.pnp -Connection $SiteConnection -ErrorAction Stop
+        Write-Host "[INFO] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
         Write-Host "[INFO] Applying PnP template [Taxonomy] to [$Url]"
         Apply-PnPProvisioningTemplate .\Templates\Taxonomy.pnp -Connection $SiteConnection -ErrorAction Stop
         Write-Host "[INFO] Successfully applied PnP template [Taxonomy] to [$Url]" -ForegroundColor Green
