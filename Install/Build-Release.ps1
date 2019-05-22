@@ -4,7 +4,8 @@ $sw = [Diagnostics.Stopwatch]::StartNew()
 $PackageJson = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Json
 
 #region Creating release path
-$ReleasePath = "$PSScriptRoot/../Release/$($PackageJson.version)"
+$GitHash = git log --pretty=format:'%h' -n 1
+$ReleasePath = "$PSScriptRoot/../Release/$($PackageJson.name)-$($PackageJson.version).$($GitHash)"
 mkdir $ReleasePath >$null 2>&1
 mkdir "$ReleasePath/Templates" >$null 2>&1
 mkdir "$ReleasePath/SiteScripts" >$null 2>&1
@@ -41,5 +42,10 @@ Convert-PnPFolderToProvisioningTemplate -Out "$ReleasePath/Templates/Taxonomy.pn
 #endregion
 
 $sw.Stop()
+
+
+Add-Type -Assembly "System.IO.Compression.FileSystem"
+
+[IO.Compression.ZipFile]::CreateFromDirectory($ReleasePath, "$($ReleasePath).zip") 
 
 Write-Host "[INFO] Done building release [v$($PackageJson.version)] in [$($sw.Elapsed)]"
