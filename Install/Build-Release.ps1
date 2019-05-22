@@ -13,6 +13,7 @@ Write-Host "[INFO] Building release [v$($PackageJson.version)]"
 Write-Host "[INFO] Copying Install.ps1 and site script source files"
 Copy-Item -Path "$PSScriptRoot/../SiteScripts/Src/*.txt" -Filter *.txt -Destination "$ReleasePath/SiteScripts" -Force
 Copy-Item -Path "$PSScriptRoot/Install.ps1" -Destination $ReleasePath -Force
+(Get-Content "$ReleasePath/Install.ps1") -Replace 'VERSION_PLACEHOLDER', $PackageJson.version | Set-Content "$ReleasePath/Install.ps1"
 
 foreach ($Solution in @("PortfolioWebParts", "ProjectExtensions", "ProjectWebParts")) {
     Set-Location "$PSScriptRoot\..\SharePointFramework\$Solution"

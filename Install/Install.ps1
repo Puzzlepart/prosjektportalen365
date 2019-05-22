@@ -22,6 +22,7 @@
 )
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
+Write-Host "[INFO] Installing [Prosjektportalen 365] [VERSION_PLACEHOLDER]"
 
 function Connect-SharePoint {
     Param(
