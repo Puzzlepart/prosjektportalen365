@@ -76,7 +76,7 @@ if (-not $SkipSiteCreation.IsPresent) {
         Write-Host "[INFO] Portfolio site [$Url] promoted to hub site" -ForegroundColor Green
     }
     Catch {
-        Write-Host "[ERROR] Failed to create site and promote to hub site: $($_.Exception.Message)"
+        Write-Host "[ERROR] Failed to create site and promote to hub site: $($_.Exception.Message)" -ForegroundColor Red
         exit 0
     }
 }
@@ -89,7 +89,7 @@ Try {
     $SiteConnection = Connect-SharePoint -Url $Url -ErrorAction Stop
 }
 Catch {
-    Write-Host "[INFO] Failed to connect to [$Url]: $($_.Exception.Message)"
+    Write-Host "[ERROR] Failed to connect to [$Url]: $($_.Exception.Message)" -ForegroundColor Red
     exit 0
 }
 
@@ -115,7 +115,7 @@ if (-not $SkipSiteDesign.IsPresent) {
         Write-Host "[INFO] Successfully installed site scripts" -ForegroundColor Green
     }
     Catch {
-        Write-Host "[INFO] Failed to install site scripts: $($_.Exception.Message)"
+        Write-Host "[ERROR] Failed to install site scripts: $($_.Exception.Message)" -ForegroundColor Red
         exit 0
     }
 
@@ -142,7 +142,7 @@ if (-not $SkipSiteDesign.IsPresent) {
         Write-Host "[INFO] Successfully installed site design [$SiteDesignName]" -ForegroundColor Green
     }
     Catch {
-        Write-Host "[INFO] Failed to install site design: $($_.Exception.Message)"
+        Write-Host "[ERROR] Failed to install site design: $($_.Exception.Message)" -ForegroundColor Red
         exit 0
     }
 }
@@ -153,7 +153,7 @@ if (-not $SkipAppPackages.IsPresent) {
         $AppCatalogSiteConnection = Connect-SharePoint -Url $TenantAppCatalogUrl -ErrorAction Stop
     }
     Catch {
-        Write-Host "[INFO] Failed to connect to [$TenantAppCatalogUrl]: $($_.Exception.Message)"
+        Write-Host "[ERROR] Failed to connect to [$TenantAppCatalogUrl]: $($_.Exception.Message)" -ForegroundColor Red
         exit 0 
     }
     Try {
@@ -169,7 +169,7 @@ if (-not $SkipAppPackages.IsPresent) {
         Write-Host "[INFO] SharePoint Framework app packages successfully installed to [$TenantAppCatalogUrl]" -ForegroundColor Green
     }
     Catch {
-        Write-Host "[INFO] Failed to install app packages to [$TenantAppCatalogUrl]: $($_.Exception.Message)"
+        Write-Host "[ERROR] Failed to install app packages to [$TenantAppCatalogUrl]: $($_.Exception.Message)" -ForegroundColor Red
         exit 0
     }
 }
@@ -183,13 +183,16 @@ if (-not $SkipTemplate.IsPresent) {
         $Site.Update() >$null 2>&1
         $Site.Context.ExecuteQuery()
         Apply-PnPProvisioningTemplate .\Templates\Portal.pnp -Connection $SiteConnection -ErrorAction Stop
+        Write-Host "[INFO] Successfully applied PnP template [Portal] to [$Url]" -ForegroundColor Green
+        Write-Host "[INFO] Applying PnP template [Taxonomy] to [$Url]"
+        Apply-PnPProvisioningTemplate .\Templates\Taxonomy.pnp -Connection $SiteConnection -ErrorAction Stop
+        Write-Host "[INFO] Successfully applied PnP template [Taxonomy] to [$Url]" -ForegroundColor Green
         $Site.DenyAddAndCustomizePages = $DenyAddAndCustomizePagesStatusEnum::Enabled 
         $Site.Update() >$null 2>&1
         $Site.Context.ExecuteQuery()
-        Write-Host "[INFO] Successfully applied PnP template [Portal] to [$Url]" -ForegroundColor Green
     }
     Catch {
-        Write-Host "[ERROR] Failed to apply PnP template [Portal] to [$Url]: $($_.Exception.Message)"
+        Write-Host "[ERROR] Failed to apply PnP templates to [$Url]: $($_.Exception.Message)" -ForegroundColor Red
         exit 0
     }
 }
@@ -200,12 +203,15 @@ Try {
     Write-Host "[INFO] Successfully cleared QuickLaunch" -ForegroundColor Green
 }
 Catch {
-    Write-Host "[WARNING] Failed to clear QuickLaunch: $($_.Exception.Message)"
+    Write-Host "[WARNING] Failed to clear QuickLaunch: $($_.Exception.Message)" -ForegroundColor Yellow
 }
 
 $sw.Stop()
 
+Write-Host "[REQUIRED ACTION] Go to $($AdminSiteUrl)/_layouts/15/online/AdminHome.aspx#/webApiPermissionManagement and approve the pending requests" -ForegroundColor Yellow
+
 Write-Host "[INFO] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
+
 
 Disconnect-PnPOnline -Connection $AppCatalogSiteConnection
 Disconnect-PnPOnline -Connection $AdminSiteConnection
