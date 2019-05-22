@@ -196,7 +196,7 @@ if (-not $SkipTemplate.IsPresent) {
 
 Try {
     Write-Host "[INFO] Clearing QuickLaunch"    
-    Get-PnPNavigationNode -Location QuickLaunch | Remove-PnPNavigationNode -Force 
+    Get-PnPNavigationNode -Location QuickLaunch -Connection $SiteConnection | Remove-PnPNavigationNode -Connection $SiteConnection -Force 
     Write-Host "[INFO] Successfully cleared QuickLaunch" -ForegroundColor Green
 }
 Catch {
