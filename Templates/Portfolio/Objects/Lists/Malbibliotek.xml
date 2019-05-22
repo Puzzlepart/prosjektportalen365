@@ -1,0 +1,27 @@
+
+<pnp:ListInstance Title="Malbibliotek" TemplateType="101" Url="Malbibliotek" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="500" DraftVersionVisibility="0" EnableAttachments="false" 
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    <pnp:Views>
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle dokumenter" Url="{site}/Malbibliotek/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/dlicon.png?rev=47">
+            <Query>
+                <OrderBy>
+                    <FieldRef Name="FileLeafRef" />
+                </OrderBy>
+            </Query>
+            <ViewFields>
+                <FieldRef Name="DocIcon" />
+                <FieldRef Name="LinkFilename" />
+                <FieldRef Name="Title" />
+                <FieldRef Name="GtProjectPhase" />
+                <FieldRef Name="Modified" />
+                <FieldRef Name="Editor" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">30</RowLimit>
+            <Aggregations Value="Off" />
+            <JSLink>clienttemplates.js</JSLink>
+        </View>
+    </pnp:Views>
+    <pnp:FieldRefs>
+        <pnp:FieldRef ID="325543a5-815d-485d-a9a5-e0773ad762e9" Name="GtProjectPhase" DisplayName="Fase" />
+    </pnp:FieldRefs>
+</pnp:ListInstance>
