@@ -1,6 +1,7 @@
 import { BaseClientSideWebPart, IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
-import "@pnp/polyfill-ie11";
+import '@pnp/polyfill-ie11';
 import { sp } from '@pnp/sp';
+import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
 import MSGraphHelper from 'msgraph-helper';
 import * as strings from 'ProjectPhasesWebPartStrings';
 import * as React from 'react';
@@ -11,8 +12,10 @@ import { IProjectPhasesWebPartProps } from './IProjectPhasesWebPartProps';
 export default class ProjectPhasesWebPart extends BaseClientSideWebPart<IProjectPhasesWebPartProps> {
   public async onInit() {
     this.context.statusRenderer.clearLoadingIndicator(this.domElement);
-    await MSGraphHelper.Init(this.context.msGraphClientFactory, 'v1.0');
+    Logger.subscribe(new ConsoleListener());
+    Logger.activeLogLevel = LogLevel.Info;
     sp.setup({ spfxContext: this.context });
+    await MSGraphHelper.Init(this.context.msGraphClientFactory, 'v1.0');
   }
 
   public render(): void {
