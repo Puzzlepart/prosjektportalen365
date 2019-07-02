@@ -21,12 +21,17 @@ Copy-Item -Path "$PSScriptRoot/Install.ps1" -Destination $ReleasePath -Force
 (Get-Content "$ReleasePath/Install.ps1") -Replace 'VERSION_PLACEHOLDER', $PackageJson.version | Set-Content "$ReleasePath/Install.ps1"
 #endregion
 
+
 #region Package SharePoint Framework solutions
-foreach ($Solution in @("PortfolioWebParts", "ProjectExtensions", "ProjectWebParts")) {
+
+Set-Location "$PSScriptRoot\..\SharePointFramework\@Shared"
+pnpm install
+
+foreach ($Solution in @("ProjectWebParts", "PortfolioWebParts", "ProjectExtensions")) {
     Set-Location "$PSScriptRoot\..\SharePointFramework\$Solution"
     $PackageSolutionJson = Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json
     Write-Host "[INFO] Packaging SharePoint Framework solution [$($Solution)] [v$($PackageSolutionJson.solution.version)]"
-    pnpm i
+    pnpm install
     pnpm run-script package
     Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse | Where-Object{-not ($_.PSIsContainer -or (Test-Path "$ReleasePath/Apps/$_"))} | Copy-Item -Destination "$ReleasePath/Apps" -Force
 }
