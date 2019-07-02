@@ -10,7 +10,7 @@ try {
     var env = require('./config/env.json');
     spfx_pkgdeploy(build, require('./config/package-solution.json'), env);
 } catch (error) {
-    build.warn("Skipping spfx_pkgdeploy due to missing config/env.json");
+    build.log("Skipping spfx_pkgdeploy due to missing config/env.json");
 }
 
 gulp.task('version-sync', () => {
