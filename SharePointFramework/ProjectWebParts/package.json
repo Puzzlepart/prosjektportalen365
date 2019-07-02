@@ -63,6 +63,7 @@
     "@types/mocha": "2.2.38",
     "ajv": "~5.2.2",
     "gulp": "~3.9.1",
-    "spfx-pkgdeploy": "^0.3.0"
+    "spfx-pkgdeploy": "^0.3.0",
+    "tslint-microsoft-contrib": "^6.2.0"
   }
 }
