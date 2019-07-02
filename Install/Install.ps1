@@ -179,15 +179,19 @@ if (-not $SkipTemplate.IsPresent) {
         $DenyAddAndCustomizePagesStatusEnum = [Microsoft.Online.SharePoint.TenantAdministration.DenyAddAndCustomizePagesStatus]
         $Site = Get-PnPTenantSite -Detailed -Url $Url -Connection $AdminSiteConnection
         $Site.DenyAddAndCustomizePages = $DenyAddAndCustomizePagesStatusEnum::Disabled 
-        $Site.Update() >$null 2>&1
+        $Site.Update() | Out-Null
         $Site.Context.ExecuteQuery()
-        Apply-PnPProvisioningTemplate .\Templates\Portfolio.pnp -Connection $SiteConnection -ErrorAction Stop
-        Write-Host "[INFO] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
+        
         Write-Host "[INFO] Applying PnP template [Taxonomy] to [$Url]"
         Apply-PnPProvisioningTemplate .\Templates\Taxonomy.pnp -Connection $SiteConnection -ErrorAction Stop
         Write-Host "[INFO] Successfully applied PnP template [Taxonomy] to [$Url]" -ForegroundColor Green
+        
+        Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
+        Apply-PnPProvisioningTemplate .\Templates\Portfolio.pnp -Connection $SiteConnection -ErrorAction Stop
+        Write-Host "[INFO] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
+        
         $Site.DenyAddAndCustomizePages = $DenyAddAndCustomizePagesStatusEnum::Enabled 
-        $Site.Update() >$null 2>&1
+        $Site.Update() | Out-Null
         $Site.Context.ExecuteQuery()
     }
     Catch {
