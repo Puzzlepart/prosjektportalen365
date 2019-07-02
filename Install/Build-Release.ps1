@@ -26,6 +26,7 @@ foreach ($Solution in @("PortfolioWebParts", "ProjectExtensions", "ProjectWebPar
     Set-Location "$PSScriptRoot\..\SharePointFramework\$Solution"
     $PackageSolutionJson = Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json
     Write-Host "[INFO] Packaging SharePoint Framework solution [$($Solution)] [v$($PackageSolutionJson.solution.version)]"
+    pnpm i
     pnpm run-script package
     Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse | Where-Object{-not ($_.PSIsContainer -or (Test-Path "$ReleasePath/Apps/$_"))} | Copy-Item -Destination "$ReleasePath/Apps" -Force
 }
