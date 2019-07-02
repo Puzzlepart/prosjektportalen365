@@ -39,6 +39,7 @@
     "@types/webpack-env": "1.13.1",
     "bluebird": "^3.5.5",
     "msgraph-helper": "^0.7.1",
+    "node-fetch": "^2.6.0",
     "object-get": "^2.1.0",
     "office-ui-fabric-react": "5.134.0",
     "prosjektportalen-spfx-shared": "link:C:/code/prosjektportalen365/SharePointFramework/@Shared/",
