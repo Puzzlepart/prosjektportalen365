@@ -81,8 +81,9 @@ if (-not $SkipSiteCreation.IsPresent) {
 }
 
 Write-Host "[INFO] Setting permissions for associated member group"
-Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -RemoveRole Rediger
-Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -AddRole Lese
+# Must use english names to avoid errors, even on non 1033 sites
+Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -RemoveRole Edit
+Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -AddRole Read
 
 Try {
     $SiteConnection = Connect-SharePoint -Url $Url -ErrorAction Stop
