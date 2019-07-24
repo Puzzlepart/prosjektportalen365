@@ -1,11 +1,12 @@
 {
   "@microsoft/generator-sharepoint": {
-    "packageManager": "pnpm",
-    "isCreatingSolution": false,
-    "environment": "spo",
-    "version": "1.8.1",
+    "version": "1.9.0",    
     "libraryName": "project-extensions",
     "libraryId": "773f8a12-1d75-44bc-ad98-a33a5d7aebca",
+    "environment": "spo",
+    "packageManager": "pnpm",
+    "isCreatingSolution": true,
+    "isDomainIsolated": false,
     "componentType": "extension",
     "extensionType": "ListViewCommandSet"
   }

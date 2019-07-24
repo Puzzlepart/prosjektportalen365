@@ -38,7 +38,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
     const { isSiteAdmin, groupId, hubSiteId } = this.context.pageContext.legacyPageContext;
     if (isSiteAdmin && groupId) {
       try {
-        Logger.log({ message: '(ProjectSetupApplicationCustomizer) onInit: Initializing pre-conditionals before initializing setup', level: LogLevel.Info });
+        Logger.log({ message: '(ProjectSetupApplicationCustomizer) onInit: Initializing pre-conditionals before initializing setup', data: { version: this.context.manifest.version }, level: LogLevel.Info });
         const topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top);
         this._domElement = topPlaceholder.domElement;
         if (this.context.pageContext.web.language !== 1044) {

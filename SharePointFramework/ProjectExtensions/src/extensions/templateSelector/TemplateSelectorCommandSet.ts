@@ -89,7 +89,7 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
       templates: this._templates,
     });
     this._container = document.createElement('DIV');
-    document.body.append(this._container);
+    document.body.appendChild(this._container);
     ReactDOM.render(templateLibrarySelectModal, this._container);
   }
 
