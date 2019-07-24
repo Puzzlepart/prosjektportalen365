@@ -6,6 +6,9 @@
   "version": "*",
   "manifestVersion": 2,
   "requiresCustomScript": false,
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
   "hiddenFromToolbox": false,
   "preconfiguredEntries": [
     {

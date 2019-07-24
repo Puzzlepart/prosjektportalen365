@@ -18,6 +18,7 @@ import ProjectInformation from '../../../../../ProjectWebParts/lib/webparts/proj
 import MSGraph from 'msgraph-helper';
 import { ProjectListModel, ISPProjectItem, ISPUser, IGraphGroup } from '../models';
 
+
 export default class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
   public static defaultProps = ProjectListDefaultProps;
 
