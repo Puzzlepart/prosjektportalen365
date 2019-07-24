@@ -11,6 +11,7 @@ dependencies:
   '@pnp/common': 1.3.2
   '@pnp/logging': 1.3.2
   '@pnp/odata': 1.3.2
+  '@pnp/polyfill-ie11': 1.0.1
   '@pnp/sp': 1.3.2
   '@pnp/sp-clientsvc': 1.3.2
   '@pnp/sp-taxonomy': 1.3.2
@@ -23,7 +24,7 @@ dependencies:
   react: 16.7.0
   react-dom: 16.7.0
   sp-entityportal-service: 0.6.3
-  sp-hubsite-service: 0.1.0
+  sp-hubsite-service: 0.2.0
   sp-js-provisioning: 0.10.7
   spfx-jsom: 0.6.0
   string-format: 2.0.0
@@ -37,13 +38,8 @@ devDependencies:
   '@types/mocha': 2.2.38
   '@types/sharepoint': 2016.1.2
   ajv: 5.2.5
-  bluebird: 3.5.4
   gulp: 3.9.1
-  node-fetch: 2.3.0
   spfx-pkgdeploy: 0.3.0
-  tslint: 5.9.1
-  tslint-microsoft-contrib: 6.1.1
-  typescript: 2.4.2
 packages:
   /@babel/code-frame/7.0.0:
     dependencies:
@@ -821,6 +817,20 @@ packages:
       '@pnp/logging': 1.3.2
     resolution:
       integrity: sha512-47yShM69ZYiIBkZrk9zMve4kDAsLBdq0CmtSzmGLMh6ecnEJJzFklqO6W8pydrkqLniX5P0Ag7DDkQyWHbzvwA==
+  /@pnp/polyfill-ie11/1.0.1:
+    dependencies:
+      '@types/core-js': 2.5.0
+      core-js: 2.6.2
+      es6-map: 0.1.5
+      whatwg-fetch: 3.0.0
+    dev: false
+    peerDependencies:
+      '@pnp/common': '*'
+      '@pnp/logging': '*'
+      '@pnp/odata': '*'
+      '@pnp/sp': '*'
+    resolution:
+      integrity: sha512-IdJPRPtx5OzCsiABnxrAH6kxlJUwLT6ISPsJu+IJzFMjwThC2mO7bf9zGzOhNIJyF4aPj667nRKJ4VmPgH+ZvA==
   /@pnp/sp-clientsvc/1.3.2:
     dependencies:
       tslib: 1.9.3
@@ -957,6 +967,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-LooLR6XHes9V+kNYRz1Qm8w3atw9QMn7XeZUmIpUelllF9BdryeUKd/u0Wh5ErcjpWfG39NrToU9MF7ngsTFVw==
+  /@types/core-js/2.5.0:
+    dev: false
+    resolution:
+      integrity: sha512-qjkHL3wF0JMHMqgm/kmL8Pf8rIiqvueEiZ0g6NVTcBX1WN46GWDr+V5z+gsHUeL0n8TfAmXnYmF7ajsxmBp4PQ==
   /@types/es6-promise/0.0.33:
     resolution:
       integrity: sha512-HKJFVLCGrWQ/1unEw8JdaTxu6n3EUxmwTxJ6D0O1x0gD8joCsgoTWxEgevb7fp2XIogNjof3KEd+3bJoGne/nw==
@@ -2940,6 +2954,11 @@ packages:
     dev: true
     resolution:
       integrity: sha1-ZSKUwUZR2yj6k70tX/KYOk8IxjY=
+  /core-js/2.6.2:
+    deprecated: 'core-js@<2.6.8 is no longer maintained. Please, upgrade to core-js@3 or at least to actual version of core-js@2.'
+    dev: false
+    resolution:
+      integrity: sha512-NdBPF/RVwPW6jr0NCILuyN9RiqLo2b1mddWHkUL+VnvcB7dzlnBJ1bXYntjpTGOgkZiiLWj2JxmOr7eGE3qK6g==
   /core-js/2.6.5:
     dev: true
     resolution:
@@ -3137,8 +3156,7 @@ packages:
       integrity: sha1-mI3zP+qxke95mmE2nddsF635V+o=
   /d/1.0.0:
     dependencies:
-      es5-ext: 0.10.49
-    dev: true
+      es5-ext: 0.10.50
     resolution:
       integrity: sha1-dUu1v+VUUdpppYuU1F9MWwRi1Y8=
   /dashdash/1.14.1:
@@ -3521,6 +3539,13 @@ packages:
     dev: true
     resolution:
       integrity: sha512-3NMEhi57E31qdzmYp2jwRArIUsj1HI/RxbQ4bgnSB+AIKIxsAmTiK83bYMifIcpWvEc3P1X30DhUKOqEtF/kvg==
+  /es5-ext/0.10.50:
+    dependencies:
+      es6-iterator: 2.0.3
+      es6-symbol: 3.1.1
+      next-tick: 1.0.0
+    resolution:
+      integrity: sha512-KMzZTPBkeQV/JcSQhI5/z6d9VWJ3EnQ194USTUwIYZ2ZbpN8+SGXQKt1h68EX44+qt+Fzr8DO17vnxrw7c3agw==
   /es6-collections/0.5.6:
     deprecated: not actively maintained anymore
     engines:
@@ -3530,20 +3555,18 @@ packages:
   /es6-iterator/2.0.3:
     dependencies:
       d: 1.0.0
-      es5-ext: 0.10.49
+      es5-ext: 0.10.50
       es6-symbol: 3.1.1
-    dev: true
     resolution:
       integrity: sha1-p96IkUGgWpSwhUQDstCg+/qY87c=
   /es6-map/0.1.5:
     dependencies:
       d: 1.0.0
-      es5-ext: 0.10.49
+      es5-ext: 0.10.50
       es6-iterator: 2.0.3
       es6-set: 0.1.5
       es6-symbol: 3.1.1
       event-emitter: 0.3.5
-    dev: true
     resolution:
       integrity: sha1-kTbgUD3MBqMBaQ8LsU/042TpSfA=
   /es6-promise/4.1.1:
@@ -3560,18 +3583,16 @@ packages:
   /es6-set/0.1.5:
     dependencies:
       d: 1.0.0
-      es5-ext: 0.10.49
+      es5-ext: 0.10.50
       es6-iterator: 2.0.3
       es6-symbol: 3.1.1
       event-emitter: 0.3.5
-    dev: true
     resolution:
       integrity: sha1-0rPsXU2ADO2BjbU40ol02wpzzLE=
   /es6-symbol/3.1.1:
     dependencies:
       d: 1.0.0
-      es5-ext: 0.10.49
-    dev: true
+      es5-ext: 0.10.50
     resolution:
       integrity: sha1-vwDvT9q2uhtG7Le2KbTH7VcVzHc=
   /es6-templates/0.2.3:
@@ -3680,8 +3701,7 @@ packages:
   /event-emitter/0.3.5:
     dependencies:
       d: 1.0.0
-      es5-ext: 0.10.49
-    dev: true
+      es5-ext: 0.10.50
     resolution:
       integrity: sha1-34xp7vFkeSPHFXuc6DhAYQsCzDk=
   /event-stream/3.3.5:
@@ -7104,7 +7124,6 @@ packages:
     resolution:
       integrity: sha512-MFh0d/Wa7vkKO3Y3LlacqAEeHK0mckVqzDieUKTT+KGxi+zIpeVsFxymkIiRpbpDziHc290Xr9A1O4Om7otoRA==
   /next-tick/1.0.0:
-    dev: true
     resolution:
       integrity: sha1-yobR/ogoFpsBICCOPchCS524NCw=
   /no-case/2.3.2:
@@ -7135,12 +7154,6 @@ packages:
       node: 4.x || >=6.0.0
     resolution:
       integrity: sha512-OayFWziIxiHY8bCUyLX6sTpDH8Jsbp4FfYd1j1f7vZyfgkcOnAyM4oQR16f8a0s7Gl/viMGRey8eScYk4V4EZA==
-  /node-fetch/2.3.0:
-    dev: true
-    engines:
-      node: 4.x || >=6.0.0
-    resolution:
-      integrity: sha512-MOd8pV3fxENbryESLgVIeaGKrdl+uaYhCSSVkjeOb/31/njTpcis5aWfdqgNlHIrKOLRbMnfPINPOML2CIFeXA==
   /node-forge/0.7.6:
     dev: true
     resolution:
@@ -9467,7 +9480,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-rJAoJ4ayLjs5jAveLKYtc12aNaWidwN0cM7+ony4UV6+sMzEsAE/TQTVXDpyAU7p5oB0h85aKTv/d3WOrlkuvA==
-  /sp-hubsite-service/0.1.0:
+  /sp-hubsite-service/0.2.0:
     dependencies:
       '@pnp/common': 1.3.2
       '@pnp/logging': 1.3.2
@@ -9475,7 +9488,7 @@ packages:
       '@pnp/sp': /@pnp/sp/1.3.2/68ea358cc0acb942ca18a8cec8c38049
     dev: false
     resolution:
-      integrity: sha512-RX8QB/sNP/16pff/iEdxO/0LMw7LS/oFEhEGuG+TNwEzfrmq3HQ+WoKE1XOoKIjlJT3/rC37jxIJpxweasDJfg==
+      integrity: sha512-+KKfZ8mgT1pZ8bMllsgJhrfYVAWJnuAZ5nnqkcMIrpEImvIemFXOlEE0DpeqLimUxq0dLBtyYEOccuIxKVhgHg==
   /sp-js-provisioning/0.10.7:
     dependencies:
       '@pnp/common': 1.3.2
@@ -10183,15 +10196,6 @@ packages:
       typescript: ^2.1.0 || ^3.0.0
     resolution:
       integrity: sha512-PDYjvpo0gN9IfMULwKk0KpVOPMhU6cNoT9VwCOLeDl/QS8v8W2yspRpFFuUS7/c5EIH/n8ApMi8TxJAz1tfFUA==
-  /tslint-microsoft-contrib/6.1.1:
-    dependencies:
-      tsutils: 2.28.0
-    dev: true
-    peerDependencies:
-      tslint: ^5.1.0
-      typescript: ^2.1.0 || ^3.0.0
-    resolution:
-      integrity: sha512-u6tK+tgt8Z1YRJxe4kpWWEx/6FTFxdga50+osnANifsfC7BMzh8c/t/XbNntTRiwMfpHkQ9xtUjizCDLxN1Yeg==
   /tslint/5.11.0/typescript@2.7.2:
     dependencies:
       babel-code-frame: 6.26.0
@@ -10240,28 +10244,6 @@ packages:
       typescript: '>=2.1.0 || >=2.1.0-dev || >=2.2.0-dev || >=2.3.0-dev || >=2.4.0-dev || >=2.5.0-dev || >=2.6.0-dev || >=2.7.0-dev || >=2.8.0-dev || >=2.9.0-dev'
     resolution:
       integrity: sha512-sfodBHOucFg6egff8d1BvuofoOQ/nOeYNfbp7LDlKBcLNrL3lmS5zoiDGyOMdT7YsEXAwWpTdAHwOGOc8eRZAw==
-  /tslint/5.9.1:
-    dependencies:
-      babel-code-frame: 6.26.0
-      builtin-modules: 1.1.1
-      chalk: 2.4.2
-      commander: 2.20.0
-      diff: 3.5.0
-      glob: 7.1.3
-      js-yaml: 3.13.1
-      minimatch: 3.0.4
-      resolve: 1.10.1
-      semver: 5.7.0
-      tslib: 1.9.3
-      tsutils: 2.29.0
-    dev: true
-    engines:
-      node: '>=4.8.0'
-    hasBin: true
-    peerDependencies:
-      typescript: '>=2.1.0 || >=2.1.0-dev || >=2.2.0-dev || >=2.3.0-dev || >=2.4.0-dev || >=2.5.0-dev || >=2.6.0-dev || >=2.7.0-dev || >=2.8.0-dev'
-    resolution:
-      integrity: sha1-ElX4ej/1frCw4fDmEKi0dIBGya4=
   /tslint/5.9.1/typescript@2.9.2:
     dependencies:
       babel-code-frame: 6.26.0
@@ -10296,14 +10278,6 @@ packages:
       typescript: '>=2.1.0 || >=2.1.0-dev || >=2.2.0-dev || >=2.3.0-dev || >= 2.4.0-dev || >= 2.5.0-dev || >= 2.6.0-dev || >= 2.7.0-dev'
     resolution:
       integrity: sha1-YBNgHjb6FP+VhBPlQdQn+4xqw0E=
-  /tsutils/2.28.0:
-    dependencies:
-      tslib: 1.9.3
-    dev: true
-    peerDependencies:
-      typescript: '>=2.1.0 || >=2.1.0-dev || >=2.2.0-dev || >=2.3.0-dev || >=2.4.0-dev || >=2.5.0-dev || >=2.6.0-dev || >=2.7.0-dev || >=2.8.0-dev || >=2.9.0-dev || >= 3.0.0-dev || >= 3.1.0-dev'
-    resolution:
-      integrity: sha512-bh5nAtW0tuhvOJnx1GLRn5ScraRLICGyJV5wJhtRWOLsxW70Kk5tZtpK3O/hW6LDnqKS9mlUMPZj9fEMJ0gxqA==
   /tsutils/2.28.0/typescript@2.7.2:
     dependencies:
       tslib: 1.9.3
@@ -10334,14 +10308,6 @@ packages:
       typescript: '>=2.1.0 || >=2.1.0-dev || >=2.2.0-dev || >=2.3.0-dev || >=2.4.0-dev || >=2.5.0-dev || >=2.6.0-dev || >=2.7.0-dev || >=2.8.0-dev || >=2.9.0-dev || >= 3.0.0-dev || >= 3.1.0-dev'
     resolution:
       integrity: sha512-bh5nAtW0tuhvOJnx1GLRn5ScraRLICGyJV5wJhtRWOLsxW70Kk5tZtpK3O/hW6LDnqKS9mlUMPZj9fEMJ0gxqA==
-  /tsutils/2.29.0:
-    dependencies:
-      tslib: 1.9.3
-    dev: true
-    peerDependencies:
-      typescript: '>=2.1.0 || >=2.1.0-dev || >=2.2.0-dev || >=2.3.0-dev || >=2.4.0-dev || >=2.5.0-dev || >=2.6.0-dev || >=2.7.0-dev || >=2.8.0-dev || >=2.9.0-dev || >= 3.0.0-dev || >= 3.1.0-dev'
-    resolution:
-      integrity: sha512-g5JVHCIJwzfISaXpXE1qvNalca5Jwob6FjI4AoPlqMusJ6ftFE7IkkFoMhVLRgK+4Kx3gkzb8UZK5t5yTTvEmA==
   /tsutils/2.29.0/typescript@2.7.2:
     dependencies:
       tslib: 1.9.3
@@ -10401,13 +10367,6 @@ packages:
       node: '>= 0.6'
     resolution:
       integrity: sha512-HRkVv/5qY2G6I8iab9cI7v1bOIdhm94dVjQCPFElW9W+3GeDOSHmy2EBYe4VTApuzolPcmgFTN3ftVJRKR2J9Q==
-  /typescript/2.4.2:
-    dev: true
-    engines:
-      node: '>=4.2.0'
-    hasBin: true
-    resolution:
-      integrity: sha1-+DlfhdRZJ2BnyYiqQYN6j4KHCEQ=
   /typescript/2.7.2:
     dev: true
     engines:
@@ -11336,6 +11295,7 @@ specifiers:
   '@pnp/common': ^1.3.2
   '@pnp/logging': ^1.3.2
   '@pnp/odata': ^1.3.2
+  '@pnp/polyfill-ie11': ^1.0.1
   '@pnp/sp': ^1.3.2
   '@pnp/sp-clientsvc': ^1.3.2
   '@pnp/sp-taxonomy': ^1.3.2
@@ -11347,19 +11307,14 @@ specifiers:
   '@types/sharepoint': ^2016.1.2
   '@types/webpack-env': 1.13.1
   ajv: ~5.2.2
-  bluebird: ^3.5.3
   gulp: ~3.9.1
   msgraph-helper: ^0.7.1
-  node-fetch: ^2.3.0
   office-ui-fabric-react: 5.134.0
   react: 16.7.0
   react-dom: 16.7.0
   sp-entityportal-service: ^0.6.2
-  sp-hubsite-service: ^0.1.0
+  sp-hubsite-service: ^0.2.0
   sp-js-provisioning: ^0.10.7
   spfx-jsom: ^0.6.0
   spfx-pkgdeploy: ^0.3.0
   string-format: ^2.0.0
-  tslint: 5.9.1
-  tslint-microsoft-contrib: ^6.0.0
-  typescript: 2.4.2

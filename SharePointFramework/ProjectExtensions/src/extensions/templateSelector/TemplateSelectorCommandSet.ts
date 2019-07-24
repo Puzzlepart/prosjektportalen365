@@ -3,7 +3,8 @@ import { BaseListViewCommandSet, Command, IListViewCommandSetExecuteEventParamet
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import HubSiteService, { IHubSite } from 'sp-hubsite-service';
+import HubSiteService from 'sp-hubsite-service';
+import '@pnp/polyfill-ie11';
 import * as strings from 'TemplateSelectorCommandSetStrings';
 import { TemplateLibrarySelectModal } from '../../components';
 import { ITemplateSelectorCommandSetProperties } from './ITemplateSelectorCommandSetProperties';
