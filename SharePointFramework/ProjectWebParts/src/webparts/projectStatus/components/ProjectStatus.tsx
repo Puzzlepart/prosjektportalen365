@@ -5,7 +5,6 @@ import { List } from '@pnp/sp';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import * as autobind from 'auto-bind';
 import * as strings from 'ProjectStatusWebPartStrings';
 import * as React from 'react';
 import getObjectValue from '../../../../../@Shared/lib/helpers/getObjectValue';
@@ -37,7 +36,6 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
     };
     this._reportList = props.hubSite.web.lists.getByTitle(this.props.reportListName) as any;
     this._sectionsList = props.hubSite.web.lists.getByTitle(this.props.sectionsListName) as any;
-    autobind.react(this);
   }
 
   public async componentDidMount() {

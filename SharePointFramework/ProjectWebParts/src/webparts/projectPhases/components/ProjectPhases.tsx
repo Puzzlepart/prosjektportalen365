@@ -6,7 +6,6 @@ import MSGraphHelper from 'msgraph-helper';
 import * as objectGet from 'object-get';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import * as autobind from 'auto-bind';
 import * as strings from 'ProjectPhasesWebPartStrings';
 import * as React from 'react';
 import SpEntityPortalService from 'sp-entityportal-service';
@@ -32,7 +31,6 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
   constructor(props: IProjectPhasesProps) {
     super(props);
     this.state = { isLoading: true, data: {} };
-    autobind.react(this);
   }
 
   public async componentDidMount() {

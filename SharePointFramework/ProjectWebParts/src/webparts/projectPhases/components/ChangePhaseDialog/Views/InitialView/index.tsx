@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { PrimaryButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import * as autobind from 'auto-bind';
 import IInitialViewProps, { InitialViewDefaultProps } from './IInitialViewProps';
 import IInitialViewState from './IInitialViewState';
 import * as strings from 'ProjectPhasesWebPartStrings';
@@ -20,7 +19,6 @@ export default class InitialView extends React.Component<IInitialViewProps, IIni
     constructor(props: IInitialViewProps) {
         super(props);
         this.state = { comment: props.currentChecklistItem ? (props.currentChecklistItem.GtComment || '') : '' };
-        autobind.react(this);
     }
 
     public render(): JSX.Element {
