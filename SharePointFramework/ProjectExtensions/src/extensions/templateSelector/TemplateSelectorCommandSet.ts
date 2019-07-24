@@ -7,7 +7,7 @@ import '@pnp/polyfill-ie11';
 import * as strings from 'TemplateSelectorCommandSetStrings';
 import { TemplateLibrarySelectModal } from '../../components';
 import { ITemplateSelectorCommandSetProperties } from './ITemplateSelectorCommandSetProperties';
-import { getHubItems, getCurrentPhase } from '../../data';
+import * as data from '../../data';
 import { TemplateFile } from '../../models';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 
@@ -24,16 +24,15 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
 
   @override
   public async onInit() {
-    const { pageContext } = this.context;
     const OPEN_TEMPLATE_SELECTOR_COMMAND: Command = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR');
     Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Initializing', data: { version: this.context.manifest.version }, level: LogLevel.Info });
     if (OPEN_TEMPLATE_SELECTOR_COMMAND) {
       try {
-        const hub = await HubSiteService.GetHubSiteById(pageContext.web.absoluteUrl, pageContext.legacyPageContext.hubSiteId);
+        const hub = await HubSiteService.GetHubSite(this.context.pageContext);
         Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Retrieved hub site', data: { url: hub.url }, level: LogLevel.Info });
-        const currentPhase = await getCurrentPhase(hub, this.properties.phaseTermSetId || 'abcfc9d9-a263-4abb-8234-be973c46258a', pageContext.site.id.toString());
+        const currentPhase = await data.getCurrentPhase(hub, this.properties.phaseTermSetId || 'abcfc9d9-a263-4abb-8234-be973c46258a', this.context.pageContext.site.id.toString());
         Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Retrieved current phase', data: { currentPhase }, level: LogLevel.Info });
-        this.templates = await getHubItems(
+        this.templates = await data.getHubItems(
           hub,
           this.properties.templateLibrary || 'Malbibliotek',
           TemplateFile,

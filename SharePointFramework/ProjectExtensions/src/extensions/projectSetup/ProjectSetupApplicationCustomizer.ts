@@ -209,7 +209,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
     try {
       await MSGraphHelper.Init(this.context.msGraphClientFactory);
       let _data: IProjectSetupApplicationCustomizerData = {};
-      _data.hub = await HubSiteService.GetHubSiteById(this.context.pageContext.web.absoluteUrl, this.context.pageContext.legacyPageContext.hubSiteId);
+      _data.hub = await HubSiteService.GetHubSite(this.context.pageContext);
       const [templates, extensions, listContentConfig] = await Promise.all([
         getHubFiles(_data.hub, this.properties.templatesLibrary, ProjectTemplate),
         getHubFiles(_data.hub, this.properties.extensionsLibrary, ProjectTemplate),
