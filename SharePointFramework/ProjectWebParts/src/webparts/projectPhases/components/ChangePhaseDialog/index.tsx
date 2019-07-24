@@ -1,12 +1,12 @@
 //#region Imports
-import * as React from "react";
-import { Dialog, DialogType } from "office-ui-fabric-react/lib/Dialog";
-import { autobind } from "office-ui-fabric-react/lib/Utilities";
-import { View } from "./Views";
-import { Body } from "./Body";
-import { Footer } from "./Footer";
-import IChangePhaseDialogProps from "./IChangePhaseDialogProps";
-import IChangePhaseDialogState from "./IChangePhaseDialogState";
+import * as React from 'react';
+import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import * as autobind from 'auto-bind';
+import { View } from './Views';
+import { Body } from './Body';
+import { Footer } from './Footer';
+import IChangePhaseDialogProps from './IChangePhaseDialogProps';
+import IChangePhaseDialogState from './IChangePhaseDialogState';
 import styles from './ChangePhaseDialog.module.scss';
 import * as strings from 'ProjectPhasesWebPartStrings';
 import * as stringFormat from 'string-format';
@@ -31,6 +31,7 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
         if (props.activePhase) {
             this.openChecklistItems = props.activePhase.checklistData.items.filter(item => item.GtChecklistStatus === strings.StatusOpen);
         }
+        autobind.react(this);
     }
 
     public componentDidMount(): void {
@@ -75,7 +76,6 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
      * @param {string} commentsValue Comments value
      * @param {boolean} updateStatus Should status be updated
      */
-    @autobind
     private async nextCheckPoint(statusValue: string, commentsValue: string, updateStatus: boolean = true): Promise<void> {
         this.setState({ isLoading: true });
         const { activePhase } = this.props;
@@ -107,7 +107,6 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
      *
      * @param {View} newView New view
      */
-    @autobind
     private onChangeView(newView: View) {
         this.setState({ currentView: newView });
     }

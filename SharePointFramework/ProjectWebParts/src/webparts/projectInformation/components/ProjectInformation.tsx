@@ -4,7 +4,7 @@ import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'ProjectInformationWebPartStrings';
-import { HubConfigurationService } from 'prosjektportalen-spfx-shared/lib/services/HubConfigurationService';
+import { HubConfigurationService } from '../../../../../@Shared/lib/services/HubConfigurationService';
 import * as React from 'react';
 import SpEntityPortalService from 'sp-entityportal-service';
 import ProjectPropertyModel from '../models/ProjectPropertyModel';

@@ -1,16 +1,15 @@
-import * as React from 'react';
-import * as strings from 'ProjectStatusWebPartStrings';
-import styles from './ListSection.module.scss';
-import { IListSectionProps } from './IListSectionProps';
-import { IListSectionState } from './IListSectionState';
-import StatusSectionBase from '../@StatusSectionBase';
-import StatusElement from '../StatusElement';
+import { sp } from '@pnp/sp';
 import { DetailsList, DetailsListLayoutMode, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import * as strings from 'ProjectStatusWebPartStrings';
+import * as React from 'react';
+import getObjectValue from '../../../../../../@Shared/lib/helpers/getObjectValue';
+import StatusSectionBase from '../@StatusSectionBase';
+import StatusElement from '../StatusElement';
 import { IListSectionData } from './IListSectionData';
-import { sp } from '@pnp/sp';
-import getObjectValue from 'prosjektportalen-spfx-shared/lib/helpers/getObjectValue';
-
+import { IListSectionProps } from './IListSectionProps';
+import { IListSectionState } from './IListSectionState';
+import styles from './ListSection.module.scss';
 
 export default class ListSection extends StatusSectionBase<IListSectionProps, IListSectionState> {
   constructor(props: IListSectionProps) {

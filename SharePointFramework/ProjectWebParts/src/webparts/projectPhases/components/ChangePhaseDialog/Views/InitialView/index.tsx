@@ -1,9 +1,9 @@
-import * as React from "react";
-import { PrimaryButton, IButtonProps } from "office-ui-fabric-react/lib/Button";
-import { TextField } from "office-ui-fabric-react/lib/TextField";
-import { autobind } from "office-ui-fabric-react/lib/Utilities";
-import IInitialViewProps, { InitialViewDefaultProps } from "./IInitialViewProps";
-import IInitialViewState from "./IInitialViewState";
+import * as React from 'react';
+import { PrimaryButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import * as autobind from 'auto-bind';
+import IInitialViewProps, { InitialViewDefaultProps } from './IInitialViewProps';
+import IInitialViewState from './IInitialViewState';
 import * as strings from 'ProjectPhasesWebPartStrings';
 
 /**
@@ -19,7 +19,8 @@ export default class InitialView extends React.Component<IInitialViewProps, IIni
      */
     constructor(props: IInitialViewProps) {
         super(props);
-        this.state = { comment: props.currentChecklistItem ? (props.currentChecklistItem.GtComment || "") : "" };
+        this.state = { comment: props.currentChecklistItem ? (props.currentChecklistItem.GtComment || '') : '' };
+        autobind.react(this);
     }
 
     public render(): JSX.Element {
@@ -31,7 +32,7 @@ export default class InitialView extends React.Component<IInitialViewProps, IIni
                 <h3>{this.props.currentChecklistItem.Title}</h3>
                 <div style={{ marginTop: 10 }}>
                     <TextField
-                        onChanged={this.onCommentUpdate}
+                        onChange={this.onCommentUpdate}
                         placeholder={strings.CommentLabel}
                         multiline
                         value={this.state.comment}
@@ -87,19 +88,18 @@ export default class InitialView extends React.Component<IInitialViewProps, IIni
     * @param {string} comment Comment value
     * @param {boolean} updateStatus Update status
     */
-    @autobind
     private onNextCheckPoint(status: string, comment: string, updateStatus: boolean = true) {
         this.props.nextCheckPointAction(status, comment, true);
-        this.setState({ comment: "" });
+        this.setState({ comment: '' });
     }
 
     /**
     * On comment update
     *
+    * @param {any} _event Event
     * @param {string} newValue New value
     */
-    @autobind
-    private onCommentUpdate(newValue: string) {
+    private onCommentUpdate(_event: any, newValue: string) {
         this.setState({ comment: newValue });
     }
 }
