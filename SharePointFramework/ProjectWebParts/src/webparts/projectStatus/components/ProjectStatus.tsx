@@ -2,13 +2,13 @@ import { dateAdd } from "@pnp/common";
 import { Logger, LogLevel } from '@pnp/logging';
 import '@pnp/polyfill-ie11';
 import { List } from '@pnp/sp';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
-import { IContextualMenuItem, ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { autobind } from 'office-ui-fabric-react/lib/Utilities';
+import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+import * as autobind from 'auto-bind';
 import * as strings from 'ProjectStatusWebPartStrings';
-import getObjectValue from 'prosjektportalen-spfx-shared/lib/helpers/getObjectValue';
 import * as React from 'react';
+import getObjectValue from '../../../../../@Shared/lib/helpers/getObjectValue';
 import ProjectStatusReport, { IProjectStatusReportItem } from '../models/ProjectStatusReport';
 import SectionModel, { SectionType } from '../models/SectionModel';
 import { IStatusSectionBaseProps } from './@StatusSectionBase/IStatusSectionBaseProps';
@@ -37,6 +37,7 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
     };
     this._reportList = props.hubSite.web.lists.getByTitle(this.props.reportListName) as any;
     this._sectionsList = props.hubSite.web.lists.getByTitle(this.props.sectionsListName) as any;
+    autobind.react(this);
   }
 
   public async componentDidMount() {
@@ -232,7 +233,6 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
    * 
    * @param {ProjectStatusReport} report Report
    */
-  @autobind
   private onReportChanged(report: ProjectStatusReport) {
     this.setState({ selectedReport: report });
   }
