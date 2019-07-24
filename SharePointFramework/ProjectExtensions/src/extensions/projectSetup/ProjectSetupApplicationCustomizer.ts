@@ -4,7 +4,6 @@ import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { sp } from '@pnp/sp';
 import MSGraphHelper from 'msgraph-helper';
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';

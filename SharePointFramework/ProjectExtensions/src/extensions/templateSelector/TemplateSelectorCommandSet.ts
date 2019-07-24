@@ -1,6 +1,5 @@
 import { override } from '@microsoft/decorators';
 import { BaseListViewCommandSet, Command, IListViewCommandSetExecuteEventParameters, IListViewCommandSetListViewUpdatedParameters } from '@microsoft/sp-listview-extensibility';
-
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import HubSiteService from 'sp-hubsite-service';
@@ -10,25 +9,31 @@ import { TemplateLibrarySelectModal } from '../../components';
 import { ITemplateSelectorCommandSetProperties } from './ITemplateSelectorCommandSetProperties';
 import { getHubItems, getCurrentPhase } from '../../data';
 import { TemplateFile } from '../../models';
+import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
+
 
 export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<ITemplateSelectorCommandSetProperties> {
-  private _templates: TemplateFile[];
-  private _container: Element;
+  private templates: TemplateFile[] = [];
+  private container: Element;
 
   constructor() {
     super();
-    this._templates = [];
+    Logger.subscribe(new ConsoleListener());
+    Logger.activeLogLevel = LogLevel.Info;
   }
 
   @override
   public async onInit() {
+    const { pageContext } = this.context;
     const OPEN_TEMPLATE_SELECTOR_COMMAND: Command = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR');
+    Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Initializing', data: { version: this.context.manifest.version }, level: LogLevel.Info });
     if (OPEN_TEMPLATE_SELECTOR_COMMAND) {
       try {
-        const { pageContext } = this.context;
         const hub = await HubSiteService.GetHubSiteById(pageContext.web.absoluteUrl, pageContext.legacyPageContext.hubSiteId);
+        Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Retrieved hub site', data: { url: hub.url }, level: LogLevel.Info });
         const currentPhase = await getCurrentPhase(hub, this.properties.phaseTermSetId || 'abcfc9d9-a263-4abb-8234-be973c46258a', pageContext.site.id.toString());
-        this._templates = await getHubItems(
+        Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Retrieved current phase', data: { currentPhase }, level: LogLevel.Info });
+        this.templates = await getHubItems(
           hub,
           this.properties.templateLibrary || 'Malbibliotek',
           TemplateFile,
@@ -57,7 +62,11 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
         </View>` },
           ['File'],
         );
-      } catch (error) { }
+        Logger.log({ message: `(TemplateSelectorCommandSet) onInit: Retrieved ${this.templates.length} templates`, level: LogLevel.Info });
+      } catch (error) {
+        console.log(error);
+        Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Failed to initialize', data: { error }, level: LogLevel.Info });
+      }
     }
   }
 
@@ -65,7 +74,7 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
   public onListViewUpdated(event: IListViewCommandSetListViewUpdatedParameters): void {
     const OPEN_TEMPLATE_SELECTOR_COMMAND: Command = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR');
     if (OPEN_TEMPLATE_SELECTOR_COMMAND) {
-      OPEN_TEMPLATE_SELECTOR_COMMAND.visible = event.selectedRows.length === 0 && this._templates.length > 0;
+      OPEN_TEMPLATE_SELECTOR_COMMAND.visible = event.selectedRows.length === 0 && this.templates.length > 0;
     }
   }
 
@@ -86,17 +95,17 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
       title: strings.TemplateLibrarySelectModalTitle,
       onDismiss: this.onDismissTemplateLibrarySelectModal,
       libraryServerRelativeUrl: this.context.pageContext.list.serverRelativeUrl,
-      templates: this._templates,
+      templates: this.templates,
     });
-    this._container = document.createElement('DIV');
-    document.body.appendChild(this._container);
-    ReactDOM.render(templateLibrarySelectModal, this._container);
+    this.container = document.createElement('DIV');
+    document.body.appendChild(this.container);
+    ReactDOM.render(templateLibrarySelectModal, this.container);
   }
 
   /**
    * On dismiss <TemplateLibrarySelectModal />
    */
-  private onDismissTemplateLibrarySelectModal =() => {
-    ReactDOM.unmountComponentAtNode(this._container);
+  private onDismissTemplateLibrarySelectModal = () => {
+    ReactDOM.unmountComponentAtNode(this.container);
   }
 }

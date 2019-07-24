@@ -56,9 +56,11 @@ export async function getCurrentPhase(hubSite: IHubSite, termSetId: string, site
         taxonomy.getDefaultSiteCollectionTermStore().getTermSetById(termSetId).terms.select('Id', 'Name').get(),
         spEntityPortalService.getEntityItem(siteId),
     ]);
-    let [currentPhase] = phaseTerms.filter(term => term.Id.indexOf(entityItem.GtProjectPhase.TermGuid) !== -1);
-    if (currentPhase) {
-        return currentPhase.Name;
+    if (entityItem.GtProjectPhase) {
+        let [currentPhase] = phaseTerms.filter(term => term.Id.indexOf(entityItem.GtProjectPhase.TermGuid) !== -1);
+        if (currentPhase) {
+            return currentPhase.Name;
+        }
     }
     return null;
 }
