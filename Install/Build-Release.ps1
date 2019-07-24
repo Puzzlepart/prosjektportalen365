@@ -23,7 +23,7 @@ Copy-Item -Path "$PSScriptRoot/Install.ps1" -Destination $ReleasePath -Force
 
 
 #region Package SharePoint Framework solutions
-
+Write-Host "[INFO] Building SharePointFramework\@Shared"
 Set-Location "$PSScriptRoot\..\SharePointFramework\@Shared"
 # https://github.com/SharePoint/sp-dev-docs/issues/2916
 pnpm install --shamefully-flatten
