@@ -84,9 +84,9 @@ export default class InitialView extends React.Component<IInitialViewProps, IIni
     *
     * @param {string} status Status value
     * @param {string} comment Comment value
-    * @param {boolean} updateStatus Update status
+    * @param {boolean} _updateStatus Update status
     */
-    private onNextCheckPoint(status: string, comment: string, updateStatus: boolean = true) {
+    private onNextCheckPoint(status: string, comment: string, _updateStatus: boolean = true) {
         this.props.nextCheckPointAction(status, comment, true);
         this.setState({ comment: '' });
     }
@@ -95,9 +95,9 @@ export default class InitialView extends React.Component<IInitialViewProps, IIni
     * On comment update
     *
     * @param {any} _event Event
-    * @param {string} newValue New value
+    * @param {string} comment New value for comment
     */
-    private onCommentUpdate(_event: any, newValue: string) {
-        this.setState({ comment: newValue });
+    private onCommentUpdate = (_event: any, comment: string) => {
+        this.setState({ comment });
     }
 }

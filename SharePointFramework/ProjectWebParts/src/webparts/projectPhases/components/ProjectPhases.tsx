@@ -113,7 +113,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
   /**
    * On <ProjectPhaseCallout /> dismiss
    */
-  private async onProjectPhaseCalloutDismiss() {
+  private onProjectPhaseCalloutDismiss = () => {
     this.setState({ phaseMouseOver: null });
   }
 
@@ -122,7 +122,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    * 
    * @param {Phase} phase Phase
    */
-  private async onChangePhase(phase: Phase) {
+  private onChangePhase = async (phase: Phase) => {
     try {
       this.setState({ isChangingPhase: true });
       await this.updatePhase(phase);

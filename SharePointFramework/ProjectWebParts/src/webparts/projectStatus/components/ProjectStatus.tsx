@@ -229,10 +229,10 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
   /**
    * On report changed
    * 
-   * @param {ProjectStatusReport} report Report
+   * @param {ProjectStatusReport} selectedReport Selected report
    */
-  private onReportChanged(report: ProjectStatusReport) {
-    this.setState({ selectedReport: report });
+  private onReportChanged = (selectedReport: ProjectStatusReport) => {
+    this.setState({ selectedReport });
   }
 
   /**
