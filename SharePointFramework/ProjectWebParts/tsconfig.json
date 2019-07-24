@@ -8,8 +8,10 @@
     "declaration": true,
     "sourceMap": true,
     "experimentalDecorators": true,
-    "noUnusedLocals": true,
-    "skipLibCheck": true,
+    "skipLibCheck": true,    
+    "noUnusedLocals": false,    
+    "strictNullChecks": false,
+    "inlineSources": false,
     "outDir": "lib",
     "typeRoots": [
       "./node_modules/@types",
@@ -31,5 +33,6 @@
   "exclude": [
     "node_modules",
     "lib"
-  ]
+  ],
+  "extends": "./node_modules/@microsoft/rush-stack-compiler-2.7/includes/tsconfig-web.json"
 }
