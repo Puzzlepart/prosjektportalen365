@@ -1,6 +1,6 @@
 import { override } from '@microsoft/decorators';
 import { BaseListViewCommandSet, Command, IListViewCommandSetExecuteEventParameters, IListViewCommandSetListViewUpdatedParameters } from '@microsoft/sp-listview-extensibility';
-import { autobind } from 'office-ui-fabric-react/lib/Utilities';
+
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import HubSiteService from 'sp-hubsite-service';
@@ -96,8 +96,7 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
   /**
    * On dismiss <TemplateLibrarySelectModal />
    */
-  @autobind
-  private onDismissTemplateLibrarySelectModal() {
+  private onDismissTemplateLibrarySelectModal =() => {
     ReactDOM.unmountComponentAtNode(this._container);
   }
 }

@@ -1,7 +1,6 @@
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import * as React from 'react';
 import * as TemplateSelectorCommandSetStrings from 'TemplateSelectorCommandSetStrings';
 import { TemplateFile } from '../../../models';
@@ -38,14 +37,14 @@ export default class TemplateLibrarySelectModalScreenEditCopy extends React.Comp
                                     label={TemplateSelectorCommandSetStrings.NameLabel}
                                     placeholder={TemplateSelectorCommandSetStrings.NameLabel}
                                     defaultValue={tmpl.newName}
-                                    onChanged={newName => this.onInputChanged(tmpl.id, { newName })} />
+                                    onChange={(_event, newName) => this.onInputChanged(tmpl.id, { newName })} />
                             </div>
                             <div className={styles.titleInput}>
                                 <TextField
                                     label={TemplateSelectorCommandSetStrings.TitleLabel}
                                     placeholder={TemplateSelectorCommandSetStrings.TitleLabel}
                                     defaultValue={tmpl.newTitle}
-                                    onChanged={newTitle => this.onInputChanged(tmpl.id, { newTitle })} />
+                                    onChange={(_event, newTitle) => this.onInputChanged(tmpl.id, { newTitle })} />
                             </div>
                         </div>
                     </div>
@@ -89,8 +88,7 @@ export default class TemplateLibrarySelectModalScreenEditCopy extends React.Comp
     /**
      * On start copy
      */
-    @autobind
-    private onStartCopy() {
+    private onStartCopy = () => {
         this.props.onStartCopy(this.state.templates);
         this.setState({ expandState: {}, templates: [] });
     }

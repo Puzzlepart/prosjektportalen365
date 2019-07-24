@@ -4,7 +4,7 @@ import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Modal } from 'office-ui-fabric-react/lib/Modal';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
-import { autobind } from 'office-ui-fabric-react/lib/Utilities';
+
 import * as React from 'react';
 import * as stringFormat from 'string-format';
 import * as TemplateSelectorCommandSetStrings from 'TemplateSelectorCommandSetStrings';
@@ -100,8 +100,7 @@ export default class TemplateLibrarySelectModal extends React.Component<ITemplat
      * 
      * @param {TemplateLibrarySelectModalScreen} screen Screen
      */
-    @autobind
-    private onChangeScreen(screen: TemplateLibrarySelectModalScreen) {
+    private onChangeScreen = (screen: TemplateLibrarySelectModalScreen) => {
         this.setState({ screen });
     }
 
@@ -111,8 +110,7 @@ export default class TemplateLibrarySelectModal extends React.Component<ITemplat
      * @param templates Templates
      * @returns Promise<void>
      */
-    @autobind
-    private async onStartCopy(templates: TemplateFile[]): Promise<void> {
+    private onStartCopy = async (templates: TemplateFile[]): Promise<void> => {
         this.setState({ screen: TemplateLibrarySelectModalScreen.CopyProgress, isBlocking: true });
 
         let templatesAdded: FileAddResult[] = [];

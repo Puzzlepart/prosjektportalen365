@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './ProjectSetupBaseModal.module.scss';
 import { Modal } from 'office-ui-fabric-react/lib/Modal';
-import { autobind } from 'office-ui-fabric-react/lib/Utilities';
+
 import { IProjectSetupBaseModalProps } from './IProjectSetupBaseModalProps';
 import { IProjectSetupBaseModalState } from './IProjectSetupBaseModalState';
 
@@ -32,8 +32,7 @@ export default class ProjectSetupBaseModal extends React.PureComponent<IProjectS
         );
     }
 
-    @autobind
-    protected onDismiss() {
+    protected onDismiss = () => {
         this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
     }
 }

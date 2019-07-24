@@ -8,11 +8,11 @@ import SpEntityPortalService from 'sp-entityportal-service';
  * 
  * @param {IHubSite} hub Hub
  * @param {string} listName List name 
- * @param {T} model Model
+ * @param {T} constructor Constructor
  */
-export async function getHubFiles<T>(hub: IHubSite, listName: string, model?: new (file: any, web: Web) => T) {
+export async function getHubFiles<T>(hub: IHubSite, listName: string, constructor?: new (file: any, web: Web) => T) {
     const files = await hub.web.lists.getByTitle(listName).rootFolder.files.get();
-    return model ? files.map(file => new model(file, hub.web)) : files;
+    return constructor ? files.map(file => new constructor(file, hub.web)) : files;
 }
 
 /**
@@ -20,11 +20,11 @@ export async function getHubFiles<T>(hub: IHubSite, listName: string, model?: ne
  * 
  * @param {IHubSite} hub Hub
  * @param {string} listName List name 
- * @param {T} model Model
+ * @param {T} constructor Constructor
  * @param {CamlQuery} query Query
  * @param {string[]} expands Expands
  */
-export async function getHubItems<T>(hub: IHubSite, listName: string, model?: new (item: any, web: Web) => T, query?: CamlQuery, expands?: string[]) {
+export async function getHubItems<T>(hub: IHubSite, listName: string, constructor?: new (item: any, web: Web) => T, query?: CamlQuery, expands?: string[]) {
     try {
         let items: any[];
         if (query) {
@@ -32,7 +32,7 @@ export async function getHubItems<T>(hub: IHubSite, listName: string, model?: ne
         } else {
             items = await hub.web.lists.getByTitle(listName).items.get();
         }
-        return model ? items.map(item => new model(item, hub.web)) : items;
+        return constructor ? items.map(item => new constructor(item, hub.web)) : items;
     } catch (error) {
         throw error;
     }

@@ -4,7 +4,7 @@ import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { sp } from '@pnp/sp';
 import MSGraphHelper from 'msgraph-helper';
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import { autobind } from 'office-ui-fabric-react/lib/Utilities';
+
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
@@ -178,8 +178,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
    * @param {string} status Status
    * @param {string} iconName Icon name
    */
-  @autobind
-  private onTaskStatusUpdated(status: string, iconName: string) {
+  private onTaskStatusUpdated = (status: string, iconName: string) => {
     this.renderProgressModal({ text: strings.ProgressModalLabel, subText: status, iconName });
   }
 
