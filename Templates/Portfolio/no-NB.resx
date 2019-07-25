@@ -1264,7 +1264,7 @@
     <value>Presiser</value>
   </data>
   <data name="SiteFields_GtMonthChoice_DisplayName" xml:space="preserve">
-    <value>M?ned</value>
+    <value>Måned</value>
   </data>
   <data name="SiteFields_GtPiAutomaticRefreshEnabled_DisplayName" xml:space="preserve">
     <value>Automatisk oppdatering</value>

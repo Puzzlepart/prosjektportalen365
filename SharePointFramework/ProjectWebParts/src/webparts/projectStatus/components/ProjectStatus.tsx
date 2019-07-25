@@ -235,7 +235,7 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
     try {
       const dateTime = dateAdd(new Date(), 'minute', -1).toISOString();
       let [item] = await this.reportList.items
-        .filter(`Author/EMail eq '${user.email}' and Created ge datetime'${dateTime}'`)
+        .filter(`Author/EMail eq '${user.email}' and Created ge datetime'${dateTime}' and GtSiteId eq '00000000-0000-0000-0000-000000000000'`)
         .select('Id', 'GtMonthChoice', 'Created')
         .orderBy('Id', false)
         .top(1)
