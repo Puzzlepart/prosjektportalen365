@@ -3,7 +3,6 @@ import * as strings from 'BenefitsOverviewWebPartStrings';
 import styles from './BenefitMeasurementsModal.module.scss';
 import { Modal, IModalProps } from 'office-ui-fabric-react/lib/Modal';
 import { DetailsList, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
-import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import { BenefitMeasurementsModalColumns } from './BenefitMeasurementsModalColumns';
 import { BenefitMeasurementIndicator, BenefitMeasurement } from '../../models';
 import * as objectGet from 'object-get';
@@ -55,18 +54,15 @@ export default class BenefitMeasurementsModal extends React.PureComponent<IBenef
         );
     }
 
-    @autobind
-    private onOpenModal() {
+    private onOpenModal = () => {
         this.setState({ isOpen: true });
     }
 
-    @autobind
-    private onCloseModal() {
+    private onCloseModal = () => {
         this.setState({ isOpen: false });
     }
 
-    @autobind
-    private onRenderItemColumn(item: BenefitMeasurement, index: number, column: IColumn) {
+    private onRenderItemColumn = (item: BenefitMeasurement, index: number, column: IColumn) => {
         const fieldNameDisplay: string = objectGet(column, 'data.fieldNameDisplay');
         return column.onRender ? column.onRender(item, index, column) : objectGet(item, fieldNameDisplay || column.fieldName);
     }

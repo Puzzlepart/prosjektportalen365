@@ -9,7 +9,6 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { DetailsList, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { Modal } from 'office-ui-fabric-react/lib/Modal';
-import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import ProjectCard from './ProjectCard/ProjectCard';
 import { sp, Web } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
@@ -148,11 +147,10 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   /**
    * Sorting on column header click
    *
-* @param {React.MouseEvent} _event Event
-* @param {IColumn} column Column
-    */
-  @autobind
-  private onListSort(_event: React.MouseEvent<any>, column: IColumn): any {
+  * @param {React.MouseEvent} _evt Event
+  * @param {IColumn} column Column
+  */
+  private onListSort = (_evt: React.MouseEvent<any>, column: IColumn): void => {
     let { listView } = ({ ...this.state } as IProjectListState);
     let isSortedDescending = column.isSortedDescending;
     if (column.isSorted) {
@@ -199,8 +197,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   * @param {React.MouseEvent} event Event
   * @param {ProjectListModel} project Project
   */
-  @autobind
-  private onCardAction(event: React.MouseEvent<any>, project: ProjectListModel) {
+  private onCardAction = (event: React.MouseEvent<any>, project: ProjectListModel) => {
     event.preventDefault();
     event.stopPropagation();
     switch (event.currentTarget.id) {
@@ -231,8 +228,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
    * 
    * @param {string} searchTerm Search term
    */
-  @autobind
-  private onSearch(searchTerm: string) {
+  private onSearch = (searchTerm: string) => {
     this.setState({ searchTerm: searchTerm.toLowerCase() });
   }
 
@@ -304,7 +300,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         .orderBy('Title')
         .usingCaching()
         .get<ISPProjectItem[]>(),
-      MSGraph.Get<IGraphGroup[]>(`/me/memberOf/$/microsoft.graph.group`,['id', 'displayName'], `groupTypes/any(a:a%20eq%20'unified')`),
+      MSGraph.Get<IGraphGroup[]>(`/me/memberOf/$/microsoft.graph.group`, ['id', 'displayName'], `groupTypes/any(a:a%20eq%20'unified')`),
       web
         .siteUsers
         .select('Id', 'Title', 'Email')

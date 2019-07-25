@@ -13,7 +13,6 @@ import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMen
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import { sp } from '@pnp/sp';
 import DataSourceService from '../../../../../@Shared/lib/services/DataSourceService';
 import { IAllocationSearchResult } from '../models/IAllocationSearchResult';
@@ -153,8 +152,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
    * @param {IColumn} column Column
    * @param {IFilterItemProps[]} selectedItems Selected items
    */
-  @autobind
-  private onFilterChange(column: IColumn, selectedItems: IFilterItemProps[]) {
+  private onFilterChange = (column: IColumn, selectedItems: IFilterItemProps[]) => {
     const { activeFilters } = ({ ...this.state } as IResourceAllocationState);
     if (selectedItems.length > 0) {
       activeFilters[column.fieldName] = selectedItems.map(i => i.value);
