@@ -451,6 +451,13 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         selected: currentView.columns.indexOf(col) !== -1,
       }));
       let filters = this.getSelectedFiltersWithItems(refiners, configuration, currentView);
+      let groupBy: PortfolioOverviewColumn;
+      if (currentView.groupBy) {
+        [groupBy] = configuration.columns.filter(fc => fc.fieldName === currentView.groupBy.fieldName);
+      }
+      if (hashState.groupBy) {
+        [groupBy] = configuration.columns.filter(fc => fc.fieldName === hashState.groupBy);
+      }
 
       let _state: Partial<IPortfolioOverviewState> = {
         columns: currentView.columns,
@@ -459,14 +466,9 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         currentView,
         configuration,
         canUserManageWeb: true,
+        groupBy,
       };
 
-      if (currentView.groupBy || hashState.groupBy) {
-        let [groupByCol] = configuration.columns.filter(fc => fc.fieldName === currentView.groupBy.fieldName || fc.fieldName === hashState.groupBy);
-        if (groupByCol) {
-          _state.groupBy = groupByCol;
-        }
-      }
       return _state;
     } catch (error) {
       throw error;
