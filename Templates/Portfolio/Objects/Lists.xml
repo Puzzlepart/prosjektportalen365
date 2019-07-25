@@ -6,7 +6,6 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Prosjekttillegg.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Listeinnhold.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Fasesjekkliste.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Prosjektkolonner.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Statusseksjoner.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Datakilder.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Ressursallokering.xml" />
@@ -15,5 +14,7 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Grafkonfigurasjon.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Logg.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Konfigurasjon.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Malbibliotek.xml" />    
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Malbibliotek.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Prosjektkolonner.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Prosjektstatuskonfigurasjon.xml" />
 </pnp:Lists>
