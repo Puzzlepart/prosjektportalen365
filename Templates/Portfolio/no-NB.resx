@@ -1035,6 +1035,9 @@
   <data name="SiteFields_GtDpRender_DisplayName" xml:space="preserve">
     <value>Visning</value>
   </data>
+  <data name="SiteFields_GtPortfolioColumn_DisplayName" xml:space="preserve">
+    <value>Kolonne</value>
+  </data>
   <data name="SiteFields_GtPortfolioColumns_DisplayName" xml:space="preserve">
     <value>Kolonner</value>
   </data>
@@ -1356,6 +1359,15 @@
   <data name="SiteFields_GtColMinWidth_DisplayName" xml:space="preserve">
     <value>Minimum bredde</value>
   </data>
+  <data name="SiteFields_GtStatusValue_DisplayName" xml:space="preserve">
+    <value>Kolonneverdi</value>
+  </data>
+  <data name="SiteFields_GtStatusColor_DisplayName" xml:space="preserve">
+    <value>Farge</value>
+  </data>
+  <data name="SiteFields_GtStatusIconName_DisplayName" xml:space="preserve">
+    <value>Ikonnavn</value>
+  </data>
   <data name="SiteFields_GtSortOrder_Description" xml:space="preserve">
     <value />
   </data>
@@ -1639,6 +1651,9 @@
     <value>Ikon fra https://developer.microsoft.com/en-us/fabric#/styles/icons</value>
   </data>
   <data name="SiteFields_GtDpRender_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtPortfolioColumn_Description" xml:space="preserve">
     <value></value>
   </data>
   <data name="SiteFields_GtPortfolioColumns_Description" xml:space="preserve">
@@ -1943,8 +1958,16 @@
   </data>
   <data name="SiteFields_GtColMinWidth_Description" xml:space="preserve">
     <value>Minimum bredde for denne kolonnen i piksler. Brukes blant annet i Porteføljeoversikten.</value>
+  </data>  
+  <data name="SiteFields_GtStatusValue_Description" xml:space="preserve">
+    <value></value>
   </data>
-  
+  <data name="SiteFields_GtStatusColor_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtStatusIconName_Description" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="ProjectList_Header" xml:space="preserve">
     <value>Prosjekter</value>
   </data>
