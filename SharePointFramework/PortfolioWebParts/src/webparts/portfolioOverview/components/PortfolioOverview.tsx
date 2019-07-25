@@ -42,7 +42,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     }
   }
 
-  public componentWillUpdate(_nextProps: IPortfolioOverviewProps, { currentView, groupBy }: IPortfolioOverviewState) {
+  public componentWillUpdate(_nextProps: IPortfolioOverviewProps, { currentView, groupBy, sortBy }: IPortfolioOverviewState) {
     let obj: { [key: string]: string } = {};
     if (currentView) {
       obj.viewId = currentView.id.toString();
@@ -290,7 +290,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     }
     items = arraySort(items, [column.fieldName], { reverse: !isSortedDescending });
     this.setState({
-      currentSort: { fieldName: column.fieldName, isSortedDescending: isSortedDescending },
+      sortBy: { fieldName: column.fieldName, isSortedDescending: isSortedDescending },
       items,
       columns: columns.map(col => {
         col.isSorted = (col.key === column.key);
@@ -355,15 +355,15 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
    * 
    * @param {SearchResult[]} items Items
    * @param {PortfolioOverviewColumn}  groupBy Group by column
-   * @param {Object} currentSort Current sort 
+   * @param {Object} sortBy Current sort 
    */
-  private getGroups(items: SearchResult[], groupBy: PortfolioOverviewColumn, currentSort: { fieldName: string; isSortedDescending: boolean; }): IGroup[] {
+  private getGroups(items: SearchResult[], groupBy: PortfolioOverviewColumn, sortBy: { fieldName: string; isSortedDescending: boolean; }): IGroup[] {
     let groups: IGroup[] = null;
     if (groupBy) {
       const itemsSort: any = { props: [groupBy.fieldName], opts: {} };
-      if (currentSort) {
-        itemsSort.props.push(currentSort.fieldName);
-        itemsSort.opts.reverse = !currentSort.isSortedDescending;
+      if (sortBy) {
+        itemsSort.props.push(sortBy.fieldName);
+        itemsSort.opts.reverse = !sortBy.isSortedDescending;
       }
       const groupItems: any[] = arraySort(items, itemsSort.props, itemsSort.opts);
       const groupByValues: string[] = groupItems.map(g => g[groupBy.fieldName] ? g[groupBy.fieldName] : strings.NotSet);
@@ -385,9 +385,9 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
    * Get filtered data
    */
   private getFilteredData() {
-    let { items, columns, searchTerm, groupBy, currentSort, activeFilters } = ({ ...this.state } as IPortfolioOverviewState);
+    let { items, columns, searchTerm, groupBy, sortBy, activeFilters } = ({ ...this.state } as IPortfolioOverviewState);
     const activeFiltersKeys = Object.keys(activeFilters);
-    let groups: IGroup[] = this.getGroups(items, groupBy, currentSort);
+    let groups: IGroup[] = this.getGroups(items, groupBy, sortBy);
     items = [].concat(items).filter(item => {
       const fieldNames = columns.map(col => col.fieldName);
       return fieldNames.filter(fieldName => {

@@ -21,7 +21,7 @@ export interface IPortfolioOverviewState {
     error?: IPortfolioOverviewErrorMessage;
     showFilterPanel?: boolean;
     groupBy?: PortfolioOverviewColumn;
-    currentSort?: { fieldName: string, isSortedDescending: boolean };
+    sortBy?: { fieldName: string, isSortedDescending: boolean };
     showProjectInfo?: any;
     excelExportStatus?: any;
     canUserManageWeb?: boolean;
