@@ -43,7 +43,7 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
     if (this.state.newStatusCreated) {
       await this.associateStatusItem(this.props.pageContext);
     }
-    const data = await this.fetchData();
+    const data = await this.fetchData(this.props.pageContext);
     this.setState({ data, selectedReport: data.reports[0], isLoading: false });
   }
 
@@ -253,12 +253,13 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
 
   /**
    * Fetch data
+   * 
+   * @param {PageContext} param0 Destructed PageContext
    */
-  private async fetchData(): Promise<IProjectStatusData> {
-    const siteId = this.props.pageContext.site.id.toString();
+  private async fetchData({ site }: PageContext): Promise<IProjectStatusData> {
     Logger.log({ message: '(ProjectStatus) fetchData: Fetching fields and reports', data: {}, level: LogLevel.Info });
     const [entityItem, entityFields] = await Promise.all([
-      this.props.spEntityPortalService.getEntityItemFieldValues(siteId),
+      this.props.spEntityPortalService.getEntityItemFieldValues(site.id.toString()),
       this.props.spEntityPortalService.getEntityFields(),
     ]);
     let reportListProps = await this.reportList
@@ -266,7 +267,7 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
       .expand('DefaultEditFormUrl', 'DefaultNewFormUrl')
       .get<{ DefaultEditFormUrl: string, DefaultNewFormUrl: string }>();
     const [reportItems, sectionItems] = await Promise.all([
-      this.reportList.items.filter(`GtSiteId eq '${siteId}'`).get<IProjectStatusReportItem[]>(),
+      this.reportList.items.filter(`GtSiteId eq '${site.id.toString()}'`).orderBy('Id', false).get<IProjectStatusReportItem[]>(),
       this.sectionsList.items.get(),
     ]);
     const reports = reportItems.map(r => new ProjectStatusReport(r));
