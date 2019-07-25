@@ -10,6 +10,7 @@ declare interface IPortfolioOverviewWebPartStrings {
   NotSet: string;
   PortfolioViewsListName: string;
   ProjectColumnsListName: string;
+  ProjectStatusConfigListName: string;
 }
 
 declare module 'PortfolioOverviewWebPartStrings' {

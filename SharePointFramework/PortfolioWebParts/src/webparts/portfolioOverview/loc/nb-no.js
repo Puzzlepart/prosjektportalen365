@@ -10,6 +10,7 @@ define([], function() {
     "FieldSelectorEmptyMessage": "Det er ikke konfigurert opp noen felter. Ta kontakt med en administrator.",
     "NotSet": "Ikke satt",
     "PortfolioViewsListName": "Porteføljevisninger",
-    "ProjectColumnsListName": "Prosjektkolonner"
+    "ProjectColumnsListName": "Prosjektkolonner",
+    "ProjectStatusConfigListName": "Prosjektstatuskonfigurasjon"
   }
 });
