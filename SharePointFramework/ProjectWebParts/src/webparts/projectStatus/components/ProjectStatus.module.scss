@@ -2,10 +2,10 @@
 .projectStatus {
   @include ms-Grid;
   .container {
-    margin: 0;
+    padding: 0 32px;
     @include ms-Grid-row;
     .header {
-      padding: 10px 0 0 0;
+      padding: 25px 0 25px 0 !important;
       .title {
         font-size: 28px;
         font-weight: 100;

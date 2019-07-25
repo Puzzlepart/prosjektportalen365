@@ -64,8 +64,8 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
 
     return (
       <div className={styles.projectStatus}>
+        {this.renderCommandBar()}
         <div className={styles.container}>
-          {this.renderCommandBar()}
           <div className={`${styles.header} ${styles.column12}`}>
             <div className={styles.title}>{this.props.title}</div>
           </div>
