@@ -1,5 +1,5 @@
 ﻿<pnp:ListInstance Title="Porteføljevisninger" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Porteføljevisninger" Hidden="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2019/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x01001BE34662FF90874E9FEB29B37B6BB18C" Default="true" />
     </pnp:ContentTypeBindings>

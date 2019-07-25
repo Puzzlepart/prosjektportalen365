@@ -1,4 +1,4 @@
 ﻿<pnp:ListInstance Title="Prosjekttillegg" Description="" DocumentTemplate="" Hidden="true" TemplateType="101" Url="Prosjekttillegg" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" EnableAttachments="false" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2019/03/ProvisioningSchema">
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

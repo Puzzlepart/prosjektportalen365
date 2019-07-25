@@ -1,5 +1,5 @@
 ﻿<pnp:ListInstance Title="Prosjektstatus" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Prosjektstatus" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2019/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x010022252E35737A413FB56A1BA53862F6D5" Default="true" />
     </pnp:ContentTypeBindings>
