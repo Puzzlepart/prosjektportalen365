@@ -5,14 +5,15 @@ import * as objectGet from 'object-get';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { DetailsList, IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import * as strings from 'PortfolioOverviewWebPartStrings';
 import * as React from 'react';
 import formatDate from '../../../../../@Shared/lib/helpers/formatDate';
 import tryParseCurrency from '../../../../../@Shared/lib/helpers/tryParseCurrency';
+import { parseUrlHash, setUrlHash } from '../../../../../@Shared/lib/util';
 import FilterPanel, { IFilterItemProps, IFilterProps } from '../../../components/FilterPanel';
 import * as PortfolioOverviewConfig from '../config';
 import { IPortfolioOverviewConfiguration, PortfolioOverviewColumn, PortfolioOverviewView } from '../config';
@@ -21,6 +22,7 @@ import { IPortfolioOverviewProps, PortfolioOverviewDefaultProps } from './IPortf
 import { IPortfolioOverviewState } from './IPortfolioOverviewState';
 import styles from './PortfolioOverview.module.scss';
 import PortfolioOverviewFieldSelector from './PortfolioOverviewFieldSelector';
+
 
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = PortfolioOverviewDefaultProps;
@@ -37,6 +39,14 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     } catch (error) {
       this.setState({ error, isLoading: false });
     }
+  }
+
+  public componentWillUpdate(_nextProps: IPortfolioOverviewProps, nextState: IPortfolioOverviewState) {
+    let obj: { [key: string]: string } = { viewId: nextState.currentView.id.toString() };
+    if (nextState.groupBy) {
+      obj.groupBy = nextState.groupBy.fieldName;
+    }
+    setUrlHash(obj);
   }
 
   public render(): React.ReactElement<IPortfolioOverviewProps> {
@@ -256,10 +266,10 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   /**
    * On column sort
    *
-   * @param {any} _event Event
+   * @param {React.MouseEvent<HTMLElement, MouseEvent>} _ev Event
    * @param {IColumn} column The column config
    */
-  private onColumnSort = (_event: any, column: IColumn): void => {
+  private onColumnSort = (_ev: React.MouseEvent<HTMLElement, MouseEvent>, column: IColumn): void => {
     let { items, columns } = ({ ...this.state } as IPortfolioOverviewState);
 
     let isSortedDescending = column.isSortedDescending;
@@ -332,11 +342,11 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   /**
    * Get groups
    * 
-   * @param {any[]} items Items
+   * @param {SearchResult[]} items Items
    * @param {PortfolioOverviewColumn}  groupBy Group by column
    * @param {Object} currentSort Current sort 
    */
-  private getGroups(items: any[], groupBy: PortfolioOverviewColumn, currentSort: { fieldName: string; isSortedDescending: boolean; }): IGroup[] {
+  private getGroups(items: SearchResult[], groupBy: PortfolioOverviewColumn, currentSort: { fieldName: string; isSortedDescending: boolean; }): IGroup[] {
     let groups: IGroup[] = null;
     if (groupBy) {
       const itemsSort: any = { props: [groupBy.fieldName], opts: {} };
@@ -390,7 +400,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
    * Fetch initial data
    */
   private async fetchInitialData(): Promise<Partial<IPortfolioOverviewState>> {
-    let hashState: any = {};
+    let hashState = parseUrlHash();
     const configuration = await PortfolioOverviewConfig.getConfig();
     let currentView: PortfolioOverviewView;
 
