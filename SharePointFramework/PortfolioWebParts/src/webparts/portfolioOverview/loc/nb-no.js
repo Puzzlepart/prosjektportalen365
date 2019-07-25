@@ -13,6 +13,6 @@ define([], function() {
     "NotSet": "Ikke satt",
     "PortfolioViewsListName": "Porteføljevisninger",
     "ProjectColumnsListName": "Prosjektkolonner",
-    "ProjectStatusConfigListName": "Prosjektstatuskonfigurasjon"
+    "ProjectColumnConfigListName": "Prosjektkolonnekonfigurasjon"
   }
 });

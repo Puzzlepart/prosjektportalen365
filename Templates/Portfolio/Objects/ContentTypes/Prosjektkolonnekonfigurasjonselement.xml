@@ -1,0 +1,10 @@
+﻿<pnp:ContentType ID="0x01005CC009F95743674DAF31B3531CFFA586" Name="Prosjektkolonnekonfigurasjonselement" Description="" Group="Prosjektportalen innholdstyper" 
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    <pnp:FieldRefs>
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" />
+        <pnp:FieldRef ID="6aefa59f-4300-4c22-94af-d77d05d792f6" Name="GtPortfolioColumn" Required="true" />
+        <pnp:FieldRef ID="bb6eac2d-9253-4cb9-a934-a9343ce875d2" Name="GtPortfolioColumnValue" Required="true" />
+        <pnp:FieldRef ID="4cfafd35-e26f-44cf-bb90-47aa65a41827" Name="GtPortfolioColumnColor" Required="true" />
+        <pnp:FieldRef ID="d066062c-2fd0-486a-a30a-44bcb3bead4a" Name="GtPortfolioColumnIconName" Required="true" />
+    </pnp:FieldRefs>
+</pnp:ContentType>

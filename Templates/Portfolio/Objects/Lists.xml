@@ -16,5 +16,5 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Konfigurasjon.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Malbibliotek.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Prosjektkolonner.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Prosjektstatuskonfigurasjon.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Prosjektkolonnekonfigurasjon.xml" />
 </pnp:Lists>

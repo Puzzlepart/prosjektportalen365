@@ -332,11 +332,11 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         );
       }
       default: {
-        const statusConfig = column.statusConfig ? column.statusConfig[colValue] : null;
-        if (statusConfig) {
+        const config = column.config ? column.config[colValue] : null;
+        if (config) {
           return (
             <span>
-              <Icon iconName={statusConfig.statusIconName} style={{ color: statusConfig.statusColor, marginRight: 4 }} />
+              <Icon iconName={config.iconName} style={{ color: config.color, marginRight: 4 }} />
               <span>{colValue}</span>
             </span>
           );
@@ -349,7 +349,6 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
       }
     }
   }
-
 
   /**
    * Get groups

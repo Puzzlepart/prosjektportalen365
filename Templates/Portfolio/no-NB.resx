@@ -1359,13 +1359,13 @@
   <data name="SiteFields_GtColMinWidth_DisplayName" xml:space="preserve">
     <value>Minimum bredde</value>
   </data>
-  <data name="SiteFields_GtStatusValue_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPortfolioColumnValue_DisplayName" xml:space="preserve">
     <value>Kolonneverdi</value>
   </data>
-  <data name="SiteFields_GtStatusColor_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPortfolioColumnColor_DisplayName" xml:space="preserve">
     <value>Farge</value>
   </data>
-  <data name="SiteFields_GtStatusIconName_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtPortfolioColumnIconName_DisplayName" xml:space="preserve">
     <value>Ikonnavn</value>
   </data>
   <data name="SiteFields_GtSortOrder_Description" xml:space="preserve">
@@ -1959,13 +1959,13 @@
   <data name="SiteFields_GtColMinWidth_Description" xml:space="preserve">
     <value>Minimum bredde for denne kolonnen i piksler. Brukes blant annet i Porteføljeoversikten.</value>
   </data>  
-  <data name="SiteFields_GtStatusValue_Description" xml:space="preserve">
+  <data name="SiteFields_GtPortfolioColumnValue_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="SiteFields_GtStatusColor_Description" xml:space="preserve">
+  <data name="SiteFields_GtPortfolioColumnColor_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="SiteFields_GtStatusIconName_Description" xml:space="preserve">
+  <data name="SiteFields_GtPortfolioColumnIconName_Description" xml:space="preserve">
     <value></value>
   </data>
   <data name="ProjectList_Header" xml:space="preserve">
