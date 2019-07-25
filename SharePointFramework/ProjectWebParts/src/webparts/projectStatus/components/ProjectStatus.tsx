@@ -35,7 +35,6 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
       isLoading: true,
       associateStatusItem: document.location.hash === '#NewStatus',
     };
-    console.log('ProjectStatus', this.state);
     this.reportList = props.hubSite.web.lists.getByTitle(this.props.reportListName) as any;
     this.sectionsList = props.hubSite.web.lists.getByTitle(this.props.sectionsListName) as any;
   }
