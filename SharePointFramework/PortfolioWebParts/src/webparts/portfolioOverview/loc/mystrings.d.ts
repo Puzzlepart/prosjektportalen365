@@ -4,6 +4,8 @@ declare interface IPortfolioOverviewWebPartStrings {
   NoGrouping: string;
   ViewNotFoundMessage: string;
   NoDefaultViewMessage: string;
+  GetConfigErrorMessage: string;
+  FetchDataErrorMessage: string;
   FiltersString: string;
   FieldSelectorName: string;
   FieldSelectorEmptyMessage: string;

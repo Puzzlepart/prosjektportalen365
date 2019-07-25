@@ -1,8 +1,9 @@
 import { sp } from '@pnp/sp';
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import * as strings from 'PortfolioOverviewWebPartStrings';
 import IPortfolioOverviewConfiguration from './IPortfolioOverviewConfiguration';
-import { PortfolioOverviewView, IPortfolioOverviewViewSpItem } from './PortfolioOverviewView';
-import { PortfolioOverviewColumn, IPortfolioOverviewColumnSpItem } from './PortfolioOverviewColumn';
+import { IPortfolioOverviewColumnSpItem, PortfolioOverviewColumn } from './PortfolioOverviewColumn';
+import { IPortfolioOverviewViewSpItem, PortfolioOverviewView } from './PortfolioOverviewView';
 import { IProjectStatusConfigSpItem, ProjectStatusConfig, ProjectStatusConfigDictionary } from './ProjectStatusConfig';
 
 /**
@@ -25,9 +26,13 @@ export async function getConfig(): Promise<IPortfolioOverviewConfiguration> {
         });
         const views = spItems[2].map(c => new PortfolioOverviewView(c, columns));
         const refiners = columns.filter(col => col.isRefinable);
-        return { columns, refiners, views };
+        const config: IPortfolioOverviewConfiguration = { columns, refiners, views };
+        return config;
     } catch (error) {
-        throw error;
+        throw {
+            message: strings.GetConfigErrorMessage,
+            type: MessageBarType.error
+        };
     }
 }
 

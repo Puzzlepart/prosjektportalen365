@@ -22,6 +22,7 @@ import { IPortfolioOverviewProps, PortfolioOverviewDefaultProps } from './IPortf
 import { IPortfolioOverviewState } from './IPortfolioOverviewState';
 import styles from './PortfolioOverview.module.scss';
 import PortfolioOverviewFieldSelector from './PortfolioOverviewFieldSelector';
+import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
 
 
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
@@ -41,10 +42,13 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     }
   }
 
-  public componentWillUpdate(_nextProps: IPortfolioOverviewProps, nextState: IPortfolioOverviewState) {
-    let obj: { [key: string]: string } = { viewId: nextState.currentView.id.toString() };
-    if (nextState.groupBy) {
-      obj.groupBy = nextState.groupBy.fieldName;
+  public componentWillUpdate(_nextProps: IPortfolioOverviewProps, { currentView, groupBy }: IPortfolioOverviewState) {
+    let obj: { [key: string]: string } = {};
+    if (currentView) {
+      obj.viewId = currentView.id.toString();
+    }
+    if (groupBy) {
+      obj.groupBy = groupBy.fieldName;
     }
     setUrlHash(obj);
   }
@@ -55,6 +59,15 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         <div className={styles.portfolioOverview}>
           <div className={styles.container}>
             <Spinner label={strings.LoadingText} size={SpinnerSize.large} />
+          </div>
+        </div>
+      );
+    }
+    if (this.state.error) {
+      return (
+        <div className={styles.portfolioOverview}>
+          <div className={styles.container}>
+            <MessageBar messageBarType={this.state.error.type}>{this.state.error.message}</MessageBar>
           </div>
         </div>
       );
@@ -236,15 +249,14 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
  * @param {IPortfolioOverviewConfigViewConfig} viewConfig View configuration
  */
   private getSelectedFiltersWithItems(refiners: IRefinementResult[], configuration: IPortfolioOverviewConfiguration, viewConfig: PortfolioOverviewView): IFilterProps[] {
-    return configuration.refiners
-      .filter(ref => refiners.filter(r => r.Name === ref.key).length > 0 && viewConfig.refiners.indexOf(ref) !== -1)
-      .map(ref => {
-        let entries = refiners.filter(r => r.Name === ref.key)[0].Entries;
-        let items = entries
-          .map(entry => ({ name: entry.RefinementName, value: entry.RefinementValue }))
-          .sort((a, b) => a.value > b.value ? 1 : -1);
-        return { column: ref, items };
-      });
+    const selectedRefiners = configuration.refiners.filter(ref => refiners.filter(r => r.Name === ref.key).length > 0 && viewConfig.refiners.indexOf(ref) !== -1);
+    let filters = selectedRefiners.map(ref => {
+      let entries = refiners.filter(r => r.Name === ref.key)[0].Entries;
+      let items = entries.map(entry => ({ name: entry.RefinementName, value: entry.RefinementValue }));
+      let itemsSorted = items.sort((a, b) => a.value > b.value ? 1 : -1);
+      return { column: ref, items: itemsSorted };
+    });
+    return filters;
   }
 
   /**
@@ -376,7 +388,6 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   private getFilteredData() {
     let { items, columns, searchTerm, groupBy, currentSort, activeFilters } = ({ ...this.state } as IPortfolioOverviewState);
     const activeFiltersKeys = Object.keys(activeFilters);
-
     let groups: IGroup[] = this.getGroups(items, groupBy, currentSort);
     items = [].concat(items).filter(item => {
       const fieldNames = columns.map(col => col.fieldName);
@@ -400,15 +411,13 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
    * Fetch initial data
    */
   private async fetchInitialData(): Promise<Partial<IPortfolioOverviewState>> {
-    let hashState = parseUrlHash();
-    const configuration = await PortfolioOverviewConfig.getConfig();
-    let currentView: PortfolioOverviewView;
+    try {
+      const configuration = await PortfolioOverviewConfig.getConfig();
+      const hashState = parseUrlHash();
+      const viewIdUrlParam = new UrlQueryParameterCollection(document.location.href).getValue('viewId');
+      let currentView = this.props.defaultView;
 
-    if (this.props.defaultView) {
-      currentView = this.props.defaultView;
-    } else {
-      let viewIdUrlParam = '';
-      if (viewIdUrlParam !== '') {
+      if (viewIdUrlParam) {
         [currentView] = configuration.views.filter(qc => qc.id === parseInt(viewIdUrlParam, 10));
         if (!currentView) {
           throw {
@@ -433,33 +442,35 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           };
         }
       }
-    }
-    const { items, refiners } = await fetchData(currentView, configuration, this.props.context);
 
-    PortfolioOverviewFieldSelector.items = configuration.columns.map(col => ({
-      name: col.name,
-      value: col.fieldName,
-      selected: currentView.columns.indexOf(col) !== -1,
-    }));
-    let filters = this.getSelectedFiltersWithItems(refiners, configuration, currentView);
+      const { items, refiners } = await fetchData(currentView, configuration, this.props.context.pageContext);
 
-    let _state: Partial<IPortfolioOverviewState> = {
-      columns: currentView.columns,
-      items,
-      filters,
-      currentView,
-      configuration,
-      canUserManageWeb: true,
-    };
+      PortfolioOverviewFieldSelector.items = configuration.columns.map(col => ({
+        name: col.name,
+        value: col.fieldName,
+        selected: currentView.columns.indexOf(col) !== -1,
+      }));
+      let filters = this.getSelectedFiltersWithItems(refiners, configuration, currentView);
 
-    if (currentView.groupBy) {
-      let [groupByCol] = configuration.columns.filter(fc => fc.fieldName === currentView.groupBy.fieldName);
-      if (groupByCol) {
-        _state.groupBy = groupByCol;
+      let _state: Partial<IPortfolioOverviewState> = {
+        columns: currentView.columns,
+        items,
+        filters,
+        currentView,
+        configuration,
+        canUserManageWeb: true,
+      };
+
+      if (currentView.groupBy || hashState.groupBy) {
+        let [groupByCol] = configuration.columns.filter(fc => fc.fieldName === currentView.groupBy.fieldName || fc.fieldName === hashState.groupBy);
+        if (groupByCol) {
+          _state.groupBy = groupByCol;
+        }
       }
+      return _state;
+    } catch (error) {
+      throw error;
     }
-
-    return _state;
   }
 
 
@@ -474,7 +485,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     }
 
     this.setState({ isChangingView: view });
-    const { items, refiners } = await fetchData(view, this.state.configuration, this.props.context);
+    const { items, refiners } = await fetchData(view, this.state.configuration, this.props.context.pageContext);
     let filters = this.getSelectedFiltersWithItems(refiners, this.state.configuration, view);
 
     let updatedState: Partial<IPortfolioOverviewState> = {

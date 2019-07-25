@@ -1,8 +1,10 @@
-import { sp, SearchResult, SearchResults, QueryPropertyValueType, SortDirection } from '@pnp/sp';
-import { IPortfolioOverviewConfiguration, PortfolioOverviewView } from '../config';
-import { WebPartContext } from '@microsoft/sp-webpart-base';
-import * as objectGet from 'object-get';
+import { PageContext } from '@microsoft/sp-page-context';
+import { QueryPropertyValueType, SearchResult, SearchResults, SortDirection, sp } from '@pnp/sp';
 import * as cleanDeep from 'clean-deep';
+import * as objectGet from 'object-get';
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import * as strings from 'PortfolioOverviewWebPartStrings';
+import { IPortfolioOverviewConfiguration, PortfolioOverviewView } from '../config';
 
 export interface IRefinementResultEntry {
     RefinementCount: string;
@@ -51,9 +53,9 @@ function mapSearchResultData(results: SearchResults) {
  *
  * @param {PortfolioOverviewView} view View configuration
  * @param {IPortfolioOverviewConfiguration} configuration PortfolioOverviewConfiguration
- * @param {WebPartContext} context Context
+ * @param {PageContext} pageContext Page context
  */
-export async function fetchData(view: PortfolioOverviewView, configuration: IPortfolioOverviewConfiguration, context: WebPartContext): Promise<IFetchDataResponse> {
+export async function fetchData(view: PortfolioOverviewView, configuration: IPortfolioOverviewConfiguration, pageContext: PageContext): Promise<IFetchDataResponse> {
     try {
         const [projectsResults, sitesResults, statusReportsResults] = await Promise.all([
             sp.search({
@@ -64,12 +66,12 @@ export async function fetchData(view: PortfolioOverviewView, configuration: IPor
             }),
             sp.search({
                 ...DEFAULT_SEARCH_SETTINGS,
-                QueryTemplate: `DepartmentId:{${context.pageContext.site.id.toString()}} contentclass:STS_Site`,
+                QueryTemplate: `DepartmentId:{${pageContext.site.id.toString()}} contentclass:STS_Site`,
                 SelectProperties: ['Path', 'Title', 'SiteId'],
             }),
             sp.search({
                 ...DEFAULT_SEARCH_SETTINGS,
-                QueryTemplate: `DepartmentId:{${context.pageContext.site.id.toString()}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5*`,
+                QueryTemplate: `DepartmentId:{${pageContext.site.id.toString()}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5*`,
                 SelectProperties: [...configuration.columns.map(f => f.fieldName), 'GtSiteIdOWSTEXT'],
                 Refiners: configuration.refiners.map(ref => ref.fieldName).join(','),
             }),
@@ -79,7 +81,7 @@ export async function fetchData(view: PortfolioOverviewView, configuration: IPor
         let projects: any[] = mapSearchResultData(projectsResults);
         let sites: any[] = mapSearchResultData(sitesResults);
         let statusReports: any[] = mapSearchResultData(statusReportsResults);
-        
+
         let items = sites
             .map(site => {
                 const [project] = projects.filter(res => res.GtSiteIdOWSTEXT === site.SiteId);
@@ -89,6 +91,9 @@ export async function fetchData(view: PortfolioOverviewView, configuration: IPor
             .filter(i => i);
         return { items, refiners };
     } catch (err) {
-        throw err;
+        throw {
+            message: strings.FetchDataErrorMessage,
+            type: MessageBarType.error
+        };
     }
 }

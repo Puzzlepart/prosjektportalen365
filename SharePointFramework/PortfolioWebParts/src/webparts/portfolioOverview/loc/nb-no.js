@@ -5,6 +5,8 @@ define([], function() {
     "NoGrouping": "Ingen gruppering",
     "ViewNotFoundMessage": "Finner ikke angitt visning.",
     "NoDefaultViewMessage": "Det er ikke satt noen standardvisning.",
+    "GetConfigErrorMessage": "Det skjedde en feil under uthenting av konfigurasjon.",
+    "FetchDataErrorMessage": "Det skjedde en feil under uthenting av data.",
     "FiltersString": "Filtre",
     "FieldSelectorName": "Felter",
     "FieldSelectorEmptyMessage": "Det er ikke konfigurert opp noen felter. Ta kontakt med en administrator.",
