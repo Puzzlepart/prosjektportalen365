@@ -18,10 +18,11 @@ import ProjectPropertiesSection from './ProjectPropertiesSection';
 import styles from './ProjectStatus.module.scss';
 import StatusSection from './StatusSection';
 import SummarySection from './SummarySection';
+import { PageContext } from '@microsoft/sp-page-context';
 
 export default class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
-  private _reportList: List;
-  private _sectionsList: List;
+  private reportList: List;
+  private sectionsList: List;
 
   /**
    * Constructor
@@ -34,13 +35,13 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
       isLoading: true,
       associateStatusItem: document.location.hash === '#NewStatus',
     };
-    this._reportList = props.hubSite.web.lists.getByTitle(this.props.reportListName) as any;
-    this._sectionsList = props.hubSite.web.lists.getByTitle(this.props.sectionsListName) as any;
+    this.reportList = props.hubSite.web.lists.getByTitle(this.props.reportListName) as any;
+    this.sectionsList = props.hubSite.web.lists.getByTitle(this.props.sectionsListName) as any;
   }
 
   public async componentDidMount() {
     if (this.state.associateStatusItem) {
-      await this.associateStatusItem();
+      await this.associateStatusItem(this.props.pageContext);
     }
     const data = await this.fetchData();
     this.setState({ data, selectedReport: data.reports[0], isLoading: false });
@@ -112,26 +113,26 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
 
   /**
    * Associate status item
+   * 
+   * @param {PageContext} param0 Destructed PageContext
    */
-  private async associateStatusItem(): Promise<void> {
-    const siteId = this.props.pageContext.site.id.toString();
-    let item: IProjectStatusReportItem;
+  private async associateStatusItem({ site, web, user }: PageContext): Promise<void> {
     try {
       const dateTime = dateAdd(new Date(), 'minute', -1).toISOString();
-      [item] = await this._reportList.items
-        .filter(`AuthorId eq ${this.props.pageContext.legacyPageContext.userId} and GtSiteId ne '${siteId}' and Created ge datetime'${dateTime}'`)
+      let [item] = await this.reportList.items
+        .filter(`Author/EMail eq '${user.email}' and Created ge datetime'${dateTime}'`)
         .select('Id', 'GtMonthChoice', 'Created')
         .orderBy('Id', false)
         .top(1)
         .get<IProjectStatusReportItem[]>();
+      if (item) {
+        const report = new ProjectStatusReport(item);
+        await this.reportList.items.getById(report.id).update({
+          Title: `${web.title} (${report.toString()})`,
+          GtSiteId: site.id.toString(),
+        });
+      }
     } catch (error) { }
-    if (item) {
-      const report = new ProjectStatusReport(item);
-      await this._reportList.items.getById(item.Id).update({
-        Title: `${this.props.pageContext.web.title} (${report.toString()})`,
-        GtSiteId: siteId,
-      });
-    }
     document.location.hash = '#';
   }
 
@@ -260,13 +261,13 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
       this.props.spEntityPortalService.getEntityItemFieldValues(siteId),
       this.props.spEntityPortalService.getEntityFields(),
     ]);
-    let reportListProps = await this._reportList
+    let reportListProps = await this.reportList
       .select('DefaultEditFormUrl', 'DefaultNewFormUrl')
       .expand('DefaultEditFormUrl', 'DefaultNewFormUrl')
       .get<{ DefaultEditFormUrl: string, DefaultNewFormUrl: string }>();
     const [reportItems, sectionItems] = await Promise.all([
-      this._reportList.items.filter(`GtSiteId eq '${siteId}'`).get<IProjectStatusReportItem[]>(),
-      this._sectionsList.items.get(),
+      this.reportList.items.filter(`GtSiteId eq '${siteId}'`).get<IProjectStatusReportItem[]>(),
+      this.sectionsList.items.get(),
     ]);
     const reports = reportItems.map(r => new ProjectStatusReport(r));
     const sections = sectionItems.map(s => new SectionModel(s));
