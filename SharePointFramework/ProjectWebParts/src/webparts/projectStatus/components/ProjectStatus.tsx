@@ -33,14 +33,14 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
     super(props);
     this.state = {
       isLoading: true,
-      associateStatusItem: document.location.hash === '#NewStatus',
+      newStatusCreated: document.location.hash === '#NewStatus',
     };
     this.reportList = props.hubSite.web.lists.getByTitle(this.props.reportListName) as any;
     this.sectionsList = props.hubSite.web.lists.getByTitle(this.props.sectionsListName) as any;
   }
 
   public async componentDidMount() {
-    if (this.state.associateStatusItem) {
+    if (this.state.newStatusCreated) {
       await this.associateStatusItem(this.props.pageContext);
     }
     const data = await this.fetchData();
@@ -109,31 +109,6 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
     return (
       <CommandBar items={items} farItems={farItems} />
     );
-  }
-
-  /**
-   * Associate status item
-   * 
-   * @param {PageContext} param0 Destructed PageContext
-   */
-  private async associateStatusItem({ site, web, user }: PageContext): Promise<void> {
-    try {
-      const dateTime = dateAdd(new Date(), 'minute', -1).toISOString();
-      let [item] = await this.reportList.items
-        .filter(`Author/EMail eq '${user.email}' and Created ge datetime'${dateTime}'`)
-        .select('Id', 'GtMonthChoice', 'Created')
-        .orderBy('Id', false)
-        .top(1)
-        .get<IProjectStatusReportItem[]>();
-      if (item) {
-        const report = new ProjectStatusReport(item);
-        await this.reportList.items.getById(report.id).update({
-          Title: `${web.title} (${report.toString()})`,
-          GtSiteId: site.id.toString(),
-        });
-      }
-    } catch (error) { }
-    document.location.hash = '#';
   }
 
   /**
@@ -249,6 +224,31 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
       isChecked: this.state.selectedReport ? report.item.Id === this.state.selectedReport.item.Id : false,
     } as IContextualMenuItem));
     return reportOptions;
+  }
+
+  /**
+   * Associate status item
+   * 
+   * @param {PageContext} param0 Destructed PageContext
+   */
+  private async associateStatusItem({ site, web, user }: PageContext): Promise<void> {
+    try {
+      const dateTime = dateAdd(new Date(), 'minute', -1).toISOString();
+      let [item] = await this.reportList.items
+        .filter(`Author/EMail eq '${user.email}' and Created ge datetime'${dateTime}'`)
+        .select('Id', 'GtMonthChoice', 'Created')
+        .orderBy('Id', false)
+        .top(1)
+        .get<IProjectStatusReportItem[]>();
+      if (item) {
+        const report = new ProjectStatusReport(item);
+        await this.reportList.items.getById(report.id).update({
+          Title: `${web.title} (${report.toString()})`,
+          GtSiteId: site.id.toString(),
+        });
+      }
+    } catch (error) { }
+    document.location.hash = '#';
   }
 
   /**
