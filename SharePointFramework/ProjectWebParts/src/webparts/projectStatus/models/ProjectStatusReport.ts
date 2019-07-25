@@ -6,9 +6,11 @@ export interface IProjectStatusReportItem {
 }
 
 export default class ProjectStatusReport {
+    public id: number;
     public item: IProjectStatusReportItem;
 
     constructor(item: IProjectStatusReportItem) {
+        this.id = item.Id;
         this.item = item;
     }
 
