@@ -22,7 +22,9 @@
 )
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
+$InstallStartTime = (Get-Date).ToString("MM/dd/yyy hh:mm")
 Write-Host "[INFO] Installing [Prosjektportalen 365] [VERSION_PLACEHOLDER]"
+
 function Connect-SharePoint {
     Param(
         [Parameter(Mandatory = $true)]
@@ -242,6 +244,14 @@ $sw.Stop()
 Write-Host "[REQUIRED ACTION] Go to $($AdminSiteUrl)/_layouts/15/online/AdminHome.aspx#/webApiPermissionManagement and approve the pending requests" -ForegroundColor Yellow
 
 Write-Host "[INFO] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
+
+$InstallEndTime = (Get-Date).ToString("MM/dd/yyy hh:mm")
+
+Add-PnPListItem -List "Installasjonslogg" -Values @{
+    InstallStartTime=$InstallStartTime; 
+    InstallEndTime=$InstallEndTime; 
+    InstallVersion="VERSION_PLACEHOLDER"
+}
 
 #region Disconnect
 Disconnect-PnPOnline -Connection $AppCatalogSiteConnection
