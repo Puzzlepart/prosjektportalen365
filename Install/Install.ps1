@@ -99,7 +99,7 @@ Catch {
 #region Setting permissons
 Write-Host "[INFO] Setting permissions for associated member group"
 # Must use english names to avoid errors, even on non 1033 sites
-# Where-Object doesn't work directly on Get-PnPRoleDefinition, so need to clone it first
+# Where-Object doesn't work directly on Get-PnPRoleDefinition, so need to clone it first (https://github.com/Puzzlepart/prosjektportalen365/issues/35)
 $RoleDefinitions = @()
 Get-PnPRoleDefinition | ForEach-Object { $RoleDefinitions += $_ }
 Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -RemoveRole ($RoleDefinitions | Where-Object { $_.RoleTypeKind -eq "Editor" }) -Connection  $SiteConnection -ErrorAction SilentlyContinue
