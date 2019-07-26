@@ -24,7 +24,7 @@
 )
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
-$InstallStartTime = (Get-Date).ToString("MM/dd/yyy hh:mm")
+$InstallStartTime = (Get-Date).ToString("MM/dd/yyy HH:mm")
 Write-Host "[INFO] Installing [Prosjektportalen 365] [VERSION_PLACEHOLDER]"
 
 function Connect-SharePoint {
@@ -257,7 +257,7 @@ Write-Host "[REQUIRED ACTION] Go to $($AdminSiteUrl)/_layouts/15/online/AdminHom
 
 Write-Host "[INFO] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
 
-$InstallEndTime = (Get-Date).ToString("MM/dd/yyy hh:mm")
+$InstallEndTime = (Get-Date).ToString("MM/dd/yyy HH:mm")
 
 Add-PnPListItem -List "Installasjonslogg" -Values @{
     InstallStartTime = $InstallStartTime; 
