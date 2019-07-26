@@ -197,7 +197,6 @@ if (-not $SkipAppPackages.IsPresent) {
 #region Applying PnP templates 
 if (-not $SkipTemplate.IsPresent) {
     Try {
-        Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
         $DenyAddAndCustomizePagesStatusEnum = [Microsoft.Online.SharePoint.TenantAdministration.DenyAddAndCustomizePagesStatus]
         $Site = Get-PnPTenantSite -Detailed -Url $Url -Connection $AdminSiteConnection
         $Site.DenyAddAndCustomizePages = $DenyAddAndCustomizePagesStatusEnum::Disabled 
@@ -248,10 +247,10 @@ Write-Host "[INFO] Installation completed in $($sw.Elapsed)" -ForegroundColor Gr
 $InstallEndTime = (Get-Date).ToString("MM/dd/yyy hh:mm")
 
 Add-PnPListItem -List "Installasjonslogg" -Values @{
-    InstallStartTime=$InstallStartTime; 
-    InstallEndTime=$InstallEndTime; 
-    InstallVersion="VERSION_PLACEHOLDER"
-}
+    InstallStartTime = $InstallStartTime; 
+    InstallEndTime = $InstallEndTime; 
+    InstallVersion = "VERSION_PLACEHOLDER"
+} -Connection $SiteConnection
 
 #region Disconnect
 Disconnect-PnPOnline -Connection $AppCatalogSiteConnection

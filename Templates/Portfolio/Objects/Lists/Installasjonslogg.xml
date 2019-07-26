@@ -21,6 +21,6 @@
     <pnp:Fields>
         <Field DisplayName="InstallStartTime" Format="DateTime" Name="InstallStartTime" Title="InstallStartTime" Type="DateTime" ID="{8bb36128-4fc0-415d-9818-10fa686df919}" SourceID="{{listid:Installasjonslogg}}" StaticName="InstallStartTime" />
         <Field DisplayName="InstallEndTime" Format="DateTime" Name="InstallEndTime" Title="InstallEndTime" Type="DateTime" ID="{b5f1936a-c2e0-4f63-b8e6-c1e61af2c096}" SourceID="{{listid:Installasjonslogg}}" StaticName="InstallEndTime" />
-        <Field DisplayName="InstallVersion" MaxLength="255" Name="InstallVersion" Title="InstallVersion" Type="Text" ID="{5e7d44ea-0667-4155-a2b8-fa46c018dbb2}" SourceID="{{listid:Installasjonslogg}}" StaticName="InstallVersion" />
+        <Field DisplayName="InstallVersion" Name="InstallVersion" Title="InstallVersion" Type="Text" ID="{5e7d44ea-0667-4155-a2b8-fa46c018dbb2}" SourceID="{{listid:Installasjonslogg}}" StaticName="InstallVersion" />
     </pnp:Fields>
 </pnp:ListInstance>
