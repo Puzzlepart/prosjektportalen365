@@ -1,3 +1,7 @@
+Param(
+    [Parameter(Mandatory = $false, HelpMessage = "Skip building of SharePoint Framework solutions")]
+    [switch]$SkipBuildSharePointFramework
+)
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
 
@@ -15,9 +19,10 @@ mkdir "$ReleasePath/Apps" >$null 2>&1
 Write-Host "[INFO] Building release [v$($PackageJson.version)]"
 
 #region Copying source files
-Write-Host "[INFO] Copying Install.ps1 and site script source files"
+Write-Host "[INFO] Copying Install.ps1, PostInstall.ps1 and site script source files"
 Copy-Item -Path "$PSScriptRoot/../SiteScripts/Src/*.txt" -Filter *.txt -Destination "$ReleasePath/SiteScripts" -Force
 Copy-Item -Path "$PSScriptRoot/Install.ps1" -Destination $ReleasePath -Force
+Copy-Item -Path "$PSScriptRoot/PostInstall.ps1" -Destination $ReleasePath -Force
 (Get-Content "$ReleasePath/Install.ps1") -Replace 'VERSION_PLACEHOLDER', $PackageJson.version | Set-Content "$ReleasePath/Install.ps1"
 #endregion
 
@@ -26,15 +31,19 @@ Copy-Item -Path "$PSScriptRoot/Install.ps1" -Destination $ReleasePath -Force
 Write-Host "[INFO] Building SharePointFramework\@Shared"
 Set-Location "$PSScriptRoot\..\SharePointFramework\@Shared"
 # https://github.com/SharePoint/sp-dev-docs/issues/2916
-pnpm install --shamefully-flatten
+if (-not $SkipBuildSharePointFramework.IsPresent) {
+    pnpm install --shamefully-flatten
+}
 
 foreach ($Solution in @("ProjectWebParts", "PortfolioWebParts", "ProjectExtensions")) {
     Set-Location "$PSScriptRoot\..\SharePointFramework\$Solution"
     $PackageSolutionJson = Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json
     Write-Host "[INFO] Packaging SharePoint Framework solution [$($Solution)] [v$($PackageSolutionJson.solution.version)]"
     # https://github.com/SharePoint/sp-dev-docs/issues/2916
-    pnpm install --shamefully-flatten
-    pnpm run-script package
+    if (-not $SkipBuildSharePointFramework.IsPresent) {
+        pnpm install --shamefully-flatten
+        pnpm run-script package
+    }
     Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse | Where-Object{-not ($_.PSIsContainer -or (Test-Path "$ReleasePath/Apps/$_"))} | Copy-Item -Destination "$ReleasePath/Apps" -Force
 }
 #endregion

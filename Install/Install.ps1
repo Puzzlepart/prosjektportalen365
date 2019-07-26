@@ -23,7 +23,6 @@
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
 Write-Host "[INFO] Installing [Prosjektportalen 365] [VERSION_PLACEHOLDER]"
-
 function Connect-SharePoint {
     Param(
         [Parameter(Mandatory = $true)]
@@ -63,6 +62,7 @@ Catch {
 }
 
 
+#region Create site
 if (-not $SkipSiteCreation.IsPresent) {
     Try {
         $PortfolioSite = Get-PnPTenantSite -Url $Url -Connection $AdminSiteConnection -ErrorAction SilentlyContinue
@@ -79,11 +79,14 @@ if (-not $SkipSiteCreation.IsPresent) {
         exit 0
     }
 }
+#endregion
 
+#region Setting permissons
 Write-Host "[INFO] Setting permissions for associated member group"
 # Must use english names to avoid errors, even on non 1033 sites
-Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -RemoveRole Edit
-Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -AddRole Read
+Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -RemoveRole Rediger -ErrorAction SilentlyContinue
+Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -AddRole Lese -ErrorAction SilentlyContinue
+#endregion
 
 Try {
     $SiteConnection = Connect-SharePoint -Url $Url -ErrorAction Stop
@@ -93,6 +96,7 @@ Catch {
     exit 0
 }
 
+#region Install site design
 if (-not $SkipSiteDesign.IsPresent) {
     $SiteScriptIds = @()
 
@@ -146,7 +150,9 @@ if (-not $SkipSiteDesign.IsPresent) {
         exit 0
     }
 }
+#endregion
 
+#region Install app packages
 if (-not $SkipAppPackages.IsPresent) {
     Try {
         $TenantAppCatalogUrl = Get-PnPTenantAppCatalogUrl -Connection $AdminSiteConnection
@@ -173,7 +179,9 @@ if (-not $SkipAppPackages.IsPresent) {
         exit 0
     }
 }
+#endregion
 
+#region Applying PnP templates 
 if (-not $SkipTemplate.IsPresent) {
     Try {
         Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
@@ -200,7 +208,9 @@ if (-not $SkipTemplate.IsPresent) {
         exit 0
     }
 }
+#endregion
 
+#region QuickLaunch 
 Try {
     Write-Host "[INFO] Clearing QuickLaunch"    
     Get-PnPNavigationNode -Location QuickLaunch -Connection $SiteConnection | Remove-PnPNavigationNode -Connection $SiteConnection -Force 
@@ -209,6 +219,12 @@ Try {
 Catch {
     Write-Host "[WARNING] Failed to clear QuickLaunch: $($_.Exception.Message)" -ForegroundColor Yellow
 }
+#endregion
+
+#region Post install
+Write-Host "[INFO] Running post-install steps"
+.\PostInstall.ps1 -Connection $SiteConnection
+#endregion
 
 $sw.Stop()
 
@@ -216,7 +232,8 @@ Write-Host "[REQUIRED ACTION] Go to $($AdminSiteUrl)/_layouts/15/online/AdminHom
 
 Write-Host "[INFO] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
 
-
+#region Disconnect
 Disconnect-PnPOnline -Connection $AppCatalogSiteConnection
 Disconnect-PnPOnline -Connection $AdminSiteConnection
 Disconnect-PnPOnline -Connection $SiteConnection
+#endregion
