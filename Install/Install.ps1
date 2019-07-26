@@ -37,8 +37,7 @@ function Connect-SharePoint {
     Try {
         if ($UseWebLogin.IsPresent) {
             $Connection = Connect-PnPOnline -Url $Url -UseWebLogin -ReturnConnection -ErrorAction Stop
-        }
-        else {
+        } else {
             $Connection = Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ReturnConnection -ErrorAction Stop
         }
     }
@@ -50,16 +49,14 @@ function Connect-SharePoint {
 
 function LoadBundle() {
     Import-Module "$PSScriptRoot\SharePointPnPPowerShellOnline\SharePointPnPPowerShellOnline.psd1" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
-    $LoadedPnPCommand = Get-Command Connect-PnPOnline
-    return $LoadedPnPCommand.Version
+    return (Get-Command Connect-PnPOnline).Version
 }
 
 if (-not $SkipLoadingBundle.IsPresent) {
     $PnPVersion = LoadBundle    
     Write-Host "[INFO] Loaded [SharePointPnPPowerShellOnline] v.$($PnPVersion) from bundle"
 } else {
-    $LoadedPnPCommand = Get-Command Connect-PnPOnline
-    Write-Host "[INFO] Loaded [SharePointPnPPowerShellOnline] v.$($LoadedPnPCommand.Version) from your environment"
+    Write-Host "[INFO] Loaded [SharePointPnPPowerShellOnline] v.$((Get-Command Connect-PnPOnline).Version) from your environment"
 }
 
 #region Setting variables
