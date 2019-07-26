@@ -1,5 +1,4 @@
-import { PageContext } from '@microsoft/sp-page-context';
-import { QueryPropertyValueType, SearchResult, SearchResults, SortDirection, sp } from '@pnp/sp';
+import { QueryPropertyValueType, SearchResults, SortDirection, sp } from '@pnp/sp';
 import * as cleanDeep from 'clean-deep';
 import * as objectGet from 'object-get';
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
@@ -19,7 +18,7 @@ export interface IRefinementResult {
 }
 
 export interface IFetchDataResponse {
-    items: SearchResult[];
+    items: any[];
     refiners: IRefinementResult[];
 }
 
@@ -42,8 +41,13 @@ export const DEFAULT_SEARCH_SETTINGS = {
     SortList: [{ Property: 'LastModifiedTime', Direction: SortDirection.Descending }],
 };
 
-function mapSearchResultData(results: SearchResults) {
-    let items: SearchResult[] = objectGet(results, 'PrimarySearchResults') || [];
+/**
+ * Map search results
+ * 
+ * @param {SearchResults} results Search reulsts
+ */
+function mapSearchResults(results: SearchResults) {
+    let items: any[] = objectGet(results, 'PrimarySearchResults') || [];
     items = items.map(item => cleanDeep({ ...item }));
     return items;
 }
@@ -53,42 +57,41 @@ function mapSearchResultData(results: SearchResults) {
  *
  * @param {PortfolioOverviewView} view View configuration
  * @param {IPortfolioOverviewConfiguration} configuration PortfolioOverviewConfiguration
- * @param {PageContext} pageContext Page context
+ * @param {string} siteId Site ID
+ * @param {string} siteIdProperty Site ID property
  */
-export async function fetchData(view: PortfolioOverviewView, configuration: IPortfolioOverviewConfiguration, pageContext: PageContext): Promise<IFetchDataResponse> {
+export async function fetchData(view: PortfolioOverviewView, configuration: IPortfolioOverviewConfiguration, siteId: string, siteIdProperty: string = 'GtSiteIdOWSTEXT'): Promise<IFetchDataResponse> {
     try {
-        const [projectsResults, sitesResults, statusReportsResults] = await Promise.all([
+        const [projectsRes, sitesRes, statusReportsRes] = await Promise.all([
             sp.search({
                 ...DEFAULT_SEARCH_SETTINGS,
                 QueryTemplate: view.searchQuery,
-                SelectProperties: [...configuration.columns.map(f => f.fieldName), 'GtSiteIdOWSTEXT'],
+                SelectProperties: [...configuration.columns.map(f => f.fieldName), siteIdProperty],
                 Refiners: configuration.refiners.map(ref => ref.fieldName).join(','),
             }),
             sp.search({
                 ...DEFAULT_SEARCH_SETTINGS,
-                QueryTemplate: `DepartmentId:{${pageContext.site.id.toString()}} contentclass:STS_Site`,
+                QueryTemplate: `DepartmentId:{${siteId}} contentclass:STS_Site`,
                 SelectProperties: ['Path', 'Title', 'SiteId'],
             }),
             sp.search({
                 ...DEFAULT_SEARCH_SETTINGS,
-                QueryTemplate: `DepartmentId:{${pageContext.site.id.toString()}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5*`,
-                SelectProperties: [...configuration.columns.map(f => f.fieldName), 'GtSiteIdOWSTEXT'],
+                QueryTemplate: `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5*`,
+                SelectProperties: [...configuration.columns.map(f => f.fieldName), siteIdProperty],
                 Refiners: configuration.refiners.map(ref => ref.fieldName).join(','),
             }),
         ]);
 
-        let refiners = objectGet(projectsResults, 'RawSearchResults.PrimaryQueryResult.RefinementResults.Refiners') || [];
-        let projects: any[] = mapSearchResultData(projectsResults);
-        let sites: any[] = mapSearchResultData(sitesResults);
-        let statusReports: any[] = mapSearchResultData(statusReportsResults);
-
-        let items = sites
-            .map(site => {
-                const [project] = projects.filter(res => res.GtSiteIdOWSTEXT === site.SiteId);
-                const [statusReport] = statusReports.filter(res => res.GtSiteIdOWSTEXT === site.SiteId);
-                return project ? { ...statusReport, ...project, Title: site.Title, Path: site.Path } : null;
-            })
-            .filter(i => i);
+        let refiners = objectGet(projectsRes, 'RawSearchResults.PrimaryQueryResult.RefinementResults.Refiners') || [];
+        let projects = mapSearchResults(projectsRes);
+        let sites = mapSearchResults(sitesRes);
+        let statusReports = mapSearchResults(statusReportsRes);
+        let validSites = sites.filter(({ SiteId }) => projects.filter(res => res[siteIdProperty] === SiteId).length === 1);
+        let items = validSites.map(({ SiteId, Title, Path }) => {
+            const [project] = projects.filter(res => res[siteIdProperty] === SiteId);
+            const [statusReport] = statusReports.filter(res => res[siteIdProperty] === SiteId);
+            return { ...statusReport, ...project, Title, Path };
+        });
         return { items, refiners };
     } catch (err) {
         throw {

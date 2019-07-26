@@ -1,10 +1,10 @@
 import { SelectionMode, ConstrainMode, DetailsListLayoutMode, } from 'office-ui-fabric-react/lib/DetailsList';
 import { PortfolioOverviewView } from '../config';
-import { WebPartContext } from '@microsoft/sp-webpart-base';
+import { PageContext } from '@microsoft/sp-page-context';
 import { IPortfolioOverviewWebPartProps } from '../IPortfolioOverviewWebPartProps';
 
 export interface IPortfolioOverviewProps extends IPortfolioOverviewWebPartProps {
-    context: WebPartContext;
+    pageContext: PageContext;
     title: string;
     showGroupBy?: boolean;
     modalHeaderClassName?: string;

@@ -1,4 +1,3 @@
-import { SearchResult } from '@pnp/sp';
 import * as arraySort from 'array-sort';
 import * as arrayUnique from 'array-unique';
 import * as objectGet from 'object-get';
@@ -11,8 +10,7 @@ import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'PortfolioOverviewWebPartStrings';
 import * as React from 'react';
-import formatDate from '../../../../../@Shared/lib/helpers/formatDate';
-import tryParseCurrency from '../../../../../@Shared/lib/helpers/tryParseCurrency';
+import { formatDate, tryParseCurrency } from '../../../../../@Shared/lib/helpers';
 import { parseUrlHash, setUrlHash } from '../../../../../@Shared/lib/util';
 import FilterPanel, { IFilterItemProps, IFilterProps } from '../../../components/FilterPanel';
 import * as PortfolioOverviewConfig from '../config';
@@ -42,7 +40,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     }
   }
 
-  public componentWillUpdate(_nextProps: IPortfolioOverviewProps, { currentView, groupBy, sortBy }: IPortfolioOverviewState) {
+  public componentWillUpdate(_nextProps: IPortfolioOverviewProps, { currentView, groupBy }: IPortfolioOverviewState) {
     let obj: { [key: string]: string } = {};
     if (currentView) {
       obj.viewId = currentView.id.toString();
@@ -279,9 +277,9 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
    * On column sort
    *
    * @param {React.MouseEvent<HTMLElement, MouseEvent>} _ev Event
-   * @param {IColumn} column The column config
+   * @param {PortfolioOverviewColumn} column The column config
    */
-  private onColumnSort = (_ev: React.MouseEvent<HTMLElement, MouseEvent>, column: IColumn): void => {
+  private onColumnSort = (_ev: React.MouseEvent<HTMLElement, MouseEvent>, column: PortfolioOverviewColumn): void => {
     let { items, columns } = ({ ...this.state } as IPortfolioOverviewState);
 
     let isSortedDescending = column.isSortedDescending;
@@ -290,7 +288,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     }
     items = arraySort(items, [column.fieldName], { reverse: !isSortedDescending });
     this.setState({
-      sortBy: { fieldName: column.fieldName, isSortedDescending: isSortedDescending },
+      sortBy: { ...column, isSortedDescending },
       items,
       columns: columns.map(col => {
         col.isSorted = (col.key === column.key);
@@ -305,11 +303,11 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   /**
    * On render item activeFilters
   *
-  * @param {SearchResult} item Item
+  * @param {any} item Item
   * @param {number} _index Index
   * @param {PortfolioOverviewColumn} column Column
   */
-  private onRenderItemColumn = (item: SearchResult, _index: number, column: PortfolioOverviewColumn) => {
+  private onRenderItemColumn = (item: any, _index: number, column: PortfolioOverviewColumn) => {
     const colValue = item[column.fieldName];
     switch (column.fieldName) {
       case 'Title': {
@@ -353,11 +351,11 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   /**
    * Get groups
    * 
-   * @param {SearchResult[]} items Items
+   * @param {any[]} items Items
    * @param {PortfolioOverviewColumn}  groupBy Group by column
-   * @param {Object} sortBy Current sort 
+   * @param {PortfolioOverviewColumn} sortBy Sort by column
    */
-  private getGroups(items: SearchResult[], groupBy: PortfolioOverviewColumn, sortBy: { fieldName: string; isSortedDescending: boolean; }): IGroup[] {
+  private getGroups(items: any[], groupBy: PortfolioOverviewColumn, sortBy: PortfolioOverviewColumn): IGroup[] {
     let groups: IGroup[] = null;
     if (groupBy) {
       const itemsSort: any = { props: [groupBy.fieldName], opts: {} };
@@ -385,7 +383,15 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
    * Get filtered data
    */
   private getFilteredData() {
-    let { items, columns, searchTerm, groupBy, sortBy, activeFilters } = ({ ...this.state } as IPortfolioOverviewState);
+    let {
+      items,
+      columns,
+      searchTerm,
+      groupBy,
+      sortBy,
+      activeFilters,
+      configuration,
+    } = ({ ...this.state } as IPortfolioOverviewState);
     const activeFiltersKeys = Object.keys(activeFilters);
     let groups: IGroup[] = this.getGroups(items, groupBy, sortBy);
     items = [].concat(items).filter(item => {
@@ -398,9 +404,9 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
       items = activeFiltersKeys
         .filter(key => key !== PortfolioOverviewFieldSelector.column.key)
         .reduce((_items, key) => _items.filter(i => activeFilters[key].indexOf(objectGet(i, key)) !== -1), items);
-      const columnsFilter = activeFilters[PortfolioOverviewFieldSelector.column.key];
-      if (columnsFilter) {
-        columns = columns.filter(_column => columnsFilter.indexOf(_column.fieldName) !== -1);
+      const selectedFilters = activeFilters[PortfolioOverviewFieldSelector.column.key];
+      if (selectedFilters) {
+        columns = configuration.columns.filter(_column => selectedFilters.indexOf(_column.fieldName) !== -1);
       }
     }
     return { items, columns, groups };
@@ -442,7 +448,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         }
       }
 
-      const { items, refiners } = await fetchData(currentView, configuration, this.props.context.pageContext);
+      const { items, refiners } = await fetchData(currentView, configuration, this.props.pageContext.site.id.toString());
 
       PortfolioOverviewFieldSelector.items = configuration.columns.map(col => ({
         name: col.name,
@@ -486,7 +492,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     }
 
     this.setState({ isChangingView: view });
-    const { items, refiners } = await fetchData(view, this.state.configuration, this.props.context.pageContext);
+    const { items, refiners } = await fetchData(view, this.state.configuration, this.props.pageContext.site.id.toString());
     let filters = this.getSelectedFiltersWithItems(refiners, this.state.configuration, view);
 
     let updatedState: Partial<IPortfolioOverviewState> = {

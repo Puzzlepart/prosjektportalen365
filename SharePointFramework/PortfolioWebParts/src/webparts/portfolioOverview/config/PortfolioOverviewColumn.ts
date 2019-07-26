@@ -31,6 +31,8 @@ export class PortfolioOverviewColumn implements IColumn {
     public isRefinable?: boolean;
     public isGroupable?: boolean;
     public isResizable?: boolean;
+    public isSorted?: boolean;
+    public isSortedDescending?: boolean;
     public config?: ProjectColumnConfigDictionary;
 
     constructor(item: IPortfolioOverviewColumnSpItem) {
