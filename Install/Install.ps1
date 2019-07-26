@@ -31,9 +31,10 @@ function Connect-SharePoint {
 
     $Connection = $null
     Try {
-        if($UseWebLogin.IsPresent) {
+        if ($UseWebLogin.IsPresent) {
             $Connection = Connect-PnPOnline -Url $Url -UseWebLogin -ReturnConnection -ErrorAction Stop
-        } else {
+        }
+        else {
             $Connection = Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ReturnConnection -ErrorAction Stop
         }
     }
@@ -43,6 +44,7 @@ function Connect-SharePoint {
     return $Connection
 }
 
+#region Setting variables
 [System.Uri]$Uri = $Url
 $Alias = $Uri.Segments | Select-Object -Last 1
 $AdminSiteConnection = $null
@@ -50,9 +52,12 @@ $AppCatalogSiteConnection = $null
 $SiteConnection = $null
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
 $TenantAppCatalogUrl = $null
+#endregion
 
 Set-PnPTraceLog -On -Level Debug -LogFile InstallLog.txt
 
+
+#region Connection to admin site
 Try {
     $AdminSiteConnection = Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
 }
@@ -60,7 +65,7 @@ Catch {
     Write-Host "[INFO] Failed to connect to [$AdminSiteUrl]: $($_.Exception.Message)"
     exit 0
 }
-
+#endregion
 
 #region Create site
 if (-not $SkipSiteCreation.IsPresent) {
@@ -81,13 +86,7 @@ if (-not $SkipSiteCreation.IsPresent) {
 }
 #endregion
 
-#region Setting permissons
-Write-Host "[INFO] Setting permissions for associated member group"
-# Must use english names to avoid errors, even on non 1033 sites
-Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -RemoveRole Rediger -ErrorAction SilentlyContinue
-Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -AddRole Lese -ErrorAction SilentlyContinue
-#endregion
-
+#region Connection to site
 Try {
     $SiteConnection = Connect-SharePoint -Url $Url -ErrorAction Stop
 }
@@ -95,6 +94,18 @@ Catch {
     Write-Host "[ERROR] Failed to connect to [$Url]: $($_.Exception.Message)" -ForegroundColor Red
     exit 0
 }
+#endregion
+
+#region Setting permissons
+Write-Host "[INFO] Setting permissions for associated member group"
+# Must use english names to avoid errors, even on non 1033 sites
+# Where-Object doesn't work directly on Get-PnPRoleDefinition, so need to clone it first
+$RoleDefinitions = @()
+Get-PnPRoleDefinition | ForEach-Object { $RoleDefinitions += $_ }
+Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -RemoveRole ($RoleDefinitions | Where-Object { $_.RoleTypeKind -eq "Editor" }) -Connection  $SiteConnection -ErrorAction SilentlyContinue
+Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -AddRole ($RoleDefinitions | Where-Object { $_.RoleTypeKind -eq "Reader" }) -Connection  $SiteConnection -ErrorAction SilentlyContinue
+#endregion
+
 
 #region Install site design
 if (-not $SkipSiteDesign.IsPresent) {
@@ -169,7 +180,7 @@ if (-not $SkipAppPackages.IsPresent) {
             "project-extensions",
             "project-web-parts"
         )
-        foreach($AppPkg in $AppPackages) {
+        foreach ($AppPkg in $AppPackages) {
             Add-PnPApp -Path ".\Apps\pp-$($AppPkg).sppkg" -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop -Connection $AppCatalogSiteConnection >$null 2>&1
         }
         Write-Host "[INFO] SharePoint Framework app packages successfully installed to [$TenantAppCatalogUrl]" -ForegroundColor Green
