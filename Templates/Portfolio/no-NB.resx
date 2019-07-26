@@ -1266,6 +1266,9 @@
   <data name="SiteFields_GtMonthChoice_DisplayName" xml:space="preserve">
     <value>Måned</value>
   </data>
+  <data name="SiteFields_GtYear_DisplayName" xml:space="preserve">
+    <value>År</value>
+  </data>
   <data name="SiteFields_GtPiAutomaticRefreshEnabled_DisplayName" xml:space="preserve">
     <value>Automatisk oppdatering</value>
   </data>
@@ -1861,6 +1864,9 @@
     <value>Brukere kan filtrere på denne kolonnen i Portføljeoversikten.</value>
   </data>
   <data name="SiteFields_GtMonthChoice_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtYear_Description" xml:space="preserve">
     <value></value>
   </data>
   <data name="SiteFields_GtPiAutomaticRefreshEnabled_Description" xml:space="preserve">

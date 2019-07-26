@@ -16,6 +16,7 @@ dependencies:
   '@types/react': 16.8.8
   '@types/react-dom': 16.8.3
   '@types/webpack-env': 1.13.1
+  moment: 2.24.0
   msgraph-helper: 0.7.3
   object-get: 2.1.0
   office-ui-fabric-react: 6.189.2
@@ -11888,6 +11889,7 @@ specifiers:
   '@types/webpack-env': 1.13.1
   ajv: ~5.2.2
   gulp: ~3.9.1
+  moment: ^2.24.0
   msgraph-helper: ^0.7.1
   object-get: ^2.1.0
   office-ui-fabric-react: 6.189.2

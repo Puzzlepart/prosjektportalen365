@@ -2,6 +2,7 @@
     xmlns:pnp="http://schemas.dev.office.com/PnP/2019/03/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" />
+        <pnp:FieldRef ID="fab2e356-9753-472c-9935-19b1c3cf809f" Name="GtYear" Required="true" />
         <pnp:FieldRef ID="86673e07-181e-4521-843c-b687d86a6f85" Name="GtMonthChoice" Required="true" />
         <pnp:FieldRef ID="3e90aa95-4d32-4819-823f-10ae2fd412b5" Name="GtOverallStatus" Required="true" />
         <pnp:FieldRef ID="1447ef51-8e9b-4d16-aa2a-526dc9f1539e" Name="GtStatusTime" Required="true" />
