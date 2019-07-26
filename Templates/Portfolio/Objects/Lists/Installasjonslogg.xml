@@ -8,7 +8,6 @@
                 </OrderBy>
             </Query>
             <ViewFields>
-                <FieldRef Name="ID" />
                 <FieldRef Name="InstallStartTime" />
                 <FieldRef Name="InstallEndTime" />
                 <FieldRef Name="InstallVersion" />
