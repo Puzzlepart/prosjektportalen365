@@ -1,5 +1,5 @@
 ﻿<pnp:ClientSidePage PageName="Home.aspx" PromoteAsNewsArticle="false" Overwrite="true" Layout="Home" EnableComments="false" Title="Home" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2019/03/ProvisioningSchema">
     <pnp:Sections>
         <pnp:Section Order="1" Type="TwoColumnLeft">
             <pnp:Controls>

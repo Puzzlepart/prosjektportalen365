@@ -1,4 +1,4 @@
-<pnp:ContentTypes xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+<pnp:ContentTypes xmlns:pnp="http://schemas.dev.office.com/PnP/2019/03/ProvisioningSchema">
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Prosjekt.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Prosjektstatus.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Listeinnhold.xml" />
@@ -17,6 +17,7 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Kolonnediagram.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Sektordiagram.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Egendefinert diagram.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Konfigurasjonselement.xml" />    
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Loggelement.xml" />    
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Konfigurasjonselement.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Loggelement.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Prosjektkolonnekonfigurasjonselement.xml" />
 </pnp:ContentTypes> 

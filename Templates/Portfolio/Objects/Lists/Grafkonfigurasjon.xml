@@ -1,5 +1,5 @@
 ﻿<pnp:ListInstance Title="Grafkonfigurasjon" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Grafkonfigurasjon" Hidden="true" EnableAttachments="false" EnableFolderCreation="false" ContentTypesEnabled="true" RemoveExistingContentTypes="true" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2019/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D01" />
         <pnp:ContentTypeBinding ContentTypeID="0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D02" />

@@ -1,4 +1,5 @@
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
+import { ProjectColumnConfigDictionary } from './ProjectColumnConfig';
 
 export interface IPortfolioOverviewColumnSpItem {
     Id?: number;
@@ -30,6 +31,9 @@ export class PortfolioOverviewColumn implements IColumn {
     public isRefinable?: boolean;
     public isGroupable?: boolean;
     public isResizable?: boolean;
+    public isSorted?: boolean;
+    public isSortedDescending?: boolean;
+    public config?: ProjectColumnConfigDictionary;
 
     constructor(item: IPortfolioOverviewColumnSpItem) {
         this.id = item.Id;

@@ -3,7 +3,7 @@ import styles from './CollapsableSection.module.scss';
 import { ICollapsableSectionProps } from './ICollapsableSectionProps';
 import { ICollapsableSectionState } from './ICollapsableSectionState';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { autobind } from 'office-ui-fabric-react/lib/Utilities';
+
 
 export default class CollapsableSection extends React.Component<ICollapsableSectionProps, ICollapsableSectionState> {
     /**
@@ -40,8 +40,7 @@ export default class CollapsableSection extends React.Component<ICollapsableSect
     /**
      * On toggle expand state
      */
-    @autobind
-    public onToggleExpandState() {
+    public onToggleExpandState = () => {
         this.setState((prevState: ICollapsableSectionState) => ({ isCollapsed: !prevState.isCollapsed }));
     }
 }

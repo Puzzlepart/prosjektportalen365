@@ -11,7 +11,7 @@ export interface IProjectStatusData {
 
 export interface IProjectStatusState {
     isLoading: boolean;
-    associateStatusItem: boolean;
+    newStatusCreated: boolean;
     showNewStatusReportModal?: boolean;
     data?: IProjectStatusData;
     selectedReport?: ProjectStatusReport;

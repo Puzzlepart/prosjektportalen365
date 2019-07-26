@@ -1,5 +1,5 @@
 ﻿<pnp:ContentType ID="0x010022252E35737A413FB56A1BA53862F6D5" Name="Prosjektstatus" Description="" Group="Prosjektportalen innholdstyper" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2019/03/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" />
         <pnp:FieldRef ID="86673e07-181e-4521-843c-b687d86a6f85" Name="GtMonthChoice" Required="true" />

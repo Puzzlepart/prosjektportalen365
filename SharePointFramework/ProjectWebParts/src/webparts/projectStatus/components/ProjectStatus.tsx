@@ -5,7 +5,6 @@ import { List } from '@pnp/sp';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import * as autobind from 'auto-bind';
 import * as strings from 'ProjectStatusWebPartStrings';
 import * as React from 'react';
 import getObjectValue from '../../../../../@Shared/lib/helpers/getObjectValue';
@@ -19,10 +18,11 @@ import ProjectPropertiesSection from './ProjectPropertiesSection';
 import styles from './ProjectStatus.module.scss';
 import StatusSection from './StatusSection';
 import SummarySection from './SummarySection';
+import { PageContext } from '@microsoft/sp-page-context';
 
 export default class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
-  private _reportList: List;
-  private _sectionsList: List;
+  private reportList: List;
+  private sectionsList: List;
 
   /**
    * Constructor
@@ -33,18 +33,17 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
     super(props);
     this.state = {
       isLoading: true,
-      associateStatusItem: document.location.hash === '#NewStatus',
+      newStatusCreated: document.location.hash === '#NewStatus',
     };
-    this._reportList = props.hubSite.web.lists.getByTitle(this.props.reportListName) as any;
-    this._sectionsList = props.hubSite.web.lists.getByTitle(this.props.sectionsListName) as any;
-    autobind.react(this);
+    this.reportList = props.hubSite.web.lists.getByTitle(this.props.reportListName) as any;
+    this.sectionsList = props.hubSite.web.lists.getByTitle(this.props.sectionsListName) as any;
   }
 
   public async componentDidMount() {
-    if (this.state.associateStatusItem) {
-      await this.associateStatusItem();
+    if (this.state.newStatusCreated) {
+      await this.associateStatusItem(this.props.pageContext);
     }
-    const data = await this.fetchData();
+    const data = await this.fetchData(this.props.pageContext);
     this.setState({ data, selectedReport: data.reports[0], isLoading: false });
   }
 
@@ -65,8 +64,8 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
 
     return (
       <div className={styles.projectStatus}>
+        {this.renderCommandBar()}
         <div className={styles.container}>
-          {this.renderCommandBar()}
           <div className={`${styles.header} ${styles.column12}`}>
             <div className={styles.title}>{this.props.title}</div>
           </div>
@@ -110,31 +109,6 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
     return (
       <CommandBar items={items} farItems={farItems} />
     );
-  }
-
-  /**
-   * Associate status item
-   */
-  private async associateStatusItem(): Promise<void> {
-    const siteId = this.props.pageContext.site.id.toString();
-    let item: IProjectStatusReportItem;
-    try {
-      const dateTime = dateAdd(new Date(), 'minute', -1).toISOString();
-      [item] = await this._reportList.items
-        .filter(`AuthorId eq ${this.props.pageContext.legacyPageContext.userId} and GtSiteId ne '${siteId}' and Created ge datetime'${dateTime}'`)
-        .select('Id', 'GtMonthChoice', 'Created')
-        .orderBy('Id', false)
-        .top(1)
-        .get<IProjectStatusReportItem[]>();
-    } catch (error) { }
-    if (item) {
-      const report = new ProjectStatusReport(item);
-      await this._reportList.items.getById(item.Id).update({
-        Title: `${this.props.pageContext.web.title} (${report.toString()})`,
-        GtSiteId: siteId,
-      });
-    }
-    document.location.hash = '#';
   }
 
   /**
@@ -231,10 +205,10 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
   /**
    * On report changed
    * 
-   * @param {ProjectStatusReport} report Report
+   * @param {ProjectStatusReport} selectedReport Selected report
    */
-  private onReportChanged(report: ProjectStatusReport) {
-    this.setState({ selectedReport: report });
+  private onReportChanged = (selectedReport: ProjectStatusReport) => {
+    this.setState({ selectedReport });
   }
 
   /**
@@ -253,22 +227,48 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
   }
 
   /**
-   * Fetch data
+   * Associate status item
+   * 
+   * @param {PageContext} param0 Destructed PageContext
    */
-  private async fetchData(): Promise<IProjectStatusData> {
-    const siteId = this.props.pageContext.site.id.toString();
+  private async associateStatusItem({ site, web, user }: PageContext): Promise<void> {
+    try {
+      const dateTime = dateAdd(new Date(), 'minute', -1).toISOString();
+      let [item] = await this.reportList.items
+        .filter(`Author/EMail eq '${user.email}' and Created ge datetime'${dateTime}' and GtSiteId eq '00000000-0000-0000-0000-000000000000'`)
+        .select('Id', 'GtMonthChoice', 'Created')
+        .orderBy('Id', false)
+        .top(1)
+        .get<IProjectStatusReportItem[]>();
+      if (item) {
+        const report = new ProjectStatusReport(item);
+        await this.reportList.items.getById(report.id).update({
+          Title: `${web.title} (${report.toString()})`,
+          GtSiteId: site.id.toString(),
+        });
+      }
+    } catch (error) { }
+    document.location.hash = '#';
+  }
+
+  /**
+   * Fetch data
+   * 
+   * @param {PageContext} param0 Destructed PageContext
+   */
+  private async fetchData({ site }: PageContext): Promise<IProjectStatusData> {
     Logger.log({ message: '(ProjectStatus) fetchData: Fetching fields and reports', data: {}, level: LogLevel.Info });
     const [entityItem, entityFields] = await Promise.all([
-      this.props.spEntityPortalService.getEntityItemFieldValues(siteId),
+      this.props.spEntityPortalService.getEntityItemFieldValues(site.id.toString()),
       this.props.spEntityPortalService.getEntityFields(),
     ]);
-    let reportListProps = await this._reportList
+    let reportListProps = await this.reportList
       .select('DefaultEditFormUrl', 'DefaultNewFormUrl')
       .expand('DefaultEditFormUrl', 'DefaultNewFormUrl')
       .get<{ DefaultEditFormUrl: string, DefaultNewFormUrl: string }>();
     const [reportItems, sectionItems] = await Promise.all([
-      this._reportList.items.filter(`GtSiteId eq '${siteId}'`).get<IProjectStatusReportItem[]>(),
-      this._sectionsList.items.get(),
+      this.reportList.items.filter(`GtSiteId eq '${site.id.toString()}'`).orderBy('Id', false).get<IProjectStatusReportItem[]>(),
+      this.sectionsList.items.get(),
     ]);
     const reports = reportItems.map(r => new ProjectStatusReport(r));
     const sections = sectionItems.map(s => new SectionModel(s));

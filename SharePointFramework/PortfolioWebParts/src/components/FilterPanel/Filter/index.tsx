@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './Filter.module.scss';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import { IFilterState } from './IFilterState';
 import { IFilterProps } from './IFilterProps';
 import { FilterItem } from '../FilterItem';
@@ -34,8 +33,7 @@ export class Filter extends React.Component<IFilterProps, IFilterState> {
     /**
      * On toggle section content
      */
-    @autobind
-    private onToggleSectionContent() {
+    private onToggleSectionContent = () => {
         this.setState((prevState: IFilterState) => ({ isCollapsed: !prevState.isCollapsed }));
     }
 
@@ -52,8 +50,7 @@ export class Filter extends React.Component<IFilterProps, IFilterState> {
      * @param {IFilterItemProps} item Item that was changed
      * @param {boolean} checked Item checked
      */
-    @autobind
-    private onChanged(item: IFilterItemProps, checked: boolean) {
+    private onChanged = (item: IFilterItemProps, checked: boolean) => {
         const { items } = this.state;
         items.filter(_item => _item.value === item.value)[0].selected = checked;
         this.setState({ items });

@@ -1,23 +1,16 @@
-@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
-
 .templateLibrarySelectModal {
-  width: 650px;
+  width: 800px;
   padding: 40px;
   box-sizing: border-box;
   position: relative;
   .modalInner {
-    @include ms-Grid;
-    @include ms-Grid-row;
     .modalTitle {
-      @include ms-Grid-col;
-      @include ms-sm12;
       font-size: 26px;
       font-weight: 100;
       margin: 0 0 20px 0;
     }
     .modalBody {
-      @include ms-Grid-col;
-      @include ms-sm12;
+      position: relative;
     }
   }
   .actions {

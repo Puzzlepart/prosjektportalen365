@@ -5,7 +5,7 @@ import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { autobind } from 'office-ui-fabric-react/lib/Utilities';
+
 import ProjectSetupBaseModal from '../ProjectSetupBaseModal';
 import CollapsableSection from '../CollapsableSection';
 import { ITemplateSelectModalProps } from './ITemplateSelectModalProps';
@@ -159,8 +159,7 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
     /**
      * On submit
      */
-    @autobind
-    private onSubmit() {
+    private onSubmit = () => {
         this.props.onSubmit(this.state);
     }
 
@@ -169,8 +168,7 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
      * 
      * @param {IDropdownOption} opt Option
      */
-    @autobind
-    private onTemplateSelected(opt: IDropdownOption) {
+    private onTemplateSelected = (opt: IDropdownOption) => {
         this.setState({ selectedTemplate: (opt.data as ProjectTemplate) });
     }
 

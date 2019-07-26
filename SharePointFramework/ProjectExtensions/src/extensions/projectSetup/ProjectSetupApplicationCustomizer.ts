@@ -4,7 +4,6 @@ import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { sp } from '@pnp/sp';
 import MSGraphHelper from 'msgraph-helper';
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
@@ -38,7 +37,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
     const { isSiteAdmin, groupId, hubSiteId } = this.context.pageContext.legacyPageContext;
     if (isSiteAdmin && groupId) {
       try {
-        Logger.log({ message: '(ProjectSetupApplicationCustomizer) onInit: Initializing pre-conditionals before initializing setup', level: LogLevel.Info });
+        Logger.log({ message: '(ProjectSetupApplicationCustomizer) onInit: Initializing pre-conditionals before initializing setup', data: { version: this.context.manifest.version }, level: LogLevel.Info });
         const topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top);
         this._domElement = topPlaceholder.domElement;
         if (this.context.pageContext.web.language !== 1044) {
@@ -178,8 +177,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
    * @param {string} status Status
    * @param {string} iconName Icon name
    */
-  @autobind
-  private onTaskStatusUpdated(status: string, iconName: string) {
+  private onTaskStatusUpdated = (status: string, iconName: string) => {
     this.renderProgressModal({ text: strings.ProgressModalLabel, subText: status, iconName });
   }
 
@@ -211,7 +209,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
     try {
       await MSGraphHelper.Init(this.context.msGraphClientFactory);
       let _data: IProjectSetupApplicationCustomizerData = {};
-      _data.hub = await HubSiteService.GetHubSiteById(this.context.pageContext.web.absoluteUrl, this.context.pageContext.legacyPageContext.hubSiteId);
+      _data.hub = await HubSiteService.GetHubSite(this.context.pageContext);
       const [templates, extensions, listContentConfig] = await Promise.all([
         getHubFiles(_data.hub, this.properties.templatesLibrary, ProjectTemplate),
         getHubFiles(_data.hub, this.properties.extensionsLibrary, ProjectTemplate),

@@ -1,10 +1,9 @@
-import { sp, FileAddResult } from '@pnp/sp';
+import { FileAddResult, sp } from '@pnp/sp';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Modal } from 'office-ui-fabric-react/lib/Modal';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
-import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import * as React from 'react';
 import * as stringFormat from 'string-format';
 import * as TemplateSelectorCommandSetStrings from 'TemplateSelectorCommandSetStrings';
@@ -17,7 +16,7 @@ import TemplateLibrarySelectModalScreenEditCopy from './TemplateLibrarySelectMod
 import TemplateLibrarySelectModalScreenSelect from './TemplateLibrarySelectModalScreenSelect';
 
 export default class TemplateLibrarySelectModal extends React.Component<ITemplateLibrarySelectModalProps, ITemplateLibrarySelectModalState> {
-    private _selection: Selection;
+    private selection: Selection;
 
     /**
      * Constructor
@@ -31,7 +30,7 @@ export default class TemplateLibrarySelectModal extends React.Component<ITemplat
             selection: [],
             screen: TemplateLibrarySelectModalScreen.Select,
         };
-        this._selection = new Selection({ onSelectionChanged: () => { this.setState({ selection: this._selection.getSelection() as TemplateFile[] }); } });
+        this.selection = new Selection({ onSelectionChanged: () => { this.setState({ selection: this.selection.getSelection() as TemplateFile[] }); } });
     }
 
     public render(): React.ReactElement<ITemplateLibrarySelectModalProps> {
@@ -65,7 +64,7 @@ export default class TemplateLibrarySelectModal extends React.Component<ITemplat
                 return (
                     <TemplateLibrarySelectModalScreenSelect
                         templates={this.props.templates}
-                        selection={this._selection}
+                        selection={this.selection}
                         selectedItems={selection}
                         onSubmitSelection={() => this.onChangeScreen(TemplateLibrarySelectModalScreen.EditCopy)} />
                 );
@@ -100,8 +99,7 @@ export default class TemplateLibrarySelectModal extends React.Component<ITemplat
      * 
      * @param {TemplateLibrarySelectModalScreen} screen Screen
      */
-    @autobind
-    private onChangeScreen(screen: TemplateLibrarySelectModalScreen) {
+    private onChangeScreen = (screen: TemplateLibrarySelectModalScreen) => {
         this.setState({ screen });
     }
 
@@ -111,8 +109,7 @@ export default class TemplateLibrarySelectModal extends React.Component<ITemplat
      * @param templates Templates
      * @returns Promise<void>
      */
-    @autobind
-    private async onStartCopy(templates: TemplateFile[]): Promise<void> {
+    private onStartCopy = async (templates: TemplateFile[]): Promise<void> => {
         this.setState({ screen: TemplateLibrarySelectModalScreen.CopyProgress, isBlocking: true });
 
         let templatesAdded: FileAddResult[] = [];
@@ -126,7 +123,7 @@ export default class TemplateLibrarySelectModal extends React.Component<ITemplat
             } catch (error) { }
         }
 
-        this._selection.setItems([], true);
+        this.selection.setItems([], true);
         this.setState({ screen: TemplateLibrarySelectModalScreen.Summary, templatesAdded, isBlocking: false, selection: [] });
     }
 }

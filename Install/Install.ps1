@@ -23,7 +23,6 @@
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
 Write-Host "[INFO] Installing [Prosjektportalen 365] [VERSION_PLACEHOLDER]"
-
 function Connect-SharePoint {
     Param(
         [Parameter(Mandatory = $true)]
@@ -32,9 +31,10 @@ function Connect-SharePoint {
 
     $Connection = $null
     Try {
-        if($UseWebLogin.IsPresent) {
+        if ($UseWebLogin.IsPresent) {
             $Connection = Connect-PnPOnline -Url $Url -UseWebLogin -ReturnConnection -ErrorAction Stop
-        } else {
+        }
+        else {
             $Connection = Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ReturnConnection -ErrorAction Stop
         }
     }
@@ -44,6 +44,7 @@ function Connect-SharePoint {
     return $Connection
 }
 
+#region Setting variables
 [System.Uri]$Uri = $Url
 $Alias = $Uri.Segments | Select-Object -Last 1
 $AdminSiteConnection = $null
@@ -51,9 +52,12 @@ $AppCatalogSiteConnection = $null
 $SiteConnection = $null
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
 $TenantAppCatalogUrl = $null
+#endregion
 
 Set-PnPTraceLog -On -Level Debug -LogFile InstallLog.txt
 
+
+#region Connection to admin site
 Try {
     $AdminSiteConnection = Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
 }
@@ -61,8 +65,9 @@ Catch {
     Write-Host "[INFO] Failed to connect to [$AdminSiteUrl]: $($_.Exception.Message)"
     exit 0
 }
+#endregion
 
-
+#region Create site
 if (-not $SkipSiteCreation.IsPresent) {
     Try {
         $PortfolioSite = Get-PnPTenantSite -Url $Url -Connection $AdminSiteConnection -ErrorAction SilentlyContinue
@@ -79,12 +84,9 @@ if (-not $SkipSiteCreation.IsPresent) {
         exit 0
     }
 }
+#endregion
 
-Write-Host "[INFO] Setting permissions for associated member group"
-# Must use english names to avoid errors, even on non 1033 sites
-Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -RemoveRole Edit
-Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -AddRole Read
-
+#region Connection to site
 Try {
     $SiteConnection = Connect-SharePoint -Url $Url -ErrorAction Stop
 }
@@ -92,7 +94,20 @@ Catch {
     Write-Host "[ERROR] Failed to connect to [$Url]: $($_.Exception.Message)" -ForegroundColor Red
     exit 0
 }
+#endregion
 
+#region Setting permissons
+Write-Host "[INFO] Setting permissions for associated member group"
+# Must use english names to avoid errors, even on non 1033 sites
+# Where-Object doesn't work directly on Get-PnPRoleDefinition, so need to clone it first (https://github.com/Puzzlepart/prosjektportalen365/issues/35)
+$RoleDefinitions = @()
+Get-PnPRoleDefinition | ForEach-Object { $RoleDefinitions += $_ }
+Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -RemoveRole ($RoleDefinitions | Where-Object { $_.RoleTypeKind -eq "Editor" }) -Connection  $SiteConnection -ErrorAction SilentlyContinue
+Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -AddRole ($RoleDefinitions | Where-Object { $_.RoleTypeKind -eq "Reader" }) -Connection  $SiteConnection -ErrorAction SilentlyContinue
+#endregion
+
+
+#region Install site design
 if (-not $SkipSiteDesign.IsPresent) {
     $SiteScriptIds = @()
 
@@ -146,7 +161,9 @@ if (-not $SkipSiteDesign.IsPresent) {
         exit 0
     }
 }
+#endregion
 
+#region Install app packages
 if (-not $SkipAppPackages.IsPresent) {
     Try {
         $TenantAppCatalogUrl = Get-PnPTenantAppCatalogUrl -Connection $AdminSiteConnection
@@ -163,7 +180,7 @@ if (-not $SkipAppPackages.IsPresent) {
             "project-extensions",
             "project-web-parts"
         )
-        foreach($AppPkg in $AppPackages) {
+        foreach ($AppPkg in $AppPackages) {
             Add-PnPApp -Path ".\Apps\pp-$($AppPkg).sppkg" -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop -Connection $AppCatalogSiteConnection >$null 2>&1
         }
         Write-Host "[INFO] SharePoint Framework app packages successfully installed to [$TenantAppCatalogUrl]" -ForegroundColor Green
@@ -173,7 +190,9 @@ if (-not $SkipAppPackages.IsPresent) {
         exit 0
     }
 }
+#endregion
 
+#region Applying PnP templates 
 if (-not $SkipTemplate.IsPresent) {
     Try {
         Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
@@ -200,7 +219,9 @@ if (-not $SkipTemplate.IsPresent) {
         exit 0
     }
 }
+#endregion
 
+#region QuickLaunch 
 Try {
     Write-Host "[INFO] Clearing QuickLaunch"    
     Get-PnPNavigationNode -Location QuickLaunch -Connection $SiteConnection | Remove-PnPNavigationNode -Connection $SiteConnection -Force 
@@ -209,6 +230,12 @@ Try {
 Catch {
     Write-Host "[WARNING] Failed to clear QuickLaunch: $($_.Exception.Message)" -ForegroundColor Yellow
 }
+#endregion
+
+#region Post install
+Write-Host "[INFO] Running post-install steps"
+.\PostInstall.ps1 -Connection $SiteConnection
+#endregion
 
 $sw.Stop()
 
@@ -216,7 +243,8 @@ Write-Host "[REQUIRED ACTION] Go to $($AdminSiteUrl)/_layouts/15/online/AdminHom
 
 Write-Host "[INFO] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
 
-
+#region Disconnect
 Disconnect-PnPOnline -Connection $AppCatalogSiteConnection
 Disconnect-PnPOnline -Connection $AdminSiteConnection
 Disconnect-PnPOnline -Connection $SiteConnection
+#endregion

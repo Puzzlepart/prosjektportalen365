@@ -13,7 +13,7 @@ export default class PortfolioOverviewWebPart extends BaseClientSideWebPart<IPor
     const element: React.ReactElement<IPortfolioOverviewProps> = React.createElement(PortfolioOverview, {
       ...this.properties,
       title: 'Porteføljeoversikt',
-      context: this.context,
+      pageContext: this.context.pageContext,
     });
     ReactDom.render(element, this.domElement);
   }

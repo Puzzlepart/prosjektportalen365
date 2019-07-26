@@ -9,7 +9,6 @@ import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/Com
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { DetailsList, DetailsListLayoutMode, SelectionMode, ConstrainMode, IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
-import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import { sp } from '@pnp/sp';
 import DataSourceService from '../../../../@Shared/lib/services/DataSourceService';
 import getObjectValue from '../../../../@Shared/lib/helpers/getObjectValue';
@@ -123,8 +122,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
      * 
      * @param {string} searchTerm Search term
      */
-    @autobind
-    private onSearch(searchTerm: string) {
+    private onSearch = (searchTerm: string) => {
         this.setState({ searchTerm: searchTerm.toLowerCase() });
     }
 
@@ -135,8 +133,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
      * @param {number} index Index
      * @param {IColumn} column Column
      */
-    @autobind
-    private onRenderItemColumn(item: any, index: number, column: IColumn) {
+    private onRenderItemColumn = (item: any, index: number, column: IColumn) => {
         const fieldNameDisplay: string = getObjectValue(column, 'data.fieldNameDisplay', undefined);
         return column.onRender ? column.onRender(item, index, column) : getObjectValue(item, fieldNameDisplay || column.fieldName, null);
     }
@@ -144,11 +141,10 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
     /**
      * Sorting on column header click
      *
-  * @param {React.MouseEvent} _event Event
-  * @param {IColumn} column Column
-      */
-    @autobind
-    private onColumnHeaderSort(_event: React.MouseEvent<any>, column: IColumn): any {
+     * @param {React.MouseEvent} _evt Event
+     * @param {IColumn} column Column
+     */
+    private onColumnHeaderSort = (_evt: React.MouseEvent<any>, column: IColumn): void => {
         let { items, columns } = ({ ...this.state } as IAggregatedSearchListState);
 
         let isSortedDescending = column.isSortedDescending;
@@ -258,8 +254,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
     /**
      * Export to Excel
      */
-    @autobind
-    private async exportToExcel(event: React.MouseEvent<any> | React.KeyboardEvent<any>): Promise<void> {
+    private exportToExcel = async (event: React.MouseEvent<any> | React.KeyboardEvent<any>): Promise<void> => {
         event.preventDefault();
         const { sheetName, fileNamePrefix } = this.props.excelExportConfig;
         this.setState({ isExporting: true });

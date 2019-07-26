@@ -1,7 +1,6 @@
 //#region Imports
 import * as React from 'react';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
-import * as autobind from 'auto-bind';
 import { View } from './Views';
 import { Body } from './Body';
 import { Footer } from './Footer';
@@ -31,7 +30,6 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
         if (props.activePhase) {
             this.openChecklistItems = props.activePhase.checklistData.items.filter(item => item.GtChecklistStatus === strings.StatusOpen);
         }
-        autobind.react(this);
     }
 
     public componentDidMount(): void {
@@ -107,7 +105,7 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
      *
      * @param {View} newView New view
      */
-    private onChangeView(newView: View) {
+    private onChangeView = (newView: View) => {
         this.setState({ currentView: newView });
     }
 }

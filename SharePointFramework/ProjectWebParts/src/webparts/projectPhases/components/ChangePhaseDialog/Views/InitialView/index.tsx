@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { PrimaryButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import * as autobind from 'auto-bind';
 import IInitialViewProps, { InitialViewDefaultProps } from './IInitialViewProps';
 import IInitialViewState from './IInitialViewState';
 import * as strings from 'ProjectPhasesWebPartStrings';
@@ -20,7 +19,6 @@ export default class InitialView extends React.Component<IInitialViewProps, IIni
     constructor(props: IInitialViewProps) {
         super(props);
         this.state = { comment: props.currentChecklistItem ? (props.currentChecklistItem.GtComment || '') : '' };
-        autobind.react(this);
     }
 
     public render(): JSX.Element {
@@ -86,9 +84,9 @@ export default class InitialView extends React.Component<IInitialViewProps, IIni
     *
     * @param {string} status Status value
     * @param {string} comment Comment value
-    * @param {boolean} updateStatus Update status
+    * @param {boolean} _updateStatus Update status
     */
-    private onNextCheckPoint(status: string, comment: string, updateStatus: boolean = true) {
+    private onNextCheckPoint(status: string, comment: string, _updateStatus: boolean = true) {
         this.props.nextCheckPointAction(status, comment, true);
         this.setState({ comment: '' });
     }
@@ -97,9 +95,9 @@ export default class InitialView extends React.Component<IInitialViewProps, IIni
     * On comment update
     *
     * @param {any} _event Event
-    * @param {string} newValue New value
+    * @param {string} comment New value for comment
     */
-    private onCommentUpdate(_event: any, newValue: string) {
-        this.setState({ comment: newValue });
+    private onCommentUpdate = (_event: any, comment: string) => {
+        this.setState({ comment });
     }
 }

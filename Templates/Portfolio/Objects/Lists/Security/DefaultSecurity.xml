@@ -1,5 +1,5 @@
 
-<pnp:Security xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+<pnp:Security xmlns:pnp="http://schemas.dev.office.com/PnP/2019/03/ProvisioningSchema">
     <pnp:BreakRoleInheritance CopyRoleAssignments="false" ClearSubscopes="false">
         <pnp:RoleAssignment Principal="{associatedownergroupid}" RoleDefinition="Full kontroll" />
         <pnp:RoleAssignment Principal="{associatedvisitorgroupid}" RoleDefinition="Lese" />
