@@ -15,6 +15,8 @@
     [switch]$SkipAppPackages,
     [Parameter(Mandatory = $false, HelpMessage = "Skip site creation")]
     [switch]$SkipSiteCreation,
+    [Parameter(Mandatory = $false, HelpMessage = "Do you want to handle PnP libraries and PnP PowerShell without using bundled files?")]
+    [switch]$SkipLoadingBundle,
     [Parameter(Mandatory = $false, HelpMessage = "Site design name")]
     [string]$SiteDesignName = "Prosjektområde",
     [Parameter(Mandatory = $false, HelpMessage = "Security group to give View access to site design")]
@@ -44,6 +46,20 @@ function Connect-SharePoint {
     
     }
     return $Connection
+}
+
+function LoadBundle() {
+    Import-Module "$PSScriptRoot\SharePointPnPPowerShellOnline\SharePointPnPPowerShellOnline.psd1" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
+    $LoadedPnPCommand = Get-Command Connect-PnPOnline
+    return $LoadedPnPCommand.Version
+}
+
+if (-not $SkipLoadingBundle.IsPresent) {
+    $PnPVersion = LoadBundle    
+    Write-Host "[INFO] Loaded [SharePointPnPPowerShellOnline] v.$($PnPVersion) from bundle"
+} else {
+    $LoadedPnPCommand = Get-Command Connect-PnPOnline
+    Write-Host "[INFO] Loaded [SharePointPnPPowerShellOnline] v.$($LoadedPnPCommand.Version) from your environment"
 }
 
 #region Setting variables
@@ -249,8 +265,9 @@ $InstallEndTime = (Get-Date).ToString("MM/dd/yyy hh:mm")
 Add-PnPListItem -List "Installasjonslogg" -Values @{
     InstallStartTime = $InstallStartTime; 
     InstallEndTime = $InstallEndTime; 
-    InstallVersion = "VERSION_PLACEHOLDER"
-} -Connection $SiteConnection
+    InstallVersion = "VERSION_PLACEHOLDER";
+    InstallCommand = $MyInvocation.Line.Substring(2);
+} -Connection $SiteConnection >$null 2>&1
 
 #region Disconnect
 Disconnect-PnPOnline -Connection $AppCatalogSiteConnection

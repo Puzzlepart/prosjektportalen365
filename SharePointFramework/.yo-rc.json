@@ -1,8 +1,0 @@
-{
-  "@microsoft/generator-sharepoint": {
-    "packageManager": "pnpm",
-    "isCreatingSolution": true,
-    "environment": "spo",
-    "whichFolder": "subdir"
-  }
-}

@@ -23,6 +23,10 @@ Write-Host "[INFO] Copying Install.ps1, PostInstall.ps1 and site script source f
 Copy-Item -Path "$PSScriptRoot/../SiteScripts/Src/*.txt" -Filter *.txt -Destination "$ReleasePath/SiteScripts" -Force
 Copy-Item -Path "$PSScriptRoot/Install.ps1" -Destination $ReleasePath -Force
 Copy-Item -Path "$PSScriptRoot/PostInstall.ps1" -Destination $ReleasePath -Force
+
+Write-Host "[INFO] Copying SharePointPnPPowerShellOnline bundle"
+Copy-Item -Path "$PSScriptRoot/SharePointPnPPowerShellOnline" -Filter * -Destination $ReleasePath -Force -Recurse
+
 (Get-Content "$ReleasePath/Install.ps1") -Replace 'VERSION_PLACEHOLDER', $PackageJson.version | Set-Content "$ReleasePath/Install.ps1"
 #endregion
 
