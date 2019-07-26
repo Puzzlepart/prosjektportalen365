@@ -1,0 +1,26 @@
+<pnp:ListInstance Title="Installasjonslogg" Description="" Hidden="true" DocumentTemplate="" TemplateType="100" Url="Lists/Installasjonslogg" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" EnableFolderCreation="false" 
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2019/03/ProvisioningSchema">
+    <pnp:Views>
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Installasjonslogg/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+            <Query>
+                <OrderBy>
+                    <FieldRef Name="ID" />
+                </OrderBy>
+            </Query>
+            <ViewFields>
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="InstallStartTime" />
+                <FieldRef Name="InstallEndTime" />
+                <FieldRef Name="InstallVersion" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">30</RowLimit>
+            <JSLink>clienttemplates.js</JSLink>
+            <CustomFormatter />
+        </View>
+    </pnp:Views>
+    <pnp:Fields>
+        <Field DisplayName="InstallStartTime" Format="DateTime" Name="InstallStartTime" Title="InstallStartTime" Type="DateTime" ID="{8bb36128-4fc0-415d-9818-10fa686df919}" SourceID="{{listid:Installasjonslogg}}" StaticName="InstallStartTime" />
+        <Field DisplayName="InstallEndTime" Format="DateTime" Name="InstallEndTime" Title="InstallEndTime" Type="DateTime" ID="{b5f1936a-c2e0-4f63-b8e6-c1e61af2c096}" SourceID="{{listid:Installasjonslogg}}" StaticName="InstallEndTime" />
+        <Field DisplayName="InstallVersion" MaxLength="255" Name="InstallVersion" Title="InstallVersion" Type="Text" ID="{5e7d44ea-0667-4155-a2b8-fa46c018dbb2}" SourceID="{{listid:Installasjonslogg}}" StaticName="InstallVersion" />
+    </pnp:Fields>
+</pnp:ListInstance>
