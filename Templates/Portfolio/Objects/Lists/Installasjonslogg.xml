@@ -4,7 +4,7 @@
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Installasjonslogg/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
             <Query>
                 <OrderBy>
-                    <FieldRef Name="ID" />
+                    <FieldRef Name="ID" Ascending="FALSE" />
                 </OrderBy>
             </Query>
             <ViewFields>
@@ -12,6 +12,7 @@
                 <FieldRef Name="InstallStartTime" />
                 <FieldRef Name="InstallEndTime" />
                 <FieldRef Name="InstallVersion" />
+                <FieldRef Name="InstallCommand" />
             </ViewFields>
             <RowLimit Paged="TRUE">30</RowLimit>
             <JSLink>clienttemplates.js</JSLink>
@@ -22,5 +23,6 @@
         <Field DisplayName="InstallStartTime" Format="DateTime" Name="InstallStartTime" Title="InstallStartTime" Type="DateTime" ID="{8bb36128-4fc0-415d-9818-10fa686df919}" SourceID="{{listid:Installasjonslogg}}" StaticName="InstallStartTime" />
         <Field DisplayName="InstallEndTime" Format="DateTime" Name="InstallEndTime" Title="InstallEndTime" Type="DateTime" ID="{b5f1936a-c2e0-4f63-b8e6-c1e61af2c096}" SourceID="{{listid:Installasjonslogg}}" StaticName="InstallEndTime" />
         <Field DisplayName="InstallVersion" Name="InstallVersion" Title="InstallVersion" Type="Text" ID="{5e7d44ea-0667-4155-a2b8-fa46c018dbb2}" SourceID="{{listid:Installasjonslogg}}" StaticName="InstallVersion" />
+        <Field DisplayName="InstallCommand" Name="InstallCommand" Title="InstallCommand" Type="Text" ID="{265e131b-7825-421d-a1a1-c8eebe9d32e9}" SourceID="{{listid:Installasjonslogg}}" StaticName="InstallCommand" />
     </pnp:Fields>
 </pnp:ListInstance>
