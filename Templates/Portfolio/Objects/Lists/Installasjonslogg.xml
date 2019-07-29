@@ -1,5 +1,5 @@
 <pnp:ListInstance Title="Installasjonslogg" Description="" Hidden="true" DocumentTemplate="" TemplateType="100" Url="Lists/Installasjonslogg" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" EnableFolderCreation="false" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2019/03/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Installasjonslogg/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
             <Query>

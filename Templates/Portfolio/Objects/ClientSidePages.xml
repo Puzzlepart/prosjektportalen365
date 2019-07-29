@@ -1,4 +1,4 @@
-<pnp:ClientSidePages xmlns:pnp="http://schemas.dev.office.com/PnP/2019/03/ProvisioningSchema">
+<pnp:ClientSidePages xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Erfaringslogg.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Gevinstoversikt.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Home.xml" />

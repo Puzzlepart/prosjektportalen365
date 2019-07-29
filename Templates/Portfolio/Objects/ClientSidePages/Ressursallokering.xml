@@ -1,5 +1,5 @@
 ﻿<pnp:ClientSidePage PageName="Ressursallokering.aspx" PromoteAsNewsArticle="false" Overwrite="true" Layout="SingleWebPartAppPage" EnableComments="false" Title="Ressursallokering" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2019/03/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:Sections>
         <pnp:Section Order="1" Type="OneColumn">
             <pnp:Controls>

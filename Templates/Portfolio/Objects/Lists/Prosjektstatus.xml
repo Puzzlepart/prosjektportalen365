@@ -1,5 +1,5 @@
 ﻿<pnp:ListInstance Title="Prosjektstatus" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Prosjektstatus" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2019/03/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x010022252E35737A413FB56A1BA53862F6D5" Default="true" />
     </pnp:ContentTypeBindings>
@@ -18,13 +18,13 @@
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="fab2e356-9753-472c-9935-19b1c3cf809f" Name="GtYear" DisplayName="År" Required="true" />
-        <pnp:FieldRef ID="86673e07-181e-4521-843c-b687d86a6f85" Name="GtMonthChoice" DisplayName="Måned" Required="true" />
-        <pnp:FieldRef ID="3e90aa95-4d32-4819-823f-10ae2fd412b5" Name="GtOverallStatus" DisplayName="Overordnet status" Required="true"/>
-        <pnp:FieldRef ID="1447ef51-8e9b-4d16-aa2a-526dc9f1539e" Name="GtStatusTime" DisplayName="Status fremdrift" Required="true"/>
-        <pnp:FieldRef ID="a9902b9d-8aad-40df-9788-ba73c64c3cb5" Name="GtStatusBudget" DisplayName="Status økonomi" Required="true" />
-        <pnp:FieldRef ID="0bbe6a84-67e6-4a9c-b26b-a5973dacd473" Name="GtStatusQuality" DisplayName="Status kvalitet" Required="true" />
-        <pnp:FieldRef ID="fc8a879d-83bc-4670-b1f6-c9817e333614" Name="GtStatusRisk" DisplayName="Status risiko" Required="true" />
-        <pnp:FieldRef ID="b1958607-cd56-4ecb-9ad7-65fb7d3c22c7" Name="GtStatusGainAchievement" DisplayName="Status gevinstoppnåelse" Required="true" />
+        <pnp:FieldRef ID="fab2e356-9753-472c-9935-19b1c3cf809f" Name="GtYear" Required="true" />
+        <pnp:FieldRef ID="86673e07-181e-4521-843c-b687d86a6f85" Name="GtMonthChoice" Required="true" />
+        <pnp:FieldRef ID="3e90aa95-4d32-4819-823f-10ae2fd412b5" Name="GtOverallStatus" Required="true"/>
+        <pnp:FieldRef ID="1447ef51-8e9b-4d16-aa2a-526dc9f1539e" Name="GtStatusTime" Required="true"/>
+        <pnp:FieldRef ID="a9902b9d-8aad-40df-9788-ba73c64c3cb5" Name="GtStatusBudget" Required="true" />
+        <pnp:FieldRef ID="0bbe6a84-67e6-4a9c-b26b-a5973dacd473" Name="GtStatusQuality" Required="true" />
+        <pnp:FieldRef ID="fc8a879d-83bc-4670-b1f6-c9817e333614" Name="GtStatusRisk" Required="true" />
+        <pnp:FieldRef ID="b1958607-cd56-4ecb-9ad7-65fb7d3c22c7" Name="GtStatusGainAchievement" Required="true" />
     </pnp:FieldRefs>
 </pnp:ListInstance>
