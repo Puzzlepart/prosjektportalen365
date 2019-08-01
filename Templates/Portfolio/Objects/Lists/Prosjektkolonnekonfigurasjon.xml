@@ -1,5 +1,5 @@
 ﻿<pnp:ListInstance Title="Prosjektkolonnekonfigurasjon" Description="" DocumentTemplate="" Hidden="true" TemplateType="100" Url="Lists/Prosjektkolonnekonfigurasjon" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2019/03/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x01005CC009F95743674DAF31B3531CFFA586" Default="true" />
     </pnp:ContentTypeBindings>
@@ -22,130 +22,154 @@
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="Tittel" Required="false" />
+        <pnp:FieldRef ID="6aefa59f-4300-4c22-94af-d77d05d792f6" Name="GtPortfolioColumn" Required="true" />
+        <pnp:FieldRef ID="bb6eac2d-9253-4cb9-a934-a9343ce875d2" Name="GtPortfolioColumnValue" Required="true" />
+        <pnp:FieldRef ID="4cfafd35-e26f-44cf-bb90-47aa65a41827" Name="GtPortfolioColumnColor" Required="true" />
+        <pnp:FieldRef ID="d066062c-2fd0-486a-a30a-44bcb3bead4a" Name="GtPortfolioColumnIconName" Required="true" />
     </pnp:FieldRefs>
-    <pnp:DataRows UpdateBehavior="Overwrite" KeyColumn="GtPortfolioColumn">
+    <pnp:DataRows UpdateBehavior="Overwrite" KeyColumn="Title">
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status risiko (Lav)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">26</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">Lav</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#2da748</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status risiko (Medium)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">26</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">Medium</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#e9b359</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status risiko (Høy)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">26</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">Høy</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#ea5c73</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status økonomi (Under budsjett)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">22</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">Under budsjett</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#2da748</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status økonomi (På budsjett)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">22</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">På budsjett</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#2da748</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status økonomi (Mindre overskridelser)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">22</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">Mindre overskridelser</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#e9b359</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status økonomi (Vet ikke)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">22</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">Vet ikke</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#e9b359</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status økonomi (Over budsjett)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">22</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">Over budsjett</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#ea5c73</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status fremdrift (Foran plan)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">20</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">Foran plan</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#2da748</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status fremdrift (På plan)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">20</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">På plan</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#2da748</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status fremdrift (Mindre forsinkelser)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">20</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">Mindre forsinkelser</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#e9b359</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status fremdrift (Forsinket)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">20</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">Forsinket</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#ea5c73</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status gevinstoppnåelse (Foran plan)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">28</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">Foran plan</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#2da748</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status gevinstoppnåelse (På plan)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">28</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">På plan</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#2da748</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status gevinstoppnåelse (Ikke påbegynt)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">28</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">Ikke påbegynt</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#e9b359</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status gevinstoppnåelse (Mindre forsinkelser)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">28</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">Mindre forsinkelser</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#e9b359</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status gevinstoppnåelse (Forsinket)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">28</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">Forsinket</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#ea5c73</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status kvalitet (Større avvik fra spesifikasjon)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">24</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">Større avvik fra spesifikasjon</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#ea5c73</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status kvalitet (Mindre avvik fra spesifikasjon)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">24</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">Mindre avvik fra spesifikasjon</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#e9b359</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status kvalitet (Ihht. spesifikasjon)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">24</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">Ihht. spesifikasjon</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#2da748</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status kvalitet (Bedre enn spesifikasjon)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">24</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">Bedre enn spesifikasjon</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#2da748</pnp:DataValue>

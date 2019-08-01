@@ -40,11 +40,11 @@ function Connect-SharePoint {
         } else {
             $Connection = Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ReturnConnection -ErrorAction Stop
         }
+        return $Connection
     }
     Catch {
-    
+        throw $_.Exception.Message
     }
-    return $Connection
 }
 
 function LoadBundle() {
@@ -74,6 +74,7 @@ Set-PnPTraceLog -On -Level Debug -LogFile InstallLog.txt
 
 #region Connection to admin site
 Try {
+    Write-Host "[INFO] Connecting to [$AdminSiteUrl]"
     $AdminSiteConnection = Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
 }
 Catch {
@@ -103,6 +104,7 @@ if (-not $SkipSiteCreation.IsPresent) {
 
 #region Connection to site
 Try {
+    Write-Host "[INFO] Connecting to [$Url]"
     $SiteConnection = Connect-SharePoint -Url $Url -ErrorAction Stop
 }
 Catch {
@@ -116,9 +118,9 @@ Write-Host "[INFO] Setting permissions for associated member group"
 # Must use english names to avoid errors, even on non 1033 sites
 # Where-Object doesn't work directly on Get-PnPRoleDefinition, so need to clone it first (https://github.com/Puzzlepart/prosjektportalen365/issues/35)
 $RoleDefinitions = @()
-Get-PnPRoleDefinition | ForEach-Object { $RoleDefinitions += $_ }
-Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -RemoveRole ($RoleDefinitions | Where-Object { $_.RoleTypeKind -eq "Editor" }) -Connection  $SiteConnection -ErrorAction SilentlyContinue
-Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -AddRole ($RoleDefinitions | Where-Object { $_.RoleTypeKind -eq "Reader" }) -Connection  $SiteConnection -ErrorAction SilentlyContinue
+Get-PnPRoleDefinition -Connection  $SiteConnection -ErrorAction SilentlyContinue | ForEach-Object { $RoleDefinitions += $_ }
+Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup -Connection  $SiteConnection) -RemoveRole ($RoleDefinitions | Where-Object { $_.RoleTypeKind -eq "Editor" }) -Connection  $SiteConnection -ErrorAction SilentlyContinue
+Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup -Connection  $SiteConnection) -AddRole ($RoleDefinitions | Where-Object { $_.RoleTypeKind -eq "Reader" }) -Connection  $SiteConnection -ErrorAction SilentlyContinue
 #endregion
 
 

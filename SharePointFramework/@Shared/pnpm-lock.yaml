@@ -1,15 +1,16 @@
 dependencies:
   '@pnp/common': 1.3.4
   '@pnp/logging': 1.3.4
-  '@pnp/odata': 1.3.4
-  '@pnp/sp': 1.3.4
-  '@pnp/sp-clientsvc': 1.3.4
-  '@pnp/sp-taxonomy': 1.3.4
+  '@pnp/odata': 1.3.4_85c904fe0796869275131ab792182ba1
+  '@pnp/sp': 1.3.4_53b50af46d203d821909bc0e473b2e99
+  '@pnp/sp-clientsvc': 1.3.4_b2d8254c3a2730888cc2f7887dd3d769
+  '@pnp/sp-taxonomy': 1.3.4_c02481f1c9af1fb42e7ec10988944680
   es6-promise: 4.2.8
   gulp: 4.0.2
   object-get: 2.1.0
 devDependencies:
-  typescript: 2.4.2
+  typescript: 2.9.2
+lockfileVersion: 5.1
 packages:
   /@pnp/common/1.3.4:
     dependencies:
@@ -24,8 +25,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-YWvAN5z45afouLtCFP1ClT74bd/tFNf5G5QgmxxMPwEp37PoYTMgUCf4hH+ZZVe6MO3eD5DVPr57ZdeF+oLzzQ==
-  /@pnp/odata/1.3.4:
+  /@pnp/odata/1.3.4_85c904fe0796869275131ab792182ba1:
     dependencies:
+      '@pnp/common': 1.3.4
+      '@pnp/logging': 1.3.4
       tslib: 1.10.0
     dev: false
     peerDependencies:
@@ -33,8 +36,12 @@ packages:
       '@pnp/logging': 1.3.4
     resolution:
       integrity: sha512-S9X+qhIrjuxv02cN56wv68hGFa5q27N1DTv/yKC8TXp3nHAGKoKwT/uRIilOrtANIR/DBMC0Oto5lXfLtC/PiQ==
-  /@pnp/sp-clientsvc/1.3.4:
+  /@pnp/sp-clientsvc/1.3.4_b2d8254c3a2730888cc2f7887dd3d769:
     dependencies:
+      '@pnp/common': 1.3.4
+      '@pnp/logging': 1.3.4
+      '@pnp/odata': 1.3.4_85c904fe0796869275131ab792182ba1
+      '@pnp/sp': 1.3.4_53b50af46d203d821909bc0e473b2e99
       tslib: 1.10.0
     dev: false
     peerDependencies:
@@ -44,8 +51,13 @@ packages:
       '@pnp/sp': 1.3.4
     resolution:
       integrity: sha512-nu1W9L4kL4QDlXN7jWratlmH0LLW1cMjJZZt55HoRwPo3hstnCbX607jaoZH4l7q4REpFSVtm2FbU1wRWoXBPA==
-  /@pnp/sp-taxonomy/1.3.4:
+  /@pnp/sp-taxonomy/1.3.4_c02481f1c9af1fb42e7ec10988944680:
     dependencies:
+      '@pnp/common': 1.3.4
+      '@pnp/logging': 1.3.4
+      '@pnp/odata': 1.3.4_85c904fe0796869275131ab792182ba1
+      '@pnp/sp': 1.3.4_53b50af46d203d821909bc0e473b2e99
+      '@pnp/sp-clientsvc': 1.3.4_b2d8254c3a2730888cc2f7887dd3d769
       tslib: 1.10.0
     dev: false
     peerDependencies:
@@ -56,8 +68,11 @@ packages:
       '@pnp/sp-clientsvc': 1.3.4
     resolution:
       integrity: sha512-nWIFHzPGIVr1QNVi2O3b9GVLVfYNu+J8WRDjXi/yyQrsHtUuE8pDv4qDV8/lKNViUM892js4JqwsDaSGjLH+iw==
-  /@pnp/sp/1.3.4:
+  /@pnp/sp/1.3.4_53b50af46d203d821909bc0e473b2e99:
     dependencies:
+      '@pnp/common': 1.3.4
+      '@pnp/logging': 1.3.4
+      '@pnp/odata': 1.3.4_85c904fe0796869275131ab792182ba1
       tslib: 1.10.0
     dev: false
     peerDependencies:
@@ -1291,7 +1306,7 @@ packages:
       is-plain-object: 2.0.4
       object.map: 1.0.1
       rechoir: 0.6.2
-      resolve: 1.11.1
+      resolve: 1.12.0
     dev: false
     engines:
       node: '>= 0.8'
@@ -1335,7 +1350,7 @@ packages:
     dependencies:
       findup-sync: 2.0.0
       micromatch: 3.1.10
-      resolve: 1.11.1
+      resolve: 1.12.0
       stack-trace: 0.0.10
     dev: false
     engines:
@@ -1417,7 +1432,7 @@ packages:
   /normalize-package-data/2.5.0:
     dependencies:
       hosted-git-info: 2.7.1
-      resolve: 1.11.1
+      resolve: 1.12.0
       semver: 5.7.0
       validate-npm-package-license: 3.0.4
     dev: false
@@ -1723,7 +1738,7 @@ packages:
       integrity: sha512-1JU/8q+VgFZyxwrJ+SVIOsh+KywWGpds3NTqikiKpDMZWScmAYyKIgqkO+ARvNWJfXeXR1zxz7aHF4u4CyH6vQ==
   /rechoir/0.6.2:
     dependencies:
-      resolve: 1.11.1
+      resolve: 1.12.0
     dev: false
     engines:
       node: '>= 0.10'
@@ -1820,12 +1835,12 @@ packages:
     dev: false
     resolution:
       integrity: sha1-LGN/53yJOv0qZj/iGqkIAGjiBSo=
-  /resolve/1.11.1:
+  /resolve/1.12.0:
     dependencies:
       path-parse: 1.0.6
     dev: false
     resolution:
-      integrity: sha512-vIpgF6wfuJOZI7KKKSP+HmiKggadPQAdsp5HiC1mvqnfp0gF1vdwgBWZIdrVft9pgqoMFQN+R7BSWZiBxx+BBw==
+      integrity: sha512-B/dOmuoAik5bKcD6s6nXDCjzUKnaDvdkRyAk6rsmsKLipWj4797iothd7jmmUhWTfinVMU+wc56rYKsit2Qy4w==
   /ret/0.1.15:
     dev: false
     engines:
@@ -2100,13 +2115,13 @@ packages:
     dev: false
     resolution:
       integrity: sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
-  /typescript/2.4.2:
+  /typescript/2.9.2:
     dev: true
     engines:
       node: '>=4.2.0'
     hasBin: true
     resolution:
-      integrity: sha1-+DlfhdRZJ2BnyYiqQYN6j4KHCEQ=
+      integrity: sha512-Gr4p6nFNaoufRIY4NMdpQRNmgxVIGMs4Fcu/ujdYk3nAZqk7supzBE9idmvfZIlH/Cuj//dvi+019qEue9lV0w==
   /unc-path-regex/0.1.2:
     dev: false
     engines:
@@ -2312,17 +2327,14 @@ packages:
     dev: false
     resolution:
       integrity: sha1-a6MY6xaWFyf10oT46gA+jWFU0Mg=
-registry: 'https://registry.npmjs.org/'
-shrinkwrapMinorVersion: 9
-shrinkwrapVersion: 3
 specifiers:
-  '@pnp/common': ^1.3.2
-  '@pnp/logging': ^1.3.2
-  '@pnp/odata': ^1.3.2
-  '@pnp/sp': ^1.3.2
-  '@pnp/sp-clientsvc': ^1.3.2
-  '@pnp/sp-taxonomy': ^1.3.2
-  es6-promise: ^4.2.6
+  '@pnp/common': ^1.3.4
+  '@pnp/logging': ^1.3.4
+  '@pnp/odata': ^1.3.4
+  '@pnp/sp': ^1.3.4
+  '@pnp/sp-clientsvc': ^1.3.4
+  '@pnp/sp-taxonomy': ^1.3.4
+  es6-promise: ^4.2.8
   gulp: ^4.0.2
   object-get: ^2.1.0
-  typescript: 2.4.2
+  typescript: ^2.9.0
