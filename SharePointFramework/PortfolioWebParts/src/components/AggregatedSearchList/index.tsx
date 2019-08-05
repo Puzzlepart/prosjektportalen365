@@ -1,4 +1,6 @@
 import { sp } from '@pnp/sp';
+import { getObjectValue } from '@Shared/helpers';
+import { DataSourceService } from '@Shared/services';
 import * as moment from 'moment';
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
 import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
@@ -10,8 +12,6 @@ import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
 import * as React from 'react';
 import HubSiteService from 'sp-hubsite-service';
 import * as stringFormat from 'string-format';
-import getObjectValue from '../../../../@Shared/lib/helpers/getObjectValue';
-import DataSourceService from '../../../../@Shared/lib/services/DataSourceService';
 import styles from './AggregatedSearchList.module.scss';
 import { IAggregatedSearchListProps } from './IAggregatedSearchListProps';
 import { IAggregatedSearchListState } from './IAggregatedSearchListState';

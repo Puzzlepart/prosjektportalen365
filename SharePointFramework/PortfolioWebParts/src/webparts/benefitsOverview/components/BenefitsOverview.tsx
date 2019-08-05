@@ -3,7 +3,7 @@ import styles from './BenefitsOverview.module.scss';
 import { IBenefitsOverviewProps, BenefitsOverviewDefaultProps } from './IBenefitsOverviewProps';
 import AggregatedSearchList from '../../../components/AggregatedSearchList';
 import { GetColumns } from './BenefitsOverviewColumns';
-import getObjectValue from '../../../../../@Shared/lib/helpers/getObjectValue';
+import { getObjectValue } from '@Shared/helpers';
 import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from '../models';
 
 export default class BenefitsOverview extends React.Component<IBenefitsOverviewProps, {}> {

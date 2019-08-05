@@ -1,14 +1,14 @@
-import * as React from 'react';
-import styles from './LatestProjects.module.scss';
-import * as strings from 'LatestProjectsWebPartStrings';
-import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
+import { QueryPropertyValueType, SortDirection, sp } from '@pnp/sp';
 import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
+import { formatDate } from '@Shared/helpers';
+import * as strings from 'LatestProjectsWebPartStrings';
+import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
+import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
+import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
+import * as React from 'react';
 import { ILatestProjectsProps } from './ILatestProjectsProps';
 import { ILatestProjectsState } from './ILatestProjectsState';
-import { sp, QueryPropertyValueType, SortDirection } from '@pnp/sp';
-import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
-import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
-import formatDate from '../../../../../@Shared/lib/helpers/formatDate';
+import styles from './LatestProjects.module.scss';
 
 export default class LatestProjects extends React.Component<ILatestProjectsProps, ILatestProjectsState> {
   public static defaultProps: Partial<ILatestProjectsProps> = { rowLimit: 5 };

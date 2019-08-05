@@ -4,7 +4,7 @@ import { IChartProps } from './IChartProps';
 import { IChartState } from './IChartState';
 import * as ReactHighcharts from 'react-highcharts';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import getBreakpoint from '../../../../../../@Shared/lib/helpers/getBreakpoint';
+import { getBreakpoint } from '@Shared/helpers';
 
 export default class Chart extends React.Component<IChartProps, IChartState> {
     public static defaultProps: Partial<IChartProps> = {};

@@ -12,7 +12,7 @@ import { Modal } from 'office-ui-fabric-react/lib/Modal';
 import ProjectCard from './ProjectCard/ProjectCard';
 import { sp, Web } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
-import { sortAlphabetically, getObjectValue } from '../../../../../@Shared/lib/helpers';
+import { sortAlphabetically, getObjectValue } from '@Shared/helpers';
 import ProjectInformation from '../../../../../ProjectWebParts/lib/webparts/projectInformation/components/ProjectInformation';
 import MSGraph from 'msgraph-helper';
 import { ProjectListModel, ISPProjectItem, ISPUser, IGraphGroup } from '../models';
