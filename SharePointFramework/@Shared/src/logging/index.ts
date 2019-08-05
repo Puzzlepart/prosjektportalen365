@@ -1,2 +1,1 @@
-import ListLogger from './ListLogger';
-export { ListLogger };
+export { default as ListLogger } from './ListLogger';

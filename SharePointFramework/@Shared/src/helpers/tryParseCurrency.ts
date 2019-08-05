@@ -1,6 +1,6 @@
-import tryParseInt from "./tryParseInt";
+import { tryParseInt } from './';
 
-export default (str: string, fallback: string): number | string => {
+export function tryParseCurrency(str: string, fallback: string): number | string {
     var parsed = tryParseInt(str, fallback);
     if (parsed === fallback) {
         return fallback;

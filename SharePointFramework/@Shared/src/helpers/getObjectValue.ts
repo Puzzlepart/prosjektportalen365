@@ -6,6 +6,6 @@ import * as objectGet from 'object-get';
  * @param {string} expression Expression
  * @param {T} fallback Fallback
  */
-export default function getObjectValue<T>(object: any, expression: string, fallback: T): T {
+export function getObjectValue<T>(object: any, expression: string, fallback: T): T {
     return objectGet(object, expression) || fallback;
 };

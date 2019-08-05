@@ -1,6 +1,4 @@
-interface IExcelExportConfig {
+export interface IExcelExportConfig {
   fileNamePrefix: string;
   sheetName: string;
 }
-
-export default IExcelExportConfig;
