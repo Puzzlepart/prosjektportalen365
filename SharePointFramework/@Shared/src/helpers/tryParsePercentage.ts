@@ -1,4 +1,4 @@
-import tryParseFloat from './tryParseFloat';
+import { tryParseFloat } from './';
 
 /**
  * 
@@ -6,7 +6,7 @@ import tryParseFloat from './tryParseFloat';
  * @param {boolean} addPostfix Add postix (%)
  * @param {string | number} fallback Fallback if parse fails
  */
-export default (str: string, addPostfix: boolean = true, fallback: string | number): number | string => {
+export function tryParsePercentage(str: string, addPostfix: boolean = true, fallback: string | number): number | string {
     var parsed = tryParseFloat(str, fallback);
     if (parsed === fallback) {
         return fallback;

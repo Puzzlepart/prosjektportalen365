@@ -1,7 +1,7 @@
 import { List } from '@pnp/sp';
 import { DataSource } from '../models/DataSource';
 
-export default class DataSourceService {
+export class DataSourceService {
     private list: List;
 
     /**

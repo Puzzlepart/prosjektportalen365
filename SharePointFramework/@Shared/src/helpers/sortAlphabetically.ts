@@ -1,4 +1,4 @@
-import getObjectValue from "./getObjectValue";
+import { getObjectValue } from './';
 
 
 /**
@@ -9,7 +9,7 @@ import getObjectValue from "./getObjectValue";
  * @param {boolean} ascending Sort ascending
  * @param {string} property Property
  */
-export default function sortAlphabetically<T>(a: T, b: T, ascending?: boolean, property?: string): number {
+export function sortAlphabetically<T>(a: T, b: T, ascending?: boolean, property?: string): number {
     let aValue = getObjectValue(a, property, '') || a;
     let bValue = getObjectValue(b, property, '') || b;
     if (aValue < bValue) { return ascending ? -1 : 1; }

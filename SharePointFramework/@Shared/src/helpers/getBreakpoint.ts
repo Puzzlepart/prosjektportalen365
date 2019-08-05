@@ -7,7 +7,7 @@ const BREAKPOINTS = {
     xxxl: [1920, 4000],
 };
 
-export default (): string => {
+export function getBreakpoint(): string {
     const windowWidth = window.innerWidth;
     const [breakpoint] = Object.keys(BREAKPOINTS).filter(key => {
         const [f, t] = BREAKPOINTS[key];
