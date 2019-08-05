@@ -1,3 +1,4 @@
+import { PageContext } from '@microsoft/sp-page-context';
 import { dateAdd } from "@pnp/common";
 import { Logger, LogLevel } from '@pnp/logging';
 import '@pnp/polyfill-ie11';
@@ -7,7 +8,6 @@ import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-re
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'ProjectStatusWebPartStrings';
 import * as React from 'react';
-import getObjectValue from '../../../../../@Shared/lib/helpers/getObjectValue';
 import ProjectStatusReport, { IProjectStatusReportItem } from '../models/ProjectStatusReport';
 import SectionModel, { SectionType } from '../models/SectionModel';
 import { IStatusSectionBaseProps } from './@StatusSectionBase/IStatusSectionBaseProps';
@@ -18,7 +18,6 @@ import ProjectPropertiesSection from './ProjectPropertiesSection';
 import styles from './ProjectStatus.module.scss';
 import StatusSection from './StatusSection';
 import SummarySection from './SummarySection';
-import { PageContext } from '@microsoft/sp-page-context';
 
 export default class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private reportList: List;
@@ -270,3 +269,4 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
 }
 
 export { IProjectStatusProps };
+

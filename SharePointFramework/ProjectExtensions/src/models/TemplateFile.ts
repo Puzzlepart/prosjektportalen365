@@ -1,5 +1,5 @@
 import { Web, Folder, FileAddResult } from '@pnp/sp';
-import formatDate from '../../../@Shared/lib/helpers/formatDate';
+import { formatDate } from '@Shared/helpers';
 
 export class TemplateFile {
     public id: string;

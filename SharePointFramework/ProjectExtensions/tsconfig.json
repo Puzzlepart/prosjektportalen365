@@ -26,7 +26,13 @@
       "es5",
       "dom",
       "es2015.collection"
-    ]
+    ],
+    "baseUrl": "src",
+    "paths": {
+      "@Shared/*": [
+        "../../@Shared/lib/*"
+      ]
+    }
   },
   "include": [
     "src/**/*.ts"
