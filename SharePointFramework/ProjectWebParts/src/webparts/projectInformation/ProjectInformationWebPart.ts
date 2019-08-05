@@ -12,7 +12,7 @@ export default class ProjectInformationWebPart extends BaseClientSideWebPart<IPr
 
   public async onInit() {
     sp.setup({ spfxContext: this.context });
-    const hubSite = await HubSiteService.GetHubSiteById(this.context.pageContext.web.absoluteUrl, this.context.pageContext.legacyPageContext.hubSiteId);
+    const hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
     this._hubSiteUrl = hubSite.url;
   }
 
