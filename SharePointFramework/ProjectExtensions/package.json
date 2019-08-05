@@ -23,6 +23,7 @@
     },
     "dependencies": {
         "@microsoft/decorators": "1.8.2",
+        "@microsoft/office-ui-fabric-react-bundle": "^1.8.2",
         "@microsoft/sp-application-base": "1.8.2",
         "@microsoft/sp-core-library": "1.8.2",
         "@microsoft/sp-dialog": "1.8.2",
@@ -42,7 +43,6 @@
         "@types/react-dom": "16.8.0",
         "@types/webpack-env": "1.13.1",
         "msgraph-helper": "^0.7.1",
-        "office-ui-fabric-react": "6.189.2",
         "react": "16.7.0",
         "react-dom": "16.7.0",
         "sp-entityportal-service": "^0.6.5",
