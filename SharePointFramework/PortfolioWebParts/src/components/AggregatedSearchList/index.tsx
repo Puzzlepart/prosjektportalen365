@@ -1,20 +1,20 @@
-import * as React from 'react';
-import styles from './AggregatedSearchList.module.scss';
-import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
-import { IAggregatedSearchListProps } from './IAggregatedSearchListProps';
-import { IAggregatedSearchListState } from './IAggregatedSearchListState';
-import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
-import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import { DetailsList, DetailsListLayoutMode, SelectionMode, ConstrainMode, IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList';
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { sp } from '@pnp/sp';
-import DataSourceService from '../../../../@Shared/lib/services/DataSourceService';
-import getObjectValue from '../../../../@Shared/lib/helpers/getObjectValue';
+import * as moment from 'moment';
+import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
+import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { ConstrainMode, DetailsList, DetailsListLayoutMode, IColumn, IGroup, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
+import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
+import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
+import * as React from 'react';
 import HubSiteService from 'sp-hubsite-service';
 import * as stringFormat from 'string-format';
-import * as moment from 'moment';
+import getObjectValue from '../../../../@Shared/lib/helpers/getObjectValue';
+import DataSourceService from '../../../../@Shared/lib/services/DataSourceService';
+import styles from './AggregatedSearchList.module.scss';
+import { IAggregatedSearchListProps } from './IAggregatedSearchListProps';
+import { IAggregatedSearchListState } from './IAggregatedSearchListState';
 
 export default class AggregatedSearchList extends React.Component<IAggregatedSearchListProps, IAggregatedSearchListState> {
     public static defaultProps: Partial<IAggregatedSearchListProps> = {
@@ -284,7 +284,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
                 const { siteId, hubSiteId } = getObjectValue<{ siteId: string, hubSiteId: string }>(this.props, 'legacyPageContext', { siteId: '', hubSiteId: '' });
                 let web: any = sp.web;
                 if (siteId.indexOf(hubSiteId) === -1) {
-                    web = (await HubSiteService.GetHubSiteById(`${document.location.protocol}//${document.location.hostname}`, hubSiteId)).web;
+                    web = (await HubSiteService.GetHubSite(sp, this.props.pageContext)).web;
                 }
                 const { QueryTemplate } = await new DataSourceService(web).getByName(dataSource);
                 if (QueryTemplate) {

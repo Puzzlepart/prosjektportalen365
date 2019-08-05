@@ -11,7 +11,7 @@ export default class BenefitsOverviewWebPart extends BaseClientSideWebPart<IBene
     Logger.log({ message: '(BenefitsOverviewWebPart) render: Rendering <BenefitsOverview />', level: LogLevel.Info });
     const element: React.ReactElement<IBenefitsOverviewProps> = React.createElement(BenefitsOverview, {
       ...this.properties,
-      legacyPageContext: this.context.pageContext.legacyPageContext,
+      pageContext: this.context.pageContext,
     });
     ReactDom.render(element, this.domElement);
   }

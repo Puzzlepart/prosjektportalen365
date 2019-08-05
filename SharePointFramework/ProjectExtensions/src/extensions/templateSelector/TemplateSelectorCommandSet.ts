@@ -9,7 +9,8 @@ import { TemplateLibrarySelectModal } from '../../components';
 import { ITemplateSelectorCommandSetProperties } from './ITemplateSelectorCommandSetProperties';
 import * as data from '../../data';
 import { TemplateFile } from '../../models';
-import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
+import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
+import { sp } from '@pnp/sp';
 
 
 export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<ITemplateSelectorCommandSetProperties> {
@@ -24,11 +25,12 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
 
   @override
   public async onInit() {
+    sp.setup({ spfxContext: this.context });
     const OPEN_TEMPLATE_SELECTOR_COMMAND: Command = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR');
-    Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Initializing', data: { version: this.context.manifest.version }, level: LogLevel.Info });
     if (OPEN_TEMPLATE_SELECTOR_COMMAND) {
+      Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Initializing', data: { version: this.context.manifest.version }, level: LogLevel.Info });
       try {
-        const hub = await HubSiteService.GetHubSite(this.context.pageContext);
+        const hub = await HubSiteService.GetHubSite(sp, this.context.pageContext);
         Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Retrieved hub site', data: { url: hub.url }, level: LogLevel.Info });
         const currentPhase = await data.getCurrentPhase(hub, this.properties.phaseTermSetId || 'abcfc9d9-a263-4abb-8234-be973c46258a', this.context.pageContext.site.id.toString());
         Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Retrieved current phase', data: { currentPhase }, level: LogLevel.Info });

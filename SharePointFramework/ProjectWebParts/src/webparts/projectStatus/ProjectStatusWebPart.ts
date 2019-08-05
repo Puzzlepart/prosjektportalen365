@@ -17,7 +17,7 @@ export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProject
   public async onInit() {
     sp.setup({ spfxContext: this.context });
     moment.locale('nb');
-    this.hubSite = await HubSiteService.GetHubSiteById(this.context.pageContext.web.absoluteUrl, this.context.pageContext.legacyPageContext.hubSiteId);
+    this.hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
     const params = { webUrl: this.hubSite.url, ...this.properties.entity };
     this.spEntityPortalService = new SpEntityPortalService(params);
   }
