@@ -244,7 +244,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
     Logger.log({ message: '(ProjectPhases) fetchData: Fetching TermSetId for selected field', level: LogLevel.Info });
     const { phaseField, pageContext, entity } = this.props;
     try {
-      const hubSite = await HubSiteService.GetHubSiteById(pageContext.web.absoluteUrl, pageContext.legacyPageContext.hubSiteId);
+      const hubSite = await HubSiteService.GetHubSite(sp, pageContext);
       const params = { webUrl: hubSite.url, ...entity };
       this._spEntityPortalService = new SpEntityPortalService(params);
       const [{ TermSetId: termSetId }, phaseTextField] = await Promise.all([
