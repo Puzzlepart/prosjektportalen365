@@ -37,6 +37,7 @@ Set-Location "$PSScriptRoot\..\SharePointFramework\@Shared"
 # https://github.com/SharePoint/sp-dev-docs/issues/2916
 if (-not $SkipBuildSharePointFramework.IsPresent) {
     pnpm install --shamefully-flatten
+    tsc
 }
 
 foreach ($Solution in @("ProjectWebParts", "PortfolioWebParts", "ProjectExtensions")) {
