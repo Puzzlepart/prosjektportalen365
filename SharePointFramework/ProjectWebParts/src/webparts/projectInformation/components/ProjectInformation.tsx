@@ -1,10 +1,10 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
 import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
+import { HubConfigurationService } from '@Shared/services';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'ProjectInformationWebPartStrings';
-import { HubConfigurationService } from '../../../../../@Shared/lib/services/HubConfigurationService';
 import * as React from 'react';
 import SpEntityPortalService from 'sp-entityportal-service';
 import ProjectPropertyModel from '../models/ProjectPropertyModel';

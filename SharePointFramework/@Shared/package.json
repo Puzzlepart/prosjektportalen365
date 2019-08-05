@@ -4,7 +4,8 @@
     "description": "Shared utilities, helpers and models",
     "main": "index.js",
     "scripts": {
-        "build": "tsc"
+        "build": "tsc",
+        "watch": "tsc --watch"
     },
     "author": "",
     "license": "ISC",
