@@ -36,7 +36,7 @@ Write-Host "[INFO] Building SharePointFramework\@Shared"
 Set-Location "$PSScriptRoot\..\SharePointFramework\@Shared"
 # https://github.com/SharePoint/sp-dev-docs/issues/2916
 if (-not $SkipBuildSharePointFramework.IsPresent) {
-    pnpm install --shamefully-flatten
+    pnpm install --shamefully-flatten --silent
     tsc
 }
 
@@ -46,7 +46,7 @@ foreach ($Solution in @("ProjectWebParts", "PortfolioWebParts", "ProjectExtensio
     Write-Host "[INFO] Packaging SharePoint Framework solution [$($Solution)] [v$($PackageSolutionJson.solution.version)]"
     # https://github.com/SharePoint/sp-dev-docs/issues/2916
     if (-not $SkipBuildSharePointFramework.IsPresent) {
-        pnpm install --shamefully-flatten
+        pnpm install --shamefully-flatten --silent
         pnpm run-script package
     }
     Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse | Where-Object{-not ($_.PSIsContainer -or (Test-Path "$ReleasePath/Apps/$_"))} | Copy-Item -Destination "$ReleasePath/Apps" -Force
