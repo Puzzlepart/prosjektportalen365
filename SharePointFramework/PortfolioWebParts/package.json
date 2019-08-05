@@ -20,7 +20,6 @@
         "major-version": "npm version major"
     },
     "dependencies": {
-        "@microsoft/office-ui-fabric-react-bundle": "^1.8.2",
         "@microsoft/sp-core-library": "1.8.2",
         "@microsoft/sp-lodash-subset": "1.8.2",
         "@microsoft/sp-office-ui-fabric-core": "1.8.2",
@@ -46,6 +45,7 @@
         "msgraph-helper": "^0.7.3",
         "object-assign": "^4.1.1",
         "object-get": "^2.1.0",
+        "office-ui-fabric-react": "^6.143.0",
         "react": "16.7.0",
         "react-calendar-timeline": "^0.23.0",
         "react-dom": "16.7.0",

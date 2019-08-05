@@ -1,6 +1,5 @@
 dependencies:
   '@microsoft/decorators': 1.8.2
-  '@microsoft/office-ui-fabric-react-bundle': 1.8.2
   '@microsoft/sp-application-base': 1.8.2
   '@microsoft/sp-core-library': 1.8.2
   '@microsoft/sp-dialog': 1.8.2
@@ -20,6 +19,7 @@ dependencies:
   '@types/react-dom': 16.8.0
   '@types/webpack-env': 1.13.1
   msgraph-helper: 0.7.3
+  office-ui-fabric-react: 6.143.0
   react: 16.7.0
   react-dom: 16.7.0
   sp-entityportal-service: 0.6.5
@@ -11327,7 +11327,6 @@ shrinkwrapMinorVersion: 9
 shrinkwrapVersion: 3
 specifiers:
   '@microsoft/decorators': 1.8.2
-  '@microsoft/office-ui-fabric-react-bundle': ^1.8.2
   '@microsoft/rush-stack-compiler-2.9': ~0.7.25
   '@microsoft/sp-application-base': 1.8.2
   '@microsoft/sp-build-web': 1.8.2
@@ -11357,6 +11356,7 @@ specifiers:
   ajv: ~5.2.2
   gulp: ~3.9.1
   msgraph-helper: ^0.7.1
+  office-ui-fabric-react: ^6.143.0
   react: 16.7.0
   react-dom: 16.7.0
   sp-entityportal-service: ^0.6.5

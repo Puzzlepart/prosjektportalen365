@@ -20,7 +20,6 @@
         "major-version": "npm version major"
     },
     "dependencies": {
-        "@microsoft/office-ui-fabric-react-bundle": "^1.8.2",
         "@microsoft/sp-core-library": "1.8.2",
         "@microsoft/sp-lodash-subset": "1.8.2",
         "@microsoft/sp-office-ui-fabric-core": "1.8.2",
@@ -42,6 +41,7 @@
         "moment": "^2.24.0",
         "msgraph-helper": "^0.7.1",
         "object-get": "^2.1.0",
+        "office-ui-fabric-react": "^6.143.0",
         "react": "16.7.0",
         "react-dom": "16.7.0",
         "react-image-fade-in": "^1.0.2",
