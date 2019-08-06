@@ -15,6 +15,8 @@
     [switch]$SkipAppPackages,
     [Parameter(Mandatory = $false, HelpMessage = "Skip site creation")]
     [switch]$SkipSiteCreation,
+    [Parameter(Mandatory = $false, HelpMessage = "Skip search configuration")]
+    [switch]$SkipSearchConfiguration,
     [Parameter(Mandatory = $false, HelpMessage = "Do you want to handle PnP libraries and PnP PowerShell without using bundled files?")]
     [switch]$SkipLoadingBundle,
     [Parameter(Mandatory = $false, HelpMessage = "Site design name")]
@@ -245,6 +247,19 @@ Try {
 }
 Catch {
     Write-Host "[WARNING] Failed to clear QuickLaunch: $($_.Exception.Message)" -ForegroundColor Yellow
+}
+#endregion
+
+#region Search Configuration 
+if (-not $SkipSearchConfiguration.IsPresent) {
+    Try {
+        Write-Host "[INFO] Importing Search Configuration"    
+        Set-PnPSearchConfiguration -Scope Subscription -Path .\SearchConfiguration.xml -Connection $AdminSiteConnection
+        Write-Host "[INFO] Successfully imported Search Configuration" -ForegroundColor Green
+    }
+    Catch {
+        Write-Host "[WARNING] Failed to import Search Configuration: $($_.Exception.Message)" -ForegroundColor Yellow
+    }
 }
 #endregion
 
