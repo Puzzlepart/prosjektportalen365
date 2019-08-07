@@ -29,6 +29,9 @@ build.configureWebpack.mergeConfig({
             let _path = path.join(__dirname, outDir, paths[key][0]);
             return { ...alias, [key]: _path };
         }, generatedConfiguration.resolve.alias);
+        generatedConfiguration.externals = Object.assign(generatedConfiguration.externals || {}, {
+            'XLSX': 'XLSX'
+        });
         return generatedConfiguration;
     }
 });

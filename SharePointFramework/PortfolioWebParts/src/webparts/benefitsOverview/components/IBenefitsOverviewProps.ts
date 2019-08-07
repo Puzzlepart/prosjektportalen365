@@ -1,11 +1,6 @@
 import { IBenefitsOverviewWebPartProps } from '../IBenefitsOverviewWebPartProps';
 
-export interface IBenefitsOverviewProps extends IBenefitsOverviewWebPartProps {
-    excelExportConfig: {
-        fileNamePrefix: 'benefits',
-        sheetName: 'Sheet A',
-    };
-}
+export interface IBenefitsOverviewProps extends IBenefitsOverviewWebPartProps {}
 
 export const BenefitsOverviewDefaultProps: Partial<IBenefitsOverviewProps> = {
     selectProperties: [

@@ -1,14 +1,14 @@
-import * as strings from 'ExperienceLogWebPartStrings';
-import { ExperienceLogColumns } from './ExperienceLogColumns';
+import * as ExperienceLogWebPartStrings from 'ExperienceLogWebPartStrings';
 import { IExperienceLogWebPartProps } from '../IExperienceLogWebPartProps';
+import { ExperienceLogColumns } from './ExperienceLogColumns';
 
 export interface IExperienceLogProps extends IExperienceLogWebPartProps { }
 
 export const ExperienceLogDefaultProps: Partial<IExperienceLogProps> = {
-  title: strings.Title,
+  title: ExperienceLogWebPartStrings.Title,
   columns: ExperienceLogColumns,
   excelExportConfig: {
-    fileNamePrefix: strings.ExcelExportFileNamePrefix,
-    sheetName: 'Sheet A',
+    fileNamePrefix: ExperienceLogWebPartStrings.ExcelExportFileNamePrefix,
+    sheetName: 'Sheet1',
   },
 };

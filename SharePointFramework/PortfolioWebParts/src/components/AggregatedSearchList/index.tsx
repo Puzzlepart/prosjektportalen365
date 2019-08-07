@@ -270,8 +270,13 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
             ],
         });
         const fileName = stringFormat("{0}-{1}.xlsx", fileNamePrefix, moment(new Date().toISOString()).format('YYYY-MM-DD-HH-mm'));
-        await ExcelExportService.export([], fileName);
-        this.setState({ isExporting: false });
+        try {
+            await ExcelExportService.export(sheets, fileName);
+            this.setState({ isExporting: false });
+        } catch (error) {
+            console.log(error);
+            this.setState({ isExporting: false });
+        }
     }
 
     /**
