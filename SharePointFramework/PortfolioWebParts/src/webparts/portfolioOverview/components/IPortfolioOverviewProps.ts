@@ -2,6 +2,9 @@ import { SelectionMode, ConstrainMode, DetailsListLayoutMode, } from 'office-ui-
 import { PortfolioOverviewView } from '../config';
 import { PageContext } from '@microsoft/sp-page-context';
 import { IPortfolioOverviewWebPartProps } from '../IPortfolioOverviewWebPartProps';
+import { IExcelExportConfig } from '@Shared/interfaces';
+import * as PortfolioOverviewWebPartStrings from 'PortfolioOverviewWebPartStrings';
+
 
 export interface IPortfolioOverviewProps extends IPortfolioOverviewWebPartProps {
     pageContext: PageContext;
@@ -12,7 +15,7 @@ export interface IPortfolioOverviewProps extends IPortfolioOverviewWebPartProps 
     constrainMode?: ConstrainMode;
     layoutMode?: DetailsListLayoutMode;
     selectionMode?: SelectionMode;
-    excelExportConfig?: any;
+    excelExportConfig?: IExcelExportConfig;
     defaultView?: PortfolioOverviewView;
     viewSelectorEnabled?: boolean;
 }
@@ -25,10 +28,8 @@ export const PortfolioOverviewDefaultProps: Partial<IPortfolioOverviewProps> = {
     layoutMode: DetailsListLayoutMode.fixedColumns,
     selectionMode: SelectionMode.none,
     excelExportConfig: {
-        fileName: '{0}-{1}.xlsx',
-        sheetName: 'Sheet A',
-        buttonLabel: 'Eksporter til Excel',
-        buttonIcon: 'ExcelDocument',
+        fileNamePrefix: PortfolioOverviewWebPartStrings.ExcelExportFileNamePrefix,
+        sheetName: 'Sheet1',
     },
     viewSelectorEnabled: true,
 };

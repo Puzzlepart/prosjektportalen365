@@ -13,6 +13,7 @@ define([], function() {
     "NotSet": "Ikke satt",
     "PortfolioViewsListName": "Porteføljevisninger",
     "ProjectColumnsListName": "Prosjektkolonner",
-    "ProjectColumnConfigListName": "Prosjektkolonnekonfigurasjon"
+    "ProjectColumnConfigListName": "Prosjektkolonnekonfigurasjon",
+    "ExcelExportFileNamePrefix": "Porteføljeoversikt"
   }
 });

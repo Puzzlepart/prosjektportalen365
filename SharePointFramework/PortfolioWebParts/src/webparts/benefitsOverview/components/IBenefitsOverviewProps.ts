@@ -1,6 +1,6 @@
 import { IBenefitsOverviewWebPartProps } from '../IBenefitsOverviewWebPartProps';
 
-export interface IBenefitsOverviewProps extends IBenefitsOverviewWebPartProps { }
+export interface IBenefitsOverviewProps extends IBenefitsOverviewWebPartProps {}
 
 export const BenefitsOverviewDefaultProps: Partial<IBenefitsOverviewProps> = {
     selectProperties: [

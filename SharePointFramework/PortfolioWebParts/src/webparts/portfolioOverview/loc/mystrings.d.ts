@@ -13,6 +13,7 @@ declare interface IPortfolioOverviewWebPartStrings {
   PortfolioViewsListName: string;
   ProjectColumnsListName: string;
   ProjectColumnConfigListName: string;
+  ExcelExportFileNamePrefix: string;
 }
 
 declare module 'PortfolioOverviewWebPartStrings' {
