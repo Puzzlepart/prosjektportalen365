@@ -15,6 +15,7 @@ import * as stringFormat from 'string-format';
 import styles from './AggregatedSearchList.module.scss';
 import { IAggregatedSearchListProps } from './IAggregatedSearchListProps';
 import { IAggregatedSearchListState } from './IAggregatedSearchListState';
+import { ExcelExportService } from '@Shared/services';
 
 export default class AggregatedSearchList extends React.Component<IAggregatedSearchListProps, IAggregatedSearchListState> {
     public static defaultProps: Partial<IAggregatedSearchListProps> = {
@@ -98,7 +99,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
     /**
      * Get loading text
      */
-    private getLoadingText() {
+    protected getLoadingText() {
         if (this.props.loadingText) {
             return this.props.loadingText;
         }
@@ -108,7 +109,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
     /**
      * Get search box label text
      */
-    private getSearchBoxLabelText() {
+    protected getSearchBoxLabelText() {
         if (this.props.searchBoxLabelText) {
             return this.props.searchBoxLabelText;
         }
@@ -122,7 +123,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
      * 
      * @param {string} searchTerm Search term
      */
-    private onSearch = (searchTerm: string) => {
+    protected onSearch = (searchTerm: string) => {
         this.setState({ searchTerm: searchTerm.toLowerCase() });
     }
 
@@ -133,7 +134,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
      * @param {number} index Index
      * @param {IColumn} column Column
      */
-    private onRenderItemColumn = (item: any, index: number, column: IColumn) => {
+    protected onRenderItemColumn = (item: any, index: number, column: IColumn) => {
         const fieldNameDisplay: string = getObjectValue(column, 'data.fieldNameDisplay', undefined);
         return column.onRender ? column.onRender(item, index, column) : getObjectValue(item, fieldNameDisplay || column.fieldName, null);
     }
@@ -144,7 +145,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
      * @param {React.MouseEvent} _evt Event
      * @param {IColumn} column Column
      */
-    private onColumnHeaderSort = (_evt: React.MouseEvent<any>, column: IColumn): void => {
+    protected onColumnHeaderSort = (_evt: React.MouseEvent<any>, column: IColumn): void => {
         let { items, columns } = ({ ...this.state } as IAggregatedSearchListState);
 
         let isSortedDescending = column.isSortedDescending;
@@ -169,7 +170,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
     /**
      * Get command bar items
      */
-    private getCommandBarItems(): ICommandBarItemProps[] {
+    protected getCommandBarItems(): ICommandBarItemProps[] {
         const items: ICommandBarItemProps[] = [];
 
         if (this.props.groupByColumns.length > 0) {
@@ -202,7 +203,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
                     styles: { root: { color: "green !important" } },
                 },
                 disabled: this.state.isExporting,
-                onClick: event => { this.exportToExcel(event); }
+                onClick: evt => { this.exportToExcel(evt); },
             });
         }
 
@@ -215,7 +216,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
      * @param {any[]} items Items
      * @param {IColumn} groupBy Group by
      */
-    private getGroups(items: any[], groupBy: IColumn): IGroup[] {
+    protected getGroups(items: any[], groupBy: IColumn): IGroup[] {
         let groups: IGroup[] = null;
         if (groupBy && groupBy.key !== 'NoGrouping') {
             const itemsSortedByGroupBy = items.sort((a, b) => getObjectValue(a, groupBy.key, null) > getObjectValue(b, groupBy.key, null) ? -1 : 1);
@@ -238,7 +239,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
     /**
      * Get filtered data
      */
-    private getFilteredData() {
+    protected getFilteredData() {
         let { items, columns, groupBy, searchTerm } = ({ ...this.state } as IAggregatedSearchListState);
         if (searchTerm) {
             items = items.filter(item => {
@@ -254,8 +255,8 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
     /**
      * Export to Excel
      */
-    private exportToExcel = async (event: React.MouseEvent<any> | React.KeyboardEvent<any>): Promise<void> => {
-        event.preventDefault();
+    protected async exportToExcel(evt: React.MouseEvent<any> | React.KeyboardEvent<any>): Promise<void> {
+        evt.preventDefault();
         const { sheetName, fileNamePrefix } = this.props.excelExportConfig;
         this.setState({ isExporting: true });
         const sheets = [];
@@ -269,15 +270,14 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
             ],
         });
         const fileName = stringFormat("{0}-{1}.xlsx", fileNamePrefix, moment(new Date().toISOString()).format('YYYY-MM-DD-HH-mm'));
-        //console.log(fileName);
-        // await ExportToExcel({ sheets: [sheet], fileName });
+        await ExcelExportService.export([], fileName);
         this.setState({ isExporting: false });
     }
 
     /**
      * Fetch items
      */
-    private async fetchItems(): Promise<any[]> {
+    protected async fetchItems(): Promise<any[]> {
         let { pageContext, queryTemplate, dataSource, selectProperties, columns, postFetch } = this.props;
         try {
             if (!queryTemplate) {
