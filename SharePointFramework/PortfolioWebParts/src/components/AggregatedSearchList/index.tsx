@@ -269,7 +269,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
             ],
         });
         const fileName = stringFormat("{0}-{1}.xlsx", fileNamePrefix, moment(new Date().toISOString()).format('YYYY-MM-DD-HH-mm'));
-        console.log(fileName);
+        //console.log(fileName);
         // await ExportToExcel({ sheets: [sheet], fileName });
         this.setState({ isExporting: false });
     }
@@ -278,13 +278,13 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
      * Fetch items
      */
     private async fetchItems(): Promise<any[]> {
-        let { queryTemplate, dataSource } = this.props;
+        let { pageContext, queryTemplate, dataSource, selectProperties, columns, postFetch } = this.props;
         try {
             if (!queryTemplate) {
-                const { siteId, hubSiteId } = getObjectValue<{ siteId: string, hubSiteId: string }>(this.props, 'legacyPageContext', { siteId: '', hubSiteId: '' });
-                let web: any = sp.web;
+                const { siteId, hubSiteId } = pageContext.legacyPageContext;
+                let web = sp.web;
                 if (siteId.indexOf(hubSiteId) === -1) {
-                    web = (await HubSiteService.GetHubSite(sp, this.props.pageContext)).web;
+                    web = (await HubSiteService.GetHubSite(sp, pageContext)).web;
                 }
                 const { QueryTemplate } = await new DataSourceService(web).getByName(dataSource);
                 if (QueryTemplate) {
@@ -293,15 +293,14 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
                     throw stringFormat(PortfolioWebPartsStrings.DataSourceNotFound, dataSource);
                 }
             }
-            const selectProperties = this.props.selectProperties || ['Path', 'SPWebUrl', ...this.props.columns.map(col => col.key)];
-            let results = (await sp.search({
+            let { PrimarySearchResults } = await sp.search({
                 QueryTemplate: queryTemplate,
                 Querytext: '*',
                 RowLimit: 500,
                 TrimDuplicates: false,
-                SelectProperties: selectProperties,
-            })).PrimarySearchResults;
-            return this.props.postFetch ? this.props.postFetch(results) : results;
+                SelectProperties: selectProperties || ['Path', 'SPWebUrl', ...columns.map(col => col.key)],
+            });
+            return postFetch ? postFetch(PrimarySearchResults) : PrimarySearchResults;
         } catch (error) {
             throw stringFormat(PortfolioWebPartsStrings.DataSourceError, dataSource);
         }
