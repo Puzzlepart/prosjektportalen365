@@ -49,7 +49,8 @@
         "sp-entityportal-service": "^0.6.4",
         "sp-hubsite-service": "^0.4.0",
         "spfx-jsom": "^0.6.0",
-        "string-format": "^2.0.0"
+        "string-format": "^2.0.0",
+        "underscore": "^1.9.1"
     },
     "resolutions": {
         "@types/react": "16.7.22"
@@ -63,6 +64,7 @@
         "@types/chai": "3.4.34",
         "@types/mocha": "2.2.38",
         "@types/string-format": "^2.0.0",
+        "@types/underscore": "^1.9.2",
         "ajv": "~5.2.2",
         "gulp": "~3.9.1",
         "spfx-pkgdeploy": "^0.3.0"
