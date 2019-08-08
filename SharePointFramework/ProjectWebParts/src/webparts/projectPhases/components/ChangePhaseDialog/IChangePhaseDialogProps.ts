@@ -1,6 +1,6 @@
-import Phase from "../../models/Phase";
+import { Phase } from "../../models";
 import { List } from '@pnp/sp';
-import {IDialogProps} from 'office-ui-fabric-react/lib/Dialog';
+import { IDialogProps } from 'office-ui-fabric-react/lib/Dialog';
 
 export default interface IChangePhaseDialogProps extends IDialogProps {
     newPhase: Phase;

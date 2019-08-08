@@ -1,4 +1,3 @@
-//#region Imports
 import * as React from 'react';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { View } from './Views';
@@ -7,36 +6,26 @@ import { Footer } from './Footer';
 import IChangePhaseDialogProps from './IChangePhaseDialogProps';
 import IChangePhaseDialogState from './IChangePhaseDialogState';
 import styles from './ChangePhaseDialog.module.scss';
-import * as strings from 'ProjectPhasesWebPartStrings';
-import * as stringFormat from 'string-format';
-//#endregion
+import * as ProjectPhasesWebPartStrings from 'ProjectPhasesWebPartStrings';
+import * as format from 'string-format';
+import { IPhaseChecklistItem } from '../../models';
 
 /**
  * Change phase dialog
  */
 export default class ChangePhaseDialog extends React.Component<IChangePhaseDialogProps, IChangePhaseDialogState> {
-    private openChecklistItems: any[] = [];
-
     /**
      * Constructor
      */
     constructor(props: IChangePhaseDialogProps) {
         super(props);
+        const checklistItems = props.activePhase ? props.activePhase.checklistData.items : [];
         this.state = {
-            currentIdx: 0,
             isLoading: false,
-            currentView: View.Initial,
+            checklistItems,
+            currentIdx: this.getNextIndex(checklistItems, 0),
+            currentView: checklistItems.filter(this.checkPointOpenFilter).length > 0 ? View.Initial : View.Confirm,
         };
-        if (props.activePhase) {
-            this.openChecklistItems = props.activePhase.checklistData.items.filter(item => item.GtChecklistStatus === strings.StatusOpen);
-        }
-    }
-
-    public componentDidMount(): void {
-        if (this.openChecklistItems.length === 0) {
-            const currentView = View.Confirm;
-            this.setState({ currentView });
-        }
     }
 
     public render() {
@@ -52,17 +41,17 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
             <Dialog
                 isOpen={true}
                 containerClassName={styles.changePhaseDialog}
-                title={strings.ChangePhaseText}
-                subText={this.state.currentView === View.Confirm ? stringFormat(strings.ConfirmChangePhase, this.props.newPhase.name) : ''}
+                title={ProjectPhasesWebPartStrings.ChangePhaseText}
+                subText={this.state.currentView === View.Confirm ? format(ProjectPhasesWebPartStrings.ConfirmChangePhase, this.props.newPhase.name) : ''}
                 dialogContentProps={{ type: DialogType.largeHeader }}
                 modalProps={{ isDarkOverlay: true, isBlocking: false }}
                 onDismiss={this.props.onDismiss}>
                 <Body
                     {...dlgCntBaseProps}
-                    openCheckListItems={this.openChecklistItems}
+                    checklistItems={this.state.checklistItems}
                     currentIdx={this.state.currentIdx}
                     nextCheckPointAction={this.nextCheckPoint.bind(this)} />
-                <Footer {...dlgCntBaseProps} onChangeView={this.onChangeView} />
+                <Footer {...dlgCntBaseProps} onChangeView={this.onChangeView.bind(this)} />
             </Dialog>
         );
     }
@@ -76,24 +65,22 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
      */
     private async nextCheckPoint(statusValue: string, commentsValue: string, updateStatus: boolean = true): Promise<void> {
         this.setState({ isLoading: true });
-        const { activePhase } = this.props;
-        const { currentIdx } = this.state;
+        const { phaseChecklist } = this.props;
+        const { checklistItems, currentIdx } = { ...this.state } as IChangePhaseDialogState;
+        const currentItem = checklistItems[currentIdx];
         let updatedValues: { [key: string]: string } = { GtComment: commentsValue };
         if (updateStatus) {
             updatedValues.GtChecklistStatus = statusValue;
         }
-        await this.props.phaseChecklist.items.getById(this.openChecklistItems[currentIdx].ID).update(updatedValues);
-        let currentItem = { ...this.openChecklistItems[currentIdx], ...updatedValues };
-        activePhase.checklistData.items = activePhase.checklistData.items.map(item => {
-            if (currentItem.ID === item.ID) {
-                return currentItem;
-            }
-            return item;
-        });
-        this.openChecklistItems[currentIdx] = currentItem;
-        let newState: Partial<IChangePhaseDialogState> = { isLoading: false };
-        if (currentIdx < (this.openChecklistItems.length - 1)) {
-            newState.currentIdx = (currentIdx + 1);
+        await phaseChecklist.items.getById(currentItem.ID).update(updatedValues);
+        checklistItems[currentIdx] = { ...currentItem, ...updatedValues };
+        let newState: Partial<IChangePhaseDialogState> = {
+            checklistItems,
+            isLoading: false,
+        };
+        const nextIndex = this.getNextIndex();
+        if (nextIndex != -1) {
+            newState.currentIdx = nextIndex;
         } else {
             newState.currentView = View.Summary;
         }
@@ -101,11 +88,31 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
     }
 
     /**
+     * Get next index
+     * 
+     * @param {IPhaseChecklistItem[]} checklistItems Check list items
+     * @param {number} currentIdx Current index
+     */
+    private getNextIndex(checklistItems: IPhaseChecklistItem[] = this.state.checklistItems, currentIdx: number = this.state.currentIdx): number {
+        const [nextOpen] = [].concat(checklistItems).splice(currentIdx).filter(this.checkPointOpenFilter);
+        return checklistItems.indexOf(nextOpen);
+    }
+
+    /**
+     * Check point open filter
+     * 
+     * @param {IPhaseChecklistItem} item Item
+     */
+    private checkPointOpenFilter(item: IPhaseChecklistItem) {
+        return item.GtChecklistStatus === ProjectPhasesWebPartStrings.StatusOpen;
+    }
+
+    /**
      * Change view
      *
      * @param {View} newView New view
      */
-    private onChangeView = (newView: View) => {
+    private onChangeView(newView: View) {
         this.setState({ currentView: newView });
     }
 }

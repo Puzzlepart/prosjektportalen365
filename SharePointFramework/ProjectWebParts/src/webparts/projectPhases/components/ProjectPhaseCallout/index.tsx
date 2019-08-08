@@ -42,10 +42,10 @@ export default class ProjectPhaseCallout extends React.PureComponent<IProjectPha
                                 })}
                             </div>
                             <div className={styles.actions}>
-                                <ActionButton
-                                    href={this.getPlannerPageUrl(this.props)}
+                                {/* <ActionButton
+                                    href='#'
                                     text={strings.TasksLinkText}
-                                    iconProps={{ iconName: 'PlannerLogo' }} />
+                                    iconProps={{ iconName: 'PlannerLogo' }} /> */}
                                 <ActionButton
                                     href={this.getFilteredPhaseChecklistViewUrl(this.props)}
                                     text={strings.PhaseChecklistLinkText}
@@ -61,15 +61,6 @@ export default class ProjectPhaseCallout extends React.PureComponent<IProjectPha
                 </div>
             </Callout>
         );
-    }
-
-    /**
-     * Get planner page url
-     * 
-     * @param {IProjectPhaseCalloutProps} param0 Props
-     */
-    protected getPlannerPageUrl({ webAbsoluteUrl, phase }: IProjectPhaseCalloutProps): string {
-        return `${webAbsoluteUrl}/SitePages/Oppgaver-${phase.model.name}.aspx`;
     }
 
     /**

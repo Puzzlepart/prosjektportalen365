@@ -4,7 +4,7 @@ import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator'
 import IChangingPhaseViewProps from './IChangingPhaseViewProps';
 import IChangingPhaseViewState from './IChangingPhaseViewState';
 import * as strings from 'ProjectPhasesWebPartStrings';
-import * as stringFormat from 'string-format';
+import * as format from 'string-format';
 //#endregion
 
 /**
@@ -24,7 +24,7 @@ export default class ChangingPhaseView extends React.Component<IChangingPhaseVie
 
     public render(): JSX.Element {
         return (
-            <ProgressIndicator label={strings.ChangingPhaseLabel} description={stringFormat(strings.ChangingPhaseDescription, this.props.newPhase.name)} />
+            <ProgressIndicator label={strings.ChangingPhaseLabel} description={format(strings.ChangingPhaseDescription, this.props.newPhase.name)} />
         );
     }
 }

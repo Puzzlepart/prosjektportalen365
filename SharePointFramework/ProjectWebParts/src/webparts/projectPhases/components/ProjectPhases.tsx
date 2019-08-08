@@ -1,6 +1,6 @@
 import { dateAdd } from '@pnp/common';
 import { Logger, LogLevel } from '@pnp/logging';
-import { ClientSidePage, ClientSideWebpart, sp } from '@pnp/sp';
+import { ClientSidePage, ClientSideWebpart, sp, List } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
 import MSGraphHelper from 'msgraph-helper';
 import * as objectGet from 'object-get';
@@ -10,7 +10,8 @@ import * as strings from 'ProjectPhasesWebPartStrings';
 import * as React from 'react';
 import SpEntityPortalService from 'sp-entityportal-service';
 import HubSiteService from 'sp-hubsite-service';
-import Phase from '../models/Phase';
+import { Phase } from '../models';
+import { IPhaseChecklistItem } from '../models';
 import ChangePhaseDialog from './ChangePhaseDialog';
 import { ChecklistData } from './ChecklistData';
 import { IProjectPhasesProps } from './IProjectPhasesProps';
@@ -20,8 +21,8 @@ import ProjectPhaseCallout from './ProjectPhaseCallout';
 import styles from './ProjectPhases.module.scss';
 
 export default class ProjectPhases extends React.Component<IProjectPhasesProps, IProjectPhasesState> {
-  private _spEntityPortalService: SpEntityPortalService;
-  private _phaseChecklist = sp.web.lists.getByTitle(strings.PhaseChecklistName);
+  protected _spEntityPortalService: SpEntityPortalService;
+  protected _phaseChecklist: List;
 
   /**
    * Constructor
@@ -31,6 +32,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
   constructor(props: IProjectPhasesProps) {
     super(props);
     this.state = { isLoading: true, data: {} };
+    this._phaseChecklist = sp.web.lists.getByTitle(strings.PhaseChecklistName);
   }
 
   public async componentDidMount() {
@@ -105,7 +107,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    * 
    * @param {Phase} phase Phase
    */
-  private async updatePhase(phase: Phase) {
+  protected async updatePhase(phase: Phase) {
     Logger.log({ message: '(ProjectPhases) updatePhase', data: { phase }, level: LogLevel.Info });
     await this._spEntityPortalService.updateEntityItem(this.props.pageContext.site.id.toString(), { [this.state.data.phaseTextField]: phase.toString() });
   }
@@ -113,7 +115,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
   /**
    * On <ProjectPhaseCallout /> dismiss
    */
-  private onProjectPhaseCalloutDismiss = () => {
+  protected onProjectPhaseCalloutDismiss = () => {
     this.setState({ phaseMouseOver: null });
   }
 
@@ -122,7 +124,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    * 
    * @param {Phase} phase Phase
    */
-  private onChangePhase = async (phase: Phase) => {
+  protected onChangePhase = async (phase: Phase) => {
     try {
       this.setState({ isChangingPhase: true });
       await this.updatePhase(phase);
@@ -146,7 +148,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    * 
    * @param {string} phaseTermName Phase term name
    */
-  private async modifiyFrontpageViews(phaseTermName: string) {
+  protected async modifiyFrontpageViews(phaseTermName: string) {
     const documentsViews = sp.web.lists.getByTitle(strings.DocumentsListName).views;
     let [documentsFrontpageView] = await documentsViews.select('Id', 'ViewQuery').filter(`Title eq '${this.props.currentPhaseViewName}'`).get<{ Id: string, ViewQuery: string }[]>();
     if (documentsFrontpageView) {
@@ -171,7 +173,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    * @param {Object} properties Properties
    * @param {boolean} publish Publish file
    */
-  private async updateWebPartProperties(pageName: string, webPartId: string, properties: { [key: string]: string }, publish: boolean = true) {
+  protected async updateWebPartProperties(pageName: string, webPartId: string, properties: { [key: string]: string }, publish: boolean = true) {
     const page = await ClientSidePage.fromFile(sp.web.getFileByServerRelativePath(`${this.props.pageContext.web.serverRelativeUrl}/SitePages/${pageName}.aspx`));
     const control = page.findControl<ClientSideWebpart>(c => objectGet(c, 'json.webPartId') === webPartId) as ClientSideWebpart;
     control.setProperties<any>({
@@ -187,7 +189,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    * @param {string} phaseTermName Phase term name
    * @param {string} plannerWebPartId Planner Web Part Id
    */
-  private async updatePlannerWebPart(phaseTermName: string, plannerWebPartId: string = '39c4c1c2-63fa-41be-8cc2-f6c0b49b253d') {
+  protected async updatePlannerWebPart(phaseTermName: string, plannerWebPartId: string = '39c4c1c2-63fa-41be-8cc2-f6c0b49b253d') {
     try {
       const plans = await MSGraphHelper.Get<{ id: string, title: string }[]>(`groups/${this.props.pageContext.legacyPageContext.groupId}/planner/plans`, ['id', 'title']);
       const [plan] = plans.filter(p => p.title === phaseTermName);
@@ -201,12 +203,18 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
   /**
    * Fetch check point statuses
    */
-  private async fetchChecklistData(): Promise<ChecklistData> {
+  protected async fetchChecklistData(): Promise<ChecklistData> {
     try {
       const items = await this._phaseChecklist
         .items
-        .select('GtChecklistStatus', 'GtProjectPhase')
-        .get<{ GtChecklistStatus: string, GtProjectPhase: { TermGuid: string } }[]>();
+        .select(
+          'ID',
+          'Title',
+          'GtComment',
+          'GtChecklistStatus',
+          'GtProjectPhase'
+        )
+        .get<IPhaseChecklistItem[]>();
       const checkPointStatuses: ChecklistData = items
         .filter(item => item.GtProjectPhase)
         .reduce((obj, item) => {
@@ -230,7 +238,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    * 
    * @param {string[]} parts Parts
    */
-  private generateStorageKey(...parts: string[]) {
+  protected generateStorageKey(...parts: string[]) {
     return ['ProjectPhases', ...parts, this.props.pageContext.web.absoluteUrl].join('.');
   }
 
@@ -240,7 +248,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    * @param {ChecklistData} checklistData Check point status
    * @param {any} cachingOptions Caching options
    */
-  private async fetchData(checklistData: ChecklistData, cachingOptions: any): Promise<IProjectPhasesData> {
+  protected async fetchData(checklistData: ChecklistData, cachingOptions: any): Promise<IProjectPhasesData> {
     Logger.log({ message: '(ProjectPhases) fetchData: Fetching TermSetId for selected field', level: LogLevel.Info });
     const { phaseField, pageContext, entity } = this.props;
     try {
@@ -280,3 +288,4 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
 }
 
 export { IProjectPhasesProps };
+

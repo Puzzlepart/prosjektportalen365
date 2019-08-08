@@ -1,10 +1,11 @@
-import { View } from "../Views";
-import Phase from "../../../models/Phase";
+import { View } from '../Views';
+import { Phase, IPhaseChecklistItem } from '../../../models';
+
 
 export default interface IBodyProps {
     newPhase: Phase;
     activePhase: Phase;
-    openCheckListItems: any[];
+    checklistItems: IPhaseChecklistItem[];
     currentIdx: number;
     nextCheckPointAction: (statusValue: string, commentsValue: string, updateStatus: boolean) => Promise<void>;
     currentView: View;

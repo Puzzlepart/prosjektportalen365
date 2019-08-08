@@ -62,6 +62,7 @@
         "@microsoft/sp-webpart-workbench": "1.8.2",
         "@types/chai": "3.4.34",
         "@types/mocha": "2.2.38",
+        "@types/string-format": "^2.0.0",
         "ajv": "~5.2.2",
         "gulp": "~3.9.1",
         "spfx-pkgdeploy": "^0.3.0"
