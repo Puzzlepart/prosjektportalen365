@@ -1,12 +1,10 @@
 {
-    "ContentTypes": [
-        {
+    "ContentTypes": [{
             "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE897",
             "Name": "Usikkerhet",
             "Description": "",
             "Group": "Prosjektportalen innholdstyper",
-            "FieldRefs": [
-                {
+            "FieldRefs": [{
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
                     "Name": "GtProjectPhase"
                 },
@@ -77,8 +75,7 @@
             "Name": "Interessent",
             "Description": "",
             "Group": "Prosjektportalen innholdstyper",
-            "FieldRefs": [
-                {
+            "FieldRefs": [{
                     "ID": "2847b3b0-ed22-4c47-b7c0-3ebfc83dae4a",
                     "Name": "GtStakeholderGroup"
                 },
@@ -113,8 +110,7 @@
             "Name": "Kommunikasjonselement",
             "Description": "",
             "Group": "Prosjektportalen innholdstyper",
-            "FieldRefs": [
-                {
+            "FieldRefs": [{
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
                     "Name": "GtProjectPhase"
                 },
@@ -141,8 +137,7 @@
             "Name": "Sjekkpunkt",
             "Description": "",
             "Group": "Prosjektportalen innholdstyper",
-            "FieldRefs": [
-                {
+            "FieldRefs": [{
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
                     "Name": "GtProjectPhase"
                 },
@@ -165,8 +160,7 @@
             "Name": "Prosjektleveranse",
             "Description": "",
             "Group": "Prosjektportalen innholdstyper",
-            "FieldRefs": [
-                {
+            "FieldRefs": [{
                     "ID": "99430a99-1354-418f-921f-7ddfdb6c0d7f",
                     "Name": "GtDeliveryDescription"
                 },
@@ -221,8 +215,7 @@
             "Name": "Prosjektloggelement",
             "Description": "",
             "Group": "Prosjektportalen innholdstyper",
-            "FieldRefs": [
-                {
+            "FieldRefs": [{
                     "ID": "2391d165-5d13-46b7-87d2-e32040293210",
                     "Name": "GtProjectLogType"
                 },
@@ -261,25 +254,21 @@
             "Name": "Infoelement",
             "Description": "",
             "Group": "Prosjektportalen innholdstyper",
-            "FieldRefs": [
-                {
-                    "ID": "a3038ecc-69db-4179-b23b-5fdb0535b38c",
-                    "Name": "GtProjectInfoDescription",
-                    "Required": true
-                }
-            ]
+            "FieldRefs": [{
+                "ID": "a3038ecc-69db-4179-b23b-5fdb0535b38c",
+                "Name": "GtProjectInfoDescription",
+                "Required": true
+            }]
         },
         {
             "ID": "0x0101008D35AAEBAF8A44A9B3264C70348EB42B",
             "Name": "Prosjektdokument",
             "Description": "",
             "Group": "Prosjektportalen innholdstyper",
-            "FieldRefs": [
-                {
-                    "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
-                    "Name": "GtProjectPhase"
-                }
-            ]
+            "FieldRefs": [{
+                "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
+                "Name": "GtProjectPhase"
+            }]
         },
         {
             "ID": "0x010200C19C974828B24D469B69C22B2D1FFB63",
@@ -292,19 +281,16 @@
             "Name": "Prosjektoppgave",
             "Description": "",
             "Group": "Prosjektportalen innholdstyper",
-            "FieldRefs": [
-                {
-                    "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
-                    "Name": "GtProjectPhase"
-                }
-            ]
+            "FieldRefs": [{
+                "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
+                "Name": "GtProjectPhase"
+            }]
         },
         {
             "ID": "0x01002CC709404B5B4751B6E1CD1CC0A3ED10",
             "Name": "Milepæl",
             "Group": "Prosjektportalen innholdstyper",
-            "FieldRefs": [
-                {
+            "FieldRefs": [{
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
                     "Name": "GtProjectPhase"
                 },
@@ -330,8 +316,7 @@
             "ID": "0x010039EAFDC2A1624C1BA1A444FC8FE85DEC",
             "Name": "Gevinstoppfølging",
             "Group": "Prosjektportalen innholdstyper",
-            "FieldRefs": [
-                {
+            "FieldRefs": [{
                     "ID": "5c6fafbb-aee4-4e46-b110-5c798916c2ca",
                     "Name": "GtMeasurementDate"
                 },
@@ -349,8 +334,7 @@
             "ID": "0x01004F466123309D46BAB9D5C6DE89A6CF67",
             "Name": "Gevinst",
             "Group": "Prosjektportalen innholdstyper",
-            "FieldRefs": [
-                {
+            "FieldRefs": [{
                     "ID": "a1a56abd-5b3d-45d2-8617-32b2f8b195de",
                     "Name": "GtGainsType"
                 },
@@ -376,8 +360,7 @@
             "ID": "0x01001AF93A93F5534B5FBAF750572B11BB7F",
             "Name": "Endring",
             "Group": "Prosjektportalen innholdstyper",
-            "FieldRefs": [
-                {
+            "FieldRefs": [{
                     "ID": "68a5a2da-048c-4d2d-8ba4-5a8b32b60120",
                     "Name": "GtProcess"
                 },
@@ -391,8 +374,7 @@
             "ID": "0x010073043EFE3E814A2BBEF96B8457623F95",
             "Name": "Måleindikator",
             "Group": "Prosjektportalen innholdstyper",
-            "FieldRefs": [
-                {
+            "FieldRefs": [{
                     "ID": "c5fc8781-7fbd-43a2-a215-c8c959bbab69",
                     "Name": "GtStartValue",
                     "Required": true
@@ -413,8 +395,7 @@
             "ID": "0x010004EAFF7AFCC94C2680042E6881264120",
             "Name": "Ressursallokering",
             "Group": "Prosjektportalen innholdstyper",
-            "FieldRefs": [
-                {
+            "FieldRefs": [{
                     "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
                     "Name": "Title",
                     "Hidden": true
@@ -522,8 +503,7 @@
         "<Field Type=\"Number\" DisplayName=\"Ønsket verdi\" Description=\"Verdi når gevinsten er realisert\" ID=\"{8b399cb6-c53e-432c-8ffa-b48e2bfbbf71}\" StaticName=\"GtDesiredValue\" Name=\"GtDesiredValue\" Group=\"{parameter:fieldsgroup}\" />"
     ],
     "Navigation": {
-        "QuickLaunch": [
-            {
+        "QuickLaunch": [{
                 "Url": "SitePages/Hjem.aspx",
                 "Title": "Hjem"
             },
@@ -567,8 +547,7 @@
             {
                 "Url": "#",
                 "Title": "Gevinstarbeid",
-                "Children": [
-                    {
+                "Children": [{
                         "Url": "Lists/Endringsanalyse/AllItems.aspx",
                         "Title": "Endringsanalyse"
                     },
@@ -577,12 +556,12 @@
                         "Title": "Gevinstanalyse og gevinstrealiseringsplan"
                     },
                     {
-                        "Url": "Lists/Gevinstoppflging/AllItems.aspx",
-                        "Title": "Gevinstoppfølging"
-                    },
-                    {
                         "Url": "Lists/Mleindikatorer/AllItems.aspx",
                         "Title": "Måleindikatorer"
+                    },
+                    {
+                        "Url": "Lists/Gevinstoppflging/AllItems.aspx",
+                        "Title": "Gevinstoppfølging"
                     },
                     {
                         "Url": "SitePages/Gevinstoversikt.aspx",
@@ -607,48 +586,40 @@
     "WebSettings": {
         "WelcomePage": "SitePages/Hjem.aspx"
     },
-    "ClientSidePages": [
-        {
+    "ClientSidePages": [{
             "Name": "Hjem.aspx",
             "Title": "Hjem",
             "PageLayoutType": "Home",
             "CommentsDisabled": true,
-            "Sections": [
-                {
-                    "Columns": [
-                        {
-                            "Factor": 12,
-                            "Controls": [
-                                {
-                                    "Id": "4449d3dc-fa58-4982-b87c-5a893114e7b7",
-                                    "Properties": {
-                                        "description": "",
-                                        "phaseSubTextProperty": "",
-                                        "phaseField": "Fase",
-                                        "automaticReload": true,
-                                        "confirmPhaseChange": true,
-                                        "reloadTimeout": 0,
-                                        "currentPhaseViewName": "Gjeldende fase",
-                                        "gutter": 15,
-                                        "fontSize": 13,
-                                        "entity": {
-                                            "listName": "Prosjekter",
-                                            "contentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
-                                            "fieldsGroupName": "{parameter:fieldsgroup}",
-                                            "identityFieldName": "GtSiteId"
-                                        }
-                                    }
+            "Sections": [{
+                    "Columns": [{
+                        "Factor": 12,
+                        "Controls": [{
+                            "Id": "4449d3dc-fa58-4982-b87c-5a893114e7b7",
+                            "Properties": {
+                                "description": "",
+                                "phaseSubTextProperty": "",
+                                "phaseField": "Fase",
+                                "automaticReload": true,
+                                "confirmPhaseChange": true,
+                                "reloadTimeout": 0,
+                                "currentPhaseViewName": "Gjeldende fase",
+                                "gutter": 15,
+                                "fontSize": 13,
+                                "entity": {
+                                    "listName": "Prosjekter",
+                                    "contentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
+                                    "fieldsGroupName": "{parameter:fieldsgroup}",
+                                    "identityFieldName": "GtSiteId"
                                 }
-                            ]
-                        }
-                    ]
+                            }
+                        }]
+                    }]
                 },
                 {
-                    "Columns": [
-                        {
+                    "Columns": [{
                             "Factor": 8,
-                            "Controls": [
-                                {
+                            "Controls": [{
                                     "Id": "39c4c1c2-63fa-41be-8cc2-f6c0b49b253d",
                                     "Properties": {
                                         "title": "Oppgaver",
@@ -678,8 +649,7 @@
                         },
                         {
                             "Factor": 4,
-                            "Controls": [
-                                {
+                            "Controls": [{
                                     "Id": "b8bec0be-2354-443d-a3ca-24b36e8ea7dc",
                                     "Properties": {
                                         "title": "Prosjektinformasjon",
@@ -710,105 +680,83 @@
             "Title": "Oppgaver",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
-            "Sections": [
-                {
-                    "Columns": [
-                        {
-                            "Factor": 12,
-                            "Controls": [
-                                {
-                                    "Id": "39c4c1c2-63fa-41be-8cc2-f6c0b49b253d",
-                                    "Properties": {
-                                        "title": "Oppgaver",
-                                        "isFullScreen": true,
-                                        "plannerViewMode": "board",
-                                        "planId": "{parameter:defaultPlanId}"
-                                    }
-                                }
-                            ]
+            "Sections": [{
+                "Columns": [{
+                    "Factor": 12,
+                    "Controls": [{
+                        "Id": "39c4c1c2-63fa-41be-8cc2-f6c0b49b253d",
+                        "Properties": {
+                            "title": "Oppgaver",
+                            "isFullScreen": true,
+                            "plannerViewMode": "board",
+                            "planId": "{parameter:defaultPlanId}"
                         }
-                    ]
-                }
-            ]
+                    }]
+                }]
+            }]
         },
         {
             "Name": "Gevinstoversikt.aspx",
             "Title": "Gevinstoversikt",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
-            "Sections": [
-                {
-                    "Columns": [
-                        {
-                            "Factor": 12,
-                            "Controls": [
-                                {
-                                    "Id": "5f925484-cfb4-42ce-9f90-79a874bb8a68",
-                                    "Properties": {
-                                        "title": "Gevinstoversikt",
-                                        "dataSource": "Gevinstoversikt (Prosjektnivå)",
-                                        "searchBoxLabelText": "Søk i gevinster...",
-                                        "hiddenColumns": [
-                                            "siteTitle"
-                                        ]
-                                    }
-                                }
+            "Sections": [{
+                "Columns": [{
+                    "Factor": 12,
+                    "Controls": [{
+                        "Id": "5f925484-cfb4-42ce-9f90-79a874bb8a68",
+                        "Properties": {
+                            "title": "Gevinstoversikt",
+                            "dataSource": "Gevinstoversikt (Prosjektnivå)",
+                            "searchBoxLabelText": "Søk i gevinster...",
+                            "hiddenColumns": [
+                                "siteTitle"
                             ]
                         }
-                    ]
-                }
-            ]
+                    }]
+                }]
+            }]
         },
         {
             "Name": "Prosjektstatus.aspx",
             "Title": "Prosjektstatus",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
-            "Sections": [
-                {
-                    "Columns": [
-                        {
-                            "Factor": 12,
-                            "Controls": [
-                                {
-                                    "Id": "681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6",
-                                    "Properties": {
-                                        "title": "Prosjektstatus",
-                                        "reportListName": "Prosjektstatus",
-                                        "sectionsListName": "Statusseksjoner",
-                                        "reportCtId": "0x010022252E35737A413FB56A1BA53862F6D5",
-                                        "entity": {
-                                            "listName": "Prosjekter",
-                                            "contentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
-                                            "fieldsGroupName": "{parameter:fieldsgroup}",
-                                            "identityFieldName": "GtSiteId"
-                                        }
-                                    }
-                                }
-                            ]
+            "Sections": [{
+                "Columns": [{
+                    "Factor": 12,
+                    "Controls": [{
+                        "Id": "681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6",
+                        "Properties": {
+                            "title": "Prosjektstatus",
+                            "reportListName": "Prosjektstatus",
+                            "sectionsListName": "Statusseksjoner",
+                            "reportCtId": "0x010022252E35737A413FB56A1BA53862F6D5",
+                            "entity": {
+                                "listName": "Prosjekter",
+                                "contentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
+                                "fieldsGroupName": "{parameter:fieldsgroup}",
+                                "identityFieldName": "GtSiteId"
+                            }
                         }
-                    ]
-                }
-            ]
+                    }]
+                }]
+            }]
         }
     ],
-    "Lists": [
-        {
+    "Lists": [{
             "Title": "Fasesjekkliste",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
             "RemoveExistingContentTypes": true,
-            "ContentTypeBindings": [
-                {
-                    "ContentTypeID": "0x0100486B1F8AEA24486FBA1C1BA9146C360C"
-                }
-            ],
+            "ContentTypeBindings": [{
+                "ContentTypeID": "0x0100486B1F8AEA24486FBA1C1BA9146C360C"
+            }],
             "AdditionalSettings": {
                 "EnableVersioning": true
             },
-            "Views": [
-                {
+            "Views": [{
                     "Title": "Alle elementer",
                     "ViewFields": [
                         "LinkTitle",
@@ -853,28 +801,24 @@
             "Template": 100,
             "ContentTypesEnabled": true,
             "RemoveExistingContentTypes": true,
-            "ContentTypeBindings": [
-                {
-                    "ContentTypeID": "0x01007CFA9140CFBF430EB3A6CE7272E89CFB"
-                }
-            ],
+            "ContentTypeBindings": [{
+                "ContentTypeID": "0x01007CFA9140CFBF430EB3A6CE7272E89CFB"
+            }],
             "AdditionalSettings": {
                 "EnableVersioning": true
             },
-            "Views": [
-                {
-                    "Title": "Alle elementer",
-                    "ViewFields": [
-                        "LinkTitle",
-                        "GtProjectInfoDescription"
-                    ],
-                    "AdditionalSettings": {
-                        "RowLimit": 30,
-                        "Paged": true,
-                        "ViewQuery": ""
-                    }
+            "Views": [{
+                "Title": "Alle elementer",
+                "ViewFields": [
+                    "LinkTitle",
+                    "GtProjectInfoDescription"
+                ],
+                "AdditionalSettings": {
+                    "RowLimit": 30,
+                    "Paged": true,
+                    "ViewQuery": ""
                 }
-            ]
+            }]
         },
         {
             "Title": "Interessentregister",
@@ -882,34 +826,30 @@
             "Template": 100,
             "ContentTypesEnabled": true,
             "RemoveExistingContentTypes": true,
-            "ContentTypeBindings": [
-                {
-                    "ContentTypeID": "0x010072C95831F8434782AB2FF6BE3E596F46"
-                }
-            ],
+            "ContentTypeBindings": [{
+                "ContentTypeID": "0x010072C95831F8434782AB2FF6BE3E596F46"
+            }],
             "AdditionalSettings": {
                 "EnableVersioning": true
             },
-            "Views": [
-                {
-                    "Title": "Alle elementer",
-                    "ViewFields": [
-                        "LinkTitle",
-                        "GtStakeholderGroup",
-                        "GtStakeholderContext",
-                        "GtStakeholderStrategy",
-                        "GtStakeholderInterest",
-                        "GtStakeholderInfluence",
-                        "GtStakeholderInfluencePossibilty",
-                        "GtStakeholderActions"
-                    ],
-                    "AdditionalSettings": {
-                        "RowLimit": 30,
-                        "Paged": true,
-                        "ViewQuery": ""
-                    }
+            "Views": [{
+                "Title": "Alle elementer",
+                "ViewFields": [
+                    "LinkTitle",
+                    "GtStakeholderGroup",
+                    "GtStakeholderContext",
+                    "GtStakeholderStrategy",
+                    "GtStakeholderInterest",
+                    "GtStakeholderInfluence",
+                    "GtStakeholderInfluencePossibilty",
+                    "GtStakeholderActions"
+                ],
+                "AdditionalSettings": {
+                    "RowLimit": 30,
+                    "Paged": true,
+                    "ViewQuery": ""
                 }
-            ]
+            }]
         },
         {
             "Title": "Kommunikasjonsplan",
@@ -917,33 +857,29 @@
             "Template": 100,
             "ContentTypesEnabled": true,
             "RemoveExistingContentTypes": true,
-            "ContentTypeBindings": [
-                {
-                    "ContentTypeID": "0x010065CE65D51354419EA794C6FACD4FA2EB"
-                }
-            ],
+            "ContentTypeBindings": [{
+                "ContentTypeID": "0x010065CE65D51354419EA794C6FACD4FA2EB"
+            }],
             "AdditionalSettings": {
                 "EnableVersioning": true
             },
             "Fields": [
                 "<Field Type=\"LookupMulti\" DisplayName=\"Målgruppe\" List=\"{listid:Interessentregister}\" ShowField=\"Title\" ID=\"{d685f33f-51b5-4e9f-a314-4b3d9467a7e4}\" StaticName=\"GtCommunicationTarget\" Name=\"GtCommunicationTarget\" Mult=\"TRUE\" />"
             ],
-            "Views": [
-                {
-                    "Title": "Alle elementer",
-                    "ViewFields": [
-                        "LinkTitle",
-                        "GtProjectPhase",
-                        "GtActionDate",
-                        "GtActionResponsible"
-                    ],
-                    "AdditionalSettings": {
-                        "RowLimit": 10,
-                        "Paged": true,
-                        "ViewQuery": ""
-                    }
+            "Views": [{
+                "Title": "Alle elementer",
+                "ViewFields": [
+                    "LinkTitle",
+                    "GtProjectPhase",
+                    "GtActionDate",
+                    "GtActionResponsible"
+                ],
+                "AdditionalSettings": {
+                    "RowLimit": 10,
+                    "Paged": true,
+                    "ViewQuery": ""
                 }
-            ]
+            }]
         },
         {
             "Title": "Milepæler",
@@ -951,31 +887,27 @@
             "Template": 100,
             "ContentTypesEnabled": true,
             "RemoveExistingContentTypes": true,
-            "ContentTypeBindings": [
-                {
-                    "ContentTypeID": "0x01002CC709404B5B4751B6E1CD1CC0A3ED10"
-                }
-            ],
+            "ContentTypeBindings": [{
+                "ContentTypeID": "0x01002CC709404B5B4751B6E1CD1CC0A3ED10"
+            }],
             "AdditionalSettings": {
                 "EnableVersioning": true
             },
-            "Views": [
-                {
-                    "Title": "Alle elementer",
-                    "ViewFields": [
-                        "LinkTitle",
-                        "GtMilestonePlannedDate",
-                        "GtMilestoneActualDate",
-                        "GtMilestoneStatus",
-                        "GtMilestoneComment"
-                    ],
-                    "AdditionalSettings": {
-                        "RowLimit": 30,
-                        "Paged": true,
-                        "ViewQuery": "<OrderBy><FieldRef Name=\"GtMilestonePlannedDate\" Ascending=\"TRUE\" /></OrderBy>"
-                    }
+            "Views": [{
+                "Title": "Alle elementer",
+                "ViewFields": [
+                    "LinkTitle",
+                    "GtMilestonePlannedDate",
+                    "GtMilestoneActualDate",
+                    "GtMilestoneStatus",
+                    "GtMilestoneComment"
+                ],
+                "AdditionalSettings": {
+                    "RowLimit": 30,
+                    "Paged": true,
+                    "ViewQuery": "<OrderBy><FieldRef Name=\"GtMilestonePlannedDate\" Ascending=\"TRUE\" /></OrderBy>"
                 }
-            ]
+            }]
         },
         {
             "Title": "Prosjektlogg",
@@ -983,36 +915,32 @@
             "Template": 100,
             "ContentTypesEnabled": true,
             "RemoveExistingContentTypes": true,
-            "ContentTypeBindings": [
-                {
-                    "ContentTypeID": "0x01004EDD18CB92C14EBA97103D909C897810"
-                }
-            ],
+            "ContentTypeBindings": [{
+                "ContentTypeID": "0x01004EDD18CB92C14EBA97103D909C897810"
+            }],
             "AdditionalSettings": {
                 "EnableVersioning": true
             },
             "Fields": [
                 "<Field Type=\"Lookup\" DisplayName=\"Påvirker leveranse\" List=\"{listid:Prosjektleveranser}\" ShowField=\"Title\" ID=\"{022cc93f-13df-4420-bd47-55e4fdae5d18}\" StaticName=\"GtProjectLogProductLookup\" Name=\"GtProjectLogProductLookup\" />"
             ],
-            "Views": [
-                {
-                    "Title": "Alle elementer",
-                    "ViewFields": [
-                        "LinkTitle",
-                        "GtProjectLogType",
-                        "GtProjectLogReporter",
-                        "GtProjectLogResponsible",
-                        "GtProjectLogConsequence",
-                        "GtProjectLogRecommendation",
-                        "GtProjectLogExperience"
-                    ],
-                    "AdditionalSettings": {
-                        "RowLimit": 30,
-                        "Paged": true,
-                        "ViewQuery": ""
-                    }
+            "Views": [{
+                "Title": "Alle elementer",
+                "ViewFields": [
+                    "LinkTitle",
+                    "GtProjectLogType",
+                    "GtProjectLogReporter",
+                    "GtProjectLogResponsible",
+                    "GtProjectLogConsequence",
+                    "GtProjectLogRecommendation",
+                    "GtProjectLogExperience"
+                ],
+                "AdditionalSettings": {
+                    "RowLimit": 30,
+                    "Paged": true,
+                    "ViewQuery": ""
                 }
-            ]
+            }]
         },
         {
             "Title": "Prosjektleveranser",
@@ -1020,19 +948,16 @@
             "Template": 100,
             "ContentTypesEnabled": true,
             "RemoveExistingContentTypes": true,
-            "ContentTypeBindings": [
-                {
-                    "ContentTypeID": "0x0100D7B74DE815F946D3B0F99D19F9B36B68"
-                }
-            ],
+            "ContentTypeBindings": [{
+                "ContentTypeID": "0x0100D7B74DE815F946D3B0F99D19F9B36B68"
+            }],
             "AdditionalSettings": {
                 "EnableVersioning": true
             },
             "Fields": [
                 "<Field Type=\"LookupMulti\" DisplayName=\"Interessent(er)\" List=\"{listid:Interessentregister}\" ShowField=\"Title\" ID=\"{6d90e0b6-73e6-48fb-aa1e-b897b214f934}\" Name=\"GtDeliveryStakeholders\" StaticName=\"GtDeliveryStakeholders\" Name=\"GtDeliveryStakeholders\" Mult=\"TRUE\" />"
             ],
-            "Views": [
-                {
+            "Views": [{
                     "Title": "Alle elementer",
                     "ViewFields": [
                         "LinkTitle",
@@ -1073,8 +998,7 @@
             "Template": 100,
             "ContentTypesEnabled": true,
             "RemoveExistingContentTypes": true,
-            "ContentTypeBindings": [
-                {
+            "ContentTypeBindings": [{
                     "ContentTypeID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE89701"
                 },
                 {
@@ -1084,8 +1008,7 @@
             "AdditionalSettings": {
                 "EnableVersioning": true
             },
-            "Views": [
-                {
+            "Views": [{
                     "Title": "Alle elementer",
                     "ViewFields": [
                         "ID",
@@ -1204,16 +1127,13 @@
             "Template": 101,
             "ContentTypesEnabled": false,
             "RemoveExistingContentTypes": true,
-            "ContentTypeBindings": [
-                {
-                    "ContentTypeID": "0x0101008D35AAEBAF8A44A9B3264C70348EB42B"
-                }
-            ],
+            "ContentTypeBindings": [{
+                "ContentTypeID": "0x0101008D35AAEBAF8A44A9B3264C70348EB42B"
+            }],
             "AdditionalSettings": {
                 "EnableVersioning": true
             },
-            "Views": [
-                {
+            "Views": [{
                     "Title": "Alle dokumenter",
                     "ViewFields": [
                         "DocIcon",
@@ -1251,26 +1171,21 @@
             "Template": 100,
             "ContentTypesEnabled": true,
             "RemoveExistingContentTypes": true,
-            "ContentTypeBindings": [
-                {
-                    "ContentTypeID": "0x01004F466123309D46BAB9D5C6DE89A6CF67"
-                }
-            ],
+            "ContentTypeBindings": [{
+                "ContentTypeID": "0x01004F466123309D46BAB9D5C6DE89A6CF67"
+            }],
             "AdditionalSettings": {
                 "EnableVersioning": true
             },
             "Fields": [
                 "<Field Type=\"LookupMulti\" DisplayName=\"Endring\" List=\"{listid:Endringsanalyse}\" ShowField=\"LinkTitleNoMenu\" UnlimitedLengthInDocumentLibrary=\"FALSE\" RelationshipDeleteBehavior=\"None\" ID=\"{1d5752af-4d26-4aed-b20a-6229ac14ed5d}\" StaticName=\"GtChangeLookup\" Name=\"GtChangeLookup\" Group=\"\" Description=\"Foreslått endring fra endringsanalysen\" Mult=\"TRUE\" />"
             ],
-            "FieldRefs": [
-                {
-                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
-                    "Required": true,
-                    "DisplayName": "Gevinst"
-                }
-            ],
-            "Views": [
-                {
+            "FieldRefs": [{
+                "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                "Required": true,
+                "DisplayName": "Gevinst"
+            }],
+            "Views": [{
                     "Title": "Alle elementer",
                     "ViewFields": [
                         "LinkTitle",
@@ -1313,23 +1228,18 @@
             "Template": 100,
             "ContentTypesEnabled": true,
             "RemoveExistingContentTypes": true,
-            "ContentTypeBindings": [
-                {
-                    "ContentTypeID": "0x01001AF93A93F5534B5FBAF750572B11BB7F"
-                }
-            ],
+            "ContentTypeBindings": [{
+                "ContentTypeID": "0x01001AF93A93F5534B5FBAF750572B11BB7F"
+            }],
             "AdditionalSettings": {
                 "EnableVersioning": true
             },
-            "FieldRefs": [
-                {
-                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
-                    "Required": true,
-                    "DisplayName": "Endring"
-                }
-            ],
-            "Views": [
-                {
+            "FieldRefs": [{
+                "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                "Required": true,
+                "DisplayName": "Endring"
+            }],
+            "Views": [{
                     "Title": "Alle elementer",
                     "ViewFields": [
                         "LinkTitle",
@@ -1362,11 +1272,9 @@
             "Template": 100,
             "ContentTypesEnabled": true,
             "RemoveExistingContentTypes": true,
-            "ContentTypeBindings": [
-                {
-                    "ContentTypeID": "0x010073043EFE3E814A2BBEF96B8457623F95"
-                }
-            ],
+            "ContentTypeBindings": [{
+                "ContentTypeID": "0x010073043EFE3E814A2BBEF96B8457623F95"
+            }],
             "AdditionalSettings": {
                 "EnableVersioning": true
             },
@@ -1374,23 +1282,21 @@
                 "<Field Type=\"Lookup\" DisplayName=\"Gevinst\" List=\"{listid:Gevinstanalyse og gevinstrealiseringsplan}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
                 "<Field Type=\"Lookup\" DisplayName=\"Gevinst:ID\" List=\"{listid:Gevinstanalyse og gevinstrealiseringsplan}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
             ],
-            "Views": [
-                {
-                    "Title": "Alle elementer",
-                    "ViewFields": [
-                        "LinkTitle",
-                        "GtGainLookup",
-                        "GtStartValue",
-                        "GtDesiredValue",
-                        "GtMeasurementUnit"
-                    ],
-                    "AdditionalSettings": {
-                        "RowLimit": 30,
-                        "Paged": true,
-                        "ViewQuery": "<OrderBy><FieldRef Name=\"ID\" /></OrderBy>"
-                    }
+            "Views": [{
+                "Title": "Alle elementer",
+                "ViewFields": [
+                    "LinkTitle",
+                    "GtGainLookup",
+                    "GtStartValue",
+                    "GtDesiredValue",
+                    "GtMeasurementUnit"
+                ],
+                "AdditionalSettings": {
+                    "RowLimit": 30,
+                    "Paged": true,
+                    "ViewQuery": "<OrderBy><FieldRef Name=\"ID\" /></OrderBy>"
                 }
-            ]
+            }]
         },
         {
             "Title": "Gevinstoppfølging",
@@ -1398,27 +1304,22 @@
             "Template": 100,
             "ContentTypesEnabled": false,
             "RemoveExistingContentTypes": true,
-            "ContentTypeBindings": [
-                {
-                    "ContentTypeID": "0x010039EAFDC2A1624C1BA1A444FC8FE85DEC"
-                }
-            ],
+            "ContentTypeBindings": [{
+                "ContentTypeID": "0x010039EAFDC2A1624C1BA1A444FC8FE85DEC"
+            }],
             "AdditionalSettings": {
                 "EnableVersioning": true
             },
-            "FieldRefs": [
-                {
-                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
-                    "Required": false
-                }
-            ],
+            "FieldRefs": [{
+                "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                "Required": false
+            }],
             "Fields": [
                 "<Field Type=\"Lookup\" DisplayName=\"Måleindikator\" List=\"{listid:Måleindikatorer}\" ShowField=\"Title\" ID=\"{92ae8541-f35e-4c05-8518-b9abce2d0860}\"  StaticName=\"GtMeasureIndicatorLookup\" Name=\"GtMeasureIndicatorLookup\" />",
                 "<Field Type=\"Lookup\" DisplayName=\"Måleindikator:ID\" List=\"{listid:Måleindikatorer}\" ShowField=\"ID\" FieldRef=\"92ae8541-f35e-4c05-8518-b9abce2d0860\" ReadOnly=\"TRUE\" ID=\"{571f95d9-4c0b-4b4d-8a0b-9a1771811f07}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtMeasureIndicatorLookup_ID\" Name=\"GtMeasureIndicatorLookup_ID\" />",
                 "<Field Type=\"Lookup\" DisplayName=\"Måleindikator:Ønsket verdi\" List=\"{listid:Måleindikatorer}\" ShowField=\"GtDesiredValue\" FieldRef=\"92ae8541-f35e-4c05-8518-b9abce2d0860\" ReadOnly=\"TRUE\" ID=\"{8fe2e615-999b-48dc-8889-151ed84a757a}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtMeasureIndicatorLookup_GtDesiredValue\" Name=\"GtMeasureIndicatorLookup_GtDesiredValue\" />"
             ],
-            "Views": [
-                {
+            "Views": [{
                     "Title": "Alle elementer",
                     "ViewFields": [
                         "GtMeasureIndicatorLookup",
@@ -1456,39 +1357,33 @@
             "Template": 100,
             "ContentTypesEnabled": false,
             "RemoveExistingContentTypes": true,
-            "FieldRefs": [
-                {
-                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
-                    "Required": false,
-                    "Hidden": true
+            "FieldRefs": [{
+                "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                "Required": false,
+                "Hidden": true
+            }],
+            "ContentTypeBindings": [{
+                "ContentTypeID": "0x010004EAFF7AFCC94C2680042E6881264120"
+            }],
+            "Views": [{
+                "Title": "Alle elementer",
+                "ViewFields": [
+                    "ID",
+                    "GtResourceUser",
+                    "GtResourceRole",
+                    "GtStartDate",
+                    "GtEndDate",
+                    "GtResourceLoad",
+                    "GtApproved",
+                    "Modified",
+                    "Editor"
+                ],
+                "AdditionalSettings": {
+                    "RowLimit": 100,
+                    "Paged": true,
+                    "ViewQuery": ""
                 }
-            ],
-            "ContentTypeBindings": [
-                {
-                    "ContentTypeID": "0x010004EAFF7AFCC94C2680042E6881264120"
-                }
-            ],
-            "Views": [
-                {
-                    "Title": "Alle elementer",
-                    "ViewFields": [
-                        "ID",
-                        "GtResourceUser",
-                        "GtResourceRole",
-                        "GtStartDate",
-                        "GtEndDate",
-                        "GtResourceLoad",
-                        "GtApproved",
-                        "Modified",
-                        "Editor"
-                    ],
-                    "AdditionalSettings": {
-                        "RowLimit": 100,
-                        "Paged": true,
-                        "ViewQuery": ""
-                    }
-                }
-            ]
+            }]
         }
     ]
 }
