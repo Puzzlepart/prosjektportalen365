@@ -4,7 +4,7 @@ import { HubConfigurationService } from '@Shared/services';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import * as strings from 'ProjectInformationWebPartStrings';
+import * as ProjectInformationWebPartStrings from 'ProjectInformationWebPartStrings';
 import * as React from 'react';
 import SpEntityPortalService from 'sp-entityportal-service';
 import ProjectPropertyModel from '../models/ProjectPropertyModel';
@@ -50,21 +50,30 @@ export default class ProjectInformation extends React.Component<IProjectInformat
    */
   private renderInner() {
     if (this.state.isLoading) {
-      return <Spinner label={strings.LoadingText} />;
+      return <Spinner label={ProjectInformationWebPartStrings.LoadingText} />;
     }
     if (this.state.error) {
-      return <MessageBar messageBarType={MessageBarType.error}>{strings.ErrorText}</MessageBar>;
+      return <MessageBar messageBarType={MessageBarType.error}>{ProjectInformationWebPartStrings.ErrorText}</MessageBar>;
     }
     return (
       <div>
         {this.renderProperties()}
-        <div className={styles.editPropertiesButton} hidden={this.props.hideEditPropertiesButton || !this.props.isSiteAdmin}>
-          <DefaultButton
-            text={strings.EditPropertiesText}
-            href={this.state.data.editFormUrl}
-            iconProps={{ iconName: 'Edit' }} />
+        <div className={styles.actions} hidden={this.props.hideActions || !this.props.isSiteAdmin}>
+          <div>
+            <DefaultButton
+              text={ProjectInformationWebPartStrings.EditPropertiesText}
+              href={this.state.data.editFormUrl}
+              iconProps={{ iconName: 'Edit' }} />
+          </div>
+          <div>
+            <DefaultButton
+              text={ProjectInformationWebPartStrings.EditSiteInformationText}
+              onClick={_ => window['_spLaunchSiteSettings']()}
+              disabled={!window['_spLaunchSiteSettings']}
+              iconProps={{ iconName: 'Info' }} />
+          </div>
         </div>
-      </div>
+      </div >
     );
   }
 
@@ -76,10 +85,10 @@ export default class ProjectInformation extends React.Component<IProjectInformat
       const propertiesToRender = this.state.data.properties.filter(p => !p.empty && p.showInDisplayForm);
       const hasMissingProps = this.state.data.properties.filter(p => p.required && p.empty).length > 0;
       if (hasMissingProps) {
-        return <MessageBar messageBarType={MessageBarType.error}>{strings.MissingPropertiesMessage}</MessageBar>;
+        return <MessageBar messageBarType={MessageBarType.error}>{ProjectInformationWebPartStrings.MissingPropertiesMessage}</MessageBar>;
       }
       if (propertiesToRender.length === 0) {
-        return <MessageBar>{strings.NoPropertiesMessage}</MessageBar>;
+        return <MessageBar>{ProjectInformationWebPartStrings.NoPropertiesMessage}</MessageBar>;
       }
       return (
         <div>

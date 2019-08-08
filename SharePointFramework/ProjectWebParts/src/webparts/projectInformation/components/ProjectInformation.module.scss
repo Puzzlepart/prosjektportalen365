@@ -1,11 +1,15 @@
-@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 
 .projectInformation {
   .container {
     margin: 0;
 
-    .editPropertiesButton {
-      margin-top: 25px;
+    .actions {
+      margin: 25px 0 0 0;
+
+      > div {
+        margin: 5px 0 0 0;
+      }
     }
   }
 }

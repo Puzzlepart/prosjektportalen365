@@ -3,7 +3,7 @@ import '@pnp/polyfill-ie11';
 import { sp } from '@pnp/sp';
 import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
 import MSGraphHelper from 'msgraph-helper';
-import * as strings from 'ProjectPhasesWebPartStrings';
+import * as ProjectPhasesWebPartStrings from 'ProjectPhasesWebPartStrings';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import ProjectPhases, { IProjectPhasesProps } from './components/ProjectPhases';
@@ -32,31 +32,31 @@ export default class ProjectPhasesWebPart extends BaseClientSideWebPart<IProject
         {
           groups: [
             {
-              groupName: strings.SettingsGroupName,
+              groupName: ProjectPhasesWebPartStrings.SettingsGroupName,
               groupFields: [
                 PropertyPaneToggle('automaticReload', {
-                  label: strings.AutomaticReloadFieldLabel,
+                  label: ProjectPhasesWebPartStrings.AutomaticReloadFieldLabel,
                 }),
                 PropertyPaneSlider('reloadTimeout', {
-                  label: strings.ReloadTimeoutFieldLabel,
+                  label: ProjectPhasesWebPartStrings.ReloadTimeoutFieldLabel,
                   min: 0,
                   max: 10,
                   step: 1,
                   disabled: !this.properties.automaticReload,
                 }),
                 PropertyPaneToggle('confirmPhaseChange', {
-                  label: strings.ConfirmPhaseChangeFieldLabel,
+                  label: ProjectPhasesWebPartStrings.ConfirmPhaseChangeFieldLabel,
                 }),
                 PropertyPaneTextField('phaseSubTextProperty', {
-                  label: strings.PhaseSubTextPropertyFieldLabel,
+                  label: ProjectPhasesWebPartStrings.PhaseSubTextPropertyFieldLabel,
                 }),
               ]
             },
             {
-              groupName: strings.ViewsGroupName,
+              groupName: ProjectPhasesWebPartStrings.ViewsGroupName,
               groupFields: [
                 PropertyPaneTextField('currentPhaseViewName', {
-                  label: strings.CurrentPhaseViewNameFieldLabel,
+                  label: ProjectPhasesWebPartStrings.CurrentPhaseViewNameFieldLabel,
                 }),
               ]
             }

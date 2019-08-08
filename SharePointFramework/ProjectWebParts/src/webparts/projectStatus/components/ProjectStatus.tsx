@@ -6,7 +6,7 @@ import { List } from '@pnp/sp';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import * as strings from 'ProjectStatusWebPartStrings';
+import * as ProjectStatusWebPartStrings from 'ProjectStatusWebPartStrings';
 import * as React from 'react';
 import ProjectStatusReport, { IProjectStatusReportItem } from '../models/ProjectStatusReport';
 import SectionModel, { SectionType } from '../models/SectionModel';
@@ -59,7 +59,7 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
       return (
         <div className={styles.projectStatus}>
           <div className={styles.container}>
-            <Spinner label={strings.LoadingText} />
+            <Spinner label={ProjectStatusWebPartStrings.LoadingText} />
           </div>
         </div>
       );
@@ -90,14 +90,14 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
     const items: IContextualMenuItem[] = [
       {
         key: 'NewStatusReport',
-        name: strings.NewStatusReportModalHeaderText,
+        name: ProjectStatusWebPartStrings.NewStatusReportModalHeaderText,
         itemType: ContextualMenuItemType.Normal,
         iconProps: { iconName: 'NewFolder' },
         href: `${newStatusReportUrl}?Source=${newStatusReportSource}`,
       },
       {
         key: 'EditReport',
-        name: strings.EditReportButtonText,
+        name: ProjectStatusWebPartStrings.EditReportButtonText,
         itemType: ContextualMenuItemType.Normal,
         iconProps: { iconName: 'Edit' },
         href: selectedReport ? selectedReport.editFormUrl : null,

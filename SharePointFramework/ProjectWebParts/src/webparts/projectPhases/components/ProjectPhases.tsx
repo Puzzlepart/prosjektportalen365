@@ -6,7 +6,7 @@ import MSGraphHelper from 'msgraph-helper';
 import * as objectGet from 'object-get';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import * as strings from 'ProjectPhasesWebPartStrings';
+import * as ProjectPhasesWebPartStrings from 'ProjectPhasesWebPartStrings';
 import * as React from 'react';
 import SpEntityPortalService from 'sp-entityportal-service';
 import HubSiteService from 'sp-hubsite-service';
@@ -32,7 +32,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
   constructor(props: IProjectPhasesProps) {
     super(props);
     this.state = { isLoading: true, data: {} };
-    this._phaseChecklist = sp.web.lists.getByTitle(strings.PhaseChecklistName);
+    this._phaseChecklist = sp.web.lists.getByTitle(ProjectPhasesWebPartStrings.PhaseChecklistName);
   }
 
   public async componentDidMount() {
@@ -51,7 +51,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
       return (
         <div className={styles.projectPhases}>
           <div className={styles.container} ref='container'>
-            <MessageBar messageBarType={MessageBarType.error}>{strings.WebPartNotConfiguredMessage}</MessageBar>
+            <MessageBar messageBarType={MessageBarType.error}>{ProjectPhasesWebPartStrings.WebPartNotConfiguredMessage}</MessageBar>
           </div>
         </div>
       );
@@ -60,7 +60,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
       return (
         <div className={styles.projectPhases}>
           <div className={styles.container} ref='container'>
-            <Spinner label={strings.LoadingText} />
+            <Spinner label={ProjectPhasesWebPartStrings.LoadingText} />
           </div>
         </div>
       );
@@ -149,7 +149,7 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
    * @param {string} phaseTermName Phase term name
    */
   protected async modifiyFrontpageViews(phaseTermName: string) {
-    const documentsViews = sp.web.lists.getByTitle(strings.DocumentsListName).views;
+    const documentsViews = sp.web.lists.getByTitle(ProjectPhasesWebPartStrings.DocumentsListName).views;
     let [documentsFrontpageView] = await documentsViews.select('Id', 'ViewQuery').filter(`Title eq '${this.props.currentPhaseViewName}'`).get<{ Id: string, ViewQuery: string }[]>();
     if (documentsFrontpageView) {
       const viewQueryDom = new DOMParser().parseFromString(`<Query>${documentsFrontpageView.ViewQuery}</Query>`, 'text/xml');
@@ -158,9 +158,9 @@ export default class ProjectPhases extends React.Component<IProjectPhasesProps, 
       const newViewQuery = [orderBy, `<Where><Eq><FieldRef Name='GtProjectPhase' /><Value Type='Text'>${phaseTermName}</Value></Eq></Where>`].join('');
       try {
         await documentsViews.getById(documentsFrontpageView.Id).update({ ViewQuery: newViewQuery });
-        Logger.write(`(ProjectPhases) modifiyFrontpageViews: Successfully updated ViewQuery for view '${this.props.currentPhaseViewName}' for list '${strings.DocumentsListName}'`, LogLevel.Info);
+        Logger.write(`(ProjectPhases) modifiyFrontpageViews: Successfully updated ViewQuery for view '${this.props.currentPhaseViewName}' for list '${ProjectPhasesWebPartStrings.DocumentsListName}'`, LogLevel.Info);
       } catch (err) {
-        Logger.write(`(ProjectPhases) modifiyFrontpageViews: Failed to update ViewQuery for view '${this.props.currentPhaseViewName}' for list '${strings.DocumentsListName}'`, LogLevel.Error);
+        Logger.write(`(ProjectPhases) modifiyFrontpageViews: Failed to update ViewQuery for view '${this.props.currentPhaseViewName}' for list '${ProjectPhasesWebPartStrings.DocumentsListName}'`, LogLevel.Error);
       }
     }
   }

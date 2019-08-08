@@ -1,4 +1,4 @@
-import * as strings from 'ProjectStatusWebPartStrings';
+import * as ProjectStatusWebPartStrings from 'ProjectStatusWebPartStrings';
 
 export enum SectionType {
   SummarySection,
@@ -61,7 +61,7 @@ export default class SectionModel {
  * @param {string} contentTypeId Content type id
  */
   private getType(contentTypeId: string): SectionType {
-    if (this.fieldName === strings.OverallStatusFieldName) {
+    if (this.fieldName === ProjectStatusWebPartStrings.OverallStatusFieldName) {
       return SectionType.SummarySection;
     }
     if (contentTypeId.indexOf("0x01004CEFE616A94A3A48A27D9DEBDF5EC82802") !== -1) {
