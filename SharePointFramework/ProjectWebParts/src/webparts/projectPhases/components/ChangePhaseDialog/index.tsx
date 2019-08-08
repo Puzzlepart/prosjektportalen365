@@ -61,7 +61,7 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
                     {...dlgCntBaseProps}
                     openCheckListItems={this.openChecklistItems}
                     currentIdx={this.state.currentIdx}
-                    nextCheckPointAction={this.nextCheckPoint} />
+                    nextCheckPointAction={this.nextCheckPoint.bind(this)} />
                 <Footer {...dlgCntBaseProps} onChangeView={this.onChangeView} />
             </Dialog>
         );
