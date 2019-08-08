@@ -1,6 +1,6 @@
 {
     "name": "prosjektportalen-spfx-projectwebparts",
-    "version": "0.8.4",
+    "version": "0.9.0",
     "private": true,
     "engines": {
         "node": ">=0.10.0"
@@ -14,7 +14,7 @@
         "package-deploy-patch": "npm version patch && npm run deploy",
         "package-deploy-minor": "npm version minor && npm run deploy",
         "package-deploy-major": "npm version major && npm run deploy",
-        "postversion": "gulp version-sync && npm run package",
+        "postversion": "gulp version-sync",
         "patch-version": "npm version patch",
         "minor-version": "npm version minor",
         "major-version": "npm version major"
