@@ -4,13 +4,7 @@ export type OnProgressCallbackFunction = (text: string, iconName: string) => voi
 
 export class BaseTask {
     public params: IBaseTaskParams;
-
-    /**
-     * Constructor
-     * 
-     * @param {string} name Name
-     */
-    constructor(public name: string) { }
+    public name: string;
 
     /**
      * Execute task
