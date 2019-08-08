@@ -553,8 +553,7 @@
             },
             {
                 "Url": "SitePages/Oppgaver.aspx",
-                "Title": "Oppgaver",
-                "Children": []
+                "Title": "Oppgaver"
             },
             {
                 "Url": "Lists/Fasesjekkliste/AllItems.aspx",
