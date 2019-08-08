@@ -1,5 +1,4 @@
 import { override } from '@microsoft/decorators';
-import { Logger, LogLevel } from '@pnp/logging';
 import { task } from 'decorators/task';
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import SpEntityPortalService from 'sp-entityportal-service';
@@ -23,7 +22,7 @@ export default class SetupProjectInformation extends BaseTask {
             try {
                 params.entity = await spEntityPortalService.getEntityItem(groupId);
             } catch (error) {
-                Logger.log({ message: `(ProjectSetupApplicationCustomizer) SetupProjectInformation: Adding project to list '${params.properties.projectsList}' at ${params.data.hub.url}`, data: { groupId, siteId: id.toString() }, level: LogLevel.Info });
+                this.logInformation(`Adding project to list '${params.properties.projectsList}' at ${params.data.hub.url}`, { groupId, siteId: id.toString() });
                 params.entity = await spEntityPortalService.newEntity(groupId, absoluteUrl, { GtSiteId: id.toString() }, params.data.hub.url);
             }
             return params;
