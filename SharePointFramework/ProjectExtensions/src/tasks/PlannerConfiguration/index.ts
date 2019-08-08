@@ -1,9 +1,7 @@
 import { override } from '@microsoft/decorators';
-import { Logger, LogLevel } from '@pnp/logging';
 import { task } from 'decorators/task';
 import MSGraphHelper from 'msgraph-helper';
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
-import { Schema } from 'sp-js-provisioning';
 import * as stringFormat from 'string-format';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { BaseTaskError } from '../BaseTaskError';
@@ -26,11 +24,11 @@ export default class PlannerConfiguration extends BaseTask {
         let planTitle = pageContext.web.title;
         let owner = pageContext.legacyPageContext.groupId;
         let existingGroupPlans = await this.getPlans(owner);
-        Logger.log({ message: `(ProjectSetupApplicationCustomizer) PlannerConfiguration: Creating plan ${planTitle}`, level: LogLevel.Info });
+        this.logInformation(`Creating plan ${planTitle}`);
         let groupPlan = await this.ensurePlan(planTitle, existingGroupPlans, pageContext.legacyPageContext.groupId);
         for (let i = 0; i < Object.keys(plannerConfig).length; i++) {
             let bucketName = Object.keys(plannerConfig)[i];
-            Logger.log({ message: `(ProjectSetupApplicationCustomizer) PlannerConfiguration: Creating bucket ${bucketName} for plan ${planTitle}`, level: LogLevel.Info });
+            this.logInformation(`Creating bucket ${bucketName} for plan ${planTitle}`);
             let bucket = await this.createBucket(bucketName, groupPlan.id);
             onProgress(stringFormat(strings.PlannerConfigurationText, bucketName), 'PlannerLogo');
             await this.createTasks(plannerConfig[bucketName], groupPlan.id, bucket);
@@ -72,7 +70,7 @@ export default class PlannerConfiguration extends BaseTask {
      */
     private async createTasks(tasks: string[], planId: string, bucket: IPlannerBucket) {
         for (let i = 0; i < tasks.length; i++) {
-            Logger.log({ message: `(ProjectSetupApplicationCustomizer) PlannerConfiguration: Creating task ${tasks[i]} in bucket ${bucket.name}`, level: LogLevel.Info });
+            this.logInformation(`Creating task ${tasks[i]} in bucket ${bucket.name}`);
             await MSGraphHelper.Post('planner/tasks', JSON.stringify({ title: tasks[i], bucketId: bucket.id, planId }));
         }
     }
@@ -103,13 +101,13 @@ export default class PlannerConfiguration extends BaseTask {
     @override
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         if (params.data.copyPlannerTasks) {
-            Logger.log({ message: '(ProjectSetupApplicationCustomizer) PlannerConfiguration: Setting up Plans, Buckets and Task', level: LogLevel.Info });
+            this.logInformation('Setting up Plans, Buckets and Task');
             try {
                 const plannerConfig = await this.fetchPlannerConfig(params.data.hub.url);
                 let groupPlan = await this.createPlan(plannerConfig, params.context.pageContext, onProgress);
                 params.templateParameters = { ...params.templateParameters || {}, defaultPlanId: groupPlan.id };
             } catch (error) {
-                Logger.log({ message: '(ProjectSetupApplicationCustomizer) PlannerConfiguration: Failed to set up Plans, Buckets and Tasks', data: error, level: LogLevel.Warning });
+                this.logWarning('Failed to set up Plans, Buckets and Tasks', error);
                 throw new BaseTaskError(this.name, strings.PlannerConfigurationErrorMessage, `${error.statusCode}: ${error.message}`);
             }
         }

@@ -1,5 +1,4 @@
 import { sp, Web } from '@pnp/sp';
-import { Logger, LogLevel } from '@pnp/logging';
 import { override } from '@microsoft/decorators';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
@@ -38,7 +37,7 @@ export default class CopyListData extends BaseTask {
      */
     private async processListItems(listConfig: ListContentConfig) {
         try {
-            Logger.log({ message: '(ProjectSetupApplicationCustomizer) CopyListData: Processing list items', data: { listConfig }, level: LogLevel.Info });
+            this.logInformation('Processing list items', { listConfig });
             let destList = sp.web.lists.getByTitle(listConfig.destinationList);
             let [sourceItems, sourceFields, { ListItemEntityTypeFullName }] = await Promise.all([
                 (listConfig.web as Web).lists.getByTitle(listConfig.sourceList).items.select(...listConfig.fields, 'TaxCatchAll/ID', 'TaxCatchAll/Term').expand('TaxCatchAll').get<any[]>(),
@@ -70,7 +69,7 @@ export default class CopyListData extends BaseTask {
                     }
                     return _properties;
                 }, {});
-                Logger.log({ message: `(ProjectSetupApplicationCustomizer) CopyListData: Processing list item ${i + 1}`, data: { properties, TaxCatchAll: sourceItems[i].TaxCatchAll }, level: LogLevel.Info });
+                this.logInformation(`Processing list item ${i + 1}`, { properties, TaxCatchAll: sourceItems[i].TaxCatchAll });
                 await destList.items.add(properties, ListItemEntityTypeFullName);
             }
         } catch (error) {

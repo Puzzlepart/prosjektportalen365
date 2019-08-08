@@ -19,7 +19,7 @@ export default class ApplyTemplate extends BaseTask {
      */
     @override
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
-        Logger.log({ message: '(ProjectSetupApplicationCustomizer) ApplyTemplate: Applying template to site', data: { parameters: params.templateParameters }, level: LogLevel.Info });
+        this.logInformation('Applying template to site', { parameters: params.templateParameters });
         try {
             const web = new Web(params.context.pageContext.web.absoluteUrl);
             const provisioner = new WebProvisioner(web);
@@ -40,7 +40,7 @@ export default class ApplyTemplate extends BaseTask {
             }
             return params;
         } catch (error) {
-            Logger.log({ message: '(ProjectSetupApplicationCustomizer) ApplyTemplate: Failed to apply template to site', data: {}, level: LogLevel.Error });
+            this.logError('Failed to apply template to site');
             throw new BaseTaskError(this.name, strings.ApplyTemplateErrorMessage, error);
         }
     }

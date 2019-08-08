@@ -6,6 +6,7 @@ import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { BaseTaskError } from '../BaseTaskError';
 import { IBaseTaskParams } from '../IBaseTaskParams';
 
+
 @task('SetupProjectInformation')
 export default class SetupProjectInformation extends BaseTask {
     @override
