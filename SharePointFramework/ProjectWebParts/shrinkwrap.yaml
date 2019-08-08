@@ -29,6 +29,7 @@ dependencies:
   sp-hubsite-service: 0.4.0
   spfx-jsom: 0.6.0
   string-format: 2.0.0
+  underscore: 1.9.1
 devDependencies:
   '@microsoft/rush-stack-compiler-2.9': 0.7.25
   '@microsoft/sp-build-web': 1.8.2
@@ -38,6 +39,7 @@ devDependencies:
   '@types/chai': 3.4.34
   '@types/mocha': 2.2.38
   '@types/string-format': 2.0.0
+  '@types/underscore': 1.9.2
   ajv: 5.2.5
   gulp: 3.9.1
   spfx-pkgdeploy: 0.3.0
@@ -1425,6 +1427,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-SudIN9TRJ+v8g5pTG8RRCqfqTMNqgWCKKd3vtynhGzkIIjxaicNAMuY5TRadJ6tzDu3Dotf3ngaMILtmOdmWEQ==
+  /@types/underscore/1.9.2:
+    dev: true
+    resolution:
+      integrity: sha512-KgOKTAD+9X+qvZnB5S1+onqKc4E+PZ+T6CM/NA5ohRPLHJXb+yCJMVf8pWOnvuBuKFNUAJW8N97IA6lba6mZGg==
   /@types/uuid/3.0.0:
     dependencies:
       '@types/node': 12.6.9
@@ -10823,6 +10829,10 @@ packages:
     dev: true
     resolution:
       integrity: sha1-Tz+1OxBuYJf8+ctBCfKl6b36UCI=
+  /underscore/1.9.1:
+    dev: false
+    resolution:
+      integrity: sha512-5/4etnCkd9c8gwgowi5/om/mYO5ajCaOgdzj/oW+0eQV9WxKBDZw5+ycmKmeaTXjInS/W0BzpGLo2xR2aBwZdg==
   /union-value/1.0.1:
     dependencies:
       arr-union: 3.1.0
@@ -11529,6 +11539,7 @@ specifiers:
   '@types/react': 16.7.22
   '@types/react-dom': 16.8.0
   '@types/string-format': ^2.0.0
+  '@types/underscore': ^1.9.2
   '@types/webpack-env': 1.13.1
   ajv: ~5.2.2
   gulp: ~3.9.1
@@ -11545,3 +11556,4 @@ specifiers:
   spfx-jsom: ^0.6.0
   spfx-pkgdeploy: ^0.3.0
   string-format: ^2.0.0
+  underscore: ^1.9.1
