@@ -1,20 +1,19 @@
 import { override } from '@microsoft/decorators';
-import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { Logger, LogLevel } from '@pnp/logging';
-import { IBaseTaskParams } from '../IBaseTaskParams';
+import { task } from 'decorators/task';
 import MSGraphHelper from 'msgraph-helper';
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
-import * as stringFormat from 'string-format';
-import { IPlannerPlan } from './IPlannerPlan';
-import { IPlannerBucket } from './IPlannerBucket';
 import { Schema } from 'sp-js-provisioning';
+import * as stringFormat from 'string-format';
+import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { BaseTaskError } from '../BaseTaskError';
+import { IBaseTaskParams } from '../IBaseTaskParams';
+import { IPlannerBucket } from './IPlannerBucket';
+import { IPlannerPlan } from './IPlannerPlan';
+import { PageContext } from '@microsoft/sp-page-context';
 
+@task('PlannerConfiguration')
 export default class PlannerConfiguration extends BaseTask {
-    constructor() {
-        super('PlannerConfiguration');
-    }
-
     /**
      * Create plans
      * 
@@ -23,24 +22,20 @@ export default class PlannerConfiguration extends BaseTask {
      * @param {OnProgressCallbackFunction} onProgress On progress function
      * @param {string} defaultBucketName Default bucket name
      */
-    private async createPlans(plannerConfig: { [key: string]: string[] }, owner: string, onProgress: OnProgressCallbackFunction, defaultBucketName: string = 'Gjøremål') {
+    private async createPlan(plannerConfig: { [key: string]: string[] }, pageContext: PageContext, onProgress: OnProgressCallbackFunction): Promise<IPlannerPlan> {
+        let planTitle = pageContext.web.title;
+        let owner = pageContext.legacyPageContext.groupId;
         let existingGroupPlans = await this.getPlans(owner);
-        let groupPlans: IPlannerPlan[] = [];
+        Logger.log({ message: `(ProjectSetupApplicationCustomizer) PlannerConfiguration: Creating plan ${planTitle}`, level: LogLevel.Info });
+        let groupPlan = await this.ensurePlan(planTitle, existingGroupPlans, pageContext.legacyPageContext.groupId);
         for (let i = 0; i < Object.keys(plannerConfig).length; i++) {
-            let title = Object.keys(plannerConfig)[i];
-            Logger.log({ message: `(ProjectSetupApplicationCustomizer) PlannerConfiguration: Creating plan ${title}`, level: LogLevel.Info });
-            let groupPlan = await this.ensurePlan(Object.keys(plannerConfig)[i], existingGroupPlans, owner);
-            groupPlans.push(groupPlan);
-            let planBuckets = await this.getPlanBuckets(groupPlan.id);
-            let [defaultPlanBucket] = planBuckets;
-            if (!defaultPlanBucket) {
-                Logger.log({ message: `(ProjectSetupApplicationCustomizer) PlannerConfiguration: Creating default bucket ${defaultBucketName} for plan ${title}`, level: LogLevel.Info });
-                defaultPlanBucket = await this.createBucket(defaultBucketName, groupPlan.id);
-            }
-            onProgress(stringFormat(strings.PlannerConfigurationText, title), 'PlannerLogo');
-            await this.createTasks(plannerConfig[title], groupPlan.id, defaultPlanBucket);
+            let bucketName = Object.keys(plannerConfig)[i];
+            Logger.log({ message: `(ProjectSetupApplicationCustomizer) PlannerConfiguration: Creating bucket ${bucketName} for plan ${planTitle}`, level: LogLevel.Info });
+            let bucket = await this.createBucket(bucketName, groupPlan.id);
+            onProgress(stringFormat(strings.PlannerConfigurationText, bucketName), 'PlannerLogo');
+            await this.createTasks(plannerConfig[bucketName], groupPlan.id, bucket);
         }
-        return groupPlans;
+        return groupPlan;
     }
 
     /**
@@ -91,104 +86,12 @@ export default class PlannerConfiguration extends BaseTask {
     }
 
     /**
+     * Fetch planner config
      * 
-     * @param {string} planId Plan Id 
+     * @param {string} url Url 
      */
-    private getPlanBuckets(planId: string) {
-        return MSGraphHelper.Get<IPlannerBucket[]>(`planner/plans/${planId}/buckets`, ['id', 'name', 'planId']);
-    }
-
-    /**
-     * Get page name for plan
-     * 
-     * @param {string} plan Plan
-     */
-    private getPageName(plan: IPlannerPlan) {
-        return `Oppgaver ${plan.title}.aspx`.split(' ').join('-');
-    }
-
-    /**
-     * Get client side page for plan
-     * 
-     * @param {IPlannerPlan} plan Plan 
-     */
-    private getClientSidePage(plan: IPlannerPlan) {
-        return {
-            Name: this.getPageName(plan),
-            Title: `Oppgaver (${plan.title})`,
-            PageLayoutType: 'SingleWebPartAppPage',
-            CommentsDisabled: true,
-            Sections: [
-                {
-                    Columns: [
-                        {
-                            Factor: 12,
-                            Controls: [
-                                {
-                                    Id: '39c4c1c2-63fa-41be-8cc2-f6c0b49b253d',
-                                    Properties: {
-                                        title: `Oppgaver (${plan.title})`,
-                                        isFullScreen: true,
-                                        plannerViewMode: 'board',
-                                        planId: plan.id,
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        };
-    }
-
-    /**
-     * Get navigation node for plan
-     * 
-     * @param {IPlannerPlan} plan Plan 
-     */
-    private getNavigationNode(plan: IPlannerPlan) {
-        return {
-            Url: `SitePages/${this.getPageName(plan)}`,
-            Title: plan.title
-        };
-    }
-
-    /**
-     * Update template parameters
-     * 
-     * @param {IPlannerPlan[]} groupPlans Group plans
-     * @param {Object} templateParameters Template parameters
-     */
-    private updateTemplateParameters(groupPlans: IPlannerPlan[], templateParameters: { [key: string]: string; }): { [key: string]: string; } {
-        return templateParameters = groupPlans.reduce((_templateParameters, _groupPlan, index) => {
-            _templateParameters[`planId|${_groupPlan.title}`] = _groupPlan.id;
-            if (index === 0) {
-                _templateParameters.defaultPlanId = _groupPlan.id;
-            }
-            return _templateParameters;
-        }, templateParameters);
-    }
-
-    /**
-     * Update template schema
-     * 
-     * @param {IPlannerPlan[]} groupPlans Group plans
-     * @param {Schema} templateSchema 
-     * @param {string} quickLaunchParentNodeTitle Quick launch parent node title
-     */
-    private updateTemplateSchema(groupPlans: IPlannerPlan[], templateSchema: Schema, quickLaunchParentNodeTitle: string = 'Oppgaver'): Schema {
-        let navigationParentIndex = -1;
-        let [navigationParent] = templateSchema.Navigation.QuickLaunch.filter(node => node.Title === quickLaunchParentNodeTitle && node.Children.length === 0);
-        if (navigationParent) {
-            navigationParentIndex = templateSchema.Navigation.QuickLaunch.indexOf(navigationParent);
-        }
-        return groupPlans.reduce((_templateSchema, _groupPlan) => {
-            _templateSchema.ClientSidePages.push(this.getClientSidePage(_groupPlan));
-            if (navigationParentIndex !== -1) {
-                _templateSchema.Navigation.QuickLaunch[navigationParentIndex].Children.push(this.getNavigationNode(_groupPlan));
-            }
-            return _templateSchema;
-        }, templateSchema);
+    private async fetchPlannerConfig(url: string) {
+        return await (await fetch(`${url}/Konfigurasjonsfiler/Planneroppgaver.txt`, { credentials: 'include' })).json();
     }
 
     /**
@@ -202,10 +105,9 @@ export default class PlannerConfiguration extends BaseTask {
         if (params.data.copyPlannerTasks) {
             Logger.log({ message: '(ProjectSetupApplicationCustomizer) PlannerConfiguration: Setting up Plans, Buckets and Task', level: LogLevel.Info });
             try {
-                const plannerConfig = await (await fetch(`${params.data.hub.url}/Konfigurasjonsfiler/Planneroppgaver.txt`, { credentials: 'include' })).json();
-                let groupPlans = await this.createPlans(plannerConfig, params.context.pageContext.legacyPageContext.groupId, onProgress);
-                params.templateParameters = this.updateTemplateParameters(groupPlans, params.templateParameters);
-                params.templateSchema = this.updateTemplateSchema(groupPlans, params.templateSchema);
+                const plannerConfig = await this.fetchPlannerConfig(params.data.hub.url);
+                let groupPlan = await this.createPlan(plannerConfig, params.context.pageContext, onProgress);
+                params.templateParameters = { ...params.templateParameters || {}, defaultPlanId: groupPlan.id };
             } catch (error) {
                 Logger.log({ message: '(ProjectSetupApplicationCustomizer) PlannerConfiguration: Failed to set up Plans, Buckets and Tasks', data: error, level: LogLevel.Warning });
                 throw new BaseTaskError(this.name, strings.PlannerConfigurationErrorMessage, `${error.statusCode}: ${error.message}`);
