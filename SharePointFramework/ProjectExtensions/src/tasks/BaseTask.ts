@@ -20,12 +20,43 @@ export class BaseTask {
     }
 
     /**
+     * Log error
+     * 
+     * @param {string} message Message
+     * @param {any} data Data
+     */
+    public logError(message: string, data?: any) {
+        this.log(`(ProjectSetupApplicationCustomizer) ${this.name}: ${message}`, data, LogLevel.Error);
+    }
+
+    /**
+     * Log warning
+     * 
+     * @param {string} message Message
+     * @param {any} data Data
+     */
+    public logWarning(message: string, data?: any) {
+        this.log(`(ProjectSetupApplicationCustomizer) ${this.name}: ${message}`, data, LogLevel.Warning);
+    }
+
+    /**
      * Log information
      * 
      * @param {string} message Message
      * @param {any} data Data
      */
     public logInformation(message: string, data?: any) {
-        Logger.log({ message: `(ProjectSetupApplicationCustomizer) ${this.name}: ${message}`, data, level: LogLevel.Info });
+        this.log(`(ProjectSetupApplicationCustomizer) ${this.name}: ${message}`, data, LogLevel.Info);
+    }
+
+    /**
+     * Log 
+     * 
+     * @param {string} message Message
+     * @param {any} data Data
+     * @param {LogLevel} level Level
+     */
+    protected log(message: string, data: any, level: LogLevel) {
+        Logger.log({ message, data, level });
     }
 }
