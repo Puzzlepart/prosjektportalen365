@@ -1,7 +1,7 @@
 import { BaseClientSideWebPart, IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
+import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import '@pnp/polyfill-ie11';
 import { sp } from '@pnp/sp';
-import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
 import MSGraphHelper from 'msgraph-helper';
 import * as ProjectPhasesWebPartStrings from 'ProjectPhasesWebPartStrings';
 import * as React from 'react';
