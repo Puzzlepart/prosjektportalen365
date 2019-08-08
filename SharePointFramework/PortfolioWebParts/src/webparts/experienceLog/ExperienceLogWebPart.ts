@@ -13,8 +13,9 @@ export default class ExperienceLogWebPart extends BaseClientSideWebPart<IExperie
     Logger.log({ message: '(ExperienceLogWebPart) render: Rendering <ExperienceLog />', level: LogLevel.Info });
     const element: React.ReactElement<IExperienceLogProps> = React.createElement(ExperienceLog, {
       ...this.properties,
+      pageContext: this.context.pageContext,
       groupByColumns: [{ name: PortfolioWebPartsStrings.SiteTitleLabel, key: 'SiteTitle', fieldName: 'SiteTitle', minWidth: 0 }],
-    });
+    } as IExperienceLogProps);
     ReactDom.render(element, this.domElement);
   }
 

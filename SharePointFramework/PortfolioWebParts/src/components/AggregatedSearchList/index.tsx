@@ -1,5 +1,5 @@
 import { sp } from '@pnp/sp';
-import { getObjectValue } from '@Shared/helpers';
+import { getObjectValue, isHubSite } from '@Shared/helpers';
 import { DataSourceService } from '@Shared/services';
 import * as moment from 'moment';
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
@@ -282,12 +282,18 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
      * Fetch items
      */
     protected async fetchItems(): Promise<any[]> {
-        let { pageContext, queryTemplate, dataSource, selectProperties, columns, postFetch } = this.props;
+        let {
+            pageContext,
+            queryTemplate,
+            dataSource,
+            selectProperties,
+            columns,
+            postFetch,
+        } = this.props;
         try {
             if (!queryTemplate) {
-                const { siteId, hubSiteId } = pageContext.legacyPageContext;
                 let web = sp.web;
-                if (siteId.indexOf(hubSiteId) === -1) {
+                if (!isHubSite(pageContext)) {
                     web = (await HubSiteService.GetHubSite(sp, pageContext)).web;
                 }
                 const { QueryTemplate } = await new DataSourceService(web).getByName(dataSource);
@@ -306,7 +312,6 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
             });
             return postFetch ? postFetch(PrimarySearchResults) : PrimarySearchResults;
         } catch (error) {
-            console.log(error);
             throw stringFormat(PortfolioWebPartsStrings.DataSourceError, dataSource);
         }
     }

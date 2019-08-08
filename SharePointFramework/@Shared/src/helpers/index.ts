@@ -7,3 +7,4 @@ export { tryParseCurrency } from './tryParseCurrency';
 export { tryParseFloat } from './tryParseFloat';
 export { tryParseInt } from './tryParseInt';
 export { tryParsePercentage } from './tryParsePercentage';
+export { isHubSite } from './isHubSite';

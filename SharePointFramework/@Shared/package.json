@@ -10,6 +10,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@microsoft/sp-page-context": "^1.8.2",
         "@pnp/common": "^1.3.4",
         "@pnp/logging": "^1.3.4",
         "@pnp/odata": "^1.3.4",
