@@ -1,10 +1,6 @@
 import { ICalloutProps } from 'office-ui-fabric-react/lib/Callout';
-import Phase from '../../models/Phase';
-
-export interface IProjectPhaseMouseOver {
-    target: any;
-    model: Phase;
-}
+import { Phase } from '../../models';
+import { IProjectPhaseMouseOver } from './IProjectPhaseMouseOver';
 
 export interface IProjectPhaseCalloutProps extends ICalloutProps {
     phase: IProjectPhaseMouseOver;

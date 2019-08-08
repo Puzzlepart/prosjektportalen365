@@ -16,6 +16,7 @@ declare interface IBenefitsOverviewWebPartStrings {
   ShowAllMeasurementsLinkText: string;
   NoGroupingText: string;
   SearchBoxLabelText: string;
+  ExcelExportFileNamePrefix: string;
 }
 
 declare module 'BenefitsOverviewWebPartStrings' {

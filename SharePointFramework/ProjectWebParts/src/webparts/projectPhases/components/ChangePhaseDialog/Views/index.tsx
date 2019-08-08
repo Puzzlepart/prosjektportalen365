@@ -1,6 +1,6 @@
-import InitialView from "./InitialView";
-import SummaryView from "./SummaryView";
-import ChangingPhaseView from "./ChangingPhaseView";
+export { default as InitialView } from "./InitialView";
+export { default as SummaryView } from "./SummaryView";
+export { default as ChangingPhaseView } from "./ChangingPhaseView";
 
 export enum View {
     Initial,
@@ -8,5 +8,3 @@ export enum View {
     Confirm,
     ChangingPhase,
 }
-
-export { InitialView, SummaryView, ChangingPhaseView };

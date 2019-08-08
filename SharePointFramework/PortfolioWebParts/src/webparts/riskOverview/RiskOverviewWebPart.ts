@@ -13,6 +13,7 @@ export default class RiskOverviewWebPart extends BaseClientSideWebPart<IRiskOver
     Logger.log({ message: '(RiskOverviewWebPart) render: Rendering <RiskOverview />', level: LogLevel.Info });
     const element: React.ReactElement<IRiskOverviewProps> = React.createElement(RiskOverview, {
       ...this.properties,
+      pageContext: this.context.pageContext,
       groupByColumns: [{ name: PortfolioWebPartsStrings.SiteTitleLabel, key: 'SiteTitle', fieldName: 'SiteTitle', minWidth: 0 }],
     });
     ReactDom.render(element, this.domElement);

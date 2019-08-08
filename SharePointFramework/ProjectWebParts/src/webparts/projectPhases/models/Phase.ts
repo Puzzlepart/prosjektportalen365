@@ -1,6 +1,6 @@
-export type PhaseChecklistData = { stats?: { [status: string]: number }, items?: any[] };
+import { PhaseChecklistData } from "../types/PhaseChecklistData";
 
-export default class Phase {
+export class Phase {
     public id: string;
     public letter: string;
     public checklistData: PhaseChecklistData;

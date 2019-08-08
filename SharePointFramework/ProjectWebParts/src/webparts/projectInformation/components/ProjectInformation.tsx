@@ -1,18 +1,18 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
 import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
-import { HubConfigurationService } from '@Shared/services';
+import { HubConfigurationService, EntityDataService } from '@Shared/services';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import * as strings from 'ProjectInformationWebPartStrings';
+import * as ProjectInformationWebPartStrings from 'ProjectInformationWebPartStrings';
 import * as React from 'react';
-import SpEntityPortalService from 'sp-entityportal-service';
 import ProjectPropertyModel from '../models/ProjectPropertyModel';
 import { IProjectInformationData } from './IProjectInformationData';
 import { IProjectInformationProps } from './IProjectInformationProps';
 import { IProjectInformationState } from './IProjectInformationState';
 import styles from './ProjectInformation.module.scss';
 import ProjectProperty from './ProjectProperty';
+
 
 export default class ProjectInformation extends React.Component<IProjectInformationProps, IProjectInformationState> {
   public static defaultProps: Partial<IProjectInformationProps> = { title: 'Prosjektinformasjon' };
@@ -50,21 +50,39 @@ export default class ProjectInformation extends React.Component<IProjectInformat
    */
   private renderInner() {
     if (this.state.isLoading) {
-      return <Spinner label={strings.LoadingText} />;
+      return <Spinner label={ProjectInformationWebPartStrings.LoadingText} />;
     }
     if (this.state.error) {
-      return <MessageBar messageBarType={MessageBarType.error}>{strings.ErrorText}</MessageBar>;
+      return <MessageBar messageBarType={MessageBarType.error}>{ProjectInformationWebPartStrings.ErrorText}</MessageBar>;
     }
     return (
       <div>
         {this.renderProperties()}
-        <div className={styles.editPropertiesButton} hidden={this.props.hideEditPropertiesButton || !this.props.isSiteAdmin}>
-          <DefaultButton
-            text={strings.EditPropertiesText}
-            href={this.state.data.editFormUrl}
-            iconProps={{ iconName: 'Edit' }} />
+        <div className={styles.actions} hidden={this.props.hideActions || !this.props.isSiteAdmin}>
+          <div>
+            <DefaultButton
+              text={ProjectInformationWebPartStrings.ViewVersionHistoryText}
+              href={this.state.data.versionHistoryUrl}
+              iconProps={{ iconName: 'History' }}
+              style={{ width: 250 }} />
+          </div>
+          <div>
+            <DefaultButton
+              text={ProjectInformationWebPartStrings.EditPropertiesText}
+              href={this.state.data.editFormUrl}
+              iconProps={{ iconName: 'Edit' }}
+              style={{ width: 250 }} />
+          </div>
+          <div>
+            <DefaultButton
+              text={ProjectInformationWebPartStrings.EditSiteInformationText}
+              onClick={_ => window['_spLaunchSiteSettings']()}
+              disabled={!window['_spLaunchSiteSettings']}
+              iconProps={{ iconName: 'Info' }}
+              style={{ width: 250 }} />
+          </div>
         </div>
-      </div>
+      </div >
     );
   }
 
@@ -76,10 +94,10 @@ export default class ProjectInformation extends React.Component<IProjectInformat
       const propertiesToRender = this.state.data.properties.filter(p => !p.empty && p.showInDisplayForm);
       const hasMissingProps = this.state.data.properties.filter(p => p.required && p.empty).length > 0;
       if (hasMissingProps) {
-        return <MessageBar messageBarType={MessageBarType.error}>{strings.MissingPropertiesMessage}</MessageBar>;
+        return <MessageBar messageBarType={MessageBarType.error}>{ProjectInformationWebPartStrings.MissingPropertiesMessage}</MessageBar>;
       }
       if (propertiesToRender.length === 0) {
-        return <MessageBar>{strings.NoPropertiesMessage}</MessageBar>;
+        return <MessageBar>{ProjectInformationWebPartStrings.NoPropertiesMessage}</MessageBar>;
       }
       return (
         <div>
@@ -95,17 +113,22 @@ export default class ProjectInformation extends React.Component<IProjectInformat
 
   private async fetchData(): Promise<IProjectInformationData> {
     try {
-      let { hubSiteUrl, siteId, webUrl } = this.props;
-      const spEntityPortalService = new SpEntityPortalService({ webUrl: hubSiteUrl, ...this.props.entity });
-      const [columnConfig, entityItem, entityFields, editFormUrl] = await Promise.all([
-        new HubConfigurationService(hubSiteUrl).getProjectColumns(),
-        spEntityPortalService.getEntityItemFieldValues(siteId),
-        spEntityPortalService.getEntityFields(),
-        spEntityPortalService.getEntityEditFormUrl(siteId, webUrl),
+      const { hubSiteUrl, siteId, webUrl, entity } = this.props;
+      const hubConfigurationService = new HubConfigurationService(hubSiteUrl);
+      const entityDataService = new EntityDataService(hubSiteUrl, siteId, webUrl, entity);
+
+      const [
+        columnConfig,
+        { fields, editFormUrl, versionHistoryUrl },
+        entityItem,
+      ] = await Promise.all([
+        hubConfigurationService.getProjectColumns(),
+        entityDataService.fetchContext(),
+        entityDataService.fetchItem(),
       ]);
       let properties = Object.keys(entityItem)
         .map(fieldName => ({
-          field: entityFields.filter(fld => fld.InternalName === fieldName)[0],
+          field: fields.filter(fld => fld.InternalName === fieldName)[0],
           value: entityItem[fieldName],
         }))
         .filter(prop => {
@@ -118,8 +141,12 @@ export default class ProjectInformation extends React.Component<IProjectInformat
           return false;
         })
         .map(({ field, value }) => new ProjectPropertyModel(field, value));
-      const data = { properties, editFormUrl, itemId: entityItem.Id };
-      return data;
+      return {
+        properties,
+        editFormUrl,
+        versionHistoryUrl,
+        itemId: entityItem.ID,
+      };
     } catch (error) {
       throw error;
     }

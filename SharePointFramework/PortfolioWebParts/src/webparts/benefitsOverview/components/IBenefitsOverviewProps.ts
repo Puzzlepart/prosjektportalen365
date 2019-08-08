@@ -1,8 +1,12 @@
 import { IBenefitsOverviewWebPartProps } from '../IBenefitsOverviewWebPartProps';
+import * as BenefitsOverviewWebPartStrings from 'BenefitsOverviewWebPartStrings';
 
-export interface IBenefitsOverviewProps extends IBenefitsOverviewWebPartProps {}
+export interface IBenefitsOverviewProps extends IBenefitsOverviewWebPartProps {
+
+}
 
 export const BenefitsOverviewDefaultProps: Partial<IBenefitsOverviewProps> = {
+    title: BenefitsOverviewWebPartStrings.Title,
     selectProperties: [
         'Path',
         'SPWebURL',
@@ -27,4 +31,8 @@ export const BenefitsOverviewDefaultProps: Partial<IBenefitsOverviewProps> = {
         'GtMeasureIndicatorLookupId',
         'GtGainsResponsible'
     ],
+    excelExportConfig: {
+        fileNamePrefix: BenefitsOverviewWebPartStrings.ExcelExportFileNamePrefix,
+        sheetName: 'Sheet1',
+    },
 };
