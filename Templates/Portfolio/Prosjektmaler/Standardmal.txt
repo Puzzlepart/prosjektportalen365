@@ -616,7 +616,7 @@
                 {
                     "Columns": [
                         {
-                            "Factor": 12,
+                            "Factor": 8,
                             "Controls": [
                                 {
                                     "Id": "4449d3dc-fa58-4982-b87c-5a893114e7b7",
@@ -637,32 +637,14 @@
                                             "identityFieldName": "GtSiteId"
                                         }
                                     }
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "Columns": [
-                        {
-                            "Factor": 8,
-                            "Controls": [
+                                },
                                 {
                                     "Id": "39c4c1c2-63fa-41be-8cc2-f6c0b49b253d",
                                     "Properties": {
                                         "title": "Oppgaver",
                                         "isFullScreen": false,
-                                        "plannerViewMode": "config",
+                                        "plannerViewMode": "bucketchart",
                                         "planId": "{parameter:defaultPlanId}"
-                                    }
-                                },
-                                {
-                                    "Id": "f92bf067-bc19-489e-a556-7fe95f508720",
-                                    "Properties": {
-                                        "isDocumentLibrary": true,
-                                        "selectedListId": "{listid:Dokumenter}",
-                                        "selectedViewId": "{listviewid:Dokumenter|Gjeldende fase}",
-                                        "webpartHeightKey": 4
                                     }
                                 },
                                 {
@@ -696,6 +678,23 @@
                                         "title": "Prosjektnyheter",
                                         "showChrome": true,
                                         "compactMode": true
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Columns": [
+                        {
+                            "Factor": 12,
+                            "Controls": [
+                                {
+                                    "Id": "f92bf067-bc19-489e-a556-7fe95f508720",
+                                    "Properties": {
+                                        "isDocumentLibrary": true,
+                                        "selectedListId": "{listid:Dokumenter}",
+                                        "webpartHeightKey": 4
                                     }
                                 }
                             ]
