@@ -1,4 +1,5 @@
 import { IBaseTaskParams } from './IBaseTaskParams';
+import { virtual } from '@microsoft/decorators';
 
 export type OnProgressCallbackFunction = (text: string, iconName: string) => void;
 
@@ -12,6 +13,7 @@ export class BaseTask {
      * @param {IBaseTaskParams} params Params
      * @param {OnProgressCallbackFunction} onProgress Progress function
      */
+    @virtual
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         onProgress('BaseTask', null);
         return params;
