@@ -1,16 +1,14 @@
-import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import { override } from '@microsoft/decorators';
-import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { Logger, LogLevel } from '@pnp/logging';
-import { IBaseTaskParams } from '../IBaseTaskParams';
-import { BaseTaskError } from '../BaseTaskError';
+import { task } from 'decorators/task';
+import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import initSpfxJsom, { ExecuteJsomQuery, JsomContext } from 'spfx-jsom';
+import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
+import { BaseTaskError } from '../BaseTaskError';
+import { IBaseTaskParams } from '../IBaseTaskParams';
 
+@task('SetTaxonomyFields')
 export default class SetTaxonomyFields extends BaseTask {
-    constructor() {
-        super('SetTaxonomyFields');
-    }
-
     /**
      * Execute CopyListData
      * 

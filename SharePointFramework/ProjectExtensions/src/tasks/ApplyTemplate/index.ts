@@ -1,18 +1,16 @@
 import { override } from '@microsoft/decorators';
-import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { Logger, LogLevel } from '@pnp/logging';
-import { WebProvisioner, Web } from 'sp-js-provisioning';
-import { ApplyTemplateStatusMap } from './ApplyTemplateStatusMap';
+import { task } from 'decorators/task';
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
+import { Web, WebProvisioner } from 'sp-js-provisioning';
 import * as stringFormat from 'string-format';
-import { IBaseTaskParams } from '../IBaseTaskParams';
+import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { BaseTaskError } from '../BaseTaskError';
+import { IBaseTaskParams } from '../IBaseTaskParams';
+import { ApplyTemplateStatusMap } from './ApplyTemplateStatusMap';
 
+@task('ApplyTemplate')
 export default class ApplyTemplate extends BaseTask {
-    constructor() {
-        super('ApplyTemplate');
-    }
-
     /**
      * Execute ApplyTemplate
      * 

@@ -7,12 +7,10 @@ import * as stringFormat from 'string-format';
 import { IBaseTaskParams } from '../IBaseTaskParams';
 import { BaseTaskError } from '../BaseTaskError';
 import { ListContentConfig } from '../../models';
+import { task } from 'decorators/task';
 
+@task('CopyListData')
 export default class CopyListData extends BaseTask {
-    constructor() {
-        super('CopyListData');
-    }
-
     /**
      * Execute CopyListData
      * 

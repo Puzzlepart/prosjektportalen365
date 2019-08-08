@@ -1,16 +1,14 @@
-import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import { override } from '@microsoft/decorators';
-import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { Logger, LogLevel } from '@pnp/logging';
-import { IBaseTaskParams } from '../IBaseTaskParams';
-import { BaseTaskError } from '../BaseTaskError';
+import { task } from 'decorators/task';
+import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import SpEntityPortalService from 'sp-entityportal-service';
+import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
+import { BaseTaskError } from '../BaseTaskError';
+import { IBaseTaskParams } from '../IBaseTaskParams';
 
+@task('SetupProjectInformation')
 export default class SetupProjectInformation extends BaseTask {
-    constructor() {
-        super('SetupProjectInformation');
-    }
-
     @override
     public async execute(params: IBaseTaskParams, _onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
