@@ -1,16 +1,13 @@
-import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import { override } from '@microsoft/decorators';
-import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
-import { Logger, LogLevel } from '@pnp/logging';
-import { IBaseTaskParams } from '../IBaseTaskParams';
-import { BaseTaskError } from '../BaseTaskError';
+import { task } from 'decorators/task';
+import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import initSpfxJsom, { ExecuteJsomQuery, JsomContext } from 'spfx-jsom';
+import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
+import { BaseTaskError } from '../BaseTaskError';
+import { IBaseTaskParams } from '../IBaseTaskParams';
 
+@task('SetTaxonomyFields')
 export default class SetTaxonomyFields extends BaseTask {
-    constructor() {
-        super('SetTaxonomyFields');
-    }
-
     /**
      * Execute CopyListData
      * 
@@ -24,10 +21,10 @@ export default class SetTaxonomyFields extends BaseTask {
             const taxSession = SP.Taxonomy.TaxonomySession.getTaxonomySession(jsomCtx.clientContext);
             const defaultSiteCollectionTermStore = taxSession.getDefaultSiteCollectionTermStore();
             await ExecuteJsomQuery(jsomCtx, [{ clientObject: defaultSiteCollectionTermStore, exps: 'Id' }]);
-            Logger.log({ message: `(ProjectSetupApplicationCustomizer) SetTaxonomyFields: Retrieved ID ${defaultSiteCollectionTermStore.get_id()} for default term store`, level: LogLevel.Info });
+            this.logInformation(`Retrieved ID ${defaultSiteCollectionTermStore.get_id()} for default term store`);
             Object.keys(params.properties.termSetIds).forEach(fldInternalName => {
                 const termSetId = params.properties.termSetIds[fldInternalName];
-                Logger.log({ message: `(ProjectSetupApplicationCustomizer) SetTaxonomyFields: Setting Term Set ID ${termSetId} for ${fldInternalName}`, level: LogLevel.Info });
+                this.logInformation(`Setting Term Set ID ${termSetId} for ${fldInternalName}`);
                 const field: SP.Field = jsomCtx.rootWeb.get_fields().getByInternalNameOrTitle(fldInternalName);
                 const taxField: SP.Taxonomy.TaxonomyField = jsomCtx.clientContext.castTo(field, SP.Taxonomy.TaxonomyField) as SP.Taxonomy.TaxonomyField;
                 taxField.set_sspId(defaultSiteCollectionTermStore.get_id());

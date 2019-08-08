@@ -1,19 +1,19 @@
-import * as React from 'react';
-import styles from './TemplateSelectModal.module.scss';
-import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-
-import ProjectSetupBaseModal from '../ProjectSetupBaseModal';
+import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
+import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import * as strings from 'ProjectSetupApplicationCustomizerStrings';
+import * as React from 'react';
+import { ListContentConfig, ProjectTemplate } from '../../models';
 import CollapsableSection from '../CollapsableSection';
+import ProjectSetupBaseModal from '../ProjectSetupBaseModal';
 import { ITemplateSelectModalProps } from './ITemplateSelectModalProps';
 import { ITemplateSelectModalState } from './ITemplateSelectModalState';
-import { ProjectTemplate, ListContentConfig } from '../../models';
+import styles from './TemplateSelectModal.module.scss';
 
 export default class TemplateSelectModal extends React.Component<ITemplateSelectModalProps, ITemplateSelectModalState> {
     /**
+     * Constructor
      * 
      * @param props Props
      */
@@ -47,13 +47,14 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
     private renderBody() {
         return (
             <React.Fragment>
-                <div className={styles.templateSelect} hidden={this.getTemplateOptions().length === 1}>
+                <div className={styles.templateSelect}>
                     <div className={styles.templateSelectTitle}>{strings.TemplateSelectTitle}</div>
                     <div className={styles.templateSelectDropdown}>
                         <Dropdown
                             defaultSelectedKey='0'
                             onChanged={this.onTemplateSelected}
-                            options={this.getTemplateOptions()} />
+                            options={this.getTemplateOptions()}
+                            disabled={this.getTemplateOptions().length === 1} />
                     </div>
                 </div>
                 <CollapsableSection
@@ -76,7 +77,6 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
                     </div>
                 </CollapsableSection>
                 <CollapsableSection
-                    hidden={true}
                     title={strings.ListContentTitle}
                     className={styles.listContent}
                     contentClassName={styles.listContentList}>
@@ -85,6 +85,7 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
                             <Toggle
                                 label={lcc.title}
                                 defaultChecked={lcc.isDefault}
+                                disabled={true}
                                 onChanged={checked => this.onListContentItemToggle(lcc, checked)} />
                         </div>
                     ))}
