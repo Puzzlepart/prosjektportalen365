@@ -652,7 +652,7 @@
                                     "Properties": {
                                         "title": "Oppgaver",
                                         "isFullScreen": false,
-                                        "plannerViewMode": "statuschart",
+                                        "plannerViewMode": "config",
                                         "planId": "{parameter:defaultPlanId}"
                                     }
                                 },
@@ -720,7 +720,7 @@
                                     "Properties": {
                                         "title": "Oppgaver",
                                         "isFullScreen": true,
-                                        "plannerViewMode": "config",
+                                        "plannerViewMode": "board",
                                         "planId": "{parameter:defaultPlanId}"
                                     }
                                 }
