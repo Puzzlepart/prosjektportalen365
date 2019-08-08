@@ -274,7 +274,6 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
             await ExcelExportService.export(sheets, fileName);
             this.setState({ isExporting: false });
         } catch (error) {
-            console.log(error);
             this.setState({ isExporting: false });
         }
     }
@@ -307,6 +306,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
             });
             return postFetch ? postFetch(PrimarySearchResults) : PrimarySearchResults;
         } catch (error) {
+            console.log(error);
             throw stringFormat(PortfolioWebPartsStrings.DataSourceError, dataSource);
         }
     }
