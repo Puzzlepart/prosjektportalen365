@@ -1,4 +1,5 @@
 import * as moment from 'moment';
+import * as _ from 'underscore';
 
 export interface IProjectStatusReportItem {
     Id: number;
@@ -28,6 +29,13 @@ export default class ProjectStatusReport {
         this.year = parseInt(item.GtYear, 10);
         this.date = moment({ month: this.monthIndex, year: this.year }).endOf('month');
         this.defaultEditFormUrl = defaultEditFormUrl;
+    }
+
+    /**
+     * Get status values from item
+     */
+    public getStatusValues(): { [key: string]: string } {
+        return _.omit(this.item, ['ID', 'Id', 'Title', 'GtSiteId', 'GtYear', 'GtMonthChoice']);
     }
 
     /**
