@@ -183,7 +183,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
             webUrl={this.props.siteAbsoluteUrl}
             hubSiteUrl={this.props.siteAbsoluteUrl}
             siteId={this.state.selectedProject.siteId}
-            hideEditPropertiesButton={true}
+            hideActions={true}
             filterField='GtShowFieldPortfolio' />
         </Modal>
       );
