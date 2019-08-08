@@ -5,6 +5,7 @@ define([], function () {
       "MissingPropertiesMessage": "Viktig informasjon om prosjektet er ikke satt. Du bør sette disse egenskapene snarest.",
       "NoPropertiesMessage": "Finner ingen informasjon om prosjektet.",
       "EditPropertiesText": "Rediger egenskaper",
-      "EditSiteInformationText": "Rediger områdeinformasjon"
+      "EditSiteInformationText": "Rediger områdeinformasjon",
+      "ViewVersionHistoryText": "Vis versjonshistorikk"
     }
   });

@@ -5,6 +5,7 @@ declare interface IProjectInformationWebPartStrings {
   NoPropertiesMessage: string;
   EditPropertiesText: string;
   EditSiteInformationText: string;
+  ViewVersionHistoryText: string;
 }
 
 declare module 'ProjectInformationWebPartStrings' {

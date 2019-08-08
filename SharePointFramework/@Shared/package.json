@@ -20,7 +20,8 @@
         "es6-promise": "^4.2.8",
         "gulp": "^4.0.2",
         "object-get": "^2.1.0",
-        "scriptjs": "^2.5.9"
+        "scriptjs": "^2.5.9",
+        "sp-entityportal-service": "^0.6.9"
     },
     "devDependencies": {
         "@types/scriptjs": "^0.0.2",
