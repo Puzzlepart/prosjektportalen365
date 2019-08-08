@@ -9,7 +9,7 @@ import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as ProjectStatusWebPartStrings from 'ProjectStatusWebPartStrings';
 import * as React from 'react';
 import * as format from 'string-format';
-import ProjectStatusReport, { IProjectStatusReportItem } from '../models/ProjectStatusReport';
+import ProjectStatusReport from '../models/ProjectStatusReport';
 import SectionModel, { SectionType } from '../models/SectionModel';
 import { IStatusSectionBaseProps } from './@StatusSectionBase/IStatusSectionBaseProps';
 import { IProjectStatusData } from "./IProjectStatusData";
@@ -92,6 +92,7 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
         itemType: ContextualMenuItemType.Normal,
         iconProps: { iconName: 'NewFolder' },
         onClick: this.newStatusReport.bind(this),
+        disabled: data.reports.filter(r => r.monthIndex === new Date().getMonth() - 1).length > 0,
       },
       {
         key: 'EditReport',
@@ -122,21 +123,19 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
    * @param {SectionModel} model Section model
    */
   private getSectionBaseProps(model: SectionModel): IStatusSectionBaseProps {
-    const { pageContext, hubSite } = this.props;
-    const { selectedReport, data } = this.state;
     const baseProps: IStatusSectionBaseProps = {
       headerProps: {
         label: model.name,
-        value: selectedReport.item[model.fieldName],
-        comment: selectedReport.item[model.commentFieldName],
+        value: this.state.selectedReport.item[model.fieldName],
+        comment: this.state.selectedReport.item[model.commentFieldName],
         iconName: model.iconName,
         iconSize: 50
       },
-      report: selectedReport,
+      report: this.state.selectedReport,
       model,
-      pageContext,
-      hubSite,
-      data,
+      pageContext: this.props.pageContext,
+      hubSite: this.props.hubSite,
+      data: this.state.data,
     };
     return baseProps;
   }
@@ -208,15 +207,16 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
    */
   private async associateStatusItem(): Promise<void> {
     try {
-      const dateTime = dateAdd(new Date(), 'minute', -1).toISOString();
-      const filter = `Author/EMail eq '${this.props.pageContext.user.email}' and Created ge datetime'${dateTime}' and GtSiteId eq '${this.props.pageContext.site.id.toString()}'`;
+      const filter = `Author/EMail eq '${this.props.pageContext.user.email}' and GtSiteId eq '00000000-0000-0000-0000-000000000000'`;
       Logger.log({ message: '(ProjectStatus) associateStatusItem: Attempting to find recently added report', data: { filter }, level: LogLevel.Info });
-      let [item] = await this._reportList.items.filter(filter).select('Id', 'GtYear', 'GtMonthChoice', 'Created').orderBy('Id', false).top(1).get<IProjectStatusReportItem[]>();
-      console.log(item);
+      let [item] = await this._reportList.items.filter(filter).select('Id', 'GtYear', 'GtMonthChoice', 'Created').orderBy('Id', false).top(1).get<any[]>();
       if (item) {
         const report = new ProjectStatusReport(item);
         Logger.log({ message: '(ProjectStatus) associateStatusItem: Setting title for item', data: { filter }, level: LogLevel.Info });
-        await this._reportList.items.getById(report.id).update({ Title: `${this.props.pageContext.web.title} (${report.toString()})` });
+        await this._reportList.items.getById(report.id).update({
+          Title: `${this.props.pageContext.web.title} (${report.toString()})`,
+          GtSiteId: this.props.pageContext.site.id.toString(),
+        });
       }
     } catch (error) { }
     document.location.hash = '#';
@@ -225,20 +225,21 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
   /**
    * Create new status report and send the user to the edit form
    * 
+   * @param {React.MouseEvent} _ev Event
+   * @param {IContextualMenuItem} _item Item
    * @param {number} year Year
    * @param {number} month Month
    */
-  private async newStatusReport(year: number = new Date().getFullYear(), month: number = new Date().getMonth() - 1) {
+  private async newStatusReport(_ev?: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement>, _item?: IContextualMenuItem, year: number = new Date().getFullYear(), month: number = new Date().getMonth() - 1): Promise<void> {
     const [previousReport] = this.state.data.reports;
-    let properties = previousReport ? previousReport.getStatusValues() : { GtSiteId: this.props.pageContext.site.id.toString() };
+    let properties = previousReport ? previousReport.getStatusValues() : {};
     properties.Title = format(ProjectStatusWebPartStrings.NewStatusReportTitle, this.props.pageContext.web.title);
     properties.GtYear = `${month >= 0 ? year : (year - 1)}`;
-    properties.GtMonthChoice = moment.months()[month >= 0 ? month : 11];
-    console.log(properties, year, month);
+    const monthName = moment.months()[month >= 0 ? month : 11];
+    properties.GtMonthChoice = monthName[0].toUpperCase() + monthName.substring(1);
     const { data } = await this._reportList.items.add(properties);
     const source = encodeURIComponent(`${window.location.href.split('#')[0]}#NewStatus`);
-    const newStatusReportUrl = `${window.location.protocol}//${window.location.hostname}${this.state.data.defaultEditFormUrl}?ID=${data.Id}&Source=${source}`;
-    document.location.href = newStatusReportUrl;
+    document.location.href = `${window.location.protocol}//${window.location.hostname}${this.state.data.defaultEditFormUrl}?ID=${data.Id}&Source=${source}`;
   }
 
   /**
@@ -253,7 +254,7 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
         this.props.spEntityPortalService.getEntityItemFieldValues(site.id.toString()),
         this.props.spEntityPortalService.getEntityFields(),
         this._reportList.select('DefaultEditFormUrl').expand('DefaultEditFormUrl').get<{ DefaultEditFormUrl: string }>(),
-        this._reportList.items.filter(`GtSiteId eq '${site.id.toString()}'`).orderBy('Id', false).get<IProjectStatusReportItem[]>(),
+        this._reportList.items.filter(`GtSiteId eq '${site.id.toString()}'`).orderBy('Id', false).get<any[]>(),
         this._sectionsList.items.get(),
       ]);
       const reports = reportItems.map(item => new ProjectStatusReport(item, DefaultEditFormUrl));

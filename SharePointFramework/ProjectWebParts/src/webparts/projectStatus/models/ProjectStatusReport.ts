@@ -1,16 +1,8 @@
 import * as moment from 'moment';
-import * as _ from 'underscore';
-
-export interface IProjectStatusReportItem {
-    Id: number;
-    GtYear: string;
-    GtMonthChoice: string;
-    [key: string]: any;
-}
 
 export default class ProjectStatusReport {
     public id: number;
-    public item: IProjectStatusReportItem;
+    public item: { [key: string]: any };
     public month: string;
     public year: number;
     public date: moment.Moment;
@@ -19,10 +11,10 @@ export default class ProjectStatusReport {
     /**
      * Constructor
      * 
-     * @param {IProjectStatusReportItem} item Item
+     * @param {Object} item Item
      * @param {string} editFormUrl Edit form url
      */
-    constructor(item: IProjectStatusReportItem, defaultEditFormUrl?: string) {
+    constructor(item: { [key: string]: any }, defaultEditFormUrl?: string) {
         this.item = item;
         this.id = this.item.Id;
         this.month = item.GtMonthChoice;
@@ -35,13 +27,18 @@ export default class ProjectStatusReport {
      * Get status values from item
      */
     public getStatusValues(): { [key: string]: string } {
-        return _.omit(this.item, ['ID', 'Id', 'Title', 'GtSiteId', 'GtYear', 'GtMonthChoice']);
+        return Object.keys(this.item)
+            .filter(fieldName => fieldName.indexOf('Status') !== -1 && fieldName.indexOf('Gt') === 0)
+            .reduce((obj, fieldName) => {
+                obj[fieldName] = this.item[fieldName];
+                return obj;
+            }, {});
     }
 
     /**
      * Month index
      */
-    private get monthIndex() {
+    public get monthIndex() {
         return moment.months().indexOf(this.month.toLowerCase());
     }
 
