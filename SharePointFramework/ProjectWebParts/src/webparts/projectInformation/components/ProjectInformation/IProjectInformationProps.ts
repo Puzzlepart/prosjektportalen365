@@ -1,4 +1,4 @@
-import { IProjectInformationWebPartProps } from '../IProjectInformationWebPartProps';
+import { IProjectInformationWebPartProps } from '../../IProjectInformationWebPartProps';
 
 export interface IProjectInformationProps extends IProjectInformationWebPartProps {
   hubSiteUrl: string;

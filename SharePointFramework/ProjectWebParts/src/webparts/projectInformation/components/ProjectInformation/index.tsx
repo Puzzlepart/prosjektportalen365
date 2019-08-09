@@ -1,12 +1,12 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
 import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
-import { HubConfigurationService, EntityDataService } from '@Shared/services';
+import { EntityDataService, HubConfigurationService } from '@Shared/services';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as ProjectInformationWebPartStrings from 'ProjectInformationWebPartStrings';
 import * as React from 'react';
-import ProjectPropertyModel from '../models/ProjectPropertyModel';
+import ProjectPropertyModel from '../../models/ProjectPropertyModel';
 import { IProjectInformationData } from './IProjectInformationData';
 import { IProjectInformationProps } from './IProjectInformationProps';
 import { IProjectInformationState } from './IProjectInformationState';
@@ -154,3 +154,4 @@ export default class ProjectInformation extends React.Component<IProjectInformat
 }
 
 export { IProjectInformationProps };
+
