@@ -14,6 +14,7 @@ define([], function() {
     "PortfolioViewsListName": "Porteføljevisninger",
     "ProjectColumnsListName": "Prosjektkolonner",
     "ProjectColumnConfigListName": "Prosjektkolonnekonfigurasjon",
-    "ExcelExportFileNamePrefix": "Porteføljeoversikt"
+    "ExcelExportFileNamePrefix": "Porteføljeoversikt",
+    "NewViewText": "Opprett ny visning"
   }
 });

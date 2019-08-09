@@ -14,6 +14,7 @@ declare interface IPortfolioOverviewWebPartStrings {
   ProjectColumnsListName: string;
   ProjectColumnConfigListName: string;
   ExcelExportFileNamePrefix: string;
+  NewViewText: string;
 }
 
 declare module 'PortfolioOverviewWebPartStrings' {

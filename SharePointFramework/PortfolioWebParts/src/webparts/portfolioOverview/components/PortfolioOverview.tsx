@@ -8,7 +8,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
-import * as strings from 'PortfolioOverviewWebPartStrings';
+import * as PortfolioOverviewWebPartStrings from 'PortfolioOverviewWebPartStrings';
 import * as React from 'react';
 import { formatDate, tryParseCurrency } from '@Shared/helpers';
 import { parseUrlHash, setUrlHash } from '@Shared/util';
@@ -56,7 +56,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
       return (
         <div className={styles.portfolioOverview}>
           <div className={styles.container}>
-            <Spinner label={strings.LoadingText} size={SpinnerSize.large} />
+            <Spinner label={PortfolioOverviewWebPartStrings.LoadingText} size={SpinnerSize.large} />
           </div>
         </div>
       );
@@ -103,7 +103,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         }));
       items.push({
         key: 'GroupBy',
-        name: this.state.groupBy ? this.state.groupBy.name : strings.NoGrouping,
+        name: this.state.groupBy ? this.state.groupBy.name : PortfolioOverviewWebPartStrings.NoGrouping,
         iconProps: { iconName: 'GroupedList' },
         itemType: ContextualMenuItemType.Header,
         onClick: e => e.preventDefault(),
@@ -111,7 +111,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           items: [
             {
               key: 'GroupBy_NoGrouping',
-              name: strings.NoGrouping,
+              name: PortfolioOverviewWebPartStrings.NoGrouping,
               onClick: e => {
                 e.preventDefault();
                 this.setState({ groupBy: null });
@@ -124,12 +124,19 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     }
 
     if (this.props.viewSelectorEnabled) {
+      if (this.props.pageContext.legacyPageContext.isSiteAdmin) {
+        farItems.push({
+          key: 'NewView',
+          name: PortfolioOverviewWebPartStrings.NewViewText,
+          iconProps: { iconName: 'CirclePlus' },
+          href: `${this.state.configuration.viewNewFormUrl}?Source=${encodeURIComponent(document.location.href)}`,
+        });
+      }
       farItems.push({
         key: 'View',
         name: this.state.currentView.title,
         iconProps: { iconName: 'List' },
         itemType: ContextualMenuItemType.Header,
-        onClick: e => e.preventDefault(),
         subMenuProps: {
           items: this.state.configuration.views.map(v => ({
             key: `View_${v.id}`,
@@ -166,7 +173,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
       <div className={styles.searchBox}>
         <SearchBox
           onChange={newValue => this.setState({ searchTerm: newValue.toLowerCase() })}
-          placeholder={strings.SearchBoxPlaceHolder} />
+          placeholder={PortfolioOverviewWebPartStrings.SearchBoxPlaceHolder} />
       </div>
     );
   }
@@ -207,8 +214,8 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           columns={data.columns}
           groups={data.groups}
           selectionMode={this.props.selectionMode}
-          onRenderItemColumn={this.onRenderItemColumn}
-          onColumnHeaderClick={this.onColumnSort} />
+          onRenderItemColumn={this.onRenderItemColumn.bind(this)}
+          onColumnHeaderClick={this.onColumnSort.bind(this)} />
       </div>
     );
   }
@@ -225,16 +232,16 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     return (
       <FilterPanel
         isOpen={this.state.showFilterPanel}
-        onDismiss={this.onDismissFilterPanel}
+        onDismiss={this.onDismissFilterPanel.bind(this)}
         filters={[PortfolioOverviewFieldSelector, ...this.state.filters]}
-        onFilterChange={this.onFilterChange} />
+        onFilterChange={this.onFilterChange.bind(this)} />
     );
   }
 
   /**
    * On dismiss <FilterPabel />
    */
-  private onDismissFilterPanel = () => {
+  private onDismissFilterPanel() {
     this.setState({ showFilterPanel: false });
   }
 
@@ -263,7 +270,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
    * @param {IColumn} column Column
    * @param {IFilterItemProps[]} selectedItems Selected items
    */
-  private onFilterChange = (column: IColumn, selectedItems: IFilterItemProps[]) => {
+  private onFilterChange(column: IColumn, selectedItems: IFilterItemProps[]) {
     const { activeFilters } = ({ ...this.state } as IPortfolioOverviewState);
     if (selectedItems.length > 0) {
       activeFilters[column.fieldName] = selectedItems.map(i => i.value);
@@ -279,7 +286,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
    * @param {React.MouseEvent<HTMLElement, MouseEvent>} _ev Event
    * @param {PortfolioOverviewColumn} column The column config
    */
-  private onColumnSort = (_ev: React.MouseEvent<HTMLElement, MouseEvent>, column: PortfolioOverviewColumn): void => {
+  private onColumnSort(_ev: React.MouseEvent<HTMLElement, MouseEvent>, column: PortfolioOverviewColumn): void {
     let { items, columns } = ({ ...this.state } as IPortfolioOverviewState);
 
     let isSortedDescending = column.isSortedDescending;
@@ -307,7 +314,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   * @param {number} _index Index
   * @param {PortfolioOverviewColumn} column Column
   */
-  private onRenderItemColumn = (item: any, _index: number, column: PortfolioOverviewColumn) => {
+  private onRenderItemColumn(item: any, _index: number, column: PortfolioOverviewColumn) {
     const colValue = item[column.fieldName];
     switch (column.fieldName) {
       case 'Title': {
@@ -364,12 +371,12 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         itemsSort.opts.reverse = !sortBy.isSortedDescending;
       }
       const groupItems: any[] = arraySort(items, itemsSort.props, itemsSort.opts);
-      const groupByValues: string[] = groupItems.map(g => g[groupBy.fieldName] ? g[groupBy.fieldName] : strings.NotSet);
+      const groupByValues: string[] = groupItems.map(g => g[groupBy.fieldName] ? g[groupBy.fieldName] : PortfolioOverviewWebPartStrings.NotSet);
       const uniqueGroupValues: string[] = arrayUnique([].concat(groupByValues));
       groups = uniqueGroupValues
         .sort((a, b) => a > b ? 1 : -1)
         .map((name, idx) => ({
-          key: `Group_${idx}`,
+          key: `${idx}`,
           name: `${groupBy.name}: ${name}`,
           startIndex: groupByValues.indexOf(name, 0),
           count: [].concat(groupByValues).filter(n => n === name).length,
@@ -392,16 +399,18 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
       activeFilters,
       configuration,
     } = ({ ...this.state } as IPortfolioOverviewState);
-    const activeFiltersKeys = Object.keys(activeFilters);
+
     let groups: IGroup[] = this.getGroups(items, groupBy, sortBy);
+
     items = [].concat(items).filter(item => {
       const fieldNames = columns.map(col => col.fieldName);
       return fieldNames.filter(fieldName => {
         return item[fieldName] && item[fieldName].toLowerCase().indexOf(searchTerm) !== -1;
       }).length > 0;
     });
-    if (activeFiltersKeys.length > 0) {
-      items = activeFiltersKeys
+
+    if (Object.keys(activeFilters).length > 0) {
+      items = Object.keys(activeFilters)
         .filter(key => key !== PortfolioOverviewFieldSelector.column.key)
         .reduce((_items, key) => _items.filter(i => activeFilters[key].indexOf(objectGet(i, key)) !== -1), items);
       const selectedFilters = activeFilters[PortfolioOverviewFieldSelector.column.key];
@@ -409,6 +418,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         columns = configuration.columns.filter(_column => selectedFilters.indexOf(_column.fieldName) !== -1);
       }
     }
+
     return { items, columns, groups };
   }
 
@@ -426,7 +436,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         [currentView] = configuration.views.filter(qc => qc.id === parseInt(viewIdUrlParam, 10));
         if (!currentView) {
           throw {
-            message: strings.ViewNotFoundMessage,
+            message: PortfolioOverviewWebPartStrings.ViewNotFoundMessage,
             type: MessageBarType.error
           };
         }
@@ -434,7 +444,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         [currentView] = configuration.views.filter(qc => qc.id === parseInt(hashState.viewId, 10));
         if (!currentView) {
           throw {
-            message: strings.ViewNotFoundMessage,
+            message: PortfolioOverviewWebPartStrings.ViewNotFoundMessage,
             type: MessageBarType.error
           };
         }
@@ -442,7 +452,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         [currentView] = configuration.views.filter(qc => qc.isDefaultView);
         if (!currentView) {
           throw {
-            message: strings.NoDefaultViewMessage,
+            message: PortfolioOverviewWebPartStrings.NoDefaultViewMessage,
             type: MessageBarType.error
           };
         }
