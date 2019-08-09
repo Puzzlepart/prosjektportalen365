@@ -21,7 +21,7 @@ import { IPortfolioOverviewState } from './IPortfolioOverviewState';
 import styles from './PortfolioOverview.module.scss';
 import PortfolioOverviewFieldSelector from './PortfolioOverviewFieldSelector';
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
-
+import { ProjectInformationModal } from './ProjectInformationModal';
 
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = PortfolioOverviewDefaultProps;
@@ -78,6 +78,11 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           {this.renderSearchBox()}
           {this.renderList()}
           {this.renderFilterPanel()}
+          {/* <ProjectInformationModal
+            title='hello'
+            siteId=''
+            entity=''
+            siteAbsoluteUrl='' /> */}
         </div>
       </div>
     );
@@ -308,6 +313,15 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   }
 
   /**
+   * On open info modal
+   * 
+   * @param item 
+   */
+  private onOpenInfoModal(item: any) {
+    console.log(item);
+  }
+
+  /**
    * On render item activeFilters
   *
   * @param {any} item Item
@@ -318,7 +332,12 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     const colValue = item[column.fieldName];
     switch (column.fieldName) {
       case 'Title': {
-        return <a href={item.Path} target='_blank'>{colValue}</a>;
+        return (
+          <span>
+            <a href={item.Path} target='_blank'>{colValue}</a>
+            <a href='#' style={{ margin: '0 0 0 8px' }} onClick={_evt => this.onOpenInfoModal(item)}><Icon iconName='OpenInNewWindow' /></a>
+          </span >
+        );
       }
     }
     switch (column.dataType) {

@@ -22,9 +22,6 @@ export interface IFetchDataResponse {
     refiners: IRefinementResult[];
 }
 
-/**
- * Default Search Settings used for @pnp/sp
- */
 export const DEFAULT_SEARCH_SETTINGS = {
     Querytext: '*',
     RowLimit: 500,
@@ -90,7 +87,7 @@ export async function fetchData(view: PortfolioOverviewView, configuration: IPor
         let items = validSites.map(({ SiteId, Title, Path }) => {
             const [project] = projects.filter(res => res[siteIdProperty] === SiteId);
             const [statusReport] = statusReports.filter(res => res[siteIdProperty] === SiteId);
-            return { ...statusReport, ...project, Title, Path };
+            return { ...statusReport, ...project, Title, Path, SiteId };
         });
         return { items, refiners };
     } catch (err) {
