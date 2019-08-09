@@ -15,13 +15,13 @@ import { parseUrlHash, setUrlHash } from '@Shared/util';
 import FilterPanel, { IFilterItemProps, IFilterProps } from '../../../components/FilterPanel';
 import * as PortfolioOverviewConfig from '../config';
 import { IPortfolioOverviewConfiguration, PortfolioOverviewColumn, PortfolioOverviewView } from '../config';
-import { fetchData, IRefinementResult } from '../data';
+import { fetchData, IRefinementResult, IFetchDataItem } from '../data';
 import { IPortfolioOverviewProps, PortfolioOverviewDefaultProps } from './IPortfolioOverviewProps';
 import { IPortfolioOverviewState } from './IPortfolioOverviewState';
 import styles from './PortfolioOverview.module.scss';
 import PortfolioOverviewFieldSelector from './PortfolioOverviewFieldSelector';
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
-import { ProjectInformationModal } from './ProjectInformationModal';
+import { ProjectInformationModal } from 'ProjectWebParts/webparts/projectInformation/components';
 
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = PortfolioOverviewDefaultProps;
@@ -78,11 +78,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           {this.renderSearchBox()}
           {this.renderList()}
           {this.renderFilterPanel()}
-          {/* <ProjectInformationModal
-            title='hello'
-            siteId=''
-            entity=''
-            siteAbsoluteUrl='' /> */}
+          {this.renderProjectInfoModal()}
         </div>
       </div>
     );
@@ -244,6 +240,23 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   }
 
   /**
+   * Render <ProjectInformationModal />
+   */
+  private renderProjectInfoModal() {
+    if(!this.state.showProjectInfo) return null;
+    return (
+        <ProjectInformationModal
+          modalProps={{ isOpen: true, onDismiss: this.onDismissProjectInfoModal.bind(this) }}
+          title={this.state.showProjectInfo.Title}
+          siteId={this.state.showProjectInfo.SiteId}
+          entity={this.props.entity}
+          webUrl={this.props.pageContext.site.absoluteUrl}
+          hubSiteUrl={this.props.pageContext.site.absoluteUrl}
+          filterField={this.props.projectInfoFilterField} /> 
+    );
+  }
+
+  /**
    * On dismiss <FilterPabel />
    */
   private onDismissFilterPanel() {
@@ -313,29 +326,36 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   }
 
   /**
-   * On open info modal
+   * On open <ProjectInformationModal />
    * 
-   * @param item 
+   * @param {IFetchDataItem} item 
    */
-  private onOpenInfoModal(item: any) {
-    console.log(item);
+  private onOpenProjectInfoModal(item: IFetchDataItem) {
+    this.setState({ showProjectInfo: item });
+  }
+
+  /**
+   * On dismiss <ProjectInformationModal />
+   */
+  private onDismissProjectInfoModal() {
+    this.setState({ showProjectInfo: null });
   }
 
   /**
    * On render item activeFilters
   *
-  * @param {any} item Item
+  * @param {IFetchDataItem} item Item
   * @param {number} _index Index
   * @param {PortfolioOverviewColumn} column Column
   */
-  private onRenderItemColumn(item: any, _index: number, column: PortfolioOverviewColumn) {
+  private onRenderItemColumn(item: IFetchDataItem, _index: number, column: PortfolioOverviewColumn) {
     const colValue = item[column.fieldName];
     switch (column.fieldName) {
       case 'Title': {
         return (
           <span>
             <a href={item.Path} target='_blank'>{colValue}</a>
-            <a href='#' style={{ margin: '0 0 0 8px' }} onClick={_evt => this.onOpenInfoModal(item)}><Icon iconName='OpenInNewWindow' /></a>
+            <a href='#' style={{ marginLeft: 8 }} onClick={_evt => this.onOpenProjectInfoModal(item)}><Icon iconName='OpenInNewWindow' /></a>
           </span >
         );
       }

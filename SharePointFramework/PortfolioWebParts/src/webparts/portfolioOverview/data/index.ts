@@ -17,8 +17,15 @@ export interface IRefinementResult {
     Entries: IRefinementResultEntry[];
 }
 
+export interface IFetchDataItem {
+    Title: string;
+    Path: string;
+    SiteId: string;
+    [key: string]: string;
+}
+
 export interface IFetchDataResponse {
-    items: any[];
+    items: IFetchDataItem[];
     refiners: IRefinementResult[];
 }
 
