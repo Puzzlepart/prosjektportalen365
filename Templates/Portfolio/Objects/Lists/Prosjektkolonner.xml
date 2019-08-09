@@ -35,7 +35,7 @@
             <pnp:DataValue FieldName="GtInternalName">Title</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">Title</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
-            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">250</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>

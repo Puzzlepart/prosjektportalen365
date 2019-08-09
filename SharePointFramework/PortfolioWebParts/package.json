@@ -1,6 +1,6 @@
 {
     "name": "prosjektportalen-spfx-portfoliowebparts",
-    "version": "0.9.0",
+    "version": "0.9.3",
     "private": true,
     "engines": {
         "node": ">=0.10.0"
@@ -10,11 +10,11 @@
         "serve-nobrowser": "gulp serve --locale=nb-no --nobrowser",
         "package": "gulp clean --ship && gulp default --ship && gulp package-solution --ship",
         "deploy": "gulp uploadAppPkg && gulp deploySppkg",
-        "package-deploy": "npm run package &&  npm run deploy",
-        "package-deploy-patch": "npm version patch &&  npm run deploy",
-        "package-deploy-minor": "npm version minor &&  npm run deploy",
-        "package-deploy-major": "npm version major &&  npm run deploy",
-        "postversion": "gulp version-sync",
+        "package-deploy": "npm run package && npm run deploy",
+        "package-deploy-patch": "npm version patch && npm run deploy",
+        "package-deploy-minor": "npm version minor && npm run deploy",
+        "package-deploy-major": "npm version major && npm run deploy",
+        "postversion": "gulp version-sync && npm run package",
         "patch-version": "npm version patch",
         "minor-version": "npm version minor",
         "major-version": "npm version major"
@@ -45,7 +45,7 @@
         "msgraph-helper": "^0.7.3",
         "object-assign": "^4.1.1",
         "object-get": "^2.1.0",
-        "office-ui-fabric-react": "^6.143.0",
+        "office-ui-fabric-react": "^6.199.1",
         "react": "16.7.0",
         "react-calendar-timeline": "^0.23.0",
         "react-dom": "16.7.0",

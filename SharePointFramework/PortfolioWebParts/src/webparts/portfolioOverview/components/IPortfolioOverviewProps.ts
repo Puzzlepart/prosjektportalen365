@@ -8,22 +8,20 @@ import * as PortfolioOverviewWebPartStrings from 'PortfolioOverviewWebPartString
 
 export interface IPortfolioOverviewProps extends IPortfolioOverviewWebPartProps {
     pageContext: PageContext;
-    title: string;
-    showGroupBy?: boolean;
-    modalHeaderClassName?: string;
+    title?: string;
     projectInfoFilterField?: string;
     constrainMode?: ConstrainMode;
     layoutMode?: DetailsListLayoutMode;
     selectionMode?: SelectionMode;
     excelExportConfig?: IExcelExportConfig;
     defaultView?: PortfolioOverviewView;
+    showGroupBy?: boolean;
     viewSelectorEnabled?: boolean;
 }
 
 export const PortfolioOverviewDefaultProps: Partial<IPortfolioOverviewProps> = {
-    showGroupBy: true,
-    modalHeaderClassName: 'ms-font-xxl',
-    projectInfoFilterField: 'GtPcPortfolioPage',
+    title: PortfolioOverviewWebPartStrings.Title,
+    projectInfoFilterField: 'GtShowFieldPortfolio',
     constrainMode: ConstrainMode.horizontalConstrained,
     layoutMode: DetailsListLayoutMode.fixedColumns,
     selectionMode: SelectionMode.none,
@@ -31,5 +29,6 @@ export const PortfolioOverviewDefaultProps: Partial<IPortfolioOverviewProps> = {
         fileNamePrefix: PortfolioOverviewWebPartStrings.ExcelExportFileNamePrefix,
         sheetName: 'Sheet1',
     },
+    showGroupBy: true,
     viewSelectorEnabled: true,
 };

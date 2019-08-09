@@ -7,12 +7,16 @@ import { setupWebPart } from '../@setup';
 import { IPortfolioOverviewWebPartProps } from './IPortfolioOverviewWebPartProps';
 import { Logger, LogLevel } from '@pnp/logging';
 
+function testdecorator(ctor: Function) {
+  console.log(ctor);
+}
+
+@testdecorator
 export default class PortfolioOverviewWebPart extends BaseClientSideWebPart<IPortfolioOverviewWebPartProps> {
   public render(): void {
     Logger.log({ message: '(PortfolioOverviewWebPart) render: Rendering <PortfolioOverview />', level: LogLevel.Info });
     const element: React.ReactElement<IPortfolioOverviewProps> = React.createElement(PortfolioOverview, {
       ...this.properties,
-      title: 'Porteføljeoversikt',
       pageContext: this.context.pageContext,
     });
     ReactDom.render(element, this.domElement);

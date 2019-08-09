@@ -13,7 +13,7 @@ import ProjectCard from './ProjectCard/ProjectCard';
 import { sp, Web } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
 import { sortAlphabetically, getObjectValue } from '@Shared/helpers';
-import ProjectInformation from '../../../../../ProjectWebParts/lib/webparts/projectInformation/components/ProjectInformation';
+import { ProjectInformationModal } from 'ProjectWebParts/webparts/projectInformation/components';
 import MSGraph from 'msgraph-helper';
 import { ProjectListModel, ISPProjectItem, ISPUser, IGraphGroup } from '../models';
 
@@ -168,24 +168,20 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   }
 
   /**
-  * Render <ProjectInformation /> in a <Modal />
+  * Render <ProjectInformationModal />
   */
   private renderProjectInformation() {
-    if (this.state.selectedProject) {
+    if (this.state.showProjectInfo) {
       return (
-        <Modal
-          isOpen={true}
-          containerClassName={styles.projectInfoModal}
-          onDismiss={() => this.setState({ selectedProject: null })}>
-          <ProjectInformation
-            title={this.state.selectedProject.title}
-            entity={{ webUrl: this.props.siteAbsoluteUrl, ...this.props.entity }}
-            webUrl={this.props.siteAbsoluteUrl}
-            hubSiteUrl={this.props.siteAbsoluteUrl}
-            siteId={this.state.selectedProject.siteId}
-            hideActions={true}
-            filterField='GtShowFieldPortfolio' />
-        </Modal>
+        <ProjectInformationModal
+          modalProps={{ isOpen: true, onDismiss: () => this.setState({ showProjectInfo: null }) }}
+          title={this.state.showProjectInfo.title}
+          entity={{ webUrl: this.props.siteAbsoluteUrl, ...this.props.entity }}
+          webUrl={this.props.siteAbsoluteUrl}
+          hubSiteUrl={this.props.siteAbsoluteUrl}
+          siteId={this.state.showProjectInfo.siteId}
+          hideActions={true}
+          filterField='GtShowFieldPortfolio' />
       );
     }
     return null;
@@ -197,12 +193,12 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   * @param {React.MouseEvent} event Event
   * @param {ProjectListModel} project Project
   */
-  private onCardAction = (event: React.MouseEvent<any>, project: ProjectListModel) => {
+  private onCardAction(event: React.MouseEvent<any>, project: ProjectListModel) {
     event.preventDefault();
     event.stopPropagation();
     switch (event.currentTarget.id) {
       case 'ON_SELECT_PROJECT': {
-        this.setState({ selectedProject: project });
+        this.setState({ showProjectInfo: project });
       }
         break;
     }

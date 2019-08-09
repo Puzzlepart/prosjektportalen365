@@ -1,12 +1,8 @@
+import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
 
 export interface IProjectListWebPartProps {
     phaseTermSetId: string;
-    entity: {
-        listName: string;
-        contentTypeId: string;
-        fieldsGroupName: string;
-        identityFieldName: string;
-    };
+    entity: ISpEntityPortalServiceParams;
     sortBy?: string;
     showAsTiles?: boolean;
     showProjectLogo?: boolean;

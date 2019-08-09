@@ -1,5 +1,6 @@
 define([], function() {
   return {
+    "Title": "Porteføljeoversikt",
     "LoadingText": "Laster prosjektportefølje...",
     "SearchBoxPlaceHolder": "Søk i alle prosjekter...",
     "NoGrouping": "Ingen gruppering",

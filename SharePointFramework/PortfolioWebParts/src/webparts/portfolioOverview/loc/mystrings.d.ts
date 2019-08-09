@@ -1,4 +1,5 @@
 declare interface IPortfolioOverviewWebPartStrings {
+  Title: string;
   LoadingText: string;
   SearchBoxPlaceHolder: string;
   NoGrouping: string;
