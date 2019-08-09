@@ -152,3 +152,5 @@ export default class ProjectInformation extends React.Component<IProjectInformat
     }
   }
 }
+
+export { IProjectInformationProps };
