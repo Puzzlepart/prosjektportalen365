@@ -95,7 +95,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
       const groupByItems = this.state.configuration.columns
         .filter(col => col.isGroupable)
         .map((col, idx) => ({
-          key: `GroupByCol_${idx.toString()}`,
+          key: `${idx}`,
           name: col.name,
           onClick: (event: any) => {
             event.preventDefault();
@@ -140,7 +140,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         itemType: ContextualMenuItemType.Header,
         subMenuProps: {
           items: this.state.configuration.views.map(v => ({
-            key: `View_${v.id}`,
+            key: `${v.id}`,
             name: v.title,
             iconProps: { iconName: v.iconName },
             onClick: (event: any) => {
@@ -243,16 +243,16 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
    * Render <ProjectInformationModal />
    */
   private renderProjectInfoModal() {
-    if(!this.state.showProjectInfo) return null;
+    if (!this.state.showProjectInfo) return null;
     return (
-        <ProjectInformationModal
-          modalProps={{ isOpen: true, onDismiss: this.onDismissProjectInfoModal.bind(this) }}
-          title={this.state.showProjectInfo.Title}
-          siteId={this.state.showProjectInfo.SiteId}
-          entity={this.props.entity}
-          webUrl={this.props.pageContext.site.absoluteUrl}
-          hubSiteUrl={this.props.pageContext.site.absoluteUrl}
-          filterField={this.props.projectInfoFilterField} /> 
+      <ProjectInformationModal
+        modalProps={{ isOpen: true, onDismiss: this.onDismissProjectInfoModal.bind(this) }}
+        title={this.state.showProjectInfo.Title}
+        siteId={this.state.showProjectInfo.SiteId}
+        entity={this.props.entity}
+        webUrl={this.props.pageContext.site.absoluteUrl}
+        hubSiteUrl={this.props.pageContext.site.absoluteUrl}
+        filterField={this.props.projectInfoFilterField} />
     );
   }
 
