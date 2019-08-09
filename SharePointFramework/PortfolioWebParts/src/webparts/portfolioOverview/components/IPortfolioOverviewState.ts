@@ -1,18 +1,15 @@
-import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { PortfolioOverviewView, PortfolioOverviewColumn, IPortfolioOverviewConfiguration } from '../config';
 import { IFilterProps } from '../../../components/FilterPanel';
+import { IFetchDataItem } from '../data';
+import { IPortfolioOverviewErrorMessage } from './IPortfolioOverviewErrorMessage';
 
-export interface IPortfolioOverviewErrorMessage {
-    message: string;
-    type: MessageBarType;
-}
 
 export interface IPortfolioOverviewState {
     isLoading?: boolean;
     isChangingView?: PortfolioOverviewView;
     configuration?: IPortfolioOverviewConfiguration;
-    items?: any[];
+    items?: IFetchDataItem[];
     columns?: IColumn[];
     searchTerm?: string;
     filters?: IFilterProps[];
@@ -22,7 +19,7 @@ export interface IPortfolioOverviewState {
     showFilterPanel?: boolean;
     groupBy?: PortfolioOverviewColumn;
     sortBy?: PortfolioOverviewColumn;
-    showProjectInfo?: any;
+    showProjectInfo?: IFetchDataItem;
     excelExportStatus?: any;
     canUserManageWeb?: boolean;
 }
