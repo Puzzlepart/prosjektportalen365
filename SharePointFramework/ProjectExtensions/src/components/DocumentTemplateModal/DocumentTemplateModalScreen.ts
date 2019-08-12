@@ -1,4 +1,4 @@
-export enum TemplateLibrarySelectModalScreen {
+export enum DocumentTemplateModalScreen {
     Select,
     EditCopy,
     CopyProgress,

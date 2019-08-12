@@ -1,28 +1,32 @@
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import * as React from 'react';
 import * as TemplateSelectorCommandSetStrings from 'TemplateSelectorCommandSetStrings';
-import { TemplateFile } from '../../../models';
-import { ITemplateLibrarySelectModalScreenEditCopyProps } from './ITemplateLibrarySelectModalScreenEditCopyProps';
-import { ITemplateLibrarySelectModalScreenEditCopyState } from './ITemplateLibrarySelectModalScreenEditCopyState';
-import styles from './TemplateLibrarySelectModalScreenEditCopy.module.scss';
+import { IDocumentTemplateModalScreenEditCopyProps } from './IDocumentTemplateModalScreenEditCopyProps';
+import { IDocumentTemplateModalScreenEditCopyState } from './IDocumentTemplateModalScreenEditCopyState';
+import styles from './DocumentTemplateModalScreenEditCopy.module.scss';
 
-export default class TemplateLibrarySelectModalScreenEditCopy extends React.Component<ITemplateLibrarySelectModalScreenEditCopyProps, ITemplateLibrarySelectModalScreenEditCopyState> {
+export default class DocumentTemplateModalScreenEditCopy extends React.Component<IDocumentTemplateModalScreenEditCopyProps, IDocumentTemplateModalScreenEditCopyState> {
     /**
      * Constructor
      * 
-     * @param {ITemplateLibrarySelectModalScreenEditCopyProps} props Props
+     * @param {IDocumentTemplateModalScreenEditCopyProps} props Props
      */
-    constructor(props: ITemplateLibrarySelectModalScreenEditCopyProps) {
+    constructor(props: IDocumentTemplateModalScreenEditCopyProps) {
         super(props);
-        this.state = { templates: [...props.selectedTemplates], expandState: {} };
+        this.state = {
+            templates: [...props.selectedTemplates],
+            selectedLibrary: this.props.libraries[0],
+            expandState: {},
+        };
     }
 
-    public render(): React.ReactElement<ITemplateLibrarySelectModalScreenEditCopyProps> {
+    public render(): React.ReactElement<IDocumentTemplateModalScreenEditCopyProps> {
         const { expandState } = this.state;
         return (
-            <div className={styles.templateLibrarySelectModalScreenEditCopy}>
+            <div className={styles.documentTemplateModalScreenEditCopy}>
                 {this.props.selectedTemplates.map(tmpl => (
                     <div className={styles.item}>
                         <div className={styles.header} onClick={_ => this.onExpandCollapse(tmpl.id)}>
@@ -49,8 +53,16 @@ export default class TemplateLibrarySelectModalScreenEditCopy extends React.Comp
                         </div>
                     </div>
                 ))}
+                <div>
+                    <Dropdown
+                        label={TemplateSelectorCommandSetStrings.LibraryDropdownLabel}
+                        defaultSelectedKey={0}
+                        onChange={this.onLibraryChanged.bind(this)}
+                        disabled={this.props.libraries.length === 1}
+                        options={this.props.libraries.map((lib, idx) => ({ key: idx, text: lib.Title, data: lib }))} />
+                </div>
                 <div className={styles.actions}>
-                    <PrimaryButton text={TemplateSelectorCommandSetStrings.OnStartCopyText} onClick={this.onStartCopy} />
+                    <PrimaryButton text={TemplateSelectorCommandSetStrings.OnStartCopyText} onClick={this.onStartCopy.bind(this)} />
                     <DefaultButton text={TemplateSelectorCommandSetStrings.OnGoBackText} onClick={this.props.onGoBack} />
                 </div>
             </div >
@@ -64,7 +76,7 @@ export default class TemplateLibrarySelectModalScreenEditCopy extends React.Comp
      * @param {Object} updatedProperties Updated properties
      */
     private onInputChanged(id: string, updatedProperties: { [key: string]: string }) {
-        const { templates } = ({ ...this.state } as ITemplateLibrarySelectModalScreenEditCopyState);
+        const { templates } = ({ ...this.state } as IDocumentTemplateModalScreenEditCopyState);
         this.setState({
             templates: templates.map(t => {
                 if (t.id === id) {
@@ -74,6 +86,17 @@ export default class TemplateLibrarySelectModalScreenEditCopy extends React.Comp
                 return t;
             })
         });
+    }
+
+    /**
+     * On library chantged
+     * 
+     * @param _event Event
+     * @param option Option
+     * @param _index Index
+     */
+    private onLibraryChanged(_event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, _index?: number) {
+        this.setState({ selectedLibrary: option.data });
     }
 
     /**
@@ -88,8 +111,8 @@ export default class TemplateLibrarySelectModalScreenEditCopy extends React.Comp
     /**
      * On start copy
      */
-    private onStartCopy = () => {
-        this.props.onStartCopy(this.state.templates);
+    private onStartCopy() {
+        this.props.onStartCopy(this.state.templates, this.state.selectedLibrary.ServerRelativeUrl);
         this.setState({ expandState: {}, templates: [] });
     }
 }

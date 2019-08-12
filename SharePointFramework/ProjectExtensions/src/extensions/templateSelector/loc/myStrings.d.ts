@@ -10,6 +10,7 @@ declare interface ITemplateSelectorCommandSetStrings {
   ModifiedLabel: string;
   SummaryText: string;
   GetMoreText: string;
+  LibraryDropdownLabel: string;
 }
 
 declare module 'TemplateSelectorCommandSetStrings' {

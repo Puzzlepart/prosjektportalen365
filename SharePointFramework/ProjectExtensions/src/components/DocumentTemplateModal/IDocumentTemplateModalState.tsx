@@ -1,12 +1,12 @@
 import { FileAddResult } from '@pnp/sp';
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator';
-import { TemplateFile } from '../../models';
-import { TemplateLibrarySelectModalScreen } from './TemplateLibrarySelectModalScreen';
+import { TemplateFile } from '../../models/index';
+import { DocumentTemplateModalScreen } from './DocumentTemplateModalScreen';
 
-export interface ITemplateLibrarySelectModalState {
+export interface IDocumentTemplateModalState {
     isBlocking: boolean;
     selection: TemplateFile[];
-    screen: TemplateLibrarySelectModalScreen;
+    screen: DocumentTemplateModalScreen;
     templatesAdded?: FileAddResult[];
     progress?: IProgressIndicatorProps;
 }

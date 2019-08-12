@@ -8,39 +8,39 @@ import * as React from 'react';
 import * as stringFormat from 'string-format';
 import * as TemplateSelectorCommandSetStrings from 'TemplateSelectorCommandSetStrings';
 import { TemplateFile } from '../../models';
-import { ITemplateLibrarySelectModalProps } from './ITemplateLibrarySelectModalProps';
-import { ITemplateLibrarySelectModalState } from './ITemplateLibrarySelectModalState';
-import styles from './TemplateLibrarySelectModal.module.scss';
-import { TemplateLibrarySelectModalScreen } from './TemplateLibrarySelectModalScreen';
-import TemplateLibrarySelectModalScreenEditCopy from './TemplateLibrarySelectModalScreenEditCopy';
-import TemplateLibrarySelectModalScreenSelect from './TemplateLibrarySelectModalScreenSelect';
+import { IDocumentTemplateModalProps } from './IDocumentTemplateModalProps';
+import { IDocumentTemplateModalState } from './IDocumentTemplateModalState';
+import styles from './DocumentTemplateModal.module.scss';
+import { DocumentTemplateModalScreen } from './DocumentTemplateModalScreen';
+import DocumentTemplateModalScreenEditCopy from './DocumentTemplateModalScreenEditCopy';
+import DocumentTemplateModalScreenSelect from './DocumentTemplateModalScreenSelect';
 
-export default class TemplateLibrarySelectModal extends React.Component<ITemplateLibrarySelectModalProps, ITemplateLibrarySelectModalState> {
+export default class DocumentTemplateModal extends React.Component<IDocumentTemplateModalProps, IDocumentTemplateModalState> {
     private selection: Selection;
 
     /**
      * Constructor
      * 
-     * @param {ITemplateLibrarySelectModalProps} props Props
+     * @param {IDocumentTemplateModalProps} props Props
      */
-    constructor(props: ITemplateLibrarySelectModalProps) {
+    constructor(props: IDocumentTemplateModalProps) {
         super(props);
         this.state = {
             isBlocking: false,
             selection: [],
-            screen: TemplateLibrarySelectModalScreen.Select,
+            screen: DocumentTemplateModalScreen.Select,
         };
         this.selection = new Selection({ onSelectionChanged: () => { this.setState({ selection: this.selection.getSelection() as TemplateFile[] }); } });
     }
 
-    public render(): React.ReactElement<ITemplateLibrarySelectModalProps> {
+    public render(): React.ReactElement<IDocumentTemplateModalProps> {
         return (
             <Modal
                 isOpen={true}
                 isBlocking={this.state.isBlocking}
                 isDarkOverlay={true}
                 onDismiss={this.props.onDismiss}
-                containerClassName={styles.templateLibrarySelectModal}>
+                containerClassName={styles.documentTemplateModal}>
                 <div className={styles.modalInner}>
                     <div className={styles.modalTitle}>
                         {this.props.title}
@@ -60,32 +60,33 @@ export default class TemplateLibrarySelectModal extends React.Component<ITemplat
         const { screen, selection, templatesAdded, progress } = this.state;
 
         switch (screen) {
-            case TemplateLibrarySelectModalScreen.Select: {
+            case DocumentTemplateModalScreen.Select: {
                 return (
-                    <TemplateLibrarySelectModalScreenSelect
+                    <DocumentTemplateModalScreenSelect
                         templates={this.props.templates}
                         selection={this.selection}
                         selectedItems={selection}
-                        onSubmitSelection={() => this.onChangeScreen(TemplateLibrarySelectModalScreen.EditCopy)} />
+                        onSubmitSelection={() => this.onChangeScreen(DocumentTemplateModalScreen.EditCopy)} />
                 );
             }
-            case TemplateLibrarySelectModalScreen.EditCopy: {
+            case DocumentTemplateModalScreen.EditCopy: {
                 return (
-                    <TemplateLibrarySelectModalScreenEditCopy
+                    <DocumentTemplateModalScreenEditCopy
                         selectedTemplates={selection}
-                        onStartCopy={this.onStartCopy}
-                        onGoBack={() => this.onChangeScreen(TemplateLibrarySelectModalScreen.Select)} />
+                        libraries={this.props.libraries}
+                        onStartCopy={this.onStartCopy.bind(this)}
+                        onGoBack={() => this.onChangeScreen(DocumentTemplateModalScreen.Select)} />
                 );
             }
-            case TemplateLibrarySelectModalScreen.CopyProgress: {
+            case DocumentTemplateModalScreen.CopyProgress: {
                 return <ProgressIndicator label={TemplateSelectorCommandSetStrings.CopyProgressLabel} {...progress} />;
             }
-            case TemplateLibrarySelectModalScreen.Summary: {
+            case DocumentTemplateModalScreen.Summary: {
                 return (
                     <React.Fragment>
                         <MessageBar messageBarType={MessageBarType.success}>{stringFormat(TemplateSelectorCommandSetStrings.SummaryText, templatesAdded.length)}</MessageBar>
                         <div className={styles.actions}>
-                            <DefaultButton text={TemplateSelectorCommandSetStrings.GetMoreText} onClick={_ => this.onChangeScreen(TemplateLibrarySelectModalScreen.Select)} />
+                            <DefaultButton text={TemplateSelectorCommandSetStrings.GetMoreText} onClick={_ => this.onChangeScreen(DocumentTemplateModalScreen.Select)} />
                             <DefaultButton text={TemplateSelectorCommandSetStrings.CloseModalText} onClick={this.props.onDismiss} />
                         </div>
                     </React.Fragment>
@@ -97,23 +98,25 @@ export default class TemplateLibrarySelectModal extends React.Component<ITemplat
     /**
      * On change screen
      * 
-     * @param {TemplateLibrarySelectModalScreen} screen Screen
+     * @param {DocumentTemplateModalScreen} screen Screen
      */
-    private onChangeScreen = (screen: TemplateLibrarySelectModalScreen) => {
+    private onChangeScreen = (screen: DocumentTemplateModalScreen) => {
         this.setState({ screen });
     }
 
     /**
      * On start copy templates
      * 
-     * @param templates Templates
+     * @param {TemplateFile[]} templates Templates
+     * @param {string} serverRelativeUrl Server relative url
+     * 
      * @returns Promise<void>
      */
-    private onStartCopy = async (templates: TemplateFile[]): Promise<void> => {
-        this.setState({ screen: TemplateLibrarySelectModalScreen.CopyProgress, isBlocking: true });
+    private async onStartCopy(templates: TemplateFile[], serverRelativeUrl: string): Promise<void> {
+        this.setState({ screen: DocumentTemplateModalScreen.CopyProgress, isBlocking: true });
 
         let templatesAdded: FileAddResult[] = [];
-        const folder = sp.web.getFolderByServerRelativeUrl(this.props.libraryServerRelativeUrl);
+        const folder = sp.web.getFolderByServerRelativeUrl(serverRelativeUrl);
 
         for (let i = 0; i < templates.length; i++) {
             const template = templates[i];
@@ -124,6 +127,6 @@ export default class TemplateLibrarySelectModal extends React.Component<ITemplat
         }
 
         this.selection.setItems([], true);
-        this.setState({ screen: TemplateLibrarySelectModalScreen.Summary, templatesAdded, isBlocking: false, selection: [] });
+        this.setState({ screen: DocumentTemplateModalScreen.Summary, templatesAdded, isBlocking: false, selection: [] });
     }
 }

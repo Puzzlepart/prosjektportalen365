@@ -1,7 +1,10 @@
 import { Web, CamlQuery } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
-import { IHubSite } from 'sp-hubsite-service';
+import { default as HubSiteService, IHubSite } from 'sp-hubsite-service';
 import SpEntityPortalService from 'sp-entityportal-service';
+import { PageContext } from '@microsoft/sp-page-context';
+import { SPRest } from '@pnp/sp';
+import { TemplateFile } from '../models';
 
 /**
  * Get hub files
@@ -28,9 +31,9 @@ export async function getHubItems<T>(hub: IHubSite, listName: string, constructo
     try {
         let items: any[];
         if (query) {
-            items = await hub.web.lists.getByTitle(listName).getItemsByCAMLQuery(query, ...expands);
+            items = await hub.web.lists.getByTitle(listName).usingCaching().getItemsByCAMLQuery(query, ...expands);
         } else {
-            items = await hub.web.lists.getByTitle(listName).items.get();
+            items = await hub.web.lists.getByTitle(listName).usingCaching().items.get();
         }
         return constructor ? items.map(item => new constructor(item, hub.web)) : items;
     } catch (error) {
@@ -63,4 +66,26 @@ export async function getCurrentPhase(hubSite: IHubSite, termSetId: string, site
         }
     }
     return null;
+}
+
+/**
+ * Get document templates
+ * 
+ * @param {SPRest} sp SP
+ * @param {PageContext} pageContext Page context
+ * @param {string} templateLibrary Template library
+ * @param {string} phaseTermSetId Phase term set id
+ */
+export async function getDocumentTemplates(sp: SPRest, pageContext: PageContext, templateLibrary: string = 'Malbibliotek', phaseTermSetId = 'abcfc9d9-a263-4abb-8234-be973c46258a') {
+    const hub = await HubSiteService.GetHubSite(sp, pageContext);
+    const currentPhase = await getCurrentPhase(hub, phaseTermSetId, pageContext.site.id.toString());
+    return await getHubItems(
+        hub,
+        templateLibrary,
+        TemplateFile,
+        {
+            ViewXml: `<View><Query><Where><Or><Or><Eq><FieldRef Name="GtProjectPhase" /><Value Type="Text">${currentPhase}</Value></Eq><Eq><FieldRef Name="GtProjectPhase" /><Value Type="Text">Flere faser</Value></Eq></Or><Eq><FieldRef Name="GtProjectPhase" /><Value Type="Text">Ingen fase</Value></Eq></Or></Where></Query></View>`
+        },
+        ['File'],
+    );
 }

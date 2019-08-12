@@ -1,11 +1,12 @@
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
+import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
+import { sp } from '@pnp/sp';
+import * as moment from 'moment';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
-import ResourceAllocation from './components/ResourceAllocation';
 import { IResourceAllocationProps } from './components/IResourceAllocationProps';
+import ResourceAllocation from './components/ResourceAllocation';
 import { IResourceAllocationWebPartProps } from './IResourceAllocationWebPartProps';
-import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
-import { sp } from '@pnp/sp';
 
 export default class ResourceAllocationWebPart extends BaseClientSideWebPart<IResourceAllocationWebPartProps> {
   public render() {
@@ -15,7 +16,7 @@ export default class ResourceAllocationWebPart extends BaseClientSideWebPart<IRe
   }
 
   public async onInit() {
-    
+    moment.locale('nb');
     sp.setup({ spfxContext: this.context });
     Logger.subscribe(new ConsoleListener());
     Logger.activeLogLevel = LogLevel.Info;

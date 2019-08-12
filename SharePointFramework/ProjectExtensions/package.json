@@ -1,6 +1,6 @@
 {
     "name": "project-extensions",
-    "version": "0.9.0",
+    "version": "0.10.0",
     "private": true,
     "engines": {
         "node": ">=0.10.0"
@@ -42,7 +42,7 @@
         "@types/react-dom": "16.8.0",
         "@types/webpack-env": "1.13.1",
         "msgraph-helper": "^0.7.1",
-        "office-ui-fabric-react": "^6.143.0",
+        "office-ui-fabric-react": "^6.200.0",
         "react": "16.7.0",
         "react-dom": "16.7.0",
         "sp-entityportal-service": "^0.6.10",
