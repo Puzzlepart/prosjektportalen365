@@ -2,7 +2,7 @@ import { PageContext } from '@microsoft/sp-page-context';
 import { dateAdd } from "@pnp/common";
 import { Logger, LogLevel } from '@pnp/logging';
 import { List } from '@pnp/sp';
-import * as moment from 'moment';
+import { formatDate } from '@Shared/helpers';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
@@ -91,8 +91,7 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
         name: ProjectStatusWebPartStrings.NewStatusReportModalHeaderText,
         itemType: ContextualMenuItemType.Normal,
         iconProps: { iconName: 'NewFolder' },
-        onClick: this.newStatusReport.bind(this),
-        disabled: data.reports.filter(r => r.monthIndex === new Date().getMonth() - 1).length > 0,
+        onClick: this.redirectNewStatusReport.bind(this),
       },
       {
         key: 'EditReport',
@@ -106,7 +105,7 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
     let farItems: IContextualMenuItem[] = [
       {
         key: 'ReportDropdown',
-        name: selectedReport ? selectedReport.toString() : '',
+        name: selectedReport ? formatDate(selectedReport.date, true) : '',
         itemType: ContextualMenuItemType.Normal,
         disabled: reportOptions.length === 0,
         subMenuProps: { items: reportOptions }
@@ -194,7 +193,7 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
   private getReportOptions(data: IProjectStatusData): IContextualMenuItem[] {
     let reportOptions: IContextualMenuItem[] = data.reports.map(report => ({
       key: `${report.id}`,
-      name: report.toString(),
+      name: formatDate(report.date, true),
       onClick: _evt => this.onReportChanged(report),
       canCheck: true,
       isChecked: this.state.selectedReport ? report.item.Id === this.state.selectedReport.item.Id : false,
@@ -208,13 +207,13 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
   private async associateStatusItem(): Promise<void> {
     try {
       const filter = `Author/EMail eq '${this.props.pageContext.user.email}' and GtSiteId eq '00000000-0000-0000-0000-000000000000'`;
-      Logger.log({ message: '(ProjectStatus) associateStatusItem: Attempting to find recently added report', data: { filter }, level: LogLevel.Info });
-      let [item] = await this._reportList.items.filter(filter).select('Id', 'GtYear', 'GtMonthChoice', 'Created').orderBy('Id', false).top(1).get<any[]>();
+      Logger.log({ message: `(ProjectStatus) associateStatusItem: Attempting to find recently added report by current user '${this.props.pageContext.user.email}'`, data: { filter }, level: LogLevel.Info });
+      let [item] = await this._reportList.items.filter(filter).select('Id', 'Created').orderBy('Id', false).top(1).get<any[]>();
       if (item) {
         const report = new ProjectStatusReport(item);
         Logger.log({ message: '(ProjectStatus) associateStatusItem: Setting title for item', data: { filter }, level: LogLevel.Info });
         await this._reportList.items.getById(report.id).update({
-          Title: `${this.props.pageContext.web.title} (${report.toString()})`,
+          Title: `${this.props.pageContext.web.title} (${formatDate(report.date, true)})`,
           GtSiteId: this.props.pageContext.site.id.toString(),
         });
       }
@@ -227,16 +226,11 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
    * 
    * @param {React.MouseEvent} _ev Event
    * @param {IContextualMenuItem} _item Item
-   * @param {number} year Year
-   * @param {number} month Month
    */
-  private async newStatusReport(_ev?: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement>, _item?: IContextualMenuItem, year: number = new Date().getFullYear(), month: number = new Date().getMonth() - 1): Promise<void> {
+  private async redirectNewStatusReport(_ev?: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement>, _item?: IContextualMenuItem): Promise<void> {
     const [previousReport] = this.state.data.reports;
     let properties = previousReport ? previousReport.getStatusValues() : {};
     properties.Title = format(ProjectStatusWebPartStrings.NewStatusReportTitle, this.props.pageContext.web.title);
-    properties.GtYear = `${month >= 0 ? year : (year - 1)}`;
-    const monthName = moment.months()[month >= 0 ? month : 11];
-    properties.GtMonthChoice = monthName[0].toUpperCase() + monthName.substring(1);
     const { data } = await this._reportList.items.add(properties);
     const source = encodeURIComponent(`${window.location.href.split('#')[0]}#NewStatus`);
     document.location.href = `${window.location.protocol}//${window.location.hostname}${this.state.data.defaultEditFormUrl}?ID=${data.Id}&Source=${source}`;
@@ -253,12 +247,23 @@ export default class ProjectStatus extends React.Component<IProjectStatusProps, 
       const [entityItem, entityFields, { DefaultEditFormUrl }, reportItems, sectionItems] = await Promise.all([
         this.props.spEntityPortalService.getEntityItemFieldValues(site.id.toString()),
         this.props.spEntityPortalService.getEntityFields(),
-        this._reportList.select('DefaultEditFormUrl').expand('DefaultEditFormUrl').get<{ DefaultEditFormUrl: string }>(),
-        this._reportList.items.filter(`GtSiteId eq '${site.id.toString()}'`).orderBy('Id', false).get<any[]>(),
+        this._reportList
+          .select('DefaultEditFormUrl')
+          .expand('DefaultEditFormUrl')
+          .usingCaching({
+            key: 'projectstatus_defaulteditformurl',
+            storeName: 'local',
+            expiration: dateAdd(new Date(), 'day', 1),
+          })
+          .get<{ DefaultEditFormUrl: string }>(),
+        this._reportList.items
+          .filter(`GtSiteId eq '${site.id.toString()}'`)
+          .orderBy('Id', false)
+          .get<any[]>(),
         this._sectionsList.items.get(),
       ]);
       const reports = reportItems.map(item => new ProjectStatusReport(item, DefaultEditFormUrl));
-      const reportsSorted = reports.sort((a, b) => b.date.valueOf() - a.date.valueOf());
+      const reportsSorted = reports.sort((a, b) => b.date.getTime() - a.date.getTime());
       const sections = sectionItems.map(item => new SectionModel(item));
       const sectionsSorted = sections.sort((a, b) => a.sortOrder < b.sortOrder ? -1 : 1);
       return {
