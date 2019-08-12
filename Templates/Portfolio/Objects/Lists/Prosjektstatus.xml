@@ -18,8 +18,6 @@
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="fab2e356-9753-472c-9935-19b1c3cf809f" Name="GtYear" Required="true" />
-        <pnp:FieldRef ID="86673e07-181e-4521-843c-b687d86a6f85" Name="GtMonthChoice" Required="true" />
         <pnp:FieldRef ID="3e90aa95-4d32-4819-823f-10ae2fd412b5" Name="GtOverallStatus" Required="true"/>
         <pnp:FieldRef ID="1447ef51-8e9b-4d16-aa2a-526dc9f1539e" Name="GtStatusTime" Required="true"/>
         <pnp:FieldRef ID="a9902b9d-8aad-40df-9788-ba73c64c3cb5" Name="GtStatusBudget" Required="true" />
