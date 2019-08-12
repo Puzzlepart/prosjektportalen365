@@ -14,7 +14,7 @@ export class Phase {
     ) {
         this.id = id.substring(6, 42);
         this.letter = this.name.substring(0, 1).toUpperCase();
-        this.checklistData = checklistData;
+        this.checklistData = checklistData || { stats: {}, items: [] };
         this.properties = properties;
     }
 

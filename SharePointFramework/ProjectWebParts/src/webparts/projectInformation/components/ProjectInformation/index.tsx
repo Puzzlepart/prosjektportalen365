@@ -9,14 +9,14 @@ import * as ProjectInformationWebPartStrings from 'ProjectInformationWebPartStri
 import * as React from 'react';
 import ProjectPropertyModel from '../../models/ProjectPropertyModel';
 import { IProjectInformationData } from './IProjectInformationData';
-import { IProjectInformationProps } from './IProjectInformationProps';
+import { IProjectInformationProps, ProjectInformationDefaultProps } from './IProjectInformationProps';
 import { IProjectInformationState } from './IProjectInformationState';
 import styles from './ProjectInformation.module.scss';
 import ProjectProperty from './ProjectProperty';
 
 
 export default class ProjectInformation extends React.Component<IProjectInformationProps, IProjectInformationState> {
-  public static defaultProps: Partial<IProjectInformationProps> = { title: 'Prosjektinformasjon' };
+  public static defaultProps = ProjectInformationDefaultProps;
 
   constructor(props: IProjectInformationProps) {
     super(props);

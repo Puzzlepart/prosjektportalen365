@@ -3,19 +3,23 @@ import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { sp } from '@pnp/sp';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import HubSiteService from 'sp-hubsite-service';
+import HubSiteService, { IHubSite } from 'sp-hubsite-service';
 import { ProjectInformation, IProjectInformationProps } from './components';
 import { IProjectInformationWebPartProps } from './IProjectInformationWebPartProps';
 
+Logger.subscribe(new ConsoleListener());
+Logger.activeLogLevel = LogLevel.Info;
+
 export default class ProjectInformationWebPart extends BaseClientSideWebPart<IProjectInformationWebPartProps> {
-  private _hubSiteUrl: string;
+  private hubSite: IHubSite;
 
   public async onInit() {
-    sp.setup({ spfxContext: this.context });
-    Logger.subscribe(new ConsoleListener());
-    Logger.activeLogLevel = LogLevel.Info;
-    const hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
-    this._hubSiteUrl = hubSite.url;
+    sp.setup({
+      spfxContext: this.context,
+      defaultCachingTimeoutSeconds: 60,
+      globalCacheDisable: false
+    });
+    this.hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
   }
 
   public render(): void {
@@ -23,7 +27,7 @@ export default class ProjectInformationWebPart extends BaseClientSideWebPart<IPr
       ProjectInformation,
       {
         ...this.properties,
-        hubSiteUrl: this._hubSiteUrl,
+        hubSiteUrl: this.hubSite.url,
         siteId: this.context.pageContext.site.id.toString(),
         webUrl: this.context.pageContext.web.absoluteUrl,
         isSiteAdmin: this.context.pageContext.legacyPageContext.isSiteAdmin,
