@@ -1,3 +1,0 @@
-<Field  DisplayName="{resource:SiteFields_GtYear_DisplayName}" Description="{resource:SiteFields_GtYear_Description}" Type="Text" ID="{fab2e356-9753-472c-9935-19b1c3cf809f}" ShowInEditForm="FALSE" Name="GtYear" StaticName="GtYear">
-    <DefaultFormula>=TEXT(Today,"YYYY")</DefaultFormula>
-</Field>

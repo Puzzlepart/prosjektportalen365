@@ -6,20 +6,32 @@ import MSGraphHelper from 'msgraph-helper';
 import * as ProjectPhasesWebPartStrings from 'ProjectPhasesWebPartStrings';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
+import SpEntityPortalService from 'sp-entityportal-service';
+import HubSiteService from 'sp-hubsite-service';
 import ProjectPhases, { IProjectPhasesProps } from './components/ProjectPhases';
 import { IProjectPhasesWebPartProps } from './IProjectPhasesWebPartProps';
 
+Logger.subscribe(new ConsoleListener());
+Logger.activeLogLevel = LogLevel.Info;
+
 export default class ProjectPhasesWebPart extends BaseClientSideWebPart<IProjectPhasesWebPartProps> {
+  private spEntityPortalService: SpEntityPortalService;
+
   public async onInit() {
     this.context.statusRenderer.clearLoadingIndicator(this.domElement);
-    Logger.subscribe(new ConsoleListener());
-    Logger.activeLogLevel = LogLevel.Info;
-    sp.setup({ spfxContext: this.context });
+    sp.setup({
+      spfxContext: this.context,
+      defaultCachingTimeoutSeconds: 60,
+      globalCacheDisable: false
+    });
     await MSGraphHelper.Init(this.context.msGraphClientFactory, 'v1.0');
+    const hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
+    this.spEntityPortalService = new SpEntityPortalService({ webUrl: hubSite.url, ...this.properties.entity });
   }
 
   public render(): void {
     const element: React.ReactElement<IProjectPhasesProps> = React.createElement(ProjectPhases, {
+      spEntityPortalService: this.spEntityPortalService,
       pageContext: this.context.pageContext,
       ...this.properties,
     });
