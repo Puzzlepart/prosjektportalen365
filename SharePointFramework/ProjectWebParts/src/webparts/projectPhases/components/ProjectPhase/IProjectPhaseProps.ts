@@ -1,4 +1,4 @@
-import Phase from "../../models/Phase";
+import { Phase } from "../../models";
 
 export interface IProjectPhaseProps {
     phase: Phase;

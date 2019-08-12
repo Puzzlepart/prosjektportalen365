@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as strings from 'PortfolioInsightsWebPartStrings';
 import styles from './PortfolioInsights.module.scss';
-import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
+import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { IPortfolioInsightsProps } from './IPortfolioInsightsProps';
@@ -52,11 +52,7 @@ export default class PortfolioInsights extends React.Component<IPortfolioInsight
     return (
       <div className={styles.portfolioInsights}>
         <div className={styles.container}>
-          <div className={styles.commandBar}>
-            <CommandBar
-              items={this.getCommandBarItems().left}
-              farItems={this.getCommandBarItems().right} />
-          </div>
+          {this.renderCommandBar()}
           <div className={styles.header}>
             <div className={styles.title}>{PortfolioInsights.displayName}</div>
           </div>
@@ -73,13 +69,20 @@ export default class PortfolioInsights extends React.Component<IPortfolioInsight
   /**
    * Get command bar items
    */
-  private getCommandBarItems() {
-    const left = [];
-    const right = [{
+  private renderCommandBar() {
+    const items: ICommandBarItemProps[] = [];
+    const farItems: ICommandBarItemProps[] = [{
       key: "EditDataSelection",
       name: 'Endre datautvalg',
       iconProps: { iconName: "ExploreData" },
+      disabled: true,
     }];
-    return { left, right };
+    return (
+      <div className={styles.commandBar}>
+        <CommandBar
+          items={items}
+          farItems={farItems} />
+      </div>
+    );
   }
 }

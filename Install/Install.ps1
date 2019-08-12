@@ -19,6 +19,8 @@
     [switch]$SkipSearchConfiguration,
     [Parameter(Mandatory = $false, HelpMessage = "Do you want to handle PnP libraries and PnP PowerShell without using bundled files?")]
     [switch]$SkipLoadingBundle,
+    [Parameter(Mandatory = $false, HelpMessage = "Do you want to perform an upgrade?")]
+    [switch]$Upgrade,
     [Parameter(Mandatory = $false, HelpMessage = "Site design name")]
     [string]$SiteDesignName = "Prosjektområde",
     [Parameter(Mandatory = $false, HelpMessage = "Security group to give View access to site design")]
@@ -27,7 +29,11 @@
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
 $InstallStartTime = (Get-Date).ToUniversalTime().ToString("MM/dd/yyy HH:mm")
-Write-Host "[INFO] Installing [Prosjektportalen 365] [VERSION_PLACEHOLDER]"
+if($Upgrade.IsPresent) {
+    Write-Host "[INFO] Upgrading [Prosjektportalen 365] to [VERSION_PLACEHOLDER]"
+} else {
+    Write-Host "[INFO] Installing [Prosjektportalen 365] [VERSION_PLACEHOLDER]"
+}
 
 function Connect-SharePoint {
     Param(
@@ -86,7 +92,7 @@ Catch {
 #endregion
 
 #region Create site
-if (-not $SkipSiteCreation.IsPresent) {
+if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
     Try {
         $PortfolioSite = Get-PnPTenantSite -Url $Url -Connection $AdminSiteConnection -ErrorAction SilentlyContinue
         if ($null -eq $PortfolioSite) {
@@ -116,13 +122,15 @@ Catch {
 #endregion
 
 #region Setting permissons
-Write-Host "[INFO] Setting permissions for associated member group"
-# Must use english names to avoid errors, even on non 1033 sites
-# Where-Object doesn't work directly on Get-PnPRoleDefinition, so need to clone it first (https://github.com/Puzzlepart/prosjektportalen365/issues/35)
-$RoleDefinitions = @()
-Get-PnPRoleDefinition -Connection  $SiteConnection -ErrorAction SilentlyContinue | ForEach-Object { $RoleDefinitions += $_ }
-Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup -Connection  $SiteConnection) -RemoveRole ($RoleDefinitions | Where-Object { $_.RoleTypeKind -eq "Editor" }) -Connection  $SiteConnection -ErrorAction SilentlyContinue
-Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup -Connection  $SiteConnection) -AddRole ($RoleDefinitions | Where-Object { $_.RoleTypeKind -eq "Reader" }) -Connection  $SiteConnection -ErrorAction SilentlyContinue
+if (-not $Upgrade.IsPresent) {
+    Write-Host "[INFO] Setting permissions for associated member group"
+    # Must use english names to avoid errors, even on non 1033 sites
+    # Where-Object doesn't work directly on Get-PnPRoleDefinition, so need to clone it first (https://github.com/Puzzlepart/prosjektportalen365/issues/35)
+    $RoleDefinitions = @()
+    Get-PnPRoleDefinition -Connection  $SiteConnection -ErrorAction SilentlyContinue | ForEach-Object { $RoleDefinitions += $_ }
+    Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup -Connection  $SiteConnection) -RemoveRole ($RoleDefinitions | Where-Object { $_.RoleTypeKind -eq "Editor" }) -Connection  $SiteConnection -ErrorAction SilentlyContinue
+    Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup -Connection  $SiteConnection) -AddRole ($RoleDefinitions | Where-Object { $_.RoleTypeKind -eq "Reader" }) -Connection  $SiteConnection -ErrorAction SilentlyContinue
+}
 #endregion
 
 
@@ -272,7 +280,11 @@ $sw.Stop()
 
 Write-Host "[REQUIRED ACTION] Go to $($AdminSiteUrl)/_layouts/15/online/AdminHome.aspx#/webApiPermissionManagement and approve the pending requests" -ForegroundColor Yellow
 
-Write-Host "[INFO] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
+if($Upgrade.IsPresent) {
+    Write-Host "[INFO] Upgrade completed in $($sw.Elapsed)" -ForegroundColor Green
+} else {
+    Write-Host "[INFO] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
+}
 
 $InstallEndTime = (Get-Date).ToUniversalTime().ToString("MM/dd/yyy HH:mm")
 

@@ -14,6 +14,7 @@ export default class DeliveriesOverviewWebPart extends BaseClientSideWebPart<IDe
     const element: React.ReactElement<IDeliveriesOverviewProps> = React.createElement(
       DeliveriesOverview, {
         ...this.properties,
+        pageContext: this.context.pageContext,
         groupByColumns: [{ name: PortfolioWebPartsStrings.SiteTitleLabel, key: 'SiteTitle', fieldName: 'SiteTitle', minWidth: 0 }],
       }
     );

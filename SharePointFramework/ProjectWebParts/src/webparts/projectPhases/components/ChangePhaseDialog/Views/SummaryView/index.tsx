@@ -6,12 +6,12 @@ import styles from './SummaryView.module.scss';
 /**
  * Summary view
  */
-export const SummaryView = ({ activePhase }: ISummaryViewProps) => {
+export const SummaryView = ({ checklistItems }: ISummaryViewProps) => {
     return (
         <div className={styles.summaryView}>
             <ul className={styles.checklist}>
-                {activePhase.checklistData.items.map((item, idx) => (
-                    <CheckListItem key={`SummaryView_CheckListItem_${idx}`} checkListItem={item} />
+                {checklistItems.map(item => (
+                    <CheckListItem key={`SummaryView_CheckListItem_${item.ID}`} checkListItem={item} />
                 ))}
             </ul>
         </div >

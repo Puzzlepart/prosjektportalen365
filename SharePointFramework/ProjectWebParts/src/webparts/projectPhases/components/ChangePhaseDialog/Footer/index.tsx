@@ -1,11 +1,9 @@
-//#region Imports
 import * as React from "react";
 import { DialogFooter } from "office-ui-fabric-react/lib/Dialog";
 import { PrimaryButton, DefaultButton } from "office-ui-fabric-react/lib/Button";
 import { View } from "../Views";
 import IFooterProps from "./IFooterProps";
-import * as strings from 'ProjectPhasesWebPartStrings';
-//#endregion
+import * as ProjectPhasesWebPartStrings from 'ProjectPhasesWebPartStrings';
 
 /**
  * Footer
@@ -16,7 +14,7 @@ export const Footer = ({ isLoading, newPhase, currentView, onChangeView, onChang
     switch (currentView) {
         case View.Initial: {
             actions.push({
-                text: strings.Skip,
+                text: ProjectPhasesWebPartStrings.Skip,
                 disabled: isLoading,
                 onClick: () => onChangeView(View.Confirm),
             });
@@ -24,7 +22,7 @@ export const Footer = ({ isLoading, newPhase, currentView, onChangeView, onChang
             break;
         case View.Confirm: {
             actions.push({
-                text: strings.Yes,
+                text: ProjectPhasesWebPartStrings.Yes,
                 disabled: isLoading,
                 onClick: async () => {
                     onChangeView(View.ChangingPhase);
@@ -36,7 +34,7 @@ export const Footer = ({ isLoading, newPhase, currentView, onChangeView, onChang
             break;
         case View.Summary: {
             actions.push({
-                text: strings.MoveOn,
+                text: ProjectPhasesWebPartStrings.MoveOn,
                 disabled: isLoading,
                 onClick: () => onChangeView(View.Confirm),
             });
@@ -49,7 +47,7 @@ export const Footer = ({ isLoading, newPhase, currentView, onChangeView, onChang
             {actions.map((buttonProps, index) => {
                 return <PrimaryButton key={`FooterAction_${index}`} {...buttonProps} />;
             })}
-            <DefaultButton text={strings.Close} disabled={isLoading} onClick={onDismiss} />
+            <DefaultButton text={ProjectPhasesWebPartStrings.Close} disabled={isLoading} onClick={onDismiss} />
         </DialogFooter>
     );
 };

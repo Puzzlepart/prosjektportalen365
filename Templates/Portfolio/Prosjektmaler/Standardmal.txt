@@ -533,8 +533,7 @@
             },
             {
                 "Url": "SitePages/Oppgaver.aspx",
-                "Title": "Oppgaver",
-                "Children": []
+                "Title": "Oppgaver"
             },
             {
                 "Url": "Lists/Fasesjekkliste/AllItems.aspx",
@@ -593,48 +592,34 @@
             "CommentsDisabled": true,
             "Sections": [{
                     "Columns": [{
-                        "Factor": 12,
-                        "Controls": [{
-                            "Id": "4449d3dc-fa58-4982-b87c-5a893114e7b7",
-                            "Properties": {
-                                "description": "",
-                                "phaseSubTextProperty": "",
-                                "phaseField": "Fase",
-                                "automaticReload": true,
-                                "confirmPhaseChange": true,
-                                "reloadTimeout": 0,
-                                "currentPhaseViewName": "Gjeldende fase",
-                                "gutter": 15,
-                                "fontSize": 13,
-                                "entity": {
-                                    "listName": "Prosjekter",
-                                    "contentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
-                                    "fieldsGroupName": "{parameter:fieldsgroup}",
-                                    "identityFieldName": "GtSiteId"
-                                }
-                            }
-                        }]
-                    }]
-                },
-                {
-                    "Columns": [{
                             "Factor": 8,
                             "Controls": [{
+                                    "Id": "4449d3dc-fa58-4982-b87c-5a893114e7b7",
+                                    "Properties": {
+                                        "description": "",
+                                        "phaseSubTextProperty": "",
+                                        "phaseField": "Fase",
+                                        "automaticReload": true,
+                                        "confirmPhaseChange": true,
+                                        "reloadTimeout": 0,
+                                        "currentPhaseViewName": "Gjeldende fase",
+                                        "gutter": 15,
+                                        "fontSize": 13,
+                                        "entity": {
+                                            "listName": "Prosjekter",
+                                            "contentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
+                                            "fieldsGroupName": "{parameter:fieldsgroup}",
+                                            "identityFieldName": "GtSiteId"
+                                        }
+                                    }
+                                },
+                                {
                                     "Id": "39c4c1c2-63fa-41be-8cc2-f6c0b49b253d",
                                     "Properties": {
                                         "title": "Oppgaver",
                                         "isFullScreen": false,
-                                        "plannerViewMode": "statuschart",
+                                        "plannerViewMode": "bucketchart",
                                         "planId": "{parameter:defaultPlanId}"
-                                    }
-                                },
-                                {
-                                    "Id": "f92bf067-bc19-489e-a556-7fe95f508720",
-                                    "Properties": {
-                                        "isDocumentLibrary": true,
-                                        "selectedListId": "{listid:Dokumenter}",
-                                        "selectedViewId": "{listviewid:Dokumenter|Gjeldende fase}",
-                                        "webpartHeightKey": 4
                                     }
                                 },
                                 {
@@ -672,6 +657,19 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "Columns": [{
+                        "Factor": 12,
+                        "Controls": [{
+                            "Id": "f92bf067-bc19-489e-a556-7fe95f508720",
+                            "Properties": {
+                                "isDocumentLibrary": true,
+                                "selectedListId": "{listid:Dokumenter}",
+                                "webpartHeightKey": 4
+                            }
+                        }]
+                    }]
                 }
             ]
         },

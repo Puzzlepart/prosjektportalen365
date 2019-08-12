@@ -1,8 +1,10 @@
-import { View } from "./Views";
+import { View } from './Views';
+import { IPhaseChecklistItem } from '../../models';
 
 export default interface IChangePhaseDialogState {
-    currentIdx?: number;
     isLoading?: boolean;
+    checklistItems?: IPhaseChecklistItem[];
+    currentIdx?: number;
     currentView?: View;
 }
 

@@ -1,6 +1,6 @@
 define([], function () {
   return {
-    "TemplateLibrarySelectModalTitle": "Hent dokumenter fra malbiblioteket",
+    "TemplateLibrarySelectModalTitle": "Hent dokumentmal",
     "CopyProgressLabel": "Kopierer valgt(e) dokument(er) til prosjektområdet...",
     "CloseModalText": "Lukk",
     "OnSubmitSelectionText": "Kopier valgt(e) dokument(er) til prosjektområdet",

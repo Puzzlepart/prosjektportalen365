@@ -6,7 +6,7 @@ export interface IProjectListState {
   searchTerm: string;
   projects?: ProjectListModel[];
   error?: any;
-  selectedProject?: ProjectListModel;
+  showProjectInfo?: ProjectListModel;
   showAsTiles?: boolean;
   listView?: { projects: ProjectListModel[], columns: IColumn[] };
 }

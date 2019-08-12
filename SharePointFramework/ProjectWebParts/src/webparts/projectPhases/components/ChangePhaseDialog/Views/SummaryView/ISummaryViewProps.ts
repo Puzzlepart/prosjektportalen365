@@ -1,5 +1,5 @@
-import Phase from "../../../../models/Phase";
+import { IPhaseChecklistItem } from "../../../../models";
 
 export default interface ISummaryViewProps {
-    activePhase: Phase;
+    checklistItems: IPhaseChecklistItem[];
 }

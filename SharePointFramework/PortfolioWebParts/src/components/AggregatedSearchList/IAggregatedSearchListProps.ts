@@ -6,7 +6,7 @@ import { PageContext } from '@microsoft/sp-page-context';
 export interface IAggregatedSearchListProps {
     title: string;
     dataSource: string;
-    pageContext?: PageContext;
+    pageContext: PageContext;
     queryTemplate?: string;
     postFetch?: (results: SearchResult[]) => Promise<any[]>;
     selectProperties?: string[];

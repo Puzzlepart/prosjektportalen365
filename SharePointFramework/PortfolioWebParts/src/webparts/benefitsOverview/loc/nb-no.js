@@ -18,5 +18,6 @@ define([], function () {
     "ShowAllMeasurementsLinkText": "Vis alle målinger",
     "NoGroupingText": "Ingen gruppering",
     "SearchBoxLabelText": "Søk i gevinster...",
+    "ExcelExportFileNamePrefix": "Gevinstoversikt"
   }
 });

@@ -1,6 +1,6 @@
 {
     "name": "prosjektportalen-spfx-projectwebparts",
-    "version": "0.8.4",
+    "version": "0.9.2",
     "private": true,
     "engines": {
         "node": ">=0.10.0"
@@ -14,7 +14,7 @@
         "package-deploy-patch": "npm version patch && npm run deploy",
         "package-deploy-minor": "npm version minor && npm run deploy",
         "package-deploy-major": "npm version major && npm run deploy",
-        "postversion": "gulp version-sync && npm run package",
+        "postversion": "gulp version-sync",
         "patch-version": "npm version patch",
         "minor-version": "npm version minor",
         "major-version": "npm version major"
@@ -41,7 +41,7 @@
         "moment": "^2.24.0",
         "msgraph-helper": "^0.7.1",
         "object-get": "^2.1.0",
-        "office-ui-fabric-react": "^6.143.0",
+        "office-ui-fabric-react": "^6.199.1",
         "react": "16.7.0",
         "react-dom": "16.7.0",
         "react-image-fade-in": "^1.0.2",
@@ -49,7 +49,8 @@
         "sp-entityportal-service": "^0.6.4",
         "sp-hubsite-service": "^0.4.0",
         "spfx-jsom": "^0.6.0",
-        "string-format": "^2.0.0"
+        "string-format": "^2.0.0",
+        "underscore": "^1.9.1"
     },
     "resolutions": {
         "@types/react": "16.7.22"
@@ -62,6 +63,8 @@
         "@microsoft/sp-webpart-workbench": "1.8.2",
         "@types/chai": "3.4.34",
         "@types/mocha": "2.2.38",
+        "@types/string-format": "^2.0.0",
+        "@types/underscore": "^1.9.2",
         "ajv": "~5.2.2",
         "gulp": "~3.9.1",
         "spfx-pkgdeploy": "^0.3.0"
