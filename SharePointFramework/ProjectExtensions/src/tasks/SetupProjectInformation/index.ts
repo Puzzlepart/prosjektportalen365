@@ -12,8 +12,7 @@ export default class SetupProjectInformation extends BaseTask {
     @override
     public async execute(params: IBaseTaskParams, _onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
-            const { groupId } = params.context.pageContext.legacyPageContext;
-            const { absoluteUrl, id } = params.context.pageContext.site;
+            const { pageContext } = params.context;
             const spEntityPortalService = new SpEntityPortalService({
                 webUrl: params.data.hub.url,
                 listName: params.properties.projectsList,
@@ -21,10 +20,16 @@ export default class SetupProjectInformation extends BaseTask {
                 urlFieldName: 'GtSiteUrl',
             });
             try {
-                params.entity = await spEntityPortalService.getEntityItem(groupId);
+                params.entity = await spEntityPortalService.getEntityItem(pageContext.legacyPageContext.groupId);
             } catch (error) {
-                this.logInformation(`Adding project to list '${params.properties.projectsList}' at ${params.data.hub.url}`, { groupId, siteId: id.toString() });
-                params.entity = await spEntityPortalService.newEntity(groupId, absoluteUrl, { GtSiteId: id.toString() }, params.data.hub.url);
+                this.logInformation(`Adding project to list '${params.properties.projectsList}' at ${params.data.hub.url}`, { groupId: pageContext.legacyPageContext.groupId, siteId: pageContext.site.id.toString() });
+                params.entity = await spEntityPortalService.newEntity(
+                    pageContext.legacyPageContext.groupId,
+                    pageContext.web.absoluteUrl,
+                    { Title: pageContext.web.title, GtSiteId: pageContext.site.id.toString() },
+                    params.data.hub.url,
+                );                
+                this.logInformation(`Project added to list '${params.properties.projectsList}' at ${params.data.hub.url}`, { id: params.entity.item.Id });
             }
             return params;
         } catch (error) {

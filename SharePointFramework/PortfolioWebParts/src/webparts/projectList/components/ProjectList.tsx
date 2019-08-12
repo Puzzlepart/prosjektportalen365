@@ -1,21 +1,21 @@
-import * as React from 'react';
-import styles from './ProjectList.module.scss';
-import * as strings from 'ProjectListWebPartStrings';
-import { IProjectListProps, ProjectListDefaultProps } from './IProjectListProps';
-import { IProjectListState } from './IProjectListState';
-import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import { DetailsList, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import { Modal } from 'office-ui-fabric-react/lib/Modal';
-import ProjectCard from './ProjectCard/ProjectCard';
 import { sp, Web } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
-import { sortAlphabetically, getObjectValue } from '@Shared/helpers';
-import { ProjectInformationModal } from 'ProjectWebParts/webparts/projectInformation/components';
+import { getObjectValue, sortAlphabetically } from '@Shared/helpers';
 import MSGraph from 'msgraph-helper';
-import { ProjectListModel, ISPProjectItem, ISPUser, IGraphGroup } from '../models';
+import { IButtonProps } from 'office-ui-fabric-react/lib/Button';
+import { DetailsList, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
+import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
+import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import * as strings from 'ProjectListWebPartStrings';
+import { ProjectInformationModal } from 'ProjectWebParts/webparts/projectInformation/components';
+import * as React from 'react';
+import { IGraphGroup, ISPProjectItem, ISPUser, ProjectListModel } from '../models';
+import { IProjectListProps, ProjectListDefaultProps } from './IProjectListProps';
+import { IProjectListState } from './IProjectListState';
+import ProjectCard from './ProjectCard/ProjectCard';
+import styles from './ProjectList.module.scss';
 
 
 export default class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
@@ -33,7 +33,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
 
   public async componentDidMount() {
     try {
-      let projects = await this.getProjects();
+      let projects = await this.fetchProjects();
       let columns = this.props.columns.map(col => {
         if (col.fieldName === this.props.sortBy) {
           col.isSorted = true;
@@ -77,7 +77,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
       <div className={styles.projectList}>
         <div className={styles.container}>
           <div className={styles.searchBox}>
-            <SearchBox placeholder={strings.SearchBoxPlaceholderText} onChanged={this.onSearch} />
+            <SearchBox placeholder={strings.SearchBoxPlaceholderText} onChanged={this.onSearch.bind(this)} />
           </div>
           <div className={styles.viewToggle}>
             <Toggle
@@ -104,27 +104,23 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
       return <MessageBar>{strings.NoSearchResults}</MessageBar>;
     }
     if (this.state.showAsTiles) {
-      const cards = projects.map(project => (
+      return projects.map(project => (
         <ProjectCard
           project={project}
           shouldTruncateTitle={true}
           showProjectLogo={this.props.showProjectLogo}
           showProjectOwner={this.props.showProjectOwner}
           showProjectManager={this.props.showProjectManager}
-          actions={[{
-            id: 'ON_SELECT_PROJECT',
-            iconProps: { iconName: 'OpenInNewWindow' },
-            onClick: (event: React.MouseEvent<any>) => this.onCardAction(event, project),
-          }]} />
+          actions={this.getCardActions(project)} />
       ));
-      return cards;
     } else {
       return (
         <DetailsList
           items={this.filterProjets(this.state.listView.projects)}
           columns={this.state.listView.columns}
-          onRenderItemColumn={this.onRenderItemColumn}
-          onColumnHeaderClick={this.onListSort} />
+          onRenderItemColumn={this.onRenderItemColumn.bind(this)}
+          onColumnHeaderClick={this.onListSort.bind(this)}
+          selectionMode={SelectionMode.none} />
       );
     }
   }
@@ -150,7 +146,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   * @param {React.MouseEvent} _evt Event
   * @param {IColumn} column Column
   */
-  private onListSort = (_evt: React.MouseEvent<any>, column: IColumn): void => {
+  private onListSort(_evt: React.MouseEvent<any>, column: IColumn): void {
     let { listView } = ({ ...this.state } as IProjectListState);
     let isSortedDescending = column.isSortedDescending;
     if (column.isSorted) {
@@ -185,6 +181,19 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
       );
     }
     return null;
+  }
+
+  /**
+   * Get card ations
+   * 
+   * @param {ProjectListModel} project Project
+   */
+  private getCardActions(project: ProjectListModel): IButtonProps[] {
+    return [{
+      id: 'ON_SELECT_PROJECT',
+      iconProps: { iconName: 'OpenInNewWindow' },
+      onClick: (event: React.MouseEvent<any>) => this.onCardAction(event, project),
+    }];
   }
 
   /**
@@ -224,7 +233,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
    * 
    * @param {string} searchTerm Search term
    */
-  private onSearch = (searchTerm: string) => {
+  private onSearch(searchTerm: string) {
     this.setState({ searchTerm: searchTerm.toLowerCase() });
   }
 
@@ -282,13 +291,11 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   }
 
   /**
-   * Fetch data
-   * 
-   * @param {Web} web Web
+   * Fetch projects
    */
-  private async getProjects(web: Web = sp.web): Promise<ProjectListModel[]> {
+  private async fetchProjects(): Promise<ProjectListModel[]> {
     let [items, groups, users, phaseTerms] = await Promise.all([
-      web
+      sp.web
         .lists
         .getByTitle(this.props.entity.listName)
         .items
@@ -297,7 +304,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         .usingCaching()
         .get<ISPProjectItem[]>(),
       MSGraph.Get<IGraphGroup[]>(`/me/memberOf/$/microsoft.graph.group`, ['id', 'displayName'], `groupTypes/any(a:a%20eq%20'unified')`),
-      web
+      sp.web
         .siteUsers
         .select('Id', 'Title', 'Email')
         .usingCaching()

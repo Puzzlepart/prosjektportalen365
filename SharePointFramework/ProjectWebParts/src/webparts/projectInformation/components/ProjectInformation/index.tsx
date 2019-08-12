@@ -1,6 +1,7 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
 import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
-import { EntityDataService, HubConfigurationService } from '@Shared/services';
+import { HubConfigurationService } from '@Shared/services';
+import SpEntityPortalService from 'sp-entityportal-service';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
@@ -113,18 +114,21 @@ export default class ProjectInformation extends React.Component<IProjectInformat
 
   private async fetchData(): Promise<IProjectInformationData> {
     try {
-      const { hubSiteUrl, siteId, webUrl, entity } = this.props;
-      const hubConfigurationService = new HubConfigurationService(hubSiteUrl);
-      const entityDataService = new EntityDataService(hubSiteUrl, siteId, webUrl, entity);
+      const hubConfigurationService = new HubConfigurationService(this.props.hubSiteUrl);
+      const spEntityPortalService = new SpEntityPortalService({ webUrl: this.props.hubSiteUrl, ...this.props.entity });
 
       const [
         columnConfig,
-        { fields, editFormUrl, versionHistoryUrl },
+        fields,
+        editFormUrl,
+        versionHistoryUrl,
         entityItem,
       ] = await Promise.all([
         hubConfigurationService.getProjectColumns(),
-        entityDataService.fetchContext(),
-        entityDataService.fetchItem(),
+        spEntityPortalService.getEntityFields(),
+        spEntityPortalService.getEntityEditFormUrl(this.props.siteId, this.props.webUrl),
+        spEntityPortalService.getEntityVersionHistoryUrl(this.props.siteId, this.props.webUrl),
+        spEntityPortalService.getEntityItemFieldValues(this.props.siteId)
       ]);
       let properties = Object.keys(entityItem)
         .map(fieldName => ({
