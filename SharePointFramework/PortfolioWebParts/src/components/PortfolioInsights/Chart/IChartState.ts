@@ -1,4 +1,4 @@
-import { ChartConfiguration } from '../../models';
+import { ChartConfiguration } from 'models';
 
 export interface IChartState {
     chart: ChartConfiguration;

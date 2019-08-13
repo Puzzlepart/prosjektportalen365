@@ -1,5 +1,6 @@
-import { IPortfolioOverviewConfiguration, PortfolioOverviewView } from '../../portfolioOverview/config';
-import { ChartConfiguration,ChartData } from '../models';
+
+import { ChartConfiguration, ChartData, PortfolioOverviewView } from 'models';
+import { IPortfolioOverviewConfiguration } from 'interfaces';
 
 
 export interface IPortfolioInsightsState {

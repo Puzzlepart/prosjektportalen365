@@ -1,4 +1,4 @@
-import { IFilterProps } from '../../../components/FilterPanel';
+import { IFilterProps } from 'components';
 
 const PortfolioOverviewFieldSelector: IFilterProps = {
     column: {

@@ -1,7 +1,7 @@
-import { IPersonaSharedProps } from 'office-ui-fabric-react/lib/Persona';
-import { ITermData, ITerm } from '@pnp/sp-taxonomy';
+import { ITerm, ITermData } from '@pnp/sp-taxonomy';
 import { getUserPhoto } from '@Shared/helpers';
-import { ISPUser } from './ISPUser';
+import { ISPUser } from 'interfaces';
+import { IPersonaSharedProps } from 'office-ui-fabric-react/lib/Persona';
 
 export class ProjectListModel {
     public manager: IPersonaSharedProps;

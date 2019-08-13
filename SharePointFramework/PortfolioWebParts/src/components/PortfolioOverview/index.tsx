@@ -536,3 +536,4 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
 }
 
 export { IPortfolioOverviewProps };
+

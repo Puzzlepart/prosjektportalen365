@@ -1,8 +1,7 @@
 import { PageContext } from '@microsoft/sp-page-context';
 import * as PortfolioInsightsWebPartStrings from 'PortfolioInsightsWebPartStrings';
-import { IPortfolioInsightsWebPartProps } from '../IPortfolioInsightsWebPartProps';
 
-export interface IPortfolioInsightsProps extends IPortfolioInsightsWebPartProps {
+export interface IPortfolioInsightsProps {
     pageContext: PageContext;
     title?: string;
 }

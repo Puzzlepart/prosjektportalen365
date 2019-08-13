@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BenefitMeasurement } from '../../models';
+import { BenefitMeasurement } from 'models';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import * as objectGet from 'object-get';
 

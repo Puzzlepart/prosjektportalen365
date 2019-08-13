@@ -1,7 +1,8 @@
 import { SearchResult } from '@pnp/sp';
+import { IPortfolioOverviewConfiguration } from 'interfaces';
+import { PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import { IFilterProps } from '../../../components/FilterPanel';
-import { IPortfolioOverviewConfiguration, PortfolioOverviewColumn, PortfolioOverviewView } from '../config';
+import { IFilterProps } from '../';
 import { IPortfolioOverviewErrorMessage } from './IPortfolioOverviewErrorMessage';
 
 export interface IPortfolioOverviewState {

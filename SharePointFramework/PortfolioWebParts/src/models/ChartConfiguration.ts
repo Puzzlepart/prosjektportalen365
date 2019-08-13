@@ -1,9 +1,9 @@
-import { DataField } from './DataField';
-import { ChartData } from './ChartData';
-import { ISPChartConfiguration } from '../interfaces/ISPChartConfiguration';
-import { ChartConfigBaseContentTypeId, ChartTypes } from '../config';
-import { ISPDataSource } from '../interfaces/ISPDataSource';
+import { ChartData, DataField } from './';
+import { ISPDataSource, ISPChartConfiguration } from 'interfaces';
 import * as objectAssign from 'object-assign';
+
+export const CHARTCONFIGBASE_CONTENTTYPEID = '0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D';
+export const CHART_TYPES = ['bar', 'column', 'pie'];
 
 export class ChartConfiguration {
     public item: ISPChartConfiguration;
@@ -29,8 +29,8 @@ export class ChartConfiguration {
      * @param {string} contentTypeId Content type id
      */
     protected initType(contentTypeId: string) {
-        const typeIndex = parseInt(contentTypeId.replace(ChartConfigBaseContentTypeId, '').substring(0, 2), 10) - 1;
-        this.type = ChartTypes[typeIndex];
+        const typeIndex = parseInt(contentTypeId.replace(CHARTCONFIGBASE_CONTENTTYPEID, '').substring(0, 2), 10) - 1;
+        this.type = CHART_TYPES[typeIndex];
     }
 
     /**
