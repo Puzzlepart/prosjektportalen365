@@ -1,15 +1,14 @@
+import { SearchResult } from '@pnp/sp';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import { PortfolioOverviewView, PortfolioOverviewColumn, IPortfolioOverviewConfiguration } from '../config';
 import { IFilterProps } from '../../../components/FilterPanel';
-import { IFetchDataItem } from '../data';
+import { IPortfolioOverviewConfiguration, PortfolioOverviewColumn, PortfolioOverviewView } from '../config';
 import { IPortfolioOverviewErrorMessage } from './IPortfolioOverviewErrorMessage';
-
 
 export interface IPortfolioOverviewState {
     isLoading?: boolean;
     isChangingView?: PortfolioOverviewView;
     configuration?: IPortfolioOverviewConfiguration;
-    items?: IFetchDataItem[];
+    items?: SearchResult[];
     columns?: IColumn[];
     searchTerm?: string;
     filters?: IFilterProps[];
@@ -19,7 +18,7 @@ export interface IPortfolioOverviewState {
     showFilterPanel?: boolean;
     groupBy?: PortfolioOverviewColumn;
     sortBy?: PortfolioOverviewColumn;
-    showProjectInfo?: IFetchDataItem;
+    showProjectInfo?: SearchResult;
     excelExportStatus?: any;
     canUserManageWeb?: boolean;
 }

@@ -17,10 +17,7 @@ export default class Chart extends React.Component<IChartProps, IChartState> {
      */
     constructor(props: IChartProps) {
         super(props);
-        this.state = {
-            chart: props.chart,
-            breakpoint: getBreakpoint(),
-        };
+        this.state = { chart: props.chart, breakpoint: getBreakpoint() };
     }
 
     /**
@@ -32,13 +29,9 @@ export default class Chart extends React.Component<IChartProps, IChartState> {
         let highChartConfig: any;
         let error: string;
 
-        if (chart.data) {
-            try {
-                highChartConfig = chart.generateHighChartConfig();
-            } catch (err) {
-                error = strings.ChartErrorText;
-            }
-        } else {
+        try {
+            highChartConfig = chart.generateHighChartConfig(this.props.data);
+        } catch (err) {
             error = strings.ChartErrorText;
         }
 

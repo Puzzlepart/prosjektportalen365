@@ -1,16 +1,21 @@
-import * as React from 'react';
-import * as strings from 'PortfolioInsightsWebPartStrings';
-import styles from './PortfolioInsights.module.scss';
-import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import { IPortfolioInsightsProps } from './IPortfolioInsightsProps';
-import { IPortfolioInsightsState } from './IPortfolioInsightsState';
-import Chart from './Chart';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import * as PortfolioInsightsWebPartStrings from 'PortfolioInsightsWebPartStrings';
+import * as React from 'react';
+import { getConfig, PortfolioOverviewView } from '../../portfolioOverview/config';
+import * as portfolioOverviewData from '../../portfolioOverview/data';
 import { fetchData } from '../data';
+import { ChartData, ChartDataItem } from '../models';
+import Chart from './Chart';
+import { IPortfolioInsightsProps, PortfolioInsightsDefaultProps } from './IPortfolioInsightsProps';
+import { IPortfolioInsightsState } from './IPortfolioInsightsState';
+import styles from './PortfolioInsights.module.scss';
+import PortfolioInsightsCommandBar from './PortfolioInsightsCommandBar';
+
 
 export default class PortfolioInsights extends React.Component<IPortfolioInsightsProps, IPortfolioInsightsState> {
-  public static displayName = 'Porteføljeinnsikt';
+  public static defaultProps = PortfolioInsightsDefaultProps;
+
   /**
    * Constructor
    * 
@@ -23,8 +28,17 @@ export default class PortfolioInsights extends React.Component<IPortfolioInsight
 
   public async componentDidMount() {
     try {
-      const { charts } = await fetchData(this.props.context);
-      this.setState({ charts, isLoading: false });
+      const configuration = await getConfig();
+      const currentView = configuration.views[0];
+      const { charts, chartData, contentTypes } = await fetchData(this.props.pageContext.site.id.toString(), currentView, configuration);
+      this.setState({
+        charts,
+        contentTypes,
+        chartData,
+        configuration,
+        currentView,
+        isLoading: false,
+      });
     } catch (error) {
       this.setState({ error, isLoading: false });
     }
@@ -35,54 +49,63 @@ export default class PortfolioInsights extends React.Component<IPortfolioInsight
       return (
         <div className={styles.portfolioInsights}>
           <div className={styles.container}>
-            <Spinner label={strings.LoadingText} size={SpinnerSize.large} />
+            <Spinner label={PortfolioInsightsWebPartStrings.LoadingText} size={SpinnerSize.large} />
           </div>
         </div>
       );
     }
-    if (this.state.error) {
-      return (
-        <div className={styles.portfolioInsights}>
-          <div className={styles.container}>
-            <MessageBar messageBarType={MessageBarType.error}>{this.state.error}</MessageBar>
-          </div>
-        </div>
-      );
-    }
+
     return (
       <div className={styles.portfolioInsights}>
         <div className={styles.container}>
-          {this.renderCommandBar()}
+          <PortfolioInsightsCommandBar
+            contentTypes={this.state.contentTypes}
+            currentView={this.state.currentView}
+            configuration={this.state.configuration}
+            onViewChanged={this.onViewChanged.bind(this)} />
           <div className={styles.header}>
-            <div className={styles.title}>{PortfolioInsights.displayName}</div>
+            <div className={styles.title}>{this.props.title}</div>
           </div>
-          <div className={styles.inner}>
-            {this.state.charts.map((chart, idx) => (
-              <Chart key={idx} chart={chart} />
-            ))}
-          </div>
+          {this.charts}
         </div>
       </div>
     );
   }
 
-  /**
-   * Get command bar items
-   */
-  private renderCommandBar() {
-    const items: ICommandBarItemProps[] = [];
-    const farItems: ICommandBarItemProps[] = [{
-      key: "EditDataSelection",
-      name: 'Endre datautvalg',
-      iconProps: { iconName: "ExploreData" },
-      disabled: true,
-    }];
+  private get charts() {
+    if (this.state.error) {
+      return (
+        <div className={styles.inner}>
+          <MessageBar messageBarType={MessageBarType.error}>{this.state.error}</MessageBar>
+        </div>
+      );
+    }
+    if (this.state.chartData.isEmpty()) {
+      return (
+        <div className={styles.inner}>
+          <MessageBar messageBarType={MessageBarType.info}>{PortfolioInsightsWebPartStrings.EmptyText}</MessageBar>
+        </div>
+      );
+    }
     return (
-      <div className={styles.commandBar}>
-        <CommandBar
-          items={items}
-          farItems={farItems} />
+      <div className={styles.inner}>
+        {this.state.charts.map((chart, idx) => (
+          <Chart key={idx} chart={chart} data={this.state.chartData} />
+        ))}
       </div>
     );
+  }
+
+  /**
+   * On view changed
+   * 
+   * @param {PortfolioOverviewView} view View
+   */
+  private async onViewChanged(view: PortfolioOverviewView) {
+    let data = await portfolioOverviewData.fetchData(view, this.state.configuration, this.props.pageContext.site.id.toString());
+    this.setState({
+      currentView: view,
+      chartData: new ChartData(data.items.map(item => new ChartDataItem(item.Title, item))),
+    });
   }
 }
