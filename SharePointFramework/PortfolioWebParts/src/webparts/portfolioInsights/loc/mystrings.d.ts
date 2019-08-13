@@ -1,4 +1,5 @@
 declare interface IPortfolioInsightsWebPartStrings {
+  Title: string;
   LoadingText: string;
   ErrorText: string;
   ChartErrorText: string;
