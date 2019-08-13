@@ -316,3 +316,5 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
         }
     }
 }
+
+export { IAggregatedSearchListProps };

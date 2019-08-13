@@ -1,12 +1,11 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import BenefitsOverview, { IBenefitsOverviewProps } from './components/BenefitsOverview';
+import { BenefitsOverview, IBenefitsOverviewProps } from 'components';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { setupWebPart } from '../@setup';
-import { IBenefitsOverviewWebPartProps } from './IBenefitsOverviewWebPartProps';
 import { Logger, LogLevel } from '@pnp/logging';
 
-export default class BenefitsOverviewWebPart extends BaseClientSideWebPart<IBenefitsOverviewWebPartProps> {
+export default class BenefitsOverviewWebPart extends BaseClientSideWebPart<IBenefitsOverviewProps> {
   public render(): void {
     Logger.log({ message: '(BenefitsOverviewWebPart) render: Rendering <BenefitsOverview />', level: LogLevel.Info });
     const element: React.ReactElement<IBenefitsOverviewProps> = React.createElement(BenefitsOverview, {
