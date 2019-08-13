@@ -1,4 +1,4 @@
-import { ChartConfiguration, ChartData } from '../../models';
+import { ChartConfiguration, ChartData } from 'models';
 
 export interface IChartProps {
     chart: ChartConfiguration;

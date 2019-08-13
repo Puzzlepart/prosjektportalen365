@@ -2,10 +2,8 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import * as PortfolioInsightsWebPartStrings from 'PortfolioInsightsWebPartStrings';
 import * as React from 'react';
-import { getConfig, PortfolioOverviewView } from '../../portfolioOverview/config';
-import * as portfolioOverviewData from '../../portfolioOverview/data';
-import { fetchData } from '../data';
-import { ChartData, ChartDataItem } from '../models';
+import { fetchChartData, fetchDataForView, getPortfolioConfig } from 'data';
+import { ChartData, ChartDataItem, PortfolioOverviewView } from 'models';
 import Chart from './Chart';
 import { IPortfolioInsightsProps, PortfolioInsightsDefaultProps } from './IPortfolioInsightsProps';
 import { IPortfolioInsightsState } from './IPortfolioInsightsState';
@@ -28,9 +26,9 @@ export default class PortfolioInsights extends React.Component<IPortfolioInsight
 
   public async componentDidMount() {
     try {
-      const configuration = await getConfig();
+      const configuration = await getPortfolioConfig();
       const currentView = configuration.views[0];
-      const { charts, chartData, contentTypes } = await fetchData(this.props.pageContext.site.id.toString(), currentView, configuration);
+      const { charts, chartData, contentTypes } = await fetchChartData(currentView, configuration, this.props.pageContext.site.id.toString());
       this.setState({
         charts,
         contentTypes,
@@ -102,10 +100,12 @@ export default class PortfolioInsights extends React.Component<IPortfolioInsight
    * @param {PortfolioOverviewView} view View
    */
   private async onViewChanged(view: PortfolioOverviewView) {
-    let data = await portfolioOverviewData.fetchData(view, this.state.configuration, this.props.pageContext.site.id.toString());
+    let data = await fetchDataForView(view, this.state.configuration, this.props.pageContext.site.id.toString());
     this.setState({
       currentView: view,
       chartData: new ChartData(data.items.map(item => new ChartDataItem(item.Title, item))),
     });
   }
 }
+
+export { IPortfolioInsightsProps };
