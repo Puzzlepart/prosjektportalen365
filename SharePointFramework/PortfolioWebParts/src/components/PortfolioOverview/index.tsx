@@ -4,6 +4,9 @@ import { formatDate, tryParseCurrency } from '@Shared/helpers';
 import { parseUrlHash, setUrlHash } from '@Shared/util';
 import * as arraySort from 'array-sort';
 import * as arrayUnique from 'array-unique';
+import { fetchDataForView, getPortfolioConfig } from 'data';
+import { IPortfolioOverviewConfiguration } from 'interfaces';
+import { PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
 import * as objectGet from 'object-get';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
@@ -15,10 +18,7 @@ import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import * as PortfolioOverviewWebPartStrings from 'PortfolioOverviewWebPartStrings';
 import { ProjectInformationModal } from 'ProjectWebParts/webparts/projectInformation/components';
 import * as React from 'react';
-import FilterPanel, { IFilterItemProps, IFilterProps } from '../../../components/FilterPanel';
-import * as PortfolioOverviewConfig from '../config';
-import { IPortfolioOverviewConfiguration, PortfolioOverviewColumn, PortfolioOverviewView } from '../config';
-import { fetchData, IRefinementResult } from '../data';
+import { FilterPanel, IFilterItemProps, IFilterProps } from '../';
 import { IPortfolioOverviewProps, PortfolioOverviewDefaultProps } from './IPortfolioOverviewProps';
 import { IPortfolioOverviewState } from './IPortfolioOverviewState';
 import styles from './PortfolioOverview.module.scss';
@@ -238,11 +238,11 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
  * Get selected filters with items. Based on refiner configuration retrieved from the configuration list,
  * the filters are checked against refiners retrieved by search.
  *
- * @param {IRefinementResult[]} refiners Refiners retrieved by search
+ * @param {any[]} refiners Refiners retrieved by search
  * @param {IPortfolioOverviewConfig} configuration PortfolioOverviewConfig
  * @param {IPortfolioOverviewConfigViewConfig} viewConfig View configuration
  */
-  private getSelectedFiltersWithItems(refiners: IRefinementResult[], configuration: IPortfolioOverviewConfiguration, viewConfig: PortfolioOverviewView): IFilterProps[] {
+  private getSelectedFiltersWithItems(refiners: any[], configuration: IPortfolioOverviewConfiguration, viewConfig: PortfolioOverviewView): IFilterProps[] {
     const selectedRefiners = configuration.refiners.filter(ref => refiners.filter(r => r.Name === ref.key).length > 0 && viewConfig.refiners.indexOf(ref) !== -1);
     let filters = selectedRefiners.map(ref => {
       let entries = refiners.filter(r => r.Name === ref.key)[0].Entries;
@@ -437,7 +437,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
    */
   private async fetchInitialData(): Promise<Partial<IPortfolioOverviewState>> {
     try {
-      const configuration = await PortfolioOverviewConfig.getConfig();
+      const configuration = await getPortfolioConfig();
       const hashState = parseUrlHash();
       const viewIdUrlParam = new UrlQueryParameterCollection(document.location.href).getValue('viewId');
       let currentView = this.props.defaultView;
@@ -468,7 +468,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         }
       }
 
-      const { items, refiners } = await fetchData(currentView, configuration, this.props.pageContext.site.id.toString());
+      const { items, refiners } = await fetchDataForView(currentView, configuration, this.props.pageContext.site.id.toString());
 
       PortfolioOverviewFieldSelector.items = configuration.columns.map(col => ({
         name: col.name,
@@ -512,7 +512,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     }
 
     this.setState({ isChangingView: view });
-    const { items, refiners } = await fetchData(view, this.state.configuration, this.props.pageContext.site.id.toString());
+    const { items, refiners } = await fetchDataForView(view, this.state.configuration, this.props.pageContext.site.id.toString());
     let filters = this.getSelectedFiltersWithItems(refiners, this.state.configuration, view);
 
     let updatedState: Partial<IPortfolioOverviewState> = {
@@ -534,3 +534,5 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     this.setState(updatedState);
   }
 }
+
+export { IPortfolioOverviewProps };

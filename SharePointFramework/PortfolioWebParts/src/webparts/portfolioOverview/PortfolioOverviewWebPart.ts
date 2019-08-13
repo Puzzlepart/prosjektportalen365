@@ -1,18 +1,12 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
-import PortfolioOverview from './components/PortfolioOverview';
-import { IPortfolioOverviewProps } from './components/IPortfolioOverviewProps';
+import { PortfolioOverview, IPortfolioOverviewProps } from 'components';
 import { setupWebPart } from '../@setup';
-import { IPortfolioOverviewWebPartProps } from './IPortfolioOverviewWebPartProps';
 import { Logger, LogLevel } from '@pnp/logging';
 
-function testdecorator(ctor: Function) {
-  console.log(ctor);
-}
 
-@testdecorator
-export default class PortfolioOverviewWebPart extends BaseClientSideWebPart<IPortfolioOverviewWebPartProps> {
+export default class PortfolioOverviewWebPart extends BaseClientSideWebPart<IPortfolioOverviewProps> {
   public render(): void {
     Logger.log({ message: '(PortfolioOverviewWebPart) render: Rendering <PortfolioOverview />', level: LogLevel.Info });
     const element: React.ReactElement<IPortfolioOverviewProps> = React.createElement(PortfolioOverview, {

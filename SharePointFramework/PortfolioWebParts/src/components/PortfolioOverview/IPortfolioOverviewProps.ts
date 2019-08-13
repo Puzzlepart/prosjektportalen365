@@ -1,12 +1,13 @@
-import { SelectionMode, ConstrainMode, DetailsListLayoutMode, } from 'office-ui-fabric-react/lib/DetailsList';
-import { PortfolioOverviewView } from '../config';
 import { PageContext } from '@microsoft/sp-page-context';
-import { IPortfolioOverviewWebPartProps } from '../IPortfolioOverviewWebPartProps';
 import { IExcelExportConfig } from '@Shared/interfaces';
+import { PortfolioOverviewView } from 'models';
+import { ConstrainMode, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import * as PortfolioOverviewWebPartStrings from 'PortfolioOverviewWebPartStrings';
+import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
 
 
-export interface IPortfolioOverviewProps extends IPortfolioOverviewWebPartProps {
+export interface IPortfolioOverviewProps {
+    entity: ISpEntityPortalServiceParams;
     pageContext: PageContext;
     title?: string;
     projectInfoFilterField?: string;
