@@ -14,7 +14,6 @@ export class ChartConfiguration {
 
     constructor(item: ISPChartConfiguration, fields: DataField[]) {
         this.item = item;
-        this.searchQuery = item.GtPiDataSourceLookup;
         this.fields = fields;
         this.initType(item.ContentTypeId);
         this.initWidth(item);

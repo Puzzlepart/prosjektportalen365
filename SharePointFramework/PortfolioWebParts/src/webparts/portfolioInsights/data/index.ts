@@ -23,8 +23,6 @@ export async function fetchData(siteId: string, view: PortfolioOverviewView, con
                     'ContentTypeId',
                     'Title',
                     'GtPiSubTitle',
-                    'GtPiDataSourceLookup/Id',
-                    'GtPiDataSourceLookup/GtSearchQuery',
                     'GtPiFieldsId',
                     'GtPiCategoryFieldId',
                     'GtPiWidthSm',
@@ -34,7 +32,6 @@ export async function fetchData(siteId: string, view: PortfolioOverviewView, con
                     'GtPiWidthXxl',
                     'GtPiWidthXxxl',
                 )
-                .expand('GtPiDataSourceLookup')
                 .get<ISPChartConfiguration[]>(),
             sp.web.lists.getByTitle(PortfolioInsightsWebPartStrings.SPColumnConfigurationList).items
                 .select(
