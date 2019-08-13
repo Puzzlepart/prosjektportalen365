@@ -2,15 +2,11 @@ import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
-import RiskOverview from './components/RiskOverview';
-import { IRiskOverviewProps } from './components/IRiskOverviewProps';
 import { setupWebPart } from '../@setup';
-import { IRiskOverviewWebPartProps } from './IRiskOverviewWebPartProps';
-import { Logger, LogLevel } from '@pnp/logging';
+import { RiskOverview, IRiskOverviewProps } from 'components';
 
-export default class RiskOverviewWebPart extends BaseClientSideWebPart<IRiskOverviewWebPartProps> {
+export default class RiskOverviewWebPart extends BaseClientSideWebPart<IRiskOverviewProps> {
   public render(): void {
-    Logger.log({ message: '(RiskOverviewWebPart) render: Rendering <RiskOverview />', level: LogLevel.Info });
     const element: React.ReactElement<IRiskOverviewProps> = React.createElement(RiskOverview, {
       ...this.properties,
       pageContext: this.context.pageContext,
@@ -20,7 +16,6 @@ export default class RiskOverviewWebPart extends BaseClientSideWebPart<IRiskOver
   }
 
   protected async onInit(): Promise<void> {
-    Logger.log({ message: '(RiskOverviewWebPart) onInit: Initializing RiskOverviewWebPart', level: LogLevel.Info });
     setupWebPart(this.context);
   }
 

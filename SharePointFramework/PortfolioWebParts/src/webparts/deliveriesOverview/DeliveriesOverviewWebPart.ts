@@ -2,13 +2,11 @@ import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
-import DeliveriesOverview from './components/DeliveriesOverview';
-import { IDeliveriesOverviewProps } from './components/IDeliveriesOverviewProps';
+import { DeliveriesOverview, IDeliveriesOverviewProps } from 'components';
 import { setupWebPart } from '../@setup';
-import { IDeliveriesOverviewWebPartProps } from './IDeliveriesOverviewWebPartProps';
 import { Logger, LogLevel } from '@pnp/logging';
 
-export default class DeliveriesOverviewWebPart extends BaseClientSideWebPart<IDeliveriesOverviewWebPartProps> {
+export default class DeliveriesOverviewWebPart extends BaseClientSideWebPart<IDeliveriesOverviewProps> {
   public render(): void {
     Logger.log({ message: '(DeliveriesOverviewWebPart) render: Rendering <DeliveriesOverview />', level: LogLevel.Info });
     const element: React.ReactElement<IDeliveriesOverviewProps> = React.createElement(

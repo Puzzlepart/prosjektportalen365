@@ -32,6 +32,18 @@
       "@Shared/*": [
         "../../@Shared/lib/*"
       ],
+      "components": [
+        "components"
+      ],
+      "models": [
+        "models"
+      ],
+      "interfaces": [
+        "interfaces"
+      ],
+      "data": [
+        "data"
+      ],
       "ProjectWebParts/*": [
         "../../ProjectWebParts/lib/*"
       ]

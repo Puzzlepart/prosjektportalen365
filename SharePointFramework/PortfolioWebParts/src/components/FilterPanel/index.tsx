@@ -35,4 +35,4 @@ export default class FilterPanel extends React.Component<IFilterPanelProps, IFil
     }
 }
 
-export { IFilterProps, IFilterItemProps };
+export { IFilterPanelProps, IFilterProps, IFilterItemProps };
