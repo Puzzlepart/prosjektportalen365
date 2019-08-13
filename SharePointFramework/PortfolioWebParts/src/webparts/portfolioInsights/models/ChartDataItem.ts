@@ -1,4 +1,4 @@
-import { DataField } from "./DataField";
+import { DataField } from './DataField';
 
 export class ChartDataItem {
     public name: string;
@@ -32,22 +32,22 @@ export class ChartDataItem {
     public getValue(field: DataField) {
         const rawValue = this.getRawValue(field);
         switch (field.type) {
-            case "Percentage": {
+            case 'Percentage': {
                 if (this.hasValue(field)) {
                     return Math.floor((parseFloat(rawValue) * 100));
                 }
                 return 0;
             }
-            case "Number": {
+            case 'Number': {
                 if (this.hasValue(field)) {
                     return parseInt(rawValue, 10);
                 }
                 return 0;
             }
-            case "Text": {
+            case 'Text': {
                 if (this.hasValue(field)) {
-                    if (field.fieldName.indexOf("OWSUSER") !== -1 && typeof rawValue === "string" && rawValue.indexOf(" | ") !== -1) {
-                        return rawValue.split(" | ")[1];
+                    if (field.fieldName.indexOf('OWSUSER') !== -1 && typeof rawValue === 'string' && rawValue.indexOf(' | ') !== -1) {
+                        return rawValue.split(' | ')[1];
                     }
                     return rawValue;
                 }
