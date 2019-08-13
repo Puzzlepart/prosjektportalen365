@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './ExperienceLog.module.scss';
 import { IExperienceLogProps, ExperienceLogDefaultProps } from './IExperienceLogProps';
-import AggregatedSearchList from '../../../components/AggregatedSearchList';
+import { AggregatedSearchList } from '../';
 
 export default class ExperienceLog extends React.Component<IExperienceLogProps, {}> {
   public static defaultProps = ExperienceLogDefaultProps;
@@ -18,3 +18,5 @@ export default class ExperienceLog extends React.Component<IExperienceLogProps, 
     );
   }
 }
+
+export { IExperienceLogProps };
