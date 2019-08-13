@@ -1,5 +1,5 @@
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import { ProjectListModel } from "../models/ProjectListModel";
+import { ProjectListModel } from 'models';
 
 export interface IProjectListState {
   isLoading: boolean;
