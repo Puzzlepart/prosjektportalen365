@@ -95,3 +95,5 @@ export default class LatestProjects extends React.Component<ILatestProjectsProps
     return projects;
   }
 }
+
+export { ILatestProjectsProps };
