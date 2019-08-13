@@ -1263,12 +1263,6 @@
   <data name="SiteFields_GtIsRefinable_DisplayName" xml:space="preserve">
     <value>Presiser</value>
   </data>
-  <data name="SiteFields_GtMonthChoice_DisplayName" xml:space="preserve">
-    <value>Måned</value>
-  </data>
-  <data name="SiteFields_GtYear_DisplayName" xml:space="preserve">
-    <value>År</value>
-  </data>
   <data name="SiteFields_GtPiAutomaticRefreshEnabled_DisplayName" xml:space="preserve">
     <value>Automatisk oppdatering</value>
   </data>
@@ -1286,9 +1280,6 @@
   </data>
   <data name="SiteFields_GtPiCustomType_DisplayName" xml:space="preserve">
     <value>Diagramtype</value>
-  </data>
-  <data name="SiteFields_GtPiDataSourceLookup_DisplayName" xml:space="preserve">
-    <value>Datakilde</value>
   </data>
   <data name="SiteFields_GtPiExpandProperty_DisplayName" xml:space="preserve">
     <value>Ekspander egenskap</value>
@@ -1863,12 +1854,6 @@
   <data name="SiteFields_GtIsRefinable_Description" xml:space="preserve">
     <value>Brukere kan filtrere på denne kolonnen i Portføljeoversikten.</value>
   </data>
-  <data name="SiteFields_GtMonthChoice_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtYear_Description" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="SiteFields_GtPiAutomaticRefreshEnabled_Description" xml:space="preserve">
     <value>Automatisk oppdatering av data</value>
   </data>
@@ -1886,9 +1871,6 @@
   </data>
   <data name="SiteFields_GtPiCustomType_Description" xml:space="preserve">
     <value>Type diagram</value>
-  </data>
-  <data name="SiteFields_GtPiDataSourceLookup_Description" xml:space="preserve">
-    <value>Datakilde som skal brukes for dette diagrammet. Velges fra listen Datakilder.</value>
   </data>
   <data name="SiteFields_GtPiExpandProperty_Description" xml:space="preserve">
     <value>Om feltet er et brukerfelt (e.l.) må du velge en egenskap ? ekspandere</value>

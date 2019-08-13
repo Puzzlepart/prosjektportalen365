@@ -1,11 +1,11 @@
 /**
  * Format date
  * 
- * @param {string} dateStr Date string
+ * @param {string | Date} date Date string or object
  * @param {string} fallback Fallback if date is invalid
  * @param {string} locale Locale
  */
-export function formatDate(dateStr: string, includeTime: boolean = false, fallback: string = '', locale: string = 'nb-NO'): string {
+export function formatDate(date: string | Date, includeTime: boolean = false, fallback: string = '', locale: string = 'nb-NO'): string {
     let options: Intl.DateTimeFormatOptions = {
         weekday: 'long',
         year: 'numeric',
@@ -19,7 +19,6 @@ export function formatDate(dateStr: string, includeTime: boolean = false, fallba
             minute: '2-digit',
         }
     }
-    return dateStr ?
-        new Date(dateStr).toLocaleString(locale, options)
-        : fallback;
+    if (!date) return fallback;
+    return (typeof date === 'string' ? new Date(date) : date).toLocaleString(locale, options);
 };

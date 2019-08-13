@@ -250,19 +250,6 @@
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">180</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Måned</pnp:DataValue>
-            <pnp:DataValue FieldName="GtInternalName">GtMonthChoice</pnp:DataValue>
-            <pnp:DataValue FieldName="GtManagedProperty">GtMonthChoiceOWSCHCS</pnp:DataValue>
-            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
-            <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
-            <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtShowFieldPortfolio">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">190</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtOverallStatus_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtOverallStatus</pnp:DataValue>

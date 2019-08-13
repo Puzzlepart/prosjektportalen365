@@ -1,4 +1,4 @@
-import { QueryPropertyValueType, SearchResults, SortDirection, sp } from '@pnp/sp';
+import { QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp';
 import * as cleanDeep from 'clean-deep';
 import * as objectGet from 'object-get';
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
@@ -17,19 +17,12 @@ export interface IRefinementResult {
     Entries: IRefinementResultEntry[];
 }
 
-export interface IFetchDataItem {
-    Title: string;
-    Path: string;
-    SiteId: string;
-    [key: string]: string;
-}
-
 export interface IFetchDataResponse {
-    items: IFetchDataItem[];
+    items: SearchResult[];
     refiners: IRefinementResult[];
 }
 
-export const DEFAULT_SEARCH_SETTINGS = {
+const DEFAULT_SEARCH_SETTINGS = {
     Querytext: '*',
     RowLimit: 500,
     TrimDuplicates: false,
@@ -46,17 +39,6 @@ export const DEFAULT_SEARCH_SETTINGS = {
 };
 
 /**
- * Map search results
- * 
- * @param {SearchResults} results Search reulsts
- */
-function mapSearchResults(results: SearchResults) {
-    let items: any[] = objectGet(results, 'PrimarySearchResults') || [];
-    items = items.map(item => cleanDeep({ ...item }));
-    return items;
-}
-
-/**
  * Query the REST Search API using @pnp/sp
  *
  * @param {PortfolioOverviewView} view View configuration
@@ -66,7 +48,7 @@ function mapSearchResults(results: SearchResults) {
  */
 export async function fetchData(view: PortfolioOverviewView, configuration: IPortfolioOverviewConfiguration, siteId: string, siteIdProperty: string = 'GtSiteIdOWSTEXT'): Promise<IFetchDataResponse> {
     try {
-        const [projectsRes, sitesRes, statusReportsRes] = await Promise.all([
+        let [{ PrimarySearchResults: projects }, { PrimarySearchResults: sites }, { PrimarySearchResults: statusReports }] = await Promise.all([
             sp.search({
                 ...DEFAULT_SEARCH_SETTINGS,
                 QueryTemplate: view.searchQuery,
@@ -86,15 +68,15 @@ export async function fetchData(view: PortfolioOverviewView, configuration: IPor
             }),
         ]);
 
-        let refiners = objectGet(projectsRes, 'RawSearchResults.PrimaryQueryResult.RefinementResults.Refiners') || [];
-        let projects = mapSearchResults(projectsRes);
-        let sites = mapSearchResults(sitesRes);
-        let statusReports = mapSearchResults(statusReportsRes);
-        let validSites = sites.filter(({ SiteId }) => projects.filter(res => res[siteIdProperty] === SiteId).length === 1);
-        let items = validSites.map(({ SiteId, Title, Path }) => {
-            const [project] = projects.filter(res => res[siteIdProperty] === SiteId);
-            const [statusReport] = statusReports.filter(res => res[siteIdProperty] === SiteId);
-            return { ...statusReport, ...project, Title, Path, SiteId };
+        let refiners = objectGet(projects, 'RawSearchResults.PrimaryQueryResult.RefinementResults.Refiners') || [];
+        projects = projects.map(item => cleanDeep({ ...item }));
+        sites = sites.map(item => cleanDeep({ ...item }));
+        statusReports = statusReports.map(item => cleanDeep({ ...item }));
+        let validSites = sites.filter(site => projects.filter(res => res[siteIdProperty] === site['SiteId']).length === 1);
+        let items = validSites.map(site => {
+            const [project] = projects.filter(res => res[siteIdProperty] === site['SiteId']);
+            const [statusReport] = statusReports.filter(res => res[siteIdProperty] === site['SiteId']);
+            return { ...statusReport, ...project, Title: site.Title, Path: site.Path, SiteId: site['SiteId'] };
         });
         return { items, refiners };
     } catch (err) {

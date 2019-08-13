@@ -1,12 +1,12 @@
 import * as React from 'react';
-import styles from './TemplateLibrarySelectModalScreenSelect.module.scss';
+import styles from './DocumentTemplateModalScreenSelect.module.scss';
 import * as TemplateSelectorCommandSetStrings from 'TemplateSelectorCommandSetStrings';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 import { DetailsList, SelectionMode, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import { ITemplateLibrarySelectModalScreenSelectProps } from './ITemplateLibrarySelectModalScreenSelectProps';
+import { IDocumentTemplateModalScreenSelectProps } from './IDocumentTemplateModalScreenSelectProps';
 
-export default class TemplateLibrarySelectModalScreenSelect extends React.Component<ITemplateLibrarySelectModalScreenSelectProps, {}> {
+export default class DocumentTemplateModalScreenSelect extends React.Component<IDocumentTemplateModalScreenSelectProps, {}> {
     private _columns: IColumn[] = [
         {
             key: 'name',
@@ -31,15 +31,15 @@ export default class TemplateLibrarySelectModalScreenSelect extends React.Compon
     /**
      * Constructor
      * 
-     * @param {ITemplateLibrarySelectModalScreenSelectProps} props Props
+     * @param {IDocumentTemplateModalScreenSelectProps} props Props
      */
-    constructor(props: ITemplateLibrarySelectModalScreenSelectProps) {
+    constructor(props: IDocumentTemplateModalScreenSelectProps) {
         super(props);
     }
 
-    public render(): React.ReactElement<ITemplateLibrarySelectModalScreenSelectProps> {
+    public render(): React.ReactElement<IDocumentTemplateModalScreenSelectProps> {
         return (
-            <div className={styles.templateLibrarySelectModalScreenSelect}>
+            <div className={styles.documentTemplateModalScreenSelect}>
                 <MarqueeSelection selection={this.props.selection}>
                     <DetailsList
                         items={this.props.templates}

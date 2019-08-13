@@ -11,7 +11,7 @@ export default class PortfolioInsightsWebPart extends BaseClientSideWebPart<IPor
   public render(): void {
     Logger.log({ message: '(PortfolioInsightsWebPart) render: Rendering <PortfolioInsights />', level: LogLevel.Info });
     const element: React.ReactElement<IPortfolioInsightsProps> = React.createElement(PortfolioInsights, {
-      context: this.context,
+      pageContext: this.context.pageContext,
       ...this.properties,
     });
     ReactDom.render(element, this.domElement);

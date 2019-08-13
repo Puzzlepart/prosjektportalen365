@@ -10,24 +10,28 @@ import HubSiteService, { IHubSite } from 'sp-hubsite-service';
 import ProjectStatus, { IProjectStatusProps } from "./components/ProjectStatus";
 import { IProjectStatusWebPartProps } from './IProjectStatusWebPartProps';
 
+moment.locale('nb');
+Logger.subscribe(new ConsoleListener());
+Logger.activeLogLevel = LogLevel.Info;
+
 export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProjectStatusWebPartProps> {
-  private hubSite: IHubSite;
-  private spEntityPortalService: SpEntityPortalService;
+  private _hubSite: IHubSite;
+  private _spEntityPortalService: SpEntityPortalService;
 
   public async onInit() {
-    sp.setup({ spfxContext: this.context });
-    moment.locale('nb');
-    Logger.subscribe(new ConsoleListener());
-    Logger.activeLogLevel = LogLevel.Info;
-    this.hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
-    const params = { webUrl: this.hubSite.url, ...this.properties.entity };
-    this.spEntityPortalService = new SpEntityPortalService(params);
+    sp.setup({
+      spfxContext: this.context,
+      defaultCachingTimeoutSeconds: 60,
+      globalCacheDisable: false
+    });
+    this._hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
+    this._spEntityPortalService = new SpEntityPortalService({ webUrl: this._hubSite.url, ...this.properties.entity });
   }
 
   public render(): void {
     const element: React.ReactElement<IProjectStatusProps> = React.createElement(ProjectStatus, {
-      hubSite: this.hubSite,
-      spEntityPortalService: this.spEntityPortalService,
+      hubSite: this._hubSite,
+      spEntityPortalService: this._spEntityPortalService,
       pageContext: this.context.pageContext,
       ...this.properties,
     });

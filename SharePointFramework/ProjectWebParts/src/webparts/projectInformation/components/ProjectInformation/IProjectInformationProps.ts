@@ -8,3 +8,7 @@ export interface IProjectInformationProps extends IProjectInformationWebPartProp
   filterField: string;
   hideActions?: boolean;
 }
+
+export const ProjectInformationDefaultProps: Partial<IProjectInformationProps> = {
+  title: 'Prosjektinformasjon',
+};

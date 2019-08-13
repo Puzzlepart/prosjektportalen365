@@ -2,25 +2,27 @@ import { override } from '@microsoft/decorators';
 import { BaseListViewCommandSet, Command, IListViewCommandSetExecuteEventParameters, IListViewCommandSetListViewUpdatedParameters } from '@microsoft/sp-listview-extensibility';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import HubSiteService from 'sp-hubsite-service';
 import '@pnp/polyfill-ie11';
 import * as strings from 'TemplateSelectorCommandSetStrings';
-import { TemplateLibrarySelectModal } from '../../components';
+import { DocumentTemplateModal } from '../../components';
 import { ITemplateSelectorCommandSetProperties } from './ITemplateSelectorCommandSetProperties';
 import * as data from '../../data';
-import { TemplateFile } from '../../models';
 import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
 import { sp } from '@pnp/sp';
+import { TemplateFile, IDocumentLibrary } from '../../models';
+
+Logger.subscribe(new ConsoleListener());
+Logger.activeLogLevel = LogLevel.Info;
 
 
 export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<ITemplateSelectorCommandSetProperties> {
-  private templates: TemplateFile[] = [];
-  private container: Element;
+  private _templates: TemplateFile[];
+  private _libraries: IDocumentLibrary[];
+  private _container: Element;
 
   constructor() {
     super();
-    Logger.subscribe(new ConsoleListener());
-    Logger.activeLogLevel = LogLevel.Info;
+    this._templates = [];
   }
 
   @override
@@ -30,43 +32,11 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
     if (OPEN_TEMPLATE_SELECTOR_COMMAND) {
       Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Initializing', data: { version: this.context.manifest.version }, level: LogLevel.Info });
       try {
-        const hub = await HubSiteService.GetHubSite(sp, this.context.pageContext);
-        Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Retrieved hub site', data: { url: hub.url }, level: LogLevel.Info });
-        const currentPhase = await data.getCurrentPhase(hub, this.properties.phaseTermSetId || 'abcfc9d9-a263-4abb-8234-be973c46258a', this.context.pageContext.site.id.toString());
-        Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Retrieved current phase', data: { currentPhase }, level: LogLevel.Info });
-        this.templates = await data.getHubItems(
-          hub,
-          this.properties.templateLibrary || 'Malbibliotek',
-          TemplateFile,
-          {
-            ViewXml: `<View>
-            <Query>
-                <Where>
-                    <Or>
-                        <Or>
-                            <Eq>
-                                <FieldRef Name="GtProjectPhase" />
-                                <Value Type="Text">${currentPhase}</Value>
-                            </Eq>
-                            <Eq>
-                                <FieldRef Name="GtProjectPhase" />
-                                <Value Type="Text">Flere faser</Value>
-                            </Eq>
-                        </Or>
-                        <Eq>
-                            <FieldRef Name="GtProjectPhase" />
-                            <Value Type="Text">Ingen fase</Value>
-                        </Eq>
-                    </Or>
-                </Where>
-            </Query>
-        </View>` },
-          ['File'],
-        );
-        Logger.log({ message: `(TemplateSelectorCommandSet) onInit: Retrieved ${this.templates.length} templates`, level: LogLevel.Info });
+        this._templates = await data.getDocumentTemplates(sp, this.context.pageContext, this.properties.templateLibrary, this.properties.phaseTermSetId);
+        Logger.log({ message: `(TemplateSelectorCommandSet) onInit: Retrieved ${this._templates.length} templates from the specified template library`, level: LogLevel.Info });
       } catch (error) {
         console.log(error);
-        Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Failed to initialize', data: { error }, level: LogLevel.Info });
+        Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Failed to initialize', level: LogLevel.Warning });
       }
     }
   }
@@ -75,38 +45,50 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
   public onListViewUpdated(event: IListViewCommandSetListViewUpdatedParameters): void {
     const OPEN_TEMPLATE_SELECTOR_COMMAND: Command = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR');
     if (OPEN_TEMPLATE_SELECTOR_COMMAND) {
-      OPEN_TEMPLATE_SELECTOR_COMMAND.visible = event.selectedRows.length === 0 && this.templates.length > 0;
+      OPEN_TEMPLATE_SELECTOR_COMMAND.visible = event.selectedRows.length === 0 && this._templates.length > 0;
     }
   }
 
   @override
-  public onExecute(event: IListViewCommandSetExecuteEventParameters): void {
+  public async onExecute(event: IListViewCommandSetExecuteEventParameters): Promise<void> {
     switch (event.itemId) {
       case 'OPEN_TEMPLATE_SELECTOR':
+        this._libraries = (
+          await sp.web.lists
+            .select('Id', 'Title', 'RootFolder/ServerRelativeUrl')
+            .expand('RootFolder')
+            .filter(`BaseTemplate eq 101 and IsCatalog eq false and IsApplicationList eq false and ListItemEntityTypeFullName ne 'SP.Data.FormServerTemplatesItem'`)
+            .usingCaching()
+            .get()
+        ).map(l => ({
+          Id: l.Id,
+          Title: l.Title,
+          ServerRelativeUrl: l.RootFolder.ServerRelativeUrl,
+        }));
         this.onOpenTemplateSelector();
         break;
     }
   }
 
   /**
-   * On open <TemplateLibrarySelectModal />
+   * On open <DocumentTemplateModal />
    */
   private onOpenTemplateSelector() {
-    const templateLibrarySelectModal = React.createElement(TemplateLibrarySelectModal, {
+    const templateLibrarySelectModal = React.createElement(DocumentTemplateModal, {
       title: strings.TemplateLibrarySelectModalTitle,
       onDismiss: this.onDismissTemplateLibrarySelectModal,
-      libraryServerRelativeUrl: this.context.pageContext.list.serverRelativeUrl,
-      templates: this.templates,
+      libraries: this._libraries,
+      templates: this._templates,
     });
-    this.container = document.createElement('DIV');
-    document.body.appendChild(this.container);
-    ReactDOM.render(templateLibrarySelectModal, this.container);
+    this._container = document.createElement('DIV');
+    document.body.appendChild(this._container);
+    ReactDOM.render(templateLibrarySelectModal, this._container);
   }
 
   /**
-   * On dismiss <TemplateLibrarySelectModal />
+   * On dismiss <DocumentTemplateModal />
    */
   private onDismissTemplateLibrarySelectModal = () => {
-    ReactDOM.unmountComponentAtNode(this.container);
+    ReactDOM.unmountComponentAtNode(this._container);
   }
 }

@@ -1,7 +1,7 @@
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
-import { TemplateFile } from '../../../models';
+import { TemplateFile } from '../../../models/index';
 
-export interface ITemplateLibrarySelectModalScreenSelectProps {
+export interface IDocumentTemplateModalScreenSelectProps {
     templates: TemplateFile[];
     selection: Selection;
     selectedItems: any[];

@@ -1,25 +1,19 @@
-import * as moment from 'moment';
-
 export default class ProjectStatusReport {
     public id: number;
     public item: { [key: string]: any };
-    public month: string;
-    public year: number;
-    public date: moment.Moment;
+    public date: Date;
     public defaultEditFormUrl: string;
 
     /**
      * Constructor
      * 
      * @param {Object} item Item
-     * @param {string} editFormUrl Edit form url
+     * @param {string} defaultEditFormUrl Default edit form url
      */
     constructor(item: { [key: string]: any }, defaultEditFormUrl?: string) {
         this.item = item;
         this.id = this.item.Id;
-        this.month = item.GtMonthChoice;
-        this.year = parseInt(item.GtYear, 10);
-        this.date = moment({ month: this.monthIndex, year: this.year }).endOf('month');
+        this.date = new Date(item.Created);
         this.defaultEditFormUrl = defaultEditFormUrl;
     }
 
@@ -35,13 +29,6 @@ export default class ProjectStatusReport {
             }, {});
     }
 
-    /**
-     * Month index
-     */
-    public get monthIndex() {
-        return moment.months().indexOf(this.month.toLowerCase());
-    }
-
     public get editFormUrl() {
         return [
             `${window.location.protocol}//${window.location.hostname}`,
@@ -51,9 +38,5 @@ export default class ProjectStatusReport {
             `&Source=`,
             encodeURIComponent(window.location.href),
         ].join('');
-    }
-
-    public toString(): string {
-        return [this.month, this.year].join(' ');
     }
 }

@@ -10,6 +10,7 @@ define([], function () {
     "TitleLabel": "Tittel",
     "ModifiedLabel": "Endret",
     "SummaryText": "{0} dokument(er) ble kopiert til prosjektområdet.",
-    "GetMoreText": "Hent flere"
+    "GetMoreText": "Hent flere",
+    "LibraryDropdownLabel": "Bibliotek"
   }
 });
