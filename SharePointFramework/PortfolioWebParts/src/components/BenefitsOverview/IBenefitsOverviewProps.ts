@@ -1,8 +1,8 @@
-import { IBenefitsOverviewWebPartProps } from '../IBenefitsOverviewWebPartProps';
 import * as BenefitsOverviewWebPartStrings from 'BenefitsOverviewWebPartStrings';
+import { IAggregatedSearchListProps } from '../';
 
-export interface IBenefitsOverviewProps extends IBenefitsOverviewWebPartProps {
-
+export interface IBenefitsOverviewProps  extends IAggregatedSearchListProps {
+    hiddenColumns?: string[];
 }
 
 export const BenefitsOverviewDefaultProps: Partial<IBenefitsOverviewProps> = {
