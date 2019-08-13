@@ -1,141 +1,80 @@
-import * as strings from 'PortfolioInsightsWebPartStrings';
-import { sp, QueryPropertyValueType, SearchQuery } from '@pnp/sp';
-import { ChartConfiguration } from '../models/ChartConfiguration';
+import { dateAdd } from "@pnp/common";
+import { sp } from '@pnp/sp';
+import * as PortfolioInsightsWebPartStrings from 'PortfolioInsightsWebPartStrings';
+import { IPortfolioOverviewConfiguration, PortfolioOverviewView } from 'webparts/portfolioOverview/config';
+import * as portfolioOverviewData from '../../portfolioOverview/data';
 import { ISPChartConfiguration } from '../interfaces/ISPChartConfiguration';
-import { DataField, DataFieldType } from '../models/DataField';
-import { ChartData } from '../models/ChartData';
-import { ChartDataItem } from '../models/ChartDataItem';
 import { ISPColumnConfiguration } from '../interfaces/ISPColumnConfiguration';
-import { ISPSearchSite } from '../interfaces/ISPSearchSite';
-import { WebPartContext } from '@microsoft/sp-webpart-base';
-
-const SPChartConfigurationListSelect = [
-    'ContentTypeId',
-    'Title',
-    'GtPiSubTitle',
-    'GtPiDataSourceLookup/Id',
-    'GtPiDataSourceLookup/GtSearchQuery',
-    'GtPiFieldsId',
-    'GtPiCategoryFieldId',
-    'GtPiWidthSm',
-    'GtPiWidthMd',
-    'GtPiWidthLg',
-    'GtPiWidthXl',
-    'GtPiWidthXxl',
-    'GtPiWidthXxxl',
-];
-const SPColumnConfigurationListSelect = [
-    'Id',
-    'Title',
-    'GtManagedProperty',
-    'GtFieldDataType',
-];
-
-export type SearchQueries = { [id: number]: SearchQuery };
-
-/**
- * Get search queries distinct
- * 
- * @param {ChartConfiguration[]} charts Charts
- */
-function getSearchQueriesDistinct(charts: ChartConfiguration[]): SearchQueries {
-    return charts.reduce((obj, chart) => {
-        if (chart.searchQuery) {
-            obj[chart.searchQuery.Id] = obj[chart.searchQuery.Id] || {
-                Querytext: '*',
-                QueryTemplate: chart.searchQuery.GtSearchQuery,
-                RowLimit: 500,
-                TrimDuplicates: false,
-                SelectProperties: ['Title', 'GtSiteIdOWSTEXT'],
-            };
-            obj[chart.searchQuery.Id].SelectProperties.push(...chart.fields.map(fld => fld.fieldName));
-        }
-        return obj;
-    }, {});
-}
-
-/**
- * Fetch sites
- * 
- * @param {string} siteId Site id
- */
-async function fetchSites(siteId: string): Promise<ISPSearchSite[]> {
-    return (await sp.search({
-        Querytext: `DepartmentId:${siteId} contentclass:STS_Site`,
-        TrimDuplicates: false,
-        RowLimit: 500,
-        SelectProperties: ['Title', 'SiteId'],
-        Properties: [{
-            Name: "EnableDynamicGroups",
-            Value: {
-                BoolVal: true,
-                QueryPropertyValueTypeIndex: QueryPropertyValueType.BooleanType
-            }
-        }]
-    })).PrimarySearchResults as ISPSearchSite[];
-}
-
-/**
- * Get chart data
- * 
- * @param {Object} searchQueries Search queries
- * @param {WebPartContext} context Context
- */
-async function fetchChartData(searchQueries: SearchQueries, context: WebPartContext): Promise<{ [id: number]: ChartData }> {
-    const sites = await fetchSites(context.pageContext.legacyPageContext.siteId);
-    var promises = Object.keys(searchQueries).map(async (id) => {
-        try {
-            let results = (await sp.search(searchQueries[id])).PrimarySearchResults as any[];
-            let items = results
-                .map(res => {
-                    const [site] = sites.filter(_site => _site.SiteId === res.GtSiteIdOWSTEXT);
-                    return site ? new ChartDataItem(site.Title, res) : null;
-                })
-                .filter(item => item);
-            let data = new ChartData(items);
-            return { [id]: data };
-        } catch (error) {
-            return {};
-        }
-    });
-    return (await Promise.all(promises)).reduce((o, d) => ({ ...o, ...d }), {});
-}
+import { ChartConfiguration, ChartData, ChartDataItem, DataField } from '../models';
+import { DataFieldType } from '../models/DataField';
 
 /**
  * Fetch data
  * 
- * @param {WebPartContext} context Context
+ * @param {string} siteId Site id
+ * @param {PortfolioOverviewView} view View
+ * @param {IPortfolioOverviewConfiguration} configuration Configuration
  */
-export async function fetchData(context: WebPartContext) {
+export async function fetchData(siteId: string, view: PortfolioOverviewView, configuration: IPortfolioOverviewConfiguration) {
     try {
-        const [chartItems, fldItems] = await Promise.all([
-            sp.web.lists.getByTitle(strings.SPChartConfigurationList).items
-                .select(...SPChartConfigurationListSelect)
-                .expand('GtPiDataSourceLookup')
+        const [chartItems, columnConfigItems, contentTypes] = await Promise.all([
+            sp.web.lists.getByTitle(PortfolioInsightsWebPartStrings.SPChartConfigurationList).items
+                .select(
+                    'ContentTypeId',
+                    'Title',
+                    'GtPiSubTitle',
+                    'GtPiFieldsId',
+                    'GtPiCategoryFieldId',
+                    'GtPiWidthSm',
+                    'GtPiWidthMd',
+                    'GtPiWidthLg',
+                    'GtPiWidthXl',
+                    'GtPiWidthXxl',
+                    'GtPiWidthXxxl',
+                )
                 .get<ISPChartConfiguration[]>(),
-            sp.web.lists.getByTitle(strings.SPColumnConfigurationList).items
-                .select(...SPColumnConfigurationListSelect)
+            sp.web.lists.getByTitle(PortfolioInsightsWebPartStrings.SPColumnConfigurationList).items
+                .select(
+                    'Id',
+                    'Title',
+                    'GtManagedProperty',
+                    'GtFieldDataType',
+                )
+                .usingCaching({
+                    key: 'portfolioinsights_columns',
+                    storeName: 'local',
+                    expiration: dateAdd(new Date(), 'hour', 1),
+                })
                 .get<ISPColumnConfiguration[]>(),
+            sp.web.lists.getByTitle(PortfolioInsightsWebPartStrings.SPChartConfigurationList).contentTypes
+                .select(
+                    'StringId',
+                    'Name',
+                    'NewFormUrl',
+                )
+                .usingCaching({
+                    key: 'portfolioinsights_contenttypes',
+                    storeName: 'local',
+                    expiration: dateAdd(new Date(), 'hour', 1),
+                })
+                .get<{ StringId: string, Name: string, NewFormUrl: string }[]>(),
         ]);
         let charts: ChartConfiguration[] = chartItems.map(item => {
             let fields = item.GtPiFieldsId.map(id => {
-                const [fld] = fldItems.filter(_fld => _fld.Id === id);
+                const [fld] = columnConfigItems.filter(_fld => _fld.Id === id);
                 return new DataField(fld.Title, fld.GtManagedProperty, fld.GtFieldDataType as DataFieldType);
             });
             let chart = new ChartConfiguration(item, fields);
             return chart;
         });
-        let searchQueries = getSearchQueriesDistinct(charts);
-        let chartData = await fetchChartData(searchQueries, context);
-        charts = charts
-            .filter(chart => chart.searchQuery)
-            .map(chart => {
-                chart.data = chartData[chart.searchQuery.Id];
-                return chart;
-            });
-        return { charts };
+        let data = await portfolioOverviewData.fetchData(view, configuration, siteId);
+        return {
+            charts,
+            chartData: new ChartData(data.items.map(item => new ChartDataItem(item.Title, item))),
+            contentTypes,
+        };
     } catch (error) {
         console.log(error);
-        throw strings.ErrorText;
+        throw PortfolioInsightsWebPartStrings.ErrorText;
     }
 }

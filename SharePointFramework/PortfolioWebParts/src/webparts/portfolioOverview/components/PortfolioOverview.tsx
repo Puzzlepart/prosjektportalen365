@@ -1,3 +1,7 @@
+import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
+import { SearchResult } from '@pnp/sp';
+import { formatDate, tryParseCurrency } from '@Shared/helpers';
+import { parseUrlHash, setUrlHash } from '@Shared/util';
 import * as arraySort from 'array-sort';
 import * as arrayUnique from 'array-unique';
 import * as objectGet from 'object-get';
@@ -9,19 +13,16 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import * as PortfolioOverviewWebPartStrings from 'PortfolioOverviewWebPartStrings';
+import { ProjectInformationModal } from 'ProjectWebParts/webparts/projectInformation/components';
 import * as React from 'react';
-import { formatDate, tryParseCurrency } from '@Shared/helpers';
-import { parseUrlHash, setUrlHash } from '@Shared/util';
 import FilterPanel, { IFilterItemProps, IFilterProps } from '../../../components/FilterPanel';
 import * as PortfolioOverviewConfig from '../config';
 import { IPortfolioOverviewConfiguration, PortfolioOverviewColumn, PortfolioOverviewView } from '../config';
-import { fetchData, IRefinementResult, IFetchDataItem } from '../data';
+import { fetchData, IRefinementResult } from '../data';
 import { IPortfolioOverviewProps, PortfolioOverviewDefaultProps } from './IPortfolioOverviewProps';
 import { IPortfolioOverviewState } from './IPortfolioOverviewState';
 import styles from './PortfolioOverview.module.scss';
 import PortfolioOverviewFieldSelector from './PortfolioOverviewFieldSelector';
-import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
-import { ProjectInformationModal } from 'ProjectWebParts/webparts/projectInformation/components';
 
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = PortfolioOverviewDefaultProps;
@@ -73,21 +74,24 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     return (
       <div className={styles.portfolioOverview}>
         <div className={styles.container}>
-          {this.renderCommandBar()}
-          {this.renderTitle()}
-          {this.renderSearchBox()}
-          {this.renderList()}
-          {this.renderFilterPanel()}
-          {this.renderProjectInfoModal()}
+          {this.commandBar}
+          <div className={styles.header}>
+            <div className={styles.title}>{this.props.title}</div>
+          </div>
+          <div className={styles.searchBox}>
+            <SearchBox
+              onChange={newValue => this.setState({ searchTerm: newValue.toLowerCase() })}
+              placeholder={PortfolioOverviewWebPartStrings.SearchBoxPlaceHolder} />
+          </div>
+          {this.list}
+          {this.filterPanel}
+          {this.projectInfoModal}
         </div>
       </div>
     );
   }
 
-  /**
-    * Renders the <CommandBar /> from {office-ui-fabric-react}
-    */
-  private renderCommandBar() {
+  private get commandBar() {
     const items: IContextualMenuItem[] = [];
     const farItems: IContextualMenuItem[] = [];
 
@@ -166,34 +170,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     return <CommandBar items={items} farItems={farItems} />;
   }
 
-  /**
-   *  Render SearchBox
-   */
-  private renderSearchBox() {
-    return (
-      <div className={styles.searchBox}>
-        <SearchBox
-          onChange={newValue => this.setState({ searchTerm: newValue.toLowerCase() })}
-          placeholder={PortfolioOverviewWebPartStrings.SearchBoxPlaceHolder} />
-      </div>
-    );
-  }
-
-  /**
-   *  Render title
-   */
-  private renderTitle() {
-    return (
-      <div className={styles.header}>
-        <div className={styles.title}>{this.props.title}</div>
-      </div>
-    );
-  }
-
-  /**
-   * Render list
-   */
-  private renderList() {
+  private get list() {
     if (this.state.error) {
       return (
         <div className={styles.portfolioOverview}>
@@ -221,10 +198,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     );
   }
 
-  /**
-   * Render filter panel
-   */
-  private renderFilterPanel() {
+  private get filterPanel() {
     PortfolioOverviewFieldSelector.items = this.state.configuration.columns.map(col => ({
       name: col.name,
       value: col.fieldName,
@@ -239,16 +213,13 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     );
   }
 
-  /**
-   * Render <ProjectInformationModal />
-   */
-  private renderProjectInfoModal() {
+  private get projectInfoModal() {
     if (!this.state.showProjectInfo) return null;
     return (
       <ProjectInformationModal
         modalProps={{ isOpen: true, onDismiss: this.onDismissProjectInfoModal.bind(this) }}
         title={this.state.showProjectInfo.Title}
-        siteId={this.state.showProjectInfo.SiteId}
+        siteId={this.state.showProjectInfo['SiteId']}
         entity={this.props.entity}
         webUrl={this.props.pageContext.site.absoluteUrl}
         hubSiteUrl={this.props.pageContext.site.absoluteUrl}
@@ -328,9 +299,9 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   /**
    * On open <ProjectInformationModal />
    * 
-   * @param {IFetchDataItem} item 
+   * @param {SearchResult} item 
    */
-  private onOpenProjectInfoModal(item: IFetchDataItem) {
+  private onOpenProjectInfoModal(item: SearchResult) {
     this.setState({ showProjectInfo: item });
   }
 
@@ -344,11 +315,11 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   /**
    * On render item activeFilters
   *
-  * @param {IFetchDataItem} item Item
+  * @param {SearchResult} item Item
   * @param {number} _index Index
   * @param {PortfolioOverviewColumn} column Column
   */
-  private onRenderItemColumn(item: IFetchDataItem, _index: number, column: PortfolioOverviewColumn) {
+  private onRenderItemColumn(item: SearchResult, _index: number, column: PortfolioOverviewColumn) {
     const colValue = item[column.fieldName];
     switch (column.fieldName) {
       case 'Title': {

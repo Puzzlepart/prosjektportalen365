@@ -1,5 +1,7 @@
 declare interface IPortfolioInsightsWebPartStrings {
+  Title: string;
   LoadingText: string;
+  EmptyText: string;
   ErrorText: string;
   ChartErrorText: string;
   SPChartConfigurationList: string;

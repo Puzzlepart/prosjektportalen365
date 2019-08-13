@@ -75,6 +75,10 @@ export class ChartData {
         return this.getItems(field).length;
     }
 
+    public isEmpty(): boolean {
+        return this.getCount() === 0;
+    }
+
     /**
     * Get average
     *

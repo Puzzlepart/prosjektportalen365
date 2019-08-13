@@ -1,6 +1,12 @@
-import { IPortfolioInsightsWebPartProps } from "../IPortfolioInsightsWebPartProps";
-import { WebPartContext } from '@microsoft/sp-webpart-base';
+import { PageContext } from '@microsoft/sp-page-context';
+import * as PortfolioInsightsWebPartStrings from 'PortfolioInsightsWebPartStrings';
+import { IPortfolioInsightsWebPartProps } from '../IPortfolioInsightsWebPartProps';
 
 export interface IPortfolioInsightsProps extends IPortfolioInsightsWebPartProps {
-    context: WebPartContext;
+    pageContext: PageContext;
+    title?: string;
 }
+
+export const PortfolioInsightsDefaultProps: Partial<IPortfolioInsightsProps> = {
+    title: PortfolioInsightsWebPartStrings.Title,
+};

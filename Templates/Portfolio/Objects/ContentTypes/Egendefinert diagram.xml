@@ -6,7 +6,6 @@
         <pnp:FieldRef ID="fca6d80c-225a-4bb0-a0b6-f4c004f8151c" Name="GtPiSubTitle" Hidden="false" />
         <pnp:FieldRef ID="e1457016-93d9-4eca-b05a-1a9491fa35db" Name="GtPiCustomType" Required="true" />
         <pnp:FieldRef ID="4795a463-b396-4987-a2d1-532c78933cf9" Name="GtPiCustomConfiguration" Required="true" />
-        <pnp:FieldRef ID="2cc4ec68-b53f-45f6-8234-b577250abaf6" Name="GtPiDataSourceLookup" Required="true" />
         <pnp:FieldRef ID="75f699b2-7ec6-4442-956d-7b35f409b521" Name="GtPiFields" Required="false" />
         <pnp:FieldRef ID="57cf13b1-d2d8-4a9e-beb2-99d0d0a13962" Name="GtPiFieldX" />
         <pnp:FieldRef ID="49b90b9f-d6bb-4337-b5cc-9b9ea9914e97" Name="GtPiFieldY" />

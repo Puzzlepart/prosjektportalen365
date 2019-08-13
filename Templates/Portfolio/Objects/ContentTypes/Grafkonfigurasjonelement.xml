@@ -4,7 +4,6 @@
         <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" />
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
         <pnp:FieldRef ID="fca6d80c-225a-4bb0-a0b6-f4c004f8151c" Name="GtPiSubTitle" />
-        <pnp:FieldRef ID="2cc4ec68-b53f-45f6-8234-b577250abaf6" Name="GtPiDataSourceLookup" Required="true" />
         <pnp:FieldRef ID="75f699b2-7ec6-4442-956d-7b35f409b521" Name="GtPiFields" Required="true" />
         <pnp:FieldRef ID="e3e71da7-e34b-4514-bc8f-5256e1f5c70f" Name="GtPiCategoryField" />
         <pnp:FieldRef ID="a2d79665-fb4a-4367-830a-c0403bd724f0" Name="GtPiColorsMap" />
