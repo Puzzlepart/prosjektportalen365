@@ -1,8 +1,8 @@
 import * as strings from 'RiskOverviewWebPartStrings';
-import { IRiskOverviewWebPartProps } from '../IRiskOverviewWebPartProps';
 import { RiskOverviewColumns } from './RiskOverviewColumns';
+import { IAggregatedSearchListProps } from '../';
 
-export interface IRiskOverviewProps extends IRiskOverviewWebPartProps {}
+export interface IRiskOverviewProps extends IAggregatedSearchListProps { }
 
 export const RiskOverviewDefaultProps: Partial<IRiskOverviewProps> = {
     title: strings.Title,

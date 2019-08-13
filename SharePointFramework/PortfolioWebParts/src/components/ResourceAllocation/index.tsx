@@ -14,9 +14,8 @@ import Timeline, { TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css';
 import * as strings from 'ResourceAllocationWebPartStrings';
 import * as stringFormat from 'string-format';
-import FilterPanel, { IFilterItemProps, IFilterProps } from '../../../components/FilterPanel';
-import { ITimelineData, ITimelineGroup, ITimelineItem } from '../interfaces';
-import { IAllocationSearchResult } from '../models/IAllocationSearchResult';
+import { FilterPanel, IFilterItemProps, IFilterProps } from '../';
+import { ITimelineData, ITimelineGroup, ITimelineItem, IAllocationSearchResult } from 'interfaces';
 import { IResourceAllocationProps, ResourceAllocationDefaultProps } from './IResourceAllocationProps';
 import { IResourceAllocationState } from './IResourceAllocationState';
 import styles from './ResourceAllocation.module.scss';
@@ -283,3 +282,5 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
     }
   }
 }
+
+export { IResourceAllocationProps };

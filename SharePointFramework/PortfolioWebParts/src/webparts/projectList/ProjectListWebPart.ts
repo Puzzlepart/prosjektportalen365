@@ -3,14 +3,12 @@ import * as ReactDom from 'react-dom';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import * as strings from 'ProjectListWebPartStrings';
 import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
-import ProjectList from './components/ProjectList';
-import { IProjectListProps } from './components/IProjectListProps';
-import { IProjectListWebPartProps } from './IProjectListWebPartProps';
+import { ProjectList, IProjectListProps } from 'components';
 import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
 import { sp } from '@pnp/sp';
 import MSGraph from 'msgraph-helper';
 
-export default class ProjectListWebPart extends BaseClientSideWebPart<IProjectListWebPartProps> {
+export default class ProjectListWebPart extends BaseClientSideWebPart<IProjectListProps> {
   public render(): void {
     Logger.log({ message: '(ProjectListWebPart) render: Rendering <ProjectList />', level: LogLevel.Info });
     const element: React.ReactElement<IProjectListProps> = React.createElement(ProjectList, {

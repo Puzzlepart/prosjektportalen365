@@ -1,4 +1,4 @@
-import { ITimelineData } from '../interfaces';
+import { ITimelineData } from 'interfaces';
 
 export interface IResourceAllocationState {
     isLoading: boolean;

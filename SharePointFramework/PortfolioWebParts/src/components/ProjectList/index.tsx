@@ -1,6 +1,8 @@
-import { sp, Web } from '@pnp/sp';
+import { sp } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
 import { getObjectValue, sortAlphabetically } from '@Shared/helpers';
+import { IGraphGroup, ISPProjectItem, ISPUser } from 'interfaces';
+import { ProjectListModel } from 'models';
 import MSGraph from 'msgraph-helper';
 import { IButtonProps } from 'office-ui-fabric-react/lib/Button';
 import { DetailsList, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
@@ -11,7 +13,6 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import * as strings from 'ProjectListWebPartStrings';
 import { ProjectInformationModal } from 'ProjectWebParts/webparts/projectInformation/components';
 import * as React from 'react';
-import { IGraphGroup, ISPProjectItem, ISPUser, ProjectListModel } from '../models';
 import { IProjectListProps, ProjectListDefaultProps } from './IProjectListProps';
 import { IProjectListState } from './IProjectListState';
 import ProjectCard from './ProjectCard/ProjectCard';
@@ -321,3 +322,4 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   }
 }
 
+export { IProjectListProps };

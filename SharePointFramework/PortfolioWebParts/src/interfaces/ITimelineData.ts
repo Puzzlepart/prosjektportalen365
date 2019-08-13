@@ -1,4 +1,4 @@
-import { ITimelineGroup, ITimelineItem } from "./";
+import { ITimelineGroup, ITimelineItem } from "./index";
 
 export interface ITimelineData {
     items: ITimelineItem[];
