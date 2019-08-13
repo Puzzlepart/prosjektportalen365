@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './DeliveriesOverview.module.scss';
 import { IDeliveriesOverviewProps, DeliveriesOverviewDefaultProps } from './IDeliveriesOverviewProps';
-import AggregatedSearchList from '../../../components/AggregatedSearchList';
+import { AggregatedSearchList } from '../';
 
 export default class DeliveriesOverview extends React.Component<IDeliveriesOverviewProps, {}> {
   public static defaultProps = DeliveriesOverviewDefaultProps;
@@ -23,3 +23,5 @@ export default class DeliveriesOverview extends React.Component<IDeliveriesOverv
     );
   }
 }
+
+export { IDeliveriesOverviewProps };
