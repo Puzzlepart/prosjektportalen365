@@ -1372,7 +1372,6 @@
                     "GtStartDate",
                     "GtEndDate",
                     "GtResourceLoad",
-                    "GtApproved",
                     "Modified",
                     "Editor"
                 ],
