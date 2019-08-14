@@ -1,6 +1,6 @@
 {
     "name": "project-extensions",
-    "version": "0.10.0",
+    "version": "0.10.1",
     "private": true,
     "engines": {
         "node": ">=0.10.0"
@@ -48,7 +48,7 @@
         "sp-entityportal-service": "^0.6.10",
         "sp-hubsite-service": "^0.4.0",
         "sp-js-provisioning": "^0.10.7",
-        "spfx-jsom": "^0.6.0",
+        "spfx-jsom": "^0.6.4",
         "string-format": "^2.0.0"
     },
     "resolutions": {

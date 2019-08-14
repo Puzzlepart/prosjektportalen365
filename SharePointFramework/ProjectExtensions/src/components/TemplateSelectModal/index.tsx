@@ -32,7 +32,7 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
         return (
             <ProjectSetupBaseModal
                 title={strings.TemplateSelectModalTitle}
-                isBlocking={false}
+                isBlocking={true}
                 isDarkOverlay={true}
                 containerClassName={styles.templateSelectModal}>
                 {this.renderBody()}
@@ -72,7 +72,6 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
                         <Toggle
                             label={strings.CopyPlannerTasksLabel}
                             defaultChecked={this.state.copyPlannerTasks}
-                            disabled={true}
                             onChanged={copyPlannerTasks => this.setState({ copyPlannerTasks })} />
                     </div>
                 </CollapsableSection>
