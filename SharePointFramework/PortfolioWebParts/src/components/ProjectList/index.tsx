@@ -12,7 +12,7 @@ import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import * as strings from 'ProjectListWebPartStrings';
-import { ProjectInformationModal } from 'ProjectWebParts/ProjectInformationModal';
+import { ProjectInformationModal } from 'ProjectWebParts/lib/components/ProjectInformationModal';
 import * as React from 'react';
 import { IProjectListProps, ProjectListDefaultProps } from './IProjectListProps';
 import { IProjectListState } from './IProjectListState';
@@ -331,3 +331,4 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
 }
 
 export { IProjectListProps };
+

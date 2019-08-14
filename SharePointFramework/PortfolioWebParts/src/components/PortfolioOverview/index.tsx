@@ -16,7 +16,7 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import * as PortfolioOverviewWebPartStrings from 'PortfolioOverviewWebPartStrings';
-import { ProjectInformationModal } from 'ProjectWebParts/ProjectInformationModal';
+import { ProjectInformationModal } from 'ProjectWebParts/lib/components/ProjectInformationModal';
 import * as React from 'react';
 import { FilterPanel, IFilterItemProps, IFilterProps } from '../';
 import { IPortfolioOverviewProps, PortfolioOverviewDefaultProps } from './IPortfolioOverviewProps';
