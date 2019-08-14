@@ -5,7 +5,7 @@ import { ISummarySectionProps } from './ISummarySectionProps';
 import { ISummarySectionState } from './ISummarySectionState';
 import StatusSectionBase from '../@StatusSectionBase';
 import StatusElement from '../StatusElement';
-import { ProjectInformation } from 'components';
+import { ProjectInformation } from 'components/ProjectInformation';
 
 export default class SummarySection extends StatusSectionBase<ISummarySectionProps, ISummarySectionState> {
   constructor(props: ISummarySectionProps) {
