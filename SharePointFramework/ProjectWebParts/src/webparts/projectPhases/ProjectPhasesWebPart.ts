@@ -2,13 +2,13 @@ import { BaseClientSideWebPart, IPropertyPaneConfiguration, PropertyPaneSlider, 
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import '@pnp/polyfill-ie11';
 import { sp } from '@pnp/sp';
+import { IProjectPhasesProps, ProjectPhases } from 'components/ProjectPhases';
 import MSGraphHelper from 'msgraph-helper';
 import * as ProjectPhasesWebPartStrings from 'ProjectPhasesWebPartStrings';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import SpEntityPortalService from 'sp-entityportal-service';
 import HubSiteService from 'sp-hubsite-service';
-import { ProjectPhases, IProjectPhasesProps } from 'components';
 
 Logger.subscribe(new ConsoleListener());
 Logger.activeLogLevel = LogLevel.Info;

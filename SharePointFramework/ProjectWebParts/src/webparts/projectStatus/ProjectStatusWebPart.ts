@@ -2,7 +2,7 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import "@pnp/polyfill-ie11";
 import { sp } from '@pnp/sp';
-import { IProjectStatusProps, ProjectStatus } from "components";
+import { IProjectStatusProps, ProjectStatus } from "components/ProjectStatus";
 import * as moment from 'moment';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';

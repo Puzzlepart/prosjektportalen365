@@ -16,13 +16,13 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import * as PortfolioOverviewWebPartStrings from 'PortfolioOverviewWebPartStrings';
-import { ProjectInformationModal } from 'ProjectWebParts/webparts/projectInformation/components';
+import { ProjectInformationModal } from 'ProjectWebParts/lib/components/ProjectInformationModal';
 import * as React from 'react';
 import { FilterPanel, IFilterItemProps, IFilterProps } from '../';
 import { IPortfolioOverviewProps, PortfolioOverviewDefaultProps } from './IPortfolioOverviewProps';
 import { IPortfolioOverviewState } from './IPortfolioOverviewState';
 import styles from './PortfolioOverview.module.scss';
-import PortfolioOverviewFieldSelector from './PortfolioOverviewFieldSelector';
+import { PortfolioOverviewFieldSelector } from './PortfolioOverviewFieldSelector';
 
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = PortfolioOverviewDefaultProps;

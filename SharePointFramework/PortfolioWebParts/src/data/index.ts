@@ -1,4 +1,3 @@
-import { dateAdd } from '@pnp/common';
 import { sp } from '@pnp/sp';
 import { makeUrlAbsolute } from '@Shared/helpers';
 import * as cleanDeep from 'clean-deep';
@@ -42,11 +41,6 @@ export async function fetchChartData(view: PortfolioOverviewView, configuration:
                     'GtManagedProperty',
                     'GtFieldDataType',
                 )
-                .usingCaching({
-                    key: 'fetchchartdata_columns',
-                    storeName: 'session',
-                    expiration: dateAdd(new Date(), 'hour', 1),
-                })
                 .get<ISPColumnConfiguration[]>(),
             sp.web.lists.getByTitle(PortfolioInsightsWebPartStrings.SPChartConfigurationList).contentTypes
                 .select(
@@ -54,11 +48,6 @@ export async function fetchChartData(view: PortfolioOverviewView, configuration:
                     'Name',
                     'NewFormUrl',
                 )
-                .usingCaching({
-                    key: 'fetchchartdata_contenttypes',
-                    storeName: 'session',
-                    expiration: dateAdd(new Date(), 'hour', 1),
-                })
                 .get<{ StringId: string, Name: string, NewFormUrl: string }[]>(),
         ]);
         let charts: ChartConfiguration[] = chartItems.map(item => {
@@ -142,36 +131,16 @@ export async function getPortfolioConfig(): Promise<IPortfolioOverviewConfigurat
         const spItems = await Promise.all([
             sp.web.lists.getByTitle(PortfolioOverviewWebPartStrings.ProjectColumnConfigListName).items
                 .orderBy('ID', true)
-                .usingCaching({
-                    key: 'getportfolioconfig_columnconfig',
-                    storeName: 'session',
-                    expiration: dateAdd(new Date(), 'day', 1),
-                })
                 .get<IProjectColumnConfigSpItem[]>(),
             sp.web.lists.getByTitle(PortfolioOverviewWebPartStrings.ProjectColumnsListName).items
                 .orderBy('GtSortOrder', true)
-                .usingCaching({
-                    key: 'getportfolioconfig_columns',
-                    storeName: 'session',
-                    expiration: dateAdd(new Date(), 'day', 1),
-                })
                 .get<IPortfolioOverviewColumnSpItem[]>(),
             sp.web.lists.getByTitle(PortfolioOverviewWebPartStrings.PortfolioViewsListName).items
                 .orderBy('GtSortOrder', true)
-                .usingCaching({
-                    key: 'getportfolioconfig_views',
-                    storeName: 'session',
-                    expiration: dateAdd(new Date(), 'day', 1),
-                })
                 .get<IPortfolioOverviewViewSpItem[]>(),
             sp.web.lists.getByTitle(PortfolioOverviewWebPartStrings.PortfolioViewsListName)
                 .select('DefaultNewFormUrl')
                 .expand('DefaultNewFormUrl')
-                .usingCaching({
-                    key: 'getportfolioconfig_defaultnewformurl',
-                    storeName: 'session',
-                    expiration: dateAdd(new Date(), 'day', 1),
-                })
                 .get<{ DefaultNewFormUrl: string }>(),
         ]);
         const columnConfig = spItems[0].map(c => new ProjectColumnConfig(c));

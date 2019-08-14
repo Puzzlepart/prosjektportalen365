@@ -1,7 +1,7 @@
 import {IButtonProps} from 'office-ui-fabric-react/lib/Button';
 import { ProjectListModel } from 'models';
 
-interface IProjectCardProps {
+export interface IProjectCardProps {
   project: ProjectListModel;
   shouldTruncateTitle: boolean;
   showProjectLogo?: boolean;
@@ -9,5 +9,3 @@ interface IProjectCardProps {
   showProjectManager?: boolean;
   actions: IButtonProps[];
 }
-
-export default IProjectCardProps;
