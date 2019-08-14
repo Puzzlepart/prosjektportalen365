@@ -1,10 +1,10 @@
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { sp } from '@pnp/sp';
+import { IProjectInformationProps, ProjectInformation } from 'components/ProjectInformation';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import HubSiteService, { IHubSite } from 'sp-hubsite-service';
-import { ProjectInformation, IProjectInformationProps } from 'components';
 
 Logger.subscribe(new ConsoleListener());
 Logger.activeLogLevel = LogLevel.Info;
