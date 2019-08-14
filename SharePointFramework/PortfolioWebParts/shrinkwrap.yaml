@@ -24,7 +24,7 @@ dependencies:
   msgraph-helper: 0.7.3
   object-assign: 4.1.1
   object-get: 2.1.0
-  office-ui-fabric-react: 6.199.1
+  office-ui-fabric-react: 6.200.1
   react: 16.7.0
   react-calendar-timeline: 0.23.1
   react-dom: 16.7.0
@@ -383,6 +383,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-zvtG9bJO76ComNhvaWIMvl04bfB7IBrEogLzt2znnHDw282wHH7hNQqLdrDVovTGu3Cd/S71iF7jXaaioe+ZYg==
+  /@microsoft/load-themed-styles/1.9.19:
+    dev: false
+    resolution:
+      integrity: sha512-t4jHLmQtL9ORfGlAXOAIBJlsCa9QfhNhTbL4TrnsbNJ55HS6SLUULbwvbJTwmw+D9WGuM8d+HpkkkpM5N3T6IA==
   /@microsoft/loader-cased-file/1.8.2/webpack@3.12.0:
     dependencies:
       '@types/lodash': 4.14.117
@@ -1612,7 +1616,7 @@ packages:
   /@uifabric/foundation/0.8.2:
     dependencies:
       '@uifabric/set-version': 1.1.3
-      '@uifabric/styling': 6.50.3
+      '@uifabric/styling': 6.50.4
       '@uifabric/utilities': 6.41.6
       tslib: 1.10.0
     dev: false
@@ -1684,7 +1688,7 @@ packages:
   /@uifabric/icons/6.5.4:
     dependencies:
       '@uifabric/set-version': 1.1.3
-      '@uifabric/styling': 6.50.3
+      '@uifabric/styling': 6.50.4
       tslib: 1.10.0
     dev: false
     resolution:
@@ -1761,6 +1765,16 @@ packages:
     id: registry.npmjs.org/@uifabric/styling/6.50.3
     resolution:
       integrity: sha512-k7ZIInlUz+oIaD1cXZi2a6s3Ms3VjIqdt7A9oT/SlTSrGcec5punjiUajETUgHpOlp39ZTTqB91Qeqrk9yA9Gg==
+  /@uifabric/styling/6.50.4:
+    dependencies:
+      '@microsoft/load-themed-styles': 1.9.19
+      '@uifabric/merge-styles': 6.19.3
+      '@uifabric/set-version': 1.1.3
+      '@uifabric/utilities': 6.41.6
+      tslib: 1.10.0
+    dev: false
+    resolution:
+      integrity: sha512-08jfbbRCT8Cs2UDl/mXljDRSC+TQsJDojzcl/8geJ9sMZ87Uu1/JVx0Hz3uyDkY56VOa0iFCuLh2hmY3ImrtbQ==
   /@uifabric/utilities/5.34.3:
     dependencies:
       '@uifabric/merge-styles': 5.17.1
@@ -8123,14 +8137,14 @@ packages:
       react-dom: '>=16.3.2-0 <17.0.0'
     resolution:
       integrity: sha512-tjHaw6ZHo0sJSFbiJo5+g8/mna77/Gwf2aNBJNqZfipmDTb61sYzFNxyzjPW4fTC56EHcjMJ6cozv9r+4Ivanw==
-  /office-ui-fabric-react/6.199.1:
+  /office-ui-fabric-react/6.200.1:
     dependencies:
-      '@microsoft/load-themed-styles': 1.9.18
+      '@microsoft/load-themed-styles': 1.9.19
       '@uifabric/foundation': 0.8.2
       '@uifabric/icons': 6.5.4
       '@uifabric/merge-styles': 6.19.3
       '@uifabric/set-version': 1.1.3
-      '@uifabric/styling': 6.50.3
+      '@uifabric/styling': 6.50.4
       '@uifabric/utilities': 6.41.6
       prop-types: 15.7.2
       tslib: 1.10.0
@@ -8141,7 +8155,7 @@ packages:
       react: '>=16.3.2-0 <17.0.0'
       react-dom: '>=16.3.2-0 <17.0.0'
     resolution:
-      integrity: sha512-A/96SUdMh0+nGjFmFeE1V6mqximOMuotJVQ8IAGvigXkjR8qsn4epabH7uranm2d1/N0Rj4dNuN9RrSLZ7+vaA==
+      integrity: sha512-7uefgcRDFglGfzA/DsWjLg6xRV1NVKtcbP8F32q+Ixd8DrchPiFlaJPf7i0blyky8WjDhRV17/fdSgYyd8EBXg==
   /on-finished/2.3.0:
     dependencies:
       ee-first: 1.1.1
@@ -11760,7 +11774,7 @@ specifiers:
   msgraph-helper: ^0.7.3
   object-assign: ^4.1.1
   object-get: ^2.1.0
-  office-ui-fabric-react: ^6.199.1
+  office-ui-fabric-react: ^6.200.1
   react: 16.7.0
   react-calendar-timeline: ^0.23.0
   react-dom: 16.7.0

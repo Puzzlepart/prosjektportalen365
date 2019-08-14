@@ -64,7 +64,9 @@ export default class PortfolioInsights extends React.Component<IPortfolioInsight
           <div className={styles.header}>
             <div className={styles.title}>{this.props.title}</div>
           </div>
-          {this.charts}
+          <div className={`${styles.inner} ms-Grid`}>
+            {this.charts}
+          </div>
         </div>
       </div>
     );
@@ -86,7 +88,7 @@ export default class PortfolioInsights extends React.Component<IPortfolioInsight
       );
     }
     return (
-      <div className={styles.inner}>
+      <div className={`${styles.charts} ms-Grid-row`}>
         {this.state.charts.map((chart, idx) => (
           <Chart key={idx} chart={chart} data={this.state.chartData} />
         ))}
@@ -96,9 +98,9 @@ export default class PortfolioInsights extends React.Component<IPortfolioInsight
 
   /**
    * On view changed
-   * 
-   * @param {PortfolioOverviewView} view View
-   */
+   *
+* @param {PortfolioOverviewView} view View
+    */
   private async onViewChanged(view: PortfolioOverviewView) {
     let data = await fetchDataForView(view, this.state.configuration, this.props.pageContext.site.id.toString());
     this.setState({

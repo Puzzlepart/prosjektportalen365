@@ -77,7 +77,6 @@
   },
   "externals": {},
   "localizedResources": {
-    "ProjectInformationWebPartStrings": "../ProjectWebParts/lib/webparts/projectInformation/loc/{locale}.js",
     "DeliveriesOverviewWebPartStrings": "lib/webparts/deliveriesOverview/loc/{locale}.js",
     "BenefitsOverviewWebPartStrings": "lib/webparts/benefitsOverview/loc/{locale}.js",
     "PortfolioOverviewWebPartStrings": "lib/webparts/portfolioOverview/loc/{locale}.js",
@@ -88,6 +87,7 @@
     "RiskOverviewWebPartStrings": "lib/webparts/riskOverview/loc/{locale}.js",
     "ResourceAllocationWebPartStrings": "lib/webparts/resourceAllocation/loc/{locale}.js",
     "PortfolioInsightsWebPartStrings": "lib/webparts/portfolioInsights/loc/{locale}.js",
-    "PortfolioWebPartsStrings": "lib/loc/{locale}.js"
+    "PortfolioWebPartsStrings": "lib/loc/{locale}.js",
+    "ProjectWebPartsStrings": "../ProjectWebParts/lib/loc/{locale}.js"
   }
 }
