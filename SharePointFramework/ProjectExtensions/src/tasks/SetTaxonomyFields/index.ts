@@ -32,7 +32,6 @@ export default class SetTaxonomyFields extends BaseTask {
             await ExecuteJsomQuery(jsomContext);
             return params;
         } catch (error) {
-            console.log(error);
             throw new BaseTaskError(this.name, strings.SetTaxonomyFieldsErrorMessage, error);
         }
     }
