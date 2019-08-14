@@ -44,7 +44,7 @@ export async function fetchChartData(view: PortfolioOverviewView, configuration:
                 )
                 .usingCaching({
                     key: 'fetchchartdata_columns',
-                    storeName: 'local',
+                    storeName: 'session',
                     expiration: dateAdd(new Date(), 'hour', 1),
                 })
                 .get<ISPColumnConfiguration[]>(),
@@ -56,7 +56,7 @@ export async function fetchChartData(view: PortfolioOverviewView, configuration:
                 )
                 .usingCaching({
                     key: 'fetchchartdata_contenttypes',
-                    storeName: 'local',
+                    storeName: 'session',
                     expiration: dateAdd(new Date(), 'hour', 1),
                 })
                 .get<{ StringId: string, Name: string, NewFormUrl: string }[]>(),
@@ -144,7 +144,7 @@ export async function getPortfolioConfig(): Promise<IPortfolioOverviewConfigurat
                 .orderBy('ID', true)
                 .usingCaching({
                     key: 'getportfolioconfig_columnconfig',
-                    storeName: 'local',
+                    storeName: 'session',
                     expiration: dateAdd(new Date(), 'day', 1),
                 })
                 .get<IProjectColumnConfigSpItem[]>(),
@@ -152,7 +152,7 @@ export async function getPortfolioConfig(): Promise<IPortfolioOverviewConfigurat
                 .orderBy('GtSortOrder', true)
                 .usingCaching({
                     key: 'getportfolioconfig_columns',
-                    storeName: 'local',
+                    storeName: 'session',
                     expiration: dateAdd(new Date(), 'day', 1),
                 })
                 .get<IPortfolioOverviewColumnSpItem[]>(),
@@ -160,7 +160,7 @@ export async function getPortfolioConfig(): Promise<IPortfolioOverviewConfigurat
                 .orderBy('GtSortOrder', true)
                 .usingCaching({
                     key: 'getportfolioconfig_views',
-                    storeName: 'local',
+                    storeName: 'session',
                     expiration: dateAdd(new Date(), 'day', 1),
                 })
                 .get<IPortfolioOverviewViewSpItem[]>(),
@@ -169,7 +169,7 @@ export async function getPortfolioConfig(): Promise<IPortfolioOverviewConfigurat
                 .expand('DefaultNewFormUrl')
                 .usingCaching({
                     key: 'getportfolioconfig_defaultnewformurl',
-                    storeName: 'local',
+                    storeName: 'session',
                     expiration: dateAdd(new Date(), 'day', 1),
                 })
                 .get<{ DefaultNewFormUrl: string }>(),
