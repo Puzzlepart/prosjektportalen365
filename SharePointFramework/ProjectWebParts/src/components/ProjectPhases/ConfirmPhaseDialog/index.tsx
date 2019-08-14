@@ -4,7 +4,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { IConfirmPhaseDialogProps } from "./IConfirmPhaseDialogProps";
 import * as format from 'string-format';
-import * as ProjectPhasesWebPartStrings from 'ProjectPhasesWebPartStrings';
+import * as strings from 'ProjectWebPartsStrings';
 
 // ConfirmPhaseDialog
 const ConfirmPhaseDialog = ({ phase, isChangingPhase, isBlocking, onConfirm }: IConfirmPhaseDialogProps) => {
@@ -14,8 +14,8 @@ const ConfirmPhaseDialog = ({ phase, isChangingPhase, isBlocking, onConfirm }: I
             onDismiss={e => onConfirm(false)}
             dialogContentProps={{
                 type: DialogType.normal,
-                title: ProjectPhasesWebPartStrings.ConfirmPhaseDialogTitle,
-                subText: format(ProjectPhasesWebPartStrings.ConfirmPhaseDialogSubText, phase.name),
+                title: strings.ConfirmPhaseDialogTitle,
+                subText: format(strings.ConfirmPhaseDialogSubText, phase.name),
             }}
             modalProps={{ isBlocking: isBlocking }}>
             {isChangingPhase

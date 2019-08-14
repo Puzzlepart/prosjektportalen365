@@ -2,17 +2,17 @@ import * as React from "react";
 import { Icon } from "office-ui-fabric-react/lib/Icon";
 import IChecklistItemProps from "./IChecklistItemProps";
 import IChecklistItemState from "./IChecklistItemState";
-import * as ProjectPhasesWebPartStrings from 'ProjectPhasesWebPartStrings';
+import * as strings from 'ProjectWebPartsStrings';
 
 const GetStatusColor = (status: string): string => {
     switch (status) {
-        case ProjectPhasesWebPartStrings.StatusOpen: {
+        case strings.StatusOpen: {
             return "inherit";
         }
-        case ProjectPhasesWebPartStrings.StatusClosed: {
+        case strings.StatusClosed: {
             return "#107c10";
         }
-        case ProjectPhasesWebPartStrings.StatusNotRelevant: {
+        case strings.StatusNotRelevant: {
             return "#e81123";
         }
         default: {

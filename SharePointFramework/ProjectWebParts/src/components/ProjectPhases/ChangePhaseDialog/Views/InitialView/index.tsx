@@ -3,7 +3,7 @@ import { PrimaryButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import IInitialViewProps, { InitialViewDefaultProps } from './IInitialViewProps';
 import IInitialViewState from './IInitialViewState';
-import * as ProjectPhasesWebPartStrings from 'ProjectPhasesWebPartStrings';
+import * as strings from 'ProjectWebPartsStrings';
 
 /**
  * Initial view
@@ -31,7 +31,7 @@ export default class InitialView extends React.Component<IInitialViewProps, IIni
                 <div style={{ marginTop: 10 }}>
                     <TextField
                         onChange={this.onCommentUpdate}
-                        placeholder={ProjectPhasesWebPartStrings.CommentLabel}
+                        placeholder={strings.CommentLabel}
                         multiline
                         value={this.state.comment}
                         resizable={false}
@@ -51,22 +51,22 @@ export default class InitialView extends React.Component<IInitialViewProps, IIni
         const isCommentValid = (comment.length >= commentMinLength) && /\S/.test(comment);
         const statusOptions: IButtonProps[] = [
             {
-                text: ProjectPhasesWebPartStrings.StatusNotRelevant,
+                text: strings.StatusNotRelevant,
                 disabled: (isLoading || !isCommentValid),
-                title: !isCommentValid ? ProjectPhasesWebPartStrings.CheckpointNotRelevantTooltipCommentEmpty : ProjectPhasesWebPartStrings.CheckpointNotRelevantTooltip,
-                onClick: () => this.onNextCheckPoint(ProjectPhasesWebPartStrings.StatusNotRelevant, comment),
+                title: !isCommentValid ? strings.CheckpointNotRelevantTooltipCommentEmpty : strings.CheckpointNotRelevantTooltip,
+                onClick: () => this.onNextCheckPoint(strings.StatusNotRelevant, comment),
             },
             {
-                text: ProjectPhasesWebPartStrings.StatusStillOpen,
+                text: strings.StatusStillOpen,
                 disabled: (isLoading || !isCommentValid),
-                title: !isCommentValid ? ProjectPhasesWebPartStrings.CheckpointStillOpenTooltipCommentEmpty : ProjectPhasesWebPartStrings.CheckpointStillOpenTooltip,
-                onClick: () => this.onNextCheckPoint(ProjectPhasesWebPartStrings.StatusStillOpen, comment, false),
+                title: !isCommentValid ? strings.CheckpointStillOpenTooltipCommentEmpty : strings.CheckpointStillOpenTooltip,
+                onClick: () => this.onNextCheckPoint(strings.StatusStillOpen, comment, false),
             },
             {
-                text: ProjectPhasesWebPartStrings.StatusClosed,
+                text: strings.StatusClosed,
                 disabled: isLoading,
-                title: ProjectPhasesWebPartStrings.CheckpointDoneTooltip,
-                onClick: () => this.onNextCheckPoint(ProjectPhasesWebPartStrings.StatusClosed, comment),
+                title: strings.CheckpointDoneTooltip,
+                onClick: () => this.onNextCheckPoint(strings.StatusClosed, comment),
             }];
         return (
             <div style={{ marginTop: 20, marginBottom: 25 }}>

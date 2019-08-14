@@ -1,7 +1,7 @@
 import { sp } from '@pnp/sp';
 import { DetailsList, DetailsListLayoutMode, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import * as ProjectStatusWebPartStrings from 'ProjectStatusWebPartStrings';
+import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import { getObjectValue } from '@Shared/helpers';
 import StatusSectionBase from '../@StatusSectionBase';
@@ -50,7 +50,7 @@ export default class ListSection extends StatusSectionBase<IListSectionProps, IL
       return null;
     }
     if (this.state.error) {
-      return <MessageBar messageBarType={MessageBarType.error}>{ProjectStatusWebPartStrings.ListSectionDataErrorMessage}</MessageBar>;
+      return <MessageBar messageBarType={MessageBarType.error}>{strings.ListSectionDataErrorMessage}</MessageBar>;
     }
     return (
       <div className={`${styles.list} ms-Grid-col ms-sm12`}>

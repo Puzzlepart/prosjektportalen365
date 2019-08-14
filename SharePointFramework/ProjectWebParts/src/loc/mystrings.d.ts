@@ -1,4 +1,11 @@
-declare interface IProjectPhasesWebPartStrings {
+declare interface IProjectWebPartsStrings {
+  LoadingText: string;
+  ErrorText: string;
+  MissingPropertiesMessage: string;
+  NoPropertiesMessage: string;
+  EditPropertiesText: string;
+  EditSiteInformationText: string;
+  ViewVersionHistoryText: string;
   SettingsGroupName: string;
   ViewsGroupName: string;
   PersistedPhasePropertyBagKey: string;
@@ -38,10 +45,16 @@ declare interface IProjectPhasesWebPartStrings {
   CommentLabel: string;
   ChangingPhaseLabel: string;
   ChangingPhaseDescription: string;
-  LoadingText: string;
+  OverallStatusFieldName: string;
+  SaveText: string;
+  PickReportText: string;
+  NewStatusReportModalHeaderText: string;
+  EditReportButtonText: string;
+  ListSectionDataErrorMessage: string;
+  NewStatusReportTitle: string;
 }
 
-declare module 'ProjectPhasesWebPartStrings' {
-  const strings: IProjectPhasesWebPartStrings;
+declare module 'ProjectWebPartsStrings' {
+  const strings: IProjectWebPartsStrings;
   export = strings;
 }

@@ -4,7 +4,7 @@ import { Callout } from 'office-ui-fabric-react/lib/Callout';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { IProjectPhaseCalloutProps } from './IProjectPhaseCalloutProps';
 import styles from './ProjectPhaseCallout.module.scss';
-import * as ProjectPhasesWebPartStrings from 'ProjectPhasesWebPartStrings';
+import * as strings from 'ProjectWebPartsStrings';
 
 // ProjectPhaseCallout
 export default class ProjectPhaseCallout extends React.PureComponent<IProjectPhaseCalloutProps, {}> {
@@ -38,21 +38,17 @@ export default class ProjectPhaseCallout extends React.PureComponent<IProjectPha
                         <div>
                             <div className={styles.stats} hidden={Object.keys(phase.model.checklistData.stats).length === 0}>
                                 {Object.keys(phase.model.checklistData.stats).map(status => {
-                                    return <div><span>{phase.model.checklistData.stats[status]} {ProjectPhasesWebPartStrings.CheckPointsMarkedAsText} {status}</span></div>;
+                                    return <div><span>{phase.model.checklistData.stats[status]} {strings.CheckPointsMarkedAsText} {status}</span></div>;
                                 })}
                             </div>
                             <div className={styles.actions}>
-                                {/* <ActionButton
-                                    href='#'
-                                    text={ProjectPhasesWebPartStrings.TasksLinkText}
-                                    iconProps={{ iconName: 'PlannerLogo' }} /> */}
                                 <ActionButton
                                     href={this.getFilteredPhaseChecklistViewUrl(this.props)}
-                                    text={ProjectPhasesWebPartStrings.PhaseChecklistLinkText}
+                                    text={strings.PhaseChecklistLinkText}
                                     iconProps={{ iconName: 'CheckList' }} />
                                 <ActionButton
                                     onClick={_ => onChangePhase(phase.model)}
-                                    text={ProjectPhasesWebPartStrings.ChangePhaseText}
+                                    text={strings.ChangePhaseText}
                                     iconProps={{ iconName: 'TransitionPop' }}
                                     disabled={isCurrentPhase} />
                             </div>
@@ -69,6 +65,6 @@ export default class ProjectPhaseCallout extends React.PureComponent<IProjectPha
      * @param {IProjectPhaseCalloutProps} param0 Props
      */
     protected getFilteredPhaseChecklistViewUrl({ webAbsoluteUrl, phase }: IProjectPhaseCalloutProps): string {
-        return `${webAbsoluteUrl}/${ProjectPhasesWebPartStrings.PhaseChecklistViewUrl}?FilterField1=GtProjectPhase&FilterValue1=${phase.model.name}`;
+        return `${webAbsoluteUrl}/${strings.PhaseChecklistViewUrl}?FilterField1=GtProjectPhase&FilterValue1=${phase.model.name}`;
     }
 }

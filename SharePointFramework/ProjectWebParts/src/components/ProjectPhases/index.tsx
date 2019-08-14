@@ -1,12 +1,13 @@
+import { dateAdd } from '@pnp/common';
 import { Logger, LogLevel } from '@pnp/logging';
 import { List, sp } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
-import { dateAdd } from '@pnp/common';
+import { IPhaseChecklistItem, Phase } from 'models';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import * as ProjectPhasesWebPartStrings from 'ProjectPhasesWebPartStrings';
+import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
-import { IPhaseChecklistItem, Phase } from 'models';
+import * as format from 'string-format';
 import ChangePhaseDialog from './ChangePhaseDialog/index';
 import { ChecklistData } from './ChecklistData';
 import { IProjectPhasesProps } from './IProjectPhasesProps';
@@ -26,7 +27,7 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
   constructor(props: IProjectPhasesProps) {
     super(props);
     this.state = { isLoading: true, data: {} };
-    this._checkList = sp.web.lists.getByTitle(ProjectPhasesWebPartStrings.PhaseChecklistName);
+    this._checkList = sp.web.lists.getByTitle(strings.PhaseChecklistName);
   }
 
   public async componentDidMount() {
@@ -44,7 +45,7 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
       return (
         <div className={styles.projectPhases}>
           <div className={styles.container}>
-            <MessageBar messageBarType={MessageBarType.error}>{ProjectPhasesWebPartStrings.WebPartNotConfiguredMessage}</MessageBar>
+            <MessageBar messageBarType={MessageBarType.error}>{strings.WebPartNotConfiguredMessage}</MessageBar>
           </div>
         </div>
       );
@@ -53,7 +54,7 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
       return (
         <div className={styles.projectPhases}>
           <div className={styles.container}>
-            <Spinner label={ProjectPhasesWebPartStrings.LoadingText} />
+            <Spinner label={format(strings.LoadingText, 'fasevelger')} />
           </div>
         </div>
       );
@@ -147,7 +148,7 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
    * @param {string} phaseTermName Phase term name
    */
   private async modifyDocumentViews(phaseTermName: string) {
-    const documentsViews = sp.web.lists.getByTitle(ProjectPhasesWebPartStrings.DocumentsListName).views;
+    const documentsViews = sp.web.lists.getByTitle(strings.DocumentsListName).views;
     let [documentsFrontpageView] = await documentsViews.select('Id', 'ViewQuery').filter(`Title eq '${this.props.currentPhaseViewName}'`).get<{ Id: string, ViewQuery: string }[]>();
     if (documentsFrontpageView) {
       const viewQueryDom = new DOMParser().parseFromString(`<Query>${documentsFrontpageView.ViewQuery}</Query>`, 'text/xml');
@@ -156,9 +157,9 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
       const newViewQuery = [orderBy, `<Where><Eq><FieldRef Name='GtProjectPhase' /><Value Type='Text'>${phaseTermName}</Value></Eq></Where>`].join('');
       try {
         await documentsViews.getById(documentsFrontpageView.Id).update({ ViewQuery: newViewQuery });
-        Logger.write(`(ProjectPhases) modifyDocumentViews: Successfully updated ViewQuery for view '${this.props.currentPhaseViewName}' for list '${ProjectPhasesWebPartStrings.DocumentsListName}'`, LogLevel.Info);
+        Logger.write(`(ProjectPhases) modifyDocumentViews: Successfully updated ViewQuery for view '${this.props.currentPhaseViewName}' for list '${strings.DocumentsListName}'`, LogLevel.Info);
       } catch (err) {
-        Logger.write(`(ProjectPhases) modifyDocumentViews: Failed to update ViewQuery for view '${this.props.currentPhaseViewName}' for list '${ProjectPhasesWebPartStrings.DocumentsListName}'`, LogLevel.Error);
+        Logger.write(`(ProjectPhases) modifyDocumentViews: Failed to update ViewQuery for view '${this.props.currentPhaseViewName}' for list '${strings.DocumentsListName}'`, LogLevel.Error);
       }
     }
   }

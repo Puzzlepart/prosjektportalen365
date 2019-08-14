@@ -3,7 +3,7 @@ import { DialogFooter } from "office-ui-fabric-react/lib/Dialog";
 import { PrimaryButton, DefaultButton } from "office-ui-fabric-react/lib/Button";
 import { View } from "../Views";
 import IFooterProps from "./IFooterProps";
-import * as ProjectPhasesWebPartStrings from 'ProjectPhasesWebPartStrings';
+import * as strings from 'ProjectWebPartsStrings';
 
 /**
  * Footer
@@ -14,7 +14,7 @@ export const Footer = ({ isLoading, newPhase, currentView, onChangeView, onChang
     switch (currentView) {
         case View.Initial: {
             actions.push({
-                text: ProjectPhasesWebPartStrings.Skip,
+                text: strings.Skip,
                 disabled: isLoading,
                 onClick: () => onChangeView(View.Confirm),
             });
@@ -22,7 +22,7 @@ export const Footer = ({ isLoading, newPhase, currentView, onChangeView, onChang
             break;
         case View.Confirm: {
             actions.push({
-                text: ProjectPhasesWebPartStrings.Yes,
+                text: strings.Yes,
                 disabled: isLoading,
                 onClick: async () => {
                     onChangeView(View.ChangingPhase);
@@ -34,7 +34,7 @@ export const Footer = ({ isLoading, newPhase, currentView, onChangeView, onChang
             break;
         case View.Summary: {
             actions.push({
-                text: ProjectPhasesWebPartStrings.MoveOn,
+                text: strings.MoveOn,
                 disabled: isLoading,
                 onClick: () => onChangeView(View.Confirm),
             });
@@ -47,7 +47,7 @@ export const Footer = ({ isLoading, newPhase, currentView, onChangeView, onChang
             {actions.map((buttonProps, index) => {
                 return <PrimaryButton key={`FooterAction_${index}`} {...buttonProps} />;
             })}
-            <DefaultButton text={ProjectPhasesWebPartStrings.Close} disabled={isLoading} onClick={onDismiss} />
+            <DefaultButton text={strings.Close} disabled={isLoading} onClick={onDismiss} />
         </DialogFooter>
     );
 };

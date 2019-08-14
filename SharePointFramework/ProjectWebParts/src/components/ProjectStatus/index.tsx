@@ -3,10 +3,12 @@ import { dateAdd } from "@pnp/common";
 import { Logger, LogLevel } from '@pnp/logging';
 import { List } from '@pnp/sp';
 import { formatDate } from '@Shared/helpers';
+import { ProjectStatusReport, SectionModel } from 'models';
+import { SectionType } from 'models/SectionModel';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import * as ProjectStatusWebPartStrings from 'ProjectStatusWebPartStrings';
+import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import * as format from 'string-format';
 import { IStatusSectionBaseProps } from './@StatusSectionBase/IStatusSectionBaseProps';
@@ -18,8 +20,6 @@ import ProjectPropertiesSection from './ProjectPropertiesSection';
 import styles from './ProjectStatus.module.scss';
 import StatusSection from './StatusSection';
 import SummarySection from './SummarySection';
-import { SectionModel, ProjectStatusReport } from 'models';
-import { SectionType } from 'models/SectionModel';
 
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private _reportList: List;
@@ -61,7 +61,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       return (
         <div className={styles.projectStatus}>
           <div className={styles.container}>
-            <Spinner label={ProjectStatusWebPartStrings.LoadingText} />
+            <Spinner label={format(strings.LoadingText, 'prosjektstatus')} />
           </div>
         </div>
       );
@@ -88,14 +88,14 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     const items: IContextualMenuItem[] = [
       {
         key: 'NewStatusReport',
-        name: ProjectStatusWebPartStrings.NewStatusReportModalHeaderText,
+        name: strings.NewStatusReportModalHeaderText,
         itemType: ContextualMenuItemType.Normal,
         iconProps: { iconName: 'NewFolder' },
         onClick: this.redirectNewStatusReport.bind(this),
       },
       {
         key: 'EditReport',
-        name: ProjectStatusWebPartStrings.EditReportButtonText,
+        name: strings.EditReportButtonText,
         itemType: ContextualMenuItemType.Normal,
         iconProps: { iconName: 'Edit' },
         href: selectedReport ? selectedReport.editFormUrl : null,
@@ -230,7 +230,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   private async redirectNewStatusReport(_ev?: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement>, _item?: IContextualMenuItem): Promise<void> {
     const [previousReport] = this.state.data.reports;
     let properties = previousReport ? previousReport.getStatusValues() : {};
-    properties.Title = format(ProjectStatusWebPartStrings.NewStatusReportTitle, this.props.pageContext.web.title);
+    properties.Title = format(strings.NewStatusReportTitle, this.props.pageContext.web.title);
     const { data } = await this._reportList.items.add(properties);
     const source = encodeURIComponent(`${window.location.href.split('#')[0]}#NewStatus`);
     document.location.href = `${window.location.protocol}//${window.location.hostname}${this.state.data.defaultEditFormUrl}?ID=${data.Id}&Source=${source}`;

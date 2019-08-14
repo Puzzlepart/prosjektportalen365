@@ -4,7 +4,7 @@ import '@pnp/polyfill-ie11';
 import { sp } from '@pnp/sp';
 import { IProjectPhasesProps, ProjectPhases } from 'components/ProjectPhases';
 import MSGraphHelper from 'msgraph-helper';
-import * as ProjectPhasesWebPartStrings from 'ProjectPhasesWebPartStrings';
+import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import SpEntityPortalService from 'sp-entityportal-service';
@@ -39,31 +39,31 @@ export default class ProjectPhasesWebPart extends BaseClientSideWebPart<IProject
         {
           groups: [
             {
-              groupName: ProjectPhasesWebPartStrings.SettingsGroupName,
+              groupName: strings.SettingsGroupName,
               groupFields: [
                 PropertyPaneToggle('automaticReload', {
-                  label: ProjectPhasesWebPartStrings.AutomaticReloadFieldLabel,
+                  label: strings.AutomaticReloadFieldLabel,
                 }),
                 PropertyPaneSlider('reloadTimeout', {
-                  label: ProjectPhasesWebPartStrings.ReloadTimeoutFieldLabel,
+                  label: strings.ReloadTimeoutFieldLabel,
                   min: 0,
                   max: 10,
                   step: 1,
                   disabled: !this.properties.automaticReload,
                 }),
                 PropertyPaneToggle('confirmPhaseChange', {
-                  label: ProjectPhasesWebPartStrings.ConfirmPhaseChangeFieldLabel,
+                  label: strings.ConfirmPhaseChangeFieldLabel,
                 }),
                 PropertyPaneTextField('phaseSubTextProperty', {
-                  label: ProjectPhasesWebPartStrings.PhaseSubTextPropertyFieldLabel,
+                  label: strings.PhaseSubTextPropertyFieldLabel,
                 }),
               ]
             },
             {
-              groupName: ProjectPhasesWebPartStrings.ViewsGroupName,
+              groupName: strings.ViewsGroupName,
               groupFields: [
                 PropertyPaneTextField('currentPhaseViewName', {
-                  label: ProjectPhasesWebPartStrings.CurrentPhaseViewNameFieldLabel,
+                  label: strings.CurrentPhaseViewNameFieldLabel,
                 }),
               ]
             }

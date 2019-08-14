@@ -6,7 +6,7 @@ import { Footer } from './Footer';
 import IChangePhaseDialogProps from './IChangePhaseDialogProps';
 import IChangePhaseDialogState from './IChangePhaseDialogState';
 import styles from './ChangePhaseDialog.module.scss';
-import * as ProjectPhasesWebPartStrings from 'ProjectPhasesWebPartStrings';
+import * as strings from 'ProjectWebPartsStrings';
 import * as format from 'string-format';
 import { IPhaseChecklistItem } from 'models';
 
@@ -41,8 +41,8 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
             <Dialog
                 isOpen={true}
                 containerClassName={styles.changePhaseDialog}
-                title={ProjectPhasesWebPartStrings.ChangePhaseText}
-                subText={this.state.currentView === View.Confirm ? format(ProjectPhasesWebPartStrings.ConfirmChangePhase, this.props.newPhase.name) : ''}
+                title={strings.ChangePhaseText}
+                subText={this.state.currentView === View.Confirm ? format(strings.ConfirmChangePhase, this.props.newPhase.name) : ''}
                 dialogContentProps={{ type: DialogType.largeHeader }}
                 modalProps={{ isDarkOverlay: true, isBlocking: false }}
                 onDismiss={this.props.onDismiss}>
@@ -104,7 +104,7 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
      * @param {IPhaseChecklistItem} item Item
      */
     private checkPointOpenFilter(item: IPhaseChecklistItem) {
-        return item.GtChecklistStatus === ProjectPhasesWebPartStrings.StatusOpen;
+        return item.GtChecklistStatus === strings.StatusOpen;
     }
 
     /**

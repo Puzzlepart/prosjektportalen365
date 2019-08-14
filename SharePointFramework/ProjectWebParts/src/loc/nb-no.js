@@ -1,5 +1,12 @@
 define([], function () {
   return {
+    LoadingText: "Laster {0}...",
+    ErrorText: "Det skjedde en feil under lasting av {0}.",
+    MissingPropertiesMessage: "Viktig informasjon om prosjektet er ikke satt. Du bør sette disse egenskapene snarest.",
+    NoPropertiesMessage: "Finner ingen informasjon om prosjektet.",
+    EditPropertiesText: "Rediger egenskaper",
+    EditSiteInformationText: "Rediger områdeinformasjon",
+    ViewVersionHistoryText: "Vis versjonshistorikk",
     SettingsGroupName: "Innstillinger",
     ViewsGroupName: "Visninger",
     PersistedPhasePropertyBagKey: "persisted_phase",
@@ -39,6 +46,12 @@ define([], function () {
     CommentLabel: "Kommentar",
     ChangingPhaseLabel: "Vennligst vent",
     ChangingPhaseDescription: "Endrer fase til {0}",
-    LoadingText: "Laster fasevelger...",
+    OverallStatusFieldName: "GtOverallStatus",
+    SaveText: "Lagre",
+    PickReportText: "Velg rapport",
+    NewStatusReportModalHeaderText: "Ny statusrapport",
+    EditReportButtonText: "Rediger status",
+    ListSectionDataErrorMessage: "Det skjedde en feil under uthenting av data for seksjonen. Er den riktig konfigurert?",
+    NewStatusReportTitle: "Ny statusrapport for {0}"
   }
 });

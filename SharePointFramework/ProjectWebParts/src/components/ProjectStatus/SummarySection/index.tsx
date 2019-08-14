@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ProjectStatusWebPartStrings from 'ProjectStatusWebPartStrings';
+import * as strings from 'ProjectWebPartsStrings';
 import styles from './SummarySection.module.scss';
 import { ISummarySectionProps } from './ISummarySectionProps';
 import { ISummarySectionState } from './ISummarySectionState';
@@ -41,13 +41,13 @@ export default class SummarySection extends StatusSectionBase<ISummarySectionPro
   /**
    * Render sections
    * 
-   * NOTE: Trying to figure out a way to avoid the ProjectStatusWebPartStrings.OverallStatusFieldName check
+   * NOTE: Trying to figure out a way to avoid the strings.OverallStatusFieldName check
    */
   private renderSections() {
     const { report, sections } = this.props;
     return sections.map(s => (
       <div className='ms-Grid-col ms-sm6'>
-        {s.fieldName === ProjectStatusWebPartStrings.OverallStatusFieldName
+        {s.fieldName === strings.OverallStatusFieldName
           ? <StatusElement label={s.name} value='' comment={report.item[s.fieldName]} iconName={s.iconName} height={150} />
           : <StatusElement label={s.name} value={report.item[s.fieldName]} comment={report.item[s.commentFieldName]} iconName={s.iconName} height={150} />}
       </div>

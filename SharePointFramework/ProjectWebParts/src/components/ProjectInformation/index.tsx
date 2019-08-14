@@ -6,15 +6,15 @@ import { HubConfigurationService } from '@Shared/services';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import * as ProjectInformationWebPartStrings from 'ProjectInformationWebPartStrings';
+import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import SpEntityPortalService from 'sp-entityportal-service';
+import * as format from 'string-format';
 import { IProjectInformationData } from './IProjectInformationData';
 import { IProjectInformationProps, ProjectInformationDefaultProps } from './IProjectInformationProps';
 import { IProjectInformationState } from './IProjectInformationState';
 import styles from './ProjectInformation.module.scss';
 import { ProjectProperty, ProjectPropertyModel } from './ProjectProperty';
-
 
 export class ProjectInformation extends React.Component<IProjectInformationProps, IProjectInformationState> {
   public static defaultProps = ProjectInformationDefaultProps;
@@ -52,10 +52,10 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
    */
   private renderInner() {
     if (this.state.isLoading) {
-      return <Spinner label={ProjectInformationWebPartStrings.LoadingText} />;
+      return <Spinner label={format(strings.LoadingText, 'prosjektinformasjon')} />;
     }
     if (this.state.error) {
-      return <MessageBar messageBarType={MessageBarType.error}>{ProjectInformationWebPartStrings.ErrorText}</MessageBar>;
+      return <MessageBar messageBarType={MessageBarType.error}>{format(strings.ErrorText, 'prosjektinformasjon')}</MessageBar>;
     }
     return (
       <div>
@@ -63,21 +63,21 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
         <div className={styles.actions} hidden={this.props.hideActions || !this.props.isSiteAdmin}>
           <div>
             <DefaultButton
-              text={ProjectInformationWebPartStrings.ViewVersionHistoryText}
+              text={strings.ViewVersionHistoryText}
               href={this.state.data.versionHistoryUrl}
               iconProps={{ iconName: 'History' }}
               style={{ width: 250 }} />
           </div>
           <div>
             <DefaultButton
-              text={ProjectInformationWebPartStrings.EditPropertiesText}
+              text={strings.EditPropertiesText}
               href={this.state.data.editFormUrl}
               iconProps={{ iconName: 'Edit' }}
               style={{ width: 250 }} />
           </div>
           <div>
             <DefaultButton
-              text={ProjectInformationWebPartStrings.EditSiteInformationText}
+              text={strings.EditSiteInformationText}
               onClick={_ => window['_spLaunchSiteSettings']()}
               disabled={!window['_spLaunchSiteSettings']}
               iconProps={{ iconName: 'Info' }}
@@ -96,10 +96,10 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
       const propertiesToRender = this.state.data.properties.filter(p => !p.empty && p.showInDisplayForm);
       const hasMissingProps = this.state.data.properties.filter(p => p.required && p.empty).length > 0;
       if (hasMissingProps) {
-        return <MessageBar messageBarType={MessageBarType.error}>{ProjectInformationWebPartStrings.MissingPropertiesMessage}</MessageBar>;
+        return <MessageBar messageBarType={MessageBarType.error}>{strings.MissingPropertiesMessage}</MessageBar>;
       }
       if (propertiesToRender.length === 0) {
-        return <MessageBar>{ProjectInformationWebPartStrings.NoPropertiesMessage}</MessageBar>;
+        return <MessageBar>{strings.NoPropertiesMessage}</MessageBar>;
       }
       return (
         <div>
@@ -172,5 +172,6 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   }
 }
 
+export { ProjectInformationModal } from '../ProjectInformationModal';
 export { IProjectInformationProps, ProjectProperty };
 
