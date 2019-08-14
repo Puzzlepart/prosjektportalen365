@@ -250,7 +250,7 @@
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">190</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">180</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtOverallStatus_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtOverallStatus</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtOverallStatusOWSMTXT</pnp:DataValue>
@@ -263,7 +263,7 @@
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">190</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusTime_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusTime</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusTimeOWSCHCS</pnp:DataValue>
@@ -276,7 +276,7 @@
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">210</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">200</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusTimeComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusTimeComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusTimeCommentOWSMTXT</pnp:DataValue>
@@ -289,7 +289,7 @@
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">210</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusBudget_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusBudget</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusBudgetOWSCHCS</pnp:DataValue>
@@ -302,7 +302,7 @@
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">230</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusBudgetComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusBudgetComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusBudgetCommentOWSMTXT</pnp:DataValue>
@@ -315,7 +315,7 @@
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">230</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusQuality_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusQuality</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusQualityOWSCHCS</pnp:DataValue>
@@ -328,7 +328,7 @@
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">250</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusQualityComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusQualityComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusQualityCommentOWSMTXT</pnp:DataValue>
@@ -341,7 +341,7 @@
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">260</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">250</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusRisk_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusRisk</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusRiskOWSCHCS</pnp:DataValue>
@@ -354,7 +354,7 @@
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">270</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">260</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusRiskComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusRiskComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusRiskCommentOWSMTXT</pnp:DataValue>
@@ -367,7 +367,7 @@
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">280</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">270</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusGainAchievement_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusGainAchievement</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusGainAchievementOWSCHCS</pnp:DataValue>
@@ -380,7 +380,7 @@
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">290</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">280</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusGainAchievementComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusGainAchievementComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusGainAchievementCommentOWSMTXT</pnp:DataValue>
