@@ -51,7 +51,7 @@
         "react-dom": "16.7.0",
         "react-highcharts": "^16.0.2",
         "react-image-fade-in": "^1.0.2",
-        "sp-entityportal-service": "^0.6.4",
+        "sp-entityportal-service": "^0.7.5",
         "sp-hubsite-service": "^0.4.0",
         "string-format": "^2.0.0"
     },
