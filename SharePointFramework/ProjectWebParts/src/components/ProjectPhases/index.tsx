@@ -125,6 +125,7 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
       this.setState({ isChangingPhase: true });
       await this.updatePhase(phase);
       await this.modifyDocumentViews(phase.name);
+      sessionStorage.clear();
       this.setState({ data: { ...this.state.data, currentPhase: phase }, confirmPhase: null, isChangingPhase: false });
       if (this.props.automaticReload) {
         window.setTimeout(() => {
