@@ -1,18 +1,19 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
+import { dateAdd } from '@pnp/common';
+import { ICachingOptions } from '@pnp/odata';
 import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
 import { HubConfigurationService } from '@Shared/services';
-import SpEntityPortalService from 'sp-entityportal-service';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as ProjectInformationWebPartStrings from 'ProjectInformationWebPartStrings';
 import * as React from 'react';
+import SpEntityPortalService from 'sp-entityportal-service';
 import { IProjectInformationData } from './IProjectInformationData';
 import { IProjectInformationProps, ProjectInformationDefaultProps } from './IProjectInformationProps';
 import { IProjectInformationState } from './IProjectInformationState';
 import styles from './ProjectInformation.module.scss';
-import ProjectProperty from './ProjectProperty';
-import { ProjectPropertyModel } from 'models';
+import { ProjectProperty, ProjectPropertyModel } from './ProjectProperty';
 
 
 export class ProjectInformation extends React.Component<IProjectInformationProps, IProjectInformationState> {
@@ -112,6 +113,20 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     }
   }
 
+  /**
+   * Get cache options for function
+   * 
+   * @param {string} func Function
+   * @param {'session' | 'local'} storeName Store name
+   */
+  private getCacheOptions(func: string, storeName: 'session' | 'local' = 'session'): ICachingOptions {
+    return {
+      key: `ProjectInformation_${func}`,
+      storeName,
+      expiration: dateAdd(new Date(), 'hour', 1),
+    };
+  }
+
   private async fetchData(): Promise<IProjectInformationData> {
     try {
       const hubConfigurationService = new HubConfigurationService(this.props.hubSiteUrl);
@@ -125,9 +140,9 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
         entityItem,
       ] = await Promise.all([
         hubConfigurationService.getProjectColumns(),
-        spEntityPortalService.getEntityFields(),
-        spEntityPortalService.getEntityEditFormUrl(this.props.siteId, this.props.webUrl),
-        spEntityPortalService.getEntityVersionHistoryUrl(this.props.siteId, this.props.webUrl),
+        spEntityPortalService.getEntityFields(this.getCacheOptions('getEntityFields')),
+        spEntityPortalService.getEntityEditFormUrl(this.props.siteId, this.props.webUrl, this.getCacheOptions('getEntityEditFormUrl')),
+        spEntityPortalService.getEntityVersionHistoryUrl(this.props.siteId, this.props.webUrl, this.getCacheOptions('getEntityVersionHistoryUrl')),
         spEntityPortalService.getEntityItemFieldValues(this.props.siteId)
       ]);
       let properties = Object.keys(entityItem)

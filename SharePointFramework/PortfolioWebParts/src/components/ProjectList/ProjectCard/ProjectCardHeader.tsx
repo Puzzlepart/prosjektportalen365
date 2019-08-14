@@ -1,7 +1,7 @@
 import { DocumentCardTitle } from 'office-ui-fabric-react/lib/DocumentCard';
 import * as React from 'react';
 import ImageFadeIn from 'react-image-fade-in';
-import IProjectCardProps from './IProjectCardProps';
+import { IProjectCardProps } from './IProjectCardProps';
 import styles from './ProjectCard.module.scss';
 
 /**

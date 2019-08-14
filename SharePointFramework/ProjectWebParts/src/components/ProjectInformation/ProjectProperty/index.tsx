@@ -1,13 +1,8 @@
 import * as React from "react";
 import styles from './ProjectProperty.module.scss';
-import { IProjectPropertyProps } from "./IProjectPropertyProps";
+import { IProjectPropertyProps, ProjectPropertyModel } from "./IProjectPropertyProps";
 
-/**
- * Project Property
- */
-export default class ProjectProperty extends React.Component<IProjectPropertyProps, {}> {
-    public static displayName = "ProjectProperty";
-
+export class ProjectProperty extends React.Component<IProjectPropertyProps, {}> {
     /**
      * Constructor
      *
@@ -35,4 +30,4 @@ export default class ProjectProperty extends React.Component<IProjectPropertyPro
     }
 }
 
-export { IProjectPropertyProps };
+export { IProjectPropertyProps, ProjectPropertyModel };

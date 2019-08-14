@@ -1,6 +1,6 @@
 import { IFilterProps } from 'components';
 
-const PortfolioOverviewFieldSelector: IFilterProps = {
+export const PortfolioOverviewFieldSelector: IFilterProps = {
     column: {
         key: 'SelectedColumns',
         fieldName: 'SelectedColumns',
@@ -10,6 +10,3 @@ const PortfolioOverviewFieldSelector: IFilterProps = {
     items: [],
     defaultCollapsed: true,
 };
-
-export default PortfolioOverviewFieldSelector;
-
