@@ -1,7 +1,7 @@
 import { override } from '@microsoft/decorators';
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
-import { sp } from '@pnp/sp';
+import { sp, Web } from '@pnp/sp';
 import { ListLogger } from '@Shared/logging';
 import { injectStyles } from '@Shared/util';
 import MSGraphHelper from 'msgraph-helper';
@@ -72,7 +72,8 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
         templateParameters: { fieldsgroup: strings.SiteFieldsGroupName },
       };
       this.renderProgressModal({ text: strings.ProgressModalLabel, subText: strings.ProgressModalDescription, iconName: 'Page' });
-      await this.runTasks();
+      await this.startProvision();
+      await this.removeCustomizer(this.componentId, !this.isDebug());
     } catch (error) {
       await ListLogger.write(`${error.taskName} failed with message ${error.message}`, 'Error');
       this.renderErrorModal({ error });
@@ -85,7 +86,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
    * @param {Web} hubWeb Hub web
    * @param {string} listName List name
    */
-  protected initLogging(hubWeb: any, listName: string = 'Logg') {
+  protected initLogging(hubWeb: Web, listName: string = 'Logg') {
     ListLogger.init(
       hubWeb.lists.getByTitle(listName), {
         webUrl: 'GtLogWebUrl',
@@ -94,7 +95,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
         message: 'GtLogMessage',
         level: 'GtLogLevel',
       },
-      document.location.href,
+      this.context.pageContext.web.absoluteUrl,
       'ProjectSetupApplicationCustomizer',
     );
   }
@@ -154,18 +155,17 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   }
 
   /**
-  * Run tasks
+  * Start provision
   */
-  private async runTasks(): Promise<void> {
-    Logger.log({ message: '(ProjectSetupApplicationCustomizer) runTasks', data: { properties: this.properties, tasks: Tasks.map(t => t.name) }, level: LogLevel.Info });
+  private async startProvision(): Promise<void> {
+    Logger.log({ message: '(ProjectSetupApplicationCustomizer) startProvision', data: { properties: this.properties, tasks: Tasks.map(t => t.name) }, level: LogLevel.Info });
     try {
-      await ListLogger.write('Starting provisioning of project.');
+      await ListLogger.write('Starting provisioning of project.', 'Info');
       this._taskParams.templateSchema = await this._taskParams.data.selectedTemplate.getSchema();
       for (let i = 0; i < Tasks.length; i++) {
-        this._taskParams = await Tasks[i].execute(this._taskParams, this.onTaskStatusUpdated);
+        this._taskParams = await Tasks[i].execute(this._taskParams, this.onTaskStatusUpdated.bind(this));
       }
-      await ListLogger.write('Project successfully provisioned.');
-      await this.removeCustomizer(this.componentId, !this.isDebug());
+      await ListLogger.write('Project successfully provisioned.', 'Info');
     } catch (error) {
       throw error;
     }
@@ -177,7 +177,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
    * @param {string} status Status
    * @param {string} iconName Icon name
    */
-  private onTaskStatusUpdated = (status: string, iconName: string) => {
+  private onTaskStatusUpdated(status: string, iconName: string) {
     this.renderProgressModal({ text: strings.ProgressModalLabel, subText: status, iconName });
   }
 
@@ -203,7 +203,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   }
 
   /**
-   * Get _data
+   * Get data
    */
   private async getData(): Promise<IProjectSetupApplicationCustomizerData> {
     try {

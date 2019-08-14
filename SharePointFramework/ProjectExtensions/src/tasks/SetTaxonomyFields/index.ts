@@ -17,23 +17,22 @@ export default class SetTaxonomyFields extends BaseTask {
     @override
     public async execute(params: IBaseTaskParams, _onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
-            const jsomCtx: JsomContext = await initSpfxJsom(params.context.pageContext.site.absoluteUrl, { loadTaxonomy: true });
-            const taxSession = SP.Taxonomy.TaxonomySession.getTaxonomySession(jsomCtx.clientContext);
-            const defaultSiteCollectionTermStore = taxSession.getDefaultSiteCollectionTermStore();
-            await ExecuteJsomQuery(jsomCtx, [{ clientObject: defaultSiteCollectionTermStore, exps: 'Id' }]);
-            this.logInformation(`Retrieved ID ${defaultSiteCollectionTermStore.get_id()} for default term store`);
-            Object.keys(params.properties.termSetIds).forEach(fldInternalName => {
-                const termSetId = params.properties.termSetIds[fldInternalName];
-                this.logInformation(`Setting Term Set ID ${termSetId} for ${fldInternalName}`);
-                const field: SP.Field = jsomCtx.rootWeb.get_fields().getByInternalNameOrTitle(fldInternalName);
-                const taxField: SP.Taxonomy.TaxonomyField = jsomCtx.clientContext.castTo(field, SP.Taxonomy.TaxonomyField) as SP.Taxonomy.TaxonomyField;
-                taxField.set_sspId(defaultSiteCollectionTermStore.get_id());
+            const { jsomContext, defaultTermStore } = await initSpfxJsom(params.context.pageContext.site.absoluteUrl, { loadTaxonomy: true });
+            await ExecuteJsomQuery(jsomContext, [{ clientObject: defaultTermStore, exps: 'Id' }]);
+            this.logInformation(`Retrieved ID ${defaultTermStore.get_id()} for default term store`);
+            Object.keys(params.properties.termSetIds).forEach(fieldName => {
+                const termSetId = params.properties.termSetIds[fieldName];
+                this.logInformation(`Setting Term Set ID ${termSetId} for ${fieldName}`);
+                const field: SP.Field = jsomContext.rootWeb.get_fields().getByInternalNameOrTitle(fieldName);
+                const taxField: SP.Taxonomy.TaxonomyField = jsomContext.clientContext.castTo(field, SP.Taxonomy.TaxonomyField) as SP.Taxonomy.TaxonomyField;
+                taxField.set_sspId(defaultTermStore.get_id());
                 taxField.set_termSetId(new SP.Guid(termSetId));
                 taxField.updateAndPushChanges(true);
             });
-            await ExecuteJsomQuery(jsomCtx);
+            await ExecuteJsomQuery(jsomContext);
             return params;
         } catch (error) {
+            console.log(error);
             throw new BaseTaskError(this.name, strings.SetTaxonomyFieldsErrorMessage, error);
         }
     }

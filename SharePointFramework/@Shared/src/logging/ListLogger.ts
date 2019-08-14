@@ -19,13 +19,13 @@ export class IListLoggerMemberMap {
 }
 
 export default new class ListLogger {
-    protected _list: any;
-    protected _memberMap: IListLoggerMemberMap;
-    protected _webUrl: string;
-    protected _scope: string;
+    private _list: any;
+    private _memberMap: IListLoggerMemberMap;
+    private _webUrl: string = '';
+    private _scope: string = '';
 
     /**
-     * Init ListLogger
+     * Initialize ListLogger
      * 
      * @param {any} list List
      * @param {IListLoggerMemberMap} memberMap Member map 
@@ -62,7 +62,7 @@ export default new class ListLogger {
      * @param {string} functionName Function name
      */
     public write(message: string, level: ListLoggerEntryLevel = 'Info', functionName?: string) {
-        return this.log({ message, level, functionName });
+        return this.log({ message, level, functionName, webUrl: this._webUrl, scope: this._scope });
     }
 
     /**
