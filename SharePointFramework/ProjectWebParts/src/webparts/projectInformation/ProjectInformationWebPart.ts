@@ -4,21 +4,16 @@ import { sp } from '@pnp/sp';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import HubSiteService, { IHubSite } from 'sp-hubsite-service';
-import { ProjectInformation, IProjectInformationProps } from './components';
-import { IProjectInformationWebPartProps } from './IProjectInformationWebPartProps';
+import { ProjectInformation, IProjectInformationProps } from 'components';
 
 Logger.subscribe(new ConsoleListener());
 Logger.activeLogLevel = LogLevel.Info;
 
-export default class ProjectInformationWebPart extends BaseClientSideWebPart<IProjectInformationWebPartProps> {
+export default class ProjectInformationWebPart extends BaseClientSideWebPart<IProjectInformationProps> {
   private hubSite: IHubSite;
 
   public async onInit() {
-    sp.setup({
-      spfxContext: this.context,
-      defaultCachingTimeoutSeconds: 60,
-      globalCacheDisable: false
-    });
+    sp.setup({ spfxContext: this.context });
     this.hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
   }
 

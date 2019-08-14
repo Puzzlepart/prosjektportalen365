@@ -31,6 +31,15 @@
     "paths": {
       "@Shared/*": [
         "../../@Shared/lib/*"
+      ],
+      "components": [
+        "components"
+      ],
+      "models": [
+        "models"
+      ],
+      "types": [
+        "types"
       ]
     }
   },

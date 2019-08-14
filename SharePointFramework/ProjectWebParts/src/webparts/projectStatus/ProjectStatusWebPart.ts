@@ -2,28 +2,23 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import "@pnp/polyfill-ie11";
 import { sp } from '@pnp/sp';
+import { IProjectStatusProps, ProjectStatus } from "components";
 import * as moment from 'moment';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import SpEntityPortalService from 'sp-entityportal-service';
 import HubSiteService, { IHubSite } from 'sp-hubsite-service';
-import ProjectStatus, { IProjectStatusProps } from "./components/ProjectStatus";
-import { IProjectStatusWebPartProps } from './IProjectStatusWebPartProps';
 
 moment.locale('nb');
 Logger.subscribe(new ConsoleListener());
 Logger.activeLogLevel = LogLevel.Info;
 
-export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProjectStatusWebPartProps> {
+export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProjectStatusProps> {
   private _hubSite: IHubSite;
   private _spEntityPortalService: SpEntityPortalService;
 
   public async onInit() {
-    sp.setup({
-      spfxContext: this.context,
-      defaultCachingTimeoutSeconds: 60,
-      globalCacheDisable: false
-    });
+    sp.setup({ spfxContext: this.context });
     this._hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
     this._spEntityPortalService = new SpEntityPortalService({ webUrl: this._hubSite.url, ...this.properties.entity });
   }
