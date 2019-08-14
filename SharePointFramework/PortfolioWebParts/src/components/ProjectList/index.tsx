@@ -1,3 +1,4 @@
+import { dateAdd } from '@pnp/common';
 import { sp } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
 import { getObjectValue, sortAlphabetically } from '@Shared/helpers';
@@ -11,13 +12,12 @@ import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import * as strings from 'ProjectListWebPartStrings';
-import { ProjectInformationModal } from 'ProjectWebParts/webparts/projectInformation/components';
+import { ProjectInformationModal } from 'ProjectWebParts/ProjectInformationModal';
 import * as React from 'react';
 import { IProjectListProps, ProjectListDefaultProps } from './IProjectListProps';
 import { IProjectListState } from './IProjectListState';
-import ProjectCard from './ProjectCard/ProjectCard';
+import { ProjectCard } from './ProjectCard';
 import styles from './ProjectList.module.scss';
-
 
 export default class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
   public static defaultProps = ProjectListDefaultProps;
@@ -256,7 +256,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         }
         let [owner] = users.filter(user => user.Id === item.GtProjectOwnerId);
         let [manager] = users.filter(user => user.Id === item.GtProjectManagerId);
-        let [phase] = phaseTerms.filter(p => p.Id.indexOf(getObjectValue(item, 'GtProjectPhase.TermGuid', '')) !== -1);
+        let [phase] = phaseTerms.filter(p => p.Id.indexOf(getObjectValue<string>(item, 'GtProjectPhase.TermGuid', '')) !== -1);
         const model = new ProjectListModel(item.GtSiteId, group.id, group.displayName, item.GtSiteUrl, manager, owner, phase);
         return model;
       })
@@ -308,13 +308,21 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
       sp.web
         .siteUsers
         .select('Id', 'Title', 'Email')
-        .usingCaching()
+        .usingCaching({
+          key: 'projectlist_fetchprojects_siteusers',
+          storeName: 'session',
+          expiration: dateAdd(new Date(), 'minute', 15),
+        })
         .get<ISPUser[]>(),
       taxonomy
         .getDefaultSiteCollectionTermStore()
         .getTermSetById(this.props.phaseTermSetId)
         .terms
-        .usingCaching()
+        .usingCaching({
+          key: 'projectlist_fetchprojects_terms',
+          storeName: 'session',
+          expiration: dateAdd(new Date(), 'minute', 15),
+        })
         .get(),
     ]);
     let projects = this.mapProjects(items, groups, users, phaseTerms);

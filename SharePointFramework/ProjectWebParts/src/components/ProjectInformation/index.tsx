@@ -11,8 +11,7 @@ import { IProjectInformationData } from './IProjectInformationData';
 import { IProjectInformationProps, ProjectInformationDefaultProps } from './IProjectInformationProps';
 import { IProjectInformationState } from './IProjectInformationState';
 import styles from './ProjectInformation.module.scss';
-import ProjectProperty from './ProjectProperty';
-import { ProjectPropertyModel } from 'models';
+import { ProjectProperty, ProjectPropertyModel } from './ProjectProperty';
 
 
 export class ProjectInformation extends React.Component<IProjectInformationProps, IProjectInformationState> {

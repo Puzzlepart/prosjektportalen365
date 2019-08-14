@@ -1,4 +1,4 @@
-import { ProjectInformation } from 'components';
+import { ProjectInformation } from '../';
 import { Modal } from 'office-ui-fabric-react/lib/Modal';
 import * as React from 'react';
 import { IProjectInformationModalProps } from './IProjectInformationModalProps';
