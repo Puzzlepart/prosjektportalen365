@@ -1,4 +1,4 @@
-Prosjektportalen for Office 365  [![version](https://img.shields.io/badge/version-0.9.1-yellow.svg)](https://semver.org)
+﻿Prosjektportalen for Office 365  [![version](https://img.shields.io/badge/version-0.9.5-yellow.svg)](https://semver.org)
 =================
 
 Prosjektportalen for Office 365 er et prosjektstyringsverktøy for Office 365 basert på <a href="http://prosjektveiviseren.no">Prosjektveiviseren</a>. <a href="http://www.puzzlepart.com/prosjektportalen-365/">Mer informasjon på Puzzleparts nettsider.</a>
