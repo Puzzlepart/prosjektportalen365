@@ -76,7 +76,7 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
   private onOpenTemplateSelector() {
     const templateLibrarySelectModal = React.createElement(DocumentTemplateModal, {
       title: strings.TemplateLibrarySelectModalTitle,
-      onDismiss: this.onDismissTemplateLibrarySelectModal,
+      onDismiss: this.onDismissTemplateLibrarySelectModal.bind(this),
       libraries: this._libraries,
       templates: this._templates,
     });
@@ -88,7 +88,8 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
   /**
    * On dismiss <DocumentTemplateModal />
    */
-  private onDismissTemplateLibrarySelectModal = () => {
+  private onDismissTemplateLibrarySelectModal() {
     ReactDOM.unmountComponentAtNode(this._container);
+    document.location.href = document.location.href;
   }
 }
