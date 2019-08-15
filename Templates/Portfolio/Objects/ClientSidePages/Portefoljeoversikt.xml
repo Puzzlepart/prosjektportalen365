@@ -3,7 +3,7 @@
     <pnp:Sections>
         <pnp:Section Order="1" Type="OneColumn">
             <pnp:Controls>
-                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;title&quot;:&quot;Porteføjeoversikt&quot;,&quot;projectInfoFilterField&quot;:&quot;GtShowFieldPortfolio&quot;,&quot;excelExportEnabled&quot;:true,&quot;showGroupBy&quot;:true,&quot;viewSelectorEnabled&quot;:true,&quot;entity&quot;:{&quot;listName&quot;:&quot;Prosjekter&quot;,&quot;contentTypeId&quot;:&quot;0x0100805E9E4FEAAB4F0EABAB2600D30DB70C&quot;,&quot;fieldsGroupName&quot;:&quot;Prosjektportalenkolonner&quot;,&quot;identityFieldName&quot;:&quot;GtSiteId&quot;}}" ControlId="e58e3d32-057a-4418-97ce-172b92482ba2" Order="1" Column="1" />
+                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;title&quot;:&quot;Porteføljeoversikt&quot;,&quot;projectInfoFilterField&quot;:&quot;GtShowFieldPortfolio&quot;,&quot;excelExportEnabled&quot;:true,&quot;showGroupBy&quot;:true,&quot;viewSelectorEnabled&quot;:true,&quot;entity&quot;:{&quot;listName&quot;:&quot;Prosjekter&quot;,&quot;contentTypeId&quot;:&quot;0x0100805E9E4FEAAB4F0EABAB2600D30DB70C&quot;,&quot;fieldsGroupName&quot;:&quot;Prosjektportalenkolonner&quot;,&quot;identityFieldName&quot;:&quot;GtSiteId&quot;}}" ControlId="e58e3d32-057a-4418-97ce-172b92482ba2" Order="1" Column="1" />
             </pnp:Controls>
         </pnp:Section>
     </pnp:Sections>
