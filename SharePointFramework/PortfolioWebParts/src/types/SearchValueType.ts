@@ -3,4 +3,6 @@ export enum SearchValueType {
     OWSDATE,
     OWSUSER,
     OWSTAXID,
+    OWSCURR,
+    OWSMTXT,
 }

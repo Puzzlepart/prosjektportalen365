@@ -68,6 +68,12 @@ export class PortfolioOverviewColumn implements IColumn {
         if (fieldName.indexOf('owstaxid') !== -1) {
             return SearchValueType.OWSTAXID;
         }
+        if (fieldName.indexOf('owscurr') !== -1) {
+            return SearchValueType.OWSCURR;
+        }
+        if (fieldName.indexOf('owsmtxt') !== -1) {
+            return SearchValueType.OWSMTXT;
+        }
         return SearchValueType.OWSTEXT;
     }
 }
