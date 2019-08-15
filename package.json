@@ -6,7 +6,7 @@
   "scripts": {
     "buildReleasePackage": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1",
     "buildReleasePackageSkipBuildSPFx": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -SkipBuildSharePointFramework",
-    "postversion": "npm run-script build-release"
+    "postversion": "npm run-script buildReleasePackage"
   },
   "repository": {
     "type": "git",
