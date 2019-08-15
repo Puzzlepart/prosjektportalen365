@@ -32,19 +32,19 @@ export class ChartDataItem {
     public getValue(field: DataField) {
         const rawValue = this.getRawValue(field);
         switch (field.type) {
-            case 'Percentage': {
+            case 'percentage': {
                 if (this.hasValue(field)) {
                     return Math.floor((parseFloat(rawValue) * 100));
                 }
                 return 0;
             }
-            case 'Number': {
+            case 'number': {
                 if (this.hasValue(field)) {
                     return parseInt(rawValue, 10);
                 }
                 return 0;
             }
-            case 'Text': {
+            case 'text': {
                 if (this.hasValue(field)) {
                     if (field.fieldName.indexOf('OWSUSER') !== -1 && typeof rawValue === 'string' && rawValue.indexOf(' | ') !== -1) {
                         return rawValue.split(' | ')[1];

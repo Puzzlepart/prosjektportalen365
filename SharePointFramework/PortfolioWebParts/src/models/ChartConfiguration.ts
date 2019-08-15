@@ -81,7 +81,7 @@ export class ChartConfiguration {
                 if (this.fields.length === 1) {
                     const [field] = this.fields;
                     switch (field.type) {
-                        case 'Text': case 'Tags': {
+                        case 'text': case 'tags': {
                             const stringValues = data.getValuesUnique(field);
                             const _data = stringValues.map(value => data.getItemsWithStringValue(field, value).length);
                             return [{ name: field.title, data: _data }];
@@ -98,14 +98,14 @@ export class ChartConfiguration {
                 if (this.fields.length === 1) {
                     const [field] = this.fields;
                     switch (field.type) {
-                        case 'Number': {
+                        case 'number': {
                             _data = data.getItems(field).map((i, index) => {
                                 const y = data.getPercentage(field, index);
                                 return { name: i.name, y };
                             });
                         }
                             break;
-                        case 'Text': case 'Tags': {
+                        case 'text': case 'tags': {
                             _data = data.getValuesUnique(field).map(value => {
                                 const itemsMatch = data.getItemsWithStringValue(field, value);
                                 const name = value || 'N/A';
@@ -174,8 +174,8 @@ export class ChartConfiguration {
                     break;
             }
             return chartConfig;
-        } catch (errText) {
-            throw `<b>${this.item.Title}:</b> ${errText}`;
+        } catch (errtext) {
+            throw `<b>${this.item.Title}:</b> ${errtext}`;
         }
     }
 
@@ -187,15 +187,6 @@ export class ChartConfiguration {
             title: { text: '', align: 'high' },
             labels: { overflow: 'justify' },
         };
-        // if (this.yAxisMin) {
-        //     yAxis.min = this.yAxisMin;
-        // }
-        // if (this.yAxisMax) {
-        //     yAxis.max = this.yAxisMax;
-        // }
-        // if (this.yAxisTickInterval) {
-        //     yAxis.tickInterval = this.yAxisTickInterval;
-        // }
         return yAxis;
     }
 
@@ -214,7 +205,7 @@ export class ChartConfiguration {
                 if (this.fields.length === 1) {
                     const [field] = this.fields;
                     switch (field.type) {
-                        case 'Text': {
+                        case 'text': {
                             categories = data.getValuesUnique(field);
                         }
                             break;

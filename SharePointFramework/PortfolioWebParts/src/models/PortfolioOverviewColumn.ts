@@ -14,6 +14,7 @@ export class PortfolioOverviewColumn implements IColumn {
     public showFieldFrontpage?: boolean;
     public showFieldPortfolio?: boolean;
     public dataType?: string;
+    public isMultiline?: boolean;
     public isRefinable?: boolean;
     public isGroupable?: boolean;
     public isResizable?: boolean;
@@ -28,10 +29,11 @@ export class PortfolioOverviewColumn implements IColumn {
         this.name = item.Title;
         this.sortOrder = item.GtSortOrder;
         this.internalName = item.GtInternalName;
+        this.dataType = item.GtFieldDataType.toLowerCase();
+        this.isMultiline = this.dataType === 'note';
         this.showFieldProjectStatus = item.GtShowFieldProjectStatus;
         this.showFieldFrontpage = item.GtShowFieldFrontpage;
         this.showFieldPortfolio = item.GtShowFieldPortfolio;
-        this.dataType = item.GtFieldDataType;
         this.isRefinable = item.GtIsRefinable;
         this.isGroupable = item.GtIsGroupable;
         this.isResizable = true;

@@ -27,6 +27,7 @@ import { renderItemColumn } from './RenderItemColumn';
 
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = PortfolioOverviewDefaultProps;
+  private _onSearchDelay;
 
   constructor(props: IPortfolioOverviewProps) {
     super(props);
@@ -85,9 +86,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
             <div className={styles.title}>{this.props.title}</div>
           </div>
           <div className={styles.searchBox}>
-            <SearchBox
-              onChange={newValue => this.setState({ searchTerm: newValue.toLowerCase() })}
-              placeholder={format(strings.SearchBoxPlaceholderText, 'alle prosjekter')} />
+            <SearchBox onChange={this.onSearch.bind(this)} placeholder={format(strings.SearchBoxPlaceholderText, 'alle prosjekter')} />
           </div>
           {this.list()}
           {this.filterPanel()}
@@ -198,14 +197,13 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           columns={data.columns}
           groups={data.groups}
           selectionMode={SelectionMode.none}
-          onRenderItemColumn={renderItemColumn}
+          onRenderItemColumn={(item, _index, column: PortfolioOverviewColumn) => renderItemColumn(item, column, state => this.setState(state))}
           onColumnHeaderClick={this.onColumnSort.bind(this)} />
       </div>
     );
   }
 
   private filterPanel() {
-    console.log(this.state.filters);
     return (
       <FilterPanel
         isOpen={this.state.showFilterPanel}
@@ -227,6 +225,19 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         hubSiteUrl={this.props.pageContext.site.absoluteUrl}
         filterField={this.props.projectInfoFilterField} />
     );
+  }
+
+  /**
+   * On search
+   * 
+   * @param {string} searchTerm Search term
+   * @param {number} delay Delay in ms
+   */
+  private onSearch(searchTerm: string, delay: number = 500) {
+    clearTimeout(this._onSearchDelay);
+    this._onSearchDelay = setTimeout(() => {
+      this.setState({ searchTerm: searchTerm.toLowerCase() });
+    }, delay);
   }
 
   /**

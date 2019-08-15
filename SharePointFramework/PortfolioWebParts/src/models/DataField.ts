@@ -1,20 +1,22 @@
 import { DataFieldType } from 'types';
 
 export class DataField {
+    public type: DataFieldType;
+
     /**
      * Constructor
      * 
      * @param {string} title Title
      * @param {string} fieldName Field name
-     * @param {DataFieldType} type Data field type
+     * @param {string} type Data field type
      */
     constructor(
         public title: string,
         public fieldName: string,
-        public type: DataFieldType,
+        type: string,
     ) {
         this.title = title;
         this.fieldName = fieldName;
-        this.type = type;
+        this.type = type.toLowerCase() as DataFieldType;
     }
 }
