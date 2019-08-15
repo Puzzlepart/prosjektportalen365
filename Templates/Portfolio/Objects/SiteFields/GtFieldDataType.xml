@@ -1,1 +1,12 @@
-﻿<Field Type="Choice" DisplayName="{resource:SiteFields_GtFieldDataType_DisplayName}" Description="{resource:SiteFields_GtFieldDataType_Description}" Title="{resource:SiteFields_GtFieldDataType_DisplayName}" Group="Prosjektportalenkolonner" ID="{7463d38f-5f51-4b25-a920-04ea1ec24a26}" StaticName="GtFieldDataType" Name="GtFieldDataType"><CHOICES><CHOICE>Text</CHOICE><CHOICE>Number</CHOICE><CHOICE>Percentage</CHOICE><CHOICE>Date</CHOICE><CHOICE>URL</CHOICE><CHOICE>Currency</CHOICE><CHOICE>Note</CHOICE></CHOICES></Field>
+﻿<Field Type="Choice" DisplayName="{resource:SiteFields_GtFieldDataType_DisplayName}" Description="{resource:SiteFields_GtFieldDataType_Description}" Title="{resource:SiteFields_GtFieldDataType_DisplayName}" Group="Prosjektportalenkolonner" ID="{7463d38f-5f51-4b25-a920-04ea1ec24a26}" StaticName="GtFieldDataType" Name="GtFieldDataType">
+    <CHOICES>
+        <CHOICE>Text</CHOICE>
+        <CHOICE>Tags</CHOICE>
+        <CHOICE>Number</CHOICE>
+        <CHOICE>Percentage</CHOICE>
+        <CHOICE>Date</CHOICE>
+        <CHOICE>URL</CHOICE>
+        <CHOICE>Currency</CHOICE>
+        <CHOICE>Note</CHOICE>
+    </CHOICES>
+</Field>
