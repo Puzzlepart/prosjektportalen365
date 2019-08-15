@@ -1,4 +1,4 @@
-export type DataFieldType =  'Text' | 'Tags' | 'Number' | 'Percentage';
+import { DataFieldType } from 'types';
 
 export class DataField {
     /**

@@ -6,6 +6,6 @@ export { BenefitMeasurementIndicator } from './BenefitMeasurementIndicator';
 export { ChartData } from './ChartData';
 export { ChartDataItem } from './ChartDataItem';
 export { ChartConfiguration } from './ChartConfiguration';
-export { DataField, DataFieldType } from './DataField';
+export { DataField } from './DataField';
 export { PortfolioOverviewColumn } from './PortfolioOverviewColumn';
 export { PortfolioOverviewView } from './PortfolioOverviewView';
