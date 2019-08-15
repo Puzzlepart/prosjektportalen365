@@ -1,6 +1,7 @@
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { ProjectColumnConfigDictionary } from './ProjectColumnConfig';
 import { IPortfolioOverviewColumnSpItem } from 'interfaces';
+import { SearchValueType } from 'types';
 
 export class PortfolioOverviewColumn implements IColumn {
     public key: string;
@@ -14,6 +15,7 @@ export class PortfolioOverviewColumn implements IColumn {
     public showFieldFrontpage?: boolean;
     public showFieldPortfolio?: boolean;
     public dataType?: string;
+    public searchType?: SearchValueType;
     public isMultiline?: boolean;
     public isRefinable?: boolean;
     public isGroupable?: boolean;
@@ -38,5 +40,34 @@ export class PortfolioOverviewColumn implements IColumn {
         this.isGroupable = item.GtIsGroupable;
         this.isResizable = true;
         this.minWidth = item.GtColMinWidth || 100;
+        this.searchType = this.getSearchType(this.fieldName.toLowerCase());
+    }
+
+    /**
+     * Set property isSortedDescending
+     * 
+     * @param isSortedDescending Is sorted descending
+     */
+    public setIsSortedDescending(isSortedDescending: boolean): PortfolioOverviewColumn {
+        this.isSortedDescending = isSortedDescending;
+        return this;
+    }
+
+    /**
+     * Get search type from field name
+     * 
+     * @param {string} fieldName Field name
+     */
+    private getSearchType(fieldName: string): SearchValueType {
+        if (fieldName.indexOf('owsdate') !== -1) {
+            return SearchValueType.OWSDATE;
+        }
+        if (fieldName.indexOf('owsuser') !== -1) {
+            return SearchValueType.OWSUSER;
+        }
+        if (fieldName.indexOf('owstaxid') !== -1) {
+            return SearchValueType.OWSTAXID;
+        }
+        return SearchValueType.OWSTEXT;
     }
 }

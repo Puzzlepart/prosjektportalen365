@@ -297,7 +297,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     }
     items = arraySort(items, [column.fieldName], { reverse: !isSortedDescending });
     this.setState({
-      sortBy: { ...column, isSortedDescending },
+      sortBy: column.setIsSortedDescending(isSortedDescending),
       items,
       columns: columns.map(col => {
         col.isSorted = (col.key === column.key);
@@ -307,15 +307,6 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         return col;
       }),
     });
-  }
-
-  /**
-   * On open <ProjectInformationModal />
-   * 
-   * @param {SearchResult} item 
-   */
-  private onOpenProjectInfoModal(item: SearchResult) {
-    this.setState({ showProjectInfo: item });
   }
 
   /**

@@ -6,23 +6,26 @@ import { Persona, PersonaPresence, PersonaSize } from 'office-ui-fabric-react/li
 import * as React from 'react';
 import { IPortfolioOverviewState } from '../IPortfolioOverviewState';
 import { Tag } from './Tag/index';
+import { SearchValueType } from 'types';
 
 /**
  * Mapping for rendering of the different data types
  */
 const renderDataTypeMap = {
-    user: (fieldName: string, colValue: string) => {
-        if (fieldName.indexOf('OWSUSER') !== -1) {
+    user: (column: PortfolioOverviewColumn, colValue: string) => {
+        if (column.searchType === SearchValueType.OWSUSER) {
             let [email, primaryText] = colValue.split(' | ');
             return (
                 <span>
-                    <a href={`mailto:${email}`}>
-                        <Persona
-                            primaryText={primaryText}
-                            secondaryText={email}
-                            size={PersonaSize.size24}
-                            presence={PersonaPresence.none} />
-                    </a>
+                    <Persona
+                        primaryText={primaryText}
+                        onRenderPrimaryText={props => (
+                            <div>
+                                <a href={`mailto:${email}`}>{props.primaryText}</a>
+                            </div>
+                        )}
+                        size={PersonaSize.size24}
+                        presence={PersonaPresence.none} />
                 </span>
             );
         }
@@ -32,17 +35,17 @@ const renderDataTypeMap = {
             </span>
         );
     },
-    date: (_fieldName: string, colValue: string) => (
+    date: (_column: PortfolioOverviewColumn, colValue: string) => (
         <span>
             {formatDate(colValue)}
         </span>
     ),
-    currency: (_fieldName: string, colValue: string) => (
+    currency: (_column: PortfolioOverviewColumn, colValue: string) => (
         <span>
             {tryParseCurrency(colValue, '')}
         </span>
     ),
-    tags: (_fieldName: string, colValue: string) => {
+    tags: (_column: PortfolioOverviewColumn, colValue: string) => {
         let tags: string[] = colValue.split(';');
         return (
             <span>
@@ -76,7 +79,7 @@ export function renderItemColumn(item: SearchResult, column: PortfolioOverviewCo
     }
 
     if (renderDataTypeMap[column.dataType]) {
-        return renderDataTypeMap[column.dataType](column.fieldName, colValue);
+        return renderDataTypeMap[column.dataType](column, colValue);
     }
 
     const config = column.config ? column.config[colValue] : null;
