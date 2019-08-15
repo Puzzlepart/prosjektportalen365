@@ -11,9 +11,10 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import * as strings from 'ProjectListWebPartStrings';
+import * as strings from 'PortfolioWebPartsStrings';
 import { ProjectInformationModal } from 'ProjectWebParts/lib/components/ProjectInformation';
 import * as React from 'react';
+import * as format from 'string-format';
 import { IProjectListProps, ProjectListDefaultProps } from './IProjectListProps';
 import { IProjectListState } from './IProjectListState';
 import { ProjectCard } from './ProjectCard';
@@ -63,7 +64,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
     if (this.state.isLoading) {
       return (
         <div className={styles.projectList}>
-          <Spinner label={strings.LoadingText} type={SpinnerType.large} />
+          <Spinner label={format(strings.LoadingText, 'prosjekter du er medlem av')} type={SpinnerType.large} />
         </div >
       );
     }

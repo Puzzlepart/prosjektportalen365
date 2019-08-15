@@ -5,8 +5,7 @@ import { IPortfolioOverviewColumnSpItem, IPortfolioOverviewConfiguration, IPortf
 import { ChartConfiguration, ChartData, ChartDataItem, DataField, DataFieldType, PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
 import { ProjectColumnConfig, ProjectColumnConfigDictionary } from 'models/ProjectColumnConfig';
 import * as objectGet from 'object-get';
-import * as PortfolioInsightsWebPartStrings from 'PortfolioInsightsWebPartStrings';
-import * as PortfolioOverviewWebPartStrings from 'PortfolioOverviewWebPartStrings';
+import * as strings from 'PortfolioWebPartsStrings';
 import { DEFAULT_SEARCH_SETTINGS } from './DEFAULT_SEARCH_SETTINGS';
 
 /**
@@ -19,7 +18,7 @@ import { DEFAULT_SEARCH_SETTINGS } from './DEFAULT_SEARCH_SETTINGS';
 export async function fetchChartData(view: PortfolioOverviewView, configuration: IPortfolioOverviewConfiguration, siteId: string) {
     try {
         const [chartItems, columnConfigItems, contentTypes] = await Promise.all([
-            sp.web.lists.getByTitle(PortfolioInsightsWebPartStrings.SPChartConfigurationList).items
+            sp.web.lists.getByTitle(strings.SPChartConfigurationList).items
                 .select(
                     'ContentTypeId',
                     'Title',
@@ -34,7 +33,7 @@ export async function fetchChartData(view: PortfolioOverviewView, configuration:
                     'GtPiWidthXxxl',
                 )
                 .get<ISPChartConfiguration[]>(),
-            sp.web.lists.getByTitle(PortfolioInsightsWebPartStrings.SPColumnConfigurationList).items
+            sp.web.lists.getByTitle(strings.SPColumnConfigurationList).items
                 .select(
                     'Id',
                     'Title',
@@ -42,7 +41,7 @@ export async function fetchChartData(view: PortfolioOverviewView, configuration:
                     'GtFieldDataType',
                 )
                 .get<ISPColumnConfiguration[]>(),
-            sp.web.lists.getByTitle(PortfolioInsightsWebPartStrings.SPChartConfigurationList).contentTypes
+            sp.web.lists.getByTitle(strings.SPChartConfigurationList).contentTypes
                 .select(
                     'StringId',
                     'Name',
@@ -129,16 +128,16 @@ export async function fetchDataForView(view: PortfolioOverviewView, configuratio
 export async function getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
     try {
         const spItems = await Promise.all([
-            sp.web.lists.getByTitle(PortfolioOverviewWebPartStrings.ProjectColumnConfigListName).items
+            sp.web.lists.getByTitle(strings.ProjectColumnConfigListName).items
                 .orderBy('ID', true)
                 .get<IProjectColumnConfigSpItem[]>(),
-            sp.web.lists.getByTitle(PortfolioOverviewWebPartStrings.ProjectColumnsListName).items
+            sp.web.lists.getByTitle(strings.ProjectColumnsListName).items
                 .orderBy('GtSortOrder', true)
                 .get<IPortfolioOverviewColumnSpItem[]>(),
-            sp.web.lists.getByTitle(PortfolioOverviewWebPartStrings.PortfolioViewsListName).items
+            sp.web.lists.getByTitle(strings.PortfolioViewsListName).items
                 .orderBy('GtSortOrder', true)
                 .get<IPortfolioOverviewViewSpItem[]>(),
-            sp.web.lists.getByTitle(PortfolioOverviewWebPartStrings.PortfolioViewsListName)
+            sp.web.lists.getByTitle(strings.PortfolioViewsListName)
                 .select('DefaultNewFormUrl')
                 .expand('DefaultNewFormUrl')
                 .get<{ DefaultNewFormUrl: string }>(),

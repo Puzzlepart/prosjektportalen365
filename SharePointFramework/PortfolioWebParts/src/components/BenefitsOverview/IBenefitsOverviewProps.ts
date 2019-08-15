@@ -1,4 +1,3 @@
-import * as BenefitsOverviewWebPartStrings from 'BenefitsOverviewWebPartStrings';
 import { IAggregatedSearchListProps } from '../';
 
 export interface IBenefitsOverviewProps  extends IAggregatedSearchListProps {
@@ -6,7 +5,6 @@ export interface IBenefitsOverviewProps  extends IAggregatedSearchListProps {
 }
 
 export const BenefitsOverviewDefaultProps: Partial<IBenefitsOverviewProps> = {
-    title: BenefitsOverviewWebPartStrings.Title,
     selectProperties: [
         'Path',
         'SPWebURL',
@@ -31,8 +29,5 @@ export const BenefitsOverviewDefaultProps: Partial<IBenefitsOverviewProps> = {
         'GtMeasureIndicatorLookupId',
         'GtGainsResponsible'
     ],
-    excelExportConfig: {
-        fileNamePrefix: BenefitsOverviewWebPartStrings.ExcelExportFileNamePrefix,
-        sheetName: 'Sheet1',
-    },
+    excelExportEnabled: true,
 };

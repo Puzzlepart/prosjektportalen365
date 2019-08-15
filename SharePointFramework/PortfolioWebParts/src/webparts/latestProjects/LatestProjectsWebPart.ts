@@ -12,7 +12,6 @@ export default class LatestProjectsWebPart extends BaseClientSideWebPart<ILatest
       LatestProjects,
       {
         hubSiteId: this.context.pageContext.legacyPageContext.hubSiteId,
-        displayMode: this.displayMode,
         updateProperty: (value: string) => {
           this.properties.title = value;
         },

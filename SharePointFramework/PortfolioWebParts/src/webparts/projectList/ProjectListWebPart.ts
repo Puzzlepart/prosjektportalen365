@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
-import * as strings from 'ProjectListWebPartStrings';
+import * as strings from 'PortfolioWebPartsStrings';
 import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
 import { ProjectList, IProjectListProps } from 'components';
 import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';

@@ -1,13 +1,12 @@
 import * as React from 'react';
-import * as strings from 'RiskOverviewWebPartStrings';
-import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
+import * as strings from 'PortfolioWebPartsStrings';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { tryParseInt } from '@Shared/helpers';
 
 export const RiskOverviewColumns: IColumn[] = [{
     key: 'Title',
     fieldName: 'Title',
-    name: PortfolioWebPartsStrings.TitleLabel,
+    name: strings.TitleLabel,
     minWidth: 220,
     maxWidth: 300,
     isResizable: true,
@@ -15,7 +14,7 @@ export const RiskOverviewColumns: IColumn[] = [{
 {
     key: "SiteTitle",
     fieldName: "SiteTitle",
-    name: PortfolioWebPartsStrings.SiteTitleLabel,
+    name: strings.SiteTitleLabel,
     minWidth: 200,
     onRender: (item: any) => <a href={item.SPWebUrl} target='_blank'>{item.SiteTitle}</a>,
 },
