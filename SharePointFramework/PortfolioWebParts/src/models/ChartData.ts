@@ -32,12 +32,6 @@ export class ChartData {
     * @param {DataField} field Field
      */
     public getItemsWithNonZeroValue(field: DataField): ChartDataItem[] {
-        if (field.type === "Text") {
-            // Logger.log({
-            //     message: String.format(LOG_TEMPLATE, "getItemsWithNonZeroValue", `Data type '${field.dataType}' not supported.`),
-            //     level: LogLevel.Error,
-            // });
-        }
         return this._items.filter(i => i.getValue(field) !== 0);
     }
 
@@ -48,12 +42,6 @@ export class ChartData {
     * @param {string} value Value
     */
     public getItemsWithStringValue(field: DataField, value: string): ChartDataItem[] {
-        if (field.type !== "Text") {
-            // Logger.log({
-            //     message: String.format(LOG_TEMPLATE, "getItemsWithStringValue", `Data type '${field.dataType}' not supported.`),
-            //     level: LogLevel.Error,
-            // });
-        }
         return this.getItems(field).filter(i => i.getValue(field) === value);
     }
 
@@ -105,12 +93,6 @@ export class ChartData {
     * @param {DataField} field Field
     */
     public getValuesUnique(field: DataField): Array<string> {
-        if (field.type !== "Text") {
-            // Logger.log({
-            //     message: String.format(LOG_TEMPLATE, "getValuesUnique", `Data type '${field.dataType}' not supported.`),
-            //     level: LogLevel.Error,
-            // });
-        }
         return this.getValues(field).filter((value, index, self) => self.indexOf(value) === index);
     }
 
@@ -145,12 +127,6 @@ export class ChartData {
      * @param {DataField} field Field
      */
     public getTotal(field: DataField) {
-        if (field.type !== "Number") {
-            // Logger.log({
-            //     message: String.format(LOG_TEMPLATE, "getTotal", `Data type '${field.dataType}' not supported.`),
-            //     level: LogLevel.Error,
-            // });
-        }
         return this._items
             .filter(i => i.hasValue(field))
             .map(i => i.getValue(field))
@@ -164,13 +140,7 @@ export class ChartData {
      * @param {number} index Index
      * @param {number} fractionDigits Number of decimals (defaults to 2)
      */
-    public getPercentage(field: DataField, index: number, fractionDigits = 2) {
-        if (field.type !== "Number") {
-            // Logger.log({
-            //     message: String.format(LOG_TEMPLATE, "getPercentage", `Data type '${field.dataType}' not supported.`),
-            //     level: LogLevel.Error,
-            // });
-        }
+    public getPercentage(field: DataField, index: number, fractionDigits: number = 2) {
         return parseFloat(((this._items[index].getValue(field) / this.getTotal(field)) * 100).toFixed(fractionDigits));
     }
 }

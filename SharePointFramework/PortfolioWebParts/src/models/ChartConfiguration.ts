@@ -1,18 +1,19 @@
 import { ChartData, DataField } from './';
-import { ISPDataSource, ISPChartConfiguration } from 'interfaces';
+import { ISPDataSource } from 'interfaces';
 import * as objectAssign from 'object-assign';
+import { SPChartConfigurationItem } from 'data';
 
 export const CHARTCONFIGBASE_CONTENTTYPEID = '0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D';
 export const CHART_TYPES = ['bar', 'column', 'pie'];
 
 export class ChartConfiguration {
-    public item: ISPChartConfiguration;
+    public item: SPChartConfigurationItem;
     public searchQuery: ISPDataSource;
     public fields: DataField[];
     public type: string;
     public width: { [key: string]: number };
 
-    constructor(item: ISPChartConfiguration, fields: DataField[]) {
+    constructor(item: SPChartConfigurationItem, fields: DataField[]) {
         this.item = item;
         this.fields = fields;
         this.initType(item.ContentTypeId);
@@ -38,7 +39,7 @@ export class ChartConfiguration {
      * 
      * @param {ISPChartConfiguration} item Item
      */
-    protected initWidth(item: ISPChartConfiguration) {
+    protected initWidth(item: SPChartConfigurationItem) {
         this.width = {
             sm: item.GtPiWidthSm,
             md: item.GtPiWidthMd,
@@ -80,7 +81,7 @@ export class ChartConfiguration {
                 if (this.fields.length === 1) {
                     const [field] = this.fields;
                     switch (field.type) {
-                        case 'Text': {
+                        case 'Text': case 'Tags': {
                             const stringValues = data.getValuesUnique(field);
                             const _data = stringValues.map(value => data.getItemsWithStringValue(field, value).length);
                             return [{ name: field.title, data: _data }];
@@ -104,7 +105,7 @@ export class ChartConfiguration {
                             });
                         }
                             break;
-                        case 'Text': {
+                        case 'Text': case 'Tags': {
                             _data = data.getValuesUnique(field).map(value => {
                                 const itemsMatch = data.getItemsWithStringValue(field, value);
                                 const name = value || 'N/A';

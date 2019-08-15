@@ -1,4 +1,4 @@
-export type DataFieldType =  'Text' | 'Number' | 'Percentage';
+export type DataFieldType =  'Text' | 'Tags' | 'Number' | 'Percentage';
 
 export class DataField {
     /**
