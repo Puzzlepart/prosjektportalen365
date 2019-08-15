@@ -1,6 +1,5 @@
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
 import { SearchResult } from '@pnp/sp';
-import { formatDate, tryParseCurrency } from '@Shared/helpers';
 import { parseUrlHash, setUrlHash } from '@Shared/util';
 import * as arraySort from 'array-sort';
 import * as arrayUnique from 'array-unique';
@@ -10,8 +9,7 @@ import { PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
 import * as objectGet from 'object-get';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { DetailsList, SelectionMode, IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { DetailsList, IColumn, IGroup, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
@@ -24,6 +22,8 @@ import { IPortfolioOverviewProps, PortfolioOverviewDefaultProps } from './IPortf
 import { IPortfolioOverviewState } from './IPortfolioOverviewState';
 import styles from './PortfolioOverview.module.scss';
 import { PortfolioOverviewFieldSelector } from './PortfolioOverviewFieldSelector';
+import { renderItemColumn } from './RenderItemColumn';
+
 
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = PortfolioOverviewDefaultProps;
@@ -42,7 +42,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     }
   }
 
-  public componentWillUpdate(_nextProps: IPortfolioOverviewProps, { currentView, groupBy }: IPortfolioOverviewState) {
+  public componentWillUpdate(_nextProps: IPortfolioOverviewProps, { currentView, groupBy, configuration, columns }: IPortfolioOverviewState) {
     let obj: { [key: string]: string } = {};
     if (currentView) {
       obj.viewId = currentView.id.toString();
@@ -50,6 +50,11 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     if (groupBy) {
       obj.groupBy = groupBy.fieldName;
     }
+    PortfolioOverviewFieldSelector.items = configuration.columns.map(col => ({
+      name: col.name,
+      value: col.fieldName,
+      selected: columns.indexOf(col) !== -1,
+    }));
     setUrlHash(obj);
   }
 
@@ -75,7 +80,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     return (
       <div className={styles.portfolioOverview}>
         <div className={styles.container}>
-          {this.commandBar}
+          {this.commandBar()}
           <div className={styles.header}>
             <div className={styles.title}>{this.props.title}</div>
           </div>
@@ -84,15 +89,15 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
               onChange={newValue => this.setState({ searchTerm: newValue.toLowerCase() })}
               placeholder={format(strings.SearchBoxPlaceholderText, 'alle prosjekter')} />
           </div>
-          {this.list}
-          {this.filterPanel}
-          {this.projectInfoModal}
+          {this.list()}
+          {this.filterPanel()}
+          {this.projectInfoModal()}
         </div>
       </div>
     );
   }
 
-  private get commandBar() {
+  private commandBar() {
     const items: IContextualMenuItem[] = [];
     const farItems: IContextualMenuItem[] = [];
 
@@ -116,7 +121,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         subMenuProps: {
           items: [
             {
-              key: 'GroupBy_NoGroupingText',
+              key: 'NoGrouping',
               name: strings.NoGroupingText,
               onClick: e => {
                 e.preventDefault();
@@ -171,7 +176,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     return <CommandBar items={items} farItems={farItems} />;
   }
 
-  private get list() {
+  private list() {
     if (this.state.error) {
       return (
         <div className={styles.portfolioOverview}>
@@ -193,18 +198,14 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           columns={data.columns}
           groups={data.groups}
           selectionMode={SelectionMode.none}
-          onRenderItemColumn={this.onRenderItemColumn.bind(this)}
+          onRenderItemColumn={renderItemColumn}
           onColumnHeaderClick={this.onColumnSort.bind(this)} />
       </div>
     );
   }
 
-  private get filterPanel() {
-    PortfolioOverviewFieldSelector.items = this.state.configuration.columns.map(col => ({
-      name: col.name,
-      value: col.fieldName,
-      selected: this.state.columns.indexOf(col) !== -1,
-    }));
+  private filterPanel() {
+    console.log(this.state.filters);
     return (
       <FilterPanel
         isOpen={this.state.showFilterPanel}
@@ -214,7 +215,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     );
   }
 
-  private get projectInfoModal() {
+  private projectInfoModal() {
     if (!this.state.showProjectInfo) return null;
     return (
       <ProjectInformationModal
@@ -246,7 +247,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   private getSelectedFiltersWithItems(refiners: any[], configuration: IPortfolioOverviewConfiguration, viewConfig: PortfolioOverviewView): IFilterProps[] {
     const selectedRefiners = configuration.refiners.filter(ref => refiners.filter(r => r.Name === ref.key).length > 0 && viewConfig.refiners.indexOf(ref) !== -1);
     let filters = selectedRefiners.map(ref => {
-      let entries = refiners.filter(r => r.Name === ref.key)[0].Entries;
+      let entries: any[] = refiners.filter(r => r.Name === ref.key)[0].Entries;
       let items = entries.map(entry => ({ name: entry.RefinementName, value: entry.RefinementValue }));
       let itemsSorted = items.sort((a, b) => a.value > b.value ? 1 : -1);
       return { column: ref, items: itemsSorted };
@@ -314,65 +315,12 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   }
 
   /**
-   * On render item activeFilters
-  *
-  * @param {SearchResult} item Item
-  * @param {number} _index Index
-  * @param {PortfolioOverviewColumn} column Column
-  */
-  private onRenderItemColumn(item: SearchResult, _index: number, column: PortfolioOverviewColumn) {
-    const colValue = item[column.fieldName];
-    switch (column.fieldName) {
-      case 'Title': {
-        return (
-          <span>
-            <a href={item.Path} target='_blank'>{colValue}</a>
-            <a href='#' style={{ marginLeft: 8 }} onClick={_evt => this.onOpenProjectInfoModal(item)}><Icon iconName='OpenInNewWindow' /></a>
-          </span >
-        );
-      }
-    }
-    switch (column.dataType) {
-      case 'Date': {
-        return (
-          <span>
-            {formatDate(colValue)}
-          </span>
-        );
-      }
-      case 'Currency': {
-        return (
-          <span>
-            {tryParseCurrency(colValue, '')}
-          </span>
-        );
-      }
-      default: {
-        const config = column.config ? column.config[colValue] : null;
-        if (config) {
-          return (
-            <span>
-              <Icon iconName={config.iconName} style={{ color: config.color, marginRight: 4 }} />
-              <span>{colValue}</span>
-            </span>
-          );
-        }
-        return (
-          <span>
-            {colValue}
-          </span>
-        );
-      }
-    }
-  }
-
-  /**
    * Get groups
-   * 
-   * @param {any[]} items Items
-   * @param {PortfolioOverviewColumn}  groupBy Group by column
-   * @param {PortfolioOverviewColumn} sortBy Sort by column
-   */
+   *
+* @param {any[]} items Items
+* @param {PortfolioOverviewColumn}  groupBy Group by column
+* @param {PortfolioOverviewColumn} sortBy Sort by column
+        */
   private getGroups(items: any[], groupBy: PortfolioOverviewColumn, sortBy: PortfolioOverviewColumn): IGroup[] {
     let groups: IGroup[] = null;
     if (groupBy) {
@@ -505,8 +453,8 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   /**
    * Changes view, doing a new search
    *
-   * @param {PortfolioOverviewView} view View configuration
-   */
+* @param {PortfolioOverviewView} view View configuration
+      */
   private async onChangeView(view: PortfolioOverviewView): Promise<void> {
     if (this.state.currentView.id === view.id) {
       return;

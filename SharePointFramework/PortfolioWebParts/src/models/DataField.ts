@@ -2,8 +2,12 @@ export type DataFieldType =  'Text' | 'Tags' | 'Number' | 'Percentage';
 
 export class DataField {
     /**
-       * Constructor
-       */
+     * Constructor
+     * 
+     * @param {string} title Title
+     * @param {string} fieldName Field name
+     * @param {DataFieldType} type Data field type
+     */
     constructor(
         public title: string,
         public fieldName: string,

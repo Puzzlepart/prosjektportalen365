@@ -1,12 +1,39 @@
-import { sp } from '@pnp/sp';
+import { sp, SearchResults } from '@pnp/sp';
 import { makeUrlAbsolute } from '@Shared/helpers';
 import * as cleanDeep from 'clean-deep';
-import { IPortfolioOverviewColumnSpItem, IPortfolioOverviewConfiguration, IPortfolioOverviewViewSpItem, IProjectColumnConfigSpItem, ISPChartConfiguration, ISPColumnConfiguration } from 'interfaces';
+import { IPortfolioOverviewColumnSpItem, IPortfolioOverviewConfiguration, IPortfolioOverviewViewSpItem, IProjectColumnConfigSpItem } from 'interfaces';
 import { ChartConfiguration, ChartData, ChartDataItem, DataField, DataFieldType, PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
 import { ProjectColumnConfig, ProjectColumnConfigDictionary } from 'models/ProjectColumnConfig';
 import * as objectGet from 'object-get';
 import * as strings from 'PortfolioWebPartsStrings';
 import { DEFAULT_SEARCH_SETTINGS } from './DEFAULT_SEARCH_SETTINGS';
+
+export class SPChartConfigurationItem {
+    public ContentTypeId: string = '';
+    public Title: string = '';
+    public GtPiSubTitle: string = '';
+    public GtPiFieldsId: number[] = [];
+    public GtPiCategoryFieldId: number = 0;
+    public GtPiWidthSm: number = 0;
+    public GtPiWidthMd: number = 0;
+    public GtPiWidthLg: number = 0;
+    public GtPiWidthXl: number = 0;
+    public GtPiWidthXxl: number = 0;
+    public GtPiWidthXxxl: number = 0;
+}
+
+export class SPColumnConfigurationItem {
+    public Id: number = 0;
+    public Title: string = '';
+    public GtManagedProperty: string = '';
+    public GtFieldDataType: string = '';
+}
+
+export class SPContentType {
+    public StringId: string = '';
+    public Name: string = '';
+    public NewFormUrl: string = '';
+}
 
 /**
  * Fetch chart data
@@ -19,35 +46,14 @@ export async function fetchChartData(view: PortfolioOverviewView, configuration:
     try {
         const [chartItems, columnConfigItems, contentTypes] = await Promise.all([
             sp.web.lists.getByTitle(strings.SPChartConfigurationList).items
-                .select(
-                    'ContentTypeId',
-                    'Title',
-                    'GtPiSubTitle',
-                    'GtPiFieldsId',
-                    'GtPiCategoryFieldId',
-                    'GtPiWidthSm',
-                    'GtPiWidthMd',
-                    'GtPiWidthLg',
-                    'GtPiWidthXl',
-                    'GtPiWidthXxl',
-                    'GtPiWidthXxxl',
-                )
-                .get<ISPChartConfiguration[]>(),
+                .select(...Object.keys(new SPChartConfigurationItem()))
+                .get<SPChartConfigurationItem[]>(),
             sp.web.lists.getByTitle(strings.SPColumnConfigurationList).items
-                .select(
-                    'Id',
-                    'Title',
-                    'GtManagedProperty',
-                    'GtFieldDataType',
-                )
-                .get<ISPColumnConfiguration[]>(),
+                .select(...Object.keys(new SPColumnConfigurationItem()))
+                .get<SPColumnConfigurationItem[]>(),
             sp.web.lists.getByTitle(strings.SPChartConfigurationList).contentTypes
-                .select(
-                    'StringId',
-                    'Name',
-                    'NewFormUrl',
-                )
-                .get<{ StringId: string, Name: string, NewFormUrl: string }[]>(),
+                .select(...Object.keys(new SPContentType()))
+                .get<SPContentType[]>(),
         ]);
         let charts: ChartConfiguration[] = chartItems.map(item => {
             let fields = item.GtPiFieldsId.map(id => {
@@ -86,7 +92,7 @@ export interface IFetchDataForViewResult {
  */
 export async function fetchDataForView(view: PortfolioOverviewView, configuration: IPortfolioOverviewConfiguration, siteId: string, siteIdProperty: string = 'GtSiteIdOWSTEXT'): Promise<IFetchDataForViewResult> {
     try {
-        let [{ PrimarySearchResults: projects }, { PrimarySearchResults: sites }, { PrimarySearchResults: statusReports }] = await Promise.all([
+        let searchResults: SearchResults[] = await Promise.all([
             sp.search({
                 ...DEFAULT_SEARCH_SETTINGS,
                 QueryTemplate: view.searchQuery,
@@ -106,10 +112,10 @@ export async function fetchDataForView(view: PortfolioOverviewView, configuratio
             }),
         ]);
 
-        let refiners = objectGet(projects, 'RawSearchResults.PrimaryQueryResult.RefinementResults.Refiners') || [];
-        projects = projects.map(item => cleanDeep({ ...item }));
-        sites = sites.map(item => cleanDeep({ ...item }));
-        statusReports = statusReports.map(item => cleanDeep({ ...item }));
+        let refiners = objectGet(searchResults[0], 'RawSearchResults.PrimaryQueryResult.RefinementResults.Refiners') || [];
+        let projects = searchResults[0].PrimarySearchResults.map(item => cleanDeep({ ...item }));
+        let sites = searchResults[1].PrimarySearchResults.map(item => cleanDeep({ ...item }));
+        let statusReports = searchResults[2].PrimarySearchResults.map(item => cleanDeep({ ...item }));
         let validSites = sites.filter(site => projects.filter(res => res[siteIdProperty] === site['SiteId']).length === 1);
         let items = validSites.map(site => {
             const [project] = projects.filter(res => res[siteIdProperty] === site['SiteId']);

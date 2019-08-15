@@ -6,8 +6,6 @@ export { ISPProjectItem } from './ISPProjectItem';
 export { ISPUser } from './ISPUser';
 export { IGraphGroup } from './IGraphGroup';
 export { IBenefitsSearchResult } from './IBenefitsSearchResult';
-export { ISPColumnConfiguration } from './ISPColumnConfiguration';
-export { ISPChartConfiguration } from './ISPChartConfiguration';
 export { ISPDataSource } from './ISPDataSource';
 export { IPortfolioOverviewConfiguration } from './IPortfolioOverviewConfiguration';
 export { IPortfolioOverviewColumnSpItem } from './IPortfolioOverviewColumnSpItem';
