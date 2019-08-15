@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as strings from 'PortfolioInsightsWebPartStrings';
+import * as strings from 'PortfolioWebPartsStrings';
 import { IChartProps } from './IChartProps';
 import { IChartState } from './IChartState';
 import * as ReactHighcharts from 'react-highcharts';

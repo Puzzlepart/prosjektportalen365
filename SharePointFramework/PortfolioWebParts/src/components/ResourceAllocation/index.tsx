@@ -8,12 +8,11 @@ import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMen
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
-import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
 import * as React from 'react';
 import Timeline, { TimelineMarkers, TodayMarker } from 'react-calendar-timeline';
 import 'react-calendar-timeline/lib/Timeline.css';
-import * as strings from 'ResourceAllocationWebPartStrings';
-import * as stringFormat from 'string-format';
+import * as strings from 'PortfolioWebPartsStrings';
+import * as format from 'string-format';
 import { FilterPanel, IFilterItemProps, IFilterProps } from '../';
 import { ITimelineData, ITimelineGroup, ITimelineItem, IAllocationSearchResult } from 'interfaces';
 import { IResourceAllocationProps, ResourceAllocationDefaultProps } from './IResourceAllocationProps';
@@ -48,7 +47,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
       return (
         <div className={styles.resourceAllocation}>
           <div className={styles.container}>
-            <Spinner label={stringFormat(PortfolioWebPartsStrings.DataLoadingText, this.props.dataSource.toLowerCase())} type={SpinnerType.large} />
+            <Spinner label={format(strings.DataLoadingText, this.props.dataSource.toLowerCase())} type={SpinnerType.large} />
           </div>
         </div>
       );
@@ -78,7 +77,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
           </div>
           <div className={styles.infoText}>
             <MessageBar>
-              <div dangerouslySetInnerHTML={{ __html: stringFormat(strings.InfoText, `../Lists/Ressursallokering/AllItems.aspx?Source=${encodeURIComponent(window.location.href)}`) }}></div>
+              <div dangerouslySetInnerHTML={{ __html: format(strings.ResourceAllocationInfoText, `../Lists/Ressursallokering/AllItems.aspx?Source=${encodeURIComponent(window.location.href)}`) }}></div>
             </MessageBar>
           </div>
           <div className={styles.timeline}>
@@ -100,7 +99,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
         </div>
         <FilterPanel
           isOpen={this.state.showFilterPanel}
-          headerText={PortfolioWebPartsStrings.FilterText}
+          headerText={strings.FilterText}
           filters={this.getFilters()}
           onFilterChange={this.onFilterChange}
           onDismiss={() => this.setState({ showFilterPanel: false })} />
@@ -128,7 +127,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
    */
   private getFilters(): IFilterProps[] {
     const columns = [
-      { fieldName: 'project', name: PortfolioWebPartsStrings.SiteTitleLabel },
+      { fieldName: 'project', name: strings.SiteTitleLabel },
       { fieldName: 'resource', name: strings.ResourceLabel },
       { fieldName: 'role', name: strings.RoleLabel },
     ];
@@ -168,7 +167,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
     const right = [
       {
         key: "Filter",
-        name: PortfolioWebPartsStrings.FilterText,
+        name: strings.FilterText,
         iconProps: { iconName: "Filter" },
         itemType: ContextualMenuItemType.Header,
         iconOnly: true,
@@ -278,7 +277,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
         throw '';
       }
     } else {
-      throw stringFormat(PortfolioWebPartsStrings.DataSourceNotFound, this.props.dataSource);
+      throw format(strings.DataSourceNotFound, this.props.dataSource);
     }
   }
 }

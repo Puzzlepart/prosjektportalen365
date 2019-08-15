@@ -1,18 +1,19 @@
+import { DisplayMode } from '@microsoft/sp-core-library';
 import { QueryPropertyValueType, SortDirection, sp } from '@pnp/sp';
 import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
 import { formatDate } from '@Shared/helpers';
-import * as strings from 'LatestProjectsWebPartStrings';
 import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
 import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
+import * as strings from 'PortfolioWebPartsStrings';
 import * as React from 'react';
+import * as format from 'string-format';
 import { ILatestProjectsProps } from './ILatestProjectsProps';
 import { ILatestProjectsState } from './ILatestProjectsState';
 import styles from './LatestProjects.module.scss';
 
-export default class LatestProjects extends React.Component<ILatestProjectsProps, ILatestProjectsState> {
-  public static defaultProps: Partial<ILatestProjectsProps> = { rowLimit: 5 };
 
+export default class LatestProjects extends React.Component<ILatestProjectsProps, ILatestProjectsState> {
   constructor(props: ILatestProjectsProps) {
     super(props);
     this.state = { isLoading: true, projects: [], showList: true };
@@ -34,12 +35,12 @@ export default class LatestProjects extends React.Component<ILatestProjectsProps
     return (
       <div className={styles.latestProjects}>
         <WebPartTitle
-          displayMode={this.props.displayMode}
+          displayMode={DisplayMode.Read}
           title={this.props.title}
           updateProperty={this.props.updateProperty} />
         <div className={styles.container}>
           {this.state.isLoading
-            ? <Spinner label={strings.LoadingProjects} type={SpinnerType.large} />
+            ? <Spinner label={format(strings.LoadingText, 'siste prosjekter')} type={SpinnerType.large} />
             : this.renderProjectList()
           }
         </div>
@@ -65,7 +66,7 @@ export default class LatestProjects extends React.Component<ILatestProjectsProps
           </div>
         );
       });
-    } else return <MessageBar>{strings.EmptyMessage}</MessageBar>;
+    } else return <MessageBar>Fant ingen nye prosjekter.</MessageBar>;
   }
 
   /**
@@ -97,3 +98,4 @@ export default class LatestProjects extends React.Component<ILatestProjectsProps
 }
 
 export { ILatestProjectsProps };
+

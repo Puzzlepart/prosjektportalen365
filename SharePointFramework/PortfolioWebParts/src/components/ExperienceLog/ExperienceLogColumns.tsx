@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as strings from 'ExperienceLogWebPartStrings';
+import * as strings from 'PortfolioWebPartsStrings';
 import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 
@@ -23,7 +23,7 @@ export const ExperienceLogColumns: IColumn[] = [
     {
         key: 'GtProjectLogDescriptionOWSMTXT',
         fieldName: 'GtProjectLogDescriptionOWSMTXT',
-        name: strings.DescriptionLabel,
+        name: strings.LogDescriptionLabel,
         minWidth: 100,
         maxWidth: 150,
         isResizable: true

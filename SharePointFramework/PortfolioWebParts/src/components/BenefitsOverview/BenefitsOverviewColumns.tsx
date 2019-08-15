@@ -1,6 +1,5 @@
 import * as React from 'react';
-import * as strings from 'BenefitsOverviewWebPartStrings';
-import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
+import * as strings from 'PortfolioWebPartsStrings';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import BenefitMeasurementsModal from './BenefitMeasurementsModal';
 import { IBenefitsOverviewProps } from './IBenefitsOverviewProps';
@@ -13,7 +12,7 @@ export function GetColumns(props: IBenefitsOverviewProps): IColumn[] {
     {
       key: 'siteTitle',
       fieldName: 'siteTitle',
-      name: PortfolioWebPartsStrings.SiteTitleLabel,
+      name: strings.SiteTitleLabel,
       minWidth: 100,
       maxWidth: 180,
       isResizable: true,
@@ -46,7 +45,7 @@ export function GetColumns(props: IBenefitsOverviewProps): IColumn[] {
     {
       key: 'title',
       fieldName: 'title',
-      name: strings.TitleLabel,
+      name: strings.MeasuremenentIdicatorLabel,
       minWidth: 50,
       maxWidth: 180,
       isMultiline: true,

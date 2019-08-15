@@ -2,7 +2,7 @@ import { IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-reac
 import * as React from 'react';
 import { IProjectCardProps } from './IProjectCardProps';
 import styles from './ProjectCard.module.scss';
-import * as strings from 'ProjectListWebPartStrings';
+import * as strings from 'PortfolioWebPartsStrings';
 
 /**
  * Project Card Content

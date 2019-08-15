@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as strings from 'BenefitsOverviewWebPartStrings';
+import * as strings from 'PortfolioWebPartsStrings';
 import styles from './BenefitMeasurementsModal.module.scss';
 import { Modal, IModalProps } from 'office-ui-fabric-react/lib/Modal';
 import { DetailsList, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';

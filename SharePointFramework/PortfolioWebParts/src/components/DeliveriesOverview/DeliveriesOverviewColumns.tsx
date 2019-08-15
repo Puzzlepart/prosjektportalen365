@@ -1,6 +1,5 @@
 import * as React from 'react';
-import * as strings from 'DeliveriesOverviewWebPartStrings';
-import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
+import * as strings from 'PortfolioWebPartsStrings';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { formatDate } from '@Shared/helpers';
 
@@ -8,7 +7,7 @@ export const DeliveriesOverviewColumns: IColumn[] = [
     {
         key: 'SiteTitle',
         fieldName: 'SiteTitle',
-        name: PortfolioWebPartsStrings.SiteTitleLabel,
+        name: strings.SiteTitleLabel,
         minWidth: 100,
         maxWidth: 150,
         isResizable: true,
@@ -17,7 +16,7 @@ export const DeliveriesOverviewColumns: IColumn[] = [
     {
         key: 'Title',
         fieldName: 'Title',
-        name: PortfolioWebPartsStrings.TitleLabel,
+        name: strings.TitleLabel,
         minWidth: 220,
         maxWidth: 250,
         isMultiline: true,

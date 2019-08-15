@@ -1,15 +1,15 @@
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
-import * as PortfolioInsightsWebPartStrings from 'PortfolioInsightsWebPartStrings';
-import * as React from 'react';
 import { fetchChartData, fetchDataForView, getPortfolioConfig } from 'data';
 import { ChartData, ChartDataItem, PortfolioOverviewView } from 'models';
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import * as strings from 'PortfolioWebPartsStrings';
+import * as React from 'react';
+import * as format from 'string-format';
 import Chart from './Chart';
 import { IPortfolioInsightsProps, PortfolioInsightsDefaultProps } from './IPortfolioInsightsProps';
 import { IPortfolioInsightsState } from './IPortfolioInsightsState';
 import styles from './PortfolioInsights.module.scss';
 import PortfolioInsightsCommandBar from './PortfolioInsightsCommandBar';
-
 
 export default class PortfolioInsights extends React.Component<IPortfolioInsightsProps, IPortfolioInsightsState> {
   public static defaultProps = PortfolioInsightsDefaultProps;
@@ -47,7 +47,7 @@ export default class PortfolioInsights extends React.Component<IPortfolioInsight
       return (
         <div className={styles.portfolioInsights}>
           <div className={styles.container}>
-            <Spinner label={PortfolioInsightsWebPartStrings.LoadingText} size={SpinnerSize.large} />
+            <Spinner label={format(strings.LoadingText, 'porteføljeinnsikt')} size={SpinnerSize.large} />
           </div>
         </div>
       );
@@ -83,7 +83,7 @@ export default class PortfolioInsights extends React.Component<IPortfolioInsight
     if (this.state.chartData.isEmpty()) {
       return (
         <div className={styles.inner}>
-          <MessageBar messageBarType={MessageBarType.info}>{PortfolioInsightsWebPartStrings.EmptyText}</MessageBar>
+          <MessageBar messageBarType={MessageBarType.info}>Ingen prosjekter funnet.</MessageBar>
         </div>
       );
     }

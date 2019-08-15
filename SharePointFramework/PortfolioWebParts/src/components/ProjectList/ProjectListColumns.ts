@@ -1,18 +1,17 @@
-import * as strings from 'ProjectListWebPartStrings';
-import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
+import * as strings from 'PortfolioWebPartsStrings';
 
 
 export const ProjectListColumns = [
   {
     key: 'title',
     fieldName: 'title',
-    name: PortfolioWebPartsStrings.TitleLabel,
+    name: strings.TitleLabel,
     minWidth: 150,
   },
   {
     key: 'phase',
     fieldName: 'phase',
-    name: PortfolioWebPartsStrings.PhaseLabel,
+    name: strings.PhaseLabel,
     minWidth: 100,
   },
   {

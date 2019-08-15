@@ -10,14 +10,15 @@ import { PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
 import * as objectGet from 'object-get';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { DetailsList, IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList';
+import { DetailsList, SelectionMode, IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
-import * as PortfolioOverviewWebPartStrings from 'PortfolioOverviewWebPartStrings';
+import * as strings from 'PortfolioWebPartsStrings';
 import { ProjectInformationModal } from 'ProjectWebParts/lib/components/ProjectInformation';
 import * as React from 'react';
+import * as format from 'string-format';
 import { FilterPanel, IFilterItemProps, IFilterProps } from '../';
 import { IPortfolioOverviewProps, PortfolioOverviewDefaultProps } from './IPortfolioOverviewProps';
 import { IPortfolioOverviewState } from './IPortfolioOverviewState';
@@ -57,7 +58,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
       return (
         <div className={styles.portfolioOverview}>
           <div className={styles.container}>
-            <Spinner label={PortfolioOverviewWebPartStrings.LoadingText} size={SpinnerSize.large} />
+            <Spinner label={format(strings.LoadingText, 'porteføljeoversikt')} size={SpinnerSize.large} />
           </div>
         </div>
       );
@@ -81,7 +82,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           <div className={styles.searchBox}>
             <SearchBox
               onChange={newValue => this.setState({ searchTerm: newValue.toLowerCase() })}
-              placeholder={PortfolioOverviewWebPartStrings.SearchBoxPlaceHolder} />
+              placeholder={format(strings.SearchBoxPlaceholderText, 'alle prosjekter')} />
           </div>
           {this.list}
           {this.filterPanel}
@@ -108,15 +109,15 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         }));
       items.push({
         key: 'GroupBy',
-        name: this.state.groupBy ? this.state.groupBy.name : PortfolioOverviewWebPartStrings.NoGrouping,
+        name: this.state.groupBy ? this.state.groupBy.name : strings.NoGroupingText,
         iconProps: { iconName: 'GroupedList' },
         itemType: ContextualMenuItemType.Header,
         onClick: e => e.preventDefault(),
         subMenuProps: {
           items: [
             {
-              key: 'GroupBy_NoGrouping',
-              name: PortfolioOverviewWebPartStrings.NoGrouping,
+              key: 'GroupBy_NoGroupingText',
+              name: strings.NoGroupingText,
               onClick: e => {
                 e.preventDefault();
                 this.setState({ groupBy: null });
@@ -132,7 +133,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
       if (this.props.pageContext.legacyPageContext.isSiteAdmin) {
         farItems.push({
           key: 'NewView',
-          name: PortfolioOverviewWebPartStrings.NewViewText,
+          name: strings.NewViewText,
           iconProps: { iconName: 'CirclePlus' },
           href: `${this.state.configuration.viewNewFormUrl}?Source=${encodeURIComponent(document.location.href)}`,
         });
@@ -191,7 +192,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           layoutMode={this.props.layoutMode}
           columns={data.columns}
           groups={data.groups}
-          selectionMode={this.props.selectionMode}
+          selectionMode={SelectionMode.none}
           onRenderItemColumn={this.onRenderItemColumn.bind(this)}
           onColumnHeaderClick={this.onColumnSort.bind(this)} />
       </div>
@@ -381,7 +382,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         itemsSort.opts.reverse = !sortBy.isSortedDescending;
       }
       const groupItems: any[] = arraySort(items, itemsSort.props, itemsSort.opts);
-      const groupByValues: string[] = groupItems.map(g => g[groupBy.fieldName] ? g[groupBy.fieldName] : PortfolioOverviewWebPartStrings.NotSet);
+      const groupByValues: string[] = groupItems.map(g => g[groupBy.fieldName] ? g[groupBy.fieldName] : strings.NotSet);
       const uniqueGroupValues: string[] = arrayUnique([].concat(groupByValues));
       groups = uniqueGroupValues
         .sort((a, b) => a > b ? 1 : -1)
@@ -446,7 +447,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         [currentView] = configuration.views.filter(qc => qc.id === parseInt(viewIdUrlParam, 10));
         if (!currentView) {
           throw {
-            message: PortfolioOverviewWebPartStrings.ViewNotFoundMessage,
+            message: strings.ViewNotFoundMessage,
             type: MessageBarType.error
           };
         }
@@ -454,7 +455,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         [currentView] = configuration.views.filter(qc => qc.id === parseInt(hashState.viewId, 10));
         if (!currentView) {
           throw {
-            message: PortfolioOverviewWebPartStrings.ViewNotFoundMessage,
+            message: strings.ViewNotFoundMessage,
             type: MessageBarType.error
           };
         }
@@ -462,7 +463,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         [currentView] = configuration.views.filter(qc => qc.isDefaultView);
         if (!currentView) {
           throw {
-            message: PortfolioOverviewWebPartStrings.NoDefaultViewMessage,
+            message: strings.NoDefaultViewMessage,
             type: MessageBarType.error
           };
         }
