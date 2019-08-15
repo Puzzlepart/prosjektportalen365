@@ -4,6 +4,7 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { PortfolioInsights, IPortfolioInsightsProps } from 'components';
 import { setupWebPart } from '../@setup';
 import { Logger, LogLevel } from '@pnp/logging';
+import 'office-ui-fabric-react/dist/css/fabric.min.css';
 
 export default class PortfolioInsightsWebPart extends BaseClientSideWebPart<IPortfolioInsightsProps> {
   public render(): void {

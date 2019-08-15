@@ -8,6 +8,7 @@ import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import SpEntityPortalService from 'sp-entityportal-service';
 import HubSiteService, { IHubSite } from 'sp-hubsite-service';
+import 'office-ui-fabric-react/dist/css/fabric.min.css';
 
 moment.locale('nb');
 Logger.subscribe(new ConsoleListener());

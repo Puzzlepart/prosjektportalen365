@@ -28,7 +28,7 @@ export default class SummarySection extends StatusSectionBase<ISummarySectionPro
             hideActions={true} />
         </div>
         <div className={styles.sections}>
-          <div className='ms-Grid'>
+          <div className='ms-Grid' dir='ltr'>
             <div className='ms-Grid-row'>
               {this.renderSections()}
             </div>

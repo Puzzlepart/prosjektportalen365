@@ -64,7 +64,7 @@ export default class PortfolioInsights extends React.Component<IPortfolioInsight
           <div className={styles.header}>
             <div className={styles.title}>{this.props.title}</div>
           </div>
-          <div className={`${styles.inner} ms-Grid`}>
+          <div className={`${styles.inner} ms-Grid`} dir='ltr'>
             {this.charts}
           </div>
         </div>

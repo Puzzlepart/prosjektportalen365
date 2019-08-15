@@ -9,6 +9,7 @@ import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import SpEntityPortalService from 'sp-entityportal-service';
 import HubSiteService from 'sp-hubsite-service';
+import 'office-ui-fabric-react/dist/css/fabric.min.css';
 
 Logger.subscribe(new ConsoleListener());
 Logger.activeLogLevel = LogLevel.Info;
