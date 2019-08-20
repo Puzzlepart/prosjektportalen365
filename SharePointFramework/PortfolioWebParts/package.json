@@ -1,6 +1,6 @@
 {
     "name": "prosjektportalen-spfx-portfoliowebparts",
-    "version": "0.9.5",
+    "version": "0.9.7",
     "private": true,
     "engines": {
         "node": ">=0.10.0"
@@ -14,7 +14,7 @@
         "packageAndDeployPatch": "npm version patch && npm run deploy",
         "packageAndDeployMinor": "npm version minor && npm run deploy",
         "packageAndDeployMajor": "npm version major && npm run deploy",
-        "postversion": "gulp version-sync && npm run package",
+        "postversion": "gulp versionSync && npm run package",
         "patchVersion": "npm version patch",
         "minorVersion": "npm version minor",
         "majorVersion": "npm version major"
@@ -68,6 +68,7 @@
         "@types/mocha": "2.2.38",
         "@types/string-format": "^2.0.0",
         "ajv": "~5.2.2",
+        "find": "^0.3.0",
         "gulp": "~3.9.1",
         "spfx-pkgdeploy": "^0.3.0"
     }

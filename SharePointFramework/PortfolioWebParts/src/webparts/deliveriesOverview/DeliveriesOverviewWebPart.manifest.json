@@ -1,36 +1,36 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-  "id": "d8558017-1e3b-4d13-82fa-2520e845297b",
-  "alias": "DeliveriesOverviewWebPart",
-  "componentType": "WebPart",
-  "version": "0.6.0",
-  "manifestVersion": 2,
-  "requiresCustomScript": false,
-  "supportedHosts": [
-    "SharePointWebPart"
-  ],
-  "preconfiguredEntries": [
-    {
-      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
-      "group": {
-        "default": "Other"
-      },
-      "title": {
-        "default": "Leveranseoversikt"
-      },
-      "description": {
-        "default": " "
-      },
-      "officeFabricIconFontName": "BusinessCenterLogo",
-      "properties": {
-        "dataSource": "Alle prosjektleveranser",
-        "groupByOptions": [
-          {
-            "name": "Prosjekt",
-            "key": "SiteTitle"
-          }
-        ]
-      }
-    }
-  ]
+    "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+    "id": "d8558017-1e3b-4d13-82fa-2520e845297b",
+    "alias": "DeliveriesOverviewWebPart",
+    "componentType": "WebPart",
+    "version": "0.9.7",
+    "manifestVersion": 2,
+    "requiresCustomScript": false,
+    "supportedHosts": [
+        "SharePointWebPart"
+    ],
+    "preconfiguredEntries": [
+        {
+            "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+            "group": {
+                "default": "Other"
+            },
+            "title": {
+                "default": "Leveranseoversikt"
+            },
+            "description": {
+                "default": " "
+            },
+            "officeFabricIconFontName": "BusinessCenterLogo",
+            "properties": {
+                "dataSource": "Alle prosjektleveranser",
+                "groupByOptions": [
+                    {
+                        "name": "Prosjekt",
+                        "key": "SiteTitle"
+                    }
+                ]
+            }
+        }
+    ]
 }

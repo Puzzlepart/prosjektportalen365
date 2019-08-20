@@ -1,30 +1,30 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-  "id": "e58e3d32-057a-4418-97ce-172b92482ba2",
-  "alias": "PortfolioOverviewWebPart",
-  "componentType": "WebPart",
-  "version": "0.6.0",
-  "manifestVersion": 2,
-  "requiresCustomScript": false,
-  "supportedHosts": [
-    "SharePointWebPart"
-  ],
-  "preconfiguredEntries": [
-    {
-      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
-      "group": {
-        "default": "Other"
-      },
-      "title": {
-        "default": "Porteføljeoversikt"
-      },
-      "description": {
-        "default": " "
-      },
-      "officeFabricIconFontName": "FolderList",
-      "properties": {
-        "description": "PortfolioOverview"
-      }
-    }
-  ]
+    "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+    "id": "e58e3d32-057a-4418-97ce-172b92482ba2",
+    "alias": "PortfolioOverviewWebPart",
+    "componentType": "WebPart",
+    "version": "0.9.7",
+    "manifestVersion": 2,
+    "requiresCustomScript": false,
+    "supportedHosts": [
+        "SharePointWebPart"
+    ],
+    "preconfiguredEntries": [
+        {
+            "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+            "group": {
+                "default": "Other"
+            },
+            "title": {
+                "default": "Porteføljeoversikt"
+            },
+            "description": {
+                "default": " "
+            },
+            "officeFabricIconFontName": "FolderList",
+            "properties": {
+                "description": "PortfolioOverview"
+            }
+        }
+    ]
 }

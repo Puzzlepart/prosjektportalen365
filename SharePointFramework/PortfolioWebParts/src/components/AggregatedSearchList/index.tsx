@@ -44,7 +44,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
             return (
                 <div className={styles.aggregatedSearchList}>
                     <div className={styles.container}>
-                        <Spinner label={format(strings.LoadingText, this.props.title.toLowerCase())} type={SpinnerType.large} />
+                        <Spinner label={format(strings.LoadingText, this.props.title)} type={SpinnerType.large} />
                     </div>
                 </div>
             );
