@@ -26,7 +26,7 @@ export default class PortfolioInsights extends React.Component<IPortfolioInsight
 
   public async componentDidMount() {
     try {
-      const configuration = await getPortfolioConfig();
+      const configuration = await getPortfolioConfig(this.props.columnConfigListName, this.props.columnsListName, this.props.viewsListName);
       const currentView = configuration.views[0];
       const { charts, chartData, contentTypes } = await fetchChartData(currentView, configuration, this.props.pageContext.site.id.toString());
       this.setState({
@@ -47,7 +47,7 @@ export default class PortfolioInsights extends React.Component<IPortfolioInsight
       return (
         <div className={styles.portfolioInsights}>
           <div className={styles.container}>
-            <Spinner label={format(strings.LoadingText, 'porteføljeinnsikt')} size={SpinnerSize.large} />
+            <Spinner label={format(strings.LoadingText, this.props.title)} size={SpinnerSize.large} />
           </div>
         </div>
       );

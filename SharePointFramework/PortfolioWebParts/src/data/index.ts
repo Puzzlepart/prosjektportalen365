@@ -131,20 +131,24 @@ export async function fetchDataForView(view: PortfolioOverviewView, configuratio
 
 /**
  * Get config from lists
+ * 
+ * @param {string} columnConfigListName List name for project column config
+ * @param {string} columnsListName List name for project columns
+ * @param {string} viewsListName List name for portfolio views
  */
-export async function getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
+export async function getPortfolioConfig(columnConfigListName: string, columnsListName: string, viewsListName: string): Promise<IPortfolioOverviewConfiguration> {
     try {
         const spItems = await Promise.all([
-            sp.web.lists.getByTitle(strings.ProjectColumnConfigListName).items
+            sp.web.lists.getByTitle(columnConfigListName).items
                 .orderBy('ID', true)
                 .get<IProjectColumnConfigSpItem[]>(),
-            sp.web.lists.getByTitle(strings.ProjectColumnsListName).items
+            sp.web.lists.getByTitle(columnsListName).items
                 .orderBy('GtSortOrder', true)
                 .get<IPortfolioOverviewColumnSpItem[]>(),
-            sp.web.lists.getByTitle(strings.PortfolioViewsListName).items
+            sp.web.lists.getByTitle(viewsListName).items
                 .orderBy('GtSortOrder', true)
                 .get<IPortfolioOverviewViewSpItem[]>(),
-            sp.web.lists.getByTitle(strings.PortfolioViewsListName)
+            sp.web.lists.getByTitle(viewsListName)
                 .select('DefaultNewFormUrl')
                 .expand('DefaultNewFormUrl')
                 .get<{ DefaultNewFormUrl: string }>(),

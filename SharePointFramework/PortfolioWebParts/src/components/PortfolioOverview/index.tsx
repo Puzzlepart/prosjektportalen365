@@ -26,7 +26,7 @@ import { renderItemColumn } from './RenderItemColumn';
 
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = PortfolioOverviewDefaultProps;
-  private _onSearchDelay;
+  private _onSearchDelay: number;
 
   constructor(props: IPortfolioOverviewProps) {
     super(props);
@@ -42,7 +42,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     }
   }
 
-  public componentWillUpdate(_nextProps: IPortfolioOverviewProps, { currentView, groupBy, configuration, columns }: IPortfolioOverviewState) {
+  public componentWillUpdate(_nextProps: IPortfolioOverviewProps, { currentView, groupBy, columns }: IPortfolioOverviewState) {
     let obj: { [key: string]: string } = {};
     if (currentView) {
       obj.viewId = currentView.id.toString();
@@ -50,7 +50,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     if (groupBy) {
       obj.groupBy = groupBy.fieldName;
     }
-    PortfolioOverviewFieldSelector.items = configuration.columns.map(col => ({
+    PortfolioOverviewFieldSelector.items = this.props.configuration.columns.map(col => ({
       name: col.name,
       value: col.fieldName,
       selected: columns.indexOf(col) !== -1,
@@ -63,7 +63,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
       return (
         <div className={styles.portfolioOverview}>
           <div className={styles.container}>
-            <Spinner label={format(strings.LoadingText, 'porteføljeoversikt')} size={SpinnerSize.large} />
+            <Spinner label={format(strings.LoadingText, this.props.title)} size={SpinnerSize.large} />
           </div>
         </div>
       );
@@ -104,7 +104,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     const farItems: IContextualMenuItem[] = [];
 
     if (this.props.showGroupBy) {
-      const groupByItems = this.state.configuration.columns
+      const groupByItems = this.props.configuration.columns
         .filter(col => col.isGroupable)
         .map((col, idx) => ({
           key: `${idx}`,
@@ -142,7 +142,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           key: 'NewView',
           name: strings.NewViewText,
           iconProps: { iconName: 'CirclePlus' },
-          href: `${this.state.configuration.viewNewFormUrl}?Source=${encodeURIComponent(document.location.href)}`,
+          href: `${this.props.configuration.viewNewFormUrl}?Source=${encodeURIComponent(document.location.href)}`,
         });
       }
       farItems.push({
@@ -151,7 +151,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         iconProps: { iconName: 'List' },
         itemType: ContextualMenuItemType.Header,
         subMenuProps: {
-          items: this.state.configuration.views.map(v => ({
+          items: this.props.configuration.views.map(v => ({
             key: `${v.id}`,
             name: v.title,
             iconProps: { iconName: v.iconName },
@@ -361,7 +361,6 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
       groupBy,
       sortBy,
       activeFilters,
-      configuration,
     } = ({ ...this.state } as IPortfolioOverviewState);
 
     let groups: IGroup[] = this.getGroups(items, groupBy, sortBy);
@@ -379,7 +378,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         .reduce((_items, key) => _items.filter(i => activeFilters[key].indexOf(objectGet(i, key)) !== -1), items);
       const selectedFilters = activeFilters[PortfolioOverviewFieldSelector.column.key];
       if (selectedFilters) {
-        columns = configuration.columns.filter(_column => selectedFilters.indexOf(_column.fieldName) !== -1);
+        columns = this.props.configuration.columns.filter(_column => selectedFilters.indexOf(_column.fieldName) !== -1);
       }
     }
 
@@ -391,13 +390,12 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
    */
   private async fetchInitialData(): Promise<Partial<IPortfolioOverviewState>> {
     try {
-      const configuration = await getPortfolioConfig();
       const hashState = parseUrlHash();
       const viewIdUrlParam = new UrlQueryParameterCollection(document.location.href).getValue('viewId');
       let currentView = this.props.defaultView;
 
       if (viewIdUrlParam) {
-        [currentView] = configuration.views.filter(qc => qc.id === parseInt(viewIdUrlParam, 10));
+        [currentView] = this.props.configuration.views.filter(qc => qc.id === parseInt(viewIdUrlParam, 10));
         if (!currentView) {
           throw {
             message: strings.ViewNotFoundMessage,
@@ -405,7 +403,15 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           };
         }
       } else if (hashState.viewId) {
-        [currentView] = configuration.views.filter(qc => qc.id === parseInt(hashState.viewId, 10));
+        [currentView] = this.props.configuration.views.filter(qc => qc.id === parseInt(hashState.viewId, 10));
+        if (!currentView) {
+          throw {
+            message: strings.ViewNotFoundMessage,
+            type: MessageBarType.error
+          };
+        }
+      } else if (this.props.defaultViewId) {
+        [currentView] = this.props.configuration.views.filter(qc => qc.id === this.props.defaultViewId);
         if (!currentView) {
           throw {
             message: strings.ViewNotFoundMessage,
@@ -413,7 +419,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           };
         }
       } else {
-        [currentView] = configuration.views.filter(qc => qc.isDefaultView);
+        [currentView] = this.props.configuration.views.filter(qc => qc.isDefaultView);
         if (!currentView) {
           throw {
             message: strings.NoDefaultViewMessage,
@@ -422,20 +428,20 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         }
       }
 
-      const { items, refiners } = await fetchDataForView(currentView, configuration, this.props.pageContext.site.id.toString());
+      const { items, refiners } = await fetchDataForView(currentView, this.props.configuration, this.props.pageContext.site.id.toString());
 
-      PortfolioOverviewFieldSelector.items = configuration.columns.map(col => ({
+      PortfolioOverviewFieldSelector.items = this.props.configuration.columns.map(col => ({
         name: col.name,
         value: col.fieldName,
         selected: currentView.columns.indexOf(col) !== -1,
       }));
-      let filters = this.getSelectedFiltersWithItems(refiners, configuration, currentView);
+      let filters = this.getSelectedFiltersWithItems(refiners, this.props.configuration, currentView);
       let groupBy: PortfolioOverviewColumn;
       if (currentView.groupBy) {
-        [groupBy] = configuration.columns.filter(fc => fc.fieldName === currentView.groupBy.fieldName);
+        [groupBy] = this.props.configuration.columns.filter(fc => fc.fieldName === currentView.groupBy.fieldName);
       }
       if (hashState.groupBy) {
-        [groupBy] = configuration.columns.filter(fc => fc.fieldName === hashState.groupBy);
+        [groupBy] = this.props.configuration.columns.filter(fc => fc.fieldName === hashState.groupBy);
       }
 
       let _state: Partial<IPortfolioOverviewState> = {
@@ -443,7 +449,6 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         items,
         filters,
         currentView,
-        configuration,
         canUserManageWeb: true,
         groupBy,
       };
@@ -466,8 +471,8 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     }
 
     this.setState({ isChangingView: view });
-    const { items, refiners } = await fetchDataForView(view, this.state.configuration, this.props.pageContext.site.id.toString());
-    let filters = this.getSelectedFiltersWithItems(refiners, this.state.configuration, view);
+    const { items, refiners } = await fetchDataForView(view, this.props.configuration, this.props.pageContext.site.id.toString());
+    let filters = this.getSelectedFiltersWithItems(refiners, this.props.configuration, view);
 
     let updatedState: Partial<IPortfolioOverviewState> = {
       isChangingView: null,
@@ -479,7 +484,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     };
 
     if (view.groupBy) {
-      let [groupByCol] = this.state.configuration.columns.filter(fc => fc.fieldName === view.groupBy.fieldName);
+      let [groupByCol] = this.props.configuration.columns.filter(fc => fc.fieldName === view.groupBy.fieldName);
       if (groupByCol) {
         updatedState.groupBy = groupByCol;
       }

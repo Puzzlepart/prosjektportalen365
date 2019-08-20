@@ -1,6 +1,6 @@
 {
     "name": "prosjektportalen-spfx-portfoliowebparts",
-    "version": "0.9.7",
+    "version": "0.9.8",
     "private": true,
     "engines": {
         "node": ">=0.10.0"
@@ -17,7 +17,8 @@
         "postversion": "gulp versionSync && npm run package",
         "patchVersion": "npm version patch",
         "minorVersion": "npm version minor",
-        "majorVersion": "npm version major"
+        "majorVersion": "npm version major",
+        "gitPushChanges": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ../../scripts/Git-PushChanges.ps1 -Prefix PortfolioWebParts"
     },
     "dependencies": {
         "@microsoft/sp-core-library": "1.8.2",

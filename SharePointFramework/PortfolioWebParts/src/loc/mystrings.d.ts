@@ -1,7 +1,16 @@
 declare interface IPortfolioWebPartsStrings {
   ActorsLabel: string;
   BasicGroupName: string;
+  ConfigurationGroupName: string;
+  ColumnConfigListNameLabel: string;
+  ColumnsListNameLabel: string;
+  ViewsListNameLabel: string;
   BenefitResponsibleLabel: string;
+  ProjectInfoFilterFieldLabel: string;
+  ExcelExportEnabledLabel: string;
+  ShowGroupByLabel: string;
+  ViewSelectorEnabledLabel: string;
+  DefaultViewLabel: string;
   BenefitTitleLabel: string;
   ChartErrorText: string;
   ConsequenceLabel: string;
@@ -44,11 +53,8 @@ declare interface IPortfolioWebPartsStrings {
   NotSet: string;
   PhaseLabel: string;
   PhaseTermSetIdFieldLabel: string;
-  PortfolioViewsListName: string;
   ProbabilityLabel: string;
   ProbabilityPostActionLabel: string;
-  ProjectColumnConfigListName: string;
-  ProjectColumnsListName: string;
   ProjectLinkText: string;
   ProjectManager: string;
   ProjectOwner: string;
