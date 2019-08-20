@@ -3,7 +3,7 @@
     <pnp:Sections>
         <pnp:Section Order="1" Type="OneColumn">
             <pnp:Controls>
-                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;title&quot;:&quot;Risikooversikt&quot;,&quot;dataSource&quot;:&quot;Alle risikoelementer&quot;}" ControlId="57530c94-4fb2-4ca2-9279-16c57881fa19" Order="1" Column="1" />
+                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;dataSource&quot;:&quot;Alle risikoelementer&quot;}" ControlId="57530c94-4fb2-4ca2-9279-16c57881fa19" Order="1" Column="1" />
             </pnp:Controls>
         </pnp:Section>
     </pnp:Sections>

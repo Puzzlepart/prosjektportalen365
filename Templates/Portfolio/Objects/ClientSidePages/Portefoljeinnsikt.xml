@@ -3,7 +3,7 @@
     <pnp:Sections>
         <pnp:Section Order="1" Type="OneColumn">
             <pnp:Controls>
-                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;title&quot;:&quot;Porteføljeinnsikt&quot;}" ControlId="875ca87a-e331-4ffb-bc69-0272fdf80e41" Order="1" Column="1" />
+                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{}" ControlId="875ca87a-e331-4ffb-bc69-0272fdf80e41" Order="1" Column="1" />
             </pnp:Controls>
         </pnp:Section>
     </pnp:Sections>
