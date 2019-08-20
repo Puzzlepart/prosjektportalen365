@@ -1,5 +1,4 @@
 import { ChartData, DataField } from './';
-import { ISPDataSource } from 'interfaces';
 import * as objectAssign from 'object-assign';
 import { SPChartConfigurationItem } from 'data';
 
@@ -7,46 +6,29 @@ export const CHARTCONFIGBASE_CONTENTTYPEID = '0x0100FAC6DE5CA35FAB46ABCF3CD57566
 export const CHART_TYPES = ['bar', 'column', 'pie'];
 
 export class ChartConfiguration {
-    public item: SPChartConfigurationItem;
-    public searchQuery: ISPDataSource;
-    public fields: DataField[];
-    public type: string;
-    public width: { [key: string]: number };
-
-    constructor(item: SPChartConfigurationItem, fields: DataField[]) {
+    constructor(public item: SPChartConfigurationItem, public fields: DataField[]) {
         this.item = item;
         this.fields = fields;
-        this.initType(item.ContentTypeId);
-        this.initWidth(item);
     }
 
     public clone(): ChartConfiguration {
         return objectAssign(Object.create(this), this);
     }
 
-    /**
-     * Initialize chart type from content type id
-     * 
-     * @param {string} contentTypeId Content type id
-     */
-    protected initType(contentTypeId: string) {
-        const typeIndex = parseInt(contentTypeId.replace(CHARTCONFIGBASE_CONTENTTYPEID, '').substring(0, 2), 10) - 1;
-        this.type = CHART_TYPES[typeIndex];
+
+    protected get type() {
+        const typeIndex = parseInt(this.item.ContentTypeId.replace(CHARTCONFIGBASE_CONTENTTYPEID, '').substring(0, 2), 10) - 1;
+        return CHART_TYPES[typeIndex];
     }
 
-    /**
-     * Initialize width properties
-     * 
-     * @param {ISPChartConfiguration} item Item
-     */
-    protected initWidth(item: SPChartConfigurationItem) {
-        this.width = {
-            sm: item.GtPiWidthSm,
-            md: item.GtPiWidthMd,
-            lg: item.GtPiWidthLg,
-            xl: item.GtPiWidthXl,
-            xxl: item.GtPiWidthXxl,
-            xxxl: item.GtPiWidthXxxl,
+    protected get width(): { [key: string]: number } {
+        return {
+            sm: this.item.GtPiWidthSm,
+            md: this.item.GtPiWidthMd,
+            lg: this.item.GtPiWidthLg,
+            xl: this.item.GtPiWidthXl,
+            xxl: this.item.GtPiWidthXxl,
+            xxxl: this.item.GtPiWidthXxxl,
         };
     }
 
@@ -81,50 +63,65 @@ export class ChartConfiguration {
                 if (this.fields.length === 1) {
                     const [field] = this.fields;
                     switch (field.type) {
-                        case 'text': case 'tags': {
-                            const stringValues = data.getValuesUnique(field);
-                            const _data = stringValues.map(value => data.getItemsWithStringValue(field, value).length);
-                            return [{ name: field.title, data: _data }];
+                        case 'text': {
+                            return [{
+                                name: field.title,
+                                data: data.getValuesUnique(field).map(value => data.getItemsWithStringValue(field, value).length),
+                            }];
+                        }
+                        case 'tags': {
+                            return [{
+                                name: field.title,
+                                data: data.getValuesUnique(field).map(value => data.getItemsWithStringValue(field, value).length),
+                            }];
                         }
                     }
                 }
-                return this.fields.map(sf => {
-                    const values = data.getValues(sf);
-                    return { name: sf.title, data: values };
-                });
+                return this.fields.map(sf => ({ name: sf.title, data: data.getValues(sf) }));
             }
             case 'pie': {
-                let _data: any[];
                 if (this.fields.length === 1) {
                     const [field] = this.fields;
                     switch (field.type) {
                         case 'number': {
-                            _data = data.getItems(field).map((i, index) => {
-                                const y = data.getPercentage(field, index);
-                                return { name: i.name, y };
-                            });
+                            return [{
+                                type: 'pie',
+                                colorByPoint: true,
+                                data: data.getItems(field).map((i, index) => ({ name: i.name, y: data.getPercentage(field, index) })),
+                            }];
                         }
-                            break;
-                        case 'text': case 'tags': {
-                            _data = data.getValuesUnique(field).map(value => {
-                                const itemsMatch = data.getItemsWithStringValue(field, value);
-                                const name = value || 'N/A';
-                                const y = (itemsMatch.length / data.getCount()) * 100;
-                                return { name, y };
-                            });
+                        case 'text': {
+                            return [{
+                                type: 'pie',
+                                colorByPoint: true,
+                                data: data.getValuesUnique(field).map(value => {
+                                    const itemsMatch = data.getItemsWithStringValue(field, value);
+                                    const name = value || 'N/A';
+                                    const y = (itemsMatch.length / data.getCount()) * 100;
+                                    return { name, y };
+                                }),
+                            }];
                         }
-                            break;
+                        case 'tags': {
+                            return [{
+                                type: 'pie',
+                                colorByPoint: true,
+                                data: data.getValuesUnique(field).map(value => {
+                                    const itemsMatch = data.getItemsWithStringValue(field, value);
+                                    const name = value ? value.split(';').join(', ') : 'N/A';
+                                    const y = (itemsMatch.length / data.getCount()) * 100;
+                                    return { name, y };
+                                }),
+                            }];
+                        }
                     }
                 } else {
-                    _data = this.fields.map(sf => {
-                        const y = data.getAverage(sf);
-                        return { name: sf.title, y };
-                    });
+                    return [{
+                        type: 'pie',
+                        colorByPoint: true,
+                        data: this.fields.map(sf => ({ name: sf.title, y: data.getAverage(sf) })),
+                    }];
                 }
-                return [{ type: 'pie', colorByPoint: true, data: _data }];
-            }
-            default: {
-                throw null;
             }
         }
     }
