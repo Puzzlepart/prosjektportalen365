@@ -1,5 +1,4 @@
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
-import { SearchResult } from '@pnp/sp';
 import { parseUrlHash, setUrlHash } from '@Shared/util';
 import * as arraySort from 'array-sort';
 import * as arrayUnique from 'array-unique';
@@ -86,7 +85,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
             <div className={styles.title}>{this.props.title}</div>
           </div>
           <div className={styles.searchBox}>
-            <SearchBox onChange={this.onSearch.bind(this)} placeholder={format(strings.SearchBoxPlaceholderText, 'alle prosjekter')} />
+            <SearchBox onChange={this.onSearch.bind(this)} placeholder={this.searchBoxPlaceholder} />
           </div>
           {this.list()}
           {this.filterPanel()}
@@ -94,6 +93,10 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         </div>
       </div>
     );
+  }
+
+  private get searchBoxPlaceholder() {
+    return format(strings.SearchBoxPlaceholderText, this.state.currentView.title);
   }
 
   private commandBar() {

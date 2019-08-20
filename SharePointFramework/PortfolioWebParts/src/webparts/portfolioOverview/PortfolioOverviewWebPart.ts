@@ -1,9 +1,10 @@
+import { BaseClientSideWebPart, IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-webpart-base';
+import { Logger, LogLevel } from '@pnp/logging';
+import { IPortfolioOverviewProps, PortfolioOverview } from 'components';
+import * as strings from 'PortfolioWebPartsStrings';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
-import { PortfolioOverview, IPortfolioOverviewProps } from 'components';
 import { setupWebPart } from '../@setup';
-import { Logger, LogLevel } from '@pnp/logging';
 
 
 export default class PortfolioOverviewWebPart extends BaseClientSideWebPart<IPortfolioOverviewProps> {
@@ -23,5 +24,24 @@ export default class PortfolioOverviewWebPart extends BaseClientSideWebPart<IPor
 
   protected onDispose(): void {
     ReactDom.unmountComponentAtNode(this.domElement);
+  }
+
+  protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+    return {
+      pages: [
+        {
+          groups: [
+            {
+              groupName: strings.GeneralGroupName,
+              groupFields: [
+                PropertyPaneTextField('title', {
+                  label: strings.TitleLabel,
+                }),
+              ]
+            }
+          ]
+        }
+      ]
+    };
   }
 }
