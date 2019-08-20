@@ -7,8 +7,8 @@ export const RiskOverviewColumns: IColumn[] = [{
     key: 'Title',
     fieldName: 'Title',
     name: strings.TitleLabel,
-    minWidth: 220,
-    maxWidth: 300,
+    minWidth: 250,
+    maxWidth: 350,
     isResizable: true,
 },
 {
@@ -16,6 +16,7 @@ export const RiskOverviewColumns: IColumn[] = [{
     fieldName: "SiteTitle",
     name: strings.SiteTitleLabel,
     minWidth: 200,
+    maxWidth: 250,
     onRender: (item: any) => <a href={item.SPWebUrl} target='_blank'>{item.SiteTitle}</a>,
 },
 {
