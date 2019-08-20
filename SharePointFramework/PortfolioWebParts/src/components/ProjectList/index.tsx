@@ -52,7 +52,6 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         this.getProjectLogos(20);
       }
     } catch (error) {
-      console.log(error);
       this.setState({ error, isLoading: false });
     }
   }
@@ -79,7 +78,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
       <div className={styles.projectList}>
         <div className={styles.container}>
           <div className={styles.searchBox}>
-            <SearchBox placeholder={strings.SearchBoxPlaceholderText} onChanged={this.onSearch.bind(this)} />
+            <SearchBox placeholder={format(strings.SearchBoxPlaceholderText, 'prosjekter du er medlem av')} onChanged={this.onSearch.bind(this)} />
           </div>
           <div className={styles.viewToggle}>
             <Toggle

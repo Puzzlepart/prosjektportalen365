@@ -41,6 +41,7 @@ devDependencies:
   '@microsoft/sp-webpart-workbench': 1.8.2
   '@types/chai': 3.4.34
   '@types/mocha': 2.2.38
+  '@types/string-format': 2.0.0
   ajv: 5.2.5
   gulp: 3.9.1
   spfx-pkgdeploy: 0.3.0
@@ -1525,6 +1526,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-OP3D/vKnOnZcRwTu2jdt7gp8AGDKx3jFoBHudR7UUX4IIwDqOPEJdkfvIpz/KiQbbbyvWS0PtvDz3iQ1HH/rcw==
+  /@types/string-format/2.0.0:
+    dev: true
+    resolution:
+      integrity: sha512-mMwtmgN0ureESnJ3SuMM4W9lsi4CgOxs43YxNo14SDHgzJ+OPYO3yM7nOTJTh8x5YICseBdtrySUbvxnpb+NYQ==
   /@types/tapable/1.0.2:
     dev: true
     resolution:
@@ -11762,6 +11767,7 @@ specifiers:
   '@types/mocha': 2.2.38
   '@types/react': 16.7.22
   '@types/react-dom': 16.8.0
+  '@types/string-format': ^2.0.0
   ajv: ~5.2.2
   array-sort: ^1.0.0
   array-unique: ^0.3.2
