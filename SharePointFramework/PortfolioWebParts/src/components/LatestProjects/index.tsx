@@ -1,13 +1,11 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
 import { QueryPropertyValueType, SortDirection, sp } from '@pnp/sp';
-import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
+import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
 import { formatDate } from '@Shared/helpers';
 import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
 import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
-import * as strings from 'PortfolioWebPartsStrings';
 import * as React from 'react';
-import * as format from 'string-format';
 import { ILatestProjectsProps } from './ILatestProjectsProps';
 import { ILatestProjectsState } from './ILatestProjectsState';
 import styles from './LatestProjects.module.scss';
@@ -21,7 +19,7 @@ export default class LatestProjects extends React.Component<ILatestProjectsProps
 
   public async componentDidMount() {
     try {
-      const projects = await this.fetchData(this.props.hubSiteId);
+      const projects = await this.fetchData();
       this.setState({ projects, isLoading: false });
     } catch (error) {
       this.setState({ projects: [], isLoading: false });
@@ -37,10 +35,10 @@ export default class LatestProjects extends React.Component<ILatestProjectsProps
         <WebPartTitle
           displayMode={DisplayMode.Read}
           title={this.props.title}
-          updateProperty={this.props.updateProperty} />
+          updateProperty={_ => { }} />
         <div className={styles.container}>
           {this.state.isLoading
-            ? <Spinner label={format(strings.LoadingText, 'siste prosjekter')} type={SpinnerType.large} />
+            ? <Spinner label={this.props.loadingText} type={SpinnerType.large} />
             : this.renderProjectList()
           }
         </div>
@@ -66,33 +64,31 @@ export default class LatestProjects extends React.Component<ILatestProjectsProps
           </div>
         );
       });
-    } else return <MessageBar>Fant ingen nye prosjekter.</MessageBar>;
+    } else return <MessageBar>{this.props.emptyMessage}</MessageBar>;
   }
 
   /**
    * Fetch data
-   * 
-   * @param {string} hubSiteId Hub site ID
    */
-  private async fetchData(hubSiteId: string) {
+  private async fetchData() {
     let result = await sp.search({
-      Querytext: `DepartmentId:{${hubSiteId}} contentclass:STS_Site`,
+      Querytext: `DepartmentId:{${this.props.pageContext.legacyPageContext.hubSiteId}} contentclass:STS_Site`,
       TrimDuplicates: false,
       RowLimit: this.props.rowLimit,
       SelectProperties: ['Title', 'Path', 'SiteId', 'Created'],
       SortList: [{
-        Property: "Created",
+        Property: 'Created',
         Direction: SortDirection.Descending
       }],
       Properties: [{
-        Name: "EnableDynamicGroups",
+        Name: 'EnableDynamicGroups',
         Value: {
           BoolVal: true,
           QueryPropertyValueTypeIndex: QueryPropertyValueType.BooleanType
         }
       }]
     });
-    let projects: any[] = result.PrimarySearchResults.filter(site => hubSiteId !== site['SiteId']);
+    let projects: any[] = result.PrimarySearchResults.filter(site => this.props.pageContext.legacyPageContext.hubSiteId !== site['SiteId']);
     return projects;
   }
 }

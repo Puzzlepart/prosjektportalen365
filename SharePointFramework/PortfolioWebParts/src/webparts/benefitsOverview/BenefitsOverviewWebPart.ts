@@ -1,33 +1,17 @@
-import * as React from 'react';
-import * as ReactDom from 'react-dom';
+import { IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
 import { BenefitsOverview, IBenefitsOverviewProps } from 'components';
-import { BaseClientSideWebPart, IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
-import { setupWebPart, ISetupWebPartResult } from '../@setup';
-import { Logger, LogLevel } from '@pnp/logging';
+import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
 
-export default class BenefitsOverviewWebPart extends BaseClientSideWebPart<IBenefitsOverviewProps> {
-  private _setup: ISetupWebPartResult;
-
+export default class BenefitsOverviewWebPart extends BasePortfolioWebPart<IBenefitsOverviewProps> {
   public render(): void {
-    Logger.log({ message: '(BenefitsOverviewWebPart) render: Rendering <BenefitsOverview />', level: LogLevel.Info });
-    const element: React.ReactElement<IBenefitsOverviewProps> = React.createElement(BenefitsOverview, {
-      ...this.properties,
-      ...this._setup,
-      pageContext: this.context.pageContext,
-    });
-    ReactDom.render(element, this.domElement);
+    this.renderComponent(BenefitsOverview);
   }
 
   protected async onInit(): Promise<void> {
-    Logger.log({ message: '(BenefitsOverviewWebPart) onInit: Initializing BenefitsOverviewWebPart', level: LogLevel.Info });
-    this._setup = await setupWebPart(this.context);
-  }
-
-  protected onDispose(): void {
-    ReactDom.unmountComponentAtNode(this.domElement);
+    await super.onInit();
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    return { pages: [] };
+    return super.getPropertyPaneConfiguration();
   }
 }

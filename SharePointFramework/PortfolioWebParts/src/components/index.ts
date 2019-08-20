@@ -9,3 +9,4 @@ export { default as DeliveriesOverview, IDeliveriesOverviewProps } from './Deliv
 export { default as ExperienceLog, IExperienceLogProps } from './ExperienceLog';
 export { default as PortfolioInsights, IPortfolioInsightsProps } from './PortfolioInsights';
 export { default as PortfolioOverview, IPortfolioOverviewProps } from './PortfolioOverview';
+export { IBaseComponentProps } from './@BaseComponent';

@@ -1,13 +1,10 @@
-import { PageContext } from '@microsoft/sp-page-context';
 import { PortfolioOverviewView } from 'models';
-import { ConstrainMode, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { ConstrainMode, DetailsListLayoutMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
+import { IBaseComponentProps } from '../';
 
-
-export interface IPortfolioOverviewProps {
+export interface IPortfolioOverviewProps extends IBaseComponentProps {
     entity: ISpEntityPortalServiceParams;
-    pageContext: PageContext;
-    title?: string;
     projectInfoFilterField?: string;
     constrainMode?: ConstrainMode;
     layoutMode?: DetailsListLayoutMode;

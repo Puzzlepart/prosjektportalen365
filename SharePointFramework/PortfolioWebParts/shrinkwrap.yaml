@@ -43,6 +43,7 @@ devDependencies:
   '@types/mocha': 2.2.38
   '@types/string-format': 2.0.0
   ajv: 5.2.5
+  find: 0.3.0
   gulp: 3.9.1
   spfx-pkgdeploy: 0.3.0
 packages:
@@ -4531,6 +4532,12 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha1-RdG35QbHF93UgndaK3eSCjwMV6c=
+  /find/0.3.0:
+    dependencies:
+      traverse-chain: 0.1.0
+    dev: true
+    resolution:
+      integrity: sha512-iSd+O4OEYV/I36Zl8MdYJO0xD82wH528SaCieTVHhclgiYNe9y+yPKSwK+A7/WsmHL1EZ+pYUJBXWTL5qofksw==
   /findup-sync/2.0.0:
     dependencies:
       detect-file: 1.0.0
@@ -10779,6 +10786,10 @@ packages:
     dev: true
     resolution:
       integrity: sha1-qLE/1r/SSJUZZ0zN5VujaTtwbQk=
+  /traverse-chain/0.1.0:
+    dev: true
+    resolution:
+      integrity: sha1-YdvC1Ttp/2CRoSoWj9fUMxB+QPE=
   /trim-newlines/1.0.0:
     dev: true
     engines:
@@ -11772,6 +11783,7 @@ specifiers:
   array-sort: ^1.0.0
   array-unique: ^0.3.2
   clean-deep: ^3.0.2
+  find: ^0.3.0
   gulp: ~3.9.1
   highcharts-more: ^0.1.7
   interactjs: ^1.3.4

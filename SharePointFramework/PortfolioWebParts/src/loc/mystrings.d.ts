@@ -7,7 +7,6 @@ declare interface IPortfolioWebPartsStrings {
   ConsequenceLabel: string;
   ConsequencePostActionLabel: string;
   CreatedText: string;
-  DataLoadingText: string;
   DataSourceError: string;
   DataSourceNotFound: string;
   DeliveryDescriptionLabel: string;

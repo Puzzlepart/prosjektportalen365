@@ -1,6 +1,8 @@
-export interface ILatestProjectsProps {
-  title: string;
+
+import { IBaseComponentProps } from '../';
+
+export interface ILatestProjectsProps extends IBaseComponentProps {
+  loadingText: string;
+  emptyMessage: string;
   rowLimit: number;
-  hubSiteId: string;
-  updateProperty: (value: string) => void;
 }

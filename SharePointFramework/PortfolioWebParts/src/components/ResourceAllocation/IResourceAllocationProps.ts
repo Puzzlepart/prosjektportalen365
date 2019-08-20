@@ -1,5 +1,6 @@
-export interface IResourceAllocationProps {
-   title: string;
+import { IBaseComponentProps } from '../';
+
+export interface IResourceAllocationProps extends IBaseComponentProps {
    dataSource: string;
    itemBgColor?: string;
    itemAbsenceBgColor?: string;

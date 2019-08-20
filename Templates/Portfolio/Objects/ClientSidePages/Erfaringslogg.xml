@@ -1,4 +1,4 @@
-﻿<pnp:ClientSidePage PageName="Erfaringslogg.aspx" PromoteAsNewsArticle="false" Overwrite="true" Layout="SingleWebPartAppPage" EnableComments="false" Title="Erfaringslogg" 
+﻿<pnp:ClientSidePage PageName="Erfaringslogg.aspx" PromoteAsNewsArticle="false" Overwrite="false" Layout="SingleWebPartAppPage" EnableComments="false" Title="Erfaringslogg" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:Sections>
         <pnp:Section Order="1" Type="OneColumn">

@@ -4,7 +4,7 @@ import { DataSourceService, ExcelExportService } from '@Shared/services';
 import * as moment from 'moment';
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
 import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { ConstrainMode, DetailsList, DetailsListLayoutMode, IColumn, IGroup, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { DetailsList, IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
@@ -13,19 +13,12 @@ import * as React from 'react';
 import HubSiteService from 'sp-hubsite-service';
 import * as format from 'string-format';
 import styles from './AggregatedSearchList.module.scss';
-import { IAggregatedSearchListProps } from './IAggregatedSearchListProps';
+import { AggregatedSearchListDefaultProps, IAggregatedSearchListProps } from './IAggregatedSearchListProps';
 import { IAggregatedSearchListState } from './IAggregatedSearchListState';
 
 
 export default class AggregatedSearchList extends React.Component<IAggregatedSearchListProps, IAggregatedSearchListState> {
-    public static defaultProps: Partial<IAggregatedSearchListProps> = {
-        showCommandBar: true,
-        showSearchBox: true,
-        layoutMode: DetailsListLayoutMode.justified,
-        constrainMode: ConstrainMode.horizontalConstrained,
-        selectionMode: SelectionMode.none,
-        groupByColumns: [],
-    };
+    public static defaultProps = AggregatedSearchListDefaultProps;
 
     /**
      * Constructor
@@ -100,8 +93,8 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
      * Get search box label text
      */
     private getSearchBoxLabelText() {
-        if (this.props.searchBoxLabelText) {
-            return this.props.searchBoxLabelText;
+        if (this.props.searchBoxPlaceholderText) {
+            return this.props.searchBoxPlaceholderText;
         }
         return format(strings.SearchBoxPlaceholderText, this.props.dataSource.toLowerCase());
     }
@@ -307,3 +300,4 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
 }
 
 export { IAggregatedSearchListProps };
+

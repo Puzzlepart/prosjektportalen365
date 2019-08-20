@@ -1,8 +1,5 @@
-import { PageContext } from '@microsoft/sp-page-context';
+import { IBaseComponentProps } from '../';
 
-export interface IPortfolioInsightsProps {
-    pageContext: PageContext;
-    title?: string;
-}
+export interface IPortfolioInsightsProps extends IBaseComponentProps { }
 
 export const PortfolioInsightsDefaultProps: Partial<IPortfolioInsightsProps> = {};

@@ -1,32 +1,17 @@
-import * as React from 'react';
-import * as ReactDom from 'react-dom';
-import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
-import * as strings from 'PortfolioWebPartsStrings';
 import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
-import { ProjectList, IProjectListProps } from 'components';
-import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
-import { sp } from '@pnp/sp';
+import { IProjectListProps, ProjectList } from 'components';
 import MSGraph from 'msgraph-helper';
+import * as strings from 'PortfolioWebPartsStrings';
+import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
 
-export default class ProjectListWebPart extends BaseClientSideWebPart<IProjectListProps> {
-  public render(): void {
-    Logger.log({ message: '(ProjectListWebPart) render: Rendering <ProjectList />', level: LogLevel.Info });
-    const element: React.ReactElement<IProjectListProps> = React.createElement(ProjectList, {
-      ...this.properties,
-      siteAbsoluteUrl: this.context.pageContext.site.absoluteUrl,
-    });
-    ReactDom.render(element, this.domElement);
+export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectListProps> {
+  public render(): void {    
+    this.renderComponent(ProjectList);
   }
 
   protected async onInit(): Promise<void> {
+    await super.onInit();
     await MSGraph.Init(this.context.msGraphClientFactory);
-    sp.setup({ spfxContext: this.context });
-    Logger.subscribe(new ConsoleListener());
-    Logger.activeLogLevel = LogLevel.Info;
-  }
-
-  protected onDispose(): void {
-    ReactDom.unmountComponentAtNode(this.domElement);
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {

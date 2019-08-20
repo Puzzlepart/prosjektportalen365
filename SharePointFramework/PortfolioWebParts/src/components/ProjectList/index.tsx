@@ -63,7 +63,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
     if (this.state.isLoading) {
       return (
         <div className={styles.projectList}>
-          <Spinner label={format(strings.LoadingText, 'prosjekter du er medlem av')} type={SpinnerType.large} />
+          <Spinner label={this.props.loadingText} type={SpinnerType.large} />
         </div >
       );
     }
@@ -78,7 +78,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
       <div className={styles.projectList}>
         <div className={styles.container}>
           <div className={styles.searchBox}>
-            <SearchBox placeholder={format(strings.SearchBoxPlaceholderText, 'prosjekter du er medlem av')} onChanged={this.onSearch.bind(this)} />
+            <SearchBox placeholder={this.props.searchBoxPlaceholderText} onChanged={this.onSearch.bind(this)} />
           </div>
           <div className={styles.viewToggle}>
             <Toggle
@@ -173,9 +173,9 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         <ProjectInformationModal
           modalProps={{ isOpen: true, onDismiss: () => this.setState({ showProjectInfo: null }) }}
           title={this.state.showProjectInfo.title}
-          entity={{ webUrl: this.props.siteAbsoluteUrl, ...this.props.entity }}
-          webUrl={this.props.siteAbsoluteUrl}
-          hubSiteUrl={this.props.siteAbsoluteUrl}
+          entity={{ webUrl: this.props.pageContext.site.absoluteUrl, ...this.props.entity }}
+          webUrl={this.props.pageContext.site.absoluteUrl}
+          hubSiteUrl={this.props.pageContext.site.absoluteUrl}
           siteId={this.state.showProjectInfo.siteId}
           hideActions={true}
           filterField='GtShowFieldPortfolio' />

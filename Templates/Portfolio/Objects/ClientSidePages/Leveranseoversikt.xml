@@ -1,4 +1,4 @@
-﻿<pnp:ClientSidePage PageName="Leveranseoversikt.aspx" PromoteAsNewsArticle="false" Overwrite="true" Layout="SingleWebPartAppPage" EnableComments="false" Title="Leveranseoversikt" 
+﻿<pnp:ClientSidePage PageName="Leveranseoversikt.aspx" PromoteAsNewsArticle="false" Overwrite="false" Layout="SingleWebPartAppPage" EnableComments="false" Title="Leveranseoversikt" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:Sections>
         <pnp:Section Order="1" Type="OneColumn">

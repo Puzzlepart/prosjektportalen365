@@ -47,7 +47,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
       return (
         <div className={styles.resourceAllocation}>
           <div className={styles.container}>
-            <Spinner label={format(strings.DataLoadingText, this.props.dataSource.toLowerCase())} type={SpinnerType.large} />
+            <Spinner label={format(strings.LoadingText, this.props.dataSource.toLowerCase())} type={SpinnerType.large} />
           </div>
         </div>
       );

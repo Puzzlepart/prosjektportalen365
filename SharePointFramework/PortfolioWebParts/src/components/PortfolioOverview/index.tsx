@@ -96,7 +96,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   }
 
   private get searchBoxPlaceholder() {
-    return format(strings.SearchBoxPlaceholderText, this.state.currentView.title);
+    return format(strings.SearchBoxPlaceholderText, this.state.currentView.title.toLowerCase());
   }
 
   private commandBar() {

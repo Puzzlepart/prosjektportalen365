@@ -25,7 +25,7 @@
       "properties": {
         "title": "Gevinstoversikt",
         "dataSource": "Gevinstoversikt (Prosjektnivå)",
-        "searchBoxLabelText": "Søk i gevinster...",
+        "searchBoxPlaceholderText": "Søk i gevinster...",
         "hiddenColumns": [
           "siteTitle"
         ]
