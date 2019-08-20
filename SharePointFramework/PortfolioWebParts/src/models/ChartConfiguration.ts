@@ -15,13 +15,7 @@ export class ChartConfiguration {
         return objectAssign(Object.create(this), this);
     }
 
-
-    protected get type() {
-        const typeIndex = parseInt(this.item.ContentTypeId.replace(CHARTCONFIGBASE_CONTENTTYPEID, '').substring(0, 2), 10) - 1;
-        return CHART_TYPES[typeIndex];
-    }
-
-    protected get width(): { [key: string]: number } {
+    public get width(): { [key: string]: number } {
         return {
             sm: this.item.GtPiWidthSm,
             md: this.item.GtPiWidthMd,
@@ -30,6 +24,12 @@ export class ChartConfiguration {
             xxl: this.item.GtPiWidthXxl,
             xxxl: this.item.GtPiWidthXxxl,
         };
+    }
+
+
+    private get type() {
+        const typeIndex = parseInt(this.item.ContentTypeId.replace(CHARTCONFIGBASE_CONTENTTYPEID, '').substring(0, 2), 10) - 1;
+        return CHART_TYPES[typeIndex];
     }
 
     /**
@@ -98,7 +98,7 @@ export class ChartConfiguration {
                                     const itemsMatch = data.getItemsWithStringValue(field, value);
                                     const name = value || 'N/A';
                                     const y = (itemsMatch.length / data.getCount()) * 100;
-                                    return { name, y };
+                                    return { name, y, test: itemsMatch };
                                 }),
                             }];
                         }
@@ -110,7 +110,7 @@ export class ChartConfiguration {
                                     const itemsMatch = data.getItemsWithStringValue(field, value);
                                     const name = value ? value.split(';').join(', ') : 'N/A';
                                     const y = (itemsMatch.length / data.getCount()) * 100;
-                                    return { name, y };
+                                    return { name, y, test: itemsMatch };
                                 }),
                             }];
                         }
@@ -133,23 +133,21 @@ export class ChartConfiguration {
      */
     public generateHighChartConfig(data: ChartData) {
         try {
-            let chartConfig: any = {
-                ...this.getBaseConfig(),
-            };
+            let chartConfig: any = this.getBaseConfig();
             switch (this.type) {
                 case 'bar': {
                     chartConfig.series = this.generateSeries(this.type, data);
                     chartConfig.xAxis = this.getXAxis(data);
-                    chartConfig.yAxis = this.getYAxis();
-                    chartConfig.legend = this.getLegend();
+                    chartConfig.yAxis = this.yAxis;
+                    chartConfig.legend = this.legend;
                     chartConfig.plotOptions = { bar: { dataLabels: { enabled: true } } };
                     break;
                 }
                 case 'column': {
                     chartConfig.series = this.generateSeries(this.type, data);
                     chartConfig.xAxis = this.getXAxis(data);
-                    chartConfig.yAxis = this.getYAxis();
-                    chartConfig.legend = this.getLegend();
+                    chartConfig.yAxis = this.yAxis;
+                    chartConfig.legend = this.legend;
                     chartConfig.plotOptions = { series: { stacking: false } };
                     break;
                 }
@@ -161,7 +159,10 @@ export class ChartConfiguration {
                             cursor: 'pointer',
                             dataLabels: {
                                 enabled: true,
-                                format: '<b>{point.name}</b>: {point.percentage: .1f} %',
+                                // tslint:disable-next-line:no-function-expression
+                                formatter: function () {
+                                    return `<b>${this.point.name}</b>: ${this.point.percentage.toFixed(2)} %`;
+                                },
                                 style: { color: 'black' },
                             },
                         },
@@ -176,15 +177,11 @@ export class ChartConfiguration {
         }
     }
 
-    /**
-     * Get Y axis
-     */
-    protected getYAxis() {
-        let yAxis: any = {
+    private get yAxis() {
+        return {
             title: { text: '', align: 'high' },
             labels: { overflow: 'justify' },
         };
-        return yAxis;
     }
 
     /**
@@ -192,7 +189,7 @@ export class ChartConfiguration {
      * 
      * @param {ChartData} data Data
      */
-    protected getXAxis(data: ChartData) {
+    private getXAxis(data: ChartData) {
         let categories = data.getNames();
         if (this.fields.length === 1) {
             categories = data.getNames(this.fields[0]);
@@ -216,10 +213,7 @@ export class ChartConfiguration {
         }
     }
 
-    /**
-     * Get legend
-     */
-    protected getLegend() {
+    private get legend() {
         switch (this.type) {
             case 'bar': {
                 return { layout: 'vertical' };
