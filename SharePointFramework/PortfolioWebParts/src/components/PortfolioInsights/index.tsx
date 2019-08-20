@@ -28,7 +28,12 @@ export default class PortfolioInsights extends React.Component<IPortfolioInsight
     try {
       const configuration = await getPortfolioConfig(this.props.columnConfigListName, this.props.columnsListName, this.props.viewsListName);
       const currentView = configuration.views[0];
-      const { charts, chartData, contentTypes } = await fetchChartData(currentView, configuration, this.props.pageContext.site.id.toString());
+      const { charts, chartData, contentTypes } = await fetchChartData(
+        currentView,
+        configuration,
+        this.props.chartConfigurationListName,
+        this.props.pageContext.site.id.toString(),
+      );
       this.setState({
         charts,
         contentTypes,

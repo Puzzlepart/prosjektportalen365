@@ -1,12 +1,10 @@
-import { sp, SearchResults } from '@pnp/sp';
+import { SearchResults, sp } from '@pnp/sp';
 import { makeUrlAbsolute } from '@Shared/helpers';
 import * as cleanDeep from 'clean-deep';
 import { IPortfolioOverviewColumnSpItem, IPortfolioOverviewConfiguration, IPortfolioOverviewViewSpItem, IProjectColumnConfigSpItem } from 'interfaces';
 import { ChartConfiguration, ChartData, ChartDataItem, DataField, PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
-import { DataFieldType } from 'types';
 import { ProjectColumnConfig, ProjectColumnConfigDictionary } from 'models/ProjectColumnConfig';
 import * as objectGet from 'object-get';
-import * as strings from 'PortfolioWebPartsStrings';
 import { DEFAULT_SEARCH_SETTINGS } from './DEFAULT_SEARCH_SETTINGS';
 
 export class SPChartConfigurationItem {
@@ -23,13 +21,6 @@ export class SPChartConfigurationItem {
     public GtPiWidthXxxl: number = 0;
 }
 
-export class SPColumnConfigurationItem {
-    public Id: number = 0;
-    public Title: string = '';
-    public GtManagedProperty: string = '';
-    public GtFieldDataType: string = '';
-}
-
 export class SPContentType {
     public StringId: string = '';
     public Name: string = '';
@@ -41,25 +32,23 @@ export class SPContentType {
  *
  * @param {PortfolioOverviewView} view View configuration
  * @param {IPortfolioOverviewConfiguration} configuration PortfolioOverviewConfiguration
+ * @param {string} chartConfigurationListName List name for chart configuration
  * @param {string} siteId Site ID
  */
-export async function fetchChartData(view: PortfolioOverviewView, configuration: IPortfolioOverviewConfiguration, siteId: string) {
+export async function fetchChartData(view: PortfolioOverviewView, configuration: IPortfolioOverviewConfiguration, chartConfigurationListName: string, siteId: string) {
     try {
-        const [chartItems, columnConfigItems, contentTypes] = await Promise.all([
-            sp.web.lists.getByTitle(strings.SPChartConfigurationList).items
+        const [chartItems, contentTypes] = await Promise.all([
+            sp.web.lists.getByTitle(chartConfigurationListName).items
                 .select(...Object.keys(new SPChartConfigurationItem()))
                 .get<SPChartConfigurationItem[]>(),
-            sp.web.lists.getByTitle(strings.SPColumnConfigurationList).items
-                .select(...Object.keys(new SPColumnConfigurationItem()))
-                .get<SPColumnConfigurationItem[]>(),
-            sp.web.lists.getByTitle(strings.SPChartConfigurationList).contentTypes
+            sp.web.lists.getByTitle(chartConfigurationListName).contentTypes
                 .select(...Object.keys(new SPContentType()))
                 .get<SPContentType[]>(),
         ]);
         let charts: ChartConfiguration[] = chartItems.map(item => {
             let fields = item.GtPiFieldsId.map(id => {
-                const [fld] = columnConfigItems.filter(_fld => _fld.Id === id);
-                return new DataField(fld.Title, fld.GtManagedProperty, fld.GtFieldDataType as DataFieldType);
+                const [fld] = configuration.columns.filter(_fld => _fld.id === id);
+                return new DataField(fld.name, fld.fieldName, fld.dataType);
             });
             let chart = new ChartConfiguration(item, fields);
             return chart;

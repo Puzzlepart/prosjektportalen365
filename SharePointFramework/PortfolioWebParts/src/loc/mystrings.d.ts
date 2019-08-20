@@ -10,6 +10,7 @@ declare interface IPortfolioWebPartsStrings {
   ExcelExportEnabledLabel: string;
   ShowGroupByLabel: string;
   ViewSelectorEnabledLabel: string;
+  ChartConfigurationListNameLabel: string;
   DefaultViewLabel: string;
   BenefitTitleLabel: string;
   ChartErrorText: string;
@@ -64,8 +65,6 @@ declare interface IPortfolioWebPartsStrings {
   ResponsibleLabel: string;
   ResourceAllocationInfoText: string;
   RiskActionLabel: string;
-  SPChartConfigurationList: string;
-  SPColumnConfigurationList: string;
   SearchBoxPlaceholderText: string;
   ShowAllMeasurementsLinkText: string;
   ShowAsListText: string;

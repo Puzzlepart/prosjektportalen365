@@ -21,6 +21,9 @@ export default class PortfolioInsightsWebPart extends BasePortfolioWebPart<IPort
             {
               groupName: strings.ConfigurationGroupName,
               groupFields: [
+                PropertyPaneTextField('chartConfigurationListName', {
+                  label: strings.ChartConfigurationListNameLabel,
+                }),
                 PropertyPaneTextField('columnConfigListName', {
                   label: strings.ColumnConfigListNameLabel,
                 }),
