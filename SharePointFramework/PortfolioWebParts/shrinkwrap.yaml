@@ -41,6 +41,7 @@ devDependencies:
   '@microsoft/sp-webpart-workbench': 1.8.2
   '@types/chai': 3.4.34
   '@types/mocha': 2.2.38
+  '@types/object-assign': 4.0.30
   '@types/string-format': 2.0.0
   ajv: 5.2.5
   find: 0.3.0
@@ -1322,6 +1323,10 @@ packages:
   /@types/node/8.5.8:
     resolution:
       integrity: sha512-8KmlRxwbKZfjUHFIt3q8TF5S2B+/E5BaAoo/3mgc5h6FJzqxXkCK/VMetO+IRDtwtU6HUvovHMBn+XRj7SV9Qg==
+  /@types/object-assign/4.0.30:
+    dev: true
+    resolution:
+      integrity: sha1-iUk3HVqZ9Dge4PHfCpt6GH4H5lI=
   /@types/orchestrator/0.0.30:
     dependencies:
       '@types/q': 1.5.2
@@ -11776,6 +11781,7 @@ specifiers:
   '@types/chai': 3.4.34
   '@types/es6-promise': 0.0.33
   '@types/mocha': 2.2.38
+  '@types/object-assign': ^4.0.30
   '@types/react': 16.7.22
   '@types/react-dom': 16.8.0
   '@types/string-format': ^2.0.0

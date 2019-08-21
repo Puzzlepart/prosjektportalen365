@@ -7,6 +7,11 @@ import { getObjectValue } from '@Shared/helpers';
 import { BenefitMeasurementIndicator } from 'models';
 import BenefitMeasurementAchievement from './BenefitMeasurementAchievement';
 
+/**
+ * Get columns for DetailsList
+ * 
+ * @param {IBenefitsOverviewProps} props Props
+ */
 export function GetColumns(props: IBenefitsOverviewProps): IColumn[] {
   let columns: IColumn[] = [
     {

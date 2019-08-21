@@ -1,8 +1,4 @@
-import { dateAdd } from '@pnp/common';
-import { sp } from '@pnp/sp';
-import { taxonomy } from '@pnp/sp-taxonomy';
 import { getObjectValue, sortAlphabetically } from '@Shared/helpers';
-import { IGraphGroup, ISPProjectItem, ISPUser } from 'interfaces';
 import { ProjectListModel } from 'models';
 import MSGraph from 'msgraph-helper';
 import { IButtonProps } from 'office-ui-fabric-react/lib/Button';
@@ -14,7 +10,6 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import * as strings from 'PortfolioWebPartsStrings';
 import { ProjectInformationModal } from 'ProjectWebParts/lib/components/ProjectInformation';
 import * as React from 'react';
-import * as format from 'string-format';
 import { IProjectListProps, ProjectListDefaultProps } from './IProjectListProps';
 import { IProjectListState } from './IProjectListState';
 import { ProjectCard } from './ProjectCard';
@@ -35,7 +30,8 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
 
   public async componentDidMount() {
     try {
-      let projects = await this.fetchProjects();
+      let projects = await this.props.dataAdapter.fetchEncrichedProjects(this.props.entity.listName, this.props.phaseTermSetId);
+      projects = projects.sort((a, b) => sortAlphabetically(a, b, true, this.props.sortBy));
       let columns = this.props.columns.map(col => {
         if (col.fieldName === this.props.sortBy) {
           col.isSorted = true;
@@ -77,10 +73,10 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
     return (
       <div className={styles.projectList}>
         <div className={styles.container}>
-          <div className={styles.searchBox}>
+          <div className={styles.searchBox} hidden={!this.props.showSearchBox}>
             <SearchBox placeholder={this.props.searchBoxPlaceholderText} onChanged={this.onSearch.bind(this)} />
           </div>
-          <div className={styles.viewToggle}>
+          <div className={styles.viewToggle} hidden={!this.props.viewSelectorEnabled}>
             <Toggle
               offText={strings.ShowAsListText}
               onText={strings.ShowAsTilesText}
@@ -239,33 +235,6 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   }
 
   /**
-   * Map projects
-   * 
-   * @param {ISPProjectItem[]} items Items
-   * @param {IGraphGroup[]} groups Groups
-   * @param {Object} photos Photos
-   * @param {ISPUser[]} users Users
-   * @param {any[]} phaseTerms Phase terms
-   */
-  private mapProjects(items: ISPProjectItem[], groups: IGraphGroup[], users: ISPUser[], phaseTerms: any[]): ProjectListModel[] {
-    let projects = items
-      .map(item => {
-        let [group] = groups.filter(grp => grp.id === item.GtGroupId);
-        if (!group) {
-          return null;
-        }
-        let [owner] = users.filter(user => user.Id === item.GtProjectOwnerId);
-        let [manager] = users.filter(user => user.Id === item.GtProjectManagerId);
-        let [phase] = phaseTerms.filter(p => p.Id.indexOf(getObjectValue<string>(item, 'GtProjectPhase.TermGuid', '')) !== -1);
-        const model = new ProjectListModel(item.GtSiteId, group.id, group.displayName, item.GtSiteUrl, manager, owner, phase);
-        return model;
-      })
-      .filter(p => p)
-      .sort((a, b) => sortAlphabetically(a, b, true, this.props.sortBy));
-    return projects;
-  }
-
-  /**
    * Get project logos (group photos)
    * 
    * @param {number} batchSize Batch size (defaults to 20)
@@ -289,44 +258,6 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         return { projects };
       });
     }
-  }
-
-  /**
-   * Fetch projects
-   */
-  private async fetchProjects(): Promise<ProjectListModel[]> {
-    let [items, groups, users, phaseTerms] = await Promise.all([
-      sp.web
-        .lists
-        .getByTitle(this.props.entity.listName)
-        .items
-        .select('GtGroupId', 'GtSiteId', 'GtSiteUrl', 'GtProjectOwnerId', 'GtProjectManagerId', 'GtProjectPhase')
-        .orderBy('Title')
-        .usingCaching()
-        .get<ISPProjectItem[]>(),
-      MSGraph.Get<IGraphGroup[]>(`/me/memberOf/$/microsoft.graph.group`, ['id', 'displayName'], `groupTypes/any(a:a%20eq%20'unified')`),
-      sp.web
-        .siteUsers
-        .select('Id', 'Title', 'Email')
-        .usingCaching({
-          key: 'projectlist_fetchprojects_siteusers',
-          storeName: 'session',
-          expiration: dateAdd(new Date(), 'minute', 15),
-        })
-        .get<ISPUser[]>(),
-      taxonomy
-        .getDefaultSiteCollectionTermStore()
-        .getTermSetById(this.props.phaseTermSetId)
-        .terms
-        .usingCaching({
-          key: 'projectlist_fetchprojects_terms',
-          storeName: 'session',
-          expiration: dateAdd(new Date(), 'minute', 15),
-        })
-        .get(),
-    ]);
-    let projects = this.mapProjects(items, groups, users, phaseTerms);
-    return projects;
   }
 }
 

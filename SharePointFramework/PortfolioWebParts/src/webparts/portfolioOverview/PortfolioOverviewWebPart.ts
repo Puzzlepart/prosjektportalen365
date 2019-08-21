@@ -2,7 +2,6 @@ import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle, 
 import { IPortfolioOverviewProps, PortfolioOverview } from 'components';
 import * as strings from 'PortfolioWebPartsStrings';
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
-import { getPortfolioConfig } from 'data';
 import { IPortfolioOverviewConfiguration } from 'interfaces';
 
 export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPortfolioOverviewProps> {
@@ -14,7 +13,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
 
   protected async onInit(): Promise<void> {
     await super.onInit();
-    this._configuration = await getPortfolioConfig(this.properties.columnConfigListName, this.properties.columnsListName, this.properties.viewsListName);
+    this._configuration = await this.dataAdapter.getPortfolioConfig(this.properties.columnConfigListName, this.properties.columnsListName, this.properties.viewsListName);
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {

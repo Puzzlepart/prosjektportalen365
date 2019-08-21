@@ -1,7 +1,8 @@
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { ProjectColumnConfigDictionary } from './ProjectColumnConfig';
-import { IPortfolioOverviewColumnSpItem } from 'interfaces';
 import { SearchValueType } from 'types';
+import { SPPortfolioOverviewColumnItem } from 'models';
+
 
 export class PortfolioOverviewColumn implements IColumn {
     public key: string;
@@ -24,7 +25,7 @@ export class PortfolioOverviewColumn implements IColumn {
     public isSortedDescending?: boolean;
     public config?: ProjectColumnConfigDictionary;
 
-    constructor(item: IPortfolioOverviewColumnSpItem) {
+    constructor(item: SPPortfolioOverviewColumnItem) {
         this.id = item.Id;
         this.fieldName = item.GtManagedProperty;
         this.key = item.GtManagedProperty;

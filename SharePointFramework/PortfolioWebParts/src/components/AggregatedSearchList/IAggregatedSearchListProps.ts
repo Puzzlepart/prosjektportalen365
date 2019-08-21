@@ -1,9 +1,9 @@
 import { IColumn, DetailsListLayoutMode, SelectionMode, ConstrainMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { SearchResult } from '@pnp/sp';
-import { IBaseComponentProps } from '../';
+import { IBaseComponentProps } from '../IBaseComponentProps';
 
 export interface IAggregatedSearchListProps extends IBaseComponentProps {
-    dataSource: string;
+    dataSource?: string;
     queryTemplate?: string;
     postFetch?: (results: SearchResult[]) => Promise<any[]>;
     selectProperties?: string[];

@@ -1,7 +1,7 @@
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { ProjectListColumns } from './ProjectListColumns';
 import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
-import { IBaseComponentProps } from '../';
+import { IBaseComponentProps } from '../IBaseComponentProps';
 
 export interface IProjectListProps extends IBaseComponentProps {
   loadingText: string;
@@ -9,6 +9,8 @@ export interface IProjectListProps extends IBaseComponentProps {
   phaseTermSetId: string;
   entity: ISpEntityPortalServiceParams;
   sortBy?: string;
+  showSearchBox?: boolean;
+  viewSelectorEnabled?: boolean;
   showAsTiles?: boolean;
   showProjectLogo?: boolean;
   showProjectOwner?: boolean;

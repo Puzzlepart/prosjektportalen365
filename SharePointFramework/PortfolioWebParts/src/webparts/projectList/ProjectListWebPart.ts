@@ -1,17 +1,15 @@
 import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
 import { IProjectListProps, ProjectList } from 'components';
-import MSGraph from 'msgraph-helper';
 import * as strings from 'PortfolioWebPartsStrings';
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
 
 export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectListProps> {
-  public render(): void {    
+  public render(): void {
     this.renderComponent(ProjectList);
   }
 
   protected async onInit(): Promise<void> {
     await super.onInit();
-    await MSGraph.Init(this.context.msGraphClientFactory);
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -24,9 +22,22 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
               groupFields: [
                 PropertyPaneTextField('sortBy', {
                   label: strings.SortByFieldLabel,
+                  disabled: true,
                 }),
                 PropertyPaneTextField('phaseTermSetId', {
                   label: strings.PhaseTermSetIdFieldLabel,
+                }),
+                PropertyPaneTextField('searchBoxPlaceholderText', {
+                  label: strings.SearchBoxPlaceholderTextLabel,
+                }),
+                PropertyPaneToggle('showSearchBox', {
+                  label: strings.ShowSearchBoxLabel,
+                }),
+                PropertyPaneToggle('viewSelectorEnabled', {
+                  label: strings.ViewSelectorEnabledLabel,
+                }),
+                PropertyPaneToggle('showAsTiles', {
+                  label: strings.ShowAsTilesLabel,
                 }),
               ]
             },

@@ -1,5 +1,5 @@
 
-import { IBaseComponentProps } from '../';
+import { IBaseComponentProps } from '../IBaseComponentProps';
 
 export interface ILatestProjectsProps extends IBaseComponentProps {
   loadingText: string;

@@ -1,10 +1,10 @@
-import * as React from 'react';
-import styles from './BenefitsOverview.module.scss';
-import { IBenefitsOverviewProps, BenefitsOverviewDefaultProps } from './IBenefitsOverviewProps';
-import { AggregatedSearchList } from '../';
-import { GetColumns } from './BenefitsOverviewColumns';
 import { getObjectValue } from '@Shared/helpers';
 import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from 'models';
+import * as React from 'react';
+import { AggregatedSearchList } from '../';
+import styles from './BenefitsOverview.module.scss';
+import { GetColumns } from './BenefitsOverviewColumns';
+import { BenefitsOverviewDefaultProps, IBenefitsOverviewProps } from './IBenefitsOverviewProps';
 
 export default class BenefitsOverview extends React.Component<IBenefitsOverviewProps, {}> {
   public static defaultProps = BenefitsOverviewDefaultProps;
@@ -27,17 +27,17 @@ export default class BenefitsOverview extends React.Component<IBenefitsOverviewP
           {...this.props}
           columns={columns}
           groupByColumns={groupByColumns}
-          postFetch={this.mapMeasureIndicators} />
+          postFetch={this.postFetch.bind(this)} />
       </div>
     );
   }
 
   /**
-   * Map measure indicators
+   * Post fetch
    * 
-   * @param {any[]} results Results
+   * @param {any]} results Results
    */
-  private async mapMeasureIndicators(results: any[]): Promise<any[]> {
+  private async postFetch(results: any[]): Promise<any[]> {
     const benefits = results
       .filter(res => res.ContentTypeID.indexOf('0x01004F466123309D46BAB9D5C6DE89A6CF67') === 0)
       .map(res => new Benefit(res));

@@ -2,7 +2,6 @@ import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
 import { parseUrlHash, setUrlHash } from '@Shared/util';
 import * as arraySort from 'array-sort';
 import * as arrayUnique from 'array-unique';
-import { fetchDataForView, getPortfolioConfig } from 'data';
 import { IPortfolioOverviewConfiguration } from 'interfaces';
 import { PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
 import * as objectGet from 'object-get';
@@ -428,7 +427,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         }
       }
 
-      const { items, refiners } = await fetchDataForView(currentView, this.props.configuration, this.props.pageContext.site.id.toString());
+      const { items, refiners } = await this.props.dataAdapter.fetchDataForView(currentView, this.props.configuration, this.props.pageContext.site.id.toString());
 
       PortfolioOverviewFieldSelector.items = this.props.configuration.columns.map(col => ({
         name: col.name,
@@ -471,7 +470,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     }
 
     this.setState({ isChangingView: view });
-    const { items, refiners } = await fetchDataForView(view, this.props.configuration, this.props.pageContext.site.id.toString());
+    const { items, refiners } = await this.props.dataAdapter.fetchDataForView(view, this.props.configuration, this.props.pageContext.site.id.toString());
     let filters = this.getSelectedFiltersWithItems(refiners, this.props.configuration, view);
 
     let updatedState: Partial<IPortfolioOverviewState> = {

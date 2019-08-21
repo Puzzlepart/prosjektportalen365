@@ -1,7 +1,8 @@
-import { IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
+import { IPropertyPaneConfiguration, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
 import { ExperienceLog, IExperienceLogProps } from 'components';
 import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
+import * as strings from 'PortfolioWebPartsStrings';
 
 export default class ExperienceLogWebPart extends BasePortfolioWebPart<IExperienceLogProps> {
   public render(): void {
@@ -12,8 +13,23 @@ export default class ExperienceLogWebPart extends BasePortfolioWebPart<IExperien
   protected async onInit(): Promise<void> {
     await super.onInit();
   }
-
+  
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    return super.getPropertyPaneConfiguration();
+    return {
+      pages: [
+        {
+          groups: [
+            {
+              groupName: strings.GeneralGroupName,
+              groupFields: [
+                PropertyPaneToggle('excelExportEnabled', {
+                  label: strings.ExcelExportEnabledLabel,
+                }),
+              ]
+            },
+          ]
+        }
+      ]
+    };
   }
 }

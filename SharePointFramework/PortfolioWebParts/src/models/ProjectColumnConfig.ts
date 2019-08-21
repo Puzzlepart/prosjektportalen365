@@ -1,4 +1,4 @@
-import { IProjectColumnConfigSpItem } from "interfaces";
+import { SPProjectColumnConfigItem } from "models";
 
 export type ProjectColumnConfigDictionary = { [key: string]: { color: string, iconName: string } };
 
@@ -9,7 +9,7 @@ export class ProjectColumnConfig  {
     public color?: string;
     public iconName?: string;
 
-    constructor(item: IProjectColumnConfigSpItem) {
+    constructor(item: SPProjectColumnConfigItem) {
         this.id = item.Id;
         this.columnId = item.GtPortfolioColumnId;
         this.value = item.GtPortfolioColumnValue;

@@ -1,4 +1,4 @@
-import { IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
+import { IPropertyPaneConfiguration, PropertyPaneToggle, PropertyPaneTextField } from '@microsoft/sp-webpart-base';
 import { IRiskOverviewProps, RiskOverview } from 'components';
 import * as strings from 'PortfolioWebPartsStrings';
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
@@ -12,8 +12,29 @@ export default class RiskOverviewWebPart extends BasePortfolioWebPart<IRiskOverv
   protected async onInit(): Promise<void> {
     await super.onInit();
   }
-  
+
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    return super.getPropertyPaneConfiguration();
+    return {
+      pages: [
+        {
+          groups: [
+            {
+              groupName: strings.GeneralGroupName,
+              groupFields: [
+                PropertyPaneToggle('showCommandBar', {
+                  label: strings.ShowCommandBarLabel,
+                }),
+                PropertyPaneToggle('showSearchBox', {
+                  label: strings.ShowSearchBoxLabel,
+                }),
+                PropertyPaneTextField('searchBoxPlaceholderText', {
+                  label: strings.SearchBoxPlaceholderTextLabel,
+                }),
+              ]
+            },
+          ]
+        }
+      ]
+    };
   }
 }

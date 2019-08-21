@@ -1,4 +1,4 @@
-import { IBaseComponentProps } from '../';
+import { IBaseComponentProps } from '../IBaseComponentProps';
 
 export interface IResourceAllocationProps extends IBaseComponentProps {
    dataSource: string;

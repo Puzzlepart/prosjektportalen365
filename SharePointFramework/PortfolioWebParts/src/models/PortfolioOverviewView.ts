@@ -1,5 +1,4 @@
-import { PortfolioOverviewColumn } from ".";
-import { IPortfolioOverviewViewSpItem } from "interfaces";
+import { PortfolioOverviewColumn, SPPortfolioOverviewViewItem } from ".";
 
 export class PortfolioOverviewView {
     public id: number;
@@ -14,7 +13,7 @@ export class PortfolioOverviewView {
     public groupBy?: PortfolioOverviewColumn;
     public scope?: string;
 
-    constructor(item: IPortfolioOverviewViewSpItem, columns: PortfolioOverviewColumn[]) {
+    constructor(item: SPPortfolioOverviewViewItem, columns: PortfolioOverviewColumn[]) {
         this.id = item.Id;
         this.title = item.Title;
         this.sortOrder = item.GtSortOrder;

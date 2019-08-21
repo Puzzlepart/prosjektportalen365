@@ -1,4 +1,3 @@
-import { fetchChartData, fetchDataForView, getPortfolioConfig } from 'data';
 import { ChartData, ChartDataItem, PortfolioOverviewView } from 'models';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
@@ -26,9 +25,9 @@ export default class PortfolioInsights extends React.Component<IPortfolioInsight
 
   public async componentDidMount() {
     try {
-      const configuration = await getPortfolioConfig(this.props.columnConfigListName, this.props.columnsListName, this.props.viewsListName);
+      const configuration = await this.props.dataAdapter.getPortfolioConfig(this.props.columnConfigListName, this.props.columnsListName, this.props.viewsListName);
       const currentView = configuration.views[0];
-      const { charts, chartData, contentTypes } = await fetchChartData(
+      const { charts, chartData, contentTypes } = await this.props.dataAdapter.fetchChartData(
         currentView,
         configuration,
         this.props.chartConfigurationListName,
@@ -107,7 +106,7 @@ export default class PortfolioInsights extends React.Component<IPortfolioInsight
 * @param {PortfolioOverviewView} view View
     */
   private async onViewChanged(view: PortfolioOverviewView) {
-    let data = await fetchDataForView(view, this.state.configuration, this.props.pageContext.site.id.toString());
+    let data = await this.props.dataAdapter.fetchDataForView(view, this.state.configuration, this.props.pageContext.site.id.toString());
     this.setState({
       currentView: view,
       chartData: new ChartData(data.items.map(item => new ChartDataItem(item.Title, item))),

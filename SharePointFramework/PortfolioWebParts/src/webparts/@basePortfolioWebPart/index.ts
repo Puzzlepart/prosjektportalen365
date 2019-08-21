@@ -1,12 +1,15 @@
 import { BaseClientSideWebPart, IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { sp } from '@pnp/sp';
-import { IBaseComponentProps } from 'components';
+import { IBaseComponentProps } from 'components/IBaseComponentProps';
+import { DataAdapter } from 'data';
 import * as moment from 'moment';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
+import * as merge from 'object-assign';
 
 export class BasePortfolioWebPart<P extends IBaseComponentProps> extends BaseClientSideWebPart<P> {
+    public dataAdapter: DataAdapter;
     private __title: string;
 
     public render(): void {
@@ -19,22 +22,29 @@ export class BasePortfolioWebPart<P extends IBaseComponentProps> extends BaseCli
      * @param {any} component Component 
      * @param {P} props Props
      */
-    public renderComponent(component: React.ComponentClass<P>, props: any = {}): void {
-        const element: React.ReactElement<any> = React.createElement(component, {
-            title: this.__title,
-            ...(this.properties as Object),
-            ...props,
-            pageContext: this.context.pageContext,
-        });
+    public renderComponent(component: React.ComponentClass<P>, props?: P): void {
+        this.dataAdapter = new DataAdapter(this.context);
+        let _props = merge({ title: this.__title }, this.properties, props, { pageContext: this.context.pageContext, dataAdapter: this.dataAdapter });
+        const element: React.ReactElement<P> = React.createElement(component, _props);
         ReactDom.render(element, this.domElement);
     }
 
-    protected async onInit(): Promise<void> {
+    /**
+     * Setup
+     * 
+     * @param {LogLevel} activeLogLevel Active log level for the web part
+     * @param {string} locale Locale for moment
+     */
+    protected async setup(activeLogLevel: LogLevel = LogLevel.Info, locale: string = 'nb') {
         sp.setup({ spfxContext: this.context });
         Logger.subscribe(new ConsoleListener());
-        Logger.activeLogLevel = LogLevel.Info;
-        moment.locale('nb');
+        Logger.activeLogLevel = activeLogLevel;
+        moment.locale(locale);
         this.__title = (await sp.web.lists.getById(this.context.pageContext.list.id.toString()).items.getById(this.context.pageContext.listItem.id).select('Title').get<{ Title: string }>()).Title;
+    }
+
+    protected async onInit(): Promise<void> {
+        await this.setup();
     }
 
     protected onDispose(): void {

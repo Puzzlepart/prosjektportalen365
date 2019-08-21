@@ -2,7 +2,7 @@ import { IPortfolioOverviewConfiguration } from 'interfaces';
 import { PortfolioOverviewView } from 'models';
 import { ConstrainMode, DetailsListLayoutMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
-import { IBaseComponentProps } from '../';
+import { IBaseComponentProps } from '../IBaseComponentProps';
 
 export interface IPortfolioOverviewProps extends IBaseComponentProps {
     entity: ISpEntityPortalServiceParams;

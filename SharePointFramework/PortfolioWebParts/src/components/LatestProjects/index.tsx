@@ -1,5 +1,5 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
-import { QueryPropertyValueType, SortDirection, sp } from '@pnp/sp';
+import { SortDirection } from '@pnp/sp';
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
 import { formatDate } from '@Shared/helpers';
 import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
@@ -19,7 +19,7 @@ export default class LatestProjects extends React.Component<ILatestProjectsProps
 
   public async componentDidMount() {
     try {
-      const projects = await this.fetchData();
+      const projects = await this.props.dataAdapter.fetchProjectSites(this.props.rowLimit, 'Created', SortDirection.Descending);
       this.setState({ projects, isLoading: false });
     } catch (error) {
       this.setState({ projects: [], isLoading: false });
@@ -65,31 +65,6 @@ export default class LatestProjects extends React.Component<ILatestProjectsProps
         );
       });
     } else return <MessageBar>{this.props.emptyMessage}</MessageBar>;
-  }
-
-  /**
-   * Fetch data
-   */
-  private async fetchData() {
-    let result = await sp.search({
-      Querytext: `DepartmentId:{${this.props.pageContext.legacyPageContext.hubSiteId}} contentclass:STS_Site`,
-      TrimDuplicates: false,
-      RowLimit: this.props.rowLimit,
-      SelectProperties: ['Title', 'Path', 'SiteId', 'Created'],
-      SortList: [{
-        Property: 'Created',
-        Direction: SortDirection.Descending
-      }],
-      Properties: [{
-        Name: 'EnableDynamicGroups',
-        Value: {
-          BoolVal: true,
-          QueryPropertyValueTypeIndex: QueryPropertyValueType.BooleanType
-        }
-      }]
-    });
-    let projects: any[] = result.PrimarySearchResults.filter(site => this.props.pageContext.legacyPageContext.hubSiteId !== site['SiteId']);
-    return projects;
   }
 }
 

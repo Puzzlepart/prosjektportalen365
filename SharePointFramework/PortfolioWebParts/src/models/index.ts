@@ -9,3 +9,8 @@ export { ChartConfiguration } from './ChartConfiguration';
 export { DataField } from './DataField';
 export { PortfolioOverviewColumn } from './PortfolioOverviewColumn';
 export { PortfolioOverviewView } from './PortfolioOverviewView';
+export { SPContentType } from './SPContentType';
+export { SPChartConfigurationItem } from './SPChartConfigurationItem';
+export { SPProjectColumnConfigItem } from './SPProjectColumnConfigItem';
+export { SPPortfolioOverviewColumnItem } from './SPPortfolioOverviewColumnItem';
+export { SPPortfolioOverviewViewItem } from './SPPortfolioOverviewViewItem';

@@ -1,6 +1,5 @@
-import { ChartData, DataField } from './';
+import { ChartData, DataField, SPChartConfigurationItem } from './';
 import * as objectAssign from 'object-assign';
-import { SPChartConfigurationItem } from 'data';
 
 export const CHARTCONFIGBASE_CONTENTTYPEID = '0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D';
 export const CHART_TYPES = ['bar', 'column', 'pie'];
