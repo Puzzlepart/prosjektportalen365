@@ -21,6 +21,7 @@ import { IPortfolioOverviewState } from './IPortfolioOverviewState';
 import styles from './PortfolioOverview.module.scss';
 import { PortfolioOverviewFieldSelector } from './PortfolioOverviewFieldSelector';
 import { renderItemColumn } from './RenderItemColumn';
+import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage';
 
 
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
@@ -412,34 +413,22 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
       if (viewIdUrlParam) {
         [currentView] = this.props.configuration.views.filter(qc => qc.id === parseInt(viewIdUrlParam, 10));
         if (!currentView) {
-          throw {
-            message: strings.ViewNotFoundMessage,
-            type: MessageBarType.error
-          };
+          throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error);
         }
       } else if (hashState.viewId) {
         [currentView] = this.props.configuration.views.filter(qc => qc.id === parseInt(hashState.viewId, 10));
         if (!currentView) {
-          throw {
-            message: strings.ViewNotFoundMessage,
-            type: MessageBarType.error
-          };
+          throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error);
         }
       } else if (this.props.defaultViewId) {
         [currentView] = this.props.configuration.views.filter(qc => qc.id === parseInt(this.props.defaultViewId, 10));
         if (!currentView) {
-          throw {
-            message: strings.ViewNotFoundMessage,
-            type: MessageBarType.error
-          };
+          throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error);
         }
       } else {
         [currentView] = this.props.configuration.views.filter(qc => qc.isDefaultView);
         if (!currentView) {
-          throw {
-            message: strings.NoDefaultViewMessage,
-            type: MessageBarType.error
-          };
+          throw new PortfolioOverviewErrorMessage(strings.NoDefaultViewMessage, MessageBarType.error);
         }
       }
 

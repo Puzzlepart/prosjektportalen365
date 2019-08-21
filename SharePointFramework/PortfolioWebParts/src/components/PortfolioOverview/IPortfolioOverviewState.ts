@@ -2,7 +2,7 @@ import { SearchResult } from '@pnp/sp';
 import { PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { IFilterProps } from '../';
-import { IPortfolioOverviewErrorMessage } from './IPortfolioOverviewErrorMessage';
+import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage';
 
 export interface IPortfolioOverviewState {
     isLoading?: boolean;
@@ -13,7 +13,7 @@ export interface IPortfolioOverviewState {
     filters?: IFilterProps[];
     currentView?: PortfolioOverviewView;
     activeFilters?: { [key: string]: string[] };
-    error?: IPortfolioOverviewErrorMessage;
+    error?: PortfolioOverviewErrorMessage;
     showFilterPanel?: boolean;
     groupBy?: PortfolioOverviewColumn;
     sortBy?: PortfolioOverviewColumn;
