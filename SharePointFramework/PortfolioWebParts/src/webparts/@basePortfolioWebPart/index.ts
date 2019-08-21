@@ -23,7 +23,6 @@ export class BasePortfolioWebPart<P extends IBaseComponentProps> extends BaseCli
      * @param {P} props Props
      */
     public renderComponent(component: React.ComponentClass<P>, props?: P): void {
-        this.dataAdapter = new DataAdapter(this.context);
         let _props = merge({ title: this.__title }, this.properties, props, { pageContext: this.context.pageContext, dataAdapter: this.dataAdapter });
         const element: React.ReactElement<P> = React.createElement(component, _props);
         ReactDom.render(element, this.domElement);
@@ -44,6 +43,8 @@ export class BasePortfolioWebPart<P extends IBaseComponentProps> extends BaseCli
     }
 
     protected async onInit(): Promise<void> {
+        this.dataAdapter = new DataAdapter(this.context);
+        this.context.statusRenderer.clearLoadingIndicator(this.domElement);
         await this.setup();
     }
 
