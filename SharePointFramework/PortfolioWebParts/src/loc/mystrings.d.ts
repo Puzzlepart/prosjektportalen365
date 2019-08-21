@@ -21,6 +21,7 @@ declare interface IPortfolioWebPartsStrings {
   DeliveryStatusLabel: string;
   DescriptionFieldLabel: string;
   DesiredValueLabel: string;
+  EditViewText: string;
   ErrorText: string;
   ExcelExportButtonLabel: string;
   ExcelExportEnabledLabel: string;
@@ -64,6 +65,7 @@ declare interface IPortfolioWebPartsStrings {
   ResponsibleLabel: string;
   RiskActionLabel: string;
   RoleLabel: string;
+  SaveViewAsText: string;
   SearchBoxPlaceholderText: string;
   SearchBoxPlaceholderTextLabel: string;
   ShowAllMeasurementsLinkText: string;

@@ -150,15 +150,31 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         iconProps: { iconName: 'List' },
         itemType: ContextualMenuItemType.Header,
         subMenuProps: {
-          items: this.props.configuration.views.map(v => ({
-            key: `${v.id}`,
-            name: v.title,
-            iconProps: { iconName: v.iconName },
-            onClick: (event: any) => {
-              event.preventDefault();
-              this.onChangeView(v);
+          items: [
+            ...this.props.configuration.views.map(v => ({
+              key: `${v.id}`,
+              name: v.title,
+              iconProps: { iconName: v.iconName },
+              onClick: (event: any) => {
+                event.preventDefault();
+                this.onChangeView(v);
+              },
+            })),
+            {
+              key: 'divider_0',
+              itemType: ContextualMenuItemType.Divider,
             },
-          })),
+            {
+              key: 'SaveViewAs',
+              name: strings.SaveViewAsText,
+              disabled: true,
+            },
+            {
+              key: 'EditView',
+              name: strings.EditViewText,
+              href: `${this.props.configuration.viewEditFormUrl}?ID=${this.state.currentView.id}&Source=${encodeURIComponent(document.location.href)}`,
+            }
+          ],
         },
       });
     }

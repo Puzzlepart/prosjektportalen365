@@ -5,4 +5,5 @@ export interface IPortfolioOverviewConfiguration {
     refiners: PortfolioOverviewColumn[];
     views: PortfolioOverviewView[];
     viewNewFormUrl: string;
+    viewEditFormUrl: string;
 }

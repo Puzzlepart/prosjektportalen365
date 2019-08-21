@@ -123,9 +123,9 @@ export class DataAdapter {
                     .orderBy('GtSortOrder', true)
                     .get<SPPortfolioOverviewViewItem[]>(),
                 sp.web.lists.getByTitle(viewsListName)
-                    .select('DefaultNewFormUrl')
-                    .expand('DefaultNewFormUrl')
-                    .get<{ DefaultNewFormUrl: string }>(),
+                    .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
+                    .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')
+                    .get<{ DefaultNewFormUrl: string, DefaultEditFormUrl: string }>(),
             ]);
             const columnConfig = spItems[0].map(c => new ProjectColumnConfig(c));
             const columns = spItems[1].map(c => {
@@ -142,6 +142,7 @@ export class DataAdapter {
                 refiners,
                 views,
                 viewNewFormUrl: makeUrlAbsolute(spItems[3].DefaultNewFormUrl),
+                viewEditFormUrl: makeUrlAbsolute(spItems[3].DefaultNewFormUrl),
             };
             return config;
         } catch (error) {
