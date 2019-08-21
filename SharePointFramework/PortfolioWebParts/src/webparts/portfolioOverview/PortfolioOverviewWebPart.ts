@@ -36,7 +36,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                 PropertyPaneToggle('viewSelectorEnabled', {
                   label: strings.ViewSelectorEnabledLabel,
                 }),
-                PropertyPaneDropdown('defaultView', {
+                PropertyPaneDropdown('defaultViewId', {
                   label: strings.DefaultViewLabel,
                   options: this._configuration
                     ? this._configuration.views.map(v => ({ key: v.id, text: v.title }))

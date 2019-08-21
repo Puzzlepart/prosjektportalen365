@@ -12,7 +12,7 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
     layoutMode?: DetailsListLayoutMode;
     excelExportEnabled?: boolean;
     defaultView?: PortfolioOverviewView;
-    defaultViewId?: number;
+    defaultViewId?: string;
     showGroupBy?: boolean;
     viewSelectorEnabled?: boolean;
     columnConfigListName: string;

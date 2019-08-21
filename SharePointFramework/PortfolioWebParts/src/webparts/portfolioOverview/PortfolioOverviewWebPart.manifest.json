@@ -3,7 +3,7 @@
     "id": "e58e3d32-057a-4418-97ce-172b92482ba2",
     "alias": "PortfolioOverviewWebPart",
     "componentType": "WebPart",
-    "version": "0.9.10",
+    "version": "0.9.11",
     "manifestVersion": 2,
     "requiresCustomScript": false,
     "supportedHosts": [
@@ -22,7 +22,11 @@
                 "default": " "
             },
             "officeFabricIconFontName": "FolderList",
-            "properties": {}
+            "properties": {
+                "columnConfigListName": "Prosjektkolonnekonfigurasjon",
+                "columnsListName": "Prosjektkolonner",
+                "viewsListName": "Porteføljevisninger"
+            }
         }
     ]
 }

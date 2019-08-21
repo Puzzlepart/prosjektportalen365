@@ -18,6 +18,4 @@ export interface IPortfolioOverviewState {
     groupBy?: PortfolioOverviewColumn;
     sortBy?: PortfolioOverviewColumn;
     showProjectInfo?: SearchResult;
-    excelExportStatus?: any;
-    canUserManageWeb?: boolean;
 }

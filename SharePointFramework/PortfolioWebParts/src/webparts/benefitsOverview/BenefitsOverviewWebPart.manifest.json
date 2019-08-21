@@ -3,7 +3,7 @@
     "id": "5f925484-cfb4-42ce-9f90-79a874bb8a68",
     "alias": "BenefitsOverviewWebPart",
     "componentType": "WebPart",
-    "version": "0.9.10",
+    "version": "0.9.11",
     "manifestVersion": 2,
     "requiresCustomScript": false,
     "supportedHosts": [

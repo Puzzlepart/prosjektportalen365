@@ -319,12 +319,12 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   }
 
   /**
-   * Get groups
-   *
-* @param {any[]} items Items
-* @param {PortfolioOverviewColumn}  groupBy Group by column
-* @param {PortfolioOverviewColumn} sortBy Sort by column
-        */
+  * Get groups
+  *
+  * @param {any[]} items Items
+  * @param {PortfolioOverviewColumn}  groupBy Group by column
+  * @param {PortfolioOverviewColumn} sortBy Sort by column
+  */
   private getGroups(items: any[], groupBy: PortfolioOverviewColumn, sortBy: PortfolioOverviewColumn): IGroup[] {
     let groups: IGroup[] = null;
     if (groupBy) {
@@ -393,6 +393,8 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
       const viewIdUrlParam = new UrlQueryParameterCollection(document.location.href).getValue('viewId');
       let currentView = this.props.defaultView;
 
+      console.log(viewIdUrlParam, hashState, this.props);
+
       if (viewIdUrlParam) {
         [currentView] = this.props.configuration.views.filter(qc => qc.id === parseInt(viewIdUrlParam, 10));
         if (!currentView) {
@@ -410,7 +412,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           };
         }
       } else if (this.props.defaultViewId) {
-        [currentView] = this.props.configuration.views.filter(qc => qc.id === this.props.defaultViewId);
+        [currentView] = this.props.configuration.views.filter(qc => qc.id === parseInt(this.props.defaultViewId, 10));
         if (!currentView) {
           throw {
             message: strings.ViewNotFoundMessage,
@@ -428,12 +430,6 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
       }
 
       const { items, refiners } = await this.props.dataAdapter.fetchDataForView(currentView, this.props.configuration, this.props.pageContext.site.id.toString());
-
-      PortfolioOverviewFieldSelector.items = this.props.configuration.columns.map(col => ({
-        name: col.name,
-        value: col.fieldName,
-        selected: currentView.columns.indexOf(col) !== -1,
-      }));
       let filters = this.getSelectedFiltersWithItems(refiners, this.props.configuration, currentView);
       let groupBy: PortfolioOverviewColumn;
       if (currentView.groupBy) {
@@ -443,16 +439,14 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         [groupBy] = this.props.configuration.columns.filter(fc => fc.fieldName === hashState.groupBy);
       }
 
-      let _state: Partial<IPortfolioOverviewState> = {
+      let newState: Partial<IPortfolioOverviewState> = {
         columns: currentView.columns,
         items,
         filters,
         currentView,
-        canUserManageWeb: true,
         groupBy,
       };
-
-      return _state;
+      return newState;
     } catch (error) {
       throw error;
     }
