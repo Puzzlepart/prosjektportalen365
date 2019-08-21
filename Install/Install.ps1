@@ -29,9 +29,10 @@
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
 $InstallStartTime = (Get-Date).ToUniversalTime().ToString("MM/dd/yyy HH:mm")
-if($Upgrade.IsPresent) {
+if ($Upgrade.IsPresent) {
     Write-Host "[INFO] Upgrading [Prosjektportalen 365] to [VERSION_PLACEHOLDER]"
-} else {
+}
+else {
     Write-Host "[INFO] Installing [Prosjektportalen 365] [VERSION_PLACEHOLDER]"
 }
 
@@ -45,7 +46,8 @@ function Connect-SharePoint {
     Try {
         if ($UseWebLogin.IsPresent) {
             $Connection = Connect-PnPOnline -Url $Url -UseWebLogin -ReturnConnection -ErrorAction Stop
-        } else {
+        }
+        else {
             $Connection = Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ReturnConnection -ErrorAction Stop
         }
         return $Connection
@@ -63,7 +65,8 @@ function LoadBundle() {
 if (-not $SkipLoadingBundle.IsPresent) {
     $PnPVersion = LoadBundle    
     Write-Host "[INFO] Loaded [SharePointPnPPowerShellOnline] v.$($PnPVersion) from bundle"
-} else {
+}
+else {
     Write-Host "[INFO] Loaded [SharePointPnPPowerShellOnline] v.$((Get-Command Connect-PnPOnline).Version) from your environment"
 }
 
@@ -202,13 +205,10 @@ if (-not $SkipAppPackages.IsPresent) {
     }
     Try {
         Write-Host "[INFO] Installing SharePoint Framework app packages to [$TenantAppCatalogUrl]"
-        $AppPackages = @(
-            "portfolio-web-parts",
-            "project-extensions",
-            "project-web-parts"
-        )
-        foreach ($AppPkg in $AppPackages) {
-            Add-PnPApp -Path ".\Apps\pp-$($AppPkg).sppkg" -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop -Connection $AppCatalogSiteConnection >$null 2>&1
+        foreach ($AppPkg in (Get-ChildItem .\Apps\)) {
+            Write-Host "[INFO] Installing $($AppPkg.BaseName)..."  -NoNewline
+            Add-PnPApp -Path $AppPkg.FullName -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop -Connection $AppCatalogSiteConnection >$null 2>&1
+            Write-Host " DONE" -ForegroundColor Green
         }
         Write-Host "[INFO] SharePoint Framework app packages successfully installed to [$TenantAppCatalogUrl]" -ForegroundColor Green
     }
@@ -280,9 +280,10 @@ $sw.Stop()
 
 Write-Host "[REQUIRED ACTION] Go to $($AdminSiteUrl)/_layouts/15/online/AdminHome.aspx#/webApiPermissionManagement and approve the pending requests" -ForegroundColor Yellow
 
-if($Upgrade.IsPresent) {
+if ($Upgrade.IsPresent) {
     Write-Host "[INFO] Upgrade completed in $($sw.Elapsed)" -ForegroundColor Green
-} else {
+}
+else {
     Write-Host "[INFO] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
 }
 
@@ -290,9 +291,9 @@ $InstallEndTime = (Get-Date).ToUniversalTime().ToString("MM/dd/yyy HH:mm")
 
 Add-PnPListItem -List "Installasjonslogg" -Values @{
     InstallStartTime = $InstallStartTime; 
-    InstallEndTime = $InstallEndTime; 
-    InstallVersion = "VERSION_PLACEHOLDER";
-    InstallCommand = $MyInvocation.Line.Substring(2);
+    InstallEndTime   = $InstallEndTime; 
+    InstallVersion   = "VERSION_PLACEHOLDER";
+    InstallCommand   = $MyInvocation.Line.Substring(2);
 } -Connection $SiteConnection >$null 2>&1
 
 #region Disconnect

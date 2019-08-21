@@ -1,7 +1,10 @@
 Param(
     [Parameter(Mandatory = $false, HelpMessage = "Skip building of SharePoint Framework solutions")]
-    [switch]$SkipBuildSharePointFramework
+    [switch]$SkipBuildSharePointFramework,
+    [Parameter(Mandatory = $false)]
+    [string[]]$Solutions = @("ProjectWebParts", "PortfolioWebParts", "ProjectExtensions")
 )
+    
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
 
@@ -41,7 +44,7 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
     tsc
 }
 
-foreach ($Solution in @("ProjectWebParts", "PortfolioWebParts", "ProjectExtensions")) {
+foreach ($Solution in $Solutions) {
     Set-Location "$PSScriptRoot\..\SharePointFramework\$Solution"
     $PackageSolutionJson = Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json
     Write-Host "[INFO] Packaging SharePoint Framework solution [$($Solution)] [v$($PackageSolutionJson.solution.version)]"
