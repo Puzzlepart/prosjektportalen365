@@ -30,7 +30,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
 
   constructor(props: IPortfolioOverviewProps) {
     super(props);
-    this.state = { isLoading: true, searchTerm: '', activeFilters: {} };
+    this.state = { isLoading: true, isCompact: false, searchTerm: '', activeFilters: {} };
   }
 
   public async componentDidMount() {
@@ -152,17 +152,39 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         itemType: ContextualMenuItemType.Header,
         subMenuProps: {
           items: [
+            {
+              key: 'List',
+              name: 'Liste',
+              iconProps: { iconName: 'List' },
+              canCheck: true,
+              checked: !this.state.isCompact,
+              disabled: true,
+            },
+            {
+              key: 'CompactList',
+              name: 'Kompakt liste',
+              iconProps: { iconName: 'AlignLeft' },
+              canCheck: true,
+              checked: this.state.isCompact,
+              disabled: true,
+            },
+            {
+              key: 'divider_0',
+              itemType: ContextualMenuItemType.Divider,
+            },
             ...this.props.configuration.views.map(v => ({
               key: `${v.id}`,
               name: v.title,
               iconProps: { iconName: v.iconName },
+              canCheck: true,
+              checked: v.id === this.state.currentView.id,
               onClick: (event: any) => {
                 event.preventDefault();
                 this.onChangeView(v);
               },
-            })),
+            } as IContextualMenuItem)),
             {
-              key: 'divider_0',
+              key: 'divider_1',
               itemType: ContextualMenuItemType.Divider,
             },
             {
@@ -217,7 +239,8 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           groups={data.groups}
           selectionMode={SelectionMode.none}
           onRenderItemColumn={(item, _index, column: PortfolioOverviewColumn) => renderItemColumn(item, column, state => this.setState(state))}
-          onColumnHeaderClick={this.onColumnSort.bind(this)} />
+          onColumnHeaderClick={this.onColumnSort.bind(this)}
+          compact={this.state.isCompact} />
       </div>
     );
   }

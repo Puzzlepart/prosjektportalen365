@@ -18,4 +18,4 @@ export interface IPortfolioOverviewState {
     groupBy?: PortfolioOverviewColumn;
     sortBy?: PortfolioOverviewColumn;
     showProjectInfo?: SearchResult;
-}
+    isCompact?: boolean;
