@@ -142,7 +142,7 @@ export class DataAdapter {
                 refiners,
                 views,
                 viewNewFormUrl: makeUrlAbsolute(spItems[3].DefaultNewFormUrl),
-                viewEditFormUrl: makeUrlAbsolute(spItems[3].DefaultNewFormUrl),
+                viewEditFormUrl: makeUrlAbsolute(spItems[3].DefaultEditFormUrl),
             };
             return config;
         } catch (error) {
