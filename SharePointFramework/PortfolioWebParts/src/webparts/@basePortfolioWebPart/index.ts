@@ -39,7 +39,9 @@ export class BasePortfolioWebPart<P extends IBaseComponentProps> extends BaseCli
         Logger.subscribe(new ConsoleListener());
         Logger.activeLogLevel = activeLogLevel;
         moment.locale(locale);
-        this.__title = (await sp.web.lists.getById(this.context.pageContext.list.id.toString()).items.getById(this.context.pageContext.listItem.id).select('Title').get<{ Title: string }>()).Title;
+        try {
+            this.__title = (await sp.web.lists.getById(this.context.pageContext.list.id.toString()).items.getById(this.context.pageContext.listItem.id).select('Title').get<{ Title: string }>()).Title;
+        } catch (error) { }
     }
 
     protected async onInit(): Promise<void> {
