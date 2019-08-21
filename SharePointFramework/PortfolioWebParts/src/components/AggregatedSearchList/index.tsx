@@ -1,6 +1,6 @@
 import { sp } from '@pnp/sp';
-import { getObjectValue, isHubSite } from '@Shared/helpers';
-import { DataSourceService, ExcelExportService } from '@Shared/services';
+import { getObjectValue, isHubSite } from 'shared/lib/helpers';
+import { DataSourceService, ExcelExportService } from 'shared/lib/services';
 import * as moment from 'moment';
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
 import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';

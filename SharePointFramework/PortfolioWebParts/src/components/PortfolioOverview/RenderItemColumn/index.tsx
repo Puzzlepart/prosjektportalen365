@@ -1,5 +1,5 @@
 import { SearchResult } from '@pnp/sp';
-import { formatDate, tryParseCurrency } from '@Shared/helpers';
+import { formatDate, tryParseCurrency } from 'shared/lib/helpers';
 import { PortfolioOverviewColumn } from 'models';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import * as React from 'react';

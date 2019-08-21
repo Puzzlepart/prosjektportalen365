@@ -1,4 +1,4 @@
-import { getObjectValue } from '@Shared/helpers';
+import { getObjectValue } from 'shared/lib/helpers';
 import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from 'models';
 import * as React from 'react';
 import { AggregatedSearchList } from '../';

@@ -1,6 +1,6 @@
 {
-    "name": "prosjektportalen-spfx-shared",
-    "version": "0.0.1",
+    "name": "shared",
+    "version": "0.5.0",
     "description": "Shared utilities, helpers and models",
     "main": "index.js",
     "scripts": {

@@ -1,5 +1,5 @@
 {
-    "name": "project-extensions",
+    "name": "projectextensions",
     "version": "0.10.1",
     "private": true,
     "engines": {
@@ -19,7 +19,8 @@
         "postversion": "gulp version-sync",
         "patchVersion": "npm version patch",
         "minorVersion": "npm version minor",
-        "majorVersion": "npm version major"
+        "majorVersion": "npm version major",
+        "gitPushChanges": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ../../scripts/Git-PushChanges.ps1 -Prefix ProjectExtensions"
     },
     "dependencies": {
         "@microsoft/decorators": "1.8.2",

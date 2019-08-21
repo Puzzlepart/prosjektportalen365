@@ -22,7 +22,12 @@
                 "default": " "
             },
             "officeFabricIconFontName": "PivotChart",
-            "properties": {}
+            "properties": {
+                "chartConfigurationListName": "Grafkonfigurasjon",
+                "columnConfigListName": "Prosjektkolonnekonfigurasjon",
+                "columnsListName": "Prosjektkolonner",
+                "viewsListName": "Porteføljevisninger"
+            }
         }
     ]
 }

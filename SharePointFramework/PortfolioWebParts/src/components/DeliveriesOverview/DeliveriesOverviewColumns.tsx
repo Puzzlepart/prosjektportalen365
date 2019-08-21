@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as strings from 'PortfolioWebPartsStrings';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import { formatDate } from '@Shared/helpers';
+import { formatDate } from 'shared/lib/helpers';
 
 export const DeliveriesOverviewColumns: IColumn[] = [
     {

@@ -1,6 +1,6 @@
 import { sp } from '@pnp/sp';
-import { tryParsePercentage } from '@Shared/helpers';
-import { DataSourceService } from '@Shared/services';
+import { tryParsePercentage } from 'shared/lib/helpers';
+import { DataSourceService } from 'shared/lib/services';
 import * as moment from 'moment';
 import * as objectGet from 'object-get';
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';

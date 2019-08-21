@@ -2,7 +2,7 @@ import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { dateAdd } from '@pnp/common';
 import { QueryPropertyValueType, SearchResults, SortDirection, sp } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
-import { getObjectValue, makeUrlAbsolute } from '@Shared/helpers';
+import { getObjectValue, makeUrlAbsolute } from 'shared/lib/helpers';
 import * as cleanDeep from 'clean-deep';
 import { IGraphGroup, IPortfolioOverviewConfiguration, ISPProjectItem, ISPUser } from 'interfaces';
 import { ChartConfiguration, ChartData, ChartDataItem, DataField, PortfolioOverviewColumn, PortfolioOverviewView, ProjectListModel, SPChartConfigurationItem, SPContentType, SPPortfolioOverviewColumnItem, SPPortfolioOverviewViewItem, SPProjectColumnConfigItem } from 'models';

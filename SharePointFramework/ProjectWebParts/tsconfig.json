@@ -29,9 +29,6 @@
     ],
     "baseUrl": "src",
     "paths": {
-      "@Shared/*": [
-        "../../@Shared/lib/*"
-      ],
       "components": [
         "components"
       ],

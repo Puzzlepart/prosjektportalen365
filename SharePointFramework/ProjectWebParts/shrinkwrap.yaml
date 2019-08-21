@@ -25,6 +25,7 @@ dependencies:
   react-dom: 16.7.0
   react-image-fade-in: 1.0.2
   react-scroll: 1.7.12
+  shared: 'link:../@Shared'
   sp-entityportal-service: 0.7.5
   sp-hubsite-service: 0.4.0
   spfx-jsom: 0.6.0
@@ -11574,6 +11575,7 @@ specifiers:
   react-dom: 16.7.0
   react-image-fade-in: ^1.0.2
   react-scroll: ^1.7.11
+  shared: 'link:..\@Shared'
   sp-entityportal-service: ^0.7.5
   sp-hubsite-service: ^0.4.0
   spfx-jsom: ^0.6.0

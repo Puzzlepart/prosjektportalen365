@@ -1,5 +1,5 @@
 {
-    "name": "prosjektportalen-spfx-projectwebparts",
+    "name": "projectwebparts",
     "version": "0.9.3",
     "private": true,
     "engines": {
@@ -17,7 +17,8 @@
         "postversion": "gulp version-sync",
         "patchVersion": "npm version patch",
         "minorVersion": "npm version minor",
-        "majorVersion": "npm version major"
+        "majorVersion": "npm version major",
+        "gitPushChanges": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ../../scripts/Git-PushChanges.ps1 -Prefix ProjectWebParts"
     },
     "dependencies": {
         "@microsoft/sp-core-library": "1.8.2",
@@ -46,6 +47,7 @@
         "react-dom": "16.7.0",
         "react-image-fade-in": "^1.0.2",
         "react-scroll": "^1.7.11",
+        "shared": "link:..\\@Shared",
         "sp-entityportal-service": "^0.7.5",
         "sp-hubsite-service": "^0.4.0",
         "spfx-jsom": "^0.6.0",

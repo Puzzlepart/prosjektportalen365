@@ -3,7 +3,7 @@ import * as strings from 'PortfolioWebPartsStrings';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import BenefitMeasurementsModal from './BenefitMeasurementsModal';
 import { IBenefitsOverviewProps } from './IBenefitsOverviewProps';
-import { getObjectValue } from '@Shared/helpers';
+import { getObjectValue } from 'shared/lib/helpers';
 import { BenefitMeasurementIndicator } from 'models';
 import BenefitMeasurementAchievement from './BenefitMeasurementAchievement';
 

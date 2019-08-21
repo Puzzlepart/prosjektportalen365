@@ -79,6 +79,6 @@
   "localizedResources": {
     "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js",
     "PortfolioWebPartsStrings": "lib/loc/{locale}.js",
-    "ProjectWebPartsStrings": "../ProjectWebParts/lib/loc/{locale}.js"
+    "ProjectWebPartsStrings": "node_modules/projectwebparts/lib/loc/{locale}.js"
   }
 }

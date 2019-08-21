@@ -1,5 +1,5 @@
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
-import { parseUrlHash, setUrlHash } from '@Shared/util';
+import { parseUrlHash, setUrlHash } from 'shared/lib/util';
 import * as arraySort from 'array-sort';
 import * as arrayUnique from 'array-unique';
 import { IPortfolioOverviewConfiguration } from 'interfaces';
@@ -12,7 +12,7 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'PortfolioWebPartsStrings';
-import { ProjectInformationModal } from 'ProjectWebParts/lib/components/ProjectInformation';
+import { ProjectInformationModal } from 'projectwebparts/lib/components/ProjectInformation';
 import * as React from 'react';
 import * as format from 'string-format';
 import { FilterPanel, IFilterItemProps, IFilterProps } from '../';

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as strings from 'PortfolioWebPartsStrings';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import { tryParseInt } from '@Shared/helpers';
+import { tryParseInt } from 'shared/lib/helpers';
 
 const onRenderLink = (item: any) => <a href={item.SPWebUrl} target='_blank'>{item.SiteTitle}</a>;
 const onRenderNumber = (item: any, _index: number, column: IColumn) => tryParseInt(item[column.fieldName], '');

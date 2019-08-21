@@ -22,9 +22,7 @@
                 "default": " "
             },
             "officeFabricIconFontName": "FolderList",
-            "properties": {
-                "description": "PortfolioOverview"
-            }
+            "properties": {}
         }
     ]
 }

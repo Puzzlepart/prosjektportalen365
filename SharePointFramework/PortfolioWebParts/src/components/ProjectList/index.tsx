@@ -1,4 +1,4 @@
-import { getObjectValue, sortAlphabetically } from '@Shared/helpers';
+import { getObjectValue, sortAlphabetically } from 'shared/lib/helpers';
 import { ProjectListModel } from 'models';
 import MSGraph from 'msgraph-helper';
 import { IButtonProps } from 'office-ui-fabric-react/lib/Button';
@@ -8,7 +8,7 @@ import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import * as strings from 'PortfolioWebPartsStrings';
-import { ProjectInformationModal } from 'ProjectWebParts/lib/components/ProjectInformation';
+import { ProjectInformationModal } from 'projectwebparts/lib/components/ProjectInformation';
 import * as React from 'react';
 import { IProjectListProps, ProjectListDefaultProps } from './IProjectListProps';
 import { IProjectListState } from './IProjectListState';

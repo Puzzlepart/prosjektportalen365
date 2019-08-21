@@ -1,5 +1,5 @@
 import { ITerm, ITermData } from '@pnp/sp-taxonomy';
-import { getUserPhoto } from '@Shared/helpers';
+import { getUserPhoto } from 'shared/lib/helpers';
 import { ISPUser } from 'interfaces';
 import { IPersonaSharedProps } from 'office-ui-fabric-react/lib/Persona';
 

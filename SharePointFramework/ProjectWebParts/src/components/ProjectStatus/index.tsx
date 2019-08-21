@@ -2,7 +2,7 @@ import { PageContext } from '@microsoft/sp-page-context';
 import { dateAdd } from "@pnp/common";
 import { Logger, LogLevel } from '@pnp/logging';
 import { List } from '@pnp/sp';
-import { formatDate } from '@Shared/helpers';
+import { formatDate } from 'shared/lib/helpers';
 import { ProjectStatusReport, SectionModel } from 'models';
 import { SectionType } from 'models/SectionModel';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';

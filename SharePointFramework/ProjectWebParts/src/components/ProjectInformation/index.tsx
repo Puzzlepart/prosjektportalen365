@@ -2,7 +2,7 @@ import { DisplayMode } from '@microsoft/sp-core-library';
 import { dateAdd } from '@pnp/common';
 import { ICachingOptions } from '@pnp/odata';
 import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
-import { HubConfigurationService } from '@Shared/services';
+import { HubConfigurationService } from 'shared/lib/services';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';

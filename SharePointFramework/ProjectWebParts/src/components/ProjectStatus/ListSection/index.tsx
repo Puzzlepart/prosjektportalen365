@@ -3,7 +3,7 @@ import { DetailsList, DetailsListLayoutMode, IColumn, SelectionMode } from 'offi
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
-import { getObjectValue } from '@Shared/helpers';
+import { getObjectValue } from 'shared/lib/helpers';
 import StatusSectionBase from '../@StatusSectionBase';
 import StatusElement from '../StatusElement';
 import { IListSectionData } from './IListSectionData';
