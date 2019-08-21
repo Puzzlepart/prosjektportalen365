@@ -393,8 +393,6 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
       const viewIdUrlParam = new UrlQueryParameterCollection(document.location.href).getValue('viewId');
       let currentView = this.props.defaultView;
 
-      console.log(viewIdUrlParam, hashState, this.props);
-
       if (viewIdUrlParam) {
         [currentView] = this.props.configuration.views.filter(qc => qc.id === parseInt(viewIdUrlParam, 10));
         if (!currentView) {
