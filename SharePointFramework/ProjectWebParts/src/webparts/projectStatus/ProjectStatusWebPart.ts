@@ -33,8 +33,4 @@ export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProject
     });
     ReactDom.render(element, this.domElement);
   }
-
-  protected onDispose(): void {
-    ReactDom.unmountComponentAtNode(this.domElement);
-  }
 }

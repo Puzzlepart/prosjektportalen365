@@ -23,7 +23,7 @@ export default class ProjectInformationWebPart extends BaseClientSideWebPart<IPr
       ProjectInformation,
       {
         ...this.properties,
-        title: this.title,
+        title: this.properties.title || this.title,
         hubSiteUrl: this.hubSite.url,
         siteId: this.context.pageContext.site.id.toString(),
         webUrl: this.context.pageContext.web.absoluteUrl,

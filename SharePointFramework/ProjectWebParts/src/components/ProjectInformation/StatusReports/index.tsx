@@ -18,7 +18,7 @@ export class StatusReports extends React.Component<IStatusReportsProps, {}> {
     constructor(props: IStatusReportsProps) {
         super(props);
     }
-    
+
     public render(): React.ReactElement<IStatusReportsProps> {
         return (
             <div className={styles.statusReports} hidden={this.props.hidden}>
@@ -30,7 +30,7 @@ export class StatusReports extends React.Component<IStatusReportsProps, {}> {
                     {this.props.statusReports.map((report, idx) => (
                         <li className={styles.item} key={idx}>
                             <ActionButton
-                                href={format(this.props.urlTemplate, report.Id.toString())}
+                                href={this.getUrl(report.Id.toString())}
                                 text={formatDate(report.Created, true)}
                                 iconProps={{ iconName: this.props.iconName }} />
                         </li>
@@ -38,6 +38,15 @@ export class StatusReports extends React.Component<IStatusReportsProps, {}> {
                 </ul>
             </div>
         );
+    }
+
+    /**
+     * Get url for report
+     * 
+     * @param {string} id Id
+     */
+    protected getUrl(id: string) {
+        return format(this.props.urlTemplate, id) + '&Source=' + this.props.urlSourceParam;
     }
 }
 
