@@ -38,7 +38,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   public render(): React.ReactElement<IProjectInformationProps> {
     return (
       <div className={styles.projectInformation}>
-        <div className={styles.container} style={this.generateStyle()}>
+        <div className={styles.container} style={this.generateStyle(this.props)}>
           <WebPartTitle
             displayMode={DisplayMode.Read}
             title={this.props.title}
@@ -115,12 +115,17 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     }
   }
 
-  private generateStyle() {
+  /**
+   * Generate styles based on props
+   * 
+   * @param {IProjectInformationProps} param0 Props
+   */
+  private generateStyle({ boxLayout, boxType, boxBackgroundColor }: IProjectInformationProps) {
     let style: React.CSSProperties = {};
-    if (this.props.boxLayout && this.props.boxType) {
+    if (boxLayout && boxType) {
       style.padding = 20;
-      style.backgroundColor = this.props.boxBackgroundColor || '#FFF';
-      switch (this.props.boxType) {
+      style.backgroundColor = boxBackgroundColor || '#FFF';
+      switch (boxType) {
         case '1': {
           style.boxShadow = '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)';
         }
