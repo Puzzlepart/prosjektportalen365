@@ -1,27 +1,28 @@
+import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
 import { PageContext } from '@microsoft/sp-page-context';
 import { dateAdd } from "@pnp/common";
 import { Logger, LogLevel } from '@pnp/logging';
 import { List } from '@pnp/sp';
-import { formatDate } from 'shared/lib/helpers';
 import { ProjectStatusReport, SectionModel } from 'models';
 import { SectionType } from 'models/SectionModel';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
+import { formatDate } from 'shared/lib/helpers';
+import { parseUrlHash, setUrlHash } from 'shared/lib/util';
 import * as format from 'string-format';
 import { IStatusSectionBaseProps } from './@StatusSectionBase/IStatusSectionBaseProps';
 import { IProjectStatusData } from "./IProjectStatusData";
 import { IProjectStatusProps } from './IProjectStatusProps';
-import { IProjectStatusState, IProjectStatusHashState } from './IProjectStatusState';
+import { IProjectStatusHashState, IProjectStatusState } from './IProjectStatusState';
 import ListSection from './ListSection';
 import ProjectPropertiesSection from './ProjectPropertiesSection';
 import styles from './ProjectStatus.module.scss';
 import StatusSection from './StatusSection';
 import SummarySection from './SummarySection';
-import { parseUrlHash, setUrlHash } from 'shared/lib/util';
 
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private _reportList: List;
@@ -48,10 +49,13 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     }
     try {
       const data = await this.fetchData(this.props.pageContext);
-      const hashState = parseUrlHash<IProjectStatusHashState>(true);
       let selectedReport = data.reports[0];
-      if (hashState.selectedreport) {
-        [selectedReport] = data.reports.filter(report => report.id === parseInt(hashState.selectedreport, 10));
+      const hashState = parseUrlHash<IProjectStatusHashState>();
+      const selectedReportUrlParam = new UrlQueryParameterCollection(document.location.href).getValue('selectedReport');
+      if (hashState.selectedReport) {
+        [selectedReport] = data.reports.filter(report => report.id === parseInt(hashState.selectedReport, 10));
+      } else if (selectedReportUrlParam) {
+        [selectedReport] = data.reports.filter(report => report.id === parseInt(selectedReportUrlParam, 10));
       }
       this.setState({ data, selectedReport, sourceUrl: decodeURIComponent(hashState.source || ''), isLoading: false });
     } catch (error) {
@@ -62,7 +66,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   public componentWillUpdate(_: IProjectStatusProps, { selectedReport }: IProjectStatusState) {
     let obj: IProjectStatusHashState = {};
     if (selectedReport) {
-      obj.selectedreport = selectedReport.id.toString();
+      obj.selectedReport = selectedReport.id.toString();
     }
     setUrlHash<IProjectStatusHashState>(obj);
   }

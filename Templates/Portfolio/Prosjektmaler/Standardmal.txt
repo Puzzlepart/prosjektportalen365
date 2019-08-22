@@ -641,7 +641,7 @@
                                         "statusReportsCount": 0,
                                         "statusReportsHeader": "Prosjektstatus",
                                         "statusReportsListName": "Prosjektstatus",
-                                        "statusReportsLinkUrlTemplate": "SitePages/Prosjektstatus.aspx#selectedreport={0}",
+                                        "statusReportsLinkUrlTemplate": "SitePages/Prosjektstatus.aspx?selectedReport={0}",
                                         "filterField": "GtShowFieldFrontpage",
                                         "entity": {
                                             "listName": "Prosjekter",

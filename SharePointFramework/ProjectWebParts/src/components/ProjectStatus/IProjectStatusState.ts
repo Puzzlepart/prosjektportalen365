@@ -13,6 +13,6 @@ export interface IProjectStatusState {
 }
 
 export interface IProjectStatusHashState {
-    selectedreport?: string;
+    selectedReport?: string;
     source?: string;
 }
