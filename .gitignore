@@ -3,3 +3,4 @@ SiteScripts/temp
 SiteScripts/config/env.json
 Release
 Scripts
+node_modules
