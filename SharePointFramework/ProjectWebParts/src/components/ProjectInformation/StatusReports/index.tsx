@@ -46,7 +46,7 @@ export class StatusReports extends React.Component<IStatusReportsProps, {}> {
      * @param {string} id Id
      */
     protected getUrl(id: string) {
-        return format(this.props.urlTemplate, id) + '&Source=' + this.props.urlSourceParam;
+        return format(this.props.urlTemplate, id) + '&Source=' + encodeURIComponent(this.props.urlSourceParam);
     }
 }
 

@@ -59,7 +59,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       } else if (selectedReportUrlParam) {
         [selectedReport] = data.reports.filter(report => report.id === parseInt(selectedReportUrlParam, 10));
       }
-      this.setState({ data, selectedReport, sourceUrl: decodeURIComponent(hashState.source || sourceUrlParam || ''), isLoading: false });
+      this.setState({ data, selectedReport, sourceUrl: decodeURIComponent(sourceUrlParam || ''), isLoading: false });
     } catch (error) {
       this.setState({ error, isLoading: false });
     }

@@ -14,5 +14,4 @@ export interface IProjectStatusState {
 
 export interface IProjectStatusHashState {
     selectedReport?: string;
-    source?: string;
 }

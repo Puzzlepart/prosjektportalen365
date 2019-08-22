@@ -47,7 +47,7 @@ export function renderItemColumn(item: SearchResult, column: PortfolioOverviewCo
             return (
                 <span>
                     <a href={item.Path} target='_blank'>{colValue}</a>
-                    <a href='#' style={{ marginLeft: 8 }} onClick={_ => { onUpdateState({ showProjectInfo: item }); }}> <Icon iconName='OpenInNewWindow' /></a>
+                    <span style={{ cursor: 'pointer', marginLeft: 8 }} onClick={_ => { onUpdateState({ showProjectInfo: item }); }}> <Icon iconName='OpenInNewWindow' /></span>
                 </span >
             );
         }

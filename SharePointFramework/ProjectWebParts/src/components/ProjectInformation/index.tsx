@@ -71,7 +71,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
           title={this.props.statusReportsHeader}
           statusReports={this.state.data.statusReports}
           urlTemplate={`${this.state.data.itemSiteUrl}/${this.props.statusReportsLinkUrlTemplate}`}
-          urlSourceParam={decodeURIComponent(document.location.href)}
+          urlSourceParam={document.location.href}
           hidden={this.props.statusReportsCount === 0} />
         <div className={styles.actions} hidden={this.props.hideActions || !this.props.isSiteAdmin}>
           <div>
