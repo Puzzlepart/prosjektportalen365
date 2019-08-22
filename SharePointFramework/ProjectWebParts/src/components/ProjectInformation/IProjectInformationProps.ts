@@ -9,8 +9,9 @@ export interface IProjectInformationProps {
   isSiteAdmin?: boolean;
   filterField: string;
   hideActions?: boolean;
+  boxLayout?: boolean;
+  boxBackgroundColor?: string;
+  boxType?: string;
 }
 
-export const ProjectInformationDefaultProps: Partial<IProjectInformationProps> = {
-  title: 'Prosjektinformasjon',
-};
+export const ProjectInformationDefaultProps: Partial<IProjectInformationProps> = {};

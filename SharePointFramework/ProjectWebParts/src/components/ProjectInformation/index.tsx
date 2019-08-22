@@ -38,7 +38,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   public render(): React.ReactElement<IProjectInformationProps> {
     return (
       <div className={styles.projectInformation}>
-        <div className={styles.container}>
+        <div className={styles.container} style={this.generateStyle()}>
           <WebPartTitle
             displayMode={DisplayMode.Read}
             title={this.props.title}
@@ -60,7 +60,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
       return <MessageBar messageBarType={MessageBarType.error}>{format(strings.ErrorText, 'prosjektinformasjon')}</MessageBar>;
     }
     return (
-      <div>
+      <React.Fragment>
         {this.renderProperties()}
         <div className={styles.actions} hidden={this.props.hideActions || !this.props.isSiteAdmin}>
           <div>
@@ -86,7 +86,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
               style={{ width: 250 }} />
           </div>
         </div>
-      </div >
+      </React.Fragment>
     );
   }
 
@@ -113,6 +113,37 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     } else {
       return null;
     }
+  }
+
+  private generateStyle() {
+    let style: React.CSSProperties = {};
+    if (this.props.boxLayout && this.props.boxType) {
+      style.padding = 20;
+      style.backgroundColor = this.props.boxBackgroundColor || '#FFF';
+      switch (this.props.boxType) {
+        case '1': {
+          style.boxShadow = '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)';
+        }
+          break;
+        case '2': {
+          style.boxShadow = '0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)';
+        }
+          break;
+        case '3': {
+          style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23)';
+        }
+          break;
+        case '4': {
+          style.boxShadow = '0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22)';
+        }
+          break;
+        case '5': {
+          style.boxShadow = '0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22)';
+        }
+          break;
+      }
+    }
+    return style;
   }
 
   /**
