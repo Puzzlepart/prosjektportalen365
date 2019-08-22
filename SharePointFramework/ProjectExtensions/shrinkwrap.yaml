@@ -22,9 +22,10 @@ dependencies:
   office-ui-fabric-react: 6.201.1
   react: 16.7.0
   react-dom: 16.7.0
-  sp-entityportal-service: 0.6.14
+  shared: 'link:../@Shared'
+  sp-entityportal-service: 0.8.1
   sp-hubsite-service: 0.4.1
-  sp-js-provisioning: 0.10.7
+  sp-js-provisioning: 1.0.0
   spfx-jsom: 0.6.4
   string-format: 2.0.0
 devDependencies:
@@ -37,6 +38,7 @@ devDependencies:
   '@types/mocha': 2.2.38
   '@types/sharepoint': 2016.1.3
   ajv: 5.2.5
+  find: 0.3.0
   gulp: 3.9.1
   spfx-pkgdeploy: 0.3.0
 packages:
@@ -4396,6 +4398,12 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-1yD6RmLI1XBfxugvORwlck6f75tYL+iR0jqwsOrOxMZyGYqUuDhJ0l4AXdO1iX/FTs9cBAMEk1gWSEx1kSbylg==
+  /find/0.3.0:
+    dependencies:
+      traverse-chain: 0.1.0
+    dev: true
+    resolution:
+      integrity: sha512-iSd+O4OEYV/I36Zl8MdYJO0xD82wH528SaCieTVHhclgiYNe9y+yPKSwK+A7/WsmHL1EZ+pYUJBXWTL5qofksw==
   /findup-sync/2.0.0:
     dependencies:
       detect-file: 1.0.0
@@ -10013,7 +10021,7 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
-  /sp-entityportal-service/0.6.14:
+  /sp-entityportal-service/0.8.1:
     dependencies:
       '@microsoft/sp-page-context': 1.9.1
       '@pnp/common': 1.3.5
@@ -10022,7 +10030,7 @@ packages:
       '@pnp/sp': /@pnp/sp/1.3.5/dc5fa9a80ecec546cf0c17918380c33f
     dev: false
     resolution:
-      integrity: sha512-nrMbd1f0r3aJov/oBNtRqSbae/2vfSKU+dhFXUlys3Bbft6H4V8x+gIx8E33C9rINF/qrajbEg6SXpvXJLhTug==
+      integrity: sha512-fx/hWBfywlOVgFc0K/BEnE5aPrjgmKQvaArvwp4y6Za2Gcivxtw0vpSfjKRQzn/BgQUZlsDwzHcWs3vW2Je3TQ==
   /sp-hubsite-service/0.4.1:
     dependencies:
       '@microsoft/sp-page-context': 1.9.1
@@ -10033,7 +10041,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-MCDakFnS4iUfPRx4+HcZlNmSdMOsMRiMsM6vgsZYa9HYNXTqhxdHt+cLK5as56tBmvR/9ik5yt2bl7I/OjsoIw==
-  /sp-js-provisioning/0.10.7:
+  /sp-js-provisioning/1.0.0:
     dependencies:
       '@pnp/common': 1.3.5
       '@pnp/logging': 1.3.5
@@ -10046,7 +10054,7 @@ packages:
       xml-js: 1.6.11
     dev: false
     resolution:
-      integrity: sha512-6SpFCj1rqzHFz+ECx9N0CwhgYy1AeVdU+Xmnwq0odErI4y3594j1EgvcbUiqqpfNDtAoi2euMA5g5NLwXwRZrw==
+      integrity: sha512-ommansgtF00RWJzpyqxTZ9aPXpl/4He5IwWgrl0OsynrZi2+qYeag9VOyNz7MRawyj3oDFgXGEJhfvdz2MkGrg==
   /sp-pnp-js/3.0.10:
     dependencies:
       '@microsoft/microsoft-graph-types': 1.1.0
@@ -10783,6 +10791,10 @@ packages:
     dev: true
     resolution:
       integrity: sha1-qLE/1r/SSJUZZ0zN5VujaTtwbQk=
+  /traverse-chain/0.1.0:
+    dev: true
+    resolution:
+      integrity: sha1-YdvC1Ttp/2CRoSoWj9fUMxB+QPE=
   /trim-newlines/1.0.0:
     dev: true
     engines:
@@ -11875,14 +11887,16 @@ specifiers:
   '@types/sharepoint': ^2016.1.2
   '@types/webpack-env': 1.13.1
   ajv: ~5.2.2
+  find: ^0.3.0
   gulp: ~3.9.1
   msgraph-helper: ^0.7.1
   office-ui-fabric-react: ^6.200.0
   react: 16.7.0
   react-dom: 16.7.0
-  sp-entityportal-service: ^0.6.10
+  shared: 'link:..\@Shared'
+  sp-entityportal-service: ^0.8.1
   sp-hubsite-service: ^0.4.1
-  sp-js-provisioning: ^0.10.7
+  sp-js-provisioning: ^1.0.0
   spfx-jsom: ^0.6.4
   spfx-pkgdeploy: ^0.3.0
   string-format: ^2.0.0
