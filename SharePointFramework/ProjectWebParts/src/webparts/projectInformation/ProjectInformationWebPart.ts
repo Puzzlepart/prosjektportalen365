@@ -75,12 +75,12 @@ export default class ProjectInformationWebPart extends BaseClientSideWebPart<IPr
                 PropertyPaneTextField('statusReportsHeader', {
                   label: strings.StatusReportsHeaderLabel,
                 }),
-                PropertyPaneTextField('reportListName', {
-                  label: strings.ReportListNameLabel,
+                PropertyPaneTextField('statusReportsListName', {
+                  label: strings.StatusReportsListNameLabel,
                   disabled: true,
                 }),
-                PropertyPaneTextField('reportLinkUrlTemplate', {
-                  label: strings.ReportLinkUrlLabel,
+                PropertyPaneTextField('statusReportsLinkUrlTemplate', {
+                  label: strings.StatusReportsLinkUrlTemplateLabel,
                 }),
               ],
             },

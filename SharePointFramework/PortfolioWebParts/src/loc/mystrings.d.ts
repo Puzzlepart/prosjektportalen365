@@ -1,4 +1,6 @@
 declare interface IPortfolioWebPartsStrings {
+  AdvancedGroupName: string;
+  StatusReportsListNameLabel: string;
   ActorsLabel: string;
   BasicGroupName: string;
   BenefitResponsibleLabel: string;
@@ -54,9 +56,9 @@ declare interface IPortfolioWebPartsStrings {
   ProbabilityLabel: string;
   ProbabilityPostActionLabel: string;
   ProjectInfoFilterFieldLabel: string;
-  ProjectInfoStatusReportsLinkUrlTemplateLabel: string;
+  StatusReportsLinkUrlTemplateLabel: string;
   ProjectInformationGroupName: string;
-  ProjectInfoStatusReportsCountLabel: string;
+  StatusReportsCountLabel: string;
   ProjectLinkText: string;
   ProjectManager: string;
   ProjectOwner: string;

@@ -5,5 +5,6 @@ export interface IProjectInformationData {
   editFormUrl?: string;
   versionHistoryUrl?: string;
   itemId?: number;
+  itemSiteUrl?: string;
   statusReports?: { Id: number, Created: string }[];
 }

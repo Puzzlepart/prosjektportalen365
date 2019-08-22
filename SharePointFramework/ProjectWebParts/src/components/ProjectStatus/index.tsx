@@ -38,7 +38,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       isLoading: true,
       newStatusCreated: document.location.hash === '#NewStatus',
     };
-    this._reportList = props.hubSite.web.lists.getByTitle(this.props.reportListName);
+    this._reportList = props.hubSite.web.lists.getByTitle(this.props.statusReportsListName);
     this._sectionsList = props.hubSite.web.lists.getByTitle(this.props.sectionsListName);
   }
 

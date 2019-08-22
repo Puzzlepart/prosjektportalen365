@@ -14,11 +14,11 @@ export interface IProjectInformationProps {
   boxType?: string;
   statusReportsHeader?: string;
   statusReportsCount?: number;
-  reportListName?: string;
-  reportLinkUrlTemplate?: string;
+  statusReportsListName?: string;
+  statusReportsLinkUrlTemplate?: string;
 }
 
 export const ProjectInformationDefaultProps: Partial<IProjectInformationProps> = {
-  reportLinkUrlTemplate: '',
+  statusReportsLinkUrlTemplate: '',
   statusReportsCount: 0,
 };

@@ -59,9 +59,9 @@ define([], function () {
     WebPartNotConfiguredMessage: 'Webdelen er ikke konfigurert riktig. Du må angi webpartegenskaper riktig.',
     Yes: 'Ja',
     StatusReportsHeaderLabel: 'Overskrift',
-    ReportListNameLabel: 'Listenavn for statusrapporter',
+    StatusReportsListNameLabel: 'Listenavn for statusrapporter',
     StatusReportsCountLabel: 'Antal rapporter å vise',
-    ReportLinkUrlLabel: 'Lenke for knapp',
+    StatusReportsLinkUrlTemplateLabel: 'Lenke for knapp',
     ProjectStatusGroupName: 'Prosjektstatus',
     NavigateToSourceUrlText: 'Gå tilbake',
   }

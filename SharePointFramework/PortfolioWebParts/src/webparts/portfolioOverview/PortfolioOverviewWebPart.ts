@@ -1,23 +1,27 @@
-import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle, PropertyPaneDropdown, IPropertyPaneDropdownOption, PropertyPaneSlider } from '@microsoft/sp-webpart-base';
+import { IPropertyPaneConfiguration, IPropertyPaneDropdownOption, PropertyPaneDropdown, PropertyPaneSlider, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
 import { IPortfolioOverviewProps, PortfolioOverview } from 'components';
+import { IPortfolioOverviewConfiguration } from 'interfaces';
 import * as strings from 'PortfolioWebPartsStrings';
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
-import { IPortfolioOverviewConfiguration } from 'interfaces';
+import { ConstrainMode, DetailsListLayoutMode } from 'office-ui-fabric-react/lib/DetailsList';
 
 export const PropertyPaneConfigurationProps = {
   COLUMN_CONFIG_LISTNAME: 'columnConfigListName',
   COLUMNS_LISTNAME: 'columnsListName',
   DEFAULT_VIEW_ID: 'defaultViewId',
   PROJECTINFO_FILTER_FIELD: 'projectInfoFilterField',
-  PROJECTINFO_STATUSREPORTS_COUNT: 'projectInfoStatusReportsCount',
-  PROJECTINFO_STATUSREPORTS_LINKURL_TEMPLATE: 'projectInfoStatusReportsLinkUrlTemplate',
+  STATUSREPORTS_COUNT: 'statusReportsCount',
+  STATUSREPORTS_LINKURLTEMPLATE: 'statusReportsLinkUrlTemplate',
+  STATUSREPORTS_LISTNAME: 'statusReportsListName',
   SHOW_COMMANDBAR: 'showCommandBar',
   SHOW_EXCELEXPORT_BUTTON: 'showExcelExportButton',
   SHOW_FILTERS: 'showFilters',
   SHOW_GROUPBY: 'showGroupBy',
   SHOW_SEARCH_BOX: 'showSearchBox',
   SHOW_VIEWSELECTOR: 'showViewSelector',
-  VIEWS_LISTNAME: 'viewsListName'
+  VIEWS_LISTNAME: 'viewsListName',
+  CONSTRAIN_MODE: 'constrainMode',
+  LAYOUT_MODE: 'layoutMode'
 };
 
 export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPortfolioOverviewProps> {
@@ -51,6 +55,30 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
         }
       }
         break;
+      case PropertyPaneConfigurationProps.CONSTRAIN_MODE: {
+        return [
+          {
+            key: ConstrainMode.horizontalConstrained,
+            text: 'horizontalConstrained',
+          },
+          {
+            key: ConstrainMode.unconstrained,
+            text: 'unconstrained',
+          }
+        ];
+      }
+      case PropertyPaneConfigurationProps.LAYOUT_MODE: {
+        return [
+          {
+            key: DetailsListLayoutMode.fixedColumns,
+            text: 'fixedColumns',
+          },
+          {
+            key: DetailsListLayoutMode.justified,
+            text: 'justified',
+          }
+        ];
+      }
     }
     return [];
   }
@@ -79,14 +107,17 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                   label: strings.ProjectInfoFilterFieldLabel,
                   options: this.getOptions(PropertyPaneConfigurationProps.PROJECTINFO_FILTER_FIELD),
                 }),
-                PropertyPaneSlider(PropertyPaneConfigurationProps.PROJECTINFO_STATUSREPORTS_COUNT, {
-                  label: strings.ProjectInfoStatusReportsCountLabel,
+                PropertyPaneTextField(PropertyPaneConfigurationProps.STATUSREPORTS_LISTNAME, {
+                  label: strings.StatusReportsListNameLabel,
+                }),
+                PropertyPaneSlider(PropertyPaneConfigurationProps.STATUSREPORTS_COUNT, {
+                  label: strings.StatusReportsCountLabel,
                   min: 0,
                   max: 10,
                   step: 1,
                 }),
-                PropertyPaneTextField(PropertyPaneConfigurationProps.PROJECTINFO_STATUSREPORTS_LINKURL_TEMPLATE, {
-                  label: strings.ProjectInfoStatusReportsLinkUrlTemplateLabel,
+                PropertyPaneTextField(PropertyPaneConfigurationProps.STATUSREPORTS_LINKURLTEMPLATE, {
+                  label: strings.StatusReportsLinkUrlTemplateLabel,
                 }),
               ]
             },
@@ -125,6 +156,19 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                 }),
                 PropertyPaneTextField(PropertyPaneConfigurationProps.VIEWS_LISTNAME, {
                   label: strings.ViewsListNameLabel,
+                }),
+              ]
+            },
+            {
+              groupName: strings.AdvancedGroupName,
+              groupFields: [
+                PropertyPaneDropdown(PropertyPaneConfigurationProps.CONSTRAIN_MODE, {
+                  label: 'ConstrainMode',
+                  options: this.getOptions(PropertyPaneConfigurationProps.CONSTRAIN_MODE),
+                }),
+                PropertyPaneDropdown(PropertyPaneConfigurationProps.LAYOUT_MODE, {
+                  label: 'DetailsListLayoutMode',
+                  options: this.getOptions(PropertyPaneConfigurationProps.LAYOUT_MODE),
                 }),
               ]
             }

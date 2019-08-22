@@ -5,7 +5,7 @@ import SpEntityPortalService from 'sp-entityportal-service';
 
 export interface IProjectStatusProps {
     title: string;
-    reportListName: string;
+    statusReportsListName: string;
     sectionsListName: string;
     reportCtId: string;
     entity: ISpEntityPortalServiceParams;

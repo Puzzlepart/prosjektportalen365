@@ -1,6 +1,7 @@
 define([], function () {
-  return{
+  return {
     ActorsLabel: 'Aktører',
+    AdvancedGroupName: 'Avansert',
     BenefitResponsibleLabel: 'Gevinstansvarlig',
     BenefitTitleLabel: 'Gevinst',
     ChartConfigurationListNameLabel: 'Grafkonfigurasjon',
@@ -53,9 +54,7 @@ define([], function () {
     ProbabilityLabel: 'Sannsynlighet (S)',
     ProbabilityPostActionLabel: 'S etter tiltak',
     ProjectInfoFilterFieldLabel: 'Filtreringsfelt',
-    ProjectInfoStatusReportsLinkUrlTemplateLabel: 'Lenke for knapp',
     ProjectInformationGroupName: 'Instillinger for Prosjektinformasjon-vindu',
-    ProjectInfoStatusReportsCountLabel: 'Antal rapporter å vise',
     ProjectLinkText: 'Gå til prosjektområde',
     ProjectManager: 'Prosjektleder',
     ProjectOwner: 'Prosjekteier',
@@ -85,6 +84,9 @@ define([], function () {
     SiteTitleLabel: 'Prosjekt',
     SortByFieldLabel: 'Sorteringsegenskap',
     StartValueLabel: 'Startverdi',
+    StatusReportsCountLabel: 'Antal rapporter å vise',
+    StatusReportsLinkUrlTemplateLabel: 'Lenke for knapp',
+    StatusReportsListNameLabel: "Listenavn for statusrapporter",
     TileViewGroupName: 'Flisevisning',
     TitleLabel: 'Tittel',
     UnitLabel: 'Måleenhet',

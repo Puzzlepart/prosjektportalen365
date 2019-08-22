@@ -70,8 +70,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
         <StatusReports
           title={this.props.statusReportsHeader}
           statusReports={this.state.data.statusReports}
-          webUrl={this.props.webUrl}
-          reportLinkUrlTemplate={this.props.reportLinkUrlTemplate}
+          urlTemplate={`${this.state.data.itemSiteUrl}/${this.props.statusReportsLinkUrlTemplate}&Source=${decodeURIComponent(document.location.href)}`}
           hidden={this.props.statusReportsCount === 0} />
         <div className={styles.actions} hidden={this.props.hideActions || !this.props.isSiteAdmin}>
           <div>
@@ -210,8 +209,9 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
 
       let statusReports: { Id: number, Created: string }[] = [];
 
-      if (this.props.statusReportsCount > 0 && this.props.reportListName) {
-        statusReports = await new Web(this.props.hubSiteUrl).lists.getByTitle(this.props.reportListName)
+      if (this.props.statusReportsListName && this.props.statusReportsCount > 0) {
+        const statusReportsList = new Web(this.props.hubSiteUrl).lists.getByTitle(this.props.statusReportsListName);
+        statusReports = await statusReportsList
           .items
           .filter(`GtSiteId eq '${this.props.siteId}'`)
           .select('Id', 'Created')
@@ -225,6 +225,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
         editFormUrl,
         versionHistoryUrl,
         itemId: item.ID,
+        itemSiteUrl: item.GtSiteUrl,
         statusReports,
       };
     } catch (error) {
