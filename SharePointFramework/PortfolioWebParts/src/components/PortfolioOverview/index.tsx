@@ -292,8 +292,8 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         webUrl={this.props.pageContext.site.absoluteUrl}
         hubSiteUrl={this.props.pageContext.site.absoluteUrl}
         filterField={this.props.projectInfoFilterField}
-        showStatusReports={this.props.projectInfoShowStatusReports}
-        reportLinkUrlTemplate={this.props.projectInfoReportLinkUrlTemplate} />
+        statusReportsCount={this.props.projectInfoStatusReportsCount}
+        reportLinkUrlTemplate={this.props.projectInfoStatusReportsLinkUrlTemplate} />
     );
   }
 

@@ -1,4 +1,4 @@
-import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle, PropertyPaneDropdown, IPropertyPaneDropdownOption } from '@microsoft/sp-webpart-base';
+import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle, PropertyPaneDropdown, IPropertyPaneDropdownOption, PropertyPaneSlider } from '@microsoft/sp-webpart-base';
 import { IPortfolioOverviewProps, PortfolioOverview } from 'components';
 import * as strings from 'PortfolioWebPartsStrings';
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
@@ -9,8 +9,8 @@ export const PropertyPaneConfigurationProps = {
   COLUMNS_LISTNAME: 'columnsListName',
   DEFAULT_VIEW_ID: 'defaultViewId',
   PROJECTINFO_FILTER_FIELD: 'projectInfoFilterField',
-  PROJECTINFO_REPORT_LINKURL_TEMPLATE: 'projectInfoReportLinkUrlTemplate',
-  PROJECTINFO_SHOW_STATUSREPORTS: 'projectInfoShowStatusReports',
+  PROJECTINFO_STATUSREPORTS_COUNT: 'projectInfoStatusReportsCount',
+  PROJECTINFO_STATUSREPORTS_LINKURL_TEMPLATE: 'projectInfoStatusReportsLinkUrlTemplate',
   SHOW_COMMANDBAR: 'showCommandBar',
   SHOW_EXCELEXPORT_BUTTON: 'showExcelExportButton',
   SHOW_FILTERS: 'showFilters',
@@ -79,11 +79,14 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                   label: strings.ProjectInfoFilterFieldLabel,
                   options: this.getOptions(PropertyPaneConfigurationProps.PROJECTINFO_FILTER_FIELD),
                 }),
-                PropertyPaneTextField(PropertyPaneConfigurationProps.PROJECTINFO_SHOW_STATUSREPORTS, {
-                  label: strings.ProjectInfoShowStatusReportsLabel,
+                PropertyPaneSlider(PropertyPaneConfigurationProps.PROJECTINFO_STATUSREPORTS_COUNT, {
+                  label: strings.ProjectInfoStatusReportsCountLabel,
+                  min: 0,
+                  max: 10,
+                  step: 1,
                 }),
-                PropertyPaneTextField(PropertyPaneConfigurationProps.PROJECTINFO_REPORT_LINKURL_TEMPLATE, {
-                  label: strings.ProjectInfoReportLinkUrlTemplateLabel,
+                PropertyPaneTextField(PropertyPaneConfigurationProps.PROJECTINFO_STATUSREPORTS_LINKURL_TEMPLATE, {
+                  label: strings.ProjectInfoStatusReportsLinkUrlTemplateLabel,
                 }),
               ]
             },

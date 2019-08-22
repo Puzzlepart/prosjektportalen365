@@ -60,7 +60,7 @@ define([], function () {
     Yes: 'Ja',
     StatusReportsHeaderLabel: 'Overskrift',
     ReportListNameLabel: 'Listenavn for statusrapporter',
-    StatusReportsCountLabel: 'Antall rapporter å vise',
+    StatusReportsCountLabel: 'Antal rapporter å vise',
     ReportLinkUrlLabel: 'Lenke for knapp',
     ProjectStatusGroupName: 'Prosjektstatus',
     NavigateToSourceUrlText: 'Gå tilbake',

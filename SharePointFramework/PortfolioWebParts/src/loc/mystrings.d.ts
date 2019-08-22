@@ -54,9 +54,9 @@ declare interface IPortfolioWebPartsStrings {
   ProbabilityLabel: string;
   ProbabilityPostActionLabel: string;
   ProjectInfoFilterFieldLabel: string;
-  ProjectInfoReportLinkUrlTemplateLabel: string;
+  ProjectInfoStatusReportsLinkUrlTemplateLabel: string;
   ProjectInformationGroupName: string;
-  ProjectInfoShowStatusReportsLabel: string;
+  ProjectInfoStatusReportsCountLabel: string;
   ProjectLinkText: string;
   ProjectManager: string;
   ProjectOwner: string;
