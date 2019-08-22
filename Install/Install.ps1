@@ -217,6 +217,12 @@ if (-not $SkipAppPackages.IsPresent) {
 }
 #endregion
 
+#region Remove existing Home.aspx
+if (-not $Upgrade.IsPresent) {
+    Write-Host "[INFO] Removing existing homepage from [$Url]"
+    Get-PnPListItem -List Områdesider -Connection $SiteConnection | Where-Object { $_["Title"] -eq "Home" } | ForEach-Object { Remove-PnPListItem -Identity $_ -List Områdesider -Force -Connection $SiteConnection }
+}
+
 #region Applying PnP templates 
 if (-not $SkipTemplate.IsPresent) {
     Try {
