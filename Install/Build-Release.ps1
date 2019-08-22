@@ -1,6 +1,8 @@
 Param(
     [Parameter(Mandatory = $false, HelpMessage = "Skip building of SharePoint Framework solutions")]
     [switch]$SkipBuildSharePointFramework,
+    [Parameter(Mandatory = $false, HelpMessage = "Clean node_modules for all SharePoint Framework solutions")]
+    [switch]$CleanNodeModules,
     [Parameter(Mandatory = $false)]
     [string[]]$Solutions = @("ProjectWebParts", "PortfolioWebParts", "ProjectExtensions")
 )
@@ -35,6 +37,15 @@ Copy-Item -Path "$PSScriptRoot/SharePointPnPPowerShellOnline" -Filter * -Destina
 #endregion
 
 
+#region Clean node_modules for all SharePoint Framework solutions
+if ($CleanNodeModules.IsPresent) {
+    foreach ($Solution in $Solutions) {
+        Write-Host "[INFO] Clearing node_modules for SharePoint Framework solution [$($Solution)]"
+        rimraf "$($PSScriptRoot)\..\SharePointFramework\$($Solution)\node_modules\"
+    }
+}
+#endregion
+
 #region Package SharePoint Framework solutions
 Write-Host "[INFO] Building SharePointFramework\@Shared"
 Set-Location "$PSScriptRoot\..\SharePointFramework\@Shared"
@@ -45,7 +56,7 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
 }
 
 foreach ($Solution in $Solutions) {
-    Set-Location "$PSScriptRoot\..\SharePointFramework\$Solution"
+    Set-Location "$($PSScriptRoot)\..\SharePointFramework\$($Solution)"
     $PackageSolutionJson = Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json
     Write-Host "[INFO] Packaging SharePoint Framework solution [$($Solution)] [v$($PackageSolutionJson.solution.version)]"
     # https://github.com/SharePoint/sp-dev-docs/issues/2916

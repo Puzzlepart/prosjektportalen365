@@ -1,13 +1,13 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
-import { dateAdd } from '@pnp/common';
-import { ICachingOptions } from '@pnp/odata';
+import { dateAdd, PnPClientStorage } from '@pnp/common';
+import { Web } from '@pnp/sp';
 import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
-import { HubConfigurationService } from 'shared/lib/services';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
+import { HubConfigurationService } from 'shared/lib/services';
 import SpEntityPortalService from 'sp-entityportal-service';
 import * as format from 'string-format';
 import { IProjectInformationData } from './IProjectInformationData';
@@ -15,13 +15,20 @@ import { IProjectInformationProps, ProjectInformationDefaultProps } from './IPro
 import { IProjectInformationState } from './IProjectInformationState';
 import styles from './ProjectInformation.module.scss';
 import { ProjectProperty, ProjectPropertyModel } from './ProjectProperty';
+import { StatusReports } from './StatusReports';
+
 
 export class ProjectInformation extends React.Component<IProjectInformationProps, IProjectInformationState> {
   public static defaultProps = ProjectInformationDefaultProps;
+  private _hubConfigurationService: HubConfigurationService;
+  private _spEntityPortalService: SpEntityPortalService;
+
 
   constructor(props: IProjectInformationProps) {
     super(props);
     this.state = { isLoading: true, data: {} };
+    this._hubConfigurationService = new HubConfigurationService(this.props.hubSiteUrl);
+    this._spEntityPortalService = new SpEntityPortalService({ webUrl: this.props.hubSiteUrl, ...this.props.entity });
   }
 
   public async componentDidMount() {
@@ -36,7 +43,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   public render(): React.ReactElement<IProjectInformationProps> {
     return (
       <div className={styles.projectInformation}>
-        <div className={styles.container}>
+        <div className={styles.container} style={this.generateStyle(this.props)}>
           <WebPartTitle
             displayMode={DisplayMode.Read}
             title={this.props.title}
@@ -58,8 +65,14 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
       return <MessageBar messageBarType={MessageBarType.error}>{format(strings.ErrorText, 'prosjektinformasjon')}</MessageBar>;
     }
     return (
-      <div>
+      <React.Fragment>
         {this.renderProperties()}
+        <StatusReports
+          title={this.props.statusReportsHeader}
+          statusReports={this.state.data.statusReports}
+          webUrl={this.props.webUrl}
+          reportLinkUrlTemplate={this.props.reportLinkUrlTemplate}
+          hidden={this.props.statusReportsCount === 0} />
         <div className={styles.actions} hidden={this.props.hideActions || !this.props.isSiteAdmin}>
           <div>
             <DefaultButton
@@ -84,7 +97,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
               style={{ width: 250 }} />
           </div>
         </div>
-      </div >
+      </React.Fragment>
     );
   }
 
@@ -114,57 +127,105 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   }
 
   /**
-   * Get cache options for function
-   * 
-   * @param {string} func Function
-   * @param {'session' | 'local'} storeName Store name
-   */
-  private getCacheOptions(func: string, storeName: 'session' | 'local' = 'session'): ICachingOptions {
-    return {
-      key: `ProjectInformation_${func}`,
-      storeName,
-      expiration: dateAdd(new Date(), 'hour', 1),
-    };
+  * Generate styles based on props
+  *
+  * @param {IProjectInformationProps} param0 Props
+  */
+  private generateStyle({ boxLayout, boxType, boxBackgroundColor }: IProjectInformationProps) {
+    let style: React.CSSProperties = {};
+    if (boxLayout && boxType) {
+      style.padding = 20;
+      style.backgroundColor = boxBackgroundColor || '#FFF';
+      switch (boxType) {
+        case '1': {
+          style.boxShadow = '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)';
+        }
+          break;
+        case '2': {
+          style.boxShadow = '0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)';
+        }
+          break;
+        case '3': {
+          style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23)';
+        }
+          break;
+        case '4': {
+          style.boxShadow = '0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22)';
+        }
+          break;
+        case '5': {
+          style.boxShadow = '0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22)';
+        }
+          break;
+      }
+    }
+    return style;
+  }
+
+  /**
+   * Fetch configuration
+   *
+   * @param {string} key Key for cache
+   * @param {Date} expire Expire for cache
+        */
+  private async fetchConfiguration(key: string = 'projectinformation_fetchconfiguration', expire: Date = dateAdd(new Date(), 'minute', 15)) {
+    return new PnPClientStorage().session.getOrPut(key, async () => {
+      const [columnConfig, fields] = await Promise.all([
+        this._hubConfigurationService.getProjectColumns(),
+        this._spEntityPortalService.getEntityFields(),
+      ]);
+      return { columnConfig, fields };
+    }, expire);
+  }
+
+  /**
+   * Map properties from entity item and configuration
+   *
+ * @param {Object} item Entity item
+ * @param {Object} configuration Configuration
+      */
+  private mapProperties(item: Object, configuration: { fields: any[], columnConfig: any[] }) {
+    return Object.keys(item)
+      .filter(fieldName => {
+        let [field] = configuration.fields.filter(fld => fld.InternalName === fieldName);
+        let [column] = configuration.columnConfig.filter(c => c.GtInternalName === fieldName);
+        if (field && column) {
+          return this.props.filterField ? column[this.props.filterField] : true;
+        }
+        return false;
+      })
+      .map(fieldName => new ProjectPropertyModel(configuration.fields.filter(fld => fld.InternalName === fieldName)[0], item[fieldName]));
   }
 
   private async fetchData(): Promise<IProjectInformationData> {
     try {
-      const hubConfigurationService = new HubConfigurationService(this.props.hubSiteUrl);
-      const spEntityPortalService = new SpEntityPortalService({ webUrl: this.props.hubSiteUrl, ...this.props.entity });
-
-      const [
-        columnConfig,
-        fields,
-        editFormUrl,
-        versionHistoryUrl,
-        entityItem,
-      ] = await Promise.all([
-        hubConfigurationService.getProjectColumns(),
-        spEntityPortalService.getEntityFields(this.getCacheOptions('getEntityFields')),
-        spEntityPortalService.getEntityEditFormUrl(this.props.siteId, this.props.webUrl, this.getCacheOptions('getEntityEditFormUrl')),
-        spEntityPortalService.getEntityVersionHistoryUrl(this.props.siteId, this.props.webUrl, this.getCacheOptions('getEntityVersionHistoryUrl')),
-        spEntityPortalService.getEntityItemFieldValues(this.props.siteId)
+      const [configuration, editFormUrl, versionHistoryUrl, item] = await Promise.all([
+        this.fetchConfiguration(),
+        this._spEntityPortalService.getEntityEditFormUrl(this.props.siteId, this.props.webUrl),
+        this._spEntityPortalService.getEntityVersionHistoryUrl(this.props.siteId, this.props.webUrl),
+        this._spEntityPortalService.getEntityItemFieldValues(this.props.siteId),
       ]);
-      let properties = Object.keys(entityItem)
-        .map(fieldName => ({
-          field: fields.filter(fld => fld.InternalName === fieldName)[0],
-          value: entityItem[fieldName],
-        }))
-        .filter(prop => {
-          if (prop.field) {
-            const [column] = columnConfig.filter(c => c.GtInternalName === prop.field.InternalName);
-            if (column) {
-              return column[this.props.filterField];
-            }
-          }
-          return false;
-        })
-        .map(({ field, value }) => new ProjectPropertyModel(field, value));
+
+      let properties = this.mapProperties(item, configuration);
+
+      let statusReports: { Id: number, Created: string }[] = [];
+
+      if (this.props.statusReportsCount > 0 && this.props.reportListName) {
+        statusReports = await new Web(this.props.hubSiteUrl).lists.getByTitle(this.props.reportListName)
+          .items
+          .filter(`GtSiteId eq '${this.props.siteId}'`)
+          .select('Id', 'Created')
+          .orderBy('Id', false)
+          .top(this.props.statusReportsCount)
+          .get<{ Id: number, Created: string }[]>();
+      }
+
       return {
         properties,
         editFormUrl,
         versionHistoryUrl,
-        itemId: entityItem.ID,
+        itemId: item.ID,
+        statusReports,
       };
     } catch (error) {
       throw error;

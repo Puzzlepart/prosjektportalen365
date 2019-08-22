@@ -4,6 +4,22 @@ import * as strings from 'PortfolioWebPartsStrings';
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
 import { IPortfolioOverviewConfiguration } from 'interfaces';
 
+export const PropertyPaneConfigurationProps = {
+  COLUMN_CONFIG_LISTNAME: 'columnConfigListName',
+  COLUMNS_LISTNAME: 'columnsListName',
+  DEFAULT_VIEW_ID: 'defaultViewId',
+  PROJECTINFO_FILTER_FIELD: 'projectInfoFilterField',
+  PROJECTINFO_REPORT_LINKURL_TEMPLATE: 'projectInfoReportLinkUrlTemplate',
+  PROJECTINFO_SHOW_STATUSREPORTS: 'projectInfoShowStatusReports',
+  SHOW_COMMANDBAR: 'showCommandBar',
+  SHOW_EXCELEXPORT_BUTTON: 'showExcelExportButton',
+  SHOW_FILTERS: 'showFilters',
+  SHOW_GROUPBY: 'showGroupBy',
+  SHOW_SEARCH_BOX: 'showSearchBox',
+  SHOW_VIEWSELECTOR: 'showViewSelector',
+  VIEWS_LISTNAME: 'viewsListName'
+};
+
 export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPortfolioOverviewProps> {
   private _configuration: IPortfolioOverviewConfiguration;
 
@@ -23,13 +39,13 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
    */
   protected getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
     switch (targetProperty) {
-      case 'projectInfoFilterField': {
+      case PropertyPaneConfigurationProps.PROJECTINFO_FILTER_FIELD: {
         if (this._configuration) {
           return [{ key: null, text: '' }, ...this._configuration.showFields.map(fld => ({ key: fld.InternalName, text: fld.Title }))];
         }
       }
         break;
-      case 'defaultViewId': {
+      case PropertyPaneConfigurationProps.DEFAULT_VIEW_ID: {
         if (this._configuration) {
           return [{ key: null, text: '' }, ...this._configuration.views.map(view => ({ key: view.id, text: view.title }))];
         }
@@ -47,38 +63,49 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
-                PropertyPaneToggle('showSearchBox', {
+                PropertyPaneToggle(PropertyPaneConfigurationProps.SHOW_SEARCH_BOX, {
                   label: strings.ShowSearchBoxLabel,
                 }),
-                PropertyPaneDropdown('projectInfoFilterField', {
-                  label: strings.ProjectInfoFilterFieldLabel,
-                  options: this.getOptions('projectInfoFilterField'),
-                }),
-                PropertyPaneDropdown('defaultViewId', {
+                PropertyPaneDropdown(PropertyPaneConfigurationProps.DEFAULT_VIEW_ID, {
                   label: strings.DefaultViewLabel,
-                  options: this.getOptions('defaultViewId'),
+                  options: this.getOptions(PropertyPaneConfigurationProps.DEFAULT_VIEW_ID),
+                }),
+              ]
+            },
+            {
+              groupName: strings.ProjectInformationGroupName,
+              groupFields: [
+                PropertyPaneDropdown(PropertyPaneConfigurationProps.PROJECTINFO_FILTER_FIELD, {
+                  label: strings.ProjectInfoFilterFieldLabel,
+                  options: this.getOptions(PropertyPaneConfigurationProps.PROJECTINFO_FILTER_FIELD),
+                }),
+                PropertyPaneTextField(PropertyPaneConfigurationProps.PROJECTINFO_SHOW_STATUSREPORTS, {
+                  label: strings.ProjectInfoShowStatusReportsLabel,
+                }),
+                PropertyPaneTextField(PropertyPaneConfigurationProps.PROJECTINFO_REPORT_LINKURL_TEMPLATE, {
+                  label: strings.ProjectInfoReportLinkUrlTemplateLabel,
                 }),
               ]
             },
             {
               groupName: strings.CommandBarGroupName,
               groupFields: [
-                PropertyPaneToggle('showCommandBar', {
+                PropertyPaneToggle(PropertyPaneConfigurationProps.SHOW_COMMANDBAR, {
                   label: strings.ShowCommandBarLabel,
                 }),
-                PropertyPaneToggle('showGroupBy', {
+                PropertyPaneToggle(PropertyPaneConfigurationProps.SHOW_GROUPBY, {
                   label: strings.ShowGroupByLabel,
                   disabled: !this.properties.showCommandBar,
                 }),
-                PropertyPaneToggle('showFilters', {
+                PropertyPaneToggle(PropertyPaneConfigurationProps.SHOW_FILTERS, {
                   label: strings.ShowFiltersLabel,
                   disabled: !this.properties.showCommandBar,
                 }),
-                PropertyPaneToggle('showExcelExportButton', {
+                PropertyPaneToggle(PropertyPaneConfigurationProps.SHOW_EXCELEXPORT_BUTTON, {
                   label: strings.ShowExcelExportButtonLabel,
                   disabled: !this.properties.showCommandBar,
                 }),
-                PropertyPaneToggle('showViewSelector', {
+                PropertyPaneToggle(PropertyPaneConfigurationProps.SHOW_VIEWSELECTOR, {
                   label: strings.ShowViewSelectorLabel,
                   disabled: !this.properties.showCommandBar,
                 }),
@@ -87,13 +114,13 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
             {
               groupName: strings.ConfigurationGroupName,
               groupFields: [
-                PropertyPaneTextField('columnConfigListName', {
+                PropertyPaneTextField(PropertyPaneConfigurationProps.COLUMN_CONFIG_LISTNAME, {
                   label: strings.ColumnConfigListNameLabel,
                 }),
-                PropertyPaneTextField('columnsListName', {
+                PropertyPaneTextField(PropertyPaneConfigurationProps.COLUMNS_LISTNAME, {
                   label: strings.ColumnsListNameLabel,
                 }),
-                PropertyPaneTextField('viewsListName', {
+                PropertyPaneTextField(PropertyPaneConfigurationProps.VIEWS_LISTNAME, {
                   label: strings.ViewsListNameLabel,
                 }),
               ]

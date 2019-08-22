@@ -1,6 +1,6 @@
 {
     "name": "projectwebparts",
-    "version": "0.9.3",
+    "version": "0.9.8",
     "private": true,
     "engines": {
         "node": ">=0.10.0"
@@ -14,7 +14,7 @@
         "packageAndDeployPatch": "npm version patch && npm run deploy",
         "packageAndDeployMinor": "npm version minor && npm run deploy",
         "packageAndDeployMajor": "npm version major && npm run deploy",
-        "postversion": "gulp version-sync",
+        "postversion": "gulp version-sync && npm run package",
         "patchVersion": "npm version patch",
         "minorVersion": "npm version minor",
         "majorVersion": "npm version major",

@@ -9,8 +9,16 @@ export interface IProjectInformationProps {
   isSiteAdmin?: boolean;
   filterField: string;
   hideActions?: boolean;
+  boxLayout?: boolean;
+  boxBackgroundColor?: string;
+  boxType?: string;
+  statusReportsHeader?: string;
+  statusReportsCount?: number;
+  reportListName?: string;
+  reportLinkUrlTemplate?: string;
 }
 
 export const ProjectInformationDefaultProps: Partial<IProjectInformationProps> = {
-  title: 'Prosjektinformasjon',
+  reportLinkUrlTemplate: '',
+  statusReportsCount: 0,
 };

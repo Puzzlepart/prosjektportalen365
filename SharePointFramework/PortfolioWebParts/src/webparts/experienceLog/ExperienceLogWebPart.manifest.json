@@ -3,7 +3,7 @@
     "id": "3ec6bcaf-28bc-4f2e-9e90-77e8cebf0b5f",
     "alias": "ExperienceLogWebPart",
     "componentType": "WebPart",
-    "version": "0.9.14",
+    "version": "0.9.15",
     "manifestVersion": 2,
     "requiresCustomScript": false,
     "supportedHosts": [

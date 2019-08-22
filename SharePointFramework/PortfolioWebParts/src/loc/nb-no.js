@@ -1,5 +1,5 @@
 define([], function () {
-  return {
+  return{
     ActorsLabel: 'Aktører',
     BenefitResponsibleLabel: 'Gevinstansvarlig',
     BenefitTitleLabel: 'Gevinst',
@@ -24,7 +24,6 @@ define([], function () {
     EditViewText: 'Rediger gjeldende visning',
     ErrorText: 'Det skjedde en feil under uthenting av prosjekter.',
     ExcelExportButtonLabel: 'Eksporter til Excel',
-    ShowExcelExportButtonLabel: 'Vis eksport til Excel-knapp',
     ExcelExportFileNamePrefix: 'Gevinstoversikt',
     FetchDataErrorMessage: 'Det skjedde en feil under uthenting av data.',
     FieldSelectorEmptyMessage: 'Det er ikke konfigurert opp noen felter. Ta kontakt med en administrator.',
@@ -53,7 +52,10 @@ define([], function () {
     PhaseTermSetIdFieldLabel: 'Termsett ID for Fase',
     ProbabilityLabel: 'Sannsynlighet (S)',
     ProbabilityPostActionLabel: 'S etter tiltak',
-    ProjectInfoFilterFieldLabel: 'Filtreringsfelt for prosjektinformasjon',
+    ProjectInfoFilterFieldLabel: 'Filtreringsfelt',
+    ProjectInfoReportLinkUrlTemplateLabel: 'Lenke for knapp',
+    ProjectInformationGroupName: 'Instillinger for Prosjektinformasjon-vindu',
+    ProjectInfoShowStatusReportsLabel: 'Vis statusrapporter',
     ProjectLinkText: 'Gå til prosjektområde',
     ProjectManager: 'Prosjektleder',
     ProjectOwner: 'Prosjekteier',
@@ -69,15 +71,17 @@ define([], function () {
     SearchBoxPlaceholderTextLabel: 'Søkebokstekst',
     ShowAllMeasurementsLinkText: 'Vis alle målinger',
     ShowAsListText: 'Vis som liste',
-    ShowAsTilesText: 'Vis som fliser',
     ShowAsTilesLabel: 'Vis som fliser',
+    ShowAsTilesText: 'Vis som fliser',
     ShowCommandBarLabel: 'Vis kommandolinje',
+    ShowExcelExportButtonLabel: 'Vis eksport til Excel-knapp',
     ShowFiltersLabel: 'Vis filtre',
     ShowGroupByLabel: 'Vis grupperingsvalg',
     ShowProjectLogoFieldLabel: 'Vis logo',
     ShowProjectManagerFieldLabel: 'Vis Prosjektleder',
     ShowProjectOwnerFieldLabel: 'Vis Prosjekteier',
     ShowSearchBoxLabel: 'Vis søkeboks',
+    ShowViewSelectorLabel: 'Vis visningsvelger',
     SiteTitleLabel: 'Prosjekt',
     SortByFieldLabel: 'Sorteringsegenskap',
     StartValueLabel: 'Startverdi',
@@ -85,7 +89,6 @@ define([], function () {
     TitleLabel: 'Tittel',
     UnitLabel: 'Måleenhet',
     ViewNotFoundMessage: 'Finner ikke angitt visning.',
-    ShowViewSelectorLabel: 'Vis visningsvelger',
     ViewsListNameLabel: 'Visninger'
   }
 });

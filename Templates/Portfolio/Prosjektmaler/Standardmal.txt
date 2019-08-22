@@ -636,8 +636,11 @@
                             "Factor": 4,
                             "Controls": [{
                                     "Id": "b8bec0be-2354-443d-a3ca-24b36e8ea7dc",
-                                    "Properties": {
-                                        "title": "Prosjektinformasjon",
+                                    "Properties": {                                      
+                                        "statusReportsCount": 0,
+                                        "statusReportsHeader": "Prosjektstatus",
+                                        "reportListName": "Prosjektstatus",
+                                        "reportLinkUrlTemplate": "SitePages/Prosjektstatus.aspx#selectedreport={0}",
                                         "entity": {
                                             "listName": "Prosjekter",
                                             "contentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
