@@ -1,4 +1,4 @@
-import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle, PropertyPaneDropdown } from '@microsoft/sp-webpart-base';
+import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle, PropertyPaneDropdown, IPropertyPaneDropdownOption } from '@microsoft/sp-webpart-base';
 import { IPortfolioOverviewProps, PortfolioOverview } from 'components';
 import * as strings from 'PortfolioWebPartsStrings';
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
@@ -16,6 +16,29 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
     this._configuration = await this.dataAdapter.getPortfolioConfig(this.properties.columnConfigListName, this.properties.columnsListName, this.properties.viewsListName);
   }
 
+  /**
+   * Get options for PropertyPaneDropdown
+   * 
+   * @param {string} targetProperty Target property
+   */
+  protected getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
+    switch (targetProperty) {
+      case 'projectInfoFilterField': {
+        if (this._configuration) {
+          return [{ key: null, text: '' }, ...this._configuration.showFields.map(fld => ({ key: fld.InternalName, text: fld.Title }))];
+        }
+      }
+        break;
+      case 'defaultViewId': {
+        if (this._configuration) {
+          return [{ key: null, text: '' }, ...this._configuration.views.map(view => ({ key: view.id, text: view.title }))];
+        }
+      }
+        break;
+    }
+    return [];
+  }
+
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
@@ -29,11 +52,11 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                 }),
                 PropertyPaneDropdown('projectInfoFilterField', {
                   label: strings.ProjectInfoFilterFieldLabel,
-                  options: this._configuration ? this._configuration.showFields.map(fld => ({ key: fld.InternalName, text: fld.Title })) : [],
+                  options: this.getOptions('projectInfoFilterField'),
                 }),
                 PropertyPaneDropdown('defaultViewId', {
                   label: strings.DefaultViewLabel,
-                  options: this._configuration ? this._configuration.views.map(view => ({ key: view.id, text: view.title })) : [],
+                  options: this.getOptions('defaultViewId'),
                 }),
               ]
             },
