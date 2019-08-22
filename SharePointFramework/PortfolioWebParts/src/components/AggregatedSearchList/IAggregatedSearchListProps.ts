@@ -11,7 +11,7 @@ export interface IAggregatedSearchListProps extends IBaseComponentProps {
     showSearchBox?: boolean;
     loadingText?: string;
     searchBoxPlaceholderText?: string;
-    excelExportEnabled?: boolean;
+    showExcelExportButton?: boolean;
     columns?: IColumn[];
     layoutMode?: DetailsListLayoutMode;
     constrainMode?: ConstrainMode;

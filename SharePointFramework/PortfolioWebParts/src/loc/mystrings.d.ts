@@ -7,6 +7,7 @@ declare interface IPortfolioWebPartsStrings {
   ChartErrorText: string;
   ColumnConfigListNameLabel: string;
   ColumnsListNameLabel: string;
+  CommandBarGroupName: string;
   ConfigurationGroupName: string;
   ConsequenceLabel: string;
   ConsequencePostActionLabel: string;
@@ -24,7 +25,7 @@ declare interface IPortfolioWebPartsStrings {
   EditViewText: string;
   ErrorText: string;
   ExcelExportButtonLabel: string;
-  ExcelExportEnabledLabel: string;
+  ShowExcelExportButtonLabel: string;
   ExcelExportFileNamePrefix: string;
   FetchDataErrorMessage: string;
   FieldSelectorEmptyMessage: string;
@@ -73,6 +74,7 @@ declare interface IPortfolioWebPartsStrings {
   ShowAsTilesText: string;
   ShowAsTilesLabel: string;
   ShowCommandBarLabel: string;
+  ShowFiltersLabel: string;
   ShowGroupByLabel: string;
   ShowProjectLogoFieldLabel: string;
   ShowProjectManagerFieldLabel: string;
@@ -85,7 +87,7 @@ declare interface IPortfolioWebPartsStrings {
   TitleLabel: string;
   UnitLabel: string;
   ViewNotFoundMessage: string;
-  ViewSelectorEnabledLabel: string;
+  ShowViewSelectorLabel: string;
   ViewsListNameLabel: string;
 }
 

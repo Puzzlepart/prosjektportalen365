@@ -10,7 +10,7 @@ export interface IProjectListProps extends IBaseComponentProps {
   entity: ISpEntityPortalServiceParams;
   sortBy?: string;
   showSearchBox?: boolean;
-  viewSelectorEnabled?: boolean;
+  showViewSelector?: boolean;
   showAsTiles?: boolean;
   showProjectLogo?: boolean;
   showProjectOwner?: boolean;

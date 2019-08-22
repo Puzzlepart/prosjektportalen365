@@ -24,24 +24,42 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
+                PropertyPaneToggle('showSearchBox', {
+                  label: strings.ShowSearchBoxLabel,
+                }),
                 PropertyPaneDropdown('projectInfoFilterField', {
                   label: strings.ProjectInfoFilterFieldLabel,
                   options: this._configuration ? this._configuration.showFields.map(fld => ({ key: fld.InternalName, text: fld.Title })) : [],
-                }),
-                PropertyPaneToggle('excelExportEnabled', {
-                  label: strings.ExcelExportEnabledLabel,
-                }),
-                PropertyPaneToggle('showGroupBy', {
-                  label: strings.ShowGroupByLabel,
-                }),
-                PropertyPaneToggle('viewSelectorEnabled', {
-                  label: strings.ViewSelectorEnabledLabel,
                 }),
                 PropertyPaneDropdown('defaultViewId', {
                   label: strings.DefaultViewLabel,
                   options: this._configuration ? this._configuration.views.map(view => ({ key: view.id, text: view.title })) : [],
                 }),
               ]
+            },
+            {
+              groupName: strings.CommandBarGroupName,
+              groupFields: [
+                PropertyPaneToggle('showCommandBar', {
+                  label: strings.ShowCommandBarLabel,
+                }),
+                PropertyPaneToggle('showGroupBy', {
+                  label: strings.ShowGroupByLabel,
+                  disabled: !this.properties.showCommandBar,
+                }),
+                PropertyPaneToggle('showFilters', {
+                  label: strings.ShowFiltersLabel,
+                  disabled: !this.properties.showCommandBar,
+                }),
+                PropertyPaneToggle('showExcelExportButton', {
+                  label: strings.ShowExcelExportButtonLabel,
+                  disabled: !this.properties.showCommandBar,
+                }),
+                PropertyPaneToggle('showViewSelector', {
+                  label: strings.ShowViewSelectorLabel,
+                  disabled: !this.properties.showCommandBar,
+                }),
+              ],
             },
             {
               groupName: strings.ConfigurationGroupName,

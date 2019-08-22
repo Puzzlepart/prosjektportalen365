@@ -7,6 +7,7 @@ define([], function () {
     ChartErrorText: 'Grafen er ugyldig konfigurert.',
     ColumnConfigListNameLabel: 'Kolonnekonfigurasjon',
     ColumnsListNameLabel: 'Kolonner',
+    CommandBarGroupName: 'Kommandolinje',
     ConfigurationGroupName: 'Konfigurasjon',
     ConsequenceLabel: 'Konsekvens (K)',
     ConsequencePostActionLabel: 'K etter tiltak',
@@ -23,7 +24,7 @@ define([], function () {
     EditViewText: 'Rediger gjeldende visning',
     ErrorText: 'Det skjedde en feil under uthenting av prosjekter.',
     ExcelExportButtonLabel: 'Eksporter til Excel',
-    ExcelExportEnabledLabel: 'Eksporter til Excel',
+    ShowExcelExportButtonLabel: 'Vis eksport til Excel-knapp',
     ExcelExportFileNamePrefix: 'Gevinstoversikt',
     FetchDataErrorMessage: 'Det skjedde en feil under uthenting av data.',
     FieldSelectorEmptyMessage: 'Det er ikke konfigurert opp noen felter. Ta kontakt med en administrator.',
@@ -71,6 +72,7 @@ define([], function () {
     ShowAsTilesText: 'Vis som fliser',
     ShowAsTilesLabel: 'Vis som fliser',
     ShowCommandBarLabel: 'Vis kommandolinje',
+    ShowFiltersLabel: 'Vis filtre',
     ShowGroupByLabel: 'Vis grupperingsvalg',
     ShowProjectLogoFieldLabel: 'Vis logo',
     ShowProjectManagerFieldLabel: 'Vis Prosjektleder',
@@ -83,7 +85,7 @@ define([], function () {
     TitleLabel: 'Tittel',
     UnitLabel: 'Måleenhet',
     ViewNotFoundMessage: 'Finner ikke angitt visning.',
-    ViewSelectorEnabledLabel: 'Vis visningsvelger',
+    ShowViewSelectorLabel: 'Vis visningsvelger',
     ViewsListNameLabel: 'Visninger'
   }
 });

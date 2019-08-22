@@ -10,11 +10,14 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
     projectInfoFilterField?: string;
     constrainMode?: ConstrainMode;
     layoutMode?: DetailsListLayoutMode;
-    excelExportEnabled?: boolean;
+    showExcelExportButton?: boolean;
     defaultView?: PortfolioOverviewView;
     defaultViewId?: string;
+    showCommandBar?: boolean;
     showGroupBy?: boolean;
-    viewSelectorEnabled?: boolean;
+    showSearchBox?: boolean;
+    showFilters?: boolean;
+    showViewSelector?: boolean;
     columnConfigListName: string;
     columnsListName: string;
     viewsListName: string;

@@ -5,5 +5,5 @@ export interface IExperienceLogProps extends IAggregatedSearchListProps { }
 
 export const ExperienceLogDefaultProps: Partial<IExperienceLogProps> = {
   columns: ExperienceLogColumns,
-  excelExportEnabled: true,
+  showExcelExportButton: true,
 };

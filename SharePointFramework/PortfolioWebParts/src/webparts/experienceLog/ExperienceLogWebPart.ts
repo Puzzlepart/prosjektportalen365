@@ -22,8 +22,8 @@ export default class ExperienceLogWebPart extends BasePortfolioWebPart<IExperien
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
-                PropertyPaneToggle('excelExportEnabled', {
-                  label: strings.ExcelExportEnabledLabel,
+                PropertyPaneToggle('showExcelExportButton', {
+                  label: strings.ShowExcelExportButtonLabel,
                 }),
               ]
             },

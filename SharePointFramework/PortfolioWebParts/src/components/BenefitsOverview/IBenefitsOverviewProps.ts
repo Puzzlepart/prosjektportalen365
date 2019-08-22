@@ -29,5 +29,5 @@ export const BenefitsOverviewDefaultProps: Partial<IBenefitsOverviewProps> = {
         'GtMeasureIndicatorLookupId',
         'GtGainsResponsible'
     ],
-    excelExportEnabled: true,
+    showExcelExportButton: true,
 };

@@ -177,7 +177,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
                 subMenuProps: { items: subItems },
             });
         }
-        if (this.props.excelExportEnabled) {
+        if (this.props.showExcelExportButton) {
             items.push({
                 key: "ExcelExport",
                 name: strings.ExcelExportButtonLabel,

@@ -76,7 +76,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
           <div className={styles.searchBox} hidden={!this.props.showSearchBox}>
             <SearchBox placeholder={this.props.searchBoxPlaceholderText} onChanged={this.onSearch.bind(this)} />
           </div>
-          <div className={styles.viewToggle} hidden={!this.props.viewSelectorEnabled}>
+          <div className={styles.viewToggle} hidden={!this.props.showViewSelector}>
             <Toggle
               offText={strings.ShowAsListText}
               onText={strings.ShowAsTilesText}

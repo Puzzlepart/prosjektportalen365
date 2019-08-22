@@ -86,7 +86,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           <div className={styles.header}>
             <div className={styles.title}>{this.props.title}</div>
           </div>
-          <div className={styles.searchBox}>
+          <div className={styles.searchBox} hidden={!this.props.showSearchBox}>
             <SearchBox onChange={this.onSearch.bind(this)} placeholder={this.searchBoxPlaceholder} />
           </div>
           {this.list()}
@@ -137,7 +137,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         },
       });
     }
-    if (this.props.excelExportEnabled) {
+    if (this.props.showExcelExportButton) {
       items.push({
         key: "ExcelExport",
         name: strings.ExcelExportButtonLabel,
@@ -150,7 +150,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
       });
     }
 
-    if (this.props.viewSelectorEnabled) {
+    if (this.props.showViewSelector) {
       if (this.props.pageContext.legacyPageContext.isSiteAdmin) {
         farItems.push({
           key: 'NewView',
@@ -222,18 +222,24 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
       });
     }
 
-    farItems.push({
-      key: 'Filters',
-      name: '',
-      iconProps: { iconName: 'Filter' },
-      itemType: ContextualMenuItemType.Normal,
-      onClick: e => {
-        e.preventDefault();
-        this.setState({ showFilterPanel: true });
-      },
-    });
+    if (this.props.showFilters) {
+      farItems.push({
+        key: 'Filters',
+        name: '',
+        iconProps: { iconName: 'Filter' },
+        itemType: ContextualMenuItemType.Normal,
+        onClick: e => {
+          e.preventDefault();
+          this.setState({ showFilterPanel: true });
+        },
+      });
+    }
 
-    return <CommandBar items={items} farItems={farItems} />;
+    return (
+      <div hidden={!this.props.showCommandBar}>
+        <CommandBar items={items} farItems={farItems} />
+      </div>
+    );
   }
 
   private list() {
