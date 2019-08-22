@@ -58,11 +58,11 @@ define([], function () {
     ViewVersionHistoryText: 'Vis versjonshistorikk',
     WebPartNotConfiguredMessage: 'Webdelen er ikke konfigurert riktig. Du må angi webpartegenskaper riktig.',
     Yes: 'Ja',
-    ShowStatusReportsLabel: 'Vis statusrapporter',
-    StatusReportsHeaderLabel: 'Prosjektstatus',
+    StatusReportsHeaderLabel: 'Overskrift',
     ReportListNameLabel: 'Listenavn for statusrapporter',
-    ReportCountLabel: 'Antall rapporter å vise',
+    StatusReportsCountLabel: 'Antall rapporter å vise',
     ReportLinkUrlLabel: 'Lenke for knapp',
-    ProjectStatusGroupName: 'Prosjektstatus'
+    ProjectStatusGroupName: 'Prosjektstatus',
+    NavigateToSourceUrlText: 'Gå tilbake',
   }
 });

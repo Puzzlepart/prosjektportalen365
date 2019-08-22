@@ -1,9 +1,9 @@
 /**
  * Set URL hash
  *
- * @param {Object} hashObject Hash object
+ * @param {T} hashObject Hash object
  */
-export default function setUrlHash(hashObject: { [key: string]: string }): void {
+export default function setUrlHash<T>(hashObject: T): void {
     let hash = "#";
     let hashParts = Object.keys(hashObject).map(key => `${key}=${hashObject[key]}`);
     hash += hashParts.join("&");

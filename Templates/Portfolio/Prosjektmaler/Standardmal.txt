@@ -636,11 +636,10 @@
                             "Factor": 4,
                             "Controls": [{
                                     "Id": "b8bec0be-2354-443d-a3ca-24b36e8ea7dc",
-                                    "Properties": {
-                                        "showStatusReports": false,
+                                    "Properties": {                                      
+                                        "statusReportsCount": 0,
                                         "statusReportsHeader": "Prosjektstatus",
                                         "reportListName": "Prosjektstatus",
-                                        "reportCount": 5,
                                         "reportLinkUrlTemplate": "SitePages/Prosjektstatus.aspx#selectedreport={0}",
                                         "entity": {
                                             "listName": "Prosjekter",

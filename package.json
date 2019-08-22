@@ -16,5 +16,8 @@
     "Prosjektportalen"
   ],
   "author": "olemp@puzzlepart.com",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "rimraf": "^3.0.0"
+  }
 }

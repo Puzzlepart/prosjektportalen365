@@ -2,7 +2,6 @@ import { DisplayMode } from '@microsoft/sp-core-library';
 import { dateAdd, PnPClientStorage } from '@pnp/common';
 import { Web } from '@pnp/sp';
 import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
-import { ProjectStatusReport } from 'models';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
@@ -73,7 +72,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
           statusReports={this.state.data.statusReports}
           webUrl={this.props.webUrl}
           reportLinkUrlTemplate={this.props.reportLinkUrlTemplate}
-          hidden={!this.props.showStatusReports} />
+          hidden={this.props.statusReportsCount === 0} />
         <div className={styles.actions} hidden={this.props.hideActions || !this.props.isSiteAdmin}>
           <div>
             <DefaultButton
@@ -209,18 +208,16 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
 
       let properties = this.mapProperties(item, configuration);
 
-      let statusReports: ProjectStatusReport[] = [];
+      let statusReports: { Id: number, Created: string }[] = [];
 
-      if (this.props.showStatusReports && this.props.reportListName) {
-        statusReports =
-          (
-            await new Web(this.props.hubSiteUrl).lists.getByTitle(this.props.reportListName)
-              .items
-              .filter(`GtSiteId eq '${this.props.siteId}'`)
-              .orderBy('Id', false)
-              .top(this.props.reportCount)
-              .get<any[]>()
-          ).map(_ => new ProjectStatusReport(_));
+      if (this.props.statusReportsCount > 0 && this.props.reportListName) {
+        statusReports = await new Web(this.props.hubSiteUrl).lists.getByTitle(this.props.reportListName)
+          .items
+          .filter(`GtSiteId eq '${this.props.siteId}'`)
+          .select('Id', 'Created')
+          .orderBy('Id', false)
+          .top(this.props.statusReportsCount)
+          .get<{ Id: number, Created: string }[]>();
       }
 
       return {

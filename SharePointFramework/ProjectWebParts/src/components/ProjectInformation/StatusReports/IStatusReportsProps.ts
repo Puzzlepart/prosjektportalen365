@@ -1,7 +1,5 @@
-import { ProjectStatusReport } from "models";
-
 export interface IStatusReportsProps extends React.HTMLAttributes<HTMLElement> {
-    statusReports?: ProjectStatusReport[];
+    statusReports?: { Id: number, Created: string }[];
     iconName?: string;
     reportLinkUrlTemplate?: string;
     webUrl: string;

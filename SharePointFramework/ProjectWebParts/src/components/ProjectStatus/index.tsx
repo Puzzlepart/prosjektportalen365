@@ -15,7 +15,7 @@ import * as format from 'string-format';
 import { IStatusSectionBaseProps } from './@StatusSectionBase/IStatusSectionBaseProps';
 import { IProjectStatusData } from "./IProjectStatusData";
 import { IProjectStatusProps } from './IProjectStatusProps';
-import { IProjectStatusState } from './IProjectStatusState';
+import { IProjectStatusState, IProjectStatusHashState } from './IProjectStatusState';
 import ListSection from './ListSection';
 import ProjectPropertiesSection from './ProjectPropertiesSection';
 import styles from './ProjectStatus.module.scss';
@@ -48,23 +48,23 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     }
     try {
       const data = await this.fetchData(this.props.pageContext);
-      const hashState = parseUrlHash<{ selectedreport: string }>();
+      const hashState = parseUrlHash<IProjectStatusHashState>(true);
       let selectedReport = data.reports[0];
       if (hashState.selectedreport) {
         [selectedReport] = data.reports.filter(report => report.id === parseInt(hashState.selectedreport, 10));
       }
-      this.setState({ data, selectedReport, isLoading: false });
+      this.setState({ data, selectedReport, sourceUrl: decodeURIComponent(hashState.source || ''), isLoading: false });
     } catch (error) {
       this.setState({ error, isLoading: false });
     }
   }
 
   public componentWillUpdate(_: IProjectStatusProps, { selectedReport }: IProjectStatusState) {
-    let obj: { [key: string]: string } = {};
+    let obj: IProjectStatusHashState = {};
     if (selectedReport) {
       obj.selectedreport = selectedReport.id.toString();
     }
-    setUrlHash(obj);
+    setUrlHash<IProjectStatusHashState>(obj);
   }
 
   /**
@@ -93,7 +93,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
 
     return (
       <div className={styles.projectStatus}>
-        {this.renderCommandBar()}
+        {this.commandBar()}
         <div className={styles.container}>
           <div className={`${styles.header} ${styles.column12}`}>
             <div className={styles.title}>{this.props.title}</div>
@@ -106,35 +106,40 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     );
   }
 
-  private renderCommandBar() {
-    const { data, selectedReport } = this.state;
+  private commandBar() {
+    const { data, selectedReport, sourceUrl } = this.state;
     const reportOptions = this.getReportOptions(data);
     const items: IContextualMenuItem[] = [
       {
         key: 'NewStatusReport',
         name: strings.NewStatusReportModalHeaderText,
-        itemType: ContextualMenuItemType.Normal,
         iconProps: { iconName: 'NewFolder' },
         onClick: this.redirectNewStatusReport.bind(this),
       },
       {
         key: 'EditReport',
         name: strings.EditReportButtonText,
-        itemType: ContextualMenuItemType.Normal,
         iconProps: { iconName: 'Edit' },
         href: selectedReport ? selectedReport.editFormUrl : null,
         disabled: !selectedReport,
       },
     ];
-    let farItems: IContextualMenuItem[] = [
-      {
-        key: 'ReportDropdown',
-        name: selectedReport ? formatDate(selectedReport.date, true) : '',
-        itemType: ContextualMenuItemType.Normal,
-        disabled: reportOptions.length === 0,
-        subMenuProps: { items: reportOptions }
-      },
-    ];
+    let farItems: IContextualMenuItem[] = [];
+    if (this.state.sourceUrl) {
+      farItems.push({
+        key: 'NavigateToSourceUrl',
+        name: strings.NavigateToSourceUrlText,
+        iconProps: { iconName: 'NavigateBack' },
+        href: sourceUrl,
+      });
+    }
+    farItems.push({
+      key: 'ReportDropdown',
+      name: selectedReport ? formatDate(selectedReport.date, true) : '',
+      itemType: ContextualMenuItemType.Normal,
+      disabled: reportOptions.length === 0,
+      subMenuProps: { items: reportOptions }
+    });
     return (
       <CommandBar items={items} farItems={farItems} />
     );

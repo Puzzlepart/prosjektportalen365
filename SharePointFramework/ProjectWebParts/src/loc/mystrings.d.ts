@@ -1,9 +1,9 @@
 declare interface IProjectWebPartsStrings {
+  NavigateToSourceUrlText: string;
   ProjectStatusGroupName: string;
-  ShowStatusReportsLabel: string;
   StatusReportsHeaderLabel: string;
   ReportListNameLabel: string;
-  ReportCountLabel: string;
+  StatusReportsCountLabel: string;
   ReportLinkUrlLabel: string;
   AutomaticReloadFieldLabel: string;
   BoxBackgroundColorLabel: string;
