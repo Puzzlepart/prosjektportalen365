@@ -1,11 +1,14 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
+import { dateAdd, PnPClientStorage } from '@pnp/common';
+import { Web } from '@pnp/sp';
 import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
-import { HubConfigurationService } from 'shared/lib/services';
+import { ProjectStatusReport } from 'models';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
+import { HubConfigurationService } from 'shared/lib/services';
 import SpEntityPortalService from 'sp-entityportal-service';
 import * as format from 'string-format';
 import { IProjectInformationData } from './IProjectInformationData';
@@ -13,7 +16,8 @@ import { IProjectInformationProps, ProjectInformationDefaultProps } from './IPro
 import { IProjectInformationState } from './IProjectInformationState';
 import styles from './ProjectInformation.module.scss';
 import { ProjectProperty, ProjectPropertyModel } from './ProjectProperty';
-import { PnPClientStorage, dateAdd } from '@pnp/common';
+import { StatusReports } from './StatusReports';
+
 
 export class ProjectInformation extends React.Component<IProjectInformationProps, IProjectInformationState> {
   public static defaultProps = ProjectInformationDefaultProps;
@@ -24,6 +28,8 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   constructor(props: IProjectInformationProps) {
     super(props);
     this.state = { isLoading: true, data: {} };
+    this._hubConfigurationService = new HubConfigurationService(this.props.hubSiteUrl);
+    this._spEntityPortalService = new SpEntityPortalService({ webUrl: this.props.hubSiteUrl, ...this.props.entity });
   }
 
   public async componentDidMount() {
@@ -62,6 +68,12 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     return (
       <React.Fragment>
         {this.renderProperties()}
+        <StatusReports
+          title={this.props.statusReportsHeader}
+          statusReports={this.state.data.statusReports}
+          webUrl={this.props.webUrl}
+          reportLinkUrlTemplate={this.props.reportLinkUrlTemplate}
+          hidden={!this.props.showStatusReports} />
         <div className={styles.actions} hidden={this.props.hideActions || !this.props.isSiteAdmin}>
           <div>
             <DefaultButton
@@ -116,10 +128,10 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   }
 
   /**
-   * Generate styles based on props
-   * 
-   * @param {IProjectInformationProps} param0 Props
-   */
+  * Generate styles based on props
+  *
+  * @param {IProjectInformationProps} param0 Props
+  */
   private generateStyle({ boxLayout, boxType, boxBackgroundColor }: IProjectInformationProps) {
     let style: React.CSSProperties = {};
     if (boxLayout && boxType) {
@@ -153,10 +165,10 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
 
   /**
    * Fetch configuration
-   * 
+   *
    * @param {string} key Key for cache
    * @param {Date} expire Expire for cache
-   */
+        */
   private async fetchConfiguration(key: string = 'projectinformation_fetchconfiguration', expire: Date = dateAdd(new Date(), 'minute', 15)) {
     return new PnPClientStorage().session.getOrPut(key, async () => {
       const [columnConfig, fields] = await Promise.all([
@@ -167,31 +179,56 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     }, expire);
   }
 
+  /**
+   * Map properties from entity item and configuration
+   *
+ * @param {Object} item Entity item
+ * @param {Object} configuration Configuration
+      */
+  private mapProperties(item: Object, configuration: { fields: any[], columnConfig: any[] }) {
+    return Object.keys(item)
+      .filter(fieldName => {
+        let [field] = configuration.fields.filter(fld => fld.InternalName === fieldName);
+        let [column] = configuration.columnConfig.filter(c => c.GtInternalName === fieldName);
+        if (field && column) {
+          return this.props.filterField ? column[this.props.filterField] : true;
+        }
+        return false;
+      })
+      .map(fieldName => new ProjectPropertyModel(configuration.fields.filter(fld => fld.InternalName === fieldName)[0], item[fieldName]));
+  }
+
   private async fetchData(): Promise<IProjectInformationData> {
-    this._hubConfigurationService = new HubConfigurationService(this.props.hubSiteUrl);
-    this._spEntityPortalService = new SpEntityPortalService({ webUrl: this.props.hubSiteUrl, ...this.props.entity });
     try {
-      const [configuration, editFormUrl, versionHistoryUrl, entityItem] = await Promise.all([
+      const [configuration, editFormUrl, versionHistoryUrl, item] = await Promise.all([
         this.fetchConfiguration(),
         this._spEntityPortalService.getEntityEditFormUrl(this.props.siteId, this.props.webUrl),
         this._spEntityPortalService.getEntityVersionHistoryUrl(this.props.siteId, this.props.webUrl),
         this._spEntityPortalService.getEntityItemFieldValues(this.props.siteId),
       ]);
-      let properties = Object.keys(entityItem)
-        .filter(fieldName => {
-          let [field] = configuration.fields.filter(fld => fld.InternalName === fieldName);
-          let [column] = configuration.columnConfig.filter(c => c.GtInternalName === fieldName);
-          if (field && column) {
-            return this.props.filterField ? column[this.props.filterField] : true;
-          }
-          return false;
-        })
-        .map(fieldName => new ProjectPropertyModel(configuration.fields.filter(fld => fld.InternalName === fieldName)[0], entityItem[fieldName]));
+
+      let properties = this.mapProperties(item, configuration);
+
+      let statusReports: ProjectStatusReport[] = [];
+
+      if (this.props.showStatusReports && this.props.reportListName) {
+        statusReports =
+          (
+            await new Web(this.props.hubSiteUrl).lists.getByTitle(this.props.reportListName)
+              .items
+              .filter(`GtSiteId eq '${this.props.siteId}'`)
+              .orderBy('Id', false)
+              .top(this.props.reportCount)
+              .get<any[]>()
+          ).map(_ => new ProjectStatusReport(_));
+      }
+
       return {
         properties,
         editFormUrl,
         versionHistoryUrl,
-        itemId: entityItem.ID,
+        itemId: item.ID,
+        statusReports,
       };
     } catch (error) {
       throw error;

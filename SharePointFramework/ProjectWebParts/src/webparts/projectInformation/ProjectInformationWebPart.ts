@@ -1,4 +1,4 @@
-import { BaseClientSideWebPart, IPropertyPaneConfiguration, PropertyPaneToggle, PropertyPaneTextField, PropertyPaneDropdown } from '@microsoft/sp-webpart-base';
+import { BaseClientSideWebPart, IPropertyPaneConfiguration, PropertyPaneToggle, PropertyPaneTextField, PropertyPaneDropdown, PropertyPaneSlider } from '@microsoft/sp-webpart-base';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { sp } from '@pnp/sp';
 import { IProjectInformationProps, ProjectInformation } from 'components/ProjectInformation';
@@ -40,6 +40,32 @@ export default class ProjectInformationWebPart extends BaseClientSideWebPart<IPr
       pages: [
         {
           groups: [
+            {
+              groupName: strings.ProjectStatusGroupName,
+              groupFields: [
+                PropertyPaneToggle('showStatusReports', {
+                  label: strings.ShowStatusReportsLabel,
+                }),
+                PropertyPaneTextField('statusReportsHeader', {
+                  label: strings.StatusReportsHeaderLabel,
+                }),
+                PropertyPaneTextField('reportListName', {
+                  label: strings.ReportListNameLabel,
+                  disabled: true,
+                }),
+                PropertyPaneSlider('reportCount', {
+                  label: strings.ReportCountLabel,
+                  disabled: !this.properties.showStatusReports,
+                  min: 1,
+                  max: 10,
+                  step: 1,
+                }),
+                PropertyPaneTextField('reportLinkUrlTemplate', {
+                  label: strings.ReportLinkUrlLabel,
+                  disabled: !this.properties.showStatusReports,
+                }),
+              ],
+            },
             {
               groupName: strings.LookAndFeelGroupName,
               groupFields: [

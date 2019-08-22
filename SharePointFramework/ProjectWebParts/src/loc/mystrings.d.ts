@@ -1,4 +1,10 @@
 declare interface IProjectWebPartsStrings {
+  ProjectStatusGroupName: string;
+  ShowStatusReportsLabel: string;
+  StatusReportsHeaderLabel: string;
+  ReportListNameLabel: string;
+  ReportCountLabel: string;
+  ReportLinkUrlLabel: string;
   AutomaticReloadFieldLabel: string;
   BoxBackgroundColorLabel: string;
   BoxLayoutLabel: string;
@@ -56,6 +62,7 @@ declare interface IProjectWebPartsStrings {
   ViewVersionHistoryText: string;
   WebPartNotConfiguredMessage: string;
   Yes: string;
+  GeneralGroupName: string;
 }
 
 declare module 'ProjectWebPartsStrings' {

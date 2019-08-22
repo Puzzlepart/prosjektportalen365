@@ -291,7 +291,9 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         entity={this.props.entity}
         webUrl={this.props.pageContext.site.absoluteUrl}
         hubSiteUrl={this.props.pageContext.site.absoluteUrl}
-        filterField={this.props.projectInfoFilterField} />
+        filterField={this.props.projectInfoFilterField}
+        showStatusReports={this.props.projectInfoShowStatusReports}
+        reportLinkUrlTemplate={this.props.projectInfoReportLinkUrlTemplate} />
     );
   }
 
@@ -455,7 +457,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
    */
   private async fetchInitialData(): Promise<Partial<IPortfolioOverviewState>> {
     try {
-      const hashState = parseUrlHash();
+      const hashState = parseUrlHash<{ viewId: string, groupBy: string }>();
       const viewIdUrlParam = new UrlQueryParameterCollection(document.location.href).getValue('viewId');
       let currentView = this.props.defaultView;
 

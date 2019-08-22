@@ -1,7 +1,7 @@
 /**
  * Parse url hash
  */
-export default function parseUrlHash(): { [key: string]: string } {
+export default function parseUrlHash<T>(): T {
     let hash = document.location.hash.substring(1);
     return hash.split("&").reduce((obj, str) => {
         let [key, value] = str.split("=");
@@ -9,5 +9,5 @@ export default function parseUrlHash(): { [key: string]: string } {
             obj[key] = value;
         }
         return obj;
-    }, {});
+    }, {}) as T;
 }

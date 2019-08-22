@@ -45,6 +45,7 @@ define([], function () {
     ReloadTimeoutFieldLabel: 'Forsinkelse (s)',
     SaveText: 'Lagre',
     SettingsGroupName: 'Innstillinger',
+    GeneralGroupName: 'Generelt',
     Skip: 'Hopp over alle',
     StatusClosed: 'Utført',
     StatusNotRelevant: 'Ikke relevant',
@@ -56,6 +57,12 @@ define([], function () {
     ViewsGroupName: 'Visninger',
     ViewVersionHistoryText: 'Vis versjonshistorikk',
     WebPartNotConfiguredMessage: 'Webdelen er ikke konfigurert riktig. Du må angi webpartegenskaper riktig.',
-    Yes: 'Ja'
+    Yes: 'Ja',
+    ShowStatusReportsLabel: 'Vis statusrapporter',
+    StatusReportsHeaderLabel: 'Prosjektstatus',
+    ReportListNameLabel: 'Listenavn for statusrapporter',
+    ReportCountLabel: 'Antall rapporter å vise',
+    ReportLinkUrlLabel: 'Lenke for knapp',
+    ProjectStatusGroupName: 'Prosjektstatus'
   }
 });

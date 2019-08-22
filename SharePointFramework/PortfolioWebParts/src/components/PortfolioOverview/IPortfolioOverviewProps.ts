@@ -8,6 +8,8 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
     entity: ISpEntityPortalServiceParams;
     configuration: IPortfolioOverviewConfiguration;
     projectInfoFilterField?: string;
+    projectInfoShowStatusReports?: boolean;
+    projectInfoReportLinkUrlTemplate?: string;
     constrainMode?: ConstrainMode;
     layoutMode?: DetailsListLayoutMode;
     showExcelExportButton?: boolean;

@@ -50,13 +50,24 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                 PropertyPaneToggle('showSearchBox', {
                   label: strings.ShowSearchBoxLabel,
                 }),
+                PropertyPaneDropdown('defaultViewId', {
+                  label: strings.DefaultViewLabel,
+                  options: this.getOptions('defaultViewId'),
+                }),
+              ]
+            },
+            {
+              groupName: strings.ProjectInformationGroupName,
+              groupFields: [
                 PropertyPaneDropdown('projectInfoFilterField', {
                   label: strings.ProjectInfoFilterFieldLabel,
                   options: this.getOptions('projectInfoFilterField'),
                 }),
-                PropertyPaneDropdown('defaultViewId', {
-                  label: strings.DefaultViewLabel,
-                  options: this.getOptions('defaultViewId'),
+                PropertyPaneTextField('projectInfoShowStatusReports', {
+                  label: strings.ProjectInfoShowStatusReportsLabel,
+                }),
+                PropertyPaneTextField('projectInfoReportLinkUrlTemplate', {
+                  label: strings.ProjectInfoReportLinkUrlTemplateLabel,
                 }),
               ]
             },

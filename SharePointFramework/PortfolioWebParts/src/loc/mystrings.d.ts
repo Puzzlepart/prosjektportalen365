@@ -25,7 +25,6 @@ declare interface IPortfolioWebPartsStrings {
   EditViewText: string;
   ErrorText: string;
   ExcelExportButtonLabel: string;
-  ShowExcelExportButtonLabel: string;
   ExcelExportFileNamePrefix: string;
   FetchDataErrorMessage: string;
   FieldSelectorEmptyMessage: string;
@@ -55,6 +54,9 @@ declare interface IPortfolioWebPartsStrings {
   ProbabilityLabel: string;
   ProbabilityPostActionLabel: string;
   ProjectInfoFilterFieldLabel: string;
+  ProjectInfoReportLinkUrlTemplateLabel: string;
+  ProjectInformationGroupName: string;
+  ProjectInfoShowStatusReportsLabel: string;
   ProjectLinkText: string;
   ProjectManager: string;
   ProjectOwner: string;
@@ -71,15 +73,17 @@ declare interface IPortfolioWebPartsStrings {
   SearchBoxPlaceholderTextLabel: string;
   ShowAllMeasurementsLinkText: string;
   ShowAsListText: string;
-  ShowAsTilesText: string;
   ShowAsTilesLabel: string;
+  ShowAsTilesText: string;
   ShowCommandBarLabel: string;
+  ShowExcelExportButtonLabel: string;
   ShowFiltersLabel: string;
   ShowGroupByLabel: string;
   ShowProjectLogoFieldLabel: string;
   ShowProjectManagerFieldLabel: string;
   ShowProjectOwnerFieldLabel: string;
   ShowSearchBoxLabel: string;
+  ShowViewSelectorLabel: string;
   SiteTitleLabel: string;
   SortByFieldLabel: string;
   StartValueLabel: string;
@@ -87,7 +91,6 @@ declare interface IPortfolioWebPartsStrings {
   TitleLabel: string;
   UnitLabel: string;
   ViewNotFoundMessage: string;
-  ShowViewSelectorLabel: string;
   ViewsListNameLabel: string;
 }
 
