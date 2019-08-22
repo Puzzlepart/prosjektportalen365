@@ -51,13 +51,15 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       const data = await this.fetchData(this.props.pageContext);
       let selectedReport = data.reports[0];
       const hashState = parseUrlHash<IProjectStatusHashState>();
-      const selectedReportUrlParam = new UrlQueryParameterCollection(document.location.href).getValue('selectedReport');
+      const urlQueryParameterCollection = new UrlQueryParameterCollection(document.location.href);
+      const selectedReportUrlParam = urlQueryParameterCollection.getValue('selectedReport');
+      const sourceUrlParam = urlQueryParameterCollection.getValue('Source');
       if (hashState.selectedReport) {
         [selectedReport] = data.reports.filter(report => report.id === parseInt(hashState.selectedReport, 10));
       } else if (selectedReportUrlParam) {
         [selectedReport] = data.reports.filter(report => report.id === parseInt(selectedReportUrlParam, 10));
       }
-      this.setState({ data, selectedReport, sourceUrl: decodeURIComponent(hashState.source || ''), isLoading: false });
+      this.setState({ data, selectedReport, sourceUrl: decodeURIComponent(hashState.source || sourceUrlParam || ''), isLoading: false });
     } catch (error) {
       this.setState({ error, isLoading: false });
     }
