@@ -125,7 +125,22 @@ export class DataAdapter {
                 sp.web.lists.getByTitle(viewsListName)
                     .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
                     .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')
+                    .usingCaching({
+                        key: 'getportfolioconfig_forms',
+                        storeName: 'session',
+                        expiration: dateAdd(new Date(), 'minute', 15),
+                    })
                     .get<{ DefaultNewFormUrl: string, DefaultEditFormUrl: string }>(),
+                sp.web.lists.getByTitle(columnsListName)
+                    .fields
+                    .filter(`substringof('GtShowField', InternalName)`)
+                    .select('InternalName', 'Title')
+                    .usingCaching({
+                        key: 'getportfolioconfig_showfields',
+                        storeName: 'session',
+                        expiration: dateAdd(new Date(), 'minute', 15),
+                    })
+                    .get<{ InternalName: string, Title: string }[]>(),
             ]);
             const columnConfig = spItems[0].map(c => new ProjectColumnConfig(c));
             const columns = spItems[1].map(c => {
@@ -143,6 +158,7 @@ export class DataAdapter {
                 views,
                 viewNewFormUrl: makeUrlAbsolute(spItems[3].DefaultNewFormUrl),
                 viewEditFormUrl: makeUrlAbsolute(spItems[3].DefaultEditFormUrl),
+                showFields: spItems[4],
             };
             return config;
         } catch (error) {
@@ -226,7 +242,7 @@ export class DataAdapter {
                 .siteUsers
                 .select('Id', 'Title', 'Email')
                 .usingCaching({
-                    key: 'projectlist_fetchprojects_siteusers',
+                    key: 'fetchencrichedprojects_siteusers',
                     storeName: 'session',
                     expiration: dateAdd(new Date(), 'minute', 15),
                 })
@@ -236,7 +252,7 @@ export class DataAdapter {
                 .getTermSetById(phaseTermSetId)
                 .terms
                 .usingCaching({
-                    key: 'projectlist_fetchprojects_terms',
+                    key: 'fetchencrichedprojects_terms',
                     storeName: 'session',
                     expiration: dateAdd(new Date(), 'minute', 15),
                 })

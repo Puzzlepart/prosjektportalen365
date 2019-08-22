@@ -6,4 +6,5 @@ export interface IPortfolioOverviewConfiguration {
     views: PortfolioOverviewView[];
     viewNewFormUrl: string;
     viewEditFormUrl: string;
+    showFields: { InternalName: string, Title: string }[];
 }

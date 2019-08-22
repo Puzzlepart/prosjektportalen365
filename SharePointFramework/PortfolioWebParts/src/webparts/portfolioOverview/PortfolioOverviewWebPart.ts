@@ -24,8 +24,9 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
-                PropertyPaneTextField('projectInfoFilterField', {
+                PropertyPaneDropdown('projectInfoFilterField', {
                   label: strings.ProjectInfoFilterFieldLabel,
+                  options: this._configuration ? this._configuration.showFields.map(fld => ({ key: fld.InternalName, text: fld.Title })) : [],
                 }),
                 PropertyPaneToggle('excelExportEnabled', {
                   label: strings.ExcelExportEnabledLabel,
@@ -38,10 +39,8 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                 }),
                 PropertyPaneDropdown('defaultViewId', {
                   label: strings.DefaultViewLabel,
-                  options: this._configuration
-                    ? this._configuration.views.map(v => ({ key: v.id, text: v.title }))
-                    : [],
-                })
+                  options: this._configuration ? this._configuration.views.map(view => ({ key: view.id, text: view.title })) : [],
+                }),
               ]
             },
             {

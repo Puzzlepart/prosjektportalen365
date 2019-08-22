@@ -1,9 +1,9 @@
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
-import { parseUrlHash, setUrlHash } from 'shared/lib/util';
 import * as arraySort from 'array-sort';
 import * as arrayUnique from 'array-unique';
 import { IPortfolioOverviewConfiguration } from 'interfaces';
 import { PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
+import * as moment from 'moment';
 import * as objectGet from 'object-get';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
@@ -14,15 +14,17 @@ import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'PortfolioWebPartsStrings';
 import { ProjectInformationModal } from 'projectwebparts/lib/components/ProjectInformation';
 import * as React from 'react';
+import { getObjectValue } from 'shared/lib/helpers';
+import { ExcelExportService } from 'shared/lib/services';
+import { parseUrlHash, setUrlHash } from 'shared/lib/util';
 import * as format from 'string-format';
 import { FilterPanel, IFilterItemProps, IFilterProps } from '../';
 import { IPortfolioOverviewProps, PortfolioOverviewDefaultProps } from './IPortfolioOverviewProps';
 import { IPortfolioOverviewState } from './IPortfolioOverviewState';
 import styles from './PortfolioOverview.module.scss';
+import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage';
 import { PortfolioOverviewFieldSelector } from './PortfolioOverviewFieldSelector';
 import { renderItemColumn } from './RenderItemColumn';
-import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage';
-
 
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = PortfolioOverviewDefaultProps;
@@ -135,6 +137,18 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         },
       });
     }
+    if (this.props.excelExportEnabled) {
+      items.push({
+        key: "ExcelExport",
+        name: strings.ExcelExportButtonLabel,
+        iconProps: {
+          iconName: 'ExcelDocument',
+          styles: { root: { color: "green !important" } },
+        },
+        disabled: this.state.isExporting,
+        onClick: evt => { this.exportToExcel(evt); },
+      });
+    }
 
     if (this.props.viewSelectorEnabled) {
       if (this.props.pageContext.legacyPageContext.isSiteAdmin) {
@@ -158,7 +172,10 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
               iconProps: { iconName: 'List' },
               canCheck: true,
               checked: !this.state.isCompact,
-              disabled: true,
+              onClick: (event: any) => {
+                event.preventDefault();
+                this.setState({ isCompact: false });
+              },
             },
             {
               key: 'CompactList',
@@ -166,7 +183,10 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
               iconProps: { iconName: 'AlignLeft' },
               canCheck: true,
               checked: this.state.isCompact,
-              disabled: true,
+              onClick: (event: any) => {
+                event.preventDefault();
+                this.setState({ isCompact: true });
+              },
             },
             {
               key: 'divider_0',
@@ -510,6 +530,33 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     }
 
     this.setState(updatedState);
+  }
+
+
+
+  /**
+   * Export to Excel
+   */
+  private async exportToExcel(evt: React.MouseEvent<any> | React.KeyboardEvent<any>): Promise<void> {
+    evt.preventDefault();
+    this.setState({ isExporting: true });
+    const sheets = [];
+    let { items, columns } = this.getFilteredData();
+    let _columns = columns.filter(column => column.name);
+    sheets.push({
+      name: 'Sheet1',
+      data: [
+        _columns.map(column => column.name),
+        ...items.map(item => _columns.map(column => getObjectValue<string>(item, column.fieldName, null))),
+      ],
+    });
+    const fileName = format("{0}-{1}.xlsx", this.props.title, moment(new Date().toISOString()).format('YYYY-MM-DD-HH-mm'));
+    try {
+      await ExcelExportService.export(sheets, fileName);
+      this.setState({ isExporting: false });
+    } catch (error) {
+      this.setState({ isExporting: false });
+    }
   }
 }
 

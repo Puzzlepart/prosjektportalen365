@@ -6,6 +6,7 @@ import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage';
 
 export interface IPortfolioOverviewState {
     isLoading?: boolean;
+    isExporting?: boolean;
     isChangingView?: PortfolioOverviewView;
     items?: SearchResult[];
     columns?: IColumn[];
