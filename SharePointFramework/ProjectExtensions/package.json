@@ -1,6 +1,6 @@
 {
     "name": "projectextensions",
-    "version": "0.10.2",
+    "version": "0.10.5",
     "private": true,
     "engines": {
         "node": ">=0.10.0"
@@ -47,9 +47,9 @@
         "react": "16.7.0",
         "react-dom": "16.7.0",
         "shared": "link:..\\@Shared",
-        "sp-entityportal-service": "^0.6.10",
+        "sp-entityportal-service": "^0.8.1",
         "sp-hubsite-service": "^0.4.1",
-        "sp-js-provisioning": "^0.10.7",
+        "sp-js-provisioning": "^1.0.0",
         "spfx-jsom": "^0.6.4",
         "string-format": "^2.0.0"
     },
@@ -66,6 +66,7 @@
         "@types/mocha": "2.2.38",
         "@types/sharepoint": "^2016.1.2",
         "ajv": "~5.2.2",
+        "find": "^0.3.0",
         "gulp": "~3.9.1",
         "spfx-pkgdeploy": "^0.3.0"
     }

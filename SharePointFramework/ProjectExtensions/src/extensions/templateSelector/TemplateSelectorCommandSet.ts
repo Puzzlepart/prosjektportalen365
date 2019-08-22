@@ -35,7 +35,6 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
         this._templates = await data.getDocumentTemplates(sp, this.context.pageContext, this.properties.templateLibrary, this.properties.phaseTermSetId);
         Logger.log({ message: `(TemplateSelectorCommandSet) onInit: Retrieved ${this._templates.length} templates from the specified template library`, level: LogLevel.Info });
       } catch (error) {
-        console.log(error);
         Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Failed to initialize', level: LogLevel.Warning });
       }
     }

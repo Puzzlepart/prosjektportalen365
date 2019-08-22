@@ -3,7 +3,6 @@ import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-applic
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { sp, Web } from '@pnp/sp';
 import { ListLogger } from 'shared/lib/logging';
-import { injectStyles } from 'shared/lib/util';
 import MSGraphHelper from 'msgraph-helper';
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
@@ -59,10 +58,13 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
    */
   protected async initializeSetup() {
     try {
-      injectStyles(`.SPPageChrome { opacity: 0.4; } .SPCanvas { visibility: hidden; } `);
+      Logger.log({ message: '(ProjectSetupApplicationCustomizer) initializeSetup: Initializing setup', data: { version: this.context.manifest.version }, level: LogLevel.Info });
       this._data = await this.getData();
+      Logger.log({ message: '(ProjectSetupApplicationCustomizer) initializeSetup: Data retrieved, initializing list logger', data: { version: this.context.manifest.version }, level: LogLevel.Info });
       this.initLogging(this._data.hub.web);
+      Logger.log({ message: '(ProjectSetupApplicationCustomizer) initializeSetup: Awaiting template selection from user', data: { version: this.context.manifest.version }, level: LogLevel.Info });
       const templateInfo = await this.getTemplateInfo();
+      Logger.log({ message: '(ProjectSetupApplicationCustomizer) initializeSetup: Template selected by user', data: { selectedTemplate: templateInfo.selectedTemplate.title }, level: LogLevel.Info });
       ReactDOM.unmountComponentAtNode(this._templateSelectModalContainer);
       this._data = { ...this._data, ...templateInfo };
       this._taskParams = {
@@ -71,6 +73,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
         data: this._data,
         templateParameters: { fieldsgroup: strings.SiteFieldsGroupName },
       };
+      Logger.log({ message: '(ProjectSetupApplicationCustomizer) initializeSetup: Rendering progrss modal', data: { selectedTemplate: templateInfo.selectedTemplate.title }, level: LogLevel.Info });
       this.renderProgressModal({ text: strings.ProgressModalLabel, subText: strings.ProgressModalDescription, iconName: 'Page' });
       await this.startProvision();
       await this.removeCustomizer(this.componentId, !this.isDebug());
@@ -163,6 +166,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
       await ListLogger.write('Starting provisioning of project.', 'Info');
       this._taskParams.templateSchema = await this._taskParams.data.selectedTemplate.getSchema();
       for (let i = 0; i < Tasks.length; i++) {
+        Logger.log({ message: `(ProjectSetupApplicationCustomizer) startProvision: Executing task ${Tasks[i].name}`, level: LogLevel.Info });
         this._taskParams = await Tasks[i].execute(this._taskParams, this.onTaskStatusUpdated.bind(this));
       }
       await ListLogger.write('Project successfully provisioned.', 'Info');
@@ -207,14 +211,19 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
    */
   private async getData(): Promise<IProjectSetupApplicationCustomizerData> {
     try {
+      Logger.log({ message: '(ProjectSetupApplicationCustomizer) getData: Retrieving required data for setup', data: { version: this.context.manifest.version }, level: LogLevel.Info });
       await MSGraphHelper.Init(this.context.msGraphClientFactory);
+      Logger.log({ message: '(ProjectSetupApplicationCustomizer) getData: Retrieving hub site url', data: {}, level: LogLevel.Info });
       let _data: IProjectSetupApplicationCustomizerData = {};
       _data.hub = await HubSiteService.GetHubSite(sp, this.context.pageContext);
+      Logger.log({ message: '(ProjectSetupApplicationCustomizer) getData: Retrieved hub site url', data: { hubUrl: _data.hub.url }, level: LogLevel.Info });
+      Logger.log({ message: '(ProjectSetupApplicationCustomizer) getData: Retrieving templates, extensions and content config', data: {}, level: LogLevel.Info });
       const [templates, extensions, listContentConfig] = await Promise.all([
         getHubFiles(_data.hub, this.properties.templatesLibrary, ProjectTemplate),
         getHubFiles(_data.hub, this.properties.extensionsLibrary, ProjectTemplate),
         getHubItems(_data.hub, this.properties.contentConfigList, ListContentConfig),
       ]);
+      Logger.log({ message: '(ProjectSetupApplicationCustomizer) getData: Retrieved templates, extensions and content config', data: { templates: templates.length, extensions: extensions.length, listContentConfig: listContentConfig.length }, level: LogLevel.Info });
       return {
         ..._data,
         templates,

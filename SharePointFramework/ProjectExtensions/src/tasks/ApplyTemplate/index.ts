@@ -19,7 +19,6 @@ export default class ApplyTemplate extends BaseTask {
      */
     @override
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
-        this.logInformation('Applying template to site', { parameters: params.templateParameters });
         try {
             const web = new Web(params.context.pageContext.web.absoluteUrl);
             const provisioner = new WebProvisioner(web);
@@ -28,11 +27,13 @@ export default class ApplyTemplate extends BaseTask {
                 logging: { prefix: '(ProjectSetupApplicationCustomizer) (ApplyTemplate)', activeLogLevel: 1 },
                 parameters: params.templateParameters,
             });
+            this.logInformation('Applying template to site', { parameters: params.templateParameters });
             await provisioner.applyTemplate(params.templateSchema, null, status => {
                 if (ApplyTemplateStatusMap[status]) {
                     onProgress(ApplyTemplateStatusMap[status].text, ApplyTemplateStatusMap[status].iconName);
                 }
             });
+            this.logInformation('Applying extensions to site', { parameters: params.templateParameters });
             for (let i = 0; i < params.data.selectedExtensions.length; i++) {
                 let extensionSchema = await params.data.selectedExtensions[i].getSchema();
                 onProgress(stringFormat(strings.ApplyExtensionText, params.data.selectedExtensions[i].title), 'ExternalBuild');
