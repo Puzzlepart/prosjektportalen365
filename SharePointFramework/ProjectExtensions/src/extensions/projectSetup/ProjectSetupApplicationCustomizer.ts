@@ -2,8 +2,8 @@ import { override } from '@microsoft/decorators';
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { sp, Web } from '@pnp/sp';
-import { ListLogger } from '@Shared/logging';
-import { injectStyles } from '@Shared/util';
+import { ListLogger } from 'shared/lib/logging';
+import { injectStyles } from 'shared/lib/util';
 import MSGraphHelper from 'msgraph-helper';
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
@@ -75,7 +75,6 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
       await this.startProvision();
       await this.removeCustomizer(this.componentId, !this.isDebug());
     } catch (error) {
-      await ListLogger.write(`${error.taskName} failed with message ${error.message}`, 'Error');
       this.renderErrorModal({ error });
     }
   }
@@ -88,7 +87,8 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
    */
   protected initLogging(hubWeb: Web, listName: string = 'Logg') {
     ListLogger.init(
-      hubWeb.lists.getByTitle(listName), {
+      hubWeb.lists.getByTitle(listName),
+      {
         webUrl: 'GtLogWebUrl',
         scope: 'GtLogScope',
         functionName: 'GtLogFunctionName',

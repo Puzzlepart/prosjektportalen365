@@ -22,6 +22,7 @@ dependencies:
   office-ui-fabric-react: 6.201.1
   react: 16.7.0
   react-dom: 16.7.0
+  shared: 'link:../@Shared'
   sp-entityportal-service: 0.6.14
   sp-hubsite-service: 0.4.1
   sp-js-provisioning: 0.10.7
@@ -11880,6 +11881,7 @@ specifiers:
   office-ui-fabric-react: ^6.200.0
   react: 16.7.0
   react-dom: 16.7.0
+  shared: 'link:..\@Shared'
   sp-entityportal-service: ^0.6.10
   sp-hubsite-service: ^0.4.1
   sp-js-provisioning: ^0.10.7

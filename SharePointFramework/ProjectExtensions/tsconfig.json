@@ -28,11 +28,7 @@
       "es2015.collection"
     ],
     "baseUrl": "src",
-    "paths": {
-      "@Shared/*": [
-        "../../@Shared/lib/*"
-      ]
-    }
+    "paths": {}
   },
   "include": [
     "src/**/*.ts"
