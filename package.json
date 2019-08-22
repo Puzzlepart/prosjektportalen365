@@ -1,11 +1,12 @@
 {
   "name": "prosjektportalen365",
-  "version": "0.9.13",
+  "version": "0.9.12",
   "description": "Prosjektportalen 365",
   "main": "n/a",
   "scripts": {
     "buildReleasePackage": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1",
-    "buildReleasePackageSkipBuildSPFx": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -SkipBuildSharePointFramework"
+    "buildReleasePackageSkipBuildSPFx": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -SkipBuildSharePointFramework",
+    "postversion": "npm run-script buildReleasePackage"
   },
   "repository": {
     "type": "git",
