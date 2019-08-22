@@ -1,6 +1,4 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
-import { dateAdd } from '@pnp/common';
-import { ICachingOptions } from '@pnp/odata';
 import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
 import { HubConfigurationService } from 'shared/lib/services';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
@@ -15,9 +13,13 @@ import { IProjectInformationProps, ProjectInformationDefaultProps } from './IPro
 import { IProjectInformationState } from './IProjectInformationState';
 import styles from './ProjectInformation.module.scss';
 import { ProjectProperty, ProjectPropertyModel } from './ProjectProperty';
+import { PnPClientStorage, dateAdd } from '@pnp/common';
 
 export class ProjectInformation extends React.Component<IProjectInformationProps, IProjectInformationState> {
   public static defaultProps = ProjectInformationDefaultProps;
+  private _hubConfigurationService: HubConfigurationService;
+  private _spEntityPortalService: SpEntityPortalService;
+
 
   constructor(props: IProjectInformationProps) {
     super(props);
@@ -114,52 +116,41 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   }
 
   /**
-   * Get cache options for function
+   * Fetch configuration
    * 
-   * @param {string} func Function
-   * @param {'session' | 'local'} storeName Store name
+   * @param {string} key Key for cache
+   * @param {Date} expire Expire for cache
    */
-  private getCacheOptions(func: string, storeName: 'session' | 'local' = 'session'): ICachingOptions {
-    return {
-      key: `ProjectInformation_${func}`,
-      storeName,
-      expiration: dateAdd(new Date(), 'hour', 1),
-    };
+  private async fetchConfiguration(key: string = 'projectinformation_fetchconfiguration', expire: Date = dateAdd(new Date(), 'minute', 15)) {
+    return new PnPClientStorage().session.getOrPut(key, async () => {
+      const [columnConfig, fields] = await Promise.all([
+        this._hubConfigurationService.getProjectColumns(),
+        this._spEntityPortalService.getEntityFields(),
+      ]);
+      return { columnConfig, fields };
+    }, expire);
   }
 
   private async fetchData(): Promise<IProjectInformationData> {
+    this._hubConfigurationService = new HubConfigurationService(this.props.hubSiteUrl);
+    this._spEntityPortalService = new SpEntityPortalService({ webUrl: this.props.hubSiteUrl, ...this.props.entity });
     try {
-      const hubConfigurationService = new HubConfigurationService(this.props.hubSiteUrl);
-      const spEntityPortalService = new SpEntityPortalService({ webUrl: this.props.hubSiteUrl, ...this.props.entity });
-
-      const [
-        columnConfig,
-        fields,
-        editFormUrl,
-        versionHistoryUrl,
-        entityItem,
-      ] = await Promise.all([
-        hubConfigurationService.getProjectColumns(),
-        spEntityPortalService.getEntityFields(this.getCacheOptions('getEntityFields')),
-        spEntityPortalService.getEntityEditFormUrl(this.props.siteId, this.props.webUrl, this.getCacheOptions('getEntityEditFormUrl')),
-        spEntityPortalService.getEntityVersionHistoryUrl(this.props.siteId, this.props.webUrl, this.getCacheOptions('getEntityVersionHistoryUrl')),
-        spEntityPortalService.getEntityItemFieldValues(this.props.siteId)
+      const [configuration, editFormUrl, versionHistoryUrl, entityItem] = await Promise.all([
+        this.fetchConfiguration(),
+        this._spEntityPortalService.getEntityEditFormUrl(this.props.siteId, this.props.webUrl),
+        this._spEntityPortalService.getEntityVersionHistoryUrl(this.props.siteId, this.props.webUrl),
+        this._spEntityPortalService.getEntityItemFieldValues(this.props.siteId),
       ]);
       let properties = Object.keys(entityItem)
-        .map(fieldName => ({
-          field: fields.filter(fld => fld.InternalName === fieldName)[0],
-          value: entityItem[fieldName],
-        }))
-        .filter(prop => {
-          if (prop.field) {
-            const [column] = columnConfig.filter(c => c.GtInternalName === prop.field.InternalName);
-            if (column) {
-              return column[this.props.filterField];
-            }
+        .filter(fieldName => {
+          let [field] = configuration.fields.filter(fld => fld.InternalName === fieldName);
+          let [column] = configuration.columnConfig.filter(c => c.GtInternalName === fieldName);
+          if (field && column) {
+            return this.props.filterField ? column[this.props.filterField] : true;
           }
           return false;
         })
-        .map(({ field, value }) => new ProjectPropertyModel(field, value));
+        .map(fieldName => new ProjectPropertyModel(configuration.fields.filter(fld => fld.InternalName === fieldName)[0], entityItem[fieldName]));
       return {
         properties,
         editFormUrl,
