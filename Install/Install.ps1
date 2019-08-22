@@ -142,7 +142,7 @@ if (-not $SkipSiteDesign.IsPresent) {
     $SiteScriptIds = @()
 
     Try {
-        Write-Host "[INFO] Installing site scripts"
+        Write-Host "[INFO] Creating/updating site scripts"
         $SiteScripts = Get-PnPSiteScript -Connection $AdminSiteConnection
         $SiteScriptSrc = Get-ChildItem "./SiteScripts/*.txt"
         foreach ($s in $SiteScriptSrc) {
@@ -157,24 +157,22 @@ if (-not $SkipSiteDesign.IsPresent) {
             }
             $SiteScriptIds += $SiteScript.Id.Guid
         }
-        Write-Host "[INFO] Successfully installed site scripts" -ForegroundColor Green
+        Write-Host "[INFO] Successfully created/updated site scripts" -ForegroundColor Green
     }
     Catch {
-        Write-Host "[ERROR] Failed to install site scripts: $($_.Exception.Message)" -ForegroundColor Red
+        Write-Host "[ERROR] Failed to create/update site scripts: $($_.Exception.Message)" -ForegroundColor Red
         exit 0
     }
 
     Try {
-        Write-Host "[INFO] Installing site design [$SiteDesignName]"
+        Write-Host "[INFO] Creating/updating site design [$SiteDesignName]"
     
         $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName -Connection $AdminSiteConnection
 
         if ($null -ne $SiteDesign) {
-            Write-Host "[INFO] Updating existing site design [$SiteDesignName]"
             $SiteDesign = Set-PnPSiteDesign -Identity $SiteDesign -SiteScriptIds $SiteScriptIds -Description "" -Version "1" -Connection $AdminSiteConnection
         }
         else {
-            Write-Host "[INFO] Creating new site design [$SiteDesignName]"
             $SiteDesign = Add-PnPSiteDesign -Title $SiteDesignName -SiteScriptIds $SiteScriptIds -Description "" -WebTemplate TeamSite -Connection $AdminSiteConnection
         }
         if ([string]::IsNullOrEmpty($SiteDesignSecurityGroupId)) {
@@ -184,10 +182,10 @@ if (-not $SkipSiteDesign.IsPresent) {
             Write-Host "[INFO] Granting group $SiteDesignSecurityGroupId View access to site design [$SiteDesignName]"
             Grant-PnPSiteDesignRights -Identity $SiteDesign.Id.Guid -Principals @("c:0t.c|tenant|$SiteDesignSecurityGroupId")
         }
-        Write-Host "[INFO] Successfully installed site design [$SiteDesignName]" -ForegroundColor Green
+        Write-Host "[INFO] Successfully created/updated site design [$SiteDesignName]" -ForegroundColor Green
     }
     Catch {
-        Write-Host "[ERROR] Failed to install site design: $($_.Exception.Message)" -ForegroundColor Red
+        Write-Host "[ERROR] Failed to create/update site design: $($_.Exception.Message)" -ForegroundColor Red
         exit 0
     }
 }
@@ -222,11 +220,7 @@ if (-not $SkipAppPackages.IsPresent) {
 #region Applying PnP templates 
 if (-not $SkipTemplate.IsPresent) {
     Try {
-        $DenyAddAndCustomizePagesStatusEnum = [Microsoft.Online.SharePoint.TenantAdministration.DenyAddAndCustomizePagesStatus]
-        $Site = Get-PnPTenantSite -Detailed -Url $Url -Connection $AdminSiteConnection
-        $Site.DenyAddAndCustomizePages = $DenyAddAndCustomizePagesStatusEnum::Disabled 
-        $Site.Update() | Out-Null
-        $Site.Context.ExecuteQuery()
+        Set-PnPTenantSite -NoScriptSite:$false -Url $Url -Connection $AdminSiteConnection
         
         Write-Host "[INFO] Applying PnP template [Taxonomy] to [$Url]"
         Apply-PnPProvisioningTemplate .\Templates\Taxonomy.pnp -Connection $SiteConnection -ErrorAction Stop
@@ -236,9 +230,7 @@ if (-not $SkipTemplate.IsPresent) {
         Apply-PnPProvisioningTemplate .\Templates\Portfolio.pnp -Connection $SiteConnection -ErrorAction Stop
         Write-Host "[INFO] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
         
-        $Site.DenyAddAndCustomizePages = $DenyAddAndCustomizePagesStatusEnum::Enabled 
-        $Site.Update() | Out-Null
-        $Site.Context.ExecuteQuery()
+        Set-PnPTenantSite -NoScriptSite:$true -Url $Url -Connection $AdminSiteConnection
     }
     Catch {
         Write-Host "[ERROR] Failed to apply PnP templates to [$Url]: $($_.Exception.Message)" -ForegroundColor Red
