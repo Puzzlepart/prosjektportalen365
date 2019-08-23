@@ -9,7 +9,7 @@
   },
   "serveConfigurations": {
     "default": {
-      "pageUrl": "https://pzlcloud.sharepoint.com/sites/Ugyldigprosjekt3/_layouts/15/viewlsts.aspx",
+      "pageUrl": "https://tenant.sharepoint.com",
       "customActions": {
         "ce34553d-ab47-4107-8dd1-e980d953996d": {
           "location": "ClientSideExtension.ApplicationCustomizer",
@@ -27,7 +27,7 @@
       }
     },
     "projectSetup": {
-      "pageUrl": "https://pzlcloud.sharepoint.com/sites/Ugyldigprosjekt3/_layouts/15/viewlsts.aspx",
+      "pageUrl": "https://tenant.sharepoint.com",
       "customActions": {
         "ce34553d-ab47-4107-8dd1-e980d953996d": {
           "location": "ClientSideExtension.ApplicationCustomizer",
@@ -45,7 +45,7 @@
       }
     },
     "projectUpgrade": {
-      "pageUrl": "https://pzlcloud.sharepoint.com/sites/Ugyldigprosjekt3/_layouts/15/viewlsts.aspx",
+      "pageUrl": "https://tenant.sharepoint.com",
       "customActions": {
         "453a6c1e-e1d0-4b12-a3fc-690a36da1f0c": {
           "location": "ClientSideExtension.ApplicationCustomizer",
@@ -54,7 +54,7 @@
       }
     },
     "templateSelector": {
-      "pageUrl": "https://pzlcloud.sharepoint.com/sites/ByggerplanerforRomerikebryggeripark/Delte%20dokumenter/Forms/AllItems.aspx",
+      "pageUrl": "https://tenant.sharepoint.com",
       "customActions": {
         "c9080212-e63e-47cc-8278-00ad38c3f5a5": {
           "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
