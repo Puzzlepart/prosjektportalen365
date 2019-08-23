@@ -1,5 +1,5 @@
 import { List } from '@pnp/sp';
-import { DataSource } from '../models/DataSource';
+import { DataSource, SPDataSourceItem } from '../models/DataSource';
 
 export class DataSourceService {
     private list: List;
@@ -20,11 +20,21 @@ export class DataSourceService {
      * @param {string} name Name
      */
     public async getByName(name: string): Promise<DataSource> {
-        const [dataSource] = await this.list.items.select('GtSearchQuery').filter(`Title eq '${name}'`).get<Array<{ GtSearchQuery: string }>>();
-        if (dataSource) {
-            return new DataSource(dataSource.GtSearchQuery);
+        const [item] = await this.list.items.select(...Object.keys(new SPDataSourceItem())).filter(`Title eq '${name}'`).get<SPDataSourceItem[]>();
+        if (item) {
+            return new DataSource(item);
         } else {
             return null;
         }
+    }
+
+    /**
+     * Get by category
+     * 
+     * @param {string} category Category
+     */
+    public async getByCategory(category: string): Promise<DataSource[]> {
+        const items = await this.list.items.select(...Object.keys(new SPDataSourceItem())).filter(`GtDataSourceCategory eq '${category}'`).get<SPDataSourceItem[]>();
+        return items.map(item => new DataSource(item));
     }
 };

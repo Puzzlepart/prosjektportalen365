@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    DataSourceCategoryLabel: 'Kategori for datakilder',
+    DataSourceLabel: 'Datakilde',
     AddColumnLabel: 'Legg til kolonne',
     SortDescLabel: 'A til Å',
     SortAscLabel: 'Å til A',

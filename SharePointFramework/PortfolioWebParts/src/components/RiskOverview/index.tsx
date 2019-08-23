@@ -16,11 +16,7 @@ export default class RiskOverview extends React.Component<IRiskOverviewProps, {}
   }
 
   public render(): React.ReactElement<IRiskOverviewProps> {
-    return (
-      <div className={styles.riskOverview}>
-        <AggregatedSearchList {...this.props} />
-      </div>
-    );
+    return <AggregatedSearchList className={styles.riskOverview} {...this.props} />;
   }
 }
 

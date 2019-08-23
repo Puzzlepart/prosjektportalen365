@@ -21,14 +21,20 @@ export default class RiskOverviewWebPart extends BasePortfolioWebPart<IRiskOverv
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
+                PropertyPaneTextField('searchBoxPlaceholderText', {
+                  label: strings.SearchBoxPlaceholderTextLabel,
+                }),
+                PropertyPaneTextField('dataSource', {
+                  label: strings.DataSourceLabel,
+                }),
+                PropertyPaneTextField('dataSourceCategory', {
+                  label: strings.DataSourceCategoryLabel,
+                }),
                 PropertyPaneToggle('showCommandBar', {
                   label: strings.ShowCommandBarLabel,
                 }),
-                PropertyPaneToggle('showSearchBox', {
-                  label: strings.ShowSearchBoxLabel,
-                }),
-                PropertyPaneTextField('searchBoxPlaceholderText', {
-                  label: strings.SearchBoxPlaceholderTextLabel,
+                PropertyPaneToggle('showExcelExportButton', {
+                  label: strings.ShowExcelExportButtonLabel,
                 }),
               ]
             },

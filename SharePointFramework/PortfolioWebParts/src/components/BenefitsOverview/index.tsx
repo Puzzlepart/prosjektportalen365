@@ -27,7 +27,7 @@ export default class BenefitsOverview extends React.Component<IBenefitsOverviewP
           {...this.props}
           columns={columns}
           groupByColumns={groupByColumns}
-          postFetch={this.postFetch.bind(this)} />
+          postTransform={this.postTransform.bind(this)} />
       </div>
     );
   }
@@ -37,7 +37,7 @@ export default class BenefitsOverview extends React.Component<IBenefitsOverviewP
    * 
    * @param {any]} results Results
    */
-  private async postFetch(results: any[]): Promise<any[]> {
+  private postTransform(results: any[]): any[] {
     const benefits = results
       .filter(res => res.ContentTypeID.indexOf('0x01004F466123309D46BAB9D5C6DE89A6CF67') === 0)
       .map(res => new Benefit(res));

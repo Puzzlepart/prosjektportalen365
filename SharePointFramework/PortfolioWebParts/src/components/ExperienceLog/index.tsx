@@ -11,11 +11,7 @@ export default class ExperienceLog extends React.Component<IExperienceLogProps, 
   }
 
   public render(): React.ReactElement<IExperienceLogProps> {
-    return (
-      <div className={styles.experienceLog}>
-        <AggregatedSearchList {...this.props} />
-      </div>
-    );
+    return <AggregatedSearchList className={styles.experienceLog} {...this.props} />;
   }
 }
 

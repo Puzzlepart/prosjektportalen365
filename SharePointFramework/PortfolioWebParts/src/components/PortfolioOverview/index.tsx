@@ -4,7 +4,7 @@ import * as arraySort from 'array-sort';
 import { IFetchDataForViewRefinersResult } from 'data/IFetchDataForViewResult';
 import { PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
 import { ContextualMenu, ContextualMenuItemType, IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { DetailsList, IColumn, IGroup, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { DetailsList, ConstrainMode, DetailsListLayoutMode, IGroup, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { LayerHost } from 'office-ui-fabric-react/lib/Layer';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
@@ -142,8 +142,8 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
       <div className={styles.listContainer}>
         <DetailsList
           items={items}
-          constrainMode={this.props.constrainMode}
-          layoutMode={this.props.layoutMode}
+          constrainMode={ConstrainMode.unconstrained}
+          layoutMode={DetailsListLayoutMode.fixedColumns}
           columns={_columns}
           groups={groups}
           selectionMode={SelectionMode.none}

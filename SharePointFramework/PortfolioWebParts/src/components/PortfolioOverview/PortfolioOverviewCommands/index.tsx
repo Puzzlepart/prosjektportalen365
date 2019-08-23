@@ -1,15 +1,15 @@
+import { getId } from '@uifabric/utilities';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import * as strings from 'PortfolioWebPartsStrings';
 import * as React from 'react';
 import { getObjectValue } from 'shared/lib/helpers/getObjectValue';
+import { isNull } from 'shared/lib/helpers/isNull';
 import { ExcelExportService } from 'shared/lib/services';
 import { redirect } from 'shared/lib/util';
 import { FilterPanel, IFilterProps } from '../../';
 import { IPortfolioOverviewCommandsProps } from './IPortfolioOverviewCommandsProps';
 import { IPortfolioOverviewCommandsState } from './IPortfolioOverviewCommandsState';
-import { isNull } from 'shared/lib/helpers/isNull';
-
 
 export class PortfolioOverviewCommands extends React.Component<IPortfolioOverviewCommandsProps, IPortfolioOverviewCommandsState> {
     constructor(props: IPortfolioOverviewCommandsProps) {
@@ -36,7 +36,8 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
     protected get items(): IContextualMenuItem[] {
         return [
             {
-                key: 'GroupBy',
+                id: getId('GroupBy'),
+                key: getId('GroupBy'),
                 name: getObjectValue<string>(this.props, 'groupBy.name', strings.NoGroupingText),
                 iconProps: { iconName: 'GroupedList' },
                 itemType: ContextualMenuItemType.Header,
@@ -44,20 +45,23 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
                 subMenuProps: {
                     items: [
                         {
-                            key: 'NoGrouping',
+                            id: getId('NoGrouping'),
+                            key: getId('NoGrouping'),
                             name: strings.NoGroupingText,
                             canCheck: true,
                             checked: isNull(this.props.groupBy),
                             onClick: _ => this.props.onGroupBy(null),
-                        },
+                        } as IContextualMenuItem,
                         {
-                            key: 'divider_0',
+                            id: getId('Divider'),
+                            key: getId('Divider'),
                             itemType: ContextualMenuItemType.Divider,
-                        },
+                        } as IContextualMenuItem,
                         ...this.props.configuration.columns
                             .filter(col => col.isGroupable)
-                            .map((col, idx) => ({
-                                key: `${idx}`,
+                            .map(col => ({
+                                id: getId(col.key),
+                                key: getId(col.key),
                                 name: col.name,
                                 canCheck: true,
                                 checked: getObjectValue<string>(this.state, 'groupBy.fieldName', '') === col.fieldName,
@@ -67,7 +71,8 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
                 },
             } as IContextualMenuItem,
             {
-                key: "ExcelExport",
+                id: getId('ExcelExport'),
+                key: getId('ExcelExport'),
                 name: strings.ExcelExportButtonLabel,
                 iconProps: {
                     iconName: 'ExcelDocument',
@@ -83,14 +88,16 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
     protected get farItems(): IContextualMenuItem[] {
         return [
             {
-                key: 'NewView',
+                id: getId('NewView'),
+                key: getId('NewView'),
                 name: strings.NewViewText,
                 iconProps: { iconName: 'CirclePlus' },
                 data: { isVisible: this.props.pageContext.legacyPageContext.isSiteAdmin && this.props.showViewSelector },
                 onClick: _ => redirect(this.props.configuration.viewNewFormUrl),
             } as IContextualMenuItem,
             {
-                key: 'View',
+                id: getId('View'),
+                key: getId('View'),
                 name: this.props.currentView.title,
                 iconProps: { iconName: 'List' },
                 itemType: ContextualMenuItemType.Header,
@@ -98,7 +105,8 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
                 subMenuProps: {
                     items: [
                         {
-                            key: 'List',
+                            id: getId('List'),
+                            key: getId('List'),
                             name: 'Liste',
                             iconProps: { iconName: 'List' },
                             canCheck: true,
@@ -106,7 +114,8 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
                             onClick: _ => this.props.onSetCompact(false),
                         },
                         {
-                            key: 'CompactList',
+                            id: getId('CompactList'),
+                            key: getId('CompactList'),
                             name: 'Kompakt liste',
                             iconProps: { iconName: 'AlignLeft' },
                             canCheck: true,
@@ -114,11 +123,13 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
                             onClick: _ => this.props.onSetCompact(true),
                         },
                         {
-                            key: 'divider_0',
+                            id: getId('Divider'),
+                            key: getId('Divider'),
                             itemType: ContextualMenuItemType.Divider,
                         },
                         ...this.props.configuration.views.map(view => ({
-                            key: `${view.id}`,
+                            id: getId(view.id.toString()),
+                            key: getId(view.id.toString()),
                             name: view.title,
                             iconProps: { iconName: view.iconName },
                             canCheck: true,
@@ -126,16 +137,20 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
                             onClick: _ => this.props.onChangeView(view),
                         } as IContextualMenuItem)),
                         {
-                            key: 'divider_1',
+
+                            id: getId('Divider'),
+                            key: getId('Divider'),
                             itemType: ContextualMenuItemType.Divider,
                         },
                         {
-                            key: 'SaveViewAs',
+                            id: getId('SaveViewAs'),
+                            key: getId('SaveViewAs'),
                             name: strings.SaveViewAsText,
                             disabled: true,
                         },
                         {
-                            key: 'EditView',
+                            id: getId('EditView'),
+                            key: getId('EditView'),
                             name: strings.EditViewText,
                             onClick: _ => redirect(`${this.props.configuration.viewEditFormUrl}?ID=${this.props.currentView.id}`),
                         }
@@ -143,7 +158,8 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
                 },
             } as IContextualMenuItem,
             {
-                key: 'Filters',
+                id: getId('Filters'),
+                key: getId('Filters'),
                 name: '',
                 iconProps: { iconName: 'Filter' },
                 itemType: ContextualMenuItemType.Normal,

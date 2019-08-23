@@ -1,6 +1,6 @@
 import { IPortfolioOverviewConfiguration } from 'interfaces';
 import { PortfolioOverviewView } from 'models';
-import { ConstrainMode, DetailsListLayoutMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { DetailsListLayoutMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
 import { IBaseComponentProps } from '../IBaseComponentProps';
 
@@ -11,8 +11,6 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
     statusReportsListName?: string;
     statusReportsCount?: number;
     statusReportsLinkUrlTemplate?: string;
-    constrainMode?: ConstrainMode;
-    layoutMode?: DetailsListLayoutMode;
     showExcelExportButton?: boolean;
     defaultView?: PortfolioOverviewView;
     defaultViewId?: string;
@@ -26,7 +24,4 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
     viewsListName: string;
 }
 
-export const PortfolioOverviewDefaultProps: Partial<IPortfolioOverviewProps> = {
-    constrainMode: ConstrainMode.horizontalConstrained,
-    layoutMode: DetailsListLayoutMode.fixedColumns,
-};
+export const PortfolioOverviewDefaultProps: Partial<IPortfolioOverviewProps> = {};

@@ -264,7 +264,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
     if (dataSource) {
       try {
         const results = (await sp.search({
-          ...dataSource,
+          QueryTemplate: dataSource.searchQuery,
           Querytext: '*',
           RowLimit: 500,
           TrimDuplicates: false,

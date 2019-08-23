@@ -15,12 +15,8 @@ export default class DeliveriesOverview extends React.Component<IDeliveriesOverv
     super(props);
   }
 
-  public render(): React.ReactElement<IDeliveriesOverviewProps> {
-    return (
-      <div className={styles.deliveriesOverview}>
-        <AggregatedSearchList {...this.props} />
-      </div>
-    );
+  public render() {
+    return <AggregatedSearchList className={styles.deliveriesOverview} {...this.props} />;
   }
 }
 

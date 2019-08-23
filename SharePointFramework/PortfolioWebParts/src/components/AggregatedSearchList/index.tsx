@@ -1,23 +1,23 @@
-import { sp } from '@pnp/sp';
-import { getObjectValue, isHubSite } from 'shared/lib/helpers';
-import { DataSourceService, ExcelExportService } from 'shared/lib/services';
-import * as moment from 'moment';
+import { sp, Web } from '@pnp/sp';
+import { getId } from '@uifabric/utilities';
+import * as arraySort from 'array-sort';
+import * as arrayUnique from 'array-unique';
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
-import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { DetailsList, IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList';
+import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { DetailsList, DetailsListLayoutMode, ConstrainMode, SelectionMode, IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'PortfolioWebPartsStrings';
 import * as React from 'react';
+import { getObjectValue, isHubSite, isNull, isEmpty } from 'shared/lib/helpers';
+import { DataSourceService, ExcelExportService } from 'shared/lib/services';
 import HubSiteService from 'sp-hubsite-service';
 import * as format from 'string-format';
 import styles from './AggregatedSearchList.module.scss';
 import { AggregatedSearchListDefaultProps, IAggregatedSearchListProps } from './IAggregatedSearchListProps';
 import { IAggregatedSearchListState } from './IAggregatedSearchListState';
-import * as arraySort from 'array-sort';
-import * as arrayUnique from 'array-unique';
-
+import { DataSource } from 'shared/lib/models/DataSource';
 
 export default class AggregatedSearchList extends React.Component<IAggregatedSearchListProps, IAggregatedSearchListState> {
     public static defaultProps = AggregatedSearchListDefaultProps;
@@ -34,8 +34,8 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
 
     public async componentDidMount(): Promise<void> {
         try {
-            const items = await this.fetchItems();
-            this.setState({ items, isLoading: false });
+            const { items, selectedDataSource, dataSources } = await this.fetchData();
+            this.setState({ items, selectedDataSource, dataSources, isLoading: false });
         } catch (error) {
             this.setState({ error, isLoading: false });
         }
@@ -44,7 +44,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
     public render(): React.ReactElement<IAggregatedSearchListProps> {
         if (this.state.isLoading) {
             return (
-                <div className={styles.aggregatedSearchList}>
+                <div className={this.props.className}>
                     <div className={styles.container}>
                         <Spinner label={format(strings.LoadingText, this.props.title)} type={SpinnerType.large} />
                     </div>
@@ -53,7 +53,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
         }
         if (this.state.error) {
             return (
-                <div className={styles.aggregatedSearchList}>
+                <div className={this.props.className}>
                     <div className={styles.container}>
                         <MessageBar messageBarType={MessageBarType.error}>{this.state.error}</MessageBar>
                     </div>
@@ -64,16 +64,14 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
         let { items, columns, groups } = this.getFilteredData();
 
         return (
-            <div className={styles.aggregatedSearchList}>
+            <div className={this.props.className}>
                 <div className={styles.container}>
-                    <div className={styles.commandBar} hidden={!this.props.showCommandBar}>
-                        <CommandBar items={this.getCommandBarItems()} />
-                    </div>
+                    {this.commandBar()}
                     <div className={styles.header}>
                         <div className={styles.title}>{this.props.title}</div>
                     </div>
                     <div className={styles.searchBox} hidden={!this.props.showSearchBox}>
-                        <SearchBox onChange={this.onSearch.bind(this)} labelText={this.getSearchBoxLabelText()} />
+                        <SearchBox onChange={this.onSearch.bind(this)} labelText={this.searchBoxLabelText} />
                     </div>
                     <div className={styles.listContainer}>
                         <DetailsList
@@ -82,23 +80,26 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
                             groups={groups}
                             onRenderItemColumn={this.onRenderItemColumn.bind(this)}
                             onColumnHeaderClick={this.onColumnHeaderSort.bind(this)}
-                            layoutMode={this.props.layoutMode}
-                            constrainMode={this.props.constrainMode}
-                            selectionMode={this.props.selectionMode} />
+                            constrainMode={ConstrainMode.unconstrained}
+                            layoutMode={DetailsListLayoutMode.fixedColumns}
+                            selectionMode={SelectionMode.none} />
                     </div>
                 </div>
             </div>
         );
     }
 
-    /**
-     * Get search box label text
-     */
-    private getSearchBoxLabelText() {
-        if (this.props.searchBoxPlaceholderText) {
+    private get searchBoxLabelText(): string {
+        if (!isEmpty(this.props.searchBoxPlaceholderText)) {
             return this.props.searchBoxPlaceholderText;
         }
-        return format(strings.SearchBoxPlaceholderText, this.props.dataSource.toLowerCase());
+        if (this.props.dataSource) {
+            return format(strings.SearchBoxPlaceholderText, this.props.dataSource.toLowerCase());
+        }
+        if (this.state.selectedDataSource) {
+            return format(strings.SearchBoxPlaceholderText, this.state.selectedDataSource.title.toLowerCase());
+        }
+        return '';
     }
 
     /**
@@ -108,8 +109,13 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
      * 
      * @param {string} searchTerm Search term
      */
-    private onSearch(searchTerm: string) {
+    private onSearch(searchTerm: string): void {
         this.setState({ searchTerm: searchTerm.toLowerCase() });
+    }
+
+    private async onDataSourceChanged(dataSource: DataSource) {
+        let items = await this.fetchItems(dataSource.searchQuery);
+        this.setState({ items, selectedDataSource: dataSource });
     }
 
     /**
@@ -127,10 +133,10 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
     /**
      * Sorting on column header click
      *
-     * @param {React.MouseEvent} _evt Event
+     * @param {React.MouseEvent} _ev Event
      * @param {IColumn} column Column
      */
-    private onColumnHeaderSort(_evt: React.MouseEvent<any>, column: IColumn): void {
+    private onColumnHeaderSort(_ev: React.MouseEvent<any>, column: IColumn): void {
         let { items, columns } = ({ ...this.state } as IAggregatedSearchListState);
 
         let isSortedDescending = column.isSortedDescending;
@@ -152,78 +158,114 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
         this.setState({ items, columns });
     }
 
-    /**
-     * Get command bar items
-     */
-    private getCommandBarItems(): ICommandBarItemProps[] {
+    private commandBar() {
         const items: ICommandBarItemProps[] = [];
 
         if (this.props.groupByColumns.length > 0) {
-            const noGrouping: IColumn = {
-                key: 'NoGrouping',
-                fieldName: 'NoGrouping',
-                name: strings.NoGroupingText,
-                minWidth: 0,
-            };
-            const subItems = [noGrouping, ...this.props.groupByColumns].map(item => ({
-                key: item.key,
-                name: item.name,
-                onClick: () => this.setState({ groupBy: item }),
-            }));
             items.push({
-                key: 'Group',
+                id: getId('GroupBy'),
+                key: getId('GroupBy'),
                 name: getObjectValue(this.state, 'groupBy.name', undefined) || strings.NoGroupingText,
                 iconProps: { iconName: 'GroupedList' },
                 itemType: ContextualMenuItemType.Header,
                 onClick: event => event.preventDefault(),
-                subMenuProps: { items: subItems },
+                subMenuProps: {
+                    items: [
+                        {
+                            id: getId('NoGrouping'),
+                            key: getId('NoGrouping'),
+                            name: strings.NoGroupingText,
+                            canCheck: true,
+                            checked: isNull(this.state.groupBy),
+                            onClick: _ => this.setState({ groupBy: null }),
+                        } as IContextualMenuItem,
+                        {
+                            id: getId('Divider'),
+                            key: getId('Divider'),
+                            itemType: ContextualMenuItemType.Divider,
+                        } as IContextualMenuItem,
+                        ...this.props.groupByColumns.map(col => ({
+                            id: getId(col.key),
+                            key: getId(col.key),
+                            name: col.name,
+                            canCheck: true,
+                            checked: getObjectValue<string>(this.state, 'groupBy.fieldName', '') === col.fieldName,
+                            onClick: () => this.setState({ groupBy: col }),
+                        })) as IContextualMenuItem[],
+                    ],
+                },
             });
         }
         if (this.props.showExcelExportButton) {
             items.push({
-                key: "ExcelExport",
+                id: getId('ExcelExport'),
+                key: getId('ExcelExport'),
                 name: strings.ExcelExportButtonLabel,
                 iconProps: {
                     iconName: 'ExcelDocument',
                     styles: { root: { color: "green !important" } },
                 },
                 disabled: this.state.isExporting,
-                onClick: evt => { this.exportToExcel(evt); },
+                onClick: ev => { this.exportToExcel(ev); },
             });
         }
 
-        return items;
+        const farItems: ICommandBarItemProps[] = [];
+
+        if (this.state.selectedDataSource) {
+            farItems.push({
+                id: getId('DataSource'),
+                key: getId('DataSource'),
+                name: this.state.selectedDataSource.title,
+                iconProps: { iconName: this.state.selectedDataSource.iconName || 'DataConnectionLibrary' },
+                disabled: this.state.dataSources.length === 1,
+                subMenuProps: {
+                    items: this.state.dataSources.map(dataSource => ({
+                        id: getId(dataSource.title),
+                        key: getId(dataSource.title),
+                        name: dataSource.title,
+                        iconProps: { iconName: dataSource.iconName || 'DataConnectionLibrary' },
+                        canCheck: true,
+                        checked: this.state.selectedDataSource.id === dataSource.id,
+                        onClick: () => { this.onDataSourceChanged(dataSource); },
+                    })) as IContextualMenuItem[],
+                }
+            });
+        }
+
+        return (
+            <div className={styles.commandBar} hidden={!this.props.showCommandBar}>
+                <CommandBar items={items} farItems={farItems} />
+            </div>
+        );
     }
 
     /**
     * Get groups
     *
     * @param {any[]} items Items
-    * @param {IColumn}  groupBy Group by column
+    * @param {IColumn} groupBy Group by column
     * @param {IColumn} sortBy Sort by column
     */
     public static getGroups(items: any[], groupBy: IColumn, sortBy?: IColumn): IGroup[] {
-        let groups: IGroup[] = null;
-        if (groupBy) {
-            const itemsSort = { props: [groupBy.fieldName], opts: { reverse: false } };
-            if (sortBy) {
-                itemsSort.props.push(sortBy.fieldName);
-                itemsSort.opts.reverse = !sortBy.isSortedDescending;
-            }
-            const groupItems: any[] = arraySort(items, itemsSort.props, itemsSort.opts);
-            const groupByValues: string[] = groupItems.map(g => g[groupBy.fieldName] ? g[groupBy.fieldName] : strings.NotSet);
-            const uniqueGroupValues: string[] = arrayUnique([].concat(groupByValues));
-            groups = uniqueGroupValues
-                .sort((a, b) => a > b ? 1 : -1)
-                .map((name, idx) => ({
-                    key: `${idx}`,
-                    name: `${groupBy.name}: ${name}`,
-                    startIndex: groupByValues.indexOf(name, 0),
-                    count: [].concat(groupByValues).filter(n => n === name).length,
-                    isShowingAll: true,
-                }));
+        if (!groupBy) return null;
+        const itemsSort = { props: [groupBy.fieldName], opts: { reverse: false } };
+        if (sortBy) {
+            itemsSort.props.push(sortBy.fieldName);
+            itemsSort.opts.reverse = !sortBy.isSortedDescending;
         }
-        return groups;
+        const groupItems: any[] = arraySort(items, itemsSort.props, itemsSort.opts);
+        const groupByValues: string[] = groupItems.map(g => g[groupBy.fieldName] ? g[groupBy.fieldName] : strings.NotSet);
+        const uniqueGroupValues: string[] = arrayUnique([].concat(groupByValues));
+        return uniqueGroupValues
+            .sort((a, b) => a > b ? 1 : -1)
+            .map((name, idx) => ({
+                key: `Group_${idx}`,
+                name: `${groupBy.name}: ${name}`,
+                startIndex: groupByValues.indexOf(name, 0),
+                count: [].concat(groupByValues).filter(n => n === name).length,
+                isShowingAll: true,
+            } as IGroup));
     }
 
     /**
@@ -244,9 +286,11 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
 
     /**
      * Export to Excel
+     * 
+     * @param {React.MouseEvent<any> | React.KeyboardEvent<any>} ev Event
      */
-    private async exportToExcel(evt: React.MouseEvent<any> | React.KeyboardEvent<any>): Promise<void> {
-        evt.preventDefault();
+    private async exportToExcel(ev: React.MouseEvent<any> | React.KeyboardEvent<any>): Promise<void> {
+        ev.preventDefault();
         this.setState({ isExporting: true });
         let { items, columns } = this.getFilteredData();
         try {
@@ -258,40 +302,69 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
     }
 
     /**
-     * Fetch items
+     * Get data source
+     * 
+     * @param {Web} web Web
+     * @param {string} dataSource Data source name
      */
-    private async fetchItems(): Promise<any[]> {
-        let {
-            pageContext,
-            queryTemplate,
-            dataSource,
-            selectProperties,
-            columns,
-            postFetch,
-        } = this.props;
+    private async getDataSource(web: Web, dataSource: string): Promise<DataSource> {
+        return await new DataSourceService(web).getByName(dataSource);
+    }
+
+    /**
+     * Get data sources
+     * 
+     * @param {Web} web Web
+     * @param {string} dataSourceCategory Data source category
+     */
+    private async getDataSources(web: Web, dataSourceCategory: string): Promise<DataSource[]> {
+        return await new DataSourceService(web).getByCategory(dataSourceCategory);
+    }
+
+    /**
+     * Fetch items
+     * 
+     * @param {string} queryTemplate Query template
+     */
+    private async fetchItems(queryTemplate: string) {
+        let { PrimarySearchResults } = await sp.search({
+            QueryTemplate: queryTemplate,
+            Querytext: '*',
+            RowLimit: 500,
+            TrimDuplicates: false,
+            SelectProperties: this.props.selectProperties || ['Path', 'SPWebUrl', ...this.props.columns.map(col => col.key)],
+        });
+        return this.props.postTransform ? this.props.postTransform(PrimarySearchResults) : PrimarySearchResults;
+    }
+
+    /**
+     * Fetch data
+     */
+    private async fetchData(): Promise<{ items: any[], selectedDataSource: DataSource, dataSources?: DataSource[] }> {
         try {
-            if (!queryTemplate) {
+            let selectedDataSource: DataSource = null;
+            let dataSources: DataSource[] = [];
+            if (isEmpty(this.props.queryTemplate)) {
                 let web = sp.web;
-                if (!isHubSite(pageContext)) {
-                    web = (await HubSiteService.GetHubSite(sp, pageContext)).web;
+                if (!isHubSite(this.props.pageContext)) {
+                    web = (await HubSiteService.GetHubSite(sp, this.props.pageContext)).web;
                 }
-                const { QueryTemplate } = await new DataSourceService(web).getByName(dataSource);
-                if (QueryTemplate) {
-                    queryTemplate = QueryTemplate;
-                } else {
-                    throw format(strings.DataSourceNotFound, dataSource);
+                if (!isEmpty(this.props.dataSource)) {
+                    selectedDataSource = await this.getDataSource(web, this.props.dataSource);
+                    dataSources.push(selectedDataSource);
+                } else if (!isEmpty(this.props.dataSourceCategory)) {
+                    dataSources = await this.getDataSources(web, this.props.dataSourceCategory);
+                    selectedDataSource = dataSources.filter(d => d.isDefault)[0];
                 }
             }
-            let { PrimarySearchResults } = await sp.search({
-                QueryTemplate: queryTemplate,
-                Querytext: '*',
-                RowLimit: 500,
-                TrimDuplicates: false,
-                SelectProperties: selectProperties || ['Path', 'SPWebUrl', ...columns.map(col => col.key)],
-            });
-            return postFetch ? postFetch(PrimarySearchResults) : PrimarySearchResults;
+            let items = await this.fetchItems(this.props.queryTemplate || selectedDataSource.searchQuery);
+            return {
+                items,
+                selectedDataSource,
+                dataSources,
+            };
         } catch (error) {
-            throw format(strings.DataSourceError, dataSource);
+            throw format(strings.DataSourceError, this.props.dataSource);
         }
     }
 }
