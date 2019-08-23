@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    AddColumnLabel: 'Legg til kolonne',
     SortDescLabel: 'A til Å',
     SortAscLabel: 'Å til A',
     ColumSettingsLabel: 'Kolonneinnstillinger',
