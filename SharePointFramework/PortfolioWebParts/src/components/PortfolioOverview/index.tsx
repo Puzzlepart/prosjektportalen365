@@ -163,15 +163,13 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   }
 
   /**
- * Get selected filters with items. Based on refiner configuration retrieved from the configuration list,
- * the filters are checked against refiners retrieved by search.
- *
- * @param {any[]} refiners Refiners retrieved by search
- * @param {IPortfolioOverviewConfig} configuration PortfolioOverviewConfig
- * @param {IPortfolioOverviewConfigViewConfig} viewConfig View configuration
- */
-  private getSelectedFiltersWithItems(refiners: any[], configuration: IPortfolioOverviewConfiguration, viewConfig: PortfolioOverviewView): IFilterProps[] {
-    const selectedRefiners = configuration.refiners.filter(ref => refiners.filter(r => r.Name === ref.key).length > 0 && viewConfig.refiners.indexOf(ref) !== -1);
+  * Get filters
+  *
+  * @param {any[]} refiners Refiners retrieved by search
+  * @param {IPortfolioOverviewConfigViewConfig} viewConfig View configuration
+  */
+  private getFilters(refiners: any[], viewConfig: PortfolioOverviewView): IFilterProps[] {
+    const selectedRefiners = this.props.configuration.refiners.filter(ref => refiners.filter(r => r.Name === ref.key).length > 0 && viewConfig.refiners.indexOf(ref) !== -1);
     let filters = selectedRefiners.map(ref => {
       let entries: any[] = refiners.filter(r => r.Name === ref.key)[0].Entries;
       let items = entries.map(entry => ({ name: entry.RefinementName, value: entry.RefinementValue }));
@@ -343,7 +341,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
       const hashState = parseUrlHash<IPortfolioOverviewHashStateState>();
       const currentView = this.getCurrentView(hashState);
       const { items, refiners } = await this.props.dataAdapter.fetchDataForView(currentView, this.props.configuration, this.props.pageContext.site.id.toString());
-      let filters = this.getSelectedFiltersWithItems(refiners, this.props.configuration, currentView);
+      let filters = this.getFilters(refiners, currentView);
       let newState: Partial<IPortfolioOverviewState> = {
         columns: currentView.columns,
         items,
@@ -372,8 +370,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     }
     this.setState({ isChangingView: view });
     const { items, refiners } = await this.props.dataAdapter.fetchDataForView(view, this.props.configuration, this.props.pageContext.site.id.toString());
-    let filters = this.getSelectedFiltersWithItems(refiners, this.props.configuration, view);
-
+    let filters = this.getFilters(refiners, view);
     let updatedState: Partial<IPortfolioOverviewState> = {
       isChangingView: null,
       items,
