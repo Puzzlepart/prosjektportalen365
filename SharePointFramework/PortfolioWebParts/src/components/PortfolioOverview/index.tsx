@@ -1,11 +1,9 @@
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
 import * as arraySort from 'array-sort';
-import * as arrayUnique from 'array-unique';
 import { IPortfolioOverviewConfiguration } from 'interfaces';
 import { PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
-import * as objectGet from 'object-get';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
-import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { ContextualMenu, IContextualMenuProps, ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { DetailsList, IColumn, IGroup, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
@@ -23,6 +21,7 @@ import styles from './PortfolioOverview.module.scss';
 import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage';
 import { PortfolioOverviewFieldSelector } from './PortfolioOverviewFieldSelector';
 import { renderItemColumn } from './RenderItemColumn';
+import { getObjectValue } from 'shared/lib/helpers/getObjectValue';
 
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = PortfolioOverviewDefaultProps;
@@ -136,15 +135,23 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
             {
               key: 'NoGrouping',
               name: strings.NoGroupingText,
+              canCheck: true,
+              checked: this.state.groupBy === null || this.state.groupBy === undefined,
               onClick: _ => { this.setState({ groupBy: null }); },
+            },
+            {
+              key: 'divider_0',
+              itemType: ContextualMenuItemType.Divider,
             },
             ...this.props.configuration.columns
               .filter(col => col.isGroupable)
               .map((col, idx) => ({
                 key: `${idx}`,
                 name: col.name,
+                canCheck: true,
+                checked: getObjectValue<string>(this.state, 'groupBy.fieldName', '') === col.fieldName,
                 onClick: _ => { this.setState({ groupBy: col }); },
-              })),
+              })) as IContextualMenuItem[],
           ],
         },
       });
@@ -253,8 +260,9 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           groups={data.groups}
           selectionMode={SelectionMode.none}
           onRenderItemColumn={(item, _index, column: PortfolioOverviewColumn) => renderItemColumn(item, column, state => this.setState(state))}
-          onColumnHeaderClick={this.onColumnSort.bind(this)}
+          onColumnHeaderContextMenu={this.onColumnHeaderContextMenu.bind(this)}
           compact={this.state.isCompact} />
+        {this.state.columnHeaderContextMenu && <ContextualMenu {...this.state.columnHeaderContextMenu} />}
       </div>
     );
   }
@@ -315,29 +323,65 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   }
 
   /**
-   * On column sort
+   * On column header click
    *
-   * @param {React.MouseEvent<HTMLElement, MouseEvent>} _ev Event
    * @param {PortfolioOverviewColumn} column The column config
+   * @param {boolean} sortDesencing Sort descending
    */
-  private onColumnSort(_ev: React.MouseEvent<HTMLElement, MouseEvent>, column: PortfolioOverviewColumn): void {
+  private onColumnSort(column: PortfolioOverviewColumn, sortDesencing: boolean): void {
     let { items, columns } = ({ ...this.state } as IPortfolioOverviewState);
-
-    let isSortedDescending = column.isSortedDescending;
-    if (column.isSorted) {
-      isSortedDescending = !isSortedDescending;
-    }
-    items = arraySort(items, [column.fieldName], { reverse: !isSortedDescending });
+    items = arraySort(items, [column.fieldName], { reverse: !sortDesencing });
     this.setState({
-      sortBy: column.setIsSortedDescending(isSortedDescending),
+      sortBy: column,
       items,
       columns: columns.map(col => {
         col.isSorted = (col.key === column.key);
         if (col.isSorted) {
-          col.isSortedDescending = isSortedDescending;
+          col.isSortedDescending = sortDesencing;
         }
         return col;
       }),
+    });
+  }
+
+  /**
+   * On column header context menu
+   * 
+   * @param {PortfolioOverviewColumn} column Column
+   * @param {React.MouseEvent<HTMLElement, MouseEvent>} ev Event
+   */
+  private onColumnHeaderContextMenu(column?: PortfolioOverviewColumn, ev?: React.MouseEvent<HTMLElement, MouseEvent>) {
+    this.setState({
+      columnHeaderContextMenu: {
+        target: ev.currentTarget,
+        items: [
+          {
+            key: 'SortDesc',
+            name: strings.SortDescLabel,
+            canCheck: true,
+            checked: column.isSorted && column.isSortedDescending,
+            onClick: _ => this.onColumnSort(column, true),
+          },
+          {
+            key: 'SortAsc',
+            name: strings.SortAscLabel,
+            canCheck: true,
+            checked: column.isSorted && !column.isSortedDescending,
+            onClick: _ => this.onColumnSort(column, false),
+          },
+          {
+            key: 'divider_0',
+            itemType: ContextualMenuItemType.Divider,
+          },
+          {
+            key: 'ColumSettings',
+            name: strings.ColumSettingsLabel,
+            href: `${this.props.configuration.colEditFormUrl}?ID=${column.id}&Source=${encodeURIComponent(document.location.href)}`,
+            disabled: !this.props.pageContext.legacyPageContext.isSiteAdmin,
+          }
+        ],
+        onDismiss: _ => this.setState({ columnHeaderContextMenu: null })
+      },
     });
   }
 
@@ -367,7 +411,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     if (Object.keys(activeFilters).length > 0) {
       filteredItems = Object.keys(activeFilters)
         .filter(key => key !== PortfolioOverviewFieldSelector.column.key)
-        .reduce((_items, key) => _items.filter(i => activeFilters[key].indexOf(objectGet(i, key)) !== -1), items);
+        .reduce((_items, key) => _items.filter(i => activeFilters[key].indexOf(getObjectValue<string>(i, key, '')) !== -1), items);
       const selectedFilters = activeFilters[PortfolioOverviewFieldSelector.column.key];
       if (selectedFilters) {
         filteredColumns = this.props.configuration.columns.filter(_column => selectedFilters.indexOf(_column.fieldName) !== -1);

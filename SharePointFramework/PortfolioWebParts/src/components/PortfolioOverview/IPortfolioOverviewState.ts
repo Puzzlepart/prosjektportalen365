@@ -1,5 +1,6 @@
 import { SearchResult } from '@pnp/sp';
 import { PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
+import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { IFilterProps } from '../';
 import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage';
@@ -20,6 +21,7 @@ export interface IPortfolioOverviewState {
     sortBy?: PortfolioOverviewColumn;
     showProjectInfo?: SearchResult;
     isCompact?: boolean;
+    columnHeaderContextMenu?: IContextualMenuProps;
 }
 
 export interface IPortfolioOverviewHashStateState {

@@ -1,5 +1,8 @@
 define([], function () {
   return {
+    SortDescLabel: 'A til Å',
+    SortAscLabel: 'Å til A',
+    ColumSettingsLabel: 'Kolonneinnstillinger',
     ActorsLabel: 'Aktører',
     AdvancedGroupName: 'Avansert',
     BenefitResponsibleLabel: 'Gevinstansvarlig',

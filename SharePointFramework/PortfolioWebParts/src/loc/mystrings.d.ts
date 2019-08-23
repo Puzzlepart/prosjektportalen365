@@ -1,4 +1,7 @@
 declare interface IPortfolioWebPartsStrings {
+  SortDescLabel: string;
+  SortAscLabel: string;
+  ColumSettingsLabel: string;
   AdvancedGroupName: string;
   StatusReportsListNameLabel: string;
   ActorsLabel: string;

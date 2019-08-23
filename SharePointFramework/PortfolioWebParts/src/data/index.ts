@@ -132,6 +132,15 @@ export class DataAdapter {
                     })
                     .get<{ DefaultNewFormUrl: string, DefaultEditFormUrl: string }>(),
                 sp.web.lists.getByTitle(columnsListName)
+                    .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
+                    .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')
+                    .usingCaching({
+                        key: 'getportfolioconfig_columns_forms',
+                        storeName: 'session',
+                        expiration: dateAdd(new Date(), 'minute', 15),
+                    })
+                    .get<{ DefaultNewFormUrl: string, DefaultEditFormUrl: string }>(),
+                sp.web.lists.getByTitle(columnsListName)
                     .fields
                     .filter(`substringof('GtShowField', InternalName)`)
                     .select('InternalName', 'Title')
@@ -158,7 +167,9 @@ export class DataAdapter {
                 views,
                 viewNewFormUrl: makeUrlAbsolute(spItems[3].DefaultNewFormUrl),
                 viewEditFormUrl: makeUrlAbsolute(spItems[3].DefaultEditFormUrl),
-                showFields: spItems[4],
+                colNewFormUrl: makeUrlAbsolute(spItems[4].DefaultNewFormUrl),
+                colEditFormUrl: makeUrlAbsolute(spItems[4].DefaultEditFormUrl),
+                showFields: spItems[5],
             };
             return config;
         } catch (error) {
