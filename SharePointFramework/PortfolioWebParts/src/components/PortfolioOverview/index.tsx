@@ -1,6 +1,6 @@
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
 import * as arraySort from 'array-sort';
-import { IPortfolioOverviewConfiguration } from 'interfaces';
+import { IFetchDataForViewRefinersResult } from 'data/IFetchDataForViewResult';
 import { PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
 import { ContextualMenu, ContextualMenuItemType, IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { DetailsList, IColumn, IGroup, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
@@ -19,8 +19,8 @@ import { IPortfolioOverviewHashStateState, IPortfolioOverviewState } from './IPo
 import styles from './PortfolioOverview.module.scss';
 import { PortfolioOverviewCommands } from './PortfolioOverviewCommands';
 import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage';
-
 import { renderItemColumn } from './RenderItemColumn';
+
 
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = PortfolioOverviewDefaultProps;
@@ -46,7 +46,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     }
   }
 
-  public componentWillUpdate(_: IPortfolioOverviewProps, { currentView, groupBy, columns }: IPortfolioOverviewState) {
+  public componentWillUpdate(_: IPortfolioOverviewProps, { currentView, groupBy }: IPortfolioOverviewState) {
     let obj: IPortfolioOverviewHashStateState = {};
     if (currentView) {
       obj.viewId = currentView.id.toString();
@@ -102,7 +102,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
             <ProjectInformationModal
               modalProps={{ isOpen: true, onDismiss: this.onDismissProjectInfoModal.bind(this) }}
               title={this.state.showProjectInfo.Title}
-              siteId={this.state.showProjectInfo['SiteId']}
+              siteId={this.state.showProjectInfo.SiteId}
               entity={this.props.entity}
               webUrl={this.props.pageContext.site.absoluteUrl}
               hubSiteUrl={this.props.pageContext.site.absoluteUrl}
@@ -165,16 +165,14 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   /**
   * Get filters
   *
-  * @param {any[]} refiners Refiners retrieved by search
+  * @param {IFetchDataForViewRefinersResult} refiners Refiners retrieved by search
   * @param {IPortfolioOverviewConfigViewConfig} viewConfig View configuration
   */
-  private getFilters(refiners: any[], viewConfig: PortfolioOverviewView): IFilterProps[] {
-    const selectedRefiners = this.props.configuration.refiners.filter(ref => refiners.filter(r => r.Name === ref.key).length > 0 && viewConfig.refiners.indexOf(ref) !== -1);
+  private getFilters(refiners: IFetchDataForViewRefinersResult, viewConfig: PortfolioOverviewView): IFilterProps[] {
+    const selectedRefiners = this.props.configuration.refiners.filter(ref => refiners[ref.fieldName] && viewConfig.refiners.indexOf(ref) !== -1);
     let filters = selectedRefiners.map(ref => {
-      let entries: any[] = refiners.filter(r => r.Name === ref.key)[0].Entries;
-      let items = entries.map(entry => ({ name: entry.RefinementName, value: entry.RefinementValue }));
-      let itemsSorted = items.sort((a, b) => a.value > b.value ? 1 : -1);
-      return { column: ref, items: itemsSorted };
+      let items = refiners[ref.fieldName].sort((a, b) => a.value > b.value ? 1 : -1);
+      return { column: ref, items };
     });
     return filters;
   }
