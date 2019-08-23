@@ -45,21 +45,11 @@ export class PortfolioOverviewColumn implements IColumn {
     }
 
     /**
-     * Set property isSortedDescending
-     * 
-     * @param isSortedDescending Is sorted descending
-     */
-    public setIsSortedDescending(isSortedDescending: boolean): PortfolioOverviewColumn {
-        this.isSortedDescending = isSortedDescending;
-        return this;
-    }
-
-    /**
      * Get search type from field name
      * 
      * @param {string} fieldName Field name
      */
-    private getSearchType(fieldName: string): SearchValueType {
+    private getSearchType?(fieldName: string): SearchValueType {
         if (fieldName.indexOf('owsdate') !== -1) {
             return SearchValueType.OWSDATE;
         }

@@ -3,7 +3,6 @@ import { IPortfolioOverviewProps, PortfolioOverview } from 'components';
 import { IPortfolioOverviewConfiguration } from 'interfaces';
 import * as strings from 'PortfolioWebPartsStrings';
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
-import { ConstrainMode, DetailsListLayoutMode } from 'office-ui-fabric-react/lib/DetailsList';
 
 export const PropertyPaneConfigurationProps = {
   COLUMN_CONFIG_LISTNAME: 'columnConfigListName',
@@ -20,8 +19,6 @@ export const PropertyPaneConfigurationProps = {
   SHOW_SEARCH_BOX: 'showSearchBox',
   SHOW_VIEWSELECTOR: 'showViewSelector',
   VIEWS_LISTNAME: 'viewsListName',
-  CONSTRAIN_MODE: 'constrainMode',
-  LAYOUT_MODE: 'layoutMode',
 };
 
 export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPortfolioOverviewProps> {
@@ -55,30 +52,6 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
         }
       }
         break;
-      case PropertyPaneConfigurationProps.CONSTRAIN_MODE: {
-        return [
-          {
-            key: ConstrainMode.horizontalConstrained,
-            text: 'horizontalConstrained',
-          },
-          {
-            key: ConstrainMode.unconstrained,
-            text: 'unconstrained',
-          }
-        ];
-      }
-      case PropertyPaneConfigurationProps.LAYOUT_MODE: {
-        return [
-          {
-            key: DetailsListLayoutMode.fixedColumns,
-            text: 'fixedColumns',
-          },
-          {
-            key: DetailsListLayoutMode.justified,
-            text: 'justified',
-          }
-        ];
-      }
     }
     return [];
   }
@@ -161,19 +134,6 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                 }),
               ]
             },
-            {
-              groupName: strings.AdvancedGroupName,
-              groupFields: [
-                PropertyPaneDropdown(PropertyPaneConfigurationProps.CONSTRAIN_MODE, {
-                  label: 'ConstrainMode',
-                  options: this.getOptions(PropertyPaneConfigurationProps.CONSTRAIN_MODE),
-                }),
-                PropertyPaneDropdown(PropertyPaneConfigurationProps.LAYOUT_MODE, {
-                  label: 'DetailsListLayoutMode',
-                  options: this.getOptions(PropertyPaneConfigurationProps.LAYOUT_MODE),
-                }),
-              ]
-            }
           ]
         }
       ]
