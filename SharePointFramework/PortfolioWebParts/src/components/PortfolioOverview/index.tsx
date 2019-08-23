@@ -94,7 +94,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           onFilterChange={this.onFilterChange.bind(this)}
           layerHostId={this._layerHostId}
           hidden={!this.props.showCommandBar} />
-        <LayerHost className={styles.container} id={this._layerHostId}>
+        <div className={styles.container}>
           <div className={styles.header}>
             <div className={styles.title}>{this.props.title}</div>
           </div>
@@ -102,7 +102,8 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
             <SearchBox onChange={this.onSearch.bind(this)} placeholder={this.searchBoxPlaceholder} />
           </div>
           {this.list(items, columns, groups)}
-        </LayerHost>
+          <LayerHost id={this._layerHostId} />
+        </div>
         {this.state.showProjectInfo && (
           <ProjectInformationModal
             modalProps={{ isOpen: true, onDismiss: this.onDismissProjectInfoModal.bind(this) }}
@@ -298,7 +299,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         filteredColumns = this.props.configuration.columns.filter(_column => selectedFilters.indexOf(_column.fieldName) !== -1);
       }
     }
-    
+
     return { items: filteredItems, columns: filteredColumns, groups };
   }
 
