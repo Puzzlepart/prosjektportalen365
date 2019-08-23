@@ -26,7 +26,10 @@
                 "title": "Porteføljeoversikt",
                 "columnConfigListName": "Prosjektkolonnekonfigurasjon",
                 "columnsListName": "Prosjektkolonner",
-                "viewsListName": "Porteføljevisninger"
+                "viewsListName": "Porteføljevisninger",
+                "showCommandBar": true,
+                "showFilters": true,
+                "showViewSelector": false
             }
         }
     ]

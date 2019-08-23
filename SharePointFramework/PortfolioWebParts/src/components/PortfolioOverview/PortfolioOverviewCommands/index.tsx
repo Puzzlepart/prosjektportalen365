@@ -23,10 +23,11 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
                 <CommandBar items={this.items} farItems={this.farItems} />
                 <FilterPanel
                     isOpen={this.state.showFilterPanel}
-                    hasCloseButton={true}
+                    layerHostId={this.props.layerHostId}
+                    headerText={'Filtre'}
+                    hasCloseButton={false}
+                    isLightDismiss={false}
                     filters={this.filters}
-                    isLightDismiss={true}
-                    onDismiss={_ => this.setState({ showFilterPanel: false })}
                     onFilterChange={this.props.onFilterChange} />
             </div>
         );
@@ -149,7 +150,11 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
                 canCheck: true,
                 checked: this.state.showFilterPanel,
                 data: { isVisible: this.props.showFilters },
-                onClick: _ => this.setState(prevState => ({ showFilterPanel: !prevState.showFilterPanel })),
+                onClick: ev => {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                    this.setState(prevState => ({ showFilterPanel: !prevState.showFilterPanel }));
+                },
             } as IContextualMenuItem,
         ].filter(i => i.data.isVisible);
     }

@@ -21,7 +21,7 @@ export const PropertyPaneConfigurationProps = {
   SHOW_VIEWSELECTOR: 'showViewSelector',
   VIEWS_LISTNAME: 'viewsListName',
   CONSTRAIN_MODE: 'constrainMode',
-  LAYOUT_MODE: 'layoutMode'
+  LAYOUT_MODE: 'layoutMode',
 };
 
 export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPortfolioOverviewProps> {

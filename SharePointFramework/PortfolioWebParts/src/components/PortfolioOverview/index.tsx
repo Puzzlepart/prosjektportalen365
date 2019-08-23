@@ -1,4 +1,5 @@
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
+import { getId } from '@uifabric/utilities';
 import * as arraySort from 'array-sort';
 import { IFetchDataForViewRefinersResult } from 'data/IFetchDataForViewResult';
 import { PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
@@ -25,6 +26,7 @@ import { renderItemColumn } from './RenderItemColumn';
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = PortfolioOverviewDefaultProps;
   private _onSearchDelay: number;
+  private _layerHostId = getId('layerHost');
 
   constructor(props: IPortfolioOverviewProps) {
     super(props);
@@ -81,17 +83,18 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
 
     return (
       <div className={styles.portfolioOverview}>
+        <PortfolioOverviewCommands
+          {...this.props}
+          {...this.state}
+          fltItems={items}
+          fltColumns={columns}
+          onGroupBy={groupBy => this.setState({ groupBy })}
+          onSetCompact={isCompact => this.setState({ isCompact })}
+          onChangeView={this.onChangeView.bind(this)}
+          onFilterChange={this.onFilterChange.bind(this)}
+          layerHostId={this._layerHostId}
+          hidden={!this.props.showCommandBar} />
         <div className={styles.container}>
-          <PortfolioOverviewCommands
-            {...this.props}
-            {...this.state}
-            fltItems={items}
-            fltColumns={columns}
-            onGroupBy={groupBy => this.setState({ groupBy })}
-            onSetCompact={isCompact => this.setState({ isCompact })}
-            onChangeView={this.onChangeView.bind(this)}
-            onFilterChange={this.onFilterChange.bind(this)}
-            hidden={!this.props.showCommandBar} />
           <div className={styles.header}>
             <div className={styles.title}>{this.props.title}</div>
           </div>
@@ -99,20 +102,21 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
             <SearchBox onChange={this.onSearch.bind(this)} placeholder={this.searchBoxPlaceholder} />
           </div>
           {this.list(items, columns, groups)}
-          {this.state.showProjectInfo && (
-            <ProjectInformationModal
-              modalProps={{ isOpen: true, onDismiss: this.onDismissProjectInfoModal.bind(this) }}
-              title={this.state.showProjectInfo.Title}
-              siteId={this.state.showProjectInfo.SiteId}
-              entity={this.props.entity}
-              webUrl={this.props.pageContext.site.absoluteUrl}
-              hubSiteUrl={this.props.pageContext.site.absoluteUrl}
-              filterField={this.props.projectInfoFilterField}
-              statusReportsListName={this.props.statusReportsListName}
-              statusReportsCount={this.props.statusReportsCount}
-              statusReportsLinkUrlTemplate={this.props.statusReportsLinkUrlTemplate} />
-          )}
+          <LayerHost id={this._layerHostId} />
         </div>
+        {this.state.showProjectInfo && (
+          <ProjectInformationModal
+            modalProps={{ isOpen: true, onDismiss: this.onDismissProjectInfoModal.bind(this) }}
+            title={this.state.showProjectInfo.Title}
+            siteId={this.state.showProjectInfo.SiteId}
+            entity={this.props.entity}
+            webUrl={this.props.pageContext.site.absoluteUrl}
+            hubSiteUrl={this.props.pageContext.site.absoluteUrl}
+            filterField={this.props.projectInfoFilterField}
+            statusReportsListName={this.props.statusReportsListName}
+            statusReportsCount={this.props.statusReportsCount}
+            statusReportsLinkUrlTemplate={this.props.statusReportsLinkUrlTemplate} />
+        )}
       </div>
     );
   }
@@ -289,7 +293,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
             let colValue = getObjectValue<string>(_item, colKey, '');
             return activeFilters[colKey].filter(filterValue => colValue.indexOf(filterValue) !== -1).length > 0;
           });
-        }, items);
+        }, filteredItems);
       const selectedFilters = activeFilters.SelectedColumns;
       if (selectedFilters) {
         filteredColumns = this.props.configuration.columns.filter(_column => selectedFilters.indexOf(_column.fieldName) !== -1);
