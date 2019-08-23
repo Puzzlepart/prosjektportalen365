@@ -2,58 +2,10 @@
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
   "version": "2.0",
   "bundles": {
-    "benefits-overview-web-part": {
-      "components": [{
-        "entrypoint": "./lib/webparts/benefitsOverview/BenefitsOverviewWebPart.js",
-        "manifest": "./src/webparts/benefitsOverview/BenefitsOverviewWebPart.manifest.json"
-      }]
-    },
-    "deliveries-overview-web-part": {
-      "components": [{
-        "entrypoint": "./lib/webparts/deliveriesOverview/DeliveriesOverviewWebPart.js",
-        "manifest": "./src/webparts/deliveriesOverview/DeliveriesOverviewWebPart.manifest.json"
-      }]
-    },
-    "experience-log-web-part": {
-      "components": [{
-        "entrypoint": "./lib/webparts/experienceLog/ExperienceLogWebPart.js",
-        "manifest": "./src/webparts/experienceLog/ExperienceLogWebPart.manifest.json"
-      }]
-    },
-    "latest-projects-web-part": {
-      "components": [{
-        "entrypoint": "./lib/webparts/latestProjects/LatestProjectsWebPart.js",
-        "manifest": "./src/webparts/latestProjects/LatestProjectsWebPart.manifest.json"
-      }]
-    },
-    "portfolio-insights-web-part": {
-      "components": [{
-        "entrypoint": "./lib/webparts/portfolioInsights/PortfolioInsightsWebPart.js",
-        "manifest": "./src/webparts/portfolioInsights/PortfolioInsightsWebPart.manifest.json"
-      }]
-    },
     "portfolio-overview-web-part": {
       "components": [{
         "entrypoint": "./lib/webparts/portfolioOverview/PortfolioOverviewWebPart.js",
         "manifest": "./src/webparts/portfolioOverview/PortfolioOverviewWebPart.manifest.json"
-      }]
-    },
-    "project-list-web-part": {
-      "components": [{
-        "entrypoint": "./lib/webparts/projectList/ProjectListWebPart.js",
-        "manifest": "./src/webparts/projectList/ProjectListWebPart.manifest.json"
-      }]
-    },
-    "resource-allocation-web-part": {
-      "components": [{
-        "entrypoint": "./lib/webparts/resourceAllocation/ResourceAllocationWebPart.js",
-        "manifest": "./src/webparts/resourceAllocation/ResourceAllocationWebPart.manifest.json"
-      }]
-    },
-    "risk-overview-web-part": {
-      "components": [{
-        "entrypoint": "./lib/webparts/riskOverview/RiskOverviewWebPart.js",
-        "manifest": "./src/webparts/riskOverview/RiskOverviewWebPart.manifest.json"
       }]
     }
   },

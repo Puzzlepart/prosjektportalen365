@@ -26,6 +26,7 @@ import { renderItemColumn } from './RenderItemColumn';
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = PortfolioOverviewDefaultProps;
   private _onSearchDelay: number;
+  private _layerHost: LayerHost;
   private _layerHostId = getId('layerHost');
 
   constructor(props: IPortfolioOverviewProps) {
@@ -95,7 +96,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
             onFilterChange={this.onFilterChange.bind(this)}
             layerHostId={this._layerHostId}
             hidden={!this.props.showCommandBar} />
-          <LayerHost id={this._layerHostId} style={{ position: 'relative' }}>
+          <LayerHost ref={ele => this._layerHost = ele} id={this._layerHostId} style={{ position: 'relative' }}>
             <div className={styles.header}>
               <div className={styles.title}>{this.props.title}</div>
             </div>
@@ -294,12 +295,15 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
             let colValue = getObjectValue<string>(_item, colKey, '');
             return activeFilters[colKey].filter(filterValue => colValue.indexOf(filterValue) !== -1).length > 0;
           });
-        }, items);
+        }, filteredItems);
       const selectedFilters = activeFilters.SelectedColumns;
       if (selectedFilters) {
         filteredColumns = this.props.configuration.columns.filter(_column => selectedFilters.indexOf(_column.fieldName) !== -1);
       }
     }
+
+
+    if(this._layerHost) { this._layerHost.forceUpdate(); }
 
     return { items: filteredItems, columns: filteredColumns, groups };
   }

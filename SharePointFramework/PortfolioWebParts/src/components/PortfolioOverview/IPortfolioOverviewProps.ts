@@ -21,6 +21,7 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
     showSearchBox?: boolean;
     showFilters?: boolean;
     showViewSelector?: boolean;
+    filterPanelLocked?: boolean;
     columnConfigListName: string;
     columnsListName: string;
     viewsListName: string;
