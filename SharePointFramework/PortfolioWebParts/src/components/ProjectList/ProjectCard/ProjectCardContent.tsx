@@ -11,7 +11,7 @@ import * as strings from 'PortfolioWebPartsStrings';
  */
 export const ProjectCardContent = ({ project, showProjectOwner, showProjectManager }: IProjectCardProps): JSX.Element => {
     const defaultPersonaProps: IPersonaSharedProps = {
-        primaryText: strings.NotSet,
+        text: strings.NotSet,
         size: PersonaSize.size40,
         imageShouldFadeIn: true,
     };

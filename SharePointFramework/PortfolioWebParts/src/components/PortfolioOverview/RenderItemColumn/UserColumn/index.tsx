@@ -6,14 +6,14 @@ import { SearchValueType } from 'types';
 export class UserColumn extends React.Component<IRenderItemColumnProps, {}> {
     public render(): React.ReactElement<IRenderItemColumnProps> {
         if (this.props.column.searchType === SearchValueType.OWSUSER) {
-            let [email, primaryText] = this.props.colValue.split(' | ');
+            let [email, text] = this.props.colValue.split(' | ');
             return (
                 <span>
                     <Persona
-                        primaryText={primaryText}
+                        text={text}
                         onRenderPrimaryText={props => (
                             <div>
-                                <a href={`mailto:${email}`}>{props.primaryText}</a>
+                                <a href={`mailto:${email}`}>{props.text}</a>
                             </div>
                         )}
                         size={PersonaSize.size24}
@@ -23,7 +23,7 @@ export class UserColumn extends React.Component<IRenderItemColumnProps, {}> {
         }
         return (
             <span>
-                <Persona primaryText={this.props.colValue} size={PersonaSize.size24} presence={PersonaPresence.none} />
+                <Persona text={this.props.colValue} size={PersonaSize.size24} presence={PersonaPresence.none} />
             </span>
         );
     }

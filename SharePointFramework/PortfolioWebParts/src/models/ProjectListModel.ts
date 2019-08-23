@@ -29,10 +29,10 @@ export class ProjectListModel {
         phase?: ITermData & ITerm,
     ) {
         if (manager) {
-            this.manager = { primaryText: manager.Title, imageUrl: getUserPhoto(manager.Email) };
+            this.manager = { text: manager.Title, imageUrl: getUserPhoto(manager.Email) };
         }
         if (owner) {
-            this.owner = { primaryText: owner.Title, imageUrl: getUserPhoto(owner.Email) };
+            this.owner = { text: owner.Title, imageUrl: getUserPhoto(owner.Email) };
         }
         if (phase) {
             this.phase = phase.Name;

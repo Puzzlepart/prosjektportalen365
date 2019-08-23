@@ -1,5 +1,7 @@
-import { IExcelExportSheet } from "../interfaces";
+import * as moment from 'moment';
 import * as $script from 'scriptjs';
+import * as format from 'string-format';
+import { getObjectValue } from "../helpers/getObjectValue";
 import { stringToArrayBuffer } from "../util";
 
 export default new class ExcelExportService {
@@ -36,12 +38,23 @@ export default new class ExcelExportService {
     /**
      * Export to Excel
      * 
-     * @param {IExcelExportSheet[]} sheets Sheets
-     * @param {string} fileName File name
+     * @param {string} title Title
+     * @param {any[]} items Items
+     * @param {any[]} columns Columns
      */
-    public async export(sheets: IExcelExportSheet[], fileName: string) {
+    public async export(title: string, items: any[], columns: any[]) {
         try {
             await this.loadDeps();
+            const sheets = [];
+            let _columns = columns.filter(column => column.name);
+            sheets.push({
+                name: 'Sheet1',
+                data: [
+                    _columns.map(column => column.name),
+                    ...items.map(item => _columns.map(column => getObjectValue<string>(item, column.fieldName, null))),
+                ],
+            });
+            const fileName = format("{0}-{1}.xlsx", title, moment(new Date().toISOString()).format('YYYY-MM-DD-HH-mm'));
             const workBook = (<any>window).XLSX.utils.book_new();
             sheets.forEach((s, index) => {
                 const sheet = (<any>window).XLSX.utils.aoa_to_sheet(s.data);

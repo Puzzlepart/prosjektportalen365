@@ -21,3 +21,8 @@ export interface IPortfolioOverviewState {
     showProjectInfo?: SearchResult;
     isCompact?: boolean;
 }
+
+export interface IPortfolioOverviewHashStateState {
+    viewId?: string;
+    groupBy?: string;
+}

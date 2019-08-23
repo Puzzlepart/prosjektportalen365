@@ -15,14 +15,14 @@ export const ProjectListColumns = [
     minWidth: 100,
   },
   {
-    key: 'owner.primaryText',
-    fieldName: 'owner.primaryText',
+    key: 'owner.text',
+    fieldName: 'owner.text',
     name: strings.ProjectOwner,
     minWidth: 100,
   },
   {
-    key: 'manager.primaryText',
-    fieldName: 'manager.primaryText',
+    key: 'manager.text',
+    fieldName: 'manager.text',
     name: strings.ProjectManager,
     minWidth: 100,
   },

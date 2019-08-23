@@ -101,27 +101,6 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
               ]
             },
             {
-              groupName: strings.ProjectInformationGroupName,
-              groupFields: [
-                PropertyPaneDropdown(PropertyPaneConfigurationProps.PROJECTINFO_FILTER_FIELD, {
-                  label: strings.ProjectInfoFilterFieldLabel,
-                  options: this.getOptions(PropertyPaneConfigurationProps.PROJECTINFO_FILTER_FIELD),
-                }),
-                PropertyPaneTextField(PropertyPaneConfigurationProps.STATUSREPORTS_LISTNAME, {
-                  label: strings.StatusReportsListNameLabel,
-                }),
-                PropertyPaneSlider(PropertyPaneConfigurationProps.STATUSREPORTS_COUNT, {
-                  label: strings.StatusReportsCountLabel,
-                  min: 0,
-                  max: 10,
-                  step: 1,
-                }),
-                PropertyPaneTextField(PropertyPaneConfigurationProps.STATUSREPORTS_LINKURLTEMPLATE, {
-                  label: strings.StatusReportsLinkUrlTemplateLabel,
-                }),
-              ]
-            },
-            {
               groupName: strings.CommandBarGroupName,
               groupFields: [
                 PropertyPaneToggle(PropertyPaneConfigurationProps.SHOW_COMMANDBAR, {
@@ -144,6 +123,29 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                   disabled: !this.properties.showCommandBar,
                 }),
               ],
+            },
+            {
+              groupName: strings.ProjectInformationGroupName,
+              groupFields: [
+                PropertyPaneDropdown(PropertyPaneConfigurationProps.PROJECTINFO_FILTER_FIELD, {
+                  label: strings.ProjectInfoFilterFieldLabel,
+                  options: this.getOptions(PropertyPaneConfigurationProps.PROJECTINFO_FILTER_FIELD),
+                }),
+                PropertyPaneSlider(PropertyPaneConfigurationProps.STATUSREPORTS_COUNT, {
+                  label: strings.StatusReportsCountLabel,
+                  min: 0,
+                  max: 10,
+                  step: 1,
+                }),
+                PropertyPaneTextField(PropertyPaneConfigurationProps.STATUSREPORTS_LISTNAME, {
+                  label: strings.StatusReportsListNameLabel,
+                  disabled: this.properties.statusReportsCount === 0,
+                }),
+                PropertyPaneTextField(PropertyPaneConfigurationProps.STATUSREPORTS_LINKURLTEMPLATE, {
+                  label: strings.StatusReportsLinkUrlTemplateLabel,
+                  disabled: this.properties.statusReportsCount === 0,
+                }),
+              ]
             },
             {
               groupName: strings.ConfigurationGroupName,

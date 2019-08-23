@@ -15,6 +15,8 @@ import * as format from 'string-format';
 import styles from './AggregatedSearchList.module.scss';
 import { AggregatedSearchListDefaultProps, IAggregatedSearchListProps } from './IAggregatedSearchListProps';
 import { IAggregatedSearchListState } from './IAggregatedSearchListState';
+import * as arraySort from 'array-sort';
+import * as arrayUnique from 'array-unique';
 
 
 export default class AggregatedSearchList extends React.Component<IAggregatedSearchListProps, IAggregatedSearchListState> {
@@ -194,26 +196,31 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
     }
 
     /**
-     * Get groups
-     * 
-     * @param {any[]} items Items
-     * @param {IColumn} groupBy Group by
-     */
-    private getGroups(items: any[], groupBy: IColumn): IGroup[] {
+    * Get groups
+    *
+    * @param {any[]} items Items
+    * @param {IColumn}  groupBy Group by column
+    * @param {IColumn} sortBy Sort by column
+    */
+    public static getGroups(items: any[], groupBy: IColumn, sortBy?: IColumn): IGroup[] {
         let groups: IGroup[] = null;
-        if (groupBy && groupBy.key !== 'NoGrouping') {
-            const itemsSortedByGroupBy = items.sort((a, b) => getObjectValue(a, groupBy.key, null) > getObjectValue(b, groupBy.key, null) ? -1 : 1);
-            const groupNames: string[] = itemsSortedByGroupBy.map(g => getObjectValue(g, groupBy.key, null));
-            groups = groupNames
-                .filter((value, index, self) => self.indexOf(value) === index)
+        if (groupBy) {
+            const itemsSort = { props: [groupBy.fieldName], opts: { reverse: false } };
+            if (sortBy) {
+                itemsSort.props.push(sortBy.fieldName);
+                itemsSort.opts.reverse = !sortBy.isSortedDescending;
+            }
+            const groupItems: any[] = arraySort(items, itemsSort.props, itemsSort.opts);
+            const groupByValues: string[] = groupItems.map(g => g[groupBy.fieldName] ? g[groupBy.fieldName] : strings.NotSet);
+            const uniqueGroupValues: string[] = arrayUnique([].concat(groupByValues));
+            groups = uniqueGroupValues
+                .sort((a, b) => a > b ? 1 : -1)
                 .map((name, idx) => ({
-                    key: `Group_${idx}`,
+                    key: `${idx}`,
                     name: `${groupBy.name}: ${name}`,
-                    startIndex: groupNames.indexOf(name, 0),
-                    count: groupNames.filter(n => n === name).length,
-                    isCollapsed: false,
+                    startIndex: groupByValues.indexOf(name, 0),
+                    count: [].concat(groupByValues).filter(n => n === name).length,
                     isShowingAll: true,
-                    isDropEnabled: false,
                 }));
         }
         return groups;
@@ -232,7 +239,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
                 }).length > 0;
             });
         }
-        return { items, columns, groups: this.getGroups(items, groupBy) };
+        return { items, columns, groups: AggregatedSearchList.getGroups(items, groupBy) };
     }
 
     /**
@@ -241,19 +248,9 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
     private async exportToExcel(evt: React.MouseEvent<any> | React.KeyboardEvent<any>): Promise<void> {
         evt.preventDefault();
         this.setState({ isExporting: true });
-        const sheets = [];
         let { items, columns } = this.getFilteredData();
-        let _columns = columns.filter(column => column.name);
-        sheets.push({
-            name: 'Sheet1',
-            data: [
-                _columns.map(column => column.name),
-                ...items.map(item => _columns.map(column => getObjectValue<string>(item, column.fieldName, null))),
-            ],
-        });
-        const fileName = format("{0}-{1}.xlsx", this.props.title, moment(new Date().toISOString()).format('YYYY-MM-DD-HH-mm'));
         try {
-            await ExcelExportService.export(sheets, fileName);
+            await ExcelExportService.export(this.props.title, items, columns);
             this.setState({ isExporting: false });
         } catch (error) {
             this.setState({ isExporting: false });

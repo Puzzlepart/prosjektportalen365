@@ -26,7 +26,7 @@
       "name": "Hosted workbench",
       "type": "chrome",
       "request": "launch",
-      "url": "https://pzlcloud.sharepoint.com/sites/pp3test/_layouts/15/workbench.aspx",
+      "url": "https://tenant.sharepoint.com/_layouts/15/workbench.aspx",
       "webRoot": "${workspaceRoot}",
       "sourceMaps": true,
       "sourceMapPathOverrides": {
@@ -36,41 +36,8 @@
         "webpack:///../../../../../src/*": "${webRoot}/src/*"
       },
       "runtimeArgs": [
-        "--remote-debugging-port=9222"
-      ]
-    },
-    {
-      "name": "Hosted workbench (CRM2019)",
-      "type": "chrome",
-      "request": "launch",
-      "url": "https://pzlcloud.sharepoint.com/sites/CRM2019/_layouts/15/workbench.aspx",
-      "webRoot": "${workspaceRoot}",
-      "sourceMaps": true,
-      "sourceMapPathOverrides": {
-        "webpack:///.././src/*": "${webRoot}/src/*",
-        "webpack:///../../../src/*": "${webRoot}/src/*",
-        "webpack:///../../../../src/*": "${webRoot}/src/*",
-        "webpack:///../../../../../src/*": "${webRoot}/src/*"
-      },
-      "runtimeArgs": [
-        "--remote-debugging-port=9222"
-      ]
-    },
-    {
-      "name": "Hosted workbench (Etablere prosjektportalen i Oslo kommune)",
-      "type": "chrome",
-      "request": "launch",
-      "url": "https://pzlcloud.sharepoint.com/sites/EtablereprosjektportaleniOslokommune/_layouts/15/workbench.aspx",
-      "webRoot": "${workspaceRoot}",
-      "sourceMaps": true,
-      "sourceMapPathOverrides": {
-        "webpack:///.././src/*": "${webRoot}/src/*",
-        "webpack:///../../../src/*": "${webRoot}/src/*",
-        "webpack:///../../../../src/*": "${webRoot}/src/*",
-        "webpack:///../../../../../src/*": "${webRoot}/src/*"
-      },
-      "runtimeArgs": [
-        "--remote-debugging-port=9222"
+        "--remote-debugging-port=9222",
+        "-incognito"
       ]
     }
   ]
