@@ -24,7 +24,7 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
                 <FilterPanel
                     isOpen={this.state.showFilterPanel}
                     layerHostId={this.props.layerHostId}
-                    headerText={'Filtre'}
+                    headerText={strings.FiltersString}
                     hasCloseButton={false}
                     isLightDismiss={false}
                     filters={this.filters}

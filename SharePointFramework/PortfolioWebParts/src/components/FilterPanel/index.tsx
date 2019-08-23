@@ -4,6 +4,7 @@ import { IFilterPanelState } from './IFilterPanelState';
 import { IFilterPanelProps } from './IFilterPanelProps';
 import { Filter, IFilterProps } from './Filter';
 import { IFilterItemProps } from './FilterItem/IFilterItemProps';
+import { Customizer } from '@uifabric/utilities';
 
 export default class FilterPanel extends React.Component<IFilterPanelProps, IFilterPanelState> {
     public static defaultProps: Partial<IFilterPanelProps> = {};
@@ -15,18 +16,20 @@ export default class FilterPanel extends React.Component<IFilterPanelProps, IFil
 
     public render(): React.ReactElement<IFilterPanelProps> {
         return (
-            <Panel
-                isOpen={this.props.isOpen}
-                isLightDismiss={this.props.isLightDismiss}
-                isBlocking={this.props.isBlocking}
-                onDismiss={this.props.onDismiss}
-                headerText={this.props.headerText}
-                hasCloseButton={this.props.hasCloseButton}
-                type={PanelType.smallFixedFar}>
-                <div>
-                    {this.renderFilters()}
-                </div>
-            </Panel>
+            <Customizer scopedSettings={{ Layer: { hostId: this.props.layerHostId } }}>
+                <Panel
+                    isOpen={this.props.isOpen}
+                    isLightDismiss={this.props.isLightDismiss}
+                    isBlocking={this.props.isBlocking}
+                    onDismiss={this.props.onDismiss}
+                    headerText={this.props.headerText}
+                    hasCloseButton={this.props.hasCloseButton}
+                    type={PanelType.smallFixedFar}>
+                    <div>
+                        {this.renderFilters()}
+                    </div>
+                </Panel>
+            </Customizer>
         );
     }
 

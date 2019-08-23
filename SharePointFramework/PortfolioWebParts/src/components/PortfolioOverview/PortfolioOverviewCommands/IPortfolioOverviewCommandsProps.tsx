@@ -10,4 +10,5 @@ export interface IPortfolioOverviewCommandsProps extends Partial<IPortfolioOverv
     onSetCompact: (isCompact: boolean) => void;
     onChangeView: (view: PortfolioOverviewView) => void;
     onFilterChange: (column: PortfolioOverviewColumn, selectedItems: IFilterItemProps[]) => void;
+    layerHostId: string;
 }
