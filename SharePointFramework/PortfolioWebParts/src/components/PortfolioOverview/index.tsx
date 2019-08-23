@@ -23,6 +23,7 @@ import { renderItemColumn } from './RenderItemColumn';
 import { LayerHost } from 'office-ui-fabric-react/lib/Layer';
 import { getId } from '@uifabric/utilities';
 
+
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = PortfolioOverviewDefaultProps;
   private _onSearchDelay: number;
