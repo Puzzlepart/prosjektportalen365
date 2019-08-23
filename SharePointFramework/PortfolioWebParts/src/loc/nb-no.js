@@ -95,6 +95,7 @@ define([], function () {
     TitleLabel: 'Tittel',
     UnitLabel: 'Måleenhet',
     ViewNotFoundMessage: 'Finner ikke angitt visning.',
-    ViewsListNameLabel: 'Visninger'
+    ViewsListNameLabel: 'Visninger',
+    SelectedColumnsLabel: 'Felter'
   }
 });

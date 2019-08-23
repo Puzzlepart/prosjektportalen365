@@ -85,8 +85,8 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           <PortfolioOverviewCommands
             {...this.props}
             {...this.state}
-            items={items}
-            columns={columns}
+            fltItems={items}
+            fltColumns={columns}
             onGroupBy={groupBy => this.setState({ groupBy })}
             onSetCompact={isCompact => this.setState({ isCompact })}
             onChangeView={this.onChangeView.bind(this)}
@@ -286,8 +286,13 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
 
     if (Object.keys(activeFilters).length > 0) {
       filteredItems = Object.keys(activeFilters)
-        .filter(key => key !== 'SelectedColumns')
-        .reduce((_items, key) => _items.filter(i => activeFilters[key].indexOf(getObjectValue<string>(i, key, '')) !== -1), items);
+        .filter(colKey => colKey !== 'SelectedColumns')
+        .reduce((_items, colKey) => {
+          return _items.filter(_item => {
+            let colValue = getObjectValue<string>(_item, colKey, '');
+            return activeFilters[colKey].filter(filterValue => colValue.indexOf(filterValue) !== -1).length > 0;
+          });
+        }, items);
       const selectedFilters = activeFilters.SelectedColumns;
       if (selectedFilters) {
         filteredColumns = this.props.configuration.columns.filter(_column => selectedFilters.indexOf(_column.fieldName) !== -1);

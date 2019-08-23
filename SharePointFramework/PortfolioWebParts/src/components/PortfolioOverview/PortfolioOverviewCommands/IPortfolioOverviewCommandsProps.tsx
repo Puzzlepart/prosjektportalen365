@@ -4,8 +4,8 @@ import { IPortfolioOverviewState } from '../IPortfolioOverviewState';
 import { IFilterItemProps } from 'components';
 
 export interface IPortfolioOverviewCommandsProps extends Partial<IPortfolioOverviewProps>, Partial<IPortfolioOverviewState> {
-    items: any[];
-    columns: PortfolioOverviewColumn[];
+    fltItems: any[];
+    fltColumns: PortfolioOverviewColumn[];
     onGroupBy: (column: PortfolioOverviewColumn) => void;
     onSetCompact: (isCompact: boolean) => void;
     onChangeView: (view: PortfolioOverviewView) => void;

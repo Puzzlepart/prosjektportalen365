@@ -5,7 +5,7 @@ import * as React from 'react';
 import { getObjectValue } from 'shared/lib/helpers/getObjectValue';
 import { ExcelExportService } from 'shared/lib/services';
 import { redirect } from 'shared/lib/util';
-import { FilterPanel } from '../../';
+import { FilterPanel, IFilterProps } from '../../';
 import { IPortfolioOverviewCommandsProps } from './IPortfolioOverviewCommandsProps';
 import { IPortfolioOverviewCommandsState } from './IPortfolioOverviewCommandsState';
 import styles from './PortfolioOverviewCommands.module.scss';
@@ -159,24 +159,24 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
         ].filter(i => i.data.isVisible);
     }
 
-    protected get filters() {
+    protected get filters(): IFilterProps[] {
         return [
             {
                 column: {
                     key: 'SelectedColumns',
                     fieldName: 'SelectedColumns',
-                    name: 'Felter',
+                    name: strings.SelectedColumnsLabel,
                     minWidth: 0,
                 },
                 items: this.props.configuration.columns.map(col => ({
                     name: col.name,
                     value: col.fieldName,
-                    selected: this.props.columns.indexOf(col) !== -1,
+                    selected: this.props.fltColumns.indexOf(col) !== -1,
                 })),
                 defaultCollapsed: true,
             },
             ...this.props.filters,
-        ];
+        ] as IFilterProps[];
     }
 
     /**
@@ -185,7 +185,7 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
     protected async exportToExcel(): Promise<void> {
         this.setState({ isExporting: true });
         try {
-            await ExcelExportService.export(this.props.title, this.props.items, this.props.columns);
+            await ExcelExportService.export(this.props.title, this.props.fltItems, this.props.fltColumns);
             this.setState({ isExporting: false });
         } catch (error) {
             this.setState({ isExporting: false });
