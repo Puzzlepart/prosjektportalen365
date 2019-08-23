@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  AddColumnLabel: any;
   SortDescLabel: string;
   SortAscLabel: string;
   ColumSettingsLabel: string;

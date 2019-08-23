@@ -1,6 +1,6 @@
 {
     "name": "shared",
-    "version": "0.5.5",
+    "version": "0.5.8",
     "description": "Shared utilities, helpers and models",
     "main": "index.js",
     "scripts": {

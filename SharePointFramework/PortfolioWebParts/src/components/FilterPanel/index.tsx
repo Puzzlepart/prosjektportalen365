@@ -17,6 +17,7 @@ export default class FilterPanel extends React.Component<IFilterPanelProps, IFil
         return (
             <Panel
                 isOpen={this.props.isOpen}
+                isLightDismiss={this.props.isLightDismiss}
                 isBlocking={this.props.isBlocking}
                 onDismiss={this.props.onDismiss}
                 headerText={this.props.headerText}

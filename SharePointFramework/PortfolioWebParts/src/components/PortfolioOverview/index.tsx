@@ -2,8 +2,7 @@ import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
 import * as arraySort from 'array-sort';
 import { IPortfolioOverviewConfiguration } from 'interfaces';
 import { PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
-import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
-import { ContextualMenu, IContextualMenuProps, ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { ContextualMenu, ContextualMenuItemType, IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { DetailsList, IColumn, IGroup, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
@@ -11,17 +10,17 @@ import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'PortfolioWebPartsStrings';
 import { ProjectInformationModal } from 'projectwebparts/lib/components/ProjectInformation';
 import * as React from 'react';
-import { ExcelExportService } from 'shared/lib/services';
-import { parseUrlHash, setUrlHash } from 'shared/lib/util';
+import { getObjectValue } from 'shared/lib/helpers/getObjectValue';
+import { parseUrlHash, redirect, setUrlHash } from 'shared/lib/util';
 import * as format from 'string-format';
-import { FilterPanel, IFilterItemProps, IFilterProps, AggregatedSearchList } from '../';
+import { AggregatedSearchList, IFilterItemProps, IFilterProps } from '../';
 import { IPortfolioOverviewProps, PortfolioOverviewDefaultProps } from './IPortfolioOverviewProps';
 import { IPortfolioOverviewHashStateState, IPortfolioOverviewState } from './IPortfolioOverviewState';
 import styles from './PortfolioOverview.module.scss';
+import { PortfolioOverviewCommands } from './PortfolioOverviewCommands';
 import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage';
-import { PortfolioOverviewFieldSelector } from './PortfolioOverviewFieldSelector';
+
 import { renderItemColumn } from './RenderItemColumn';
-import { getObjectValue } from 'shared/lib/helpers/getObjectValue';
 
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = PortfolioOverviewDefaultProps;
@@ -55,11 +54,6 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     if (groupBy) {
       obj.groupBy = groupBy.fieldName;
     }
-    PortfolioOverviewFieldSelector.items = this.props.configuration.columns.map(col => ({
-      name: col.name,
-      value: col.fieldName,
-      selected: columns.indexOf(col) !== -1,
-    }));
     setUrlHash<IPortfolioOverviewHashStateState>(obj);
   }
 
@@ -82,22 +76,28 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         </div>
       );
     }
+
+    const { items, columns, groups } = this.getData();
+
     return (
       <div className={styles.portfolioOverview}>
         <div className={styles.container}>
-          {this.commandBar()}
+          <PortfolioOverviewCommands
+            {...this.props}
+            {...this.state}
+            items={items}
+            columns={columns}
+            onGroupBy={groupBy => this.setState({ groupBy })}
+            onSetCompact={isCompact => this.setState({ isCompact })}
+            onChangeView={this.onChangeView.bind(this)}
+            onFilterChange={this.onFilterChange.bind(this)} />
           <div className={styles.header}>
             <div className={styles.title}>{this.props.title}</div>
           </div>
           <div className={styles.searchBox} hidden={!this.props.showSearchBox}>
             <SearchBox onChange={this.onSearch.bind(this)} placeholder={this.searchBoxPlaceholder} />
           </div>
-          {this.list()}
-          <FilterPanel
-            isOpen={this.state.showFilterPanel}
-            onDismiss={this.onDismissFilterPanel.bind(this)}
-            filters={[PortfolioOverviewFieldSelector, ...this.state.filters]}
-            onFilterChange={this.onFilterChange.bind(this)} />
+          {this.list(items, columns, groups)}
           {this.state.showProjectInfo && (
             <ProjectInformationModal
               modalProps={{ isOpen: true, onDismiss: this.onDismissProjectInfoModal.bind(this) }}
@@ -120,144 +120,26 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     return format(strings.SearchBoxPlaceholderText, this.state.currentView.title.toLowerCase());
   }
 
-  private commandBar() {
-    const items: IContextualMenuItem[] = [];
-    const farItems: IContextualMenuItem[] = [];
-
-    if (this.props.showGroupBy) {
-      items.push({
-        key: 'GroupBy',
-        name: this.state.groupBy ? this.state.groupBy.name : strings.NoGroupingText,
-        iconProps: { iconName: 'GroupedList' },
-        itemType: ContextualMenuItemType.Header,
-        subMenuProps: {
-          items: [
-            {
-              key: 'NoGrouping',
-              name: strings.NoGroupingText,
-              canCheck: true,
-              checked: this.state.groupBy === null || this.state.groupBy === undefined,
-              onClick: _ => { this.setState({ groupBy: null }); },
-            },
-            {
-              key: 'divider_0',
-              itemType: ContextualMenuItemType.Divider,
-            },
-            ...this.props.configuration.columns
-              .filter(col => col.isGroupable)
-              .map((col, idx) => ({
-                key: `${idx}`,
-                name: col.name,
-                canCheck: true,
-                checked: getObjectValue<string>(this.state, 'groupBy.fieldName', '') === col.fieldName,
-                onClick: _ => { this.setState({ groupBy: col }); },
-              })) as IContextualMenuItem[],
-          ],
-        },
-      });
+  private list(items: any[], columns: PortfolioOverviewColumn[], groups: IGroup[]) {
+    let addColumn: IColumn = null;
+    if (this.props.pageContext.legacyPageContext.isSiteAdmin) {
+      addColumn = {
+        key: 'AddColumn',
+        name: `  ${strings.AddColumnLabel}`,
+        iconName: 'CalculatorAddition',
+        onColumnClick: _ => redirect(this.props.configuration.colNewFormUrl),
+        minWidth: 150,
+      };
     }
-    if (this.props.showExcelExportButton) {
-      items.push({
-        key: "ExcelExport",
-        name: strings.ExcelExportButtonLabel,
-        iconProps: {
-          iconName: 'ExcelDocument',
-          styles: { root: { color: "green !important" } },
-        },
-        disabled: this.state.isExporting,
-        onClick: _ => { this.exportToExcel(); },
-      });
-    }
-    if (this.props.showViewSelector) {
-      if (this.props.pageContext.legacyPageContext.isSiteAdmin) {
-        farItems.push({
-          key: 'NewView',
-          name: strings.NewViewText,
-          iconProps: { iconName: 'CirclePlus' },
-          href: `${this.props.configuration.viewNewFormUrl}?Source=${encodeURIComponent(document.location.href)}`,
-        });
-      }
-      farItems.push({
-        key: 'View',
-        name: this.state.currentView.title,
-        iconProps: { iconName: 'List' },
-        itemType: ContextualMenuItemType.Header,
-        subMenuProps: {
-          items: [
-            {
-              key: 'List',
-              name: 'Liste',
-              iconProps: { iconName: 'List' },
-              canCheck: true,
-              checked: !this.state.isCompact,
-              onClick: _ => { this.setState({ isCompact: false }); },
-            },
-            {
-              key: 'CompactList',
-              name: 'Kompakt liste',
-              iconProps: { iconName: 'AlignLeft' },
-              canCheck: true,
-              checked: this.state.isCompact,
-              onClick: _ => { this.setState({ isCompact: true }); },
-            },
-            {
-              key: 'divider_0',
-              itemType: ContextualMenuItemType.Divider,
-            },
-            ...this.props.configuration.views.map(v => ({
-              key: `${v.id}`,
-              name: v.title,
-              iconProps: { iconName: v.iconName },
-              canCheck: true,
-              checked: v.id === this.state.currentView.id,
-              onClick: _ => { this.onChangeView(v); },
-            } as IContextualMenuItem)),
-            {
-              key: 'divider_1',
-              itemType: ContextualMenuItemType.Divider,
-            },
-            {
-              key: 'SaveViewAs',
-              name: strings.SaveViewAsText,
-              disabled: true,
-            },
-            {
-              key: 'EditView',
-              name: strings.EditViewText,
-              href: `${this.props.configuration.viewEditFormUrl}?ID=${this.state.currentView.id}&Source=${encodeURIComponent(document.location.href)}`,
-            }
-          ],
-        },
-      });
-    }
-    if (this.props.showFilters) {
-      farItems.push({
-        key: 'Filters',
-        name: '',
-        iconProps: { iconName: 'Filter' },
-        itemType: ContextualMenuItemType.Normal,
-        onClick: _ => { this.setState({ showFilterPanel: true }); },
-      });
-    }
-
-    return (
-      <div hidden={!this.props.showCommandBar}>
-        <CommandBar items={items} farItems={farItems} />
-      </div>
-    );
-  }
-
-  private list() {
-    const data = this.filteredData;
 
     return (
       <div className={styles.listContainer}>
         <DetailsList
-          items={data.items}
+          items={items}
           constrainMode={this.props.constrainMode}
           layoutMode={this.props.layoutMode}
-          columns={data.columns}
-          groups={data.groups}
+          columns={[...columns, addColumn]}
+          groups={groups}
           selectionMode={SelectionMode.none}
           onRenderItemColumn={(item, _index, column: PortfolioOverviewColumn) => renderItemColumn(item, column, state => this.setState(state))}
           onColumnHeaderContextMenu={this.onColumnHeaderContextMenu.bind(this)}
@@ -278,13 +160,6 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     this._onSearchDelay = setTimeout(() => {
       this.setState({ searchTerm: searchTerm.toLowerCase() });
     }, delay);
-  }
-
-  /**
-   * On dismiss <FilterPabel />
-   */
-  private onDismissFilterPanel() {
-    this.setState({ showFilterPanel: false });
   }
 
   /**
@@ -309,10 +184,10 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   /**
    * On filter change 
    *
-   * @param {IColumn} column Column
+   * @param {PortfolioOverviewColumn} column Column
    * @param {IFilterItemProps[]} selectedItems Selected items
    */
-  private onFilterChange(column: IColumn, selectedItems: IFilterItemProps[]) {
+  private onFilterChange(column: PortfolioOverviewColumn, selectedItems: IFilterItemProps[]) {
     const { activeFilters } = ({ ...this.state } as IPortfolioOverviewState);
     if (selectedItems.length > 0) {
       activeFilters[column.fieldName] = selectedItems.map(i => i.value);
@@ -351,6 +226,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
    * @param {React.MouseEvent<HTMLElement, MouseEvent>} ev Event
    */
   private onColumnHeaderContextMenu(column?: PortfolioOverviewColumn, ev?: React.MouseEvent<HTMLElement, MouseEvent>) {
+    if (column.key === 'AddColumn') return;
     this.setState({
       columnHeaderContextMenu: {
         target: ev.currentTarget,
@@ -376,12 +252,12 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           {
             key: 'ColumSettings',
             name: strings.ColumSettingsLabel,
-            href: `${this.props.configuration.colEditFormUrl}?ID=${column.id}&Source=${encodeURIComponent(document.location.href)}`,
+            onClick: _ => redirect(`${this.props.configuration.colEditFormUrl}?ID=${column.id}`),
             disabled: !this.props.pageContext.legacyPageContext.isSiteAdmin,
           }
         ],
         onDismiss: _ => this.setState({ columnHeaderContextMenu: null })
-      },
+      } as IContextualMenuProps,
     });
   }
 
@@ -395,7 +271,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   /**
    * Get filtered data
    */
-  private get filteredData() {
+  private getData() {
     const { items, columns, searchTerm, groupBy, sortBy, activeFilters } = ({ ...this.state } as IPortfolioOverviewState);
 
     let groups: IGroup[] = AggregatedSearchList.getGroups(items, groupBy, sortBy);
@@ -410,9 +286,9 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
 
     if (Object.keys(activeFilters).length > 0) {
       filteredItems = Object.keys(activeFilters)
-        .filter(key => key !== PortfolioOverviewFieldSelector.column.key)
+        .filter(key => key !== 'SelectedColumns')
         .reduce((_items, key) => _items.filter(i => activeFilters[key].indexOf(getObjectValue<string>(i, key, '')) !== -1), items);
-      const selectedFilters = activeFilters[PortfolioOverviewFieldSelector.column.key];
+      const selectedFilters = activeFilters.SelectedColumns;
       if (selectedFilters) {
         filteredColumns = this.props.configuration.columns.filter(_column => selectedFilters.indexOf(_column.fieldName) !== -1);
       }
@@ -485,7 +361,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   *
   * @param {PortfolioOverviewView} view View configuration
   */
-  private async onChangeView(view: PortfolioOverviewView): Promise<void> {
+  private async onChangeView(view: PortfolioOverviewView) {
     if (this.state.currentView.id === view.id) {
       return;
     }
@@ -503,20 +379,6 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     };
 
     this.setState(updatedState);
-  }
-
-  /**
-   * Export to Excel
-   */
-  private async exportToExcel(): Promise<void> {
-    this.setState({ isExporting: true });
-    let { items, columns } = this.filteredData;
-    try {
-      await ExcelExportService.export(this.props.title, items, columns);
-      this.setState({ isExporting: false });
-    } catch (error) {
-      this.setState({ isExporting: false });
-    }
   }
 }
 
