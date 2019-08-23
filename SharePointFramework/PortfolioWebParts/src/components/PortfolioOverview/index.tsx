@@ -1,5 +1,4 @@
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
-import { getId } from '@uifabric/utilities';
 import * as arraySort from 'array-sort';
 import { IFetchDataForViewRefinersResult } from 'data/IFetchDataForViewResult';
 import { PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
@@ -26,7 +25,6 @@ import { renderItemColumn } from './RenderItemColumn';
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = PortfolioOverviewDefaultProps;
   private _onSearchDelay: number;
-  private _layerHostId = getId('layerHost');
 
   constructor(props: IPortfolioOverviewProps) {
     super(props);
@@ -93,17 +91,14 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
             onSetCompact={isCompact => this.setState({ isCompact })}
             onChangeView={this.onChangeView.bind(this)}
             onFilterChange={this.onFilterChange.bind(this)}
-            layerHostId={this._layerHostId}
             hidden={!this.props.showCommandBar} />
-          <LayerHost id={this._layerHostId} style={{ position: 'relative' }}>
-            <div className={styles.header}>
-              <div className={styles.title}>{this.props.title}</div>
-            </div>
-            <div className={styles.searchBox} hidden={!this.props.showSearchBox}>
-              <SearchBox onChange={this.onSearch.bind(this)} placeholder={this.searchBoxPlaceholder} />
-            </div>
-            {this.list(items, columns, groups)}
-          </LayerHost>
+          <div className={styles.header}>
+            <div className={styles.title}>{this.props.title}</div>
+          </div>
+          <div className={styles.searchBox} hidden={!this.props.showSearchBox}>
+            <SearchBox onChange={this.onSearch.bind(this)} placeholder={this.searchBoxPlaceholder} />
+          </div>
+          {this.list(items, columns, groups)}
           {this.state.showProjectInfo && (
             <ProjectInformationModal
               modalProps={{ isOpen: true, onDismiss: this.onDismissProjectInfoModal.bind(this) }}

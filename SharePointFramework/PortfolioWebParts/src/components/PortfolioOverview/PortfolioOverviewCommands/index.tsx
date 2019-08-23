@@ -23,10 +23,10 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
                 <CommandBar items={this.items} farItems={this.farItems} />
                 <FilterPanel
                     isOpen={this.state.showFilterPanel}
-                    layerHostId={this.props.layerHostId}
-                    headerText={'Filtre'}
-                    hasCloseButton={false}
+                    hasCloseButton={true}
                     filters={this.filters}
+                    isLightDismiss={true}
+                    onDismiss={_ => this.setState({ showFilterPanel: false })}
                     onFilterChange={this.props.onFilterChange} />
             </div>
         );
