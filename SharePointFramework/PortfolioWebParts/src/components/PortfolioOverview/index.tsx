@@ -1,9 +1,11 @@
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
+import { getId } from '@uifabric/utilities';
 import * as arraySort from 'array-sort';
 import { IFetchDataForViewRefinersResult } from 'data/IFetchDataForViewResult';
 import { PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
 import { ContextualMenu, ContextualMenuItemType, IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { DetailsList, IColumn, IGroup, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { LayerHost } from 'office-ui-fabric-react/lib/Layer';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
@@ -20,9 +22,6 @@ import styles from './PortfolioOverview.module.scss';
 import { PortfolioOverviewCommands } from './PortfolioOverviewCommands';
 import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage';
 import { renderItemColumn } from './RenderItemColumn';
-import { LayerHost } from 'office-ui-fabric-react/lib/Layer';
-import { getId } from '@uifabric/utilities';
-
 
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = PortfolioOverviewDefaultProps;

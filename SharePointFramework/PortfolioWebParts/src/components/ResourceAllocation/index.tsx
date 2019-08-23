@@ -1,6 +1,5 @@
 import { sp } from '@pnp/sp';
-import { tryParsePercentage } from 'shared/lib/helpers';
-import { DataSourceService } from 'shared/lib/services';
+import { IAllocationSearchResult, ITimelineData, ITimelineGroup, ITimelineItem } from 'interfaces';
 import * as moment from 'moment';
 import * as objectGet from 'object-get';
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
@@ -8,13 +7,14 @@ import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMen
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
+import * as strings from 'PortfolioWebPartsStrings';
 import * as React from 'react';
 import Timeline, { TimelineMarkers, TodayMarker } from 'react-calendar-timeline';
 import 'react-calendar-timeline/lib/Timeline.css';
-import * as strings from 'PortfolioWebPartsStrings';
+import { tryParsePercentage } from 'shared/lib/helpers';
+import { DataSourceService } from 'shared/lib/services';
 import * as format from 'string-format';
 import { FilterPanel, IFilterItemProps, IFilterProps } from '../';
-import { ITimelineData, ITimelineGroup, ITimelineItem, IAllocationSearchResult } from 'interfaces';
 import { IResourceAllocationProps, ResourceAllocationDefaultProps } from './IResourceAllocationProps';
 import { IResourceAllocationState } from './IResourceAllocationState';
 import styles from './ResourceAllocation.module.scss';
