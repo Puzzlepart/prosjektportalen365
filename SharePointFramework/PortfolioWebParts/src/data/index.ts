@@ -2,15 +2,15 @@ import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { dateAdd } from '@pnp/common';
 import { QueryPropertyValueType, SearchResults, SortDirection, sp } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
-import { getObjectValue, makeUrlAbsolute } from 'shared/lib/helpers';
 import * as cleanDeep from 'clean-deep';
 import { IGraphGroup, IPortfolioOverviewConfiguration, ISPProjectItem, ISPUser } from 'interfaces';
 import { ChartConfiguration, ChartData, ChartDataItem, DataField, PortfolioOverviewColumn, PortfolioOverviewView, ProjectListModel, SPChartConfigurationItem, SPContentType, SPPortfolioOverviewColumnItem, SPPortfolioOverviewViewItem, SPProjectColumnConfigItem } from 'models';
 import { ProjectColumnConfig, ProjectColumnConfigDictionary } from 'models/ProjectColumnConfig';
 import MSGraph from 'msgraph-helper';
 import * as objectGet from 'object-get';
+import { getObjectValue, makeUrlAbsolute } from 'shared/lib/helpers';
 import { DEFAULT_SEARCH_SETTINGS } from './DEFAULT_SEARCH_SETTINGS';
-import { IFetchDataForViewResult } from './IFetchDataForViewResult';
+import { IFetchDataForViewResult, IFetchDataForViewRefinersResult, FetchDataForViewRefinerEntryResult } from './IFetchDataForViewResult';
 
 
 export class DataAdapter {
@@ -65,7 +65,7 @@ export class DataAdapter {
      */
     public async fetchDataForView(view: PortfolioOverviewView, configuration: IPortfolioOverviewConfiguration, siteId: string, siteIdProperty: string = 'GtSiteIdOWSTEXT'): Promise<IFetchDataForViewResult> {
         try {
-            let searchResults: SearchResults[] = await Promise.all([
+            let response: SearchResults[] = await Promise.all([
                 sp.search({
                     ...DEFAULT_SEARCH_SETTINGS,
                     QueryTemplate: view.searchQuery,
@@ -85,10 +85,13 @@ export class DataAdapter {
                 }),
             ]);
 
-            let refiners = objectGet(searchResults[0], 'RawSearchResults.PrimaryQueryResult.RefinementResults.Refiners') || [];
-            let projects = searchResults[0].PrimarySearchResults.map(item => cleanDeep({ ...item }));
-            let sites = searchResults[1].PrimarySearchResults.map(item => cleanDeep({ ...item }));
-            let statusReports = searchResults[2].PrimarySearchResults.map(item => cleanDeep({ ...item }));
+            let refiners: IFetchDataForViewRefinersResult = (objectGet(response[0], 'RawSearchResults.PrimaryQueryResult.RefinementResults.Refiners') || []).reduce((obj: IFetchDataForViewRefinersResult, ref: { Name: string, Entries: any[] }) => {
+                obj[ref.Name] = ref.Entries.map(e => new FetchDataForViewRefinerEntryResult(e.RefinementName, e.RefinementValue));
+                return obj;
+            }, {});
+            let projects = response[0].PrimarySearchResults.map(item => cleanDeep({ ...item }));
+            let sites = response[1].PrimarySearchResults.map(item => cleanDeep({ ...item }));
+            let statusReports = response[2].PrimarySearchResults.map(item => cleanDeep({ ...item }));
             let validSites = sites.filter(site => projects.filter(res => res[siteIdProperty] === site['SiteId']).length === 1);
             let items = validSites.map(site => {
                 const [project] = projects.filter(res => res[siteIdProperty] === site['SiteId']);
@@ -273,3 +276,5 @@ export class DataAdapter {
         return projects;
     }
 }
+
+export { IFetchDataForViewRefinersResult };

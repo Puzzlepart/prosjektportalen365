@@ -1,4 +1,4 @@
-import { SearchResult } from '@pnp/sp';
+import { IFetchDataForViewItemResult } from 'data/IFetchDataForViewResult';
 import { PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
 import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { IFilterProps } from '../';
@@ -8,7 +8,7 @@ export interface IPortfolioOverviewState {
     isLoading?: boolean;
     isExporting?: boolean;
     isChangingView?: PortfolioOverviewView;
-    items?: SearchResult[];
+    items?: IFetchDataForViewItemResult[];
     columns?: PortfolioOverviewColumn[];
     searchTerm?: string;
     filters?: IFilterProps[];
@@ -18,7 +18,7 @@ export interface IPortfolioOverviewState {
     showFilterPanel?: boolean;
     groupBy?: PortfolioOverviewColumn;
     sortBy?: PortfolioOverviewColumn;
-    showProjectInfo?: SearchResult;
+    showProjectInfo?: IFetchDataForViewItemResult;
     isCompact?: boolean;
     columnHeaderContextMenu?: IContextualMenuProps;
 }

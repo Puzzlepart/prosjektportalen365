@@ -1,4 +1,3 @@
-import { SearchResult } from '@pnp/sp';
 import { formatDate, tryParseCurrency } from 'shared/lib/helpers';
 import { PortfolioOverviewColumn } from 'models';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -7,6 +6,7 @@ import { IPortfolioOverviewState } from '../IPortfolioOverviewState';
 import { IRenderItemColumnProps } from './IRenderItemColumnProps';
 import { TagsColumn } from './TagsColumn';
 import { UserColumn } from './UserColumn';
+import { IFetchDataForViewItemResult } from 'data/IFetchDataForViewResult';
 
 /**
  * Mapping for rendering of the different data types
@@ -33,11 +33,11 @@ const renderDataTypeMap = {
 /**
  * On render item activeFilters
 *
-* @param {SearchResult} item Item
+* @param {IFetchDataForViewItemResult} item Item
 * @param {PortfolioOverviewColumn} column Column
 * @param {void} onUpdateState On update state
 */
-export function renderItemColumn(item: SearchResult, column: PortfolioOverviewColumn, onUpdateState: (state: Partial<IPortfolioOverviewState>) => void) {
+export function renderItemColumn(item: IFetchDataForViewItemResult, column: PortfolioOverviewColumn, onUpdateState: (state: Partial<IPortfolioOverviewState>) => void) {
     const colValue = item[column.fieldName];
 
     if (!colValue) return null;
