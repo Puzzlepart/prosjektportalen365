@@ -126,15 +126,16 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   }
 
   private list(items: any[], columns: PortfolioOverviewColumn[], groups: IGroup[]) {
-    let addColumn: IColumn = null;
+    let _columns = [...columns];
     if (this.props.pageContext.legacyPageContext.isSiteAdmin) {
-      addColumn = {
+      _columns.push({
         key: 'AddColumn',
+        fieldName: undefined,
         name: `  ${strings.AddColumnLabel}`,
         iconName: 'CalculatorAddition',
         onColumnClick: _ => redirect(this.props.configuration.colNewFormUrl),
         minWidth: 150,
-      };
+      } as PortfolioOverviewColumn);
     }
 
     return (
@@ -143,7 +144,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           items={items}
           constrainMode={this.props.constrainMode}
           layoutMode={this.props.layoutMode}
-          columns={[...columns, addColumn]}
+          columns={_columns}
           groups={groups}
           selectionMode={SelectionMode.none}
           onRenderItemColumn={(item, _index, column: PortfolioOverviewColumn) => renderItemColumn(item, column, state => this.setState(state))}
