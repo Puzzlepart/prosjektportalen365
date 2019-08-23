@@ -22,7 +22,6 @@ export const PropertyPaneConfigurationProps = {
   VIEWS_LISTNAME: 'viewsListName',
   CONSTRAIN_MODE: 'constrainMode',
   LAYOUT_MODE: 'layoutMode',
-  FILTER_PANEL_LOCKED: 'filterPanelLocked',
 };
 
 export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPortfolioOverviewProps> {
@@ -121,10 +120,6 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                 }),
                 PropertyPaneToggle(PropertyPaneConfigurationProps.SHOW_VIEWSELECTOR, {
                   label: strings.ShowViewSelectorLabel,
-                  disabled: !this.properties.showCommandBar,
-                }),
-                PropertyPaneToggle(PropertyPaneConfigurationProps.FILTER_PANEL_LOCKED, {
-                  label: 'filterPanelLocked',
                   disabled: !this.properties.showCommandBar,
                 }),
               ],

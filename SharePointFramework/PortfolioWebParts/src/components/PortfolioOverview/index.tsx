@@ -26,7 +26,6 @@ import { renderItemColumn } from './RenderItemColumn';
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = PortfolioOverviewDefaultProps;
   private _onSearchDelay: number;
-  private _layerHost: LayerHost;
   private _layerHostId = getId('layerHost');
 
   constructor(props: IPortfolioOverviewProps) {
@@ -84,41 +83,39 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
 
     return (
       <div className={styles.portfolioOverview}>
-        <div className={styles.container}>
-          <PortfolioOverviewCommands
-            {...this.props}
-            {...this.state}
-            fltItems={items}
-            fltColumns={columns}
-            onGroupBy={groupBy => this.setState({ groupBy })}
-            onSetCompact={isCompact => this.setState({ isCompact })}
-            onChangeView={this.onChangeView.bind(this)}
-            onFilterChange={this.onFilterChange.bind(this)}
-            layerHostId={this._layerHostId}
-            hidden={!this.props.showCommandBar} />
-          <LayerHost ref={ele => this._layerHost = ele} id={this._layerHostId} style={{ position: 'relative' }}>
-            <div className={styles.header}>
-              <div className={styles.title}>{this.props.title}</div>
-            </div>
-            <div className={styles.searchBox} hidden={!this.props.showSearchBox}>
-              <SearchBox onChange={this.onSearch.bind(this)} placeholder={this.searchBoxPlaceholder} />
-            </div>
-            {this.list(items, columns, groups)}
-          </LayerHost>
-          {this.state.showProjectInfo && (
-            <ProjectInformationModal
-              modalProps={{ isOpen: true, onDismiss: this.onDismissProjectInfoModal.bind(this) }}
-              title={this.state.showProjectInfo.Title}
-              siteId={this.state.showProjectInfo.SiteId}
-              entity={this.props.entity}
-              webUrl={this.props.pageContext.site.absoluteUrl}
-              hubSiteUrl={this.props.pageContext.site.absoluteUrl}
-              filterField={this.props.projectInfoFilterField}
-              statusReportsListName={this.props.statusReportsListName}
-              statusReportsCount={this.props.statusReportsCount}
-              statusReportsLinkUrlTemplate={this.props.statusReportsLinkUrlTemplate} />
-          )}
-        </div>
+        <PortfolioOverviewCommands
+          {...this.props}
+          {...this.state}
+          fltItems={items}
+          fltColumns={columns}
+          onGroupBy={groupBy => this.setState({ groupBy })}
+          onSetCompact={isCompact => this.setState({ isCompact })}
+          onChangeView={this.onChangeView.bind(this)}
+          onFilterChange={this.onFilterChange.bind(this)}
+          layerHostId={this._layerHostId}
+          hidden={!this.props.showCommandBar} />
+        <LayerHost className={styles.container} id={this._layerHostId}>
+          <div className={styles.header}>
+            <div className={styles.title}>{this.props.title}</div>
+          </div>
+          <div className={styles.searchBox} hidden={!this.props.showSearchBox}>
+            <SearchBox onChange={this.onSearch.bind(this)} placeholder={this.searchBoxPlaceholder} />
+          </div>
+          {this.list(items, columns, groups)}
+        </LayerHost>
+        {this.state.showProjectInfo && (
+          <ProjectInformationModal
+            modalProps={{ isOpen: true, onDismiss: this.onDismissProjectInfoModal.bind(this) }}
+            title={this.state.showProjectInfo.Title}
+            siteId={this.state.showProjectInfo.SiteId}
+            entity={this.props.entity}
+            webUrl={this.props.pageContext.site.absoluteUrl}
+            hubSiteUrl={this.props.pageContext.site.absoluteUrl}
+            filterField={this.props.projectInfoFilterField}
+            statusReportsListName={this.props.statusReportsListName}
+            statusReportsCount={this.props.statusReportsCount}
+            statusReportsLinkUrlTemplate={this.props.statusReportsLinkUrlTemplate} />
+        )}
       </div>
     );
   }
@@ -301,10 +298,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
         filteredColumns = this.props.configuration.columns.filter(_column => selectedFilters.indexOf(_column.fieldName) !== -1);
       }
     }
-
-
-    if(this._layerHost) { this._layerHost.forceUpdate(); }
-
+    
     return { items: filteredItems, columns: filteredColumns, groups };
   }
 
