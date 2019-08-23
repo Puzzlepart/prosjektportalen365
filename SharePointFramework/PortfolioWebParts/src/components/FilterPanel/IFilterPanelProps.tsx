@@ -6,4 +6,5 @@ import { IFilterItemProps } from './FilterItem/IFilterItemProps';
 export interface IFilterPanelProps extends IPanelProps {
     filters: IFilterProps[];
     onFilterChange: (column: IColumn, selectedItems: IFilterItemProps[]) => void;
+    layerHostId?: string;
 }

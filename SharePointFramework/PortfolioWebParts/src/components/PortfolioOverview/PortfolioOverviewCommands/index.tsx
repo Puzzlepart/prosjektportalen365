@@ -8,7 +8,6 @@ import { redirect } from 'shared/lib/util';
 import { FilterPanel, IFilterProps } from '../../';
 import { IPortfolioOverviewCommandsProps } from './IPortfolioOverviewCommandsProps';
 import { IPortfolioOverviewCommandsState } from './IPortfolioOverviewCommandsState';
-import styles from './PortfolioOverviewCommands.module.scss';
 import { isNull } from 'shared/lib/helpers/isNull';
 
 
@@ -20,23 +19,17 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
 
     public render() {
         return (
-            <div className={styles.portfolioOverviewCommands}>
+            <div className={this.props.className} hidden={this.props.hidden}>
                 <CommandBar items={this.items} farItems={this.farItems} />
                 <FilterPanel
-                    isLightDismiss={true}
                     isOpen={this.state.showFilterPanel}
-                    onDismiss={this.onDismissFilterPanel.bind(this)}
+                    layerHostId={this.props.layerHostId}
+                    headerText={'Filtre'}
+                    hasCloseButton={false}
                     filters={this.filters}
                     onFilterChange={this.props.onFilterChange} />
             </div>
         );
-    }
-
-    /**
-     * On dismiss <FilterPabel />
-     */
-    private onDismissFilterPanel() {
-        this.setState({ showFilterPanel: false });
     }
 
     protected get items(): IContextualMenuItem[] {
@@ -153,8 +146,10 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
                 name: '',
                 iconProps: { iconName: 'Filter' },
                 itemType: ContextualMenuItemType.Normal,
+                canCheck: true,
+                checked: this.state.showFilterPanel,
                 data: { isVisible: this.props.showFilters },
-                onClick: _ => this.setState({ showFilterPanel: true }),
+                onClick: _ => this.setState(prevState => ({ showFilterPanel: !prevState.showFilterPanel })),
             } as IContextualMenuItem,
         ].filter(i => i.data.isVisible);
     }
