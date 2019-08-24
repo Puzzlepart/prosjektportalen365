@@ -326,31 +326,64 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     this.setState({ showProjectInfo: null });
   }
 
+  /**
+  * Create groups
+  * 
+  * @param {any[]} items Items
+  * @param {IAggregatedSearchListColumn[]} columns Columns
+  */
+  private _createGroups(items: any[], columns: PortfolioOverviewColumn[]) {
+    let { groupBy, sortBy } = ({ ...this.state } as IPortfolioOverviewState);
+    if (!groupBy) return { items, columns, groups: null };
+    const itemsSort = { props: [groupBy.fieldName], opts: { reverse: false } };
+    if (sortBy) {
+      itemsSort.props.push(sortBy.fieldName);
+      itemsSort.opts.reverse = !sortBy.isSortedDescending;
+    }
+    items = arraySort([...items], itemsSort.props, itemsSort.opts);
+    const groupNames: string[] = items.map(g => getObjectValue<string>(g, groupBy.fieldName, strings.NotSet));
+    const uniqueGroupNames: string[] = _.uniq(groupNames);
+    const groups = uniqueGroupNames
+      .sort((a, b) => a > b ? 1 : -1)
+      .map((name, idx) => {
+        const count = groupNames.filter(n => n === name).length;
+        const group: IGroup = {
+          key: `Group_${idx}`,
+          name: `${groupBy.name}: ${name}`,
+          startIndex: groupNames.indexOf(name, 0),
+          count,
+          isShowingAll: count === items.length,
+          isDropEnabled: false,
+          isCollapsed: false,
+        };
+        return group;
+      });
+    return { items, columns, groups };
+  }
+
 
   /**
    * Get filtered data
    */
   private _getData() {
-    const { items, columns, searchTerm, groupBy, sortBy, activeFilters } = ({ ...this.state } as IPortfolioOverviewState);
-
-    let filteredColumns = columns;
-    let newItems = [...items].filter(item => {
+    let { items, columns, searchTerm, activeFilters } = ({ ...this.state } as IPortfolioOverviewState);
+    items = items.filter(item => {
       return columns.filter(col => getObjectValue(item, col.fieldName, '').toLowerCase().indexOf(searchTerm) !== -1).length > 0;
     });
 
-    newItems = Object.keys(activeFilters)
+    items = Object.keys(activeFilters)
       .filter(key => key !== 'SelectedColumns')
       .reduce((arr, key) => {
         return arr.filter(i => {
           let colValue = getObjectValue<string>(i, key, '');
           return activeFilters[key].filter(filterValue => colValue.indexOf(filterValue) !== -1).length > 0;
         });
-      }, newItems);
+      }, items);
     if (activeFilters.SelectedColumns) {
-      filteredColumns = this.props.configuration.columns.filter(col => activeFilters.SelectedColumns.indexOf(col.fieldName) !== -1);
+      columns = this.props.configuration.columns.filter(col => activeFilters.SelectedColumns.indexOf(col.fieldName) !== -1);
     }
 
-    return { items: newItems, columns: filteredColumns, groups: AggregatedSearchList.getGroups(newItems, groupBy, sortBy) };
+    return this._createGroups(items, columns);
   }
 
   /**

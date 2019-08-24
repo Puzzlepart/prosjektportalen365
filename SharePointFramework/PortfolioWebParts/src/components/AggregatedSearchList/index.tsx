@@ -281,21 +281,21 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
     }
 
     /**
-    * Get groups
-    *
+    * Create groups
+    * 
     * @param {any[]} items Items
-    * @param {IAggregatedSearchListColumn} groupBy Group by column
-    * @param {IAggregatedSearchListColumn} sortBy Sort by column
+    * @param {IAggregatedSearchListColumn[]} columns Columns
     */
-    public static getGroups(items: any[], groupBy: IAggregatedSearchListColumn, sortBy: IAggregatedSearchListColumn): IGroup[] {
-        if (!groupBy) return null;
+    private _createGroups(items: any[], columns: IAggregatedSearchListColumn[]) {
+        let { groupBy, sortBy } = ({ ...this.state } as IAggregatedSearchListState);
+        if (!groupBy) return { items, columns, groups: null };
         const itemsSort = { props: [groupBy.fieldName], opts: { reverse: false } };
         if (sortBy) {
             itemsSort.props.push(sortBy.fieldName);
             itemsSort.opts.reverse = !sortBy.isSortedDescending;
         }
-        const itemsSorted: any[] = arraySort([...items], itemsSort.props, itemsSort.opts);
-        const groupNames: string[] = itemsSorted.map(g => getObjectValue<string>(g, groupBy.fieldName, strings.NotSet));
+        items = arraySort([...items], itemsSort.props, itemsSort.opts);
+        const groupNames: string[] = items.map(g => getObjectValue<string>(g, groupBy.fieldName, strings.NotSet));
         const uniqueGroupNames: string[] = _.uniq(groupNames);
         const groups = uniqueGroupNames
             .sort((a, b) => a > b ? 1 : -1)
@@ -306,20 +306,20 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
                     name: `${groupBy.name}: ${name}`,
                     startIndex: groupNames.indexOf(name, 0),
                     count,
-                    isShowingAll: count === itemsSorted.length,
+                    isShowingAll: count === items.length,
                     isDropEnabled: false,
                     isCollapsed: false,
                 };
                 return group;
             });
-        return groups;
+        return { items, columns, groups };
     }
 
     /**
      * Get data
      */
     private _getData() {
-        let { items, columns, groupBy, sortBy, searchTerm } = ({ ...this.state } as IAggregatedSearchListState);
+        let { items, columns, searchTerm } = ({ ...this.state } as IAggregatedSearchListState);
         if (searchTerm) {
             items = items.filter(item => {
                 return columns.filter(col => {
@@ -328,7 +328,8 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
                 }).length > 0;
             });
         }
-        return { items, columns, groups: AggregatedSearchList.getGroups(items, groupBy, sortBy) };
+
+        return this._createGroups(items, columns);
     }
 
     /**
