@@ -4,14 +4,15 @@ import ApplyTemplate from './ApplyTemplate';
 import CopyListData from './CopyListData';
 import SetTaxonomyFields from './SetTaxonomyFields';
 import { BaseTask } from './BaseTask';
-import { IBaseTaskParams } from './IBaseTaskParams';
 export * from './BaseTask';
 
-const Tasks: BaseTask[] = [
+const tasks: BaseTask[] = [
     new SetupProjectInformation(),
     new PlannerConfiguration(),
     new ApplyTemplate(),
     new SetTaxonomyFields(),
     new CopyListData(),
 ];
-export { Tasks, IBaseTaskParams };
+
+export default tasks;
+export { IBaseTaskParams } from './IBaseTaskParams';

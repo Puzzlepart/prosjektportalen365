@@ -1,5 +1,5 @@
-import { View } from "../Views";
-import { Phase } from "models";
+import { View } from '../Views';
+import { Phase } from 'models';
 
 export default interface IFooterProps {
     newPhase: Phase;

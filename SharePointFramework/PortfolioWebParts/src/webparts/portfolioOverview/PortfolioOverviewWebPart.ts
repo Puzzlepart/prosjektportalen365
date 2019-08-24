@@ -4,7 +4,7 @@ import { IPortfolioOverviewConfiguration } from 'interfaces';
 import * as strings from 'PortfolioWebPartsStrings';
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
 
-export const PropertyPaneConfigurationProps = {
+export const PROPERTYPANE_CONFIGURATION_PROPS = {
   COLUMN_CONFIG_LISTNAME: 'columnConfigListName',
   COLUMNS_LISTNAME: 'columnsListName',
   DEFAULT_VIEW_ID: 'defaultViewId',
@@ -28,7 +28,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
     this.renderComponent(PortfolioOverview, { configuration: this._configuration } as IPortfolioOverviewProps);
   }
 
-  protected async onInit(): Promise<void> {
+  public async onInit(): Promise<void> {
     await super.onInit();
     this._configuration = await this.dataAdapter.getPortfolioConfig(this.properties.columnConfigListName, this.properties.columnsListName, this.properties.viewsListName);
   }
@@ -38,15 +38,15 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
    * 
    * @param {string} targetProperty Target property
    */
-  protected getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
+  protected _getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
     switch (targetProperty) {
-      case PropertyPaneConfigurationProps.PROJECTINFO_FILTER_FIELD: {
+      case PROPERTYPANE_CONFIGURATION_PROPS.PROJECTINFO_FILTER_FIELD: {
         if (this._configuration) {
           return [{ key: null, text: '' }, ...this._configuration.showFields.map(fld => ({ key: fld.InternalName, text: fld.Title }))];
         }
       }
         break;
-      case PropertyPaneConfigurationProps.DEFAULT_VIEW_ID: {
+      case PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID: {
         if (this._configuration) {
           return [{ key: null, text: '' }, ...this._configuration.views.map(view => ({ key: view.id, text: view.title }))];
         }
@@ -56,7 +56,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
     return [];
   }
 
-  protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+  public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
         {
@@ -64,34 +64,34 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
-                PropertyPaneToggle(PropertyPaneConfigurationProps.SHOW_SEARCH_BOX, {
+                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_SEARCH_BOX, {
                   label: strings.ShowSearchBoxLabel,
                 }),
-                PropertyPaneDropdown(PropertyPaneConfigurationProps.DEFAULT_VIEW_ID, {
+                PropertyPaneDropdown(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID, {
                   label: strings.DefaultViewLabel,
-                  options: this.getOptions(PropertyPaneConfigurationProps.DEFAULT_VIEW_ID),
+                  options: this._getOptions(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID),
                 }),
               ]
             },
             {
               groupName: strings.CommandBarGroupName,
               groupFields: [
-                PropertyPaneToggle(PropertyPaneConfigurationProps.SHOW_COMMANDBAR, {
+                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_COMMANDBAR, {
                   label: strings.ShowCommandBarLabel,
                 }),
-                PropertyPaneToggle(PropertyPaneConfigurationProps.SHOW_GROUPBY, {
+                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_GROUPBY, {
                   label: strings.ShowGroupByLabel,
                   disabled: !this.properties.showCommandBar,
                 }),
-                PropertyPaneToggle(PropertyPaneConfigurationProps.SHOW_FILTERS, {
+                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_FILTERS, {
                   label: strings.ShowFiltersLabel,
                   disabled: !this.properties.showCommandBar,
                 }),
-                PropertyPaneToggle(PropertyPaneConfigurationProps.SHOW_EXCELEXPORT_BUTTON, {
+                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_EXCELEXPORT_BUTTON, {
                   label: strings.ShowExcelExportButtonLabel,
                   disabled: !this.properties.showCommandBar,
                 }),
-                PropertyPaneToggle(PropertyPaneConfigurationProps.SHOW_VIEWSELECTOR, {
+                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_VIEWSELECTOR, {
                   label: strings.ShowViewSelectorLabel,
                   disabled: !this.properties.showCommandBar,
                 }),
@@ -100,21 +100,21 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
             {
               groupName: strings.ProjectInformationGroupName,
               groupFields: [
-                PropertyPaneDropdown(PropertyPaneConfigurationProps.PROJECTINFO_FILTER_FIELD, {
+                PropertyPaneDropdown(PROPERTYPANE_CONFIGURATION_PROPS.PROJECTINFO_FILTER_FIELD, {
                   label: strings.ProjectInfoFilterFieldLabel,
-                  options: this.getOptions(PropertyPaneConfigurationProps.PROJECTINFO_FILTER_FIELD),
+                  options: this._getOptions(PROPERTYPANE_CONFIGURATION_PROPS.PROJECTINFO_FILTER_FIELD),
                 }),
-                PropertyPaneSlider(PropertyPaneConfigurationProps.STATUSREPORTS_COUNT, {
+                PropertyPaneSlider(PROPERTYPANE_CONFIGURATION_PROPS.STATUSREPORTS_COUNT, {
                   label: strings.StatusReportsCountLabel,
                   min: 0,
                   max: 10,
                   step: 1,
                 }),
-                PropertyPaneTextField(PropertyPaneConfigurationProps.STATUSREPORTS_LISTNAME, {
+                PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.STATUSREPORTS_LISTNAME, {
                   label: strings.StatusReportsListNameLabel,
                   disabled: this.properties.statusReportsCount === 0,
                 }),
-                PropertyPaneTextField(PropertyPaneConfigurationProps.STATUSREPORTS_LINKURLTEMPLATE, {
+                PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.STATUSREPORTS_LINKURLTEMPLATE, {
                   label: strings.StatusReportsLinkUrlTemplateLabel,
                   disabled: this.properties.statusReportsCount === 0,
                 }),
@@ -123,13 +123,13 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
             {
               groupName: strings.ConfigurationGroupName,
               groupFields: [
-                PropertyPaneTextField(PropertyPaneConfigurationProps.COLUMN_CONFIG_LISTNAME, {
+                PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.COLUMN_CONFIG_LISTNAME, {
                   label: strings.ColumnConfigListNameLabel,
                 }),
-                PropertyPaneTextField(PropertyPaneConfigurationProps.COLUMNS_LISTNAME, {
+                PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.COLUMNS_LISTNAME, {
                   label: strings.ColumnsListNameLabel,
                 }),
-                PropertyPaneTextField(PropertyPaneConfigurationProps.VIEWS_LISTNAME, {
+                PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.VIEWS_LISTNAME, {
                   label: strings.ViewsListNameLabel,
                 }),
               ]

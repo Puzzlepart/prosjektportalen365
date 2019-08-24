@@ -1,7 +1,7 @@
 import * as strings from 'PortfolioWebPartsStrings';
+import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 
-
-export const ProjectListColumns = [
+export const PROJECTLIST_COLUMNS: IColumn[] = [
   {
     key: 'title',
     fieldName: 'title',

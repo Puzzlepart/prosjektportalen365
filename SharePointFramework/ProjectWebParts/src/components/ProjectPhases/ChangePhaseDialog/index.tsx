@@ -11,7 +11,7 @@ import * as format from 'string-format';
 import { IPhaseChecklistItem } from 'models';
 
 /**
- * Change phase dialog
+ * @component ChangePhaseDialog
  */
 export default class ChangePhaseDialog extends React.Component<IChangePhaseDialogProps, IChangePhaseDialogState> {
     /**
@@ -23,8 +23,8 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
         this.state = {
             isLoading: false,
             checklistItems,
-            currentIdx: this.getNextIndex(checklistItems, 0),
-            currentView: checklistItems.filter(this.checkPointOpenFilter).length > 0 ? View.Initial : View.Confirm,
+            currentIdx: this._getNextIndex(checklistItems, 0),
+            currentView: checklistItems.filter(this._checkPointOpenFilter).length > 0 ? View.Initial : View.Confirm,
         };
     }
 
@@ -50,8 +50,8 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
                     {...dlgCntBaseProps}
                     checklistItems={this.state.checklistItems}
                     currentIdx={this.state.currentIdx}
-                    nextCheckPointAction={this.nextCheckPoint.bind(this)} />
-                <Footer {...dlgCntBaseProps} onChangeView={this.onChangeView.bind(this)} />
+                    nextCheckPointAction={this._nextCheckPointAction.bind(this)} />
+                <Footer {...dlgCntBaseProps} onChangeView={this._onChangeView.bind(this)} />
             </Dialog>
         );
     }
@@ -63,7 +63,7 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
      * @param {string} commentsValue Comments value
      * @param {boolean} updateStatus Should status be updated
      */
-    private async nextCheckPoint(statusValue: string, commentsValue: string, updateStatus: boolean = true): Promise<void> {
+    private async _nextCheckPointAction(statusValue: string, commentsValue: string, updateStatus: boolean = true): Promise<void> {
         this.setState({ isLoading: true });
         const { phaseChecklist } = this.props;
         const { checklistItems, currentIdx } = { ...this.state } as IChangePhaseDialogState;
@@ -78,7 +78,7 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
             checklistItems,
             isLoading: false,
         };
-        const nextIndex = this.getNextIndex();
+        const nextIndex = this._getNextIndex();
         if (nextIndex != -1) {
             newState.currentIdx = nextIndex;
         } else {
@@ -93,8 +93,8 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
      * @param {IPhaseChecklistItem[]} checklistItems Check list items
      * @param {number} currentIdx Current index
      */
-    private getNextIndex(checklistItems: IPhaseChecklistItem[] = this.state.checklistItems, currentIdx: number = this.state.currentIdx): number {
-        const [nextOpen] = [].concat(checklistItems).splice(currentIdx).filter(this.checkPointOpenFilter);
+    private _getNextIndex(checklistItems: IPhaseChecklistItem[] = this.state.checklistItems, currentIdx: number = this.state.currentIdx): number {
+        const [nextOpen] = [].concat(checklistItems).splice(currentIdx).filter(this._checkPointOpenFilter);
         return checklistItems.indexOf(nextOpen);
     }
 
@@ -103,7 +103,7 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
      * 
      * @param {IPhaseChecklistItem} item Item
      */
-    private checkPointOpenFilter(item: IPhaseChecklistItem) {
+    private _checkPointOpenFilter(item: IPhaseChecklistItem) {
         return item.GtChecklistStatus === strings.StatusOpen;
     }
 
@@ -112,7 +112,7 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
      *
      * @param {View} newView New view
      */
-    private onChangeView(newView: View) {
+    private _onChangeView(newView: View) {
         this.setState({ currentView: newView });
     }
 }

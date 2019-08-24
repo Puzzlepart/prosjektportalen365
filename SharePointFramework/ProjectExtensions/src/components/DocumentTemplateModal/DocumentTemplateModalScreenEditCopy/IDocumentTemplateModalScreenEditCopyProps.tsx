@@ -1,4 +1,4 @@
-import { TemplateFile, IDocumentLibrary } from "../../../models";
+import { TemplateFile, IDocumentLibrary } from '../../../models';
 
 export interface IDocumentTemplateModalScreenEditCopyProps {
     selectedTemplates: TemplateFile[];

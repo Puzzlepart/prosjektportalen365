@@ -1,4 +1,5 @@
-import { PortfolioOverviewColumn, SPPortfolioOverviewViewItem } from ".";
+import { PortfolioOverviewColumn, SPPortfolioOverviewViewItem } from '.';
+import * as _ from 'underscore';
 
 export class PortfolioOverviewView {
     public id: number;
@@ -21,8 +22,8 @@ export class PortfolioOverviewView {
         this.isDefaultView = item.GtPortfolioIsDefaultView;
         this.iconName = item.GtPortfolioFabricIcon;
         this.isPersonal = item.GtPortfolioIsPersonalView;
-        this.columns = item.GtPortfolioColumnsId.map(id => columns.filter(col => col.id === id)[0]).sort((a, b) => a.sortOrder - b.sortOrder);
-        this.refiners = item.GtPortfolioRefinersId.map(id => columns.filter(col => col.id === id)[0]).sort((a, b) => a.sortOrder - b.sortOrder);
-        this.groupBy = columns.filter(col => col.id === item.GtPortfolioGroupById)[0];
+        this.columns = item.GtPortfolioColumnsId.map(id => _.find(columns, col => col.id === id)).sort((a, b) => a.sortOrder - b.sortOrder);
+        this.refiners = item.GtPortfolioRefinersId.map(id => _.find(columns, col => col.id === id)).sort((a, b) => a.sortOrder - b.sortOrder);
+        this.groupBy = _.find(columns, col => col.id === item.GtPortfolioGroupById);
     }
 }

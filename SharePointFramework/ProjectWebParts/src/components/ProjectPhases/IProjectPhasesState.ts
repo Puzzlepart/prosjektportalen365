@@ -1,6 +1,6 @@
-import { Phase } from "models";
-import { ChecklistData } from "./ChecklistData";
-import { IProjectPhaseMouseOver } from "./ProjectPhaseCallout/IProjectPhaseMouseOver";
+import { Phase } from 'models';
+import { ChecklistData } from './ChecklistData';
+import { IProjectPhaseMouseOver } from './ProjectPhaseCallout/IProjectPhaseMouseOver';
 
 export interface IProjectPhasesData {
   phases?: Array<Phase>;

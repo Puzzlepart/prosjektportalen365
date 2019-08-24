@@ -8,3 +8,4 @@ export { IGraphGroup } from './IGraphGroup';
 export { IBenefitsSearchResult } from './IBenefitsSearchResult';
 export { ISPDataSource } from './ISPDataSource';
 export { IPortfolioOverviewConfiguration } from './IPortfolioOverviewConfiguration';
+export { IAggregatedSearchListColumn } from './IAggregatedSearchListColumn';

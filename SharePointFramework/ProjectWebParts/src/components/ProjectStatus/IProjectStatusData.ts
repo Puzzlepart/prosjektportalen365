@@ -1,4 +1,4 @@
-import { ProjectStatusReport, SectionModel } from "models";
+import { ProjectStatusReport, SectionModel } from 'models';
 
 export interface IProjectStatusData {
     entityFields?: any[];

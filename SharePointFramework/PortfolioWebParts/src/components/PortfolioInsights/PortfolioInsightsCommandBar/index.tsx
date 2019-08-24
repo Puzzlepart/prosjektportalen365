@@ -8,12 +8,12 @@ export default class PortfolioInsightsCommandBar extends React.Component<IPortfo
     public render(): React.ReactElement<IPortfolioInsightsCommandBarProps> {
         return (
             <div className={styles.portfolioInsightsCommandBar}>
-                <CommandBar items={this.items} farItems={this.farItems} />
+                <CommandBar items={this._items} farItems={this._farItems} />
             </div>
         );
     }
 
-    private get items(): ICommandBarItemProps[] {
+    private get _items(): ICommandBarItemProps[] {
         return [
             {
                 key: 'NewItem',
@@ -33,7 +33,7 @@ export default class PortfolioInsightsCommandBar extends React.Component<IPortfo
         ];
     }
 
-    private get farItems(): ICommandBarItemProps[] {
+    private get _farItems(): ICommandBarItemProps[] {
         return [
             {
                 key: 'View',

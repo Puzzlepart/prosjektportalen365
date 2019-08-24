@@ -1,19 +1,19 @@
 import * as React from 'react';
 import * as strings from 'PortfolioWebPartsStrings';
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import BenefitMeasurementsModal from './BenefitMeasurementsModal';
 import { IBenefitsOverviewProps } from './IBenefitsOverviewProps';
 import { getObjectValue } from 'shared/lib/helpers';
 import { BenefitMeasurementIndicator } from 'models';
 import BenefitMeasurementAchievement from './BenefitMeasurementAchievement';
+import { IAggregatedSearchListColumn } from 'interfaces';
 
 /**
  * Get columns for DetailsList
  * 
  * @param {IBenefitsOverviewProps} props Props
  */
-export function GetColumns(props: IBenefitsOverviewProps): IColumn[] {
-  let columns: IColumn[] = [
+export function getColumns(props: IBenefitsOverviewProps): IAggregatedSearchListColumn[] {
+  let columns: IAggregatedSearchListColumn[] = [
     {
       key: 'siteTitle',
       fieldName: 'siteTitle',
@@ -22,11 +22,11 @@ export function GetColumns(props: IBenefitsOverviewProps): IColumn[] {
       maxWidth: 180,
       isResizable: true,
       onRender: (indicator: BenefitMeasurementIndicator) => {
-        const webUrl = getObjectValue<string>(indicator, "webUrl", null);
-        const siteTitle = getObjectValue<string>(indicator, "siteTitle", null);
+        const webUrl = getObjectValue<string>(indicator, 'webUrl', null);
+        const siteTitle = getObjectValue<string>(indicator, 'siteTitle', null);
         return <a href={webUrl} target='_blank'>{siteTitle}</a>;
       },
-      data: { isGroupable: true },
+      isGroupable: true,
     },
     {
       key: 'benefit.title',
@@ -36,7 +36,6 @@ export function GetColumns(props: IBenefitsOverviewProps): IColumn[] {
       maxWidth: 180,
       isMultiline: true,
       isResizable: true,
-      data: { isGroupable: true },
     },
     {
       key: 'benefit.responsible',
@@ -45,7 +44,7 @@ export function GetColumns(props: IBenefitsOverviewProps): IColumn[] {
       minWidth: 50,
       maxWidth: 180,
       isResizable: true,
-      data: { isGroupable: true },
+      isGroupable: true,
     },
     {
       key: 'title',
@@ -67,29 +66,29 @@ export function GetColumns(props: IBenefitsOverviewProps): IColumn[] {
     {
       key: 'startValue',
       fieldName: 'startValue',
+      fieldNameDisplay: 'startValueDisplay',
       name: strings.StartValueLabel,
       minWidth: 50,
       maxWidth: 80,
       isResizable: true,
-      data: { fieldNameDisplay: 'startValueDisplay' },
     },
     {
       key: 'desiredValue',
       fieldName: 'desiredValue',
+      fieldNameDisplay: 'desiredValueDisplay',
       name: strings.DesiredValueLabel,
       minWidth: 50,
       maxWidth: 80,
       isResizable: true,
-      data: { fieldNameDisplay: 'desiredValueDisplay' },
     },
     {
       key: 'measurements[0].value',
       fieldName: 'measurements[0].value',
+      fieldNameDisplay: 'measurements[0].valueDisplay',
       name: strings.LastMeasurementLabel,
       minWidth: 50,
       maxWidth: 80,
       isResizable: true,
-      data: { fieldNameDisplay: 'measurements[0].valueDisplay' }
     },
     {
       key: 'measurements[0].achievement',
@@ -98,18 +97,18 @@ export function GetColumns(props: IBenefitsOverviewProps): IColumn[] {
       minWidth: 50,
       maxWidth: 80,
       isResizable: true,
-      onRender: (indicator: BenefitMeasurementIndicator, _index: number, _column: IColumn) => {
-        const measurement = getObjectValue(indicator, "measurements[0]", null);
+      onRender: (indicator: BenefitMeasurementIndicator, _index: number, _column: IAggregatedSearchListColumn) => {
+        const measurement = getObjectValue(indicator, 'measurements[0]', null);
         if (measurement) {
           return <BenefitMeasurementAchievement measurement={measurement} />;
         }
         return null;
-      }
+      },
     },
     {
-      fieldName: "allMeasurements",
-      key: "allMeasurements",
-      name: "",
+      fieldName: 'allMeasurements',
+      key: 'allMeasurements',
+      name: '',
       minWidth: 50,
       maxWidth: 80,
       onRender: (indicator: BenefitMeasurementIndicator) => <BenefitMeasurementsModal indicator={indicator} />,

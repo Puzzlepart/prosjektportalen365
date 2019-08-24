@@ -1,4 +1,4 @@
-import { Phase } from "models";
+import { Phase } from 'models';
 import { List } from '@pnp/sp';
 import { IDialogProps } from 'office-ui-fabric-react/lib/Dialog';
 

@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    GroupByColumnLabel: 'Grupper etter {0}',
+    FilterBy: 'Filtrer etter',
     DataSourceCategoryLabel: 'Kategori for datakilder',
     DataSourceLabel: 'Datakilde',
     AddColumnLabel: 'Legg til kolonne',

@@ -1,15 +1,18 @@
 import * as React from 'react';
 import { PrimaryButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import IInitialViewProps, { InitialViewDefaultProps } from './IInitialViewProps';
-import IInitialViewState from './IInitialViewState';
+import { IInitialViewProps } from './IInitialViewProps';
+import { IInitialViewState } from './IInitialViewState';
 import * as strings from 'ProjectWebPartsStrings';
 
 /**
- * Initial view
+ * @component InitialView
  */
 export default class InitialView extends React.Component<IInitialViewProps, IInitialViewState> {
-    public static defaultProps = InitialViewDefaultProps;
+    public static defaultProps: Partial<IInitialViewProps> = {
+        className: 'inner',
+        commentMinLength: 4,
+    };
 
     /**
      * Constructor
@@ -30,14 +33,14 @@ export default class InitialView extends React.Component<IInitialViewProps, IIni
                 <h3>{this.props.currentChecklistItem.Title}</h3>
                 <div style={{ marginTop: 10 }}>
                     <TextField
-                        onChange={this.onCommentUpdate}
+                        onChange={this._onCommentUpdate.bind(this)}
                         placeholder={strings.CommentLabel}
                         multiline
                         value={this.state.comment}
                         resizable={false}
                         style={{ height: 100 }} />
                 </div>
-                {this.renderStatusOptions()}
+                {this._renderStatusOptions()}
             </div>
         );
     }
@@ -45,7 +48,7 @@ export default class InitialView extends React.Component<IInitialViewProps, IIni
     /**
      * Render status options
      */
-    private renderStatusOptions() {
+    private _renderStatusOptions() {
         const { isLoading, commentMinLength } = this.props;
         const { comment } = this.state;
         const isCommentValid = (comment.length >= commentMinLength) && /\S/.test(comment);
@@ -54,19 +57,19 @@ export default class InitialView extends React.Component<IInitialViewProps, IIni
                 text: strings.StatusNotRelevant,
                 disabled: (isLoading || !isCommentValid),
                 title: !isCommentValid ? strings.CheckpointNotRelevantTooltipCommentEmpty : strings.CheckpointNotRelevantTooltip,
-                onClick: () => this.onNextCheckPoint(strings.StatusNotRelevant, comment),
+                onClick: () => this._onNextCheckPoint(strings.StatusNotRelevant, comment),
             },
             {
                 text: strings.StatusStillOpen,
                 disabled: (isLoading || !isCommentValid),
                 title: !isCommentValid ? strings.CheckpointStillOpenTooltipCommentEmpty : strings.CheckpointStillOpenTooltip,
-                onClick: () => this.onNextCheckPoint(strings.StatusStillOpen, comment, false),
+                onClick: () => this._onNextCheckPoint(strings.StatusStillOpen, comment, false),
             },
             {
                 text: strings.StatusClosed,
                 disabled: isLoading,
                 title: strings.CheckpointDoneTooltip,
-                onClick: () => this.onNextCheckPoint(strings.StatusClosed, comment),
+                onClick: () => this._onNextCheckPoint(strings.StatusClosed, comment),
             }];
         return (
             <div style={{ marginTop: 20, marginBottom: 25 }}>
@@ -86,7 +89,7 @@ export default class InitialView extends React.Component<IInitialViewProps, IIni
     * @param {string} comment Comment value
     * @param {boolean} _updateStatus Update status
     */
-    private onNextCheckPoint(status: string, comment: string, _updateStatus: boolean = true) {
+    private _onNextCheckPoint(status: string, comment: string, _updateStatus: boolean = true) {
         this.props.nextCheckPointAction(status, comment, true);
         this.setState({ comment: '' });
     }
@@ -97,7 +100,7 @@ export default class InitialView extends React.Component<IInitialViewProps, IIni
     * @param {any} _event Event
     * @param {string} comment New value for comment
     */
-    private onCommentUpdate = (_event: any, comment: string) => {
+    private _onCommentUpdate(_event: any, comment: string) {
         this.setState({ comment });
     }
 }

@@ -1,4 +1,4 @@
-import { IFilterItemProps } from "../FilterItem/IFilterItemProps";
+import { IFilterItemProps } from '../FilterItem/IFilterItemProps';
 
 export interface IFilterState {
     isCollapsed: boolean;

@@ -1,7 +1,7 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
 import { dateAdd, PnPClientStorage } from '@pnp/common';
 import { Web } from '@pnp/sp';
-import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
+import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
@@ -11,7 +11,7 @@ import { HubConfigurationService } from 'shared/lib/services';
 import SpEntityPortalService from 'sp-entityportal-service';
 import * as format from 'string-format';
 import { IProjectInformationData } from './IProjectInformationData';
-import { IProjectInformationProps, ProjectInformationDefaultProps } from './IProjectInformationProps';
+import { IProjectInformationProps } from './IProjectInformationProps';
 import { IProjectInformationState } from './IProjectInformationState';
 import styles from './ProjectInformation.module.scss';
 import { ProjectProperty, ProjectPropertyModel } from './ProjectProperty';
@@ -19,7 +19,10 @@ import { StatusReports } from './StatusReports';
 
 
 export class ProjectInformation extends React.Component<IProjectInformationProps, IProjectInformationState> {
-  public static defaultProps = ProjectInformationDefaultProps;
+  public static defaultProps: Partial<IProjectInformationProps> = {
+    statusReportsLinkUrlTemplate: '',
+    statusReportsCount: 0,
+  };
   private _hubConfigurationService: HubConfigurationService;
   private _spEntityPortalService: SpEntityPortalService;
 
@@ -33,7 +36,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
 
   public async componentDidMount() {
     try {
-      const data = await this.fetchData();
+      const data = await this._fetchData();
       this.setState({ data, isLoading: false });
     } catch (error) {
       this.setState({ error, isLoading: false });
@@ -43,12 +46,12 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   public render(): React.ReactElement<IProjectInformationProps> {
     return (
       <div className={styles.projectInformation}>
-        <div className={styles.container} style={this.generateStyle(this.props)}>
+        <div className={styles.container} style={this._generateStyle(this.props)}>
           <WebPartTitle
             displayMode={DisplayMode.Read}
             title={this.props.title}
             updateProperty={_ => { }} />
-          {this.renderInner()}
+          {this._renderInner()}
         </div>
       </div>
     );
@@ -57,7 +60,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   /**
    * Render component inner
    */
-  private renderInner() {
+  private _renderInner() {
     if (this.state.isLoading) {
       return <Spinner label={format(strings.LoadingText, 'prosjektinformasjon')} />;
     }
@@ -66,7 +69,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     }
     return (
       <React.Fragment>
-        {this.renderProperties()}
+        {this._renderProperties()}
         <StatusReports
           title={this.props.statusReportsHeader}
           statusReports={this.state.data.statusReports}
@@ -104,26 +107,23 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   /**
    * Render properties
    */
-  private renderProperties() {
-    if (this.state.data.properties) {
-      const propertiesToRender = this.state.data.properties.filter(p => !p.empty && p.showInDisplayForm);
-      const hasMissingProps = this.state.data.properties.filter(p => p.required && p.empty).length > 0;
-      if (hasMissingProps) {
-        return <MessageBar messageBarType={MessageBarType.error}>{strings.MissingPropertiesMessage}</MessageBar>;
-      }
-      if (propertiesToRender.length === 0) {
-        return <MessageBar>{strings.NoPropertiesMessage}</MessageBar>;
-      }
-      return (
-        <div>
-          {propertiesToRender.map((model, key) => {
-            return <ProjectProperty key={key} model={model} />;
-          })}
-        </div>
-      );
-    } else {
-      return null;
+  private _renderProperties() {
+    if (!this.state.data.properties) return null;
+    const propertiesToRender = this.state.data.properties.filter(p => !p.empty && p.showInDisplayForm);
+    const hasMissingProps = this.state.data.properties.filter(p => p.required && p.empty).length > 0;
+    if (hasMissingProps) {
+      return <MessageBar messageBarType={MessageBarType.error}>{strings.MissingPropertiesMessage}</MessageBar>;
     }
+    if (propertiesToRender.length === 0) {
+      return <MessageBar>{strings.NoPropertiesMessage}</MessageBar>;
+    }
+    return (
+      <div>
+        {propertiesToRender.map((model, key) => {
+          return <ProjectProperty key={key} model={model} />;
+        })}
+      </div>
+    );
   }
 
   /**
@@ -131,7 +131,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   *
   * @param {IProjectInformationProps} param0 Props
   */
-  private generateStyle({ boxLayout, boxType, boxBackgroundColor }: IProjectInformationProps) {
+  private _generateStyle({ boxLayout, boxType, boxBackgroundColor }: IProjectInformationProps) {
     let style: React.CSSProperties = {};
     if (boxLayout && boxType) {
       style.padding = 20;
@@ -163,12 +163,12 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   }
 
   /**
-   * Fetch configuration
-   *
-   * @param {string} key Key for cache
-   * @param {Date} expire Expire for cache
-        */
-  private async fetchConfiguration(key: string = 'projectinformation_fetchconfiguration', expire: Date = dateAdd(new Date(), 'minute', 15)) {
+  * Fetch configuration
+  *
+  * @param {string} key Key for cache
+  * @param {Date} expire Expire for cache
+  */
+  private async _fetchConfiguration(key: string = 'projectinformation_fetchconfiguration', expire: Date = dateAdd(new Date(), 'minute', 15)) {
     return new PnPClientStorage().session.getOrPut(key, async () => {
       const [columnConfig, fields] = await Promise.all([
         this._hubConfigurationService.getProjectColumns(),
@@ -179,12 +179,12 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   }
 
   /**
-   * Map properties from entity item and configuration
-   *
- * @param {Object} item Entity item
- * @param {Object} configuration Configuration
-      */
-  private mapProperties(item: Object, configuration: { fields: any[], columnConfig: any[] }) {
+  * Map properties from entity item and configuration
+  *
+  * @param {Object} item Entity item
+  * @param {Object} configuration Configuration
+  */
+  private _mapProperties(item: Object, configuration: { fields: any[], columnConfig: any[] }) {
     return Object.keys(item)
       .filter(fieldName => {
         let [field] = configuration.fields.filter(fld => fld.InternalName === fieldName);
@@ -197,16 +197,16 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
       .map(fieldName => new ProjectPropertyModel(configuration.fields.filter(fld => fld.InternalName === fieldName)[0], item[fieldName]));
   }
 
-  private async fetchData(): Promise<IProjectInformationData> {
+  private async _fetchData(): Promise<IProjectInformationData> {
     try {
       const [configuration, editFormUrl, versionHistoryUrl, item] = await Promise.all([
-        this.fetchConfiguration(),
+        this._fetchConfiguration(),
         this._spEntityPortalService.getEntityEditFormUrl(this.props.siteId, this.props.webUrl),
         this._spEntityPortalService.getEntityVersionHistoryUrl(this.props.siteId, this.props.webUrl),
         this._spEntityPortalService.getEntityItemFieldValues(this.props.siteId),
       ]);
 
-      let properties = this.mapProperties(item, configuration);
+      let properties = this._mapProperties(item, configuration);
 
       let statusReports: { Id: number, Created: string }[] = [];
 

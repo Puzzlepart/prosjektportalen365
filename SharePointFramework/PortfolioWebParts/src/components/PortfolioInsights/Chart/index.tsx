@@ -37,7 +37,7 @@ export default class Chart extends React.Component<IChartProps, IChartState> {
 
         if (error) {
             return (
-                <div className={`ms-Grid-col ${this.getClassName()}`} style={{ marginTop: 10 }}>
+                <div className={`ms-Grid-col ${this._getClassName()}`} style={{ marginTop: 10 }}>
                     <div className='ms-Grid' dir='ltr'>
                         <div className='ms-Grid-row'>
                             <div className='ms-Grid-col ms-sm12'>
@@ -50,7 +50,7 @@ export default class Chart extends React.Component<IChartProps, IChartState> {
         }
 
         return (
-            <div className={`ms-Grid-col ${this.getClassName()}`} style={{ marginTop: 10 }}>
+            <div className={`ms-Grid-col ${this._getClassName()}`} style={{ marginTop: 10 }}>
                 <div className='ms-Grid' dir='ltr'>
                     <div className='ms-Grid-row'>
                         <div className='ms-Grid-col ms-sm12'>
@@ -65,7 +65,7 @@ export default class Chart extends React.Component<IChartProps, IChartState> {
     /**
      * Get layout class names
      */
-    protected getClassName(): string {
+    protected _getClassName(): string {
         const chart = this.state.chart.clone();
         const classNames = Object.keys(chart.width)
             .map(key => {

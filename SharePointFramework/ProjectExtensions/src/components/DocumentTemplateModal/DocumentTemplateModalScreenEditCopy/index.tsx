@@ -29,7 +29,7 @@ export default class DocumentTemplateModalScreenEditCopy extends React.Component
             <div className={styles.documentTemplateModalScreenEditCopy}>
                 {this.props.selectedTemplates.map(tmpl => (
                     <div className={styles.item}>
-                        <div className={styles.header} onClick={_ => this.onExpandCollapse(tmpl.id)}>
+                        <div className={styles.header} onClick={_ => this._onExpandCollapse(tmpl.id)}>
                             <div className={styles.title}>{tmpl.name}</div>
                             <div className={styles.icon}>
                                 <Icon iconName={expandState[tmpl.id] ? 'ChevronDown' : 'ChevronUp'} />
@@ -41,14 +41,14 @@ export default class DocumentTemplateModalScreenEditCopy extends React.Component
                                     label={TemplateSelectorCommandSetStrings.NameLabel}
                                     placeholder={TemplateSelectorCommandSetStrings.NameLabel}
                                     defaultValue={tmpl.newName}
-                                    onChange={(_event, newName) => this.onInputChanged(tmpl.id, { newName })} />
+                                    onChange={(_event, newName) => this._onInputChanged(tmpl.id, { newName })} />
                             </div>
                             <div className={styles.titleInput}>
                                 <TextField
                                     label={TemplateSelectorCommandSetStrings.TitleLabel}
                                     placeholder={TemplateSelectorCommandSetStrings.TitleLabel}
                                     defaultValue={tmpl.newTitle}
-                                    onChange={(_event, newTitle) => this.onInputChanged(tmpl.id, { newTitle })} />
+                                    onChange={(_event, newTitle) => this._onInputChanged(tmpl.id, { newTitle })} />
                             </div>
                         </div>
                     </div>
@@ -57,12 +57,12 @@ export default class DocumentTemplateModalScreenEditCopy extends React.Component
                     <Dropdown
                         label={TemplateSelectorCommandSetStrings.LibraryDropdownLabel}
                         defaultSelectedKey={0}
-                        onChange={this.onLibraryChanged.bind(this)}
+                        onChange={this._onLibraryChanged.bind(this)}
                         disabled={this.props.libraries.length === 1}
                         options={this.props.libraries.map((lib, idx) => ({ key: idx, text: lib.Title, data: lib }))} />
                 </div>
                 <div className={styles.actions}>
-                    <PrimaryButton text={TemplateSelectorCommandSetStrings.OnStartCopyText} onClick={this.onStartCopy.bind(this)} />
+                    <PrimaryButton text={TemplateSelectorCommandSetStrings.OnStartCopyText} onClick={this._onStartCopy.bind(this)} />
                     <DefaultButton text={TemplateSelectorCommandSetStrings.OnGoBackText} onClick={this.props.onGoBack} />
                 </div>
             </div >
@@ -75,7 +75,7 @@ export default class DocumentTemplateModalScreenEditCopy extends React.Component
      * @param {string} id Id 
      * @param {Object} updatedProperties Updated properties
      */
-    private onInputChanged(id: string, updatedProperties: { [key: string]: string }) {
+    private _onInputChanged(id: string, updatedProperties: { [key: string]: string }) {
         const { templates } = ({ ...this.state } as IDocumentTemplateModalScreenEditCopyState);
         this.setState({
             templates: templates.map(t => {
@@ -95,7 +95,7 @@ export default class DocumentTemplateModalScreenEditCopy extends React.Component
      * @param option Option
      * @param _index Index
      */
-    private onLibraryChanged(_event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, _index?: number) {
+    private _onLibraryChanged(_event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, _index?: number) {
         this.setState({ selectedLibrary: option.data });
     }
 
@@ -104,14 +104,14 @@ export default class DocumentTemplateModalScreenEditCopy extends React.Component
      * 
      * @param {string} key Key
      */
-    private onExpandCollapse(key: string): void {
+    private _onExpandCollapse(key: string): void {
         this.setState(({ expandState }) => ({ expandState: { ...expandState, [key]: !expandState[key] } }));
     }
 
     /**
      * On start copy
      */
-    private onStartCopy() {
+    private _onStartCopy() {
         this.props.onStartCopy(this.state.templates, this.state.selectedLibrary.ServerRelativeUrl);
         this.setState({ expandState: {}, templates: [] });
     }

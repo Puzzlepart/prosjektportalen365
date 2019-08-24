@@ -15,26 +15,26 @@ Logger.subscribe(new ConsoleListener());
 Logger.activeLogLevel = LogLevel.Info;
 
 export default class ProjectPhasesWebPart extends BaseClientSideWebPart<IProjectPhasesProps> {
-  private spEntityPortalService: SpEntityPortalService;
+  private _spEntityPortalService: SpEntityPortalService;
 
   public async onInit() {
     this.context.statusRenderer.clearLoadingIndicator(this.domElement);
     sp.setup({ spfxContext: this.context });
     await MSGraphHelper.Init(this.context.msGraphClientFactory, 'v1.0');
     const hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
-    this.spEntityPortalService = new SpEntityPortalService({ webUrl: hubSite.url, ...this.properties.entity });
+    this._spEntityPortalService = new SpEntityPortalService({ webUrl: hubSite.url, ...this.properties.entity });
   }
 
   public render(): void {
     const element: React.ReactElement<IProjectPhasesProps> = React.createElement(ProjectPhases, {
-      spEntityPortalService: this.spEntityPortalService,
+      spEntityPortalService: this._spEntityPortalService,
       pageContext: this.context.pageContext,
       ...this.properties,
     });
     ReactDom.render(element, this.domElement);
   }
 
-  protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+  public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
         {

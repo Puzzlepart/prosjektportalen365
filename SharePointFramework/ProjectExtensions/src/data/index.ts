@@ -51,9 +51,9 @@ export async function getHubItems<T>(hub: IHubSite, listName: string, constructo
 export async function getCurrentPhase(hubSite: IHubSite, termSetId: string, siteId: string) {
     const spEntityPortalService = new SpEntityPortalService({
         webUrl: hubSite.url,
-        listName: "Prosjekter",
-        contentTypeId: "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
-        identityFieldName: "GtSiteId"
+        listName: 'Prosjekter',
+        contentTypeId: '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+        identityFieldName: 'GtSiteId'
     });
     const [phaseTerms, entityItem] = await Promise.all([
         taxonomy.getDefaultSiteCollectionTermStore().getTermSetById(termSetId).terms.select('Id', 'Name').get(),
@@ -84,7 +84,7 @@ export async function getDocumentTemplates(sp: SPRest, pageContext: PageContext,
         templateLibrary,
         TemplateFile,
         {
-            ViewXml: `<View><Query><Where><Or><Or><Eq><FieldRef Name="GtProjectPhase" /><Value Type="Text">${currentPhase}</Value></Eq><Eq><FieldRef Name="GtProjectPhase" /><Value Type="Text">Flere faser</Value></Eq></Or><Eq><FieldRef Name="GtProjectPhase" /><Value Type="Text">Ingen fase</Value></Eq></Or></Where></Query></View>`
+            ViewXml: `<View><Query><Where><Or><Or><Eq><FieldRef Name='GtProjectPhase' /><Value Type='Text'>${currentPhase}</Value></Eq><Eq><FieldRef Name='GtProjectPhase' /><Value Type='Text'>Flere faser</Value></Eq></Or><Eq><FieldRef Name='GtProjectPhase' /><Value Type='Text'>Ingen fase</Value></Eq></Or></Where></Query></View>`
         },
         ['File'],
     );

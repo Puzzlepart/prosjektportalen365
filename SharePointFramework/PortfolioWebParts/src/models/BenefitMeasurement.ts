@@ -11,7 +11,7 @@ export class BenefitMeasurement extends BenefitBase {
     public achievementDisplay: string;
     public trendIconProps: any;
     public indicatorId: number;
-    private indicator: BenefitMeasurementIndicator;
+    public indicator: BenefitMeasurementIndicator;
 
     /**
     * Creates a new instance of BenefitMeasurement
@@ -53,15 +53,15 @@ export class BenefitMeasurement extends BenefitBase {
     public setTrendIconProps(prevMeasurement: BenefitMeasurement): BenefitMeasurement {
         let shouldIncrease = this.indicator.desiredValue > this.indicator.startValue;
         if (this.achievement >= 100) {
-            this.trendIconProps = { iconName: "Trophy", style: { color: "gold" } };
+            this.trendIconProps = { iconName: 'Trophy', style: { color: 'gold' } };
             return this;
         }
         if (prevMeasurement && prevMeasurement.value !== this.value) {
             let hasIncreased = this.value > prevMeasurement.value;
             if (shouldIncrease && hasIncreased || !shouldIncrease && !hasIncreased) {
-                this.trendIconProps = { iconName: "StockUp", style: { color: "green" } };
+                this.trendIconProps = { iconName: 'StockUp', style: { color: 'green' } };
             } else {
-                this.trendIconProps = { iconName: "StockDown", style: { color: "red" } };
+                this.trendIconProps = { iconName: 'StockDown', style: { color: 'red' } };
             }
         }
         return this;

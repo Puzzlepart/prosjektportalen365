@@ -3,6 +3,7 @@ import { dateAdd } from '@pnp/common';
 import { QueryPropertyValueType, SearchResults, SortDirection, sp } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
 import * as cleanDeep from 'clean-deep';
+import * as _ from 'underscore';
 import { IGraphGroup, IPortfolioOverviewConfiguration, ISPProjectItem, ISPUser } from 'interfaces';
 import { ChartConfiguration, ChartData, ChartDataItem, DataField, PortfolioOverviewColumn, PortfolioOverviewView, ProjectListModel, SPChartConfigurationItem, SPContentType, SPPortfolioOverviewColumnItem, SPPortfolioOverviewViewItem, SPProjectColumnConfigItem } from 'models';
 import { ProjectColumnConfig, ProjectColumnConfigDictionary } from 'models/ProjectColumnConfig';
@@ -36,7 +37,7 @@ export class DataAdapter {
             ]);
             let charts: ChartConfiguration[] = chartItems.map(item => {
                 let fields = item.GtPiFieldsId.map(id => {
-                    const [fld] = configuration.columns.filter(_fld => _fld.id === id);
+                    const fld = _.find(configuration.columns, f => f.id === id);
                     return new DataField(fld.name, fld.fieldName, fld.dataType);
                 });
                 let chart = new ChartConfiguration(item, fields);
@@ -158,7 +159,7 @@ export class DataAdapter {
             const columns = spItems[1].map(c => {
                 let column = new PortfolioOverviewColumn(c);
                 column.config = columnConfig
-                    .filter(_c => _c.columnId === c.Id)
+                    .filter(col => col.columnId === c.Id)
                     .reduce((obj, { value, color, iconName }) => ({ ...obj, [value]: { color, iconName } }), {}) as ProjectColumnConfigDictionary;
                 return column;
             });
@@ -188,7 +189,7 @@ export class DataAdapter {
      * @param {SortDirection} sortDirection Sort direction
      */
     public async fetchProjectSites(rowLimit: number, sortProperty: string, sortDirection: SortDirection) {
-        let { PrimarySearchResults } = await sp.search({
+        let response = await sp.search({
             Querytext: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} contentclass:STS_Site`,
             TrimDuplicates: false,
             RowLimit: rowLimit,
@@ -205,7 +206,7 @@ export class DataAdapter {
                 }
             }]
         });
-        return PrimarySearchResults.filter(site => this.context.pageContext.legacyPageContext.hubSiteId !== site['SiteId']);
+        return response.PrimarySearchResults.filter(site => this.context.pageContext.legacyPageContext.hubSiteId !== site['SiteId']);
     }
 
     /**
@@ -217,7 +218,7 @@ export class DataAdapter {
        * @param {ISPUser[]} users Users
        * @param {any[]} phaseTerms Phase terms
        */
-    private mapProjects(items: ISPProjectItem[], groups: IGraphGroup[], users: ISPUser[], phaseTerms: any[]): ProjectListModel[] {
+    private _mapProjects(items: ISPProjectItem[], groups: IGraphGroup[], users: ISPUser[], phaseTerms: any[]): ProjectListModel[] {
         let projects = items
             .map(item => {
                 let [group] = groups.filter(grp => grp.id === item.GtGroupId);
@@ -272,7 +273,7 @@ export class DataAdapter {
                 })
                 .get(),
         ]);
-        let projects = this.mapProjects(items, groups, users, phaseTerms);
+        let projects = this._mapProjects(items, groups, users, phaseTerms);
         return projects;
     }
 }

@@ -7,11 +7,11 @@ export default class ResourceAllocationWebPart extends BasePortfolioWebPart<IRes
     this.renderComponent(ResourceAllocation);
   }
 
-  protected async onInit(): Promise<void> {
+  public async onInit(): Promise<void> {
     await super.onInit();
   }
 
-  protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+  public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return super.getPropertyPaneConfiguration();
   }
 }

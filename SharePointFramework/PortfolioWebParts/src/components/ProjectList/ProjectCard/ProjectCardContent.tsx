@@ -9,6 +9,7 @@ import * as strings from 'PortfolioWebPartsStrings';
  * 
  * @param {IProjectCardProps} props Props 
  */
+// tslint:disable-next-line: naming-convention
 export const ProjectCardContent = ({ project, showProjectOwner, showProjectManager }: IProjectCardProps): JSX.Element => {
     const defaultPersonaProps: IPersonaSharedProps = {
         text: strings.NotSet,

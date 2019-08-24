@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as strings from 'PortfolioWebPartsStrings';
 import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
+import { IAggregatedSearchListColumn } from 'interfaces';
 
-export const ExperienceLogColumns: IColumn[] = [    
+export const EXPERIENCE_LOG_COLUMNS: IAggregatedSearchListColumn[] = [
     {
         key: 'SiteTitle',
         fieldName: 'SiteTitle',
@@ -12,6 +12,7 @@ export const ExperienceLogColumns: IColumn[] = [
         maxWidth: 150,
         isResizable: true,
         onRender: (item: any) => <a href={item.SPWebUrl} target='_blank'>{item.SiteTitle}</a>,
+        isGroupable: true,
     },
     {
         key: 'Title',
@@ -34,7 +35,8 @@ export const ExperienceLogColumns: IColumn[] = [
         name: strings.ResponsibleLabel,
         minWidth: 100,
         maxWidth: 150,
-        isResizable: true
+        isResizable: true,
+        isGroupable: true,
     },
     {
         key: 'GtProjectLogConsequenceOWSMTXT',
@@ -59,10 +61,10 @@ export const ExperienceLogColumns: IColumn[] = [
         minWidth: 100,
         maxWidth: 150,
         isResizable: true,
-        onRender: (item: any, _index: number, column: IColumn) => {
+        onRender: (item: any, _index: number, column: IAggregatedSearchListColumn) => {
             const colValue = item[column.fieldName] as string;
             if (colValue) {
-                const actors = colValue.split(";#").filter(v => v);
+                const actors = colValue.split(';#').filter(v => v);
                 return (
                     <ul style={{ margin: 0, padding: 0 }}>
                         {actors.map(a => <li>{a}</li>)}

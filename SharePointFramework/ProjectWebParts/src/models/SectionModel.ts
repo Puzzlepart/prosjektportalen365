@@ -28,52 +28,45 @@ export class SectionModel {
   public statusValue: string;
   public statusComment?: string;
   public statusProperties?: any;
-  public type: SectionType;
 
   /**
  * Constructor
  *
- * @param {any} obj Section object
+ * @param {any} _obj Section object
  */
-  constructor(obj: any) {
-    this.name = obj.Title;
-    this.iconName = obj.GtSecIcon;
-    this.source = obj.GtSecSource;
-    this.listTitle = obj.GtSecList;
-    this.viewQuery = obj.GtSecViewQuery;
-    this.viewFields = obj.GtSecViewFields ? obj.GtSecViewFields.split(",") : [];
-    this.rowLimit = obj.GtSecRowLimit;
-    this.fieldName = obj.GtSecFieldName;
-    this.showRiskMatrix = obj.GtSecShowRiskMatrix;
-    this.showInNavbar = obj.GtSecShowInNavbar;
-    this.showInStatusSection = obj.GtSecShowInStatusSection;
-    this.showAsSection = obj.GtSecShowAsSection;
-    this.sortOrder = obj.GtSortOrder;
-    this.customComponent = obj.GtSecCustomComponent;
+  constructor(private _obj: any) {
+    this.name = _obj.Title;
+    this.iconName = _obj.GtSecIcon;
+    this.source = _obj.GtSecSource;
+    this.listTitle = _obj.GtSecList;
+    this.viewQuery = _obj.GtSecViewQuery;
+    this.viewFields = _obj.GtSecViewFields ? _obj.GtSecViewFields.split(',') : [];
+    this.rowLimit = _obj.GtSecRowLimit;
+    this.fieldName = _obj.GtSecFieldName;
+    this.showRiskMatrix = _obj.GtSecShowRiskMatrix;
+    this.showInNavbar = _obj.GtSecShowInNavbar;
+    this.showInStatusSection = _obj.GtSecShowInStatusSection;
+    this.showAsSection = _obj.GtSecShowAsSection;
+    this.sortOrder = _obj.GtSortOrder;
+    this.customComponent = _obj.GtSecCustomComponent;
     this.statusProperties = {};
     this.commentFieldName = `${this.fieldName}Comment`;
-    this.type = this.getType(obj.ContentTypeId);
   }
 
-  /**
- * Get type
- * 
- * @param {string} contentTypeId Content type id
- */
-  private getType(contentTypeId: string): SectionType {
+  public get type(): SectionType {
     if (this.fieldName === strings.OverallStatusFieldName) {
       return SectionType.SummarySection;
     }
-    if (contentTypeId.indexOf("0x01004CEFE616A94A3A48A27D9DEBDF5EC82802") !== -1) {
+    if (this._obj.ContentTypeId.indexOf('0x01004CEFE616A94A3A48A27D9DEBDF5EC82802') !== -1) {
       return SectionType.StatusSection;
     }
-    if (contentTypeId.indexOf("0x01004CEFE616A94A3A48A27D9DEBDF5EC82803") !== -1) {
+    if (this._obj.ContentTypeId.indexOf('0x01004CEFE616A94A3A48A27D9DEBDF5EC82803') !== -1) {
       return SectionType.ProjectPropertiesSection;
     }
-    if (contentTypeId.indexOf("0x01004CEFE616A94A3A48A27D9DEBDF5EC82804") !== -1) {
+    if (this._obj.ContentTypeId.indexOf('0x01004CEFE616A94A3A48A27D9DEBDF5EC82804') !== -1) {
       return SectionType.RiskSection;
     }
-    if (contentTypeId.indexOf("0x01004CEFE616A94A3A48A27D9DEBDF5EC82805") !== -1) {
+    if (this._obj.ContentTypeId.indexOf('0x01004CEFE616A94A3A48A27D9DEBDF5EC82805') !== -1) {
       return SectionType.ListSection;
     }
   }

@@ -1,4 +1,6 @@
 declare interface IPortfolioWebPartsStrings {
+  GroupByColumnLabel: string;
+  FilterBy: string;
   DataSourceCategoryLabel: string;
   DataSourceLabel: string;
   SelectedColumnsLabel: string;

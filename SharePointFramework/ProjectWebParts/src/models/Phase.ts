@@ -1,4 +1,4 @@
-import { PhaseChecklistData } from "../types/PhaseChecklistData";
+import { PhaseChecklistData } from '../types/PhaseChecklistData';
 
 export class Phase {
     public id: string;

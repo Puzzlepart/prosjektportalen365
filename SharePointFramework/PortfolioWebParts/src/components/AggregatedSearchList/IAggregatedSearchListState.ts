@@ -1,3 +1,4 @@
+import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { DataSource } from 'shared/lib/models/DataSource';
 
@@ -38,6 +39,11 @@ export interface IAggregatedSearchListState {
     groupBy?: IColumn;
 
     /**
+     * Column to sort by
+     */
+    sortBy?: IColumn;
+
+    /**
      * Search term
      */
     searchTerm?: string;
@@ -46,4 +52,9 @@ export interface IAggregatedSearchListState {
      * Error
      */
     error?: string;
+
+    /**
+     * Props for column header context menu
+     */
+    columnContextMenu?: IContextualMenuProps;
 }

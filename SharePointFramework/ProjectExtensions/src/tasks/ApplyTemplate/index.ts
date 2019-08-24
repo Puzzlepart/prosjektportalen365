@@ -7,7 +7,7 @@ import * as stringFormat from 'string-format';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { BaseTaskError } from '../BaseTaskError';
 import { IBaseTaskParams } from '../IBaseTaskParams';
-import { ApplyTemplateStatusMap } from './ApplyTemplateStatusMap';
+import { APPLY_TEMPLATE_STATUS_MAP } from './ApplyTemplateStatusMap';
 
 @task('ApplyTemplate')
 export default class ApplyTemplate extends BaseTask {
@@ -29,8 +29,8 @@ export default class ApplyTemplate extends BaseTask {
             });
             this.logInformation('Applying template to site', { parameters: params.templateParameters });
             await provisioner.applyTemplate(params.templateSchema, null, status => {
-                if (ApplyTemplateStatusMap[status]) {
-                    onProgress(ApplyTemplateStatusMap[status].text, ApplyTemplateStatusMap[status].iconName);
+                if (APPLY_TEMPLATE_STATUS_MAP[status]) {
+                    onProgress(APPLY_TEMPLATE_STATUS_MAP[status].text, APPLY_TEMPLATE_STATUS_MAP[status].iconName);
                 }
             });
             this.logInformation('Applying extensions to site', { parameters: params.templateParameters });

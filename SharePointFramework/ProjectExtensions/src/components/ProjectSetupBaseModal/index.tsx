@@ -15,7 +15,7 @@ export default class ProjectSetupBaseModal extends React.PureComponent<IProjectS
         return (
             <Modal
                 isOpen={this.state.isOpen}
-                onDismiss={this.onDismiss}
+                onDismiss={this._onDismiss.bind(this)}
                 isBlocking={this.props.isBlocking}
                 isDarkOverlay={this.props.isDarkOverlay}
                 containerClassName={`${styles.projectSetupBaseModal} ${this.props.containerClassName}`}>
@@ -32,7 +32,7 @@ export default class ProjectSetupBaseModal extends React.PureComponent<IProjectS
         );
     }
 
-    protected onDismiss = () => {
+    protected _onDismiss() {
         this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
     }
 }

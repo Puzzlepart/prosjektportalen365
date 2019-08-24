@@ -1,6 +1,6 @@
 {
     "name": "projectextensions",
-    "version": "0.10.5",
+    "version": "0.10.7",
     "private": true,
     "engines": {
         "node": ">=0.10.0"
@@ -16,7 +16,7 @@
         "packageAndDeployPatch": "npm version patch && npm run deploy",
         "packageAndDeployMinor": "npm version minor && npm run deploy",
         "packageAndDeployMajor": "npm version major && npm run deploy",
-        "postversion": "gulp version-sync",
+        "postversion": "gulp version-sync && npm run package",
         "patchVersion": "npm version patch",
         "minorVersion": "npm version minor",
         "majorVersion": "npm version major",
@@ -68,6 +68,7 @@
         "ajv": "~5.2.2",
         "find": "^0.3.0",
         "gulp": "~3.9.1",
-        "spfx-pkgdeploy": "^0.3.0"
+        "spfx-pkgdeploy": "^0.3.0",
+        "tslint-consistent-codestyle": "^1.15.1"
     }
 }

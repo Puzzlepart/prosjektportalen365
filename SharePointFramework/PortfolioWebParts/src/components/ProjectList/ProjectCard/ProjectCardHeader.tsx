@@ -9,6 +9,7 @@ import styles from './ProjectCard.module.scss';
  * 
  * @param {IProjectCardProps} props Props 
  */
+// tslint:disable-next-line: naming-convention
 export const ProjectCardHeader = ({ project, showProjectLogo, shouldTruncateTitle }: IProjectCardProps): JSX.Element => {
     return (
         <div className={styles.header}>

@@ -1,15 +1,15 @@
 import { override } from '@microsoft/decorators';
 import { BaseListViewCommandSet, Command, IListViewCommandSetExecuteEventParameters, IListViewCommandSetListViewUpdatedParameters } from '@microsoft/sp-listview-extensibility';
+import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
+import '@pnp/polyfill-ie11';
+import { sp } from '@pnp/sp';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import '@pnp/polyfill-ie11';
 import * as strings from 'TemplateSelectorCommandSetStrings';
 import { DocumentTemplateModal } from '../../components';
-import { ITemplateSelectorCommandSetProperties } from './ITemplateSelectorCommandSetProperties';
 import * as data from '../../data';
-import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
-import { sp } from '@pnp/sp';
-import { TemplateFile, IDocumentLibrary } from '../../models';
+import { IDocumentLibrary, TemplateFile } from '../../models';
+import { ITemplateSelectorCommandSetProperties } from './ITemplateSelectorCommandSetProperties';
 
 Logger.subscribe(new ConsoleListener());
 Logger.activeLogLevel = LogLevel.Info;
@@ -28,23 +28,22 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
   @override
   public async onInit() {
     sp.setup({ spfxContext: this.context });
-    const OPEN_TEMPLATE_SELECTOR_COMMAND: Command = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR');
-    if (OPEN_TEMPLATE_SELECTOR_COMMAND) {
-      Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Initializing', data: { version: this.context.manifest.version }, level: LogLevel.Info });
-      try {
-        this._templates = await data.getDocumentTemplates(sp, this.context.pageContext, this.properties.templateLibrary, this.properties.phaseTermSetId);
-        Logger.log({ message: `(TemplateSelectorCommandSet) onInit: Retrieved ${this._templates.length} templates from the specified template library`, level: LogLevel.Info });
-      } catch (error) {
-        Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Failed to initialize', level: LogLevel.Warning });
-      }
+    const openTemplateSelectorCommand: Command = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR');
+    if (!openTemplateSelectorCommand) return;
+    Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Initializing', data: { version: this.context.manifest.version }, level: LogLevel.Info });
+    try {
+      this._templates = await data.getDocumentTemplates(sp, this.context.pageContext, this.properties.templateLibrary, this.properties.phaseTermSetId);
+      Logger.log({ message: `(TemplateSelectorCommandSet) onInit: Retrieved ${this._templates.length} templates from the specified template library`, level: LogLevel.Info });
+    } catch (error) {
+      Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Failed to initialize', level: LogLevel.Warning });
     }
   }
 
   @override
   public onListViewUpdated(event: IListViewCommandSetListViewUpdatedParameters): void {
-    const OPEN_TEMPLATE_SELECTOR_COMMAND: Command = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR');
-    if (OPEN_TEMPLATE_SELECTOR_COMMAND) {
-      OPEN_TEMPLATE_SELECTOR_COMMAND.visible = event.selectedRows.length === 0 && this._templates.length > 0;
+    const openTemplateSelectorCommand: Command = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR');
+    if (openTemplateSelectorCommand) {
+      openTemplateSelectorCommand.visible = event.selectedRows.length === 0 && this._templates.length > 0;
     }
   }
 
@@ -64,7 +63,7 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
           Title: l.Title,
           ServerRelativeUrl: l.RootFolder.ServerRelativeUrl,
         }));
-        this.onOpenTemplateSelector();
+        this._onOpenTemplateSelector();
         break;
     }
   }
@@ -72,10 +71,10 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
   /**
    * On open <DocumentTemplateModal />
    */
-  private onOpenTemplateSelector() {
+  private _onOpenTemplateSelector() {
     const templateLibrarySelectModal = React.createElement(DocumentTemplateModal, {
       title: strings.TemplateLibrarySelectModalTitle,
-      onDismiss: this.onDismissTemplateLibrarySelectModal.bind(this),
+      onDismiss: this._onDismissTemplateLibrarySelectModal.bind(this),
       libraries: this._libraries,
       templates: this._templates,
     });
@@ -87,7 +86,7 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
   /**
    * On dismiss <DocumentTemplateModal />
    */
-  private onDismissTemplateLibrarySelectModal() {
+  private _onDismissTemplateLibrarySelectModal() {
     ReactDOM.unmountComponentAtNode(this._container);
     document.location.href = document.location.href;
   }

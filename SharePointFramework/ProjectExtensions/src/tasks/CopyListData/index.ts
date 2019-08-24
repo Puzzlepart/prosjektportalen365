@@ -22,7 +22,7 @@ export default class CopyListData extends BaseTask {
             for (let i = 0; i < params.data.selectedListConfig.length; i++) {
                 const listConfig = params.data.selectedListConfig[i];
                 onProgress(stringFormat(strings.CopyListDataText, listConfig.sourceList, listConfig.destinationLibrary || listConfig.destinationList), 'List');
-                await this.processListItems(listConfig);
+                await this._processListItems(listConfig);
             }
             return params;
         } catch (error) {
@@ -35,17 +35,17 @@ export default class CopyListData extends BaseTask {
      * 
      * @param {ListContentConfig} listConfig List config
      */
-    private async processListItems(listConfig: ListContentConfig) {
+    private async _processListItems(listConfig: ListContentConfig) {
         try {
             this.logInformation('Processing list items', { listConfig });
             let destList = sp.web.lists.getByTitle(listConfig.destinationList);
-            let [sourceItems, sourceFields, { ListItemEntityTypeFullName }] = await Promise.all([
+            let [sourceItems, sourceFields, destListProps] = await Promise.all([
                 (listConfig.web as Web).lists.getByTitle(listConfig.sourceList).items.select(...listConfig.fields, 'TaxCatchAll/ID', 'TaxCatchAll/Term').expand('TaxCatchAll').get<any[]>(),
                 (listConfig.web as Web).lists.getByTitle(listConfig.sourceList).fields.select('Id', 'InternalName', 'TypeAsString', 'TextField').get<Array<{ Id: string, InternalName: string, TypeAsString: string, TextField: string }>>(),
                 destList.select('ListItemEntityTypeFullName').get<{ ListItemEntityTypeFullName: string }>(),
             ]);
             for (let i = 0; i < sourceItems.length; i++) {
-                let properties = listConfig.fields.reduce((_properties: { [x: string]: any; }, fieldName: string) => {
+                let properties = listConfig.fields.reduce((obj: { [x: string]: any; }, fieldName: string) => {
                     let fieldValue = sourceItems[i][fieldName];
                     if (fieldValue) {
                         const [field] = sourceFields.filter(fld => fld.InternalName === fieldName);
@@ -56,21 +56,21 @@ export default class CopyListData extends BaseTask {
                                     if (textField) {
                                         const [taxonomyFieldValue] = sourceItems[i].TaxCatchAll.filter((tca: { ID: number, Term: string }) => tca.ID === fieldValue.WssId);
                                         if (taxonomyFieldValue) {
-                                            _properties[textField.InternalName] = `-1;#${taxonomyFieldValue.Term}|${fieldValue.TermGuid}`;
+                                            obj[textField.InternalName] = `-1;#${taxonomyFieldValue.Term}|${fieldValue.TermGuid}`;
                                         }
                                     }
                                 }
                                     break;
                                 default: {
-                                    _properties[fieldName] = fieldValue;
+                                    obj[fieldName] = fieldValue;
                                 }
                             }
                         }
                     }
-                    return _properties;
+                    return obj;
                 }, {});
                 this.logInformation(`Processing list item ${i + 1}`, { properties, TaxCatchAll: sourceItems[i].TaxCatchAll });
-                await destList.items.add(properties, ListItemEntityTypeFullName);
+                await destList.items.add(properties, destListProps.ListItemEntityTypeFullName);
             }
         } catch (error) {
             throw error;

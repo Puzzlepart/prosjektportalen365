@@ -1,10 +1,10 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
-import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
+import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import * as React from "react";
+import * as React from 'react';
 import { formatDate } from 'shared/lib/helpers/formatDate';
 import * as format from 'string-format';
-import { IStatusReportsProps } from "./IStatusReportsProps";
+import { IStatusReportsProps } from './IStatusReportsProps';
 import styles from './StatusReports.module.scss';
 
 export class StatusReports extends React.Component<IStatusReportsProps, {}> {
@@ -30,7 +30,7 @@ export class StatusReports extends React.Component<IStatusReportsProps, {}> {
                     {this.props.statusReports.map((report, idx) => (
                         <li className={styles.item} key={idx}>
                             <ActionButton
-                                href={this.getUrl(report.Id.toString())}
+                                href={this._createUrl(report.Id.toString())}
                                 text={formatDate(report.Created, true)}
                                 iconProps={{ iconName: this.props.iconName }} />
                         </li>
@@ -41,11 +41,11 @@ export class StatusReports extends React.Component<IStatusReportsProps, {}> {
     }
 
     /**
-     * Get url for report
+     * Create url for report
      * 
      * @param {string} id Id
      */
-    protected getUrl(id: string) {
+    protected _createUrl(id: string) {
         return format(this.props.urlTemplate, id) + '&Source=' + encodeURIComponent(this.props.urlSourceParam);
     }
 }

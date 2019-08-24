@@ -16,7 +16,7 @@ import DocumentTemplateModalScreenEditCopy from './DocumentTemplateModalScreenEd
 import DocumentTemplateModalScreenSelect from './DocumentTemplateModalScreenSelect';
 
 export default class DocumentTemplateModal extends React.Component<IDocumentTemplateModalProps, IDocumentTemplateModalState> {
-    private selection: Selection;
+    private _selection: Selection;
 
     /**
      * Constructor
@@ -30,7 +30,7 @@ export default class DocumentTemplateModal extends React.Component<IDocumentTemp
             selection: [],
             screen: DocumentTemplateModalScreen.Select,
         };
-        this.selection = new Selection({ onSelectionChanged: () => { this.setState({ selection: this.selection.getSelection() as TemplateFile[] }); } });
+        this._selection = new Selection({ onSelectionChanged: () => { this.setState({ selection: this._selection.getSelection() as TemplateFile[] }); } });
     }
 
     public render(): React.ReactElement<IDocumentTemplateModalProps> {
@@ -46,7 +46,7 @@ export default class DocumentTemplateModal extends React.Component<IDocumentTemp
                         {this.props.title}
                     </div>
                     <div className={styles.modalBody}>
-                        {this.renderScreen()}
+                        {this._renderScreen()}
                     </div>
                 </div>
             </Modal>
@@ -54,9 +54,9 @@ export default class DocumentTemplateModal extends React.Component<IDocumentTemp
     }
 
     /**
-     * Render body
+     * Render screen
      */
-    private renderScreen() {
+    private _renderScreen() {
         const { screen, selection, templatesAdded, progress } = this.state;
 
         switch (screen) {
@@ -64,9 +64,9 @@ export default class DocumentTemplateModal extends React.Component<IDocumentTemp
                 return (
                     <DocumentTemplateModalScreenSelect
                         templates={this.props.templates}
-                        selection={this.selection}
+                        selection={this._selection}
                         selectedItems={selection}
-                        onSubmitSelection={() => this.onChangeScreen(DocumentTemplateModalScreen.EditCopy)} />
+                        onSubmitSelection={() => this._onChangeScreen(DocumentTemplateModalScreen.EditCopy)} />
                 );
             }
             case DocumentTemplateModalScreen.EditCopy: {
@@ -74,8 +74,8 @@ export default class DocumentTemplateModal extends React.Component<IDocumentTemp
                     <DocumentTemplateModalScreenEditCopy
                         selectedTemplates={selection}
                         libraries={this.props.libraries}
-                        onStartCopy={this.onStartCopy.bind(this)}
-                        onGoBack={() => this.onChangeScreen(DocumentTemplateModalScreen.Select)} />
+                        onStartCopy={this._onStartCopy.bind(this)}
+                        onGoBack={() => this._onChangeScreen(DocumentTemplateModalScreen.Select)} />
                 );
             }
             case DocumentTemplateModalScreen.CopyProgress: {
@@ -86,7 +86,7 @@ export default class DocumentTemplateModal extends React.Component<IDocumentTemp
                     <React.Fragment>
                         <MessageBar messageBarType={MessageBarType.success}>{stringFormat(TemplateSelectorCommandSetStrings.SummaryText, templatesAdded.length)}</MessageBar>
                         <div className={styles.actions}>
-                            <DefaultButton text={TemplateSelectorCommandSetStrings.GetMoreText} onClick={_ => this.onChangeScreen(DocumentTemplateModalScreen.Select)} />
+                            <DefaultButton text={TemplateSelectorCommandSetStrings.GetMoreText} onClick={_ => this._onChangeScreen(DocumentTemplateModalScreen.Select)} />
                             <DefaultButton text={TemplateSelectorCommandSetStrings.CloseModalText} onClick={this.props.onDismiss} />
                         </div>
                     </React.Fragment>
@@ -100,7 +100,7 @@ export default class DocumentTemplateModal extends React.Component<IDocumentTemp
      * 
      * @param {DocumentTemplateModalScreen} screen Screen
      */
-    private onChangeScreen = (screen: DocumentTemplateModalScreen) => {
+    private _onChangeScreen(screen: DocumentTemplateModalScreen) {
         this.setState({ screen });
     }
 
@@ -112,7 +112,7 @@ export default class DocumentTemplateModal extends React.Component<IDocumentTemp
      * 
      * @returns Promise<void>
      */
-    private async onStartCopy(templates: TemplateFile[], serverRelativeUrl: string): Promise<void> {
+    private async _onStartCopy(templates: TemplateFile[], serverRelativeUrl: string): Promise<void> {
         this.setState({ screen: DocumentTemplateModalScreen.CopyProgress, isBlocking: true });
 
         let templatesAdded: FileAddResult[] = [];
@@ -126,7 +126,7 @@ export default class DocumentTemplateModal extends React.Component<IDocumentTemp
             } catch (error) { }
         }
 
-        this.selection.setItems([], true);
+        this._selection.setItems([], true);
         this.setState({ screen: DocumentTemplateModalScreen.Summary, templatesAdded, isBlocking: false, selection: [] });
     }
 }

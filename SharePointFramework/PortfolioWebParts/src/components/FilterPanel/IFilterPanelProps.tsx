@@ -4,7 +4,18 @@ import { IFilterProps } from './Filter/IFilterProps';
 import { IFilterItemProps } from './FilterItem/IFilterItemProps';
 
 export interface IFilterPanelProps extends IPanelProps {
+    /**
+     * @todo describe property
+     */
     filters: IFilterProps[];
+
+    /**
+     * @todo describe property
+     */
     onFilterChange: (column: IColumn, selectedItems: IFilterItemProps[]) => void;
+
+    /**
+     * @todo describe property
+     */
     layerHostId?: string;
 }

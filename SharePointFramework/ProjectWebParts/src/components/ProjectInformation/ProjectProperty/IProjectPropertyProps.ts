@@ -21,8 +21,8 @@ export class ProjectPropertyModel {
         this.value = value;
         this.type = field.TypeAsString;
         this.required = field.Required;
-        this.empty = value === "";
-        this.showInDisplayForm = field.SchemaXml.indexOf('ShowInDisplayForm="FALSE"') === -1;
+        this.empty = value === '';
+        this.showInDisplayForm = field.SchemaXml.indexOf('ShowInDisplayForm=\'FALSE\'') === -1;
     }
 }
 

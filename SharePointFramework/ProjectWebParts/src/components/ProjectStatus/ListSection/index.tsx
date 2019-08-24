@@ -19,7 +19,7 @@ export default class ListSection extends StatusSectionBase<IListSectionProps, IL
 
   public async componentDidMount() {
     try {
-      const data = await this.fetchData();
+      const data = await this._fetchData();
       this.setState({ data, isLoading: false });
     } catch (error) {
       this.setState({ error, isLoading: false });
@@ -36,7 +36,7 @@ export default class ListSection extends StatusSectionBase<IListSectionProps, IL
           <div className='ms-Grid-col ms-sm12'>
             <StatusElement {...this.props.headerProps} />
           </div>
-          {this.renderList()}
+          {this._renderList()}
         </div>
       </StatusSectionBase>
     );
@@ -45,7 +45,7 @@ export default class ListSection extends StatusSectionBase<IListSectionProps, IL
   /**
    * Render list
    */
-  private renderList() {
+  private _renderList() {
     if (this.state.isLoading || !this.state.data) {
       return null;
     }
@@ -66,7 +66,7 @@ export default class ListSection extends StatusSectionBase<IListSectionProps, IL
   /**
    * Fetch data
    */
-  private async fetchData(): Promise<IListSectionData> {
+  private async _fetchData(): Promise<IListSectionData> {
     const { listTitle, viewQuery, viewFields, rowLimit } = this.props.model;
     const list = sp.web.lists.getByTitle(listTitle);
     try {

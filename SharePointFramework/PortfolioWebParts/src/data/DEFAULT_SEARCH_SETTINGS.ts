@@ -6,7 +6,7 @@ export const DEFAULT_SEARCH_SETTINGS = {
     TrimDuplicates: false,
     Properties: [
         {
-            Name: "EnableDynamicGroups",
+            Name: 'EnableDynamicGroups',
             Value: {
                 BoolVal: true,
                 QueryPropertyValueTypeIndex: QueryPropertyValueType.BooleanType

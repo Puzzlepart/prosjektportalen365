@@ -1,4 +1,4 @@
-import { IProjectInformationData } from "./IProjectInformationData";
+import { IProjectInformationData } from './IProjectInformationData';
 
 export interface IProjectInformationState {
   isLoading: boolean;

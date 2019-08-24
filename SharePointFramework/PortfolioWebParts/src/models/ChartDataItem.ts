@@ -21,7 +21,7 @@ export class ChartDataItem {
      * @param {DataField} field Field
      */
     public hasValue(field: DataField): boolean {
-        return this.getRawValue(field) != null;
+        return this._getRawValue(field) != null;
     }
 
     /**
@@ -30,7 +30,7 @@ export class ChartDataItem {
      * @param {DataField} field Field
      */
     public getValue(field: DataField) {
-        const rawValue = this.getRawValue(field);
+        const rawValue = this._getRawValue(field);
         switch (field.type) {
             case 'percentage': {
                 if (this.hasValue(field)) {
@@ -64,7 +64,7 @@ export class ChartDataItem {
      *
      * @param {DataField} field Field
      */
-    protected getRawValue(field: DataField): any {
+    protected _getRawValue(field: DataField): any {
         const rawValue = this.data[field.fieldName];
         return rawValue;
     }

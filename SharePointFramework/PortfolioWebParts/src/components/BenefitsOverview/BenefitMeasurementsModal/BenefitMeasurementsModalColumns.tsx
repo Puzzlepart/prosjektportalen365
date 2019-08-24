@@ -4,7 +4,7 @@ import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { BenefitMeasurement } from 'models';
 import BenefitMeasurementAchievement from '../BenefitMeasurementAchievement';
 
-export const BenefitMeasurementsModalColumns: IColumn[] = [
+export const BENEFIT_MEASUREMENTS_MODAL_COLUMNS: IColumn[] = [
     {
         key: 'value',
         fieldName: 'value',

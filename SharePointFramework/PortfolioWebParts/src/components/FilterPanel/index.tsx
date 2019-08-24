@@ -26,14 +26,14 @@ export default class FilterPanel extends React.Component<IFilterPanelProps, IFil
                     hasCloseButton={this.props.hasCloseButton}
                     type={PanelType.smallFixedFar}>
                     <div>
-                        {this.renderFilters()}
+                        {this._renderFilters()}
                     </div>
                 </Panel>
             </Customizer>
         );
     }
 
-    private renderFilters() {
+    private _renderFilters() {
         return this.props.filters
             .filter(props => props.items.length > 1)
             .map(props => <Filter {...props} onFilterChange={this.props.onFilterChange} />);

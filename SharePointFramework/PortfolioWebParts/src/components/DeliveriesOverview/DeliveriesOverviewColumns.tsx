@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as strings from 'PortfolioWebPartsStrings';
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { formatDate } from 'shared/lib/helpers';
+import { IAggregatedSearchListColumn } from 'interfaces';
 
-export const DeliveriesOverviewColumns: IColumn[] = [
+export const DELIVERIES_OVERVIEW_COLUMNS: IAggregatedSearchListColumn[] = [
     {
         key: 'SiteTitle',
         fieldName: 'SiteTitle',
@@ -12,6 +12,7 @@ export const DeliveriesOverviewColumns: IColumn[] = [
         maxWidth: 150,
         isResizable: true,
         onRender: (item: any) => <a href={item.SPWebUrl} target='_blank'>{item.SiteTitle}</a>,
+        isGroupable: true,
     },
     {
         key: 'Title',

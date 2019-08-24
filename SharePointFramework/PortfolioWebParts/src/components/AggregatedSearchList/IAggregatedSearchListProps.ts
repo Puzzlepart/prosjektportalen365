@@ -1,6 +1,6 @@
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { SearchResult } from '@pnp/sp';
 import { IBaseComponentProps } from '../IBaseComponentProps';
+import { IAggregatedSearchListColumn } from 'interfaces';
 
 export interface IAggregatedSearchListProps extends IBaseComponentProps {
     /**
@@ -62,16 +62,5 @@ export interface IAggregatedSearchListProps extends IBaseComponentProps {
     /**
      * Columns to show in the DetailsList
      */
-    columns?: IColumn[];
-
-    /**
-     * Columns available to group by
-     */
-    groupByColumns?: IColumn[];
+    columns?: IAggregatedSearchListColumn[];
 }
-
-export const AggregatedSearchListDefaultProps: Partial<IAggregatedSearchListProps> = {
-    showCommandBar: true,
-    showSearchBox: true,
-    groupByColumns: [],
-};

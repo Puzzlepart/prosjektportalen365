@@ -26,7 +26,7 @@ export class ChartConfiguration {
     }
 
 
-    private get type() {
+    public get type() {
         const typeIndex = parseInt(this.item.ContentTypeId.replace(CHARTCONFIGBASE_CONTENTTYPEID, '').substring(0, 2), 10) - 1;
         return CHART_TYPES[typeIndex];
     }
@@ -34,7 +34,7 @@ export class ChartConfiguration {
     /**
      * Get base config
      */
-    private getBaseConfig() {
+    private _getBaseConfig() {
         let base: any = {};
         base.chart = { type: this.type };
         base.title = { text: this.item.Title };
@@ -132,21 +132,21 @@ export class ChartConfiguration {
      */
     public generateHighChartConfig(data: ChartData) {
         try {
-            let chartConfig: any = this.getBaseConfig();
+            let chartConfig: any = this._getBaseConfig();
             switch (this.type) {
                 case 'bar': {
                     chartConfig.series = this.generateSeries(this.type, data);
-                    chartConfig.xAxis = this.getXAxis(data);
-                    chartConfig.yAxis = this.yAxis;
-                    chartConfig.legend = this.legend;
+                    chartConfig.xAxis = this._getXAxis(data);
+                    chartConfig.yAxis = this._yAxis;
+                    chartConfig.legend = this._legend;
                     chartConfig.plotOptions = { bar: { dataLabels: { enabled: true } } };
                     break;
                 }
                 case 'column': {
                     chartConfig.series = this.generateSeries(this.type, data);
-                    chartConfig.xAxis = this.getXAxis(data);
-                    chartConfig.yAxis = this.yAxis;
-                    chartConfig.legend = this.legend;
+                    chartConfig.xAxis = this._getXAxis(data);
+                    chartConfig.yAxis = this._yAxis;
+                    chartConfig.legend = this._legend;
                     chartConfig.plotOptions = { series: { stacking: false } };
                     break;
                 }
@@ -176,7 +176,7 @@ export class ChartConfiguration {
         }
     }
 
-    private get yAxis() {
+    private get _yAxis() {
         return {
             title: { text: '', align: 'high' },
             labels: { overflow: 'justify' },
@@ -188,7 +188,7 @@ export class ChartConfiguration {
      * 
      * @param {ChartData} data Data
      */
-    private getXAxis(data: ChartData) {
+    private _getXAxis(data: ChartData) {
         let categories = data.getNames();
         if (this.fields.length === 1) {
             categories = data.getNames(this.fields[0]);
@@ -212,7 +212,7 @@ export class ChartConfiguration {
         }
     }
 
-    private get legend() {
+    private get _legend() {
         switch (this.type) {
             case 'bar': {
                 return { layout: 'vertical' };

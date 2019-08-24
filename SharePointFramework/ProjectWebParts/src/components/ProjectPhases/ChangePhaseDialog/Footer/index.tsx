@@ -1,13 +1,14 @@
-import * as React from "react";
-import { DialogFooter } from "office-ui-fabric-react/lib/Dialog";
-import { PrimaryButton, DefaultButton } from "office-ui-fabric-react/lib/Button";
-import { View } from "../Views";
-import IFooterProps from "./IFooterProps";
+import * as React from 'react';
+import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { View } from '../Views';
+import IFooterProps from './IFooterProps';
 import * as strings from 'ProjectWebPartsStrings';
 
 /**
  * Footer
  */
+// tslint:disable-next-line: naming-convention
 export const Footer = ({ isLoading, newPhase, currentView, onChangeView, onChangePhase, onDismiss }: IFooterProps) => {
     let actions = [];
 

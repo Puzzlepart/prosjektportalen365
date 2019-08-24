@@ -2,6 +2,7 @@ import * as React from 'react';
 import { View, InitialView, SummaryView, ChangingPhaseView } from '../Views';
 import IBodyProps from './IBodyProps';
 
+// tslint:disable-next-line: naming-convention
 export const Body = ({
     isLoading,
     currentIdx,

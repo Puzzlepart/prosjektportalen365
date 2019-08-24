@@ -1,10 +1,11 @@
 import * as React from 'react';
-import styles from './DeliveriesOverview.module.scss';
-import { IDeliveriesOverviewProps, DeliveriesOverviewDefaultProps } from './IDeliveriesOverviewProps';
 import { AggregatedSearchList } from '../';
+import styles from './DeliveriesOverview.module.scss';
+import { DELIVERIES_OVERVIEW_COLUMNS } from './DeliveriesOverviewColumns';
+import { IDeliveriesOverviewProps } from './IDeliveriesOverviewProps';
 
 export default class DeliveriesOverview extends React.Component<IDeliveriesOverviewProps, {}> {
-  public static defaultProps = DeliveriesOverviewDefaultProps;
+  public static defaultProps: Partial<IDeliveriesOverviewProps> = { columns: DELIVERIES_OVERVIEW_COLUMNS };
 
   /**
    * Constructor

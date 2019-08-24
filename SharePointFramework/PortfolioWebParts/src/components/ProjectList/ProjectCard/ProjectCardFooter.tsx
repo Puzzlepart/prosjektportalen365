@@ -7,6 +7,7 @@ import { IProjectCardProps } from './IProjectCardProps';
  * 
  * @param {IProjectCardProps} props Props 
  */
+// tslint:disable-next-line: naming-convention
 export const ProjectCardFooter = ({ actions }: IProjectCardProps): JSX.Element => {
     return <DocumentCardActions actions={actions} />;
 };

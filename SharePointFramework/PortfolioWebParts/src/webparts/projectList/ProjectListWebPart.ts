@@ -8,11 +8,11 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
     this.renderComponent(ProjectList);
   }
 
-  protected async onInit(): Promise<void> {
+  public async onInit(): Promise<void> {
     await super.onInit();
   }
 
-  protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+  public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
         {

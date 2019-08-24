@@ -3,8 +3,9 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import IChecklistItemProps from './IChecklistItemProps';
 import IChecklistItemState from './IChecklistItemState';
 import * as strings from 'ProjectWebPartsStrings';
+import { stringIsNullOrEmpty } from '@pnp/common';
 
-const GetStatusColor = (status: string): string => {
+function getStatusColor(status: string): string {
     switch (status) {
         case strings.StatusOpen: {
             return 'inherit';
@@ -19,10 +20,10 @@ const GetStatusColor = (status: string): string => {
             return '';
         }
     }
-};
+}
 
 /**
- * CheckListItem
+ * @component CheckListItem
  */
 export default class CheckListItem extends React.PureComponent<IChecklistItemProps, IChecklistItemState> {
     /**
@@ -36,19 +37,18 @@ export default class CheckListItem extends React.PureComponent<IChecklistItemPro
     }
 
     public render(): JSX.Element {
-        const { Title, GtChecklistStatus, GtComment } = this.props.checkListItem;
-        const hasComment = GtComment !== null && /\S/.test(GtComment);
-        const style = { color: GetStatusColor(GtChecklistStatus), cursor: hasComment ? 'pointer' : 'initial' };
+        const hasComment = !stringIsNullOrEmpty(this.props.checkListItem.GtComment);
+        const style = { color: getStatusColor(this.props.checkListItem.GtChecklistStatus), cursor: hasComment ? 'pointer' : 'initial' };
         return (
             <li>
                 <div className='ms-Grid' style={style} dir='ltr'>
-                    <div className='ms-Grid-row' onClick={e => {
+                    <div className='ms-Grid-row' onClick={() => {
                         if (hasComment) {
                             this.setState({ showComment: !this.state.showComment });
                         }
                     }}>
                         <div className='ms-Grid-col ms-sm10'>
-                            <span>{Title}</span>
+                            <span>{this.props.checkListItem.Title}</span>
                         </div>
                         <div className='ms-Grid-col ms-sm2' hidden={!hasComment}>
                             <Icon iconName={this.state.showComment ? 'ChevronDown' : 'ChevronUp'} />
@@ -57,7 +57,7 @@ export default class CheckListItem extends React.PureComponent<IChecklistItemPro
                     <div className='ms-Grid-row' hidden={!this.state.showComment}>
                         <div className='ms-Grid-col ms-sm12'>
                             <p className='ms-metadata'>
-                                {GtComment}
+                                {this.props.checkListItem.GtComment}
                             </p>
                         </div>
                     </div>

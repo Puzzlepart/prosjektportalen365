@@ -3,6 +3,10 @@ import styles from './StatusElement.module.scss';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { IStatusElementProps } from './IStatusElementProps';
 
+/**
+ * @component StatusElement
+ */
+// tslint:disable-next-line: naming-convention
 const StatusElement = ({ iconName, label, value, comment, iconSize = 30 }: IStatusElementProps) => {
     return (
         <div className={styles.statusElement}>

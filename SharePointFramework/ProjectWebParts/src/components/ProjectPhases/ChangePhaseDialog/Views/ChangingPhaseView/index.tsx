@@ -8,7 +8,7 @@ import * as format from 'string-format';
 //#endregion
 
 /**
- * Changing phase view
+ * @component ChangingPhaseView
  */
 export default class ChangingPhaseView extends React.Component<IChangingPhaseViewProps, IChangingPhaseViewState> {
     public static displayName = 'ChangingPhaseView';

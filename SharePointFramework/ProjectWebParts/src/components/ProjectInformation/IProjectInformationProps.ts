@@ -17,8 +17,3 @@ export interface IProjectInformationProps {
   statusReportsListName?: string;
   statusReportsLinkUrlTemplate?: string;
 }
-
-export const ProjectInformationDefaultProps: Partial<IProjectInformationProps> = {
-  statusReportsLinkUrlTemplate: '',
-  statusReportsCount: 0,
-};

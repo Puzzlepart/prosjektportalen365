@@ -1,27 +1,86 @@
 import { IPortfolioOverviewConfiguration } from 'interfaces';
 import { PortfolioOverviewView } from 'models';
-import { DetailsListLayoutMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
 import { IBaseComponentProps } from '../IBaseComponentProps';
 
 export interface IPortfolioOverviewProps extends IBaseComponentProps {
+    /**
+     * Settings for entity
+     */
     entity: ISpEntityPortalServiceParams;
-    configuration: IPortfolioOverviewConfiguration;
-    projectInfoFilterField?: string;
-    statusReportsListName?: string;
-    statusReportsCount?: number;
-    statusReportsLinkUrlTemplate?: string;
-    showExcelExportButton?: boolean;
-    defaultView?: PortfolioOverviewView;
-    defaultViewId?: string;
-    showCommandBar?: boolean;
-    showGroupBy?: boolean;
-    showSearchBox?: boolean;
-    showFilters?: boolean;
-    showViewSelector?: boolean;
-    columnConfigListName: string;
-    columnsListName: string;
-    viewsListName: string;
-}
 
-export const PortfolioOverviewDefaultProps: Partial<IPortfolioOverviewProps> = {};
+    /**
+     * Configuration (columns and views etc)
+     */
+    configuration: IPortfolioOverviewConfiguration;
+
+    /**
+     * Filter field for <ProjectInformationModal />
+     */
+    projectInfoFilterField?: string;
+
+    /**
+     * List name for status reports
+     */
+    statusReportsListName?: string;    
+
+    /**
+     * List name for column config
+     */
+    columnConfigListName: string;
+
+    /**
+     * List name for columns
+     */
+    columnsListName: string;
+
+    /**
+     * List name for views
+     */
+    viewsListName: string;
+
+    /**
+     * Number of status reports to show
+     */
+    statusReportsCount?: number;
+
+    /**
+     * Link url template for status reports
+     */
+    statusReportsLinkUrlTemplate?: string;
+
+    /**
+     * Show Excel export button
+     */
+    showExcelExportButton?: boolean;
+
+    /**
+     * Show command bar
+     */
+    showCommandBar?: boolean;
+
+    /**
+     * Show group by
+     */
+    showGroupBy?: boolean;
+
+    /**
+     * Show search box
+     */
+    showSearchBox?: boolean;
+
+    /**
+     * Show filters
+     */
+    showFilters?: boolean;
+
+    /**
+     * Show view selector
+     */
+    showViewSelector?: boolean;
+
+    /**
+     * Default view id
+     */
+    defaultViewId?: string;
+}

@@ -1,5 +1,5 @@
-import { DataField } from "./DataField";
-import { ChartDataItem } from "./ChartDataItem";
+import { DataField } from './DataField';
+import { ChartDataItem } from './ChartDataItem';
 
 export class ChartData {
     public includeEmptyValues: boolean;

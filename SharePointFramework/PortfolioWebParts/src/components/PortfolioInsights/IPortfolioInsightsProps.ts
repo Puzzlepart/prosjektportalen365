@@ -6,5 +6,3 @@ export interface IPortfolioInsightsProps extends IBaseComponentProps {
     columnsListName: string;
     viewsListName: string;
 }
-
-export const PortfolioInsightsDefaultProps: Partial<IPortfolioInsightsProps> = {};

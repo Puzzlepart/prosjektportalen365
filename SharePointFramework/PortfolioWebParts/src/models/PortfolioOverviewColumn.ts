@@ -41,7 +41,7 @@ export class PortfolioOverviewColumn implements IColumn {
         this.isGroupable = item.GtIsGroupable;
         this.isResizable = true;
         this.minWidth = item.GtColMinWidth || 100;
-        this.searchType = this.getSearchType(this.fieldName.toLowerCase());
+        this.searchType = this._getSearchType(this.fieldName.toLowerCase());
     }
 
     /**
@@ -49,7 +49,7 @@ export class PortfolioOverviewColumn implements IColumn {
      * 
      * @param {string} fieldName Field name
      */
-    private getSearchType?(fieldName: string): SearchValueType {
+    protected _getSearchType?(fieldName: string): SearchValueType {
         if (fieldName.indexOf('owsdate') !== -1) {
             return SearchValueType.OWSDATE;
         }

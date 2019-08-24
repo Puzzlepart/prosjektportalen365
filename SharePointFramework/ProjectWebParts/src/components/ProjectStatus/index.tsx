@@ -1,8 +1,9 @@
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
 import { PageContext } from '@microsoft/sp-page-context';
-import { dateAdd } from "@pnp/common";
+import { dateAdd } from '@pnp/common';
 import { Logger, LogLevel } from '@pnp/logging';
 import { List } from '@pnp/sp';
+import { getId } from '@uifabric/utilities';
 import { ProjectStatusReport, SectionModel } from 'models';
 import { SectionType } from 'models/SectionModel';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
@@ -15,7 +16,7 @@ import { formatDate } from 'shared/lib/helpers';
 import { parseUrlHash, setUrlHash } from 'shared/lib/util';
 import * as format from 'string-format';
 import { IStatusSectionBaseProps } from './@StatusSectionBase/IStatusSectionBaseProps';
-import { IProjectStatusData } from "./IProjectStatusData";
+import { IProjectStatusData } from './IProjectStatusData';
 import { IProjectStatusProps } from './IProjectStatusProps';
 import { IProjectStatusHashState, IProjectStatusState } from './IProjectStatusState';
 import ListSection from './ListSection';
@@ -45,10 +46,10 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
 
   public async componentDidMount() {
     if (this.state.newStatusCreated) {
-      await this.associateStatusItem();
+      await this._associateStatusItem();
     }
     try {
-      const data = await this.fetchData(this.props.pageContext);
+      const data = await this._fetchData(this.props.pageContext);
       let selectedReport = data.reports[0];
       const hashState = parseUrlHash<IProjectStatusHashState>();
       const urlQueryParameterCollection = new UrlQueryParameterCollection(document.location.href);
@@ -99,31 +100,33 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
 
     return (
       <div className={styles.projectStatus}>
-        {this.commandBar()}
+        {this._commandBar()}
         <div className={styles.container}>
           <div className={`${styles.header} ${styles.column12}`}>
             <div className={styles.title}>{this.props.title}</div>
           </div>
           <div className={`${styles.sections} ${styles.column12}`}>
-            {this.state.selectedReport && this.renderSections()}
+            {this.state.selectedReport && this._renderSections()}
           </div>
         </div>
       </div>
     );
   }
 
-  private commandBar() {
+  private _commandBar() {
     const { data, selectedReport, sourceUrl } = this.state;
-    const reportOptions = this.getReportOptions(data);
+    const reportOptions = this._getReportOptions(data);
     const items: IContextualMenuItem[] = [
       {
-        key: 'NewStatusReport',
+        id: getId('NewStatusReport'),
+        key: getId('NewStatusReport'),
         name: strings.NewStatusReportModalHeaderText,
         iconProps: { iconName: 'NewFolder' },
-        onClick: this.redirectNewStatusReport.bind(this),
+        onClick: this._redirectNewStatusReport.bind(this),
       },
       {
-        key: 'EditReport',
+        id: getId('EditReport'),
+        key: getId('EditReport'),
         name: strings.EditReportButtonText,
         iconProps: { iconName: 'Edit' },
         href: selectedReport ? selectedReport.editFormUrl : null,
@@ -133,14 +136,16 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     let farItems: IContextualMenuItem[] = [];
     if (this.state.sourceUrl) {
       farItems.push({
-        key: 'NavigateToSourceUrl',
+        id: getId('NavigateToSourceUrl'),
+        key: getId('NavigateToSourceUrl'),
         name: strings.NavigateToSourceUrlText,
         iconProps: { iconName: 'NavigateBack' },
         href: sourceUrl,
       });
     }
     farItems.push({
-      key: 'ReportDropdown',
+      id: getId('ReportDropdown'),
+      key: getId('ReportDropdown'),
       name: selectedReport ? formatDate(selectedReport.date, true) : '',
       itemType: ContextualMenuItemType.Normal,
       disabled: reportOptions.length === 0,
@@ -156,7 +161,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    * 
    * @param {SectionModel} model Section model
    */
-  private getSectionBaseProps(model: SectionModel): IStatusSectionBaseProps {
+  private _getSectionBaseProps(model: SectionModel): IStatusSectionBaseProps {
     const baseProps: IStatusSectionBaseProps = {
       headerProps: {
         label: model.name,
@@ -177,9 +182,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * Render sections
    */
-  private renderSections() {
+  private _renderSections() {
     return this.state.data.sections.map(model => {
-      const baseProps = this.getSectionBaseProps(model);
+      const baseProps = this._getSectionBaseProps(model);
       switch (model.type) {
         case SectionType.SummarySection: {
           return (
@@ -218,18 +223,18 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    * 
    * @param {ProjectStatusReport} selectedReport Selected report
    */
-  private onReportChanged(selectedReport: ProjectStatusReport) {
+  private _onReportChanged(selectedReport: ProjectStatusReport) {
     this.setState({ selectedReport });
   }
 
   /**
    * Get report options
    */
-  private getReportOptions(data: IProjectStatusData): IContextualMenuItem[] {
+  private _getReportOptions(data: IProjectStatusData): IContextualMenuItem[] {
     let reportOptions: IContextualMenuItem[] = data.reports.map(report => ({
       key: `${report.id}`,
       name: formatDate(report.date, true),
-      onClick: _evt => this.onReportChanged(report),
+      onClick: _evt => this._onReportChanged(report),
       canCheck: true,
       isChecked: this.state.selectedReport ? report.item.Id === this.state.selectedReport.item.Id : false,
     } as IContextualMenuItem));
@@ -239,14 +244,14 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * Associate status item
    */
-  private async associateStatusItem(): Promise<void> {
+  private async _associateStatusItem(): Promise<void> {
     try {
       const filter = `Author/EMail eq '${this.props.pageContext.user.email}' and GtSiteId eq '00000000-0000-0000-0000-000000000000'`;
-      Logger.log({ message: `(ProjectStatus) associateStatusItem: Attempting to find recently added report by current user '${this.props.pageContext.user.email}'`, data: { filter }, level: LogLevel.Info });
+      Logger.log({ message: `(ProjectStatus) _associateStatusItem: Attempting to find recently added report by current user '${this.props.pageContext.user.email}'`, data: { filter }, level: LogLevel.Info });
       let [item] = await this._reportList.items.filter(filter).select('Id', 'Created').orderBy('Id', false).top(1).get<any[]>();
       if (item) {
         const report = new ProjectStatusReport(item);
-        Logger.log({ message: '(ProjectStatus) associateStatusItem: Setting title for item', data: { filter }, level: LogLevel.Info });
+        Logger.log({ message: '(ProjectStatus) _associateStatusItem: Setting title for item', data: { filter }, level: LogLevel.Info });
         await this._reportList.items.getById(report.id).update({
           Title: `${this.props.pageContext.web.title} (${formatDate(report.date, true)})`,
           GtSiteId: this.props.pageContext.site.id.toString(),
@@ -262,7 +267,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    * @param {React.MouseEvent} _ev Event
    * @param {IContextualMenuItem} _item Item
    */
-  private async redirectNewStatusReport(_ev?: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement>, _item?: IContextualMenuItem): Promise<void> {
+  private async _redirectNewStatusReport(_ev?: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement>, _item?: IContextualMenuItem): Promise<void> {
     const [previousReport] = this.state.data.reports;
     let properties = previousReport ? previousReport.getStatusValues() : {};
     properties.Title = format(strings.NewStatusReportTitle, this.props.pageContext.web.title);
@@ -276,10 +281,10 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    * 
    * @param {PageContext} param0 Destructed PageContext
    */
-  private async fetchData({ site }: PageContext): Promise<IProjectStatusData> {
+  private async _fetchData({ site }: PageContext): Promise<IProjectStatusData> {
     try {
-      Logger.log({ message: '(ProjectStatus) fetchData: Fetching fields and reports', level: LogLevel.Info });
-      const [entityItem, entityFields, { DefaultEditFormUrl }, reportItems, sectionItems] = await Promise.all([
+      Logger.log({ message: '(ProjectStatus) _fetchData: Fetching fields and reports', level: LogLevel.Info });
+      const [entityItem, entityFields, reportList, reportItems, sectionItems] = await Promise.all([
         this.props.spEntityPortalService.getEntityItemFieldValues(site.id.toString()),
         this.props.spEntityPortalService.getEntityFields(),
         this._reportList
@@ -297,14 +302,14 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           .get<any[]>(),
         this._sectionsList.items.get(),
       ]);
-      const reports = reportItems.map(item => new ProjectStatusReport(item, DefaultEditFormUrl));
+      const reports = reportItems.map(item => new ProjectStatusReport(item, reportList.DefaultEditFormUrl));
       const reportsSorted = reports.sort((a, b) => b.date.getTime() - a.date.getTime());
       const sections = sectionItems.map(item => new SectionModel(item));
       const sectionsSorted = sections.sort((a, b) => a.sortOrder < b.sortOrder ? -1 : 1);
       return {
         entityFields,
         entityItem,
-        defaultEditFormUrl: DefaultEditFormUrl,
+        defaultEditFormUrl: reportList.DefaultEditFormUrl,
         reports: reportsSorted,
         sections: sectionsSorted,
       };

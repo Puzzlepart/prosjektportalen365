@@ -1,4 +1,3 @@
-import { getObjectValue, sortAlphabetically } from 'shared/lib/helpers';
 import { ProjectListModel } from 'models';
 import MSGraph from 'msgraph-helper';
 import { IButtonProps } from 'office-ui-fabric-react/lib/Button';
@@ -10,13 +9,20 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import * as strings from 'PortfolioWebPartsStrings';
 import { ProjectInformationModal } from 'projectwebparts/lib/components/ProjectInformation';
 import * as React from 'react';
-import { IProjectListProps, ProjectListDefaultProps } from './IProjectListProps';
+import { getObjectValue, sortAlphabetically } from 'shared/lib/helpers';
+import * as _ from 'underscore';
+import { IProjectListProps } from './IProjectListProps';
 import { IProjectListState } from './IProjectListState';
 import { ProjectCard } from './ProjectCard';
 import styles from './ProjectList.module.scss';
+import { PROJECTLIST_COLUMNS } from './ProjectListColumns';
 
 export default class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
-  public static defaultProps = ProjectListDefaultProps;
+  public static defaultProps: Partial<IProjectListProps> = {
+    columns: PROJECTLIST_COLUMNS,
+    sortBy: 'Title',
+  };
+
 
   /**
    * Constructor
@@ -45,7 +51,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         isLoading: false,
       });
       if (this.props.showProjectLogo) {
-        this.getProjectLogos(20);
+        this._getProjectLogos(20);
       }
     } catch (error) {
       this.setState({ error, isLoading: false });
@@ -74,7 +80,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
       <div className={styles.projectList}>
         <div className={styles.container}>
           <div className={styles.searchBox} hidden={!this.props.showSearchBox}>
-            <SearchBox placeholder={this.props.searchBoxPlaceholderText} onChanged={this.onSearch.bind(this)} />
+            <SearchBox placeholder={this.props.searchBoxPlaceholderText} onChanged={this._onSearch.bind(this)} />
           </div>
           <div className={styles.viewToggle} hidden={!this.props.showViewSelector}>
             <Toggle
@@ -84,10 +90,10 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
               onChanged={showAsTiles => this.setState({ showAsTiles })} />
           </div>
           <div className={styles.projects}>
-            {this.renderProjects()}
+            {this._renderProjects()}
           </div>
         </div>
-        {this.renderProjectInformation()}
+        {this._renderProjectInformation()}
       </div>
     );
   }
@@ -95,8 +101,8 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   /**
    * Render projects
    */
-  private renderProjects() {
-    const projects = this.filterProjets(this.state.projects);
+  private _renderProjects() {
+    const projects = this._filterProjets(this.state.projects);
     if (projects.length === 0) {
       return <MessageBar>{strings.NoSearchResults}</MessageBar>;
     }
@@ -108,15 +114,15 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
           showProjectLogo={this.props.showProjectLogo}
           showProjectOwner={this.props.showProjectOwner}
           showProjectManager={this.props.showProjectManager}
-          actions={this.getCardActions(project)} />
+          actions={this._getCardActions(project)} />
       ));
     } else {
       return (
         <DetailsList
-          items={this.filterProjets(this.state.listView.projects)}
+          items={this._filterProjets(this.state.listView.projects)}
           columns={this.state.listView.columns}
-          onRenderItemColumn={this.onRenderItemColumn.bind(this)}
-          onColumnHeaderClick={this.onListSort.bind(this)}
+          onRenderItemColumn={this._onRenderItemColumn.bind(this)}
+          onColumnHeaderClick={this._onListSort.bind(this)}
           selectionMode={SelectionMode.none} />
       );
     }
@@ -129,7 +135,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
    * @param {number} _index Index
    * @param {IColumn} column Column
    */
-  private onRenderItemColumn(project: ProjectListModel, _index: number, column: IColumn) {
+  private _onRenderItemColumn(project: ProjectListModel, _index: number, column: IColumn) {
     const colValue = getObjectValue(project, column.fieldName, null);
     if (column.fieldName === 'title') {
       return <a href={project.url}>{colValue}</a>;
@@ -143,19 +149,19 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   * @param {React.MouseEvent} _evt Event
   * @param {IColumn} column Column
   */
-  private onListSort(_evt: React.MouseEvent<any>, column: IColumn): void {
+  private _onListSort(_evt: React.MouseEvent<any>, column: IColumn): void {
     let { listView } = ({ ...this.state } as IProjectListState);
     let isSortedDescending = column.isSortedDescending;
     if (column.isSorted) {
       isSortedDescending = !isSortedDescending;
     }
     listView.projects = listView.projects.concat([]).sort((a, b) => sortAlphabetically<ProjectListModel>(a, b, isSortedDescending, column.fieldName));
-    listView.columns = listView.columns.map(_column => {
-      _column.isSorted = (_column.key === column.key);
-      if (_column.isSorted) {
-        _column.isSortedDescending = isSortedDescending;
+    listView.columns = listView.columns.map(col => {
+      col.isSorted = (col.key === column.key);
+      if (col.isSorted) {
+        col.isSortedDescending = isSortedDescending;
       }
-      return _column;
+      return col;
     });
     this.setState({ listView });
   }
@@ -163,7 +169,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
   /**
   * Render <ProjectInformationModal />
   */
-  private renderProjectInformation() {
+  private _renderProjectInformation() {
     if (this.state.showProjectInfo) {
       return (
         <ProjectInformationModal
@@ -185,21 +191,21 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
    * 
    * @param {ProjectListModel} project Project
    */
-  private getCardActions(project: ProjectListModel): IButtonProps[] {
+  private _getCardActions(project: ProjectListModel): IButtonProps[] {
     return [{
       id: 'ON_SELECT_PROJECT',
       iconProps: { iconName: 'OpenInNewWindow' },
-      onClick: (event: React.MouseEvent<any>) => this.onCardAction(event, project),
+      onClick: (event: React.MouseEvent<any>) => this._onExecuteCardAction(event, project),
     }];
   }
 
   /**
-  * On select project
+  * On execute card action
   *
   * @param {React.MouseEvent} event Event
   * @param {ProjectListModel} project Project
   */
-  private onCardAction(event: React.MouseEvent<any>, project: ProjectListModel) {
+  private _onExecuteCardAction(event: React.MouseEvent<any>, project: ProjectListModel) {
     event.preventDefault();
     event.stopPropagation();
     switch (event.currentTarget.id) {
@@ -215,7 +221,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
    * 
    * @param {ProjectListModel[]} projects Projects
    */
-  private filterProjets(projects: ProjectListModel[]) {
+  private _filterProjets(projects: ProjectListModel[]) {
     return projects.filter(p => {
       const matches = Object.keys(p).filter(key => {
         const value = p[key];
@@ -230,7 +236,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
    * 
    * @param {string} searchTerm Search term
    */
-  private onSearch(searchTerm: string) {
+  private _onSearch(searchTerm: string) {
     this.setState({ searchTerm: searchTerm.toLowerCase() });
   }
 
@@ -239,7 +245,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
    * 
    * @param {number} batchSize Batch size (defaults to 20)
    */
-  private async getProjectLogos(batchSize: number = 20) {
+  private async _getProjectLogos(batchSize: number = 20) {
     let requests = this.state.projects.map(p => ({
       id: p.groupId,
       method: 'GET',
@@ -249,7 +255,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
       const { responses } = await MSGraph.Batch(requests.splice(0, batchSize));
       this.setState((prevState: IProjectListState) => {
         const projects = prevState.projects.map(p => {
-          let [response] = responses.filter(r => r.id === p.groupId && r.status === 200);
+          let response = _.find(responses, r => r.id === p.groupId && r.status === 200);
           if (response) {
             p.logo = `data:image/png;base64, ${response.body}`;
           }

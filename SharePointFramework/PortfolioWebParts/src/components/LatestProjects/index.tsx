@@ -39,7 +39,7 @@ export default class LatestProjects extends React.Component<ILatestProjectsProps
         <div className={styles.container}>
           {this.state.isLoading
             ? <Spinner label={this.props.loadingText} type={SpinnerType.large} />
-            : this.renderProjectList()
+            : this._renderProjectList()
           }
         </div>
       </div>
@@ -49,22 +49,21 @@ export default class LatestProjects extends React.Component<ILatestProjectsProps
   /**
    * Render project list
    */
-  private renderProjectList() {
-    if (this.state.projects.length > 0) {
-      return this.state.projects.map(site => {
-        let created = formatDate(site.Created);
-        return (
-          <div className={styles.projectItem}>
-            <div className={styles.itemContainer}>
-              <div className={styles.created}>
-                {PortfolioWebPartsStrings.CreatedText} {created}
-              </div>
-              <a href={site.Path}>{site.Title}</a>
+  private _renderProjectList() {
+    if (this.state.projects.length === 0) return <MessageBar>{this.props.emptyMessage}</MessageBar>;
+    return this.state.projects.map(site => {
+      let created = formatDate(site.Created);
+      return (
+        <div className={styles.projectItem}>
+          <div className={styles.itemContainer}>
+            <div className={styles.created}>
+              {PortfolioWebPartsStrings.CreatedText} {created}
             </div>
+            <a href={site.Path}>{site.Title}</a>
           </div>
-        );
-      });
-    } else return <MessageBar>{this.props.emptyMessage}</MessageBar>;
+        </div>
+      );
+    });
   }
 }
 

@@ -1,6 +1,6 @@
-import * as React from "react";
+import * as React from 'react';
 import styles from './ProjectProperty.module.scss';
-import { IProjectPropertyProps, ProjectPropertyModel } from "./IProjectPropertyProps";
+import { IProjectPropertyProps, ProjectPropertyModel } from './IProjectPropertyProps';
 
 export class ProjectProperty extends React.Component<IProjectPropertyProps, {}> {
     /**

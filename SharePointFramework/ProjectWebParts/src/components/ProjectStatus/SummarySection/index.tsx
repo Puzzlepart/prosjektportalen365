@@ -30,7 +30,7 @@ export default class SummarySection extends StatusSectionBase<ISummarySectionPro
         <div className={styles.sections}>
           <div className='ms-Grid' dir='ltr'>
             <div className='ms-Grid-row'>
-              {this.renderSections()}
+              {this._renderSections()}
             </div>
           </div>
         </div>
@@ -41,9 +41,9 @@ export default class SummarySection extends StatusSectionBase<ISummarySectionPro
   /**
    * Render sections
    * 
-   * NOTE: Trying to figure out a way to avoid the strings.OverallStatusFieldName check
+   * @todo Trying to figure out a way to avoid the strings.OverallStatusFieldName check
    */
-  private renderSections() {
+  private _renderSections() {
     const { report, sections } = this.props;
     return sections.map(s => (
       <div className='ms-Grid-col ms-sm6'>

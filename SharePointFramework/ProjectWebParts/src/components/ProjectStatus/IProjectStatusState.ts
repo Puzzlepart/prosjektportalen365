@@ -1,5 +1,5 @@
-import { ProjectStatusReport } from "models";
-import { IProjectStatusData } from "./IProjectStatusData";
+import { ProjectStatusReport } from 'models';
+import { IProjectStatusData } from './IProjectStatusData';
 
 export interface IProjectStatusState {
     isLoading: boolean;

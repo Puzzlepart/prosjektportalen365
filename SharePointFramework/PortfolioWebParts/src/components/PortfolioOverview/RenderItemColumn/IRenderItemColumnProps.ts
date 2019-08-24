@@ -1,4 +1,4 @@
-import { PortfolioOverviewColumn } from "models";
+import { PortfolioOverviewColumn } from 'models';
 
 export interface IRenderItemColumnProps {
     column: PortfolioOverviewColumn;

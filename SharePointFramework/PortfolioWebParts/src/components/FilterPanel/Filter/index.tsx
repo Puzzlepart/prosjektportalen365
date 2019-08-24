@@ -15,7 +15,7 @@ export class Filter extends React.Component<IFilterProps, IFilterState> {
     public render(): React.ReactElement<IFilterProps> {
         return (
             <div className={styles.filter}>
-                <div className={styles.filterSectionHeader} onClick={this.onToggleSectionContent}>
+                <div className={styles.filterSectionHeader} onClick={this._onToggleSectionContent}>
                     <span className={styles.titleText}>{this.props.column.name}</span>
                     <span className={styles.titleIcon}>
                         <Icon iconName={this.state.isCollapsed ? 'ChevronUp' : 'ChevronDown'} />
@@ -23,7 +23,7 @@ export class Filter extends React.Component<IFilterProps, IFilterState> {
                 </div>
                 <div hidden={this.state.isCollapsed}>
                     <ul className={styles.filterSectionContent}>
-                        {this.renderItems()}
+                        {this._renderItems()}
                     </ul>
                 </div>
             </div>
@@ -33,15 +33,15 @@ export class Filter extends React.Component<IFilterProps, IFilterState> {
     /**
      * On toggle section content
      */
-    private onToggleSectionContent = () => {
+    private _onToggleSectionContent = () => {
         this.setState((prevState: IFilterState) => ({ isCollapsed: !prevState.isCollapsed }));
     }
 
     /**
      * Render filter items
      */
-    private renderItems() {
-        return this.state.items.map(props => <FilterItem {...props} onChanged={(event, checked) => this.onChanged(props, checked)} />);
+    private _renderItems() {
+        return this.state.items.map(props => <FilterItem {...props} onChanged={(event, checked) => this._onChanged(props, checked)} />);
     }
 
     /**
@@ -50,9 +50,9 @@ export class Filter extends React.Component<IFilterProps, IFilterState> {
      * @param {IFilterItemProps} item Item that was changed
      * @param {boolean} checked Item checked
      */
-    private onChanged = (item: IFilterItemProps, checked: boolean) => {
+    private _onChanged = (item: IFilterItemProps, checked: boolean) => {
         const { items } = this.state;
-        items.filter(_item => _item.value === item.value)[0].selected = checked;
+        items.filter(i => i.value === item.value)[0].selected = checked;
         this.setState({ items });
         const selectedItems = items.filter(i => i.selected);
         this.props.onFilterChange(this.props.column, selectedItems);

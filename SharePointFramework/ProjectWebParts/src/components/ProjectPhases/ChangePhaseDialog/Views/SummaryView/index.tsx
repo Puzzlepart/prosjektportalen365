@@ -1,11 +1,12 @@
-import * as React from "react";
-import CheckListItem from "./CheckListItem";
-import ISummaryViewProps from "./ISummaryViewProps";
+import * as React from 'react';
+import CheckListItem from './CheckListItem';
+import ISummaryViewProps from './ISummaryViewProps';
 import styles from './SummaryView.module.scss';
 
 /**
- * Summary view
+ * @component Summary view
  */
+// tslint:disable-next-line: naming-convention
 export const SummaryView = ({ checklistItems }: ISummaryViewProps) => {
     return (
         <div className={styles.summaryView}>

@@ -1,4 +1,4 @@
-import { ProjectPropertyModel } from "./ProjectProperty";
+import { ProjectPropertyModel } from './ProjectProperty';
 
 export interface IProjectInformationData {
   properties?: ProjectPropertyModel[];

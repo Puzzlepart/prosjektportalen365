@@ -6,15 +6,13 @@ import { BasePortfolioWebPart } from '../@basePortfolioWebPart';
 
 export default class DeliveriesOverviewWebPart extends BasePortfolioWebPart<IDeliveriesOverviewProps> {
   public render(): void {
-    const groupByColumns = [{ name: strings.SiteTitleLabel, key: 'SiteTitle', fieldName: 'SiteTitle', minWidth: 0 }];
-    this.renderComponent(DeliveriesOverview, { groupByColumns, });
+    this.renderComponent(DeliveriesOverview);
   }
-
-  protected async onInit(): Promise<void> {
+  public async onInit(): Promise<void> {
     await super.onInit();
   }
 
-  protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+  public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
         {

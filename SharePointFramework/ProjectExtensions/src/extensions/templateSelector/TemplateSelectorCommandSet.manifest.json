@@ -4,7 +4,7 @@
     "alias": "TemplateSelectorCommandSet",
     "componentType": "Extension",
     "extensionType": "ListViewCommandSet",
-    "version": "0.10.5",
+    "version": "0.10.7",
     "manifestVersion": 2,
     "requiresCustomScript": false,
     "items": {

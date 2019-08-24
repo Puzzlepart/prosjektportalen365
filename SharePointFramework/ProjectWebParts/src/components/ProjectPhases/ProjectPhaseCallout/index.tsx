@@ -6,7 +6,9 @@ import { IProjectPhaseCalloutProps } from './IProjectPhaseCalloutProps';
 import styles from './ProjectPhaseCallout.module.scss';
 import * as strings from 'ProjectWebPartsStrings';
 
-// ProjectPhaseCallout
+/**
+ * @component ProjectPhaseCallout
+ */
 export default class ProjectPhaseCallout extends React.PureComponent<IProjectPhaseCalloutProps, {}> {
     /**
      * Constructor
@@ -43,7 +45,7 @@ export default class ProjectPhaseCallout extends React.PureComponent<IProjectPha
                             </div>
                             <div className={styles.actions}>
                                 <ActionButton
-                                    href={this.getFilteredPhaseChecklistViewUrl(this.props)}
+                                    href={this._getFilteredPhaseChecklistViewUrl(this.props)}
                                     text={strings.PhaseChecklistLinkText}
                                     iconProps={{ iconName: 'CheckList' }} />
                                 <ActionButton
@@ -64,7 +66,7 @@ export default class ProjectPhaseCallout extends React.PureComponent<IProjectPha
      * 
      * @param {IProjectPhaseCalloutProps} param0 Props
      */
-    protected getFilteredPhaseChecklistViewUrl({ webAbsoluteUrl, phase }: IProjectPhaseCalloutProps): string {
+    protected _getFilteredPhaseChecklistViewUrl({ webAbsoluteUrl, phase }: IProjectPhaseCalloutProps): string {
         return `${webAbsoluteUrl}/${strings.PhaseChecklistViewUrl}?FilterField1=GtProjectPhase&FilterValue1=${phase.model.name}`;
     }
 }

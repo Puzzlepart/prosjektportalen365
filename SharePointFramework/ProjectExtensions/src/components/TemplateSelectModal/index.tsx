@@ -35,8 +35,8 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
                 isBlocking={true}
                 isDarkOverlay={true}
                 containerClassName={styles.templateSelectModal}>
-                {this.renderBody()}
-                {this.renderFooter()}
+                {this._renderBody()}
+                {this._renderFooter()}
             </ProjectSetupBaseModal>
         );
     }
@@ -44,7 +44,7 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
     /**
      * Render body
      */
-    private renderBody() {
+    private _renderBody() {
         return (
             <React.Fragment>
                 <div className={styles.templateSelect}>
@@ -52,9 +52,9 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
                     <div className={styles.templateSelectDropdown}>
                         <Dropdown
                             defaultSelectedKey='0'
-                            onChanged={this.onTemplateSelected}
-                            options={this.getTemplateOptions()}
-                            disabled={this.getTemplateOptions().length === 1} />
+                            onChanged={this._onTemplateSelected}
+                            options={this._getTemplateOptions()}
+                            disabled={this._getTemplateOptions().length === 1} />
                     </div>
                 </div>
                 <CollapsableSection
@@ -85,7 +85,7 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
                                 label={lcc.title}
                                 defaultChecked={lcc.isDefault}
                                 disabled={true}
-                                onChanged={checked => this.onListContentItemToggle(lcc, checked)} />
+                                onChanged={checked => this._onListContentItemToggle(lcc, checked)} />
                         </div>
                     ))}
                 </CollapsableSection>
@@ -96,7 +96,7 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
                     contentClassName={styles.extensionsList}>
                     {this.props.data.extensions.map((ext, idx) => (
                         <div key={`${idx}`} className={styles.extensionItem}>
-                            <Toggle label={ext.title} onChanged={checked => this.onExtensionItemToggle(ext, checked)} />
+                            <Toggle label={ext.title} onChanged={checked => this._onExtensionItemToggle(ext, checked)} />
                         </div>
                     ))}
                 </CollapsableSection>
@@ -107,14 +107,14 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
     /**
      * Render footrer
      */
-    private renderFooter() {
+    private _renderFooter() {
         return (
             <React.Fragment>
                 <div className={styles.infoText}>
                     <MessageBar>{strings.TemplateSelectModalInfoText}</MessageBar>
                 </div>
                 <div className={styles.submitButton}>
-                    <DefaultButton text={strings.TemplateSelectModalSubmitButtonText} onClick={this.onSubmit} />
+                    <DefaultButton text={strings.TemplateSelectModalSubmitButtonText} onClick={this._onSubmit.bind(this)} />
                 </div>
             </React.Fragment>
         );
@@ -126,7 +126,7 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
      * @param {ProjectTemplate} extension Extension
      * @param {boolean} checked Checked
      */
-    private onExtensionItemToggle(extension: ProjectTemplate, checked: boolean): void {
+    private _onExtensionItemToggle(extension: ProjectTemplate, checked: boolean): void {
         if (checked) {
             this.setState((prevState: ITemplateSelectModalState) => ({
                 selectedExtensions: [extension, ...prevState.selectedExtensions],
@@ -144,7 +144,7 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
      * @param {ListContentConfig} listContentConfig List content config
      * @param {boolean} checked Checked
      */
-    private onListContentItemToggle(listContentConfig: ListContentConfig, checked: boolean): void {
+    private _onListContentItemToggle(listContentConfig: ListContentConfig, checked: boolean): void {
         if (checked) {
             this.setState((prevState: ITemplateSelectModalState) => ({
                 selectedListConfig: [listContentConfig, ...prevState.selectedListConfig],
@@ -159,7 +159,7 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
     /**
      * On submit
      */
-    private onSubmit = () => {
+    private _onSubmit() {
         this.props.onSubmit(this.state);
     }
 
@@ -168,14 +168,14 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
      * 
      * @param {IDropdownOption} opt Option
      */
-    private onTemplateSelected = (opt: IDropdownOption) => {
+    private _onTemplateSelected = (opt: IDropdownOption) => {
         this.setState({ selectedTemplate: (opt.data as ProjectTemplate) });
     }
 
     /**
      * Get template options
      */
-    private getTemplateOptions(): IDropdownOption[] {
+    private _getTemplateOptions(): IDropdownOption[] {
         return this.props.data.templates.map((template, idx) => {
             return { key: `${idx}`, text: template.title, data: template };
         });

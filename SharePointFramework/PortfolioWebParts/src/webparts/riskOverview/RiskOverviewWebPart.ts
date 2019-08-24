@@ -5,15 +5,14 @@ import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
 
 export default class RiskOverviewWebPart extends BasePortfolioWebPart<IRiskOverviewProps> {
   public render(): void {
-    const groupByColumns = [{ name: strings.SiteTitleLabel, key: 'SiteTitle', fieldName: 'SiteTitle', minWidth: 0 }];
-    this.renderComponent(RiskOverview, { groupByColumns });
+    this.renderComponent(RiskOverview);
   }
 
-  protected async onInit(): Promise<void> {
+  public async onInit(): Promise<void> {
     await super.onInit();
   }
 
-  protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+  protected _getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
         {

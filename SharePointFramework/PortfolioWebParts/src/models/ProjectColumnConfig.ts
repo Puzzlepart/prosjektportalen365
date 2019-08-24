@@ -1,4 +1,4 @@
-import { SPProjectColumnConfigItem } from "models";
+import { SPProjectColumnConfigItem } from 'models';
 
 export type ProjectColumnConfigDictionary = { [key: string]: { color: string, iconName: string } };
 

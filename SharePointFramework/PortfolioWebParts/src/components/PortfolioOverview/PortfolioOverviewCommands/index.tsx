@@ -20,72 +20,37 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
     public render() {
         return (
             <div className={this.props.className} hidden={this.props.hidden}>
-                <CommandBar items={this.items} farItems={this.farItems} />
+                <CommandBar items={this._items} farItems={this._farItems} />
                 <FilterPanel
                     isOpen={this.state.showFilterPanel}
                     layerHostId={this.props.layerHostId}
                     headerText={strings.FiltersString}
                     hasCloseButton={false}
                     isLightDismiss={false}
-                    filters={this.filters}
-                    onFilterChange={this.props.onFilterChange} />
+                    filters={this._filters}
+                    onFilterChange={this.props.events.onFilterChange} />
             </div>
         );
     }
 
-    protected get items(): IContextualMenuItem[] {
+    protected get _items(): IContextualMenuItem[] {
         return [
-            {
-                id: getId('GroupBy'),
-                key: getId('GroupBy'),
-                name: getObjectValue<string>(this.props, 'groupBy.name', strings.NoGroupingText),
-                iconProps: { iconName: 'GroupedList' },
-                itemType: ContextualMenuItemType.Header,
-                data: { isVisible: this.props.showGroupBy },
-                subMenuProps: {
-                    items: [
-                        {
-                            id: getId('NoGrouping'),
-                            key: getId('NoGrouping'),
-                            name: strings.NoGroupingText,
-                            canCheck: true,
-                            checked: isNull(this.props.groupBy),
-                            onClick: _ => this.props.onGroupBy(null),
-                        } as IContextualMenuItem,
-                        {
-                            id: getId('Divider'),
-                            key: getId('Divider'),
-                            itemType: ContextualMenuItemType.Divider,
-                        } as IContextualMenuItem,
-                        ...this.props.configuration.columns
-                            .filter(col => col.isGroupable)
-                            .map(col => ({
-                                id: getId(col.key),
-                                key: getId(col.key),
-                                name: col.name,
-                                canCheck: true,
-                                checked: getObjectValue<string>(this.state, 'groupBy.fieldName', '') === col.fieldName,
-                                onClick: _ => this.props.onGroupBy(col),
-                            })) as IContextualMenuItem[],
-                    ],
-                },
-            } as IContextualMenuItem,
             {
                 id: getId('ExcelExport'),
                 key: getId('ExcelExport'),
                 name: strings.ExcelExportButtonLabel,
                 iconProps: {
                     iconName: 'ExcelDocument',
-                    styles: { root: { color: "green !important" } },
+                    styles: { root: { color: 'green !important' } },
                 },
                 data: { isVisible: this.props.showExcelExportButton },
                 disabled: this.state.isExporting,
-                onClick: _ => { this.exportToExcel(); },
+                onClick: _ => { this._exportToExcel(); },
             } as IContextualMenuItem,
         ].filter(i => i.data.isVisible);
     }
 
-    protected get farItems(): IContextualMenuItem[] {
+    protected get _farItems(): IContextualMenuItem[] {
         return [
             {
                 id: getId('NewView'),
@@ -111,7 +76,7 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
                             iconProps: { iconName: 'List' },
                             canCheck: true,
                             checked: !this.props.isCompact,
-                            onClick: _ => this.props.onSetCompact(false),
+                            onClick: _ => this.props.events.onSetCompact(false),
                         },
                         {
                             id: getId('CompactList'),
@@ -120,7 +85,7 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
                             iconProps: { iconName: 'AlignLeft' },
                             canCheck: true,
                             checked: this.props.isCompact,
-                            onClick: _ => this.props.onSetCompact(true),
+                            onClick: _ => this.props.events.onSetCompact(true),
                         },
                         {
                             id: getId('Divider'),
@@ -134,7 +99,7 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
                             iconProps: { iconName: view.iconName },
                             canCheck: true,
                             checked: view.id === this.props.currentView.id,
-                            onClick: _ => this.props.onChangeView(view),
+                            onClick: _ => this.props.events.onChangeView(view),
                         } as IContextualMenuItem)),
                         {
 
@@ -175,8 +140,8 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
         ].filter(i => i.data.isVisible);
     }
 
-    protected get filters(): IFilterProps[] {
-        return [
+    protected get _filters(): IFilterProps[] {
+        let filters: IFilterProps[] = [
             {
                 column: {
                     key: 'SelectedColumns',
@@ -192,13 +157,14 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
                 defaultCollapsed: true,
             },
             ...this.props.filters,
-        ] as IFilterProps[];
+        ];
+        return filters;
     }
 
     /**
      * Export to Excel
      */
-    protected async exportToExcel(): Promise<void> {
+    protected async _exportToExcel(): Promise<void> {
         this.setState({ isExporting: true });
         try {
             await ExcelExportService.export(this.props.title, this.props.fltItems, this.props.fltColumns);

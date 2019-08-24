@@ -11,11 +11,11 @@ Logger.subscribe(new ConsoleListener());
 Logger.activeLogLevel = LogLevel.Info;
 
 export default class ProjectInformationWebPart extends BaseClientSideWebPart<IProjectInformationProps> {
-  private hubSite: IHubSite;
+  private _hubSite: IHubSite;
 
   public async onInit() {
     sp.setup({ spfxContext: this.context });
-    this.hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
+    this._hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
   }
 
   public render(): void {
@@ -24,7 +24,7 @@ export default class ProjectInformationWebPart extends BaseClientSideWebPart<IPr
       {
         ...this.properties,
         title: this.properties.title || this.title,
-        hubSiteUrl: this.hubSite.url,
+        hubSiteUrl: this._hubSite.url,
         siteId: this.context.pageContext.site.id.toString(),
         webUrl: this.context.pageContext.web.absoluteUrl,
         isSiteAdmin: this.context.pageContext.legacyPageContext.isSiteAdmin,
@@ -35,11 +35,11 @@ export default class ProjectInformationWebPart extends BaseClientSideWebPart<IPr
     ReactDom.render(element, this.domElement);
   }
 
-  protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+  public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
         {
-          groups: [           
+          groups: [
             {
               groupName: strings.LookAndFeelGroupName,
               groupFields: [
@@ -65,7 +65,7 @@ export default class ProjectInformationWebPart extends BaseClientSideWebPart<IPr
             },
             {
               groupName: strings.ProjectStatusGroupName,
-              groupFields: [            
+              groupFields: [
                 PropertyPaneSlider('statusReportsCount', {
                   label: strings.StatusReportsCountLabel,
                   min: 0,

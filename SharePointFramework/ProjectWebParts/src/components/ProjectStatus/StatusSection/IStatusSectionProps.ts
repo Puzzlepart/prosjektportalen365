@@ -1,3 +1,3 @@
-import { IStatusSectionBaseProps } from "../@StatusSectionBase/IStatusSectionBaseProps";
+import { IStatusSectionBaseProps } from '../@StatusSectionBase/IStatusSectionBaseProps';
 
 export interface IStatusSectionProps extends IStatusSectionBaseProps {}

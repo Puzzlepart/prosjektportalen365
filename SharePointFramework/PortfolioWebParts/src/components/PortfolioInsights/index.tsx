@@ -5,20 +5,20 @@ import * as strings from 'PortfolioWebPartsStrings';
 import * as React from 'react';
 import * as format from 'string-format';
 import Chart from './Chart';
-import { IPortfolioInsightsProps, PortfolioInsightsDefaultProps } from './IPortfolioInsightsProps';
+import { IPortfolioInsightsProps } from './IPortfolioInsightsProps';
 import { IPortfolioInsightsState } from './IPortfolioInsightsState';
 import styles from './PortfolioInsights.module.scss';
 import PortfolioInsightsCommandBar from './PortfolioInsightsCommandBar';
 
 export default class PortfolioInsights extends React.Component<IPortfolioInsightsProps, IPortfolioInsightsState> {
-  public static defaultProps = PortfolioInsightsDefaultProps;
+  public static defaultProps: Partial<IPortfolioInsightsProps> = {};
 
   /**
    * Constructor
    * 
    * @param {IPortfolioInsightsProps} props Props
    */
-  public constructor(props: IPortfolioInsightsProps) {
+  constructor(props: IPortfolioInsightsProps) {
     super(props);
     this.state = { isLoading: true };
   }
@@ -64,19 +64,19 @@ export default class PortfolioInsights extends React.Component<IPortfolioInsight
             contentTypes={this.state.contentTypes}
             currentView={this.state.currentView}
             configuration={this.state.configuration}
-            onViewChanged={this.onViewChanged.bind(this)} />
+            onViewChanged={this._onViewChanged.bind(this)} />
           <div className={styles.header}>
             <div className={styles.title}>{this.props.title}</div>
           </div>
           <div className={`${styles.inner} ms-Grid`} dir='ltr'>
-            {this.charts}
+            {this._charts}
           </div>
         </div>
       </div>
     );
   }
 
-  private get charts() {
+  private get _charts() {
     if (this.state.error) {
       return (
         <div className={styles.inner}>
@@ -101,11 +101,11 @@ export default class PortfolioInsights extends React.Component<IPortfolioInsight
   }
 
   /**
-   * On view changed
-   *
-* @param {PortfolioOverviewView} view View
-    */
-  private async onViewChanged(view: PortfolioOverviewView) {
+  * On view changed
+  *
+  * @param {PortfolioOverviewView} view View
+  */
+  private async _onViewChanged(view: PortfolioOverviewView) {
     let data = await this.props.dataAdapter.fetchDataForView(view, this.state.configuration, this.props.pageContext.site.id.toString());
     this.setState({
       currentView: view,

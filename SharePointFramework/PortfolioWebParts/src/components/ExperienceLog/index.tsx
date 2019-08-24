@@ -1,10 +1,15 @@
 import * as React from 'react';
-import styles from './ExperienceLog.module.scss';
-import { IExperienceLogProps, ExperienceLogDefaultProps } from './IExperienceLogProps';
 import { AggregatedSearchList } from '../';
+import styles from './ExperienceLog.module.scss';
+import { EXPERIENCE_LOG_COLUMNS } from './ExperienceLogColumns';
+import { IExperienceLogProps } from './IExperienceLogProps';
+
 
 export default class ExperienceLog extends React.Component<IExperienceLogProps, {}> {
-  public static defaultProps = ExperienceLogDefaultProps;
+  public static defaultProps: Partial<IExperienceLogProps> = {
+    columns: EXPERIENCE_LOG_COLUMNS,
+    showExcelExportButton: true,
+  };
 
   constructor(props: IExperienceLogProps) {
     super(props);
