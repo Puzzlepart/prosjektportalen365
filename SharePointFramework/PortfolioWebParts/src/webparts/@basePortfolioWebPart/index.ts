@@ -1,5 +1,6 @@
 import { BaseClientSideWebPart, IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
+import '@pnp/polyfill-ie11';
 import { sp } from '@pnp/sp';
 import { IBaseComponentProps } from 'components/IBaseComponentProps';
 import { DataAdapter } from 'data';
