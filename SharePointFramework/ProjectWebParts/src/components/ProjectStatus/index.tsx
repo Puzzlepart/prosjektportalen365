@@ -14,6 +14,7 @@ import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import { formatDate } from 'shared/lib/helpers';
 import { parseUrlHash, setUrlHash } from 'shared/lib/util';
+import { HubConfigurationService } from 'shared/lib/services';
 import * as format from 'string-format';
 import { IStatusSectionBaseProps } from './@StatusSectionBase/IStatusSectionBaseProps';
 import { IProjectStatusData } from './IProjectStatusData';
@@ -28,6 +29,7 @@ import SummarySection from './SummarySection';
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private _reportList: List;
   private _sectionsList: List;
+  private _hubConfigurationService: HubConfigurationService;
 
   /**
    * Constructor
@@ -42,6 +44,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     };
     this._reportList = props.hubSite.web.lists.getByTitle(this.props.reportListName);
     this._sectionsList = props.hubSite.web.lists.getByTitle(this.props.sectionsListName);
+    this._hubConfigurationService = new HubConfigurationService(props.hubSite.url);
   }
 
   public async componentDidMount() {
@@ -159,19 +162,24 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * Get section base props
    * 
-   * @param {SectionModel} model Section model
+   * @param {SectionModel} sec Section model
    */
-  private _getSectionBaseProps(model: SectionModel): IStatusSectionBaseProps {
+  private _getSectionBaseProps(sec: SectionModel): IStatusSectionBaseProps {
+    const { selectedReport: report, data } = this.state;
+    const value = report.item[sec.fieldName];
+    const comment = report.item[sec.commentFieldName];
+    const [columnConfig] = data.columnConfig.filter(c => c.columnFieldName === sec.fieldName && c.value === value);
     const baseProps: IStatusSectionBaseProps = {
       headerProps: {
-        label: model.name,
-        value: this.state.selectedReport.item[model.fieldName],
-        comment: this.state.selectedReport.item[model.commentFieldName],
-        iconName: model.iconName,
-        iconSize: 50
+        label: sec.name,
+        value,
+        comment,
+        iconName: sec.iconName,
+        iconSize: 50,
+        iconColor: columnConfig ? columnConfig.color : '#444',
       },
-      report: this.state.selectedReport,
-      model,
+      report,
+      model: sec,
       pageContext: this.props.pageContext,
       hubSite: this.props.hubSite,
       data: this.state.data,
@@ -191,7 +199,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
             <SummarySection
               {...baseProps}
               entity={this.props.entity}
-              sections={this.state.data.sections} />
+              sections={this.state.data.sections}
+              columnConfig={this.state.data.columnConfig} />
           );
         }
         case SectionType.StatusSection: {
@@ -284,7 +293,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   private async _fetchData({ site }: PageContext): Promise<IProjectStatusData> {
     try {
       Logger.log({ message: '(ProjectStatus) _fetchData: Fetching fields and reports', level: LogLevel.Info });
-      const [entityItem, entityFields, reportList, reportItems, sectionItems] = await Promise.all([
+      const [entityItem, entityFields, reportList, reportItems, sectionItems, columnConfig] = await Promise.all([
         this.props.spEntityPortalService.getEntityItemFieldValues(site.id.toString()),
         this.props.spEntityPortalService.getEntityFields(),
         this._reportList
@@ -301,6 +310,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           .orderBy('Id', false)
           .get<any[]>(),
         this._sectionsList.items.get(),
+        this._hubConfigurationService.getProjectColumnConfig(),
       ]);
       const reports = reportItems.map(item => new ProjectStatusReport(item, reportList.DefaultEditFormUrl));
       const reportsSorted = reports.sort((a, b) => b.date.getTime() - a.date.getTime());
@@ -312,6 +322,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         defaultEditFormUrl: reportList.DefaultEditFormUrl,
         reports: reportsSorted,
         sections: sectionsSorted,
+        columnConfig,
       };
     } catch (error) {
       throw error;

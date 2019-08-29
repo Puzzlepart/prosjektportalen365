@@ -7,6 +7,7 @@ export interface IStatusElementProps {
     iconName: string;
     height?: string | number;
     iconSize?: number;
+    iconColor?: string;
     iconColumnWidth?: StatusElementColumnWidth;
     bodyColumnWidth?: StatusElementColumnWidth;
 }

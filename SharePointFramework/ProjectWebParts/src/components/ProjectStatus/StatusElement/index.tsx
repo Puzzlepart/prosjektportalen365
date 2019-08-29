@@ -7,11 +7,11 @@ import { IStatusElementProps } from './IStatusElementProps';
  * @component StatusElement
  */
 // tslint:disable-next-line: naming-convention
-const StatusElement = ({ iconName, label, value, comment, iconSize = 30 }: IStatusElementProps) => {
+const StatusElement = ({ iconName, label, value, comment, iconSize = 30, iconColor }: IStatusElementProps) => {
     return (
         <div className={styles.statusElement}>
             <div className={styles.container}>
-                <div className={styles.statusIcon} style={{ fontSize: iconSize }}>
+                <div className={styles.statusIcon} style={{ fontSize: iconSize, color: iconColor }}>
                     <Icon iconName={iconName} />
                 </div>
                 <div className={styles.statusContent}>

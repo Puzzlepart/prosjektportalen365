@@ -9,6 +9,7 @@ import * as ReactDom from 'react-dom';
 import SpEntityPortalService from 'sp-entityportal-service';
 import HubSiteService, { IHubSite } from 'sp-hubsite-service';
 import 'office-ui-fabric-react/dist/css/fabric.min.css';
+import { injectStyles } from 'shared/lib/util';
 
 moment.locale('nb');
 Logger.subscribe(new ConsoleListener());
@@ -19,6 +20,10 @@ export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProject
   private _spEntityPortalService: SpEntityPortalService;
 
   public async onInit() {
+    injectStyles(`#workbenchPageContent,.CanvasZone {
+      max-width: none ;
+      width: auto ;
+  }`);
     sp.setup({ spfxContext: this.context });
     this._hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
     this._spEntityPortalService = new SpEntityPortalService({ webUrl: this._hubSite.url, ...this.properties.entity });

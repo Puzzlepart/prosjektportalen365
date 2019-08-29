@@ -6,6 +6,7 @@ import { ISummarySectionState } from './ISummarySectionState';
 import StatusSectionBase from '../@StatusSectionBase';
 import StatusElement from '../StatusElement';
 import { ProjectInformation } from 'components/ProjectInformation';
+import { IStatusElementProps } from '../StatusElement/IStatusElementProps';
 
 export default class SummarySection extends StatusSectionBase<ISummarySectionProps, ISummarySectionState> {
   constructor(props: ISummarySectionProps) {
@@ -45,13 +46,28 @@ export default class SummarySection extends StatusSectionBase<ISummarySectionPro
    */
   private _renderSections() {
     const { report, sections } = this.props;
-    return sections.map(s => (
-      <div className='ms-Grid-col ms-sm6'>
-        {s.fieldName === strings.OverallStatusFieldName
-          ? <StatusElement label={s.name} value='' comment={report.item[s.fieldName]} iconName={s.iconName} height={150} />
-          : <StatusElement label={s.name} value={report.item[s.fieldName]} comment={report.item[s.commentFieldName]} iconName={s.iconName} height={150} />}
-      </div>
-    ));
+    return sections.map(sec => {
+      const value = report.item[sec.fieldName];
+      const comment = report.item[sec.commentFieldName];
+      const [columnConfig] = this.props.columnConfig.filter(c => c.columnFieldName === sec.fieldName && c.value === value);
+      let props: IStatusElementProps = {
+        label: sec.name,
+        value,
+        comment,
+        iconName: sec.iconName,
+        iconColor: columnConfig ? columnConfig.color : '#444',
+        height: 150,
+      };
+      if (sec.fieldName === strings.OverallStatusFieldName) {
+        props.comment = props.value;
+        props.value = '';
+      }
+      return (
+        <div className='ms-Grid-col ms-sm6'>
+          <StatusElement {...props} />
+        </div>
+      );
+    });
   }
 
 }
