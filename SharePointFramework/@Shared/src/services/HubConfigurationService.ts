@@ -1,24 +1,36 @@
 import { Web } from '@pnp/sp';
-
-export interface ISpItemProjectColumn {
-    Title: string;
-    GtSortOrder: number;
-    GtInternalName: string;
-    GtManagedProperty?: any;
-    GtShowFieldProjectStatus: boolean;
-    GtShowFieldFrontpage: boolean;
-    GtShowFieldPortfolio: boolean;
-    GtFieldDataType: string;
-}
+import { SPProjectColumnConfigItem, SPProjectColumnItem, ProjectColumnConfig } from '../models';
 
 export class HubConfigurationService {
     private web: Web;
 
-    constructor(hubSiteUrl: string) {
-        this.web = new Web(hubSiteUrl);
+    constructor(urlOrWeb: string | Web) {
+        if (typeof urlOrWeb === 'string') {
+            this.web = new Web(urlOrWeb);
+        } else {
+            this.web = urlOrWeb;
+        }
     }
 
-    public getProjectColumns(): Promise<ISpItemProjectColumn[]> {
-        return this.web.lists.getByTitle('Prosjektkolonner').items.get<ISpItemProjectColumn[]>();
+    /**
+     * Get project columns
+     */
+    public getProjectColumns(): Promise<SPProjectColumnItem[]> {
+        return this.web.lists.getByTitle('Prosjektkolonner')
+            .items
+            .select(...Object.keys(new SPProjectColumnItem()))
+            .get<SPProjectColumnItem[]>();
+    }
+
+    /**
+     * Get project column configuration
+     */
+    public async getProjectColumnConfig(): Promise<ProjectColumnConfig[]> {
+        let spItems = await this.web.lists.getByTitle('Prosjektkolonnekonfigurasjon').items
+            .orderBy('ID', true)
+            .expand('GtPortfolioColumn')
+            .select(...Object.keys(new SPProjectColumnConfigItem()), 'GtPortfolioColumn/Title', 'GtPortfolioColumn/GtInternalName')
+            .get<SPProjectColumnConfigItem[]>();
+        return spItems.map(c => new ProjectColumnConfig(c));;
     }
 }
