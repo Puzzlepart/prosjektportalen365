@@ -1,4 +1,8 @@
 SharePointFramework/*/**/env.json
+SharePointFramework/*/**/shrinkwrap.yaml
+SharePointFramework/*/**/pnpm-lock.yaml
+SharePointFramework/*/**/config/serve.json
+SharePointFramework/*/**/.vscode/launch.json
 SiteScripts/temp
 SiteScripts/config/env.json
 Release
