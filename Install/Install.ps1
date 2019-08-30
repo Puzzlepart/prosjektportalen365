@@ -24,7 +24,9 @@
     [Parameter(Mandatory = $false, HelpMessage = "Site design name")]
     [string]$SiteDesignName = "Prosjektområde",
     [Parameter(Mandatory = $false, HelpMessage = "Security group to give View access to site design")]
-    [string]$SiteDesignSecurityGroupId
+    [string]$SiteDesignSecurityGroupId,
+    [Parameter(Mandatory = $false, HelpMessage = "Tenant App Catalog Url")]
+    [string]$TenantAppCatalogUrl
 )
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
@@ -77,7 +79,6 @@ $AdminSiteConnection = $null
 $AppCatalogSiteConnection = $null
 $SiteConnection = $null
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
-$TenantAppCatalogUrl = $null
 #endregion
 
 Set-PnPTraceLog -On -Level Debug -LogFile InstallLog.txt
@@ -87,6 +88,7 @@ Set-PnPTraceLog -On -Level Debug -LogFile InstallLog.txt
 Try {
     Write-Host "[INFO] Connecting to [$AdminSiteUrl]"
     $AdminSiteConnection = Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
+    Write-Host "[SUCCESS] Successfully connected to [$AdminSiteUrl]" -ForegroundColor Green
 }
 Catch {
     Write-Host "[INFO] Failed to connect to [$AdminSiteUrl]: $($_.Exception.Message)"
@@ -117,6 +119,7 @@ if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
 Try {
     Write-Host "[INFO] Connecting to [$Url]"
     $SiteConnection = Connect-SharePoint -Url $Url -ErrorAction Stop
+    Write-Host "[SUCCESS] Successfully connected to [$Url]" -ForegroundColor Green
 }
 Catch {
     Write-Host "[ERROR] Failed to connect to [$Url]: $($_.Exception.Message)" -ForegroundColor Red
@@ -157,7 +160,7 @@ if (-not $SkipSiteDesign.IsPresent) {
             }
             $SiteScriptIds += $SiteScript.Id.Guid
         }
-        Write-Host "[INFO] Successfully created/updated site scripts" -ForegroundColor Green
+        Write-Host "[SUCCESS] Successfully created/updated site scripts" -ForegroundColor Green
     }
     Catch {
         Write-Host "[ERROR] Failed to create/update site scripts: $($_.Exception.Message)" -ForegroundColor Red
@@ -194,7 +197,9 @@ if (-not $SkipSiteDesign.IsPresent) {
 #region Install app packages
 if (-not $SkipAppPackages.IsPresent) {
     Try {
-        $TenantAppCatalogUrl = Get-PnPTenantAppCatalogUrl -Connection $AdminSiteConnection -ErrorAction SilentlyContinue
+        if(-not $TenantAppCatalogUrl) {
+            $TenantAppCatalogUrl = Get-PnPTenantAppCatalogUrl -Connection $AdminSiteConnection -ErrorAction SilentlyContinue
+        }
         $AppCatalogSiteConnection = Connect-SharePoint -Url $TenantAppCatalogUrl -ErrorAction Stop
     }
     Catch {
