@@ -11,7 +11,7 @@ Prosjektportalen ble i sin tid utviklet for Asker kommune og Kommit. Versjonen s
 
 ## Installering ##
 
-Vi har nå klar versjon 1.0.0 som kan lastes ned <a href="https://github.com/Puzzlepart/prosjektportalen365/releases/tag/v1.0.0">herfra</a>.
+Vi har nå klar versjon 1.0.0 som kan lastes ned <a href="https://github.com/Puzzlepart/prosjektportalen365/releases/tag/v1.0.0">herfra</a>. Det betyr ikke at løsningen er komplett og helt uten feil og mangler, men vi mener den er klar for å installeres og brukes av fremoverlente virksomheter. Vi markerer denne likevel som en pre-release og vi vil anbefale å vente noen uker før løsningen begynner å brukes for fullt i produksjon.
 
 ## Kontakt ##
 
