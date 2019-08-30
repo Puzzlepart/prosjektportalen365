@@ -287,12 +287,18 @@ else {
 
 $InstallEndTime = (Get-Date).ToUniversalTime().ToString("MM/dd/yyy HH:mm")
 
-Add-PnPListItem -List "Installasjonslogg" -Values @{
+$InstallEntry =  @{
     InstallStartTime = $InstallStartTime; 
     InstallEndTime   = $InstallEndTime; 
     InstallVersion   = "VERSION_PLACEHOLDER";
     InstallCommand   = $MyInvocation.Line.Substring(2);
-} -Connection $SiteConnection >$null 2>&1
+}
+
+Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -Connection $SiteConnection >$null 2>&1
+
+$InstallEntry.InstallUrl = $Url
+
+Invoke-WebRequest "https://pp365-install-pingback.azurewebsites.net/api/AddEntry" -Body ($InstallEntry | ConvertTo-Json) -Method 'POST'
 
 #region Disconnect
 Disconnect-PnPOnline -Connection $AppCatalogSiteConnection
