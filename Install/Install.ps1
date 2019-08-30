@@ -194,16 +194,16 @@ if (-not $SkipSiteDesign.IsPresent) {
 #region Install app packages
 if (-not $SkipAppPackages.IsPresent) {
     Try {
-        $TenantAppCatalogUrl = Get-PnPTenantAppCatalogUrl -Connection $AdminSiteConnection
+        $TenantAppCatalogUrl = Get-PnPTenantAppCatalogUrl -Connection $AdminSiteConnection -ErrorAction SilentlyContinue
         $AppCatalogSiteConnection = Connect-SharePoint -Url $TenantAppCatalogUrl -ErrorAction Stop
     }
     Catch {
-        Write-Host "[ERROR] It looks like you don't have a app catalog site in your tenant. Create one, and try again." -ForegroundColor Red
+        Write-Host "[ERROR] Failed to connect to Tenant App Catalog. Do you have a Tenant App Catalog in your tenant?" -ForegroundColor Red
         exit 0 
     }
     Try {
         Write-Host "[INFO] Installing SharePoint Framework app packages to [$TenantAppCatalogUrl]"
-        foreach ($AppPkg in (Get-ChildItem .\Apps\)) {
+        foreach ($AppPkg in (Get-ChildItem .\Apps\ -ErrorAction SilentlyContinue)) {
             Write-Host "[INFO] Installing $($AppPkg.BaseName)..."  -NoNewline
             Add-PnPApp -Path $AppPkg.FullName -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop -Connection $AppCatalogSiteConnection >$null 2>&1
             Write-Host " DONE" -ForegroundColor Green
