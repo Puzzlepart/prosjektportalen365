@@ -298,7 +298,7 @@ Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -Connection $Sit
 
 $InstallEntry.InstallUrl = $Url
 
-Invoke-WebRequest "https://pp365-install-pingback.azurewebsites.net/api/AddEntry" -Body ($InstallEntry | ConvertTo-Json) -Method 'POST'
+Invoke-WebRequest "https://pp365-install-pingback.azurewebsites.net/api/AddEntry" -Body ($InstallEntry | ConvertTo-Json) -Method 'POST'  >$null 2>&1
 
 #region Disconnect
 Disconnect-PnPOnline -Connection $AppCatalogSiteConnection

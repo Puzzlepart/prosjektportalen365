@@ -13,7 +13,6 @@ import SpEntityPortalService from 'sp-entityportal-service';
 import HubSiteService from 'sp-hubsite-service';
 
 Logger.subscribe(new ConsoleListener());
-Logger.subscribe(new ApplicationInsightsLogListener());
 Logger.activeLogLevel = LogLevel.Info;
 
 export default class ProjectPhasesWebPart extends BaseClientSideWebPart<IProjectPhasesProps> {
@@ -21,6 +20,7 @@ export default class ProjectPhasesWebPart extends BaseClientSideWebPart<IProject
 
   public async onInit() {
     this.context.statusRenderer.clearLoadingIndicator(this.domElement);
+    Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
     sp.setup({ spfxContext: this.context });
     await MSGraphHelper.Init(this.context.msGraphClientFactory, 'v1.0');
     const hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);

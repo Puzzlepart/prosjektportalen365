@@ -3,7 +3,7 @@
     "id": "57530c94-4fb2-4ca2-9279-16c57881fa19",
     "alias": "RiskOverviewWebPart",
     "componentType": "WebPart",
-    "version": "0.9.20",
+    "version": "1.0.0",
     "manifestVersion": 2,
     "requiresCustomScript": false,
     "supportedHosts": [

@@ -16,7 +16,7 @@ try {
     build.log("Skipping pkgDeploy due to missing config/env.json");
 }
 
-gulp.task('version-sync', () => {
+gulp.task('versionSync', () => {
     find.file(/\.manifest.json$/, path.join(__dirname, "src", "extensions"), manifests => {
         var pkgSolution = require('./config/package-solution.json');
         var newVersionNumber = require('./package.json').version.split('-')[0];

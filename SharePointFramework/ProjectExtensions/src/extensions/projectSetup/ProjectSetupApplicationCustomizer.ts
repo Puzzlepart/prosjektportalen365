@@ -2,17 +2,17 @@ import { override } from '@microsoft/decorators';
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { sp, Web } from '@pnp/sp';
-import { ListLogger, ApplicationInsightsLogListener } from 'shared/lib/logging';
 import MSGraphHelper from 'msgraph-helper';
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { ApplicationInsightsLogListener, ListLogger } from 'shared/lib/logging';
 import HubSiteService from 'sp-hubsite-service';
 import { ErrorModal, IErrorModalProps, IProgressModalProps, ITemplateSelectModalState, ProgressModal, TemplateSelectModal } from '../../components';
 import { getHubFiles, getHubItems } from '../../data';
 import { ListContentConfig, ProjectTemplate } from './../../models';
-import { IBaseTaskParams, default as Tasks } from './../../tasks';
+import { default as Tasks, IBaseTaskParams } from './../../tasks';
 import IProjectSetupApplicationCustomizerData from './IProjectSetupApplicationCustomizerData';
 import { IProjectSetupApplicationCustomizerProperties } from './IProjectSetupApplicationCustomizerProperties';
 import { ProjectSetupError } from './ProjectSetupError';
@@ -27,12 +27,12 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   public constructor() {
     super();
     Logger.subscribe(new ConsoleListener());
-    Logger.subscribe(new ApplicationInsightsLogListener());
     Logger.activeLogLevel = this._isDebug ? LogLevel.Info : LogLevel.Warning;
   }
 
   @override
   public async onInit(): Promise<void> {
+    Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
     sp.setup({ spfxContext: this.context });
     const { isSiteAdmin, groupId, hubSiteId } = this.context.pageContext.legacyPageContext;
     if (!isSiteAdmin || !groupId) return;
@@ -73,7 +73,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
         data: this._data,
         templateParameters: { fieldsgroup: strings.SiteFieldsGroupName },
       };
-      Logger.log({ message: '(ProjectSetupApplicationCustomizer) _initializeSetup: Rendering progrss modal', data: { selectedTemplate: templateInfo.selectedTemplate.title }, level: LogLevel.Info });
+      Logger.log({ message: '(ProjectSetupApplicationCustomizer) _initializeSetup: Rendering progress modal', data: { selectedTemplate: templateInfo.selectedTemplate.title }, level: LogLevel.Info });
       this._renderProgressModal({ text: strings.ProgressModalLabel, subText: strings.ProgressModalDescription, iconName: 'Page' });
       await this._startProvision();
       await this._deleteCustomizer(this.componentId, !this._isDebug());

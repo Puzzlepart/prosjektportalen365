@@ -13,7 +13,6 @@ import HubSiteService, { IHubSite } from 'sp-hubsite-service';
 
 moment.locale('nb');
 Logger.subscribe(new ConsoleListener());
-Logger.subscribe(new ApplicationInsightsLogListener());
 Logger.activeLogLevel = LogLevel.Info;
 
 export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProjectStatusProps> {
@@ -21,6 +20,7 @@ export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProject
   private _spEntityPortalService: SpEntityPortalService;
 
   public async onInit() {
+    Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
     sp.setup({ spfxContext: this.context });
     this._hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
     this._spEntityPortalService = new SpEntityPortalService({ webUrl: this._hubSite.url, ...this.properties.entity });

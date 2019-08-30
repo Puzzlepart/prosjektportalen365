@@ -9,11 +9,13 @@ import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import * as merge from 'object-assign';
 import { ApplicationInsightsLogListener } from 'shared/lib/logging';
+import { virtual } from '@microsoft/decorators';
 
 export class BasePortfolioWebPart<T extends IBaseComponentProps> extends BaseClientSideWebPart<T> {
     public dataAdapter: DataAdapter;
     private _pageTitle: string;
 
+    @virtual
     public render(): void {
         throw new Error('Method not implemented.');
     }
@@ -39,7 +41,7 @@ export class BasePortfolioWebPart<T extends IBaseComponentProps> extends BaseCli
     protected async _setup(activeLogLevel: LogLevel = LogLevel.Info, locale: string = 'nb') {
         sp.setup({ spfxContext: this.context });
         Logger.subscribe(new ConsoleListener());
-        Logger.subscribe(new ApplicationInsightsLogListener());
+        Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
         Logger.activeLogLevel = activeLogLevel;
         moment.locale(locale);
         try {
