@@ -20,10 +20,6 @@ export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProject
   private _spEntityPortalService: SpEntityPortalService;
 
   public async onInit() {
-    injectStyles(`#workbenchPageContent,.CanvasZone {
-      max-width: none ;
-      width: auto ;
-  }`);
     sp.setup({ spfxContext: this.context });
     this._hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
     this._spEntityPortalService = new SpEntityPortalService({ webUrl: this._hubSite.url, ...this.properties.entity });
