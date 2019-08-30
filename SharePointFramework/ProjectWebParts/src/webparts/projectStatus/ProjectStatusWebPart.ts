@@ -4,15 +4,16 @@ import '@pnp/polyfill-ie11';
 import { sp } from '@pnp/sp';
 import { IProjectStatusProps, ProjectStatus } from 'components/ProjectStatus';
 import * as moment from 'moment';
+import 'office-ui-fabric-react/dist/css/fabric.min.css';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
+import { ApplicationInsightsLogListener } from 'shared/lib/logging/ApplicationInsightsLogListener';
 import SpEntityPortalService from 'sp-entityportal-service';
 import HubSiteService, { IHubSite } from 'sp-hubsite-service';
-import 'office-ui-fabric-react/dist/css/fabric.min.css';
-import { injectStyles } from 'shared/lib/util';
 
 moment.locale('nb');
 Logger.subscribe(new ConsoleListener());
+Logger.subscribe(new ApplicationInsightsLogListener());
 Logger.activeLogLevel = LogLevel.Info;
 
 export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProjectStatusProps> {

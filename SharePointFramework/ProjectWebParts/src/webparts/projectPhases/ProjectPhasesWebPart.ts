@@ -4,14 +4,16 @@ import '@pnp/polyfill-ie11';
 import { sp } from '@pnp/sp';
 import { IProjectPhasesProps, ProjectPhases } from 'components/ProjectPhases';
 import MSGraphHelper from 'msgraph-helper';
+import 'office-ui-fabric-react/dist/css/fabric.min.css';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
+import { ApplicationInsightsLogListener } from 'shared/lib/logging/ApplicationInsightsLogListener';
 import SpEntityPortalService from 'sp-entityportal-service';
 import HubSiteService from 'sp-hubsite-service';
-import 'office-ui-fabric-react/dist/css/fabric.min.css';
 
 Logger.subscribe(new ConsoleListener());
+Logger.subscribe(new ApplicationInsightsLogListener());
 Logger.activeLogLevel = LogLevel.Info;
 
 export default class ProjectPhasesWebPart extends BaseClientSideWebPart<IProjectPhasesProps> {

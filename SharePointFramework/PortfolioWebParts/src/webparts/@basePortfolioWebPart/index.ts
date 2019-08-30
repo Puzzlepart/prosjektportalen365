@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import * as merge from 'object-assign';
+import { ApplicationInsightsLogListener } from 'shared/lib/logging';
 
 export class BasePortfolioWebPart<T extends IBaseComponentProps> extends BaseClientSideWebPart<T> {
     public dataAdapter: DataAdapter;
@@ -38,6 +39,7 @@ export class BasePortfolioWebPart<T extends IBaseComponentProps> extends BaseCli
     protected async _setup(activeLogLevel: LogLevel = LogLevel.Info, locale: string = 'nb') {
         sp.setup({ spfxContext: this.context });
         Logger.subscribe(new ConsoleListener());
+        Logger.subscribe(new ApplicationInsightsLogListener());
         Logger.activeLogLevel = activeLogLevel;
         moment.locale(locale);
         try {

@@ -1,13 +1,15 @@
-import { BaseClientSideWebPart, IPropertyPaneConfiguration, PropertyPaneToggle, PropertyPaneTextField, PropertyPaneDropdown, PropertyPaneSlider } from '@microsoft/sp-webpart-base';
+import { BaseClientSideWebPart, IPropertyPaneConfiguration, PropertyPaneDropdown, PropertyPaneSlider, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { sp } from '@pnp/sp';
 import { IProjectInformationProps, ProjectInformation } from 'components/ProjectInformation';
+import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
+import { ApplicationInsightsLogListener } from 'shared/lib/logging/ApplicationInsightsLogListener';
 import HubSiteService, { IHubSite } from 'sp-hubsite-service';
-import * as strings from 'ProjectWebPartsStrings';
 
 Logger.subscribe(new ConsoleListener());
+Logger.subscribe(new ApplicationInsightsLogListener());
 Logger.activeLogLevel = LogLevel.Info;
 
 export default class ProjectInformationWebPart extends BaseClientSideWebPart<IProjectInformationProps> {

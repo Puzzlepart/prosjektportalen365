@@ -2,7 +2,7 @@ import { override } from '@microsoft/decorators';
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { sp, Web } from '@pnp/sp';
-import { ListLogger } from 'shared/lib/logging';
+import { ListLogger, ApplicationInsightsLogListener } from 'shared/lib/logging';
 import MSGraphHelper from 'msgraph-helper';
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
@@ -27,6 +27,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   public constructor() {
     super();
     Logger.subscribe(new ConsoleListener());
+    Logger.subscribe(new ApplicationInsightsLogListener());
     Logger.activeLogLevel = this._isDebug ? LogLevel.Info : LogLevel.Warning;
   }
 
