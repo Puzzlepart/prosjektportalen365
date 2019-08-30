@@ -198,7 +198,7 @@ if (-not $SkipAppPackages.IsPresent) {
         $AppCatalogSiteConnection = Connect-SharePoint -Url $TenantAppCatalogUrl -ErrorAction Stop
     }
     Catch {
-        Write-Host "[ERROR] Failed to connect to [$TenantAppCatalogUrl]: $($_.Exception.Message)" -ForegroundColor Red
+        Write-Host "[ERROR] It looks like you don't have a app catalog site in your tenant. Create one, and try again." -ForegroundColor Red
         exit 0 
     }
     Try {
