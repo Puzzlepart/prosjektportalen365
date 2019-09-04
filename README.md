@@ -19,4 +19,5 @@ Har du spørsmål om Prosjektportalen for Office 365, behov for bistand til inst
 
 ## Maintainers ##
 
-Tarjei Ormestøyl [tarjeieo@puzzlepart.com], Ole Martin Pettersen [olemp@puzzlepart.com]
+- Tarjei Ormestøyl [tarjeieo@puzzlepart.com]
+- Ole Martin Pettersen [olemp@puzzlepart.com]
