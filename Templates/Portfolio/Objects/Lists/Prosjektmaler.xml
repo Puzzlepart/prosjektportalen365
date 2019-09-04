@@ -8,10 +8,11 @@
                 </OrderBy>
             </Query>
             <ViewFields>
+                <FieldRef Name="_UIVersionString" />
                 <FieldRef Name="LinkFilename" />
                 <FieldRef Name="Title" />
                 <FieldRef Name="GtDescription" />
-                <FieldRef Name="_UIVersionString" />
+                <FieldRef Name="Modified" />
             </ViewFields>
             <RowLimit Paged="TRUE">30</RowLimit>
             <Aggregations Value="Off" />
