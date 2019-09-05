@@ -3,7 +3,7 @@
     "id": "d8558017-1e3b-4d13-82fa-2520e845297b",
     "alias": "DeliveriesOverviewWebPart",
     "componentType": "WebPart",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "manifestVersion": 2,
     "requiresCustomScript": false,
     "supportedHosts": [
