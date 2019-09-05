@@ -1,0 +1,1 @@
+﻿<Field ID="{149a30c2-056d-44f0-9cb5-29bfc632ca25}" Name="GtDeliveryAcceptanceCriteria" DisplayName="Akseptansekriterier" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Målbare definisjoner av kravene leveransen må møte før den kan aksepteres av interessentene" AppendOnly="FALSE" StaticName="GtDeliveryAcceptanceCriteria" />

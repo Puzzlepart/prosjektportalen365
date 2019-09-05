@@ -1,0 +1,1 @@
+﻿<Field ID="{6bd17911-c48a-4900-be61-54ae26207d78}" Name="GtShowInPortfolio" DisplayName="Vis i portefølje" Type="Boolean" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Huk av denne for å vise risikoen i oversikten på porteføljenivå" StaticName="GtShowInPortfolio" />

@@ -1,0 +1,8 @@
+﻿<Field Type="Choice" DisplayName="Gevinsttype" Format="RadioButtons" ID="{a1a56abd-5b3d-45d2-8617-32b2f8b195de}" StaticName="GtGainsType" Name="GtGainsType" Description="Direkte (økonomiske - NOK), Indirekte (frigjort tid - årsverk), Kvalitative (f.eks. omdømme)" Group="Kolonner for Prosjektportalen (Prosjekt)">
+    <Default>Direkte</Default>
+    <CHOICES>
+        <CHOICE>Direkte</CHOICE>
+        <CHOICE>Indirekte</CHOICE>
+        <CHOICE>Kvalitativ</CHOICE>
+    </CHOICES>
+</Field>

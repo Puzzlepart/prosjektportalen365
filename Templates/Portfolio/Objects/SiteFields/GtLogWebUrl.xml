@@ -1,1 +1,1 @@
-﻿<Field Description="" DisplayName="Web URL" Group="Prosjektportalenkolonner" ID="{b9bbd94f-f9c0-4512-ad77-404f8a2c64b1}" Name="GtLogWebUrl" StaticName="GtLogWebUrl" Type="Text" />
+﻿<Field Description="" DisplayName="Web URL" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{b9bbd94f-f9c0-4512-ad77-404f8a2c64b1}" Name="GtLogWebUrl" StaticName="GtLogWebUrl" Type="Text" />

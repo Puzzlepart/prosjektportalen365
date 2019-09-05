@@ -1,1 +1,9 @@
-﻿<Field DisplayName="{resource:SiteFields_GtResourceAbsence_DisplayName}" Description="{resource:SiteFields_GtResourceAbsence_Description}" FillInChoice="FALSE" Type="Choice" ID="{028e49b1-b141-4d35-8998-a17d729960d4}" Name="GtResourceAbsence" StaticName="GtResourceAbsence"><CHOICES><CHOICE>{resource:Choice_GtResourceAbsence_Linetasks}</CHOICE><CHOICE>{resource:Choice_GtResourceAbsence_Leave}</CHOICE><CHOICE>{resource:Choice_GtResourceAbsence_Competency}</CHOICE><CHOICE>{resource:Choice_GtResourceAbsence_OtherAssignments}</CHOICE><CHOICE>{resource:Choice_GtResourceAbsence_Other}</CHOICE></CHOICES></Field>
+﻿<Field DisplayName="{resource:SiteFields_GtResourceAbsence_DisplayName}" Description="{resource:SiteFields_GtResourceAbsence_Description}" FillInChoice="FALSE" Type="Choice" ID="{028e49b1-b141-4d35-8998-a17d729960d4}" Name="GtResourceAbsence" StaticName="GtResourceAbsence">
+    <CHOICES>
+        <CHOICE>{resource:Choice_GtResourceAbsence_Linetasks}</CHOICE>
+        <CHOICE>{resource:Choice_GtResourceAbsence_Leave}</CHOICE>
+        <CHOICE>{resource:Choice_GtResourceAbsence_Competency}</CHOICE>
+        <CHOICE>{resource:Choice_GtResourceAbsence_OtherAssignments}</CHOICE>
+        <CHOICE>{resource:Choice_GtResourceAbsence_Other}</CHOICE>
+    </CHOICES>
+</Field>

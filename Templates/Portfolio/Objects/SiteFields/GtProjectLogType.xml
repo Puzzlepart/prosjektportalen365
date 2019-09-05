@@ -1,0 +1,9 @@
+﻿<Field ID="{2391d165-5d13-46b7-87d2-e32040293210}" Name="GtProjectLogType" DisplayName="Loggelement" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" StaticName="GtProjectLogType">
+    <Default>Kommentar/Bekymring/Hendelse</Default>
+    <CHOICES>
+        <CHOICE>Kommentar/Bekymring/Hendelse</CHOICE>
+        <CHOICE>Endringsforespørsel</CHOICE>
+        <CHOICE>Avvik fra spesifikasjon</CHOICE>
+        <CHOICE>Beslutning</CHOICE>
+    </CHOICES>
+</Field>

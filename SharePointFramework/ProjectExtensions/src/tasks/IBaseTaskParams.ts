@@ -4,10 +4,11 @@ import IProjectSetupApplicationCustomizerData from '../extensions/projectSetup/I
 import { Schema } from 'sp-js-provisioning';
 
 export interface IBaseTaskParams {
+    templateParameters: { [key: string]: string };
+    templateExcludeHandlers: string[];
     context: ApplicationCustomizerContext;
     properties: IProjectSetupApplicationCustomizerProperties;
     templateSchema?: Schema;
-    templateParameters: { [key: string]: string };
-    data: IProjectSetupApplicationCustomizerData;
+    data?: IProjectSetupApplicationCustomizerData;
     entity?: any;
 }

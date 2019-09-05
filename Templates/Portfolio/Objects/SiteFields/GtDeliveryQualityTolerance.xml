@@ -1,0 +1,1 @@
+﻿<Field ID="{3dd7058b-0ba1-46e5-b40a-4f2f542638ea}" Name="GtDeliveryQualityTolerance" DisplayName="Kvalitetstoleranse" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hvilke toleranser (slingringsmonn) gjelder for akseptansekriteriene?" AppendOnly="FALSE" StaticName="GtDeliveryQualityTolerance" />

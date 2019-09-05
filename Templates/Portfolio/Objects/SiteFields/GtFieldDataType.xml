@@ -1,4 +1,4 @@
-﻿<Field Type="Choice" DisplayName="{resource:SiteFields_GtFieldDataType_DisplayName}" Description="{resource:SiteFields_GtFieldDataType_Description}" Title="{resource:SiteFields_GtFieldDataType_DisplayName}" Group="Prosjektportalenkolonner" ID="{7463d38f-5f51-4b25-a920-04ea1ec24a26}" StaticName="GtFieldDataType" Name="GtFieldDataType">
+﻿<Field Type="Choice" DisplayName="{resource:SiteFields_GtFieldDataType_DisplayName}" Description="{resource:SiteFields_GtFieldDataType_Description}" Title="{resource:SiteFields_GtFieldDataType_DisplayName}" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{7463d38f-5f51-4b25-a920-04ea1ec24a26}" StaticName="GtFieldDataType" Name="GtFieldDataType">
     <CHOICES>
         <CHOICE>Text</CHOICE>
         <CHOICE>User</CHOICE>

@@ -1,0 +1,7 @@
+﻿<Field Type="Choice" DisplayName="Siste beslutningspunktstatus" Format="RadioButtons" FillInChoice="FALSE" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{13aa2254-728b-48bd-8d09-5aa5e20933e1}" StaticName="GtLastGateStatus" Name="GtLastGateStatus" ShowInNewForm="FALSE" ShowInEditForm="FALSE">
+    <CHOICES>
+        <CHOICE>Godkjent</CHOICE>
+        <CHOICE>Foreløpig godkjent</CHOICE>
+        <CHOICE>Avvist</CHOICE>
+    </CHOICES>
+</Field>

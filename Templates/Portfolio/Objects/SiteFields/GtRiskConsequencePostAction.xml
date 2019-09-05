@@ -1,0 +1,1 @@
+﻿<Field ID="{00f17233-d4c0-49d0-aebd-5004552abb17}" Name="GtRiskConsequencePostAction" DisplayName="K etter tiltak" Type="Number" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Tall 0 til 5" Min="0" Max="5" StaticName="GtRiskConsequencePostAction" />

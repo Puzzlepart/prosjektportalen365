@@ -28,6 +28,8 @@ dependencies:
   sp-js-provisioning: 1.0.0
   spfx-jsom: 0.6.4
   string-format: 2.0.0
+  underscore: 1.9.1
+  xmldom: 0.1.27
 devDependencies:
   '@microsoft/rush-stack-compiler-3.3': 0.2.30
   '@microsoft/sp-build-web': 1.9.1
@@ -37,6 +39,8 @@ devDependencies:
   '@types/chai': 3.4.34
   '@types/mocha': 2.2.38
   '@types/sharepoint': 2016.1.3
+  '@types/underscore': 1.9.2
+  '@types/xmldom': 0.1.29
   ajv: 5.2.5
   find: 0.3.0
   gulp: 3.9.1
@@ -1371,6 +1375,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-SudIN9TRJ+v8g5pTG8RRCqfqTMNqgWCKKd3vtynhGzkIIjxaicNAMuY5TRadJ6tzDu3Dotf3ngaMILtmOdmWEQ==
+  /@types/underscore/1.9.2:
+    dev: true
+    resolution:
+      integrity: sha512-KgOKTAD+9X+qvZnB5S1+onqKc4E+PZ+T6CM/NA5ohRPLHJXb+yCJMVf8pWOnvuBuKFNUAJW8N97IA6lba6mZGg==
   /@types/uuid/3.0.0:
     dependencies:
       '@types/node': 12.7.2
@@ -1433,6 +1441,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-qeqQIjDfSLjmWR0noFQmcPKCtqn0L68MchoEi1Zj33unPfC83Op3j2mBH2g4hAgOaWUobv/O86w7LObo6p4sDQ==
+  /@types/xmldom/0.1.29:
+    dev: true
+    resolution:
+      integrity: sha1-xEKLDKhtO4gUdXJv2UmAs4onw4E=
   /@types/yargs/0.0.34:
     dev: true
     resolution:
@@ -11946,7 +11958,9 @@ specifiers:
   '@types/react': 16.7.22
   '@types/react-dom': 16.8.0
   '@types/sharepoint': ^2016.1.2
+  '@types/underscore': ^1.9.2
   '@types/webpack-env': 1.13.1
+  '@types/xmldom': ^0.1.29
   ajv: ~5.2.2
   find: ^0.3.0
   gulp: ~3.9.1
@@ -11962,3 +11976,5 @@ specifiers:
   spfx-pkgdeploy: ^0.3.0
   string-format: ^2.0.0
   tslint-consistent-codestyle: ^1.15.1
+  underscore: ^1.9.1
+  xmldom: ^0.1.27

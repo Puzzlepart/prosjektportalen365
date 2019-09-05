@@ -1,1 +1,1 @@
-﻿<Field Type="Text" DisplayName="{resource:SiteFields_GtSecIcon_DisplayName}" Description="{resource:SiteFields_GtSecIcon_Description}" Group="Prosjektportalenkolonner" ID="{b2af224f-5e07-4f9f-9a3a-9f5345bb3153}" StaticName="GtSecIcon" Name="GtSecIcon"></Field>
+﻿<Field Type="Text" DisplayName="{resource:SiteFields_GtSecIcon_DisplayName}" Description="{resource:SiteFields_GtSecIcon_Description}" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{b2af224f-5e07-4f9f-9a3a-9f5345bb3153}" StaticName="GtSecIcon" Name="GtSecIcon" />

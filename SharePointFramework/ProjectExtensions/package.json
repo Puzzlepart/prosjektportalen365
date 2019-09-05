@@ -51,7 +51,9 @@
         "sp-hubsite-service": "^0.4.1",
         "sp-js-provisioning": "^1.0.0",
         "spfx-jsom": "^0.6.4",
-        "string-format": "^2.0.0"
+        "string-format": "^2.0.0",
+        "underscore": "^1.9.1",
+        "xmldom": "^0.1.27"
     },
     "resolutions": {
         "@types/react": "16.7.22"
@@ -65,6 +67,8 @@
         "@types/chai": "3.4.34",
         "@types/mocha": "2.2.38",
         "@types/sharepoint": "^2016.1.2",
+        "@types/underscore": "^1.9.2",
+        "@types/xmldom": "^0.1.29",
         "ajv": "~5.2.2",
         "find": "^0.3.0",
         "gulp": "~3.9.1",
