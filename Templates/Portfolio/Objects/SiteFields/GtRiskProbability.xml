@@ -1,0 +1,1 @@
+﻿<Field ID="{0e1b295d-2bfb-4ef6-ae92-e72068e56111}" Name="GtRiskProbability" DisplayName="Sannsynlighet (S)" Type="Number" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Tall 0 til 5" Min="0" Max="5" StaticName="GtRiskProbability" />

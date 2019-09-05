@@ -1,0 +1,1 @@
+﻿<Field Type="DateTime" DisplayName="Sluttidspunkt" Description="" Format="DateOnly" FriendlyDisplayFormat="Disabled" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{eb78509b-4109-474e-aca8-90d024a960de}" StaticName="GtDeliveryEndTime" Name="GtDeliveryEndTime" />

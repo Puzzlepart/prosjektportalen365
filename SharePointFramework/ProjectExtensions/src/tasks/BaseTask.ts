@@ -11,7 +11,7 @@ export class BaseTask {
     /**
      * Execute task
      * 
-     * @param {IBaseTaskParams} params Params
+     * @param {IBaseTaskParams} params Task parameters
      * @param {OnProgressCallbackFunction} onProgress Progress function
      */
     @virtual

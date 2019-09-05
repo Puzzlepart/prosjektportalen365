@@ -11,7 +11,7 @@ export default class SetTaxonomyFields extends BaseTask {
     /**
      * Execute CopyListData
      * 
-     * @param {IBaseTaskParams} params Params 
+     * @param {IBaseTaskParams} params Task parameters 
      * @param {OnProgressCallbackFunction} onProgress On progress function
      */
     @override

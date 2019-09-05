@@ -1,0 +1,1 @@
+﻿<Field ID="{3bcfaa2c-e9bd-4a22-bf65-af4d68c308e7}" Name="GtDeliveryAcceptanceMethod" DisplayName="Godkjenningsmetode" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hvordan blir godkjenningen av leveransen bekreftet (test, brukerundersøkelse, demo, muntlig, skriftlig)?" AppendOnly="FALSE" StaticName="GtDeliveryAcceptanceMethod" />

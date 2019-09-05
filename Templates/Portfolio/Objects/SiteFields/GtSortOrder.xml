@@ -1,3 +1,3 @@
-﻿<Field Description="{resource:SiteFields_GtSortOrder_Description}" DisplayName="{resource:SiteFields_GtSortOrder_DisplayName}" Group="Prosjektportalenkolonner" ID="{0e82c395-9ed9-43f9-871a-208215b18558}" Name="GtSortOrder" StaticName="GtSortOrder" Type="Number">
+﻿<Field Description="{resource:SiteFields_GtSortOrder_Description}" DisplayName="{resource:SiteFields_GtSortOrder_DisplayName}" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{0e82c395-9ed9-43f9-871a-208215b18558}" Name="GtSortOrder" StaticName="GtSortOrder" Type="Number">
     <Default>100</Default>
 </Field>

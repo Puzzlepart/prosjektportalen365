@@ -1,0 +1,1 @@
+﻿<Field ID="{cbf2ae22-2c77-4ad0-a639-07fddfb5cd81}" Name="GtMilestoneActualDate" StaticName="GtMilestoneActualDate" DisplayName="Faktisk dato" Type="DateTime" Format="DateOnly" FriendlyDisplayFormat="Disabled" Group="Kolonner for Prosjektportalen (Prosjekt)" />

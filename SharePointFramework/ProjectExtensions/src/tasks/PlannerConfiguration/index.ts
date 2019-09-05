@@ -95,7 +95,7 @@ export default class PlannerConfiguration extends BaseTask {
     /**
      * Execute PlannerConfiguration
      * 
-     * @param {IBaseTaskParams} params Params 
+     * @param {IBaseTaskParams} params Task parameters 
      * @param {OnProgressCallbackFunction} onProgress On progress function
      */
     @override

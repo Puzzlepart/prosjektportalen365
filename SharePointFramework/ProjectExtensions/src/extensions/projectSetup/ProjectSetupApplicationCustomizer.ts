@@ -46,6 +46,12 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
       } else if (!hubSiteId) {
         throw new ProjectSetupError(strings.NoHubSiteErrorMessage, strings.NoHubSiteErrorStack, MessageBarType.severeWarning);
       } else {
+        this._taskParams = {
+          templateParameters: { fieldsgroup: strings.SiteFieldsGroupName },
+          templateExcludeHandlers: [],
+          context: this.context,
+          properties: this.properties,
+        };
         this._initializeSetup();
       }
     } catch (error) {
@@ -67,12 +73,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
       Logger.log({ message: '(ProjectSetupApplicationCustomizer) _initializeSetup: Template selected by user', data: { selectedTemplate: templateInfo.selectedTemplate.title }, level: LogLevel.Info });
       ReactDOM.unmountComponentAtNode(this._templateSelectModalContainer);
       this._data = { ...this._data, ...templateInfo };
-      this._taskParams = {
-        context: this.context,
-        properties: this.properties,
-        data: this._data,
-        templateParameters: { fieldsgroup: strings.SiteFieldsGroupName },
-      };
+      this._taskParams.data = this._data;
       Logger.log({ message: '(ProjectSetupApplicationCustomizer) _initializeSetup: Rendering progress modal', data: { selectedTemplate: templateInfo.selectedTemplate.title }, level: LogLevel.Info });
       this._renderProgressModal({ text: strings.ProgressModalLabel, subText: strings.ProgressModalDescription, iconName: 'Page' });
       await this._startProvision();

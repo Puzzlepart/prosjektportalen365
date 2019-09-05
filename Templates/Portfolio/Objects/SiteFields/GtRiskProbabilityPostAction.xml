@@ -1,0 +1,1 @@
+﻿<Field ID="{f81ebcb7-8791-44b0-9919-08ed5524b11d}" Name="GtRiskProbabilityPostAction" DisplayName="S etter tiltak" Type="Number" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Tall 0 til 5" Min="0" Max="5" StaticName="GtRiskProbabilityPostAction" />

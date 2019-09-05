@@ -9,3 +9,5 @@ Release
 Scripts
 node_modules
 Install/.vscode
+Templates/*.txt
+Templates/*.ps1

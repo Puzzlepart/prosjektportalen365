@@ -1,1 +1,3 @@
-﻿<Field Type="Boolean" DisplayName="{resource:SiteFields_GtSecShowInStatusSection_DisplayName}" Description="{resource:SiteFields_GtSecShowInStatusSection_Description}" Group="Prosjektportalenkolonner" ID="{9985ae83-9e19-48dc-b33d-2fbf84f7202b}" StaticName="GtSecShowInStatusSection" Name="GtSecShowInStatusSection"><Default>1</Default></Field>
+﻿<Field Type="Boolean" DisplayName="{resource:SiteFields_GtSecShowInStatusSection_DisplayName}" Description="{resource:SiteFields_GtSecShowInStatusSection_Description}" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{9985ae83-9e19-48dc-b33d-2fbf84f7202b}" StaticName="GtSecShowInStatusSection" Name="GtSecShowInStatusSection">
+    <Default>1</Default>
+</Field>

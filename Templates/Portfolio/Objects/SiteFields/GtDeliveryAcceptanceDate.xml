@@ -1,0 +1,1 @@
+﻿<Field ID="{ce9474dd-407b-4480-951a-5381857fad6a}" Name="GtDeliveryAcceptanceDate" DisplayName="Godkjent dato" Type="DateTime" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" Format="DateOnly" StaticName="GtDeliveryAcceptanceDate"   />

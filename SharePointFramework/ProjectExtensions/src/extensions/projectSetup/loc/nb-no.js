@@ -31,11 +31,13 @@ define([], function () {
     NoHubSiteErrorStack: "Området kan ikke settes opp uten å være koblet til en hub. Koble området til ett hubområde, og last siden på nytt.",
     GetSetupDataErrorMessage: "Det skjedde en feil",
     GetSetupDataErrorStack: "Det skjedde en feil under uthenting av data fra hubområdet.",
-    SiteFieldsGroupName: "Prosjektportalenkolonner",
+    SiteFieldsGroupName: "Kolonner for Prosjektportalen (Prosjekt)",
     ApplyTemplateErrorMessage: "Det skjedde en feil under konfigurering av området",
     CopyListDataErrorMessage: "Det skjedde en feil under kopiering av listeinnhold",
     PlannerConfigurationErrorMessage: "Det skjedde en feil under konfigurering av området",
     SetTaxonomyFieldsErrorMessage: "Det skjedde en feil under konfigurering av taksonomifelter",
-    SetupProjectInformationErrorMessage: "Det skjedde en feil under initialisering av prosjektinformasjon"
+    SetupProjectInformationErrorMessage: "Det skjedde en feil under initialisering av prosjektinformasjon",
+    ProvisionSiteFieldsErrorMessage: "Det skjedde en feil under provisjonering av områdekolonner",
+    ProvisionSiteFieldsText: "Opprettet feltet {0} på området",
   }
 });

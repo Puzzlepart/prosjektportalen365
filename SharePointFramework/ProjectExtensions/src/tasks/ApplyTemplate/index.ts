@@ -1,5 +1,4 @@
 import { override } from '@microsoft/decorators';
-import { Logger, LogLevel } from '@pnp/logging';
 import { task } from 'decorators/task';
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import { Web, WebProvisioner } from 'sp-js-provisioning';
@@ -8,13 +7,14 @@ import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { BaseTaskError } from '../BaseTaskError';
 import { IBaseTaskParams } from '../IBaseTaskParams';
 import { APPLY_TEMPLATE_STATUS_MAP } from './ApplyTemplateStatusMap';
+import * as _ from 'underscore';
 
 @task('ApplyTemplate')
 export default class ApplyTemplate extends BaseTask {
     /**
      * Execute ApplyTemplate
      * 
-     * @param {IBaseTaskParams} params Params 
+     * @param {IBaseTaskParams} params Task parameters 
      * @param {OnProgressCallbackFunction} onProgress On progress function
      */
     @override
@@ -28,7 +28,8 @@ export default class ApplyTemplate extends BaseTask {
                 parameters: params.templateParameters,
             });
             this.logInformation('Applying template to site', { parameters: params.templateParameters });
-            await provisioner.applyTemplate(params.templateSchema, null, status => {
+            let templateSchema = _.omit(params.templateSchema, params.templateExcludeHandlers);
+            await provisioner.applyTemplate(templateSchema, null, status => {
                 if (APPLY_TEMPLATE_STATUS_MAP[status]) {
                     onProgress(APPLY_TEMPLATE_STATUS_MAP[status].text, APPLY_TEMPLATE_STATUS_MAP[status].iconName);
                 }

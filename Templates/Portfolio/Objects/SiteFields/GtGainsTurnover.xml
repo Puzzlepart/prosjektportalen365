@@ -1,0 +1,1 @@
+﻿<Field Type="Note" DisplayName="Gevinstomsetting" Description="Hvordan skal gevinsten realiseres?" NumLines="3" RichText="FALSE" ID="{d79d8a58-1079-4a3a-9f27-02de9a3eace1}" StaticName="GtGainsTurnover" Name="GtGainsTurnover" RestrictedMode="TRUE" RichTextMode="Compatible" IsolateStyles="FALSE" AppendOnly="FALSE" Group="Kolonner for Prosjektportalen (Prosjekt)" />

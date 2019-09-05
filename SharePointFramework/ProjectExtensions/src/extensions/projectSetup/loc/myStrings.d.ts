@@ -36,6 +36,8 @@ declare interface IProjectSetupApplicationCustomizerStrings {
   PlannerConfigurationErrorMessage: string;
   SetTaxonomyFieldsErrorMessage: string;
   SetupProjectInformationErrorMessage: string;
+  ProvisionSiteFieldsErrorMessage: string;
+  ProvisionSiteFieldsText: string;
 }
 
 declare module 'ProjectSetupApplicationCustomizerStrings' {

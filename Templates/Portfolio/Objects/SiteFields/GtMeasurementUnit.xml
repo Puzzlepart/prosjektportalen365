@@ -1,0 +1,9 @@
+﻿<Field Type="Choice" DisplayName="Måleenhet" Description="Se måleindikator for utdypning" Format="Dropdown" ID="{0d38db52-2040-44c1-823e-7642f76519ee}" StaticName="GtMeasurementUnit" Name="GtMeasurementUnit" Group="Kolonner for Prosjektportalen (Prosjekt)">
+    <Default>Antall</Default>
+    <CHOICES>
+        <CHOICE>Antall</CHOICE>
+        <CHOICE>Kroner</CHOICE>
+        <CHOICE>Prosent</CHOICE>
+        <CHOICE>Timer</CHOICE>
+    </CHOICES>
+</Field>
