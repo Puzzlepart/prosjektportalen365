@@ -744,6 +744,7 @@
                 {
                     "Title": "Alle elementer",
                     "ViewFields": [
+                        "GtSortOrder",
                         "LinkTitle",
                         "GtProjectPhase",
                         "GtChecklistStatus",
@@ -757,6 +758,7 @@
                 {
                     "Title": "Arkivert",
                     "ViewFields": [
+                        "GtSortOrder",
                         "LinkTitle",
                         "GtProjectPhase",
                         "GtComment"
@@ -769,13 +771,14 @@
                 {
                     "Title": "Per status",
                     "ViewFields": [
+                        "GtSortOrder",
                         "LinkTitle",
                         "GtProjectPhase",
                         "GtComment"
                     ],
                     "AdditionalSettings": {
                         "RowLimit": 50,
-                        "ViewQuery": "<GroupBy Collapse=\"TRUE\" GroupLimit=\"30\">\n  <FieldRef Name=\"GtChecklistStatus\" Ascending=\"FALSE\" />\n</GroupBy>\n<OrderBy><FieldRef Name=\"GtSortOrder\" /><FieldRef Name=\"ID\" />\n</OrderBy>"
+                        "ViewQuery": "<GroupBy Collapse=\"TRUE\" GroupLimit=\"30\"><FieldRef Name=\"GtChecklistStatus\" Ascending=\"FALSE\" />\n</GroupBy>\n<OrderBy><FieldRef Name=\"GtSortOrder\" /><FieldRef Name=\"ID\" />\n</OrderBy>"
                     }
                 }
             ]

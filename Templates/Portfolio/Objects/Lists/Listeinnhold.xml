@@ -28,7 +28,7 @@
             <pnp:DataValue FieldName="Title">Fasesjekkpunkter</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccSourceList">Fasesjekkliste</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccDestinationList">Fasesjekkliste</pnp:DataValue>
-            <pnp:DataValue FieldName="GtLccFields">Title,GtProjectPhase</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccFields">GtSortOrder,Title,GtProjectPhase</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccDefault">1</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
