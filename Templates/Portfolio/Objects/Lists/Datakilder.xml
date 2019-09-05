@@ -97,7 +97,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Alle loggelementer</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x01004EDD18CB92C14EBA97103D909C897810* DepartmentId:{{sitecollectionid}}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x01004EDD18CB92C14EBA97103D909C897810* DepartmentId:{{sitecollectionid}} GtProjectLogExperienceOWSBOOL:1</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Erfaringslogg</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">BacklogList</pnp:DataValue>
         </pnp:DataRow>
