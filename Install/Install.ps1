@@ -74,11 +74,19 @@ else {
 
 #region Setting variables
 [System.Uri]$Uri = $Url
-$Alias = $Uri.Segments | Select-Object -Last 1
+$ManagedPath = $Uri.Segments[1]
+$Alias = $Uri.Segments[2]
 $AdminSiteConnection = $null
 $AppCatalogSiteConnection = $null
 $SiteConnection = $null
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
+#endregion
+
+#region Check if URL specified is root site
+if($Alias.Length -lt 2 -or $ManagedPath -ne "sites/") {
+    Write-Host "[ERROR] It looks like you're trying to install to a root site or an invalid site. This is not supported." -ForegroundColor Red
+    exit 0
+}
 #endregion
 
 Set-PnPTraceLog -On -Level Debug -LogFile InstallLog.txt
