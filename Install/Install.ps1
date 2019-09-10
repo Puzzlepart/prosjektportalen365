@@ -82,7 +82,7 @@ $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".share
 #endregion
 
 #region Check if URL specified is root site
-if($Alias.Length -lt 2) {
+if($Alias.TrimEnd("/").Length -lt 1 -and $Uri.Segments[1].TrimEnd("/") -ne "sites") {
     Write-Host "[ERROR] It looks like you're trying to install to a root site. This is not supported." -ForegroundColor Red
     exit 0
 }
