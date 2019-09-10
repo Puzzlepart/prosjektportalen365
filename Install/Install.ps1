@@ -74,7 +74,8 @@ else {
 
 #region Setting variables
 [System.Uri]$Uri = $Url
-$Alias = $Uri.Segments | Select-Object -Last 1
+$ManagedPath = $Uri.Segments[1]
+$Alias = $Uri.Segments[2]
 $AdminSiteConnection = $null
 $AppCatalogSiteConnection = $null
 $SiteConnection = $null
@@ -82,8 +83,8 @@ $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".share
 #endregion
 
 #region Check if URL specified is root site
-if($Alias.TrimEnd("/").Length -lt 1 -or $Uri.Segments[1].TrimEnd("/") -ne "sites") {
-    Write-Host "[ERROR] It looks like you're trying to install to a root site. This is not supported." -ForegroundColor Red
+if($Alias.Length -lt 2 -or $ManagedPath -ne "sites/") {
+    Write-Host "[ERROR] It looks like you're trying to install to a root site or an invalid site. This is not supported." -ForegroundColor Red
     exit 0
 }
 #endregion
