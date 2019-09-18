@@ -1,13 +1,16 @@
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base';
-import { IProjectSetupApplicationCustomizerProperties } from '../extensions/projectSetup/IProjectSetupApplicationCustomizerProperties';
+import { Schema, Web } from 'sp-js-provisioning';
+import { ISpfxJsomContext } from 'spfx-jsom';
 import IProjectSetupApplicationCustomizerData from '../extensions/projectSetup/IProjectSetupApplicationCustomizerData';
-import { Schema } from 'sp-js-provisioning';
+import { IProjectSetupApplicationCustomizerProperties } from '../extensions/projectSetup/IProjectSetupApplicationCustomizerProperties';
 
 export interface IBaseTaskParams {
+    web: Web;
     templateParameters: { [key: string]: string };
     templateExcludeHandlers: string[];
     context: ApplicationCustomizerContext;
     properties: IProjectSetupApplicationCustomizerProperties;
+    spfxJsomContext?: ISpfxJsomContext;
     templateSchema?: Schema;
     data?: IProjectSetupApplicationCustomizerData;
     entity?: any;
