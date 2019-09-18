@@ -4,4 +4,5 @@ export interface IProjectSetupApplicationCustomizerProperties {
     projectsList: string;
     contentConfigList: string;
     termSetIds: { [key: string]: string };
+    tasks: string[];
 }

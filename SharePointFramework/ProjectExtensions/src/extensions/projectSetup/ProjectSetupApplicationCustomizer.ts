@@ -1,5 +1,6 @@
 import { override } from '@microsoft/decorators';
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base';
+import { isArray } from '@pnp/common';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { sp, Web } from '@pnp/sp';
 import MSGraphHelper from 'msgraph-helper';
@@ -33,9 +34,15 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   @override
   public async onInit(): Promise<void> {
     Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
-    sp.setup({ spfxContext: this.context });
-    const { isSiteAdmin, groupId, hubSiteId } = this.context.pageContext.legacyPageContext;
-    if (!isSiteAdmin || !groupId) return;
+    sp.setup({
+      spfxContext: this.context,
+      defaultCachingStore: 'session',
+      defaultCachingTimeoutSeconds: 15,
+      enableCacheExpiration: true,
+      cacheExpirationIntervalMilliseconds: 2500,
+      globalCacheDisable: false,
+    });
+    if (!this.context.pageContext.legacyPageContext.isSiteAdmin || !this.context.pageContext.legacyPageContext.groupId) return;
     try {
       Logger.log({ message: '(ProjectSetupApplicationCustomizer) onInit: Initializing pre-conditionals before initializing setup', data: { version: this.context.manifest.version }, level: LogLevel.Info });
       const topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top);
@@ -43,10 +50,11 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
       if (this.context.pageContext.web.language !== 1044) {
         await this._deleteCustomizer(this.componentId, false);
         throw new ProjectSetupError(strings.InvalidLanguageErrorMessage, strings.InvalidLanguageErrorStack);
-      } else if (!hubSiteId) {
+      } else if (!this.context.pageContext.legacyPageContext.hubSiteId) {
         throw new ProjectSetupError(strings.NoHubSiteErrorMessage, strings.NoHubSiteErrorStack, MessageBarType.severeWarning);
       } else {
         this._taskParams = {
+          web: new Web(this.context.pageContext.web.absoluteUrl),
           templateParameters: { fieldsgroup: strings.SiteFieldsGroupName },
           templateExcludeHandlers: [],
           context: this.context,
@@ -167,6 +175,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
       await ListLogger.write('Starting provisioning of project.', 'Info');
       this._taskParams.templateSchema = await this._taskParams.data.selectedTemplate.getSchema();
       for (let i = 0; i < Tasks.length; i++) {
+        if (isArray(this.properties.tasks) && this.properties.tasks.indexOf(Tasks[i].name) === -1) continue;
         Logger.log({ message: `(ProjectSetupApplicationCustomizer) _startProvision: Executing task ${Tasks[i].name}`, level: LogLevel.Info });
         this._taskParams = await Tasks[i].execute(this._taskParams, this._onTaskStatusUpdated.bind(this));
       }
