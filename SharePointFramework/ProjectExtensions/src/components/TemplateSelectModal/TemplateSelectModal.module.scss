@@ -2,7 +2,7 @@
 
 .templateSelectModal {
   width: 650px;
-  padding: 40px;
+  max-width: 650px;
   box-sizing: border-box;
   position: relative;
 
@@ -16,46 +16,6 @@
 
     .templateSelectDropdown {
       margin: 10px 0 25px 0;
-    }
-  }
-
-  .settings {
-    @include ms-Grid-col;
-    @include ms-sm12;
-
-    .settingsContent {
-      @include ms-Grid;
-      @include ms-Grid-row;
-      .settingsItem {
-        @include ms-Grid-col;
-        @include ms-sm6;
-      }
-    }
-  }
-
-  .listContent {
-    @include ms-Grid-col;
-    @include ms-sm6;
-
-    .listContentList {
-      margin: 10px 0 25px 0;
-
-      .listContentItem {
-        margin: 0 0 5px 0;
-      }
-    }
-  }
-
-  .extensions {
-    @include ms-Grid-col;
-    @include ms-sm6;
-
-    .extensionsList {
-      margin: 10px 0 25px 0;
-
-      .extensionItem {
-        margin: 0 0 5px 0;
-      }
     }
   }
 

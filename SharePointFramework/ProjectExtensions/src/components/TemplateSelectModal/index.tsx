@@ -1,14 +1,15 @@
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
 import * as React from 'react';
-import { ListContentConfig, ProjectTemplate } from '../../models';
-import CollapsableSection from '../CollapsableSection';
-import ProjectSetupBaseModal from '../ProjectSetupBaseModal';
+import { ProjectTemplate } from '../../models';
+import { ExtensionsSection } from './ExtensionsSection';
 import { ITemplateSelectModalProps } from './ITemplateSelectModalProps';
 import { ITemplateSelectModalState } from './ITemplateSelectModalState';
+import { ListContentSection } from './ListContentSection';
+import { SettingsSection } from './SettingsSection';
 import styles from './TemplateSelectModal.module.scss';
 
 export default class TemplateSelectModal extends React.Component<ITemplateSelectModalProps, ITemplateSelectModalState> {
@@ -30,21 +31,28 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
 
     public render(): React.ReactElement<ITemplateSelectModalProps> {
         return (
-            <ProjectSetupBaseModal
-                title={strings.TemplateSelectModalTitle}
-                isBlocking={true}
-                isDarkOverlay={true}
+            <Dialog
+                hidden={false}
+                modalProps={{
+                    isBlocking: true,
+                    isDarkOverlay: true,
+                }}
+                dialogContentProps={{
+                    title: strings.TemplateSelectModalTitle,
+                    type: DialogType.largeHeader,
+                }}
+                onDismiss={this.props.onDismiss}
                 containerClassName={styles.templateSelectModal}>
-                {this._renderBody()}
-                {this._renderFooter()}
-            </ProjectSetupBaseModal>
+                {this._body}
+                {this._footer}
+            </Dialog>
         );
     }
 
     /**
      * Render body
      */
-    private _renderBody() {
+    private get _body() {
         return (
             <React.Fragment>
                 <div className={styles.templateSelect}>
@@ -57,49 +65,15 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
                             disabled={this._getTemplateOptions().length === 1} />
                     </div>
                 </div>
-                <CollapsableSection
-                    title={strings.SettingsTitle}
-                    className={styles.settings}
-                    contentClassName={styles.settingsContent}>
-                    <div className={styles.settingsItem}>
-                        <Toggle
-                            label={strings.IncludeStandardFoldersLabel}
-                            defaultChecked={this.state.includeStandardFolders}
-                            disabled={true}
-                            onChanged={includeStandardFolders => this.setState({ includeStandardFolders })} />
-                    </div>
-                    <div className={styles.settingsItem}>
-                        <Toggle
-                            label={strings.CopyPlannerTasksLabel}
-                            defaultChecked={this.state.copyPlannerTasks}
-                            onChanged={copyPlannerTasks => this.setState({ copyPlannerTasks })} />
-                    </div>
-                </CollapsableSection>
-                <CollapsableSection
-                    title={strings.ListContentTitle}
-                    className={styles.listContent}
-                    contentClassName={styles.listContentList}>
-                    {this.props.data.listContentConfig.map((lcc, idx) => (
-                        <div key={`${idx}`} className={styles.listContentItem}>
-                            <Toggle
-                                label={lcc.title}
-                                defaultChecked={lcc.isDefault}
-                                disabled={true}
-                                onChanged={checked => this._onListContentItemToggle(lcc, checked)} />
-                        </div>
-                    ))}
-                </CollapsableSection>
-                <CollapsableSection
-                    hidden={this.props.data.extensions.length === 0}
-                    title={strings.ExtensionsTitle}
-                    className={styles.extensions}
-                    contentClassName={styles.extensionsList}>
-                    {this.props.data.extensions.map((ext, idx) => (
-                        <div key={`${idx}`} className={styles.extensionItem}>
-                            <Toggle label={ext.title} onChanged={checked => this._onExtensionItemToggle(ext, checked)} />
-                        </div>
-                    ))}
-                </CollapsableSection>
+                <SettingsSection
+                    defaultChecked={{ includeStandardFolders: this.state.includeStandardFolders, copyPlannerTasks: this.state.copyPlannerTasks }}
+                    onChange={obj => this.setState(obj)} />
+                <ExtensionsSection
+                    extensions={this.props.data.extensions}
+                    onChange={obj => this.setState(obj)} />
+                <ListContentSection
+                    listContentConfig={this.props.data.listContentConfig}
+                    onChange={obj => this.setState(obj)} />
             </React.Fragment>
         );
     }
@@ -107,53 +81,19 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
     /**
      * Render footrer
      */
-    private _renderFooter() {
+    private get _footer() {
         return (
-            <React.Fragment>
+            <>
                 <div className={styles.infoText}>
                     <MessageBar>{strings.TemplateSelectModalInfoText}</MessageBar>
                 </div>
-                <div className={styles.submitButton}>
-                    <DefaultButton text={strings.TemplateSelectModalSubmitButtonText} onClick={this._onSubmit.bind(this)} />
-                </div>
-            </React.Fragment>
+                <DialogFooter>
+                    <div className={styles.submitButton}>
+                        <DefaultButton text={strings.TemplateSelectModalSubmitButtonText} onClick={this._onSubmit.bind(this)} />
+                    </div>
+                </DialogFooter>
+            </>
         );
-    }
-
-    /**
-     * On extension item toggle
-     * 
-     * @param {ProjectTemplate} extension Extension
-     * @param {boolean} checked Checked
-     */
-    private _onExtensionItemToggle(extension: ProjectTemplate, checked: boolean): void {
-        if (checked) {
-            this.setState((prevState: ITemplateSelectModalState) => ({
-                selectedExtensions: [extension, ...prevState.selectedExtensions],
-            }));
-        } else {
-            this.setState((prevState: ITemplateSelectModalState) => ({
-                selectedExtensions: prevState.selectedExtensions.filter(ext => extension.title !== ext.title),
-            }));
-        }
-    }
-
-    /**
-     * On list content item toggle
-     * 
-     * @param {ListContentConfig} listContentConfig List content config
-     * @param {boolean} checked Checked
-     */
-    private _onListContentItemToggle(listContentConfig: ListContentConfig, checked: boolean): void {
-        if (checked) {
-            this.setState((prevState: ITemplateSelectModalState) => ({
-                selectedListConfig: [listContentConfig, ...prevState.selectedListConfig],
-            }));
-        } else {
-            this.setState((prevState: ITemplateSelectModalState) => ({
-                selectedListConfig: prevState.selectedListConfig.filter(lcc => listContentConfig.title !== lcc.title),
-            }));
-        }
     }
 
     /**
@@ -183,3 +123,4 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
 }
 
 export { ITemplateSelectModalProps, ITemplateSelectModalState };
+

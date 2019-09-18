@@ -1,0 +1,14 @@
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+
+.extensionsSection {
+  @include ms-Grid-col;
+  @include ms-sm6;
+
+  .list {
+    margin: 10px 0 25px 0;
+
+    .listItem {
+      margin: 0 0 5px 0;
+    }
+  }
+}
