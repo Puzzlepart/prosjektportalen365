@@ -6,23 +6,31 @@
   box-sizing: border-box;
   position: relative;
 
-  .templateSelect {
-    @include ms-Grid-col;
-    @include ms-sm12;
+  .content {
+    div[class*="ms-Dialog-header"] {
+      display: none;
+    }
+    div[class*="ms-Dialog-inner"] {
+      padding: 0;
+    }
+    .templateSelect {
+      @include ms-Grid-col;
+      @include ms-sm12;
 
-    .templateSelectTitle {
-      font-size: 18px;
+      .templateSelectTitle {
+        font-size: 18px;
+      }
+
+      .templateSelectDropdown {
+        margin: 10px 0 25px 0;
+      }
     }
 
-    .templateSelectDropdown {
-      margin: 10px 0 25px 0;
+    .infoText {
+      @include ms-Grid-col;
+      @include ms-sm12;
+      margin: 15px 0 15px 0;
     }
-  }
-
-  .infoText {
-    @include ms-Grid-col;
-    @include ms-sm12;
-    margin: 15px 0 15px 0;
   }
 
   .submitButton {

@@ -22,7 +22,7 @@ export class ListContentSection extends React.Component<IListContentSectionProps
         return (
             <CollapsableSection
                 hidden={this.props.listContentConfig.length === 0}
-                title={strings.ExtensionsTitle}
+                title={strings.ListContentTitle}
                 className={styles.listContentSection}
                 contentClassName={styles.list}>
                 {this.props.listContentConfig.map((lcc, idx) => (

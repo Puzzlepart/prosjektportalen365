@@ -2,7 +2,7 @@
 
 .listContentSection {
   @include ms-Grid-col;
-  @include ms-sm6;
+  @include ms-sm12;
 
   .list {
     margin: 10px 0 25px 0;

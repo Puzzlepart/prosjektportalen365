@@ -1,5 +1,5 @@
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { Dialog, DialogContent, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
@@ -39,6 +39,7 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
                 }}
                 dialogContentProps={{
                     title: strings.TemplateSelectModalTitle,
+                    subText: strings.TemplateSelectModalInfoText,
                     type: DialogType.largeHeader,
                 }}
                 onDismiss={this.props.onDismiss}
@@ -54,7 +55,10 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
      */
     private get _body() {
         return (
-            <React.Fragment>
+            <DialogContent className={styles.content}>
+                {/* <div className={styles.infoText}>
+                    <MessageBar>{strings.TemplateSelectModalInfoText}</MessageBar>
+                </div> */}
                 <div className={styles.templateSelect}>
                     <div className={styles.templateSelectTitle}>{strings.TemplateSelectTitle}</div>
                     <div className={styles.templateSelectDropdown}>
@@ -74,7 +78,7 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
                 <ListContentSection
                     listContentConfig={this.props.data.listContentConfig}
                     onChange={obj => this.setState(obj)} />
-            </React.Fragment>
+            </DialogContent>
         );
     }
 
@@ -83,16 +87,14 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
      */
     private get _footer() {
         return (
-            <>
-                <div className={styles.infoText}>
-                    <MessageBar>{strings.TemplateSelectModalInfoText}</MessageBar>
+            <DialogFooter>
+                <div className={styles.submitButton}>
+                    <DefaultButton
+                        text={strings.TemplateSelectModalSubmitButtonText}
+                        iconProps={{ iconName: 'Settings' }}
+                        onClick={this._onSubmit.bind(this)} />
                 </div>
-                <DialogFooter>
-                    <div className={styles.submitButton}>
-                        <DefaultButton text={strings.TemplateSelectModalSubmitButtonText} onClick={this._onSubmit.bind(this)} />
-                    </div>
-                </DialogFooter>
-            </>
+            </DialogFooter>
         );
     }
 
