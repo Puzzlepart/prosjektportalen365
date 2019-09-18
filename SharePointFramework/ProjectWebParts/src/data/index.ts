@@ -1,5 +1,5 @@
 import { stringIsNullOrEmpty } from '@pnp/common';
-import { List, ItemUpdateResult } from '@pnp/sp';
+import { sp, List, ItemUpdateResult } from '@pnp/sp';
 import { ISPList } from 'models/ISPList';
 import { makeUrlAbsolute } from 'shared/lib/helpers';
 import { SpEntityPortalService } from 'sp-entityportal-service';
@@ -70,28 +70,19 @@ export default new class SPDataAdapter {
     /**
      * Get property item from site
      * 
-     * @param {List} propertiesList Properties list
+     * @param {string} listName List name
      * @param {string} urlSource Url source
      */
-    public async getPropertyItem(propertiesList: List, urlSource: string = encodeURIComponent(document.location.href)) {
+    public async getPropertyItem(listName: string, urlSource: string = encodeURIComponent(document.location.href)) {
         try {
-            let [item] = await propertiesList.items.select('Id').top(1).get<{ Id: number }[]>();
+            let [list] = await sp.web.lists.filter(`Title eq '${listName}'`).select('Id', 'DefaultEditFormUrl').get<ISPList[]>();
+            if (!list) return null;
+            let [item] = await sp.web.lists.getById(list.Id).items.select('Id').top(1).get<{ Id: number }[]>();
             if (!item) return null;
             // tslint:disable-next-line: naming-convention
-            let [fieldValuesText, fieldValues, list] = await Promise.all([
-                propertiesList.items.getById(item.Id).fieldValuesAsText.get(),
-                propertiesList.items.getById(item.Id).get(),
-                propertiesList
-                    .select(
-                        'Id',
-                        'DefaultEditFormUrl',
-                        'Fields/InternalName',
-                        'Fields/TypeAsString',
-                        'Fields/TextField',
-                        'Fields/Id',
-                    )
-                    .expand('Fields')
-                    .get<ISPList>(),
+            let [fieldValuesText, fieldValues] = await Promise.all([
+                sp.web.lists.getById(list.Id).items.getById(item.Id).fieldValuesAsText.get(),
+                sp.web.lists.getById(list.Id).items.getById(item.Id).get(),
             ]);
             let editFormUrl = makeUrlAbsolute(`${list.DefaultEditFormUrl}?ID=${item.Id}&Source=${urlSource}`);
             let versionHistoryUrl = `${this._settings.webUrl}/_layouts/15/versions.aspx?list=${list.Id}&ID=${item.Id}`;

@@ -1,11 +1,10 @@
-import * as React from 'react';
-import styles from './ProgressModal.module.scss';
-import * as strings from 'ProjectSetupApplicationCustomizerStrings';
-import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { IProgressModalProps } from './IProgressModalProps';
+import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
+import * as strings from 'ProjectSetupApplicationCustomizerStrings';
+import * as React from 'react';
 import ProjectSetupBaseModal from '../ProjectSetupBaseModal';
-import EditPropertiesLink from './EditPropertiesLink';
+import { IProgressModalProps } from './IProgressModalProps';
+import styles from './ProgressModal.module.scss';
 
 export default class ProgressModal extends React.PureComponent<IProgressModalProps, {}>{
     public render() {
@@ -21,11 +20,6 @@ export default class ProgressModal extends React.PureComponent<IProgressModalPro
                 <div className={styles.progressIndicator}>
                     <ProgressIndicator label={this.props.text} description={this.props.subText} />
                 </div>
-                {(this.props.taskParams.entity && this.props.taskParams.entity.editFormUrl) && (
-                    <div className={styles.editPropertiesLink}>
-                        <EditPropertiesLink editFormUrl={this.props.taskParams.entity.editFormUrl} />
-                    </div>
-                )}
             </ProjectSetupBaseModal>
         );
     }

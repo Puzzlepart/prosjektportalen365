@@ -1,13 +1,7 @@
 import { TypedHash } from '@pnp/common';
 import { IEntityField } from 'sp-entityportal-service';
-import { ProjectPropertyModel } from './ProjectProperty';
 
 export interface IProjectInformationData {
-  /**
-   * Properties
-   */
-  properties?: ProjectPropertyModel[];
-
   /**
    * URL for edit form
    */

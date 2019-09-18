@@ -1,7 +1,7 @@
 import { Web, CamlQuery } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
 import { default as HubSiteService, IHubSite } from 'sp-hubsite-service';
-import SpEntityPortalService from 'sp-entityportal-service';
+import { SpEntityPortalService } from 'sp-entityportal-service';
 import { PageContext } from '@microsoft/sp-page-context';
 import { SPRest } from '@pnp/sp';
 import { TemplateFile } from '../models';

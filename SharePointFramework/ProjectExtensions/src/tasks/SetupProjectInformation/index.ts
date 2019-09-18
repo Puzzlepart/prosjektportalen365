@@ -7,6 +7,7 @@ import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { BaseTaskError } from '../BaseTaskError';
 import { IBaseTaskParams } from '../IBaseTaskParams';
 import { Web, List } from '@pnp/sp';
+import { SpEntityPortalService } from 'sp-entityportal-service';
 
 @task('SetupProjectInformation')
 export default class SetupProjectInformation extends BaseTask {
@@ -22,37 +23,71 @@ export default class SetupProjectInformation extends BaseTask {
     @override
     public async execute(params: IBaseTaskParams, _onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
-            const { web, spfxJsomContext: { jsomContext } } = params;
-            const [contentType, siteFields, { list }] = await Promise.all([
-                this._getHubContentType(params.data.hub.web),
-                this._getSiteFields(params.web),
-                web.lists.ensure(this._listName, undefined, 100, false, { Hidden: true, EnableAttachments: false }),
-            ]);
-            const listFields = await this._getListFields(list);
-            const spList = jsomContext.web.get_lists().getByTitle(this._listName);
-            for (let field of contentType.Fields) {
-                let [listField] = listFields.filter(fld => fld.InternalName === field.InternalName);
-                if (listField) continue;
-                let [siteField] = siteFields.filter(fld => fld.InternalName === field.InternalName);
-                try {
-                    if (siteField) {
-                        this.logInformation(`Adding field ${field.InternalName} to list ${this._listName}`, {});
-                        let spSiteField = jsomContext.web.get_fields().getByInternalNameOrTitle(siteField.InternalName);
-                        spList.get_fields().add(spSiteField);
-                    } else {
-                        this.logInformation(`Adding field ${field.InternalName} to list ${this._listName} as XML`, {});
-                        let newField = spList.get_fields().addFieldAsXml(ProvisionSiteFields.parseFieldXml(field, { DisplayName: field.InternalName }), false, SP.AddFieldOptions.addToDefaultContentType);
-                        newField.set_title(field.Title);
-                        newField.updateAndPushChanges(true);
-                    }
-                    await ExecuteJsomQuery(jsomContext);
-                } catch (error) { }
-            }
-            await list.items.add({ Title: params.context.pageContext.web.title });
+            const propertiesList = await this._clonePropertiesList(params);
+            await propertiesList.items.add({ Title: params.context.pageContext.web.title });
+            await this._addEntryToHub(params);
             return params;
         } catch (error) {
             throw new BaseTaskError(this.name, strings.SetupProjectInformationErrorMessage, error);
         }
+    }
+
+    /**
+     * Add entry to hub
+     * 
+     * @param {IBaseTaskParams} param0 Parameters destructed
+     */
+    private async _addEntryToHub({ data, properties, context }: IBaseTaskParams) {
+        const spEntityPortalService = new SpEntityPortalService({
+            webUrl: data.hub.url,
+            listName: properties.projectsList,
+            identityFieldName: 'GtGroupId',
+            urlFieldName: 'GtSiteUrl',
+        });
+        this.logInformation(`Attempting to retrieve project item from list '${properties.projectsList}' at ${data.hub.url}`, { groupId: context.pageContext.legacyPageContext.groupId, siteId: context.pageContext.site.id.toString() });
+        let entity = await spEntityPortalService.getEntityItem(context.pageContext.legacyPageContext.groupId);
+        if (entity) return;
+        this.logInformation(`Adding project to list '${properties.projectsList}' at ${data.hub.url}`, { groupId: context.pageContext.legacyPageContext.groupId, siteId: context.pageContext.site.id.toString() });
+        await spEntityPortalService.newEntity(
+            context.pageContext.legacyPageContext.groupId,
+            context.pageContext.web.absoluteUrl,
+            { Title: context.pageContext.web.title, GtSiteId: context.pageContext.site.id.toString() },
+        );
+        this.logInformation(`Project added to list '${properties.projectsList}' at ${data.hub.url}`, { id: entity.item.Id });
+    }
+
+    /**
+     * Clone properties list
+     * 
+     * @param {IBaseTaskParams} param0 Parameters destructed
+     */
+    private async _clonePropertiesList({ data, web, spfxJsomContext: { jsomContext } }: IBaseTaskParams): Promise<List> {
+        const [contentType, siteFields, { list }] = await Promise.all([
+            this._getHubContentType(data.hub.web),
+            this._getSiteFields(web),
+            web.lists.ensure(this._listName, undefined, 100, false, { Hidden: true, EnableAttachments: false }),
+        ]);
+        const listFields = await this._getListFields(list);
+        const spList = jsomContext.web.get_lists().getByTitle(this._listName);
+        for (let field of contentType.Fields) {
+            let [listField] = listFields.filter(fld => fld.InternalName === field.InternalName);
+            if (listField) continue;
+            let [siteField] = siteFields.filter(fld => fld.InternalName === field.InternalName);
+            try {
+                if (siteField) {
+                    this.logInformation(`Adding field ${field.InternalName} to list ${this._listName}`, {});
+                    let spSiteField = jsomContext.web.get_fields().getByInternalNameOrTitle(siteField.InternalName);
+                    spList.get_fields().add(spSiteField);
+                } else {
+                    this.logInformation(`Adding field ${field.InternalName} to list ${this._listName} as XML`, {});
+                    let newField = spList.get_fields().addFieldAsXml(ProvisionSiteFields.parseFieldXml(field, { DisplayName: field.InternalName }), false, SP.AddFieldOptions.addToDefaultContentType);
+                    newField.set_title(field.Title);
+                    newField.updateAndPushChanges(true);
+                }
+                await ExecuteJsomQuery(jsomContext);
+            } catch (error) { }
+        }
+        return list;
     }
 
     /**

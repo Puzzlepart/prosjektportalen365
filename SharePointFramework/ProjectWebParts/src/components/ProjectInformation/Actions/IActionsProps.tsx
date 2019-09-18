@@ -3,5 +3,6 @@ export interface IActionsProps {
     hidden: boolean;
     versionHistoryUrl: string;
     editFormUrl: string;
-    onSyncProjectProperties: () => void;
+    onSyncPropertiesEnabled: boolean;
+    onSyncProperties: () => void;
 }

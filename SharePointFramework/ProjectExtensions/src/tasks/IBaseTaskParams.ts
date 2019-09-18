@@ -13,5 +13,4 @@ export interface IBaseTaskParams {
     spfxJsomContext?: ISpfxJsomContext;
     templateSchema?: Schema;
     data?: IProjectSetupApplicationCustomizerData;
-    entity?: any;
 }

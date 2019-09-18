@@ -1,4 +1,5 @@
 import { IProjectInformationData } from './IProjectInformationData';
+import { ProjectPropertyModel } from './ProjectProperty';
 
 export interface IProjectInformationState {
   /**
@@ -12,7 +13,17 @@ export interface IProjectInformationState {
   data?: IProjectInformationData;
 
   /**
+   * Properties
+   */
+  properties?: ProjectPropertyModel[];
+
+  /**
    * @todo describe property
    */
   error?: any;
+
+  /**
+   * @todo describe property
+   */
+  onSyncPropertiesEnabled?: boolean;
 }

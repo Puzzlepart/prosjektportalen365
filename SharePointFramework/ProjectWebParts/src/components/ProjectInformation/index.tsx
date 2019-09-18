@@ -25,7 +25,6 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   };
   private _hubConfigurationService: HubConfigurationService;
   private _spEntityPortalService: SpEntityPortalService;
-  private _propertiesList: List;
 
 
   constructor(props: IProjectInformationProps) {
@@ -33,7 +32,6 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     this.state = { isLoading: true, data: {} };
     this._hubConfigurationService = new HubConfigurationService(this.props.hubSiteUrl);
     this._spEntityPortalService = new SpEntityPortalService({ webUrl: this.props.hubSiteUrl, ...this.props.entity });
-    this._propertiesList = sp.web.lists.getByTitle('Prosjektegenskaper');
     SPDataAdapter.configure({
       spEntityPortalService: this._spEntityPortalService,
       siteId: this.props.siteId,
@@ -43,8 +41,8 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
 
   public async componentDidMount() {
     try {
-      const data = await this._fetchData();
-      this.setState({ data, isLoading: false });
+      const updatedState = await this._fetchData();
+      this.setState({ ...updatedState, isLoading: false });
     } catch (error) {
       this.setState({ error, isLoading: false });
     }
@@ -88,9 +86,8 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
           hidden={this.props.hideActions || !this.props.isSiteAdmin}
           versionHistoryUrl={this.state.data.versionHistoryUrl}
           editFormUrl={this.state.data.editFormUrl}
-          onSyncProjectProperties={() => {
-            SPDataAdapter.syncPropertyItemToHub(this.state.data);
-          }} />
+          onSyncPropertiesEnabled={this.state.onSyncPropertiesEnabled}
+          onSyncProperties={() => SPDataAdapter.syncPropertyItemToHub(this.state.data)} />
       </React.Fragment>
     );
   }
@@ -99,9 +96,9 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
    * Render properties
    */
   private _renderProperties() {
-    if (!this.state.data.properties) return null;
-    const propertiesToRender = this.state.data.properties.filter(p => !p.empty && p.showInDisplayForm);
-    const hasMissingProps = this.state.data.properties.filter(p => p.required && p.empty).length > 0;
+    if (!this.state.properties) return null;
+    const propertiesToRender = this.state.properties.filter(p => !p.empty && p.showInDisplayForm);
+    const hasMissingProps = this.state.properties.filter(p => p.required && p.empty).length > 0;
     if (hasMissingProps) {
       return <MessageBar messageBarType={MessageBarType.error}>{strings.MissingPropertiesMessage}</MessageBar>;
     }
@@ -194,11 +191,11 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
    * 
    * @param {IProjectInformationData} data Initial data
    */
-  private async _fetchData(data: IProjectInformationData = { statusReports: [] }): Promise<IProjectInformationData> {
+  private async _fetchData(data: IProjectInformationData = { statusReports: [] }): Promise<Partial<IProjectInformationState>> {
     try {
       let [configuration, propertyItem, entity] = await Promise.all([
         this._fetchConfiguration(),
-        SPDataAdapter.getPropertyItem(this._propertiesList),
+        SPDataAdapter.getPropertyItem('Prosjektegenskpaer'),
         this._spEntityPortalService.fetchEntity(this.props.siteId, this.props.webUrl),
       ]);
 
@@ -216,7 +213,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
 
       data.fields = entity.fields;
 
-      data.properties = this._transformProperties(data.fieldValuesText, configuration);
+      let properties = this._transformProperties(data.fieldValuesText, configuration);
 
       if (this.props.statusReportsListName && this.props.statusReportsCount > 0) {
         const statusReportsList = new Web(this.props.hubSiteUrl).lists.getByTitle(this.props.statusReportsListName);
@@ -229,7 +226,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
           .get<{ Id: number, Created: string }[]>();
       }
 
-      return data;
+      return { data, properties, onSyncPropertiesEnabled: !!propertyItem };
     } catch (error) {
       throw error;
     }
