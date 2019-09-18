@@ -1,17 +1,16 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
-import { dateAdd, PnPClientStorage, stringIsNullOrEmpty, TypedHash } from '@pnp/common';
+import { dateAdd, PnPClientStorage, TypedHash } from '@pnp/common';
 import { List, sp, Web } from '@pnp/sp';
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
-import { makeUrlAbsolute } from 'shared/lib/helpers';
 import { HubConfigurationService } from 'shared/lib/services';
 import { SpEntityPortalService } from 'sp-entityportal-service';
 import * as format from 'string-format';
-import * as _ from 'underscore';
+import SPDataAdapter from '../../data';
+import { Actions } from './Actions';
 import { IProjectInformationData } from './IProjectInformationData';
 import { IProjectInformationProps } from './IProjectInformationProps';
 import { IProjectInformationState } from './IProjectInformationState';
@@ -35,6 +34,11 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     this._hubConfigurationService = new HubConfigurationService(this.props.hubSiteUrl);
     this._spEntityPortalService = new SpEntityPortalService({ webUrl: this.props.hubSiteUrl, ...this.props.entity });
     this._propertiesList = sp.web.lists.getByTitle('Prosjektegenskaper');
+    SPDataAdapter.configure({
+      spEntityPortalService: this._spEntityPortalService,
+      siteId: this.props.siteId,
+      webUrl: this.props.webUrl,
+    });
   }
 
   public async componentDidMount() {
@@ -79,37 +83,14 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
           urlTemplate={`${this.props.webUrl}/${this.props.statusReportsLinkUrlTemplate}`}
           urlSourceParam={document.location.href}
           hidden={this.props.statusReportsCount === 0} />
-        <div className={styles.actions} hidden={this.props.hideActions || !this.props.isSiteAdmin}>
-          <div>
-            <DefaultButton
-              text={strings.ViewVersionHistoryText}
-              href={this.state.data.versionHistoryUrl}
-              iconProps={{ iconName: 'History' }}
-              style={{ width: 300 }} />
-          </div>
-          <div>
-            <DefaultButton
-              text={strings.EditPropertiesText}
-              href={this.state.data.editFormUrl}
-              iconProps={{ iconName: 'Edit' }}
-              style={{ width: 300 }} />
-          </div>
-          <div>
-            <DefaultButton
-              text={strings.SyncProjectPropertiesText}
-              onClick={this._syncPropertyItem.bind(this)}
-              iconProps={{ iconName: 'Sync' }}
-              style={{ width: 300 }} />
-          </div>
-          <div>
-            <DefaultButton
-              text={strings.EditSiteInformationText}
-              onClick={() => window['_spLaunchSiteSettings']()}
-              disabled={!window['_spLaunchSiteSettings']}
-              iconProps={{ iconName: 'Info' }}
-              style={{ width: 300 }} />
-          </div>
-        </div>
+        <Actions
+          className={styles.actions}
+          hidden={this.props.hideActions || !this.props.isSiteAdmin}
+          versionHistoryUrl={this.state.data.versionHistoryUrl}
+          editFormUrl={this.state.data.editFormUrl}
+          onSyncProjectProperties={() => {
+            SPDataAdapter.syncPropertyItemToHub(this.state.data);
+          }} />
       </React.Fragment>
     );
   }
@@ -189,11 +170,11 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   /**
   * Map properties from entity item and configuration
   *
-  * @param {TypedHash} item Entity item
+  * @param {TypedHash} fieldValuesText Field values as text
   * @param {Object} configuration Configuration
   */
-  private _transformProperties(item: TypedHash<any>, configuration: { fields: any[], columnConfig: any[] }) {
-    const fieldNames = Object.keys(item).filter(fieldName => {
+  private _transformProperties(fieldValuesText: TypedHash<any>, configuration: { fields: any[], columnConfig: any[] }) {
+    const fieldNames = Object.keys(fieldValuesText).filter(fieldName => {
       let [field] = configuration.fields.filter(fld => fld.InternalName === fieldName);
       let [column] = configuration.columnConfig.filter(c => c.GtInternalName === fieldName);
       if (field && column) {
@@ -203,76 +184,9 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     });
     const properties = fieldNames.map(fieldName => {
       let [field] = configuration.fields.filter(fld => fld.InternalName === fieldName);
-      return new ProjectPropertyModel(field, item[fieldName]);
+      return new ProjectPropertyModel(field, fieldValuesText[fieldName]);
     });
     return properties;
-  }
-
-  /**
-   * Get property item from site
-   * 
-   * @param {string} urlSource URL source
-   */
-  private async _getPropertyItem(urlSource: string = encodeURIComponent(document.location.href)) {
-    try {
-      let [item] = await this._propertiesList.items.select('Id').top(1).get<{ Id: number }[]>();
-      if (!item) return null;
-      // tslint:disable-next-line: naming-convention
-      let [fieldValues, list] = await Promise.all([
-        this._propertiesList.items.getById(item.Id).fieldValuesAsText.get(),
-        this._propertiesList
-          .select(
-            'Id',
-            'DefaultEditFormUrl',
-            'Fields/InternalName',
-            'Fields/TypeAsString',
-            'Fields/TextField',
-            'Fields/Id',
-          )
-          .expand('Fields')
-          .get<{ Id: string, DefaultEditFormUrl: string, Fields: { InternalName: string, TypeAsString: string, TextField: string, Id: string }[] }>(),
-      ]);
-      let editFormUrl = makeUrlAbsolute(`${list.DefaultEditFormUrl}?ID=${item.Id}&Source=${urlSource}`);
-      let versionHistoryUrl = `${this.props.webUrl}/_layouts/15/versions.aspx?list=${list.Id}&ID=${item.Id}`;
-      return { fieldValues, editFormUrl, versionHistoryUrl, fields: list.Fields };
-    } catch (error) {
-      return null;
-    }
-  }
-
-  /**
-   * Sync property item from site
-   * 
-   * @param {any} _evt Event
-   * @param {string[]} skip Property names to skip
-   */
-  private async _syncPropertyItem(_evt: any, skipProps: string[] = ['GtSiteId', 'GtGroupId', 'GtSiteUrl']) {
-    try {
-      const { fields, fieldValues } = this.state.data;
-      const gtFields = fields.filter(fld => fld.InternalName.indexOf('Gt') === 0);
-      const properties = _.omit(gtFields.reduce((obj, fld) => {
-        let fieldValue = fieldValues[fld.InternalName];
-        if (stringIsNullOrEmpty(fieldValue)) return obj;
-        switch (fld.TypeAsString) {
-          case 'TaxonomyFieldType': {
-            let [textField] = fields.filter(f => f.Id === fld.TextField);
-            if (textField) {
-              obj[textField.InternalName] = fieldValues[textField.InternalName];
-            }
-          }
-            break;
-          case 'Text': {
-            obj[fld.InternalName] = fieldValue;
-          }
-            break;
-        }
-        return obj;
-      }, {}), skipProps);
-      await this._spEntityPortalService.updateEntityItem(this.props.siteId, properties);
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
   }
 
   /**
@@ -284,24 +198,25 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     try {
       let [configuration, propertyItem, entity] = await Promise.all([
         this._fetchConfiguration(),
-        this._getPropertyItem(),
+        SPDataAdapter.getPropertyItem(this._propertiesList),
         this._spEntityPortalService.fetchEntity(this.props.siteId, this.props.webUrl),
       ]);
 
       if (propertyItem) {
-        data.editFormUrl = propertyItem.editFormUrl;
-        data.versionHistoryUrl = propertyItem.versionHistoryUrl;
-        data.fieldValues = propertyItem.fieldValues;
+        data = { ...data, ...propertyItem };
       } else {
         entity = await this._spEntityPortalService.fetchEntity(this.props.siteId, this.props.webUrl);
-        data.editFormUrl = entity.urls.editFormUrl;
-        data.versionHistoryUrl = entity.urls.versionHistoryUrl;
-        data.fieldValues = entity.fieldValues;
+        data = {
+          ...data,
+          editFormUrl: entity.urls.editFormUrl,
+          versionHistoryUrl: entity.urls.versionHistoryUrl,
+          fieldValues: entity.fieldValues,
+        };
       }
 
       data.fields = entity.fields;
 
-      data.properties = this._transformProperties(data.fieldValues, configuration);
+      data.properties = this._transformProperties(data.fieldValuesText, configuration);
 
       if (this.props.statusReportsListName && this.props.statusReportsCount > 0) {
         const statusReportsList = new Web(this.props.hubSiteUrl).lists.getByTitle(this.props.statusReportsListName);
