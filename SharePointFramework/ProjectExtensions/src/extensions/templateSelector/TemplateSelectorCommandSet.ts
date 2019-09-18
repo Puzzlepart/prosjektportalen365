@@ -27,7 +27,14 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
 
   @override
   public async onInit() {
-    sp.setup({ spfxContext: this.context });
+    sp.setup({
+      spfxContext: this.context,
+      defaultCachingStore: 'session',
+      defaultCachingTimeoutSeconds: 15,
+      enableCacheExpiration: true,
+      cacheExpirationIntervalMilliseconds: 2500,
+      globalCacheDisable: false,
+    });
     const openTemplateSelectorCommand: Command = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR');
     if (!openTemplateSelectorCommand) return;
     Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Initializing', data: { version: this.context.manifest.version }, level: LogLevel.Info });
