@@ -4,28 +4,12 @@
    * Chrome browser: https://aka.ms/spfx-debugger-extensions
    */
   "version": "0.2.0",
-  "configurations": [{
-      "name": "Local workbench",
-      "type": "chrome",
-      "request": "launch",
-      "url": "https://localhost:4321/temp/workbench.html",
-      "webRoot": "${workspaceRoot}",
-      "sourceMaps": true,
-      "sourceMapPathOverrides": {
-        "webpack:///.././src/*": "${webRoot}/src/*",
-        "webpack:///../../../src/*": "${webRoot}/src/*",
-        "webpack:///../../../../src/*": "${webRoot}/src/*",
-        "webpack:///../../../../../src/*": "${webRoot}/src/*"
-      },
-      "runtimeArgs": [
-        "--remote-debugging-port=9222"
-      ]
-    },
+  "configurations": [
     {
       "name": "Hosted workbench",
       "type": "chrome",
       "request": "launch",
-      "url": "https://tenant.sharepoint.com",
+      "url": "https://tenant.sharepoint.com/sites/project?debugManifestsFile=https://localhost:4321/temp/manifests.js&loadSPFX=true&customActions={%22ce34553d-ab47-4107-8dd1-e980d953996d%22:{%22location%22:%22ClientSideExtension.ApplicationCustomizer%22,%22properties%22:{%22templatesLibrary%22:%22Prosjektmaler%22,%22extensionsLibrary%22:%22Prosjekttillegg%22,%22projectsList%22:%22Prosjekter%22,%22contentConfigList%22:%22Listeinnhold%22,%22termSetIds%22:{%22GtProjectPhase%22:%22abcfc9d9-a263-4abb-8234-be973c46258a%22,%22GtResourceRole%22:%2254da9f47-c64e-4a26-80f3-4d3c3fa1b7b2%22},%22tasks%22:[%22PreTask%22,%22SetupProjectInformation%22]}}}",
       "webRoot": "${workspaceRoot}",
       "sourceMaps": true,
       "sourceMapPathOverrides": {
