@@ -1,22 +1,21 @@
 import { override } from '@microsoft/decorators';
 import { task } from 'decorators/task';
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
-import { Web } from 'sp-js-provisioning';
 import * as stringFormat from 'string-format';
+import { DOMParser } from 'xmldom';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { BaseTaskError } from '../BaseTaskError';
 import { IBaseTaskParams } from '../IBaseTaskParams';
-import { DOMParser } from 'xmldom';
 
 export class SPField {
     // tslint:disable-next-line: naming-convention
     public InternalName: string = '';
     // tslint:disable-next-line: naming-convention
-    public Title: string = '';
+    public Title?: string = '';
     // tslint:disable-next-line: naming-convention
     public SchemaXml: string = '';
     // tslint:disable-next-line: naming-convention
-    public TypeAsString: string = '';
+    public TypeAsString?: string = '';
 }
 
 @task('ProvisionSiteFields')
@@ -30,15 +29,14 @@ export default class ProvisionSiteFields extends BaseTask {
     @override
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
-            const web = new Web(params.context.pageContext.web.absoluteUrl);
             const siteFields = await params.data.hub.web.fields.filter(`Group eq '${strings.SiteFieldsGroupName}' and TypeAsString ne 'Calculated'`).select(...Object.keys(new SPField())).get<SPField[]>();
             for (let i = 0; i < siteFields.length; i++) {
                 let siteField = siteFields[i];
                 this.logInformation('Processing site field', { siteField });
                 onProgress(stringFormat(strings.ProvisionSiteFieldsText, siteField.Title), 'EditCreate');
-                let fieldXml = this._getFieldXml(siteField);
+                let fieldXml = ProvisionSiteFields.parseFieldXml(siteField);
                 this.logInformation(`Processing site field ${siteField.Title}`, { fieldXml });
-                await web.fields.createFieldAsXml(fieldXml);
+                await params.web.fields.createFieldAsXml(fieldXml);
                 this.logInformation(`Site field ${siteField.Title} successfully created`, { fieldXml });
             }
             return params;
@@ -53,7 +51,7 @@ export default class ProvisionSiteFields extends BaseTask {
      * 
      * @param {SPField} siteField Site field
      */
-    private _getFieldXml(siteField: SPField): string {
+    public static parseFieldXml(siteField: SPField): string {
         let { documentElement } = new DOMParser().parseFromString(siteField.SchemaXml);
         documentElement.removeAttribute('Version');
         documentElement.removeAttribute('SourceID');
