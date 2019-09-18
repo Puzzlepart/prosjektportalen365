@@ -63,6 +63,7 @@ declare interface IProjectWebPartsStrings {
   WebPartNotConfiguredMessage: string;
   Yes: string;
   GeneralGroupName: string;
+  SyncProjectPropertiesText: string;
 }
 
 declare module 'ProjectWebPartsStrings' {

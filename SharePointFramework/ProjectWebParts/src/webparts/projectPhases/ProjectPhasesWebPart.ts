@@ -9,7 +9,7 @@ import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { ApplicationInsightsLogListener } from 'shared/lib/logging/ApplicationInsightsLogListener';
-import SpEntityPortalService from 'sp-entityportal-service';
+import { SpEntityPortalService } from 'sp-entityportal-service';
 import HubSiteService from 'sp-hubsite-service';
 
 Logger.subscribe(new ConsoleListener());

@@ -1,5 +1,5 @@
 import { PageContext } from '@microsoft/sp-page-context';
-import SpEntityPortalService, { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
+import { SpEntityPortalService, ISpEntityPortalServiceParams } from 'sp-entityportal-service';
 
 
 export interface IProjectPhasesProps {
