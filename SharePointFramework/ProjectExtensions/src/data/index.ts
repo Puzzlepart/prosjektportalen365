@@ -14,7 +14,7 @@ import { TemplateFile } from '../models';
  * @param {T} constructor Constructor
  */
 export async function getHubFiles<T>(hub: IHubSite, listName: string, constructor?: new (file: any, web: Web) => T) {
-    const files = await hub.web.lists.getByTitle(listName).rootFolder.files.get();
+    const files = await hub.web.lists.getByTitle(listName).rootFolder.files.usingCaching().get();
     return constructor ? files.map(file => new constructor(file, hub.web)) : files;
 }
 
@@ -31,9 +31,9 @@ export async function getHubItems<T>(hub: IHubSite, listName: string, constructo
     try {
         let items: any[];
         if (query) {
-            items = await hub.web.lists.getByTitle(listName).usingCaching().getItemsByCAMLQuery(query, ...expands);
+            items = await hub.web.lists.getByTitle(listName).usingCaching().usingCaching().getItemsByCAMLQuery(query, ...expands);
         } else {
-            items = await hub.web.lists.getByTitle(listName).usingCaching().items.get();
+            items = await hub.web.lists.getByTitle(listName).usingCaching().items.usingCaching().get();
         }
         return constructor ? items.map(item => new constructor(item, hub.web)) : items;
     } catch (error) {
