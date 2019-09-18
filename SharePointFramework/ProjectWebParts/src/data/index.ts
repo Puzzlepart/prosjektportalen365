@@ -1,5 +1,5 @@
 import { stringIsNullOrEmpty } from '@pnp/common';
-import { List } from '@pnp/sp';
+import { List, ItemUpdateResult } from '@pnp/sp';
 import { ISPList } from 'models/ISPList';
 import { makeUrlAbsolute } from 'shared/lib/helpers';
 import { SpEntityPortalService } from 'sp-entityportal-service';
@@ -28,7 +28,7 @@ export default new class SPDataAdapter {
       * @param {IProjectInformationData} data Data
       * @param {string[]} skip Property names to skip
       */
-    public async syncPropertyItemToHub(data: IProjectInformationData, skipProps: string[] = ['GtSiteId', 'GtGroupId', 'GtSiteUrl']) {
+    public async syncPropertyItemToHub(data: IProjectInformationData, skipProps: string[] = ['GtSiteId', 'GtGroupId', 'GtSiteUrl']): Promise<ItemUpdateResult> {
         try {
             const fieldToSync = data.fields.filter(fld => fld.InternalName.indexOf('Gt') === 0);
             const properties = _.omit(fieldToSync.reduce((obj, fld) => {
@@ -61,7 +61,7 @@ export default new class SPDataAdapter {
                 }
                 return obj;
             }, {}), skipProps);
-            await this._settings.spEntityPortalService.updateEntityItem(this._settings.siteId, properties);
+            return await this._settings.spEntityPortalService.updateEntityItem(this._settings.siteId, properties);
         } catch (error) {
             throw error;
         }
