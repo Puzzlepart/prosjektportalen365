@@ -47,11 +47,12 @@ export default class ProvisionSiteFields extends BaseTask {
     }
 
     /**
-     * Get field XML
+     * Parse field XML
      * 
      * @param {SPField} siteField Site field
+     * @param {Object} attributes Attributes
      */
-    public static parseFieldXml(siteField: SPField): string {
+    public static parseFieldXml(siteField: SPField, attributes: { [key: string]: string } = {}): string {
         let { documentElement } = new DOMParser().parseFromString(siteField.SchemaXml);
         documentElement.removeAttribute('Version');
         documentElement.removeAttribute('SourceID');
@@ -59,6 +60,9 @@ export default class ProvisionSiteFields extends BaseTask {
         documentElement.removeAttribute('WebId');
         documentElement.removeAttribute('Hidden');
         documentElement.removeAttribute('List');
+        for (let key of Object.keys(attributes)) {
+            documentElement.setAttribute(key, attributes[key]);
+        }
         return documentElement.toString();
     }
 }
