@@ -1,7 +1,7 @@
 import { override } from '@microsoft/decorators';
 import { task } from 'decorators/task';
 import * as strings from 'ProjectSetupApplicationCustomizerStrings';
-import initSpfxJsom, { ExecuteJsomQuery, JsomContext } from 'spfx-jsom';
+import initSpfxJsom, { ExecuteJsomQuery, JsomContext, ISpfxJsomContext } from 'spfx-jsom';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { BaseTaskError } from '../BaseTaskError';
 import { IBaseTaskParams } from '../IBaseTaskParams';
@@ -17,7 +17,7 @@ export default class SetTaxonomyFields extends BaseTask {
     @override
     public async execute(params: IBaseTaskParams, _onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
-            const { jsomContext, defaultTermStore } = await initSpfxJsom(params.context.pageContext.site.absoluteUrl, { loadTaxonomy: true });
+            let { web, spfxJsomContext: { jsomContext, defaultTermStore } } = params;
             await ExecuteJsomQuery(jsomContext, [{ clientObject: defaultTermStore, exps: 'Id' }]);
             this.logInformation(`Retrieved ID ${defaultTermStore.get_id()} for default term store`);
             Object.keys(params.properties.termSetIds).forEach(fieldName => {
