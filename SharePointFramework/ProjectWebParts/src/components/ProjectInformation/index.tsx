@@ -1,10 +1,9 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
-import { dateAdd, PnPClientStorage, stringIsNullOrEmpty, TypedHash } from '@pnp/common';
+import { dateAdd, PnPClientStorage, PnPClientStore, stringIsNullOrEmpty, TypedHash } from '@pnp/common';
 import { Web } from '@pnp/sp';
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import { HubConfigurationService } from 'shared/lib/services';
@@ -15,11 +14,11 @@ import { Actions } from './Actions';
 import { IProjectInformationData } from './IProjectInformationData';
 import { IProjectInformationProps } from './IProjectInformationProps';
 import { IProjectInformationState } from './IProjectInformationState';
+import { ProgressBar } from './ProgressBar';
 import styles from './ProjectInformation.module.scss';
 import { ProjectProperty, ProjectPropertyModel } from './ProjectProperty';
 import { StatusReports } from './StatusReports';
 import { UserMessage } from './UserMessage';
-import { ProgressBar } from './ProgressBar';
 
 export class ProjectInformation extends React.Component<IProjectInformationProps, IProjectInformationState> {
   public static defaultProps: Partial<IProjectInformationProps> = {
@@ -28,11 +27,13 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   };
   private _hubConfigurationService: HubConfigurationService;
   private _spEntityPortalService: SpEntityPortalService;
+  private _storage: PnPClientStore;
 
 
   constructor(props: IProjectInformationProps) {
     super(props);
     this.state = { isLoading: true, data: {} };
+    this._storage = new PnPClientStorage().session;
     this._hubConfigurationService = new HubConfigurationService(this.props.hubSiteUrl);
     this._spEntityPortalService = new SpEntityPortalService({ webUrl: this.props.hubSiteUrl, ...this.props.entity });
     SPDataAdapter.configure({
@@ -54,7 +55,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
 
   public render(): React.ReactElement<IProjectInformationProps> {
     return (
-      <div className={styles.projectInformation}>
+      <div className={styles.projectInformation} >
         <div className={styles.container}>
           <WebPartTitle
             displayMode={DisplayMode.Read}
@@ -134,6 +135,9 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     );
   }
 
+  /**
+   * On sync properties
+   */
   private async _onSyncProperties() {
     this.setState({ progress: { label: strings.SyncProjectPropertiesProgressLabel, description: '' } });
     const { fields, fieldValues, fieldValuesText } = this.state.data;
@@ -153,7 +157,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   * Fetch configuration
   */
   private async _fetchConfiguration() {
-    return new PnPClientStorage().session.getOrPut('projectinformation_fetchconfiguration', async () => {
+    return this._storage.getOrPut('projectinformation_fetchconfiguration', async () => {
       const [columnConfig, fields] = await Promise.all([
         this._hubConfigurationService.getProjectColumns(),
         this._spEntityPortalService.getEntityFields(),
