@@ -31,7 +31,14 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     super(props);
     this.state = { isLoading: true, data: {} };
     this._hubConfigurationService = new HubConfigurationService(this.props.hubSiteUrl);
-    this._spEntityPortalService = new SpEntityPortalService({ webUrl: this.props.hubSiteUrl, ...this.props.entity });
+    this._spEntityPortalService = new SpEntityPortalService({
+      webUrl: this.props.hubSiteUrl,
+      listName: this.props.entity.listName,
+      identityFieldName: this.props.entity.identityFieldName,
+      contentTypeId: this.props.entity.contentTypeId,
+      urlFieldName: this.props.entity.urlFieldName,
+      fieldPrefix: 'Gt',
+    });
     SPDataAdapter.configure({
       spEntityPortalService: this._spEntityPortalService,
       siteId: this.props.siteId,
