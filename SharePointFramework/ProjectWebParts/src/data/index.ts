@@ -114,11 +114,11 @@ export default new class SPDataAdapter {
      * @param {TypedHash} fieldValuesText Field values in text format for the properties item
      * @param {void} progressFunc Progress function
      */
-    public async syncPropertyItemToHub(fields: any[], fieldValues: TypedHash<any>, fieldValuesText: TypedHash<string>, progressFunc: (description: string) => void): Promise<ItemUpdateResult> {
+    public async syncPropertyItemToHub(fields: any[], fieldValues: TypedHash<any>, fieldValuesText: TypedHash<string>, progressFunc: ({ description: string }) => void): Promise<ItemUpdateResult> {
         try {
-            progressFunc('Oppdaterer Prosjektegenskaper-listen');
+            progressFunc({ description: strings.SyncProjectPropertiesListProgressDescription });
             await this._syncPropertiesList();
-            progressFunc('Synkroniserer egenskaper');
+            progressFunc({ description: strings.SyncProjectPropertiesValuesProgressDescription });
             const fieldToSync = fields.filter(fld => fld.InternalName.indexOf('Gt') === 0);
             const properties = _.omit(fieldToSync.reduce((obj, fld) => {
                 let fieldValue = fieldValuesText[fld.InternalName];

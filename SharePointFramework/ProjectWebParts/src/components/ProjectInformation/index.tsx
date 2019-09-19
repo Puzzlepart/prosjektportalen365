@@ -60,16 +60,16 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
             displayMode={DisplayMode.Read}
             title={this.props.title}
             updateProperty={() => { }} />
-          {this._renderInner()}
+          {this._contents}
         </div>
       </div>
     );
   }
 
   /**
-   * Render component inner
+   * Contents
    */
-  private _renderInner() {
+  private get _contents() {
     if (this.state.isLoading) {
       return <Spinner label={format(strings.LoadingText, this.props.title.toLowerCase())} />;
     }
@@ -135,15 +135,15 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   }
 
   private async _onSyncProperties() {
-    this.setState({ progress: { label: 'Synkroniserer prosjektegenskaper til porteføljeområdet', description: '' } });
+    this.setState({ progress: { label: strings.SyncProjectPropertiesProgressLabel, description: '' } });
     const { fields, fieldValues, fieldValuesText } = this.state.data;
     try {
-      await SPDataAdapter.syncPropertyItemToHub(fields, fieldValues, fieldValuesText, description => {
-        this.setState({ progress: { label: 'Synkroniserer prosjektegenskaper til porteføljeområdet', description } });
+      await SPDataAdapter.syncPropertyItemToHub(fields, fieldValues, fieldValuesText, props => {
+        this.setState({ progress: { label: strings.SyncProjectPropertiesProgressLabel, ...props } });
       });
-      this._addMessage('Prosjektegenskaper ble synkronisert til porteføljeområdet', MessageBarType.success);
+      this._addMessage(strings.SyncProjectPropertiesSuccessText, MessageBarType.success);
     } catch (error) {
-      this._addMessage('Det skjedde feil under synkronisering', MessageBarType.severeWarning);
+      this._addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning);
     } finally {
       this.setState({ progress: null });
     }

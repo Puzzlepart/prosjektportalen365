@@ -1,5 +1,5 @@
 define([], function () {
-  return{
+  return {
     AutomaticReloadFieldLabel: 'Automatisk oppdatering',
     ChangePhaseText: 'Endre til denne fasen',
     ChangingPhaseDescription: 'Endrer fase til {0}',
@@ -61,6 +61,11 @@ define([], function () {
     ProjectStatusGroupName: 'Prosjektstatus',
     NavigateToSourceUrlText: 'Gå tilbake',
     SyncProjectPropertiesText: 'Synkroniser prosjektegenskaper',
-    ProjectPropertiesListName: 'Prosjektegenskaper'
+    ProjectPropertiesListName: 'Prosjektegenskaper',
+    SyncProjectPropertiesProgressLabel: 'Synkroniserer prosjektegenskaper til porteføljeområdet',
+    SyncProjectPropertiesSuccessText: 'Prosjektegenskaper ble synkronisert til porteføljeområdet',
+    SyncProjectPropertiesErrorText: 'Det skjedde feil under synkronisering',
+    SyncProjectPropertiesListProgressDescription: 'Oppdaterer Prosjektegenskaper-listen',
+    SyncProjectPropertiesValuesProgressDescription: 'Synkroniserer egenskaper'
   }
 });

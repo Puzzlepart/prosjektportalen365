@@ -8,7 +8,7 @@ export const UserMessage = (props: IUserMessageProps) => {
     return (
         <div className={props.className}>
             <MessageBar messageBarType={props.messageBarType}>
-                {this.props.text}
+                {props.text}
             </MessageBar>
         </div>
     );
