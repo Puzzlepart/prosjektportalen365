@@ -14,9 +14,11 @@ dependencies:
   scriptjs: 2.5.9
   sp-entityportal-service: 0.6.9
   string-format: 2.0.0
+  xmldom: 0.1.27
 devDependencies:
   '@types/applicationinsights-js': 1.0.9
   '@types/scriptjs': 0.0.2
+  '@types/xmldom': 0.1.29
   typescript: 2.9.2
 packages:
   /@microsoft/sp-core-library/1.9.1:
@@ -200,6 +202,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-oHyg0NssP2RCpCvE35hhbSqMJRsc5lSW+GFe+Vc65JL+kHII1VMYM+0KeV/z4utFuUqPoQRmq8KMMp7ba0dj6Q==
+  /@types/xmldom/0.1.29:
+    dev: true
+    resolution:
+      integrity: sha1-xEKLDKhtO4gUdXJv2UmAs4onw4E=
   /@types/z-schema/3.16.31:
     dev: false
     resolution:
@@ -2465,6 +2471,12 @@ packages:
     dev: false
     resolution:
       integrity: sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
+  /xmldom/0.1.27:
+    dev: false
+    engines:
+      node: '>=0.1'
+    resolution:
+      integrity: sha1-1QH5ezvbQDr4757MIFcxh6rawOk=
   /xtend/4.0.2:
     dev: false
     engines:
@@ -2523,6 +2535,7 @@ specifiers:
   '@pnp/sp-taxonomy': ^1.3.5
   '@types/applicationinsights-js': ^1.0.9
   '@types/scriptjs': ^0.0.2
+  '@types/xmldom': ^0.1.29
   applicationinsights-js: ^1.0.20
   es6-promise: ^4.2.8
   gulp: ^4.0.2
@@ -2532,3 +2545,4 @@ specifiers:
   sp-entityportal-service: ^0.6.9
   string-format: ^2.0.0
   typescript: ^2.9.0
+  xmldom: ^0.1.27

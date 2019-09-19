@@ -21,7 +21,7 @@ export const Actions = (props: IActionsProps) => {
                     iconProps={{ iconName: 'Edit' }}
                     style={{ width: 300 }} />
             </div>
-            <div hidden={!props.onSyncPropertiesEnabled}>
+            <div>
                 <DefaultButton
                     text={strings.SyncProjectPropertiesText}
                     onClick={props.onSyncProperties}

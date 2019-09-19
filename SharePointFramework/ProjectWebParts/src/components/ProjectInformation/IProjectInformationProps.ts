@@ -2,81 +2,62 @@ import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
 
 export interface IProjectInformationProps {
   /**
-   * @todo describe property
+   * Title of the web part
    */
   title?: string;
 
   /**
-   * @todo describe property
+   * Properties for the enitity residing in the hub site
    */
   entity: ISpEntityPortalServiceParams;
 
   /**
-   * @todo describe property
+   * URL for the hub site
    */
   hubSiteUrl: string;
 
   /**
-   * @todo describe property
+   * ID of the site
    */
   siteId: string;
 
   /**
-   * @todo describe property
+   * URL for the web
    */
   webUrl: string;
 
   /**
-   * @todo describe property
+   * Is the user admin of the site
    */
   isSiteAdmin?: boolean;
 
   /**
-   * @todo describe property
+   * Filter field for project properties
    */
   filterField: string;
 
   /**
-   * @todo describe property
+   * Hide actions for the web part
    */
   hideActions?: boolean;
 
   /**
-   * @todo describe property
-   */
-  boxLayout?: boolean;
-
-  /**
-   * @todo describe property
-   */
-  boxBackgroundColor?: string;
-
-  /**
-   * @todo describe property
-   */
-  boxType?: string;
-
-  /**
-   * @todo describe property
+   * Header text for status reports
    */
   statusReportsHeader?: string;
 
   /**
-   * @todo describe property
+   * Number of status reports to show (defaults to 0)
    */
   statusReportsCount?: number;
 
   /**
-   * @todo describe property
-   */
-
-  /**
-   * @todo describe property
+   * List name for status reports
    */
   statusReportsListName?: string;
 
   /**
-   * @todo describe property
+   * URL template for status reports
    */
   statusReportsLinkUrlTemplate?: string;
 }

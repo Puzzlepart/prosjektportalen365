@@ -1,15 +1,28 @@
-import { stringIsNullOrEmpty } from '@pnp/common';
-import { sp, List, ItemUpdateResult } from '@pnp/sp';
+import { stringIsNullOrEmpty, TypedHash, dateAdd } from '@pnp/common';
+import { ItemUpdateResult, sp, Web, List } from '@pnp/sp';
+import { taxonomy } from '@pnp/sp-taxonomy';
 import { ISPList } from 'models/ISPList';
-import { makeUrlAbsolute } from 'shared/lib/helpers';
+import { Phase } from 'models/Phase';
+import { makeUrlAbsolute, parseFieldXml } from 'shared/lib/helpers';
 import { SpEntityPortalService } from 'sp-entityportal-service';
 import * as _ from 'underscore';
-import { IProjectInformationData } from '../components/ProjectInformation/IProjectInformationData';
+import { IPhaseChecklistItem } from 'models';
+import { ChecklistData } from 'components/ProjectPhases/ChecklistData';
+import * as strings from 'ProjectWebPartsStrings';
+import initSpfxJsom, { ExecuteJsomQuery } from 'spfx-jsom';
 
 export interface ISPDataAdapterSettings {
-    spEntityPortalService: SpEntityPortalService;
-    siteId: string;
-    webUrl: string;
+    spEntityPortalService?: SpEntityPortalService;
+    siteId?: string;
+    webUrl?: string;
+    hubSiteUrl?: string;
+}
+
+export interface IGetPropertiesData {
+    editFormUrl?: string;
+    versionHistoryUrl?: string;
+    fieldValues?: TypedHash<any>;
+    fieldValuesText?: TypedHash<string>;
 }
 
 export default new class SPDataAdapter {
@@ -22,36 +35,112 @@ export default new class SPDataAdapter {
     public configure(settings: ISPDataAdapterSettings) {
         this._settings = settings;
     }
+
     /**
-      * Sync property item from site to associated hub
-      * 
-      * @param {IProjectInformationData} data Data
-      * @param {string[]} skip Property names to skip
-      */
-    public async syncPropertyItemToHub(data: IProjectInformationData, skipProps: string[] = ['GtSiteId', 'GtGroupId', 'GtSiteUrl']): Promise<ItemUpdateResult> {
+     * Clone properties list
+     */
+    private async _syncPropertiesList(): Promise<List> {
         try {
-            const fieldToSync = data.fields.filter(fld => fld.InternalName.indexOf('Gt') === 0);
+            let { jsomContext } = await initSpfxJsom(this._settings.webUrl, { loadTaxonomy: true });
+            const [contentType, siteFields, ensureList] = await Promise.all([
+                this._getHubContentType(new Web(this._settings.hubSiteUrl), '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C'),
+                this._getSiteFields(sp.web),
+                sp.web.lists.ensure(strings.ProjectPropertiesListName, undefined, 100, false, { Hidden: true, EnableAttachments: false }),
+            ]);
+            const listFields = await this._getListFields(ensureList.list);
+            const spList = jsomContext.web.get_lists().getByTitle(strings.ProjectPropertiesListName);
+            for (let field of contentType.Fields) {
+                let [listField] = listFields.filter(fld => fld.InternalName === field.InternalName);
+                if (listField) continue;
+                let [siteField] = siteFields.filter(fld => fld.InternalName === field.InternalName);
+                try {
+                    if (siteField) {
+                        let spSiteField = jsomContext.web.get_fields().getByInternalNameOrTitle(siteField.InternalName);
+                        spList.get_fields().add(spSiteField);
+                    } else {
+                        let newField = spList.get_fields().addFieldAsXml(parseFieldXml(field, { DisplayName: field.InternalName }), false, SP.AddFieldOptions.addToDefaultContentType);
+                        newField.set_title(field.Title);
+                        newField.updateAndPushChanges(true);
+                    }
+                    await ExecuteJsomQuery(jsomContext);
+                } catch (error) { }
+            }
+            return ensureList.list;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    /**
+     * Get hub content types
+     * 
+     * @param {Web} web Web
+     * @param {string} contentTypeId Content type ID
+     */
+    private async _getHubContentType(web: Web, contentTypeId: string) {
+        let contentType = await web.contentTypes
+            .getById(contentTypeId)
+            .select('StringId', 'Name', 'Fields/InternalName', 'Fields/Title', 'Fields/SchemaXml')
+            .expand('Fields')
+            .get<{ StringId: string, Name: string, Fields: { InternalName: string, Title: string, SchemaXml: string }[] }>();
+        return contentType;
+    }
+
+    /**
+     * Get site fields for the specifiec web
+     * 
+     * @param {Web} web Web
+     */
+    private async _getSiteFields(web: Web) {
+        let siteFields = await web.fields.select('InternalName').get<{ InternalName: string }[]>();
+        return siteFields;
+    }
+
+    /**
+   * Get list fields for the specified list
+   * 
+   * @param {List} list List
+   */
+    private async _getListFields(list: List) {
+        let listFields = await list.fields.select('InternalName').get<{ InternalName: string }[]>();
+        return listFields;
+    }
+
+    /**
+     * Sync property item from site to associated hub
+     * 
+     * @param {any[]} fields Fields
+     * @param {TypedHash} fieldValues Field values for the properties item
+     * @param {TypedHash} fieldValuesText Field values in text format for the properties item
+     * @param {void} progressFunc Progress function
+     */
+    public async syncPropertyItemToHub(fields: any[], fieldValues: TypedHash<any>, fieldValuesText: TypedHash<string>, progressFunc: (description: string) => void): Promise<ItemUpdateResult> {
+        try {
+            progressFunc('Oppdaterer Prosjektegenskaper-listen');
+            await this._syncPropertiesList();
+            progressFunc('Synkroniserer egenskaper');
+            const fieldToSync = fields.filter(fld => fld.InternalName.indexOf('Gt') === 0);
             const properties = _.omit(fieldToSync.reduce((obj, fld) => {
-                let fieldValue = data.fieldValuesText[fld.InternalName];
+                let fieldValue = fieldValuesText[fld.InternalName];
                 if (stringIsNullOrEmpty(fieldValue)) return obj;
                 switch (fld.TypeAsString) {
                     case 'TaxonomyFieldType': case 'TaxonomyFieldTypeMulti': {
-                        let [textField] = data.fields.filter(f => f.Id === fld.TextField);
+                        let [textField] = fields.filter(f => f.Id === fld.TextField);
                         if (textField) {
-                            obj[textField.InternalName] = data.fieldValuesText[textField.InternalName];
+                            obj[textField.InternalName] = fieldValuesText[textField.InternalName];
                         }
                     }
                         break;
                     case 'User': {
-                        obj[`${fld.InternalName}Id`] = data.fieldValues[`${fld.InternalName}Id`];
+                        obj[`${fld.InternalName}Id`] = fieldValues[`${fld.InternalName}Id`];
                     }
                         break;
                     case 'DateTime': {
-                        obj[fld.InternalName] = new Date(data.fieldValues[fld.InternalName]);
+                        obj[fld.InternalName] = new Date(fieldValues[fld.InternalName]);
                     }
                         break;
                     case 'Currency': {
-                        obj[fld.InternalName] = data.fieldValues[fld.InternalName];
+                        obj[fld.InternalName] = fieldValues[fld.InternalName];
                     }
                         break;
                     default: {
@@ -60,7 +149,7 @@ export default new class SPDataAdapter {
                         break;
                 }
                 return obj;
-            }, {}), skipProps);
+            }, {}), ['GtSiteId', 'GtGroupId', 'GtSiteUrl']);
             return await this._settings.spEntityPortalService.updateEntityItem(this._settings.siteId, properties);
         } catch (error) {
             throw error;
@@ -70,16 +159,14 @@ export default new class SPDataAdapter {
     /**
      * Get property item from site
      * 
-     * @param {string} listName List name
      * @param {string} urlSource Url source
      */
-    public async getPropertyItem(listName: string, urlSource: string = encodeURIComponent(document.location.href)) {
+    private async _getPropertyItem(urlSource: string = encodeURIComponent(document.location.href)) {
         try {
-            let [list] = await sp.web.lists.filter(`Title eq '${listName}'`).select('Id', 'DefaultEditFormUrl').get<ISPList[]>();
+            let [list] = await sp.web.lists.filter(`Title eq '${strings.ProjectPropertiesListName}'`).select('Id', 'DefaultEditFormUrl').get<ISPList[]>();
             if (!list) return null;
             let [item] = await sp.web.lists.getById(list.Id).items.select('Id').top(1).get<{ Id: number }[]>();
             if (!item) return null;
-            // tslint:disable-next-line: naming-convention
             let [fieldValuesText, fieldValues] = await Promise.all([
                 sp.web.lists.getById(list.Id).items.getById(item.Id).fieldValuesAsText.get(),
                 sp.web.lists.getById(list.Id).items.getById(item.Id).get(),
@@ -90,5 +177,127 @@ export default new class SPDataAdapter {
         } catch (error) {
             return null;
         }
+    }
+
+    /**
+     * Get properties
+     */
+    public async getPropertiesData(): Promise<IGetPropertiesData> {
+        let propertyItem = await this._getPropertyItem();
+        // tslint:disable-next-line: early-exit
+        if (propertyItem) {
+            return propertyItem;
+        } else {
+            let entity = await this._settings.spEntityPortalService.fetchEntity(this._settings.siteId, this._settings.webUrl);
+            return {
+                editFormUrl: entity.urls.editFormUrl,
+                versionHistoryUrl: entity.urls.versionHistoryUrl,
+                fieldValues: entity.fieldValues,
+                fieldValuesText: entity.fieldValues,
+            };
+        }
+    }
+
+    /**
+     * Update phase
+     * 
+     * @param {Phase} phase Phase
+     * @param {string} phaseTextField Phase text field
+     */
+    public async updatePhase(phase: Phase, phaseTextField: string): Promise<void> {
+        let properties = { [phaseTextField]: phase.toString() };
+        try {
+            await this._settings.spEntityPortalService.updateEntityItem(this._settings.siteId, properties);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    /**
+     * Get phases
+     * 
+     * @param {string} termSetId Get phases
+     * @param {ChecklistData} checklistData Checklist data
+     */
+    public async getPhases(termSetId: string, checklistData: ChecklistData = {}) {
+        let terms = await taxonomy.getDefaultSiteCollectionTermStore()
+            .getTermSetById(termSetId)
+            .terms
+            .select('Id', 'Name', 'LocalCustomProperties')
+            .usingCaching({
+                key: `projectphases_terms`,
+                storeName: 'session',
+                expiration: dateAdd(new Date(), 'day', 1),
+            })
+            .get();
+        return terms.map(term => new Phase(term.Name, term.Id, checklistData[term.Id], term.LocalCustomProperties));
+    }
+
+    /**
+     * Get current phase
+     */
+    public async getCurrentPhase(): Promise<Phase> {
+        return null;
+    }
+
+    /**
+     * Get checklist data
+     * 
+     * @param {List} list List
+     */
+    public async getChecklistData(list: List): Promise<ChecklistData> {
+        try {
+            const items = await list
+                .items
+                .select(
+                    'ID',
+                    'Title',
+                    'GtComment',
+                    'GtChecklistStatus',
+                    'GtProjectPhase'
+                )
+                .get<IPhaseChecklistItem[]>();
+            const checklistData: ChecklistData = items
+                .filter(item => item.GtProjectPhase)
+                .reduce((obj, item) => {
+                    const status = item.GtChecklistStatus.toLowerCase();
+                    const termId = `/Guid(${item.GtProjectPhase.TermGuid})/`;
+                    obj[termId] = obj[termId] ? obj[termId] : {};
+                    obj[termId].stats = obj[termId].stats || {};
+                    obj[termId].items = obj[termId].items || [];
+                    obj[termId].items.push(item);
+                    obj[termId].stats[status] = obj[termId].stats[status] ? obj[termId].stats[status] + 1 : 1;
+                    return obj;
+                }, {});
+            return checklistData;
+        } catch (e) {
+            return {};
+        }
+    }
+    /**
+     * Fetch term field context
+     * 
+     * @param {string} fieldName Field name for phase
+     */
+    public async getTermFieldContext(fieldName: string) {
+        const [phaseField, textField] = await Promise.all([
+            sp.web.fields.getByInternalNameOrTitle(fieldName)
+                .select('TermSetId')
+                .usingCaching({
+                    key: `projectphases_termsetid`,
+                    storeName: 'session',
+                    expiration: dateAdd(new Date(), 'day', 1),
+                }
+                ).get<{ TermSetId: string }>(),
+            sp.web.fields.getByInternalNameOrTitle(`${fieldName}_0`)
+                .select('InternalName')
+                .usingCaching({
+                    key: `projectphases_phasetextfield`,
+                    storeName: 'session',
+                    expiration: dateAdd(new Date(), 'day', 1),
+                })
+                .get<{ InternalName: string }>(),
+        ]);
+        return { termSetId: phaseField.TermSetId, phaseTextField: textField.InternalName };
     }
 };

@@ -43,29 +43,6 @@ export default class ProjectInformationWebPart extends BaseClientSideWebPart<IPr
         {
           groups: [
             {
-              groupName: strings.LookAndFeelGroupName,
-              groupFields: [
-                PropertyPaneToggle('boxLayout', {
-                  label: strings.BoxLayoutLabel,
-                }),
-                PropertyPaneDropdown('boxType', {
-                  label: strings.BoxTypeLabel,
-                  options: [
-                    { key: '1', text: 'Boks 1' },
-                    { key: '2', text: 'Boks 2' },
-                    { key: '3', text: 'Boks 3' },
-                    { key: '4', text: 'Boks 4' },
-                    { key: '5', text: 'Boks 5' },
-                  ],
-                  disabled: !this.properties.boxLayout,
-                }),
-                PropertyPaneTextField('boxBackgroundColor', {
-                  label: strings.BoxBackgroundColorLabel,
-                  disabled: !this.properties.boxLayout,
-                }),
-              ]
-            },
-            {
               groupName: strings.ProjectStatusGroupName,
               groupFields: [
                 PropertyPaneSlider('statusReportsCount', {

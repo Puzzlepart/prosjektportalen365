@@ -1,14 +1,16 @@
 import { IProjectInformationData } from './IProjectInformationData';
 import { ProjectPropertyModel } from './ProjectProperty';
+import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator';
+import { IUserMessageProps } from './UserMessage';
 
 export interface IProjectInformationState {
   /**
-   * @todo describe property
+   * The component is loading
    */
   isLoading: boolean;
 
   /**
-   * @todo describe property
+   * Data 
    */
   data?: IProjectInformationData;
 
@@ -18,12 +20,17 @@ export interface IProjectInformationState {
   properties?: ProjectPropertyModel[];
 
   /**
-   * @todo describe property
+   * Error object
    */
   error?: any;
 
   /**
-   * @todo describe property
+   * Progress
    */
-  onSyncPropertiesEnabled?: boolean;
+  progress?: IProgressIndicatorProps;
+
+  /**
+   * Messagge
+   */
+  message?: IUserMessageProps;
 }

@@ -1,9 +1,6 @@
 define([], function () {
   return{
     AutomaticReloadFieldLabel: 'Automatisk oppdatering',
-    BoxBackgroundColorLabel: 'Fargekode for bakgrunn',
-    BoxLayoutLabel: 'Vis som boks',
-    BoxTypeLabel: 'Type boks',
     ChangePhaseText: 'Endre til denne fasen',
     ChangingPhaseDescription: 'Endrer fase til {0}',
     ChangingPhaseLabel: 'Vennligst vent',
@@ -27,7 +24,6 @@ define([], function () {
     ErrorText: 'Det skjedde en feil under lasting av {0}.',
     ListSectionDataErrorMessage: 'Det skjedde en feil under uthenting av data for seksjonen. Er den riktig konfigurert?',
     LoadingText: 'Laster {0}...',
-    LookAndFeelGroupName: 'Utseende og funksjonalitet',
     MissingPropertiesMessage: 'Viktig informasjon om prosjektet er ikke satt. Du bør sette disse egenskapene snarest.',
     MoveOn: 'Gå videre',
     NewStatusReportModalHeaderText: 'Ny statusrapport',

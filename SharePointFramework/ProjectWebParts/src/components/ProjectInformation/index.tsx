@@ -1,9 +1,10 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
-import { dateAdd, PnPClientStorage, TypedHash } from '@pnp/common';
-import { List, sp, Web } from '@pnp/sp';
+import { dateAdd, PnPClientStorage, stringIsNullOrEmpty, TypedHash } from '@pnp/common';
+import { Web } from '@pnp/sp';
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import { HubConfigurationService } from 'shared/lib/services';
@@ -17,6 +18,8 @@ import { IProjectInformationState } from './IProjectInformationState';
 import styles from './ProjectInformation.module.scss';
 import { ProjectProperty, ProjectPropertyModel } from './ProjectProperty';
 import { StatusReports } from './StatusReports';
+import { UserMessage } from './UserMessage';
+import { ProgressBar } from './ProgressBar';
 
 export class ProjectInformation extends React.Component<IProjectInformationProps, IProjectInformationState> {
   public static defaultProps: Partial<IProjectInformationProps> = {
@@ -31,15 +34,12 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     super(props);
     this.state = { isLoading: true, data: {} };
     this._hubConfigurationService = new HubConfigurationService(this.props.hubSiteUrl);
-    this._spEntityPortalService = new SpEntityPortalService({
-      webUrl: this.props.hubSiteUrl,
-      ...this.props.entity,
-      fieldPrefix: 'Gt',
-    });
+    this._spEntityPortalService = new SpEntityPortalService({ webUrl: this.props.hubSiteUrl, ...this.props.entity });
     SPDataAdapter.configure({
       spEntityPortalService: this._spEntityPortalService,
       siteId: this.props.siteId,
       webUrl: this.props.webUrl,
+      hubSiteUrl: this.props.hubSiteUrl,
     });
   }
 
@@ -55,7 +55,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   public render(): React.ReactElement<IProjectInformationProps> {
     return (
       <div className={styles.projectInformation}>
-        <div className={styles.container} style={this._generateStyle(this.props)}>
+        <div className={styles.container}>
           <WebPartTitle
             displayMode={DisplayMode.Read}
             title={this.props.title}
@@ -76,24 +76,42 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     if (this.state.error) {
       return <MessageBar messageBarType={MessageBarType.error}>{format(strings.ErrorText, this.props.title.toLowerCase())}</MessageBar>;
     }
+
+    const { statusReports, editFormUrl, versionHistoryUrl } = this.state.data;
+
     return (
-      <React.Fragment>
+      <>
         {this._renderProperties()}
         <StatusReports
           title={this.props.statusReportsHeader}
-          statusReports={this.state.data.statusReports}
+          statusReports={statusReports}
           urlTemplate={`${this.props.webUrl}/${this.props.statusReportsLinkUrlTemplate}`}
           urlSourceParam={document.location.href}
           hidden={this.props.statusReportsCount === 0} />
+        <ProgressBar className={styles.progress} {...this.state.progress} />
+        <UserMessage className={styles.message} {...this.state.message} />
         <Actions
           className={styles.actions}
           hidden={this.props.hideActions || !this.props.isSiteAdmin}
-          versionHistoryUrl={this.state.data.versionHistoryUrl}
-          editFormUrl={this.state.data.editFormUrl}
-          onSyncPropertiesEnabled={this.state.onSyncPropertiesEnabled}
-          onSyncProperties={() => SPDataAdapter.syncPropertyItemToHub(this.state.data)} />
-      </React.Fragment>
+          versionHistoryUrl={versionHistoryUrl}
+          editFormUrl={editFormUrl}
+          onSyncProperties={this._onSyncProperties.bind(this)} />
+      </>
     );
+  }
+
+  /**
+   * Add message
+   * 
+   * @param {string} text Text
+   * @param {MessageBarType} messageBarType Message type
+   * @param {number} duration Duration in seconds (defaults to 5)
+   */
+  private _addMessage(text: string, messageBarType: MessageBarType, duration: number = 5) {
+    this.setState({ message: { text, messageBarType } });
+    window.setTimeout(() => {
+      this.setState({ message: null });
+    }, (duration * 1000));
   }
 
   /**
@@ -116,40 +134,19 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     );
   }
 
-  /**
-  * Generate styles based on props
-  *
-  * @param {IProjectInformationProps} param0 Props
-  */
-  private _generateStyle({ boxLayout, boxType, boxBackgroundColor }: IProjectInformationProps) {
-    let style: React.CSSProperties = {};
-    if (boxLayout && boxType) {
-      style.padding = 20;
-      style.backgroundColor = boxBackgroundColor || '#FFF';
-      switch (boxType) {
-        case '1': {
-          style.boxShadow = '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)';
-        }
-          break;
-        case '2': {
-          style.boxShadow = '0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)';
-        }
-          break;
-        case '3': {
-          style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23)';
-        }
-          break;
-        case '4': {
-          style.boxShadow = '0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22)';
-        }
-          break;
-        case '5': {
-          style.boxShadow = '0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22)';
-        }
-          break;
-      }
+  private async _onSyncProperties() {
+    this.setState({ progress: { label: 'Synkroniserer prosjektegenskaper til porteføljeområdet', description: '' } });
+    const { fields, fieldValues, fieldValuesText } = this.state.data;
+    try {
+      await SPDataAdapter.syncPropertyItemToHub(fields, fieldValues, fieldValuesText, description => {
+        this.setState({ progress: { label: 'Synkroniserer prosjektegenskaper til porteføljeområdet', description } });
+      });
+      this._addMessage('Prosjektegenskaper ble synkronisert til porteføljeområdet', MessageBarType.success);
+    } catch (error) {
+      this._addMessage('Det skjedde feil under synkronisering', MessageBarType.severeWarning);
+    } finally {
+      this.setState({ progress: null });
     }
-    return style;
   }
 
   /**
@@ -194,29 +191,21 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
    */
   private async _fetchData(data: IProjectInformationData = { statusReports: [] }): Promise<Partial<IProjectInformationState>> {
     try {
-      const [configuration, propertyItem, entity] = await Promise.all([
+      const [configuration, propertiesData, fields] = await Promise.all([
         this._fetchConfiguration(),
-        SPDataAdapter.getPropertyItem(strings.ProjectPropertiesListName),
-        this._spEntityPortalService.fetchEntity(this.props.siteId, this.props.webUrl),
+        SPDataAdapter.getPropertiesData(),
+        this._spEntityPortalService.getEntityFields(),
       ]);
 
-      if (propertyItem) {
-        data = { ...data, ...propertyItem };
-      } else {
-        data = {
-          ...data,
-          editFormUrl: entity.urls.editFormUrl,
-          versionHistoryUrl: entity.urls.versionHistoryUrl,
-          fieldValues: entity.fieldValues,
-          fieldValuesText: entity.fieldValues,
-        };
-      }
-
-      data.fields = entity.fields;
+      data.fields = fields;
+      data = {
+        ...data,
+        ...propertiesData,
+      };
 
       let properties = this._transformProperties(data.fieldValuesText, configuration);
 
-      if (this.props.statusReportsListName && this.props.statusReportsCount > 0) {
+      if (!stringIsNullOrEmpty(this.props.statusReportsListName) && this.props.statusReportsCount > 0) {
         const statusReportsList = new Web(this.props.hubSiteUrl).lists.getByTitle(this.props.statusReportsListName);
         data.statusReports = await statusReportsList
           .items
@@ -227,7 +216,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
           .get<{ Id: number, Created: string }[]>();
       }
 
-      return { data, properties, onSyncPropertiesEnabled: !!propertyItem };
+      return { data, properties };
     } catch (error) {
       throw error;
     }

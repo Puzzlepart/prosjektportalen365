@@ -6,9 +6,6 @@ declare interface IProjectWebPartsStrings {
   StatusReportsCountLabel: string;
   StatusReportsLinkUrlTemplateLabel: string;
   AutomaticReloadFieldLabel: string;
-  BoxBackgroundColorLabel: string;
-  BoxLayoutLabel: string;
-  BoxTypeLabel: string;
   ChangePhaseText: string;
   ChangingPhaseDescription: string;
   ChangingPhaseLabel: string;
@@ -32,7 +29,6 @@ declare interface IProjectWebPartsStrings {
   ErrorText: string;
   ListSectionDataErrorMessage: string;
   LoadingText: string;
-  LookAndFeelGroupName: string;
   MissingPropertiesMessage: string;
   MoveOn: string;
   NewStatusReportModalHeaderText: string;

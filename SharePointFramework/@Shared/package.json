@@ -25,11 +25,13 @@
         "object-get": "^2.1.0",
         "scriptjs": "^2.5.9",
         "sp-entityportal-service": "^0.6.9",
-        "string-format": "^2.0.0"
+        "string-format": "^2.0.0",
+        "xmldom": "^0.1.27"
     },
     "devDependencies": {
         "@types/applicationinsights-js": "^1.0.9",
         "@types/scriptjs": "^0.0.2",
+        "@types/xmldom": "^0.1.29",
         "typescript": "^2.9.0"
     }
 }

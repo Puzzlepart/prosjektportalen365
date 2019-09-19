@@ -1,17 +1,7 @@
-import { TypedHash } from '@pnp/common';
+import { IGetPropertiesData } from 'data';
 import { IEntityField } from 'sp-entityportal-service';
 
-export interface IProjectInformationData {
-  /**
-   * URL for edit form
-   */
-  editFormUrl?: string;
-
-  /**
-   * URL for version history
-   */
-  versionHistoryUrl?: string;
-
+export interface IProjectInformationData extends IGetPropertiesData {
   /**
    * Array of status reports
    */
@@ -21,14 +11,4 @@ export interface IProjectInformationData {
    * Array of fields from the entity
    */
   fields?: IEntityField[];
-
-  /**
-   * Field values for the properties item
-   */
-  fieldValues?: TypedHash<any>;
-
-  /**
-   * Field values in text format for the properties item
-   */
-  fieldValuesText?: TypedHash<string>;
 }
