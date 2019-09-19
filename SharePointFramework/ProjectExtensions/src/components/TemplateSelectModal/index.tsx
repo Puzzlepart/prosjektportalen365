@@ -2,7 +2,7 @@ import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Dialog, DialogContent, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
-import * as strings from 'ProjectSetupApplicationCustomizerStrings';
+import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import { ProjectTemplate } from '../../models';
 import { ExtensionsSection } from './ExtensionsSection';

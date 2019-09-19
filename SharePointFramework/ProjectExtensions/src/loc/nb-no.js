@@ -36,8 +36,10 @@ define([], function () {
     CopyListDataErrorMessage: "Det skjedde en feil under kopiering av listeinnhold",
     PlannerConfigurationErrorMessage: "Det skjedde en feil under konfigurering av området",
     SetTaxonomyFieldsErrorMessage: "Det skjedde en feil under konfigurering av taksonomifelter",
-    SetupProjectInformationErrorMessage: "Det skjedde en feil under initialisering av prosjektinformasjon",
+    SetupProjectInformationErrorMessage: "Det skjedde en feil under initialisering av prosjektegenskaper",
+    SetupProjectInformationText: "Setter opp prosjektegenskaper",
     ProvisionSiteFieldsErrorMessage: "Det skjedde en feil under provisjonering av områdekolonner",
     ProvisionSiteFieldsText: "Opprettet feltet {0} på området",
+    PreTaskErrorMessage: 'Det skjedde en feil',
   }
 });

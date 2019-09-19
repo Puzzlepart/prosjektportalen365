@@ -1,6 +1,6 @@
 import { override } from '@microsoft/decorators';
 import { task } from 'decorators/task';
-import * as strings from 'ProjectSetupApplicationCustomizerStrings';
+import * as strings from 'ProjectExtensionsStrings';
 import { ExecuteJsomQuery } from 'spfx-jsom';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { BaseTaskError } from '../BaseTaskError';

@@ -1,13 +1,13 @@
 import { override } from '@microsoft/decorators';
+import { List, Web } from '@pnp/sp';
 import { task } from 'decorators/task';
-import * as strings from 'ProjectSetupApplicationCustomizerStrings';
-import { ExecuteJsomQuery, JsomContext } from 'spfx-jsom';
+import * as strings from 'ProjectExtensionsStrings';
+import { SpEntityPortalService } from 'sp-entityportal-service';
+import { ExecuteJsomQuery } from 'spfx-jsom';
 import { default as ProvisionSiteFields } from 'tasks/ProvisionSiteFields';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { BaseTaskError } from '../BaseTaskError';
 import { IBaseTaskParams } from '../IBaseTaskParams';
-import { Web, List } from '@pnp/sp';
-import { SpEntityPortalService } from 'sp-entityportal-service';
 
 @task('SetupProjectInformation')
 export default class SetupProjectInformation extends BaseTask {
@@ -21,8 +21,9 @@ export default class SetupProjectInformation extends BaseTask {
      * @param {OnProgressCallbackFunction} _onProgress On progress funtion (not currently in use by this task)
      */
     @override
-    public async execute(params: IBaseTaskParams, _onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
+    public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
+            onProgress(strings.SetupProjectInformationText, 'AlignCenter');
             const propertiesList = await this._clonePropertiesList(params);
             await propertiesList.items.add({ Title: params.context.pageContext.web.title });
             await this._addEntryToHub(params);
@@ -37,13 +38,7 @@ export default class SetupProjectInformation extends BaseTask {
      * 
      * @param {IBaseTaskParams} param0 Parameters destructed
      */
-    private async _addEntryToHub({ data, properties, context }: IBaseTaskParams) {
-        const spEntityPortalService = new SpEntityPortalService({
-            webUrl: data.hub.url,
-            listName: properties.projectsList,
-            identityFieldName: 'GtGroupId',
-            urlFieldName: 'GtSiteUrl',
-        });
+    private async _addEntryToHub({ spEntityPortalService, data, properties, context }: IBaseTaskParams) {
         this.logInformation(`Attempting to retrieve project item from list '${properties.projectsList}' at ${data.hub.url}`, { groupId: context.pageContext.legacyPageContext.groupId, siteId: context.pageContext.site.id.toString() });
         let entity = await spEntityPortalService.getEntityItem(context.pageContext.legacyPageContext.groupId);
         if (entity) return;
@@ -62,12 +57,12 @@ export default class SetupProjectInformation extends BaseTask {
      * @param {IBaseTaskParams} param0 Parameters destructed
      */
     private async _clonePropertiesList({ data, web, spfxJsomContext: { jsomContext } }: IBaseTaskParams): Promise<List> {
-        const [contentType, siteFields, { list }] = await Promise.all([
+        const [contentType, siteFields, ensureList] = await Promise.all([
             this._getHubContentType(data.hub.web),
             this._getSiteFields(web),
             web.lists.ensure(this._listName, undefined, 100, false, { Hidden: true, EnableAttachments: false }),
         ]);
-        const listFields = await this._getListFields(list);
+        const listFields = await this._getListFields(ensureList.list);
         const spList = jsomContext.web.get_lists().getByTitle(this._listName);
         for (let field of contentType.Fields) {
             let [listField] = listFields.filter(fld => fld.InternalName === field.InternalName);
@@ -87,7 +82,7 @@ export default class SetupProjectInformation extends BaseTask {
                 await ExecuteJsomQuery(jsomContext);
             } catch (error) { }
         }
-        return list;
+        return ensureList.list;
     }
 
     /**
@@ -109,8 +104,8 @@ export default class SetupProjectInformation extends BaseTask {
      * 
      * @param {Web} web Web
      */
-    private async _getSiteFields(web: Web): Promise<{ InternalName: string }[]> {
-        let siteFields = await web.fields.select('InternalName').get();
+    private async _getSiteFields(web: Web) {
+        let siteFields = await web.fields.select('InternalName').get<{ InternalName: string }[]>();
         return siteFields;
     }
 
@@ -119,8 +114,8 @@ export default class SetupProjectInformation extends BaseTask {
    * 
    * @param {List} list List
    */
-    private async _getListFields(list: List): Promise<{ InternalName: string }[]> {
-        let listFields = await list.fields.select('InternalName').get();
+    private async _getListFields(list: List) {
+        let listFields = await list.fields.select('InternalName').get<{ InternalName: string }[]>();
         return listFields;
     }
 }

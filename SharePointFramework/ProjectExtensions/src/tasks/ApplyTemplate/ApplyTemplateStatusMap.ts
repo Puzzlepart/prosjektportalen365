@@ -1,4 +1,4 @@
-import * as strings from 'ProjectSetupApplicationCustomizerStrings';
+import * as strings from 'ProjectExtensionsStrings';
 
 export const APPLY_TEMPLATE_STATUS_MAP: { [key: string]: { text: string, iconName: string } } = {
     Files: { text: strings.ApplyTemplateFiles, iconName: 'OpenFile' },

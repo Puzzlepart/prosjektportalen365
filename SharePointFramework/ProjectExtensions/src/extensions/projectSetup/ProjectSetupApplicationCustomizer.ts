@@ -5,7 +5,7 @@ import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { sp, Web } from '@pnp/sp';
 import MSGraphHelper from 'msgraph-helper';
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import * as strings from 'ProjectSetupApplicationCustomizerStrings';
+import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { ApplicationInsightsLogListener, ListLogger } from 'shared/lib/logging';
@@ -85,7 +85,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
       Logger.log({ message: '(ProjectSetupApplicationCustomizer) _initializeSetup: Rendering progress modal', data: { selectedTemplate: templateInfo.selectedTemplate.title }, level: LogLevel.Info });
       this._renderProgressModal({ text: strings.ProgressModalLabel, subText: strings.ProgressModalDescription, iconName: 'Page' });
       await this._startProvision();
-      await this._deleteCustomizer(this.componentId, !this._isDebug());
+      await this._deleteCustomizer(this.componentId, true);
     } catch (error) {
       this._renderErrorModal({ error });
     }
@@ -212,7 +212,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
       }
     }
     if (reload) {
-      window.location.href = this.context.pageContext.web.absoluteUrl;
+      window.location.href = window.location.href;
     }
   }
 

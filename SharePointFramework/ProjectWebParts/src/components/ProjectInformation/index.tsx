@@ -33,10 +33,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     this._hubConfigurationService = new HubConfigurationService(this.props.hubSiteUrl);
     this._spEntityPortalService = new SpEntityPortalService({
       webUrl: this.props.hubSiteUrl,
-      listName: this.props.entity.listName,
-      identityFieldName: this.props.entity.identityFieldName,
-      contentTypeId: this.props.entity.contentTypeId,
-      urlFieldName: this.props.entity.urlFieldName,
+      ...this.props.entity,
       fieldPrefix: 'Gt',
     });
     SPDataAdapter.configure({
@@ -74,10 +71,10 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
    */
   private _renderInner() {
     if (this.state.isLoading) {
-      return <Spinner label={format(strings.LoadingText, 'prosjektinformasjon')} />;
+      return <Spinner label={format(strings.LoadingText, this.props.title.toLowerCase())} />;
     }
     if (this.state.error) {
-      return <MessageBar messageBarType={MessageBarType.error}>{format(strings.ErrorText, 'prosjektinformasjon')}</MessageBar>;
+      return <MessageBar messageBarType={MessageBarType.error}>{format(strings.ErrorText, this.props.title.toLowerCase())}</MessageBar>;
     }
     return (
       <React.Fragment>
@@ -157,18 +154,15 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
 
   /**
   * Fetch configuration
-  *
-  * @param {string} key Key for cache
-  * @param {Date} expire Expire for cache
   */
-  private async _fetchConfiguration(key: string = 'projectinformation_fetchconfiguration', expire: Date = dateAdd(new Date(), 'minute', 15)) {
-    return new PnPClientStorage().session.getOrPut(key, async () => {
+  private async _fetchConfiguration() {
+    return new PnPClientStorage().session.getOrPut('projectinformation_fetchconfiguration', async () => {
       const [columnConfig, fields] = await Promise.all([
         this._hubConfigurationService.getProjectColumns(),
         this._spEntityPortalService.getEntityFields(),
       ]);
       return { columnConfig, fields };
-    }, expire);
+    }, dateAdd(new Date(), 'minute', 30));
   }
 
   /**
@@ -200,21 +194,21 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
    */
   private async _fetchData(data: IProjectInformationData = { statusReports: [] }): Promise<Partial<IProjectInformationState>> {
     try {
-      let [configuration, propertyItem, entity] = await Promise.all([
+      const [configuration, propertyItem, entity] = await Promise.all([
         this._fetchConfiguration(),
-        SPDataAdapter.getPropertyItem('Prosjektegenskpaer'),
+        SPDataAdapter.getPropertyItem(strings.ProjectPropertiesListName),
         this._spEntityPortalService.fetchEntity(this.props.siteId, this.props.webUrl),
       ]);
 
       if (propertyItem) {
         data = { ...data, ...propertyItem };
       } else {
-        entity = await this._spEntityPortalService.fetchEntity(this.props.siteId, this.props.webUrl);
         data = {
           ...data,
           editFormUrl: entity.urls.editFormUrl,
           versionHistoryUrl: entity.urls.versionHistoryUrl,
           fieldValues: entity.fieldValues,
+          fieldValuesText: entity.fieldValues,
         };
       }
 

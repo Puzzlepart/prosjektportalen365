@@ -1,6 +1,6 @@
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
-import * as strings from 'ProjectSetupApplicationCustomizerStrings';
+import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import ProjectSetupBaseModal from '../ProjectSetupBaseModal';
 import { IProgressModalProps } from './IProgressModalProps';

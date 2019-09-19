@@ -1,4 +1,5 @@
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base';
+import { SpEntityPortalService } from 'sp-entityportal-service';
 import { Schema, Web } from 'sp-js-provisioning';
 import { ISpfxJsomContext } from 'spfx-jsom';
 import IProjectSetupApplicationCustomizerData from '../extensions/projectSetup/IProjectSetupApplicationCustomizerData';
@@ -13,4 +14,5 @@ export interface IBaseTaskParams {
     spfxJsomContext?: ISpfxJsomContext;
     templateSchema?: Schema;
     data?: IProjectSetupApplicationCustomizerData;
+    spEntityPortalService?: SpEntityPortalService;
 }

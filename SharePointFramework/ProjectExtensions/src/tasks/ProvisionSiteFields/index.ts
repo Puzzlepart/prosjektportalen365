@@ -1,6 +1,6 @@
 import { override } from '@microsoft/decorators';
 import { task } from 'decorators/task';
-import * as strings from 'ProjectSetupApplicationCustomizerStrings';
+import * as strings from 'ProjectExtensionsStrings';
 import * as stringFormat from 'string-format';
 import { DOMParser } from 'xmldom';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';

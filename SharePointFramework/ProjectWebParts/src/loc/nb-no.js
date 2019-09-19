@@ -64,6 +64,7 @@ define([], function () {
     StatusReportsLinkUrlTemplateLabel: 'Lenke for knapp',
     ProjectStatusGroupName: 'Prosjektstatus',
     NavigateToSourceUrlText: 'Gå tilbake',
-    SyncProjectPropertiesText: 'Synkroniser prosjektegenskaper'
+    SyncProjectPropertiesText: 'Synkroniser prosjektegenskaper',
+    ProjectPropertiesListName: 'Prosjektegenskaper'
   }
 });

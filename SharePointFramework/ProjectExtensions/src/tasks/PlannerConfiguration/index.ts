@@ -1,7 +1,7 @@
 import { override } from '@microsoft/decorators';
 import { task } from 'decorators/task';
 import MSGraphHelper from 'msgraph-helper';
-import * as strings from 'ProjectSetupApplicationCustomizerStrings';
+import * as strings from 'ProjectExtensionsStrings';
 import * as stringFormat from 'string-format';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { BaseTaskError } from '../BaseTaskError';

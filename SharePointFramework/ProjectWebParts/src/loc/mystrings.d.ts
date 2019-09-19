@@ -64,6 +64,7 @@ declare interface IProjectWebPartsStrings {
   Yes: string;
   GeneralGroupName: string;
   SyncProjectPropertiesText: string;
+  ProjectPropertiesListName: string;
 }
 
 declare module 'ProjectWebPartsStrings' {

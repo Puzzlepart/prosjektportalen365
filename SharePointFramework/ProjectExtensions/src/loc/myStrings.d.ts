@@ -1,4 +1,4 @@
-declare interface IProjectSetupApplicationCustomizerStrings {
+declare interface IProjectExtensionsStrings {
   ApplyTemplateFiles: string;
   ApplyTemplateLists: string;
   ApplyTemplateNavigation: string;
@@ -36,11 +36,13 @@ declare interface IProjectSetupApplicationCustomizerStrings {
   PlannerConfigurationErrorMessage: string;
   SetTaxonomyFieldsErrorMessage: string;
   SetupProjectInformationErrorMessage: string;
+  SetupProjectInformationText: string;
   ProvisionSiteFieldsErrorMessage: string;
   ProvisionSiteFieldsText: string;
+  PreTaskErrorMessage: string;
 }
 
-declare module 'ProjectSetupApplicationCustomizerStrings' {
-  const strings: IProjectSetupApplicationCustomizerStrings;
+declare module 'ProjectExtensionsStrings' {
+  const strings: IProjectExtensionsStrings;
   export = strings;
 }

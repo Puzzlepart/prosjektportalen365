@@ -1,7 +1,7 @@
 import { sp, Web } from '@pnp/sp';
 import { override } from '@microsoft/decorators';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
-import * as strings from 'ProjectSetupApplicationCustomizerStrings';
+import * as strings from 'ProjectExtensionsStrings';
 import * as stringFormat from 'string-format';
 import { IBaseTaskParams } from '../IBaseTaskParams';
 import { BaseTaskError } from '../BaseTaskError';
