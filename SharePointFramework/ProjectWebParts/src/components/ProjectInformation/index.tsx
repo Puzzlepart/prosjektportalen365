@@ -8,7 +8,7 @@ import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import { HubConfigurationService } from 'shared/lib/services';
-import SpEntityPortalService from 'sp-entityportal-service';
+import { SpEntityPortalService } from 'sp-entityportal-service';
 import * as format from 'string-format';
 import { IProjectInformationData } from './IProjectInformationData';
 import { IProjectInformationProps } from './IProjectInformationProps';
@@ -31,7 +31,11 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     super(props);
     this.state = { isLoading: true, data: {} };
     this._hubConfigurationService = new HubConfigurationService(this.props.hubSiteUrl);
-    this._spEntityPortalService = new SpEntityPortalService({ webUrl: this.props.hubSiteUrl, ...this.props.entity });
+    this._spEntityPortalService = new SpEntityPortalService({
+      webUrl: this.props.hubSiteUrl,
+      fieldPrefix: 'Gt',
+      ...this.props.entity,
+    });
   }
 
   public async componentDidMount() {
@@ -73,7 +77,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
         <StatusReports
           title={this.props.statusReportsHeader}
           statusReports={this.state.data.statusReports}
-          urlTemplate={`${this.state.data.itemSiteUrl}/${this.props.statusReportsLinkUrlTemplate}`}
+          urlTemplate={`${this.props.webUrl}/${this.props.statusReportsLinkUrlTemplate}`}
           urlSourceParam={document.location.href}
           hidden={this.props.statusReportsCount === 0} />
         <div className={styles.actions} hidden={this.props.hideActions || !this.props.isSiteAdmin}>
@@ -199,14 +203,12 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
 
   private async _fetchData(): Promise<IProjectInformationData> {
     try {
-      const [configuration, editFormUrl, versionHistoryUrl, item] = await Promise.all([
+      const [configuration, entityData] = await Promise.all([
         this._fetchConfiguration(),
-        this._spEntityPortalService.getEntityEditFormUrl(this.props.siteId, this.props.webUrl),
-        this._spEntityPortalService.getEntityVersionHistoryUrl(this.props.siteId, this.props.webUrl),
-        this._spEntityPortalService.getEntityItemFieldValues(this.props.siteId),
+        this._spEntityPortalService.fetchEntity(this.props.siteId, this.props.webUrl)
       ]);
 
-      let properties = this._mapProperties(item, configuration);
+      let properties = this._mapProperties(entityData.fieldValues, configuration);
 
       let statusReports: { Id: number, Created: string }[] = [];
 
@@ -223,11 +225,8 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
 
       return {
         properties,
-        editFormUrl,
-        versionHistoryUrl,
-        itemId: item.ID,
-        itemSiteUrl: item.GtSiteUrl,
         statusReports,
+        ...entityData,
       };
     } catch (error) {
       throw error;
