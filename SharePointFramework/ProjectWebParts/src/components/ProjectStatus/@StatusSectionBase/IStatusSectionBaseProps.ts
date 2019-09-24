@@ -1,13 +1,40 @@
-import { PageContext } from '@microsoft/sp-page-context';
 import { ProjectStatusReport, SectionModel } from 'models';
 import { IProjectStatusData } from '../IProjectStatusData';
 import { IStatusElementProps } from '../StatusElement/IStatusElementProps';
 
 export interface IStatusSectionBaseProps {
+  /**
+   * @todo Describe property
+   */
   model: SectionModel;
+
+  /**
+   * @todo Describe property
+   */
   headerProps: IStatusElementProps;
+
+  /**
+   * @todo Describe property
+   */
   report: ProjectStatusReport;
-  pageContext: PageContext;
-  hubSiteUrl: string;
+
+  /**
+   * @todo Describe property
+   */
   data?: IProjectStatusData;
+
+  /**
+   * URL for the hub site
+   */
+  hubSiteUrl: string;
+
+  /**
+   * ID of the site
+   */
+  siteId: string;
+
+  /**
+   * URL for the web
+   */
+  webUrl: string;
 }

@@ -30,12 +30,11 @@ export default new class SPDataAdapter {
     /**
      * Configure
      * 
-     * @param spfxContext 
      * @param settings 
      */
-    public configure(spfxContext: WebPartContext, settings: ISPDataAdapterSettings) {
+    public configure(settings: ISPDataAdapterSettings) {
         this._settings = settings;
-        sp.setup({ spfxContext, ...this.spConfiguration });
+        sp.setup(this.spConfiguration);
     }
 
     /**

@@ -36,7 +36,7 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
       fieldPrefix: 'Gt',
       ...props.entity,
     });
-    SPDataAdapter.configure(this.props.context, {
+    SPDataAdapter.configure({
       spEntityPortalService: this._spEntityPortalService,
       siteId: props.siteId,
       webUrl: props.webUrl,
@@ -95,7 +95,7 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
             phase={this.state.phaseMouseOver}
             isCurrentPhase={currentPhase && (this.state.phaseMouseOver.model.id === currentPhase.id)}
             phaseSubTextProperty={this.props.phaseSubTextProperty}
-            webAbsoluteUrl={this.props.webUrl}
+            webAbsoluteUrl={this.props.context.pageContext.web.absoluteUrl}
             onChangePhase={phase => this.setState({ confirmPhase: phase })}
             onDismiss={this._onProjectPhaseCalloutDismiss.bind(this)}
             gapSpace={5} />
@@ -144,7 +144,7 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
       this.setState({ data: { ...this.state.data, currentPhase: phase }, confirmPhase: null, isChangingPhase: false });
       if (this.props.automaticReload) {
         window.setTimeout(() => {
-          document.location.href = this.props.webUrl;
+          document.location.href = this.props.context.pageContext.web.absoluteUrl;
         }, (this.props.reloadTimeout * 5000));
       } else {
         Logger.log({ message: '(ProjectPhases) _onChangePhase: Successfully changed phase. Automatic reload is disabled.', level: LogLevel.Info });

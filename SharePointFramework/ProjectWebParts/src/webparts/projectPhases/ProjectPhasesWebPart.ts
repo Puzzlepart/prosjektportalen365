@@ -25,10 +25,9 @@ export default class ProjectPhasesWebPart extends BaseClientSideWebPart<IProject
 
   public render(): void {
     const element: React.ReactElement<IProjectPhasesProps> = React.createElement(ProjectPhases, {
-      context: this.context,
-      hubSiteUrl: this._hubSite.url,
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,
+      hubSiteUrl: this._hubSite.url,
       ...this.properties,
     });
     ReactDom.render(element, this.domElement);

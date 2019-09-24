@@ -46,7 +46,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
       fieldPrefix: 'Gt',
       ...props.entity,
     });
-    SPDataAdapter.configure(this.props.context, {
+    SPDataAdapter.configure({
       spEntityPortalService: this._spEntityPortalService,
       siteId: props.siteId,
       webUrl: props.webUrl,

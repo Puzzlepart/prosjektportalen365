@@ -8,11 +8,6 @@ export interface IProjectInformationProps {
   title?: string;
 
   /**
-   * Web part context
-   */
-  context: WebPartContext;
-
-  /**
    * Properties for the enitity residing in the hub site
    */
   entity: ISpEntityPortalServiceParams;
@@ -33,7 +28,7 @@ export interface IProjectInformationProps {
   webUrl: string;
 
   /**
-   * Is the user admin of the site
+   * Is the current user site admin
    */
   isSiteAdmin?: boolean;
 

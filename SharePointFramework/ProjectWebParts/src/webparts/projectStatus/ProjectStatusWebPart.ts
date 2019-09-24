@@ -28,10 +28,11 @@ export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProject
 
   public render(): void {
     const element: React.ReactElement<IProjectStatusProps> = React.createElement(ProjectStatus, {
-      context: this.context,
-      hubSiteUrl: this._hubSite.url,
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,
+      webTitle: this.context.pageContext.web.title,
+      currentUserEmail: this.context.pageContext.user.email,
+      hubSiteUrl: this._hubSite.url,
       ...this.properties,
     });
     ReactDom.render(element, this.domElement);

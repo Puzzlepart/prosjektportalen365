@@ -10,12 +10,12 @@ export interface IProjectPhasesProps {
   context: WebPartContext;
 
   /**
-   * @todo Describe property
+   * Field name for phase field
    */
   phaseField: string;
 
   /**
-   * @todo Describe property
+   * Automatic reload after phase change
    */
   automaticReload: boolean;
 
@@ -35,17 +35,17 @@ export interface IProjectPhasesProps {
   webUrl: string;
 
   /**
-   * @todo Describe property
+   * Reload timeout
    */
   reloadTimeout: number;
 
   /**
-   * @todo Describe property
+   * Should phase change be confirmed
    */
   confirmPhaseChange: boolean;
 
   /**
-   * @todo Describe property
+   * View name for current phase
    */
   currentPhaseViewName: boolean;
 
@@ -58,14 +58,4 @@ export interface IProjectPhasesProps {
    * @todo Describe property
    */
   entity: ISpEntityPortalServiceParams;
-
-  /**
-   * @todo Describe property
-   */
-  spEntityPortalService: SpEntityPortalService;
-
-  /**
-   * @todo Describe property
-   */
-  pageContext: PageContext;
 }

@@ -22,8 +22,8 @@ export default class SummarySection extends StatusSectionBase<ISummarySectionPro
         <div className={styles.projectInformation}>
           <ProjectInformation
             hubSiteUrl={this.props.hubSiteUrl}
-            siteId={this.props.pageContext.site.id.toString()}
-            webUrl={this.props.pageContext.web.absoluteUrl}
+            siteId={this.props.siteId}
+            webUrl={this.props.webUrl}
             entity={this.props.entity}
             filterField='GtShowFieldProjectStatus'
             hideActions={true} />

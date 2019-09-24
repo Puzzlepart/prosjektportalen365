@@ -1,16 +1,30 @@
-import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
 
 export interface IProjectStatusProps {
     /**
-     * @todo describe property
+     * Title of the web part
      */
     title: string;
 
     /**
-     * Web part context
+     * ID of the site
      */
-    context: WebPartContext;
+    siteId: string;
+  
+    /**
+     * URL for the web
+     */
+    webUrl: string;
+  
+    /**
+     * Title for the web
+     */
+    webTitle: string;
+
+    /**
+     * Email for the current user
+     */
+    currentUserEmail: string;
 
     /**
      * URL for the hub site
@@ -18,32 +32,22 @@ export interface IProjectStatusProps {
     hubSiteUrl: string;
 
     /**
-     * ID of the site
-     */
-    siteId: string;
-
-    /**
-     * URL for the web
-     */
-    webUrl: string;
-
-    /**
-     * @todo describe property
+     * List name for reports
      */
     reportListName: string;
 
     /**
-     * @todo describe property
+     * List name for sections
      */
     sectionsListName: string;
 
     /**
-     * @todo describe property
+     * Content type id for report
      */
     reportCtId: string;
 
     /**
-     * @todo describe property
+     * Entity parameters used for SpEntityPortalService
      */
     entity: ISpEntityPortalServiceParams;
 }

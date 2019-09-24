@@ -53,7 +53,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       fieldPrefix: 'Gt',
       ...props.entity,
     });
-    SPDataAdapter.configure(this.props.context, {
+    SPDataAdapter.configure({
       spEntityPortalService: this._spEntityPortalService,
       siteId: props.siteId,
       webUrl: props.webUrl,
@@ -194,9 +194,10 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       },
       report,
       model: sec,
-      pageContext: this.props.context.pageContext,
       data: this.state.data,
       hubSiteUrl: this.props.hubSiteUrl,
+      siteId: this.props.siteId,
+      webUrl: this.props.webUrl,
     };
     return baseProps;
   }
@@ -269,14 +270,14 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    */
   private async _associateStatusItem(): Promise<void> {
     try {
-      const filter = `Author/EMail eq '${this.props.context.pageContext.user.email}' and GtSiteId eq '00000000-0000-0000-0000-000000000000'`;
-      Logger.log({ message: `(ProjectStatus) _associateStatusItem: Attempting to find recently added report by current user '${this.props.context.pageContext.user.email}'`, data: { filter }, level: LogLevel.Info });
+      const filter = `Author/EMail eq '${this.props.currentUserEmail}' and GtSiteId eq '00000000-0000-0000-0000-000000000000'`;
+      Logger.log({ message: `(ProjectStatus) _associateStatusItem: Attempting to find recently added report by current user '${this.props.currentUserEmail}'`, data: { filter }, level: LogLevel.Info });
       let [item] = await this._reportList.items.filter(filter).select('Id', 'Created').orderBy('Id', false).top(1).get<any[]>();
       if (item) {
         const report = new ProjectStatusReport(item);
         Logger.log({ message: '(ProjectStatus) _associateStatusItem: Setting title for item', data: { filter }, level: LogLevel.Info });
         await this._reportList.items.getById(report.id).update({
-          Title: `${this.props.context.pageContext.web.title} (${formatDate(report.date, true)})`,
+          Title: `${this.props.webTitle} (${formatDate(report.date, true)})`,
           GtSiteId: this.props.siteId,
         });
       }
@@ -293,7 +294,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   private async _redirectNewStatusReport(_ev?: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement>, _item?: IContextualMenuItem): Promise<void> {
     const [previousReport] = this.state.data.reports;
     let properties = previousReport ? previousReport.getStatusValues() : {};
-    properties.Title = format(strings.NewStatusReportTitle, this.props.context.pageContext.web.title);
+    properties.Title = format(strings.NewStatusReportTitle, this.props.webTitle);
     const { data } = await this._reportList.items.add(properties);
     const source = encodeURIComponent(`${window.location.href.split('#')[0]}#NewStatus`);
     document.location.href = `${window.location.protocol}//${window.location.hostname}${this.state.data.defaultEditFormUrl}?ID=${data.Id}&Source=${source}`;

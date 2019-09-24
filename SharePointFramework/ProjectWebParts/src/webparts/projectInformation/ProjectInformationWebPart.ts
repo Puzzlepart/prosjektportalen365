@@ -24,13 +24,12 @@ export default class ProjectInformationWebPart extends BaseClientSideWebPart<IPr
     const element: React.ReactElement<IProjectInformationProps> = React.createElement(
       ProjectInformation,
       {
-        context: this.context,
         title: this.properties.title || this.title,
         hubSiteUrl: this._hubSite.url,
         siteId: this.context.pageContext.site.id.toString(),
         webUrl: this.context.pageContext.web.absoluteUrl,
         isSiteAdmin: this.context.pageContext.legacyPageContext.isSiteAdmin,
-        filterField: 'GtShowFieldFrontpage',        
+        filterField: 'GtShowFieldFrontpage',
         ...this.properties,
       }
     );
