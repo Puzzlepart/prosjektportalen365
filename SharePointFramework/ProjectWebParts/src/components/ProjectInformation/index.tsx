@@ -9,6 +9,7 @@ import * as React from 'react';
 import { HubConfigurationService } from 'shared/lib/services';
 import { SpEntityPortalService } from 'sp-entityportal-service';
 import * as format from 'string-format';
+import * as _ from 'underscore';
 import SPDataAdapter from '../../data';
 import { Actions } from './Actions';
 import { IProjectInformationData } from './IProjectInformationData';
@@ -161,35 +162,37 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   }
 
   /**
-  * Fetch configuration
+  * Get column config
   */
-  private async _fetchConfiguration() {
-    return this._storage.getOrPut('projectinformation_fetchconfiguration', async () => {
-      const [columnConfig, fields] = await Promise.all([
-        this._hubConfigurationService.getProjectColumns(),
-        this._spEntityPortalService.getEntityFields(),
-      ]);
-      return { columnConfig, fields };
+  private async _getColumnConfig() {
+    return this._storage.getOrPut('projectinformation_getcolumnconfig', async () => {
+      try {
+        let columns = await this._hubConfigurationService.getProjectColumns();
+        return columns;
+      } catch (error) {
+        return [];
+      }
     }, dateAdd(new Date(), 'minute', 30));
   }
 
   /**
-  * Map properties from entity item and configuration
+  * Transform properties from entity item and configuration
   *
   * @param {TypedHash} fieldValuesText Field values as text
-  * @param {Object} configuration Configuration
+  * @param {IProjectInformationData} data Data
   */
-  private _transformProperties(fieldValuesText: TypedHash<any>, configuration: { fields: any[], columnConfig: any[] }) {
-    const fieldNames = Object.keys(fieldValuesText).filter(fieldName => {
-      let [field] = configuration.fields.filter(fld => fld.InternalName === fieldName);
-      let [column] = configuration.columnConfig.filter(c => c.GtInternalName === fieldName);
+  private _transformProperties(fieldValuesText: TypedHash<any>, data: IProjectInformationData) {
+    const fieldNames: string[] = _.omit(Object.keys(fieldValuesText).filter(fieldName => {
+      let [field] = data.fields.filter(fld => fld.InternalName === fieldName);
+      if (field && data.columnConfig.length === 0) return true;
+      let [column] = data.columnConfig.filter(c => c.GtInternalName === fieldName);
       if (field && column) {
         return this.props.filterField ? column[this.props.filterField] : true;
       }
       return false;
-    });
+    }), ['GtSiteId', 'GtGroupId', 'GtSiteUrl']);
     const properties = fieldNames.map(fieldName => {
-      let [field] = configuration.fields.filter(fld => fld.InternalName === fieldName);
+      let [field] = data.fields.filter(fld => fld.InternalName === fieldName);
       return new ProjectPropertyModel(field, fieldValuesText[fieldName]);
     });
     return properties;
@@ -200,13 +203,14 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
    */
   private async _fetchData(): Promise<Partial<IProjectInformationState>> {
     try {
-      const [configuration, propertiesData] = await Promise.all([
-        this._fetchConfiguration(),
+      const [columnConfig, propertiesData] = await Promise.all([
+        this._getColumnConfig(),
         SPDataAdapter.getPropertiesData(),
       ]);
 
       let data: IProjectInformationData = {
         statusReports: [],
+        columnConfig,
         ...propertiesData,
       };
 
@@ -221,7 +225,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
           .get<{ Id: number, Created: string }[]>();
       }
 
-      let properties = this._transformProperties(data.fieldValuesText, configuration);
+      let properties = this._transformProperties(data.fieldValuesText, data);
 
       return { data, properties };
     } catch (error) {

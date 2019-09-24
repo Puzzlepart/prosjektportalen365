@@ -2,7 +2,7 @@ import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
 import { PageContext } from '@microsoft/sp-page-context';
 import { dateAdd } from '@pnp/common';
 import { Logger, LogLevel } from '@pnp/logging';
-import { List } from '@pnp/sp';
+import { List, Web } from '@pnp/sp';
 import { getId } from '@uifabric/utilities';
 import { ProjectStatusReport, SectionModel } from 'models';
 import { SectionType } from 'models/SectionModel';
@@ -13,9 +13,11 @@ import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import { formatDate } from 'shared/lib/helpers';
-import { parseUrlHash, setUrlHash } from 'shared/lib/util';
 import { HubConfigurationService } from 'shared/lib/services';
+import { parseUrlHash, setUrlHash } from 'shared/lib/util';
+import { SpEntityPortalService } from 'sp-entityportal-service';
 import * as format from 'string-format';
+import SPDataAdapter from '../../data';
 import { IStatusSectionBaseProps } from './@StatusSectionBase/IStatusSectionBaseProps';
 import { IProjectStatusData } from './IProjectStatusData';
 import { IProjectStatusProps } from './IProjectStatusProps';
@@ -30,6 +32,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   private _reportList: List;
   private _sectionsList: List;
   private _hubConfigurationService: HubConfigurationService;
+  private _spEntityPortalService: SpEntityPortalService;
 
   /**
    * Constructor
@@ -42,9 +45,20 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       isLoading: true,
       newStatusCreated: document.location.hash === '#NewStatus',
     };
-    this._reportList = props.hubSite.web.lists.getByTitle(this.props.reportListName);
-    this._sectionsList = props.hubSite.web.lists.getByTitle(this.props.sectionsListName);
-    this._hubConfigurationService = new HubConfigurationService(props.hubSite.url);
+    this._reportList = new Web(props.hubSiteUrl).lists.getByTitle(props.reportListName);
+    this._sectionsList = new Web(props.hubSiteUrl).lists.getByTitle(props.sectionsListName);
+    this._hubConfigurationService = new HubConfigurationService(props.hubSiteUrl);
+    this._spEntityPortalService = new SpEntityPortalService({
+      webUrl: props.hubSiteUrl,
+      fieldPrefix: 'Gt',
+      ...props.entity,
+    });
+    SPDataAdapter.configure(this.props.context, {
+      spEntityPortalService: this._spEntityPortalService,
+      siteId: props.siteId,
+      webUrl: props.webUrl,
+      hubSiteUrl: props.hubSiteUrl,
+    });
   }
 
   public async componentDidMount() {
@@ -52,7 +66,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       await this._associateStatusItem();
     }
     try {
-      const data = await this._fetchData(this.props.pageContext);
+      const data = await this._fetchData();
       let selectedReport = data.reports[0];
       const hashState = parseUrlHash<IProjectStatusHashState>();
       const urlQueryParameterCollection = new UrlQueryParameterCollection(document.location.href);
@@ -180,9 +194,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       },
       report,
       model: sec,
-      pageContext: this.props.pageContext,
-      hubSite: this.props.hubSite,
+      pageContext: this.props.context.pageContext,
       data: this.state.data,
+      hubSiteUrl: this.props.hubSiteUrl,
     };
     return baseProps;
   }
@@ -255,15 +269,15 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    */
   private async _associateStatusItem(): Promise<void> {
     try {
-      const filter = `Author/EMail eq '${this.props.pageContext.user.email}' and GtSiteId eq '00000000-0000-0000-0000-000000000000'`;
-      Logger.log({ message: `(ProjectStatus) _associateStatusItem: Attempting to find recently added report by current user '${this.props.pageContext.user.email}'`, data: { filter }, level: LogLevel.Info });
+      const filter = `Author/EMail eq '${this.props.context.pageContext.user.email}' and GtSiteId eq '00000000-0000-0000-0000-000000000000'`;
+      Logger.log({ message: `(ProjectStatus) _associateStatusItem: Attempting to find recently added report by current user '${this.props.context.pageContext.user.email}'`, data: { filter }, level: LogLevel.Info });
       let [item] = await this._reportList.items.filter(filter).select('Id', 'Created').orderBy('Id', false).top(1).get<any[]>();
       if (item) {
         const report = new ProjectStatusReport(item);
         Logger.log({ message: '(ProjectStatus) _associateStatusItem: Setting title for item', data: { filter }, level: LogLevel.Info });
         await this._reportList.items.getById(report.id).update({
-          Title: `${this.props.pageContext.web.title} (${formatDate(report.date, true)})`,
-          GtSiteId: this.props.pageContext.site.id.toString(),
+          Title: `${this.props.context.pageContext.web.title} (${formatDate(report.date, true)})`,
+          GtSiteId: this.props.siteId,
         });
       }
     } catch (error) { }
@@ -279,7 +293,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   private async _redirectNewStatusReport(_ev?: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement>, _item?: IContextualMenuItem): Promise<void> {
     const [previousReport] = this.state.data.reports;
     let properties = previousReport ? previousReport.getStatusValues() : {};
-    properties.Title = format(strings.NewStatusReportTitle, this.props.pageContext.web.title);
+    properties.Title = format(strings.NewStatusReportTitle, this.props.context.pageContext.web.title);
     const { data } = await this._reportList.items.add(properties);
     const source = encodeURIComponent(`${window.location.href.split('#')[0]}#NewStatus`);
     document.location.href = `${window.location.protocol}//${window.location.hostname}${this.state.data.defaultEditFormUrl}?ID=${data.Id}&Source=${source}`;
@@ -287,14 +301,12 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
 
   /**
    * Fetch data
-   * 
-   * @param {PageContext} param0 Destructed PageContext
    */
-  private async _fetchData({ site }: PageContext): Promise<IProjectStatusData> {
+  private async _fetchData(): Promise<IProjectStatusData> {
     try {
       Logger.log({ message: '(ProjectStatus) _fetchData: Fetching fields and reports', level: LogLevel.Info });
       const [entity, reportList, reportItems, sectionItems, columnConfig] = await Promise.all([
-        this.props.spEntityPortalService.fetchEntity(site.id.toString(), this.props.pageContext.web.absoluteUrl),
+        this._spEntityPortalService.fetchEntity(this.props.siteId, this.props.webUrl),
         this._reportList
           .select('DefaultEditFormUrl')
           .expand('DefaultEditFormUrl')
@@ -305,7 +317,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           })
           .get<{ DefaultEditFormUrl: string }>(),
         this._reportList.items
-          .filter(`GtSiteId eq '${site.id.toString()}'`)
+          .filter(`GtSiteId eq '${this.props.siteId}'`)
           .orderBy('Id', false)
           .get<any[]>(),
         this._sectionsList.items.get(),
@@ -324,6 +336,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         columnConfig,
       };
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }

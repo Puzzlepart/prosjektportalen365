@@ -1,12 +1,31 @@
-import { IHubSite } from 'sp-hubsite-service';
-import { PageContext } from '@microsoft/sp-page-context';
-import { SpEntityPortalService, ISpEntityPortalServiceParams } from 'sp-entityportal-service';
+import { WebPartContext } from '@microsoft/sp-webpart-base';
+import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
 
 export interface IProjectStatusProps {
     /**
      * @todo describe property
      */
     title: string;
+
+    /**
+     * Web part context
+     */
+    context: WebPartContext;
+
+    /**
+     * URL for the hub site
+     */
+    hubSiteUrl: string;
+
+    /**
+     * ID of the site
+     */
+    siteId: string;
+
+    /**
+     * URL for the web
+     */
+    webUrl: string;
 
     /**
      * @todo describe property
@@ -27,19 +46,4 @@ export interface IProjectStatusProps {
      * @todo describe property
      */
     entity: ISpEntityPortalServiceParams;
-
-    /**
-     * @todo describe property
-     */
-    hubSite: IHubSite;
-
-    /**
-     * @todo describe property
-     */
-    spEntityPortalService: SpEntityPortalService;
-
-    /**
-     * @todo describe property
-     */
-    pageContext: PageContext;
 }

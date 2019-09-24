@@ -39,18 +39,21 @@ export default new class SPDataAdapter {
     }
 
     /**
-     * Create properties list
+     * Sync list from hub
+     * 
+     * @param {string} listName List name
+     * @param {string} contentTypeId Content type id
      */
-    private async _createPropertiesList(): Promise<List> {
+    private async _syncListFromHub(listName: string, contentTypeId: string): Promise<List> {
         try {
             let { jsomContext } = await initSpfxJsom(this._settings.webUrl, { loadTaxonomy: true });
             const [contentType, siteFields, ensureList] = await Promise.all([
-                this._getHubContentType(new Web(this._settings.hubSiteUrl), '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C'),
+                this._getHubContentType(new Web(this._settings.hubSiteUrl), contentTypeId),
                 this._getSiteFields(sp.web),
-                sp.web.lists.ensure(strings.ProjectPropertiesListName, undefined, 100, false, { Hidden: true, EnableAttachments: false }),
+                sp.web.lists.ensure(listName, undefined, 100, false, { Hidden: true, EnableAttachments: false }),
             ]);
             const listFields = await this._getListFields(ensureList.list);
-            const spList = jsomContext.web.get_lists().getByTitle(strings.ProjectPropertiesListName);
+            const spList = jsomContext.web.get_lists().getByTitle(listName);
             for (let field of contentType.Fields) {
                 let [listField] = listFields.filter(fld => fld.InternalName === field.InternalName);
                 if (listField) continue;
@@ -119,7 +122,7 @@ export default new class SPDataAdapter {
     public async syncPropertyItemToHub(fields: any[], fieldValues: TypedHash<any>, fieldValuesText: TypedHash<string>, progressFunc: ({ description: string }) => void): Promise<ItemUpdateResult> {
         try {
             progressFunc({ description: strings.SyncProjectPropertiesListProgressDescription });
-            await this._createPropertiesList();
+            await this._syncListFromHub(strings.ProjectPropertiesListName, '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C');
             progressFunc({ description: strings.SyncProjectPropertiesValuesProgressDescription });
             const fieldToSync = fields.filter(fld => fld.InternalName.indexOf('Gt') === 0);
             const properties = _.omit(fieldToSync.reduce((obj, fld) => {
@@ -189,9 +192,20 @@ export default new class SPDataAdapter {
             let propertyItemContext = await this._getPropertyItemContext();
             if (!propertyItemContext) return null;
             let [fieldValuesText, fieldValues, fields] = await Promise.all([
-                propertyItemContext.item.fieldValuesAsText.get(),
-                propertyItemContext.item.get(),
-                propertyItemContext.list.fields.select('Id', 'InternalName', 'Title', 'TypeAsString', 'SchemaXml', 'TextField').filter(`substringof('Gt', InternalName)`).usingCaching().get(),
+                propertyItemContext
+                    .item
+                    .fieldValuesAsText
+                    .get(),
+                propertyItemContext
+                    .item
+                    .get(),
+                propertyItemContext
+                    .list
+                    .fields
+                    .select('Id', 'InternalName', 'Title', 'TypeAsString', 'SchemaXml', 'TextField')
+                    .filter(`substringof('Gt', InternalName)`)
+                    .usingCaching()
+                    .get(),
             ]);
             let editFormUrl = makeUrlAbsolute(`${propertyItemContext.defaultEditFormUrl}?ID=${propertyItemContext.id}&Source=${urlSource}`);
             let versionHistoryUrl = `${this._settings.webUrl}/_layouts/15/versions.aspx?list=${propertyItemContext.listId}&ID=${propertyItemContext.id}`;

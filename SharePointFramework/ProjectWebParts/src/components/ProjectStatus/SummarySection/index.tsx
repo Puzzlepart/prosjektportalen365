@@ -21,7 +21,7 @@ export default class SummarySection extends StatusSectionBase<ISummarySectionPro
       <StatusSectionBase {...this.props}>
         <div className={styles.projectInformation}>
           <ProjectInformation
-            hubSiteUrl={this.props.hubSite.url}
+            hubSiteUrl={this.props.hubSiteUrl}
             siteId={this.props.pageContext.site.id.toString()}
             webUrl={this.props.pageContext.web.absoluteUrl}
             entity={this.props.entity}

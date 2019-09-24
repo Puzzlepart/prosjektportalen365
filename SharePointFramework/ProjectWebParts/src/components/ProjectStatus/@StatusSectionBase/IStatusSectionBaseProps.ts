@@ -1,14 +1,13 @@
 import { PageContext } from '@microsoft/sp-page-context';
+import { ProjectStatusReport, SectionModel } from 'models';
 import { IProjectStatusData } from '../IProjectStatusData';
 import { IStatusElementProps } from '../StatusElement/IStatusElementProps';
-import { IHubSite } from 'sp-hubsite-service';
-import { SectionModel, ProjectStatusReport } from 'models';
 
 export interface IStatusSectionBaseProps {
-  model?: SectionModel;
+  model: SectionModel;
   headerProps: IStatusElementProps;
   report: ProjectStatusReport;
   pageContext: PageContext;
-  hubSite: IHubSite;
+  hubSiteUrl: string;
   data?: IProjectStatusData;
 }
