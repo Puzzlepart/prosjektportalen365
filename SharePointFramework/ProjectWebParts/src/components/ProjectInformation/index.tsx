@@ -197,20 +197,16 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
 
   /**
    * Fetch data
-   * 
-   * @param {IProjectInformationData} data Initial data
    */
-  private async _fetchData(data: IProjectInformationData = { statusReports: [] }): Promise<Partial<IProjectInformationState>> {
+  private async _fetchData(): Promise<Partial<IProjectInformationState>> {
     try {
-      const [configuration, propertiesData, fields] = await Promise.all([
+      const [configuration, propertiesData] = await Promise.all([
         this._fetchConfiguration(),
         SPDataAdapter.getPropertiesData(),
-        this._spEntityPortalService.getEntityFields(),
       ]);
 
-      data.fields = fields;
-      data = {
-        ...data,
+      let data: IProjectInformationData = {
+        statusReports: [],
         ...propertiesData,
       };
 

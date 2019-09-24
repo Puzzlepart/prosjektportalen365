@@ -4,4 +4,5 @@ export interface IGetPropertiesData {
     versionHistoryUrl?: string;
     fieldValues?: TypedHash<any>;
     fieldValuesText?: TypedHash<string>;
+    fields?: any[];
 }

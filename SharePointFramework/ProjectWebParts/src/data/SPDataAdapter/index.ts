@@ -169,6 +169,7 @@ export default new class SPDataAdapter {
             if (!item) return null;
             return {
                 id: item.Id,
+                list: sp.web.lists.getById(list.Id),
                 item: sp.web.lists.getById(list.Id).items.getById(item.Id),
                 listId: list.Id,
                 defaultEditFormUrl: list.DefaultEditFormUrl,
@@ -187,9 +188,10 @@ export default new class SPDataAdapter {
         try {
             let propertyItemContext = await this._getPropertyItemContext();
             if (!propertyItemContext) return null;
-            let [fieldValuesText, fieldValues] = await Promise.all([
+            let [fieldValuesText, fieldValues, fields] = await Promise.all([
                 propertyItemContext.item.fieldValuesAsText.get(),
                 propertyItemContext.item.get(),
+                propertyItemContext.list.fields.select('Id', 'InternalName', 'Title', 'TypeAsString', 'SchemaXml', 'TextField').filter(`substringof('Gt', InternalName)`).usingCaching().get(),
             ]);
             let editFormUrl = makeUrlAbsolute(`${propertyItemContext.defaultEditFormUrl}?ID=${propertyItemContext.id}&Source=${urlSource}`);
             let versionHistoryUrl = `${this._settings.webUrl}/_layouts/15/versions.aspx?list=${propertyItemContext.listId}&ID=${propertyItemContext.id}`;
@@ -198,6 +200,7 @@ export default new class SPDataAdapter {
                 fieldValues,
                 editFormUrl,
                 versionHistoryUrl,
+                fields,
             };
         } catch (error) {
             return null;
@@ -219,6 +222,7 @@ export default new class SPDataAdapter {
                 versionHistoryUrl: entity.urls.versionHistoryUrl,
                 fieldValues: entity.fieldValues,
                 fieldValuesText: entity.fieldValues,
+                fields: entity.fields,
             };
         }
     }
