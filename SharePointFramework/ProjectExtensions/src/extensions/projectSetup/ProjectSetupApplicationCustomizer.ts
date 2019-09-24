@@ -170,13 +170,13 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   * Start provision
   */
   private async _startProvision(): Promise<void> {
-    Logger.log({ message: '(ProjectSetupApplicationCustomizer) _startProvision', data: { properties: this.properties, tasks: Tasks.map(t => t.name) }, level: LogLevel.Info });
+    Logger.log({ message: '(ProjectSetupApplicationCustomizer) _startProvision', data: { properties: this.properties, tasks: Tasks.map(t => t.taskName) }, level: LogLevel.Info });
     try {
       await ListLogger.write('Starting provisioning of project.', 'Info');
       this._taskParams.templateSchema = await this._taskParams.data.selectedTemplate.getSchema();
       for (let i = 0; i < Tasks.length; i++) {
-        if (isArray(this.properties.tasks) && this.properties.tasks.indexOf(Tasks[i].name) === -1) continue;
-        Logger.log({ message: `(ProjectSetupApplicationCustomizer) _startProvision: Executing task ${Tasks[i].name}`, level: LogLevel.Info });
+        if (isArray(this.properties.tasks) && this.properties.tasks.indexOf(Tasks[i].taskName) === -1) continue;
+        Logger.log({ message: `(ProjectSetupApplicationCustomizer) _startProvision: Executing task ${Tasks[i].taskName}`, level: LogLevel.Info });
         this._taskParams = await Tasks[i].execute(this._taskParams, this._onTaskStatusUpdated.bind(this));
       }
       await ListLogger.write('Project successfully provisioned.', 'Info');

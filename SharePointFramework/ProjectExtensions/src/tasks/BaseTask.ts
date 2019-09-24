@@ -6,7 +6,7 @@ export type OnProgressCallbackFunction = (text: string, iconName: string) => voi
 
 export class BaseTask {
     public params: IBaseTaskParams;
-    public name: string;
+    public taskName: string;
 
     /**
      * Execute task
@@ -26,7 +26,7 @@ export class BaseTask {
      * @param {any} data Data
      */
     public logError(message: string, data?: any) {
-        this._log(`(ProjectSetupApplicationCustomizer) ${this.name}: ${message}`, data, LogLevel.Error);
+        this._log(`(ProjectSetupApplicationCustomizer) ${this.taskName}: ${message}`, data, LogLevel.Error);
     }
 
     /**
@@ -36,7 +36,7 @@ export class BaseTask {
      * @param {any} data Data
      */
     public logWarning(message: string, data?: any) {
-        this._log(`(ProjectSetupApplicationCustomizer) ${this.name}: ${message}`, data, LogLevel.Warning);
+        this._log(`(ProjectSetupApplicationCustomizer) ${this.taskName}: ${message}`, data, LogLevel.Warning);
     }
 
     /**
@@ -46,7 +46,7 @@ export class BaseTask {
      * @param {any} data Data
      */
     public logInformation(message: string, data?: any) {
-        this._log(`(ProjectSetupApplicationCustomizer) ${this.name}: ${message}`, data, LogLevel.Info);
+        this._log(`(ProjectSetupApplicationCustomizer) ${this.taskName}: ${message}`, data, LogLevel.Info);
     }
 
     /**

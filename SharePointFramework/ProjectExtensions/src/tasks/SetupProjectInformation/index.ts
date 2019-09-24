@@ -1,16 +1,14 @@
-import { override } from '@microsoft/decorators';
 import { List, Web } from '@pnp/sp';
-import { task } from 'decorators/task';
 import * as strings from 'ProjectExtensionsStrings';
-import { SpEntityPortalService } from 'sp-entityportal-service';
 import { ExecuteJsomQuery } from 'spfx-jsom';
 import { default as ProvisionSiteFields } from 'tasks/ProvisionSiteFields';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { BaseTaskError } from '../BaseTaskError';
 import { IBaseTaskParams } from '../IBaseTaskParams';
+import { parseFieldXml } from 'shared/lib/helpers';
 
-@task('SetupProjectInformation')
-export default class SetupProjectInformation extends BaseTask {
+export default new class SetupProjectInformation extends BaseTask {
+    public taskName = 'SetupProjectInformation';
     private _listName = strings.ProjectPropertiesListName;
 
     /**
@@ -19,7 +17,6 @@ export default class SetupProjectInformation extends BaseTask {
      * @param {IBaseTaskParams} params Task parameters
      * @param {OnProgressCallbackFunction} _onProgress On progress funtion (not currently in use by this task)
      */
-    @override
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
             onProgress(strings.SetupProjectInformationText, 'AlignCenter');
@@ -28,7 +25,7 @@ export default class SetupProjectInformation extends BaseTask {
             await this._addEntryToHub(params);
             return params;
         } catch (error) {
-            throw new BaseTaskError(this.name, strings.SetupProjectInformationErrorMessage, error);
+            throw new BaseTaskError(this.taskName, strings.SetupProjectInformationErrorMessage, error);
         }
     }
 
@@ -47,7 +44,7 @@ export default class SetupProjectInformation extends BaseTask {
             context.pageContext.web.absoluteUrl,
             { Title: context.pageContext.web.title, GtSiteId: context.pageContext.site.id.toString() },
         );
-        this.logInformation(`Project added to list '${properties.projectsList}' at ${data.hub.url}`, { id: entity.item.Id });
+        this.logInformation(`Project added to list '${properties.projectsList}' at ${data.hub.url}`, {});
     }
 
     /**
@@ -74,7 +71,7 @@ export default class SetupProjectInformation extends BaseTask {
                     spList.get_fields().add(spSiteField);
                 } else {
                     this.logInformation(`Adding field ${field.InternalName} to list ${this._listName} as XML`, {});
-                    let newField = spList.get_fields().addFieldAsXml(ProvisionSiteFields.parseFieldXml(field, { DisplayName: field.InternalName }), false, SP.AddFieldOptions.addToDefaultContentType);
+                    let newField = spList.get_fields().addFieldAsXml(parseFieldXml(field, { DisplayName: field.InternalName }), false, SP.AddFieldOptions.addToDefaultContentType);
                     newField.set_title(field.Title);
                     newField.updateAndPushChanges(true);
                 }
@@ -117,4 +114,4 @@ export default class SetupProjectInformation extends BaseTask {
         let listFields = await list.fields.select('InternalName').get<{ InternalName: string }[]>();
         return listFields;
     }
-}
+};

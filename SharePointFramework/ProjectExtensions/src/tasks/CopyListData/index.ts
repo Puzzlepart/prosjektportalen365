@@ -1,22 +1,21 @@
-import { sp, Web } from '@pnp/sp';
 import { override } from '@microsoft/decorators';
-import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
+import { sp, Web } from '@pnp/sp';
 import * as strings from 'ProjectExtensionsStrings';
 import * as stringFormat from 'string-format';
-import { IBaseTaskParams } from '../IBaseTaskParams';
-import { BaseTaskError } from '../BaseTaskError';
 import { ListContentConfig } from '../../models';
-import { task } from 'decorators/task';
+import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
+import { BaseTaskError } from '../BaseTaskError';
+import { IBaseTaskParams } from '../IBaseTaskParams';
 
-@task('CopyListData')
-export default class CopyListData extends BaseTask {
+export default new class CopyListData extends BaseTask {
+    public taskName = 'CopyListData';
+
     /**
      * Execute CopyListData
      * 
      * @param {IBaseTaskParams} params Task parameters 
      * @param {OnProgressCallbackFunction} onProgress On progress function
      */
-    @override
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
             for (let i = 0; i < params.data.selectedListConfig.length; i++) {
@@ -26,7 +25,7 @@ export default class CopyListData extends BaseTask {
             }
             return params;
         } catch (error) {
-            throw new BaseTaskError(this.name, strings.CopyListDataErrorMessage, error);
+            throw new BaseTaskError(this.taskName, strings.CopyListDataErrorMessage, error);
         }
     }
 
@@ -76,4 +75,4 @@ export default class CopyListData extends BaseTask {
             throw error;
         }
     }
-}
+};

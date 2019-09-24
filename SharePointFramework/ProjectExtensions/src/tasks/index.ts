@@ -9,13 +9,13 @@ import { BaseTask } from './BaseTask';
 export * from './BaseTask';
 
 const tasks: BaseTask[] = [
-    new PreTask(),
-    new SetupProjectInformation(),
-    new PlannerConfiguration(),
-    new ProvisionSiteFields(),
-    new ApplyTemplate(),
-    new SetTaxonomyFields(),
-    new CopyListData(),
+    PreTask,
+    SetupProjectInformation,
+    PlannerConfiguration,
+    ProvisionSiteFields,
+    ApplyTemplate,
+    SetTaxonomyFields,
+    CopyListData,
 ];
 
 export default tasks;

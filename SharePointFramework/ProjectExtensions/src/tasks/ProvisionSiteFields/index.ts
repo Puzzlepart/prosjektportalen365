@@ -18,15 +18,15 @@ export class SPField {
     public TypeAsString?: string = '';
 }
 
-@task('ProvisionSiteFields')
-export default class ProvisionSiteFields extends BaseTask {
+export default new class ProvisionSiteFields extends BaseTask {
+    public taskName = 'ProvisionSiteFields';
+    
     /**
      * Execute ProvisionSiteFields
      * 
      * @param {IBaseTaskParams} params Task parameters 
      * @param {OnProgressCallbackFunction} onProgress On progress function
      */
-    @override
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
             const siteFields = await params.data.hub.web.fields.filter(`Group eq '${strings.SiteFieldsGroupName}' and TypeAsString ne 'Calculated'`).select(...Object.keys(new SPField())).get<SPField[]>();
@@ -42,7 +42,7 @@ export default class ProvisionSiteFields extends BaseTask {
             return params;
         } catch (error) {
             this.logError('Failed to provision site fields to site');
-            throw new BaseTaskError(this.name, strings.ProvisionSiteFieldsErrorMessage, '');
+            throw new BaseTaskError(this.taskName, strings.ProvisionSiteFieldsErrorMessage, '');
         }
     }
 
@@ -65,4 +65,4 @@ export default class ProvisionSiteFields extends BaseTask {
         }
         return documentElement.toString();
     }
-}
+};

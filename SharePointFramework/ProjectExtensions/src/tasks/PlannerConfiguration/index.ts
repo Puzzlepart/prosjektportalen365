@@ -10,8 +10,9 @@ import { IPlannerBucket } from './IPlannerBucket';
 import { IPlannerPlan } from './IPlannerPlan';
 import { PageContext } from '@microsoft/sp-page-context';
 
-@task('PlannerConfiguration')
-export default class PlannerConfiguration extends BaseTask {
+export default new class PlannerConfiguration extends BaseTask {
+    public taskName = 'PlannerConfiguration';
+
     /**
      * Create plans
      * 
@@ -98,7 +99,6 @@ export default class PlannerConfiguration extends BaseTask {
      * @param {IBaseTaskParams} params Task parameters 
      * @param {OnProgressCallbackFunction} onProgress On progress function
      */
-    @override
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         if (params.data.copyPlannerTasks) {
             this.logInformation('Setting up Plans, Buckets and Task');
@@ -108,9 +108,9 @@ export default class PlannerConfiguration extends BaseTask {
                 params.templateParameters = { ...params.templateParameters || {}, defaultPlanId: groupPlan.id };
             } catch (error) {
                 this.logWarning('Failed to set up Plans, Buckets and Tasks', error);
-                throw new BaseTaskError(this.name, strings.PlannerConfigurationErrorMessage, `${error.statusCode}: ${error.message}`);
+                throw new BaseTaskError(this.taskName, strings.PlannerConfigurationErrorMessage, `${error.statusCode}: ${error.message}`);
             }
         }
         return params;
     }
-}
+};

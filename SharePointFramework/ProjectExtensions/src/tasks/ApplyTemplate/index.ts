@@ -1,23 +1,22 @@
 import { override } from '@microsoft/decorators';
-import { task } from 'decorators/task';
 import * as strings from 'ProjectExtensionsStrings';
 import { Web, WebProvisioner } from 'sp-js-provisioning';
 import * as stringFormat from 'string-format';
+import * as _ from 'underscore';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { BaseTaskError } from '../BaseTaskError';
 import { IBaseTaskParams } from '../IBaseTaskParams';
 import { APPLY_TEMPLATE_STATUS_MAP } from './ApplyTemplateStatusMap';
-import * as _ from 'underscore';
 
-@task('ApplyTemplate')
-export default class ApplyTemplate extends BaseTask {
+export default new class ApplyTemplate extends BaseTask {
+    public taskName = 'ApplyTemplate';
+
     /**
      * Execute ApplyTemplate
      * 
      * @param {IBaseTaskParams} params Task parameters 
      * @param {OnProgressCallbackFunction} onProgress On progress function
      */
-    @override
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
             const web = new Web(params.context.pageContext.web.absoluteUrl);
@@ -43,7 +42,7 @@ export default class ApplyTemplate extends BaseTask {
             return params;
         } catch (error) {
             this.logError('Failed to apply template to site');
-            throw new BaseTaskError(this.name, strings.ApplyTemplateErrorMessage, error);
+            throw new BaseTaskError(this.taskName, strings.ApplyTemplateErrorMessage, error);
         }
     }
-}
+};

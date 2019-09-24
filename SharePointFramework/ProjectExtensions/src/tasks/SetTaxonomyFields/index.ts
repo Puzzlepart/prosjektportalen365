@@ -1,20 +1,18 @@
-import { override } from '@microsoft/decorators';
-import { task } from 'decorators/task';
 import * as strings from 'ProjectExtensionsStrings';
 import { ExecuteJsomQuery } from 'spfx-jsom';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { BaseTaskError } from '../BaseTaskError';
 import { IBaseTaskParams } from '../IBaseTaskParams';
 
-@task('SetTaxonomyFields')
-export default class SetTaxonomyFields extends BaseTask {
+export default new class SetTaxonomyFields extends BaseTask {
+    public taskName = 'SetTaxonomyFields';
+    
     /**
      * Execute CopyListData
      * 
      * @param {IBaseTaskParams} params Task parameters 
      * @param {OnProgressCallbackFunction} onProgress On progress function
      */
-    @override
     public async execute(params: IBaseTaskParams, _onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
             let { spfxJsomContext: { jsomContext, defaultTermStore } } = params;
@@ -32,7 +30,7 @@ export default class SetTaxonomyFields extends BaseTask {
             await ExecuteJsomQuery(jsomContext);
             return params;
         } catch (error) {
-            throw new BaseTaskError(this.name, strings.SetTaxonomyFieldsErrorMessage, error);
+            throw new BaseTaskError(this.taskName, strings.SetTaxonomyFieldsErrorMessage, error);
         }
     }
-}
+};
