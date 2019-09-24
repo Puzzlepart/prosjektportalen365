@@ -1,14 +1,8 @@
-import { PageContext } from '@microsoft/sp-page-context';
 import { WebPartContext } from '@microsoft/sp-webpart-base';
-import { ISpEntityPortalServiceParams, SpEntityPortalService } from 'sp-entityportal-service';
+import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
 
 
 export interface IProjectPhasesProps {
-  /**
-   * Web part context
-   */
-  context: WebPartContext;
-
   /**
    * Field name for phase field
    */
