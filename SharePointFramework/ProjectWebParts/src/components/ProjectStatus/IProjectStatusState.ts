@@ -2,38 +2,41 @@ import { ProjectStatusReport } from 'models';
 import { IProjectStatusData } from './IProjectStatusData';
 
 export interface IProjectStatusState {
-    
     /**
-     * @todo describe property
-     */
+    * The component is loading
+    */
     isLoading: boolean;
-    
+
     /**
      * @todo describe property
      */
     newStatusCreated: boolean;
-    
+
     /**
      * @todo describe property
      */
     showNewStatusReportModal?: boolean;
-    sourceUrl?: string;
-    
+
     /**
      * @todo describe property
      */
-    error?: any;
-    
+    sourceUrl?: string;
+
+    /**
+     * @todo describe property
+     */
+    error?: string;
+
     /**
      * @todo describe property
      */
     data?: IProjectStatusData;
-    
+
     /**
      * @todo describe property
      */
     selectedReport?: ProjectStatusReport;
-    
+
     /**
      * @todo describe property
      */
@@ -41,5 +44,8 @@ export interface IProjectStatusState {
 }
 
 export interface IProjectStatusHashState {
+    /**
+     * @todo describe property
+     */
     selectedReport?: string;
 }

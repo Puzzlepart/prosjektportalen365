@@ -66,6 +66,7 @@ define([], function () {
     SyncProjectPropertiesSuccessText: 'Prosjektegenskaper ble synkronisert til porteføljeområdet',
     SyncProjectPropertiesErrorText: 'Det skjedde feil under synkronisering',
     SyncProjectPropertiesListProgressDescription: 'Oppdaterer Prosjektegenskaper-listen',
-    SyncProjectPropertiesValuesProgressDescription: 'Synkroniserer egenskaper'
+    SyncProjectPropertiesValuesProgressDescription: 'Synkroniserer egenskaper',
+    ProjectStatusDataErrorText: 'Ingen tilgang. Du har ikke tillatelse til å se statusrapporter.'
   }
 });

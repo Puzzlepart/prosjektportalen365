@@ -109,7 +109,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       return (
         <div className={styles.projectStatus}>
           <div className={styles.container}>
-            <MessageBar messageBarType={MessageBarType.error}>Det skjedde en feil.</MessageBar>
+            <MessageBar messageBarType={MessageBarType.error}>{this.state.error}</MessageBar>
           </div>
         </div>
       );
@@ -337,8 +337,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         columnConfig,
       };
     } catch (error) {
-      console.log(error);
-      throw error;
+      throw strings.ProjectStatusDataErrorText;
     }
   }
 }

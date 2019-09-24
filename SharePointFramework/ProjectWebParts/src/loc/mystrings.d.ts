@@ -66,6 +66,7 @@ declare interface IProjectWebPartsStrings {
   SyncProjectPropertiesErrorText: string;
   SyncProjectPropertiesListProgressDescription: string;
   SyncProjectPropertiesValuesProgressDescription: string;
+  ProjectStatusDataErrorText: string;
 }
 
 declare module 'ProjectWebPartsStrings' {
