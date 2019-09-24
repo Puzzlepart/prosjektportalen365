@@ -8,7 +8,7 @@ import 'office-ui-fabric-react/dist/css/fabric.min.css';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { ApplicationInsightsLogListener } from 'shared/lib/logging/ApplicationInsightsLogListener';
-import SpEntityPortalService from 'sp-entityportal-service';
+import { SpEntityPortalService } from 'sp-entityportal-service';
 import HubSiteService, { IHubSite } from 'sp-hubsite-service';
 
 moment.locale('nb');
@@ -23,7 +23,11 @@ export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProject
     Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
     sp.setup({ spfxContext: this.context });
     this._hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
-    this._spEntityPortalService = new SpEntityPortalService({ webUrl: this._hubSite.url, ...this.properties.entity });
+    this._spEntityPortalService = new SpEntityPortalService({
+      webUrl: this._hubSite.url,
+      fieldPrefix: 'Gt',
+      ...this.properties.entity,
+    });
   }
 
   public render(): void {

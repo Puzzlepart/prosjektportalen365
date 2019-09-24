@@ -9,7 +9,7 @@ import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { ApplicationInsightsLogListener } from 'shared/lib/logging/ApplicationInsightsLogListener';
-import SpEntityPortalService from 'sp-entityportal-service';
+import { SpEntityPortalService } from 'sp-entityportal-service';
 import HubSiteService from 'sp-hubsite-service';
 
 Logger.subscribe(new ConsoleListener());
@@ -24,7 +24,11 @@ export default class ProjectPhasesWebPart extends BaseClientSideWebPart<IProject
     sp.setup({ spfxContext: this.context });
     await MSGraphHelper.Init(this.context.msGraphClientFactory, 'v1.0');
     const hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
-    this._spEntityPortalService = new SpEntityPortalService({ webUrl: hubSite.url, ...this.properties.entity });
+    this._spEntityPortalService = new SpEntityPortalService({
+      webUrl: hubSite.url,
+      fieldPrefix: 'Gt',
+      ...this.properties.entity,
+    });
   }
 
   public render(): void {

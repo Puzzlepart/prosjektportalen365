@@ -293,9 +293,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   private async _fetchData({ site }: PageContext): Promise<IProjectStatusData> {
     try {
       Logger.log({ message: '(ProjectStatus) _fetchData: Fetching fields and reports', level: LogLevel.Info });
-      const [entityItem, entityFields, reportList, reportItems, sectionItems, columnConfig] = await Promise.all([
-        this.props.spEntityPortalService.getEntityItemFieldValues(site.id.toString()),
-        this.props.spEntityPortalService.getEntityFields(),
+      const [entityData, reportList, reportItems, sectionItems, columnConfig] = await Promise.all([
+        this.props.spEntityPortalService.fetchEntity(site.id.toString(), this.props.pageContext.web.absoluteUrl),
         this._reportList
           .select('DefaultEditFormUrl')
           .expand('DefaultEditFormUrl')
@@ -317,8 +316,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       const sections = sectionItems.map(item => new SectionModel(item));
       const sectionsSorted = sections.sort((a, b) => a.sortOrder < b.sortOrder ? -1 : 1);
       return {
-        entityFields,
-        entityItem,
+        entityFields: entityData.fields,
+        entityItem: entityData.fieldValues,
         defaultEditFormUrl: reportList.DefaultEditFormUrl,
         reports: reportsSorted,
         sections: sectionsSorted,
