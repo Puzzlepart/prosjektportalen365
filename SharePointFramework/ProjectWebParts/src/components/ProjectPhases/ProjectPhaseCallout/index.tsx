@@ -23,10 +23,10 @@ export default class ProjectPhaseCallout extends React.PureComponent<IProjectPha
      * Renders the <ProjectPhaseCallout /> component
      */
     public render(): JSX.Element {
-        const { phase, isCurrentPhase, onChangePhase, gapSpace } = this.props;
+        const { phase, isCurrentPhase, onChangePhase } = this.props;
         return (
             <Callout
-                gapSpace={gapSpace}
+                gapSpace={5}
                 target={phase.target}
                 onDismiss={this.props.onDismiss}
                 setInitialFocus={true}
@@ -52,7 +52,7 @@ export default class ProjectPhaseCallout extends React.PureComponent<IProjectPha
                                     onClick={_ => onChangePhase(phase.model)}
                                     text={strings.ChangePhaseText}
                                     iconProps={{ iconName: 'TransitionPop' }}
-                                    disabled={isCurrentPhase} />
+                                    disabled={isCurrentPhase || !this.props.isSiteAdmin} />
                             </div>
                         </div>
                     </div>
@@ -66,7 +66,7 @@ export default class ProjectPhaseCallout extends React.PureComponent<IProjectPha
      * 
      * @param {IProjectPhaseCalloutProps} param0 Props
      */
-    protected _getFilteredPhaseChecklistViewUrl({ webAbsoluteUrl, phase }: IProjectPhaseCalloutProps): string {
-        return `${webAbsoluteUrl}/${strings.PhaseChecklistViewUrl}?FilterField1=GtProjectPhase&FilterValue1=${phase.model.name}`;
+    protected _getFilteredPhaseChecklistViewUrl({ webUrl, phase }: IProjectPhaseCalloutProps): string {
+        return `${webUrl}/${strings.PhaseChecklistViewUrl}?FilterField1=GtProjectPhase&FilterValue1=${phase.model.name}`;
     }
 }

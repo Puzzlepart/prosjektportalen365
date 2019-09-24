@@ -29,6 +29,11 @@ export interface IProjectPhasesProps {
   webUrl: string;
 
   /**
+   * Is the current user site admin
+   */
+  isSiteAdmin?: boolean;
+
+  /**
    * Reload timeout
    */
   reloadTimeout: number;
