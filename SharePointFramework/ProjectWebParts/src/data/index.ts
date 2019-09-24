@@ -37,9 +37,9 @@ export default new class SPDataAdapter {
     }
 
     /**
-     * Clone properties list
+     * Create properties list
      */
-    private async _syncPropertiesList(): Promise<List> {
+    private async _createPropertiesList(): Promise<List> {
         try {
             let { jsomContext } = await initSpfxJsom(this._settings.webUrl, { loadTaxonomy: true });
             const [contentType, siteFields, ensureList] = await Promise.all([
@@ -117,7 +117,7 @@ export default new class SPDataAdapter {
     public async syncPropertyItemToHub(fields: any[], fieldValues: TypedHash<any>, fieldValuesText: TypedHash<string>, progressFunc: ({ description: string }) => void): Promise<ItemUpdateResult> {
         try {
             progressFunc({ description: strings.SyncProjectPropertiesListProgressDescription });
-            await this._syncPropertiesList();
+            await this._createPropertiesList();
             progressFunc({ description: strings.SyncProjectPropertiesValuesProgressDescription });
             const fieldToSync = fields.filter(fld => fld.InternalName.indexOf('Gt') === 0);
             const properties = _.omit(fieldToSync.reduce((obj, fld) => {

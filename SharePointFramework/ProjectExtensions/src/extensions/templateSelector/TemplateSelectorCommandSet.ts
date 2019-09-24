@@ -5,7 +5,7 @@ import '@pnp/polyfill-ie11';
 import { sp } from '@pnp/sp';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import * as strings from 'TemplateSelectorCommandSetStrings';
+import * as strings from 'ProjectExtensionsStrings';
 import { DocumentTemplateModal } from '../../components';
 import * as data from '../../data';
 import { IDocumentLibrary, TemplateFile } from '../../models';

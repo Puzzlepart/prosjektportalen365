@@ -11,8 +11,7 @@ import { IBaseTaskParams } from '../IBaseTaskParams';
 
 @task('SetupProjectInformation')
 export default class SetupProjectInformation extends BaseTask {
-    private _contentTypeId = '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C';
-    private _listName = 'Prosjektegenskaper';
+    private _listName = strings.ProjectPropertiesListName;
 
     /**
      * Executes the SetupProjectInformation task
@@ -24,7 +23,7 @@ export default class SetupProjectInformation extends BaseTask {
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
             onProgress(strings.SetupProjectInformationText, 'AlignCenter');
-            const propertiesList = await this._clonePropertiesList(params);
+            const propertiesList = await this._createPropertiesList(params);
             await propertiesList.items.add({ Title: params.context.pageContext.web.title });
             await this._addEntryToHub(params);
             return params;
@@ -52,11 +51,11 @@ export default class SetupProjectInformation extends BaseTask {
     }
 
     /**
-     * Clone properties list
+     * Create properties list
      * 
-     * @param {IBaseTaskParams} param0 Parameters destructed
+     * @param {IBaseTaskParams} param0 Task parameters destructed
      */
-    private async _clonePropertiesList({ data, web, spfxJsomContext: { jsomContext } }: IBaseTaskParams): Promise<List> {
+    private async _createPropertiesList({ data, web, spfxJsomContext: { jsomContext } }: IBaseTaskParams): Promise<List> {
         const [contentType, siteFields, ensureList] = await Promise.all([
             this._getHubContentType(data.hub.web),
             this._getSiteFields(web),
@@ -92,7 +91,7 @@ export default class SetupProjectInformation extends BaseTask {
      */
     private async _getHubContentType(web: Web) {
         let contentType = await web.contentTypes
-            .getById(this._contentTypeId)
+            .getById('0x0100805E9E4FEAAB4F0EABAB2600D30DB70C')
             .select('StringId', 'Name', 'Fields/InternalName', 'Fields/Title', 'Fields/SchemaXml')
             .expand('Fields')
             .get<{ StringId: string, Name: string, Fields: { InternalName: string, Title: string, SchemaXml: string }[] }>();
@@ -104,7 +103,7 @@ export default class SetupProjectInformation extends BaseTask {
      * 
      * @param {Web} web Web
      */
-    private async _getSiteFields(web: Web) {
+    private async _getSiteFields(web: Web): Promise<{ InternalName: string }[]> {
         let siteFields = await web.fields.select('InternalName').get<{ InternalName: string }[]>();
         return siteFields;
     }
@@ -114,7 +113,7 @@ export default class SetupProjectInformation extends BaseTask {
    * 
    * @param {List} list List
    */
-    private async _getListFields(list: List) {
+    private async _getListFields(list: List): Promise<{ InternalName: string }[]> {
         let listFields = await list.fields.select('InternalName').get<{ InternalName: string }[]>();
         return listFields;
     }

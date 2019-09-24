@@ -29,8 +29,6 @@
   },
   "externals": {},
   "localizedResources": {
-    "ProjectExtensionsStrings": "lib/loc/{locale}.js",
-    "ProjectUpgradeApplicationCustomizerStrings": "lib/extensions/projectUpgrade/loc/{locale}.js",
-    "TemplateSelectorCommandSetStrings": "lib/extensions/templateSelector/loc/{locale}.js"
+    "ProjectExtensionsStrings": "lib/loc/{locale}.js"
   }
 }

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './DocumentTemplateModalScreenSelect.module.scss';
-import * as TemplateSelectorCommandSetStrings from 'TemplateSelectorCommandSetStrings';
+import * as ProjectExtensionsStrings from 'ProjectExtensionsStrings';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 import { DetailsList, SelectionMode, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
@@ -11,19 +11,19 @@ export default class DocumentTemplateModalScreenSelect extends React.Component<I
         {
             key: 'name',
             fieldName: 'name',
-            name: TemplateSelectorCommandSetStrings.NameLabel,
+            name: ProjectExtensionsStrings.NameLabel,
             minWidth: 200,
         },
         {
             key: 'title',
             fieldName: 'title',
-            name: TemplateSelectorCommandSetStrings.TitleLabel,
+            name: ProjectExtensionsStrings.TitleLabel,
             minWidth: 150,
         },
         {
             key: 'modified',
             fieldName: 'modified',
-            name: TemplateSelectorCommandSetStrings.ModifiedLabel,
+            name: ProjectExtensionsStrings.ModifiedLabel,
             minWidth: 150,
         }
     ];
@@ -48,7 +48,7 @@ export default class DocumentTemplateModalScreenSelect extends React.Component<I
                         selectionMode={SelectionMode.multiple} />
                 </MarqueeSelection>
                 <div className={styles.actions} hidden={this.props.selectedItems.length === 0}>
-                    <PrimaryButton text={TemplateSelectorCommandSetStrings.OnSubmitSelectionText} onClick={this.props.onSubmitSelection} />
+                    <PrimaryButton text={ProjectExtensionsStrings.OnSubmitSelectionText} onClick={this.props.onSubmitSelection} />
                 </div>
             </div>
         );

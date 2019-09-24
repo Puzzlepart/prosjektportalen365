@@ -6,7 +6,7 @@ import { Modal } from 'office-ui-fabric-react/lib/Modal';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import * as React from 'react';
 import * as stringFormat from 'string-format';
-import * as TemplateSelectorCommandSetStrings from 'TemplateSelectorCommandSetStrings';
+import * as ProjectExtensionsStrings from 'ProjectExtensionsStrings';
 import { TemplateFile } from '../../models';
 import { IDocumentTemplateModalProps } from './IDocumentTemplateModalProps';
 import { IDocumentTemplateModalState } from './IDocumentTemplateModalState';
@@ -79,15 +79,15 @@ export default class DocumentTemplateModal extends React.Component<IDocumentTemp
                 );
             }
             case DocumentTemplateModalScreen.CopyProgress: {
-                return <ProgressIndicator label={TemplateSelectorCommandSetStrings.CopyProgressLabel} {...progress} />;
+                return <ProgressIndicator label={ProjectExtensionsStrings.CopyProgressLabel} {...progress} />;
             }
             case DocumentTemplateModalScreen.Summary: {
                 return (
                     <React.Fragment>
-                        <MessageBar messageBarType={MessageBarType.success}>{stringFormat(TemplateSelectorCommandSetStrings.SummaryText, templatesAdded.length)}</MessageBar>
+                        <MessageBar messageBarType={MessageBarType.success}>{stringFormat(ProjectExtensionsStrings.SummaryText, templatesAdded.length)}</MessageBar>
                         <div className={styles.actions}>
-                            <DefaultButton text={TemplateSelectorCommandSetStrings.GetMoreText} onClick={_ => this._onChangeScreen(DocumentTemplateModalScreen.Select)} />
-                            <DefaultButton text={TemplateSelectorCommandSetStrings.CloseModalText} onClick={this.props.onDismiss} />
+                            <DefaultButton text={ProjectExtensionsStrings.GetMoreText} onClick={_ => this._onChangeScreen(DocumentTemplateModalScreen.Select)} />
+                            <DefaultButton text={ProjectExtensionsStrings.CloseModalText} onClick={this.props.onDismiss} />
                         </div>
                     </React.Fragment>
                 );

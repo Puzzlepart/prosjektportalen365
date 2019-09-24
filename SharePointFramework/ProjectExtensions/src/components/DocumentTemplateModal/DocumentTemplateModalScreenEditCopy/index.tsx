@@ -3,7 +3,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import * as React from 'react';
-import * as TemplateSelectorCommandSetStrings from 'TemplateSelectorCommandSetStrings';
+import * as ProjectExtensionsStrings from 'ProjectExtensionsStrings';
 import { IDocumentTemplateModalScreenEditCopyProps } from './IDocumentTemplateModalScreenEditCopyProps';
 import { IDocumentTemplateModalScreenEditCopyState } from './IDocumentTemplateModalScreenEditCopyState';
 import styles from './DocumentTemplateModalScreenEditCopy.module.scss';
@@ -38,15 +38,15 @@ export default class DocumentTemplateModalScreenEditCopy extends React.Component
                         <div hidden={!expandState[tmpl.id]}>
                             <div className={styles.nameInput}>
                                 <TextField
-                                    label={TemplateSelectorCommandSetStrings.NameLabel}
-                                    placeholder={TemplateSelectorCommandSetStrings.NameLabel}
+                                    label={ProjectExtensionsStrings.NameLabel}
+                                    placeholder={ProjectExtensionsStrings.NameLabel}
                                     defaultValue={tmpl.newName}
                                     onChange={(_event, newName) => this._onInputChanged(tmpl.id, { newName })} />
                             </div>
                             <div className={styles.titleInput}>
                                 <TextField
-                                    label={TemplateSelectorCommandSetStrings.TitleLabel}
-                                    placeholder={TemplateSelectorCommandSetStrings.TitleLabel}
+                                    label={ProjectExtensionsStrings.TitleLabel}
+                                    placeholder={ProjectExtensionsStrings.TitleLabel}
                                     defaultValue={tmpl.newTitle}
                                     onChange={(_event, newTitle) => this._onInputChanged(tmpl.id, { newTitle })} />
                             </div>
@@ -55,15 +55,15 @@ export default class DocumentTemplateModalScreenEditCopy extends React.Component
                 ))}
                 <div>
                     <Dropdown
-                        label={TemplateSelectorCommandSetStrings.LibraryDropdownLabel}
+                        label={ProjectExtensionsStrings.LibraryDropdownLabel}
                         defaultSelectedKey={0}
                         onChange={this._onLibraryChanged.bind(this)}
                         disabled={this.props.libraries.length === 1}
                         options={this.props.libraries.map((lib, idx) => ({ key: idx, text: lib.Title, data: lib }))} />
                 </div>
                 <div className={styles.actions}>
-                    <PrimaryButton text={TemplateSelectorCommandSetStrings.OnStartCopyText} onClick={this._onStartCopy.bind(this)} />
-                    <DefaultButton text={TemplateSelectorCommandSetStrings.OnGoBackText} onClick={this.props.onGoBack} />
+                    <PrimaryButton text={ProjectExtensionsStrings.OnStartCopyText} onClick={this._onStartCopy.bind(this)} />
+                    <DefaultButton text={ProjectExtensionsStrings.OnGoBackText} onClick={this.props.onGoBack} />
                 </div>
             </div >
         );
