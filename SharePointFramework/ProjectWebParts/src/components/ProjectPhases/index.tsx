@@ -1,26 +1,25 @@
-import { dateAdd } from '@pnp/common';
 import { Logger, LogLevel } from '@pnp/logging';
 import { List, sp } from '@pnp/sp';
-import { taxonomy } from '@pnp/sp-taxonomy';
-import { IPhaseChecklistItem, Phase } from 'models';
+import { Phase } from 'models';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
+import { SpEntityPortalService } from 'sp-entityportal-service';
 import * as format from 'string-format';
+import SPDataAdapter from '../../data';
 import ChangePhaseDialog from './ChangePhaseDialog/index';
-import { ChecklistData } from './ChecklistData';
 import { IProjectPhasesProps } from './IProjectPhasesProps';
 import { IProjectPhasesData, IProjectPhasesState } from './IProjectPhasesState';
 import ProjectPhase from './ProjectPhase';
 import ProjectPhaseCallout from './ProjectPhaseCallout/index';
 import styles from './ProjectPhases.module.scss';
-import SPDataAdapter from '../../data';
 
 /**
  * @component ProjectPhases
  */
 export class ProjectPhases extends React.Component<IProjectPhasesProps, IProjectPhasesState> {
+  private _spEntityPortalService: SpEntityPortalService;
   private _checkList: List;
 
   /**
@@ -32,7 +31,17 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
     super(props);
     this.state = { isLoading: true, data: {} };
     this._checkList = sp.web.lists.getByTitle(strings.PhaseChecklistName);
-    SPDataAdapter.configure({ siteId: this.props.pageContext.site.id.toString() });
+    this._spEntityPortalService = new SpEntityPortalService({
+      webUrl: props.hubSiteUrl,
+      fieldPrefix: 'Gt',
+      ...props.entity,
+    });
+    SPDataAdapter.configure(this.props.context, {
+      spEntityPortalService: this._spEntityPortalService,
+      siteId: props.siteId,
+      webUrl: props.webUrl,
+      hubSiteUrl: props.hubSiteUrl,
+    });
   }
 
   public async componentDidMount() {
@@ -86,7 +95,7 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
             phase={this.state.phaseMouseOver}
             isCurrentPhase={currentPhase && (this.state.phaseMouseOver.model.id === currentPhase.id)}
             phaseSubTextProperty={this.props.phaseSubTextProperty}
-            webAbsoluteUrl={this.props.pageContext.web.absoluteUrl}
+            webAbsoluteUrl={this.props.webUrl}
             onChangePhase={phase => this.setState({ confirmPhase: phase })}
             onDismiss={this._onProjectPhaseCalloutDismiss.bind(this)}
             gapSpace={5} />
@@ -135,12 +144,13 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
       this.setState({ data: { ...this.state.data, currentPhase: phase }, confirmPhase: null, isChangingPhase: false });
       if (this.props.automaticReload) {
         window.setTimeout(() => {
-          document.location.href = this.props.pageContext.web.absoluteUrl;
+          document.location.href = this.props.webUrl;
         }, (this.props.reloadTimeout * 5000));
       } else {
         Logger.log({ message: '(ProjectPhases) _onChangePhase: Successfully changed phase. Automatic reload is disabled.', level: LogLevel.Info });
       }
     } catch (error) {
+      console.log(error);
       Logger.log({ message: '(ProjectPhases) _onChangePhase: Failed to change phase', level: LogLevel.Warning });
       this.setState({ confirmPhase: null, isChangingPhase: false });
     }
@@ -176,12 +186,17 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
         SPDataAdapter.getTermFieldContext(this.props.phaseField),
         SPDataAdapter.getChecklistData(this._checkList),
       ]);
-      const [phases, currentPhase] = await Promise.all([
+      const [phases, currentPhaseName] = await Promise.all([
         SPDataAdapter.getPhases(phaseFieldCtx.termSetId, checklistData),
-        SPDataAdapter.getCurrentPhase(),
+        SPDataAdapter.getCurrentPhaseName(),
       ]);
       Logger.log({ message: '(ProjectPhases) _fetchData: Successfully fetch phases', level: LogLevel.Info });
-      return { currentPhase, phases, phaseTextField: phaseFieldCtx.phaseTextField };
+      let [currentPhase] = phases.filter(p => p.name === currentPhaseName);
+      return {
+        currentPhase,
+        phases,
+        phaseTextField: phaseFieldCtx.phaseTextField,
+      };
     } catch (err) {
       throw err;
     }

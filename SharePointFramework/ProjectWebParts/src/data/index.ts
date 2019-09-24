@@ -1,15 +1,16 @@
-import { stringIsNullOrEmpty, TypedHash, dateAdd } from '@pnp/common';
-import { ItemUpdateResult, sp, Web, List } from '@pnp/sp';
+import { WebPartContext } from '@microsoft/sp-webpart-base';
+import { dateAdd, stringIsNullOrEmpty, TypedHash } from '@pnp/common';
+import { ItemUpdateResult, List, sp, SPConfiguration, Web } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
+import { ChecklistData } from 'components/ProjectPhases/ChecklistData';
+import { IPhaseChecklistItem } from 'models';
 import { ISPList } from 'models/ISPList';
 import { Phase } from 'models/Phase';
+import * as strings from 'ProjectWebPartsStrings';
 import { makeUrlAbsolute, parseFieldXml } from 'shared/lib/helpers';
 import { SpEntityPortalService } from 'sp-entityportal-service';
-import * as _ from 'underscore';
-import { IPhaseChecklistItem } from 'models';
-import { ChecklistData } from 'components/ProjectPhases/ChecklistData';
-import * as strings from 'ProjectWebPartsStrings';
 import initSpfxJsom, { ExecuteJsomQuery } from 'spfx-jsom';
+import * as _ from 'underscore';
 
 export interface ISPDataAdapterSettings {
     spEntityPortalService?: SpEntityPortalService;
@@ -26,14 +27,28 @@ export interface IGetPropertiesData {
 }
 
 export default new class SPDataAdapter {
+    public spConfiguration: SPConfiguration = {
+        defaultCachingStore: 'session',
+        defaultCachingTimeoutSeconds: 90,
+        enableCacheExpiration: true,
+        cacheExpirationIntervalMilliseconds: 2500,
+        globalCacheDisable: false,
+    };
     private _settings: ISPDataAdapterSettings = {
         spEntityPortalService: null,
         siteId: '',
         webUrl: '',
     };
 
-    public configure(settings: ISPDataAdapterSettings) {
+    /**
+     * Configure
+     * 
+     * @param spfxContext 
+     * @param settings 
+     */
+    public configure(spfxContext: WebPartContext, settings: ISPDataAdapterSettings) {
         this._settings = settings;
+        sp.setup({ spfxContext, ...this.spConfiguration });
     }
 
     /**
@@ -163,9 +178,9 @@ export default new class SPDataAdapter {
      */
     private async _getPropertyItem(urlSource: string = encodeURIComponent(document.location.href)) {
         try {
-            let [list] = await sp.web.lists.filter(`Title eq '${strings.ProjectPropertiesListName}'`).select('Id', 'DefaultEditFormUrl').get<ISPList[]>();
+            let [list] = await sp.web.lists.filter(`Title eq '${strings.ProjectPropertiesListName}'`).select('Id', 'DefaultEditFormUrl').usingCaching().get<ISPList[]>();
             if (!list) return null;
-            let [item] = await sp.web.lists.getById(list.Id).items.select('Id').top(1).get<{ Id: number }[]>();
+            let [item] = await sp.web.lists.getById(list.Id).items.select('Id').top(1).usingCaching().get<{ Id: number }[]>();
             if (!item) return null;
             let [fieldValuesText, fieldValues] = await Promise.all([
                 sp.web.lists.getById(list.Id).items.getById(item.Id).fieldValuesAsText.get(),
@@ -188,7 +203,7 @@ export default new class SPDataAdapter {
         if (propertyItem) {
             return propertyItem;
         } else {
-            let entity = await this._settings.spEntityPortalService.fetchEntity(this._settings.siteId, this._settings.webUrl);
+            let entity = await this._settings.spEntityPortalService.configure(this.spConfiguration).fetchEntity(this._settings.siteId, this._settings.webUrl);
             return {
                 editFormUrl: entity.urls.editFormUrl,
                 versionHistoryUrl: entity.urls.versionHistoryUrl,
@@ -236,8 +251,9 @@ export default new class SPDataAdapter {
     /**
      * Get current phase
      */
-    public async getCurrentPhase(): Promise<Phase> {
-        return null;
+    public async getCurrentPhaseName(): Promise<string> {
+        let propertiesData = await this.getPropertiesData();
+        return propertiesData.fieldValuesText.GtProjectPhase;
     }
 
     /**
@@ -283,19 +299,11 @@ export default new class SPDataAdapter {
         const [phaseField, textField] = await Promise.all([
             sp.web.fields.getByInternalNameOrTitle(fieldName)
                 .select('TermSetId')
-                .usingCaching({
-                    key: `projectphases_termsetid`,
-                    storeName: 'session',
-                    expiration: dateAdd(new Date(), 'day', 1),
-                }
-                ).get<{ TermSetId: string }>(),
+                .usingCaching()
+                .get<{ TermSetId: string }>(),
             sp.web.fields.getByInternalNameOrTitle(`${fieldName}_0`)
                 .select('InternalName')
-                .usingCaching({
-                    key: `projectphases_phasetextfield`,
-                    storeName: 'session',
-                    expiration: dateAdd(new Date(), 'day', 1),
-                })
+                .usingCaching()
                 .get<{ InternalName: string }>(),
         ]);
         return { termSetId: phaseField.TermSetId, phaseTextField: textField.InternalName };

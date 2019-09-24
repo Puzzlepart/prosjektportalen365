@@ -30,21 +30,26 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   private _storage: PnPClientStore;
 
 
+  /**
+   * Constructor
+   * 
+   * @param {IProjectInformationProps} props Props
+   */
   constructor(props: IProjectInformationProps) {
     super(props);
     this.state = { isLoading: true, data: {} };
     this._storage = new PnPClientStorage().session;
-    this._hubConfigurationService = new HubConfigurationService(this.props.hubSiteUrl);
+    this._hubConfigurationService = new HubConfigurationService(props.hubSiteUrl);
     this._spEntityPortalService = new SpEntityPortalService({
-      webUrl: this.props.hubSiteUrl,
+      webUrl: props.hubSiteUrl,
       fieldPrefix: 'Gt',
-      ...this.props.entity,
+      ...props.entity,
     });
-    SPDataAdapter.configure({
+    SPDataAdapter.configure(this.props.context, {
       spEntityPortalService: this._spEntityPortalService,
-      siteId: this.props.siteId,
-      webUrl: this.props.webUrl,
-      hubSiteUrl: this.props.hubSiteUrl,
+      siteId: props.siteId,
+      webUrl: props.webUrl,
+      hubSiteUrl: props.hubSiteUrl,
     });
   }
 
@@ -146,9 +151,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     this.setState({ progress: { label: strings.SyncProjectPropertiesProgressLabel, description: '' } });
     const { fields, fieldValues, fieldValuesText } = this.state.data;
     try {
-      await SPDataAdapter.syncPropertyItemToHub(fields, fieldValues, fieldValuesText, props => {
-        this.setState({ progress: { label: strings.SyncProjectPropertiesProgressLabel, ...props } });
-      });
+      await SPDataAdapter.syncPropertyItemToHub(fields, fieldValues, fieldValuesText, props => this.setState({ progress: { label: strings.SyncProjectPropertiesProgressLabel, ...props } }));
       this._addMessage(strings.SyncProjectPropertiesSuccessText, MessageBarType.success);
     } catch (error) {
       this._addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning);
@@ -211,8 +214,6 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
         ...propertiesData,
       };
 
-      let properties = this._transformProperties(data.fieldValuesText, configuration);
-
       if (!stringIsNullOrEmpty(this.props.statusReportsListName) && this.props.statusReportsCount > 0) {
         const statusReportsList = new Web(this.props.hubSiteUrl).lists.getByTitle(this.props.statusReportsListName);
         data.statusReports = await statusReportsList
@@ -223,6 +224,8 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
           .top(this.props.statusReportsCount)
           .get<{ Id: number, Created: string }[]>();
       }
+
+      let properties = this._transformProperties(data.fieldValuesText, configuration);
 
       return { data, properties };
     } catch (error) {
