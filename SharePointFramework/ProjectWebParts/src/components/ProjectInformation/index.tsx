@@ -182,15 +182,15 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   * @param {IProjectInformationData} data Data
   */
   private _transformProperties(fieldValuesText: TypedHash<any>, data: IProjectInformationData) {
-    const fieldNames: string[] = _.omit(Object.keys(fieldValuesText).filter(fieldName => {
+    const fieldNames: string[] = Object.keys(fieldValuesText).filter(fieldName => {
       let [field] = data.fields.filter(fld => fld.InternalName === fieldName);
-      if (field && data.columnConfig.length === 0) return true;
+      if (field && ['GtSiteId', 'GtGroupId', 'GtSiteUrl'].indexOf(fieldName) === -1 && data.columnConfig.length === 0) return true;
       let [column] = data.columnConfig.filter(c => c.GtInternalName === fieldName);
       if (field && column) {
         return this.props.filterField ? column[this.props.filterField] : true;
       }
       return false;
-    }), ['GtSiteId', 'GtGroupId', 'GtSiteUrl']);
+    });
     const properties = fieldNames.map(fieldName => {
       let [field] = data.fields.filter(fld => fld.InternalName === fieldName);
       return new ProjectPropertyModel(field, fieldValuesText[fieldName]);
