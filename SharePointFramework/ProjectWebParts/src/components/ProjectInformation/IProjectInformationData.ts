@@ -1,5 +1,5 @@
-import { IGetPropertiesData } from 'data';
 import { IEntityField } from 'sp-entityportal-service';
+import { IGetPropertiesData } from 'data/SPDataAdapter/IGetPropertiesData';
 
 export interface IProjectInformationData extends IGetPropertiesData {
   /**
