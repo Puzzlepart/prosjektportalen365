@@ -24,7 +24,7 @@
         "moment": "^2.24.0",
         "object-get": "^2.1.0",
         "scriptjs": "^2.5.9",
-        "sp-entityportal-service": "^0.12.4",
+        "sp-entityportal-service": "^1.0.0",
         "sp-hubsite-service": "^0.5.0",
         "spfx-jsom": "^0.6.4",
         "string-format": "^2.0.0",

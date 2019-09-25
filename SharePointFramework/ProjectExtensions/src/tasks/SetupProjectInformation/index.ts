@@ -41,7 +41,7 @@ export default new class SetupProjectInformation extends BaseTask {
         let entity = await spEntityPortalService.getEntityItem(context.pageContext.legacyPageContext.groupId);
         if (entity) return;
         this.logInformation(`Adding project entity to list '${properties.projectsList}' at ${data.hub.url}`, { groupId: context.pageContext.legacyPageContext.groupId, siteId: context.pageContext.site.id.toString() });
-        await spEntityPortalService.newEntity(
+        await spEntityPortalService.createNewEntity(
             context.pageContext.legacyPageContext.groupId,
             context.pageContext.web.absoluteUrl,
             { Title: context.pageContext.web.title, GtSiteId: context.pageContext.site.id.toString() },

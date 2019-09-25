@@ -1,6 +1,6 @@
 {
     "name": "projectextensions",
-    "version": "1.0.7",
+    "version": "1.1.0",
     "private": true,
     "engines": {
         "node": ">=0.10.0"
@@ -47,7 +47,7 @@
         "react": "16.7.0",
         "react-dom": "16.7.0",
         "shared": "link:..\\@Shared",
-        "sp-entityportal-service": "^0.12.4",
+        "sp-entityportal-service": "^1.0.0",
         "sp-hubsite-service": "^0.4.1",
         "sp-js-provisioning": "^1.0.0",
         "spfx-jsom": "^0.6.4",

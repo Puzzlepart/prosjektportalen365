@@ -49,7 +49,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     this._sectionsList = new Web(props.hubSiteUrl).lists.getByTitle(props.sectionsListName);
     this._hubConfigurationService = new HubConfigurationService(props.hubSiteUrl);
     this._spEntityPortalService = new SpEntityPortalService({
-      webUrl: props.hubSiteUrl,
+      portalUrl: props.hubSiteUrl,
       fieldPrefix: 'Gt',
       ...props.entity,
     });

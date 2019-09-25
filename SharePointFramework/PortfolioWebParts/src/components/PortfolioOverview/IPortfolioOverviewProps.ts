@@ -1,5 +1,4 @@
 import { IPortfolioOverviewConfiguration } from 'interfaces';
-import { PortfolioOverviewView } from 'models';
 import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
 import { IBaseComponentProps } from '../IBaseComponentProps';
 

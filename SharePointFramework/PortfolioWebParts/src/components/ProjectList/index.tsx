@@ -175,7 +175,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         <ProjectInformationModal
           modalProps={{ isOpen: true, onDismiss: () => this.setState({ showProjectInfo: null }) }}
           title={this.state.showProjectInfo.title}
-          entity={{ webUrl: this.props.pageContext.site.absoluteUrl, ...this.props.entity }}
+          entity={{ portalUrl: this.props.pageContext.site.absoluteUrl, ...this.props.entity }}
           webUrl={this.props.pageContext.site.absoluteUrl}
           hubSiteUrl={this.props.pageContext.site.absoluteUrl}
           siteId={this.state.showProjectInfo.siteId}

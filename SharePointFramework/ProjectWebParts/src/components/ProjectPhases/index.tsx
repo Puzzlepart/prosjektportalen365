@@ -32,7 +32,7 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
     this.state = { isLoading: true, data: {} };
     this._checkList = sp.web.lists.getByTitle(strings.PhaseChecklistName);
     this._spEntityPortalService = new SpEntityPortalService({
-      webUrl: props.hubSiteUrl,
+      portalUrl: props.hubSiteUrl,
       fieldPrefix: 'Gt',
       ...props.entity,
     });

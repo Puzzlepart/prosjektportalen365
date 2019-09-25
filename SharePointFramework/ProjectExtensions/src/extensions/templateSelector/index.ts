@@ -8,7 +8,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { default as HubSiteService } from 'sp-hubsite-service';
 import { DocumentTemplateModal } from '../../components/index';
-import { default as SPDataAdapter } from '../../data';
+import { SPDataAdapter } from '../../data';
 import { IDocumentLibrary, TemplateFile } from '../../models/index';
 import { ITemplateSelectorCommandSetProperties } from './ITemplateSelectorCommandSetProperties';
 

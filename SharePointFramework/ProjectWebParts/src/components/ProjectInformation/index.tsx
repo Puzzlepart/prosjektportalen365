@@ -43,7 +43,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     this._storage = new PnPClientStorage().session;
     this._hubConfigurationService = new HubConfigurationService(props.hubSiteUrl);
     this._spEntityPortalService = new SpEntityPortalService({
-      webUrl: props.hubSiteUrl,
+      portalUrl: props.hubSiteUrl,
       fieldPrefix: 'Gt',
       ...props.entity,
     });
