@@ -1,5 +1,9 @@
 <pnp:Files xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
-    <pnp:Directory Src="Prosjektmaler" Folder="Prosjektmaler" Overwrite="true" Recursive="false" IncludedExtensions="*.txt" MetadataMappingFile=".\Prosjektmaler.json" />
+    <pnp:File Src="Prosjektmaler\Standardmal.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
+        <pnp:Properties>
+            <pnp:Property Key="Title" Value="Standardmal" />
+        </pnp:Properties>
+    </pnp:File>
     <pnp:Directory Src="Konfigurasjonsfiler" Folder="Konfigurasjonsfiler" Overwrite="true" Recursive="false" IncludedExtensions="*.txt" />
     <pnp:Directory Src="SiteAssets" Folder="SiteAssets" Overwrite="true" Recursive="false" IncludedExtensions="*.png" />
 </pnp:Files>

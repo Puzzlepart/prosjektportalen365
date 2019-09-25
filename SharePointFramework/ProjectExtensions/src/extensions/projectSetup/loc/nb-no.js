@@ -39,5 +39,7 @@ define([], function () {
     SetupProjectInformationErrorMessage: "Det skjedde en feil under initialisering av prosjektinformasjon",
     ProvisionSiteFieldsErrorMessage: "Det skjedde en feil under provisjonering av områdekolonner",
     ProvisionSiteFieldsText: "Opprettet feltet {0} på området",
+    SiteNotReadyErrorMessage: "Området er ikke klart",
+    SiteNotReadyErrorStack: "Området er ikke klart. Prøv igjen senere."
   }
 });

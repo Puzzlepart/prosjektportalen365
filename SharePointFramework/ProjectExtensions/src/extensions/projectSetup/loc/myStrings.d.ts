@@ -38,6 +38,8 @@ declare interface IProjectSetupApplicationCustomizerStrings {
   SetupProjectInformationErrorMessage: string;
   ProvisionSiteFieldsErrorMessage: string;
   ProvisionSiteFieldsText: string;
+  SiteNotReadyErrorMessage: string;
+  SiteNotReadyErrorStack: string;
 }
 
 declare module 'ProjectSetupApplicationCustomizerStrings' {

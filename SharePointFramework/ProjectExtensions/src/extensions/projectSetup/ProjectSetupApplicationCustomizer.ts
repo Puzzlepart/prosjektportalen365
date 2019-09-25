@@ -43,6 +43,8 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
       if (this.context.pageContext.web.language !== 1044) {
         await this._deleteCustomizer(this.componentId, false);
         throw new ProjectSetupError(strings.InvalidLanguageErrorMessage, strings.InvalidLanguageErrorStack);
+      } else if (this.context.pageContext.legacyPageContext.currentCultureLCID !== 1044 || this.context.pageContext.legacyPageContext.currentLanguage !== 1044) {
+        throw new ProjectSetupError(strings.SiteNotReadyErrorMessage, strings.SiteNotReadyErrorStack);
       } else if (!hubSiteId) {
         throw new ProjectSetupError(strings.NoHubSiteErrorMessage, strings.NoHubSiteErrorStack, MessageBarType.severeWarning);
       } else {
