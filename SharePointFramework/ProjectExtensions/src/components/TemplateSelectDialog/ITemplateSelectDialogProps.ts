@@ -1,8 +1,8 @@
 import IProjectSetupApplicationCustomizerData from '../../extensions/projectSetup/IProjectSetupApplicationCustomizerData';
-import { IProjectSetupBaseModalProps } from '../ProjectSetupBaseModal/IProjectSetupBaseModalProps';
+import { IBaseDialogProps } from '../@BaseDialog/IBaseDialogProps';
 import { ITemplateSelectDialogState } from './ITemplateSelectDialogState';
 
-export interface ITemplateSelectDialogProps extends IProjectSetupBaseModalProps {
+export interface ITemplateSelectDialogProps extends IBaseDialogProps {
     /**
      * @todo Describe property
      */

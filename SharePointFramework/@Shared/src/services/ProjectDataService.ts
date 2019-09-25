@@ -1,5 +1,5 @@
 import { dateAdd } from '@pnp/common';
-import { sp, List, SPConfiguration } from '@pnp/sp';
+import { sp, SPRest, Web, List, SPConfiguration } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
 import { makeUrlAbsolute } from '../helpers/makeUrlAbsolute';
 import { ISPList } from '../interfaces/ISPList';
@@ -21,13 +21,17 @@ export class ProjectDataService {
         cacheExpirationIntervalMilliseconds: 2500,
         globalCacheDisable: false,
     };
+    private _web: Web;
 
     /**
      * Creates a new instance of ProjectDataService
      * 
-     * @param {IProjectDataServiceParams} _params Parametrs
+     * @param {IProjectDataServiceParams} _params Parameters
+     * @param {SPRest} _sp SP Rest instance
      */
-    constructor(private _params: IProjectDataServiceParams) { }
+    constructor(private _params: IProjectDataServiceParams, private _sp: SPRest = sp) {
+        this._web = new Web(_params.webUrl);
+    }
 
 
     /**
@@ -35,14 +39,14 @@ export class ProjectDataService {
      */
     private async _getPropertyItemContext() {
         try {
-            let [list] = await sp.web.lists.filter(`Title eq '${this._params.propertiesListName}'`).select('Id', 'DefaultEditFormUrl').usingCaching().get<ISPList[]>();
+            let [list] = await this._web.lists.filter(`Title eq '${this._params.propertiesListName}'`).select('Id', 'DefaultEditFormUrl').usingCaching().get<ISPList[]>();
             if (!list) return null;
-            let [item] = await sp.web.lists.getById(list.Id).items.select('Id').top(1).usingCaching().get<{ Id: number }[]>();
+            let [item] = await this._web.lists.getById(list.Id).items.select('Id').top(1).usingCaching().get<{ Id: number }[]>();
             if (!item) return null;
             return {
                 id: item.Id,
-                list: sp.web.lists.getById(list.Id),
-                item: sp.web.lists.getById(list.Id).items.getById(item.Id),
+                list: this._web.lists.getById(list.Id),
+                item: this._web.lists.getById(list.Id).items.getById(item.Id),
                 listId: list.Id,
                 defaultEditFormUrl: list.DefaultEditFormUrl,
             };

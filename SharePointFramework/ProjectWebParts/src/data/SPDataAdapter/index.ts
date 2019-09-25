@@ -4,6 +4,7 @@ import * as strings from 'ProjectWebPartsStrings';
 import * as _ from 'underscore';
 import { ISPDataAdapterSettings } from './ISPDataAdapterSettings';
 import { ProjectDataService } from 'shared/lib/services';
+import { WebPartContext } from '@microsoft/sp-webpart-base';
 
 export default new class SPDataAdapter {
     public spConfiguration: SPConfiguration = {
@@ -19,12 +20,12 @@ export default new class SPDataAdapter {
     /**
      * Configure the SP data adapter
      * 
-     * @param settings 
+     * @param {ISPDataAdapterSettings} settings Settings
      */
-    public configure(settings: ISPDataAdapterSettings) {
+    public configure( settings: ISPDataAdapterSettings) {
         this._settings = settings;
         sp.setup(this.spConfiguration);
-        this.project = new ProjectDataService({ ...this._settings, propertiesListName: strings.ProjectPropertiesListName });
+        this.project = new ProjectDataService({ ...this._settings, propertiesListName: strings.ProjectPropertiesListName }, sp);
     }
 
     /**

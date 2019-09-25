@@ -34,15 +34,8 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
 
   @override
   public async onInit(): Promise<void> {
+    sp.setup({ spfxContext: this.context });
     Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
-    sp.setup({
-      spfxContext: this.context,
-      defaultCachingStore: 'session',
-      defaultCachingTimeoutSeconds: 15,
-      enableCacheExpiration: true,
-      cacheExpirationIntervalMilliseconds: 2500,
-      globalCacheDisable: false,
-    });
     if (!this.context.pageContext.legacyPageContext.isSiteAdmin || !this.context.pageContext.legacyPageContext.groupId) return;
     try {
       Logger.log({ message: '(ProjectSetupApplicationCustomizer) onInit: Initializing pre-conditionals before initializing setup', data: { version: this.context.manifest.version }, level: LogLevel.Info });
@@ -77,7 +70,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
     try {
       Logger.log({ message: '(ProjectSetupApplicationCustomizer) _initializeSetup: Initializing setup', data: { version: this.context.manifest.version }, level: LogLevel.Info });
       this._data = await this._fetchData();
-      this._initializeLogging(this._data.hub.web);
+      this._initializeSPListLogging(this._data.hub.web);
       const templateInfo = await this._getTemplateInfoFromModal();
       Logger.log({ message: '(ProjectSetupApplicationCustomizer) _initializeSetup: Template selected by user', data: { selectedTemplate: templateInfo.selectedTemplate.title }, level: LogLevel.Info });
       ReactDOM.unmountComponentAtNode(this._templateSelectModalContainer);
@@ -93,12 +86,12 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   }
 
   /**
-   * Init logging
+   * Init SP list logging
    * 
    * @param {Web} hubWeb Hub web
    * @param {string} listName List name
    */
-  protected _initializeLogging(hubWeb: Web, listName: string = 'Logg') {
+  protected _initializeSPListLogging(hubWeb: Web, listName: string = 'Logg') {
     ListLogger.init(
       hubWeb.lists.getByTitle(listName),
       {
@@ -203,12 +196,13 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
    * @param {boolean} reload Reload page after customizer removal
    */
   private async _deleteCustomizer(componentId: string, reload: boolean): Promise<void> {
-    let customActions = await sp.web.userCustomActions.get<{ Id: string, ClientSideComponentId: string }[]>();
+    const web = new Web(this.context.pageContext.web.absoluteUrl);
+    const customActions = await web.userCustomActions.get<{ Id: string, ClientSideComponentId: string }[]>();
     for (let i = 0; i < customActions.length; i++) {
       var customAction = customActions[i];
       if (customAction.ClientSideComponentId === componentId) {
         Logger.log({ message: `(ProjectSetupApplicationCustomizer) _deleteCustomizer: Deleting custom action ${customAction.Id}`, level: LogLevel.Info });
-        await sp.web.userCustomActions.getById(customAction.Id).delete();
+        await web.userCustomActions.getById(customAction.Id).delete();
         break;
       }
     }

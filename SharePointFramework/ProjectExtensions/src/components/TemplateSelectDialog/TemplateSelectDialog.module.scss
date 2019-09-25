@@ -1,19 +1,6 @@
 @import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 
 .templateSelectDialog {
-  width: 650px;
-  max-width: 650px;
-  box-sizing: border-box;
-  position: relative;
-
-  .versionString {
-    position: absolute;
-    top: -90px;
-    right: -15px;
-    color: #fff;
-    font-size: 10px;
-  }
-
   .content {
     div[class*="ms-Dialog-header"] {
       display: none;

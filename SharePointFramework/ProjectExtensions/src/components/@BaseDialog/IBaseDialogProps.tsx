@@ -1,6 +1,6 @@
-import { IModalProps } from 'office-ui-fabric-react/lib/Modal';
+import { IDialogProps } from 'office-ui-fabric-react/lib/Dialog';
 
-export interface IProjectSetupBaseModalProps extends IModalProps {
+export interface IBaseDialogProps extends IDialogProps {
     /**
      * @todo Describe property
      */

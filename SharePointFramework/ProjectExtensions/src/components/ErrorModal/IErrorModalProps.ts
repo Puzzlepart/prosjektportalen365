@@ -1,6 +1,6 @@
 import { ProjectSetupError } from '../../extensions/projectSetup/ProjectSetupError';
-import { IProjectSetupBaseModalProps } from '../ProjectSetupBaseModal/IProjectSetupBaseModalProps';
+import { IBaseDialogProps } from '../@BaseDialog/IBaseDialogProps';
 
-export interface IErrorModalProps extends IProjectSetupBaseModalProps {
+export interface IErrorModalProps extends IBaseDialogProps {
     error: ProjectSetupError;
 }

@@ -1,9 +1,10 @@
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Dialog, DialogContent, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { DialogContent, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import { ProjectTemplate } from '../../models/index';
+import { BaseDialog } from '../@BaseDialog';
 import { ExtensionsSection } from './ExtensionsSection';
 import { ITemplateSelectDialogProps } from './ITemplateSelectDialogProps';
 import { ITemplateSelectDialogState } from './ITemplateSelectDialogState';
@@ -30,23 +31,17 @@ export default class TemplateSelectDialog extends React.Component<ITemplateSelec
 
     public render(): React.ReactElement<ITemplateSelectDialogProps> {
         return (
-            <Dialog
-                hidden={false}
-                modalProps={{
-                    isBlocking: true,
-                    isDarkOverlay: true,
-                }}
+            <BaseDialog
                 dialogContentProps={{
                     title: strings.TemplateSelectDialogTitle,
                     subText: strings.TemplateSelectDialogInfoText,
-                    type: DialogType.largeHeader,
                 }}
+                modalProps={{ isBlocking: true, isDarkOverlay: true }}
                 onDismiss={this.props.onDismiss}
                 containerClassName={styles.templateSelectDialog}>
-                <span className={styles.versionString}>{this.props.versionString}</span>
                 {this._body}
                 {this._footer}
-            </Dialog>
+            </BaseDialog>
         );
     }
 
