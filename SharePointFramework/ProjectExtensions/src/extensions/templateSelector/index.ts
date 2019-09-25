@@ -3,16 +3,17 @@ import { BaseListViewCommandSet, Command, IListViewCommandSetExecuteEventParamet
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import '@pnp/polyfill-ie11';
 import { sp } from '@pnp/sp';
+import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import * as strings from 'ProjectExtensionsStrings';
+import { default as HubSiteService } from 'sp-hubsite-service';
 import { DocumentTemplateModal } from '../../components/index';
-import * as data from '../../data/index';
+import { default as SPDataAdapter } from '../../data';
 import { IDocumentLibrary, TemplateFile } from '../../models/index';
 import { ITemplateSelectorCommandSetProperties } from './ITemplateSelectorCommandSetProperties';
 
 Logger.subscribe(new ConsoleListener());
-Logger.activeLogLevel = LogLevel.Info;
+Logger.activeLogLevel = LogLevel.Warning;
 
 
 export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<ITemplateSelectorCommandSetProperties> {
@@ -22,19 +23,17 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
 
   @override
   public async onInit() {
-    sp.setup({
-      spfxContext: this.context,
-      defaultCachingStore: 'session',
-      defaultCachingTimeoutSeconds: 15,
-      enableCacheExpiration: true,
-      cacheExpirationIntervalMilliseconds: 2500,
-      globalCacheDisable: false,
+    const hub = await HubSiteService.GetHubSite(sp, this.context.pageContext);
+    SPDataAdapter.configure({
+      siteId: this.context.pageContext.site.id.toString(),
+      webUrl: this.context.pageContext.web.absoluteUrl,
+      hubSiteUrl: hub.url,
     });
     const openTemplateSelectorCommand: Command = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR');
     if (!openTemplateSelectorCommand) return;
     Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Initializing', data: { version: this.context.manifest.version }, level: LogLevel.Info });
     try {
-      this._templates = await data.getDocumentTemplates(sp, this.context.pageContext, this.properties.templateLibrary, this.properties.phaseTermSetId);
+      this._templates = await SPDataAdapter.getDocumentTemplates(this.properties.templateLibrary);
       Logger.log({ message: `(TemplateSelectorCommandSet) onInit: Retrieved ${this._templates.length} templates from the specified template library`, level: LogLevel.Info });
     } catch (error) {
       Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Failed to initialize', level: LogLevel.Warning });
@@ -53,18 +52,7 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
   public async onExecute(event: IListViewCommandSetExecuteEventParameters): Promise<void> {
     switch (event.itemId) {
       case 'OPEN_TEMPLATE_SELECTOR':
-        this._libraries = (
-          await sp.web.lists
-            .select('Id', 'Title', 'RootFolder/ServerRelativeUrl')
-            .expand('RootFolder')
-            .filter(`BaseTemplate eq 101 and IsCatalog eq false and IsApplicationList eq false and ListItemEntityTypeFullName ne 'SP.Data.FormServerTemplatesItem'`)
-            .usingCaching()
-            .get()
-        ).map(l => ({
-          Id: l.Id,
-          Title: l.Title,
-          ServerRelativeUrl: l.RootFolder.ServerRelativeUrl,
-        }));
+        this._libraries = await SPDataAdapter.getLibraries();
         this._onOpenTemplateSelector();
         break;
     }

@@ -138,7 +138,7 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
     try {
       Logger.log({ message: `(ProjectPhases) _onChangePhase: Changing phase to ${phase.name}`, level: LogLevel.Info });
       this.setState({ isChangingPhase: true });
-      await SPDataAdapter.updatePhase(phase, this.state.data.phaseTextField);
+      await SPDataAdapter.project.updatePhase(phase, this.state.data.phaseTextField);
       await this._modifyDocumentViews(phase.name);
       sessionStorage.clear();
       this.setState({ data: { ...this.state.data, currentPhase: phase }, confirmPhase: null, isChangingPhase: false });
@@ -150,7 +150,6 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
         Logger.log({ message: '(ProjectPhases) _onChangePhase: Successfully changed phase. Automatic reload is disabled.', level: LogLevel.Info });
       }
     } catch (error) {
-      console.log(error);
       Logger.log({ message: '(ProjectPhases) _onChangePhase: Failed to change phase', level: LogLevel.Warning });
       this.setState({ confirmPhase: null, isChangingPhase: false });
     }
@@ -184,11 +183,11 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
     try {
       const [phaseFieldCtx, checklistData] = await Promise.all([
         SPDataAdapter.getTermFieldContext(this.props.phaseField),
-        SPDataAdapter.getChecklistData(this._checkList),
+        SPDataAdapter.project.getChecklistData(this._checkList),
       ]);
       const [phases, currentPhaseName] = await Promise.all([
-        SPDataAdapter.getPhases(phaseFieldCtx.termSetId, checklistData),
-        SPDataAdapter.getCurrentPhaseName(),
+        SPDataAdapter.project.getPhases(phaseFieldCtx.termSetId, checklistData),
+        SPDataAdapter.project.getCurrentPhaseName(),
       ]);
       Logger.log({ message: '(ProjectPhases) _fetchData: Successfully fetch phases', level: LogLevel.Info });
       let [currentPhase] = phases.filter(p => p.name === currentPhaseName);

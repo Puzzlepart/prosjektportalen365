@@ -209,7 +209,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     try {
       const [columnConfig, propertiesData] = await Promise.all([
         this._getColumnConfig(),
-        SPDataAdapter.getPropertiesData(),
+        SPDataAdapter.project.getPropertiesData(),
       ]);
 
       let data: IProjectInformationData = {
