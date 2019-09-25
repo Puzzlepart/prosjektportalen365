@@ -1,4 +1,4 @@
-import { ListContentConfig } from '../../../models';
+import { ListContentConfig } from '../../../models/index';
 
 export interface IListContentSectionProps {
     listContentConfig: ListContentConfig[];

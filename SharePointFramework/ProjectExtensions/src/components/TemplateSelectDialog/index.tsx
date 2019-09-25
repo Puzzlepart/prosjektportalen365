@@ -3,21 +3,21 @@ import { Dialog, DialogContent, DialogFooter, DialogType } from 'office-ui-fabri
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
-import { ProjectTemplate } from '../../models';
+import { ProjectTemplate } from '../../models/index';
 import { ExtensionsSection } from './ExtensionsSection';
-import { ITemplateSelectModalProps } from './ITemplateSelectModalProps';
-import { ITemplateSelectModalState } from './ITemplateSelectModalState';
+import { ITemplateSelectDialogProps } from './ITemplateSelectDialogProps';
+import { ITemplateSelectDialogState } from './ITemplateSelectDialogState';
 import { ListContentSection } from './ListContentSection';
 import { SettingsSection } from './SettingsSection';
-import styles from './TemplateSelectModal.module.scss';
+import styles from './TemplateSelectDialog.module.scss';
 
-export default class TemplateSelectModal extends React.Component<ITemplateSelectModalProps, ITemplateSelectModalState> {
+export default class TemplateSelectDialog extends React.Component<ITemplateSelectDialogProps, ITemplateSelectDialogState> {
     /**
      * Constructor
      * 
-     * @param props Props
+     * @param {ITemplateSelectDialogProps} props Props
      */
-    constructor(props: ITemplateSelectModalProps) {
+    constructor(props: ITemplateSelectDialogProps) {
         super(props);
         this.state = {
             selectedTemplate: props.data.templates[0],
@@ -28,7 +28,7 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
         };
     }
 
-    public render(): React.ReactElement<ITemplateSelectModalProps> {
+    public render(): React.ReactElement<ITemplateSelectDialogProps> {
         return (
             <Dialog
                 hidden={false}
@@ -37,12 +37,12 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
                     isDarkOverlay: true,
                 }}
                 dialogContentProps={{
-                    title: strings.TemplateSelectModalTitle,
-                    subText: strings.TemplateSelectModalInfoText,
+                    title: strings.TemplateSelectDialogTitle,
+                    subText: strings.TemplateSelectDialogInfoText,
                     type: DialogType.largeHeader,
                 }}
                 onDismiss={this.props.onDismiss}
-                containerClassName={styles.templateSelectModal}>
+                containerClassName={styles.templateSelectDialog}>
                 <span className={styles.versionString}>{this.props.versionString}</span>
                 {this._body}
                 {this._footer}
@@ -87,7 +87,7 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
             <DialogFooter>
                 <div className={styles.submitButton}>
                     <DefaultButton
-                        text={strings.TemplateSelectModalSubmitButtonText}
+                        text={strings.TemplateSelectDialogSubmitButtonText}
                         iconProps={{ iconName: 'Settings' }}
                         onClick={this._onSubmit.bind(this)} />
                 </div>
@@ -121,5 +121,5 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
     }
 }
 
-export { ITemplateSelectModalProps, ITemplateSelectModalState };
+export { ITemplateSelectDialogProps, ITemplateSelectDialogState };
 

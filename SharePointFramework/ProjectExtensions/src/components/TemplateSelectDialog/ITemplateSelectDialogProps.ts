@@ -1,8 +1,8 @@
 import IProjectSetupApplicationCustomizerData from '../../extensions/projectSetup/IProjectSetupApplicationCustomizerData';
 import { IProjectSetupBaseModalProps } from '../ProjectSetupBaseModal/IProjectSetupBaseModalProps';
-import { ITemplateSelectModalState } from './ITemplateSelectModalState';
+import { ITemplateSelectDialogState } from './ITemplateSelectDialogState';
 
-export interface ITemplateSelectModalProps extends IProjectSetupBaseModalProps {
+export interface ITemplateSelectDialogProps extends IProjectSetupBaseModalProps {
     /**
      * @todo Describe property
      */
@@ -11,5 +11,5 @@ export interface ITemplateSelectModalProps extends IProjectSetupBaseModalProps {
     /**
      * @todo Describe property
      */
-    onSubmit: (state: ITemplateSelectModalState) => void;
+    onSubmit: (state: ITemplateSelectDialogState) => void;
 }

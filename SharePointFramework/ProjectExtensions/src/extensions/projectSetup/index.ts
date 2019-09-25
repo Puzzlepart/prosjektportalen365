@@ -3,18 +3,18 @@ import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-applic
 import { isArray } from '@pnp/common';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { sp, Web } from '@pnp/sp';
-import MSGraphHelper from 'msgraph-helper';
+import { default as MSGraphHelper } from 'msgraph-helper';
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { ApplicationInsightsLogListener, ListLogger } from 'shared/lib/logging';
 import { HubConfigurationService } from 'shared/lib/services';
-import HubSiteService from 'sp-hubsite-service';
-import { ErrorModal, IErrorModalProps, IProgressModalProps, ITemplateSelectModalProps, ITemplateSelectModalState, ProgressModal, TemplateSelectModal } from '../../components';
+import { default as HubSiteService } from 'sp-hubsite-service';
+import { ErrorModal, IErrorModalProps, IProgressModalProps, ITemplateSelectDialogProps, ITemplateSelectDialogState, ProgressModal, TemplateSelectDialog } from '../../components';
 import { ListContentConfig, ProjectTemplate } from '../../models';
 import { default as Tasks, IBaseTaskParams } from '../../tasks';
-import IProjectSetupApplicationCustomizerData from './IProjectSetupApplicationCustomizerData';
+import { default as IProjectSetupApplicationCustomizerData } from './IProjectSetupApplicationCustomizerData';
 import { IProjectSetupApplicationCustomizerProperties } from './IProjectSetupApplicationCustomizerProperties';
 import { ProjectSetupError } from './ProjectSetupError';
 
@@ -114,14 +114,14 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   }
 
   /**
-   * Render TemplateSelectModal
+   * Render TemplateSelectDialog
    */
-  private _getTemplateInfoFromModal(): Promise<ITemplateSelectModalState> {
+  private _getTemplateInfoFromModal(): Promise<ITemplateSelectDialogState> {
     return new Promise(resolve => {
-      const templateSelectModal = React.createElement<ITemplateSelectModalProps>(TemplateSelectModal, {
-        key: 'ProjectSetupApplicationCustomizer_TemplateSelectModal',
+      const templateSelectModal = React.createElement<ITemplateSelectDialogProps>(TemplateSelectDialog, {
+        key: 'ProjectSetupApplicationCustomizer_TemplateSelectDialog',
         data: this._data,
-        onSubmit: (state: ITemplateSelectModalState) => resolve(state),
+        onSubmit: (state: ITemplateSelectDialogState) => resolve(state),
         versionString: `v${this.manifest.version}`,
       });
       this._templateSelectModalContainer = document.createElement('DIV');

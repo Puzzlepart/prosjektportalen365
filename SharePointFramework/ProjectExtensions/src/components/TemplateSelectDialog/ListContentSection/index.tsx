@@ -1,8 +1,8 @@
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
-import { ListContentConfig } from '../../../models';
-import CollapsableSection from '../../CollapsableSection';
+import { ListContentConfig } from '../../../models/index';
+import CollapsableSection from '../../CollapsableSection/index';
 import { IListContentSectionProps } from './IListContentSectionProps';
 import { IListContentSectionState } from './IListContentSectionState';
 import styles from './ListContentSection.module.scss';

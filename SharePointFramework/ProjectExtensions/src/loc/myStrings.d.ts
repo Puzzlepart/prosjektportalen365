@@ -50,9 +50,9 @@ declare interface IProjectExtensionsStrings {
   SiteNotReadyErrorStack: string;
   SummaryText: string;
   TemplateLibrarySelectModalTitle: string;
-  TemplateSelectModalInfoText: string;
-  TemplateSelectModalSubmitButtonText: string;
-  TemplateSelectModalTitle: string;
+  TemplateSelectDialogInfoText: string;
+  TemplateSelectDialogSubmitButtonText: string;
+  TemplateSelectDialogTitle: string;
   TemplateSelectTitle: string;
   TitleLabel: string;
 }

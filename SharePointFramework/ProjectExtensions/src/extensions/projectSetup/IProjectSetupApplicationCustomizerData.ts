@@ -1,8 +1,8 @@
 import { ListContentConfig, ProjectTemplate } from '../../models';
 import { IHubSite } from 'sp-hubsite-service';
-import { ITemplateSelectModalState } from '../../components/TemplateSelectModal/ITemplateSelectModalState';
+import { ITemplateSelectDialogState } from '../../components/TemplateSelectDialog/ITemplateSelectDialogState';
 
-export default interface IProjectSetupApplicationCustomizerData extends ITemplateSelectModalState {
+export default interface IProjectSetupApplicationCustomizerData extends ITemplateSelectDialogState {
     templates?: ProjectTemplate[];
     extensions?: ProjectTemplate[];
     listContentConfig?: ListContentConfig[];

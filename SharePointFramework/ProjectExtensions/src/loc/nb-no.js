@@ -51,9 +51,9 @@ define([], function () {
     SiteNotReadyErrorStack: 'Området er ikke klart. Prøv igjen senere.',
     SummaryText: '{0} dokument(er) ble kopiert til prosjektområdet.',
     TemplateLibrarySelectModalTitle: 'Hent dokumentmal',
-    TemplateSelectModalInfoText: 'Oppsettet av prosjektområdet tar omtrent 10 minutter. Ikke lukk nettleservinduet mens området settes opp.',
-    TemplateSelectModalSubmitButtonText: 'Sett opp området',
-    TemplateSelectModalTitle: 'Oppsett av prosjektområde',
+    TemplateSelectDialogInfoText: 'Oppsettet av prosjektområdet tar omtrent 10 minutter. Ikke lukk nettleservinduet mens området settes opp.',
+    TemplateSelectDialogSubmitButtonText: 'Sett opp området',
+    TemplateSelectDialogTitle: 'Oppsett av prosjektområde',
     TemplateSelectTitle: 'Velg prosjektmal',
     TitleLabel: 'Tittel'
   }
