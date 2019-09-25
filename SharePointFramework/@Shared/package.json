@@ -25,6 +25,7 @@
         "object-get": "^2.1.0",
         "scriptjs": "^2.5.9",
         "sp-entityportal-service": "^0.6.9",
+        "sp-hubsite-service": "^0.5.0",
         "spfx-jsom": "^0.6.4",
         "string-format": "^2.0.0",
         "xmldom": "^0.1.27"

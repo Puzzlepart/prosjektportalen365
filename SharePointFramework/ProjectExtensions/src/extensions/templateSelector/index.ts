@@ -6,9 +6,9 @@ import { sp } from '@pnp/sp';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as strings from 'ProjectExtensionsStrings';
-import { DocumentTemplateModal } from '../../components';
-import * as data from '../../data';
-import { IDocumentLibrary, TemplateFile } from '../../models';
+import { DocumentTemplateModal } from '../../components/index';
+import * as data from '../../data/index';
+import { IDocumentLibrary, TemplateFile } from '../../models/index';
 import { ITemplateSelectorCommandSetProperties } from './ITemplateSelectorCommandSetProperties';
 
 Logger.subscribe(new ConsoleListener());
@@ -16,14 +16,9 @@ Logger.activeLogLevel = LogLevel.Info;
 
 
 export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<ITemplateSelectorCommandSetProperties> {
-  private _templates: TemplateFile[];
+  private _templates: TemplateFile[] = [];
   private _libraries: IDocumentLibrary[];
   private _container: Element;
-
-  constructor() {
-    super();
-    this._templates = [];
-  }
 
   @override
   public async onInit() {

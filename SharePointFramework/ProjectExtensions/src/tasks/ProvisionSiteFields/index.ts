@@ -18,7 +18,7 @@ export class SPField {
 
 export default new class ProvisionSiteFields extends BaseTask {
     public taskName = 'ProvisionSiteFields';
-    
+
     /**
      * Execute ProvisionSiteFields
      * 
@@ -31,13 +31,15 @@ export default new class ProvisionSiteFields extends BaseTask {
             const siteFields = await params.data.hub.web.fields.filter(`Group eq '${strings.SiteFieldsGroupName}' and TypeAsString ne 'Calculated'`).select(...Object.keys(new SPField())).get<SPField[]>();
             for (let i = 0; i < siteFields.length; i++) {
                 let siteField = siteFields[i];
-                if (existingSiteFields.filter(exf => exf.InternalName === siteField.InternalName).length > 0) continue;
-                this.logInformation('Processing site field', { siteField });
+                if (existingSiteFields.filter(exf => exf.InternalName === siteField.InternalName).length > 0) {
+                    this.logInformation(`Site field ${siteField.InternalName} already exists in site`);
+                    continue;
+                }
                 onProgress(stringFormat(strings.ProvisionSiteFieldsText, siteField.Title), 'EditCreate');
                 let fieldXml = ProvisionSiteFields.parseFieldXml(siteField);
-                this.logInformation(`Processing site field ${siteField.Title}`, { fieldXml });
+                this.logInformation(`Processing site field ${siteField.Title} (${siteField.InternalName})`, { fieldXml });
                 await params.web.fields.createFieldAsXml(fieldXml);
-                this.logInformation(`Site field ${siteField.Title} successfully created`, { fieldXml });
+                this.logInformation(`Site field ${siteField.Title} (${siteField.InternalName}) successfully created`, { fieldXml });
             }
             return params;
         } catch (error) {

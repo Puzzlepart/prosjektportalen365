@@ -1,7 +1,8 @@
-import { Web, List } from '@pnp/sp';
-import { SPProjectColumnConfigItem, SPProjectColumnItem, ProjectColumnConfig } from '../models';
+import { CamlQuery, List, Web } from '@pnp/sp';
+import { IHubSite } from 'sp-hubsite-service';
 import { default as initSpfxJsom, ExecuteJsomQuery } from 'spfx-jsom';
 import { parseFieldXml } from '../helpers/parseFieldXml';
+import { ProjectColumnConfig, SPProjectColumnConfigItem, SPProjectColumnItem } from '../models';
 
 export class HubConfigurationService {
     private web: Web;
@@ -104,5 +105,39 @@ export class HubConfigurationService {
     private async _getListFields(list: List): Promise<{ InternalName: string }[]> {
         let listFields = await list.fields.select('InternalName').get<{ InternalName: string }[]>();
         return listFields;
+    }
+
+
+    /**
+     * Get hub files
+     * 
+     * @param {string} listName List name 
+     * @param {T} constructor Constructor
+     */
+    public async getHubFiles<T>(listName: string, constructor: new (file: any, web: Web) => T): Promise<T[]> {
+        const files = await this.web.lists.getByTitle(listName).rootFolder.files.usingCaching().get();
+        return files.map(file => new constructor(file, this.web));
+    }
+
+    /**
+     * Get hub items
+     * 
+     * @param {string} listName List name 
+     * @param {T} constructor Constructor
+     * @param {CamlQuery} query Query
+     * @param {string[]} expands Expands
+     */
+    public async getHubItems<T>(listName: string, constructor: new (item: any, web: Web) => T, query?: CamlQuery, expands?: string[]): Promise<T[]> {
+        try {
+            let items: any[];
+            if (query) {
+                items = await this.web.lists.getByTitle(listName).usingCaching().usingCaching().getItemsByCAMLQuery(query, ...expands);
+            } else {
+                items = await this.web.lists.getByTitle(listName).usingCaching().items.usingCaching().get();
+            }
+            return items.map(item => new constructor(item, this.web));
+        } catch (error) {
+            throw error;
+        }
     }
 }

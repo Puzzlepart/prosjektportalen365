@@ -9,11 +9,11 @@ import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { ApplicationInsightsLogListener, ListLogger } from 'shared/lib/logging';
+import { HubConfigurationService } from 'shared/lib/services';
 import HubSiteService from 'sp-hubsite-service';
-import { ErrorModal, IErrorModalProps, IProgressModalProps, ITemplateSelectModalState, ProgressModal, TemplateSelectModal, ITemplateSelectModalProps } from '../../components';
-import { getHubFiles, getHubItems } from '../../data';
-import { ListContentConfig, ProjectTemplate } from './../../models';
-import { default as Tasks, IBaseTaskParams } from './../../tasks';
+import { ErrorModal, IErrorModalProps, IProgressModalProps, ITemplateSelectModalProps, ITemplateSelectModalState, ProgressModal, TemplateSelectModal } from '../../components';
+import { ListContentConfig, ProjectTemplate } from '../../models';
+import { default as Tasks, IBaseTaskParams } from '../../tasks';
 import IProjectSetupApplicationCustomizerData from './IProjectSetupApplicationCustomizerData';
 import { IProjectSetupApplicationCustomizerProperties } from './IProjectSetupApplicationCustomizerProperties';
 import { ProjectSetupError } from './ProjectSetupError';
@@ -24,6 +24,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   private _progressModalContainer: HTMLElement;
   private _data: IProjectSetupApplicationCustomizerData;
   private _taskParams: IBaseTaskParams;
+  private _hubConfigurationService: HubConfigurationService;
 
   public constructor() {
     super();
@@ -76,9 +77,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
     try {
       Logger.log({ message: '(ProjectSetupApplicationCustomizer) _initializeSetup: Initializing setup', data: { version: this.context.manifest.version }, level: LogLevel.Info });
       this._data = await this._fetchData();
-      Logger.log({ message: '(ProjectSetupApplicationCustomizer) _initializeSetup: Data retrieved, initializing list logger', data: { version: this.context.manifest.version }, level: LogLevel.Info });
       this._initializeLogging(this._data.hub.web);
-      Logger.log({ message: '(ProjectSetupApplicationCustomizer) _initializeSetup: Awaiting template selection from user', data: { version: this.context.manifest.version }, level: LogLevel.Info });
       const templateInfo = await this._getTemplateInfoFromModal();
       Logger.log({ message: '(ProjectSetupApplicationCustomizer) _initializeSetup: Template selected by user', data: { selectedTemplate: templateInfo.selectedTemplate.title }, level: LogLevel.Info });
       ReactDOM.unmountComponentAtNode(this._templateSelectModalContainer);
@@ -228,12 +227,13 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
       Logger.log({ message: '(ProjectSetupApplicationCustomizer) _fetchData: Retrieving hub site url', data: {}, level: LogLevel.Info });
       let data: IProjectSetupApplicationCustomizerData = {};
       data.hub = await HubSiteService.GetHubSite(sp, this.context.pageContext);
+      this._hubConfigurationService = new HubConfigurationService(data.hub.web);
       Logger.log({ message: '(ProjectSetupApplicationCustomizer) _fetchData: Retrieved hub site url', data: { hubUrl: data.hub.url }, level: LogLevel.Info });
       Logger.log({ message: '(ProjectSetupApplicationCustomizer) _fetchData: Retrieving templates, extensions and content config', data: {}, level: LogLevel.Info });
       const [templates, extensions, listContentConfig] = await Promise.all([
-        getHubFiles(data.hub, this.properties.templatesLibrary, ProjectTemplate),
-        getHubFiles(data.hub, this.properties.extensionsLibrary, ProjectTemplate),
-        getHubItems(data.hub, this.properties.contentConfigList, ListContentConfig),
+        this._hubConfigurationService.getHubFiles<ProjectTemplate>(this.properties.templatesLibrary, ProjectTemplate),
+        this._hubConfigurationService.getHubFiles<ProjectTemplate>(this.properties.extensionsLibrary, ProjectTemplate),
+        this._hubConfigurationService.getHubItems<ListContentConfig>(this.properties.contentConfigList, ListContentConfig),
       ]);
       Logger.log({ message: '(ProjectSetupApplicationCustomizer) _fetchData: Retrieved templates, extensions and content config', data: { templates: templates.length, extensions: extensions.length, listContentConfig: listContentConfig.length }, level: LogLevel.Info });
       return {

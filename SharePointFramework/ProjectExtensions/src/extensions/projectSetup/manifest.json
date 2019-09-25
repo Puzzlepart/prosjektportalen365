@@ -1,10 +1,10 @@
 {
     "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-extension-manifest.schema.json",
-    "id": "453a6c1e-e1d0-4b12-a3fc-690a36da1f0c",
-    "alias": "ProjectUpgradeApplicationCustomizer",
+    "id": "ce34553d-ab47-4107-8dd1-e980d953996d",
+    "alias": "ProjectSetupApplicationCustomizer",
     "componentType": "Extension",
     "extensionType": "ApplicationCustomizer",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "manifestVersion": 2,
     "requiresCustomScript": false
 }
