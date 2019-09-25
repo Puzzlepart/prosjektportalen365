@@ -6,6 +6,14 @@
   box-sizing: border-box;
   position: relative;
 
+  .versionString {
+    position: absolute;
+    top: -90px;
+    right: -15px;
+    color: #fff;
+    font-size: 10px;
+  }
+
   .content {
     div[class*="ms-Dialog-header"] {
       display: none;

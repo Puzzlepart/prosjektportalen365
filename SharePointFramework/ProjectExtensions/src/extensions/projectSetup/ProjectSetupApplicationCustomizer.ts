@@ -10,7 +10,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { ApplicationInsightsLogListener, ListLogger } from 'shared/lib/logging';
 import HubSiteService from 'sp-hubsite-service';
-import { ErrorModal, IErrorModalProps, IProgressModalProps, ITemplateSelectModalState, ProgressModal, TemplateSelectModal } from '../../components';
+import { ErrorModal, IErrorModalProps, IProgressModalProps, ITemplateSelectModalState, ProgressModal, TemplateSelectModal, ITemplateSelectModalProps } from '../../components';
 import { getHubFiles, getHubItems } from '../../data';
 import { ListContentConfig, ProjectTemplate } from './../../models';
 import { default as Tasks, IBaseTaskParams } from './../../tasks';
@@ -117,7 +117,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
    */
   private _getTemplateInfoFromModal(): Promise<ITemplateSelectModalState> {
     return new Promise(resolve => {
-      const templateSelectModal = React.createElement(TemplateSelectModal, {
+      const templateSelectModal = React.createElement<ITemplateSelectModalProps>(TemplateSelectModal, {
         key: 'ProjectSetupApplicationCustomizer_TemplateSelectModal',
         data: this._data,
         onSubmit: (state: ITemplateSelectModalState) => resolve(state),
@@ -135,7 +135,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
    * @param {IProgressModalProps} props Props
    */
   private _renderProgressModal(props: IProgressModalProps) {
-    const progressModal = React.createElement(ProgressModal, {
+    const progressModal = React.createElement<IProgressModalProps>(ProgressModal, {
       key: 'ProjectSetupApplicationCustomizer_ProgressModal',
       ...props,
       taskParams: this._taskParams,

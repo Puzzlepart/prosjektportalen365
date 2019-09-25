@@ -3,7 +3,7 @@
     "solution": {
         "name": "pp-project-extensions",
         "id": "fe723971-d5c2-4698-91e3-c16e2f72fb5b",
-        "version": "1.0.5.0",
+        "version": "1.0.6.0",
         "includeClientSideAssets": true,
         "skipFeatureDeployment": true,
         "webApiPermissionRequests": [

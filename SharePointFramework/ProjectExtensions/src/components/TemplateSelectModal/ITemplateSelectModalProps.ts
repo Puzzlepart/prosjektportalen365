@@ -3,6 +3,13 @@ import { IProjectSetupBaseModalProps } from '../ProjectSetupBaseModal/IProjectSe
 import { ITemplateSelectModalState } from './ITemplateSelectModalState';
 
 export interface ITemplateSelectModalProps extends IProjectSetupBaseModalProps {
+    /**
+     * @todo Describe property
+     */
     data: IProjectSetupApplicationCustomizerData;
+
+    /**
+     * @todo Describe property
+     */
     onSubmit: (state: ITemplateSelectModalState) => void;
 }

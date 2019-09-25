@@ -3,6 +3,7 @@ import { dateAdd, PnPClientStorage, PnPClientStore, stringIsNullOrEmpty, TypedHa
 import { Web } from '@pnp/sp';
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
@@ -151,8 +152,11 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   private async _onSyncProperties() {
     this.setState({ progress: { label: strings.SyncProjectPropertiesProgressLabel, description: '' } });
     const { fields, fieldValues, fieldValuesText } = this.state.data;
+    const progressFunc = (props: IProgressIndicatorProps) => this.setState({ progress: { label: strings.SyncProjectPropertiesProgressLabel, ...props } });
     try {
-      await SPDataAdapter.syncPropertyItemToHub(fields, fieldValues, fieldValuesText, props => this.setState({ progress: { label: strings.SyncProjectPropertiesProgressLabel, ...props } }));
+      progressFunc({ description: strings.SyncProjectPropertiesListProgressDescription });
+      await this._hubConfigurationService.syncList(this.props.webUrl, strings.ProjectPropertiesListName, '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C');
+      await SPDataAdapter.syncPropertyItemToHub(fields, fieldValues, fieldValuesText, progressFunc);
       this._addMessage(strings.SyncProjectPropertiesSuccessText, MessageBarType.success);
     } catch (error) {
       this._addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning);

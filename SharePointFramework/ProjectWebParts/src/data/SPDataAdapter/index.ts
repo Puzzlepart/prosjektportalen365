@@ -38,79 +38,6 @@ export default new class SPDataAdapter {
     }
 
     /**
-     * Sync list from hub
-     * 
-     * @param {string} listName List name
-     * @param {string} contentTypeId Content type id
-     */
-    private async _syncListFromHub(listName: string, contentTypeId: string): Promise<List> {
-        try {
-            let { jsomContext } = await initSpfxJsom(this._settings.webUrl, { loadTaxonomy: true });
-            const [contentType, siteFields, ensureList] = await Promise.all([
-                this._getHubContentType(new Web(this._settings.hubSiteUrl), contentTypeId),
-                this._getSiteFields(sp.web),
-                sp.web.lists.ensure(listName, undefined, 100, false, { Hidden: true, EnableAttachments: false }),
-            ]);
-            const listFields = await this._getListFields(ensureList.list);
-            const spList = jsomContext.web.get_lists().getByTitle(listName);
-            for (let field of contentType.Fields) {
-                let [listField] = listFields.filter(fld => fld.InternalName === field.InternalName);
-                if (listField) continue;
-                let [siteField] = siteFields.filter(fld => fld.InternalName === field.InternalName);
-                try {
-                    if (siteField) {
-                        let spSiteField = jsomContext.web.get_fields().getByInternalNameOrTitle(siteField.InternalName);
-                        spList.get_fields().add(spSiteField);
-                    } else {
-                        let newField = spList.get_fields().addFieldAsXml(parseFieldXml(field, { DisplayName: field.InternalName }), false, SP.AddFieldOptions.addToDefaultContentType);
-                        newField.set_title(field.Title);
-                        newField.updateAndPushChanges(true);
-                    }
-                    await ExecuteJsomQuery(jsomContext);
-                } catch (error) { }
-            }
-            return ensureList.list;
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    /**
-     * Get hub content types
-     * 
-     * @param {Web} web Web
-     * @param {string} contentTypeId Content type ID
-     */
-    private async _getHubContentType(web: Web, contentTypeId: string) {
-        let contentType = await web.contentTypes
-            .getById(contentTypeId)
-            .select('StringId', 'Name', 'Fields/InternalName', 'Fields/Title', 'Fields/SchemaXml')
-            .expand('Fields')
-            .get<{ StringId: string, Name: string, Fields: { InternalName: string, Title: string, SchemaXml: string }[] }>();
-        return contentType;
-    }
-
-    /**
-     * Get site fields for the specifiec web
-     * 
-     * @param {Web} web Web
-     */
-    private async _getSiteFields(web: Web) {
-        let siteFields = await web.fields.select('InternalName').get<{ InternalName: string }[]>();
-        return siteFields;
-    }
-
-    /**
-   * Get list fields for the specified list
-   * 
-   * @param {List} list List
-   */
-    private async _getListFields(list: List) {
-        let listFields = await list.fields.select('InternalName').get<{ InternalName: string }[]>();
-        return listFields;
-    }
-
-    /**
      * Sync property item from site to associated hub
      * 
      * @param {any[]} fields Fields
@@ -120,8 +47,6 @@ export default new class SPDataAdapter {
      */
     public async syncPropertyItemToHub(fields: any[], fieldValues: TypedHash<any>, fieldValuesText: TypedHash<string>, progressFunc: ({ description: string }) => void): Promise<ItemUpdateResult> {
         try {
-            progressFunc({ description: strings.SyncProjectPropertiesListProgressDescription });
-            await this._syncListFromHub(strings.ProjectPropertiesListName, '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C');
             progressFunc({ description: strings.SyncProjectPropertiesValuesProgressDescription });
             const fieldToSync = fields.filter(fld => fld.InternalName.indexOf('Gt') === 0);
             const properties = _.omit(fieldToSync.reduce((obj, fld) => {

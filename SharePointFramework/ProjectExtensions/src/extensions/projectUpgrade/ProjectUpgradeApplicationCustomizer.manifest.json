@@ -4,7 +4,7 @@
     "alias": "ProjectUpgradeApplicationCustomizer",
     "componentType": "Extension",
     "extensionType": "ApplicationCustomizer",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "manifestVersion": 2,
     "requiresCustomScript": false
 }

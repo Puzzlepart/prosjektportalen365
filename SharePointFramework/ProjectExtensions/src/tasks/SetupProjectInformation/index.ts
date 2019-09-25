@@ -5,6 +5,12 @@ import { IBaseTaskParams } from '../IBaseTaskParams';
 
 export default new class SetupProjectInformation extends BaseTask {
     public taskName = 'SetupProjectInformation';
+    private _propertiesCtId: string;
+
+    constructor() {
+        super();
+        this._propertiesCtId = '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C';
+    }
 
     /**
      * Executes the SetupProjectInformation task
@@ -15,9 +21,8 @@ export default new class SetupProjectInformation extends BaseTask {
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
             onProgress(strings.SetupProjectInformationText, 'AlignCenter');
-            const propertiesCtId = '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C';
-            this.logInformation(`Synchronizing list '${strings.ProjectPropertiesListName}' based on content type ${propertiesCtId} from ${params.data.hub.url} `, {});
-            const propertiesList = await params.hubConfigurationService.syncList(params.webAbsoluteUrl, strings.ProjectPropertiesListName, propertiesCtId);
+            this.logInformation(`Synchronizing list '${strings.ProjectPropertiesListName}' based on content type ${this._propertiesCtId} from ${params.data.hub.url} `, {});
+            const propertiesList = await params.hubConfigurationService.syncList(params.webAbsoluteUrl, strings.ProjectPropertiesListName, this._propertiesCtId);
             await propertiesList.items.add({ Title: params.context.pageContext.web.title });
             await this._addEntryToHub(params);
             return params;

@@ -1,7 +1,6 @@
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Dialog, DialogContent, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
 import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import { ProjectTemplate } from '../../models';
@@ -44,6 +43,7 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
                 }}
                 onDismiss={this.props.onDismiss}
                 containerClassName={styles.templateSelectModal}>
+                <span className={styles.versionString}>{this.props.versionString}</span>
                 {this._body}
                 {this._footer}
             </Dialog>
@@ -56,9 +56,6 @@ export default class TemplateSelectModal extends React.Component<ITemplateSelect
     private get _body() {
         return (
             <DialogContent className={styles.content}>
-                {/* <div className={styles.infoText}>
-                    <MessageBar>{strings.TemplateSelectModalInfoText}</MessageBar>
-                </div> */}
                 <div className={styles.templateSelect}>
                     <div className={styles.templateSelectTitle}>{strings.TemplateSelectTitle}</div>
                     <div className={styles.templateSelectDropdown}>
