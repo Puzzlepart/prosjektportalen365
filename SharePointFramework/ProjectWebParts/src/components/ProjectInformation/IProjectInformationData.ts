@@ -4,6 +4,5 @@ export interface IProjectInformationData {
   properties?: ProjectPropertyModel[];
   editFormUrl?: string;
   versionHistoryUrl?: string;
-  itemId?: number;
   statusReports?: { Id: number, Created: string }[];
 }

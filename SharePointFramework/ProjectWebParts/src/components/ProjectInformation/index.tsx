@@ -226,7 +226,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
       return {
         properties,
         statusReports,
-        ...entityData,
+        ...entityData.urls,
       };
     } catch (error) {
       throw error;
