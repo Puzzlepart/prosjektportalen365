@@ -1,5 +1,3 @@
-import { override } from '@microsoft/decorators';
-import { task } from 'decorators/task';
 import * as strings from 'ProjectExtensionsStrings';
 import * as stringFormat from 'string-format';
 import { DOMParser } from 'xmldom';
@@ -29,9 +27,11 @@ export default new class ProvisionSiteFields extends BaseTask {
      */
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
+            const existingSiteFields = await params.web.fields.select(...Object.keys(new SPField())).get<SPField[]>();
             const siteFields = await params.data.hub.web.fields.filter(`Group eq '${strings.SiteFieldsGroupName}' and TypeAsString ne 'Calculated'`).select(...Object.keys(new SPField())).get<SPField[]>();
             for (let i = 0; i < siteFields.length; i++) {
                 let siteField = siteFields[i];
+                if (existingSiteFields.filter(exf => exf.InternalName === siteField.InternalName).length > 0) continue;
                 this.logInformation('Processing site field', { siteField });
                 onProgress(stringFormat(strings.ProvisionSiteFieldsText, siteField.Title), 'EditCreate');
                 let fieldXml = ProvisionSiteFields.parseFieldXml(siteField);

@@ -24,15 +24,16 @@ export default new class PlannerConfiguration extends BaseTask {
         let owner = pageContext.legacyPageContext.groupId;
         let existingGroupPlans = await this._fetchPlans(owner);
         this.logInformation(`Creating plan ${planTitle}`);
-        let groupPlan = await this._ensurePlan(planTitle, existingGroupPlans, pageContext.legacyPageContext.groupId);
+        let { plan, created } = await this._ensurePlan(planTitle, existingGroupPlans, pageContext.legacyPageContext.groupId);
+        if (!created) return plan;
         for (let i = 0; i < Object.keys(plannerConfig).length; i++) {
             let bucketName = Object.keys(plannerConfig)[i];
             this.logInformation(`Creating bucket ${bucketName} for plan ${planTitle}`);
-            let bucket = await this._createBucket(bucketName, groupPlan.id);
+            let bucket = await this._createBucket(bucketName, plan.id);
             onProgress(stringFormat(strings.PlannerConfigurationText, bucketName), 'PlannerLogo');
-            await this._createTasks(plannerConfig[bucketName], groupPlan.id, bucket);
+            await this._createTasks(plannerConfig[bucketName], plan.id, bucket);
         }
-        return groupPlan;
+        return plan;
     }
 
     /**
@@ -42,12 +43,14 @@ export default new class PlannerConfiguration extends BaseTask {
      * @param {IPlannerPlan[]} existingPlans Existing plans
      * @param {string} owner Owner (group id) 
      */
-    private async _ensurePlan(title: string, existingPlans: IPlannerPlan[], owner: string) {
+    private async _ensurePlan(title: string, existingPlans: IPlannerPlan[], owner: string): Promise<{ plan: IPlannerPlan, created: boolean }> {
         let [plan] = existingPlans.filter(p => p.title === title);
+        let created = false;
         if (!plan) {
             plan = await MSGraphHelper.Post(`planner/plans`, JSON.stringify({ title, owner }));
+            created = true;
         }
-        return plan;
+        return { plan, created };
     }
 
     /**

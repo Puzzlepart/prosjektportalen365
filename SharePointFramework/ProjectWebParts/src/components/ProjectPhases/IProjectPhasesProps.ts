@@ -1,4 +1,3 @@
-import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
 
 

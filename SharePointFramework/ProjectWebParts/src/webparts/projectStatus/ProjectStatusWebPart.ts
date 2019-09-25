@@ -23,7 +23,11 @@ export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProject
     Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
     sp.setup({ spfxContext: this.context });
     this._hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
-    this._spEntityPortalService = new SpEntityPortalService({ webUrl: this._hubSite.url, ...this.properties.entity });
+    this._spEntityPortalService = new SpEntityPortalService({
+      webUrl: this._hubSite.url,
+      fieldPrefix: 'Gt',
+      ...this.properties.entity,
+    });
   }
 
   public render(): void {

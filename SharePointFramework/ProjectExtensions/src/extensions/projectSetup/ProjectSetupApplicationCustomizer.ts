@@ -52,6 +52,8 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
         throw new ProjectSetupError(strings.InvalidLanguageErrorMessage, strings.InvalidLanguageErrorStack);
       } else if (!this.context.pageContext.legacyPageContext.hubSiteId) {
         throw new ProjectSetupError(strings.NoHubSiteErrorMessage, strings.NoHubSiteErrorStack, MessageBarType.severeWarning);
+      } else if (this.context.pageContext.legacyPageContext.currentCultureLCID !== 1044 || this.context.pageContext.legacyPageContext.currentLanguage !== 1044) {
+        throw new ProjectSetupError(strings.SiteNotReadyErrorMessage, strings.SiteNotReadyErrorStack);
       } else {
         this._taskParams = {
           web: new Web(this.context.pageContext.web.absoluteUrl),

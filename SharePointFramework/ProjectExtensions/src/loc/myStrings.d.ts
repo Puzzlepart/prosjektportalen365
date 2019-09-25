@@ -40,7 +40,7 @@ declare interface IProjectExtensionsStrings {
   ProvisionSiteFieldsErrorMessage: string;
   ProvisionSiteFieldsText: string;
   PreTaskErrorMessage: string;
-  ProjectPropertiesListName: string;  
+  ProjectPropertiesListName: string;
   TemplateLibrarySelectModalTitle: string;
   CopyProgressLabel: string;
   CloseModalText: string;
@@ -53,6 +53,8 @@ declare interface IProjectExtensionsStrings {
   SummaryText: string;
   GetMoreText: string;
   LibraryDropdownLabel: string;
+  TemplateSelectTitle: string;
+  TitleLabel: string;
 }
 
 declare module 'ProjectExtensionsStrings' {
