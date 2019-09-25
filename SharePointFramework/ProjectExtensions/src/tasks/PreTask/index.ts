@@ -5,6 +5,7 @@ import initSpfxJsom from 'spfx-jsom';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { BaseTaskError } from '../BaseTaskError';
 import { IBaseTaskParams } from '../IBaseTaskParams';
+import { HubConfigurationService } from 'shared/lib/services';
 
 export default new class PreTask extends BaseTask {
     public taskName = 'PreTask';
@@ -18,6 +19,7 @@ export default new class PreTask extends BaseTask {
                 identityFieldName: 'GtGroupId',
                 urlFieldName: 'GtSiteUrl',
             });
+            params.hubConfigurationService = new HubConfigurationService(params.data.hub.web);
             return params;
         } catch (error) {
             throw new BaseTaskError(this.taskName, strings.PreTaskErrorMessage, error);

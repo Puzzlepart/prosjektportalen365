@@ -55,7 +55,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
       } else {
         this._taskParams = {
           web: new Web(this.context.pageContext.web.absoluteUrl),
-          templateParameters: { fieldsgroup: strings.SiteFieldsGroupName },
+          webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
           templateExcludeHandlers: [],
           context: this.context,
           properties: this.properties,

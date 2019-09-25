@@ -1,5 +1,4 @@
-import { override } from '@microsoft/decorators';
-import { task } from 'decorators/task';
+import { PageContext } from '@microsoft/sp-page-context';
 import MSGraphHelper from 'msgraph-helper';
 import * as strings from 'ProjectExtensionsStrings';
 import * as stringFormat from 'string-format';
@@ -8,7 +7,6 @@ import { BaseTaskError } from '../BaseTaskError';
 import { IBaseTaskParams } from '../IBaseTaskParams';
 import { IPlannerBucket } from './IPlannerBucket';
 import { IPlannerPlan } from './IPlannerPlan';
-import { PageContext } from '@microsoft/sp-page-context';
 
 export default new class PlannerConfiguration extends BaseTask {
     public taskName = 'PlannerConfiguration';
@@ -105,7 +103,7 @@ export default new class PlannerConfiguration extends BaseTask {
             try {
                 const plannerConfig = await this._fetchPlannerConfig(params.data.hub.url);
                 let groupPlan = await this._createPlan(plannerConfig, params.context.pageContext, onProgress);
-                params.templateParameters = { ...params.templateParameters || {}, defaultPlanId: groupPlan.id };
+                params.templateParameters = { defaultPlanId: groupPlan.id };
             } catch (error) {
                 this.logWarning('Failed to set up Plans, Buckets and Tasks', error);
                 throw new BaseTaskError(this.taskName, strings.PlannerConfigurationErrorMessage, `${error.statusCode}: ${error.message}`);
