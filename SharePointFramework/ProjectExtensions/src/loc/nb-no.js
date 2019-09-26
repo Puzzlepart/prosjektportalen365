@@ -25,7 +25,7 @@ define([], function () {
     IncludeStandardFoldersLabel: 'Inkluder standardmapper',
     InvalidLanguageErrorMessage: 'Ugyldig språk for området',
     InvalidLanguageErrorStack: 'Språket som er satt for området støttes ikke. Området må være opprettet med norsk språk.',
-    DocumentLibraryDropdownLabel: 'Bibliotek',
+    LibraryDropdownLabel: 'Bibliotek',
     ListContentTitle: 'Velg standardinnhold',
     ModifiedLabel: 'Endret',
     NameLabel: 'Filnavn',
@@ -58,7 +58,7 @@ define([], function () {
     TemplateSelectTitle: 'Velg prosjektmal',
     TitleLabel: 'Tittel',
     ProgressDialogSubText: 'Vennligst vent. Ikke lukk nettleservinduet.',
-    DocumentTemplateDialogScreenSelectInfoText: 'Velg dokumentmalene du vil kopiere til prosjektområdet. Malene hentes fra [{0}]({1}) og det hentes _siste versjon_ av malene. Når du trykker \'Velg\' sendes du videre til et skjermbilde hvor du kan sette _tittel_ og _filnavn_ for dokumentene som kopieres over.',
+    DocumentTemplateDialogScreenSelectInfoText: 'Velg dokumentmalene du vil kopiere til prosjektområdet. Malene hentes fra <a href="{1}">{0}</a> og det hentes _siste versjon_ av malene.<br /><br /> Når du trykker \'Velg\' sendes du videre til et skjermbilde hvor du kan sette _tittel_ og _filnavn_ for dokumentene som kopieres over.',
     DocumentTemplateDialogScreenEditCopyInfoText: 'Her kan du sette _tittel_ og _filnavn_ for dokumentene som kopieres over. Når du er ferdig, trykk \'Start kopering\' for å starte kopieringen.'
   }
 });
