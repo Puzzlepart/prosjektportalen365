@@ -1,4 +1,4 @@
-.documentTemplateModalScreenEditCopy {
+.documentTemplateDialogScreenEditCopy {
   .item {
     margin: 0 0 20px 0;
     .header {
@@ -21,10 +21,10 @@
       margin: 5px 0 0 0;
     }
   }
-  .actions {
-    margin: 15px 0 0 0;
-    > button {
-      margin: 0 8px 0 0;
+  .copyAction {
+    margin: 20px 0 0 0;
+    button {
+      width: 100%;
     }
   }
 }

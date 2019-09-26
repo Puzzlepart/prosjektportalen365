@@ -3,7 +3,7 @@ import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
 import { BaseDialog } from '../@BaseDialog';
 import { IErrorDialogProps } from './IErrorDialogProps';
 
-export default class ErrorDialog extends React.PureComponent<IErrorDialogProps, {}> {
+export class ErrorDialog extends React.PureComponent<IErrorDialogProps, {}> {
     public render() {
         return (
             <BaseDialog

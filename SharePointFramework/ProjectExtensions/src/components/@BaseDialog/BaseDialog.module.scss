@@ -5,6 +5,7 @@
   position: relative;
 
   .content {
+    overflow: hidden;
     div[class*="ms-Dialog-header"] {
       display: none;
     }

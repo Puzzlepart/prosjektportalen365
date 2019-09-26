@@ -5,7 +5,7 @@ import { ICollapsableSectionState } from './ICollapsableSectionState';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 
-export default class CollapsableSection extends React.Component<ICollapsableSectionProps, ICollapsableSectionState> {
+export class CollapsableSection extends React.Component<ICollapsableSectionProps, ICollapsableSectionState> {
     /**
      * Constructor
      * 

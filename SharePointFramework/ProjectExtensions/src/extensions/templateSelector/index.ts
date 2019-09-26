@@ -7,13 +7,13 @@ import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { default as HubSiteService } from 'sp-hubsite-service';
-import { DocumentTemplateModal } from '../../components/index';
+import { DocumentTemplateDialog, IDocumentTemplateDialogProps } from '../../components';
 import { SPDataAdapter } from '../../data';
-import { IDocumentLibrary, TemplateFile } from '../../models/index';
+import { IDocumentLibrary, TemplateFile } from '../../models';
 import { ITemplateSelectorCommandSetProperties } from './ITemplateSelectorCommandSetProperties';
 
 Logger.subscribe(new ConsoleListener());
-Logger.activeLogLevel = LogLevel.Warning;
+Logger.activeLogLevel = LogLevel.Info;
 
 
 export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<ITemplateSelectorCommandSetProperties> {
@@ -59,24 +59,24 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
   }
 
   /**
-   * On open <DocumentTemplateModal />
+   * On open <DocumentTemplateDialog />
    */
   private _onOpenTemplateSelector() {
-    const templateLibrarySelectModal = React.createElement(DocumentTemplateModal, {
+    const element = React.createElement<IDocumentTemplateDialogProps>(DocumentTemplateDialog, {
       title: strings.TemplateLibrarySelectModalTitle,
-      onDismiss: this._onDismissTemplateLibrarySelectModal.bind(this),
+      onDismiss: this._onDismissDocumentTemplateDialog.bind(this),
       libraries: this._libraries,
       templates: this._templates,
     });
     this._container = document.createElement('DIV');
     document.body.appendChild(this._container);
-    ReactDOM.render(templateLibrarySelectModal, this._container);
+    ReactDOM.render(element, this._container);
   }
 
   /**
-   * On dismiss <DocumentTemplateModal />
+   * On dismiss <DocumentTemplateDialog />
    */
-  private _onDismissTemplateLibrarySelectModal() {
+  private _onDismissDocumentTemplateDialog() {
     ReactDOM.unmountComponentAtNode(this._container);
     document.location.href = document.location.href;
   }

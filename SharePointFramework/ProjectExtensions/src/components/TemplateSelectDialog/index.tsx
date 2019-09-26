@@ -12,7 +12,7 @@ import { ListContentSection } from './ListContentSection';
 import { SettingsSection } from './SettingsSection';
 import styles from './TemplateSelectDialog.module.scss';
 
-export default class TemplateSelectDialog extends React.Component<ITemplateSelectDialogProps, ITemplateSelectDialogState> {
+export class TemplateSelectDialog extends React.Component<ITemplateSelectDialogProps, ITemplateSelectDialogState> {
     /**
      * Constructor
      * 

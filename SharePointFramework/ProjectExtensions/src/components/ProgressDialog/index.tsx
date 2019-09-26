@@ -6,7 +6,7 @@ import { BaseDialog } from '../@BaseDialog/index';
 import { IProgressDialogProps } from './IProgressDialogProps';
 import styles from './ProgressDialog.module.scss';
 
-export default class ProgressDialog extends React.PureComponent<IProgressDialogProps, {}>{
+export class ProgressDialog extends React.PureComponent<IProgressDialogProps, {}>{
     public render() {
         return (
             <BaseDialog

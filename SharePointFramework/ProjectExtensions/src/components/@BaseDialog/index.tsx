@@ -18,19 +18,19 @@ export class BaseDialog extends React.PureComponent<IBaseDialogProps, {}> {
         return (
             <Dialog
                 hidden={false}
-                modalProps={this.props.modalProps}
-                dialogContentProps={{
-                    type: DialogType.largeHeader,
-                    ...this.props.dialogContentProps,
-                }}
-                onDismiss={this.props.onDismiss}
-                containerClassName={`${styles.baseDialog} ${this.props.containerClassName}`}>
-                <span className={styles.version}>v{this.props.version}</span>
+                modalProps={{ containerClassName: this._containerClassName, ...this.props.modalProps }}
+                dialogContentProps={{ type: DialogType.largeHeader, ...this.props.dialogContentProps }}
+                onDismiss={this.props.onDismiss}>
+                <span hidden={!this.props.version} className={styles.version}>v{this.props.version}</span>
                 <DialogContent className={`${styles.content} ${this.props.contentClassName}`}>
                     {this.props.children}
                 </DialogContent>
                 {this.props.onRenderFooter ? <DialogFooter>{this.props.onRenderFooter()}</DialogFooter> : null}
             </Dialog>
         );
+    }
+
+    private get _containerClassName() {
+        return [styles.baseDialog, this.props.containerClassName].filter(c => c).join(' ');
     }
 }

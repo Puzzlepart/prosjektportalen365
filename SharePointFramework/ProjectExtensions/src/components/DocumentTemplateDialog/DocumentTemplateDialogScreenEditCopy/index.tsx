@@ -1,20 +1,20 @@
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import * as React from 'react';
 import * as ProjectExtensionsStrings from 'ProjectExtensionsStrings';
-import { IDocumentTemplateModalScreenEditCopyProps } from './IDocumentTemplateModalScreenEditCopyProps';
-import { IDocumentTemplateModalScreenEditCopyState } from './IDocumentTemplateModalScreenEditCopyState';
-import styles from './DocumentTemplateModalScreenEditCopy.module.scss';
+import * as React from 'react';
+import styles from './DocumentTemplateDialogScreenEditCopy.module.scss';
+import { IDocumentTemplateDialogScreenEditCopyProps } from './IDocumentTemplateDialogScreenEditCopyProps';
+import { IDocumentTemplateDialogScreenEditCopyState } from './IDocumentTemplateDialogScreenEditCopyState';
 
-export default class DocumentTemplateModalScreenEditCopy extends React.Component<IDocumentTemplateModalScreenEditCopyProps, IDocumentTemplateModalScreenEditCopyState> {
+export class DocumentTemplateDialogScreenEditCopy extends React.Component<IDocumentTemplateDialogScreenEditCopyProps, IDocumentTemplateDialogScreenEditCopyState> {
     /**
      * Constructor
      * 
-     * @param {IDocumentTemplateModalScreenEditCopyProps} props Props
+     * @param {IDocumentTemplateDialogScreenEditCopyProps} props Props
      */
-    constructor(props: IDocumentTemplateModalScreenEditCopyProps) {
+    constructor(props: IDocumentTemplateDialogScreenEditCopyProps) {
         super(props);
         this.state = {
             templates: [...props.selectedTemplates],
@@ -23,10 +23,10 @@ export default class DocumentTemplateModalScreenEditCopy extends React.Component
         };
     }
 
-    public render(): React.ReactElement<IDocumentTemplateModalScreenEditCopyProps> {
+    public render(): React.ReactElement<IDocumentTemplateDialogScreenEditCopyProps> {
         const { expandState } = this.state;
         return (
-            <div className={styles.documentTemplateModalScreenEditCopy}>
+            <div className={styles.documentTemplateDialogScreenEditCopy}>
                 {this.props.selectedTemplates.map(tmpl => (
                     <div className={styles.item}>
                         <div className={styles.header} onClick={_ => this._onExpandCollapse(tmpl.id)}>
@@ -61,9 +61,8 @@ export default class DocumentTemplateModalScreenEditCopy extends React.Component
                         disabled={this.props.libraries.length === 1}
                         options={this.props.libraries.map((lib, idx) => ({ key: idx, text: lib.Title, data: lib }))} />
                 </div>
-                <div className={styles.actions}>
+                <div className={styles.copyAction}>
                     <PrimaryButton text={ProjectExtensionsStrings.OnStartCopyText} onClick={this._onStartCopy.bind(this)} />
-                    <DefaultButton text={ProjectExtensionsStrings.OnGoBackText} onClick={this.props.onGoBack} />
                 </div>
             </div >
         );
@@ -76,7 +75,7 @@ export default class DocumentTemplateModalScreenEditCopy extends React.Component
      * @param {Object} updatedProperties Updated properties
      */
     private _onInputChanged(id: string, updatedProperties: { [key: string]: string }) {
-        const { templates } = ({ ...this.state } as IDocumentTemplateModalScreenEditCopyState);
+        const { templates } = ({ ...this.state } as IDocumentTemplateDialogScreenEditCopyState);
         this.setState({
             templates: templates.map(t => {
                 if (t.id === id) {
