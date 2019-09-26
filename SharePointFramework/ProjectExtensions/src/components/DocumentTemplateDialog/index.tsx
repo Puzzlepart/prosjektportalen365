@@ -3,7 +3,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
-import * as ProjectExtensionsStrings from 'ProjectExtensionsStrings';
+import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import * as stringFormat from 'string-format';
 import { TemplateFile } from '../../models/index';
@@ -51,7 +51,8 @@ export class DocumentTemplateDialog extends React.Component<IDocumentTemplateDia
                     <DocumentTemplateDialogScreenSelect
                         templates={this.props.templates}
                         selection={this._selection}
-                        selectedItems={this.state.selection} />
+                        selectedItems={this.state.selection}
+                        templateLibrary={this.props.templateLibrary} />
                 );
             }
             case DocumentTemplateDialogScreen.EditCopy: {
@@ -61,10 +62,10 @@ export class DocumentTemplateDialog extends React.Component<IDocumentTemplateDia
                     onStartCopy={this._onStartCopy.bind(this)} />;
             }
             case DocumentTemplateDialogScreen.CopyProgress: {
-                return <ProgressIndicator label={ProjectExtensionsStrings.CopyProgressLabel} {...this.state.progress} />;
+                return <ProgressIndicator label={strings.CopyProgressLabel} {...this.state.progress} />;
             }
             case DocumentTemplateDialogScreen.Summary: {
-                return <MessageBar messageBarType={MessageBarType.success}>{stringFormat(ProjectExtensionsStrings.SummaryText, this.state.templatesAdded.length)}</MessageBar>;
+                return <MessageBar messageBarType={MessageBarType.success}>{stringFormat(strings.SummaryText, this.state.templatesAdded.length)}</MessageBar>;
             }
         }
     }
@@ -74,22 +75,22 @@ export class DocumentTemplateDialog extends React.Component<IDocumentTemplateDia
             case DocumentTemplateDialogScreen.Select: {
                 return (
                     <>
-                        <PrimaryButton text={ProjectExtensionsStrings.OnSubmitSelectionText} onClick={() => this._onChangeScreen(DocumentTemplateDialogScreen.EditCopy)} disabled={this.state.selection.length === 0} />
+                        <PrimaryButton text={strings.OnSubmitSelectionText} onClick={() => this._onChangeScreen(DocumentTemplateDialogScreen.EditCopy)} disabled={this.state.selection.length === 0} />
                     </>
                 );
             }
             case DocumentTemplateDialogScreen.EditCopy: {
                 return (
                     <>
-                        <DefaultButton text={ProjectExtensionsStrings.OnGoBackText} onClick={() => this._onChangeScreen(DocumentTemplateDialogScreen.Select)} />
+                        <DefaultButton text={strings.OnGoBackText} onClick={() => this._onChangeScreen(DocumentTemplateDialogScreen.Select)} />
                     </>
                 );
             }
             case DocumentTemplateDialogScreen.Summary: {
                 return (
                     <>
-                        <DefaultButton text={ProjectExtensionsStrings.GetMoreText} onClick={_ => this._onChangeScreen(DocumentTemplateDialogScreen.Select)} />
-                        <DefaultButton text={ProjectExtensionsStrings.CloseModalText} onClick={this.props.onDismiss} />
+                        <DefaultButton text={strings.GetMoreText} onClick={_ => this._onChangeScreen(DocumentTemplateDialogScreen.Select)} />
+                        <DefaultButton text={strings.CloseModalText} onClick={this.props.onDismiss} />
                     </>
                 );
             }

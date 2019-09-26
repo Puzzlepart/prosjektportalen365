@@ -57,6 +57,8 @@ declare interface IProjectExtensionsStrings {
   TemplateSelectDialogTitle: string;
   TemplateSelectTitle: string;
   TitleLabel: string;
+  DocumentTemplateDialogScreenSelectInfoText: string;
+  DocumentTemplateDialogScreenEditCopyInfoText: string;
 }
 
 declare module 'ProjectExtensionsStrings' {

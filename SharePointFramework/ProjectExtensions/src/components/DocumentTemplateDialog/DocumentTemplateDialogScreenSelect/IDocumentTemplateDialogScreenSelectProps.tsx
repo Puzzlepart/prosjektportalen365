@@ -22,6 +22,11 @@ export interface IDocumentTemplateDialogScreenSelectProps {
      * @todo Describe property
      */
     selectedItems: any[];
+
+    /**
+     * @todo Describe property
+     */
+    templateLibrary: { title: string, url: string };
 }
 
 // tslint:disable-next-line: naming-convention

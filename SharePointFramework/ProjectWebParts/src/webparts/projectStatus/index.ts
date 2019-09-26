@@ -10,7 +10,7 @@ import * as ReactDom from 'react-dom';
 import { ApplicationInsightsLogListener } from 'shared/lib/logging/ApplicationInsightsLogListener';
 import { SpEntityPortalService } from 'sp-entityportal-service';
 import HubSiteService, { IHubSite } from 'sp-hubsite-service';
-import SPDataAdapter from '../../data';
+import SPDataAdapter from '../../data/index';
 
 moment.locale('nb');
 Logger.subscribe(new ConsoleListener());
@@ -18,21 +18,14 @@ Logger.activeLogLevel = LogLevel.Warning;
 
 export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProjectStatusProps> {
   private _hubSite: IHubSite;
-  private _spEntityPortalService: SpEntityPortalService;
 
   public async onInit() {
     Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
     sp.setup({ spfxContext: this.context });
     this._hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
-    this._spEntityPortalService = new SpEntityPortalService({
-      portalUrl: this._hubSite.url,
-      fieldPrefix: 'Gt',
-      ...this.properties.entity,
-    });
     SPDataAdapter.configure(this.context, {
-      spEntityPortalService: this._spEntityPortalService,
       siteId: this.context.pageContext.site.id.toString(),
-      webUrl:this.context.pageContext.web.absoluteUrl,
+      webUrl: this.context.pageContext.web.absoluteUrl,
       hubSiteUrl: this._hubSite.url,
     });
   }
@@ -44,7 +37,6 @@ export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProject
       webTitle: this.context.pageContext.web.title,
       currentUserEmail: this.context.pageContext.user.email,
       hubSiteUrl: this._hubSite.url,
-      spEntityPortalService: this._spEntityPortalService,
       ...this.properties,
     });
     ReactDom.render(element, this.domElement);

@@ -24,7 +24,6 @@ export class SummarySection extends BaseSection<ISummarySectionProps, ISummarySe
             hubSiteUrl={this.props.hubSiteUrl}
             siteId={this.props.siteId}
             webUrl={this.props.webUrl}
-            entity={this.props.entity}
             filterField='GtShowFieldProjectStatus'
             hideActions={true} />
         </div>

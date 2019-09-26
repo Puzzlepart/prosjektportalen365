@@ -16,4 +16,9 @@ export interface IDocumentTemplateDialogProps extends IBaseDialogProps {
      * @todo Describe property
      */
     libraries: IDocumentLibrary[];
+
+    /**
+     * @todo Describe property
+     */
+    templateLibrary: { title: string, url: string };
 }

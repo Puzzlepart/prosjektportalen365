@@ -46,6 +46,7 @@
         "office-ui-fabric-react": "^6.200.0",
         "react": "16.7.0",
         "react-dom": "16.7.0",
+        "react-markdown": "^4.2.2",
         "shared": "link:..\\@Shared",
         "sp-entityportal-service": "^1.0.0",
         "sp-hubsite-service": "^0.4.1",

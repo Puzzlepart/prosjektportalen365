@@ -55,9 +55,4 @@ export interface IProjectInformationProps {
    * URL template for status reports
    */
   statusReportsLinkUrlTemplate?: string;
-
-  /**
-   * Properties for the enitity residing in the hub site
-   */
-  entity: ISpEntityPortalServiceParams;
 }

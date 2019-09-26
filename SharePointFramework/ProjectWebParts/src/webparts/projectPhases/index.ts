@@ -10,27 +10,20 @@ import * as ReactDom from 'react-dom';
 import { ApplicationInsightsLogListener } from 'shared/lib/logging/ApplicationInsightsLogListener';
 import { SpEntityPortalService } from 'sp-entityportal-service';
 import HubSiteService, { IHubSite } from 'sp-hubsite-service';
-import SPDataAdapter from '../../data';
+import SPDataAdapter from '../../data/index';
 
 Logger.subscribe(new ConsoleListener());
 Logger.activeLogLevel = LogLevel.Warning;
 
 export default class ProjectPhasesWebPart extends BaseClientSideWebPart<IProjectPhasesProps> {
   private _hubSite: IHubSite;
-  private _spEntityPortalService: SpEntityPortalService;
 
   public async onInit() {
     this.context.statusRenderer.clearLoadingIndicator(this.domElement);
     Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
     sp.setup({ spfxContext: this.context });
     this._hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
-    this._spEntityPortalService = new SpEntityPortalService({
-      portalUrl: this._hubSite.url,
-      fieldPrefix: 'Gt',
-      ...this.properties.entity,
-    });
     SPDataAdapter.configure(this.context, {
-      spEntityPortalService: this._spEntityPortalService,
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,
       hubSiteUrl: this._hubSite.url,

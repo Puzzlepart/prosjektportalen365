@@ -1,23 +1,3 @@
-import { SpEntityPortalService } from 'sp-entityportal-service';
+import { ISPDataAdapterBaseSettings } from 'shared/lib/data';
 
-export interface ISPDataAdapterSettings {
-    /**
-     * @todo Describe property
-     */
-    spEntityPortalService: SpEntityPortalService;
-
-    /**
-     * @todo Describe property
-     */
-    siteId: string;
-    
-    /**
-     * @todo Describe property
-     */
-    webUrl: string;
-    
-    /**
-     * @todo Describe property
-     */
-    hubSiteUrl: string;
-}
+export interface ISPDataAdapterSettings extends ISPDataAdapterBaseSettings {}

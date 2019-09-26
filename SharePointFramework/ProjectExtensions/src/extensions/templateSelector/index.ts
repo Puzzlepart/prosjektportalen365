@@ -1,12 +1,11 @@
 import { override } from '@microsoft/decorators';
 import { BaseListViewCommandSet, Command, IListViewCommandSetExecuteEventParameters, IListViewCommandSetListViewUpdatedParameters } from '@microsoft/sp-listview-extensibility';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
-import '@pnp/polyfill-ie11';
 import { sp } from '@pnp/sp';
 import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { default as HubSiteService } from 'sp-hubsite-service';
+import { default as HubSiteService, IHubSite } from 'sp-hubsite-service';
 import { DocumentTemplateDialog, IDocumentTemplateDialogProps } from '../../components';
 import { SPDataAdapter } from '../../data';
 import { IDocumentLibrary, TemplateFile } from '../../models';
@@ -17,23 +16,26 @@ Logger.activeLogLevel = LogLevel.Info;
 
 
 export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<ITemplateSelectorCommandSetProperties> {
+  private _hub: IHubSite;
   private _templates: TemplateFile[] = [];
   private _libraries: IDocumentLibrary[];
   private _container: Element;
+  private _templateLibrary: string;
 
   @override
   public async onInit() {
-    const hub = await HubSiteService.GetHubSite(sp, this.context.pageContext);
-    SPDataAdapter.configure({
+    this._hub = await HubSiteService.GetHubSite(sp, this.context.pageContext);
+    SPDataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,
-      hubSiteUrl: hub.url,
+      hubSiteUrl: this._hub.url,
     });
     const openTemplateSelectorCommand: Command = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR');
     if (!openTemplateSelectorCommand) return;
     Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Initializing', data: { version: this.context.manifest.version }, level: LogLevel.Info });
     try {
-      this._templates = await SPDataAdapter.getDocumentTemplates(this.properties.templateLibrary);
+      this._templateLibrary = this.properties.templateLibrary || 'Malbibliotek';
+      this._templates = await SPDataAdapter.getDocumentTemplates(this._templateLibrary);
       Logger.log({ message: `(TemplateSelectorCommandSet) onInit: Retrieved ${this._templates.length} templates from the specified template library`, level: LogLevel.Info });
     } catch (error) {
       Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Failed to initialize', level: LogLevel.Warning });
@@ -67,6 +69,7 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
       onDismiss: this._onDismissDocumentTemplateDialog.bind(this),
       libraries: this._libraries,
       templates: this._templates,
+      templateLibrary: { title: this._templateLibrary, url: `${this._hub.url}/${this._templateLibrary}` },
     });
     this._container = document.createElement('DIV');
     document.body.appendChild(this._container);

@@ -1,50 +1,36 @@
-import { sp, SPConfiguration, Web } from '@pnp/sp';
-import * as strings from 'ProjectExtensionsStrings';
-import { HubConfigurationService, ProjectDataService } from 'shared/lib/services';
-import { SpEntityPortalService } from 'sp-entityportal-service';
+import { ApplicationCustomizerContext } from '@microsoft/sp-application-base';
+import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility';
 import { TemplateFile } from 'models/TemplateFile';
+import * as strings from 'ProjectExtensionsStrings';
+import { ISPDataAdapterBaseSettings, SPDataAdapterBase } from 'shared/lib/data';
+import { ProjectDataService } from 'shared/lib/services';
 
-export interface ISPDataAdapterSettings {
-    siteId: string;
-    webUrl: string;
-    hubSiteUrl: string;
+export interface ISPDataAdapterSettings extends ISPDataAdapterBaseSettings { }
+
+export interface ISPLibrary {
+    Id: string;
+    Title: string;
+    ServerRelativeUrl: string;
 }
 
-
-export default new class SPDataAdapter {
-    public spConfiguration: SPConfiguration = {
-        defaultCachingStore: 'session',
-        defaultCachingTimeoutSeconds: 90,
-        enableCacheExpiration: true,
-        cacheExpirationIntervalMilliseconds: 2500,
-        globalCacheDisable: false,
-    };
+export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterSettings> {
     public project: ProjectDataService;
-    private _settings: ISPDataAdapterSettings;
-    private _hubConfigurationService: HubConfigurationService;
-    private _spEntityPortalService: SpEntityPortalService;
 
     /**
      * Configure the SP data adapter
      * 
-     * @param {ISPDataAdapterSettings} settings SP data adapter settings
+     * @param {ApplicationCustomizerContext | ListViewCommandSetContext} spfxContext Context
+     * @param {ISPDataAdapterSettings} settings Settings
      */
-    public configure(settings: ISPDataAdapterSettings) {
-        this._settings = settings;
-        sp.setup(this.spConfiguration);
-        this._hubConfigurationService = new HubConfigurationService(new Web(this._settings.hubSiteUrl));
-        this._spEntityPortalService = new SpEntityPortalService({
-            portalUrl: this._settings.hubSiteUrl,
-            listName: 'Prosjekter',
-            contentTypeId: '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
-            identityFieldName: 'GtSiteId'
-        });
+    public configure(spfxContext: ApplicationCustomizerContext | ListViewCommandSetContext, settings: ISPDataAdapterSettings) {
+        super.configure(spfxContext, settings);
         this.project = new ProjectDataService({
-            ...this._settings,
-            spEntityPortalService: this._spEntityPortalService,
+            ...this.settings,
+            spEntityPortalService: this.spEntityPortalService,
             propertiesListName: strings.ProjectPropertiesListName,
-            sp,
+            sp: this.sp,
         });
+        this.project.spConfiguration = this.spConfiguration;
     }
 
     /**
@@ -52,13 +38,36 @@ export default new class SPDataAdapter {
      * 
      * @param {string} templateLibrary Template library
      */
-    public async getDocumentTemplates(templateLibrary: string = 'Malbibliotek') {
+    public async getDocumentTemplates(templateLibrary: string) {
         const currentPhase = await this.project.getCurrentPhaseName();
-        return await this._hubConfigurationService.getHubItems(
+        return await this.hubConfigurationService.getHubItems(
             templateLibrary,
             TemplateFile,
             {
-                ViewXml: `<View><Query><Where><Or><Or><Eq><FieldRef Name='GtProjectPhase' /><Value Type='Text'>${currentPhase}</Value></Eq><Eq><FieldRef Name='GtProjectPhase' /><Value Type='Text'>Flere faser</Value></Eq></Or><Eq><FieldRef Name='GtProjectPhase' /><Value Type='Text'>Ingen fase</Value></Eq></Or></Where></Query></View>`
+                ViewXml: `
+                <View>
+                    <Query>
+                        <Where>
+                            <Or>
+                                <Or>
+                                    <Eq>
+                                        <FieldRef Name='GtProjectPhase' />
+                                        <Value Type='Text'>${currentPhase}</Value>
+                                    </Eq>
+                                    <Eq>
+                                        <FieldRef Name='GtProjectPhase' />
+                                        <Value Type='Text'>Flere faser</Value>
+                                    </Eq>
+                                </Or>
+                                <Eq>
+                                    <FieldRef Name='GtProjectPhase' />
+                                    <Value Type='Text'>Ingen fase</Value>
+                                </Eq>
+                            </Or>
+                        </Where>
+                    </Query>
+                </View>
+                `
             },
             ['File'],
         );
@@ -67,9 +76,9 @@ export default new class SPDataAdapter {
     /**
      * Get libraries in web
      */
-    public async getLibraries() {
+    public async getLibraries(): Promise<ISPLibrary[]> {
         return (
-            await sp.web.lists
+            await this.sp.web.lists
                 .select('Id', 'Title', 'RootFolder/ServerRelativeUrl')
                 .expand('RootFolder')
                 .filter(`BaseTemplate eq 101 and IsCatalog eq false and IsApplicationList eq false and ListItemEntityTypeFullName ne 'SP.Data.FormServerTemplatesItem'`)

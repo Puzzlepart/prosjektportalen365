@@ -33,7 +33,7 @@ define([], function () {
     NoHubSiteErrorStack: 'Området kan ikke settes opp uten å være koblet til en hub. Koble området til ett hubområde, og last siden på nytt.',
     OnGoBackText: 'Gå tilbake',
     OnStartCopyText: 'Start kopiering',
-    OnSubmitSelectionText: 'Kopier valgt(e) dokument(er) til prosjektområdet',
+    OnSubmitSelectionText: 'Velg',
     PlannerConfigurationErrorMessage: 'Det skjedde en feil under konfigurering av området',
     PlannerConfigurationText: 'Oppretter standardoppgaver i Planner',
     PreTaskErrorMessage: 'Det skjedde en feil',
@@ -57,6 +57,8 @@ define([], function () {
     TemplateSelectDialogTitle: 'Oppsett av prosjektområde',
     TemplateSelectTitle: 'Velg prosjektmal',
     TitleLabel: 'Tittel',
-    ProgressDialogSubText: 'Vennligst vent. Ikke lukk nettleservinduet.'
+    ProgressDialogSubText: 'Vennligst vent. Ikke lukk nettleservinduet.',
+    DocumentTemplateDialogScreenSelectInfoText: 'Velg dokumentmalene du vil kopiere til prosjektområdet. Malene hentes fra [{0}]({1}) og det hentes _siste versjon_ av malene. I neste skjermbilde kan du sette _tittel_ og _filnavn_ for dokumentene som kopieres over.',
+    DocumentTemplateDialogScreenEditCopyInfoText: 'Her kan du sette _tittel_ og _filnavn_ for dokumentene som kopieres over. Når du er ferdig, trykk \'Start kopering\' for å starte kopieringen.'
   }
 });

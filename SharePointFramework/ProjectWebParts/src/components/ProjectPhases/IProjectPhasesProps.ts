@@ -51,9 +51,4 @@ export interface IProjectPhasesProps {
    * @todo Describe property
    */
   phaseSubTextProperty: string;
-
-  /**
-   * @todo Describe property
-   */
-  entity: ISpEntityPortalServiceParams;
 }

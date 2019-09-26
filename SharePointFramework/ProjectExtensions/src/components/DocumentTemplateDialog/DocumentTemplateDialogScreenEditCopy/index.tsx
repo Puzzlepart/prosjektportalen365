@@ -2,8 +2,9 @@ import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import * as ProjectExtensionsStrings from 'ProjectExtensionsStrings';
+import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
+import { InfoMessage } from '../../InfoMessage';
 import styles from './DocumentTemplateDialogScreenEditCopy.module.scss';
 import { IDocumentTemplateDialogScreenEditCopyProps } from './IDocumentTemplateDialogScreenEditCopyProps';
 import { IDocumentTemplateDialogScreenEditCopyState } from './IDocumentTemplateDialogScreenEditCopyState';
@@ -27,6 +28,7 @@ export class DocumentTemplateDialogScreenEditCopy extends React.Component<IDocum
         const { expandState } = this.state;
         return (
             <div className={styles.documentTemplateDialogScreenEditCopy}>
+                <InfoMessage text={strings.DocumentTemplateDialogScreenEditCopyInfoText} />
                 {this.props.selectedTemplates.map(tmpl => (
                     <div className={styles.item}>
                         <div className={styles.header} onClick={_ => this._onExpandCollapse(tmpl.id)}>
@@ -38,15 +40,15 @@ export class DocumentTemplateDialogScreenEditCopy extends React.Component<IDocum
                         <div hidden={!expandState[tmpl.id]}>
                             <div className={styles.nameInput}>
                                 <TextField
-                                    label={ProjectExtensionsStrings.NameLabel}
-                                    placeholder={ProjectExtensionsStrings.NameLabel}
+                                    label={strings.NameLabel}
+                                    placeholder={strings.NameLabel}
                                     defaultValue={tmpl.newName}
                                     onChange={(_event, newName) => this._onInputChanged(tmpl.id, { newName })} />
                             </div>
                             <div className={styles.titleInput}>
                                 <TextField
-                                    label={ProjectExtensionsStrings.TitleLabel}
-                                    placeholder={ProjectExtensionsStrings.TitleLabel}
+                                    label={strings.TitleLabel}
+                                    placeholder={strings.TitleLabel}
                                     defaultValue={tmpl.newTitle}
                                     onChange={(_event, newTitle) => this._onInputChanged(tmpl.id, { newTitle })} />
                             </div>
@@ -55,14 +57,14 @@ export class DocumentTemplateDialogScreenEditCopy extends React.Component<IDocum
                 ))}
                 <div>
                     <Dropdown
-                        label={ProjectExtensionsStrings.LibraryDropdownLabel}
+                        label={strings.LibraryDropdownLabel}
                         defaultSelectedKey={0}
                         onChange={this._onLibraryChanged.bind(this)}
                         disabled={this.props.libraries.length === 1}
                         options={this.props.libraries.map((lib, idx) => ({ key: idx, text: lib.Title, data: lib }))} />
                 </div>
                 <div className={styles.copyAction}>
-                    <PrimaryButton text={ProjectExtensionsStrings.OnStartCopyText} onClick={this._onStartCopy.bind(this)} />
+                    <PrimaryButton text={strings.OnStartCopyText} onClick={this._onStartCopy.bind(this)} />
                 </div>
             </div >
         );

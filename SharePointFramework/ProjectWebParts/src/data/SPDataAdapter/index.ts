@@ -1,22 +1,15 @@
+import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common';
-import { ItemUpdateResult, sp, SPConfiguration } from '@pnp/sp';
+import { ItemUpdateResult } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
 import * as strings from 'ProjectWebPartsStrings';
+import { SPDataAdapterBase } from 'shared/lib/data';
+import { ProjectDataService } from 'shared/lib/services';
 import * as _ from 'underscore';
 import { ISPDataAdapterSettings } from './ISPDataAdapterSettings';
-import { ProjectDataService } from 'shared/lib/services';
-import { WebPartContext } from '@microsoft/sp-webpart-base';
 
-export default new class SPDataAdapter {
-    public spConfiguration: SPConfiguration = {
-        defaultCachingStore: 'session',
-        defaultCachingTimeoutSeconds: 90,
-        enableCacheExpiration: true,
-        cacheExpirationIntervalMilliseconds: 2500,
-        globalCacheDisable: false,
-    };
+export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterSettings> {
     public project: ProjectDataService;
-    private _settings: ISPDataAdapterSettings;
 
     /**
      * Configure the SP data adapter
@@ -25,10 +18,15 @@ export default new class SPDataAdapter {
      * @param {ISPDataAdapterSettings} settings Settings
      */
     public configure(spfxContext: WebPartContext, settings: ISPDataAdapterSettings) {
-        this._settings = settings;
-        sp.setup({ spfxContext, ...this.spConfiguration });
+        super.configure(spfxContext, settings);
         taxonomy.setup({ spfxContext });
-        this.project = new ProjectDataService({ ...this._settings, propertiesListName: strings.ProjectPropertiesListName, sp, taxonomy });
+        this.project = new ProjectDataService({
+            ...this.settings,
+            spEntityPortalService: this.spEntityPortalService,
+            propertiesListName: strings.ProjectPropertiesListName,
+            sp: this.sp,
+            taxonomy,
+        });
         this.project.spConfiguration = this.spConfiguration;
     }
 
@@ -74,7 +72,7 @@ export default new class SPDataAdapter {
                 }
                 return obj;
             }, {}), ['GtSiteId', 'GtGroupId', 'GtSiteUrl']);
-            return await this._settings.spEntityPortalService.updateEntityItem(this._settings.siteId, properties);
+            return await this.spEntityPortalService.updateEntityItem(this.settings.siteId, properties);
         } catch (error) {
             throw error;
         }
@@ -87,11 +85,11 @@ export default new class SPDataAdapter {
      */
     public async getTermFieldContext(fieldName: string) {
         const [phaseField, textField] = await Promise.all([
-            sp.web.fields.getByInternalNameOrTitle(fieldName)
+            this.sp.web.fields.getByInternalNameOrTitle(fieldName)
                 .select('TermSetId')
                 .usingCaching()
                 .get<{ TermSetId: string }>(),
-            sp.web.fields.getByInternalNameOrTitle(`${fieldName}_0`)
+            this.sp.web.fields.getByInternalNameOrTitle(`${fieldName}_0`)
                 .select('InternalName')
                 .usingCaching()
                 .get<{ InternalName: string }>(),

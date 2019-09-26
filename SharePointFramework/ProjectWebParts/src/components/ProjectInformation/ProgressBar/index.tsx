@@ -2,11 +2,11 @@ import { IProgressIndicatorProps, ProgressIndicator } from 'office-ui-fabric-rea
 import * as React from 'react';
 
 // tslint:disable-next-line: naming-convention
-export const ProgressBar = (props: IProgressIndicatorProps) => {
-    if (!props.label) return null;
+export const ProgressBar = ({ label, description, className }: IProgressIndicatorProps) => {
+    if (!label) return null;
     return (
-        <div className={props.className}>
-            <ProgressIndicator label={props.label} description={props.description} />
+        <div className={className}>
+            <ProgressIndicator label={label} description={description} />
         </div>
     );
 };

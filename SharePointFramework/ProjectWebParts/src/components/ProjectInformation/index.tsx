@@ -117,11 +117,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
    */
   private _renderProperties() {
     if (!this.state.properties) return null;
-    const propertiesToRender = this.state.properties.filter(p => !p.empty && p.showInDisplayForm);
-    const hasMissingProps = this.state.properties.filter(p => p.required && p.empty).length > 0;
-    if (hasMissingProps) {
-      return <MessageBar messageBarType={MessageBarType.error}>{strings.MissingPropertiesMessage}</MessageBar>;
-    }
+    const propertiesToRender = this.state.properties.filter(p => !p.empty && !p.visible);
     if (propertiesToRender.length === 0) {
       return <MessageBar>{strings.NoPropertiesMessage}</MessageBar>;
     }
@@ -174,7 +170,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   private _transformProperties(fieldValuesText: TypedHash<any>, data: IProjectInformationData) {
     const fieldNames: string[] = Object.keys(fieldValuesText).filter(fieldName => {
       let [field] = data.fields.filter(fld => fld.InternalName === fieldName);
-      if (field && ['GtSiteId', 'GtGroupId', 'GtSiteUrl'].indexOf(fieldName) === -1 && data.columnConfig.length === 0) return true;
+      if (field && data.columnConfig.length === 0) return true;
       let [column] = data.columnConfig.filter(c => c.GtInternalName === fieldName);
       if (field && column) {
         return this.props.filterField ? column[this.props.filterField] : true;

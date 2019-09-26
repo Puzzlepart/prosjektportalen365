@@ -19,11 +19,13 @@ import { IProjectStatusProps } from './IProjectStatusProps';
 import { IProjectStatusHashState, IProjectStatusState } from './IProjectStatusState';
 import styles from './ProjectStatus.module.scss';
 import { IBaseSectionProps, ListSection, ProjectPropertiesSection, StatusSection, SummarySection } from './Sections';
+import { SpEntityPortalService } from 'sp-entityportal-service';
 
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private _reportList: List;
   private _sectionsList: List;
   private _hubConfigurationService: HubConfigurationService;
+  private _spEntityPortalService: SpEntityPortalService;
 
   /**
    * Constructor
@@ -39,6 +41,13 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     this._reportList = new Web(props.hubSiteUrl).lists.getByTitle(props.reportListName);
     this._sectionsList = new Web(props.hubSiteUrl).lists.getByTitle(props.sectionsListName);
     this._hubConfigurationService = new HubConfigurationService(props.hubSiteUrl);
+    this._spEntityPortalService = new SpEntityPortalService({
+      portalUrl: this.props.hubSiteUrl,
+      listName: 'Prosjekter',
+      contentTypeId: '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+      identityFieldName: 'GtSiteId',
+      urlFieldName: 'GtSiteUrl',
+    });
   }
 
   public async componentDidMount() {
@@ -192,7 +201,6 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           return (
             <SummarySection
               {...baseProps}
-              entity={this.props.entity}
               sections={this.state.data.sections}
               columnConfig={this.state.data.columnConfig} />
           );
@@ -286,7 +294,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     try {
       Logger.log({ message: '(ProjectStatus) _fetchData: Fetching fields and reports', level: LogLevel.Info });
       const [entity, reportList, reportItems, sectionItems, columnConfig] = await Promise.all([
-        this.props.spEntityPortalService.fetchEntity(this.props.siteId, this.props.webUrl),
+        this._spEntityPortalService.fetchEntity(this.props.siteId, this.props.webUrl),
         this._reportList
           .select('DefaultEditFormUrl')
           .expand('DefaultEditFormUrl')

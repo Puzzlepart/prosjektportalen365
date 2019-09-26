@@ -12,21 +12,21 @@ export const Actions = (props: IActionsProps) => {
                     text={strings.ViewVersionHistoryText}
                     href={props.versionHistoryUrl}
                     iconProps={{ iconName: 'History' }}
-                    style={{ width: 300 }} />
+                    style={{ width: '100%' }} />
             </div>
             <div>
                 <DefaultButton
                     text={strings.EditPropertiesText}
                     href={props.editFormUrl}
                     iconProps={{ iconName: 'Edit' }}
-                    style={{ width: 300 }} />
+                    style={{ width: '100%' }} />
             </div>
             <div>
                 <DefaultButton
                     text={strings.SyncProjectPropertiesText}
                     onClick={props.onSyncProperties}
                     iconProps={{ iconName: 'Sync' }}
-                    style={{ width: 300 }} />
+                    style={{ width: '100%' }} />
             </div>
             <div>
                 <DefaultButton
@@ -34,7 +34,7 @@ export const Actions = (props: IActionsProps) => {
                     onClick={() => window['_spLaunchSiteSettings']()}
                     disabled={!window['_spLaunchSiteSettings']}
                     iconProps={{ iconName: 'Info' }}
-                    style={{ width: 300 }} />
+                    style={{ width: '100%' }} />
             </div>
         </div>
     );

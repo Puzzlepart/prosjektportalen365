@@ -1,5 +1,3 @@
-import { SpEntityPortalService, ISpEntityPortalServiceParams } from 'sp-entityportal-service';
-
 export interface IProjectStatusProps {
     /**
      * Title of the web part
@@ -45,14 +43,4 @@ export interface IProjectStatusProps {
      * Content type id for report
      */
     reportCtId: string;
-
-    /**
-     * Entity parameters used for SpEntityPortalService
-     */
-    entity: ISpEntityPortalServiceParams;
-
-    /**
-     * 
-     */
-    spEntityPortalService: SpEntityPortalService;
 }
