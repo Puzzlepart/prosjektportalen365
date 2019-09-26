@@ -25,7 +25,7 @@ define([], function () {
     IncludeStandardFoldersLabel: 'Inkluder standardmapper',
     InvalidLanguageErrorMessage: 'Ugyldig språk for området',
     InvalidLanguageErrorStack: 'Språket som er satt for området støttes ikke. Området må være opprettet med norsk språk.',
-    LibraryDropdownLabel: 'Bibliotek',
+    DocumentLibraryDropdownLabel: 'Bibliotek',
     ListContentTitle: 'Velg standardinnhold',
     ModifiedLabel: 'Endret',
     NameLabel: 'Filnavn',

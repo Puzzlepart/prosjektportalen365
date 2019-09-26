@@ -25,7 +25,7 @@ declare interface IProjectExtensionsStrings {
   IncludeStandardFoldersLabel: string;
   InvalidLanguageErrorMessage: string;
   InvalidLanguageErrorStack: string;
-  LibraryDropdownLabel: string;
+  DocumentLibraryDropdownLabel: string;
   ListContentTitle: string;
   ModifiedLabel: string;
   NameLabel: string;

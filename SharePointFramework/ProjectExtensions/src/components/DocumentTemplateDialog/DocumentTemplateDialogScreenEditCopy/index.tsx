@@ -55,12 +55,11 @@ export class DocumentTemplateDialogScreenEditCopy extends React.Component<IDocum
                         </div>
                     </div>
                 ))}
-                <div>
+                <div hidden={this.props.libraries.length === 1}>
                     <Dropdown
-                        label={strings.LibraryDropdownLabel}
+                        label={strings.DocumentLibraryDropdownLabel}
                         defaultSelectedKey={0}
                         onChange={this._onLibraryChanged.bind(this)}
-                        disabled={this.props.libraries.length === 1}
                         options={this.props.libraries.map((lib, idx) => ({ key: idx, text: lib.Title, data: lib }))} />
                 </div>
                 <div className={styles.copyAction}>
