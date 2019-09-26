@@ -57,10 +57,12 @@ export class DocumentTemplateDialog extends React.Component<IDocumentTemplateDia
                 );
             }
             case DocumentTemplateDialogScreen.EditCopy: {
-                return <DocumentTemplateDialogScreenEditCopy
-                    selectedTemplates={this.state.selection}
-                    libraries={this.props.libraries}
-                    onStartCopy={this._onStartCopy.bind(this)} />;
+                return (
+                    <DocumentTemplateDialogScreenEditCopy
+                        selectedTemplates={this.state.selection}
+                        libraries={this.props.libraries}
+                        onStartCopy={this._copyFilesToWeb.bind(this)} />
+                );
             }
             case DocumentTemplateDialogScreen.CopyProgress: {
                 return <ProgressIndicator label={strings.CopyProgressLabel} {...this.state.progress} />;
@@ -76,14 +78,20 @@ export class DocumentTemplateDialog extends React.Component<IDocumentTemplateDia
             case DocumentTemplateDialogScreen.Select: {
                 return (
                     <>
-                        <PrimaryButton text={strings.OnSubmitSelectionText} onClick={() => this._onChangeScreen(DocumentTemplateDialogScreen.EditCopy)} disabled={this.state.selection.length === 0} />
+                        <PrimaryButton
+                            text={strings.OnSubmitSelectionText}
+                            onClick={() => this._onChangeScreen(DocumentTemplateDialogScreen.EditCopy)}
+                            disabled={this.state.selection.length === 0} />
                     </>
                 );
             }
             case DocumentTemplateDialogScreen.EditCopy: {
                 return (
                     <>
-                        <DefaultButton text={strings.OnGoBackText} onClick={() => this._onChangeScreen(DocumentTemplateDialogScreen.Select)} />
+                        <DefaultButton
+                            text={strings.OnGoBackText}
+                            iconProps={{ iconName: 'NavigateBack' }}
+                            onClick={() => this._onChangeScreen(DocumentTemplateDialogScreen.Select)} />
                     </>
                 );
             }
@@ -112,23 +120,21 @@ export class DocumentTemplateDialog extends React.Component<IDocumentTemplateDia
     }
 
     /**
-     * On start copy templates
+     * On copy documents to web
      * 
      * @param {TemplateFile[]} templates Templates
-     * @param {string} serverRelativeUrl Server relative url
+     * @param {string} folderServerRelativeUrl Folder URL
      */
-    private async _onStartCopy(templates: TemplateFile[], serverRelativeUrl: string): Promise<void> {
+    private async _copyFilesToWeb(templates: TemplateFile[], folderServerRelativeUrl: string): Promise<void> {
         this.setState({ screen: DocumentTemplateDialogScreen.CopyProgress, isBlocking: true });
 
+        let folder = sp.web.getFolderByServerRelativeUrl(folderServerRelativeUrl);
         let templatesAdded: FileAddResult[] = [];
-        const folder = sp.web.getFolderByServerRelativeUrl(serverRelativeUrl);
 
         for (let i = 0; i < templates.length; i++) {
             const template = templates[i];
             this.setState({ progress: { description: template.newName, percentComplete: (i / templates.length) } });
-            try {
-                templatesAdded.push(await template.copyTo(folder));
-            } catch (error) { }
+            try { templatesAdded.push(await template.copyTo(folder)); } catch (error) { }
         }
 
         this._selection.setItems([], true);

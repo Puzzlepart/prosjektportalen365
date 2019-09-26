@@ -58,7 +58,9 @@ define([], function () {
     TemplateSelectTitle: 'Velg prosjektmal',
     TitleLabel: 'Tittel',
     ProgressDialogSubText: 'Vennligst vent. Ikke lukk nettleservinduet.',
-    DocumentTemplateDialogScreenSelectInfoText: 'Velg dokumentmalene du vil kopiere til prosjektområdet.<br /><br />Malene hentes fra<a href="{0}">{1}</a> og det hentes _siste versjon_ av malene.<br /><br />Når du trykker \'Velg\' sendes du videre til et skjermbilde hvor du kan sette _tittel_ og _filnavn_ for dokumentene som kopieres over.',
-    DocumentTemplateDialogScreenEditCopyInfoText: 'Her kan du sette _tittel_ og _filnavn_ for dokumentene som kopieres over.<br /><br />Når du er ferdig, trykk \'Start kopering\' for å starte kopieringen.'
+    DocumentTemplateDialogScreenSelectInfoText: 'Velg dokumentmalene du vil kopiere til prosjektområdet.<br /><br />Malene hentes fra<a href="{0}" target="_blank">{1}</a> og det hentes _siste versjon_ av malene.<br /><br />Når du trykker \'Velg\' sendes du videre til et skjermbilde hvor du kan sette _tittel_ og _filnavn_ for dokumentene som kopieres over.',
+    DocumentTemplateDialogScreenEditCopyInfoText: 'Her kan du sette _tittel_ og _filnavn_ for dokumentene som kopieres over.<br /><br />Når du er ferdig, trykk \'Start kopering\' for å starte kopieringen.',
+    FilenameAlreadyInUseErrorText: 'Filnavnet er allerede i bruk.',
+    FilenameInValidErrorText: 'Filnavnet er ugyldig.'
   }
 });

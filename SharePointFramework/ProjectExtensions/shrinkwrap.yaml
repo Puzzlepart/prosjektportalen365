@@ -30,6 +30,7 @@ dependencies:
   spfx-jsom: 0.6.4
   string-format: 2.0.0
   underscore: 1.9.1
+  valid-filename: 3.1.0
   xmldom: 0.1.27
 devDependencies:
   '@microsoft/rush-stack-compiler-3.3': 0.2.37
@@ -4423,6 +4424,12 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-wcS5vuPglyXdsQa3XB4wH+LxiyY=
+  /filename-reserved-regex/2.0.0:
+    dev: false
+    engines:
+      node: '>=4'
+    resolution:
+      integrity: sha1-q/c9+rc10EVECr/qLZHzieu/oik=
   /fileset/2.0.3:
     dependencies:
       glob: 7.1.4
@@ -11618,6 +11625,14 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-G5BKWWCfsyjvB4E4Qgk09rhnCaY=
+  /valid-filename/3.1.0:
+    dependencies:
+      filename-reserved-regex: 2.0.0
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-O99sdfhdGCiWoN4cv6Unq4eJ2EuXwRsOLCeSw+IJyMYgwVK0BPmaUnzhWQw5E8qknLTVrVExCr6xxTBnRBvtsQ==
   /validate-npm-package-license/3.0.4:
     dependencies:
       spdx-correct: 3.1.0
@@ -12326,4 +12341,5 @@ specifiers:
   string-format: ^2.0.0
   tslint-consistent-codestyle: ^1.15.1
   underscore: ^1.9.1
+  valid-filename: ^3.1.0
   xmldom: ^0.1.27

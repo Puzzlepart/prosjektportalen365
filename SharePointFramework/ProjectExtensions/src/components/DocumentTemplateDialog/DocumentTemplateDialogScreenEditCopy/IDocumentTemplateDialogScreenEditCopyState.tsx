@@ -1,4 +1,4 @@
-import { TemplateFile, IDocumentLibrary } from '../../../models';
+import { TemplateFile } from '../../../models';
 
 export interface IDocumentTemplateDialogScreenEditCopyState {
     /**
@@ -9,5 +9,5 @@ export interface IDocumentTemplateDialogScreenEditCopyState {
     /**
      * @todo Describe property
      */
-    selectedLibrary: IDocumentLibrary;
+    selectedFolderServerRelativeUrl: string;
 }

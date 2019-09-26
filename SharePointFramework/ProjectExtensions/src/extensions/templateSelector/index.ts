@@ -12,7 +12,7 @@ import { IDocumentLibrary, TemplateFile } from '../../models';
 import { ITemplateSelectorCommandSetProperties } from './ITemplateSelectorCommandSetProperties';
 
 Logger.subscribe(new ConsoleListener());
-Logger.activeLogLevel = LogLevel.Info;
+Logger.activeLogLevel = LogLevel.Warning;
 
 
 export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<ITemplateSelectorCommandSetProperties> {
@@ -35,7 +35,7 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
     Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Initializing', data: { version: this.context.manifest.version }, level: LogLevel.Info });
     try {
       this._templateLibrary = this.properties.templateLibrary || 'Malbibliotek';
-      this._templates = await SPDataAdapter.getDocumentTemplates(this._templateLibrary);
+      this._templates = await SPDataAdapter.getDocumentTemplates(this._templateLibrary, this.properties.viewXml);
       Logger.log({ message: `(TemplateSelectorCommandSet) onInit: Retrieved ${this._templates.length} templates from the specified template library`, level: LogLevel.Info });
     } catch (error) {
       Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Failed to initialize', level: LogLevel.Warning });

@@ -59,6 +59,8 @@ declare interface IProjectExtensionsStrings {
   TitleLabel: string;
   DocumentTemplateDialogScreenSelectInfoText: string;
   DocumentTemplateDialogScreenEditCopyInfoText: string;
+  FilenameAlreadyInUseErrorText: string;
+  FilenameInValidErrorText: string;
 }
 
 declare module 'ProjectExtensionsStrings' {

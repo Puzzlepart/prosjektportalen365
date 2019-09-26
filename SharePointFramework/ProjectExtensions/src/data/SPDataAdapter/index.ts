@@ -4,6 +4,7 @@ import { TemplateFile } from 'models/TemplateFile';
 import * as strings from 'ProjectExtensionsStrings';
 import { ISPDataAdapterBaseSettings, SPDataAdapterBase } from 'shared/lib/data';
 import { ProjectDataService } from 'shared/lib/services';
+import * as validFilename from 'valid-filename';
 
 export interface ISPDataAdapterSettings extends ISPDataAdapterBaseSettings { }
 
@@ -34,17 +35,35 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterS
     }
 
     /**
+     * Checks if the filename is valid
+     * 
+     * @param {string} folderServerRelativeUrl Folder server relative URL
+     * @param {string} name File name
+     */
+    public async isFilenameValid(folderServerRelativeUrl: string, name: string): Promise<string> {
+        if (!validFilename(name)) {
+            return strings.FilenameInValidErrorText;
+        }
+        let [file] = await this.sp.web.getFolderByServerRelativeUrl(folderServerRelativeUrl).files.filter(`Name eq '${name}'`).get();
+        if (file) {
+            return strings.FilenameAlreadyInUseErrorText;
+        }
+        return null;
+    }
+
+    /**
      * Get document templates
      * 
      * @param {string} templateLibrary Template library
+     * @param {string} viewXml View xml
      */
-    public async getDocumentTemplates(templateLibrary: string) {
+    public async getDocumentTemplates(templateLibrary: string, viewXml?: string) {
         const currentPhase = await this.project.getCurrentPhaseName();
         return await this.hubConfigurationService.getHubItems(
             templateLibrary,
             TemplateFile,
             {
-                ViewXml: `
+                ViewXml: viewXml || `
                 <View>
                     <Query>
                         <Where>
