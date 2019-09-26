@@ -1,4 +1,4 @@
-import { TemplateFile, IDocumentLibrary } from '../../../models/index';
+import { TemplateFile, IDocumentLibrary } from '../../../models';
 
 export interface IDocumentTemplateDialogScreenEditCopyState {
     /**
@@ -10,9 +10,4 @@ export interface IDocumentTemplateDialogScreenEditCopyState {
      * @todo Describe property
      */
     selectedLibrary: IDocumentLibrary;
-
-    /**
-     * @todo Describe property
-     */
-    expandState: { [key: string]: boolean };
 }

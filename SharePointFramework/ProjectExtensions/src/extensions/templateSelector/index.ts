@@ -6,7 +6,7 @@ import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { default as HubSiteService, IHubSite } from 'sp-hubsite-service';
-import { DocumentTemplateDialog, IDocumentTemplateDialogProps } from '../../components';
+import { DocumentTemplateDialog, IDocumentTemplateDialogProps, IDocumentTemplateDialogDismissProps } from '../../components';
 import { SPDataAdapter } from '../../data';
 import { IDocumentLibrary, TemplateFile } from '../../models';
 import { ITemplateSelectorCommandSetProperties } from './ITemplateSelectorCommandSetProperties';
@@ -78,9 +78,11 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
 
   /**
    * On dismiss <DocumentTemplateDialog />
+   * 
+   * @param {IDocumentTemplateDialogDismissProps} props Dismiss props
    */
-  private _onDismissDocumentTemplateDialog() {
+  private _onDismissDocumentTemplateDialog(props: IDocumentTemplateDialogDismissProps) {
     ReactDOM.unmountComponentAtNode(this._container);
-    document.location.href = document.location.href;
+    if (props.reload) document.location.href = document.location.href;
   }
 }

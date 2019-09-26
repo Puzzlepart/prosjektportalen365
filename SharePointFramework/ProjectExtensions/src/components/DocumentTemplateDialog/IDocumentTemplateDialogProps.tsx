@@ -1,7 +1,7 @@
-import { TemplateFile, IDocumentLibrary } from '../../models/index';
-import { IBaseDialogProps } from '../@BaseDialog/IBaseDialogProps';
+import { TemplateFile, IDocumentLibrary } from '../../models';
+import { IDocumentTemplateDialogDismissProps } from './IDocumentTemplateDialogDismissProps';
 
-export interface IDocumentTemplateDialogProps extends IBaseDialogProps {
+export interface IDocumentTemplateDialogProps {
     /**
      * @todo Describe property
      */
@@ -21,4 +21,9 @@ export interface IDocumentTemplateDialogProps extends IBaseDialogProps {
      * @todo Describe property
      */
     templateLibrary: { title: string, url: string };
+
+    /**
+     * @todo Describe property
+     */
+    onDismiss: (props: IDocumentTemplateDialogDismissProps) => void;
 }

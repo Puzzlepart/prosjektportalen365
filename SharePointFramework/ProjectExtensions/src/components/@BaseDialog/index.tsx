@@ -4,15 +4,7 @@ import { Dialog, DialogContent, DialogFooter, DialogType } from 'office-ui-fabri
 import { IBaseDialogProps } from './IBaseDialogProps';
 
 export class BaseDialog extends React.PureComponent<IBaseDialogProps, {}> {
-    /**
-     * Constructor
-     * 
-     * @param {IBaseDialogProps} props Props
-     */
-    constructor(props: IBaseDialogProps) {
-        super(props);
-        this.state = { isOpen: true };
-    }
+    public static defaultProps: Partial<IBaseDialogProps> = { onRenderFooter: () => null };
 
     public render(): React.ReactElement<IBaseDialogProps> {
         return (
@@ -25,7 +17,9 @@ export class BaseDialog extends React.PureComponent<IBaseDialogProps, {}> {
                 <DialogContent className={`${styles.content} ${this.props.contentClassName}`}>
                     {this.props.children}
                 </DialogContent>
-                {this.props.onRenderFooter ? <DialogFooter>{this.props.onRenderFooter()}</DialogFooter> : null}
+                <DialogFooter className={styles.footer}>
+                    {this.props.onRenderFooter()}
+                </DialogFooter>
             </Dialog>
         );
     }

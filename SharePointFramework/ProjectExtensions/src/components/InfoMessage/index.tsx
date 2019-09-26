@@ -8,7 +8,7 @@ export class InfoMessage extends React.PureComponent<IInfoMessageProps, {}> {
     public render(): React.ReactElement<IInfoMessageProps> {
         return (
             <div className={styles.infoMessage}>
-                <MessageBar>
+                <MessageBar messageBarType={this.props.type}>
                     <ReactMarkdown escapeHtml={false} linkTarget='_blank' source={this.props.text} />
                 </MessageBar>
             </div>

@@ -1,13 +1,14 @@
 import { FileAddResult, sp } from '@pnp/sp';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import * as stringFormat from 'string-format';
 import { TemplateFile } from '../../models/index';
 import { BaseDialog } from '../@BaseDialog/index';
+import { InfoMessage } from '../InfoMessage';
 import { DocumentTemplateDialogScreen } from './DocumentTemplateDialogScreen';
 import { DocumentTemplateDialogScreenEditCopy } from './DocumentTemplateDialogScreenEditCopy';
 import { DocumentTemplateDialogScreenSelect } from './DocumentTemplateDialogScreenSelect';
@@ -38,7 +39,7 @@ export class DocumentTemplateDialog extends React.Component<IDocumentTemplateDia
                 dialogContentProps={{ title: this.props.title }}
                 modalProps={{ isBlocking: false, isDarkOverlay: true }}
                 onRenderFooter={this._onRenderFooter.bind(this)}
-                onDismiss={this.props.onDismiss}>
+                onDismiss={this._onClose.bind(this)}>
                 {this._content}
             </BaseDialog>
         );
@@ -65,7 +66,7 @@ export class DocumentTemplateDialog extends React.Component<IDocumentTemplateDia
                 return <ProgressIndicator label={strings.CopyProgressLabel} {...this.state.progress} />;
             }
             case DocumentTemplateDialogScreen.Summary: {
-                return <MessageBar messageBarType={MessageBarType.success}>{stringFormat(strings.SummaryText, this.state.templatesAdded.length)}</MessageBar>;
+                return <InfoMessage type={MessageBarType.success} text={stringFormat(strings.SummaryText, this.state.templatesAdded.length)} />;
             }
         }
     }
@@ -90,7 +91,7 @@ export class DocumentTemplateDialog extends React.Component<IDocumentTemplateDia
                 return (
                     <>
                         <DefaultButton text={strings.GetMoreText} onClick={_ => this._onChangeScreen(DocumentTemplateDialogScreen.Select)} />
-                        <DefaultButton text={strings.CloseModalText} onClick={this.props.onDismiss} />
+                        <DefaultButton text={strings.CloseModalText} onClick={this._onClose.bind(this)} />
                     </>
                 );
             }
@@ -133,6 +134,11 @@ export class DocumentTemplateDialog extends React.Component<IDocumentTemplateDia
         this._selection.setItems([], true);
         this.setState({ screen: DocumentTemplateDialogScreen.Summary, templatesAdded, isBlocking: false, selection: [] });
     }
+
+    private async _onClose() {
+        this.props.onDismiss({ reload: this.state.screen === DocumentTemplateDialogScreen.Summary });
+    }
 }
 
+export * from './IDocumentTemplateDialogDismissProps';
 export { IDocumentTemplateDialogProps };

@@ -1,11 +1,10 @@
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import { InfoMessage } from '../../InfoMessage';
 import styles from './DocumentTemplateDialogScreenEditCopy.module.scss';
+import { DocumentTemplateItem } from './DocumentTemplateItem';
 import { IDocumentTemplateDialogScreenEditCopyProps } from './IDocumentTemplateDialogScreenEditCopyProps';
 import { IDocumentTemplateDialogScreenEditCopyState } from './IDocumentTemplateDialogScreenEditCopyState';
 
@@ -17,44 +16,14 @@ export class DocumentTemplateDialogScreenEditCopy extends React.Component<IDocum
      */
     constructor(props: IDocumentTemplateDialogScreenEditCopyProps) {
         super(props);
-        this.state = {
-            templates: [...props.selectedTemplates],
-            selectedLibrary: this.props.libraries[0],
-            expandState: {},
-        };
+        this.state = { templates: [...props.selectedTemplates], selectedLibrary: this.props.libraries[0], };
     }
 
     public render(): React.ReactElement<IDocumentTemplateDialogScreenEditCopyProps> {
-        const { expandState } = this.state;
         return (
             <div className={styles.documentTemplateDialogScreenEditCopy}>
                 <InfoMessage text={strings.DocumentTemplateDialogScreenEditCopyInfoText} />
-                {this.props.selectedTemplates.map(tmpl => (
-                    <div className={styles.item}>
-                        <div className={styles.header} onClick={_ => this._onExpandCollapse(tmpl.id)}>
-                            <div className={styles.title}>{tmpl.name}</div>
-                            <div className={styles.icon}>
-                                <Icon iconName={expandState[tmpl.id] ? 'ChevronDown' : 'ChevronUp'} />
-                            </div>
-                        </div>
-                        <div hidden={!expandState[tmpl.id]}>
-                            <div className={styles.nameInput}>
-                                <TextField
-                                    label={strings.NameLabel}
-                                    placeholder={strings.NameLabel}
-                                    defaultValue={tmpl.newName}
-                                    onChange={(_event, newName) => this._onInputChanged(tmpl.id, { newName })} />
-                            </div>
-                            <div className={styles.titleInput}>
-                                <TextField
-                                    label={strings.TitleLabel}
-                                    placeholder={strings.TitleLabel}
-                                    defaultValue={tmpl.newTitle}
-                                    onChange={(_event, newTitle) => this._onInputChanged(tmpl.id, { newTitle })} />
-                            </div>
-                        </div>
-                    </div>
-                ))}
+                {this.props.selectedTemplates.map(item => <DocumentTemplateItem model={item} onInputChanged={this._onInputChanged.bind(this)} />)}
                 <div hidden={this.props.libraries.length === 1}>
                     <Dropdown
                         label={strings.DocumentLibraryDropdownLabel}
@@ -89,23 +58,14 @@ export class DocumentTemplateDialogScreenEditCopy extends React.Component<IDocum
     }
 
     /**
-     * On library chantged
+     * On library changed
      * 
-     * @param _event Event
-     * @param option Option
-     * @param _index Index
+     * @param {any} _event Event
+     * @param {IDropdownOption} option Option
+     * @param {number} _index Index
      */
-    private _onLibraryChanged(_event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, _index?: number) {
-        this.setState({ selectedLibrary: option.data });
-    }
-
-    /**
-     * On expand collapse
-     * 
-     * @param {string} key Key
-     */
-    private _onExpandCollapse(key: string): void {
-        this.setState(({ expandState }) => ({ expandState: { ...expandState, [key]: !expandState[key] } }));
+    private _onLibraryChanged(_event: React.FormEvent<HTMLDivElement>, { data: selectedLibrary }: IDropdownOption, _index?: number) {
+        this.setState({ selectedLibrary });
     }
 
     /**
@@ -113,6 +73,5 @@ export class DocumentTemplateDialogScreenEditCopy extends React.Component<IDocum
      */
     private _onStartCopy() {
         this.props.onStartCopy(this.state.templates, this.state.selectedLibrary.ServerRelativeUrl);
-        this.setState({ expandState: {}, templates: [] });
     }
 }
