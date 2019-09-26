@@ -1,5 +1,3 @@
-import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
-import { PageContext } from '@microsoft/sp-page-context';
 import { dateAdd } from '@pnp/common';
 import { Logger, LogLevel } from '@pnp/logging';
 import { List, Web } from '@pnp/sp';
@@ -14,25 +12,18 @@ import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import { formatDate } from 'shared/lib/helpers';
 import { HubConfigurationService } from 'shared/lib/services';
-import { parseUrlHash, setUrlHash } from 'shared/lib/util';
-import { SpEntityPortalService } from 'sp-entityportal-service';
-import * as format from 'string-format';
-import SPDataAdapter from '../../data';
-import { IStatusSectionBaseProps } from './@StatusSectionBase/IStatusSectionBaseProps';
+import { parseUrlHash, setUrlHash, getUrlParam } from 'shared/lib/util';
+import * as formatString from 'string-format';
 import { IProjectStatusData } from './IProjectStatusData';
 import { IProjectStatusProps } from './IProjectStatusProps';
 import { IProjectStatusHashState, IProjectStatusState } from './IProjectStatusState';
-import ListSection from './ListSection';
-import ProjectPropertiesSection from './ProjectPropertiesSection';
 import styles from './ProjectStatus.module.scss';
-import StatusSection from './StatusSection';
-import SummarySection from './SummarySection';
+import { IBaseSectionProps, ListSection, ProjectPropertiesSection, StatusSection, SummarySection } from './Sections';
 
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private _reportList: List;
   private _sectionsList: List;
   private _hubConfigurationService: HubConfigurationService;
-  private _spEntityPortalService: SpEntityPortalService;
 
   /**
    * Constructor
@@ -48,17 +39,6 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     this._reportList = new Web(props.hubSiteUrl).lists.getByTitle(props.reportListName);
     this._sectionsList = new Web(props.hubSiteUrl).lists.getByTitle(props.sectionsListName);
     this._hubConfigurationService = new HubConfigurationService(props.hubSiteUrl);
-    this._spEntityPortalService = new SpEntityPortalService({
-      portalUrl: props.hubSiteUrl,
-      fieldPrefix: 'Gt',
-      ...props.entity,
-    });
-    SPDataAdapter.configure({
-      spEntityPortalService: this._spEntityPortalService,
-      siteId: props.siteId,
-      webUrl: props.webUrl,
-      hubSiteUrl: props.hubSiteUrl,
-    });
   }
 
   public async componentDidMount() {
@@ -69,9 +49,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       const data = await this._fetchData();
       let selectedReport = data.reports[0];
       const hashState = parseUrlHash<IProjectStatusHashState>();
-      const urlQueryParameterCollection = new UrlQueryParameterCollection(document.location.href);
-      const selectedReportUrlParam = urlQueryParameterCollection.getValue('selectedReport');
-      const sourceUrlParam = urlQueryParameterCollection.getValue('Source');
+      const selectedReportUrlParam = getUrlParam('selectedReport');
+      const sourceUrlParam = getUrlParam('Source');
       if (hashState.selectedReport) {
         [selectedReport] = data.reports.filter(report => report.id === parseInt(hashState.selectedReport, 10));
       } else if (selectedReportUrlParam) {
@@ -99,7 +78,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       return (
         <div className={styles.projectStatus}>
           <div className={styles.container}>
-            <Spinner label={format(strings.LoadingText, this.props.title)} />
+            <Spinner label={formatString(strings.LoadingText, this.props.title)} />
           </div>
         </div>
       );
@@ -178,12 +157,12 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    * 
    * @param {SectionModel} sec Section model
    */
-  private _getSectionBaseProps(sec: SectionModel): IStatusSectionBaseProps {
+  private _getSectionBaseProps(sec: SectionModel): IBaseSectionProps {
     const { selectedReport: report, data } = this.state;
     const value = report.item[sec.fieldName];
     const comment = report.item[sec.commentFieldName];
     const [columnConfig] = data.columnConfig.filter(c => c.columnFieldName === sec.fieldName && c.value === value);
-    const baseProps: IStatusSectionBaseProps = {
+    const baseProps: IBaseSectionProps = {
       headerProps: {
         label: sec.name,
         value,
@@ -294,7 +273,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   private async _redirectNewStatusReport(_ev?: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement>, _item?: IContextualMenuItem): Promise<void> {
     const [previousReport] = this.state.data.reports;
     let properties = previousReport ? previousReport.getStatusValues() : {};
-    properties.Title = format(strings.NewStatusReportTitle, this.props.webTitle);
+    properties.Title = formatString(strings.NewStatusReportTitle, this.props.webTitle);
     const { data } = await this._reportList.items.add(properties);
     const source = encodeURIComponent(`${window.location.href.split('#')[0]}#NewStatus`);
     document.location.href = `${window.location.protocol}//${window.location.hostname}${this.state.data.defaultEditFormUrl}?ID=${data.Id}&Source=${source}`;
@@ -307,7 +286,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     try {
       Logger.log({ message: '(ProjectStatus) _fetchData: Fetching fields and reports', level: LogLevel.Info });
       const [entity, reportList, reportItems, sectionItems, columnConfig] = await Promise.all([
-        this._spEntityPortalService.fetchEntity(this.props.siteId, this.props.webUrl),
+        this.props.spEntityPortalService.fetchEntity(this.props.siteId, this.props.webUrl),
         this._reportList
           .select('DefaultEditFormUrl')
           .expand('DefaultEditFormUrl')

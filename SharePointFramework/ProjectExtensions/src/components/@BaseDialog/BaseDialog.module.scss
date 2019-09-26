@@ -4,7 +4,16 @@
   box-sizing: border-box;
   position: relative;
 
-  .versionString {
+  .content {
+    div[class*="ms-Dialog-header"] {
+      display: none;
+    }
+    div[class*="ms-Dialog-inner"] {
+      padding: 0;
+    }
+  }
+
+  .version {
     position: absolute;
     top: -90px;
     right: -15px;

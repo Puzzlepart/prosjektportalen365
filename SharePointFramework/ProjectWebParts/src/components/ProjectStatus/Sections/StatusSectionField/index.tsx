@@ -3,7 +3,7 @@ import styles from './StatusSectionField.module.scss';
 import { IStatusSectionFieldProps } from './IStatusSectionFieldProps';
 
 // tslint:disable-next-line: naming-convention
-const StatusSectionField = ({ label, value }: IStatusSectionFieldProps) => {
+export const StatusSectionField = ({ label, value }: IStatusSectionFieldProps) => {
     return (
         <div className={styles.statusSectionField}>
             <div className={styles.statusSectionFieldInner}>
@@ -13,5 +13,3 @@ const StatusSectionField = ({ label, value }: IStatusSectionFieldProps) => {
         </div>
     );
 };
-
-export default StatusSectionField;

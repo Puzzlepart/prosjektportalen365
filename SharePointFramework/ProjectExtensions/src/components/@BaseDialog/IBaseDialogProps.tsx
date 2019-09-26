@@ -2,12 +2,12 @@ import { IDialogProps } from 'office-ui-fabric-react/lib/Dialog';
 
 export interface IBaseDialogProps extends IDialogProps {
     /**
-     * @todo Describe property
+     * On render footer
      */
-    title?: string;
+    onRenderFooter?: () => React.ReactElement<any>;
 
     /**
-     * Version string from extension manifest
+     * Version from extension manifest
      */
-    versionString?: string;
+    version?: string;
 }

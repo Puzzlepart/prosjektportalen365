@@ -1,12 +1,11 @@
 import * as React from 'react';
 import styles from './ProjectPropertiesSection.module.scss';
 import { IProjectPropertiesSectionProps } from './IProjectPropertiesSectionProps';
-import StatusSectionBase from '../@StatusSectionBase';
-import StatusElement from '../StatusElement';
-import StatusSectionField from '../StatusSectionField';
+import { BaseSection } from '../BaseSection';
+import { StatusElement } from '../../StatusElement';
+import { StatusSectionField } from '../StatusSectionField';
 
-
-export default class ProjectPropertiesSection extends StatusSectionBase<IProjectPropertiesSectionProps, {}> {
+export class ProjectPropertiesSection extends BaseSection<IProjectPropertiesSectionProps, {}> {
   constructor(props: IProjectPropertiesSectionProps) {
     super(props);
   }
@@ -16,7 +15,7 @@ export default class ProjectPropertiesSection extends StatusSectionBase<IProject
    */
   public render(): React.ReactElement<IProjectPropertiesSectionProps> {
     return (
-      <StatusSectionBase {...this.props}>
+      <BaseSection {...this.props}>
         <div className='ms-Grid-row'>
           <div className='ms-Grid-col ms-sm12'>
             <StatusElement {...this.props.headerProps} />
@@ -25,7 +24,7 @@ export default class ProjectPropertiesSection extends StatusSectionBase<IProject
             {this.renderFields()}
           </div>
         </div>
-      </StatusSectionBase>
+      </BaseSection>
     );
   }
 

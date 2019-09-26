@@ -11,7 +11,7 @@ import * as ReactDOM from 'react-dom';
 import { ApplicationInsightsLogListener, ListLogger } from 'shared/lib/logging';
 import { HubConfigurationService } from 'shared/lib/services';
 import { default as HubSiteService } from 'sp-hubsite-service';
-import { ErrorModal, IErrorModalProps, IProgressModalProps, ITemplateSelectDialogProps, ITemplateSelectDialogState, ProgressModal, TemplateSelectDialog } from '../../components';
+import { ErrorDialog, IErrorDialogProps, IProgressDialogProps, ITemplateSelectDialogProps, ITemplateSelectDialogState, ProgressDialog, TemplateSelectDialog } from '../../components';
 import { ListContentConfig, ProjectTemplate } from '../../models';
 import { default as Tasks, IBaseTaskParams } from '../../tasks';
 import { default as IProjectSetupApplicationCustomizerData } from './IProjectSetupApplicationCustomizerData';
@@ -59,7 +59,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
         this._initializeSetup();
       }
     } catch (error) {
-      this._renderErrorModal({ error });
+      this._renderErrorDialog({ error });
     }
   }
 
@@ -77,11 +77,11 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
       this._data = { ...this._data, ...templateInfo };
       this._taskParams.data = this._data;
       Logger.log({ message: '(ProjectSetupApplicationCustomizer) _initializeSetup: Rendering progress modal', data: { selectedTemplate: templateInfo.selectedTemplate.title }, level: LogLevel.Info });
-      this._renderProgressModal({ text: strings.ProgressModalLabel, subText: strings.ProgressModalDescription, iconName: 'Page' });
+      this._renderProgressDialog({ text: strings.ProgressDialogLabel, subText: strings.ProgressDialogDescription, iconName: 'Page' });
       await this._startProvision();
       await this._deleteCustomizer(this.componentId, true);
     } catch (error) {
-      this._renderErrorModal({ error });
+      this._renderErrorDialog({ error });
     }
   }
 
@@ -112,10 +112,9 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   private _getTemplateInfoFromModal(): Promise<ITemplateSelectDialogState> {
     return new Promise(resolve => {
       const templateSelectModal = React.createElement<ITemplateSelectDialogProps>(TemplateSelectDialog, {
-        key: 'ProjectSetupApplicationCustomizer_TemplateSelectDialog',
         data: this._data,
+        version: this.manifest.version,
         onSubmit: (state: ITemplateSelectDialogState) => resolve(state),
-        versionString: `v${this.manifest.version}`,
       });
       this._templateSelectModalContainer = document.createElement('DIV');
       this._domElement.appendChild(this._templateSelectModalContainer);
@@ -124,17 +123,12 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   }
 
   /**
-   * Render ProgressModal
+   * Render ProgressDialog
    * 
-   * @param {IProgressModalProps} props Props
+   * @param {IProgressDialogProps} props Props
    */
-  private _renderProgressModal(props: IProgressModalProps) {
-    const progressModal = React.createElement<IProgressModalProps>(ProgressModal, {
-      key: 'ProjectSetupApplicationCustomizer_ProgressModal',
-      ...props,
-      taskParams: this._taskParams,
-      versionString: `v${this.manifest.version}`,
-    });
+  private _renderProgressDialog(props: IProgressDialogProps) {
+    const progressModal = React.createElement<IProgressDialogProps>(ProgressDialog, { ...props, version: this.manifest.version });
     if (!this._progressModalContainer) {
       this._progressModalContainer = document.createElement('DIV');
       this._domElement.appendChild(this._progressModalContainer);
@@ -143,16 +137,12 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   }
 
   /**
-   * Render ErrorModal
+   * Render ErrorDialog
    * 
-   * @param {IProgressModalProps} props Props
+   * @param {IProgressDialogProps} props Props
    */
-  private _renderErrorModal(props: IErrorModalProps) {
-    const errorModal = React.createElement(ErrorModal, {
-      key: 'ProjectSetupApplicationCustomizer_ProgressModal',
-      versionString: `v${this.manifest.version}`,
-      ...props,
-    });
+  private _renderErrorDialog(props: IErrorDialogProps) {
+    const errorModal = React.createElement(ErrorDialog, { ...props, version: this.manifest.version });
     if (!this._progressModalContainer) {
       this._progressModalContainer = document.createElement('DIV');
       this._domElement.appendChild(this._progressModalContainer);
@@ -167,7 +157,6 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
     Logger.log({ message: '(ProjectSetupApplicationCustomizer) _startProvision', data: { properties: this.properties, tasks: Tasks.map(t => t.taskName) }, level: LogLevel.Info });
     try {
       await ListLogger.write('Starting provisioning of project.', 'Info');
-      this._taskParams.templateSchema = await this._taskParams.data.selectedTemplate.getSchema();
       for (let i = 0; i < Tasks.length; i++) {
         if (isArray(this.properties.tasks) && this.properties.tasks.indexOf(Tasks[i].taskName) === -1) continue;
         Logger.log({ message: `(ProjectSetupApplicationCustomizer) _startProvision: Executing task ${Tasks[i].taskName}`, level: LogLevel.Info });
@@ -182,11 +171,12 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   /**
    * On task status updated
    * 
-   * @param {string} status Status
+   * @param {string} text Text
+   * @param {string} subText Sub text
    * @param {string} iconName Icon name
    */
-  private _onTaskStatusUpdated(status: string, iconName: string) {
-    this._renderProgressModal({ text: strings.ProgressModalLabel, subText: status, iconName });
+  private _onTaskStatusUpdated(text: string, subText: string, iconName: string) {
+    this._renderProgressDialog({ text, subText, iconName });
   }
 
   /**

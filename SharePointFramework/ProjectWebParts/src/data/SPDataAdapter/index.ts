@@ -1,5 +1,6 @@
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common';
 import { ItemUpdateResult, sp, SPConfiguration } from '@pnp/sp';
+import { taxonomy } from '@pnp/sp-taxonomy';
 import * as strings from 'ProjectWebPartsStrings';
 import * as _ from 'underscore';
 import { ISPDataAdapterSettings } from './ISPDataAdapterSettings';
@@ -20,12 +21,15 @@ export default new class SPDataAdapter {
     /**
      * Configure the SP data adapter
      * 
+     * @param {WebPartContext} spfxContext Context
      * @param {ISPDataAdapterSettings} settings Settings
      */
-    public configure( settings: ISPDataAdapterSettings) {
+    public configure(spfxContext: WebPartContext, settings: ISPDataAdapterSettings) {
         this._settings = settings;
-        sp.setup(this.spConfiguration);
-        this.project = new ProjectDataService({ ...this._settings, propertiesListName: strings.ProjectPropertiesListName }, sp);
+        sp.setup({ spfxContext, ...this.spConfiguration });
+        taxonomy.setup({ spfxContext });
+        this.project = new ProjectDataService({ ...this._settings, propertiesListName: strings.ProjectPropertiesListName, sp, taxonomy });
+        this.project.spConfiguration = this.spConfiguration;
     }
 
     /**

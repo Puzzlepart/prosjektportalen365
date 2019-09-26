@@ -1,0 +1,23 @@
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+
+.progressDialog {
+  .progressDialogContent {
+    margin: 18px 0 18px 0;
+    .progressIcon {
+      @include ms-Grid-col;
+      @include ms-sm2;
+
+      > i {
+        font-size: 42px;
+        display: block;
+        text-align: center;
+        margin-top: 12px;
+      }
+    }
+
+    .progressIndicator {
+      @include ms-Grid-col;
+      @include ms-sm10;
+    }
+  }
+}

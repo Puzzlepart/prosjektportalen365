@@ -1,4 +1,3 @@
-import { override } from '@microsoft/decorators';
 import { sp, Web } from '@pnp/sp';
 import * as strings from 'ProjectExtensionsStrings';
 import * as stringFormat from 'string-format';
@@ -9,6 +8,7 @@ import { IBaseTaskParams } from '../IBaseTaskParams';
 
 export default new class CopyListData extends BaseTask {
     public taskName = 'CopyListData';
+    private _progressText;
 
     /**
      * Execute CopyListData
@@ -20,8 +20,8 @@ export default new class CopyListData extends BaseTask {
         try {
             for (let i = 0; i < params.data.selectedListConfig.length; i++) {
                 const listConfig = params.data.selectedListConfig[i];
-                onProgress(stringFormat(strings.CopyListDataText, listConfig.sourceList, listConfig.destinationLibrary || listConfig.destinationList), 'List');
-                await this._processListItems(listConfig);
+                onProgress(stringFormat(strings.CopyListDataText, listConfig.sourceList, listConfig.destinationLibrary || listConfig.destinationList), '', 'List');
+                await this._processListItems(listConfig, onProgress);
             }
             return params;
         } catch (error) {
@@ -33,8 +33,9 @@ export default new class CopyListData extends BaseTask {
      * Process list items
      * 
      * @param {ListContentConfig} listConfig List config
+     * @param {OnProgressCallbackFunction} onProgress On progress function
      */
-    private async _processListItems(listConfig: ListContentConfig) {
+    private async _processListItems(listConfig: ListContentConfig, onProgress: OnProgressCallbackFunction) {
         try {
             this.logInformation('Processing list items', { listConfig });
             let destList = sp.web.lists.getByTitle(listConfig.destinationList);
@@ -43,6 +44,7 @@ export default new class CopyListData extends BaseTask {
                 (listConfig.web as Web).lists.getByTitle(listConfig.sourceList).fields.select('Id', 'InternalName', 'TypeAsString', 'TextField').get<Array<{ Id: string, InternalName: string, TypeAsString: string, TextField: string }>>(),
                 destList.select('ListItemEntityTypeFullName').get<{ ListItemEntityTypeFullName: string }>(),
             ]);
+            onProgress(stringFormat(strings.CopyListDataText, sourceItems.length, listConfig.sourceList, listConfig.destinationLibrary || listConfig.destinationList), '', 'List');
             for (let i = 0; i < sourceItems.length; i++) {
                 let properties = listConfig.fields.reduce((obj: { [x: string]: any; }, fieldName: string) => {
                     let fieldValue = sourceItems[i][fieldName];

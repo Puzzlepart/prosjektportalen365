@@ -1,37 +1,29 @@
-import { dateAdd } from '@pnp/common';
-import { sp, SPRest, Web, List, SPConfiguration } from '@pnp/sp';
-import { taxonomy } from '@pnp/sp-taxonomy';
+import { dateAdd, TypedHash } from '@pnp/common';
+import { SPConfiguration, SPRest } from '@pnp/sp';
+import { ITaxonomySession } from '@pnp/sp-taxonomy';
+import { SpEntityPortalService } from 'sp-entityportal-service';
 import { makeUrlAbsolute } from '../helpers/makeUrlAbsolute';
 import { ISPList } from '../interfaces/ISPList';
-import { ProjectPhaseModel, IProjectPhaseChecklistItem, ProjectPhaseChecklistData } from '../models';
-import { SpEntityPortalService } from 'sp-entityportal-service';
+import { IProjectPhaseChecklistItem, ProjectPhaseChecklistData, ProjectPhaseModel } from '../models';
 
 export interface IProjectDataServiceParams {
     webUrl: string;
     siteId: string;
     spEntityPortalService: SpEntityPortalService;
     propertiesListName: string;
+    sp: SPRest
+    taxonomy?: ITaxonomySession
 }
 
 export class ProjectDataService {
-    public spConfiguration: SPConfiguration = {
-        defaultCachingStore: 'session',
-        defaultCachingTimeoutSeconds: 90,
-        enableCacheExpiration: true,
-        cacheExpirationIntervalMilliseconds: 2500,
-        globalCacheDisable: false,
-    };
-    private _web: Web;
+    public spConfiguration: SPConfiguration;
 
     /**
      * Creates a new instance of ProjectDataService
      * 
      * @param {IProjectDataServiceParams} _params Parameters
-     * @param {SPRest} _sp SP Rest instance
      */
-    constructor(private _params: IProjectDataServiceParams, private _sp: SPRest = sp) {
-        this._web = new Web(_params.webUrl);
-    }
+    constructor(private _params: IProjectDataServiceParams) { }
 
 
     /**
@@ -39,14 +31,14 @@ export class ProjectDataService {
      */
     private async _getPropertyItemContext() {
         try {
-            let [list] = await this._web.lists.filter(`Title eq '${this._params.propertiesListName}'`).select('Id', 'DefaultEditFormUrl').usingCaching().get<ISPList[]>();
+            let [list] = await this._params.sp.web.lists.filter(`Title eq '${this._params.propertiesListName}'`).select('Id', 'DefaultEditFormUrl').usingCaching().get<ISPList[]>();
             if (!list) return null;
-            let [item] = await this._web.lists.getById(list.Id).items.select('Id').top(1).usingCaching().get<{ Id: number }[]>();
+            let [item] = await this._params.sp.web.lists.getById(list.Id).items.select('Id').top(1).usingCaching().get<{ Id: number }[]>();
             if (!item) return null;
             return {
                 id: item.Id,
-                list: this._web.lists.getById(list.Id),
-                item: this._web.lists.getById(list.Id).items.getById(item.Id),
+                list: this._params.sp.web.lists.getById(list.Id),
+                item: this._params.sp.web.lists.getById(list.Id).items.getById(item.Id),
                 listId: list.Id,
                 defaultEditFormUrl: list.DefaultEditFormUrl,
             };
@@ -141,7 +133,7 @@ export class ProjectDataService {
      * @param {ChecklistData} checklistData Checklist data
      */
     public async getPhases(termSetId: string, checklistData: { [termGuid: string]: ProjectPhaseChecklistData } = {}): Promise<ProjectPhaseModel[]> {
-        let terms = await taxonomy.getDefaultSiteCollectionTermStore()
+        let terms = await this._params.taxonomy.getDefaultSiteCollectionTermStore()
             .getTermSetById(termSetId)
             .terms
             .select('Id', 'Name', 'LocalCustomProperties')
@@ -162,16 +154,14 @@ export class ProjectDataService {
         return propertiesData.fieldValuesText.GtProjectPhase;
     }
 
-
-
     /**
      * Get checklist data
      * 
-     * @param {List} list List
+     * @param {string} listName List name
      */
-    public async getChecklistData(list: List): Promise<{ [termGuid: string]: ProjectPhaseChecklistData }> {
+    public async getChecklistData(listName: string): Promise<{ [termGuid: string]: ProjectPhaseChecklistData }> {
         try {
-            const items = await list
+            const items = await this._params.sp.web.lists.getByTitle(listName)
                 .items
                 .select(
                     'ID',
@@ -197,5 +187,16 @@ export class ProjectDataService {
         } catch (e) {
             return {};
         }
+    }
+
+    /**
+     * Update checklist item
+     * 
+     * @param {string} listName List name
+     * @param {number} id Id
+     * @param {TypedHash} properties Properties 
+     */
+    public async updateChecklistItem(listName: string, id: number, properties: TypedHash<any>) {
+        return await this._params.sp.web.lists.getByTitle(listName).items.getById(id).update(properties);
     }
 };

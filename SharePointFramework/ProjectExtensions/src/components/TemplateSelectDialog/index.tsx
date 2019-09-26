@@ -32,25 +32,15 @@ export default class TemplateSelectDialog extends React.Component<ITemplateSelec
     public render(): React.ReactElement<ITemplateSelectDialogProps> {
         return (
             <BaseDialog
+                version={this.props.version}
                 dialogContentProps={{
                     title: strings.TemplateSelectDialogTitle,
                     subText: strings.TemplateSelectDialogInfoText,
                 }}
                 modalProps={{ isBlocking: true, isDarkOverlay: true }}
                 onDismiss={this.props.onDismiss}
+                onRenderFooter={this._onRenderFooter.bind(this)}
                 containerClassName={styles.templateSelectDialog}>
-                {this._body}
-                {this._footer}
-            </BaseDialog>
-        );
-    }
-
-    /**
-     * Render body
-     */
-    private get _body() {
-        return (
-            <DialogContent className={styles.content}>
                 <div className={styles.templateSelect}>
                     <div className={styles.templateSelectTitle}>{strings.TemplateSelectTitle}</div>
                     <div className={styles.templateSelectDropdown}>
@@ -70,23 +60,21 @@ export default class TemplateSelectDialog extends React.Component<ITemplateSelec
                 <ListContentSection
                     listContentConfig={this.props.data.listContentConfig}
                     onChange={obj => this.setState(obj)} />
-            </DialogContent>
+            </BaseDialog>
         );
     }
 
     /**
-     * Render footrer
+     * On render footrer
      */
-    private get _footer() {
+    private _onRenderFooter() {
         return (
-            <DialogFooter>
-                <div className={styles.submitButton}>
-                    <DefaultButton
-                        text={strings.TemplateSelectDialogSubmitButtonText}
-                        iconProps={{ iconName: 'Settings' }}
-                        onClick={this._onSubmit.bind(this)} />
-                </div>
-            </DialogFooter>
+            <div className={styles.submitButton}>
+                <DefaultButton
+                    text={strings.TemplateSelectDialogSubmitButtonText}
+                    iconProps={{ iconName: 'Settings' }}
+                    onClick={this._onSubmit.bind(this)} />
+            </div>
         );
     }
 

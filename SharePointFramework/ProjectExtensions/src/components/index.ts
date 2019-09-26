@@ -1,13 +1,13 @@
-import ProgressModal, { IProgressModalProps } from './ProgressModal';
-import ErrorModal, { IErrorModalProps } from './ErrorModal';
-import TemplateSelectDialog, { ITemplateSelectDialogProps, ITemplateSelectDialogState } from './TemplateSelectDialog';
-import DocumentTemplateModal from './DocumentTemplateModal';
+import { default as ProgressDialog, IProgressDialogProps } from './ProgressDialog';
+import { default as ErrorDialog, IErrorDialogProps } from './ErrorDialog';
+import { default as TemplateSelectDialog, ITemplateSelectDialogProps, ITemplateSelectDialogState } from './TemplateSelectDialog';
+import { default as DocumentTemplateModal } from './DocumentTemplateModal';
 
 export {
-    ProgressModal,
-    IProgressModalProps,
-    ErrorModal,
-    IErrorModalProps,
+    ProgressDialog,
+    IProgressDialogProps,
+    ErrorDialog,
+    IErrorDialogProps,
     TemplateSelectDialog,
     ITemplateSelectDialogProps,
     ITemplateSelectDialogState,

@@ -4,14 +4,14 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import { getObjectValue } from 'shared/lib/helpers';
-import StatusSectionBase from '../@StatusSectionBase';
-import StatusElement from '../StatusElement';
+import { BaseSection } from '../BaseSection/index';
+import { StatusElement } from '../../StatusElement';
 import { IListSectionData } from './IListSectionData';
 import { IListSectionProps } from './IListSectionProps';
 import { IListSectionState } from './IListSectionState';
 import styles from './ListSection.module.scss';
 
-export default class ListSection extends StatusSectionBase<IListSectionProps, IListSectionState> {
+export class ListSection extends BaseSection<IListSectionProps, IListSectionState> {
   constructor(props: IListSectionProps) {
     super(props);
     this.state = { isLoading: true };
@@ -31,14 +31,14 @@ export default class ListSection extends StatusSectionBase<IListSectionProps, IL
    */
   public render(): React.ReactElement<IListSectionProps> {
     return (
-      <StatusSectionBase {...this.props}>
+      <BaseSection {...this.props}>
         <div className='ms-Grid-row'>
           <div className='ms-Grid-col ms-sm12'>
             <StatusElement {...this.props.headerProps} />
           </div>
           {this._renderList()}
         </div>
-      </StatusSectionBase>
+      </BaseSection>
     );
   }
 

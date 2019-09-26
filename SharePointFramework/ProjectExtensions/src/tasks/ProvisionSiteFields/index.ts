@@ -35,7 +35,7 @@ export default new class ProvisionSiteFields extends BaseTask {
                     this.logInformation(`Site field ${siteField.InternalName} already exists in site`);
                     continue;
                 }
-                onProgress(stringFormat(strings.ProvisionSiteFieldsText, siteField.Title), 'EditCreate');
+                onProgress(strings.ProvisionSiteFieldsText, `Opprettet feltet ${siteField.Title} på området`, 'EditCreate');
                 let fieldXml = ProvisionSiteFields.parseFieldXml(siteField);
                 this.logInformation(`Processing site field ${siteField.Title} (${siteField.InternalName})`, { fieldXml });
                 await params.web.fields.createFieldAsXml(fieldXml);

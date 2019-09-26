@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { IStatusSectionProps } from './IStatusSectionProps';
 import { IStatusSectionState } from './IStatusSectionState';
-import StatusSectionBase from '../@StatusSectionBase';
-import StatusElement from '../StatusElement';
+import { BaseSection } from '../BaseSection';
+import { StatusElement } from '../../StatusElement';
 
-
-export default class StatusSection extends StatusSectionBase<IStatusSectionProps, IStatusSectionState> {
+export class StatusSection extends BaseSection<IStatusSectionProps, IStatusSectionState> {
   constructor(props: IStatusSectionProps) {
     super(props);
     this.state = {};
@@ -16,13 +15,13 @@ export default class StatusSection extends StatusSectionBase<IStatusSectionProps
    */
   public render(): React.ReactElement<IStatusSectionProps> {
     return (
-      <StatusSectionBase {...this.props}>
+      <BaseSection {...this.props}>
         <div className='ms-Grid-row'>
           <div className='ms-Grid-col ms-sm12'>
             <StatusElement {...this.props.headerProps} />
           </div>
         </div>
-      </StatusSectionBase>
+      </BaseSection>
     );
   }
 }

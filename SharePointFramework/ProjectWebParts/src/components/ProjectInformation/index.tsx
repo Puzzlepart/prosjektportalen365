@@ -8,9 +8,7 @@ import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import { HubConfigurationService } from 'shared/lib/services';
-import { SpEntityPortalService } from 'sp-entityportal-service';
 import * as format from 'string-format';
-import * as _ from 'underscore';
 import SPDataAdapter from '../../data';
 import { Actions } from './Actions';
 import { IProjectInformationData } from './IProjectInformationData';
@@ -28,7 +26,6 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     statusReportsCount: 0,
   };
   private _hubConfigurationService: HubConfigurationService;
-  private _spEntityPortalService: SpEntityPortalService;
   private _storage: PnPClientStore;
 
 
@@ -42,17 +39,6 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     this.state = { isLoading: true, data: {} };
     this._storage = new PnPClientStorage().session;
     this._hubConfigurationService = new HubConfigurationService(props.hubSiteUrl);
-    this._spEntityPortalService = new SpEntityPortalService({
-      portalUrl: props.hubSiteUrl,
-      fieldPrefix: 'Gt',
-      ...props.entity,
-    });
-    SPDataAdapter.configure({
-      spEntityPortalService: this._spEntityPortalService,
-      siteId: props.siteId,
-      webUrl: props.webUrl,
-      hubSiteUrl: props.hubSiteUrl,
-    });
   }
 
   public async componentDidMount() {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './BaseDialog.module.scss';
-import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { Dialog, DialogContent, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { IBaseDialogProps } from './IBaseDialogProps';
 
 export class BaseDialog extends React.PureComponent<IBaseDialogProps, {}> {
@@ -25,8 +25,11 @@ export class BaseDialog extends React.PureComponent<IBaseDialogProps, {}> {
                 }}
                 onDismiss={this.props.onDismiss}
                 containerClassName={`${styles.baseDialog} ${this.props.containerClassName}`}>
-                <span className={styles.versionString}>{this.props.versionString}</span>
-                {this.props.children}
+                <span className={styles.version}>v{this.props.version}</span>
+                <DialogContent className={`${styles.content} ${this.props.contentClassName}`}>
+                    {this.props.children}
+                </DialogContent>
+                {this.props.onRenderFooter ? <DialogFooter>{this.props.onRenderFooter()}</DialogFooter> : null}
             </Dialog>
         );
     }

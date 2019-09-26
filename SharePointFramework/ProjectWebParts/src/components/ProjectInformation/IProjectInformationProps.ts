@@ -1,4 +1,3 @@
-import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
 
 export interface IProjectInformationProps {
@@ -6,11 +5,6 @@ export interface IProjectInformationProps {
    * Title of the web part
    */
   title?: string;
-
-  /**
-   * Properties for the enitity residing in the hub site
-   */
-  entity: ISpEntityPortalServiceParams;
 
   /**
    * URL for the hub site
@@ -61,4 +55,9 @@ export interface IProjectInformationProps {
    * URL template for status reports
    */
   statusReportsLinkUrlTemplate?: string;
+
+  /**
+   * Properties for the enitity residing in the hub site
+   */
+  entity: ISpEntityPortalServiceParams;
 }

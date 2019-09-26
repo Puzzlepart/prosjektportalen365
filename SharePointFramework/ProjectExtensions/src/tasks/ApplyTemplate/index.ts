@@ -30,13 +30,13 @@ export default new class ApplyTemplate extends BaseTask {
             let templateSchema = _.omit(params.templateSchema, params.templateExcludeHandlers);
             await provisioner.applyTemplate(templateSchema, null, status => {
                 if (APPLY_TEMPLATE_STATUS_MAP[status]) {
-                    onProgress(APPLY_TEMPLATE_STATUS_MAP[status].text, APPLY_TEMPLATE_STATUS_MAP[status].iconName);
+                    onProgress(stringFormat(strings.ApplyTemplateText, params.data.selectedTemplate.title), APPLY_TEMPLATE_STATUS_MAP[status].text, APPLY_TEMPLATE_STATUS_MAP[status].iconName);
                 }
             });
             this.logInformation('Applying extensions to site', { parameters: params.templateParameters });
             for (let i = 0; i < params.data.selectedExtensions.length; i++) {
                 let extensionSchema = await params.data.selectedExtensions[i].getSchema();
-                onProgress(stringFormat(strings.ApplyExtensionText, params.data.selectedExtensions[i].title), 'ExternalBuild');
+                onProgress(strings.ApplyExtensionText, `Legger på prosjekttilegg ${params.data.selectedExtensions[i].title}`, 'ExternalBuild');
                 await provisioner.applyTemplate(extensionSchema, null);
             }
             return params;

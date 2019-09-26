@@ -5,7 +5,6 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
-import { SpEntityPortalService } from 'sp-entityportal-service';
 import * as format from 'string-format';
 import SPDataAdapter from '../../data';
 import ChangePhaseDialog from './ChangePhaseDialog/index';
@@ -19,9 +18,6 @@ import styles from './ProjectPhases.module.scss';
  * @component ProjectPhases
  */
 export class ProjectPhases extends React.Component<IProjectPhasesProps, IProjectPhasesState> {
-  private _spEntityPortalService: SpEntityPortalService;
-  private _checkList: List;
-
   /**
    * Constructor
    * 
@@ -30,18 +26,6 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
   constructor(props: IProjectPhasesProps) {
     super(props);
     this.state = { isLoading: true, data: {} };
-    this._checkList = sp.web.lists.getByTitle(strings.PhaseChecklistName);
-    this._spEntityPortalService = new SpEntityPortalService({
-      portalUrl: props.hubSiteUrl,
-      fieldPrefix: 'Gt',
-      ...props.entity,
-    });
-    SPDataAdapter.configure({
-      spEntityPortalService: this._spEntityPortalService,
-      siteId: props.siteId,
-      webUrl: props.webUrl,
-      hubSiteUrl: props.hubSiteUrl,
-    });
   }
 
   public async componentDidMount() {
@@ -104,7 +88,6 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
           <ChangePhaseDialog
             activePhase={this.state.data.currentPhase}
             newPhase={this.state.confirmPhase}
-            phaseChecklist={this._checkList}
             onDismiss={_ => this.setState({ confirmPhase: null })}
             onChangePhase={this._onChangePhase.bind(this)} />
         )}
@@ -183,7 +166,7 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
     try {
       const [phaseFieldCtx, checklistData] = await Promise.all([
         SPDataAdapter.getTermFieldContext(this.props.phaseField),
-        SPDataAdapter.project.getChecklistData(this._checkList),
+        SPDataAdapter.project.getChecklistData(strings.PhaseChecklistName),
       ]);
       const [phases, currentPhaseName] = await Promise.all([
         SPDataAdapter.project.getPhases(phaseFieldCtx.termSetId, checklistData),

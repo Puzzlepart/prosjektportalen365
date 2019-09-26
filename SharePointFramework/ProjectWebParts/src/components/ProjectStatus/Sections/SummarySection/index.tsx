@@ -3,12 +3,12 @@ import * as strings from 'ProjectWebPartsStrings';
 import styles from './SummarySection.module.scss';
 import { ISummarySectionProps } from './ISummarySectionProps';
 import { ISummarySectionState } from './ISummarySectionState';
-import StatusSectionBase from '../@StatusSectionBase';
-import StatusElement from '../StatusElement';
+import { BaseSection } from '../BaseSection';
+import { StatusElement } from '../../StatusElement';
 import { ProjectInformation } from 'components/ProjectInformation';
-import { IStatusElementProps } from '../StatusElement/IStatusElementProps';
+import { IStatusElementProps } from '../../StatusElement/IStatusElementProps';
 
-export default class SummarySection extends StatusSectionBase<ISummarySectionProps, ISummarySectionState> {
+export class SummarySection extends BaseSection<ISummarySectionProps, ISummarySectionState> {
   constructor(props: ISummarySectionProps) {
     super(props);
   }
@@ -18,7 +18,7 @@ export default class SummarySection extends StatusSectionBase<ISummarySectionPro
    */
   public render(): React.ReactElement<ISummarySectionProps> {
     return (
-      <StatusSectionBase {...this.props}>
+      <BaseSection {...this.props}>
         <div className={styles.projectInformation}>
           <ProjectInformation
             hubSiteUrl={this.props.hubSiteUrl}
@@ -35,7 +35,7 @@ export default class SummarySection extends StatusSectionBase<ISummarySectionPro
             </div>
           </div>
         </div>
-      </StatusSectionBase>
+      </BaseSection>
     );
   }
 

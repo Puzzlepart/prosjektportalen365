@@ -41,14 +41,7 @@ export default class DocumentTemplateModal extends React.Component<IDocumentTemp
                 isDarkOverlay={true}
                 onDismiss={this.props.onDismiss}
                 containerClassName={styles.documentTemplateModal}>
-                <div className={styles.modalInner}>
-                    <div className={styles.modalTitle}>
-                        {this.props.title}
-                    </div>
-                    <div className={styles.modalBody}>
-                        {this._renderScreen()}
-                    </div>
-                </div>
+                {this._renderScreen()}
             </Modal>
         );
     }
@@ -97,21 +90,21 @@ export default class DocumentTemplateModal extends React.Component<IDocumentTemp
 
     /**
      * On change screen
-     * 
+     *
      * @param {DocumentTemplateModalScreen} screen Screen
-     */
+                */
     private _onChangeScreen(screen: DocumentTemplateModalScreen) {
         this.setState({ screen });
     }
 
     /**
      * On start copy templates
-     * 
-     * @param {TemplateFile[]} templates Templates
-     * @param {string} serverRelativeUrl Server relative url
-     * 
-     * @returns Promise<void>
-     */
+     *
+* @param {TemplateFile[]} templates Templates
+* @param {string} serverRelativeUrl Server relative url
+    *
+* @returns Promise<void>
+        */
     private async _onStartCopy(templates: TemplateFile[], serverRelativeUrl: string): Promise<void> {
         this.setState({ screen: DocumentTemplateModalScreen.CopyProgress, isBlocking: true });
 

@@ -1,8 +1,8 @@
 import { ProjectStatusReport, SectionModel } from 'models';
-import { IProjectStatusData } from '../IProjectStatusData';
-import { IStatusElementProps } from '../StatusElement/IStatusElementProps';
+import { IProjectStatusData } from '../../IProjectStatusData';
+import { IStatusElementProps } from '../../StatusElement/IStatusElementProps';
 
-export interface IStatusSectionBaseProps {
+export interface IBaseSectionProps {
   /**
    * @todo Describe property
    */

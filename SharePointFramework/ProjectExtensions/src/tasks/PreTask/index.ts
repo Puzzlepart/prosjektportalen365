@@ -11,6 +11,7 @@ export default new class PreTask extends BaseTask {
 
     public async execute(params: IBaseTaskParams, _onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
+            params.templateSchema = await params.data.selectedTemplate.getSchema();
             params.spfxJsomContext = await initSpfxJsom(params.context.pageContext.site.absoluteUrl, { loadTaxonomy: true });
             params.spEntityPortalService = new SpEntityPortalService({
                 portalUrl: params.data.hub.url,

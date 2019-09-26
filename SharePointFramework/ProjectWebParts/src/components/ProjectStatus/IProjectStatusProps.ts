@@ -1,4 +1,4 @@
-import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
+import { SpEntityPortalService, ISpEntityPortalServiceParams } from 'sp-entityportal-service';
 
 export interface IProjectStatusProps {
     /**
@@ -10,12 +10,12 @@ export interface IProjectStatusProps {
      * ID of the site
      */
     siteId: string;
-  
+
     /**
      * URL for the web
      */
     webUrl: string;
-  
+
     /**
      * Title for the web
      */
@@ -50,4 +50,9 @@ export interface IProjectStatusProps {
      * Entity parameters used for SpEntityPortalService
      */
     entity: ISpEntityPortalServiceParams;
+
+    /**
+     * 
+     */
+    spEntityPortalService: SpEntityPortalService;
 }

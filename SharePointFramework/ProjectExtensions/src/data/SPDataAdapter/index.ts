@@ -43,6 +43,7 @@ export default new class SPDataAdapter {
             ...this._settings,
             spEntityPortalService: this._spEntityPortalService,
             propertiesListName: strings.ProjectPropertiesListName,
+            sp,
         });
     }
 

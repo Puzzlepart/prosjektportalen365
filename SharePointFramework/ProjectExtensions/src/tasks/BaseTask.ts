@@ -2,7 +2,7 @@ import { IBaseTaskParams } from './IBaseTaskParams';
 import { virtual } from '@microsoft/decorators';
 import { Logger, LogLevel } from '@pnp/logging';
 
-export type OnProgressCallbackFunction = (text: string, iconName: string) => void;
+export type OnProgressCallbackFunction = (text: string, subText: string, iconName: string) => void;
 
 export class BaseTask {
     public params: IBaseTaskParams;
@@ -11,11 +11,11 @@ export class BaseTask {
     /**
      * Execute task
      * 
-     * @param {IBaseTaskParams} params Task parameters
-     * @param {OnProgressCallbackFunction} onProgress Progress function
+     * @param {IBaseTaskParams} _params Task parameters
+     * @param {OnProgressCallbackFunction} _onProgress Progress function
      */
     @virtual
-    public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
+    public async execute(_params: IBaseTaskParams, _onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         return null;
     }
 

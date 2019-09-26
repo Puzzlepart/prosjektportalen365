@@ -30,7 +30,7 @@ export default new class PlannerConfiguration extends BaseTask {
             let bucketName = Object.keys(plannerConfig)[i];
             this.logInformation(`Creating bucket ${bucketName} for plan ${planTitle}`);
             let bucket = await this._createBucket(bucketName, plan.id);
-            onProgress(stringFormat(strings.PlannerConfigurationText, bucketName), 'PlannerLogo');
+            onProgress(strings.PlannerConfigurationText, `Oppretter oppgaver for ${bucketName}`, 'PlannerLogo');
             await this._createTasks(plannerConfig[bucketName], plan.id, bucket);
         }
         return plan;

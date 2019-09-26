@@ -1,11 +1,20 @@
 import { Phase } from 'models';
-import { List } from '@pnp/sp';
 import { IDialogProps } from 'office-ui-fabric-react/lib/Dialog';
 
 export default interface IChangePhaseDialogProps extends IDialogProps {
+    /**
+     * @todo Describe property
+     */
     newPhase: Phase;
+
+    /**
+     * @todo Describe property
+     */
     activePhase: Phase;
-    phaseChecklist: List;
+
+    /**
+     * @todo Describe property
+     */
     onChangePhase: (phase: Phase) => Promise<void>;
 }
 

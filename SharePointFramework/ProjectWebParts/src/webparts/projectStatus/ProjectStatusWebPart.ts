@@ -10,10 +10,11 @@ import * as ReactDom from 'react-dom';
 import { ApplicationInsightsLogListener } from 'shared/lib/logging/ApplicationInsightsLogListener';
 import { SpEntityPortalService } from 'sp-entityportal-service';
 import HubSiteService, { IHubSite } from 'sp-hubsite-service';
+import SPDataAdapter from '../../data';
 
 moment.locale('nb');
 Logger.subscribe(new ConsoleListener());
-Logger.activeLogLevel = LogLevel.Info;
+Logger.activeLogLevel = LogLevel.Warning;
 
 export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProjectStatusProps> {
   private _hubSite: IHubSite;
@@ -28,6 +29,12 @@ export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProject
       fieldPrefix: 'Gt',
       ...this.properties.entity,
     });
+    SPDataAdapter.configure(this.context, {
+      spEntityPortalService: this._spEntityPortalService,
+      siteId: this.context.pageContext.site.id.toString(),
+      webUrl:this.context.pageContext.web.absoluteUrl,
+      hubSiteUrl: this._hubSite.url,
+    });
   }
 
   public render(): void {
@@ -37,6 +44,7 @@ export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProject
       webTitle: this.context.pageContext.web.title,
       currentUserEmail: this.context.pageContext.user.email,
       hubSiteUrl: this._hubSite.url,
+      spEntityPortalService: this._spEntityPortalService,
       ...this.properties,
     });
     ReactDom.render(element, this.domElement);

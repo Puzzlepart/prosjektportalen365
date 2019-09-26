@@ -1,4 +1,6 @@
 declare interface IProjectExtensionsStrings {
+  ProgressDialogSubText: string;
+  ApplyTemplateText: string;
   ApplyExtensionText: string;
   ApplyTemplateClientSidePages: string;
   ApplyTemplateComposedLook: string;
@@ -15,7 +17,7 @@ declare interface IProjectExtensionsStrings {
   CopyPlannerTasksLabel: string;
   CopyProgressLabel: string;
   EditPropertiesLinkText: string;
-  ErrorModalTitle: string;
+  ErrorDialogTitle: string;
   ExtensionsTitle: string;
   GetMoreText: string;
   GetSetupDataErrorMessage: string;
@@ -35,9 +37,9 @@ declare interface IProjectExtensionsStrings {
   PlannerConfigurationErrorMessage: string;
   PlannerConfigurationText: string;
   PreTaskErrorMessage: string;
-  ProgressModalDescription: string;
-  ProgressModalLabel: string;
-  ProgressModalTitle: string;
+  ProgressDialogDescription: string;
+  ProgressDialogLabel: string;
+  ProgressDialogTitle: string;
   ProjectPropertiesListName: string;
   ProvisionSiteFieldsErrorMessage: string;
   ProvisionSiteFieldsText: string;

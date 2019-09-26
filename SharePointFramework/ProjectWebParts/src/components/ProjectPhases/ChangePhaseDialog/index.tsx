@@ -9,6 +9,7 @@ import styles from './ChangePhaseDialog.module.scss';
 import * as strings from 'ProjectWebPartsStrings';
 import * as format from 'string-format';
 import { IPhaseChecklistItem } from 'models';
+import SPDataAdapter from '../../../data';
 
 /**
  * @component ChangePhaseDialog
@@ -65,14 +66,13 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
      */
     private async _nextCheckPointAction(statusValue: string, commentsValue: string, updateStatus: boolean = true): Promise<void> {
         this.setState({ isLoading: true });
-        const { phaseChecklist } = this.props;
         const { checklistItems, currentIdx } = { ...this.state } as IChangePhaseDialogState;
         const currentItem = checklistItems[currentIdx];
         let updatedValues: { [key: string]: string } = { GtComment: commentsValue };
         if (updateStatus) {
             updatedValues.GtChecklistStatus = statusValue;
         }
-        await phaseChecklist.items.getById(currentItem.ID).update(updatedValues);
+        await SPDataAdapter.project.updateChecklistItem(strings.PhaseChecklistName, currentItem.ID, updatedValues);
         checklistItems[currentIdx] = { ...currentItem, ...updatedValues };
         let newState: Partial<IChangePhaseDialogState> = {
             checklistItems,

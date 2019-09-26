@@ -1,6 +1,7 @@
 define([], function () {
   return {
-    ApplyExtensionText: 'Installer prosjekttilegget {0}',
+    ApplyTemplateText: 'Legger på mal {0}',
+    ApplyExtensionText: 'Legger på prosjekttilegg',
     ApplyTemplateClientSidePages: 'Legger inn filer og webdeler',
     ApplyTemplateComposedLook: 'Legger på farge og fonter',
     ApplyTemplateContentTypes: 'Legger inn innholdstyper',
@@ -12,11 +13,11 @@ define([], function () {
     ApplyTemplateWebSettings: 'Legger inn webinstillinger',
     CloseModalText: 'Lukk',
     CopyListDataErrorMessage: 'Det skjedde en feil under kopiering av listeinnhold',
-    CopyListDataText: 'Kopierer listeinnhold fra {0} til {1}',
+    CopyListDataText: 'Kopierer {0} listeelementer fra {1} til {2}',
     CopyPlannerTasksLabel: 'Kopier standardoppgaver til Planner',
     CopyProgressLabel: 'Kopierer valgt(e) dokument(er) til prosjektområdet...',
     EditPropertiesLinkText: 'Du kan allerede nå<A HREF=\'{0}\' TARGET=\'_BLANK\'>redigere egenskaper</A> for prosjektet (åpnes i ny fane).',
-    ErrorModalTitle: 'Noe er galt',
+    ErrorDialogTitle: 'Noe er galt',
     ExtensionsTitle: 'Velg prosjekttillegg',
     GetMoreText: 'Hent flere',
     GetSetupDataErrorMessage: 'Det skjedde en feil',
@@ -34,14 +35,14 @@ define([], function () {
     OnStartCopyText: 'Start kopiering',
     OnSubmitSelectionText: 'Kopier valgt(e) dokument(er) til prosjektområdet',
     PlannerConfigurationErrorMessage: 'Det skjedde en feil under konfigurering av området',
-    PlannerConfigurationText: 'Oppretter standardoppgaver i Planner for {0}',
+    PlannerConfigurationText: 'Oppretter standardoppgaver i Planner',
     PreTaskErrorMessage: 'Det skjedde en feil',
-    ProgressModalDescription: 'Vennligst vent. Ikke lukk nettleservinduet.',
-    ProgressModalLabel: 'Klargjør prosjektområdet',
-    ProgressModalTitle: 'Setter opp prosjektområdet',
+    ProgressDialogDescription: 'Vennligst vent. Ikke lukk nettleservinduet.',
+    ProgressDialogLabel: 'Klargjør prosjektområdet',
+    ProgressDialogTitle: 'Setter opp prosjektområdet',
     ProjectPropertiesListName: 'Prosjektegenskaper',
     ProvisionSiteFieldsErrorMessage: 'Det skjedde en feil under provisjonering av områdekolonner',
-    ProvisionSiteFieldsText: 'Opprettet feltet {0} på området',
+    ProvisionSiteFieldsText: 'Oppretter områdekolonner',
     SetTaxonomyFieldsErrorMessage: 'Det skjedde en feil under konfigurering av taksonomifelter',
     SettingsTitle: 'Innstillinger',
     SetupProjectInformationErrorMessage: 'Det skjedde en feil under initialisering av prosjektegenskaper',
@@ -55,6 +56,7 @@ define([], function () {
     TemplateSelectDialogSubmitButtonText: 'Sett opp området',
     TemplateSelectDialogTitle: 'Oppsett av prosjektområde',
     TemplateSelectTitle: 'Velg prosjektmal',
-    TitleLabel: 'Tittel'
+    TitleLabel: 'Tittel',
+    ProgressDialogSubText: 'Vennligst vent. Ikke lukk nettleservinduet.'
   }
 });

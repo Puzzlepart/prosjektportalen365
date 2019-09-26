@@ -1,4 +1,4 @@
-import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
+import {  ISpEntityPortalServiceParams } from 'sp-entityportal-service';
 
 
 export interface IProjectPhasesProps {
