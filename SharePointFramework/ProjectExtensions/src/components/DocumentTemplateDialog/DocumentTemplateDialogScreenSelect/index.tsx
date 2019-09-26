@@ -9,10 +9,6 @@ import { DocumentTemplateDialogScreenSelectDefaultProps, IDocumentTemplateDialog
 export class DocumentTemplateDialogScreenSelect extends React.Component<IDocumentTemplateDialogScreenSelectProps, {}> {
     public static defaultProps = DocumentTemplateDialogScreenSelectDefaultProps;
 
-    public componentDidMount() {
-        console.log(stringFormat(strings.DocumentTemplateDialogScreenSelectInfoText, this.props.templateLibrary.title, this.props.templateLibrary.url), this.props.templateLibrary);
-    }
-
     public render(): React.ReactElement<IDocumentTemplateDialogScreenSelectProps> {
         return (
             <>
