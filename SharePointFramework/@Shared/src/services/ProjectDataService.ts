@@ -67,7 +67,7 @@ export class ProjectDataService {
                 propertyItemContext
                     .list
                     .fields
-                    .select('Id', 'InternalName', 'Title', 'TypeAsString', 'SchemaXml', 'TextField')
+                    .select('Id', 'InternalName', 'Title', 'Description', 'TypeAsString', 'SchemaXml', 'TextField')
                     .filter(`substringof('Gt', InternalName)`)
                     .usingCaching()
                     .get(),

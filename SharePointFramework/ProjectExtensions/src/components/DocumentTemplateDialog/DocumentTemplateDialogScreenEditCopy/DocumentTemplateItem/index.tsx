@@ -15,13 +15,14 @@ export class DocumentTemplateItem extends React.Component<IDocumentTemplateItemP
 
     constructor(props: IDocumentTemplateItemProps) {
         super(props);
-        this.state = { isExpanded: true, errorMessages: {} };
+        this.state = { isExpanded: false };
     }
 
     public async componentDidMount() {
         let errorMessage = await SPDataAdapter.isFilenameValid(this.props.folderServerRelativeUrl, this.props.model.name);
         if (errorMessage) {
             this.props.onInputChanged(this.props.model.id, {}, errorMessage);
+            this.setState({ isExpanded: true });
         }
     }
 

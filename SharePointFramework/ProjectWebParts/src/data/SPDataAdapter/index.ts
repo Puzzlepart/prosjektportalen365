@@ -5,7 +5,6 @@ import { taxonomy } from '@pnp/sp-taxonomy';
 import * as strings from 'ProjectWebPartsStrings';
 import { SPDataAdapterBase } from 'shared/lib/data';
 import { ProjectDataService } from 'shared/lib/services';
-import * as _ from 'underscore';
 import { ISPDataAdapterSettings } from './ISPDataAdapterSettings';
 
 export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterSettings> {
@@ -33,24 +32,27 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterS
     /**
      * Sync property item from site to associated hub
      * 
-     * @param {any[]} fields Fields
      * @param {TypedHash} fieldValues Field values for the properties item
      * @param {TypedHash} fieldValuesText Field values in text format for the properties item
      * @param {void} progressFunc Progress function
      */
-    public async syncPropertyItemToHub(fields: any[], fieldValues: TypedHash<any>, fieldValuesText: TypedHash<string>, progressFunc: ({ description: string }) => void): Promise<ItemUpdateResult> {
+    public async syncPropertyItemToHub(fieldValues: TypedHash<any>, fieldValuesText: TypedHash<string>, progressFunc: ({ description: string }) => void): Promise<ItemUpdateResult> {
         try {
             progressFunc({ description: strings.SyncProjectPropertiesValuesProgressDescription });
-            const fieldToSync = fields.filter(fld => fld.InternalName.indexOf('Gt') === 0);
-            const properties = _.omit(fieldToSync.reduce((obj, fld) => {
-                let fieldValue = fieldValuesText[fld.InternalName];
-                if (stringIsNullOrEmpty(fieldValue)) return obj;
+            const fields = await this.spEntityPortalService.getEntityFields();
+            const fieldToSync = fields.filter(fld => {
+                if (fld.SchemaXml.indexOf('ShowInEditForm="FALSE"') !== -1) return false;
+                if (fld.InternalName.indexOf('Gt') !== 0) return false;
+                return true;
+            });
+            const properties = fieldToSync.reduce((obj, fld) => {
+                let fldValue = fieldValues[fld.InternalName];
+                let fldValueTxt = fieldValuesText[fld.InternalName];
+                if (stringIsNullOrEmpty(fldValueTxt)) return obj;
                 switch (fld.TypeAsString) {
                     case 'TaxonomyFieldType': case 'TaxonomyFieldTypeMulti': {
                         let [textField] = fields.filter(f => f.Id === fld.TextField);
-                        if (textField) {
-                            obj[textField.InternalName] = fieldValuesText[textField.InternalName];
-                        }
+                        if (textField) obj[textField.InternalName] = fieldValuesText[textField.InternalName];
                     }
                         break;
                     case 'User': {
@@ -58,20 +60,20 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterS
                     }
                         break;
                     case 'DateTime': {
-                        obj[fld.InternalName] = new Date(fieldValues[fld.InternalName]);
+                        obj[fld.InternalName] = new Date(fldValue);
                     }
                         break;
                     case 'Currency': {
-                        obj[fld.InternalName] = fieldValues[fld.InternalName];
+                        obj[fld.InternalName] = fldValue;
                     }
                         break;
                     default: {
-                        obj[fld.InternalName] = fieldValue;
+                        obj[fld.InternalName] = fldValueTxt;
                     }
                         break;
                 }
                 return obj;
-            }, {}), ['GtSiteId', 'GtGroupId', 'GtSiteUrl']);
+            }, {});
             return await this.spEntityPortalService.updateEntityItem(this.settings.siteId, properties);
         } catch (error) {
             throw error;

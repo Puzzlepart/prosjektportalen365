@@ -1,7 +1,7 @@
 import { PageContext } from '@microsoft/sp-page-context';
 import { default as MSGraphHelper } from 'msgraph-helper';
 import * as strings from 'ProjectExtensionsStrings';
-import * as stringFormat from 'string-format';
+import * as formatString from 'string-format';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { BaseTaskError } from '../BaseTaskError';
 import { IBaseTaskParams } from '../IBaseTaskParams';

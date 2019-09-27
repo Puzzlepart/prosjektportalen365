@@ -5,7 +5,7 @@ import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
-import * as stringFormat from 'string-format';
+import * as formatString from 'string-format';
 import { TemplateFile } from '../../models/index';
 import { BaseDialog } from '../@BaseDialog/index';
 import { InfoMessage } from '../InfoMessage';
@@ -68,7 +68,7 @@ export class DocumentTemplateDialog extends React.Component<IDocumentTemplateDia
                 return <ProgressIndicator label={strings.CopyProgressLabel} {...this.state.progress} />;
             }
             case DocumentTemplateDialogScreen.Summary: {
-                return <InfoMessage type={MessageBarType.success} text={stringFormat(strings.SummaryText, this.state.templatesAdded.length)} />;
+                return <InfoMessage type={MessageBarType.success} text={formatString(strings.SummaryText, this.state.templatesAdded.length)} />;
             }
         }
     }

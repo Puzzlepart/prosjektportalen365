@@ -1,12 +1,13 @@
-import * as React from 'react';
+import { Web } from '@pnp/sp';
+import { ProjectInformation } from 'components/ProjectInformation';
 import * as strings from 'ProjectWebPartsStrings';
-import styles from './SummarySection.module.scss';
+import * as React from 'react';
+import { StatusElement } from '../../StatusElement';
+import { IStatusElementProps } from '../../StatusElement/IStatusElementProps';
+import { BaseSection } from '../BaseSection';
 import { ISummarySectionProps } from './ISummarySectionProps';
 import { ISummarySectionState } from './ISummarySectionState';
-import { BaseSection } from '../BaseSection';
-import { StatusElement } from '../../StatusElement';
-import { ProjectInformation } from 'components/ProjectInformation';
-import { IStatusElementProps } from '../../StatusElement/IStatusElementProps';
+import styles from './SummarySection.module.scss';
 
 export class SummarySection extends BaseSection<ISummarySectionProps, ISummarySectionState> {
   constructor(props: ISummarySectionProps) {
@@ -21,7 +22,7 @@ export class SummarySection extends BaseSection<ISummarySectionProps, ISummarySe
       <BaseSection {...this.props}>
         <div className={styles.projectInformation}>
           <ProjectInformation
-            hubSiteUrl={this.props.hubSiteUrl}
+            hubSite={{ web: new Web(this.props.hubSiteUrl), url: this.props.hubSiteUrl }}
             siteId={this.props.siteId}
             webUrl={this.props.webUrl}
             filterField='GtShowFieldProjectStatus'

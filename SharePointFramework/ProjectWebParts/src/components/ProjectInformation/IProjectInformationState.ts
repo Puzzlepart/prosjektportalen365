@@ -1,5 +1,5 @@
 import { IProjectInformationData } from './IProjectInformationData';
-import { ProjectPropertyModel } from './ProjectProperty';
+import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty/index';
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import { IUserMessageProps } from './UserMessage';
 

@@ -3,27 +3,27 @@ import { IEntityField } from 'sp-entityportal-service';
 
 export interface IGetPropertiesData {    
     /**
-     * @todo Describe property
+     * EditForm url
      */
     editFormUrl?: string;
     
     /**
-     * @todo Describe property
+     * Version history url
      */
     versionHistoryUrl?: string;
     
     /**
-     * @todo Describe property
+     * Field values
      */
     fieldValues?: TypedHash<any>;
     
     /**
-     * @todo Describe property
+     * Field values as text
      */
     fieldValuesText?: TypedHash<string>;
     
     /**
-     * @todo Describe property
+     * Entity fields
      */
     fields?: IEntityField[];
 }

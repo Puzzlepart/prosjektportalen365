@@ -1,6 +1,6 @@
 import { sp, SPRest, Web, SPConfiguration } from '@pnp/sp';
 import '@pnp/polyfill-ie11';
-import { HubConfigurationService } from '../services';
+import { HubConfigurationService } from '../../services';
 import { SpEntityPortalService } from 'sp-entityportal-service';
 import { ISPDataAdapterBaseSettings } from './ISPDataAdapterBaseSettings';
 

@@ -67,6 +67,8 @@ declare interface IProjectWebPartsStrings {
   SyncProjectPropertiesListProgressDescription: string;
   SyncProjectPropertiesValuesProgressDescription: string;
   ProjectStatusDataErrorText: string;
+  ShowFieldExternalUsers: string;
+  ExternalUsersConfigText: string;
 }
 
 declare module 'ProjectWebPartsStrings' {

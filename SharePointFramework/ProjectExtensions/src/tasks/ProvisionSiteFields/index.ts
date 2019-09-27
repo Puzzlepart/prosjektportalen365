@@ -1,5 +1,5 @@
 import * as strings from 'ProjectExtensionsStrings';
-import * as stringFormat from 'string-format';
+import * as formatString from 'string-format';
 import { DOMParser } from 'xmldom';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { BaseTaskError } from '../BaseTaskError';

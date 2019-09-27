@@ -1,7 +1,7 @@
 import { override } from '@microsoft/decorators';
 import * as strings from 'ProjectExtensionsStrings';
 import { Web, WebProvisioner } from 'sp-js-provisioning';
-import * as stringFormat from 'string-format';
+import * as formatString from 'string-format';
 import * as _ from 'underscore';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { BaseTaskError } from '../BaseTaskError';
@@ -30,7 +30,7 @@ export default new class ApplyTemplate extends BaseTask {
             let templateSchema = _.omit(params.templateSchema, params.templateExcludeHandlers);
             await provisioner.applyTemplate(templateSchema, null, status => {
                 if (APPLY_TEMPLATE_STATUS_MAP[status]) {
-                    onProgress(stringFormat(strings.ApplyTemplateText, params.data.selectedTemplate.title), APPLY_TEMPLATE_STATUS_MAP[status].text, APPLY_TEMPLATE_STATUS_MAP[status].iconName);
+                    onProgress(formatString(strings.ApplyTemplateText, params.data.selectedTemplate.title), APPLY_TEMPLATE_STATUS_MAP[status].text, APPLY_TEMPLATE_STATUS_MAP[status].iconName);
                 }
             });
             this.logInformation('Applying extensions to site', { parameters: params.templateParameters });

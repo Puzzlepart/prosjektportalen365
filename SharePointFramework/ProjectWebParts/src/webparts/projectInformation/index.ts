@@ -1,4 +1,4 @@
-import { BaseClientSideWebPart, IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField } from '@microsoft/sp-webpart-base';
+import { BaseClientSideWebPart, IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField, } from '@microsoft/sp-webpart-base';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { sp } from '@pnp/sp';
 import { IProjectInformationProps, ProjectInformation } from 'components/ProjectInformation';
@@ -7,7 +7,7 @@ import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { ApplicationInsightsLogListener } from 'shared/lib/logging/ApplicationInsightsLogListener';
 import HubSiteService, { IHubSite } from 'sp-hubsite-service';
-import SPDataAdapter from '../../data/index';
+import SPDataAdapter from '../../data';
 
 Logger.subscribe(new ConsoleListener());
 Logger.activeLogLevel = LogLevel.Warning;
@@ -31,16 +31,24 @@ export default class ProjectInformationWebPart extends BaseClientSideWebPart<IPr
       ProjectInformation,
       {
         title: this.properties.title || this.title,
-        hubSiteUrl: this._hubSite.url,
+        hubSite: this._hubSite,
         siteId: this.context.pageContext.site.id.toString(),
         webUrl: this.context.pageContext.web.absoluteUrl,
         isSiteAdmin: this.context.pageContext.legacyPageContext.isSiteAdmin,
         filterField: 'GtShowFieldFrontpage',
+        displayMode: this.displayMode,
+        onFieldExternalChanged: this._onFieldExternalChanged.bind(this),
         ...this.properties,
       }
     );
 
     ReactDom.render(element, this.domElement);
+  }
+
+  private _onFieldExternalChanged(fieldName: string, checked: boolean) {
+    console.log('ProjectInformationWebPart._onFieldExternalChanged', fieldName, checked);
+    let showFieldExternal = { ... this.properties.showFieldExternal || {}, [fieldName]: checked };
+    this.properties.showFieldExternal = showFieldExternal;
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -70,7 +78,7 @@ export default class ProjectInformationWebPart extends BaseClientSideWebPart<IPr
               ],
             },
           ]
-        }
+        },
       ]
     };
   }

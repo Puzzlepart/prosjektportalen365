@@ -1,5 +1,4 @@
 import { CamlQuery, List, Web } from '@pnp/sp';
-import { IHubSite } from 'sp-hubsite-service';
 import { default as initSpfxJsom, ExecuteJsomQuery } from 'spfx-jsom';
 import { parseFieldXml } from '../helpers/parseFieldXml';
 import { ProjectColumnConfig, SPProjectColumnConfigItem, SPProjectColumnItem } from '../models';

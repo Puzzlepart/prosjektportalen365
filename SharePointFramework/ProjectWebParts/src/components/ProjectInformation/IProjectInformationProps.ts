@@ -1,4 +1,6 @@
-import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
+import { DisplayMode } from '@microsoft/sp-core-library';
+import { TypedHash } from '@pnp/common';
+import { IHubSite } from 'sp-hubsite-service';
 
 export interface IProjectInformationProps {
   /**
@@ -7,9 +9,9 @@ export interface IProjectInformationProps {
   title?: string;
 
   /**
-   * URL for the hub site
+   * Hub site
    */
-  hubSiteUrl: string;
+  hubSite: IHubSite;
 
   /**
    * ID of the site
@@ -55,4 +57,19 @@ export interface IProjectInformationProps {
    * URL template for status reports
    */
   statusReportsLinkUrlTemplate?: string;
+
+  /**
+   * Display mode
+   */
+  displayMode?: DisplayMode;
+
+  /**
+   * @todo Describe property
+   */
+  onFieldExternalChanged?: (fieldName: string, checked: boolean) => void;
+
+  /**
+   * @todo Describe property
+   */
+  showFieldExternal?: TypedHash<boolean>;
 }

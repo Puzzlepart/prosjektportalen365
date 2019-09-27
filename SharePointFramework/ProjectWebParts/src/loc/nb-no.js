@@ -67,6 +67,8 @@ define([], function () {
     SyncProjectPropertiesErrorText: 'Det skjedde feil under synkronisering',
     SyncProjectPropertiesListProgressDescription: 'Oppdaterer Prosjektegenskaper-listen',
     SyncProjectPropertiesValuesProgressDescription: 'Synkroniserer egenskaper',
-    ProjectStatusDataErrorText: 'Ingen tilgang. Du har ikke tillatelse til å se statusrapporter.'
+    ProjectStatusDataErrorText: 'Ingen tilgang. Du har ikke tillatelse til å se statusrapporter.',
+    ShowFieldExternalUsers: 'Synlig for eksterne brukere',
+    ExternalUsersConfigText: 'Konfigurasjon for eksterne brukere'
   }
 });

@@ -1,6 +1,5 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
 import { dateAdd, PnPClientStorage, PnPClientStore, stringIsNullOrEmpty, TypedHash } from '@pnp/common';
-import { Web } from '@pnp/sp';
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator';
@@ -16,7 +15,8 @@ import { IProjectInformationProps } from './IProjectInformationProps';
 import { IProjectInformationState } from './IProjectInformationState';
 import { ProgressBar } from './ProgressBar';
 import styles from './ProjectInformation.module.scss';
-import { ProjectProperty, ProjectPropertyModel } from './ProjectProperty';
+import { ProjectProperties } from './ProjectProperties';
+import { ProjectProperty, ProjectPropertyModel } from './ProjectProperties/ProjectProperty/index';
 import { StatusReports } from './StatusReports';
 import { UserMessage } from './UserMessage';
 
@@ -28,7 +28,6 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   private _hubConfigurationService: HubConfigurationService;
   private _storage: PnPClientStore;
 
-
   /**
    * Constructor
    * 
@@ -38,7 +37,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     super(props);
     this.state = { isLoading: true, data: {} };
     this._storage = new PnPClientStorage().session;
-    this._hubConfigurationService = new HubConfigurationService(props.hubSiteUrl);
+    this._hubConfigurationService = new HubConfigurationService(props.hubSite.web);
   }
 
   public async componentDidMount() {
@@ -54,10 +53,12 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     return (
       <div className={styles.projectInformation} >
         <div className={styles.container}>
-          <WebPartTitle
-            displayMode={DisplayMode.Read}
-            title={this.props.title}
-            updateProperty={() => { }} />
+          <div hidden={this.props.displayMode === DisplayMode.Edit}>
+            <WebPartTitle
+              displayMode={DisplayMode.Read}
+              title={this.props.title}
+              updateProperty={() => { }} />
+          </div>
           {this._contents}
         </div>
       </div>
@@ -79,7 +80,12 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
 
     return (
       <>
-        {this._renderProperties()}
+        <ProjectProperties
+          title={this.props.title}
+          properties={this.state.properties}
+          displayMode={this.props.displayMode}
+          onFieldExternalChanged={this.props.onFieldExternalChanged}
+          showFieldExternal={this.props.showFieldExternal} />
         <StatusReports
           title={this.props.statusReportsHeader}
           statusReports={statusReports}
@@ -90,7 +96,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
         <UserMessage className={styles.message} {...this.state.message} />
         <Actions
           className={styles.actions}
-          hidden={this.props.hideActions || !this.props.isSiteAdmin}
+          hidden={this.props.hideActions || !this.props.isSiteAdmin || this.props.displayMode === DisplayMode.Edit}
           versionHistoryUrl={versionHistoryUrl}
           editFormUrl={editFormUrl}
           onSyncProperties={this._onSyncProperties.bind(this)} />
@@ -113,32 +119,15 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   }
 
   /**
-   * Render properties
-   */
-  private _renderProperties() {
-    if (!this.state.properties) return null;
-    const propertiesToRender = this.state.properties.filter(p => !p.empty && !p.visible);
-    if (propertiesToRender.length === 0) {
-      return <MessageBar>{strings.NoPropertiesMessage}</MessageBar>;
-    }
-    return (
-      <div>
-        {propertiesToRender.map((model, key) => <ProjectProperty {...{ key, model }} />)}
-      </div>
-    );
-  }
-
-  /**
    * On sync properties
    */
   private async _onSyncProperties() {
     this.setState({ progress: { label: strings.SyncProjectPropertiesProgressLabel, description: '' } });
-    const { fields, fieldValues, fieldValuesText } = this.state.data;
     const progressFunc = (props: IProgressIndicatorProps) => this.setState({ progress: { label: strings.SyncProjectPropertiesProgressLabel, ...props } });
     try {
       progressFunc({ description: strings.SyncProjectPropertiesListProgressDescription });
       await this._hubConfigurationService.syncList(this.props.webUrl, strings.ProjectPropertiesListName, '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C');
-      await SPDataAdapter.syncPropertyItemToHub(fields, fieldValues, fieldValuesText, progressFunc);
+      await SPDataAdapter.syncPropertyItemToHub(this.state.data.fieldValues, this.state.data.fieldValuesText, progressFunc);
       this._addMessage(strings.SyncProjectPropertiesSuccessText, MessageBarType.success);
     } catch (error) {
       this._addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning);
@@ -170,7 +159,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   private _transformProperties(fieldValuesText: TypedHash<any>, data: IProjectInformationData) {
     const fieldNames: string[] = Object.keys(fieldValuesText).filter(fieldName => {
       let [field] = data.fields.filter(fld => fld.InternalName === fieldName);
-      if (field && data.columnConfig.length === 0) return true;
+      if (field && data.columnConfig.length === 0 && this.props.showFieldExternal[fieldName]) return true;
       let [column] = data.columnConfig.filter(c => c.GtInternalName === fieldName);
       if (field && column) {
         return this.props.filterField ? column[this.props.filterField] : true;
@@ -201,7 +190,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
       };
 
       if (!stringIsNullOrEmpty(this.props.statusReportsListName) && this.props.statusReportsCount > 0) {
-        const statusReportsList = new Web(this.props.hubSiteUrl).lists.getByTitle(this.props.statusReportsListName);
+        const statusReportsList = this.props.hubSite.web.lists.getByTitle(this.props.statusReportsListName);
         data.statusReports = await statusReportsList
           .items
           .filter(`GtSiteId eq '${this.props.siteId}'`)

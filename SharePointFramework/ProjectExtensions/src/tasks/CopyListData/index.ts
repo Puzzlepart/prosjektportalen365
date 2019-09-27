@@ -1,6 +1,7 @@
 import { sp, Web } from '@pnp/sp';
+import { TypedHash } from '@pnp/common';
 import * as strings from 'ProjectExtensionsStrings';
-import * as stringFormat from 'string-format';
+import * as formatString from 'string-format';
 import { ListContentConfig } from '../../models';
 import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
 import { BaseTaskError } from '../BaseTaskError';
@@ -8,7 +9,7 @@ import { IBaseTaskParams } from '../IBaseTaskParams';
 
 export default new class CopyListData extends BaseTask {
     public taskName = 'CopyListData';
-    private _progressText;
+    private _progressText: string;
 
     /**
      * Execute CopyListData
@@ -20,7 +21,8 @@ export default new class CopyListData extends BaseTask {
         try {
             for (let i = 0; i < params.data.selectedListConfig.length; i++) {
                 const listConfig = params.data.selectedListConfig[i];
-                onProgress(stringFormat(strings.CopyListDataText, listConfig.sourceList, listConfig.destinationLibrary || listConfig.destinationList), '', 'List');
+                this._progressText = formatString(strings.CopyListDataText, listConfig.sourceList, listConfig.destinationLibrary || listConfig.destinationList);
+                onProgress(this._progressText, '', 'List');
                 await this._processListItems(listConfig, onProgress);
             }
             return params;
@@ -44,9 +46,8 @@ export default new class CopyListData extends BaseTask {
                 (listConfig.web as Web).lists.getByTitle(listConfig.sourceList).fields.select('Id', 'InternalName', 'TypeAsString', 'TextField').get<Array<{ Id: string, InternalName: string, TypeAsString: string, TextField: string }>>(),
                 destList.select('ListItemEntityTypeFullName').get<{ ListItemEntityTypeFullName: string }>(),
             ]);
-            onProgress(stringFormat(strings.CopyListDataText, sourceItems.length, listConfig.sourceList, listConfig.destinationLibrary || listConfig.destinationList), '', 'List');
             for (let i = 0; i < sourceItems.length; i++) {
-                let properties = listConfig.fields.reduce((obj: { [x: string]: any; }, fieldName: string) => {
+                let properties = listConfig.fields.reduce((obj: TypedHash<any>, fieldName: string) => {
                     let fieldValue = sourceItems[i][fieldName];
                     if (fieldValue) {
                         const [field] = sourceFields.filter(fld => fld.InternalName === fieldName);
@@ -71,6 +72,7 @@ export default new class CopyListData extends BaseTask {
                     return obj;
                 }, {});
                 this.logInformation(`Processing list item ${i + 1}`, { properties, TaxCatchAll: sourceItems[i].TaxCatchAll });
+                onProgress(this._progressText, `Kopierer listeelement ${i + 1} av ${sourceItems.length}`, 'List');
                 await destList.items.add(properties, destListProps.ListItemEntityTypeFullName);
             }
         } catch (error) {
