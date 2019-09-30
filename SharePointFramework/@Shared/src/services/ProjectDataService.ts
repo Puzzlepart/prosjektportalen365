@@ -2,10 +2,42 @@ import { dateAdd, TypedHash } from '@pnp/common';
 import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
 import { SPConfiguration, SPRest } from '@pnp/sp';
 import { ITaxonomySession } from '@pnp/sp-taxonomy';
-import { SpEntityPortalService } from 'sp-entityportal-service';
+import { SpEntityPortalService, IEntityField } from 'sp-entityportal-service';
 import { makeUrlAbsolute } from '../helpers/makeUrlAbsolute';
 import { ISPList } from '../interfaces/ISPList';
 import { IProjectPhaseChecklistItem, ProjectPhaseChecklistData, ProjectPhaseModel } from '../models';
+
+export interface IGetPropertiesData {
+     /**
+     * EditForm url
+     */
+    editFormUrl?: string;
+    
+    /**
+     * Version history url
+     */
+    versionHistoryUrl?: string;
+    
+    /**
+     * Field values
+     */
+    fieldValues?: TypedHash<any>;
+    
+    /**
+     * Field values as text
+     */
+    fieldValuesText?: TypedHash<string>;
+    
+    /**
+     * Entity fields
+     */
+    fields?: IEntityField[];
+
+    /**
+     * Has local list
+     */
+    localList?: boolean;
+}
 
 export interface IProjectDataServiceParams {
     webUrl: string;
@@ -105,11 +137,11 @@ export class ProjectDataService {
     /**
      * Get properties data
      */
-    public async getPropertiesData() {
+    public async getPropertiesData(): Promise<IGetPropertiesData> {
         let propertyItem = await this._getPropertyItem();
         // tslint:disable-next-line: early-exit
         if (propertyItem) {
-            return propertyItem;
+            return { ...propertyItem, localList: true };
         } else {
             let entity = await this._params.spEntityPortalService.configure(this.spConfiguration).fetchEntity(this._params.siteId, this._params.webUrl);
             return {

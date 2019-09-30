@@ -1,4 +1,5 @@
 declare interface IProjectWebPartsStrings {
+  NoLocalPropertiesListWarningText: string;
   NavigateToSourceUrlText: string;
   ProjectStatusGroupName: string;
   StatusReportsHeaderLabel: string;

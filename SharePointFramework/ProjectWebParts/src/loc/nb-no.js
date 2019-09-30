@@ -70,6 +70,7 @@ define([], function () {
     ProjectStatusDataErrorText: 'Ingen tilgang. Du har ikke tillatelse til å se statusrapporter.',
     ShowFieldExternalUsers: 'Synlig for eksterne brukere',
     ExternalUsersConfigText: 'Konfigurasjon',
-    ExternalUsersConfigInfoText: 'Her konfigueres felter/kolonner som skal vises for eksterne brukere/gjester.<br /><br />Felter/kolonner som skal vises for brukere i organisasjonen konfigureres på porteføljeområdet av administrator.'
+    ExternalUsersConfigInfoText: 'Her konfigueres felter/kolonner som skal vises for eksterne brukere/gjester.<br /><br />Felter/kolonner som skal vises for brukere i organisasjonen konfigureres på porteføljeområdet av administrator.',
+    NoLocalPropertiesListWarningText: 'Du må synkronisere prosjektegenskapene før du kan konfigurere felter/kolonner som skal vises for eksterne brukere/gjester.<br /><br />Det gjøres ved å klikke på knappen \'Synkroniser prosjektegenskaper\'.'
   }
 });

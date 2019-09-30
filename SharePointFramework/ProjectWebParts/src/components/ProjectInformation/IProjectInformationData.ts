@@ -1,5 +1,5 @@
-import { IGetPropertiesData } from 'data/SPDataAdapter/IGetPropertiesData';
 import { SPProjectColumnItem } from 'shared/lib/models/SPProjectColumnItem';
+import { IGetPropertiesData } from 'shared/lib/services/ProjectDataService';
 import { IEntityField } from 'sp-entityportal-service';
 
 export interface IProjectInformationData extends IGetPropertiesData {

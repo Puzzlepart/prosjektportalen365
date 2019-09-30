@@ -32,4 +32,9 @@ export interface IProjectPropertiesProps {
      * @todo Describe property
      */
     showFieldExternal?: TypedHash<boolean>;
+
+    /**
+     * @todo Describe property
+     */
+    localList?: boolean;
 }

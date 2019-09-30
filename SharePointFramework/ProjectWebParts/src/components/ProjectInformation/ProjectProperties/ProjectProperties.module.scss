@@ -1,5 +1,14 @@
 .projectProperties {
   .pivotItem {
     margin: 10px 0 0 0;
+
+    .pivotItemUserMessage {
+      margin: 0 0 25px 0;
+
+      p {
+        margin: 0;
+        padding: 0;
+      }
+    }
   }
 }

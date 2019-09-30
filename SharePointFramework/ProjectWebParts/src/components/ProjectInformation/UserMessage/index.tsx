@@ -6,12 +6,12 @@ import styles from './UserMessage.module.scss';
 import * as ReactMarkdown from 'react-markdown/with-html';
 
 // tslint:disable-next-line: naming-convention
-export const UserMessage = (props: IUserMessageProps) => {
-    if (stringIsNullOrEmpty(props.text)) return null;
+export const UserMessage = ({ className = styles.userMessage, text, messageBarType, style, hidden }: IUserMessageProps) => {
+    if (stringIsNullOrEmpty(text)) return null;
     return (
-        <div className={styles.userMessage} style={props.style}>
-            <MessageBar messageBarType={props.messageBarType}>
-                <ReactMarkdown escapeHtml={false} source={props.text} />
+        <div className={className} style={style} hidden={hidden}>
+            <MessageBar messageBarType={messageBarType}>
+                <ReactMarkdown escapeHtml={false} source={text} />
             </MessageBar>
         </div>
     );
