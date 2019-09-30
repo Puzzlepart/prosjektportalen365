@@ -3,7 +3,7 @@ import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
-import { UserMessage } from '../UserMessage';
+import { UserMessage } from '../../UserMessage';
 import { IProjectPropertiesProps } from './IProjectPropertiesProps';
 import styles from './ProjectProperties.module.scss';
 import { ProjectProperty } from './ProjectProperty';

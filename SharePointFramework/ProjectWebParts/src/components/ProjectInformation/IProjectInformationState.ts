@@ -1,7 +1,7 @@
 import { IProjectInformationData } from './IProjectInformationData';
 import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty/index';
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator';
-import { IUserMessageProps } from './UserMessage';
+import { IUserMessageProps } from '../UserMessage/index';
 
 export interface IProjectInformationState {
   /**
@@ -23,6 +23,11 @@ export interface IProjectInformationState {
    * Error object
    */
   error?: any;
+
+  /**
+   * Is the component hidden
+   */
+  hidden?: boolean;
 
   /**
    * Progress

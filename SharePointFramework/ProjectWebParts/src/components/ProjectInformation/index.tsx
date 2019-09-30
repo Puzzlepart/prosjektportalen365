@@ -18,7 +18,9 @@ import styles from './ProjectInformation.module.scss';
 import { ProjectProperties } from './ProjectProperties';
 import { ProjectProperty, ProjectPropertyModel } from './ProjectProperties/ProjectProperty/index';
 import { StatusReports } from './StatusReports';
-import { UserMessage } from './UserMessage';
+import { UserMessage } from '../UserMessage/index';
+
+const log = (text: string): (() => void) => (): void => console.log(text);
 
 export class ProjectInformation extends React.Component<IProjectInformationProps, IProjectInformationState> {
   public static defaultProps: Partial<IProjectInformationProps> = {
@@ -50,6 +52,9 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   }
 
   public render(): React.ReactElement<IProjectInformationProps> {
+    if (this.state.hidden) {
+      return null;
+    }
     return (
       <div className={styles.projectInformation} >
         <div className={styles.container}>
@@ -73,7 +78,12 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
       return <Spinner label={format(strings.LoadingText, this.props.title.toLowerCase())} />;
     }
     if (this.state.error) {
-      return <MessageBar messageBarType={MessageBarType.error}>{format(strings.ErrorText, this.props.title.toLowerCase())}</MessageBar>;
+      return (
+        <UserMessage
+          messageBarType={MessageBarType.severeWarning}
+          onDismiss={() => this.setState({ hidden: true })}
+          text={strings.WebPartNoAccessMessage} />
+      );
     }
 
     const { statusReports, editFormUrl, versionHistoryUrl } = this.state.data;
@@ -86,7 +96,8 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
           displayMode={this.props.displayMode}
           isSiteAdmin={this.props.isSiteAdmin}
           onFieldExternalChanged={this.props.onFieldExternalChanged}
-          showFieldExternal={this.props.showFieldExternal} />
+          showFieldExternal={this.props.showFieldExternal}
+          localList={this.state.data.localList} />
         <StatusReports
           title={this.props.statusReportsHeader}
           statusReports={statusReports}

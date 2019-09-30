@@ -9,11 +9,14 @@ import { ProjectPropertyModel } from './ProjectPropertyModel';
 
 // tslint:disable-next-line: naming-convention
 export const ProjectProperty = ({ model, style, displayMode = DisplayMode.Read, onFieldExternalChanged, showFieldExternal }: IProjectPropertyProps) => {
+    let id = getId(`projectproperty_${model.internalName}`.toLowerCase());
+
     switch (displayMode) {
         case DisplayMode.Edit: {
+            let defaultChecked = showFieldExternal ? showFieldExternal[model.internalName] : false;
             return (
                 <div
-                    id={getId(model.internalName)}
+                    id={id}
                     className={styles.projectProperty}
                     title={model.description}
                     style={style}>
@@ -22,7 +25,7 @@ export const ProjectProperty = ({ model, style, displayMode = DisplayMode.Read, 
                         <Toggle
                             label={strings.ShowFieldExternalUsers}
                             inlineLabel={true}
-                            defaultChecked={showFieldExternal ? showFieldExternal[model.internalName] : false}
+                            defaultChecked={defaultChecked}
                             onChange={(_event, checked) => onFieldExternalChanged(model.internalName, checked)} />
                     </div>
                 </div>
@@ -31,7 +34,7 @@ export const ProjectProperty = ({ model, style, displayMode = DisplayMode.Read, 
         default: {
             return (
                 <div
-                    id={getId(model.internalName)}
+                    id={id}
                     className={styles.projectProperty}
                     title={model.description}
                     style={style}>

@@ -1,5 +1,6 @@
+import { stringIsNullOrEmpty } from '@pnp/common';
 import { Logger, LogLevel } from '@pnp/logging';
-import { List, sp } from '@pnp/sp';
+import { sp } from '@pnp/sp';
 import { Phase } from 'models';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
@@ -7,9 +8,11 @@ import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import * as format from 'string-format';
 import SPDataAdapter from '../../data';
+import { UserMessage } from '../UserMessage';
 import ChangePhaseDialog from './ChangePhaseDialog/index';
+import { IProjectPhasesData } from './IProjectPhasesData';
 import { IProjectPhasesProps } from './IProjectPhasesProps';
-import { IProjectPhasesData, IProjectPhasesState } from './IProjectPhasesState';
+import { IProjectPhasesState } from './IProjectPhasesState';
 import ProjectPhase from './ProjectPhase';
 import ProjectPhaseCallout from './ProjectPhaseCallout/index';
 import styles from './ProjectPhases.module.scss';
@@ -29,9 +32,12 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
   }
 
   public async componentDidMount() {
-    if (this.props.phaseField) {
+    if (stringIsNullOrEmpty(this.props.phaseField)) return;
+    try {
       const data = await this._fetchData();
       this.setState({ isLoading: false, data });
+    } catch (error) {
+      this.setState({ isLoading: false, error });
     }
   }
 
@@ -48,6 +54,9 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
         </div>
       );
     }
+    if (this.state.hidden) {
+      return null;
+    }
     if (this.state.isLoading) {
       return (
         <div className={styles.projectPhases}>
@@ -55,6 +64,14 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
             <Spinner label={format(strings.LoadingText, 'fasevelger')} />
           </div>
         </div>
+      );
+    }
+    if (this.state.error) {
+      return (
+        <UserMessage
+          messageBarType={MessageBarType.severeWarning}
+          onDismiss={() => this.setState({ hidden: true })}
+          text={strings.WebPartNoAccessMessage} />
       );
     }
 
@@ -179,8 +196,8 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
         phases,
         phaseTextField: phaseFieldCtx.phaseTextField,
       };
-    } catch (err) {
-      throw err;
+    } catch (error) {
+      throw new Error();
     }
   }
 }

@@ -71,6 +71,7 @@ declare interface IProjectWebPartsStrings {
   ShowFieldExternalUsers: string;
   ExternalUsersConfigText: string;
   ExternalUsersConfigInfoText: string;
+  WebPartNoAccessMessage: string;
 }
 
 declare module 'ProjectWebPartsStrings' {

@@ -24,17 +24,17 @@ export interface IProjectPropertiesProps {
     displayMode?: DisplayMode;
 
     /**
-     * @todo Describe property
+     * Does the web have a local project properties list
+     */
+    localList: boolean;
+
+    /**
+     * On external field changed
      */
     onFieldExternalChanged?: (fieldName: string, checked: boolean) => void;
 
     /**
-     * @todo Describe property
+     * A hash object of fields to show for external users
      */
     showFieldExternal?: TypedHash<boolean>;
-
-    /**
-     * @todo Describe property
-     */
-    localList?: boolean;
 }

@@ -1,43 +1,12 @@
 import { dateAdd, TypedHash } from '@pnp/common';
-import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
+import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { SPConfiguration, SPRest } from '@pnp/sp';
 import { ITaxonomySession } from '@pnp/sp-taxonomy';
-import { SpEntityPortalService, IEntityField } from 'sp-entityportal-service';
-import { makeUrlAbsolute } from '../helpers/makeUrlAbsolute';
-import { ISPList } from '../interfaces/ISPList';
-import { IProjectPhaseChecklistItem, ProjectPhaseChecklistData, ProjectPhaseModel } from '../models';
-
-export interface IGetPropertiesData {
-     /**
-     * EditForm url
-     */
-    editFormUrl?: string;
-    
-    /**
-     * Version history url
-     */
-    versionHistoryUrl?: string;
-    
-    /**
-     * Field values
-     */
-    fieldValues?: TypedHash<any>;
-    
-    /**
-     * Field values as text
-     */
-    fieldValuesText?: TypedHash<string>;
-    
-    /**
-     * Entity fields
-     */
-    fields?: IEntityField[];
-
-    /**
-     * Has local list
-     */
-    localList?: boolean;
-}
+import { SpEntityPortalService } from 'sp-entityportal-service';
+import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute';
+import { ISPList } from '../../interfaces/ISPList';
+import { IProjectPhaseChecklistItem, ProjectPhaseChecklistData, ProjectPhaseModel } from '../../models';
+import { IGetPropertiesData } from './IGetPropertiesData';
 
 export interface IProjectDataServiceParams {
     webUrl: string;
@@ -198,8 +167,12 @@ export class ProjectDataService {
      * Get current phase
      */
     public async getCurrentPhaseName(): Promise<string> {
-        let propertiesData = await this.getPropertiesData();
-        return propertiesData.fieldValuesText.GtProjectPhase;
+        try {
+            let propertiesData = await this.getPropertiesData();
+            return propertiesData.fieldValuesText.GtProjectPhase;
+        } catch (error) {
+            throw new Error();
+        }
     }
 
     /**
@@ -248,3 +221,5 @@ export class ProjectDataService {
         return await this._params.sp.web.lists.getByTitle(listName).items.getById(id).update(properties);
     }
 };
+
+export { IGetPropertiesData };

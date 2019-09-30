@@ -1,28 +1,6 @@
 import { Phase } from 'models';
-import { ChecklistData } from './ChecklistData';
 import { IProjectPhaseMouseOver } from './ProjectPhaseCallout/IProjectPhaseMouseOver';
-
-export interface IProjectPhasesData {
-  /**
-   * @todo describe property
-   */
-  phases?: Phase[];
-
-  /**
-   * @todo describe property
-   */
-  currentPhase?: Phase;
-
-  /**
-   * @todo describe property
-   */
-  checklistData?: ChecklistData;
-
-  /**
-   * @todo describe property
-   */
-  phaseTextField?: string;
-}
+import { IProjectPhasesData } from './IProjectPhasesData';
 
 export interface IProjectPhasesState {
   /**
@@ -34,6 +12,16 @@ export interface IProjectPhasesState {
    * @todo describe property
    */
   data: IProjectPhasesData;
+
+  /**
+   * @todo describe property
+   */
+  error?: any;
+
+  /**
+   * Is the component hidden
+   */
+  hidden?: boolean;
 
   /**
    * @todo describe property

@@ -71,6 +71,7 @@ define([], function () {
     ShowFieldExternalUsers: 'Synlig for eksterne brukere',
     ExternalUsersConfigText: 'Konfigurasjon',
     ExternalUsersConfigInfoText: 'Her konfigueres felter/kolonner som skal vises for eksterne brukere/gjester.<br /><br />Felter/kolonner som skal vises for brukere i organisasjonen konfigureres på porteføljeområdet av administrator.',
-    NoLocalPropertiesListWarningText: 'Du må synkronisere prosjektegenskapene før du kan konfigurere felter/kolonner som skal vises for eksterne brukere/gjester.<br /><br />Det gjøres ved å klikke på knappen \'Synkroniser prosjektegenskaper\'.'
+    NoLocalPropertiesListWarningText: 'Du må synkronisere prosjektegenskapene før du kan konfigurere felter/kolonner som skal vises for eksterne brukere/gjester.<br /><br />Det gjøres ved å klikke på knappen \'Synkroniser prosjektegenskaper\'.',
+    WebPartNoAccessMessage: 'Du har ikke tilgang til å se denne webdelen.<br/><br/>Du må enten ha tilgang til porteføljeområdet, eller så må prosjektet være fristilt fra porteføljeområdet.'
   }
 });
