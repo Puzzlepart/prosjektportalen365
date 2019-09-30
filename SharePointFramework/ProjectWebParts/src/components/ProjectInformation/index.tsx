@@ -84,6 +84,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
           title={this.props.title}
           properties={this.state.properties}
           displayMode={this.props.displayMode}
+          isSiteAdmin={this.props.isSiteAdmin}
           onFieldExternalChanged={this.props.onFieldExternalChanged}
           showFieldExternal={this.props.showFieldExternal} />
         <StatusReports
@@ -92,10 +93,9 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
           urlTemplate={`${this.props.webUrl}/${this.props.statusReportsLinkUrlTemplate}`}
           urlSourceParam={document.location.href}
           hidden={this.props.statusReportsCount === 0} />
-        <ProgressBar className={styles.progress} {...this.state.progress} />
-        <UserMessage className={styles.message} {...this.state.message} />
+        <ProgressBar {...this.state.progress} />
+        <UserMessage {...this.state.message} />
         <Actions
-          className={styles.actions}
           hidden={this.props.hideActions || !this.props.isSiteAdmin || this.props.displayMode === DisplayMode.Edit}
           versionHistoryUrl={versionHistoryUrl}
           editFormUrl={editFormUrl}

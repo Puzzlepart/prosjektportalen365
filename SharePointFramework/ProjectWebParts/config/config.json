@@ -2,22 +2,6 @@
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
   "version": "2.0",
   "bundles": {
-    "project-status-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/projectStatus/index.js",
-          "manifest": "./src/webparts/projectStatus/manifest.json"
-        }
-      ]
-    },
-    "project-phases-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/projectPhases/index.js",
-          "manifest": "./src/webparts/projectPhases/manifest.json"
-        }
-      ]
-    },
     "project-information-web-part": {
       "components": [
         {

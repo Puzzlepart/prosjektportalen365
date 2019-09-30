@@ -46,7 +46,6 @@ export default class ProjectInformationWebPart extends BaseClientSideWebPart<IPr
   }
 
   private _onFieldExternalChanged(fieldName: string, checked: boolean) {
-    console.log('ProjectInformationWebPart._onFieldExternalChanged', fieldName, checked);
     let showFieldExternal = { ... this.properties.showFieldExternal || {}, [fieldName]: checked };
     this.properties.showFieldExternal = showFieldExternal;
   }

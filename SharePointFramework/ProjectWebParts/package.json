@@ -46,6 +46,7 @@
         "react": "16.7.0",
         "react-dom": "16.7.0",
         "react-image-fade-in": "^1.0.2",
+        "react-markdown": "^4.2.2",
         "react-scroll": "^1.7.11",
         "shared": "link:..\\@Shared",
         "sp-entityportal-service": "^1.0.2",

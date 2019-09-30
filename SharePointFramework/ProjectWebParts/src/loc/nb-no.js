@@ -69,6 +69,7 @@ define([], function () {
     SyncProjectPropertiesValuesProgressDescription: 'Synkroniserer egenskaper',
     ProjectStatusDataErrorText: 'Ingen tilgang. Du har ikke tillatelse til å se statusrapporter.',
     ShowFieldExternalUsers: 'Synlig for eksterne brukere',
-    ExternalUsersConfigText: 'Konfigurasjon for eksterne brukere'
+    ExternalUsersConfigText: 'Konfigurasjon',
+    ExternalUsersConfigInfoText: 'Her konfigueres felter/kolonner som skal vises for eksterne brukere/gjester.<br /><br />Felter/kolonner som skal vises for brukere i organisasjonen konfigureres på porteføljeområdet av administrator.'
   }
 });

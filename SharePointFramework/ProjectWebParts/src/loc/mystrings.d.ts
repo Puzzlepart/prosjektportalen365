@@ -69,6 +69,7 @@ declare interface IProjectWebPartsStrings {
   ProjectStatusDataErrorText: string;
   ShowFieldExternalUsers: string;
   ExternalUsersConfigText: string;
+  ExternalUsersConfigInfoText: string;
 }
 
 declare module 'ProjectWebPartsStrings' {

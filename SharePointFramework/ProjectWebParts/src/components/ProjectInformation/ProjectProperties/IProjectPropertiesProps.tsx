@@ -14,6 +14,11 @@ export interface IProjectPropertiesProps {
     properties?: ProjectPropertyModel[];
 
     /**
+     * Is the current user site admin
+     */
+    isSiteAdmin: boolean;
+
+    /**
      * Display mode
      */
     displayMode?: DisplayMode;

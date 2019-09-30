@@ -24,6 +24,7 @@
         "gulp": "^4.0.2",
         "moment": "^2.24.0",
         "object-get": "^2.1.0",
+        "react-markdown": "^4.2.2",
         "scriptjs": "^2.5.9",
         "sp-entityportal-service": "^1.0.0",
         "sp-hubsite-service": "^0.5.0",

@@ -2,6 +2,7 @@ import { DisplayMode } from '@microsoft/sp-core-library';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
+import { UserMessage } from '../UserMessage';
 import { IProjectPropertiesProps } from './IProjectPropertiesProps';
 import styles from './ProjectProperties.module.scss';
 import { ProjectProperty } from './ProjectProperty';
@@ -25,18 +26,21 @@ export class ProjectProperties extends React.PureComponent<IProjectPropertiesPro
                                     {this._nonEmptyProperties.map((model, idx) => <ProjectProperty key={idx} model={model} />)}
                                 </div>
                             </PivotItem>
-                            <PivotItem headerText={strings.ExternalUsersConfigText} itemIcon='FilterSettings'>
-                                <div className={styles.pivotItem}>
-                                    {this._visibleProperties.map((model, idx) => (
-                                        <ProjectProperty
-                                            key={idx}
-                                            model={model}
-                                            displayMode={DisplayMode.Edit}
-                                            onFieldExternalChanged={this.props.onFieldExternalChanged}
-                                            showFieldExternal={this.props.showFieldExternal} />
-                                    ))}
-                                </div>
-                            </PivotItem>
+                            {this.props.isSiteAdmin && (
+                                <PivotItem headerText={strings.ExternalUsersConfigText} itemIcon='FilterSettings' hidden={true}>
+                                    <div className={styles.pivotItem}>
+                                        <UserMessage text={strings.ExternalUsersConfigInfoText} style={{ marginBottom: 25 }} />
+                                        {this._visibleProperties.map((model, idx) => (
+                                            <ProjectProperty
+                                                key={idx}
+                                                model={model}
+                                                displayMode={DisplayMode.Edit}
+                                                onFieldExternalChanged={this.props.onFieldExternalChanged}
+                                                showFieldExternal={this.props.showFieldExternal} />
+                                        ))}
+                                    </div>
+                                </PivotItem>
+                            )}
                         </Pivot>
                     </div>
                 );

@@ -1,6 +1,7 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
 import { TypedHash } from '@pnp/common';
 import { IHubSite } from 'sp-hubsite-service';
+import { ActionType } from './Actions/ActionType';
 
 export interface IProjectInformationProps {
   /**
@@ -72,4 +73,9 @@ export interface IProjectInformationProps {
    * @todo Describe property
    */
   showFieldExternal?: TypedHash<boolean>;
+
+  /**
+   * @todo Describe property
+   */
+  customActions?: ActionType[];
 }
