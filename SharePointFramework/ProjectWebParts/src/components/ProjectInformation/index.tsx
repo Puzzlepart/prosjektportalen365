@@ -126,7 +126,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     const progressFunc = (props: IProgressIndicatorProps) => this.setState({ progress: { label: strings.SyncProjectPropertiesProgressLabel, ...props } });
     try {
       progressFunc({ description: strings.SyncProjectPropertiesListProgressDescription });
-      await this._hubConfigurationService.syncList(this.props.webUrl, strings.ProjectPropertiesListName, '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C');
+      await this._hubConfigurationService.syncList(this.props.webUrl, strings.ProjectPropertiesListName, '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C', { Title: this.props.webTitle });
       await SPDataAdapter.syncPropertyItemToHub(this.state.data.fieldValues, this.state.data.fieldValuesText, progressFunc);
       this._addMessage(strings.SyncProjectPropertiesSuccessText, MessageBarType.success);
     } catch (error) {

@@ -1,4 +1,5 @@
 import { dateAdd, TypedHash } from '@pnp/common';
+import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
 import { SPConfiguration, SPRest } from '@pnp/sp';
 import { ITaxonomySession } from '@pnp/sp-taxonomy';
 import { SpEntityPortalService } from 'sp-entityportal-service';
@@ -13,6 +14,7 @@ export interface IProjectDataServiceParams {
     propertiesListName: string;
     sp: SPRest
     taxonomy?: ITaxonomySession
+    logLevel?: LogLevel;
 }
 
 export class ProjectDataService {
@@ -23,7 +25,12 @@ export class ProjectDataService {
      * 
      * @param {IProjectDataServiceParams} _params Parameters
      */
-    constructor(private _params: IProjectDataServiceParams) { }
+    constructor(private _params: IProjectDataServiceParams) {
+        if (_params.logLevel) {
+            Logger.subscribe(new ConsoleListener());
+            Logger.activeLogLevel = _params.logLevel;
+        }
+    }
 
 
     /**
@@ -31,10 +38,19 @@ export class ProjectDataService {
      */
     private async _getPropertyItemContext() {
         try {
+            Logger.write(`(ProjectDataService) Checking if list ${this._params.propertiesListName} exists in web.`);
             let [list] = await this._params.sp.web.lists.filter(`Title eq '${this._params.propertiesListName}'`).select('Id', 'DefaultEditFormUrl').usingCaching().get<ISPList[]>();
-            if (!list) return null;
+            if (!list) {
+                Logger.write(`(ProjectDataService) List ${this._params.propertiesListName} does not exist in web.`);
+                return null;
+            }
+            Logger.write(`(ProjectDataService) Checking if there's a entry in list ${this._params.propertiesListName}.`);
             let [item] = await this._params.sp.web.lists.getById(list.Id).items.select('Id').top(1).usingCaching().get<{ Id: number }[]>();
-            if (!item) return null;
+            if (!item) {
+                Logger.write(`(ProjectDataService) No entry found in list ${this._params.propertiesListName}.`);
+                return null;
+            }
+            Logger.write(`(ProjectDataService) Entry with ID ${item.Id} found in list ${this._params.propertiesListName}.`);
             return {
                 id: item.Id,
                 list: this._params.sp.web.lists.getById(list.Id),

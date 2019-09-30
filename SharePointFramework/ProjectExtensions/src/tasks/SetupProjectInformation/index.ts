@@ -5,12 +5,7 @@ import { IBaseTaskParams } from '../IBaseTaskParams';
 
 export default new class SetupProjectInformation extends BaseTask {
     public taskName = 'SetupProjectInformation';
-    private _propertiesCtId: string;
-
-    constructor() {
-        super();
-        this._propertiesCtId = '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C';
-    }
+    private _propertiesCtId: string = '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C';
 
     /**
      * Executes the SetupProjectInformation task

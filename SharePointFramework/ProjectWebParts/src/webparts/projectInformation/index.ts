@@ -34,12 +34,13 @@ export default class ProjectInformationWebPart extends BaseClientSideWebPart<IPr
         hubSite: this._hubSite,
         siteId: this.context.pageContext.site.id.toString(),
         webUrl: this.context.pageContext.web.absoluteUrl,
+        webTitle: this.context.pageContext.web.title,
         isSiteAdmin: this.context.pageContext.legacyPageContext.isSiteAdmin,
         filterField: 'GtShowFieldFrontpage',
         displayMode: this.displayMode,
         onFieldExternalChanged: this._onFieldExternalChanged.bind(this),
         ...this.properties,
-      }
+      } as IProjectInformationProps
     );
 
     ReactDom.render(element, this.domElement);

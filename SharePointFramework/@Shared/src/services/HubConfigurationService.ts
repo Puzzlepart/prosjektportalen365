@@ -1,7 +1,9 @@
 import { CamlQuery, List, Web } from '@pnp/sp';
+import { TypedHash } from '@pnp/common';
 import { default as initSpfxJsom, ExecuteJsomQuery } from 'spfx-jsom';
 import { parseFieldXml } from '../helpers/parseFieldXml';
 import { ProjectColumnConfig, SPProjectColumnConfigItem, SPProjectColumnItem } from '../models';
+import { ISPField, ISPContentType } from '../interfaces';
 
 export class HubConfigurationService {
     private web: Web;
@@ -42,8 +44,9 @@ export class HubConfigurationService {
      * @param {string} url Url
      * @param {stirng} listName List name 
      * @param {string} contentTypeId Content type id
+     * @param {TypedHash} properties Create a new item in the list with specified properties if the list was created
      */
-    public async syncList(url: string, listName: string, contentTypeId: string) {
+    public async syncList(url: string, listName: string, contentTypeId: string, properties?: TypedHash<string>) {
         const { jsomContext } = await initSpfxJsom(url, { loadTaxonomy: true });
         const [contentType, siteFields, ensureList] = await Promise.all([
             this._getHubContentType(this.web, contentTypeId),
@@ -68,6 +71,9 @@ export class HubConfigurationService {
                 await ExecuteJsomQuery(jsomContext);
             } catch (error) { }
         }
+        if (ensureList.created && properties) {
+            ensureList.list.items.add(properties);
+        }
         return ensureList.list;
     }
 
@@ -77,12 +83,12 @@ export class HubConfigurationService {
      * @param {Web} web Web
      * @param {string} contentTypeId Content type ID
      */
-    private async _getHubContentType(web: Web, contentTypeId: string) {
+    private async _getHubContentType(web: Web, contentTypeId: string): Promise<ISPContentType> {
         let contentType = await web.contentTypes
             .getById(contentTypeId)
-            .select('StringId', 'Name', 'Fields/InternalName', 'Fields/Title', 'Fields/SchemaXml')
+            .select('StringId', 'Name', 'Fields/InternalName', 'Fields/Title', 'Fields/SchemaXml', 'Fields/InternalName')
             .expand('Fields')
-            .get<{ StringId: string, Name: string, Fields: { InternalName: string, Title: string, SchemaXml: string }[] }>();
+            .get<ISPContentType>();
         return contentType;
     }
 
@@ -91,8 +97,8 @@ export class HubConfigurationService {
      * 
      * @param {Web} web Web
      */
-    private async _getSiteFields(web: Web): Promise<{ InternalName: string }[]> {
-        let siteFields = await web.fields.select('InternalName').get<{ InternalName: string }[]>();
+    private async _getSiteFields(web: Web): Promise<ISPField[]> {
+        let siteFields = await web.fields.select('InternalName', 'Title', 'SchemaXml', 'InternalName').get<ISPField[]>();
         return siteFields;
     }
 
@@ -101,8 +107,8 @@ export class HubConfigurationService {
    * 
    * @param {List} list List
    */
-    private async _getListFields(list: List): Promise<{ InternalName: string }[]> {
-        let listFields = await list.fields.select('InternalName').get<{ InternalName: string }[]>();
+    private async _getListFields(list: List): Promise<ISPField[]> {
+        let listFields = await list.fields.select('InternalName', 'Title', 'SchemaXml', 'InternalName').get<ISPField[]>();
         return listFields;
     }
 

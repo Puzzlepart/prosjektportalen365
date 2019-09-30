@@ -25,6 +25,11 @@ export interface IProjectInformationProps {
   webUrl: string;
 
   /**
+   * Title for the web
+   */
+  webTitle?: string;
+
+  /**
    * Is the current user site admin
    */
   isSiteAdmin?: boolean;

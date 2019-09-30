@@ -1,22 +1,23 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common';
 import { ItemUpdateResult } from '@pnp/sp';
+import { LogLevel } from '@pnp/logging';
 import { taxonomy } from '@pnp/sp-taxonomy';
 import * as strings from 'ProjectWebPartsStrings';
 import { SPDataAdapterBase } from 'shared/lib/data';
 import { ProjectDataService } from 'shared/lib/services';
-import { ISPDataAdapterSettings } from './ISPDataAdapterSettings';
+import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration';
 
-export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterSettings> {
+export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     public project: ProjectDataService;
 
     /**
      * Configure the SP data adapter
      * 
      * @param {WebPartContext} spfxContext Context
-     * @param {ISPDataAdapterSettings} settings Settings
+     * @param {ISPDataAdapterConfiguration} settings Settings
      */
-    public configure(spfxContext: WebPartContext, settings: ISPDataAdapterSettings) {
+    public configure(spfxContext: WebPartContext, settings: ISPDataAdapterConfiguration) {
         super.configure(spfxContext, settings);
         taxonomy.setup({ spfxContext });
         this.project = new ProjectDataService({
@@ -25,6 +26,7 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterS
             propertiesListName: strings.ProjectPropertiesListName,
             sp: this.sp,
             taxonomy,
+            logLevel: LogLevel.Info,
         });
         this.project.spConfiguration = this.spConfiguration;
     }

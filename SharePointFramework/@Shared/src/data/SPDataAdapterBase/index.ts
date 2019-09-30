@@ -2,9 +2,9 @@ import '@pnp/polyfill-ie11';
 import { sp, SPConfiguration, SPRest, Web } from '@pnp/sp';
 import { SpEntityPortalService } from 'sp-entityportal-service';
 import { HubConfigurationService } from '../../services/HubConfigurationService';
-import { ISPDataAdapterBaseSettings } from './ISPDataAdapterBaseSettings';
+import { ISPDataAdapterBaseConfiguration } from './ISPDataAdapterBaseConfiguration';
 
-export class SPDataAdapterBase<T extends ISPDataAdapterBaseSettings> {
+export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
     public spConfiguration: SPConfiguration = {
         defaultCachingStore: 'session',
         defaultCachingTimeoutSeconds: 90,
@@ -38,4 +38,4 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseSettings> {
     }
 }
 
-export { ISPDataAdapterBaseSettings };
+export { ISPDataAdapterBaseConfiguration };
