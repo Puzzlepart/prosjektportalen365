@@ -1,5 +1,6 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
+import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import { UserMessage } from '../UserMessage';
@@ -11,6 +12,9 @@ export class ProjectProperties extends React.PureComponent<IProjectPropertiesPro
     public render(): React.ReactElement<IProjectPropertiesProps> {
         switch (this.props.displayMode) {
             case DisplayMode.Read: {
+                if (this._nonEmptyProperties.length === 0) {
+                    return <MessageBar>{strings.NoPropertiesMessage}</MessageBar>;
+                }
                 return (
                     <div className={styles.projectProperties}>
                         {this._nonEmptyProperties.map((model, idx) => <ProjectProperty key={idx} model={model} />)}

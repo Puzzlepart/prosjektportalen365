@@ -26,6 +26,7 @@ export class TemplateSelectDialog extends React.Component<ITemplateSelectDialogP
             selectedListConfig: props.data.listContentConfig.filter(lcc => lcc.isDefault),
             includeStandardFolders: false,
             copyPlannerTasks: true,
+            localProjectPropertiesList: true,
         };
     }
 
@@ -52,7 +53,11 @@ export class TemplateSelectDialog extends React.Component<ITemplateSelectDialogP
                     </div>
                 </div>
                 <SettingsSection
-                    defaultChecked={{ includeStandardFolders: this.state.includeStandardFolders, copyPlannerTasks: this.state.copyPlannerTasks }}
+                    defaultChecked={{
+                        includeStandardFolders: this.state.includeStandardFolders,
+                        copyPlannerTasks: this.state.copyPlannerTasks,
+                        localProjectPropertiesList: this.state.localProjectPropertiesList,
+                    }}
                     onChange={obj => this.setState(obj)} />
                 <ExtensionsSection
                     extensions={this.props.data.extensions}

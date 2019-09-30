@@ -72,7 +72,7 @@ export default new class CopyListData extends BaseTask {
                     return obj;
                 }, {});
                 this.logInformation(`Processing list item ${i + 1}`, { properties, TaxCatchAll: sourceItems[i].TaxCatchAll });
-                onProgress(this._progressText, `Kopierer listeelement ${i + 1} av ${sourceItems.length}`, 'List');
+                onProgress(this._progressText, formatString(strings.ProcessListItemText, i + 1, sourceItems.length), 'List');
                 await destList.items.add(properties, destListProps.ListItemEntityTypeFullName);
             }
         } catch (error) {

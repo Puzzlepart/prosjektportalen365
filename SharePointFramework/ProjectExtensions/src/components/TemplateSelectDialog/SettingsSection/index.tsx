@@ -25,6 +25,12 @@ export const SettingsSection = (props: ISettingsSectionProps) => {
                     defaultChecked={props.defaultChecked.copyPlannerTasks}
                     onChanged={copyPlannerTasks => props.onChange({ copyPlannerTasks })} />
             </div>
+            <div className={styles.item}>
+                <Toggle
+                    label={'Prosjektegenskaper lokalt'}
+                    defaultChecked={props.defaultChecked.localProjectPropertiesList}
+                    onChanged={localProjectPropertiesList => props.onChange({ localProjectPropertiesList })} />
+            </div>
         </CollapsableSection>
     );
 };

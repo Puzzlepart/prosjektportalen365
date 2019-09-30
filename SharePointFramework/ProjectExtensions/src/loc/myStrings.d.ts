@@ -1,7 +1,11 @@
 declare interface IProjectExtensionsStrings {
+    ApplyExtensionText: any;
+    ProcessListItemText: any;
+    CreatingPlannerTaskText: any;
+    ProvisionSiteFieldText: any;
   ProgressDialogSubText: string;
   ApplyTemplateText: string;
-  ApplyExtensionText: string;
+  ApplyingExtensionsText: string;
   ApplyTemplateClientSidePages: string;
   ApplyTemplateComposedLook: string;
   ApplyTemplateContentTypes: string;
@@ -61,6 +65,8 @@ declare interface IProjectExtensionsStrings {
   DocumentTemplateDialogScreenEditCopyInfoText: string;
   FilenameAlreadyInUseErrorText: string;
   FilenameInValidErrorText: string;
+  SyncLocalProjectPropertiesListText: string;
+  CreatingLocalProjectPropertiesListItemText: string;
 }
 
 declare module 'ProjectExtensionsStrings' {

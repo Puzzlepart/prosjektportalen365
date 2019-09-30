@@ -1,6 +1,7 @@
 import { ListContentConfig, ProjectTemplate } from '../../models/index';
+import { ISettings } from './SettingsSection/ISettingsSectionProps';
 
-export interface ITemplateSelectDialogState {    /**
+export interface ITemplateSelectDialogState extends ISettings {    /**
      * @todo Describe property
      */
     selectedTemplate?: ProjectTemplate;
@@ -14,14 +15,4 @@ export interface ITemplateSelectDialogState {    /**
      * @todo Describe property
      */
     selectedListConfig?: ListContentConfig[];
-
-    /**
-     * @todo Describe property
-     */
-    includeStandardFolders?: boolean;
-
-    /**
-     * @todo Describe property
-     */
-    copyPlannerTasks?: boolean;
 }

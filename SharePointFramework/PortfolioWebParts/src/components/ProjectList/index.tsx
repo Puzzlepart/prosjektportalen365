@@ -15,6 +15,7 @@ import { IProjectListProps } from './IProjectListProps';
 import { IProjectListState } from './IProjectListState';
 import { ProjectCard } from './ProjectCard';
 import styles from './ProjectList.module.scss';
+import { Web } from '@pnp/sp';
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns';
 
 export default class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
@@ -76,6 +77,10 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         </div >
       );
     }
+
+
+    const projects = this._filterProjets(this.state.projects);
+
     return (
       <div className={styles.projectList}>
         <div className={styles.container}>
@@ -87,10 +92,14 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
               offText={strings.ShowAsListText}
               onText={strings.ShowAsTilesText}
               defaultChecked={this.state.showAsTiles}
+              inlineLabel={true}
               onChanged={showAsTiles => this.setState({ showAsTiles })} />
           </div>
-          <div className={styles.projects}>
-            {this._renderProjects()}
+          <div className={styles.emptyMessage} hidden={projects.length > 0}>
+            <MessageBar>{strings.NoSearchResults}</MessageBar>
+          </div>
+          <div className={styles.projects} hidden={projects.length === 0}>
+            {this._renderProjects(projects)}
           </div>
         </div>
         {this._renderProjectInformation()}
@@ -100,12 +109,10 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
 
   /**
    * Render projects
+   * 
+   * @param {ProjectListModel[]} projects Projects
    */
-  private _renderProjects() {
-    const projects = this._filterProjets(this.state.projects);
-    if (projects.length === 0) {
-      return <MessageBar>{strings.NoSearchResults}</MessageBar>;
-    }
+  private _renderProjects(projects: ProjectListModel[]) {
     if (this.state.showAsTiles) {
       return projects.map(project => (
         <ProjectCard
@@ -175,9 +182,8 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
         <ProjectInformationModal
           modalProps={{ isOpen: true, onDismiss: () => this.setState({ showProjectInfo: null }) }}
           title={this.state.showProjectInfo.title}
-          entity={{ portalUrl: this.props.pageContext.site.absoluteUrl, ...this.props.entity }}
           webUrl={this.props.pageContext.site.absoluteUrl}
-          hubSiteUrl={this.props.pageContext.site.absoluteUrl}
+          hubSite={{ web: new Web(this.props.pageContext.site.absoluteUrl), url: this.props.pageContext.site.absoluteUrl }}
           siteId={this.state.showProjectInfo.siteId}
           hideActions={true}
           filterField='GtShowFieldPortfolio' />

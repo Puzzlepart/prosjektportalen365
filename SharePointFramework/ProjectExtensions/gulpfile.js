@@ -13,11 +13,11 @@ try {
     var env = require('./config/env.json');
     pkgDeploy(build, require('./config/package-solution.json'), env);
 } catch (error) {
-    build.log("Skipping pkgDeploy due to missing config/env.json");
+    build.log('Skipping pkgDeploy due to missing config/env.json');
 }
 
 gulp.task('versionSync', () => {
-    find.file(/\.manifest.json$/, path.join(__dirname, "src", "extensions"), manifests => {
+    find.file(/\manifest.json$/, path.join(__dirname, 'src', 'extensions'), manifests => {
         var pkgSolution = require('./config/package-solution.json');
         var newVersionNumber = require('./package.json').version.split('-')[0];
         pkgSolution.solution.version = newVersionNumber + '.0';
@@ -32,7 +32,7 @@ gulp.task('versionSync', () => {
 
 build.configureWebpack.mergeConfig({
     additionalConfiguration: (generatedConfiguration) => {
-        let { paths, outDir } = JSON.parse(JSON.stringify(tsConfig.compilerOptions).replace(/\/\*"/gm, '"'));
+        let { paths, outDir } = JSON.parse(JSON.stringify(tsConfig.compilerOptions).replace(/\/\*'/gm, '"'));
         generatedConfiguration.resolve.alias = Object.keys(paths).reduce((alias, key) => {
             let _path = path.join(__dirname, outDir, paths[key][0]);
             return { ...alias, [key]: _path };

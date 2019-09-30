@@ -1,4 +1,3 @@
-import { override } from '@microsoft/decorators';
 import * as strings from 'ProjectExtensionsStrings';
 import { Web, WebProvisioner } from 'sp-js-provisioning';
 import * as formatString from 'string-format';
@@ -36,7 +35,7 @@ export default new class ApplyTemplate extends BaseTask {
             this.logInformation('Applying extensions to site', { parameters: params.templateParameters });
             for (let i = 0; i < params.data.selectedExtensions.length; i++) {
                 let extensionSchema = await params.data.selectedExtensions[i].getSchema();
-                onProgress(strings.ApplyExtensionText, `Legger på prosjekttilegg ${params.data.selectedExtensions[i].title}`, 'ExternalBuild');
+                onProgress(strings.ApplyingExtensionsText, formatString(strings.ApplyExtensionText, params.data.selectedExtensions[i].title), 'ExternalBuild');
                 await provisioner.applyTemplate(extensionSchema, null);
             }
             return params;

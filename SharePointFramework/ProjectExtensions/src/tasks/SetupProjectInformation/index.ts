@@ -20,11 +20,13 @@ export default new class SetupProjectInformation extends BaseTask {
      */
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
-            onProgress(strings.SetupProjectInformationText, 'Synkroniserer liste for prosjektegenskaper', 'AlignCenter');
-            this.logInformation(`Synchronizing list '${strings.ProjectPropertiesListName}' based on content type ${this._propertiesCtId} from ${params.data.hub.url} `, {});
-            const propertiesList = await params.hubConfigurationService.syncList(params.webAbsoluteUrl, strings.ProjectPropertiesListName, this._propertiesCtId);
-            onProgress(strings.SetupProjectInformationText, 'Oppretter element for prosjektegenskaper', 'AlignCenter');
-            await propertiesList.items.add({ Title: params.context.pageContext.web.title });
+            if (params.data.localProjectPropertiesList) {
+                onProgress(strings.SetupProjectInformationText, strings.SyncLocalProjectPropertiesListText, 'AlignCenter');
+                this.logInformation(`Synchronizing list '${strings.ProjectPropertiesListName}' based on content type ${this._propertiesCtId} from ${params.data.hub.url} `, {});
+                const propertiesList = await params.hubConfigurationService.syncList(params.webAbsoluteUrl, strings.ProjectPropertiesListName, this._propertiesCtId);
+                onProgress(strings.SetupProjectInformationText, strings.CreatingLocalProjectPropertiesListItemText, 'AlignCenter');
+                await propertiesList.items.add({ Title: params.context.pageContext.web.title });
+            }
             await this._addEntryToHub(params);
             return params;
         } catch (error) {

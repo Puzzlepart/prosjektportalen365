@@ -1,10 +1,11 @@
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
+import { Web } from '@pnp/sp';
 import { getId } from '@uifabric/utilities';
 import * as arraySort from 'array-sort';
 import { IFetchDataForViewRefinersResult } from 'data/IFetchDataForViewResult';
 import { PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
 import { ContextualMenu, ContextualMenuItemType, IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { DetailsList, ConstrainMode, DetailsListLayoutMode, IGroup, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { ConstrainMode, DetailsList, DetailsListLayoutMode, IGroup, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { LayerHost } from 'office-ui-fabric-react/lib/Layer';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
@@ -15,14 +16,14 @@ import * as React from 'react';
 import { getObjectValue } from 'shared/lib/helpers/getObjectValue';
 import { parseUrlHash, redirect, setUrlHash } from 'shared/lib/util';
 import * as format from 'string-format';
-import { AggregatedSearchList, IFilterItemProps, IFilterProps } from '../';
+import * as _ from 'underscore';
+import { IFilterItemProps, IFilterProps } from '../';
 import { IPortfolioOverviewProps } from './IPortfolioOverviewProps';
 import { IPortfolioOverviewHashStateState, IPortfolioOverviewState } from './IPortfolioOverviewState';
 import styles from './PortfolioOverview.module.scss';
 import { PortfolioOverviewCommands } from './PortfolioOverviewCommands';
 import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage';
 import { renderItemColumn } from './RenderItemColumn';
-import * as _ from 'underscore';
 
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = {};
@@ -111,9 +112,8 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
             modalProps={{ isOpen: true, onDismiss: this._onDismissProjectInfoModal.bind(this) }}
             title={this.state.showProjectInfo.Title}
             siteId={this.state.showProjectInfo.SiteId}
-            entity={this.props.entity}
             webUrl={this.props.pageContext.site.absoluteUrl}
-            hubSiteUrl={this.props.pageContext.site.absoluteUrl}
+            hubSite={{ web: new Web(this.props.pageContext.site.absoluteUrl), url: this.props.pageContext.site.absoluteUrl }}
             filterField={this.props.projectInfoFilterField}
             statusReportsListName={this.props.statusReportsListName}
             statusReportsCount={this.props.statusReportsCount}

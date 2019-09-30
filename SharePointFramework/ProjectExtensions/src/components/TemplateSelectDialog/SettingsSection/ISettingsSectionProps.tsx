@@ -1,4 +1,10 @@
+export interface ISettings {
+    includeStandardFolders?: boolean;
+    copyPlannerTasks?: boolean;
+    localProjectPropertiesList?: boolean;
+}
+
 export interface ISettingsSectionProps {
-    defaultChecked: { includeStandardFolders: boolean, copyPlannerTasks: boolean };
-    onChange: (obj: { includeStandardFolders?: boolean, copyPlannerTasks?: boolean }) => void;
+    defaultChecked: ISettings;
+    onChange: (obj: ISettings) => void;
 }

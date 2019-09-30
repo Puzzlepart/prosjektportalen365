@@ -1,7 +1,8 @@
 define([], function () {
   return {
     ApplyTemplateText: 'Legger på mal {0}',
-    ApplyExtensionText: 'Legger på prosjekttilegg',
+    ApplyingExtensionsText: 'Legger på prosjekttilegg',
+    ApplyExtensionText: 'Legger på prosjekttilegg {0}',
     ApplyTemplateClientSidePages: 'Legger inn filer og webdeler',
     ApplyTemplateComposedLook: 'Legger på farge og fonter',
     ApplyTemplateContentTypes: 'Legger inn innholdstyper',
@@ -61,6 +62,12 @@ define([], function () {
     DocumentTemplateDialogScreenSelectInfoText: 'Velg dokumentmalene du vil kopiere til prosjektområdet.<br /><br />Malene hentes fra<a href="{0}" target="_blank">{1}</a> og det hentes _siste versjon_ av malene.<br /><br />Når du trykker \'Velg\' sendes du videre til et skjermbilde hvor du kan sette _tittel_ og _filnavn_ for dokumentene som kopieres over.',
     DocumentTemplateDialogScreenEditCopyInfoText: 'Her kan du sette _tittel_ og _filnavn_ for dokumentene som kopieres over.<br /><br />Når du er ferdig, trykk \'Start kopering\' for å starte kopieringen.',
     FilenameAlreadyInUseErrorText: 'Filnavnet er allerede i bruk.',
-    FilenameInValidErrorText: 'Filnavnet er ugyldig.'
+    FilenameInValidErrorText: 'Filnavnet er ugyldig.',
+    SyncLocalProjectPropertiesListText: 'Synkroniserer liste for prosjektegenskaper',
+    CreatingLocalProjectPropertiesListItemText: 'Oppretter element for prosjektegenskaper',
+    ProvisionSiteFieldText: 'Opprettet feltet {0} på området',
+    CreatingPlannerTaskText: 'Oppretter oppgaver for {0}',
+    ProcessListItemText: 'Kopierer listeelement {0} av {1}',
+    
   }
 });
