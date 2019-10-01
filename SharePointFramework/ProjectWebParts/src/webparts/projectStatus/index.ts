@@ -1,3 +1,4 @@
+import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import '@pnp/polyfill-ie11';
@@ -8,18 +9,18 @@ import 'office-ui-fabric-react/dist/css/fabric.min.css';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { ApplicationInsightsLogListener } from 'shared/lib/logging/ApplicationInsightsLogListener';
-import { SpEntityPortalService } from 'sp-entityportal-service';
 import HubSiteService, { IHubSite } from 'sp-hubsite-service';
+import { LOGGING_PAGE } from 'webparts/PropertyPane';
 import SPDataAdapter from '../../data/index';
 
 moment.locale('nb');
-Logger.subscribe(new ConsoleListener());
-Logger.activeLogLevel = LogLevel.Warning;
 
 export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProjectStatusProps> {
   private _hubSite: IHubSite;
 
   public async onInit() {
+    Logger.activeLogLevel = this.properties.logLevel || LogLevel.Error;
+    Logger.subscribe(new ConsoleListener());
     Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
     sp.setup({ spfxContext: this.context });
     this._hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
@@ -27,6 +28,7 @@ export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProject
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,
       hubSiteUrl: this._hubSite.url,
+      logLevel: this.properties.logLevel || LogLevel.Error,
     });
   }
 
@@ -40,5 +42,11 @@ export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProject
       ...this.properties,
     });
     ReactDom.render(element, this.domElement);
+  }
+
+  public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+    return {
+      pages: [LOGGING_PAGE]
+    };
   }
 }

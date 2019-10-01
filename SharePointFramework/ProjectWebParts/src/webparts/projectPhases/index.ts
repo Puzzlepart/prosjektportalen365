@@ -1,4 +1,5 @@
-import { BaseClientSideWebPart, IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
+import { IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane';
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import '@pnp/polyfill-ie11';
 import { sp } from '@pnp/sp';
@@ -8,18 +9,16 @@ import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { ApplicationInsightsLogListener } from 'shared/lib/logging/ApplicationInsightsLogListener';
-import { SpEntityPortalService } from 'sp-entityportal-service';
 import HubSiteService, { IHubSite } from 'sp-hubsite-service';
-import SPDataAdapter from '../../data/index';
-
-Logger.subscribe(new ConsoleListener());
-Logger.activeLogLevel = LogLevel.Warning;
+import { LOGGING_PAGE } from 'webparts/PropertyPane';
+import SPDataAdapter from '../../data';
 
 export default class ProjectPhasesWebPart extends BaseClientSideWebPart<IProjectPhasesProps> {
   private _hubSite: IHubSite;
 
   public async onInit() {
-    this.context.statusRenderer.clearLoadingIndicator(this.domElement);
+    Logger.activeLogLevel = this.properties.logLevel || LogLevel.Error;
+    Logger.subscribe(new ConsoleListener());
     Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
     sp.setup({ spfxContext: this.context });
     this._hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
@@ -27,15 +26,14 @@ export default class ProjectPhasesWebPart extends BaseClientSideWebPart<IProject
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,
       hubSiteUrl: this._hubSite.url,
+      logLevel: this.properties.logLevel || LogLevel.Error,
     });
   }
 
   public render(): void {
     const element: React.ReactElement<IProjectPhasesProps> = React.createElement(ProjectPhases, {
-      siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,
       isSiteAdmin: this.context.pageContext.legacyPageContext.isSiteAdmin,
-      hubSiteUrl: this._hubSite.url,
       ...this.properties,
     });
     ReactDom.render(element, this.domElement);
@@ -76,7 +74,8 @@ export default class ProjectPhasesWebPart extends BaseClientSideWebPart<IProject
               ]
             }
           ]
-        }
+        },
+        LOGGING_PAGE,
       ]
     };
   }

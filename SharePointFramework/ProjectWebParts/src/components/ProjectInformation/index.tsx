@@ -10,19 +10,20 @@ import { HubConfigurationService } from 'shared/lib/services';
 import parseUrlHash from 'shared/lib/util/parseUrlHash';
 import * as formatString from 'string-format';
 import SPDataAdapter from '../../data';
+import { BaseWebPartComponent } from '../BaseWebPartComponent';
+import { ProgressDialog } from '../ProgressDialog/index';
 import { UserMessage } from '../UserMessage';
 import { Actions } from './Actions';
 import { IProjectInformationData } from './IProjectInformationData';
 import { IProjectInformationProps } from './IProjectInformationProps';
 import { IProjectInformationState } from './IProjectInformationState';
 import { IProjectInformationUrlHash } from './IProjectInformationUrlHash';
-import { ProgressDialog } from '../ProgressDialog/index';
 import styles from './ProjectInformation.module.scss';
 import { ProjectProperties } from './ProjectProperties';
 import { ProjectProperty, ProjectPropertyModel } from './ProjectProperties/ProjectProperty/index';
 import { StatusReports } from './StatusReports';
 
-export class ProjectInformation extends React.Component<IProjectInformationProps, IProjectInformationState> {
+export class ProjectInformation extends BaseWebPartComponent<IProjectInformationProps, IProjectInformationState> {
   public static defaultProps: Partial<IProjectInformationProps> = { statusReportsCount: 0 };
   private _hubConfigurationService: HubConfigurationService;
   private _storage: PnPClientStore;
@@ -33,8 +34,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
    * @param {IProjectInformationProps} props Props
    */
   constructor(props: IProjectInformationProps) {
-    super(props);
-    this.state = { isLoading: true, data: {} };
+    super('ProjectInformation', props, { isLoading: true });
     this._storage = new PnPClientStorage().session;
     this._hubConfigurationService = new HubConfigurationService().configure({ urlOrWeb: props.hubSite.web, siteId: props.siteId });
   }
@@ -51,7 +51,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     }
   }
 
-  public render(): React.ReactElement<IProjectInformationProps> {
+  public render() {
     if (this.state.hidden) {
       return null;
     }
@@ -134,13 +134,18 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   /**
    * On sync properties
    */
-  private async _onSyncProperties() {
+  private async _onSyncProperties(): Promise<void> {
+    this.logInfo(`Starting sync of ${strings.ProjectPropertiesListName}`, '_onSyncProperties');
     this.setState({ progress: { title: strings.SyncProjectPropertiesProgressLabel, progress: {} } });
     const progressFunc = (progress: IProgressIndicatorProps) => this.setState({ progress: { title: strings.SyncProjectPropertiesProgressLabel, progress } });
     try {
       progressFunc({ label: strings.SyncProjectPropertiesListProgressDescription, description: 'Vennligst vent...' });
+      this.logInfo('Ensuring list and fields', '_onSyncProperties');
       await this._hubConfigurationService.syncList(this.props.webUrl, strings.ProjectPropertiesListName, '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C', { Title: this.props.webTitle });
+      this.logInfo('Synchronizing properties to item in hub', '_onSyncProperties');
       await SPDataAdapter.syncPropertyItemToHub(this.state.data.fieldValues, this.state.data.fieldValuesText, progressFunc);
+      this.logInfo(`Finished. Reloading page.`, '_onSyncProperties');
+      SPDataAdapter.clearStorage();
       document.location.href = this.props.webUrl;
     } catch (error) {
       this._addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning);
@@ -207,6 +212,8 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
       }
 
       const properties = this._transformProperties(data.fieldValuesText, data);
+
+      this.logInfo('Succesfully retrieved data.', '_fetchData', { localList: data.localList });
 
       return { data, properties };
     } catch (error) {

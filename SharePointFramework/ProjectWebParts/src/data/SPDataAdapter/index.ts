@@ -18,8 +18,8 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
      * @param {WebPartContext} spfxContext Context
      * @param {ISPDataAdapterConfiguration} settings Settings
      */
-    public configure(spfxContext: WebPartContext, settings: ISPDataAdapterConfiguration) {
-        super.configure(spfxContext, settings);
+    public configure(spfxContext: WebPartContext, configuration: ISPDataAdapterConfiguration) {
+        super.configure(spfxContext, configuration);
         taxonomy.setup({ spfxContext });
         this.project = new ProjectDataService({
             ...this.settings,
@@ -27,7 +27,6 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
             propertiesListName: strings.ProjectPropertiesListName,
             sp: this.sp,
             taxonomy,
-            logLevel: LogLevel.Info,
         });
         this.project.spConfiguration = this.spConfiguration;
     }
@@ -100,5 +99,12 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
                 .get<{ InternalName: string }>(),
         ]);
         return { termSetId: phaseField.TermSetId, phaseTextField: textField.InternalName };
+    }
+
+    /**
+     * Clear storage
+     */
+    public clearStorage(): void {
+        this.project.clearStorage();
     }
 };

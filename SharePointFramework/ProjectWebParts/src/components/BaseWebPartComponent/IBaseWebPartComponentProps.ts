@@ -1,4 +1,5 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
+import { LogLevel } from '@pnp/logging';
 import { IHubSite } from 'sp-hubsite-service';
 
 export interface IBaseWebPartComponentProps {
@@ -37,4 +38,9 @@ export interface IBaseWebPartComponentProps {
      * Display mode
      */
     displayMode?: DisplayMode;
+
+    /**
+     * Log level
+     */
+    logLevel?: LogLevel;
 }

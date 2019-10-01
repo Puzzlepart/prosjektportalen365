@@ -1,25 +1,19 @@
-import { dateAdd, TypedHash } from '@pnp/common';
-import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
-import { SPConfiguration, SPRest } from '@pnp/sp';
-import { ITaxonomySession } from '@pnp/sp-taxonomy';
-import { SpEntityPortalService } from 'sp-entityportal-service';
+import { dateAdd, TypedHash, PnPClientStorage, PnPClientStore } from '@pnp/common';
+import { ConsoleListener, Logger } from '@pnp/logging';
+import { SPConfiguration } from '@pnp/sp';
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute';
 import { ISPList } from '../../interfaces/ISPList';
 import { IProjectPhaseChecklistItem, ProjectPhaseChecklistData, ProjectPhaseModel } from '../../models';
 import { IGetPropertiesData } from './IGetPropertiesData';
-
-export interface IProjectDataServiceParams {
-    webUrl: string;
-    siteId: string;
-    spEntityPortalService: SpEntityPortalService;
-    propertiesListName: string;
-    sp: SPRest
-    taxonomy?: ITaxonomySession
-    logLevel?: LogLevel;
-}
+import * as formatString from 'string-format';
+import { IProjectDataServiceParams } from './IProjectDataServiceParams';
 
 export class ProjectDataService {
     public spConfiguration: SPConfiguration;
+    private _storage: PnPClientStore;
+    private _storageKeys: TypedHash<string> = {
+        _getPropertyItemContext: '{0}_propertyitemcontext'
+    }
 
     /**
      * Creates a new instance of ProjectDataService
@@ -27,41 +21,66 @@ export class ProjectDataService {
      * @param {IProjectDataServiceParams} _params Parameters
      */
     constructor(private _params: IProjectDataServiceParams) {
+        this._initStorage();
         if (_params.logLevel) {
             Logger.subscribe(new ConsoleListener());
             Logger.activeLogLevel = _params.logLevel;
         }
     }
 
+    /**
+     * Initialize storage
+     */
+    private _initStorage() {
+        this._storage = new PnPClientStorage().session;
+        this._storageKeys = Object.keys(this._storageKeys).reduce((obj, key) => {
+            obj[key] = formatString(this._storageKeys[key], this._params.siteId.replace(/-/g, ''));
+            return obj;
+        }, {});
+    }
+
+    /**
+     * Get storage key for function
+     * 
+     * @param {string} func Function name
+     */
+    private _getStorageKey(func: string) {
+        return this._storageKeys[func];
+    }
 
     /**
      * Get property item context from site
+     * 
+     * @param {Date} expire Date of expire for cache
      */
-    private async _getPropertyItemContext() {
-        try {
-            Logger.write(`(ProjectDataService) (_getPropertyItemContext) Checking if list ${this._params.propertiesListName} exists in web.`);
-            let [list] = await this._params.sp.web.lists.filter(`Title eq '${this._params.propertiesListName}'`).select('Id', 'DefaultEditFormUrl').usingCaching().get<ISPList[]>();
-            if (!list) {
-                Logger.write(`(ProjectDataService) List ${this._params.propertiesListName} does not exist in web.`);
+    private async _getPropertyItemContext(expire: Date = dateAdd(new Date(), 'day', 1)) {
+        Logger.write(`(ProjectDataService) (_getPropertyItemContext) ${this._getStorageKey('_getPropertyItemContext')}`);
+        return this._storage.getOrPut(this._getStorageKey('_getPropertyItemContext'), async () => {
+            try {
+                Logger.write(`(ProjectDataService) (_getPropertyItemContext) Checking if list ${this._params.propertiesListName} exists in web.`);
+                let [list] = await this._params.sp.web.lists.filter(`Title eq '${this._params.propertiesListName}'`).select('Id', 'DefaultEditFormUrl').usingCaching().get<ISPList[]>();
+                if (!list) {
+                    Logger.write(`(ProjectDataService) List ${this._params.propertiesListName} does not exist in web.`);
+                    return null;
+                }
+                Logger.write(`(ProjectDataService) (_getPropertyItemContext) Checking if there's a entry in list ${this._params.propertiesListName}.`);
+                let [item] = await this._params.sp.web.lists.getById(list.Id).items.select('Id').top(1).usingCaching().get<{ Id: number }[]>();
+                if (!item) {
+                    Logger.write(`(ProjectDataService) (_getPropertyItemContext) No entry found in list ${this._params.propertiesListName}.`);
+                    return null;
+                }
+                Logger.write(`(ProjectDataService) (_getPropertyItemContext) Entry with ID ${item.Id} found in list ${this._params.propertiesListName}.`);
+                return {
+                    id: item.Id,
+                    list: this._params.sp.web.lists.getById(list.Id),
+                    item: this._params.sp.web.lists.getById(list.Id).items.getById(item.Id),
+                    listId: list.Id,
+                    defaultEditFormUrl: list.DefaultEditFormUrl,
+                };
+            } catch (error) {
                 return null;
             }
-            Logger.write(`(ProjectDataService) (_getPropertyItemContext) Checking if there's a entry in list ${this._params.propertiesListName}.`);
-            let [item] = await this._params.sp.web.lists.getById(list.Id).items.select('Id').top(1).usingCaching().get<{ Id: number }[]>();
-            if (!item) {
-                Logger.write(`(ProjectDataService) (_getPropertyItemContext) No entry found in list ${this._params.propertiesListName}.`);
-                return null;
-            }
-            Logger.write(`(ProjectDataService) (_getPropertyItemContext) Entry with ID ${item.Id} found in list ${this._params.propertiesListName}.`);
-            return {
-                id: item.Id,
-                list: this._params.sp.web.lists.getById(list.Id),
-                item: this._params.sp.web.lists.getById(list.Id).items.getById(item.Id),
-                listId: list.Id,
-                defaultEditFormUrl: list.DefaultEditFormUrl,
-            };
-        } catch (error) {
-            return null;
-        }
+        }, expire);
     }
 
     /**
@@ -69,7 +88,7 @@ export class ProjectDataService {
      * 
      * @param {string} urlSource Url source
      */
-    private async _getPropertyItem(urlSource: string = encodeURIComponent(document.location.href)) {
+    private async _getPropertyItem(urlSource: string = encodeURIComponent(document.location.href)): Promise<IGetPropertiesData> {
         try {
             let propertyItemContext = await this._getPropertyItemContext();
             if (!propertyItemContext) {
@@ -222,6 +241,15 @@ export class ProjectDataService {
      */
     public async updateChecklistItem(listName: string, id: number, properties: TypedHash<any>) {
         return await this._params.sp.web.lists.getByTitle(listName).items.getById(id).update(properties);
+    }
+
+    /**
+     * Clear storage
+     */
+    public clearStorage(): void {
+        for (let key in Object.keys(this._storageKeys)) {
+            this._storage.delete(key);
+        }
     }
 };
 

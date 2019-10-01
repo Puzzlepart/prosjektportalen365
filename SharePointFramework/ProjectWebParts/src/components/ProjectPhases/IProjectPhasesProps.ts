@@ -1,7 +1,6 @@
-import {  ISpEntityPortalServiceParams } from 'sp-entityportal-service';
+import { IBaseWebPartComponentProps } from '../BaseWebPartComponent';
 
-
-export interface IProjectPhasesProps {
+export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   /**
    * Field name for phase field
    */
@@ -11,26 +10,6 @@ export interface IProjectPhasesProps {
    * Automatic reload after phase change
    */
   automaticReload: boolean;
-
-  /**
-   * URL for the hub site
-   */
-  hubSiteUrl: string;
-
-  /**
-   * ID of the site
-   */
-  siteId: string;
-
-  /**
-   * URL for the web
-   */
-  webUrl: string;
-
-  /**
-   * Is the current user site admin
-   */
-  isSiteAdmin?: boolean;
 
   /**
    * Reload timeout
@@ -48,7 +27,7 @@ export interface IProjectPhasesProps {
   currentPhaseViewName: boolean;
 
   /**
-   * @todo Describe property
+   * Property for phase sub text
    */
   phaseSubTextProperty: string;
 }
