@@ -93,8 +93,6 @@ define([], function () {
     SortByFieldLabel: 'Sorteringsegenskap',
     StartValueLabel: 'Startverdi',
     StatusReportsCountLabel: 'Antal rapporter å vise',
-    StatusReportsLinkUrlTemplateLabel: 'Lenke for knapp',
-    StatusReportsListNameLabel: "Listenavn for statusrapporter",
     TileViewGroupName: 'Flisevisning',
     TitleLabel: 'Tittel',
     UnitLabel: 'Måleenhet',

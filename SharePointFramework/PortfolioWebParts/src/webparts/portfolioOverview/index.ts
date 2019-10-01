@@ -1,7 +1,8 @@
 import { IPropertyPaneConfiguration, IPropertyPaneDropdownOption, PropertyPaneDropdown, PropertyPaneSlider, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
 import { IPortfolioOverviewProps, PortfolioOverview } from 'components';
-import { IPortfolioOverviewConfiguration } from 'interfaces';
+import { IPortfolioConfiguration } from 'interfaces';
 import * as strings from 'PortfolioWebPartsStrings';
+import { HubConfigurationService } from 'shared/lib/services/HubConfigurationService';
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
 
 export const PROPERTYPANE_CONFIGURATION_PROPS = {
@@ -10,8 +11,6 @@ export const PROPERTYPANE_CONFIGURATION_PROPS = {
   DEFAULT_VIEW_ID: 'defaultViewId',
   PROJECTINFO_FILTER_FIELD: 'projectInfoFilterField',
   STATUSREPORTS_COUNT: 'statusReportsCount',
-  STATUSREPORTS_LINKURLTEMPLATE: 'statusReportsLinkUrlTemplate',
-  STATUSREPORTS_LISTNAME: 'statusReportsListName',
   SHOW_COMMANDBAR: 'showCommandBar',
   SHOW_EXCELEXPORT_BUTTON: 'showExcelExportButton',
   SHOW_FILTERS: 'showFilters',
@@ -22,7 +21,7 @@ export const PROPERTYPANE_CONFIGURATION_PROPS = {
 };
 
 export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPortfolioOverviewProps> {
-  private _configuration: IPortfolioOverviewConfiguration;
+  private _configuration: IPortfolioConfiguration;
 
   public render(): void {
     this.renderComponent(PortfolioOverview, { configuration: this._configuration } as IPortfolioOverviewProps);
@@ -30,7 +29,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
 
   public async onInit(): Promise<void> {
     await super.onInit();
-    this._configuration = await this.dataAdapter.getPortfolioConfig(this.properties.columnConfigListName, this.properties.columnsListName, this.properties.viewsListName);
+    this._configuration = await this.dataAdapter.getPortfolioConfig();
   }
 
   /**
@@ -110,27 +109,26 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                   max: 10,
                   step: 1,
                 }),
-                PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.STATUSREPORTS_LISTNAME, {
-                  label: strings.StatusReportsListNameLabel,
-                  disabled: this.properties.statusReportsCount === 0,
-                }),
-                PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.STATUSREPORTS_LINKURLTEMPLATE, {
-                  label: strings.StatusReportsLinkUrlTemplateLabel,
-                  disabled: this.properties.statusReportsCount === 0,
-                }),
               ]
             },
+          ]
+        },
+        {
+          groups: [
             {
               groupName: strings.ConfigurationGroupName,
               groupFields: [
                 PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.COLUMN_CONFIG_LISTNAME, {
                   label: strings.ColumnConfigListNameLabel,
+                  disabled: true,
                 }),
                 PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.COLUMNS_LISTNAME, {
                   label: strings.ColumnsListNameLabel,
+                  disabled: true,
                 }),
                 PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.VIEWS_LISTNAME, {
                   label: strings.ViewsListNameLabel,
+                  disabled: true,
                 }),
               ]
             },

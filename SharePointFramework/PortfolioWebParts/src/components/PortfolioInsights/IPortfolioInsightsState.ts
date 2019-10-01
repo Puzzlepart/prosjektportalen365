@@ -1,6 +1,7 @@
 
-import { ChartConfiguration, ChartData, PortfolioOverviewView } from 'models';
-import { IPortfolioOverviewConfiguration } from 'interfaces';
+import { ChartConfiguration, ChartData } from 'models';
+import { IPortfolioConfiguration } from 'interfaces';
+import { PortfolioOverviewView } from 'shared/lib/models/PortfolioOverviewView';
 
 
 export interface IPortfolioInsightsState {
@@ -9,6 +10,6 @@ export interface IPortfolioInsightsState {
     charts?: ChartConfiguration[];
     contentTypes?: { StringId: string, Name: string, NewFormUrl: string }[];
     currentView?: PortfolioOverviewView;
-    configuration?: IPortfolioOverviewConfiguration;
+    configuration?: IPortfolioConfiguration;
     error?: string;
 }

@@ -24,12 +24,14 @@
             "officeFabricIconFontName": "FolderList",
             "properties": {
                 "title": "Porteføljeoversikt",
-                "columnConfigListName": "Prosjektkolonnekonfigurasjon",
-                "columnsListName": "Prosjektkolonner",
-                "viewsListName": "Porteføljevisninger",
+                "projectInfoFilterField": "GtShowFieldPortfolio",
+                "statusReportsCount": 0,
                 "showCommandBar": true,
-                "showFilters": true,
-                "showViewSelector": false
+                "showExcelExportButton": true,
+                "showGroupBy": true,
+                "showViewSelector": true,
+                "showSearchBox": true,
+                "showFilters": true
             }
         }
     ]

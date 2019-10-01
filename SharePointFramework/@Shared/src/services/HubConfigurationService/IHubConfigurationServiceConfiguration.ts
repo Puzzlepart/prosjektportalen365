@@ -1,26 +1,26 @@
 import { Web } from '@pnp/sp';
 
-export type HubConfigurationServiceList = 'statusSections' | 'projectColumns' | 'projectColumnConfiguration' | 'projectStatus' | 'portfolioViews';
+export type HubConfigurationServiceList = 'STATUS_SECTIONS' | 'PROJECT_COLUMNS' | 'PROJECT_COLUMN_CONFIGURATION' | 'PROJECT_STATUS' | 'PORTFOLIO_VIEWS';
 
 export interface IHubConfigurationServiceConfiguration extends Object {
     urlOrWeb: string | Web;
     siteId?: string;
     webUrl?: string;
     listNames?: {
-        statusSections: string,
-        projectColumns: string,
-        projectColumnConfiguration: string,
-        projectStatus: string,
-        portfolioViews: string,
+        STATUS_SECTIONS: string,
+        PROJECT_COLUMNS: string,
+        PROJECT_COLUMN_CONFIGURATION: string,
+        PROJECT_STATUS: string,
+        PORTFOLIO_VIEWS: string,
     }
 }
 
 export const HubConfigurationServiceDefaultConfiguration: Partial<IHubConfigurationServiceConfiguration> = {
     listNames: {
-        statusSections: 'Statusseksjoner',
-        projectColumns: 'Prosjektkolonner',
-        projectColumnConfiguration: 'Prosjektkolonnekonfigurasjon',
-        projectStatus: 'Prosjektstatus',
-        portfolioViews: 'Porteføljevisninger'
+        STATUS_SECTIONS: 'Statusseksjoner',
+        PROJECT_COLUMNS: 'Prosjektkolonner',
+        PROJECT_COLUMN_CONFIGURATION: 'Prosjektkolonnekonfigurasjon',
+        PROJECT_STATUS: 'Prosjektstatus',
+        PORTFOLIO_VIEWS: 'Porteføljevisninger'
     }
 }

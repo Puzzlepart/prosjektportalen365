@@ -3,7 +3,6 @@ import { Web } from '@pnp/sp';
 import { getId } from '@uifabric/utilities';
 import * as arraySort from 'array-sort';
 import { IFetchDataForViewRefinersResult } from 'data/IFetchDataForViewResult';
-import { PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
 import { ContextualMenu, ContextualMenuItemType, IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ConstrainMode, DetailsList, DetailsListLayoutMode, IGroup, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { LayerHost } from 'office-ui-fabric-react/lib/Layer';
@@ -24,6 +23,8 @@ import styles from './PortfolioOverview.module.scss';
 import { PortfolioOverviewCommands } from './PortfolioOverviewCommands';
 import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage';
 import { renderItemColumn } from './RenderItemColumn';
+import ExcelExportService from 'shared/lib/services/ExcelExportService';
+import { ProjectColumn, PortfolioOverviewView } from 'shared/lib/models';
 
 export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = {};
@@ -42,6 +43,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   }
 
   public async componentDidMount() {
+    ExcelExportService.configure({ name: this.props.title });
     try {
       const data = await this._fetchInitialData();
       this.setState({ ...data, isLoading: false });
@@ -115,9 +117,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
             webUrl={this.props.pageContext.site.absoluteUrl}
             hubSite={{ web: new Web(this.props.pageContext.site.absoluteUrl), url: this.props.pageContext.site.absoluteUrl }}
             filterField={this.props.projectInfoFilterField}
-            statusReportsListName={this.props.statusReportsListName}
-            statusReportsCount={this.props.statusReportsCount}
-            statusReportsLinkUrlTemplate={this.props.statusReportsLinkUrlTemplate} />
+            statusReportsCount={this.props.statusReportsCount} />
         )}
       </div>
     );
@@ -127,17 +127,11 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     return format(strings.SearchBoxPlaceholderText, this.state.currentView.title.toLowerCase());
   }
 
-  private _list(items: any[], columns: PortfolioOverviewColumn[], groups: IGroup[]) {
+  private _list(items: any[], columns: ProjectColumn[], groups: IGroup[]) {
     let columnsCopy = [...columns];
     if (this.props.pageContext.legacyPageContext.isSiteAdmin) {
-      columnsCopy.push({
-        key: 'AddColumn',
-        fieldName: undefined,
-        name: `  ${strings.AddColumnLabel}`,
-        iconName: 'CalculatorAddition',
-        onColumnClick: () => redirect(this.props.configuration.colNewFormUrl),
-        minWidth: 150,
-      } as PortfolioOverviewColumn);
+      let addCol = new ProjectColumn().create('AddColumn', null, `  ${strings.AddColumnLabel}`, 'CalculatorAddition',  () => redirect(this.props.configuration.columnUrls.defaultNewFormUrl), 150);
+      columnsCopy.push(addCol);
     }
 
     return (
@@ -149,7 +143,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           columns={columnsCopy}
           groups={groups}
           selectionMode={SelectionMode.none}
-          onRenderItemColumn={(item, _index, column: PortfolioOverviewColumn) => renderItemColumn(item, column, state => this.setState(state))}
+          onRenderItemColumn={(item, _index, column: ProjectColumn) => renderItemColumn(item, column, state => this.setState(state))}
           onColumnHeaderClick={this._onColumnHeaderClick.bind(this)}
           onColumnHeaderContextMenu={this._onColumnHeaderContextMenu.bind(this)}
           compact={this.state.isCompact} />
@@ -189,10 +183,10 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   /**
    * On filter change 
    *
-   * @param {PortfolioOverviewColumn} column Column
+   * @param {ProjectColumn} column Column
    * @param {IFilterItemProps[]} selectedItems Selected items
    */
-  private _onFilterChange(column: PortfolioOverviewColumn, selectedItems: IFilterItemProps[]) {
+  private _onFilterChange(column: ProjectColumn, selectedItems: IFilterItemProps[]) {
     const { activeFilters } = ({ ...this.state } as IPortfolioOverviewState);
     if (selectedItems.length > 0) {
       activeFilters[column.fieldName] = selectedItems.map(i => i.value);
@@ -205,10 +199,10 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   /**
    * On column sort
    *
-   * @param {PortfolioOverviewColumn} column The column config
+   * @param {ProjectColumn} column The column config
    * @param {boolean} sortDesencing Sort descending
    */
-  private _onColumnSort(column: PortfolioOverviewColumn, sortDesencing: boolean): void {
+  private _onColumnSort(column: ProjectColumn, sortDesencing: boolean): void {
     let { items, columns } = ({ ...this.state } as IPortfolioOverviewState);
     items = arraySort(items, [column.fieldName], { reverse: !sortDesencing });
     this.setState({
@@ -227,9 +221,9 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   /**
    * On column group by
    * 
-   * @param {PortfolioOverviewColumn} column The column config
+   * @param {ProjectColumn} column The column config
    */
-  private _onColumnGroupBy(column: PortfolioOverviewColumn) {
+  private _onColumnGroupBy(column: ProjectColumn) {
     this.setState(prevState => ({
       groupBy: getObjectValue<string>(prevState, 'groupBy.fieldName', '') === column.fieldName ? null : column,
     }));
@@ -239,19 +233,19 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
    * On column header click
    * 
    * @param {React.MouseEvent<HTMLElement, MouseEvent>} ev Event
-   * @param {PortfolioOverviewColumn} column Column
+   * @param {ProjectColumn} column Column
    */
-  private _onColumnHeaderClick(ev?: React.MouseEvent<HTMLElement, MouseEvent>, column?: PortfolioOverviewColumn) {
+  private _onColumnHeaderClick(ev?: React.MouseEvent<HTMLElement, MouseEvent>, column?: ProjectColumn) {
     this._onColumnHeaderContextMenu(column, ev);
   }
 
   /**
    * On column header context menu
    * 
-   * @param {PortfolioOverviewColumn} column Column
+   * @param {ProjectColumn} column Column
    * @param {React.MouseEvent<HTMLElement, MouseEvent>} ev Event
    */
-  private _onColumnHeaderContextMenu(column?: PortfolioOverviewColumn, ev?: React.MouseEvent<HTMLElement, MouseEvent>) {
+  private _onColumnHeaderContextMenu(column?: ProjectColumn, ev?: React.MouseEvent<HTMLElement, MouseEvent>) {
     if (column.key === 'AddColumn') return;
     this.setState({
       columnContextMenu: {
@@ -310,7 +304,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
             id: getId('ColumSettings'),
             key: getId('ColumSettings'),
             name: strings.ColumSettingsLabel,
-            onClick: () => redirect(`${this.props.configuration.colEditFormUrl}?ID=${column.id}`),
+            onClick: () => redirect(`${this.props.configuration.columnUrls.defaultEditFormUrl}?ID=${column.id}`),
             disabled: !this.props.pageContext.legacyPageContext.isSiteAdmin,
           }
         ],
@@ -330,9 +324,9 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
   * Create groups
   * 
   * @param {any[]} items Items
-  * @param {IAggregatedSearchListColumn[]} columns Columns
+  * @param {ProjectColumn[]} columns Columns
   */
-  private _createGroups(items: any[], columns: PortfolioOverviewColumn[]) {
+  private _createGroups(items: any[], columns: ProjectColumn[]) {
     let { groupBy, sortBy } = ({ ...this.state } as IPortfolioOverviewState);
     if (!groupBy) return { items, columns, groups: null };
     const itemsSort = { props: [groupBy.fieldName], opts: { reverse: false } };

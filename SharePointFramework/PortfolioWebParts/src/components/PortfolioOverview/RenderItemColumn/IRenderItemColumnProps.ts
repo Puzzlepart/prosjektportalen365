@@ -1,6 +1,6 @@
-import { PortfolioOverviewColumn } from 'models';
+import { ProjectColumn } from 'shared/lib/models/ProjectColumn';
 
 export interface IRenderItemColumnProps {
-    column: PortfolioOverviewColumn;
+    column: ProjectColumn;
     colValue: string;
 }

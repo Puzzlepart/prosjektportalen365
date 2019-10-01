@@ -26,7 +26,7 @@ export class HubConfigurationService {
      * Get project columns
      */
     public async getProjectColumns(): Promise<ProjectColumn[]> {
-        let spItems = await this._web.lists.getByTitle(this._configuration.listNames.projectColumns)
+        let spItems = await this._web.lists.getByTitle(this._configuration.listNames.PROJECT_COLUMNS)
             .items
             .select(...Object.keys(new SPProjectColumnItem()))
             .get<SPProjectColumnItem[]>();
@@ -37,24 +37,24 @@ export class HubConfigurationService {
      * Get project status sections
      */
     public async getProjectStatusSections(): Promise<SectionModel[]> {
-        let items = await this._web.lists.getByTitle(this._configuration.listNames.statusSections).items.get();
+        let items = await this._web.lists.getByTitle(this._configuration.listNames.STATUS_SECTIONS).items.get();
         return items.map(item => new SectionModel(item));
     }
 
     public async addStatusReport(properties: TypedHash<string>): Promise<number> {
-        let itemAddResult = await this._web.lists.getByTitle(this._configuration.listNames.statusSections).items.add(properties);
+        let itemAddResult = await this._web.lists.getByTitle(this._configuration.listNames.STATUS_SECTIONS).items.add(properties);
         return itemAddResult.data.Id;
     }
 
     public async updateStatusReport(id: number, properties: TypedHash<string>): Promise<void> {
-        await this._web.lists.getByTitle(this._configuration.listNames.statusSections).items.getById(id).update(properties);
+        await this._web.lists.getByTitle(this._configuration.listNames.STATUS_SECTIONS).items.getById(id).update(properties);
     }
 
     /**
      * Get project column configuration
      */
     public async getProjectColumnConfig(): Promise<ProjectColumnConfig[]> {
-        let spItems = await this._web.lists.getByTitle(this._configuration.listNames.projectColumnConfiguration).items
+        let spItems = await this._web.lists.getByTitle(this._configuration.listNames.PROJECT_COLUMN_CONFIGURATION).items
             .orderBy('ID', true)
             .expand('GtPortfolioColumn')
             .select(...Object.keys(new SPProjectColumnConfigItem()), 'GtPortfolioColumn/Title', 'GtPortfolioColumn/GtInternalName')
@@ -66,7 +66,7 @@ export class HubConfigurationService {
      * Get portfolio overview views
      */
     public async getPortfolioOverviewViews(): Promise<PortfolioOverviewView[]> {
-        let spItems = await this._web.lists.getByTitle(this._configuration.listNames.projectColumnConfiguration).items
+        let spItems = await this._web.lists.getByTitle(this._configuration.listNames.PORTFOLIO_VIEWS).items
             .orderBy('GtSortOrder', true)
             .get<SPPortfolioOverviewViewItem[]>();
         return spItems.map(item => new PortfolioOverviewView(item));;
@@ -203,7 +203,7 @@ export class HubConfigurationService {
     public async getStatusReports(filter: string = `GtSiteId eq '${this._configuration.siteId}'`, top?: number, select?: string[]): Promise<StatusReport[]> {
         if (!this._configuration.siteId) return [];
         try {
-            let items = this._web.lists.getByTitle(this._configuration.listNames.projectStatus)
+            let items = this._web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
                 .items
                 .filter(filter)
                 .orderBy('Id', false);
@@ -222,7 +222,7 @@ export class HubConfigurationService {
      */
     public async getStatusReportListProps(): Promise<{ DefaultEditFormUrl: string }> {
         try {
-            return this._web.lists.getByTitle(this._configuration.listNames.projectStatus)
+            return this._web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
                 .select('DefaultEditFormUrl')
                 .expand('DefaultEditFormUrl')
                 .usingCaching({
@@ -237,7 +237,7 @@ export class HubConfigurationService {
     }
 
     public async getProjectColumnFields(filter?: string, select: string[] = ['InternalName', 'Title']): Promise<any[]> {
-        let fields = this._web.lists.getByTitle(this._configuration.listNames.projectColumns)
+        let fields = this._web.lists.getByTitle(this._configuration.listNames.PROJECT_COLUMNS)
             .fields
             .select(...select);
         if (filter) {
