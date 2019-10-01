@@ -1,25 +1,25 @@
-import { ProjectStatusReport, SectionModel } from 'models';
+import { StatusReport, SectionModel } from 'shared/lib/models';
 import { IProjectStatusData } from '../../IProjectStatusData';
 import { IStatusElementProps } from '../../StatusElement/IStatusElementProps';
 
 export interface IBaseSectionProps {
   /**
-   * @todo Describe property
+   * Section model
    */
   model: SectionModel;
 
   /**
-   * @todo Describe property
+   * Props for section header
    */
   headerProps: IStatusElementProps;
 
   /**
-   * @todo Describe property
+   * The selected report
    */
-  report: ProjectStatusReport;
+  report: StatusReport;
 
   /**
-   * @todo Describe property
+   * Data
    */
   data?: IProjectStatusData;
 

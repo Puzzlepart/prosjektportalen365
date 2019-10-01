@@ -1,9 +1,6 @@
-import { dateAdd } from '@pnp/common';
 import { Logger, LogLevel } from '@pnp/logging';
-import { List, Web } from '@pnp/sp';
+import { List } from '@pnp/sp';
 import { getId } from '@uifabric/utilities';
-import { ProjectStatusReport, SectionModel } from 'models';
-import { SectionType } from 'models/SectionModel';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
@@ -21,10 +18,10 @@ import { IProjectStatusProps } from './IProjectStatusProps';
 import { IProjectStatusState } from './IProjectStatusState';
 import styles from './ProjectStatus.module.scss';
 import { IBaseSectionProps, ListSection, ProjectPropertiesSection, StatusSection, SummarySection } from './Sections';
+import { StatusReport, SectionModel, SectionType } from 'shared/lib/models';
+import { UserMessage } from 'components/UserMessage';
 
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
-  private _reportList: List;
-  private _sectionsList: List;
   private _hubConfigurationService: HubConfigurationService;
   private _spEntityPortalService: SpEntityPortalService;
 
@@ -39,12 +36,10 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       isLoading: true,
       newStatusCreated: document.location.hash === '#NewStatus',
     };
-    this._reportList = props.hubSite.web.lists.getByTitle(props.reportListName);
-    this._sectionsList = props.hubSite.web.lists.getByTitle(props.sectionsListName);
-    this._hubConfigurationService = new HubConfigurationService(props.hubSite.web);
+    this._hubConfigurationService = new HubConfigurationService().configure({ urlOrWeb: props.hubSite.web });
     this._spEntityPortalService = new SpEntityPortalService({
       portalUrl: this.props.hubSite.url,
-      listName: 'Prosjekter',
+      listName: strings.ProjectsListName,
       contentTypeId: '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
       identityFieldName: 'GtSiteId',
       urlFieldName: 'GtSiteUrl',
@@ -112,7 +107,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
             <div className={styles.title}>{this.props.title}</div>
           </div>
           <div className={`${styles.sections} ${styles.column12}`}>
-            {this.state.selectedReport && this._renderSections()}
+            {this._renderSections()}
           </div>
         </div>
       </div>
@@ -152,7 +147,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     farItems.push({
       id: getId('ReportDropdown'),
       key: getId('ReportDropdown'),
-      name: selectedReport ? formatDate(selectedReport.date, true) : '',
+      name: selectedReport ? formatDate(selectedReport.created, true) : '',
       itemType: ContextualMenuItemType.Normal,
       disabled: reportOptions.length === 0,
       subMenuProps: { items: reportOptions }
@@ -169,8 +164,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    */
   private _getSectionBaseProps(sec: SectionModel): IBaseSectionProps {
     const { selectedReport: report, data } = this.state;
-    const value = report.item[sec.fieldName];
-    const comment = report.item[sec.commentFieldName];
+    const { value, comment } = report.getStatusValue(sec.fieldName);
     const [columnConfig] = data.columnConfig.filter(c => c.columnFieldName === sec.fieldName && c.value === value);
     const baseProps: IBaseSectionProps = {
       headerProps: {
@@ -195,6 +189,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    * Render sections
    */
   private _renderSections() {
+    if (!this.state.selectedReport) {
+      return <UserMessage text={strings.NoStatusReportsMessage} messageBarType={MessageBarType.info} />;
+    }
     return this.state.data.sections.map(model => {
       const baseProps = this._getSectionBaseProps(model);
       switch (model.type) {
@@ -213,8 +210,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           return (
             <ProjectPropertiesSection
               {...baseProps}
-              entityItem={this.state.data.entityItem}
-              entityFields={this.state.data.entityFields} />
+              entityItem={this.state.data.entity.fieldValues}
+              entityFields={this.state.data.entity.fields} />
           );
         }
         case SectionType.RiskSection: {
@@ -233,9 +230,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * On report changed
    * 
-   * @param {ProjectStatusReport} selectedReport Selected report
+   * @param {StatusReport} selectedReport Selected report
    */
-  private _onReportChanged(selectedReport: ProjectStatusReport) {
+  private _onReportChanged(selectedReport: StatusReport) {
     this.setState({ selectedReport });
   }
 
@@ -245,10 +242,10 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   private _getReportOptions(data: IProjectStatusData): IContextualMenuItem[] {
     let reportOptions: IContextualMenuItem[] = data.reports.map(report => ({
       key: `${report.id}`,
-      name: formatDate(report.date, true),
+      name: formatDate(report.created, true),
       onClick: _evt => this._onReportChanged(report),
       canCheck: true,
-      isChecked: this.state.selectedReport ? report.item.Id === this.state.selectedReport.item.Id : false,
+      isChecked: this.state.selectedReport ? report.id === this.state.selectedReport.id : false,
     } as IContextualMenuItem));
     return reportOptions;
   }
@@ -260,12 +257,12 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     try {
       const filter = `Author/EMail eq '${this.props.currentUserEmail}' and GtSiteId eq '00000000-0000-0000-0000-000000000000'`;
       Logger.log({ message: `(ProjectStatus) _associateStatusItem: Attempting to find recently added report by current user '${this.props.currentUserEmail}'`, data: { filter }, level: LogLevel.Info });
-      let [item] = await this._reportList.items.filter(filter).select('Id', 'Created').orderBy('Id', false).top(1).get<any[]>();
+      let [item] = await this._hubConfigurationService.getStatusReports(filter, 1);
       if (item) {
-        const report = new ProjectStatusReport(item);
+        const report = new StatusReport(item);
         Logger.log({ message: '(ProjectStatus) _associateStatusItem: Setting title for item', data: { filter }, level: LogLevel.Info });
-        await this._reportList.items.getById(report.id).update({
-          Title: `${this.props.webTitle} (${formatDate(report.date, true)})`,
+        await this._hubConfigurationService.updateStatusReport(report.id, {
+          Title: `${this.props.webTitle} (${formatDate(report.created, true)})`,
           GtSiteId: this.props.siteId,
         });
       }
@@ -283,9 +280,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     const [previousReport] = this.state.data.reports;
     let properties = previousReport ? previousReport.getStatusValues() : {};
     properties.Title = formatString(strings.NewStatusReportTitle, this.props.webTitle);
-    const { data } = await this._reportList.items.add(properties);
+    const newReportId = await this._hubConfigurationService.addStatusReport(properties);
     const source = encodeURIComponent(`${window.location.href.split('#')[0]}#NewStatus`);
-    document.location.href = `${window.location.protocol}//${window.location.hostname}${this.state.data.defaultEditFormUrl}?ID=${data.Id}&Source=${source}`;
+    document.location.href = `${window.location.protocol}//${window.location.hostname}${this.state.data.defaultEditFormUrl}?ID=${newReportId}&Source=${source}`;
   }
 
   /**
@@ -294,34 +291,21 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   private async _fetchData(): Promise<IProjectStatusData> {
     try {
       Logger.log({ message: '(ProjectStatus) _fetchData: Fetching fields and reports', level: LogLevel.Info });
-      const [entity, reportList, reportItems, sectionItems, columnConfig] = await Promise.all([
+      let [entity, reportList, reports, sections, columnConfig] = await Promise.all([
         this._spEntityPortalService.fetchEntity(this.props.siteId, this.props.webUrl),
-        this._reportList
-          .select('DefaultEditFormUrl')
-          .expand('DefaultEditFormUrl')
-          .usingCaching({
-            key: 'projectstatus_defaulteditformurl',
-            storeName: 'session',
-            expiration: dateAdd(new Date(), 'day', 1),
-          })
-          .get<{ DefaultEditFormUrl: string }>(),
-        this._reportList.items
-          .filter(`GtSiteId eq '${this.props.siteId}'`)
-          .orderBy('Id', false)
-          .get<any[]>(),
-        this._sectionsList.items.get(),
+        this._hubConfigurationService.getStatusReportListProps(),
+        this._hubConfigurationService.getStatusReports(),
+        this._hubConfigurationService.getProjectStatusSections(),
         this._hubConfigurationService.getProjectColumnConfig(),
       ]);
-      const reports = reportItems.map(item => new ProjectStatusReport(item, reportList.DefaultEditFormUrl));
-      const reportsSorted = reports.sort((a, b) => b.date.getTime() - a.date.getTime());
-      const sections = sectionItems.map(item => new SectionModel(item));
-      const sectionsSorted = sections.sort((a, b) => a.sortOrder < b.sortOrder ? -1 : 1);
+      reports = reports.map(item => item.setDefaultEditFormUrl(reportList.DefaultEditFormUrl));
+      reports = reports.sort((a, b) => b.created.getTime() - a.created.getTime());
+      sections = sections.sort((a, b) => a.sortOrder < b.sortOrder ? -1 : 1);
       return {
-        entityFields: entity.fields,
-        entityItem: entity.fieldValues,
+        entity,
         defaultEditFormUrl: reportList.DefaultEditFormUrl,
-        reports: reportsSorted,
-        sections: sectionsSorted,
+        reports,
+        sections,
         columnConfig,
       };
     } catch (error) {

@@ -34,7 +34,6 @@ declare interface IProjectWebPartsStrings {
   NewStatusReportTitle: string;
   No: string;
   NoPropertiesMessage: string;
-  OverallStatusFieldName: string;
   PageReloadMessage: string;
   PersistedPhasePropertyBagKey: string;
   PhaseChecklistLinkText: string;
@@ -70,6 +69,8 @@ declare interface IProjectWebPartsStrings {
   ExternalUsersConfigText: string;
   ExternalUsersConfigInfoText: string;
   WebPartNoAccessMessage: string;
+  ProjectsListName: string;
+  NoStatusReportsMessage: string;
 }
 
 declare module 'ProjectWebPartsStrings' {

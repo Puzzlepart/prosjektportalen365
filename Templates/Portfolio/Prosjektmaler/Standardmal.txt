@@ -590,8 +590,6 @@
                                         "title": "Prosjektinformasjon",
                                         "statusReportsCount": 0,
                                         "statusReportsHeader": "Prosjektstatus",
-                                        "statusReportsListName": "Prosjektstatus",
-                                        "statusReportsLinkUrlTemplate": "SitePages/Prosjektstatus.aspx?selectedReport={0}",
                                         "filterField": "GtShowFieldFrontpage"
                                     }
                                 },
@@ -694,10 +692,7 @@
                                 {
                                     "Id": "681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6",
                                     "Properties": {
-                                        "title": "Prosjektstatus",
-                                        "reportListName": "Prosjektstatus",
-                                        "sectionsListName": "Statusseksjoner",
-                                        "reportCtId": "0x010022252E35737A413FB56A1BA53862F6D5"
+                                        "title": "Prosjektstatus"
                                     }
                                 }
                             ]

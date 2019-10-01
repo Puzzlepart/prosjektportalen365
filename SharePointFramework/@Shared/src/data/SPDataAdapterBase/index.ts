@@ -27,7 +27,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
         this.settings = settings;
         sp.setup({ spfxContext, ...this.spConfiguration });
         this.sp = sp;
-        this.hubConfigurationService = new HubConfigurationService(new Web(this.settings.hubSiteUrl), this.settings.siteId);
+        this.hubConfigurationService = new HubConfigurationService().configure({ urlOrWeb: new Web(this.settings.hubSiteUrl), siteId: this.settings.siteId });
         this.spEntityPortalService = new SpEntityPortalService({
             portalUrl: this.settings.hubSiteUrl,
             listName: 'Prosjekter',

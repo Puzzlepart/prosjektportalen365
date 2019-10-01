@@ -6,3 +6,4 @@ export * from './SPProjectColumnConfigItem';
 export * from './SPProjectColumnItem';
 export * from './ProjectPhaseModel';
 export * from './StatusReport';
+export * from './SectionModel';

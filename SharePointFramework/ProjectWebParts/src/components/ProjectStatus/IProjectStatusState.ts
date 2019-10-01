@@ -1,6 +1,6 @@
-import { ProjectStatusReport } from 'models';
-import { IProjectStatusData } from './IProjectStatusData';
+import { StatusReport } from 'shared/lib/models/StatusReport';
 import { IBaseWebPartComponentState } from '../BaseWebPartComponent';
+import { IProjectStatusData } from './IProjectStatusData';
 import { IProjectStatusHashState } from './IProjectStatusHashState';
 
 export interface IProjectStatusState extends IBaseWebPartComponentState<IProjectStatusData> {
@@ -22,7 +22,7 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
     /**
      * @todo describe property
      */
-    selectedReport?: ProjectStatusReport;
+    selectedReport?: StatusReport;
 
     /**
      * @todo describe property

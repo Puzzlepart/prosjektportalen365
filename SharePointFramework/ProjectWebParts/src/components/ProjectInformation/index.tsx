@@ -36,7 +36,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     super(props);
     this.state = { isLoading: true, data: {} };
     this._storage = new PnPClientStorage().session;
-    this._hubConfigurationService = new HubConfigurationService(props.hubSite.web, props.siteId);
+    this._hubConfigurationService = new HubConfigurationService().configure({ urlOrWeb: props.hubSite.web, siteId: props.siteId });
   }
 
   public async componentDidMount() {
@@ -138,15 +138,14 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     this.setState({ progress: { title: strings.SyncProjectPropertiesProgressLabel, progress: {} } });
     const progressFunc = (progress: IProgressIndicatorProps) => this.setState({ progress: { title: strings.SyncProjectPropertiesProgressLabel, progress } });
     try {
-      progressFunc({ description: strings.SyncProjectPropertiesListProgressDescription });
+      progressFunc({ label: strings.SyncProjectPropertiesListProgressDescription, description: 'Vennligst vent...' });
       await this._hubConfigurationService.syncList(this.props.webUrl, strings.ProjectPropertiesListName, '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C', { Title: this.props.webTitle });
       await SPDataAdapter.syncPropertyItemToHub(this.state.data.fieldValues, this.state.data.fieldValuesText, progressFunc);
-      await this._addMessage(strings.SyncProjectPropertiesSuccessText, MessageBarType.success);
+      document.location.href = this.props.webUrl;
     } catch (error) {
       this._addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning);
     } finally {
       this.setState({ progress: null });
-      document.location.href = this.props.webUrl;
     }
   }
 
@@ -204,7 +203,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
       };
 
       if (this.props.statusReportsCount > 0) {
-        data.statusReports = await this._hubConfigurationService.getStatusReports(this.props.statusReportsCount);
+        data.statusReports = await this._hubConfigurationService.getStatusReports(undefined, this.props.statusReportsCount);
       }
 
       const properties = this._transformProperties(data.fieldValuesText, data);

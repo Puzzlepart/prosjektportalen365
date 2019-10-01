@@ -1,42 +1,62 @@
-import { CamlQuery, List, Web } from '@pnp/sp';
-import { TypedHash } from '@pnp/common';
+import { CamlQuery, List, Web, } from '@pnp/sp';
+import { TypedHash, dateAdd } from '@pnp/common';
 import { default as initSpfxJsom, ExecuteJsomQuery } from 'spfx-jsom';
 import { parseFieldXml } from '../helpers/parseFieldXml';
-import { ProjectColumnConfig, SPProjectColumnConfigItem, SPProjectColumnItem, StatusReport } from '../models';
+import { ProjectColumnConfig, SPProjectColumnConfigItem, SPProjectColumnItem, StatusReport, SectionModel } from '../models';
 import { ISPField, ISPContentType } from '../interfaces';
 
-export class HubConfigurationService {
-    private web: Web;
+export interface IHubConfigurationServiceConfiguration {
+    urlOrWeb: string | Web;
+    siteId?: string;
+    webUrl?: string;
+}
 
-    /**
-     * Creates a new instance of HubConfigurationService
-     * 
-     * @param {string | Web} urlOrWeb Url or web of the hub site
-     * @param {string} _siteId Site ID
-     */
-    constructor(urlOrWeb: string | Web, private _siteId?: string) {
-        if (typeof urlOrWeb === 'string') {
-            this.web = new Web(urlOrWeb);
+export class HubConfigurationService {
+    private _configuration: IHubConfigurationServiceConfiguration;
+    private _web: Web;
+
+    public configure(configuration: IHubConfigurationServiceConfiguration): HubConfigurationService {
+        this._configuration = configuration;
+        if (typeof this._configuration.urlOrWeb === 'string') {
+            this._web = new Web(this._configuration.urlOrWeb);
         } else {
-            this.web = urlOrWeb;
+            this._web = this._configuration.urlOrWeb;
         }
+        return this;
     }
 
     /**
      * Get project columns
      */
     public getProjectColumns(): Promise<SPProjectColumnItem[]> {
-        return this.web.lists.getByTitle('Prosjektkolonner')
+        return this._web.lists.getByTitle('Prosjektkolonner')
             .items
             .select(...Object.keys(new SPProjectColumnItem()))
             .get<SPProjectColumnItem[]>();
     }
 
     /**
+     * Get project status sections
+     */
+    public async getProjectStatusSections(): Promise<SectionModel[]> {
+        let items = await this._web.lists.getByTitle('Statusseksjoner').items.get();
+        return items.map(item => new SectionModel(item));
+    }
+
+    public async addStatusReport(properties: TypedHash<string>): Promise<number> {
+        let itemAddResult = await this._web.lists.getByTitle('Statusseksjoner').items.add(properties);
+        return itemAddResult.data.Id;
+    }
+
+    public async updateStatusReport(id: number, properties: TypedHash<string>): Promise<void> {
+        await this._web.lists.getByTitle('Statusseksjoner').items.getById(id).update(properties);
+    }
+
+    /**
      * Get project column configuration
      */
     public async getProjectColumnConfig(): Promise<ProjectColumnConfig[]> {
-        let spItems = await this.web.lists.getByTitle('Prosjektkolonnekonfigurasjon').items
+        let spItems = await this._web.lists.getByTitle('Prosjektkolonnekonfigurasjon').items
             .orderBy('ID', true)
             .expand('GtPortfolioColumn')
             .select(...Object.keys(new SPProjectColumnConfigItem()), 'GtPortfolioColumn/Title', 'GtPortfolioColumn/GtInternalName')
@@ -55,7 +75,7 @@ export class HubConfigurationService {
     public async syncList(url: string, listName: string, contentTypeId: string, properties?: TypedHash<string>) {
         const { jsomContext } = await initSpfxJsom(url, { loadTaxonomy: true });
         const [contentType, siteFields, ensureList] = await Promise.all([
-            this._getHubContentType(this.web, contentTypeId),
+            this._getHubContentType(this._web, contentTypeId),
             this._getSiteFields(new Web(url)),
             new Web(url).lists.ensure(listName, undefined, 100, false, { Hidden: true, EnableAttachments: false }),
         ]);
@@ -126,8 +146,8 @@ export class HubConfigurationService {
      * @param {T} constructor Constructor
      */
     public async getHubFiles<T>(listName: string, constructor: new (file: any, web: Web) => T): Promise<T[]> {
-        const files = await this.web.lists.getByTitle(listName).rootFolder.files.usingCaching().get();
-        return files.map(file => new constructor(file, this.web));
+        const files = await this._web.lists.getByTitle(listName).rootFolder.files.usingCaching().get();
+        return files.map(file => new constructor(file, this._web));
     }
 
     /**
@@ -142,11 +162,11 @@ export class HubConfigurationService {
         try {
             let items: any[];
             if (query) {
-                items = await this.web.lists.getByTitle(listName).usingCaching().usingCaching().getItemsByCAMLQuery(query, ...expands);
+                items = await this._web.lists.getByTitle(listName).usingCaching().usingCaching().getItemsByCAMLQuery(query, ...expands);
             } else {
-                items = await this.web.lists.getByTitle(listName).usingCaching().items.usingCaching().get();
+                items = await this._web.lists.getByTitle(listName).usingCaching().items.usingCaching().get();
             }
-            return items.map(item => new constructor(item, this.web));
+            return items.map(item => new constructor(item, this._web));
         } catch (error) {
             throw error;
         }
@@ -155,19 +175,41 @@ export class HubConfigurationService {
     /**
      * Get status reports
      * 
+     * @param {string} filter Filter
      * @param {number} top Number of reports to retrieve
+     * @param {string{}} select Fields to retrieve
      */
-    public async getStatusReports(top: number = 10): Promise<StatusReport[]> {
-        if (!this._siteId) return [];
+    public async getStatusReports(filter: string = `GtSiteId eq '${this._configuration.siteId}'`, top?: number, select?: string[]): Promise<StatusReport[]> {
+        if (!this._configuration.siteId) return [];
         try {
-            let items = await this.web.lists.getByTitle('Prosjektstatus')
+            let items = this._web.lists.getByTitle('Prosjektstatus')
                 .items
-                .filter(`GtSiteId eq '${this._siteId}'`)
-                .select('Id', 'Created')
-                .orderBy('Id', false)
-                .top(top)
-                .get<{ Id: number, Created: string }[]>();
-            return items.map(i => new StatusReport(i));
+                .filter(filter)
+                .orderBy('Id', false);
+
+            if (top) items = items.top(top);
+            if (select) items = items.select(...select);
+
+            return (await items.get()).map(i => new StatusReport(i));
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    /**
+     * Get status report list props
+     */
+    public async getStatusReportListProps(): Promise<{ DefaultEditFormUrl: string }> {
+        try {
+            return this._web.lists.getByTitle('Prosjektstatus')
+                .select('DefaultEditFormUrl')
+                .expand('DefaultEditFormUrl')
+                .usingCaching({
+                    key: 'projectstatus_defaulteditformurl',
+                    storeName: 'session',
+                    expiration: dateAdd(new Date(), 'day', 1),
+                })
+                .get<{ DefaultEditFormUrl: string }>();
         } catch (error) {
             throw error;
         }

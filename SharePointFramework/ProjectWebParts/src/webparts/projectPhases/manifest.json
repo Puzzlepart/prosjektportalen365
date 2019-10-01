@@ -32,13 +32,7 @@
                 "reloadTimeout": 0,
                 "currentPhaseViewName": "Gjeldende fase",
                 "gutter": 15,
-                "fontSize": 13,
-                "entity": {
-                    "listName": "Prosjekter",
-                    "contentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
-                    "fieldsGroupName": "{parameter:fieldsgroup}",
-                    "identityFieldName": "GtSiteId"
-                }
+                "fontSize": 13
             }
         }
     ]

@@ -41,14 +41,11 @@ export class SummarySection extends BaseSection<ISummarySectionProps, ISummarySe
 
   /**
    * Render sections
-   * 
-   * @todo Trying to figure out a way to avoid the strings.OverallStatusFieldName check
    */
   private _renderSections() {
     const { report, sections } = this.props;
     return sections.map(sec => {
-      const value = report.item[sec.fieldName];
-      const comment = report.item[sec.commentFieldName];
+      const { value, comment } = report.getStatusValue(sec.fieldName);
       const [columnConfig] = this.props.columnConfig.filter(c => c.columnFieldName === sec.fieldName && c.value === value);
       let props: IStatusElementProps = {
         label: sec.name,
@@ -58,7 +55,7 @@ export class SummarySection extends BaseSection<ISummarySectionProps, ISummarySe
         iconColor: columnConfig ? columnConfig.color : '#444',
         height: 150,
       };
-      if (sec.fieldName === strings.OverallStatusFieldName) {
+      if (sec.fieldName === 'GtOverallStatus') {
         props.comment = props.value;
         props.value = '';
       }

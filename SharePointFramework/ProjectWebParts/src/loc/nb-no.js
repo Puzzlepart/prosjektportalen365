@@ -30,7 +30,6 @@ define([], function () {
     NewStatusReportTitle: 'Ny statusrapport for {0}',
     No: 'Nei',
     NoPropertiesMessage: 'Finner ingen informasjon om prosjektet.',
-    OverallStatusFieldName: 'GtOverallStatus',
     PageReloadMessage: 'Oppdater siden for å få oppdaterte listevisninger.',
     PersistedPhasePropertyBagKey: 'persisted_phase',
     PhaseChecklistLinkText: 'Gå til fasesjekklisten',
@@ -70,6 +69,8 @@ define([], function () {
     ExternalUsersConfigText: 'Konfigurasjon',
     ExternalUsersConfigInfoText: 'Her konfigueres felter/kolonner som skal vises for eksterne brukere/gjester.<br /><br />Felter/kolonner som skal vises for brukere i organisasjonen konfigureres på porteføljeområdet av administrator.',
     NoLocalPropertiesListWarningText: 'Du må synkronisere prosjektegenskapene før du kan konfigurere felter/kolonner som skal vises for eksterne brukere/gjester.<br /><br />Det gjøres ved å klikke på knappen \'Synkroniser prosjektegenskaper\'.',
-    WebPartNoAccessMessage: 'Du har ikke tilgang til å se denne webdelen.<br/><br/>Du må enten ha tilgang til porteføljeområdet, eller så må prosjektet være fristilt fra porteføljeområdet.'
+    WebPartNoAccessMessage: 'Du har ikke tilgang til å se denne webdelen.<br/><br/>Du må enten ha tilgang til porteføljeområdet, eller så må prosjektet være fristilt fra porteføljeområdet.',
+    ProjectsListName: 'Prosjekter',
+    NoStatusReportsMessage: 'Det er ikke rapportert status for prosjektet enda. Om du er eier på området, kan du rapportere status ved å klikke på _Ny statusrapport_ i menyen over.'
   }
 });
