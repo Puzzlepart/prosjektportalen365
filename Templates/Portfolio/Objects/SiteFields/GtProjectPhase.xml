@@ -35,7 +35,7 @@
                 <Name>TermSetId</Name>
                 <Value p4:type="q2:string" 
                     xmlns:p4="http://www.w3.org/2001/XMLSchema-instance" 
-                    xmlns:q2="http://www.w3.org/2001/XMLSchema">{termsetid:Prosjektportalen:Fase}</Value>
+                    xmlns:q2="http://www.w3.org/2001/XMLSchema">{abcfc9d9-a263-4abb-8234-be973c46258a}</Value>
             </Property>
         </ArrayOfProperty>
     </Customization>

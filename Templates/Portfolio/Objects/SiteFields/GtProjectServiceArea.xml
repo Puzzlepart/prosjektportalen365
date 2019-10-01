@@ -71,7 +71,7 @@
                 <Name>TermSetId</Name>
                 <Value p4:type="q2:string" 
                     xmlns:p4="http://www.w3.org/2001/XMLSchema-instance" 
-                    xmlns:q2="http://www.w3.org/2001/XMLSchema">{termsetid:Prosjektportalen:Tjenesteområde}</Value>
+                    xmlns:q2="http://www.w3.org/2001/XMLSchema">{99af1a25-88c1-4781-a05c-8446928d3fdd}</Value>
             </Property>
             <Property>
                 <Name>TextField</Name>
