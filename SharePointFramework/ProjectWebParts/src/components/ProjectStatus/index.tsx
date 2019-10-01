@@ -12,14 +12,15 @@ import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import { formatDate } from 'shared/lib/helpers';
 import { HubConfigurationService } from 'shared/lib/services';
-import { parseUrlHash, setUrlHash, getUrlParam } from 'shared/lib/util';
+import { getUrlParam, parseUrlHash, setUrlHash } from 'shared/lib/util';
+import { SpEntityPortalService } from 'sp-entityportal-service';
 import * as formatString from 'string-format';
 import { IProjectStatusData } from './IProjectStatusData';
+import { IProjectStatusHashState } from './IProjectStatusHashState';
 import { IProjectStatusProps } from './IProjectStatusProps';
-import { IProjectStatusHashState, IProjectStatusState } from './IProjectStatusState';
+import { IProjectStatusState } from './IProjectStatusState';
 import styles from './ProjectStatus.module.scss';
 import { IBaseSectionProps, ListSection, ProjectPropertiesSection, StatusSection, SummarySection } from './Sections';
-import { SpEntityPortalService } from 'sp-entityportal-service';
 
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private _reportList: List;
@@ -38,11 +39,11 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       isLoading: true,
       newStatusCreated: document.location.hash === '#NewStatus',
     };
-    this._reportList = new Web(props.hubSiteUrl).lists.getByTitle(props.reportListName);
-    this._sectionsList = new Web(props.hubSiteUrl).lists.getByTitle(props.sectionsListName);
-    this._hubConfigurationService = new HubConfigurationService(props.hubSiteUrl);
+    this._reportList = props.hubSite.web.lists.getByTitle(props.reportListName);
+    this._sectionsList = props.hubSite.web.lists.getByTitle(props.sectionsListName);
+    this._hubConfigurationService = new HubConfigurationService(props.hubSite.web);
     this._spEntityPortalService = new SpEntityPortalService({
-      portalUrl: this.props.hubSiteUrl,
+      portalUrl: this.props.hubSite.url,
       listName: 'Prosjekter',
       contentTypeId: '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
       identityFieldName: 'GtSiteId',
@@ -183,7 +184,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       report,
       model: sec,
       data: this.state.data,
-      hubSiteUrl: this.props.hubSiteUrl,
+      hubSiteUrl: this.props.hubSite.url,
       siteId: this.props.siteId,
       webUrl: this.props.webUrl,
     };

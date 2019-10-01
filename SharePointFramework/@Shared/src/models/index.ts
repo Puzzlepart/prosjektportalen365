@@ -5,3 +5,4 @@ export * from './ProjectColumnConfig';
 export * from './SPProjectColumnConfigItem';
 export * from './SPProjectColumnItem';
 export * from './ProjectPhaseModel';
+export * from './StatusReport';

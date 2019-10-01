@@ -36,7 +36,7 @@ export default class ProjectStatusWebPart extends BaseClientSideWebPart<IProject
       webUrl: this.context.pageContext.web.absoluteUrl,
       webTitle: this.context.pageContext.web.title,
       currentUserEmail: this.context.pageContext.user.email,
-      hubSiteUrl: this._hubSite.url,
+      hubSite: this._hubSite,
       ...this.properties,
     });
     ReactDom.render(element, this.domElement);

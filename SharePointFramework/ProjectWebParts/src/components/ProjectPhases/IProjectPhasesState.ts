@@ -1,28 +1,9 @@
 import { Phase } from 'models';
-import { IProjectPhaseMouseOver } from './ProjectPhaseCallout/IProjectPhaseMouseOver';
+import { IBaseWebPartComponentState } from '../BaseWebPartComponent';
 import { IProjectPhasesData } from './IProjectPhasesData';
+import { IProjectPhaseMouseOver } from './ProjectPhaseCallout/IProjectPhaseMouseOver';
 
-export interface IProjectPhasesState {
-  /**
-   * @todo describe property
-   */
-  isLoading: boolean;
-
-  /**
-   * @todo describe property
-   */
-  data: IProjectPhasesData;
-
-  /**
-   * @todo describe property
-   */
-  error?: any;
-
-  /**
-   * Is the component hidden
-   */
-  hidden?: boolean;
-
+export interface IProjectPhasesState extends IBaseWebPartComponentState<IProjectPhasesData> {
   /**
    * @todo describe property
    */

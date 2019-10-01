@@ -1,12 +1,9 @@
 import { ProjectStatusReport } from 'models';
 import { IProjectStatusData } from './IProjectStatusData';
+import { IBaseWebPartComponentState } from '../BaseWebPartComponent';
+import { IProjectStatusHashState } from './IProjectStatusHashState';
 
-export interface IProjectStatusState {
-    /**
-    * The component is loading
-    */
-    isLoading: boolean;
-
+export interface IProjectStatusState extends IBaseWebPartComponentState<IProjectStatusData> {
     /**
      * @todo describe property
      */
@@ -25,27 +22,10 @@ export interface IProjectStatusState {
     /**
      * @todo describe property
      */
-    error?: string;
-
-    /**
-     * @todo describe property
-     */
-    data?: IProjectStatusData;
-
-    /**
-     * @todo describe property
-     */
     selectedReport?: ProjectStatusReport;
 
     /**
      * @todo describe property
      */
     hashState?: IProjectStatusHashState;
-}
-
-export interface IProjectStatusHashState {
-    /**
-     * @todo describe property
-     */
-    selectedReport?: string;
 }

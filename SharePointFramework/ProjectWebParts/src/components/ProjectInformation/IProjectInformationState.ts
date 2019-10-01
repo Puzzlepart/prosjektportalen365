@@ -1,41 +1,22 @@
+import { IUserMessageProps } from '../UserMessage';
 import { IProjectInformationData } from './IProjectInformationData';
-import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty/index';
-import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator';
-import { IUserMessageProps } from '../UserMessage/index';
+import { IProgressDialogProps } from '../ProgressDialog/IProgressDialogProps';
+import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty';
+import { IBaseWebPartComponentState } from '../BaseWebPartComponent';
 
-export interface IProjectInformationState {
-  /**
-   * The component is loading
-   */
-  isLoading: boolean;
-
-  /**
-   * Data 
-   */
-  data?: IProjectInformationData;
-
+export interface IProjectInformationState extends IBaseWebPartComponentState<IProjectInformationData>  {
   /**
    * Properties
    */
   properties?: ProjectPropertyModel[];
 
   /**
-   * Error object
-   */
-  error?: any;
-
-  /**
-   * Is the component hidden
-   */
-  hidden?: boolean;
-
-  /**
    * Progress
    */
-  progress?: IProgressIndicatorProps;
+  progress?: IProgressDialogProps;
 
   /**
-   * Messagge
+   * Message to show to the user
    */
   message?: IUserMessageProps;
 }

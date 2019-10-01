@@ -1,8 +1,9 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common';
-import { ItemUpdateResult } from '@pnp/sp';
 import { LogLevel } from '@pnp/logging';
+import { ItemUpdateResult } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
+import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import * as strings from 'ProjectWebPartsStrings';
 import { SPDataAdapterBase } from 'shared/lib/data';
 import { ProjectDataService } from 'shared/lib/services';
@@ -38,9 +39,9 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
      * @param {TypedHash} fieldValuesText Field values in text format for the properties item
      * @param {void} progressFunc Progress function
      */
-    public async syncPropertyItemToHub(fieldValues: TypedHash<any>, fieldValuesText: TypedHash<string>, progressFunc: ({ description: string }) => void): Promise<ItemUpdateResult> {
+    public async syncPropertyItemToHub(fieldValues: TypedHash<any>, fieldValuesText: TypedHash<string>, progressFunc: (props: IProgressIndicatorProps) => void): Promise<ItemUpdateResult> {
         try {
-            progressFunc({ description: strings.SyncProjectPropertiesValuesProgressDescription });
+            progressFunc({ label: strings.SyncProjectPropertiesValuesProgressDescription, description: 'Vennligst vent...' });
             const fields = await this.spEntityPortalService.getEntityFields();
             const fieldToSync = fields.filter(fld => {
                 if (fld.SchemaXml.indexOf('ShowInEditForm="FALSE"') !== -1) return false;

@@ -2,13 +2,19 @@ import { CamlQuery, List, Web } from '@pnp/sp';
 import { TypedHash } from '@pnp/common';
 import { default as initSpfxJsom, ExecuteJsomQuery } from 'spfx-jsom';
 import { parseFieldXml } from '../helpers/parseFieldXml';
-import { ProjectColumnConfig, SPProjectColumnConfigItem, SPProjectColumnItem } from '../models';
+import { ProjectColumnConfig, SPProjectColumnConfigItem, SPProjectColumnItem, StatusReport } from '../models';
 import { ISPField, ISPContentType } from '../interfaces';
 
 export class HubConfigurationService {
     private web: Web;
 
-    constructor(urlOrWeb: string | Web) {
+    /**
+     * Creates a new instance of HubConfigurationService
+     * 
+     * @param {string | Web} urlOrWeb Url or web of the hub site
+     * @param {string} _siteId Site ID
+     */
+    constructor(urlOrWeb: string | Web, private _siteId?: string) {
         if (typeof urlOrWeb === 'string') {
             this.web = new Web(urlOrWeb);
         } else {
@@ -141,6 +147,27 @@ export class HubConfigurationService {
                 items = await this.web.lists.getByTitle(listName).usingCaching().items.usingCaching().get();
             }
             return items.map(item => new constructor(item, this.web));
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    /**
+     * Get status reports
+     * 
+     * @param {number} top Number of reports to retrieve
+     */
+    public async getStatusReports(top: number = 10): Promise<StatusReport[]> {
+        if (!this._siteId) return [];
+        try {
+            let items = await this.web.lists.getByTitle('Prosjektstatus')
+                .items
+                .filter(`GtSiteId eq '${this._siteId}'`)
+                .select('Id', 'Created')
+                .orderBy('Id', false)
+                .top(top)
+                .get<{ Id: number, Created: string }[]>();
+            return items.map(i => new StatusReport(i));
         } catch (error) {
             throw error;
         }

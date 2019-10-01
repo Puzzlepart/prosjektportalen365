@@ -39,19 +39,19 @@ export class ProjectDataService {
      */
     private async _getPropertyItemContext() {
         try {
-            Logger.write(`(ProjectDataService) Checking if list ${this._params.propertiesListName} exists in web.`);
+            Logger.write(`(ProjectDataService) (_getPropertyItemContext) Checking if list ${this._params.propertiesListName} exists in web.`);
             let [list] = await this._params.sp.web.lists.filter(`Title eq '${this._params.propertiesListName}'`).select('Id', 'DefaultEditFormUrl').usingCaching().get<ISPList[]>();
             if (!list) {
                 Logger.write(`(ProjectDataService) List ${this._params.propertiesListName} does not exist in web.`);
                 return null;
             }
-            Logger.write(`(ProjectDataService) Checking if there's a entry in list ${this._params.propertiesListName}.`);
+            Logger.write(`(ProjectDataService) (_getPropertyItemContext) Checking if there's a entry in list ${this._params.propertiesListName}.`);
             let [item] = await this._params.sp.web.lists.getById(list.Id).items.select('Id').top(1).usingCaching().get<{ Id: number }[]>();
             if (!item) {
-                Logger.write(`(ProjectDataService) No entry found in list ${this._params.propertiesListName}.`);
+                Logger.write(`(ProjectDataService) (_getPropertyItemContext) No entry found in list ${this._params.propertiesListName}.`);
                 return null;
             }
-            Logger.write(`(ProjectDataService) Entry with ID ${item.Id} found in list ${this._params.propertiesListName}.`);
+            Logger.write(`(ProjectDataService) (_getPropertyItemContext) Entry with ID ${item.Id} found in list ${this._params.propertiesListName}.`);
             return {
                 id: item.Id,
                 list: this._params.sp.web.lists.getById(list.Id),
@@ -72,7 +72,9 @@ export class ProjectDataService {
     private async _getPropertyItem(urlSource: string = encodeURIComponent(document.location.href)) {
         try {
             let propertyItemContext = await this._getPropertyItemContext();
-            if (!propertyItemContext) return null;
+            if (!propertyItemContext) {
+                return null;
+            }
             let [fieldValuesText, fieldValues, fields] = await Promise.all([
                 propertyItemContext
                     .item
@@ -107,18 +109,19 @@ export class ProjectDataService {
      * Get properties data
      */
     public async getPropertiesData(): Promise<IGetPropertiesData> {
-        let propertyItem = await this._getPropertyItem();
+        let propertyItem = await this._getPropertyItem(encodeURIComponent(`${document.location.href}#syncproperties=1`));
         // tslint:disable-next-line: early-exit
         if (propertyItem) {
+            Logger.write(`(ProjectDataService) (getPropertiesData) Local property item found.`);
             return { ...propertyItem, localList: true };
         } else {
+            Logger.write(`(ProjectDataService) (getPropertiesData) Local property item not found. Retrieving data from portal site.`);
             let entity = await this._params.spEntityPortalService.configure(this.spConfiguration).fetchEntity(this._params.siteId, this._params.webUrl);
             return {
-                editFormUrl: entity.urls.editFormUrl,
-                versionHistoryUrl: entity.urls.versionHistoryUrl,
                 fieldValues: entity.fieldValues,
                 fieldValuesText: entity.fieldValues,
                 fields: entity.fields,
+                ...entity.urls,
             };
         }
     }

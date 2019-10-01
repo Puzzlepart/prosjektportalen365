@@ -2,27 +2,27 @@ import { ActionType } from './ActionType';
 
 export interface IActionsProps {
     /**
-     * @todo Describe property
+     * Should the actions be hidden
      */
     hidden: boolean;
 
     /**
-     * @todo Describe property
+     * Version history URL
      */
     versionHistoryUrl: string;
 
     /**
-     * @todo Describe property
+     * Edit form URL
      */
     editFormUrl: string;
 
     /**
-     * @todo Describe property
+     * On sync properties action
      */
     onSyncProperties: () => void;
 
     /**
-     * @todo Describe property
+     * Custom actions
      */
     customActions?: ActionType[];
 }

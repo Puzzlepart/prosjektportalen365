@@ -1,4 +1,4 @@
-import { BaseClientSideWebPart, IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField, } from '@microsoft/sp-webpart-base';
+import { BaseClientSideWebPart, IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { sp } from '@pnp/sp';
 import { IProjectInformationProps, ProjectInformation } from 'components/ProjectInformation';
@@ -67,13 +67,6 @@ export default class ProjectInformationWebPart extends BaseClientSideWebPart<IPr
                 }),
                 PropertyPaneTextField('statusReportsHeader', {
                   label: strings.StatusReportsHeaderLabel,
-                }),
-                PropertyPaneTextField('statusReportsListName', {
-                  label: strings.StatusReportsListNameLabel,
-                  disabled: true,
-                }),
-                PropertyPaneTextField('statusReportsLinkUrlTemplate', {
-                  label: strings.StatusReportsLinkUrlTemplateLabel,
                 }),
               ],
             },

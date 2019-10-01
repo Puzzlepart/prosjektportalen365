@@ -1,32 +1,29 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
-import { dateAdd, PnPClientStorage, PnPClientStore, stringIsNullOrEmpty, TypedHash } from '@pnp/common';
+import { dateAdd, PnPClientStorage, PnPClientStore, TypedHash } from '@pnp/common';
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import { HubConfigurationService } from 'shared/lib/services';
-import * as format from 'string-format';
+import parseUrlHash from 'shared/lib/util/parseUrlHash';
+import * as formatString from 'string-format';
 import SPDataAdapter from '../../data';
+import { UserMessage } from '../UserMessage';
 import { Actions } from './Actions';
 import { IProjectInformationData } from './IProjectInformationData';
 import { IProjectInformationProps } from './IProjectInformationProps';
 import { IProjectInformationState } from './IProjectInformationState';
-import { ProgressBar } from './ProgressBar';
+import { IProjectInformationUrlHash } from './IProjectInformationUrlHash';
+import { ProgressDialog } from '../ProgressDialog/index';
 import styles from './ProjectInformation.module.scss';
 import { ProjectProperties } from './ProjectProperties';
 import { ProjectProperty, ProjectPropertyModel } from './ProjectProperties/ProjectProperty/index';
 import { StatusReports } from './StatusReports';
-import { UserMessage } from '../UserMessage/index';
-
-const log = (text: string): (() => void) => (): void => console.log(text);
 
 export class ProjectInformation extends React.Component<IProjectInformationProps, IProjectInformationState> {
-  public static defaultProps: Partial<IProjectInformationProps> = {
-    statusReportsLinkUrlTemplate: '',
-    statusReportsCount: 0,
-  };
+  public static defaultProps: Partial<IProjectInformationProps> = { statusReportsCount: 0 };
   private _hubConfigurationService: HubConfigurationService;
   private _storage: PnPClientStore;
 
@@ -39,13 +36,16 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
     super(props);
     this.state = { isLoading: true, data: {} };
     this._storage = new PnPClientStorage().session;
-    this._hubConfigurationService = new HubConfigurationService(props.hubSite.web);
+    this._hubConfigurationService = new HubConfigurationService(props.hubSite.web, props.siteId);
   }
 
   public async componentDidMount() {
     try {
-      const updatedState = await this._fetchData();
-      this.setState({ ...updatedState, isLoading: false });
+      const data = await this._fetchData();
+      this.setState({ ...data, isLoading: false });
+      if (parseUrlHash<IProjectInformationUrlHash>(true).syncproperties === '1') {
+        this._onSyncProperties();
+      }
     } catch (error) {
       this.setState({ error, isLoading: false });
     }
@@ -75,7 +75,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
    */
   private get _contents() {
     if (this.state.isLoading) {
-      return <Spinner label={format(strings.LoadingText, this.props.title.toLowerCase())} />;
+      return <Spinner label={formatString(strings.LoadingText, this.props.title.toLowerCase())} />;
     }
     if (this.state.error) {
       return (
@@ -101,16 +101,15 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
         <StatusReports
           title={this.props.statusReportsHeader}
           statusReports={statusReports}
-          urlTemplate={`${this.props.webUrl}/${this.props.statusReportsLinkUrlTemplate}`}
           urlSourceParam={document.location.href}
           hidden={this.props.statusReportsCount === 0} />
-        <ProgressBar {...this.state.progress} />
         <UserMessage {...this.state.message} />
         <Actions
           hidden={this.props.hideActions || !this.props.isSiteAdmin || this.props.displayMode === DisplayMode.Edit}
           versionHistoryUrl={versionHistoryUrl}
           editFormUrl={editFormUrl}
-          onSyncProperties={this._onSyncProperties.bind(this)} />
+          onSyncProperties={!this.state.data.localList && this._onSyncProperties.bind(this)} />
+        <ProgressDialog {...this.state.progress} />
       </>
     );
   }
@@ -122,28 +121,32 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
    * @param {MessageBarType} messageBarType Message type
    * @param {number} duration Duration in seconds (defaults to 5)
    */
-  private _addMessage(text: string, messageBarType: MessageBarType, duration: number = 5) {
-    this.setState({ message: { text, messageBarType } });
-    window.setTimeout(() => {
-      this.setState({ message: null });
-    }, (duration * 1000));
+  private _addMessage(text: string, messageBarType: MessageBarType, duration: number = 5): Promise<void> {
+    return new Promise(resolve => {
+      this.setState({ message: { text: formatString(text, duration.toString()), messageBarType, onDismiss: () => this.setState({ message: null }) } });
+      window.setTimeout(() => {
+        this.setState({ message: null });
+        resolve();
+      }, (duration * 1000));
+    });
   }
 
   /**
    * On sync properties
    */
   private async _onSyncProperties() {
-    this.setState({ progress: { label: strings.SyncProjectPropertiesProgressLabel, description: '' } });
-    const progressFunc = (props: IProgressIndicatorProps) => this.setState({ progress: { label: strings.SyncProjectPropertiesProgressLabel, ...props } });
+    this.setState({ progress: { title: strings.SyncProjectPropertiesProgressLabel, progress: {} } });
+    const progressFunc = (progress: IProgressIndicatorProps) => this.setState({ progress: { title: strings.SyncProjectPropertiesProgressLabel, progress } });
     try {
       progressFunc({ description: strings.SyncProjectPropertiesListProgressDescription });
       await this._hubConfigurationService.syncList(this.props.webUrl, strings.ProjectPropertiesListName, '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C', { Title: this.props.webTitle });
       await SPDataAdapter.syncPropertyItemToHub(this.state.data.fieldValues, this.state.data.fieldValuesText, progressFunc);
-      this._addMessage(strings.SyncProjectPropertiesSuccessText, MessageBarType.success);
+      await this._addMessage(strings.SyncProjectPropertiesSuccessText, MessageBarType.success);
     } catch (error) {
       this._addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning);
     } finally {
       this.setState({ progress: null });
+      document.location.href = this.props.webUrl;
     }
   }
 
@@ -151,7 +154,7 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
   * Get column config
   */
   private async _getColumnConfig() {
-    return this._storage.getOrPut('projectinformation_getcolumnconfig', async () => {
+    return this._storage.getOrPut('projectinformation_columnconfig', async () => {
       try {
         let columns = await this._hubConfigurationService.getProjectColumns();
         return columns;
@@ -200,18 +203,11 @@ export class ProjectInformation extends React.Component<IProjectInformationProps
         ...propertiesData,
       };
 
-      if (!stringIsNullOrEmpty(this.props.statusReportsListName) && this.props.statusReportsCount > 0) {
-        const statusReportsList = this.props.hubSite.web.lists.getByTitle(this.props.statusReportsListName);
-        data.statusReports = await statusReportsList
-          .items
-          .filter(`GtSiteId eq '${this.props.siteId}'`)
-          .select('Id', 'Created')
-          .orderBy('Id', false)
-          .top(this.props.statusReportsCount)
-          .get<{ Id: number, Created: string }[]>();
+      if (this.props.statusReportsCount > 0) {
+        data.statusReports = await this._hubConfigurationService.getStatusReports(this.props.statusReportsCount);
       }
 
-      let properties = this._transformProperties(data.fieldValuesText, data);
+      const properties = this._transformProperties(data.fieldValuesText, data);
 
       return { data, properties };
     } catch (error) {

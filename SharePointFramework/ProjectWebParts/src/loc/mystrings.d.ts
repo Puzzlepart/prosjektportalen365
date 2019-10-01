@@ -3,9 +3,7 @@ declare interface IProjectWebPartsStrings {
   NavigateToSourceUrlText: string;
   ProjectStatusGroupName: string;
   StatusReportsHeaderLabel: string;
-  StatusReportsListNameLabel: string;
   StatusReportsCountLabel: string;
-  StatusReportsLinkUrlTemplateLabel: string;
   AutomaticReloadFieldLabel: string;
   ChangePhaseText: string;
   ChangingPhaseDescription: string;

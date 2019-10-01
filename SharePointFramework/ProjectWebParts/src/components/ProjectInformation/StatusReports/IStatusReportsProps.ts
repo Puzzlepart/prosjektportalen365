@@ -1,18 +1,15 @@
+import { StatusReport } from 'shared/lib/models/StatusReport';
+
 export interface IStatusReportsProps extends React.HTMLAttributes<HTMLElement> {
     /**
      * @todo Describe property
      */
-    statusReports: { Id: number, Created: string }[];
+    statusReports: StatusReport[];
 
     /**
      * @todo Describe property
      */
     iconName: string;
-
-    /**
-     * @todo Describe property
-     */
-    urlTemplate: string;
 
     /**
      * @todo Describe property
