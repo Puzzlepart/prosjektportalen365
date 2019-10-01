@@ -1,5 +1,5 @@
 import { List } from '@pnp/sp';
-import { DataSource, SPDataSourceItem } from '../models/DataSource';
+import { DataSource, SPDataSourceItem } from '../../models/DataSource';
 
 export class DataSourceService {
     private list: List;

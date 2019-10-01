@@ -18,11 +18,13 @@ dependencies:
   sp-hubsite-service: 0.5.0
   spfx-jsom: 0.6.4
   string-format: 2.0.0
+  underscore: 1.9.1
   xmldom: 0.1.27
 devDependencies:
   '@types/applicationinsights-js': 1.0.9
   '@types/scriptjs': 0.0.2
   '@types/sharepoint': 2016.1.5
+  '@types/underscore': 1.9.3
   '@types/xmldom': 0.1.29
   typescript: 2.9.2
 packages:
@@ -327,6 +329,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-Im74++PvEePBhydRopmxtriSaVajKsAywaOyqiF0BNuoTeNLmZ4hWjenQMnAcDQG9YjjgI/zN94zszJhSmLN6A==
+  /@types/underscore/1.9.3:
+    dev: true
+    resolution:
+      integrity: sha512-SwbHKB2DPIDlvYqtK5O+0LFtZAyrUSw4c0q+HWwmH1Ve3KMQ0/5PlV3RX97+3dP7yMrnNQ8/bCWWvQpPl03Mug==
   /@types/webpack-env/1.13.1:
     dev: false
     resolution:
@@ -2923,6 +2929,10 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-5z3T17DXxe2G+6xrCufYxqadUPo=
+  /underscore/1.9.1:
+    dev: false
+    resolution:
+      integrity: sha512-5/4etnCkd9c8gwgowi5/om/mYO5ajCaOgdzj/oW+0eQV9WxKBDZw5+ycmKmeaTXjInS/W0BzpGLo2xR2aBwZdg==
   /undertaker-registry/1.0.1:
     dev: false
     engines:
@@ -3250,6 +3260,7 @@ specifiers:
   '@types/applicationinsights-js': ^1.0.9
   '@types/scriptjs': ^0.0.2
   '@types/sharepoint': ^2016.1.5
+  '@types/underscore': ^1.9.3
   '@types/xmldom': ^0.1.29
   applicationinsights-js: ^1.0.20
   es6-promise: ^4.2.8
@@ -3263,4 +3274,5 @@ specifiers:
   spfx-jsom: ^0.6.4
   string-format: ^2.0.0
   typescript: ^2.9.0
+  underscore: ^1.9.1
   xmldom: ^0.1.27

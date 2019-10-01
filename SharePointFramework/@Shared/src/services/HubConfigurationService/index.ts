@@ -1,22 +1,19 @@
 import { CamlQuery, List, Web, } from '@pnp/sp';
 import { TypedHash, dateAdd } from '@pnp/common';
 import { default as initSpfxJsom, ExecuteJsomQuery } from 'spfx-jsom';
-import { parseFieldXml } from '../helpers/parseFieldXml';
-import { ProjectColumnConfig, SPProjectColumnConfigItem, SPProjectColumnItem, StatusReport, SectionModel } from '../models';
-import { ISPField, ISPContentType } from '../interfaces';
+import { parseFieldXml } from '../../helpers/parseFieldXml';
+import { ProjectColumnConfig, SPProjectColumnConfigItem, SPProjectColumnItem, StatusReport, SectionModel, ProjectColumn, PortfolioOverviewView, SPPortfolioOverviewViewItem } from '../../models';
+import { ISPField, ISPContentType } from '../../interfaces';
+import { HubConfigurationServiceDefaultConfiguration, IHubConfigurationServiceConfiguration, HubConfigurationServiceList } from './IHubConfigurationServiceConfiguration';
+import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute';
 
-export interface IHubConfigurationServiceConfiguration {
-    urlOrWeb: string | Web;
-    siteId?: string;
-    webUrl?: string;
-}
 
 export class HubConfigurationService {
     private _configuration: IHubConfigurationServiceConfiguration;
     private _web: Web;
 
     public configure(configuration: IHubConfigurationServiceConfiguration): HubConfigurationService {
-        this._configuration = configuration;
+        this._configuration = { ...HubConfigurationServiceDefaultConfiguration, ...configuration };
         if (typeof this._configuration.urlOrWeb === 'string') {
             this._web = new Web(this._configuration.urlOrWeb);
         } else {
@@ -28,40 +25,64 @@ export class HubConfigurationService {
     /**
      * Get project columns
      */
-    public getProjectColumns(): Promise<SPProjectColumnItem[]> {
-        return this._web.lists.getByTitle('Prosjektkolonner')
+    public async getProjectColumns(): Promise<ProjectColumn[]> {
+        let spItems = await this._web.lists.getByTitle(this._configuration.listNames.projectColumns)
             .items
             .select(...Object.keys(new SPProjectColumnItem()))
             .get<SPProjectColumnItem[]>();
+        return spItems.map(item => new ProjectColumn(item));
     }
 
     /**
      * Get project status sections
      */
     public async getProjectStatusSections(): Promise<SectionModel[]> {
-        let items = await this._web.lists.getByTitle('Statusseksjoner').items.get();
+        let items = await this._web.lists.getByTitle(this._configuration.listNames.statusSections).items.get();
         return items.map(item => new SectionModel(item));
     }
 
     public async addStatusReport(properties: TypedHash<string>): Promise<number> {
-        let itemAddResult = await this._web.lists.getByTitle('Statusseksjoner').items.add(properties);
+        let itemAddResult = await this._web.lists.getByTitle(this._configuration.listNames.statusSections).items.add(properties);
         return itemAddResult.data.Id;
     }
 
     public async updateStatusReport(id: number, properties: TypedHash<string>): Promise<void> {
-        await this._web.lists.getByTitle('Statusseksjoner').items.getById(id).update(properties);
+        await this._web.lists.getByTitle(this._configuration.listNames.statusSections).items.getById(id).update(properties);
     }
 
     /**
      * Get project column configuration
      */
     public async getProjectColumnConfig(): Promise<ProjectColumnConfig[]> {
-        let spItems = await this._web.lists.getByTitle('Prosjektkolonnekonfigurasjon').items
+        let spItems = await this._web.lists.getByTitle(this._configuration.listNames.projectColumnConfiguration).items
             .orderBy('ID', true)
             .expand('GtPortfolioColumn')
             .select(...Object.keys(new SPProjectColumnConfigItem()), 'GtPortfolioColumn/Title', 'GtPortfolioColumn/GtInternalName')
             .get<SPProjectColumnConfigItem[]>();
-        return spItems.map(c => new ProjectColumnConfig(c));;
+        return spItems.map(item => new ProjectColumnConfig(item));;
+    }
+
+    /**
+     * Get portfolio overview views
+     */
+    public async getPortfolioOverviewViews(): Promise<PortfolioOverviewView[]> {
+        let spItems = await this._web.lists.getByTitle(this._configuration.listNames.projectColumnConfiguration).items
+            .orderBy('GtSortOrder', true)
+            .get<SPPortfolioOverviewViewItem[]>();
+        return spItems.map(item => new PortfolioOverviewView(item));;
+    }
+
+    /**
+     * Get list form urls
+     * 
+     * @param {HubConfigurationServiceList} list List key
+     */
+    public async getListFormUrls(list: HubConfigurationServiceList): Promise<{ defaultNewFormUrl: string, defaultEditFormUrl: string }> {
+        let urls = await this._web.lists.getByTitle(this._configuration.listNames[list])
+            .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
+            .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')
+            .get<{ DefaultNewFormUrl: string, DefaultEditFormUrl: string }>();
+        return { defaultNewFormUrl: urls.DefaultNewFormUrl, defaultEditFormUrl: urls.DefaultEditFormUrl };
     }
 
     /**
@@ -182,7 +203,7 @@ export class HubConfigurationService {
     public async getStatusReports(filter: string = `GtSiteId eq '${this._configuration.siteId}'`, top?: number, select?: string[]): Promise<StatusReport[]> {
         if (!this._configuration.siteId) return [];
         try {
-            let items = this._web.lists.getByTitle('Prosjektstatus')
+            let items = this._web.lists.getByTitle(this._configuration.listNames.projectStatus)
                 .items
                 .filter(filter)
                 .orderBy('Id', false);
@@ -201,7 +222,7 @@ export class HubConfigurationService {
      */
     public async getStatusReportListProps(): Promise<{ DefaultEditFormUrl: string }> {
         try {
-            return this._web.lists.getByTitle('Prosjektstatus')
+            return this._web.lists.getByTitle(this._configuration.listNames.projectStatus)
                 .select('DefaultEditFormUrl')
                 .expand('DefaultEditFormUrl')
                 .usingCaching({
@@ -213,5 +234,15 @@ export class HubConfigurationService {
         } catch (error) {
             throw error;
         }
+    }
+
+    public async getProjectColumnFields(filter?: string, select: string[] = ['InternalName', 'Title']): Promise<any[]> {
+        let fields = this._web.lists.getByTitle(this._configuration.listNames.projectColumns)
+            .fields
+            .select(...select);
+        if (filter) {
+            fields = fields.filter(filter);
+        }
+        return fields.get();
     }
 }

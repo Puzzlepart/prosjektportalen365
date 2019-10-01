@@ -1,6 +1,6 @@
 {
     "name": "shared",
-    "version": "0.6.0",
+    "version": "1.0.0",
     "description": "Shared utilities, helpers and models",
     "main": "index.js",
     "scripts": {
@@ -30,12 +30,14 @@
         "sp-hubsite-service": "^0.5.0",
         "spfx-jsom": "^0.6.4",
         "string-format": "^2.0.0",
+        "underscore": "^1.9.1",
         "xmldom": "^0.1.27"
     },
     "devDependencies": {
         "@types/applicationinsights-js": "^1.0.9",
         "@types/scriptjs": "^0.0.2",
         "@types/sharepoint": "^2016.1.5",
+        "@types/underscore": "^1.9.3",
         "@types/xmldom": "^0.1.29",
         "typescript": "^2.9.0"
     }

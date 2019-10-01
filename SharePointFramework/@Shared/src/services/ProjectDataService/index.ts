@@ -1,12 +1,20 @@
 import { dateAdd, TypedHash, PnPClientStorage, PnPClientStore } from '@pnp/common';
 import { ConsoleListener, Logger } from '@pnp/logging';
-import { SPConfiguration } from '@pnp/sp';
+import { SPConfiguration, List, Item } from '@pnp/sp';
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute';
 import { ISPList } from '../../interfaces/ISPList';
 import { IProjectPhaseChecklistItem, ProjectPhaseChecklistData, ProjectPhaseModel } from '../../models';
 import { IGetPropertiesData } from './IGetPropertiesData';
 import * as formatString from 'string-format';
 import { IProjectDataServiceParams } from './IProjectDataServiceParams';
+
+export interface IPropertyItemContext {
+    itemId?: number;
+    listId?: string;
+    defaultEditFormUrl?: string;
+    list?: List;
+    item?: Item;
+}
 
 export class ProjectDataService {
     public spConfiguration: SPConfiguration;
@@ -53,9 +61,8 @@ export class ProjectDataService {
      * 
      * @param {Date} expire Date of expire for cache
      */
-    private async _getPropertyItemContext(expire: Date = dateAdd(new Date(), 'day', 1)) {
-        Logger.write(`(ProjectDataService) (_getPropertyItemContext) ${this._getStorageKey('_getPropertyItemContext')}`);
-        return this._storage.getOrPut(this._getStorageKey('_getPropertyItemContext'), async () => {
+    private async _getPropertyItemContext(expire: Date = dateAdd(new Date(), 'day', 1)): Promise<IPropertyItemContext> {
+        let context: Partial<IPropertyItemContext> = await this._storage.getOrPut(this._getStorageKey('_getPropertyItemContext'), async () => {
             try {
                 Logger.write(`(ProjectDataService) (_getPropertyItemContext) Checking if list ${this._params.propertiesListName} exists in web.`);
                 let [list] = await this._params.sp.web.lists.filter(`Title eq '${this._params.propertiesListName}'`).select('Id', 'DefaultEditFormUrl').usingCaching().get<ISPList[]>();
@@ -71,9 +78,7 @@ export class ProjectDataService {
                 }
                 Logger.write(`(ProjectDataService) (_getPropertyItemContext) Entry with ID ${item.Id} found in list ${this._params.propertiesListName}.`);
                 return {
-                    id: item.Id,
-                    list: this._params.sp.web.lists.getById(list.Id),
-                    item: this._params.sp.web.lists.getById(list.Id).items.getById(item.Id),
+                    itemId: item.Id,
                     listId: list.Id,
                     defaultEditFormUrl: list.DefaultEditFormUrl,
                 };
@@ -81,6 +86,11 @@ export class ProjectDataService {
                 return null;
             }
         }, expire);
+        return {
+            ...context,
+            list: this._params.sp.web.lists.getById(context.listId),
+            item: this._params.sp.web.lists.getById(context.listId).items.getById(context.itemId),
+        }
     }
 
     /**
@@ -110,8 +120,8 @@ export class ProjectDataService {
                     .usingCaching()
                     .get(),
             ]);
-            let editFormUrl = makeUrlAbsolute(`${propertyItemContext.defaultEditFormUrl}?ID=${propertyItemContext.id}&Source=${urlSource}`);
-            let versionHistoryUrl = `${this._params.webUrl}/_layouts/15/versions.aspx?list=${propertyItemContext.listId}&ID=${propertyItemContext.id}`;
+            let editFormUrl = makeUrlAbsolute(`${propertyItemContext.defaultEditFormUrl}?ID=${propertyItemContext.itemId}&Source=${urlSource}`);
+            let versionHistoryUrl = `${this._params.webUrl}/_layouts/15/versions.aspx?list=${propertyItemContext.listId}&ID=${propertyItemContext.itemId}`;
             return {
                 fieldValuesText,
                 fieldValues,
