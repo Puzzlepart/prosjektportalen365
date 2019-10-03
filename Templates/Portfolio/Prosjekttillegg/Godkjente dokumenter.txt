@@ -1,0 +1,13 @@
+{
+    "Lists": [
+        {
+            "Title": "Godkjente dokumenter",
+            "Description": "",
+            "Template": 101,
+            "AdditionalSettings": {
+                "EnableVersioning": true
+            },
+            "Views": []
+        }
+    ]
+}
