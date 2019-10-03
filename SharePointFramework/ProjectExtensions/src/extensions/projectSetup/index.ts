@@ -22,6 +22,11 @@ import { ProjectSetupValidation } from './ProjectSetupValidation';
 
 export default class ProjectSetupApplicationCustomizer extends BaseApplicationCustomizer<IProjectSetupApplicationCustomizerProperties> {
   private _hubConfigurationService: HubConfigurationService;
+  private _placeholderIds = {
+    ErrorDialog: getId('errordialog'),
+    ProgressDialog: getId('progressdialog'),
+    TemplateSelectDialog: getId('templateselectdialog'),
+  };
 
   public constructor() {
     super();
@@ -69,7 +74,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
    */
   private async _initializeSetup(taskParams: Tasks.IBaseTaskParams) {
     try {
-      Logger.log({ message: '(ProjectSetupApplicationCustomizer) _initializeSetup: Initializing setup', data: { version: this.context.manifest.version }, level: LogLevel.Info });
+      Logger.log({ message: '(ProjectSetupApplicationCustomizer) _initializeSetup: Initializing setup', data: { version: this.context.manifest.version, placeholderIds: this._placeholderIds }, level: LogLevel.Info });
       let data = await this._fetchData();
       this._initializeSPListLogging(data.hub.web);
       const provisioningInfo = await this._getProvisioningInfo(data);
@@ -85,36 +90,13 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   }
 
   /**
-   * Init SP list logging
-   * 
-   * @param {Web} hubWeb Hub web
-   * @param {string} listName List name
-   */
-  private _initializeSPListLogging(hubWeb: Web, listName: string = 'Logg') {
-    ListLogger.init(
-      hubWeb.lists.getByTitle(listName),
-      {
-        webUrl: 'GtLogWebUrl',
-        scope: 'GtLogScope',
-        functionName: 'GtLogFunctionName',
-        message: 'GtLogMessage',
-        level: 'GtLogLevel',
-      },
-      this.context.pageContext.web.absoluteUrl,
-      'ProjectSetupApplicationCustomizer',
-    );
-  }
-
-  /**
    * Get provisioning info from TemplateSelectDialog
    * 
    * @param {IProjectSetupApplicationCustomizerData} data Data
    */
   private _getProvisioningInfo(data: IProjectSetupApplicationCustomizerData): Promise<ITemplateSelectDialogState> {
     return new Promise((resolve, reject) => {
-      let placeholder = document.createElement('DIV');
-      placeholder.id = getId('TemplateSelectDialog');
-      placeholder = this._container.appendChild(placeholder);
+      let placeholder = this._getPlaceholder('TemplateSelectDialog');
       const element = React.createElement<ITemplateSelectDialogProps>(TemplateSelectDialog, {
         data,
         version: this.manifest.version,
@@ -137,9 +119,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
    * @param {IProgressDialogProps} props Props
    */
   private _renderProgressDialog(props: IProgressDialogProps) {
-    let placeholder = document.createElement('DIV');
-    placeholder.id = getId('ProgressDialog');
-    placeholder = this._container.appendChild(placeholder);
+    let placeholder = this._getPlaceholder('ProgressDialog');
     const element = React.createElement<IProgressDialogProps>(ProgressDialog, { ...props, version: this.manifest.version });
     ReactDOM.render(element, placeholder);
   }
@@ -150,9 +130,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
    * @param {IProgressDialogProps} props Props
    */
   private _renderErrorDialog(props: IErrorDialogProps) {
-    let placeholder = document.createElement('DIV');
-    placeholder.id = getId('ErrorDialog');
-    placeholder = this._container.appendChild(placeholder);
+    let placeholder = this._getPlaceholder('ErrorDialog');
     const element = React.createElement(ErrorDialog, {
       ...props,
       version: this.manifest.version,
@@ -263,12 +241,41 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
     return ProjectSetupValidation.Ready;
   }
 
-  private get _container(): HTMLDivElement {
-    const topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top);
-    return topPlaceholder.domElement;
-  }
-
   private _unmount(container: HTMLElement) {
     ReactDOM.unmountComponentAtNode(container);
+  }
+
+  private _getPlaceholder(key: 'ErrorDialog' | 'ProgressDialog' | 'TemplateSelectDialog') {
+    const id = this._placeholderIds[key];
+    const topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top);
+    let placeholder = document.getElementById(id);
+    if (placeholder === null) {
+      placeholder = document.createElement('DIV');
+      placeholder.id = this._placeholderIds[key];
+      placeholder.setAttribute('name', key);
+      return topPlaceholder.domElement.appendChild(placeholder);
+    }
+    return placeholder;
+  }
+
+  /**
+   * Init SP list logging
+   * 
+   * @param {Web} hubWeb Hub web
+   * @param {string} listName List name
+   */
+  private _initializeSPListLogging(hubWeb: Web, listName: string = 'Logg') {
+    ListLogger.init(
+      hubWeb.lists.getByTitle(listName),
+      {
+        webUrl: 'GtLogWebUrl',
+        scope: 'GtLogScope',
+        functionName: 'GtLogFunctionName',
+        message: 'GtLogMessage',
+        level: 'GtLogLevel',
+      },
+      this.context.pageContext.web.absoluteUrl,
+      'ProjectSetupApplicationCustomizer',
+    );
   }
 }

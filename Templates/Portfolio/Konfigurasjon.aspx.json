@@ -101,6 +101,30 @@
                 "fabricReactIcon": {
                     "iconName": "document"
                 }
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 9,
+                "fabricReactIcon": {
+                    "iconName": "assessmentgroup"
+                }
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 10,
+                "fabricReactIcon": {
+                    "iconName": "arrangebringforward"
+                }
             }
         ],
         "isMigrated": true,
@@ -139,6 +163,8 @@
             "items[5].title": "Prosjektkolonnekonfigurasjon",
             "items[6].title": "Prosjektkolonner",
             "items[7].title": "Malbibliotek",
+            "items[8].title": "Prosjektmaler",
+            "items[9].title": "Prosjekttillegg",
             "items[0].description": "",
             "items[1].description": "",
             "items[2].description": "",
@@ -164,7 +190,9 @@
             "items[4].sourceItem.url": "{hosturl}{site}/Lists/Porteføljevisninger",
             "items[5].sourceItem.url": "{hosturl}{site}/Lists/Prosjektkolonnekonfigurasjon",
             "items[6].sourceItem.url": "{hosturl}{site}/Lists/Prosjektkolonner",
-            "items[7].sourceItem.url": "{hosturl}{site}/Malbibliotek"
+            "items[7].sourceItem.url": "{hosturl}{site}/Malbibliotek",
+            "items[8].sourceItem.url": "{hosturl}{site}/Prosjektmaler",
+            "items[9].sourceItem.url": "{hosturl}{site}/Prosjekttillegg"
         },
         "componentDependencies": {
             "layoutComponentId": "706e33c8-af37-4e7b-9d22-6e5694d92a6f"
