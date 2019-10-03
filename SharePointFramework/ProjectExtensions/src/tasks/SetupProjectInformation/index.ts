@@ -1,11 +1,15 @@
+import { IProjectSetupApplicationCustomizerData } from 'extensions/projectSetup/IProjectSetupApplicationCustomizerData';
 import * as strings from 'ProjectExtensionsStrings';
-import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
-import { BaseTaskError } from '../BaseTaskError';
-import { IBaseTaskParams } from '../IBaseTaskParams';
+import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask';
+import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction';
 
-export default new class SetupProjectInformation extends BaseTask {
+export class SetupProjectInformation extends BaseTask {
     public taskName = 'SetupProjectInformation';
     private _propertiesCtId: string = '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C';
+
+    constructor(data: IProjectSetupApplicationCustomizerData) {
+        super(data);
+    }
 
     /**
      * Executes the SetupProjectInformation task
@@ -15,9 +19,9 @@ export default new class SetupProjectInformation extends BaseTask {
      */
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
-            if (params.data.localProjectPropertiesList) {
+            if (this.data.settings.localProjectPropertiesList) {
                 onProgress(strings.SetupProjectInformationText, strings.SyncLocalProjectPropertiesListText, 'AlignCenter');
-                this.logInformation(`Synchronizing list '${strings.ProjectPropertiesListName}' based on content type ${this._propertiesCtId} from ${params.data.hub.url} `, {});
+                this.logInformation(`Synchronizing list '${strings.ProjectPropertiesListName}' based on content type ${this._propertiesCtId} from ${this.data.hub.url} `, {});
                 const propertiesList = await params.hubConfigurationService.syncList(params.webAbsoluteUrl, strings.ProjectPropertiesListName, this._propertiesCtId);
                 onProgress(strings.SetupProjectInformationText, strings.CreatingLocalProjectPropertiesListItemText, 'AlignCenter');
                 await propertiesList.items.add({ Title: params.context.pageContext.web.title });
@@ -34,16 +38,16 @@ export default new class SetupProjectInformation extends BaseTask {
      * 
      * @param {IBaseTaskParams} param0 Parameters destructed
      */
-    private async _addEntryToHub({ spEntityPortalService, data, properties, context }: IBaseTaskParams) {
-        this.logInformation(`Attempting to retrieve project item from list '${properties.projectsList}' at ${data.hub.url}`);
+    private async _addEntryToHub({ spEntityPortalService, properties, context }: IBaseTaskParams) {
+        this.logInformation(`Attempting to retrieve project item from list '${properties.projectsList}' at ${this.data.hub.url}`);
         let entity = await spEntityPortalService.getEntityItem(context.pageContext.legacyPageContext.groupId);
         if (entity) return;
-        this.logInformation(`Adding project entity to list '${properties.projectsList}' at ${data.hub.url}`, { groupId: context.pageContext.legacyPageContext.groupId, siteId: context.pageContext.site.id.toString() });
+        this.logInformation(`Adding project entity to list '${properties.projectsList}' at ${this.data.hub.url}`, { groupId: context.pageContext.legacyPageContext.groupId, siteId: context.pageContext.site.id.toString() });
         await spEntityPortalService.createNewEntity(
             context.pageContext.legacyPageContext.groupId,
             context.pageContext.web.absoluteUrl,
             { Title: context.pageContext.web.title, GtSiteId: context.pageContext.site.id.toString() },
         );
-        this.logInformation(`Project entity added to list '${properties.projectsList}' at ${data.hub.url}`, {});
+        this.logInformation(`Project entity added to list '${properties.projectsList}' at ${this.data.hub.url}`, {});
     }
-};
+}

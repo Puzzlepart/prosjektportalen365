@@ -24,12 +24,6 @@
             "officeFabricIconFontName": "ViewListGroup",
             "properties": {
                 "phaseTermSetId": "abcfc9d9-a263-4abb-8234-be973c46258a",
-                "entity": {
-                    "listName": "Prosjekter",
-                    "contentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
-                    "fieldsGroupName": "Prosjektportalenkolonner",
-                    "identityFieldName": "GtSiteId"
-                },
                 "sortBy": "Title",
                 "showAsTiles": true,
                 "showProjectOwner": true,

@@ -1,0 +1,19 @@
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+
+.TemplateSelector {
+  @include ms-Grid-col;
+  @include ms-sm12;
+
+  .title {
+    font-size: 18px;
+  }
+
+  .dropdown {
+    margin: 10px 0 5px 0;
+  }
+
+  .description {
+    @include ms-font-s;
+    margin: 5px 0 15px 0;
+  }
+}

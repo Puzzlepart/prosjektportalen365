@@ -1,20 +1,13 @@
 import { dateAdd, TypedHash, PnPClientStorage, PnPClientStore } from '@pnp/common';
 import { ConsoleListener, Logger } from '@pnp/logging';
-import { SPConfiguration, List, Item } from '@pnp/sp';
+import { SPConfiguration } from '@pnp/sp';
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute';
 import { ISPList } from '../../interfaces/ISPList';
 import { IProjectPhaseChecklistItem, ProjectPhaseChecklistData, ProjectPhaseModel } from '../../models';
 import { IGetPropertiesData } from './IGetPropertiesData';
 import * as formatString from 'string-format';
 import { IProjectDataServiceParams } from './IProjectDataServiceParams';
-
-export interface IPropertyItemContext {
-    itemId?: number;
-    listId?: string;
-    defaultEditFormUrl?: string;
-    list?: List;
-    item?: Item;
-}
+import { IPropertyItemContext } from './IPropertyItemContext';
 
 export class ProjectDataService {
     public spConfiguration: SPConfiguration;

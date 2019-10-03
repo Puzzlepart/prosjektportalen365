@@ -1,5 +1,4 @@
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
 import { IBaseComponentProps } from '../IBaseComponentProps';
 
 export interface IProjectListProps extends IBaseComponentProps {
@@ -17,11 +16,6 @@ export interface IProjectListProps extends IBaseComponentProps {
    * @todo describe property
    */
   phaseTermSetId: string;
-
-  /**
-   * @todo describe property
-   */
-  entity: ISpEntityPortalServiceParams;
 
   /**
    * @todo describe property

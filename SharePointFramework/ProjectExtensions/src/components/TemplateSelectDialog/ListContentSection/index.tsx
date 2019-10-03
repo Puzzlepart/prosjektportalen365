@@ -4,20 +4,9 @@ import * as React from 'react';
 import { ListContentConfig } from '../../../models';
 import { CollapsableSection } from '../../CollapsableSection';
 import { IListContentSectionProps } from './IListContentSectionProps';
-import { IListContentSectionState } from './IListContentSectionState';
 import styles from './ListContentSection.module.scss';
 
-export class ListContentSection extends React.Component<IListContentSectionProps, IListContentSectionState> {
-    /**
-     * Constructor
-     * 
-     * @param {IListContentSectionProps} props Properties
-     */
-    constructor(props: IListContentSectionProps) {
-        super(props);
-        this.state = { selectedListConfig: this.props.listContentConfig.filter(lcc => lcc.isDefault) };
-    }
-
+export class ListContentSection extends React.PureComponent<IListContentSectionProps> {
     public render() {
         return (
             <CollapsableSection
@@ -30,7 +19,7 @@ export class ListContentSection extends React.Component<IListContentSectionProps
                         <Toggle
                             label={lcc.title}
                             defaultChecked={lcc.isDefault}
-                            onChanged={checked => this._onItemToggle(lcc, checked)} />
+                            onChanged={checked => this._onChanged(lcc, checked)} />
                     </div>
                 ))}
             </CollapsableSection>
@@ -43,16 +32,14 @@ export class ListContentSection extends React.Component<IListContentSectionProps
      * @param {ListContentConfig} listContentConfig List content config
      * @param {boolean} checked Checked
      */
-    private _onItemToggle(listContentConfig: ListContentConfig, checked: boolean): void {
-        let selectedListConfig = [];
+    private _onChanged(listContentConfig: ListContentConfig, checked: boolean): void {
+        let selectedListContentConfig = [];
         if (checked) {
-            selectedListConfig = [listContentConfig, ...this.state.selectedListConfig];
-            this.setState({ selectedListConfig });
+            selectedListContentConfig = [listContentConfig, ...this.props.selectedListContentConfig];
         }
         else {
-            selectedListConfig = this.state.selectedListConfig.filter(lcc => listContentConfig.title !== lcc.title);
-            this.setState({ selectedListConfig });
+            selectedListContentConfig = this.props.selectedListContentConfig.filter(lcc => listContentConfig.title !== lcc.title);
         }
-        this.props.onChange({ selectedListConfig });
+        this.props.onChange(selectedListContentConfig);
     }
 }

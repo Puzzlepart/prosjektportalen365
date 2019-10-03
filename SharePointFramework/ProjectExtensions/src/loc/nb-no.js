@@ -53,10 +53,10 @@ define([], function () {
     SiteNotReadyErrorStack: 'Området er ikke klart. Prøv igjen senere.',
     SummaryText: '{0} dokument(er) ble kopiert til prosjektområdet.',
     TemplateLibrarySelectModalTitle: 'Hent dokumentmal',
-    TemplateSelectDialogInfoText: 'Oppsettet av prosjektområdet tar omtrent 10 minutter. Ikke lukk nettleservinduet mens området settes opp.',
+    TemplateSelectDialogInfoText: 'Oppsettet av prosjektområdet tar omtrent 10 minutter.\n\nIkke lukk nettleservinduet mens området settes opp.',
     TemplateSelectDialogSubmitButtonText: 'Sett opp området',
     TemplateSelectDialogTitle: 'Oppsett av prosjektområde',
-    TemplateSelectTitle: 'Velg prosjektmal',
+    TemplateSelectorTitle: 'Velg prosjektmal',
     TitleLabel: 'Tittel',
     ProgressDialogSubText: 'Vennligst vent. Ikke lukk nettleservinduet.',
     DocumentTemplateDialogScreenSelectInfoText: 'Velg dokumentmalene du vil kopiere til prosjektområdet.<br /><br />Malene hentes fra<a href="{0}" target="_blank">{1}</a> og det hentes _siste versjon_ av malene.<br /><br />Når du trykker \'Velg\' sendes du videre til et skjermbilde hvor du kan sette _tittel_ og _filnavn_ for dokumentene som kopieres over.',
@@ -68,6 +68,6 @@ define([], function () {
     ProvisionSiteFieldText: 'Opprettet feltet {0} på området',
     CreatingPlannerTaskText: 'Oppretter oppgaver for {0}',
     ProcessListItemText: 'Kopierer listeelement {0} av {1}',
-    
+    PhaseLabel: 'Fase'
   }
 });

@@ -1,52 +1,63 @@
-import { TypedHash, stringIsNullOrEmpty } from '@pnp/common';
+import { stringIsNullOrEmpty, TypedHash } from '@pnp/common';
 import { FileAddResult, Folder, Web } from '@pnp/sp';
 import { formatDate } from 'shared/lib/helpers';
 
+export interface ITemplateFileSPItem {
+    File?: { UniqueId: string, Name: string, Title: string, ServerRelativeUrl: string, TimeLastModified: string };
+    FieldValuesAsText?: TypedHash<string>;
+}
+
 export class TemplateFile {
     /**
-     * @todo Describe property
+     * Item id
      */
     public id: string;
 
     /**
-     * @todo Describe property
+     * Name
      */
     public name: string;
 
     /**
-     * @todo Describe property
+     * Title
      */
     public title: string;
 
     /**
-     * @todo Describe property
+     * The project phase
+     */
+    public phase: string;
+
+    /**
+     * The new name
      */
     public newName: string;
 
     /**
-     * @todo Describe property
+     * The new title
      */
     public newTitle: string;
 
     /**
-     * @todo Describe property
+     * Server relative URL for the template file
      */
     public serverRelativeUrl: string;
 
     /**
-     * @todo Describe property
+     * Modified time
      */
     public modified: string;
 
     /**
-     * @todo Describe property
+     * Error message for the input field for name
      */
     public errorMessage: string;
 
-    constructor(spItem: any, public web: Web) {
+    constructor(spItem: ITemplateFileSPItem, public web: Web) {
         this.id = spItem.File.UniqueId;
         this.name = spItem.File.Name;
         this.title = spItem.File.Title;
+        this.phase = spItem.FieldValuesAsText.GtProjectPhase;
         this.newName = this.name;
         this.newTitle = this.title;
         this.serverRelativeUrl = spItem.File.ServerRelativeUrl;

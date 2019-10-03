@@ -2,8 +2,10 @@
     <pnp:File Src="Prosjektmaler\Standardmal.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
         <pnp:Properties>
             <pnp:Property Key="Title" Value="Standardmal" />
+            <pnp:Property Key="GtDescription" Value="Dette er standardmalen som følger med Prosjektportalen 365." />
         </pnp:Properties>
     </pnp:File>
     <pnp:Directory Src="Konfigurasjonsfiler" Folder="Konfigurasjonsfiler" Overwrite="true" Recursive="false" IncludedExtensions="*.txt" />
     <pnp:Directory Src="SiteAssets" Folder="SiteAssets" Overwrite="true" Recursive="false" IncludedExtensions="*.png" />
+    <pnp:Directory Src="Malbibliotek" Folder="Malbibliotek" Overwrite="true" Recursive="false" IncludedExtensions="*.doc,*.docx,*.xls,*.xlsx,*.ppt,*.pptx" />
 </pnp:Files>

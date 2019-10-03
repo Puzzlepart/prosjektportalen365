@@ -1,16 +1,16 @@
 export interface ITemplateSelectorCommandSetProperties {
     /**
-     * @todo Describe property
+     * Template library to retrieve the documents from
      */
     templateLibrary: string;
 
     /**
-     * @todo Describe property
+     * Phase term set id
      */
     phaseTermSetId: string;
 
     /**
-     * @todo Describe property
+     * View xml
      */
     viewXml: string;
 }

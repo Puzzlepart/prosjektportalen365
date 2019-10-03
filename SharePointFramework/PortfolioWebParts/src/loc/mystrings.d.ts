@@ -101,6 +101,7 @@ declare interface IPortfolioWebPartsStrings {
   UnitLabel: string;
   ViewNotFoundMessage: string;
   ViewsListNameLabel: string;
+  ProjectsListName: string;
 }
 
 declare module 'PortfolioWebPartsStrings' {

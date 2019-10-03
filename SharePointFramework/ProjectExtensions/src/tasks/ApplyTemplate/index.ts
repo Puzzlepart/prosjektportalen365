@@ -1,14 +1,18 @@
+import { IProjectSetupApplicationCustomizerData } from 'extensions/projectSetup/IProjectSetupApplicationCustomizerData';
 import * as strings from 'ProjectExtensionsStrings';
 import { Web, WebProvisioner } from 'sp-js-provisioning';
 import * as formatString from 'string-format';
 import * as _ from 'underscore';
-import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
-import { BaseTaskError } from '../BaseTaskError';
-import { IBaseTaskParams } from '../IBaseTaskParams';
+import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask';
+import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction';
 import { APPLY_TEMPLATE_STATUS_MAP } from './ApplyTemplateStatusMap';
 
-export default new class ApplyTemplate extends BaseTask {
+export class ApplyTemplate extends BaseTask {
     public taskName = 'ApplyTemplate';
+
+    constructor(data: IProjectSetupApplicationCustomizerData) {
+        super(data);
+    }
 
     /**
      * Execute ApplyTemplate
@@ -29,13 +33,13 @@ export default new class ApplyTemplate extends BaseTask {
             let templateSchema = _.omit(params.templateSchema, params.templateExcludeHandlers);
             await provisioner.applyTemplate(templateSchema, null, status => {
                 if (APPLY_TEMPLATE_STATUS_MAP[status]) {
-                    onProgress(formatString(strings.ApplyTemplateText, params.data.selectedTemplate.title), APPLY_TEMPLATE_STATUS_MAP[status].text, APPLY_TEMPLATE_STATUS_MAP[status].iconName);
+                    onProgress(formatString(strings.ApplyTemplateText, this.data.selectedTemplate.text), APPLY_TEMPLATE_STATUS_MAP[status].text, APPLY_TEMPLATE_STATUS_MAP[status].iconName);
                 }
             });
             this.logInformation('Applying extensions to site', { parameters: params.templateParameters });
-            for (let i = 0; i < params.data.selectedExtensions.length; i++) {
-                let extensionSchema = await params.data.selectedExtensions[i].getSchema();
-                onProgress(strings.ApplyingExtensionsText, formatString(strings.ApplyExtensionText, params.data.selectedExtensions[i].title), 'ExternalBuild');
+            for (let i = 0; i < this.data.selectedExtensions.length; i++) {
+                let extensionSchema = await this.data.selectedExtensions[i].getSchema();
+                onProgress(strings.ApplyingExtensionsText, formatString(strings.ApplyExtensionText, this.data.selectedExtensions[i].text), 'ExternalBuild');
                 await provisioner.applyTemplate(extensionSchema, null);
             }
             return params;
@@ -44,4 +48,4 @@ export default new class ApplyTemplate extends BaseTask {
             throw new BaseTaskError(this.taskName, strings.ApplyTemplateErrorMessage, error);
         }
     }
-};
+}

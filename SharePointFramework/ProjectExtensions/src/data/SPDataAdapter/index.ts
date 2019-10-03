@@ -2,28 +2,22 @@ import { ApplicationCustomizerContext } from '@microsoft/sp-application-base';
 import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility';
 import { TemplateFile } from 'models/TemplateFile';
 import * as strings from 'ProjectExtensionsStrings';
-import { ISPDataAdapterBaseSettings, SPDataAdapterBase } from 'shared/lib/data';
+import {  SPDataAdapterBase } from 'shared/lib/data';
 import { ProjectDataService } from 'shared/lib/services';
 import * as validFilename from 'valid-filename';
+import { ISPLibrary } from './ISPLibrary';
+import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration';
 
-export interface ISPDataAdapterSettings extends ISPDataAdapterBaseSettings { }
-
-export interface ISPLibrary {
-    Id: string;
-    Title: string;
-    ServerRelativeUrl: string;
-}
-
-export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterSettings> {
+export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     public project: ProjectDataService;
 
     /**
      * Configure the SP data adapter
      * 
      * @param {ApplicationCustomizerContext | ListViewCommandSetContext} spfxContext Context
-     * @param {ISPDataAdapterSettings} settings Settings
+     * @param {ISPDataAdapterConfiguration} settings Settings
      */
-    public configure(spfxContext: ApplicationCustomizerContext | ListViewCommandSetContext, settings: ISPDataAdapterSettings) {
+    public configure(spfxContext: ApplicationCustomizerContext | ListViewCommandSetContext, settings: ISPDataAdapterConfiguration) {
         super.configure(spfxContext, settings);
         this.project = new ProjectDataService({
             ...this.settings,
@@ -58,37 +52,13 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterS
      * @param {string} viewXml View xml
      */
     public async getDocumentTemplates(templateLibrary: string, viewXml?: string) {
-        const currentPhase = await this.project.getCurrentPhaseName();
         return await this.hubConfigurationService.getHubItems(
             templateLibrary,
             TemplateFile,
             {
-                ViewXml: viewXml || `
-                <View>
-                    <Query>
-                        <Where>
-                            <Or>
-                                <Or>
-                                    <Eq>
-                                        <FieldRef Name='GtProjectPhase' />
-                                        <Value Type='Text'>${currentPhase}</Value>
-                                    </Eq>
-                                    <Eq>
-                                        <FieldRef Name='GtProjectPhase' />
-                                        <Value Type='Text'>Flere faser</Value>
-                                    </Eq>
-                                </Or>
-                                <Eq>
-                                    <FieldRef Name='GtProjectPhase' />
-                                    <Value Type='Text'>Ingen fase</Value>
-                                </Eq>
-                            </Or>
-                        </Where>
-                    </Query>
-                </View>
-                `
+                ViewXml: viewXml || '<View></View>'
             },
-            ['File'],
+            ['File', 'FieldValuesAsText'],
         );
     }
 

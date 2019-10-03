@@ -1,32 +1,18 @@
 @import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 
 .templateSelectDialog {
-  .templateSelect {
-    @include ms-Grid-col;
-    @include ms-sm12;
-
-    .templateSelectTitle {
-      font-size: 18px;
-    }
-
-    .templateSelectDropdown {
-      margin: 10px 0 25px 0;
-    }
-  }
-
   .infoText {
     @include ms-Grid-col;
     @include ms-sm12;
     margin: 15px 0 15px 0;
   }
-}
+  .submitButton {
+    @include ms-Grid-col;
+    @include ms-sm12;
+    margin: 0 0 15px 0;
 
-.submitButton {
-  @include ms-Grid-col;
-  @include ms-sm12;
-  margin: 0 0 15px 0;
-
-  > button {
-    margin: 0;
+    > button {
+      margin: 0;
+    }
   }
 }

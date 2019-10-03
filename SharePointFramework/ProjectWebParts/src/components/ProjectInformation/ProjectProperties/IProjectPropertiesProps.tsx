@@ -26,7 +26,7 @@ export interface IProjectPropertiesProps {
     /**
      * Does the web have a local project properties list
      */
-    localList: boolean;
+    localProjectPropertiesList: boolean;
 
     /**
      * On external field changed

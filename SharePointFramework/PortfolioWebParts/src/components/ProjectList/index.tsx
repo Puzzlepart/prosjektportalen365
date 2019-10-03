@@ -20,6 +20,7 @@ import { PROJECTLIST_COLUMNS } from './ProjectListColumns';
 
 export default class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
   public static defaultProps: Partial<IProjectListProps> = {
+    phaseTermSetId: 'abcfc9d9-a263-4abb-8234-be973c46258a',
     columns: PROJECTLIST_COLUMNS,
     sortBy: 'Title',
   };
@@ -37,7 +38,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
 
   public async componentDidMount() {
     try {
-      let projects = await this.props.dataAdapter.fetchEncrichedProjects(this.props.entity.listName, this.props.phaseTermSetId);
+      let projects = await this.props.dataAdapter.fetchEncrichedProjects(strings.ProjectsListName, this.props.phaseTermSetId);
       projects = projects.sort((a, b) => sortAlphabetically(a, b, true, this.props.sortBy));
       let columns = this.props.columns.map(col => {
         if (col.fieldName === this.props.sortBy) {

@@ -1,12 +1,16 @@
+import { IProjectSetupApplicationCustomizerData } from 'extensions/projectSetup/IProjectSetupApplicationCustomizerData';
 import * as strings from 'ProjectExtensionsStrings';
 import { ExecuteJsomQuery } from 'spfx-jsom';
-import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
-import { BaseTaskError } from '../BaseTaskError';
-import { IBaseTaskParams } from '../IBaseTaskParams';
+import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask';
+import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction';
 
-export default new class SetTaxonomyFields extends BaseTask {
+export class SetTaxonomyFields extends BaseTask {
     public taskName = 'SetTaxonomyFields';
-    
+
+    constructor(data: IProjectSetupApplicationCustomizerData) {
+     super(data);
+    }
+
     /**
      * Execute CopyListData
      * 
@@ -33,4 +37,4 @@ export default new class SetTaxonomyFields extends BaseTask {
             throw new BaseTaskError(this.taskName, strings.SetTaxonomyFieldsErrorMessage, error);
         }
     }
-};
+}

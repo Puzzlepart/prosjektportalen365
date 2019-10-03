@@ -1,14 +1,14 @@
-import { default as PreTask } from './PreTask';
-import { default as PlannerConfiguration } from './PlannerConfiguration';
-import { default as SetupProjectInformation } from './SetupProjectInformation';
-import { default as ProvisionSiteFields } from './ProvisionSiteFields';
-import { default as ApplyTemplate } from './ApplyTemplate';
-import { default as CopyListData } from './CopyListData';
-import { default as SetTaxonomyFields } from './SetTaxonomyFields';
-import { BaseTask } from './BaseTask';
-export * from './BaseTask';
+import { IProjectSetupApplicationCustomizerData } from 'extensions/projectSetup/IProjectSetupApplicationCustomizerData';
+import { ApplyTemplate } from './ApplyTemplate';
+import { CopyListData } from './CopyListData';
+import { PlannerConfiguration } from './PlannerConfiguration';
+import { PreTask } from './PreTask';
+import { ProvisionSiteFields } from './ProvisionSiteFields';
+import { SetTaxonomyFields } from './SetTaxonomyFields';
+import { SetupProjectInformation } from './SetupProjectInformation';
+import { IBaseTask } from './@BaseTask';
 
-const tasks: BaseTask[] = [
+const tasks: (new (data: IProjectSetupApplicationCustomizerData) => IBaseTask)[] = [
     PreTask,
     SetupProjectInformation,
     PlannerConfiguration,
@@ -18,5 +18,13 @@ const tasks: BaseTask[] = [
     CopyListData,
 ];
 
-export default tasks;
-export { IBaseTaskParams } from './IBaseTaskParams';
+/**
+ * Get tasks
+ * 
+ * @param {IProjectSetupApplicationCustomizerData} data Data
+ */
+export function getTasks(data: IProjectSetupApplicationCustomizerData) {
+    return tasks.map(ctor => new ctor(data));
+}
+
+export * from './@BaseTask';

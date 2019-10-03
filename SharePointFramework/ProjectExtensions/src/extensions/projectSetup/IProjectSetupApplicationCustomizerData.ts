@@ -2,24 +2,24 @@ import { ListContentConfig, ProjectTemplate } from '../../models';
 import { IHubSite } from 'sp-hubsite-service';
 import { ITemplateSelectDialogState } from '../../components/TemplateSelectDialog/ITemplateSelectDialogState';
 
-export default interface IProjectSetupApplicationCustomizerData extends ITemplateSelectDialogState {
+export interface IProjectSetupApplicationCustomizerData extends ITemplateSelectDialogState {
     /**
-     * @todo Describe property
+     * Templates
      */
     templates?: ProjectTemplate[];
 
     /**
-     * @todo Describe property
+     * Extensions
      */
     extensions?: ProjectTemplate[];
 
     /**
-     * @todo Describe property
+     * List content config
      */
     listContentConfig?: ListContentConfig[];
 
     /**
-     * @todo Describe property
+     * Hub site
      */
     hub?: IHubSite;
 }

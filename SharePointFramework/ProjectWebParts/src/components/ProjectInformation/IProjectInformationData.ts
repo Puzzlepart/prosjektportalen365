@@ -1,6 +1,6 @@
+import { ProjectColumn, StatusReport } from 'shared/lib/models';
 import * as ProjectDataService from 'shared/lib/services/ProjectDataService';
 import { IEntityField } from 'sp-entityportal-service';
-import { StatusReport, SPProjectColumnItem } from 'shared/lib/models';
 
 export interface IProjectInformationData extends ProjectDataService.IGetPropertiesData {
   /**
@@ -11,7 +11,7 @@ export interface IProjectInformationData extends ProjectDataService.IGetProperti
   /**
    * Column configuration
    */
-  columnConfig?: SPProjectColumnItem[];
+  columns?: ProjectColumn[];
 
   /**
    * Array of fields from the entity

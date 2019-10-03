@@ -1,4 +1,3 @@
-import { IBaseTaskParams } from '../../tasks/IBaseTaskParams';
 import { IBaseDialogProps } from '../@BaseDialog/IBaseDialogProps';
 
 export interface IProgressDialogProps extends IBaseDialogProps {

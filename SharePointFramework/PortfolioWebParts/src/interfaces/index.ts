@@ -6,6 +6,5 @@ export * from './ISPProjectItem';
 export * from './ISPUser';
 export * from './IGraphGroup';
 export * from './IBenefitsSearchResult';
-export * from './ISPDataSource';
 export * from './IPortfolioConfiguration';
 export * from './IAggregatedSearchListColumn';

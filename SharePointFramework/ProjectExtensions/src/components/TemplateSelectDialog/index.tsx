@@ -1,14 +1,12 @@
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { DialogContent, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
-import { ProjectTemplate } from '../../models/index';
 import { BaseDialog } from '../@BaseDialog';
 import { ExtensionsSection } from './ExtensionsSection';
 import { ITemplateSelectDialogProps } from './ITemplateSelectDialogProps';
 import { ITemplateSelectDialogState } from './ITemplateSelectDialogState';
 import { ListContentSection } from './ListContentSection';
+import { TemplateSelector } from './TemplateSelector';
 import { SettingsSection } from './SettingsSection';
 import styles from './TemplateSelectDialog.module.scss';
 
@@ -23,10 +21,12 @@ export class TemplateSelectDialog extends React.Component<ITemplateSelectDialogP
         this.state = {
             selectedTemplate: props.data.templates[0],
             selectedExtensions: [],
-            selectedListConfig: props.data.listContentConfig.filter(lcc => lcc.isDefault),
-            includeStandardFolders: false,
-            copyPlannerTasks: true,
-            localProjectPropertiesList: true,
+            selectedListContentConfig: props.data.listContentConfig.filter(lcc => lcc.isDefault),
+            settings: {
+                includeStandardFolders: false,
+                copyPlannerTasks: true,
+                localProjectPropertiesList: true,
+            },
         };
     }
 
@@ -42,29 +42,21 @@ export class TemplateSelectDialog extends React.Component<ITemplateSelectDialogP
                 onDismiss={this.props.onDismiss}
                 onRenderFooter={this._onRenderFooter.bind(this)}
                 containerClassName={styles.templateSelectDialog}>
-                <div className={styles.templateSelect}>
-                    <div className={styles.templateSelectTitle}>{strings.TemplateSelectTitle}</div>
-                    <div className={styles.templateSelectDropdown}>
-                        <Dropdown
-                            defaultSelectedKey='0'
-                            onChanged={this._onTemplateSelected}
-                            options={this._getTemplateOptions()}
-                            disabled={this._getTemplateOptions().length === 1} />
-                    </div>
-                </div>
-                <SettingsSection
-                    defaultChecked={{
-                        includeStandardFolders: this.state.includeStandardFolders,
-                        copyPlannerTasks: this.state.copyPlannerTasks,
-                        localProjectPropertiesList: this.state.localProjectPropertiesList,
-                    }}
-                    onChange={obj => this.setState(obj)} />
+                <TemplateSelector
+                    templates={this.props.data.templates}
+                    selectedTemplate={this.state.selectedTemplate}
+                    onChange={selectedTemplate => this.setState({ selectedTemplate })} />
                 <ExtensionsSection
                     extensions={this.props.data.extensions}
-                    onChange={obj => this.setState(obj)} />
+                    selectedExtensions={this.state.selectedExtensions}
+                    onChange={selectedExtensions => this.setState({ selectedExtensions })} />
                 <ListContentSection
                     listContentConfig={this.props.data.listContentConfig}
-                    onChange={obj => this.setState(obj)} />
+                    selectedListContentConfig={this.state.selectedListContentConfig}
+                    onChange={selectedListContentConfig => this.setState({ selectedListContentConfig })} />
+                <SettingsSection
+                    defaultChecked={this.state.settings}
+                    onChange={settings => this.setState({ settings })} />
             </BaseDialog>
         );
     }
@@ -74,12 +66,16 @@ export class TemplateSelectDialog extends React.Component<ITemplateSelectDialogP
      */
     private _onRenderFooter() {
         return (
-            <div className={styles.submitButton}>
+            <>
                 <DefaultButton
+                    text={strings.CloseModalText}
+                    onClick={this.props.onDismiss}
+                    disabled={true} />
+                <PrimaryButton
                     text={strings.TemplateSelectDialogSubmitButtonText}
                     iconProps={{ iconName: 'Settings' }}
                     onClick={this._onSubmit.bind(this)} />
-            </div>
+            </>
         );
     }
 
@@ -88,24 +84,6 @@ export class TemplateSelectDialog extends React.Component<ITemplateSelectDialogP
      */
     private _onSubmit() {
         this.props.onSubmit(this.state);
-    }
-
-    /**
-     * On template selected
-     * 
-     * @param {IDropdownOption} opt Option
-     */
-    private _onTemplateSelected = (opt: IDropdownOption) => {
-        this.setState({ selectedTemplate: (opt.data as ProjectTemplate) });
-    }
-
-    /**
-     * Get template options
-     */
-    private _getTemplateOptions(): IDropdownOption[] {
-        return this.props.data.templates.map((template, idx) => {
-            return { key: `${idx}`, text: template.title, data: template };
-        });
     }
 }
 

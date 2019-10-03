@@ -12,7 +12,7 @@ import { IDocumentLibrary, TemplateFile } from '../../models';
 import { ITemplateSelectorCommandSetProperties } from './ITemplateSelectorCommandSetProperties';
 
 Logger.subscribe(new ConsoleListener());
-Logger.activeLogLevel = LogLevel.Warning;
+Logger.activeLogLevel = LogLevel.Info;
 
 
 export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<ITemplateSelectorCommandSetProperties> {
@@ -43,10 +43,10 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
   }
 
   @override
-  public onListViewUpdated(event: IListViewCommandSetListViewUpdatedParameters): void {
+  public onListViewUpdated(_event: IListViewCommandSetListViewUpdatedParameters): void {
     const openTemplateSelectorCommand: Command = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR');
     if (openTemplateSelectorCommand) {
-      openTemplateSelectorCommand.visible = event.selectedRows.length === 0 && this._templates.length > 0;
+      openTemplateSelectorCommand.visible = true;
     }
   }
 

@@ -98,6 +98,7 @@ define([], function () {
     UnitLabel: 'Måleenhet',
     ViewNotFoundMessage: 'Finner ikke angitt visning.',
     ViewsListNameLabel: 'Visninger',
-    SelectedColumnsLabel: 'Felter'
+    SelectedColumnsLabel: 'Felter',
+    ProjectsListName: 'Prosjekter'
   }
 });

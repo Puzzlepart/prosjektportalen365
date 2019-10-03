@@ -1,6 +1,18 @@
 import { ListContentConfig } from '../../../models/index';
 
 export interface IListContentSectionProps {
-    listContentConfig: ListContentConfig[];
-    onChange: (obj: { selectedListConfig: ListContentConfig[] }) => void;
+    /**
+     * List content config
+     */
+    listContentConfig?: ListContentConfig[];
+
+    /**
+     * Currently selected list content config
+     */
+    selectedListContentConfig?: ListContentConfig[];
+
+    /**
+     * On list content config changed
+     */
+    onChange: (selectedListConfig: ListContentConfig[]) => void;
 }

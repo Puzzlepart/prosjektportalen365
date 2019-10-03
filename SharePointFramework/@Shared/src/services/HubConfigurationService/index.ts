@@ -201,7 +201,9 @@ export class HubConfigurationService {
      * @param {string{}} select Fields to retrieve
      */
     public async getStatusReports(filter: string = `GtSiteId eq '${this._configuration.siteId}'`, top?: number, select?: string[]): Promise<StatusReport[]> {
-        if (!this._configuration.siteId) return [];
+        if (!this._configuration.siteId) {
+            throw 'Property siteId missing in configuration';
+        }
         try {
             let items = this._web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
                 .items

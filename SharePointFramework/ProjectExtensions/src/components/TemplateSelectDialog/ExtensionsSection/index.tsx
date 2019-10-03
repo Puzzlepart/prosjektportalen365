@@ -4,11 +4,10 @@ import * as React from 'react';
 import { ProjectTemplate } from '../../../models';
 import { CollapsableSection } from '../../CollapsableSection';
 import { IExtensionsSectionProps } from './IExtensionsSectionProps';
-import { IExtensionsSectionState } from './IExtensionsSectionState';
 import styles from './ExtensionsSection.module.scss';
 
 
-export class ExtensionsSection extends React.Component<IExtensionsSectionProps, IExtensionsSectionState> {
+export class ExtensionsSection extends React.PureComponent<IExtensionsSectionProps> {
     /**
      * Constructor
      * 
@@ -29,8 +28,8 @@ export class ExtensionsSection extends React.Component<IExtensionsSectionProps, 
                 {this.props.extensions.map((ext, idx) => (
                     <div key={idx} className={styles.listItem}>
                         <Toggle
-                            label={ext.title}
-                            onChanged={checked => this._onItemToggle(ext, checked)} />
+                            label={ext.text}
+                            onChanged={checked => this._onChanged(ext, checked)} />
                     </div>
                 ))}
             </CollapsableSection>
@@ -42,16 +41,14 @@ export class ExtensionsSection extends React.Component<IExtensionsSectionProps, 
      * @param {ProjectTemplate} extension Extension
      * @param {boolean} checked Checked
      */
-    private _onItemToggle(extension: ProjectTemplate, checked: boolean): void {
+    private _onChanged(extension: ProjectTemplate, checked: boolean): void {
         let selectedExtensions = [];
         if (checked) {
-            selectedExtensions = [extension, ...this.state.selectedExtensions];
-            this.setState({ selectedExtensions });
+            selectedExtensions = [extension, ...this.props.selectedExtensions];
         }
         else {
-            selectedExtensions = this.state.selectedExtensions.filter(ext => extension.title !== ext.title);
-            this.setState({ selectedExtensions });
+            selectedExtensions = this.props.selectedExtensions.filter(ext => extension.text !== ext.text);
         }
-        this.props.onChange({ selectedExtensions });
+        this.props.onChange(selectedExtensions);
     }
 }

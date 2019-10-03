@@ -97,7 +97,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
           isSiteAdmin={this.props.isSiteAdmin}
           onFieldExternalChanged={this.props.onFieldExternalChanged}
           showFieldExternal={this.props.showFieldExternal}
-          localList={this.state.data.localList} />
+          localProjectPropertiesList={this.state.data.localProjectPropertiesList} />
         <StatusReports
           title={this.props.statusReportsHeader}
           statusReports={statusReports}
@@ -108,7 +108,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
           hidden={this.props.hideActions || !this.props.isSiteAdmin || this.props.displayMode === DisplayMode.Edit}
           versionHistoryUrl={versionHistoryUrl}
           editFormUrl={editFormUrl}
-          onSyncProperties={!this.state.data.localList && this._onSyncProperties.bind(this)} />
+          onSyncProperties={!this.state.data.localProjectPropertiesList && this._onSyncProperties.bind(this)} />
         <ProgressDialog {...this.state.progress} />
       </>
     );
@@ -177,8 +177,8 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
   private _transformProperties(fieldValuesText: TypedHash<any>, data: IProjectInformationData) {
     const fieldNames: string[] = Object.keys(fieldValuesText).filter(fieldName => {
       let [field] = data.fields.filter(fld => fld.InternalName === fieldName);
-      if (field && data.columnConfig.length === 0 && this.props.showFieldExternal[fieldName]) return true;
-      let [column] = data.columnConfig.filter(c => c.GtInternalName === fieldName);
+      if (field && data.columns.length === 0 && this.props.showFieldExternal[fieldName]) return true;
+      let [column] = data.columns.filter(c => c.internalName === fieldName);
       if (field && column) {
         return this.props.filterField ? column[this.props.filterField] : true;
       }
@@ -203,7 +203,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
 
       let data: IProjectInformationData = {
         statusReports: [],
-        columnConfig,
+        columns: columnConfig,
         ...propertiesData,
       };
 
@@ -213,7 +213,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
 
       const properties = this._transformProperties(data.fieldValuesText, data);
 
-      this.logInfo('Succesfully retrieved data.', '_fetchData', { localList: data.localList });
+      this.logInfo('Succesfully retrieved data.', '_fetchData', { localProjectPropertiesList: data.localProjectPropertiesList });
 
       return { data, properties };
     } catch (error) {

@@ -4,7 +4,7 @@
   "files.exclude": {
     "lib": true,
     "dist": true,
-    "node_modules": true,
+    "node_modules": false,
     "sharepoint": true,
     "temp": true,
     "shrinkwrap.yaml": true,

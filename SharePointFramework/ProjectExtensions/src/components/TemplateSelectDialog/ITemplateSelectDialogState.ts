@@ -1,18 +1,24 @@
 import { ListContentConfig, ProjectTemplate } from '../../models/index';
 import { ISettings } from './SettingsSection/ISettingsSectionProps';
 
-export interface ITemplateSelectDialogState extends ISettings {    /**
-     * @todo Describe property
+export interface ITemplateSelectDialogState {
+    /**
+     * Currently selected project templates
      */
     selectedTemplate?: ProjectTemplate;
 
     /**
-     * @todo Describe property
+     * Currently selected extensions
      */
     selectedExtensions?: ProjectTemplate[];
 
     /**
-     * @todo Describe property
+     * Currently selected list content config
      */
-    selectedListConfig?: ListContentConfig[];
+    selectedListContentConfig?: ListContentConfig[];
+
+    /**
+     * Settings
+     */
+    settings?: ISettings;
 }

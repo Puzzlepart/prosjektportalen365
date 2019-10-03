@@ -1,9 +1,9 @@
+import { IProjectSetupApplicationCustomizerData } from 'extensions/projectSetup/IProjectSetupApplicationCustomizerData';
 import * as strings from 'ProjectExtensionsStrings';
 import * as formatString from 'string-format';
 import { DOMParser } from 'xmldom';
-import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
-import { BaseTaskError } from '../BaseTaskError';
-import { IBaseTaskParams } from '../IBaseTaskParams';
+import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask';
+import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction';
 
 export class SPField {
     // tslint:disable-next-line: naming-convention
@@ -16,8 +16,12 @@ export class SPField {
     public TypeAsString?: string = '';
 }
 
-export default new class ProvisionSiteFields extends BaseTask {
+export class ProvisionSiteFields extends BaseTask {
     public taskName = 'ProvisionSiteFields';
+
+    constructor(data: IProjectSetupApplicationCustomizerData) {
+     super(data);
+    }
 
     /**
      * Execute ProvisionSiteFields
@@ -28,7 +32,7 @@ export default new class ProvisionSiteFields extends BaseTask {
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
             const existingSiteFields = await params.web.fields.select(...Object.keys(new SPField())).get<SPField[]>();
-            const siteFields = await params.data.hub.web.fields.filter(`Group eq '${strings.SiteFieldsGroupName}' and TypeAsString ne 'Calculated'`).select(...Object.keys(new SPField())).get<SPField[]>();
+            const siteFields = await this.data.hub.web.fields.filter(`Group eq '${strings.SiteFieldsGroupName}' and TypeAsString ne 'Calculated'`).select(...Object.keys(new SPField())).get<SPField[]>();
             for (let i = 0; i < siteFields.length; i++) {
                 let siteField = siteFields[i];
                 if (existingSiteFields.filter(exf => exf.InternalName === siteField.InternalName).length > 0) {
@@ -67,4 +71,4 @@ export default new class ProvisionSiteFields extends BaseTask {
         }
         return documentElement.toString();
     }
-};
+}

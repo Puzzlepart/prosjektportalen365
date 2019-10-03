@@ -59,7 +59,7 @@ declare interface IProjectExtensionsStrings {
   TemplateSelectDialogInfoText: string;
   TemplateSelectDialogSubmitButtonText: string;
   TemplateSelectDialogTitle: string;
-  TemplateSelectTitle: string;
+  TemplateSelectorTitle: string;
   TitleLabel: string;
   DocumentTemplateDialogScreenSelectInfoText: string;
   DocumentTemplateDialogScreenEditCopyInfoText: string;
@@ -67,6 +67,7 @@ declare interface IProjectExtensionsStrings {
   FilenameInValidErrorText: string;
   SyncLocalProjectPropertiesListText: string;
   CreatingLocalProjectPropertiesListItemText: string;
+  PhaseLabel: string;
 }
 
 declare module 'ProjectExtensionsStrings' {

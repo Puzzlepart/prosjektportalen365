@@ -1,4 +1,4 @@
-import IProjectSetupApplicationCustomizerData from '../../extensions/projectSetup/IProjectSetupApplicationCustomizerData';
+import { IProjectSetupApplicationCustomizerData } from '../../extensions/projectSetup/IProjectSetupApplicationCustomizerData';
 import { IBaseDialogProps } from '../@BaseDialog/IBaseDialogProps';
 import { ITemplateSelectDialogState } from './ITemplateSelectDialogState';
 

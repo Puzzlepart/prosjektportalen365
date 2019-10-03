@@ -1,6 +1,6 @@
 {
     "Ingen fase": {
-        "Beslutte utredning av idéen og utforme et førsteutkast til prosjektmandat": [],
+        "Beslutte utredning av idéen og utforme et førsteutkast til prosjektmandat": ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6"],
         "Definere en tydelig problemstilling som synliggjør behovet for nærmere utredning": [],
         "Gjøre det tydelig hvordan eller av hvem utredningen skal finansieres": [],
         "Vurdere om det er mest riktig å gjennomføre tiltaket som et prosjekt eller som en linjeoppgave": [],

@@ -3,6 +3,7 @@ import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-applic
 import { isArray } from '@pnp/common';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { sp, Web } from '@pnp/sp';
+import { getId } from '@uifabric/utilities';
 import { default as MSGraphHelper } from 'msgraph-helper';
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import * as strings from 'ProjectExtensionsStrings';
@@ -13,23 +14,19 @@ import { HubConfigurationService } from 'shared/lib/services';
 import { default as HubSiteService } from 'sp-hubsite-service';
 import { ErrorDialog, IErrorDialogProps, IProgressDialogProps, ITemplateSelectDialogProps, ITemplateSelectDialogState, ProgressDialog, TemplateSelectDialog } from '../../components';
 import { ListContentConfig, ProjectTemplate } from '../../models';
-import { default as Tasks, IBaseTaskParams } from '../../tasks';
-import { default as IProjectSetupApplicationCustomizerData } from './IProjectSetupApplicationCustomizerData';
+import * as Tasks from '../../tasks';
+import { IProjectSetupApplicationCustomizerData } from './IProjectSetupApplicationCustomizerData';
 import { IProjectSetupApplicationCustomizerProperties } from './IProjectSetupApplicationCustomizerProperties';
 import { ProjectSetupError } from './ProjectSetupError';
+import { ProjectSetupValidation } from './ProjectSetupValidation';
 
 export default class ProjectSetupApplicationCustomizer extends BaseApplicationCustomizer<IProjectSetupApplicationCustomizerProperties> {
-  private _domElement: HTMLDivElement;
-  private _templateSelectModalContainer: HTMLElement;
-  private _progressModalContainer: HTMLElement;
-  private _data: IProjectSetupApplicationCustomizerData;
-  private _taskParams: IBaseTaskParams;
   private _hubConfigurationService: HubConfigurationService;
 
   public constructor() {
     super();
     Logger.subscribe(new ConsoleListener());
-    Logger.activeLogLevel = this._isDebug ? LogLevel.Info : LogLevel.Warning;
+    Logger.activeLogLevel = this._isDebug ? LogLevel.Info : LogLevel.Info;
   }
 
   @override
@@ -38,26 +35,28 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
     Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
     if (!this.context.pageContext.legacyPageContext.isSiteAdmin || !this.context.pageContext.legacyPageContext.groupId) return;
     try {
-      Logger.log({ message: '(ProjectSetupApplicationCustomizer) onInit: Initializing pre-conditionals before initializing setup', data: { version: this.context.manifest.version }, level: LogLevel.Info });
-      const topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top);
-      this._domElement = topPlaceholder.domElement;
-      if (this.context.pageContext.web.language !== 1044) {
-        await this._deleteCustomizer(this.componentId, false);
-        throw new ProjectSetupError(strings.InvalidLanguageErrorMessage, strings.InvalidLanguageErrorStack);
-      } else if (!this.context.pageContext.legacyPageContext.hubSiteId) {
-        throw new ProjectSetupError(strings.NoHubSiteErrorMessage, strings.NoHubSiteErrorStack, MessageBarType.severeWarning);
-      } else if (this.context.pageContext.legacyPageContext.currentCultureLCID !== 1044 || this.context.pageContext.legacyPageContext.currentLanguage !== 1044) {
-        throw new ProjectSetupError(strings.SiteNotReadyErrorMessage, strings.SiteNotReadyErrorStack);
-      } else {
-        this._taskParams = {
-          web: new Web(this.context.pageContext.web.absoluteUrl),
-          webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
-          templateExcludeHandlers: [],
-          context: this.context,
-          properties: this.properties,
-        };
-        this._initializeSetup();
+      Logger.log({ message: '(ProjectSetupApplicationCustomizer) onInit: Initializing pre-conditionals before initializing setup', data: { version: this.context.manifest.version, validation: this._validation }, level: LogLevel.Info });
+      switch (this._validation) {
+        case ProjectSetupValidation.InvalidWebLanguage: {
+          await this._deleteCustomizer(this.componentId, false);
+          throw new ProjectSetupError(strings.InvalidLanguageErrorMessage, strings.InvalidLanguageErrorStack);
+        }
+        case ProjectSetupValidation.NoHubConnection: {
+          throw new ProjectSetupError(strings.NoHubSiteErrorMessage, strings.NoHubSiteErrorStack, MessageBarType.severeWarning);
+        }
+        case ProjectSetupValidation.InvalidCulture: {
+          throw new ProjectSetupError(strings.SiteNotReadyErrorMessage, strings.SiteNotReadyErrorStack);
+        }
       }
+
+      this._initializeSetup({
+        web: new Web(this.context.pageContext.web.absoluteUrl),
+        webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
+        templateExcludeHandlers: [],
+        context: this.context,
+        properties: this.properties,
+      });
+
     } catch (error) {
       this._renderErrorDialog({ error });
     }
@@ -65,20 +64,20 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
 
   /**
    * Intiialize setup
+   * 
+   * @param {Tasks.IBaseTaskParams} taskParams Task params
    */
-  protected async _initializeSetup() {
+  private async _initializeSetup(taskParams: Tasks.IBaseTaskParams) {
     try {
       Logger.log({ message: '(ProjectSetupApplicationCustomizer) _initializeSetup: Initializing setup', data: { version: this.context.manifest.version }, level: LogLevel.Info });
-      this._data = await this._fetchData();
-      this._initializeSPListLogging(this._data.hub.web);
-      const templateInfo = await this._getTemplateInfoFromModal();
-      Logger.log({ message: '(ProjectSetupApplicationCustomizer) _initializeSetup: Template selected by user', data: { selectedTemplate: templateInfo.selectedTemplate.title }, level: LogLevel.Info });
-      ReactDOM.unmountComponentAtNode(this._templateSelectModalContainer);
-      this._data = { ...this._data, ...templateInfo };
-      this._taskParams.data = this._data;
-      Logger.log({ message: '(ProjectSetupApplicationCustomizer) _initializeSetup: Rendering progress modal', data: { selectedTemplate: templateInfo.selectedTemplate.title }, level: LogLevel.Info });
+      let data = await this._fetchData();
+      this._initializeSPListLogging(data.hub.web);
+      const provisioningInfo = await this._getProvisioningInfo(data);
+      Logger.log({ message: '(ProjectSetupApplicationCustomizer) _initializeSetup: Template selected by user', data: {}, level: LogLevel.Info });
+      data = { ...data, ...provisioningInfo };
+      Logger.log({ message: '(ProjectSetupApplicationCustomizer) _initializeSetup: Rendering progress modal', data: {}, level: LogLevel.Info });
       this._renderProgressDialog({ text: strings.ProgressDialogLabel, subText: strings.ProgressDialogDescription, iconName: 'Page' });
-      await this._startProvision();
+      await this._startProvision(taskParams, data);
       await this._deleteCustomizer(this.componentId, true);
     } catch (error) {
       this._renderErrorDialog({ error });
@@ -91,7 +90,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
    * @param {Web} hubWeb Hub web
    * @param {string} listName List name
    */
-  protected _initializeSPListLogging(hubWeb: Web, listName: string = 'Logg') {
+  private _initializeSPListLogging(hubWeb: Web, listName: string = 'Logg') {
     ListLogger.init(
       hubWeb.lists.getByTitle(listName),
       {
@@ -107,18 +106,28 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
   }
 
   /**
-   * Render TemplateSelectDialog
+   * Get provisioning info from TemplateSelectDialog
+   * 
+   * @param {IProjectSetupApplicationCustomizerData} data Data
    */
-  private _getTemplateInfoFromModal(): Promise<ITemplateSelectDialogState> {
-    return new Promise(resolve => {
-      const templateSelectModal = React.createElement<ITemplateSelectDialogProps>(TemplateSelectDialog, {
-        data: this._data,
+  private _getProvisioningInfo(data: IProjectSetupApplicationCustomizerData): Promise<ITemplateSelectDialogState> {
+    return new Promise((resolve, reject) => {
+      let placeholder = document.createElement('DIV');
+      placeholder.id = getId('TemplateSelectDialog');
+      placeholder = this._container.appendChild(placeholder);
+      const element = React.createElement<ITemplateSelectDialogProps>(TemplateSelectDialog, {
+        data,
         version: this.manifest.version,
-        onSubmit: (state: ITemplateSelectDialogState) => resolve(state),
+        onSubmit: (state: ITemplateSelectDialogState) => {
+          this._unmount(placeholder);
+          resolve(state);
+        },
+        onDismiss: () => {
+          this._unmount(placeholder);
+          reject(new ProjectSetupError('Installasjon avbrutt av bruker.', 'Installasjon avbrutt av bruker.'));
+        },
       });
-      this._templateSelectModalContainer = document.createElement('DIV');
-      this._domElement.appendChild(this._templateSelectModalContainer);
-      ReactDOM.render(templateSelectModal, this._templateSelectModalContainer);
+      ReactDOM.render(element, placeholder);
     });
   }
 
@@ -128,12 +137,11 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
    * @param {IProgressDialogProps} props Props
    */
   private _renderProgressDialog(props: IProgressDialogProps) {
-    const progressModal = React.createElement<IProgressDialogProps>(ProgressDialog, { ...props, version: this.manifest.version });
-    if (!this._progressModalContainer) {
-      this._progressModalContainer = document.createElement('DIV');
-      this._domElement.appendChild(this._progressModalContainer);
-    }
-    ReactDOM.render(progressModal, this._progressModalContainer);
+    let placeholder = document.createElement('DIV');
+    placeholder.id = getId('ProgressDialog');
+    placeholder = this._container.appendChild(placeholder);
+    const element = React.createElement<IProgressDialogProps>(ProgressDialog, { ...props, version: this.manifest.version });
+    ReactDOM.render(element, placeholder);
   }
 
   /**
@@ -142,25 +150,33 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
    * @param {IProgressDialogProps} props Props
    */
   private _renderErrorDialog(props: IErrorDialogProps) {
-    const errorModal = React.createElement(ErrorDialog, { ...props, version: this.manifest.version });
-    if (!this._progressModalContainer) {
-      this._progressModalContainer = document.createElement('DIV');
-      this._domElement.appendChild(this._progressModalContainer);
-    }
-    ReactDOM.render(errorModal, this._progressModalContainer);
+    let placeholder = document.createElement('DIV');
+    placeholder.id = getId('ErrorDialog');
+    placeholder = this._container.appendChild(placeholder);
+    const element = React.createElement(ErrorDialog, {
+      ...props,
+      version: this.manifest.version,
+      onDismiss: () => this._unmount(placeholder),
+    });
+    ReactDOM.render(element, placeholder);
   }
 
   /**
   * Start provision
+   * 
+   * @param {Tasks.IBaseTaskParams} taskParams Task params   
+   * @param {IProjectSetupApplicationCustomizerData} data Data
   */
-  private async _startProvision(): Promise<void> {
-    Logger.log({ message: '(ProjectSetupApplicationCustomizer) _startProvision', data: { properties: this.properties, tasks: Tasks.map(t => t.taskName) }, level: LogLevel.Info });
+  private async _startProvision(taskParams: Tasks.IBaseTaskParams, data: IProjectSetupApplicationCustomizerData): Promise<void> {
+    const tasks = Tasks.getTasks(data);
+    Logger.log({ message: '(ProjectSetupApplicationCustomizer) _startProvision', data: { properties: this.properties, tasks: tasks.map(t => t.taskName) }, level: LogLevel.Info });
     try {
       await ListLogger.write('Starting provisioning of project.', 'Info');
-      for (let i = 0; i < Tasks.length; i++) {
-        if (isArray(this.properties.tasks) && this.properties.tasks.indexOf(Tasks[i].taskName) === -1) continue;
-        Logger.log({ message: `(ProjectSetupApplicationCustomizer) _startProvision: Executing task ${Tasks[i].taskName}`, level: LogLevel.Info });
-        this._taskParams = await Tasks[i].execute(this._taskParams, this._onTaskStatusUpdated.bind(this));
+      for (let i = 0; i < tasks.length; i++) {
+        let task = tasks[i];
+        if (isArray(this.properties.tasks) && ['PreTask', ...this.properties.tasks].indexOf(task.taskName) === -1) continue;
+        Logger.log({ message: `(ProjectSetupApplicationCustomizer) _startProvision: Executing task ${task.taskName}`, level: LogLevel.Info });
+        taskParams = await task.execute(taskParams, this._onTaskStatusUpdated.bind(this));
       }
       await ListLogger.write('Project successfully provisioned.', 'Info');
     } catch (error) {
@@ -211,13 +227,13 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
       Logger.log({ message: '(ProjectSetupApplicationCustomizer) _fetchData: Retrieving hub site url', data: {}, level: LogLevel.Info });
       let data: IProjectSetupApplicationCustomizerData = {};
       data.hub = await HubSiteService.GetHubSite(sp, this.context.pageContext);
-      this._hubConfigurationService = new HubConfigurationService(data.hub.web);
+      this._hubConfigurationService = new HubConfigurationService().configure({ urlOrWeb: data.hub.web });
       Logger.log({ message: '(ProjectSetupApplicationCustomizer) _fetchData: Retrieved hub site url', data: { hubUrl: data.hub.url }, level: LogLevel.Info });
       Logger.log({ message: '(ProjectSetupApplicationCustomizer) _fetchData: Retrieving templates, extensions and content config', data: {}, level: LogLevel.Info });
       const [templates, extensions, listContentConfig] = await Promise.all([
-        this._hubConfigurationService.getHubFiles<ProjectTemplate>(this.properties.templatesLibrary, ProjectTemplate),
-        this._hubConfigurationService.getHubFiles<ProjectTemplate>(this.properties.extensionsLibrary, ProjectTemplate),
-        this._hubConfigurationService.getHubItems<ListContentConfig>(this.properties.contentConfigList, ListContentConfig),
+        this._hubConfigurationService.getHubItems(this.properties.templatesLibrary, ProjectTemplate, { ViewXml: '<View></View>' }, ['File', 'FieldValuesAsText']),
+        this._hubConfigurationService.getHubItems(this.properties.extensionsLibrary, ProjectTemplate, { ViewXml: '<View></View>' }, ['File', 'FieldValuesAsText']),
+        this._hubConfigurationService.getHubItems(this.properties.contentConfigList, ListContentConfig),
       ]);
       Logger.log({ message: '(ProjectSetupApplicationCustomizer) _fetchData: Retrieved templates, extensions and content config', data: { templates: templates.length, extensions: extensions.length, listContentConfig: listContentConfig.length }, level: LogLevel.Info });
       return {
@@ -226,7 +242,7 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
         extensions,
         listContentConfig,
       };
-    } catch (e) {
+    } catch (error) {
       throw new ProjectSetupError(strings.GetSetupDataErrorMessage, strings.GetSetupDataErrorStack);
     }
   }
@@ -236,7 +252,23 @@ export default class ProjectSetupApplicationCustomizer extends BaseApplicationCu
    * 
    * Typically true when running 'gulp serve'
    */
-  private _isDebug(): boolean {
+  private get _isDebug(): boolean {
     return document.location.search.toLowerCase().indexOf('debugmanifestsfile') !== -1;
+  }
+
+  private get _validation(): ProjectSetupValidation {
+    if (this.context.pageContext.web.language !== 1044) return ProjectSetupValidation.InvalidWebLanguage;
+    if (!this.context.pageContext.legacyPageContext.hubSiteId) return ProjectSetupValidation.NoHubConnection;
+    if (this.context.pageContext.legacyPageContext.currentCultureLCID !== 1044 || this.context.pageContext.legacyPageContext.currentLanguage !== 1044) return ProjectSetupValidation.InvalidCulture;
+    return ProjectSetupValidation.Ready;
+  }
+
+  private get _container(): HTMLDivElement {
+    const topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top);
+    return topPlaceholder.domElement;
+  }
+
+  private _unmount(container: HTMLElement) {
+    ReactDOM.unmountComponentAtNode(container);
   }
 }

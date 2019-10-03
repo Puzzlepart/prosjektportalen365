@@ -1,10 +1,9 @@
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base';
-import { SpEntityPortalService } from 'sp-entityportal-service';
 import { HubConfigurationService } from 'shared/lib/services';
+import { SpEntityPortalService } from 'sp-entityportal-service';
 import { Schema, Web } from 'sp-js-provisioning';
 import { ISpfxJsomContext } from 'spfx-jsom';
-import IProjectSetupApplicationCustomizerData from '../extensions/projectSetup/IProjectSetupApplicationCustomizerData';
-import { IProjectSetupApplicationCustomizerProperties } from '../extensions/projectSetup/IProjectSetupApplicationCustomizerProperties';
+import { IProjectSetupApplicationCustomizerProperties } from '../../extensions/projectSetup/IProjectSetupApplicationCustomizerProperties';
 
 export interface IBaseTaskParams {
     /**
@@ -46,15 +45,6 @@ export interface IBaseTaskParams {
      * @todo Describe property
      */
     templateSchema?: Schema;
-
-    /**
-     * @todo Describe property
-     */
-
-    /**
-     * @todo Describe property
-     */
-    data?: IProjectSetupApplicationCustomizerData;
 
     /**
      * @todo Describe property

@@ -3,8 +3,7 @@ import { SPRest } from '@pnp/sp';
 import { ITaxonomySession } from '@pnp/sp-taxonomy';
 import { SpEntityPortalService } from 'sp-entityportal-service';
 
-export interface IProjectDataServiceParams {
-    
+export interface IProjectDataServiceParams {    
     /**
      * @todo Describe property
      */

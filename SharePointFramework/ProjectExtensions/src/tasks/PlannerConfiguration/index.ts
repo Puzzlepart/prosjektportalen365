@@ -1,37 +1,43 @@
 import { PageContext } from '@microsoft/sp-page-context';
+import { IProjectSetupApplicationCustomizerData } from 'extensions/projectSetup/IProjectSetupApplicationCustomizerData';
 import { default as MSGraphHelper } from 'msgraph-helper';
 import * as strings from 'ProjectExtensionsStrings';
 import * as formatString from 'string-format';
-import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
-import { BaseTaskError } from '../BaseTaskError';
-import { IBaseTaskParams } from '../IBaseTaskParams';
+import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask';
+import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction';
 import { IPlannerBucket } from './IPlannerBucket';
+import { IPlannerConfiguration } from './IPlannerConfiguration';
 import { IPlannerPlan } from './IPlannerPlan';
+import { TypedHash, getGUID } from '@pnp/common';
 
-export default new class PlannerConfiguration extends BaseTask {
+export class PlannerConfiguration extends BaseTask {
     public taskName = 'PlannerConfiguration';
+    private _config: IPlannerConfiguration;
+
+    constructor(data: IProjectSetupApplicationCustomizerData) {
+        super(data);
+    }
 
     /**
      * Create plans
      * 
-     * @param {IPlannerPlan} plan PlannerConfig Planner config
      * @param {string} owner Owner (group id)
      * @param {OnProgressCallbackFunction} onProgress On progress function
      * @param {string} defaultBucketName Default bucket name
      */
-    private async _createPlan(plannerConfig: { [key: string]: string[] }, pageContext: PageContext, onProgress: OnProgressCallbackFunction): Promise<IPlannerPlan> {
+    private async _createPlan(pageContext: PageContext, onProgress: OnProgressCallbackFunction): Promise<IPlannerPlan> {
         let planTitle = pageContext.web.title;
         let owner = pageContext.legacyPageContext.groupId;
         let existingGroupPlans = await this._fetchPlans(owner);
         this.logInformation(`Creating plan ${planTitle}`);
         let { plan, created } = await this._ensurePlan(planTitle, existingGroupPlans, pageContext.legacyPageContext.groupId);
         if (!created) return plan;
-        for (let i = 0; i < Object.keys(plannerConfig).length; i++) {
-            let bucketName = Object.keys(plannerConfig)[i];
+        for (let i = 0; i < Object.keys(this._config).length; i++) {
+            let bucketName = Object.keys(this._config)[i];
             this.logInformation(`Creating bucket ${bucketName} for plan ${planTitle}`);
             let bucket = await this._createBucket(bucketName, plan.id);
             onProgress(strings.PlannerConfigurationText, formatString(strings.CreatingPlannerTaskText, bucketName), 'PlannerLogo');
-            await this._createTasks(plannerConfig[bucketName], plan.id, bucket);
+            await this._createTasks(plan.id, bucket);
         }
         return plan;
     }
@@ -47,7 +53,7 @@ export default new class PlannerConfiguration extends BaseTask {
         let [plan] = existingPlans.filter(p => p.title === title);
         let created = false;
         if (!plan) {
-            plan = await MSGraphHelper.Post(`planner/plans`, JSON.stringify({ title, owner }));
+            plan = await MSGraphHelper.Post('planner/plans', JSON.stringify({ title, owner }));
             created = true;
         }
         return { plan, created };
@@ -64,20 +70,33 @@ export default new class PlannerConfiguration extends BaseTask {
     }
 
     /**
-     * Create tasks
+     * Create tasks for the bucket in the specifiec plan
      * 
-     * @param {string[]} tasks Tasks
      * @param {string} planId Plan Id 
      * @param {IPlannerBucket} bucket Bucket 
      */
-    private async _createTasks(tasks: string[], planId: string, bucket: IPlannerBucket) {
+    private async _createTasks(planId: string, bucket: IPlannerBucket) {
+        const tasks = Object.keys(this._config[bucket.name]);
         for (let i = 0; i < tasks.length; i++) {
-            this.logInformation(`Creating task ${tasks[i]} in bucket ${bucket.name}`);
-            await MSGraphHelper.Post('planner/tasks', JSON.stringify({ title: tasks[i], bucketId: bucket.id, planId }));
+            let title = tasks[i];
+            let checklist: string[] = this._config[bucket.name][title] || [];
+            try {
+                this.logInformation(`Creating task ${title} in bucket ${bucket.name}`);
+                const task = await MSGraphHelper.Post('planner/tasks', JSON.stringify({ title, bucketId: bucket.id, planId }));
+                if (checklist.length > 0) {
+                    let taskUpdate: TypedHash<any> = {};
+                    taskUpdate.checklist = checklist.reduce((obj, t) => ({ ...obj, [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title: t }, }), {});
+                    await MSGraphHelper.Patch(`planner/tasks/${task.id}/details`, JSON.stringify(taskUpdate), task['@odata.etag']);
+                }
+                this.logInformation(`Succesfully created task ${title} in bucket ${bucket.name}`, { taskId: task.id, checklist });
+            } catch (error) {
+                this.logInformation(`Failed to create task ${title} in bucket ${bucket.name}`);
+            }
         }
     }
 
     /**
+     * Fetch plans
      * 
      * @param {string} owner Owner (group id) 
      */
@@ -88,10 +107,10 @@ export default new class PlannerConfiguration extends BaseTask {
     /**
      * Fetch planner config
      * 
-     * @param {string} url Url 
+     * @param {string} path Config path
      */
-    private async _fetchPlannerConfig(url: string) {
-        return await (await fetch(`${url}/Konfigurasjonsfiler/Planneroppgaver.txt`, { credentials: 'include' })).json();
+    private async _fetchPlannerConfig(path: string = 'Konfigurasjonsfiler/Planneroppgaver.txt'): Promise<IPlannerConfiguration> {
+        return await (await fetch(`${this.data.hub.url}/${path}`, { credentials: 'include' })).json();
     }
 
     /**
@@ -101,11 +120,11 @@ export default new class PlannerConfiguration extends BaseTask {
      * @param {OnProgressCallbackFunction} onProgress On progress function
      */
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
-        if (params.data.copyPlannerTasks) {
+        if (this.data.settings.copyPlannerTasks) {
             this.logInformation('Setting up Plans, Buckets and Task');
             try {
-                const plannerConfig = await this._fetchPlannerConfig(params.data.hub.url);
-                let groupPlan = await this._createPlan(plannerConfig, params.context.pageContext, onProgress);
+                this._config = await this._fetchPlannerConfig();
+                let groupPlan = await this._createPlan(params.context.pageContext, onProgress);
                 params.templateParameters = { defaultPlanId: groupPlan.id };
             } catch (error) {
                 this.logWarning('Failed to set up Plans, Buckets and Tasks', error);
@@ -114,4 +133,4 @@ export default new class PlannerConfiguration extends BaseTask {
         }
         return params;
     }
-};
+}

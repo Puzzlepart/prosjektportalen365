@@ -1,28 +1,32 @@
+import { IProjectSetupApplicationCustomizerData } from 'extensions/projectSetup/IProjectSetupApplicationCustomizerData';
 import * as strings from 'ProjectExtensionsStrings';
 import { HubConfigurationService } from 'shared/lib/services';
 import { SpEntityPortalService } from 'sp-entityportal-service';
 import initSpfxJsom from 'spfx-jsom';
-import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
-import { BaseTaskError } from '../BaseTaskError';
-import { IBaseTaskParams } from '../IBaseTaskParams';
+import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask';
+import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction';
 
-export default new class PreTask extends BaseTask {
+export class PreTask extends BaseTask {
     public taskName = 'PreTask';
+
+    constructor(data: IProjectSetupApplicationCustomizerData) {
+        super(data);
+    }
 
     public async execute(params: IBaseTaskParams, _onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
-            params.templateSchema = await params.data.selectedTemplate.getSchema();
+            params.templateSchema = await this.data.selectedTemplate.getSchema();
             params.spfxJsomContext = await initSpfxJsom(params.context.pageContext.site.absoluteUrl, { loadTaxonomy: true });
             params.spEntityPortalService = new SpEntityPortalService({
-                portalUrl: params.data.hub.url,
+                portalUrl: this.data.hub.url,
                 listName: params.properties.projectsList,
                 identityFieldName: 'GtGroupId',
                 urlFieldName: 'GtSiteUrl',
             });
-            params.hubConfigurationService = new HubConfigurationService(params.data.hub.web);
+            params.hubConfigurationService = new HubConfigurationService().configure({ urlOrWeb: this.data.hub.web });
             return params;
         } catch (error) {
             throw new BaseTaskError(this.taskName, strings.PreTaskErrorMessage, error);
         }
     }
-};
+}

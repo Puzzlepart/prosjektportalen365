@@ -1,23 +1,28 @@
-import { IBaseTaskParams } from './IBaseTaskParams';
-import { virtual } from '@microsoft/decorators';
 import { Logger, LogLevel } from '@pnp/logging';
+import { IProjectSetupApplicationCustomizerData } from 'extensions/projectSetup/IProjectSetupApplicationCustomizerData';
+import { IBaseTaskParams } from './IBaseTaskParams';
+import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction';
 
-export type OnProgressCallbackFunction = (text: string, subText: string, iconName: string) => void;
+export interface IBaseTask {
+    params: IBaseTaskParams;
+    taskName: string;
+    execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams>;
+}
 
-export class BaseTask {
+// tslint:disable-next-line: naming-convention
+export abstract class BaseTask implements IBaseTask {
     public params: IBaseTaskParams;
     public taskName: string;
+
+    constructor(public data: IProjectSetupApplicationCustomizerData) { }
 
     /**
      * Execute task
      * 
-     * @param {IBaseTaskParams} _params Task parameters
-     * @param {OnProgressCallbackFunction} _onProgress Progress function
+     * @param {IBaseTaskParams} params Task parameters
+     * @param {OnProgressCallbackFunction} onProgress Progress function
      */
-    @virtual
-    public async execute(_params: IBaseTaskParams, _onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
-        return null;
-    }
+    public abstract execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams>;
 
     /**
      * Log error
@@ -60,3 +65,6 @@ export class BaseTask {
         Logger.log({ message, data, level });
     }
 }
+
+export * from './BaseTaskError';
+export * from './IBaseTaskParams';

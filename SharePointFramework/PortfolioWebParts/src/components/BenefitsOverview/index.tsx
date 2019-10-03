@@ -1,4 +1,3 @@
-import { getObjectValue } from 'shared/lib/helpers';
 import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from 'models';
 import * as React from 'react';
 import { AggregatedSearchList } from '../';
@@ -85,3 +84,4 @@ export default class BenefitsOverview extends React.Component<IBenefitsOverviewP
 }
 
 export { IBenefitsOverviewProps };
+
