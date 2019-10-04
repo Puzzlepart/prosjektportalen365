@@ -1,6 +1,5 @@
 import { TypedHash } from '@pnp/common';
 import { Web } from '@pnp/sp';
-import { getId } from '@uifabric/utilities';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Schema } from 'sp-js-provisioning';
 
@@ -18,7 +17,7 @@ export class ProjectTemplate implements IDropdownOption {
 
     constructor(spItem: IProjectTemplateSPItem, public web: Web) {
         this.id = spItem.File.UniqueId;
-        this.key = getId(`projecttemplate_${this.id}`);
+        this.key = `projecttemplate_${this.id}`;
         this.text = spItem.File.Title;
         this.description = spItem.FieldValuesAsText.GtDescription;
         this.serverRelativeUrl = spItem.File.ServerRelativeUrl;
@@ -32,6 +31,6 @@ export class ProjectTemplate implements IDropdownOption {
 export class ProjectExtension extends ProjectTemplate {
     constructor(spItem: IProjectTemplateSPItem, web: Web) {
         super(spItem, web);
-        this.key = getId(`projectextension_${this.id}`);
+        this.key = `projectextension_${this.id}`;
     }
 }

@@ -1,6 +1,6 @@
 import { Logger, LogLevel } from '@pnp/logging';
-import { List } from '@pnp/sp';
 import { getId } from '@uifabric/utilities';
+import { UserMessage } from 'components/UserMessage';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
@@ -8,6 +8,7 @@ import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import { formatDate } from 'shared/lib/helpers';
+import { SectionModel, SectionType, StatusReport } from 'shared/lib/models';
 import { HubConfigurationService } from 'shared/lib/services';
 import { getUrlParam, parseUrlHash, setUrlHash } from 'shared/lib/util';
 import { SpEntityPortalService } from 'sp-entityportal-service';
@@ -18,8 +19,6 @@ import { IProjectStatusProps } from './IProjectStatusProps';
 import { IProjectStatusState } from './IProjectStatusState';
 import styles from './ProjectStatus.module.scss';
 import { IBaseSectionProps, ListSection, ProjectPropertiesSection, StatusSection, SummarySection } from './Sections';
-import { StatusReport, SectionModel, SectionType } from 'shared/lib/models';
-import { UserMessage } from 'components/UserMessage';
 
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private _hubConfigurationService: HubConfigurationService;
@@ -210,8 +209,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           return (
             <ProjectPropertiesSection
               {...baseProps}
-              entityItem={this.state.data.entity.fieldValues}
-              entityFields={this.state.data.entity.fields} />
+              fieldValues={{ ...this.state.data.entity.fieldValues, ...this.state.selectedReport.fieldValues }}
+              fields={[...this.state.data.entity.fields, ...this.state.data.reportFields]} />
           );
         }
         case SectionType.RiskSection: {
@@ -238,6 +237,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
 
   /**
    * Get report options
+   * 
+   * @param {IProjectStatusData} data Data
    */
   private _getReportOptions(data: IProjectStatusData): IContextualMenuItem[] {
     let reportOptions: IContextualMenuItem[] = data.reports.map(report => ({
@@ -278,11 +279,11 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    */
   private async _redirectNewStatusReport(_ev?: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement>, _item?: IContextualMenuItem): Promise<void> {
     const [previousReport] = this.state.data.reports;
-    let properties = previousReport ? previousReport.getStatusValues() : {};
+    let properties = previousReport ? previousReport.statusValues : {};
     properties.Title = formatString(strings.NewStatusReportTitle, this.props.webTitle);
     const newReportId = await this._hubConfigurationService.addStatusReport(properties);
     const source = encodeURIComponent(`${window.location.href.split('#')[0]}#NewStatus`);
-    document.location.href = `${window.location.protocol}//${window.location.hostname}${this.state.data.defaultEditFormUrl}?ID=${newReportId}&Source=${source}`;
+    document.location.href = `${window.location.protocol}//${window.location.hostname}${this.state.data.reportEditFormUrl}?ID=${newReportId}&Source=${source}`;
   }
 
   /**
@@ -290,20 +291,29 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    */
   private async _fetchData(): Promise<IProjectStatusData> {
     try {
-      Logger.log({ message: '(ProjectStatus) _fetchData: Fetching fields and reports', level: LogLevel.Info });
-      let [entity, reportList, reports, sections, columnConfig] = await Promise.all([
+      Logger.log({ message: '(ProjectStatus) _fetchData: Fetching entity data, fields, column config, sections and reports', level: LogLevel.Info });
+      let [
+        entity,
+        reportList,
+        reports,
+        sections,
+        columnConfig,
+        reportFields,
+      ] = await Promise.all([
         this._spEntityPortalService.fetchEntity(this.props.siteId, this.props.webUrl),
         this._hubConfigurationService.getStatusReportListProps(),
         this._hubConfigurationService.getStatusReports(),
         this._hubConfigurationService.getProjectStatusSections(),
         this._hubConfigurationService.getProjectColumnConfig(),
+        this._hubConfigurationService.getListFields('PROJECT_STATUS'),
       ]);
       reports = reports.map(item => item.setDefaultEditFormUrl(reportList.DefaultEditFormUrl));
       reports = reports.sort((a, b) => b.created.getTime() - a.created.getTime());
       sections = sections.sort((a, b) => a.sortOrder < b.sortOrder ? -1 : 1);
       return {
         entity,
-        defaultEditFormUrl: reportList.DefaultEditFormUrl,
+        reportFields,
+        reportEditFormUrl: reportList.DefaultEditFormUrl,
         reports,
         sections,
         columnConfig,

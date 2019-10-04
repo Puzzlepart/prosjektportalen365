@@ -11,7 +11,7 @@ export class ExtensionsSection extends React.PureComponent<IExtensionsSectionPro
             <div className={styles.extensionsSection}>
                 <div className={styles.container}>
                     {this.props.extensions.map(ext => (
-                        <div id={ext.key} key={ext.key} className={styles.item}>
+                        <div key={ext.key} className={styles.item}>
                             <Toggle
                                 label={ext.text}
                                 inlineLabel={true}

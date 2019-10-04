@@ -1,13 +1,15 @@
+import { TypedHash } from '@pnp/common';
+import { SPField } from 'shared/lib/models';
 import { IBaseSectionProps } from '../BaseSection';
 
 export interface IProjectPropertiesSectionProps extends IBaseSectionProps {
     /**
-     * @todo Describe property
+     * Fields
      */
-    entityFields: any[];
+    fields: SPField[];
 
     /**
-     * @todo Describe property
+     * Field values
      */
-    entityItem: any;
+    fieldValues: TypedHash<string>;
 }

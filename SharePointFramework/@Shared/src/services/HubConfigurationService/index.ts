@@ -2,7 +2,7 @@ import { CamlQuery, List, Web, } from '@pnp/sp';
 import { TypedHash, dateAdd } from '@pnp/common';
 import { default as initSpfxJsom, ExecuteJsomQuery } from 'spfx-jsom';
 import { transformFieldXml } from '../../helpers/transformFieldXml';
-import { ProjectColumnConfig, SPProjectColumnConfigItem, SPProjectColumnItem, StatusReport, SectionModel, ProjectColumn, PortfolioOverviewView, SPPortfolioOverviewViewItem } from '../../models';
+import { ProjectColumnConfig, SPProjectColumnConfigItem, SPProjectColumnItem, StatusReport, SectionModel, ProjectColumn, PortfolioOverviewView, SPPortfolioOverviewViewItem, SPField } from '../../models';
 import { ISPField, ISPContentType } from '../../interfaces';
 import { HubConfigurationServiceDefaultConfiguration, IHubConfigurationServiceConfiguration, HubConfigurationServiceList } from './IHubConfigurationServiceConfiguration';
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute';
@@ -100,7 +100,7 @@ export class HubConfigurationService {
             this._getSiteFields(new Web(url)),
             new Web(url).lists.ensure(listName, undefined, 100, false, { Hidden: true, EnableAttachments: false }),
         ]);
-        const listFields = await this._getListFields(ensureList.list);
+        const listFields = await this.getListFields(ensureList.data.Title);
         const spList = jsomContext.web.get_lists().getByTitle(listName);
         for (let field of contentType.Fields) {
             let [listField] = listFields.filter(fld => fld.InternalName === field.InternalName);
@@ -147,16 +147,6 @@ export class HubConfigurationService {
     private async _getSiteFields(web: Web): Promise<ISPField[]> {
         let siteFields = await web.fields.select('InternalName', 'Title', 'SchemaXml', 'InternalName').get<ISPField[]>();
         return siteFields;
-    }
-
-    /**
-   * Get list fields internal names
-   * 
-   * @param {List} list List
-   */
-    private async _getListFields(list: List): Promise<ISPField[]> {
-        let listFields = await list.fields.select('InternalName', 'Title', 'SchemaXml', 'InternalName').get<ISPField[]>();
-        return listFields;
     }
 
 
@@ -238,13 +228,19 @@ export class HubConfigurationService {
         }
     }
 
-    public async getProjectColumnFields(filter?: string, select: string[] = ['InternalName', 'Title']): Promise<any[]> {
-        let fields = this._web.lists.getByTitle(this._configuration.listNames.PROJECT_COLUMNS)
+    /**
+     * Get list fields
+     * 
+     * @param {HubConfigurationServiceList | string} list List
+     * @param {string} filter Filter 
+     */
+    public async getListFields(list: HubConfigurationServiceList | string, filter?: string): Promise<SPField[]> {
+        let fields = this._web.lists.getByTitle(this._configuration.listNames[list] || list)
             .fields
-            .select(...select);
+            .select(...Object.keys(new SPField()));
         if (filter) {
             fields = fields.filter(filter);
         }
-        return fields.get();
+        return fields.get<SPField[]>();
     }
 }

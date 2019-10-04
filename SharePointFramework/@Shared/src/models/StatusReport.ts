@@ -6,6 +6,7 @@ export class StatusReport {
     public defaultEditFormUrl: string;
 
     /**
+     * Creates a new instance of StatusReport
      * 
      * @param {any} item SP item
      */
@@ -19,6 +20,11 @@ export class StatusReport {
         return this;
     }
 
+    /**
+     * Get url for the report page
+     * 
+     * @param {string} urlSourceParam Source param
+     */
     public url(urlSourceParam: string) {
         return `SitePages/Prosjektstatus.aspx?selectedReport=${this.id}&Source=${encodeURIComponent(urlSourceParam)}`;
     }
@@ -26,13 +32,20 @@ export class StatusReport {
     /**
      * Get status values from item
      */
-    public getStatusValues(): TypedHash<string> {
+    public get statusValues(): TypedHash<string> {
         return Object.keys(this._item)
             .filter(fieldName => fieldName.indexOf('Status') !== -1 && fieldName.indexOf('Gt') === 0)
             .reduce((obj, fieldName) => {
                 obj[fieldName] = this._item[fieldName];
                 return obj;
             }, {});
+    }
+
+    /**
+     * Field values
+     */
+    public get fieldValues(): TypedHash<string> {
+        return this._item;
     }
 
     /**

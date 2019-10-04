@@ -10,7 +10,7 @@ export class ListContentSection extends React.PureComponent<IListContentSectionP
             <div className={styles.listContentSection}>
                 <div className={styles.container}>
                     {this.props.listContentConfig.map(l => (
-                        <div id={l.key} key={l.key} className={styles.item}>
+                        <div key={l.key} className={styles.item}>
                             <Toggle
                                 label={l.title}
                                 defaultChecked={l.isDefault}

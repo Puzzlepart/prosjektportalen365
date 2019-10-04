@@ -1,4 +1,4 @@
-import { ProjectColumnConfig, SectionModel, StatusReport } from 'shared/lib/models';
+import { ProjectColumnConfig, SectionModel, StatusReport, SPField } from 'shared/lib/models';
 import { IEntity } from 'sp-entityportal-service';
 
 export interface IProjectStatusData {
@@ -8,9 +8,14 @@ export interface IProjectStatusData {
     entity?: IEntity;
 
     /**
+     * Status report fields
+     */
+    reportFields?: SPField[];
+
+    /**
      * Default edit form URL for status reports
      */
-    defaultEditFormUrl?: string;
+    reportEditFormUrl?: string;
 
     /**
      * Reports

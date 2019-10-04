@@ -135,7 +135,7 @@ export class ProjectDataService {
         // tslint:disable-next-line: early-exit
         if (propertyItem) {
             Logger.write(`(ProjectDataService) (getPropertiesData) Local property item found.`);
-            return { ...propertyItem, localList: true };
+            return { ...propertyItem, localProjectPropertiesList: true };
         } else {
             Logger.write(`(ProjectDataService) (getPropertiesData) Local property item not found. Retrieving data from portal site.`);
             let entity = await this._params.spEntityPortalService.configure(this.spConfiguration).fetchEntity(this._params.siteId, this._params.webUrl);

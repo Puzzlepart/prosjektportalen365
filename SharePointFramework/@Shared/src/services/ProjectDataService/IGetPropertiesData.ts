@@ -30,5 +30,5 @@ export interface IGetPropertiesData {
     /**
      * Has local list
      */
-    localList?: boolean;
+    localProjectPropertiesList?: boolean;
 }
