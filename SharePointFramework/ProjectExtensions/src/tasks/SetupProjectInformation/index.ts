@@ -1,5 +1,5 @@
-import { IProjectSetupApplicationCustomizerData } from 'extensions/projectSetup/IProjectSetupApplicationCustomizerData';
 import * as strings from 'ProjectExtensionsStrings';
+import { IProjectSetupData } from '../../extensions/projectSetup';
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask';
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction';
 
@@ -7,7 +7,7 @@ export class SetupProjectInformation extends BaseTask {
     public taskName = 'SetupProjectInformation';
     private _propertiesCtId: string = '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C';
 
-    constructor(data: IProjectSetupApplicationCustomizerData) {
+    constructor(data: IProjectSetupData) {
         super(data);
     }
 
@@ -19,13 +19,11 @@ export class SetupProjectInformation extends BaseTask {
      */
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
-            if (this.data.settings.localProjectPropertiesList) {
-                onProgress(strings.SetupProjectInformationText, strings.SyncLocalProjectPropertiesListText, 'AlignCenter');
-                this.logInformation(`Synchronizing list '${strings.ProjectPropertiesListName}' based on content type ${this._propertiesCtId} from ${this.data.hub.url} `, {});
-                const propertiesList = await params.hubConfigurationService.syncList(params.webAbsoluteUrl, strings.ProjectPropertiesListName, this._propertiesCtId);
-                onProgress(strings.SetupProjectInformationText, strings.CreatingLocalProjectPropertiesListItemText, 'AlignCenter');
-                await propertiesList.items.add({ Title: params.context.pageContext.web.title });
-            }
+            onProgress(strings.SetupProjectInformationText, strings.SyncLocalProjectPropertiesListText, 'AlignCenter');
+            this.logInformation(`Synchronizing list '${strings.ProjectPropertiesListName}' based on content type ${this._propertiesCtId} from ${this.data.hub.url} `, {});
+            const propertiesList = await params.hubConfigurationService.syncList(params.webAbsoluteUrl, strings.ProjectPropertiesListName, this._propertiesCtId);
+            onProgress(strings.SetupProjectInformationText, strings.CreatingLocalProjectPropertiesListItemText, 'AlignCenter');
+            await propertiesList.items.add({ Title: params.context.pageContext.web.title });
             await this._addEntryToHub(params);
             return params;
         } catch (error) {

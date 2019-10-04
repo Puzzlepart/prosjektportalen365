@@ -31,7 +31,6 @@ dependencies:
   string-format: 2.0.0
   underscore: 1.9.1
   valid-filename: 3.1.0
-  xmldom: 0.1.27
 devDependencies:
   '@microsoft/rush-stack-compiler-3.3': 0.2.37
   '@microsoft/sp-build-web': 1.9.1
@@ -42,7 +41,6 @@ devDependencies:
   '@types/mocha': 2.2.38
   '@types/sharepoint': 2016.1.5
   '@types/underscore': 1.9.3
-  '@types/xmldom': 0.1.29
   ajv: 5.2.5
   find: 0.3.0
   gulp: 3.9.1
@@ -1443,10 +1441,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-qeqQIjDfSLjmWR0noFQmcPKCtqn0L68MchoEi1Zj33unPfC83Op3j2mBH2g4hAgOaWUobv/O86w7LObo6p4sDQ==
-  /@types/xmldom/0.1.29:
-    dev: true
-    resolution:
-      integrity: sha1-xEKLDKhtO4gUdXJv2UmAs4onw4E=
   /@types/yargs/0.0.34:
     dev: true
     resolution:
@@ -12328,7 +12322,6 @@ specifiers:
   '@types/sharepoint': ^2016.1.2
   '@types/underscore': ^1.9.2
   '@types/webpack-env': 1.13.1
-  '@types/xmldom': ^0.1.29
   ajv: ~5.2.2
   find: ^0.3.0
   gulp: ~3.9.1
@@ -12347,4 +12340,3 @@ specifiers:
   tslint-consistent-codestyle: ^1.15.1
   underscore: ^1.9.1
   valid-filename: ^3.1.0
-  xmldom: ^0.1.27

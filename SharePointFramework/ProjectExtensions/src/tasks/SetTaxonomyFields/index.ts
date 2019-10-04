@@ -1,4 +1,4 @@
-import { IProjectSetupApplicationCustomizerData } from 'extensions/projectSetup/IProjectSetupApplicationCustomizerData';
+import { IProjectSetupData } from 'extensions/projectSetup';
 import * as strings from 'ProjectExtensionsStrings';
 import { ExecuteJsomQuery } from 'spfx-jsom';
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask';
@@ -7,7 +7,7 @@ import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction';
 export class SetTaxonomyFields extends BaseTask {
     public taskName = 'SetTaxonomyFields';
 
-    constructor(data: IProjectSetupApplicationCustomizerData) {
+    constructor(data: IProjectSetupData) {
      super(data);
     }
 

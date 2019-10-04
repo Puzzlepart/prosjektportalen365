@@ -125,6 +125,30 @@
                 "fabricReactIcon": {
                     "iconName": "arrangebringforward"
                 }
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 11,
+                "fabricReactIcon": {
+                    "iconName": "folderlist"
+                }
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 12,
+                "fabricReactIcon": {
+                    "iconName": "configurationsolid"
+                }
             }
         ],
         "isMigrated": true,
@@ -165,6 +189,8 @@
             "items[7].title": "Malbibliotek",
             "items[8].title": "Prosjektmaler",
             "items[9].title": "Prosjekttillegg",
+            "items[10].title": "Listeinnhold",
+            "items[11].title": "Konfigurasjonsfiler",
             "items[0].description": "",
             "items[1].description": "",
             "items[2].description": "",
@@ -192,7 +218,9 @@
             "items[6].sourceItem.url": "{hosturl}{site}/Lists/Prosjektkolonner",
             "items[7].sourceItem.url": "{hosturl}{site}/Malbibliotek",
             "items[8].sourceItem.url": "{hosturl}{site}/Prosjektmaler",
-            "items[9].sourceItem.url": "{hosturl}{site}/Prosjekttillegg"
+            "items[9].sourceItem.url": "{hosturl}{site}/Prosjekttillegg",
+            "items[10].sourceItem.url": "{hosturl}{site}/Lists/Listeinnhold",
+            "items[11].sourceItem.url": "{hosturl}{site}/Konfigurasjonsfiler"
         },
         "componentDependencies": {
             "layoutComponentId": "706e33c8-af37-4e7b-9d22-6e5694d92a6f"

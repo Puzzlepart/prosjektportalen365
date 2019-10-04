@@ -1,4 +1,4 @@
-export interface IProjectSetupApplicationCustomizerProperties {
+export interface IProjectSetupProperties {
     /**
      * @todo Describe property
      */

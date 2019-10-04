@@ -3,7 +3,7 @@ import { HubConfigurationService } from 'shared/lib/services';
 import { SpEntityPortalService } from 'sp-entityportal-service';
 import { Schema, Web } from 'sp-js-provisioning';
 import { ISpfxJsomContext } from 'spfx-jsom';
-import { IProjectSetupApplicationCustomizerProperties } from '../../extensions/projectSetup/IProjectSetupApplicationCustomizerProperties';
+import { IProjectSetupProperties } from '../../extensions/projectSetup/IProjectSetupProperties';
 
 export interface IBaseTaskParams {
     /**
@@ -34,7 +34,7 @@ export interface IBaseTaskParams {
     /**
      * @todo Describe property
      */
-    properties: IProjectSetupApplicationCustomizerProperties;
+    properties: IProjectSetupProperties;
 
     /**
      * @todo Describe property

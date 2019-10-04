@@ -8,3 +8,4 @@ export * from './StatusReport';
 export * from './SectionModel';
 export * from './ProjectColumn';
 export * from './PortfolioOverviewView';
+export * from './SPField';

@@ -7,30 +7,32 @@ import { ISettingsSectionProps } from './ISettingsSectionProps';
 
 // tslint:disable-next-line: naming-convention
 export const SettingsSection = (props: ISettingsSectionProps) => {
+    function onChange(event: React.MouseEvent<HTMLElement, MouseEvent>, checked?: boolean) {
+        props.onChange((event.currentTarget as HTMLElement).id, checked);
+    }
+
     return (
         <CollapsableSection
-            title={strings.SettingsTitle}
+            title={strings.SettingsSectionTitle}
             className={styles.settingsSection}
             contentClassName={styles.content}>
             <div className={styles.item}>
                 <Toggle
+                    id='includeStandardFolders'
                     label={strings.IncludeStandardFoldersLabel}
-                    defaultChecked={props.defaultChecked.includeStandardFolders}
+                    defaultChecked={props.defaultSettings.includeStandardFolders}
                     disabled={true}
-                    onChanged={includeStandardFolders => props.onChange({ includeStandardFolders })} />
+                    onChange={onChange} />
             </div>
             <div className={styles.item}>
                 <Toggle
+                    id='copyPlannerTasks'
                     label={strings.CopyPlannerTasksLabel}
-                    defaultChecked={props.defaultChecked.copyPlannerTasks}
-                    onChanged={copyPlannerTasks => props.onChange({ copyPlannerTasks })} />
-            </div>
-            <div className={styles.item}>
-                <Toggle
-                    label={'Prosjektegenskaper lokalt'}
-                    defaultChecked={props.defaultChecked.localProjectPropertiesList}
-                    onChanged={localProjectPropertiesList => props.onChange({ localProjectPropertiesList })} />
+                    defaultChecked={props.defaultSettings.copyPlannerTasks}
+                    onChange={onChange} />
             </div>
         </CollapsableSection>
     );
 };
+
+export * from './ISettingsSectionProps';

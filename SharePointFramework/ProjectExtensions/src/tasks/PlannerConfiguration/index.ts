@@ -1,5 +1,5 @@
 import { PageContext } from '@microsoft/sp-page-context';
-import { IProjectSetupApplicationCustomizerData } from 'extensions/projectSetup/IProjectSetupApplicationCustomizerData';
+import { IProjectSetupData } from 'extensions/projectSetup';
 import { default as MSGraphHelper } from 'msgraph-helper';
 import * as strings from 'ProjectExtensionsStrings';
 import * as formatString from 'string-format';
@@ -14,7 +14,7 @@ export class PlannerConfiguration extends BaseTask {
     public taskName = 'PlannerConfiguration';
     private _config: IPlannerConfiguration;
 
-    constructor(data: IProjectSetupApplicationCustomizerData) {
+    constructor(data: IProjectSetupData) {
         super(data);
     }
 
@@ -84,9 +84,11 @@ export class PlannerConfiguration extends BaseTask {
                 this.logInformation(`Creating task ${title} in bucket ${bucket.name}`);
                 const task = await MSGraphHelper.Post('planner/tasks', JSON.stringify({ title, bucketId: bucket.id, planId }));
                 if (checklist.length > 0) {
-                    let taskUpdate: TypedHash<any> = {};
-                    taskUpdate.checklist = checklist.reduce((obj, t) => ({ ...obj, [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title: t }, }), {});
-                    await MSGraphHelper.Patch(`planner/tasks/${task.id}/details`, JSON.stringify(taskUpdate), task['@odata.etag']);
+                    let taskUpdate: TypedHash<any> = {
+                        checklist: checklist.reduce((obj, t) => ({ ...obj, [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title: t }, }), {}),
+                    };
+                    let eTag = (await MSGraphHelper.Get(`planner/tasks/${task.id}/details`))['@odata.etag'];
+                    await MSGraphHelper.Patch(`planner/tasks/${task.id}/details`, JSON.stringify(taskUpdate), eTag);
                 }
                 this.logInformation(`Succesfully created task ${title} in bucket ${bucket.name}`, { taskId: task.id, checklist });
             } catch (error) {

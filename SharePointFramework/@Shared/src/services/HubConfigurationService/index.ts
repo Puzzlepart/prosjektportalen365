@@ -1,7 +1,7 @@
 import { CamlQuery, List, Web, } from '@pnp/sp';
 import { TypedHash, dateAdd } from '@pnp/common';
 import { default as initSpfxJsom, ExecuteJsomQuery } from 'spfx-jsom';
-import { parseFieldXml } from '../../helpers/parseFieldXml';
+import { transformFieldXml } from '../../helpers/transformFieldXml';
 import { ProjectColumnConfig, SPProjectColumnConfigItem, SPProjectColumnItem, StatusReport, SectionModel, ProjectColumn, PortfolioOverviewView, SPPortfolioOverviewViewItem } from '../../models';
 import { ISPField, ISPContentType } from '../../interfaces';
 import { HubConfigurationServiceDefaultConfiguration, IHubConfigurationServiceConfiguration, HubConfigurationServiceList } from './IHubConfigurationServiceConfiguration';
@@ -82,7 +82,7 @@ export class HubConfigurationService {
             .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
             .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')
             .get<{ DefaultNewFormUrl: string, DefaultEditFormUrl: string }>();
-        return { defaultNewFormUrl: urls.DefaultNewFormUrl, defaultEditFormUrl: urls.DefaultEditFormUrl };
+        return { defaultNewFormUrl: makeUrlAbsolute(urls.DefaultNewFormUrl), defaultEditFormUrl: makeUrlAbsolute(urls.DefaultEditFormUrl) };
     }
 
     /**
@@ -111,7 +111,7 @@ export class HubConfigurationService {
                     let spSiteField = jsomContext.web.get_fields().getByInternalNameOrTitle(siteField.InternalName);
                     spList.get_fields().add(spSiteField);
                 } else {
-                    let newField = spList.get_fields().addFieldAsXml(parseFieldXml(field, { DisplayName: field.InternalName }), false, SP.AddFieldOptions.addToDefaultContentType);
+                    let newField = spList.get_fields().addFieldAsXml(transformFieldXml(field.SchemaXml, { DisplayName: field.InternalName }), false, SP.AddFieldOptions.addToDefaultContentType);
                     newField.set_title(field.Title);
                     newField.updateAndPushChanges(true);
                 }

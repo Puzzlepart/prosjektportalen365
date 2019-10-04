@@ -24,9 +24,9 @@ export class ExtensionsSection extends React.PureComponent<IExtensionsSectionPro
                 hidden={this.props.extensions.length === 0}
                 title={strings.ExtensionsTitle}
                 className={styles.extensionsSection}
-                contentClassName={styles.list}>
+                contentClassName={styles.content}>
                 {this.props.extensions.map((ext, idx) => (
-                    <div key={idx} className={styles.listItem}>
+                    <div key={idx} className={styles.item}>
                         <Toggle
                             label={ext.text}
                             onChanged={checked => this._onChanged(ext, checked)} />

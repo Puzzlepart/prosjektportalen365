@@ -9,18 +9,19 @@ import { default as HubSiteService, IHubSite } from 'sp-hubsite-service';
 import { DocumentTemplateDialog, IDocumentTemplateDialogProps, IDocumentTemplateDialogDismissProps } from '../../components';
 import { SPDataAdapter } from '../../data';
 import { IDocumentLibrary, TemplateFile } from '../../models';
-import { ITemplateSelectorCommandSetProperties } from './ITemplateSelectorCommandSetProperties';
+import { ITemplateSelectorCommandProperties } from './ITemplateSelectorCommandProperties';
+import { getId } from '@uifabric/utilities';
 
 Logger.subscribe(new ConsoleListener());
 Logger.activeLogLevel = LogLevel.Info;
 
 
-export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<ITemplateSelectorCommandSetProperties> {
+export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITemplateSelectorCommandProperties> {
   private _hub: IHubSite;
   private _templates: TemplateFile[] = [];
   private _libraries: IDocumentLibrary[];
-  private _container: Element;
   private _templateLibrary: string;
+  private _placeholderIds = { DocumentTemplateDialog: getId('documenttemplatedialog') };
 
   @override
   public async onInit() {
@@ -32,13 +33,13 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
     });
     const openTemplateSelectorCommand: Command = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR');
     if (!openTemplateSelectorCommand) return;
-    Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Initializing', data: { version: this.context.manifest.version }, level: LogLevel.Info });
+    Logger.log({ message: '(TemplateSelectorCommand) onInit: Initializing', data: { version: this.context.manifest.version, placeholderIds: this._placeholderIds }, level: LogLevel.Info });
     try {
       this._templateLibrary = this.properties.templateLibrary || 'Malbibliotek';
       this._templates = await SPDataAdapter.getDocumentTemplates(this._templateLibrary, this.properties.viewXml);
-      Logger.log({ message: `(TemplateSelectorCommandSet) onInit: Retrieved ${this._templates.length} templates from the specified template library`, level: LogLevel.Info });
+      Logger.log({ message: `(TemplateSelectorCommand) onInit: Retrieved ${this._templates.length} templates from the specified template library`, level: LogLevel.Info });
     } catch (error) {
-      Logger.log({ message: '(TemplateSelectorCommandSet) onInit: Failed to initialize', level: LogLevel.Warning });
+      Logger.log({ message: '(TemplateSelectorCommand) onInit: Failed to initialize', level: LogLevel.Warning });
     }
   }
 
@@ -64,25 +65,33 @@ export default class TemplateSelectorCommandSet extends BaseListViewCommandSet<I
    * On open <DocumentTemplateDialog />
    */
   private _onOpenTemplateSelector() {
+    let placeholder = this._getPlaceholder('DocumentTemplateDialog');
     const element = React.createElement<IDocumentTemplateDialogProps>(DocumentTemplateDialog, {
       title: strings.TemplateLibrarySelectModalTitle,
-      onDismiss: this._onDismissDocumentTemplateDialog.bind(this),
+      onDismiss: () => {
+        this._unmount(placeholder);
+        document.location.href = document.location.href;
+      },
       libraries: this._libraries,
       templates: this._templates,
       templateLibrary: { title: this._templateLibrary, url: `${this._hub.url}/${this._templateLibrary}` },
     });
-    this._container = document.createElement('DIV');
-    document.body.appendChild(this._container);
-    ReactDOM.render(element, this._container);
+    ReactDOM.render(element, placeholder);
   }
 
-  /**
-   * On dismiss <DocumentTemplateDialog />
-   * 
-   * @param {IDocumentTemplateDialogDismissProps} props Dismiss props
-   */
-  private _onDismissDocumentTemplateDialog(props: IDocumentTemplateDialogDismissProps) {
-    ReactDOM.unmountComponentAtNode(this._container);
-    if (props.reload) document.location.href = document.location.href;
+  private _unmount(container: HTMLElement) {
+    ReactDOM.unmountComponentAtNode(container);
+  }
+
+  private _getPlaceholder(key: 'DocumentTemplateDialog') {
+    const id = this._placeholderIds[key];
+    let placeholder = document.getElementById(id);
+    if (placeholder === null) {
+      placeholder = document.createElement('DIV');
+      placeholder.id = this._placeholderIds[key];
+      placeholder.setAttribute('name', key);
+      return document.body.appendChild(placeholder);
+    }
+    return placeholder;
   }
 }

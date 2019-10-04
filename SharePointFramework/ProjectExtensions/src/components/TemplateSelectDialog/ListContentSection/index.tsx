@@ -13,13 +13,13 @@ export class ListContentSection extends React.PureComponent<IListContentSectionP
                 hidden={this.props.listContentConfig.length === 0}
                 title={strings.ListContentTitle}
                 className={styles.listContentSection}
-                contentClassName={styles.list}>
-                {this.props.listContentConfig.map((lcc, idx) => (
-                    <div key={idx} className={styles.listItem}>
+                contentClassName={styles.content}>
+                {this.props.listContentConfig.map(l => (
+                    <div id={l.key} key={l.key} className={styles.item}>
                         <Toggle
-                            label={lcc.title}
-                            defaultChecked={lcc.isDefault}
-                            onChanged={checked => this._onChanged(lcc, checked)} />
+                            label={l.title}
+                            defaultChecked={l.isDefault}
+                            onChanged={checked => this._onChanged(l, checked)} />
                     </div>
                 ))}
             </CollapsableSection>

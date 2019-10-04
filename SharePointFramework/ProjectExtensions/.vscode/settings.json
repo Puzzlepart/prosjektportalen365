@@ -10,6 +10,5 @@
     "src/**/*.scss.ts": true
   },
   "files.autoSave": "onWindowChange",
-  "typescript.tsdk": ".\\node_modules\\typescript\\lib",
-  "powershell.enableProfileLoading": false
+  "typescript.tsdk": ".\\node_modules\\typescript\\lib"
 }

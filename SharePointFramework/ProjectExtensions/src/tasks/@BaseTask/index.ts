@@ -1,5 +1,5 @@
 import { Logger, LogLevel } from '@pnp/logging';
-import { IProjectSetupApplicationCustomizerData } from 'extensions/projectSetup/IProjectSetupApplicationCustomizerData';
+import { IProjectSetupData } from 'extensions/projectSetup';
 import { IBaseTaskParams } from './IBaseTaskParams';
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction';
 
@@ -14,7 +14,7 @@ export abstract class BaseTask implements IBaseTask {
     public params: IBaseTaskParams;
     public taskName: string;
 
-    constructor(public data: IProjectSetupApplicationCustomizerData) { }
+    constructor(public data: IProjectSetupData) { }
 
     /**
      * Execute task
@@ -31,7 +31,7 @@ export abstract class BaseTask implements IBaseTask {
      * @param {any} data Data
      */
     public logError(message: string, data?: any) {
-        this._log(`(ProjectSetupApplicationCustomizer) ${this.taskName}: ${message}`, data, LogLevel.Error);
+        this._log(`(ProjectSetup) ${this.taskName}: ${message}`, data, LogLevel.Error);
     }
 
     /**
@@ -41,7 +41,7 @@ export abstract class BaseTask implements IBaseTask {
      * @param {any} data Data
      */
     public logWarning(message: string, data?: any) {
-        this._log(`(ProjectSetupApplicationCustomizer) ${this.taskName}: ${message}`, data, LogLevel.Warning);
+        this._log(`(ProjectSetup) ${this.taskName}: ${message}`, data, LogLevel.Warning);
     }
 
     /**
@@ -51,7 +51,7 @@ export abstract class BaseTask implements IBaseTask {
      * @param {any} data Data
      */
     public logInformation(message: string, data?: any) {
-        this._log(`(ProjectSetupApplicationCustomizer) ${this.taskName}: ${message}`, data, LogLevel.Info);
+        this._log(`(ProjectSetup) ${this.taskName}: ${message}`, data, LogLevel.Info);
     }
 
     /**

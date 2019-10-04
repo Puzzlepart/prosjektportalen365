@@ -48,7 +48,7 @@ declare interface IProjectExtensionsStrings {
   ProvisionSiteFieldsErrorMessage: string;
   ProvisionSiteFieldsText: string;
   SetTaxonomyFieldsErrorMessage: string;
-  SettingsTitle: string;
+  SettingsSectionTitle: string;
   SetupProjectInformationErrorMessage: string;
   SetupProjectInformationText: string;
   SiteFieldsGroupName: string;

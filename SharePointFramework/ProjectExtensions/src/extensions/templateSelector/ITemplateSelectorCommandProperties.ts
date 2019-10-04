@@ -1,4 +1,4 @@
-export interface ITemplateSelectorCommandSetProperties {
+export interface ITemplateSelectorCommandProperties {
     /**
      * Template library to retrieve the documents from
      */

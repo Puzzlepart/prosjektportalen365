@@ -4,11 +4,13 @@
   @include ms-Grid-col;
   @include ms-sm12;
 
-  .list {
-    margin: 10px 0 25px 0;
+  .content {
+    @include ms-Grid;
+    @include ms-Grid-row;
 
-    .listItem {
-      margin: 0 0 5px 0;
+    .item {
+      @include ms-Grid-col;
+      @include ms-sm6;
     }
   }
 }

@@ -1,10 +1,16 @@
-export interface ISettings {
-    includeStandardFolders?: boolean;
-    copyPlannerTasks?: boolean;
-    localProjectPropertiesList?: boolean;
-}
+import { ProjectSetupSettings } from '../../../extensions/projectSetup/ProjectSetupSettings';
 
 export interface ISettingsSectionProps {
-    defaultChecked: ISettings;
-    onChange: (obj: ISettings) => void;
+    /**
+     * Default settings
+     */
+    defaultSettings: ProjectSetupSettings;
+
+    /**
+     * On setting change
+     * 
+     * @param {string} key Key
+     * @param {string} bool Bool
+     */
+    onChange: (key: string, bool: boolean) => void;
 }

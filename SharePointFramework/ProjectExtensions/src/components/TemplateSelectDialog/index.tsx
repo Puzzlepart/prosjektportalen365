@@ -1,14 +1,15 @@
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
+import { ProjectSetupSettings } from '../../extensions/projectSetup/ProjectSetupSettings';
 import { BaseDialog } from '../@BaseDialog';
 import { ExtensionsSection } from './ExtensionsSection';
 import { ITemplateSelectDialogProps } from './ITemplateSelectDialogProps';
 import { ITemplateSelectDialogState } from './ITemplateSelectDialogState';
 import { ListContentSection } from './ListContentSection';
-import { TemplateSelector } from './TemplateSelector';
 import { SettingsSection } from './SettingsSection';
 import styles from './TemplateSelectDialog.module.scss';
+import { TemplateSelector } from './TemplateSelector';
 
 export class TemplateSelectDialog extends React.Component<ITemplateSelectDialogProps, ITemplateSelectDialogState> {
     /**
@@ -22,11 +23,7 @@ export class TemplateSelectDialog extends React.Component<ITemplateSelectDialogP
             selectedTemplate: props.data.templates[0],
             selectedExtensions: [],
             selectedListContentConfig: props.data.listContentConfig.filter(lcc => lcc.isDefault),
-            settings: {
-                includeStandardFolders: false,
-                copyPlannerTasks: true,
-                localProjectPropertiesList: true,
-            },
+            settings: new ProjectSetupSettings().useDefault(),
         };
     }
 
@@ -55,8 +52,8 @@ export class TemplateSelectDialog extends React.Component<ITemplateSelectDialogP
                     selectedListContentConfig={this.state.selectedListContentConfig}
                     onChange={selectedListContentConfig => this.setState({ selectedListContentConfig })} />
                 <SettingsSection
-                    defaultChecked={this.state.settings}
-                    onChange={settings => this.setState({ settings })} />
+                    defaultSettings={this.state.settings}
+                    onChange={(key, bool) => this.setState({ settings: this.state.settings.set(key, bool) })} />
             </BaseDialog>
         );
     }

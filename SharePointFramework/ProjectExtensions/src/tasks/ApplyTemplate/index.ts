@@ -1,4 +1,4 @@
-import { IProjectSetupApplicationCustomizerData } from 'extensions/projectSetup/IProjectSetupApplicationCustomizerData';
+import { IProjectSetupData } from '../../extensions/projectSetup/IProjectSetupData';
 import * as strings from 'ProjectExtensionsStrings';
 import { Web, WebProvisioner } from 'sp-js-provisioning';
 import * as formatString from 'string-format';
@@ -10,7 +10,7 @@ import { APPLY_TEMPLATE_STATUS_MAP } from './ApplyTemplateStatusMap';
 export class ApplyTemplate extends BaseTask {
     public taskName = 'ApplyTemplate';
 
-    constructor(data: IProjectSetupApplicationCustomizerData) {
+    constructor(data: IProjectSetupData) {
         super(data);
     }
 
@@ -26,7 +26,7 @@ export class ApplyTemplate extends BaseTask {
             const provisioner = new WebProvisioner(web);
             provisioner.setup({
                 spfxContext: params.context,
-                logging: { prefix: '(ProjectSetupApplicationCustomizer) (ApplyTemplate)', activeLogLevel: 1 },
+                logging: { prefix: '(ProjectSetup) (ApplyTemplate)', activeLogLevel: 1 },
                 parameters: params.templateParameters,
             });
             this.logInformation('Applying template to site', { parameters: params.templateParameters });

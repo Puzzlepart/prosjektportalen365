@@ -5,7 +5,7 @@
       "name": "Hosted workbench",
       "type": "chrome",
       "request": "launch",
-      "url": "https://puzzlepart.sharepoint.com/sites/UtvidelseavUiA?debugManifestsFile=https%3A%2F%2Flocalhost%3A4321%2Ftemp%2Fmanifests.js&loadSPFX=true&customActions=%7B%22ce34553d-ab47-4107-8dd1-e980d953996d%22%3A%7B%22location%22%3A%22ClientSideExtension.ApplicationCustomizer%22%2C%22properties%22%3A%7B%22templatesLibrary%22%3A%22Prosjektmaler%22%2C%22extensionsLibrary%22%3A%22Prosjekttillegg%22%2C%22projectsList%22%3A%22Prosjekter%22%2C%22contentConfigList%22%3A%22Listeinnhold%22%2C%22termSetIds%22%3A%7B%22GtProjectPhase%22%3A%22abcfc9d9-a263-4abb-8234-be973c46258a%22%2C%22GtResourceRole%22%3A%2254da9f47-c64e-4a26-80f3-4d3c3fa1b7b2%22%7D%7D%7D%7D",
+      "url": "https://puzzlepart.sharepoint.com/sites/NyttutestedpSrenga?debugManifestsFile=https%3A%2F%2Flocalhost%3A4321%2Ftemp%2Fmanifests.js&loadSPFX=true&customActions=%7B%22ce34553d-ab47-4107-8dd1-e980d953996d%22%3A%7B%22location%22%3A%22ClientSideExtension.ApplicationCustomizer%22%2C%22properties%22%3A%7B%22templatesLibrary%22%3A%22Prosjektmaler%22%2C%22extensionsLibrary%22%3A%22Prosjekttillegg%22%2C%22projectsList%22%3A%22Prosjekter%22%2C%22contentConfigList%22%3A%22Listeinnhold%22%2C%22termSetIds%22%3A%7B%22GtProjectPhase%22%3A%22abcfc9d9-a263-4abb-8234-be973c46258a%22%2C%22GtResourceRole%22%3A%2254da9f47-c64e-4a26-80f3-4d3c3fa1b7b2%22%7D%7D%7D%7D",
       "webRoot": "${workspaceRoot}",
       "sourceMaps": true,
       "sourceMapPathOverrides": {

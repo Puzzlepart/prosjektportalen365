@@ -45,7 +45,7 @@ define([], function () {
     ProvisionSiteFieldsErrorMessage: 'Det skjedde en feil under provisjonering av områdekolonner',
     ProvisionSiteFieldsText: 'Oppretter områdekolonner',
     SetTaxonomyFieldsErrorMessage: 'Det skjedde en feil under konfigurering av taksonomifelter',
-    SettingsTitle: 'Innstillinger',
+    SettingsSectionTitle: 'Innstillinger',
     SetupProjectInformationErrorMessage: 'Det skjedde en feil under initialisering av prosjektegenskaper',
     SetupProjectInformationText: 'Setter opp prosjektegenskaper',
     SiteFieldsGroupName: 'Kolonner for Prosjektportalen (Prosjekt)',

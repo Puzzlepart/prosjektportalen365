@@ -1,4 +1,4 @@
-import { IProjectSetupApplicationCustomizerData } from 'extensions/projectSetup/IProjectSetupApplicationCustomizerData';
+import { IProjectSetupData } from 'extensions/projectSetup';
 import * as strings from 'ProjectExtensionsStrings';
 import { HubConfigurationService } from 'shared/lib/services';
 import { SpEntityPortalService } from 'sp-entityportal-service';
@@ -9,7 +9,7 @@ import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction';
 export class PreTask extends BaseTask {
     public taskName = 'PreTask';
 
-    constructor(data: IProjectSetupApplicationCustomizerData) {
+    constructor(data: IProjectSetupData) {
         super(data);
     }
 

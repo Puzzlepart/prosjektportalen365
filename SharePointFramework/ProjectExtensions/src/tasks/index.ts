@@ -1,4 +1,4 @@
-import { IProjectSetupApplicationCustomizerData } from 'extensions/projectSetup/IProjectSetupApplicationCustomizerData';
+import { IProjectSetupData } from 'extensions/projectSetup';
 import { ApplyTemplate } from './ApplyTemplate';
 import { CopyListData } from './CopyListData';
 import { PlannerConfiguration } from './PlannerConfiguration';
@@ -8,7 +8,7 @@ import { SetTaxonomyFields } from './SetTaxonomyFields';
 import { SetupProjectInformation } from './SetupProjectInformation';
 import { IBaseTask } from './@BaseTask';
 
-const tasks: (new (data: IProjectSetupApplicationCustomizerData) => IBaseTask)[] = [
+const tasks: (new (data: IProjectSetupData) => IBaseTask)[] = [
     PreTask,
     SetupProjectInformation,
     PlannerConfiguration,
@@ -21,9 +21,9 @@ const tasks: (new (data: IProjectSetupApplicationCustomizerData) => IBaseTask)[]
 /**
  * Get tasks
  * 
- * @param {IProjectSetupApplicationCustomizerData} data Data
+ * @param {IProjectSetupData} data Data
  */
-export function getTasks(data: IProjectSetupApplicationCustomizerData) {
+export function getTasks(data: IProjectSetupData) {
     return tasks.map(ctor => new ctor(data));
 }
 

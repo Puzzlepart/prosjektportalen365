@@ -1,5 +1,5 @@
 import { ListContentConfig, ProjectTemplate } from '../../models/index';
-import { ISettings } from './SettingsSection/ISettingsSectionProps';
+import { ProjectSetupSettings } from '../../extensions/projectSetup/ProjectSetupSettings';
 
 export interface ITemplateSelectDialogState {
     /**
@@ -20,5 +20,5 @@ export interface ITemplateSelectDialogState {
     /**
      * Settings
      */
-    settings?: ISettings;
+    settings?: ProjectSetupSettings;
 }
