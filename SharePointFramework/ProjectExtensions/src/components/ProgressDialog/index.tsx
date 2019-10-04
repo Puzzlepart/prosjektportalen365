@@ -12,14 +12,13 @@ export class ProgressDialog extends React.PureComponent<IProgressDialogProps, {}
             <BaseDialog
                 version={this.props.version}
                 modalProps={{ isBlocking: true, isDarkOverlay: true }}
-                dialogContentProps={{ title: strings.ProgressDialogTitle, subText: strings.ProgressDialogSubText }}
+                dialogContentProps={{ title: strings.ProgressDialogTitle, subText: strings.ProgressDialogSubText, className: styles.content }}
                 onDismiss={this.props.onDismiss}
-                containerClassName={styles.progressDialog}
-                contentClassName={styles.progressDialogContent}>
-                <div className={styles.progressIcon}>
+                containerClassName={styles.progressDialog}>                    
+                <div className={styles.icon}>
                     <Icon iconName={this.props.iconName} style={{ fontSize: 42, display: 'block', textAlign: 'center' }} />
                 </div>
-                <div className={styles.progressIndicator}>
+                <div className={styles.indicator}>
                     <ProgressIndicator label={this.props.text} description={this.props.subText} />
                 </div>
             </BaseDialog>

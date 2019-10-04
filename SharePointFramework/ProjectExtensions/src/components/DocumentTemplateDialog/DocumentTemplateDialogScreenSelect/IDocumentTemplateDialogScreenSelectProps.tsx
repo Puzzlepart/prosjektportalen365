@@ -40,16 +40,10 @@ export const DocumentTemplateDialogScreenSelectDefaultProps: Partial<IDocumentTe
             minWidth: 200,
         },
         {
-            key: getId('title'),
-            fieldName: 'title',
-            name: ProjectExtensionsStrings.TitleLabel,
-            minWidth: 150,
-        },
-        {
             key: getId('phase'),
             fieldName: 'phase',
             name: ProjectExtensionsStrings.PhaseLabel,
-            minWidth: 150,
+            minWidth: 100,
         },
         {
             key: getId('modified'),

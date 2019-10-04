@@ -1,38 +1,28 @@
+import { stringIsNullOrEmpty } from '@pnp/common';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import { ProjectTemplate } from '../../../models';
-import { CollapsableSection } from '../../CollapsableSection';
-import { IExtensionsSectionProps } from './IExtensionsSectionProps';
 import styles from './ExtensionsSection.module.scss';
-
+import { IExtensionsSectionProps } from './IExtensionsSectionProps';
 
 export class ExtensionsSection extends React.PureComponent<IExtensionsSectionProps> {
-    /**
-     * Constructor
-     * 
-     * @param {IExtensionsSectionProps} props Properties
-     */
-    constructor(props: IExtensionsSectionProps) {
-        super(props);
-        this.state = { selectedExtensions: [] };
-    }
-
     public render() {
         return (
-            <CollapsableSection
-                hidden={this.props.extensions.length === 0}
-                title={strings.ExtensionsTitle}
-                className={styles.extensionsSection}
-                contentClassName={styles.content}>
-                {this.props.extensions.map((ext, idx) => (
-                    <div key={idx} className={styles.item}>
-                        <Toggle
-                            label={ext.text}
-                            onChanged={checked => this._onChanged(ext, checked)} />
-                    </div>
-                ))}
-            </CollapsableSection>
+            <div className={styles.extensionsSection}>
+                <div className={styles.container}>
+                    {this.props.extensions.map(ext => (
+                        <div id={ext.key} key={ext.key} className={styles.item}>
+                            <Toggle
+                                label={ext.text}
+                                inlineLabel={true}
+                                onChange={(_event, checked) => this._onChange(ext, checked)} />
+                            <div className={styles.description} hidden={stringIsNullOrEmpty(ext.description)}>
+                                <span>{ext.description}</span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
         );
     }
     /**
@@ -41,14 +31,10 @@ export class ExtensionsSection extends React.PureComponent<IExtensionsSectionPro
      * @param {ProjectTemplate} extension Extension
      * @param {boolean} checked Checked
      */
-    private _onChanged(extension: ProjectTemplate, checked: boolean): void {
+    private _onChange(extension: ProjectTemplate, checked: boolean): void {
         let selectedExtensions = [];
-        if (checked) {
-            selectedExtensions = [extension, ...this.props.selectedExtensions];
-        }
-        else {
-            selectedExtensions = this.props.selectedExtensions.filter(ext => extension.text !== ext.text);
-        }
+        if (checked) selectedExtensions = [extension, ...this.props.selectedExtensions];
+        else selectedExtensions = this.props.selectedExtensions.filter(ext => extension.text !== ext.text);
         this.props.onChange(selectedExtensions);
     }
 }

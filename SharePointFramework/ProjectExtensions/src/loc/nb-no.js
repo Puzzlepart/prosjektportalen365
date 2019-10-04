@@ -19,7 +19,7 @@ define([], function () {
     CopyProgressLabel: 'Kopierer valgt(e) dokument(er) til prosjektområdet...',
     EditPropertiesLinkText: 'Du kan allerede nå<A HREF=\'{0}\' TARGET=\'_BLANK\'>redigere egenskaper</A> for prosjektet (åpnes i ny fane).',
     ErrorDialogTitle: 'Noe er galt',
-    ExtensionsTitle: 'Velg prosjekttillegg',
+    ExtensionsTitle: 'Prosjekttillegg',
     GetMoreText: 'Hent flere',
     GetSetupDataErrorMessage: 'Det skjedde en feil',
     GetSetupDataErrorStack: 'Det skjedde en feil under uthenting av data fra hubområdet.',
@@ -27,7 +27,7 @@ define([], function () {
     InvalidLanguageErrorMessage: 'Ugyldig språk for området',
     InvalidLanguageErrorStack: 'Språket som er satt for området støttes ikke. Området må være opprettet med norsk språk.',
     LibraryDropdownLabel: 'Bibliotek',
-    ListContentTitle: 'Velg standardinnhold',
+    ListContentTitle: 'Standardinnhold',
     ModifiedLabel: 'Endret',
     NameLabel: 'Filnavn',
     NoHubSiteErrorMessage: 'Området er ikke koblet til en hub',
@@ -56,7 +56,7 @@ define([], function () {
     TemplateSelectDialogInfoText: 'Oppsettet av prosjektområdet tar omtrent 10 minutter.\n\nIkke lukk nettleservinduet mens området settes opp.',
     TemplateSelectDialogSubmitButtonText: 'Sett opp området',
     TemplateSelectDialogTitle: 'Oppsett av prosjektområde',
-    TemplateSelectorTitle: 'Velg prosjektmal',
+    TemplateSelectorTitle: 'Prosjektmal',
     TitleLabel: 'Tittel',
     ProgressDialogSubText: 'Vennligst vent. Ikke lukk nettleservinduet.',
     DocumentTemplateDialogScreenSelectInfoText: 'Velg dokumentmalene du vil kopiere til prosjektområdet.<br /><br />Malene hentes fra<a href="{0}" target="_blank">{1}</a> og det hentes _siste versjon_ av malene.<br /><br />Når du trykker \'Velg\' sendes du videre til et skjermbilde hvor du kan sette _tittel_ og _filnavn_ for dokumentene som kopieres over.',
@@ -68,6 +68,8 @@ define([], function () {
     ProvisionSiteFieldText: 'Opprettet feltet {0} på området',
     CreatingPlannerTaskText: 'Oppretter oppgaver for {0}',
     ProcessListItemText: 'Prosesserer batch {0} med {1} listeelementer',
-    PhaseLabel: 'Fase'
+    PhaseLabel: 'Fase',
+    IncludeStandardFoldersDescription: 'Inkluder standardmapper for dokumentbiblioteket. Det opprettes en mappe per prosjetktfase.',
+    CopyPlannerTasksDescription: 'Opprett en plan for prosjektet i Planner og opprett buckets og oppgaver for denne.'
   }
 });

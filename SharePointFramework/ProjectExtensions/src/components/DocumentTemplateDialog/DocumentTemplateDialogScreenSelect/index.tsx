@@ -20,7 +20,7 @@ export class DocumentTemplateDialogScreenSelect extends React.Component<IDocumen
                         selection={this.props.selection}
                         selectionMode={SelectionMode.multiple}
                         layoutMode={DetailsListLayoutMode.justified}
-                        constrainMode={ConstrainMode.unconstrained} />
+                        constrainMode={ConstrainMode.horizontalConstrained} />
                 </MarqueeSelection>
             </>
         );

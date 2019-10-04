@@ -18,7 +18,6 @@ declare interface IProjectExtensionsStrings {
   CloseModalText: string;
   CopyListDataErrorMessage: string;
   CopyListDataText: string;
-  CopyPlannerTasksLabel: string;
   CopyProgressLabel: string;
   EditPropertiesLinkText: string;
   ErrorDialogTitle: string;
@@ -27,6 +26,9 @@ declare interface IProjectExtensionsStrings {
   GetSetupDataErrorMessage: string;
   GetSetupDataErrorStack: string;
   IncludeStandardFoldersLabel: string;
+  IncludeStandardFoldersDescription: string;
+  CopyPlannerTasksLabel: string;
+  CopyPlannerTasksDescription: string;
   InvalidLanguageErrorMessage: string;
   InvalidLanguageErrorStack: string;
   DocumentLibraryDropdownLabel: string;

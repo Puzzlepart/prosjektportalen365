@@ -1,9 +1,9 @@
+import { stringIsNullOrEmpty } from '@pnp/common';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
-import { CollapsableSection } from '../../CollapsableSection';
-import styles from './SettingsSection.module.scss';
 import { ISettingsSectionProps } from './ISettingsSectionProps';
+import styles from './SettingsSection.module.scss';
+import { getId } from '@uifabric/utilities';
 
 // tslint:disable-next-line: naming-convention
 export const SettingsSection = (props: ISettingsSectionProps) => {
@@ -12,27 +12,26 @@ export const SettingsSection = (props: ISettingsSectionProps) => {
     }
 
     return (
-        <CollapsableSection
-            title={strings.SettingsSectionTitle}
-            className={styles.settingsSection}
-            contentClassName={styles.content}>
-            <div className={styles.item}>
-                <Toggle
-                    id='includeStandardFolders'
-                    label={strings.IncludeStandardFoldersLabel}
-                    defaultChecked={props.defaultSettings.includeStandardFolders}
-                    disabled={true}
-                    onChange={onChange} />
+        <div className={styles.settingsSection}>
+            <div className={styles.container}>
+                {props.settings.keys.map(key => {
+                    const toggleProps = props.settings.getToggleProps(key);
+                    return (
+                        <div id={getId(key)} key={getId(key)} className={styles.item}>
+                            <Toggle
+                                {...toggleProps}
+                                inlineLabel={true}
+                                onChange={onChange} />
+                            <div className={styles.description} hidden={stringIsNullOrEmpty(toggleProps.title)}>
+                                <span>{toggleProps.title}</span>
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
-            <div className={styles.item}>
-                <Toggle
-                    id='copyPlannerTasks'
-                    label={strings.CopyPlannerTasksLabel}
-                    defaultChecked={props.defaultSettings.copyPlannerTasks}
-                    onChange={onChange} />
-            </div>
-        </CollapsableSection>
+        </div>
     );
 };
 
 export * from './ISettingsSectionProps';
+

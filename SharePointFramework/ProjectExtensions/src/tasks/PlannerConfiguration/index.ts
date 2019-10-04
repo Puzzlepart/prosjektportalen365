@@ -122,7 +122,7 @@ export class PlannerConfiguration extends BaseTask {
      * @param {OnProgressCallbackFunction} onProgress On progress function
      */
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
-        if (this.data.settings.copyPlannerTasks) {
+        if (this.data.settings.values.copyPlannerTasks) {
             this.logInformation('Setting up Plans, Buckets and Task');
             try {
                 this._config = await this._fetchPlannerConfig();

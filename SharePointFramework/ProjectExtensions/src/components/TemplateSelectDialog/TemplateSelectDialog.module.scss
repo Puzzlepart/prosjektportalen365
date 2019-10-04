@@ -1,6 +1,12 @@
 @import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 
 .templateSelectDialog {
+  width: 750px !important;
+  max-width: 750px !important;
+  .content {
+    min-height: 300px;
+    overflow: hidden;
+  }  
   .infoText {
     @include ms-Grid-col;
     @include ms-sm12;

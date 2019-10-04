@@ -2,9 +2,9 @@ import { ProjectSetupSettings } from '../../../extensions/projectSetup/ProjectSe
 
 export interface ISettingsSectionProps {
     /**
-     * Default settings
+     * Settings
      */
-    defaultSettings: ProjectSetupSettings;
+    settings: ProjectSetupSettings;
 
     /**
      * On setting change

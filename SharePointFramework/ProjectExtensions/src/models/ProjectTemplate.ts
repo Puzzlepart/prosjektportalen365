@@ -18,7 +18,7 @@ export class ProjectTemplate implements IDropdownOption {
 
     constructor(spItem: IProjectTemplateSPItem, public web: Web) {
         this.id = spItem.File.UniqueId;
-        this.key = getId(this.id);
+        this.key = getId(`projecttemplate_${this.id}`);
         this.text = spItem.File.Title;
         this.description = spItem.FieldValuesAsText.GtDescription;
         this.serverRelativeUrl = spItem.File.ServerRelativeUrl;
@@ -27,8 +27,11 @@ export class ProjectTemplate implements IDropdownOption {
     public async getSchema(): Promise<Schema> {
         return await this.web.getFileByServerRelativeUrl(this.serverRelativeUrl).getJSON();
     }
+}
 
-    public get data() {
-        return this;
+export class ProjectExtension extends ProjectTemplate {
+    constructor(spItem: IProjectTemplateSPItem, web: Web) {
+        super(spItem, web);
+        this.key = getId(`projectextension_${this.id}`);
     }
 }

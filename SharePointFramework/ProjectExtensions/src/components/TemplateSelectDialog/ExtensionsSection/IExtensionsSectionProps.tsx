@@ -1,18 +1,18 @@
-import { ProjectTemplate } from '../../../models';
+import { ProjectExtension } from '../../../models';
 
 export interface IExtensionsSectionProps {
     /**
      * Extensions
      */
-    extensions?: ProjectTemplate[];
+    extensions?: ProjectExtension[];
 
     /**
      * Currently selected extensions
      */
-    selectedExtensions?: ProjectTemplate[];
+    selectedExtensions?: ProjectExtension[];
 
     /**
      * On extensions changed
      */
-    onChange: (selectedExtensions: ProjectTemplate[]) => void;
+    onChange: (selectedExtensions: ProjectExtension[]) => void;
 }

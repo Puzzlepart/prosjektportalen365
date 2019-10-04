@@ -14,6 +14,7 @@ import { DocumentTemplateDialogScreenEditCopy } from './DocumentTemplateDialogSc
 import { DocumentTemplateDialogScreenSelect } from './DocumentTemplateDialogScreenSelect';
 import { IDocumentTemplateDialogProps } from './IDocumentTemplateDialogProps';
 import { IDocumentTemplateDialogState } from './IDocumentTemplateDialogState';
+import styles from './DocumentTemplateDialog.module.scss';
 
 export class DocumentTemplateDialog extends React.Component<IDocumentTemplateDialogProps, IDocumentTemplateDialogState> {
     private _selection: Selection;
@@ -39,7 +40,8 @@ export class DocumentTemplateDialog extends React.Component<IDocumentTemplateDia
                 dialogContentProps={{ title: this.props.title }}
                 modalProps={{ isBlocking: false, isDarkOverlay: true }}
                 onRenderFooter={this._onRenderFooter.bind(this)}
-                onDismiss={this._onClose.bind(this)}>
+                onDismiss={this._onClose.bind(this)}
+                containerClassName={styles.documentTemplateDialog}>
                 {this._content}
             </BaseDialog>
         );

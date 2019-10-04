@@ -3,14 +3,17 @@
 .extensionsSection {
   @include ms-Grid-col;
   @include ms-sm12;
-
-  .content {
+  padding: 10px 0 10px 0;
+  .container {
     @include ms-Grid;
     @include ms-Grid-row;
-
     .item {
       @include ms-Grid-col;
       @include ms-sm6;
+      .description {
+        @include ms-font-s;
+        margin: 5px 0 15px 0;
+      }
     }
   }
 }

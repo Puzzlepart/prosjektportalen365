@@ -13,7 +13,7 @@ import { ApplicationInsightsLogListener, ListLogger } from 'shared/lib/logging';
 import { HubConfigurationService } from 'shared/lib/services';
 import { default as HubSiteService } from 'sp-hubsite-service';
 import { ErrorDialog, IErrorDialogProps, IProgressDialogProps, ITemplateSelectDialogProps, ITemplateSelectDialogState, ProgressDialog, TemplateSelectDialog } from '../../components';
-import { ListContentConfig, ProjectTemplate } from '../../models';
+import { ListContentConfig, ProjectTemplate, ProjectExtension } from '../../models';
 import * as Tasks from '../../tasks';
 import { IProjectSetupData } from './IProjectSetupData';
 import { IProjectSetupProperties } from './IProjectSetupProperties';
@@ -212,7 +212,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       Logger.log({ message: '(ProjectSetup) _fetchData: Retrieving templates, extensions and content config', data: {}, level: LogLevel.Info });
       const [templates, extensions, listContentConfig] = await Promise.all([
         this._hubConfigurationService.getHubItems(this.properties.templatesLibrary, ProjectTemplate, { ViewXml: '<View></View>' }, ['File', 'FieldValuesAsText']),
-        this._hubConfigurationService.getHubItems(this.properties.extensionsLibrary, ProjectTemplate, { ViewXml: '<View></View>' }, ['File', 'FieldValuesAsText']),
+        this._hubConfigurationService.getHubItems(this.properties.extensionsLibrary, ProjectExtension, { ViewXml: '<View></View>' }, ['File', 'FieldValuesAsText']),
         this._hubConfigurationService.getHubItems(this.properties.contentConfigList, ListContentConfig),
       ]);
       Logger.log({ message: '(ProjectSetup) _fetchData: Retrieved templates, extensions and content config', data: { templates: templates.length, extensions: extensions.length, listContentConfig: listContentConfig.length }, level: LogLevel.Info });

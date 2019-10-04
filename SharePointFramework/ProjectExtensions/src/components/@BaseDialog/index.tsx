@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './BaseDialog.module.scss';
-import { Dialog, DialogContent, DialogFooter, DialogType, IDialogContentProps } from 'office-ui-fabric-react/lib/Dialog';
+import { Dialog, DialogFooter, DialogType, IDialogContentProps } from 'office-ui-fabric-react/lib/Dialog';
 import { IModalProps } from 'office-ui-fabric-react/lib/Modal';
 import { IBaseDialogProps } from './IBaseDialogProps';
 
@@ -15,9 +15,7 @@ export class BaseDialog extends React.PureComponent<IBaseDialogProps, {}> {
                 dialogContentProps={this._dialogContentProps}
                 onDismiss={this.props.onDismiss}>
                 <span hidden={!this.props.version} className={styles.version}>v{this.props.version}</span>
-                <DialogContent className={`${styles.content} ${this.props.contentClassName}`}>
-                    {this.props.children}
-                </DialogContent>
+                {this.props.children}
                 <DialogFooter className={styles.footer}>
                     {this.props.onRenderFooter()}
                 </DialogFooter>
