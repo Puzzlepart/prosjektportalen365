@@ -3,45 +3,10 @@ import * as React from 'react';
 import { AggregatedSearchList } from '../';
 import styles from './BenefitsOverview.module.scss';
 import { getColumns } from './BenefitsOverviewColumns';
-import { IBenefitsOverviewProps } from './IBenefitsOverviewProps';
+import { BenefitsOverviewDefaultProps, IBenefitsOverviewProps } from './IBenefitsOverviewProps';
 
 export default class BenefitsOverview extends React.Component<IBenefitsOverviewProps, {}> {
-  public static defaultProps: Partial<IBenefitsOverviewProps> = {
-    selectProperties: [
-      'Path',
-      'SPWebURL',
-      'Title',
-      'ListItemId',
-      'SiteTitle',
-      'SiteId',
-      'ContentTypeID',
-      'GtDesiredValueOWSNMBR',
-      'GtMeasureIndicatorOWSTEXT',
-      'GtMeasurementUnitOWSCHCS',
-      'GtStartValueOWSNMBR',
-      'GtMeasurementValueOWSNMBR',
-      'GtMeasurementCommentOWSMTXT',
-      'GtMeasurementDateOWSDATE',
-      'GtGainsResponsibleOWSUSER',
-      'GtGainsTurnoverOWSMTXT',
-      'GtGainsTypeOWSCHCS',
-      'GtPrereqProfitAchievementOWSMTXT',
-      'GtRealizationTimeOWSDATE',
-      'GtGainLookupId',
-      'GtMeasureIndicatorLookupId',
-      'GtGainsResponsible'
-    ],
-    showExcelExportButton: true,
-  };
-
-  /**
-   * Constructor
-   *
-   * @param {IBenefitsOverviewProps} props Props
-   */
-  constructor(props: IBenefitsOverviewProps) {
-    super(props);
-  }
+  public static defaultProps = BenefitsOverviewDefaultProps;
 
   public render(): React.ReactElement<IBenefitsOverviewProps> {
     const columns = getColumns(this.props);
