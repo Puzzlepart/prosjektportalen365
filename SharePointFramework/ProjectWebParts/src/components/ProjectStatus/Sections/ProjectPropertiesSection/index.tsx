@@ -4,15 +4,9 @@ import { IProjectPropertiesSectionProps } from './IProjectPropertiesSectionProps
 import { BaseSection } from '../BaseSection';
 import { StatusElement } from '../../StatusElement';
 import { StatusSectionField } from '../StatusSectionField';
+import { stringIsNullOrEmpty } from '@pnp/common';
 
 export class ProjectPropertiesSection extends BaseSection<IProjectPropertiesSectionProps, {}> {
-  constructor(props: IProjectPropertiesSectionProps) {
-    super(props);
-  }
-
-  /**
-   * Renders the <ProjectPropertiesSection /> component
-   */
   public render(): React.ReactElement<IProjectPropertiesSectionProps> {
     return (
       <BaseSection {...this.props}>
@@ -28,13 +22,15 @@ export class ProjectPropertiesSection extends BaseSection<IProjectPropertiesSect
     );
   }
 
+  /**
+   * Render fields specified in model.viewFields
+   */
   public renderFields() {
     if (this.props.model.viewFields) {
-      const { entityFields, entityItem } = this.props;
-      return this.props.model.viewFields.map(fn => {
-        const [fld] = entityFields.filter(ef => ef.InternalName === fn);
-        if (fld) {
-          return <StatusSectionField label={fld.Title} value={entityItem[fn]} />;
+      return this.props.model.viewFields.map(fieldName => {
+        const [fld] = this.props.fields.filter(f => [f.InternalName, f.Title].indexOf(fieldName) !== -1);
+        if (fld && !stringIsNullOrEmpty(this.props.fieldValues[fieldName])) {
+          return <StatusSectionField label={fld.Title} value={this.props.fieldValues[fieldName]} />;
         }
         return null;
       });

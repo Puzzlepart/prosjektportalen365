@@ -1,6 +1,5 @@
 import { stringIsNullOrEmpty } from '@pnp/common';
 import { Web } from '@pnp/sp';
-import { getId } from '@uifabric/utilities';
 
 
 export interface IListContentConfigSPItem {
@@ -29,7 +28,7 @@ export class ListContentConfig {
     }
 
     public get key() {
-        return getId(`listcontentconfig_${this._spItem.Id.toString()}`);
+        return `listcontentconfig_${this._spItem.Id.toString()}`;
     }
 
     public get fields() {
