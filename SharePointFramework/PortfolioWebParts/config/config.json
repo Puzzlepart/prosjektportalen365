@@ -57,6 +57,18 @@
           "manifest": "./src/webparts/projectList/manifest.json"
         }
       ]
+    },
+    "resource-allocation-web-part": {
+      "components": [{
+        "entrypoint": "./lib/webparts/resourceAllocation/ResourceAllocationWebPart.js",
+        "manifest": "./src/webparts/resourceAllocation/ResourceAllocationWebPart.manifest.json"
+      }]
+    },
+    "risk-overview-web-part": {
+      "components": [{
+        "entrypoint": "./lib/webparts/riskOverview/RiskOverviewWebPart.js",
+        "manifest": "./src/webparts/riskOverview/RiskOverviewWebPart.manifest.json"
+      }]
     }
   },
   "externals": {},
