@@ -1143,6 +1143,9 @@
   <data name="SiteFields_GtLastGateStatus_DisplayName" xml:space="preserve">
     <value>Siste beslutningspunktstatus</value>
   </data>
+  <data name="SiteFields_GtLastSyncTime_DisplayName" xml:space="preserve">
+    <value>Sist synkronisert</value>
+  </data>
   <data name="SiteFields_GtProjectProcessState_DisplayName" xml:space="preserve">
     <value>Prosjektprosessstatus</value>
   </data>
@@ -1954,6 +1957,9 @@
     <value></value>
   </data>
   <data name="SiteFields_GtPortfolioColumnIconName_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtLastSyncTime_Description" xml:space="preserve">
     <value></value>
   </data>
   <data name="ProjectList_Header" xml:space="preserve">

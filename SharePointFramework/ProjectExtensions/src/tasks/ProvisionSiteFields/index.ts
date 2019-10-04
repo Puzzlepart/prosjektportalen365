@@ -1,68 +1,44 @@
-import { override } from '@microsoft/decorators';
-import { task } from 'decorators/task';
-import * as strings from 'ProjectSetupApplicationCustomizerStrings';
-import { Web } from 'sp-js-provisioning';
-import * as stringFormat from 'string-format';
-import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
-import { BaseTaskError } from '../BaseTaskError';
-import { IBaseTaskParams } from '../IBaseTaskParams';
-import { DOMParser } from 'xmldom';
+import { IProjectSetupData } from 'extensions/projectSetup';
+import * as strings from 'ProjectExtensionsStrings';
+import * as formatString from 'string-format';
+import { transformFieldXml } from 'shared/lib/helpers';
+import { SPField } from 'shared/lib/models';
+import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask';
+import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction';
 
-export class SPField {
-    // tslint:disable-next-line: naming-convention
-    public InternalName: string = '';
-    // tslint:disable-next-line: naming-convention
-    public Title: string = '';
-    // tslint:disable-next-line: naming-convention
-    public SchemaXml: string = '';
-    // tslint:disable-next-line: naming-convention
-    public TypeAsString: string = '';
-}
+export class ProvisionSiteFields extends BaseTask {
+    public taskName = 'ProvisionSiteFields';
 
-@task('ProvisionSiteFields')
-export default class ProvisionSiteFields extends BaseTask {
+    constructor(data: IProjectSetupData) {
+        super(data);
+    }
+
     /**
      * Execute ProvisionSiteFields
      * 
      * @param {IBaseTaskParams} params Task parameters 
      * @param {OnProgressCallbackFunction} onProgress On progress function
      */
-    @override
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
-            const web = new Web(params.context.pageContext.web.absoluteUrl);
-            const existingSiteFields = await web.fields.select(...Object.keys(new SPField())).get<SPField[]>();
-            const siteFields = await params.data.hub.web.fields.filter(`Group eq '${strings.SiteFieldsGroupName}' and TypeAsString ne 'Calculated'`).select(...Object.keys(new SPField())).get<SPField[]>();
+            const existingSiteFields = await params.web.fields.select(...Object.keys(new SPField())).get<SPField[]>();
+            const siteFields = await this.data.hub.web.fields.filter(`Group eq '${strings.SiteFieldsGroupName}' and TypeAsString ne 'Calculated'`).select(...Object.keys(new SPField())).get<SPField[]>();
             for (let i = 0; i < siteFields.length; i++) {
                 let siteField = siteFields[i];
-                if (existingSiteFields.filter(exf => exf.InternalName === siteField.InternalName).length > 0) continue;
-                this.logInformation('Processing site field', { siteField });
-                onProgress(stringFormat(strings.ProvisionSiteFieldsText, siteField.Title), 'EditCreate');
-                let fieldXml = this._getFieldXml(siteField);
-                this.logInformation(`Processing site field ${siteField.Title}`, { fieldXml });
-                await web.fields.createFieldAsXml(fieldXml);
-                this.logInformation(`Site field ${siteField.Title} successfully created`, { fieldXml });
+                if (existingSiteFields.filter(exf => exf.InternalName === siteField.InternalName).length > 0) {
+                    this.logInformation(`Site field ${siteField.InternalName} already exists in site`);
+                    continue;
+                }
+                onProgress(strings.ProvisionSiteFieldsText, formatString(strings.ProvisionSiteFieldText, siteField.Title), 'EditCreate');
+                let fieldXml = transformFieldXml(siteField.SchemaXml);
+                this.logInformation(`Processing site field ${siteField.Title} (${siteField.InternalName})`, fieldXml);
+                await params.web.fields.createFieldAsXml(fieldXml);
+                this.logInformation(`Site field ${siteField.Title} (${siteField.InternalName}) successfully created`);
             }
             return params;
         } catch (error) {
             this.logError('Failed to provision site fields to site');
-            throw new BaseTaskError(this.name, strings.ProvisionSiteFieldsErrorMessage, '');
+            throw new BaseTaskError(this.taskName, strings.ProvisionSiteFieldsErrorMessage, '');
         }
-    }
-
-    /**
-     * Get field XML
-     * 
-     * @param {SPField} siteField Site field
-     */
-    private _getFieldXml(siteField: SPField): string {
-        let { documentElement } = new DOMParser().parseFromString(siteField.SchemaXml);
-        documentElement.removeAttribute('Version');
-        documentElement.removeAttribute('SourceID');
-        documentElement.removeAttribute('Required');
-        documentElement.removeAttribute('WebId');
-        documentElement.removeAttribute('Hidden');
-        documentElement.removeAttribute('List');
-        return documentElement.toString();
     }
 }

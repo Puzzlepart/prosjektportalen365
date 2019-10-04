@@ -1,233 +1,221 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
-import { dateAdd, PnPClientStorage } from '@pnp/common';
-import { Web } from '@pnp/sp';
+import { dateAdd, PnPClientStorage, PnPClientStore, TypedHash } from '@pnp/common';
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import { HubConfigurationService } from 'shared/lib/services';
-import { SpEntityPortalService } from 'sp-entityportal-service';
-import * as format from 'string-format';
+import parseUrlHash from 'shared/lib/util/parseUrlHash';
+import * as formatString from 'string-format';
+import SPDataAdapter from '../../data';
+import { BaseWebPartComponent } from '../BaseWebPartComponent';
+import { ProgressDialog } from '../ProgressDialog/index';
+import { UserMessage } from '../UserMessage';
+import { Actions } from './Actions';
 import { IProjectInformationData } from './IProjectInformationData';
 import { IProjectInformationProps } from './IProjectInformationProps';
 import { IProjectInformationState } from './IProjectInformationState';
+import { IProjectInformationUrlHash } from './IProjectInformationUrlHash';
 import styles from './ProjectInformation.module.scss';
-import { ProjectProperty, ProjectPropertyModel } from './ProjectProperty';
+import { ProjectProperties } from './ProjectProperties';
+import { ProjectProperty, ProjectPropertyModel } from './ProjectProperties/ProjectProperty/index';
 import { StatusReports } from './StatusReports';
 
-
-export class ProjectInformation extends React.Component<IProjectInformationProps, IProjectInformationState> {
-  public static defaultProps: Partial<IProjectInformationProps> = {
-    statusReportsLinkUrlTemplate: '',
-    statusReportsCount: 0,
-  };
+export class ProjectInformation extends BaseWebPartComponent<IProjectInformationProps, IProjectInformationState> {
+  public static defaultProps: Partial<IProjectInformationProps> = { statusReportsCount: 0 };
   private _hubConfigurationService: HubConfigurationService;
-  private _spEntityPortalService: SpEntityPortalService;
+  private _storage: PnPClientStore;
 
-
+  /**
+   * Constructor
+   * 
+   * @param {IProjectInformationProps} props Props
+   */
   constructor(props: IProjectInformationProps) {
-    super(props);
-    this.state = { isLoading: true, data: {} };
-    this._hubConfigurationService = new HubConfigurationService(this.props.hubSiteUrl);
-    this._spEntityPortalService = new SpEntityPortalService({
-      webUrl: this.props.hubSiteUrl,
-      fieldPrefix: 'Gt',
-      ...this.props.entity,
-    });
+    super('ProjectInformation', props, { isLoading: true });
+    this._storage = new PnPClientStorage().session;
+    this._hubConfigurationService = new HubConfigurationService().configure({ urlOrWeb: props.hubSite.web, siteId: props.siteId });
   }
 
   public async componentDidMount() {
     try {
       const data = await this._fetchData();
-      this.setState({ data, isLoading: false });
+      this.setState({ ...data, isLoading: false });
+      if (parseUrlHash<IProjectInformationUrlHash>(true).syncproperties === '1') {
+        this._onSyncProperties();
+      }
     } catch (error) {
       this.setState({ error, isLoading: false });
     }
   }
 
-  public render(): React.ReactElement<IProjectInformationProps> {
+  public render() {
+    if (this.state.hidden) {
+      return null;
+    }
     return (
-      <div className={styles.projectInformation}>
-        <div className={styles.container} style={this._generateStyle(this.props)}>
-          <WebPartTitle
-            displayMode={DisplayMode.Read}
-            title={this.props.title}
-            updateProperty={_ => { }} />
-          {this._renderInner()}
+      <div className={styles.projectInformation} >
+        <div className={styles.container}>
+          <div hidden={this.props.displayMode === DisplayMode.Edit}>
+            <WebPartTitle
+              displayMode={DisplayMode.Read}
+              title={this.props.title}
+              updateProperty={() => { }} />
+          </div>
+          {this._contents}
         </div>
       </div>
     );
   }
 
   /**
-   * Render component inner
+   * Contents
    */
-  private _renderInner() {
+  private get _contents() {
     if (this.state.isLoading) {
-      return <Spinner label={format(strings.LoadingText, 'prosjektinformasjon')} />;
+      return <Spinner label={formatString(strings.LoadingText, this.props.title.toLowerCase())} />;
     }
     if (this.state.error) {
-      return <MessageBar messageBarType={MessageBarType.error}>{format(strings.ErrorText, 'prosjektinformasjon')}</MessageBar>;
+      return (
+        <UserMessage
+          messageBarType={MessageBarType.severeWarning}
+          onDismiss={() => this.setState({ hidden: true })}
+          text={strings.WebPartNoAccessMessage} />
+      );
     }
+
+    const { statusReports, editFormUrl, versionHistoryUrl } = this.state.data;
+
     return (
-      <React.Fragment>
-        {this._renderProperties()}
+      <>
+        <ProjectProperties
+          title={this.props.title}
+          properties={this.state.properties}
+          displayMode={this.props.displayMode}
+          isSiteAdmin={this.props.isSiteAdmin}
+          onFieldExternalChanged={this.props.onFieldExternalChanged}
+          showFieldExternal={this.props.showFieldExternal}
+          localProjectPropertiesList={this.state.data.localProjectPropertiesList} />
         <StatusReports
           title={this.props.statusReportsHeader}
-          statusReports={this.state.data.statusReports}
-          urlTemplate={`${this.props.webUrl}/${this.props.statusReportsLinkUrlTemplate}`}
+          statusReports={statusReports}
           urlSourceParam={document.location.href}
           hidden={this.props.statusReportsCount === 0} />
-        <div className={styles.actions} hidden={this.props.hideActions || !this.props.isSiteAdmin}>
-          <div>
-            <DefaultButton
-              text={strings.ViewVersionHistoryText}
-              href={this.state.data.versionHistoryUrl}
-              iconProps={{ iconName: 'History' }}
-              style={{ width: 250 }} />
-          </div>
-          <div>
-            <DefaultButton
-              text={strings.EditPropertiesText}
-              href={this.state.data.editFormUrl}
-              iconProps={{ iconName: 'Edit' }}
-              style={{ width: 250 }} />
-          </div>
-          <div>
-            <DefaultButton
-              text={strings.EditSiteInformationText}
-              onClick={_ => window['_spLaunchSiteSettings']()}
-              disabled={!window['_spLaunchSiteSettings']}
-              iconProps={{ iconName: 'Info' }}
-              style={{ width: 250 }} />
-          </div>
-        </div>
-      </React.Fragment>
+        <UserMessage {...this.state.message} />
+        <Actions
+          hidden={this.props.hideActions || !this.props.isSiteAdmin || this.props.displayMode === DisplayMode.Edit}
+          versionHistoryUrl={versionHistoryUrl}
+          editFormUrl={editFormUrl}
+          onSyncProperties={!this.state.data.localProjectPropertiesList && this._onSyncProperties.bind(this)} />
+        <ProgressDialog {...this.state.progress} />
+      </>
     );
   }
 
   /**
-   * Render properties
+   * Add message
+   * 
+   * @param {string} text Text
+   * @param {MessageBarType} messageBarType Message type
+   * @param {number} duration Duration in seconds (defaults to 5)
    */
-  private _renderProperties() {
-    if (!this.state.data.properties) return null;
-    const propertiesToRender = this.state.data.properties.filter(p => !p.empty && p.showInDisplayForm);
-    const hasMissingProps = this.state.data.properties.filter(p => p.required && p.empty).length > 0;
-    if (hasMissingProps) {
-      return <MessageBar messageBarType={MessageBarType.error}>{strings.MissingPropertiesMessage}</MessageBar>;
-    }
-    if (propertiesToRender.length === 0) {
-      return <MessageBar>{strings.NoPropertiesMessage}</MessageBar>;
-    }
-    return (
-      <div>
-        {propertiesToRender.map((model, key) => {
-          return <ProjectProperty key={key} model={model} />;
-        })}
-      </div>
-    );
+  private _addMessage(text: string, messageBarType: MessageBarType, duration: number = 5): Promise<void> {
+    return new Promise(resolve => {
+      this.setState({ message: { text: formatString(text, duration.toString()), messageBarType, onDismiss: () => this.setState({ message: null }) } });
+      window.setTimeout(() => {
+        this.setState({ message: null });
+        resolve();
+      }, (duration * 1000));
+    });
   }
 
   /**
-  * Generate styles based on props
-  *
-  * @param {IProjectInformationProps} param0 Props
-  */
-  private _generateStyle({ boxLayout, boxType, boxBackgroundColor }: IProjectInformationProps) {
-    let style: React.CSSProperties = {};
-    if (boxLayout && boxType) {
-      style.padding = 20;
-      style.backgroundColor = boxBackgroundColor || '#FFF';
-      switch (boxType) {
-        case '1': {
-          style.boxShadow = '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)';
-        }
-          break;
-        case '2': {
-          style.boxShadow = '0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)';
-        }
-          break;
-        case '3': {
-          style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23)';
-        }
-          break;
-        case '4': {
-          style.boxShadow = '0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22)';
-        }
-          break;
-        case '5': {
-          style.boxShadow = '0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22)';
-        }
-          break;
-      }
-    }
-    return style;
-  }
-
-  /**
-  * Fetch configuration
-  *
-  * @param {string} key Key for cache
-  * @param {Date} expire Expire for cache
-  */
-  private async _fetchConfiguration(key: string = 'projectinformation_fetchconfiguration', expire: Date = dateAdd(new Date(), 'minute', 15)) {
-    return new PnPClientStorage().session.getOrPut(key, async () => {
-      const [columnConfig, fields] = await Promise.all([
-        this._hubConfigurationService.getProjectColumns(),
-        this._spEntityPortalService.getEntityFields(),
-      ]);
-      return { columnConfig, fields };
-    }, expire);
-  }
-
-  /**
-  * Map properties from entity item and configuration
-  *
-  * @param {Object} item Entity item
-  * @param {Object} configuration Configuration
-  */
-  private _mapProperties(item: Object, configuration: { fields: any[], columnConfig: any[] }) {
-    return Object.keys(item)
-      .filter(fieldName => {
-        let [field] = configuration.fields.filter(fld => fld.InternalName === fieldName);
-        let [column] = configuration.columnConfig.filter(c => c.GtInternalName === fieldName);
-        if (field && column) {
-          return this.props.filterField ? column[this.props.filterField] : true;
-        }
-        return false;
-      })
-      .map(fieldName => new ProjectPropertyModel(configuration.fields.filter(fld => fld.InternalName === fieldName)[0], item[fieldName]));
-  }
-
-  private async _fetchData(): Promise<IProjectInformationData> {
+   * On sync properties
+   */
+  private async _onSyncProperties(): Promise<void> {
+    this.logInfo(`Starting sync of ${strings.ProjectPropertiesListName}`, '_onSyncProperties');
+    this.setState({ progress: { title: strings.SyncProjectPropertiesProgressLabel, progress: {} } });
+    const progressFunc = (progress: IProgressIndicatorProps) => this.setState({ progress: { title: strings.SyncProjectPropertiesProgressLabel, progress } });
     try {
-      const [configuration, entityData] = await Promise.all([
-        this._fetchConfiguration(),
-        this._spEntityPortalService.fetchEntity(this.props.siteId, this.props.webUrl)
+      progressFunc({ label: strings.SyncProjectPropertiesListProgressDescription, description: 'Vennligst vent...' });
+      this.logInfo('Ensuring list and fields', '_onSyncProperties');
+      await this._hubConfigurationService.syncList(this.props.webUrl, strings.ProjectPropertiesListName, '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C', { Title: this.props.webTitle });
+      this.logInfo('Synchronizing properties to item in hub', '_onSyncProperties');
+      await SPDataAdapter.syncPropertyItemToHub(this.state.data.fieldValues, this.state.data.fieldValuesText, progressFunc);
+      this.logInfo(`Finished. Reloading page.`, '_onSyncProperties');
+      SPDataAdapter.clearStorage();
+      document.location.href = this.props.webUrl;
+    } catch (error) {
+      this._addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning);
+    } finally {
+      this.setState({ progress: null });
+    }
+  }
+
+  /**
+  * Get column config
+  */
+  private async _getColumnConfig() {
+    return this._storage.getOrPut('projectinformation_columnconfig', async () => {
+      try {
+        let columns = await this._hubConfigurationService.getProjectColumns();
+        return columns;
+      } catch (error) {
+        return [];
+      }
+    }, dateAdd(new Date(), 'minute', 30));
+  }
+
+  /**
+  * Transform properties from entity item and configuration
+  *
+  * @param {TypedHash} fieldValuesText Field values as text
+  * @param {IProjectInformationData} data Data
+  */
+  private _transformProperties(fieldValuesText: TypedHash<any>, data: IProjectInformationData) {
+    const fieldNames: string[] = Object.keys(fieldValuesText).filter(fieldName => {
+      let [field] = data.fields.filter(fld => fld.InternalName === fieldName);
+      if (field && data.columns.length === 0 && this.props.showFieldExternal[fieldName]) return true;
+      let [column] = data.columns.filter(c => c.internalName === fieldName);
+      if (field && column) {
+        return this.props.filterField ? column[this.props.filterField] : true;
+      }
+      return false;
+    });
+    const properties = fieldNames.map(fieldName => {
+      let [field] = data.fields.filter(fld => fld.InternalName === fieldName);
+      return new ProjectPropertyModel(field, fieldValuesText[fieldName]);
+    });
+    return properties;
+  }
+
+  /**
+   * Fetch data
+   */
+  private async _fetchData(): Promise<Partial<IProjectInformationState>> {
+    try {
+      const [columnConfig, propertiesData] = await Promise.all([
+        this._getColumnConfig(),
+        SPDataAdapter.project.getPropertiesData(),
       ]);
 
-      let properties = this._mapProperties(entityData.fieldValues, configuration);
+      let data: IProjectInformationData = {
+        statusReports: [],
+        columns: columnConfig,
+        ...propertiesData,
+      };
 
-      let statusReports: { Id: number, Created: string }[] = [];
-
-      if (this.props.statusReportsListName && this.props.statusReportsCount > 0) {
-        const statusReportsList = new Web(this.props.hubSiteUrl).lists.getByTitle(this.props.statusReportsListName);
-        statusReports = await statusReportsList
-          .items
-          .filter(`GtSiteId eq '${this.props.siteId}'`)
-          .select('Id', 'Created')
-          .orderBy('Id', false)
-          .top(this.props.statusReportsCount)
-          .get<{ Id: number, Created: string }[]>();
+      if (this.props.statusReportsCount > 0) {
+        data.statusReports = await this._hubConfigurationService.getStatusReports(undefined, this.props.statusReportsCount);
       }
 
-      return {
-        properties,
-        statusReports,
-        ...entityData.urls,
-      };
+      const properties = this._transformProperties(data.fieldValuesText, data);
+
+      this.logInfo('Succesfully retrieved data.', '_fetchData', { localProjectPropertiesList: data.localProjectPropertiesList });
+
+      return { data, properties };
     } catch (error) {
       throw error;
     }

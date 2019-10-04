@@ -17,15 +17,15 @@ try {
 }
 
 gulp.task('versionSync', () => {
-    find.file(/\.manifest.json$/, path.join(__dirname, "src", "webparts"), (files) => {
+    find.file(/\manifest.json$/, path.join(__dirname, "src", "webparts"), (files) => {
         var pkgSolution = require('./config/package-solution.json');
         var newVersionNumber = require('./package.json').version.split('-')[0];
         pkgSolution.solution.version = newVersionNumber + '.0';
-        fs.writeFile('./config/package-solution.json', JSON.stringify(pkgSolution, null, 4), (_error) => { /* handle error */ });
+        fs.writeFile('./config/package-solution.json', JSON.stringify(pkgSolution, null, 4), (_error) => {});
         for (let i = 0; i < files.length; i++) {
             let manifest = require(files[i]);
             manifest.version = newVersionNumber;
-            fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => { /* handle error */ });
+            fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => {});
         }
     });
 });

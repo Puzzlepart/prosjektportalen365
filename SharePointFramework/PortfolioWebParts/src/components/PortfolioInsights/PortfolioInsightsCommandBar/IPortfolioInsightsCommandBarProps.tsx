@@ -1,9 +1,9 @@
-import { PortfolioOverviewView } from 'models';
-import { IPortfolioOverviewConfiguration } from 'interfaces';
+import { IPortfolioConfiguration } from 'interfaces';
+import { PortfolioOverviewView } from 'shared/lib/models/PortfolioOverviewView';
 
 export interface IPortfolioInsightsCommandBarProps {
     currentView: PortfolioOverviewView;
-    configuration: IPortfolioOverviewConfiguration;
+    configuration: IPortfolioConfiguration;
     contentTypes: {
         StringId: string;
         Name: string;

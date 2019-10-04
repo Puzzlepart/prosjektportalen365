@@ -5,32 +5,30 @@
     "project-setup-application-customizer": {
       "components": [
         {
-          "entrypoint": "./lib/extensions/projectSetup/ProjectSetupApplicationCustomizer.js",
-          "manifest": "./src/extensions/projectSetup/ProjectSetupApplicationCustomizer.manifest.json"
+          "entrypoint": "./lib/extensions/projectSetup/index.js",
+          "manifest": "./src/extensions/projectSetup/manifest.json"
         }
       ]
     },
     "project-upgrade-application-customizer": {
       "components": [
         {
-          "entrypoint": "./lib/extensions/projectUpgrade/ProjectUpgradeApplicationCustomizer.js",
-          "manifest": "./src/extensions/projectUpgrade/ProjectUpgradeApplicationCustomizer.manifest.json"
+          "entrypoint": "./lib/extensions/projectUpgrade/index.js",
+          "manifest": "./src/extensions/projectUpgrade/manifest.json"
         }
       ]
     },
     "template-selector-command-set": {
       "components": [
         {
-          "entrypoint": "./lib/extensions/templateSelector/TemplateSelectorCommandSet.js",
-          "manifest": "./src/extensions/templateSelector/TemplateSelectorCommandSet.manifest.json"
+          "entrypoint": "./lib/extensions/templateSelector/index.js",
+          "manifest": "./src/extensions/templateSelector/manifest.json"
         }
       ]
     }
   },
   "externals": {},
   "localizedResources": {
-    "ProjectSetupApplicationCustomizerStrings": "lib/extensions/projectSetup/loc/{locale}.js",
-    "ProjectUpgradeApplicationCustomizerStrings": "lib/extensions/projectUpgrade/loc/{locale}.js",
-    "TemplateSelectorCommandSetStrings": "lib/extensions/templateSelector/loc/{locale}.js"
+    "ProjectExtensionsStrings": "lib/loc/{locale}.js"
   }
 }

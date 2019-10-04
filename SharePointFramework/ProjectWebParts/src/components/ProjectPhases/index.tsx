@@ -1,17 +1,18 @@
-import { dateAdd } from '@pnp/common';
+import { stringIsNullOrEmpty } from '@pnp/common';
 import { Logger, LogLevel } from '@pnp/logging';
-import { List, sp } from '@pnp/sp';
-import { taxonomy } from '@pnp/sp-taxonomy';
-import { IPhaseChecklistItem, Phase } from 'models';
+import { sp } from '@pnp/sp';
+import { Phase } from 'models';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import * as format from 'string-format';
+import SPDataAdapter from '../../data';
+import { UserMessage } from '../UserMessage';
 import ChangePhaseDialog from './ChangePhaseDialog/index';
-import { ChecklistData } from './ChecklistData';
+import { IProjectPhasesData } from './IProjectPhasesData';
 import { IProjectPhasesProps } from './IProjectPhasesProps';
-import { IProjectPhasesData, IProjectPhasesState } from './IProjectPhasesState';
+import { IProjectPhasesState } from './IProjectPhasesState';
 import ProjectPhase from './ProjectPhase';
 import ProjectPhaseCallout from './ProjectPhaseCallout/index';
 import styles from './ProjectPhases.module.scss';
@@ -20,8 +21,6 @@ import styles from './ProjectPhases.module.scss';
  * @component ProjectPhases
  */
 export class ProjectPhases extends React.Component<IProjectPhasesProps, IProjectPhasesState> {
-  private _checkList: List;
-
   /**
    * Constructor
    * 
@@ -30,13 +29,15 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
   constructor(props: IProjectPhasesProps) {
     super(props);
     this.state = { isLoading: true, data: {} };
-    this._checkList = sp.web.lists.getByTitle(strings.PhaseChecklistName);
   }
 
   public async componentDidMount() {
-    if (this.props.phaseField) {
+    if (stringIsNullOrEmpty(this.props.phaseField)) return;
+    try {
       const data = await this._fetchData();
       this.setState({ isLoading: false, data });
+    } catch (error) {
+      this.setState({ isLoading: false, error });
     }
   }
 
@@ -53,6 +54,9 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
         </div>
       );
     }
+    if (this.state.hidden) {
+      return null;
+    }
     if (this.state.isLoading) {
       return (
         <div className={styles.projectPhases}>
@@ -60,6 +64,14 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
             <Spinner label={format(strings.LoadingText, 'fasevelger')} />
           </div>
         </div>
+      );
+    }
+    if (this.state.error) {
+      return (
+        <UserMessage
+          messageBarType={MessageBarType.severeWarning}
+          onDismiss={() => this.setState({ hidden: true })}
+          text={strings.WebPartNoAccessMessage} />
       );
     }
 
@@ -84,16 +96,15 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
             phase={this.state.phaseMouseOver}
             isCurrentPhase={currentPhase && (this.state.phaseMouseOver.model.id === currentPhase.id)}
             phaseSubTextProperty={this.props.phaseSubTextProperty}
-            webAbsoluteUrl={this.props.pageContext.web.absoluteUrl}
+            webUrl={this.props.webUrl}
+            isSiteAdmin={this.props.isSiteAdmin}
             onChangePhase={phase => this.setState({ confirmPhase: phase })}
-            onDismiss={this._onProjectPhaseCalloutDismiss.bind(this)}
-            gapSpace={5} />
+            onDismiss={this._onProjectPhaseCalloutDismiss.bind(this)} />
         )}
         {this.state.confirmPhase && (
           <ChangePhaseDialog
             activePhase={this.state.data.currentPhase}
             newPhase={this.state.confirmPhase}
-            phaseChecklist={this._checkList}
             onDismiss={_ => this.setState({ confirmPhase: null })}
             onChangePhase={this._onChangePhase.bind(this)} />
         )}
@@ -127,20 +138,19 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
     try {
       Logger.log({ message: `(ProjectPhases) _onChangePhase: Changing phase to ${phase.name}`, level: LogLevel.Info });
       this.setState({ isChangingPhase: true });
-      await this._updatePhase(phase);
+      await SPDataAdapter.project.updatePhase(phase, this.state.data.phaseTextField);
       await this._modifyDocumentViews(phase.name);
       sessionStorage.clear();
       this.setState({ data: { ...this.state.data, currentPhase: phase }, confirmPhase: null, isChangingPhase: false });
       if (this.props.automaticReload) {
         window.setTimeout(() => {
-          document.location.href = this.props.pageContext.web.absoluteUrl;
+          document.location.href = this.props.webUrl;
         }, (this.props.reloadTimeout * 5000));
       } else {
         Logger.log({ message: '(ProjectPhases) _onChangePhase: Successfully changed phase. Automatic reload is disabled.', level: LogLevel.Info });
       }
     } catch (error) {
       Logger.log({ message: '(ProjectPhases) _onChangePhase: Failed to change phase', level: LogLevel.Warning });
-      console.log(error);
       this.setState({ confirmPhase: null, isChangingPhase: false });
     }
   }
@@ -166,111 +176,28 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
     }
   }
 
-  /**
-   * Fetch check point data
-   */
-  private async _fetchChecklistData(): Promise<ChecklistData> {
-    try {
-      const items = await this._checkList
-        .items
-        .select(
-          'ID',
-          'Title',
-          'GtComment',
-          'GtChecklistStatus',
-          'GtProjectPhase'
-        )
-        .get<IPhaseChecklistItem[]>();
-      const checklistData: ChecklistData = items
-        .filter(item => item.GtProjectPhase)
-        .reduce((obj, item) => {
-          const status = item.GtChecklistStatus.toLowerCase();
-          const termId = `/Guid(${item.GtProjectPhase.TermGuid})/`;
-          obj[termId] = obj[termId] ? obj[termId] : {};
-          obj[termId].stats = obj[termId].stats || {};
-          obj[termId].items = obj[termId].items || [];
-          obj[termId].items.push(item);
-          obj[termId].stats[status] = obj[termId].stats[status] ? obj[termId].stats[status] + 1 : 1;
-          return obj;
-        }, {});
-      return checklistData;
-    } catch (e) {
-      return {};
-    }
-  }
-
-  /**
-   * Fetch phase field context
-   * 
-   * @param {string} fieldName Field name for phase
-   */
-  private async _fetchPhaseFieldContext(fieldName: string) {
-    const [phaseField, textField] = await Promise.all([
-      sp.web.fields.getByInternalNameOrTitle(fieldName)
-        .select('TermSetId')
-        .usingCaching({
-          key: `projectphases_termsetid`,
-          storeName: 'session',
-          expiration: dateAdd(new Date(), 'day', 1),
-        }
-        ).get<{ TermSetId: string }>(),
-      sp.web.fields.getByInternalNameOrTitle(`${fieldName}_0`)
-        .select('InternalName')
-        .usingCaching({
-          key: `projectphases_phasetextfield`,
-          storeName: 'session',
-          expiration: dateAdd(new Date(), 'day', 1),
-        })
-        .get<{ InternalName: string }>(),
-    ]);
-    return { termSetId: phaseField.TermSetId, phaseTextField: textField.InternalName };
-  }
-
   /***
    * Fetch phase terms
    */
   private async _fetchData(): Promise<IProjectPhasesData> {
     try {
-      const { termSetId, phaseTextField } = await this._fetchPhaseFieldContext(this.props.phaseField);
-      const [phaseTerms, entityItem, checklistData] = await Promise.all([
-        taxonomy.getDefaultSiteCollectionTermStore()
-          .getTermSetById(termSetId)
-          .terms
-          .select('Id', 'Name', 'LocalCustomProperties')
-          .usingCaching({
-            key: `projectphases_terms`,
-            storeName: 'session',
-            expiration: dateAdd(new Date(), 'day', 1),
-          }).get(),
-        this.props.spEntityPortalService.getEntityItem(this.props.pageContext.site.id.toString()),
-        this._fetchChecklistData(),
+      const [phaseFieldCtx, checklistData] = await Promise.all([
+        SPDataAdapter.getTermFieldContext(this.props.phaseField),
+        SPDataAdapter.project.getChecklistData(strings.PhaseChecklistName),
       ]);
-
-      let phases = phaseTerms.map(term => new Phase(term.Name, term.Id, checklistData[term.Id], term.LocalCustomProperties));
-
-      let currentPhase: Phase = null;
-      if (entityItem && entityItem.GtProjectPhase) {
-        [currentPhase] = phases.filter(p => p.id.indexOf(entityItem.GtProjectPhase.TermGuid) !== -1);
-      }
+      const [phases, currentPhaseName] = await Promise.all([
+        SPDataAdapter.project.getPhases(phaseFieldCtx.termSetId, checklistData),
+        SPDataAdapter.project.getCurrentPhaseName(),
+      ]);
       Logger.log({ message: '(ProjectPhases) _fetchData: Successfully fetch phases', level: LogLevel.Info });
-      return { currentPhase, phases, phaseTextField };
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  /**
-   * Update phase
-   * 
-   * @param {Phase} phase Phase
-   */
-  private async _updatePhase(phase: Phase): Promise<void> {
-    let properties = { [this.state.data.phaseTextField]: phase.toString() };
-    Logger.log({ message: '(ProjectPhases) _updatePhase: Updating phase on entity item', data: properties, level: LogLevel.Info });
-    try {
-      await this.props.spEntityPortalService.updateEntityItem(this.props.pageContext.site.id.toString(), properties);
+      let [currentPhase] = phases.filter(p => p.name === currentPhaseName);
+      return {
+        currentPhase,
+        phases,
+        phaseTextField: phaseFieldCtx.phaseTextField,
+      };
     } catch (error) {
-      throw error;
+      throw new Error();
     }
   }
 }

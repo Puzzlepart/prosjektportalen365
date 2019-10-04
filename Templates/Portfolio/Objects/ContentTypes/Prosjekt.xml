@@ -21,5 +21,6 @@
         <pnp:FieldRef ID="167aef39-147b-40e1-befa-c1982af39d71" Name="GtGroupId" />
         <pnp:FieldRef ID="fba7ced6-9970-4b14-ab9c-7c809310d86d" Name="GtSiteId" />
         <pnp:FieldRef ID="871c1234-9ac5-4841-8b56-50839c34a7a1" Name="GtSiteUrl" />
+        <pnp:FieldRef ID="5e2506aa-1fe1-4be6-8b45-2e94eb9afdd0" Name="GtLastSyncTime" />
     </pnp:FieldRefs>
 </pnp:ContentType>

@@ -5,24 +5,24 @@
     "project-status-web-part": {
       "components": [
         {
-          "entrypoint": "./lib/webparts/projectStatus/ProjectStatusWebPart.js",
-          "manifest": "./src/webparts/projectStatus/ProjectStatusWebPart.manifest.json"
+          "entrypoint": "./lib/webparts/projectStatus/index.js",
+          "manifest": "./src/webparts/projectStatus/manifest.json"
         }
       ]
     },
     "project-phases-web-part": {
       "components": [
         {
-          "entrypoint": "./lib/webparts/projectPhases/ProjectPhasesWebPart.js",
-          "manifest": "./src/webparts/projectPhases/ProjectPhasesWebPart.manifest.json"
+          "entrypoint": "./lib/webparts/projectPhases/index.js",
+          "manifest": "./src/webparts/projectPhases/manifest.json"
         }
       ]
     },
     "project-information-web-part": {
       "components": [
         {
-          "entrypoint": "./lib/webparts/projectInformation/ProjectInformationWebPart.js",
-          "manifest": "./src/webparts/projectInformation/ProjectInformationWebPart.manifest.json"
+          "entrypoint": "./lib/webparts/projectInformation/index.js",
+          "manifest": "./src/webparts/projectInformation/manifest.json"
         }
       ]
     }

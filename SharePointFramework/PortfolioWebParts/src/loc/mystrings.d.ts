@@ -9,7 +9,6 @@ declare interface IPortfolioWebPartsStrings {
   SortAscLabel: string;
   ColumSettingsLabel: string;
   AdvancedGroupName: string;
-  StatusReportsListNameLabel: string;
   ActorsLabel: string;
   BasicGroupName: string;
   BenefitResponsibleLabel: string;
@@ -65,7 +64,6 @@ declare interface IPortfolioWebPartsStrings {
   ProbabilityLabel: string;
   ProbabilityPostActionLabel: string;
   ProjectInfoFilterFieldLabel: string;
-  StatusReportsLinkUrlTemplateLabel: string;
   ProjectInformationGroupName: string;
   StatusReportsCountLabel: string;
   ProjectLinkText: string;
@@ -103,6 +101,7 @@ declare interface IPortfolioWebPartsStrings {
   UnitLabel: string;
   ViewNotFoundMessage: string;
   ViewsListNameLabel: string;
+  ProjectsListName: string;
 }
 
 declare module 'PortfolioWebPartsStrings' {

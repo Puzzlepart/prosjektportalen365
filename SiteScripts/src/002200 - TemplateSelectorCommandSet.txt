@@ -6,7 +6,7 @@
             "title": "TemplateSelectorCommandSet",
             "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
             "clientSideComponentId": "c9080212-e63e-47cc-8278-00ad38c3f5a5",
-            "clientSideComponentProperties": "{}",
+            "clientSideComponentProperties": "{\"templateLibrary\": \"Malbibliotek\"}",
             "registrationId": "101",
             "registrationType": "List",
             "scope": "Web"

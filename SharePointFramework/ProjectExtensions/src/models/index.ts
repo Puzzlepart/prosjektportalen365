@@ -1,4 +1,4 @@
-export { ProjectTemplate } from './ProjectTemplate';
-export { ListContentConfig } from './ListContentConfig';
-export { TemplateFile } from './TemplateFile';
-export { IDocumentLibrary } from './IDocumentLibrary';
+export * from './ProjectTemplate';
+export * from './ListContentConfig';
+export * from './TemplateFile';
+export * from './IDocumentLibrary';

@@ -1,23 +1,25 @@
-import { override } from '@microsoft/decorators';
-import { task } from 'decorators/task';
-import * as strings from 'ProjectSetupApplicationCustomizerStrings';
-import initSpfxJsom, { ExecuteJsomQuery, JsomContext } from 'spfx-jsom';
-import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
-import { BaseTaskError } from '../BaseTaskError';
-import { IBaseTaskParams } from '../IBaseTaskParams';
+import { IProjectSetupData } from 'extensions/projectSetup';
+import * as strings from 'ProjectExtensionsStrings';
+import { ExecuteJsomQuery } from 'spfx-jsom';
+import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask';
+import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction';
 
-@task('SetTaxonomyFields')
-export default class SetTaxonomyFields extends BaseTask {
+export class SetTaxonomyFields extends BaseTask {
+    public taskName = 'SetTaxonomyFields';
+
+    constructor(data: IProjectSetupData) {
+     super(data);
+    }
+
     /**
      * Execute CopyListData
      * 
      * @param {IBaseTaskParams} params Task parameters 
      * @param {OnProgressCallbackFunction} onProgress On progress function
      */
-    @override
     public async execute(params: IBaseTaskParams, _onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
-            const { jsomContext, defaultTermStore } = await initSpfxJsom(params.context.pageContext.site.absoluteUrl, { loadTaxonomy: true });
+            let { spfxJsomContext: { jsomContext, defaultTermStore } } = params;
             await ExecuteJsomQuery(jsomContext, [{ clientObject: defaultTermStore, exps: 'Id' }]);
             this.logInformation(`Retrieved ID ${defaultTermStore.get_id()} for default term store`);
             Object.keys(params.properties.termSetIds).forEach(fieldName => {
@@ -32,7 +34,7 @@ export default class SetTaxonomyFields extends BaseTask {
             await ExecuteJsomQuery(jsomContext);
             return params;
         } catch (error) {
-            throw new BaseTaskError(this.name, strings.SetTaxonomyFieldsErrorMessage, error);
+            throw new BaseTaskError(this.taskName, strings.SetTaxonomyFieldsErrorMessage, error);
         }
     }
 }

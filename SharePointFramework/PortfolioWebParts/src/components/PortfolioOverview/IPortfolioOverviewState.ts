@@ -1,8 +1,8 @@
 import { IFetchDataForViewItemResult } from 'data/IFetchDataForViewResult';
-import { PortfolioOverviewColumn, PortfolioOverviewView } from 'models';
 import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { IFilterProps } from '../';
 import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage';
+import { PortfolioOverviewView, ProjectColumn } from 'shared/lib/models';
 
 export interface IPortfolioOverviewState {
     /**
@@ -28,7 +28,7 @@ export interface IPortfolioOverviewState {
     /**
      * @todo describe property
      */
-    columns?: PortfolioOverviewColumn[];
+    columns?: ProjectColumn[];
 
     /**
      * @todo describe property
@@ -63,12 +63,12 @@ export interface IPortfolioOverviewState {
     /**
      * @todo describe property
      */
-    groupBy?: PortfolioOverviewColumn;
+    groupBy?: ProjectColumn;
 
     /**
      * @todo describe property
      */
-    sortBy?: PortfolioOverviewColumn;
+    sortBy?: ProjectColumn;
 
     /**
      * @todo describe property

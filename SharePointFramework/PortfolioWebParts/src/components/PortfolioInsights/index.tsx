@@ -1,4 +1,4 @@
-import { ChartData, ChartDataItem, PortfolioOverviewView } from 'models';
+import { ChartData, ChartDataItem } from 'models';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'PortfolioWebPartsStrings';
@@ -9,6 +9,7 @@ import { IPortfolioInsightsProps } from './IPortfolioInsightsProps';
 import { IPortfolioInsightsState } from './IPortfolioInsightsState';
 import styles from './PortfolioInsights.module.scss';
 import PortfolioInsightsCommandBar from './PortfolioInsightsCommandBar';
+import { PortfolioOverviewView } from 'shared/lib/models';
 
 export default class PortfolioInsights extends React.Component<IPortfolioInsightsProps, IPortfolioInsightsState> {
   public static defaultProps: Partial<IPortfolioInsightsProps> = {};
@@ -25,7 +26,7 @@ export default class PortfolioInsights extends React.Component<IPortfolioInsight
 
   public async componentDidMount() {
     try {
-      const configuration = await this.props.dataAdapter.getPortfolioConfig(this.props.columnConfigListName, this.props.columnsListName, this.props.viewsListName);
+     const configuration = await this.props.dataAdapter.getPortfolioConfig();
       const currentView = configuration.views[0];
       const { charts, chartData, contentTypes } = await this.props.dataAdapter.fetchChartData(
         currentView,
