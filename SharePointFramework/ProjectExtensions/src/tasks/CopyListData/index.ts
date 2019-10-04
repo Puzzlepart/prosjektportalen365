@@ -1,5 +1,5 @@
 import { TypedHash } from '@pnp/common';
-import { List, sp } from '@pnp/sp';
+import { List, sp, SPBatch } from '@pnp/sp';
 import { IProjectSetupData } from 'extensions/projectSetup';
 import * as strings from 'ProjectExtensionsStrings';
 import { SPField } from 'shared/lib/models/SPField';
@@ -81,8 +81,9 @@ export class CopyListData extends BaseTask {
      * 
      * @param {ListContentConfig} listContentConfig List config
      * @param {OnProgressCallbackFunction} onProgress On progress function
+     * @param {number} batchChunkSize Batch chunk size
      */
-    private async _processListItems(listContentConfig: ListContentConfig, onProgress: OnProgressCallbackFunction) {
+    private async _processListItems(listContentConfig: ListContentConfig, onProgress: OnProgressCallbackFunction, batchChunkSize: number = 25) {
         try {
             this.logInformation('Processing list items', { listConfig: listContentConfig });
             let destList = sp.web.lists.getByTitle(listContentConfig.destinationList);
@@ -93,11 +94,15 @@ export class CopyListData extends BaseTask {
             ]);
             let progressText = formatString(strings.CopyListDataText, sourceItems.length, listContentConfig.sourceList, listContentConfig.destinationLibrary || listContentConfig.destinationList);
             onProgress(progressText, '', 'List');
-            for (let i = 0; i < sourceItems.length; i++) {
-                let properties = this._getProperties(listContentConfig.fields, sourceItems[i], sourceFields);
-                this.logInformation(`Processing list item ${i + 1}`, { properties, TaxCatchAll: sourceItems[i].TaxCatchAll });
-                onProgress(progressText, formatString(strings.ProcessListItemText, i + 1, sourceItems.length), 'List');
-                await destList.items.add(properties, listEntityType);
+
+            let itemsToAdd = sourceItems.map(itm => this._getProperties(listContentConfig.fields, itm, sourceFields));
+
+            for (let i = 0, j = 0, batch = sp.createBatch(); i < itemsToAdd.length; i += batchChunkSize, j++) {
+                let batchItems = itemsToAdd.slice(i, i + batchChunkSize);
+                this.logInformation(`Processing batch ${j + 1} with ${batchItems.length} items`, {});
+                onProgress(progressText, formatString(strings.ProcessListItemText, j + 1, batchItems.length), 'List');
+                batchItems.forEach(item => destList.items.inBatch(batch).add(item, listEntityType));
+                await batch.execute();
             }
         } catch (error) {
             throw error;

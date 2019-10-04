@@ -67,7 +67,7 @@ define([], function () {
     CreatingLocalProjectPropertiesListItemText: 'Oppretter element for prosjektegenskaper',
     ProvisionSiteFieldText: 'Opprettet feltet {0} på området',
     CreatingPlannerTaskText: 'Oppretter oppgaver for {0}',
-    ProcessListItemText: 'Kopierer listeelement {0} av {1}',
+    ProcessListItemText: 'Prosesserer batch {0} med {1} listeelementer',
     PhaseLabel: 'Fase'
   }
 });

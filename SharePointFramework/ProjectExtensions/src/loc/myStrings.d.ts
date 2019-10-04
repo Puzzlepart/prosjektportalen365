@@ -1,8 +1,8 @@
 declare interface IProjectExtensionsStrings {
-    ApplyExtensionText: any;
-    ProcessListItemText: any;
-    CreatingPlannerTaskText: any;
-    ProvisionSiteFieldText: any;
+  ApplyExtensionText: string;
+  ProcessListItemText: string;
+  CreatingPlannerTaskText: string;
+  ProvisionSiteFieldText: string;
   ProgressDialogSubText: string;
   ApplyTemplateText: string;
   ApplyingExtensionsText: string;
