@@ -61,7 +61,6 @@ define([], function () {
     PhaseTermSetIdFieldLabel: 'Termsett ID for Fase',
     ProbabilityLabel: 'Sannsynlighet (S)',
     ProbabilityPostActionLabel: 'S etter tiltak',
-    ProjectInfoFilterFieldLabel: 'Filtreringsfelt',
     ProjectInformationGroupName: 'Instillinger for Prosjektinformasjon-vindu',
     ProjectLinkText: 'Gå til prosjektområde',
     ProjectManager: 'Prosjektleder',

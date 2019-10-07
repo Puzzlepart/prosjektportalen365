@@ -11,11 +11,11 @@ import { ProjectProperty } from './ProjectProperty';
 export class ProjectProperties extends React.PureComponent<IProjectPropertiesProps> {
     public render(): React.ReactElement<IProjectPropertiesProps> {
         switch (this.props.displayMode) {
-            case DisplayMode.Read: {
-                return this._renderReadMode();
-            }
             case DisplayMode.Edit: {
                 return this._renderEditMode();
+            }
+            default: {
+                return this._renderReadMode();
             }
         }
     }

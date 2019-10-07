@@ -70,6 +70,8 @@ declare interface IProjectExtensionsStrings {
   SyncLocalProjectPropertiesListText: string;
   CreatingLocalProjectPropertiesListItemText: string;
   PhaseLabel: string;
+  SetupAbortedText: string;
+  UnknownErrorText: string;
 }
 
 declare module 'ProjectExtensionsStrings' {

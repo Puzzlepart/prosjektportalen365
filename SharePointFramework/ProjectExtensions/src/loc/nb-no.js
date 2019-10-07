@@ -70,6 +70,8 @@ define([], function () {
     ProcessListItemText: 'Prosesserer batch {0} med {1} listeelementer',
     PhaseLabel: 'Fase',
     IncludeStandardFoldersDescription: 'Inkluder standardmapper for dokumentbiblioteket. Det opprettes en mappe per prosjetktfase.',
-    CopyPlannerTasksDescription: 'Opprett en plan for prosjektet i Planner og opprett buckets og oppgaver for denne.'
+    CopyPlannerTasksDescription: 'Opprett en plan for prosjektet i Planner og opprett buckets og oppgaver for denne.',
+    SetupAbortedText: 'Installasjon avbrutt av bruker',
+    UnknownErrorText: 'Ukjent feil'    
   }
 });

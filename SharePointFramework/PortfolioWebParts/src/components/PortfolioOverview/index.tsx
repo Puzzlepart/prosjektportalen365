@@ -116,7 +116,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
             siteId={this.state.showProjectInfo.SiteId}
             webUrl={this.props.pageContext.site.absoluteUrl}
             hubSite={{ web: new Web(this.props.pageContext.site.absoluteUrl), url: this.props.pageContext.site.absoluteUrl }}
-            filterField={this.props.projectInfoFilterField}
+            page='Portfolio'
             statusReportsCount={this.props.statusReportsCount} />
         )}
       </div>

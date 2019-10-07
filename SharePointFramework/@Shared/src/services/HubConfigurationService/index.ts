@@ -1,5 +1,5 @@
 import { CamlQuery, List, Web, } from '@pnp/sp';
-import { TypedHash, dateAdd } from '@pnp/common';
+import { TypedHash, dateAdd, stringIsNullOrEmpty } from '@pnp/common';
 import { default as initSpfxJsom, ExecuteJsomQuery } from 'spfx-jsom';
 import { transformFieldXml } from '../../helpers/transformFieldXml';
 import { ProjectColumnConfig, SPProjectColumnConfigItem, SPProjectColumnItem, StatusReport, SectionModel, ProjectColumn, PortfolioOverviewView, SPPortfolioOverviewViewItem, SPField } from '../../models';
@@ -7,11 +7,15 @@ import { ISPField, ISPContentType } from '../../interfaces';
 import { HubConfigurationServiceDefaultConfiguration, IHubConfigurationServiceConfiguration, HubConfigurationServiceList } from './IHubConfigurationServiceConfiguration';
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute';
 
-
 export class HubConfigurationService {
     private _configuration: IHubConfigurationServiceConfiguration;
     private _web: Web;
 
+    /**
+     * Configure HubConfigurationService
+     * 
+     * @param {IHubConfigurationServiceConfiguration} configuration Configuration for HubConfigurationService
+     */
     public configure(configuration: IHubConfigurationServiceConfiguration): HubConfigurationService {
         this._configuration = { ...HubConfigurationServiceDefaultConfiguration, ...configuration };
         if (typeof this._configuration.urlOrWeb === 'string') {
@@ -39,11 +43,6 @@ export class HubConfigurationService {
     public async getProjectStatusSections(): Promise<SectionModel[]> {
         let items = await this._web.lists.getByTitle(this._configuration.listNames.STATUS_SECTIONS).items.get();
         return items.map(item => new SectionModel(item));
-    }
-
-    public async addStatusReport(properties: TypedHash<string>): Promise<number> {
-        let itemAddResult = await this._web.lists.getByTitle(this._configuration.listNames.STATUS_SECTIONS).items.add(properties);
-        return itemAddResult.data.Id;
     }
 
     public async updateStatusReport(id: number, properties: TypedHash<string>): Promise<void> {
@@ -94,18 +93,18 @@ export class HubConfigurationService {
      * @param {TypedHash} properties Create a new item in the list with specified properties if the list was created
      */
     public async syncList(url: string, listName: string, contentTypeId: string, properties?: TypedHash<string>) {
+        const targetWeb = new Web(url);
         const { jsomContext } = await initSpfxJsom(url, { loadTaxonomy: true });
-        const [contentType, siteFields, ensureList] = await Promise.all([
-            this._getHubContentType(this._web, contentTypeId),
-            this._getSiteFields(new Web(url)),
-            new Web(url).lists.ensure(listName, undefined, 100, false, { Hidden: true, EnableAttachments: false }),
+        const [sourceContentType, targetSiteFields, ensureList] = await Promise.all([
+            this._getHubContentType(contentTypeId),
+            this._getSiteFields(targetWeb),
+            targetWeb.lists.ensure(listName, '', 100, false, { Hidden: true, EnableAttachments: false }),
         ]);
-        const listFields = await this.getListFields(ensureList.data.Title);
+        const listFields = await this.getListFields(listName, undefined, targetWeb);
         const spList = jsomContext.web.get_lists().getByTitle(listName);
-        for (let field of contentType.Fields) {
-            let [listField] = listFields.filter(fld => fld.InternalName === field.InternalName);
+        for (let field of sourceContentType.Fields) {
+            let [[listField], [siteField]] = [listFields.filter(fld => fld.InternalName === field.InternalName), targetSiteFields.filter(fld => fld.InternalName === field.InternalName)];
             if (listField) continue;
-            let [siteField] = siteFields.filter(fld => fld.InternalName === field.InternalName);
             try {
                 if (siteField) {
                     let spSiteField = jsomContext.web.get_fields().getByInternalNameOrTitle(siteField.InternalName);
@@ -127,11 +126,10 @@ export class HubConfigurationService {
     /**
      * Get hub content type
      * 
-     * @param {Web} web Web
      * @param {string} contentTypeId Content type ID
      */
-    private async _getHubContentType(web: Web, contentTypeId: string): Promise<ISPContentType> {
-        let contentType = await web.contentTypes
+    private async _getHubContentType(contentTypeId: string): Promise<ISPContentType> {
+        let contentType = await this._web.contentTypes
             .getById(contentTypeId)
             .select('StringId', 'Name', 'Fields/InternalName', 'Fields/Title', 'Fields/SchemaXml', 'Fields/InternalName')
             .expand('Fields')
@@ -171,16 +169,28 @@ export class HubConfigurationService {
      */
     public async getHubItems<T>(listName: string, constructor: new (item: any, web: Web) => T, query?: CamlQuery, expands?: string[]): Promise<T[]> {
         try {
+            let list = this._web.lists.getByTitle(listName);
             let items: any[];
             if (query) {
-                items = await this._web.lists.getByTitle(listName).usingCaching().usingCaching().getItemsByCAMLQuery(query, ...expands);
+                items = await list.usingCaching().getItemsByCAMLQuery(query, ...expands);
             } else {
-                items = await this._web.lists.getByTitle(listName).usingCaching().items.usingCaching().get();
+                items = await list.usingCaching().items.usingCaching().get();
             }
             return items.map(item => new constructor(item, this._web));
         } catch (error) {
             throw error;
         }
+    }
+
+
+    /**
+     * Add status report
+     * 
+     * @param {TypedHash} properties Properties
+     */
+    public async addStatusReport(properties: TypedHash<string>): Promise<number> {
+        let itemAddResult = await this._web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS).items.add(properties);
+        return itemAddResult.data.Id;
     }
 
     /**
@@ -189,20 +199,19 @@ export class HubConfigurationService {
      * @param {string} filter Filter
      * @param {number} top Number of reports to retrieve
      * @param {string{}} select Fields to retrieve
+     * @param {string[]} expand Expand
      */
-    public async getStatusReports(filter: string = `GtSiteId eq '${this._configuration.siteId}'`, top?: number, select?: string[]): Promise<StatusReport[]> {
-        if (!this._configuration.siteId) {
-            throw 'Property siteId missing in configuration';
-        }
+    public async getStatusReports(filter: string = '', top?: number, select?: string[], expand: string[] = ['FieldValuesAsText']): Promise<StatusReport[]> {
+        if (!this._configuration.siteId) throw 'Property {siteId} missing in configuration';
+        if (stringIsNullOrEmpty(filter)) filter = `GtSiteId eq '${this._configuration.siteId}'`;
         try {
             let items = this._web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
                 .items
                 .filter(filter)
+                .expand(...expand)
                 .orderBy('Id', false);
-
             if (top) items = items.top(top);
             if (select) items = items.select(...select);
-
             return (await items.get()).map(i => new StatusReport(i));
         } catch (error) {
             throw error;
@@ -233,9 +242,10 @@ export class HubConfigurationService {
      * 
      * @param {HubConfigurationServiceList | string} list List
      * @param {string} filter Filter 
+     * @param {Web} web Web 
      */
-    public async getListFields(list: HubConfigurationServiceList | string, filter?: string): Promise<SPField[]> {
-        let fields = this._web.lists.getByTitle(this._configuration.listNames[list] || list)
+    public async getListFields(list: HubConfigurationServiceList | string, filter?: string, web: Web = this._web): Promise<SPField[]> {
+        let fields = web.lists.getByTitle(this._configuration.listNames[list] || list)
             .fields
             .select(...Object.keys(new SPField()));
         if (filter) {

@@ -8,11 +8,6 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
     configuration: IPortfolioConfiguration;
 
     /**
-     * Filter field for <ProjectInformationModal />
-     */
-    projectInfoFilterField?: string;  
-
-    /**
      * List name for column config
      */
     columnConfigListName: string;

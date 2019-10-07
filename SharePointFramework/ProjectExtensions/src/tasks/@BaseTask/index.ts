@@ -2,12 +2,7 @@ import { Logger, LogLevel } from '@pnp/logging';
 import { IProjectSetupData } from 'extensions/projectSetup';
 import { IBaseTaskParams } from './IBaseTaskParams';
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction';
-
-export interface IBaseTask {
-    params: IBaseTaskParams;
-    taskName: string;
-    execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams>;
-}
+import { IBaseTask } from './IBaseTask';
 
 // tslint:disable-next-line: naming-convention
 export abstract class BaseTask implements IBaseTask {
@@ -66,5 +61,6 @@ export abstract class BaseTask implements IBaseTask {
     }
 }
 
+export * from './IBaseTask';
 export * from './BaseTaskError';
 export * from './IBaseTaskParams';

@@ -1,8 +1,16 @@
-import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { parseErrorStack } from 'shared/lib/helpers/parseErrorStack';
 
 export class ProjectSetupError extends Error {
-    constructor(message: string, stack: string, public type = MessageBarType.error) {
+    /**
+     * Creates a new instance of ProjectSetupError
+     * 
+     * @param {string} taskName Task name
+     * @param {string} message Message
+     * @param {string} stack Stack
+     */
+    constructor(taskName: string, message: string, stack: any) {
         super(message);
-        this.stack = stack;
+        this.name = taskName;
+        this.stack = parseErrorStack(stack);
     }
 }

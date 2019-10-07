@@ -4,9 +4,9 @@ import { ActionType } from './Actions/ActionType';
 
 export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   /**
-   * Filter field for project properties
+   * Page
    */
-  filterField: string;
+  page: 'Frontpage' | 'ProjectStatus' | 'Portfolio';
 
   /**
    * Hide actions for the web part

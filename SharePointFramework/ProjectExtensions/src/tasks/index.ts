@@ -1,4 +1,5 @@
 import { IProjectSetupData } from 'extensions/projectSetup';
+import { IBaseTask } from './@BaseTask';
 import { ApplyTemplate } from './ApplyTemplate';
 import { CopyListData } from './CopyListData';
 import { PlannerConfiguration } from './PlannerConfiguration';
@@ -6,7 +7,6 @@ import { PreTask } from './PreTask';
 import { ProvisionSiteFields } from './ProvisionSiteFields';
 import { SetTaxonomyFields } from './SetTaxonomyFields';
 import { SetupProjectInformation } from './SetupProjectInformation';
-import { IBaseTask } from './@BaseTask';
 
 const tasks: (new (data: IProjectSetupData) => IBaseTask)[] = [
     PreTask,

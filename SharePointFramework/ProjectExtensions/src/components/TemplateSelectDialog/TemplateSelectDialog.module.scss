@@ -5,7 +5,6 @@
   max-width: 750px !important;
   .content {
     min-height: 300px;
-    overflow: hidden;
   }  
   .infoText {
     @include ms-Grid-col;

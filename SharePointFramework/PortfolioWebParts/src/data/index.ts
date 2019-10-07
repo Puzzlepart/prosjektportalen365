@@ -62,13 +62,12 @@ export class DataAdapter {
     }
 
     public async getPortfolioConfig(): Promise<IPortfolioConfiguration> {
-        let [columnConfig, columns, views, viewsUrls, columnUrls, showFields] = await Promise.all([
+        let [columnConfig, columns, views, viewsUrls, columnUrls] = await Promise.all([
             this._hubConfigurationService.getProjectColumnConfig(),
             this._hubConfigurationService.getProjectColumns(),
             this._hubConfigurationService.getPortfolioOverviewViews(),
             this._hubConfigurationService.getListFormUrls('PORTFOLIO_VIEWS'),
             this._hubConfigurationService.getListFormUrls('PROJECT_COLUMNS'),
-            this._hubConfigurationService.getProjectColumnFields(`substringof('GtShowField', InternalName)`),
         ]);
         columns = columns.map(col => col.configure(columnConfig));
         let refiners = columns.filter(col => col.isRefinable);
@@ -79,7 +78,6 @@ export class DataAdapter {
             views,
             viewsUrls,
             columnUrls,
-            showFields,
         };
     }
 

@@ -1,6 +1,5 @@
 import { Web } from '@pnp/sp';
 import { ProjectInformation } from 'components/ProjectInformation';
-import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import { StatusElement } from '../../StatusElement';
 import { IStatusElementProps } from '../../StatusElement/IStatusElementProps';
@@ -25,7 +24,7 @@ export class SummarySection extends BaseSection<ISummarySectionProps, ISummarySe
             hubSite={{ web: new Web(this.props.hubSiteUrl), url: this.props.hubSiteUrl }}
             siteId={this.props.siteId}
             webUrl={this.props.webUrl}
-            filterField='GtShowFieldProjectStatus'
+            page='ProjectStatus'
             hideActions={true} />
         </div>
         <div className={styles.sections}>

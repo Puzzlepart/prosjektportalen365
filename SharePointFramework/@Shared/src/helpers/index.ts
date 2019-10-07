@@ -12,3 +12,4 @@ export * from './makeUrlAbsolute';
 export * from './isNull';
 export * from './isEmpty';
 export * from './transformFieldXml';
+export { parseErrorStack } from './parseErrorStack';

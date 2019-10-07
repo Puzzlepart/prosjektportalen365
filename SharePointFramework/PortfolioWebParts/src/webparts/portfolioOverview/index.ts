@@ -2,14 +2,12 @@ import { IPropertyPaneConfiguration, IPropertyPaneDropdownOption, PropertyPaneDr
 import { IPortfolioOverviewProps, PortfolioOverview } from 'components';
 import { IPortfolioConfiguration } from 'interfaces';
 import * as strings from 'PortfolioWebPartsStrings';
-import { HubConfigurationService } from 'shared/lib/services/HubConfigurationService';
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
 
 export const PROPERTYPANE_CONFIGURATION_PROPS = {
   COLUMN_CONFIG_LISTNAME: 'columnConfigListName',
   COLUMNS_LISTNAME: 'columnsListName',
   DEFAULT_VIEW_ID: 'defaultViewId',
-  PROJECTINFO_FILTER_FIELD: 'projectInfoFilterField',
   STATUSREPORTS_COUNT: 'statusReportsCount',
   SHOW_COMMANDBAR: 'showCommandBar',
   SHOW_EXCELEXPORT_BUTTON: 'showExcelExportButton',
@@ -39,12 +37,6 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
    */
   protected _getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
     switch (targetProperty) {
-      case PROPERTYPANE_CONFIGURATION_PROPS.PROJECTINFO_FILTER_FIELD: {
-        if (this._configuration) {
-          return [{ key: null, text: '' }, ...this._configuration.showFields.map(fld => ({ key: fld.InternalName, text: fld.Title }))];
-        }
-      }
-        break;
       case PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID: {
         if (this._configuration) {
           return [{ key: null, text: '' }, ...this._configuration.views.map(view => ({ key: view.id, text: view.title }))];
@@ -99,10 +91,6 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
             {
               groupName: strings.ProjectInformationGroupName,
               groupFields: [
-                PropertyPaneDropdown(PROPERTYPANE_CONFIGURATION_PROPS.PROJECTINFO_FILTER_FIELD, {
-                  label: strings.ProjectInfoFilterFieldLabel,
-                  options: this._getOptions(PROPERTYPANE_CONFIGURATION_PROPS.PROJECTINFO_FILTER_FIELD),
-                }),
                 PropertyPaneSlider(PROPERTYPANE_CONFIGURATION_PROPS.STATUSREPORTS_COUNT, {
                   label: strings.StatusReportsCountLabel,
                   min: 0,

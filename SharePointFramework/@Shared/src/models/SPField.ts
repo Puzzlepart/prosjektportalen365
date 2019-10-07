@@ -5,4 +5,5 @@ export class SPField {
     public Title?: string = '';
     public SchemaXml: string = '';
     public TypeAsString?: string = '';
+    public Hidden?: boolean = false;
 }

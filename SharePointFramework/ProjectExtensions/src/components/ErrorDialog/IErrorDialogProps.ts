@@ -1,9 +1,14 @@
-import { ProjectSetupError } from '../../extensions/projectSetup/ProjectSetupError';
 import { IBaseDialogProps } from '../@BaseDialog/IBaseDialogProps';
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 
 export interface IErrorDialogProps extends IBaseDialogProps {
     /**
-     * @todo Describe property
+     * Error object
      */
-    error: ProjectSetupError;
+    error: Error;
+
+    /**
+     * Message type
+     */
+    messageType?: MessageBarType;
 }

@@ -1,5 +1,5 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
-import { dateAdd, PnPClientStorage, PnPClientStore, TypedHash } from '@pnp/common';
+import { dateAdd, PnPClientStorage, PnPClientStore, TypedHash, stringIsNullOrEmpty } from '@pnp/common';
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator';
@@ -24,7 +24,7 @@ import { ProjectProperty, ProjectPropertyModel } from './ProjectProperties/Proje
 import { StatusReports } from './StatusReports';
 
 export class ProjectInformation extends BaseWebPartComponent<IProjectInformationProps, IProjectInformationState> {
-  public static defaultProps: Partial<IProjectInformationProps> = { statusReportsCount: 0 };
+  public static defaultProps: Partial<IProjectInformationProps> = { statusReportsCount: 0, page: 'Frontpage' };
   private _hubConfigurationService: HubConfigurationService;
   private _storage: PnPClientStore;
 
@@ -75,7 +75,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
    */
   private get _contents() {
     if (this.state.isLoading) {
-      return <Spinner label={formatString(strings.LoadingText, this.props.title.toLowerCase())} />;
+      return !stringIsNullOrEmpty(this.props.title) ? <Spinner label={formatString(strings.LoadingText, this.props.title.toLowerCase())} /> : null;
     }
     if (this.state.error) {
       return (
@@ -155,20 +155,6 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
   }
 
   /**
-  * Get column config
-  */
-  private async _getColumnConfig() {
-    return this._storage.getOrPut('projectinformation_columnconfig', async () => {
-      try {
-        let columns = await this._hubConfigurationService.getProjectColumns();
-        return columns;
-      } catch (error) {
-        return [];
-      }
-    }, dateAdd(new Date(), 'minute', 30));
-  }
-
-  /**
   * Transform properties from entity item and configuration
   *
   * @param {TypedHash} fieldValuesText Field values as text
@@ -179,9 +165,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
       let [field] = data.fields.filter(fld => fld.InternalName === fieldName);
       if (field && data.columns.length === 0 && this.props.showFieldExternal[fieldName]) return true;
       let [column] = data.columns.filter(c => c.internalName === fieldName);
-      if (field && column) {
-        return this.props.filterField ? column[this.props.filterField] : true;
-      }
+      if (field && column) return column.isVisible(this.props.page);
       return false;
     });
     const properties = fieldNames.map(fieldName => {
@@ -197,7 +181,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
   private async _fetchData(): Promise<Partial<IProjectInformationState>> {
     try {
       const [columnConfig, propertiesData] = await Promise.all([
-        this._getColumnConfig(),
+        this._hubConfigurationService.getProjectColumns(),
         SPDataAdapter.project.getPropertiesData(),
       ]);
 

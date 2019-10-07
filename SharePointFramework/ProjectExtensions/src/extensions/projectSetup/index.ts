@@ -44,13 +44,13 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       switch (this._validation) {
         case ProjectSetupValidation.InvalidWebLanguage: {
           await this._deleteCustomizer(this.componentId, false);
-          throw new ProjectSetupError(strings.InvalidLanguageErrorMessage, strings.InvalidLanguageErrorStack);
+          throw new ProjectSetupError('onInit', strings.InvalidLanguageErrorMessage, strings.InvalidLanguageErrorStack);
         }
         case ProjectSetupValidation.NoHubConnection: {
-          throw new ProjectSetupError(strings.NoHubSiteErrorMessage, strings.NoHubSiteErrorStack, MessageBarType.severeWarning);
+          throw new ProjectSetupError('onInit', strings.NoHubSiteErrorMessage, strings.NoHubSiteErrorStack);
         }
         case ProjectSetupValidation.InvalidCulture: {
-          throw new ProjectSetupError(strings.SiteNotReadyErrorMessage, strings.SiteNotReadyErrorStack);
+          throw new ProjectSetupError('onInit', strings.SiteNotReadyErrorMessage, strings.SiteNotReadyErrorStack);
         }
       }
 
@@ -106,7 +106,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         },
         onDismiss: () => {
           this._unmount(placeholder);
-          reject(new ProjectSetupError('Installasjon avbrutt av bruker.', 'Installasjon avbrutt av bruker.'));
+          reject(new ProjectSetupError('_getProvisioningInfo', strings.SetupAbortedText, strings.SetupAbortedText));
         },
       });
       ReactDOM.render(element, placeholder);
@@ -223,7 +223,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         listContentConfig,
       };
     } catch (error) {
-      throw new ProjectSetupError(strings.GetSetupDataErrorMessage, strings.GetSetupDataErrorStack);
+      throw new ProjectSetupError('_fetchData', strings.GetSetupDataErrorMessage, strings.GetSetupDataErrorStack);
     }
   }
 

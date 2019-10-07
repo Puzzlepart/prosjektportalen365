@@ -35,7 +35,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       isLoading: true,
       newStatusCreated: document.location.hash === '#NewStatus',
     };
-    this._hubConfigurationService = new HubConfigurationService().configure({ urlOrWeb: props.hubSite.web });
+    this._hubConfigurationService = new HubConfigurationService().configure({ urlOrWeb: props.hubSite.web, siteId: props.siteId });
     this._spEntityPortalService = new SpEntityPortalService({
       portalUrl: this.props.hubSite.url,
       listName: strings.ProjectsListName,
@@ -46,9 +46,6 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   }
 
   public async componentDidMount() {
-    if (this.state.newStatusCreated) {
-      await this._associateStatusItem();
-    }
     try {
       const data = await this._fetchData();
       let selectedReport = data.reports[0];
@@ -60,7 +57,12 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       } else if (selectedReportUrlParam) {
         [selectedReport] = data.reports.filter(report => report.id === parseInt(selectedReportUrlParam, 10));
       }
-      this.setState({ data, selectedReport, sourceUrl: decodeURIComponent(sourceUrlParam || ''), isLoading: false });
+      this.setState({
+        data,
+        selectedReport: data.reports[0],
+        sourceUrl: decodeURIComponent(sourceUrlParam || ''),
+        isLoading: false,
+      });
     } catch (error) {
       this.setState({ error, isLoading: false });
     }
@@ -252,26 +254,6 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   }
 
   /**
-   * Associate status item
-   */
-  private async _associateStatusItem(): Promise<void> {
-    try {
-      const filter = `Author/EMail eq '${this.props.currentUserEmail}' and GtSiteId eq '00000000-0000-0000-0000-000000000000'`;
-      Logger.log({ message: `(ProjectStatus) _associateStatusItem: Attempting to find recently added report by current user '${this.props.currentUserEmail}'`, data: { filter }, level: LogLevel.Info });
-      let [item] = await this._hubConfigurationService.getStatusReports(filter, 1);
-      if (item) {
-        const report = new StatusReport(item);
-        Logger.log({ message: '(ProjectStatus) _associateStatusItem: Setting title for item', data: { filter }, level: LogLevel.Info });
-        await this._hubConfigurationService.updateStatusReport(report.id, {
-          Title: `${this.props.webTitle} (${formatDate(report.created, true)})`,
-          GtSiteId: this.props.siteId,
-        });
-      }
-    } catch (error) { }
-    document.location.hash = '#';
-  }
-
-  /**
    * Create new status report and send the user to the edit form
    * 
    * @param {React.MouseEvent} _ev Event
@@ -281,9 +263,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     const [previousReport] = this.state.data.reports;
     let properties = previousReport ? previousReport.statusValues : {};
     properties.Title = formatString(strings.NewStatusReportTitle, this.props.webTitle);
+    properties.GtSiteId = this.props.siteId;
     const newReportId = await this._hubConfigurationService.addStatusReport(properties);
-    const source = encodeURIComponent(`${window.location.href.split('#')[0]}#NewStatus`);
-    document.location.href = `${window.location.protocol}//${window.location.hostname}${this.state.data.reportEditFormUrl}?ID=${newReportId}&Source=${source}`;
+    document.location.href = `${window.location.protocol}//${window.location.hostname}${this.state.data.reportEditFormUrl}?ID=${newReportId}&Source=${encodeURIComponent(window.location.href)}`;
   }
 
   /**

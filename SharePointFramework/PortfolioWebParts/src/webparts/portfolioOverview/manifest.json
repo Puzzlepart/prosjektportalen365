@@ -24,7 +24,6 @@
             "officeFabricIconFontName": "FolderList",
             "properties": {
                 "title": "Porteføljeoversikt",
-                "projectInfoFilterField": "GtShowFieldPortfolio",
                 "statusReportsCount": 0,
                 "showCommandBar": true,
                 "showExcelExportButton": true,

@@ -8,9 +8,9 @@ export class StatusReport {
     /**
      * Creates a new instance of StatusReport
      * 
-     * @param {any} item SP item
+     * @param {TypedHash} item SP item
      */
-    constructor(private _item: any) {
+    constructor(private _item: TypedHash<any>) {
         this.id = _item.Id;
         this.created = new Date(_item.Created);
     }
@@ -45,7 +45,7 @@ export class StatusReport {
      * Field values
      */
     public get fieldValues(): TypedHash<string> {
-        return this._item;
+        return this._item.FieldValuesAsText || this._item;
     }
 
     /**

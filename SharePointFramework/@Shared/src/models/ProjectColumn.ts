@@ -29,7 +29,6 @@ export class SPProjectColumnItem {
     public GtIsGroupable: boolean = false;
 }
 
-
 export class ProjectColumn implements IColumn {
     public key: string;
     public fieldName: string;
@@ -39,9 +38,6 @@ export class ProjectColumn implements IColumn {
     public sortOrder?: number;
     public internalName?: string;
     public iconName?: string;
-    public showFieldProjectStatus?: boolean;
-    public showFieldFrontpage?: boolean;
-    public showFieldPortfolio?: boolean;
     public dataType?: string;
     public searchType?: SearchValueType;
     public isMultiline?: boolean;
@@ -53,35 +49,41 @@ export class ProjectColumn implements IColumn {
     public config?: ProjectColumnConfigDictionary;
     public onColumnClick: any;
 
-    constructor(item?: SPProjectColumnItem) {
-        if (item) {
-            this.id = item.Id;
-            this.fieldName = item.GtManagedProperty;
-            this.key = item.GtManagedProperty;
-            this.name = item.Title;
-            this.sortOrder = item.GtSortOrder;
-            this.internalName = item.GtInternalName;
-            this.dataType = item.GtFieldDataType.toLowerCase();
+    constructor(private _item?: SPProjectColumnItem) {
+        if (_item) {
+            this.id = _item.Id;
+            this.fieldName = _item.GtManagedProperty;
+            this.key = _item.GtManagedProperty;
+            this.name = _item.Title;
+            this.sortOrder = _item.GtSortOrder;
+            this.internalName = _item.GtInternalName;
+            this.dataType = _item.GtFieldDataType.toLowerCase();
             this.isMultiline = this.dataType === 'note';
-            this.showFieldProjectStatus = item.GtShowFieldProjectStatus;
-            this.showFieldFrontpage = item.GtShowFieldFrontpage;
-            this.showFieldPortfolio = item.GtShowFieldPortfolio;
-            this.isRefinable = item.GtIsRefinable;
-            this.isGroupable = item.GtIsGroupable;
+            this.isRefinable = _item.GtIsRefinable;
+            this.isGroupable = _item.GtIsGroupable;
             this.isResizable = true;
-            this.minWidth = item.GtColMinWidth || 100;
+            this.minWidth = _item.GtColMinWidth || 100;
             this.searchType = this._getSearchType(this.fieldName.toLowerCase());
         }
     }
 
+    public isVisible(page: 'Frontpage' | 'ProjectStatus' | 'Portfolio') {
+        switch (page) {
+            case 'Frontpage': return this._item.GtShowFieldFrontpage;
+            case 'ProjectStatus': return this._item.GtShowFieldProjectStatus;
+            case 'Portfolio': return this._item.GtShowFieldPortfolio;
+        }
+    }
+
     /**
+     * Creates a new ProjectColumn
      * 
-     * @param key 
-     * @param fieldName 
-     * @param name 
-     * @param iconName 
-     * @param onColumnClick 
-     * @param minWidth 
+     * @param {string} key Key
+     * @param {string} fieldName Field name
+     * @param {string} name Name
+     * @param {string} iconName Icon name
+     * @param {any} onColumnClick On column click
+     * @param {number} minWidth Min width
      */
     public create(key: string, fieldName: string, name: string, iconName: string, onColumnClick: any, minWidth: number): ProjectColumn {
         this.key = key;

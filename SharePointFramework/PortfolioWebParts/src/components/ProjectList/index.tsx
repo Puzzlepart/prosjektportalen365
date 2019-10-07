@@ -187,7 +187,7 @@ export default class ProjectList extends React.Component<IProjectListProps, IPro
           hubSite={{ web: new Web(this.props.pageContext.site.absoluteUrl), url: this.props.pageContext.site.absoluteUrl }}
           siteId={this.state.showProjectInfo.siteId}
           hideActions={true}
-          filterField='GtShowFieldPortfolio' />
+          page='Portfolio' />
       );
     }
     return null;
