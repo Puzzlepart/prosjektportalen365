@@ -14,7 +14,7 @@ declare interface IProjectWebPartsStrings {
   CheckPointsMarkedAsText: string;
   CheckpointStillOpenTooltip: string;
   CheckpointStillOpenTooltipCommentEmpty: string;
-  Close: string;
+  CloseText: string;
   CommentLabel: string;
   ConfirmChangePhase: string;
   ConfirmPhaseChangeFieldLabel: string;
@@ -73,6 +73,7 @@ declare interface IProjectWebPartsStrings {
   ProjectsListName: string;
   NoStatusReportsMessage: string;
   SyncNowText: string;
+  
 }
 
 declare module 'ProjectWebPartsStrings' {

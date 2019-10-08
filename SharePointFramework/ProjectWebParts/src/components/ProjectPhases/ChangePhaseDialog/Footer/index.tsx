@@ -48,7 +48,7 @@ export const Footer = ({ isLoading, newPhase, currentView, onChangeView, onChang
             {actions.map((buttonProps, index) => {
                 return <PrimaryButton key={`FooterAction_${index}`} {...buttonProps} />;
             })}
-            <DefaultButton text={strings.Close} disabled={isLoading} onClick={onDismiss} />
+            <DefaultButton text={strings.CloseText} disabled={isLoading} onClick={onDismiss} />
         </DialogFooter>
     );
 };

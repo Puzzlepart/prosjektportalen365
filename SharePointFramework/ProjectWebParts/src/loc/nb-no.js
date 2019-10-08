@@ -10,7 +10,7 @@ define([], function () {
     CheckPointsMarkedAsText: 'sjekkpunkter markert som',
     CheckpointStillOpenTooltip: 'Sjekkpunktet er forsatt åpent',
     CheckpointStillOpenTooltipCommentEmpty: 'Du kan ikke sette sjekkpunktet som \'Fortsatt åpen\' uten å legge inn enn kommentar.',
-    Close: 'Lukk',
+    CloseText: 'Lukk',
     CommentLabel: 'Kommentar',
     ConfirmChangePhase: 'Vil du endre fase til {0}?',
     ConfirmPhaseChangeFieldLabel: 'Bekreft faseenendring',

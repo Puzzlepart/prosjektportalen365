@@ -75,6 +75,7 @@
   "localizedResources": {
     "ControlStrings": "lib/loc/{locale}.js",
     "PortfolioWebPartsStrings": "lib/loc/{locale}.js",
-    "ProjectWebPartsStrings": "node_modules/projectwebparts/lib/loc/{locale}.js"
+    "ProjectWebPartsStrings": "node_modules/projectwebparts/lib/loc/{locale}.js",
+    "PzlSPFxComponentsStrings": "node_modules/projectwebparts/lib/loc/{locale}.js"
   }
 }
