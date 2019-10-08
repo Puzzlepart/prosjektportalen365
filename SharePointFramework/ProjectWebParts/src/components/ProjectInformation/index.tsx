@@ -150,7 +150,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
       this.logInfo('Synchronizing properties to item in hub', '_onSyncProperties');
       await SPDataAdapter.syncPropertyItemToHub(this.state.data.fieldValues, this.state.data.fieldValuesText, progressFunc);
       this.logInfo(`Finished. Reloading page.`, '_onSyncProperties');
-      SPDataAdapter.clearStorage();
+      sessionStorage.clear();
       document.location.href = this.props.webUrl;
     } catch (error) {
       this._addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning);

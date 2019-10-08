@@ -100,11 +100,4 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
         ]);
         return { termSetId: phaseField.TermSetId, phaseTextField: textField.InternalName };
     }
-
-    /**
-     * Clear storage
-     */
-    public clearStorage(): void {
-        this.project.clearStorage();
-    }
 };
