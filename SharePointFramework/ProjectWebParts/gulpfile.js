@@ -42,6 +42,7 @@ build.configureWebpack.mergeConfig({
         generatedConfiguration.plugins = [...(generatedConfiguration.plugins || []), new WebpackBar()];
         if (generatedConfiguration.optimization) {
             generatedConfiguration.optimization.minimizer[0].options.parallel = os.cpus().length - 1;
+            generatedConfiguration.optimization.minimizer[0].options.cache = true;
         }
         return generatedConfiguration;
     }
