@@ -40,6 +40,7 @@
         "@types/sharepoint": "^2016.1.5",
         "@types/underscore": "^1.9.3",
         "@types/xmldom": "^0.1.29",
+        "pzl-tslint-rules": "^1.0.5",
         "typescript": "^2.9.0"
     }
 }

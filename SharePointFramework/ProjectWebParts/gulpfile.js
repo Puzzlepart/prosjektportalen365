@@ -8,6 +8,7 @@ const pkgDeploy = require('spfx-pkgdeploy').default;
 const tsConfig = require('./tsconfig.json');
 const WebpackBar = require('webpackbar');
 const os = require('os');
+const argv = require('yargs').argv;
 build.addSuppression(`Warning - [sass] The local CSS class 'ms-Grid' is not camelCase and will not be type-safe.`);
 build.addSuppression(`Warning - [sass] The local CSS class '-webkit-filter' is not camelCase and will not be type-safe.`);
 
@@ -19,7 +20,7 @@ try {
 }
 
 gulp.task('versionSync', () => {
-    find.file(/\.manifest.json$/, path.join(__dirname, "src", "webparts"), (files) => {
+    find.file(/\manifest.json$/, path.join(__dirname, "src", "webparts"), (files) => {
         var pkgSolution = require('./config/package-solution.json');
         var newVersionNumber = require('./package.json').version.split('-')[0];
         pkgSolution.solution.version = newVersionNumber + '.0';
@@ -27,6 +28,16 @@ gulp.task('versionSync', () => {
         for (let i = 0; i < files.length; i++) {
             let manifest = require(files[i]);
             manifest.version = newVersionNumber;
+            fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => { /* handle error */ });
+        }
+    });
+});
+
+gulp.task('setHiddenToolbox', () => {
+    find.file(/\manifest.json$/, path.join(__dirname, "src", "webparts"), (files) => {
+        for (let i = 0; i < files.length; i++) {
+            let manifest = require(files[i]);
+            manifest.hiddenFromToolbox = Boolean(argv.hidden);
             fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => { /* handle error */ });
         }
     });

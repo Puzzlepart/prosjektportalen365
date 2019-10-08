@@ -146,9 +146,11 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
     try {
       progressFunc({ label: strings.SyncProjectPropertiesListProgressDescription, description: `${strings.PleaseWaitText}...` });
       this.logInfo('Ensuring list and fields', '_onSyncProperties');
-      await this._portalDataService.syncList(this.props.webUrl, strings.ProjectPropertiesListName, '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C', { Title: this.props.webTitle });
-      this.logInfo('Synchronizing properties to item in hub', '_onSyncProperties');
-      await SPDataAdapter.syncPropertyItemToHub(this.state.data.fieldValues, this.state.data.fieldValuesText, progressFunc);
+      const { created } = await this._portalDataService.syncList(this.props.webUrl, strings.ProjectPropertiesListName, '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C', { Title: this.props.webTitle });
+      if (!created) {
+        this.logInfo('Synchronizing properties to item in hub', '_onSyncProperties');
+        await SPDataAdapter.syncPropertyItemToHub(this.state.data.fieldValues, this.state.data.fieldValuesText, progressFunc);
+      }
       this.logInfo(`Finished. Reloading page.`, '_onSyncProperties');
       sessionStorage.clear();
       document.location.href = this.props.webUrl;

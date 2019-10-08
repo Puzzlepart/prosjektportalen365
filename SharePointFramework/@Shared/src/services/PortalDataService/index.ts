@@ -1,5 +1,5 @@
 import { dateAdd, stringIsNullOrEmpty, TypedHash } from '@pnp/common';
-import { CamlQuery, Web } from '@pnp/sp';
+import { CamlQuery, Web, ListEnsureResult } from '@pnp/sp';
 import { default as initSpfxJsom, ExecuteJsomQuery } from 'spfx-jsom';
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute';
 import { transformFieldXml } from '../../helpers/transformFieldXml';
@@ -64,7 +64,7 @@ export class PortalDataService {
             .expand('GtPortfolioColumn')
             .select(...Object.keys(new SPProjectColumnConfigItem()), 'GtPortfolioColumn/Title', 'GtPortfolioColumn/GtInternalName')
             .get<SPProjectColumnConfigItem[]>();
-        return spItems.map(item => new ProjectColumnConfig(item));;
+        return spItems.map(item => new ProjectColumnConfig(item));
     }
 
     /**
@@ -74,7 +74,7 @@ export class PortalDataService {
         let spItems = await this._web.lists.getByTitle(this._configuration.listNames.PORTFOLIO_VIEWS).items
             .orderBy('GtSortOrder', true)
             .get<SPPortfolioOverviewViewItem[]>();
-        return spItems.map(item => new PortfolioOverviewView(item));;
+        return spItems.map(item => new PortfolioOverviewView(item));
     }
 
     /**
@@ -98,7 +98,7 @@ export class PortalDataService {
      * @param {string} contentTypeId Content type id
      * @param {TypedHash} properties Create a new item in the list with specified properties if the list was created
      */
-    public async syncList(url: string, listName: string, contentTypeId: string, properties?: TypedHash<string>) {
+    public async syncList(url: string, listName: string, contentTypeId: string, properties?: TypedHash<string>): Promise<ListEnsureResult> {
         const targetWeb = new Web(url);
         const { jsomContext } = await initSpfxJsom(url, { loadTaxonomy: true });
         const [sourceContentType, targetSiteFields, ensureList] = await Promise.all([
@@ -129,7 +129,7 @@ export class PortalDataService {
         if (ensureList.created && properties) {
             ensureList.list.items.add(properties);
         }
-        return ensureList.list;
+        return ensureList;
     }
 
     /**
