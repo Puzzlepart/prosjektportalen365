@@ -135,7 +135,6 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
   private async _onSyncProperties(): Promise<void> {
     let lastUpdated = await SPDataAdapter.project.getPropertiesLastUpdated(this.state.data);
     if (lastUpdated > 60) {
-      document.location.hash = '';
       return;
     }
     this.logInfo(`Starting sync of ${strings.ProjectPropertiesListName}`, '_onSyncProperties');
