@@ -1,14 +1,13 @@
-@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 
-.portfolioOverview {  
+.portfolioOverview {
   margin: 15px 0 0 0;
-  height: 100%;
+  height: 90%;
   .container {
-    height: 100%;
     position: relative;
+    height: 100%;
     .header {
-      padding: 23px 32px 20px 32px;
-
+      padding: 20px 0 20px 0;
       .title {
         font-size: 28px;
         font-weight: 100;
@@ -18,15 +17,24 @@
         text-overflow: ellipsis;
       }
     }
-    .searchBox {      
-      padding: 0 32px 20px 32px;
+    .searchBox {
+      padding: 0 0 20px 0;
     }
-    .statusBar {      
+    .statusBar {
       padding: 0 32px 0 32px;
     }
     .listContainer {
-      padding: 0 32px 0 32px;
+      padding: 0 32px;
+    }
+
+    .stickyHeader {
+      .header {
+        padding-left: 32px;
+        padding-right: 32px;
+      }
+      .searchBox {
+        display: none;
+      }
     }
   }
 }
-

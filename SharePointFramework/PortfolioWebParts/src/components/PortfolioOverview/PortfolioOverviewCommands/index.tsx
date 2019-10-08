@@ -1,3 +1,4 @@
+import { isArray } from '@pnp/common';
 import { getId } from '@uifabric/utilities';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
@@ -43,7 +44,7 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
                 },
                 data: { isVisible: this.props.showExcelExportButton },
                 disabled: this.state.isExporting,
-                onClick: _ => { this._exportToExcel(); },
+                onClick: this._exportToExcel.bind(this),
             } as IContextualMenuItem,
         ].filter(i => i.data.isVisible);
     }
@@ -165,7 +166,9 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
     protected async _exportToExcel(): Promise<void> {
         this.setState({ isExporting: true });
         try {
-            await ExcelExportService.export(this.props.fltItems, this.props.fltColumns);
+            const { fltItems, fltColumns, selectedItems } = this.props;
+            let items = (isArray(selectedItems) && selectedItems.length > 0) ? selectedItems : fltItems;
+            await ExcelExportService.export(items, fltColumns);
             this.setState({ isExporting: false });
         } catch (error) {
             this.setState({ isExporting: false });
