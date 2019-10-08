@@ -13,8 +13,9 @@ export class ProjectDataService {
     public spConfiguration: SPConfiguration;
     private _storage: PnPClientStore;
     private _storageKeys: TypedHash<string> = {
-        _getPropertyItemContext: '{0}_propertyitemcontext'
-    }
+        _getPropertyItemContext: '{0}_propertyitemcontext',
+        getPhases: 'projectphases_terms',
+    };
 
     /**
      * Creates a new instance of ProjectDataService
@@ -83,7 +84,7 @@ export class ProjectDataService {
             ...context,
             list: this._params.sp.web.lists.getById(context.listId),
             item: this._params.sp.web.lists.getById(context.listId).items.getById(context.itemId),
-        }
+        };
     }
 
     /**
@@ -156,7 +157,8 @@ export class ProjectDataService {
      * @param {IGetPropertiesData} data Data
      */
     public async getPropertiesLastUpdated(data: IGetPropertiesData): Promise<number> {
-        let { Modified } = await this._params.sp.web.lists.getById(data.propertiesListId).items.getById(data.fieldValues.Id).select("Modified").get<{ Modified: string }>();
+        // tslint:disable-next-line: naming-convention
+        let { Modified } = await this._params.sp.web.lists.getById(data.propertiesListId).items.getById(data.fieldValues.Id).select('Modified').get<{ Modified: string }>();
         return (new Date().getTime() - new Date(Modified).getTime()) / 1000;
     }
 
@@ -192,7 +194,7 @@ export class ProjectDataService {
             .terms
             .select('Id', 'Name', 'LocalCustomProperties')
             .usingCaching({
-                key: `projectphases_terms`,
+                key: this._storageKeys.getPhases,
                 storeName: 'session',
                 expiration: dateAdd(new Date(), 'day', 1),
             })
@@ -259,13 +261,14 @@ export class ProjectDataService {
     }
 
     /**
-     * Clear storage
+     * Clear cache
      */
-    public clearStorage(): void {
-        for (let key in Object.keys(this._storageKeys)) {
-            this._storage.delete(key);
-        }
+    public clearCache(): void {
+        Object.keys(this._storageKeys).forEach(key => {
+            Logger.write(`(ProjectDataService) Clearing key ${key} from sessionStorage.`);
+            this._storage.delete(this._getStorageKey(key));
+        });
     }
-};
+}
 
 export { IGetPropertiesData };

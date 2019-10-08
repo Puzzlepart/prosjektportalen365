@@ -19,4 +19,9 @@ export interface IProjectInformationState extends IBaseWebPartComponentState<IPr
    * Message to show to the user
    */
   message?: IUserMessageProps;
+
+  /**
+   * @todo Describe property
+   */
+  confirmActionProps?: any;
 }

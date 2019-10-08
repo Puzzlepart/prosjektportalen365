@@ -3,7 +3,6 @@ import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import '@pnp/polyfill-ie11';
 import { sp } from '@pnp/sp';
 import * as moment from 'moment';
-import * as merge from 'object-assign';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { ApplicationInsightsLogListener } from 'shared/lib/logging';
@@ -24,19 +23,18 @@ export abstract class BaseProjectWebPart<T extends IBaseWebPartComponentProps> e
      * @param {T} props Props
      */
     public renderComponent(component: React.ComponentClass<T>, props?: Partial<T>): void {
-        let combinedProps = merge(
-            this.properties,
-            props,
-            {
-                title: this.properties.title || this.title,
-                hubSite: this._hubSite,
-                siteId: this.context.pageContext.site.id.toString(),
-                webUrl: this.context.pageContext.web.absoluteUrl,
-                webTitle: this.context.pageContext.web.title,
-                isSiteAdmin: this.context.pageContext.legacyPageContext.isSiteAdmin,
-                displayMode: this.displayMode,
-                pageContext: this.context.pageContext,
-            });
+        let combinedProps: T = {
+            ...this.properties,
+            ...props,
+            title: this.properties.title || this.title,
+            hubSite: this._hubSite,
+            siteId: this.context.pageContext.site.id.toString(),
+            webUrl: this.context.pageContext.web.absoluteUrl,
+            webTitle: this.context.pageContext.web.title,
+            isSiteAdmin: this.context.pageContext.legacyPageContext.isSiteAdmin,
+            displayMode: this.displayMode,
+            pageContext: this.context.pageContext,
+        };
         const element: React.ReactElement<T> = React.createElement(component, combinedProps);
         ReactDom.render(element, this.domElement);
     }

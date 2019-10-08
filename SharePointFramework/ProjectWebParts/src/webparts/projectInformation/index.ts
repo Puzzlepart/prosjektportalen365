@@ -1,7 +1,6 @@
 import { IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField } from '@microsoft/sp-property-pane';
 import { IProjectInformationProps, ProjectInformation } from 'components/ProjectInformation';
 import * as strings from 'ProjectWebPartsStrings';
-import { LOGGING_PAGE } from 'webparts/PropertyPane';
 import { BaseProjectWebPart } from '../@baseProjectWebPart';
 
 export default class ProjectInformationWebPart extends BaseProjectWebPart<IProjectInformationProps> {
@@ -39,7 +38,6 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
             },
           ]
         },
-        LOGGING_PAGE,
       ]
     };
   }

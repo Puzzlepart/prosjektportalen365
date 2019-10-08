@@ -23,6 +23,7 @@ import styles from './ProjectInformation.module.scss';
 import { ProjectProperties } from './ProjectProperties';
 import { ProjectProperty, ProjectPropertyModel } from './ProjectProperties/ProjectProperty/index';
 import { StatusReports } from './StatusReports';
+import { ConfirmDialog, IConfirmDialogProps, ConfirmAction } from 'pzl-spfx-components/lib/components/ConfirmDialog';
 
 export class ProjectInformation extends BaseWebPartComponent<IProjectInformationProps, IProjectInformationState> {
   public static defaultProps: Partial<IProjectInformationProps> = { statusReportsCount: 0, page: 'Frontpage' };
@@ -109,6 +110,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
           editFormUrl={editFormUrl}
           onSyncProperties={stringIsNullOrEmpty(this.state.data.propertiesListId) && this._onSyncProperties.bind(this)} />
         <ProgressDialog {...this.state.progress} />
+        {this.state.confirmActionProps && <ConfirmDialog {...this.state.confirmActionProps} />}
       </>
     );
   }
@@ -132,8 +134,13 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
 
   /**
    * On sync properties
+   * 
+   * @param {React.MouseEvent<any>} event Event
    */
-  private async _onSyncProperties(): Promise<void> {
+  private async _onSyncProperties(event?: React.MouseEvent<any>): Promise<void> {
+    if (event != null) {
+      return ConfirmAction(strings.SyncProjectPropertiesText, strings.SyncProjectPropertiesDescription, this._onSyncProperties.bind(this), strings.SyncNowText, this, 'confirmActionProps', { containerClassName: styles.confirmDialog });
+    }
     if (!stringIsNullOrEmpty(this.state.data.propertiesListId)) {
       let lastUpdated = await SPDataAdapter.project.getPropertiesLastUpdated(this.state.data);
       if (lastUpdated > 60) {
@@ -152,8 +159,8 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
         await SPDataAdapter.syncPropertyItemToHub(this.state.data.fieldValues, this.state.data.fieldValuesText, progressFunc);
       }
       this.logInfo(`Finished. Reloading page.`, '_onSyncProperties');
-      sessionStorage.clear();
-      document.location.href = this.props.webUrl;
+      SPDataAdapter.clearCache();
+      document.location.href = DEBUG ? document.location.href : this.props.webUrl;
     } catch (error) {
       this._addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning);
     } finally {

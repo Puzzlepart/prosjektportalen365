@@ -24,8 +24,7 @@
             },
             "officeFabricIconFontName": "ProjectCollection",
             "properties": {
-                "title": "Prosjektinformasjon",
-                "logLevel": 1
+                "title": "Prosjektinformasjon"
             }
         }
     ]

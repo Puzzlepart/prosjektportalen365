@@ -46,6 +46,7 @@
         "msgraph-helper": "^0.7.1",
         "object-get": "^2.1.0",
         "office-ui-fabric-react": "^6.199.1",
+        "pzl-spfx-components": "^0.0.11",
         "react": "16.7.0",
         "react-dom": "16.7.0",
         "react-image-fade-in": "^1.0.2",

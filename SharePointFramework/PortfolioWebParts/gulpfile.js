@@ -37,8 +37,11 @@ gulp.task('setHiddenToolbox', () => {
     find.file(/\manifest.json$/, path.join(__dirname, "src", "webparts"), (files) => {
         for (let i = 0; i < files.length; i++) {
             let manifest = require(files[i]);
-            manifest.hiddenFromToolbox = Boolean(argv.hidden);
-            fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => { /* handle error */ });
+            let hiddenFromToolbox = argv.hidden === 'true';
+            if (manifest.hiddenFromToolbox != hiddenFromToolbox) {
+                manifest.hiddenFromToolbox = hiddenFromToolbox;
+                fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => { /* handle error */ });
+            }
         }
     });
 });
