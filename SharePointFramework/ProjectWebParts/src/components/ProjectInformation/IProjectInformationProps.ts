@@ -29,12 +29,12 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   onFieldExternalChanged?: (fieldName: string, checked: boolean) => void;
 
   /**
-   * @todo Describe property
+   * A hash object of fields to show for external users
    */
   showFieldExternal?: TypedHash<boolean>;
 
   /**
-   * @todo Describe property
+   * Custom actions/button to add
    */
   customActions?: ActionType[];
 }

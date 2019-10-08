@@ -1,3 +1,5 @@
+declare var DEBUG: boolean;
+
 import { BaseClientSideWebPart, IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import '@pnp/polyfill-ie11';
@@ -5,20 +7,17 @@ import { sp } from '@pnp/sp';
 import { IBaseComponentProps } from 'components/IBaseComponentProps';
 import { DataAdapter } from 'data';
 import * as moment from 'moment';
+import * as merge from 'object-assign';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import * as merge from 'object-assign';
 import { ApplicationInsightsLogListener } from 'shared/lib/logging';
-import { virtual } from '@microsoft/decorators';
 
-export class BasePortfolioWebPart<T extends IBaseComponentProps> extends BaseClientSideWebPart<T> {
+// tslint:disable-next-line: naming-convention
+export abstract class BasePortfolioWebPart<T extends IBaseComponentProps> extends BaseClientSideWebPart<T> {
     public dataAdapter: DataAdapter;
     private _pageTitle: string;
 
-    @virtual
-    public render(): void {
-        throw new Error('Method not implemented.');
-    }
+    public abstract render(): void;
 
     /**
      * Render component
@@ -35,14 +34,13 @@ export class BasePortfolioWebPart<T extends IBaseComponentProps> extends BaseCli
     /**
      * Setup
      * 
-     * @param {LogLevel} activeLogLevel Active log level for the web part
      * @param {string} locale Locale for moment
      */
-    protected async _setup(activeLogLevel: LogLevel = LogLevel.Info, locale: string = 'nb') {
+    private async _setup(locale: string = 'nb') {
         sp.setup({ spfxContext: this.context });
         Logger.subscribe(new ConsoleListener());
         Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
-        Logger.activeLogLevel = activeLogLevel;
+        Logger.activeLogLevel = DEBUG ? LogLevel.Info : LogLevel.Warning;
         moment.locale(locale);
         try {
             this._pageTitle = (await sp.web.lists.getById(this.context.pageContext.list.id.toString()).items.getById(this.context.pageContext.listItem.id).select('Title').get<{ Title: string }>()).Title;

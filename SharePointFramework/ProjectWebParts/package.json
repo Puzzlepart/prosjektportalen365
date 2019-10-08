@@ -73,6 +73,7 @@
         "gulp": "~3.9.1",
         "pzl-tslint-rules": "1.0.5",
         "spfx-pkgdeploy": "^0.3.0",
-        "tslint": "5.20.0"
+        "tslint": "5.20.0",
+        "webpackbar": "^4.0.0"
     }
 }

@@ -28,7 +28,7 @@ export interface IGetPropertiesData {
     fields?: IEntityField[];
     
     /**
-     * Has local list
+     * Properties list id
      */
-    localProjectPropertiesList?: boolean;
+    propertiesListId?: string;
 }

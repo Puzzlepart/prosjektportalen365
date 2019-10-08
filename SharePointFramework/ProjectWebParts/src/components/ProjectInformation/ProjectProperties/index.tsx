@@ -53,11 +53,11 @@ export class ProjectProperties extends React.PureComponent<IProjectPropertiesPro
                                     className={styles.pivotItemUserMessage}
                                     text={strings.ExternalUsersConfigInfoText} />
                                 <UserMessage
-                                    hidden={this.props.localProjectPropertiesList}
+                                    hidden={this.props.propertiesList}
                                     className={styles.pivotItemUserMessage}
                                     text={strings.NoLocalPropertiesListWarningText}
                                     messageBarType={MessageBarType.warning} />
-                                <div hidden={!this.props.localProjectPropertiesList}>
+                                <div hidden={!this.props.propertiesList}>
                                     {this._visibleProperties.map((model, idx) => (
                                         <ProjectProperty
                                             key={idx}

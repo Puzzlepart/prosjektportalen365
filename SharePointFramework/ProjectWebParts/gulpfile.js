@@ -6,6 +6,8 @@ const gulp = require('gulp');
 const build = require('@microsoft/sp-build-web');
 const pkgDeploy = require('spfx-pkgdeploy').default;
 const tsConfig = require('./tsconfig.json');
+const WebpackBar = require('webpackbar');
+const os = require('os');
 build.addSuppression(`Warning - [sass] The local CSS class 'ms-Grid' is not camelCase and will not be type-safe.`);
 build.addSuppression(`Warning - [sass] The local CSS class '-webkit-filter' is not camelCase and will not be type-safe.`);
 
@@ -37,6 +39,10 @@ build.configureWebpack.mergeConfig({
             let _path = path.join(__dirname, outDir, paths[key][0]);
             return { ...alias, [key]: _path };
         }, generatedConfiguration.resolve.alias);
+        generatedConfiguration.plugins = [...(generatedConfiguration.plugins || []), new WebpackBar()];
+        if (generatedConfiguration.optimization) {
+            generatedConfiguration.optimization.minimizer[0].options.parallel = os.cpus().length - 1;
+        }
         return generatedConfiguration;
     }
 });

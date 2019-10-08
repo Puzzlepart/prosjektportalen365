@@ -3,7 +3,7 @@ define([], function () {
     AutomaticReloadFieldLabel: 'Automatisk oppdatering',
     ChangePhaseText: 'Endre til denne fasen',
     ChangingPhaseDescription: 'Endrer fase til {0}',
-    ChangingPhaseLabel: 'Vennligst vent',
+    PleaseWaitText: 'Vennligst vent',
     CheckpointDoneTooltip: 'Sjekkpunktet er utført',
     CheckpointNotRelevantTooltip: 'Sjekkpunktet er ikke relevant',
     CheckpointNotRelevantTooltipCommentEmpty: 'Du kan ikke sette sjekkpunktet som \'Ikke relevant\' uten å legge inn enn kommentar.',

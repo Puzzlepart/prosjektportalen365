@@ -38,9 +38,4 @@ export interface IBaseWebPartComponentProps {
      * Display mode
      */
     displayMode?: DisplayMode;
-
-    /**
-     * Log level
-     */
-    logLevel?: LogLevel;
 }

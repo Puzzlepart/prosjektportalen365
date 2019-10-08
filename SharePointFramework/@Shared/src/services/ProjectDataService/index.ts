@@ -121,6 +121,7 @@ export class ProjectDataService {
                 editFormUrl,
                 versionHistoryUrl,
                 fields,
+                propertiesListId: propertyItemContext.listId,
             };
         } catch (error) {
             return null;
@@ -135,7 +136,7 @@ export class ProjectDataService {
         // tslint:disable-next-line: early-exit
         if (propertyItem) {
             Logger.write(`(ProjectDataService) (getPropertiesData) Local property item found.`);
-            return { ...propertyItem, localProjectPropertiesList: true };
+            return { ...propertyItem, propertiesListId: propertyItem.propertiesListId };
         } else {
             Logger.write(`(ProjectDataService) (getPropertiesData) Local property item not found. Retrieving data from portal site.`);
             let entity = await this._params.spEntityPortalService.configure(this.spConfiguration).fetchEntity(this._params.siteId, this._params.webUrl);
@@ -144,8 +145,19 @@ export class ProjectDataService {
                 fieldValuesText: entity.fieldValues,
                 fields: entity.fields,
                 ...entity.urls,
+                propertiesListId: null,
             };
         }
+    }
+
+    /**
+     * Get last updated time in seconds since now
+     * 
+     * @param {IGetPropertiesData} data Data
+     */
+    public async getPropertiesLastUpdated(data: IGetPropertiesData): Promise<number> {
+        let { Modified } = await this._params.sp.web.lists.getById(data.propertiesListId).items.getById(data.fieldValues.Id).select("Modified").get<{ Modified: string }>();
+        return (new Date().getTime() - new Date(Modified).getTime()) / 1000;
     }
 
     /**

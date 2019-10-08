@@ -1,7 +1,7 @@
 import '@pnp/polyfill-ie11';
 import { sp, SPConfiguration, SPRest, Web } from '@pnp/sp';
 import { SpEntityPortalService } from 'sp-entityportal-service';
-import { HubConfigurationService } from '../../services/HubConfigurationService';
+import { PortalDataService } from '../../services/PortalDataService';
 import { ISPDataAdapterBaseConfiguration } from './ISPDataAdapterBaseConfiguration';
 
 export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
@@ -13,7 +13,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
         globalCacheDisable: false,
     };
     public settings: T;
-    public hubConfigurationService: HubConfigurationService;
+    public portalDataService: PortalDataService;
     public spEntityPortalService: SpEntityPortalService;
     public sp: SPRest;
 
@@ -27,7 +27,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
         this.settings = settings;
         sp.setup({ spfxContext, ...this.spConfiguration });
         this.sp = sp;
-        this.hubConfigurationService = new HubConfigurationService().configure({ urlOrWeb: new Web(this.settings.hubSiteUrl), siteId: this.settings.siteId });
+        this.portalDataService = new PortalDataService().configure({ urlOrWeb: new Web(this.settings.hubSiteUrl), siteId: this.settings.siteId });
         this.spEntityPortalService = new SpEntityPortalService({
             portalUrl: this.settings.hubSiteUrl,
             listName: 'Prosjekter',

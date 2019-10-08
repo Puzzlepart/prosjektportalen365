@@ -9,7 +9,7 @@ import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import { formatDate } from 'shared/lib/helpers';
 import { SectionModel, SectionType, StatusReport } from 'shared/lib/models';
-import { HubConfigurationService } from 'shared/lib/services';
+import { PortalDataService } from 'shared/lib/services';
 import { getUrlParam, parseUrlHash, setUrlHash } from 'shared/lib/util';
 import { SpEntityPortalService } from 'sp-entityportal-service';
 import * as formatString from 'string-format';
@@ -21,7 +21,7 @@ import styles from './ProjectStatus.module.scss';
 import { IBaseSectionProps, ListSection, ProjectPropertiesSection, StatusSection, SummarySection } from './Sections';
 
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
-  private _hubConfigurationService: HubConfigurationService;
+  private _portalDataService: PortalDataService;
   private _spEntityPortalService: SpEntityPortalService;
 
   /**
@@ -35,7 +35,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       isLoading: true,
       newStatusCreated: document.location.hash === '#NewStatus',
     };
-    this._hubConfigurationService = new HubConfigurationService().configure({ urlOrWeb: props.hubSite.web, siteId: props.siteId });
+    this._portalDataService = new PortalDataService().configure({ urlOrWeb: props.hubSite.web, siteId: props.siteId });
     this._spEntityPortalService = new SpEntityPortalService({
       portalUrl: this.props.hubSite.url,
       listName: strings.ProjectsListName,
@@ -264,7 +264,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     let properties = previousReport ? previousReport.statusValues : {};
     properties.Title = formatString(strings.NewStatusReportTitle, this.props.webTitle);
     properties.GtSiteId = this.props.siteId;
-    const newReportId = await this._hubConfigurationService.addStatusReport(properties);
+    const newReportId = await this._portalDataService.addStatusReport(properties);
     document.location.href = `${window.location.protocol}//${window.location.hostname}${this.state.data.reportEditFormUrl}?ID=${newReportId}&Source=${encodeURIComponent(window.location.href)}`;
   }
 
@@ -283,11 +283,11 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         reportFields,
       ] = await Promise.all([
         this._spEntityPortalService.fetchEntity(this.props.siteId, this.props.webUrl),
-        this._hubConfigurationService.getStatusReportListProps(),
-        this._hubConfigurationService.getStatusReports(),
-        this._hubConfigurationService.getProjectStatusSections(),
-        this._hubConfigurationService.getProjectColumnConfig(),
-        this._hubConfigurationService.getListFields('PROJECT_STATUS'),
+        this._portalDataService.getStatusReportListProps(),
+        this._portalDataService.getStatusReports(),
+        this._portalDataService.getProjectStatusSections(),
+        this._portalDataService.getProjectColumnConfig(),
+        this._portalDataService.getListFields('PROJECT_STATUS'),
       ]);
       reports = reports.map(item => item.setDefaultEditFormUrl(reportList.DefaultEditFormUrl));
       reports = reports.sort((a, b) => b.created.getTime() - a.created.getTime());

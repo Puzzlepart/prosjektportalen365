@@ -52,7 +52,7 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
      * @param {string} viewXml View xml
      */
     public async getDocumentTemplates(templateLibrary: string, viewXml?: string) {
-        return await this.hubConfigurationService.getHubItems(
+        return await this.portalDataService.getHubItems(
             templateLibrary,
             TemplateFile,
             {

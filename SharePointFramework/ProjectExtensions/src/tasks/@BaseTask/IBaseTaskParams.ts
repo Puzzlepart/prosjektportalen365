@@ -1,5 +1,5 @@
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base';
-import { HubConfigurationService } from 'shared/lib/services';
+import { PortalDataService } from 'shared/lib/services';
 import { SpEntityPortalService } from 'sp-entityportal-service';
 import { Schema, Web } from 'sp-js-provisioning';
 import { ISpfxJsomContext } from 'spfx-jsom';
@@ -54,5 +54,5 @@ export interface IBaseTaskParams {
     /**
      * @todo Describe property
      */
-    hubConfigurationService?: HubConfigurationService;
+    portalDataService?: PortalDataService;
 }

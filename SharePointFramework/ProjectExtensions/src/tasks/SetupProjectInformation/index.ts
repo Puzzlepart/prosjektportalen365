@@ -31,7 +31,7 @@ export class SetupProjectInformation extends BaseTask {
         try {
             onProgress(strings.SetupProjectInformationText, strings.SyncLocalProjectPropertiesListText, 'AlignCenter');
             this.logInformation(`Synchronizing list '${strings.ProjectPropertiesListName}' based on content type from ${this.data.hub.url} `, {});
-            const propertiesList = await params.hubConfigurationService.syncList(params.webAbsoluteUrl, strings.ProjectPropertiesListName, '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C');
+            const propertiesList = await params.portalDataService.syncList(params.webAbsoluteUrl, strings.ProjectPropertiesListName, '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C');
             onProgress(strings.SetupProjectInformationText, strings.CreatingLocalProjectPropertiesListItemText, 'AlignCenter');
             await propertiesList.items.add({ Title: params.context.pageContext.web.title });
         } catch (error) {

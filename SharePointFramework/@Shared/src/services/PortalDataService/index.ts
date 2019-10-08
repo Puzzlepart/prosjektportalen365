@@ -1,23 +1,23 @@
-import { CamlQuery, List, Web, } from '@pnp/sp';
-import { TypedHash, dateAdd, stringIsNullOrEmpty } from '@pnp/common';
+import { dateAdd, stringIsNullOrEmpty, TypedHash } from '@pnp/common';
+import { CamlQuery, Web } from '@pnp/sp';
 import { default as initSpfxJsom, ExecuteJsomQuery } from 'spfx-jsom';
-import { transformFieldXml } from '../../helpers/transformFieldXml';
-import { ProjectColumnConfig, SPProjectColumnConfigItem, SPProjectColumnItem, StatusReport, SectionModel, ProjectColumn, PortfolioOverviewView, SPPortfolioOverviewViewItem, SPField } from '../../models';
-import { ISPField, ISPContentType } from '../../interfaces';
-import { HubConfigurationServiceDefaultConfiguration, IHubConfigurationServiceConfiguration, HubConfigurationServiceList } from './IHubConfigurationServiceConfiguration';
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute';
+import { transformFieldXml } from '../../helpers/transformFieldXml';
+import { ISPContentType } from '../../interfaces';
+import { PortfolioOverviewView, ProjectColumn, ProjectColumnConfig, SectionModel, SPField, SPPortfolioOverviewViewItem, SPProjectColumnConfigItem, SPProjectColumnItem, StatusReport } from '../../models';
+import { IPortalDataServiceConfiguration, PortalDataServiceDefaultConfiguration, PortalDataServiceList } from './IPortalDataServiceConfiguration';
 
-export class HubConfigurationService {
-    private _configuration: IHubConfigurationServiceConfiguration;
+export class PortalDataService {
+    private _configuration: IPortalDataServiceConfiguration;
     private _web: Web;
 
     /**
-     * Configure HubConfigurationService
+     * Configure PortalDataService
      * 
-     * @param {IHubConfigurationServiceConfiguration} configuration Configuration for HubConfigurationService
+     * @param {IPortalDataServiceConfiguration} configuration Configuration for PortalDataService
      */
-    public configure(configuration: IHubConfigurationServiceConfiguration): HubConfigurationService {
-        this._configuration = { ...HubConfigurationServiceDefaultConfiguration, ...configuration };
+    public configure(configuration: IPortalDataServiceConfiguration): PortalDataService {
+        this._configuration = { ...PortalDataServiceDefaultConfiguration, ...configuration };
         if (typeof this._configuration.urlOrWeb === 'string') {
             this._web = new Web(this._configuration.urlOrWeb);
         } else {
@@ -45,6 +45,12 @@ export class HubConfigurationService {
         return items.map(item => new SectionModel(item));
     }
 
+    /**
+     * Update status report
+     * 
+     * @param {number} id Id
+     * @param {TypedHash<string>} properties Properties
+     */
     public async updateStatusReport(id: number, properties: TypedHash<string>): Promise<void> {
         await this._web.lists.getByTitle(this._configuration.listNames.STATUS_SECTIONS).items.getById(id).update(properties);
     }
@@ -74,9 +80,9 @@ export class HubConfigurationService {
     /**
      * Get list form urls
      * 
-     * @param {HubConfigurationServiceList} list List key
+     * @param {PortalDataServiceList} list List key
      */
-    public async getListFormUrls(list: HubConfigurationServiceList): Promise<{ defaultNewFormUrl: string, defaultEditFormUrl: string }> {
+    public async getListFormUrls(list: PortalDataServiceList): Promise<{ defaultNewFormUrl: string, defaultEditFormUrl: string }> {
         let urls = await this._web.lists.getByTitle(this._configuration.listNames[list])
             .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
             .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')
@@ -103,7 +109,10 @@ export class HubConfigurationService {
         const listFields = await this.getListFields(listName, undefined, targetWeb);
         const spList = jsomContext.web.get_lists().getByTitle(listName);
         for (let field of sourceContentType.Fields) {
-            let [[listField], [siteField]] = [listFields.filter(fld => fld.InternalName === field.InternalName), targetSiteFields.filter(fld => fld.InternalName === field.InternalName)];
+            let [[listField], [siteField]] = [
+                listFields.filter(fld => fld.InternalName === field.InternalName),
+                targetSiteFields.filter(fld => fld.InternalName === field.InternalName && fld.SchemaXml.indexOf('ShowInEditForm="FALSE"') === -1),
+            ];
             if (listField) continue;
             try {
                 if (siteField) {
@@ -138,15 +147,14 @@ export class HubConfigurationService {
     }
 
     /**
-     * Get site fields internal names
+     * Get site fields
      * 
      * @param {Web} web Web
      */
-    private async _getSiteFields(web: Web): Promise<ISPField[]> {
-        let siteFields = await web.fields.select('InternalName', 'Title', 'SchemaXml', 'InternalName').get<ISPField[]>();
+    private async _getSiteFields(web: Web): Promise<SPField[]> {
+        let siteFields = await web.fields.select(...Object.keys(new SPField())).get<SPField[]>();
         return siteFields;
     }
-
 
     /**
      * Get hub files
@@ -181,7 +189,6 @@ export class HubConfigurationService {
             throw error;
         }
     }
-
 
     /**
      * Add status report
@@ -240,11 +247,11 @@ export class HubConfigurationService {
     /**
      * Get list fields
      * 
-     * @param {HubConfigurationServiceList | string} list List
+     * @param {PortalDataServiceList | string} list List
      * @param {string} filter Filter 
      * @param {Web} web Web 
      */
-    public async getListFields(list: HubConfigurationServiceList | string, filter?: string, web: Web = this._web): Promise<SPField[]> {
+    public async getListFields(list: PortalDataServiceList | string, filter?: string, web: Web = this._web): Promise<SPField[]> {
         let fields = web.lists.getByTitle(this._configuration.listNames[list] || list)
             .fields
             .select(...Object.keys(new SPField()));

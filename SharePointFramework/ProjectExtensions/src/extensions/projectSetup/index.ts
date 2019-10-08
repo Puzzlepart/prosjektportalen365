@@ -5,15 +5,14 @@ import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { sp, Web } from '@pnp/sp';
 import { getId } from '@uifabric/utilities';
 import { default as MSGraphHelper } from 'msgraph-helper';
-import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { ApplicationInsightsLogListener, ListLogger } from 'shared/lib/logging';
-import { HubConfigurationService } from 'shared/lib/services';
+import { PortalDataService } from 'shared/lib/services';
 import { default as HubSiteService } from 'sp-hubsite-service';
 import { ErrorDialog, IErrorDialogProps, IProgressDialogProps, ITemplateSelectDialogProps, ITemplateSelectDialogState, ProgressDialog, TemplateSelectDialog } from '../../components';
-import { ListContentConfig, ProjectTemplate, ProjectExtension } from '../../models';
+import { ListContentConfig, ProjectExtension, ProjectTemplate } from '../../models';
 import * as Tasks from '../../tasks';
 import { IProjectSetupData } from './IProjectSetupData';
 import { IProjectSetupProperties } from './IProjectSetupProperties';
@@ -21,23 +20,19 @@ import { ProjectSetupError } from './ProjectSetupError';
 import { ProjectSetupValidation } from './ProjectSetupValidation';
 
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
-  private _hubConfigurationService: HubConfigurationService;
+  private _portalDataService: PortalDataService;
   private _placeholderIds = {
     ErrorDialog: getId('errordialog'),
     ProgressDialog: getId('progressdialog'),
     TemplateSelectDialog: getId('templateselectdialog'),
   };
 
-  public constructor() {
-    super();
-    Logger.subscribe(new ConsoleListener());
-    Logger.activeLogLevel = this._isDebug ? LogLevel.Info : LogLevel.Info;
-  }
-
   @override
   public async onInit(): Promise<void> {
     sp.setup({ spfxContext: this.context });
     Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
+    Logger.subscribe(new ConsoleListener());
+    Logger.activeLogLevel = DEBUG ? LogLevel.Info : LogLevel.Error;
     if (!this.context.pageContext.legacyPageContext.isSiteAdmin || !this.context.pageContext.legacyPageContext.groupId) return;
     try {
       Logger.log({ message: '(ProjectSetup) onInit: Initializing pre-conditionals before initializing setup', data: { version: this.context.manifest.version, validation: this._validation }, level: LogLevel.Info });
@@ -63,6 +58,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       });
 
     } catch (error) {
+      Logger.log({ message: '(ProjectSetup) onInit: Failed initializing pre-conditionals', data: error, level: LogLevel.Error });
       this._renderErrorDialog({ error });
     }
   }
@@ -85,6 +81,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       await this._startProvision(taskParams, data);
       await this._deleteCustomizer(this.componentId, true);
     } catch (error) {
+      Logger.log({ message: '(ProjectSetup) _initializeSetup: Failed initializing setup', data: error, level: LogLevel.Error });
       this._renderErrorDialog({ error });
     }
   }
@@ -207,13 +204,13 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       Logger.log({ message: '(ProjectSetup) _fetchData: Retrieving hub site url', data: {}, level: LogLevel.Info });
       let data: IProjectSetupData = {};
       data.hub = await HubSiteService.GetHubSite(sp, this.context.pageContext);
-      this._hubConfigurationService = new HubConfigurationService().configure({ urlOrWeb: data.hub.web });
+      this._portalDataService = new PortalDataService().configure({ urlOrWeb: data.hub.web });
       Logger.log({ message: '(ProjectSetup) _fetchData: Retrieved hub site url', data: { hubUrl: data.hub.url }, level: LogLevel.Info });
       Logger.log({ message: '(ProjectSetup) _fetchData: Retrieving templates, extensions and content config', data: {}, level: LogLevel.Info });
       const [templates, extensions, listContentConfig] = await Promise.all([
-        this._hubConfigurationService.getHubItems(this.properties.templatesLibrary, ProjectTemplate, { ViewXml: '<View></View>' }, ['File', 'FieldValuesAsText']),
-        this._hubConfigurationService.getHubItems(this.properties.extensionsLibrary, ProjectExtension, { ViewXml: '<View></View>' }, ['File', 'FieldValuesAsText']),
-        this._hubConfigurationService.getHubItems(this.properties.contentConfigList, ListContentConfig),
+        this._portalDataService.getHubItems(this.properties.templatesLibrary, ProjectTemplate, { ViewXml: '<View></View>' }, ['File', 'FieldValuesAsText']),
+        this._portalDataService.getHubItems(this.properties.extensionsLibrary, ProjectExtension, { ViewXml: '<View></View>' }, ['File', 'FieldValuesAsText']),
+        this._portalDataService.getHubItems(this.properties.contentConfigList, ListContentConfig),
       ]);
       Logger.log({ message: '(ProjectSetup) _fetchData: Retrieved templates, extensions and content config', data: { templates: templates.length, extensions: extensions.length, listContentConfig: listContentConfig.length }, level: LogLevel.Info });
       return {
@@ -225,15 +222,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     } catch (error) {
       throw new ProjectSetupError('_fetchData', strings.GetSetupDataErrorMessage, strings.GetSetupDataErrorStack);
     }
-  }
-
-  /**
-   * Is debug
-   * 
-   * Typically true when running 'gulp serve'
-   */
-  private get _isDebug(): boolean {
-    return document.location.search.toLowerCase().indexOf('debugmanifestsfile') !== -1;
   }
 
   private get _validation(): ProjectSetupValidation {

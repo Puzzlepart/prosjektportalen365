@@ -7,7 +7,7 @@ declare interface IProjectWebPartsStrings {
   AutomaticReloadFieldLabel: string;
   ChangePhaseText: string;
   ChangingPhaseDescription: string;
-  ChangingPhaseLabel: string;
+  PleaseWaitText: string;
   CheckpointDoneTooltip: string;
   CheckpointNotRelevantTooltip: string;
   CheckpointNotRelevantTooltipCommentEmpty: string;

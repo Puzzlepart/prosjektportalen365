@@ -1,8 +1,8 @@
 import { Web } from '@pnp/sp';
 
-export type HubConfigurationServiceList = 'STATUS_SECTIONS' | 'PROJECT_COLUMNS' | 'PROJECT_COLUMN_CONFIGURATION' | 'PROJECT_STATUS' | 'PORTFOLIO_VIEWS';
+export type PortalDataServiceList = 'STATUS_SECTIONS' | 'PROJECT_COLUMNS' | 'PROJECT_COLUMN_CONFIGURATION' | 'PROJECT_STATUS' | 'PORTFOLIO_VIEWS';
 
-export interface IHubConfigurationServiceConfiguration extends Object {
+export interface IPortalDataServiceConfiguration extends Object {
     urlOrWeb: string | Web;
     siteId?: string;
     webUrl?: string;
@@ -15,7 +15,7 @@ export interface IHubConfigurationServiceConfiguration extends Object {
     }
 }
 
-export const HubConfigurationServiceDefaultConfiguration: Partial<IHubConfigurationServiceConfiguration> = {
+export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceConfiguration> = {
     listNames: {
         STATUS_SECTIONS: 'Statusseksjoner',
         PROJECT_COLUMNS: 'Prosjektkolonner',

@@ -12,14 +12,14 @@ import * as _ from 'underscore';
 import { DEFAULT_SEARCH_SETTINGS } from './DEFAULT_SEARCH_SETTINGS';
 import { FetchDataForViewRefinerEntryResult, IFetchDataForViewRefinersResult, IFetchDataForViewResult } from './IFetchDataForViewResult';
 import { PortfolioOverviewView } from 'shared/lib/models';
-import { HubConfigurationService } from 'shared/lib/services/HubConfigurationService';
+import { PortalDataService } from 'shared/lib/services/PortalDataService';
 
 
 export class DataAdapter {
-    private _hubConfigurationService: HubConfigurationService;
+    private _portalDataService: PortalDataService;
 
     constructor(public context: WebPartContext) {
-        this._hubConfigurationService = new HubConfigurationService().configure({ urlOrWeb: context.pageContext.web.absoluteUrl });
+        this._portalDataService = new PortalDataService().configure({ urlOrWeb: context.pageContext.web.absoluteUrl });
     }
 
     /**
@@ -63,11 +63,11 @@ export class DataAdapter {
 
     public async getPortfolioConfig(): Promise<IPortfolioConfiguration> {
         let [columnConfig, columns, views, viewsUrls, columnUrls] = await Promise.all([
-            this._hubConfigurationService.getProjectColumnConfig(),
-            this._hubConfigurationService.getProjectColumns(),
-            this._hubConfigurationService.getPortfolioOverviewViews(),
-            this._hubConfigurationService.getListFormUrls('PORTFOLIO_VIEWS'),
-            this._hubConfigurationService.getListFormUrls('PROJECT_COLUMNS'),
+            this._portalDataService.getProjectColumnConfig(),
+            this._portalDataService.getProjectColumns(),
+            this._portalDataService.getPortfolioOverviewViews(),
+            this._portalDataService.getListFormUrls('PORTFOLIO_VIEWS'),
+            this._portalDataService.getListFormUrls('PROJECT_COLUMNS'),
         ]);
         columns = columns.map(col => col.configure(columnConfig));
         let refiners = columns.filter(col => col.isRefinable);

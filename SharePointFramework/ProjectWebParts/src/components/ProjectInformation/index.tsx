@@ -1,12 +1,12 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
-import { dateAdd, PnPClientStorage, PnPClientStore, TypedHash, stringIsNullOrEmpty } from '@pnp/common';
+import { stringIsNullOrEmpty, TypedHash } from '@pnp/common';
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
-import { HubConfigurationService } from 'shared/lib/services';
+import { PortalDataService } from 'shared/lib/services';
 import parseUrlHash from 'shared/lib/util/parseUrlHash';
 import * as formatString from 'string-format';
 import SPDataAdapter from '../../data';
@@ -25,8 +25,7 @@ import { StatusReports } from './StatusReports';
 
 export class ProjectInformation extends BaseWebPartComponent<IProjectInformationProps, IProjectInformationState> {
   public static defaultProps: Partial<IProjectInformationProps> = { statusReportsCount: 0, page: 'Frontpage' };
-  private _hubConfigurationService: HubConfigurationService;
-  private _storage: PnPClientStore;
+  private _portalDataService: PortalDataService;
 
   /**
    * Constructor
@@ -35,8 +34,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
    */
   constructor(props: IProjectInformationProps) {
     super('ProjectInformation', props, { isLoading: true });
-    this._storage = new PnPClientStorage().session;
-    this._hubConfigurationService = new HubConfigurationService().configure({ urlOrWeb: props.hubSite.web, siteId: props.siteId });
+    this._portalDataService = new PortalDataService().configure({ urlOrWeb: props.hubSite.web, siteId: props.siteId });
   }
 
   public async componentDidMount() {
@@ -97,7 +95,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
           isSiteAdmin={this.props.isSiteAdmin}
           onFieldExternalChanged={this.props.onFieldExternalChanged}
           showFieldExternal={this.props.showFieldExternal}
-          localProjectPropertiesList={this.state.data.localProjectPropertiesList} />
+          propertiesList={!stringIsNullOrEmpty(this.state.data.propertiesListId)} />
         <StatusReports
           title={this.props.statusReportsHeader}
           statusReports={statusReports}
@@ -108,7 +106,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
           hidden={this.props.hideActions || !this.props.isSiteAdmin || this.props.displayMode === DisplayMode.Edit}
           versionHistoryUrl={versionHistoryUrl}
           editFormUrl={editFormUrl}
-          onSyncProperties={!this.state.data.localProjectPropertiesList && this._onSyncProperties.bind(this)} />
+          onSyncProperties={stringIsNullOrEmpty(this.state.data.propertiesListId) && this._onSyncProperties.bind(this)} />
         <ProgressDialog {...this.state.progress} />
       </>
     );
@@ -135,13 +133,18 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
    * On sync properties
    */
   private async _onSyncProperties(): Promise<void> {
+    let lastUpdated = await SPDataAdapter.project.getPropertiesLastUpdated(this.state.data);
+    if (lastUpdated > 60) {
+      document.location.hash = '';
+      return;
+    }
     this.logInfo(`Starting sync of ${strings.ProjectPropertiesListName}`, '_onSyncProperties');
     this.setState({ progress: { title: strings.SyncProjectPropertiesProgressLabel, progress: {} } });
     const progressFunc = (progress: IProgressIndicatorProps) => this.setState({ progress: { title: strings.SyncProjectPropertiesProgressLabel, progress } });
     try {
-      progressFunc({ label: strings.SyncProjectPropertiesListProgressDescription, description: 'Vennligst vent...' });
+      progressFunc({ label: strings.SyncProjectPropertiesListProgressDescription, description: `${strings.PleaseWaitText}...` });
       this.logInfo('Ensuring list and fields', '_onSyncProperties');
-      await this._hubConfigurationService.syncList(this.props.webUrl, strings.ProjectPropertiesListName, '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C', { Title: this.props.webTitle });
+      await this._portalDataService.syncList(this.props.webUrl, strings.ProjectPropertiesListName, '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C', { Title: this.props.webTitle });
       this.logInfo('Synchronizing properties to item in hub', '_onSyncProperties');
       await SPDataAdapter.syncPropertyItemToHub(this.state.data.fieldValues, this.state.data.fieldValuesText, progressFunc);
       this.logInfo(`Finished. Reloading page.`, '_onSyncProperties');
@@ -181,7 +184,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
   private async _fetchData(): Promise<Partial<IProjectInformationState>> {
     try {
       const [columnConfig, propertiesData] = await Promise.all([
-        this._hubConfigurationService.getProjectColumns(),
+        this._portalDataService.getProjectColumns(),
         SPDataAdapter.project.getPropertiesData(),
       ]);
 
@@ -192,12 +195,12 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
       };
 
       if (this.props.statusReportsCount > 0) {
-        data.statusReports = await this._hubConfigurationService.getStatusReports(undefined, this.props.statusReportsCount);
+        data.statusReports = await this._portalDataService.getStatusReports(undefined, this.props.statusReportsCount);
       }
 
       const properties = this._transformProperties(data.fieldValuesText, data);
 
-      this.logInfo('Succesfully retrieved data.', '_fetchData', { localProjectPropertiesList: data.localProjectPropertiesList });
+      this.logInfo('Succesfully retrieved data.', '_fetchData', { propertiesListId: data.propertiesListId });
 
       return { data, properties };
     } catch (error) {

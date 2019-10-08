@@ -1,6 +1,6 @@
 import { IProjectSetupData } from 'extensions/projectSetup';
 import * as strings from 'ProjectExtensionsStrings';
-import { HubConfigurationService } from 'shared/lib/services';
+import { PortalDataService } from 'shared/lib/services';
 import { SpEntityPortalService } from 'sp-entityportal-service';
 import initSpfxJsom from 'spfx-jsom';
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask';
@@ -23,7 +23,7 @@ export class PreTask extends BaseTask {
                 identityFieldName: 'GtGroupId',
                 urlFieldName: 'GtSiteUrl',
             });
-            params.hubConfigurationService = new HubConfigurationService().configure({ urlOrWeb: this.data.hub.web });
+            params.portalDataService = new PortalDataService().configure({ urlOrWeb: this.data.hub.web });
             return params;
         } catch (error) {
             throw new BaseTaskError(this.taskName, strings.PreTaskErrorMessage, error);

@@ -73,6 +73,7 @@
         "find": "^0.3.0",
         "gulp": "~3.9.1",
         "spfx-pkgdeploy": "^0.3.0",
-        "tslint-consistent-codestyle": "^1.15.1"
+        "tslint-consistent-codestyle": "^1.15.1",
+        "webpackbar": "^4.0.0"
     }
 }
