@@ -1,6 +1,6 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { dateAdd } from '@pnp/common';
-import { QueryPropertyValueType, SearchResults, SortDirection, sp } from '@pnp/sp';
+import { QueryPropertyValueType, SearchResult, SearchResults, SortDirection, sp } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
 import * as cleanDeep from 'clean-deep';
 import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces';
@@ -137,7 +137,7 @@ export class DataAdapter {
      * @param {string} sortProperty Sort property
      * @param {SortDirection} sortDirection Sort direction
      */
-    public async fetchProjectSites(rowLimit: number, sortProperty: string, sortDirection: SortDirection) {
+    public async fetchProjectSites(rowLimit: number, sortProperty: string, sortDirection: SortDirection): Promise<SearchResult[]> {
         let response = await sp.search({
             Querytext: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} contentclass:STS_Site`,
             TrimDuplicates: false,

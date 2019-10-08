@@ -1,86 +1,186 @@
 dependencies:
-  '@pnp/common': 1.3.4
-  '@pnp/logging': 1.3.4
-  '@pnp/odata': 1.3.4_85c904fe0796869275131ab792182ba1
-  '@pnp/sp': 1.3.4_53b50af46d203d821909bc0e473b2e99
-  '@pnp/sp-clientsvc': 1.3.4_b2d8254c3a2730888cc2f7887dd3d769
-  '@pnp/sp-taxonomy': 1.3.4_c02481f1c9af1fb42e7ec10988944680
+  '@microsoft/sp-page-context': 1.9.1
+  '@pnp/common': 1.3.5
+  '@pnp/logging': 1.3.5
+  '@pnp/odata': 1.3.5_be328cba2ec3bf7f0e259caa6ebdf16c
+  '@pnp/sp': 1.3.5_ee7ce9daf1f4788476a83d6aac2fb44c
+  '@pnp/sp-clientsvc': 1.3.5_ec78ce297c84b3e4f4c20fbab9c7cb22
+  '@pnp/sp-taxonomy': 1.3.5_a0330ef306db4d0f1a5309f731d52d43
+  applicationinsights-js: 1.0.20
   es6-promise: 4.2.8
   gulp: 4.0.2
+  moment: 2.24.0
   object-get: 2.1.0
+  scriptjs: 2.5.9
+  sp-entityportal-service: 0.6.14
+  string-format: 2.0.0
 devDependencies:
+  '@types/applicationinsights-js': 1.0.9
+  '@types/scriptjs': 0.0.2
   typescript: 2.9.2
 lockfileVersion: 5.1
 packages:
-  /@pnp/common/1.3.4:
+  /@microsoft/sp-core-library/1.9.1:
+    dependencies:
+      '@microsoft/sp-lodash-subset': 1.9.1
+      '@microsoft/sp-module-interfaces': 1.9.1
+      '@types/es6-promise': 0.0.33
+      '@types/webpack-env': 1.13.1
+    dev: false
+    resolution:
+      integrity: sha512-mXmrZhyuA0NymTAC6HSUiMGFLni9OSlKfJGWKt02EyuFbQ3U4v4UnmvZgvnQZs9ZHBc7KrKInxRaYCjHrv2ITg==
+  /@microsoft/sp-diagnostics/1.9.1:
+    dependencies:
+      '@microsoft/sp-core-library': 1.9.1
+      '@microsoft/sp-lodash-subset': 1.9.1
+    dev: false
+    resolution:
+      integrity: sha512-Ggnszpej/zPfCeGCwzBg/pFvsNxq4/cGDc0J3cGQJknAv/5cldSefT6SqPDD7qELpXw/sTfq+Zy5pyGxQDvcVw==
+  /@microsoft/sp-dynamic-data/1.9.1:
+    dependencies:
+      '@microsoft/sp-core-library': 1.9.1
+      '@microsoft/sp-diagnostics': 1.9.1
+      '@microsoft/sp-lodash-subset': 1.9.1
+      '@microsoft/sp-module-interfaces': 1.9.1
+      '@types/webpack-env': 1.13.1
+      tslib: 1.9.3
+    dev: false
+    resolution:
+      integrity: sha512-NVHhesEQ/qUpJOr54SMJtIrRdVs+dJVT9eSo4ntsJF1N2o23FMvH7IHLym9e+tGK0XqA6c/f3SWq+ujVRDfLMQ==
+  /@microsoft/sp-lodash-subset/1.9.1:
+    dependencies:
+      '@types/lodash': 4.14.117
+      '@types/webpack-env': 1.13.1
+      tslib: 1.9.3
+    dev: false
+    resolution:
+      integrity: sha512-bHYp2vyKfB/TYmCClUw9SCvJ7EYGeJOx8bxIm1hBlYzNBtIQvotTfdFBNz6vYEAXczMQHZkO9vToEd5jSturEA==
+  /@microsoft/sp-module-interfaces/1.9.1:
+    dependencies:
+      '@types/node': 8.5.8
+      '@types/z-schema': 3.16.31
+      z-schema: 3.18.4
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha512-c9ihRbxq3zOv1hU76BNFlB1i2ZOTidgPmoz5BRHogSarcTC6NxnB+4pP8ulSvvV5NiNZLFZrNNF5WXg1wbGIqA==
+  /@microsoft/sp-odata-types/1.9.1:
+    dependencies:
+      tslib: 1.9.3
+    dev: false
+    resolution:
+      integrity: sha512-Gy3Ke4MQv1gQxhAlAgp9aWZ9R3nCKr7uZ67186BZit0sSqFmmv3XWGUMS3DCKQo3+piQWCoZPU8XvmyBmAo9+w==
+  /@microsoft/sp-page-context/1.9.1:
+    dependencies:
+      '@microsoft/sp-core-library': 1.9.1
+      '@microsoft/sp-diagnostics': 1.9.1
+      '@microsoft/sp-dynamic-data': 1.9.1
+      '@microsoft/sp-lodash-subset': 1.9.1
+      '@microsoft/sp-odata-types': 1.9.1
+      '@types/es6-promise': 0.0.33
+      '@types/webpack-env': 1.13.1
+      tslib: 1.9.3
+    dev: false
+    resolution:
+      integrity: sha512-eFFbUxcGhjtS4CD57fzphNDqRgLbY2SHY9zsjfDYRiiAqOxrKGC2XklLbS6zCEb4xXOCZAPyPDHYmR8tLRAE2g==
+  /@pnp/common/1.3.5:
     dependencies:
       adal-angular: 1.0.17
       tslib: 1.10.0
     dev: false
     resolution:
-      integrity: sha512-gs5q9Fiy9BUTqPvqC7Ake9fAQVrcq5RVRGhQMbZPAdx14iiFhfwR1fq7MJltdRMXIToi+3YGdKxh7fn2xCkMbA==
-  /@pnp/logging/1.3.4:
+      integrity: sha512-rM+4PGqGvvB0PuvsKvTgXGTwuhc6Zrl6Xtv4qOJaw1GAtkc18VtuG9yUgltRPsfMYQQl8DAO3VxnDyRKTo8Mng==
+  /@pnp/logging/1.3.5:
     dependencies:
       tslib: 1.10.0
     dev: false
     resolution:
-      integrity: sha512-YWvAN5z45afouLtCFP1ClT74bd/tFNf5G5QgmxxMPwEp37PoYTMgUCf4hH+ZZVe6MO3eD5DVPr57ZdeF+oLzzQ==
-  /@pnp/odata/1.3.4_85c904fe0796869275131ab792182ba1:
+      integrity: sha512-QVfucpf+TkGPjBgbhUYUkIof9fyq9wLmxYfO/KVOz7abstA97j9AywOS458NOnhXQebWnVKVNP8tB8uuFvv1WQ==
+  /@pnp/odata/1.3.5_be328cba2ec3bf7f0e259caa6ebdf16c:
     dependencies:
-      '@pnp/common': 1.3.4
-      '@pnp/logging': 1.3.4
-      tslib: 1.10.0
-    dev: false
-    peerDependencies:
-      '@pnp/common': 1.3.4
-      '@pnp/logging': 1.3.4
-    resolution:
-      integrity: sha512-S9X+qhIrjuxv02cN56wv68hGFa5q27N1DTv/yKC8TXp3nHAGKoKwT/uRIilOrtANIR/DBMC0Oto5lXfLtC/PiQ==
-  /@pnp/sp-clientsvc/1.3.4_b2d8254c3a2730888cc2f7887dd3d769:
-    dependencies:
-      '@pnp/common': 1.3.4
-      '@pnp/logging': 1.3.4
-      '@pnp/odata': 1.3.4_85c904fe0796869275131ab792182ba1
-      '@pnp/sp': 1.3.4_53b50af46d203d821909bc0e473b2e99
+      '@pnp/common': 1.3.5
+      '@pnp/logging': 1.3.5
       tslib: 1.10.0
     dev: false
     peerDependencies:
-      '@pnp/common': 1.3.4
-      '@pnp/logging': 1.3.4
-      '@pnp/odata': 1.3.4
-      '@pnp/sp': 1.3.4
+      '@pnp/common': 1.3.5
+      '@pnp/logging': 1.3.5
     resolution:
-      integrity: sha512-nu1W9L4kL4QDlXN7jWratlmH0LLW1cMjJZZt55HoRwPo3hstnCbX607jaoZH4l7q4REpFSVtm2FbU1wRWoXBPA==
-  /@pnp/sp-taxonomy/1.3.4_c02481f1c9af1fb42e7ec10988944680:
+      integrity: sha512-a1C4A6RZg5paR+D0sJ1urIcCNNhFISgBjPTTh7mdbWTHKVj1b/FD2JtlhwuM4SCXsLQRgYTy4fM9e1DQ98CcfQ==
+  /@pnp/sp-clientsvc/1.3.5_ec78ce297c84b3e4f4c20fbab9c7cb22:
     dependencies:
-      '@pnp/common': 1.3.4
-      '@pnp/logging': 1.3.4
-      '@pnp/odata': 1.3.4_85c904fe0796869275131ab792182ba1
-      '@pnp/sp': 1.3.4_53b50af46d203d821909bc0e473b2e99
-      '@pnp/sp-clientsvc': 1.3.4_b2d8254c3a2730888cc2f7887dd3d769
+      '@pnp/common': 1.3.5
+      '@pnp/logging': 1.3.5
+      '@pnp/odata': 1.3.5_be328cba2ec3bf7f0e259caa6ebdf16c
+      '@pnp/sp': 1.3.5_ee7ce9daf1f4788476a83d6aac2fb44c
       tslib: 1.10.0
     dev: false
     peerDependencies:
-      '@pnp/common': 1.3.4
-      '@pnp/logging': 1.3.4
-      '@pnp/odata': 1.3.4
-      '@pnp/sp': 1.3.4
-      '@pnp/sp-clientsvc': 1.3.4
+      '@pnp/common': 1.3.5
+      '@pnp/logging': 1.3.5
+      '@pnp/odata': 1.3.5
+      '@pnp/sp': 1.3.5
     resolution:
-      integrity: sha512-nWIFHzPGIVr1QNVi2O3b9GVLVfYNu+J8WRDjXi/yyQrsHtUuE8pDv4qDV8/lKNViUM892js4JqwsDaSGjLH+iw==
-  /@pnp/sp/1.3.4_53b50af46d203d821909bc0e473b2e99:
+      integrity: sha512-OIG4dFlqr8gHK7yUXNt3uf0gLly9Uf/kijJ3WNQJfQ6GYWO06yQwzfrQoVUItK8raxVA+OZST+8ExYYMsx9m4Q==
+  /@pnp/sp-taxonomy/1.3.5_a0330ef306db4d0f1a5309f731d52d43:
     dependencies:
-      '@pnp/common': 1.3.4
-      '@pnp/logging': 1.3.4
-      '@pnp/odata': 1.3.4_85c904fe0796869275131ab792182ba1
+      '@pnp/common': 1.3.5
+      '@pnp/logging': 1.3.5
+      '@pnp/odata': 1.3.5_be328cba2ec3bf7f0e259caa6ebdf16c
+      '@pnp/sp': 1.3.5_ee7ce9daf1f4788476a83d6aac2fb44c
+      '@pnp/sp-clientsvc': 1.3.5_ec78ce297c84b3e4f4c20fbab9c7cb22
       tslib: 1.10.0
     dev: false
     peerDependencies:
-      '@pnp/common': 1.3.4
-      '@pnp/logging': 1.3.4
-      '@pnp/odata': 1.3.4
+      '@pnp/common': 1.3.5
+      '@pnp/logging': 1.3.5
+      '@pnp/odata': 1.3.5
+      '@pnp/sp': 1.3.5
+      '@pnp/sp-clientsvc': 1.3.5
     resolution:
-      integrity: sha512-mTPXjs3kI/Ydxy5wMZ0eBMaMmxcMeCUXJbo522xtWNSGgQEHiEdM75QKNniIo6Bf+Nhnf6h3T8bdR8A4+1ztJw==
+      integrity: sha512-rch++LI5Bur9sZcLK9SlLB71UzwlzxmMdAVXRQCtQT7qCqCLjQdex7bzNlOCEMegtghZXUESjjOR0YtYCctIww==
+  /@pnp/sp/1.3.5_ee7ce9daf1f4788476a83d6aac2fb44c:
+    dependencies:
+      '@pnp/common': 1.3.5
+      '@pnp/logging': 1.3.5
+      '@pnp/odata': 1.3.5_be328cba2ec3bf7f0e259caa6ebdf16c
+      tslib: 1.10.0
+    dev: false
+    peerDependencies:
+      '@pnp/common': 1.3.5
+      '@pnp/logging': 1.3.5
+      '@pnp/odata': 1.3.5
+    resolution:
+      integrity: sha512-0CP6aK6pFYe8wrTASotuvwCbsFarIimphsAM4cvAhO77Io1wLSoQpIXUltV6hfILD8q7981gl5v6yXYYbQlgIA==
+  /@types/applicationinsights-js/1.0.9:
+    dev: true
+    resolution:
+      integrity: sha512-tf2BBQFIRgaoxkii5Ys4Q2nvhPQ2PFt9FfgDc+xL7+XPi3s4ScqzRuAn8FRBCglnyzVvwEznOtdfqGREzUOkCw==
+  /@types/es6-promise/0.0.33:
+    dev: false
+    resolution:
+      integrity: sha512-HKJFVLCGrWQ/1unEw8JdaTxu6n3EUxmwTxJ6D0O1x0gD8joCsgoTWxEgevb7fp2XIogNjof3KEd+3bJoGne/nw==
+  /@types/lodash/4.14.117:
+    dev: false
+    resolution:
+      integrity: sha512-xyf2m6tRbz8qQKcxYZa7PA4SllYcay+eh25DN3jmNYY6gSTL7Htc/bttVdkqj2wfJGbeWlQiX8pIyJpKU+tubw==
+  /@types/node/8.5.8:
+    dev: false
+    resolution:
+      integrity: sha512-8KmlRxwbKZfjUHFIt3q8TF5S2B+/E5BaAoo/3mgc5h6FJzqxXkCK/VMetO+IRDtwtU6HUvovHMBn+XRj7SV9Qg==
+  /@types/scriptjs/0.0.2:
+    dev: true
+    resolution:
+      integrity: sha1-CaIociGno0H8a5WwBeS/sqVANTg=
+  /@types/webpack-env/1.13.1:
+    dev: false
+    resolution:
+      integrity: sha512-oHyg0NssP2RCpCvE35hhbSqMJRsc5lSW+GFe+Vc65JL+kHII1VMYM+0KeV/z4utFuUqPoQRmq8KMMp7ba0dj6Q==
+  /@types/z-schema/3.16.31:
+    dev: false
+    resolution:
+      integrity: sha1-LrHQCl5Ow/pYx2r94S4YK2bcXBw=
   /adal-angular/1.0.17:
     dev: false
     engines:
@@ -130,6 +230,10 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-2CIM9GYIFSXv6lBhTz3mUU36WPE=
+  /applicationinsights-js/1.0.20:
+    dev: false
+    resolution:
+      integrity: sha512-vN6fEv2fNPZtw76/mv5OJ44cTP/VzSDahdXVIGnRB5Apnf2/9PIl4IyWpwS9biG53I1sWvkw83RjdrAnsIKoRQ==
   /archy/1.0.0:
     dev: false
     resolution:
@@ -221,7 +325,7 @@ packages:
       integrity: sha1-WWZ/QfrdTyDMvCu5a41Pf3jsA2c=
   /async-done/1.3.2:
     dependencies:
-      end-of-stream: 1.4.1
+      end-of-stream: 1.4.4
       once: 1.4.0
       process-nextick-args: 2.0.1
       stream-exhaust: 1.0.2
@@ -345,7 +449,7 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-MvxLn82vhF/N9+c7uXysImHwqwo=
-  /chokidar/2.1.6:
+  /chokidar/2.1.8:
     dependencies:
       anymatch: 2.0.0
       async-each: 1.0.3
@@ -357,12 +461,12 @@ packages:
       normalize-path: 3.0.0
       path-is-absolute: 1.0.1
       readdirp: 2.2.1
-      upath: 1.1.2
+      upath: 1.2.0
     dev: false
     optionalDependencies:
       fsevents: 1.2.9
     resolution:
-      integrity: sha512-V2jUo67OKkc6ySiRpJrjlpJKl9kDuG+Xb8VgsGzb+aEouhgS1D0weyPU4lEzdAcsCAvrih2J2BqyXqHWvVLw5g==
+      integrity: sha512-ZmZUazfOzf0Nve7duiCKD23PFSCs4JPoYyccjUFF3aQkQadqBhfzhjkwBH2mNOG9cTBwhamM37EIsIkZw3nRgg==
   /class-utils/0.3.6:
     dependencies:
       arr-union: 3.1.0
@@ -436,6 +540,11 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-qiBjkpbMLO/HL68y+lh4q0/O1MZFj2RX6X/KmMa3+gJD3z+WwI1ZzDHysvqHGS3mP6mznPckpXmw1nI9cJjyRg==
+  /commander/2.20.1:
+    dev: false
+    optional: true
+    resolution:
+      integrity: sha512-cCuLsMhJeWQ/ZpsFTbE765kvVfoeSddc4nU3up4fV+fDBcfUXnbITJ+JzhkdjzOqhURjZgujxaioam4RM9yGUg==
   /component-emitter/1.3.0:
     dev: false
     resolution:
@@ -480,8 +589,8 @@ packages:
       integrity: sha1-tf1UIgqivFq1eqtxQMlAdUUDwac=
   /d/1.0.1:
     dependencies:
-      es5-ext: 0.10.50
-      type: 1.0.1
+      es5-ext: 0.10.51
+      type: 1.2.0
     dev: false
     resolution:
       integrity: sha512-m62ShEObQ39CfralilEQRjH6oAMtNCV1xJyEx5LpRYUVN+EviphDgUc/F3hnYbADmkiNs67Y+3ylmlG7Lnu+FA==
@@ -558,7 +667,7 @@ packages:
       integrity: sha1-8NZtA2cqglyxtzvbP+YjEMjlUrc=
   /duplexify/3.7.1:
     dependencies:
-      end-of-stream: 1.4.1
+      end-of-stream: 1.4.4
       inherits: 2.0.4
       readable-stream: 2.3.6
       stream-shift: 1.0.0
@@ -572,31 +681,31 @@ packages:
     dev: false
     resolution:
       integrity: sha512-vV0Hem3zAGkJAyU7JSjixeU66rwdynTAa1vofCrSA5fEln+m67Az9CcnkVD776/fsN/UjIWmBDoNRS6t6G9RfA==
-  /end-of-stream/1.4.1:
+  /end-of-stream/1.4.4:
     dependencies:
       once: 1.4.0
     dev: false
     resolution:
-      integrity: sha512-1MkrZNvWTKCaigbn+W15elq2BB/L22nqrSY5DKlo3X6+vclJm8Bb5djXJBmEX6fS3+zCh/F4VBK5Z2KxJt4s2Q==
+      integrity: sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==
   /error-ex/1.3.2:
     dependencies:
       is-arrayish: 0.2.1
     dev: false
     resolution:
       integrity: sha512-7dFHNmqeFSEt2ZBsCriorKnn3Z2pj+fd9kmI6QoWw4//DL+icEBfc0U7qJCisqrTsKTjw4fNFy2pW9OqStD84g==
-  /es5-ext/0.10.50:
+  /es5-ext/0.10.51:
     dependencies:
       es6-iterator: 2.0.3
-      es6-symbol: 3.1.1
+      es6-symbol: 3.1.2
       next-tick: 1.0.0
     dev: false
     resolution:
-      integrity: sha512-KMzZTPBkeQV/JcSQhI5/z6d9VWJ3EnQ194USTUwIYZ2ZbpN8+SGXQKt1h68EX44+qt+Fzr8DO17vnxrw7c3agw==
+      integrity: sha512-oRpWzM2WcLHVKpnrcyB7OW8j/s67Ba04JCm0WnNv3RiABSvs7mrQlutB8DBv793gKcp0XENR8Il8WxGTlZ73gQ==
   /es6-iterator/2.0.3:
     dependencies:
       d: 1.0.1
-      es5-ext: 0.10.50
-      es6-symbol: 3.1.1
+      es5-ext: 0.10.51
+      es6-symbol: 3.1.2
     dev: false
     resolution:
       integrity: sha1-p96IkUGgWpSwhUQDstCg+/qY87c=
@@ -604,19 +713,19 @@ packages:
     dev: false
     resolution:
       integrity: sha512-HJDGx5daxeIvxdBxvG2cb9g4tEvwIk3i8+nhX0yGrYmZUzbkdg8QbDevheDB8gd0//uPj4c1EQua8Q+MViT0/w==
-  /es6-symbol/3.1.1:
+  /es6-symbol/3.1.2:
     dependencies:
       d: 1.0.1
-      es5-ext: 0.10.50
+      es5-ext: 0.10.51
     dev: false
     resolution:
-      integrity: sha1-vwDvT9q2uhtG7Le2KbTH7VcVzHc=
+      integrity: sha512-/ZypxQsArlv+KHpGvng52/Iz8by3EQPxhmbuz8yFG89N/caTFBSbcXONDw0aMjy827gQg26XAjP4uXFvnfINmQ==
   /es6-weak-map/2.0.3:
     dependencies:
       d: 1.0.1
-      es5-ext: 0.10.50
+      es5-ext: 0.10.51
       es6-iterator: 2.0.3
-      es6-symbol: 3.1.1
+      es6-symbol: 3.1.2
     dev: false
     resolution:
       integrity: sha512-p5um32HOTO1kP+w7PRnB+5lQ43Z6muuMuIMffvDN8ZB4GcnjLBV6zGStpbASIMk4DCAvEaamhe2zhyCb/QXXsA==
@@ -780,7 +889,7 @@ packages:
       integrity: sha1-QpD60n8T6Jvn8zeZxrxaCr//DRk=
   /fs-mkdirp-stream/1.0.0:
     dependencies:
-      graceful-fs: 4.2.0
+      graceful-fs: 4.2.2
       through2: 2.0.5
     dev: false
     engines:
@@ -845,7 +954,7 @@ packages:
     dependencies:
       anymatch: 2.0.0
       async-done: 1.3.2
-      chokidar: 2.1.6
+      chokidar: 2.1.8
       is-negated-glob: 1.0.0
       just-debounce: 1.0.0
       object.defaults: 1.1.0
@@ -895,10 +1004,10 @@ packages:
       node: '>= 0.10'
     resolution:
       integrity: sha512-5mwUoSuBk44Y4EshyiqcH95ZntbDdTQqA3QYSrxmzj28Ai0vXBGMH1ApSANH14j2sIRtqCEyg6PfsuP7ElOEDA==
-  /graceful-fs/4.2.0:
+  /graceful-fs/4.2.2:
     dev: false
     resolution:
-      integrity: sha512-jpSvDPV4Cq/bgtpndIWbI5hmYxhQGHPC4d4cqBPb4DLniCfhJokdXhwhaDuLBGLQdvvRum/UiX6ECVIPvDXqdg==
+      integrity: sha512-IItsdsea19BoLC7ELy13q1iJFNmd7ofZH5+X/pJr90/nRoPEX0DJo1dHDbgtYWOhJhcCgMDTOw84RZ72q6lB+Q==
   /gulp-cli/2.2.0:
     dependencies:
       ansi-colors: 1.1.0
@@ -994,10 +1103,10 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-eSmmWE5bZTK2Nou4g0AI3zZ9rswp7GRKoKXS1BLUkvPviOqs4YTN1djQIqrXy9k5gEtdLPy86JjRwsNM9tnDcA==
-  /hosted-git-info/2.7.1:
+  /hosted-git-info/2.8.4:
     dev: false
     resolution:
-      integrity: sha512-7T/BxH19zbcCTa8XkMlbK5lTo1WtgkFi3GvdWEyNuc4Vex7/9Dqbnpsf4JMydcfj9HCg4zUWFTL3Za6lapg5/w==
+      integrity: sha512-pzXIvANXEFrc5oFFXRMkbLPQ2rXRoDERwDLyrcUxGhaZhgP54BBSl9Oheh7Vv0T090cszWBxPjkQQ5Sq1PbBRQ==
   /inflight/1.0.6:
     dependencies:
       once: 1.4.0
@@ -1314,7 +1423,7 @@ packages:
       integrity: sha512-DlIPlJUkCV0Ips2zf2pJP0unEoT1kwYhiiPUGF3s/jtxTCjziNLoiVVh+jqWOWeFi6mmwQ5fNxvAUyPad4Dfog==
   /load-json-file/1.1.0:
     dependencies:
-      graceful-fs: 4.2.0
+      graceful-fs: 4.2.2
       parse-json: 2.2.0
       pify: 2.3.0
       pinkie-promise: 2.0.1
@@ -1324,6 +1433,14 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-lWkFcI1YtLq0wiYbBPWfMcmTdMA=
+  /lodash.get/4.4.2:
+    dev: false
+    resolution:
+      integrity: sha1-LRd/ZS+jHpObRDjVNBSZ36OCXpk=
+  /lodash.isequal/4.5.0:
+    dev: false
+    resolution:
+      integrity: sha1-QVxEePK8wwEgwizhDtMib30+GOA=
   /make-iterator/1.0.1:
     dependencies:
       kind-of: 6.0.2
@@ -1392,6 +1509,10 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-WRoDn//mXBiJ1H40rqa3vH0toePwSsGb45iInWlTySa+Uu4k3tYUSxa2v1KqAiLtvlrSzaExqS1gtk96A9zvEA==
+  /moment/2.24.0:
+    dev: false
+    resolution:
+      integrity: sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
   /ms/2.0.0:
     dev: false
     resolution:
@@ -1431,9 +1552,9 @@ packages:
       integrity: sha1-yobR/ogoFpsBICCOPchCS524NCw=
   /normalize-package-data/2.5.0:
     dependencies:
-      hosted-git-info: 2.7.1
+      hosted-git-info: 2.8.4
       resolve: 1.12.0
-      semver: 5.7.0
+      semver: 5.7.1
       validate-npm-package-license: 3.0.4
     dev: false
     resolution:
@@ -1636,7 +1757,7 @@ packages:
       integrity: sha1-mkpoFMrBwM1zNgqV8yCDyOpHRbc=
   /path-type/1.1.0:
     dependencies:
-      graceful-fs: 4.2.0
+      graceful-fs: 4.2.2
       pify: 2.3.0
       pinkie-promise: 2.0.1
     dev: false
@@ -1682,7 +1803,7 @@ packages:
       integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==
   /pump/2.0.1:
     dependencies:
-      end-of-stream: 1.4.1
+      end-of-stream: 1.4.4
       once: 1.4.0
     dev: false
     resolution:
@@ -1728,7 +1849,7 @@ packages:
       integrity: sha512-tQtKA9WIAhBF3+VLAseyMqZeBjW0AHJoxOtYqSUZNJxauErmLbVm2FW1y+J/YA9dUrAC39ITejlZWhVIwawkKw==
   /readdirp/2.2.1:
     dependencies:
-      graceful-fs: 4.2.0
+      graceful-fs: 4.2.2
       micromatch: 3.1.10
       readable-stream: 2.3.6
     dev: false
@@ -1861,6 +1982,10 @@ packages:
     dev: false
     resolution:
       integrity: sha1-QKNmnzsHfR6UPURinhV91IAjvy4=
+  /scriptjs/2.5.9:
+    dev: false
+    resolution:
+      integrity: sha512-qGVDoreyYiP1pkQnbnFAUIS5AjenNwwQBdl7zeos9etl+hYKWahjRTfzAZZYBv5xNHx7vNKCmaLDQZ6Fr2AEXg==
   /semver-greatest-satisfied-range/1.1.0:
     dependencies:
       sver-compat: 1.5.0
@@ -1869,11 +1994,11 @@ packages:
       node: '>= 0.10'
     resolution:
       integrity: sha1-E+jCZYq5aRywzXEJMkAoDTb3els=
-  /semver/5.7.0:
+  /semver/5.7.1:
     dev: false
     hasBin: true
     resolution:
-      integrity: sha512-Ya52jSX2u7QKghxeoFGpLwCtGlt7j0oY9DYb5apt9nPlJ42ID+ulTXESnt/qAQcoSERyZ5sl3LDIOw0nAn/5DA==
+      integrity: sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ==
   /set-blocking/2.0.0:
     dev: false
     resolution:
@@ -1942,6 +2067,16 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=
+  /sp-entityportal-service/0.6.14:
+    dependencies:
+      '@microsoft/sp-page-context': 1.9.1
+      '@pnp/common': 1.3.5
+      '@pnp/logging': 1.3.5
+      '@pnp/odata': 1.3.5_be328cba2ec3bf7f0e259caa6ebdf16c
+      '@pnp/sp': 1.3.5_ee7ce9daf1f4788476a83d6aac2fb44c
+    dev: false
+    resolution:
+      integrity: sha512-nrMbd1f0r3aJov/oBNtRqSbae/2vfSKU+dhFXUlys3Bbft6H4V8x+gIx8E33C9rINF/qrajbEg6SXpvXJLhTug==
   /sparkles/1.0.1:
     dev: false
     engines:
@@ -1999,6 +2134,10 @@ packages:
     dev: false
     resolution:
       integrity: sha1-1cdSgl5TZ+eG944Y5EXqIjoVWVI=
+  /string-format/2.0.0:
+    dev: false
+    resolution:
+      integrity: sha512-bbEs3scLeYNXLecRRuk6uJxdXUSj6le/8rNPHChIJTn2V79aXVTR1EH2OH5zLKKoz0V02fOUKZZcw01pLUShZA==
   /string-width/1.0.2:
     dependencies:
       code-point-at: 1.1.0
@@ -2034,7 +2173,7 @@ packages:
   /sver-compat/1.5.0:
     dependencies:
       es6-iterator: 2.0.3
-      es6-symbol: 3.1.1
+      es6-symbol: 3.1.2
     dev: false
     resolution:
       integrity: sha1-PPh9/rTQe0o/FIJ7wYaz/QxkXNg=
@@ -2107,10 +2246,14 @@ packages:
     dev: false
     resolution:
       integrity: sha512-qOebF53frne81cf0S9B41ByenJ3/IuH8yJKngAX35CmiZySA0khhkovshKK+jGCaMnVomla7gVlIcc3EvKPbTQ==
-  /type/1.0.1:
+  /tslib/1.9.3:
     dev: false
     resolution:
-      integrity: sha512-MAM5dBMJCJNKs9E7JXo4CXRAansRfG0nlJxW7Wf6GZzSOvH31zClSaHdIMWLehe/EGMBkqeC55rrkaOr5Oo7Nw==
+      integrity: sha512-4krF8scpejhaOgqzBEcGM7yDIEfi0/8+8zDRZhNZZ2kjmHJ4hv3zCbQWxoJGz1iw5U0Jl0nma13xzHXcncMavQ==
+  /type/1.2.0:
+    dev: false
+    resolution:
+      integrity: sha512-+5nt5AAniqsCnu2cEQQdpzCAh33kVx8n0VoFidKpB1dVVLAN/F+bgVOqOJqOnEnrhp222clB5p3vUlD+1QAnfg==
   /typedarray/0.0.6:
     dev: false
     resolution:
@@ -2177,12 +2320,12 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-g3aHP30jNRef+x5vw6jtDfyKtVk=
-  /upath/1.1.2:
+  /upath/1.2.0:
     dev: false
     engines:
       node: '>=4'
     resolution:
-      integrity: sha512-kXpym8nmDmlCBr7nKdIx8P2jNBa+pBpIUFRnKJ4dr8htyYGJFokkr2ZvERRtUN+9SY+JqXouNgUPtv6JQva/2Q==
+      integrity: sha512-aZwGpamFO61g3OlfT7OQCHqhGnW43ieH9WZeP7QxN/G/jS4jfqUkZxoryvJgVPEcrl5NL/ggHsSmLMHuH64Lhg==
   /urix/0.1.0:
     dev: false
     resolution:
@@ -2212,6 +2355,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==
+  /validator/8.2.0:
+    dev: false
+    engines:
+      node: '>= 0.10'
+    resolution:
+      integrity: sha512-Yw5wW34fSv5spzTXNkokD6S6/Oq92d8q/t14TqsS3fAiA1RYnxSFSIZ+CY3n6PGGRCq5HhJTSepQvFUS2QUDxA==
   /value-or-function/3.0.0:
     dev: false
     engines:
@@ -2222,7 +2371,7 @@ packages:
     dependencies:
       fs-mkdirp-stream: 1.0.0
       glob-stream: 6.1.0
-      graceful-fs: 4.2.0
+      graceful-fs: 4.2.2
       is-valid-glob: 1.0.0
       lazystream: 1.0.0
       lead: 1.0.0
@@ -2246,7 +2395,7 @@ packages:
     dependencies:
       append-buffer: 1.0.2
       convert-source-map: 1.6.0
-      graceful-fs: 4.2.0
+      graceful-fs: 4.2.2
       normalize-path: 2.1.1
       now-and-later: 2.0.1
       remove-bom-buffer: 3.0.0
@@ -2327,14 +2476,33 @@ packages:
     dev: false
     resolution:
       integrity: sha1-a6MY6xaWFyf10oT46gA+jWFU0Mg=
+  /z-schema/3.18.4:
+    dependencies:
+      lodash.get: 4.4.2
+      lodash.isequal: 4.5.0
+      validator: 8.2.0
+    dev: false
+    hasBin: true
+    optionalDependencies:
+      commander: 2.20.1
+    resolution:
+      integrity: sha512-DUOKC/IhbkdLKKiV89gw9DUauTV8U/8yJl1sjf6MtDmzevLKOF2duNJ495S3MFVjqZarr+qNGCPbkg4mu4PpLw==
 specifiers:
-  '@pnp/common': ^1.3.4
-  '@pnp/logging': ^1.3.4
-  '@pnp/odata': ^1.3.4
-  '@pnp/sp': ^1.3.4
-  '@pnp/sp-clientsvc': ^1.3.4
-  '@pnp/sp-taxonomy': ^1.3.4
+  '@microsoft/sp-page-context': ^1.9.1
+  '@pnp/common': ^1.3.5
+  '@pnp/logging': ^1.3.5
+  '@pnp/odata': ^1.3.5
+  '@pnp/sp': ^1.3.5
+  '@pnp/sp-clientsvc': ^1.3.5
+  '@pnp/sp-taxonomy': ^1.3.5
+  '@types/applicationinsights-js': ^1.0.9
+  '@types/scriptjs': ^0.0.2
+  applicationinsights-js: ^1.0.20
   es6-promise: ^4.2.8
   gulp: ^4.0.2
+  moment: ^2.24.0
   object-get: ^2.1.0
+  scriptjs: ^2.5.9
+  sp-entityportal-service: ^0.6.9
+  string-format: ^2.0.0
   typescript: ^2.9.0
