@@ -23,7 +23,12 @@ export interface IPortfolioOverviewState {
     /**
      * @todo describe property
      */
-    items?: IFetchDataForViewItemResult[];
+    items?: any[];
+
+    /**
+     * @todo describe property
+     */
+    selectedItems?: any[];
 
     /**
      * @todo describe property
