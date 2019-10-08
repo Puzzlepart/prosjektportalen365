@@ -19,9 +19,9 @@
         "minorVersion": "npm version minor",
         "majorVersion": "npm version major",
         "gitPushChanges": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ../../scripts/Git-PushChanges.ps1 -Prefix PortfolioWebParts",
-        "prepackage": "gulp setHiddenToolbox --hidden true",
-        "preserve": "gulp setHiddenToolbox --hidden false",
-        "preserveNoBrowser": "gulp setHiddenToolbox --hidden false"
+        "prepackage": "gulp setHiddenToolbox --ship",
+        "preserve": "gulp setHiddenToolbox",
+        "preserveNoBrowser": "gulp setHiddenToolbox"
     },
     "dependencies": {
         "@microsoft/sp-core-library": "1.9.1",
