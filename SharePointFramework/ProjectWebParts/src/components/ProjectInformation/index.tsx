@@ -1,5 +1,6 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common';
+import { LogLevel } from '@pnp/logging';
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator';
@@ -133,9 +134,11 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
    * On sync properties
    */
   private async _onSyncProperties(): Promise<void> {
-    let lastUpdated = await SPDataAdapter.project.getPropertiesLastUpdated(this.state.data);
-    if (lastUpdated > 60) {
-      return;
+    if (!stringIsNullOrEmpty(this.state.data.propertiesListId)) {
+      let lastUpdated = await SPDataAdapter.project.getPropertiesLastUpdated(this.state.data);
+      if (lastUpdated > 60) {
+        return;
+      }
     }
     this.logInfo(`Starting sync of ${strings.ProjectPropertiesListName}`, '_onSyncProperties');
     this.setState({ progress: { title: strings.SyncProjectPropertiesProgressLabel, progress: {} } });
@@ -182,6 +185,15 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
    */
   private async _fetchData(): Promise<Partial<IProjectInformationState>> {
     try {
+      if (!SPDataAdapter.isConfigured) {
+        SPDataAdapter.configure(this.context, {
+          siteId: this.props.siteId,
+          webUrl: this.props.webUrl,
+          hubSiteUrl: this.props.hubSite.url,
+          logLevel: DEBUG ? LogLevel.Info : LogLevel.Error,
+        });
+      }
+
       const [columnConfig, propertiesData] = await Promise.all([
         this._portalDataService.getProjectColumns(),
         SPDataAdapter.project.getPropertiesData(),
@@ -203,6 +215,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
 
       return { data, properties };
     } catch (error) {
+      this.logError('Failed to retrieve data.', '_fetchData', error);
       throw error;
     }
   }

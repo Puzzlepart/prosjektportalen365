@@ -16,6 +16,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
     public portalDataService: PortalDataService;
     public spEntityPortalService: SpEntityPortalService;
     public sp: SPRest;
+    public isConfigured: boolean = false;
 
     /**
      * Configure the SP data adapter
@@ -35,6 +36,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
             identityFieldName: 'GtSiteId',
             urlFieldName: 'GtSiteUrl',
         });
+        this.isConfigured = true;
     }
 }
 

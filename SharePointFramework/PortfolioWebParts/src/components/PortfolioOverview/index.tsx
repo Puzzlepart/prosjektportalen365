@@ -114,7 +114,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
             modalProps={{ isOpen: true, onDismiss: this._onDismissProjectInfoModal.bind(this) }}
             title={this.state.showProjectInfo.Title}
             siteId={this.state.showProjectInfo.SiteId}
-            webUrl={this.props.pageContext.site.absoluteUrl}
+            webUrl={this.state.showProjectInfo.Path}
             hubSite={{ web: new Web(this.props.pageContext.site.absoluteUrl), url: this.props.pageContext.site.absoluteUrl }}
             page='Portfolio'
             statusReportsCount={this.props.statusReportsCount} />
