@@ -31,7 +31,7 @@ try {
 }
 
 gulp.task('versionSync', (done) => {
-    find.file(/\manifest.json$/, path.join(__dirname, "src", "extensions"), (files) => {
+    find.file(/\manifest.json$/, path.join(__dirname, "src"), (files) => {
         var pkgSolution = require('./config/package-solution.json');
         var newVersionNumber = require('./package.json').version.split('-')[0];
         pkgSolution.solution.version = newVersionNumber + '.0';
