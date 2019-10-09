@@ -1,4 +1,4 @@
 {
-  "extends": "pzl-tslint-rules/base-tslint",
+  "extends": "./node_modules/pzl-tslint-rules/base-tslint.json",
   "rules": {}
 }

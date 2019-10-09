@@ -1,4 +1,3 @@
-
 <pnp:Navigation xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:GlobalNavigation NavigationType="Structural">
         <pnp:StructuralNavigation RemoveExistingNodes="true">

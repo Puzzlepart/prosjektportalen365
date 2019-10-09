@@ -1,0 +1,30 @@
+.baseDialog {
+  width: 750px;
+  max-width: 750px;
+  box-sizing: border-box;
+  position: relative;
+
+  .content {
+    overflow: hidden;
+    div[class*="ms-Dialog-header"] {
+      display: none;
+    }
+    div[class*="ms-Dialog-inner"] {
+      padding: 0;
+    }
+  }
+
+  .version {
+    position: absolute;
+    top: -90px;
+    right: -15px;
+    color: #fff;
+    font-size: 10px;
+  }
+
+  .footer {
+    button {
+      margin: 0 0 0 4px
+    }
+  }
+}

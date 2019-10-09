@@ -13,6 +13,11 @@
       @include ms-sm3;
       @include ms-font-m;
     }
+    .emptyMessage {
+      @include ms-Grid-col;
+      @include ms-sm12;
+      margin: 15px 0 0 0;
+    }
     .projects {
       @include ms-Grid-col;
       @include ms-sm12;

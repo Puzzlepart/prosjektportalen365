@@ -1,13 +1,9 @@
 .projectInformation {
   .container {
     margin: 0;
-
-    .actions {
-      margin: 25px 0 0 0;
-
-      > div {
-        margin: 5px 0 0 0;
-      }
-    }
   }
+}
+.confirmDialog {
+  max-width: 450px;
+  width: 450px;
 }

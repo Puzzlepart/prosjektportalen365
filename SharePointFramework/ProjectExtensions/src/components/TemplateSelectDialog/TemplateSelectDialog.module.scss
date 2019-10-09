@@ -1,0 +1,23 @@
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+
+.templateSelectDialog {
+  width: 750px !important;
+  max-width: 750px !important;
+  .content {
+    min-height: 300px;
+  }  
+  .infoText {
+    @include ms-Grid-col;
+    @include ms-sm12;
+    margin: 15px 0 15px 0;
+  }
+  .submitButton {
+    @include ms-Grid-col;
+    @include ms-sm12;
+    margin: 0 0 15px 0;
+
+    > button {
+      margin: 0;
+    }
+  }
+}

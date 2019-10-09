@@ -1,11 +1,6 @@
-import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
-import { PageContext } from '@microsoft/sp-page-context';
-import { dateAdd } from '@pnp/common';
 import { Logger, LogLevel } from '@pnp/logging';
-import { List } from '@pnp/sp';
 import { getId } from '@uifabric/utilities';
-import { ProjectStatusReport, SectionModel } from 'models';
-import { SectionType } from 'models/SectionModel';
+import { UserMessage } from 'components/UserMessage';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
@@ -13,23 +8,21 @@ import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import { formatDate } from 'shared/lib/helpers';
-import { parseUrlHash, setUrlHash } from 'shared/lib/util';
-import { HubConfigurationService } from 'shared/lib/services';
-import * as format from 'string-format';
-import { IStatusSectionBaseProps } from './@StatusSectionBase/IStatusSectionBaseProps';
+import { SectionModel, SectionType, StatusReport } from 'shared/lib/models';
+import { PortalDataService } from 'shared/lib/services';
+import { getUrlParam, parseUrlHash, setUrlHash } from 'shared/lib/util';
+import { SpEntityPortalService } from 'sp-entityportal-service';
+import * as formatString from 'string-format';
 import { IProjectStatusData } from './IProjectStatusData';
+import { IProjectStatusHashState } from './IProjectStatusHashState';
 import { IProjectStatusProps } from './IProjectStatusProps';
-import { IProjectStatusHashState, IProjectStatusState } from './IProjectStatusState';
-import ListSection from './ListSection';
-import ProjectPropertiesSection from './ProjectPropertiesSection';
+import { IProjectStatusState } from './IProjectStatusState';
 import styles from './ProjectStatus.module.scss';
-import StatusSection from './StatusSection';
-import SummarySection from './SummarySection';
+import { IBaseSectionProps, ListSection, ProjectPropertiesSection, StatusSection, SummarySection } from './Sections';
 
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
-  private _reportList: List;
-  private _sectionsList: List;
-  private _hubConfigurationService: HubConfigurationService;
+  private _portalDataService: PortalDataService;
+  private _spEntityPortalService: SpEntityPortalService;
 
   /**
    * Constructor
@@ -42,28 +35,34 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       isLoading: true,
       newStatusCreated: document.location.hash === '#NewStatus',
     };
-    this._reportList = props.hubSite.web.lists.getByTitle(this.props.reportListName);
-    this._sectionsList = props.hubSite.web.lists.getByTitle(this.props.sectionsListName);
-    this._hubConfigurationService = new HubConfigurationService(props.hubSite.url);
+    this._portalDataService = new PortalDataService().configure({ urlOrWeb: props.hubSite.web, siteId: props.siteId });
+    this._spEntityPortalService = new SpEntityPortalService({
+      portalUrl: this.props.hubSite.url,
+      listName: strings.ProjectsListName,
+      contentTypeId: '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+      identityFieldName: 'GtSiteId',
+      urlFieldName: 'GtSiteUrl',
+    });
   }
 
   public async componentDidMount() {
-    if (this.state.newStatusCreated) {
-      await this._associateStatusItem();
-    }
     try {
-      const data = await this._fetchData(this.props.pageContext);
+      const data = await this._fetchData();
       let selectedReport = data.reports[0];
       const hashState = parseUrlHash<IProjectStatusHashState>();
-      const urlQueryParameterCollection = new UrlQueryParameterCollection(document.location.href);
-      const selectedReportUrlParam = urlQueryParameterCollection.getValue('selectedReport');
-      const sourceUrlParam = urlQueryParameterCollection.getValue('Source');
+      const selectedReportUrlParam = getUrlParam('selectedReport');
+      const sourceUrlParam = getUrlParam('Source');
       if (hashState.selectedReport) {
         [selectedReport] = data.reports.filter(report => report.id === parseInt(hashState.selectedReport, 10));
       } else if (selectedReportUrlParam) {
         [selectedReport] = data.reports.filter(report => report.id === parseInt(selectedReportUrlParam, 10));
       }
-      this.setState({ data, selectedReport, sourceUrl: decodeURIComponent(sourceUrlParam || ''), isLoading: false });
+      this.setState({
+        data,
+        selectedReport: data.reports[0],
+        sourceUrl: decodeURIComponent(sourceUrlParam || ''),
+        isLoading: false,
+      });
     } catch (error) {
       this.setState({ error, isLoading: false });
     }
@@ -85,7 +84,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       return (
         <div className={styles.projectStatus}>
           <div className={styles.container}>
-            <Spinner label={format(strings.LoadingText, this.props.title)} />
+            <Spinner label={formatString(strings.LoadingText, this.props.title)} />
           </div>
         </div>
       );
@@ -95,7 +94,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       return (
         <div className={styles.projectStatus}>
           <div className={styles.container}>
-            <MessageBar messageBarType={MessageBarType.error}>Det skjedde en feil.</MessageBar>
+            <MessageBar messageBarType={MessageBarType.error}>{this.state.error}</MessageBar>
           </div>
         </div>
       );
@@ -109,7 +108,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
             <div className={styles.title}>{this.props.title}</div>
           </div>
           <div className={`${styles.sections} ${styles.column12}`}>
-            {this.state.selectedReport && this._renderSections()}
+            {this._renderSections()}
           </div>
         </div>
       </div>
@@ -149,7 +148,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     farItems.push({
       id: getId('ReportDropdown'),
       key: getId('ReportDropdown'),
-      name: selectedReport ? formatDate(selectedReport.date, true) : '',
+      name: selectedReport ? formatDate(selectedReport.created, true) : '',
       itemType: ContextualMenuItemType.Normal,
       disabled: reportOptions.length === 0,
       subMenuProps: { items: reportOptions }
@@ -164,12 +163,11 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    * 
    * @param {SectionModel} sec Section model
    */
-  private _getSectionBaseProps(sec: SectionModel): IStatusSectionBaseProps {
+  private _getSectionBaseProps(sec: SectionModel): IBaseSectionProps {
     const { selectedReport: report, data } = this.state;
-    const value = report.item[sec.fieldName];
-    const comment = report.item[sec.commentFieldName];
+    const { value, comment } = report.getStatusValue(sec.fieldName);
     const [columnConfig] = data.columnConfig.filter(c => c.columnFieldName === sec.fieldName && c.value === value);
-    const baseProps: IStatusSectionBaseProps = {
+    const baseProps: IBaseSectionProps = {
       headerProps: {
         label: sec.name,
         value,
@@ -180,9 +178,10 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       },
       report,
       model: sec,
-      pageContext: this.props.pageContext,
-      hubSite: this.props.hubSite,
       data: this.state.data,
+      hubSiteUrl: this.props.hubSite.url,
+      siteId: this.props.siteId,
+      webUrl: this.props.webUrl,
     };
     return baseProps;
   }
@@ -191,6 +190,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    * Render sections
    */
   private _renderSections() {
+    if (!this.state.selectedReport) {
+      return <UserMessage text={strings.NoStatusReportsMessage} messageBarType={MessageBarType.info} />;
+    }
     return this.state.data.sections.map(model => {
       const baseProps = this._getSectionBaseProps(model);
       switch (model.type) {
@@ -198,7 +200,6 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           return (
             <SummarySection
               {...baseProps}
-              entity={this.props.entity}
               sections={this.state.data.sections}
               columnConfig={this.state.data.columnConfig} />
           );
@@ -210,8 +211,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           return (
             <ProjectPropertiesSection
               {...baseProps}
-              entityItem={this.state.data.entityItem}
-              entityFields={this.state.data.entityFields} />
+              fieldValues={{ ...this.state.data.entity.fieldValues, ...this.state.selectedReport.fieldValues }}
+              fields={[...this.state.data.entity.fields, ...this.state.data.reportFields]} />
           );
         }
         case SectionType.RiskSection: {
@@ -230,44 +231,26 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * On report changed
    * 
-   * @param {ProjectStatusReport} selectedReport Selected report
+   * @param {StatusReport} selectedReport Selected report
    */
-  private _onReportChanged(selectedReport: ProjectStatusReport) {
+  private _onReportChanged(selectedReport: StatusReport) {
     this.setState({ selectedReport });
   }
 
   /**
    * Get report options
+   * 
+   * @param {IProjectStatusData} data Data
    */
   private _getReportOptions(data: IProjectStatusData): IContextualMenuItem[] {
     let reportOptions: IContextualMenuItem[] = data.reports.map(report => ({
       key: `${report.id}`,
-      name: formatDate(report.date, true),
+      name: formatDate(report.created, true),
       onClick: _evt => this._onReportChanged(report),
       canCheck: true,
-      isChecked: this.state.selectedReport ? report.item.Id === this.state.selectedReport.item.Id : false,
+      isChecked: this.state.selectedReport ? report.id === this.state.selectedReport.id : false,
     } as IContextualMenuItem));
     return reportOptions;
-  }
-
-  /**
-   * Associate status item
-   */
-  private async _associateStatusItem(): Promise<void> {
-    try {
-      const filter = `Author/EMail eq '${this.props.pageContext.user.email}' and GtSiteId eq '00000000-0000-0000-0000-000000000000'`;
-      Logger.log({ message: `(ProjectStatus) _associateStatusItem: Attempting to find recently added report by current user '${this.props.pageContext.user.email}'`, data: { filter }, level: LogLevel.Info });
-      let [item] = await this._reportList.items.filter(filter).select('Id', 'Created').orderBy('Id', false).top(1).get<any[]>();
-      if (item) {
-        const report = new ProjectStatusReport(item);
-        Logger.log({ message: '(ProjectStatus) _associateStatusItem: Setting title for item', data: { filter }, level: LogLevel.Info });
-        await this._reportList.items.getById(report.id).update({
-          Title: `${this.props.pageContext.web.title} (${formatDate(report.date, true)})`,
-          GtSiteId: this.props.pageContext.site.id.toString(),
-        });
-      }
-    } catch (error) { }
-    document.location.hash = '#';
   }
 
   /**
@@ -278,53 +261,47 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    */
   private async _redirectNewStatusReport(_ev?: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement>, _item?: IContextualMenuItem): Promise<void> {
     const [previousReport] = this.state.data.reports;
-    let properties = previousReport ? previousReport.getStatusValues() : {};
-    properties.Title = format(strings.NewStatusReportTitle, this.props.pageContext.web.title);
-    const { data } = await this._reportList.items.add(properties);
-    const source = encodeURIComponent(`${window.location.href.split('#')[0]}#NewStatus`);
-    document.location.href = `${window.location.protocol}//${window.location.hostname}${this.state.data.defaultEditFormUrl}?ID=${data.Id}&Source=${source}`;
+    let properties = previousReport ? previousReport.statusValues : {};
+    properties.Title = formatString(strings.NewStatusReportTitle, this.props.webTitle);
+    properties.GtSiteId = this.props.siteId;
+    const newReportId = await this._portalDataService.addStatusReport(properties);
+    document.location.href = `${window.location.protocol}//${window.location.hostname}${this.state.data.reportEditFormUrl}?ID=${newReportId}&Source=${encodeURIComponent(window.location.href)}`;
   }
 
   /**
    * Fetch data
-   * 
-   * @param {PageContext} param0 Destructed PageContext
    */
-  private async _fetchData({ site }: PageContext): Promise<IProjectStatusData> {
+  private async _fetchData(): Promise<IProjectStatusData> {
     try {
-      Logger.log({ message: '(ProjectStatus) _fetchData: Fetching fields and reports', level: LogLevel.Info });
-      const [entityData, reportList, reportItems, sectionItems, columnConfig] = await Promise.all([
-        this.props.spEntityPortalService.fetchEntity(site.id.toString(), this.props.pageContext.web.absoluteUrl),
-        this._reportList
-          .select('DefaultEditFormUrl')
-          .expand('DefaultEditFormUrl')
-          .usingCaching({
-            key: 'projectstatus_defaulteditformurl',
-            storeName: 'session',
-            expiration: dateAdd(new Date(), 'day', 1),
-          })
-          .get<{ DefaultEditFormUrl: string }>(),
-        this._reportList.items
-          .filter(`GtSiteId eq '${site.id.toString()}'`)
-          .orderBy('Id', false)
-          .get<any[]>(),
-        this._sectionsList.items.get(),
-        this._hubConfigurationService.getProjectColumnConfig(),
+      Logger.log({ message: '(ProjectStatus) _fetchData: Fetching entity data, fields, column config, sections and reports', level: LogLevel.Info });
+      let [
+        entity,
+        reportList,
+        reports,
+        sections,
+        columnConfig,
+        reportFields,
+      ] = await Promise.all([
+        this._spEntityPortalService.fetchEntity(this.props.siteId, this.props.webUrl),
+        this._portalDataService.getStatusReportListProps(),
+        this._portalDataService.getStatusReports(),
+        this._portalDataService.getProjectStatusSections(),
+        this._portalDataService.getProjectColumnConfig(),
+        this._portalDataService.getListFields('PROJECT_STATUS'),
       ]);
-      const reports = reportItems.map(item => new ProjectStatusReport(item, reportList.DefaultEditFormUrl));
-      const reportsSorted = reports.sort((a, b) => b.date.getTime() - a.date.getTime());
-      const sections = sectionItems.map(item => new SectionModel(item));
-      const sectionsSorted = sections.sort((a, b) => a.sortOrder < b.sortOrder ? -1 : 1);
+      reports = reports.map(item => item.setDefaultEditFormUrl(reportList.DefaultEditFormUrl));
+      reports = reports.sort((a, b) => b.created.getTime() - a.created.getTime());
+      sections = sections.sort((a, b) => a.sortOrder < b.sortOrder ? -1 : 1);
       return {
-        entityFields: entityData.fields,
-        entityItem: entityData.fieldValues,
-        defaultEditFormUrl: reportList.DefaultEditFormUrl,
-        reports: reportsSorted,
-        sections: sectionsSorted,
+        entity,
+        reportFields,
+        reportEditFormUrl: reportList.DefaultEditFormUrl,
+        reports,
+        sections,
         columnConfig,
       };
     } catch (error) {
-      throw error;
+      throw strings.ProjectStatusDataErrorText;
     }
   }
 }

@@ -1,24 +1,20 @@
 declare interface IProjectWebPartsStrings {
+  NoLocalPropertiesListWarningText: string;
   NavigateToSourceUrlText: string;
   ProjectStatusGroupName: string;
   StatusReportsHeaderLabel: string;
-  StatusReportsListNameLabel: string;
   StatusReportsCountLabel: string;
-  StatusReportsLinkUrlTemplateLabel: string;
   AutomaticReloadFieldLabel: string;
-  BoxBackgroundColorLabel: string;
-  BoxLayoutLabel: string;
-  BoxTypeLabel: string;
   ChangePhaseText: string;
   ChangingPhaseDescription: string;
-  ChangingPhaseLabel: string;
+  PleaseWaitText: string;
   CheckpointDoneTooltip: string;
   CheckpointNotRelevantTooltip: string;
   CheckpointNotRelevantTooltipCommentEmpty: string;
   CheckPointsMarkedAsText: string;
   CheckpointStillOpenTooltip: string;
   CheckpointStillOpenTooltipCommentEmpty: string;
-  Close: string;
+  CloseText: string;
   CommentLabel: string;
   ConfirmChangePhase: string;
   ConfirmPhaseChangeFieldLabel: string;
@@ -32,14 +28,12 @@ declare interface IProjectWebPartsStrings {
   ErrorText: string;
   ListSectionDataErrorMessage: string;
   LoadingText: string;
-  LookAndFeelGroupName: string;
   MissingPropertiesMessage: string;
   MoveOn: string;
   NewStatusReportModalHeaderText: string;
   NewStatusReportTitle: string;
   No: string;
   NoPropertiesMessage: string;
-  OverallStatusFieldName: string;
   PageReloadMessage: string;
   PersistedPhasePropertyBagKey: string;
   PhaseChecklistLinkText: string;
@@ -63,6 +57,23 @@ declare interface IProjectWebPartsStrings {
   WebPartNotConfiguredMessage: string;
   Yes: string;
   GeneralGroupName: string;
+  SyncProjectPropertiesText: string;
+  SyncProjectPropertiesDescription: string;
+  ProjectPropertiesListName: string;
+  SyncProjectPropertiesProgressLabel: string;
+  SyncProjectPropertiesSuccessText: string;
+  SyncProjectPropertiesErrorText: string;
+  SyncProjectPropertiesListProgressDescription: string;
+  SyncProjectPropertiesValuesProgressDescription: string;
+  ProjectStatusDataErrorText: string;
+  ShowFieldExternalUsers: string;
+  ExternalUsersConfigText: string;
+  ExternalUsersConfigInfoText: string;
+  WebPartNoAccessMessage: string;
+  ProjectsListName: string;
+  NoStatusReportsMessage: string;
+  SyncNowText: string;
+  
 }
 
 declare module 'ProjectWebPartsStrings' {

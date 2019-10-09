@@ -24,7 +24,7 @@ export default class ChangingPhaseView extends React.Component<IChangingPhaseVie
 
     public render(): JSX.Element {
         return (
-            <ProgressIndicator label={strings.ChangingPhaseLabel} description={format(strings.ChangingPhaseDescription, this.props.newPhase.name)} />
+            <ProgressIndicator label={strings.PleaseWaitText} description={format(strings.ChangingPhaseDescription, this.props.newPhase.name)} />
         );
     }
 }

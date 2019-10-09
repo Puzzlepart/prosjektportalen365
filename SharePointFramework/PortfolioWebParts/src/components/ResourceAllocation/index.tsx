@@ -20,6 +20,7 @@ import { IResourceAllocationProps } from './IResourceAllocationProps';
 import { IResourceAllocationState } from './IResourceAllocationState';
 import styles from './ResourceAllocation.module.scss';
 import './Timeline.overrides.css';
+import { getId } from '@uifabric/utilities';
 
 export default class ResourceAllocation extends React.Component<IResourceAllocationProps, IResourceAllocationState> {
   public static defaultProps: Partial<IResourceAllocationProps> = {
@@ -170,7 +171,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
   private _getCommandBarItems() {
     const right = [
       {
-        key: 'Filter',
+        key: getId('Filter'),
         name: strings.FilterText,
         iconProps: { iconName: 'Filter' },
         itemType: ContextualMenuItemType.Header,
@@ -227,7 +228,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
   private _transformItems(searchResults: IAllocationSearchResult[], groups: ITimelineGroup[], groupBy: string = 'RefinableString71'): ITimelineItem[] {
     const items: ITimelineItem[] = searchResults.map((res, idx) => {
       const group = _.find(groups, grp => grp.title === res[groupBy]);
-      const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, false, 0) as number;
+      const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, true, 0) as number;
       const isAbsence = res.ContentTypeId.indexOf('0x010029F45E75BA9CE340A83EFFB2927E11F4') !== -1;
       const itemOpacity = allocation < 30 ? 0.3 : (allocation / 100);
       const itemColor = allocation < 40 ? '#000' : '#fff';
@@ -238,7 +239,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
       let itemStyle: React.CSSProperties = {
         color: itemColor,
         border: 'none',
-        cursor: 'pointer',
+        cursor: 'none',
         outline: 'none',
         background: `rgb(${backgroundColor})`,
         backgroundColor: `rgba(${backgroundColor}, ${itemOpacity})`,
@@ -267,13 +268,15 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
     const dataSource = await new DataSourceService(sp.web).getByName(this.props.dataSource);
     if (!dataSource) throw format(strings.DataSourceNotFound, this.props.dataSource);
     try {
-      const results = (await sp.search({
-        QueryTemplate: dataSource.searchQuery,
-        Querytext: '*',
-        RowLimit: 500,
-        TrimDuplicates: false,
-        SelectProperties: ['Path', 'SPWebUrl', 'ContentTypeId', 'SiteTitle', 'RefinableString71', 'RefinableString72', 'GtResourceLoadOWSNMBR', 'GtResourceAbsenceOWSCHCS', 'GtStartDateOWSDATE', 'GtEndDateOWSDATE'],
-      })).PrimarySearchResults as IAllocationSearchResult[];
+      const results = (
+        await sp.search({
+          QueryTemplate: dataSource.searchQuery,
+          Querytext: '*',
+          RowLimit: 500,
+          TrimDuplicates: false,
+          SelectProperties: ['Path', 'SPWebUrl', 'ContentTypeId', 'SiteTitle', 'RefinableString71', 'RefinableString72', 'GtResourceLoadOWSNMBR', 'GtResourceAbsenceOWSCHCS', 'GtStartDateOWSDATE', 'GtEndDateOWSDATE'],
+        })
+      ).PrimarySearchResults as IAllocationSearchResult[];
       const groups = this._transformGroups(results);
       const items = this._transformItems(results, groups);
       return { items, groups };

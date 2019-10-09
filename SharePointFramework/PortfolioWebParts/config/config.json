@@ -3,57 +3,71 @@
   "version": "2.0",
   "bundles": {
     "benefits-overview-web-part": {
-      "components": [{
-        "entrypoint": "./lib/webparts/benefitsOverview/BenefitsOverviewWebPart.js",
-        "manifest": "./src/webparts/benefitsOverview/BenefitsOverviewWebPart.manifest.json"
-      }]
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/benefitsOverview/index.js",
+          "manifest": "./src/webparts/benefitsOverview/manifest.json"
+        }
+      ]
     },
     "deliveries-overview-web-part": {
-      "components": [{
-        "entrypoint": "./lib/webparts/deliveriesOverview/DeliveriesOverviewWebPart.js",
-        "manifest": "./src/webparts/deliveriesOverview/DeliveriesOverviewWebPart.manifest.json"
-      }]
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/deliveriesOverview/index.js",
+          "manifest": "./src/webparts/deliveriesOverview/manifest.json"
+        }
+      ]
     },
     "experience-log-web-part": {
-      "components": [{
-        "entrypoint": "./lib/webparts/experienceLog/ExperienceLogWebPart.js",
-        "manifest": "./src/webparts/experienceLog/ExperienceLogWebPart.manifest.json"
-      }]
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/experienceLog/index.js",
+          "manifest": "./src/webparts/experienceLog/manifest.json"
+        }
+      ]
     },
     "latest-projects-web-part": {
-      "components": [{
-        "entrypoint": "./lib/webparts/latestProjects/LatestProjectsWebPart.js",
-        "manifest": "./src/webparts/latestProjects/LatestProjectsWebPart.manifest.json"
-      }]
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/latestProjects/index.js",
+          "manifest": "./src/webparts/latestProjects/manifest.json"
+        }
+      ]
     },
     "portfolio-insights-web-part": {
-      "components": [{
-        "entrypoint": "./lib/webparts/portfolioInsights/PortfolioInsightsWebPart.js",
-        "manifest": "./src/webparts/portfolioInsights/PortfolioInsightsWebPart.manifest.json"
-      }]
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/portfolioInsights/index.js",
+          "manifest": "./src/webparts/portfolioInsights/manifest.json"
+        }
+      ]
     },
     "portfolio-overview-web-part": {
-      "components": [{
-        "entrypoint": "./lib/webparts/portfolioOverview/PortfolioOverviewWebPart.js",
-        "manifest": "./src/webparts/portfolioOverview/PortfolioOverviewWebPart.manifest.json"
-      }]
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/portfolioOverview/index.js",
+          "manifest": "./src/webparts/portfolioOverview/manifest.json"
+        }
+      ]
     },
     "project-list-web-part": {
-      "components": [{
-        "entrypoint": "./lib/webparts/projectList/ProjectListWebPart.js",
-        "manifest": "./src/webparts/projectList/ProjectListWebPart.manifest.json"
-      }]
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/projectList/index.js",
+          "manifest": "./src/webparts/projectList/manifest.json"
+        }
+      ]
     },
     "resource-allocation-web-part": {
       "components": [{
-        "entrypoint": "./lib/webparts/resourceAllocation/ResourceAllocationWebPart.js",
-        "manifest": "./src/webparts/resourceAllocation/ResourceAllocationWebPart.manifest.json"
+        "entrypoint": "./lib/webparts/resourceAllocation/index.js",
+        "manifest": "./src/webparts/resourceAllocation/manifest.json"
       }]
     },
     "risk-overview-web-part": {
       "components": [{
-        "entrypoint": "./lib/webparts/riskOverview/RiskOverviewWebPart.js",
-        "manifest": "./src/webparts/riskOverview/RiskOverviewWebPart.manifest.json"
+        "entrypoint": "./lib/webparts/riskOverview/index.js",
+        "manifest": "./src/webparts/riskOverview/manifest.json"
       }]
     }
   },
@@ -61,6 +75,7 @@
   "localizedResources": {
     "ControlStrings": "lib/loc/{locale}.js",
     "PortfolioWebPartsStrings": "lib/loc/{locale}.js",
-    "ProjectWebPartsStrings": "node_modules/projectwebparts/lib/loc/{locale}.js"
+    "ProjectWebPartsStrings": "node_modules/projectwebparts/lib/loc/{locale}.js",
+    "PzlSPFxComponentsStrings": "node_modules/projectwebparts/lib/loc/{locale}.js"
   }
 }

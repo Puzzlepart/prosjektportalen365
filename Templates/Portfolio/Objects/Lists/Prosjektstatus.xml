@@ -9,9 +9,15 @@
                 <OrderBy>
                     <FieldRef Name="ID" />
                 </OrderBy>
+                <Where>
+                    <Eq>
+                        <FieldRef Name="ID" />
+                        <Value Type="Counter">0</Value>
+                    </Eq>
+                </Where>
             </Query>
             <ViewFields>
-                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="ID" />
             </ViewFields>
             <RowLimit Paged="TRUE">30</RowLimit>
             <JSLink>clienttemplates.js</JSLink>

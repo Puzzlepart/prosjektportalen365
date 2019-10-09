@@ -38,6 +38,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
     }
 
     public async componentDidMount(): Promise<void> {
+        ExcelExportService.configure({ name: this.props.title });
         try {
             const { items, selectedDataSource, dataSources } = await this._fetchData();
             this.setState({ items, selectedDataSource, dataSources, isLoading: false });
@@ -342,7 +343,7 @@ export default class AggregatedSearchList extends React.Component<IAggregatedSea
         this.setState({ isExporting: true });
         let { items, columns } = this._getData();
         try {
-            await ExcelExportService.export(this.props.title, items, columns);
+            await ExcelExportService.export(items, columns);
             this.setState({ isExporting: false });
         } catch (error) {
             this.setState({ isExporting: false });

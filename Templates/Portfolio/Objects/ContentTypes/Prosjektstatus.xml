@@ -3,6 +3,10 @@
     <pnp:FieldRefs>
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" />
         <pnp:FieldRef ID="3e90aa95-4d32-4819-823f-10ae2fd412b5" Name="GtOverallStatus" Required="true" />
+        <pnp:FieldRef ID="28be4cc9-bc5e-4a55-a557-f652b564ca75" Name="GtBudgetTotal" />
+        <pnp:FieldRef ID="5af54348-bc38-4a18-a11f-0f84a96da4ea" Name="GtCostsTotal" />
+        <pnp:FieldRef ID="9076c206-ca80-4e17-b6f4-6fa3b90c421a" Name="GtProjectForecast" />
+        <pnp:FieldRef ID="f4623214-ab74-4160-82a7-37d46901bc1b" Name="GtBudgetLastReportDate" />
         <pnp:FieldRef ID="1447ef51-8e9b-4d16-aa2a-526dc9f1539e" Name="GtStatusTime" Required="true" />
         <pnp:FieldRef ID="cb1fc0b7-cbb8-40af-a782-c6b9ad4ee40f" Name="GtStatusTimeComment" />
         <pnp:FieldRef ID="a9902b9d-8aad-40df-9788-ba73c64c3cb5" Name="GtStatusBudget" Required="true" />

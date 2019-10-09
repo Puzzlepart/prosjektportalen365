@@ -1,34 +1,34 @@
-import { ProjectStatusReport, SectionModel } from 'models';
-import { ProjectColumnConfig } from 'shared/lib/models';
+import { ProjectColumnConfig, SectionModel, StatusReport, SPField } from 'shared/lib/models';
+import { IEntity } from 'sp-entityportal-service';
 
 export interface IProjectStatusData {
     /**
-     * @todo describe property
+     * Entity item
      */
-    entityFields?: any[];
+    entity?: IEntity;
 
     /**
-     * @todo describe property
+     * Status report fields
      */
-    entityItem?: any;
-    
+    reportFields?: SPField[];
+
     /**
-     * @todo describe property
+     * Default edit form URL for status reports
      */
-    defaultEditFormUrl?: string;
-    
+    reportEditFormUrl?: string;
+
     /**
-     * @todo describe property
+     * Reports
      */
-    reports?: ProjectStatusReport[];
-    
+    reports?: StatusReport[];
+
     /**
-     * @todo describe property
+     * Sections
      */
     sections?: SectionModel[];
-    
+
     /**
-     * @todo describe property
+     * Column configuration
      */
     columnConfig?: ProjectColumnConfig[];
 }

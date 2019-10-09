@@ -61,7 +61,6 @@ define([], function () {
     PhaseTermSetIdFieldLabel: 'Termsett ID for Fase',
     ProbabilityLabel: 'Sannsynlighet (S)',
     ProbabilityPostActionLabel: 'S etter tiltak',
-    ProjectInfoFilterFieldLabel: 'Filtreringsfelt',
     ProjectInformationGroupName: 'Instillinger for Prosjektinformasjon-vindu',
     ProjectLinkText: 'Gå til prosjektområde',
     ProjectManager: 'Prosjektleder',
@@ -93,13 +92,12 @@ define([], function () {
     SortByFieldLabel: 'Sorteringsegenskap',
     StartValueLabel: 'Startverdi',
     StatusReportsCountLabel: 'Antal rapporter å vise',
-    StatusReportsLinkUrlTemplateLabel: 'Lenke for knapp',
-    StatusReportsListNameLabel: "Listenavn for statusrapporter",
     TileViewGroupName: 'Flisevisning',
     TitleLabel: 'Tittel',
     UnitLabel: 'Måleenhet',
     ViewNotFoundMessage: 'Finner ikke angitt visning.',
     ViewsListNameLabel: 'Visninger',
-    SelectedColumnsLabel: 'Felter'
+    SelectedColumnsLabel: 'Felter',
+    ProjectsListName: 'Prosjekter'
   }
 });

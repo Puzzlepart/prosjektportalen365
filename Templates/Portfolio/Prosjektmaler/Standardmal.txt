@@ -559,13 +559,7 @@
                                         "reloadTimeout": 0,
                                         "currentPhaseViewName": "Gjeldende fase",
                                         "gutter": 15,
-                                        "fontSize": 13,
-                                        "entity": {
-                                            "listName": "Prosjekter",
-                                            "contentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
-                                            "fieldsGroupName": "{parameter:fieldsgroup}",
-                                            "identityFieldName": "GtSiteId"
-                                        }
+                                        "fontSize": 13
                                     }
                                 },
                                 {
@@ -596,15 +590,7 @@
                                         "title": "Prosjektinformasjon",
                                         "statusReportsCount": 0,
                                         "statusReportsHeader": "Prosjektstatus",
-                                        "statusReportsListName": "Prosjektstatus",
-                                        "statusReportsLinkUrlTemplate": "SitePages/Prosjektstatus.aspx?selectedReport={0}",
-                                        "filterField": "GtShowFieldFrontpage",
-                                        "entity": {
-                                            "listName": "Prosjekter",
-                                            "contentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
-                                            "fieldsGroupName": "{parameter:fieldsgroup}",
-                                            "identityFieldName": "GtSiteId"
-                                        }
+                                        "filterField": "GtShowFieldFrontpage"
                                     }
                                 },
                                 {
@@ -706,16 +692,7 @@
                                 {
                                     "Id": "681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6",
                                     "Properties": {
-                                        "title": "Prosjektstatus",
-                                        "reportListName": "Prosjektstatus",
-                                        "sectionsListName": "Statusseksjoner",
-                                        "reportCtId": "0x010022252E35737A413FB56A1BA53862F6D5",
-                                        "entity": {
-                                            "listName": "Prosjekter",
-                                            "contentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
-                                            "fieldsGroupName": "{parameter:fieldsgroup}",
-                                            "identityFieldName": "GtSiteId"
-                                        }
+                                        "title": "Prosjektstatus"
                                     }
                                 }
                             ]

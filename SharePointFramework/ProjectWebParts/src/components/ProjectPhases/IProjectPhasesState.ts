@@ -1,18 +1,21 @@
 import { Phase } from 'models';
-import { ChecklistData } from './ChecklistData';
+import { IBaseWebPartComponentState } from '../BaseWebPartComponent';
+import { IProjectPhasesData } from './IProjectPhasesData';
 import { IProjectPhaseMouseOver } from './ProjectPhaseCallout/IProjectPhaseMouseOver';
 
-export interface IProjectPhasesData {
-  phases?: Array<Phase>;
-  currentPhase?: Phase;
-  checklistData?: ChecklistData;
-  phaseTextField?: string;
-}
-
-export interface IProjectPhasesState {
-  isLoading: boolean;
-  data: IProjectPhasesData;
+export interface IProjectPhasesState extends IBaseWebPartComponentState<IProjectPhasesData> {
+  /**
+   * @todo describe property
+   */
   confirmPhase?: Phase;
+
+  /**
+   * @todo describe property
+   */
   isChangingPhase?: boolean;
+
+  /**
+   * @todo describe property
+   */
   phaseMouseOver?: IProjectPhaseMouseOver;
 }

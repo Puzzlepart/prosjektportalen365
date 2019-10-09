@@ -3,29 +3,34 @@ import { dateAdd } from '@pnp/common';
 import { QueryPropertyValueType, SearchResult, SearchResults, SortDirection, sp } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
 import * as cleanDeep from 'clean-deep';
-import * as _ from 'underscore';
-import { IGraphGroup, IPortfolioOverviewConfiguration, ISPProjectItem, ISPUser } from 'interfaces';
-import { ChartConfiguration, ChartData, ChartDataItem, DataField, PortfolioOverviewColumn, PortfolioOverviewView, ProjectListModel, SPChartConfigurationItem, SPContentType, SPPortfolioOverviewColumnItem, SPPortfolioOverviewViewItem, SPProjectColumnConfigItem } from 'models';
-import { ProjectColumnConfig, ProjectColumnConfigDictionary } from 'models/ProjectColumnConfig';
+import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces';
+import { ChartConfiguration, ChartData, ChartDataItem, DataField, ProjectListModel, SPChartConfigurationItem, SPContentType } from 'models';
 import MSGraph from 'msgraph-helper';
 import * as objectGet from 'object-get';
-import { getObjectValue, makeUrlAbsolute } from 'shared/lib/helpers';
+import { getObjectValue } from 'shared/lib/helpers';
+import * as _ from 'underscore';
 import { DEFAULT_SEARCH_SETTINGS } from './DEFAULT_SEARCH_SETTINGS';
-import { IFetchDataForViewResult, IFetchDataForViewRefinersResult, FetchDataForViewRefinerEntryResult } from './IFetchDataForViewResult';
+import { FetchDataForViewRefinerEntryResult, IFetchDataForViewRefinersResult, IFetchDataForViewResult } from './IFetchDataForViewResult';
+import { PortfolioOverviewView } from 'shared/lib/models';
+import { PortalDataService } from 'shared/lib/services/PortalDataService';
 
 
 export class DataAdapter {
-    constructor(public context: WebPartContext) { }
+    private _portalDataService: PortalDataService;
+
+    constructor(public context: WebPartContext) {
+        this._portalDataService = new PortalDataService().configure({ urlOrWeb: context.pageContext.web.absoluteUrl });
+    }
 
     /**
      * Fetch chart data (used by [PortfolioInsights])
      *
      * @param {PortfolioOverviewView} view View configuration
-     * @param {IPortfolioOverviewConfiguration} configuration PortfolioOverviewConfiguration
+     * @param {IPortfolioConfiguration} configuration PortfolioOverviewConfiguration
      * @param {string} chartConfigurationListName List name for chart configuration
      * @param {string} siteId Site ID
      */
-    public async fetchChartData(view: PortfolioOverviewView, configuration: IPortfolioOverviewConfiguration, chartConfigurationListName: string, siteId: string) {
+    public async fetchChartData(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, chartConfigurationListName: string, siteId: string) {
         try {
             const [chartItems, contentTypes] = await Promise.all([
                 sp.web.lists.getByTitle(chartConfigurationListName).items
@@ -56,15 +61,35 @@ export class DataAdapter {
         }
     }
 
+    public async getPortfolioConfig(): Promise<IPortfolioConfiguration> {
+        let [columnConfig, columns, views, viewsUrls, columnUrls] = await Promise.all([
+            this._portalDataService.getProjectColumnConfig(),
+            this._portalDataService.getProjectColumns(),
+            this._portalDataService.getPortfolioOverviewViews(),
+            this._portalDataService.getListFormUrls('PORTFOLIO_VIEWS'),
+            this._portalDataService.getListFormUrls('PROJECT_COLUMNS'),
+        ]);
+        columns = columns.map(col => col.configure(columnConfig));
+        let refiners = columns.filter(col => col.isRefinable);
+        views = views.map(view => view.configure(columns));
+        return {
+            columns,
+            refiners,
+            views,
+            viewsUrls,
+            columnUrls,
+        };
+    }
+
     /**
      * Fetch data for view (used by [PortfolioOverview] and [PortfolioInsights])
      *
      * @param {PortfolioOverviewView} view View configuration
-     * @param {IPortfolioOverviewConfiguration} configuration PortfolioOverviewConfiguration
+     * @param {IPortfolioConfiguration} configuration PortfolioOverviewConfiguration
      * @param {string} siteId Site ID
      * @param {string} siteIdProperty Site ID property
      */
-    public async fetchDataForView(view: PortfolioOverviewView, configuration: IPortfolioOverviewConfiguration, siteId: string, siteIdProperty: string = 'GtSiteIdOWSTEXT'): Promise<IFetchDataForViewResult> {
+    public async fetchDataForView(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string, siteIdProperty: string = 'GtSiteIdOWSTEXT'): Promise<IFetchDataForViewResult> {
         try {
             let response: SearchResults[] = await Promise.all([
                 sp.search({
@@ -102,82 +127,6 @@ export class DataAdapter {
             return { items, refiners };
         } catch (err) {
             throw err;
-        }
-    }
-
-    /**
-     * Get config from lists
-     * 
-     * @param {string} columnConfigListName List name for project column config
-     * @param {string} columnsListName List name for project columns
-     * @param {string} viewsListName List name for portfolio views
-     */
-    public async getPortfolioConfig(columnConfigListName: string, columnsListName: string, viewsListName: string): Promise<IPortfolioOverviewConfiguration> {
-        try {
-            const spItems = await Promise.all([
-                sp.web.lists.getByTitle(columnConfigListName).items
-                    .orderBy('ID', true)
-                    .select(...Object.keys(new SPProjectColumnConfigItem()))
-                    .get<SPProjectColumnConfigItem[]>(),
-                sp.web.lists.getByTitle(columnsListName).items
-                    .orderBy('GtSortOrder', true)
-                    .select(...Object.keys(new SPPortfolioOverviewColumnItem()))
-                    .get<SPPortfolioOverviewColumnItem[]>(),
-                sp.web.lists.getByTitle(viewsListName).items
-                    .orderBy('GtSortOrder', true)
-                    .get<SPPortfolioOverviewViewItem[]>(),
-                sp.web.lists.getByTitle(viewsListName)
-                    .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
-                    .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')
-                    .usingCaching({
-                        key: 'getportfolioconfig_forms',
-                        storeName: 'session',
-                        expiration: dateAdd(new Date(), 'minute', 15),
-                    })
-                    .get<{ DefaultNewFormUrl: string, DefaultEditFormUrl: string }>(),
-                sp.web.lists.getByTitle(columnsListName)
-                    .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
-                    .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')
-                    .usingCaching({
-                        key: 'getportfolioconfig_columns_forms',
-                        storeName: 'session',
-                        expiration: dateAdd(new Date(), 'minute', 15),
-                    })
-                    .get<{ DefaultNewFormUrl: string, DefaultEditFormUrl: string }>(),
-                sp.web.lists.getByTitle(columnsListName)
-                    .fields
-                    .filter(`substringof('GtShowField', InternalName)`)
-                    .select('InternalName', 'Title')
-                    .usingCaching({
-                        key: 'getportfolioconfig_showfields',
-                        storeName: 'session',
-                        expiration: dateAdd(new Date(), 'minute', 15),
-                    })
-                    .get<{ InternalName: string, Title: string }[]>(),
-            ]);
-            const columnConfig = spItems[0].map(c => new ProjectColumnConfig(c));
-            const columns = spItems[1].map(c => {
-                let column = new PortfolioOverviewColumn(c);
-                column.config = columnConfig
-                    .filter(col => col.columnId === c.Id)
-                    .reduce((obj, { value, color, iconName }) => ({ ...obj, [value]: { color, iconName } }), {}) as ProjectColumnConfigDictionary;
-                return column;
-            });
-            const views = spItems[2].map(c => new PortfolioOverviewView(c, columns));
-            const refiners = columns.filter(col => col.isRefinable);
-            const config: IPortfolioOverviewConfiguration = {
-                columns,
-                refiners,
-                views,
-                viewNewFormUrl: makeUrlAbsolute(spItems[3].DefaultNewFormUrl),
-                viewEditFormUrl: makeUrlAbsolute(spItems[3].DefaultEditFormUrl),
-                colNewFormUrl: makeUrlAbsolute(spItems[4].DefaultNewFormUrl),
-                colEditFormUrl: makeUrlAbsolute(spItems[4].DefaultEditFormUrl),
-                showFields: spItems[5],
-            };
-            return config;
-        } catch (error) {
-            throw error;
         }
     }
 
@@ -279,3 +228,4 @@ export class DataAdapter {
 }
 
 export { IFetchDataForViewRefinersResult };
+

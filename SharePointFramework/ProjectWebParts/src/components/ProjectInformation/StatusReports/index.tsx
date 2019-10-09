@@ -3,21 +3,11 @@ import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import * as React from 'react';
 import { formatDate } from 'shared/lib/helpers/formatDate';
-import * as format from 'string-format';
 import { IStatusReportsProps } from './IStatusReportsProps';
 import styles from './StatusReports.module.scss';
 
 export class StatusReports extends React.Component<IStatusReportsProps, {}> {
     public static defaultProps: Partial<IStatusReportsProps> = { iconName: 'PageCheckedin' };
-
-    /**
-     * Constructor
-     *
-     * @param {IStatusReportsProps} props Props
-     */
-    constructor(props: IStatusReportsProps) {
-        super(props);
-    }
 
     public render(): React.ReactElement<IStatusReportsProps> {
         return (
@@ -30,23 +20,14 @@ export class StatusReports extends React.Component<IStatusReportsProps, {}> {
                     {this.props.statusReports.map((report, idx) => (
                         <li className={styles.item} key={idx}>
                             <ActionButton
-                                href={this._createUrl(report.Id.toString())}
-                                text={formatDate(report.Created, true)}
+                                href={report.url(this.props.urlSourceParam)}
+                                text={formatDate(report.created, true)}
                                 iconProps={{ iconName: this.props.iconName }} />
                         </li>
                     ))}
                 </ul>
             </div>
         );
-    }
-
-    /**
-     * Create url for report
-     * 
-     * @param {string} id Id
-     */
-    protected _createUrl(id: string) {
-        return format(this.props.urlTemplate, id) + '&Source=' + encodeURIComponent(this.props.urlSourceParam);
     }
 }
 

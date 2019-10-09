@@ -1,5 +1,3 @@
-import { PageContext } from '@microsoft/sp-page-context';
-
 /**
  * Checks if a object is null or undefined
  * 

@@ -1,0 +1,30 @@
+.documentTemplateDialogScreenEditCopy {
+  .item {
+    margin: 0 0 20px 0;
+    .header {
+        position: relative;
+        cursor: pointer;
+      .title {
+        font-size: 18px;
+        font-weight: 100;
+      }
+      .icon {
+          position: absolute;
+          top: 0;
+          right: 0;
+      }
+    }
+    .nameInput {
+      margin: 5px 0 0 0;
+    }
+    .titleInput {
+      margin: 5px 0 0 0;
+    }
+  }
+  .copyAction {
+    margin: 20px 0 0 0;
+    button {
+      width: 100%;
+    }
+  }
+}

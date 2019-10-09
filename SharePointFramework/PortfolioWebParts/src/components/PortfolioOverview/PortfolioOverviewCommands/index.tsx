@@ -3,9 +3,7 @@ import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import * as strings from 'PortfolioWebPartsStrings';
 import * as React from 'react';
-import { getObjectValue } from 'shared/lib/helpers/getObjectValue';
-import { isNull } from 'shared/lib/helpers/isNull';
-import { ExcelExportService } from 'shared/lib/services';
+import ExcelExportService from 'shared/lib/services/ExcelExportService';
 import { redirect } from 'shared/lib/util';
 import { FilterPanel, IFilterProps } from '../../';
 import { IPortfolioOverviewCommandsProps } from './IPortfolioOverviewCommandsProps';
@@ -58,7 +56,7 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
                 name: strings.NewViewText,
                 iconProps: { iconName: 'CirclePlus' },
                 data: { isVisible: this.props.pageContext.legacyPageContext.isSiteAdmin && this.props.showViewSelector },
-                onClick: _ => redirect(this.props.configuration.viewNewFormUrl),
+                onClick: _ => redirect(this.props.configuration.viewsUrls.defaultNewFormUrl),
             } as IContextualMenuItem,
             {
                 id: getId('View'),
@@ -117,7 +115,7 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
                             id: getId('EditView'),
                             key: getId('EditView'),
                             name: strings.EditViewText,
-                            onClick: _ => redirect(`${this.props.configuration.viewEditFormUrl}?ID=${this.props.currentView.id}`),
+                            onClick: _ => redirect(`${this.props.configuration.viewsUrls.defaultEditFormUrl}?ID=${this.props.currentView.id}`),
                         }
                     ],
                 },
@@ -167,7 +165,7 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
     protected async _exportToExcel(): Promise<void> {
         this.setState({ isExporting: true });
         try {
-            await ExcelExportService.export(this.props.title, this.props.fltItems, this.props.fltColumns);
+            await ExcelExportService.export(this.props.fltItems, this.props.fltColumns);
             this.setState({ isExporting: false });
         } catch (error) {
             this.setState({ isExporting: false });

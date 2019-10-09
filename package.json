@@ -1,22 +1,23 @@
 {
-  "name": "prosjektportalen365",
-  "version": "1.0.7",
-  "description": "Prosjektportalen 365",
-  "main": "n/a",
-  "scripts": {
-    "buildReleasePackage": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1",
-    "buildReleasePackageSkipBuildSPFx": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -SkipBuildSharePointFramework"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Puzzlepart/prosjektportalen365"
-  },
-  "keywords": [
-    "Prosjektportalen"
-  ],
-  "author": "olemp@puzzlepart.com",
-  "license": "MIT",
-  "devDependencies": {
-    "rimraf": "^3.0.0"
-  }
+    "name": "prosjektportalen365",
+    "version": "1.1.0",
+    "description": "Prosjektportalen 365",
+    "main": "n/a",
+    "scripts": {
+        "buildReleasePackage": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1",
+        "buildReleasePackageSkipBuildSPFx": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -SkipBuildSharePointFramework",
+        "buildReleasePackageClean": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -CleanNodeModules"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Puzzlepart/prosjektportalen365"
+    },
+    "keywords": [
+        "Prosjektportalen"
+    ],
+    "author": "olemp@puzzlepart.com",
+    "license": "MIT",
+    "devDependencies": {
+        "rimraf": "^3.0.0"
+    }
 }

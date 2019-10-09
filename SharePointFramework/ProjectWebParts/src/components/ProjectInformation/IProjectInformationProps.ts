@@ -1,19 +1,40 @@
-import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
+import { TypedHash } from '@pnp/common';
+import { IBaseWebPartComponentProps } from '../BaseWebPartComponent';
+import { ActionType } from './Actions/ActionType';
 
-export interface IProjectInformationProps {
-  title?: string;
-  entity: ISpEntityPortalServiceParams;
-  hubSiteUrl: string;
-  siteId: string;
-  webUrl: string;
-  isSiteAdmin?: boolean;
-  filterField: string;
+export interface IProjectInformationProps extends IBaseWebPartComponentProps {
+  /**
+   * Page
+   */
+  page: 'Frontpage' | 'ProjectStatus' | 'Portfolio';
+
+  /**
+   * Hide actions for the web part
+   */
   hideActions?: boolean;
-  boxLayout?: boolean;
-  boxBackgroundColor?: string;
-  boxType?: string;
+
+  /**
+   * Header text for status reports
+   */
   statusReportsHeader?: string;
+
+  /**
+   * Number of status reports to show (defaults to 0)
+   */
   statusReportsCount?: number;
-  statusReportsListName?: string;
-  statusReportsLinkUrlTemplate?: string;
+
+  /**
+   * @todo Describe property
+   */
+  onFieldExternalChanged?: (fieldName: string, checked: boolean) => void;
+
+  /**
+   * A hash object of fields to show for external users
+   */
+  showFieldExternal?: TypedHash<boolean>;
+
+  /**
+   * Custom actions/button to add
+   */
+  customActions?: ActionType[];
 }

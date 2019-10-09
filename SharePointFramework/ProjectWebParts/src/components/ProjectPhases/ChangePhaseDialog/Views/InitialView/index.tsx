@@ -9,10 +9,7 @@ import * as strings from 'ProjectWebPartsStrings';
  * @component InitialView
  */
 export default class InitialView extends React.Component<IInitialViewProps, IInitialViewState> {
-    public static defaultProps: Partial<IInitialViewProps> = {
-        className: 'inner',
-        commentMinLength: 4,
-    };
+    public static defaultProps: Partial<IInitialViewProps> = { commentMinLength: 4 };
 
     /**
      * Constructor
@@ -29,8 +26,8 @@ export default class InitialView extends React.Component<IInitialViewProps, IIni
             return null;
         }
         return (
-            <div className={this.props.className}>
-                <h3>{this.props.currentChecklistItem.Title}</h3>
+            <div>
+                <h3>{this.props.currentChecklistItem.ID}. {this.props.currentChecklistItem.Title}</h3>
                 <div style={{ marginTop: 10 }}>
                     <TextField
                         onChange={this._onCommentUpdate.bind(this)}
@@ -52,7 +49,7 @@ export default class InitialView extends React.Component<IInitialViewProps, IIni
         const { isLoading, commentMinLength } = this.props;
         const { comment } = this.state;
         const isCommentValid = (comment.length >= commentMinLength) && /\S/.test(comment);
-        const statusOptions: IButtonProps[] = [
+        const actions: IButtonProps[] = [
             {
                 text: strings.StatusNotRelevant,
                 disabled: (isLoading || !isCommentValid),
@@ -73,7 +70,7 @@ export default class InitialView extends React.Component<IInitialViewProps, IIni
             }];
         return (
             <div style={{ marginTop: 20, marginBottom: 25 }}>
-                {statusOptions.map((statusOpt, key) => (
+                {actions.map((statusOpt, key) => (
                     <span key={key} >
                         <PrimaryButton style={{ marginRight: 5 }} {...statusOpt} />
                     </span>

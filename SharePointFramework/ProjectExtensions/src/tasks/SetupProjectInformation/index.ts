@@ -1,38 +1,63 @@
-import { override } from '@microsoft/decorators';
-import { task } from 'decorators/task';
-import * as strings from 'ProjectSetupApplicationCustomizerStrings';
-import SpEntityPortalService from 'sp-entityportal-service';
-import { BaseTask, OnProgressCallbackFunction } from '../BaseTask';
-import { BaseTaskError } from '../BaseTaskError';
-import { IBaseTaskParams } from '../IBaseTaskParams';
+import * as strings from 'ProjectExtensionsStrings';
+import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask';
+import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction';
 
+export class SetupProjectInformation extends BaseTask {
+    public taskName = 'SetupProjectInformation';
 
-@task('SetupProjectInformation')
-export default class SetupProjectInformation extends BaseTask {
-    @override
-    public async execute(params: IBaseTaskParams, _onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
+    /**
+     * Executes the SetupProjectInformation task
+     * 
+     * @param {IBaseTaskParams} params Task parameters
+     * @param {OnProgressCallbackFunction} onProgress On progress funtion (not currently in use by this task)
+     */
+    public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
-            const spEntityPortalService = new SpEntityPortalService({
-                webUrl: params.data.hub.url,
-                listName: params.properties.projectsList,
-                identityFieldName: 'GtGroupId',
-                urlFieldName: 'GtSiteUrl',
-            });
-            this.logInformation(`Attempting to retrieve project item from list '${params.properties.projectsList}' at ${params.data.hub.url}`, { groupId: params.context.pageContext.legacyPageContext.groupId, siteId: params.context.pageContext.site.id.toString() });
-            params.entity = await spEntityPortalService.getEntityItem(params.context.pageContext.legacyPageContext.groupId);
-            if (!params.entity) {
-                this.logInformation(`Adding project to list '${params.properties.projectsList}' at ${params.data.hub.url}`, { groupId: params.context.pageContext.legacyPageContext.groupId, siteId: params.context.pageContext.site.id.toString() });
-                params.entity = await spEntityPortalService.newEntity(
-                    params.context.pageContext.legacyPageContext.groupId,
-                    params.context.pageContext.web.absoluteUrl,
-                    { Title: params.context.pageContext.web.title, GtSiteId: params.context.pageContext.site.id.toString() },
-                    params.data.hub.url,
-                );
-                this.logInformation(`Project added to list '${params.properties.projectsList}' at ${params.data.hub.url}`, { id: params.entity.item.Id });
-            }
+            await this._syncPropertiesList(params, onProgress);
+            await this._addEntryToHub(params);
             return params;
         } catch (error) {
-            throw new BaseTaskError(this.name, strings.SetupProjectInformationErrorMessage, error);
+            throw new BaseTaskError(this.taskName, strings.SetupProjectInformationErrorMessage, error);
+        }
+    }
+
+    /**
+     * Sync properties list
+     * 
+     * @param {IBaseTaskParams} params Task parameters
+     * @param {OnProgressCallbackFunction} onProgress On progress funtion (not currently in use by this task)
+     */
+    private async _syncPropertiesList(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction) {
+        try {
+            onProgress(strings.SetupProjectInformationText, strings.SyncLocalProjectPropertiesListText, 'AlignCenter');
+            this.logInformation(`Synchronizing list '${strings.ProjectPropertiesListName}' based on content type from ${this.data.hub.url} `, {});
+            const { list } = await params.portalDataService.syncList(params.webAbsoluteUrl, strings.ProjectPropertiesListName, '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C');
+            onProgress(strings.SetupProjectInformationText, strings.CreatingLocalProjectPropertiesListItemText, 'AlignCenter');
+            await list.items.add({ Title: params.context.pageContext.web.title });
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    /**
+     * Add entry to hub
+     * 
+     * @param {IBaseTaskParams} params Task parameters
+     */
+    private async _addEntryToHub(params: IBaseTaskParams) {
+        try {
+            this.logInformation(`Attempting to retrieve project item from list '${params.properties.projectsList}' at ${this.data.hub.url}`);
+            let entity = await params.spEntityPortalService.getEntityItem(params.context.pageContext.legacyPageContext.groupId);
+            if (entity) return;
+            this.logInformation(`Adding project entity to list '${params.properties.projectsList}' at ${this.data.hub.url}`, {});
+            await params.spEntityPortalService.createNewEntity(
+                params.context.pageContext.legacyPageContext.groupId,
+                params.context.pageContext.web.absoluteUrl,
+                { Title: params.context.pageContext.web.title, GtSiteId: params.context.pageContext.site.id.toString() },
+            );
+            this.logInformation(`Project entity added to list '${params.properties.projectsList}' at ${this.data.hub.url}`, {});
+        } catch (error) {
+            throw error;
         }
     }
 }

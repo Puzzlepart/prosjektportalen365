@@ -7,7 +7,7 @@ import { IStatusElementProps } from './IStatusElementProps';
  * @component StatusElement
  */
 // tslint:disable-next-line: naming-convention
-const StatusElement = ({ iconName, label, value, comment, iconSize = 30, iconColor }: IStatusElementProps) => {
+export const StatusElement = ({ iconName, label, value, comment, iconSize = 30, iconColor }: IStatusElementProps) => {
     return (
         <div className={styles.statusElement}>
             <div className={styles.container}>
@@ -23,5 +23,3 @@ const StatusElement = ({ iconName, label, value, comment, iconSize = 30, iconCol
         </div>
     );
 };
-
-export default StatusElement;

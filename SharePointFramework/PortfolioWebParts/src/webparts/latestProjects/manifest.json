@@ -1,0 +1,31 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+    "id": "941fd73c-b957-41c3-8d4f-082268407f10",
+    "alias": "LatestProjectsWebPart",
+    "componentType": "WebPart",
+    "version": "1.1.0",
+    "manifestVersion": 2,
+    "requiresCustomScript": false,
+    "hiddenFromToolbox": true,
+    "supportedHosts": [
+        "SharePointWebPart"
+    ],
+    "preconfiguredEntries": [
+        {
+            "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+            "group": {
+                "default": "Other"
+            },
+            "title": {
+                "default": "Siste prosjekter"
+            },
+            "description": {
+                "default": " "
+            },
+            "officeFabricIconFontName": "BuildQueueNew",
+            "properties": {
+                "title": "Siste prosjekter"
+            }
+        }
+    ]
+}

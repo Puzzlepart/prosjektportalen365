@@ -1,0 +1,38 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+    "id": "e58e3d32-057a-4418-97ce-172b92482ba2",
+    "alias": "PortfolioOverviewWebPart",
+    "componentType": "WebPart",
+    "version": "1.1.0",
+    "manifestVersion": 2,
+    "requiresCustomScript": false,
+    "hiddenFromToolbox": true,
+    "supportedHosts": [
+        "SharePointWebPart"
+    ],
+    "preconfiguredEntries": [
+        {
+            "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+            "group": {
+                "default": "Other"
+            },
+            "title": {
+                "default": "Porteføljeoversikt"
+            },
+            "description": {
+                "default": " "
+            },
+            "officeFabricIconFontName": "FolderList",
+            "properties": {
+                "title": "Porteføljeoversikt",
+                "statusReportsCount": 0,
+                "showCommandBar": true,
+                "showExcelExportButton": true,
+                "showGroupBy": true,
+                "showViewSelector": true,
+                "showSearchBox": true,
+                "showFilters": true
+            }
+        }
+    ]
+}

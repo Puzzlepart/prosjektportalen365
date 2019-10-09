@@ -37,7 +37,7 @@
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">250</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>

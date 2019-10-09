@@ -1,20 +1,30 @@
-import PlannerConfiguration from './PlannerConfiguration';
-import SetupProjectInformation from './SetupProjectInformation';
-import ProvisionSiteFields from './ProvisionSiteFields';
-import ApplyTemplate from './ApplyTemplate';
-import CopyListData from './CopyListData';
-import SetTaxonomyFields from './SetTaxonomyFields';
-import { BaseTask } from './BaseTask';
-export * from './BaseTask';
+import { IProjectSetupData } from 'extensions/projectSetup';
+import { IBaseTask } from './@BaseTask';
+import { ApplyTemplate } from './ApplyTemplate';
+import { CopyListData } from './CopyListData';
+import { PlannerConfiguration } from './PlannerConfiguration';
+import { PreTask } from './PreTask';
+import { ProvisionSiteFields } from './ProvisionSiteFields';
+import { SetTaxonomyFields } from './SetTaxonomyFields';
+import { SetupProjectInformation } from './SetupProjectInformation';
 
-const tasks: BaseTask[] = [
-    new SetupProjectInformation(),
-    new PlannerConfiguration(),
-    new ProvisionSiteFields(),
-    new ApplyTemplate(),
-    new SetTaxonomyFields(),
-    new CopyListData(),
+const tasks: (new (data: IProjectSetupData) => IBaseTask)[] = [
+    PreTask,
+    SetupProjectInformation,
+    PlannerConfiguration,
+    ProvisionSiteFields,
+    ApplyTemplate,
+    SetTaxonomyFields,
+    CopyListData,
 ];
 
-export default tasks;
-export { IBaseTaskParams } from './IBaseTaskParams';
+/**
+ * Get tasks
+ * 
+ * @param {IProjectSetupData} data Data
+ */
+export function getTasks(data: IProjectSetupData) {
+    return tasks.map(ctor => new ctor(data));
+}
+
+export * from './@BaseTask';

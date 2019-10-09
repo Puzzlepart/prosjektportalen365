@@ -3,3 +3,4 @@ export { default as parseUrlHash } from './parseUrlHash';
 export { default as setUrlHash } from './setUrlHash';
 export { default as stringToArrayBuffer } from './stringToArrayBuffer';
 export { default as redirect } from './redirect';
+export { default as getUrlParam } from './getUrlParam';

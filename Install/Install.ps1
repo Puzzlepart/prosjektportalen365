@@ -22,7 +22,7 @@
     [Parameter(Mandatory = $false, HelpMessage = "Do you want to perform an upgrade?")]
     [switch]$Upgrade,
     [Parameter(Mandatory = $false, HelpMessage = "Site design name")]
-    [string]$SiteDesignName = "Prosjektområde",
+    [string]$SiteDesignName = "Prosjektomr%C3%A5de",
     [Parameter(Mandatory = $false, HelpMessage = "Security group to give View access to site design")]
     [string]$SiteDesignSecurityGroupId,
     [Parameter(Mandatory = $false, HelpMessage = "Tenant App Catalog Url")]
@@ -83,7 +83,7 @@ $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".share
 #endregion
 
 #region Check if URL specified is root site
-if($Alias.Length -lt 2 -or $ManagedPath -ne "sites/") {
+if ($Alias.Length -lt 2 -or $ManagedPath -ne "sites/") {
     Write-Host "[ERROR] It looks like you're trying to install to a root site or an invalid site. This is not supported." -ForegroundColor Red
     exit 0
 }
@@ -176,6 +176,7 @@ if (-not $SkipSiteDesign.IsPresent) {
     }
 
     Try {
+        $SiteDesignName = [Uri]::UnescapeDataString($SiteDesignName)
         Write-Host "[INFO] Creating/updating site design [$SiteDesignName]"
     
         $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName -Connection $AdminSiteConnection
@@ -205,7 +206,7 @@ if (-not $SkipSiteDesign.IsPresent) {
 #region Install app packages
 if (-not $SkipAppPackages.IsPresent) {
     Try {
-        if(-not $TenantAppCatalogUrl) {
+        if (-not $TenantAppCatalogUrl) {
             $TenantAppCatalogUrl = Get-PnPTenantAppCatalogUrl -Connection $AdminSiteConnection -ErrorAction SilentlyContinue
         }
         $AppCatalogSiteConnection = Connect-SharePoint -Url $TenantAppCatalogUrl -ErrorAction Stop
@@ -300,7 +301,7 @@ else {
 
 $InstallEndTime = (Get-Date).ToUniversalTime().ToString("MM/dd/yyy HH:mm")
 
-$InstallEntry =  @{
+$InstallEntry = @{
     InstallStartTime = $InstallStartTime; 
     InstallEndTime   = $InstallEndTime; 
     InstallVersion   = "VERSION_PLACEHOLDER";
@@ -311,7 +312,7 @@ Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -Connection $Sit
 
 $InstallEntry.InstallUrl = $Url
 
-Invoke-WebRequest "https://pp365-install-pingback.azurewebsites.net/api/AddEntry" -Body ($InstallEntry | ConvertTo-Json) -Method 'POST'  >$null 2>&1
+try { Invoke-WebRequest "https://pp365-install-pingback.azurewebsites.net/api/AddEntry" -Body ($InstallEntry | ConvertTo-Json) -Method 'POST' -ErrorAction SilentlyContinue >$null 2>&1 } catch {}
 
 #region Disconnect
 Disconnect-PnPOnline -Connection $AppCatalogSiteConnection

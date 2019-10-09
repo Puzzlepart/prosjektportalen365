@@ -1,28 +1,11 @@
-import { IPortfolioOverviewConfiguration } from 'interfaces';
-import { PortfolioOverviewView } from 'models';
-import { ISpEntityPortalServiceParams } from 'sp-entityportal-service';
+import { IPortfolioConfiguration } from 'interfaces';
 import { IBaseComponentProps } from '../IBaseComponentProps';
 
 export interface IPortfolioOverviewProps extends IBaseComponentProps {
     /**
-     * Settings for entity
-     */
-    entity: ISpEntityPortalServiceParams;
-
-    /**
      * Configuration (columns and views etc)
      */
-    configuration: IPortfolioOverviewConfiguration;
-
-    /**
-     * Filter field for <ProjectInformationModal />
-     */
-    projectInfoFilterField?: string;
-
-    /**
-     * List name for status reports
-     */
-    statusReportsListName?: string;    
+    configuration: IPortfolioConfiguration;
 
     /**
      * List name for column config
@@ -43,11 +26,6 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
      * Number of status reports to show
      */
     statusReportsCount?: number;
-
-    /**
-     * Link url template for status reports
-     */
-    statusReportsLinkUrlTemplate?: string;
 
     /**
      * Show Excel export button

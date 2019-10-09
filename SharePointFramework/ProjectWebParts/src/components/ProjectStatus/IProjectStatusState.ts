@@ -1,45 +1,31 @@
-import { ProjectStatusReport } from 'models';
+import { StatusReport } from 'shared/lib/models/StatusReport';
+import { IBaseWebPartComponentState } from '../BaseWebPartComponent';
 import { IProjectStatusData } from './IProjectStatusData';
+import { IProjectStatusHashState } from './IProjectStatusHashState';
 
-export interface IProjectStatusState {
-    
-    /**
-     * @todo describe property
-     */
-    isLoading: boolean;
-    
+export interface IProjectStatusState extends IBaseWebPartComponentState<IProjectStatusData> {
     /**
      * @todo describe property
      */
     newStatusCreated: boolean;
-    
+
     /**
      * @todo describe property
      */
     showNewStatusReportModal?: boolean;
+
+    /**
+     * @todo describe property
+     */
     sourceUrl?: string;
-    
+
     /**
      * @todo describe property
      */
-    error?: any;
-    
-    /**
-     * @todo describe property
-     */
-    data?: IProjectStatusData;
-    
-    /**
-     * @todo describe property
-     */
-    selectedReport?: ProjectStatusReport;
-    
+    selectedReport?: StatusReport;
+
     /**
      * @todo describe property
      */
     hashState?: IProjectStatusHashState;
-}
-
-export interface IProjectStatusHashState {
-    selectedReport?: string;
 }
