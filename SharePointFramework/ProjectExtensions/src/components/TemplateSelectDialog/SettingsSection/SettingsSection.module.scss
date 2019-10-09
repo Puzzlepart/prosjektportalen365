@@ -8,7 +8,9 @@
     .item {
       width: 50%;
       display: inline-block;
-      vertical-align: top;
+      vertical-align: top; 
+      padding-right: 5px;
+      box-sizing: border-box;
       .description {
         @include ms-font-s;
         margin: 5px 0 15px 0;
