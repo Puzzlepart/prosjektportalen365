@@ -1,0 +1,14 @@
+{
+    "Lists": [
+        {
+            "Title": "Eksterne dokumenter",
+            "Description": "",
+            "Template": 101,
+            "AdditionalSettings": {
+                "EnableVersioning": false,
+                "Hidden": true
+            },
+            "Views": []
+        }
+    ]
+}

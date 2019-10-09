@@ -5,11 +5,10 @@
   @include ms-sm12;
   padding: 10px 0 10px 0;
   .container {
-    @include ms-Grid;
-    @include ms-Grid-row;
     .item {
-      @include ms-Grid-col;
-      @include ms-sm6;
+      width: 50%;
+      display: inline-block;
+      vertical-align: top;
       .description {
         @include ms-font-s;
         margin: 5px 0 15px 0;

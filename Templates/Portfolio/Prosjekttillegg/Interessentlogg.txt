@@ -1,0 +1,25 @@
+{
+    "Lists": [
+        {
+            "Title": "Interessentlogg",
+            "Description": "",
+            "Template": 100,
+            "AdditionalSettings": {
+                "EnableVersioning": false
+            },
+            "Views": [
+                {
+                    "Title": "Alle elementer",
+                    "ViewFields": [
+                        "ID",
+                        "LinkTitle"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 50,
+                        "ViewQuery": "<OrderBy><FieldRef Name=\"ID\" /></OrderBy>"
+                    }
+                }
+            ]
+        }
+    ]
+}
