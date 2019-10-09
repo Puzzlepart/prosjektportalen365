@@ -1,5 +1,5 @@
 import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
-import { BenefitsOverview, IBenefitsOverviewProps } from 'components';
+import { BenefitsOverview, IBenefitsOverviewProps } from 'components/BenefitsOverview';
 import * as strings from 'PortfolioWebPartsStrings';
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
 

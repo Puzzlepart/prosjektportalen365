@@ -1,6 +1,6 @@
 export interface IBaseSectionState {
     /**
-     * @todo Describe property
+     * List items
      */
     listItems?: any[];
 }

@@ -1,16 +1,16 @@
 export interface ILatestProjectsState {
   /**
-   * @todo describe property
+   * Whether the component is loading
    */
   isLoading: boolean;
 
   /**
-   * @todo describe property
+   * Project
    */
   projects: any[];
 
   /**
-   * @todo describe property
+   * Show list
    */
   showList: boolean;
 }

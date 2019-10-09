@@ -2,7 +2,6 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import '@pnp/polyfill-ie11';
 import { sp } from '@pnp/sp';
-import * as moment from 'moment';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { ApplicationInsightsLogListener } from 'shared/lib/logging';
@@ -41,10 +40,8 @@ export abstract class BaseProjectWebPart<T extends IBaseWebPartComponentProps> e
 
     /**
      * Setup sp, data adapter, logging etc
-     * 
-     * @param {string} locale Locale for moment
      */
-    private async _setup(momentLocale: string = 'nb') {
+    private async _setup() {
         sp.setup({ spfxContext: this.context });
         this._hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext);
         SPDataAdapter.configure(this.context, {
@@ -56,7 +53,6 @@ export abstract class BaseProjectWebPart<T extends IBaseWebPartComponentProps> e
         Logger.subscribe(new ConsoleListener());
         Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
         Logger.activeLogLevel = DEBUG ? LogLevel.Info : LogLevel.Error;
-        moment.locale(momentLocale);
     }
 
     public async onInit(): Promise<void> {

@@ -3,17 +3,17 @@ import { IListSectionData } from './IListSectionData';
 
 export interface IListSectionState extends IBaseSectionState {
     /**
-     * @todo Describe property
+     * Whether the component is loading
      */
     isLoading: boolean;
 
     /**
-     * @todo Describe property
+     * Data
      */
     data?: IListSectionData;
 
     /**
-     * @todo Describe property
+     * Error
      */
     error?: any;
 }

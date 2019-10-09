@@ -1,6 +1,6 @@
 export interface IInitialViewState {
     /**
-     * @todo describe property
+     * Comment
      */
     comment: string;
 }

@@ -1,3 +1,4 @@
+import { Web } from '@pnp/sp';
 import { ProjectListModel } from 'models';
 import MSGraph from 'msgraph-helper';
 import { IButtonProps } from 'office-ui-fabric-react/lib/Button';
@@ -15,10 +16,9 @@ import { IProjectListProps } from './IProjectListProps';
 import { IProjectListState } from './IProjectListState';
 import { ProjectCard } from './ProjectCard';
 import styles from './ProjectList.module.scss';
-import { Web } from '@pnp/sp';
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns';
 
-export default class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
+export class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
   public static defaultProps: Partial<IProjectListProps> = {
     phaseTermSetId: 'abcfc9d9-a263-4abb-8234-be973c46258a',
     columns: PROJECTLIST_COLUMNS,

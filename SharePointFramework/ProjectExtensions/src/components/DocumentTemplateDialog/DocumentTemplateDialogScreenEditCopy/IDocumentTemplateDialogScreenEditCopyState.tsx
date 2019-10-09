@@ -2,12 +2,12 @@ import { TemplateFile } from '../../../models';
 
 export interface IDocumentTemplateDialogScreenEditCopyState {
     /**
-     * @todo Describe property
+     * Templates
      */
     templates: TemplateFile[];
 
     /**
-     * @todo Describe property
+     * Selected folder server relative URL
      */
     selectedFolderServerRelativeUrl: string;
 }

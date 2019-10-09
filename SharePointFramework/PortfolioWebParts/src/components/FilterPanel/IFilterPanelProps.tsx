@@ -5,17 +5,17 @@ import { IFilterItemProps } from './FilterItem/IFilterItemProps';
 
 export interface IFilterPanelProps extends IPanelProps {
     /**
-     * @todo describe property
+     * Filters
      */
     filters: IFilterProps[];
 
     /**
-     * @todo describe property
+     * On filter change function
      */
     onFilterChange: (column: IColumn, selectedItems: IFilterItemProps[]) => void;
 
     /**
-     * @todo describe property
+     * Id for the layer host
      */
     layerHostId?: string;
 }

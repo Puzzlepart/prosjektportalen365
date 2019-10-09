@@ -6,27 +6,27 @@ import { DocumentTemplateDialogScreen } from './DocumentTemplateDialogScreen';
 export interface IDocumentTemplateDialogState {
 
     /**
-     * @todo Describe property
+     * Is blocking
      */
     isBlocking: boolean;
 
     /**
-     * @todo Describe property
+     * Selection
      */
     selection: TemplateFile[];
 
     /**
-     * @todo Describe property
+     * Current screen
      */
     screen: DocumentTemplateDialogScreen;
 
     /**
-     * @todo Describe property
+     * Templates added
      */
     templatesAdded?: FileAddResult[];
 
     /**
-     * @todo Describe property
+     * Progress
      */
     progress?: IProgressIndicatorProps;
 }

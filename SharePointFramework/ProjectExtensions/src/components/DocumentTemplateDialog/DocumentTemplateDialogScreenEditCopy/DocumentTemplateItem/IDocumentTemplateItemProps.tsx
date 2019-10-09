@@ -3,17 +3,17 @@ import { TemplateFile } from 'models/TemplateFile';
 
 export interface IDocumentTemplateItemProps {
     /**
-     * @todo Describe property
+     * Model
      */
     model: TemplateFile;
 
     /**
-     * @todo Describe property
+     * On input changed
      */
     onInputChanged: (id: string, properties: TypedHash<string>, errorMessage?: string) => void;
 
     /**
-     * @todo Describe property
+     * Folder server relative URL
      */
     folderServerRelativeUrl: string;
 }

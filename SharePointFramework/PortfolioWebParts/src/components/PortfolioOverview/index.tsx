@@ -13,20 +13,20 @@ import * as strings from 'PortfolioWebPartsStrings';
 import { ProjectInformationModal } from 'projectwebparts/lib/components/ProjectInformation';
 import * as React from 'react';
 import { getObjectValue } from 'shared/lib/helpers/getObjectValue';
+import { PortfolioOverviewView, ProjectColumn } from 'shared/lib/models';
+import ExcelExportService from 'shared/lib/services/ExcelExportService';
 import { parseUrlHash, redirect, setUrlHash } from 'shared/lib/util';
 import * as format from 'string-format';
 import * as _ from 'underscore';
-import { IFilterItemProps, IFilterProps } from '../';
+import { IFilterItemProps, IFilterProps } from '../FilterPanel';
 import { IPortfolioOverviewProps } from './IPortfolioOverviewProps';
 import { IPortfolioOverviewHashStateState, IPortfolioOverviewState } from './IPortfolioOverviewState';
 import styles from './PortfolioOverview.module.scss';
 import { PortfolioOverviewCommands } from './PortfolioOverviewCommands';
 import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage';
 import { renderItemColumn } from './RenderItemColumn';
-import ExcelExportService from 'shared/lib/services/ExcelExportService';
-import { ProjectColumn, PortfolioOverviewView } from 'shared/lib/models';
 
-export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
+export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = {};
   private _onSearchDelay: number;
   private _layerHostId = getId('layerHost');

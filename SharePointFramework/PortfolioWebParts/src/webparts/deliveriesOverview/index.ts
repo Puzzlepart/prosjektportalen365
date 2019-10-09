@@ -1,5 +1,5 @@
 import { IPropertyPaneConfiguration, PropertyPaneToggle, PropertyPaneTextField } from '@microsoft/sp-webpart-base';
-import { DeliveriesOverview, IDeliveriesOverviewProps } from 'components';
+import { DeliveriesOverview, IDeliveriesOverviewProps } from 'components/DeliveriesOverview';
 import * as strings from 'PortfolioWebPartsStrings';
 import { BasePortfolioWebPart } from '../@basePortfolioWebPart';
 

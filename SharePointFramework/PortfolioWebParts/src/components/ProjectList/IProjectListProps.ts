@@ -3,57 +3,57 @@ import { IBaseComponentProps } from '../IBaseComponentProps';
 
 export interface IProjectListProps extends IBaseComponentProps {
   /**
-   * @todo describe property
+   * Loading text
    */
   loadingText: string;
 
   /**
-   * @todo describe property
+   * Seach box placeholder text
    */
   searchBoxPlaceholderText: string;
 
   /**
-   * @todo describe property
+   * Term set ID for phase
    */
   phaseTermSetId: string;
 
   /**
-   * @todo describe property
+   * Sort by property
    */
   sortBy?: string;
 
   /**
-   * @todo describe property
+   *Show search box
    */
   showSearchBox?: boolean;
 
   /**
-   * @todo describe property
+   * Show view selector
    */
   showViewSelector?: boolean;
 
   /**
-   * @todo describe property
+   * Show as tiles (shown as list if false)
    */
   showAsTiles?: boolean;
 
   /**
-   * @todo describe property
+   * Show Project Logo
    */
   showProjectLogo?: boolean;
 
   /**
-   * @todo describe property
+   * Show Project Owner
    */
   showProjectOwner?: boolean;
 
   /**
-   * @todo describe property
+   * Show Project Manager
    */
   showProjectManager?: boolean;
 
   /**
-   * @todo describe property
+   * Columns
    */
   columns?: IColumn[];
 }

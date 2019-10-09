@@ -2,27 +2,27 @@ import { Phase } from 'models';
 
 export interface IProjectPhaseProps {
     /**
-     * @todo Describe property
+     * Phase
      */
     phase: Phase;
 
     /**
-     * @todo Describe property
+     * Is current phase
      */
     isCurrentPhase?: boolean;
 
     /**
-     * @todo Describe property
+     * Change phase enabled
      */
     changePhaseEnabled?: boolean;
 
     /**
-     * @todo Describe property
+     * On change phase handler
      */
     onChangePhaseHandler?: (phase: Phase) => void;
 
     /**
-     * @todo Describe property
+     * On open callout
      */
     onOpenCallout: (target: any) => void;
 }

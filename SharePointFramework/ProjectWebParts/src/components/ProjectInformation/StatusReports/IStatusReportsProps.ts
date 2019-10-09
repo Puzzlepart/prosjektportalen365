@@ -2,17 +2,17 @@ import { StatusReport } from 'shared/lib/models/StatusReport';
 
 export interface IStatusReportsProps extends React.HTMLAttributes<HTMLElement> {
     /**
-     * @todo Describe property
+     * Status reports
      */
     statusReports: StatusReport[];
 
     /**
-     * @todo Describe property
+     * Icon name
      */
     iconName: string;
 
     /**
-     * @todo Describe property
+     * URL source param
      */
     urlSourceParam?: string;
 }

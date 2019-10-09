@@ -1,19 +1,18 @@
-import { Folder } from '@pnp/sp';
 import { IDocumentLibrary, TemplateFile } from '../../../models';
 
 export interface IDocumentTemplateDialogScreenEditCopyProps {
     /**
-     * @todo Describe property
+     * Selected templates
      */
     selectedTemplates: TemplateFile[];
 
     /**
-     * @todo Describe property
+     * Libraries
      */
     libraries: IDocumentLibrary[];
 
     /**
-     * @todo Describe property
+     * On start copy callback
      */
     onStartCopy: (templates: TemplateFile[], selectedFolderServerRelativeUrl: string) => void;
 }

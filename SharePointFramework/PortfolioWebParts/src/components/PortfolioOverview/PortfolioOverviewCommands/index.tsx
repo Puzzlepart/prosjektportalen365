@@ -5,7 +5,7 @@ import * as strings from 'PortfolioWebPartsStrings';
 import * as React from 'react';
 import ExcelExportService from 'shared/lib/services/ExcelExportService';
 import { redirect } from 'shared/lib/util';
-import { FilterPanel, IFilterProps } from '../../';
+import { FilterPanel, IFilterProps } from '../../FilterPanel';
 import { IPortfolioOverviewCommandsProps } from './IPortfolioOverviewCommandsProps';
 import { IPortfolioOverviewCommandsState } from './IPortfolioOverviewCommandsState';
 

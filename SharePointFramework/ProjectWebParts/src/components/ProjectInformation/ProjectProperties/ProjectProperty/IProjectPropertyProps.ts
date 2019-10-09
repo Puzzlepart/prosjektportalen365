@@ -14,12 +14,12 @@ export interface IProjectPropertyProps extends React.HTMLAttributes<HTMLElement>
     displayMode?: DisplayMode;
 
     /**
-     * @todo Describe property
+     * On field external changed
      */
     onFieldExternalChanged?: (fieldName: string, checked: boolean) => void;
 
     /**
-     * @todo Describe property
+     * A hash object of fields to show for external users
      */
     showFieldExternal?: TypedHash<boolean>;
 }

@@ -39,6 +39,7 @@ export class ProjectDataService {
             obj[key] = formatString(this._storageKeys[key], this._params.siteId.replace(/-/g, ''));
             return obj;
         }, {});
+        this._storage.deleteExpired();
     }
 
     /**
@@ -55,7 +56,7 @@ export class ProjectDataService {
      * 
      * @param {Date} expire Date of expire for cache
      */
-    private async _getPropertyItemContext(expire: Date = dateAdd(new Date(), 'day', 1)): Promise<IPropertyItemContext> {
+    private async _getPropertyItemContext(expire: Date = dateAdd(new Date(), 'minute', 15)): Promise<IPropertyItemContext> {
         let context: Partial<IPropertyItemContext> = await this._storage.getOrPut(this._getStorageKey('_getPropertyItemContext'), async () => {
             try {
                 Logger.write(`(ProjectDataService) (_getPropertyItemContext) Checking if list ${this._params.propertiesListName} exists in web.`);
@@ -95,9 +96,7 @@ export class ProjectDataService {
     private async _getPropertyItem(urlSource: string = encodeURIComponent(document.location.href)): Promise<IGetPropertiesData> {
         try {
             let propertyItemContext = await this._getPropertyItemContext();
-            if (!propertyItemContext) {
-                return null;
-            }
+            if (!propertyItemContext) return null;
             let [fieldValuesText, fieldValues, fields] = await Promise.all([
                 propertyItemContext
                     .item
@@ -140,7 +139,7 @@ export class ProjectDataService {
             return { ...propertyItem, propertiesListId: propertyItem.propertiesListId };
         } else {
             Logger.write(`(ProjectDataService) (getPropertiesData) Local property item not found. Retrieving data from portal site.`);
-            let entity = await this._params.spEntityPortalService.configure(this.spConfiguration).fetchEntity(this._params.siteId, this._params.webUrl);
+            let entity = await this._params.entityService.configure(this.spConfiguration).fetchEntity(this._params.siteId, this._params.webUrl);
             return {
                 fieldValues: entity.fieldValues,
                 fieldValuesText: entity.fieldValues,
@@ -175,7 +174,7 @@ export class ProjectDataService {
             if (propertyItemContext) {
                 await propertyItemContext.item.update(properties);
             } else {
-                await this._params.spEntityPortalService.updateEntityItem(this._params.siteId, properties);
+                await this._params.entityService.updateEntityItem(this._params.siteId, properties);
             }
         } catch (error) {
             throw error;
@@ -199,6 +198,7 @@ export class ProjectDataService {
                 expiration: dateAdd(new Date(), 'day', 1),
             })
             .get();
+        Logger.write(`(ProjectDataService) Retrieved ${terms.length} phases from ${termSetId}.`);
         return terms.map((term) => new ProjectPhaseModel(term.Name, term.Id, checklistData[term.Id], term.LocalCustomProperties));
     }
 
@@ -264,9 +264,10 @@ export class ProjectDataService {
      * Clear cache
      */
     public clearCache(): void {
-        Object.keys(this._storageKeys).forEach(key => {
+        Object.keys(this._storageKeys).forEach(name => {
+            let key = this._getStorageKey(name);
             Logger.write(`(ProjectDataService) Clearing key ${key} from sessionStorage.`);
-            this._storage.delete(this._getStorageKey(key));
+            sessionStorage.removeItem(key);
         });
     }
 }

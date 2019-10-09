@@ -13,8 +13,8 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
         globalCacheDisable: false,
     };
     public settings: T;
-    public portalDataService: PortalDataService;
-    public spEntityPortalService: SpEntityPortalService;
+    public portal: PortalDataService;
+    public entityService: SpEntityPortalService;
     public sp: SPRest;
     public isConfigured: boolean = false;
 
@@ -28,8 +28,8 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
         this.settings = settings;
         sp.setup({ spfxContext, ...this.spConfiguration });
         this.sp = sp;
-        this.portalDataService = new PortalDataService().configure({ urlOrWeb: new Web(this.settings.hubSiteUrl), siteId: this.settings.siteId });
-        this.spEntityPortalService = new SpEntityPortalService({
+        this.portal = new PortalDataService().configure({ urlOrWeb: new Web(this.settings.hubSiteUrl), siteId: this.settings.siteId });
+        this.entityService = new SpEntityPortalService({
             portalUrl: this.settings.hubSiteUrl,
             listName: 'Prosjekter',
             contentTypeId: '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',

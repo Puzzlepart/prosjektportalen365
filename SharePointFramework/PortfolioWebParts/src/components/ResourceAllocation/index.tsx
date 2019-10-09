@@ -1,4 +1,5 @@
 import { sp } from '@pnp/sp';
+import { getId } from '@uifabric/utilities';
 import { IAllocationSearchResult, ITimelineData, ITimelineGroup, ITimelineItem } from 'interfaces';
 import * as moment from 'moment';
 import * as objectGet from 'object-get';
@@ -15,14 +16,13 @@ import { tryParsePercentage } from 'shared/lib/helpers';
 import { DataSourceService } from 'shared/lib/services';
 import * as format from 'string-format';
 import * as _ from 'underscore';
-import { FilterPanel, IFilterItemProps, IFilterProps } from '../';
+import { FilterPanel, IFilterItemProps, IFilterProps } from '../FilterPanel';
 import { IResourceAllocationProps } from './IResourceAllocationProps';
 import { IResourceAllocationState } from './IResourceAllocationState';
 import styles from './ResourceAllocation.module.scss';
 import './Timeline.overrides.css';
-import { getId } from '@uifabric/utilities';
 
-export default class ResourceAllocation extends React.Component<IResourceAllocationProps, IResourceAllocationState> {
+export class ResourceAllocation extends React.Component<IResourceAllocationProps, IResourceAllocationState> {
   public static defaultProps: Partial<IResourceAllocationProps> = {
     itemBgColor: '51,153,51',
     itemAbsenceBgColor: '26,111,179',
@@ -36,6 +36,7 @@ export default class ResourceAllocation extends React.Component<IResourceAllocat
   constructor(props: IResourceAllocationProps) {
     super(props);
     this.state = { isLoading: true, showFilterPanel: false, activeFilters: {} };
+    moment.locale('nb');
   }
 
   public async componentDidMount(): Promise<void> {

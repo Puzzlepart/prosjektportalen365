@@ -1,4 +1,4 @@
-import { IAggregatedSearchListProps } from '../';
+import { IAggregatedSearchListProps } from '../AggregatedSearchList';
 
 export interface IBenefitsOverviewProps  extends IAggregatedSearchListProps {
     /**

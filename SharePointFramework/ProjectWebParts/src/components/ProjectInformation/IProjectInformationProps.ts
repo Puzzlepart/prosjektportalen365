@@ -24,7 +24,7 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   statusReportsCount?: number;
 
   /**
-   * @todo Describe property
+   * On field external changed
    */
   onFieldExternalChanged?: (fieldName: string, checked: boolean) => void;
 

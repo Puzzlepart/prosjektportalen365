@@ -1,6 +1,6 @@
 export interface IDocumentTemplateItemState {
     /**
-     * @todo Describe property
+     * Is expanded
      */
     isExpanded: boolean;
 }

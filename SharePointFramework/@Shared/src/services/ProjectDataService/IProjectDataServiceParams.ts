@@ -5,37 +5,37 @@ import { SpEntityPortalService } from 'sp-entityportal-service';
 
 export interface IProjectDataServiceParams {    
     /**
-     * @todo Describe property
+     * Web URL
      */
     webUrl: string;
     
     /**
-     * @todo Describe property
+     * Site ID
      */
     siteId: string;
     
     /**
-     * @todo Describe property
+     * Entity service
      */
-    spEntityPortalService: SpEntityPortalService;
+    entityService: SpEntityPortalService;
     
     /**
-     * @todo Describe property
+     * List name for project properties
      */
     propertiesListName: string;
     
     /**
-     * @todo Describe property
+     * SP rest
      */
     sp: SPRest;
     
     /**
-     * @todo Describe property
+     * Taxonomy session
      */
     taxonomy?: ITaxonomySession;
     
     /**
-     * @todo Describe property
+     * Log level
      */
     logLevel?: LogLevel;
 }

@@ -7,52 +7,52 @@ import { IProjectSetupProperties } from '../../extensions/projectSetup/IProjectS
 
 export interface IBaseTaskParams {
     /**
-     * @todo Describe property
+     * Web
      */
     web: Web;
 
     /**
-     * @todo Describe property
+     * Web absolute URL
      */
     webAbsoluteUrl: string;
 
     /**
-     * @todo Describe property
+     * Template parameters
      */
     templateParameters?: { [key: string]: string };
 
     /**
-     * @todo Describe property
+     * Template exclude handlers
      */
     templateExcludeHandlers: string[];
 
     /**
-     * @todo Describe property
+     * Context for the Application Customizer
      */
     context: ApplicationCustomizerContext;
 
     /**
-     * @todo Describe property
+     * Properties
      */
     properties: IProjectSetupProperties;
 
     /**
-     * @todo Describe property
+     * SPFx JSOM context
      */
     spfxJsomContext?: ISpfxJsomContext;
 
     /**
-     * @todo Describe property
+     * Template schema
      */
     templateSchema?: Schema;
 
     /**
-     * @todo Describe property
+     * Entity service
      */
-    spEntityPortalService?: SpEntityPortalService;
+    entityService?: SpEntityPortalService;
 
     /**
-     * @todo Describe property
+     * Portal data service
      */
-    portalDataService?: PortalDataService;
+    portal?: PortalDataService;
 }

@@ -3,37 +3,37 @@ import { ProjectListModel } from 'models';
 
 export interface IProjectListState {
   /**
-   * @todo describe property
+   * Whether the component is loading
    */
   isLoading: boolean;
 
   /**
-   * @todo describe property
+   * Search term
    */
   searchTerm: string;
 
   /**
-   * @todo describe property
+   * Projects
    */
   projects?: ProjectListModel[];
 
   /**
-   * @todo describe property
+   * Error
    */
   error?: any;
 
   /**
-   * @todo describe property
+   * Show project info
    */
   showProjectInfo?: ProjectListModel;
 
   /**
-   * @todo describe property
+   * Show as tiles (shown as list if false)
    */
   showAsTiles?: boolean;
 
   /**
-   * @todo describe property
+   * List view properties
    */
   listView?: { projects: ProjectListModel[], columns: IColumn[] };
 }

@@ -11,7 +11,7 @@ import { ILatestProjectsState } from './ILatestProjectsState';
 import styles from './LatestProjects.module.scss';
 
 
-export default class LatestProjects extends React.Component<ILatestProjectsProps, ILatestProjectsState> {
+export class LatestProjects extends React.Component<ILatestProjectsProps, ILatestProjectsState> {
   constructor(props: ILatestProjectsProps) {
     super(props);
     this.state = { isLoading: true, projects: [], showList: true };

@@ -1,5 +1,5 @@
 import { IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
-import { ILatestProjectsProps, LatestProjects } from 'components';
+import { LatestProjects, ILatestProjectsProps } from 'components/LatestProjects';
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
 
 export default class LatestProjectsWebPart extends BasePortfolioWebPart<ILatestProjectsProps> {

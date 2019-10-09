@@ -1,6 +1,5 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common';
-import { LogLevel } from '@pnp/logging';
 import { ItemUpdateResult } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator';
@@ -23,7 +22,7 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
         taxonomy.setup({ spfxContext });
         this.project = new ProjectDataService({
             ...this.settings,
-            spEntityPortalService: this.spEntityPortalService,
+            entityService: this.entityService,
             propertiesListName: strings.ProjectPropertiesListName,
             sp: this.sp,
             taxonomy,
@@ -41,42 +40,48 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
     public async syncPropertyItemToHub(fieldValues: TypedHash<any>, fieldValuesText: TypedHash<string>, progressFunc: (props: IProgressIndicatorProps) => void): Promise<ItemUpdateResult> {
         try {
             progressFunc({ label: strings.SyncProjectPropertiesValuesProgressDescription, description: 'Vennligst vent...' });
-            const fields = await this.spEntityPortalService.getEntityFields();
+            const [fields, siteUsers] = await Promise.all([
+                this.entityService.getEntityFields(),
+                this.sp.web.siteUsers.select('Id', 'Email', 'LoginName').get<{ Id: number, Email: string, LoginName: string }[]>(),
+            ]);
             const fieldToSync = fields.filter(fld => {
                 if (fld.SchemaXml.indexOf('ShowInEditForm="FALSE"') !== -1) return false;
                 if (fld.InternalName.indexOf('Gt') !== 0) return false;
                 return true;
             });
-            const properties = fieldToSync.reduce((obj, fld) => {
+            let properties: TypedHash<any> = {};
+            for (let i = 0; i < fieldToSync.length; i++) {
+                let fld = fieldToSync[i];
                 let fldValue = fieldValues[fld.InternalName];
                 let fldValueTxt = fieldValuesText[fld.InternalName];
-                if (stringIsNullOrEmpty(fldValueTxt)) return obj;
                 switch (fld.TypeAsString) {
                     case 'TaxonomyFieldType': case 'TaxonomyFieldTypeMulti': {
                         let [textField] = fields.filter(f => f.Id === fld.TextField);
-                        if (textField) obj[textField.InternalName] = fieldValuesText[textField.InternalName];
+                        if (!textField) continue;
+                        properties[textField.InternalName] = fieldValuesText[textField.InternalName];
                     }
                         break;
                     case 'User': {
-                        obj[`${fld.InternalName}Id`] = fieldValues[`${fld.InternalName}Id`];
+                        let [siteUser] = siteUsers.filter(u => u.Id === fieldValues[`${fld.InternalName}Id`]);
+                        let user = siteUser ? await this.entityService.web.ensureUser(siteUser.LoginName) : null;
+                        properties[`${fld.InternalName}Id`] = user ? user.data.Id : null;
                     }
                         break;
                     case 'DateTime': {
-                        obj[fld.InternalName] = new Date(fldValue);
+                        properties[fld.InternalName] = fldValue ? new Date(fldValue) : null;
                     }
                         break;
                     case 'Currency': {
-                        obj[fld.InternalName] = fldValue;
+                        properties[fld.InternalName] = fldValue || null;
                     }
                         break;
                     default: {
-                        obj[fld.InternalName] = fldValueTxt;
+                        properties[fld.InternalName] = fldValueTxt || null;
                     }
                         break;
                 }
-                return obj;
-            }, {});
-            return await this.spEntityPortalService.updateEntityItem(this.settings.siteId, properties);
+            }
+            return await this.entityService.updateEntityItem(this.settings.siteId, properties);
         } catch (error) {
             throw error;
         }

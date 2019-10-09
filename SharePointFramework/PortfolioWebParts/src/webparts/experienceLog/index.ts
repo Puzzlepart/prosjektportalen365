@@ -1,5 +1,5 @@
 import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
-import { ExperienceLog, IExperienceLogProps } from 'components';
+import { ExperienceLog, IExperienceLogProps } from 'components/ExperienceLog';
 import * as strings from 'PortfolioWebPartsStrings';
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
 

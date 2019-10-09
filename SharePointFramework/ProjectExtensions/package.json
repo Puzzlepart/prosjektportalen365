@@ -1,6 +1,6 @@
 {
     "name": "projectextensions",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "private": true,
     "engines": {
         "node": ">=0.10.0"
@@ -70,10 +70,12 @@
         "@types/sharepoint": "^2016.1.2",
         "@types/underscore": "^1.9.2",
         "ajv": "~5.2.2",
+        "colors": "^1.4.0",
         "find": "^0.3.0",
         "gulp": "~3.9.1",
         "spfx-pkgdeploy": "^0.3.0",
         "tslint-consistent-codestyle": "^1.15.1",
+        "webpack-bundle-analyzer": "^3.5.2",
         "webpackbar": "^4.0.0"
     }
 }

@@ -3,27 +3,27 @@ import { IDocumentTemplateDialogDismissProps } from './IDocumentTemplateDialogDi
 
 export interface IDocumentTemplateDialogProps {
     /**
-     * @todo Describe property
+     * Title
      */
     title: string;
 
     /**
-     * @todo Describe property
+     * Templates
      */
     templates: TemplateFile[];
 
     /**
-     * @todo Describe property
+     * Libraries
      */
     libraries: IDocumentLibrary[];
 
     /**
-     * @todo Describe property
+     * Template library
      */
     templateLibrary: { title: string, url: string };
 
     /**
-     * @todo Describe property
+     * On dismiss callback
      */
     onDismiss: (props: IDocumentTemplateDialogDismissProps) => void;
 }

@@ -20,7 +20,7 @@ import { ProjectSetupError } from './ProjectSetupError';
 import { ProjectSetupValidation } from './ProjectSetupValidation';
 
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
-  private _portalDataService: PortalDataService;
+  private _portal: PortalDataService;
   private _placeholderIds = {
     ErrorDialog: getId('errordialog'),
     ProgressDialog: getId('progressdialog'),
@@ -204,13 +204,13 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       Logger.log({ message: '(ProjectSetup) _fetchData: Retrieving hub site url', data: {}, level: LogLevel.Info });
       let data: IProjectSetupData = {};
       data.hub = await HubSiteService.GetHubSite(sp, this.context.pageContext);
-      this._portalDataService = new PortalDataService().configure({ urlOrWeb: data.hub.web });
+      this._portal = new PortalDataService().configure({ urlOrWeb: data.hub.web });
       Logger.log({ message: '(ProjectSetup) _fetchData: Retrieved hub site url', data: { hubUrl: data.hub.url }, level: LogLevel.Info });
       Logger.log({ message: '(ProjectSetup) _fetchData: Retrieving templates, extensions and content config', data: {}, level: LogLevel.Info });
       const [templates, extensions, listContentConfig] = await Promise.all([
-        this._portalDataService.getHubItems(this.properties.templatesLibrary, ProjectTemplate, { ViewXml: '<View></View>' }, ['File', 'FieldValuesAsText']),
-        this._portalDataService.getHubItems(this.properties.extensionsLibrary, ProjectExtension, { ViewXml: '<View></View>' }, ['File', 'FieldValuesAsText']),
-        this._portalDataService.getHubItems(this.properties.contentConfigList, ListContentConfig),
+        this._portal.getItems(this.properties.templatesLibrary, ProjectTemplate, { ViewXml: '<View></View>' }, ['File', 'FieldValuesAsText']),
+        this._portal.getItems(this.properties.extensionsLibrary, ProjectExtension, { ViewXml: '<View></View>' }, ['File', 'FieldValuesAsText']),
+        this._portal.getItems(this.properties.contentConfigList, ListContentConfig),
       ]);
       Logger.log({ message: '(ProjectSetup) _fetchData: Retrieved templates, extensions and content config', data: { templates: templates.length, extensions: extensions.length, listContentConfig: listContentConfig.length }, level: LogLevel.Info });
       return {

@@ -21,7 +21,7 @@ import styles from './AggregatedSearchList.module.scss';
 import { IAggregatedSearchListProps } from './IAggregatedSearchListProps';
 import { IAggregatedSearchListState } from './IAggregatedSearchListState';
 
-export default class AggregatedSearchList extends React.Component<IAggregatedSearchListProps, IAggregatedSearchListState> {
+export class AggregatedSearchList extends React.Component<IAggregatedSearchListProps, IAggregatedSearchListState> {
     public static defaultProps: Partial<IAggregatedSearchListProps> = {
         showCommandBar: true,
         showSearchBox: true,

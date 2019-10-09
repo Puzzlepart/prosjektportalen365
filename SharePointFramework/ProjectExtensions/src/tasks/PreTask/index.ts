@@ -17,13 +17,13 @@ export class PreTask extends BaseTask {
         try {
             params.templateSchema = await this.data.selectedTemplate.getSchema();
             params.spfxJsomContext = await initSpfxJsom(params.context.pageContext.site.absoluteUrl, { loadTaxonomy: true });
-            params.spEntityPortalService = new SpEntityPortalService({
+            params.entityService = new SpEntityPortalService({
                 portalUrl: this.data.hub.url,
                 listName: params.properties.projectsList,
                 identityFieldName: 'GtGroupId',
                 urlFieldName: 'GtSiteUrl',
             });
-            params.portalDataService = new PortalDataService().configure({ urlOrWeb: this.data.hub.web });
+            params.portal = new PortalDataService().configure({ urlOrWeb: this.data.hub.web });
             return params;
         } catch (error) {
             throw new BaseTaskError(this.taskName, strings.PreTaskErrorMessage, error);

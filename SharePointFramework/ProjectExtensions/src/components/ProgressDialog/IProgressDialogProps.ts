@@ -2,17 +2,17 @@ import { IBaseDialogProps } from '../@BaseDialog/IBaseDialogProps';
 
 export interface IProgressDialogProps extends IBaseDialogProps {
     /**
-     * @todo Describe property
+     * Text
      */
     text: string;
     
     /**
-     * @todo Describe property
+     * Sub text
      */
     subText: string;
 
     /**
-     * @todo Describe property
+     * Icon name
      */
     iconName?: string;
 }

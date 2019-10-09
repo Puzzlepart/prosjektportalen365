@@ -2,12 +2,12 @@ import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 
 export interface IAggregatedSearchListColumn extends IColumn {
     /**
-     * @todo Describe property
+     * Is the column groupable
      */
     isGroupable?: boolean;
     
     /**
-     * @todo Describe property
+     * Field name for display
      */
     fieldNameDisplay?: string;
 }

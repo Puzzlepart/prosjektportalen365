@@ -4,12 +4,12 @@ import { ITemplateSelectDialogState } from './ITemplateSelectDialogState';
 
 export interface ITemplateSelectDialogProps extends IBaseDialogProps {
     /**
-     * @todo Describe property
+     * Data
      */
     data: IProjectSetupData;
 
     /**
-     * @todo Describe property
+     * On submit callback
      */
     onSubmit: (state: ITemplateSelectDialogState) => void;
 }

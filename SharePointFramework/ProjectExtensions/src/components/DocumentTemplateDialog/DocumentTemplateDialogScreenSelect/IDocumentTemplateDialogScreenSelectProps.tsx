@@ -5,27 +5,27 @@ import { TemplateFile } from '../../../models';
 
 export interface IDocumentTemplateDialogScreenSelectProps {
     /**
-     * @todo Describe property
+     * Templates
      */
     templates: TemplateFile[];
 
     /**
-     * @todo Describe property
+     * Selection
      */
     selection: Selection;
 
     /**
-     * @todo Describe property
+     * Columns
      */
     columns?: IColumn[];
 
     /**
-     * @todo Describe property
+     * Selected items
      */
     selectedItems: any[];
 
     /**
-     * @todo Describe property
+     * Template library
      */
     templateLibrary: { title: string, url: string };
 }

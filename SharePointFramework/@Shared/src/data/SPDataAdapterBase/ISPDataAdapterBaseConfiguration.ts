@@ -2,22 +2,22 @@ import { LogLevel } from '@pnp/logging';
 
 export interface ISPDataAdapterBaseConfiguration {
    /**
-     * @todo Describe property
+     * Web URL
      */
     webUrl: string;
     
     /**
-     * @todo Describe property
+     * Site ID
      */
     siteId: string;    
     
     /**
-     * @todo Describe property
+     * Hub site URL
      */
     hubSiteUrl: string;
     
     /**
-     * @todo Describe property
+     * Log level
      */
     logLevel?: LogLevel,
 }

@@ -21,7 +21,7 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
         super.configure(spfxContext, settings);
         this.project = new ProjectDataService({
             ...this.settings,
-            spEntityPortalService: this.spEntityPortalService,
+            entityService: this.entityService,
             propertiesListName: strings.ProjectPropertiesListName,
             sp: this.sp,
         });
@@ -52,7 +52,7 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
      * @param {string} viewXml View xml
      */
     public async getDocumentTemplates(templateLibrary: string, viewXml?: string) {
-        return await this.portalDataService.getHubItems(
+        return await this.portal.getItems(
             templateLibrary,
             TemplateFile,
             {

@@ -3,7 +3,7 @@ import { IProjectInformationProps } from '../ProjectInformation';
 
 export interface IProjectInformationModalProps extends IProjectInformationProps {
   /**
-   * @todo describe property
+   * Props for the modal
    */
   modalProps: IModalProps;
 }

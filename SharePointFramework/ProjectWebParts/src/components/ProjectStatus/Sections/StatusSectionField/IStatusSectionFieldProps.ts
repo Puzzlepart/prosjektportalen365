@@ -1,11 +1,11 @@
 export interface IStatusSectionFieldProps {
     /**
-     * @todo Describe property
+     * Label for the field
      */
     label: string;
 
     /**
-     * @todo Describe property
+     * Value for the field
      */
     value: string;
 }

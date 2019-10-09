@@ -1,5 +1,5 @@
 import { IPropertyPaneConfiguration, PropertyPaneToggle, PropertyPaneTextField } from '@microsoft/sp-webpart-base';
-import { IRiskOverviewProps, RiskOverview } from 'components';
+import { RiskOverview, IRiskOverviewProps } from 'components/RiskOverview';
 import * as strings from 'PortfolioWebPartsStrings';
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
 
