@@ -6,7 +6,9 @@
     "scripts": {
         "buildReleasePackage": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1",
         "buildReleasePackageSkipBuildSPFx": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -SkipBuildSharePointFramework",
-        "buildReleasePackageClean": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -CleanNodeModules"
+        "buildReleasePackageClean": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -CleanNodeModules",
+        "version": "auto-changelog -p && git add CHANGELOG.md",
+        "auto-changelog": "auto-changelog -p"
     },
     "repository": {
         "type": "git",
@@ -27,7 +29,8 @@
         "unreleased": true,
         "commitLimit": false,
         "includeBranch": [
-            "master"
+            "master",
+            "dev"
         ]
     }
 }
