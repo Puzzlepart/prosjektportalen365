@@ -3,32 +3,32 @@ import { ProjectListModel } from 'models';
 
 export interface IProjectCardProps {
   /**
-   * @todo describe property
+   * Project
    */
   project: ProjectListModel;
 
   /**
-   * @todo describe property
+   * Should the title be truncated
    */
   shouldTruncateTitle: boolean;
 
   /**
-   * @todo describe property
+   * Show Project Logo
    */
   showProjectLogo?: boolean;
 
   /**
-   * @todo describe property
+   * Show Project Owner
    */
   showProjectOwner?: boolean;
 
   /**
-   * @todo describe property
+   * Show Project Manager
    */
   showProjectManager?: boolean;
 
   /**
-   * @todo describe property
+   * Actions
    */
   actions: IButtonProps[];
 }

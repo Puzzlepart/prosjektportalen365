@@ -3,12 +3,12 @@ import { IBaseSectionProps } from '../BaseSection';
 
 export interface ISummarySectionProps extends IBaseSectionProps {
     /**
-     * @todo describe property
+     * Sections
      */
     sections: SectionModel[];
 
     /**
-     * @todo describe property
+     * Column configuration
      */
     columnConfig: ProjectColumnConfig[];
 }

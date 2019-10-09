@@ -4,22 +4,22 @@ export type ChecklistData = { [termGuid: string]: { stats: { [status: string]: n
 
 export interface IProjectPhasesData {
     /**
-     * @todo describe property
+     * Phases
      */
     phases?: Phase[];
 
     /**
-     * @todo describe property
+     * Current phase
      */
     currentPhase?: Phase;
 
     /**
-     * @todo describe property
+     * Check list data
      */
     checklistData?: ChecklistData;
 
     /**
-     * @todo describe property
+     * Phase text field name
      */
     phaseTextField?: string;
 }

@@ -22,7 +22,7 @@ import { IBaseSectionProps, ListSection, ProjectPropertiesSection, StatusSection
 
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private _portalDataService: PortalDataService;
-  private _spEntityPortalService: SpEntityPortalService;
+  private _entityService: SpEntityPortalService;
 
   /**
    * Constructor
@@ -31,12 +31,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    */
   constructor(props: IProjectStatusProps) {
     super(props);
-    this.state = {
-      isLoading: true,
-      newStatusCreated: document.location.hash === '#NewStatus',
-    };
+    this.state = { isLoading: true };
     this._portalDataService = new PortalDataService().configure({ urlOrWeb: props.hubSite.web, siteId: props.siteId });
-    this._spEntityPortalService = new SpEntityPortalService({
+    this._entityService = new SpEntityPortalService({
       portalUrl: this.props.hubSite.url,
       listName: strings.ProjectsListName,
       contentTypeId: '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
@@ -282,7 +279,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         columnConfig,
         reportFields,
       ] = await Promise.all([
-        this._spEntityPortalService.fetchEntity(this.props.siteId, this.props.webUrl),
+        this._entityService.fetchEntity(this.props.siteId, this.props.webUrl),
         this._portalDataService.getStatusReportListProps(),
         this._portalDataService.getStatusReports(),
         this._portalDataService.getProjectStatusSections(),

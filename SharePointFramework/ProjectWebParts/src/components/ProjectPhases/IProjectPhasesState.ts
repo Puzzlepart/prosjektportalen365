@@ -5,17 +5,17 @@ import { IProjectPhaseMouseOver } from './ProjectPhaseCallout/IProjectPhaseMouse
 
 export interface IProjectPhasesState extends IBaseWebPartComponentState<IProjectPhasesData> {
   /**
-   * @todo describe property
+   * Confirm phase
    */
   confirmPhase?: Phase;
 
   /**
-   * @todo describe property
+   * Is changing phase
    */
   isChangingPhase?: boolean;
 
   /**
-   * @todo describe property
+   * Phase mouse over
    */
   phaseMouseOver?: IProjectPhaseMouseOver;
 }

@@ -1,8 +1,7 @@
-import * as moment from 'moment';
 import * as $script from 'scriptjs';
 import * as format from 'string-format';
-import { getObjectValue } from "../../helpers/getObjectValue";
-import { stringToArrayBuffer } from "../../util";
+import { getObjectValue } from '../../helpers/getObjectValue';
+import { stringToArrayBuffer } from '../../util';
 import { ExcelExportServiceDefaultConfiguration } from './ExcelExportServiceDefaultConfiguration';
 import { IExcelExportServiceConfiguration } from './IExcelExportServiceConfiguration';
 
@@ -57,7 +56,7 @@ export default new class ExcelExportService {
                 (<any>window).XLSX.utils.book_append_sheet(workBook, sheet, s.name || `Sheet${index + 1}`);
             });
             const wbout = (<any>window).XLSX.write(workBook, this._configuration.options);
-            (<any>window).saveAs(new Blob([stringToArrayBuffer(wbout)], { type: "application/octet-stream" }), format("{0}-{1}.xlsx", this._configuration.name, moment(new Date().toISOString()).format('YYYY-MM-DD-HH-mm')));
+            (<any>window).saveAs(new Blob([stringToArrayBuffer(wbout)], { type: 'application/octet-stream' }), format('{0}-{1}.xlsx', this._configuration.name, new Date().toISOString()));
         } catch (error) {
             throw new Error(error);
         }

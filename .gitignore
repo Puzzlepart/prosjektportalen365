@@ -11,3 +11,4 @@ node_modules
 Install/.vscode
 Templates/*.txt
 Templates/*.ps1
+SharePointFramework/*/**/build.config.json

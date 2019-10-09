@@ -3,17 +3,17 @@ import { IBaseComponentProps } from '../IBaseComponentProps';
 
 export interface ILatestProjectsProps extends IBaseComponentProps {
   /**
-   * @todo describe property
+   * Loading text
    */
   loadingText: string;
 
   /**
-   * @todo describe property
+   * Empty message
    */
   emptyMessage: string;
 
   /**
-   * @todo describe property
+   * Number of items to show
    */
   rowLimit: number;
 }

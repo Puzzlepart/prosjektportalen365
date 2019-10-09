@@ -5,27 +5,17 @@ import { IProjectStatusHashState } from './IProjectStatusHashState';
 
 export interface IProjectStatusState extends IBaseWebPartComponentState<IProjectStatusData> {
     /**
-     * @todo describe property
-     */
-    newStatusCreated: boolean;
-
-    /**
-     * @todo describe property
-     */
-    showNewStatusReportModal?: boolean;
-
-    /**
-     * @todo describe property
+     * Source URL
      */
     sourceUrl?: string;
 
     /**
-     * @todo describe property
+     * Selected report
      */
     selectedReport?: StatusReport;
 
     /**
-     * @todo describe property
+     * Hash state
      */
     hashState?: IProjectStatusHashState;
 }

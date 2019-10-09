@@ -2,27 +2,27 @@ import { IPhaseChecklistItem } from 'models';
 
 export interface IInitialViewProps {
   /**
- * @todo describe property
- */
+  * Whether the component is loading
+  */
   isLoading: boolean;
 
   /**
- * @todo describe property
+ * Current check list items
  */
   currentChecklistItem: IPhaseChecklistItem;
 
   /**
- * @todo describe property
+ * Next check point ation callback
  */
   nextCheckPointAction: (statusValue: string, commentsValue: string, updateStatus: boolean) => void;
 
   /**
- * @todo describe property
+ * Min length for comment
  */
   commentMinLength?: number;
 
   /**
- * @todo describe property
+ * Style for comment field
  */
   commentStyle?: React.CSSProperties;
 }

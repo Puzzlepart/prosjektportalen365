@@ -1,5 +1,5 @@
 import { IPropertyPaneConfiguration, IPropertyPaneDropdownOption, PropertyPaneDropdown, PropertyPaneSlider, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
-import { IPortfolioOverviewProps, PortfolioOverview } from 'components';
+import { PortfolioOverview, IPortfolioOverviewProps } from 'components/PortfolioOverview';
 import { IPortfolioConfiguration } from 'interfaces';
 import * as strings from 'PortfolioWebPartsStrings';
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';

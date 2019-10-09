@@ -1,82 +1,86 @@
-import { IFetchDataForViewItemResult } from 'data/IFetchDataForViewResult';
 import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { IFilterProps } from '../';
-import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage';
 import { PortfolioOverviewView, ProjectColumn } from 'shared/lib/models';
+import { IFilterProps } from '../FilterPanel';
+import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage';
 
 export interface IPortfolioOverviewState {
     /**
-     * @todo describe property
+     * Whether the component is loading
      */
     isLoading?: boolean;
 
     /**
-     * @todo describe property
+     * Is exporting
      */
     isExporting?: boolean;
 
     /**
-     * @todo describe property
+     * Is changing view
      */
     isChangingView?: PortfolioOverviewView;
 
     /**
-     * @todo describe property
+     * Items
      */
-    items?: IFetchDataForViewItemResult[];
+    items?: any[];
 
     /**
      * @todo describe property
+     */
+    selectedItems?: any[];
+
+    /**
+     * Columns
      */
     columns?: ProjectColumn[];
 
     /**
-     * @todo describe property
+     * Search term
      */
     searchTerm?: string;
 
     /**
-     * @todo describe property
+     * Filters
      */
     filters?: IFilterProps[];
 
     /**
-     * @todo describe property
+     * Current view
      */
     currentView?: PortfolioOverviewView;
 
     /**
-     * @todo describe property
+     * Active filters
      */
     activeFilters?: { SelectedColumns?: string[], [key: string]: string[] };
 
     /**
-     * @todo describe property
+     * Error
      */
     error?: PortfolioOverviewErrorMessage;
 
     /**
-     * @todo describe property
+     * Show filter panel
      */
     showFilterPanel?: boolean;
 
     /**
-     * @todo describe property
+     * Column to group by
      */
     groupBy?: ProjectColumn;
 
     /**
-     * @todo describe property
+     * Column to sort by
      */
     sortBy?: ProjectColumn;
 
     /**
-     * @todo describe property
+     * Show project info
      */
-    showProjectInfo?: IFetchDataForViewItemResult;
+    showProjectInfo?: any;
 
     /**
-     * @todo describe property
+     * Is compact
      */
     isCompact?: boolean;
 

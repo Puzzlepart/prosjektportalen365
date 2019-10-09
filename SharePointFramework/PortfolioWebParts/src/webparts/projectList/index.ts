@@ -1,5 +1,5 @@
 import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
-import { IProjectListProps, ProjectList } from 'components';
+import { ProjectList, IProjectListProps } from 'components/ProjectList';
 import * as strings from 'PortfolioWebPartsStrings';
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
 

@@ -1,31 +1,31 @@
 export interface IProjectSetupProperties {
     /**
-     * @todo Describe property
+     * Templates library
      */
     templatesLibrary: string;
 
     /**
-     * @todo Describe property
+     * Exensions library
      */
     extensionsLibrary: string;
 
     /**
-     * @todo Describe property
+     * Projects list
      */
     projectsList: string;
 
     /**
-     * @todo Describe property
+     * List content config list
      */
     contentConfigList: string;
 
     /**
-     * @todo Describe property
+     * Term set IDs
      */
     termSetIds: { [key: string]: string };
 
     /**
-     * @todo Describe property
+     * Tasks
      */
     tasks: string[];
 }

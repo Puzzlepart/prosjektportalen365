@@ -2,27 +2,27 @@ import { ITimelineData } from 'interfaces';
 
 export interface IResourceAllocationState {
     /**
-     * @todo describe property
+     * Whether the component is loading
      */
     isLoading: boolean;
 
     /**
-     * @todo describe property
+     * Show filter panel
      */
     showFilterPanel: boolean;
 
     /**
-     * @todo describe property
+     * Active filters
      */
     activeFilters: {[key: string]: string[] };
 
     /**
-     * @todo describe property
+     * Data
      */
     data?: ITimelineData;
 
     /**
-     * @todo describe property
+     * Error
      */
     error?: string;
 }

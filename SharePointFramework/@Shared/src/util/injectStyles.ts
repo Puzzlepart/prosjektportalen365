@@ -5,7 +5,7 @@
  * 
  * @returns {HTMLStyleElement} The style element
  */
-export default function injectStyles(css: string): HTMLStyleElement {
+export function injectStyles(css: string): HTMLStyleElement {
     let head = document.head || document.getElementsByTagName('head')[0];
     let style = document.createElement('style');
     head.appendChild(style);

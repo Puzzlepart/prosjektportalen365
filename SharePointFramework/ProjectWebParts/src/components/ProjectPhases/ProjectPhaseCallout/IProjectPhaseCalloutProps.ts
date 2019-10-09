@@ -4,17 +4,17 @@ import { IProjectPhaseMouseOver } from './IProjectPhaseMouseOver';
 
 export interface IProjectPhaseCalloutProps extends ICalloutProps {
     /**
-     * @todo Describe property
+     * Phase mouse over
      */
     phase: IProjectPhaseMouseOver;
 
     /**
-     * @todo Describe property
+     * Is the phase currently selected
      */
     isCurrentPhase: boolean;
 
     /**
-     * @todo Describe property
+     * Propert for phase sub text
      */
     phaseSubTextProperty: string;
 
@@ -24,12 +24,12 @@ export interface IProjectPhaseCalloutProps extends ICalloutProps {
     webUrl: string;
 
     /**
-     * @todo Describe property
+     * Is the current user site admin
      */
     isSiteAdmin?: boolean;
 
     /**
-     * @todo Describe property
+     * On change phase callback
      */
     onChangePhase: (phase: Phase) => void;
 }

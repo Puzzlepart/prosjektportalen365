@@ -3,17 +3,17 @@ import { IDialogProps } from 'office-ui-fabric-react/lib/Dialog';
 
 export default interface IChangePhaseDialogProps extends IDialogProps {
     /**
-     * @todo Describe property
+     * New phase
      */
     newPhase: Phase;
 
     /**
-     * @todo Describe property
+     * Active phase
      */
     activePhase: Phase;
 
     /**
-     * @todo Describe property
+     * On change phase
      */
     onChangePhase: (phase: Phase) => Promise<void>;
 }

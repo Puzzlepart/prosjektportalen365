@@ -2,17 +2,17 @@ import { IBaseComponentProps } from '../IBaseComponentProps';
 
 export interface IResourceAllocationProps extends IBaseComponentProps {
    /**
-    * @todo describe property
+    * Data source
     */
    dataSource: string;
 
    /**
-    * @todo describe property
+    * Background color for item
     */
    itemBgColor?: string;
 
    /**
-    * @todo describe property
+    * Background color for absence items
     */
    itemAbsenceBgColor?: string;
 }

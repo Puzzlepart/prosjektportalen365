@@ -157,25 +157,25 @@ export class PortalDataService {
     }
 
     /**
-     * Get hub files
+     * Get files
      * 
      * @param {string} listName List name 
      * @param {T} constructor Constructor
      */
-    public async getHubFiles<T>(listName: string, constructor: new (file: any, web: Web) => T): Promise<T[]> {
+    public async getFiles<T>(listName: string, constructor: new (file: any, web: Web) => T): Promise<T[]> {
         const files = await this._web.lists.getByTitle(listName).rootFolder.files.usingCaching().get();
         return files.map(file => new constructor(file, this._web));
     }
 
     /**
-     * Get hub items
+     * Get items
      * 
      * @param {string} listName List name 
      * @param {T} constructor Constructor
      * @param {CamlQuery} query Query
      * @param {string[]} expands Expands
      */
-    public async getHubItems<T>(listName: string, constructor: new (item: any, web: Web) => T, query?: CamlQuery, expands?: string[]): Promise<T[]> {
+    public async getItems<T>(listName: string, constructor: new (item: any, web: Web) => T, query?: CamlQuery, expands?: string[]): Promise<T[]> {
         try {
             let list = this._web.lists.getByTitle(listName);
             let items: any[];

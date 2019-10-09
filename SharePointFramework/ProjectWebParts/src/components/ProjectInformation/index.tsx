@@ -6,13 +6,14 @@ import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'ProjectWebPartsStrings';
+import { ConfirmAction, ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog';
 import * as React from 'react';
 import { PortalDataService } from 'shared/lib/services';
-import parseUrlHash from 'shared/lib/util/parseUrlHash';
+import { parseUrlHash, sleep } from 'shared/lib/util';
 import * as formatString from 'string-format';
 import SPDataAdapter from '../../data';
 import { BaseWebPartComponent } from '../BaseWebPartComponent';
-import { ProgressDialog } from '../ProgressDialog/index';
+import { ProgressDialog } from '../ProgressDialog';
 import { UserMessage } from '../UserMessage';
 import { Actions } from './Actions';
 import { IProjectInformationData } from './IProjectInformationData';
@@ -21,9 +22,8 @@ import { IProjectInformationState } from './IProjectInformationState';
 import { IProjectInformationUrlHash } from './IProjectInformationUrlHash';
 import styles from './ProjectInformation.module.scss';
 import { ProjectProperties } from './ProjectProperties';
-import { ProjectProperty, ProjectPropertyModel } from './ProjectProperties/ProjectProperty/index';
+import { ProjectProperty, ProjectPropertyModel } from './ProjectProperties/ProjectProperty';
 import { StatusReports } from './StatusReports';
-import { ConfirmDialog, IConfirmDialogProps, ConfirmAction } from 'pzl-spfx-components/lib/components/ConfirmDialog';
 
 export class ProjectInformation extends BaseWebPartComponent<IProjectInformationProps, IProjectInformationState> {
   public static defaultProps: Partial<IProjectInformationProps> = { statusReportsCount: 0, page: 'Frontpage' };
@@ -160,7 +160,8 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
       }
       this.logInfo(`Finished. Reloading page.`, '_onSyncProperties');
       SPDataAdapter.clearCache();
-      document.location.href = DEBUG ? document.location.href : this.props.webUrl;
+      await sleep(5);
+      document.location.href = DEBUG ? document.location.href.split('#')[0] : this.props.webUrl;
     } catch (error) {
       this._addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning);
     } finally {

@@ -1,6 +1,6 @@
 export interface IProjectStatusHashState {
     /**
-     * @todo describe property
+     * Selected report
      */
     selectedReport?: string;
 }

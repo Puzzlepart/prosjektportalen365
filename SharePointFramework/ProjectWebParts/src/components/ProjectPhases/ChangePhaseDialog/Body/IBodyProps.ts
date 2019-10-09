@@ -4,47 +4,47 @@ import { Phase, IPhaseChecklistItem } from 'models';
 
 export default interface IBodyProps {
     /**
-   * @todo describe property
+   * New phase
    */
     newPhase: Phase;
 
     /**
-   * @todo describe property
+   * Active phase
    */
     activePhase: Phase;
 
     /**
-   * @todo describe property
+   * Check list items
    */
     checklistItems: IPhaseChecklistItem[];
 
     /**
-   * @todo describe property
+   * Current index
    */
     currentIdx: number;
 
     /**
-   * @todo describe property
+   * Next checkpoint action callback
    */
     nextCheckPointAction: (statusValue: string, commentsValue: string, updateStatus: boolean) => Promise<void>;
 
     /**
-   * @todo describe property
+   * Current view
    */
     currentView: View;
 
     /**
-   * @todo describe property
+   * Is loading
    */
     isLoading: boolean;
 
     /**
-   * @todo describe property
+   * On change phase callback
    */
     onChangePhase: (phase: Phase) => Promise<void>;
 
     /**
-   * @todo describe property
+   * On dismiss callback
    */
     onDismiss: (event: any, reload?: boolean) => void;
 }

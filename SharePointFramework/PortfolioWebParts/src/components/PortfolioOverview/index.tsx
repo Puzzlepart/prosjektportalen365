@@ -4,30 +4,35 @@ import { getId } from '@uifabric/utilities';
 import * as arraySort from 'array-sort';
 import { IFetchDataForViewRefinersResult } from 'data/IFetchDataForViewResult';
 import { ContextualMenu, ContextualMenuItemType, IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { ConstrainMode, DetailsList, DetailsListLayoutMode, IGroup, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { ConstrainMode, DetailsList, DetailsListLayoutMode, IDetailsHeaderProps, IGroup, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { LayerHost } from 'office-ui-fabric-react/lib/Layer';
+import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
+import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
 import * as strings from 'PortfolioWebPartsStrings';
 import { ProjectInformationModal } from 'projectwebparts/lib/components/ProjectInformation';
 import * as React from 'react';
 import { getObjectValue } from 'shared/lib/helpers/getObjectValue';
+import { PortfolioOverviewView, ProjectColumn } from 'shared/lib/models';
+import ExcelExportService from 'shared/lib/services/ExcelExportService';
 import { parseUrlHash, redirect, setUrlHash } from 'shared/lib/util';
 import * as format from 'string-format';
 import * as _ from 'underscore';
-import { IFilterItemProps, IFilterProps } from '../';
+import { IFilterItemProps, IFilterProps } from '../FilterPanel';
 import { IPortfolioOverviewProps } from './IPortfolioOverviewProps';
 import { IPortfolioOverviewHashStateState, IPortfolioOverviewState } from './IPortfolioOverviewState';
 import styles from './PortfolioOverview.module.scss';
 import { PortfolioOverviewCommands } from './PortfolioOverviewCommands';
 import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage';
 import { renderItemColumn } from './RenderItemColumn';
-import ExcelExportService from 'shared/lib/services/ExcelExportService';
-import { ProjectColumn, PortfolioOverviewView } from 'shared/lib/models';
 
-export default class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
+export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = {};
+  private _selection: Selection;
   private _onSearchDelay: number;
   private _layerHostId = getId('layerHost');
 
@@ -40,6 +45,11 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
       activeFilters: {},
       columns: [],
     };
+    this._selection = new Selection({
+      onSelectionChanged: () => {
+        this.setState({ selectedItems: this._selection.getSelection() });
+      },
+    });
   }
 
   public async componentDidMount() {
@@ -100,14 +110,25 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
           layerHostId={this._layerHostId}
           hidden={!this.props.showCommandBar} />
         <div className={styles.container}>
-          <div className={styles.header}>
-            <div className={styles.title}>{this.props.title}</div>
-          </div>
-          <div className={styles.searchBox} hidden={!this.props.showSearchBox}>
-            <SearchBox onChange={this._onSearch.bind(this)} placeholder={this._searchBoxPlaceholderText} />
-          </div>
-          {this._list(items, columns, groups)}
-          <LayerHost id={this._layerHostId} />
+          <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+            <MarqueeSelection selection={this._selection} className={styles.listContainer}>
+              <DetailsList
+                items={items}
+                constrainMode={ConstrainMode.unconstrained}
+                layoutMode={DetailsListLayoutMode.fixedColumns}
+                columns={this._getColumns(columns)}
+                groups={groups}
+                selectionMode={SelectionMode.multiple}
+                selection={this._selection}
+                setKey='multiple'
+                onRenderDetailsHeader={this._onRenderDetailsHeader.bind(this)}
+                onRenderItemColumn={(item, _index, column: ProjectColumn) => renderItemColumn(item, column, state => this.setState(state))}
+                onColumnHeaderClick={this._onColumnHeaderClick.bind(this)}
+                onColumnHeaderContextMenu={this._onColumnHeaderContextMenu.bind(this)}
+                compact={this.state.isCompact} />
+            </MarqueeSelection>
+            <LayerHost id={this._layerHostId} />
+          </ScrollablePane>
         </div>
         {this.state.showProjectInfo && (
           <ProjectInformationModal
@@ -119,6 +140,7 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
             page='Portfolio'
             statusReportsCount={this.props.statusReportsCount} />
         )}
+        {this.state.columnContextMenu && <ContextualMenu {...this.state.columnContextMenu} />}
       </div>
     );
   }
@@ -127,29 +149,18 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     return format(strings.SearchBoxPlaceholderText, this.state.currentView.title.toLowerCase());
   }
 
-  private _list(items: any[], columns: ProjectColumn[], groups: IGroup[]) {
+  /**
+   * Get columns
+   * 
+   * @param {ProjectColumn[]} columns Columns
+   */
+  private _getColumns(columns: ProjectColumn[]) {
     let columnsCopy = [...columns];
     if (this.props.pageContext.legacyPageContext.isSiteAdmin) {
-      let addCol = new ProjectColumn().create('AddColumn', null, `  ${strings.AddColumnLabel}`, 'CalculatorAddition',  () => redirect(this.props.configuration.columnUrls.defaultNewFormUrl), 150);
+      let addCol = new ProjectColumn().create('AddColumn', null, `  ${strings.AddColumnLabel}`, 'CalculatorAddition', () => redirect(this.props.configuration.columnUrls.defaultNewFormUrl), 150);
       columnsCopy.push(addCol);
     }
-
-    return (
-      <div className={styles.listContainer}>
-        <DetailsList
-          items={items}
-          constrainMode={ConstrainMode.unconstrained}
-          layoutMode={DetailsListLayoutMode.fixedColumns}
-          columns={columnsCopy}
-          groups={groups}
-          selectionMode={SelectionMode.none}
-          onRenderItemColumn={(item, _index, column: ProjectColumn) => renderItemColumn(item, column, state => this.setState(state))}
-          onColumnHeaderClick={this._onColumnHeaderClick.bind(this)}
-          onColumnHeaderContextMenu={this._onColumnHeaderContextMenu.bind(this)}
-          compact={this.state.isCompact} />
-        {this.state.columnContextMenu && <ContextualMenu {...this.state.columnContextMenu} />}
-      </div>
-    );
+    return columnsCopy;
   }
 
   /**
@@ -227,6 +238,28 @@ export default class PortfolioOverview extends React.Component<IPortfolioOvervie
     this.setState(prevState => ({
       groupBy: getObjectValue<string>(prevState, 'groupBy.fieldName', '') === column.fieldName ? null : column,
     }));
+  }
+
+  /**
+   * On render details header
+   * 
+   * @param {IDetailsHeaderProps} props Props
+   * @param {IRenderFunction} defaultRender Default render
+   */
+  private _onRenderDetailsHeader(props: IDetailsHeaderProps, defaultRender?: IRenderFunction<IDetailsHeaderProps>) {
+    return (
+      <Sticky stickyClassName={styles.stickyHeader} stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+        <div className={styles.header}>
+          <div className={styles.title}>{this.props.title}</div>
+        </div>
+        <div className={styles.searchBox} hidden={!this.props.showSearchBox}>
+          <SearchBox onChange={this._onSearch.bind(this)} placeholder={this._searchBoxPlaceholderText} />
+        </div>
+        <div>
+          {defaultRender!(props)}
+        </div>
+      </Sticky>
+    );
   }
 
   /**

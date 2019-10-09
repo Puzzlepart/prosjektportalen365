@@ -11,7 +11,7 @@ import styles from './PortfolioInsights.module.scss';
 import PortfolioInsightsCommandBar from './PortfolioInsightsCommandBar';
 import { PortfolioOverviewView } from 'shared/lib/models';
 
-export default class PortfolioInsights extends React.Component<IPortfolioInsightsProps, IPortfolioInsightsState> {
+export class PortfolioInsights extends React.Component<IPortfolioInsightsProps, IPortfolioInsightsState> {
   public static defaultProps: Partial<IPortfolioInsightsProps> = {};
 
   /**
