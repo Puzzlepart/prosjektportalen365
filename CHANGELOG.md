@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## 1.1.1 - 2019-10-09
 
-### Fixed
+### Commits
 
 - Fixed handling of user fields in project properties sync
 - Fixed cache issue for ProjectInformation web part

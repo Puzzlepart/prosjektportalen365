@@ -18,6 +18,16 @@
     "author": "olemp@puzzlepart.com",
     "license": "MIT",
     "devDependencies": {
+        "auto-changelog": "^1.16.1",
         "rimraf": "^3.0.0"
+    },
+    "auto-changelog": {
+        "output": "CHANGELOG.md",
+        "template": "keepachangelog",
+        "unreleased": true,
+        "commitLimit": false,
+        "includeBranch": [
+            "master"
+        ]
     }
 }
