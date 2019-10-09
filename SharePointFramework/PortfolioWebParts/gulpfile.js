@@ -32,7 +32,7 @@ try {
     log(`Missing '${colors.cyan('./build.config.json')}'. Using defaults...`);
 }
 
-gulp.task('versionSync', () => {
+gulp.task('versionSync', (done) => {
     find.file(/\manifest.json$/, path.join(__dirname, "src", "webparts"), (files) => {
         var pkgSolution = require('./config/package-solution.json');
         var newVersionNumber = require('./package.json').version.split('-')[0];
@@ -41,20 +41,24 @@ gulp.task('versionSync', () => {
         for (let i = 0; i < files.length; i++) {
             let manifest = require(files[i]);
             manifest.version = newVersionNumber;
+            log(`[${colors.cyan('versionSync')}] Setting ${colors.cyan('version')} to ${colors.cyan(newVersionNumber)} for ${colors.cyan(manifest.alias)}...`);
             fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => { });
         }
+        done();
     });
 });
 
-gulp.task('setHiddenToolbox', () => {
+gulp.task('setHiddenToolbox', (done) => {
     find.file(/\manifest.json$/, path.join(__dirname, "src", "webparts"), (files) => {
         for (let i = 0; i < files.length; i++) {
             let manifest = require(files[i]);
             if (manifest.hiddenFromToolbox != !!argv.ship) {
+                log(`[${colors.cyan('setHiddenToolbox')}] Setting ${colors.cyan('hiddenFromToolbox')} to ${colors.cyan(!!argv.ship)} for ${colors.cyan(manifest.alias)}...`);
                 manifest.hiddenFromToolbox = !!argv.ship;
                 fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => { /* handle error */ });
             }
         }
+        done();
     });
 });
 

@@ -30,17 +30,19 @@ try {
     log(`Missing '${colors.cyan('./build.config.json')}'. Using defaults...`);
 }
 
-gulp.task('versionSync', () => {
-    find.file(/\manifest.json$/, path.join(__dirname, 'src', 'extensions'), manifests => {
+gulp.task('versionSync', (done) => {
+    find.file(/\manifest.json$/, path.join(__dirname, "src", "extensions"), (files) => {
         var pkgSolution = require('./config/package-solution.json');
         var newVersionNumber = require('./package.json').version.split('-')[0];
         pkgSolution.solution.version = newVersionNumber + '.0';
-        fs.writeFile('./config/package-solution.json', JSON.stringify(pkgSolution, null, 4), (_error) => { /* handle error */ });
-        for (let i = 0; i < manifests.length; i++) {
-            let manifestJson = require(manifests[i]);
-            manifestJson.version = newVersionNumber;
-            fs.writeFile(manifests[i], JSON.stringify(manifestJson, null, 4), (_error) => { /* handle error */ });
+        fs.writeFile('./config/package-solution.json', JSON.stringify(pkgSolution, null, 4), (_error) => { });
+        for (let i = 0; i < files.length; i++) {
+            let manifest = require(files[i]);
+            manifest.version = newVersionNumber;
+            log(`[${colors.cyan('versionSync')}] Setting ${colors.cyan('version')} to ${colors.cyan(newVersionNumber)} for ${colors.cyan(manifest.alias)}...`);
+            fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => { });
         }
+        done();
     });
 });
 
