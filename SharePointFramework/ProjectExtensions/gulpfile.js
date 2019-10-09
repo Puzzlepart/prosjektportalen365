@@ -46,22 +46,22 @@ gulp.task('versionSync', () => {
 
 build.configureWebpack.mergeConfig({
     additionalConfiguration: (webpack) => {
-        let { paths, outDir } = JSON.parse(JSON.stringify(tsConfig.compilerOptions).replace(/\/\*'/gm, '"'));
+        let { paths, outDir } = JSON.parse(JSON.stringify(tsConfig.compilerOptions).replace(/\/\*"/gm, '"'));
         webpack.resolve.alias = Object.keys(paths).reduce((alias, key) => {
             let _path = path.join(__dirname, outDir, paths[key][0]);
-            log(`Added alias ${colors.cyan(key)} pointing to ${colors.cyan(_path)}...`);
+            log(`[${colors.cyan('configure-webpack')}] Added alias ${colors.cyan(key)} pointing to ${colors.cyan(_path)}...`);
             return { ...alias, [key]: _path };
         }, webpack.resolve.alias);
         webpack.externals = Object.assign(webpack.externals || {}, { 'XLSX': 'XLSX' });
         webpack.plugins = webpack.plugins || [];
-        log(`Adding plugin ${colors.cyan('WebpackBar')}...`);
+        log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('WebpackBar')}...`);
         webpack.plugins.push(new WebpackBar());
         if (buildConfig.bundleAnalyzerEnabled) {
-            log(`Adding plugin ${colors.cyan('BundleAnalyzerPlugin')}...`);
+            log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('BundleAnalyzerPlugin')}...`);
             webpack.plugins.push(new BundleAnalyzerPlugin());
         }
         if (webpack.optimization) {
-            log(`Setting ${colors.cyan('minimizer')} to run ${colors.cyan(buildConfig.parallel)} processes in parallel and enabling cache...`);
+            log(`[${colors.cyan('configure-webpack')}] Setting ${colors.cyan('minimizer')} to run ${colors.cyan(buildConfig.parallel)} processes in parallel and enabling cache...`);
             webpack.optimization.minimizer[0].options.parallel = buildConfig.parallel;
             webpack.optimization.minimizer[0].options.cache = true;
         }
