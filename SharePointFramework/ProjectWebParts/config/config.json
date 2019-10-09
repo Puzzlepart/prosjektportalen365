@@ -31,6 +31,6 @@
   "localizedResources": {
     "ProjectWebPartsStrings": "lib/loc/{locale}.js",
     "PzlSPFxComponentsStrings": "lib/loc/{locale}.js",
-    "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js"
+    "ControlStrings": "lib/loc/{locale}.js"
   }
 }
