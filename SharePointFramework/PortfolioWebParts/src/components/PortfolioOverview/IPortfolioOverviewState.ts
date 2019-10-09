@@ -25,6 +25,11 @@ export interface IPortfolioOverviewState {
     items?: any[];
 
     /**
+     * @todo describe property
+     */
+    selectedItems?: any[];
+
+    /**
      * Columns
      */
     columns?: ProjectColumn[];
