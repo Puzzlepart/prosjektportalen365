@@ -8,3 +8,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed handling of user fields in project properties sync
 - Fixed cache issue for ProjectInformation web part
 - Economy fields also hidden from list instance due to issue with content type updates
+- Added around in PortfolioOverview to fix issue with scroll #116
