@@ -1364,6 +1364,9 @@
   </data>
   <data name="SiteFields_GtPortfolioColumnIconName_DisplayName" xml:space="preserve">
     <value>Ikonnavn</value>
+  </data>  
+  <data name="SiteFields_GtProjectLifecycleStatus_DisplayName" xml:space="preserve">
+    <value>Prosjektstatus</value>
   </data>
   <data name="SiteFields_GtSortOrder_Description" xml:space="preserve">
     <value />
@@ -1961,6 +1964,9 @@
   </data>
   <data name="SiteFields_GtLastSyncTime_Description" xml:space="preserve">
     <value></value>
+  </data>  
+  <data name="SiteFields_GtProjectLifecycleStatus_Description" xml:space="preserve">
+    <value />
   </data>
   <data name="ProjectList_Header" xml:space="preserve">
     <value>Prosjekter</value>

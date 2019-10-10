@@ -33,11 +33,11 @@
         <pnp:FieldRef ID="b5fc712a-9908-4ba1-a8ac-7e51eca7a251" Name="GtPortfolioFabricIcon" Required="true" />
         <pnp:FieldRef ID="43c79736-a2b6-452c-9995-6b72bba0ec16" Name="GtPortfolioColumns" Required="true" />
     </pnp:FieldRefs>
-    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
+    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Alle prosjekter</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} NOT GtProjectLifecycleStatusOWSCHCS="Avsluttet" ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioIsDefaultView">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioFabricIcon">PhotoCollection</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumns">1,3,5,6,7,8,9,13</pnp:DataValue>
@@ -47,7 +47,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Porteføljestatus</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} NOT GtProjectLifecycleStatusOWSCHCS="Avsluttet" ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioIsDefaultView">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioFabricIcon">BarChart4</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumns">1,7,8,9,22,26,24,20,28,19</pnp:DataValue>
@@ -57,7 +57,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Mine prosjekter</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* (GtProjectManagerOWSUSER:{User.Name} OR GtProjectOwnerOWSUSER:{User.Name})</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} NOT GtProjectLifecycleStatusOWSCHCS="Avsluttet" ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* (GtProjectManagerOWSUSER:{User.Name} OR GtProjectOwnerOWSUSER:{User.Name})</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioIsDefaultView">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioFabricIcon">Contact</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumns">1,3,5,6,7,8,9,13</pnp:DataValue>
@@ -67,10 +67,20 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Økonomi</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} NOT GtProjectLifecycleStatusOWSCHCS="Avsluttet" ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioIsDefaultView">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioFabricIcon">Money</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumns">1,7,14,15,16</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioRefiners">5,6,7,8,9</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioGroupBy" />
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Avsluttede prosjekter</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* GtProjectLifecycleStatusOWSCHCS="Avsluttet"</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioIsDefaultView">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioFabricIcon">CircleStop</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumns">1,3,5,6,7,8,9,13</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioRefiners">5,6,7,8,9</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioGroupBy" />
         </pnp:DataRow>

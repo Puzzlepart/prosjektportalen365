@@ -22,5 +22,6 @@
         <pnp:FieldRef ID="fba7ced6-9970-4b14-ab9c-7c809310d86d" Name="GtSiteId" />
         <pnp:FieldRef ID="871c1234-9ac5-4841-8b56-50839c34a7a1" Name="GtSiteUrl" />
         <pnp:FieldRef ID="5e2506aa-1fe1-4be6-8b45-2e94eb9afdd0" Name="GtLastSyncTime" />
+        <pnp:FieldRef ID="18d92e18-10b6-42ea-815d-b12d7827564e" Name="GtProjectLifecycleStatus" />
     </pnp:FieldRefs>
 </pnp:ContentType>

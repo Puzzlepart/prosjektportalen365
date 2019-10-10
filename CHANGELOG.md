@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Fixed issue with document template selector on frontpage #128
+- Include active/inactive projects field to filter projects from portfolio #99
 
 ## 1.1.2 - 2019-10-10
 
