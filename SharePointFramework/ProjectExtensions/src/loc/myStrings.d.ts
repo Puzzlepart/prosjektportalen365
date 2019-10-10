@@ -54,8 +54,8 @@ declare interface IProjectExtensionsStrings {
   SetupProjectInformationErrorMessage: string;
   SetupProjectInformationText: string;
   SiteFieldsGroupName: string;
-  SiteNotReadyErrorMessage: string;
-  SiteNotReadyErrorStack: string;
+  ProfileLanguageIncorrectErrorMessage: string;
+  ProfileLanguageIncorrectErrorStack: string;
   SummaryText: string;
   TemplateLibrarySelectModalTitle: string;
   TemplateSelectDialogInfoText: string;
