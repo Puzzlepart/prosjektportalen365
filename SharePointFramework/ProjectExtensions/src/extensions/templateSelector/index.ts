@@ -29,7 +29,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
     Logger.log({ message: '(TemplateSelectorCommand) onInit: Initializing', data: { version: this.context.manifest.version, placeholderIds: this._placeholderIds }, level: LogLevel.Info });
     Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
     Logger.subscribe(new ConsoleListener());
-    Logger.activeLogLevel = DEBUG ? LogLevel.Info : LogLevel.Error;
+    Logger.activeLogLevel = (sessionStorage.DEBUG || DEBUG) ? LogLevel.Info : LogLevel.Error;
     this._hub = await HubSiteService.GetHubSite(sp, this.context.pageContext);
     SPDataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),
@@ -60,6 +60,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
     switch (event.itemId) {
       case 'OPEN_TEMPLATE_SELECTOR':
         this._libraries = await SPDataAdapter.getLibraries();
+        Logger.log({ message: `(TemplateSelectorCommand) onExecute: Retrieved ${this._libraries.length} libraries`, level: LogLevel.Info });
         this._onOpenTemplateSelector();
         break;
     }

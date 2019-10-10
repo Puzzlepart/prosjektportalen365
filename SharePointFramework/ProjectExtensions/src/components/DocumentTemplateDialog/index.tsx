@@ -1,4 +1,4 @@
-import { FileAddResult, sp } from '@pnp/sp';
+import { FileAddResult } from '@pnp/sp';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
@@ -6,15 +6,16 @@ import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator'
 import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import * as formatString from 'string-format';
+import { SPDataAdapter } from '../../data';
 import { TemplateFile } from '../../models/index';
 import { BaseDialog } from '../@BaseDialog/index';
 import { InfoMessage } from '../InfoMessage';
+import styles from './DocumentTemplateDialog.module.scss';
 import { DocumentTemplateDialogScreen } from './DocumentTemplateDialogScreen';
 import { DocumentTemplateDialogScreenEditCopy } from './DocumentTemplateDialogScreenEditCopy';
 import { DocumentTemplateDialogScreenSelect } from './DocumentTemplateDialogScreenSelect';
 import { IDocumentTemplateDialogProps } from './IDocumentTemplateDialogProps';
 import { IDocumentTemplateDialogState } from './IDocumentTemplateDialogState';
-import styles from './DocumentTemplateDialog.module.scss';
 
 export class DocumentTemplateDialog extends React.Component<IDocumentTemplateDialogProps, IDocumentTemplateDialogState> {
     private _selection: Selection;
@@ -130,19 +131,24 @@ export class DocumentTemplateDialog extends React.Component<IDocumentTemplateDia
     private async _copyFilesToWeb(templates: TemplateFile[], folderServerRelativeUrl: string): Promise<void> {
         this.setState({ screen: DocumentTemplateDialogScreen.CopyProgress, isBlocking: true });
 
-        let folder = sp.web.getFolderByServerRelativeUrl(folderServerRelativeUrl);
+        let folder = SPDataAdapter.sp.web.getFolderByServerRelativeUrl(folderServerRelativeUrl);
         let templatesAdded: FileAddResult[] = [];
 
         for (let i = 0; i < templates.length; i++) {
             const template = templates[i];
             this.setState({ progress: { description: template.newName, percentComplete: (i / templates.length) } });
-            try { templatesAdded.push(await template.copyTo(folder)); } catch (error) { }
+            try {
+                templatesAdded.push(await template.copyTo(folder));
+            } catch (error) {}
         }
 
         this._selection.setItems([], true);
         this.setState({ screen: DocumentTemplateDialogScreen.Summary, templatesAdded, isBlocking: false, selection: [] });
     }
 
+    /**
+     * On close dialog
+     */
     private async _onClose() {
         this.props.onDismiss({ reload: this.state.screen === DocumentTemplateDialogScreen.Summary });
     }
@@ -150,3 +156,4 @@ export class DocumentTemplateDialog extends React.Component<IDocumentTemplateDia
 
 export * from './IDocumentTemplateDialogDismissProps';
 export { IDocumentTemplateDialogProps };
+
