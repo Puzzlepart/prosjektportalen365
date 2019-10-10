@@ -1,7 +1,5 @@
 # 1. The solutions
 
-All the solutions are currenly using `v1.8.2` of `SharePoint Framework` due to 1.9.0 being down from NPM.
-
 ## @Shared
 Shared `functions` used by all the solutions.
 
