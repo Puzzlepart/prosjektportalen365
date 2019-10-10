@@ -6,7 +6,6 @@ SharePointFramework/*/**/.vscode/launch.json
 SiteScripts/temp
 SiteScripts/config/env.json
 Release
-Scripts
 node_modules
 Install/.vscode
 Templates/*.txt
