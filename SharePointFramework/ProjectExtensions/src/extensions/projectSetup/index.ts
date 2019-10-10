@@ -45,7 +45,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           throw new ProjectSetupError('onInit', strings.NoHubSiteErrorMessage, strings.NoHubSiteErrorStack);
         }
         case ProjectSetupValidation.InvalidCulture: {
-          throw new ProjectSetupError('onInit', strings.SiteNotReadyErrorMessage, strings.SiteNotReadyErrorStack);
+          throw new ProjectSetupError('onInit', strings.ProfileLanguageIncorrectErrorMessage, strings.ProfileLanguageIncorrectErrorStack);
         }
       }
 
