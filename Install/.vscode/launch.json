@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "PowerShell",
+            "request": "launch",
+            "name": "Install.ps1",
+            "script": "${file}",
+            "args": [
+                "-Url https://tenant.sharepoint.com/...",
+                "-UseWebLogin"
+            ],
+            "cwd": "${file}"
+        }
+    ]
+}
