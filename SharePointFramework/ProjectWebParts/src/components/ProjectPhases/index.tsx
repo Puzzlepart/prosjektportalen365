@@ -95,7 +95,6 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
           <ProjectPhaseCallout
             phase={this.state.phaseMouseOver}
             isCurrentPhase={currentPhase && (this.state.phaseMouseOver.model.id === currentPhase.id)}
-            phaseSubTextProperty={this.props.phaseSubTextProperty}
             webUrl={this.props.webUrl}
             isSiteAdmin={this.props.isSiteAdmin}
             onChangePhase={phase => this.setState({ confirmPhase: phase })}

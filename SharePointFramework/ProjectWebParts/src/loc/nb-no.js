@@ -35,7 +35,6 @@ define([], function () {
     PhaseChecklistLinkText: 'Gå til fasesjekklisten',
     PhaseChecklistName: 'Fasesjekkliste',
     PhaseChecklistViewUrl: 'Lists/Fasesjekkliste/AllItems.aspx',
-    PhaseSubTextPropertyFieldLabel: 'Egenskap for undertekst',
     PickReportText: 'Velg rapport',
     ReloadTimeoutFieldLabel: 'Forsinkelse (s)',
     SaveText: 'Lagre',

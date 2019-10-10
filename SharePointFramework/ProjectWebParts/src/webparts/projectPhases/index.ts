@@ -35,9 +35,6 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
                 PropertyPaneToggle('confirmPhaseChange', {
                   label: strings.ConfirmPhaseChangeFieldLabel,
                 }),
-                PropertyPaneTextField('phaseSubTextProperty', {
-                  label: strings.PhaseSubTextPropertyFieldLabel,
-                }),
               ]
             },
             {

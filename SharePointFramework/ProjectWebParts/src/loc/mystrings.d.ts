@@ -39,7 +39,6 @@ declare interface IProjectWebPartsStrings {
   PhaseChecklistLinkText: string;
   PhaseChecklistName: string;
   PhaseChecklistViewUrl: string;
-  PhaseSubTextPropertyFieldLabel: string;
   PickReportText: string;
   ReloadTimeoutFieldLabel: string;
   SaveText: string;

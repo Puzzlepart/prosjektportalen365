@@ -25,9 +25,4 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
    * View name for current phase
    */
   currentPhaseViewName: boolean;
-
-  /**
-   * Property for phase sub text
-   */
-  phaseSubTextProperty: string;
 }

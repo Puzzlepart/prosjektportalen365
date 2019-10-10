@@ -14,11 +14,6 @@ export interface IProjectPhaseCalloutProps extends ICalloutProps {
     isCurrentPhase: boolean;
 
     /**
-     * Propert for phase sub text
-     */
-    phaseSubTextProperty: string;
-
-    /**
      * URL for the web
      */
     webUrl: string;
