@@ -18,6 +18,7 @@ $ReleasePath = "$PSScriptRoot/../Release/$($PackageJson.name)-$($PackageJson.ver
 mkdir $ReleasePath >$null 2>&1
 mkdir "$ReleasePath/Templates" >$null 2>&1
 mkdir "$ReleasePath/SiteScripts" >$null 2>&1
+mkdir "$ReleasePath/Scripts" >$null 2>&1
 mkdir "$ReleasePath/Apps" >$null 2>&1
 #endregion
 
@@ -27,7 +28,7 @@ Write-Host "[INFO] Building release [v$($PackageJson.version)]"
 Write-Host "[INFO] Copying Install.ps1, PostInstall.ps1 and site script source files"
 Copy-Item -Path "$PSScriptRoot/../SiteScripts/Src/*.txt" -Filter *.txt -Destination "$ReleasePath/SiteScripts" -Force
 Copy-Item -Path "$PSScriptRoot/Install.ps1" -Destination $ReleasePath -Force
-Copy-Item -Path "$PSScriptRoot/PostInstall.ps1" -Destination $ReleasePath -Force
+Copy-Item -Path "$PSScriptRoot/Scripts/*.ps1" -Destination "$ReleasePath/Scripts" -Force
 Copy-Item -Path "$PSScriptRoot/SearchConfiguration.xml" -Destination $ReleasePath -Force
 
 Write-Host "[INFO] Copying SharePointPnPPowerShellOnline bundle"

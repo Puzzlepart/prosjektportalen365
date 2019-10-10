@@ -289,7 +289,7 @@ if (-not $SkipSearchConfiguration.IsPresent) {
 
 #region Post install
 Write-Host "[INFO] Running post-install steps"
-.\PostInstall.ps1 -Connection $SiteConnection
+.\Scripts\PostInstall.ps1 -Connection $SiteConnection
 #endregion
 
 $sw.Stop()
