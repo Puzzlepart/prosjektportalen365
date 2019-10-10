@@ -50,7 +50,7 @@ define([], function () {
     SetupProjectInformationText: 'Setter opp prosjektegenskaper',
     SiteFieldsGroupName: 'Kolonner for Prosjektportalen (Prosjekt)',
     SiteNotReadyErrorMessage: 'Området er ikke klart',
-    SiteNotReadyErrorStack: 'Området er ikke klart. Prøv igjen senere.',
+    SiteNotReadyErrorStack: 'Området er ikke klart. Brukeren som skal sette opp området må ha norsk språk. Denne feilen kan av og til midlertidig oppstå. Kom tilbake til dette området senere for å ferdigstille oppsett av området.',
     SummaryText: '{0} dokument(er) ble kopiert til prosjektområdet.',
     TemplateLibrarySelectModalTitle: 'Hent dokumentmal',
     TemplateSelectDialogInfoText: 'Oppsettet av prosjektområdet tar omtrent 10 minutter.\n\nIkke lukk nettleservinduet mens området settes opp.',
