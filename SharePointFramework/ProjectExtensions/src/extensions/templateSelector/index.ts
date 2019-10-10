@@ -29,7 +29,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
     Logger.log({ message: '(TemplateSelectorCommand) onInit: Initializing', data: { version: this.context.manifest.version, placeholderIds: this._placeholderIds }, level: LogLevel.Info });
     Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
     Logger.subscribe(new ConsoleListener());
-    Logger.activeLogLevel = (sessionStorage.DEBUG || DEBUG) ? LogLevel.Info : LogLevel.Error;
+    Logger.activeLogLevel = (sessionStorage.DEBUG || DEBUG) ? LogLevel.Info : LogLevel.Warning;
     this._hub = await HubSiteService.GetHubSite(sp, this.context.pageContext);
     SPDataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),

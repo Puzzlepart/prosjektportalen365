@@ -48,11 +48,11 @@ export abstract class BaseProjectWebPart<T extends IBaseWebPartComponentProps> e
             siteId: this.context.pageContext.site.id.toString(),
             webUrl: this.context.pageContext.web.absoluteUrl,
             hubSiteUrl: this._hubSite.url,
-            logLevel: DEBUG ? LogLevel.Info : LogLevel.Error,
+            logLevel: (sessionStorage.DEBUG || DEBUG) ? LogLevel.Info : LogLevel.Warning,
         });
         Logger.subscribe(new ConsoleListener());
         Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
-        Logger.activeLogLevel = DEBUG ? LogLevel.Info : LogLevel.Error;
+        Logger.activeLogLevel = (sessionStorage.DEBUG || DEBUG) ? LogLevel.Info : LogLevel.Warning;
     }
 
     public async onInit(): Promise<void> {

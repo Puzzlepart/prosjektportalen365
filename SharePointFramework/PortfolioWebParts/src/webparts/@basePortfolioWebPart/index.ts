@@ -35,7 +35,7 @@ export abstract class BasePortfolioWebPart<T extends IBaseComponentProps> extend
         sp.setup({ spfxContext: this.context });
         Logger.subscribe(new ConsoleListener());
         Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
-        Logger.activeLogLevel = DEBUG ? LogLevel.Info : LogLevel.Warning;
+        Logger.activeLogLevel = (sessionStorage.DEBUG || DEBUG) ? LogLevel.Info : LogLevel.Warning;
         try {
             this._pageTitle = (await sp.web.lists.getById(this.context.pageContext.list.id.toString()).items.getById(this.context.pageContext.listItem.id).select('Title').get<{ Title: string }>()).Title;
         } catch (error) { }

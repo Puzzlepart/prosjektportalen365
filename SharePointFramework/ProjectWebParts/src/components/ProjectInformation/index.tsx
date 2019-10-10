@@ -161,7 +161,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
       this.logInfo(`Finished. Reloading page.`, '_onSyncProperties');
       SPDataAdapter.clearCache();
       await sleep(5);
-      document.location.href = DEBUG ? document.location.href.split('#')[0] : this.props.webUrl;
+      document.location.href = (sessionStorage.DEBUG || DEBUG) ? document.location.href.split('#')[0] : this.props.webUrl;
     } catch (error) {
       this._addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning);
     } finally {
@@ -200,7 +200,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
           siteId: this.props.siteId,
           webUrl: this.props.webUrl,
           hubSiteUrl: this.props.hubSite.url,
-          logLevel: DEBUG ? LogLevel.Info : LogLevel.Error,
+          logLevel: (sessionStorage.DEBUG || DEBUG) ? LogLevel.Info : LogLevel.Warning,
         });
       }
 

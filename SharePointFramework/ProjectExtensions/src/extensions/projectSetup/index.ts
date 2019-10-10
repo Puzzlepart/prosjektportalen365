@@ -32,7 +32,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     sp.setup({ spfxContext: this.context });
     Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
     Logger.subscribe(new ConsoleListener());
-    Logger.activeLogLevel = DEBUG ? LogLevel.Info : LogLevel.Error;
+    Logger.activeLogLevel = (sessionStorage.DEBUG || DEBUG) ? LogLevel.Info : LogLevel.Warning;
     if (!this.context.pageContext.legacyPageContext.isSiteAdmin || !this.context.pageContext.legacyPageContext.groupId) return;
     try {
       Logger.log({ message: '(ProjectSetup) onInit: Initializing pre-conditionals before initializing setup', data: { version: this.context.manifest.version, validation: this._validation }, level: LogLevel.Info });
