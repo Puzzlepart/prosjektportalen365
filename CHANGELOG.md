@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Fixed issue with document template selector on frontpage #128
 - Include active/inactive projects field to filter projects from portfolio #99
+- Fixed planner task creation. Still creating a plan even though  setting `copyPlannerTasks` is set to `false` #132
 
 ## 1.1.2 - 2019-10-10
 
