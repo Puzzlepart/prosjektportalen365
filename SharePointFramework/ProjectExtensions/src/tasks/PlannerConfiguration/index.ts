@@ -32,12 +32,14 @@ export class PlannerConfiguration extends BaseTask {
         this.logInformation(`Creating plan ${planTitle}`);
         let { plan, created } = await this._ensurePlan(planTitle, existingGroupPlans, pageContext.legacyPageContext.groupId);
         if (!created) return plan;
-        for (let i = 0; i < Object.keys(this._config).length; i++) {
-            let bucketName = Object.keys(this._config)[i];
-            this.logInformation(`Creating bucket ${bucketName} for plan ${planTitle}`);
-            let bucket = await this._createBucket(bucketName, plan.id);
-            onProgress(strings.PlannerConfigurationText, formatString(strings.CreatingPlannerTaskText, bucketName), 'PlannerLogo');
-            await this._createTasks(plan.id, bucket);
+        if (this.data.settings.values.copyPlannerTasks) {
+            for (let i = 0; i < Object.keys(this._config).length; i++) {
+                let bucketName = Object.keys(this._config)[i];
+                this.logInformation(`Creating bucket ${bucketName} for plan ${planTitle}`);
+                let bucket = await this._createBucket(bucketName, plan.id);
+                onProgress(strings.PlannerConfigurationText, formatString(strings.CreatingPlannerTaskText, bucketName), 'PlannerLogo');
+                await this._createTasks(plan.id, bucket);
+            }
         }
         return plan;
     }
@@ -122,16 +124,14 @@ export class PlannerConfiguration extends BaseTask {
      * @param {OnProgressCallbackFunction} onProgress On progress function
      */
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
-        if (this.data.settings.values.copyPlannerTasks) {
-            this.logInformation('Setting up Plans, Buckets and Task');
-            try {
-                this._config = await this._fetchPlannerConfig();
-                let groupPlan = await this._createPlan(params.context.pageContext, onProgress);
-                params.templateParameters = { defaultPlanId: groupPlan.id };
-            } catch (error) {
-                this.logWarning('Failed to set up Plans, Buckets and Tasks', error);
-                throw new BaseTaskError(this.taskName, strings.PlannerConfigurationErrorMessage, `${error.statusCode}: ${error.message}`);
-            }
+        this.logInformation('Setting up Plans, Buckets and Task');
+        try {
+            this._config = await this._fetchPlannerConfig();
+            let groupPlan = await this._createPlan(params.context.pageContext, onProgress);
+            params.templateParameters = { defaultPlanId: groupPlan.id };
+        } catch (error) {
+            this.logWarning('Failed to set up Plans, Buckets and Tasks', error);
+            throw new BaseTaskError(this.taskName, strings.PlannerConfigurationErrorMessage, `${error.statusCode}: ${error.message}`);
         }
         return params;
     }
