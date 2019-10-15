@@ -81,7 +81,7 @@ export class CopyListData extends BaseTask {
      * 
      * @param {ListContentConfig} listContentConfig List config
      * @param {OnProgressCallbackFunction} onProgress On progress function
-     * @param {number} batchChunkSize Batch chunk size
+     * @param {number} batchChunkSize Batch chunk size (defaults to 25)
      */
     private async _processListItems(listContentConfig: ListContentConfig, onProgress: OnProgressCallbackFunction, batchChunkSize: number = 25) {
         try {
@@ -97,7 +97,8 @@ export class CopyListData extends BaseTask {
 
             let itemsToAdd = sourceItems.map(itm => this._getProperties(listContentConfig.fields, itm, sourceFields));
 
-            for (let i = 0, j = 0, batch = sp.createBatch(); i < itemsToAdd.length; i += batchChunkSize, j++) {
+            for (let i = 0, j = 0; i < itemsToAdd.length; i += batchChunkSize, j++) {
+                let batch = sp.createBatch();
                 let batchItems = itemsToAdd.slice(i, i + batchChunkSize);
                 this.logInformation(`Processing batch ${j + 1} with ${batchItems.length} items`, {});
                 onProgress(progressText, formatString(strings.ProcessListItemText, j + 1, batchItems.length), 'List');
