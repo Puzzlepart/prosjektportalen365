@@ -1,0 +1,28 @@
+﻿<pnp:ListInstance Title="Interessentregister" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Interessentregister" Hidden="true" RemoveExistingContentTypes="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false" 
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    <pnp:ContentTypeBindings>
+        <pnp:ContentTypeBinding ContentTypeID="0x010072C95831F8434782AB2FF6BE3E596F46" Default="true" />
+    </pnp:ContentTypeBindings>
+    <pnp:Views RemoveExistingViews="true">
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Interessentregister/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=44">
+            <Query>
+                <OrderBy>
+                    <FieldRef Name="ID" />
+                </OrderBy>
+            </Query>
+            <ViewFields>
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtStakeholderGroup" />
+                <FieldRef Name="GtStakeholderContext" />
+                <FieldRef Name="GtStakeholderStrategy" />
+                <FieldRef Name="GtStakeholderInterest" />
+                <FieldRef Name="GtStakeholderInfluence" />
+                <FieldRef Name="GtStakeholderInfluencePossibilty" />
+                <FieldRef Name="GtStakeholderActions" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">100</RowLimit>
+            <JSLink>clienttemplates.js</JSLink>
+        </View>
+    </pnp:Views>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
+</pnp:ListInstance>

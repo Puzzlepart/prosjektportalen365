@@ -3,8 +3,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## 1.1.4 - TBA
 
-### Fixed
-
+### Added
+- Added list 'Interessentregister' to portfolio level
 
 ## 1.1.3 - 2019-10-15
 
