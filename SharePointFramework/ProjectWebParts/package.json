@@ -1,6 +1,6 @@
 {
     "name": "projectwebparts",
-    "version": "1.1.3",
+    "version": "1.1.4",
     "private": true,
     "engines": {
         "node": ">=0.10.0"
@@ -53,7 +53,7 @@
         "react-scroll": "^1.7.11",
         "shared": "link:..\\@Shared",
         "sp-entityportal-service": "^1.1.1",
-        "sp-hubsite-service": "^0.5.0",
+        "sp-hubsite-service": "0.5.1",
         "spfx-jsom": "^0.6.0",
         "string-format": "^2.0.0",
         "underscore": "^1.9.1"

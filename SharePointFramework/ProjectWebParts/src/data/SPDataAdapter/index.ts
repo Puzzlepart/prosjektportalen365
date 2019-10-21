@@ -93,17 +93,15 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
      * @param {string} fieldName Field name for phase
      */
     public async getTermFieldContext(fieldName: string) {
-        const [phaseField, textField] = await Promise.all([
-            this.sp.web.fields.getByInternalNameOrTitle(fieldName)
-                .select('TermSetId')
-                .usingCaching()
-                .get<{ TermSetId: string }>(),
-            this.sp.web.fields.getByInternalNameOrTitle(`${fieldName}_0`)
-                .select('InternalName')
-                .usingCaching()
-                .get<{ InternalName: string }>(),
-        ]);
-        return { termSetId: phaseField.TermSetId, phaseTextField: textField.InternalName };
+        let phaseField = await this.sp.web.fields.getByInternalNameOrTitle(fieldName)
+            .select('TermSetId', 'TextField')
+            .usingCaching()
+            .get<{ TermSetId: string, TextField: string }>();
+        let phaseTextField = await this.sp.web.fields.getById(phaseField.TextField)
+            .select('InternalName')
+            .usingCaching()
+            .get<{ InternalName: string }>();
+        return { termSetId: phaseField.TermSetId, phaseTextField: phaseTextField.InternalName };
     }
 
     /**

@@ -147,6 +147,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
         return;
       }
     }
+    if (this.props.skipSyncToHub) return;
     this.logInfo(`Starting sync of ${strings.ProjectPropertiesListName}`, '_onSyncProperties');
     this.setState({ progress: { title: strings.SyncProjectPropertiesProgressLabel, progress: {} } });
     const progressFunc = (progress: IProgressIndicatorProps) => this.setState({ progress: { title: strings.SyncProjectPropertiesProgressLabel, progress } });
@@ -178,9 +179,14 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
   private _transformProperties(fieldValuesText: TypedHash<any>, data: IProjectInformationData) {
     const fieldNames: string[] = Object.keys(fieldValuesText).filter(fieldName => {
       let [field] = data.fields.filter(fld => fld.InternalName === fieldName);
-      if (field && data.columns.length === 0 && this.props.showFieldExternal[fieldName]) return true;
+      if (!field) {
+        return false;
+      }
+      if (data.columns.length === 0 && ((this.props.showFieldExternal || {})[fieldName] || this.props.skipSyncToHub)) {
+        return true;
+      }
       let [column] = data.columns.filter(c => c.internalName === fieldName);
-      if (field && column) return column.isVisible(this.props.page);
+      if (column) return column.isVisible(this.props.page);
       return false;
     });
     const properties = fieldNames.map(fieldName => {

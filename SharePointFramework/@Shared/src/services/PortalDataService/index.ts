@@ -30,19 +30,27 @@ export class PortalDataService {
      * Get project columns
      */
     public async getProjectColumns(): Promise<ProjectColumn[]> {
-        let spItems = await this._web.lists.getByTitle(this._configuration.listNames.PROJECT_COLUMNS)
-            .items
-            .select(...Object.keys(new SPProjectColumnItem()))
-            .get<SPProjectColumnItem[]>();
-        return spItems.map(item => new ProjectColumn(item));
+        try {
+            let spItems = await this._web.lists.getByTitle(this._configuration.listNames.PROJECT_COLUMNS)
+                .items
+                .select(...Object.keys(new SPProjectColumnItem()))
+                .get<SPProjectColumnItem[]>();
+            return spItems.map(item => new ProjectColumn(item));
+        } catch (error) {
+            return [];
+        }
     }
 
     /**
      * Get project status sections
      */
     public async getProjectStatusSections(): Promise<SectionModel[]> {
-        let items = await this._web.lists.getByTitle(this._configuration.listNames.STATUS_SECTIONS).items.get();
-        return items.map(item => new SectionModel(item));
+        try {
+            let items = await this._web.lists.getByTitle(this._configuration.listNames.STATUS_SECTIONS).items.get();
+            return items.map(item => new SectionModel(item));
+        } catch (error) {
+            return [];
+        }
     }
 
     /**

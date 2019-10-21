@@ -34,6 +34,11 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   showFieldExternal?: TypedHash<boolean>;
 
   /**
+   * Skip sync to hub
+   */
+  skipSyncToHub?: boolean;
+
+  /**
    * Custom actions/button to add
    */
   customActions?: ActionType[];

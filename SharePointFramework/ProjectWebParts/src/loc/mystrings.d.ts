@@ -1,4 +1,6 @@
 declare interface IProjectWebPartsStrings {
+  SkipSyncToHubLabel: string;
+  PhaseFieldFieldLabel: string;
   NoLocalPropertiesListWarningText: string;
   NavigateToSourceUrlText: string;
   ProjectStatusGroupName: string;

@@ -1,13 +1,17 @@
-import { IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane';
+import { IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField, PropertyPaneToggle, PropertyPaneDropdown } from '@microsoft/sp-property-pane';
 import '@pnp/polyfill-ie11';
 import { IProjectPhasesProps, ProjectPhases } from 'components/ProjectPhases';
 import 'office-ui-fabric-react/dist/css/fabric.min.css';
 import * as strings from 'ProjectWebPartsStrings';
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart';
+import { sp } from '@pnp/sp';
 
 export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPhasesProps> {
+  private _fields: { Title: string, InternalName: string }[] = [];
+
   public async onInit() {
     await super.onInit();
+    this._fields = await sp.web.fields.filter(`TypeAsString eq 'TaxonomyFieldType'`).select('Title', 'InternalName').get();
   }
 
   public render(): void {
@@ -34,6 +38,13 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
                 }),
                 PropertyPaneToggle('confirmPhaseChange', {
                   label: strings.ConfirmPhaseChangeFieldLabel,
+                }),
+                PropertyPaneDropdown('phaseField', {
+                  label: strings.PhaseFieldFieldLabel,
+                  options: this._fields.map(f => ({
+                    key: f.InternalName,
+                    text: `${f.Title} (${f.InternalName})`,
+                  }))
                 }),
               ]
             },

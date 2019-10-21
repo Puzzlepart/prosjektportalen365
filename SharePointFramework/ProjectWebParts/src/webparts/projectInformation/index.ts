@@ -1,4 +1,4 @@
-import { IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField } from '@microsoft/sp-property-pane';
+import { IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane';
 import { IProjectInformationProps, ProjectInformation } from 'components/ProjectInformation';
 import * as strings from 'ProjectWebPartsStrings';
 import { BaseProjectWebPart } from '../@baseProjectWebPart';
@@ -33,6 +33,9 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
                 }),
                 PropertyPaneTextField('statusReportsHeader', {
                   label: strings.StatusReportsHeaderLabel,
+                }),
+                PropertyPaneToggle('skipSyncToHub', {
+                  label: strings.SkipSyncToHubLabel,
                 }),
               ],
             },

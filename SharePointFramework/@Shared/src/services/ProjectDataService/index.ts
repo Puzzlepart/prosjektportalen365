@@ -204,11 +204,13 @@ export class ProjectDataService {
 
     /**
      * Get current phase
+     * 
+     * @param {string} phaseField Phase field
      */
-    public async getCurrentPhaseName(): Promise<string> {
+    public async getCurrentPhaseName(phaseField: string): Promise<string> {
         try {
             let propertiesData = await this.getPropertiesData();
-            return propertiesData.fieldValuesText.GtProjectPhase;
+            return propertiesData.fieldValuesText[phaseField];
         } catch (error) {
             throw new Error();
         }
