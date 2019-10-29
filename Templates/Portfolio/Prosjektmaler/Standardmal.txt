@@ -1107,6 +1107,13 @@
             "AdditionalSettings": {
                 "EnableVersioning": true
             },
+            "FieldRefs": [
+                {
+                    "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
+                    "Required": false,
+                    "DisplayName": "GtProjectPhase"
+                }
+            ],
             "Views": [
                 {
                     "Title": "Alle dokumenter",
