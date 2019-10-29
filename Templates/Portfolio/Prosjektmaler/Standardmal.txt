@@ -270,18 +270,6 @@
             ]
         },
         {
-            "ID": "0x0101008D35AAEBAF8A44A9B3264C70348EB42B",
-            "Name": "Prosjektdokument",
-            "Description": "",
-            "Group": "Prosjektportalen innholdstyper",
-            "FieldRefs": [
-                {
-                    "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
-                    "Name": "GtProjectPhase"
-                }
-            ]
-        },
-        {
             "ID": "0x010200C19C974828B24D469B69C22B2D1FFB63",
             "Name": "Prosjekthendelse",
             "Description": "",
