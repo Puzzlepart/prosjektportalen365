@@ -1104,12 +1104,6 @@
             "Description": "",
             "Template": 101,
             "ContentTypesEnabled": false,
-            "RemoveExistingContentTypes": true,
-            "ContentTypeBindings": [
-                {
-                    "ContentTypeID": "0x0101008D35AAEBAF8A44A9B3264C70348EB42B"
-                }
-            ],
             "AdditionalSettings": {
                 "EnableVersioning": true
             },
