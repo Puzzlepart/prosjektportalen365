@@ -10,7 +10,7 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'PortfolioWebPartsStrings';
 import * as React from 'react';
-import Timeline, { TimelineMarkers, TodayMarker } from 'react-calendar-timeline';
+import Timeline, { TimelineMarkers, TodayMarker, ReactCalendarItemRendererProps } from 'react-calendar-timeline';
 import 'react-calendar-timeline/lib/Timeline.css';
 import { tryParsePercentage } from 'shared/lib/helpers';
 import { DataSourceService } from 'shared/lib/services';
@@ -26,6 +26,8 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
   public static defaultProps: Partial<IResourceAllocationProps> = {
     itemBgColor: '51,153,51',
     itemAbsenceBgColor: '26,111,179',
+    defaultTimeStart: [-1, 'months'],
+    defaultTimeEnd: [1, 'years'],
   };
 
   /**
@@ -83,7 +85,7 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
           </div>
           <div className={styles.infoText}>
             <MessageBar>
-              <div dangerouslySetInnerHTML={{ __html: format(strings.ResourceAllocationInfoText, `../Lists/Ressursallokering/AllItems.aspx?Source=${encodeURIComponent(window.location.href)}`) }}></div>
+              <div dangerouslySetInnerHTML={{ __html: format(strings.ResourceAllocationInfoText, encodeURIComponent(window.location.href)) }}></div>
             </MessageBar>
           </div>
           <div className={styles.timeline}>
@@ -93,12 +95,12 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
               stackItems={true}
               canMove={false}
               canChangeGroup={false}
-              sidebarWidth={220}
-              _itemRenderer={({ item, itemContext, getItemProps }) => this._itemRenderer(item, itemContext, getItemProps)}
-              defaultTimeStart={moment().subtract(1, 'months')}
-              defaultTimeEnd={moment().add(1, 'years')}>
+              sidebarWidth={250}
+              itemRenderer={this._itemRenderer.bind(this)}
+              defaultTimeStart={moment().add(...this.props.defaultTimeStart)}
+              defaultTimeEnd={moment().add(...this.props.defaultTimeEnd)}>
               <TimelineMarkers>
-                <TodayMarker />
+                <TodayMarker date={moment().toDate()} />
               </TimelineMarkers>
             </Timeline>
           </div>
@@ -188,16 +190,14 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
 
   /**
    * Timeline item renderer
-   * 
-   * @param {ITimelineItem} item Item
-   * @param {any} itemContext Item context
-   * @param {function} getItemProps Get item props functoon 
    */
-  private _itemRenderer(item: ITimelineItem, itemContext: any, getItemProps: (props: React.HTMLProps<HTMLDivElement>) => React.HTMLProps<HTMLDivElement>) {
+  private _itemRenderer(props: ReactCalendarItemRendererProps<ITimelineItem>) {
+    let htmlProps = props.getItemProps(props.item.itemProps);
+    console.log('_itemRenderer', htmlProps);
     return (
-      <div {...getItemProps(item.itemProps)}>
-        <div className='rct-item-content' style={{ maxHeight: `${itemContext.dimensions.height}` }}>
-          {item.title}
+      <div {...htmlProps}>
+        <div className='rct-item-content' style={{ maxHeight: `${props.itemContext.dimensions.height}` }}>
+          {props.item.title}
         </div>
       </div >
     );
@@ -229,7 +229,7 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
   private _transformItems(searchResults: IAllocationSearchResult[], groups: ITimelineGroup[], groupBy: string = 'RefinableString71'): ITimelineItem[] {
     const items: ITimelineItem[] = searchResults.map((res, idx) => {
       const group = _.find(groups, grp => grp.title === res[groupBy]);
-      const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, true, 0) as number;
+      const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, false, 0) as number;
       const isAbsence = res.ContentTypeId.indexOf('0x010029F45E75BA9CE340A83EFFB2927E11F4') !== -1;
       const itemOpacity = allocation < 30 ? 0.3 : (allocation / 100);
       const itemColor = allocation < 40 ? '#000' : '#fff';
@@ -237,10 +237,10 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
       if (isAbsence) {
         backgroundColor = this.props.itemAbsenceBgColor;
       }
-      let itemStyle: React.CSSProperties = {
+      let style: React.CSSProperties = {
         color: itemColor,
         border: 'none',
-        cursor: 'none',
+        cursor: 'auto',
         outline: 'none',
         background: `rgb(${backgroundColor})`,
         backgroundColor: `rgba(${backgroundColor}, ${itemOpacity})`,
@@ -248,10 +248,10 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
       return {
         id: idx,
         group: group.id,
-        title: isAbsence ? `${res.GtResourceAbsenceOWSCHCS} (${allocation})` : `${res.RefinableString72} - ${res.SiteTitle} (${allocation})`,
+        title: isAbsence ? `${res.GtResourceAbsenceOWSCHCS} (${allocation}%)` : `${res.RefinableString72} - ${res.SiteTitle} (${allocation}%)`,
         start_time: moment(new Date(res.GtStartDateOWSDATE)),
         end_time: moment(new Date(res.GtEndDateOWSDATE)),
-        itemProps: { style: itemStyle },
+        itemProps: { style },
         project: res.SiteTitle,
         role: res.RefinableString72,
         resource: group.title,
