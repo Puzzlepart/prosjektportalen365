@@ -714,9 +714,6 @@
   <data name="SiteFields_GtStatusRiskComment_DisplayName" xml:space="preserve">
     <value>Kommentar, risiko</value>
   </data>
-  <data name="SiteFields_GtProductAcceptanceResponsible_DisplayName" xml:space="preserve">
-    <value>Godkjenningsansvar</value>
-  </data>
   <data name="SiteFields_GtArchiveReference_DisplayName" xml:space="preserve">
     <value>Sak-/arkivreferanse</value>
   </data>
@@ -725,9 +722,6 @@
   </data>
   <data name="SiteFields_GtEndDate_DisplayName" xml:space="preserve">
     <value>Sluttdato</value>
-  </data>
-  <data name="SiteFields_GtProductAcceptanceMethod_DisplayName" xml:space="preserve">
-    <value>Godkjenningsmetode</value>
   </data>
   <data name="SiteFields_GtRiskConsequencePostAction_DisplayName" xml:space="preserve">
     <value>K etter tiltak</value>
@@ -777,9 +771,6 @@
   <data name="SiteFields_GtProjectLogReporter_DisplayName" xml:space="preserve">
     <value>Meldt av</value>
   </data>
-  <data name="SiteFields_GtProductPhase_DisplayName" xml:space="preserve">
-    <value>Leveransefase</value>
-  </data>
   <data name="SiteFields_GtProjectTaskUrl_DisplayName" xml:space="preserve">
     <value>Url</value>
   </data>
@@ -791,12 +782,6 @@
   </data>
   <data name="SiteFields_GtProjectLogActors_DisplayName" xml:space="preserve">
     <value>Aktører</value>
-  </data>
-  <data name="SiteFields_GtProductQualityTolerance_DisplayName" xml:space="preserve">
-    <value>Kvalitetstoleranse</value>
-  </data>
-  <data name="SiteFields_GtProductQualityResponsible_DisplayName" xml:space="preserve">
-    <value>Kvalitetsansvar</value>
   </data>
   <data name="SiteFields_GtProjectManager_DisplayName" xml:space="preserve">
     <value>Prosjektleder</value>
@@ -858,20 +843,11 @@
   <data name="SiteFields_GtStakeholderStrategy_DisplayName" xml:space="preserve">
     <value>Plan/strategi/prosjekt</value>
   </data>
-  <data name="SiteFields_GtProductAcceptanceCriteria_DisplayName" xml:space="preserve">
-    <value>Akseptansekriterier</value>
-  </data>
-  <data name="SiteFields_GtProductQualityExpectations_DisplayName" xml:space="preserve">
-    <value>Kvalitetsforventninger</value>
-  </data>
   <data name="SiteFields_GtProjectInfoDescription_DisplayName" xml:space="preserve">
     <value>Beskrivelse</value>
   </data>
   <data name="SiteFields_GtStartDate_DisplayName" xml:space="preserve">
     <value>Startdato</value>
-  </data>
-  <data name="SiteFields_GtProductAcceptanceDate_DisplayName" xml:space="preserve">
-    <value>Godkjent dato</value>
   </data>
   <data name="SiteFields_GtProjectLogConsequence_DisplayName" xml:space="preserve">
     <value>Konsekvens</value>
@@ -893,9 +869,6 @@
   </data>
   <data name="SiteFields_GtProjectTaskComElement_DisplayName" xml:space="preserve">
     <value>Relevant kommunikasjonselement</value>
-  </data>
-  <data name="SiteFields_GtProductInteressent_DisplayName" xml:space="preserve">
-    <value>Interessent(er)</value>
   </data>
   <data name="SiteFields_GtProjectLogEventLookup_DisplayName" xml:space="preserve">
     <value>Til prosjektstyre</value>
@@ -1131,12 +1104,6 @@
   <data name="SiteFields_GtValue_DisplayName" xml:space="preserve">
     <value>Verdi</value>
   </data>
-  <data name="SiteFields_GtProductStatus_DisplayName" xml:space="preserve">
-    <value>Leveransestatus</value>
-  </data>
-  <data name="SiteFields_GtProductStatusComment_DisplayName" xml:space="preserve">
-    <value>Kommentar, leveransestatus</value>
-  </data>
   <data name="SiteFields_GtIsEnabled_DisplayName" xml:space="preserve">
     <value>Aktivert</value>
   </data>
@@ -1160,15 +1127,6 @@
   </data>
   <data name="SiteFields_GtShowInPortfolio_DisplayName" xml:space="preserve">
     <value>Vis i portefølje</value>
-  </data>
-  <data name="SiteFields_GtProductDescription_DisplayName" xml:space="preserve">
-    <value>Leveransebeskrivelse</value>
-  </data>
-  <data name="SiteFields_GtProductStartTime_DisplayName" xml:space="preserve">
-    <value>Starttidspunkt</value>
-  </data>
-  <data name="SiteFields_GtProductEndTime_DisplayName" xml:space="preserve">
-    <value>Sluttidspunkt</value>
   </data>
   <data name="SiteFields_GtChrShowItemSelector_DisplayName" xml:space="preserve">
     <value>Vis elementvelger</value>
@@ -1398,9 +1356,6 @@
   <data name="SiteFields_GtStatusRiskComment_Description" xml:space="preserve">
     <value>Kommentar til status risiko angitt over</value>
   </data>
-  <data name="SiteFields_GtProductAcceptanceResponsible_Description" xml:space="preserve">
-    <value>Hvem har ansvaret for å godkjenne leveransen?</value>
-  </data>
   <data name="SiteFields_GtArchiveReference_Description" xml:space="preserve">
     <value />
   </data>
@@ -1409,9 +1364,6 @@
   </data>
   <data name="SiteFields_GtEndDate_Description" xml:space="preserve">
     <value />
-  </data>
-  <data name="SiteFields_GtProductAcceptanceMethod_Description" xml:space="preserve">
-    <value>Hvordan blir godkjenningen av leveransen bekreftet (test, brukerundersøkelse, demo, muntlig, skriftlig)?</value>
   </data>
   <data name="SiteFields_GtRiskConsequencePostAction_Description" xml:space="preserve">
     <value>Tall 0 til 5</value>
@@ -1458,9 +1410,6 @@
   <data name="SiteFields_GtProjectLogReporter_Description" xml:space="preserve">
     <value>Oppgi den personen som meldte saken. Det er prosjektleders ansvar å opprette en Emnerapport på basis av emnet som er valgt etter prosedyrene valgt for dette prosjektet.</value>
   </data>
-  <data name="SiteFields_GtProductPhase_Description" xml:space="preserve">
-    <value />
-  </data>
   <data name="SiteFields_GtProjectTaskUrl_Description" xml:space="preserve">
     <value />
   </data>
@@ -1475,12 +1424,6 @@
   </data>
   <data name="SiteFields_GtProjectLogActors_Description" xml:space="preserve">
     <value />
-  </data>
-  <data name="SiteFields_GtProductQualityTolerance_Description" xml:space="preserve">
-    <value>Hvilke toleranser (slingringsmonn) gjelder for akseptansekriteriene?</value>
-  </data>
-  <data name="SiteFields_GtProductQualityResponsible_Description" xml:space="preserve">
-    <value>Hvem er ansvarlig for å levere kvaliteten på leveransen?</value>
   </data>
   <data name="SiteFields_GtProjectManager_Description" xml:space="preserve">
     <value />
@@ -1542,19 +1485,10 @@
   <data name="SiteFields_GtStakeholderStrategy_Description" xml:space="preserve">
     <value />
   </data>
-  <data name="SiteFields_GtProductAcceptanceCriteria_Description" xml:space="preserve">
-    <value>Målbare definisjoner av kravene leveransen må møte før den kan aksepteres av interessentene</value>
-  </data>
-  <data name="SiteFields_GtProductQualityExpectations_Description" xml:space="preserve">
-    <value>Hvilke forventninger er uttalt til kvaliteten på leveransen?</value>
-  </data>
   <data name="SiteFields_GtProjectInfoDescription_Description" xml:space="preserve">
     <value />
   </data>
   <data name="SiteFields_GtStartDate_Description" xml:space="preserve">
-    <value />
-  </data>
-  <data name="SiteFields_GtProductAcceptanceDate_Description" xml:space="preserve">
     <value />
   </data>
   <data name="SiteFields_GtProjectLogConsequence_Description" xml:space="preserve">
@@ -1747,24 +1681,6 @@
     <value></value>
   </data>
   <data name="SiteFields_GtValue_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtProductStatus_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtProductStatusComment_Description" xml:space="preserve">
-    <value>Kommentar til leveransestatus angitt over</value>
-  </data>
-  <data name="SiteFields_GtIsEnabled_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtProductDescription_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtProductStartTime_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtProductEndTime_Description" xml:space="preserve">
     <value></value>
   </data>
   <data name="SiteFields_GtChrShowItemSelector_Description" xml:space="preserve">
@@ -2531,18 +2447,6 @@
   </data>
   <data name="Choice_GtFeedbackCriticality_SeriousError" xml:space="preserve">
     <value>Alvorlig feil</value>
-  </data>
-  <data name="Choice_GtProductStatus_AccPlan" xml:space="preserve">
-    <value>Ihht. plan</value>
-  </data>
-  <data name="Choice_GtProductStatus_SmallDeviations" xml:space="preserve">
-    <value>Små avvik</value>
-  </data>
-  <data name="Choice_GtProductStatus_MajorDeviations" xml:space="preserve">
-    <value>Store avvik</value>
-  </data>
-  <data name="Choice_GtProductStatus_Approved" xml:space="preserve">
-    <value>Godkjent</value>
   </data>
   <data name="Choice_GtGainsType_Directly" xml:space="preserve">
     <value>Direkte</value>

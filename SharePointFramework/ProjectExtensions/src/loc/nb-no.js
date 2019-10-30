@@ -50,7 +50,6 @@ define([], function () {
     SettingsSectionTitle: 'Innstillinger',
     SetupProjectInformationErrorMessage: 'Det skjedde en feil under initialisering av prosjektegenskaper',
     SetupProjectInformationText: 'Setter opp prosjektegenskaper',
-    SiteFieldsGroupName: 'Kolonner for Prosjektportalen (Prosjekt)',
     SummaryText: '{0} dokument(er) ble kopiert til prosjektområdet.',
     TemplateLibrarySelectModalTitle: 'Hent dokumentmal',
     TemplateSelectDialogInfoText: 'Oppsettet av prosjektområdet tar omtrent 10 minutter.\n\nIkke lukk nettleservinduet mens området settes opp.',

@@ -1,4 +1,8 @@
 {
+    "Version": "1.0.4",
+    "Parameters": {
+        "ProvisionSiteFields": "Kolonner for Prosjektportalen (Prosjekt)"
+    },
     "ContentTypes": [
         {
             "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE897",
@@ -266,18 +270,6 @@
                     "ID": "a3038ecc-69db-4179-b23b-5fdb0535b38c",
                     "Name": "GtProjectInfoDescription",
                     "Required": true
-                }
-            ]
-        },
-        {
-            "ID": "0x0101008D35AAEBAF8A44A9B3264C70348EB42B",
-            "Name": "Prosjektdokument",
-            "Description": "",
-            "Group": "Prosjektportalen innholdstyper",
-            "FieldRefs": [
-                {
-                    "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
-                    "Name": "GtProjectPhase"
                 }
             ]
         },
@@ -1116,15 +1108,16 @@
             "Description": "",
             "Template": 101,
             "ContentTypesEnabled": false,
-            "RemoveExistingContentTypes": true,
-            "ContentTypeBindings": [
-                {
-                    "ContentTypeID": "0x0101008D35AAEBAF8A44A9B3264C70348EB42B"
-                }
-            ],
             "AdditionalSettings": {
                 "EnableVersioning": true
             },
+            "FieldRefs": [
+                {
+                    "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
+                    "Required": false,
+                    "DisplayName": "Fase"
+                }
+            ],
             "Views": [
                 {
                     "Title": "Alle dokumenter",

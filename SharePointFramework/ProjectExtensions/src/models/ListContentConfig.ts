@@ -1,5 +1,5 @@
 import { stringIsNullOrEmpty } from '@pnp/common';
-import { Web } from '@pnp/sp';
+import { Web, List } from '@pnp/sp';
 
 
 export interface IListContentConfigSPItem {
@@ -35,7 +35,7 @@ export class ListContentConfig {
         return !stringIsNullOrEmpty(this._spItem.GtLccFields) ? this._spItem.GtLccFields.split(',') : [];
     }
 
-    public get list() {
+    public get list(): List {
         return this._web.lists.getByTitle(this.sourceList);
     }
 }
