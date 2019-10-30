@@ -53,7 +53,6 @@ declare interface IProjectExtensionsStrings {
   SettingsSectionTitle: string;
   SetupProjectInformationErrorMessage: string;
   SetupProjectInformationText: string;
-  SiteFieldsGroupName: string;
   ProfileLanguageIncorrectErrorMessage: string;
   ProfileLanguageIncorrectErrorStack: string;
   SummaryText: string;

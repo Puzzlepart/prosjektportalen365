@@ -21,8 +21,9 @@ export class ProvisionSiteFields extends BaseTask {
      */
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
+            this.logInformation('Provisionining site fields to site', { parameters: params.templateSchema.Parameters });
             const existingSiteFields = await params.web.fields.select(...Object.keys(new SPField())).get<SPField[]>();
-            const siteFields = await this.data.hub.web.fields.filter(`Group eq '${strings.SiteFieldsGroupName}' and TypeAsString ne 'Calculated'`).select(...Object.keys(new SPField())).get<SPField[]>();
+            const siteFields = await this.data.hub.web.fields.filter(`Group eq '${params.templateSchema.Parameters.ProvisionSiteFields}' and TypeAsString ne 'Calculated'`).select(...Object.keys(new SPField())).get<SPField[]>();
             for (let i = 0; i < siteFields.length; i++) {
                 let siteField = siteFields[i];
                 if (existingSiteFields.filter(exf => exf.InternalName === siteField.InternalName).length > 0) {

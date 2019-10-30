@@ -24,11 +24,19 @@ export class ApplyTemplate extends BaseTask {
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
             const web = new Web(params.context.pageContext.web.absoluteUrl);
-            const provisioner = new WebProvisioner(web);
-            provisioner.setup({
+            const provisioner = new WebProvisioner(web).setup({
                 spfxContext: params.context,
-                logging: { prefix: '(ProjectSetup) (ApplyTemplate)', activeLogLevel: (DEBUG ? LogLevel.Info : LogLevel.Error) },
+                logging: {
+                    prefix: '(ProjectSetup) (ApplyTemplate)',
+                    activeLogLevel: ((sessionStorage.DEBUG === '1' || DEBUG) ? LogLevel.Info : LogLevel.Error),
+                },
                 parameters: params.templateParameters,
+                spConfiguration: {
+                    cacheExpirationIntervalMilliseconds: 5000,
+                    defaultCachingStore: 'session',
+                    enableCacheExpiration: true,
+                    defaultCachingTimeoutSeconds: 60,
+                }
             });
             this.logInformation('Applying template to site', { parameters: params.templateParameters });
             let templateSchema = _.omit(params.templateSchema, params.templateExcludeHandlers);
