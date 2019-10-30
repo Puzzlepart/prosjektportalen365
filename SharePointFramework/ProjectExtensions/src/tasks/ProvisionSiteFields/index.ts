@@ -21,20 +21,23 @@ export class ProvisionSiteFields extends BaseTask {
      */
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
-            this.logInformation('Provisionining site fields to site', { parameters: params.templateSchema.Parameters });
-            const existingSiteFields = await params.web.fields.select(...Object.keys(new SPField())).get<SPField[]>();
-            const siteFields = await this.data.hub.web.fields.filter(`Group eq '${params.templateSchema.Parameters.ProvisionSiteFields}' and TypeAsString ne 'Calculated'`).select(...Object.keys(new SPField())).get<SPField[]>();
-            for (let i = 0; i < siteFields.length; i++) {
-                let siteField = siteFields[i];
-                if (existingSiteFields.filter(exf => exf.InternalName === siteField.InternalName).length > 0) {
-                    this.logInformation(`Site field ${siteField.InternalName} already exists in site`);
-                    continue;
+            if ((params.templateSchema.Parameters || {}).ProvisionSiteFields) {
+                this.logInformation('Provisionining site fields to site', { parameters: params.templateSchema.Parameters });
+                const existingSiteFields = await params.web.fields.select(...Object.keys(new SPField())).get<SPField[]>();
+                const siteFields = await this.data.hub.web.fields.filter(`Group eq '${params.templateSchema.Parameters.ProvisionSiteFields}' and TypeAsString ne 'Calculated'`).select(...Object.keys(new SPField())).get<SPField[]>();
+                this.logInformation(`Retrieved ${siteFields.length} site fields from hub`);
+                for (let i = 0; i < siteFields.length; i++) {
+                    let siteField = siteFields[i];
+                    if (existingSiteFields.filter(exf => exf.InternalName === siteField.InternalName).length > 0) {
+                        this.logInformation(`Site field ${siteField.InternalName} already exists in site`);
+                        continue;
+                    }
+                    onProgress(strings.ProvisionSiteFieldsText, formatString(strings.ProvisionSiteFieldText, siteField.Title), 'EditCreate');
+                    let fieldXml = transformFieldXml(siteField.SchemaXml);
+                    this.logInformation(`Processing site field ${siteField.Title} (${siteField.InternalName})`, fieldXml);
+                    await params.web.fields.createFieldAsXml(fieldXml);
+                    this.logInformation(`Site field ${siteField.Title} (${siteField.InternalName}) successfully created`);
                 }
-                onProgress(strings.ProvisionSiteFieldsText, formatString(strings.ProvisionSiteFieldText, siteField.Title), 'EditCreate');
-                let fieldXml = transformFieldXml(siteField.SchemaXml);
-                this.logInformation(`Processing site field ${siteField.Title} (${siteField.InternalName})`, fieldXml);
-                await params.web.fields.createFieldAsXml(fieldXml);
-                this.logInformation(`Site field ${siteField.Title} (${siteField.InternalName}) successfully created`);
             }
             return params;
         } catch (error) {

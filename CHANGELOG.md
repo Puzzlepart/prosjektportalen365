@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 - Added list 'Interessentregister' to portfolio level
+- Using list fields instead of content type for 'Dokumenter' to keep the OOTB document type dropdown #136
+- Updated Standardmal.txt to include Parameters
 
 ## 1.1.3 - 2019-10-15
 
