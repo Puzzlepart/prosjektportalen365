@@ -29,7 +29,8 @@
         </View>
     </pnp:Views>
     <pnp:DataRows KeyColumn="GtInternalName" UpdateBehavior="Overwrite">
-        <pnp:DataRow>
+        <!-- ID: 1 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Tittel</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">Title</pnp:DataValue>
@@ -42,9 +43,10 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 2 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Prosjektnavn i økonomisystemet</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Prosjektnavn i ?konomisystemet</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectFinanceName</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectFinanceNameOWSTEXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -55,7 +57,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 3 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Prosjektnummer</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectNumber</pnp:DataValue>
@@ -68,7 +71,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 4 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Sak-/arkivreferanse</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtArchiveReference</pnp:DataValue>
@@ -81,9 +85,10 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 5 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Tjenesteområde</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Tjenesteomr?de</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectServiceArea</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">RefinableString53</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
@@ -94,7 +99,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 6 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Prosjekttype</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectType</pnp:DataValue>
@@ -107,7 +113,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 7 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Fase</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectPhase</pnp:DataValue>
@@ -120,7 +127,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 8 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Prosjektleder</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectManager</pnp:DataValue>
@@ -133,7 +141,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 9 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">90</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Prosjekteier</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectOwner</pnp:DataValue>
@@ -145,7 +154,8 @@
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 10 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">150</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Gevinstansvarlig</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtGainsResponsible</pnp:DataValue>
@@ -158,7 +168,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 11 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">110</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Startdato</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStartDate</pnp:DataValue>
@@ -171,7 +182,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 12 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">120</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Sluttdato</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtEndDate</pnp:DataValue>
@@ -184,9 +196,10 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 13 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">130</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Målsetting</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">M?lsetting</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectGoals</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectGoalsOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
@@ -197,7 +210,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 14 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">140</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Totalbudsjett for prosjektet</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBudgetTotal</pnp:DataValue>
@@ -210,9 +224,10 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 15 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">150</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Kostnader påløpt totalt</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Kostnader p?l?pt totalt</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtCostsTotal</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtCostsTotalOWSCURR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Currency</pnp:DataValue>
@@ -223,7 +238,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 16 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">160</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Prognose for prosjektet</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectForecast</pnp:DataValue>
@@ -236,7 +252,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 17 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">170</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Dato for siste rapportering av kostnader</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBudgetLastReportDate</pnp:DataValue>
@@ -249,7 +266,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 18 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">180</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtOverallStatus_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtOverallStatus</pnp:DataValue>
@@ -262,7 +280,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 19 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">190</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusTime_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusTime</pnp:DataValue>
@@ -275,7 +294,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 20 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">200</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusTimeComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusTimeComment</pnp:DataValue>
@@ -288,7 +308,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 21 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">210</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusBudget_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusBudget</pnp:DataValue>
@@ -301,7 +322,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 22 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusBudgetComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusBudgetComment</pnp:DataValue>
@@ -314,7 +336,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 23 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">230</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusQuality_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusQuality</pnp:DataValue>
@@ -327,7 +350,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 24 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusQualityComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusQualityComment</pnp:DataValue>
@@ -340,7 +364,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 25 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">250</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusRisk_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusRisk</pnp:DataValue>
@@ -353,7 +378,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 26 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">260</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusRiskComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusRiskComment</pnp:DataValue>
@@ -366,7 +392,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 27 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">270</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusGainAchievement_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusGainAchievement</pnp:DataValue>
@@ -379,7 +406,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
+        <!-- ID: 28 -->
+        <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">280</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusGainAchievementComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusGainAchievementComment</pnp:DataValue>
