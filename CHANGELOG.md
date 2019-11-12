@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Added
 - Support for PSCredential in Install script #145
+- Added missing resource for choice option (Choice_GtResourceAbsence_Linetasks) #148
 
 ### Fixed
 - Fixed project column configuration to make status colors work in portfolio overview #142
