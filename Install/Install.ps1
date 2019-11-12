@@ -52,9 +52,9 @@ function Connect-SharePoint {
     Try {
         if ($UseWebLogin.IsPresent) {
             $Connection = Connect-PnPOnline -Url $Url -UseWebLogin -ReturnConnection -ErrorAction Stop
-        } elseif ($PSCredential -ne $null) {
+        } elseif ($null -ne $PSCredential) {
             $Connection = Connect-PnPOnline -Url $Url -Credentials $PSCredential -ReturnConnection -ErrorAction Stop
-        } elseif ($GenericCredential -ne $null -and $GenericCredential -ne "")  {
+        } elseif ($null -ne $GenericCredential -and $GenericCredential -ne "")  {
             $Connection = Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ReturnConnection -ErrorAction Stop
         }
         return $Connection

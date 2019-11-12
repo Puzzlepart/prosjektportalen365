@@ -1322,7 +1322,7 @@
   </data>
   <data name="SiteFields_GtPortfolioColumnIconName_DisplayName" xml:space="preserve">
     <value>Ikonnavn</value>
-  </data>  
+  </data>
   <data name="SiteFields_GtProjectLifecycleStatus_DisplayName" xml:space="preserve">
     <value>Prosjektstatus</value>
   </data>
@@ -1868,7 +1868,7 @@
   </data>
   <data name="SiteFields_GtColMinWidth_Description" xml:space="preserve">
     <value>Minimum bredde for denne kolonnen i piksler. Brukes blant annet i Porteføljeoversikten.</value>
-  </data>  
+  </data>
   <data name="SiteFields_GtPortfolioColumnValue_Description" xml:space="preserve">
     <value></value>
   </data>
@@ -1880,7 +1880,7 @@
   </data>
   <data name="SiteFields_GtLastSyncTime_Description" xml:space="preserve">
     <value></value>
-  </data>  
+  </data>
   <data name="SiteFields_GtProjectLifecycleStatus_Description" xml:space="preserve">
     <value />
   </data>
@@ -2720,6 +2720,9 @@
   </data>
   <data name="Choice_GtProjectProcessState_InPhase" xml:space="preserve">
     <value>I en fase</value>
+  </data>
+  <data name="Choice_GtResourceAbsence_Linetasks" xml:space="preserve">
+    <value>Linjeoppgaver</value>
   </data>
   <data name="Choice_GtResourceAbsence_Leave" xml:space="preserve">
     <value>Fravær</value>
