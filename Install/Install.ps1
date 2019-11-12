@@ -7,6 +7,8 @@
     [string]$GenericCredential,
     [Parameter(Mandatory = $false, HelpMessage = "Use Web Login")]
     [switch]$UseWebLogin,
+    [Parameter(Mandatory = $false, HelpMessage = "PowerShell credential to authenticate with")]
+    [System.Management.Automation.PSCredential]$PSCredential,
     [Parameter(Mandatory = $false, HelpMessage = "Skip PnP template")]
     [switch]$SkipTemplate,
     [Parameter(Mandatory = $false, HelpMessage = "Do you want to skip deployment of taxonomy?")]
@@ -50,8 +52,9 @@ function Connect-SharePoint {
     Try {
         if ($UseWebLogin.IsPresent) {
             $Connection = Connect-PnPOnline -Url $Url -UseWebLogin -ReturnConnection -ErrorAction Stop
-        }
-        else {
+        } elseif ($PSCredential -ne $null) {
+            $Connection = Connect-PnPOnline -Url $Url -Credentials $PSCredential -ReturnConnection -ErrorAction Stop
+        } elseif ($GenericCredential -ne $null -and $GenericCredential -ne "")  {
             $Connection = Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ReturnConnection -ErrorAction Stop
         }
         return $Connection
