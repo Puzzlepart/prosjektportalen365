@@ -3,8 +3,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## 1.1.5 - TBA
 
-### Added
-
+### Fixed
+- Fixed project column configuration to make status colors work in portfolio overview #142
 
 ## 1.1.4 - 2019-10-30
 
