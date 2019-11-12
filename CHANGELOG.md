@@ -3,6 +3,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## 1.1.5 - TBA
 
+## Added
+- Support for PSCredential in Install script #145
+
 ### Fixed
 - Fixed project column configuration to make status colors work in portfolio overview #142
 
