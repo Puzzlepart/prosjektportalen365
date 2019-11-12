@@ -2715,12 +2715,6 @@
   <data name="Choice_GtLastGateStatus_Rejected" xml:space="preserve">
     <value>Avvist</value>
   </data>
-  <data name="Choice_GtProjectProcessState_AtGate" xml:space="preserve">
-    <value>Ved en gate</value>
-  </data>
-  <data name="Choice_GtProjectProcessState_InPhase" xml:space="preserve">
-    <value>I en fase</value>
-  </data>
   <data name="Choice_GtResourceAbsence_Linetasks" xml:space="preserve">
     <value>Linjeoppgaver</value>
   </data>
