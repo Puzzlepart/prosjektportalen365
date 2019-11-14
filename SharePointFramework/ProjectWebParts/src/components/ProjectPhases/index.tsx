@@ -186,7 +186,7 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
       ]);
       const [phases, currentPhaseName] = await Promise.all([
         SPDataAdapter.project.getPhases(phaseFieldCtx.termSetId, checklistData),
-        SPDataAdapter.project.getCurrentPhaseName(this.props.phaseField),
+        SPDataAdapter.project.getCurrentPhaseName(phaseFieldCtx.fieldName),
       ]);
       Logger.log({ message: '(ProjectPhases) _fetchData: Successfully fetch phases', level: LogLevel.Info });
       let [currentPhase] = phases.filter(p => p.name === currentPhaseName);

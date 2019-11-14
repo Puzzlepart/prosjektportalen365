@@ -44,7 +44,7 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
                   options: this._fields.map(f => ({
                     key: f.InternalName,
                     text: `${f.Title} (${f.InternalName})`,
-                  }))
+                  })),
                 }),
               ]
             },
