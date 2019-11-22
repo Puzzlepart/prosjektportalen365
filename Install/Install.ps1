@@ -80,7 +80,7 @@ else {
 #region Setting variables
 [System.Uri]$Uri = $Url
 $ManagedPath = $Uri.Segments[1]
-$Alias = $Uri.Segments[2]
+$Alias = $Uri.Segments[2].TrimEnd('/')
 $AdminSiteConnection = $null
 $AppCatalogSiteConnection = $null
 $SiteConnection = $null
@@ -281,7 +281,7 @@ Catch {
 if (-not $SkipSearchConfiguration.IsPresent) {
     Try {
         Write-Host "[INFO] Importing Search Configuration"    
-        Set-PnPSearchConfiguration -Scope Subscription -Path .\SearchConfiguration.xml -Connection $AdminSiteConnection
+        Set-PnPSearchConfiguration -Scope Subscription -Path .\SearchConfiguration.xml -Connection $AdminSiteConnection -ErrorAction Stop
         Write-Host "[INFO] Successfully imported Search Configuration" -ForegroundColor Green
     }
     Catch {
