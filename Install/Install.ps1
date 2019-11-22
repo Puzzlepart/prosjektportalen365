@@ -281,7 +281,7 @@ Catch {
 if (-not $SkipSearchConfiguration.IsPresent) {
     Try {
         Write-Host "[INFO] Importing Search Configuration"    
-        Set-PnPSearchConfiguration -Scope Subscription -Path .\SearchConfiguration.xml -Connection $AdminSiteConnection
+        Set-PnPSearchConfiguration -Scope Subscription -Path .\SearchConfiguration.xml -Connection $AdminSiteConnection -ErrorAction Stop
         Write-Host "[INFO] Successfully imported Search Configuration" -ForegroundColor Green
     }
     Catch {
