@@ -80,7 +80,7 @@ else {
 #region Setting variables
 [System.Uri]$Uri = $Url
 $ManagedPath = $Uri.Segments[1]
-$Alias = $Uri.Segments[2]
+$Alias = $Uri.Segments[2].TrimEnd('/')
 $AdminSiteConnection = $null
 $AppCatalogSiteConnection = $null
 $SiteConnection = $null
