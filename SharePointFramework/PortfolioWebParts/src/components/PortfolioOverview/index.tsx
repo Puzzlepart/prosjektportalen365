@@ -110,7 +110,7 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
           layerHostId={this._layerHostId}
           hidden={!this.props.showCommandBar} />
         <div className={styles.container}>
-          <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+          <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} styles={{ root: { top: 50 } }}>
             <MarqueeSelection selection={this._selection} className={styles.listContainer}>
               <DetailsList
                 items={items}
