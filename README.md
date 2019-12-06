@@ -17,7 +17,9 @@ Vi gjør oppmerksom at vi logger hver installasjon som blir kjørt av skriptet t
 
 ## Kontakt ##
 
-Har du spørsmål om Prosjektportalen for Office 365, behov for bistand til installasjon av løsningen eller muligheter for videreutvikling og spesialtilpasninger, ta kontakt med <a href="mailto:prosjektportalen@puzzlepart.com">Prosjektportalen @ Puzzlepart</a>. For tekniske spørsmål, ta kontakt med [<a href="mailto:tarjeieo@puzzlepart.com">Tarjei Ormestøyl</a>] eller [<a href="mailto:olemp@puzzlepart.com">Ole Martin Pettersen</a>]. Vi gjør oppmerksom på at eventuell bistand vil være en fakturerbar tjeneste. 
+Har du spørsmål om Prosjektportalen for Office 365, behov for bistand til installasjon av løsningen eller muligheter for videreutvikling og spesialtilpasninger, ta kontakt med <a href="mailto:prosjektportalen@puzzlepart.com">Prosjektportalen @ Puzzlepart</a>. 
+
+For tekniske og funksjonelle spørsmål, ta kontakt med <a href="mailto:jan.lindset@puzzlepart.com">Jan Lindset</a>. Vi gjør oppmerksom på at eventuell bistand vil være en fakturerbar tjeneste. 
 
 ## Maintainers ##
 
