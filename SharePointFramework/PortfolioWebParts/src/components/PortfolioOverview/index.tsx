@@ -116,7 +116,7 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
                 items={items}
                 constrainMode={ConstrainMode.unconstrained}
                 layoutMode={DetailsListLayoutMode.fixedColumns}
-                columns={this._getColumns(columns)}
+                columns={columns}
                 groups={groups}
                 selectionMode={SelectionMode.multiple}
                 selection={this._selection}
@@ -147,20 +147,6 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
 
   private get _searchBoxPlaceholderText() {
     return format(strings.SearchBoxPlaceholderText, this.state.currentView.title.toLowerCase());
-  }
-
-  /**
-   * Get columns
-   * 
-   * @param {ProjectColumn[]} columns Columns
-   */
-  private _getColumns(columns: ProjectColumn[]) {
-    let columnsCopy = [...columns];
-    if (this.props.pageContext.legacyPageContext.isSiteAdmin) {
-      let addCol = new ProjectColumn().create('AddColumn', null, `  ${strings.AddColumnLabel}`, 'CalculatorAddition', () => redirect(this.props.configuration.columnUrls.defaultNewFormUrl), 150);
-      columnsCopy.push(addCol);
-    }
-    return columnsCopy;
   }
 
   /**
