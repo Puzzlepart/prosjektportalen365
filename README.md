@@ -24,4 +24,5 @@ For tekniske og funksjonelle spørsmål, ta kontakt med <a href="mailto:jan.lind
 ## Maintainers ##
 
 Tarjei Ormestøyl (tarjeieo@puzzlepart.com)
+
 Ole Martin Pettersen (olemp@puzzlepart.com)
