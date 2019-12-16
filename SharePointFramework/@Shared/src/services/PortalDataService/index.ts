@@ -60,7 +60,7 @@ export class PortalDataService {
      * @param {TypedHash<string>} properties Properties
      */
     public async updateStatusReport(id: number, properties: TypedHash<string>): Promise<void> {
-        await this._web.lists.getByTitle(this._configuration.listNames.STATUS_SECTIONS).items.getById(id).update(properties);
+        await this._web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS).items.getById(id).update(properties);
     }
 
     /**

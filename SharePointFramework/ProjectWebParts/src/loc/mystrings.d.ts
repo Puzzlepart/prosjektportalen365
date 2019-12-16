@@ -26,6 +26,7 @@ declare interface IProjectWebPartsStrings {
   DocumentsListName: string;
   EditPropertiesText: string;
   EditReportButtonText: string;
+  PublishReportButtonText: string;
   EditSiteInformationText: string;
   ErrorText: string;
   ListSectionDataErrorMessage: string;
@@ -87,6 +88,8 @@ declare interface IProjectWebPartsStrings {
   RiskMatrix_ViewSelectorLabel: string;
   RiskMatrix_EmptyMessage: string;
   RiskMatrix_LoadingText: string;
+  GtModerationStatus_Choice_Published: string;
+  GtModerationStatus_Choice_Draft: string;
 }
 
 declare module 'ProjectWebPartsStrings' {

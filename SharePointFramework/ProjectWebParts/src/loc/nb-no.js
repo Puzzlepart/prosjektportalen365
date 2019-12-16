@@ -20,6 +20,7 @@ define([], function () {
     DocumentsListName: 'Dokumenter',
     EditPropertiesText: 'Rediger egenskaper',
     EditReportButtonText: 'Rediger status',
+    PublishReportButtonText: 'Publiser',
     EditSiteInformationText: 'Rediger områdeinformasjon',
     ErrorText: 'Det skjedde en feil under lasting av {0}.',
     ListSectionDataErrorMessage: 'Det skjedde en feil under uthenting av data for seksjonen. Er den riktig konfigurert?',
@@ -87,6 +88,8 @@ define([], function () {
     RiskMatrix_Header_VeryLow: 'Svart lav',
     RiskMatrix_ViewSelectorLabel: 'Velg en visning',
     RiskMatrix_EmptyMessage: 'Det finnes ingen Risiko-elementer i den angitte visningen.',
-    RiskMatrix_LoadingText: 'Laster risikomatrise...'
+    RiskMatrix_LoadingText: 'Laster risikomatrise...',
+    GtModerationStatus_Choice_Published: 'Publisert',
+    GtModerationStatus_Choice_Draft: 'Kladd'
   }
 });
