@@ -53,7 +53,10 @@ export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionStat
     return (
       <>
         <div className='ms-Grid-col ms-sm12'>
-          <RiskMatrix items={this.state.data.riskElements} calloutTemplate={this.props.calloutTemplate} />
+          <RiskMatrix
+            items={this.state.data.riskElements}
+            width={800}
+            calloutTemplate={this.props.calloutTemplate} />
         </div>
         <div className={`${styles.list} ms-Grid-col ms-sm12`}>
           <DetailsList
