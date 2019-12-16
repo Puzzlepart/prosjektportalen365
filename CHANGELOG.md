@@ -1,15 +1,25 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Added
+- RiskMatrix added as separate web part #97
+- RiskMatrix added to project status #172
+- Improved error messages when provisioning new projects #170
+
+### Fixed
+- Fixed lookups in list 'Prosjektkolonnekonfigurasjon' #142
+- Fixed colors and columns not matching content #134
+
 ## 1.1.6 - 2019-11-14
 
-## Fixed
+### Fixed
 - Fixed a bug with current phase not being displayed in phase web part on project frontpage #149
-
 
 ## 1.1.5 - 2019-11-13
 
-## Added
+### Added
 - Support for PSCredential in Install script #145
 - Added missing resource for choice option (Choice_GtResourceAbsence_Linetasks) #148
 
