@@ -1,8 +1,8 @@
+import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane';
 import '@pnp/polyfill-ie11';
 import { IProjectStatusProps, ProjectStatus } from 'components/ProjectStatus';
 import 'office-ui-fabric-react/dist/css/fabric.min.css';
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart';
-import { IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField } from '@microsoft/sp-property-pane';
 
 
 export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectStatusProps> {

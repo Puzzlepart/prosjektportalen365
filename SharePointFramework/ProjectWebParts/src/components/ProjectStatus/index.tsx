@@ -18,7 +18,7 @@ import { IProjectStatusHashState } from './IProjectStatusHashState';
 import { IProjectStatusProps } from './IProjectStatusProps';
 import { IProjectStatusState } from './IProjectStatusState';
 import styles from './ProjectStatus.module.scss';
-import { IBaseSectionProps, ListSection, ProjectPropertiesSection, StatusSection, SummarySection } from './Sections';
+import { IBaseSectionProps, ListSection, ProjectPropertiesSection, RiskSection, StatusSection, SummarySection } from './Sections';
 
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private _portalDataService: PortalDataService;
@@ -213,7 +213,11 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           );
         }
         case SectionType.RiskSection: {
-          return <ListSection {...baseProps} />;
+          return (
+            <>
+              <RiskSection {...baseProps} calloutTemplate={this.props.riskMatrixCalloutTemplate} />
+            </>
+          );
         }
         case SectionType.ListSection: {
           return <ListSection {...baseProps} />;

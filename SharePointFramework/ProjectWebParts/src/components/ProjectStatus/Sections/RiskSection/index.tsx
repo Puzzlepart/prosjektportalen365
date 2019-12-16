@@ -4,15 +4,17 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import { getObjectValue } from 'shared/lib/helpers';
-import { BaseSection } from '../BaseSection/index';
+import { RiskMatrix } from '../../../RiskMatrix';
+import { RiskElementModel } from '../../../RiskMatrix/RiskElementModel';
 import { StatusElement } from '../../StatusElement';
-import { IListSectionData } from './IListSectionData';
-import { IListSectionProps } from './IListSectionProps';
-import { IListSectionState } from './IListSectionState';
-import styles from './ListSection.module.scss';
+import { BaseSection } from '../BaseSection';
+import { IRiskSectionData } from './IRiskSectionData';
+import { IRiskSectionProps } from './IRiskSectionProps';
+import { IRiskSectionState } from './IRiskSectionState';
+import styles from './RiskSection.module.scss';
 
-export class ListSection extends BaseSection<IListSectionProps, IListSectionState<IListSectionData>> {
-  constructor(props: IListSectionProps) {
+export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionState> {
+  constructor(props: IRiskSectionProps) {
     super(props);
     this.state = { isLoading: true };
   }
@@ -29,14 +31,14 @@ export class ListSection extends BaseSection<IListSectionProps, IListSectionStat
   /**
    * Renders the <ListSection /> component
    */
-  public render(): React.ReactElement<IListSectionProps> {
+  public render(): React.ReactElement<IRiskSectionProps> {
     return (
       <BaseSection {...this.props}>
         <div className='ms-Grid-row'>
           <div className='ms-Grid-col ms-sm12'>
             <StatusElement {...this.props.headerProps} />
           </div>
-          {this._renderList()}
+          {this._renderContent()}
         </div>
       </BaseSection>
     );
@@ -45,28 +47,29 @@ export class ListSection extends BaseSection<IListSectionProps, IListSectionStat
   /**
    * Render list
    */
-  private _renderList() {
-    if (this.state.isLoading || !this.state.data) {
-      return null;
-    }
-    if (this.state.error) {
-      return <MessageBar messageBarType={MessageBarType.error}>{strings.ListSectionDataErrorMessage}</MessageBar>;
-    }
+  private _renderContent() {
+    if (this.state.isLoading || !this.state.data) return null;
+    if (this.state.error) return <MessageBar messageBarType={MessageBarType.error}>{strings.ListSectionDataErrorMessage}</MessageBar>;
     return (
-      <div className={`${styles.list} ms-Grid-col ms-sm12`}>
-        <DetailsList
-          columns={getObjectValue<IColumn[]>(this.state, 'data.columns', [])}
-          items={getObjectValue<any[]>(this.state, 'data.items', [])}
-          selectionMode={SelectionMode.none}
-          layoutMode={DetailsListLayoutMode.justified} />
-      </div>
+      <>
+        <div className='ms-Grid-col ms-sm12'>
+          <RiskMatrix items={this.state.data.riskElements} calloutTemplate={this.props.calloutTemplate} />
+        </div>
+        <div className={`${styles.list} ms-Grid-col ms-sm12`}>
+          <DetailsList
+            columns={getObjectValue<IColumn[]>(this.state, 'data.columns', [])}
+            items={getObjectValue<any[]>(this.state, 'data.items', [])}
+            selectionMode={SelectionMode.none}
+            layoutMode={DetailsListLayoutMode.justified} />
+        </div>
+      </>
     );
   }
 
   /**
    * Fetch data
    */
-  private async _fetchData(): Promise<IListSectionData> {
+  private async _fetchData(): Promise<IRiskSectionData> {
     const { listTitle, viewQuery, viewFields, rowLimit } = this.props.model;
     const list = sp.web.lists.getByTitle(listTitle);
     try {
@@ -74,10 +77,9 @@ export class ListSection extends BaseSection<IListSectionProps, IListSectionStat
         list.getItemsByCAMLQuery({ ViewXml: `<View>${viewQuery}<RowLimit>${rowLimit}</RowLimit></View>` }, 'FieldValuesAsText') as Promise<any[]>,
         list.fields.select('Title', 'InternalName', 'TypeAsString').get<{ Title: string, InternalName: string, TypeAsString: string }[]>(),
       ]);
-      if (items.length === 0) {
-        return null;
-      }
+      if (items.length === 0) return null;
       items = items.map(i => i.FieldValuesAsText);
+      let riskElements = items.map(i => new RiskElementModel(i));
       const columns: IColumn[] = viewFields
         .filter(vf => fields.filter(fld => fld.InternalName === vf).length === 1)
         .map(vf => {
@@ -91,7 +93,7 @@ export class ListSection extends BaseSection<IListSectionProps, IListSectionStat
             isResizable: true,
           } as IColumn);
         });
-      return { items, columns };
+      return { items, columns, riskElements };
     } catch (error) {
       throw error;
     }

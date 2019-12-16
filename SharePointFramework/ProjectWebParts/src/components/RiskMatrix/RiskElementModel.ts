@@ -24,7 +24,7 @@ export class RiskElementModel {
         probabilityPostAction?: string,
         consequencePostAction?: string,
     ) {
-        this.id = item.Id;
+        this.id = item.Id || item.ID;
         this.title = item.Title;
         this.probability = parseInt(probability || item.GtRiskProbability, 10);
         this.consequence = parseInt(consequence || item.GtRiskConsequence, 10);
