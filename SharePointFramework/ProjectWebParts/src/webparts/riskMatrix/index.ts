@@ -9,7 +9,7 @@ export interface IRiskMatrixWebPartProps { }
 export default class RiskMatrixWebPart extends BaseClientSideWebPart<IRiskMatrixWebPartProps> {
 
   public render(): void {
-    const element: React.ReactElement<IRiskMatrixProps> = React.createElement(RiskMatrix, {});
+    const element: React.ReactElement<IRiskMatrixProps> = React.createElement(RiskMatrix, { items: [] });
 
     ReactDom.render(element, this.domElement);
   }
