@@ -13,15 +13,7 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixPro
   public async onInit() {
     await super.onInit();
     try {
-      let items: any[] = await sp.web.lists.getByTitle(this.properties.listName).getItemsByCAMLQuery({ ViewXml: this.properties.viewXml });
-      items = items.map(i => new RiskElementModel(
-        i,
-        getValue(i, this.properties.probabilityFieldName, { default: '' }),
-        getValue(i, this.properties.consequenceFieldName, { default: '' }),
-        getValue(i, this.properties.probabilityPostActionFieldName, { default: '' }),
-        getValue(i, this.properties.consequencePostActionFieldName, { default: '' }),
-      ));
-      this._items = items;
+      this._items = await this._getItems();
     } catch (error) {
       this._error = error;
     }
@@ -33,6 +25,18 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixPro
     } else {
       this.renderComponent(RiskMatrix, { ...this.properties, items: this._items });
     }
+  }
+
+  protected async _getItems(): Promise<RiskElementModel[]> {
+    let items: any[] = await sp.web.lists.getByTitle(this.properties.listName).getItemsByCAMLQuery({ ViewXml: this.properties.viewXml });
+    items = items.map(i => new RiskElementModel(
+      i,
+      getValue(i, this.properties.probabilityFieldName, { default: '' }),
+      getValue(i, this.properties.consequenceFieldName, { default: '' }),
+      getValue(i, this.properties.probabilityPostActionFieldName, { default: '' }),
+      getValue(i, this.properties.consequencePostActionFieldName, { default: '' }),
+    ));
+    return items;
   }
 
   // tslint:disable-next-line: naming-convention
