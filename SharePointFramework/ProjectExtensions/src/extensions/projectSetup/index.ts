@@ -5,13 +5,14 @@ import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 import { sp, Web } from '@pnp/sp';
 import { getId } from '@uifabric/utilities';
 import { default as MSGraphHelper } from 'msgraph-helper';
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { ApplicationInsightsLogListener, ListLogger } from 'shared/lib/logging';
-import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { PortalDataService } from 'shared/lib/services';
 import { default as HubSiteService } from 'sp-hubsite-service';
+import * as formatString from 'string-format';
 import { ErrorDialog, IErrorDialogProps, IProgressDialogProps, ITemplateSelectDialogProps, ITemplateSelectDialogState, ProgressDialog, TemplateSelectDialog } from '../../components';
 import { ListContentConfig, ProjectExtension, ProjectTemplate } from '../../models';
 import * as Tasks from '../../tasks';
@@ -46,7 +47,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           throw new ProjectSetupError('onInit', strings.NoHubSiteErrorMessage, strings.NoHubSiteErrorStack, MessageBarType.warning);
         }
         case ProjectSetupValidation.InvalidCulture: {
-          throw new ProjectSetupError('onInit', strings.ProfileLanguageIncorrectErrorMessage, strings.ProfileLanguageIncorrectErrorStack);
+          throw new ProjectSetupError('onInit', strings.ProfileLanguageIncorrectErrorMessage, formatString(strings.ProfileLanguageIncorrectErrorStack, this.context.pageContext.site.absoluteUrl));
         }
       }
 
@@ -128,13 +129,15 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    * @param {IProgressDialogProps} props Props
    */
   private _renderErrorDialog(props: IErrorDialogProps) {
+    console.log(props);
     let progressDialog = this._getPlaceholder('ProgressDialog');
     this._unmount(progressDialog);
     let placeholder = this._getPlaceholder('ErrorDialog');
-    const element = React.createElement(ErrorDialog, {
+    const element = React.createElement<IErrorDialogProps>(ErrorDialog, {
       ...props,
       version: this.manifest.version,
       onDismiss: () => this._unmount(placeholder),
+      messageType: props.error['messageType'],
     });
     ReactDOM.render(element, placeholder);
   }
@@ -276,3 +279,4 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 }
 
 export { IProjectSetupData };
+
