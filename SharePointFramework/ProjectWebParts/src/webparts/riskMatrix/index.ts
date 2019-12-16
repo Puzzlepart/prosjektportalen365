@@ -1,17 +1,39 @@
-import { BaseClientSideWebPart, IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
+import { IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField } from '@microsoft/sp-property-pane';
 import { IRiskMatrixProps, RiskMatrix } from 'components/RiskMatrix';
-import * as React from 'react';
 import * as ReactDom from 'react-dom';
+import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart';
+import { sp, CamlQuery } from '@pnp/sp';
+import * as getValue from 'get-value';
+import { RiskElementModel } from 'components/RiskMatrix/RiskElementModel';
 
+export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixProps> {
+  private _items: RiskElementModel[] = [];
+  private _error: Error;
 
-export interface IRiskMatrixWebPartProps { }
-
-export default class RiskMatrixWebPart extends BaseClientSideWebPart<IRiskMatrixWebPartProps> {
+  public async onInit() {
+    await super.onInit();
+    try {
+      let items: any[] = await sp.web.lists.getByTitle(this.properties.listName).getItemsByCAMLQuery({ ViewXml: this.properties.viewXml });
+      items = items.map(i => new RiskElementModel(
+        getValue(i, 'ID', { default: '' }),
+        getValue(i, 'Title', { default: '' }),
+        getValue(i, this.properties.probabilityFieldName, { default: '' }),
+        getValue(i, this.properties.consequenceFieldName, { default: '' }),
+        getValue(i, this.properties.probabilityPostActionFieldName, { default: '' }),
+        getValue(i, this.properties.consequencePostActionFieldName, { default: '' }),
+      ));
+      this._items = items;
+    } catch (error) {
+      this._error = error;
+    }
+  }
 
   public render(): void {
-    const element: React.ReactElement<IRiskMatrixProps> = React.createElement(RiskMatrix, { items: [] });
-
-    ReactDom.render(element, this.domElement);
+    if (this._error) {
+      this.renderError(this._error);
+    } else {
+      this.renderComponent(RiskMatrix, { ...this.properties, items: this._items });
+    }
   }
 
   // tslint:disable-next-line: naming-convention
@@ -23,7 +45,54 @@ export default class RiskMatrixWebPart extends BaseClientSideWebPart<IRiskMatrix
   // tslint:disable-next-line: naming-convention
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
-      pages: []
+      pages: [
+        {
+          groups: [
+            {
+              groupName: 'Data',
+              groupFields: [
+                PropertyPaneTextField('listName', {
+                  label: 'List name',
+                }),
+                PropertyPaneTextField('viewXml', {
+                  label: 'Spørring',
+                }),
+                PropertyPaneTextField('probabilityFieldName', {
+                  label: 'Sannsynlighet',
+                }),
+                PropertyPaneTextField('consequenceFieldName', {
+                  label: 'Konsekvens',
+                }),
+                PropertyPaneTextField('probabilityPostActionFieldName', {
+                  label: 'Sannsynlighet (etter tiltak)',
+                }),
+                PropertyPaneTextField('consequencePostActionFieldName', {
+                  label: 'Konsekvens (etter tiltak)',
+                })
+              ]
+            },
+            {
+              groupName: 'Utseende og funksjonalitet',
+              groupFields: [
+                PropertyPaneSlider('width', {
+                  label: 'Bredde',
+                  min: 400,
+                  max: 1000,
+                  value: 400,
+                  showValue: true
+                }),
+                PropertyPaneSlider('height', {
+                  label: 'Høyde',
+                  min: 400,
+                  max: 1000,
+                  value: 400,
+                  showValue: true
+                })
+              ]
+            }
+          ]
+        }
+      ]
     };
   }
 }
