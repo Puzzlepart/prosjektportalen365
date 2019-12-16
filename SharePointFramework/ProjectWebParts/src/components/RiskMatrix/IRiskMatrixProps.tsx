@@ -1,6 +1,8 @@
 import { RiskElementModel } from './RiskElementModel';
-import { IRiskMatrixWebPartProps } from 'webparts/riskMatrix/IRiskMatrixWebPartProps';
 
-export interface IRiskMatrixProps extends IRiskMatrixWebPartProps {
+export interface IRiskMatrixProps {
     items: RiskElementModel[];
+    width?: number | string;
+    height?: number | string;
+    calloutTemplate: string;
 }
