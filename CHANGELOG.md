@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - RiskMatrix added as separate web part #97
 - RiskMatrix added to project status #172
 - Improved error messages when provisioning new projects #170
+- Including previous budget numbers in new project status #167
 
 ### Fixed
 - Fixed lookups in list 'Prosjektkolonnekonfigurasjon' #142

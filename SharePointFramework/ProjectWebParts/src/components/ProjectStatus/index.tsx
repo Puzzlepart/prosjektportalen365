@@ -1,3 +1,4 @@
+import { TypedHash } from '@pnp/common';
 import { Logger, LogLevel } from '@pnp/logging';
 import { getId } from '@uifabric/utilities';
 import { UserMessage } from 'components/UserMessage';
@@ -261,14 +262,19 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * Create new status report and send the user to the edit form
    * 
-   * @param {React.MouseEvent} _ev Event
+   * @param {React.MouseEvent | React.KeyboardEvent} _ev Event
    * @param {IContextualMenuItem} _item Item
    */
-  private async _redirectNewStatusReport(_ev?: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement>, _item?: IContextualMenuItem): Promise<void> {
+  private async _redirectNewStatusReport(_ev?: React.MouseEvent<any> | React.KeyboardEvent<any>, _item?: IContextualMenuItem): Promise<void> {
     const [previousReport] = this.state.data.reports;
-    let properties = previousReport ? previousReport.statusValues : {};
+    let properties: TypedHash<any> = previousReport ? previousReport.statusValues : {};
     properties.Title = formatString(strings.NewStatusReportTitle, this.props.webTitle);
     properties.GtSiteId = this.props.siteId;
+    if (previousReport) {
+      Logger.log({ message: '(ProjectStatus) _redirectNewStatusReport: Copying budget numbers from previous report', data: { id: previousReport.id, budgetNumbers: previousReport.budgetNumbers }, level: LogLevel.Info });
+      properties = { ...properties, ...previousReport.budgetNumbers };
+    }
+    Logger.log({ message: '(ProjectStatus) _redirectNewStatusReport: Created new status report', data: { properties }, level: LogLevel.Info });
     const newReportId = await this._portalDataService.addStatusReport(properties);
     document.location.href = `${window.location.protocol}//${window.location.hostname}${this.state.data.reportEditFormUrl}?ID=${newReportId}&Source=${encodeURIComponent(window.location.href)}`;
   }
