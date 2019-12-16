@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './MatrixCell.module.scss';
-
-export interface IMatrixCellProps extends React.HTMLProps<HTMLElement> {}
+import { IMatrixCellProps } from './IMatrixCellProps';
 
 // tslint:disable-next-line: naming-convention
 export const MatrixCell = ({ style,  children }: IMatrixCellProps) => {

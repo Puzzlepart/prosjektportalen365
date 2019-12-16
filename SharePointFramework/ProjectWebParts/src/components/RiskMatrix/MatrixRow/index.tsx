@@ -5,8 +5,7 @@ import { RiskElement } from '../RiskElement';
 import RISK_MATRIX_CELLS from '../RiskMatrixCells';
 import { MatrixCellType, MatrixCell, MatrixHeaderCell } from '../MatrixCell';
 import { RiskElementModel } from '../RiskElementModel';
-
-export interface IMatrixRowProps extends React.HTMLProps<HTMLElement> { }
+import { IMatrixRowProps } from './IMatrixRowProps';
 
 // tslint:disable-next-line: naming-convention
 export const MatrixRow = ({ children }: IMatrixRowProps) => {

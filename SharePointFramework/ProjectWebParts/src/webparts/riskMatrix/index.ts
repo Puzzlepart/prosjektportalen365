@@ -1,10 +1,10 @@
 import { IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField } from '@microsoft/sp-property-pane';
+import { sp } from '@pnp/sp';
 import { IRiskMatrixProps, RiskMatrix } from 'components/RiskMatrix';
+import { RiskElementModel } from 'components/RiskMatrix/RiskElementModel';
+import * as getValue from 'get-value';
 import * as ReactDom from 'react-dom';
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart';
-import { sp, CamlQuery } from '@pnp/sp';
-import * as getValue from 'get-value';
-import { RiskElementModel } from 'components/RiskMatrix/RiskElementModel';
 
 export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixProps> {
   private _items: RiskElementModel[] = [];
@@ -14,8 +14,9 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixPro
     await super.onInit();
     try {
       let items: any[] = await sp.web.lists.getByTitle(this.properties.listName).getItemsByCAMLQuery({ ViewXml: this.properties.viewXml });
+      console.log(items);
       items = items.map(i => new RiskElementModel(
-        getValue(i, 'ID', { default: '' }),
+        getValue(i, 'Id', { default: '' }),
         getValue(i, 'Title', { default: '' }),
         getValue(i, this.properties.probabilityFieldName, { default: '' }),
         getValue(i, this.properties.consequenceFieldName, { default: '' }),
