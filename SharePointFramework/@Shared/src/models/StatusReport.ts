@@ -59,6 +59,10 @@ export class StatusReport {
         return this._item.FieldValuesAsText || this._item;
     }
 
+    public get moderationStatus(): string {
+        return this._item.FieldValuesAsText.GtModerationStatus;
+    }
+
     /**
      * Get status values from item
      * 
