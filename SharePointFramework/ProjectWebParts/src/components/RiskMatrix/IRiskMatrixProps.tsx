@@ -1,7 +1,7 @@
 import { RiskElementModel } from './RiskElementModel';
 
 export interface IRiskMatrixProps {
-    items: RiskElementModel[];
+    items?: RiskElementModel[];
     width?: number | string;
     height?: number | string;
     calloutTemplate: string;

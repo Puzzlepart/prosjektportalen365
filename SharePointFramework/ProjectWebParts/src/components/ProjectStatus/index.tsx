@@ -214,9 +214,13 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         }
         case SectionType.RiskSection: {
           return (
-            <>
-              <RiskSection {...baseProps} calloutTemplate={this.props.riskMatrixCalloutTemplate} />
-            </>
+            <RiskSection
+              {...baseProps}
+              riskMatrix={{
+                width: this.props.riskMatrixWidth,
+                height: this.props.riskMatrixHeight,
+                calloutTemplate: this.props.riskMatrixCalloutTemplate,
+              }} />
           );
         }
         case SectionType.ListSection: {
