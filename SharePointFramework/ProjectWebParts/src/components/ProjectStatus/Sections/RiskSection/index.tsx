@@ -3,7 +3,6 @@ import { DetailsList, DetailsListLayoutMode, IColumn, SelectionMode } from 'offi
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
-import { getObjectValue } from 'shared/lib/helpers';
 import { RiskMatrix } from '../../../RiskMatrix';
 import { RiskElementModel } from '../../../RiskMatrix/RiskElementModel';
 import { StatusElement } from '../../StatusElement';
@@ -57,8 +56,8 @@ export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionStat
         </div>
         <div className={`${styles.list} ms-Grid-col ms-sm12`}>
           <DetailsList
-            columns={getObjectValue<IColumn[]>(this.state, 'data.columns', [])}
-            items={getObjectValue<any[]>(this.state, 'data.items', [])}
+            columns={this.state.data.columns}
+            items={this.state.data.items}
             selectionMode={SelectionMode.none}
             layoutMode={DetailsListLayoutMode.justified} />
         </div>
