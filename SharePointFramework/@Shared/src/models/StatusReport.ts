@@ -42,6 +42,17 @@ export class StatusReport {
     }
 
     /**
+     * Budget numbers
+     */
+    public get budgetNumbers(): TypedHash<number> {
+        return {
+            GtBudgetTotal: this._item.GtBudgetTotal || 0,
+            GtCostsTotal: this._item.GtCostsTotal || 0,
+            GtProjectForecast: this._item.GtProjectForecast || 0,
+        }
+    }
+
+    /**
      * Field values
      */
     public get fieldValues(): TypedHash<string> {
