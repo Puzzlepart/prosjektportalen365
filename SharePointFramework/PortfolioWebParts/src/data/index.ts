@@ -82,8 +82,10 @@ export class DataAdapter {
     }
 
     /**
-     * Fetch data for view (used by [PortfolioOverview] and [PortfolioInsights])
+     * Fetch data for view
      *
+     * @description Used by PortfolioOverview and PortfolioInsights
+     * 
      * @param {PortfolioOverviewView} view View configuration
      * @param {IPortfolioConfiguration} configuration PortfolioOverviewConfiguration
      * @param {string} siteId Site ID
