@@ -630,8 +630,6 @@
                                 {
                                     "Id": "39c4c1c2-63fa-41be-8cc2-f6c0b49b253d",
                                     "Properties": {
-                                        "title": "Oppgaver",
-                                        "isFullScreen": true,
                                         "plannerViewMode": "board",
                                         "planId": "{parameter:defaultPlanId}"
                                     }
