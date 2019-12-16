@@ -1,4 +1,11 @@
 .errorDialog {
   width: 900px !important;
   max-width: 900px !important;
+
+  .errorMessage {
+    p {
+      margin: 0;
+      padding: 0;
+    }
+  }
 }

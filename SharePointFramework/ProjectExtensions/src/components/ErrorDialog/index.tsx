@@ -3,39 +3,36 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import { BaseDialog } from '../@BaseDialog';
+import * as ReactMarkdown from 'react-markdown/with-html';
 import styles from './ErrorDialog.module.scss';
 import { IErrorDialogProps } from './IErrorDialogProps';
 
-export class ErrorDialog extends React.PureComponent<IErrorDialogProps> {
-    public render() {
-        return (
-            <BaseDialog
-                version={this.props.version}
-                dialogContentProps={{ title: this.props.error.message }}
-                modalProps={{ isBlocking: false, isDarkOverlay: true }}
-                onRenderFooter={this._onRenderFooter.bind(this)}
-                onDismiss={this.props.onDismiss}
-                containerClassName={styles.errorDialog}>
-                <div style={{ marginTop: 15 }}>
-                    <MessageBar messageBarType={this.props.messageType || MessageBarType.error}>
-                        <span>{this.props.error.stack}</span>
-                    </MessageBar>
-                </div>
-            </BaseDialog >
-        );
-    }
-
-    /**
-     * On render footrer
-     */
-    private _onRenderFooter() {
+// tslint:disable-next-line: naming-convention
+export const ErrorDialog = ({ error, version, messageType = MessageBarType.error, onDismiss }: IErrorDialogProps) => {
+    const onRenderFooter = () => {
         return (
             <>
-                <DefaultButton text={strings.CloseModalText} onClick={this.props.onDismiss} />
+                <DefaultButton text={strings.CloseModalText} onClick={onDismiss} />
             </>
         );
-    }
-}
+    };
+
+    return (
+        <BaseDialog
+            version={version}
+            dialogContentProps={{ title: error.message }}
+            modalProps={{ isBlocking: false, isDarkOverlay: true }}
+            onRenderFooter={onRenderFooter}
+            onDismiss={onDismiss}
+            containerClassName={styles.errorDialog}>
+            <div style={{ marginTop: 15 }}>
+                <MessageBar messageBarType={messageType} className={styles.errorMessage}>
+                    <ReactMarkdown escapeHtml={false} linkTarget='_blank' source={error.stack} html />
+                </MessageBar>
+            </div>
+        </BaseDialog >
+    );
+};
 
 export { IErrorDialogProps };
 
