@@ -9,4 +9,5 @@ export interface IRiskMatrixWebPartProps extends IBaseWebPartComponentProps {
     consequenceFieldName: string;
     probabilityPostActionFieldName: string;
     consequencePostActionFieldName: string;
+    calloutTemplate: string;
 }

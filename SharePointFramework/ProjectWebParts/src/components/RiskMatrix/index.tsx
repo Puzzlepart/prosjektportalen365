@@ -4,12 +4,12 @@ import { MatrixRows } from './MatrixRow';
 import styles from './RiskMatrix.module.scss';
 
 // tslint:disable-next-line: naming-convention
-export const RiskMatrix = ({ items = [], width = 400, height = 300 }: IRiskMatrixProps) => {
+export const RiskMatrix = ({ items = [], width = 400, height = 300, calloutTemplate }: IRiskMatrixProps) => {
     return (
         <div className={styles.riskMatrix} style={{ width, height }}>
             <table className={styles.table}>
                 <tbody>
-                    <MatrixRows items={items} />
+                    <MatrixRows items={items} calloutTemplate={calloutTemplate} />
                 </tbody>
             </table>
         </div>

@@ -14,10 +14,8 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixPro
     await super.onInit();
     try {
       let items: any[] = await sp.web.lists.getByTitle(this.properties.listName).getItemsByCAMLQuery({ ViewXml: this.properties.viewXml });
-      console.log(items);
       items = items.map(i => new RiskElementModel(
-        getValue(i, 'Id', { default: '' }),
-        getValue(i, 'Title', { default: '' }),
+        i,
         getValue(i, this.properties.probabilityFieldName, { default: '' }),
         getValue(i, this.properties.consequenceFieldName, { default: '' }),
         getValue(i, this.properties.probabilityPostActionFieldName, { default: '' }),
@@ -57,6 +55,7 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixPro
                 }),
                 PropertyPaneTextField('viewXml', {
                   label: 'Spørring',
+                  multiline: true,
                 }),
                 PropertyPaneTextField('probabilityFieldName', {
                   label: 'Sannsynlighet',
@@ -80,14 +79,19 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixPro
                   min: 400,
                   max: 1000,
                   value: 400,
-                  showValue: true
+                  showValue: true,
                 }),
                 PropertyPaneSlider('height', {
                   label: 'Høyde',
                   min: 400,
                   max: 1000,
                   value: 400,
-                  showValue: true
+                  showValue: true,
+                }),
+                PropertyPaneTextField('calloutTemplate', {
+                  label: 'Mal for Callout',
+                  multiline: true,
+                  resizable: true,
                 })
               ]
             }
