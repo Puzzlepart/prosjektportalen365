@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed lookups in list 'Prosjektkolonnekonfigurasjon' #142
 - Fixed colors and columns not matching content #134
 - Fixed an issue with invalid web part properties on Oppgaver.aspx #164
+- Added support for currency fields in Portfolio Insights #155
 
 ## 1.1.6 - 2019-11-14
 
