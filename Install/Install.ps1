@@ -317,7 +317,7 @@ $InstallEntry = @{
     InstallCommand   = $MyInvocation.Line.Substring(2);
 }
 
-Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -Connection $SiteConnection -ErrorAction SilentlyContinue
+Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -Connection $SiteConnection -ErrorAction SilentlyContinue >$null 2>&1
 
 $InstallEntry.InstallUrl = $Url
 

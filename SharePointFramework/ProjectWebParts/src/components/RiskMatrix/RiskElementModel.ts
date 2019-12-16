@@ -19,16 +19,16 @@ export class RiskElementModel {
 
     constructor(
         public item: IRiskElementItem,
-        probability: string,
-        consequence: string,
-        probabilityPostAction: string,
-        consequencePostAction: string,
+        probability?: string,
+        consequence?: string,
+        probabilityPostAction?: string,
+        consequencePostAction?: string,
     ) {
-        this.id = item.Id;
+        this.id = item.Id || item.ID;
         this.title = item.Title;
-        this.probability = parseInt(probability, 10);
-        this.consequence = parseInt(consequence, 10);
-        this.probabilityPostAction = parseInt(probabilityPostAction, 10);
-        this.consequencePostAction = parseInt(consequencePostAction, 10);
+        this.probability = parseInt(probability || item.GtRiskProbability, 10);
+        this.consequence = parseInt(consequence || item.GtRiskConsequence, 10);
+        this.probabilityPostAction = parseInt(probabilityPostAction || item.GtRiskProbabilityPostAction, 10);
+        this.consequencePostAction = parseInt(consequencePostAction || item.GtRiskConsequencePostAction, 10);
     }
 }

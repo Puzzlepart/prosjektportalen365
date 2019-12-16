@@ -19,9 +19,10 @@ export abstract class BaseProjectWebPart<T extends IBaseWebPartComponentProps> e
      * Render component
      * 
      * @param {any} component Component 
-     * @param {T} props Props
+     * @param {P} props Props
      */
-    public renderComponent(component: any, props?: Partial<T>): void {
+    // tslint:disable-next-line: naming-convention
+    public renderComponent<P>(component: any, props?: Partial<P>): void {
         let combinedProps: T = {
             ...this.properties,
             ...props,

@@ -21,7 +21,7 @@ export interface IMatrixHeaderCellProps extends React.HTMLProps<HTMLElement> {
 // tslint:disable-next-line: naming-convention
 export const MatrixHeaderCell = (props: IMatrixHeaderCellProps) => {
     return (
-        <td className={styles.matrixCell}>
+        <td className={`${styles.matrixCell} ${styles.headerCell}`}>
             <span>{props.label}</span>
         </td>
     );
