@@ -74,7 +74,19 @@ declare interface IProjectWebPartsStrings {
   ProjectsListName: string;
   NoStatusReportsMessage: string;
   SyncNowText: string;
-  
+  RiskMatrix_Header_Critical: string;
+  RiskMatrix_Header_High: string;
+  RiskMatrix_Header_Insignificant: string;
+  RiskMatrix_Header_Low: string;
+  RiskMatrix_Header_Medium: string;
+  RiskMatrix_Header_Moderate: string;
+  RiskMatrix_Header_Serious: string;
+  RiskMatrix_Header_Small: string;
+  RiskMatrix_Header_VeryHigh: string;
+  RiskMatrix_Header_VeryLow: string;
+  RiskMatrix_ViewSelectorLabel: string;
+  RiskMatrix_EmptyMessage: string;
+  RiskMatrix_LoadingText: string;
 }
 
 declare module 'ProjectWebPartsStrings' {

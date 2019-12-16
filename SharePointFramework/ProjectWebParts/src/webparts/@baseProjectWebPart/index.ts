@@ -18,10 +18,10 @@ export abstract class BaseProjectWebPart<T extends IBaseWebPartComponentProps> e
     /**
      * Render component
      * 
-     * @param {React.ComponentClass} component Component 
+     * @param {any} component Component 
      * @param {T} props Props
      */
-    public renderComponent(component: React.ComponentClass<T>, props?: Partial<T>): void {
+    public renderComponent(component: any, props?: Partial<T>): void {
         let combinedProps: T = {
             ...this.properties,
             ...props,
@@ -34,7 +34,7 @@ export abstract class BaseProjectWebPart<T extends IBaseWebPartComponentProps> e
             displayMode: this.displayMode,
             pageContext: this.context.pageContext,
         };
-        const element: React.ReactElement<T> = React.createElement(component, combinedProps);
+        const element = React.createElement(component, combinedProps);
         ReactDom.render(element, this.domElement);
     }
 
