@@ -25,6 +25,14 @@
           "manifest": "./src/webparts/projectInformation/manifest.json"
         }
       ]
+    },
+    "risk-matrix-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/riskMatrix/index.js",
+          "manifest": "./src/webparts/riskMatrix/manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
