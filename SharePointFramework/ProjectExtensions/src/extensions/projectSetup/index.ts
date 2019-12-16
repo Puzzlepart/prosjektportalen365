@@ -9,6 +9,7 @@ import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { ApplicationInsightsLogListener, ListLogger } from 'shared/lib/logging';
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { PortalDataService } from 'shared/lib/services';
 import { default as HubSiteService } from 'sp-hubsite-service';
 import { ErrorDialog, IErrorDialogProps, IProgressDialogProps, ITemplateSelectDialogProps, ITemplateSelectDialogState, ProgressDialog, TemplateSelectDialog } from '../../components';
@@ -42,7 +43,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           throw new ProjectSetupError('onInit', strings.InvalidLanguageErrorMessage, strings.InvalidLanguageErrorStack);
         }
         case ProjectSetupValidation.NoHubConnection: {
-          throw new ProjectSetupError('onInit', strings.NoHubSiteErrorMessage, strings.NoHubSiteErrorStack);
+          throw new ProjectSetupError('onInit', strings.NoHubSiteErrorMessage, strings.NoHubSiteErrorStack, MessageBarType.warning);
         }
         case ProjectSetupValidation.InvalidCulture: {
           throw new ProjectSetupError('onInit', strings.ProfileLanguageIncorrectErrorMessage, strings.ProfileLanguageIncorrectErrorStack);
