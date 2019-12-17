@@ -17,7 +17,7 @@ define([], function () {
     CopyListDataText: 'Kopierer {0} listeelementer fra {1} til {2}',
     CopyPlannerTasksLabel: 'Kopier standardoppgaver til Planner',
     IncludePortfolioAdministratorsLabel: 'Gi tilgang til porteføljeadministratorer',
-    IncludePortfolioAdministratorsDescription: 'Porteføljeadministratorer (brukerne i gruppen Porteføljeadministratorer) får tilgang til prosjektomårdet.',
+    IncludePortfolioAdministratorsDescription: 'Porteføljeadministratorer (brukerne i gruppen Porteføljeadministratorer) får tilgang til prosjektområdet.',
     CopyProgressLabel: 'Kopierer valgt(e) dokument(er) til prosjektområdet...',
     EditPropertiesLinkText: 'Du kan allerede nå<A HREF=\'{0}\' TARGET=\'_BLANK\'>redigere egenskaper</A> for prosjektet (åpnes i ny fane).',
     ErrorDialogTitle: 'Noe er galt',
