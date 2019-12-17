@@ -1091,6 +1091,28 @@
                     }
                 },
                 {
+                    "Title": "Risiko",
+                    "ViewFields": [
+                        "ID",
+                        "LinkTitle",
+                        "GtRiskProbability",
+                        "GtRiskConsequence",
+                        "GtRiskFactor",
+                        "GtRiskStatus",
+                        "GtRiskStrategy",
+                        "GtRiskAction",
+                        "GtRiskProbabilityPostAction",
+                        "GtRiskConsequencePostAction",
+                        "GtRiskFactorPostAction",
+                        "Modified"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 100,
+                        "Paged": true,
+                        "ViewQuery": "<Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">Risiko</Value></Eq></Where>"
+                    }
+                },
+                {
                     "Title": "Gjeldende fase",
                     "ViewFields": [
                         "ID",
