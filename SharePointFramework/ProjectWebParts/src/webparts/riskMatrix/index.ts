@@ -27,7 +27,7 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
     } else {
       this.renderComponent<IRiskMatrixProps>(RiskMatrix, {
         width: this.properties.width,
-        height: this.properties.width,
+        height: this.properties.height,
         calloutTemplate: this.properties.calloutTemplate,
         items: this._items,
       });
