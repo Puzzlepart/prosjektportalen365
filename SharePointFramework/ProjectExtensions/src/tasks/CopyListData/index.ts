@@ -87,9 +87,11 @@ export class CopyListData extends BaseTask {
         try {
             this.logInformation('Processing list items', { listConfig: listContentConfig });
             let destList = sp.web.lists.getByTitle(listContentConfig.destinationList);
-            let destListProperties = await this._getListProperties(destList);
-
-            let progressText = formatString(strings.CopyListDataText, destListProperties.ItemCount, listContentConfig.sourceList, listContentConfig.destinationLibrary || listContentConfig.destinationList);
+            let [destListProperties, sourceListProperties] = await Promise.all([
+                this._getListProperties(destList),
+                this._getListProperties(listContentConfig.list),
+            ]);
+            let progressText = formatString(strings.CopyListDataText, sourceListProperties.ItemCount, listContentConfig.sourceList, listContentConfig.destinationLibrary || listContentConfig.destinationList);
             onProgress(progressText, '', 'List');
 
             let [sourceItems, sourceFields] = await Promise.all([
