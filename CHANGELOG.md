@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Including previous budget numbers in new project status #167
 - Better support for the Portfolio administrator role #133
 - Made it possible to work with draft and published versions of project status reports #119
+- Support for copying more than 100 items in CopyListData (up to 500)
 
 ### Fixed
 - Fixed lookups in list 'Prosjektkolonnekonfigurasjon' #142
