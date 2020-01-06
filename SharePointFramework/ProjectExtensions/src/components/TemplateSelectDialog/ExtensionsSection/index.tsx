@@ -5,36 +5,40 @@ import { ProjectTemplate } from '../../../models';
 import styles from './ExtensionsSection.module.scss';
 import { IExtensionsSectionProps } from './IExtensionsSectionProps';
 
-export class ExtensionsSection extends React.PureComponent<IExtensionsSectionProps> {
-    public render() {
-        return (
-            <div className={styles.extensionsSection}>
-                <div className={styles.container}>
-                    {this.props.extensions.map(ext => (
-                        <div key={ext.key} className={styles.item}>
-                            <Toggle
-                                label={ext.text}
-                                inlineLabel={true}
-                                onChange={(_event, checked) => this._onChange(ext, checked)} />
-                            <div className={styles.description} hidden={stringIsNullOrEmpty(ext.description)}>
-                                <span>{ext.description}</span>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        );
-    }
+// tslint:disable-next-line: naming-convention
+export const ExtensionsSection = (props: IExtensionsSectionProps) => {
     /**
      * On item toggle
      *
      * @param {ProjectTemplate} extension Extension
      * @param {boolean} checked Checked
      */
-    private _onChange(extension: ProjectTemplate, checked: boolean): void {
+    const onChange = (extension: ProjectTemplate, checked: boolean): void => {
         let selectedExtensions = [];
-        if (checked) selectedExtensions = [extension, ...this.props.selectedExtensions];
-        else selectedExtensions = this.props.selectedExtensions.filter(ext => extension.text !== ext.text);
-        this.props.onChange(selectedExtensions);
-    }
-}
+        if (checked) selectedExtensions = [extension, ...props.selectedExtensions];
+        else selectedExtensions = props.selectedExtensions.filter(ext => extension.text !== ext.text);
+        props.onChange(selectedExtensions);
+    };
+
+    const selectedKeys = props.selectedExtensions.map(lc => lc.key);
+
+
+    return (
+        <div className={styles.extensionsSection}>
+            <div className={styles.container}>
+                {props.extensions.map(ext => (
+                    <div key={ext.key} className={styles.item}>
+                        <Toggle
+                            label={ext.text}
+                            defaultChecked={selectedKeys.indexOf(ext.key) !== -1}
+                            inlineLabel={true}
+                            onChange={(_event, checked) => onChange(ext, checked)} />
+                        <div className={styles.description} hidden={stringIsNullOrEmpty(ext.description)}>
+                            <span>{ext.description}</span>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
