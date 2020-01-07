@@ -34,7 +34,7 @@
 )
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
-$InstallStartTime = (Get-Date).ToUniversalTime().ToString("MM/dd/yyy HH:mm")
+$InstallStartTime = (Get-Date -Format o)
 if ($Upgrade.IsPresent) {
     Write-Host "[INFO] Upgrading [Prosjektportalen 365] to [VERSION_PLACEHOLDER]"
 }
@@ -308,7 +308,7 @@ else {
     Write-Host "[INFO] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
 }
 
-$InstallEndTime = (Get-Date).ToUniversalTime().ToString("MM/dd/yyy HH:mm")
+$InstallEndTime = (Get-Date -Format o)
 
 $InstallEntry = @{
     InstallStartTime = $InstallStartTime; 
