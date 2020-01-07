@@ -86,13 +86,19 @@
             <pnp:DataValue FieldName="GtSecFieldName">GtStatusRisk</pnp:DataValue>
             <pnp:DataValue FieldName="GtSecList">Usikkerhet</pnp:DataValue>
             <pnp:DataValue FieldName="GtSecViewQuery">&lt;OrderBy&gt;
-&lt;FieldRef Name="GtRiskFactor" Ascending="FALSE" /&gt;
+    &lt;FieldRef Name=&quot;GtRiskFactor&quot; Ascending=&quot;FALSE&quot; /&gt;
 &lt;/OrderBy&gt;
 &lt;Where&gt;
-&lt;Neq&gt;
-&lt;FieldRef Name="GtRiskStatus" /&gt;
-&lt;Value Type="Text"&gt;Ikke lenger aktuell&lt;/Value&gt;
-&lt;/Neq&gt;
+    &lt;And&gt;
+        &lt;Neq&gt;
+            &lt;FieldRef Name=&quot;GtRiskStatus&quot; /&gt;
+            &lt;Value Type=&quot;Text&quot;&gt;Ikke lenger aktuell&lt;/Value&gt;
+        &lt;/Neq&gt;
+        &lt;Eq&gt;
+            &lt;FieldRef Name=\&quot;ContentType\&quot; /&gt;
+            &lt;Value Type=\&quot;Computed\&quot;&gt;Risiko&lt;/Value&gt;
+        &lt;/Eq&gt;
+    &lt;/And&gt;
 &lt;/Where&gt;</pnp:DataValue>
             <pnp:DataValue FieldName="GtSecRowLimit">100</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82804</pnp:DataValue>

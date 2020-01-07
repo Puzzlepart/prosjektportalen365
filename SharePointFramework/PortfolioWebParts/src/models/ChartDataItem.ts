@@ -38,7 +38,7 @@ export class ChartDataItem {
                 }
                 return 0;
             }
-            case 'number': {
+            case 'currency': case 'number': {
                 if (this.hasValue(field)) {
                     return parseInt(rawValue, 10);
                 }

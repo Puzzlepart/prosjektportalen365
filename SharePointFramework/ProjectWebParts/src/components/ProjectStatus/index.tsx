@@ -1,3 +1,4 @@
+import { TypedHash } from '@pnp/common';
 import { Logger, LogLevel } from '@pnp/logging';
 import { getId } from '@uifabric/utilities';
 import { UserMessage } from 'components/UserMessage';
@@ -18,7 +19,7 @@ import { IProjectStatusHashState } from './IProjectStatusHashState';
 import { IProjectStatusProps } from './IProjectStatusProps';
 import { IProjectStatusState } from './IProjectStatusState';
 import styles from './ProjectStatus.module.scss';
-import { IBaseSectionProps, ListSection, ProjectPropertiesSection, StatusSection, SummarySection } from './Sections';
+import { IBaseSectionProps, ListSection, ProjectPropertiesSection, RiskSection, StatusSection, SummarySection } from './Sections';
 
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private _portalDataService: PortalDataService;
@@ -129,7 +130,15 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         name: strings.EditReportButtonText,
         iconProps: { iconName: 'Edit' },
         href: selectedReport ? selectedReport.editFormUrl : null,
-        disabled: !selectedReport,
+        disabled: !selectedReport || selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published,
+      },
+      {
+        id: getId('PublishReport'),
+        key: getId('PublishReport'),
+        name: strings.PublishReportButtonText,
+        iconProps: { iconName: 'PublishContent' },
+        disabled: !selectedReport || selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published,
+        onClick: _ => { this._publishReport(selectedReport); },
       },
     ];
     let farItems: IContextualMenuItem[] = [];
@@ -213,7 +222,15 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           );
         }
         case SectionType.RiskSection: {
-          return <ListSection {...baseProps} />;
+          return (
+            <RiskSection
+              {...baseProps}
+              riskMatrix={{
+                width: this.props.riskMatrixWidth,
+                height: this.props.riskMatrixHeight,
+                calloutTemplate: this.props.riskMatrixCalloutTemplate,
+              }} />
+          );
         }
         case SectionType.ListSection: {
           return <ListSection {...baseProps} />;
@@ -253,16 +270,32 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * Create new status report and send the user to the edit form
    * 
-   * @param {React.MouseEvent} _ev Event
+   * @param {React.MouseEvent | React.KeyboardEvent} _ev Event
    * @param {IContextualMenuItem} _item Item
    */
-  private async _redirectNewStatusReport(_ev?: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement>, _item?: IContextualMenuItem): Promise<void> {
+  private async _redirectNewStatusReport(_ev?: React.MouseEvent<any> | React.KeyboardEvent<any>, _item?: IContextualMenuItem): Promise<void> {
     const [previousReport] = this.state.data.reports;
-    let properties = previousReport ? previousReport.statusValues : {};
+    let properties: TypedHash<any> = previousReport ? previousReport.statusValues : {};
     properties.Title = formatString(strings.NewStatusReportTitle, this.props.webTitle);
     properties.GtSiteId = this.props.siteId;
+    if (previousReport) {
+      Logger.log({ message: '(ProjectStatus) _redirectNewStatusReport: Copying budget numbers from previous report', data: { id: previousReport.id, budgetNumbers: previousReport.budgetNumbers }, level: LogLevel.Info });
+      properties = { ...properties, ...previousReport.budgetNumbers };
+    }
+    properties.GtModerationStatus = strings.GtModerationStatus_Choice_Draft;
+    Logger.log({ message: '(ProjectStatus) _redirectNewStatusReport: Created new status report', data: { properties }, level: LogLevel.Info });
     const newReportId = await this._portalDataService.addStatusReport(properties);
     document.location.href = `${window.location.protocol}//${window.location.hostname}${this.state.data.reportEditFormUrl}?ID=${newReportId}&Source=${encodeURIComponent(window.location.href)}`;
+  }
+
+  /**
+   * Publish report
+   * 
+   * @param {StatusReport} report Report
+   */
+  private async _publishReport(report: StatusReport) {
+    await this._portalDataService.updateStatusReport(report.id, { GtModerationStatus: strings.GtModerationStatus_Choice_Published });
+    document.location.reload();
   }
 
   /**

@@ -16,6 +16,8 @@ define([], function () {
     CopyListDataErrorMessage: 'Det skjedde en feil under kopiering av listeinnhold',
     CopyListDataText: 'Kopierer {0} listeelementer fra {1} til {2}',
     CopyPlannerTasksLabel: 'Kopier standardoppgaver til Planner',
+    IncludePortfolioAdministratorsLabel: 'Gi tilgang til porteføljeadministratorer',
+    IncludePortfolioAdministratorsDescription: 'Porteføljeadministratorer (brukerne i gruppen Porteføljeadministratorer) får tilgang til prosjektområdet.',
     CopyProgressLabel: 'Kopierer valgt(e) dokument(er) til prosjektområdet...',
     EditPropertiesLinkText: 'Du kan allerede nå<A HREF=\'{0}\' TARGET=\'_BLANK\'>redigere egenskaper</A> for prosjektet (åpnes i ny fane).',
     ErrorDialogTitle: 'Noe er galt',
@@ -45,6 +47,7 @@ define([], function () {
     ProgressDialogTitle: 'Setter opp prosjektområdet',
     ProjectPropertiesListName: 'Prosjektegenskaper',
     ProvisionSiteFieldsErrorMessage: 'Det skjedde en feil under provisjonering av områdekolonner',
+    SitePermissionsErrorMessage: 'Det skjedde en feil under oppsett av områdetilganger',
     ProvisionSiteFieldsText: 'Oppretter områdekolonner',
     SetTaxonomyFieldsErrorMessage: 'Det skjedde en feil under konfigurering av taksonomifelter',
     SettingsSectionTitle: 'Innstillinger',
@@ -71,6 +74,6 @@ define([], function () {
     IncludeStandardFoldersDescription: 'Inkluder standardmapper for dokumentbiblioteket. Det opprettes en mappe per prosjetktfase.',
     CopyPlannerTasksDescription: 'Opprett en plan for prosjektet i Planner og opprett buckets og oppgaver for denne.',
     SetupAbortedText: 'Installasjon avbrutt av bruker',
-    UnknownErrorText: 'Ukjent feil'    
+    UnknownErrorText: 'Ukjent feil'
   }
 });

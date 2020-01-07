@@ -630,8 +630,6 @@
                                 {
                                     "Id": "39c4c1c2-63fa-41be-8cc2-f6c0b49b253d",
                                     "Properties": {
-                                        "title": "Oppgaver",
-                                        "isFullScreen": true,
                                         "plannerViewMode": "board",
                                         "planId": "{parameter:defaultPlanId}"
                                     }
@@ -684,7 +682,10 @@
                                 {
                                     "Id": "681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6",
                                     "Properties": {
-                                        "title": "Prosjektstatus"
+                                        "title": "Prosjektstatus",
+                                        "riskMatrixCalloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>",
+                                        "riskMatrixWidth": 800,
+                                        "riskMatrixHeight": 400
                                     }
                                 }
                             ]
@@ -1090,6 +1091,28 @@
                     }
                 },
                 {
+                    "Title": "Risiko",
+                    "ViewFields": [
+                        "ID",
+                        "LinkTitle",
+                        "GtRiskProbability",
+                        "GtRiskConsequence",
+                        "GtRiskFactor",
+                        "GtRiskStatus",
+                        "GtRiskStrategy",
+                        "GtRiskAction",
+                        "GtRiskProbabilityPostAction",
+                        "GtRiskConsequencePostAction",
+                        "GtRiskFactorPostAction",
+                        "Modified"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 100,
+                        "Paged": true,
+                        "ViewQuery": "<Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">Risiko</Value></Eq></Where>"
+                    }
+                },
+                {
                     "Title": "Gjeldende fase",
                     "ViewFields": [
                         "ID",
@@ -1114,6 +1137,7 @@
             "FieldRefs": [
                 {
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
+                    "Name": "GtProjectPhase",
                     "Required": false,
                     "DisplayName": "Fase"
                 }
@@ -1171,6 +1195,7 @@
             "FieldRefs": [
                 {
                     "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title",
                     "Required": true,
                     "DisplayName": "Gevinst"
                 }
@@ -1230,6 +1255,7 @@
             "FieldRefs": [
                 {
                     "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title",
                     "Required": true,
                     "DisplayName": "Endring"
                 }
@@ -1315,6 +1341,8 @@
             "FieldRefs": [
                 {
                     "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title",
+                    "DisplayName": "Tittel",
                     "Required": false
                 }
             ],
@@ -1365,6 +1393,8 @@
             "FieldRefs": [
                 {
                     "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title",
+                    "DisplayName": "Tittel",
                     "Required": false,
                     "Hidden": true
                 }

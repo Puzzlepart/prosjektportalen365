@@ -7,9 +7,11 @@ import * as strings from 'ProjectWebPartsStrings';
 import { SPDataAdapterBase } from 'shared/lib/data';
 import { ProjectDataService } from 'shared/lib/services';
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration';
+import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 
 export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     public project: ProjectDataService;
+    private _name = 'SPDataAdapter';
 
     /**
      * Configure the SP data adapter
@@ -39,16 +41,20 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
      */
     public async syncPropertyItemToHub(fieldValues: TypedHash<any>, fieldValuesText: TypedHash<string>, progressFunc: (props: IProgressIndicatorProps) => void): Promise<ItemUpdateResult> {
         try {
+            fieldValuesText = Object.keys(fieldValuesText).reduce((obj, key) => ({ ...obj, [key.replace(/_x005f_/gm, '_')]: fieldValuesText[key] }), {});
+            Logger.log({ message: `(${this._name}) (syncPropertyItemToHub) Starting sync of property item to hub.`, level: LogLevel.Info });
             progressFunc({ label: strings.SyncProjectPropertiesValuesProgressDescription, description: 'Vennligst vent...' });
             const [fields, siteUsers] = await Promise.all([
                 this.entityService.getEntityFields(),
                 this.sp.web.siteUsers.select('Id', 'Email', 'LoginName').get<{ Id: number, Email: string, LoginName: string }[]>(),
             ]);
+            Logger.log({ message: `(${this._name}) (syncPropertyItemToHub) Retreived ${fields.length} from entity.`, level: LogLevel.Info });
             const fieldToSync = fields.filter(fld => {
                 if (fld.SchemaXml.indexOf('ShowInEditForm="FALSE"') !== -1) return false;
                 if (fld.InternalName.indexOf('Gt') !== 0) return false;
                 return true;
             });
+            Logger.log({ message: `(${this._name}) (syncPropertyItemToHub) Syncing ${fieldToSync.length} to hub entity.`, data: { fieldToSync: fieldToSync.map(f => f.InternalName) }, level: LogLevel.Info });
             let properties: TypedHash<any> = {};
             for (let i = 0; i < fieldToSync.length; i++) {
                 let fld = fieldToSync[i];
@@ -81,7 +87,10 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
                         break;
                 }
             }
-            return await this.entityService.updateEntityItem(this.settings.siteId, properties);
+            Logger.log({ message: `(${this._name}) (syncPropertyItemToHub) Syncing item to hub entity.`, data: { properties }, level: LogLevel.Info });
+            let itemUpdateResult = await this.entityService.updateEntityItem(this.settings.siteId, properties);
+            Logger.log({ message: `(${this._name}) (syncPropertyItemToHub) Successfully synced item to hub entity.`, data: { properties }, level: LogLevel.Info });
+            return itemUpdateResult;
         } catch (error) {
             throw error;
         }

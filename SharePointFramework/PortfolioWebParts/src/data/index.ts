@@ -82,8 +82,10 @@ export class DataAdapter {
     }
 
     /**
-     * Fetch data for view (used by [PortfolioOverview] and [PortfolioInsights])
+     * Fetch data for view
      *
+     * @description Used by PortfolioOverview and PortfolioInsights
+     * 
      * @param {PortfolioOverviewView} view View configuration
      * @param {IPortfolioConfiguration} configuration PortfolioOverviewConfiguration
      * @param {string} siteId Site ID
@@ -105,7 +107,7 @@ export class DataAdapter {
                 }),
                 sp.search({
                     ...DEFAULT_SEARCH_SETTINGS,
-                    QueryTemplate: `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5*`,
+                    QueryTemplate: `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
                     SelectProperties: [...configuration.columns.map(f => f.fieldName), siteIdProperty],
                     Refiners: configuration.refiners.map(ref => ref.fieldName).join(','),
                 }),

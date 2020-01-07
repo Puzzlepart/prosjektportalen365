@@ -1,15 +1,19 @@
 import { Logger, LogLevel } from '@pnp/logging';
 import { IProjectSetupData } from 'extensions/projectSetup';
-import { IBaseTaskParams } from './IBaseTaskParams';
+import { IProjectSetupSettings } from 'extensions/projectSetup/ProjectSetupSettings';
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction';
 import { IBaseTask } from './IBaseTask';
+import { IBaseTaskParams } from './IBaseTaskParams';
 
 // tslint:disable-next-line: naming-convention
 export abstract class BaseTask implements IBaseTask {
+    public settings: IProjectSetupSettings<boolean>;
     public params: IBaseTaskParams;
     public taskName: string;
 
-    constructor(public data: IProjectSetupData) { }
+    constructor(public data: IProjectSetupData) {
+        this.settings = data.settings.values;
+    }
 
     /**
      * Execute task
@@ -61,6 +65,6 @@ export abstract class BaseTask implements IBaseTask {
     }
 }
 
-export * from './IBaseTask';
 export * from './BaseTaskError';
+export * from './IBaseTask';
 export * from './IBaseTaskParams';

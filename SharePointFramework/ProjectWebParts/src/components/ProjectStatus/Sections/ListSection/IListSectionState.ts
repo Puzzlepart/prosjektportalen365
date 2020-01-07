@@ -1,7 +1,6 @@
 import { IBaseSectionState } from '../BaseSection';
-import { IListSectionData } from './IListSectionData';
 
-export interface IListSectionState extends IBaseSectionState {
+export interface IListSectionState<T> extends IBaseSectionState {
     /**
      * Whether the component is loading
      */
@@ -10,7 +9,7 @@ export interface IListSectionState extends IBaseSectionState {
     /**
      * Data
      */
-    data?: IListSectionData;
+    data?: T;
 
     /**
      * Error

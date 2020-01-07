@@ -7,9 +7,11 @@ import { PreTask } from './PreTask';
 import { ProvisionSiteFields } from './ProvisionSiteFields';
 import { SetTaxonomyFields } from './SetTaxonomyFields';
 import { SetupProjectInformation } from './SetupProjectInformation';
+import { SitePermissions } from './SitePermissions';
 
 const tasks: (new (data: IProjectSetupData) => IBaseTask)[] = [
     PreTask,
+    SitePermissions,
     SetupProjectInformation,
     PlannerConfiguration,
     ProvisionSiteFields,
@@ -28,3 +30,4 @@ export function getTasks(data: IProjectSetupData) {
 }
 
 export * from './@BaseTask';
+
