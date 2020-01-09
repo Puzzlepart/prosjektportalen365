@@ -245,7 +245,7 @@ if (-not $Upgrade.IsPresent) {
 #region Applying PnP templates 
 if (-not $SkipTemplate.IsPresent) {
     Try {
-        Set-PnPTenantSite -NoScriptSite:$false -Url $Url -Connection $AdminSiteConnection
+        Set-PnPTenantSite -NoScriptSite:$false -Url $Url -Connection $AdminSiteConnection -ErrorAction SilentlyContinue >$null 2>&1
         
         if (-not $SkipTaxonomy.IsPresent) {
             Write-Host "[INFO] Applying PnP template [Taxonomy] to [$Url]"
@@ -257,7 +257,7 @@ if (-not $SkipTemplate.IsPresent) {
         Apply-PnPProvisioningTemplate .\Templates\Portfolio.pnp -Connection $SiteConnection -ErrorAction Stop
         Write-Host "[INFO] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
         
-        Set-PnPTenantSite -NoScriptSite:$true -Url $Url -Connection $AdminSiteConnection
+        Set-PnPTenantSite -NoScriptSite:$true -Url $Url -Connection $AdminSiteConnection -ErrorAction SilentlyContinue >$null 2>&1
     }
     Catch {
         Write-Host "[ERROR] Failed to apply PnP templates to [$Url]: $($_.Exception.Message)" -ForegroundColor Red
