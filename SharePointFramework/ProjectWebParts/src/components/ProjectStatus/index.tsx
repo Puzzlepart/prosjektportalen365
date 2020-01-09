@@ -196,18 +196,19 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    * Render sections
    */
   private _renderSections() {
-    if (!this.state.selectedReport) {
-      return <UserMessage text={strings.NoStatusReportsMessage} messageBarType={MessageBarType.info} />;
-    }
-    return this.state.data.sections.map(model => {
+    const { riskMatrixWidth, riskMatrixHeight, riskMatrixCalloutTemplate } = this.props;
+    const { data, selectedReport } = this.state;
+
+    if (!selectedReport) return <UserMessage text={strings.NoStatusReportsMessage} messageBarType={MessageBarType.info} />;
+    return data.sections.map(model => {
       const baseProps = this._getSectionBaseProps(model);
       switch (model.type) {
         case SectionType.SummarySection: {
           return (
             <SummarySection
               {...baseProps}
-              sections={this.state.data.sections}
-              columnConfig={this.state.data.columnConfig} />
+              sections={data.sections}
+              columnConfig={data.columnConfig} />
           );
         }
         case SectionType.StatusSection: {
@@ -217,8 +218,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           return (
             <ProjectPropertiesSection
               {...baseProps}
-              fieldValues={{ ...this.state.data.entity.fieldValues, ...this.state.selectedReport.fieldValues }}
-              fields={[...this.state.data.entity.fields, ...this.state.data.reportFields]} />
+              fieldValues={{ ...data.entity.fieldValues, ...selectedReport.fieldValues }}
+              fields={[...data.entity.fields, ...data.reportFields]} />
           );
         }
         case SectionType.RiskSection: {
@@ -226,9 +227,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
             <RiskSection
               {...baseProps}
               riskMatrix={{
-                width: this.props.riskMatrixWidth,
-                height: this.props.riskMatrixHeight,
-                calloutTemplate: this.props.riskMatrixCalloutTemplate,
+                width: riskMatrixWidth,
+                height: riskMatrixHeight,
+                calloutTemplate: riskMatrixCalloutTemplate,
               }} />
           );
         }
