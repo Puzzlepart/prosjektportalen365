@@ -4,39 +4,40 @@ import { ListContentConfig } from '../../../models';
 import { IListContentSectionProps } from './IListContentSectionProps';
 import styles from './ListContentSection.module.scss';
 
-export class ListContentSection extends React.PureComponent<IListContentSectionProps> {
-    public render() {
-        return (
-            <div className={styles.listContentSection}>
-                <div className={styles.container}>
-                    {this.props.listContentConfig.map(l => (
-                        <div key={l.key} className={styles.item}>
-                            <Toggle
-                                label={l.title}
-                                defaultChecked={l.isDefault}
-                                inlineLabel={true}
-                                onChanged={checked => this._onChanged(l, checked)} />
-                        </div>
-                    ))}
-                </div>
-            </div>
-        );
-    }
-
+// tslint:disable-next-line: naming-convention
+export const ListContentSection = (props: IListContentSectionProps) => {
     /**
      * On item toggle
      * 
      * @param {ListContentConfig} listContentConfig List content config
      * @param {boolean} checked Checked
      */
-    private _onChanged(listContentConfig: ListContentConfig, checked: boolean): void {
+    const onChanged = (listContentConfig: ListContentConfig, checked: boolean): void => {
         let selectedListContentConfig = [];
         if (checked) {
-            selectedListContentConfig = [listContentConfig, ...this.props.selectedListContentConfig];
+            selectedListContentConfig = [listContentConfig, ...props.selectedListContentConfig];
         }
         else {
-            selectedListContentConfig = this.props.selectedListContentConfig.filter(lcc => listContentConfig.title !== lcc.title);
+            selectedListContentConfig = props.selectedListContentConfig.filter(lcc => listContentConfig.title !== lcc.title);
         }
-        this.props.onChange(selectedListContentConfig);
-    }
-}
+        props.onChange(selectedListContentConfig);
+    };
+
+    const selectedKeys = props.selectedListContentConfig.map(lc => lc.key);
+
+    return (
+        <div className={styles.listContentSection}>
+            <div className={styles.container}>
+                {props.listContentConfig.map(l => (
+                    <div key={l.key} className={styles.item}>
+                        <Toggle
+                            label={l.title}
+                            defaultChecked={selectedKeys.indexOf(l.key) !== -1}
+                            inlineLabel={true}
+                            onChanged={checked => onChanged(l, checked)} />
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};

@@ -40,10 +40,10 @@ export class CopyListData extends BaseTask {
      */
     private async _getSourceItems(listConfig: ListContentConfig) {
         try {
-            return await listConfig.list.items.select(...listConfig.fields, 'TaxCatchAll/ID', 'TaxCatchAll/Term').expand('TaxCatchAll').get();
+            return await listConfig.list.items.select(...listConfig.fields, 'TaxCatchAll/ID', 'TaxCatchAll/Term').expand('TaxCatchAll').top(500).get();
         } catch (error) {
             try {
-                return await listConfig.list.items.select(...listConfig.fields).get();
+                return await listConfig.list.items.select(...listConfig.fields).top(500).get();
             } catch (error) {
                 return [];
             }
@@ -68,9 +68,9 @@ export class CopyListData extends BaseTask {
      * 
      * @param {List} destList Destination list
      */
-    private async _getListEntityType(destList: List) {
+    private async _getListProperties(destList: List) {
         try {
-            return (await destList.select('ListItemEntityTypeFullName').get<{ ListItemEntityTypeFullName: string }>()).ListItemEntityTypeFullName;
+            return await destList.select('ListItemEntityTypeFullName', 'ItemCount').get<{ ListItemEntityTypeFullName: string, ItemCount: number }>();
         } catch (error) {
             return undefined;
         }
@@ -87,13 +87,17 @@ export class CopyListData extends BaseTask {
         try {
             this.logInformation('Processing list items', { listConfig: listContentConfig });
             let destList = sp.web.lists.getByTitle(listContentConfig.destinationList);
-            let [sourceItems, sourceFields, listEntityType] = await Promise.all([
+            let [destListProperties, sourceListProperties] = await Promise.all([
+                this._getListProperties(destList),
+                this._getListProperties(listContentConfig.list),
+            ]);
+            let progressText = formatString(strings.CopyListDataText, sourceListProperties.ItemCount, listContentConfig.sourceList, listContentConfig.destinationLibrary || listContentConfig.destinationList);
+            onProgress(progressText, '', 'List');
+
+            let [sourceItems, sourceFields] = await Promise.all([
                 this._getSourceItems(listContentConfig),
                 this._getSourceFields(listContentConfig),
-                this._getListEntityType(destList),
             ]);
-            let progressText = formatString(strings.CopyListDataText, sourceItems.length, listContentConfig.sourceList, listContentConfig.destinationLibrary || listContentConfig.destinationList);
-            onProgress(progressText, '', 'List');
 
             let itemsToAdd = sourceItems.map(itm => this._getProperties(listContentConfig.fields, itm, sourceFields));
 
@@ -102,7 +106,7 @@ export class CopyListData extends BaseTask {
                 let batchItems = itemsToAdd.slice(i, i + batchChunkSize);
                 this.logInformation(`Processing batch ${j + 1} with ${batchItems.length} items`, {});
                 onProgress(progressText, formatString(strings.ProcessListItemText, j + 1, batchItems.length), 'List');
-                batchItems.forEach(item => destList.items.inBatch(batch).add(item, listEntityType));
+                batchItems.forEach(item => destList.items.inBatch(batch).add(item, destListProperties.ListItemEntityTypeFullName));
                 await batch.execute();
             }
         } catch (error) {

@@ -82,7 +82,7 @@ export class ChartConfiguration {
                 if (this.fields.length === 1) {
                     const [field] = this.fields;
                     switch (field.type) {
-                        case 'number': {
+                        case 'currency': case 'number': {
                             return [{
                                 type: 'pie',
                                 colorByPoint: true,

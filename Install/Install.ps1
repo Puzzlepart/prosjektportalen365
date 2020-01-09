@@ -34,7 +34,7 @@
 )
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
-$InstallStartTime = (Get-Date).ToUniversalTime().ToString("MM/dd/yyy HH:mm")
+$InstallStartTime = (Get-Date -Format o)
 if ($Upgrade.IsPresent) {
     Write-Host "[INFO] Upgrading [Prosjektportalen 365] to [VERSION_PLACEHOLDER]"
 }
@@ -88,7 +88,7 @@ $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".share
 #endregion
 
 #region Check if URL specified is root site
-if ($Alias.Length -lt 2 -or $ManagedPath -ne "sites/") {
+if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath)) {
     Write-Host "[ERROR] It looks like you're trying to install to a root site or an invalid site. This is not supported." -ForegroundColor Red
     exit 0
 }
@@ -281,7 +281,7 @@ Catch {
 if (-not $SkipSearchConfiguration.IsPresent) {
     Try {
         Write-Host "[INFO] Importing Search Configuration"    
-        Set-PnPSearchConfiguration -Scope Subscription -Path .\SearchConfiguration.xml -Connection $AdminSiteConnection -ErrorAction Stop
+        Set-PnPSearchConfiguration -Scope Subscription -Path .\SearchConfiguration.xml -Connection $AdminSiteConnection -ErrorAction Continue
         Write-Host "[INFO] Successfully imported Search Configuration" -ForegroundColor Green
     }
     Catch {
@@ -298,6 +298,8 @@ Write-Host "[INFO] Running post-install steps"
 $sw.Stop()
 
 Write-Host "[REQUIRED ACTION] Go to $($AdminSiteUrl)/_layouts/15/online/AdminHome.aspx#/webApiPermissionManagement and approve the pending requests" -ForegroundColor Yellow
+Write-Host "[RECOMMENDED ACTION] Go to https://github.com/Puzzlepart/prosjektportalen365/wiki/Installasjon#steg-4-manuelle-steg-etter-installasjonen and verify post-install steps" -ForegroundColor Yellow
+
 
 if ($Upgrade.IsPresent) {
     Write-Host "[INFO] Upgrade completed in $($sw.Elapsed)" -ForegroundColor Green
@@ -306,7 +308,7 @@ else {
     Write-Host "[INFO] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
 }
 
-$InstallEndTime = (Get-Date).ToUniversalTime().ToString("MM/dd/yyy HH:mm")
+$InstallEndTime = (Get-Date -Format o)
 
 $InstallEntry = @{
     InstallStartTime = $InstallStartTime; 
@@ -315,7 +317,7 @@ $InstallEntry = @{
     InstallCommand   = $MyInvocation.Line.Substring(2);
 }
 
-Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -Connection $SiteConnection >$null 2>&1
+Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -Connection $SiteConnection -ErrorAction SilentlyContinue >$null 2>&1
 
 $InstallEntry.InstallUrl = $Url
 

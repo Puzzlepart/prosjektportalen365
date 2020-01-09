@@ -11,7 +11,7 @@ import { IListSectionProps } from './IListSectionProps';
 import { IListSectionState } from './IListSectionState';
 import styles from './ListSection.module.scss';
 
-export class ListSection extends BaseSection<IListSectionProps, IListSectionState> {
+export class ListSection extends BaseSection<IListSectionProps, IListSectionState<IListSectionData>> {
   constructor(props: IListSectionProps) {
     super(props);
     this.state = { isLoading: true };

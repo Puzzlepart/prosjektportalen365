@@ -20,6 +20,7 @@ define([], function () {
     DocumentsListName: 'Dokumenter',
     EditPropertiesText: 'Rediger egenskaper',
     EditReportButtonText: 'Rediger status',
+    PublishReportButtonText: 'Publiser',
     EditSiteInformationText: 'Rediger områdeinformasjon',
     ErrorText: 'Det skjedde en feil under lasting av {0}.',
     ListSectionDataErrorMessage: 'Det skjedde en feil under uthenting av data for seksjonen. Er den riktig konfigurert?',
@@ -74,6 +75,21 @@ define([], function () {
     NoStatusReportsMessage: 'Det er ikke rapportert status for prosjektet enda. Om du er eier på området, kan du rapportere status ved å klikke på _Ny statusrapport_ i menyen over.',
     SyncNowText: 'Synkroniser nå',
     PhaseFieldFieldLabel: 'Fasefelt',
-    SkipSyncToHubLabel: 'Ikke synkroniser til hub'
+    SkipSyncToHubLabel: 'Ikke synkroniser til hub',
+    RiskMatrix_Header_Critical: 'Kritisk',
+    RiskMatrix_Header_High: 'Høy',
+    RiskMatrix_Header_Insignificant: 'Ubetydelig',
+    RiskMatrix_Header_Low: 'Lav',
+    RiskMatrix_Header_Medium: 'Middels',
+    RiskMatrix_Header_Moderate: 'Moderat',
+    RiskMatrix_Header_Serious: 'Alvorlig',
+    RiskMatrix_Header_Small: 'Liten',
+    RiskMatrix_Header_VeryHigh: 'Svært høy',
+    RiskMatrix_Header_VeryLow: 'Svart lav',
+    RiskMatrix_ViewSelectorLabel: 'Velg en visning',
+    RiskMatrix_EmptyMessage: 'Det finnes ingen Risiko-elementer i den angitte visningen.',
+    RiskMatrix_LoadingText: 'Laster risikomatrise...',
+    GtModerationStatus_Choice_Published: 'Publisert',
+    GtModerationStatus_Choice_Draft: 'Kladd'
   }
 });

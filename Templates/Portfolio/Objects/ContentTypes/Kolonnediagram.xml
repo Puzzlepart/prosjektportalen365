@@ -1,4 +1,4 @@
-﻿<pnp:ContentType ID="0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D02" Name="Kolonnediagram" Description="Opprett et nytt kolonnediagram" Group="Prosjektportalen innholdstyper" 
+﻿<pnp:ContentType ID="0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D02" Name="Kolonnediagram" Description="Opprett et nytt kolonnediagram" Group="Prosjektportalen innholdstyper" NewFormUrl="{site}/Lists/Grafkonfigurasjon/NewForm.aspx" EditFormUrl="{site}/Lists/Grafkonfigurasjon/EditForm.aspx" DisplayFormUrl="{site}/Lists/Grafkonfigurasjon/DispForm.aspx" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" />

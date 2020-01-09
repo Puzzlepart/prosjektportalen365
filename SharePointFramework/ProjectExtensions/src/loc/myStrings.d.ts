@@ -29,6 +29,8 @@ declare interface IProjectExtensionsStrings {
   IncludeStandardFoldersDescription: string;
   CopyPlannerTasksLabel: string;
   CopyPlannerTasksDescription: string;
+  IncludePortfolioAdministratorsLabel: string;
+  IncludePortfolioAdministratorsDescription: string;
   InvalidLanguageErrorMessage: string;
   InvalidLanguageErrorStack: string;
   DocumentLibraryDropdownLabel: string;
@@ -48,6 +50,7 @@ declare interface IProjectExtensionsStrings {
   ProgressDialogTitle: string;
   ProjectPropertiesListName: string;
   ProvisionSiteFieldsErrorMessage: string;
+  SitePermissionsErrorMessage: string;
   ProvisionSiteFieldsText: string;
   SetTaxonomyFieldsErrorMessage: string;
   SettingsSectionTitle: string;

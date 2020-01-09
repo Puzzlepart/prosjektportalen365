@@ -1,4 +1,4 @@
-﻿<pnp:ListInstance Title="Prosjektkolonner" Description="" DocumentTemplate="" TemplateType="100" Hidden="true" Url="Lists/Prosjektkolonner" EnableVersioning="true" EnableAttachments="false" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" 
+<pnp:ListInstance Title="Prosjektkolonner" Description="" DocumentTemplate="" TemplateType="100" Hidden="true" Url="Lists/Prosjektkolonner" EnableVersioning="true" EnableAttachments="false" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100248005C277FADD45B7266F9151442472" Default="true" />
@@ -46,7 +46,7 @@
         <!-- ID: 2 -->
         <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Prosjektnavn i ?konomisystemet</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Prosjektnavn i økonomisystemet</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectFinanceName</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectFinanceNameOWSTEXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -88,7 +88,7 @@
         <!-- ID: 5 -->
         <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Tjenesteomr?de</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Tjenesteområde</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectServiceArea</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">RefinableString53</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
@@ -199,7 +199,7 @@
         <!-- ID: 13 -->
         <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">130</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">M?lsetting</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Målsetting</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectGoals</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectGoalsOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
@@ -227,7 +227,7 @@
         <!-- ID: 15 -->
         <pnp:DataRow xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
             <pnp:DataValue FieldName="GtSortOrder">150</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Kostnader p?l?pt totalt</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Kostnader påløpt totalt</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtCostsTotal</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtCostsTotalOWSCURR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Currency</pnp:DataValue>

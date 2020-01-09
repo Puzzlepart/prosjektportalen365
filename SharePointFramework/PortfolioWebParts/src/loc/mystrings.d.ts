@@ -4,7 +4,6 @@ declare interface IPortfolioWebPartsStrings {
   DataSourceCategoryLabel: string;
   DataSourceLabel: string;
   SelectedColumnsLabel: string;
-  AddColumnLabel: any;
   SortDescLabel: string;
   SortAscLabel: string;
   ColumSettingsLabel: string;

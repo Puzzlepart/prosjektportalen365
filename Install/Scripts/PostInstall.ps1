@@ -11,4 +11,3 @@ Set-PnPList -Identity Listeinnhold -EnableContentTypes:$false -Connection $Conne
 Set-PnPList -Identity Porteføljevisninger -EnableContentTypes:$false -Connection $Connection
 Set-PnPList -Identity Prosjektkolonner -EnableContentTypes:$false -Connection $Connection
 Set-PnPList -Identity Ressursallokering -EnableContentTypes:$false -Connection $Connection
-Set-PnPList -Identity Statusseksjoner -EnableContentTypes:$false -Connection $Connection

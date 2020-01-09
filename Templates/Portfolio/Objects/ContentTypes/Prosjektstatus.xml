@@ -17,6 +17,7 @@
         <pnp:FieldRef ID="b5932b1d-bee4-410c-aac2-54a7cd9d5381" Name="GtStatusRiskComment" />
         <pnp:FieldRef ID="b1958607-cd56-4ecb-9ad7-65fb7d3c22c7" Name="GtStatusGainAchievement" Required="true" />
         <pnp:FieldRef ID="cb41572a-78c6-4e33-8505-b97bfd8fd162" Name="GtStatusGainAchievementComment" />
+        <pnp:FieldRef ID="9a81b4e1-64ea-40c2-9be1-946f20e78999" Name="GtModerationStatus" />
         <pnp:FieldRef ID="fba7ced6-9970-4b14-ab9c-7c809310d86d" Name="GtSiteId" />
     </pnp:FieldRefs>
 </pnp:ContentType>

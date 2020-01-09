@@ -1,5 +1,4 @@
 import { DisplayMode } from '@microsoft/sp-core-library';
-import { LogLevel } from '@pnp/logging';
 import { IHubSite } from 'sp-hubsite-service';
 
 export interface IBaseWebPartComponentProps {
@@ -11,17 +10,17 @@ export interface IBaseWebPartComponentProps {
     /**
      * Hub site
      */
-    hubSite: IHubSite;
+    hubSite?: IHubSite;
 
     /**
      * ID of the site
      */
-    siteId: string;
+    siteId?: string;
 
     /**
      * URL for the web
      */
-    webUrl: string;
+    webUrl?: string;
 
     /**
      * Title for the web

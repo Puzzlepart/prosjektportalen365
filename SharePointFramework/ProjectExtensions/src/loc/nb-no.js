@@ -16,6 +16,8 @@ define([], function () {
     CopyListDataErrorMessage: 'Det skjedde en feil under kopiering av listeinnhold',
     CopyListDataText: 'Kopierer {0} listeelementer fra {1} til {2}',
     CopyPlannerTasksLabel: 'Kopier standardoppgaver til Planner',
+    IncludePortfolioAdministratorsLabel: 'Gi tilgang til porteføljeadministratorer',
+    IncludePortfolioAdministratorsDescription: 'Porteføljeadministratorer (brukerne i gruppen Porteføljeadministratorer) får tilgang til prosjektområdet.',
     CopyProgressLabel: 'Kopierer valgt(e) dokument(er) til prosjektområdet...',
     EditPropertiesLinkText: 'Du kan allerede nå<A HREF=\'{0}\' TARGET=\'_BLANK\'>redigere egenskaper</A> for prosjektet (åpnes i ny fane).',
     ErrorDialogTitle: 'Noe er galt',
@@ -31,7 +33,7 @@ define([], function () {
     ModifiedLabel: 'Endret',
     NameLabel: 'Filnavn',
     NoHubSiteErrorMessage: 'Området er ikke koblet til en hub',
-    NoHubSiteErrorStack: 'Området kan ikke settes opp uten å være koblet til en hub. Koble området til ett hubområde, og last siden på nytt.',
+    NoHubSiteErrorStack: 'Området kan ikke settes opp uten å være koblet til en hub. Koble området til ett hubområde, og last siden på nytt.<br/><br/>Gå til `Innstillinger` (tannhjulet i øvre høyre hjørne), finn `Nettstedsinformasjon` og velg hub/portefølje under `Tilknytning til hubområde`.',
     OnGoBackText: 'Gå tilbake',
     OnStartCopyText: 'Start kopiering',
     OnSubmitSelectionText: 'Velg',
@@ -39,12 +41,13 @@ define([], function () {
     PlannerConfigurationText: 'Oppretter standardoppgaver i Planner',
     PreTaskErrorMessage: 'Det skjedde en feil',
     ProfileLanguageIncorrectErrorMessage: 'Området er ikke klart: Feil profilspråk.',
-    ProfileLanguageIncorrectErrorStack: 'Brukeren som skal sette opp området må ha norsk språk. Sjekk at du har norsk (bokmål) som standard profilspråk i Office 365. Selv om du har det kan det av og til midlertidig oppstå en feil knyttet til profilspråk. Kom tilbake til dette området senere for å ferdigstille oppsett av området.',
+    ProfileLanguageIncorrectErrorStack: 'Brukeren som skal sette opp området må ha norsk språk. Sjekk at du har norsk (bokmål) som standard profilspråk i Office 365.<br/><br/>Selv om du har det kan det av og til midlertidig oppstå en feil knyttet til profilspråk. Kom tilbake til dette området senere for å ferdigstille oppsett av området.<br/><br/>Det kan hjelpe å skru av engelsk språkpakke under<a href="{0}/_layouts/15/muisetng.aspx">Språkinnstillinger</a>.',
     ProgressDialogDescription: 'Vennligst vent. Ikke lukk nettleservinduet.',
     ProgressDialogLabel: 'Klargjør prosjektområdet',
     ProgressDialogTitle: 'Setter opp prosjektområdet',
     ProjectPropertiesListName: 'Prosjektegenskaper',
     ProvisionSiteFieldsErrorMessage: 'Det skjedde en feil under provisjonering av områdekolonner',
+    SitePermissionsErrorMessage: 'Det skjedde en feil under oppsett av områdetilganger',
     ProvisionSiteFieldsText: 'Oppretter områdekolonner',
     SetTaxonomyFieldsErrorMessage: 'Det skjedde en feil under konfigurering av taksonomifelter',
     SettingsSectionTitle: 'Innstillinger',
@@ -71,6 +74,6 @@ define([], function () {
     IncludeStandardFoldersDescription: 'Inkluder standardmapper for dokumentbiblioteket. Det opprettes en mappe per prosjetktfase.',
     CopyPlannerTasksDescription: 'Opprett en plan for prosjektet i Planner og opprett buckets og oppgaver for denne.',
     SetupAbortedText: 'Installasjon avbrutt av bruker',
-    UnknownErrorText: 'Ukjent feil'    
+    UnknownErrorText: 'Ukjent feil'
   }
 });
