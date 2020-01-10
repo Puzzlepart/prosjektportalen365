@@ -91,7 +91,7 @@ export class CopyListData extends BaseTask {
                 this._getListProperties(destList),
                 this._getListProperties(listContentConfig.list),
             ]);
-            let progressText = formatString(strings.CopyListDataText, sourceListProperties.ItemCount, listContentConfig.sourceList, listContentConfig.destinationLibrary || listContentConfig.destinationList);
+            let progressText = formatString(strings.CopyListDataText, sourceListProperties.ItemCount, listContentConfig.sourceList, listContentConfig.destinationList);
             onProgress(progressText, '', 'List');
 
             let [sourceItems, sourceFields] = await Promise.all([
