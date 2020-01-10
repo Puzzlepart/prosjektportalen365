@@ -49,7 +49,6 @@ function Connect-SharePoint {
     )
 
     Try {
-        Write-Host "[INFO] Connecting to [$Url]"
         if ($UseWebLogin.IsPresent) {
             Connect-PnPOnline -Url $Url -UseWebLogin -ErrorAction Stop
         }
@@ -59,7 +58,6 @@ function Connect-SharePoint {
         elseif ($null -ne $GenericCredential -and $GenericCredential -ne "") {
             Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ErrorAction Stop
         }
-        Write-Host "[SUCCESS] Successfully connected to [$Url]" -ForegroundColor Green
     }
     Catch {
         Write-Host "[INFO] Failed to connect to [$Url]: $($_.Exception.Message)"
