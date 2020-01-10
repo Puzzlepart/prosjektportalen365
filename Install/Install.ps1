@@ -79,11 +79,20 @@ else {
     Write-Host "[INFO] Loaded [SharePointPnPPowerShellOnline] v.$((Get-Command Connect-PnPOnline).Version) from your environment"
 }
 
+
 #region Setting variables
 [System.Uri]$Uri = $Url
 $ManagedPath = $Uri.Segments[1]
 $Alias = $Uri.Segments[2].TrimEnd('/')
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
+#endregion
+
+#region Print installation user
+
+Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
+$CurrentUser = Get-PnPProperty -Property CurrentUser -ClientObject (Get-PnPContext).Web
+Write-Host "[INFO] Installing with user [$($CurrentUser.Email)]"
+Disconnect-PnPOnline
 #endregion
 
 #region Check if URL specified is root site or admin site or invalid managed path
