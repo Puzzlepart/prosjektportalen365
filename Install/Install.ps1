@@ -111,11 +111,11 @@ if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
         $PortfolioSite = Get-PnPTenantSite -Url $Url -ErrorAction SilentlyContinue
         if ($null -eq $PortfolioSite) {
             Write-Host "[INFO] Creating portfolio site at [$Url]"
-            New-PnPSite -Type TeamSite  -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Lcid 1044 >$null 2>&1
-            Write-Host "[INFO] Portfolio site created at [$Url]" -ForegroundColor Green
+            New-PnPSite -Type TeamSite -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Lcid 1044 >$null 2>&1
+            Write-Host "[SUCCESS] Portfolio site created at [$Url]" -ForegroundColor Green
         }
         Register-PnPHubSite -Site $Url -ErrorAction SilentlyContinue
-        Write-Host "[INFO] Portfolio site [$Url] promoted to hub site" -ForegroundColor Green
+        Write-Host "[SUCCESS] Portfolio site [$Url] promoted to hub site" -ForegroundColor Green
         Disconnect-PnPOnline
     }
     Catch {
@@ -227,7 +227,7 @@ if (-not $SkipAppPackages.IsPresent) {
             Write-Host " DONE" -ForegroundColor Green
         }
         Disconnect-PnPOnline
-        Write-Host "[INFO] SharePoint Framework app packages successfully installed to [$TenantAppCatalogUrl]" -ForegroundColor Green
+        Write-Host "[SUCCESS] SharePoint Framework app packages successfully installed to [$TenantAppCatalogUrl]" -ForegroundColor Green
     }
     Catch {
         Write-Host "Error" -ForegroundColor Red
@@ -270,7 +270,7 @@ if (-not $SkipTemplate.IsPresent) {
         if (-not $SkipTaxonomy.IsPresent -and -not $Upgrade.IsPresent) {
             Write-Host "[INFO] Applying PnP template [Taxonomy] to [$Url]"
             Apply-PnPProvisioningTemplate .\Templates\Taxonomy.pnp -ErrorAction Stop
-            Write-Host "[INFO] Successfully applied PnP template [Taxonomy] to [$Url]" -ForegroundColor Green
+            Write-Host "[SUCCESS] Successfully applied PnP template [Taxonomy] to [$Url]" -ForegroundColor Green
         }
         
         Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
@@ -296,7 +296,7 @@ Try {
     Write-Host "[INFO] Clearing QuickLaunch"    
     Get-PnPNavigationNode -Location QuickLaunch | Remove-PnPNavigationNode -Force
     Disconnect-PnPOnline
-    Write-Host "[INFO] Successfully cleared QuickLaunch" -ForegroundColor Green
+    Write-Host "[SUCCESS] Successfully cleared QuickLaunch" -ForegroundColor Green
 }
 Catch {
     Write-Host "[WARNING] Failed to clear QuickLaunch: $($_.Exception.Message)" -ForegroundColor Yellow
@@ -310,7 +310,7 @@ if (-not $SkipSearchConfiguration.IsPresent) {
         Write-Host "[INFO] Importing Search Configuration"    
         Set-PnPSearchConfiguration -Scope Subscription -Path .\SearchConfiguration.xml -ErrorAction SilentlyContinue   
         Disconnect-PnPOnline
-        Write-Host "[INFO] Successfully imported Search Configuration" -ForegroundColor Green
+        Write-Host "[SUCCESS] Successfully imported Search Configuration" -ForegroundColor Green
     }
     Catch {
         Write-Host "[WARNING] Failed to import Search Configuration: $($_.Exception.Message)" -ForegroundColor Yellow
@@ -333,10 +333,10 @@ Write-Host "[RECOMMENDED ACTION] Go to https://github.com/Puzzlepart/prosjektpor
 
 
 if ($Upgrade.IsPresent) {
-    Write-Host "[INFO] Upgrade completed in $($sw.Elapsed)" -ForegroundColor Green
+    Write-Host "[SUCCESS] Upgrade completed in $($sw.Elapsed)" -ForegroundColor Green
 }
 else {
-    Write-Host "[INFO] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
+    Write-Host "[SUCCESS] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
 }
 
 $InstallEndTime = (Get-Date -Format o)
