@@ -59,6 +59,9 @@ function Connect-SharePoint {
         elseif ($null -ne $GenericCredential -and $GenericCredential -ne "") {
             Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ErrorAction Stop
         }
+        else {
+            Connect-PnPOnline -Url $Url -ErrorAction Stop
+        }
     }
     Catch {
         Write-Host "[INFO] Failed to connect to [$Url]: $($_.Exception.Message)"
