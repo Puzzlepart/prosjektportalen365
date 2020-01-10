@@ -270,7 +270,7 @@ if (-not $SkipTemplate.IsPresent) {
             Write-Host "[ERROR] Attempted to install to $Url but connection was active against $($CurrentContext.Url)"
             throw "Wrong connection identified - you are not connected to the correct site"
         }
-        if (-not $SkipTaxonomy.IsPresent) {
+        if (-not $SkipTaxonomy.IsPresent -and -not $Upgrade.IsPresent) {
             Write-Host "[INFO] Applying PnP template [Taxonomy] to [$Url]"
             Apply-PnPProvisioningTemplate .\Templates\Taxonomy.pnp -ErrorAction Stop
             Write-Host "[INFO] Successfully applied PnP template [Taxonomy] to [$Url]" -ForegroundColor Green
