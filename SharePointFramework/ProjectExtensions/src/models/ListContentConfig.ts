@@ -4,7 +4,6 @@ import { Web, List } from '@pnp/sp';
 
 export interface IListContentConfigSPItem {
     GtLccDestinationList: string;
-    GtLccDestinationLibrary: string;
     GtLccFields: string;
     GtLccDefault: boolean;
     Id: number;
@@ -16,14 +15,12 @@ export class ListContentConfig {
     public title: string;
     public sourceList: string;
     public destinationList: string;
-    public destinationLibrary: string;
     public isDefault: boolean;
 
     constructor(private _spItem: IListContentConfigSPItem, private _web: Web) {
         this.title = this._spItem.Title;
         this.sourceList = this._spItem.GtLccSourceList;
         this.destinationList = this._spItem.GtLccDestinationList;
-        this.destinationLibrary = this._spItem.GtLccDestinationLibrary;
         this.isDefault = this._spItem.GtLccDefault;
     }
 

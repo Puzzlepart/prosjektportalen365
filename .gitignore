@@ -4,3 +4,5 @@ SharePointFramework/*/**/.vscode/launch.json
 Release
 node_modules
 SharePointFramework/*/**/build.config.json
+Install/Templates
+Install/InstallLog.txt

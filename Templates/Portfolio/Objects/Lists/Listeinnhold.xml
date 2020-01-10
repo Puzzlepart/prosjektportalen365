@@ -13,7 +13,6 @@
             <ViewFields>
                 <FieldRef Name="Title" />
                 <FieldRef Name="GtLccSourceList" />
-                <FieldRef Name="GtLccDestinationLibrary" />
                 <FieldRef Name="GtLccDestinationList" />
                 <FieldRef Name="GtLccFields" />
                 <FieldRef Name="GtLccDefault" />
