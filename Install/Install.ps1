@@ -86,7 +86,7 @@ $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".share
 #endregion
 
 #region Check if URL specified is root site
-if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath)) {
+if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -or $Url.Contains("-admin")) {
     Write-Host "[ERROR] It looks like you're trying to install to a root site or an invalid site. This is not supported." -ForegroundColor Red
     exit 0
 }
