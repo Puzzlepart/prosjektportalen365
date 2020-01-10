@@ -33,6 +33,7 @@
     [string]$TenantAppCatalogUrl
 )
 
+$ErrorActionPreference = "Stop"
 $sw = [Diagnostics.Stopwatch]::StartNew()
 $InstallStartTime = (Get-Date -Format o)
 if ($Upgrade.IsPresent) {
@@ -85,8 +86,8 @@ $Alias = $Uri.Segments[2].TrimEnd('/')
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
 #endregion
 
-#region Check if URL specified is root site
-if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -or $Url.Contains("-admin")) {
+#region Check if URL specified is root site or admin site or invalid managed path
+if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -or $Uri.Authority.Contains("-admin")) {
     Write-Host "[ERROR] It looks like you're trying to install to a root site or an invalid site. This is not supported." -ForegroundColor Red
     exit 0
 }
@@ -220,6 +221,7 @@ if (-not $SkipAppPackages.IsPresent) {
         Write-Host "[INFO] SharePoint Framework app packages successfully installed to [$TenantAppCatalogUrl]" -ForegroundColor Green
     }
     Catch {
+        Write-Host "Error" -ForegroundColor Red
         Write-Host "[ERROR] Failed to install app packages to [$TenantAppCatalogUrl]: $($_.Exception.Message)" -ForegroundColor Red
         exit 0
     }
@@ -231,9 +233,9 @@ if (-not $Upgrade.IsPresent) {
     Try {
         Connect-SharePoint -Url $Url -ErrorAction Stop
         Write-Host "[INFO] Removing existing homepage from [$Url]"
-        Remove-PnPFile -ServerRelativeUrl "$($Uri.LocalPath)/SitePages/Home.aspx" -Force
+        Remove-PnPFile -ServerRelativeUrl "$($Uri.LocalPath)/SitePages/Home.aspx" -Recycle -Force
         Disconnect-PnPOnline
-        Write-Host "[SUCCESS] Successfully existing homepage from [$Url]" -ForegroundColor Green
+        Write-Host "[SUCCESS] Successfully removed existing homepage from [$Url]" -ForegroundColor Green
     }
     Catch {
         Write-Host "[ERROR] Failed to remove existing homepage from [$Url]: $($_.Exception.Message)" -ForegroundColor Red
@@ -246,10 +248,16 @@ if (-not $SkipTemplate.IsPresent) {
     Try {
         Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
         Set-PnPTenantSite -NoScriptSite:$false -Url $Url -ErrorAction SilentlyContinue >$null 2>&1        
-        Disconnect-PnPOnline        
+        Disconnect-PnPOnline
 
         Connect-SharePoint -Url $Url -ErrorAction Stop
 
+        # Applying additional check that we're connected to the correct site before applying templates
+        $CurrentContext = Get-PnPContext
+        if ($CurrentContext.Url -ne $Url) {
+            Write-Host "[ERROR] Attempted to install to $Url but connection was active against $($CurrentContext.Url)"
+            throw "Wrong connection identified - you are not connected to the correct site"
+        }
         if (-not $SkipTaxonomy.IsPresent) {
             Write-Host "[INFO] Applying PnP template [Taxonomy] to [$Url]"
             Apply-PnPProvisioningTemplate .\Templates\Taxonomy.pnp -ErrorAction Stop
