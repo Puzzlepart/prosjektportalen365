@@ -18,7 +18,6 @@ export class SectionModel {
   public commentFieldName: string;
   public statusClassName: string;
   public showRiskMatrix: boolean;
-  public showInNavbar: boolean;
   public showInStatusSection: boolean;
   public showAsSection: boolean;
   public sortOrder: number;
@@ -42,7 +41,6 @@ export class SectionModel {
     this.rowLimit = _item.GtSecRowLimit;
     this.fieldName = _item.GtSecFieldName;
     this.showRiskMatrix = _item.GtSecShowRiskMatrix;
-    this.showInNavbar = _item.GtSecShowInNavbar;
     this.showInStatusSection = _item.GtSecShowInStatusSection;
     this.showAsSection = _item.GtSecShowAsSection;
     this.sortOrder = _item.GtSortOrder;
