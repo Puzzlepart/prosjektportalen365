@@ -5,7 +5,7 @@
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
         <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" />
         <pnp:FieldRef ID="b2af224f-5e07-4f9f-9a3a-9f5345bb3153" Name="GtSecIcon" Required="true" />
-        <pnp:FieldRef ID="1c6ac96b-0f62-4396-8e87-d7db512d96b9" Name="GtSecShowInNavbar" />
+        <pnp:FieldRef ID="1c6ac96b-0f62-4396-8e87-d7db512d96b9" Name="GtSecShowInNavbar" Hidden="true" />
         <pnp:FieldRef ID="9985ae83-9e19-48dc-b33d-2fbf84f7202b" Name="GtSecShowInStatusSection" />
         <pnp:FieldRef ID="3aad67a9-d8bb-41ce-9324-17a757e6b14b" Name="GtSecShowAsSection" />
         <pnp:FieldRef ID="2d6790ad-9da9-408c-a87f-8d56d7b377f6" Name="GtSecSource" />

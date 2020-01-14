@@ -200,47 +200,49 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     const { data, selectedReport } = this.state;
 
     if (!selectedReport) return <UserMessage text={strings.NoStatusReportsMessage} messageBarType={MessageBarType.info} />;
-    return data.sections.map(model => {
-      const baseProps = this._getSectionBaseProps(model);
-      switch (model.type) {
-        case SectionType.SummarySection: {
-          return (
-            <SummarySection
-              {...baseProps}
-              sections={data.sections}
-              columnConfig={data.columnConfig} />
-          );
+    return data.sections
+      .filter(sec => sec.showAsSection || sec.type === SectionType.SummarySection)
+      .map(sec => {
+        const baseProps = this._getSectionBaseProps(sec);
+        switch (sec.type) {
+          case SectionType.SummarySection: {
+            return (
+              <SummarySection
+                {...baseProps}
+                sections={data.sections.filter(s => s.showInStatusSection || s.type === SectionType.SummarySection)}
+                columnConfig={data.columnConfig} />
+            );
+          }
+          case SectionType.StatusSection: {
+            return <StatusSection {...baseProps} />;
+          }
+          case SectionType.ProjectPropertiesSection: {
+            return (
+              <ProjectPropertiesSection
+                {...baseProps}
+                fieldValues={{ ...data.entity.fieldValues, ...selectedReport.fieldValues }}
+                fields={[...data.entity.fields, ...data.reportFields]} />
+            );
+          }
+          case SectionType.RiskSection: {
+            return (
+              <RiskSection
+                {...baseProps}
+                riskMatrix={{
+                  width: riskMatrixWidth,
+                  height: riskMatrixHeight,
+                  calloutTemplate: riskMatrixCalloutTemplate,
+                }} />
+            );
+          }
+          case SectionType.ListSection: {
+            return <ListSection {...baseProps} />;
+          }
+          default: {
+            return null;
+          }
         }
-        case SectionType.StatusSection: {
-          return <StatusSection {...baseProps} />;
-        }
-        case SectionType.ProjectPropertiesSection: {
-          return (
-            <ProjectPropertiesSection
-              {...baseProps}
-              fieldValues={{ ...data.entity.fieldValues, ...selectedReport.fieldValues }}
-              fields={[...data.entity.fields, ...data.reportFields]} />
-          );
-        }
-        case SectionType.RiskSection: {
-          return (
-            <RiskSection
-              {...baseProps}
-              riskMatrix={{
-                width: riskMatrixWidth,
-                height: riskMatrixHeight,
-                calloutTemplate: riskMatrixCalloutTemplate,
-              }} />
-          );
-        }
-        case SectionType.ListSection: {
-          return <ListSection {...baseProps} />;
-        }
-        default: {
-          return null;
-        }
-      }
-    });
+      });
   }
 
   /**

@@ -3,6 +3,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased - TBA
 
+### Fixed
+- Fixed rendering of status sections, some properties had no effect #180
+
 ### Added
 - Installation writes to output which user it is connected with #187
 
