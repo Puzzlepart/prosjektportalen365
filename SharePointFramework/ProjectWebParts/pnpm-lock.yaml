@@ -17,6 +17,7 @@ dependencies:
   '@types/react': 16.8.8
   '@types/react-dom': 16.8.3
   '@types/webpack-env': 1.13.1
+  '@uifabric/utilities': 6.45.1_052fcf153ec79c77e0d1778fd73206f7
   get-value: 3.0.1
   msgraph-helper: 0.7.1
   office-ui-fabric-react: 6.189.2_052fcf153ec79c77e0d1778fd73206f7
@@ -13240,6 +13241,7 @@ specifiers:
   '@types/string-format': 2.0.0
   '@types/underscore': 1.9.2
   '@types/webpack-env': 1.13.1
+  '@uifabric/utilities': 6.45.1
   ajv: ~5.2.2
   colors: 1.4.0
   find: 0.3.0
