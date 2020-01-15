@@ -4,6 +4,7 @@ import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction';
 
 export class SetupProjectInformation extends BaseTask {
     public taskName = 'SetupProjectInformation';
+    private _projectCtId: string;
 
     /**
      * Executes the SetupProjectInformation task
@@ -13,6 +14,7 @@ export class SetupProjectInformation extends BaseTask {
      */
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
+            this._projectCtId = params.templateSchema.Parameters.ProjectContentTypeId || '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C';
             await this._syncPropertiesList(params, onProgress);
             await this._addEntryToHub(params);
             return params;
@@ -31,7 +33,7 @@ export class SetupProjectInformation extends BaseTask {
         try {
             onProgress(strings.SetupProjectInformationText, strings.SyncLocalProjectPropertiesListText, 'AlignCenter');
             this.logInformation(`Synchronizing list '${strings.ProjectPropertiesListName}' based on content type from ${this.data.hub.url} `, {});
-            const { list } = await params.portal.syncList(params.webAbsoluteUrl, strings.ProjectPropertiesListName, '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C');
+            const { list } = await params.portal.syncList(params.webAbsoluteUrl, strings.ProjectPropertiesListName, this._projectCtId, { SourceContentTypeId: this._projectCtId });
             onProgress(strings.SetupProjectInformationText, strings.CreatingLocalProjectPropertiesListItemText, 'AlignCenter');
             await list.items.add({ Title: params.context.pageContext.web.title });
         } catch (error) {
@@ -49,11 +51,12 @@ export class SetupProjectInformation extends BaseTask {
             this.logInformation(`Attempting to retrieve project item from list '${params.properties.projectsList}' at ${this.data.hub.url}`);
             let entity = await params.entityService.getEntityItem(params.context.pageContext.legacyPageContext.groupId);
             if (entity) return;
-            this.logInformation(`Adding project entity to list '${params.properties.projectsList}' at ${this.data.hub.url}`, {});
+            let item = { Title: params.context.pageContext.web.title, GtSiteId: params.context.pageContext.site.id.toString(), ContentTypeId: this._projectCtId };
+            this.logInformation(`Adding project entity to list '${params.properties.projectsList}' at ${this.data.hub.url}`, { item });
             await params.entityService.createNewEntity(
                 params.context.pageContext.legacyPageContext.groupId,
                 params.context.pageContext.web.absoluteUrl,
-                { Title: params.context.pageContext.web.title, GtSiteId: params.context.pageContext.site.id.toString() },
+                item,
             );
             this.logInformation(`Project entity added to list '${params.properties.projectsList}' at ${this.data.hub.url}`, {});
         } catch (error) {
