@@ -1,4 +1,5 @@
 dependencies:
+  '@microsoft/sp-core-library': 1.9.1
   '@microsoft/sp-page-context': 1.9.1
   '@pnp/common': 1.3.6
   '@pnp/logging': 1.3.6
@@ -11,6 +12,7 @@ dependencies:
   es6-promise: 4.2.8
   gulp: 4.0.2
   object-get: 2.1.0
+  office-ui-fabric-react: 6.200.1
   react-markdown: 4.2.2
   scriptjs: 2.5.9
   sp-entityportal-service: 1.1.1
@@ -451,6 +453,20 @@ packages:
       react-dom: ^0.14.9 || ^15.0.1-0 || ^16.0.0-0
     resolution:
       integrity: sha512-ZsX6vuPX6OpvUb26GL7ribJELYt2SOKFhuM4W+YcowPSBTRLl2DSC+ZkaLI4VngT//D89tl0SqmipukcSn4hDA==
+  /@uifabric/foundation/0.8.3:
+    dependencies:
+      '@uifabric/set-version': 1.1.3
+      '@uifabric/styling': 6.50.7
+      '@uifabric/utilities': 6.45.0
+      tslib: 1.10.0
+    dev: false
+    peerDependencies:
+      '@types/react': ^0.14.x || ^15.x || ^16.x
+      '@types/react-dom': ^0.14.x || ^15.x || ^16.x
+      react: ^0.14.9 || ^15.0.1-0 || ^16.0.0-0
+      react-dom: ^0.14.9 || ^15.0.1-0 || ^16.0.0-0
+    resolution:
+      integrity: sha512-r3WhRj7Out8QAOe50BGA36R8zgRPy0D0GNPuwFK9BB9oIidf91ycj7/miY8U0TZRZi5fB3Kg+dy/uxSDfgC6Og==
   /@uifabric/icons/6.5.3_052fcf153ec79c77e0d1778fd73206f7:
     dependencies:
       '@uifabric/set-version': 1.1.3
@@ -464,6 +480,14 @@ packages:
       react-dom: '*'
     resolution:
       integrity: sha512-baqA8QGP68RD2IsKfsd40hVK1/GyweOvAKYcxkCIFXGz0mGtBVhSy8hs1jHdU9cdZeo4ebDkkn11TizCm/b00A==
+  /@uifabric/icons/6.5.5:
+    dependencies:
+      '@uifabric/set-version': 1.1.3
+      '@uifabric/styling': 6.50.7
+      tslib: 1.10.0
+    dev: false
+    resolution:
+      integrity: sha512-cGjzdpT0jzQ2RJvzlCVTrewaHCi4rb+ZNL2LWoceMi+5h196Y32qJwKMsc0ggR6u5CjMrzBiAxUFNppBSCutdA==
   /@uifabric/icons/6.5.5_052fcf153ec79c77e0d1778fd73206f7:
     dependencies:
       '@uifabric/set-version': 1.1.3
@@ -490,6 +514,16 @@ packages:
     dev: false
     resolution:
       integrity: sha512-IYpwVIuN7MJOeiWzZzr9AmFSvA5zc6gJn4fNHtEFIQnNB8WVWIcYrvx8Tbf7wWj9MvhdHYp70F054zZlHbL/Ag==
+  /@uifabric/styling/6.50.7:
+    dependencies:
+      '@microsoft/load-themed-styles': 1.10.16
+      '@uifabric/merge-styles': 6.19.4
+      '@uifabric/set-version': 1.1.3
+      '@uifabric/utilities': 6.45.0
+      tslib: 1.10.0
+    dev: false
+    resolution:
+      integrity: sha512-F2aBiB30ZiFxlZzy5hzLXODWOl6jySvPFAsoaTofk37xucHiunBLZYjX6WkfZrCWiyGPva+DLssNcwly9ZHVjg==
   /@uifabric/styling/6.50.7_052fcf153ec79c77e0d1778fd73206f7:
     dependencies:
       '@microsoft/load-themed-styles': 1.10.16
@@ -519,6 +553,20 @@ packages:
       react-dom: '>=16.3.2-0 <17.0.0'
     resolution:
       integrity: sha512-gO+bdJQMMwFz4jnOJnkcaFIKrg8KT+EKYaynoqo0Q1N/Fw4QYLo5tUNxwIkOhI6tPo3zo/TIxIYJn+yt3la9ZQ==
+  /@uifabric/utilities/6.45.0:
+    dependencies:
+      '@uifabric/merge-styles': 6.19.4
+      '@uifabric/set-version': 1.1.3
+      prop-types: 15.7.2
+      tslib: 1.10.0
+    dev: false
+    peerDependencies:
+      '@types/react': '>=16.3.0 <17.0.0'
+      '@types/react-dom': '>=16.3.0 <17.0.0'
+      react: '>=16.3.2-0 <17.0.0'
+      react-dom: '>=16.3.2-0 <17.0.0'
+    resolution:
+      integrity: sha512-sC9etmDJ2kLV8409oaUVqxmMCU6IaBLtyvO6VQ/hFNo0r9Fqz2AgpqYaKRaKfXQvseqMJWTkYMXpovb2UfOpsg==
   /@uifabric/utilities/6.45.0_052fcf153ec79c77e0d1778fd73206f7:
     dependencies:
       '@types/react': 16.8.8
@@ -2421,6 +2469,25 @@ packages:
       react-dom: '>=16.3.2-0 <17.0.0'
     resolution:
       integrity: sha512-1Y111Ip78u7aCbmyRTucRldY4lYwRPkxhFL+y1rgQC4TivB2FmoHN6eSA1nAA59Ix4k2etM0UCzh7MdC1SbP5Q==
+  /office-ui-fabric-react/6.200.1:
+    dependencies:
+      '@microsoft/load-themed-styles': 1.10.16
+      '@uifabric/foundation': 0.8.3
+      '@uifabric/icons': 6.5.5
+      '@uifabric/merge-styles': 6.19.4
+      '@uifabric/set-version': 1.1.3
+      '@uifabric/styling': 6.50.7
+      '@uifabric/utilities': 6.45.0
+      prop-types: 15.7.2
+      tslib: 1.10.0
+    dev: false
+    peerDependencies:
+      '@types/react': '>=16.3.0 <17.0.0'
+      '@types/react-dom': '>=16.3.0 <17.0.0'
+      react: '>=16.3.2-0 <17.0.0'
+      react-dom: '>=16.3.2-0 <17.0.0'
+    resolution:
+      integrity: sha512-7uefgcRDFglGfzA/DsWjLg6xRV1NVKtcbP8F32q+Ixd8DrchPiFlaJPf7i0blyky8WjDhRV17/fdSgYyd8EBXg==
   /once/1.4.0:
     dependencies:
       wrappy: 1.0.2
@@ -3680,6 +3747,7 @@ packages:
       integrity: sha512-DUOKC/IhbkdLKKiV89gw9DUauTV8U/8yJl1sjf6MtDmzevLKOF2duNJ495S3MFVjqZarr+qNGCPbkg4mu4PpLw==
 specifiers:
   '@microsoft/rush-stack-compiler-3.3': ^0.3.5
+  '@microsoft/sp-core-library': 1.9.1
   '@microsoft/sp-page-context': ^1.9.1
   '@pnp/common': 1.3.6
   '@pnp/logging': 1.3.6
@@ -3697,6 +3765,7 @@ specifiers:
   es6-promise: ^4.2.8
   gulp: ^4.0.2
   object-get: ^2.1.0
+  office-ui-fabric-react: 6.200.1
   pzl-tslint-rules: ^1.0.5
   react-markdown: ^4.2.2
   scriptjs: ^2.5.9
