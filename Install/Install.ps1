@@ -244,15 +244,10 @@ if (-not $SkipAppPackages.IsPresent) {
 if (-not $Upgrade.IsPresent) {
     Try {
         Connect-SharePoint -Url $Url -ErrorAction Stop
-        Write-Host "[INFO] Removing existing homepage from [$Url]"
         Remove-PnPFile -ServerRelativeUrl "$($Uri.LocalPath)/SitePages/Home.aspx" -Recycle -Force
         Disconnect-PnPOnline
-        Write-Host "[SUCCESS] Successfully removed existing homepage from [$Url]" -ForegroundColor Green
     }
-    Catch {
-        Write-Host "[ERROR] Failed to remove existing homepage from [$Url]: $($_.Exception.Message)" -ForegroundColor Red
-        exit 0
-    }
+    Catch {}
 }
 
 #region Applying PnP templates 
