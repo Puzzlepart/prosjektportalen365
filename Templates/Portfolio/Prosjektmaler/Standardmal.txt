@@ -1,8 +1,7 @@
 {
     "Version": "1.1.4",
     "Parameters": {
-        "ProvisionSiteFields": "Kolonner for Prosjektportalen (Prosjekt)",
-        "ProjectContentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C"
+        "ProvisionSiteFields": "Kolonner for Prosjektportalen (Prosjekt)"
     },
     "ContentTypes": [
         {
