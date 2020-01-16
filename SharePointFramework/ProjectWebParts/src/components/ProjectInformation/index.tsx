@@ -139,15 +139,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
    */
   private async _onSyncProperties(event?: React.MouseEvent<any>): Promise<void> {
     if (event != null) {
-      return ConfirmAction(
-        strings.SyncProjectPropertiesText,
-        strings.SyncProjectPropertiesDescription,
-        this._onSyncProperties.bind(this),
-        strings.SyncNowText,
-        this,
-        'confirmActionProps',
-        { containerClassName: styles.confirmDialog },
-      );
+      return ConfirmAction(strings.SyncProjectPropertiesText, strings.SyncProjectPropertiesDescription, this._onSyncProperties.bind(this), strings.SyncNowText, this, 'confirmActionProps', { containerClassName: styles.confirmDialog });
     }
     if (!stringIsNullOrEmpty(this.state.data.propertiesListId)) {
       let lastUpdated = await SPDataAdapter.project.getPropertiesLastUpdated(this.state.data);
@@ -162,10 +154,15 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
     try {
       progressFunc({ label: strings.SyncProjectPropertiesListProgressDescription, description: `${strings.PleaseWaitText}...` });
       this.logInfo('Ensuring list and fields', '_onSyncProperties');
+      let tmplParams: TypedHash<any> = {};
+      try {
+        tmplParams = JSON.parse(this.state.data.fieldValues.TemplateParameters);
+      } catch { }
+      this.logInfo('Ensuring list and fields', '_onSyncProperties', { tmplParams });
       const { created } = await this._portalDataService.syncList(
         this.props.webUrl,
         strings.ProjectPropertiesListName,
-        this.state.data.fieldValues.SourceContentTypeId,
+        tmplParams.ProjectContentTypeId || '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: this.props.webTitle },
       );
       if (!created) {
