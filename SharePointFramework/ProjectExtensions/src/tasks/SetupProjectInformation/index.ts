@@ -33,9 +33,12 @@ export class SetupProjectInformation extends BaseTask {
         try {
             onProgress(strings.SetupProjectInformationText, strings.SyncLocalProjectPropertiesListText, 'AlignCenter');
             this.logInformation(`Synchronizing list '${strings.ProjectPropertiesListName}' based on content type from ${this.data.hub.url} `, {});
-            const { list } = await params.portal.syncList(params.webAbsoluteUrl, strings.ProjectPropertiesListName, this._projectCtId, { SourceContentTypeId: this._projectCtId });
+            const { list } = await params.portal.syncList(params.webAbsoluteUrl, strings.ProjectPropertiesListName, this._projectCtId);
             onProgress(strings.SetupProjectInformationText, strings.CreatingLocalProjectPropertiesListItemText, 'AlignCenter');
-            await list.items.add({ Title: params.context.pageContext.web.title });
+            await list.items.add({
+                Title: params.context.pageContext.web.title,
+                SourceContentTypeId: this._projectCtId,
+            });
         } catch (error) {
             throw error;
         }
@@ -51,7 +54,11 @@ export class SetupProjectInformation extends BaseTask {
             this.logInformation(`Attempting to retrieve project item from list '${params.properties.projectsList}' at ${this.data.hub.url}`);
             let entity = await params.entityService.getEntityItem(params.context.pageContext.legacyPageContext.groupId);
             if (entity) return;
-            let item = { Title: params.context.pageContext.web.title, GtSiteId: params.context.pageContext.site.id.toString(), ContentTypeId: this._projectCtId };
+            let item = {
+                Title: params.context.pageContext.web.title,
+                GtSiteId: params.context.pageContext.site.id.toString(),
+                ContentTypeId: this._projectCtId,
+            };
             this.logInformation(`Adding project entity to list '${params.properties.projectsList}' at ${this.data.hub.url}`, { item });
             await params.entityService.createNewEntity(
                 params.context.pageContext.legacyPageContext.groupId,
