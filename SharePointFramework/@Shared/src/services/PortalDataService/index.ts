@@ -135,7 +135,7 @@ export class PortalDataService {
             } catch (error) { }
         }
         try {
-            let newField = spList.get_fields().addFieldAsXml(`<Field Type="Text" DisplayName="SourceContentTypeId" ID="{b8854944-7141-471f-b8df-53d93a4395ba}" StaticName="SourceContentTypeId" Name="SourceContentTypeId" ShowInEditForm="FALSE" />`, false, SP.AddFieldOptions.addToDefaultContentType);
+            let newField = spList.get_fields().addFieldAsXml(`<Field Type="Note" DisplayName="TemplateParameters" ID="{b8854944-7141-471f-b8df-53d93a4395ba}" StaticName="TemplateParameters" Name="TemplateParameters" UnlimitedLengthInDocumentLibrary="TRUE" ShowInEditForm="FALSE" />`, false, SP.AddFieldOptions.addToDefaultContentType);
             newField.updateAndPushChanges(true);
             await ExecuteJsomQuery(jsomContext);
         } catch { }
