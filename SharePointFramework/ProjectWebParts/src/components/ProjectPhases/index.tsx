@@ -160,7 +160,7 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
     const viewQueryDom = new DOMParser().parseFromString(`< Query > ${documentsFrontpageView.ViewQuery}</Query > `, 'text/xml');
     const orderByDomElement = viewQueryDom.getElementsByTagName('OrderBy')[0];
     const orderBy = orderByDomElement ? orderByDomElement.outerHTML : '';
-    const newViewQuery = [orderBy, `< Where > <Eq><FieldRef Name='GtProjectPhase' /><Value Type='Text'>${phaseTermName}</Value></Eq></Where > `].join('');
+    const newViewQuery = [orderBy, `<Where><Eq><FieldRef Name='GtProjectPhase' /><Value Type='Text'>${phaseTermName}</Value></Eq></Where>`].join('');
     try {
       await documentsViews.getById(documentsFrontpageView.Id).update({ ViewQuery: newViewQuery });
       Logger.write(`(ProjectPhases) _modifyDocumentViews: Successfully updated ViewQuery for view '${this.props.currentPhaseViewName}' for list '${strings.DocumentsListName}'`, LogLevel.Info);
