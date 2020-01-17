@@ -18,11 +18,7 @@ export class DocumentTemplateDialogScreenEditCopy extends React.Component<IDocum
      */
     constructor(props: IDocumentTemplateDialogScreenEditCopyProps) {
         super(props);
-        this.state = { 
-            templates: [...props.selectedTemplates], 
-            selectedFolderServerRelativeUrl: this.props.libraries[0].ServerRelativeUrl,
-            selectedLibraryOptionKey: 0
-        };
+        this.state = { templates: [...props.selectedTemplates], selectedFolderServerRelativeUrl: this.props.libraries[0].ServerRelativeUrl };
     }
 
     public render(): React.ReactElement<IDocumentTemplateDialogScreenEditCopyProps> {
@@ -38,7 +34,7 @@ export class DocumentTemplateDialogScreenEditCopy extends React.Component<IDocum
                 <div hidden={this.props.libraries.length === 1}>
                     <Dropdown
                         label={strings.DocumentLibraryDropdownLabel}
-                        selectedKey={this.state.selectedLibraryOptionKey}
+                        defaultSelectedKey={0}
                         onChange={this._onLibraryChanged.bind(this)}
                         options={this.props.libraries.map((lib, idx) => ({ key: idx, text: lib.Title, data: lib }))} />
                 </div>
@@ -62,7 +58,6 @@ export class DocumentTemplateDialogScreenEditCopy extends React.Component<IDocum
      */
     private _onInputChanged(id: string, properties: TypedHash<string>, errorMessage?: string) {
         const { templates } = ({ ...this.state } as IDocumentTemplateDialogScreenEditCopyState);
-
         this.setState({
             templates: templates.map(t => {
                 if (t.id === id) {
@@ -85,12 +80,8 @@ export class DocumentTemplateDialogScreenEditCopy extends React.Component<IDocum
      * @param {IDropdownOption} option Option
      * @param {number} _index Index
      */
-    private _onLibraryChanged(_event: React.FormEvent<HTMLDivElement>, data: IDropdownOption, _index?: number) {
-        const option: any = data;
-        this.setState({ 
-            selectedFolderServerRelativeUrl: (option as IDocumentLibrary).ServerRelativeUrl, 
-            selectedLibraryOptionKey: option.key 
-        });
+    private _onLibraryChanged(_event: React.FormEvent<HTMLDivElement>, { data }: IDropdownOption, _index?: number) {
+        this.setState({ selectedFolderServerRelativeUrl: (data as IDocumentLibrary).ServerRelativeUrl });
     }
 
     /**
