@@ -134,6 +134,11 @@ export class PortalDataService {
                 await ExecuteJsomQuery(jsomContext);
             } catch (error) { }
         }
+        try {
+            let newField = spList.get_fields().addFieldAsXml(`<Field Type="Note" DisplayName="TemplateParameters" ID="{b8854944-7141-471f-b8df-53d93a4395ba}" StaticName="TemplateParameters" Name="TemplateParameters" UnlimitedLengthInDocumentLibrary="TRUE" ShowInEditForm="FALSE" />`, false, SP.AddFieldOptions.addToDefaultContentType);
+            newField.updateAndPushChanges(true);
+            await ExecuteJsomQuery(jsomContext);
+        } catch { }
         if (ensureList.created && properties) {
             ensureList.list.items.add(properties);
         }

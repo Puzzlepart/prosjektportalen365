@@ -3,7 +3,7 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import { BaseDialog } from '../@BaseDialog';
-import * as ReactMarkdown from 'react-markdown/with-html';
+import ReactMarkdown from 'react-markdown/with-html';
 import styles from './ErrorDialog.module.scss';
 import { IErrorDialogProps } from './IErrorDialogProps';
 
@@ -27,7 +27,7 @@ export const ErrorDialog = ({ error, version, messageType = MessageBarType.error
             containerClassName={styles.errorDialog}>
             <div style={{ marginTop: 15 }}>
                 <MessageBar messageBarType={messageType} className={styles.errorMessage}>
-                    <ReactMarkdown escapeHtml={false} linkTarget='_blank' source={error.stack} html />
+                    <ReactMarkdown escapeHtml={false} linkTarget='_blank' source={error.stack} />
                 </MessageBar>
             </div>
         </BaseDialog >
