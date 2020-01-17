@@ -547,9 +547,7 @@
                                         "description": "",
                                         "phaseSubTextProperty": "",
                                         "phaseField": "Fase",
-                                        "automaticReload": true,
                                         "confirmPhaseChange": true,
-                                        "reloadTimeout": 0,
                                         "currentPhaseViewName": "Gjeldende fase",
                                         "gutter": 15,
                                         "fontSize": 13

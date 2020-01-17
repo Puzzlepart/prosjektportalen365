@@ -26,16 +26,6 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
             {
               groupName: strings.SettingsGroupName,
               groupFields: [
-                PropertyPaneToggle('automaticReload', {
-                  label: strings.AutomaticReloadFieldLabel,
-                }),
-                PropertyPaneSlider('reloadTimeout', {
-                  label: strings.ReloadTimeoutFieldLabel,
-                  min: 0,
-                  max: 10,
-                  step: 1,
-                  disabled: !this.properties.automaticReload,
-                }),
                 PropertyPaneToggle('confirmPhaseChange', {
                   label: strings.ConfirmPhaseChangeFieldLabel,
                 }),

@@ -7,16 +7,6 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   phaseField: string;
 
   /**
-   * Automatic reload after phase change
-   */
-  automaticReload: boolean;
-
-  /**
-   * Reload timeout
-   */
-  reloadTimeout: number;
-
-  /**
    * Should phase change be confirmed
    */
   confirmPhaseChange: boolean;

@@ -141,13 +141,7 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
       await this._modifyDocumentViews(phase.name);
       sessionStorage.clear();
       this.setState({ data: { ...this.state.data, currentPhase: phase }, confirmPhase: null, isChangingPhase: false });
-      if (this.props.automaticReload) {
-        window.setTimeout(() => {
-          document.location.href = this.props.webUrl;
-        }, (this.props.reloadTimeout * 5000));
-      } else {
-        Logger.log({ message: '(ProjectPhases) _onChangePhase: Successfully changed phase. Automatic reload is disabled.', level: LogLevel.Info });
-      }
+      window.setTimeout(() => document.location.href = `${this.props.webUrl}#syncproperties=1`, 2000);
     } catch (error) {
       Logger.log({ message: '(ProjectPhases) _onChangePhase: Failed to change phase', level: LogLevel.Warning });
       this.setState({ confirmPhase: null, isChangingPhase: false });
@@ -163,10 +157,10 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
     const documentsViews = sp.web.lists.getByTitle(strings.DocumentsListName).views;
     let [documentsFrontpageView] = await documentsViews.select('Id', 'ViewQuery').filter(`Title eq '${this.props.currentPhaseViewName}'`).get<{ Id: string, ViewQuery: string }[]>();
     if (!documentsFrontpageView) return;
-    const viewQueryDom = new DOMParser().parseFromString(`<Query>${documentsFrontpageView.ViewQuery}</Query>`, 'text/xml');
+    const viewQueryDom = new DOMParser().parseFromString(`< Query > ${documentsFrontpageView.ViewQuery}</Query > `, 'text/xml');
     const orderByDomElement = viewQueryDom.getElementsByTagName('OrderBy')[0];
     const orderBy = orderByDomElement ? orderByDomElement.outerHTML : '';
-    const newViewQuery = [orderBy, `<Where><Eq><FieldRef Name='GtProjectPhase' /><Value Type='Text'>${phaseTermName}</Value></Eq></Where>`].join('');
+    const newViewQuery = [orderBy, `< Where > <Eq><FieldRef Name='GtProjectPhase' /><Value Type='Text'>${phaseTermName}</Value></Eq></Where > `].join('');
     try {
       await documentsViews.getById(documentsFrontpageView.Id).update({ ViewQuery: newViewQuery });
       Logger.write(`(ProjectPhases) _modifyDocumentViews: Successfully updated ViewQuery for view '${this.props.currentPhaseViewName}' for list '${strings.DocumentsListName}'`, LogLevel.Info);

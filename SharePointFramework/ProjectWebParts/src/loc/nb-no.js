@@ -1,6 +1,5 @@
 define([], function () {
   return {
-    AutomaticReloadFieldLabel: 'Automatisk oppdatering',
     ChangePhaseText: 'Endre til denne fasen',
     ChangingPhaseDescription: 'Endrer fase til {0}',
     PleaseWaitText: 'Vennligst vent',
@@ -37,7 +36,6 @@ define([], function () {
     PhaseChecklistName: 'Fasesjekkliste',
     PhaseChecklistViewUrl: 'Lists/Fasesjekkliste/AllItems.aspx',
     PickReportText: 'Velg rapport',
-    ReloadTimeoutFieldLabel: 'Forsinkelse (s)',
     SaveText: 'Lagre',
     SettingsGroupName: 'Innstillinger',
     GeneralGroupName: 'Generelt',
