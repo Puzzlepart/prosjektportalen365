@@ -157,7 +157,7 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
     const documentsViews = sp.web.lists.getByTitle(strings.DocumentsListName).views;
     let [documentsFrontpageView] = await documentsViews.select('Id', 'ViewQuery').filter(`Title eq '${this.props.currentPhaseViewName}'`).get<{ Id: string, ViewQuery: string }[]>();
     if (!documentsFrontpageView) return;
-    const viewQueryDom = new DOMParser().parseFromString(`< Query > ${documentsFrontpageView.ViewQuery}</Query > `, 'text/xml');
+    const viewQueryDom = new DOMParser().parseFromString(`<Query> ${documentsFrontpageView.ViewQuery}</Query> `, 'text/xml');
     const orderByDomElement = viewQueryDom.getElementsByTagName('OrderBy')[0];
     const orderBy = orderByDomElement ? orderByDomElement.outerHTML : '';
     const newViewQuery = [orderBy, `<Where><Eq><FieldRef Name='GtProjectPhase' /><Value Type='Text'>${phaseTermName}</Value></Eq></Where>`].join('');
