@@ -1,11 +1,11 @@
-import { ProjectColumnConfig, SectionModel, StatusReport, SPField } from 'shared/lib/models';
-import { IEntity } from 'sp-entityportal-service';
+import { ProjectColumnConfig, SectionModel, SPField, StatusReport } from 'shared/lib/models';
+import { IGetPropertiesData } from 'shared/lib/services';
 
 export interface IProjectStatusData {
     /**
      * Entity item
      */
-    entity?: IEntity;
+    properties?: IGetPropertiesData;
 
     /**
      * Status report fields

@@ -14,6 +14,7 @@ import { PortalDataService } from 'shared/lib/services';
 import { getUrlParam, parseUrlHash, setUrlHash } from 'shared/lib/util';
 import { SpEntityPortalService } from 'sp-entityportal-service';
 import * as formatString from 'string-format';
+import SPDataAdapter from '../../data';
 import { IProjectStatusData } from './IProjectStatusData';
 import { IProjectStatusHashState } from './IProjectStatusHashState';
 import { IProjectStatusProps } from './IProjectStatusProps';
@@ -23,7 +24,6 @@ import { IBaseSectionProps, ListSection, ProjectPropertiesSection, RiskSection, 
 
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private _portalDataService: PortalDataService;
-  private _entityService: SpEntityPortalService;
 
   /**
    * Constructor
@@ -34,13 +34,6 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     super(props);
     this.state = { isLoading: true };
     this._portalDataService = new PortalDataService().configure({ urlOrWeb: props.hubSite.web, siteId: props.siteId });
-    this._entityService = new SpEntityPortalService({
-      portalUrl: this.props.hubSite.url,
-      listName: strings.ProjectsListName,
-      contentTypeId: '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
-      identityFieldName: 'GtSiteId',
-      urlFieldName: 'GtSiteUrl',
-    });
   }
 
   public async componentDidMount() {
@@ -220,8 +213,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
             return (
               <ProjectPropertiesSection
                 {...baseProps}
-                fieldValues={{ ...data.entity.fieldValues, ...selectedReport.fieldValues }}
-                fields={[...data.entity.fields, ...data.reportFields]} />
+                fieldValues={{ ...data.properties.fieldValues, ...selectedReport.fieldValues }}
+                fields={[...data.properties.fields, ...data.reportFields]} />
             );
           }
           case SectionType.RiskSection: {
@@ -278,9 +271,14 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    */
   private async _redirectNewStatusReport(_ev?: React.MouseEvent<any> | React.KeyboardEvent<any>, _item?: IContextualMenuItem): Promise<void> {
     const [previousReport] = this.state.data.reports;
+    let tmplParams: TypedHash<any> = {};
+    try {
+      tmplParams = JSON.parse(this.state.data.properties.fieldValues.TemplateParameters);
+    } catch { }
     let properties: TypedHash<any> = previousReport ? previousReport.statusValues : {};
     properties.Title = formatString(strings.NewStatusReportTitle, this.props.webTitle);
     properties.GtSiteId = this.props.siteId;
+    properties.ContentTypeId = tmplParams.ProjectStatusContentTypeId;
     if (previousReport) {
       Logger.log({ message: '(ProjectStatus) _redirectNewStatusReport: Copying budget numbers from previous report', data: { id: previousReport.id, budgetNumbers: previousReport.budgetNumbers }, level: LogLevel.Info });
       properties = { ...properties, ...previousReport.budgetNumbers };
@@ -307,15 +305,23 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   private async _fetchData(): Promise<IProjectStatusData> {
     try {
       Logger.log({ message: '(ProjectStatus) _fetchData: Fetching entity data, fields, column config, sections and reports', level: LogLevel.Info });
+      if (!SPDataAdapter.isConfigured) {
+        SPDataAdapter.configure(this.context, {
+          siteId: this.props.siteId,
+          webUrl: this.props.webUrl,
+          hubSiteUrl: this.props.hubSite.url,
+          logLevel: (sessionStorage.DEBUG || DEBUG) ? LogLevel.Info : LogLevel.Warning,
+        });
+      }
       let [
-        entity,
+        properties,
         reportList,
         reports,
         sections,
         columnConfig,
         reportFields,
       ] = await Promise.all([
-        this._entityService.fetchEntity(this.props.siteId, this.props.webUrl),
+        SPDataAdapter.project.getPropertiesData(),
         this._portalDataService.getStatusReportListProps(),
         this._portalDataService.getStatusReports(),
         this._portalDataService.getProjectStatusSections(),
@@ -326,7 +332,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       reports = reports.sort((a, b) => b.created.getTime() - a.created.getTime());
       sections = sections.sort((a, b) => a.sortOrder < b.sortOrder ? -1 : 1);
       return {
-        entity,
+        properties,
         reportFields,
         reportEditFormUrl: reportList.DefaultEditFormUrl,
         reports,
