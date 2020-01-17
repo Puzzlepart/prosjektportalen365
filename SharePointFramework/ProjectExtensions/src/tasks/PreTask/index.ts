@@ -5,6 +5,7 @@ import { SpEntityPortalService } from 'sp-entityportal-service';
 import initSpfxJsom from 'spfx-jsom';
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask';
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction';
+import { ExecuteJsomQuery } from 'spfx-jsom';
 
 export class PreTask extends BaseTask {
     public taskName = 'PreTask';
@@ -23,7 +24,10 @@ export class PreTask extends BaseTask {
                 identityFieldName: 'GtGroupId',
                 urlFieldName: 'GtSiteUrl',
             });
-            params.portal = new PortalDataService().configure({ urlOrWeb: this.data.hub.web });
+            params.portal = new PortalDataService().configure({ urlOrWeb: this.data.hub.web });            
+            params.spfxJsomContext.jsomContext.web['set_isMultilingual'](false);
+            params.spfxJsomContext.jsomContext.web.update();
+            await ExecuteJsomQuery(params.spfxJsomContext.jsomContext);
             return params;
         } catch (error) {
             throw new BaseTaskError(this.taskName, strings.PreTaskErrorMessage, error);
