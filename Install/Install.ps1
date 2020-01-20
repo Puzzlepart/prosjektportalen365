@@ -59,6 +59,9 @@ function Connect-SharePoint {
         elseif ($null -ne $GenericCredential -and $GenericCredential -ne "") {
             Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ErrorAction Stop
         }
+        else {
+            Connect-PnPOnline -Url $Url -ErrorAction Stop
+        }
     }
     Catch {
         Write-Host "[INFO] Failed to connect to [$Url]: $($_.Exception.Message)"
@@ -79,11 +82,20 @@ else {
     Write-Host "[INFO] Loaded [SharePointPnPPowerShellOnline] v.$((Get-Command Connect-PnPOnline).Version) from your environment"
 }
 
+
 #region Setting variables
 [System.Uri]$Uri = $Url
 $ManagedPath = $Uri.Segments[1]
 $Alias = $Uri.Segments[2].TrimEnd('/')
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
+#endregion
+
+#region Print installation user
+
+Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
+$CurrentUser = Get-PnPProperty -Property CurrentUser -ClientObject (Get-PnPContext).Web
+Write-Host "[INFO] Installing with user [$($CurrentUser.Email)]"
+Disconnect-PnPOnline
 #endregion
 
 #region Check if URL specified is root site or admin site or invalid managed path
@@ -102,11 +114,11 @@ if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
         $PortfolioSite = Get-PnPTenantSite -Url $Url -ErrorAction SilentlyContinue
         if ($null -eq $PortfolioSite) {
             Write-Host "[INFO] Creating portfolio site at [$Url]"
-            New-PnPSite -Type TeamSite  -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Lcid 1044 >$null 2>&1
-            Write-Host "[INFO] Portfolio site created at [$Url]" -ForegroundColor Green
+            New-PnPSite -Type TeamSite -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Lcid 1044 >$null 2>&1
+            Write-Host "[SUCCESS] Portfolio site created at [$Url]" -ForegroundColor Green
         }
         Register-PnPHubSite -Site $Url -ErrorAction SilentlyContinue
-        Write-Host "[INFO] Portfolio site [$Url] promoted to hub site" -ForegroundColor Green
+        Write-Host "[SUCCESS] Portfolio site [$Url] promoted to hub site" -ForegroundColor Green
         Disconnect-PnPOnline
     }
     Catch {
@@ -218,7 +230,7 @@ if (-not $SkipAppPackages.IsPresent) {
             Write-Host " DONE" -ForegroundColor Green
         }
         Disconnect-PnPOnline
-        Write-Host "[INFO] SharePoint Framework app packages successfully installed to [$TenantAppCatalogUrl]" -ForegroundColor Green
+        Write-Host "[SUCCESS] SharePoint Framework app packages successfully installed to [$TenantAppCatalogUrl]" -ForegroundColor Green
     }
     Catch {
         Write-Host "Error" -ForegroundColor Red
@@ -232,15 +244,10 @@ if (-not $SkipAppPackages.IsPresent) {
 if (-not $Upgrade.IsPresent) {
     Try {
         Connect-SharePoint -Url $Url -ErrorAction Stop
-        Write-Host "[INFO] Removing existing homepage from [$Url]"
         Remove-PnPFile -ServerRelativeUrl "$($Uri.LocalPath)/SitePages/Home.aspx" -Recycle -Force
         Disconnect-PnPOnline
-        Write-Host "[SUCCESS] Successfully removed existing homepage from [$Url]" -ForegroundColor Green
     }
-    Catch {
-        Write-Host "[ERROR] Failed to remove existing homepage from [$Url]: $($_.Exception.Message)" -ForegroundColor Red
-        exit 0
-    }
+    Catch {}
 }
 
 #region Applying PnP templates 
@@ -258,10 +265,10 @@ if (-not $SkipTemplate.IsPresent) {
             Write-Host "[ERROR] Attempted to install to $Url but connection was active against $($CurrentContext.Url)"
             throw "Wrong connection identified - you are not connected to the correct site"
         }
-        if (-not $SkipTaxonomy.IsPresent) {
+        if (-not $SkipTaxonomy.IsPresent -and -not $Upgrade.IsPresent) {
             Write-Host "[INFO] Applying PnP template [Taxonomy] to [$Url]"
             Apply-PnPProvisioningTemplate .\Templates\Taxonomy.pnp -ErrorAction Stop
-            Write-Host "[INFO] Successfully applied PnP template [Taxonomy] to [$Url]" -ForegroundColor Green
+            Write-Host "[SUCCESS] Successfully applied PnP template [Taxonomy] to [$Url]" -ForegroundColor Green
         }
         
         Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
@@ -287,7 +294,7 @@ Try {
     Write-Host "[INFO] Clearing QuickLaunch"    
     Get-PnPNavigationNode -Location QuickLaunch | Remove-PnPNavigationNode -Force
     Disconnect-PnPOnline
-    Write-Host "[INFO] Successfully cleared QuickLaunch" -ForegroundColor Green
+    Write-Host "[SUCCESS] Successfully cleared QuickLaunch" -ForegroundColor Green
 }
 Catch {
     Write-Host "[WARNING] Failed to clear QuickLaunch: $($_.Exception.Message)" -ForegroundColor Yellow
@@ -301,7 +308,7 @@ if (-not $SkipSearchConfiguration.IsPresent) {
         Write-Host "[INFO] Importing Search Configuration"    
         Set-PnPSearchConfiguration -Scope Subscription -Path .\SearchConfiguration.xml -ErrorAction SilentlyContinue   
         Disconnect-PnPOnline
-        Write-Host "[INFO] Successfully imported Search Configuration" -ForegroundColor Green
+        Write-Host "[SUCCESS] Successfully imported Search Configuration" -ForegroundColor Green
     }
     Catch {
         Write-Host "[WARNING] Failed to import Search Configuration: $($_.Exception.Message)" -ForegroundColor Yellow
@@ -324,10 +331,10 @@ Write-Host "[RECOMMENDED ACTION] Go to https://github.com/Puzzlepart/prosjektpor
 
 
 if ($Upgrade.IsPresent) {
-    Write-Host "[INFO] Upgrade completed in $($sw.Elapsed)" -ForegroundColor Green
+    Write-Host "[SUCCESS] Upgrade completed in $($sw.Elapsed)" -ForegroundColor Green
 }
 else {
-    Write-Host "[INFO] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
+    Write-Host "[SUCCESS] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
 }
 
 $InstallEndTime = (Get-Date -Format o)

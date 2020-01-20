@@ -6,7 +6,6 @@ declare interface IProjectWebPartsStrings {
   ProjectStatusGroupName: string;
   StatusReportsHeaderLabel: string;
   StatusReportsCountLabel: string;
-  AutomaticReloadFieldLabel: string;
   ChangePhaseText: string;
   ChangingPhaseDescription: string;
   PleaseWaitText: string;
@@ -43,7 +42,6 @@ declare interface IProjectWebPartsStrings {
   PhaseChecklistName: string;
   PhaseChecklistViewUrl: string;
   PickReportText: string;
-  ReloadTimeoutFieldLabel: string;
   SaveText: string;
   SettingsGroupName: string;
   Skip: string;

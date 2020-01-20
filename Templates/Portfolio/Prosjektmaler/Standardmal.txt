@@ -1,7 +1,8 @@
 {
-    "Version": "1.1.4",
+    "Version": "1.1.8",
     "Parameters": {
-        "ProvisionSiteFields": "Kolonner for Prosjektportalen (Prosjekt)"
+        "ProvisionSiteFields": "Kolonner for Prosjektportalen (Prosjekt)",
+        "ProjectContentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C"
     },
     "ContentTypes": [
         {
@@ -546,9 +547,7 @@
                                         "description": "",
                                         "phaseSubTextProperty": "",
                                         "phaseField": "Fase",
-                                        "automaticReload": true,
                                         "confirmPhaseChange": true,
-                                        "reloadTimeout": 0,
                                         "currentPhaseViewName": "Gjeldende fase",
                                         "gutter": 15,
                                         "fontSize": 13

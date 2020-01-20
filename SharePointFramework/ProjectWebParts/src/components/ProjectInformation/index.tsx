@@ -154,7 +154,17 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
     try {
       progressFunc({ label: strings.SyncProjectPropertiesListProgressDescription, description: `${strings.PleaseWaitText}...` });
       this.logInfo('Ensuring list and fields', '_onSyncProperties');
-      const { created } = await this._portalDataService.syncList(this.props.webUrl, strings.ProjectPropertiesListName, '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C', { Title: this.props.webTitle });
+      let tmplParams: TypedHash<any> = {};
+      try {
+        tmplParams = JSON.parse(this.state.data.fieldValues.TemplateParameters);
+      } catch { }
+      this.logInfo('Ensuring list and fields', '_onSyncProperties', { tmplParams });
+      const { created } = await this._portalDataService.syncList(
+        this.props.webUrl,
+        strings.ProjectPropertiesListName,
+        tmplParams.ProjectContentTypeId || '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+        { Title: this.props.webTitle },
+      );
       if (!created) {
         this.logInfo('Synchronizing properties to item in hub', '_onSyncProperties');
         await SPDataAdapter.syncPropertyItemToHub(this.state.data.fieldValues, this.state.data.fieldValuesText, progressFunc);

@@ -1,5 +1,5 @@
 import { TypedHash } from '@pnp/common';
-import { List, sp, SPBatch } from '@pnp/sp';
+import { List, sp } from '@pnp/sp';
 import { IProjectSetupData } from 'extensions/projectSetup';
 import * as strings from 'ProjectExtensionsStrings';
 import { SPField } from 'shared/lib/models/SPField';

@@ -1,6 +1,15 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 1.1.9 - 2020-01-20
+
+### Fixed
+- Fixed rendering of status sections, some properties had no effect #180
+- Sync project propertes after phase change #196
+- Fixed an issue with installation script
+
+### Added
+- Installation writes to output which user it is connected with #187
 
 ## 1.1.8 - 2020-01-10
 
