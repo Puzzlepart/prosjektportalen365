@@ -141,7 +141,7 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
       await this._modifyDocumentViews(phase.name);
       sessionStorage.clear();
       this.setState({ data: { ...this.state.data, currentPhase: phase }, confirmPhase: null, isChangingPhase: false });
-      window.setTimeout(() => document.location.href = `${this.props.webUrl}#syncproperties=1`, 2000);
+      window.setTimeout(() => document.location.href = `${this.props.webUrl}#syncproperties=1`, 3000);
     } catch (error) {
       Logger.log({ message: '(ProjectPhases) _onChangePhase: Failed to change phase', level: LogLevel.Warning });
       this.setState({ confirmPhase: null, isChangingPhase: false });
