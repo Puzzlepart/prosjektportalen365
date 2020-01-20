@@ -1,6 +1,6 @@
 {
     "name": "projectextensions",
-    "version": "1.1.8",
+    "version": "1.1.9",
     "private": true,
     "engines": {
         "node": ">=0.10.0"
@@ -16,7 +16,7 @@
         "packageAndDeployPatch": "npm version patch && npm run deploy",
         "packageAndDeployMinor": "npm version minor && npm run deploy",
         "packageAndDeployMajor": "npm version major && npm run deploy",
-        "postversion": "gulp versionSync && npm run package",
+        "postversion": "gulp versionSync",
         "patchVersion": "npm version patch",
         "minorVersion": "npm version minor",
         "majorVersion": "npm version major",
