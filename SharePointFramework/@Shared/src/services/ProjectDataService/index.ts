@@ -132,7 +132,7 @@ export class ProjectDataService {
      * Get properties data
      */
     public async getPropertiesData(): Promise<IGetPropertiesData> {
-        let propertyItem = await this._getPropertyItem(encodeURIComponent(`${document.location.href}#syncproperties=1`));
+        let propertyItem = await this._getPropertyItem(encodeURIComponent(`${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`));
         // tslint:disable-next-line: early-exit
         if (propertyItem) {
             Logger.write(`(ProjectDataService) (getPropertiesData) Local property item found.`);

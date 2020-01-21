@@ -52,7 +52,6 @@ export abstract class BaseProjectWebPart<T extends IBaseWebPartComponentProps> e
             logLevel: (sessionStorage.DEBUG || DEBUG) ? LogLevel.Info : LogLevel.Warning,
         });
         Logger.subscribe(new ConsoleListener());
-        Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
         Logger.activeLogLevel = (sessionStorage.DEBUG || DEBUG) ? LogLevel.Info : LogLevel.Warning;
     }
 

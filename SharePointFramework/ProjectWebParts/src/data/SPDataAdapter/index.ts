@@ -1,5 +1,6 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base';
-import { stringIsNullOrEmpty, TypedHash } from '@pnp/common';
+import { TypedHash } from '@pnp/common';
+import { Logger, LogLevel } from '@pnp/logging';
 import { ItemUpdateResult } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator';
@@ -7,7 +8,6 @@ import * as strings from 'ProjectWebPartsStrings';
 import { SPDataAdapterBase } from 'shared/lib/data';
 import { ProjectDataService } from 'shared/lib/services';
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration';
-import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 
 export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     public project: ProjectDataService;
@@ -44,8 +44,12 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
             fieldValuesText = Object.keys(fieldValuesText).reduce((obj, key) => ({ ...obj, [key.replace(/_x005f_/gm, '_')]: fieldValuesText[key] }), {});
             Logger.log({ message: `(${this._name}) (syncPropertyItemToHub) Starting sync of property item to hub.`, level: LogLevel.Info });
             progressFunc({ label: strings.SyncProjectPropertiesValuesProgressDescription, description: 'Vennligst vent...' });
+            let tmplParams: TypedHash<any> = {};
+            try {
+                tmplParams = JSON.parse(fieldValuesText.TemplateParameters);
+            } catch { }
             const [fields, siteUsers] = await Promise.all([
-                this.entityService.getEntityFields(),
+                this.entityService.usingParams({ contentTypeId: tmplParams.ProjectContentTypeId }).getEntityFields(),
                 this.sp.web.siteUsers.select('Id', 'Email', 'LoginName').get<{ Id: number, Email: string, LoginName: string }[]>(),
             ]);
             Logger.log({ message: `(${this._name}) (syncPropertyItemToHub) Retreived ${fields.length} from entity.`, level: LogLevel.Info });
@@ -81,7 +85,7 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
                         properties[fld.InternalName] = fldValue ? new Date(fldValue) : null;
                     }
                         break;
-                    case 'Currency': {
+                    case 'Currency': case 'URL': {
                         properties[fld.InternalName] = fldValue || null;
                     }
                         break;

@@ -53,7 +53,7 @@
     "react-markdown": "4.2.2",
     "react-scroll": "1.7.11",
     "shared": "link:..\\@Shared",
-    "sp-entityportal-service": "1.1.1",
+    "sp-entityportal-service": "1.2.0",
     "sp-hubsite-service": "0.5.1",
     "spfx-jsom": "0.6.0",
     "string-format": "2.0.0",
