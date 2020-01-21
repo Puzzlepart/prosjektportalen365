@@ -90,7 +90,7 @@
             <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Tjenesteområde</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectServiceArea</pnp:DataValue>
-            <pnp:DataValue FieldName="GtManagedProperty">GtProjectServiceAreaOWSTEXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtProjectServiceAreaTextOWSTEXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
@@ -104,7 +104,7 @@
             <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Prosjekttype</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectType</pnp:DataValue>
-            <pnp:DataValue FieldName="GtManagedProperty">GtProjectTypeOWSTEXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtProjectTypeTextOWSTEXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
