@@ -1,0 +1,1 @@
+﻿<Field Description="{resource:SiteFields_GtProjectType_Description}" DisplayName="{resource:SiteFields_GtProjectTypeText_DisplayName}" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{7212b9e5-52fc-46cb-8b5e-9bf787dd115f}" Name="GtProjectTypeText" SourceID="{{siteid}}" StaticName="GtProjectTypeText" Type="Text" WebId="{siteid}" ShowInEditForm="FALSE" />

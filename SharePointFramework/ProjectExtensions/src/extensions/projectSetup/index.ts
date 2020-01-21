@@ -46,9 +46,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         case ProjectSetupValidation.NoHubConnection: {
           throw new ProjectSetupError('onInit', strings.NoHubSiteErrorMessage, strings.NoHubSiteErrorStack, MessageBarType.warning);
         }
-        case ProjectSetupValidation.InvalidCulture: {
-          throw new ProjectSetupError('onInit', strings.ProfileLanguageIncorrectErrorMessage, formatString(strings.ProfileLanguageIncorrectErrorStack, this.context.pageContext.site.absoluteUrl));
-        }
       }
 
       this._initializeSetup({
@@ -129,7 +126,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    * @param {IProgressDialogProps} props Props
    */
   private _renderErrorDialog(props: IErrorDialogProps) {
-    console.log(props);
     let progressDialog = this._getPlaceholder('ProgressDialog');
     this._unmount(progressDialog);
     let placeholder = this._getPlaceholder('ErrorDialog');
@@ -231,7 +227,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   private get _validation(): ProjectSetupValidation {
     if (this.context.pageContext.web.language !== 1044) return ProjectSetupValidation.InvalidWebLanguage;
     if (!this.context.pageContext.legacyPageContext.hubSiteId) return ProjectSetupValidation.NoHubConnection;
-    if (this.context.pageContext.legacyPageContext.currentCultureLCID !== 1044 || this.context.pageContext.legacyPageContext.currentLanguage !== 1044) return ProjectSetupValidation.InvalidCulture;
     return ProjectSetupValidation.Ready;
   }
 

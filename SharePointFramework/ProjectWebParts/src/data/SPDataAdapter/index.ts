@@ -62,9 +62,13 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
                 let fldValueTxt = fieldValuesText[fld.InternalName];
                 switch (fld.TypeAsString) {
                     case 'TaxonomyFieldType': case 'TaxonomyFieldTypeMulti': {
-                        let [textField] = fields.filter(f => f.Id === fld.TextField);
-                        if (!textField) continue;
-                        properties[textField.InternalName] = fieldValuesText[textField.InternalName];
+                        let [textField] = fields.filter(f => f.InternalName === `${fld.InternalName}Text`);
+                        if (textField) properties[textField.InternalName] = fieldValuesText[fld.InternalName];
+                        else {
+                            [textField] = fields.filter(f => f.Id === fld.TextField);
+                            if (!textField) continue;
+                            properties[textField.InternalName] = fieldValuesText[textField.InternalName];
+                        }
                     }
                         break;
                     case 'User': {

@@ -56,8 +56,6 @@ declare interface IProjectExtensionsStrings {
   SettingsSectionTitle: string;
   SetupProjectInformationErrorMessage: string;
   SetupProjectInformationText: string;
-  ProfileLanguageIncorrectErrorMessage: string;
-  ProfileLanguageIncorrectErrorStack: string;
   SummaryText: string;
   TemplateLibrarySelectModalTitle: string;
   TemplateSelectDialogInfoText: string;

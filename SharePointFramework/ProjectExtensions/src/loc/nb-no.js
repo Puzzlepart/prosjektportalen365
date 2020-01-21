@@ -40,8 +40,6 @@ define([], function () {
     PlannerConfigurationErrorMessage: 'Det skjedde en feil under konfigurering av området',
     PlannerConfigurationText: 'Oppretter standardoppgaver i Planner',
     PreTaskErrorMessage: 'Det skjedde en feil',
-    ProfileLanguageIncorrectErrorMessage: 'Området er ikke klart: Feil profilspråk.',
-    ProfileLanguageIncorrectErrorStack: 'Brukeren som skal sette opp området må ha norsk språk. Sjekk at du har norsk (bokmål) som standard profilspråk i Office 365.<br/><br/>Selv om du har det kan det av og til midlertidig oppstå en feil knyttet til profilspråk. Kom tilbake til dette området senere for å ferdigstille oppsett av området.<br/><br/>Det kan hjelpe å skru av engelsk språkpakke under<a href="{0}/_layouts/15/muisetng.aspx">Språkinnstillinger</a>.',
     ProgressDialogDescription: 'Vennligst vent. Ikke lukk nettleservinduet.',
     ProgressDialogLabel: 'Klargjør prosjektområdet',
     ProgressDialogTitle: 'Setter opp prosjektområdet',
