@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Added support for different phase term sets (to fully support different project templates/types) #201
 
+### Fixed
+- Header columns mispositioned in portfolio overview #207
+
 ## 1.1.9 - 2020-01-20
 
 ### Fixed
