@@ -25,6 +25,7 @@ export class CopyListData extends BaseTask {
         try {
             for (let i = 0; i < this.data.selectedListContentConfig.length; i++) {
                 const listConfig = this.data.selectedListContentConfig[i];
+                if(listConfig.)
                 await this._processListItems(listConfig, onProgress);
             }
             return params;
