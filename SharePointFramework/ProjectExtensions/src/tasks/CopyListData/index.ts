@@ -22,14 +22,15 @@ export class CopyListData extends BaseTask {
      * @param {OnProgressCallbackFunction} onProgress On progress function
      */
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
+        this.onProgress = onProgress;
         try {
             for (let i = 0; i < this.data.selectedListContentConfig.length; i++) {
                 const config = this.data.selectedListContentConfig[i];
                 await config.load();
                 if (config.sourceListProps.BaseTemplate === 101) {
-                    await this._processFiles(config, onProgress);
+                    await this._processFiles(config);
                 } else {
-                    await this._processListItems(config, onProgress);
+                    await this._processListItems(config);
                 }
             }
             return params;
@@ -72,14 +73,13 @@ export class CopyListData extends BaseTask {
      * Process list items
      * 
      * @param {ListContentConfig} config List config
-     * @param {OnProgressCallbackFunction} onProgress On progress function
      * @param {number} batchChunkSize Batch chunk size (defaults to 25)
      */
-    private async _processListItems(config: ListContentConfig, onProgress: OnProgressCallbackFunction, batchChunkSize: number = 25) {
+    private async _processListItems(config: ListContentConfig,batchChunkSize: number = 25) {
         try {
             this.logInformation('Processing list items', { listConfig: config });
-            let progressText = formatString(strings.CopyListDataText, config.sourceListProps.ItemCount, config.sourceListProps.Title, config.destListProps.Title);
-            onProgress(progressText, '', 'List');
+            let progressText = formatString(strings.CopyListItemsText, config.sourceListProps.ItemCount, config.sourceListProps.Title, config.destListProps.Title);
+            this.onProgress(progressText, '', 'List');
 
             let [sourceItems, sourceFields] = await Promise.all([
                 this._getSourceItems(config),
@@ -92,7 +92,7 @@ export class CopyListData extends BaseTask {
                 let batch = sp.createBatch();
                 let batchItems = itemsToAdd.slice(i, i + batchChunkSize);
                 this.logInformation(`Processing batch ${j + 1} with ${batchItems.length} items`, {});
-                onProgress(progressText, formatString(strings.ProcessListItemText, j + 1, batchItems.length), 'List');
+                this.onProgress(progressText, formatString(strings.ProcessListItemText, j + 1, batchItems.length), 'List');
                 batchItems.forEach(item => config.destList.items.inBatch(batch).add(item, config.destListProps.ListItemEntityTypeFullName));
                 await batch.execute();
             }
@@ -123,17 +123,18 @@ export class CopyListData extends BaseTask {
     /**
      * Create folder hierarchy
      *
-     * @param {string} destLibServerRelUrl Destination library server relative URL
-     * @param {string} rootFolderServerRelUrl Root folder server relative URL
+     * @param {ListContentConfig} config List config
      * @param {string[]} folders An array of folders to provision
+     * @param {string} progressText Progress text
      */
-    private async _provisionFolderHierarchy(destLibServerRelUrl: string, rootFolderServerRelUrl: string, folders: string[]): Promise<void> {
+    private async _provisionFolderHierarchy(config: ListContentConfig, folders: string[], progressText: string): Promise<void> {
         try {
             await folders
                 .sort()
-                .reduce((chain: Promise<any>, folder) => {
-                    const folderServerRelUrl = `${destLibServerRelUrl}/${folder.replace(rootFolderServerRelUrl, '')}`;
-                    return chain.then(_ => sp.web.getFolderByServerRelativeUrl(destLibServerRelUrl).folders.add(folderServerRelUrl));
+                .reduce((chain: Promise<any>, folder, index: number) => {
+                    const folderServerRelUrl = `${config.destListProps.RootFolder.ServerRelativeUrl}/${folder.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`;
+                    this.onProgress(progressText, formatString(strings.ProcessFolderText, index + 1, folders.length), 'Documentation');
+                    return chain.then(_ => sp.web.getFolderByServerRelativeUrl(config.destListProps.RootFolder.ServerRelativeUrl).folders.add(folderServerRelUrl));
                 }, Promise.resolve());
             return;
         } catch (error) {
@@ -145,11 +146,12 @@ export class CopyListData extends BaseTask {
      * Process files
      * 
      * @param {ListContentConfig} config List config
-     * @param {OnProgressCallbackFunction} onProgress On progress function
      */
-    private async _processFiles(config: ListContentConfig, onProgress: OnProgressCallbackFunction) {
+    private async _processFiles(config: ListContentConfig) {
         try {
             this.logInformation('Processing files', { listConfig: config });
+            let progressText = formatString(strings.CopyFilesText, config.sourceListProps.ItemCount, config.sourceListProps.Title, config.destListProps.Title);
+            this.onProgress(progressText, '', 'Documentation');
 
             const spItems = await config.sourceList
                 .items
@@ -169,7 +171,7 @@ export class CopyListData extends BaseTask {
                 }
             });
 
-            await this._provisionFolderHierarchy(config.destListProps.RootFolder.ServerRelativeUrl, config.sourceListProps.RootFolder.ServerRelativeUrl, folders);
+            await this._provisionFolderHierarchy(config, folders, progressText);
 
             const filesWithContents = await this._getFileContents(config.web, files);
             let filesCopied = [];
@@ -178,6 +180,7 @@ export class CopyListData extends BaseTask {
                 let destFolderUrl = `${config.destListProps.RootFolder.ServerRelativeUrl}${file.FileDirRef.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`;
                 try {
                     this.logInformation(`Copying file ${file.LinkFilename}`);
+                    this.onProgress(progressText, formatString(strings.ProcessFileText, i + 1, files.length), 'Documentation');
                     const filename = file.LinkFilename;
                     const fileAddResult = await config.web.getFolderByServerRelativeUrl(destFolderUrl).files.add(filename, file.Blob, true);
                     filesCopied.push(fileAddResult);

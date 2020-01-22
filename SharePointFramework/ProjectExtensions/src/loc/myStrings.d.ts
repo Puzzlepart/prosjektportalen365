@@ -1,6 +1,8 @@
 declare interface IProjectExtensionsStrings {
   ApplyExtensionText: string;
   ProcessListItemText: string;
+  ProcessFileText: string;
+  ProcessFolderText: string;
   CreatingPlannerTaskText: string;
   ProvisionSiteFieldText: string;
   ProgressDialogSubText: string;
@@ -17,7 +19,8 @@ declare interface IProjectExtensionsStrings {
   ApplyTemplateWebSettings: string;
   CloseModalText: string;
   CopyListDataErrorMessage: string;
-  CopyListDataText: string;
+  CopyListItemsText: string;
+  CopyFilesText: string;
   CopyProgressLabel: string;
   EditPropertiesLinkText: string;
   ErrorDialogTitle: string;
