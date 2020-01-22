@@ -1,10 +1,10 @@
 import { stringIsNullOrEmpty } from '@pnp/common';
-import { Web, List } from '@pnp/sp';
+import { sp, Web, List } from '@pnp/sp';
+import { IListProperties } from './IListProperties';
 
 
 export interface IListContentConfigSPItem {
     GtLccDestinationList: string;
-    GtLccDestinationLibrary: string;
     GtLccFields: string;
     GtLccDefault: boolean;
     Id: number;
@@ -14,16 +14,16 @@ export interface IListContentConfigSPItem {
 
 export class ListContentConfig {
     public title: string;
-    public sourceList: string;
-    public destinationList: string;
-    public destinationLibrary: string;
     public isDefault: boolean;
+    public sourceListProps: IListProperties;
+    public destListProps: IListProperties;
+    private _sourceList: string;
+    private _destinationList: string;
 
-    constructor(private _spItem: IListContentConfigSPItem, private _web: Web) {
+    constructor(private _spItem: IListContentConfigSPItem, public web: Web) {
         this.title = this._spItem.Title;
-        this.sourceList = this._spItem.GtLccSourceList;
-        this.destinationList = this._spItem.GtLccDestinationList;
-        this.destinationLibrary = this._spItem.GtLccDestinationLibrary;
+        this._sourceList = this._spItem.GtLccSourceList;
+        this._destinationList = this._spItem.GtLccDestinationList;
         this.isDefault = this._spItem.GtLccDefault;
     }
 
@@ -35,7 +35,20 @@ export class ListContentConfig {
         return !stringIsNullOrEmpty(this._spItem.GtLccFields) ? this._spItem.GtLccFields.split(',') : [];
     }
 
-    public get list(): List {
-        return this._web.lists.getByTitle(this.sourceList);
+    public get sourceList(): List {
+        return this.web.lists.getByTitle(this._sourceList);
+    }
+
+    public get destList(): List {
+        return sp.web.lists.getByTitle(this._destinationList);
+    }
+
+    public async load() {
+        const [sourceListProps, destListProps] = await Promise.all([
+            this.sourceList.select('Title', 'ListItemEntityTypeFullName', 'ItemCount', 'BaseTemplate').expand('RootFolder').get<IListProperties>(),
+            this.destList.select('Title', 'ListItemEntityTypeFullName', 'ItemCount', 'BaseTemplate').expand('RootFolder').get<IListProperties>(),
+        ]);
+        this.sourceListProps = sourceListProps;
+        this.destListProps = destListProps;
     }
 }
