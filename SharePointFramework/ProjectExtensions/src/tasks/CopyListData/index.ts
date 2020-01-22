@@ -25,8 +25,11 @@ export class CopyListData extends BaseTask {
         try {
             for (let i = 0; i < this.data.selectedListContentConfig.length; i++) {
                 const listConfig = this.data.selectedListContentConfig[i];
-                if(listConfig.)
-                await this._processListItems(listConfig, onProgress);
+                if (listConfig.destinationLibrary) {
+                    await this._processFiles(listConfig, onProgress);
+                } else {
+                    await this._processListItems(listConfig, onProgress);
+                }
             }
             return params;
         } catch (error) {
@@ -110,6 +113,20 @@ export class CopyListData extends BaseTask {
                 batchItems.forEach(item => destList.items.inBatch(batch).add(item, destListProperties.ListItemEntityTypeFullName));
                 await batch.execute();
             }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    /**
+     * Process files
+     * 
+     * @param {ListContentConfig} listContentConfig List config
+     * @param {OnProgressCallbackFunction} onProgress On progress function
+     */
+    private async _processFiles(listContentConfig: ListContentConfig, onProgress: OnProgressCallbackFunction) {
+        try {
+            this.logInformation('Processing files', { listConfig: listContentConfig });
         } catch (error) {
             throw error;
         }
