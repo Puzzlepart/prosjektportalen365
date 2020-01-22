@@ -6,3 +6,4 @@ node_modules
 SharePointFramework/*/**/build.config.json
 Install/Templates
 Install/InstallLog.txt
+SharePointFramework/**/.vscode/launch*.json
