@@ -1,5 +1,5 @@
 import { TypedHash } from '@pnp/common';
-import { List, sp } from '@pnp/sp';
+import { List, sp, Web } from '@pnp/sp';
 import { IProjectSetupData } from 'extensions/projectSetup';
 import * as strings from 'ProjectExtensionsStrings';
 import { SPField } from 'shared/lib/models/SPField';
@@ -22,10 +22,16 @@ export class CopyListData extends BaseTask {
      * @param {OnProgressCallbackFunction} onProgress On progress function
      */
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
+        this.onProgress = onProgress;
         try {
             for (let i = 0; i < this.data.selectedListContentConfig.length; i++) {
-                const listConfig = this.data.selectedListContentConfig[i];
-                await this._processListItems(listConfig, onProgress);
+                const config = this.data.selectedListContentConfig[i];
+                await config.load();
+                if (config.sourceListProps.BaseTemplate === 101) {
+                    await this._processFiles(config);
+                } else {
+                    await this._processListItems(config);
+                }
             }
             return params;
         } catch (error) {
@@ -38,12 +44,12 @@ export class CopyListData extends BaseTask {
      * 
      * @param {ListContentConfig} listContentConfig List config
      */
-    private async _getSourceItems(listConfig: ListContentConfig) {
+    private async _getSourceItems(config: ListContentConfig) {
         try {
-            return await listConfig.list.items.select(...listConfig.fields, 'TaxCatchAll/ID', 'TaxCatchAll/Term').expand('TaxCatchAll').top(500).get();
+            return await config.sourceList.items.select(...config.fields, 'TaxCatchAll/ID', 'TaxCatchAll/Term').expand('TaxCatchAll').top(500).get();
         } catch (error) {
             try {
-                return await listConfig.list.items.select(...listConfig.fields).top(500).get();
+                return await config.sourceList.items.select(...config.fields).top(500).get();
             } catch (error) {
                 return [];
             }
@@ -53,62 +59,135 @@ export class CopyListData extends BaseTask {
     /**
      * Get source fields
      * 
-     * @param {ListContentConfig} listContentConfig List config
+     * @param {ListContentConfig} config List config
      */
-    private async _getSourceFields(listContentConfig: ListContentConfig): Promise<SPField[]> {
+    private async _getSourceFields(config: ListContentConfig): Promise<SPField[]> {
         try {
-            return await listContentConfig.list.fields.select(...Object.keys(new SPField())).get<SPField[]>();
+            return await config.sourceList.fields.select(...Object.keys(new SPField())).get<SPField[]>();
         } catch (error) {
             return [];
         }
     }
 
     /**
-     * Get list entity type
-     * 
-     * @param {List} destList Destination list
-     */
-    private async _getListProperties(destList: List) {
-        try {
-            return await destList.select('ListItemEntityTypeFullName', 'ItemCount').get<{ ListItemEntityTypeFullName: string, ItemCount: number }>();
-        } catch (error) {
-            return undefined;
-        }
-    }
-
-    /**
      * Process list items
      * 
-     * @param {ListContentConfig} listContentConfig List config
-     * @param {OnProgressCallbackFunction} onProgress On progress function
+     * @param {ListContentConfig} config List config
      * @param {number} batchChunkSize Batch chunk size (defaults to 25)
      */
-    private async _processListItems(listContentConfig: ListContentConfig, onProgress: OnProgressCallbackFunction, batchChunkSize: number = 25) {
+    private async _processListItems(config: ListContentConfig,batchChunkSize: number = 25) {
         try {
-            this.logInformation('Processing list items', { listConfig: listContentConfig });
-            let destList = sp.web.lists.getByTitle(listContentConfig.destinationList);
-            let [destListProperties, sourceListProperties] = await Promise.all([
-                this._getListProperties(destList),
-                this._getListProperties(listContentConfig.list),
-            ]);
-            let progressText = formatString(strings.CopyListDataText, sourceListProperties.ItemCount, listContentConfig.sourceList, listContentConfig.destinationList);
-            onProgress(progressText, '', 'List');
+            this.logInformation('Processing list items', { listConfig: config });
+            let progressText = formatString(strings.CopyListItemsText, config.sourceListProps.ItemCount, config.sourceListProps.Title, config.destListProps.Title);
+            this.onProgress(progressText, '', 'List');
 
             let [sourceItems, sourceFields] = await Promise.all([
-                this._getSourceItems(listContentConfig),
-                this._getSourceFields(listContentConfig),
+                this._getSourceItems(config),
+                this._getSourceFields(config),
             ]);
 
-            let itemsToAdd = sourceItems.map(itm => this._getProperties(listContentConfig.fields, itm, sourceFields));
+            let itemsToAdd = sourceItems.map(itm => this._getProperties(config.fields, itm, sourceFields));
 
             for (let i = 0, j = 0; i < itemsToAdd.length; i += batchChunkSize, j++) {
                 let batch = sp.createBatch();
                 let batchItems = itemsToAdd.slice(i, i + batchChunkSize);
                 this.logInformation(`Processing batch ${j + 1} with ${batchItems.length} items`, {});
-                onProgress(progressText, formatString(strings.ProcessListItemText, j + 1, batchItems.length), 'List');
-                batchItems.forEach(item => destList.items.inBatch(batch).add(item, destListProperties.ListItemEntityTypeFullName));
+                this.onProgress(progressText, formatString(strings.ProcessListItemText, j + 1, batchItems.length), 'List');
+                batchItems.forEach(item => config.destList.items.inBatch(batch).add(item, config.destListProps.ListItemEntityTypeFullName));
                 await batch.execute();
             }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    /**
+     * Get file contents
+     *
+     * @param {Web} web Web
+     * @param {IFile[]} files Files to get content for
+     */
+    private async _getFileContents(web: Web, files: any[]): Promise<any[]> {
+        try {
+            const fileContents = await Promise.all(files.map(file => new Promise<any>(async (resolve) => {
+                let blob = await web.getFileByServerRelativeUrl(file.FileRef).getBlob();
+                file.Blob = blob;
+                resolve(file);
+            })));
+            return fileContents;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    /**
+     * Create folder hierarchy
+     *
+     * @param {ListContentConfig} config List config
+     * @param {string[]} folders An array of folders to provision
+     * @param {string} progressText Progress text
+     */
+    private async _provisionFolderHierarchy(config: ListContentConfig, folders: string[], progressText: string): Promise<void> {
+        try {
+            await folders
+                .sort()
+                .reduce((chain: Promise<any>, folder, index: number) => {
+                    const folderServerRelUrl = `${config.destListProps.RootFolder.ServerRelativeUrl}/${folder.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`;
+                    this.onProgress(progressText, formatString(strings.ProcessFolderText, index + 1, folders.length), 'Documentation');
+                    return chain.then(_ => sp.web.getFolderByServerRelativeUrl(config.destListProps.RootFolder.ServerRelativeUrl).folders.add(folderServerRelUrl));
+                }, Promise.resolve());
+            return;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    /**
+     * Process files
+     * 
+     * @param {ListContentConfig} config List config
+     */
+    private async _processFiles(config: ListContentConfig) {
+        try {
+            this.logInformation('Processing files', { listConfig: config });
+            let progressText = formatString(strings.CopyFilesText, config.sourceListProps.ItemCount, config.sourceListProps.Title, config.destListProps.Title);
+            this.onProgress(progressText, '', 'Documentation');
+
+            const spItems = await config.sourceList
+                .items
+                .expand('Folder')
+                .select('Title', 'LinkFilename', 'FileRef', 'FileDirRef', 'Folder/ServerRelativeUrl')
+                .top(500)
+                .get();
+
+            let folders: string[] = [];
+            let files: any[] = [];
+
+            spItems.forEach(item => {
+                if (item.Folder && item.Folder.hasOwnProperty('ServerRelativeUrl')) {
+                    folders.push(item.Folder.ServerRelativeUrl);
+                } else {
+                    files.push(item);
+                }
+            });
+
+            await this._provisionFolderHierarchy(config, folders, progressText);
+
+            const filesWithContents = await this._getFileContents(config.web, files);
+            let filesCopied = [];
+            for (let i = 0; i < filesWithContents.length; i++) {
+                let file = filesWithContents[i];
+                let destFolderUrl = `${config.destListProps.RootFolder.ServerRelativeUrl}${file.FileDirRef.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`;
+                try {
+                    this.logInformation(`Copying file ${file.LinkFilename}`);
+                    this.onProgress(progressText, formatString(strings.ProcessFileText, i + 1, files.length), 'Documentation');
+                    const filename = file.LinkFilename;
+                    const fileAddResult = await config.web.getFolderByServerRelativeUrl(destFolderUrl).files.add(filename, file.Blob, true);
+                    filesCopied.push(fileAddResult);
+                    this.logInformation(`Successfully copied file ${file.LinkFilename}`);
+                } catch (err) { }
+            }
+            return filesCopied;
         } catch (error) {
             throw error;
         }

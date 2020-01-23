@@ -1672,7 +1672,7 @@
     <value></value>
   </data>
   <data name="SiteFields_GtLccDestinationLibrary_Description" xml:space="preserve">
-    <value></value>
+    <value>Om det er dokumenter som skal kopieres, skriv inn relativ URL for biblioteket dokumentene skal kopieres til. F.eks. Delte dokumenter.</value>
   </data>
   <data name="SiteFields_GtLccLabel_Description" xml:space="preserve">
     <value>Tekst som vises i Nytt prosjekt-dialogen</value>
