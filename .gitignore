@@ -5,5 +5,6 @@ Release
 node_modules
 SharePointFramework/*/**/build.config.json
 Install/Templates
+Install/SiteScripts/*.txt
 Install/InstallLog.txt
 SharePointFramework/**/.vscode/launch*.json
