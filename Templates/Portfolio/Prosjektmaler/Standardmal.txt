@@ -1,15 +1,9 @@
 {
-    "Version": "1.1.8",
+    "Version": "1.1.9",
     "Parameters": {
         "ProvisionSiteFields": "Kolonner for Prosjektportalen (Prosjekt)",
         "ProjectContentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
-        "ProjectStatusContentTypeId": "0x010022252E35737A413FB56A1BA53862F6D5",
-        "TermSetIds": {
-            "GtProjectPhase": "abcfc9d9-a263-4abb-8234-be973c46258a",
-            "GtProjectServiceArea": "99af1a25-88c1-4781-a05c-8446928d3fdd",
-            "GtProjectType": "abcfc9d9-a263-4abb-8234-be973c46258a",
-            "GtResourceRole": "3930cddb-fa4d-496f-b314-03ecabb91de1"
-        }
+        "ProjectStatusContentTypeId": "0x010022252E35737A413FB56A1BA53862F6D5"
     },
     "ContentTypes": [
         {
