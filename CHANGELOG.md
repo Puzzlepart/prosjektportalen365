@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed rendering of status sections, some properties had no effect #180
 - Sync project propertes after phase change #196
 - Fixed an issue with installation script
+- Fixed an overview with retrieving document template and library picker #197
 
 ### Added
 - Installation writes to output which user it is connected with #187
