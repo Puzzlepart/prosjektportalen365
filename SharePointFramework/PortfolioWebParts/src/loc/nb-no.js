@@ -57,7 +57,6 @@ define([], function () {
     NoSearchResults: 'Søket ga ingen resultater',
     NotSet: 'Ikke satt',
     PhaseLabel: 'Fase',
-    PhaseTermSetIdFieldLabel: 'Termsett ID for Fase',
     ProbabilityLabel: 'Sannsynlighet (S)',
     ProbabilityPostActionLabel: 'S etter tiltak',
     ProjectInformationGroupName: 'Instillinger for Prosjektinformasjon-vindu',

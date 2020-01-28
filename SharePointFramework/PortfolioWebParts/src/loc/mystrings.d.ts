@@ -59,7 +59,6 @@ declare interface IPortfolioWebPartsStrings {
   NoSearchResults: string;
   NotSet: string;
   PhaseLabel: string;
-  PhaseTermSetIdFieldLabel: string;
   ProbabilityLabel: string;
   ProbabilityPostActionLabel: string;
   ProjectInformationGroupName: string;

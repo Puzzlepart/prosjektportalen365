@@ -24,9 +24,6 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   label: strings.SortByFieldLabel,
                   disabled: true,
                 }),
-                PropertyPaneTextField('phaseTermSetId', {
-                  label: strings.PhaseTermSetIdFieldLabel,
-                }),
                 PropertyPaneTextField('searchBoxPlaceholderText', {
                   label: strings.SearchBoxPlaceholderTextLabel,
                 }),

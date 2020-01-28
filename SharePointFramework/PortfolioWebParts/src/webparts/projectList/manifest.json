@@ -24,7 +24,6 @@
             },
             "officeFabricIconFontName": "ViewListGroup",
             "properties": {
-                "phaseTermSetId": "abcfc9d9-a263-4abb-8234-be973c46258a",
                 "sortBy": "Title",
                 "showAsTiles": true,
                 "showProjectOwner": true,
