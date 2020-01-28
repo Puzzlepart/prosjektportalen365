@@ -27,6 +27,15 @@
       padding: 0 32px 0 32px;
       font-size: 12px !important;
 
+      .timelineItem {
+        cursor: pointer !important;
+        .itemContent {
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          width: 100%;
+        }
+      }
+
       [class="react-calendar-timeline"] [class*="rct-header-root"] {
         background: #f4f4f4 !important;
       }
@@ -43,12 +52,6 @@
       [class="react-calendar-timeline"] [class*="rct-dateHeader"] {
         font-size: 10px;
         border: none;
-      }
-
-      [class="react-calendar-timeline"] [class*="rct-item"] [class*="rct-item-content"] {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        width: 100%;
       }
     }
   }
