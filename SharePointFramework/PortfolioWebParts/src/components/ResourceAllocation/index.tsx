@@ -193,7 +193,6 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
    */
   private _itemRenderer(props: ReactCalendarItemRendererProps<ITimelineItem>) {
     let htmlProps = props.getItemProps(props.item.itemProps);
-    console.log('_itemRenderer', htmlProps);
     return (
       <div {...htmlProps}>
         <div className='rct-item-content' style={{ maxHeight: `${props.itemContext.dimensions.height}` }}>
