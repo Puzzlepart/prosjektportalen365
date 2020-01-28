@@ -37,19 +37,16 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
      * 
      * @param {TypedHash} fieldValues Field values for the properties item
      * @param {TypedHash} fieldValuesText Field values in text format for the properties item
+     * @param {TypedHash<any>} templateParameters Template parameters
      * @param {void} progressFunc Progress function
      */
-    public async syncPropertyItemToHub(fieldValues: TypedHash<any>, fieldValuesText: TypedHash<string>, progressFunc: (props: IProgressIndicatorProps) => void): Promise<ItemUpdateResult> {
+    public async syncPropertyItemToHub(fieldValues: TypedHash<any>, fieldValuesText: TypedHash<string>, templateParameters: TypedHash<any>, progressFunc: (props: IProgressIndicatorProps) => void): Promise<ItemUpdateResult> {
         try {
             fieldValuesText = Object.keys(fieldValuesText).reduce((obj, key) => ({ ...obj, [key.replace(/_x005f_/gm, '_')]: fieldValuesText[key] }), {});
             Logger.log({ message: `(${this._name}) (syncPropertyItemToHub) Starting sync of property item to hub.`, level: LogLevel.Info });
             progressFunc({ label: strings.SyncProjectPropertiesValuesProgressDescription, description: 'Vennligst vent...' });
-            let tmplParams: TypedHash<any> = {};
-            try {
-                tmplParams = JSON.parse(fieldValuesText.TemplateParameters);
-            } catch { }
             const [fields, siteUsers] = await Promise.all([
-                this.entityService.usingParams({ contentTypeId: tmplParams.ProjectContentTypeId }).getEntityFields(),
+                templateParameters.ProjectContentTypeId ? this.entityService.usingParams({ contentTypeId: templateParameters.ProjectContentTypeId }).getEntityFields() : this.entityService.getEntityFields(),
                 this.sp.web.siteUsers.select('Id', 'Email', 'LoginName').get<{ Id: number, Email: string, LoginName: string }[]>(),
             ]);
             Logger.log({ message: `(${this._name}) (syncPropertyItemToHub) Retreived ${fields.length} from entity.`, level: LogLevel.Info });
