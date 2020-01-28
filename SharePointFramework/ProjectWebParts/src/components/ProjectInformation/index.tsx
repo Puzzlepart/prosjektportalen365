@@ -153,16 +153,11 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
     const progressFunc = (progress: IProgressIndicatorProps) => this.setState({ progress: { title: strings.SyncProjectPropertiesProgressLabel, progress } });
     try {
       progressFunc({ label: strings.SyncProjectPropertiesListProgressDescription, description: `${strings.PleaseWaitText}...` });
-      this.logInfo('Ensuring list and fields', '_onSyncProperties');
-      let tmplParams: TypedHash<any> = {};
-      try {
-        tmplParams = JSON.parse(this.state.data.fieldValues.TemplateParameters);
-      } catch { }
-      this.logInfo('Ensuring list and fields', '_onSyncProperties', { tmplParams });
+      this.logInfo('Ensuring list and fields', '_onSyncProperties', { templateParameters: this.state.data.templateParameters });
       const { created } = await this._portalDataService.syncList(
         this.props.webUrl,
         strings.ProjectPropertiesListName,
-        tmplParams.ProjectContentTypeId || '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+        this.state.data.templateParameters.ProjectContentTypeId || '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: this.props.webTitle },
       );
       if (!created) {
@@ -174,6 +169,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
       await sleep(5);
       document.location.href = (sessionStorage.DEBUG || DEBUG) ? document.location.href.split('#')[0] : this.props.webUrl;
     } catch (error) {
+      this.logError('Failed to synchornize properties to item in hub', '_onSyncProperties', error);
       this._addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning);
     } finally {
       this.setState({ progress: null });

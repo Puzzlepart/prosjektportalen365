@@ -26,9 +26,14 @@ export interface IGetPropertiesData {
      * Entity fields
      */
     fields?: IEntityField[];
-    
+
     /**
      * Properties list id
      */
     propertiesListId?: string;
+
+    /**
+     * 
+     */
+    templateParameters?: TypedHash<any>;
 }

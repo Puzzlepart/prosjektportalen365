@@ -135,8 +135,18 @@ export class ProjectDataService {
         let propertyItem = await this._getPropertyItem(encodeURIComponent(`${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`));
         // tslint:disable-next-line: early-exit
         if (propertyItem) {
+            let templateParameters: TypedHash<any>;
+            try {
+                templateParameters = JSON.parse(propertyItem.fieldValues.TemplateParameters) || {};
+            } catch {
+                templateParameters = {};
+            }
             Logger.write(`(ProjectDataService) (getPropertiesData) Local property item found.`);
-            return { ...propertyItem, propertiesListId: propertyItem.propertiesListId };
+            return {
+                ...propertyItem,
+                propertiesListId: propertyItem.propertiesListId,
+                templateParameters,
+            };
         } else {
             Logger.write(`(ProjectDataService) (getPropertiesData) Local property item not found. Retrieving data from portal site.`);
             let entity = await this._params.entityService.configure(this.spConfiguration).fetchEntity(this._params.siteId, this._params.webUrl);
@@ -146,6 +156,7 @@ export class ProjectDataService {
                 fields: entity.fields,
                 ...entity.urls,
                 propertiesListId: null,
+                templateParameters: {},
             };
         }
     }
