@@ -18,7 +18,7 @@ export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
             target={item.element}
             onDismiss={onDismiss}
             setInitialFocus={true}>
-            <p><b>Resssurs:</b> {item.data.resource}</p>
+            <p><b>Ressurs:</b> {item.data.resource}</p>
             <p><b>Allokeringsprosent:</b> {item.data.allocation}%</p>
             <p><b>Startdato:</b> {formatDate(item.data.props.GtStartDateOWSDATE)}</p>
             <p><b>Sluttdato:</b> {formatDate(item.data.props.GtEndDateOWSDATE)}</p>
