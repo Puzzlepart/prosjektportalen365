@@ -40,6 +40,8 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
       'GtResourceAbsenceOWSCHCS',
       'GtStartDateOWSDATE',
       'GtEndDateOWSDATE',
+      'GtAllocationStatusOWSCHCS',
+      'GtAllocationCommentOWSMTXT'
     ],
   };
 
@@ -276,10 +278,12 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
         title: isAbsence ? `${res.GtResourceAbsenceOWSCHCS} (${allocation}%)` : `${res.RefinableString72} - ${res.SiteTitle} (${allocation}%)`,
         start_time: moment(new Date(res.GtStartDateOWSDATE)),
         end_time: moment(new Date(res.GtEndDateOWSDATE)),
+        allocation,
         itemProps: { style },
         project: res.SiteTitle,
         role: res.RefinableString72,
         resource: group.title,
+        props: res,
       } as ITimelineItem;
     });
     return items;
