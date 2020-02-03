@@ -10,6 +10,7 @@ export interface ITimelineItem {
     allocation: number;
     itemProps: React.HTMLProps<HTMLDivElement>;
     project: string;
+    projectUrl: string;
     role: string;
     resource: string;
     props: TypedHash<any>;
