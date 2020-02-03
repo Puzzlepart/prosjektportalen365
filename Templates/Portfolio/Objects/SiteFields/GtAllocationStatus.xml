@@ -1,4 +1,4 @@
-﻿<Field Type="Choice" DisplayName="{resource:SiteFields_GtAllocationStatus_Description}" Description="{resource:SiteFields_GtAllocationStatus_Description}" Format="Dropdown" FillInChoice="FALSE" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{6ec4d897-ee44-42b2-80c0-3714021f6ac6}" StaticName="GtAllocationStatus" Name="GtAllocationStatus">
+﻿<Field Type="Choice" DisplayName="{resource:SiteFields_GtAllocationStatus_DisplayName}" Description="{resource:SiteFields_GtAllocationStatus_Description}" Format="Dropdown" FillInChoice="FALSE" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{6ec4d897-ee44-42b2-80c0-3714021f6ac6}" StaticName="GtAllocationStatus" Name="GtAllocationStatus">
     <Default>Forespurt</Default>
     <CHOICES>
         <CHOICE>Forespurt</CHOICE>
