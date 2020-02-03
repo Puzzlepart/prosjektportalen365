@@ -437,6 +437,14 @@
                     "ID": "08ac9d56-f8eb-4a2c-868f-d39fc012fcd6",
                     "Name": "GtResourceLoad",
                     "Required": true
+                },
+                {
+                    "ID": "6ec4d897-ee44-42b2-80c0-3714021f6ac6",
+                    "Name": "GtAllocationStatus"
+                },
+                {
+                    "ID": "42b501ac-c235-4b2a-a95d-8d00aad11779",
+                    "Name": "GtAllocationComment"
                 }
             ]
         }
@@ -1414,6 +1422,8 @@
                         "GtStartDate",
                         "GtEndDate",
                         "GtResourceLoad",
+                        "GtAllocationStatus",
+                        "GtAllocationComment",
                         "Modified",
                         "Editor"
                     ],

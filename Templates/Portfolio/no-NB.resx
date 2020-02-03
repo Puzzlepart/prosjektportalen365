@@ -1334,6 +1334,18 @@
   </data>
   <data name="SiteFields_GtProjectLifecycleStatus_DisplayName" xml:space="preserve">
     <value>Prosjektstatus</value>
+  </data>  
+  <data name="SiteFields_GtAllocationStatus_DisplayName" xml:space="preserve">
+    <value>Status</value>
+  </data>  
+  <data name="SiteFields_GtAllocationComment_DisplayName" xml:space="preserve">
+    <value>Kommentar</value>
+  </data>
+  <data name="SiteFields_GtAllocationStatus_Description" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SiteFields_GtAllocationComment_Description" xml:space="preserve">
+    <value />
   </data>
   <data name="SiteFields_GtSortOrder_Description" xml:space="preserve">
     <value />
