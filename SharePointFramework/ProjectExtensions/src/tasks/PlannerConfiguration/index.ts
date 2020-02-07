@@ -10,11 +10,19 @@ import { IPlannerConfiguration } from './IPlannerConfiguration';
 import { IPlannerPlan } from './IPlannerPlan';
 import { TypedHash, getGUID } from '@pnp/common';
 
+/**
+ * @class PlannerConfiguration
+ */
 export class PlannerConfiguration extends BaseTask {
     public taskName = 'PlannerConfiguration';
-    private _config: IPlannerConfiguration;
 
-    constructor(data: IProjectSetupData) {
+    /**
+     * Constructor
+     * 
+     * @param {IProjectSetupData} data Project setup data 
+     * @param {IPlannerConfiguration} _configuration Planner configuration object
+     */
+    constructor(data: IProjectSetupData, private _configuration: IPlannerConfiguration) {
         super(data);
     }
 
@@ -32,14 +40,12 @@ export class PlannerConfiguration extends BaseTask {
         this.logInformation(`Creating plan ${planTitle}`);
         let { plan, created } = await this._ensurePlan(planTitle, existingGroupPlans, pageContext.legacyPageContext.groupId);
         if (!created) return plan;
-        if (this.data.settings.values.copyPlannerTasks) {
-            for (let i = 0; i < Object.keys(this._config).length; i++) {
-                let bucketName = Object.keys(this._config)[i];
-                this.logInformation(`Creating bucket ${bucketName} for plan ${planTitle}`);
-                let bucket = await this._createBucket(bucketName, plan.id);
-                onProgress(strings.PlannerConfigurationText, formatString(strings.CreatingPlannerTaskText, bucketName), 'PlannerLogo');
-                await this._createTasks(plan.id, bucket);
-            }
+        for (let i = 0; i < Object.keys(this._configuration).length; i++) {
+            let bucketName = Object.keys(this._configuration)[i];
+            this.logInformation(`Creating bucket ${bucketName} for plan ${planTitle}`);
+            let bucket = await this._createBucket(bucketName, plan.id);
+            onProgress(strings.PlannerConfigurationText, formatString(strings.CreatingPlannerTaskText, bucketName), 'PlannerLogo');
+            await this._createTasks(plan.id, bucket);
         }
         return plan;
     }
@@ -78,23 +84,23 @@ export class PlannerConfiguration extends BaseTask {
      * @param {IPlannerBucket} bucket Bucket 
      */
     private async _createTasks(planId: string, bucket: IPlannerBucket) {
-        const tasks = Object.keys(this._config[bucket.name]);
+        const tasks = Object.keys(this._configuration[bucket.name]);
         for (let i = 0; i < tasks.length; i++) {
-            let title = tasks[i];
-            let checklist: string[] = this._config[bucket.name][title] || [];
+            let name = tasks[i];
+            let checklist: string[] = this._configuration[bucket.name][name] || [];
             try {
-                this.logInformation(`Creating task ${title} in bucket ${bucket.name}`);
-                const task = await MSGraphHelper.Post('planner/tasks', JSON.stringify({ title, bucketId: bucket.id, planId }));
+                this.logInformation(`Creating task ${name} in bucket ${bucket.name}`);
+                const task = await MSGraphHelper.Post('planner/tasks', JSON.stringify({ title: name, bucketId: bucket.id, planId }));
                 if (checklist.length > 0) {
                     let taskUpdate: TypedHash<any> = {
-                        checklist: checklist.reduce((obj, t) => ({ ...obj, [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title: t }, }), {}),
+                        checklist: checklist.reduce((obj, title) => ({ ...obj, [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }, }), {}),
                     };
                     let eTag = (await MSGraphHelper.Get(`planner/tasks/${task.id}/details`))['@odata.etag'];
                     await MSGraphHelper.Patch(`planner/tasks/${task.id}/details`, JSON.stringify(taskUpdate), eTag);
                 }
-                this.logInformation(`Succesfully created task ${title} in bucket ${bucket.name}`, { taskId: task.id, checklist });
+                this.logInformation(`Succesfully created task ${name} in bucket ${bucket.name}`, { taskId: task.id, checklist });
             } catch (error) {
-                this.logInformation(`Failed to create task ${title} in bucket ${bucket.name}`);
+                this.logInformation(`Failed to create task ${name} in bucket ${bucket.name}`);
             }
         }
     }
@@ -109,24 +115,15 @@ export class PlannerConfiguration extends BaseTask {
     }
 
     /**
-     * Fetch planner config
-     * 
-     * @param {string} path Config path
-     */
-    private async _fetchPlannerConfig(path: string = 'Konfigurasjonsfiler/Planneroppgaver.txt'): Promise<IPlannerConfiguration> {
-        return await (await fetch(`${this.data.hub.url}/${path}`, { credentials: 'include' })).json();
-    }
-
-    /**
      * Execute PlannerConfiguration
      * 
+     * @param {IBaseTaskParams} params Task parameters 
      * @param {IBaseTaskParams} params Task parameters 
      * @param {OnProgressCallbackFunction} onProgress On progress function
      */
     public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         this.logInformation('Setting up Plans, Buckets and Task');
         try {
-            this._config = await this._fetchPlannerConfig();
             let groupPlan = await this._createPlan(params.context.pageContext, onProgress);
             params.templateParameters = { defaultPlanId: groupPlan.id };
         } catch (error) {
