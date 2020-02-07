@@ -1,12 +1,13 @@
-import { TypedHash } from '@pnp/common';
+import { TypedHash, stringIsNullOrEmpty } from '@pnp/common';
 import { List, sp, Web } from '@pnp/sp';
 import { IProjectSetupData } from 'extensions/projectSetup';
 import * as strings from 'ProjectExtensionsStrings';
 import { SPField } from 'shared/lib/models/SPField';
 import * as formatString from 'string-format';
-import { ListContentConfig } from '../../models';
+import { ListContentConfig, ListContentConfigType } from '../../models';
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask';
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction';
+import { PlannerConfiguration } from '../PlannerConfiguration';
 
 export class CopyListData extends BaseTask {
     public taskName = 'CopyListData';
@@ -27,10 +28,25 @@ export class CopyListData extends BaseTask {
             for (let i = 0; i < this.data.selectedListContentConfig.length; i++) {
                 const config = this.data.selectedListContentConfig[i];
                 await config.load();
-                if (config.sourceListProps.BaseTemplate === 101) {
-                    await this._processFiles(config);
-                } else {
-                    await this._processListItems(config);
+                switch (config.type) {
+                    case ListContentConfigType.Planner: {
+                        let items = await this._getSourceItems(config, ['Title', 'GtCategory', 'GtChecklist']);
+                        let configuration = items.reduce((obj, item) => {
+                            obj[item.GtCategory] = obj[item.GtCategory] || {};
+                            obj[item.GtCategory][item.Title] = stringIsNullOrEmpty(item.GtChecklist) ? [] : item.GtChecklist.split(';');
+                            return obj;
+                        }, {});
+                        await new PlannerConfiguration(this.data, configuration).execute(params, onProgress);
+                    }
+                        break;
+                    case ListContentConfigType.List: {
+                        if (config.sourceListProps.BaseTemplate === 101) {
+                            await this._processFiles(config);
+                        } else {
+                            await this._processListItems(config);
+                        }
+                    }
+                        break;
                 }
             }
             return params;
@@ -43,13 +59,14 @@ export class CopyListData extends BaseTask {
      * Get source items
      * 
      * @param {ListContentConfig} listContentConfig List config
+     * @param {string[]} fields Fields
      */
-    private async _getSourceItems(config: ListContentConfig) {
+    private async _getSourceItems(config: ListContentConfig, fields?: string[]) {
         try {
-            return await config.sourceList.items.select(...config.fields, 'TaxCatchAll/ID', 'TaxCatchAll/Term').expand('TaxCatchAll').top(500).get();
+            return await config.sourceList.items.select(...fields || config.fields, 'TaxCatchAll/ID', 'TaxCatchAll/Term').expand('TaxCatchAll').top(500).get();
         } catch (error) {
             try {
-                return await config.sourceList.items.select(...config.fields).top(500).get();
+                return await config.sourceList.items.select(...fields || config.fields).top(500).get();
             } catch (error) {
                 return [];
             }
@@ -75,7 +92,7 @@ export class CopyListData extends BaseTask {
      * @param {ListContentConfig} config List config
      * @param {number} batchChunkSize Batch chunk size (defaults to 25)
      */
-    private async _processListItems(config: ListContentConfig,batchChunkSize: number = 25) {
+    private async _processListItems(config: ListContentConfig, batchChunkSize: number = 25) {
         try {
             this.logInformation('Processing list items', { listConfig: config });
             let progressText = formatString(strings.CopyListItemsText, config.sourceListProps.ItemCount, config.sourceListProps.Title, config.destListProps.Title);
