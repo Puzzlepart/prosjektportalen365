@@ -30,8 +30,6 @@ declare interface IProjectExtensionsStrings {
   GetSetupDataErrorStack: string;
   IncludeStandardFoldersLabel: string;
   IncludeStandardFoldersDescription: string;
-  CopyPlannerTasksLabel: string;
-  CopyPlannerTasksDescription: string;
   IncludePortfolioAdministratorsLabel: string;
   IncludePortfolioAdministratorsDescription: string;
   InvalidLanguageErrorMessage: string;

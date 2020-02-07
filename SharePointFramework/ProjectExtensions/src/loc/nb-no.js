@@ -16,7 +16,6 @@ define([], function () {
     CopyListDataErrorMessage: 'Det skjedde en feil under kopiering av listeinnhold',
     CopyListItemsText: 'Kopierer {0} listeelementer fra {1} til {2}',
     CopyFilesText: 'Kopierer {0} dokumenter/mapper fra {1} til {2}',
-    CopyPlannerTasksLabel: 'Kopier standardoppgaver til Planner',
     IncludePortfolioAdministratorsLabel: 'Gi tilgang til porteføljeadministratorer',
     IncludePortfolioAdministratorsDescription: 'Porteføljeadministratorer (brukerne i gruppen Porteføljeadministratorer) får tilgang til prosjektområdet.',
     CopyProgressLabel: 'Kopierer valgt(e) dokument(er) til prosjektområdet...',
@@ -73,7 +72,6 @@ define([], function () {
     ProcessFolderText: 'Kopierer mappe {0} av {1}',
     PhaseLabel: 'Fase',
     IncludeStandardFoldersDescription: 'Inkluder standardmapper for dokumentbiblioteket. Det opprettes en mappe per prosjetktfase.',
-    CopyPlannerTasksDescription: 'Opprett en plan for prosjektet i Planner og opprett buckets og oppgaver for denne.',
     SetupAbortedText: 'Installasjon avbrutt av bruker',
     UnknownErrorText: 'Ukjent feil'
   }
