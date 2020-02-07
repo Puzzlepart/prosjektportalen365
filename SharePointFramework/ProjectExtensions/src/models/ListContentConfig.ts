@@ -19,6 +19,7 @@ export enum ListContentConfigType {
 }
 
 export class ListContentConfig {
+    public id: number;
     public title: string;
     public isDefault: boolean;
     public sourceListProps: IListProperties = {};
@@ -27,10 +28,11 @@ export class ListContentConfig {
     private _destinationList: string;
 
     constructor(private _spItem: IListContentConfigSPItem, public web: Web) {
-        this.title = this._spItem.Title;
-        this._sourceList = this._spItem.GtLccSourceList;
-        this._destinationList = this._spItem.GtLccDestinationList;
-        this.isDefault = this._spItem.GtLccDefault;
+        this.id = _spItem.Id;
+        this.title = _spItem.Title;
+        this._sourceList = _spItem.GtLccSourceList;
+        this._destinationList = _spItem.GtLccDestinationList;
+        this.isDefault = _spItem.GtLccDefault;
     }
 
     public get type(): ListContentConfigType {

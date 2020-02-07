@@ -73,6 +73,7 @@ define([], function () {
     PhaseLabel: 'Fase',
     IncludeStandardFoldersDescription: 'Inkluder standardmapper for dokumentbiblioteket. Det opprettes en mappe per prosjetktfase.',
     SetupAbortedText: 'Installasjon avbrutt av bruker',
-    UnknownErrorText: 'Ukjent feil'
+    UnknownErrorText: 'Ukjent feil',
+    TemplateListContentConfigText: 'Den valgte prosjektmalen inneholder konfigurasjon for standardinnhold.'
   }
 });

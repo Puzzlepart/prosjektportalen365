@@ -73,6 +73,7 @@ declare interface IProjectExtensionsStrings {
   PhaseLabel: string;
   SetupAbortedText: string;
   UnknownErrorText: string;
+  TemplateListContentConfigText: string;
 }
 
 declare module 'ProjectExtensionsStrings' {
