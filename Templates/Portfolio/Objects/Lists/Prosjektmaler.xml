@@ -21,7 +21,7 @@
         </View>
     </pnp:Views>
     <pnp:Fields>
-        <Field Type="Lookup" DisplayName="Listeinnhold" List="{listid:Listeinnhold}" ShowField="Title" RelationshipDeleteBehavior="None" ID="{dd01587d-5fc2-46c1-8681-8b81b2514e92}" SourceID="{{listid:Prosjektmaler}}" StaticName="ListContentConfigLookup" Name="ListContentConfigLookup" />
+        <Field Type="LookupMulti" Mult="TRUE" DisplayName="Listeinnhold" List="{listid:Listeinnhold}" ShowField="Title" RelationshipDeleteBehavior="None" ID="{dd01587d-5fc2-46c1-8681-8b81b2514e92}" SourceID="{{listid:Prosjektmaler}}" StaticName="ListContentConfigLookup" Name="ListContentConfigLookup" />
     </pnp:Fields>
     <pnp:FieldRefs>
         <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" />
