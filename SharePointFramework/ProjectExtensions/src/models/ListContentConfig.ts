@@ -4,19 +4,25 @@ import { IListProperties } from './IListProperties';
 
 
 export interface IListContentConfigSPItem {
+    Id: number;
+    Title: string;
+    ContentTypeId: string;
     GtLccDestinationList: string;
     GtLccFields: string;
     GtLccDefault: boolean;
-    Id: number;
-    Title: string;
     GtLccSourceList: string;
+}
+
+export enum ListContentConfigType {
+    List,
+    Planner
 }
 
 export class ListContentConfig {
     public title: string;
     public isDefault: boolean;
-    public sourceListProps: IListProperties;
-    public destListProps: IListProperties;
+    public sourceListProps: IListProperties = {};
+    public destListProps: IListProperties = {};
     private _sourceList: string;
     private _destinationList: string;
 
@@ -25,6 +31,11 @@ export class ListContentConfig {
         this._sourceList = this._spItem.GtLccSourceList;
         this._destinationList = this._spItem.GtLccDestinationList;
         this.isDefault = this._spItem.GtLccDefault;
+    }
+
+    public get type(): ListContentConfigType {
+        if (this._spItem.ContentTypeId.indexOf('0x0100B8B4EE61A547B247B49CFC21B67D5B7D01') !== -1) return ListContentConfigType.Planner;
+        return ListContentConfigType.List;
     }
 
     public get key() {
@@ -44,11 +55,9 @@ export class ListContentConfig {
     }
 
     public async load() {
-        const [sourceListProps, destListProps] = await Promise.all([
-            this.sourceList.select('Title', 'ListItemEntityTypeFullName', 'ItemCount', 'BaseTemplate').expand('RootFolder').get<IListProperties>(),
-            this.destList.select('Title', 'ListItemEntityTypeFullName', 'ItemCount', 'BaseTemplate').expand('RootFolder').get<IListProperties>(),
-        ]);
-        this.sourceListProps = sourceListProps;
-        this.destListProps = destListProps;
+        this.sourceListProps = await this.sourceList.select('Title', 'ListItemEntityTypeFullName', 'ItemCount', 'BaseTemplate').expand('RootFolder').get<IListProperties>();
+        if (this.type === ListContentConfigType.List) {
+            this.destListProps = await this.destList.select('Title', 'ListItemEntityTypeFullName', 'ItemCount', 'BaseTemplate').expand('RootFolder').get<IListProperties>();
+        }
     }
 }
