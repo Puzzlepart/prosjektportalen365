@@ -4,6 +4,7 @@ import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Schema } from 'sp-js-provisioning';
 
 export interface IProjectTemplateSPItem {
+    ListContentConfigLookupId?: number[];
     File?: { UniqueId: string, Name: string, Title: string, ServerRelativeUrl: string };
     FieldValuesAsText?: TypedHash<string>;
 }
@@ -14,6 +15,7 @@ export class ProjectTemplate implements IDropdownOption {
     public text: string;
     public description: string;
     public serverRelativeUrl: string;
+    public listContentConfigIds: number[];
 
     constructor(spItem: IProjectTemplateSPItem, public web: Web) {
         this.id = spItem.File.UniqueId;
@@ -21,6 +23,7 @@ export class ProjectTemplate implements IDropdownOption {
         this.text = spItem.File.Title;
         this.description = spItem.FieldValuesAsText.GtDescription;
         this.serverRelativeUrl = spItem.File.ServerRelativeUrl;
+        this.listContentConfigIds = spItem.ListContentConfigLookupId.length > 0 ? spItem.ListContentConfigLookupId : null;
     }
 
     public async getSchema(): Promise<Schema> {
@@ -28,9 +31,3 @@ export class ProjectTemplate implements IDropdownOption {
     }
 }
 
-export class ProjectExtension extends ProjectTemplate {
-    constructor(spItem: IProjectTemplateSPItem, web: Web) {
-        super(spItem, web);
-        this.key = `projectextension_${this.id}`;
-    }
-}
