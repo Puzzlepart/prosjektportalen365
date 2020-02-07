@@ -11,5 +11,5 @@ export interface ITemplateSelectDialogProps extends IBaseDialogProps {
     /**
      * On submit callback
      */
-    onSubmit: (state: ITemplateSelectDialogState) => void;
+    onSubmit: (data: ITemplateSelectDialogState) => void;
 }

@@ -1,5 +1,6 @@
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import * as strings from 'ProjectExtensionsStrings';
 import * as React from 'react';
 import { ProjectSetupSettings } from '../../extensions/projectSetup/ProjectSetupSettings';
@@ -12,6 +13,9 @@ import { SettingsSection } from './SettingsSection';
 import styles from './TemplateSelectDialog.module.scss';
 import { TemplateSelector } from './TemplateSelector';
 
+/**
+ * @class TemplateSelectDialog
+ */
 export class TemplateSelectDialog extends React.Component<ITemplateSelectDialogProps, ITemplateSelectDialogState> {
     /**
      * Constructor
@@ -29,39 +33,47 @@ export class TemplateSelectDialog extends React.Component<ITemplateSelectDialogP
     }
 
     public render(): React.ReactElement<ITemplateSelectDialogProps> {
+        const { version, onDismiss, data } = this.props;
+        const { selectedTemplate, selectedListContentConfig, selectedExtensions, settings } = this.state;
+
         return (
             <BaseDialog
-                version={this.props.version}
+                version={version}
                 dialogContentProps={{
                     title: strings.TemplateSelectDialogTitle,
                     subText: strings.TemplateSelectDialogInfoText,
                     className: styles.content,
                 }}
                 modalProps={{ isBlocking: true, isDarkOverlay: true }}
-                onDismiss={this.props.onDismiss}
+                onDismiss={onDismiss}
                 onRenderFooter={this._onRenderFooter.bind(this)}
                 containerClassName={styles.templateSelectDialog}>
                 <Pivot>
                     <PivotItem headerText={strings.TemplateSelectorTitle} itemIcon='ViewListGroup'>
                         <TemplateSelector
-                            templates={this.props.data.templates}
-                            selectedTemplate={this.state.selectedTemplate}
-                            onChange={selectedTemplate => this.setState({ selectedTemplate })} />
+                            templates={data.templates}
+                            selectedTemplate={selectedTemplate}
+                            onChange={s => this.setState({ selectedTemplate: s })} />
+                        {selectedTemplate.listContentConfigIds && <MessageBar messageBarType={MessageBarType.info}>{strings.TemplateListContentConfigText}</MessageBar>}
                     </PivotItem>
-                    <PivotItem headerText={strings.ExtensionsTitle} itemIcon='ArrangeBringForward'>
-                        <ExtensionsSection
-                            extensions={this.props.data.extensions}
-                            selectedExtensions={this.state.selectedExtensions}
-                            onChange={selectedExtensions => this.setState({ selectedExtensions })} />
-                    </PivotItem>
-                    <PivotItem headerText={strings.ListContentTitle} itemIcon='ViewList'>
-                        <ListContentSection
-                            listContentConfig={this.props.data.listContentConfig}
-                            selectedListContentConfig={this.state.selectedListContentConfig}
-                            onChange={selectedListContentConfig => this.setState({ selectedListContentConfig })} />
-                    </PivotItem>
+                    {data.extensions.length > 0 && (
+                        <PivotItem headerText={strings.ExtensionsTitle} itemIcon='ArrangeBringForward'>
+                            <ExtensionsSection
+                                extensions={data.extensions}
+                                selectedExtensions={selectedExtensions}
+                                onChange={s => this.setState({ selectedExtensions: s })} />
+                        </PivotItem>
+                    )}
+                    {!selectedTemplate.listContentConfigIds && (
+                        <PivotItem headerText={strings.ListContentTitle} itemIcon='ViewList'>
+                            <ListContentSection
+                                listContentConfig={data.listContentConfig}
+                                selectedListContentConfig={selectedListContentConfig}
+                                onChange={s => this.setState({ selectedListContentConfig: s })} />
+                        </PivotItem>
+                    )}
                     <PivotItem headerText={strings.SettingsSectionTitle} itemIcon='ConfigurationSolid'>
-                        <SettingsSection settings={this.state.settings} onChange={this._onSettingsChanged.bind(this)} />
+                        <SettingsSection settings={settings} onChange={this._onSettingsChanged.bind(this)} />
                     </PivotItem>
                 </Pivot>
             </BaseDialog>
@@ -100,7 +112,11 @@ export class TemplateSelectDialog extends React.Component<ITemplateSelectDialogP
      * On submit
      */
     private _onSubmit() {
-        this.props.onSubmit(this.state);
+        let data = { ...this.state };
+        if (data.selectedTemplate.listContentConfigIds) {
+            data.selectedListContentConfig = this.props.data.listContentConfig.filter(lcc => data.selectedTemplate.listContentConfigIds.indexOf(lcc.id) !== -1);
+        }
+        this.props.onSubmit(data);
     }
 }
 
