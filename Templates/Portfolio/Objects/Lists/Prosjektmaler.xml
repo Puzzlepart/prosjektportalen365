@@ -19,6 +19,9 @@
             <JSLink>clienttemplates.js</JSLink>
         </View>
     </pnp:Views>
+    <pnp:Fields>
+
+    </pnp:Fields>
     <pnp:FieldRefs>
         <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" />
     </pnp:FieldRefs>
