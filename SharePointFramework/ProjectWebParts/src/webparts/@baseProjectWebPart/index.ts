@@ -4,7 +4,6 @@ import '@pnp/polyfill-ie11';
 import { sp } from '@pnp/sp';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import { ApplicationInsightsLogListener } from 'shared/lib/logging';
 import HubSiteService, { IHubSite } from 'sp-hubsite-service';
 import { IBaseWebPartComponentProps } from '../../components/BaseWebPartComponent';
 import SPDataAdapter from '../../data';

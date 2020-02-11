@@ -1,5 +1,6 @@
 import { dateAdd, stringIsNullOrEmpty, TypedHash } from '@pnp/common';
-import { CamlQuery, Web, ListEnsureResult } from '@pnp/sp';
+import { Logger, LogLevel } from '@pnp/logging';
+import { CamlQuery, ListEnsureResult, Web } from '@pnp/sp';
 import { default as initSpfxJsom, ExecuteJsomQuery } from 'spfx-jsom';
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute';
 import { transformFieldXml } from '../../helpers/transformFieldXml';
@@ -109,7 +110,7 @@ export class PortalDataService {
     public async syncList(url: string, listName: string, contentTypeId: string, properties?: TypedHash<string>): Promise<ListEnsureResult> {
         const targetWeb = new Web(url);
         const { jsomContext } = await initSpfxJsom(url, { loadTaxonomy: true });
-        const [sourceContentType, targetSiteFields, ensureList] = await Promise.all([
+        const [sourceContentType, destSiteFields, ensureList] = await Promise.all([
             this._getHubContentType(contentTypeId),
             this._getSiteFields(targetWeb),
             targetWeb.lists.ensure(listName, '', 100, false, { Hidden: true, EnableAttachments: false }),
@@ -119,11 +120,15 @@ export class PortalDataService {
         for (let field of sourceContentType.Fields) {
             let [[listField], [siteField]] = [
                 listFields.filter(fld => fld.InternalName === field.InternalName),
-                targetSiteFields.filter(fld => fld.InternalName === field.InternalName && fld.SchemaXml.indexOf('ShowInEditForm="FALSE"') === -1),
+                destSiteFields.filter(fld => fld.InternalName === field.InternalName && fld.SchemaXml.indexOf('ShowInEditForm="FALSE"') === -1),
             ];
-            if (listField) continue;
+            if (listField) {
+                Logger.log({ message: `(PortalDataService) (syncList) Field [${field.InternalName}] already exists on list [${listName}].`, level: LogLevel.Info });
+                continue;
+            }
             try {
                 let [fieldLink] = sourceContentType.FieldLinks.filter(fl => fl.Name === field.InternalName);
+                Logger.log({ message: `(PortalDataService) (syncList) Adding field [${field.InternalName}] to list [${listName}].`, level: LogLevel.Info, data: { fieldLink, siteField: !!siteField } });
                 if (siteField) {
                     let spSiteField = jsomContext.web.get_fields().getByInternalNameOrTitle(siteField.InternalName);
                     let newField = spList.get_fields().add(spSiteField);
@@ -143,6 +148,7 @@ export class PortalDataService {
             } catch (error) { }
         }
         try {
+            Logger.log({ message: `(PortalDataService) (syncList) Attempting to add field [TemplateParameters] to list ${listName}.`, level: LogLevel.Info });
             let newField = spList.get_fields().addFieldAsXml(`<Field Type="Note" DisplayName="TemplateParameters" ID="{b8854944-7141-471f-b8df-53d93a4395ba}" StaticName="TemplateParameters" Name="TemplateParameters" UnlimitedLengthInDocumentLibrary="TRUE" ShowInEditForm="FALSE" />`, false, SP.AddFieldOptions.addToDefaultContentType);
             newField.updateAndPushChanges(true);
             await ExecuteJsomQuery(jsomContext);
