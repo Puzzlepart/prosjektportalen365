@@ -123,11 +123,19 @@ export class PortalDataService {
             ];
             if (listField) continue;
             try {
+                let [fieldLink] = sourceContentType.FieldLinks.filter(fl => fl.Name === field.InternalName);
                 if (siteField) {
                     let spSiteField = jsomContext.web.get_fields().getByInternalNameOrTitle(siteField.InternalName);
-                    spList.get_fields().add(spSiteField);
+                    let newField = spList.get_fields().add(spSiteField);
+                    if (fieldLink && fieldLink.Required) {
+                        newField.set_required(true);
+                        newField.updateAndPushChanges(true);
+                    }
                 } else {
                     let newField = spList.get_fields().addFieldAsXml(transformFieldXml(field.SchemaXml, { DisplayName: field.InternalName }), false, SP.AddFieldOptions.addToDefaultContentType);
+                    if (fieldLink && fieldLink.Required) {
+                        newField.set_required(true);
+                    }
                     newField.set_title(field.Title);
                     newField.updateAndPushChanges(true);
                 }
@@ -153,8 +161,8 @@ export class PortalDataService {
     private async _getHubContentType(contentTypeId: string): Promise<ISPContentType> {
         let contentType = await this._web.contentTypes
             .getById(contentTypeId)
-            .select('StringId', 'Name', 'Fields/InternalName', 'Fields/Title', 'Fields/SchemaXml', 'Fields/InternalName')
-            .expand('Fields')
+            .select('StringId', 'Name', 'Fields/InternalName', 'Fields/Title', 'Fields/SchemaXml', 'Fields/InternalName', 'FieldLinks/Name', 'FieldLinks/Required')
+            .expand('Fields', 'FieldLinks')
             .get<ISPContentType>();
         return contentType;
     }
