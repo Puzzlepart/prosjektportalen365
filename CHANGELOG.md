@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Header columns mispositioned in portfolio overview #207
+- Issue with mandatory project properties not synced to created projects #215
 
 ## 1.1.9 - 2020-01-20
 
