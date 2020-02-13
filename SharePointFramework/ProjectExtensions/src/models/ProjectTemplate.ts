@@ -23,7 +23,7 @@ export class ProjectTemplate implements IDropdownOption {
         this.text = spItem.File.Title;
         this.description = spItem.FieldValuesAsText.GtDescription;
         this.serverRelativeUrl = spItem.File.ServerRelativeUrl;
-        this.listContentConfigIds = spItem.ListContentConfigLookupId.length > 0 ? spItem.ListContentConfigLookupId : null;
+        this.listContentConfigIds = (spItem.ListContentConfigLookupId && spItem.ListContentConfigLookupId.length > 0) ? spItem.ListContentConfigLookupId : null;
     }
 
     public async getSchema(): Promise<Schema> {
