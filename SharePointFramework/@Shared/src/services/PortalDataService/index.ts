@@ -113,7 +113,7 @@ export class PortalDataService {
         const [sourceContentType, destSiteFields, ensureList] = await Promise.all([
             this._getHubContentType(contentTypeId),
             this._getSiteFields(targetWeb),
-            targetWeb.lists.ensure(listName, '', 100, false, { Hidden: true, EnableAttachments: false }),
+            targetWeb.lists.ensure(listName, '', 100, false, { Hidden: true, EnableAttachments: false, EnableVersioning: true }),
         ]);
         const listFields = await this.getListFields(listName, undefined, targetWeb);
         const spList = jsomContext.web.get_lists().getByTitle(listName);
