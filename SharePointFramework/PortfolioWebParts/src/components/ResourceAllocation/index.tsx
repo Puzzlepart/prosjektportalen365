@@ -232,7 +232,6 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
   private _groupRenderer({ group }: ReactCalendarGroupRendererProps<ITimelineGroup>) {
     let style: React.CSSProperties = { display: 'block', width: '100%' };
     if (group.type === TimelineGroupType.Role) {
-      style.paddingLeft = 20;
       style.fontStyle = 'italic';
     }
     return (
