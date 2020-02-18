@@ -47,7 +47,7 @@
       }
     },
     "helpContent": {
-      "pageUrl": "https://contoso.sharepoint.com/sites/mySite/SitePages/myPage.aspx",
+      "pageUrl": "https://olemp.sharepoint.com/sites/ArendalpolitistasjonNybygg/Lists/Gevinstanalyse%20og%20gevinstrealiseringsplan/AllItems.aspx",
       "customActions": {
         "28987406-2a67-48a8-9297-fd2833bf0a09": {
           "location": "ClientSideExtension.ApplicationCustomizer",
