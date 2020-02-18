@@ -37,7 +37,6 @@
   },
   "externals": {},
   "localizedResources": {
-    "ProjectExtensionsStrings": "lib/loc/{locale}.js",
-    "HelpContentApplicationCustomizerStrings": "lib/extensions/helpContent/loc/{locale}.js"
+    "ProjectExtensionsStrings": "lib/loc/{locale}.js"
   }
 }
