@@ -17,13 +17,16 @@ export default class HelpContentApplicationCustomizer extends BaseApplicationCus
     if (!this._topPlaceholder) this._topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top, { onDispose: this._onDispose });
     if (!this._topPlaceholder) return;
     if (!this._topPlaceholder.domElement) return;
-    await this._start();
-    this.context.application.navigatedEvent.add(this, this._start);
+    await this._render();
+    this.context.application.navigatedEvent.add(this, this._render);
 
   }
 
-  private async _start() {
-    let helpContent = await this._getHelpContent('Hjelpeinnhold');
+  /**
+   * Render function
+   */
+  private async _render() {
+    let helpContent = await this._getHelpContent(this.properties.listName);
     let helpContentId = 'pp-help-content';
     let helpContentPlaceholder = document.getElementById(helpContentId);
     if (helpContentPlaceholder == null) {
@@ -32,7 +35,7 @@ export default class HelpContentApplicationCustomizer extends BaseApplicationCus
       this._topPlaceholder.domElement.appendChild(helpContentPlaceholder);
     }
     if (helpContent.length == 0) ReactDOM.render(null, helpContentPlaceholder);
-    else ReactDOM.render(<HelpContent linkText='Hjelp tilgjengelig' content={helpContent} />, helpContentPlaceholder);
+    else ReactDOM.render(<HelpContent linkText={this.properties.linkText} content={helpContent} />, helpContentPlaceholder);
   }
 
   /**
@@ -43,13 +46,14 @@ export default class HelpContentApplicationCustomizer extends BaseApplicationCus
   private async _getHelpContent(listName: string) {
     let hub = await HubSiteService.GetHubSite(sp, this.context.pageContext);
     let portal = new PortalDataService().configure({ urlOrWeb: hub.web });
-    let items = await portal.getItems(listName, HelpContentModel);
+    let items = await portal.getItems(listName, HelpContentModel, { ViewXml: '<View><Query><OrderBy><FieldRef Name="SortOrder" /></OrderBy><Query></View>' });
+    items = items.filter(i => i.matchPattern(window.location.pathname)).splice(0, 3);
     for (let i = 0; i < items.length; i++) {
       if (items[i].externalUrl) {
         await items[i].fetchExternalContent();
       }
     }
-    return items.filter(i => i.matchPattern(window.location.pathname));
+    return items;
   }
 
   private _onDispose(): void { }

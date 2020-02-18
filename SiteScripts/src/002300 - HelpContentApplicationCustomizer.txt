@@ -6,7 +6,7 @@
             "title": "Hjelpeinnhold",
             "location": "ClientSideExtension.ApplicationCustomizer",
             "clientSideComponentId": "28987406-2a67-48a8-9297-fd2833bf0a09",
-            "clientSideComponentProperties": "{}",
+            "clientSideComponentProperties": "{\"listName\":\"Hjelpeinnhold\",\"linkText\":\"Hjelp tilgjengelig\"}",
             "scope": "Web"
         }
     ],
