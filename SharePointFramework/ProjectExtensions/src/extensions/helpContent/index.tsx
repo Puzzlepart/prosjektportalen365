@@ -17,9 +17,22 @@ export default class HelpContentApplicationCustomizer extends BaseApplicationCus
     if (!this._topPlaceholder) this._topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top, { onDispose: this._onDispose });
     if (!this._topPlaceholder) return;
     if (!this._topPlaceholder.domElement) return;
+    await this._start();
+    this.context.application.navigatedEvent.add(this, this._start);
+
+  }
+
+  private async _start() {
     let helpContent = await this._getHelpContent('Hjelpeinnhold');
-    if (helpContent.length == 0) return;
-    ReactDOM.render(<HelpContent linkText='Hjelp tilgjengelig' content={helpContent} />, this._topPlaceholder.domElement);
+    let helpContentId = 'pp-help-content';
+    let helpContentPlaceholder = document.getElementById(helpContentId);
+    if (helpContentPlaceholder == null) {
+      helpContentPlaceholder = document.createElement('DIV');
+      helpContentPlaceholder.id = helpContentId;
+      this._topPlaceholder.domElement.appendChild(helpContentPlaceholder);
+    }
+    if (helpContent.length == 0) ReactDOM.render(null, helpContentPlaceholder);
+    else ReactDOM.render(<HelpContent linkText='Hjelp tilgjengelig' content={helpContent} />, helpContentPlaceholder);
   }
 
   /**
@@ -36,7 +49,6 @@ export default class HelpContentApplicationCustomizer extends BaseApplicationCus
         await items[i].fetchExternalContent();
       }
     }
-    console.log(items);
     return items.filter(i => i.matchPattern(window.location.pathname));
   }
 

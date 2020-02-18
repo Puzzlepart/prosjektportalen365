@@ -1,9 +1,9 @@
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import * as React from 'react';
 import { useState } from 'react';
-import { IHelpContentProps } from './IHelpContentProps';
 import styles from './HelpContent.module.scss';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { HelpContentModal } from './HelpContentModal';
+import { IHelpContentProps } from './IHelpContentProps';
 
 // tslint:disable-next-line: naming-convention
 export const HelpContent = (props: IHelpContentProps) => {
