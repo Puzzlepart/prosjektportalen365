@@ -3,7 +3,7 @@
     "actions": [
         {
             "verb": "associateExtension",
-            "title": "ProjectUpgradeApplicationCustomizer",
+            "title": "Oppgradering av prosjekter",
             "location": "ClientSideExtension.ApplicationCustomizer",
             "clientSideComponentId": "453a6c1e-e1d0-4b12-a3fc-690a36da1f0c",
             "clientSideComponentProperties": "{}",
