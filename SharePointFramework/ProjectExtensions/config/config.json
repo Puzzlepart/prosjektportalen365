@@ -25,10 +25,19 @@
           "manifest": "./src/extensions/templateSelector/manifest.json"
         }
       ]
+    },
+    "help-content-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/helpContent/index.js",
+          "manifest": "./src/extensions/helpContent/manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
   "localizedResources": {
-    "ProjectExtensionsStrings": "lib/loc/{locale}.js"
+    "ProjectExtensionsStrings": "lib/loc/{locale}.js",
+    "HelpContentApplicationCustomizerStrings": "lib/extensions/helpContent/loc/{locale}.js"
   }
 }

@@ -21,7 +21,9 @@
               "GtProjectPhase": "abcfc9d9-a263-4abb-8234-be973c46258a",
               "GtResourceRole": "54da9f47-c64e-4a26-80f3-4d3c3fa1b7b2"
             },
-            "tasks": ["PlannerConfiguration"]
+            "tasks": [
+              "PlannerConfiguration"
+            ]
           }
         }
       }
@@ -40,6 +42,15 @@
       "customActions": {
         "c9080212-e63e-47cc-8278-00ad38c3f5a5": {
           "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
+          "properties": {}
+        }
+      }
+    },
+    "helpContent": {
+      "pageUrl": "https://contoso.sharepoint.com/sites/mySite/SitePages/myPage.aspx",
+      "customActions": {
+        "28987406-2a67-48a8-9297-fd2833bf0a09": {
+          "location": "ClientSideExtension.ApplicationCustomizer",
           "properties": {}
         }
       }
