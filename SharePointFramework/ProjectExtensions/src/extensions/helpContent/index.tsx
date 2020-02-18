@@ -17,15 +17,26 @@ export default class HelpContentApplicationCustomizer extends BaseApplicationCus
     if (!this._topPlaceholder) this._topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top, { onDispose: this._onDispose });
     if (!this._topPlaceholder) return;
     if (!this._topPlaceholder.domElement) return;
-    let helpContent = await this._getHelpContent();
+    let helpContent = await this._getHelpContent('Hjelpeinnhold');
     if (helpContent.length == 0) return;
     ReactDOM.render(<HelpContent linkText='Hjelp tilgjengelig' content={helpContent} />, this._topPlaceholder.domElement);
   }
 
-  private async _getHelpContent() {
+  /**
+   * Get help content from the specified list
+   * 
+   * @param {string} listName Name of the list
+   */
+  private async _getHelpContent(listName: string) {
     let hub = await HubSiteService.GetHubSite(sp, this.context.pageContext);
     let portal = new PortalDataService().configure({ urlOrWeb: hub.web });
-    let items = await portal.getItems('Hjelpeinnhold', HelpContentModel);
+    let items = await portal.getItems(listName, HelpContentModel);
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].externalUrl) {
+        await items[i].fetchExternalContent();
+      }
+    }
+    console.log(items);
     return items.filter(i => i.matchPattern(window.location.pathname));
   }
 

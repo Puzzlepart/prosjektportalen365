@@ -9,7 +9,9 @@ export class HelpContentModel {
   public iconName: string;
   public urlPattern: string;
   public textContent: string;
+  public mdContent: string;
   public resourceLink: { Url: string, Description: string };
+  public externalUrl: string;
 
   constructor(spItem: TypedHash<any>, public web: Web) {
     this.title = spItem.Title;
@@ -17,6 +19,7 @@ export class HelpContentModel {
     this.urlPattern = spItem.URL;
     this.textContent = spItem.TextContent;
     this.resourceLink = spItem.ResourceLink;
+    this.externalUrl = spItem.ExternalURL;
   }
 
   /**
@@ -26,5 +29,17 @@ export class HelpContentModel {
    */
   public matchPattern(url: string): boolean {
     return decodeURIComponent(url).indexOf(this.urlPattern) !== -1;
+  }
+
+  /**
+   * Fetch external content
+   */
+  public async fetchExternalContent() {
+    try {
+      let md = await (await fetch(this.externalUrl, { method: 'GET' })).text();
+      this.mdContent = md;
+    } catch (error) {
+
+    }
   }
 }
