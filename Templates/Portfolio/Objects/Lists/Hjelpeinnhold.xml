@@ -1,17 +1,18 @@
-<pnp:ListInstance Title="Hjelpeinnhold" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Hjelpeinnhold" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" 
+<pnp:ListInstance Title="Hjelpeinnhold" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Hjelpeinnhold" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" EnableAttachments="false" EnableFolderCreation="false" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Hjelpeinnhold/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
             <Query>
                 <OrderBy>
-                    <FieldRef Name="ID" />
+                    <FieldRef Name="URL" />
                 </OrderBy>
             </Query>
             <ViewFields>
                 <FieldRef Name="LinkTitle" />
-                <FieldRef Name="URLpattern" />
-                <FieldRef Name="Content" />
-                <FieldRef Name="ResourceUrl" />
+                <FieldRef Name="IconName" />
+                <FieldRef Name="URL" />
+                <FieldRef Name="TextContent" />
+                <FieldRef Name="ResourceLink" />
             </ViewFields>
             <RowLimit Paged="TRUE">30</RowLimit>
             <JSLink>clienttemplates.js</JSLink>
@@ -19,8 +20,10 @@
         </View>
     </pnp:Views>
     <pnp:Fields>
-        <Field DisplayName="URL" Title="URL" Description="" Format="Dropdown" MaxLength="255" Name="URL" Type="Text" ID="{dea96897-22ac-48a9-b9ea-9b27ba0ca6da}" SourceID="{{listid:Hjelpeinnhold}}" StaticName="URL" />
-        <Field DisplayName="Innhold" Title="Innhold" Format="Dropdown" IsolateStyles="FALSE" Name="TextContent" NumLines="8" RichText="FALSE" RichTextMode="Compatible" Type="Note" ID="{0aedaa7c-93fd-4a28-abf8-cd406a4a082c}" SourceID="{{listid:Hjelpeinnhold}}" StaticName="TextContent"/>
-        <Field DisplayName="Link til ressurs" Title="Link til ressurs" Format="Hyperlink" Name="ResourceLink" Type="URL" ID="{5a4b9d7f-7219-443b-a517-2d23fb230673}" SourceID="{{listid:Hjelpeinnhold}}" StaticName="ResourceLink" />
+        <Field DisplayName="URL" Title="URL" Description="URL hvor hjelpeinnholdet skal vises. For eksempel SitePages/Hjem.aspx om du vil at innholdet skal vises på forsiden av prosjektet." Required="TRUE" Format="Dropdown" MaxLength="255" Name="URL" Type="Text" ID="{dea96897-22ac-48a9-b9ea-9b27ba0ca6da}" SourceID="{{listid:Hjelpeinnhold}}" StaticName="URL" />
+        <Field DisplayName="Innhold" Title="Innhold" Description="Tekst som skal vises." Required="TRUE" Format="Dropdown" IsolateStyles="FALSE" Name="TextContent" NumLines="8" RichText="FALSE" RichTextMode="Compatible" Type="Note" ID="{0aedaa7c-93fd-4a28-abf8-cd406a4a082c}" SourceID="{{listid:Hjelpeinnhold}}" StaticName="TextContent"/>
+        <Field DisplayName="Link til ressurs" Title="Link til ressurs" Description="Lenk opp en ressurs om ønskelig. Om denne settes, vil det legges til en knapp under teksten." Format="Hyperlink" Name="ResourceLink" Type="URL" ID="{5a4b9d7f-7219-443b-a517-2d23fb230673}" SourceID="{{listid:Hjelpeinnhold}}" StaticName="ResourceLink" />
+        <Field DisplayName="Ikon" Title="Ikon" Description="Ikon fra https://dev.office.com/fabric#/styles/icons"  Name="IconName" Type="Text" ID="{08afe0a2-26c3-4eb8-a1d5-4ac9842546ec}" SourceID="{{listid:Hjelpeinnhold}}" StaticName="IconName" />
     </pnp:Fields>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>
