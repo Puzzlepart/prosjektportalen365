@@ -28,13 +28,13 @@ export const ListContentSection = (props: IListContentSectionProps) => {
     return (
         <div className={styles.listContentSection}>
             <div className={styles.container}>
-                {props.listContentConfig.map(l => (
-                    <div key={l.key} className={styles.item}>
+                {props.listContentConfig.map(lcc => (
+                    <div key={lcc.key} className={styles.item} hidden={lcc.hidden}>
                         <Toggle
-                            label={l.title}
-                            defaultChecked={selectedKeys.indexOf(l.key) !== -1}
+                            label={lcc.title}
+                            defaultChecked={selectedKeys.indexOf(lcc.key) !== -1}
                             inlineLabel={true}
-                            onChanged={checked => onChanged(l, checked)} />
+                            onChanged={checked => onChanged(lcc, checked)} />
                     </div>
                 ))}
             </div>
