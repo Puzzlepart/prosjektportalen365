@@ -361,6 +361,10 @@
                     "Name": "GtGainsResponsible"
                 },
                 {
+                    "ID": "158b2f60-8068-447f-83e7-cabdb5bf4cf4",
+                    "Name": "GtGainsOwner"
+                },
+                {
                     "ID": "b0d03734-a5b1-4e85-a752-45b2da8df7dd",
                     "Name": "GtRealizationTime"
                 }
