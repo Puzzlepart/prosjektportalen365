@@ -12,7 +12,6 @@ import * as ReactDOM from 'react-dom';
 import { ApplicationInsightsLogListener, ListLogger } from 'shared/lib/logging';
 import { PortalDataService } from 'shared/lib/services';
 import { default as HubSiteService } from 'sp-hubsite-service';
-import * as formatString from 'string-format';
 import { ErrorDialog, IErrorDialogProps, IProgressDialogProps, ITemplateSelectDialogProps, ITemplateSelectDialogState, ProgressDialog, TemplateSelectDialog } from '../../components';
 import { ListContentConfig, ProjectExtension, ProjectTemplate } from '../../models';
 import * as Tasks from '../../tasks';
