@@ -12,6 +12,7 @@ import { ListContentSection } from './ListContentSection';
 import { SettingsSection } from './SettingsSection';
 import styles from './TemplateSelectDialog.module.scss';
 import { TemplateSelector } from './TemplateSelector';
+import { ProjectTemplate } from 'models';
 
 /**
  * @class TemplateSelectDialog
@@ -25,7 +26,7 @@ export class TemplateSelectDialog extends React.Component<ITemplateSelectDialogP
     constructor(props: ITemplateSelectDialogProps) {
         super(props);
         this.state = {
-            selectedTemplate: props.data.templates[0],
+            selectedTemplate: this._getDefaultTemplate(),
             selectedExtensions: [],
             selectedListContentConfig: props.data.listContentConfig.filter(lcc => lcc.isDefault),
             settings: new ProjectSetupSettings().useDefault(),
@@ -78,6 +79,17 @@ export class TemplateSelectDialog extends React.Component<ITemplateSelectDialogP
                 </Pivot>
             </BaseDialog>
         );
+    }
+
+    /**
+     * Get default template.
+     * 
+     * The first template that is set to default or the first template retrieved
+     */
+    private _getDefaultTemplate(): ProjectTemplate {
+        let [defaultTemplate] = this.props.data.templates.filter(tmpl => tmpl.isDefault);
+        if (!defaultTemplate) defaultTemplate = this.props.data.templates[0];
+        return defaultTemplate;
     }
 
     /**

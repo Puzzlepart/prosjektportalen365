@@ -207,8 +207,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       Logger.log({ message: '(ProjectSetup) [_fetchData]: Retrieved hub site url', data: { hubUrl: data.hub.url }, level: LogLevel.Info });
       Logger.log({ message: '(ProjectSetup) [_fetchData]: Retrieving templates, extensions and content config', data: {}, level: LogLevel.Info });
       const [templates, extensions, listContentConfig] = await Promise.all([
-        this._portal.getItems(this.properties.templatesLibrary, ProjectTemplate, { ViewXml: '<View></View>' }, ['File', 'FieldValuesAsText']),
-        this._portal.getItems(this.properties.extensionsLibrary, ProjectExtension, { ViewXml: '<View></View>' }, ['File', 'FieldValuesAsText']),
+        this._portal.getItems(this.properties.templatesLibrary, ProjectTemplate, { ViewXml: '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>' }, ['File', 'FieldValuesAsText']),
+        this._portal.getItems(this.properties.extensionsLibrary, ProjectExtension, { ViewXml: '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>' }, ['File', 'FieldValuesAsText']),
         this._portal.getItems(this.properties.contentConfigList, ListContentConfig),
       ]);
       Logger.log({ message: '(ProjectSetup) [_fetchData]: Retrieved templates, extensions and content config', data: { templates: templates.length, extensions: extensions.length, listContentConfig: listContentConfig.length }, level: LogLevel.Info });
