@@ -42,6 +42,7 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtLastGateStatus.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtLastSyncTime.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtLccDefault.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtLccHidden.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtLccDestinationLibrary.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtLccDestinationList.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtLccFields.xml" />

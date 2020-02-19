@@ -12,7 +12,6 @@ import * as ReactDOM from 'react-dom';
 import { ApplicationInsightsLogListener, ListLogger } from 'shared/lib/logging';
 import { PortalDataService } from 'shared/lib/services';
 import { default as HubSiteService } from 'sp-hubsite-service';
-import * as formatString from 'string-format';
 import { ErrorDialog, IErrorDialogProps, IProgressDialogProps, ITemplateSelectDialogProps, ITemplateSelectDialogState, ProgressDialog, TemplateSelectDialog } from '../../components';
 import { ListContentConfig, ProjectExtension, ProjectTemplate } from '../../models';
 import * as Tasks from '../../tasks';
@@ -224,21 +223,37 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     }
   }
 
+  /**
+   * Get validation
+   */
   private get _validation(): ProjectSetupValidation {
     if (this.context.pageContext.web.language !== 1044) return ProjectSetupValidation.InvalidWebLanguage;
     if (!this.context.pageContext.legacyPageContext.hubSiteId) return ProjectSetupValidation.NoHubConnection;
     return ProjectSetupValidation.Ready;
   }
 
-  private _unmount(container: HTMLElement) {
-    ReactDOM.unmountComponentAtNode(container);
+  /**
+   * Unmount component at container
+   * 
+   * @param {HTMLElement} container Container
+   */
+  private _unmount(container: HTMLElement): boolean {
+    return ReactDOM.unmountComponentAtNode(container);
   }
 
-  private get _container() {
+  /**
+   * Get container
+   */
+  private get _container(): HTMLDivElement {
     const topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top);
     return topPlaceholder.domElement;
   }
 
+  /**
+   * Get placeholder by key
+   * 
+   * @param {string} key Key
+   */
   private _getPlaceholder(key: 'ErrorDialog' | 'ProgressDialog' | 'TemplateSelectDialog') {
     const id = this._placeholderIds[key];
     let placeholder = document.getElementById(id);
