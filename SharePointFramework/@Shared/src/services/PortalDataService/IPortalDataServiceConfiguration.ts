@@ -13,7 +13,7 @@ export interface IPortalDataServiceConfiguration extends Object {
         PROJECT_STATUS: string,
         PORTFOLIO_VIEWS: string,
     };
-    templateParametersFieldXml: string;
+    templateParametersFieldXml?: string;
 }
 
 // tslint:disable-next-line: naming-convention
