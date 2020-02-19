@@ -18,6 +18,7 @@
                 <FieldRef Name="GtLccDestinationList" />
                 <FieldRef Name="GtLccFields" />
                 <FieldRef Name="GtLccDefault" />
+                <FieldRef Name="GtLccHidden" />
                 <FieldRef Name="Modified" />
             </ViewFields>
             <RowLimit Paged="TRUE">30</RowLimit>
