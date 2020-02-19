@@ -3,6 +3,7 @@
         <pnp:Properties>
             <pnp:Property Key="Title" Value="Standardmal" />
             <pnp:Property Key="GtDescription" Value="Dette er standardmalen som følger med Prosjektportalen 365." />
+            <pnp:Property Key="IconName" Value="Page" />
             <pnp:Property Key="IsDefaultTemplate" Value="1" />
         </pnp:Properties>
     </pnp:File>
