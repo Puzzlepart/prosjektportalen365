@@ -5,29 +5,29 @@ import { ProjectTemplate } from '../../../models';
 import { ITemplateSelectorProps } from './ITemplateSelectorProps';
 import styles from './TemplateSelector.module.scss';
 
-export class TemplateSelector extends React.PureComponent<ITemplateSelectorProps> {
-    public render() {
-        return (
-            <div className={styles.templateSelector}>
-                <div className={styles.dropdown}>
-                    <Dropdown
-                        defaultSelectedKey={this.props.selectedTemplate.key}
-                        onChanged={this._onTemplateSelected.bind(this)}
-                        options={this.props.templates} />
-                </div>
-                <div className={styles.description} hidden={stringIsNullOrEmpty(this.props.selectedTemplate.description)}>
-                    <span>{this.props.selectedTemplate.description}</span>
-                </div>
-            </div>
-        );
-    }
-
+// tslint:disable-next-line: naming-convention
+export const TemplateSelector = (props: ITemplateSelectorProps) => {
     /**
-     * On template selected
-     * 
-     * @param {IDropdownOption} opt Option
-     */
-    private _onTemplateSelected(opt: ProjectTemplate) {
-        this.props.onChange(opt);
-    }
-}
+   * On template selected
+   * 
+   * @param {IDropdownOption} opt Option
+   */
+    const onTemplateSelected = (opt: ProjectTemplate) => {
+        props.onChange(opt);
+    };
+
+    return (
+        <div className={styles.templateSelector}>
+            <div className={styles.dropdown}>
+                <Dropdown
+                    disabled={props.templates.length <= 1}
+                    defaultSelectedKey={props.selectedTemplate.key}
+                    onChanged={onTemplateSelected}
+                    options={props.templates} />
+            </div>
+            <div className={styles.description} hidden={stringIsNullOrEmpty(props.selectedTemplate.description)}>
+                <span>{props.selectedTemplate.description}</span>
+            </div>
+        </div>
+    );
+};
