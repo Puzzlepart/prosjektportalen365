@@ -10,6 +10,7 @@ define([], function () {
     ActorsLabel: 'Aktører',
     AdvancedGroupName: 'Avansert',
     BenefitResponsibleLabel: 'Gevinstansvarlig',
+    BenefitOwnerLabel: 'Gevinsteier',
     BenefitTitleLabel: 'Gevinst',
     ChartConfigurationListNameLabel: 'Grafkonfigurasjon',
     ChartErrorText: 'Grafen er ugyldig konfigurert.',
