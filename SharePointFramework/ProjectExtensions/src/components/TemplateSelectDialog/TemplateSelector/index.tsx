@@ -1,5 +1,6 @@
 import { stringIsNullOrEmpty } from '@pnp/common';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import * as React from 'react';
 import { ProjectTemplate } from '../../../models';
 import { ITemplateSelectorProps } from './ITemplateSelectorProps';
@@ -10,10 +11,29 @@ export const TemplateSelector = (props: ITemplateSelectorProps) => {
     /**
    * On template selected
    * 
-   * @param {IDropdownOption} opt Option
+   * @param {ProjectTemplate} opt Option
    */
-    const onTemplateSelected = (opt: ProjectTemplate) => {
+    const onTemplateSelected = (opt: ProjectTemplate): void => {
         props.onChange(opt);
+    };
+
+    /**
+     * On render option
+   * 
+   * @param {ProjectTemplate} opt Option
+     */
+    const onRenderOption = (option: ProjectTemplate): JSX.Element => {
+        return (
+            <div className={styles.dropdownOption}>
+                <div className={styles.icon}>
+                    <Icon iconName={option.iconName} />
+                </div>
+                <div className={styles.body}>
+                    <div className={styles.text}>{option.text}</div>
+                    <div className={styles.subText}>{option.subText}</div>
+                </div>
+            </div>
+        );
     };
 
     return (
@@ -23,10 +43,8 @@ export const TemplateSelector = (props: ITemplateSelectorProps) => {
                     disabled={props.templates.length <= 1}
                     defaultSelectedKey={props.selectedTemplate.key}
                     onChanged={onTemplateSelected}
-                    options={props.templates} />
-            </div>
-            <div className={styles.description} hidden={stringIsNullOrEmpty(props.selectedTemplate.description)}>
-                <span>{props.selectedTemplate.description}</span>
+                    options={props.templates}
+                    onRenderOption={onRenderOption} />
             </div>
         </div>
     );
