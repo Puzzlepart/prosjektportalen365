@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Support for different project metadata for different project types/templates
 - Ability to connect template(s) to list content config
 - Support for provisioning documents and folders to new project sites #190
+- Support for cascade import of planner tasks #228
 
 ### Fixed
 - Header columns mispositioned in portfolio overview #207
