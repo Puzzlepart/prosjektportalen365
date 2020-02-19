@@ -20,4 +20,5 @@ export interface IBenefitsSearchResult {
     GtGainLookupId: string;
     GtMeasureIndicatorLookupId: string;
     GtGainsResponsible: string;
+    GtGainsOwner: string;
 }
