@@ -10,16 +10,19 @@ import { ILatestProjectsProps } from './ILatestProjectsProps';
 import { ILatestProjectsState } from './ILatestProjectsState';
 import styles from './LatestProjects.module.scss';
 
-
+/**
+ * @component LatestProjects
+ * @extends React.Component
+ */
 export class LatestProjects extends React.Component<ILatestProjectsProps, ILatestProjectsState> {
   constructor(props: ILatestProjectsProps) {
     super(props);
-    this.state = { isLoading: true, projects: [], showList: true };
+    this.state = { isLoading: true, projects: [] };
   }
 
   public async componentDidMount() {
     try {
-      const projects = await this.props.dataAdapter.fetchProjectSites(this.props.rowLimit, 'Created', SortDirection.Descending);
+      const projects = await this.props.dataAdapter.fetchProjectSites(15, 'Created', SortDirection.Descending);
       this.setState({ projects, isLoading: false });
     } catch (error) {
       this.setState({ projects: [], isLoading: false });
@@ -50,9 +53,10 @@ export class LatestProjects extends React.Component<ILatestProjectsProps, ILates
    * Render project list
    */
   private _renderProjectList() {
-    if (this.state.projects.length === 0) return <MessageBar>{this.props.emptyMessage}</MessageBar>;
-    return this.state.projects.map(site => {
-      let created = formatDate(site.Created);
+    const { projects } = this.state;
+    if (projects.length === 0) return <MessageBar>{this.props.emptyMessage}</MessageBar>;
+    return projects.splice(0, this.props.rowLimit).map(site => {
+      let created = formatDate(site.Created, true);
       return (
         <div className={styles.projectItem}>
           <div className={styles.itemContainer}>

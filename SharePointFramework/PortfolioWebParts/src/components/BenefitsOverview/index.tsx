@@ -5,6 +5,10 @@ import styles from './BenefitsOverview.module.scss';
 import { getColumns } from './BenefitsOverviewColumns';
 import { BenefitsOverviewDefaultProps, IBenefitsOverviewProps } from './IBenefitsOverviewProps';
 
+/**
+ * @component BenefitsOverview
+ * @extends React.Component
+ */
 export class BenefitsOverview extends React.Component<IBenefitsOverviewProps, {}> {
   public static defaultProps = BenefitsOverviewDefaultProps;
 
