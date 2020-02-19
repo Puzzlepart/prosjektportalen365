@@ -8,11 +8,12 @@
                 </OrderBy>
             </Query>
             <ViewFields>
-                <FieldRef Name="IsDefaultTemplate" />
+                <FieldRef Name="DocIcon" />
                 <FieldRef Name="LinkFilename" />
                 <FieldRef Name="IconName" />
                 <FieldRef Name="Title" />
                 <FieldRef Name="GtDescription" />
+                <FieldRef Name="IsDefaultTemplate" />
                 <FieldRef Name="ListContentConfigLookup" />
                 <FieldRef Name="Modified" />
             </ViewFields>
