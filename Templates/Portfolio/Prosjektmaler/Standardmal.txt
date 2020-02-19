@@ -1219,6 +1219,7 @@
                         "GtGainsType",
                         "GtGainsTurnover",
                         "GtGainsResponsible",
+                        "GtGainsOwner",
                         "GtRealizationTime"
                     ],
                     "AdditionalSettings": {
@@ -1234,6 +1235,7 @@
                         "Title",
                         "GtGainsTurnover",
                         "GtGainsResponsible",
+                        "GtGainsOwner",
                         "GtMeasureIndicator",
                         "GtStartValue",
                         "GtDesiredValue",
