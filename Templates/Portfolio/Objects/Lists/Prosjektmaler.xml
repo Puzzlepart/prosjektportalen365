@@ -1,4 +1,4 @@
-﻿<pnp:ListInstance Title="Prosjektmaler" Description="" DocumentTemplate="" TemplateType="101" Url="Prosjektmaler" Hidden="true" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" EnableAttachments="false" 
+﻿<pnp:ListInstance Title="Prosjektmaler" TemplateType="101" Description="" DocumentTemplate="" Url="Prosjektmaler" Hidden="true" EnableVersioning="true" EnableMinorVersions="true" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" EnableAttachments="false" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:Views RemoveExistingViews="true">
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle maler" Url="{site}/Prosjektmaler/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/dlicon.png?rev=45">
@@ -9,6 +9,7 @@
             </Query>
             <ViewFields>
                 <FieldRef Name="_UIVersionString" />
+                <FieldRef Name="IsDefaultTemplate" />
                 <FieldRef Name="LinkFilename" />
                 <FieldRef Name="Title" />
                 <FieldRef Name="GtDescription" />
@@ -22,6 +23,9 @@
     </pnp:Views>
     <pnp:Fields>
         <Field Type="LookupMulti" Mult="TRUE" DisplayName="Listeinnhold" List="{listid:Listeinnhold}" ShowField="Title" RelationshipDeleteBehavior="None" ID="{dd01587d-5fc2-46c1-8681-8b81b2514e92}" SourceID="{{listid:Prosjektmaler}}" StaticName="ListContentConfigLookup" Name="ListContentConfigLookup" />
+        <Field Type="Boolean" DisplayName="Standardmal" ID="{7bb7252a-a0eb-4e6b-b181-be89075e1d20}" SourceID="{{listid:Prosjektmaler}}" StaticName="IsDefaultTemplate" Name="IsDefaultTemplate">
+            <Default>0</Default>
+        </Field>
     </pnp:Fields>
     <pnp:FieldRefs>
         <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" />
