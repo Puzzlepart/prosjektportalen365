@@ -12,7 +12,6 @@ import { formatDate } from 'shared/lib/helpers';
 import { SectionModel, SectionType, StatusReport } from 'shared/lib/models';
 import { PortalDataService } from 'shared/lib/services';
 import { getUrlParam, parseUrlHash, setUrlHash } from 'shared/lib/util';
-import { SpEntityPortalService } from 'sp-entityportal-service';
 import * as formatString from 'string-format';
 import SPDataAdapter from '../../data';
 import { IProjectStatusData } from './IProjectStatusData';
