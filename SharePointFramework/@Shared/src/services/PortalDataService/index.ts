@@ -149,7 +149,7 @@ export class PortalDataService {
         }
         try {
             Logger.log({ message: `(PortalDataService) (syncList) Attempting to add field [TemplateParameters] to list ${listName}.`, level: LogLevel.Info });
-            let newField = spList.get_fields().addFieldAsXml(`<Field Type="Note" DisplayName="TemplateParameters" ID="{b8854944-7141-471f-b8df-53d93a4395ba}" StaticName="TemplateParameters" Name="TemplateParameters" UnlimitedLengthInDocumentLibrary="TRUE" ShowInEditForm="FALSE" />`, false, SP.AddFieldOptions.addToDefaultContentType);
+            let newField = spList.get_fields().addFieldAsXml(this._configuration.templateParametersFieldXml, false, SP.AddFieldOptions.addToDefaultContentType);
             newField.updateAndPushChanges(true);
             await ExecuteJsomQuery(jsomContext);
         } catch { }
