@@ -1,18 +1,19 @@
 import { sp } from '@pnp/sp';
 import { getId } from '@uifabric/utilities';
-import { IAllocationSearchResult, ITimelineData, ITimelineGroup, ITimelineItem } from 'interfaces';
+import { IAllocationSearchResult, ITimelineData, ITimelineGroup, ITimelineItem, TimelineGroupType } from 'interfaces';
 import * as moment from 'moment';
 import * as objectGet from 'object-get';
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'PortfolioWebPartsStrings';
 import * as React from 'react';
-import Timeline, { ReactCalendarItemRendererProps, TimelineMarkers, TodayMarker } from 'react-calendar-timeline';
+import Timeline, { ReactCalendarItemRendererProps, ReactCalendarGroupRendererProps, TimelineMarkers, TodayMarker } from 'react-calendar-timeline';
 import 'react-calendar-timeline/lib/Timeline.css';
-import { tryParsePercentage } from 'shared/lib/helpers';
+import { getObjectValue, tryParsePercentage } from 'shared/lib/helpers';
 import { DataSourceService } from 'shared/lib/services';
 import * as format from 'string-format';
 import * as _ from 'underscore';
@@ -22,6 +23,7 @@ import { IResourceAllocationProps } from './IResourceAllocationProps';
 import { IResourceAllocationState } from './IResourceAllocationState';
 import styles from './ResourceAllocation.module.scss';
 import './Timeline.overrides.css';
+import * as arraySort from 'array-sort';
 
 export class ResourceAllocation extends React.Component<IResourceAllocationProps, IResourceAllocationState> {
   public static defaultProps: Partial<IResourceAllocationProps> = {
@@ -113,6 +115,7 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
               canChangeGroup={false}
               sidebarWidth={250}
               itemRenderer={this._itemRenderer.bind(this)}
+              groupRenderer={this._groupRenderer.bind(this)}
               defaultTimeStart={moment().add(...this.props.defaultTimeStart)}
               defaultTimeEnd={moment().add(...this.props.defaultTimeEnd)}>
               <TimelineMarkers>
@@ -193,7 +196,6 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
    * Get command bar items
    */
   private _getCommandBarItems() {
-    const left = [];
     const right = [
       {
         key: getId('Filter'),
@@ -207,7 +209,7 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
         }
       }
     ] as ICommandBarItemProps[];
-    return { left, right };
+    return { left: [], right };
   }
 
   /**
@@ -225,41 +227,67 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
   }
 
   /**
-   * On item click
-   * 
-   * @param {React.MouseEvent} event Event
-   * @param {ITimelineItem} item Item
+   * Timeline group renderer
    */
+  private _groupRenderer({ group }: ReactCalendarGroupRendererProps<ITimelineGroup>) {
+    let style: React.CSSProperties = { display: 'block', width: '100%' };
+    if (group.type === TimelineGroupType.Role) {
+      style.fontStyle = 'italic';
+    }
+    return (
+      <div>
+        <span style={style}>{group.title}</span>
+      </div>
+    );
+  }
+
+  /**
+   * On item click
+   *
+* @param {React.MouseEvent} event Event
+* @param {ITimelineItem} item Item
+    */
   private _onItemClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) {
     this.setState({ showDetails: { element: event.currentTarget, data: item } });
   }
 
   /**
-   * Create groups
-   * 
-   * @param {IAllocationSearchResult[]} searchResults Search results
-   * @param {string} groupBy Group by
-   * 
-   * @returns {ITimelineGroup[]} Timeline groups
-   */
-  private _transformGroups(searchResults: IAllocationSearchResult[], groupBy: string = 'RefinableString71'): ITimelineGroup[] {
-    const groupNames: string[] = searchResults.map(res => res[groupBy]).filter((value, index, self) => self.indexOf(value) === index);
-    const groups: ITimelineGroup[] = groupNames.map((name, idx) => ({ id: idx, title: name }));
+   * Creating groups based on user property (RefinableString71) on the search result, with fallback to role (RefinableString72)
+   *
+* @param {IAllocationSearchResult[]} searchResults Search results
+    *
+* @returns {ITimelineGroup[]} Timeline groups
+    */
+  private _transformGroups(searchResults: IAllocationSearchResult[]): ITimelineGroup[] {
+    const groupNames: string[] = searchResults
+      .map(res => {
+        let name = res.RefinableString71 || `${res.RefinableString72}|R`;
+        return name;
+      })
+      .filter((value, index, self) => self.indexOf(value) === index);
+    let groups: ITimelineGroup[] = groupNames.map((name, id) => {
+      let [title, type] = name.split('|');
+      return {
+        id,
+        title,
+        type: type === 'R' ? TimelineGroupType.Role : TimelineGroupType.User,
+      };
+    });
+    groups = arraySort(groups, ['type', 'title']);
     return groups;
   }
 
   /**
    * Create items
-   * 
+   *
    * @param {IAllocationSearchResult[]} searchResults Search results
    * @param {ITimelineGroup[]} groups Groups
-   * @param {string} groupBy Group by
-   * 
+        *
    * @returns {ITimelineItem[]} Timeline items
-   */
-  private _transformItems(searchResults: IAllocationSearchResult[], groups: ITimelineGroup[], groupBy: string = 'RefinableString71'): ITimelineItem[] {
+        */
+  private _transformItems(searchResults: IAllocationSearchResult[], groups: ITimelineGroup[]): ITimelineItem[] {
     const items: ITimelineItem[] = searchResults.map((res, id) => {
-      const group = _.find(groups, grp => grp.title === res[groupBy]);
+      const group = _.find(groups, grp => [res.RefinableString71, res.RefinableString72].indexOf(grp.title) != -1);
       const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, false, 0) as number;
       const isAbsence = res.ContentTypeId.indexOf('0x010029F45E75BA9CE340A83EFFB2927E11F4') !== -1;
       const itemOpacity = allocation < 30 ? 0.3 : (allocation / 100);
@@ -284,7 +312,7 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
         project: res.SiteTitle,
         projectUrl: res.SiteName,
         role: res.RefinableString72,
-        resource: group.title,
+        resource: res.RefinableString71,
         props: res,
       } as ITimelineItem;
     });
@@ -293,9 +321,9 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
 
   /**
    * Fetch data
-   * 
+   *
    * @returns {ITimelineData} Timeline data
-   */
+        */
   private async _fetchData(): Promise<ITimelineData> {
     const dataSource = await new DataSourceService(sp.web).getByName(this.props.dataSource);
     if (!dataSource) throw format(strings.DataSourceNotFound, this.props.dataSource);
@@ -313,7 +341,7 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
       const items = this._transformItems(results, groups);
       return { items, groups };
     } catch (error) {
-      throw '';
+      throw error;
     }
   }
 }
