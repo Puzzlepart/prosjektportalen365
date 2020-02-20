@@ -11,6 +11,7 @@ declare interface IPortfolioWebPartsStrings {
   ActorsLabel: string;
   BasicGroupName: string;
   BenefitResponsibleLabel: string;
+  BenefitOwnerLabel: string;
   BenefitTitleLabel: string;
   ChartConfigurationListNameLabel: string;
   ChartErrorText: string;

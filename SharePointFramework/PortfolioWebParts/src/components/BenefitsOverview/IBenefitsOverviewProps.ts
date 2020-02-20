@@ -31,7 +31,8 @@ export const BenefitsOverviewDefaultProps: Partial<IBenefitsOverviewProps> = {
         'GtRealizationTimeOWSDATE',
         'GtGainLookupId',
         'GtMeasureIndicatorLookupId',
-        'GtGainsResponsible'
+        'GtGainsResponsible',
+        'GtGainsOwner'
       ],
       showExcelExportButton: true,
 };
