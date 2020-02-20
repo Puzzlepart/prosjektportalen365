@@ -416,7 +416,7 @@
                 {
                     "ID": "88d9b92c-efed-45d0-a586-86d9196b77d0",
                     "Name": "GtResourceUser",
-                    "Required": true
+                    "Required": false
                 },
                 {
                     "ID": "3a0ae560-bd55-45d4-907f-5119bf0a83bb",

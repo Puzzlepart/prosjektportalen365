@@ -23,7 +23,7 @@ export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceCo
         PROJECT_COLUMNS: 'Prosjektkolonner',
         PROJECT_COLUMN_CONFIGURATION: 'Prosjektkolonnekonfigurasjon',
         PROJECT_STATUS: 'Prosjektstatus',
-        PORTFOLIO_VIEWS: 'Porteføljevisninger',
-    },    
+        PORTFOLIO_VIEWS: 'Porteføljevisninger'
+    },
     templateParametersFieldXml: '<Field Type="Note" DisplayName="TemplateParameters" ID="{b8854944-7141-471f-b8df-53d93a4395ba}" StaticName="TemplateParameters" Name="TemplateParameters" UnlimitedLengthInDocumentLibrary="TRUE" Hidden="TRUE" />',
 }

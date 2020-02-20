@@ -11,6 +11,7 @@ export interface IListContentConfigSPItem {
     GtLccFields: string;
     GtLccDefault: boolean;
     GtLccSourceList: string;
+    GtLccHidden: boolean;
 }
 
 export enum ListContentConfigType {
@@ -18,10 +19,14 @@ export enum ListContentConfigType {
     Planner
 }
 
+/**
+ * @model ListContentConfig
+ */
 export class ListContentConfig {
     public id: number;
     public title: string;
     public isDefault: boolean;
+    public hidden: boolean;
     public sourceListProps: IListProperties = {};
     public destListProps: IListProperties = {};
     private _sourceList: string;
@@ -30,9 +35,10 @@ export class ListContentConfig {
     constructor(private _spItem: IListContentConfigSPItem, public web: Web) {
         this.id = _spItem.Id;
         this.title = _spItem.Title;
+        this.isDefault = _spItem.GtLccDefault;
+        this.hidden = _spItem.GtLccHidden;
         this._sourceList = _spItem.GtLccSourceList;
         this._destinationList = _spItem.GtLccDestinationList;
-        this.isDefault = _spItem.GtLccDefault;
     }
 
     public get type(): ListContentConfigType {

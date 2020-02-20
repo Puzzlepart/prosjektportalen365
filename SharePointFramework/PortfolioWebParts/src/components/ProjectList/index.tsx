@@ -18,6 +18,10 @@ import { ProjectCard } from './ProjectCard';
 import styles from './ProjectList.module.scss';
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns';
 
+/**
+ * @component ProjectList
+ * @extends React.Component
+ */
 export class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
   public static defaultProps: Partial<IProjectListProps> = {
     columns: PROJECTLIST_COLUMNS,

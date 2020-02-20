@@ -7,5 +7,6 @@
         <pnp:FieldRef ID="91d0b1bf-0a05-44f1-9885-cab0f3c3b77c" Name="GtLccDestinationLibrary" Hidden="true" />
         <pnp:FieldRef ID="525a7269-b880-4266-8482-fe7a1bfaac3e" Name="GtLccFields" Required="true" />
         <pnp:FieldRef ID="19c0c03c-678a-4c2a-ab9b-cb9ffd903012" Name="GtLccDefault" />
+        <pnp:FieldRef ID="f536ad85-248c-49b9-b6c7-0665943a2061" Name="GtLccHidden" />
     </pnp:FieldRefs>
 </pnp:ContentType>

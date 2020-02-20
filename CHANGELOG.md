@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Support for different project metadata for different project types/templates
 - Ability to connect template(s) to list content config
 - Support for provisioning documents and folders to new project sites #190
+- Support for cascade import of planner tasks #228
+- New column "Skjult" added to the list "Listeinnhold" #227
+- Add the ability to set a template in Prosjektmaler as default #233
+- Add the ability to set a icon for Prosjektmaler #233
+- Improved layout for project template selector #233
 
 ### Fixed
 - Header columns mispositioned in portfolio overview #207
