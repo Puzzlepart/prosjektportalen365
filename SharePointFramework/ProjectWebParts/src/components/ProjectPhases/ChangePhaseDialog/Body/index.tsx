@@ -3,32 +3,19 @@ import { View, InitialView, SummaryView, ChangingPhaseView } from '../Views';
 import IBodyProps from './IBodyProps';
 
 // tslint:disable-next-line: naming-convention
-export const Body = ({
-    isLoading,
-    currentIdx,
-    currentView,
-    checklistItems,
-    nextCheckPointAction,
-    newPhase,
-}: IBodyProps) => {
-    switch (currentView) {
+export const Body = (props: IBodyProps) => {
+    switch (props.currentView) {
         case View.Initial: {
-            const currentChecklistItem = checklistItems[currentIdx];
+            const currentChecklistItem = props.checklistItems[props.currentIdx];
             return (
                 <InitialView
-                    isLoading={isLoading}
-                    currentChecklistItem={currentChecklistItem}
-                    nextCheckPointAction={nextCheckPointAction} />
+                    isLoading={props.isLoading}
+                    checklistItem={currentChecklistItem}
+                    saveCheckPoint={props.saveCheckPoint} />
             );
         }
-        case View.Summary: {
-            return <SummaryView checklistItems={checklistItems} />;
-        }
-        case View.ChangingPhase: {
-            return <ChangingPhaseView newPhase={newPhase} />;
-        }
-        default: {
-            return null;
-        }
+        case View.Summary: return <SummaryView checklistItems={props.checklistItems} />;
+        case View.ChangingPhase: return <ChangingPhaseView newPhase={props.newPhase} />;
+        default: return null;
     }
 };

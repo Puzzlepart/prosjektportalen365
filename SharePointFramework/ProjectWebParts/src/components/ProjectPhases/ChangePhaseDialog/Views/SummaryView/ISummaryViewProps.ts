@@ -1,5 +1,5 @@
 import { IPhaseChecklistItem } from 'models';
 
-export default interface ISummaryViewProps {
+export interface ISummaryViewProps {
     checklistItems: IPhaseChecklistItem[];
 }

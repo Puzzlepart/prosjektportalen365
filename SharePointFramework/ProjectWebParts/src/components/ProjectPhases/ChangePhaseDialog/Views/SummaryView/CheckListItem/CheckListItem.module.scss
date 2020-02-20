@@ -1,3 +1,47 @@
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+
 .checkListItem {
-   margin: 18px 0 0 0;
+  margin: 18px 0 0 0;
+
+  .iconContainer {
+    float: left;
+    @include ms-fontSize-18;
+    width: 30px;
+    padding: 8px 0 0 0;
+  }
+
+  .container {
+    @include ms-Grid;
+    margin-left: 30px;
+
+    .header {
+      @include ms-Grid-row;
+
+      .title {
+        @include ms-Grid-col;
+        @include ms-sm10;
+        @include ms-fontSize-14;
+      }
+
+      .toggle {
+        @include ms-Grid-col;
+        @include ms-sm2;
+      }
+    }
+
+    .content {
+      @include ms-Grid-row;
+
+      .comment {
+        @include ms-Grid-col;
+        @include ms-sm12;
+        @include ms-fontSize-12;
+        padding: 8px 0 0 0;
+
+        .label {
+          @include ms-fontWeight-semibold;
+        }
+      }
+    }
+  }
 }
