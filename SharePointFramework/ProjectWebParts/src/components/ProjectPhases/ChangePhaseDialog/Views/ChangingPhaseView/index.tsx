@@ -1,30 +1,13 @@
-//#region Imports
-import * as React from 'react';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
-import IChangingPhaseViewProps from './IChangingPhaseViewProps';
-import IChangingPhaseViewState from './IChangingPhaseViewState';
 import * as strings from 'ProjectWebPartsStrings';
+import * as React from 'react';
 import * as format from 'string-format';
-//#endregion
+import IChangingPhaseViewProps from './IChangingPhaseViewProps';
 
 /**
  * @component ChangingPhaseView
  */
-export default class ChangingPhaseView extends React.Component<IChangingPhaseViewProps, IChangingPhaseViewState> {
-    public static displayName = 'ChangingPhaseView';
-
-    /**
-     * Constructor
-     *
-     * @param {IChangingPhaseViewProps} props Props
-     */
-    constructor(props: IChangingPhaseViewProps) {
-        super(props);
-    }
-
-    public render(): JSX.Element {
-        return (
-            <ProgressIndicator label={strings.PleaseWaitText} description={format(strings.ChangingPhaseDescription, this.props.newPhase.name)} />
-        );
-    }
-}
+// tslint:disable-next-line: naming-convention
+export const ChangingPhaseView = (props: IChangingPhaseViewProps) => {
+    return <ProgressIndicator label={strings.PleaseWaitText} description={format(strings.ChangingPhaseDescription, props.newPhase.name)} />;
+};
