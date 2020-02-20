@@ -9,7 +9,9 @@
     "dist": true,
     "lib": true,
     "node_modules": true,
-    "sharepoint": true
+    "sharepoint": true,
+    "temp": true,
+    "teams": true
   },
   "typescript.tsdk": ".\\node_modules\\typescript\\lib"
 }

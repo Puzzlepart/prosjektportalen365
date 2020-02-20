@@ -10,7 +10,12 @@ import { IPortfolioInsightsState } from './IPortfolioInsightsState';
 import styles from './PortfolioInsights.module.scss';
 import PortfolioInsightsCommandBar from './PortfolioInsightsCommandBar';
 import { PortfolioOverviewView } from 'shared/lib/models';
+ort { renderItemColumn } from './RenderItemColumn';
 
+/**
+ * @component PortfolioInsights
+ * @extends React.Component
+ */
 export class PortfolioInsights extends React.Component<IPortfolioInsightsProps, IPortfolioInsightsState> {
   public static defaultProps: Partial<IPortfolioInsightsProps> = {};
 

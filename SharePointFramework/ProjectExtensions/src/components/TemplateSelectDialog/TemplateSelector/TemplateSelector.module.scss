@@ -4,14 +4,27 @@
   @include ms-Grid-col;
   @include ms-sm12;
   padding: 10px 0 10px 0;
-  .title {
-    font-size: 18px;
-  }
+
   .dropdown {
     margin: 10px 0 5px 0;
   }
-  .description {
-    @include ms-font-s;
-    margin: 5px 0 15px 0;
+}
+
+.dropdownOption {
+  .icon {
+    @include ms-fontSize-18;
+    float: left;
+    width: 30px;
+    height: 100%;
+    padding-top: 5px;
+  }
+  .body {
+    float: right;
+    .text {
+      @include ms-fontSize-14;
+    }
+    .subText {
+      @include ms-fontSize-12;
+    }
   }
 }

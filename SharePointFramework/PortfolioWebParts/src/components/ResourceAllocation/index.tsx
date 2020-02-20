@@ -25,6 +25,10 @@ import styles from './ResourceAllocation.module.scss';
 import './Timeline.overrides.css';
 import * as arraySort from 'array-sort';
 
+/**
+ * @component ResourceAllocation
+ * @extends React.Component
+ */
 export class ResourceAllocation extends React.Component<IResourceAllocationProps, IResourceAllocationState> {
   public static defaultProps: Partial<IResourceAllocationProps> = {
     itemBgColor: '51,153,51',

@@ -4,6 +4,10 @@ import { IRiskOverviewProps } from './IRiskOverviewProps';
 import { RISKOVERVIEW_COLUMNS } from './RiskOverviewColumns';
 import { AggregatedSearchList } from '../AggregatedSearchList';
 
+/**
+ * @component RiskOverview
+ * @extends React.Component
+ */
 export class RiskOverview extends React.Component<IRiskOverviewProps, {}> {
   public static defaultProps: Partial<IRiskOverviewProps> = { columns: RISKOVERVIEW_COLUMNS };
 

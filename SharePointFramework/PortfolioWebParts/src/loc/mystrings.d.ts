@@ -17,6 +17,11 @@ declare interface IPortfolioWebPartsStrings {
   ChartErrorText: string;
   ColumnConfigListNameLabel: string;
   ColumnsListNameLabel: string;
+  LoadingTextLabel: string;
+  EmptyMessageLabel: string;
+  RowLimitLabel: string;
+  LoadingTextDescription: string;
+  EmptyMessageDescription: string;
   CommandBarGroupName: string;
   ConfigurationGroupName: string;
   ConsequenceLabel: string;

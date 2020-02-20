@@ -9,6 +9,10 @@ const CONTENT_TYPE_ID_BENEFITS = '0x01004F466123309D46BAB9D5C6DE89A6CF67';
 const CONTENT_TYPE_ID_MEASUREMENTS = '0x010039EAFDC2A1624C1BA1A444FC8FE85DEC';
 const CONTENT_TYPE_ID_INDICATORS = '0x010073043EFE3E814A2BBEF96B8457623F95';
 
+/**
+ * @component BenefitsOverview
+ * @extends React.Component
+ */
 export class BenefitsOverview extends React.Component<IBenefitsOverviewProps, {}> {
   public static defaultProps = BenefitsOverviewDefaultProps;
 

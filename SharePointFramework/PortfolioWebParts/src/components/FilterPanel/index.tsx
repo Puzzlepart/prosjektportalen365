@@ -6,6 +6,10 @@ import { Filter, IFilterProps } from './Filter';
 import { IFilterItemProps } from './FilterItem/IFilterItemProps';
 import { Customizer } from '@uifabric/utilities';
 
+/**
+ * @component FilterPanel
+ * @extends React.Component
+ */
 export class FilterPanel extends React.Component<IFilterPanelProps, IFilterPanelState> {
     public static defaultProps: Partial<IFilterPanelProps> = {};
 

@@ -5,12 +5,7 @@ export interface ILatestProjectsState {
   isLoading: boolean;
 
   /**
-   * Project
+   * Projects
    */
   projects: any[];
-
-  /**
-   * Show list
-   */
-  showList: boolean;
 }
