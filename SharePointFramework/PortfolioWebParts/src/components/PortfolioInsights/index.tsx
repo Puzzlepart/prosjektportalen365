@@ -10,7 +10,6 @@ import { IPortfolioInsightsState } from './IPortfolioInsightsState';
 import styles from './PortfolioInsights.module.scss';
 import PortfolioInsightsCommandBar from './PortfolioInsightsCommandBar';
 import { PortfolioOverviewView } from 'shared/lib/models';
-ort { renderItemColumn } from './RenderItemColumn';
 
 /**
  * @component PortfolioInsights
