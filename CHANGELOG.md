@@ -1,22 +1,26 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## Unreleased - TBA
+## 2.0.0 - 2020-02-21
 
 ### Added
 - Support for different phase term sets (to fully support different project templates/types) #201
 - Support for different project metadata for different project types/templates
 - Ability to connect template(s) to list content config
 - Support for provisioning documents and folders to new project sites #190
-- Support for cascade import of planner tasks #228
-- New column "Skjult" added to the list "Listeinnhold" #227
+- New column `Skjult` added to the list `Listeinnhold` #227
 - Add the ability to set a template in Prosjektmaler as default #233
 - Add the ability to set a icon for Prosjektmaler #233
 - Improved layout for project template selector #233
+- Support for role-only for resource allocation #214
+- Misc allocation improvements #139
+- Moving planner configuration to `Lists/Listeinnhold` (also support for cascade import #228
+- Add `Gevinsteier` to `Gevinstanalyse og gevinstrealiseringsplan` #162
 
 ### Fixed
 - Header columns mispositioned in portfolio overview #207
 - Issue with mandatory project properties not synced to created projects #215
+- Disabled template dropdown in project configurator if there's only 1 template selected
 
 ## 1.1.9 - 2020-01-20
 
