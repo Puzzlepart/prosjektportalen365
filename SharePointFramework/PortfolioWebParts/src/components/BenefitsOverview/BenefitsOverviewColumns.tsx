@@ -47,6 +47,15 @@ export function getColumns(props: IBenefitsOverviewProps): IAggregatedSearchList
       isGroupable: true,
     },
     {
+      key: 'benefit.owner',
+      fieldName: 'benefit.owner',
+      name: strings.BenefitOwnerLabel,
+      minWidth: 50,
+      maxWidth: 180,
+      isResizable: true,
+      isGroupable: true,
+    },
+    {
       key: 'title',
       fieldName: 'title',
       name: strings.MeasuremenentIdicatorLabel,

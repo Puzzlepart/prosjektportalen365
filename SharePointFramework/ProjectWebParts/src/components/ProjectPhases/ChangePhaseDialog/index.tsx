@@ -10,6 +10,7 @@ import * as strings from 'ProjectWebPartsStrings';
 import * as format from 'string-format';
 import { IPhaseChecklistItem } from 'models';
 import SPDataAdapter from '../../../data';
+import { Logger, LogLevel } from '@pnp/logging';
 
 /**
  * @component ChangePhaseDialog
@@ -17,6 +18,8 @@ import SPDataAdapter from '../../../data';
 export default class ChangePhaseDialog extends React.Component<IChangePhaseDialogProps, IChangePhaseDialogState> {
     /**
      * Constructor
+     * 
+     * @param {IChangePhaseDialogProps} props
      */
     constructor(props: IChangePhaseDialogProps) {
         super(props);
@@ -24,7 +27,7 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
         this.state = {
             isLoading: false,
             checklistItems,
-            currentIdx: this._getNextIndex(checklistItems, 0),
+            currentIdx: this._getNextIndex(checklistItems),
             currentView: checklistItems.filter(this._checkPointOpenFilter).length > 0 ? View.Initial : View.Confirm,
         };
     }
@@ -51,7 +54,7 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
                     {...dlgCntBaseProps}
                     checklistItems={this.state.checklistItems}
                     currentIdx={this.state.currentIdx}
-                    nextCheckPointAction={this._nextCheckPointAction.bind(this)} />
+                    saveCheckPoint={this._saveCheckPoint.bind(this)} />
                 <Footer {...dlgCntBaseProps} onChangeView={this._onChangeView.bind(this)} />
             </Dialog>
         );
@@ -62,39 +65,33 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
      *
      * @param {string} statusValue Status value
      * @param {string} commentsValue Comments value
-     * @param {boolean} updateStatus Should status be updated
      */
-    private async _nextCheckPointAction(statusValue: string, commentsValue: string, updateStatus: boolean = true): Promise<void> {
+    private async _saveCheckPoint(statusValue: string, commentsValue: string): Promise<void> {
         this.setState({ isLoading: true });
         const { checklistItems, currentIdx } = { ...this.state } as IChangePhaseDialogState;
         const currentItem = checklistItems[currentIdx];
-        let updatedValues: { [key: string]: string } = { GtComment: commentsValue };
-        if (updateStatus) {
-            updatedValues.GtChecklistStatus = statusValue;
-        }
+        let updatedValues: { [key: string]: string } = { GtComment: commentsValue, GtChecklistStatus: statusValue };
         await SPDataAdapter.project.updateChecklistItem(strings.PhaseChecklistName, currentItem.ID, updatedValues);
         checklistItems[currentIdx] = { ...currentItem, ...updatedValues };
         let newState: Partial<IChangePhaseDialogState> = {
             checklistItems,
             isLoading: false,
         };
-        const nextIndex = this._getNextIndex();
-        if (nextIndex != -1) {
-            newState.currentIdx = nextIndex;
-        } else {
-            newState.currentView = View.Summary;
-        }
+        const nextIndex = this._getNextIndex(undefined, currentIdx + 1);
+        if (nextIndex != -1) newState.currentIdx = nextIndex;
+        else newState.currentView = View.Summary;
         this.setState(newState);
     }
 
     /**
      * Get next index
      * 
-     * @param {IPhaseChecklistItem[]} checklistItems Check list items
-     * @param {number} currentIdx Current index
+     * @param {IPhaseChecklistItem[]} checklistItems Check list items (default to state.checklistItems)
+     * @param {number} startIndex Start index (defaults to 0)
      */
-    private _getNextIndex(checklistItems: IPhaseChecklistItem[] = this.state.checklistItems, currentIdx: number = this.state.currentIdx): number {
-        const [nextOpen] = [].concat(checklistItems).splice(currentIdx).filter(this._checkPointOpenFilter);
+    private _getNextIndex(checklistItems: IPhaseChecklistItem[] = this.state.checklistItems, startIndex: number = 0): number {
+        Logger.log({ message: `(ChangePhaseDialog) _getNextIndex: Retrieving next index`, data: { currentIdx: startIndex }, level: LogLevel.Info });
+        const [nextOpen] = [].concat(checklistItems).splice(startIndex).filter(item => item.GtChecklistStatus === strings.StatusOpen);
         return checklistItems.indexOf(nextOpen);
     }
 
@@ -110,10 +107,10 @@ export default class ChangePhaseDialog extends React.Component<IChangePhaseDialo
     /**
      * Change view
      *
-     * @param {View} newView New view
+     * @param {View} view New view
      */
-    private _onChangeView(newView: View) {
-        this.setState({ currentView: newView });
+    private _onChangeView(view: View) {
+        this.setState({ currentView: view });
     }
 }
 

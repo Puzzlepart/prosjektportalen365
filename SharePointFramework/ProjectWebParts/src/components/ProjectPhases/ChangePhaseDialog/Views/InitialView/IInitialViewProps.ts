@@ -9,12 +9,12 @@ export interface IInitialViewProps {
   /**
  * Current check list items
  */
-  currentChecklistItem: IPhaseChecklistItem;
+  checklistItem: IPhaseChecklistItem;
 
   /**
  * Next check point ation callback
  */
-  nextCheckPointAction: (statusValue: string, commentsValue: string, updateStatus: boolean) => void;
+  saveCheckPoint: (statusValue: string, commentsValue: string, updateStatus: boolean) => void;
 
   /**
  * Min length for comment

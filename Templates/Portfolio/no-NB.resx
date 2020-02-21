@@ -906,6 +906,9 @@
   <data name="SiteFields_GtGainsResponsible_DisplayName" xml:space="preserve">
     <value>Gevinstansvarlig</value>
   </data>
+  <data name="SiteFields_GtGainsOwner_DisplayName" xml:space="preserve">
+    <value>Gevinsteier</value>
+  </data>
   <data name="SiteFields_GtMeasureIndicator_DisplayName" xml:space="preserve">
     <value>Måleindikator</value>
   </data>
@@ -1546,7 +1549,10 @@
     <value> Hvordan skal gevinsten realiseres?</value>
   </data>
   <data name="SiteFields_GtGainsResponsible_Description" xml:space="preserve">
-    <value>Ansvarlig for realisering av gevinst</value>
+    <value>Er den rollen som har det overordnede ansvaret for at prosjektets gevinster blir realisert. Den gevinstansvarlige skal normalt være en leder plassert i den delen av en linjeorganisasjon som skal realisere gevinstene.</value>
+  </data>
+  <data name="SiteFields_GtGainsOwner_Description" xml:space="preserve">
+    <value>Dersom gevinstene skal realiseres i ulike deler av organisasjonen (eller i flere virksomheter) anbefales det å oppnevne en gevinsteier i de ulike delene av linjeorganisasjonen (eller virksomhetene) som eier ulike deler av de planlagte gevinstene. Gevinsteiere har da et distribuert ansvar for sin del av gevinstene, og har en viktig rolle som den gevinstansvarliges "forlengede arm" og lokale støttespiller.</value>
   </data>
   <data name="SiteFields_GtMeasureIndicator_Description" xml:space="preserve">
     <value>Hvordan skal gevinsten måles, eks: papirforbruk pr måned</value>

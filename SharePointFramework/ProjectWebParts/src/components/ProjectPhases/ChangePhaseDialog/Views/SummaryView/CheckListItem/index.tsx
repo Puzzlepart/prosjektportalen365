@@ -2,9 +2,9 @@ import { stringIsNullOrEmpty } from '@pnp/common';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
-import IChecklistItemProps from './IChecklistItemProps';
-import IChecklistItemState from './IChecklistItemState';
+import { useState } from 'react';
 import styles from './CheckListItem.module.scss';
+import IChecklistItemProps from './IChecklistItemProps';
 
 const STATUS_COLORS = {
     [strings.StatusOpen]: 'inherit',
@@ -12,61 +12,44 @@ const STATUS_COLORS = {
     [strings.StatusNotRelevant]: '#e81123',
 };
 
+const STATUS_ICONS = {
+    [strings.StatusOpen]: 'CircleRing',
+    [strings.StatusClosed]: 'Completed',
+    [strings.StatusNotRelevant]: 'Blocked',
+};
+
 /**
  * @component CheckListItem
  */
-export default class CheckListItem extends React.PureComponent<IChecklistItemProps, IChecklistItemState> {
-    /**
-     * Constructor
-     *
-     * @param {IChecklistItemProps} props Props
-     */
-    constructor(props: IChecklistItemProps) {
-        super(props);
-        this.state = {};
-    }
+// tslint:disable-next-line: naming-convention
+export const CheckListItem = ({ item }: IChecklistItemProps) => {
+    const [commentHidden, setCommentHidden] = useState(true);
 
-    public render(): JSX.Element {
-        return (
-            <li className={styles.checkListItem}>
-                <div className='ms-Grid' dir='ltr'>
-                    <div className='ms-Grid-row' style={this._style} onClick={this._onTitleClick.bind(this)}>
-                        <div className='ms-Grid-col ms-sm10'>
-                            <span>{this.props.item.ID}. {this.props.item.Title}</span>
-                        </div>
-                        <div className='ms-Grid-col ms-sm2' hidden={!this._hasComment}>
-                            <Icon iconName={this.state.showComment ? 'ChevronDown' : 'ChevronUp'} />
-                        </div>
+    let hasComment = !stringIsNullOrEmpty(item.GtComment);
+
+    return (
+        <li className={styles.checkListItem}>
+            <div className={styles.iconContainer}>
+                <Icon iconName={STATUS_ICONS[item.GtChecklistStatus]} style={{ color: STATUS_COLORS[item.GtChecklistStatus] }} />
+            </div>
+            <div className={styles.container}>
+                <div className={styles.header} style={{ cursor: hasComment && 'pointer' }} onClick={() => hasComment && setCommentHidden(!commentHidden)}>
+                    <div className={styles.title}>
+                        <span>{item.ID}. {item.Title}</span>
                     </div>
-                    <div className='ms-Grid-row' hidden={!this.state.showComment}>
-                        <div className='ms-Grid-col ms-sm12'>
-                            <p className='ms-metadata'>
-                                {this.props.item.GtComment}
-                            </p>
-                        </div>
+                    <div className={styles.toggle} hidden={!hasComment}>
+                        <Icon iconName={commentHidden ? 'ChevronUp' : 'ChevronDown'} />
                     </div>
                 </div>
-            </li>
-        );
-    }
-
-    private get _hasComment(): boolean {
-        return !stringIsNullOrEmpty(this.props.item.GtComment);
-    }
-
-    private get _style() {
-        return {
-            color: STATUS_COLORS[this.props.item.GtChecklistStatus],
-            cursor: this._hasComment ? 'pointer' : 'initial',
-        };
-    }
-
-    private _onTitleClick() {
-        if (this._hasComment) {
-            this.setState(prevState => ({ showComment: !prevState.showComment }));
-        }
-    }
-}
+                <div className={styles.content} hidden={commentHidden}>
+                    <div className={styles.comment}>
+                        <span className={styles.label}>{strings.CommentLabel}</span> <span>{item.GtComment}</span>
+                    </div>
+                </div>
+            </div>
+        </li>
+    );
+};
 
 
 
