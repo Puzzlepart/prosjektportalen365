@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Moving planner configuration to `Lists/Listeinnhold` (also support for cascade import #228
 - Add `Gevinsteier` to `Gevinstanalyse og gevinstrealiseringsplan` #162
 - Improved UI for summary view phase change modal #235
+- Support for description for list content configurations (#240)
 
 ### Fixed
 - Header columns mispositioned in portfolio overview #207
