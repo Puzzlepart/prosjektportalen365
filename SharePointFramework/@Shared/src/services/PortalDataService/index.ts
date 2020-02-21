@@ -207,7 +207,8 @@ export class PortalDataService {
             let list = this._web.lists.getByTitle(listName);
             let items: any[];
             if (query) {
-                items = await list.usingCaching().getItemsByCAMLQuery(query, ...expands);
+                if (expands) items = await list.usingCaching().getItemsByCAMLQuery(query, ...expands);
+                else items = await list.usingCaching().getItemsByCAMLQuery(query);
             } else {
                 items = await list.usingCaching().items.usingCaching().get();
             }

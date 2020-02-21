@@ -32,7 +32,8 @@
     "paths": {}
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts", "src/extensions/helpContent/index.tsx",
+    "src/**/*.tsx"
   ],
   "exclude": [
     "node_modules",

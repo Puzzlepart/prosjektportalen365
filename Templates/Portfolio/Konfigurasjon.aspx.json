@@ -185,6 +185,18 @@
                 "fabricReactIcon": {
                     "iconName": "plannerlogo"
                 }
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 16,
+                "fabricReactIcon": {
+                    "iconName": "help"
+                }
             }
         ],
         "isMigrated": true,
@@ -230,20 +242,7 @@
             "items[12].title": "Fasesjekkliste",
             "items[13].title": "Interessentregister",
             "items[14].title": "Planneroppgaver",
-            "items[0].description": "",
-            "items[1].description": "",
-            "items[2].description": "",
-            "items[3].description": "",
-            "items[4].description": "",
-            "items[5].description": "",
-            "items[6].description": "",
-            "items[0].altText": "",
-            "items[1].altText": "",
-            "items[2].altText": "",
-            "items[3].altText": "",
-            "items[4].altText": "",
-            "items[5].altText": "",
-            "items[6].altText": ""
+            "items[15].title": "Hjelpeinnhold"
         },
         "imageSources": {},
         "links": {
@@ -262,7 +261,8 @@
             "items[11].sourceItem.url": "{hosturl}{site}/Konfigurasjonsfiler",
             "items[12].sourceItem.url": "{hosturl}{site}/Lists/Fasesjekkliste",
             "items[13].sourceItem.url": "{hosturl}{site}/Lists/Interessentregister",
-            "items[14].sourceItem.url": "{hosturl}{site}/Lists/Planneroppgaver"
+            "items[14].sourceItem.url": "{hosturl}{site}/Lists/Planneroppgaver",
+            "items[15].sourceItem.url": "{hosturl}{site}/Lists/Hjelpeinnhold"
         },
         "componentDependencies": {
             "layoutComponentId": "706e33c8-af37-4e7b-9d22-6e5694d92a6f"

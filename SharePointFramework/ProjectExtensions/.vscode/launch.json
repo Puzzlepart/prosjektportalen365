@@ -73,5 +73,23 @@
         "--incognito"
       ]
     },
+    {
+      "name": "HelpContentApplicationCustomizer",
+      "type": "chrome",
+      "request": "launch",
+      "url": "https://olemp.sharepoint.com/sites/ArendalpolitistasjonNybygg/Lists/Gevinstanalyse%20og%20gevinstrealiseringsplan/AllItems.aspx?debugManifestsFile=https%3A%2F%2Flocalhost%3A4321%2Ftemp%2Fmanifests.js&loadSPFX=true&customActions=%7B%2228987406-2a67-48a8-9297-fd2833bf0a09%22%3A%7B%22location%22%3A%22ClientSideExtension.ApplicationCustomizer%22%2C%22properties%22%3A%7B%7D%7D%7D",
+      "webRoot": "${workspaceRoot}",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack:///.././src/*": "${webRoot}/src/*",
+        "webpack:///../../../src/*": "${webRoot}/src/*",
+        "webpack:///../../../../src/*": "${webRoot}/src/*",
+        "webpack:///../../../../../src/*": "${webRoot}/src/*"
+      },
+      "runtimeArgs": [
+        "--remote-debugging-port=9222",
+        "--incognito"
+      ]
+    }
   ]
 }

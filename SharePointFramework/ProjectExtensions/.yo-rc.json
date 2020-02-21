@@ -1,13 +1,13 @@
 {
-    "@microsoft/generator-sharepoint": {
-        "version": "1.9.1",
-        "libraryName": "project-extensions",
-        "libraryId": "773f8a12-1d75-44bc-ad98-a33a5d7aebca",
-        "environment": "spo",
-        "packageManager": "pnpm",
-        "isCreatingSolution": true,
-        "isDomainIsolated": false,
-        "componentType": "extension",
-        "extensionType": "ListViewCommandSet"
-    }
+  "@microsoft/generator-sharepoint": {
+    "version": "1.9.1",
+    "libraryName": "project-extensions",
+    "libraryId": "773f8a12-1d75-44bc-ad98-a33a5d7aebca",
+    "environment": "spo",
+    "packageManager": "pnpm",
+    "isCreatingSolution": false,
+    "isDomainIsolated": false,
+    "componentType": "extension",
+    "extensionType": "ApplicationCustomizer"
+  }
 }
