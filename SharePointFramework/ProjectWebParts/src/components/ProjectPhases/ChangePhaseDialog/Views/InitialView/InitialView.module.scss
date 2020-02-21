@@ -7,6 +7,9 @@
   }
   .commentField {
     margin: 10px 0 0 0;
-    height: 100px;
+
+    textarea {
+      height: 100px;
+    }
   }
 }
