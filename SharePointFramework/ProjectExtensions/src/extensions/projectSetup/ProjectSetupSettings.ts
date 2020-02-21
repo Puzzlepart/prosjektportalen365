@@ -3,25 +3,22 @@ import { IToggleProps } from 'office-ui-fabric-react/lib/Toggle';
 
 export interface IProjectSetupSettings<T> {
     includeStandardFolders?: T;
-    copyPlannerTasks?: T;
     includePortfolioAdministrators?: T;
 }
 
 export class ProjectSetupSettings {
     private _labels: IProjectSetupSettings<string> = {
         includeStandardFolders: strings.IncludeStandardFoldersLabel,
-        copyPlannerTasks: strings.CopyPlannerTasksLabel,
         includePortfolioAdministrators: strings.IncludePortfolioAdministratorsLabel,
     };
     private _descriptions: IProjectSetupSettings<string> = {
         includeStandardFolders: strings.IncludeStandardFoldersDescription,
-        copyPlannerTasks: strings.CopyPlannerTasksDescription,
         includePortfolioAdministrators: strings.IncludePortfolioAdministratorsDescription,
     };
     private _values: IProjectSetupSettings<boolean> = {};
 
     public useDefault() {
-        this._values = { includeStandardFolders: false, copyPlannerTasks: true, includePortfolioAdministrators: true };
+        this._values = { includeStandardFolders: false, includePortfolioAdministrators: true };
         return this;
     }
 

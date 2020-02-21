@@ -11,6 +11,10 @@ import styles from './PortfolioInsights.module.scss';
 import PortfolioInsightsCommandBar from './PortfolioInsightsCommandBar';
 import { PortfolioOverviewView } from 'shared/lib/models';
 
+/**
+ * @component PortfolioInsights
+ * @extends React.Component
+ */
 export class PortfolioInsights extends React.Component<IPortfolioInsightsProps, IPortfolioInsightsState> {
   public static defaultProps: Partial<IPortfolioInsightsProps> = {};
 
@@ -26,7 +30,7 @@ export class PortfolioInsights extends React.Component<IPortfolioInsightsProps, 
 
   public async componentDidMount() {
     try {
-     const configuration = await this.props.dataAdapter.getPortfolioConfig();
+      const configuration = await this.props.dataAdapter.getPortfolioConfig();
       const currentView = configuration.views[0];
       const { charts, chartData, contentTypes } = await this.props.dataAdapter.fetchChartData(
         currentView,
@@ -62,6 +66,7 @@ export class PortfolioInsights extends React.Component<IPortfolioInsightsProps, 
       <div className={styles.portfolioInsights}>
         <div className={styles.container}>
           <PortfolioInsightsCommandBar
+            newFormUrl={`${this.props.pageContext.web.absoluteUrl}/Lists/Grafkonfigurasjon/NewForm.aspx`}
             contentTypes={this.state.contentTypes}
             currentView={this.state.currentView}
             configuration={this.state.configuration}
@@ -108,10 +113,8 @@ export class PortfolioInsights extends React.Component<IPortfolioInsightsProps, 
   */
   private async _onViewChanged(view: PortfolioOverviewView) {
     let data = await this.props.dataAdapter.fetchDataForView(view, this.state.configuration, this.props.pageContext.site.id.toString());
-    this.setState({
-      currentView: view,
-      chartData: new ChartData(data.items.map(item => new ChartDataItem(item.Title, item))),
-    });
+    let chartData = new ChartData(data.items.map(item => new ChartDataItem(item.Title, item)));
+    this.setState({ currentView: view, chartData });
   }
 }
 

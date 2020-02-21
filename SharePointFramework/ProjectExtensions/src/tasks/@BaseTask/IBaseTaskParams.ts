@@ -1,4 +1,5 @@
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base';
+import { TypedHash } from '@pnp/common';
 import { PortalDataService } from 'shared/lib/services';
 import { SpEntityPortalService } from 'sp-entityportal-service';
 import { Schema, Web } from 'sp-js-provisioning';
@@ -55,4 +56,9 @@ export interface IBaseTaskParams {
      * Portal data service
      */
     portal?: PortalDataService;
+
+    /**
+     * Miscellaneous data
+     */
+    data?: TypedHash<any>;
 }

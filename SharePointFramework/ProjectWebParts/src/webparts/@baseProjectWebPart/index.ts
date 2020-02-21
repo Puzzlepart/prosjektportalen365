@@ -4,7 +4,6 @@ import '@pnp/polyfill-ie11';
 import { sp } from '@pnp/sp';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import { ApplicationInsightsLogListener } from 'shared/lib/logging';
 import HubSiteService, { IHubSite } from 'sp-hubsite-service';
 import { IBaseWebPartComponentProps } from '../../components/BaseWebPartComponent';
 import SPDataAdapter from '../../data';
@@ -52,7 +51,6 @@ export abstract class BaseProjectWebPart<T extends IBaseWebPartComponentProps> e
             logLevel: (sessionStorage.DEBUG || DEBUG) ? LogLevel.Info : LogLevel.Warning,
         });
         Logger.subscribe(new ConsoleListener());
-        Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext));
         Logger.activeLogLevel = (sessionStorage.DEBUG || DEBUG) ? LogLevel.Info : LogLevel.Warning;
     }
 

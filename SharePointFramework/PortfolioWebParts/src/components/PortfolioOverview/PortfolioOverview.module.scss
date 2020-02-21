@@ -36,6 +36,13 @@
       .searchBox {
         display: none;
       }
+      .headerColumns {
+        position: inherit;
+      }
+    }
+
+    [class*='stickyAbove'] .headerColumns {
+      padding-left: 32px;
     }
   }
 }

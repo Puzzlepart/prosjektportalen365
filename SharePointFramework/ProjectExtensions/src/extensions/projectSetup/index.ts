@@ -12,7 +12,6 @@ import * as ReactDOM from 'react-dom';
 import { ApplicationInsightsLogListener, ListLogger } from 'shared/lib/logging';
 import { PortalDataService } from 'shared/lib/services';
 import { default as HubSiteService } from 'sp-hubsite-service';
-import * as formatString from 'string-format';
 import { ErrorDialog, IErrorDialogProps, IProgressDialogProps, ITemplateSelectDialogProps, ITemplateSelectDialogState, ProgressDialog, TemplateSelectDialog } from '../../components';
 import { ListContentConfig, ProjectExtension, ProjectTemplate } from '../../models';
 import * as Tasks from '../../tasks';
@@ -45,9 +44,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         }
         case ProjectSetupValidation.NoHubConnection: {
           throw new ProjectSetupError('onInit', strings.NoHubSiteErrorMessage, strings.NoHubSiteErrorStack, MessageBarType.warning);
-        }
-        case ProjectSetupValidation.InvalidCulture: {
-          throw new ProjectSetupError('onInit', strings.ProfileLanguageIncorrectErrorMessage, formatString(strings.ProfileLanguageIncorrectErrorStack, this.context.pageContext.site.absoluteUrl));
         }
       }
 
@@ -129,7 +125,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    * @param {IProgressDialogProps} props Props
    */
   private _renderErrorDialog(props: IErrorDialogProps) {
-    console.log(props);
     let progressDialog = this._getPlaceholder('ProgressDialog');
     this._unmount(progressDialog);
     let placeholder = this._getPlaceholder('ErrorDialog');
@@ -212,8 +207,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       Logger.log({ message: '(ProjectSetup) [_fetchData]: Retrieved hub site url', data: { hubUrl: data.hub.url }, level: LogLevel.Info });
       Logger.log({ message: '(ProjectSetup) [_fetchData]: Retrieving templates, extensions and content config', data: {}, level: LogLevel.Info });
       const [templates, extensions, listContentConfig] = await Promise.all([
-        this._portal.getItems(this.properties.templatesLibrary, ProjectTemplate, { ViewXml: '<View></View>' }, ['File', 'FieldValuesAsText']),
-        this._portal.getItems(this.properties.extensionsLibrary, ProjectExtension, { ViewXml: '<View></View>' }, ['File', 'FieldValuesAsText']),
+        this._portal.getItems(this.properties.templatesLibrary, ProjectTemplate, { ViewXml: '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>' }, ['File', 'FieldValuesAsText']),
+        this._portal.getItems(this.properties.extensionsLibrary, ProjectExtension, { ViewXml: '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>' }, ['File', 'FieldValuesAsText']),
         this._portal.getItems(this.properties.contentConfigList, ListContentConfig),
       ]);
       Logger.log({ message: '(ProjectSetup) [_fetchData]: Retrieved templates, extensions and content config', data: { templates: templates.length, extensions: extensions.length, listContentConfig: listContentConfig.length }, level: LogLevel.Info });
@@ -228,22 +223,37 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     }
   }
 
+  /**
+   * Get validation
+   */
   private get _validation(): ProjectSetupValidation {
     if (this.context.pageContext.web.language !== 1044) return ProjectSetupValidation.InvalidWebLanguage;
     if (!this.context.pageContext.legacyPageContext.hubSiteId) return ProjectSetupValidation.NoHubConnection;
-    if (this.context.pageContext.legacyPageContext.currentCultureLCID !== 1044 || this.context.pageContext.legacyPageContext.currentLanguage !== 1044) return ProjectSetupValidation.InvalidCulture;
     return ProjectSetupValidation.Ready;
   }
 
-  private _unmount(container: HTMLElement) {
-    ReactDOM.unmountComponentAtNode(container);
+  /**
+   * Unmount component at container
+   * 
+   * @param {HTMLElement} container Container
+   */
+  private _unmount(container: HTMLElement): boolean {
+    return ReactDOM.unmountComponentAtNode(container);
   }
 
-  private get _container() {
+  /**
+   * Get container
+   */
+  private get _container(): HTMLDivElement {
     const topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top);
     return topPlaceholder.domElement;
   }
 
+  /**
+   * Get placeholder by key
+   * 
+   * @param {string} key Key
+   */
   private _getPlaceholder(key: 'ErrorDialog' | 'ProgressDialog' | 'TemplateSelectDialog') {
     const id = this._placeholderIds[key];
     let placeholder = document.getElementById(id);

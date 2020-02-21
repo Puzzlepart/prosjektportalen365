@@ -6,29 +6,29 @@ import IFooterProps from './IFooterProps';
 import * as strings from 'ProjectWebPartsStrings';
 
 /**
- * Footer
+ * @component Footer
  */
 // tslint:disable-next-line: naming-convention
-export const Footer = ({ isLoading, newPhase, currentView, onChangeView, onChangePhase, onDismiss }: IFooterProps) => {
+export const Footer = (props: IFooterProps) => {
     let actions = [];
 
-    switch (currentView) {
+    switch (props.currentView) {
         case View.Initial: {
             actions.push({
                 text: strings.Skip,
-                disabled: isLoading,
-                onClick: () => onChangeView(View.Confirm),
+                disabled: props.isLoading,
+                onClick: () => props.onChangeView(View.Confirm),
             });
         }
             break;
         case View.Confirm: {
             actions.push({
                 text: strings.Yes,
-                disabled: isLoading,
+                disabled: props.isLoading,
                 onClick: async () => {
-                    onChangeView(View.ChangingPhase);
-                    await onChangePhase(newPhase);
-                    onDismiss(null, true);
+                    props.onChangeView(View.ChangingPhase);
+                    await props.onChangePhase(props.newPhase);
+                    props.onDismiss(null, true);
                 },
             });
         }
@@ -36,8 +36,8 @@ export const Footer = ({ isLoading, newPhase, currentView, onChangeView, onChang
         case View.Summary: {
             actions.push({
                 text: strings.MoveOn,
-                disabled: isLoading,
-                onClick: () => onChangeView(View.Confirm),
+                disabled: props.isLoading,
+                onClick: () => props.onChangeView(View.Confirm),
             });
         }
             break;
@@ -45,10 +45,8 @@ export const Footer = ({ isLoading, newPhase, currentView, onChangeView, onChang
 
     return (
         <DialogFooter>
-            {actions.map((buttonProps, index) => {
-                return <PrimaryButton key={`FooterAction_${index}`} {...buttonProps} />;
-            })}
-            <DefaultButton text={strings.CloseText} disabled={isLoading} onClick={onDismiss} />
+            {actions.map((buttonProps, index) => <PrimaryButton key={index} {...buttonProps} />)}
+            <DefaultButton text={strings.CloseText} disabled={props.isLoading} onClick={props.onDismiss} />
         </DialogFooter>
     );
 };

@@ -1,3 +1,4 @@
+import { TypedHash } from '@pnp/common';
 import * as moment from 'moment';
 
 export interface ITimelineItem {
@@ -6,8 +7,11 @@ export interface ITimelineItem {
     group: number;
     start_time: moment.Moment;
     end_time: moment.Moment;
+    allocation: number;
     itemProps: React.HTMLProps<HTMLDivElement>;
     project: string;
+    projectUrl: string;
     role: string;
     resource: string;
+    props: TypedHash<any>;
 }

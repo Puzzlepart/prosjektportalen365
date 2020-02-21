@@ -2,6 +2,7 @@
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100B8B4EE61A547B247B49CFC21B67D5B7D" Default="true" />
+        <pnp:ContentTypeBinding ContentTypeID="0x0100B8B4EE61A547B247B49CFC21B67D5B7D01" />
     </pnp:ContentTypeBindings>
     <pnp:Views RemoveExistingViews="true">
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Listeinnhold/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=44">
@@ -11,11 +12,14 @@
                 </OrderBy>
             </Query>
             <ViewFields>
+                <FieldRef Name="ContentType" />
                 <FieldRef Name="Title" />
+                <FieldRef Name="GtDescription" />
                 <FieldRef Name="GtLccSourceList" />
                 <FieldRef Name="GtLccDestinationList" />
                 <FieldRef Name="GtLccFields" />
                 <FieldRef Name="GtLccDefault" />
+                <FieldRef Name="GtLccHidden" />
                 <FieldRef Name="Modified" />
             </ViewFields>
             <RowLimit Paged="TRUE">30</RowLimit>
@@ -25,10 +29,21 @@
     <pnp:DataRows UpdateBehavior="Overwrite" KeyColumn="Title">
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Fasesjekkpunkter</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDescription">Fasesjekkpunkter basert på Prosjektveiviserens beslutningspunkter</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccSourceList">Fasesjekkliste</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccDestinationList">Fasesjekkliste</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccFields">GtSortOrder,Title,GtProjectPhase</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccDefault">1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccHidden">0</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100B8B4EE61A547B247B49CFC21B67D5B7D01</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Planneroppgaver</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDescription">Standard prosjektoppgaver for å understøtte Prosjektveiviserens metodikk</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccSourceList">Planneroppgaver</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccFields">N/A</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccDefault">1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccHidden">0</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />

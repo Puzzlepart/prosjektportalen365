@@ -18,9 +18,12 @@ import { ProjectCard } from './ProjectCard';
 import styles from './ProjectList.module.scss';
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns';
 
+/**
+ * @component ProjectList
+ * @extends React.Component
+ */
 export class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
   public static defaultProps: Partial<IProjectListProps> = {
-    phaseTermSetId: 'abcfc9d9-a263-4abb-8234-be973c46258a',
     columns: PROJECTLIST_COLUMNS,
     sortBy: 'Title',
   };
@@ -38,7 +41,7 @@ export class ProjectList extends React.Component<IProjectListProps, IProjectList
 
   public async componentDidMount() {
     try {
-      let projects = await this.props.dataAdapter.fetchEncrichedProjects(strings.ProjectsListName, this.props.phaseTermSetId);
+      let projects = await this.props.dataAdapter.fetchEncrichedProjects();
       projects = projects.sort((a, b) => sortAlphabetically(a, b, true, this.props.sortBy));
       let columns = this.props.columns.map(col => {
         if (col.fieldName === this.props.sortBy) {

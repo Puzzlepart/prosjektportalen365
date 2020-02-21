@@ -13,11 +13,6 @@ export interface IProjectListProps extends IBaseComponentProps {
   searchBoxPlaceholderText: string;
 
   /**
-   * Term set ID for phase
-   */
-  phaseTermSetId: string;
-
-  /**
    * Sort by property
    */
   sortBy?: string;

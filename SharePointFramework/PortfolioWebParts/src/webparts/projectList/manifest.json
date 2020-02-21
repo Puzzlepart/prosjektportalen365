@@ -3,7 +3,7 @@
     "id": "54fbeb7d-e463-4dcc-8873-50a3ab2f0f68",
     "alias": "ProjectListWebPart",
     "componentType": "WebPart",
-    "version": "1.1.9",
+    "version": "1.2.0",
     "manifestVersion": 2,
     "requiresCustomScript": false,
     "hiddenFromToolbox": true,
@@ -24,7 +24,6 @@
             },
             "officeFabricIconFontName": "ViewListGroup",
             "properties": {
-                "phaseTermSetId": "abcfc9d9-a263-4abb-8234-be973c46258a",
                 "sortBy": "Title",
                 "showAsTiles": true,
                 "showProjectOwner": true,

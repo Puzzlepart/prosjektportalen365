@@ -26,4 +26,9 @@ export interface IResourceAllocationProps extends IBaseComponentProps {
     * Default time end
     */
    defaultTimeEnd?: [number, moment.unitOfTime.DurationConstructor];
+
+   /**
+    * Select properties
+    */
+   selectProperties?: string[];
 }

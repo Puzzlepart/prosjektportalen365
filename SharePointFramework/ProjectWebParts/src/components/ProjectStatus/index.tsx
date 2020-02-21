@@ -12,7 +12,6 @@ import { formatDate } from 'shared/lib/helpers';
 import { SectionModel, SectionType, StatusReport } from 'shared/lib/models';
 import { PortalDataService } from 'shared/lib/services';
 import { getUrlParam, parseUrlHash, setUrlHash } from 'shared/lib/util';
-import { SpEntityPortalService } from 'sp-entityportal-service';
 import * as formatString from 'string-format';
 import SPDataAdapter from '../../data';
 import { IProjectStatusData } from './IProjectStatusData';
@@ -271,14 +270,10 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    */
   private async _redirectNewStatusReport(_ev?: React.MouseEvent<any> | React.KeyboardEvent<any>, _item?: IContextualMenuItem): Promise<void> {
     const [previousReport] = this.state.data.reports;
-    let tmplParams: TypedHash<any> = {};
-    try {
-      tmplParams = JSON.parse(this.state.data.properties.fieldValues.TemplateParameters);
-    } catch { }
     let properties: TypedHash<any> = previousReport ? previousReport.statusValues : {};
     properties.Title = formatString(strings.NewStatusReportTitle, this.props.webTitle);
     properties.GtSiteId = this.props.siteId;
-    properties.ContentTypeId = tmplParams.ProjectStatusContentTypeId;
+    properties.ContentTypeId = this.state.data.properties.templateParameters.ProjectStatusContentTypeId;
     if (previousReport) {
       Logger.log({ message: '(ProjectStatus) _redirectNewStatusReport: Copying budget numbers from previous report', data: { id: previousReport.id, budgetNumbers: previousReport.budgetNumbers }, level: LogLevel.Info });
       properties = { ...properties, ...previousReport.budgetNumbers };

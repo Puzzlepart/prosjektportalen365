@@ -173,6 +173,18 @@
                 "fabricReactIcon": {
                     "iconName": "accountmanagement"
                 }
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 15,
+                "fabricReactIcon": {
+                    "iconName": "plannerlogo"
+                }
             }
         ],
         "isMigrated": true,
@@ -217,6 +229,7 @@
             "items[11].title": "Konfigurasjonsfiler",
             "items[12].title": "Fasesjekkliste",
             "items[13].title": "Interessentregister",
+            "items[14].title": "Planneroppgaver",
             "items[0].description": "",
             "items[1].description": "",
             "items[2].description": "",
@@ -248,7 +261,8 @@
             "items[10].sourceItem.url": "{hosturl}{site}/Lists/Listeinnhold",
             "items[11].sourceItem.url": "{hosturl}{site}/Konfigurasjonsfiler",
             "items[12].sourceItem.url": "{hosturl}{site}/Lists/Fasesjekkliste",
-            "items[13].sourceItem.url": "{hosturl}{site}/Lists/Interessentregister"
+            "items[13].sourceItem.url": "{hosturl}{site}/Lists/Interessentregister",
+            "items[14].sourceItem.url": "{hosturl}{site}/Lists/Planneroppgaver"
         },
         "componentDependencies": {
             "layoutComponentId": "706e33c8-af37-4e7b-9d22-6e5694d92a6f"

@@ -4,6 +4,10 @@ import styles from './DeliveriesOverview.module.scss';
 import { DELIVERIES_OVERVIEW_COLUMNS } from './DeliveriesOverviewColumns';
 import { IDeliveriesOverviewProps } from './IDeliveriesOverviewProps';
 
+/**
+ * @component DeliveriesOverview
+ * @extends React.Component
+ */
 export class DeliveriesOverview extends React.Component<IDeliveriesOverviewProps, {}> {
   public static defaultProps: Partial<IDeliveriesOverviewProps> = { columns: DELIVERIES_OVERVIEW_COLUMNS };
 

@@ -1,6 +1,8 @@
 declare interface IProjectExtensionsStrings {
   ApplyExtensionText: string;
   ProcessListItemText: string;
+  ProcessFileText: string;
+  ProcessFolderText: string;
   CreatingPlannerTaskText: string;
   ProvisionSiteFieldText: string;
   ProgressDialogSubText: string;
@@ -17,7 +19,8 @@ declare interface IProjectExtensionsStrings {
   ApplyTemplateWebSettings: string;
   CloseModalText: string;
   CopyListDataErrorMessage: string;
-  CopyListDataText: string;
+  CopyListItemsText: string;
+  CopyFilesText: string;
   CopyProgressLabel: string;
   EditPropertiesLinkText: string;
   ErrorDialogTitle: string;
@@ -27,8 +30,6 @@ declare interface IProjectExtensionsStrings {
   GetSetupDataErrorStack: string;
   IncludeStandardFoldersLabel: string;
   IncludeStandardFoldersDescription: string;
-  CopyPlannerTasksLabel: string;
-  CopyPlannerTasksDescription: string;
   IncludePortfolioAdministratorsLabel: string;
   IncludePortfolioAdministratorsDescription: string;
   InvalidLanguageErrorMessage: string;
@@ -56,8 +57,6 @@ declare interface IProjectExtensionsStrings {
   SettingsSectionTitle: string;
   SetupProjectInformationErrorMessage: string;
   SetupProjectInformationText: string;
-  ProfileLanguageIncorrectErrorMessage: string;
-  ProfileLanguageIncorrectErrorStack: string;
   SummaryText: string;
   TemplateLibrarySelectModalTitle: string;
   TemplateSelectDialogInfoText: string;
@@ -74,6 +73,7 @@ declare interface IProjectExtensionsStrings {
   PhaseLabel: string;
   SetupAbortedText: string;
   UnknownErrorText: string;
+  TemplateListContentConfigText: string;
 }
 
 declare module 'ProjectExtensionsStrings' {

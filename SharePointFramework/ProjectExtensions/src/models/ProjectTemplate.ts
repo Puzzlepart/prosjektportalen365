@@ -4,23 +4,33 @@ import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Schema } from 'sp-js-provisioning';
 
 export interface IProjectTemplateSPItem {
+    Id?: number;
+    IsDefaultTemplate?: boolean;
+    IconName?: string;
+    ListContentConfigLookupId?: number[];
     File?: { UniqueId: string, Name: string, Title: string, ServerRelativeUrl: string };
     FieldValuesAsText?: TypedHash<string>;
 }
 
 export class ProjectTemplate implements IDropdownOption {
-    public id: string;
+    public id: number;
     public key: string;
     public text: string;
-    public description: string;
+    public subText: string;
+    public isDefault: boolean;
+    public iconName: string;
     public serverRelativeUrl: string;
+    public listContentConfigIds: number[];
 
     constructor(spItem: IProjectTemplateSPItem, public web: Web) {
-        this.id = spItem.File.UniqueId;
+        this.id = spItem.Id;
         this.key = `projecttemplate_${this.id}`;
         this.text = spItem.File.Title;
-        this.description = spItem.FieldValuesAsText.GtDescription;
+        this.subText = spItem.FieldValuesAsText.GtDescription;
+        this.isDefault = spItem.IsDefaultTemplate;
+        this.iconName = spItem.IconName;
         this.serverRelativeUrl = spItem.File.ServerRelativeUrl;
+        this.listContentConfigIds = (spItem.ListContentConfigLookupId && spItem.ListContentConfigLookupId.length > 0) ? spItem.ListContentConfigLookupId : null;
     }
 
     public async getSchema(): Promise<Schema> {
@@ -28,9 +38,3 @@ export class ProjectTemplate implements IDropdownOption {
     }
 }
 
-export class ProjectExtension extends ProjectTemplate {
-    constructor(spItem: IProjectTemplateSPItem, web: Web) {
-        super(spItem, web);
-        this.key = `projectextension_${this.id}`;
-    }
-}

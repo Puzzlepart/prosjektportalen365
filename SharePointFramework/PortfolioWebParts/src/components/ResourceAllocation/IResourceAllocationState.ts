@@ -1,4 +1,4 @@
-import { ITimelineData } from 'interfaces';
+import { ITimelineData, ITimelineItem } from 'interfaces';
 
 export interface IResourceAllocationState {
     /**
@@ -14,7 +14,7 @@ export interface IResourceAllocationState {
     /**
      * Active filters
      */
-    activeFilters: {[key: string]: string[] };
+    activeFilters: { [key: string]: string[] };
 
     /**
      * Data
@@ -25,4 +25,9 @@ export interface IResourceAllocationState {
      * Error
      */
     error?: string;
+
+    /**
+     * Item to show show details for
+     */
+    showDetails?: { data: ITimelineItem, element: HTMLElement };
 }

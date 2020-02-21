@@ -738,8 +738,14 @@
   <data name="SiteFields_GtProjectServiceArea_DisplayName" xml:space="preserve">
     <value>Tjenesteområde</value>
   </data>
+  <data name="SiteFields_GtProjectServiceAreaText_DisplayName" xml:space="preserve">
+    <value>Tjenesteområde (tekst)</value>
+  </data>
   <data name="SiteFields_GtProjectType_DisplayName" xml:space="preserve">
     <value>Prosjekttype</value>
+  </data>
+  <data name="SiteFields_GtProjectTypeText_DisplayName" xml:space="preserve">
+    <value>Prosjekttype (tekst)</value>
   </data>
   <data name="SiteFields_GtProjectLogDescription_DisplayName" xml:space="preserve">
     <value>Loggbeskrivelse</value>
@@ -812,6 +818,9 @@
   </data>
   <data name="SiteFields_GtProjectPhase_DisplayName" xml:space="preserve">
     <value>Fase</value>
+  </data>
+  <data name="SiteFields_GtProjectPhaseText_DisplayName" xml:space="preserve">
+    <value>Fase (text)</value>
   </data>
   <data name="SiteFields_GtProjectPhaseChoice_DisplayName" xml:space="preserve">
     <value>Prosjektfase</value>
@@ -896,6 +905,9 @@
   </data>
   <data name="SiteFields_GtGainsResponsible_DisplayName" xml:space="preserve">
     <value>Gevinstansvarlig</value>
+  </data>
+  <data name="SiteFields_GtGainsOwner_DisplayName" xml:space="preserve">
+    <value>Gevinsteier</value>
   </data>
   <data name="SiteFields_GtMeasureIndicator_DisplayName" xml:space="preserve">
     <value>Måleindikator</value>
@@ -1070,6 +1082,9 @@
   </data>
   <data name="SiteFields_GtLccDefault_DisplayName" xml:space="preserve">
     <value>Standard</value>
+  </data>
+  <data name="SiteFields_GtLccHidden_DisplayName" xml:space="preserve">
+    <value>Skjult</value>
   </data>
   <data name="SiteFields_GtLccSourceUrl_DisplayName" xml:space="preserve">
     <value>URL (kilde)</value>
@@ -1325,6 +1340,18 @@
   </data>
   <data name="SiteFields_GtProjectLifecycleStatus_DisplayName" xml:space="preserve">
     <value>Prosjektstatus</value>
+  </data>  
+  <data name="SiteFields_GtAllocationStatus_DisplayName" xml:space="preserve">
+    <value>Status</value>
+  </data>  
+  <data name="SiteFields_GtAllocationComment_DisplayName" xml:space="preserve">
+    <value>Kommentar</value>
+  </data>
+  <data name="SiteFields_GtAllocationStatus_Description" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SiteFields_GtAllocationComment_Description" xml:space="preserve">
+    <value />
   </data>
   <data name="SiteFields_GtSortOrder_Description" xml:space="preserve">
     <value />
@@ -1522,7 +1549,10 @@
     <value> Hvordan skal gevinsten realiseres?</value>
   </data>
   <data name="SiteFields_GtGainsResponsible_Description" xml:space="preserve">
-    <value>Ansvarlig for realisering av gevinst</value>
+    <value>Er den rollen som har det overordnede ansvaret for at prosjektets gevinster blir realisert. Den gevinstansvarlige skal normalt være en leder plassert i den delen av en linjeorganisasjon som skal realisere gevinstene.</value>
+  </data>
+  <data name="SiteFields_GtGainsOwner_Description" xml:space="preserve">
+    <value>Dersom gevinstene skal realiseres i ulike deler av organisasjonen (eller i flere virksomheter) anbefales det å oppnevne en gevinsteier i de ulike delene av linjeorganisasjonen (eller virksomhetene) som eier ulike deler av de planlagte gevinstene. Gevinsteiere har da et distribuert ansvar for sin del av gevinstene, og har en viktig rolle som den gevinstansvarliges "forlengede arm" og lokale støttespiller.</value>
   </data>
   <data name="SiteFields_GtMeasureIndicator_Description" xml:space="preserve">
     <value>Hvordan skal gevinsten måles, eks: papirforbruk pr måned</value>
@@ -1650,6 +1680,9 @@
   <data name="SiteFields_GtLccDefault_Description" xml:space="preserve">
     <value>Velges som standard</value>
   </data>
+  <data name="SiteFields_GtLccHidden_Description" xml:space="preserve">
+    <value>Om elementet skjules, kan det ikke velges av brukerne i dialogen for oppsett av nytt prosjektområde.</value>
+  </data>
   <data name="SiteFields_GtLccSourceUrl_Description" xml:space="preserve">
     <value></value>
   </data>
@@ -1663,7 +1696,7 @@
     <value></value>
   </data>
   <data name="SiteFields_GtLccDestinationLibrary_Description" xml:space="preserve">
-    <value></value>
+    <value>Om det er dokumenter som skal kopieres, skriv inn relativ URL for biblioteket dokumentene skal kopieres til. F.eks. Delte dokumenter.</value>
   </data>
   <data name="SiteFields_GtLccLabel_Description" xml:space="preserve">
     <value>Tekst som vises i Nytt prosjekt-dialogen</value>

@@ -1,5 +1,6 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base';
-import { stringIsNullOrEmpty, TypedHash } from '@pnp/common';
+import { TypedHash } from '@pnp/common';
+import { Logger, LogLevel } from '@pnp/logging';
 import { ItemUpdateResult } from '@pnp/sp';
 import { taxonomy } from '@pnp/sp-taxonomy';
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator';
@@ -7,7 +8,6 @@ import * as strings from 'ProjectWebPartsStrings';
 import { SPDataAdapterBase } from 'shared/lib/data';
 import { ProjectDataService } from 'shared/lib/services';
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration';
-import { ConsoleListener, Logger, LogLevel } from '@pnp/logging';
 
 export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     public project: ProjectDataService;
@@ -37,15 +37,16 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
      * 
      * @param {TypedHash} fieldValues Field values for the properties item
      * @param {TypedHash} fieldValuesText Field values in text format for the properties item
+     * @param {TypedHash<any>} templateParameters Template parameters
      * @param {void} progressFunc Progress function
      */
-    public async syncPropertyItemToHub(fieldValues: TypedHash<any>, fieldValuesText: TypedHash<string>, progressFunc: (props: IProgressIndicatorProps) => void): Promise<ItemUpdateResult> {
+    public async syncPropertyItemToHub(fieldValues: TypedHash<any>, fieldValuesText: TypedHash<string>, templateParameters: TypedHash<any>, progressFunc: (props: IProgressIndicatorProps) => void): Promise<ItemUpdateResult> {
         try {
             fieldValuesText = Object.keys(fieldValuesText).reduce((obj, key) => ({ ...obj, [key.replace(/_x005f_/gm, '_')]: fieldValuesText[key] }), {});
             Logger.log({ message: `(${this._name}) (syncPropertyItemToHub) Starting sync of property item to hub.`, level: LogLevel.Info });
             progressFunc({ label: strings.SyncProjectPropertiesValuesProgressDescription, description: 'Vennligst vent...' });
             const [fields, siteUsers] = await Promise.all([
-                this.entityService.getEntityFields(),
+                templateParameters.ProjectContentTypeId ? this.entityService.usingParams({ contentTypeId: templateParameters.ProjectContentTypeId }).getEntityFields() : this.entityService.getEntityFields(),
                 this.sp.web.siteUsers.select('Id', 'Email', 'LoginName').get<{ Id: number, Email: string, LoginName: string }[]>(),
             ]);
             Logger.log({ message: `(${this._name}) (syncPropertyItemToHub) Retreived ${fields.length} from entity.`, level: LogLevel.Info });
@@ -62,9 +63,13 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
                 let fldValueTxt = fieldValuesText[fld.InternalName];
                 switch (fld.TypeAsString) {
                     case 'TaxonomyFieldType': case 'TaxonomyFieldTypeMulti': {
-                        let [textField] = fields.filter(f => f.Id === fld.TextField);
-                        if (!textField) continue;
-                        properties[textField.InternalName] = fieldValuesText[textField.InternalName];
+                        let [textField] = fields.filter(f => f.InternalName === `${fld.InternalName}Text`);
+                        if (textField) properties[textField.InternalName] = fieldValuesText[fld.InternalName];
+                        else {
+                            [textField] = fields.filter(f => f.Id === fld.TextField);
+                            if (!textField) continue;
+                            properties[textField.InternalName] = fieldValuesText[textField.InternalName];
+                        }
                     }
                         break;
                     case 'User': {
@@ -77,7 +82,7 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
                         properties[fld.InternalName] = fldValue ? new Date(fldValue) : null;
                     }
                         break;
-                    case 'Currency': {
+                    case 'Currency': case 'URL': {
                         properties[fld.InternalName] = fldValue || null;
                     }
                         break;

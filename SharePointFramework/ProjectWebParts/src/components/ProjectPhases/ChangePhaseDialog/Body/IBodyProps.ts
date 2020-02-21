@@ -26,7 +26,7 @@ export default interface IBodyProps {
     /**
    * Next checkpoint action callback
    */
-    nextCheckPointAction: (statusValue: string, commentsValue: string, updateStatus: boolean) => Promise<void>;
+    saveCheckPoint: (statusValue: string, commentsValue: string, updateStatus: boolean) => Promise<void>;
 
     /**
    * Current view

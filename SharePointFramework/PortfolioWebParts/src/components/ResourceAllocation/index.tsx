@@ -1,33 +1,55 @@
 import { sp } from '@pnp/sp';
 import { getId } from '@uifabric/utilities';
-import { IAllocationSearchResult, ITimelineData, ITimelineGroup, ITimelineItem } from 'interfaces';
+import { IAllocationSearchResult, ITimelineData, ITimelineGroup, ITimelineItem, TimelineGroupType } from 'interfaces';
 import * as moment from 'moment';
 import * as objectGet from 'object-get';
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
 import * as strings from 'PortfolioWebPartsStrings';
 import * as React from 'react';
-import Timeline, { TimelineMarkers, TodayMarker, ReactCalendarItemRendererProps } from 'react-calendar-timeline';
+import Timeline, { ReactCalendarItemRendererProps, ReactCalendarGroupRendererProps, TimelineMarkers, TodayMarker } from 'react-calendar-timeline';
 import 'react-calendar-timeline/lib/Timeline.css';
-import { tryParsePercentage } from 'shared/lib/helpers';
+import { getObjectValue, tryParsePercentage } from 'shared/lib/helpers';
 import { DataSourceService } from 'shared/lib/services';
 import * as format from 'string-format';
 import * as _ from 'underscore';
 import { FilterPanel, IFilterItemProps, IFilterProps } from '../FilterPanel';
+import { DetailsCallout } from './DetailsCallout';
 import { IResourceAllocationProps } from './IResourceAllocationProps';
 import { IResourceAllocationState } from './IResourceAllocationState';
 import styles from './ResourceAllocation.module.scss';
 import './Timeline.overrides.css';
+import * as arraySort from 'array-sort';
 
+/**
+ * @component ResourceAllocation
+ * @extends React.Component
+ */
 export class ResourceAllocation extends React.Component<IResourceAllocationProps, IResourceAllocationState> {
   public static defaultProps: Partial<IResourceAllocationProps> = {
     itemBgColor: '51,153,51',
     itemAbsenceBgColor: '26,111,179',
     defaultTimeStart: [-1, 'months'],
     defaultTimeEnd: [1, 'years'],
+    selectProperties: [
+      'Path',
+      'SPWebUrl',
+      'ContentTypeId',
+      'SiteTitle',
+      'SiteName',
+      'RefinableString71',
+      'RefinableString72',
+      'GtResourceLoadOWSNMBR',
+      'GtResourceAbsenceOWSCHCS',
+      'GtStartDateOWSDATE',
+      'GtEndDateOWSDATE',
+      'GtAllocationStatusOWSCHCS',
+      'GtAllocationCommentOWSMTXT'
+    ],
   };
 
   /**
@@ -97,6 +119,7 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
               canChangeGroup={false}
               sidebarWidth={250}
               itemRenderer={this._itemRenderer.bind(this)}
+              groupRenderer={this._groupRenderer.bind(this)}
               defaultTimeStart={moment().add(...this.props.defaultTimeStart)}
               defaultTimeEnd={moment().add(...this.props.defaultTimeEnd)}>
               <TimelineMarkers>
@@ -111,6 +134,11 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
           filters={this._getFilters()}
           onFilterChange={this._onFilterChange.bind(this)}
           onDismiss={() => this.setState({ showFilterPanel: false })} />
+        {this.state.showDetails && (
+          <DetailsCallout
+            item={this.state.showDetails}
+            onDismiss={() => this.setState({ showDetails: null })} />
+        )}
       </div>
     );
   }
@@ -193,10 +221,9 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
    */
   private _itemRenderer(props: ReactCalendarItemRendererProps<ITimelineItem>) {
     let htmlProps = props.getItemProps(props.item.itemProps);
-    console.log('_itemRenderer', htmlProps);
     return (
-      <div {...htmlProps}>
-        <div className='rct-item-content' style={{ maxHeight: `${props.itemContext.dimensions.height}` }}>
+      <div {...htmlProps} className={`${styles.timelineItem} rc-item`} onClick={event => this._onItemClick(event, props.item)}>
+        <div className={`${styles.itemContent} rc-item-content`} style={{ maxHeight: `${props.itemContext.dimensions.height}` }}>
           {props.item.title}
         </div>
       </div >
@@ -204,39 +231,72 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
   }
 
   /**
-   * Create groups
-   * 
-   * @param {IAllocationSearchResult[]} searchResults Search results
-   * @param {string} groupBy Group by
-   * 
-   * @returns {ITimelineGroup[]} Timeline groups
+   * Timeline group renderer
    */
-  private _transformGroups(searchResults: IAllocationSearchResult[], groupBy: string = 'RefinableString71'): ITimelineGroup[] {
-    const groupNames: string[] = searchResults.map(res => res[groupBy]).filter((value, index, self) => self.indexOf(value) === index);
-    const groups: ITimelineGroup[] = groupNames.map((name, idx) => ({ id: idx, title: name }));
+  private _groupRenderer({ group }: ReactCalendarGroupRendererProps<ITimelineGroup>) {
+    let style: React.CSSProperties = { display: 'block', width: '100%' };
+    if (group.type === TimelineGroupType.Role) {
+      style.fontStyle = 'italic';
+    }
+    return (
+      <div>
+        <span style={style}>{group.title}</span>
+      </div>
+    );
+  }
+
+  /**
+   * On item click
+   *
+* @param {React.MouseEvent} event Event
+* @param {ITimelineItem} item Item
+    */
+  private _onItemClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) {
+    this.setState({ showDetails: { element: event.currentTarget, data: item } });
+  }
+
+  /**
+   * Creating groups based on user property (RefinableString71) on the search result, with fallback to role (RefinableString72)
+   *
+* @param {IAllocationSearchResult[]} searchResults Search results
+    *
+* @returns {ITimelineGroup[]} Timeline groups
+    */
+  private _transformGroups(searchResults: IAllocationSearchResult[]): ITimelineGroup[] {
+    const groupNames: string[] = searchResults
+      .map(res => {
+        let name = res.RefinableString71 || `${res.RefinableString72}|R`;
+        return name;
+      })
+      .filter((value, index, self) => self.indexOf(value) === index);
+    let groups: ITimelineGroup[] = groupNames.map((name, id) => {
+      let [title, type] = name.split('|');
+      return {
+        id,
+        title,
+        type: type === 'R' ? TimelineGroupType.Role : TimelineGroupType.User,
+      };
+    });
+    groups = arraySort(groups, ['type', 'title']);
     return groups;
   }
 
   /**
    * Create items
-   * 
+   *
    * @param {IAllocationSearchResult[]} searchResults Search results
    * @param {ITimelineGroup[]} groups Groups
-   * @param {string} groupBy Group by
-   * 
+        *
    * @returns {ITimelineItem[]} Timeline items
-   */
-  private _transformItems(searchResults: IAllocationSearchResult[], groups: ITimelineGroup[], groupBy: string = 'RefinableString71'): ITimelineItem[] {
-    const items: ITimelineItem[] = searchResults.map((res, idx) => {
-      const group = _.find(groups, grp => grp.title === res[groupBy]);
+        */
+  private _transformItems(searchResults: IAllocationSearchResult[], groups: ITimelineGroup[]): ITimelineItem[] {
+    const items: ITimelineItem[] = searchResults.map((res, id) => {
+      const group = _.find(groups, grp => [res.RefinableString71, res.RefinableString72].indexOf(grp.title) != -1);
       const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, false, 0) as number;
       const isAbsence = res.ContentTypeId.indexOf('0x010029F45E75BA9CE340A83EFFB2927E11F4') !== -1;
       const itemOpacity = allocation < 30 ? 0.3 : (allocation / 100);
       const itemColor = allocation < 40 ? '#000' : '#fff';
-      let backgroundColor = this.props.itemBgColor;
-      if (isAbsence) {
-        backgroundColor = this.props.itemAbsenceBgColor;
-      }
+      let backgroundColor = isAbsence ? this.props.itemAbsenceBgColor : this.props.itemBgColor;
       let style: React.CSSProperties = {
         color: itemColor,
         border: 'none',
@@ -246,15 +306,18 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
         backgroundColor: `rgba(${backgroundColor}, ${itemOpacity})`,
       };
       return {
-        id: idx,
+        id,
         group: group.id,
         title: isAbsence ? `${res.GtResourceAbsenceOWSCHCS} (${allocation}%)` : `${res.RefinableString72} - ${res.SiteTitle} (${allocation}%)`,
         start_time: moment(new Date(res.GtStartDateOWSDATE)),
         end_time: moment(new Date(res.GtEndDateOWSDATE)),
+        allocation,
         itemProps: { style },
         project: res.SiteTitle,
+        projectUrl: res.SiteName,
         role: res.RefinableString72,
-        resource: group.title,
+        resource: res.RefinableString71,
+        props: res,
       } as ITimelineItem;
     });
     return items;
@@ -262,9 +325,9 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
 
   /**
    * Fetch data
-   * 
+   *
    * @returns {ITimelineData} Timeline data
-   */
+        */
   private async _fetchData(): Promise<ITimelineData> {
     const dataSource = await new DataSourceService(sp.web).getByName(this.props.dataSource);
     if (!dataSource) throw format(strings.DataSourceNotFound, this.props.dataSource);
@@ -275,14 +338,14 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
           Querytext: '*',
           RowLimit: 500,
           TrimDuplicates: false,
-          SelectProperties: ['Path', 'SPWebUrl', 'ContentTypeId', 'SiteTitle', 'RefinableString71', 'RefinableString72', 'GtResourceLoadOWSNMBR', 'GtResourceAbsenceOWSCHCS', 'GtStartDateOWSDATE', 'GtEndDateOWSDATE'],
+          SelectProperties: this.props.selectProperties,
         })
       ).PrimarySearchResults as IAllocationSearchResult[];
       const groups = this._transformGroups(results);
       const items = this._transformItems(results, groups);
       return { items, groups };
     } catch (error) {
-      throw '';
+      throw error;
     }
   }
 }

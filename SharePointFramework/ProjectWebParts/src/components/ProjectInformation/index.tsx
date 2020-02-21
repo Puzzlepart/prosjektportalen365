@@ -41,11 +41,10 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
 
   public async componentDidMount() {
     try {
+      const urlHash = parseUrlHash<IProjectInformationUrlHash>(true);
       const data = await this._fetchData();
       this.setState({ ...data, isLoading: false });
-      if (parseUrlHash<IProjectInformationUrlHash>(true).syncproperties === '1') {
-        this._onSyncProperties();
-      }
+      if (urlHash.syncproperties === '1') this._onSyncProperties(undefined, urlHash.force === '1');
     } catch (error) {
       this.setState({ error, isLoading: false });
     }
@@ -136,14 +135,15 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
    * On sync properties
    * 
    * @param {React.MouseEvent<any>} event Event
+   * @param {boolean} force Force sync of properties
    */
-  private async _onSyncProperties(event?: React.MouseEvent<any>): Promise<void> {
+  private async _onSyncProperties(event?: React.MouseEvent<any>, force: boolean = false): Promise<void> {
     if (event != null) {
       return ConfirmAction(strings.SyncProjectPropertiesText, strings.SyncProjectPropertiesDescription, this._onSyncProperties.bind(this), strings.SyncNowText, this, 'confirmActionProps', { containerClassName: styles.confirmDialog });
     }
     if (!stringIsNullOrEmpty(this.state.data.propertiesListId)) {
       let lastUpdated = await SPDataAdapter.project.getPropertiesLastUpdated(this.state.data);
-      if (lastUpdated > 60) {
+      if (lastUpdated > 60 && !force) {
         return;
       }
     }
@@ -153,27 +153,23 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
     const progressFunc = (progress: IProgressIndicatorProps) => this.setState({ progress: { title: strings.SyncProjectPropertiesProgressLabel, progress } });
     try {
       progressFunc({ label: strings.SyncProjectPropertiesListProgressDescription, description: `${strings.PleaseWaitText}...` });
-      this.logInfo('Ensuring list and fields', '_onSyncProperties');
-      let tmplParams: TypedHash<any> = {};
-      try {
-        tmplParams = JSON.parse(this.state.data.fieldValues.TemplateParameters);
-      } catch { }
-      this.logInfo('Ensuring list and fields', '_onSyncProperties', { tmplParams });
+      this.logInfo('Ensuring list and fields', '_onSyncProperties', { templateParameters: this.state.data.templateParameters });
       const { created } = await this._portalDataService.syncList(
         this.props.webUrl,
         strings.ProjectPropertiesListName,
-        tmplParams.ProjectContentTypeId || '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+        this.state.data.templateParameters.ProjectContentTypeId || '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: this.props.webTitle },
       );
       if (!created) {
         this.logInfo('Synchronizing properties to item in hub', '_onSyncProperties');
-        await SPDataAdapter.syncPropertyItemToHub(this.state.data.fieldValues, this.state.data.fieldValuesText, progressFunc);
+        await SPDataAdapter.syncPropertyItemToHub(this.state.data.fieldValues, this.state.data.fieldValuesText, this.state.data.templateParameters, progressFunc);
       }
       this.logInfo(`Finished. Reloading page.`, '_onSyncProperties');
       SPDataAdapter.clearCache();
       await sleep(5);
       document.location.href = (sessionStorage.DEBUG || DEBUG) ? document.location.href.split('#')[0] : this.props.webUrl;
     } catch (error) {
+      this.logError('Failed to synchornize properties to item in hub', '_onSyncProperties', error);
       this._addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning);
     } finally {
       this.setState({ progress: null });

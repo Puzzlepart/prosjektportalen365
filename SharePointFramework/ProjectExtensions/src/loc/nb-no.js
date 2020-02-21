@@ -14,8 +14,8 @@ define([], function () {
     ApplyTemplateWebSettings: 'Legger inn webinstillinger',
     CloseModalText: 'Lukk',
     CopyListDataErrorMessage: 'Det skjedde en feil under kopiering av listeinnhold',
-    CopyListDataText: 'Kopierer {0} listeelementer fra {1} til {2}',
-    CopyPlannerTasksLabel: 'Kopier standardoppgaver til Planner',
+    CopyListItemsText: 'Kopierer {0} listeelementer fra {1} til {2}',
+    CopyFilesText: 'Kopierer {0} dokumenter/mapper fra {1} til {2}',
     IncludePortfolioAdministratorsLabel: 'Gi tilgang til porteføljeadministratorer',
     IncludePortfolioAdministratorsDescription: 'Porteføljeadministratorer (brukerne i gruppen Porteføljeadministratorer) får tilgang til prosjektområdet.',
     CopyProgressLabel: 'Kopierer valgt(e) dokument(er) til prosjektområdet...',
@@ -40,8 +40,6 @@ define([], function () {
     PlannerConfigurationErrorMessage: 'Det skjedde en feil under konfigurering av området',
     PlannerConfigurationText: 'Oppretter standardoppgaver i Planner',
     PreTaskErrorMessage: 'Det skjedde en feil',
-    ProfileLanguageIncorrectErrorMessage: 'Området er ikke klart: Feil profilspråk.',
-    ProfileLanguageIncorrectErrorStack: 'Brukeren som skal sette opp området må ha norsk språk. Sjekk at du har norsk (bokmål) som standard profilspråk i Office 365.<br/><br/>Selv om du har det kan det av og til midlertidig oppstå en feil knyttet til profilspråk. Kom tilbake til dette området senere for å ferdigstille oppsett av området.<br/><br/>Det kan hjelpe å skru av engelsk språkpakke under<a href="{0}/_layouts/15/muisetng.aspx">Språkinnstillinger</a>.',
     ProgressDialogDescription: 'Vennligst vent. Ikke lukk nettleservinduet.',
     ProgressDialogLabel: 'Klargjør prosjektområdet',
     ProgressDialogTitle: 'Setter opp prosjektområdet',
@@ -70,10 +68,12 @@ define([], function () {
     ProvisionSiteFieldText: 'Opprettet feltet {0} på området',
     CreatingPlannerTaskText: 'Oppretter oppgaver for {0}',
     ProcessListItemText: 'Prosesserer batch {0} med {1} listeelementer',
+    ProcessFileText: 'Kopierer fil {0} av {1}',
+    ProcessFolderText: 'Kopierer mappe {0} av {1}',
     PhaseLabel: 'Fase',
     IncludeStandardFoldersDescription: 'Inkluder standardmapper for dokumentbiblioteket. Det opprettes en mappe per prosjetktfase.',
-    CopyPlannerTasksDescription: 'Opprett en plan for prosjektet i Planner og opprett buckets og oppgaver for denne.',
     SetupAbortedText: 'Installasjon avbrutt av bruker',
-    UnknownErrorText: 'Ukjent feil'
+    UnknownErrorText: 'Ukjent feil',
+    TemplateListContentConfigText: 'Den valgte prosjektmalen inneholder konfigurasjon for standardinnhold.'
   }
 });

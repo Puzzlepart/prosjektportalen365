@@ -1,19 +1,17 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { dateAdd } from '@pnp/common';
 import { QueryPropertyValueType, SearchResult, SearchResults, SortDirection, sp } from '@pnp/sp';
-import { taxonomy } from '@pnp/sp-taxonomy';
 import * as cleanDeep from 'clean-deep';
 import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces';
 import { ChartConfiguration, ChartData, ChartDataItem, DataField, ProjectListModel, SPChartConfigurationItem, SPContentType } from 'models';
 import MSGraph from 'msgraph-helper';
 import * as objectGet from 'object-get';
-import { getObjectValue } from 'shared/lib/helpers';
+import * as strings from 'PortfolioWebPartsStrings';
+import { PortfolioOverviewView } from 'shared/lib/models';
+import { PortalDataService } from 'shared/lib/services/PortalDataService';
 import * as _ from 'underscore';
 import { DEFAULT_SEARCH_SETTINGS } from './DEFAULT_SEARCH_SETTINGS';
 import { FetchDataForViewRefinerEntryResult, IFetchDataForViewRefinersResult, IFetchDataForViewResult } from './IFetchDataForViewResult';
-import { PortfolioOverviewView } from 'shared/lib/models';
-import { PortalDataService } from 'shared/lib/services/PortalDataService';
-
 
 export class DataAdapter {
     private _portalDataService: PortalDataService;
@@ -167,19 +165,15 @@ export class DataAdapter {
        * @param {IGraphGroup[]} groups Groups
        * @param {Object} photos Photos
        * @param {ISPUser[]} users Users
-       * @param {any[]} phaseTerms Phase terms
        */
-    private _mapProjects(items: ISPProjectItem[], groups: IGraphGroup[], users: ISPUser[], phaseTerms: any[]): ProjectListModel[] {
+    private _mapProjects(items: ISPProjectItem[], groups: IGraphGroup[], users: ISPUser[]): ProjectListModel[] {
         let projects = items
             .map(item => {
                 let [group] = groups.filter(grp => grp.id === item.GtGroupId);
-                if (!group) {
-                    return null;
-                }
+                if (!group) return null;
                 let [owner] = users.filter(user => user.Id === item.GtProjectOwnerId);
                 let [manager] = users.filter(user => user.Id === item.GtProjectManagerId);
-                let [phase] = phaseTerms.filter(p => p.Id.indexOf(getObjectValue<string>(item, 'GtProjectPhase.TermGuid', '')) !== -1);
-                const model = new ProjectListModel(item.GtSiteId, group.id, group.displayName, item.GtSiteUrl, manager, owner, phase);
+                const model = new ProjectListModel(item.GtSiteId, group.id, group.displayName, item.GtSiteUrl, item.GtProjectPhaseText, manager, owner);
                 return model;
             })
             .filter(p => p);
@@ -188,18 +182,15 @@ export class DataAdapter {
 
     /**
      * Fetch enriched projects
-     * 
-     * @param {string} listName List name for projects
-     * @param {string} phaseTermSetId Phase term set id
      */
-    public async fetchEncrichedProjects(listName: string, phaseTermSetId: string): Promise<ProjectListModel[]> {
+    public async fetchEncrichedProjects(): Promise<ProjectListModel[]> {
         await MSGraph.Init(this.context.msGraphClientFactory);
-        let [items, groups, users, phaseTerms] = await Promise.all([
+        let [items, groups, users] = await Promise.all([
             sp.web
                 .lists
-                .getByTitle(listName)
+                .getByTitle(strings.ProjectsListName)
                 .items
-                .select('GtGroupId', 'GtSiteId', 'GtSiteUrl', 'GtProjectOwnerId', 'GtProjectManagerId', 'GtProjectPhase')
+                .select('GtGroupId', 'GtSiteId', 'GtSiteUrl', 'GtProjectOwnerId', 'GtProjectManagerId', 'GtProjectPhaseText')
                 .orderBy('Title')
                 .usingCaching()
                 .get<ISPProjectItem[]>(),
@@ -213,18 +204,8 @@ export class DataAdapter {
                     expiration: dateAdd(new Date(), 'minute', 15),
                 })
                 .get<ISPUser[]>(),
-            taxonomy
-                .getDefaultSiteCollectionTermStore()
-                .getTermSetById(phaseTermSetId)
-                .terms
-                .usingCaching({
-                    key: 'fetchencrichedprojects_terms',
-                    storeName: 'session',
-                    expiration: dateAdd(new Date(), 'minute', 15),
-                })
-                .get(),
         ]);
-        let projects = this._mapProjects(items, groups, users, phaseTerms);
+        let projects = this._mapProjects(items, groups, users);
         return projects;
     }
 }

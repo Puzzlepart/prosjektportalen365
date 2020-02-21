@@ -12,9 +12,11 @@ export interface IPortalDataServiceConfiguration extends Object {
         PROJECT_COLUMN_CONFIGURATION: string,
         PROJECT_STATUS: string,
         PORTFOLIO_VIEWS: string,
-    }
+    };
+    templateParametersFieldXml?: string;
 }
 
+// tslint:disable-next-line: naming-convention
 export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceConfiguration> = {
     listNames: {
         STATUS_SECTIONS: 'Statusseksjoner',
@@ -22,5 +24,6 @@ export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceCo
         PROJECT_COLUMN_CONFIGURATION: 'Prosjektkolonnekonfigurasjon',
         PROJECT_STATUS: 'Prosjektstatus',
         PORTFOLIO_VIEWS: 'Porteføljevisninger'
-    }
+    },
+    templateParametersFieldXml: '<Field Type="Note" DisplayName="TemplateParameters" ID="{b8854944-7141-471f-b8df-53d93a4395ba}" StaticName="TemplateParameters" Name="TemplateParameters" UnlimitedLengthInDocumentLibrary="TRUE" Hidden="TRUE" />',
 }

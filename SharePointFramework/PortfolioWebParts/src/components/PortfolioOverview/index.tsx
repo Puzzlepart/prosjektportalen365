@@ -30,6 +30,10 @@ import { PortfolioOverviewCommands } from './PortfolioOverviewCommands';
 import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage';
 import { renderItemColumn } from './RenderItemColumn';
 
+/**
+ * @component PortfolioOverview
+ * @extends React.Component
+ */
 export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = {};
   private _selection: Selection;
@@ -241,7 +245,7 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
         <div className={styles.searchBox} hidden={!this.props.showSearchBox}>
           <SearchBox onChange={this._onSearch.bind(this)} placeholder={this._searchBoxPlaceholderText} />
         </div>
-        <div>
+        <div className={styles.headerColumns} >
           {defaultRender!(props)}
         </div>
       </Sticky>

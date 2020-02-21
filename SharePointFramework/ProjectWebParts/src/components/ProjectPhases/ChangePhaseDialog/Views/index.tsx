@@ -1,6 +1,6 @@
-export { default as InitialView } from './InitialView';
-export { default as SummaryView } from './SummaryView';
-export { default as ChangingPhaseView } from './ChangingPhaseView';
+export * from './InitialView';
+export * from './SummaryView';
+export * from './ChangingPhaseView';
 
 export enum View {
     Initial,

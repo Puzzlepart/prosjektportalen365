@@ -33,8 +33,8 @@ export const ExtensionsSection = (props: IExtensionsSectionProps) => {
                             defaultChecked={selectedKeys.indexOf(ext.key) !== -1}
                             inlineLabel={true}
                             onChange={(_event, checked) => onChange(ext, checked)} />
-                        <div className={styles.description} hidden={stringIsNullOrEmpty(ext.description)}>
-                            <span>{ext.description}</span>
+                        <div className={styles.subText} hidden={stringIsNullOrEmpty(ext.subText)}>
+                            <span>{ext.subText}</span>
                         </div>
                     </div>
                 ))}

@@ -11,11 +11,17 @@ declare interface IPortfolioWebPartsStrings {
   ActorsLabel: string;
   BasicGroupName: string;
   BenefitResponsibleLabel: string;
+  BenefitOwnerLabel: string;
   BenefitTitleLabel: string;
   ChartConfigurationListNameLabel: string;
   ChartErrorText: string;
   ColumnConfigListNameLabel: string;
   ColumnsListNameLabel: string;
+  LoadingTextLabel: string;
+  EmptyMessageLabel: string;
+  RowLimitLabel: string;
+  LoadingTextDescription: string;
+  EmptyMessageDescription: string;
   CommandBarGroupName: string;
   ConfigurationGroupName: string;
   ConsequenceLabel: string;
@@ -59,7 +65,6 @@ declare interface IPortfolioWebPartsStrings {
   NoSearchResults: string;
   NotSet: string;
   PhaseLabel: string;
-  PhaseTermSetIdFieldLabel: string;
   ProbabilityLabel: string;
   ProbabilityPostActionLabel: string;
   ProjectInformationGroupName: string;

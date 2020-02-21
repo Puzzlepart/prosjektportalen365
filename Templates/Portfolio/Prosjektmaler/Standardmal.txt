@@ -1,8 +1,9 @@
 {
-    "Version": "1.1.8",
+    "Version": "1.2.0",
     "Parameters": {
         "ProvisionSiteFields": "Kolonner for Prosjektportalen (Prosjekt)",
-        "ProjectContentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C"
+        "ProjectContentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
+        "ProjectStatusContentTypeId": "0x010022252E35737A413FB56A1BA53862F6D5"
     },
     "ContentTypes": [
         {
@@ -360,6 +361,10 @@
                     "Name": "GtGainsResponsible"
                 },
                 {
+                    "ID": "158b2f60-8068-447f-83e7-cabdb5bf4cf4",
+                    "Name": "GtGainsOwner"
+                },
+                {
                     "ID": "b0d03734-a5b1-4e85-a752-45b2da8df7dd",
                     "Name": "GtRealizationTime"
                 }
@@ -415,7 +420,7 @@
                 {
                     "ID": "88d9b92c-efed-45d0-a586-86d9196b77d0",
                     "Name": "GtResourceUser",
-                    "Required": true
+                    "Required": false
                 },
                 {
                     "ID": "3a0ae560-bd55-45d4-907f-5119bf0a83bb",
@@ -436,6 +441,14 @@
                     "ID": "08ac9d56-f8eb-4a2c-868f-d39fc012fcd6",
                     "Name": "GtResourceLoad",
                     "Required": true
+                },
+                {
+                    "ID": "6ec4d897-ee44-42b2-80c0-3714021f6ac6",
+                    "Name": "GtAllocationStatus"
+                },
+                {
+                    "ID": "42b501ac-c235-4b2a-a95d-8d00aad11779",
+                    "Name": "GtAllocationComment"
                 }
             ]
         }
@@ -558,8 +571,7 @@
                                     "Properties": {
                                         "title": "Oppgaver",
                                         "isFullScreen": false,
-                                        "plannerViewMode": "bucketchart",
-                                        "planId": "{parameter:defaultPlanId}"
+                                        "plannerViewMode": "bucketchart"
                                     }
                                 },
                                 {
@@ -629,8 +641,7 @@
                                 {
                                     "Id": "39c4c1c2-63fa-41be-8cc2-f6c0b49b253d",
                                     "Properties": {
-                                        "plannerViewMode": "board",
-                                        "planId": "{parameter:defaultPlanId}"
+                                        "plannerViewMode": "board"
                                     }
                                 }
                             ]
@@ -1208,6 +1219,7 @@
                         "GtGainsType",
                         "GtGainsTurnover",
                         "GtGainsResponsible",
+                        "GtGainsOwner",
                         "GtRealizationTime"
                     ],
                     "AdditionalSettings": {
@@ -1223,6 +1235,7 @@
                         "Title",
                         "GtGainsTurnover",
                         "GtGainsResponsible",
+                        "GtGainsOwner",
                         "GtMeasureIndicator",
                         "GtStartValue",
                         "GtDesiredValue",
@@ -1413,6 +1426,8 @@
                         "GtStartDate",
                         "GtEndDate",
                         "GtResourceLoad",
+                        "GtAllocationStatus",
+                        "GtAllocationComment",
                         "Modified",
                         "Editor"
                     ],

@@ -1,4 +1,5 @@
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import { Toggle } from 'office-ui-fabric-react/lib/Toggle';import { stringIsNullOrEmpty } from '@pnp/common';
+
 import * as React from 'react';
 import { ListContentConfig } from '../../../models';
 import { IListContentSectionProps } from './IListContentSectionProps';
@@ -18,7 +19,7 @@ export const ListContentSection = (props: IListContentSectionProps) => {
             selectedListContentConfig = [listContentConfig, ...props.selectedListContentConfig];
         }
         else {
-            selectedListContentConfig = props.selectedListContentConfig.filter(lcc => listContentConfig.title !== lcc.title);
+            selectedListContentConfig = props.selectedListContentConfig.filter(lcc => listContentConfig.text !== lcc.text);
         }
         props.onChange(selectedListContentConfig);
     };
@@ -28,15 +29,20 @@ export const ListContentSection = (props: IListContentSectionProps) => {
     return (
         <div className={styles.listContentSection}>
             <div className={styles.container}>
-                {props.listContentConfig.map(l => (
-                    <div key={l.key} className={styles.item}>
-                        <Toggle
-                            label={l.title}
-                            defaultChecked={selectedKeys.indexOf(l.key) !== -1}
-                            inlineLabel={true}
-                            onChanged={checked => onChanged(l, checked)} />
-                    </div>
-                ))}
+                {props.listContentConfig
+                    .filter(lcc => !lcc.hidden)
+                    .map(lcc => (
+                        <div key={lcc.key} className={styles.item}>
+                            <Toggle
+                                label={lcc.text}
+                                defaultChecked={selectedKeys.indexOf(lcc.key) !== -1}
+                                inlineLabel={true}
+                                onChanged={checked => onChanged(lcc, checked)} />
+                            <div className={styles.subText} hidden={stringIsNullOrEmpty(lcc.subText)}>
+                                <span>{lcc.subText}</span>
+                            </div>
+                        </div>
+                    ))}
             </div>
         </div>
     );

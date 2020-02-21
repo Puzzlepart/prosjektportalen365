@@ -1,0 +1,1 @@
+﻿<Field Description="{resource:SiteFields_GtProjectPhase_Description}" DisplayName="{resource:SiteFields_GtProjectPhaseText_DisplayName}" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{1b9a1571-b300-4cc0-bd32-9311f72e1998}" Name="GtProjectPhaseText" SourceID="{{siteid}}" StaticName="GtProjectPhaseText" Type="Text" WebId="{siteid}" ShowInEditForm="FALSE" />
