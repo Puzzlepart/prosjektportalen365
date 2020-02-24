@@ -1,8 +1,8 @@
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
 import { Web } from '@pnp/sp';
+import { stringIsNullOrEmpty } from '@pnp/common';
 import { getId } from '@uifabric/utilities';
 import * as arraySort from 'array-sort';
-import { IFetchDataForViewRefinersResult } from 'data/IFetchDataForViewResult';
 import { ContextualMenu, ContextualMenuItemType, IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ConstrainMode, DetailsList, DetailsListLayoutMode, IDetailsHeaderProps, IGroup, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { LayerHost } from 'office-ui-fabric-react/lib/Layer';
@@ -29,6 +29,7 @@ import styles from './PortfolioOverview.module.scss';
 import { PortfolioOverviewCommands } from './PortfolioOverviewCommands';
 import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage';
 import { renderItemColumn } from './RenderItemColumn';
+import * as uniq from 'array-unique';
 
 /**
  * @component PortfolioOverview
@@ -97,15 +98,15 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
       );
     }
 
-    const { items, columns, groups } = this._getData();
+    const { items, columns, groups } = this._getFilteredData();
 
     return (
       <div className={styles.portfolioOverview}>
         <PortfolioOverviewCommands
-          {...this.props}
-          {...this.state}
+          {...{ ...this.props, ...this.state }}
           fltItems={items}
           fltColumns={columns}
+          filters={this._getFilters()}
           events={{
             onSetCompact: isCompact => this.setState({ isCompact }),
             onChangeView: this._onChangeView.bind(this),
@@ -168,15 +169,16 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
 
   /**
   * Get filters
-  *
-  * @param {IFetchDataForViewRefinersResult} refiners Refiners retrieved by search
-  * @param {IPortfolioOverviewConfigViewConfig} viewConfig View configuration
   */
-  private _getFilters(refiners: IFetchDataForViewRefinersResult, viewConfig: PortfolioOverviewView): IFilterProps[] {
-    const selectedRefiners = this.props.configuration.refiners.filter(ref => refiners[ref.fieldName] && viewConfig.refiners.indexOf(ref) !== -1);
-    let filters = selectedRefiners.map(ref => {
-      let items = refiners[ref.fieldName].sort((a, b) => a.value > b.value ? 1 : -1);
-      return { column: ref, items };
+  private _getFilters(): IFilterProps[] {
+    const selectedFilters = this.props.configuration.refiners.filter(ref => this.state.currentView.refiners.indexOf(ref) !== -1);
+    let filters = selectedFilters.map(column => {
+      let uniqueValues = uniq([].concat.apply([], this.state.items.map(i => getObjectValue(i, column.fieldName, '').split(';'))));
+      let items: IFilterItemProps[] = uniqueValues
+        .filter((value: string) => !stringIsNullOrEmpty(value))
+        .map((value: string) => ({ name: value, value }));
+      items = items.sort((a, b) => a.value > b.value ? 1 : -1);
+      return { column, items };
     });
     return filters;
   }
@@ -382,7 +384,7 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
   /**
    * Get filtered data
    */
-  private _getData() {
+  private _getFilteredData() {
     let { items, columns, searchTerm, activeFilters } = ({ ...this.state } as IPortfolioOverviewState);
     items = items.filter(item => {
       return columns.filter(col => getObjectValue(item, col.fieldName, '').toLowerCase().indexOf(searchTerm) !== -1).length > 0;
@@ -446,12 +448,10 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
       const { configuration, pageContext } = this.props;
       const hashState = parseUrlHash<IPortfolioOverviewHashStateState>();
       const currentView = this._getCurrentView(hashState);
-      const { items, refiners } = await this.props.dataAdapter.fetchDataForView(currentView, configuration, pageContext.site.id.toString());
-      let filters = this._getFilters(refiners, currentView);
+      const items = await this.props.dataAdapter.fetchDataForView(currentView, configuration, pageContext.site.id.toString());
       let newState: Partial<IPortfolioOverviewState> = {
         columns: currentView.columns,
         items,
-        filters,
         currentView,
         groupBy: currentView.groupBy,
       };
@@ -475,13 +475,10 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
       return;
     }
     this.setState({ isChangingView: view });
-    let { configuration, pageContext } = this.props;
-    const { items, refiners } = await this.props.dataAdapter.fetchDataForView(view, configuration, pageContext.site.id.toString());
-    let filters = this._getFilters(refiners, view);
+    const items = await this.props.dataAdapter.fetchDataForView(view, this.props.configuration, this.props.pageContext.site.id.toString());
     let updatedState: Partial<IPortfolioOverviewState> = {
       isChangingView: null,
       items,
-      filters,
       currentView: view,
       columns: view.columns,
       groupBy: view.groupBy,
