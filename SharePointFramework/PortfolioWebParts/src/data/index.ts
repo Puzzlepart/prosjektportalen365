@@ -90,7 +90,11 @@ export class DataAdapter {
      */
     public async fetchDataForView(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string, siteIdProperty: string = 'GtSiteIdOWSTEXT'): Promise<IFetchDataForViewItemResult[]> {
         try {
-            let [{ PrimarySearchResults: projects }, { PrimarySearchResults: sites }, { PrimarySearchResults: statusReports }] = await Promise.all([
+            let [
+                { PrimarySearchResults: projects },
+                { PrimarySearchResults: sites },
+                { PrimarySearchResults: statusReports },
+            ] = await Promise.all([
                 sp.search({
                     ...DEFAULT_SEARCH_SETTINGS,
                     QueryTemplate: view.searchQuery,
