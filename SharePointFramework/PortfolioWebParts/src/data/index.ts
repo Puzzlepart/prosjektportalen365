@@ -1,17 +1,16 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { dateAdd } from '@pnp/common';
-import { QueryPropertyValueType, SearchResult, SearchResults, SortDirection, sp } from '@pnp/sp';
+import { QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp';
 import * as cleanDeep from 'clean-deep';
 import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces';
 import { ChartConfiguration, ChartData, ChartDataItem, DataField, ProjectListModel, SPChartConfigurationItem, SPContentType } from 'models';
 import MSGraph from 'msgraph-helper';
-import * as objectGet from 'object-get';
 import * as strings from 'PortfolioWebPartsStrings';
 import { PortfolioOverviewView } from 'shared/lib/models';
 import { PortalDataService } from 'shared/lib/services/PortalDataService';
 import * as _ from 'underscore';
 import { DEFAULT_SEARCH_SETTINGS } from './DEFAULT_SEARCH_SETTINGS';
-import { FetchDataForViewRefinerEntryResult, IFetchDataForViewRefinersResult, IFetchDataForViewResult } from './IFetchDataForViewResult';
+import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult';
 
 export class DataAdapter {
     private _portalDataService: PortalDataService;
@@ -46,7 +45,7 @@ export class DataAdapter {
                 let chart = new ChartConfiguration(item, fields);
                 return chart;
             });
-            let items = (await this.fetchDataForView(view, configuration, siteId)).items.map(i => new ChartDataItem(i.Title, i));
+            let items = (await this.fetchDataForView(view, configuration, siteId)).map(i => new ChartDataItem(i.Title, i));
             let chartData = new ChartData(items);
 
             return {
@@ -89,14 +88,13 @@ export class DataAdapter {
      * @param {string} siteId Site ID
      * @param {string} siteIdProperty Site ID property
      */
-    public async fetchDataForView(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string, siteIdProperty: string = 'GtSiteIdOWSTEXT'): Promise<IFetchDataForViewResult> {
+    public async fetchDataForView(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string, siteIdProperty: string = 'GtSiteIdOWSTEXT'): Promise<IFetchDataForViewItemResult[]> {
         try {
-            let response: SearchResults[] = await Promise.all([
+            let [{ PrimarySearchResults: projects }, { PrimarySearchResults: sites }, { PrimarySearchResults: statusReports }] = await Promise.all([
                 sp.search({
                     ...DEFAULT_SEARCH_SETTINGS,
                     QueryTemplate: view.searchQuery,
                     SelectProperties: [...configuration.columns.map(f => f.fieldName), siteIdProperty],
-                    Refiners: configuration.refiners.map(ref => ref.fieldName).join(','),
                 }),
                 sp.search({
                     ...DEFAULT_SEARCH_SETTINGS,
@@ -110,21 +108,16 @@ export class DataAdapter {
                     Refiners: configuration.refiners.map(ref => ref.fieldName).join(','),
                 }),
             ]);
-
-            let refiners: IFetchDataForViewRefinersResult = (objectGet(response[0], 'RawSearchResults.PrimaryQueryResult.RefinementResults.Refiners') || []).reduce((obj: IFetchDataForViewRefinersResult, ref: { Name: string, Entries: any[] }) => {
-                obj[ref.Name] = ref.Entries.map(e => new FetchDataForViewRefinerEntryResult(e.RefinementName, e.RefinementValue));
-                return obj;
-            }, {});
-            let projects = response[0].PrimarySearchResults.map(item => cleanDeep({ ...item }));
-            let sites = response[1].PrimarySearchResults.map(item => cleanDeep({ ...item }));
-            let statusReports = response[2].PrimarySearchResults.map(item => cleanDeep({ ...item }));
-            let validSites = sites.filter(site => projects.filter(res => res[siteIdProperty] === site['SiteId']).length === 1);
-            let items = validSites.map(site => {
+            projects = projects.map(item => cleanDeep({ ...item }));
+            sites = sites.map(item => cleanDeep({ ...item }));
+            statusReports = statusReports.map(item => cleanDeep({ ...item }));
+            sites = sites.filter(site => projects.filter(res => res[siteIdProperty] === site['SiteId']).length === 1);
+            let items = sites.map(site => {
                 const [project] = projects.filter(res => res[siteIdProperty] === site['SiteId']);
                 const [statusReport] = statusReports.filter(res => res[siteIdProperty] === site['SiteId']);
                 return { ...statusReport, ...project, Title: site.Title, Path: site.Path, SiteId: site['SiteId'] };
             });
-            return { items, refiners };
+            return items;
         } catch (err) {
             throw err;
         }
@@ -209,6 +202,3 @@ export class DataAdapter {
         return projects;
     }
 }
-
-export { IFetchDataForViewRefinersResult };
-
