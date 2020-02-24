@@ -112,8 +112,8 @@ export class PortfolioInsights extends React.Component<IPortfolioInsightsProps, 
   * @param {PortfolioOverviewView} view View
   */
   private async _onViewChanged(view: PortfolioOverviewView) {
-    let data = await this.props.dataAdapter.fetchDataForView(view, this.state.configuration, this.props.pageContext.site.id.toString());
-    let chartData = new ChartData(data.items.map(item => new ChartDataItem(item.Title, item)));
+    let items = await this.props.dataAdapter.fetchDataForView(view, this.state.configuration, this.props.pageContext.site.id.toString());
+    let chartData = new ChartData(items.map(item => new ChartDataItem(item.Title, item)));
     this.setState({ currentView: view, chartData });
   }
 }

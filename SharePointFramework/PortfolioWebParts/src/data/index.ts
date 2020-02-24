@@ -10,7 +10,7 @@ import { PortfolioOverviewView } from 'shared/lib/models';
 import { PortalDataService } from 'shared/lib/services/PortalDataService';
 import * as _ from 'underscore';
 import { DEFAULT_SEARCH_SETTINGS } from './DEFAULT_SEARCH_SETTINGS';
-import { IFetchDataForViewItemResult } from './IFetchDataForViewResult';
+import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult';
 
 export class DataAdapter {
     private _portalDataService: PortalDataService;
