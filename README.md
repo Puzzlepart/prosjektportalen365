@@ -11,7 +11,7 @@ Prosjektportalen ble i sin tid utviklet for Asker kommune og Kommit. Versjonen s
 
 ## Installering ##
 
-Vi har nå klar en versjon som kan lastes ned <a href="https://github.com/Puzzlepart/prosjektportalen365/releases/latest">herfra</a>. Det betyr ikke at løsningen er komplett og helt uten feil og mangler, men vi mener den er klar for å installeres og brukes av fremoverlente virksomheter. Vi markerer denne likevel som en pre-release og vi vil anbefale å vente noen uker før løsningen begynner å brukes for fullt i produksjon.
+Prosjektportalen 365 kan lastes ned <a href="https://github.com/Puzzlepart/prosjektportalen365/releases/latest">herfra</a>. Det betyr ikke at løsningen er komplett og helt uten feil og mangler, men vi mener den er klar for å installeres og brukes av fremoverlente virksomheter. Vi markerer denne likevel som en pre-release og vi vil anbefale å vente noen uker før løsningen begynner å brukes for fullt i produksjon.   ESA
 
 Vi gjør oppmerksom at vi logger hver installasjon som blir kjørt av skriptet til en sentral oversikt. Dette gjøres for å ha kontroll på installasjonshyppighet og hvordan installasjoner gjøres. Informasjonen brukes kun for å forbedre løsningen.
 
