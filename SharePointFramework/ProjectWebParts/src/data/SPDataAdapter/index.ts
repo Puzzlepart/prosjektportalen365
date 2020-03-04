@@ -50,11 +50,14 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
                 this.sp.web.siteUsers.select('Id', 'Email', 'LoginName').get<{ Id: number, Email: string, LoginName: string }[]>(),
             ]);
             Logger.log({ message: `(${this._name}) (syncPropertyItemToHub) Retreived ${fields.length} from entity.`, level: LogLevel.Info });
-            const fieldToSync = fields.filter(fld => {
-                if (fld.SchemaXml.indexOf('ShowInEditForm="FALSE"') !== -1) return false;
-                if (fld.InternalName.indexOf('Gt') !== 0) return false;
-                return true;
-            });
+            const fieldToSync = [
+                { InternalName: 'Title', TypeAsString: 'Text', TextField: undefined },
+                ...fields.filter(fld => {
+                    if (fld.SchemaXml.indexOf('ShowInEditForm="FALSE"') !== -1) return false;
+                    if (fld.InternalName.indexOf('Gt') !== 0) return false;
+                    return true;
+                }),
+            ];
             Logger.log({ message: `(${this._name}) (syncPropertyItemToHub) Syncing ${fieldToSync.length} to hub entity.`, data: { fieldToSync: fieldToSync.map(f => f.InternalName) }, level: LogLevel.Info });
             let properties: TypedHash<any> = {};
             for (let i = 0; i < fieldToSync.length; i++) {
