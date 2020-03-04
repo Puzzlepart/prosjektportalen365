@@ -897,7 +897,7 @@
             "Title": "Prosjektlogg",
             "Description": "",
             "Template": 100,
-            "ContentTypesEnabled": true,
+            "ContentTypesEnabled": false,
             "RemoveExistingContentTypes": true,
             "ContentTypeBindings": [
                 {
