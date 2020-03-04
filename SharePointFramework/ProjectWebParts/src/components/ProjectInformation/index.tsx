@@ -143,9 +143,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
     }
     if (!stringIsNullOrEmpty(this.state.data.propertiesListId)) {
       let lastUpdated = await SPDataAdapter.project.getPropertiesLastUpdated(this.state.data);
-      if (lastUpdated > 60 && !force) {
-        return;
-      }
+      if (lastUpdated > 60 && !force) return;
     }
     if (this.props.skipSyncToHub) return;
     this.logInfo(`Starting sync of ${strings.ProjectPropertiesListName}`, '_onSyncProperties');
@@ -162,7 +160,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
       );
       if (!created) {
         this.logInfo('Synchronizing properties to item in hub', '_onSyncProperties');
-        await SPDataAdapter.syncPropertyItemToHub(this.state.data.fieldValues, this.state.data.fieldValuesText, this.state.data.templateParameters, progressFunc);
+        await SPDataAdapter.syncPropertyItemToHub(this.state.data.fieldValues, { ...this.state.data.fieldValuesText, Title: this.props.webTitle }, this.state.data.templateParameters, progressFunc);
       }
       this.logInfo(`Finished. Reloading page.`, '_onSyncProperties');
       SPDataAdapter.clearCache();
