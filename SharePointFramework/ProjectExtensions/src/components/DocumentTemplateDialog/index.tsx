@@ -15,111 +15,75 @@ import { DocumentTemplateDialogScreen } from './DocumentTemplateDialogScreen';
 import { DocumentTemplateDialogScreenEditCopy } from './DocumentTemplateDialogScreenEditCopy';
 import { DocumentTemplateDialogScreenSelect } from './DocumentTemplateDialogScreenSelect';
 import { IDocumentTemplateDialogProps } from './IDocumentTemplateDialogProps';
-import { IDocumentTemplateDialogState } from './IDocumentTemplateDialogState';
 
-export class DocumentTemplateDialog extends React.Component<IDocumentTemplateDialogProps, IDocumentTemplateDialogState> {
-    private _selection: Selection;
+// tslint:disable-next-line: naming-convention
+export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
+    const selection = new Selection({ onSelectionChanged });
 
-    /**
-     * Constructor
-     * 
-     * @param {IDocumentTemplateDialogProps} props Props
-     */
-    constructor(props: IDocumentTemplateDialogProps) {
-        super(props);
-        this.state = {
-            isBlocking: false,
-            selection: [],
-            screen: DocumentTemplateDialogScreen.Select,
-        };
-        this._selection = new Selection({ onSelectionChanged: this._onSelectionChanged.bind(this) });
-    }
+    let [selected, setSelected] = React.useState([]);
+    const [progress, setProgress] = React.useState(null);
+    const [screen, setScreen] = React.useState(DocumentTemplateDialogScreen.Select);
+    const [isBlocking, setIsBlocking] = React.useState(false);
+    const [uploaded, setUploaded] = React.useState([]);
 
-    public render(): React.ReactElement<IDocumentTemplateDialogProps> {
-        return (
-            <BaseDialog
-                dialogContentProps={{ title: this.props.title }}
-                modalProps={{ isBlocking: false, isDarkOverlay: true }}
-                onRenderFooter={this._onRenderFooter.bind(this)}
-                onDismiss={this._onClose.bind(this)}
-                containerClassName={styles.documentTemplateDialog}>
-                {this._content}
-            </BaseDialog>
-        );
-    }
 
-    private get _content() {
-        switch (this.state.screen) {
+    function onRenderContent() {
+        switch (screen) {
             case DocumentTemplateDialogScreen.Select: {
                 return (
                     <DocumentTemplateDialogScreenSelect
-                        templates={this.props.templates}
-                        selection={this._selection}
-                        selectedItems={this.state.selection}
-                        templateLibrary={this.props.templateLibrary} />
+                        templates={props.templates}
+                        selection={selection}
+                        selectedItems={selected}
+                        templateLibrary={props.templateLibrary} />
                 );
             }
             case DocumentTemplateDialogScreen.EditCopy: {
                 return (
                     <DocumentTemplateDialogScreenEditCopy
-                        selectedTemplates={this.state.selection}
-                        libraries={this.props.libraries}
-                        onStartCopy={this._copyFilesToWeb.bind(this)} />
+                        selectedTemplates={selected}
+                        libraries={props.libraries}
+                        onStartCopy={onStartCopy}
+                        onChangeScreen={s => setScreen(s)} />
                 );
             }
             case DocumentTemplateDialogScreen.CopyProgress: {
-                return <ProgressIndicator label={strings.CopyProgressLabel} {...this.state.progress} />;
+                return <ProgressIndicator label={strings.CopyProgressLabel} {...progress} />;
             }
             case DocumentTemplateDialogScreen.Summary: {
-                return <InfoMessage type={MessageBarType.success} text={formatString(strings.SummaryText, this.state.templatesAdded.length)} />;
+                return <InfoMessage type={MessageBarType.success} text={formatString(strings.SummaryText, uploaded.length)} />;
             }
         }
     }
 
-    private _onRenderFooter() {
-        switch (this.state.screen) {
+    function onRenderFooter() {
+        switch (screen) {
             case DocumentTemplateDialogScreen.Select: {
                 return (
                     <>
                         <PrimaryButton
                             text={strings.OnSubmitSelectionText}
-                            onClick={() => this._onChangeScreen(DocumentTemplateDialogScreen.EditCopy)}
-                            disabled={this.state.selection.length === 0} />
-                    </>
-                );
-            }
-            case DocumentTemplateDialogScreen.EditCopy: {
-                return (
-                    <>
-                        <DefaultButton
-                            text={strings.OnGoBackText}
-                            iconProps={{ iconName: 'NavigateBack' }}
-                            onClick={() => this._onChangeScreen(DocumentTemplateDialogScreen.Select)} />
+                            onClick={() => setScreen(DocumentTemplateDialogScreen.EditCopy)}
+                            disabled={selected.length === 0} />
                     </>
                 );
             }
             case DocumentTemplateDialogScreen.Summary: {
                 return (
                     <>
-                        <DefaultButton text={strings.GetMoreText} onClick={_ => this._onChangeScreen(DocumentTemplateDialogScreen.Select)} />
-                        <DefaultButton text={strings.CloseModalText} onClick={this._onClose.bind(this)} />
+                        <DefaultButton text={strings.GetMoreText} onClick={_ => setScreen(DocumentTemplateDialogScreen.Select)} />
+                        <DefaultButton text={strings.CloseModalText} onClick={onClose} />
                     </>
                 );
+            }
+            default: {
+                return null;
             }
         }
     }
 
-    private _onSelectionChanged() {
-        this.setState({ selection: this._selection.getSelection() as TemplateFile[] });
-    }
-
-    /**
-     * On change screen
-     * 
-     * @param {DocumentTemplateDialogScreen} screen Screen
-     */
-    private _onChangeScreen(screen: DocumentTemplateDialogScreen) {
-        this.setState({ screen });
+    function onSelectionChanged() {
+        setSelected(selection.getSelection() as TemplateFile[]);
     }
 
     /**
@@ -128,31 +92,46 @@ export class DocumentTemplateDialog extends React.Component<IDocumentTemplateDia
      * @param {TemplateFile[]} templates Templates
      * @param {string} folderServerRelativeUrl Folder URL
      */
-    private async _copyFilesToWeb(templates: TemplateFile[], folderServerRelativeUrl: string): Promise<void> {
-        this.setState({ screen: DocumentTemplateDialogScreen.CopyProgress, isBlocking: true });
+    async function onStartCopy(templates: TemplateFile[], folderServerRelativeUrl: string): Promise<void> {
+        setScreen(DocumentTemplateDialogScreen.CopyProgress);
+        setIsBlocking(true);
 
         let folder = SPDataAdapter.sp.web.getFolderByServerRelativeUrl(folderServerRelativeUrl);
-        let templatesAdded: FileAddResult[] = [];
+        let filesAdded: FileAddResult[] = [];
 
         for (let i = 0; i < templates.length; i++) {
             const template = templates[i];
-            this.setState({ progress: { description: template.newName, percentComplete: (i / templates.length) } });
+            setProgress({ description: template.newName, percentComplete: (i / templates.length) });
             try {
-                templatesAdded.push(await template.copyTo(folder));
-            } catch (error) {}
+                filesAdded.push(await template.copyTo(folder));
+            } catch (error) { }
         }
 
-        this._selection.setItems([], true);
-        this.setState({ screen: DocumentTemplateDialogScreen.Summary, templatesAdded, isBlocking: false, selection: [] });
+        selection.setItems([], true);
+        setScreen(DocumentTemplateDialogScreen.Summary);
+        setUploaded(filesAdded);
+        setIsBlocking(false);
     }
 
     /**
      * On close dialog
      */
-    private async _onClose() {
-        this.props.onDismiss({ reload: this.state.screen === DocumentTemplateDialogScreen.Summary });
+    function onClose() {
+        props.onDismiss({ reload: screen === DocumentTemplateDialogScreen.Summary });
     }
-}
+
+
+    return (
+        <BaseDialog
+            dialogContentProps={{ title: props.title }}
+            modalProps={{ isBlocking, isDarkOverlay: isBlocking }}
+            onRenderFooter={onRenderFooter}
+            onDismiss={onClose}
+            containerClassName={styles.documentTemplateDialog}>
+            {onRenderContent()}
+        </BaseDialog>
+    );
+};
 
 export * from './IDocumentTemplateDialogDismissProps';
 export { IDocumentTemplateDialogProps };

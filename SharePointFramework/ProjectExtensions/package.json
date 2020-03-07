@@ -8,8 +8,8 @@
     "scripts": {
         "serve": "gulp serve --locale=nb-no",
         "serveNoBrowser": "gulp serve --locale=nb-no --nobrowser",
-        "serveTemplateSelector": "gulp serve --locale=nb-no --config=templateSelector",
-        "serveProjectSetup": "gulp serve --locale=nb-no --config=projectSetup",
+        "serveTemplateSelector": "gulp serve --locale=nb-no --config=TemplateSelectorCommand",
+        "serveProjectUpgrade": "gulp serve --locale=nb-no --config=ProjectUpgrade",
         "package": "gulp clean && gulp default --ship && gulp package-solution --ship",
         "deploy": "gulp uploadAppPkg && gulp deploySppkg",
         "packageAndDeploy": "npm run package && npm run deploy",

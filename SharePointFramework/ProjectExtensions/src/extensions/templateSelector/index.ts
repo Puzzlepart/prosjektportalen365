@@ -73,9 +73,9 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
     let placeholder = this._getPlaceholder('DocumentTemplateDialog');
     const element = React.createElement<IDocumentTemplateDialogProps>(DocumentTemplateDialog, {
       title: strings.TemplateLibrarySelectModalTitle,
-      onDismiss: () => {
+      onDismiss: (props) => {
         this._unmount(placeholder);
-        document.location.href = document.location.href;
+       if(props.reload) (document.location.href = document.location.href);
       },
       libraries: this._libraries,
       templates: this._templates,
