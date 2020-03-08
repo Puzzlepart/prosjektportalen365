@@ -2,10 +2,10 @@ import { ApplicationCustomizerContext } from '@microsoft/sp-application-base';
 import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility';
 import { TemplateFile } from 'models/TemplateFile';
 import * as strings from 'ProjectExtensionsStrings';
-import {  SPDataAdapterBase } from 'shared/lib/data';
+import { SPDataAdapterBase } from 'shared/lib/data';
 import { ProjectDataService } from 'shared/lib/services';
 import * as validFilename from 'valid-filename';
-import { ISPLibrary } from './ISPLibrary';
+import { ISPLibraryFolder } from './ISPLibraryFolder';
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration';
 
 export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
@@ -35,9 +35,7 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
      * @param {string} name File name
      */
     public async isFilenameValid(folderServerRelativeUrl: string, name: string): Promise<string> {
-        if (!validFilename(name)) {
-            return strings.FilenameInValidErrorText;
-        }
+        if (!validFilename(name)) return strings.FilenameInValidErrorText;
         let [file] = await this.sp.web.getFolderByServerRelativeUrl(folderServerRelativeUrl).files.filter(`Name eq '${name}'`).get();
         if (file) {
             return strings.FilenameAlreadyInUseErrorText;
@@ -56,7 +54,7 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
             templateLibrary,
             TemplateFile,
             {
-                ViewXml: viewXml || '<View></View>'
+                ViewXml: viewXml || '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
             },
             ['File', 'FieldValuesAsText'],
         );
@@ -65,18 +63,24 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
     /**
      * Get libraries in web
      */
-    public async getLibraries(): Promise<ISPLibrary[]> {
-        return (
-            await this.sp.web.lists
-                .select('Id', 'Title', 'RootFolder/ServerRelativeUrl')
-                .expand('RootFolder')
-                .filter(`BaseTemplate eq 101 and IsCatalog eq false and IsApplicationList eq false and ListItemEntityTypeFullName ne 'SP.Data.FormServerTemplatesItem'`)
-                .usingCaching()
-                .get()
-        ).map(l => ({
-            Id: l.Id,
-            Title: l.Title,
-            ServerRelativeUrl: l.RootFolder.ServerRelativeUrl,
+    public async getLibraries(): Promise<ISPLibraryFolder[]> {
+        let libraries = await this.sp.web.lists
+            .select('Id', 'Title', 'RootFolder/ServerRelativeUrl', 'RootFolder/Folders')
+            .expand('RootFolder', 'RootFolder/Folders')
+            .filter(`BaseTemplate eq 101 and IsCatalog eq false and IsApplicationList eq false and ListItemEntityTypeFullName ne 'SP.Data.FormServerTemplatesItem'`)
+            .get();
+
+        return libraries.map(lib => ({
+            Id: lib.Id,
+            Title: lib.Title,
+            ServerRelativeUrl: lib.RootFolder.ServerRelativeUrl,
+            Folders: lib.RootFolder.Folders
+                .filter((f: { Name: string; }) => f.Name !== 'Forms')
+                .map((f: { UniqueId: string; Name: string; ServerRelativeUrl: string; }) => ({
+                    Id: f.UniqueId,
+                    Title: f.Name,
+                    ServerRelativeUrl: f.ServerRelativeUrl,
+                }))
         }));
     }
 };
