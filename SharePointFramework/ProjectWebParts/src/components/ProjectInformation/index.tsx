@@ -41,11 +41,10 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
 
   public async componentDidMount() {
     try {
+      const urlHash = parseUrlHash<IProjectInformationUrlHash>(true);
       const data = await this._fetchData();
       this.setState({ ...data, isLoading: false });
-      if (parseUrlHash<IProjectInformationUrlHash>(true).syncproperties === '1') {
-        this._onSyncProperties();
-      }
+      if (urlHash.syncproperties === '1') this._onSyncProperties(undefined, urlHash.force === '1');
     } catch (error) {
       this.setState({ error, isLoading: false });
     }
@@ -136,16 +135,15 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
    * On sync properties
    * 
    * @param {React.MouseEvent<any>} event Event
+   * @param {boolean} force Force sync of properties
    */
-  private async _onSyncProperties(event?: React.MouseEvent<any>): Promise<void> {
+  private async _onSyncProperties(event?: React.MouseEvent<any>, force: boolean = false): Promise<void> {
     if (event != null) {
       return ConfirmAction(strings.SyncProjectPropertiesText, strings.SyncProjectPropertiesDescription, this._onSyncProperties.bind(this), strings.SyncNowText, this, 'confirmActionProps', { containerClassName: styles.confirmDialog });
     }
     if (!stringIsNullOrEmpty(this.state.data.propertiesListId)) {
       let lastUpdated = await SPDataAdapter.project.getPropertiesLastUpdated(this.state.data);
-      if (lastUpdated > 60) {
-        return;
-      }
+      if (lastUpdated > 60 && !force) return;
     }
     if (this.props.skipSyncToHub) return;
     this.logInfo(`Starting sync of ${strings.ProjectPropertiesListName}`, '_onSyncProperties');
@@ -162,7 +160,7 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
       );
       if (!created) {
         this.logInfo('Synchronizing properties to item in hub', '_onSyncProperties');
-        await SPDataAdapter.syncPropertyItemToHub(this.state.data.fieldValues, this.state.data.fieldValuesText, this.state.data.templateParameters, progressFunc);
+        await SPDataAdapter.syncPropertyItemToHub(this.state.data.fieldValues, { ...this.state.data.fieldValuesText, Title: this.props.webTitle }, this.state.data.templateParameters, progressFunc);
       }
       this.logInfo(`Finished. Reloading page.`, '_onSyncProperties');
       SPDataAdapter.clearCache();

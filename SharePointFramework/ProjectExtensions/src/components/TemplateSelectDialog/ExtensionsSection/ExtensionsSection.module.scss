@@ -4,6 +4,7 @@
   @include ms-Grid-col;
   @include ms-sm12;
   padding: 10px 0 10px 0;
+  
   .container {
     .item {
       width: 50%;
@@ -11,7 +12,8 @@
       vertical-align: top; 
       padding-right: 5px;
       box-sizing: border-box;
-      .description {
+
+      .subText {
         @include ms-font-s;
         margin: 5px 0 15px 0;
       }

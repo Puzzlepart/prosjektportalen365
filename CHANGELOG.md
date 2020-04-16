@@ -1,6 +1,11 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Unreleased - TBA
+
+### Added
+- Not using refiners from search anymore in `PortfolioOverview`, retrieving the values from the current collection instead #244
+
 ## 2.0.0 - 2020-02-21
 
 ### Added
@@ -17,6 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Moving planner configuration to `Lists/Listeinnhold` (also support for cascade import #228
 - Add `Gevinsteier` to `Gevinstanalyse og gevinstrealiseringsplan` #162
 - Improved UI for summary view phase change modal #235
+- Support for description for list content configurations (#240)
 
 ### Fixed
 - Header columns mispositioned in portfolio overview #207

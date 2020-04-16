@@ -5,7 +5,7 @@ import { IPortfolioOverviewState } from '../IPortfolioOverviewState';
 import { IRenderItemColumnProps } from './IRenderItemColumnProps';
 import { TagsColumn } from './TagsColumn';
 import { UserColumn } from './UserColumn';
-import { IFetchDataForViewItemResult } from 'data/IFetchDataForViewResult';
+import { IFetchDataForViewItemResult } from 'data/IFetchDataForViewItemResult';
 import { ProjectColumn } from 'shared/lib/models';
 
 /**
