@@ -12,6 +12,7 @@ A clear and concise description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
+
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
@@ -24,8 +25,9 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **About your setup**
- - Browser [e.g. chrome, safari]
- - Installed version [found under {Prosjektportalen}/Lists/Installasjonslogg/AllItems.aspx]
+
+- Browser [e.g. chrome, safari]
+- Installed version [found under {Prosjektportalen}/Lists/Installasjonslogg/AllItems.aspx]
 
 **Additional context**
 Add any other context about the problem here.
