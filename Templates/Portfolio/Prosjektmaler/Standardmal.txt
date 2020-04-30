@@ -263,19 +263,6 @@
             ]
         },
         {
-            "ID": "0x01007CFA9140CFBF430EB3A6CE7272E89CFB",
-            "Name": "Infoelement",
-            "Description": "",
-            "Group": "Prosjektportalen innholdstyper",
-            "FieldRefs": [
-                {
-                    "ID": "a3038ecc-69db-4179-b23b-5fdb0535b38c",
-                    "Name": "GtProjectInfoDescription",
-                    "Required": true
-                }
-            ]
-        },
-        {
             "ID": "0x010200C19C974828B24D469B69C22B2D1FFB63",
             "Name": "Prosjekthendelse",
             "Description": "",
@@ -290,33 +277,6 @@
                 {
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
                     "Name": "GtProjectPhase"
-                }
-            ]
-        },
-        {
-            "ID": "0x01002CC709404B5B4751B6E1CD1CC0A3ED10",
-            "Name": "Milepæl",
-            "Group": "Prosjektportalen innholdstyper",
-            "FieldRefs": [
-                {
-                    "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
-                    "Name": "GtProjectPhase"
-                },
-                {
-                    "ID": "1fa322ec-6b56-4ea9-a1fd-2623e34083e6",
-                    "Name": "GtMilestonePlannedDate"
-                },
-                {
-                    "ID": "cbf2ae22-2c77-4ad0-a639-07fddfb5cd81",
-                    "Name": "GtMilestoneActualDate"
-                },
-                {
-                    "ID": "17a4b359-5819-4e7c-9894-a154320a661d",
-                    "Name": "GtMilestoneStatus"
-                },
-                {
-                    "ID": "dabdcbab-7bab-4fb2-8d65-85bd03809a8d",
-                    "Name": "GtMilestoneComment"
                 }
             ]
         },
@@ -764,35 +724,6 @@
             ]
         },
         {
-            "Title": "Informasjon",
-            "Description": "",
-            "Template": 100,
-            "ContentTypesEnabled": true,
-            "RemoveExistingContentTypes": true,
-            "ContentTypeBindings": [
-                {
-                    "ContentTypeID": "0x01007CFA9140CFBF430EB3A6CE7272E89CFB"
-                }
-            ],
-            "AdditionalSettings": {
-                "EnableVersioning": true
-            },
-            "Views": [
-                {
-                    "Title": "Alle elementer",
-                    "ViewFields": [
-                        "LinkTitle",
-                        "GtProjectInfoDescription"
-                    ],
-                    "AdditionalSettings": {
-                        "RowLimit": 30,
-                        "Paged": true,
-                        "ViewQuery": ""
-                    }
-                }
-            ]
-        },
-        {
             "Title": "Interessentregister",
             "Description": "",
             "Template": 100,
@@ -857,38 +788,6 @@
                         "RowLimit": 10,
                         "Paged": true,
                         "ViewQuery": ""
-                    }
-                }
-            ]
-        },
-        {
-            "Title": "Milepæler",
-            "Description": "",
-            "Template": 100,
-            "ContentTypesEnabled": true,
-            "RemoveExistingContentTypes": true,
-            "ContentTypeBindings": [
-                {
-                    "ContentTypeID": "0x01002CC709404B5B4751B6E1CD1CC0A3ED10"
-                }
-            ],
-            "AdditionalSettings": {
-                "EnableVersioning": true
-            },
-            "Views": [
-                {
-                    "Title": "Alle elementer",
-                    "ViewFields": [
-                        "LinkTitle",
-                        "GtMilestonePlannedDate",
-                        "GtMilestoneActualDate",
-                        "GtMilestoneStatus",
-                        "GtMilestoneComment"
-                    ],
-                    "AdditionalSettings": {
-                        "RowLimit": 30,
-                        "Paged": true,
-                        "ViewQuery": "<OrderBy><FieldRef Name=\"GtMilestonePlannedDate\" Ascending=\"TRUE\" /></OrderBy>"
                     }
                 }
             ]
