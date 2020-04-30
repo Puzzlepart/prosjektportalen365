@@ -84,6 +84,13 @@
             <pnp:DataValue FieldName="GtIconName">Asterisk</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Risikoelementer på porteføljenivå</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89701* GtShowInPortfolioOWSBOOL:1 DepartmentId:{{sitecollectionid}}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Risikooversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">Asterisk</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceDefault">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Alle ressursallokeringer</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeId:0x010004EAFF7AFCC94C2680042E6881264120* OR ContentTypeId:0x010029F45E75BA9CE340A83EFFB2927E11F4*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Ressursallokering</pnp:DataValue>
@@ -120,10 +127,17 @@
             <pnp:DataValue FieldName="GtIconName">SyncStatus</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">Gevinstoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Alle gevinstelementer</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x010039EAFDC2A1624C1BA1A444FC8FE85DEC* OR ContentTypeID:0x01004F466123309D46BAB9D5C6DE89A6CF67* OR ContentTypeID:0x010073043EFE3E814A2BBEF96B8457623F95*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">Trophy</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Gevinstelementer på porteføljenivå</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x010039EAFDC2A1624C1BA1A444FC8FE85DEC* OR (ContentTypeID:0x01004F466123309D46BAB9D5C6DE89A6CF67* AND GtShowInPortfolioOWSBOOL:1) OR ContentTypeID:0x010073043EFE3E814A2BBEF96B8457623F95*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">Trophy</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceDefault">True</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Gevinstoversikt (Prosjektnivå)</pnp:DataValue>
