@@ -34,9 +34,9 @@ To work with the various solutions, you have to to the following
 
 1. Ensure you have pnpm installed
 2. Build the Shared solution. Navigate to "@Shared" and run `pnpm i` followed by `npm run-script build`
-3. Navigate to "ProjectWebParts" and run `pnpm i` followed by `npm run-script package`
-4. Navigate to "PortfolioWebParts" and run `pnpm i` followed by `npm run-script package`
-5. Navigate to "ProjectExtensions" and run `pnpm i` followed by `npm run-script package`
+3. Navigate to "ProjectWebParts" and run `pnpm i --shamefully-hoist` followed by `npm run-script package`
+4. Navigate to "PortfolioWebParts" and run `pnpm i --shamefully-hoist` followed by `npm run-script package`
+5. Navigate to "ProjectExtensions" and run `pnpm i --shamefully-hoist` followed by `npm run-script package`
 
 ## Package and deploy
 
