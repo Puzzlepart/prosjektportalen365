@@ -59,18 +59,20 @@
                 {
                     "ID": "6c2da0dc-77b1-4152-b751-97adf436faa0",
                     "Name": "GtRiskStatus"
-                },
-                {
-                    "ID": "6bd17911-c48a-4900-be61-54ae26207d78",
-                    "Name": "GtShowInPortfolio"
-                }
+                }                
             ]
         },
         {
             "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE89701",
             "Name": "Risiko",
             "Description": "",
-            "Group": "Prosjektportalen innholdstyper"
+            "Group": "Prosjektportalen innholdstyper",
+            "FieldRefs": [
+                {
+                    "ID": "6bd17911-c48a-4900-be61-54ae26207d78",
+                    "Name": "GtShowInPortfolio"
+                }
+            ]
         },
         {
             "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE89702",
