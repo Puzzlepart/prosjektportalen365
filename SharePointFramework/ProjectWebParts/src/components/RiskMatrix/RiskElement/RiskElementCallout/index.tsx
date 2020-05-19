@@ -3,7 +3,7 @@ import * as React from 'react';
 import { replaceTokens } from 'shared/lib/util/replaceTokens';
 import { IRiskElementCalloutProps } from './IRiskElementCalloutProps';
 
-// tslint:disable-next-line: naming-convention
+
 export const RiskElementCallout = ({ risk, calloutTemplate, target, onDismiss }: IRiskElementCalloutProps) => {
     let content = replaceTokens(calloutTemplate, risk.item);
     return (

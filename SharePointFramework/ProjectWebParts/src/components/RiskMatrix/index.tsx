@@ -3,7 +3,7 @@ import { IRiskMatrixProps } from './IRiskMatrixProps';
 import { MatrixRows } from './MatrixRow';
 import styles from './RiskMatrix.module.scss';
 
-// tslint:disable-next-line: naming-convention
+
 export const RiskMatrix = ({ items = [], width = 400, height = 300, calloutTemplate }: IRiskMatrixProps) => {
     return (
         <div className={styles.riskMatrix} style={{ width, height }}>

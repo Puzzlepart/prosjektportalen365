@@ -1,11 +1,11 @@
 import { DefaultButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
-import { IActionsProps } from './IActionsProps';
 import styles from './Actions.module.scss';
 import { ActionType } from './ActionType';
+import { IActionsProps } from './IActionsProps';
 
-// tslint:disable-next-line: naming-convention
+
 export const Actions = (props: IActionsProps) => {
     const actions: ActionType[] = [
         [strings.ViewVersionHistoryText, props.versionHistoryUrl, 'History'],

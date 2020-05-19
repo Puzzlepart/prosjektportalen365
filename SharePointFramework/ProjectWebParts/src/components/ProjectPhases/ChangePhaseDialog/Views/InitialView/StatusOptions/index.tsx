@@ -5,7 +5,7 @@ import { IStatusOptionsProps } from './IStatusOptionsProps';
 /**
  * @component StatusOptions
  */
-// tslint:disable-next-line: naming-convention
+
 export const StatusOptions = ({ actions }: IStatusOptionsProps) => {
     return (
         <div style={{ marginTop: 20, marginBottom: 25 }}>

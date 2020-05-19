@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { View, InitialView, SummaryView, ChangingPhaseView } from '../Views';
+import { ChangingPhaseView, InitialView, SummaryView, View } from '../Views';
 import IBodyProps from './IBodyProps';
 
-// tslint:disable-next-line: naming-convention
+
 export const Body = (props: IBodyProps) => {
     switch (props.currentView) {
         case View.Initial: {

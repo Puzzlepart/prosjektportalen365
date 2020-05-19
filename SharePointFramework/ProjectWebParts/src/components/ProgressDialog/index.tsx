@@ -1,10 +1,10 @@
-import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
+import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import * as React from 'react';
-import styles from './ProgressDialog.module.scss';
 import { IProgressDialogProps } from './IProgressDialogProps';
+import styles from './ProgressDialog.module.scss';
 
-// tslint:disable-next-line: naming-convention
+
 export const ProgressDialog = ({ title, progress }: IProgressDialogProps) => {
     if (!progress) return null;
     return (

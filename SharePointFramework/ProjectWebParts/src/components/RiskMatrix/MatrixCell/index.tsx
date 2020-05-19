@@ -1,8 +1,8 @@
 import * as React from 'react';
-import styles from './MatrixCell.module.scss';
 import { IMatrixCellProps } from './IMatrixCellProps';
+import styles from './MatrixCell.module.scss';
 
-// tslint:disable-next-line: naming-convention
+
 export const MatrixCell = ({ style,  children }: IMatrixCellProps) => {
     return (
         <td className={styles.matrixCell} style={style} >
@@ -18,7 +18,7 @@ export interface IMatrixHeaderCellProps extends React.HTMLProps<HTMLElement> {
     label: string;
 }
 
-// tslint:disable-next-line: naming-convention
+
 export const MatrixHeaderCell = (props: IMatrixHeaderCellProps) => {
     return (
         <td className={`${styles.matrixCell} ${styles.headerCell}`}>
