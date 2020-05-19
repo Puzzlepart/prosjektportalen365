@@ -2,11 +2,13 @@
 
 .projectStatus {
   @include ms-Grid;
+  padding: 0;
+  margin: 0;
   .container {
     padding: 10px 32px;
     @include ms-Grid-row;
     .header {
-      padding: 25px 0 25px 0 !important;
+      padding: 15px 0 25px 0 !important;
       .title {
         font-size: 28px;
         font-weight: 100;
@@ -42,8 +44,4 @@
       @include ms-sm4;
     }
   }
-}
-
-div[class="commandBarWrapper"] {
-  display: none !important;
 }

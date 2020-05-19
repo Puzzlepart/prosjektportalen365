@@ -16,7 +16,12 @@ export const ProjectPropertiesSection = (props: IProjectPropertiesSectionProps) 
       return props.model.viewFields.map(fieldName => {
         const [fld] = props.fields.filter(f => [f.InternalName, f.Title].indexOf(fieldName) !== -1);
         if (fld && !stringIsNullOrEmpty(props.fieldValues[fieldName])) {
-          return <StatusSectionField label={fld.Title} value={props.fieldValues[fieldName]} />;
+          return (
+            <StatusSectionField
+              label={fld.Title}
+              value={props.fieldValues[fieldName]}
+              width={props.fieldWidth} />
+          );
         }
         return null;
       });
