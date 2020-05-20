@@ -4,7 +4,7 @@ import { IRiskElementProps } from './IRiskElementProps';
 import styles from './RiskElement.module.scss';
 import { RiskElementCallout } from './RiskElementCallout';
 
-// tslint:disable-next-line: naming-convention
+
 export const RiskElement = ({ style, model, calloutTemplate }: IRiskElementProps) => {
     const [callout, setCallout] = useState(null);
 

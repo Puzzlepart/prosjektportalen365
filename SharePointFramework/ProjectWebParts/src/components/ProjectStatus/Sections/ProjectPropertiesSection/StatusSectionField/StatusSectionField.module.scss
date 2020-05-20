@@ -1,14 +1,12 @@
 .statusSectionField {
-  max-width: 250px;
+  padding: 0 18px 18px 0;
   .statusSectionFieldInner {
-    margin: 0px 0px 10px;
-    max-width: 95%;
     .statusSectionFieldLabel {
       font-size: 14px;
       font-weight: 600;
     }
     .statusSectionFieldValue {
-      margin-top: 5px;
+      margin: 10px 0 0 0;
       font-size: 17px;
       font-weight: 300;
     }

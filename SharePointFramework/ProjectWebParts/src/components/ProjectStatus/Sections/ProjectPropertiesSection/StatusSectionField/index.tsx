@@ -1,11 +1,11 @@
 import * as React from 'react';
-import styles from './StatusSectionField.module.scss';
 import { IStatusSectionFieldProps } from './IStatusSectionFieldProps';
+import styles from './StatusSectionField.module.scss';
 
-// tslint:disable-next-line: naming-convention
-export const StatusSectionField = ({ label, value }: IStatusSectionFieldProps) => {
+
+export const StatusSectionField = ({ label, value, width }: IStatusSectionFieldProps) => {
     return (
-        <div className={styles.statusSectionField}>
+        <div className={styles.statusSectionField} style={{ width: width || 250 }}>
             <div className={styles.statusSectionFieldInner}>
                 <div className={styles.statusSectionFieldLabel}>{label}</div>
                 <div className={styles.statusSectionFieldValue}>{value}</div>
