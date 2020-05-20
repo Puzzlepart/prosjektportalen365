@@ -1,4 +1,4 @@
-import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneSlider } from '@microsoft/sp-property-pane';
+import { IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField } from '@microsoft/sp-property-pane';
 import '@pnp/polyfill-ie11';
 import { IProjectStatusProps, ProjectStatus } from 'components/ProjectStatus';
 import 'office-ui-fabric-react/dist/css/fabric.min.css';
@@ -18,7 +18,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
     });
   }
 
-  // tslint:disable-next-line: naming-convention
+
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
@@ -46,6 +46,18 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   multiline: true,
                   resizable: true,
                 }),
+              ]
+            },
+            {
+              groupName: 'Prosjektegenskaper (Statusseksjoner)',
+              groupFields: [
+                PropertyPaneSlider('fieldWidth', {
+                  label: 'Bredde',
+                  min: 150,
+                  max: 350,
+                  step: 10,
+                  value: 250,
+                })
               ]
             }
           ]

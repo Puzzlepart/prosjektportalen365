@@ -7,7 +7,7 @@ import IChangingPhaseViewProps from './IChangingPhaseViewProps';
 /**
  * @component ChangingPhaseView
  */
-// tslint:disable-next-line: naming-convention
+
 export const ChangingPhaseView = (props: IChangingPhaseViewProps) => {
     return <ProgressIndicator label={strings.PleaseWaitText} description={format(strings.ChangingPhaseDescription, props.newPhase.name)} />;
 };

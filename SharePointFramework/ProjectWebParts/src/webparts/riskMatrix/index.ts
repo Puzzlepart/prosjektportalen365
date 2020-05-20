@@ -1,6 +1,6 @@
 import { IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField } from '@microsoft/sp-property-pane';
 import { sp } from '@pnp/sp';
-import { RiskMatrix, IRiskMatrixProps } from 'components/RiskMatrix';
+import { IRiskMatrixProps, RiskMatrix } from 'components/RiskMatrix';
 import { RiskElementModel } from 'components/RiskMatrix/RiskElementModel';
 import * as getValue from 'get-value';
 import * as ReactDom from 'react-dom';
@@ -21,7 +21,6 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
   }
 
   public render(): void {
-    // tslint:disable-next-line: early-exit
     if (this._error) {
       this.renderError(this._error);
     } else {
@@ -46,12 +45,12 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
     return items;
   }
 
-  // tslint:disable-next-line: naming-convention
+  
   protected onDispose(): void {
     ReactDom.unmountComponentAtNode(this.domElement);
   }
 
-  // tslint:disable-next-line: naming-convention
+  
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [

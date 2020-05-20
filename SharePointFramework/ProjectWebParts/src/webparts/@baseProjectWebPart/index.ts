@@ -8,7 +8,7 @@ import HubSiteService, { IHubSite } from 'sp-hubsite-service';
 import { IBaseWebPartComponentProps } from '../../components/BaseWebPartComponent';
 import SPDataAdapter from '../../data';
 
-// tslint:disable-next-line: naming-convention
+
 export abstract class BaseProjectWebPart<T extends IBaseWebPartComponentProps> extends BaseClientSideWebPart<T> {
     private _hubSite: IHubSite;
 
@@ -20,7 +20,7 @@ export abstract class BaseProjectWebPart<T extends IBaseWebPartComponentProps> e
      * @param {any} component Component 
      * @param {P} props Props
      */
-    // tslint:disable-next-line: naming-convention
+    
     public renderComponent<P>(component: any, props?: Partial<P>): void {
         let combinedProps: T = {
             ...this.properties,

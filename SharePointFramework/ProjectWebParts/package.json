@@ -67,7 +67,6 @@
     "@microsoft/rush-stack-compiler-3.3": "0.4.2",
     "@microsoft/sp-build-web": "1.9.1",
     "@microsoft/sp-module-interfaces": "1.9.1",
-    "@microsoft/sp-tslint-rules": "1.9.1",
     "@microsoft/sp-webpart-workbench": "1.9.1",
     "@types/chai": "3.4.34",
     "@types/get-value": "^3.0.1",
@@ -78,9 +77,7 @@
     "colors": "1.4.0",
     "find": "0.3.0",
     "gulp": "~3.9.1",
-    "pzl-tslint-rules": "1.0.5",
     "spfx-pkgdeploy": "0.3.0",
-    "tslint": "5.20.0",
     "webpack-bundle-analyzer": "3.5.2",
     "webpackbar": "4.0.0",
     "yargs": "14.2.0"

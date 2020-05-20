@@ -1,11 +1,11 @@
 import { stringIsNullOrEmpty } from '@pnp/common';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import * as React from 'react';
-import { IUserMessageProps } from './IUserMessageProps';
 import * as ReactMarkdown from 'react-markdown/with-html';
+import { IUserMessageProps } from './IUserMessageProps';
 import styles from './UserMessage.module.scss';
 
-// tslint:disable-next-line: naming-convention
+
 export const UserMessage = ({ className = styles.userMessage, text, messageBarType, onDismiss = null, style, hidden }: IUserMessageProps) => {
     if (stringIsNullOrEmpty(text)) return null;
     return (
@@ -17,6 +17,6 @@ export const UserMessage = ({ className = styles.userMessage, text, messageBarTy
     );
 };
 
-export { MessageBarType };
 export * from './IUserMessageProps';
+export { MessageBarType };
 

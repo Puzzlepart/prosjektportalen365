@@ -8,4 +8,9 @@ export interface IStatusSectionFieldProps {
      * Value for the field
      */
     value: string;
+
+    /**
+     * Width for the component
+     */
+    width: number;
 }

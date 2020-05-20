@@ -213,7 +213,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
               <ProjectPropertiesSection
                 {...baseProps}
                 fieldValues={{ ...data.properties.fieldValues, ...selectedReport.fieldValues }}
-                fields={[...data.properties.fields, ...data.reportFields]} />
+                fields={[...data.properties.fields, ...data.reportFields]}
+                fieldWidth={this.props.fieldWidth} />
             );
           }
           case SectionType.RiskSection: {
