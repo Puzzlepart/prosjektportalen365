@@ -1,12 +1,16 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## Unreleased - TBA
+#### 1.2.1 - 2020-05-22
 
 ### Added
 - Not using refiners from search anymore in `PortfolioOverview`, retrieving the values from the current collection instead #244
+- Removed lists Information and Milestones #266
 
-## 2.0.0 - 2020-02-21
+### Fixed
+- Removed "Add to portfolio" on Opportunities #270
+
+## 1.2.0 - 2020-02-21
 
 ### Added
 - Support for different phase term sets (to fully support different project templates/types) #201
