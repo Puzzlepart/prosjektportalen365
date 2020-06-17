@@ -36,7 +36,7 @@ export class CopyListData extends BaseTask {
                             obj[item.GtCategory][item.Title] = stringIsNullOrEmpty(item.GtChecklist) ? [] : item.GtChecklist.split(';');
                             return obj;
                         }, {});
-                        await new PlannerConfiguration(this.data, configuration).execute(params, onProgress);
+                        await new PlannerConfiguration(this.data, configuration, ['Metodikk']).execute(params, onProgress);
                     }
                         break;
                     case ListContentConfigType.List: {
