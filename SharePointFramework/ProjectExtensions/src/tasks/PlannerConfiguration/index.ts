@@ -21,8 +21,13 @@ export class PlannerConfiguration extends BaseTask {
      * 
      * @param {IProjectSetupData} data Project setup data 
      * @param {IPlannerConfiguration} _configuration Planner configuration object
+     * @param {string[]} _labels Planner labels
      */
-    constructor(data: IProjectSetupData, private _configuration: IPlannerConfiguration) {
+    constructor(
+        data: IProjectSetupData,
+        private _configuration: IPlannerConfiguration,
+        private _labels: string[] = [],
+    ) {
         super(data);
     }
 
@@ -62,6 +67,11 @@ export class PlannerConfiguration extends BaseTask {
         if (!plan) {
             plan = await MSGraphHelper.Post('planner/plans', JSON.stringify({ title, owner }));
         }
+        if (this._labels.length > 0) {
+            const eTag = (await MSGraphHelper.Get(`planner/plans/${plan.id}/details`))['@odata.etag']
+            const categoryDescriptions = this._labels.splice(0, 6).reduce((obj, value, idx) => ({ ...obj, [`category${idx + 1}`]: value }), {})
+            await MSGraphHelper.Patch(`planner/plans/${plan.id}/details`, JSON.stringify({ categoryDescriptions }), eTag)
+        }
         return plan;
     }
 
@@ -93,7 +103,12 @@ export class PlannerConfiguration extends BaseTask {
             let checklist: string[] = this._configuration[bucket.name][name] || [];
             try {
                 this.logInformation(`Creating task ${name} in bucket ${bucket.name}`);
-                const task = await MSGraphHelper.Post('planner/tasks', JSON.stringify({ title: name, bucketId: bucket.id, planId }));
+                const task = await MSGraphHelper.Post('planner/tasks', JSON.stringify({
+                    title: name,
+                    bucketId: bucket.id,
+                    planId,
+                    appliedCategories: { category1: true },
+                }));
                 if (checklist.length > 0) {
                     let taskUpdate: TypedHash<any> = {
                         checklist: checklist.reduce((obj, title) => ({ ...obj, [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }, }), {}),
