@@ -71,4 +71,6 @@ build.configureWebpack.mergeConfig({
     }
 });
 
+build.tslintCmd.enabled = false
+
 build.initialize(gulp);
