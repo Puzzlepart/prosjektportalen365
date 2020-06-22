@@ -7,7 +7,7 @@ import { IProjectPropertyProps } from './IProjectPropertyProps';
 import styles from './ProjectProperty.module.scss';
 import { ProjectPropertyModel } from './ProjectPropertyModel';
 
-// tslint:disable-next-line: naming-convention
+
 export const ProjectProperty = ({ model, style, displayMode = DisplayMode.Read, onFieldExternalChanged, showFieldExternal }: IProjectPropertyProps) => {
     let id = getId(`projectproperty_${model.internalName}`.toLowerCase());
 

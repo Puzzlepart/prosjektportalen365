@@ -4,13 +4,13 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import * as strings from 'ProjectWebPartsStrings';
 import * as React from 'react';
 import { IInitialViewProps } from './IInitialViewProps';
-import { StatusOptions } from './StatusOptions';
 import styles from './InitialView.module.scss';
+import { StatusOptions } from './StatusOptions';
 
 /**
  * @component InitialView
  */
-// tslint:disable-next-line: naming-convention
+
 export const InitialView = (props: IInitialViewProps) => {
     if (!props.checklistItem) return null;
 

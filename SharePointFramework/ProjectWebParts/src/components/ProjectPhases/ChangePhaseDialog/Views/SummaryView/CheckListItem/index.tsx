@@ -21,7 +21,7 @@ const STATUS_ICONS = {
 /**
  * @component CheckListItem
  */
-// tslint:disable-next-line: naming-convention
+
 export const CheckListItem = ({ item }: IChecklistItemProps) => {
     const [commentHidden, setCommentHidden] = useState(true);
 

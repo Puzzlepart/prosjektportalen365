@@ -6,7 +6,7 @@ import styles from './SummaryView.module.scss';
 /**
  * @component SummaryView
  */
-// tslint:disable-next-line: naming-convention
+
 export const SummaryView = (props: ISummaryViewProps) => {
     return (
         <div className={styles.summaryView}>

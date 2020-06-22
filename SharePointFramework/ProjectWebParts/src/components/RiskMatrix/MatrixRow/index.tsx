@@ -1,13 +1,13 @@
 import * as React from 'react';
-import styles from './MatrixRow.module.scss';
 import { IMatrixCell } from '../IMatrixCell';
+import { MatrixCell, MatrixCellType, MatrixHeaderCell } from '../MatrixCell';
 import { RiskElement } from '../RiskElement';
-import RISK_MATRIX_CELLS from '../RiskMatrixCells';
-import { MatrixCellType, MatrixCell, MatrixHeaderCell } from '../MatrixCell';
 import { RiskElementModel } from '../RiskElementModel';
+import RISK_MATRIX_CELLS from '../RiskMatrixCells';
 import { IMatrixRowProps } from './IMatrixRowProps';
+import styles from './MatrixRow.module.scss';
 
-// tslint:disable-next-line: naming-convention
+
 export const MatrixRow = ({ children }: IMatrixRowProps) => {
     return (
         <tr className={styles.matrixRow}>
@@ -46,7 +46,7 @@ const getRiskElementsPostActionForCell = (items: RiskElementModel[], cell: IMatr
     // return riskElements;
 };
 
-// tslint:disable-next-line: naming-convention
+
 export const MatrixRows = ({ items, calloutTemplate }) => {
     const children = RISK_MATRIX_CELLS.map((rows, i) => {
         let cells = rows.map((c, j) => {

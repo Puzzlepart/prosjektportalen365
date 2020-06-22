@@ -12,4 +12,9 @@ export interface IProjectPropertiesSectionProps extends IBaseSectionProps {
      * Field values
      */
     fieldValues: TypedHash<string>;
+
+    /**
+     * Field width
+     */
+    fieldWidth: number;
 }
