@@ -28,7 +28,7 @@ export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionStat
   }
 
   /**
-   * Renders the <ListSection /> component
+   * Renders the <RiskSection /> component
    */
   public render(): React.ReactElement<IRiskSectionProps> {
     return (
@@ -44,7 +44,7 @@ export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionStat
   }
 
   /**
-   * Render list
+   * Render content
    */
   private _renderContent() {
     if (this.state.isLoading || !this.state.data) return null;
@@ -71,9 +71,10 @@ export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionStat
   private async _fetchData(): Promise<IRiskSectionData> {
     const { listTitle, viewQuery, viewFields, rowLimit } = this.props.model;
     const list = sp.web.lists.getByTitle(listTitle);
+    const viewXml = `<View><Query>${viewQuery}</Query><RowLimit>${rowLimit}</RowLimit></View>`;
     try {
       let [items, fields] = await Promise.all([
-        list.getItemsByCAMLQuery({ ViewXml: `<View>${viewQuery}<RowLimit>${rowLimit}</RowLimit></View>` }, 'FieldValuesAsText') as Promise<any[]>,
+        list.getItemsByCAMLQuery({ ViewXml: viewXml }, 'FieldValuesAsText') as Promise<any[]>,
         list.fields.select('Title', 'InternalName', 'TypeAsString').get<{ Title: string, InternalName: string, TypeAsString: string }[]>(),
       ]);
       if (items.length === 0) return null;
