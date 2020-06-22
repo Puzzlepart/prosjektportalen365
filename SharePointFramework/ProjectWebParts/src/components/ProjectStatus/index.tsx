@@ -49,7 +49,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       }
       this.setState({
         data,
-        selectedReport: data.reports[0],
+        selectedReport,
         sourceUrl: decodeURIComponent(sourceUrlParam || ''),
         isLoading: false,
       });
@@ -60,9 +60,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
 
   public componentWillUpdate(_: IProjectStatusProps, { selectedReport }: IProjectStatusState) {
     let obj: IProjectStatusHashState = {};
-    if (selectedReport) {
-      obj.selectedReport = selectedReport.id.toString();
-    }
+    if (selectedReport) obj.selectedReport = selectedReport.id.toString();
     setUrlHash<IProjectStatusHashState>(obj);
   }
 
