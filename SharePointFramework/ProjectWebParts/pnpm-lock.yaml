@@ -38,7 +38,6 @@ devDependencies:
   '@microsoft/rush-stack-compiler-3.3': 0.4.2
   '@microsoft/sp-build-web': 1.9.1
   '@microsoft/sp-module-interfaces': 1.9.1
-  '@microsoft/sp-tslint-rules': 1.9.1
   '@microsoft/sp-webpart-workbench': 1.9.1
   '@types/chai': 3.4.34
   '@types/get-value': 3.0.1
@@ -49,9 +48,7 @@ devDependencies:
   colors: 1.4.0
   find: 0.3.0
   gulp: 3.9.1
-  pzl-tslint-rules: 1.0.5_tslint@5.20.0
   spfx-pkgdeploy: 0.3.0
-  tslint: 5.20.0
   webpack-bundle-analyzer: 3.5.2
   webpackbar: 4.0.0
   yargs: 14.2.0
@@ -71,31 +68,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-PX4y5xQUvy0fnEVHrYOarRPXVWafSjTW9T0Hab8gVIawpl2Sj0ORyrygANq+KjcNlSSTw0YCLSNA8OyZ1I4yEg==
-  /@fimbul/bifrost/0.21.0_tslint@5.20.0:
-    dependencies:
-      '@fimbul/ymir': 0.21.0_tsutils@3.17.1
-      get-caller-file: 2.0.5
-      tslib: 1.10.0
-      tslint: 5.20.0
-      tsutils: 3.17.1
-    dev: true
-    peerDependencies:
-      tslint: ^5.0.0
-      typescript: '>= 3.3.0 || >= 3.6.0-dev || >= 3.7.0-dev'
-    resolution:
-      integrity: sha512-ou8VU+nTmOW1jeg+FT+sn+an/M0Xb9G16RucrfhjXGWv1Q97kCoM5CG9Qj7GYOSdu7km72k7nY83Eyr53Bkakg==
-  /@fimbul/ymir/0.21.0_tsutils@3.17.1:
-    dependencies:
-      inversify: 5.0.1
-      reflect-metadata: 0.1.13
-      tslib: 1.10.0
-      tsutils: 3.17.1
-    dev: true
-    peerDependencies:
-      tsutils: '>=2.29.0'
-      typescript: '>= 3.3.0 || >= 3.6.0-dev || >= 3.7.0-dev'
-    resolution:
-      integrity: sha512-T/y7WqPsm4n3zhT08EpB5sfdm2Kvw3gurAxr2Lr5dQeLi8ZsMlNT/Jby+ZmuuAAd1PnXYzKp+2SXgIkQIIMCUg==
   /@microsoft/api-extractor-model/7.1.3:
     dependencies:
       '@microsoft/node-core-library': 3.13.0
@@ -4249,12 +4221,6 @@ packages:
       node: '>=0.3.1'
     resolution:
       integrity: sha512-A46qtFgd+g7pDZinpnwiRJtxbC1hpgf0uzP3iG89scHk0AUC7A1TGxf5OiiOUv/JMZR8GOt8hL900hV0bOy5xA==
-  /diff/4.0.2:
-    dev: true
-    engines:
-      node: '>=0.3.1'
-    resolution:
-      integrity: sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==
   /diffie-hellman/5.0.3:
     dependencies:
       bn.js: 4.11.8
@@ -6490,10 +6456,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
-  /inversify/5.0.1:
-    dev: true
-    resolution:
-      integrity: sha512-Ieh06s48WnEYGcqHepdsJUIJUXpwH5o5vodAX+DK2JA/gjy4EbEcQZxw+uFfzysmKjiLXGYwNG3qDZsKVMcINQ==
   /invert-kv/1.0.0:
     dev: true
     engines:
@@ -10227,15 +10189,6 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-hPa5JuhbVEowmPQaTbvw7clC/SAYxosheQSYvwF6VWlhDx5Pvj1pM1oRcroFpi+QRrp3x0IAdjboJ4fo25O75w==
-  /pzl-tslint-rules/1.0.5_tslint@5.20.0:
-    dependencies:
-      '@microsoft/sp-tslint-rules': 1.9.1
-      tslint-consistent-codestyle: 1.16.0_tslint@5.20.0
-    dev: true
-    peerDependencies:
-      tslint: '*'
-    resolution:
-      integrity: sha512-3snrlhLIumFDNDqys+qlXN7bFxT74Cd4lwECylOM3qeH0Mycyaeudv8q0AxWHAv173i94wj4CszwMarZH5gkeA==
   /q/1.5.1:
     dev: true
     engines:
@@ -10606,10 +10559,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-Hl/tuV2VDgWgCSEeWMLwxLZqX7OK59eU1guxXsRKTAyeYimivsKdtcV4fu3r710tpG5GmDKDhQ0HSZLExnNmyQ==
-  /reflect-metadata/0.1.13:
-    dev: true
-    resolution:
-      integrity: sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==
   /regenerate/1.4.0:
     dev: true
     resolution:
@@ -12266,18 +12215,6 @@ packages:
   /tslib/1.9.3:
     resolution:
       integrity: sha512-4krF8scpejhaOgqzBEcGM7yDIEfi0/8+8zDRZhNZZ2kjmHJ4hv3zCbQWxoJGz1iw5U0Jl0nma13xzHXcncMavQ==
-  /tslint-consistent-codestyle/1.16.0_tslint@5.20.0:
-    dependencies:
-      '@fimbul/bifrost': 0.21.0_tslint@5.20.0
-      tslib: 1.10.0
-      tslint: 5.20.0
-      tsutils: 2.29.0
-    dev: true
-    peerDependencies:
-      tslint: ^5.0.0
-      typescript: '>=2.1.4 || >=2.1.0-dev || >=2.2.0-dev || >=2.3.0-dev || >=2.4.0-dev || >=2.5.0-dev || >=2.6.0-dev || >=2.7.0-dev || >=2.8.0-dev || >=2.9.0-dev || >=3.0.0-dev || >=3.1.0-dev || >=3.2.0-dev || >=3.3.0-dev || >=3.4.0-dev'
-    resolution:
-      integrity: sha512-ebR/xHyMEuU36hGNOgCfjGBNYxBPixf0yU1Yoo6s3BrpBRFccjPOmIVaVvQsWAUAMdmfzHOCihVkcaMfimqvHw==
   /tslint-microsoft-contrib/5.2.1_e3ee0fc47f74ced40450794f5ef5a1fb:
     dependencies:
       tslint: 5.12.1_typescript@3.3.4000
@@ -12356,29 +12293,6 @@ packages:
       typescript: '>=2.1.0 || >=2.1.0-dev || >=2.2.0-dev || >=2.3.0-dev || >=2.4.0-dev || >=2.5.0-dev || >=2.6.0-dev || >=2.7.0-dev || >=2.8.0-dev || >=2.9.0-dev'
     resolution:
       integrity: sha512-sfodBHOucFg6egff8d1BvuofoOQ/nOeYNfbp7LDlKBcLNrL3lmS5zoiDGyOMdT7YsEXAwWpTdAHwOGOc8eRZAw==
-  /tslint/5.20.0:
-    dependencies:
-      '@babel/code-frame': 7.8.3
-      builtin-modules: 1.1.1
-      chalk: 2.4.2
-      commander: 2.20.3
-      diff: 4.0.2
-      glob: 7.1.6
-      js-yaml: 3.13.1
-      minimatch: 3.0.4
-      mkdirp: 0.5.1
-      resolve: 1.14.2
-      semver: 5.7.1
-      tslib: 1.10.0
-      tsutils: 2.29.0
-    dev: true
-    engines:
-      node: '>=4.8.0'
-    hasBin: true
-    peerDependencies:
-      typescript: '>=2.3.0-dev || >=2.4.0-dev || >=2.5.0-dev || >=2.6.0-dev || >=2.7.0-dev || >=2.8.0-dev || >=2.9.0-dev || >=3.0.0-dev || >= 3.1.0-dev || >= 3.2.0-dev'
-    resolution:
-      integrity: sha512-2vqIvkMHbnx8acMogAERQ/IuINOq6DFqgF8/VDvhEkBqQh/x6SP0Y+OHnKth9/ZcHQSroOZwUQSN18v8KKF0/g==
   /tslint/5.9.1:
     dependencies:
       babel-code-frame: 6.26.0
@@ -12461,16 +12375,6 @@ packages:
       typescript: '>=2.1.0 || >=2.1.0-dev || >=2.2.0-dev || >=2.3.0-dev || >=2.4.0-dev || >=2.5.0-dev || >=2.6.0-dev || >=2.7.0-dev || >=2.8.0-dev || >=2.9.0-dev || >= 3.0.0-dev || >= 3.1.0-dev'
     resolution:
       integrity: sha512-g5JVHCIJwzfISaXpXE1qvNalca5Jwob6FjI4AoPlqMusJ6ftFE7IkkFoMhVLRgK+4Kx3gkzb8UZK5t5yTTvEmA==
-  /tsutils/3.17.1:
-    dependencies:
-      tslib: 1.10.0
-    dev: true
-    engines:
-      node: '>= 6'
-    peerDependencies:
-      typescript: '>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta'
-    resolution:
-      integrity: sha512-kzeQ5B8H3w60nFY2g8cJIuH7JDpsALXySGtwGJ0p2LSjLgay3NdIpqq5SoOBe46bKDW2iq25irHCr8wjomUS2g==
   /tsutils/3.17.1_typescript@3.3.4000:
     dependencies:
       tslib: 1.10.0
@@ -13531,7 +13435,6 @@ specifiers:
   '@microsoft/sp-office-ui-fabric-core': 1.9.1
   '@microsoft/sp-page-context': 1.9.1
   '@microsoft/sp-property-pane': 1.9.1
-  '@microsoft/sp-tslint-rules': 1.9.1
   '@microsoft/sp-webpart-base': 1.9.1
   '@microsoft/sp-webpart-workbench': 1.9.1
   '@pnp/common': 1.3.6
@@ -13560,7 +13463,6 @@ specifiers:
   msgraph-helper: 0.7.1
   office-ui-fabric-react: 6.189.2
   pzl-spfx-components: 0.0.11
-  pzl-tslint-rules: 1.0.5
   react: 16.8.5
   react-dom: 16.8.5
   react-image-fade-in: 1.0.2
@@ -13572,7 +13474,6 @@ specifiers:
   spfx-jsom: 0.6.0
   spfx-pkgdeploy: 0.3.0
   string-format: 2.0.0
-  tslint: 5.20.0
   underscore: 1.9.1
   webpack-bundle-analyzer: 3.5.2
   webpackbar: 4.0.0

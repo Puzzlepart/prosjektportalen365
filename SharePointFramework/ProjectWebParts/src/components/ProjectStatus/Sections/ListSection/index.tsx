@@ -70,13 +70,12 @@ export class ListSection extends BaseSection<IListSectionProps, IListSectionStat
     const { listTitle, viewQuery, viewFields, rowLimit } = this.props.model;
     const list = sp.web.lists.getByTitle(listTitle);
     try {
+      const viewXml = `<View><Query>${viewQuery}</Query><RowLimit>${rowLimit}</RowLimit></View>`;
       let [items, fields] = await Promise.all([
-        list.getItemsByCAMLQuery({ ViewXml: `<View>${viewQuery}<RowLimit>${rowLimit}</RowLimit></View>` }, 'FieldValuesAsText') as Promise<any[]>,
+        list.getItemsByCAMLQuery({ ViewXml: viewXml }, 'FieldValuesAsText') as Promise<any[]>,
         list.fields.select('Title', 'InternalName', 'TypeAsString').get<{ Title: string, InternalName: string, TypeAsString: string }[]>(),
       ]);
-      if (items.length === 0) {
-        return null;
-      }
+      if (items.length === 0) return null;
       items = items.map(i => i.FieldValuesAsText);
       const columns: IColumn[] = viewFields
         .filter(vf => fields.filter(fld => fld.InternalName === vf).length === 1)

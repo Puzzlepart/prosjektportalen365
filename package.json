@@ -1,6 +1,6 @@
 {
     "name": "prosjektportalen365",
-    "version": "1.2.2",
+    "version": "1.2.1",
     "description": "Prosjektportalen for Office 365 er et prosjektstyringsverktøy for Office 365 basert på Prosjektveiviseren. Mer informasjon på Puzzleparts nettsider.",
     "scripts": {
         "buildReleasePackage": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1",
