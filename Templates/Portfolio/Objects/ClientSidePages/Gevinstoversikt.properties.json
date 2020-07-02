@@ -1,0 +1,9 @@
+{
+  "properties": {
+    "searchBoxPlaceholderText": "Søk i gevinster...",
+    "dataSourceCategory": "Gevinstoversikt",
+    "showCommandBar": true,
+    "showSearchBox": true,
+    "showExcelExportButton": true
+  }
+}
