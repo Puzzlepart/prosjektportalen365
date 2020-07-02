@@ -11,7 +11,7 @@ import * as React from 'react'
 import { formatDate } from 'shared/lib/helpers'
 import { SectionModel, SectionType, StatusReport } from 'shared/lib/models'
 import { PortalDataService } from 'shared/lib/services'
-import { getUrlParam, parseUrlHash, setUrlHash } from 'shared/lib/util'
+import { getUrlParam, parseUrlHash, setUrlHash, removeMenuBorder } from 'shared/lib/util'
 import * as formatString from 'string-format'
 import SPDataAdapter from '../../data'
 import { IProjectStatusData } from './IProjectStatusData'
@@ -147,10 +147,13 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       name: selectedReport ? formatDate(selectedReport.created, true) : '',
       itemType: ContextualMenuItemType.Normal,
       disabled: reportOptions.length === 0,
-      subMenuProps: { items: reportOptions }
+      subMenuProps: { items: reportOptions },
     })
+
     return (
-      <CommandBar items={items} farItems={farItems} />
+      <CommandBar
+       items={removeMenuBorder<IContextualMenuItem>(items)} 
+       farItems={removeMenuBorder<IContextualMenuItem>(farItems)} />
     )
   }
 
