@@ -1,4 +1,4 @@
-import { IPhaseChecklistItem } from 'models/IPhaseChecklistItem';
+import { IPhaseChecklistItem } from 'models/IPhaseChecklistItem'
 
 export default interface IChecklistItemProps {
     item: IPhaseChecklistItem;

@@ -1,4 +1,4 @@
-import { MatrixCellType } from './MatrixCell';
+import { MatrixCellType } from './MatrixCell'
 
 export interface IMatrixCell {
     cellValue?: string;

@@ -24,11 +24,11 @@ export class RiskElementModel {
         probabilityPostAction?: string,
         consequencePostAction?: string,
     ) {
-        this.id = item.Id || item.ID;
-        this.title = item.Title;
-        this.probability = parseInt(probability || item.GtRiskProbability, 10);
-        this.consequence = parseInt(consequence || item.GtRiskConsequence, 10);
-        this.probabilityPostAction = parseInt(probabilityPostAction || item.GtRiskProbabilityPostAction, 10);
-        this.consequencePostAction = parseInt(consequencePostAction || item.GtRiskConsequencePostAction, 10);
+        this.id = item.Id || item.ID
+        this.title = item.Title
+        this.probability = parseInt(probability || item.GtRiskProbability, 10)
+        this.consequence = parseInt(consequence || item.GtRiskConsequence, 10)
+        this.probabilityPostAction = parseInt(probabilityPostAction || item.GtRiskProbabilityPostAction, 10)
+        this.consequencePostAction = parseInt(consequencePostAction || item.GtRiskConsequencePostAction, 10)
     }
 }

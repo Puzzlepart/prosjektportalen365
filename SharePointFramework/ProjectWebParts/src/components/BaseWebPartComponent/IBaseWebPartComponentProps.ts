@@ -1,5 +1,5 @@
-import { DisplayMode } from '@microsoft/sp-core-library';
-import { IHubSite } from 'sp-hubsite-service';
+import { DisplayMode } from '@microsoft/sp-core-library'
+import { IHubSite } from 'sp-hubsite-service'
 
 export interface IBaseWebPartComponentProps {
     /**

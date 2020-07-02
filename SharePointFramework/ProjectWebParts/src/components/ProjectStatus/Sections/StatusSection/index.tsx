@@ -1,13 +1,13 @@
-import * as React from 'react';
-import { IStatusSectionProps } from './IStatusSectionProps';
-import { IStatusSectionState } from './IStatusSectionState';
-import { BaseSection } from '../BaseSection';
-import { StatusElement } from '../../StatusElement';
+import * as React from 'react'
+import { IStatusSectionProps } from './IStatusSectionProps'
+import { IStatusSectionState } from './IStatusSectionState'
+import { BaseSection } from '../BaseSection'
+import { StatusElement } from '../../StatusElement'
 
 export class StatusSection extends BaseSection<IStatusSectionProps, IStatusSectionState> {
   constructor(props: IStatusSectionProps) {
-    super(props);
-    this.state = {};
+    super(props)
+    this.state = {}
   }
 
   /**
@@ -22,6 +22,6 @@ export class StatusSection extends BaseSection<IStatusSectionProps, IStatusSecti
           </div>
         </div>
       </BaseSection>
-    );
+    )
   }
 }

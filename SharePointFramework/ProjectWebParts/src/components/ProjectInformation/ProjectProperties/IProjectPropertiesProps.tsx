@@ -1,6 +1,6 @@
-import { DisplayMode } from '@microsoft/sp-core-library';
-import { ProjectPropertyModel } from './ProjectProperty';
-import { TypedHash } from '@pnp/common';
+import { DisplayMode } from '@microsoft/sp-core-library'
+import { ProjectPropertyModel } from './ProjectProperty'
+import { TypedHash } from '@pnp/common'
 
 export interface IProjectPropertiesProps {
     /**

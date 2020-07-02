@@ -1,5 +1,5 @@
-import { View } from '../Views';
-import { Phase, IPhaseChecklistItem } from 'models';
+import { View } from '../Views'
+import { Phase, IPhaseChecklistItem } from 'models'
 
 
 export default interface IBodyProps {

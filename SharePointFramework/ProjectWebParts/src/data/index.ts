@@ -1,3 +1,3 @@
-import { default as SPDataAdapter } from './SPDataAdapter';
+import { default as SPDataAdapter } from './SPDataAdapter'
 
-export default SPDataAdapter;
+export default SPDataAdapter

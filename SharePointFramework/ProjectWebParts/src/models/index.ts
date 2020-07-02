@@ -1,3 +1,3 @@
-export * from './IPhaseChecklistItem';
-export * from './Phase';
-export * from './ISPList';
+export * from './IPhaseChecklistItem'
+export * from './Phase'
+export * from './ISPList'

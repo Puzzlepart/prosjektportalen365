@@ -6,3 +6,4 @@ export * from './redirect';
 export * from './getUrlParam';
 export * from './sleep';
 export * from './replaceTokens';
+export * from './removeMenuBorder'

@@ -1,5 +1,5 @@
-import { IEntityField } from 'sp-entityportal-service';
-import { stringIsNullOrEmpty } from '@pnp/common';
+import { IEntityField } from 'sp-entityportal-service'
+import { stringIsNullOrEmpty } from '@pnp/common'
 
 export class ProjectPropertyModel {
     /**
@@ -34,18 +34,18 @@ export class ProjectPropertyModel {
      * @param {string} value Value
     */
     constructor(private _field: IEntityField, value: string) {
-        this.internalName = _field.InternalName;
-        this.displayName = _field.Title;
-        this.description = _field.Description;
-        this.value = value;
-        this.type = _field.TypeAsString;
+        this.internalName = _field.InternalName
+        this.displayName = _field.Title
+        this.description = _field.Description
+        this.value = value
+        this.type = _field.TypeAsString
     }
 
     public get visible() {
-        return this._field.SchemaXml.indexOf('ShowInDisplayForm="FALSE"') === -1;
+        return this._field.SchemaXml.indexOf('ShowInDisplayForm="FALSE"') === -1
     }
 
     public get empty() {
-        return stringIsNullOrEmpty(this.value);
+        return stringIsNullOrEmpty(this.value)
     }
 }

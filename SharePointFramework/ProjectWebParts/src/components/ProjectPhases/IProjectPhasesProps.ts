@@ -1,4 +1,4 @@
-import { IBaseWebPartComponentProps } from '../BaseWebPartComponent';
+import { IBaseWebPartComponentProps } from '../BaseWebPartComponent'
 
 export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   /**

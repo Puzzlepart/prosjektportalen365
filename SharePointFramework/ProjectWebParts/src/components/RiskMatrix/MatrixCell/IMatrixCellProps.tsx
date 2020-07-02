@@ -1,2 +1,1 @@
-export interface IMatrixCellProps extends React.HTMLProps<HTMLElement> {
-}
+export type IMatrixCellProps = React.HTMLProps<HTMLElement>

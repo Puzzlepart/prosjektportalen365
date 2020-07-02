@@ -1,6 +1,6 @@
-import { TypedHash } from '@pnp/common';
-import { IBaseWebPartComponentProps } from '../BaseWebPartComponent';
-import { ActionType } from './Actions/ActionType';
+import { TypedHash } from '@pnp/common'
+import { IBaseWebPartComponentProps } from '../BaseWebPartComponent'
+import { ActionType } from './Actions/ActionType'
 
 export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   /**

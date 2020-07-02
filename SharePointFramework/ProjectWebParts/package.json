@@ -6,6 +6,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
+    "watch": "concurrently \"npm run serve\" \"livereload ./dist -e js -w 250\"",
     "serve": "gulp serve --locale=nb-no",
     "serveNoBrowser": "gulp serve --locale=nb-no --nobrowser",
     "package": "gulp clean --ship && gulp default --ship && gulp package-solution --ship",
@@ -18,10 +19,10 @@
     "patchVersion": "npm version patch",
     "minorVersion": "npm version minor",
     "majorVersion": "npm version major",
-    "gitPushChanges": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ../../scripts/Git-PushChanges.ps1 -Prefix ProjectWebParts",
     "prepackage": "gulp setHiddenToolbox --ship",
     "preserve": "gulp setHiddenToolbox",
-    "preserveNoBrowser": "gulp setHiddenToolbox"
+    "preserveNoBrowser": "gulp setHiddenToolbox",
+    "lint": "eslint --ext .ts,.tsx ./src --color --fix"
   },
   "dependencies": {
     "@microsoft/sp-core-library": "1.9.1",
@@ -52,7 +53,7 @@
     "react-image-fade-in": "1.0.2",
     "react-markdown": "4.2.2",
     "react-scroll": "1.7.11",
-    "shared": "link:..\\@Shared",
+    "shared": "file:../@Shared",
     "sp-entityportal-service": "1.2.0",
     "sp-hubsite-service": "0.5.1",
     "spfx-jsom": "0.6.0",
@@ -63,7 +64,7 @@
     "@types/react": "16.8.8"
   },
   "devDependencies": {
-    "@microsoft/rush-stack-compiler-2.9": "0.7.16",
+    "typescript": "~3.3.x",
     "@microsoft/rush-stack-compiler-3.3": "0.4.2",
     "@microsoft/sp-build-web": "1.9.1",
     "@microsoft/sp-module-interfaces": "1.9.1",
@@ -75,11 +76,17 @@
     "@types/underscore": "1.9.2",
     "ajv": "~5.2.2",
     "colors": "1.4.0",
+    "concurrently": "5.2.0",
     "find": "0.3.0",
     "gulp": "~3.9.1",
+    "livereload": "0.9.1",
     "spfx-pkgdeploy": "0.3.0",
     "webpack-bundle-analyzer": "3.5.2",
     "webpackbar": "4.0.0",
-    "yargs": "14.2.0"
+    "yargs": "14.2.0",
+    "@typescript-eslint/eslint-plugin": "2.30.0",
+    "@typescript-eslint/parser": "2.30.0",
+    "eslint": "6.8.0",
+    "eslint-plugin-react": "7.19.0"
   }
 }

@@ -1,21 +1,20 @@
-import * as React from 'react';
-import { useState } from 'react';
-import { IRiskElementProps } from './IRiskElementProps';
-import styles from './RiskElement.module.scss';
-import { RiskElementCallout } from './RiskElementCallout';
+import * as React from 'react'
+import { IRiskElementProps } from './IRiskElementProps'
+import styles from './RiskElement.module.scss'
+import { RiskElementCallout } from './RiskElementCallout'
 
 
 export const RiskElement = ({ style, model, calloutTemplate }: IRiskElementProps) => {
-    const [callout, setCallout] = useState(null);
+    const [callout, setCallout] = React.useState(null)
 
     const getTooltip = () => {
-        let tooltip = '';
+        let tooltip = ''
         if (model.siteTitle) {
-            tooltip += `${model.siteTitle}: `;
+            tooltip += `${model.siteTitle}: `
         }
-        tooltip += model.title;
-        return tooltip;
-    };
+        tooltip += model.title
+        return tooltip
+    }
 
     return (
         <>
@@ -31,8 +30,8 @@ export const RiskElement = ({ style, model, calloutTemplate }: IRiskElementProps
                     risk={model}
                     calloutTemplate={calloutTemplate}
                     target={callout}
-                    onDismiss={_ => setCallout(null)} />
+                    onDismiss={() => setCallout(null)} />
             )}
         </>
-    );
-};
+    )
+}
