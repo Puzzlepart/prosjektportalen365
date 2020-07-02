@@ -1,6 +1,6 @@
 {
     "name": "portfoliowebparts",
-    "version": "1.2.0",
+    "version": "1.2.2",
     "private": true,
     "engines": {
         "node": ">=8.0.0 <11.0.0"
