@@ -20,6 +20,7 @@ import * as _ from 'underscore'
 import styles from './AggregatedSearchList.module.scss'
 import { IAggregatedSearchListProps } from './IAggregatedSearchListProps'
 import { IAggregatedSearchListState } from './IAggregatedSearchListState'
+import { removeMenuBorder } from 'shared/lib/util'
 
 /**
  * @component AggregatedSearchList
@@ -280,7 +281,9 @@ export class AggregatedSearchList extends React.Component<IAggregatedSearchListP
 
         return (
             <div className={styles.commandBar} hidden={!this.props.showCommandBar}>
-                <CommandBar items={items} farItems={farItems} />
+                <CommandBar 
+                items={removeMenuBorder(items)} 
+                farItems={removeMenuBorder(farItems)} />
             </div>
         )
     }
