@@ -4,10 +4,11 @@ import { IProjectSetupData } from 'extensions/projectSetup'
 import * as strings from 'ProjectExtensionsStrings'
 import { SPField } from 'shared/lib/models/SPField'
 import * as formatString from 'string-format'
-import { ListContentConfig, ListContentConfigType } from '../../models'
+import { ListContentConfig, ListContentConfigType, IPlannerTaskSPItem } from '../../models'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 import { PlannerConfiguration } from '../PlannerConfiguration'
+import { ITaskDetails, TaskAttachment } from 'tasks/PlannerConfiguration/IPlannerConfiguration'
 
 export class CopyListData extends BaseTask {
     public taskName = 'CopyListData';
@@ -31,23 +32,32 @@ export class CopyListData extends BaseTask {
                 // eslint-disable-next-line default-case
                 switch (config.type) {
                     case ListContentConfigType.Planner: {
-                        const items = await this._getSourceItems(config, ['Title', 'GtCategory', 'GtChecklist'])
+                        const items = await this._getSourceItems<IPlannerTaskSPItem>(config, ['Title', 'GtCategory', 'GtChecklist', 'GtAttachments'])
                         const configuration = items.reduce((obj, item) => {
-                            // eslint-disable-next-line no-console
-                            console.log(item)
                             obj[item.GtCategory] = obj[item.GtCategory] || {}
-                            obj[item.GtCategory][item.Title] = !stringIsNullOrEmpty(item.GtChecklist) ? item.GtChecklist.split(';') : []
+                            const taskDetails: ITaskDetails = {}
+                            if (!stringIsNullOrEmpty(item.GtChecklist)) {
+                                taskDetails.checklist = item.GtChecklist.split(';')
+                            }
+                            if (!stringIsNullOrEmpty(item.GtAttachments)) {
+                                try {
+                                    taskDetails.attachments = item.GtAttachments.split('|')
+                                        .map(str => new TaskAttachment(str)).
+                                        filter(attachment =>
+                                            !stringIsNullOrEmpty(attachment.url)
+                                            && !stringIsNullOrEmpty(attachment.alias)
+                                        )
+                                } catch (error) { }
+                            }
+                            obj[item.GtCategory][item.Title] = taskDetails
                             return obj
                         }, {})
                         await new PlannerConfiguration(this.data, configuration, ['Metodikk']).execute(params, onProgress)
                     }
                         break
                     case ListContentConfigType.List: {
-                        // if (config.sourceListProps.BaseTemplate === 101) {
-                        //     await this._processFiles(config);
-                        // } else {
-                        //     await this._processListItems(config);
-                        // }
+                        if (config.sourceListProps.BaseTemplate === 101) await this._processFiles(config)
+                        else await this._processListItems(config)
                     }
                         break
                 }
@@ -64,7 +74,7 @@ export class CopyListData extends BaseTask {
      * @param {ListContentConfig} listContentConfig List config
      * @param {string[]} fields Fields
      */
-    private async _getSourceItems(config: ListContentConfig, fields?: string[]) {
+    private async _getSourceItems<T = any>(config: ListContentConfig, fields?: string[]): Promise<T[]> {
         try {
             return await config.sourceList.items.select(...fields || config.fields, 'TaxCatchAll/ID', 'TaxCatchAll/Term').expand('TaxCatchAll').top(500).get()
         } catch (error) {

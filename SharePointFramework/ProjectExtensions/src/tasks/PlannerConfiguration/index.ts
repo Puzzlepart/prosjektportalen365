@@ -100,7 +100,7 @@ export class PlannerConfiguration extends BaseTask {
         const tasks = Object.keys(this._configuration[bucket.name])
         for (let i = 0; i < tasks.length; i++) {
             const name = tasks[i]
-            const checklist: string[] = this._configuration[bucket.name][name] || []
+            const { checklist, attachments } = this._configuration[bucket.name][name]
             try {
                 this.logInformation(`Creating task ${name} in bucket ${bucket.name}`)
                 const task = await MSGraphHelper.Post('planner/tasks', JSON.stringify({
@@ -109,24 +109,29 @@ export class PlannerConfiguration extends BaseTask {
                     planId,
                     appliedCategories: { category1: true },
                 }))
-                if (checklist.length > 0) {
-                    const taskUpdate: TypedHash<any> = {
-                        checklist: checklist.reduce((obj, title) => ({
-                            ...obj,
-                            [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title },
-                        }), {}),
-                        references: {
-                            'https%3A//contoso%2Esharepoint%2Ecom/teams/agile/documents/AnnualReport%2Epptx':
-                            {
-                              '@odata.type': 'microsoft.graph.externalReference', // required in PATCH requests to edit the references on a task
-                              'alias': 'Agile Team Annual Report',
-                              'type': 'PowerPoint'
-                            }
-                        },
-                        previewType: 'reference'
+                if (checklist || attachments) {
+                    const taskDetails: TypedHash<any> = {
+                        checklist: checklist
+                            ? checklist.reduce((obj, title) => ({
+                                ...obj,
+                                [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title },
+                            }), {})
+                            : {},
+                        references: attachments
+                            ? attachments.reduce((obj, attachment) => ({
+                                ...obj,
+                                [attachment.url]: {
+                                    '@odata.type': 'microsoft.graph.plannerExternalReference',
+                                    alias: attachment.alias,
+                                    type: attachment.type,
+                                },
+                            }), {})
+                            : {},
+                        previewType: attachments ? 'reference' : 'checklist'
                     }
+                    this.logInformation(`Updating task details for ${name} in bucket ${bucket.name}`, taskDetails)
                     const eTag = (await MSGraphHelper.Get(`planner/tasks/${task.id}/details`))['@odata.etag']
-                    await MSGraphHelper.Patch(`planner/tasks/${task.id}/details`, JSON.stringify(taskUpdate), eTag)
+                    await MSGraphHelper.Patch(`planner/tasks/${task.id}/details`, JSON.stringify(taskDetails), eTag)
                 }
                 this.logInformation(`Succesfully created task ${name} in bucket ${bucket.name}`, { taskId: task.id, checklist })
             } catch (error) {
