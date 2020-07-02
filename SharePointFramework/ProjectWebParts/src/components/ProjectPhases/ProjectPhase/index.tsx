@@ -8,20 +8,15 @@ import { IProjectPhaseProps } from './IProjectPhaseProps'
 const ProjectPhase = ({ phase, isCurrentPhase, onOpenCallout }: IProjectPhaseProps) => {
     const phaseLetterRef = React.useRef()
 
-    function className() {
-        const classNames = [styles.projectPhase]
-        if (isCurrentPhase) {
-            classNames.push(styles.isCurrentPhase)
-        }
-        if (phase.properties.PhaseLevel) {
-            const className = phase.properties.PhaseLevel.toLowerCase()
-            classNames.push(styles[className])
-        }
-        return classNames.join(' ')
+    const classNames = [styles.projectPhase]
+    if (isCurrentPhase) classNames.push(styles.isCurrentPhase)
+    if (phase.properties.PhaseLevel) {
+        const className = phase.properties.PhaseLevel.toLowerCase()
+        classNames.push(styles[className])
     }
 
     return (
-        <li className={className()}>
+        <li className={classNames.join(' ')}>
             <a href='#' className={styles.container}>
                 <div className={styles.phaseIcon}>
                     <span
