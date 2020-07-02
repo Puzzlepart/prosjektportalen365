@@ -132,7 +132,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       },
     ]
     const farItems: IContextualMenuItem[] = []
-    if (this.state.sourceUrl) {
+    if (sourceUrl) {
       farItems.push({
         id: getId('NavigateToSourceUrl'),
         key: getId('NavigateToSourceUrl'),
