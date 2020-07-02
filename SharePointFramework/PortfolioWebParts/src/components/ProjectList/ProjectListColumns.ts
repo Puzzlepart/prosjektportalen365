@@ -1,5 +1,5 @@
-import * as strings from 'PortfolioWebPartsStrings';
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
+import * as strings from 'PortfolioWebPartsStrings'
+import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 
 export const PROJECTLIST_COLUMNS: IColumn[] = [
   {
@@ -26,4 +26,4 @@ export const PROJECTLIST_COLUMNS: IColumn[] = [
     name: strings.ProjectManager,
     minWidth: 100,
   },
-];
+]

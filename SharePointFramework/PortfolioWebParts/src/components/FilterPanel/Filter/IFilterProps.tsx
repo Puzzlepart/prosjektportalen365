@@ -1,5 +1,5 @@
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import { IFilterItemProps } from '../FilterItem/IFilterItemProps';
+import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
+import { IFilterItemProps } from '../FilterItem/IFilterItemProps'
 
 export interface IFilterProps {
     column: IColumn;

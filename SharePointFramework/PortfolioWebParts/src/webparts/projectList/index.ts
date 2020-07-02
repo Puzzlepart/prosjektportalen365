@@ -1,15 +1,15 @@
-import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
-import { ProjectList, IProjectListProps } from 'components/ProjectList';
-import * as strings from 'PortfolioWebPartsStrings';
-import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
+import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base'
+import { ProjectList, IProjectListProps } from 'components/ProjectList'
+import * as strings from 'PortfolioWebPartsStrings'
+import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectListProps> {
   public render(): void {
-    this.renderComponent(ProjectList);
+    this.renderComponent(ProjectList)
   }
 
   public async onInit(): Promise<void> {
-    await super.onInit();
+    await super.onInit()
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -55,6 +55,6 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
           ]
         }
       ]
-    };
+    }
   }
 }

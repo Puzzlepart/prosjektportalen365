@@ -1,3 +1,3 @@
-import { IAggregatedSearchListProps } from '../AggregatedSearchList';
+import { IAggregatedSearchListProps } from '../AggregatedSearchList'
 
-export interface IDeliveriesOverviewProps extends IAggregatedSearchListProps { }
+export type IDeliveriesOverviewProps = IAggregatedSearchListProps

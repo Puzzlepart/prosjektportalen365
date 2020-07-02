@@ -1,3 +1,3 @@
-import { IAggregatedSearchListProps } from '../AggregatedSearchList';
+import { IAggregatedSearchListProps } from '../AggregatedSearchList'
 
-export interface IExperienceLogProps extends IAggregatedSearchListProps { }
+export type IExperienceLogProps = IAggregatedSearchListProps

@@ -1,29 +1,28 @@
-import { sp } from '@pnp/sp';
-import { getId } from '@uifabric/utilities';
-import { IAllocationSearchResult, ITimelineData, ITimelineGroup, ITimelineItem, TimelineGroupType } from 'interfaces';
-import * as moment from 'moment';
-import * as objectGet from 'object-get';
-import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
-import * as strings from 'PortfolioWebPartsStrings';
-import * as React from 'react';
-import Timeline, { ReactCalendarItemRendererProps, ReactCalendarGroupRendererProps, TimelineMarkers, TodayMarker } from 'react-calendar-timeline';
-import 'react-calendar-timeline/lib/Timeline.css';
-import { getObjectValue, tryParsePercentage } from 'shared/lib/helpers';
-import { DataSourceService } from 'shared/lib/services';
-import * as format from 'string-format';
-import * as _ from 'underscore';
-import { FilterPanel, IFilterItemProps, IFilterProps } from '../FilterPanel';
-import { DetailsCallout } from './DetailsCallout';
-import { IResourceAllocationProps } from './IResourceAllocationProps';
-import { IResourceAllocationState } from './IResourceAllocationState';
-import styles from './ResourceAllocation.module.scss';
-import './Timeline.overrides.css';
-import * as arraySort from 'array-sort';
+import { sp } from '@pnp/sp'
+import { getId } from '@uifabric/utilities'
+import * as arraySort from 'array-sort'
+import { IAllocationSearchResult, ITimelineData, ITimelineGroup, ITimelineItem, TimelineGroupType } from 'interfaces'
+import * as moment from 'moment'
+import * as objectGet from 'object-get'
+import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar'
+import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu'
+import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner'
+import * as strings from 'PortfolioWebPartsStrings'
+import * as React from 'react'
+import Timeline, { ReactCalendarGroupRendererProps, ReactCalendarItemRendererProps, TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
+import 'react-calendar-timeline/lib/Timeline.css'
+import { tryParsePercentage } from 'shared/lib/helpers'
+import { DataSourceService } from 'shared/lib/services'
+import * as format from 'string-format'
+import * as _ from 'underscore'
+import { FilterPanel, IFilterItemProps, IFilterProps } from '../FilterPanel'
+import { DetailsCallout } from './DetailsCallout'
+import { IResourceAllocationProps } from './IResourceAllocationProps'
+import { IResourceAllocationState } from './IResourceAllocationState'
+import styles from './ResourceAllocation.module.scss'
+import './Timeline.overrides.css'
 
 /**
  * @component ResourceAllocation
@@ -58,17 +57,17 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
    * @param {IResourceAllocationProps} props Props
    */
   constructor(props: IResourceAllocationProps) {
-    super(props);
-    this.state = { isLoading: true, showFilterPanel: false, activeFilters: {} };
-    moment.locale('nb');
+    super(props)
+    this.state = { isLoading: true, showFilterPanel: false, activeFilters: {} }
+    moment.locale('nb')
   }
 
   public async componentDidMount(): Promise<void> {
     try {
-      const data = await this._fetchData();
-      this.setState({ data, isLoading: false });
+      const data = await this._fetchData()
+      this.setState({ data, isLoading: false })
     } catch (error) {
-      this.setState({ error, isLoading: false });
+      this.setState({ error, isLoading: false })
     }
   }
 
@@ -80,7 +79,7 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
             <Spinner label={format(strings.LoadingText, this.props.dataSource.toLowerCase())} type={SpinnerType.large} />
           </div>
         </div>
-      );
+      )
     }
     if (this.state.error) {
       return (
@@ -89,10 +88,10 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
             <MessageBar messageBarType={MessageBarType.error}>{this.state.error}</MessageBar>
           </div>
         </div>
-      );
+      )
     }
 
-    const { groups, items } = this._getFilteredData();
+    const { groups, items } = this._getFilteredData()
 
     return (
       <div className={styles.resourceAllocation}>
@@ -140,21 +139,21 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
             onDismiss={() => this.setState({ showDetails: null })} />
         )}
       </div>
-    );
+    )
   }
 
   /**
    * Get filtered data
    */
   private _getFilteredData(): ITimelineData {
-    const { activeFilters, data } = ({ ...this.state } as IResourceAllocationState);
-    const activeFiltersKeys = Object.keys(activeFilters);
+    const { activeFilters, data } = ({ ...this.state } as IResourceAllocationState)
+    const activeFiltersKeys = Object.keys(activeFilters)
     if (activeFiltersKeys.length > 0) {
-      let items = activeFiltersKeys.reduce((newItems, key) => newItems.filter(i => activeFilters[key].indexOf(objectGet(i, key)) !== -1), data.items);
-      let groups = data.groups.filter(grp => items.filter(i => i.group === grp.id).length > 0);
-      return { items, groups };
+      const items = activeFiltersKeys.reduce((newItems, key) => newItems.filter(i => activeFilters[key].indexOf(objectGet(i, key)) !== -1), data.items)
+      const groups = data.groups.filter(grp => items.filter(i => i.group === grp.id).length > 0)
+      return { items, groups }
     } else {
-      return data;
+      return data
     }
   }
 
@@ -166,18 +165,18 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
       { fieldName: 'project', name: strings.SiteTitleLabel },
       { fieldName: 'resource', name: strings.ResourceLabel },
       { fieldName: 'role', name: strings.RoleLabel },
-    ];
+    ]
     return columns.map(col => ({
       column: { key: col.fieldName, minWidth: 0, ...col },
       items: this.state.data.items
         .map(i => objectGet(i, col.fieldName))
         .filter((value, index, self) => value && self.indexOf(value) === index)
         .map(name => {
-          const filter = this.state.activeFilters[col.fieldName];
-          const selected = filter ? filter.indexOf(name) !== -1 : false;
-          return { name, value: name, selected, };
+          const filter = this.state.activeFilters[col.fieldName]
+          const selected = filter ? filter.indexOf(name) !== -1 : false
+          return { name, value: name, selected, }
         }),
-    }));
+    }))
   }
 
   /**
@@ -187,13 +186,13 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
    * @param {IFilterItemProps[]} selectedItems Selected items
    */
   private _onFilterChange(column: IColumn, selectedItems: IFilterItemProps[]) {
-    const { activeFilters } = ({ ...this.state } as IResourceAllocationState);
+    const { activeFilters } = ({ ...this.state } as IResourceAllocationState)
     if (selectedItems.length > 0) {
-      activeFilters[column.fieldName] = selectedItems.map(i => i.value);
+      activeFilters[column.fieldName] = selectedItems.map(i => i.value)
     } else {
-      delete activeFilters[column.fieldName];
+      delete activeFilters[column.fieldName]
     }
-    this.setState({ activeFilters });
+    this.setState({ activeFilters })
   }
 
   /**
@@ -208,41 +207,41 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
         itemType: ContextualMenuItemType.Header,
         iconOnly: true,
         onClick: ev => {
-          ev.preventDefault();
-          this.setState({ showFilterPanel: true });
+          ev.preventDefault()
+          this.setState({ showFilterPanel: true })
         }
       }
-    ] as ICommandBarItemProps[];
-    return { left: [], right };
+    ] as ICommandBarItemProps[]
+    return { left: [], right }
   }
 
   /**
    * Timeline item renderer
    */
   private _itemRenderer(props: ReactCalendarItemRendererProps<ITimelineItem>) {
-    let htmlProps = props.getItemProps(props.item.itemProps);
+    const htmlProps = props.getItemProps(props.item.itemProps)
     return (
       <div {...htmlProps} className={`${styles.timelineItem} rc-item`} onClick={event => this._onItemClick(event, props.item)}>
         <div className={`${styles.itemContent} rc-item-content`} style={{ maxHeight: `${props.itemContext.dimensions.height}` }}>
           {props.item.title}
         </div>
       </div >
-    );
+    )
   }
 
   /**
    * Timeline group renderer
    */
   private _groupRenderer({ group }: ReactCalendarGroupRendererProps<ITimelineGroup>) {
-    let style: React.CSSProperties = { display: 'block', width: '100%' };
+    const style: React.CSSProperties = { display: 'block', width: '100%' }
     if (group.type === TimelineGroupType.Role) {
-      style.fontStyle = 'italic';
+      style.fontStyle = 'italic'
     }
     return (
       <div>
         <span style={style}>{group.title}</span>
       </div>
-    );
+    )
   }
 
   /**
@@ -252,7 +251,7 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
 * @param {ITimelineItem} item Item
     */
   private _onItemClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) {
-    this.setState({ showDetails: { element: event.currentTarget, data: item } });
+    this.setState({ showDetails: { element: event.currentTarget, data: item } })
   }
 
   /**
@@ -265,20 +264,20 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
   private _transformGroups(searchResults: IAllocationSearchResult[]): ITimelineGroup[] {
     const groupNames: string[] = searchResults
       .map(res => {
-        let name = res.RefinableString71 || `${res.RefinableString72}|R`;
-        return name;
+        const name = res.RefinableString71 || `${res.RefinableString72}|R`
+        return name
       })
-      .filter((value, index, self) => self.indexOf(value) === index);
+      .filter((value, index, self) => self.indexOf(value) === index)
     let groups: ITimelineGroup[] = groupNames.map((name, id) => {
-      let [title, type] = name.split('|');
+      const [title, type] = name.split('|')
       return {
         id,
         title,
         type: type === 'R' ? TimelineGroupType.Role : TimelineGroupType.User,
-      };
-    });
-    groups = arraySort(groups, ['type', 'title']);
-    return groups;
+      }
+    })
+    groups = arraySort(groups, ['type', 'title'])
+    return groups
   }
 
   /**
@@ -291,25 +290,27 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
         */
   private _transformItems(searchResults: IAllocationSearchResult[], groups: ITimelineGroup[]): ITimelineItem[] {
     const items: ITimelineItem[] = searchResults.map((res, id) => {
-      const group = _.find(groups, grp => [res.RefinableString71, res.RefinableString72].indexOf(grp.title) != -1);
-      const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, false, 0) as number;
-      const isAbsence = res.ContentTypeId.indexOf('0x010029F45E75BA9CE340A83EFFB2927E11F4') !== -1;
-      const itemOpacity = allocation < 30 ? 0.3 : (allocation / 100);
-      const itemColor = allocation < 40 ? '#000' : '#fff';
-      let backgroundColor = isAbsence ? this.props.itemAbsenceBgColor : this.props.itemBgColor;
-      let style: React.CSSProperties = {
+      const group = _.find(groups, grp => [res.RefinableString71, res.RefinableString72].indexOf(grp.title) !== -1)
+      const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, false, 0) as number
+      const isAbsence = res.ContentTypeId.indexOf('0x010029F45E75BA9CE340A83EFFB2927E11F4') !== -1
+      const itemOpacity = allocation < 30 ? 0.3 : (allocation / 100)
+      const itemColor = allocation < 40 ? '#000' : '#fff'
+      const backgroundColor = isAbsence ? this.props.itemAbsenceBgColor : this.props.itemBgColor
+      const style: React.CSSProperties = {
         color: itemColor,
         border: 'none',
         cursor: 'auto',
         outline: 'none',
         background: `rgb(${backgroundColor})`,
         backgroundColor: `rgba(${backgroundColor}, ${itemOpacity})`,
-      };
+      }
       return {
         id,
         group: group.id,
         title: isAbsence ? `${res.GtResourceAbsenceOWSCHCS} (${allocation}%)` : `${res.RefinableString72} - ${res.SiteTitle} (${allocation}%)`,
+        // eslint-disable-next-line @typescript-eslint/camelcase
         start_time: moment(new Date(res.GtStartDateOWSDATE)),
+        // eslint-disable-next-line @typescript-eslint/camelcase
         end_time: moment(new Date(res.GtEndDateOWSDATE)),
         allocation,
         itemProps: { style },
@@ -318,9 +319,9 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
         role: res.RefinableString72,
         resource: res.RefinableString71,
         props: res,
-      } as ITimelineItem;
-    });
-    return items;
+      } as ITimelineItem
+    })
+    return items
   }
 
   /**
@@ -329,8 +330,8 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
    * @returns {ITimelineData} Timeline data
         */
   private async _fetchData(): Promise<ITimelineData> {
-    const dataSource = await new DataSourceService(sp.web).getByName(this.props.dataSource);
-    if (!dataSource) throw format(strings.DataSourceNotFound, this.props.dataSource);
+    const dataSource = await new DataSourceService(sp.web).getByName(this.props.dataSource)
+    if (!dataSource) throw format(strings.DataSourceNotFound, this.props.dataSource)
     try {
       const results = (
         await sp.search({
@@ -340,15 +341,15 @@ export class ResourceAllocation extends React.Component<IResourceAllocationProps
           TrimDuplicates: false,
           SelectProperties: this.props.selectProperties,
         })
-      ).PrimarySearchResults as IAllocationSearchResult[];
-      const groups = this._transformGroups(results);
-      const items = this._transformItems(results, groups);
-      return { items, groups };
+      ).PrimarySearchResults as IAllocationSearchResult[]
+      const groups = this._transformGroups(results)
+      const items = this._transformItems(results, groups)
+      return { items, groups }
     } catch (error) {
-      throw error;
+      throw error
     }
   }
 }
 
-export { IResourceAllocationProps };
+export { IResourceAllocationProps }
 

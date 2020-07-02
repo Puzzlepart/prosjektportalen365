@@ -1,11 +1,11 @@
-import { ITimelineItem } from 'interfaces/ITimelineItem';
-import { Callout } from 'office-ui-fabric-react/lib/Callout';
-import * as React from 'react';
-import { formatDate } from 'shared/lib/helpers/formatDate';
-import styles from './DetailsCallout.module.scss';
+import { ITimelineItem } from 'interfaces/ITimelineItem'
+import { Callout } from 'office-ui-fabric-react/lib/Callout'
+import * as React from 'react'
+import { formatDate } from 'shared/lib/helpers/formatDate'
+import styles from './DetailsCallout.module.scss'
 
 export interface IDetailsCalloutProps {
-    item: { data: ITimelineItem, element: HTMLElement };
+    item: { data: ITimelineItem; element: HTMLElement };
     onDismiss: () => void;
 }
 
@@ -27,5 +27,5 @@ export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
             <p hidden={!item.data.props.GtAllocationStatusOWSCHCS}><b>Allokeringsstatus:</b> <span>{item.data.props.GtAllocationStatusOWSCHCS}</span></p>
             <p hidden={!item.data.props.GtAllocationCommentOWSMTXT}><b>Kommentar:</b> <span>{item.data.props.GtAllocationCommentOWSMTXT}</span></p>
         </Callout>
-    );
-};
+    )
+}

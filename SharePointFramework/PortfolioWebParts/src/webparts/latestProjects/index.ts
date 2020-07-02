@@ -1,15 +1,15 @@
-import { ILatestProjectsProps, LatestProjects } from 'components/LatestProjects';
-import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneSlider } from '@microsoft/sp-webpart-base';
-import * as strings from 'PortfolioWebPartsStrings';
-import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
+import { ILatestProjectsProps, LatestProjects } from 'components/LatestProjects'
+import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneSlider } from '@microsoft/sp-webpart-base'
+import * as strings from 'PortfolioWebPartsStrings'
+import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export default class LatestProjectsWebPart extends BasePortfolioWebPart<ILatestProjectsProps> {
   public render(): void {
-    this.renderComponent(LatestProjects);
+    this.renderComponent(LatestProjects)
   }
 
   public async onInit(): Promise<void> {
-    await super.onInit();
+    await super.onInit()
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -39,6 +39,6 @@ export default class LatestProjectsWebPart extends BasePortfolioWebPart<ILatestP
           ]
         }
       ]
-    };
+    }
   }
 }

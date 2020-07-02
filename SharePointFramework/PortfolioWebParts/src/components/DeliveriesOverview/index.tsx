@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { AggregatedSearchList } from '../AggregatedSearchList';
-import styles from './DeliveriesOverview.module.scss';
-import { DELIVERIES_OVERVIEW_COLUMNS } from './DeliveriesOverviewColumns';
-import { IDeliveriesOverviewProps } from './IDeliveriesOverviewProps';
+import * as React from 'react'
+import { AggregatedSearchList } from '../AggregatedSearchList'
+import styles from './DeliveriesOverview.module.scss'
+import { DELIVERIES_OVERVIEW_COLUMNS } from './DeliveriesOverviewColumns'
+import { IDeliveriesOverviewProps } from './IDeliveriesOverviewProps'
 
 /**
  * @component DeliveriesOverview
@@ -17,12 +17,12 @@ export class DeliveriesOverview extends React.Component<IDeliveriesOverviewProps
    * @param {IDeliveriesOverviewProps} props Props
    */
   constructor(props: IDeliveriesOverviewProps) {
-    super(props);
+    super(props)
   }
 
   public render() {
-    return <AggregatedSearchList className={styles.deliveriesOverview} {...this.props} />;
+    return <AggregatedSearchList className={styles.deliveriesOverview} {...this.props} />
   }
 }
 
-export { IDeliveriesOverviewProps };
+export { IDeliveriesOverviewProps }

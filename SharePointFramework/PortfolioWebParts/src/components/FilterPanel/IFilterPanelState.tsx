@@ -1,4 +1,4 @@
-import { IFilterProps } from '.';
+import { IFilterProps } from '.'
 
 export interface IFilterPanelState {
     /**

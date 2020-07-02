@@ -1,5 +1,5 @@
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import { ProjectListModel } from 'models';
+import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
+import { ProjectListModel } from 'models'
 
 export interface IProjectListState {
   /**
@@ -35,5 +35,5 @@ export interface IProjectListState {
   /**
    * List view properties
    */
-  listView?: { projects: ProjectListModel[], columns: IColumn[] };
+  listView?: { projects: ProjectListModel[]; columns: IColumn[] };
 }

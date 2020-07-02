@@ -1,8 +1,8 @@
-import * as React from 'react';
-import styles from './PortfolioInsightsCommandBar.module.scss';
-import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
-import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { IPortfolioInsightsCommandBarProps } from './IPortfolioInsightsCommandBarProps';
+import * as React from 'react'
+import styles from './PortfolioInsightsCommandBar.module.scss'
+import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar'
+import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu'
+import { IPortfolioInsightsCommandBarProps } from './IPortfolioInsightsCommandBarProps'
 
 // tslint:disable-next-line: naming-convention
 const PortfolioInsightsCommandBar = (props: IPortfolioInsightsCommandBarProps) => {
@@ -20,7 +20,7 @@ const PortfolioInsightsCommandBar = (props: IPortfolioInsightsCommandBarProps) =
                 })),
             },
         }
-    ];
+    ]
 
     const farItems: ICommandBarItemProps[] = [
         {
@@ -33,17 +33,17 @@ const PortfolioInsightsCommandBar = (props: IPortfolioInsightsCommandBarProps) =
                     key: `${view.id}`,
                     name: view.title,
                     iconProps: { iconName: view.iconName },
-                    onClick: () => { props.onViewChanged(view); },
+                    onClick: () => { props.onViewChanged(view) },
                 })),
             },
         },
-    ];
+    ]
 
     return (
         <div className={styles.portfolioInsightsCommandBar}>
             <CommandBar items={items} farItems={farItems} />
         </div>
-    );
-};
+    )
+}
 
-export default PortfolioInsightsCommandBar;
+export default PortfolioInsightsCommandBar

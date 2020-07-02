@@ -1,8 +1,8 @@
-import * as React from 'react';
-import * as strings from 'PortfolioWebPartsStrings';
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import { BenefitMeasurement } from 'models';
-import BenefitMeasurementAchievement from '../BenefitMeasurementAchievement';
+import * as React from 'react'
+import * as strings from 'PortfolioWebPartsStrings'
+import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
+import { BenefitMeasurement } from 'models'
+import BenefitMeasurementAchievement from '../BenefitMeasurementAchievement'
 
 export const BENEFIT_MEASUREMENTS_MODAL_COLUMNS: IColumn[] = [
     {
@@ -38,4 +38,4 @@ export const BENEFIT_MEASUREMENTS_MODAL_COLUMNS: IColumn[] = [
         name: strings.MeasurementDateLabel,
         minWidth: 150,
     },
-];
+]

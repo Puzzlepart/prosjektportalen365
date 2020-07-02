@@ -1,12 +1,12 @@
-import * as React from 'react';
-import styles from './FilterItem.module.scss';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { IFilterItemProps } from './IFilterItemProps';
+import * as React from 'react'
+import styles from './FilterItem.module.scss'
+import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox'
+import { IFilterItemProps } from './IFilterItemProps'
 
 export class FilterItem extends React.PureComponent<IFilterItemProps, {}> {
     constructor(props: IFilterItemProps) {
-        super(props);
-        this.state = {};
+        super(props)
+        this.state = {}
     }
 
     public render(): React.ReactElement<IFilterItemProps> {
@@ -19,6 +19,6 @@ export class FilterItem extends React.PureComponent<IFilterItemProps, {}> {
                         onChange={this.props.onChanged} />
                 </div>
             </li>
-        );
+        )
     }
 }
