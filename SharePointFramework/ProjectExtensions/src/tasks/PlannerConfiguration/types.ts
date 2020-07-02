@@ -1,3 +1,5 @@
+import { stringIsNullOrEmpty } from '@pnp/common'
+
 export interface IPlannerPlan {
     id: string;
     title: string;
@@ -11,8 +13,23 @@ export class TaskAttachment {
     constructor(str: string) {
         const [url, alias, type] = str.split(';')
         this.url = this._encodeUrl(url)
-        this.alias = alias
-        this.type = type || 'Other'
+        this.alias = alias || url
+        this.type = this._getType(url, type)
+    }
+
+    /**
+     * Get type of attachment from URL
+     * 
+     * @param {string} url URL
+     * @param {string} type Type
+     */
+    private _getType(url: string, type: string) {
+        if (!stringIsNullOrEmpty(type)) return type
+        if (url.endsWith('ppt') || url.endsWith('pptx')) return 'PowerPoint'
+        if (url.endsWith('xls') || url.endsWith('xlsx')) return 'Excel'
+        if (url.endsWith('doc') || url.endsWith('docx')) return 'Word'
+        if (url.endsWith('pdf')) return 'Pdf'
+        return 'Other'
     }
 
     /**

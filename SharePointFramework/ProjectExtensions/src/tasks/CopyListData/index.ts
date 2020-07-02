@@ -41,11 +41,8 @@ export class CopyListData extends BaseTask {
                             if (!stringIsNullOrEmpty(item.GtAttachments)) {
                                 try {
                                     taskDetails.attachments = item.GtAttachments.split('|')
-                                        .map(str => new TaskAttachment(str)).
-                                        filter(attachment =>
-                                            !stringIsNullOrEmpty(attachment.url)
-                                            && !stringIsNullOrEmpty(attachment.alias)
-                                        )
+                                        .map(str => new TaskAttachment(str))
+                                        .filter(attachment => !stringIsNullOrEmpty(attachment.url))
                                 } catch (error) { }
                             }
                             obj[item.GtCategory][item.Title] = taskDetails
