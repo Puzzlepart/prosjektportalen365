@@ -21,7 +21,7 @@
             <JSLink>clienttemplates.js</JSLink>
         </View>
     </pnp:Views>
-    <pnp:DataRows UpdateBehavior="Overwrite" KeyColumn="Title">
+    <pnp:DataRows UpdateBehavior="Skip" KeyColumn="Title">
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Beslutte utredning av idéen og utforme et førsteutkast til prosjektmandat</pnp:DataValue>
             <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
