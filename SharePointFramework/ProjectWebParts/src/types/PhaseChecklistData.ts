@@ -1,4 +1,4 @@
-import { IPhaseChecklistItem } from '../models';
+import { IPhaseChecklistItem } from '../models'
 
 export type PhaseChecklistData = {
     stats?: {

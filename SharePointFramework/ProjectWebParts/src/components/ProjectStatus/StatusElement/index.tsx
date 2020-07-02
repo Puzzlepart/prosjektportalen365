@@ -1,7 +1,7 @@
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import * as React from 'react';
-import { IStatusElementProps } from './IStatusElementProps';
-import styles from './StatusElement.module.scss';
+import { Icon } from 'office-ui-fabric-react/lib/Icon'
+import * as React from 'react'
+import { IStatusElementProps } from './IStatusElementProps'
+import styles from './StatusElement.module.scss'
 
 /**
  * @component StatusElement
@@ -21,5 +21,5 @@ export const StatusElement = ({ iconName, label, value, comment, iconSize = 30, 
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}

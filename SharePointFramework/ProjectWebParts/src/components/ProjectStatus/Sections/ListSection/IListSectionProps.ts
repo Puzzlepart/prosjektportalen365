@@ -1,3 +1,3 @@
-import { IBaseSectionProps } from '../BaseSection';
+import { IBaseSectionProps } from '../BaseSection'
 
-export interface IListSectionProps extends IBaseSectionProps {}
+export type IListSectionProps = IBaseSectionProps

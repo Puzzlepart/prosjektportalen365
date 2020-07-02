@@ -91,6 +91,6 @@ declare interface IProjectWebPartsStrings {
 }
 
 declare module 'ProjectWebPartsStrings' {
-  const strings: IProjectWebPartsStrings;
+  const strings: IProjectWebPartsStrings
   export = strings;
 }

@@ -1,4 +1,4 @@
-import { IBaseSectionState } from '../BaseSection';
+import { IBaseSectionState } from '../BaseSection'
 
 export interface IListSectionState<T> extends IBaseSectionState {
     /**

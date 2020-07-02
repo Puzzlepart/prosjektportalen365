@@ -1,6 +1,6 @@
-import { Phase, IPhaseChecklistItem } from 'models';
+import { Phase, IPhaseChecklistItem } from 'models'
 
-export type ChecklistData = { [termGuid: string]: { stats: { [status: string]: number }, items: IPhaseChecklistItem[] } };
+export type ChecklistData = { [termGuid: string]: { stats: { [status: string]: number }; items: IPhaseChecklistItem[] } };
 
 export interface IProjectPhasesData {
     /**

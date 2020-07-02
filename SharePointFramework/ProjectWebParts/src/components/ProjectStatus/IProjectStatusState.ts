@@ -1,7 +1,7 @@
-import { StatusReport } from 'shared/lib/models/StatusReport';
-import { IBaseWebPartComponentState } from '../BaseWebPartComponent';
-import { IProjectStatusData } from './IProjectStatusData';
-import { IProjectStatusHashState } from './IProjectStatusHashState';
+import { StatusReport } from 'shared/lib/models/StatusReport'
+import { IBaseWebPartComponentState } from '../BaseWebPartComponent'
+import { IProjectStatusData } from './IProjectStatusData'
+import { IProjectStatusHashState } from './IProjectStatusHashState'
 
 export interface IProjectStatusState extends IBaseWebPartComponentState<IProjectStatusData> {
     /**

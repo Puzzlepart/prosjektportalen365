@@ -1,7 +1,7 @@
-import { Phase } from 'models';
-import { IBaseWebPartComponentState } from '../BaseWebPartComponent';
-import { IProjectPhasesData } from './IProjectPhasesData';
-import { IProjectPhaseMouseOver } from './ProjectPhaseCallout/IProjectPhaseMouseOver';
+import { Phase } from 'models'
+import { IBaseWebPartComponentState } from '../BaseWebPartComponent'
+import { IProjectPhasesData } from './IProjectPhasesData'
+import { IProjectPhaseMouseOver } from './ProjectPhaseCallout/IProjectPhaseMouseOver'
 
 export interface IProjectPhasesState extends IBaseWebPartComponentState<IProjectPhasesData> {
   /**

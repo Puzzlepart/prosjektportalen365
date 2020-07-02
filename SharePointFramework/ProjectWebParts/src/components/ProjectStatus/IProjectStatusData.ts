@@ -1,5 +1,5 @@
-import { ProjectColumnConfig, SectionModel, SPField, StatusReport } from 'shared/lib/models';
-import { IGetPropertiesData } from 'shared/lib/services';
+import { ProjectColumnConfig, SectionModel, SPField, StatusReport } from 'shared/lib/models'
+import { IGetPropertiesData } from 'shared/lib/services'
 
 export interface IProjectStatusData {
     /**

@@ -1,6 +1,6 @@
-import { StatusReport, SectionModel } from 'shared/lib/models';
-import { IProjectStatusData } from '../../IProjectStatusData';
-import { IStatusElementProps } from '../../StatusElement/IStatusElementProps';
+import { StatusReport, SectionModel } from 'shared/lib/models'
+import { IProjectStatusData } from '../../IProjectStatusData'
+import { IStatusElementProps } from '../../StatusElement/IStatusElementProps'
 
 export interface IBaseSectionProps {
   /**

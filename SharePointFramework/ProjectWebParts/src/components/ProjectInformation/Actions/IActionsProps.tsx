@@ -1,4 +1,4 @@
-import { ActionType } from './ActionType';
+import { ActionType } from './ActionType'
 
 export interface IActionsProps {
     /**

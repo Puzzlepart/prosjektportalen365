@@ -1,6 +1,6 @@
-import { DisplayMode } from '@microsoft/sp-core-library';
-import { TypedHash } from '@pnp/common';
-import { ProjectPropertyModel } from './ProjectPropertyModel';
+import { DisplayMode } from '@microsoft/sp-core-library'
+import { TypedHash } from '@pnp/common'
+import { ProjectPropertyModel } from './ProjectPropertyModel'
 
 export interface IProjectPropertyProps extends React.HTMLAttributes<HTMLElement> {
     /**

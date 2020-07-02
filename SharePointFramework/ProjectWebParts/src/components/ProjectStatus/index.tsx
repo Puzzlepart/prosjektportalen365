@@ -59,7 +59,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   }
 
   public componentWillUpdate(_: IProjectStatusProps, { selectedReport }: IProjectStatusState) {
-    let obj: IProjectStatusHashState = {}
+    const obj: IProjectStatusHashState = {}
     if (selectedReport) obj.selectedReport = selectedReport.id.toString()
     setUrlHash<IProjectStatusHashState>(obj)
   }
@@ -128,10 +128,10 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         name: strings.PublishReportButtonText,
         iconProps: { iconName: 'PublishContent' },
         disabled: !selectedReport || selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published,
-        onClick: _ => { this._publishReport(selectedReport) },
+        onClick: () => { this._publishReport(selectedReport) },
       },
     ]
-    let farItems: IContextualMenuItem[] = []
+    const farItems: IContextualMenuItem[] = []
     if (this.state.sourceUrl) {
       farItems.push({
         id: getId('NavigateToSourceUrl'),
@@ -251,10 +251,10 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    * @param {IProjectStatusData} data Data
    */
   private _getReportOptions(data: IProjectStatusData): IContextualMenuItem[] {
-    let reportOptions: IContextualMenuItem[] = data.reports.map(report => ({
+    const reportOptions: IContextualMenuItem[] = data.reports.map(report => ({
       key: `${report.id}`,
       name: formatDate(report.created, true),
-      onClick: _evt => this._onReportChanged(report),
+      onClick: () => this._onReportChanged(report),
       canCheck: true,
       isChecked: this.state.selectedReport ? report.id === this.state.selectedReport.id : false,
     } as IContextualMenuItem))
@@ -268,7 +268,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     const { webTitle, siteId } = this.props
     const { reports, reportFields, properties, reportEditFormUrl } = this.state.data
     const [previousReport] = reports
-    let fieldValues: TypedHash<string | number | boolean> = reportFields
+    const fieldValues: TypedHash<string | number | boolean> = reportFields
       .filter(field => field.SchemaXml.indexOf('ReadOnly="TRUE"') === -1)
       .reduce((obj, field) => {
         const fieldValue = previousReport.values[field.InternalName]
@@ -308,7 +308,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           logLevel: (sessionStorage.DEBUG || DEBUG) ? LogLevel.Info : LogLevel.Warning,
         })
       }
-      let [
+      const [
         properties,
         reportList,
         reports,
@@ -323,15 +323,16 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         this._portalDataService.getProjectColumnConfig(),
         this._portalDataService.getListFields('PROJECT_STATUS', 'Hidden eq false and Group ne \'Hidden\''),
       ])
-      reports = reports.map(item => item.setDefaultEditFormUrl(reportList.DefaultEditFormUrl))
-      reports = reports.sort((a, b) => b.created.getTime() - a.created.getTime())
-      sections = sections.sort((a, b) => a.sortOrder < b.sortOrder ? -1 : 1)
+      const sortedReports = reports
+        .map(item => item.setDefaultEditFormUrl(reportList.DefaultEditFormUrl))
+        .sort((a, b) => b.created.getTime() - a.created.getTime())
+      const sortedSections = sections.sort((a, b) => a.sortOrder < b.sortOrder ? -1 : 1)
       return {
         properties,
         reportFields,
         reportEditFormUrl: reportList.DefaultEditFormUrl,
-        reports,
-        sections,
+        reports: sortedReports,
+        sections: sortedSections,
         columnConfig,
       }
     } catch (error) {

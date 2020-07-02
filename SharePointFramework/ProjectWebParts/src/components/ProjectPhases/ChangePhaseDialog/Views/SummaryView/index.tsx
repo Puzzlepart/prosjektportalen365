@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { CheckListItem } from './CheckListItem';
-import { ISummaryViewProps } from './ISummaryViewProps';
-import styles from './SummaryView.module.scss';
+import * as React from 'react'
+import { CheckListItem } from './CheckListItem'
+import { ISummaryViewProps } from './ISummaryViewProps'
+import styles from './SummaryView.module.scss'
 
 /**
  * @component SummaryView
@@ -16,7 +16,7 @@ export const SummaryView = (props: ISummaryViewProps) => {
                 ))}
             </ul>
         </div >
-    );
-};
+    )
+}
 
-export default SummaryView;
+export default SummaryView

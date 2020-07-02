@@ -1,3 +1,3 @@
-import { IBaseSectionState } from '../BaseSection';
+import { IBaseSectionState } from '../BaseSection'
 
-export interface ISummarySectionState extends IBaseSectionState {}
+export type ISummarySectionState = IBaseSectionState

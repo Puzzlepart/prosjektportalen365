@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { IMatrixCellProps } from './IMatrixCellProps';
-import styles from './MatrixCell.module.scss';
+import * as React from 'react'
+import { IMatrixCellProps } from './IMatrixCellProps'
+import styles from './MatrixCell.module.scss'
 
 
 export const MatrixCell = ({ style,  children }: IMatrixCellProps) => {
@@ -10,8 +10,8 @@ export const MatrixCell = ({ style,  children }: IMatrixCellProps) => {
                 {children}
             </div>
         </td>
-    );
-};
+    )
+}
 
 
 export interface IMatrixHeaderCellProps extends React.HTMLProps<HTMLElement> {
@@ -24,8 +24,8 @@ export const MatrixHeaderCell = (props: IMatrixHeaderCellProps) => {
         <td className={`${styles.matrixCell} ${styles.headerCell}`}>
             <span>{props.label}</span>
         </td>
-    );
-};
+    )
+}
 
 export enum MatrixCellType {
     Header,

@@ -1,31 +1,31 @@
-import { stringIsNullOrEmpty } from '@pnp/common';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import * as strings from 'ProjectWebPartsStrings';
-import * as React from 'react';
-import { useState } from 'react';
-import styles from './CheckListItem.module.scss';
-import IChecklistItemProps from './IChecklistItemProps';
+import { stringIsNullOrEmpty } from '@pnp/common'
+import { Icon } from 'office-ui-fabric-react/lib/Icon'
+import * as strings from 'ProjectWebPartsStrings'
+import * as React from 'react'
+import { useState } from 'react'
+import styles from './CheckListItem.module.scss'
+import IChecklistItemProps from './IChecklistItemProps'
 
 const STATUS_COLORS = {
     [strings.StatusOpen]: 'inherit',
     [strings.StatusClosed]: '#107c10',
     [strings.StatusNotRelevant]: '#e81123',
-};
+}
 
 const STATUS_ICONS = {
     [strings.StatusOpen]: 'CircleRing',
     [strings.StatusClosed]: 'Completed',
     [strings.StatusNotRelevant]: 'Blocked',
-};
+}
 
 /**
  * @component CheckListItem
  */
 
 export const CheckListItem = ({ item }: IChecklistItemProps) => {
-    const [commentHidden, setCommentHidden] = useState(true);
+    const [commentHidden, setCommentHidden] = useState(true)
 
-    let hasComment = !stringIsNullOrEmpty(item.GtComment);
+    const hasComment = !stringIsNullOrEmpty(item.GtComment)
 
     return (
         <li className={styles.checkListItem}>
@@ -48,8 +48,8 @@ export const CheckListItem = ({ item }: IChecklistItemProps) => {
                 </div>
             </div>
         </li>
-    );
-};
+    )
+}
 
 
 
