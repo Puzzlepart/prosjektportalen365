@@ -1,1 +1,1 @@
-export { default as SPDataAdapter } from './SPDataAdapter';
+export { default as SPDataAdapter } from './SPDataAdapter'

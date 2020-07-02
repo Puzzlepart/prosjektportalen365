@@ -1,18 +1,18 @@
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import * as strings from 'ProjectExtensionsStrings';
-import * as React from 'react';
-import { ProjectSetupSettings } from '../../extensions/projectSetup/ProjectSetupSettings';
-import { BaseDialog } from '../@BaseDialog';
-import { ExtensionsSection } from './ExtensionsSection';
-import { ITemplateSelectDialogProps } from './ITemplateSelectDialogProps';
-import { ITemplateSelectDialogState } from './ITemplateSelectDialogState';
-import { ListContentSection } from './ListContentSection';
-import { SettingsSection } from './SettingsSection';
-import styles from './TemplateSelectDialog.module.scss';
-import { TemplateSelector } from './TemplateSelector';
-import { ProjectTemplate } from 'models';
+import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
+import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot'
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import * as strings from 'ProjectExtensionsStrings'
+import * as React from 'react'
+import { ProjectSetupSettings } from '../../extensions/projectSetup/ProjectSetupSettings'
+import { BaseDialog } from '../@BaseDialog'
+import { ExtensionsSection } from './ExtensionsSection'
+import { ITemplateSelectDialogProps } from './ITemplateSelectDialogProps'
+import { ITemplateSelectDialogState } from './ITemplateSelectDialogState'
+import { ListContentSection } from './ListContentSection'
+import { SettingsSection } from './SettingsSection'
+import styles from './TemplateSelectDialog.module.scss'
+import { TemplateSelector } from './TemplateSelector'
+import { ProjectTemplate } from 'models'
 
 /**
  * @class TemplateSelectDialog
@@ -24,18 +24,18 @@ export class TemplateSelectDialog extends React.Component<ITemplateSelectDialogP
      * @param {ITemplateSelectDialogProps} props Props
      */
     constructor(props: ITemplateSelectDialogProps) {
-        super(props);
+        super(props)
         this.state = {
             selectedTemplate: this._getDefaultTemplate(),
             selectedExtensions: [],
             selectedListContentConfig: props.data.listContentConfig.filter(lcc => lcc.isDefault),
             settings: new ProjectSetupSettings().useDefault(),
-        };
+        }
     }
 
     public render(): React.ReactElement<ITemplateSelectDialogProps> {
-        const { version, onDismiss, data } = this.props;
-        const { selectedTemplate, selectedListContentConfig, selectedExtensions, settings } = this.state;
+        const { version, onDismiss, data } = this.props
+        const { selectedTemplate, selectedListContentConfig, selectedExtensions, settings } = this.state
 
         return (
             <BaseDialog
@@ -78,7 +78,7 @@ export class TemplateSelectDialog extends React.Component<ITemplateSelectDialogP
                     </PivotItem>
                 </Pivot>
             </BaseDialog>
-        );
+        )
     }
 
     /**
@@ -87,9 +87,9 @@ export class TemplateSelectDialog extends React.Component<ITemplateSelectDialogP
      * The first template that is set to default or the first template retrieved
      */
     private _getDefaultTemplate(): ProjectTemplate {
-        let [defaultTemplate] = this.props.data.templates.filter(tmpl => tmpl.isDefault);
-        if (!defaultTemplate) defaultTemplate = this.props.data.templates[0];
-        return defaultTemplate;
+        let [defaultTemplate] = this.props.data.templates.filter(tmpl => tmpl.isDefault)
+        if (!defaultTemplate) defaultTemplate = this.props.data.templates[0]
+        return defaultTemplate
     }
 
     /**
@@ -99,7 +99,7 @@ export class TemplateSelectDialog extends React.Component<ITemplateSelectDialogP
      * @param {string} bool Bool
      */
     private _onSettingsChanged(key: string, bool: boolean) {
-        this.setState({ settings: this.state.settings.set(key, bool) });
+        this.setState({ settings: this.state.settings.set(key, bool) })
     }
 
     /**
@@ -117,20 +117,20 @@ export class TemplateSelectDialog extends React.Component<ITemplateSelectDialogP
                     iconProps={{ iconName: 'Settings' }}
                     onClick={this._onSubmit.bind(this)} />
             </>
-        );
+        )
     }
 
     /**
      * On submit
      */
     private _onSubmit() {
-        let data = { ...this.state };
+        const data = { ...this.state }
         if (data.selectedTemplate.listContentConfigIds) {
-            data.selectedListContentConfig = this.props.data.listContentConfig.filter(lcc => data.selectedTemplate.listContentConfigIds.indexOf(lcc.id) !== -1);
+            data.selectedListContentConfig = this.props.data.listContentConfig.filter(lcc => data.selectedTemplate.listContentConfigIds.indexOf(lcc.id) !== -1)
         }
-        this.props.onSubmit(data);
+        this.props.onSubmit(data)
     }
 }
 
-export { ITemplateSelectDialogProps, ITemplateSelectDialogState };
+export { ITemplateSelectDialogProps, ITemplateSelectDialogState }
 

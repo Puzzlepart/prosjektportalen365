@@ -1,4 +1,4 @@
-import { ProjectTemplate } from '../../../models';
+import { ProjectTemplate } from '../../../models'
 
 export interface ITemplateSelectorProps {
     /**

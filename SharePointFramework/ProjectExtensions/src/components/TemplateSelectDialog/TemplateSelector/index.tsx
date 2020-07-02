@@ -1,10 +1,9 @@
-import { stringIsNullOrEmpty } from '@pnp/common';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import * as React from 'react';
-import { ProjectTemplate } from '../../../models';
-import { ITemplateSelectorProps } from './ITemplateSelectorProps';
-import styles from './TemplateSelector.module.scss';
+import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown'
+import { Icon } from 'office-ui-fabric-react/lib/Icon'
+import * as React from 'react'
+import { ProjectTemplate } from '../../../models'
+import { ITemplateSelectorProps } from './ITemplateSelectorProps'
+import styles from './TemplateSelector.module.scss'
 
 // tslint:disable-next-line: naming-convention
 export const TemplateSelector = (props: ITemplateSelectorProps) => {
@@ -14,8 +13,8 @@ export const TemplateSelector = (props: ITemplateSelectorProps) => {
    * @param {ProjectTemplate} opt Option
    */
     const onTemplateSelected = (opt: ProjectTemplate): void => {
-        props.onChange(opt);
-    };
+        props.onChange(opt)
+    }
 
     /**
      * On render option
@@ -33,8 +32,8 @@ export const TemplateSelector = (props: ITemplateSelectorProps) => {
                     <div className={styles.subText}>{option.subText}</div>
                 </div>
             </div>
-        );
-    };
+        )
+    }
 
     return (
         <div className={styles.templateSelector}>
@@ -47,5 +46,5 @@ export const TemplateSelector = (props: ITemplateSelectorProps) => {
                     onRenderOption={onRenderOption} />
             </div>
         </div>
-    );
-};
+    )
+}

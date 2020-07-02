@@ -1,5 +1,5 @@
-import { TemplateFile, IDocumentLibrary } from '../../models';
-import { IDocumentTemplateDialogDismissProps } from './IDocumentTemplateDialogDismissProps';
+import { TemplateFile, IDocumentLibrary } from '../../models'
+import { IDocumentTemplateDialogDismissProps } from './IDocumentTemplateDialogDismissProps'
 
 export interface IDocumentTemplateDialogProps {
     /**
@@ -20,7 +20,7 @@ export interface IDocumentTemplateDialogProps {
     /**
      * Template library
      */
-    templateLibrary: { title: string, url: string };
+    templateLibrary: { title: string; url: string };
 
     /**
      * On dismiss callback

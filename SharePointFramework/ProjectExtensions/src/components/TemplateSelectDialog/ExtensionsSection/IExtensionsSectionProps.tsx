@@ -1,4 +1,4 @@
-import { ProjectExtension } from '../../../models';
+import { ProjectExtension } from '../../../models'
 
 export interface IExtensionsSectionProps {
     /**

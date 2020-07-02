@@ -1,0 +1,1 @@
+﻿<Field Type="Note" DisplayName="{resource:SiteFields_GtAttachments_DisplayName}" Description="{resource:SiteFields_GtAttachments_Description}" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{43a2aa45-0383-40ff-9baf-458981180fac}" StaticName="GtAttachments" Name="GtAttachments" />
