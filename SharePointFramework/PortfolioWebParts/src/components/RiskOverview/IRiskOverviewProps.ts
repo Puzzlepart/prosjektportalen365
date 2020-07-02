@@ -1,3 +1,3 @@
-import { IAggregatedSearchListProps } from '../AggregatedSearchList';
+import { IAggregatedSearchListProps } from '../AggregatedSearchList'
 
-export interface IRiskOverviewProps extends IAggregatedSearchListProps { }
+export type IRiskOverviewProps = IAggregatedSearchListProps

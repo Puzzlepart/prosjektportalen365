@@ -1,8 +1,8 @@
 
-import { IPortfolioOverviewProps } from '../IPortfolioOverviewProps';
-import { IPortfolioOverviewState } from '../IPortfolioOverviewState';
-import { IFilterItemProps } from 'components/FilterPanel';
-import { PortfolioOverviewView, ProjectColumn } from 'shared/lib/models';
+import { IPortfolioOverviewProps } from '../IPortfolioOverviewProps'
+import { IPortfolioOverviewState } from '../IPortfolioOverviewState'
+import { IFilterItemProps } from 'components/FilterPanel'
+import { PortfolioOverviewView, ProjectColumn } from 'shared/lib/models'
 
 export interface IPortfolioOverviewCommandsEvents {
     onSetCompact: (isCompact: boolean) => void;

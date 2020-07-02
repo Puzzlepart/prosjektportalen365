@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { AggregatedSearchList } from '../AggregatedSearchList';
-import styles from './ExperienceLog.module.scss';
-import { EXPERIENCE_LOG_COLUMNS } from './ExperienceLogColumns';
-import { IExperienceLogProps } from './IExperienceLogProps';
+import * as React from 'react'
+import { AggregatedSearchList } from '../AggregatedSearchList'
+import styles from './ExperienceLog.module.scss'
+import { EXPERIENCE_LOG_COLUMNS } from './ExperienceLogColumns'
+import { IExperienceLogProps } from './IExperienceLogProps'
 
 /**
  * @component ExperienceLog
@@ -15,12 +15,12 @@ export class ExperienceLog extends React.Component<IExperienceLogProps, {}> {
   };
 
   constructor(props: IExperienceLogProps) {
-    super(props);
+    super(props)
   }
 
   public render(): React.ReactElement<IExperienceLogProps> {
-    return <AggregatedSearchList className={styles.experienceLog} {...this.props} />;
+    return <AggregatedSearchList className={styles.experienceLog} {...this.props} />
   }
 }
 
-export { IExperienceLogProps };
+export { IExperienceLogProps }

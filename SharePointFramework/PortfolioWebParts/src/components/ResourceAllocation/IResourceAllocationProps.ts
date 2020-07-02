@@ -1,5 +1,5 @@
-import { IBaseComponentProps } from '../IBaseComponentProps';
-import * as moment from 'moment';
+import { IBaseComponentProps } from '../IBaseComponentProps'
+import * as moment from 'moment'
 
 export interface IResourceAllocationProps extends IBaseComponentProps {
    /**

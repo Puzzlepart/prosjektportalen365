@@ -1,5 +1,5 @@
-import { TypedHash } from '@pnp/common';
-import * as moment from 'moment';
+import { TypedHash } from '@pnp/common'
+import * as moment from 'moment'
 
 export interface ITimelineItem {
     id: number;

@@ -1,25 +1,26 @@
-import { stringIsNullOrEmpty } from '@pnp/common';
-import { sp, Web } from '@pnp/sp';
-import { getId } from '@uifabric/utilities';
-import * as arraySort from 'array-sort';
-import { IAggregatedSearchListColumn } from 'interfaces';
-import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
-import { ContextualMenu, ContextualMenuItemType, IContextualMenuItem, IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { ConstrainMode, DetailsList, DetailsListLayoutMode, IGroup, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
-import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
-import * as strings from 'PortfolioWebPartsStrings';
-import * as React from 'react';
-import { getObjectValue, isHubSite } from 'shared/lib/helpers';
-import { DataSource } from 'shared/lib/models/DataSource';
-import { DataSourceService, ExcelExportService } from 'shared/lib/services';
-import HubSiteService from 'sp-hubsite-service';
-import * as format from 'string-format';
-import * as _ from 'underscore';
-import styles from './AggregatedSearchList.module.scss';
-import { IAggregatedSearchListProps } from './IAggregatedSearchListProps';
-import { IAggregatedSearchListState } from './IAggregatedSearchListState';
+import { stringIsNullOrEmpty } from '@pnp/common'
+import { sp } from '@pnp/sp'
+import { getId } from '@uifabric/utilities'
+import * as arraySort from 'array-sort'
+import { IAggregatedSearchListColumn } from 'interfaces'
+import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar'
+import { ContextualMenu, ContextualMenuItemType, IContextualMenuItem, IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu'
+import { ConstrainMode, DetailsList, DetailsListLayoutMode, IGroup, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
+import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner'
+import * as strings from 'PortfolioWebPartsStrings'
+import * as React from 'react'
+import { getObjectValue, isHubSite } from 'shared/lib/helpers'
+import { DataSource } from 'shared/lib/models/DataSource'
+import { DataSourceService, ExcelExportService } from 'shared/lib/services'
+import HubSiteService from 'sp-hubsite-service'
+import * as format from 'string-format'
+import * as _ from 'underscore'
+import styles from './AggregatedSearchList.module.scss'
+import { IAggregatedSearchListProps } from './IAggregatedSearchListProps'
+import { IAggregatedSearchListState } from './IAggregatedSearchListState'
+import { removeMenuBorder } from 'shared/lib/util'
 
 /**
  * @component AggregatedSearchList
@@ -37,17 +38,17 @@ export class AggregatedSearchList extends React.Component<IAggregatedSearchListP
      * @param {IAggregatedSearchListProps} props Props
      */
     constructor(props: IAggregatedSearchListProps) {
-        super(props);
-        this.state = { isLoading: true, columns: props.columns };
+        super(props)
+        this.state = { isLoading: true, columns: props.columns }
     }
 
     public async componentDidMount(): Promise<void> {
-        ExcelExportService.configure({ name: this.props.title });
+        ExcelExportService.configure({ name: this.props.title })
         try {
-            const { items, selectedDataSource, dataSources } = await this._fetchData();
-            this.setState({ items, selectedDataSource, dataSources, isLoading: false });
+            const { items, selectedDataSource, dataSources } = await this._fetchData()
+            this.setState({ items, selectedDataSource, dataSources, isLoading: false })
         } catch (error) {
-            this.setState({ error, isLoading: false });
+            this.setState({ error, isLoading: false })
         }
     }
 
@@ -59,7 +60,7 @@ export class AggregatedSearchList extends React.Component<IAggregatedSearchListP
                         <Spinner label={format(strings.LoadingText, this.props.title)} type={SpinnerType.large} />
                     </div>
                 </div>
-            );
+            )
         }
         if (this.state.error) {
             return (
@@ -68,10 +69,10 @@ export class AggregatedSearchList extends React.Component<IAggregatedSearchListP
                         <MessageBar messageBarType={MessageBarType.error}>{this.state.error}</MessageBar>
                     </div>
                 </div>
-            );
+            )
         }
 
-        let { items, columns, groups } = this._getData();
+        const { items, columns, groups } = this._getData()
 
         return (
             <div className={this.props.className}>
@@ -98,20 +99,20 @@ export class AggregatedSearchList extends React.Component<IAggregatedSearchListP
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 
     private get _searchBoxPlaceholderText(): string {
         if (!stringIsNullOrEmpty(this.props.searchBoxPlaceholderText)) {
-            return this.props.searchBoxPlaceholderText;
+            return this.props.searchBoxPlaceholderText
         }
         if (this.props.dataSource) {
-            return format(strings.SearchBoxPlaceholderText, this.props.dataSource.toLowerCase());
+            return format(strings.SearchBoxPlaceholderText, this.props.dataSource.toLowerCase())
         }
         if (this.state.selectedDataSource) {
-            return format(strings.SearchBoxPlaceholderText, this.state.selectedDataSource.title.toLowerCase());
+            return format(strings.SearchBoxPlaceholderText, this.state.selectedDataSource.title.toLowerCase())
         }
-        return '';
+        return ''
     }
 
     /**
@@ -122,7 +123,7 @@ export class AggregatedSearchList extends React.Component<IAggregatedSearchListP
      * @param {string} searchTerm Search term
      */
     private _onSearch(searchTerm: string): void {
-        this.setState({ searchTerm: searchTerm.toLowerCase() });
+        this.setState({ searchTerm: searchTerm.toLowerCase() })
     }
 
     /**
@@ -131,8 +132,8 @@ export class AggregatedSearchList extends React.Component<IAggregatedSearchListP
      * @param {DataSource} dataSource The new data source
      */
     private async _onDataSourceChanged(dataSource: DataSource) {
-        let items = await this._fetchItems(dataSource.searchQuery);
-        this.setState({ items, selectedDataSource: dataSource });
+        const items = await this._fetchItems(dataSource.searchQuery)
+        this.setState({ items, selectedDataSource: dataSource })
     }
 
     /**
@@ -143,9 +144,9 @@ export class AggregatedSearchList extends React.Component<IAggregatedSearchListP
      * @param {IAggregatedSearchListColumn} column Column
      */
     private _onRenderItemColumn(item: any, index: number, column: IAggregatedSearchListColumn) {
-        if (column.onRender) return column.onRender(item, index, column);
-        if (!stringIsNullOrEmpty(column.fieldNameDisplay)) return getObjectValue(item, column.fieldNameDisplay, null);
-        return getObjectValue(item, column.fieldName, null);
+        if (column.onRender) return column.onRender(item, index, column)
+        if (!stringIsNullOrEmpty(column.fieldNameDisplay)) return getObjectValue(item, column.fieldNameDisplay, null)
+        return getObjectValue(item, column.fieldName, null)
     }
 
     /**
@@ -155,19 +156,19 @@ export class AggregatedSearchList extends React.Component<IAggregatedSearchListP
      * @param {boolean} sortDesencing Sort descending
      */
     private _onColumnSort(column: IAggregatedSearchListColumn, sortDesencing: boolean): void {
-        let { items, columns } = ({ ...this.state } as IAggregatedSearchListState);
-        items = arraySort(items, [column.fieldName], { reverse: !sortDesencing });
+        const { items, columns } = ({ ...this.state } as IAggregatedSearchListState)
+        const itemsSorted = arraySort(items, [column.fieldName], { reverse: !sortDesencing })
         this.setState({
             sortBy: column,
-            items,
+            items: itemsSorted,
             columns: columns.map(col => {
-                col.isSorted = (col.key === column.key);
+                col.isSorted = (col.key === column.key)
                 if (col.isSorted) {
-                    col.isSortedDescending = sortDesencing;
+                    col.isSortedDescending = sortDesencing
                 }
-                return col;
+                return col
             }),
-        });
+        })
     }
 
     /**
@@ -178,7 +179,7 @@ export class AggregatedSearchList extends React.Component<IAggregatedSearchListP
     private _onColumnGroupBy(column: IAggregatedSearchListColumn) {
         this.setState(prevState => ({
             groupBy: getObjectValue<string>(prevState, 'groupBy.fieldName', '') === column.fieldName ? null : column,
-        }));
+        }))
     }
 
     /**
@@ -188,7 +189,7 @@ export class AggregatedSearchList extends React.Component<IAggregatedSearchListP
      * @param {IAggregatedSearchListColumn} column Column
      */
     private _onColumnHeaderClick(ev?: React.MouseEvent<HTMLElement, MouseEvent>, column?: IAggregatedSearchListColumn) {
-        this._onColumnHeaderContextMenu(column, ev);
+        this._onColumnHeaderContextMenu(column, ev)
     }
 
     /**
@@ -235,11 +236,11 @@ export class AggregatedSearchList extends React.Component<IAggregatedSearchListP
                 ],
                 onDismiss: () => this.setState({ columnContextMenu: null })
             } as IContextualMenuProps,
-        });
+        })
     }
 
     private _commandBar() {
-        const items: ICommandBarItemProps[] = [];
+        const items: ICommandBarItemProps[] = []
 
         if (this.props.showExcelExportButton) {
             items.push({
@@ -251,11 +252,11 @@ export class AggregatedSearchList extends React.Component<IAggregatedSearchListP
                     styles: { root: { color: 'green !important' } },
                 },
                 disabled: this.state.isExporting,
-                onClick: ev => { this._exportToExcel(ev); },
-            });
+                onClick: ev => { this._exportToExcel(ev) },
+            })
         }
 
-        const farItems: ICommandBarItemProps[] = [];
+        const farItems: ICommandBarItemProps[] = []
 
         if (this.state.selectedDataSource) {
             farItems.push({
@@ -272,17 +273,19 @@ export class AggregatedSearchList extends React.Component<IAggregatedSearchListP
                         iconProps: { iconName: dataSource.iconName || 'DataConnectionLibrary' },
                         canCheck: true,
                         checked: this.state.selectedDataSource.id === dataSource.id,
-                        onClick: () => { this._onDataSourceChanged(dataSource); },
+                        onClick: () => { this._onDataSourceChanged(dataSource) },
                     })) as IContextualMenuItem[],
                 }
-            });
+            })
         }
 
         return (
             <div className={styles.commandBar} hidden={!this.props.showCommandBar}>
-                <CommandBar items={items} farItems={farItems} />
+                <CommandBar 
+                items={removeMenuBorder(items)} 
+                farItems={removeMenuBorder(farItems)} />
             </div>
-        );
+        )
     }
 
     /**
@@ -292,20 +295,20 @@ export class AggregatedSearchList extends React.Component<IAggregatedSearchListP
     * @param {IAggregatedSearchListColumn[]} columns Columns
     */
     private _createGroups(items: any[], columns: IAggregatedSearchListColumn[]) {
-        let { groupBy, sortBy } = ({ ...this.state } as IAggregatedSearchListState);
-        if (!groupBy) return { items, columns, groups: null };
-        const itemsSort = { props: [groupBy.fieldName], opts: { reverse: false } };
+        const { groupBy, sortBy } = ({ ...this.state } as IAggregatedSearchListState)
+        if (!groupBy) return { items, columns, groups: null }
+        const itemsSort = { props: [groupBy.fieldName], opts: { reverse: false } }
         if (sortBy) {
-            itemsSort.props.push(sortBy.fieldName);
-            itemsSort.opts.reverse = !sortBy.isSortedDescending;
+            itemsSort.props.push(sortBy.fieldName)
+            itemsSort.opts.reverse = !sortBy.isSortedDescending
         }
-        items = arraySort([...items], itemsSort.props, itemsSort.opts);
-        const groupNames: string[] = items.map(g => getObjectValue<string>(g, groupBy.fieldName, strings.NotSet));
-        const uniqueGroupNames: string[] = _.uniq(groupNames);
+        items = arraySort([...items], itemsSort.props, itemsSort.opts)
+        const groupNames: string[] = items.map(g => getObjectValue<string>(g, groupBy.fieldName, strings.NotSet))
+        const uniqueGroupNames: string[] = _.uniq(groupNames)
         const groups = uniqueGroupNames
             .sort((a, b) => a > b ? 1 : -1)
             .map((name, idx) => {
-                const count = groupNames.filter(n => n === name).length;
+                const count = groupNames.filter(n => n === name).length
                 const group: IGroup = {
                     key: `Group_${idx}`,
                     name: `${groupBy.name}: ${name}`,
@@ -314,27 +317,28 @@ export class AggregatedSearchList extends React.Component<IAggregatedSearchListP
                     isShowingAll: count === items.length,
                     isDropEnabled: false,
                     isCollapsed: false,
-                };
-                return group;
-            });
-        return { items, columns, groups };
+                }
+                return group
+            })
+        return { items, columns, groups }
     }
 
     /**
      * Get data
      */
     private _getData() {
-        let { items, columns, searchTerm } = ({ ...this.state } as IAggregatedSearchListState);
+        const { items, columns, searchTerm } = ({ ...this.state } as IAggregatedSearchListState)
+        let filteredItems = items
         if (searchTerm) {
-            items = items.filter(item => {
+            filteredItems = items.filter(item => {
                 return columns.filter(col => {
-                    const colValue = getObjectValue<string>(item, col.fieldName, '');
-                    return typeof colValue === 'string' && colValue.toLowerCase().indexOf(searchTerm) !== -1;
-                }).length > 0;
-            });
+                    const colValue = getObjectValue<string>(item, col.fieldName, '')
+                    return typeof colValue === 'string' && colValue.toLowerCase().indexOf(searchTerm) !== -1
+                }).length > 0
+            })
         }
 
-        return this._createGroups(items, columns);
+        return this._createGroups(filteredItems, columns)
     }
 
     /**
@@ -343,14 +347,14 @@ export class AggregatedSearchList extends React.Component<IAggregatedSearchListP
      * @param {React.MouseEvent<any> | React.KeyboardEvent<any>} ev Event
      */
     private async _exportToExcel(ev: React.MouseEvent<any> | React.KeyboardEvent<any>): Promise<void> {
-        ev.preventDefault();
-        this.setState({ isExporting: true });
-        let { items, columns } = this._getData();
+        ev.preventDefault()
+        this.setState({ isExporting: true })
+        const { items, columns } = this._getData()
         try {
-            await ExcelExportService.export(items, columns);
-            this.setState({ isExporting: false });
+            await ExcelExportService.export(items, columns)
+            this.setState({ isExporting: false })
         } catch (error) {
-            this.setState({ isExporting: false });
+            this.setState({ isExporting: false })
         }
     }
 
@@ -360,49 +364,49 @@ export class AggregatedSearchList extends React.Component<IAggregatedSearchListP
      * @param {string} queryTemplate Query template
      */
     private async _fetchItems(queryTemplate: string) {
-        let response = await sp.search({
+        const response = await sp.search({
             QueryTemplate: queryTemplate,
             Querytext: '*',
             RowLimit: 500,
             TrimDuplicates: false,
             SelectProperties: this.props.selectProperties || ['Path', 'SPWebUrl', ...this.props.columns.map(col => col.key)],
-        });
-        return this.props.postTransform ? this.props.postTransform(response.PrimarySearchResults) : response.PrimarySearchResults;
+        })
+        return this.props.postTransform ? this.props.postTransform(response.PrimarySearchResults) : response.PrimarySearchResults
     }
 
     /**
      * Fetch data
      */
-    private async _fetchData(): Promise<{ items: any[], selectedDataSource: DataSource, dataSources?: DataSource[] }> {
-        const { queryTemplate, pageContext, dataSource, dataSourceCategory } = this.props;
+    private async _fetchData(): Promise<{ items: any[]; selectedDataSource: DataSource; dataSources?: DataSource[] }> {
+        const { queryTemplate, pageContext, dataSource, dataSourceCategory } = this.props
         try {
-            let selectedDataSource: DataSource = null;
-            let dataSources: DataSource[] = [];
+            let selectedDataSource: DataSource = null
+            let dataSources: DataSource[] = []
             if (stringIsNullOrEmpty(queryTemplate)) {
-                let web = sp.web;
+                let web = sp.web
                 if (!isHubSite(pageContext)) {
-                    web = (await HubSiteService.GetHubSite(sp, pageContext)).web;
+                    web = (await HubSiteService.GetHubSite(sp, pageContext)).web
                 }
-                let dataSourceService = new DataSourceService(web);
+                const dataSourceService = new DataSourceService(web)
                 if (!stringIsNullOrEmpty(dataSource)) {
-                    selectedDataSource = await dataSourceService.getByName(dataSource);
-                    dataSources.push(selectedDataSource);
+                    selectedDataSource = await dataSourceService.getByName(dataSource)
+                    dataSources.push(selectedDataSource)
                 } else if (!stringIsNullOrEmpty(dataSourceCategory)) {
-                    dataSources = await dataSourceService.getByCategory(dataSourceCategory);
-                    selectedDataSource = dataSources.filter(d => d.isDefault)[0];
+                    dataSources = await dataSourceService.getByCategory(dataSourceCategory)
+                    selectedDataSource = dataSources.filter(d => d.isDefault)[0]
                 }
             }
-            let items = await this._fetchItems(queryTemplate || selectedDataSource.searchQuery);
+            const items = await this._fetchItems(queryTemplate || selectedDataSource.searchQuery)
             return {
                 items,
                 selectedDataSource,
                 dataSources,
-            };
+            }
         } catch (error) {
-            throw format(strings.DataSourceError, dataSource);
+            throw format(strings.DataSourceError, dataSource)
         }
     }
 }
 
-export { IAggregatedSearchListProps };
+export { IAggregatedSearchListProps }
 

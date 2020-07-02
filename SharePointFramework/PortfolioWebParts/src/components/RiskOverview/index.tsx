@@ -1,8 +1,8 @@
-import * as React from 'react';
-import styles from './RiskOverview.module.scss';
-import { IRiskOverviewProps } from './IRiskOverviewProps';
-import { RISKOVERVIEW_COLUMNS } from './RiskOverviewColumns';
-import { AggregatedSearchList } from '../AggregatedSearchList';
+import * as React from 'react'
+import styles from './RiskOverview.module.scss'
+import { IRiskOverviewProps } from './IRiskOverviewProps'
+import { RISKOVERVIEW_COLUMNS } from './RiskOverviewColumns'
+import { AggregatedSearchList } from '../AggregatedSearchList'
 
 /**
  * @component RiskOverview
@@ -17,12 +17,12 @@ export class RiskOverview extends React.Component<IRiskOverviewProps, {}> {
    * @param {IRiskOverviewProps} props Props
    */
   constructor(props: IRiskOverviewProps) {
-    super(props);
+    super(props)
   }
 
   public render(): React.ReactElement<IRiskOverviewProps> {
-    return <AggregatedSearchList className={styles.riskOverview} {...this.props} />;
+    return <AggregatedSearchList className={styles.riskOverview} {...this.props} />
   }
 }
 
-export { IRiskOverviewProps };
+export { IRiskOverviewProps }

@@ -1,10 +1,10 @@
-import * as React from 'react';
-import * as strings from 'PortfolioWebPartsStrings';
-import { IChartProps } from './IChartProps';
-import { IChartState } from './IChartState';
-import * as ReactHighcharts from 'react-highcharts';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import { getBreakpoint } from 'shared/lib/helpers';
+import * as React from 'react'
+import * as strings from 'PortfolioWebPartsStrings'
+import { IChartProps } from './IChartProps'
+import { IChartState } from './IChartState'
+import * as ReactHighcharts from 'react-highcharts'
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { getBreakpoint } from 'shared/lib/helpers'
 
 export default class Chart extends React.Component<IChartProps, IChartState> {
     public static defaultProps: Partial<IChartProps> = {};
@@ -16,23 +16,23 @@ export default class Chart extends React.Component<IChartProps, IChartState> {
      * @param {IChartProps} props Props
      */
     constructor(props: IChartProps) {
-        super(props);
-        this.state = { chart: props.chart, breakpoint: getBreakpoint() };
+        super(props)
+        this.state = { chart: props.chart, breakpoint: getBreakpoint() }
     }
 
     /**
      * Renders the <Chart /> component
      */
     public render(): React.ReactElement<IChartProps> {
-        const { chart } = this.state;
+        const { chart } = this.state
 
-        let highChartConfig: any;
-        let error: string;
+        let highChartConfig: any
+        let error: string
 
         try {
-            highChartConfig = chart.generateHighChartConfig(this.props.data);
+            highChartConfig = chart.generateHighChartConfig(this.props.data)
         } catch (err) {
-            error = strings.ChartErrorText;
+            error = strings.ChartErrorText
         }
 
         if (error) {
@@ -46,7 +46,7 @@ export default class Chart extends React.Component<IChartProps, IChartState> {
                         </div>
                     </div>
                 </div>
-            );
+            )
         }
 
         return (
@@ -59,23 +59,23 @@ export default class Chart extends React.Component<IChartProps, IChartState> {
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 
     /**
      * Get layout class names
      */
     protected _getClassName(): string {
-        const chart = this.state.chart.clone();
+        const chart = this.state.chart.clone()
         const classNames = Object.keys(chart.width)
             .map(key => {
-                let value = chart.width[key];
-                return value ? `ms-${key}${value}` : null;
+                const value = chart.width[key]
+                return value ? `ms-${key}${value}` : null
             })
-            .filter(c => c);
-        return classNames.join(' ');
+            .filter(c => c)
+        return classNames.join(' ')
     }
 }
 
-export { IChartProps, IChartState };
+export { IChartProps, IChartState }
 

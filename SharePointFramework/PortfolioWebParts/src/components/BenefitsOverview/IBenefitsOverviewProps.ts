@@ -1,4 +1,4 @@
-import { IAggregatedSearchListProps } from '../AggregatedSearchList';
+import { IAggregatedSearchListProps } from '../AggregatedSearchList'
 
 export interface IBenefitsOverviewProps  extends IAggregatedSearchListProps {
     /**
@@ -35,4 +35,4 @@ export const BenefitsOverviewDefaultProps: Partial<IBenefitsOverviewProps> = {
         'GtGainsOwner'
       ],
       showExcelExportButton: true,
-};
+}

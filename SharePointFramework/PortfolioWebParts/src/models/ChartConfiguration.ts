@@ -1,17 +1,18 @@
-import { ChartData, DataField, SPChartConfigurationItem } from './';
-import * as objectAssign from 'object-assign';
+/* eslint-disable default-case */
+import { ChartData, DataField, SPChartConfigurationItem } from './'
+import * as objectAssign from 'object-assign'
 
-export const CHARTCONFIGBASE_CONTENTTYPEID = '0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D';
-export const CHART_TYPES = ['bar', 'column', 'pie'];
+export const CHARTCONFIGBASE_CONTENTTYPEID = '0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D'
+export const CHART_TYPES = ['bar', 'column', 'pie']
 
 export class ChartConfiguration {
     constructor(public item: SPChartConfigurationItem, public fields: DataField[]) {
-        this.item = item;
-        this.fields = fields;
+        this.item = item
+        this.fields = fields
     }
 
     public clone(): ChartConfiguration {
-        return objectAssign(Object.create(this), this);
+        return objectAssign(Object.create(this), this)
     }
 
     public get width(): { [key: string]: number } {
@@ -22,26 +23,26 @@ export class ChartConfiguration {
             xl: this.item.GtPiWidthXl,
             xxl: this.item.GtPiWidthXxl,
             xxxl: this.item.GtPiWidthXxxl,
-        };
+        }
     }
 
 
     public get type() {
-        const typeIndex = parseInt(this.item.ContentTypeId.replace(CHARTCONFIGBASE_CONTENTTYPEID, '').substring(0, 2), 10) - 1;
-        return CHART_TYPES[typeIndex];
+        const typeIndex = parseInt(this.item.ContentTypeId.replace(CHARTCONFIGBASE_CONTENTTYPEID, '').substring(0, 2), 10) - 1
+        return CHART_TYPES[typeIndex]
     }
 
     /**
      * Get base config
      */
     private _getBaseConfig() {
-        let base: any = {};
-        base.chart = { type: this.type };
-        base.title = { text: this.item.Title };
-        base.subtitle = { text: this.item.GtPiSubTitle };
-        base.tooltip = { valueSuffix: '' };
-        base.credits = { enabled: false };
-        return base;
+        const base: any = {}
+        base.chart = { type: this.type }
+        base.title = { text: this.item.Title }
+        base.subtitle = { text: this.item.GtPiSubTitle }
+        base.tooltip = { valueSuffix: '' }
+        base.credits = { enabled: false }
+        return base
     }
 
     /**
@@ -54,64 +55,64 @@ export class ChartConfiguration {
         switch (type) {
             case 'column': {
                 return this.fields.map(sf => {
-                    const values = data.getValues(sf);
-                    return { name: sf.title, data: values };
-                });
+                    const values = data.getValues(sf)
+                    return { name: sf.title, data: values }
+                })
             }
             case 'bar': {
                 if (this.fields.length === 1) {
-                    const [field] = this.fields;
+                    const [field] = this.fields
                     switch (field.type) {
                         case 'text': {
                             return [{
                                 name: field.title,
                                 data: data.getValuesUnique(field).map(value => data.getItemsWithStringValue(field, value).length),
-                            }];
+                            }]
                         }
                         case 'tags': {
                             return [{
                                 name: field.title,
                                 data: data.getValuesUnique(field).map(value => data.getItemsWithStringValue(field, value).length),
-                            }];
+                            }]
                         }
                     }
                 }
-                return this.fields.map(sf => ({ name: sf.title, data: data.getValues(sf) }));
+                return this.fields.map(sf => ({ name: sf.title, data: data.getValues(sf) }))
             }
             case 'pie': {
                 if (this.fields.length === 1) {
-                    const [field] = this.fields;
+                    const [field] = this.fields
                     switch (field.type) {
                         case 'currency': case 'number': {
                             return [{
                                 type: 'pie',
                                 colorByPoint: true,
                                 data: data.getItems(field).map((i, index) => ({ name: i.name, y: data.getPercentage(field, index) })),
-                            }];
+                            }]
                         }
                         case 'text': {
                             return [{
                                 type: 'pie',
                                 colorByPoint: true,
                                 data: data.getValuesUnique(field).map(value => {
-                                    const itemsMatch = data.getItemsWithStringValue(field, value);
-                                    const name = value || 'N/A';
-                                    const y = (itemsMatch.length / data.getCount()) * 100;
-                                    return { name, y, test: itemsMatch };
+                                    const itemsMatch = data.getItemsWithStringValue(field, value)
+                                    const name = value || 'N/A'
+                                    const y = (itemsMatch.length / data.getCount()) * 100
+                                    return { name, y, test: itemsMatch }
                                 }),
-                            }];
+                            }]
                         }
                         case 'tags': {
                             return [{
                                 type: 'pie',
                                 colorByPoint: true,
                                 data: data.getValuesUnique(field).map(value => {
-                                    const itemsMatch = data.getItemsWithStringValue(field, value);
-                                    const name = value ? value.split(';').join(', ') : 'N/A';
-                                    const y = (itemsMatch.length / data.getCount()) * 100;
-                                    return { name, y, test: itemsMatch };
+                                    const itemsMatch = data.getItemsWithStringValue(field, value)
+                                    const name = value ? value.split(';').join(', ') : 'N/A'
+                                    const y = (itemsMatch.length / data.getCount()) * 100
+                                    return { name, y, test: itemsMatch }
                                 }),
-                            }];
+                            }]
                         }
                     }
                 } else {
@@ -119,7 +120,7 @@ export class ChartConfiguration {
                         type: 'pie',
                         colorByPoint: true,
                         data: this.fields.map(sf => ({ name: sf.title, y: data.getAverage(sf) })),
-                    }];
+                    }]
                 }
             }
         }
@@ -132,26 +133,26 @@ export class ChartConfiguration {
      */
     public generateHighChartConfig(data: ChartData) {
         try {
-            let chartConfig: any = this._getBaseConfig();
+            const chartConfig: any = this._getBaseConfig()
             switch (this.type) {
                 case 'bar': {
-                    chartConfig.series = this.generateSeries(this.type, data);
-                    chartConfig.xAxis = this._getXAxis(data);
-                    chartConfig.yAxis = this._yAxis;
-                    chartConfig.legend = this._legend;
-                    chartConfig.plotOptions = { bar: { dataLabels: { enabled: true } } };
-                    break;
+                    chartConfig.series = this.generateSeries(this.type, data)
+                    chartConfig.xAxis = this._getXAxis(data)
+                    chartConfig.yAxis = this._yAxis
+                    chartConfig.legend = this._legend
+                    chartConfig.plotOptions = { bar: { dataLabels: { enabled: true } } }
+                    break
                 }
                 case 'column': {
-                    chartConfig.series = this.generateSeries(this.type, data);
-                    chartConfig.xAxis = this._getXAxis(data);
-                    chartConfig.yAxis = this._yAxis;
-                    chartConfig.legend = this._legend;
-                    chartConfig.plotOptions = { series: { stacking: false } };
-                    break;
+                    chartConfig.series = this.generateSeries(this.type, data)
+                    chartConfig.xAxis = this._getXAxis(data)
+                    chartConfig.yAxis = this._yAxis
+                    chartConfig.legend = this._legend
+                    chartConfig.plotOptions = { series: { stacking: false } }
+                    break
                 }
                 case 'pie': {
-                    chartConfig.series = this.generateSeries(this.type, data);
+                    chartConfig.series = this.generateSeries(this.type, data)
                     chartConfig.plotOptions = {
                         pie: {
                             allowPointSelect: true,
@@ -160,19 +161,19 @@ export class ChartConfiguration {
                                 enabled: true,
                                 // tslint:disable-next-line:no-function-expression
                                 formatter: function () {
-                                    return `<b>${this.point.name}</b>: ${this.point.percentage.toFixed(2)} %`;
+                                    return `<b>${this.point.name}</b>: ${this.point.percentage.toFixed(2)} %`
                                 },
                                 style: { color: 'black' },
                             },
                         },
-                    };
-                    chartConfig.tooltip = { pointFormat: '<b>{point.percentage: .1f}%</b>' };
+                    }
+                    chartConfig.tooltip = { pointFormat: '<b>{point.percentage: .1f}%</b>' }
                 }
-                    break;
+                    break
             }
-            return chartConfig;
+            return chartConfig
         } catch (errtext) {
-            throw `<b>${this.item.Title}:</b> ${errtext}`;
+            throw `<b>${this.item.Title}:</b> ${errtext}`
         }
     }
 
@@ -180,7 +181,7 @@ export class ChartConfiguration {
         return {
             title: { text: '', align: 'high' },
             labels: { overflow: 'justify' },
-        };
+        }
     }
 
     /**
@@ -189,25 +190,25 @@ export class ChartConfiguration {
      * @param {ChartData} data Data
      */
     private _getXAxis(data: ChartData) {
-        let categories = data.getNames();
+        let categories = data.getNames()
         if (this.fields.length === 1) {
-            categories = data.getNames(this.fields[0]);
+            categories = data.getNames(this.fields[0])
         }
         switch (this.type) {
             case 'bar': {
                 if (this.fields.length === 1) {
-                    const [field] = this.fields;
+                    const [field] = this.fields
                     switch (field.type) {
                         case 'text': {
-                            categories = data.getValuesUnique(field);
+                            categories = data.getValuesUnique(field)
                         }
-                            break;
+                            break
                     }
                 }
-                return { categories, title: { text: '' } };
+                return { categories, title: { text: '' } }
             }
             default: {
-                return { categories, title: { text: '' } };
+                return { categories, title: { text: '' } }
             }
         }
     }
@@ -215,10 +216,10 @@ export class ChartConfiguration {
     private get _legend() {
         switch (this.type) {
             case 'bar': {
-                return { layout: 'vertical' };
+                return { layout: 'vertical' }
             }
             case 'column': {
-                return { reversed: true };
+                return { reversed: true }
             }
         }
     }

@@ -1,15 +1,15 @@
-import { IPropertyPaneConfiguration, PropertyPaneToggle, PropertyPaneTextField } from '@microsoft/sp-webpart-base';
-import { RiskOverview, IRiskOverviewProps } from 'components/RiskOverview';
-import * as strings from 'PortfolioWebPartsStrings';
-import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
+import { IPropertyPaneConfiguration, PropertyPaneToggle, PropertyPaneTextField } from '@microsoft/sp-webpart-base'
+import { RiskOverview, IRiskOverviewProps } from 'components/RiskOverview'
+import * as strings from 'PortfolioWebPartsStrings'
+import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export default class RiskOverviewWebPart extends BasePortfolioWebPart<IRiskOverviewProps> {
   public render(): void {
-    this.renderComponent(RiskOverview);
+    this.renderComponent(RiskOverview)
   }
 
   public async onInit(): Promise<void> {
-    await super.onInit();
+    await super.onInit()
   }
 
   protected _getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -40,6 +40,6 @@ export default class RiskOverviewWebPart extends BasePortfolioWebPart<IRiskOverv
           ]
         }
       ]
-    };
+    }
   }
 }

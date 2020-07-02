@@ -1,5 +1,5 @@
-import { IBenefitsSearchResult } from 'interfaces';
-import { BenefitBase } from './';
+import { IBenefitsSearchResult } from 'interfaces'
+import { BenefitBase } from './'
 
 /**
  * @class Benefit
@@ -15,11 +15,11 @@ export class Benefit extends BenefitBase {
      *
      */
     constructor(result: IBenefitsSearchResult) {
-        super(result);
-        this.type = result.GtGainsTypeOWSCHCS;
-        this.turnover = result.GtGainsTurnoverOWSMTXT;
-        this.responsible = result.GtGainsResponsible;
-        this.owner = result.GtGainsOwner;
-        this.realizationTime = new Date(result.GtRealizationTimeOWSDATE);
+        super(result)
+        this.type = result.GtGainsTypeOWSCHCS
+        this.turnover = result.GtGainsTurnoverOWSMTXT
+        this.responsible = result.GtGainsResponsible
+        this.owner = result.GtGainsOwner
+        this.realizationTime = new Date(result.GtRealizationTimeOWSDATE)
     }
 }
