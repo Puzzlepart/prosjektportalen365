@@ -1,5 +1,5 @@
 {
-    "Version": "1.2.0",
+    "Version": "1.2.2",
     "Parameters": {
         "ProvisionSiteFields": "Kolonner for Prosjektportalen (Prosjekt)",
         "ProjectContentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
