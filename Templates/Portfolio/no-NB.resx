@@ -556,34 +556,34 @@
     <value>Datakilde</value>
   </data>
   <data name="ContentTypes_Glittertind_element_Description" xml:space="preserve">
-    <value>Opprett et nytt listeelement.</value>
+    <value></value>
   </data>
   <data name="ContentTypes_Usikkerhet_Description" xml:space="preserve">
-    <value>Opprett et nytt listeelement.</value>
+    <value></value>
   </data>
   <data name="ContentTypes_Risiko_Description" xml:space="preserve">
-    <value>Opprett et nytt listeelement.</value>
+    <value></value>
   </data>
   <data name="ContentTypes_Mulighet_Description" xml:space="preserve">
-    <value>Opprett et nytt listeelement.</value>
+    <value></value>
   </data>
   <data name="ContentTypes_Interessent_Description" xml:space="preserve">
-    <value>Opprett et nytt listeelement.</value>
+    <value></value>
   </data>
   <data name="ContentTypes_Kommunikasjonselement_Description" xml:space="preserve">
-    <value>Opprett et nytt listeelement.</value>
+    <value></value>
   </data>
   <data name="ContentTypes_Sjekkpunkt_Description" xml:space="preserve">
-    <value>Opprett et nytt listeelement.</value>
+    <value></value>
   </data>
   <data name="ContentTypes_Prosjektprodukt_Description" xml:space="preserve">
-    <value>Opprett et nytt listeelement.</value>
+    <value></value>
   </data>
   <data name="ContentTypes_Prosjektloggelement_Description" xml:space="preserve">
-    <value>Opprett et nytt listeelement.</value>
+    <value></value>
   </data>
   <data name="ContentTypes_Infoelement_Description" xml:space="preserve">
-    <value>Opprett et nytt listeelement.</value>
+    <value></value>
   </data>
   <data name="ContentTypes_Glittertind_dokument_Description" xml:space="preserve">
     <value>Opprett et nytt dokument.</value>
@@ -607,13 +607,13 @@
     <value>Spor et arbeidselement som du eller gruppen må fullføre.</value>
   </data>
   <data name="ContentTypes_Gevinst_Description" xml:space="preserve">
-    <value>Opprett et nytt listeelement.</value>
+    <value></value>
   </data>
   <data name="ContentTypes_Endring_Description" xml:space="preserve">
-    <value>Opprett et nytt listeelement.</value>
+    <value></value>
   </data>
   <data name="ContentTypes_Gevinstoppfolging_Description" xml:space="preserve">
-    <value>Opprett et nytt listeelement.</value>
+    <value></value>
   </data>
   <data name="ContentTypes_Utvidelse_Description" xml:space="preserve">
     <value></value>

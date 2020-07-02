@@ -3,7 +3,7 @@
     "actions": [
         {
             "verb": "createContentType",
-            "description": "Opprett et nytt listeelement.",
+            "description": "",
             "id": "0x010072C95831F8434782AB2FF6BE3E596F46",
             "name": "Interessent",
             "hidden": false
