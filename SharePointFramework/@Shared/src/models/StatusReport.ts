@@ -55,6 +55,13 @@ export class StatusReport {
     /**
      * Field values
      */
+    public get values(): TypedHash<string | number | boolean> {
+        return this._item;
+    }
+
+    /**
+     * Field values
+     */
     public get fieldValues(): TypedHash<string> {
         return this._item.FieldValuesAsText || this._item;
     }
@@ -72,6 +79,9 @@ export class StatusReport {
         return { value: this._item[fieldName], comment: this._item[`${fieldName}Comment`] };
     }
 
+    /**
+     * Edit form URL with added Source parameter
+     */
     public get editFormUrl() {
         return [
             `${window.location.protocol}//${window.location.hostname}`,
