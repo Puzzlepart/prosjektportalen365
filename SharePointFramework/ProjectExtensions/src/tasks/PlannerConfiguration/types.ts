@@ -1,3 +1,8 @@
+export interface IPlannerPlan {
+    id: string;
+    title: string;
+}
+
 export class TaskAttachment {
     public url: string;
     public alias: string;
@@ -34,4 +39,10 @@ export interface IPlannerConfiguration {
     [key: string]: {
         [key: string]: ITaskDetails;
     };
+}
+
+export interface IPlannerBucket {
+    id: string;
+    name: string;
+    planId: string;
 }

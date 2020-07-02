@@ -5,9 +5,7 @@ import * as strings from 'ProjectExtensionsStrings'
 import * as formatString from 'string-format'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
-import { IPlannerBucket } from './IPlannerBucket'
-import { IPlannerConfiguration } from './IPlannerConfiguration'
-import { IPlannerPlan } from './IPlannerPlan'
+import { IPlannerPlan,IPlannerConfiguration,IPlannerBucket } from './types'
 import { TypedHash, getGUID } from '@pnp/common'
 
 /**
@@ -177,3 +175,5 @@ export class PlannerConfiguration extends BaseTask {
         return params
     }
 }
+
+export * from './types'

@@ -4,11 +4,10 @@ import { IProjectSetupData } from 'extensions/projectSetup'
 import * as strings from 'ProjectExtensionsStrings'
 import { SPField } from 'shared/lib/models/SPField'
 import * as formatString from 'string-format'
-import { ListContentConfig, ListContentConfigType, IPlannerTaskSPItem } from '../../models'
+import { IPlannerTaskSPItem, ListContentConfig, ListContentConfigType } from '../../models'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
-import { PlannerConfiguration } from '../PlannerConfiguration'
-import { ITaskDetails, TaskAttachment } from 'tasks/PlannerConfiguration/IPlannerConfiguration'
+import { ITaskDetails, PlannerConfiguration, TaskAttachment } from '../PlannerConfiguration'
 
 export class CopyListData extends BaseTask {
     public taskName = 'CopyListData';
