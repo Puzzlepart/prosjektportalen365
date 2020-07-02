@@ -8,3 +8,4 @@ Install/Templates
 Install/SiteScripts/*.txt
 Install/InstallLog.txt
 SharePointFramework/**/.vscode/launch*.json
+SharePointFramework/**/package-lock.json
