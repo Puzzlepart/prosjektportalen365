@@ -1,4 +1,4 @@
-import { IDialogProps } from 'office-ui-fabric-react/lib/Dialog';
+import { IDialogProps } from 'office-ui-fabric-react/lib/Dialog'
 
 export interface IBaseDialogProps extends IDialogProps {
     /**

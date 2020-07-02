@@ -1,6 +1,6 @@
-import * as strings from 'ProjectExtensionsStrings';
+import * as strings from 'ProjectExtensionsStrings'
 
-export const APPLY_TEMPLATE_STATUS_MAP: { [key: string]: { text: string, iconName: string } } = {
+export const APPLY_TEMPLATE_STATUS_MAP: { [key: string]: { text: string; iconName: string } } = {
     Files: { text: strings.ApplyTemplateFiles, iconName: 'OpenFile' },
     Lists: { text: strings.ApplyTemplateLists, iconName: 'PageListSolid' },
     Navigation: { text: strings.ApplyTemplateNavigation, iconName: 'MiniLink' },
@@ -9,4 +9,4 @@ export const APPLY_TEMPLATE_STATUS_MAP: { [key: string]: { text: string, iconNam
     SiteFields: { text: strings.ApplyTemplateSiteFields, iconName: 'NumberField' },
     ContentTypes: { text: strings.ApplyTemplateContentTypes, iconName: 'ExploreContent' },
     ClientSidePages: { text: strings.ApplyTemplateClientSidePages, iconName: 'Page' },
-};
+}

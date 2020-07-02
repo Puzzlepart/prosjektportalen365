@@ -1,6 +1,6 @@
-import { IProjectSetupData } from '../../extensions/projectSetup/IProjectSetupData';
-import { IBaseDialogProps } from '../@BaseDialog/IBaseDialogProps';
-import { ITemplateSelectDialogState } from './ITemplateSelectDialogState';
+import { IProjectSetupData } from '../../extensions/projectSetup/IProjectSetupData'
+import { IBaseDialogProps } from '../@BaseDialog/IBaseDialogProps'
+import { ITemplateSelectDialogState } from './ITemplateSelectDialogState'
 
 export interface ITemplateSelectDialogProps extends IBaseDialogProps {
     /**

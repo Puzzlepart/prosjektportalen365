@@ -1,7 +1,7 @@
-import { getId } from '@uifabric/utilities';
-import { IColumn, Selection } from 'office-ui-fabric-react/lib/DetailsList';
-import * as ProjectExtensionsStrings from 'ProjectExtensionsStrings';
-import { TemplateFile } from '../../../models';
+import { getId } from '@uifabric/utilities'
+import { IColumn, Selection } from 'office-ui-fabric-react/lib/DetailsList'
+import * as ProjectExtensionsStrings from 'ProjectExtensionsStrings'
+import { TemplateFile } from '../../../models'
 
 export interface IDocumentTemplateDialogScreenSelectProps {
     /**
@@ -27,7 +27,7 @@ export interface IDocumentTemplateDialogScreenSelectProps {
     /**
      * Template library
      */
-    templateLibrary: { title: string, url: string };
+    templateLibrary: { title: string; url: string };
 }
 
 // tslint:disable-next-line: naming-convention
@@ -52,4 +52,4 @@ export const DocumentTemplateDialogScreenSelectDefaultProps: Partial<IDocumentTe
             minWidth: 150,
         }
     ],
-};
+}

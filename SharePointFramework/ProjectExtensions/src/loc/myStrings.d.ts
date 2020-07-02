@@ -78,6 +78,6 @@ declare interface IProjectExtensionsStrings {
 }
 
 declare module 'ProjectExtensionsStrings' {
-  const strings: IProjectExtensionsStrings;
+  const strings: IProjectExtensionsStrings
   export = strings;
 }

@@ -1,21 +1,21 @@
-import { stringIsNullOrEmpty, TypedHash } from '@pnp/common';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import * as strings from 'ProjectExtensionsStrings';
-import * as React from 'react';
-import { InfoMessage } from '../../InfoMessage';
-import { DocumentTemplateDialogScreen } from '../DocumentTemplateDialogScreen';
-import styles from './DocumentTemplateDialogScreenEditCopy.module.scss';
-import { DocumentTemplateItem } from './DocumentTemplateItem';
-import { IDocumentTemplateDialogScreenEditCopyProps } from './IDocumentTemplateDialogScreenEditCopyProps';
-import { ISPLibraryFolder } from 'data/SPDataAdapter/ISPLibraryFolder';
+import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
+import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
+import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog'
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown'
+import * as strings from 'ProjectExtensionsStrings'
+import * as React from 'react'
+import { InfoMessage } from '../../InfoMessage'
+import { DocumentTemplateDialogScreen } from '../DocumentTemplateDialogScreen'
+import styles from './DocumentTemplateDialogScreenEditCopy.module.scss'
+import { DocumentTemplateItem } from './DocumentTemplateItem'
+import { IDocumentTemplateDialogScreenEditCopyProps } from './IDocumentTemplateDialogScreenEditCopyProps'
+import { ISPLibraryFolder } from 'data/SPDataAdapter/ISPLibraryFolder'
 
 // tslint:disable-next-line: naming-convention
 export const DocumentTemplateDialogScreenEditCopy = (props: IDocumentTemplateDialogScreenEditCopyProps) => {
-    const [templates, setTemplates] = React.useState([...props.selectedTemplates]);
-    const [selectedLibrary, setLibrary] = React.useState<ISPLibraryFolder>(props.libraries[0]);
-    const [selectedFolder, setFolder] = React.useState<ISPLibraryFolder>(null);
+    const [templates, setTemplates] = React.useState([...props.selectedTemplates])
+    const [selectedLibrary, setLibrary] = React.useState<ISPLibraryFolder>(props.libraries[0])
+    const [selectedFolder, setFolder] = React.useState<ISPLibraryFolder>(null)
 
 
 
@@ -29,15 +29,15 @@ export const DocumentTemplateDialogScreenEditCopy = (props: IDocumentTemplateDia
     function onInputChanged(id: string, properties: TypedHash<string>, errorMessage?: string) {
         setTemplates(templates.map(t => {
             if (t.id === id) {
-                t.update(properties);
-                t.errorMessage = errorMessage;
+                t.update(properties)
+                t.errorMessage = errorMessage
             }
-            return t;
-        }));
+            return t
+        }))
     }
 
     function isFileNamesValid(): boolean {
-        return templates.filter(t => !stringIsNullOrEmpty(t.errorMessage)).length === 0;
+        return templates.filter(t => !stringIsNullOrEmpty(t.errorMessage)).length === 0
     }
 
     /**
@@ -47,9 +47,9 @@ export const DocumentTemplateDialogScreenEditCopy = (props: IDocumentTemplateDia
      * @param {IDropdownOption} option Option
      * @param {number} _index Index
      */
-    function onLibraryChanged(_event: React.FormEvent<HTMLDivElement>, option: IDropdownOption, _index?: number) {
-        setLibrary(option.data);
-        setFolder(null);
+    function onLibraryChanged(_event: React.FormEvent<HTMLDivElement>, option: IDropdownOption) {
+        setLibrary(option.data)
+        setFolder(null)
     }
 
     /**
@@ -59,23 +59,24 @@ export const DocumentTemplateDialogScreenEditCopy = (props: IDocumentTemplateDia
      * @param {IDropdownOption} option Option
      * @param {number} _index Index
      */
-    function onFolderChanged(_event: React.FormEvent<HTMLDivElement>, option: IDropdownOption, _index?: number) {
-        setFolder(option.data);
+    function onFolderChanged(_event: React.FormEvent<HTMLDivElement>, option: IDropdownOption) {
+        setFolder(option.data)
     }
 
     /**
      * On start copy
      */
     function onStartCopy() {
-        let selectedFolderUrl = selectedFolder ? selectedFolder.ServerRelativeUrl : selectedLibrary.ServerRelativeUrl;
-        props.onStartCopy(templates, selectedFolderUrl);
+        const selectedFolderUrl = selectedFolder ? selectedFolder.ServerRelativeUrl : selectedLibrary.ServerRelativeUrl
+        props.onStartCopy(templates, selectedFolderUrl)
     }
 
     return (
         <div className={styles.documentTemplateDialogScreenEditCopy}>
             <InfoMessage text={strings.DocumentTemplateDialogScreenEditCopyInfoText} />
-            {props.selectedTemplates.map(item => (
+            {props.selectedTemplates.map((item, idx) => (
                 <DocumentTemplateItem
+                    key={idx}
                     model={item}
                     folderServerRelativeUrl={selectedFolder ? selectedFolder.ServerRelativeUrl : selectedLibrary.ServerRelativeUrl}
                     onInputChanged={onInputChanged} />)
@@ -109,5 +110,5 @@ export const DocumentTemplateDialogScreenEditCopy = (props: IDocumentTemplateDia
                     onClick={onStartCopy} />
             </DialogFooter>
         </div >
-    );
-};
+    )
+}

@@ -1,5 +1,5 @@
-import * as strings from 'ProjectExtensionsStrings';
-import { IToggleProps } from 'office-ui-fabric-react/lib/Toggle';
+import * as strings from 'ProjectExtensionsStrings'
+import { IToggleProps } from 'office-ui-fabric-react/lib/Toggle'
 
 export interface IProjectSetupSettings<T> {
     includeStandardFolders?: T;
@@ -18,16 +18,16 @@ export class ProjectSetupSettings {
     private _values: IProjectSetupSettings<boolean> = {};
 
     public useDefault() {
-        this._values = { includeStandardFolders: false, includePortfolioAdministrators: true };
-        return this;
+        this._values = { includeStandardFolders: false, includePortfolioAdministrators: true }
+        return this
     }
 
     public get values(): IProjectSetupSettings<boolean> {
-        return this._values;
+        return this._values
     }
 
     public get keys(): string[] {
-        return Object.keys(this._values);
+        return Object.keys(this._values)
     }
 
     public getToggleProps(key: string): IToggleProps {
@@ -37,7 +37,7 @@ export class ProjectSetupSettings {
             title: this._descriptions[key],
             defaultChecked: this._values[key],
             disabled: key === 'includeStandardFolders',
-        };
+        }
     }
 
     /**
@@ -47,7 +47,7 @@ export class ProjectSetupSettings {
      * @param {bool} bool Bool
      */
     public set(key: string, bool: boolean): ProjectSetupSettings {
-        this._values[key] = bool;
-        return this;
+        this._values[key] = bool
+        return this
     }
 }

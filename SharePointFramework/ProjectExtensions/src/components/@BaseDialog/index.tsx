@@ -1,8 +1,8 @@
-import * as React from 'react';
-import styles from './BaseDialog.module.scss';
-import { Dialog, DialogFooter, DialogType, IDialogContentProps } from 'office-ui-fabric-react/lib/Dialog';
-import { IModalProps } from 'office-ui-fabric-react/lib/Modal';
-import { IBaseDialogProps } from './IBaseDialogProps';
+import * as React from 'react'
+import styles from './BaseDialog.module.scss'
+import { Dialog, DialogFooter, DialogType, IDialogContentProps } from 'office-ui-fabric-react/lib/Dialog'
+import { IModalProps } from 'office-ui-fabric-react/lib/Modal'
+import { IBaseDialogProps } from './IBaseDialogProps'
 
 export class BaseDialog extends React.PureComponent<IBaseDialogProps, {}> {
     public static defaultProps: Partial<IBaseDialogProps> = { onRenderFooter: () => null };
@@ -20,18 +20,18 @@ export class BaseDialog extends React.PureComponent<IBaseDialogProps, {}> {
                     {this.props.onRenderFooter()}
                 </DialogFooter>
             </Dialog>
-        );
+        )
     }
 
     private get _modalProps(): IModalProps {
-        return { containerClassName: this._containerClassName, ...this.props.modalProps, onDismiss: this.props.onDismiss };
+        return { containerClassName: this._containerClassName, ...this.props.modalProps, onDismiss: this.props.onDismiss }
     }
 
     private get _dialogContentProps(): IDialogContentProps {
-        return { type: DialogType.largeHeader, ...this.props.dialogContentProps, onDismiss: this.props.onDismiss };
+        return { type: DialogType.largeHeader, ...this.props.dialogContentProps, onDismiss: this.props.onDismiss }
     }
 
     private get _containerClassName(): string {
-        return [styles.baseDialog, this.props.containerClassName].filter(c => c).join(' ');
+        return [styles.baseDialog, this.props.containerClassName].filter(c => c).join(' ')
     }
 }
