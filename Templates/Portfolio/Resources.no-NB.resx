@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" 
     xmlns="" 
@@ -2694,33 +2694,6 @@
   </data>
   <data name="SiteFields_GtChecklistStatus_FormValidation_NotRelevant" xml:space="preserve">
     <value>Du må angi en kommentar for hvorfor sjekklistepunktet har fått denne statusen.</value>
-  </data>
-  <data name="WebPart_RelatedLogElements_Title" xml:space="preserve">
-    <value>Relaterte loggelementer</value>
-  </data>
-  <data name="CurrencySymbol" xml:space="preserve">
-    <value>kr </value>
-  </data>
-  <data name="View_BenefitTasks_DisplayName" xml:space="preserve">
-    <value>Gevinstoppgaver</value>
-  </data>
-  <data name="View_Flat_DisplayName" xml:space="preserve">
-    <value>Flat visning</value>
-  </data>
-  <data name="View_GroupedBenefitType_DisplayName" xml:space="preserve">
-    <value>Pr gevinsttype</value>
-  </data>
-  <data name="View_GroupedProcess_DisplayName" xml:space="preserve">
-    <value>Pr prosess</value>
-  </data>
-  <data name="View_GroupedStatus_DisplayName" xml:space="preserve">
-    <value>Per status</value>
-  </data>
-  <data name="View_RelevantLinks_DisplayName" xml:space="preserve">
-    <value>Relevante koblinger</value>
-  </data>
-  <data name="View_ProductionPhase_DisplayName" xml:space="preserve">
-    <value>Leveransefase</value>
   </data>
   <data name="ClientSidePages_ExperienceLog_PageName" xml:space="preserve">
     <value>Erfaringslogg.aspx</value>
