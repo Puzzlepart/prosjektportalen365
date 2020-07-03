@@ -25,4 +25,4 @@ $availableRes = @()
 
 $availableRes | Select-Object -Unique | Out-File available_resources.txt -Encoding utf8 -Force
 
-Compare-Object $usedRes $availableRes | Where-Object { $_.SideIndicator -eq "=>" }
+Compare-Object $usedRes $availableRes | Where-Object { $_.SideIndicator -eq "=>" } | Select-Object -ExpandProperty InputObject
