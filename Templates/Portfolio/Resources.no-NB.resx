@@ -409,44 +409,8 @@
   <data name="SiteFields_Group" xml:space="preserve">
     <value>Prosjektportalenkolonner</value>
   </data>
-  <data name="SiteFields_Title_DisplayName" xml:space="preserve">
-    <value>Tittel</value>
-  </data>
-  <data name="SiteFields_Description_DisplayName" xml:space="preserve">
-    <value>Beskrivelse</value>
-  </data>
-  <data name="SiteFields_EventDate_DisplayName" xml:space="preserve">
-    <value>Starttidspunkt</value>
-  </data>
-  <data name="SiteFields_GtProjectEventDateAndTitle_DisplayName" xml:space="preserve">
-    <value>Dato og tittel</value>
-  </data>
   <data name="SiteFields_GtSortOrder_DisplayName" xml:space="preserve">
     <value>Sorteringsrekkefølge</value>
-  </data>
-  <data name="SiteFields_GtProjectTaskProduct_DisplayName" xml:space="preserve">
-    <value>Relevant leveranse</value>
-  </data>
-  <data name="SiteFields_GtProjectTaskChange_DisplayName" xml:space="preserve">
-    <value>Relevant endring</value>
-  </data>
-  <data name="SiteFields_GtProjectTaskGain_DisplayName" xml:space="preserve">
-    <value>Relevant gevinst</value>
-  </data>
-  <data name="SiteFields_GtChangeLookup_DisplayName" xml:space="preserve">
-    <value>Endring</value>
-  </data>
-  <data name="SiteFields_GtGainLookup_DisplayName" xml:space="preserve">
-    <value>Gevinst</value>
-  </data>
-  <data name="SiteFields_GtMeasureIndicatorLookup_DisplayName" xml:space="preserve">
-    <value>Måleindikator</value>
-  </data>
-  <data name="SiteFields_Created_DisplayName" xml:space="preserve">
-    <value>Opprettet</value>
-  </data>
-  <data name="SiteFields_Modified_DisplayName" xml:space="preserve">
-    <value>Sist endret</value>
   </data>
   <data name="SiteFields_GtStatusRiskComment_DisplayName" xml:space="preserve">
     <value>Kommentar, risiko</value>
@@ -454,23 +418,11 @@
   <data name="SiteFields_GtArchiveReference_DisplayName" xml:space="preserve">
     <value>Sak-/arkivreferanse</value>
   </data>
-  <data name="SiteFields_GtProjectLogResponsible_DisplayName" xml:space="preserve">
-    <value>Ansvarlig</value>
-  </data>
   <data name="SiteFields_GtEndDate_DisplayName" xml:space="preserve">
     <value>Sluttdato</value>
   </data>
-  <data name="SiteFields_GtRiskConsequencePostAction_DisplayName" xml:space="preserve">
-    <value>K etter tiltak</value>
-  </data>
-  <data name="SiteFields_GtRiskAction_DisplayName" xml:space="preserve">
-    <value>Tiltak</value>
-  </data>
   <data name="SiteFields_GtStatusBudgetComment_DisplayName" xml:space="preserve">
     <value>Kommentar, økonomi</value>
-  </data>
-  <data name="SiteFields_GtAverageRisk_DisplayName" xml:space="preserve">
-    <value>Snittrisiko</value>
   </data>
   <data name="SiteFields_GtProjectServiceArea_DisplayName" xml:space="preserve">
     <value>Tjenesteområde</value>
@@ -484,9 +436,6 @@
   <data name="SiteFields_GtProjectTypeText_DisplayName" xml:space="preserve">
     <value>Prosjekttype (tekst)</value>
   </data>
-  <data name="SiteFields_GtProjectLogDescription_DisplayName" xml:space="preserve">
-    <value>Loggbeskrivelse</value>
-  </data>
   <data name="SiteFields_GtProjectNumber_DisplayName" xml:space="preserve">
     <value>Prosjektnummer</value>
   </data>
@@ -495,12 +444,6 @@
   </data>
   <data name="SiteFields_GtProjectOwner_DisplayName" xml:space="preserve">
     <value>Prosjekteier</value>
-  </data>
-  <data name="SiteFields_GtStakeholderInfluencePossibilty_DisplayName" xml:space="preserve">
-    <value>Mulighet til påvirkning</value>
-  </data>
-  <data name="SiteFields_GtRiskProximity_DisplayName" xml:space="preserve">
-    <value>Nærhet</value>
   </data>
   <data name="SiteFields_GtRiskProbability_DisplayName" xml:space="preserve">
     <value>Sannsynlighet (S)</value>
@@ -1348,9 +1291,6 @@
   <data name="SiteFields_GtLccHidden_Description" xml:space="preserve">
     <value>Om elementet skjules, kan det ikke velges av brukerne i dialogen for oppsett av nytt prosjektområde.</value>
   </data>
-  <data name="SiteFields_GtLccSourceUrl_Description" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="SiteFields_GtLccDestinationList_Description" xml:space="preserve">
     <value></value>
   </data>
@@ -1362,9 +1302,6 @@
   </data>
   <data name="SiteFields_GtLccDestinationLibrary_Description" xml:space="preserve">
     <value>Om det er dokumenter som skal kopieres, skriv inn relativ URL for biblioteket dokumentene skal kopieres til. F.eks. Delte dokumenter.</value>
-  </data>
-  <data name="SiteFields_GtLccLabel_Description" xml:space="preserve">
-    <value>Tekst som vises i Nytt prosjekt-dialogen</value>
   </data>
   <data name="SiteFields_GtShowFieldProjectStatus_Description" xml:space="preserve">
     <value>Skal kolonnen være synlig i Prosjektinformasjon på Prosjektstatus-siden.</value>
