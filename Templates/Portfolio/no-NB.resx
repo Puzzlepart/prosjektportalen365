@@ -180,14 +180,20 @@
   <data name="Lists_CustomCharts_Url" xml:space="preserve">
     <value>CustomCharts</value>
   </data>
-  <data name="Lists_Extensions_Title" xml:space="preserve">
-    <value>Utvidelser</value>
-  </data>
   <data name="Lists_PhaseChecklist_Title" xml:space="preserve">
     <value>Fasesjekkliste</value>
   </data>
   <data name="Lists_PhaseChecklist_Url" xml:space="preserve">
     <value>Lists/Fasesjekkliste</value>
+  </data>
+  <data name="Lists_ChartConfiguration_Title" xml:space="preserve">
+    <value>Grafkonfigurasjon</value>
+  </data>
+  <data name="Lists_ChartConfiguration_Url" xml:space="preserve">
+    <value>Lists/Grafkonfigurasjon</value>
+  </data>
+  <data name="Lists_Extensions_Title" xml:space="preserve">
+    <value>Utvidelser</value>
   </data>
   <data name="Lists_SiteTemplates_Title" xml:space="preserve">
     <value>Områdemaler</value>
