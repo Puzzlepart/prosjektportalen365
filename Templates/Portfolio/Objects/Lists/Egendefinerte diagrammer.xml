@@ -1,7 +1,7 @@
 ﻿<pnp:ListInstance Title="{resource:Lists_CustomCharts_Title}" Description="" TemplateType="101" Url="{resourceLists_CustomCharts_Url}" Hidden="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="500" DraftVersionVisibility="0" EnableAttachments="false" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:Views>
-        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllDocuments_DisplayName}" Url="{site}/{resourceLists_CustomCharts_Url}/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/dlicon.png?rev=44">
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllDocuments_DisplayName}" Url="{site}/{resourceLists_CustomCharts_Url}/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
             <Query>
                 <OrderBy>
                     <FieldRef Name="FileLeafRef" />

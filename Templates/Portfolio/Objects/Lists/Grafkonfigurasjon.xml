@@ -7,7 +7,7 @@
         <pnp:ContentTypeBinding ContentTypeID="0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D04" />
     </pnp:ContentTypeBindings>
     <pnp:Views>
-        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_ChartConfiguration_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=45">
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_ChartConfiguration_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
             <Query>
                 <OrderBy>
                     <FieldRef Name="GtSortOrder" />
