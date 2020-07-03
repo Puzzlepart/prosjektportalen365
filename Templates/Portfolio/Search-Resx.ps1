@@ -25,4 +25,8 @@ $availableRes = @()
 
 $availableRes | Select-Object -Unique | Out-File available_resources.txt -Encoding utf8 -Force
 
-Compare-Object $usedRes $availableRes | Where-Object { $_.SideIndicator -eq "=>" } | Select-Object -ExpandProperty InputObject
+$unusedRes = Compare-Object $usedRes $availableRes | Where-Object { $_.SideIndicator -eq "=>" } | Select-Object -ExpandProperty InputObject 
+
+Write-Host "Found $($unusedRes.Length) unusued resources" -ForegroundColor Cyan
+
+$unusedRes | Out-File unused_resources.txt -Encoding utf8 -Force
