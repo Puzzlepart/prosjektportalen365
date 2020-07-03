@@ -12,8 +12,8 @@ Get-ChildItem *.xml | ForEach-Object {
     if ($pageName -notlike "{resource:*") {
         Write-Host "Generating resources for $($pageName)" -ForegroundColor Cyan
         $key = Read-Host "Key for $pageName"
-        $pageNameKey = "SiteFields_$($key)_PageName"
-        $titleKey = "SiteFields_$($key)_Title"
+        $pageNameKey = "ClientSidePages_$($key)_PageName"
+        $titleKey = "ClientSidePages_$($key)_Title"
         $instance.PageName = "{resource:$pageNameKey}"
         $instance.Title = "{resource:$titleKey}"
         $resources += @"
