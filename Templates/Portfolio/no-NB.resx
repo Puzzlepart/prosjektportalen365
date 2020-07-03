@@ -306,27 +306,6 @@
   <data name="View_AllDocuments_DisplayName" xml:space="preserve">
     <value>Alle dokumenter</value>
   </data>
-  <data name="View_Archived_DisplayName" xml:space="preserve">
-    <value>Arkivert</value>
-  </data>
-  <data name="View_Activated_DisplayName" xml:space="preserve">
-    <value>Aktivert</value>
-  </data>
-  <data name="View_CurrentRisk_DisplayName" xml:space="preserve">
-    <value>Aktuell risiko</value>
-  </data>
-  <data name="View_UnacceptableRisk_DisplayName" xml:space="preserve">
-    <value>Uakseptabel risiko</value>
-  </data>
-  <data name="View_ClarifiedRisks_DisplayName" xml:space="preserve">
-    <value>Avklart risiko</value>
-  </data>
-  <data name="View_WithoutResponsible_DisplayName" xml:space="preserve">
-    <value>Uten ansvarlig</value>
-  </data>
-  <data name="View_ProjectFields_DisplayName" xml:space="preserve">
-    <value>Prosjektfelter</value>
-  </data>
   <data name="ContentTypes_Group" xml:space="preserve">
     <value>Prosjektportalen innholdstyper</value>
   </data>
