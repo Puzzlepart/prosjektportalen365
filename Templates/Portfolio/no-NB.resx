@@ -865,71 +865,8 @@
   <data name="SiteFields_GtShowInPortfolio_DisplayName" xml:space="preserve">
     <value>Vis i portefølje</value>
   </data>
-  <data name="SiteFields_GtChrShowItemSelector_DisplayName" xml:space="preserve">
-    <value>Vis elementvelger</value>
-  </data>
-  <data name="SiteFields_GtChrSubTitle_DisplayName" xml:space="preserve">
-    <value>Undertekst</value>
-  </data>
-  <data name="SiteFields_GtChrYAxisTitle_DisplayName" xml:space="preserve">
-    <value>Tittel (primærakse)</value>
-  </data>
-  <data name="SiteFields_GtChrWidthLg_DisplayName" xml:space="preserve">
-    <value>Bredde (640px - 1023px)</value>
-  </data>
-  <data name="SiteFields_GtChrWidthSm_DisplayName" xml:space="preserve">
-    <value>Bredde (320px - 479px)</value>
-  </data>
-  <data name="SiteFields_GtChrYMin_DisplayName" xml:space="preserve">
-    <value>Min (primærakse)</value>
-  </data>
-  <data name="SiteFields_GtChrWidthXxl_DisplayName" xml:space="preserve">
-    <value>Bredde (1366px - 1919px)</value>
-  </data>
-  <data name="SiteFields_GtChrManagedPropertyName_DisplayName" xml:space="preserve">
-    <value>Forvaltet egenskap</value>
-  </data>
-  <data name="SiteFields_GtChrWidthXl_DisplayName" xml:space="preserve">
-    <value>Bredde (1024px - 1365px)</value>
-  </data>
-  <data name="SiteFields_GtChrYMax_DisplayName" xml:space="preserve">
-    <value>Max (primærakse)</value>
-  </data>
   <data name="SiteFields_GtFieldDataType_DisplayName" xml:space="preserve">
     <value>Datatype</value>
-  </data>
-  <data name="SiteFields_GtChrYTickInterval_DisplayName" xml:space="preserve">
-    <value>Intervall (primærakse)</value>
-  </data>
-  <data name="SiteFields_GtChrWidthMd_DisplayName" xml:space="preserve">
-    <value>Bredde (480px - 639px)</value>
-  </data>
-  <data name="SiteFields_GtChrFields_DisplayName" xml:space="preserve">
-    <value>Kolonne(r) for datagrunnlag</value>
-  </data>
-  <data name="SiteFields_GtChrValueSuffix_DisplayName" xml:space="preserve">
-    <value>Verdisuffiks</value>
-  </data>
-  <data name="SiteFields_GtChrOrder_DisplayName" xml:space="preserve">
-    <value>Rekkefølge</value>
-  </data>
-  <data name="SiteFields_GtChrShowAverage_DisplayName" xml:space="preserve">
-    <value>Vis gjennomsnitt</value>
-  </data>
-  <data name="SiteFields_GtChrShowPercentage_DisplayName" xml:space="preserve">
-    <value>Vis verdi i prosent</value>
-  </data>
-  <data name="SiteFields_GtChrStacking_DisplayName" xml:space="preserve">
-    <value>Stabling</value>
-  </data>
-  <data name="SiteFields_GtChrShowLegend_DisplayName" xml:space="preserve">
-    <value>Vis forklarende merkelapp</value>
-  </data>
-  <data name="SiteFields_GtChrWidthXxxl_DisplayName" xml:space="preserve">
-    <value>Bredde (1920px og oppover)</value>
-  </data>
-  <data name="SiteFields_GtChrHeight_DisplayName" xml:space="preserve">
-    <value>Høyde</value>
   </data>
   <data name="SiteFields_GtResourceRole_DisplayName" xml:space="preserve">
     <value>Rolle</value>
@@ -1443,72 +1380,9 @@
   </data>
   <data name="SiteFields_GtValue_Description" xml:space="preserve">
     <value></value>
-  </data>
-  <data name="SiteFields_GtChrShowItemSelector_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtChrSubTitle_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtChrYAxisTitle_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtChrWidthLg_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtChrWidthSm_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtChrYMin_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtChrWidthXxl_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtChrManagedPropertyName_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtChrWidthXl_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtChrYMax_Description" xml:space="preserve">
-    <value></value>
-  </data>
+  </data>  
   <data name="SiteFields_GtFieldDataType_Description" xml:space="preserve">
     <value>Datatype for denne kolonnen. Styrer hvordan kolonnen blir vist i Porteføljeoversikten.</value>
-  </data>
-  <data name="SiteFields_GtChrYTickInterval_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtChrWidthMd_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtChrFields_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtChrValueSuffix_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtChrOrder_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtChrShowAverage_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtChrShowPercentage_Description" xml:space="preserve">
-    <value>Vis verdiene for hver sektor som prosent av totalen</value>
-  </data>
-  <data name="SiteFields_GtChrStacking_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtChrShowLegend_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtChrWidthXxxl_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="SiteFields_GtChrHeight_Description" xml:space="preserve">
-    <value>Høyden på diagrammet i piksler</value>
   </data>
   <data name="SiteFields_GtResourceRole_Description" xml:space="preserve">
     <value>Hvilken rolle har personen?</value>
