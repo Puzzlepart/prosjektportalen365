@@ -2722,4 +2722,58 @@
   <data name="View_ProductionPhase_DisplayName" xml:space="preserve">
     <value>Leveransefase</value>
   </data>
+  <data name="ClientSidePages_ExperienceLog_PageName" xml:space="preserve">
+    <value>Erfaringslogg.aspx</value>
+  </data>
+  <data name="ClientSidePages_ExperienceLog_Title" xml:space="preserve">
+    <value>Erfaringslogg</value>
+  </data>
+  <data name="ClientSidePages_BenefitOverview_PageName" xml:space="preserve">
+    <value>Gevinstoversikt.aspx</value>
+  </data>
+  <data name="ClientSidePages_BenefitOverview_Title" xml:space="preserve">
+    <value>Gevinstoversikt</value>
+  </data>
+  <data name="ClientSidePages_Home_PageName" xml:space="preserve">
+    <value>Home.aspx</value>
+  </data>
+  <data name="ClientSidePages_Home_Title" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="ClientSidePages_Configuration_PageName" xml:space="preserve">
+    <value>Konfigurasjon.aspx</value>
+  </data>
+  <data name="ClientSidePages_Configuration_Title" xml:space="preserve">
+    <value>Konfigurasjon</value>
+  </data>
+  <data name="ClientSidePages_DeliveryOverview_PageName" xml:space="preserve">
+    <value>Leveranseoversikt.aspx</value>
+  </data>
+  <data name="ClientSidePages_DeliveryOverview_Title" xml:space="preserve">
+    <value>Leveranseoversikt</value>
+  </data>
+  <data name="ClientSidePages_PortfolioInsights_PageName" xml:space="preserve">
+    <value>Porteføljeinnsikt.aspx</value>
+  </data>
+  <data name="ClientSidePages_PortfolioInsights_Title" xml:space="preserve">
+    <value>Porteføljeinnsikt</value>
+  </data>
+  <data name="ClientSidePages_PortfolioOverview_PageName" xml:space="preserve">
+    <value>Porteføljeoversikt.aspx</value>
+  </data>
+  <data name="ClientSidePages_PortfolioOverview_Title" xml:space="preserve">
+    <value>Porteføljeoversikt</value>
+  </data>
+  <data name="ClientSidePages_ResourceAllocation_PageName" xml:space="preserve">
+    <value>Ressursallokering.aspx</value>
+  </data>
+  <data name="ClientSidePages_ResourceAllocation_Title" xml:space="preserve">
+    <value>Ressursallokering</value>
+  </data>
+  <data name="ClientSidePages_RiskOverview_PageName" xml:space="preserve">
+    <value>Risikooversikt.aspx</value>
+  </data>
+  <data name="ClientSidePages_RiskOverview_Title" xml:space="preserve">
+    <value>Risikooversikt</value>
+  </data>
 </root>

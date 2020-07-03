@@ -1,11 +1,1 @@
-﻿<pnp:ClientSidePage PageName="Gevinstoversikt.aspx" PromoteAsNewsArticle="false" Overwrite="false" Layout="SingleWebPartAppPage" EnableComments="false" Title="Gevinstoversikt" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
-    <pnp:Sections>
-        <pnp:Section Order="1" Type="OneColumn">
-            <pnp:Controls>
-                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;properties&quot;:{&quot;searchBoxPlaceholderText&quot;:&quot;Søk i gevinster...&quot;,&quot;dataSourceCategory&quot;:&quot;Gevinstoversikt&quot;,&quot;showCommandBar&quot;:true,&quot;showSearchBox&quot;:true,&quot;showExcelExportButton&quot;:true}}" ControlId="5f925484-cfb4-42ce-9f90-79a874bb8a68" Order="1" Column="1" />
-            </pnp:Controls>
-        </pnp:Section>
-    </pnp:Sections>
-    <pnp:Header Type="None" />
-</pnp:ClientSidePage>
+<pnp:ClientSidePage PageName="{resource:SiteFields_BenefitOverview_PageName}" PromoteAsNewsArticle="false" Overwrite="false" Layout="SingleWebPartAppPage" EnableComments="false" Title="{resource:SiteFields_BenefitOverview_Title}" xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema"><pnp:Sections><pnp:Section Order="1" Type="OneColumn"><pnp:Controls><pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;properties&quot;:{&quot;searchBoxPlaceholderText&quot;:&quot;Søk i gevinster...&quot;,&quot;dataSourceCategory&quot;:&quot;Gevinstoversikt&quot;,&quot;showCommandBar&quot;:true,&quot;showSearchBox&quot;:true,&quot;showExcelExportButton&quot;:true}}" ControlId="5f925484-cfb4-42ce-9f90-79a874bb8a68" Order="1" Column="1" /></pnp:Controls></pnp:Section></pnp:Sections><pnp:Header Type="None" /></pnp:ClientSidePage>
