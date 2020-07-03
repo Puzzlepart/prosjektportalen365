@@ -3,8 +3,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema https://raw.githubusercontent.com/OfficeDev/PnP-Provisioning-Schema/master/OfficeDevPnP.ProvisioningSchema/ProvisioningSchema-2019-03.xsd">
     <pnp:Preferences></pnp:Preferences>
     <pnp:Localizations>
-        <pnp:Localization LCID="1044" Name="Norwegian" ResourceFile="no-NB.resx" />
-        <pnp:Localization LCID="1033" Name="English (US)" ResourceFile="no-NB.resx" />
+        <pnp:Localization LCID="1044" Name="Norwegian" ResourceFile="Resources.no-NB.resx" />
+        <pnp:Localization LCID="1033" Name="English (US)" ResourceFile="Resources.no-NB.resx" />
     </pnp:Localizations>
     <pnp:Templates ID="CONTAINER-TEMPLATE-PP-PORTFOLIO">
         <pnp:ProvisioningTemplate ID="TEMPLATE-PP-PORTFOLIO" Version="1" Scope="RootSite">
