@@ -1,1 +1,1 @@
-﻿<Field ID="{1150d6bd-c9ba-4014-bd74-7d559110841d}" Name="GtStakeholderStrategy" DisplayName="Plan/strategi/prosjekt" Type="Text" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" StaticName="GtStakeholderStrategy" />
+<Field ID="{1150d6bd-c9ba-4014-bd74-7d559110841d}" Name="GtStakeholderStrategy" DisplayName="{resource:SiteFields_GtStakeholderStrategy_DisplayName}" Type="Text" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="{resource:SiteFields_GtStakeholderStrategy_Description}" StaticName="GtStakeholderStrategy" />

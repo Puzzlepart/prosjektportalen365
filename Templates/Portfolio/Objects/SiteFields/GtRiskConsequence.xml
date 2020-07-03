@@ -1,1 +1,1 @@
-﻿<Field ID="{554d32a0-0148-4b3c-bfc4-f101232ee501}" Name="GtRiskConsequence" DisplayName="Konsekvens (K)" Type="Number" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Tall 0 til 5" Min="0" Max="5" StaticName="GtRiskConsequence" />
+<Field ID="{554d32a0-0148-4b3c-bfc4-f101232ee501}" Name="GtRiskConsequence" DisplayName="{resource:SiteFields_GtRiskConsequence_DisplayName}" Type="Number" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="{resource:SiteFields_GtRiskConsequence_Description}" Min="0" Max="5" StaticName="GtRiskConsequence" />

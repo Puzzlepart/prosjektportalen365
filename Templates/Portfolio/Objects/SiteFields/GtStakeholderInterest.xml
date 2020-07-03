@@ -1,1 +1,1 @@
-﻿<Field ID="{748ae9b5-223d-4daa-b8f8-dc14284b59db}" Name="GtStakeholderInterest" DisplayName="Interesse" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" AppendOnly="FALSE" StaticName="GtStakeholderInterest" />
+<Field ID="{748ae9b5-223d-4daa-b8f8-dc14284b59db}" Name="GtStakeholderInterest" DisplayName="{resource:SiteFields_GtStakeholderInterest_DisplayName}" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="{resource:SiteFields_GtStakeholderInterest_Description}" AppendOnly="FALSE" StaticName="GtStakeholderInterest" />

@@ -1,1 +1,1 @@
-﻿<Field Description="" DisplayName="Scope" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{80dea622-3202-4896-b33f-9720aa19adbc}" Name="GtLogScope" StaticName="GtLogScope" Type="Text" />
+<Field Description="{resource:SiteFields_GtLogScope_Description}" DisplayName="{resource:SiteFields_GtLogScope_DisplayName}" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{80dea622-3202-4896-b33f-9720aa19adbc}" Name="GtLogScope" StaticName="GtLogScope" Type="Text" />

@@ -742,6 +742,432 @@
   <data name="SiteFields_GtAttachments_Description" xml:space="preserve">
     <value>Vedlegg til oppgaven. Skrives på formatet url;tittel;type. Separer verdier med |. Type kan f.eks. være PowerPoint, Word, Excel eller Other.</value>
   </data>
+  <data name="SiteFields_GtActionChannel_DisplayName" xml:space="preserve">
+    <value>Kommunikasjonskanal</value>
+  </data>
+  <data name="SiteFields_GtActionChannel_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtActionDate_DisplayName" xml:space="preserve">
+    <value>Tiltaksdato</value>
+  </data>
+  <data name="SiteFields_GtActionDate_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtActionDescription_DisplayName" xml:space="preserve">
+    <value>Beskrivelse</value>
+  </data>
+  <data name="SiteFields_GtActionDescription_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtActionResponsible_DisplayName" xml:space="preserve">
+    <value>Tiltaksansvarlig</value>
+  </data>
+  <data name="SiteFields_GtActionResponsible_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtActionStatus_DisplayName" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="SiteFields_GtActionStatus_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtCategory_DisplayName" xml:space="preserve">
+    <value>Kategori</value>
+  </data>
+  <data name="SiteFields_GtCategory_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtChallengeDescription_DisplayName" xml:space="preserve">
+    <value>Beskrivelse av utfordring</value>
+  </data>
+  <data name="SiteFields_GtChallengeDescription_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtChecklist_DisplayName" xml:space="preserve">
+    <value>Sjekkliste</value>
+  </data>
+  <data name="SiteFields_GtChecklist_Description" xml:space="preserve">
+    <value>Sjekkpunkter separert med semikolon.</value>
+  </data>
+  <data name="SiteFields_GtChecklistStatus_DisplayName" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="SiteFields_GtChecklistStatus_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtComment_DisplayName" xml:space="preserve">
+    <value>Kommentar</value>
+  </data>
+  <data name="SiteFields_GtComment_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtDataSourceCategory_DisplayName" xml:space="preserve">
+    <value>Kategori</value>
+  </data>
+  <data name="SiteFields_GtDataSourceCategory_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtDataSourceDefault_DisplayName" xml:space="preserve">
+    <value>Standard for kategori</value>
+  </data>
+  <data name="SiteFields_GtDataSourceDefault_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtDeliveryAcceptanceCriteria_DisplayName" xml:space="preserve">
+    <value>Akseptansekriterier</value>
+  </data>
+  <data name="SiteFields_GtDeliveryAcceptanceCriteria_Description" xml:space="preserve">
+    <value>Målbare definisjoner av kravene leveransen må møte før den kan aksepteres av interessentene</value>
+  </data>
+  <data name="SiteFields_GtDeliveryAcceptanceDate_DisplayName" xml:space="preserve">
+    <value>Godkjent dato</value>
+  </data>
+  <data name="SiteFields_GtDeliveryAcceptanceDate_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtDeliveryAcceptanceMethod_DisplayName" xml:space="preserve">
+    <value>Godkjenningsmetode</value>
+  </data>
+  <data name="SiteFields_GtDeliveryAcceptanceMethod_Description" xml:space="preserve">
+    <value>Hvordan blir godkjenningen av leveransen bekreftet (test, brukerundersøkelse, demo, muntlig, skriftlig)?</value>
+  </data>
+  <data name="SiteFields_GtDeliveryAcceptanceResponsible_DisplayName" xml:space="preserve">
+    <value>Godkjenningsansvar</value>
+  </data>
+  <data name="SiteFields_GtDeliveryAcceptanceResponsible_Description" xml:space="preserve">
+    <value>Hvem har ansvaret for å godkjenne leveransen?</value>
+  </data>
+  <data name="SiteFields_GtDeliveryDescription_DisplayName" xml:space="preserve">
+    <value>Leveransebeskrivelse</value>
+  </data>
+  <data name="SiteFields_GtDeliveryDescription_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtDeliveryEndTime_DisplayName" xml:space="preserve">
+    <value>Sluttidspunkt</value>
+  </data>
+  <data name="SiteFields_GtDeliveryEndTime_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtDeliveryQualityExpectations_DisplayName" xml:space="preserve">
+    <value>Kvalitetsforventninger</value>
+  </data>
+  <data name="SiteFields_GtDeliveryQualityExpectations_Description" xml:space="preserve">
+    <value>Hvilke forventninger er uttalt til kvaliteten på leveransen?</value>
+  </data>
+  <data name="SiteFields_GtDeliveryQualityResponsible_DisplayName" xml:space="preserve">
+    <value>Kvalitetsansvar</value>
+  </data>
+  <data name="SiteFields_GtDeliveryQualityResponsible_Description" xml:space="preserve">
+    <value>Hvem er ansvarlig for å levere kvaliteten på leveransen?</value>
+  </data>
+  <data name="SiteFields_GtDeliveryQualityTolerance_DisplayName" xml:space="preserve">
+    <value>Kvalitetstoleranse</value>
+  </data>
+  <data name="SiteFields_GtDeliveryQualityTolerance_Description" xml:space="preserve">
+    <value>Hvilke toleranser (slingringsmonn) gjelder for akseptansekriteriene?</value>
+  </data>
+  <data name="SiteFields_GtDeliveryStartTime_DisplayName" xml:space="preserve">
+    <value>Starttidspunkt</value>
+  </data>
+  <data name="SiteFields_GtDeliveryStartTime_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtDeliveryStatus_DisplayName" xml:space="preserve">
+    <value>Leveransestatus</value>
+  </data>
+  <data name="SiteFields_GtDeliveryStatus_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtDeliveryStatusComment_DisplayName" xml:space="preserve">
+    <value>Kommentar, leveransestatus</value>
+  </data>
+  <data name="SiteFields_GtDeliveryStatusComment_Description" xml:space="preserve">
+    <value>Kommentar til leveransestatus angitt over</value>
+  </data>
+  <data name="SiteFields_GtDesiredValue_DisplayName" xml:space="preserve">
+    <value>Ønsket verdi</value>
+  </data>
+  <data name="SiteFields_GtDesiredValue_Description" xml:space="preserve">
+    <value>Verdi når gevinsten er realisert</value>
+  </data>
+  <data name="SiteFields_GtGainsTurnover_DisplayName" xml:space="preserve">
+    <value>Gevinstomsetting</value>
+  </data>
+  <data name="SiteFields_GtGainsTurnover_Description" xml:space="preserve">
+    <value>Hvordan skal gevinsten realiseres?</value>
+  </data>
+  <data name="SiteFields_GtGainsType_DisplayName" xml:space="preserve">
+    <value>Gevinsttype</value>
+  </data>
+  <data name="SiteFields_GtGainsType_Description" xml:space="preserve">
+    <value>Direkte (økonomiske - NOK), Indirekte (frigjort tid - årsverk), Kvalitative (f.eks. omdømme)</value>
+  </data>
+  <data name="SiteFields_GtIconName_DisplayName" xml:space="preserve">
+    <value>Ikonnavn</value>
+  </data>
+  <data name="SiteFields_GtIconName_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtKey_DisplayName" xml:space="preserve">
+    <value>Key</value>
+  </data>
+  <data name="SiteFields_GtKey_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtLogFunctionName_DisplayName" xml:space="preserve">
+    <value>Function Name</value>
+  </data>
+  <data name="SiteFields_GtLogFunctionName_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtLogLevel_DisplayName" xml:space="preserve">
+    <value>Log Level</value>
+  </data>
+  <data name="SiteFields_GtLogLevel_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtLogMessage_DisplayName" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="SiteFields_GtLogMessage_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtLogScope_DisplayName" xml:space="preserve">
+    <value>Scope</value>
+  </data>
+  <data name="SiteFields_GtLogScope_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtLogWebUrl_DisplayName" xml:space="preserve">
+    <value>Web URL</value>
+  </data>
+  <data name="SiteFields_GtLogWebUrl_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtMeasurementComment_DisplayName" xml:space="preserve">
+    <value>Kommentar til måling</value>
+  </data>
+  <data name="SiteFields_GtMeasurementComment_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtMeasurementDate_DisplayName" xml:space="preserve">
+    <value>Dato for måling</value>
+  </data>
+  <data name="SiteFields_GtMeasurementDate_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtMeasurementUnit_DisplayName" xml:space="preserve">
+    <value>Måleenhet</value>
+  </data>
+  <data name="SiteFields_GtMeasurementUnit_Description" xml:space="preserve">
+    <value>Se måleindikator for utdypning</value>
+  </data>
+  <data name="SiteFields_GtMeasurementValue_DisplayName" xml:space="preserve">
+    <value>Målt verdi</value>
+  </data>
+  <data name="SiteFields_GtMeasurementValue_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtModerationStatus_DisplayName" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="SiteFields_GtModerationStatus_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtPrereqProfitAchievement_DisplayName" xml:space="preserve">
+    <value>Forutsetninger for gevinstoppnåelse</value>
+  </data>
+  <data name="SiteFields_GtPrereqProfitAchievement_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtProcess_DisplayName" xml:space="preserve">
+    <value>Prosess</value>
+  </data>
+  <data name="SiteFields_GtProcess_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtProjectInfoDescription_DisplayName" xml:space="preserve">
+    <value>Beskrivelse</value>
+  </data>
+  <data name="SiteFields_GtProjectInfoDescription_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtProjectLogActors_DisplayName" xml:space="preserve">
+    <value>Aktører</value>
+  </data>
+  <data name="SiteFields_GtProjectLogActors_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtProjectLogConsequence_DisplayName" xml:space="preserve">
+    <value>Konsekvens</value>
+  </data>
+  <data name="SiteFields_GtProjectLogConsequence_Description" xml:space="preserve">
+    <value>Beskriv mer utfyllende hva dette kan føre til.</value>
+  </data>
+  <data name="SiteFields_GtProjectLogDescription_DisplayName" xml:space="preserve">
+    <value>Loggbeskrivelse</value>
+  </data>
+  <data name="SiteFields_GtProjectLogDescription_Description" xml:space="preserve">
+    <value>Hva handler dette om?</value>
+  </data>
+  <data name="SiteFields_GtProjectLogExperience_DisplayName" xml:space="preserve">
+    <value>Til erfaringslogg</value>
+  </data>
+  <data name="SiteFields_GtProjectLogExperience_Description" xml:space="preserve">
+    <value>Huk av dersom dette skal vises i prosjektenes delte erfaringslogg.</value>
+  </data>
+  <data name="SiteFields_GtProjectLogRecommendation_DisplayName" xml:space="preserve">
+    <value>Anbefaling</value>
+  </data>
+  <data name="SiteFields_GtProjectLogRecommendation_Description" xml:space="preserve">
+    <value>Hva bør gjøres og hvorfor?</value>
+  </data>
+  <data name="SiteFields_GtProjectLogReporter_DisplayName" xml:space="preserve">
+    <value>Meldt av</value>
+  </data>
+  <data name="SiteFields_GtProjectLogReporter_Description" xml:space="preserve">
+    <value>Oppgi den personen som meldte saken. Det er prosjektleders ansvar å opprette en Emnerapport på basis av emnet som er valgt etter prosedyrene valgt for dette prosjektet.</value>
+  </data>
+  <data name="SiteFields_GtProjectLogResponsible_DisplayName" xml:space="preserve">
+    <value>Ansvarlig</value>
+  </data>
+  <data name="SiteFields_GtProjectLogResponsible_Description" xml:space="preserve">
+    <value>Hvem er ansvarlig for dette?</value>
+  </data>
+  <data name="SiteFields_GtProjectLogType_DisplayName" xml:space="preserve">
+    <value>Loggelement</value>
+  </data>
+  <data name="SiteFields_GtProjectLogType_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtRealizationTime_DisplayName" xml:space="preserve">
+    <value>Realiseringstidspunkt</value>
+  </data>
+  <data name="SiteFields_GtRealizationTime_Description" xml:space="preserve">
+    <value>Forventet tidspunkt for realisering av gevinsten</value>
+  </data>
+  <data name="SiteFields_GtRiskAction_DisplayName" xml:space="preserve">
+    <value>Tiltak</value>
+  </data>
+  <data name="SiteFields_GtRiskAction_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtRiskConsequence_DisplayName" xml:space="preserve">
+    <value>Konsekvens (K)</value>
+  </data>
+  <data name="SiteFields_GtRiskConsequence_Description" xml:space="preserve">
+    <value>Tall 0 til 5</value>
+  </data>
+  <data name="SiteFields_GtRiskConsequencePostAction_DisplayName" xml:space="preserve">
+    <value>K etter tiltak</value>
+  </data>
+  <data name="SiteFields_GtRiskConsequencePostAction_Description" xml:space="preserve">
+    <value>Tall 0 til 5</value>
+  </data>
+  <data name="SiteFields_GtRiskFactor_DisplayName" xml:space="preserve">
+    <value>Risikofaktor</value>
+  </data>
+  <data name="SiteFields_GtRiskFactor_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtRiskFactorPostAction_DisplayName" xml:space="preserve">
+    <value>Risikofaktor etter tiltak</value>
+  </data>
+  <data name="SiteFields_GtRiskFactorPostAction_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtRiskProbability_DisplayName" xml:space="preserve">
+    <value>Sannsynlighet (S)</value>
+  </data>
+  <data name="SiteFields_GtRiskProbability_Description" xml:space="preserve">
+    <value>Tall 0 til 5</value>
+  </data>
+  <data name="SiteFields_GtRiskProbabilityPostAction_DisplayName" xml:space="preserve">
+    <value>S etter tiltak</value>
+  </data>
+  <data name="SiteFields_GtRiskProbabilityPostAction_Description" xml:space="preserve">
+    <value>Tall 0 til 5</value>
+  </data>
+  <data name="SiteFields_GtRiskProximity_DisplayName" xml:space="preserve">
+    <value>Nærhet</value>
+  </data>
+  <data name="SiteFields_GtRiskProximity_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtRiskStatus_DisplayName" xml:space="preserve">
+    <value>Status usikkerhet</value>
+  </data>
+  <data name="SiteFields_GtRiskStatus_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtRiskStrategy_DisplayName" xml:space="preserve">
+    <value>Usikkerhetstrategi</value>
+  </data>
+  <data name="SiteFields_GtRiskStrategy_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtShowInPortfolio_DisplayName" xml:space="preserve">
+    <value>Vis i portefølje</value>
+  </data>
+  <data name="SiteFields_GtShowInPortfolio_Description" xml:space="preserve">
+    <value>Huk av denne for å vise risikoen i oversikten på porteføljenivå</value>
+  </data>
+  <data name="SiteFields_GtStakeholderActions_DisplayName" xml:space="preserve">
+    <value>Tiltak</value>
+  </data>
+  <data name="SiteFields_GtStakeholderActions_Description" xml:space="preserve">
+    <value>Mulige strategier for å oppnå støtte eller redusere hindringer</value>
+  </data>
+  <data name="SiteFields_GtStakeholderContext_DisplayName" xml:space="preserve">
+    <value>Arena/Møteplass/Nettverk</value>
+  </data>
+  <data name="SiteFields_GtStakeholderContext_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtStakeholderGroup_DisplayName" xml:space="preserve">
+    <value>Interessentgruppe</value>
+  </data>
+  <data name="SiteFields_GtStakeholderGroup_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtStakeholderInfluence_DisplayName" xml:space="preserve">
+    <value>Påvirkes i hvilken grad</value>
+  </data>
+  <data name="SiteFields_GtStakeholderInfluence_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtStakeholderInfluencePossibilty_DisplayName" xml:space="preserve">
+    <value>Mulighet til påvirkning</value>
+  </data>
+  <data name="SiteFields_GtStakeholderInfluencePossibilty_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtStakeholderInterest_DisplayName" xml:space="preserve">
+    <value>Interesse</value>
+  </data>
+  <data name="SiteFields_GtStakeholderInterest_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtStakeholderStrategy_DisplayName" xml:space="preserve">
+    <value>Plan/strategi/prosjekt</value>
+  </data>
+  <data name="SiteFields_GtStakeholderStrategy_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtStartValue_DisplayName" xml:space="preserve">
+    <value>Startverdi</value>
+  </data>
+  <data name="SiteFields_GtStartValue_Description" xml:space="preserve">
+    <value>Resultatet fra nullmålingen</value>
+  </data>
+  <data name="SiteFields_GtValue_DisplayName" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="SiteFields_GtValue_Description" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="SiteFields_GtAllocationStatus_Description" xml:space="preserve">
     <value />
   </data>
