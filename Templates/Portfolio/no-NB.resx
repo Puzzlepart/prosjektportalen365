@@ -706,18 +706,6 @@
   <data name="SiteFields_GtStatusUncertainty_DisplayName" xml:space="preserve">
     <value>Status usikkerhet</value>
   </data>
-  <data name="SiteFields_GtMilestoneStatus_DisplayName" xml:space="preserve">
-    <value>Status milepæl</value>
-  </data>
-  <data name="SiteFields_GtMilestoneComment_DisplayName" xml:space="preserve">
-    <value>Kommentar milepæl</value>
-  </data>
-  <data name="SiteFields_GtMilestonePlannedDate_DisplayName" xml:space="preserve">
-    <value>Planlagt dato</value>
-  </data>
-  <data name="SiteFields_GtMilestoneActualDate_DisplayName" xml:space="preserve">
-    <value>Faktisk dato</value>
-  </data>
   <data name="SiteFields_GtSecViewFields_DisplayName" xml:space="preserve">
     <value>Felter</value>
   </data>
@@ -858,9 +846,6 @@
   </data>
   <data name="SiteFields_GtIsEnabled_DisplayName" xml:space="preserve">
     <value>Aktivert</value>
-  </data>
-  <data name="SiteFields_GtLastGateStatus_DisplayName" xml:space="preserve">
-    <value>Siste beslutningspunktstatus</value>
   </data>
   <data name="SiteFields_GtLastSyncTime_DisplayName" xml:space="preserve">
     <value>Sist synkronisert</value>
@@ -2469,27 +2454,6 @@
   </data>
   <data name="Choice_GtProjectPhaseChoice_SeveralPhases" xml:space="preserve">
     <value>Flere faser</value>
-  </data>
-  <data name="Choice_GtMilestoneStatus_BehindSchedule" xml:space="preserve">
-    <value>Ikke i rute</value>
-  </data>
-  <data name="Choice_GtMilestoneStatus_OnSchedule" xml:space="preserve">
-    <value>I rute</value>
-  </data>
-  <data name="Choice_GtMilestoneStatus_Achieved" xml:space="preserve">
-    <value>Oppnådd</value>
-  </data>
-  <data name="Choice_GtMilestoneStatus_NotAchieved" xml:space="preserve">
-    <value>Ikke oppnådd</value>
-  </data>
-  <data name="Choice_GtLastGateStatus_Approved" xml:space="preserve">
-    <value>Godkjent</value>
-  </data>
-  <data name="Choice_GtLastGateStatus_ProvisionallyApproved" xml:space="preserve">
-    <value>Foreløpig godkjent</value>
-  </data>
-  <data name="Choice_GtLastGateStatus_Rejected" xml:space="preserve">
-    <value>Avvist</value>
   </data>
   <data name="Choice_GtResourceAbsence_Linetasks" xml:space="preserve">
     <value>Linjeoppgaver</value>

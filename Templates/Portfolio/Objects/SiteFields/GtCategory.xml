@@ -1,1 +1,1 @@
-﻿<Field Type="Text" DisplayName="Kategori" MaxLength="255" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{5ff9d412-67f4-42a0-8e46-78bcf0ebc6d7}" StaticName="GtCategory" Name="GtCategory" />
+﻿<Field Type="Text" DisplayName="Kategori" Description="" MaxLength="255" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{5ff9d412-67f4-42a0-8e46-78bcf0ebc6d7}" StaticName="GtCategory" Name="GtCategory" />

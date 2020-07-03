@@ -1,1 +1,1 @@
-﻿<Field ID="{77450582-a061-4416-af17-6dfb99fa9036}" Name="GtActionDate" DisplayName="Tiltaksdato" Type="DateTime" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" Format="DateOnly" StaticName="GtActionDate" />
+﻿<Field ID="{77450582-a061-4416-af17-6dfb99fa9036}" Name="GtActionDate" DisplayName="Tiltaksdato" Description="" Type="DateTime" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" Format="DateOnly" StaticName="GtActionDate" />

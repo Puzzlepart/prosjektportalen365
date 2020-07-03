@@ -1,1 +1,1 @@
-﻿<Field Type="Text" DisplayName="Kategori" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{67a0a4b1-61d7-45c3-9157-7e302450a304}" StaticName="GtDataSourceCategory" Name="GtDataSourceCategory" />
+﻿<Field Type="Text" DisplayName="Kategori" Description="" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{67a0a4b1-61d7-45c3-9157-7e302450a304}" StaticName="GtDataSourceCategory" Name="GtDataSourceCategory" />

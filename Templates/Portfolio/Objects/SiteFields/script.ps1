@@ -15,7 +15,7 @@ Get-ChildItem *.xml | ForEach-Object {
         $nameKey = "SiteFields_$($internalName)_DisplayName"
         $descKey = "SiteFields_$($internalName)_Description"
         $instance.DisplayName = "{resource:$nameKey}"
-        $instance.Description = "{resource:$descKey}"    
+        $instance.Description = "{resource:$descKey}"
         $resources += @"
         <data name="$nameKey" xml:space="preserve">
         <value>$name</value>
