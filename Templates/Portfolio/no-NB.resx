@@ -192,106 +192,106 @@
   <data name="Lists_ChartConfiguration_Url" xml:space="preserve">
     <value>Lists/Grafkonfigurasjon</value>
   </data>
-  <data name=" {resource:Lists_InstallationLog_Title}" xml:space="preserve">
+  <data name="Lists_InstallationLog_Title" xml:space="preserve">
     <value>Installasjonslogg</value>
   </data>
-  <data name="{resource:Lists_InstallationLog_Url}" xml:space="preserve">
+  <data name="Lists_InstallationLog_Url" xml:space="preserve">
     <value>Lists/Installasjonslogg</value>
   </data>
-  <data name=" {resource:Lists_Stakeholders_Title}" xml:space="preserve">
+  <data name="Lists_Stakeholders_Title" xml:space="preserve">
     <value>Interessentregister</value>
   </data>
-  <data name="{resource:Lists_Stakeholders_Url}" xml:space="preserve">
+  <data name="Lists_Stakeholders_Url" xml:space="preserve">
     <value>Lists/Interessentregister</value>
   </data>
-  <data name=" {resource:Lists_Configuration_Title}" xml:space="preserve">
+  <data name="Lists_Configuration_Title" xml:space="preserve">
     <value>Konfigurasjon</value>
   </data>
-  <data name="{resource:Lists_Configuration_Url}" xml:space="preserve">
+  <data name="Lists_Configuration_Url" xml:space="preserve">
     <value>Lists/Konfigurasjon</value>
   </data>
-  <data name=" {resource:Lists_ConfigurationFiles_Title}" xml:space="preserve">
+  <data name="Lists_ConfigurationFiles_Title" xml:space="preserve">
     <value>Konfigurasjonsfiler</value>
   </data>
-  <data name="{resource:Lists_ConfigurationFiles_Url}" xml:space="preserve">
+  <data name="Lists_ConfigurationFiles_Url" xml:space="preserve">
     <value>Konfigurasjonsfiler</value>
   </data>
-  <data name=" {resource:Lists_ListContent_Title}" xml:space="preserve">
+  <data name="Lists_ListContent_Title" xml:space="preserve">
     <value>Listeinnhold</value>
   </data>
-  <data name="{resource:Lists_ListContent_Url}" xml:space="preserve">
+  <data name="Lists_ListContent_Url" xml:space="preserve">
     <value>Lists/Listeinnhold</value>
   </data>
-  <data name=" {resource:Lists_Log_Title}" xml:space="preserve">
+  <data name="Lists_Log_Title" xml:space="preserve">
     <value>Logg</value>
   </data>
-  <data name="{resource:Lists_Log_Url}" xml:space="preserve">
+  <data name="Lists_Log_Url" xml:space="preserve">
     <value>Lists/Logg</value>
   </data>
-  <data name=" {resource:Lists_TemplateLibrary_Title}" xml:space="preserve">
+  <data name="Lists_TemplateLibrary_Title" xml:space="preserve">
     <value>Malbibliotek</value>
   </data>
-  <data name="{resource:Lists_TemplateLibrary_Url}" xml:space="preserve">
+  <data name="Lists_TemplateLibrary_Url" xml:space="preserve">
     <value>Malbibliotek</value>
   </data>
-  <data name=" {resource:Lists_PlannerTasks_Title}" xml:space="preserve">
+  <data name="Lists_PlannerTasks_Title" xml:space="preserve">
     <value>Planneroppgaver</value>
   </data>
-  <data name="{resource:Lists_PlannerTasks_Url}" xml:space="preserve">
+  <data name="Lists_PlannerTasks_Url" xml:space="preserve">
     <value>Lists/Planneroppgaver</value>
   </data>
-  <data name=" {resource:Lists_PortfolioViews_Title}" xml:space="preserve">
+  <data name="Lists_PortfolioViews_Title" xml:space="preserve">
     <value>Porteføljevisninger</value>
   </data>
-  <data name="{resource:Lists_PortfolioViews_Url}" xml:space="preserve">
+  <data name="Lists_PortfolioViews_Url" xml:space="preserve">
     <value>Lists/Porteføljevisninger</value>
   </data>
-  <data name=" {resource:Lists_Projects_Title}" xml:space="preserve">
+  <data name="Lists_Projects_Title" xml:space="preserve">
     <value>Prosjekter</value>
   </data>
-  <data name="{resource:Lists_Projects_Url}" xml:space="preserve">
+  <data name="Lists_Projects_Url" xml:space="preserve">
     <value>Lists/Prosjekter</value>
   </data>
-  <data name=" {resource:Lists_ProjectColumnConfiguration_Title}" xml:space="preserve">
+  <data name="Lists_ProjectColumnConfiguration_Title" xml:space="preserve">
     <value>Prosjektkolonnekonfigurasjon</value>
   </data>
-  <data name="{resource:Lists_ProjectColumnConfiguration_Url}" xml:space="preserve">
+  <data name="Lists_ProjectColumnConfiguration_Url" xml:space="preserve">
     <value>Lists/Prosjektkolonnekonfigurasjon</value>
   </data>
-  <data name=" {resource:Lists_ProjectColumns_Title}" xml:space="preserve">
+  <data name="Lists_ProjectColumns_Title" xml:space="preserve">
     <value>Prosjektkolonner</value>
   </data>
-  <data name="{resource:Lists_ProjectColumns_Url}" xml:space="preserve">
+  <data name="Lists_ProjectColumns_Url" xml:space="preserve">
     <value>Lists/Prosjektkolonner</value>
   </data>
-  <data name=" {resource:Lists_ProjectTemplates_Title}" xml:space="preserve">
+  <data name="Lists_ProjectTemplates_Title" xml:space="preserve">
     <value>Prosjektmaler</value>
   </data>
-  <data name="{resource:Lists_ProjectTemplates_Url}" xml:space="preserve">
+  <data name="Lists_ProjectTemplates_Url" xml:space="preserve">
     <value>Prosjektmaler</value>
   </data>
-  <data name=" {resource:Lists_ProjectStatus_Title}" xml:space="preserve">
+  <data name="Lists_ProjectStatus_Title" xml:space="preserve">
     <value>Prosjektstatus</value>
   </data>
-  <data name="{resource:Lists_ProjectStatus_Url}" xml:space="preserve">
+  <data name="Lists_ProjectStatus_Url" xml:space="preserve">
     <value>Lists/Prosjektstatus</value>
   </data>
-  <data name=" {resource:Lists_ProjectExtensions_Title}" xml:space="preserve">
+  <data name="Lists_ProjectExtensions_Title" xml:space="preserve">
     <value>Prosjekttillegg</value>
   </data>
-  <data name="{resource:Lists_ProjectExtensions_Url}" xml:space="preserve">
+  <data name="Lists_ProjectExtensions_Url" xml:space="preserve">
     <value>Prosjekttillegg</value>
   </data>
-  <data name=" {resource:Lists_ResourceAllocation_Title}" xml:space="preserve">
+  <data name="Lists_ResourceAllocation_Title" xml:space="preserve">
     <value>Ressursallokering</value>
   </data>
-  <data name="{resource:Lists_ResourceAllocation_Url}" xml:space="preserve">
+  <data name="Lists_ResourceAllocation_Url" xml:space="preserve">
     <value>Lists/Ressursallokering</value>
   </data>
-  <data name=" {resource:Lists_StatusSections_Title}" xml:space="preserve">
+  <data name="Lists_StatusSections_Title" xml:space="preserve">
     <value>Statusseksjoner</value>
   </data>
-  <data name="{resource:Lists_StatusSections_Url}" xml:space="preserve">
+  <data name="Lists_StatusSections_Url" xml:space="preserve">
     <value>Lists/Statusseksjoner</value>
   </data>
   <data name="View_ProjectStatus" xml:space="preserve">
@@ -326,261 +326,6 @@
   </data>
   <data name="View_ProjectFields_DisplayName" xml:space="preserve">
     <value>Prosjektfelter</value>
-  </data>
-  <data name="ContentTypes_Group" xml:space="preserve">
-    <value>Prosjektportalen innholdstyper</value>
-  </data>
-  <data name="ContentTypes_Glittertind_element_Name" xml:space="preserve">
-    <value>Glittertind element</value>
-  </data>
-  <data name="ContentTypes_Usikkerhet_Name" xml:space="preserve">
-    <value>Usikkerhet</value>
-  </data>
-  <data name="ContentTypes_Risiko_Name" xml:space="preserve">
-    <value>Risiko</value>
-  </data>
-  <data name="ContentTypes_Mulighet_Name" xml:space="preserve">
-    <value>Mulighet</value>
-  </data>
-  <data name="ContentTypes_Interessent_Name" xml:space="preserve">
-    <value>Interessent</value>
-  </data>
-  <data name="ContentTypes_Kommunikasjonselement_Name" xml:space="preserve">
-    <value>Kommunikasjonselement</value>
-  </data>
-  <data name="ContentTypes_Sjekkpunkt_Name" xml:space="preserve">
-    <value>Sjekkpunkt</value>
-  </data>
-  <data name="ContentTypes_Prosjektprodukt_Name" xml:space="preserve">
-    <value>Prosjektleveranse</value>
-  </data>
-  <data name="ContentTypes_Prosjektloggelement_Name" xml:space="preserve">
-    <value>Prosjektloggelement</value>
-  </data>
-  <data name="ContentTypes_Infoelement_Name" xml:space="preserve">
-    <value>Infoelement</value>
-  </data>
-  <data name="ContentTypes_Glittertind_dokument_Name" xml:space="preserve">
-    <value>Glittertind dokument</value>
-  </data>
-  <data name="ContentTypes_Prosjektdokument_Name" xml:space="preserve">
-    <value>Prosjektdokument</value>
-  </data>
-  <data name="ContentTypes_Glittertind_nettdelside_Name" xml:space="preserve">
-    <value>Glittertind nettdelside</value>
-  </data>
-  <data name="ContentTypes_Prosjektforside_Name" xml:space="preserve">
-    <value>Prosjektforside</value>
-  </data>
-  <data name="ContentTypes_Prosjektelement_Name" xml:space="preserve">
-    <value>Prosjektelement</value>
-  </data>
-  <data name="ContentTypes_Prosjektressurs_Name" xml:space="preserve">
-    <value>Prosjektressurs</value>
-  </data>
-  <data name="ContentTypes_Ressursallokering_Name" xml:space="preserve">
-    <value>Ressursallokering</value>
-  </data>
-  <data name="ContentTypes_Ressursallokering_utenfor_prosjekt_Name" xml:space="preserve">
-    <value>Ressursallokering (utenfor prosjekt)</value>
-  </data>
-  <data name="ContentTypes_Glittertind_basehendelse_Name" xml:space="preserve">
-    <value>Glittertind basehendelse</value>
-  </data>
-  <data name="ContentTypes_Prosjekthendelse_Name" xml:space="preserve">
-    <value>Prosjekthendelse</value>
-  </data>
-  <data name="ContentTypes_Prosjektoppgave_Name" xml:space="preserve">
-    <value>Prosjektoppgave</value>
-  </data>
-  <data name="ContentTypes_Gevinst_Name" xml:space="preserve">
-    <value>Gevinst</value>
-  </data>
-  <data name="ContentTypes_Endring_Name" xml:space="preserve">
-    <value>Endring</value>
-  </data>
-  <data name="ContentTypes_Gevinstoppfolging_Name" xml:space="preserve">
-    <value>Gevinstoppfølging</value>
-  </data>
-  <data name="ContentTypes_Milestone_Name" xml:space="preserve">
-    <value>Milepæl</value>
-  </data>
-  <data name="ContentTypes_Section_Name" xml:space="preserve">
-    <value>Seksjon</value>
-  </data>
-  <data name="ContentTypes_StatusSection_Name" xml:space="preserve">
-    <value>Seksjon for statusfelt</value>
-  </data>
-  <data name="ContentTypes_ProjectPropertiesSection_Name" xml:space="preserve">
-    <value>Seksjon for prosjektegenskaper</value>
-  </data>
-  <data name="ContentTypes_ListSection_Name" xml:space="preserve">
-    <value>Listeseksjon</value>
-  </data>
-  <data name="ContentTypes_RiskSection_Name" xml:space="preserve">
-    <value>Risikoseksjon</value>
-  </data>
-  <data name="ContentTypes_Utvidelse_Name" xml:space="preserve">
-    <value>Utvidelse</value>
-  </data>
-  <data name="ContentTypes_SiteTemplate_Name" xml:space="preserve">
-    <value>Områdemal</value>
-  </data>
-  <data name="ContentTypes_Statistikkfelt_Name" xml:space="preserve">
-    <value>Statistikkfelt</value>
-  </data>
-  <data name="ContentTypes_Grafkonfigurasjonelement_Name" xml:space="preserve">
-    <value>Diagramkonfigurasjonselement</value>
-  </data>
-  <data name="ContentTypes_Stolpediagram_Name" xml:space="preserve">
-    <value>Stolpediagram</value>
-  </data>
-  <data name="ContentTypes_Kolonnediagram_Name" xml:space="preserve">
-    <value>Kolonnediagram</value>
-  </data>
-  <data name="ContentTypes_Sektordiagram_Name" xml:space="preserve">
-    <value>Sektordiagram</value>
-  </data>
-  <data name="ContentTypes_Dynamic_Portfolio_Config_Base_Name" xml:space="preserve">
-    <value>Porteføljekonfigurasjonsbase</value>
-  </data>
-  <data name="ContentTypes_Dynamic_Portfolio_Field_Name" xml:space="preserve">
-    <value>Porteføljefelt</value>
-  </data>
-  <data name="ContentTypes_Dynamic_Portfolio_Refiner_Name" xml:space="preserve">
-    <value>Porteføljepresiseringsfelt</value>
-  </data>
-  <data name="ContentTypes_Dynamic_Portfolio_View_Name" xml:space="preserve">
-    <value>Porteføljevisning</value>
-  </data>
-  <data name="ContentTypes_List_Content_Config_Name" xml:space="preserve">
-    <value>Listeinnehold</value>
-  </data>
-  <data name="ContentTypes_Project_Config_Base_Name" xml:space="preserve">
-    <value>Prosjektkonfigurasjonsbase</value>
-  </data>
-  <data name="ContentTypes_Project_Field_Name" xml:space="preserve">
-    <value>Prosjektfelt</value>
-  </data>
-  <data name="ContentTypes_Tilbakemelding_Name" xml:space="preserve">
-    <value>Tilbakemelding</value>
-  </data>
-  <data name="ContentTypes_DataSource_Name" xml:space="preserve">
-    <value>Datakilde</value>
-  </data>
-  <data name="ContentTypes_Glittertind_element_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_Usikkerhet_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_Risiko_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_Mulighet_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_Interessent_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_Kommunikasjonselement_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_Sjekkpunkt_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_Prosjektprodukt_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_Prosjektloggelement_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_Infoelement_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_Glittertind_dokument_Description" xml:space="preserve">
-    <value>Opprett et nytt dokument.</value>
-  </data>
-  <data name="ContentTypes_Prosjektdokument_Description" xml:space="preserve">
-    <value>Opprett et nytt dokument.</value>
-  </data>
-  <data name="ContentTypes_Glittertind_nettdelside_Description" xml:space="preserve">
-    <value>Opprett en ny webdel-side.</value>
-  </data>
-  <data name="ContentTypes_Prosjektforside_Description" xml:space="preserve">
-    <value>Opprett en ny webdel-side.</value>
-  </data>
-  <data name="ContentTypes_Glittertind_basehendelse_Description" xml:space="preserve">
-    <value>Opprett et nytt møte, en ny tidsfrist eller en annen hendelse.</value>
-  </data>
-  <data name="ContentTypes_Prosjekthendelse_Description" xml:space="preserve">
-    <value>Opprett et nytt møte, en ny tidsfrist eller en annen hendelse.</value>
-  </data>
-  <data name="ContentTypes_Prosjektoppgave_Description" xml:space="preserve">
-    <value>Spor et arbeidselement som du eller gruppen må fullføre.</value>
-  </data>
-  <data name="ContentTypes_Gevinst_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_Endring_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_Gevinstoppfolging_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_Utvidelse_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_SiteTemplate_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_Section_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_StatusSection_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_ProjectPropertiesSection_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_ListSection_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_RiskSection_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_Statistikkfelt_Description" xml:space="preserve">
-    <value>Opprett et nytt statistikkfelt</value>
-  </data>
-  <data name="ContentTypes_Grafkonfigurasjonelement_Description" xml:space="preserve">
-    <value>Opprett et nytt diagramkonfigurasjonselement</value>
-  </data>
-  <data name="ContentTypes_Stolpediagram_Description" xml:space="preserve">
-    <value>Opprett et nytt stolpediagram</value>
-  </data>
-  <data name="ContentTypes_Kolonnediagram_Description" xml:space="preserve">
-    <value>Opprett et nytt kolonnediagram</value>
-  </data>
-  <data name="ContentTypes_Sektordiagram_Description" xml:space="preserve">
-    <value>Opprett et nytt sektordiagram</value>
-  </data>
-  <data name="ContentTypes_Prosjektforside_ContentTypeId" xml:space="preserve">
-    <value>0x010109010058561F86D956412B9DD7957BBCD67AAE01</value>
-  </data>
-  <data name="ContentTypes_Gevinst_ContentTypeId" xml:space="preserve">
-    <value>0x0100B384774BA4EBB842A5E402EBF4707367</value>
-  </data>
-  <data name="ContentTypes_Endring_ContentTypeId" xml:space="preserve">
-    <value>0x01004D8897A0212F9A40A4C2209D89E5AD4C</value>
-  </data>
-  <data name="ContentTypes_Gevinstoppfolging_ContentTypeId" xml:space="preserve">
-    <value>0x01007A831AC68204F04AAA022CFF06C7BAA2</value>
-  </data>
-  <data name="ContentTypes_ProjectStatus_Name" xml:space="preserve">
-    <value>Prosjektrapport</value>
-  </data>
-  <data name="ContentTypes_ProjectStatus_Description" xml:space="preserve">
-    <value>Genererte rapporter som viser status på prosjektet.</value>
   </data>
   <data name="SiteFields_Group" xml:space="preserve">
     <value>Prosjektportalenkolonner</value>
