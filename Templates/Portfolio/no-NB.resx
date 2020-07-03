@@ -168,11 +168,26 @@
   <data name="Lists_SitePages_Title" xml:space="preserve">
     <value>Områdesider</value>
   </data>
-  <data name="Lists_Announcements_Title" xml:space="preserve">
-    <value>Kunngjøringer</value>
+  <data name="Lists_DataSources_Title" xml:space="preserve">
+    <value>Datakilder</value>
+  </data>
+  <data name="Lists_DataSources_Url" xml:space="preserve">
+    <value>Lists/Datakilder</value>
+  </data>
+  <data name="Lists_CustomCharts_Title" xml:space="preserve">
+    <value>Egendefinerte diagrammer</value>
+  </data>
+  <data name="Lists_CustomCharts_Url" xml:space="preserve">
+    <value>CustomCharts</value>
   </data>
   <data name="Lists_Extensions_Title" xml:space="preserve">
     <value>Utvidelser</value>
+  </data>
+  <data name="Lists_PhaseChecklist_Title" xml:space="preserve">
+    <value>Fasesjekkliste</value>
+  </data>
+  <data name="Lists_PhaseChecklist_Url" xml:space="preserve">
+    <value>Lists/Fasesjekkliste</value>
   </data>
   <data name="Lists_SiteTemplates_Title" xml:space="preserve">
     <value>Områdemaler</value>
@@ -188,9 +203,6 @@
   </data>
   <data name="Lists_StandardTasks_Title" xml:space="preserve">
     <value>Standardoppgaver</value>
-  </data>
-  <data name="Lists_PhaseChecklist_Title" xml:space="preserve">
-    <value>Fasesjekkliste</value>
   </data>
   <data name="Lists_Stakeholders_Title" xml:space="preserve">
     <value>Interessentregister</value>
@@ -228,12 +240,6 @@
   <data name="Lists_ProjectStatus_Title" xml:space="preserve">
     <value>Prosjektstatusrapporter</value>
   </data>
-  <data name="Lists_ProjectElements_Title" xml:space="preserve">
-    <value>Prosjekter</value>
-  </data>
-  <data name="Lists_Milestones_Title" xml:space="preserve">
-    <value>Milepæler</value>
-  </data>
   <data name="Lists_DynamicPortfolioFields_Title" xml:space="preserve">
     <value>Feltkonfigurasjon for portefølje</value>
   </data>
@@ -261,125 +267,11 @@
   <data name="Lists_ChartsConfig_Title" xml:space="preserve">
     <value>Diagramkonfigurasjon</value>
   </data>
-  <data name="Lists_DataSources_Title" xml:space="preserve">
-    <value>Datakilder</value>
-  </data>
   <data name="Lists_ProjectResources_Title" xml:space="preserve">
     <value>Prosjektressurser</value>
   </data>
   <data name="Lists_ResourceAllocation_Title" xml:space="preserve">
     <value>Ressursallokering</value>
-  </data>
-  <data name="Lists_SitePages_Url" xml:space="preserve">
-    <value>SitePages</value>
-  </data>
-  <data name="Lists_Announcements_Url" xml:space="preserve">
-    <value>Lists/Announcements</value>
-  </data>
-  <data name="Lists_Extensions_Url" xml:space="preserve">
-    <value>Utvidelser</value>
-  </data>
-  <data name="Lists_QuickLinks_Url" xml:space="preserve">
-    <value>Lists/QuickLinks</value>
-  </data>
-  <data name="Lists_Resources_Url" xml:space="preserve">
-    <value>Ressurser</value>
-  </data>
-  <data name="Lists_Tasks_Url" xml:space="preserve">
-    <value>Lists/Oppgaver</value>
-  </data>
-  <data name="Lists_StandardTasks_Url" xml:space="preserve">
-    <value>Lists/Standardoppgaver</value>
-  </data>
-  <data name="Lists_PhaseChecklist_Url" xml:space="preserve">
-    <value>Lists/Fasesjekkliste</value>
-  </data>
-  <data name="Lists_Stakeholders_Url" xml:space="preserve">
-    <value>Lists/Interessentregister</value>
-  </data>
-  <data name="Lists_Standarddocuments_Url" xml:space="preserve">
-    <value>Standarddokumenter</value>
-  </data>
-  <data name="Lists_Information_Url" xml:space="preserve">
-    <value>Lists/Informasjon</value>
-  </data>
-  <data name="Lists_CommunicationPlan_Url" xml:space="preserve">
-    <value>Lists/Kommunikasjonsplan</value>
-  </data>
-  <data name="Lists_ProjectLog_Url" xml:space="preserve">
-    <value>Lists/Prosjektlogg</value>
-  </data>
-  <data name="Lists_ProjectDeliveries_Url" xml:space="preserve">
-    <value>Lists/Prosjektleveranser</value>
-  </data>
-  <data name="Lists_Uncertainties_Url" xml:space="preserve">
-    <value>Lists/Usikkerhet</value>
-  </data>
-  <data name="Lists_MeetingCalendar_Url" xml:space="preserve">
-    <value>Lists/Mtekalender</value>
-  </data>
-  <data name="Lists_Documents_Url" xml:space="preserve">
-    <value>Delte dokumenter</value>
-  </data>
-  <data name="Lists_BenefitsAnalysis_Url" xml:space="preserve">
-    <value>Lists/Gevinstanalyse og gevinstrealiseringsplan</value>
-  </data>
-  <data name="Lists_ChangeAnalysis_Url" xml:space="preserve">
-    <value>Lists/Endringsanalyse</value>
-  </data>
-  <data name="Lists_BenefitsFollowup_Url" xml:space="preserve">
-    <value>Lists/Gevinstsoppflging</value>
-  </data>
-  <data name="Lists_ProjectStatus_Url" xml:space="preserve">
-    <value>Lists/Prosjektstatusrapporter</value>
-  </data>
-  <data name="Lists_ProjectElements_Url" xml:space="preserve">
-    <value>Lists/Prosjekter</value>
-  </data>
-  <data name="DefaultView_ProjectLog_Url" xml:space="preserve">
-    <value>Lists/Prosjektlogg/AllItems.aspx</value>
-  </data>
-  <data name="DefaultView_Information_Url" xml:space="preserve">
-    <value>Lists/Informasjon/AllItems.aspx</value>
-  </data>
-  <data name="DefaultView_Stakeholders_Url" xml:space="preserve">
-    <value>Lists/Interessentregister/AllItems.aspx</value>
-  </data>
-  <data name="DefaultView_CommunicationPlan_Url" xml:space="preserve">
-    <value>Lists/Kommunikasjonsplan/AllItems.aspx</value>
-  </data>
-  <data name="DefaultView_ProjectDeliveries_Url" xml:space="preserve">
-    <value>Lists/Prosjektleveranser/AllItems.aspx</value>
-  </data>
-  <data name="DefaultView_Uncertainties_Url" xml:space="preserve">
-    <value>Lists/Usikkerhet/AllItems.aspx</value>
-  </data>
-  <data name="DefaultView_Tasks_Url" xml:space="preserve">
-    <value>Lists/Oppgaver/AllItems.aspx</value>
-  </data>
-  <data name="DefaultView_MeetingCalendar_Url" xml:space="preserve">
-    <value>Lists/Mtekalender/calendar.aspx</value>
-  </data>
-  <data name="DefaultView_Documents_Url" xml:space="preserve">
-    <value>Delte dokumenter/Forms/AllItems.aspx</value>
-  </data>
-  <data name="DefaultView_PhaseChecklist_Url" xml:space="preserve">
-    <value>Lists/Fasesjekkliste/AllItems.aspx</value>
-  </data>
-  <data name="DefaultView_ChangeAnalysis_Url" xml:space="preserve">
-    <value>Lists/Endringsanalyse/AllItems.aspx</value>
-  </data>
-  <data name="DefaultView_BenefitsAnalysis_Url" xml:space="preserve">
-    <value>Lists/Gevinstanalyse og gevinstrealiseringsplan/AllItems.aspx</value>
-  </data>
-  <data name="DefaultView_BenefitsFollowup_Url" xml:space="preserve">
-    <value>Lists/Gevinstsoppflging/AllItems.aspx</value>
-  </data>
-  <data name="DefaultView_ProjectResources_Url" xml:space="preserve">
-    <value>Lists/Prosjektressurser/AllItems.aspx</value>
-  </data>
-  <data name="DefaultView_ResourceAllocation_Url" xml:space="preserve">
-    <value>Lists/Ressursallokering/AllItems.aspx</value>
   </data>
   <data name="View_ProjectStatus" xml:space="preserve">
     <value>Prosjektstatus</value>
