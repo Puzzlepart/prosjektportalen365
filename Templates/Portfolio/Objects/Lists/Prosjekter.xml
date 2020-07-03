@@ -4,7 +4,7 @@
         <pnp:ContentTypeBinding ContentTypeID="0x0100805E9E4FEAAB4F0EABAB2600D30DB70C" Default="true" />
     </pnp:ContentTypeBindings>
     <pnp:Views>
-        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/{resource:Lists_Projects_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_Projects_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
             <Query>
                 <OrderBy>
                     <FieldRef Name="ID" />
