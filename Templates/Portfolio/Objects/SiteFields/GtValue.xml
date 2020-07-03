@@ -1,1 +1,1 @@
-<Field Description="{resource:SiteFields_GtValue_Description}" DisplayName="{resource:SiteFields_GtValue_DisplayName}" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{7711112c-e3f1-4a97-b162-c23dc78f4af4}" Name="GtValue" StaticName="GtValue" Type="Text" />
+<Field Description="{resource:SiteFields_GtValue_Description}" DisplayName="{resource:SiteFields_GtValue_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{7711112c-e3f1-4a97-b162-c23dc78f4af4}" Name="GtValue" StaticName="GtValue" Type="Text" />

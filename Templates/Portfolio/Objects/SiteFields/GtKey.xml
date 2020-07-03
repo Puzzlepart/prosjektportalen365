@@ -1,1 +1,1 @@
-<Field Description="{resource:SiteFields_GtKey_Description}" DisplayName="{resource:SiteFields_GtKey_DisplayName}" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{a2c95470-5762-407b-935f-412092a3a4cf}" Name="GtKey" StaticName="GtKey" Type="Text" />
+<Field Description="{resource:SiteFields_GtKey_Description}" DisplayName="{resource:SiteFields_GtKey_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{a2c95470-5762-407b-935f-412092a3a4cf}" Name="GtKey" StaticName="GtKey" Type="Text" />

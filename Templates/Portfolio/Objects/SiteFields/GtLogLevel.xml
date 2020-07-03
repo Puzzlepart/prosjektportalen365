@@ -1,1 +1,1 @@
-<Field Description="{resource:SiteFields_GtLogLevel_Description}" DisplayName="{resource:SiteFields_GtLogLevel_DisplayName}" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{d141ee8b-feea-4a9d-9dc1-a6feff4abb72}" Name="GtLogLevel" StaticName="GtLogLevel" Type="Text" />
+<Field Description="{resource:SiteFields_GtLogLevel_Description}" DisplayName="{resource:SiteFields_GtLogLevel_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{d141ee8b-feea-4a9d-9dc1-a6feff4abb72}" Name="GtLogLevel" StaticName="GtLogLevel" Type="Text" />

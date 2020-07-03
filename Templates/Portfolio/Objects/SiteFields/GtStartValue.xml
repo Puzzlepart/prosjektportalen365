@@ -1,1 +1,1 @@
-<Field Type="Number" DisplayName="{resource:SiteFields_GtStartValue_DisplayName}" Description="{resource:SiteFields_GtStartValue_Description}" ID="{c5fc8781-7fbd-43a2-a215-c8c959bbab69}" StaticName="GtStartValue" Name="GtStartValue" Group="Kolonner for Prosjektportalen (Prosjekt)" />
+<Field Type="Number" DisplayName="{resource:SiteFields_GtStartValue_DisplayName}" Description="{resource:SiteFields_GtStartValue_Description}" ID="{c5fc8781-7fbd-43a2-a215-c8c959bbab69}" StaticName="GtStartValue" Name="GtStartValue" Group="{resource:SiteFields_Project_Group}" />

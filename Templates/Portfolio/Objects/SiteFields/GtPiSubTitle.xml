@@ -1,1 +1,1 @@
-﻿<Field DisplayName="{resource:SiteFields_GtPiSubTitle_DisplayName}" Description="{resource:SiteFields_GtPiSubTitle_Description}" Type="Text" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{fca6d80c-225a-4bb0-a0b6-f4c004f8151c}" StaticName="GtPiSubTitle" Name="GtPiSubTitle" />
+﻿<Field DisplayName="{resource:SiteFields_GtPiSubTitle_DisplayName}" Description="{resource:SiteFields_GtPiSubTitle_Description}" Type="Text" Group="{resource:SiteFields_Portfolio_Group}" ID="{fca6d80c-225a-4bb0-a0b6-f4c004f8151c}" StaticName="GtPiSubTitle" Name="GtPiSubTitle" />

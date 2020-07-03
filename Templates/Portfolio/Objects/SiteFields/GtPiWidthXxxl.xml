@@ -1,3 +1,3 @@
-﻿<Field DisplayName="{resource:SiteFields_GtPiWidthXxxl_DisplayName}" Description="{resource:SiteFields_GtPiWidthXxxl_Description}" Type="Number" Min="1" Max="12" Decimals="0" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{41d29afe-b026-4417-9166-3e22dda59d78}" StaticName="GtPiWidthXxxl" Name="GtPiWidthXxxl">
+﻿<Field DisplayName="{resource:SiteFields_GtPiWidthXxxl_DisplayName}" Description="{resource:SiteFields_GtPiWidthXxxl_Description}" Type="Number" Min="1" Max="12" Decimals="0" Group="{resource:SiteFields_Portfolio_Group}" ID="{41d29afe-b026-4417-9166-3e22dda59d78}" StaticName="GtPiWidthXxxl" Name="GtPiWidthXxxl">
     <Default>12</Default>
 </Field>

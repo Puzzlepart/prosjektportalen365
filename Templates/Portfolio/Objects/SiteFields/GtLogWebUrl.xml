@@ -1,1 +1,1 @@
-<Field Description="{resource:SiteFields_GtLogWebUrl_Description}" DisplayName="{resource:SiteFields_GtLogWebUrl_DisplayName}" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{b9bbd94f-f9c0-4512-ad77-404f8a2c64b1}" Name="GtLogWebUrl" StaticName="GtLogWebUrl" Type="Text" />
+<Field Description="{resource:SiteFields_GtLogWebUrl_Description}" DisplayName="{resource:SiteFields_GtLogWebUrl_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{b9bbd94f-f9c0-4512-ad77-404f8a2c64b1}" Name="GtLogWebUrl" StaticName="GtLogWebUrl" Type="Text" />

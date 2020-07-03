@@ -1,4 +1,4 @@
-﻿<Field DisplayName="{resource:SiteFields_GtResourceRole_DisplayName}" Description="{resource:SiteFields_GtResourceRole_Description}" ID="{3a0ae560-bd55-45d4-907f-5119bf0a83bb}" Type="TaxonomyFieldType" WebId="{siteid}" Group="Kolonner for Prosjektportalen (Prosjekt)" StaticName="GtResourceRole" Name="GtResourceRole">
+﻿<Field DisplayName="{resource:SiteFields_GtResourceRole_DisplayName}" Description="{resource:SiteFields_GtResourceRole_Description}" ID="{3a0ae560-bd55-45d4-907f-5119bf0a83bb}" Type="TaxonomyFieldType" WebId="{siteid}" Group="{resource:SiteFields_Project_Group}" StaticName="GtResourceRole" Name="GtResourceRole">
     <Customization>
         <ArrayOfProperty>
             <Property>

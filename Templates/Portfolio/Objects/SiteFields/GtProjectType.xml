@@ -1,4 +1,4 @@
-﻿<Field Description="{resource:SiteFields_GtProjectType_Description}" DisplayName="{resource:SiteFields_GtProjectType_DisplayName}" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{ddb69044-7d2c-4865-86ec-b71413780409}" List="{{listid:TaxonomyHiddenList}}" Mult="TRUE" Name="GtProjectType" ShowField="Term1044" SourceID="{{siteid}}" StaticName="GtProjectType" Type="TaxonomyFieldTypeMulti" WebId="{siteid}">
+﻿<Field Description="{resource:SiteFields_GtProjectType_Description}" DisplayName="{resource:SiteFields_GtProjectType_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{ddb69044-7d2c-4865-86ec-b71413780409}" List="{{listid:TaxonomyHiddenList}}" Mult="TRUE" Name="GtProjectType" ShowField="Term1044" SourceID="{{siteid}}" StaticName="GtProjectType" Type="TaxonomyFieldTypeMulti" WebId="{siteid}">
     <Customization>
         <ArrayOfProperty>
             <Property>

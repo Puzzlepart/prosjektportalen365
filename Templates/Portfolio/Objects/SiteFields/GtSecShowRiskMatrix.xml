@@ -1,3 +1,3 @@
-﻿<Field Type="Boolean" DisplayName="{resource:SiteFields_GtSecShowRiskMatrix_DisplayName}" Description="{resource:SiteFields_GtSecShowRiskMatrix_Description}" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{f93b92b8-1a69-445f-b13f-0fc3ef924101}" StaticName="GtSecShowRiskMatrix" Name="GtSecShowRiskMatrix">
+﻿<Field Type="Boolean" DisplayName="{resource:SiteFields_GtSecShowRiskMatrix_DisplayName}" Description="{resource:SiteFields_GtSecShowRiskMatrix_Description}" Group="{resource:SiteFields_Portfolio_Group}" ID="{f93b92b8-1a69-445f-b13f-0fc3ef924101}" StaticName="GtSecShowRiskMatrix" Name="GtSecShowRiskMatrix">
     <Default>1</Default>
 </Field>

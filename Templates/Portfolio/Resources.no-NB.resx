@@ -406,8 +406,11 @@
   <data name="ContentTypes_BarChart_Description" xml:space="preserve">
     <value>Opprett et nytt stolpediagram</value>
   </data>
-  <data name="SiteFields_Group" xml:space="preserve">
-    <value>Prosjektportalenkolonner</value>
+  <data name="SiteFields_Project_Group" xml:space="preserve">
+    <value>Kolonner for Prosjektportalen (Prosjekt)</value>
+  </data>
+  <data name="SiteFields_Portfolio_Group" xml:space="preserve">
+    <value>Kolonner for Prosjektportalen (Portefølje)</value>
   </data>
   <data name="SiteFields_GtSortOrder_DisplayName" xml:space="preserve">
     <value>Sorteringsrekkefølge</value>

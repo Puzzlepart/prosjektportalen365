@@ -1,1 +1,1 @@
-<Field Type="Text" DisplayName="{resource:SiteFields_GtProcess_DisplayName}" Description="{resource:SiteFields_GtProcess_Description}" ID="{68a5a2da-048c-4d2d-8ba4-5a8b32b60120}" StaticName="GtProcess" Name="GtProcess" Group="Kolonner for Prosjektportalen (Prosjekt)" />
+<Field Type="Text" DisplayName="{resource:SiteFields_GtProcess_DisplayName}" Description="{resource:SiteFields_GtProcess_Description}" ID="{68a5a2da-048c-4d2d-8ba4-5a8b32b60120}" StaticName="GtProcess" Name="GtProcess" Group="{resource:SiteFields_Project_Group}" />

@@ -1,1 +1,1 @@
-<Field Type="Text" DisplayName="{resource:SiteFields_GtCategory_DisplayName}" Description="{resource:SiteFields_GtCategory_Description}" MaxLength="255" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{5ff9d412-67f4-42a0-8e46-78bcf0ebc6d7}" StaticName="GtCategory" Name="GtCategory" />
+<Field Type="Text" DisplayName="{resource:SiteFields_GtCategory_DisplayName}" Description="{resource:SiteFields_GtCategory_Description}" MaxLength="255" Group="{resource:SiteFields_Portfolio_Group}" ID="{5ff9d412-67f4-42a0-8e46-78bcf0ebc6d7}" StaticName="GtCategory" Name="GtCategory" />
