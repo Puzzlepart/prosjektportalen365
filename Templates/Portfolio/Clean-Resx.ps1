@@ -6,8 +6,8 @@ $dataNodes = $xml.root.SelectNodes("data")
 
 foreach($node in $dataNodes) {
     if($unused.Contains($node.name)) {
-        Write-Host "Will remove $($node.name)"
         $node.ParentNode.RemoveChild($node)
+        Write-Host "Removed resource $($node.Name)" -ForegroundColor Cyan
     }
 }
 

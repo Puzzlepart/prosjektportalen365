@@ -61,63 +61,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Navigation_Home_Title" xml:space="preserve">
-    <value>Hjem</value>
-  </data>
-  <data name="Navigation_Mom_Title" xml:space="preserve">
-    <value>Møtereferat</value>
-  </data>
-  <data name="Navigation_Notebook_Title" xml:space="preserve">
-    <value>Notatblokk</value>
-  </data>
-  <data name="Navigation_NoFilterFrontpage_Title" xml:space="preserve">
-    <value>Forside alle faser</value>
-  </data>
-  <data name="Navigation_SiteContents_Title" xml:space="preserve">
-    <value>Områdeinnhold</value>
-  </data>
-  <data name="Navigation_NoPhaseProjectItems_Title" xml:space="preserve">
-    <value>Prosjektelementer uten fase</value>
-  </data>
-  <data name="Navigation_MyProjectItems_Title" xml:space="preserve">
-    <value>Mine prosjektelementer</value>
-  </data>
-  <data name="Navigation_PortfolioSite_Title" xml:space="preserve">
-    <value>Porteføljeområde</value>
-  </data>
-  <data name="Navigation_Portfolio_Title" xml:space="preserve">
-    <value>Porteføljeoversikt</value>
-  </data>
-  <data name="Navigation_BenefitsOverview_Title" xml:space="preserve">
-    <value>Gevinstoversikt</value>
-  </data>
-  <data name="Navigation_ExperienceLog_Title" xml:space="preserve">
-    <value>Erfaringslogg</value>
-  </data>
-  <data name="Navigation_DeliveriesOverview_Title" xml:space="preserve">
-    <value>Leveranseoversikt</value>
-  </data>
-  <data name="Navigation_RiskOverview_Title" xml:space="preserve">
-    <value>Risikooversikt</value>
-  </data>
-  <data name="Navigation_PortfolioStats_Title" xml:space="preserve">
-    <value>Porteføljeinnsikt</value>
-  </data>
-  <data name="Navigation_ProjectStatus_Title" xml:space="preserve">
-    <value>Prosjektstatus</value>
-  </data>
-  <data name="Navigation_RiskOverview_Title" xml:space="preserve">
-    <value>Risikooversikt</value>
-  </data>
-  <data name="Navigation_NoPhaseProjectItems_Url" xml:space="preserve">
-    <value>_layouts/15/osssearchresults.aspx?k=owstaxIdGtProjectPhase%3A%22Ingen%20fase%22</value>
-  </data>
-  <data name="Navigation_BenefitsFollowup_Title" xml:space="preserve">
-    <value>Gevinstoppfølging</value>
-  </data>
-  <data name="Navigation_ResourceAllocation_Title" xml:space="preserve">
-    <value>Ressursallokering</value>
-  </data>
   <data name="Lists_SitePages_Title" xml:space="preserve">
     <value>Områdesider</value>
   </data>
