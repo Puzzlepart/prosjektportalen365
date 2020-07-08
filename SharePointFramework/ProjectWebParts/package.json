@@ -6,9 +6,9 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "watch": "concurrently \"npm run serve\" \"livereload ./dist -e js -w 250\"",
+    "watch": "concurrently \"npm run serveNoBrowser\" \"livereload ./dist -e js -w 250\"",
     "serve": "gulp serve --locale=nb-no",
-    "serveNoBrowser": "gulp serve --locale=nb-no --nobrowser",
+    "serveNoBrowser": "gulp serve --locale=en-gb --nobrowser",
     "package": "gulp clean --ship && gulp default --ship && gulp package-solution --ship",
     "deploy": "gulp uploadAppPkg && gulp deploySppkg",
     "packageAndDeploy": "npm run package && npm run deploy",
