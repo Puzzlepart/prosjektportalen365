@@ -1,4 +1,4 @@
-<Field ID="{18d92e18-10b6-42ea-815d-b12d7827564e}" Name="GtProjectLifecycleStatus" DisplayName="{resource:SiteFields_GtProjectLifecycleStatus_DisplayName}" Type="Choice" Format="Dropdown" Group="Kolonner for Prosjektportalen (Portefølje)" Description="{resource:SiteFields_GtProjectLifecycleStatus_Description}" StaticName="GtProjectLifecycleStatus">
+<Field ID="{18d92e18-10b6-42ea-815d-b12d7827564e}" Name="GtProjectLifecycleStatus" DisplayName="{resource:SiteFields_GtProjectLifecycleStatus_DisplayName}" Type="Choice" Format="Dropdown" Group="{resource:SiteFields_Portfolio_Group}" Description="{resource:SiteFields_GtProjectLifecycleStatus_Description}" StaticName="GtProjectLifecycleStatus">
     <Default>Aktivt</Default>
     <CHOICES>
         <CHOICE>Aktivt</CHOICE>

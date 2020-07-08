@@ -1,3 +1,3 @@
-﻿<Field DisplayName="{resource:SiteFields_GtPiShowLegend_DisplayName}" Description="{resource:SiteFields_GtPiShowLegend_Description}" Type="Boolean" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{f6c928f6-4b57-478c-866d-42d5f2874d57}" StaticName="GtPiShowLegend" Name="GtPiShowLegend">
+﻿<Field DisplayName="{resource:SiteFields_GtPiShowLegend_DisplayName}" Description="{resource:SiteFields_GtPiShowLegend_Description}" Type="Boolean" Group="{resource:SiteFields_Portfolio_Group}" ID="{f6c928f6-4b57-478c-866d-42d5f2874d57}" StaticName="GtPiShowLegend" Name="GtPiShowLegend">
     <Default>0</Default>
 </Field>

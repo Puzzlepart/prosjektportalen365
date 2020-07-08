@@ -1,1 +1,1 @@
-﻿<Field ID="{2ae541a5-5ecc-481d-afb6-c03a6f1e71b4}" Name="GtActionResponsible" DisplayName="Tiltaksansvarlig" Type="User" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" StaticName="GtActionResponsible" />
+<Field ID="{2ae541a5-5ecc-481d-afb6-c03a6f1e71b4}" Name="GtActionResponsible" DisplayName="{resource:SiteFields_GtActionResponsible_DisplayName}" Type="User" Group="{resource:SiteFields_Project_Group}" Description="{resource:SiteFields_GtActionResponsible_Description}" StaticName="GtActionResponsible" />

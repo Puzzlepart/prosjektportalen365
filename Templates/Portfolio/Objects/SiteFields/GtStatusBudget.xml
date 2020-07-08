@@ -1,4 +1,4 @@
-﻿<Field Description="{resource:SiteFields_GtStatusBudget_Description}" DisplayName="{resource:SiteFields_GtStatusBudget_DisplayName}" Format="RadioButtons" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{a9902b9d-8aad-40df-9788-ba73c64c3cb5}" Name="GtStatusBudget" StaticName="GtStatusBudget" Type="Choice">
+﻿<Field Description="{resource:SiteFields_GtStatusBudget_Description}" DisplayName="{resource:SiteFields_GtStatusBudget_DisplayName}" Format="RadioButtons" Group="{resource:SiteFields_Portfolio_Group}" ID="{a9902b9d-8aad-40df-9788-ba73c64c3cb5}" Name="GtStatusBudget" StaticName="GtStatusBudget" Type="Choice">
     <CHOICES>
         <CHOICE>Mindre overskridelser</CHOICE>
         <CHOICE>Over budsjett</CHOICE>

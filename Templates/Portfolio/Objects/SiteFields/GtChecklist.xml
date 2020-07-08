@@ -1,1 +1,1 @@
-﻿<Field Type="Note" DisplayName="Sjekkliste" Description="Sjekkpunkter separert med semikolon." Group="Kolonner for Prosjektportalen (Portefølje)" ID="{3eb0bf2f-9cda-47b7-9865-515e04d8a6f1}" StaticName="GtChecklist" Name="GtChecklist" />
+<Field Type="Note" DisplayName="{resource:SiteFields_GtChecklist_DisplayName}" Description="{resource:SiteFields_GtChecklist_Description}" Group="{resource:SiteFields_Portfolio_Group}" ID="{3eb0bf2f-9cda-47b7-9865-515e04d8a6f1}" StaticName="GtChecklist" Name="GtChecklist" />

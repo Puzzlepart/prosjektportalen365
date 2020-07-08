@@ -1,0 +1,7 @@
+{
+  "name": "prosjektportalen365-portfolio-template",
+  "main": "generateResxJson.js",
+  "scripts": {
+    "generateResxJson": "node generateResxJson"
+  }
+}

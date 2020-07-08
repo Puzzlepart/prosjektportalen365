@@ -1,7 +1,1 @@
-﻿<Field ID="{62f0454d-1150-4d55-86ef-075f786d6e5c}" Name="GtRiskFactorPostAction" DisplayName="Risikofaktor etter tiltak" Type="Calculated" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" ResultType="Number" StaticName="GtRiskFactorPostAction">
-    <Formula>=GtRiskProbabilityPostAction*GtRiskConsequencePostAction</Formula>
-    <FieldRefs>
-        <FieldRef Name="GtRiskProbabilityPostAction" ID="{f81ebcb7-8791-44b0-9919-08ed5524b11d}" />
-        <FieldRef Name="GtRiskConsequencePostAction" ID="{00f17233-d4c0-49d0-aebd-5004552abb17}" />
-    </FieldRefs>
-</Field>
+<Field ID="{62f0454d-1150-4d55-86ef-075f786d6e5c}" Name="GtRiskFactorPostAction" DisplayName="{resource:SiteFields_GtRiskFactorPostAction_DisplayName}" Type="Calculated" Group="{resource:SiteFields_Project_Group}" Description="{resource:SiteFields_GtRiskFactorPostAction_Description}" ResultType="Number" StaticName="GtRiskFactorPostAction"><Formula>=GtRiskProbabilityPostAction*GtRiskConsequencePostAction</Formula><FieldRefs><FieldRef Name="GtRiskProbabilityPostAction" ID="{f81ebcb7-8791-44b0-9919-08ed5524b11d}" /><FieldRef Name="GtRiskConsequencePostAction" ID="{00f17233-d4c0-49d0-aebd-5004552abb17}" /></FieldRefs></Field>
