@@ -1801,4 +1801,10 @@
   <data name="ClientSidePages_RiskOverview_Title" xml:space="preserve">
     <value>Risikooversikt</value>
   </data>
+  <data name="Files_StandardTemplate_Title" xml:space="preserve">
+    <value>Standardmal</value>
+  </data>
+  <data name="Files_StandardTemplate_Description" xml:space="preserve">
+    <value>Dette er standardmalen som følger med Prosjektportalen 365.</value>
+  </data>
 </root>
