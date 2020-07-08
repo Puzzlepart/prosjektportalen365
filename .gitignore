@@ -10,3 +10,5 @@ Install/InstallLog.txt
 SharePointFramework/**/.vscode/launch.json
 SharePointFramework/**/package-lock.json
 Templates/Portfolio/*.txt
+Templates/Portfolio/Prosjektmaler/*.txt
+Templates/Portfolio/Resources.json
