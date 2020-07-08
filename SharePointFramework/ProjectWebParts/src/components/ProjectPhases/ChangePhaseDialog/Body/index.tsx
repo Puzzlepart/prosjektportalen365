@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { ChangingPhaseView, InitialView, SummaryView, View } from '../Views'
-import IBodyProps from './IBodyProps'
+import IBodyProps from './types'
 
 
 export const Body = (props: IBodyProps) => {

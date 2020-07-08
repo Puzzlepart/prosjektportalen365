@@ -3,7 +3,7 @@ import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle'
 import { ActionButton } from 'office-ui-fabric-react/lib/Button'
 import * as React from 'react'
 import { formatDate } from 'shared/lib/helpers/formatDate'
-import { IStatusReportsProps } from './IStatusReportsProps'
+import { IStatusReportsProps } from './types'
 import styles from './StatusReports.module.scss'
 
 export class StatusReports extends React.Component<IStatusReportsProps, {}> {

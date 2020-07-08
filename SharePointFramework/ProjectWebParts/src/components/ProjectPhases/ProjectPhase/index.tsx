@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styles from './ProjectPhase.module.scss'
-import { IProjectPhaseProps } from './IProjectPhaseProps'
+import { IProjectPhaseProps } from './types'
 
 /**
  * @component ProjectPhase

@@ -4,7 +4,7 @@ import * as strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
 import { useState } from 'react'
 import styles from './CheckListItem.module.scss'
-import IChecklistItemProps from './IChecklistItemProps'
+import IChecklistItemProps from './types'
 
 const STATUS_COLORS = {
     [strings.StatusOpen]: 'inherit',

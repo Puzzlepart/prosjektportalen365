@@ -1,4 +1,4 @@
-define ([], function () {
+define([], function () {
   return {
     ChangePhaseText: 'Change to this phase',
     ChangingPhaseDescription: 'Changes phase to {0}',
@@ -37,7 +37,11 @@ define ([], function () {
     PhaseChecklistViewUrl: 'Lists/PhaseChecklist/AllItems.aspx',
     PickReportText: 'Select Report',
     SaveText: 'Save',
+    RiskMatrixGroupName: 'Risk Matrix',
+    ProjectStatusProjectPropertiesGroupName: 'Project Properties (Status Sections)',
     SettingsGroupName: 'Settings',
+    DataGroupName: 'Data',
+    LookAndFeelGroupName: 'Look and feel',
     GeneralGroupName: 'General',
     Skip: 'Skip All',
     StatusClosed: 'Done',
@@ -88,6 +92,15 @@ define ([], function () {
     RiskMatrix_EmptyMessage: 'There are no Risk elements in the specified view.',
     RiskMatrix_LoadingText: 'Loading risk matrix ...',
     GtModerationStatus_Choice_Published: 'Published',
-    GtModerationStatus_Choice_Draft: 'Draft'
+    GtModerationStatus_Choice_Draft: 'Draft',
+    ListNameFieldLabel: 'List name',
+    ViewXmlFieldLabel: 'View XML',
+    ProbabilityFieldNameFieldLabel: 'Field name - Probability',
+    ConsequenceFieldNameFieldLabel: 'Field name - Consequence',
+    ProbabilityPostActionFieldNameFieldLabel: 'Field name - Probability (post action)',
+    ConsequencePostActionFieldNameFieldLabel: 'Field name - Consequence (post action)',
+    WidthFieldLabel: 'Width (pixels)',
+    HeightFieldLabel: 'Height (pixels)',
+    CalloutTemplateFieldLabel: 'Callout template'
   }
 });

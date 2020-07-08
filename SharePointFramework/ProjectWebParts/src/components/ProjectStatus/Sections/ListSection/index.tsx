@@ -6,9 +6,7 @@ import * as React from 'react'
 import { getObjectValue } from 'shared/lib/helpers'
 import { BaseSection } from '../BaseSection/index'
 import { StatusElement } from '../../StatusElement'
-import { IListSectionData } from './IListSectionData'
-import { IListSectionProps } from './IListSectionProps'
-import { IListSectionState } from './IListSectionState'
+import { IListSectionProps, IListSectionState, IListSectionData } from './types'
 import styles from './ListSection.module.scss'
 
 export class ListSection extends BaseSection<IListSectionProps, IListSectionState<IListSectionData>> {
@@ -96,3 +94,5 @@ export class ListSection extends BaseSection<IListSectionProps, IListSectionStat
     }
   }
 }
+
+export * from './types'

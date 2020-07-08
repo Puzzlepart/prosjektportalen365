@@ -2,7 +2,7 @@ import { stringIsNullOrEmpty } from '@pnp/common'
 import * as React from 'react'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection'
-import { IProjectPropertiesSectionProps } from './IProjectPropertiesSectionProps'
+import { IProjectPropertiesSectionProps } from './types'
 import styles from './ProjectPropertiesSection.module.scss'
 import { StatusSectionField } from './StatusSectionField'
 

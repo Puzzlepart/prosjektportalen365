@@ -1,5 +1,5 @@
 import { StatusReport, SectionModel } from 'shared/lib/models'
-import { IProjectStatusData } from '../../IProjectStatusData'
+import { IProjectStatusData } from '../..'
 import { IStatusElementProps } from '../../StatusElement/IStatusElementProps'
 
 export interface IBaseSectionProps {
@@ -37,4 +37,11 @@ export interface IBaseSectionProps {
    * URL for the web
    */
   webUrl: string;
+}
+
+export interface IBaseSectionState {
+  /**
+   * List items
+   */
+  listItems?: any[];
 }

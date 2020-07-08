@@ -44,6 +44,8 @@ declare interface IProjectWebPartsStrings {
   PickReportText: string;
   SaveText: string;
   SettingsGroupName: string;
+  DataGroupName: string;
+  LookAndFeelGroupName: string;
   Skip: string;
   StatusClosed: string;
   StatusNotRelevant: string;
@@ -56,6 +58,8 @@ declare interface IProjectWebPartsStrings {
   ViewVersionHistoryText: string;
   WebPartNotConfiguredMessage: string;
   Yes: string;
+  RiskMatrixGroupName: string;
+  ProjectStatusProjectPropertiesGroupName: string;
   GeneralGroupName: string;
   SyncProjectPropertiesText: string;
   SyncProjectPropertiesDescription: string;
@@ -88,6 +92,15 @@ declare interface IProjectWebPartsStrings {
   RiskMatrix_LoadingText: string;
   GtModerationStatus_Choice_Published: string;
   GtModerationStatus_Choice_Draft: string;
+  ListNameFieldLabel: string;
+  ViewXmlFieldLabel: string;
+  ProbabilityFieldNameFieldLabel: string;
+  ConsequenceFieldNameFieldLabel: string;
+  ProbabilityPostActionFieldNameFieldLabel: string;
+  ConsequencePostActionFieldNameFieldLabel: string;
+  WidthFieldLabel: string;
+  HeightFieldLabel: string;
+  CalloutTemplateFieldLabel: string;
 }
 
 declare module 'ProjectWebPartsStrings' {

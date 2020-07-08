@@ -194,5 +194,4 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
   }
 }
 
-export { IProjectPhasesProps }
-
+export * from './types'
