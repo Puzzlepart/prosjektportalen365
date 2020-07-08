@@ -683,7 +683,7 @@
     <value>Vedlegg til oppgaven. Skrives på formatet url;tittel;type. Separer verdier med |. Type kan f.eks. være PowerPoint, Word, Excel eller Other.</value>
   </data>
   <data name="SiteFields_GtActionChannel_DisplayName" xml:space="preserve">
-    <value>Kommunikasjonskanal</value>
+    <value>Communication channel</value>
   </data>
   <data name="SiteFields_GtActionChannel_Description" xml:space="preserve">
     <value></value>

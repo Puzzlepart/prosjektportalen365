@@ -33,6 +33,8 @@
     [string]$TenantAppCatalogUrl
 )
 
+$LCID = 1044
+
 $ErrorActionPreference = "Stop"
 $sw = [Diagnostics.Stopwatch]::StartNew()
 $InstallStartTime = (Get-Date -Format o)
@@ -114,7 +116,7 @@ if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
         $PortfolioSite = Get-PnPTenantSite -Url $Url -ErrorAction SilentlyContinue
         if ($null -eq $PortfolioSite) {
             Write-Host "[INFO] Creating portfolio site at [$Url]"
-            New-PnPSite -Type TeamSite -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Lcid 1044 >$null 2>&1
+            New-PnPSite -Type TeamSite -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Lcid $LCID >$null 2>&1
             Write-Host "[SUCCESS] Portfolio site created at [$Url]" -ForegroundColor Green
         }
         Register-PnPHubSite -Site $Url -ErrorAction SilentlyContinue
@@ -272,7 +274,10 @@ if (-not $SkipTemplate.IsPresent) {
         }
         
         Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
-        Apply-PnPProvisioningTemplate .\Templates\Portfolio.pnp -ErrorAction Stop
+        $Instance = Read-PnPProvisioningTemplate .\Templates\Portfolio.pnp
+        $Instance.SupportedUILanguages[0].LCID = $LCID
+        Apply-PnPProvisioningTemplate -InputInstance $Instance -Handlers SupportedUILanguages
+        Apply-PnPProvisioningTemplate .\Templates\Portfolio.pnp -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
         Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
         
         Disconnect-PnPOnline

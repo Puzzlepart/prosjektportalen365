@@ -4,7 +4,7 @@
     <pnp:Preferences></pnp:Preferences>
     <pnp:Localizations>
         <pnp:Localization LCID="1044" Name="Norwegian" ResourceFile="Resources.no-NB.resx" />
-        <pnp:Localization LCID="1033" Name="English (US)" ResourceFile="Resources.no-NB.resx" />
+        <pnp:Localization LCID="1033" Name="English (US)" ResourceFile="Resources.en-US.resx" />
     </pnp:Localizations>
     <pnp:Templates ID="CONTAINER-TEMPLATE-PP-PORTFOLIO">
         <pnp:ProvisioningTemplate ID="TEMPLATE-PP-PORTFOLIO" Version="1" Scope="RootSite">
