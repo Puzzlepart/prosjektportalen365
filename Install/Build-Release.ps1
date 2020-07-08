@@ -73,6 +73,9 @@ Set-Location $PSScriptRoot
 
 #region Build PnP templates
 Write-Host "[INFO] Building [Portfolio] PnP template"
+Set-Location "$PSScriptRoot/../Templates/Portfolio"
+npm run generateTemplate
+Set-Location $PSScriptRoot
 Convert-PnPFolderToProvisioningTemplate -Out "$ReleasePath/Templates/Portfolio.pnp" -Folder "$PSScriptRoot/../Templates/Portfolio" -Force
 
 Write-Host "[INFO] Building [Taxonomy] PnP template"

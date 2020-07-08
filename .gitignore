@@ -12,3 +12,4 @@ SharePointFramework/**/package-lock.json
 Templates/Portfolio/*.txt
 Templates/Portfolio/Prosjektmaler/*.txt
 Templates/Portfolio/Resources.json
+.DS_Store
