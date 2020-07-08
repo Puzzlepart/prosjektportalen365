@@ -65,7 +65,7 @@ foreach ($Solution in $Solutions) {
         npm install --silent
         npm run package
     }
-    Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse | Where-Object{-not ($_.PSIsContainer -or (Test-Path "$ReleasePath/Apps/$_"))} | Copy-Item -Destination "$ReleasePath/Apps" -Force
+    Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$ReleasePath/Apps/$_")) } | Copy-Item -Destination "$ReleasePath/Apps" -Force
 }
 #endregion
 
@@ -77,6 +77,11 @@ Set-Location "$PSScriptRoot/../Templates"
 npm run generateJsonTemplates
 Set-Location $PSScriptRoot
 Convert-PnPFolderToProvisioningTemplate -Out "$ReleasePath/Templates/Portfolio.pnp" -Folder "$PSScriptRoot/../Templates/Portfolio" -Force
+
+Write-Host "[INFO] Building PnP content templates"
+Get-ChildItem "$PSScriptRoot/../Templates/Content" -Directory | ForEach-Object {
+    Convert-PnPFolderToProvisioningTemplate -Out "$ReleasePath/Templates/$($_.BaseName).pnp" -Folder $_.FullName -Force
+}
 
 Write-Host "[INFO] Building [Taxonomy] PnP template"
 Convert-PnPFolderToProvisioningTemplate -Out "$ReleasePath/Templates/Taxonomy.pnp" -Folder "$PSScriptRoot/../Templates/Taxonomy" -Force
