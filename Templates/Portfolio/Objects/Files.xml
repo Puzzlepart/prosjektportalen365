@@ -1,8 +1,8 @@
 <pnp:Files xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
-    <pnp:File Src="{resources:Lists_ProjectTemplates_Url}\{resource:Files_StandardTemplate_Title}.txt" Folder="{resources:Lists_ProjectTemplates_Url}" Level="Published" Overwrite="true">
+    <pnp:File Src="{resources:Lists_ProjectTemplates_Url}\{resource:Files_DefaultTemplate_Title}.txt" Folder="{resources:Lists_ProjectTemplates_Url}" Level="Published" Overwrite="true">
         <pnp:Properties>
-            <pnp:Property Key="Title" Value="{resource:Files_StandardTemplate_Title}" />
-            <pnp:Property Key="GtDescription" Value="{resource:Files_StandardTemplate_Description}" />
+            <pnp:Property Key="Title" Value="{resource:Files_DefaultTemplate_Title}" />
+            <pnp:Property Key="GtDescription" Value="{resource:Files_DefaultTemplate_Description}" />
             <pnp:Property Key="IconName" Value="Page" />
             <pnp:Property Key="IsDefaultTemplate" Value="1" />
         </pnp:Properties>
