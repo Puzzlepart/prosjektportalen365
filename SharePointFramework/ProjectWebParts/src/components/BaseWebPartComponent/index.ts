@@ -1,7 +1,6 @@
 import { Logger, LogLevel } from '@pnp/logging'
 import * as React from 'react'
-import { IBaseWebPartComponentProps } from './IBaseWebPartComponentProps'
-import { IBaseWebPartComponentState } from './IBaseWebPartComponentState'
+import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from './types'
 
 export class BaseWebPartComponent<T1 extends IBaseWebPartComponentProps, T2 extends IBaseWebPartComponentState<any>> extends React.Component<T1, T2> {
     /**
@@ -50,5 +49,4 @@ export class BaseWebPartComponent<T1 extends IBaseWebPartComponentProps, T2 exte
     }
 }
 
-export * from './IBaseWebPartComponentProps'
-export * from './IBaseWebPartComponentState'
+export * from './types'

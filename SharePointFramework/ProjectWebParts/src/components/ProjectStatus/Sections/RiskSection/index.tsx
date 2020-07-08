@@ -4,12 +4,10 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import * as strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
 import { RiskMatrix } from '../../../RiskMatrix'
-import { RiskElementModel } from '../../../RiskMatrix/RiskElementModel'
+import { RiskElementModel } from '../../../RiskMatrix'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection'
-import { IRiskSectionData } from './IRiskSectionData'
-import { IRiskSectionProps } from './IRiskSectionProps'
-import { IRiskSectionState } from './IRiskSectionState'
+import { IRiskSectionProps, IRiskSectionState, IRiskSectionData } from './types'
 import styles from './RiskSection.module.scss'
 
 export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionState> {
@@ -93,7 +91,7 @@ export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionStat
             isResizable: true,
           } as IColumn)
         })
-      return { items:itemValues, columns, riskElements }
+      return { items: itemValues, columns, riskElements }
     } catch (error) {
       throw error
     }

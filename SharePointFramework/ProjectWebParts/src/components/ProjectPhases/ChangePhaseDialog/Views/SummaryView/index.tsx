@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { CheckListItem } from './CheckListItem'
-import { ISummaryViewProps } from './ISummaryViewProps'
+import { ISummaryViewProps } from './types'
 import styles from './SummaryView.module.scss'
 
 /**

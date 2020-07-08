@@ -4,9 +4,8 @@ import * as React from 'react'
 import { StatusElement } from '../../StatusElement'
 import { IStatusElementProps } from '../../StatusElement/IStatusElementProps'
 import { BaseSection } from '../BaseSection'
-import { ISummarySectionProps } from './ISummarySectionProps'
-import { ISummarySectionState } from './ISummarySectionState'
 import styles from './SummarySection.module.scss'
+import { ISummarySectionProps, ISummarySectionState } from './types'
 
 export class SummarySection extends BaseSection<ISummarySectionProps, ISummarySectionState> {
   constructor(props: ISummarySectionProps) {

@@ -1,5 +1,5 @@
 import { ProjectColumnConfig, SectionModel } from 'shared/lib/models'
-import { IBaseSectionProps } from '../BaseSection'
+import { IBaseSectionProps, IBaseSectionState } from '../BaseSection'
 
 export interface ISummarySectionProps extends IBaseSectionProps {
     /**
@@ -12,3 +12,6 @@ export interface ISummarySectionProps extends IBaseSectionProps {
      */
     columnConfig: ProjectColumnConfig[];
 }
+
+
+export type ISummarySectionState = IBaseSectionState

@@ -9,12 +9,10 @@ import * as React from 'react'
 import * as format from 'string-format'
 import SPDataAdapter from '../../data'
 import { UserMessage } from '../UserMessage'
-import ChangePhaseDialog from './ChangePhaseDialog/index'
-import { IProjectPhasesData } from './IProjectPhasesData'
-import { IProjectPhasesProps } from './IProjectPhasesProps'
-import { IProjectPhasesState } from './IProjectPhasesState'
+import ChangePhaseDialog from './ChangePhaseDialog'
+import { IProjectPhasesProps,IProjectPhasesState,IProjectPhasesData } from './types'
 import ProjectPhase from './ProjectPhase'
-import ProjectPhaseCallout from './ProjectPhaseCallout/index'
+import ProjectPhaseCallout from './ProjectPhaseCallout'
 import styles from './ProjectPhases.module.scss'
 
 /**
@@ -196,5 +194,4 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
   }
 }
 
-export { IProjectPhasesProps }
-
+export * from './types'

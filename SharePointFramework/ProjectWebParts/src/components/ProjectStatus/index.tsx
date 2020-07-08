@@ -14,10 +14,7 @@ import { PortalDataService } from 'shared/lib/services'
 import { getUrlParam, parseUrlHash, setUrlHash, removeMenuBorder } from 'shared/lib/util'
 import * as formatString from 'string-format'
 import SPDataAdapter from '../../data'
-import { IProjectStatusData } from './IProjectStatusData'
-import { IProjectStatusHashState } from './IProjectStatusHashState'
-import { IProjectStatusProps } from './IProjectStatusProps'
-import { IProjectStatusState } from './IProjectStatusState'
+import { IProjectStatusProps, IProjectStatusState, IProjectStatusHashState, IProjectStatusData } from './types'
 import styles from './ProjectStatus.module.scss'
 import { IBaseSectionProps, ListSection, ProjectPropertiesSection, RiskSection, StatusSection, SummarySection } from './Sections'
 
@@ -152,8 +149,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
 
     return (
       <CommandBar
-       items={removeMenuBorder<IContextualMenuItem>(items)} 
-       farItems={removeMenuBorder<IContextualMenuItem>(farItems)} />
+        items={removeMenuBorder<IContextualMenuItem>(items)}
+        farItems={removeMenuBorder<IContextualMenuItem>(farItems)} />
     )
   }
 
@@ -344,5 +341,5 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   }
 }
 
-export { IProjectStatusProps }
+export * from './types'
 

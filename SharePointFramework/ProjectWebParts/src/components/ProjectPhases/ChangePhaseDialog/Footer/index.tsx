@@ -3,7 +3,7 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog'
 import * as strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
 import { View } from '../Views'
-import IFooterProps from './IFooterProps'
+import IFooterProps from './types'
 
 /**
  * @component Footer

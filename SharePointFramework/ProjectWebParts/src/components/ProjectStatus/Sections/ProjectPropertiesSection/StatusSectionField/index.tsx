@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { IStatusSectionFieldProps } from './IStatusSectionFieldProps'
+import { IStatusSectionFieldProps } from './types'
 import styles from './StatusSectionField.module.scss'
 
 

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { IRiskElementProps } from './IRiskElementProps'
+import { IRiskElementProps } from './types'
 import styles from './RiskElement.module.scss'
 import { RiskElementCallout } from './RiskElementCallout'
 

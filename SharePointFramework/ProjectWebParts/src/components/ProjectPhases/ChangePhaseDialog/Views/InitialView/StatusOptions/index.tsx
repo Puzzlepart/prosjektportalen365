@@ -1,6 +1,6 @@
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import * as React from 'react'
-import { IStatusOptionsProps } from './IStatusOptionsProps'
+import { IStatusOptionsProps } from './types'
 
 /**
  * @component StatusOptions

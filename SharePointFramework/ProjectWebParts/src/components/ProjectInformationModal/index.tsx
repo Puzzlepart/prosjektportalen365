@@ -1,7 +1,7 @@
 import { Modal } from 'office-ui-fabric-react/lib/Modal'
 import * as React from 'react'
 import { ProjectInformation } from '../ProjectInformation'
-import { IProjectInformationModalProps } from './IProjectInformationModalProps'
+import { IProjectInformationModalProps } from './types'
 import styles from './ProjectInformationModal.module.scss'
 
 export class ProjectInformationModal extends React.Component<IProjectInformationModalProps, {}> {

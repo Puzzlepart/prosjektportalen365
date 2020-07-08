@@ -3,7 +3,7 @@ import { IButtonProps } from 'office-ui-fabric-react/lib/Button'
 import { TextField } from 'office-ui-fabric-react/lib/TextField'
 import * as strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
-import { IInitialViewProps } from './IInitialViewProps'
+import { IInitialViewProps } from './types'
 import styles from './InitialView.module.scss'
 import { StatusOptions } from './StatusOptions'
 

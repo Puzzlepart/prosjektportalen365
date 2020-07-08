@@ -3,9 +3,8 @@ import { getId } from '@uifabric/utilities'
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
-import { IProjectPropertyProps } from './IProjectPropertyProps'
+import { IProjectPropertyProps } from './types'
 import styles from './ProjectProperty.module.scss'
-import { ProjectPropertyModel } from './ProjectPropertyModel'
 
 
 export const ProjectProperty = ({ model, style, displayMode = DisplayMode.Read, onFieldExternalChanged, showFieldExternal }: IProjectPropertyProps) => {
@@ -46,5 +45,5 @@ export const ProjectProperty = ({ model, style, displayMode = DisplayMode.Read, 
     }
 }
 
-export { IProjectPropertyProps, ProjectPropertyModel }
+export * from './types'
 

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { IRiskMatrixProps } from './IRiskMatrixProps'
+import { IRiskMatrixProps } from './types'
 import { MatrixRows } from './MatrixRow'
 import styles from './RiskMatrix.module.scss'
 
@@ -15,5 +15,5 @@ export const RiskMatrix = ({ items = [], width = 400, height = 300, calloutTempl
         </div>
     )
 }
-export * from './IRiskMatrixProps'
+export * from './types'
 

@@ -4,7 +4,7 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import * as strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
 import { UserMessage } from '../../UserMessage'
-import { IProjectPropertiesProps } from './IProjectPropertiesProps'
+import { IProjectPropertiesProps } from './types'
 import styles from './ProjectProperties.module.scss'
 import { ProjectProperty } from './ProjectProperty'
 
