@@ -14,7 +14,7 @@ $xmlFiles | ForEach-Object {
 
 # $usedRes | Select-Object -Unique | Out-File used_resources.txt -Encoding utf8 -Force
 
-$content = Get-Content ./Resources.no-NB.resx | Out-String
+$content = Get-Content ./Portfolio/Resources.no-NB.resx | Out-String
 
 $availableRes = @()
 

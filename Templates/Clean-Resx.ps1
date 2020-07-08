@@ -1,6 +1,6 @@
 $unused = Get-Content './unused_resources.txt'
 
-[xml]$xml = Get-Content ./Resources.no-NB.resx
+[xml]$xml = Get-Content ./Portfolio/Resources.no-NB.resx
 
 $dataNodes = $xml.root.SelectNodes("data")
 

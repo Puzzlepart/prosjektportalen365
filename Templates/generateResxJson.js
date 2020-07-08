@@ -1,8 +1,8 @@
 const resxConverter = require('resx-json-typescript-converter')
 
 resxConverter.convertResx([
-    './Resources.no-NB.resx',
-    './Resources.en-US.resx'
+    './Portfolio/Resources.no-NB.resx',
+    './Portfolio/Resources.en-US.resx'
 ],
     './',
     {
