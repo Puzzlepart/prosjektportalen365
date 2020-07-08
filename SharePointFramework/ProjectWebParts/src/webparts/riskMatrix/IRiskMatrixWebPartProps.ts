@@ -1,4 +1,4 @@
-import { IBaseWebPartComponentProps } from 'components/BaseWebPartComponent/IBaseWebPartComponentProps'
+import { IBaseWebPartComponentProps } from 'components/BaseWebPartComponent/types'
 import { IRiskElementProps } from 'components/RiskMatrix/RiskElement/IRiskElementProps'
 
 export interface IRiskMatrixWebPartProps extends IBaseWebPartComponentProps, IRiskElementProps {

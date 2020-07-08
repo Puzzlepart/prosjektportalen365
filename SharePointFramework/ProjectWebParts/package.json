@@ -6,9 +6,8 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "watch": "concurrently \"npm run serveNoBrowser\" \"livereload ./dist -e js -w 250\"",
-    "serve": "gulp serve --locale=nb-no",
-    "serveNoBrowser": "gulp serve --locale=en-gb --nobrowser",
+    "watch": "concurrently \"npm run serve\" \"livereload ./dist -e js -w 250\"",
+    "serve": "gulp serve --locale=en-us --nobrowser",
     "package": "gulp clean --ship && gulp default --ship && gulp package-solution --ship",
     "deploy": "gulp uploadAppPkg && gulp deploySppkg",
     "packageAndDeploy": "npm run package && npm run deploy",
@@ -21,7 +20,6 @@
     "majorVersion": "npm version major",
     "prepackage": "gulp setHiddenToolbox --ship",
     "preserve": "gulp setHiddenToolbox",
-    "preserveNoBrowser": "gulp setHiddenToolbox",
     "lint": "eslint --ext .ts,.tsx ./src --color --fix"
   },
   "dependencies": {
