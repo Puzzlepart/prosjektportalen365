@@ -17,13 +17,16 @@ Object.keys(resources).forEach(key => {
         template,
         '{resource:', '}'
     )
+
     content = jtr.replace(
         pkg,
         content,
         '{', '}'
     )
 
-    fs.writeFile(path.join(__dirname, 'Prosjektmaler', output[key]), JSON.stringify(content, null, 4), () => {
+    console.log(path.join(__dirname, `../Content/Portfolio_content.${key}/ProjectTemplates`, output[key]))
+
+    fs.writeFile(path.join(__dirname, `../Content/Portfolio_content.${key}/ProjectTemplates`, output[key]), JSON.stringify(content, null, 4), () => {
 
     })
 })
