@@ -688,7 +688,7 @@
             },
             "Views": [
                 {
-                    "Title": "Alle elementer",
+                    "Title": "{{View_AllItems_DisplayName}}",
                     "ViewFields": [
                         "GtSortOrder",
                         "LinkTitle",
@@ -745,7 +745,7 @@
             },
             "Views": [
                 {
-                    "Title": "Alle elementer",
+                    "Title": "{{View_AllItems_DisplayName}}",
                     "ViewFields": [
                         "LinkTitle",
                         "GtStakeholderGroup",
@@ -783,7 +783,7 @@
             ],
             "Views": [
                 {
-                    "Title": "Alle elementer",
+                    "Title": "{{View_AllItems_DisplayName}}",
                     "ViewFields": [
                         "LinkTitle",
                         "GtProjectPhase",
@@ -817,7 +817,7 @@
             ],
             "Views": [
                 {
-                    "Title": "Alle elementer",
+                    "Title": "{{View_AllItems_DisplayName}}",
                     "ViewFields": [
                         "LinkTitle",
                         "GtProjectLogType",
@@ -854,7 +854,7 @@
             ],
             "Views": [
                 {
-                    "Title": "Alle elementer",
+                    "Title": "{{View_AllItems_DisplayName}}",
                     "ViewFields": [
                         "LinkTitle",
                         "GtDeliveryDescription",
@@ -907,7 +907,7 @@
             },
             "Views": [
                 {
-                    "Title": "Alle elementer",
+                    "Title": "{{View_AllItems_DisplayName}}",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1117,7 +1117,7 @@
             ],
             "Views": [
                 {
-                    "Title": "Alle elementer",
+                    "Title": "{{View_AllItems_DisplayName}}",
                     "ViewFields": [
                         "LinkTitle",
                         "GtChangeLookup",
@@ -1179,7 +1179,7 @@
             ],
             "Views": [
                 {
-                    "Title": "Alle elementer",
+                    "Title": "{{View_AllItems_DisplayName}}",
                     "ViewFields": [
                         "LinkTitle",
                         "GtProcess",
@@ -1225,7 +1225,7 @@
             ],
             "Views": [
                 {
-                    "Title": "Alle elementer",
+                    "Title": "{{View_AllItems_DisplayName}}",
                     "ViewFields": [
                         "LinkTitle",
                         "GtGainLookup",
@@ -1270,7 +1270,7 @@
             ],
             "Views": [
                 {
-                    "Title": "Alle elementer",
+                    "Title": "{{View_AllItems_DisplayName}}",
                     "ViewFields": [
                         "GtMeasureIndicatorLookup",
                         "GtMeasureIndicatorLookup_GtDesiredValue",
@@ -1323,7 +1323,7 @@
             ],
             "Views": [
                 {
-                    "Title": "Alle elementer",
+                    "Title": "{{View_AllItems_DisplayName}}",
                     "ViewFields": [
                         "ID",
                         "GtResourceUser",
