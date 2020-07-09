@@ -10,7 +10,7 @@ The source files are found in the **src** folder.
 
 Not everything we want to do is available with site designs, so we're also using [sp-js-provisioning](https://github.com/Puzzlepart/sp-js-provisioning). Please note that we´re using the Puzzlepart fork from **pnp**.
 
-With our PnP templates we're provisioning [Standardmal.txt](../Templates/Portfolio/Prosjektmaler/Standardmal.txt).
+With our PnP content templates (see **3.2.2**) we're provisioning a default template. The default templates for our supported languages are built from the source file [_JsonTemplate.json](../Templates/_JsonTemplate.json).
 
 Please note the **Parameters** object.
 
@@ -38,7 +38,7 @@ In addition to the parameters specified in [Standardmal.txt](../Templates/Portfo
 | ---------- | ------------------------------------------------------------ |
 | TermSetIds | An map of term set fields and term set id. Used to override the default term set ids. |
 
-Say you'd like to use the term set with ID **54da9f47-c64e-4a26-80f3-4d3c3fa1b7b2** for project phase. The internal field name for project phase is **GtProjectPhase**. If you build on [Standardmal.txt](../Templates/Portfolio/Prosjektmaler/Standardmal.txt), the **Parameters** object would look like this:
+Say you'd like to use the term set with ID **54da9f47-c64e-4a26-80f3-4d3c3fa1b7b2** for project phase. The internal field name for project phase is **GtProjectPhase**. With the default template, the **Parameters** object would look like this:
 
 
 ```json
