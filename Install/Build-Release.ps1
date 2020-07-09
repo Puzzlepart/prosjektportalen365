@@ -4,10 +4,10 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "Clean node_modules for all SharePoint Framework solutions")]
     [switch]$CleanNodeModules,
     [Parameter(Mandatory = $false)]
-    [string[]]$Solutions = @("ProjectWebParts", "PortfolioWebParts", "ProjectExtensions")
-)
-
-npm config set loglevel warn    
+    [string[]]$Solutions = @("ProjectWebParts", "PortfolioWebParts", "ProjectExtensions"),
+    [Parameter(Mandatory = $false)]
+    [switch]$Silent
+)   
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
 
@@ -23,7 +23,7 @@ mkdir "$ReleasePath/Scripts" >$null 2>&1
 mkdir "$ReleasePath/Apps" >$null 2>&1
 #endregion
 
-Write-Host "[INFO] Building release [v$($PackageJson.version)]"
+Write-Host "Building release [v$($PackageJson.version)]" -ForegroundColor Cyan
 
 #region Copying source files
 Write-Host "[INFO] Copying Install.ps1, PostInstall.ps1 and site script source files"
@@ -41,9 +41,9 @@ Copy-Item -Path "$PSScriptRoot/SharePointPnPPowerShellOnline" -Filter * -Destina
 
 #region Clean node_modules for all SharePoint Framework solutions
 if ($CleanNodeModules.IsPresent) {
-    foreach ($Solution in $Solutions) {
-        Write-Host "[INFO] Clearing node_modules for SharePoint Framework solution [$($Solution)]"
-        rimraf "$($PSScriptRoot)\..\SharePointFramework\$($Solution)\node_modules\"
+    $Solutions | ForEach-Object {
+        Write-Host "[INFO] Clearing node_modules for SPFx solution [$_]"
+        rimraf "$($PSScriptRoot)\..\SharePointFramework\$_\node_modules\"
     }
 }
 #endregion
@@ -51,35 +51,53 @@ if ($CleanNodeModules.IsPresent) {
 #region Package SharePoint Framework solutions
 Write-Host "[INFO] Building SharePointFramework\@Shared"
 Set-Location "$PSScriptRoot\..\SharePointFramework\@Shared"
+
 # https://github.com/SharePoint/sp-dev-docs/issues/2916
 if (-not $SkipBuildSharePointFramework.IsPresent) {
-    npm install --no-package-lock --no-progress --silent --no-audit 
-    tsc >$null 2>&1
+    if ($Silent.IsPresent) {
+        npm install --no-package-lock --no-progress --silent --no-audit 
+        npm run build >$null 2>&1
+    }
+    else {
+        npm install --no-package-lock
+        npm run build   
+    }
 }
 
 foreach ($Solution in $Solutions) {
     Set-Location "$($PSScriptRoot)\..\SharePointFramework\$($Solution)"
     $PackageSolutionJson = Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json
-    Write-Host "[INFO] Packaging SharePoint Framework solution [$($Solution)] [v$($PackageSolutionJson.solution.version)]"
+    Write-Host "[INFO] Packaging SPFx solution [$($Solution)] [v$($PackageSolutionJson.solution.version)]"
     # https://github.com/SharePoint/sp-dev-docs/issues/2916
     if (-not $SkipBuildSharePointFramework.IsPresent) {
+        if ($Silent.IsPresent) {
         npm install --no-package-lock --no-progress --silent --no-audit 
         npm run package >$null 2>&1
+        } else {
+        npm install --no-package-lock
+        npm run package 
+        }
     }
     Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$ReleasePath/Apps/$_")) } | Copy-Item -Destination "$ReleasePath/Apps" -Force
 }
 #endregion
 
-Set-Location $PSScriptRoot
 
 #region Build PnP templates
+Set-Location $PSScriptRoot
 Write-Host "[INFO] Building [Portfolio] PnP template"
 Convert-PnPFolderToProvisioningTemplate -Out "$ReleasePath/Templates/Portfolio.pnp" -Folder "$PSScriptRoot/../Templates/Portfolio" -Force
 
 Write-Host "[INFO] Building PnP content templates"
 Set-Location "$PSScriptRoot/../Templates"
-npm install --no-package-lock --no-progress --silent --no-audit 
-npm run generateJsonTemplates >$null 2>&1
+if ($Silent.IsPresent) {
+    npm install --no-package-lock --no-progress --silent --no-audit 
+    npm run generateJsonTemplates >$null 2>&1
+}
+else {
+    npm install --no-package-lock
+    npm run generateJsonTemplates
+}
 Get-ChildItem "./Content" -Directory | ForEach-Object {
     Convert-PnPFolderToProvisioningTemplate -Out "$ReleasePath/Templates/$($_.BaseName).pnp" -Folder $_.FullName -Force
 }
@@ -96,4 +114,4 @@ Add-Type -Assembly "System.IO.Compression.FileSystem"
 
 [IO.Compression.ZipFile]::CreateFromDirectory($ReleasePath, "$($ReleasePath).zip") 
 
-Write-Host "[INFO] Done building release [v$($PackageJson.version)] in [$($sw.Elapsed)]"
+Write-Host "Done building release [v$($PackageJson.version)] in [$($sw.Elapsed)]" -ForegroundColor Cyan
