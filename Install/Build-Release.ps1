@@ -26,12 +26,12 @@ mkdir "$ReleasePath/Apps" >$null 2>&1
 Write-Host "Building release [v$($PackageJson.version)]" -ForegroundColor Cyan
 
 #region Copying source files
-Write-Host "[INFO] Copying Install.ps1, PostInstall.ps1 and site script source files..."
+Write-Host "[INFO] Copying Install.ps1, PostInstall.ps1 and site script source files..." -NoNewline
 Copy-Item -Path "$PSScriptRoot/../SiteScripts/Src/*.txt" -Filter *.txt -Destination "$ReleasePath/SiteScripts" -Force
 Copy-Item -Path "$PSScriptRoot/Install.ps1" -Destination $ReleasePath -Force
 Copy-Item -Path "$PSScriptRoot/Scripts/*.ps1" -Destination "$ReleasePath/Scripts" -Force
 Copy-Item -Path "$PSScriptRoot/SearchConfiguration.xml" -Destination $ReleasePath -Force
-Write-Host "DONE" -ForegroundColor Green -NoNewline
+Write-Host "DONE" -ForegroundColor Green
 
 Write-Host "[INFO] Copying SharePointPnPPowerShellOnline bundle"
 Copy-Item -Path "$PSScriptRoot/SharePointPnPPowerShellOnline" -Filter * -Destination $ReleasePath -Force -Recurse
