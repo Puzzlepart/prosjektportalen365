@@ -52,7 +52,7 @@ Write-Host "[INFO] Building SharePointFramework\@Shared"
 Set-Location "$PSScriptRoot\..\SharePointFramework\@Shared"
 # https://github.com/SharePoint/sp-dev-docs/issues/2916
 if (-not $SkipBuildSharePointFramework.IsPresent) {
-    npm install --silent
+    npm install --silent --no-package-lock
     tsc
 }
 
@@ -62,7 +62,7 @@ foreach ($Solution in $Solutions) {
     Write-Host "[INFO] Packaging SharePoint Framework solution [$($Solution)] [v$($PackageSolutionJson.solution.version)]"
     # https://github.com/SharePoint/sp-dev-docs/issues/2916
     if (-not $SkipBuildSharePointFramework.IsPresent) {
-        npm install --silent
+        npm install --silent --no-package-lock
         npm run package
     }
     Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$ReleasePath/Apps/$_")) } | Copy-Item -Destination "$ReleasePath/Apps" -Force
@@ -74,6 +74,7 @@ Set-Location $PSScriptRoot
 #region Build PnP templates
 Write-Host "[INFO] Building [Portfolio] PnP template"
 Set-Location "$PSScriptRoot/../Templates"
+npm install --silent --no-package-lock
 npm run generateJsonTemplates
 Set-Location $PSScriptRoot
 Convert-PnPFolderToProvisioningTemplate -Out "$ReleasePath/Templates/Portfolio.pnp" -Folder "$PSScriptRoot/../Templates/Portfolio" -Force
