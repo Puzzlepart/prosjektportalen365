@@ -14,3 +14,4 @@ Templates/Portfolio/Resources.json
 .DS_Store
 Templates/Content/**/ProjectTemplates/*.txt
 Templates/Content/**/ProjectTemplates/*.txt
+Templates/*.txt
