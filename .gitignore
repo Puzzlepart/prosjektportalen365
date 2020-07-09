@@ -12,5 +12,5 @@ SharePointFramework/**/package-lock.json
 Templates/Portfolio/*.txt
 Templates/Content/**/ProjectTemplates/*.txt
 Templates/*.txt
-Templates/*.json
+Templates/Resources.json
 .DS_Store
