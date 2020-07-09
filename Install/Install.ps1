@@ -30,10 +30,26 @@
     [Parameter(Mandatory = $false, HelpMessage = "Security group to give View access to site design")]
     [string]$SiteDesignSecurityGroupId,
     [Parameter(Mandatory = $false, HelpMessage = "Tenant App Catalog Url")]
-    [string]$TenantAppCatalogUrl
+    [string]$TenantAppCatalogUrl,
+    [Parameter(Mandatory = $false, HelpMessage = "Language")]
+    [ValidateSet('Norwegian', 'English (US)')]
+    [string]$Language = "Norwegian"
 )
 
-$LCID = 1044
+#region Handling installation language
+$LanguageIds = @{
+    "Norwegian"    = 1044;
+    "English (US)" = 1033;
+}
+
+$LanguageCodes = @{
+    "Norwegian"    = 'no-NB';
+    "English (US)" = 'en-US';
+}
+
+$LanguageId = $LanguageIds[$Language]
+$LanguageCode = $LanguageCodes[$Language]
+#endregion
 
 $ErrorActionPreference = "Stop"
 $sw = [Diagnostics.Stopwatch]::StartNew()
@@ -116,7 +132,7 @@ if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
         $PortfolioSite = Get-PnPTenantSite -Url $Url -ErrorAction SilentlyContinue
         if ($null -eq $PortfolioSite) {
             Write-Host "[INFO] Creating portfolio site at [$Url]"
-            New-PnPSite -Type TeamSite -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Lcid $LCID >$null 2>&1
+            New-PnPSite -Type TeamSite -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Lcid $LanguageId >$null 2>&1
             Write-Host "[SUCCESS] Portfolio site created at [$Url]" -ForegroundColor Green
         }
         Register-PnPHubSite -Site $Url -ErrorAction SilentlyContinue
@@ -275,10 +291,16 @@ if (-not $SkipTemplate.IsPresent) {
         
         Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
         $Instance = Read-PnPProvisioningTemplate .\Templates\Portfolio.pnp
-        $Instance.SupportedUILanguages[0].LCID = $LCID
+        $Instance.SupportedUILanguages[0].LCID = $LanguageId
         Apply-PnPProvisioningTemplate -InputInstance $Instance -Handlers SupportedUILanguages
         Apply-PnPProvisioningTemplate .\Templates\Portfolio.pnp -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
         Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
+
+        if (-not $Upgrade.IsPresent) {
+            Write-Host "[INFO] Applying PnP content template to [$Url]"
+            Apply-PnPProvisioningTemplate ".\Templates\Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop
+            Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
+        }
         
         Disconnect-PnPOnline
 
