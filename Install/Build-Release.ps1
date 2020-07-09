@@ -9,6 +9,7 @@ Param(
     [switch]$Silent
 )   
 
+
 $sw = [Diagnostics.Stopwatch]::StartNew()
 
 $PackageJson = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Json
@@ -24,6 +25,11 @@ mkdir "$ReleasePath/Apps" >$null 2>&1
 #endregion
 
 Write-Host "Building release [v$($PackageJson.version)]" -ForegroundColor Cyan
+
+
+if ($Silent.IsPresent) {
+    Write-Host "Running in silent mode. All output from npm will be surpressed." -ForegroundColor Yellow
+}
 
 #region Copying source files
 Write-Host "[INFO] Copying Install.ps1, PostInstall.ps1 and site script source files...  " -NoNewline
