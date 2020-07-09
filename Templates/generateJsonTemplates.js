@@ -6,16 +6,16 @@ const jtr = new Jtr()
 const resources = require('./Resources.json')
 const template = require('./_JsonTemplate.json')
 const output = {
-    'en-US': 'DefaultTemplate.txt',
-    'no-NB': 'Standardmal.txt'
+    'en-US': path.join(__dirname, 'Content', `Portfolio_content.en-US/ProjectTemplates`, 'DefaultTemplate.txt'),
+    'no-NB': path.join(__dirname, 'Content', `Portfolio_content.no-NB/ProjectTemplates`, 'Standardmal.txt')
 }
 
 Object.keys(resources).forEach(key => {
     let content = jtr.replace(
         resources[key],
         template,
-        '{resource:',
-        '}'
+        '{{',
+        '}}'
     )
 
     content = jtr.replace(
@@ -26,7 +26,7 @@ Object.keys(resources).forEach(key => {
     )
 
     fs.writeFile(
-        path.join(__dirname, 'Content', `Portfolio_content.${key}/ProjectTemplates`, output[key]),
+        output[key],
         JSON.stringify(content, null, 4),
         () => {
 

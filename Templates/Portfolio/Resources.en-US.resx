@@ -199,6 +199,12 @@
   <data name="ContentTypes_Group" xml:space="preserve">
     <value>Prosjektportalen innholdstyper</value>
   </data>
+  <data name="ContentTypes_Uncertainty_Name}" xml:space="preserve">
+    <value>Uncertainty</value>
+  </data>
+  <data name="ContentTypes_Uncertainty_Description" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="ContentTypes_DataSource_Name}" xml:space="preserve">
     <value>Datakilde</value>
   </data>

@@ -11,4 +11,4 @@ foreach($node in $dataNodes) {
     }
 }
 
-$xml.OuterXml | Out-File ./Resources.no-NB.resx -Encoding utf8 -Force
+$xml.OuterXml | Out-File ./Portfolio/Resources.no-NB.resx -Encoding utf8 -Force

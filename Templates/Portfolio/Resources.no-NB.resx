@@ -199,6 +199,51 @@
   <data name="ContentTypes_Group" xml:space="preserve">
     <value>Prosjektportalen innholdstyper</value>
   </data>
+  <data name="ContentTypes_Uncertainty_Name" xml:space="preserve">
+    <value>Usikkerhet</value>
+  </data>
+  <data name="ContentTypes_Risk_Name" xml:space="preserve">
+    <value>Risiko</value>
+  </data>
+  <data name="ContentTypes_Possibility_Name" xml:space="preserve">
+    <value>Mulighet</value>
+  </data>
+  <data name="ContentTypes_Stakeholder_Name" xml:space="preserve">
+    <value>Interessent</value>
+  </data>
+  <data name="ContentTypes_CommunicationElement_Name" xml:space="preserve">
+    <value>Kommunikasjonselement</value>
+  </data>
+  <data name="ContentTypes_Checkpoint_Name" xml:space="preserve">
+    <value>Sjekkpunkt</value>
+  </data>
+  <data name="ContentTypes_ProjectDelivery_Name" xml:space="preserve">
+    <value>Prosjektleveranse</value>
+  </data>
+  <data name="ContentTypes_ProjectLogElement_Name" xml:space="preserve">
+    <value>Prosjektloggelement</value>
+  </data>
+  <data name="ContentTypes_ProjectEvent_Name" xml:space="preserve">
+    <value>Prosjekthendelse</value>
+  </data>
+  <data name="ContentTypes_ProjectTask_Name" xml:space="preserve">
+    <value>Prosjektoppgave</value>
+  </data>
+  <data name="ContentTypes_BenefitFollowup_Name" xml:space="preserve">
+    <value>Gevinstoppfølging</value>
+  </data>
+  <data name="ContentTypes_Benefit_Name" xml:space="preserve">
+    <value>Gevinst</value>
+  </data>
+  <data name="ContentTypes_Change_Name" xml:space="preserve">
+    <value>Endring</value>
+  </data>
+  <data name="ContentTypes_MeasureIndicator_Name" xml:space="preserve">
+    <value>Måleindikator</value>
+  </data>
+  <data name="ContentTypes_ResourceAllocation_Name" xml:space="preserve">
+    <value>Ressursallokering</value>
+  </data>
   <data name="ContentTypes_DataSource_Name}" xml:space="preserve">
     <value>Datakilde</value>
   </data>

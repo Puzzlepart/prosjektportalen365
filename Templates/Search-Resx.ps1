@@ -1,6 +1,9 @@
+Param(
+    [Parameter(Mandatory = $true)]
+    [string]$ResourceFile
+)
 
 $xmlFiles = Get-ChildItem *.xml -Recurse
-
 
 $usedRes = @()
 
@@ -12,9 +15,7 @@ $xmlFiles | ForEach-Object {
     }
 }
 
-# $usedRes | Select-Object -Unique | Out-File used_resources.txt -Encoding utf8 -Force
-
-$content = Get-Content ./Portfolio/Resources.no-NB.resx | Out-String
+$content = Get-Content $ResourceFile | Out-String
 
 $availableRes = @()
 
@@ -22,8 +23,6 @@ $availableRes = @()
     $resKey = $_.Groups | Where-Object { $_.Name -eq "key" } | Select-Object -ExpandProperty value
     $availableRes += $resKey
 }
-
-# $availableRes | Select-Object -Unique | Out-File available_resources.txt -Encoding utf8 -Force
 
 $unusedRes = Compare-Object $usedRes $availableRes | Where-Object { $_.SideIndicator -eq "=>" } | Select-Object -ExpandProperty InputObject 
 
