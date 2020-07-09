@@ -1,3 +1,5 @@
+# Search-Resx.ps1
+
 Param(
     [Parameter(Mandatory = $true)]
     [string]$ResourceFile

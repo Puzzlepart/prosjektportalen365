@@ -1,3 +1,5 @@
+# Clean-Resx.ps1
+
 $unused = Get-Content './unused_resources.txt'
 
 [xml]$xml = Get-Content ./Portfolio/Resources.no-NB.resx
