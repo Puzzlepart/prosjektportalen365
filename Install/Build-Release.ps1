@@ -58,7 +58,7 @@ Set-Location "$PSScriptRoot\..\SharePointFramework\@Shared"
 # https://github.com/SharePoint/sp-dev-docs/issues/2916
 if (-not $SkipBuildSharePointFramework.IsPresent) {
     if ($Silent.IsPresent) {
-        npm install --no-package-lock --no-progress --silent --no-audit 
+        npm install --no-package-lock --no-progress --silent --no-audit >$null 2>&1
         npm run build >$null 2>&1
     }
     else {
@@ -75,7 +75,7 @@ $Solutions | ForEach-Object {
     # https://github.com/SharePoint/sp-dev-docs/issues/2916
     if (-not $SkipBuildSharePointFramework.IsPresent) {
         if ($Silent.IsPresent) {
-            npm install --no-package-lock --no-progress --silent --no-audit 
+            npm install --no-package-lock --no-progress --silent --no-audit >$null 2>&1
             npm run package >$null 2>&1
         }
         else {
@@ -98,7 +98,7 @@ Write-Host "DONE" -ForegroundColor Green
 Write-Host "[INFO] Building PnP content templates...  " -NoNewline
 Set-Location "$PSScriptRoot/../Templates"
 if ($Silent.IsPresent) {
-    npm install --no-package-lock --no-progress --silent --no-audit 
+    npm install --no-package-lock --no-progress --silent --no-audit >$null 2>&1
     npm run generateJsonTemplates >$null 2>&1
 }
 else {
