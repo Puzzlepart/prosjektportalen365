@@ -11,7 +11,6 @@ SharePointFramework/**/.vscode/launch.json
 SharePointFramework/**/package-lock.json
 Templates/Portfolio/*.txt
 Templates/Content/**/ProjectTemplates/*.txt
-Templates/Content/**/ProjectTemplates/*.txt
 Templates/*.txt
-Templates/Resources.json
+Templates/*.json
 .DS_Store
