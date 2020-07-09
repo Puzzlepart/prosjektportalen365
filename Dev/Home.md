@@ -56,11 +56,11 @@ Say you'd like to use the term set with ID **54da9f47-c64e-4a26-80f3-4d3c3fa1b7b
 
 
 
-## 3. PnP Provisioning Templates
+## 3. Templates
 
 ### 3.1 Introduction
 
-At the root level of the **Templates** folder, the following are found:
+At the root level of the **Templates** folder, the following files are found:
 
 | File/Folder               | Description                                                  |
 | ------------------------- | ------------------------------------------------------------ |
@@ -69,17 +69,23 @@ At the root level of the **Templates** folder, the following are found:
 | `generateResxJson.js`     | Node script to generate a JSON representation of the **.resx** files |
 | `generateJsonTemplate.js` | Node script to generate JSON templates for each language     |
 | `Search-Resx.ps1`         | Script to search for unused **.resx** resources              |
+| `_JsonTemplate.json`      | JSON project template                                        |
 
 
+#### 3.11. Building JSON templates
 
-We have two PnP provisioning templates. 
+When doing changes to the JSON template the npm task `watch` can be used. This watches `_JsonTemplate.json` and builds localized version of this to the corresponding Content template.
+
+### 3.2 PnP templates
+
+In addition we have two PnP provisioning templates. 
 
 | Template                            | Description      |
 | ----------------------------------- | ---------------- |
 | [Portfolio](../Templates/Portfolio) | Portfolio assets |
 | [Taxonomy](../Templates/Taxonomy)   | Taxonomy         |
 
-### 3.2 Portfolio
+### 3.3 Portfolio
 
 | File/Folder          | Description                                                  |
 | -------------------- | ------------------------------------------------------------ |
@@ -87,7 +93,6 @@ We have two PnP provisioning templates.
 | SiteAssets           | Files to be uploaded to SiteAssets                           |
 | Portfolio.xml        | Main template file                                           |
 | `Resources.*.resx` | Resource files                               |
-|                      |                                                              |
 
 ### 3.3 Content templates
 
