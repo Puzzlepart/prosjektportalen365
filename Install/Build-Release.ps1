@@ -53,8 +53,8 @@ Write-Host "[INFO] Building SharePointFramework\@Shared"
 Set-Location "$PSScriptRoot\..\SharePointFramework\@Shared"
 # https://github.com/SharePoint/sp-dev-docs/issues/2916
 if (-not $SkipBuildSharePointFramework.IsPresent) {
-    npm install --no-package-lock
-    tsc
+    npm install --no-package-lock --no-progress --silent
+    tsc >$null 2>&1
 }
 
 foreach ($Solution in $Solutions) {
@@ -63,8 +63,8 @@ foreach ($Solution in $Solutions) {
     Write-Host "[INFO] Packaging SharePoint Framework solution [$($Solution)] [v$($PackageSolutionJson.solution.version)]"
     # https://github.com/SharePoint/sp-dev-docs/issues/2916
     if (-not $SkipBuildSharePointFramework.IsPresent) {
-        npm install --no-package-lock
-        npm run package
+        npm install --no-package-lock --no-progress --silent
+        npm run package >$null 2>&1
     }
     Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$ReleasePath/Apps/$_")) } | Copy-Item -Destination "$ReleasePath/Apps" -Force
 }
@@ -78,8 +78,8 @@ Convert-PnPFolderToProvisioningTemplate -Out "$ReleasePath/Templates/Portfolio.p
 
 Write-Host "[INFO] Building PnP content templates"
 Set-Location "$PSScriptRoot/../Templates"
-npm install --no-package-lock
-npm run generateJsonTemplates
+npm install --no-package-lock --no-progress --silent
+npm run generateJsonTemplates >$null 2>&1
 Get-ChildItem "./Content" -Directory | ForEach-Object {
     Convert-PnPFolderToProvisioningTemplate -Out "$ReleasePath/Templates/$($_.BaseName).pnp" -Folder $_.FullName -Force
 }
