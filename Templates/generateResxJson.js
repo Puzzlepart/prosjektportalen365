@@ -1,3 +1,5 @@
+// generateResxJson.js
+
 const resxConverter = require('resx-json-typescript-converter')
 
 resxConverter.convertResx([
