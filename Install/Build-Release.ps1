@@ -6,7 +6,8 @@ Param(
     [Parameter(Mandatory = $false)]
     [string[]]$Solutions = @("ProjectWebParts", "PortfolioWebParts", "ProjectExtensions")
 )
-    
+
+npm config set loglevel warn    
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
 
@@ -52,7 +53,7 @@ Write-Host "[INFO] Building SharePointFramework\@Shared"
 Set-Location "$PSScriptRoot\..\SharePointFramework\@Shared"
 # https://github.com/SharePoint/sp-dev-docs/issues/2916
 if (-not $SkipBuildSharePointFramework.IsPresent) {
-    npm install --silent --no-package-lock
+    npm install --no-package-lock
     tsc
 }
 
@@ -62,10 +63,12 @@ foreach ($Solution in $Solutions) {
     Write-Host "[INFO] Packaging SharePoint Framework solution [$($Solution)] [v$($PackageSolutionJson.solution.version)]"
     # https://github.com/SharePoint/sp-dev-docs/issues/2916
     if (-not $SkipBuildSharePointFramework.IsPresent) {
-        npm install --silent --no-package-lock
+        npm install --no-package-lock
         npm run package
     }
-    Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$ReleasePath/Apps/$_")) } | Copy-Item -Destination "$ReleasePath/Apps" -Force
+    Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse
+    | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$ReleasePath/Apps/$_")) }
+    | Copy-Item -Destination "$ReleasePath/Apps" -Force
 }
 #endregion
 
@@ -73,16 +76,16 @@ Set-Location $PSScriptRoot
 
 #region Build PnP templates
 Write-Host "[INFO] Building [Portfolio] PnP template"
-Set-Location "$PSScriptRoot/../Templates"
-npm install --silent --no-package-lock
-npm run generateJsonTemplates
-Set-Location $PSScriptRoot
 Convert-PnPFolderToProvisioningTemplate -Out "$ReleasePath/Templates/Portfolio.pnp" -Folder "$PSScriptRoot/../Templates/Portfolio" -Force
 
 Write-Host "[INFO] Building PnP content templates"
-Get-ChildItem "$PSScriptRoot/../Templates/Content" -Directory | ForEach-Object {
+Set-Location "$PSScriptRoot/../Templates"
+npm install --no-package-lock
+npm run generateJsonTemplates
+Get-ChildItem "./Content" -Directory | ForEach-Object {
     Convert-PnPFolderToProvisioningTemplate -Out "$ReleasePath/Templates/$($_.BaseName).pnp" -Folder $_.FullName -Force
 }
+Set-Location $PSScriptRoot
 
 Write-Host "[INFO] Building [Taxonomy] PnP template"
 Convert-PnPFolderToProvisioningTemplate -Out "$ReleasePath/Templates/Taxonomy.pnp" -Folder "$PSScriptRoot/../Templates/Taxonomy" -Force
