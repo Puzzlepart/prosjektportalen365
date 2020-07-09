@@ -199,151 +199,151 @@
   <data name="ContentTypes_Group" xml:space="preserve">
     <value>Prosjektportalen innholdstyper</value>
   </data>
-  <data name="ContentTypes_Uncertainty_Name}" xml:space="preserve">
+  <data name="ContentTypes_Uncertainty_Name" xml:space="preserve">
     <value>Uncertainty</value>
   </data>
   <data name="ContentTypes_Uncertainty_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_DataSource_Name}" xml:space="preserve">
+  <data name="ContentTypes_DataSource_Name" xml:space="preserve">
     <value>Datakilde</value>
   </data>
   <data name="ContentTypes_DataSource_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_CustomChart_Name}" xml:space="preserve">
+  <data name="ContentTypes_CustomChart_Name" xml:space="preserve">
     <value>Egendefinert diagram</value>
   </data>
   <data name="ContentTypes_CustomChart_Description" xml:space="preserve">
     <value>Opprett et nytt egendefinert diagram</value>
   </data>
-  <data name="ContentTypes_ChartConfigurationElement_Name}" xml:space="preserve">
+  <data name="ContentTypes_ChartConfigurationElement_Name" xml:space="preserve">
     <value>Grafkonfigurasjonelement</value>
   </data>
   <data name="ContentTypes_ChartConfigurationElement_Description" xml:space="preserve">
     <value>Opprett et nytt grafkonfigurasjonelement</value>
   </data>
-  <data name="ContentTypes_Stakeholder_Name}" xml:space="preserve">
+  <data name="ContentTypes_Stakeholder_Name" xml:space="preserve">
     <value>Interessent</value>
   </data>
   <data name="ContentTypes_Stakeholder_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_ColumnChart_Name}" xml:space="preserve">
+  <data name="ContentTypes_ColumnChart_Name" xml:space="preserve">
     <value>Kolonnediagram</value>
   </data>
   <data name="ContentTypes_ColumnChart_Description" xml:space="preserve">
     <value>Opprett et nytt kolonnediagram</value>
   </data>
-  <data name="ContentTypes_ConfigurationElement_Name}" xml:space="preserve">
+  <data name="ContentTypes_ConfigurationElement_Name" xml:space="preserve">
     <value>Konfigurasjonselement</value>
   </data>
   <data name="ContentTypes_ConfigurationElement_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_ListContent_Name}" xml:space="preserve">
+  <data name="ContentTypes_ListContent_Name" xml:space="preserve">
     <value>Listeinnhold</value>
   </data>
   <data name="ContentTypes_ListContent_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_ListSection_Name}" xml:space="preserve">
+  <data name="ContentTypes_ListSection_Name" xml:space="preserve">
     <value>Listeseksjon</value>
   </data>
   <data name="ContentTypes_ListSection_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_LogElement_Name}" xml:space="preserve">
+  <data name="ContentTypes_LogElement_Name" xml:space="preserve">
     <value>Loggelement</value>
   </data>
   <data name="ContentTypes_LogElement_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_PlannerTask_Name}" xml:space="preserve">
+  <data name="ContentTypes_PlannerTask_Name" xml:space="preserve">
     <value>Planneroppgave</value>
   </data>
   <data name="ContentTypes_PlannerTask_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_PlannerTasks_Name}" xml:space="preserve">
+  <data name="ContentTypes_PlannerTasks_Name" xml:space="preserve">
     <value>Planneroppgaver</value>
   </data>
   <data name="ContentTypes_PlannerTasks_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_PortfolioView_Name}" xml:space="preserve">
+  <data name="ContentTypes_PortfolioView_Name" xml:space="preserve">
     <value>Porteføljevisning</value>
   </data>
   <data name="ContentTypes_PortfolioView_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_Project_Name}" xml:space="preserve">
+  <data name="ContentTypes_Project_Name" xml:space="preserve">
     <value>Prosjekt</value>
   </data>
   <data name="ContentTypes_Project_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_ProjectColumn_Name}" xml:space="preserve">
+  <data name="ContentTypes_ProjectColumn_Name" xml:space="preserve">
     <value>Prosjektkolonne</value>
   </data>
   <data name="ContentTypes_ProjectColumn_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_ProjectColumnConfiguration_Name}" xml:space="preserve">
+  <data name="ContentTypes_ProjectColumnConfiguration_Name" xml:space="preserve">
     <value>Prosjektkolonnekonfigurasjonselement</value>
   </data>
   <data name="ContentTypes_ProjectColumnConfiguration_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_ProjectStatus_Name}" xml:space="preserve">
+  <data name="ContentTypes_ProjectStatus_Name" xml:space="preserve">
     <value>Prosjektstatus</value>
   </data>
   <data name="ContentTypes_ProjectStatus_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_ResourceAllocation_Name}" xml:space="preserve">
+  <data name="ContentTypes_ResourceAllocation_Name" xml:space="preserve">
     <value>Ressursallokering</value>
   </data>
   <data name="ContentTypes_ResourceAllocation_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_RiskSection_Name}" xml:space="preserve">
+  <data name="ContentTypes_RiskSection_Name" xml:space="preserve">
     <value>Risikoseksjon</value>
   </data>
   <data name="ContentTypes_RiskSection_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_ProjectPropertiesSection_Name}" xml:space="preserve">
+  <data name="ContentTypes_ProjectPropertiesSection_Name" xml:space="preserve">
     <value>Seksjon for prosjektegenskaper</value>
   </data>
   <data name="ContentTypes_ProjectPropertiesSection_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_StatusFieldSection_Name}" xml:space="preserve">
+  <data name="ContentTypes_StatusFieldSection_Name" xml:space="preserve">
     <value>Seksjon for statusfelt</value>
   </data>
   <data name="ContentTypes_StatusFieldSection_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_SectionBase_Name}" xml:space="preserve">
+  <data name="ContentTypes_SectionBase_Name" xml:space="preserve">
     <value>Seksjonsbase</value>
   </data>
   <data name="ContentTypes_SectionBase_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_SectorDiagram_Name}" xml:space="preserve">
+  <data name="ContentTypes_SectorDiagram_Name" xml:space="preserve">
     <value>Sektordiagram</value>
   </data>
   <data name="ContentTypes_SectorDiagram_Description" xml:space="preserve">
     <value>Opprett et nytt sektordiagram</value>
   </data>
-  <data name="ContentTypes_Checkpoint_Name}" xml:space="preserve">
+  <data name="ContentTypes_Checkpoint_Name" xml:space="preserve">
     <value>Sjekkpunkt</value>
   </data>
   <data name="ContentTypes_Checkpoint_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_BarChart_Name}" xml:space="preserve">
+  <data name="ContentTypes_BarChart_Name" xml:space="preserve">
     <value>Stolpediagram</value>
   </data>
   <data name="ContentTypes_BarChart_Description" xml:space="preserve">
@@ -1433,7 +1433,7 @@
     <value />
   </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
-    <value>Gå til &lt;a href="{0}" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
+    <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
   </data>
   <data name="Choice_GtRiskStatus_Identified" xml:space="preserve">
     <value>Identifisert</value>
