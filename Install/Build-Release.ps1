@@ -66,9 +66,7 @@ foreach ($Solution in $Solutions) {
         npm install --no-package-lock
         npm run package
     }
-    Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse
-    | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$ReleasePath/Apps/$_")) }
-    | Copy-Item -Destination "$ReleasePath/Apps" -Force
+    Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$ReleasePath/Apps/$_")) } | Copy-Item -Destination "$ReleasePath/Apps" -Force
 }
 #endregion
 
