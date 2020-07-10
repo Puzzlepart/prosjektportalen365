@@ -1,94 +1,97 @@
-'use strict';
-const fs = require('fs');
-const path = require('path');
-const find = require('find');
-const gulp = require('gulp');
-const build = require('@microsoft/sp-build-web');
-const pkgDeploy = require('spfx-pkgdeploy').default;
-const tsConfig = require('./tsconfig.json');
-const WebpackBar = require('webpackbar');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const os = require('os');
-const argv = require('yargs').argv;
-const log = require('@microsoft/gulp-core-build').log;
-const colors = require("colors");
+'use strict'
+const fs = require('fs')
+const path = require('path')
+const find = require('find')
+const gulp = require('gulp')
+const build = require('@microsoft/sp-build-web')
+const pkgDeploy = require('spfx-pkgdeploy').default
+const tsConfig = require('./tsconfig.json')
+const WebpackBar = require('webpackbar')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const LiveReloadPlugin = require('webpack-livereload-plugin')
+const os = require('os')
+const argv = require('yargs').argv
+const log = require('@microsoft/gulp-core-build').log
+const colors = require("colors")
 let buildConfig = {
     parallel: os.cpus().length - 1,
     bundleAnalyzerEnabled: false
-};
-build.addSuppression(`Warning - [sass] The local CSS class 'ms-Grid' is not camelCase and will not be type-safe.`);
-build.addSuppression(`Warning - [sass] The local CSS class '-webkit-filter' is not camelCase and will not be type-safe.`);
+}
+build.addSuppression(`Warning - [sass] The local CSS class 'ms-Grid' is not camelCase and will not be type-safe.`)
+build.addSuppression(`Warning - [sass] The local CSS class '-webkit-filter' is not camelCase and will not be type-safe.`)
 
 try {
-    var env = require('./config/env.json');
-    pkgDeploy(build, require('./config/package-solution.json'), env);
+    var env = require('./config/env.json')
+    pkgDeploy(build, require('./config/package-solution.json'), env)
 } catch (error) {
-    log(`Skipping '${colors.cyan('pkgDeploy')}' due to missing ${colors.cyan('config/env.json')}...`);
+    log(`Skipping '${colors.cyan('pkgDeploy')}' due to missing ${colors.cyan('config/env.json')}...`)
 }
 
 try {
-    buildConfig = require('./build.config.json');
+    buildConfig = require('./build.config.json')
 } catch (error) {
-    log(`Missing '${colors.cyan('./build.config.json')}'. Using defaults...`);
+    log(`Missing '${colors.cyan('./build.config.json')}'. Using defaults...`)
 }
 
 gulp.task('versionSync', (done) => {
     find.file(/\manifest.json$/, path.join(__dirname, "src", "webparts"), (files) => {
-        var pkgSolution = require('./config/package-solution.json');
-        var newVersionNumber = require('./package.json').version.split('-')[0];
-        pkgSolution.solution.version = newVersionNumber + '.0';
-        fs.writeFile('./config/package-solution.json', JSON.stringify(pkgSolution, null, 4), (_error) => { });
+        var pkgSolution = require('./config/package-solution.json')
+        var newVersionNumber = require('./package.json').version.split('-')[0]
+        pkgSolution.solution.version = newVersionNumber + '.0'
+        fs.writeFile('./config/package-solution.json', JSON.stringify(pkgSolution, null, 4), (_error) => { })
         for (let i = 0; i < files.length; i++) {
-            let manifest = require(files[i]);
-            manifest.version = newVersionNumber;
-            log(`[${colors.cyan('versionSync')}] Setting ${colors.cyan('version')} to ${colors.cyan(newVersionNumber)} for ${colors.cyan(manifest.alias)}...`);
-            fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => { });
+            let manifest = require(files[i])
+            manifest.version = newVersionNumber
+            log(`[${colors.cyan('versionSync')}] Setting ${colors.cyan('version')} to ${colors.cyan(newVersionNumber)} for ${colors.cyan(manifest.alias)}...`)
+            fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => { })
         }
-        done();
-    });
-});
+        done()
+    })
+})
 
 gulp.task('setHiddenToolbox', (done) => {
     find.file(/\manifest.json$/, path.join(__dirname, "src"), (files) => {
         for (let i = 0; i < files.length; i++) {
-            let manifest = require(files[i]);
+            let manifest = require(files[i])
             if (['RiskMatrixWebPart'].indexOf(manifest.alias) !== -1) {
-                log(`[${colors.cyan('setHiddenToolbox')}] Skipping ${colors.cyan('hiddenFromToolbox')} for ${colors.cyan(manifest.alias)}...`);
+                log(`[${colors.cyan('setHiddenToolbox')}] Skipping ${colors.cyan('hiddenFromToolbox')} for ${colors.cyan(manifest.alias)}...`)
             } else if (manifest.hiddenFromToolbox != !!argv.ship) {
-                log(`[${colors.cyan('setHiddenToolbox')}] Setting ${colors.cyan('hiddenFromToolbox')} to ${colors.cyan(!!argv.ship)} for ${colors.cyan(manifest.alias)}...`);
-                manifest.hiddenFromToolbox = !!argv.ship;
-                fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => { /* handle error */ });
+                log(`[${colors.cyan('setHiddenToolbox')}] Setting ${colors.cyan('hiddenFromToolbox')} to ${colors.cyan(!!argv.ship)} for ${colors.cyan(manifest.alias)}...`)
+                manifest.hiddenFromToolbox = !!argv.ship
+                fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => { /* handle error */ })
             }
         }
-        done();
-    });
-});
+        done()
+    })
+})
 
 build.configureWebpack.mergeConfig({
     additionalConfiguration: (webpack) => {
-        let { paths, outDir } = JSON.parse(JSON.stringify(tsConfig.compilerOptions).replace(/\/\*"/gm, '"'));
+        let { paths, outDir } = JSON.parse(JSON.stringify(tsConfig.compilerOptions).replace(/\/\*"/gm, '"'))
         webpack.resolve.alias = Object.keys(paths).reduce((alias, key) => {
-            let _path = path.join(__dirname, outDir, paths[key][0]);
-            log(`[${colors.cyan('configure-webpack')}] Added alias ${colors.cyan(key)} pointing to ${colors.cyan(_path)}...`);
-            return { ...alias, [key]: _path };
-        }, webpack.resolve.alias);
-        webpack.externals = Object.assign(webpack.externals || {}, { 'XLSX': 'XLSX' });
-        webpack.plugins = webpack.plugins || [];
-        log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('WebpackBar')}...`);
-        webpack.plugins.push(new WebpackBar());
+            let _path = path.join(__dirname, outDir, paths[key][0])
+            log(`[${colors.cyan('configure-webpack')}] Added alias ${colors.cyan(key)} pointing to ${colors.cyan(_path)}...`)
+            return { ...alias, [key]: _path }
+        }, webpack.resolve.alias)
+        webpack.externals = Object.assign(webpack.externals || {}, { 'XLSX': 'XLSX' })
+        webpack.plugins = webpack.plugins || []
+        log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('WebpackBar')}...`)
+        webpack.plugins.push(new WebpackBar())
+        log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('LiveReloadPlugin')}...`)
+        webpack.plugins.push(new LiveReloadPlugin())
         if (buildConfig.bundleAnalyzerEnabled) {
-            log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('BundleAnalyzerPlugin')}...`);
-            webpack.plugins.push(new BundleAnalyzerPlugin());
+            log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('BundleAnalyzerPlugin')}...`)
+            webpack.plugins.push(new BundleAnalyzerPlugin())
         }
         if (webpack.optimization) {
-            log(`[${colors.cyan('configure-webpack')}] Setting ${colors.cyan('minimizer')} to run ${colors.cyan(buildConfig.parallel)} processes in parallel and enabling cache...`);
-            webpack.optimization.minimizer[0].options.parallel = buildConfig.parallel;
-            webpack.optimization.minimizer[0].options.cache = true;
+            log(`[${colors.cyan('configure-webpack')}] Setting ${colors.cyan('minimizer')} to run ${colors.cyan(buildConfig.parallel)} processes in parallel and enabling cache...`)
+            webpack.optimization.minimizer[0].options.parallel = buildConfig.parallel
+            webpack.optimization.minimizer[0].options.cache = true
         }
-        return webpack;
+        return webpack
     }
-});
+})
 
-build.tslintCmd.enabled = false;
+build.tslintCmd.enabled = false
 
-build.initialize(gulp);
+build.initialize(gulp)
