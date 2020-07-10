@@ -135,8 +135,16 @@ export class ProjectInformation extends BaseWebPartComponent<IProjectInformation
    * @param {boolean} force Force sync of properties
    */
   private async _onSyncProperties(event?: React.MouseEvent<any>, force = false): Promise<void> {
-    if (event !== null) {
-      return ConfirmAction(strings.SyncProjectPropertiesText, strings.SyncProjectPropertiesDescription, this._onSyncProperties.bind(this), strings.SyncNowText, this, 'confirmActionProps', { containerClassName: styles.confirmDialog })
+    if (event) {
+      return ConfirmAction(
+        strings.SyncProjectPropertiesText,
+        strings.SyncProjectPropertiesDescription,
+        this._onSyncProperties.bind(this),
+        strings.SyncNowText,
+        this,
+        'confirmActionProps',
+        { containerClassName: styles.confirmDialog }
+      )
     }
     if (!stringIsNullOrEmpty(this.state.data.propertiesListId)) {
       const lastUpdated = await SPDataAdapter.project.getPropertiesLastUpdated(this.state.data)

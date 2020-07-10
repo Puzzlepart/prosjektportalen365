@@ -1,6 +1,7 @@
-$siteFields = Get-ChildItem ./Objects/SiteFields/*.xml | Select-Object -ExpandProperty BaseName
+# Find-FieldUsage.ps1
 
-$xmlFiles = Get-ChildItem ./Objects/ContentTypes/*.xml,./Objects/Lists/*.xml -Recurse
+$siteFields = Get-ChildItem ./Portfolio/Objects/SiteFields/*.xml | Select-Object -ExpandProperty BaseName
+$xmlFiles = Get-ChildItem ./Portfolio/Objects/ContentTypes/*.xml,./Portfolio/Objects/Lists/*.xml -Recurse
 
 $fields = @()
 

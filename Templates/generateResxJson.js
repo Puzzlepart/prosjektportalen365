@@ -1,6 +1,11 @@
+// generateResxJson.js
+
 const resxConverter = require('resx-json-typescript-converter')
 
-resxConverter.convertResx(['./Resources.no-NB.resx'],
+resxConverter.convertResx([
+    './Portfolio/Resources.no-NB.resx',
+    './Portfolio/Resources.en-US.resx'
+],
     './',
     {
         defaultResxCulture: 'no-NB',

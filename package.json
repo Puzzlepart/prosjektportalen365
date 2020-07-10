@@ -3,8 +3,8 @@
     "version": "1.2.2",
     "description": "Prosjektportalen for Office 365 er et prosjektstyringsverktøy for Office 365 basert på Prosjektveiviseren. Mer informasjon på Puzzleparts nettsider.",
     "scripts": {
-        "buildReleasePackage": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1",
-        "buildReleasePackageSkipBuildSPFx": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -SkipBuildSharePointFramework",
+        "buildReleasePackage": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -Silent",
+        "buildReleasePackageSkipBuildSPFx": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -SkipBuildSharePointFramework -Silent",
         "buildReleasePackageClean": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -CleanNodeModules"
     },
     "repository": {

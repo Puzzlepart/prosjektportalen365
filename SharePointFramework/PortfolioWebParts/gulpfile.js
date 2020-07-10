@@ -8,6 +8,7 @@ const tsConfig = require('./tsconfig.json')
 const find = require('find')
 const WebpackBar = require('webpackbar')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const LiveReloadPlugin = require('webpack-livereload-plugin')
 const os = require('os')
 const argv = require('yargs').argv
 const log = require('@microsoft/gulp-core-build').log
@@ -74,6 +75,8 @@ build.configureWebpack.mergeConfig({
         webpack.plugins = webpack.plugins || []
         log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('WebpackBar')}...`)
         webpack.plugins.push(new WebpackBar())
+        log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('LiveReloadPlugin')}...`)
+        webpack.plugins.push(new LiveReloadPlugin())
         if (buildConfig.bundleAnalyzerEnabled) {
             log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('BundleAnalyzerPlugin')}...`)
             webpack.plugins.push(new BundleAnalyzerPlugin())

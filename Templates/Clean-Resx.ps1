@@ -1,6 +1,8 @@
+# Clean-Resx.ps1
+
 $unused = Get-Content './unused_resources.txt'
 
-[xml]$xml = Get-Content ./Resources.no-NB.resx
+[xml]$xml = Get-Content ./Portfolio/Resources.no-NB.resx
 
 $dataNodes = $xml.root.SelectNodes("data")
 
@@ -11,4 +13,4 @@ foreach($node in $dataNodes) {
     }
 }
 
-$xml.OuterXml | Out-File ./Resources.no-NB.resx -Encoding utf8 -Force
+$xml.OuterXml | Out-File ./Portfolio/Resources.no-NB.resx -Encoding utf8 -Force

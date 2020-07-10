@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema https://raw.githubusercontent.com/OfficeDev/PnP-Provisioning-Schema/master/OfficeDevPnP.ProvisioningSchema/ProvisioningSchema-2019-03.xsd">
+    <pnp:Preferences></pnp:Preferences>
+    <pnp:Templates ID="CONTAINER-TEMPLATE-PP-PORTFOLIO-CONTENT-EN-US">
+        <pnp:ProvisioningTemplate ID="TEMPLATE-PP-PORTFOLIO-CONTENT-EN-US" Version="1" Scope="RootSite">
+            <pnp:Files>
+                <pnp:File Src="ProjectTemplates\DefaultTemplate.txt" Folder="ProjectTemplates" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Default Template" />
+                        <pnp:Property Key="GtDescription" Value="" />
+                        <pnp:Property Key="IconName" Value="Page" />
+                        <pnp:Property Key="IsDefaultTemplate" Value="1" />
+                    </pnp:Properties>
+                </pnp:File>
+            </pnp:Files>
+        </pnp:ProvisioningTemplate>
+    </pnp:Templates>
+</pnp:Provisioning>
