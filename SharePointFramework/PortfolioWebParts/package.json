@@ -6,19 +6,11 @@
         "node": ">=8.0.0 <11.0.0"
     },
     "scripts": {
-        "watch": "concurrently \"npm run serve\" \"livereload ./dist -e js -w 250\"",
-        "serve": "gulp serve --locale=nb-no",
-        "serveNoBrowser": "gulp serve --locale=nb-no --nobrowser",
+        "serve": "gulp serve --locale=nb-no --nobrowser",
         "package": "gulp clean --ship && gulp default --ship && gulp package-solution --ship",
         "deploy": "gulp uploadAppPkg && gulp deploySppkg",
         "packageAndDeploy": "npm run package && npm run deploy",
-        "packageAndDeployPatch": "npm version patch && npm run deploy",
-        "packageAndDeployMinor": "npm version minor && npm run deploy",
-        "packageAndDeployMajor": "npm version major && npm run deploy",
         "postversion": "gulp versionSync",
-        "patchVersion": "npm version patch",
-        "minorVersion": "npm version minor",
-        "majorVersion": "npm version major",
         "prepackage": "gulp setHiddenToolbox --ship",
         "preserve": "gulp setHiddenToolbox",
         "preserveNoBrowser": "gulp setHiddenToolbox",
@@ -65,7 +57,6 @@
         "@types/react": "16.8.8"
     },
     "devDependencies": {
-        "typescript": "~3.3.x",
         "@microsoft/rush-stack-compiler-3.3": "^0.4.2",
         "@microsoft/sp-build-web": "1.9.1",
         "@microsoft/sp-module-interfaces": "1.9.1",
@@ -76,20 +67,21 @@
         "@types/react-calendar-timeline": "^0.26.0",
         "@types/string-format": "2.0.0",
         "@types/underscore": "1.9.2",
+        "@typescript-eslint/eslint-plugin": "2.30.0",
+        "@typescript-eslint/parser": "2.30.0",
         "ajv": "~5.2.2",
         "concurrently": "5.2.0",
+        "eslint": "6.8.0",
+        "eslint-plugin-react": "7.19.0",
         "find": "0.3.0",
         "gulp": "~3.9.1",
-        "livereload": "0.9.1",
         "pzl-tslint-rules": "1.0.5",
         "spfx-pkgdeploy": "0.3.0",
         "tslint": "5.20.0",
+        "typescript": "~3.3.x",
         "webpack-bundle-analyzer": "3.5.2",
+        "webpack-livereload-plugin": "^2.3.0",
         "webpackbar": "4.0.0",
-        "yargs": "14.2.0",
-        "@typescript-eslint/eslint-plugin": "2.30.0",
-        "@typescript-eslint/parser": "2.30.0",
-        "eslint": "6.8.0",
-        "eslint-plugin-react": "7.19.0"
+        "yargs": "14.2.0"
     }
 }
