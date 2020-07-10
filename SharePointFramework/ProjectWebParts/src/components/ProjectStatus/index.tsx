@@ -268,13 +268,16 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     const { webTitle, siteId } = this.props
     const { reports, reportFields, properties, reportEditFormUrl } = this.state.data
     const [previousReport] = reports
-    const fieldValues: TypedHash<string | number | boolean> = reportFields
-      .filter(field => field.SchemaXml.indexOf('ReadOnly="TRUE"') === -1)
-      .reduce((obj, field) => {
-        const fieldValue = previousReport.values[field.InternalName]
-        if (fieldValue) obj[field.InternalName] = fieldValue
-        return obj
-      }, {})
+    let fieldValues: TypedHash < string | number | boolean > = {}
+    if (previousReport) {
+      fieldValues = reportFields
+        .filter(field => field.SchemaXml.indexOf('ReadOnly="TRUE"') === -1)
+        .reduce((obj, field) => {
+          const fieldValue = previousReport.values[field.InternalName]
+          if (fieldValue) obj[field.InternalName] = fieldValue
+          return obj
+        }, {})
+    }
     fieldValues.Title = formatString(strings.NewStatusReportTitle, webTitle)
     fieldValues.GtSiteId = siteId
     fieldValues.ContentTypeId = properties.templateParameters.ProjectStatusContentTypeId
