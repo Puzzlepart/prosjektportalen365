@@ -32,7 +32,7 @@
     [Parameter(Mandatory = $false, HelpMessage = "Tenant App Catalog Url")]
     [string]$TenantAppCatalogUrl,
     [Parameter(Mandatory = $false, HelpMessage = "Language")]
-    [ValidateSet('Norwegian', 'English (US)')]
+    [ValidateSet('Norwegian')]
     [string]$Language = "Norwegian"
 )
 
