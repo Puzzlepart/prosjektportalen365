@@ -111,7 +111,7 @@ else {
     npm install --no-package-lock
     npm run generateJsonTemplates
 }
-Get-ChildItem "./Content" -Directory | ForEach-Object {
+Get-ChildItem "./Content" -Directory -Filter "*no-NB*" | ForEach-Object {
     Convert-PnPFolderToProvisioningTemplate -Out "$ReleasePath/Templates/$($_.BaseName).pnp" -Folder $_.FullName -Force
 }
 Write-Host "DONE" -ForegroundColor Green
