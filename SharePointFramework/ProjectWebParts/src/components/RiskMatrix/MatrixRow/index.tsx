@@ -6,6 +6,11 @@ import { RiskElement } from '../RiskElement'
 import RISK_MATRIX_CELLS from '../RiskMatrixCells'
 import { IMatrixRowProps } from './IMatrixRowProps'
 import styles from './MatrixRow.module.scss'
+import * as strings from 'ProjectWebPartsStrings'
+import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+
+
+
 
 
 export const MatrixRow = ({ children }: IMatrixRowProps) => {
@@ -29,12 +34,16 @@ const getRiskElementsForCell = (items: RiskElementModel[], cell: IMatrixCell, ca
  * Get risk elements post action for cell
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getRiskElementsPostActionForCell = (_items: RiskElementModel[], _cell: IMatrixCell, _calloutTemplate: string) => {
-    return []
+const getRiskElementsPostActionForCell = (items: RiskElementModel[], cell: IMatrixCell, calloutTemplate: string) => {
+    const itemsForCell = items.filter(risk => cell.probability === risk.probabilityPostAction && cell.consequence === risk.consequencePostAction);
+    const riskElements = itemsForCell.map((risk, idx) => <RiskElement key={idx} model={risk} calloutTemplate={calloutTemplate} />);
+    return riskElements;
 }
 
 
 export const MatrixRows = ({ items, calloutTemplate }) => {
+    const [isHidden, setHidden] = React.useState(false);
+
     const children = RISK_MATRIX_CELLS.map((rows, i) => {
         const cells = rows.map((c, j) => {
             const cell = RISK_MATRIX_CELLS[i][j]
@@ -74,9 +83,9 @@ export const MatrixRows = ({ items, calloutTemplate }) => {
             {children}
             <Toggle
                 className="toggle"
-                label={strings.ToggleRiskElements}
-                onText="Ja"
-                offText="Nei"
+                label={strings.RiskMatrix_ToggleElements}
+                onText={strings.Yes}
+                offText={strings.No}
                 onChanged={() => {
                     isHidden ? setHidden(false) : setHidden(true)
                 }
