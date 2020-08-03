@@ -90,6 +90,7 @@ declare interface IProjectWebPartsStrings {
   RiskMatrix_ViewSelectorLabel: string;
   RiskMatrix_EmptyMessage: string;
   RiskMatrix_LoadingText: string;
+  RiskMatrix_ToggleElements: string;
   GtModerationStatus_Choice_Published: string;
   GtModerationStatus_Choice_Draft: string;
   ListNameFieldLabel: string;

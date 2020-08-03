@@ -72,6 +72,16 @@ export const MatrixRows = ({ items, calloutTemplate }) => {
     return (
         <>
             {children}
+            <Toggle
+                className="toggle"
+                label={strings.ToggleRiskElements}
+                onText="Ja"
+                offText="Nei"
+                onChanged={() => {
+                    isHidden ? setHidden(false) : setHidden(true)
+                }
+                }
+            />
         </>
     )
 }
