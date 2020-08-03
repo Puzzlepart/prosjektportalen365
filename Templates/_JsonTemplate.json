@@ -673,7 +673,7 @@
     ],
     "Lists": [
         {
-            "Title": "{{Lists_PhaseChecklist_Url}}",
+            "Title": "Fasesjekkliste",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
