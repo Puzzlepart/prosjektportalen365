@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { IMatrixCellProps } from './IMatrixCellProps'
+import { IMatrixCellProps } from './types'
 import styles from './MatrixCell.module.scss'
 
 

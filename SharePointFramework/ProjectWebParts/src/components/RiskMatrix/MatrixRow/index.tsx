@@ -4,14 +4,10 @@ import { IMatrixCell } from '../IMatrixCell'
 import { MatrixCell, MatrixCellType, MatrixHeaderCell } from '../MatrixCell'
 import { RiskElement } from '../RiskElement'
 import RISK_MATRIX_CELLS from '../RiskMatrixCells'
-import { IMatrixRowProps } from './IMatrixRowProps'
+import { IMatrixRowProps } from './types'
 import styles from './MatrixRow.module.scss'
 import * as strings from 'ProjectWebPartsStrings'
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-
-
-
-
+import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 
 export const MatrixRow = ({ children }: IMatrixRowProps) => {
     return (
@@ -26,7 +22,7 @@ export const MatrixRow = ({ children }: IMatrixRowProps) => {
  */
 const getRiskElementsForCell = (items: RiskElementModel[], cell: IMatrixCell, calloutTemplate: string) => {
     const itemsForCell = items.filter(risk => cell.probability === risk.probability && cell.consequence === risk.consequence)
-    const riskElements = itemsForCell.map((risk, idx) => <RiskElement key={idx} model={risk} calloutTemplate={calloutTemplate} />)
+    const riskElements = itemsForCell.map((risk, idx) => <RiskElement key={`RiskElement_${idx}`} model={risk} calloutTemplate={calloutTemplate} />)
     return riskElements
 }
 
@@ -35,14 +31,14 @@ const getRiskElementsForCell = (items: RiskElementModel[], cell: IMatrixCell, ca
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getRiskElementsPostActionForCell = (items: RiskElementModel[], cell: IMatrixCell, calloutTemplate: string) => {
-    const itemsForCell = items.filter(risk => cell.probability === risk.probabilityPostAction && cell.consequence === risk.consequencePostAction);
-    const riskElements = itemsForCell.map((risk, idx) => <RiskElement key={idx} model={risk} calloutTemplate={calloutTemplate} />);
-    return riskElements;
+    const itemsForCell = items.filter(risk => cell.probability === risk.probabilityPostAction && cell.consequence === risk.consequencePostAction)
+    const riskElements = itemsForCell.map((risk, idx) => <RiskElement key={`RiskElement_${idx}_PostAction`} model={risk} calloutTemplate={calloutTemplate} />)
+    return riskElements
 }
 
 
 export const MatrixRows = ({ items, calloutTemplate }) => {
-    const [isHidden, setHidden] = React.useState(false);
+    const [showPostAction, setShowPostAction] = React.useState(false)
 
     const children = RISK_MATRIX_CELLS.map((rows, i) => {
         const cells = rows.map((c, j) => {
@@ -56,8 +52,12 @@ export const MatrixRows = ({ items, calloutTemplate }) => {
                             key={`MatrixCell_${j}`}
                             style={cell.style}
                             className={cell.className}>
-                            {riskElements}
-                            {riskElementsPostAction}
+                            <span hidden={showPostAction}>
+                                {riskElements}
+                            </span>
+                            <span hidden={!showPostAction}>
+                                {riskElementsPostAction}
+                            </span>
                         </MatrixCell>
                     )
                 }
@@ -82,14 +82,10 @@ export const MatrixRows = ({ items, calloutTemplate }) => {
         <>
             {children}
             <Toggle
-                className="toggle"
                 label={strings.RiskMatrix_ToggleElements}
                 onText={strings.Yes}
                 offText={strings.No}
-                onChanged={() => {
-                    isHidden ? setHidden(false) : setHidden(true)
-                }
-                }
+                onChange={(_event, _showPostAction) => setShowPostAction(_showPostAction)}
             />
         </>
     )
