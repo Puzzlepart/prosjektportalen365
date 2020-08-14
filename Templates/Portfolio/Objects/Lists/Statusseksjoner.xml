@@ -95,8 +95,8 @@
             &lt;Value Type="Text"&gt;Ikke lenger aktuell&lt;/Value&gt;
         &lt;/Neq&gt;
         &lt;Eq&gt;
-            &lt;FieldRef Name=\"ContentType\" /&gt;
-            &lt;Value Type=\"Computed\"&gt;Risiko&lt;/Value&gt;
+            &lt;FieldRef Name="ContentType" /&gt;
+            &lt;Value Type="Computed"&gt;Risiko&lt;/Value&gt;
         &lt;/Eq&gt;
     &lt;/And&gt;
 &lt;/Where&gt;</pnp:DataValue>
