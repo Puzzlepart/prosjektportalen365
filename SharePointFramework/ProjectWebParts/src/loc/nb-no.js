@@ -91,6 +91,7 @@ define([], function () {
     RiskMatrix_ViewSelectorLabel: 'Velg en visning',
     RiskMatrix_EmptyMessage: 'Det finnes ingen Risiko-elementer i den angitte visningen.',
     RiskMatrix_LoadingText: 'Laster risikomatrise...',
+    RiskMatrix_ToggleElements: 'Vis før/etter tiltak',
     GtModerationStatus_Choice_Published: 'Publisert',
     GtModerationStatus_Choice_Draft: 'Kladd',
     ListNameFieldLabel: 'Listenavn',

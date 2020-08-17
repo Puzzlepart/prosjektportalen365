@@ -6,7 +6,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "serve": "gulp serve --locale=en-us --nobrowser",
+    "serve": "gulp serve --locale=nb-no --nobrowser",
     "package": "gulp clean --ship && gulp default --ship && gulp package-solution --ship",
     "deploy": "gulp uploadAppPkg && gulp deploySppkg",
     "packageAndDeploy": "npm run package && npm run deploy",
