@@ -1,4 +1,4 @@
-﻿<Field Description="{resource:SiteFields_GtStatusRisk_Description}" DisplayName="{resource:SiteFields_GtStatusRisk_DisplayName}" Format="RadioButtons" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{fc8a879d-83bc-4670-b1f6-c9817e333614}" Name="GtStatusRisk" StaticName="GtStatusRisk" Type="Choice">
+﻿<Field Description="{resource:SiteFields_GtStatusRisk_Description}" DisplayName="{resource:SiteFields_GtStatusRisk_DisplayName}" Format="RadioButtons" Group="{resource:SiteFields_Portfolio_Group}" ID="{fc8a879d-83bc-4670-b1f6-c9817e333614}" Name="GtStatusRisk" StaticName="GtStatusRisk" Type="Choice">
     <CHOICES>
         <CHOICE>Høy</CHOICE>
         <CHOICE>Lav</CHOICE>

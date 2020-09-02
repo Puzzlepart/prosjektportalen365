@@ -1,4 +1,4 @@
-import { DataFieldType } from 'types';
+import { DataFieldType } from 'types'
 
 export class DataField {
     public type: DataFieldType;
@@ -15,8 +15,8 @@ export class DataField {
         public fieldName: string,
         type: string,
     ) {
-        this.title = title;
-        this.fieldName = fieldName;
-        this.type = type.toLowerCase() as DataFieldType;
+        this.title = title
+        this.fieldName = fieldName
+        this.type = type.toLowerCase() as DataFieldType
     }
 }

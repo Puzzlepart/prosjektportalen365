@@ -1,16 +1,16 @@
-import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
-import { BenefitsOverview, IBenefitsOverviewProps } from 'components/BenefitsOverview';
-import * as strings from 'PortfolioWebPartsStrings';
-import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
+import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base'
+import { BenefitsOverview, IBenefitsOverviewProps } from 'components/BenefitsOverview'
+import * as strings from 'PortfolioWebPartsStrings'
+import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 
 export default class BenefitsOverviewWebPart extends BasePortfolioWebPart<IBenefitsOverviewProps> {
   public render(): void {
-    this.renderComponent(BenefitsOverview);
+    this.renderComponent(BenefitsOverview)
   }
 
   public async onInit(): Promise<void> {
-    await super.onInit();
+    await super.onInit()
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -26,11 +26,9 @@ export default class BenefitsOverviewWebPart extends BasePortfolioWebPart<IBenef
                 }),
                 PropertyPaneTextField('dataSource', {
                   label: strings.DataSourceLabel,
-                  disabled: true,
                 }),
                 PropertyPaneTextField('dataSourceCategory', {
                   label: strings.DataSourceCategoryLabel,
-                  disabled: true,
                 }),
                 PropertyPaneToggle('showCommandBar', {
                   label: strings.ShowCommandBarLabel,
@@ -43,6 +41,6 @@ export default class BenefitsOverviewWebPart extends BasePortfolioWebPart<IBenef
           ]
         }
       ]
-    };
+    }
   }
 }

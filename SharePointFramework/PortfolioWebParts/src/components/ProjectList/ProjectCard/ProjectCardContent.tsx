@@ -1,8 +1,8 @@
-import { IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
-import * as React from 'react';
-import { IProjectCardProps } from './IProjectCardProps';
-import styles from './ProjectCard.module.scss';
-import * as strings from 'PortfolioWebPartsStrings';
+import { IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona'
+import * as React from 'react'
+import { IProjectCardProps } from './IProjectCardProps'
+import styles from './ProjectCard.module.scss'
+import * as strings from 'PortfolioWebPartsStrings'
 
 /**
  * Project Card Content
@@ -15,9 +15,9 @@ export const ProjectCardContent = ({ project, showProjectOwner, showProjectManag
         text: strings.NotSet,
         size: PersonaSize.size40,
         imageShouldFadeIn: true,
-    };
-    const ownerPersonaProps = { ...defaultPersonaProps, ...project.owner, secondaryText: strings.ProjectOwner };
-    const managerPersonaProps = { ...defaultPersonaProps, ...project.manager, secondaryText: strings.ProjectManager };
+    }
+    const ownerPersonaProps = { ...defaultPersonaProps, ...project.owner, secondaryText: strings.ProjectOwner }
+    const managerPersonaProps = { ...defaultPersonaProps, ...project.manager, secondaryText: strings.ProjectManager }
     return (
         <div>
             <div className={styles.phase}>{project.phase || strings.NotSet}</div>
@@ -28,5 +28,5 @@ export const ProjectCardContent = ({ project, showProjectOwner, showProjectManag
                 <Persona {...managerPersonaProps} />
             </div>
         </div>
-    );
-};
+    )
+}

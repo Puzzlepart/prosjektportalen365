@@ -1,4 +1,4 @@
-import { IBaseComponentProps } from '../IBaseComponentProps';
+import { IBaseComponentProps } from '../IBaseComponentProps'
 
 export interface IPortfolioInsightsProps extends IBaseComponentProps {
     chartConfigurationListName: string;

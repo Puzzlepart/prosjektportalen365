@@ -1,6 +1,6 @@
-import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import { DataSource } from 'shared/lib/models/DataSource';
+import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu'
+import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
+import { DataSource } from 'shared/lib/models/DataSource'
 
 export interface IAggregatedSearchListState {
     /**

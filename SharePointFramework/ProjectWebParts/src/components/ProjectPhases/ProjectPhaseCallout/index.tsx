@@ -1,10 +1,10 @@
 
-import * as React from 'react';
-import { Callout } from 'office-ui-fabric-react/lib/Callout';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { IProjectPhaseCalloutProps } from './IProjectPhaseCalloutProps';
-import styles from './ProjectPhaseCallout.module.scss';
-import * as strings from 'ProjectWebPartsStrings';
+import * as React from 'react'
+import { Callout } from 'office-ui-fabric-react/lib/Callout'
+import { ActionButton } from 'office-ui-fabric-react/lib/Button'
+import { IProjectPhaseCalloutProps } from './IProjectPhaseCalloutProps'
+import styles from './ProjectPhaseCallout.module.scss'
+import * as strings from 'ProjectWebPartsStrings'
 
 /**
  * @component ProjectPhaseCallout
@@ -16,14 +16,14 @@ export default class ProjectPhaseCallout extends React.PureComponent<IProjectPha
      * @param {IProjectPhaseCalloutProps} props Props
      */
     constructor(props: IProjectPhaseCalloutProps) {
-        super(props);
+        super(props)
     }
 
     /**
      * Renders the <ProjectPhaseCallout /> component
      */
     public render(): JSX.Element {
-        const { phase, isCurrentPhase, onChangePhase } = this.props;
+        const { phase, isCurrentPhase, onChangePhase } = this.props
         return (
             <Callout
                 gapSpace={5}
@@ -39,8 +39,12 @@ export default class ProjectPhaseCallout extends React.PureComponent<IProjectPha
                         <p className={styles.subText}>{phase.model.properties.PhasePurpose}</p>
                         <div>
                             <div className={styles.stats} hidden={Object.keys(phase.model.checklistData.stats).length === 0}>
-                                {Object.keys(phase.model.checklistData.stats).map(status => {
-                                    return <div><span>{phase.model.checklistData.stats[status]} {strings.CheckPointsMarkedAsText} {status}</span></div>;
+                                {Object.keys(phase.model.checklistData.stats).map((status, idx) => {
+                                    return (
+                                        <div key={idx}>
+                                            <span>{phase.model.checklistData.stats[status]} {strings.CheckPointsMarkedAsText} {status}</span>
+                                        </div>
+                                    )
                                 })}
                             </div>
                             <div className={styles.actions}>
@@ -49,7 +53,7 @@ export default class ProjectPhaseCallout extends React.PureComponent<IProjectPha
                                     text={strings.PhaseChecklistLinkText}
                                     iconProps={{ iconName: 'CheckList' }} />
                                 <ActionButton
-                                    onClick={_ => onChangePhase(phase.model)}
+                                    onClick={() => onChangePhase(phase.model)}
                                     text={strings.ChangePhaseText}
                                     iconProps={{ iconName: 'TransitionPop' }}
                                     disabled={isCurrentPhase || !this.props.isSiteAdmin} />
@@ -58,7 +62,7 @@ export default class ProjectPhaseCallout extends React.PureComponent<IProjectPha
                     </div>
                 </div>
             </Callout>
-        );
+        )
     }
 
     /**
@@ -67,6 +71,6 @@ export default class ProjectPhaseCallout extends React.PureComponent<IProjectPha
      * @param {IProjectPhaseCalloutProps} param0 Props
      */
     protected _getFilteredPhaseChecklistViewUrl({ webUrl, phase }: IProjectPhaseCalloutProps): string {
-        return `${webUrl}/${strings.PhaseChecklistViewUrl}?FilterField1=GtProjectPhase&FilterValue1=${phase.model.name}`;
+        return `${webUrl}/${strings.PhaseChecklistViewUrl}?FilterField1=GtProjectPhase&FilterValue1=${phase.model.name}`
     }
 }

@@ -1,10 +1,10 @@
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
-import * as strings from 'ProjectExtensionsStrings';
-import * as React from 'react';
-import { BaseDialog } from '../@BaseDialog/index';
-import { IProgressDialogProps } from './IProgressDialogProps';
-import styles from './ProgressDialog.module.scss';
+import { Icon } from 'office-ui-fabric-react/lib/Icon'
+import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator'
+import * as strings from 'ProjectExtensionsStrings'
+import * as React from 'react'
+import { BaseDialog } from '../@BaseDialog/index'
+import { IProgressDialogProps } from './IProgressDialogProps'
+import styles from './ProgressDialog.module.scss'
 
 export class ProgressDialog extends React.PureComponent<IProgressDialogProps, {}>{
     public render() {
@@ -22,8 +22,8 @@ export class ProgressDialog extends React.PureComponent<IProgressDialogProps, {}
                     <ProgressIndicator label={this.props.text} description={this.props.subText} />
                 </div>
             </BaseDialog>
-        );
+        )
     }
 }
 
-export { IProgressDialogProps };
+export { IProgressDialogProps }

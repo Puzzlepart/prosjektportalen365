@@ -1,21 +1,21 @@
-import { IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField, PropertyPaneToggle, PropertyPaneDropdown } from '@microsoft/sp-property-pane';
-import '@pnp/polyfill-ie11';
-import { IProjectPhasesProps, ProjectPhases } from 'components/ProjectPhases';
-import 'office-ui-fabric-react/dist/css/fabric.min.css';
-import * as strings from 'ProjectWebPartsStrings';
-import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart';
-import { sp } from '@pnp/sp';
+import { IPropertyPaneConfiguration, PropertyPaneDropdown, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane'
+import '@pnp/polyfill-ie11'
+import { sp } from '@pnp/sp'
+import { IProjectPhasesProps, ProjectPhases } from 'components/ProjectPhases'
+import 'office-ui-fabric-react/dist/css/fabric.min.css'
+import * as strings from 'ProjectWebPartsStrings'
+import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
 
 export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPhasesProps> {
-  private _fields: { Title: string, InternalName: string }[] = [];
+  private _fields: { Title: string; InternalName: string }[] = [];
 
   public async onInit() {
-    await super.onInit();
-    this._fields = await sp.web.fields.filter(`TypeAsString eq 'TaxonomyFieldType'`).select('Title', 'InternalName').get();
+    await super.onInit()
+    this._fields = await sp.web.fields.filter('TypeAsString eq \'TaxonomyFieldType\'').select('Title', 'InternalName').get()
   }
 
   public render(): void {
-    this.renderComponent(ProjectPhases, {});
+    this.renderComponent(ProjectPhases, {})
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -49,6 +49,6 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
           ]
         },
       ]
-    };
+    }
   }
 }

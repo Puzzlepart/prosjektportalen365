@@ -221,11 +221,12 @@ export class PortalDataService {
     /**
      * Add status report
      * 
-     * @param {TypedHash} properties Properties
+     * @param {TypedHash} fieldValues Field values
+     * @param {string} defaultEditFormUrl Default edit form URL
      */
-    public async addStatusReport(properties: TypedHash<string>): Promise<number> {
-        let itemAddResult = await this._web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS).items.add(properties);
-        return itemAddResult.data.Id;
+    public async addStatusReport(fieldValues: TypedHash<string | number | boolean>, defaultEditFormUrl: string): Promise<StatusReport> {
+        let itemAddResult = await this._web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS).items.add(fieldValues);
+        return new StatusReport(itemAddResult.data).setDefaultEditFormUrl(defaultEditFormUrl);
     }
 
     /**
@@ -233,8 +234,8 @@ export class PortalDataService {
      * 
      * @param {string} filter Filter
      * @param {number} top Number of reports to retrieve
-     * @param {string{}} select Fields to retrieve
-     * @param {string[]} expand Expand
+     * @param {string[]} select Fields to retrieve
+     * @param {string[]} expand Expand fields
      */
     public async getStatusReports(filter: string = '', top?: number, select?: string[], expand: string[] = ['FieldValuesAsText']): Promise<StatusReport[]> {
         if (!this._configuration.siteId) throw 'Property {siteId} missing in configuration';

@@ -1,21 +1,21 @@
-import { DisplayMode } from '@microsoft/sp-core-library';
-import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import * as strings from 'ProjectWebPartsStrings';
-import * as React from 'react';
-import { UserMessage } from '../../UserMessage';
-import { IProjectPropertiesProps } from './IProjectPropertiesProps';
-import styles from './ProjectProperties.module.scss';
-import { ProjectProperty } from './ProjectProperty';
+import { DisplayMode } from '@microsoft/sp-core-library'
+import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot'
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import * as strings from 'ProjectWebPartsStrings'
+import * as React from 'react'
+import { UserMessage } from '../../UserMessage'
+import { IProjectPropertiesProps } from './types'
+import styles from './ProjectProperties.module.scss'
+import { ProjectProperty } from './ProjectProperty'
 
 export class ProjectProperties extends React.PureComponent<IProjectPropertiesProps> {
     public render(): React.ReactElement<IProjectPropertiesProps> {
         switch (this.props.displayMode) {
             case DisplayMode.Edit: {
-                return this._renderEditMode();
+                return this._renderEditMode()
             }
             default: {
-                return this._renderReadMode();
+                return this._renderReadMode()
             }
         }
     }
@@ -25,13 +25,13 @@ export class ProjectProperties extends React.PureComponent<IProjectPropertiesPro
      */
     private _renderReadMode() {
         if (this._nonEmptyProperties.length === 0) {
-            return <MessageBar>{strings.NoPropertiesMessage}</MessageBar>;
+            return <MessageBar>{strings.NoPropertiesMessage}</MessageBar>
         }
         return (
             <div className={styles.projectProperties}>
                 {this._nonEmptyProperties.map((model, idx) => <ProjectProperty key={idx} model={model} />)}
             </div>
-        );
+        )
     }
 
     /**
@@ -72,17 +72,17 @@ export class ProjectProperties extends React.PureComponent<IProjectPropertiesPro
                     )}
                 </Pivot>
             </div>
-        );
+        )
     }
 
     private get _visibleProperties() {
-        return this.props.properties.filter(p => p.visible);
+        return this.props.properties.filter(p => p.visible)
     }
 
     private get _nonEmptyProperties() {
-        return this._visibleProperties.filter(p => !p.empty);
+        return this._visibleProperties.filter(p => !p.empty)
     }
 }
 
-export { IProjectPropertiesProps };
+export { IProjectPropertiesProps }
 

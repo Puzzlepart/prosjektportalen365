@@ -1,7 +1,6 @@
-import { Logger, LogLevel } from '@pnp/logging';
-import * as React from 'react';
-import { IBaseWebPartComponentProps } from './IBaseWebPartComponentProps';
-import { IBaseWebPartComponentState } from './IBaseWebPartComponentState';
+import { Logger, LogLevel } from '@pnp/logging'
+import * as React from 'react'
+import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from './types'
 
 export class BaseWebPartComponent<T1 extends IBaseWebPartComponentProps, T2 extends IBaseWebPartComponentState<any>> extends React.Component<T1, T2> {
     /**
@@ -12,8 +11,8 @@ export class BaseWebPartComponent<T1 extends IBaseWebPartComponentProps, T2 exte
      * @param {T2} state Initial state
      */
     constructor(private _name: string, props: T1, state: T2) {
-        super(props);
-        this.state = state;
+        super(props)
+        this.state = state
     }
 
     /**
@@ -24,7 +23,7 @@ export class BaseWebPartComponent<T1 extends IBaseWebPartComponentProps, T2 exte
      * @param {string} data Data
      */
     public logInfo(message: string, scope: string, data?: any) {
-        Logger.log({ message: `(${this._name}) (${scope}) ${message}`, data, level: LogLevel.Info });
+        Logger.log({ message: `(${this._name}) (${scope}) ${message}`, data, level: LogLevel.Info })
     }
 
     /**
@@ -35,7 +34,7 @@ export class BaseWebPartComponent<T1 extends IBaseWebPartComponentProps, T2 exte
      * @param {string} data Data
      */
     public logWarning(message: string, scope: string, data?: any) {
-        Logger.log({ message: `(${this._name}) (${scope}) ${message}`, data, level: LogLevel.Warning });
+        Logger.log({ message: `(${this._name}) (${scope}) ${message}`, data, level: LogLevel.Warning })
     }
 
     /**
@@ -46,9 +45,8 @@ export class BaseWebPartComponent<T1 extends IBaseWebPartComponentProps, T2 exte
      * @param {string} data Data
      */
     public logError(message: string, scope: string, data?: any) {
-        Logger.log({ message: `(${this._name}) (${scope}) ${message}`, data, level: LogLevel.Error });
+        Logger.log({ message: `(${this._name}) (${scope}) ${message}`, data, level: LogLevel.Error })
     }
 }
 
-export * from './IBaseWebPartComponentProps';
-export * from './IBaseWebPartComponentState';
+export * from './types'

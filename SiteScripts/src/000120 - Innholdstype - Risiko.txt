@@ -3,7 +3,7 @@
     "actions": [
         {
             "verb": "createContentType",
-            "description": "Opprett et nytt listeelement.",
+            "description": "",
             "id": "0x0100A87AE71CBF2643A6BC9D0948BD2EE89701",
             "name": "Risiko",
             "hidden": false

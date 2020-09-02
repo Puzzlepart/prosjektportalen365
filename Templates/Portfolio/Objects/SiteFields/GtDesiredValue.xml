@@ -1,1 +1,1 @@
-﻿<Field Type="Number" DisplayName="Ønsket verdi" Description="Verdi når gevinsten er realisert" ID="{8b399cb6-c53e-432c-8ffa-b48e2bfbbf71}" StaticName="GtDesiredValue" Name="GtDesiredValue" Group="Kolonner for Prosjektportalen (Prosjekt)" />
+<Field Type="Number" DisplayName="{resource:SiteFields_GtDesiredValue_DisplayName}" Description="{resource:SiteFields_GtDesiredValue_Description}" ID="{8b399cb6-c53e-432c-8ffa-b48e2bfbbf71}" StaticName="GtDesiredValue" Name="GtDesiredValue" Group="{resource:SiteFields_Project_Group}" />

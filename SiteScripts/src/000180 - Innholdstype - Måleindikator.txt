@@ -3,7 +3,7 @@
     "actions": [
         {
             "verb": "createContentType",
-            "description": "Opprett et nytt listeelement.",
+            "description": "",
             "id": "0x010073043EFE3E814A2BBEF96B8457623F95",
             "name": "Måleindikator",
             "hidden": false

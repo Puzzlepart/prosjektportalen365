@@ -1,11 +1,11 @@
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import * as strings from 'ProjectExtensionsStrings';
-import * as React from 'react';
-import { BaseDialog } from '../@BaseDialog';
-import ReactMarkdown from 'react-markdown/with-html';
-import styles from './ErrorDialog.module.scss';
-import { IErrorDialogProps } from './IErrorDialogProps';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button'
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import * as strings from 'ProjectExtensionsStrings'
+import * as React from 'react'
+import { BaseDialog } from '../@BaseDialog'
+import ReactMarkdown from 'react-markdown/with-html'
+import styles from './ErrorDialog.module.scss'
+import { IErrorDialogProps } from './IErrorDialogProps'
 
 // tslint:disable-next-line: naming-convention
 export const ErrorDialog = ({ error, version, messageType = MessageBarType.error, onDismiss }: IErrorDialogProps) => {
@@ -14,8 +14,8 @@ export const ErrorDialog = ({ error, version, messageType = MessageBarType.error
             <>
                 <DefaultButton text={strings.CloseModalText} onClick={onDismiss} />
             </>
-        );
-    };
+        )
+    }
 
     return (
         <BaseDialog
@@ -31,8 +31,8 @@ export const ErrorDialog = ({ error, version, messageType = MessageBarType.error
                 </MessageBar>
             </div>
         </BaseDialog >
-    );
-};
+    )
+}
 
-export { IErrorDialogProps };
+export { IErrorDialogProps }
 

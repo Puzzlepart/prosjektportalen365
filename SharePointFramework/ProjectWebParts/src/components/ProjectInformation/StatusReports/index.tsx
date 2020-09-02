@@ -1,10 +1,10 @@
-import { DisplayMode } from '@microsoft/sp-core-library';
-import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import * as React from 'react';
-import { formatDate } from 'shared/lib/helpers/formatDate';
-import { IStatusReportsProps } from './IStatusReportsProps';
-import styles from './StatusReports.module.scss';
+import { DisplayMode } from '@microsoft/sp-core-library'
+import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle'
+import { ActionButton } from 'office-ui-fabric-react/lib/Button'
+import * as React from 'react'
+import { formatDate } from 'shared/lib/helpers/formatDate'
+import { IStatusReportsProps } from './types'
+import styles from './StatusReports.module.scss'
 
 export class StatusReports extends React.Component<IStatusReportsProps, {}> {
     public static defaultProps: Partial<IStatusReportsProps> = { iconName: 'PageCheckedin' };
@@ -15,7 +15,7 @@ export class StatusReports extends React.Component<IStatusReportsProps, {}> {
                 <WebPartTitle
                     displayMode={DisplayMode.Read}
                     title={this.props.title}
-                    updateProperty={_ => { }} />
+                    updateProperty={undefined} />
                 <ul>
                     {this.props.statusReports.map((report, idx) => (
                         <li className={styles.item} key={idx}>
@@ -27,9 +27,9 @@ export class StatusReports extends React.Component<IStatusReportsProps, {}> {
                     ))}
                 </ul>
             </div>
-        );
+        )
     }
 }
 
-export { IStatusReportsProps };
+export { IStatusReportsProps }
 

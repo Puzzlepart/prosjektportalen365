@@ -1,5 +1,5 @@
-import { DataField } from './DataField';
-import { ChartDataItem } from './ChartDataItem';
+import { DataField } from './DataField'
+import { ChartDataItem } from './ChartDataItem'
 
 export class ChartData {
     public includeEmptyValues: boolean;
@@ -11,7 +11,7 @@ export class ChartData {
      * @param {ChartDataItem[]} items ITems
      */
     constructor(items: ChartDataItem[]) {
-        this._items = items;
+        this._items = items
     }
 
     /**
@@ -21,9 +21,9 @@ export class ChartData {
      */
     public getItems(field?: DataField): ChartDataItem[] {
         if (field) {
-            return this._items.filter(item => this.includeEmptyValues ? true : item.hasValue(field));
+            return this._items.filter(item => this.includeEmptyValues ? true : item.hasValue(field))
         }
-        return this._items;
+        return this._items
     }
 
     /**
@@ -32,7 +32,7 @@ export class ChartData {
     * @param {DataField} field Field
      */
     public getItemsWithNonZeroValue(field: DataField): ChartDataItem[] {
-        return this._items.filter(i => i.getValue(field) !== 0);
+        return this._items.filter(i => i.getValue(field) !== 0)
     }
 
     /**
@@ -42,7 +42,7 @@ export class ChartData {
     * @param {string} value Value
     */
     public getItemsWithStringValue(field: DataField, value: string): ChartDataItem[] {
-        return this.getItems(field).filter(i => i.getValue(field) === value);
+        return this.getItems(field).filter(i => i.getValue(field) === value)
     }
 
     /**
@@ -51,7 +51,7 @@ export class ChartData {
      * @param {number} index Index
      */
     public getItem(index: number): ChartDataItem {
-        return this._items[index];
+        return this._items[index]
     }
 
     /**
@@ -60,11 +60,11 @@ export class ChartData {
     * @param {DataField} field Field
      */
     public getCount(field?: DataField): number {
-        return this.getItems(field).length;
+        return this.getItems(field).length
     }
 
     public isEmpty(): boolean {
-        return this.getCount() === 0;
+        return this.getCount() === 0
     }
 
     /**
@@ -73,7 +73,7 @@ export class ChartData {
     * @param {DataField} field Field
     */
     public getAverage(field?: DataField) {
-        return (this.getTotal(field) / this.getCount(field));
+        return (this.getTotal(field) / this.getCount(field))
     }
 
     /**
@@ -84,7 +84,7 @@ export class ChartData {
     public getValues(field: DataField) {
         return this._items
             .filter(item => this.includeEmptyValues ? true : item.hasValue(field))
-            .map(item => item.getValue(field));
+            .map(item => item.getValue(field))
     }
 
     /**
@@ -93,7 +93,7 @@ export class ChartData {
     * @param {DataField} field Field
     */
     public getValuesUnique(field: DataField): Array<string> {
-        return this.getValues(field).filter((value, index, self) => self.indexOf(value) === index);
+        return this.getValues(field).filter((value, index, self) => self.indexOf(value) === index)
     }
 
     /**
@@ -108,17 +108,17 @@ export class ChartData {
             return this._items
                 .filter(item => {
                     if (this.includeEmptyValues) {
-                        return true;
+                        return true
                     }
                     if (Array.isArray(field)) {
-                        return field.filter(f => item.hasValue(f)).length === field.length;
+                        return field.filter(f => item.hasValue(f)).length === field.length
                     } else {
-                        return item.hasValue(field as DataField);
+                        return item.hasValue(field as DataField)
                     }
                 })
-                .map(item => item.name);
+                .map(item => item.name)
         }
-        return this._items.map(item => item.name);
+        return this._items.map(item => item.name)
     }
 
     /**
@@ -130,7 +130,7 @@ export class ChartData {
         return this._items
             .filter(i => i.hasValue(field))
             .map(i => i.getValue(field))
-            .reduce((prev, curr, index) => prev += curr, 0);
+            .reduce((prev, curr) => prev += curr, 0)
     }
 
     /**
@@ -140,7 +140,7 @@ export class ChartData {
      * @param {number} index Index
      * @param {number} fractionDigits Number of decimals (defaults to 2)
      */
-    public getPercentage(field: DataField, index: number, fractionDigits: number = 2) {
-        return parseFloat(((this._items[index].getValue(field) / this.getTotal(field)) * 100).toFixed(fractionDigits));
+    public getPercentage(field: DataField, index: number, fractionDigits = 2) {
+        return parseFloat(((this._items[index].getValue(field) / this.getTotal(field)) * 100).toFixed(fractionDigits))
     }
 }

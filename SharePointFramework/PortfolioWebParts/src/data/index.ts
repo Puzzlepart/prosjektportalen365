@@ -1,22 +1,22 @@
-import { WebPartContext } from '@microsoft/sp-webpart-base';
-import { dateAdd } from '@pnp/common';
-import { QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp';
-import * as cleanDeep from 'clean-deep';
-import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces';
-import { ChartConfiguration, ChartData, ChartDataItem, DataField, ProjectListModel, SPChartConfigurationItem, SPContentType } from 'models';
-import MSGraph from 'msgraph-helper';
-import * as strings from 'PortfolioWebPartsStrings';
-import { PortfolioOverviewView } from 'shared/lib/models';
-import { PortalDataService } from 'shared/lib/services/PortalDataService';
-import * as _ from 'underscore';
-import { DEFAULT_SEARCH_SETTINGS } from './DEFAULT_SEARCH_SETTINGS';
-import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult';
+import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { dateAdd } from '@pnp/common'
+import { QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
+import * as cleanDeep from 'clean-deep'
+import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces'
+import { ChartConfiguration, ChartData, ChartDataItem, DataField, ProjectListModel, SPChartConfigurationItem, SPContentType } from 'models'
+import MSGraph from 'msgraph-helper'
+import * as strings from 'PortfolioWebPartsStrings'
+import { PortfolioOverviewView } from 'shared/lib/models'
+import { PortalDataService } from 'shared/lib/services/PortalDataService'
+import * as _ from 'underscore'
+import { DEFAULT_SEARCH_SETTINGS } from './DEFAULT_SEARCH_SETTINGS'
+import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 
 export class DataAdapter {
     private _portalDataService: PortalDataService;
 
     constructor(public context: WebPartContext) {
-        this._portalDataService = new PortalDataService().configure({ urlOrWeb: context.pageContext.web.absoluteUrl });
+        this._portalDataService = new PortalDataService().configure({ urlOrWeb: context.pageContext.web.absoluteUrl })
     }
 
     /**
@@ -36,46 +36,47 @@ export class DataAdapter {
                 sp.web.lists.getByTitle(chartConfigurationListName).contentTypes
                     .select(...Object.keys(new SPContentType()))
                     .get<SPContentType[]>(),
-            ]);
-            let charts: ChartConfiguration[] = chartItems.map(item => {
-                let fields = item.GtPiFieldsId.map(id => {
-                    const fld = _.find(configuration.columns, f => f.id === id);
-                    return new DataField(fld.name, fld.fieldName, fld.dataType);
-                });
-                let chart = new ChartConfiguration(item, fields);
-                return chart;
-            });
-            let items = (await this.fetchDataForView(view, configuration, siteId)).map(i => new ChartDataItem(i.Title, i));
-            let chartData = new ChartData(items);
+            ])
+            const charts: ChartConfiguration[] = chartItems.map(item => {
+                const fields = item.GtPiFieldsId.map(id => {
+                    const fld = _.find(configuration.columns, f => f.id === id)
+                    return new DataField(fld.name, fld.fieldName, fld.dataType)
+                })
+                const chart = new ChartConfiguration(item, fields)
+                return chart
+            })
+            const items = (await this.fetchDataForView(view, configuration, siteId)).map(i => new ChartDataItem(i.Title, i))
+            const chartData = new ChartData(items)
 
             return {
                 charts,
                 chartData,
                 contentTypes,
-            };
+            }
         } catch (error) {
-            throw error;
+            throw error
         }
     }
 
     public async getPortfolioConfig(): Promise<IPortfolioConfiguration> {
+        // eslint-disable-next-line prefer-const
         let [columnConfig, columns, views, viewsUrls, columnUrls] = await Promise.all([
             this._portalDataService.getProjectColumnConfig(),
             this._portalDataService.getProjectColumns(),
             this._portalDataService.getPortfolioOverviewViews(),
             this._portalDataService.getListFormUrls('PORTFOLIO_VIEWS'),
             this._portalDataService.getListFormUrls('PROJECT_COLUMNS'),
-        ]);
-        columns = columns.map(col => col.configure(columnConfig));
-        let refiners = columns.filter(col => col.isRefinable);
-        views = views.map(view => view.configure(columns));
+        ])
+        columns = columns.map(col => col.configure(columnConfig))
+        const refiners = columns.filter(col => col.isRefinable)
+        views = views.map(view => view.configure(columns))
         return {
             columns,
             refiners,
             views,
             viewsUrls,
             columnUrls,
-        };
+        }
     }
 
     /**
@@ -88,7 +89,7 @@ export class DataAdapter {
      * @param {string} siteId Site ID
      * @param {string} siteIdProperty Site ID property
      */
-    public async fetchDataForView(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string, siteIdProperty: string = 'GtSiteIdOWSTEXT'): Promise<IFetchDataForViewItemResult[]> {
+    public async fetchDataForView(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string, siteIdProperty = 'GtSiteIdOWSTEXT'): Promise<IFetchDataForViewItemResult[]> {
         try {
             let [
                 { PrimarySearchResults: projects },
@@ -111,19 +112,19 @@ export class DataAdapter {
                     SelectProperties: [...configuration.columns.map(f => f.fieldName), siteIdProperty],
                     Refiners: configuration.refiners.map(ref => ref.fieldName).join(','),
                 }),
-            ]);
-            projects = projects.map(item => cleanDeep({ ...item }));
-            sites = sites.map(item => cleanDeep({ ...item }));
-            statusReports = statusReports.map(item => cleanDeep({ ...item }));
-            sites = sites.filter(site => projects.filter(res => res[siteIdProperty] === site['SiteId']).length === 1);
-            let items = sites.map(site => {
-                const [project] = projects.filter(res => res[siteIdProperty] === site['SiteId']);
-                const [statusReport] = statusReports.filter(res => res[siteIdProperty] === site['SiteId']);
-                return { ...statusReport, ...project, Title: site.Title, Path: site.Path, SiteId: site['SiteId'] };
-            });
-            return items;
+            ])
+            projects = projects.map(item => cleanDeep({ ...item }))
+            sites = sites.map(item => cleanDeep({ ...item }))
+            statusReports = statusReports.map(item => cleanDeep({ ...item }))
+            sites = sites.filter(site => projects.filter(res => res[siteIdProperty] === site['SiteId']).length === 1)
+            const items = sites.map(site => {
+                const [project] = projects.filter(res => res[siteIdProperty] === site['SiteId'])
+                const [statusReport] = statusReports.filter(res => res[siteIdProperty] === site['SiteId'])
+                return { ...statusReport, ...project, Title: site.Title, Path: site.Path, SiteId: site['SiteId'] }
+            })
+            return items
         } catch (err) {
-            throw err;
+            throw err
         }
     }
 
@@ -135,7 +136,7 @@ export class DataAdapter {
      * @param {SortDirection} sortDirection Sort direction
      */
     public async fetchProjectSites(rowLimit: number, sortProperty: string, sortDirection: SortDirection): Promise<SearchResult[]> {
-        let response = await sp.search({
+        const response = await sp.search({
             Querytext: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} contentclass:STS_Site`,
             TrimDuplicates: false,
             RowLimit: rowLimit,
@@ -151,8 +152,8 @@ export class DataAdapter {
                     QueryPropertyValueTypeIndex: QueryPropertyValueType.BooleanType
                 }
             }]
-        });
-        return response.PrimarySearchResults.filter(site => this.context.pageContext.legacyPageContext.hubSiteId !== site['SiteId']);
+        })
+        return response.PrimarySearchResults.filter(site => this.context.pageContext.legacyPageContext.hubSiteId !== site['SiteId'])
     }
 
     /**
@@ -164,25 +165,25 @@ export class DataAdapter {
        * @param {ISPUser[]} users Users
        */
     private _mapProjects(items: ISPProjectItem[], groups: IGraphGroup[], users: ISPUser[]): ProjectListModel[] {
-        let projects = items
+        const projects = items
             .map(item => {
-                let [group] = groups.filter(grp => grp.id === item.GtGroupId);
-                if (!group) return null;
-                let [owner] = users.filter(user => user.Id === item.GtProjectOwnerId);
-                let [manager] = users.filter(user => user.Id === item.GtProjectManagerId);
-                const model = new ProjectListModel(item.GtSiteId, group.id, group.displayName, item.GtSiteUrl, item.GtProjectPhaseText, manager, owner);
-                return model;
+                const [group] = groups.filter(grp => grp.id === item.GtGroupId)
+                if (!group) return null
+                const [owner] = users.filter(user => user.Id === item.GtProjectOwnerId)
+                const [manager] = users.filter(user => user.Id === item.GtProjectManagerId)
+                const model = new ProjectListModel(item.GtSiteId, group.id, group.displayName, item.GtSiteUrl, item.GtProjectPhaseText, manager, owner)
+                return model
             })
-            .filter(p => p);
-        return projects;
+            .filter(p => p)
+        return projects
     }
 
     /**
      * Fetch enriched projects
      */
     public async fetchEncrichedProjects(): Promise<ProjectListModel[]> {
-        await MSGraph.Init(this.context.msGraphClientFactory);
-        let [items, groups, users] = await Promise.all([
+        await MSGraph.Init(this.context.msGraphClientFactory)
+        const [items, groups, users] = await Promise.all([
             sp.web
                 .lists
                 .getByTitle(strings.ProjectsListName)
@@ -191,7 +192,7 @@ export class DataAdapter {
                 .orderBy('Title')
                 .usingCaching()
                 .get<ISPProjectItem[]>(),
-            MSGraph.Get<IGraphGroup[]>(`/me/memberOf/$/microsoft.graph.group`, ['id', 'displayName'], `groupTypes/any(a:a%20eq%20'unified')`),
+            MSGraph.Get<IGraphGroup[]>('/me/memberOf/$/microsoft.graph.group', ['id', 'displayName'], 'groupTypes/any(a:a%20eq%20\'unified\')'),
             sp.web
                 .siteUsers
                 .select('Id', 'Title', 'Email')
@@ -201,8 +202,8 @@ export class DataAdapter {
                     expiration: dateAdd(new Date(), 'minute', 15),
                 })
                 .get<ISPUser[]>(),
-        ]);
-        let projects = this._mapProjects(items, groups, users);
-        return projects;
+        ])
+        const projects = this._mapProjects(items, groups, users)
+        return projects
     }
 }

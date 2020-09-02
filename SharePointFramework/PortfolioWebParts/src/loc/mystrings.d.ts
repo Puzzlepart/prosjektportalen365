@@ -108,6 +108,6 @@ declare interface IPortfolioWebPartsStrings {
 }
 
 declare module 'PortfolioWebPartsStrings' {
-  const strings: IPortfolioWebPartsStrings;
+  const strings: IPortfolioWebPartsStrings
   export = strings;
 }

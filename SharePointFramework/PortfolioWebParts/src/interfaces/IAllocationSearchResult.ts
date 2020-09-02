@@ -1,4 +1,4 @@
-import { SearchResult } from '@pnp/sp';
+import { SearchResult } from '@pnp/sp'
 
 export interface IAllocationSearchResult extends SearchResult {
     RefinableString71: string;

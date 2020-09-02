@@ -37,7 +37,11 @@ define([], function () {
     PhaseChecklistViewUrl: 'Lists/Fasesjekkliste/AllItems.aspx',
     PickReportText: 'Velg rapport',
     SaveText: 'Lagre',
+  RiskMatrixGroupName: 'Risikomatrise',
+  ProjectStatusProjectPropertiesGroupName: 'Prosjektegenskaper (Statusseksjoner)',
     SettingsGroupName: 'Innstillinger',
+    DataGroupName: 'Data',
+    LookAndFeelGroupName: 'Utseende og funksjonalitet',
     GeneralGroupName: 'Generelt',
     Skip: 'Hopp over alle',
     StatusClosed: 'Utført',
@@ -87,7 +91,17 @@ define([], function () {
     RiskMatrix_ViewSelectorLabel: 'Velg en visning',
     RiskMatrix_EmptyMessage: 'Det finnes ingen Risiko-elementer i den angitte visningen.',
     RiskMatrix_LoadingText: 'Laster risikomatrise...',
+    RiskMatrix_ToggleElements: 'Vis før/etter tiltak',
     GtModerationStatus_Choice_Published: 'Publisert',
-    GtModerationStatus_Choice_Draft: 'Kladd'
+    GtModerationStatus_Choice_Draft: 'Kladd',
+    ListNameFieldLabel: 'Listenavn',
+    ViewXmlFieldLabel: 'Spørring',
+    ProbabilityFieldNameFieldLabel: 'Feltnavn - Sannsynlighet',
+    ConsequenceFieldNameFieldLabel: 'Feltnavn - Konsekvens',
+    ProbabilityPostActionFieldNameFieldLabel: 'Feltnavn - Sannsynlighet (etter tiltak)',
+    ConsequencePostActionFieldNameFieldLabel: 'Feltnavn - Konsekvens (etter tiltak)',
+    WidthFieldLabel: 'Bredde (piksler)',
+    HeightFieldLabel: 'Høyde (piksler)',
+    CalloutTemplateFieldLabel: 'Mal for callout'
   }
 });

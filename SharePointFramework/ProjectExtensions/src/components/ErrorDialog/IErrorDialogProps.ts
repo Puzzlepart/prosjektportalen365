@@ -1,5 +1,5 @@
-import { IBaseDialogProps } from '../@BaseDialog/IBaseDialogProps';
-import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { IBaseDialogProps } from '../@BaseDialog/IBaseDialogProps'
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 
 export interface IErrorDialogProps extends IBaseDialogProps {
     /**

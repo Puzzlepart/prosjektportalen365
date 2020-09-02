@@ -1,9 +1,9 @@
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';import { stringIsNullOrEmpty } from '@pnp/common';
+import { Toggle } from 'office-ui-fabric-react/lib/Toggle';import { stringIsNullOrEmpty } from '@pnp/common'
 
-import * as React from 'react';
-import { ListContentConfig } from '../../../models';
-import { IListContentSectionProps } from './IListContentSectionProps';
-import styles from './ListContentSection.module.scss';
+import * as React from 'react'
+import { ListContentConfig } from '../../../models'
+import { IListContentSectionProps } from './IListContentSectionProps'
+import styles from './ListContentSection.module.scss'
 
 // tslint:disable-next-line: naming-convention
 export const ListContentSection = (props: IListContentSectionProps) => {
@@ -14,17 +14,17 @@ export const ListContentSection = (props: IListContentSectionProps) => {
      * @param {boolean} checked Checked
      */
     const onChanged = (listContentConfig: ListContentConfig, checked: boolean): void => {
-        let selectedListContentConfig = [];
+        let selectedListContentConfig = []
         if (checked) {
-            selectedListContentConfig = [listContentConfig, ...props.selectedListContentConfig];
+            selectedListContentConfig = [listContentConfig, ...props.selectedListContentConfig]
         }
         else {
-            selectedListContentConfig = props.selectedListContentConfig.filter(lcc => listContentConfig.text !== lcc.text);
+            selectedListContentConfig = props.selectedListContentConfig.filter(lcc => listContentConfig.text !== lcc.text)
         }
-        props.onChange(selectedListContentConfig);
-    };
+        props.onChange(selectedListContentConfig)
+    }
 
-    const selectedKeys = props.selectedListContentConfig.map(lc => lc.key);
+    const selectedKeys = props.selectedListContentConfig.map(lc => lc.key)
 
     return (
         <div className={styles.listContentSection}>
@@ -45,5 +45,5 @@ export const ListContentSection = (props: IListContentSectionProps) => {
                     ))}
             </div>
         </div>
-    );
-};
+    )
+}

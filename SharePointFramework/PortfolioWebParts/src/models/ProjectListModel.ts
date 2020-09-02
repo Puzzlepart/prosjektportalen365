@@ -1,7 +1,6 @@
-import { ITerm, ITermData } from '@pnp/sp-taxonomy';
-import { getUserPhoto } from 'shared/lib/helpers';
-import { ISPUser } from 'interfaces';
-import { IPersonaSharedProps } from 'office-ui-fabric-react/lib/Persona';
+import { ISPUser } from 'interfaces'
+import { IPersonaSharedProps } from 'office-ui-fabric-react/lib/Persona'
+import { getUserPhoto } from 'shared/lib/helpers'
 
 export class ProjectListModel {
     public manager: IPersonaSharedProps;
@@ -27,7 +26,7 @@ export class ProjectListModel {
         manager?: ISPUser,
         owner?: ISPUser,
     ) {
-        if (manager) this.manager = { text: manager.Title, imageUrl: getUserPhoto(manager.Email) };
-        if (owner) this.owner = { text: owner.Title, imageUrl: getUserPhoto(owner.Email) };
+        if (manager) this.manager = { text: manager.Title, imageUrl: getUserPhoto(manager.Email) }
+        if (owner) this.owner = { text: owner.Title, imageUrl: getUserPhoto(owner.Email) }
     }
 }

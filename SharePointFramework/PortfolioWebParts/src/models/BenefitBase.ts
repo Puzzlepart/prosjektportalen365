@@ -1,4 +1,4 @@
-import { IBenefitsSearchResult } from 'interfaces';
+import { IBenefitsSearchResult } from 'interfaces'
 
 export class BenefitBase {
     public path: string;
@@ -9,11 +9,11 @@ export class BenefitBase {
     public siteId: string;
 
     constructor(result: IBenefitsSearchResult) {
-        this.path = result.Path;
-        this.title = result.Title;
-        this.webUrl = result.SPWebURL;
-        this.siteTitle = result.SiteTitle;
-        this.id = parseInt(result.ListItemId, 10);
-        this.siteId = result.SiteId;
+        this.path = result.Path
+        this.title = result.Title
+        this.webUrl = result.SPWebURL
+        this.siteTitle = result.SiteTitle
+        this.id = parseInt(result.ListItemId, 10)
+        this.siteId = result.SiteId
     }
 }

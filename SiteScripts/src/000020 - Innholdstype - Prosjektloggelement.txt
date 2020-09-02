@@ -3,7 +3,7 @@
     "actions": [
         {
             "verb": "createContentType",
-            "description": "Opprett et nytt listeelement.",
+            "description": "",
             "id": "0x01004EDD18CB92C14EBA97103D909C897810",
             "name": "Prosjektloggelement",
             "hidden": false

@@ -1,10 +1,10 @@
-import { DocumentCard } from 'office-ui-fabric-react/lib/DocumentCard';
-import * as React from 'react';
-import { IProjectCardProps } from './IProjectCardProps';
-import styles from './ProjectCard.module.scss';
-import { ProjectCardHeader } from './ProjectCardHeader';
-import { ProjectCardContent } from './ProjectCardContent';
-import { ProjectCardFooter } from './ProjectCardFooter';
+import { DocumentCard } from 'office-ui-fabric-react/lib/DocumentCard'
+import * as React from 'react'
+import { IProjectCardProps } from './IProjectCardProps'
+import styles from './ProjectCard.module.scss'
+import { ProjectCardHeader } from './ProjectCardHeader'
+import { ProjectCardContent } from './ProjectCardContent'
+import { ProjectCardFooter } from './ProjectCardFooter'
 
 /**
  * Project Card
@@ -21,5 +21,5 @@ export const ProjectCard = (props: IProjectCardProps): JSX.Element => {
       <ProjectCardContent {...props} />
       <ProjectCardFooter {...props} />
     </DocumentCard>
-  );
-};
+  )
+}

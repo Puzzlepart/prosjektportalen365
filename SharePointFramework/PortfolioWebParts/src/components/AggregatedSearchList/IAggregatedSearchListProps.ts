@@ -1,6 +1,6 @@
-import { SearchResult } from '@pnp/sp';
-import { IBaseComponentProps } from '../IBaseComponentProps';
-import { IAggregatedSearchListColumn } from 'interfaces';
+import { SearchResult } from '@pnp/sp'
+import { IBaseComponentProps } from '../IBaseComponentProps'
+import { IAggregatedSearchListColumn } from 'interfaces'
 
 export interface IAggregatedSearchListProps extends IBaseComponentProps {
     /**

@@ -3,7 +3,7 @@
     "actions": [
         {
             "verb": "createContentType",
-            "description": "Opprett et nytt listeelement.",
+            "description": "",
             "id": "0x01001AF93A93F5534B5FBAF750572B11BB7F",
             "name": "Endring",
             "hidden": false

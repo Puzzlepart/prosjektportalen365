@@ -1,2 +1,2 @@
-export { DataFieldType } from './DataFieldType';
-export { SearchValueType } from './SearchValueType';
+export { DataFieldType } from './DataFieldType'
+export { SearchValueType } from './SearchValueType'

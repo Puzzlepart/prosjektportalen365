@@ -1,4 +1,4 @@
-import { ProjectSetupError } from '../../extensions/projectSetup/ProjectSetupError';
+import { ProjectSetupError } from '../../extensions/projectSetup/ProjectSetupError'
 
 export class BaseTaskError extends ProjectSetupError {
     /**
@@ -9,6 +9,6 @@ export class BaseTaskError extends ProjectSetupError {
      * @param {string} stack Stack
      */
     constructor(taskName: string, message: string, stack: any) {
-        super(taskName, message, stack);
+        super(taskName, message, stack)
     }
 }

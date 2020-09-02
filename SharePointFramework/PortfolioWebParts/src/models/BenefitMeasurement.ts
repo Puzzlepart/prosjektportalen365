@@ -1,5 +1,5 @@
-import { BenefitBase, BenefitMeasurementIndicator } from './';
-import { IBenefitsSearchResult } from 'interfaces';
+import { BenefitBase, BenefitMeasurementIndicator } from './'
+import { IBenefitsSearchResult } from 'interfaces'
 
 export class BenefitMeasurement extends BenefitBase {
     public date: Date;
@@ -19,16 +19,16 @@ export class BenefitMeasurement extends BenefitBase {
     * @param {IBenefitsSearchResult} result Search result
     * @param {number} fractionDigits Fraction digits for valueDisplay
     */
-    constructor(result: IBenefitsSearchResult, fractionDigits: number = 2) {
-        super(result);
-        this.date = new Date(result.GtMeasurementDateOWSDATE);
-        this.dateDisplay = this.date.toLocaleDateString();
-        this.value = !isNaN(parseFloat(result.GtMeasurementValueOWSNMBR)) ? parseFloat(result.GtMeasurementValueOWSNMBR) : null;
+    constructor(result: IBenefitsSearchResult, fractionDigits = 2) {
+        super(result)
+        this.date = new Date(result.GtMeasurementDateOWSDATE)
+        this.dateDisplay = this.date.toLocaleDateString()
+        this.value = !isNaN(parseFloat(result.GtMeasurementValueOWSNMBR)) ? parseFloat(result.GtMeasurementValueOWSNMBR) : null
         if (this.value !== null) {
-            this.valueDisplay = this.value.toFixed(fractionDigits);
+            this.valueDisplay = this.value.toFixed(fractionDigits)
         }
-        this.comment = result.GtMeasurementCommentOWSMTXT;
-        this.indicatorId = parseInt(result.GtMeasureIndicatorLookupId, 10);
+        this.comment = result.GtMeasurementCommentOWSMTXT
+        this.indicatorId = parseInt(result.GtMeasureIndicatorLookupId, 10)
     }
 
     /**
@@ -37,12 +37,12 @@ export class BenefitMeasurement extends BenefitBase {
      * @param {BenefitMeasurementIndicator} indicator Indicator
      * @param {number} fractionDigits Fraction digits used for achievementDisplay
      */
-    public calculcateAchievement(indicator: BenefitMeasurementIndicator, fractionDigits: number = 2): BenefitMeasurement {
-        this.indicator = indicator;
-        let achievement = (((this.value - this.indicator.startValue) / (this.indicator.desiredValue - this.indicator.startValue)) * 100);
-        this.achievement = achievement;
-        this.achievementDisplay = `${achievement.toFixed(fractionDigits)}%`;
-        return this;
+    public calculcateAchievement(indicator: BenefitMeasurementIndicator, fractionDigits = 2): BenefitMeasurement {
+        this.indicator = indicator
+        const achievement = (((this.value - this.indicator.startValue) / (this.indicator.desiredValue - this.indicator.startValue)) * 100)
+        this.achievement = achievement
+        this.achievementDisplay = `${achievement.toFixed(fractionDigits)}%`
+        return this
     }
 
     /**
@@ -51,19 +51,19 @@ export class BenefitMeasurement extends BenefitBase {
      * @param {BenefitMeasurement} prevMeasurement Previous measurement
      */
     public setTrendIconProps(prevMeasurement: BenefitMeasurement): BenefitMeasurement {
-        let shouldIncrease = this.indicator.desiredValue > this.indicator.startValue;
+        const shouldIncrease = this.indicator.desiredValue > this.indicator.startValue
         if (this.achievement >= 100) {
-            this.trendIconProps = { iconName: 'Trophy', style: { color: 'gold' } };
-            return this;
+            this.trendIconProps = { iconName: 'Trophy', style: { color: 'gold' } }
+            return this
         }
         if (prevMeasurement && prevMeasurement.value !== this.value) {
-            let hasIncreased = this.value > prevMeasurement.value;
+            const hasIncreased = this.value > prevMeasurement.value
             if (shouldIncrease && hasIncreased || !shouldIncrease && !hasIncreased) {
-                this.trendIconProps = { iconName: 'StockUp', style: { color: 'green' } };
+                this.trendIconProps = { iconName: 'StockUp', style: { color: 'green' } }
             } else {
-                this.trendIconProps = { iconName: 'StockDown', style: { color: 'red' } };
+                this.trendIconProps = { iconName: 'StockDown', style: { color: 'red' } }
             }
         }
-        return this;
+        return this
     }
 }

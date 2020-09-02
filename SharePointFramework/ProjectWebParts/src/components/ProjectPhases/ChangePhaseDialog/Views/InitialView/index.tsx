@@ -1,21 +1,21 @@
-import { stringIsNullOrEmpty } from '@pnp/common';
-import { IButtonProps } from 'office-ui-fabric-react/lib/Button';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import * as strings from 'ProjectWebPartsStrings';
-import * as React from 'react';
-import { IInitialViewProps } from './IInitialViewProps';
-import { StatusOptions } from './StatusOptions';
-import styles from './InitialView.module.scss';
+import { stringIsNullOrEmpty } from '@pnp/common'
+import { IButtonProps } from 'office-ui-fabric-react/lib/Button'
+import { TextField } from 'office-ui-fabric-react/lib/TextField'
+import * as strings from 'ProjectWebPartsStrings'
+import * as React from 'react'
+import { IInitialViewProps } from './types'
+import styles from './InitialView.module.scss'
+import { StatusOptions } from './StatusOptions'
 
 /**
  * @component InitialView
  */
-// tslint:disable-next-line: naming-convention
+
 export const InitialView = (props: IInitialViewProps) => {
-    if (!props.checklistItem) return null;
+    if (!props.checklistItem) return null
 
 
-    const [comment, setComment] = React.useState(props.checklistItem.GtComment || '');
+    const [comment, setComment] = React.useState(props.checklistItem.GtComment || '')
 
     /**
     * Save checkpoint
@@ -23,11 +23,11 @@ export const InitialView = (props: IInitialViewProps) => {
     * @param {string} status Status value
     */
     const saveCheckPoint = (status: string) => {
-        props.saveCheckPoint(status, comment, true);
-        setComment('');
-    };
+        props.saveCheckPoint(status, comment, true)
+        setComment('')
+    }
 
-    const isCommentValid = !stringIsNullOrEmpty(comment) && (comment.length >= 4);
+    const isCommentValid = !stringIsNullOrEmpty(comment) && (comment.length >= 4)
     const actions: IButtonProps[] = [
         {
             text: strings.StatusNotRelevant,
@@ -46,7 +46,7 @@ export const InitialView = (props: IInitialViewProps) => {
             disabled: props.isLoading,
             title: strings.CheckpointDoneTooltip,
             onClick: () => saveCheckPoint(strings.StatusClosed),
-        }];
+        }]
 
     return (
         <div className={styles.initialView}>
@@ -60,5 +60,5 @@ export const InitialView = (props: IInitialViewProps) => {
                 resizable={false} />
             <StatusOptions actions={actions} />
         </div>
-    );
-};
+    )
+}

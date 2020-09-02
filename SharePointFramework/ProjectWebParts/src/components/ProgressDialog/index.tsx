@@ -1,12 +1,12 @@
-import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
-import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
-import * as React from 'react';
-import styles from './ProgressDialog.module.scss';
-import { IProgressDialogProps } from './IProgressDialogProps';
+import { Dialog } from 'office-ui-fabric-react/lib/Dialog'
+import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator'
+import * as React from 'react'
+import { IProgressDialogProps } from './types'
+import styles from './ProgressDialog.module.scss'
 
-// tslint:disable-next-line: naming-convention
+
 export const ProgressDialog = ({ title, progress }: IProgressDialogProps) => {
-    if (!progress) return null;
+    if (!progress) return null
     return (
         <Dialog
             hidden={false}
@@ -15,5 +15,5 @@ export const ProgressDialog = ({ title, progress }: IProgressDialogProps) => {
             containerClassName={styles.progressDialog}>
             <ProgressIndicator  {...progress} />
         </Dialog>
-    );
-};
+    )
+}

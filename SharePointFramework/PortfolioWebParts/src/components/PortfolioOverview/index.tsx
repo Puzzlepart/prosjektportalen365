@@ -1,35 +1,35 @@
-import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
-import { Web } from '@pnp/sp';
-import { stringIsNullOrEmpty } from '@pnp/common';
-import { getId } from '@uifabric/utilities';
-import * as arraySort from 'array-sort';
-import { ContextualMenu, ContextualMenuItemType, IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { ConstrainMode, DetailsList, DetailsListLayoutMode, IDetailsHeaderProps, IGroup, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
-import { LayerHost } from 'office-ui-fabric-react/lib/Layer';
-import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
-import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
-import * as strings from 'PortfolioWebPartsStrings';
-import { ProjectInformationModal } from 'projectwebparts/lib/components/ProjectInformation';
-import * as React from 'react';
-import { getObjectValue } from 'shared/lib/helpers/getObjectValue';
-import { PortfolioOverviewView, ProjectColumn } from 'shared/lib/models';
-import ExcelExportService from 'shared/lib/services/ExcelExportService';
-import { parseUrlHash, redirect, setUrlHash } from 'shared/lib/util';
-import * as format from 'string-format';
-import * as _ from 'underscore';
-import { IFilterItemProps, IFilterProps } from '../FilterPanel';
-import { IPortfolioOverviewProps } from './IPortfolioOverviewProps';
-import { IPortfolioOverviewHashStateState, IPortfolioOverviewState } from './IPortfolioOverviewState';
-import styles from './PortfolioOverview.module.scss';
-import { PortfolioOverviewCommands } from './PortfolioOverviewCommands';
-import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage';
-import { renderItemColumn } from './RenderItemColumn';
-import * as uniq from 'array-unique';
+import { UrlQueryParameterCollection } from '@microsoft/sp-core-library'
+import { Web } from '@pnp/sp'
+import { stringIsNullOrEmpty } from '@pnp/common'
+import { getId } from '@uifabric/utilities'
+import * as arraySort from 'array-sort'
+import { ContextualMenu, ContextualMenuItemType, IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu'
+import { ConstrainMode, DetailsList, DetailsListLayoutMode, IDetailsHeaderProps, IGroup, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList'
+import { LayerHost } from 'office-ui-fabric-react/lib/Layer'
+import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection'
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane'
+import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner'
+import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky'
+import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities'
+import * as strings from 'PortfolioWebPartsStrings'
+import { ProjectInformationModal } from 'projectwebparts/lib/components/ProjectInformation'
+import * as React from 'react'
+import { getObjectValue } from 'shared/lib/helpers/getObjectValue'
+import { PortfolioOverviewView, ProjectColumn } from 'shared/lib/models'
+import ExcelExportService from 'shared/lib/services/ExcelExportService'
+import { parseUrlHash, redirect, setUrlHash } from 'shared/lib/util'
+import * as format from 'string-format'
+import * as _ from 'underscore'
+import { IFilterItemProps, IFilterProps } from '../FilterPanel'
+import { IPortfolioOverviewProps } from './IPortfolioOverviewProps'
+import { IPortfolioOverviewHashStateState, IPortfolioOverviewState } from './IPortfolioOverviewState'
+import styles from './PortfolioOverview.module.scss'
+import { PortfolioOverviewCommands } from './PortfolioOverviewCommands'
+import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage'
+import { renderItemColumn } from './RenderItemColumn'
+import * as uniq from 'array-unique'
 
 /**
  * @component PortfolioOverview
@@ -42,40 +42,40 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
   private _layerHostId = getId('layerHost');
 
   constructor(props: IPortfolioOverviewProps) {
-    super(props);
+    super(props)
     this.state = {
       isLoading: true,
       isCompact: false,
       searchTerm: '',
       activeFilters: {},
       columns: [],
-    };
+    }
     this._selection = new Selection({
       onSelectionChanged: () => {
-        this.setState({ selectedItems: this._selection.getSelection() });
+        this.setState({ selectedItems: this._selection.getSelection() })
       },
-    });
+    })
   }
 
   public async componentDidMount() {
-    ExcelExportService.configure({ name: this.props.title });
+    ExcelExportService.configure({ name: this.props.title })
     try {
-      const data = await this._fetchInitialData();
-      this.setState({ ...data, isLoading: false });
+      const data = await this._fetchInitialData()
+      this.setState({ ...data, isLoading: false })
     } catch (error) {
-      this.setState({ error, isLoading: false });
+      this.setState({ error, isLoading: false })
     }
   }
 
   public componentWillUpdate(_nextProps: IPortfolioOverviewProps, { currentView, groupBy }: IPortfolioOverviewState) {
-    let obj: IPortfolioOverviewHashStateState = {};
+    const obj: IPortfolioOverviewHashStateState = {}
     if (currentView) {
-      obj.viewId = currentView.id.toString();
+      obj.viewId = currentView.id.toString()
     }
     if (groupBy) {
-      obj.groupBy = groupBy.fieldName;
+      obj.groupBy = groupBy.fieldName
     }
-    setUrlHash<IPortfolioOverviewHashStateState>(obj);
+    setUrlHash<IPortfolioOverviewHashStateState>(obj)
   }
 
   public render(): React.ReactElement<IPortfolioOverviewProps> {
@@ -86,7 +86,7 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
             <Spinner label={format(strings.LoadingText, this.props.title)} size={SpinnerSize.large} />
           </div>
         </div>
-      );
+      )
     }
     if (this.state.error) {
       return (
@@ -95,10 +95,10 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
             <MessageBar messageBarType={this.state.error.type}>{this.state.error.message}</MessageBar>
           </div>
         </div>
-      );
+      )
     }
 
-    const { items, columns, groups } = this._getFilteredData();
+    const { items, columns, groups } = this._getFilteredData()
 
     return (
       <div className={styles.portfolioOverview}>
@@ -147,11 +147,11 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
         )}
         {this.state.columnContextMenu && <ContextualMenu {...this.state.columnContextMenu} />}
       </div>
-    );
+    )
   }
 
   private get _searchBoxPlaceholderText() {
-    return format(strings.SearchBoxPlaceholderText, this.state.currentView.title.toLowerCase());
+    return format(strings.SearchBoxPlaceholderText, this.state.currentView.title.toLowerCase())
   }
 
   /**
@@ -160,27 +160,28 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
    * @param {string} searchTerm Search term
    * @param {number} delay Delay in ms
    */
-  private _onSearch(searchTerm: string, delay: number = 500) {
-    clearTimeout(this._onSearchDelay);
+  private _onSearch(searchTerm: string, delay = 500) {
+    clearTimeout(this._onSearchDelay)
     this._onSearchDelay = setTimeout(() => {
-      this.setState({ searchTerm: searchTerm.toLowerCase() });
-    }, delay);
+      this.setState({ searchTerm: searchTerm.toLowerCase() })
+    }, delay)
   }
 
   /**
   * Get filters
   */
   private _getFilters(): IFilterProps[] {
-    const selectedFilters = this.props.configuration.refiners.filter(ref => this.state.currentView.refiners.indexOf(ref) !== -1);
-    let filters = selectedFilters.map(column => {
-      let uniqueValues = uniq([].concat.apply([], this.state.items.map(i => getObjectValue(i, column.fieldName, '').split(';'))));
+    const selectedFilters = this.props.configuration.refiners.filter(ref => this.state.currentView.refiners.indexOf(ref) !== -1)
+    const filters = selectedFilters.map(column => {
+      // eslint-disable-next-line prefer-spread
+      const uniqueValues = uniq([].concat.apply([], this.state.items.map(i => getObjectValue(i, column.fieldName, '').split(';'))))
       let items: IFilterItemProps[] = uniqueValues
         .filter((value: string) => !stringIsNullOrEmpty(value))
-        .map((value: string) => ({ name: value, value }));
-      items = items.sort((a, b) => a.value > b.value ? 1 : -1);
-      return { column, items };
-    });
-    return filters;
+        .map((value: string) => ({ name: value, value }))
+      items = items.sort((a, b) => a.value > b.value ? 1 : -1)
+      return { column, items }
+    })
+    return filters
   }
 
   /**
@@ -190,13 +191,13 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
    * @param {IFilterItemProps[]} selectedItems Selected items
    */
   private _onFilterChange(column: ProjectColumn, selectedItems: IFilterItemProps[]) {
-    const { activeFilters } = ({ ...this.state } as IPortfolioOverviewState);
+    const { activeFilters } = ({ ...this.state } as IPortfolioOverviewState)
     if (selectedItems.length > 0) {
-      activeFilters[column.fieldName] = selectedItems.map(i => i.value);
+      activeFilters[column.fieldName] = selectedItems.map(i => i.value)
     } else {
-      delete activeFilters[column.fieldName];
+      delete activeFilters[column.fieldName]
     }
-    this.setState({ activeFilters });
+    this.setState({ activeFilters })
   }
 
   /**
@@ -206,19 +207,19 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
    * @param {boolean} sortDesencing Sort descending
    */
   private _onColumnSort(column: ProjectColumn, sortDesencing: boolean): void {
-    let { items, columns } = ({ ...this.state } as IPortfolioOverviewState);
-    items = arraySort(items, [column.fieldName], { reverse: !sortDesencing });
+    const { items, columns } = ({ ...this.state } as IPortfolioOverviewState)
+    const itemsSorted = arraySort(items, [column.fieldName], { reverse: !sortDesencing })
     this.setState({
       sortBy: column,
-      items,
+      items:itemsSorted,
       columns: columns.map(col => {
-        col.isSorted = (col.key === column.key);
+        col.isSorted = (col.key === column.key)
         if (col.isSorted) {
-          col.isSortedDescending = sortDesencing;
+          col.isSortedDescending = sortDesencing
         }
-        return col;
+        return col
       }),
-    });
+    })
   }
 
   /**
@@ -229,7 +230,7 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
   private _onColumnGroupBy(column: ProjectColumn) {
     this.setState(prevState => ({
       groupBy: getObjectValue<string>(prevState, 'groupBy.fieldName', '') === column.fieldName ? null : column,
-    }));
+    }))
   }
 
   /**
@@ -248,10 +249,10 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
           <SearchBox onChange={this._onSearch.bind(this)} placeholder={this._searchBoxPlaceholderText} />
         </div>
         <div className={styles.headerColumns} >
-          {defaultRender!(props)}
+          {defaultRender(props)}
         </div>
       </Sticky>
-    );
+    )
   }
 
   /**
@@ -261,7 +262,7 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
    * @param {ProjectColumn} column Column
    */
   private _onColumnHeaderClick(ev?: React.MouseEvent<HTMLElement, MouseEvent>, column?: ProjectColumn) {
-    this._onColumnHeaderContextMenu(column, ev);
+    this._onColumnHeaderContextMenu(column, ev)
   }
 
   /**
@@ -271,7 +272,7 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
    * @param {React.MouseEvent<HTMLElement, MouseEvent>} ev Event
    */
   private _onColumnHeaderContextMenu(column?: ProjectColumn, ev?: React.MouseEvent<HTMLElement, MouseEvent>) {
-    if (column.key === 'AddColumn') return;
+    if (column.key === 'AddColumn') return
     this.setState({
       columnContextMenu: {
         target: ev.currentTarget,
@@ -304,7 +305,6 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
             canCheck: true,
             checked: false,
             disabled: true,
-            onClick: () => { },
           },
           {
             id: getId('Divider'),
@@ -335,14 +335,14 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
         ],
         onDismiss: () => this.setState({ columnContextMenu: null })
       } as IContextualMenuProps,
-    });
+    })
   }
 
   /**
    * On dismiss <ProjectInformationModal />
    */
   private _onDismissProjectInfoModal() {
-    this.setState({ showProjectInfo: null });
+    this.setState({ showProjectInfo: null })
   }
 
   /**
@@ -352,20 +352,20 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
   * @param {ProjectColumn[]} columns Columns
   */
   private _createGroups(items: any[], columns: ProjectColumn[]) {
-    let { groupBy, sortBy } = ({ ...this.state } as IPortfolioOverviewState);
-    if (!groupBy) return { items, columns, groups: null };
-    const itemsSort = { props: [groupBy.fieldName], opts: { reverse: false } };
+    const { groupBy, sortBy } = ({ ...this.state } as IPortfolioOverviewState)
+    if (!groupBy) return { items, columns, groups: null }
+    const itemsSort = { props: [groupBy.fieldName], opts: { reverse: false } }
     if (sortBy) {
-      itemsSort.props.push(sortBy.fieldName);
-      itemsSort.opts.reverse = !sortBy.isSortedDescending;
+      itemsSort.props.push(sortBy.fieldName)
+      itemsSort.opts.reverse = !sortBy.isSortedDescending
     }
-    items = arraySort([...items], itemsSort.props, itemsSort.opts);
-    const groupNames: string[] = items.map(g => getObjectValue<string>(g, groupBy.fieldName, strings.NotSet));
-    const uniqueGroupNames: string[] = _.uniq(groupNames);
+    items = arraySort([...items], itemsSort.props, itemsSort.opts)
+    const groupNames: string[] = items.map(g => getObjectValue<string>(g, groupBy.fieldName, strings.NotSet))
+    const uniqueGroupNames: string[] = _.uniq(groupNames)
     const groups = uniqueGroupNames
       .sort((a, b) => a > b ? 1 : -1)
       .map((name, idx) => {
-        const count = groupNames.filter(n => n === name).length;
+        const count = groupNames.filter(n => n === name).length
         const group: IGroup = {
           key: `Group_${idx}`,
           name: `${groupBy.name}: ${name}`,
@@ -374,10 +374,10 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
           isShowingAll: count === items.length,
           isDropEnabled: false,
           isCollapsed: false,
-        };
-        return group;
-      });
-    return { items, columns, groups };
+        }
+        return group
+      })
+    return { items, columns, groups }
   }
 
 
@@ -385,24 +385,25 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
    * Get filtered data
    */
   private _getFilteredData() {
-    let { items, columns, searchTerm, activeFilters } = ({ ...this.state } as IPortfolioOverviewState);
+    const { searchTerm, activeFilters } = ({ ...this.state } as IPortfolioOverviewState)
+    let { items, columns } = ({ ...this.state } as IPortfolioOverviewState)
     items = items.filter(item => {
-      return columns.filter(col => getObjectValue(item, col.fieldName, '').toLowerCase().indexOf(searchTerm) !== -1).length > 0;
-    });
+      return columns.filter(col => getObjectValue(item, col.fieldName, '').toLowerCase().indexOf(searchTerm) !== -1).length > 0
+    })
 
     items = Object.keys(activeFilters)
       .filter(key => key !== 'SelectedColumns')
       .reduce((arr, key) => {
         return arr.filter(i => {
-          let colValue = getObjectValue<string>(i, key, '');
-          return activeFilters[key].filter(filterValue => colValue.indexOf(filterValue) !== -1).length > 0;
-        });
-      }, items);
+          const colValue = getObjectValue<string>(i, key, '')
+          return activeFilters[key].filter(filterValue => colValue.indexOf(filterValue) !== -1).length > 0
+        })
+      }, items)
     if (activeFilters.SelectedColumns) {
-      columns = this.props.configuration.columns.filter(col => activeFilters.SelectedColumns.indexOf(col.fieldName) !== -1);
+      columns = this.props.configuration.columns.filter(col => activeFilters.SelectedColumns.indexOf(col.fieldName) !== -1)
     }
 
-    return this._createGroups(items, columns);
+    return this._createGroups(items, columns)
   }
 
   /**
@@ -411,33 +412,33 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
    * @param {IPortfolioOverviewHashStateState} hashState Hash state
    */
   private _getCurrentView(hashState: IPortfolioOverviewHashStateState): PortfolioOverviewView {
-    const viewIdUrlParam = new UrlQueryParameterCollection(document.location.href).getValue('viewId');
-    let { configuration, defaultViewId } = this.props;
-    let { views } = configuration;
-    let currentView = null;
+    const viewIdUrlParam = new UrlQueryParameterCollection(document.location.href).getValue('viewId')
+    const { configuration, defaultViewId } = this.props
+    const { views } = configuration
+    let currentView = null
 
     if (viewIdUrlParam) {
-      currentView = _.find(views, v => v.id.toString() === viewIdUrlParam);
+      currentView = _.find(views, v => v.id.toString() === viewIdUrlParam)
       if (!currentView) {
-        throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error);
+        throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
       }
     } else if (hashState.viewId) {
-      currentView = _.find(views, v => v.id.toString() === hashState.viewId);
+      currentView = _.find(views, v => v.id.toString() === hashState.viewId)
       if (!currentView) {
-        throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error);
+        throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
       }
     } else if (defaultViewId) {
-      currentView = _.find(views, v => v.id.toString() === defaultViewId);
+      currentView = _.find(views, v => v.id.toString() === defaultViewId)
       if (!currentView) {
-        throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error);
+        throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
       }
     } else {
-      currentView = _.find(views, v => v.isDefaultView);
+      currentView = _.find(views, v => v.isDefaultView)
       if (!currentView) {
-        throw new PortfolioOverviewErrorMessage(strings.NoDefaultViewMessage, MessageBarType.error);
+        throw new PortfolioOverviewErrorMessage(strings.NoDefaultViewMessage, MessageBarType.error)
       }
     }
-    return currentView;
+    return currentView
   }
 
   /**
@@ -445,22 +446,22 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
   */
   private async _fetchInitialData(): Promise<Partial<IPortfolioOverviewState>> {
     try {
-      const { configuration, pageContext } = this.props;
-      const hashState = parseUrlHash<IPortfolioOverviewHashStateState>();
-      const currentView = this._getCurrentView(hashState);
-      const items = await this.props.dataAdapter.fetchDataForView(currentView, configuration, pageContext.site.id.toString());
-      let newState: Partial<IPortfolioOverviewState> = {
+      const { configuration, pageContext } = this.props
+      const hashState = parseUrlHash<IPortfolioOverviewHashStateState>()
+      const currentView = this._getCurrentView(hashState)
+      const items = await this.props.dataAdapter.fetchDataForView(currentView, configuration, pageContext.site.id.toString())
+      const newState: Partial<IPortfolioOverviewState> = {
         columns: currentView.columns,
         items,
         currentView,
         groupBy: currentView.groupBy,
-      };
-      if (hashState.groupBy && !newState.groupBy) {
-        newState.groupBy = _.find(configuration.columns, fc => fc.fieldName === hashState.groupBy);
       }
-      return newState;
+      if (hashState.groupBy && !newState.groupBy) {
+        newState.groupBy = _.find(configuration.columns, fc => fc.fieldName === hashState.groupBy)
+      }
+      return newState
     } catch (error) {
-      throw error;
+      throw error
     }
   }
 
@@ -472,21 +473,21 @@ export class PortfolioOverview extends React.Component<IPortfolioOverviewProps, 
   */
   private async _onChangeView(view: PortfolioOverviewView) {
     if (this.state.currentView.id === view.id) {
-      return;
+      return
     }
-    this.setState({ isChangingView: view });
-    const items = await this.props.dataAdapter.fetchDataForView(view, this.props.configuration, this.props.pageContext.site.id.toString());
-    let updatedState: Partial<IPortfolioOverviewState> = {
+    this.setState({ isChangingView: view })
+    const items = await this.props.dataAdapter.fetchDataForView(view, this.props.configuration, this.props.pageContext.site.id.toString())
+    const updatedState: Partial<IPortfolioOverviewState> = {
       isChangingView: null,
       items,
       currentView: view,
       columns: view.columns,
       groupBy: view.groupBy,
-    };
+    }
 
-    this.setState(updatedState);
+    this.setState(updatedState)
   }
 }
 
-export { IPortfolioOverviewProps };
+export { IPortfolioOverviewProps }
 

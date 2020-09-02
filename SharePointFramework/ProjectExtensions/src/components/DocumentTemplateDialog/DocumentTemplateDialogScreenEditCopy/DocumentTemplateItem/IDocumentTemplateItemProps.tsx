@@ -1,5 +1,5 @@
-import { TypedHash } from '@pnp/common';
-import { TemplateFile } from 'models/TemplateFile';
+import { TypedHash } from '@pnp/common'
+import { TemplateFile } from 'models/TemplateFile'
 
 export interface IDocumentTemplateItemProps {
     /**

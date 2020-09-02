@@ -1,7 +1,7 @@
-import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { PortfolioOverviewView, ProjectColumn } from 'shared/lib/models';
-import { IFilterProps } from '../FilterPanel';
-import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage';
+import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu'
+import { PortfolioOverviewView, ProjectColumn } from 'shared/lib/models'
+import { IFilterProps } from '../FilterPanel'
+import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage'
 
 export interface IPortfolioOverviewState {
     /**
@@ -52,7 +52,7 @@ export interface IPortfolioOverviewState {
     /**
      * Active filters
      */
-    activeFilters?: { SelectedColumns?: string[], [key: string]: string[] };
+    activeFilters?: { SelectedColumns?: string[]; [key: string]: string[] };
 
     /**
      * Error

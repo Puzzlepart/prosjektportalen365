@@ -1,15 +1,15 @@
-import { IPropertyPaneConfiguration, PropertyPaneToggle, PropertyPaneTextField } from '@microsoft/sp-webpart-base';
-import { DeliveriesOverview, IDeliveriesOverviewProps } from 'components/DeliveriesOverview';
-import * as strings from 'PortfolioWebPartsStrings';
-import { BasePortfolioWebPart } from '../@basePortfolioWebPart';
+import { IPropertyPaneConfiguration, PropertyPaneToggle, PropertyPaneTextField } from '@microsoft/sp-webpart-base'
+import { DeliveriesOverview, IDeliveriesOverviewProps } from 'components/DeliveriesOverview'
+import * as strings from 'PortfolioWebPartsStrings'
+import { BasePortfolioWebPart } from '../@basePortfolioWebPart'
 
 
 export default class DeliveriesOverviewWebPart extends BasePortfolioWebPart<IDeliveriesOverviewProps> {
   public render(): void {
-    this.renderComponent(DeliveriesOverview);
+    this.renderComponent(DeliveriesOverview)
   }
   public async onInit(): Promise<void> {
-    await super.onInit();
+    await super.onInit()
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -40,6 +40,6 @@ export default class DeliveriesOverviewWebPart extends BasePortfolioWebPart<IDel
           ]
         }
       ]
-    };
+    }
   }
 }

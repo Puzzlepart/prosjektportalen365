@@ -1,1 +1,1 @@
-﻿<Field Description="" DisplayName="Message" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{4614d809-1d6f-42a4-a9a6-3255d2e1f9b7}" Name="GtLogMessage" StaticName="GtLogMessage" Type="Note" />
+<Field Description="{resource:SiteFields_GtLogMessage_Description}" DisplayName="{resource:SiteFields_GtLogMessage_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{4614d809-1d6f-42a4-a9a6-3255d2e1f9b7}" Name="GtLogMessage" StaticName="GtLogMessage" Type="Note" />

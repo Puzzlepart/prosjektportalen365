@@ -1,7 +1,7 @@
-import * as React from 'react';
-import * as strings from 'PortfolioWebPartsStrings';
-import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings';
-import { IAggregatedSearchListColumn } from 'interfaces';
+import * as React from 'react'
+import * as strings from 'PortfolioWebPartsStrings'
+import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings'
+import { IAggregatedSearchListColumn } from 'interfaces'
 
 export const EXPERIENCE_LOG_COLUMNS: IAggregatedSearchListColumn[] = [
     {
@@ -11,7 +11,7 @@ export const EXPERIENCE_LOG_COLUMNS: IAggregatedSearchListColumn[] = [
         minWidth: 100,
         maxWidth: 150,
         isResizable: true,
-        onRender: (item: any) => <a href={item.SPWebUrl} target='_blank'>{item.SiteTitle}</a>,
+        onRender: (item: any) => <a href={item.SPWebUrl} rel='noopener noreferrer' target='_blank'>{item.SiteTitle}</a>,
         isGroupable: true,
     },
     {
@@ -62,16 +62,16 @@ export const EXPERIENCE_LOG_COLUMNS: IAggregatedSearchListColumn[] = [
         maxWidth: 150,
         isResizable: true,
         onRender: (item: any, _index: number, column: IAggregatedSearchListColumn) => {
-            const colValue = item[column.fieldName] as string;
+            const colValue = item[column.fieldName] as string
             if (colValue) {
-                const actors = colValue.split(';#').filter(v => v);
+                const actors = colValue.split(';#').filter(v => v)
                 return (
                     <ul style={{ margin: 0, padding: 0 }}>
-                        {actors.map(a => <li>{a}</li>)}
+                        {actors.map((a,idx) => <li key={idx}>{a}</li>)}
                     </ul>
-                );
+                )
             }
-            return null;
+            return null
         },
     }
-];
+]

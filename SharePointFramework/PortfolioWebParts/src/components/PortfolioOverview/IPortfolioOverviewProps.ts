@@ -1,5 +1,5 @@
-import { IPortfolioConfiguration } from 'interfaces';
-import { IBaseComponentProps } from '../IBaseComponentProps';
+import { IPortfolioConfiguration } from 'interfaces'
+import { IBaseComponentProps } from '../IBaseComponentProps'
 
 export interface IPortfolioOverviewProps extends IBaseComponentProps {
     /**
