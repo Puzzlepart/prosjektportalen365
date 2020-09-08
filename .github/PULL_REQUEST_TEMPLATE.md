@@ -9,6 +9,10 @@
 
 Please describe your pull request.
 
+### How to test
+
+Please describe how someone else can test this PR.
+
 ### Relevant issues (if applicable)
 
 💔Thank you!
