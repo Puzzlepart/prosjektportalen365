@@ -4,6 +4,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 #### 1.2.3 - TBA
 
 ### Added
+- Descriptions on configuration page
+
+### Added
 - Show only benefits (gevinster) that are toggled as "Show at portfolio level" #268
 - Support for attachments on provisioned planner tasks #274
 
