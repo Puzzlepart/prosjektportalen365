@@ -83,13 +83,33 @@ export class DataAdapter {
      * Fetch data for view
      *
      * @description Used by PortfolioOverview and PortfolioInsights
+     *
+     * @param {PortfolioOverviewView} view
+     * @param {IPortfolioConfiguration} configuration
+     * @param {string} siteId
+     * @returns {Promise<IFetchDataForViewItemResult[]>}
+     * @memberof DataAdapter
+     */
+    public async fetchDataForView(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string): Promise<IFetchDataForViewItemResult[]> {
+        let isCurrentUserInManagerGroup = await this._isUserInGroup("Portfolio Managers");
+        if (isCurrentUserInManagerGroup) {
+            return await this.fetchDataForManagerView(view, configuration, siteId);
+        }
+        else {
+            return await this.fetchDataForRegularView(view, configuration, siteId);
+        }
+    }
+
+    /**
+     * Fetch data for regular view
+     *
      * 
      * @param {PortfolioOverviewView} view View configuration
      * @param {IPortfolioConfiguration} configuration PortfolioOverviewConfiguration
      * @param {string} siteId Site ID
      * @param {string} siteIdProperty Site ID property
      */
-    public async fetchDataForView(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string, siteIdProperty = 'GtSiteIdOWSTEXT'): Promise<IFetchDataForViewItemResult[]> {
+    public async fetchDataForRegularView(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string, siteIdProperty = 'GtSiteIdOWSTEXT'): Promise<IFetchDataForViewItemResult[]> {
         try {
             let [
                 { PrimarySearchResults: projects },
@@ -121,6 +141,61 @@ export class DataAdapter {
                 const [project] = projects.filter(res => res[siteIdProperty] === site['SiteId'])
                 const [statusReport] = statusReports.filter(res => res[siteIdProperty] === site['SiteId'])
                 return { ...statusReport, ...project, Title: site.Title, Path: site.Path, SiteId: site['SiteId'] }
+            })
+
+
+            return items
+        } catch (err) {
+            throw err
+        }
+    }
+
+    /**
+     * Fetch data for manager view
+     *
+     * @description Used by PortfolioOverview and PortfolioInsights
+     *
+     * @param {PortfolioOverviewView} view
+     * @param {IPortfolioConfiguration} configuration
+     * @param {string} siteId
+     * @param {string} [siteIdProperty='GtSiteIdOWSTEXT']
+     * @returns {Promise<IFetchDataForViewItemResult[]>}
+     * @memberof DataAdapter
+     */
+    public async fetchDataForManagerView(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string, siteIdProperty = 'GtSiteIdOWSTEXT'): Promise<IFetchDataForViewItemResult[]> {
+        try {
+            let [
+                { PrimarySearchResults: projects },
+                { PrimarySearchResults: sites },
+                { PrimarySearchResults: statusReports },
+            ] = await Promise.all([
+                sp.search({
+                    ...DEFAULT_SEARCH_SETTINGS,
+                    QueryTemplate: view.searchQuery,
+                    SelectProperties: [...configuration.columns.map(f => f.fieldName), siteIdProperty],
+                }),
+                sp.search({
+                    ...DEFAULT_SEARCH_SETTINGS,
+                    QueryTemplate: `DepartmentId:{${siteId}} contentclass:STS_Site`,
+                    SelectProperties: ['Path', 'Title', 'SiteId'],
+                }),
+                sp.search({
+                    ...DEFAULT_SEARCH_SETTINGS,
+                    QueryTemplate: `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+                    SelectProperties: [...configuration.columns.map(f => f.fieldName), siteIdProperty],
+                    Refiners: configuration.refiners.map(ref => ref.fieldName).join(','),
+                }),
+            ])
+            projects = projects.map(item => cleanDeep({ ...item }))
+            sites = sites.map(item => cleanDeep({ ...item }))
+            statusReports = statusReports.map(item => cleanDeep({ ...item }))
+            sites = sites.filter(site => projects.filter(res => res[siteIdProperty] === site['SiteId']).length === 1)
+
+
+            const items = projects.map((project) => {
+                const [statusReport] = statusReports.filter(res => res[siteIdProperty] === project['siteIdProperty'])
+                const [site] = sites.filter(res => res['SiteId'] === project[siteIdProperty])
+                return { ...statusReport, ...project, Path: site && site.Path, SiteId: project['siteIdProperty'] }
             })
             return items
         } catch (err) {
@@ -205,5 +280,23 @@ export class DataAdapter {
         ])
         const projects = this._mapProjects(items, groups, users)
         return projects
+    }
+
+    /**
+     *
+     *
+     * @private
+     * @param {string} groupName
+     * @returns {Promise<boolean>}
+     * @memberof DataAdapter
+     */
+    private async _isUserInGroup(groupName: string): Promise<boolean> {
+        try {
+            let group = await sp.web.currentUser.groups.getByName(groupName).get();
+            console.log(group);
+            return true;
+        } catch (error) {
+            return false;
+        }
     }
 }

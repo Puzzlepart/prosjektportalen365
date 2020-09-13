@@ -48,9 +48,10 @@ export function renderItemColumn(item: IFetchDataForViewItemResult, column: Proj
             return (
                 <span>
                     <a href={item.Path} rel='noopener noreferrer' target='_blank'>{colValue}</a>
-                    <span
+                    {item.Path && <span
                         style={{ cursor: 'pointer', marginLeft: 8 }}
                         onClick={() => { onUpdateState({ showProjectInfo: item }) }}> <Icon iconName='OpenInNewWindow' /></span>
+                    }
                 </span >
             )
         }
