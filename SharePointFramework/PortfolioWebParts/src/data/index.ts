@@ -91,7 +91,7 @@ export class DataAdapter {
      * @memberof DataAdapter
      */
     public async fetchDataForView(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string): Promise<IFetchDataForViewItemResult[]> {
-        let isCurrentUserInManagerGroup = await this._isUserInGroup("Portfolio Managers");
+        let isCurrentUserInManagerGroup = await this._isUserInGroup(strings.PortfolioManagerGroupName);
         if (isCurrentUserInManagerGroup) {
             return await this.fetchDataForManagerView(view, configuration, siteId);
         }
