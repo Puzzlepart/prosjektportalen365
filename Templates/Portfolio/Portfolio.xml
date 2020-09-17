@@ -8,6 +8,15 @@
     </pnp:Localizations>
     <pnp:Templates ID="CONTAINER-TEMPLATE-PP-PORTFOLIO">
         <pnp:ProvisioningTemplate ID="TEMPLATE-PP-PORTFOLIO" Version="1" Scope="RootSite">
+        <pnp:Security>
+        <pnp:SiteGroups>
+            <pnp:SiteGroup
+                Title="Prosjektinnsyn"
+                Description="Innsyn i alle prosjekt"
+                Owner="{associatedownergroupid}">
+            </pnp:SiteGroup>
+        </pnp:SiteGroups>
+    </pnp:Security>
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields.xml" />
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes.xml" />
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists.xml" />
