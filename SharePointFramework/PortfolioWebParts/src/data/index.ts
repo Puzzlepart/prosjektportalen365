@@ -111,32 +111,7 @@ export class DataAdapter {
      */
     public async fetchDataForRegularView(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string, siteIdProperty = 'GtSiteIdOWSTEXT'): Promise<IFetchDataForViewItemResult[]> {
         try {
-            let [
-                { PrimarySearchResults: projects },
-                { PrimarySearchResults: sites },
-                { PrimarySearchResults: statusReports },
-            ] = await Promise.all([
-                sp.search({
-                    ...DEFAULT_SEARCH_SETTINGS,
-                    QueryTemplate: view.searchQuery,
-                    SelectProperties: [...configuration.columns.map(f => f.fieldName), siteIdProperty],
-                }),
-                sp.search({
-                    ...DEFAULT_SEARCH_SETTINGS,
-                    QueryTemplate: `DepartmentId:{${siteId}} contentclass:STS_Site`,
-                    SelectProperties: ['Path', 'Title', 'SiteId'],
-                }),
-                sp.search({
-                    ...DEFAULT_SEARCH_SETTINGS,
-                    QueryTemplate: `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
-                    SelectProperties: [...configuration.columns.map(f => f.fieldName), siteIdProperty],
-                    Refiners: configuration.refiners.map(ref => ref.fieldName).join(','),
-                }),
-            ])
-            projects = projects.map(item => cleanDeep({ ...item }))
-            sites = sites.map(item => cleanDeep({ ...item }))
-            statusReports = statusReports.map(item => cleanDeep({ ...item }))
-            sites = sites.filter(site => projects.filter(res => res[siteIdProperty] === site['SiteId']).length === 1)
+            let {projects, sites, statusReports} = await this._fetchDataForView(view, configuration, siteId, siteIdProperty);
             const items = sites.map(site => {
                 const [project] = projects.filter(res => res[siteIdProperty] === site['SiteId'])
                 const [statusReport] = statusReports.filter(res => res[siteIdProperty] === site['SiteId'])
@@ -164,34 +139,7 @@ export class DataAdapter {
      */
     public async fetchDataForManagerView(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string, siteIdProperty = 'GtSiteIdOWSTEXT'): Promise<IFetchDataForViewItemResult[]> {
         try {
-            let [
-                { PrimarySearchResults: projects },
-                { PrimarySearchResults: sites },
-                { PrimarySearchResults: statusReports },
-            ] = await Promise.all([
-                sp.search({
-                    ...DEFAULT_SEARCH_SETTINGS,
-                    QueryTemplate: view.searchQuery,
-                    SelectProperties: [...configuration.columns.map(f => f.fieldName), siteIdProperty],
-                }),
-                sp.search({
-                    ...DEFAULT_SEARCH_SETTINGS,
-                    QueryTemplate: `DepartmentId:{${siteId}} contentclass:STS_Site`,
-                    SelectProperties: ['Path', 'Title', 'SiteId'],
-                }),
-                sp.search({
-                    ...DEFAULT_SEARCH_SETTINGS,
-                    QueryTemplate: `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
-                    SelectProperties: [...configuration.columns.map(f => f.fieldName), siteIdProperty],
-                    Refiners: configuration.refiners.map(ref => ref.fieldName).join(','),
-                }),
-            ])
-            projects = projects.map(item => cleanDeep({ ...item }))
-            sites = sites.map(item => cleanDeep({ ...item }))
-            statusReports = statusReports.map(item => cleanDeep({ ...item }))
-            sites = sites.filter(site => projects.filter(res => res[siteIdProperty] === site['SiteId']).length === 1)
-
-
+            let {projects, sites, statusReports} = await this._fetchDataForView(view, configuration, siteId, siteIdProperty);
             const items = projects.map((project) => {
                 const [statusReport] = statusReports.filter(res => res[siteIdProperty] === project['siteIdProperty'])
                 const [site] = sites.filter(res => res['SiteId'] === project[siteIdProperty])
@@ -202,6 +150,49 @@ export class DataAdapter {
             throw err
         }
     }
+
+
+    /**
+     *  Fetches data for portfolio views
+     * @param {PortfolioOverviewView} view
+     * @param {IPortfolioConfiguration} configuration
+     * @param {string} siteId
+     * @param {string} [siteIdProperty='GtSiteIdOWSTEXT']
+     */
+
+    private async _fetchDataForView(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string, siteIdProperty = 'GtSiteIdOWSTEXT'){
+        let [
+            { PrimarySearchResults: projects },
+            { PrimarySearchResults: sites },
+            { PrimarySearchResults: statusReports },
+        ] = await Promise.all([
+            sp.search({
+                ...DEFAULT_SEARCH_SETTINGS,
+                QueryTemplate: view.searchQuery,
+                SelectProperties: [...configuration.columns.map(f => f.fieldName), siteIdProperty],
+            }),
+            sp.search({
+                ...DEFAULT_SEARCH_SETTINGS,
+                QueryTemplate: `DepartmentId:{${siteId}} contentclass:STS_Site`,
+                SelectProperties: ['Path', 'Title', 'SiteId'],
+            }),
+            sp.search({
+                ...DEFAULT_SEARCH_SETTINGS,
+                QueryTemplate: `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+                SelectProperties: [...configuration.columns.map(f => f.fieldName), siteIdProperty],
+                Refiners: configuration.refiners.map(ref => ref.fieldName).join(','),
+            }),
+        ])
+        projects = projects.map(item => cleanDeep({ ...item }))
+        sites = sites.map(item => cleanDeep({ ...item }))
+        statusReports = statusReports.map(item => cleanDeep({ ...item }))
+        sites = sites.filter(site => projects.filter(res => res[siteIdProperty] === site['SiteId']).length === 1)
+        return {
+                    projects,
+                    sites,
+                    statusReports
+                }
+     }
 
     /**
      * Fetch project sites
