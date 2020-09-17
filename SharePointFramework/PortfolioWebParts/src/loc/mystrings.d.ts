@@ -105,6 +105,7 @@ declare interface IPortfolioWebPartsStrings {
   ViewNotFoundMessage: string;
   ViewsListNameLabel: string;
   ProjectsListName: string;
+  PortfolioManagerGroupName: string;
 }
 
 declare module 'PortfolioWebPartsStrings' {

@@ -102,6 +102,7 @@ define([], function () {
     ViewNotFoundMessage: 'Finner ikke angitt visning.',
     ViewsListNameLabel: 'Visninger',
     SelectedColumnsLabel: 'Felter',
-    ProjectsListName: 'Prosjekter'
+    ProjectsListName: 'Prosjekter',
+    PortfolioManagerGroupName: 'Porteføljeinnsikt'
   }
 });
