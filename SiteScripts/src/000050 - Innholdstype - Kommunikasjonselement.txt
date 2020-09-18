@@ -3,7 +3,7 @@
     "actions": [
         {
             "verb": "createContentType",
-            "description": "Opprett et nytt listeelement.",
+            "description": "",
             "id": "0x010065CE65D51354419EA794C6FACD4FA2EB",
             "name": "Kommunikasjonselement",
             "hidden": false

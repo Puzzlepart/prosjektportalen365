@@ -7,8 +7,6 @@
     "node_modules": false,
     "sharepoint": true,
     "temp": true,
-    "shrinkwrap.yaml": true,
-    "package-lock.json": true,
     "**/.git": true,
     "**/.DS_Store": true,
     "**/bower_components": true,

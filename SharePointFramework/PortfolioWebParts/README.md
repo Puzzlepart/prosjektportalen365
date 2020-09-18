@@ -1,4 +1,5 @@
-## portfolio-web-parts
-The solution uses `pnpm` for package management.
+# Portfolio web parts
 
-Read more here: https://pnpm.js.org/
+## Serve
+- Take a copy of `config/serve.sample.json` and name it `serve.json`
+- Run `npm run serve`

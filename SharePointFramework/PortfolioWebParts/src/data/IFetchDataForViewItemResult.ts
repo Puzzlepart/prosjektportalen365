@@ -1,5 +1,5 @@
 
-import { SearchResult } from '@pnp/sp';
+import { SearchResult } from '@pnp/sp'
 
 
 export interface IFetchDataForViewItemResult extends SearchResult {

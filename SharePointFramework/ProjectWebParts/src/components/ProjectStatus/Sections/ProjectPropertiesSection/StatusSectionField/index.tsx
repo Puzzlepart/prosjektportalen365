@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { IStatusSectionFieldProps } from './IStatusSectionFieldProps';
-import styles from './StatusSectionField.module.scss';
+import * as React from 'react'
+import { IStatusSectionFieldProps } from './types'
+import styles from './StatusSectionField.module.scss'
 
 
 export const StatusSectionField = ({ label, value, width }: IStatusSectionFieldProps) => {
@@ -11,5 +11,5 @@ export const StatusSectionField = ({ label, value, width }: IStatusSectionFieldP
                 <div className={styles.statusSectionFieldValue}>{value}</div>
             </div>
         </div>
-    );
-};
+    )
+}

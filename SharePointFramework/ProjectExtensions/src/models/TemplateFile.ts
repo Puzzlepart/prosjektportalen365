@@ -1,9 +1,9 @@
-import { stringIsNullOrEmpty, TypedHash } from '@pnp/common';
-import { FileAddResult, Folder, Web } from '@pnp/sp';
-import { formatDate } from 'shared/lib/helpers';
+import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
+import { FileAddResult, Folder, Web } from '@pnp/sp'
+import { formatDate } from 'shared/lib/helpers'
 
 export interface ITemplateFileSPItem {
-    File?: { UniqueId: string, Name: string, Title: string, ServerRelativeUrl: string, TimeLastModified: string };
+    File?: { UniqueId: string; Name: string; Title: string; ServerRelativeUrl: string; TimeLastModified: string };
     FieldValuesAsText?: TypedHash<string>;
 }
 
@@ -54,14 +54,14 @@ export class TemplateFile {
     public errorMessage: string;
 
     constructor(spItem: ITemplateFileSPItem, public web: Web) {
-        this.id = spItem.File.UniqueId;
-        this.name = spItem.File.Name;
-        this.title = spItem.File.Title;
-        this.phase = spItem.FieldValuesAsText.GtProjectPhase;
-        this.newName = this.name;
-        this.newTitle = this.title;
-        this.serverRelativeUrl = spItem.File.ServerRelativeUrl;
-        this.modified = formatDate(spItem.File.TimeLastModified);
+        this.id = spItem.File.UniqueId
+        this.name = spItem.File.Name
+        this.title = spItem.File.Title
+        this.phase = spItem.FieldValuesAsText.GtProjectPhase
+        this.newName = this.name
+        this.newTitle = this.title
+        this.serverRelativeUrl = spItem.File.ServerRelativeUrl
+        this.modified = formatDate(spItem.File.TimeLastModified)
     }
 
     /**
@@ -72,14 +72,15 @@ export class TemplateFile {
      * 
      * @returns true if the operation is successful
      */
-    public async copyTo(folder: Folder, shouldOverwrite: boolean = true): Promise<FileAddResult> {
+    public async copyTo(folder: Folder, shouldOverwrite = true): Promise<FileAddResult> {
         try {
-            const content = await this.web.getFileByServerRelativeUrl(this.serverRelativeUrl).getBlob();
-            const fileAddResult = await folder.files.addChunked(this.newName, content, () => { }, shouldOverwrite);
-            await (await fileAddResult.file.getItem()).update({ Title: this.newTitle });
-            return fileAddResult;
+            const content = await this.web.getFileByServerRelativeUrl(this.serverRelativeUrl).getBlob()
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            const fileAddResult = await folder.files.addChunked(this.newName, content, () => { }, shouldOverwrite)
+            await (await fileAddResult.file.getItem()).update({ Title: this.newTitle })
+            return fileAddResult
         } catch (error) {
-            throw error;
+            throw error
         }
     }
 
@@ -90,19 +91,19 @@ export class TemplateFile {
     */
     public update(properties: TypedHash<string>) {
         Object.keys(properties).forEach(prop => {
-            if (!stringIsNullOrEmpty(properties[prop])) this[prop] = properties[prop];
-        });
+            if (!stringIsNullOrEmpty(properties[prop])) this[prop] = properties[prop]
+        })
     }
 
     public get nameWithoutExtension() {
-        return this.name.split('.')[0];
+        return this.name.split('.')[0]
     }
 
     public get fileExtension() {
-        return this.name.split('.')[1];
+        return this.name.split('.')[1]
     }
 
     public get folderServerRelativeUrl() {
-        return this.serverRelativeUrl.replace(this.name, '');
+        return this.serverRelativeUrl.replace(this.name, '')
     }
 }

@@ -1,15 +1,15 @@
-import { ChartData, ChartDataItem } from 'models';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
-import * as strings from 'PortfolioWebPartsStrings';
-import * as React from 'react';
-import * as format from 'string-format';
-import Chart from './Chart';
-import { IPortfolioInsightsProps } from './IPortfolioInsightsProps';
-import { IPortfolioInsightsState } from './IPortfolioInsightsState';
-import styles from './PortfolioInsights.module.scss';
-import PortfolioInsightsCommandBar from './PortfolioInsightsCommandBar';
-import { PortfolioOverviewView } from 'shared/lib/models';
+import { ChartData, ChartDataItem } from 'models'
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner'
+import * as strings from 'PortfolioWebPartsStrings'
+import * as React from 'react'
+import * as format from 'string-format'
+import Chart from './Chart'
+import { IPortfolioInsightsProps } from './IPortfolioInsightsProps'
+import { IPortfolioInsightsState } from './IPortfolioInsightsState'
+import styles from './PortfolioInsights.module.scss'
+import PortfolioInsightsCommandBar from './PortfolioInsightsCommandBar'
+import { PortfolioOverviewView } from 'shared/lib/models'
 
 /**
  * @component PortfolioInsights
@@ -24,20 +24,20 @@ export class PortfolioInsights extends React.Component<IPortfolioInsightsProps, 
    * @param {IPortfolioInsightsProps} props Props
    */
   constructor(props: IPortfolioInsightsProps) {
-    super(props);
-    this.state = { isLoading: true };
+    super(props)
+    this.state = { isLoading: true }
   }
 
   public async componentDidMount() {
     try {
-      const configuration = await this.props.dataAdapter.getPortfolioConfig();
-      const currentView = configuration.views[0];
+      const configuration = await this.props.dataAdapter.getPortfolioConfig()
+      const currentView = configuration.views[0]
       const { charts, chartData, contentTypes } = await this.props.dataAdapter.fetchChartData(
         currentView,
         configuration,
         this.props.chartConfigurationListName,
         this.props.pageContext.site.id.toString(),
-      );
+      )
       this.setState({
         charts,
         contentTypes,
@@ -45,9 +45,9 @@ export class PortfolioInsights extends React.Component<IPortfolioInsightsProps, 
         configuration,
         currentView,
         isLoading: false,
-      });
+      })
     } catch (error) {
-      this.setState({ error, isLoading: false });
+      this.setState({ error, isLoading: false })
     }
   }
 
@@ -59,7 +59,7 @@ export class PortfolioInsights extends React.Component<IPortfolioInsightsProps, 
             <Spinner label={format(strings.LoadingText, this.props.title)} size={SpinnerSize.large} />
           </div>
         </div>
-      );
+      )
     }
 
     return (
@@ -79,7 +79,7 @@ export class PortfolioInsights extends React.Component<IPortfolioInsightsProps, 
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   private get _charts() {
@@ -88,14 +88,14 @@ export class PortfolioInsights extends React.Component<IPortfolioInsightsProps, 
         <div className={styles.inner}>
           <MessageBar messageBarType={MessageBarType.error}>{this.state.error}</MessageBar>
         </div>
-      );
+      )
     }
     if (this.state.chartData.isEmpty()) {
       return (
         <div className={styles.inner}>
           <MessageBar messageBarType={MessageBarType.info}>Ingen prosjekter funnet.</MessageBar>
         </div>
-      );
+      )
     }
     return (
       <div className={`${styles.charts} ms-Grid-row`}>
@@ -103,7 +103,7 @@ export class PortfolioInsights extends React.Component<IPortfolioInsightsProps, 
           <Chart key={idx} chart={chart} data={this.state.chartData} />
         ))}
       </div>
-    );
+    )
   }
 
   /**
@@ -112,10 +112,10 @@ export class PortfolioInsights extends React.Component<IPortfolioInsightsProps, 
   * @param {PortfolioOverviewView} view View
   */
   private async _onViewChanged(view: PortfolioOverviewView) {
-    let items = await this.props.dataAdapter.fetchDataForView(view, this.state.configuration, this.props.pageContext.site.id.toString());
-    let chartData = new ChartData(items.map(item => new ChartDataItem(item.Title, item)));
-    this.setState({ currentView: view, chartData });
+    const items = await this.props.dataAdapter.fetchDataForView(view, this.state.configuration, this.props.pageContext.site.id.toString())
+    const chartData = new ChartData(items.map(item => new ChartDataItem(item.Title, item)))
+    this.setState({ currentView: view, chartData })
   }
 }
 
-export { IPortfolioInsightsProps };
+export { IPortfolioInsightsProps }

@@ -1,18 +1,18 @@
-import { getId } from '@uifabric/utilities';
-import { SPDataAdapter } from 'data';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import * as strings from 'ProjectExtensionsStrings';
-import * as React from 'react';
-import styles from './DocumentTemplateItem.module.scss';
-import { IDocumentTemplateItemProps } from './IDocumentTemplateItemProps';
+import { getId } from '@uifabric/utilities'
+import { SPDataAdapter } from 'data'
+import { Icon } from 'office-ui-fabric-react/lib/Icon'
+import { TextField } from 'office-ui-fabric-react/lib/TextField'
+import * as strings from 'ProjectExtensionsStrings'
+import * as React from 'react'
+import styles from './DocumentTemplateItem.module.scss'
+import { IDocumentTemplateItemProps } from './IDocumentTemplateItemProps'
 
 // tslint:disable-next-line: naming-convention
 export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
-    const nameId = getId('name');
-    const titleId = getId('title');
-    let changeTimeout: number;
-    const [isExpanded, setIsExpanded] = React.useState(false);
+    const nameId = getId('name')
+    const titleId = getId('title')
+    let changeTimeout: number
+    const [isExpanded, setIsExpanded] = React.useState(false)
 
 
     /**
@@ -22,36 +22,37 @@ export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
      * @param {string} newValue New value
      * @param {number} resolveDelay Resolve delay
      */
-    function onInputChange(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue: string, resolveDelay: number = 400) {
-        clearTimeout(changeTimeout);
+    function onInputChange(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue: string, resolveDelay = 400) {
+        clearTimeout(changeTimeout)
         changeTimeout = setTimeout(async () => {
+            // eslint-disable-next-line default-case
             switch ((event.target as HTMLInputElement).id) {
                 case nameId: {
-                    let newName = `${newValue}.${props.model.fileExtension}`;
-                    let errorMsg = await SPDataAdapter.isFilenameValid(props.folderServerRelativeUrl, newName);
-                    props.onInputChanged(props.model.id, { newName }, errorMsg);
+                    const newName = `${newValue}.${props.model.fileExtension}`
+                    const errorMsg = await SPDataAdapter.isFilenameValid(props.folderServerRelativeUrl, newName)
+                    props.onInputChanged(props.model.id, { newName }, errorMsg)
                 }
-                    break;
+                    break
                 case titleId: {
-                    props.onInputChanged(props.model.id, { newTitle: newValue });
+                    props.onInputChanged(props.model.id, { newTitle: newValue })
                 }
-                    break;
+                    break
             }
-        }, resolveDelay);
+        }, resolveDelay)
     }
 
     React.useEffect(() => {
         SPDataAdapter.isFilenameValid(props.folderServerRelativeUrl, props.model.name).then(errorMessage => {
             if (errorMessage) {
-                props.onInputChanged(props.model.id, {}, errorMessage);
-                setIsExpanded(true);
+                props.onInputChanged(props.model.id, {}, errorMessage)
+                setIsExpanded(true)
             }
-        });
-    }, [props.folderServerRelativeUrl]);
+        })
+    }, [props.folderServerRelativeUrl])
 
     return (
         <div className={styles.documentTemplateItem}>
-            <div className={styles.header} onClick={_ => setIsExpanded(!isExpanded)}>
+            <div className={styles.header} onClick={() => setIsExpanded(!isExpanded)}>
                 <div className={styles.title}>{props.model.name}</div>
                 <div className={styles.icon}>
                     <Icon iconName={isExpanded ? 'ChevronDown' : 'ChevronUp'} />
@@ -78,5 +79,5 @@ export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}

@@ -1,24 +1,24 @@
 export class SPChartConfigurationItem {
     // tslint:disable-next-line:naming-convention
-    public ContentTypeId: string = '';
+    public ContentTypeId = '';
     // tslint:disable-next-line:naming-convention
-    public Title: string = '';
+    public Title = '';
     // tslint:disable-next-line:naming-convention
-    public GtPiSubTitle: string = '';
+    public GtPiSubTitle = '';
     // tslint:disable-next-line:naming-convention
     public GtPiFieldsId: number[] = [];
     // tslint:disable-next-line:naming-convention
-    public GtPiCategoryFieldId: number = 0;
+    public GtPiCategoryFieldId = 0;
     // tslint:disable-next-line:naming-convention
-    public GtPiWidthSm: number = 0;
+    public GtPiWidthSm = 0;
     // tslint:disable-next-line:naming-convention
-    public GtPiWidthMd: number = 0;
+    public GtPiWidthMd = 0;
     // tslint:disable-next-line:naming-convention
-    public GtPiWidthLg: number = 0;
+    public GtPiWidthLg = 0;
     // tslint:disable-next-line:naming-convention
-    public GtPiWidthXl: number = 0;
+    public GtPiWidthXl = 0;
     // tslint:disable-next-line:naming-convention
-    public GtPiWidthXxl: number = 0;
+    public GtPiWidthXxl = 0;
     // tslint:disable-next-line:naming-convention
-    public GtPiWidthXxxl: number = 0;
+    public GtPiWidthXxxl = 0;
 }

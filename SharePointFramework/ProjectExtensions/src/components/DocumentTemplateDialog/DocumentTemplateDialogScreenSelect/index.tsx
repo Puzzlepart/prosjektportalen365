@@ -1,10 +1,10 @@
-import { ConstrainMode, DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
-import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import * as strings from 'ProjectExtensionsStrings';
-import * as React from 'react';
-import * as formatString from 'string-format';
-import { InfoMessage } from '../../InfoMessage';
-import { DocumentTemplateDialogScreenSelectDefaultProps, IDocumentTemplateDialogScreenSelectProps } from './IDocumentTemplateDialogScreenSelectProps';
+import { ConstrainMode, DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
+import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection'
+import * as strings from 'ProjectExtensionsStrings'
+import * as React from 'react'
+import * as formatString from 'string-format'
+import { InfoMessage } from '../../InfoMessage'
+import { DocumentTemplateDialogScreenSelectDefaultProps, IDocumentTemplateDialogScreenSelectProps } from './IDocumentTemplateDialogScreenSelectProps'
 
 export class DocumentTemplateDialogScreenSelect extends React.Component<IDocumentTemplateDialogScreenSelectProps, {}> {
     public static defaultProps = DocumentTemplateDialogScreenSelectDefaultProps;
@@ -23,6 +23,6 @@ export class DocumentTemplateDialogScreenSelect extends React.Component<IDocumen
                         constrainMode={ConstrainMode.horizontalConstrained} />
                 </MarqueeSelection>
             </>
-        );
+        )
     }
 }

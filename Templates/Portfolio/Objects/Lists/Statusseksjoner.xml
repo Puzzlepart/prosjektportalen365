@@ -1,4 +1,4 @@
-﻿<pnp:ListInstance Title="Statusseksjoner" TemplateType="100" Url="Lists/Statusseksjoner" ContentTypesEnabled="true" Hidden="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
+<pnp:ListInstance Title="{resource:Lists_StatusSections_Title}" TemplateType="100" Url="{resource:Lists_StatusSections_Url}" ContentTypesEnabled="true" Hidden="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82803" Default="true" />
@@ -7,7 +7,7 @@
         <pnp:ContentTypeBinding ContentTypeID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82805" />
     </pnp:ContentTypeBindings>
     <pnp:Views>
-        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Statusseksjoner/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=44">
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_StatusSections_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
             <Query>
                 <OrderBy>
                     <FieldRef Name="GtSortOrder" />
@@ -86,17 +86,17 @@
             <pnp:DataValue FieldName="GtSecFieldName">GtStatusRisk</pnp:DataValue>
             <pnp:DataValue FieldName="GtSecList">Usikkerhet</pnp:DataValue>
             <pnp:DataValue FieldName="GtSecViewQuery">&lt;OrderBy&gt;
-    &lt;FieldRef Name=&quot;GtRiskFactor&quot; Ascending=&quot;FALSE&quot; /&gt;
+    &lt;FieldRef Name="GtRiskFactor" Ascending="FALSE" /&gt;
 &lt;/OrderBy&gt;
 &lt;Where&gt;
     &lt;And&gt;
         &lt;Neq&gt;
-            &lt;FieldRef Name=&quot;GtRiskStatus&quot; /&gt;
-            &lt;Value Type=&quot;Text&quot;&gt;Ikke lenger aktuell&lt;/Value&gt;
+            &lt;FieldRef Name="GtRiskStatus" /&gt;
+            &lt;Value Type="Text"&gt;Ikke lenger aktuell&lt;/Value&gt;
         &lt;/Neq&gt;
         &lt;Eq&gt;
-            &lt;FieldRef Name=\&quot;ContentType\&quot; /&gt;
-            &lt;Value Type=\&quot;Computed\&quot;&gt;Risiko&lt;/Value&gt;
+            &lt;FieldRef Name="ContentType" /&gt;
+            &lt;Value Type="Computed"&gt;Risiko&lt;/Value&gt;
         &lt;/Eq&gt;
     &lt;/And&gt;
 &lt;/Where&gt;</pnp:DataValue>

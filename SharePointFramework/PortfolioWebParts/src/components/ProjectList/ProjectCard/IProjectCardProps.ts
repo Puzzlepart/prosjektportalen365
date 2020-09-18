@@ -1,5 +1,5 @@
-import { IButtonProps } from 'office-ui-fabric-react/lib/Button';
-import { ProjectListModel } from 'models';
+import { IButtonProps } from 'office-ui-fabric-react/lib/Button'
+import { ProjectListModel } from 'models'
 
 export interface IProjectCardProps {
   /**

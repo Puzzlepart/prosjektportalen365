@@ -1,12 +1,12 @@
-import { IProjectSetupData } from 'extensions/projectSetup';
-import { IBaseTask } from './@BaseTask';
-import { ApplyTemplate } from './ApplyTemplate';
-import { CopyListData } from './CopyListData';
-import { PreTask } from './PreTask';
-import { ProvisionSiteFields } from './ProvisionSiteFields';
-import { SetTaxonomyFields } from './SetTaxonomyFields';
-import { SetupProjectInformation } from './SetupProjectInformation';
-import { SitePermissions } from './SitePermissions';
+import { IProjectSetupData } from 'extensions/projectSetup'
+import { IBaseTask } from './@BaseTask'
+import { ApplyTemplate } from './ApplyTemplate'
+import { CopyListData } from './CopyListData'
+import { PreTask } from './PreTask'
+import { ProvisionSiteFields } from './ProvisionSiteFields'
+import { SetTaxonomyFields } from './SetTaxonomyFields'
+import { SetupProjectInformation } from './SetupProjectInformation'
+import { SitePermissions } from './SitePermissions'
 
 const tasks: (new (data: IProjectSetupData) => IBaseTask)[] = [
     PreTask,
@@ -16,7 +16,7 @@ const tasks: (new (data: IProjectSetupData) => IBaseTask)[] = [
     ApplyTemplate,
     SetTaxonomyFields,
     CopyListData,
-];
+]
 
 /**
  * Get tasks
@@ -24,8 +24,8 @@ const tasks: (new (data: IProjectSetupData) => IBaseTask)[] = [
  * @param {IProjectSetupData} data Data
  */
 export function getTasks(data: IProjectSetupData) {
-    return tasks.map(ctor => new ctor(data));
+    return tasks.map(ctor => new ctor(data))
 }
 
-export * from './@BaseTask';
+export * from './@BaseTask'
 

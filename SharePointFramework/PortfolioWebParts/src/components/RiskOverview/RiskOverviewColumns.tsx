@@ -1,10 +1,10 @@
-import * as React from 'react';
-import * as strings from 'PortfolioWebPartsStrings';
-import { tryParseInt } from 'shared/lib/helpers';
-import { IAggregatedSearchListColumn } from 'interfaces';
+import * as React from 'react'
+import * as strings from 'PortfolioWebPartsStrings'
+import { tryParseInt } from 'shared/lib/helpers'
+import { IAggregatedSearchListColumn } from 'interfaces'
 
-const onRenderLink = (item: any) => <a href={item.SPWebUrl} target='_blank'>{item.SiteTitle}</a>;
-const onRenderNumber = (item: any, _index: number, column: IAggregatedSearchListColumn) => tryParseInt(item[column.fieldName], '');
+const onRenderLink = (item: any) => <a href={item.SPWebUrl} rel='noopener noreferrer' target='_blank'>{item.SiteTitle}</a>
+const onRenderNumber = (item: any, _index: number, column: IAggregatedSearchListColumn) => tryParseInt(item[column.fieldName], '')
 
 export const RISKOVERVIEW_COLUMNS: IAggregatedSearchListColumn[] = [{
     key: 'Title',
@@ -61,4 +61,4 @@ export const RISKOVERVIEW_COLUMNS: IAggregatedSearchListColumn[] = [{
     name: strings.RiskActionLabel,
     minWidth: 300,
     isMultiline: true,
-}];
+}]

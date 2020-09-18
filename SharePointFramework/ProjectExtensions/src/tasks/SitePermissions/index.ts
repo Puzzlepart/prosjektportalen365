@@ -1,14 +1,14 @@
-import { IProjectSetupData } from 'extensions/projectSetup';
-import * as strings from 'ProjectExtensionsStrings';
-import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask';
-import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction';
+import { IProjectSetupData } from 'extensions/projectSetup'
+import * as strings from 'ProjectExtensionsStrings'
+import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
+import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 
 export class SitePermissions extends BaseTask {
     public taskName = 'SitePermissions';
     private _groupName = 'Porteføljeadministratorer';
 
     constructor(data: IProjectSetupData) {
-        super(data);
+        super(data)
     }
 
     /**
@@ -17,23 +17,24 @@ export class SitePermissions extends BaseTask {
      * @param {IBaseTaskParams} params Task parameters 
      * @param {OnProgressCallbackFunction} _onProgress On progress function
      */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public async execute(params: IBaseTaskParams, _onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
         try {
             if (this.settings.includePortfolioAdministrators) {
                 try {
-                    let users = await this.data.hub.web.siteGroups.getByName(this._groupName).users.select('Email', 'LoginName').get();
+                    const users = await this.data.hub.web.siteGroups.getByName(this._groupName).users.select('Email', 'LoginName').get()
                     for (let i = 0; i < users.length; i++) {
-                        let { data } = await params.web.ensureUser(users[i].LoginName);
-                        await params.web.associatedMemberGroup.users.add(data.LoginName);
+                        const { data } = await params.web.ensureUser(users[i].LoginName)
+                        await params.web.associatedMemberGroup.users.add(data.LoginName)
                     }
                 } catch (error) {
-                    this.logInformation(`Failed to set site permissions. The group ${this._groupName} might not exist.`);
+                    this.logInformation(`Failed to set site permissions. The group ${this._groupName} might not exist.`)
                 }
             }
-            return params;
+            return params
         } catch (error) {
-            this.logError('Failed to set site permissions');
-            throw new BaseTaskError(this.taskName, strings.SitePermissionsErrorMessage, '');
+            this.logError('Failed to set site permissions')
+            throw new BaseTaskError(this.taskName, strings.SitePermissionsErrorMessage, '')
         }
     }
 }

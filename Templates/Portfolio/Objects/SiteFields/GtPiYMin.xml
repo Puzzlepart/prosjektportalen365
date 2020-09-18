@@ -1,1 +1,1 @@
-﻿<Field DisplayName="{resource:SiteFields_GtPiYMin_DisplayName}" Description="{resource:SiteFields_GtPiYMin_Description}" Percentage="FALSE" Type="Number" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{9a731b59-52ed-4b93-ab7a-3fd56914d0a6}" StaticName="GtPiYMin" Name="GtPiYMin" />
+﻿<Field DisplayName="{resource:SiteFields_GtPiYMin_DisplayName}" Description="{resource:SiteFields_GtPiYMin_Description}" Percentage="FALSE" Type="Number" Group="{resource:SiteFields_Portfolio_Group}" ID="{9a731b59-52ed-4b93-ab7a-3fd56914d0a6}" StaticName="GtPiYMin" Name="GtPiYMin" />

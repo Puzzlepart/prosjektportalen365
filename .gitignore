@@ -7,4 +7,13 @@ SharePointFramework/*/**/build.config.json
 Install/Templates
 Install/SiteScripts/*.txt
 Install/InstallLog.txt
-SharePointFramework/**/.vscode/launch*.json
+SharePointFramework/**/.vscode/launch.json
+SharePointFramework/**/package-lock.json
+SharePointFramework/**/pnpm-lock.yaml
+SharePointFramework/**/shrinkwrap.yaml
+Templates/Portfolio/*.txt
+Templates/Content/**/ProjectTemplates/*.txt
+Templates/*.txt
+Templates/Resources.json
+.DS_Store
+SharePointFramework/ProjectWebParts/config/config.backup.json

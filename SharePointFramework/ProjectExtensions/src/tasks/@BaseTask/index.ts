@@ -1,9 +1,9 @@
-import { Logger, LogLevel } from '@pnp/logging';
-import { IProjectSetupData } from 'extensions/projectSetup';
-import { IProjectSetupSettings } from 'extensions/projectSetup/ProjectSetupSettings';
-import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction';
-import { IBaseTask } from './IBaseTask';
-import { IBaseTaskParams } from './IBaseTaskParams';
+import { Logger, LogLevel } from '@pnp/logging'
+import { IProjectSetupData } from 'extensions/projectSetup'
+import { IProjectSetupSettings } from 'extensions/projectSetup/ProjectSetupSettings'
+import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
+import { IBaseTask } from './IBaseTask'
+import { IBaseTaskParams } from './IBaseTaskParams'
 
 // tslint:disable-next-line: naming-convention
 export abstract class BaseTask implements IBaseTask {
@@ -13,7 +13,7 @@ export abstract class BaseTask implements IBaseTask {
     public onProgress: OnProgressCallbackFunction;
 
     constructor(public data: IProjectSetupData) {
-        this.settings = data.settings.values;
+        this.settings = data.settings.values
     }
 
     /**
@@ -31,7 +31,7 @@ export abstract class BaseTask implements IBaseTask {
      * @param {any} data Data
      */
     public logError(message: string, data?: any) {
-        this._log(`(ProjectSetup) [${this.taskName}]: ${message}`, data, LogLevel.Error);
+        this._log(`(ProjectSetup) [${this.taskName}]: ${message}`, data, LogLevel.Error)
     }
 
     /**
@@ -41,7 +41,7 @@ export abstract class BaseTask implements IBaseTask {
      * @param {any} data Data
      */
     public logWarning(message: string, data?: any) {
-        this._log(`(ProjectSetup) [${this.taskName}]: ${message}`, data, LogLevel.Warning);
+        this._log(`(ProjectSetup) [${this.taskName}]: ${message}`, data, LogLevel.Warning)
     }
 
     /**
@@ -51,7 +51,7 @@ export abstract class BaseTask implements IBaseTask {
      * @param {any} data Data
      */
     public logInformation(message: string, data?: any) {
-        this._log(`(ProjectSetup) [${this.taskName}]: ${message}`, data, LogLevel.Info);
+        this._log(`(ProjectSetup) [${this.taskName}]: ${message}`, data, LogLevel.Info)
     }
 
     /**
@@ -62,10 +62,10 @@ export abstract class BaseTask implements IBaseTask {
      * @param {LogLevel} level Level
      */
     protected _log(message: string, data: any, level: LogLevel) {
-        Logger.log({ message, data, level });
+        Logger.log({ message, data, level })
     }
 }
 
-export * from './BaseTaskError';
-export * from './IBaseTask';
-export * from './IBaseTaskParams';
+export * from './BaseTaskError'
+export * from './IBaseTask'
+export * from './IBaseTaskParams'

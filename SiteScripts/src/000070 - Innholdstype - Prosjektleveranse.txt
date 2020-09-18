@@ -3,7 +3,7 @@
     "actions": [
         {
             "verb": "createContentType",
-            "description": "Opprett et nytt listeelement.",
+            "description": "",
             "id": "0x0100D7B74DE815F946D3B0F99D19F9B36B68",
             "name": "Prosjektleveranse",
             "hidden": false

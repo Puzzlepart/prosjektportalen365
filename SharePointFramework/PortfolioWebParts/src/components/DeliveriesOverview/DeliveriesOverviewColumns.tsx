@@ -1,7 +1,7 @@
-import * as React from 'react';
-import * as strings from 'PortfolioWebPartsStrings';
-import { formatDate } from 'shared/lib/helpers';
-import { IAggregatedSearchListColumn } from 'interfaces';
+import * as React from 'react'
+import * as strings from 'PortfolioWebPartsStrings'
+import { formatDate } from 'shared/lib/helpers'
+import { IAggregatedSearchListColumn } from 'interfaces'
 
 export const DELIVERIES_OVERVIEW_COLUMNS: IAggregatedSearchListColumn[] = [
     {
@@ -11,7 +11,7 @@ export const DELIVERIES_OVERVIEW_COLUMNS: IAggregatedSearchListColumn[] = [
         minWidth: 100,
         maxWidth: 150,
         isResizable: true,
-        onRender: (item: any) => <a href={item.SPWebUrl} target='_blank'>{item.SiteTitle}</a>,
+        onRender: (item: any) => <a href={item.SPWebUrl} rel='noopener noreferrer' target='_blank'>{item.SiteTitle}</a>,
         isGroupable: true,
     },
     {
@@ -67,4 +67,4 @@ export const DELIVERIES_OVERVIEW_COLUMNS: IAggregatedSearchListColumn[] = [
         isMultiline: true,
         isResizable: true,
     },
-];
+]

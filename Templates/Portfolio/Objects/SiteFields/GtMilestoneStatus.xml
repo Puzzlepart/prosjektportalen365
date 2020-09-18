@@ -1,8 +1,0 @@
-﻿<Field ID="{17a4b359-5819-4e7c-9894-a154320a661d}" Name="GtMilestoneStatus" StaticName="GtMilestoneStatus" DisplayName="Status milepæl" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" FillInChoice="FALSE">
-    <CHOICES>
-        <CHOICE>Ikke i rute</CHOICE>
-        <CHOICE>I rute</CHOICE>
-        <CHOICE>Oppnådd</CHOICE>
-        <CHOICE>Ikke oppnådd</CHOICE>
-    </CHOICES>
-</Field>

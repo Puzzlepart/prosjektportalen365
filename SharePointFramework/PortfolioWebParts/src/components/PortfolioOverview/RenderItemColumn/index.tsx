@@ -1,12 +1,12 @@
-import { formatDate, tryParseCurrency } from 'shared/lib/helpers';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import * as React from 'react';
-import { IPortfolioOverviewState } from '../IPortfolioOverviewState';
-import { IRenderItemColumnProps } from './IRenderItemColumnProps';
-import { TagsColumn } from './TagsColumn';
-import { UserColumn } from './UserColumn';
-import { IFetchDataForViewItemResult } from 'data/IFetchDataForViewItemResult';
-import { ProjectColumn } from 'shared/lib/models';
+import { formatDate, tryParseCurrency } from 'shared/lib/helpers'
+import { Icon } from 'office-ui-fabric-react/lib/Icon'
+import * as React from 'react'
+import { IPortfolioOverviewState } from '../IPortfolioOverviewState'
+import { IRenderItemColumnProps } from './IRenderItemColumnProps'
+import { TagsColumn } from './TagsColumn'
+import { UserColumn } from './UserColumn'
+import { IFetchDataForViewItemResult } from 'data/IFetchDataForViewItemResult'
+import { ProjectColumn } from 'shared/lib/models'
 
 /**
  * Mapping for rendering of the different data types
@@ -28,7 +28,7 @@ const renderDataTypeMap = {
     tags: (props: IRenderItemColumnProps) => (
         <TagsColumn {...props} />
     ),
-};
+}
 
 /**
  * On render item activeFilters
@@ -38,37 +38,41 @@ const renderDataTypeMap = {
 * @param {void} onUpdateState On update state
 */
 export function renderItemColumn(item: IFetchDataForViewItemResult, column: ProjectColumn, onUpdateState: (state: Partial<IPortfolioOverviewState>) => void) {
-    const colValue = item[column.fieldName];
+    const colValue = item[column.fieldName]
 
-    if (!colValue) return null;
+    if (!colValue) return null
 
+    // eslint-disable-next-line default-case
     switch (column.fieldName) {
         case 'Title': {
             return (
                 <span>
-                    <a href={item.Path} target='_blank'>{colValue}</a>
-                    <span style={{ cursor: 'pointer', marginLeft: 8 }} onClick={_ => { onUpdateState({ showProjectInfo: item }); }}> <Icon iconName='OpenInNewWindow' /></span>
+                    <a href={item.Path} rel='noopener noreferrer' target='_blank'>{colValue}</a>
+                    {item.Path && <span
+                        style={{ cursor: 'pointer', marginLeft: 8 }}
+                        onClick={() => { onUpdateState({ showProjectInfo: item }) }}> <Icon iconName='OpenInNewWindow' /></span>
+                    }
                 </span >
-            );
+            )
         }
     }
 
     if (renderDataTypeMap[column.dataType]) {
-        return renderDataTypeMap[column.dataType]({ column, colValue });
+        return renderDataTypeMap[column.dataType]({ column, colValue })
     }
 
-    const config = column.config ? column.config[colValue] : null;
+    const config = column.config ? column.config[colValue] : null
     if (config) {
         return (
             <span>
                 <Icon iconName={config.iconName} style={{ color: config.color, marginRight: 4 }} />
                 <span>{colValue}</span>
             </span>
-        );
+        )
     }
     return (
         <span>
             {colValue}
         </span>
-    );
+    )
 }

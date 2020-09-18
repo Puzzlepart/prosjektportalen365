@@ -1,10 +1,10 @@
-﻿<pnp:ListInstance Title="Datakilder" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Datakilder" Hidden="true" RemoveExistingContentTypes="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false" 
+﻿<pnp:ListInstance Title="{resource:Lists_DataSources_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_DataSources_Url}" Hidden="true" RemoveExistingContentTypes="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100A0AB42EFAB986D4A8E8038BC2391BEB2" Default="true" />
     </pnp:ContentTypeBindings>
     <pnp:Views RemoveExistingViews="true">
-        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Datakilder/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=44">
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_DataSources_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
             <Query>
                 <OrderBy>
                     <FieldRef Name="ID" />
@@ -19,49 +19,6 @@
             </ViewFields>
             <RowLimit Paged="TRUE">100</RowLimit>
             <JSLink>clienttemplates.js</JSLink>
-        </View>
-        <View Type="HTML" DisplayName="Gruppert på Kategori" Url="{site}/Lists/Datakilder/Gruppert på Kategori.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
-            <Query>
-                <OrderBy>
-                    <FieldRef Name="ID" />
-                </OrderBy>
-                <GroupBy>
-                    <FieldRef Name="GtDataSourceCategory" Ascending="TRUE" />
-                </GroupBy>
-            </Query>
-            <ViewFields>
-                <FieldRef Name="LinkTitle" />
-                <FieldRef Name="GtSearchQuery" />
-                <FieldRef Name="GtDataSourceDefault" />
-                <FieldRef Name="GtIconName" />
-            </ViewFields>
-            <Toolbar Type="Standard" />
-            <XslLink Default="TRUE">main.xsl</XslLink>
-            <JSLink>clienttemplates.js</JSLink>
-            <RowLimit Paged="TRUE">100</RowLimit>
-        </View>
-        <View Type="HTML" DisplayName="Standardvisninger" Url="{site}/Lists/Datakilder/Standardvisninger.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
-            <Query>
-                <OrderBy>
-                    <FieldRef Name="ID" />
-                </OrderBy>
-                <Where>
-                    <Eq>
-                        <FieldRef Name="GtDataSourceDefault" />
-                        <Value Type="Boolean">1</Value>
-                    </Eq>
-                </Where>
-            </Query>
-            <ViewFields>
-                <FieldRef Name="LinkTitle" />
-                <FieldRef Name="GtSearchQuery" />
-                <FieldRef Name="GtDataSourceCategory" />
-                <FieldRef Name="GtIconName" />
-            </ViewFields>
-            <Toolbar Type="Standard" />
-            <XslLink Default="TRUE">main.xsl</XslLink>
-            <JSLink>clienttemplates.js</JSLink>
-            <RowLimit Paged="TRUE">100</RowLimit>
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
@@ -79,9 +36,16 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Alle risikoelementer</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89701* DepartmentId:{{sitecollectionid}} GtShowInPortfolioOWSBOOL:1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89701* DepartmentId:{{sitecollectionid}} GtShowInPortfolioOWSBOOL:1 -GtRiskStatusOWSCHCS="Ikke lenger aktuell"</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Risikooversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">Asterisk</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Risikoelementer på porteføljenivå</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89701* GtShowInPortfolioOWSBOOL:1 DepartmentId:{{sitecollectionid}}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Risikooversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">Asterisk</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceDefault">True</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Alle ressursallokeringer</pnp:DataValue>
@@ -120,10 +84,17 @@
             <pnp:DataValue FieldName="GtIconName">SyncStatus</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">Gevinstoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Alle gevinstelementer</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x010039EAFDC2A1624C1BA1A444FC8FE85DEC* OR ContentTypeID:0x01004F466123309D46BAB9D5C6DE89A6CF67* OR ContentTypeID:0x010073043EFE3E814A2BBEF96B8457623F95*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">Trophy</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Gevinstelementer på porteføljenivå</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x010039EAFDC2A1624C1BA1A444FC8FE85DEC* OR (ContentTypeID:0x01004F466123309D46BAB9D5C6DE89A6CF67* AND GtShowInPortfolioOWSBOOL:1) OR ContentTypeID:0x010073043EFE3E814A2BBEF96B8457623F95*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">Trophy</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceDefault">True</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Gevinstoversikt (Prosjektnivå)</pnp:DataValue>

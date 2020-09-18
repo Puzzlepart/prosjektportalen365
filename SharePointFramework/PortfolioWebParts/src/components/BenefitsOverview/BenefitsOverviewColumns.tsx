@@ -1,11 +1,11 @@
-import * as React from 'react';
-import * as strings from 'PortfolioWebPartsStrings';
-import BenefitMeasurementsModal from './BenefitMeasurementsModal';
-import { IBenefitsOverviewProps } from './IBenefitsOverviewProps';
-import { getObjectValue } from 'shared/lib/helpers';
-import { BenefitMeasurementIndicator } from 'models';
-import BenefitMeasurementAchievement from './BenefitMeasurementAchievement';
-import { IAggregatedSearchListColumn } from 'interfaces';
+import * as React from 'react'
+import * as strings from 'PortfolioWebPartsStrings'
+import BenefitMeasurementsModal from './BenefitMeasurementsModal'
+import { IBenefitsOverviewProps } from './IBenefitsOverviewProps'
+import { getObjectValue } from 'shared/lib/helpers'
+import { BenefitMeasurementIndicator } from 'models'
+import BenefitMeasurementAchievement from './BenefitMeasurementAchievement'
+import { IAggregatedSearchListColumn } from 'interfaces'
 
 /**
  * Get columns for DetailsList
@@ -13,7 +13,7 @@ import { IAggregatedSearchListColumn } from 'interfaces';
  * @param {IBenefitsOverviewProps} props Props
  */
 export function getColumns(props: IBenefitsOverviewProps): IAggregatedSearchListColumn[] {
-  let columns: IAggregatedSearchListColumn[] = [
+  const columns: IAggregatedSearchListColumn[] = [
     {
       key: 'siteTitle',
       fieldName: 'siteTitle',
@@ -22,9 +22,9 @@ export function getColumns(props: IBenefitsOverviewProps): IAggregatedSearchList
       maxWidth: 180,
       isResizable: true,
       onRender: (indicator: BenefitMeasurementIndicator) => {
-        const webUrl = getObjectValue<string>(indicator, 'webUrl', null);
-        const siteTitle = getObjectValue<string>(indicator, 'siteTitle', null);
-        return <a href={webUrl} target='_blank'>{siteTitle}</a>;
+        const webUrl = getObjectValue<string>(indicator, 'webUrl', null)
+        const siteTitle = getObjectValue<string>(indicator, 'siteTitle', null)
+        return <a href={webUrl} rel='noopener noreferrer' target='_blank'>{siteTitle}</a>
       },
       isGroupable: true,
     },
@@ -106,12 +106,13 @@ export function getColumns(props: IBenefitsOverviewProps): IAggregatedSearchList
       minWidth: 50,
       maxWidth: 80,
       isResizable: true,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       onRender: (indicator: BenefitMeasurementIndicator, _index: number, _column: IAggregatedSearchListColumn) => {
-        const measurement = getObjectValue(indicator, 'measurements[0]', null);
+        const measurement = getObjectValue(indicator, 'measurements[0]', null)
         if (measurement) {
-          return <BenefitMeasurementAchievement measurement={measurement} />;
+          return <BenefitMeasurementAchievement measurement={measurement} />
         }
-        return null;
+        return null
       },
     },
     {
@@ -122,6 +123,6 @@ export function getColumns(props: IBenefitsOverviewProps): IAggregatedSearchList
       maxWidth: 80,
       onRender: (indicator: BenefitMeasurementIndicator) => <BenefitMeasurementsModal indicator={indicator} />,
     },
-  ];
-  return columns.filter(col => getObjectValue<string[]>(props, 'hiddenColumns', []).indexOf(col.key) === -1);
+  ]
+  return columns.filter(col => getObjectValue<string[]>(props, 'hiddenColumns', []).indexOf(col.key) === -1)
 }

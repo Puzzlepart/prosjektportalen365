@@ -1,8 +1,8 @@
-import { IPropertyPaneConfiguration, IPropertyPaneDropdownOption, PropertyPaneDropdown, PropertyPaneSlider, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base';
-import { PortfolioOverview, IPortfolioOverviewProps } from 'components/PortfolioOverview';
-import { IPortfolioConfiguration } from 'interfaces';
-import * as strings from 'PortfolioWebPartsStrings';
-import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart';
+import { IPropertyPaneConfiguration, IPropertyPaneDropdownOption, PropertyPaneDropdown, PropertyPaneSlider, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base'
+import { PortfolioOverview, IPortfolioOverviewProps } from 'components/PortfolioOverview'
+import { IPortfolioConfiguration } from 'interfaces'
+import * as strings from 'PortfolioWebPartsStrings'
+import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export const PROPERTYPANE_CONFIGURATION_PROPS = {
   COLUMN_CONFIG_LISTNAME: 'columnConfigListName',
@@ -16,18 +16,18 @@ export const PROPERTYPANE_CONFIGURATION_PROPS = {
   SHOW_SEARCH_BOX: 'showSearchBox',
   SHOW_VIEWSELECTOR: 'showViewSelector',
   VIEWS_LISTNAME: 'viewsListName',
-};
+}
 
 export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPortfolioOverviewProps> {
   private _configuration: IPortfolioConfiguration;
 
   public render(): void {
-    this.renderComponent(PortfolioOverview, { configuration: this._configuration } as IPortfolioOverviewProps);
+    this.renderComponent(PortfolioOverview, { configuration: this._configuration } as IPortfolioOverviewProps)
   }
 
   public async onInit(): Promise<void> {
-    await super.onInit();
-    this._configuration = await this.dataAdapter.getPortfolioConfig();
+    await super.onInit()
+    this._configuration = await this.dataAdapter.getPortfolioConfig()
   }
 
   /**
@@ -36,15 +36,16 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
    * @param {string} targetProperty Target property
    */
   protected _getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
+    // eslint-disable-next-line default-case
     switch (targetProperty) {
       case PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID: {
         if (this._configuration) {
-          return [{ key: null, text: '' }, ...this._configuration.views.map(view => ({ key: view.id, text: view.title }))];
+          return [{ key: null, text: '' }, ...this._configuration.views.map(view => ({ key: view.id, text: view.title }))]
         }
       }
-        break;
+        break
     }
-    return [];
+    return []
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -123,6 +124,6 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
           ]
         }
       ]
-    };
+    }
   }
 }

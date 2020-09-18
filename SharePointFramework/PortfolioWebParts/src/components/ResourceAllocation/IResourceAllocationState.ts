@@ -1,4 +1,4 @@
-import { ITimelineData, ITimelineItem } from 'interfaces';
+import { ITimelineData, ITimelineItem } from 'interfaces'
 
 export interface IResourceAllocationState {
     /**
@@ -29,5 +29,5 @@ export interface IResourceAllocationState {
     /**
      * Item to show show details for
      */
-    showDetails?: { data: ITimelineItem, element: HTMLElement };
+    showDetails?: { data: ITimelineItem; element: HTMLElement };
 }

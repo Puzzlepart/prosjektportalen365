@@ -1,10 +1,7 @@
-## project-extensions
+## Project extensions
 
-### ProjectSetup
-_TODO_
+This solution contains SPFx extensions for the project level.
 
-### ProjectUpgrade
-_TODO_
-
-### TemplateSelector
-_TODO_
+## Serve
+- Take a copy of `config/serve.sample.json` and name it `serve.json`
+- Run `npm run serve`

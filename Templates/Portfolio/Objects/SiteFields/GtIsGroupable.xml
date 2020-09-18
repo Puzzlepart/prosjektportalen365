@@ -1,1 +1,1 @@
-﻿<Field Type="Boolean" DisplayName="{resource:SiteFields_GtIsGroupable_DisplayName}" Description="{resource:SiteFields_GtIsGroupable_Description}" ID="{b77be89a-346f-4897-b519-e55eedbc0aa9}" StaticName="GtIsGroupable" Name="GtIsGroupable" Group="Kolonner for Prosjektportalen (Portefølje)" />
+﻿<Field Type="Boolean" DisplayName="{resource:SiteFields_GtIsGroupable_DisplayName}" Description="{resource:SiteFields_GtIsGroupable_Description}" ID="{b77be89a-346f-4897-b519-e55eedbc0aa9}" StaticName="GtIsGroupable" Name="GtIsGroupable" Group="{resource:SiteFields_Portfolio_Group}" />

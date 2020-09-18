@@ -1,5 +1,5 @@
 
-import { IBaseComponentProps } from '../IBaseComponentProps';
+import { IBaseComponentProps } from '../IBaseComponentProps'
 
 export interface ILatestProjectsProps extends IBaseComponentProps {
   /**

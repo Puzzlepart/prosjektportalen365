@@ -1,1 +1,1 @@
-﻿<Field Type="Boolean" DisplayName="{resource:SiteFields_GtIsRefinable_DisplayName}" Description="{resource:SiteFields_GtIsRefinable_Description}" ID="{0956cadc-1268-4bc1-9baf-5d2e16190d06}" StaticName="GtIsRefinable" Name="GtIsRefinable" Group="Kolonner for Prosjektportalen (Portefølje)" />
+﻿<Field Type="Boolean" DisplayName="{resource:SiteFields_GtIsRefinable_DisplayName}" Description="{resource:SiteFields_GtIsRefinable_Description}" ID="{0956cadc-1268-4bc1-9baf-5d2e16190d06}" StaticName="GtIsRefinable" Name="GtIsRefinable" Group="{resource:SiteFields_Portfolio_Group}" />

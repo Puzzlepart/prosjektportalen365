@@ -1,4 +1,4 @@
-# Prosjektportalen for Office 365  [![version](https://img.shields.io/badge/version-1.2.0-yellow.svg)](https://semver.org)
+# Prosjektportalen for Office 365  [![version](https://img.shields.io/badge/version-1.2.2-yellow.svg)](https://semver.org)
 
 Prosjektportalen for Office 365 er et prosjektstyringsverktøy for Office 365 basert på [Prosjektveiviseren](http://prosjektveiviseren.no). [Mer informasjon på Puzzleparts nettsider](http://www.puzzlepart.com/prosjektportalen).
 
@@ -35,7 +35,7 @@ Vi gjør vårt beste for å støtte alle nettlesere, men følger retningslinjer 
 | Internet Explorer 11 | :slightly_smiling_face: Grunnleggende støttet* |
 | Internet Explorer 10 og eldre | :expressionless: Ikke støttet |
 
- *Grunnleggende støttet betyr at det meste vil fungere, men en kan risikere at noe funksjonalitet ikke virker
+ * _Grunnleggende støttet betyr at det meste vil fungere, men en kan risikere at noe funksjonalitet ikke virker_
 
 ## Maintainers
 

@@ -1,1 +1,1 @@
-﻿<Field DisplayName="{resource:SiteFields_GtPiYMax_DisplayName}" Description="{resource:SiteFields_GtPiYMax_Description}" Percentage="FALSE" Type="Number" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{f7fd2b80-26e4-472c-8629-02e898b2a19f}" StaticName="GtPiYMax" Name="GtPiYMax" />
+﻿<Field DisplayName="{resource:SiteFields_GtPiYMax_DisplayName}" Description="{resource:SiteFields_GtPiYMax_Description}" Percentage="FALSE" Type="Number" Group="{resource:SiteFields_Portfolio_Group}" ID="{f7fd2b80-26e4-472c-8629-02e898b2a19f}" StaticName="GtPiYMax" Name="GtPiYMax" />

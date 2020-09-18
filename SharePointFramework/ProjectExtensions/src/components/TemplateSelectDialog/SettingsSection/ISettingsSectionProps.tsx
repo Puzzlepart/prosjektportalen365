@@ -1,4 +1,4 @@
-import { ProjectSetupSettings } from '../../../extensions/projectSetup/ProjectSetupSettings';
+import { ProjectSetupSettings } from '../../../extensions/projectSetup/ProjectSetupSettings'
 
 export interface ISettingsSectionProps {
     /**

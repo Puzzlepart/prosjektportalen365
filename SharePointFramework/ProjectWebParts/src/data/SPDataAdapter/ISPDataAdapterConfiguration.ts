@@ -1,3 +1,3 @@
-import { ISPDataAdapterBaseConfiguration } from 'shared/lib/data';
+import { ISPDataAdapterBaseConfiguration } from 'shared/lib/data'
 
-export interface ISPDataAdapterConfiguration extends ISPDataAdapterBaseConfiguration {}
+export type ISPDataAdapterConfiguration = ISPDataAdapterBaseConfiguration
