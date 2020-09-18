@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - View in portfolio overview was not changeable for non-admin users
 - Projects set to Avsluttet are no longer visible on the front page
 
-### Improvements
+### Changed
 - Disabled "Ny statusrapport" when a report is unpublished.
 
 ### Added
