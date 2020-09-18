@@ -65,7 +65,7 @@ export class PortfolioOverviewCommands extends React.Component<IPortfolioOvervie
                 name: this.props.currentView.title,
                 iconProps: { iconName: 'List' },
                 itemType: ContextualMenuItemType.Header,
-                data: { isVisible: this.props.pageContext.legacyPageContext.isSiteAdmin && this.props.showViewSelector },
+                data: { isVisible: this.props.showViewSelector },
                 subMenuProps: {
                     items: [
                         {
