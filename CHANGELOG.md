@@ -4,12 +4,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 #### 1.2.3 - TBA
 
 ### Added
-- Descriptions on configuration page
-- Added new group "Porteføljeinnsyn" granting users in this group insight into all projects in the portfolio
-- Added "Porteføljeinnsyn" button on configuration page for adding users to the group
-- Ability to change view in portfolio overview
-- Handling of unpublished reports have been improved. Not possible to create new reports while having unpublished report.
 
+- Descriptions on configuration page
+- New group "Porteføljeinnsyn". Grants users in this group insight into all projects in the portfolio
+- "Porteføljeinnsyn" button on configuration page for adding users to the group
+- Risk matrix toggle: Before and after risk reduction measures.
+- Support for planner tasks references/attachments
+
+### Fixed
+
+- View in portfolio overview was not changeable for non-admin users
+- Projects set to Avsluttet are no longer visible on the front page
+
+### Improvements
+- Disabled "Ny statusrapport" when a report is unpublished.
 
 ### Added
 - Show only benefits (gevinster) that are toggled as "Show at portfolio level" #268
