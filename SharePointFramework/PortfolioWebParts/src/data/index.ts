@@ -255,6 +255,7 @@ export class DataAdapter {
                 .getByTitle(strings.ProjectsListName)
                 .items
                 .select('GtGroupId', 'GtSiteId', 'GtSiteUrl', 'GtProjectOwnerId', 'GtProjectManagerId', 'GtProjectPhaseText')
+                .filter('GtProjectLifecycleStatus ne \'Avsluttet\'')
                 .orderBy('Title')
                 .usingCaching()
                 .get<ISPProjectItem[]>(),
