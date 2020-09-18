@@ -103,6 +103,6 @@ define([], function () {
     ViewsListNameLabel: 'Visninger',
     SelectedColumnsLabel: 'Felter',
     ProjectsListName: 'Prosjekter',
-    PortfolioManagerGroupName: 'Porteføljeinnsikt'
+    PortfolioManagerGroupName: 'Porteføljeinnsyn'
   }
 });

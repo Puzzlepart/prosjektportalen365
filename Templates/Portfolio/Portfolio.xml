@@ -8,6 +8,7 @@
     </pnp:Localizations>
     <pnp:Templates ID="CONTAINER-TEMPLATE-PP-PORTFOLIO">
         <pnp:ProvisioningTemplate ID="TEMPLATE-PP-PORTFOLIO" Version="1" Scope="RootSite">
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Security.xml" />
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields.xml" />
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes.xml" />
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists.xml" />
