@@ -109,7 +109,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         key: getId('NewStatusReport'),
         name: strings.NewStatusReportModalHeaderText,
         iconProps: { iconName: 'NewFolder' },
-        disabled: !selectedReport || selectedReport.moderationStatus !== strings.GtModerationStatus_Choice_Published,
+        disabled: !!data.reports.filter((report) => report.moderationStatus.indexOf("Publisert")).length,
         onClick: this._redirectNewStatusReport.bind(this),
       },
       {
