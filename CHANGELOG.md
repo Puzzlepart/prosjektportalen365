@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Descriptions on configuration page
 - Added new group "Porteføljeinnsyn" granting users in this group insight into all projects in the portfolio
 - Added "Porteføljeinnsyn" button on configuration page for adding users to the group
+- Ability to change view in portfolio overview
+
 
 ### Added
 - Show only benefits (gevinster) that are toggled as "Show at portfolio level" #268
