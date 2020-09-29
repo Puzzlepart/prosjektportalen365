@@ -141,9 +141,9 @@ export class DataAdapter {
         try {
             let {projects, sites, statusReports} = await this._fetchDataForView(view, configuration, siteId, siteIdProperty);
             const items = projects.map((project) => {
-                const [statusReport] = statusReports.filter(res => res[siteIdProperty] === project['siteIdProperty'])
+                const [statusReport] = statusReports.filter(res => res[siteIdProperty] === project[siteIdProperty])
                 const [site] = sites.filter(res => res['SiteId'] === project[siteIdProperty])
-                return { ...statusReport, ...project, Path: site && site.Path, SiteId: project['siteIdProperty'] }
+                return { ...statusReport, ...project, Path: site && site.Path, SiteId: project[siteIdProperty] }
             })
             return items
         } catch (err) {
