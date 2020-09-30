@@ -82,7 +82,7 @@
             <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecViewFields">Title,GtRiskProximity,GtRiskAction,GtRiskStrategy,GtRiskFactor,GtRiskFactorPostAction</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSecViewFields">ID,Title,GtRiskProximity,GtRiskAction,GtRiskStrategy,GtRiskFactor,GtRiskFactorPostAction</pnp:DataValue>
             <pnp:DataValue FieldName="GtSecFieldName">GtStatusRisk</pnp:DataValue>
             <pnp:DataValue FieldName="GtSecList">Usikkerhet</pnp:DataValue>
             <pnp:DataValue FieldName="GtSecViewQuery">&lt;OrderBy&gt;
