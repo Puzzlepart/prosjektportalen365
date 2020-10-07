@@ -1,27 +1,26 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+Every change is marked with Pull Request ID.
+
 #### 1.2.3 - TBA
 
-### Added
+## Added
 
-- Descriptions on configuration page
-- New group "Porteføljeinnsyn". Grants users in this group insight into all projects in the portfolio
-- "Porteføljeinnsyn" button on configuration page for adding users to the group
-- Risk matrix toggle: Before and after risk reduction measures.
-- Support for planner tasks references/attachments
+- Descriptions on configuration page #301
+- New group "Porteføljeinnsyn". Grants users in this group insight into all projects in the portfolio #305
+- "Porteføljeinnsyn" button on configuration page for adding users to the group #306
+- Risk matrix toggle: Before and after risk reduction measures #293
+- Support for planner tasks references/attachments #287
 
-### Fixed
+## Fixed
 
-- View in portfolio overview was not changeable for non-admin users
-- Projects set to Avsluttet are no longer visible on the front page
+- View in portfolio overview was not changeable for non-admin users #308
+- Projects set to Avsluttet are no longer visible on the front page #307
 
-### Changed
-- Disabled "Ny statusrapport" when a report is unpublished.
+## Changed
 
-### Added
-- Show only benefits (gevinster) that are toggled as "Show at portfolio level" #268
-- Support for attachments on provisioned planner tasks #274
+- Disabled "Ny statusrapport" when a report is unpublished. #309
 
 #### 1.2.2 - 2020-06-24
 
