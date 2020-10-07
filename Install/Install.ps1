@@ -296,7 +296,11 @@ if (-not $SkipTemplate.IsPresent) {
         Apply-PnPProvisioningTemplate .\Templates\Portfolio.pnp -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
         Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
 
-        if (-not $Upgrade.IsPresent) {
+        if ($Upgrade.IsPresent) {
+            Write-Host "[INFO] Applying PnP content template (Handlers:Files) to [$Url]"
+            Apply-PnPProvisioningTemplate ".\Templates\Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop
+            Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
+        } else {
             Write-Host "[INFO] Applying PnP content template to [$Url]"
             Apply-PnPProvisioningTemplate ".\Templates\Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
