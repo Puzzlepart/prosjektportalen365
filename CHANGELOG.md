@@ -3,7 +3,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with Pull Request ID.
 
-#### 1.2.3 - TBA
+## 1.2.3 - 2020-10-07
 
 ## Added
 
@@ -22,7 +22,7 @@ Every change is marked with Pull Request ID.
 
 - Disabled "Ny statusrapport" when a report is unpublished. #309
 
-#### 1.2.2 - 2020-06-24
+## 1.2.2 - 2020-06-24
 
 ### Added
 - Planner tasks copied to the project site during provisioning get label Metodikk #276
