@@ -8,7 +8,7 @@
                 <pnp:File Src="ProjectTemplates\Standardmal.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Standardmal" />
-                        <pnp:Property Key="GtDescription" Value="Dette er standardmalen som følger med Prosjektportalen 365." />
+                        <pnp:Property Key="GtDescription" Value="Dette er standardmalen som følger med Prosjektportalen 365. Blir overskrevet ved en oppgradering." />
                         <pnp:Property Key="IconName" Value="Page" />
                         <pnp:Property Key="IsDefaultTemplate" Value="1" />
                     </pnp:Properties>
