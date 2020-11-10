@@ -26,6 +26,8 @@ module.exports = {
 
         "@typescript-eslint/explicit-function-return-type": 0,
 
+        "@typescript-eslint/no-inferrable-types": 0,
+
         "react/display-name": 0,
 
         "no-compare-neg-zero": 1,

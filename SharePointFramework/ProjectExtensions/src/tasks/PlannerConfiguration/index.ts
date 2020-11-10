@@ -12,7 +12,7 @@ import { sleep } from 'shared/lib/util'
  * @class PlannerConfiguration
  */
 export class PlannerConfiguration extends BaseTask {
-    public taskName = 'PlannerConfiguration';
+    public taskName = 'Planner';
 
     /**
      * Constructor
@@ -83,7 +83,7 @@ export class PlannerConfiguration extends BaseTask {
      * @param {IPlannerPlan} plan Plan
      * @param {number} delay Delay in seconds before updating the plan to ensure it's created properly
      */
-    private async _setupLabels(plan: IPlannerPlan, delay = 5) {
+    private async _setupLabels(plan: IPlannerPlan, delay: number = 5) {
         this.logInformation(`Sleeping ${delay} seconds before updating the plan with labels`)
         await sleep(delay)
         if (this._labels.length > 0) {
@@ -122,8 +122,9 @@ export class PlannerConfiguration extends BaseTask {
      * 
      * @param {string} planId Plan Id 
      * @param {IPlannerBucket} bucket Bucket 
+     * @param {number} delay Delay in seconds before updating the plan to ensure it's created properly
      */
-    private async _createTasks(planId: string, bucket: IPlannerBucket) {
+    private async _createTasks(planId: string, bucket: IPlannerBucket, delay: number = 1) {
         const tasks = Object.keys(this._configuration[bucket.name])
         for (let i = 0; i < tasks.length; i++) {
             const name = tasks[i]
@@ -136,8 +137,9 @@ export class PlannerConfiguration extends BaseTask {
                     planId,
                     appliedCategories: { category1: true },
                 }))
-                await sleep(1)
                 if (checklist || attachments) {
+                    this.logInformation(`Sleeping ${delay} seconds before updating task details for ${name}`)
+                    await sleep(delay)
                     const taskDetails: TypedHash<any> = {
                         checklist: checklist
                             ? checklist.reduce((obj, title) => ({
