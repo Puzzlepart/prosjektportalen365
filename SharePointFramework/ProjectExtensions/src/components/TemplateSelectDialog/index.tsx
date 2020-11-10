@@ -27,7 +27,7 @@ export class TemplateSelectDialog extends React.Component<ITemplateSelectDialogP
         super(props)
         this.state = {
             selectedTemplate: this._getDefaultTemplate(),
-            selectedExtensions: [],
+            selectedExtensions: props.data.extensions.filter(ext => ext.isDefault),
             selectedListContentConfig: props.data.listContentConfig.filter(lcc => lcc.isDefault),
             settings: new ProjectSetupSettings().useDefault(),
         }

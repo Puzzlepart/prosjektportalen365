@@ -1471,6 +1471,12 @@
   <data name="SiteFields_GtProjectLifecycleStatus_Description" xml:space="preserve">
     <value />
   </data>
+  <data name="SiteFields_GtExtensionDefault_Description" xml:space="preserve">
+    <value>Velges som standard</value>
+  </data>
+  <data name="SiteFields_GtExtensionDefault_DisplayName" xml:space="preserve">
+    <value>Standard</value>
+  </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
   </data>
