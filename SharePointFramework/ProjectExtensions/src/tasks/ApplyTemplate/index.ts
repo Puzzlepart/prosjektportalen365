@@ -28,7 +28,7 @@ export class ApplyTemplate extends BaseTask {
                 spfxContext: params.context,
                 logging: {
                     prefix: '(ProjectSetup) (ApplyTemplate)',
-                    activeLogLevel: ((sessionStorage.DEBUG === '1' || DEBUG) ? LogLevel.Info : LogLevel.Error),
+                    activeLogLevel: ((sessionStorage.DEBUG === '1' || DEBUG) ? LogLevel.Info : LogLevel.Error) as any,
                 },
                 parameters: params.templateParameters,
                 spConfiguration: {

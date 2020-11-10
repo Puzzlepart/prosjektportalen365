@@ -6,7 +6,6 @@ import { getId } from '@uifabric/utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { ApplicationInsightsLogListener } from 'shared/lib/logging'
 import { default as HubSiteService, IHubSite } from 'sp-hubsite-service'
 import { DocumentTemplateDialog, IDocumentTemplateDialogProps } from '../../components'
 import { SPDataAdapter } from '../../data'
@@ -27,7 +26,6 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
   @override
   public async onInit() {
     Logger.log({ message: '(TemplateSelectorCommand) onInit: Initializing', data: { version: this.context.manifest.version, placeholderIds: this._placeholderIds }, level: LogLevel.Info })
-    Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext))
     Logger.subscribe(new ConsoleListener())
     Logger.activeLogLevel = (sessionStorage.DEBUG || DEBUG) ? LogLevel.Info : LogLevel.Warning
     this._hub = await HubSiteService.GetHubSite(sp, this.context.pageContext)
