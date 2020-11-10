@@ -1,7 +1,7 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as React from 'react'
-import { ProjectTemplate } from '../../../models'
+import { ProjectExtension } from '../../../models'
 import styles from './ExtensionsSection.module.scss'
 import { IExtensionsSectionProps } from './IExtensionsSectionProps'
 
@@ -13,15 +13,14 @@ export const ExtensionsSection = (props: IExtensionsSectionProps) => {
      * @param {ProjectTemplate} extension Extension
      * @param {boolean} checked Checked
      */
-    const onChange = (extension: ProjectTemplate, checked: boolean): void => {
+    const onChange = (extension: ProjectExtension, checked: boolean): void => {
         let selectedExtensions = []
         if (checked) selectedExtensions = [extension, ...props.selectedExtensions]
         else selectedExtensions = props.selectedExtensions.filter(ext => extension.text !== ext.text)
         props.onChange(selectedExtensions)
     }
 
-    const selectedKeys = props.selectedExtensions.map(lc => lc.key)
-
+    const selectedKeys = props.selectedExtensions.map(ext => ext.key)
 
     return (
         <div className={styles.extensionsSection}>
