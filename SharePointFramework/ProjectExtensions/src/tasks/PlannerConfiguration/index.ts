@@ -122,9 +122,10 @@ export class PlannerConfiguration extends BaseTask {
      * 
      * @param {string} planId Plan Id 
      * @param {IPlannerBucket} bucket Bucket 
+     * @param {Record<string, boolean>} appliedCategories Categories to apply to the task 
      * @param {number} delay Delay in seconds before updating the plan to ensure it's created properly
      */
-    private async _createTasks(planId: string, bucket: IPlannerBucket, delay: number = 1) {
+    private async _createTasks(planId: string, bucket: IPlannerBucket, appliedCategories: Record<string, boolean> = { category1: true }, delay: number = 1) {
         const tasks = Object.keys(this._configuration[bucket.name])
         for (let i = 0; i < tasks.length; i++) {
             const name = tasks[i]
@@ -135,7 +136,7 @@ export class PlannerConfiguration extends BaseTask {
                     title: name,
                     bucketId: bucket.id,
                     planId,
-                    appliedCategories: { category1: true },
+                    appliedCategories,
                 }))
                 if (checklist || attachments) {
                     this.logInformation(`Sleeping ${delay} seconds before updating task details for ${name}`)
