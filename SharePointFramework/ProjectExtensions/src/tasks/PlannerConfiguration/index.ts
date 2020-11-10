@@ -1,13 +1,13 @@
 import { PageContext } from '@microsoft/sp-page-context'
-import { getGUID, TypedHash } from '@pnp/common'
+import { getGUID } from '@pnp/common'
 import { IProjectSetupData } from 'extensions/projectSetup'
 import { default as MSGraphHelper } from 'msgraph-helper'
-import * as strings from 'ProjectExtensionsStrings'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
+import * as strings from 'ProjectExtensionsStrings'
+import { sleep } from 'shared/lib/util'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 import { IPlannerBucket, IPlannerConfiguration, IPlannerPlan } from './types'
-import { sleep } from 'shared/lib/util'
 /**
  * @class PlannerConfiguration
  */
@@ -140,7 +140,7 @@ export class PlannerConfiguration extends BaseTask {
                 if (checklist || attachments) {
                     this.logInformation(`Sleeping ${delay} seconds before updating task details for ${name}`)
                     await sleep(delay)
-                    const taskDetails: TypedHash<any> = {
+                    const taskDetails: Record<string, any> = {
                         checklist: checklist
                             ? checklist.reduce((obj, title) => ({
                                 ...obj,
@@ -165,7 +165,7 @@ export class PlannerConfiguration extends BaseTask {
                 }
                 this.logInformation(`Succesfully created task ${name} in bucket ${bucket.name}`, { taskId: task.id, checklist })
             } catch (error) {
-                this.logInformation(`Failed to create task ${name} in bucket ${bucket.name}`)
+                this.logWarning(`Failed to create task ${name} in bucket ${bucket.name}`)
             }
         }
     }
