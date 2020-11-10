@@ -1,13 +1,13 @@
 import { PageContext } from '@microsoft/sp-page-context'
+import { getGUID, TypedHash } from '@pnp/common'
 import { IProjectSetupData } from 'extensions/projectSetup'
 import { default as MSGraphHelper } from 'msgraph-helper'
 import * as strings from 'ProjectExtensionsStrings'
-import * as formatString from 'string-format'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
-import { IPlannerPlan,IPlannerConfiguration,IPlannerBucket } from './types'
-import { TypedHash, getGUID } from '@pnp/common'
-
+import { IPlannerBucket, IPlannerConfiguration, IPlannerPlan } from './types'
+import { sleep } from 'shared/lib/util'
 /**
  * @class PlannerConfiguration
  */
@@ -37,20 +37,24 @@ export class PlannerConfiguration extends BaseTask {
      * @param {string} defaultBucketName Default bucket name
      */
     private async _createPlan(pageContext: PageContext, onProgress: OnProgressCallbackFunction): Promise<IPlannerPlan> {
-        const planTitle = pageContext.web.title
-        const owner = pageContext.legacyPageContext.groupId
-        const existingGroupPlans = await this._fetchPlans(owner)
-        this.logInformation(`Creating plan ${planTitle}`)
-        const plan = await this._ensurePlan(planTitle, existingGroupPlans, pageContext.legacyPageContext.groupId)
-        const existingBuckets = await this._fetchBuckets(plan.id)
-        for (let i = 0; i < Object.keys(this._configuration).length; i++) {
-            const bucketName = Object.keys(this._configuration)[i]
-            this.logInformation(`Ensuring bucket ${bucketName} for plan ${planTitle}`)
-            const bucket = await this._ensureBucket(bucketName, existingBuckets, plan.id)
-            onProgress(strings.PlannerConfigurationText, formatString(strings.CreatingPlannerTaskText, bucketName), 'PlannerLogo')
-            await this._createTasks(plan.id, bucket)
+        try {
+            const planTitle = pageContext.web.title
+            const owner = pageContext.legacyPageContext.groupId
+            const existingGroupPlans = await this._fetchPlans(owner)
+            this.logInformation(`Creating plan ${planTitle}`)
+            const plan = await this._ensurePlan(planTitle, existingGroupPlans, owner)
+            const existingBuckets = await this._fetchBuckets(plan.id)
+            for (let i = 0; i < Object.keys(this._configuration).length; i++) {
+                const bucketName = Object.keys(this._configuration)[i]
+                this.logInformation(`Ensuring bucket ${bucketName} for plan ${planTitle}`)
+                const bucket = await this._ensureBucket(bucketName, existingBuckets, plan.id)
+                onProgress(strings.PlannerConfigurationText, format(strings.CreatingPlannerTaskText, bucketName), 'PlannerLogo')
+                await this._createTasks(plan.id, bucket)
+            }
+            return plan
+        } catch (error) {
+            throw new Error(`_createPlan: ${error.message}`)
         }
-        return plan
     }
 
     /**
@@ -61,16 +65,27 @@ export class PlannerConfiguration extends BaseTask {
      * @param {string} owner Owner (group id) 
      */
     private async _ensurePlan(title: string, existingPlans: IPlannerPlan[], owner: string): Promise<IPlannerPlan> {
-        let [plan] = existingPlans.filter(p => p.title === title)
-        if (!plan) {
-            plan = await MSGraphHelper.Post('planner/plans', JSON.stringify({ title, owner }))
+        try {
+            let [plan] = existingPlans.filter(p => p.title === title)
+            if (!plan) {
+                plan = await MSGraphHelper.Post('planner/plans', JSON.stringify({ title, owner }))
+            }
+            await this._setupLabels(plan)
+            return plan
+        } catch (error) {
+            throw error
         }
+    }
+
+    private async _setupLabels(plan: IPlannerPlan) {
+        this.logInformation('Sleeping before updating the plan with labels')
+        await sleep(5)
         if (this._labels.length > 0) {
+            this.logInformation(`Sleeping before updating the plan with labels ${JSON.stringify(this._labels)}`)
             const eTag = (await MSGraphHelper.Get(`planner/plans/${plan.id}/details`))['@odata.etag']
             const categoryDescriptions = this._labels.splice(0, 6).reduce((obj, value, idx) => ({ ...obj, [`category${idx + 1}`]: value }), {})
             await MSGraphHelper.Patch(`planner/plans/${plan.id}/details`, JSON.stringify({ categoryDescriptions }), eTag)
         }
-        return plan
     }
 
     /**
@@ -81,11 +96,15 @@ export class PlannerConfiguration extends BaseTask {
      * @param {string} planId Plan Id 
      */
     private async _ensureBucket(name: string, existingBuckets: IPlannerBucket[], planId: string) {
-        let [bucket] = existingBuckets.filter(p => p.name === name)
-        if (!bucket) {
-            bucket = await MSGraphHelper.Post('planner/buckets', JSON.stringify({ name, planId, orderHint: ' !' }))
+        try {
+            let [bucket] = existingBuckets.filter(p => p.name === name)
+            if (!bucket) {
+                bucket = await MSGraphHelper.Post('planner/buckets', JSON.stringify({ name, planId, orderHint: ' !' }))
+            }
+            return bucket
+        } catch (error) {
+            throw error
         }
-        return bucket
     }
 
     /**
@@ -107,6 +126,7 @@ export class PlannerConfiguration extends BaseTask {
                     planId,
                     appliedCategories: { category1: true },
                 }))
+                await sleep(1)
                 if (checklist || attachments) {
                     const taskDetails: TypedHash<any> = {
                         checklist: checklist
