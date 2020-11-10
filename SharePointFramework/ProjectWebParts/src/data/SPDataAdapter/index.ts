@@ -1,7 +1,6 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
-import { ItemUpdateResult } from '@pnp/sp'
 import { taxonomy } from '@pnp/sp-taxonomy'
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator'
 import * as strings from 'ProjectWebPartsStrings'
@@ -40,7 +39,7 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
      * @param {TypedHash<any>} templateParameters Template parameters
      * @param {void} progressFunc Progress function
      */
-    public async syncPropertyItemToHub(fieldValues: TypedHash<any>, fieldValuesText: TypedHash<string>, templateParameters: TypedHash<any>, progressFunc: (props: IProgressIndicatorProps) => void): Promise<ItemUpdateResult> {
+    public async syncPropertyItemToHub(fieldValues: TypedHash<any>, fieldValuesText: TypedHash<string>, templateParameters: TypedHash<any>, progressFunc: (props: IProgressIndicatorProps) => void): Promise<void> {
         try {
             fieldValuesText = Object.keys(fieldValuesText).reduce((obj, key) => ({ ...obj, [key.replace(/_x005f_/gm, '_')]: fieldValuesText[key] }), {})
             Logger.log({ message: `(${this._name}) (syncPropertyItemToHub) Starting sync of property item to hub.`, level: LogLevel.Info })
@@ -96,9 +95,8 @@ export default new class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterC
                 }
             }
             Logger.log({ message: `(${this._name}) (syncPropertyItemToHub) Syncing item to hub entity.`, data: { properties }, level: LogLevel.Info })
-            const itemUpdateResult = await this.entityService.updateEntityItem(this.settings.siteId, properties)
+            await this.entityService.updateEntityItem(this.settings.siteId, properties)
             Logger.log({ message: `(${this._name}) (syncPropertyItemToHub) Successfully synced item to hub entity.`, data: { properties }, level: LogLevel.Info })
-            return itemUpdateResult
         } catch (error) {
             throw error
         }

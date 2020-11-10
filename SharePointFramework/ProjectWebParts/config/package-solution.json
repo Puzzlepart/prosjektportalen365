@@ -5,7 +5,14 @@
         "id": "b69cb2f2-762d-425d-8e0b-d59c08918831",
         "version": "1.2.3.0",
         "includeClientSideAssets": true,
-        "skipFeatureDeployment": true
+        "skipFeatureDeployment": true,
+        "developer": {
+            "name": "Puzzlepart AS",
+            "mpnId": "",
+            "privacyUrl": "https://puzzlepart.com/",
+            "termsOfUseUrl": "https://puzzlepart.com/",
+            "websiteUrl": "https://puzzlepart.com/"
+        }
     },
     "paths": {
         "zippedPackage": "solution/pp-project-web-parts.sppkg"

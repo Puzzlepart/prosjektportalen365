@@ -9,7 +9,7 @@ import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import * as strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { ApplicationInsightsLogListener, ListLogger } from 'shared/lib/logging'
+import { ListLogger } from 'shared/lib/logging'
 import { PortalDataService } from 'shared/lib/services'
 import { default as HubSiteService } from 'sp-hubsite-service'
 import { ErrorDialog, IErrorDialogProps, IProgressDialogProps, ITemplateSelectDialogProps, ITemplateSelectDialogState, ProgressDialog, TemplateSelectDialog } from '../../components'
@@ -31,7 +31,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   @override
   public async onInit(): Promise<void> {
     sp.setup({ spfxContext: this.context })
-    Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext))
     Logger.subscribe(new ConsoleListener())
     Logger.activeLogLevel = (sessionStorage.DEBUG === '1' || DEBUG) ? LogLevel.Info : LogLevel.Warning
     if (!this.context.pageContext.legacyPageContext.isSiteAdmin || !this.context.pageContext.legacyPageContext.groupId) return
@@ -49,7 +48,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       }
 
       this._initializeSetup({
-        web: new Web(this.context.pageContext.web.absoluteUrl),
+        web: new Web(this.context.pageContext.web.absoluteUrl) as any,
         webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
         templateExcludeHandlers: [],
         context: this.context,
