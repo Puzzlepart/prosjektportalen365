@@ -81,10 +81,11 @@ export class PlannerConfiguration extends BaseTask {
      * Sets up labels for the plan
      * 
      * @param {IPlannerPlan} plan Plan
+     * @param {number} delay Delay in seconds before updating the plan to ensure it's created properly
      */
-    private async _setupLabels(plan: IPlannerPlan) {
-        this.logInformation('Sleeping before updating the plan with labels')
-        await sleep(5)
+    private async _setupLabels(plan: IPlannerPlan, delay = 5) {
+        this.logInformation(`Sleeping ${delay} seconds before updating the plan with labels`)
+        await sleep(delay)
         if (this._labels.length > 0) {
             this.logInformation(`Sleeping before updating the plan with labels ${JSON.stringify(this._labels)}`)
             const eTag = (await MSGraphHelper.Get(`planner/plans/${plan.id}/details`))['@odata.etag']
