@@ -77,6 +77,11 @@ export class PlannerConfiguration extends BaseTask {
         }
     }
 
+    /**
+     * Sets up labels for the plan
+     * 
+     * @param {IPlannerPlan} plan Plan
+     */
     private async _setupLabels(plan: IPlannerPlan) {
         this.logInformation('Sleeping before updating the plan with labels')
         await sleep(5)
@@ -99,7 +104,11 @@ export class PlannerConfiguration extends BaseTask {
         try {
             let [bucket] = existingBuckets.filter(p => p.name === name)
             if (!bucket) {
-                bucket = await MSGraphHelper.Post('planner/buckets', JSON.stringify({ name, planId, orderHint: ' !' }))
+                bucket = await MSGraphHelper.Post('planner/buckets', JSON.stringify({
+                    name,
+                    planId,
+                    orderHint: ' !'
+                }))
             }
             return bucket
         } catch (error) {
