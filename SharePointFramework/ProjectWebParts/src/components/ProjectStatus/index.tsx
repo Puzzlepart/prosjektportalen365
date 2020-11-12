@@ -32,6 +32,9 @@ import {
   StatusSection,
   SummarySection
 } from './Sections'
+import domtoimage from 'dom-to-image';
+import * as moment from 'moment';
+
 
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private _portalDataService: PortalDataService
@@ -108,7 +111,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     }
 
     return (
-      <div className={styles.projectStatus}>
+      <div className={styles.projectStatus} >
         {this._commandBar()}
         <div className={styles.container}>
           {this.state.data.reports.filter((report) => !report.published).length > 0 && (
@@ -119,7 +122,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           <div className={`${styles.header} ${styles.column12}`}>
             <div className={styles.title}>{this.props.title}</div>
           </div>
-          <div className={`${styles.sections} ${styles.column12}`}>{this._renderSections()}</div>
+          <div className={`${styles.sections} ${styles.column12}`} id="pp-statussection">
+            {this._renderSections()}
+          </div>
         </div>
       </div>
     )
@@ -166,6 +171,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         }
       }
     ]
+    console.log(selectedReport);
     const farItems: IContextualMenuItem[] = []
     if (sourceUrl) {
       farItems.push({
@@ -177,12 +183,21 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       })
     }
     farItems.push({
+      id: "GetSnapshot",
+      key: "GetSnapShot",
+      name: "Åpne som øyeblikksbilde",
+      iconProps: { iconName: 'Photo2',  },
+      disabled: !selectedReport || !selectedReport.values.Attachments,
+      onClick: () => { window.open(selectedReport.values.AttachmentFiles[0].ServerRelativeUrl) },
+    })
+    farItems.push({
       id: getId('ReportDropdown'),
       key: getId('ReportDropdown'),
       name: selectedReport ? formatDate(selectedReport.created, true) : '',
       itemType: ContextualMenuItemType.Normal,
       disabled: reportOptions.length === 0,
-      subMenuProps: { items: reportOptions }
+      iconProps: {iconName : "FullHistory"},
+      subMenuProps: { items: reportOptions },
     })
     farItems.push({
       id: getId('StatusIcon'),
@@ -366,15 +381,30 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     document.location.href = newReport.editFormUrl
   }
 
+
+  /**
+   *  Saves report to blob
+   *  @param title: Report Title
+   */
+
+   private async _captureReport(title: string | number | boolean) {
+    let statusReportHtml = document.getElementById('pp-statussection');
+    statusReportHtml.style.backgroundColor = "#FFFFFF"
+    let base64Png = await domtoimage.toBlob(statusReportHtml)
+    const date = moment(Date()).format('YYYY-MM-DD-HHmm');
+    const fileName = `${title.toString().replace(/\/|\\| /g, '-')}_${date}.png`
+    return {fileName: fileName, content: base64Png}
+   }
+
+
   /**
    * Publish report
    *
    * @param {StatusReport} report Report
    */
   private async _publishReport(report: StatusReport) {
-    await this._portalDataService.updateStatusReport(report.id, {
-      GtModerationStatus: strings.GtModerationStatus_Choice_Published
-    })
+    let attachment = await this._captureReport(report.values.Title);
+    await this._portalDataService.updateStatusReport(report.id, { GtModerationStatus: strings.GtModerationStatus_Choice_Published}, attachment);
     document.location.reload()
   }
 
@@ -428,6 +458,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           "Hidden eq false and Group ne 'Hidden'"
         )
       ])
+      console.log('-----------------------------------------------------------------------');
+      console.log(reports);
       const sortedReports = reports
         .map((item) => item.setDefaultEditFormUrl(reportList.DefaultEditFormUrl))
         .sort((a, b) => b.created.getTime() - a.created.getTime())

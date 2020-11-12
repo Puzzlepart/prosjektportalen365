@@ -72,18 +72,18 @@ export class PortalDataService {
     }
   }
 
-  /**
-   * Update status report
-   *
-   * @param {number} id Id
-   * @param {TypedHash<string>} properties Properties
-   */
-  public async updateStatusReport(id: number, properties: TypedHash<string>): Promise<void> {
-    await this._web.lists
-      .getByTitle(this._configuration.listNames.PROJECT_STATUS)
-      .items.getById(id)
-      .update(properties)
-  }
+
+    /**
+     * Update status report
+     * 
+     * @param {number} id Id
+     * @param {TypedHash<string>} properties Properties
+     */
+    public async updateStatusReport(id: number, properties: TypedHash<string>, attachment: {fileName: string, content: Blob}): Promise<void> {
+        await this._web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS).items.getById(id).attachmentFiles.add(attachment.fileName, attachment.content);
+        await this._web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS).items.getById(id).update(properties);
+        
+    }
 
   /**
    * Update status report
@@ -354,6 +354,7 @@ export class PortalDataService {
       return (await items.get()).map((i) => new StatusReport(i, publishedString))
     } catch (error) {
       throw error
+    public async getStatusReports(filter: string = '', top?: number, select?: string[], expand: string[] = ['FieldValuesAsText', 'AttachmentFiles']): Promise<StatusReport[]> {
     }
   }
 
