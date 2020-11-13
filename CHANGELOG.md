@@ -3,6 +3,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with Pull Request ID.
 
+## 1.2.4 - TBA
+
+## Added
+
+- Added "default" option for extensions, similar to list content
+
+## Fixed
+
+- Improved failure handling for PlannerConfiguration task in Project Setup #329
+
+
 ## 1.2.3 - 2020-10-07
 
 ## Added

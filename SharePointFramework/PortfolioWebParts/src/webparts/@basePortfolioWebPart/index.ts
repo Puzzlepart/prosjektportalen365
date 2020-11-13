@@ -7,7 +7,6 @@ import { DataAdapter } from 'data'
 import * as merge from 'object-assign'
 import * as React from 'react'
 import * as ReactDom from 'react-dom'
-import { ApplicationInsightsLogListener } from 'shared/lib/logging'
 
 // tslint:disable-next-line: naming-convention
 export abstract class BasePortfolioWebPart<T extends IBaseComponentProps> extends BaseClientSideWebPart<T> {
@@ -34,7 +33,6 @@ export abstract class BasePortfolioWebPart<T extends IBaseComponentProps> extend
     private async _setup() {
         sp.setup({ spfxContext: this.context })
         Logger.subscribe(new ConsoleListener())
-        Logger.subscribe(new ApplicationInsightsLogListener(this.context.pageContext))
         Logger.activeLogLevel = (sessionStorage.DEBUG || DEBUG) ? LogLevel.Info : LogLevel.Warning
         try {
             this._pageTitle = (await sp.web.lists.getById(this.context.pageContext.list.id.toString()).items.getById(this.context.pageContext.listItem.id).select('Title').get<{ Title: string }>()).Title

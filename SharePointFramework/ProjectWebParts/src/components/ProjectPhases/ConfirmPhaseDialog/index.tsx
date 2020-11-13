@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog'
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
-import { IConfirmPhaseDialogProps } from './IConfirmPhaseDialogProps'
+import { IConfirmPhaseDialogProps } from './types'
 import * as format from 'string-format'
 import * as strings from 'ProjectWebPartsStrings'
 

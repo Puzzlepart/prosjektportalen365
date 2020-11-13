@@ -37,7 +37,7 @@ define([], function () {
     OnGoBackText: 'Gå tilbake',
     OnStartCopyText: 'Start kopiering',
     OnSubmitSelectionText: 'Velg',
-    PlannerConfigurationErrorMessage: 'Det skjedde en feil under konfigurering av området',
+    PlannerConfigurationErrorMessage: 'Det skjedde en feil under opprettelse av standardoppgaver i Planner. Prøv igjen ved å laste siden på nytt.',
     PlannerConfigurationText: 'Oppretter standardoppgaver i Planner',
     PreTaskErrorMessage: 'Det skjedde en feil',
     ProgressDialogDescription: 'Vennligst vent. Ikke lukk nettleservinduet.',
