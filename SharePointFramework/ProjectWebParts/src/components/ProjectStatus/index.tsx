@@ -35,7 +35,6 @@ import {
 import domtoimage from 'dom-to-image';
 import * as moment from 'moment';
 
-
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private _portalDataService: PortalDataService
 
@@ -171,7 +170,6 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         }
       }
     ]
-    console.log(selectedReport);
     const farItems: IContextualMenuItem[] = []
     if (sourceUrl) {
       farItems.push({
@@ -381,9 +379,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     document.location.href = newReport.editFormUrl
   }
 
-
   /**
-   *  Saves report to blob
+   *  Creates png snapshot 
    *  @param title: Report Title
    */
 
@@ -458,8 +455,6 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           "Hidden eq false and Group ne 'Hidden'"
         )
       ])
-      console.log('-----------------------------------------------------------------------');
-      console.log(reports);
       const sortedReports = reports
         .map((item) => item.setDefaultEditFormUrl(reportList.DefaultEditFormUrl))
         .sort((a, b) => b.created.getTime() - a.created.getTime())
