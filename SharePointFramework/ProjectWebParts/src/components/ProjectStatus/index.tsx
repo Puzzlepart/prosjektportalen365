@@ -164,11 +164,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         key: getId('PublishReport'),
         name: strings.PublishReportButtonText,
         iconProps: { iconName: 'PublishContent' },
-        disabled: selectedReport.published,
-        onClick: () => {
-          this._publishReport(selectedReport)
-        }
-      }
+        disabled: (!selectedReport || selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published),
+        onClick: () => { this._publishReport(selectedReport); this.setState({isPublishing: true}); },
+      },
     ]
     const farItems: IContextualMenuItem[] = []
     if (sourceUrl) {
@@ -386,11 +384,17 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
 
    private async _captureReport(title: string | number | boolean) {
     let statusReportHtml = document.getElementById('pp-statussection');
-    statusReportHtml.style.backgroundColor = "#FFFFFF"
-    let base64Png = await domtoimage.toBlob(statusReportHtml)
-    const date = moment(Date()).format('YYYY-MM-DD-HHmm');
-    const fileName = `${title.toString().replace(/\/|\\| /g, '-')}_${date}.png`
-    return {fileName: fileName, content: base64Png}
+    const date = moment(Date()).format('YYYY-MM-DD HH:mm');
+    let dateStamp = document.createElement("p")
+    dateStamp.textContent = `${date}`
+    dateStamp.style.textAlign = "right"
+    statusReportHtml.appendChild(dateStamp);
+    statusReportHtml.style.backgroundColor = "#FFFFFF";
+
+    let base64Png = await domtoimage.toBlob(statusReportHtml);
+    const fileName = `${(title + "_" + date).toString().replace(/\/|\\| |\:/g, '-')}.png`;
+
+    return {fileName: fileName, content: base64Png};
    }
 
 
@@ -400,9 +404,11 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    * @param {StatusReport} report Report
    */
   private async _publishReport(report: StatusReport) {
+    if (!this.state.isPublishing) {
     let attachment = await this._captureReport(report.values.Title);
     await this._portalDataService.updateStatusReport(report.id, { GtModerationStatus: strings.GtModerationStatus_Choice_Published}, attachment);
     document.location.reload()
+    }
   }
 
   /**
