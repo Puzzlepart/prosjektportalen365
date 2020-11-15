@@ -1,6 +1,7 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd } from '@pnp/common'
 import { QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
+import { SiteGroup, SiteGroups } from '@pnp/sp/src/sitegroups'
 import * as cleanDeep from 'clean-deep'
 import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces'
 import { ChartConfiguration, ChartData, ChartDataItem, DataField, ProjectListModel, SPChartConfigurationItem, SPContentType } from 'models'
@@ -111,7 +112,7 @@ export class DataAdapter {
      */
     public async fetchDataForRegularView(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string, siteIdProperty = 'GtSiteIdOWSTEXT'): Promise<IFetchDataForViewItemResult[]> {
         try {
-            let {projects, sites, statusReports} = await this._fetchDataForView(view, configuration, siteId, siteIdProperty);
+            let { projects, sites, statusReports } = await this._fetchDataForView(view, configuration, siteId, siteIdProperty);
             const items = sites.map(site => {
                 const [project] = projects.filter(res => res[siteIdProperty] === site['SiteId'])
                 const [statusReport] = statusReports.filter(res => res[siteIdProperty] === site['SiteId'])
@@ -139,7 +140,7 @@ export class DataAdapter {
      */
     public async fetchDataForManagerView(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string, siteIdProperty = 'GtSiteIdOWSTEXT'): Promise<IFetchDataForViewItemResult[]> {
         try {
-            let {projects, sites, statusReports} = await this._fetchDataForView(view, configuration, siteId, siteIdProperty);
+            let { projects, sites, statusReports } = await this._fetchDataForView(view, configuration, siteId, siteIdProperty);
             const items = projects.map((project) => {
                 const [statusReport] = statusReports.filter(res => res[siteIdProperty] === project[siteIdProperty])
                 const [site] = sites.filter(res => res['SiteId'] === project[siteIdProperty])
@@ -160,7 +161,7 @@ export class DataAdapter {
      * @param {string} [siteIdProperty='GtSiteIdOWSTEXT']
      */
 
-    private async _fetchDataForView(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string, siteIdProperty = 'GtSiteIdOWSTEXT'){
+    private async _fetchDataForView(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string, siteIdProperty = 'GtSiteIdOWSTEXT') {
         let [
             { PrimarySearchResults: projects },
             { PrimarySearchResults: sites },
@@ -188,11 +189,11 @@ export class DataAdapter {
         statusReports = statusReports.map(item => cleanDeep({ ...item }))
         sites = sites.filter(site => projects.filter(res => res[siteIdProperty] === site['SiteId']).length === 1)
         return {
-                    projects,
-                    sites,
-                    statusReports
-                }
-     }
+            projects,
+            sites,
+            statusReports
+        }
+    }
 
     /**
      * Fetch project sites
@@ -284,9 +285,9 @@ export class DataAdapter {
      */
     private async _isUserInGroup(groupName: string): Promise<boolean> {
         try {
-            let group = await sp.web.currentUser.groups.getByName(groupName).get();
-            console.log(group);
-            return true;
+            let siteGroups = await sp.web.siteGroups.select('CanCurrentUserViewMembership,Title').get();
+            let siteGroupByName = siteGroups.filter(_ => _.Title === groupName);
+            return siteGroupByName.length === 1 && siteGroupByName[0].CanCurrentUserViewMembership;
         } catch (error) {
             return false;
         }
