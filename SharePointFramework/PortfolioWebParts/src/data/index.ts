@@ -1,7 +1,6 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd } from '@pnp/common'
 import { QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
-import { SiteGroup, SiteGroups } from '@pnp/sp/src/sitegroups'
 import * as cleanDeep from 'clean-deep'
 import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces'
 import { ChartConfiguration, ChartData, ChartDataItem, DataField, ProjectListModel, SPChartConfigurationItem, SPContentType } from 'models'
