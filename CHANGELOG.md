@@ -7,12 +7,12 @@ Every change is marked with Pull Request ID.
 
 ## Added
 
-- Added "default" option for extensions, similar to list content
+- Added "default" option for extensions, similar to list content #328
+- Added info message if there are unpublished statusreports #340
 
 ## Fixed
 
 - Improved failure handling for PlannerConfiguration task in Project Setup #329
-
 
 ## 1.2.3 - 2020-10-07
 

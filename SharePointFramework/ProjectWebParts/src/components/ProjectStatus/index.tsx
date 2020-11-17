@@ -79,7 +79,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       return (
         <div className={styles.projectStatus}>
           <div className={styles.container}>
-            <MessageBar messageBarType={MessageBarType.error}>{this.state.error}</MessageBar>
+            <MessageBar messageBarType={MessageBarType.info}>{this.state.error}</MessageBar>
           </div>
         </div>
       )
@@ -89,6 +89,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       <div className={styles.projectStatus}>
         {this._commandBar()}
         <div className={styles.container}>
+          {this.state.data.reports.filter((report) => report.moderationStatus.indexOf("Publisert")).length !== 0 &&
+            <MessageBar messageBarType={MessageBarType.info}>{strings.UnpublishedStatusReportInfo}</MessageBar>}
           <div className={`${styles.header} ${styles.column12}`}>
             <div className={styles.title}>{this.props.title}</div>
           </div>

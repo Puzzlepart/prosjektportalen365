@@ -28,6 +28,7 @@ define([], function () {
     MoveOn: 'Go ahead',
     NewStatusReportModalHeaderText: 'New Status Report',
     NewStatusReportTitle: 'New Status Report for {0}',
+    UnpublishedStatusReportInfo: 'There are unpublished status reports. It is therefore not possible to create a new status report. If you are an owner of the site, you can publish or delete unpublished reports using the buttons above.',
     No: 'No',
     NoPropertiesMessage: 'No project information found.',
     PageReloadMessage: 'Refresh the page to get updated list views.',
