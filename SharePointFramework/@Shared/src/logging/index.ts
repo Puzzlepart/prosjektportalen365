@@ -1,1 +1,1 @@
-export { default as ListLogger } from './ListLogger';
+export { default as ListLogger } from './ListLogger'
