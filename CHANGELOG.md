@@ -12,6 +12,7 @@ Every change is marked with Pull Request ID.
 ## Fixed
 
 - Improved failure handling for PlannerConfiguration task in Project Setup #329
+- Support adding AD groups to get porfolio insights from SP group #332
 
 
 ## 1.2.3 - 2020-10-07
