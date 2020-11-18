@@ -181,19 +181,19 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       key: getId('StatusIcon'),
       name:
         this.state.selectedReport &&
-        selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published
+          selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published
           ? strings.PublishedStatusReport
           : strings.NotPublishedStatusReport,
       iconProps: {
         iconName:
           this.state.selectedReport &&
-          selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published
+            selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published
             ? 'BoxCheckmarkSolid'
             : 'CheckboxFill',
         style: {
           color:
             this.state.selectedReport &&
-            selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published
+              selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published
               ? '#2DA748'
               : '#D2D2D2'
         }
@@ -316,30 +316,25 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    * @param {IProjectStatusData} data Data
    */
   private _getReportOptions(data: IProjectStatusData): IContextualMenuItem[] {
-    const reportOptions: IContextualMenuItem[] = data.reports.map(
-      (report) =>
-        ({
-          key: `${report.id}`,
-          name: formatDate(report.created, true),
-          onClick: () => this._onReportChanged(report),
-          canCheck: true,
-          iconProps: {
-            iconName:
-              this.state.selectedReport &&
-              report.moderationStatus === strings.GtModerationStatus_Choice_Published
-                ? 'BoxCheckmarkSolid'
-                : 'CheckboxFill',
-            style: {
-              color:
-                this.state.selectedReport &&
-                report.moderationStatus === strings.GtModerationStatus_Choice_Published
-                  ? '#2DA748'
-                  : '#D2D2D2'
-            }
-          },
-          isChecked: this.state.selectedReport ? report.id === this.state.selectedReport.id : false
-        } as IContextualMenuItem)
-    )
+    const reportOptions: IContextualMenuItem[] = data.reports.map((report) => {
+      const isPublished = report.moderationStatus === strings.GtModerationStatus_Choice_Published
+      const isCurrent = this.state.selectedReport
+        ? report.id === this.state.selectedReport.id
+        : false
+      return {
+        key: `${report.id}`,
+        name: formatDate(report.created, true),
+        onClick: () => this._onReportChanged(report),
+        canCheck: true,
+        iconProps: {
+          iconName: isPublished ? 'BoxCheckmarkSolid' : 'CheckboxFill',
+          style: {
+            color: isPublished ? '#2DA748' : '#D2D2D2'
+          }
+        },
+        isChecked: isCurrent
+      } as IContextualMenuItem
+    })
     return reportOptions
   }
 
@@ -418,6 +413,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         this._portalDataService.getProjectColumnConfig(),
         this._portalDataService.getListFields(
           'PROJECT_STATUS',
+          // eslint-disable-next-line quotes
           "Hidden eq false and Group ne 'Hidden'"
         )
       ])
