@@ -5,7 +5,7 @@ import { IProjectInformationModalProps } from './types'
 import styles from './ProjectInformationModal.module.scss'
 
 export class ProjectInformationModal extends React.Component<IProjectInformationModalProps, {}> {
-  public static defaultProps: Partial<IProjectInformationModalProps> = {};
+  public static defaultProps: Partial<IProjectInformationModalProps> = {}
 
   public render(): React.ReactElement<IProjectInformationModalProps> {
     return (
@@ -17,4 +17,3 @@ export class ProjectInformationModal extends React.Component<IProjectInformation
 }
 
 export { IProjectInformationModalProps }
-

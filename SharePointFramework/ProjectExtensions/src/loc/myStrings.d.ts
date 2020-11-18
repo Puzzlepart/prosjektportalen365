@@ -79,5 +79,5 @@ declare interface IProjectExtensionsStrings {
 
 declare module 'ProjectExtensionsStrings' {
   const strings: IProjectExtensionsStrings
-  export = strings;
+  export = strings
 }

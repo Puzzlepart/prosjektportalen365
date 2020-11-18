@@ -1,1 +1,1 @@
-export * from './SPDataAdapterBase';
+export * from './SPDataAdapterBase'

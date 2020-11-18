@@ -1,39 +1,39 @@
-import { TypedHash } from '@pnp/common';
-import { IEntityField } from 'sp-entityportal-service';
+import { TypedHash } from '@pnp/common'
+import { IEntityField } from 'sp-entityportal-service'
 
 export interface IGetPropertiesData {
-    /**
-    * EditForm url
-    */
-    editFormUrl?: string;
+  /**
+   * EditForm url
+   */
+  editFormUrl?: string
 
-    /**
-     * Version history url
-     */
-    versionHistoryUrl?: string;
+  /**
+   * Version history url
+   */
+  versionHistoryUrl?: string
 
-    /**
-     * Field values
-     */
-    fieldValues?: TypedHash<any>;
+  /**
+   * Field values
+   */
+  fieldValues?: TypedHash<any>
 
-    /**
-     * Field values as text
-     */
-    fieldValuesText?: TypedHash<string>;
+  /**
+   * Field values as text
+   */
+  fieldValuesText?: TypedHash<string>
 
-    /**
-     * Entity fields
-     */
-    fields?: IEntityField[];
+  /**
+   * Entity fields
+   */
+  fields?: IEntityField[]
 
-    /**
-     * Properties list id
-     */
-    propertiesListId?: string;
+  /**
+   * Properties list id
+   */
+  propertiesListId?: string
 
-    /**
-     * 
-     */
-    templateParameters?: TypedHash<any>;
+  /**
+   *
+   */
+  templateParameters?: TypedHash<any>
 }

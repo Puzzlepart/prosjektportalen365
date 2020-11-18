@@ -26,6 +26,8 @@ declare interface IProjectWebPartsStrings {
   EditPropertiesText: string;
   EditReportButtonText: string;
   PublishReportButtonText: string;
+  PublishedStatusReport: string;
+  NotPublishedStatusReport: string;
   EditSiteInformationText: string;
   ErrorText: string;
   ListSectionDataErrorMessage: string;
@@ -34,6 +36,7 @@ declare interface IProjectWebPartsStrings {
   MoveOn: string;
   NewStatusReportModalHeaderText: string;
   NewStatusReportTitle: string;
+  UnpublishedStatusReportInfo: string;
   No: string;
   NoPropertiesMessage: string;
   PageReloadMessage: string;

@@ -1,18 +1,18 @@
 import { ProjectTemplate } from '../../../models'
 
 export interface ITemplateSelectorProps {
-    /**
-     * Project templates
-     */
-    templates?: ProjectTemplate[];
+  /**
+   * Project templates
+   */
+  templates?: ProjectTemplate[]
 
-    /**
-     * Currently selected project templates
-     */
-    selectedTemplate?: ProjectTemplate;
+  /**
+   * Currently selected project templates
+   */
+  selectedTemplate?: ProjectTemplate
 
-    /**
-     * On project template changed
-     */
-    onChange?: (template: ProjectTemplate) => void;
+  /**
+   * On project template changed
+   */
+  onChange?: (template: ProjectTemplate) => void
 }

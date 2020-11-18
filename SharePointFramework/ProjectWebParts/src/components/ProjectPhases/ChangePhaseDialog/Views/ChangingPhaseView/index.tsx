@@ -9,5 +9,10 @@ import IChangingPhaseViewProps from './IChangingPhaseViewProps'
  */
 
 export const ChangingPhaseView = (props: IChangingPhaseViewProps) => {
-    return <ProgressIndicator label={strings.PleaseWaitText} description={format(strings.ChangingPhaseDescription, props.newPhase.name)} />
+  return (
+    <ProgressIndicator
+      label={strings.PleaseWaitText}
+      description={format(strings.ChangingPhaseDescription, props.newPhase.name)}
+    />
+  )
 }

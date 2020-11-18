@@ -1,10 +1,10 @@
-import { PageContext } from '@microsoft/sp-page-context';
+import { PageContext } from '@microsoft/sp-page-context'
 
 /**
  * Checks if the current site is a hub site (checks pageContext.legacyPageContext)
- * 
+ *
  * @param {PageContext} pageContext Page context
  */
 export function isHubSite({ legacyPageContext: { siteId, hubSiteId } }: PageContext) {
-    return siteId.indexOf(hubSiteId) !== -1;
+  return siteId.indexOf(hubSiteId) !== -1
 }

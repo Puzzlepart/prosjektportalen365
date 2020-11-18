@@ -4,7 +4,9 @@ import 'office-ui-fabric-react/dist/css/fabric.min.css'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
-export default class PortfolioInsightsWebPart extends BasePortfolioWebPart<IPortfolioInsightsProps> {
+export default class PortfolioInsightsWebPart extends BasePortfolioWebPart<
+  IPortfolioInsightsProps
+> {
   public render(): void {
     this.renderComponent(PortfolioInsights)
   }
@@ -22,17 +24,17 @@ export default class PortfolioInsightsWebPart extends BasePortfolioWebPart<IPort
               groupName: strings.ConfigurationGroupName,
               groupFields: [
                 PropertyPaneTextField('chartConfigurationListName', {
-                  label: strings.ChartConfigurationListNameLabel,
+                  label: strings.ChartConfigurationListNameLabel
                 }),
                 PropertyPaneTextField('columnConfigListName', {
-                  label: strings.ColumnConfigListNameLabel,
+                  label: strings.ColumnConfigListNameLabel
                 }),
                 PropertyPaneTextField('columnsListName', {
-                  label: strings.ColumnsListNameLabel,
+                  label: strings.ColumnsListNameLabel
                 }),
                 PropertyPaneTextField('viewsListName', {
-                  label: strings.ViewsListNameLabel,
-                }),
+                  label: strings.ViewsListNameLabel
+                })
               ]
             }
           ]

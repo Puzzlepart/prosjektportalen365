@@ -1,10 +1,10 @@
 /**
  * Make url absolute
- * 
+ *
  * @param {string} serverRelativeUrl Server relative url
  */
 export function makeUrlAbsolute(serverRelativeUrl: string) {
-    let baseUrl = `${window.location.protocol}//${window.location.hostname}`;
-    if (serverRelativeUrl.indexOf(baseUrl) === 0) return baseUrl;
-    return baseUrl + serverRelativeUrl;
+  const baseUrl = `${window.location.protocol}//${window.location.hostname}`
+  if (serverRelativeUrl.indexOf(baseUrl) === 0) return baseUrl
+  return baseUrl + serverRelativeUrl
 }
