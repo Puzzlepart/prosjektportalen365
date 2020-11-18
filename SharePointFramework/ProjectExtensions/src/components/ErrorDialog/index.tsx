@@ -8,31 +8,35 @@ import styles from './ErrorDialog.module.scss'
 import { IErrorDialogProps } from './IErrorDialogProps'
 
 // tslint:disable-next-line: naming-convention
-export const ErrorDialog = ({ error, version, messageType = MessageBarType.error, onDismiss }: IErrorDialogProps) => {
-    const onRenderFooter = () => {
-        return (
-            <>
-                <DefaultButton text={strings.CloseModalText} onClick={onDismiss} />
-            </>
-        )
-    }
-
+export const ErrorDialog = ({
+  error,
+  version,
+  messageType = MessageBarType.error,
+  onDismiss
+}: IErrorDialogProps) => {
+  const onRenderFooter = () => {
     return (
-        <BaseDialog
-            version={version}
-            dialogContentProps={{ title: error.message }}
-            modalProps={{ isBlocking: false, isDarkOverlay: true }}
-            onRenderFooter={onRenderFooter}
-            onDismiss={onDismiss}
-            containerClassName={styles.errorDialog}>
-            <div style={{ marginTop: 15 }}>
-                <MessageBar messageBarType={messageType} className={styles.errorMessage}>
-                    <ReactMarkdown escapeHtml={false} linkTarget='_blank' source={error.stack} />
-                </MessageBar>
-            </div>
-        </BaseDialog >
+      <>
+        <DefaultButton text={strings.CloseModalText} onClick={onDismiss} />
+      </>
     )
+  }
+
+  return (
+    <BaseDialog
+      version={version}
+      dialogContentProps={{ title: error.message }}
+      modalProps={{ isBlocking: false, isDarkOverlay: true }}
+      onRenderFooter={onRenderFooter}
+      onDismiss={onDismiss}
+      containerClassName={styles.errorDialog}>
+      <div style={{ marginTop: 15 }}>
+        <MessageBar messageBarType={messageType} className={styles.errorMessage}>
+          <ReactMarkdown escapeHtml={false} linkTarget='_blank' source={error.stack} />
+        </MessageBar>
+      </div>
+    </BaseDialog>
+  )
 }
 
 export { IErrorDialogProps }
-

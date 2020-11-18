@@ -1,5 +1,9 @@
 import { override } from '@microsoft/decorators'
-import { BaseListViewCommandSet, Command, IListViewCommandSetExecuteEventParameters } from '@microsoft/sp-listview-extensibility'
+import {
+  BaseListViewCommandSet,
+  Command,
+  IListViewCommandSetExecuteEventParameters
+} from '@microsoft/sp-listview-extensibility'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { sp } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
@@ -15,33 +19,47 @@ import { ITemplateSelectorCommandProperties } from './ITemplateSelectorCommandPr
 Logger.subscribe(new ConsoleListener())
 Logger.activeLogLevel = LogLevel.Info
 
-
-export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITemplateSelectorCommandProperties> {
-  private _hub: IHubSite;
-  private _templates: TemplateFile[] = [];
-  private _libraries: IDocumentLibrary[];
-  private _templateLibrary: string;
-  private _placeholderIds = { DocumentTemplateDialog: getId('documenttemplatedialog') };
+export default class TemplateSelectorCommand extends BaseListViewCommandSet<
+  ITemplateSelectorCommandProperties
+> {
+  private _hub: IHubSite
+  private _templates: TemplateFile[] = []
+  private _libraries: IDocumentLibrary[]
+  private _templateLibrary: string
+  private _placeholderIds = { DocumentTemplateDialog: getId('documenttemplatedialog') }
 
   @override
   public async onInit() {
-    Logger.log({ message: '(TemplateSelectorCommand) onInit: Initializing', data: { version: this.context.manifest.version, placeholderIds: this._placeholderIds }, level: LogLevel.Info })
+    Logger.log({
+      message: '(TemplateSelectorCommand) onInit: Initializing',
+      data: { version: this.context.manifest.version, placeholderIds: this._placeholderIds },
+      level: LogLevel.Info
+    })
     Logger.subscribe(new ConsoleListener())
-    Logger.activeLogLevel = (sessionStorage.DEBUG || DEBUG) ? LogLevel.Info : LogLevel.Warning
+    Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     this._hub = await HubSiteService.GetHubSite(sp, this.context.pageContext)
     SPDataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,
-      hubSiteUrl: this._hub.url,
+      hubSiteUrl: this._hub.url
     })
     const openTemplateSelectorCommand: Command = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR')
     if (!openTemplateSelectorCommand) return
     try {
       this._templateLibrary = this.properties.templateLibrary || 'Malbibliotek'
-      this._templates = await SPDataAdapter.getDocumentTemplates(this._templateLibrary, this.properties.viewXml)
-      Logger.log({ message: `(TemplateSelectorCommand) onInit: Retrieved ${this._templates.length} templates from the specified template library`, level: LogLevel.Info })
+      this._templates = await SPDataAdapter.getDocumentTemplates(
+        this._templateLibrary,
+        this.properties.viewXml
+      )
+      Logger.log({
+        message: `(TemplateSelectorCommand) onInit: Retrieved ${this._templates.length} templates from the specified template library`,
+        level: LogLevel.Info
+      })
     } catch (error) {
-      Logger.log({ message: '(TemplateSelectorCommand) onInit: Failed to initialize', level: LogLevel.Warning })
+      Logger.log({
+        message: '(TemplateSelectorCommand) onInit: Failed to initialize',
+        level: LogLevel.Warning
+      })
     }
   }
 
@@ -59,7 +77,10 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
     switch (event.itemId) {
       case 'OPEN_TEMPLATE_SELECTOR':
         this._libraries = await SPDataAdapter.getLibraries()
-        Logger.log({ message: `(TemplateSelectorCommand) onExecute: Retrieved ${this._libraries.length} libraries`, level: LogLevel.Info })
+        Logger.log({
+          message: `(TemplateSelectorCommand) onExecute: Retrieved ${this._libraries.length} libraries`,
+          level: LogLevel.Info
+        })
         this._onOpenTemplateSelector()
         break
     }
@@ -74,11 +95,14 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
       title: strings.TemplateLibrarySelectModalTitle,
       onDismiss: (props) => {
         this._unmount(placeholder)
-       if(props.reload) (document.location.href = document.location.href)
+        if (props.reload) document.location.href = document.location.href
       },
       libraries: this._libraries,
       templates: this._templates,
-      templateLibrary: { title: this._templateLibrary, url: `${this._hub.url}/${this._templateLibrary}` },
+      templateLibrary: {
+        title: this._templateLibrary,
+        url: `${this._hub.url}/${this._templateLibrary}`
+      }
     })
     ReactDOM.render(element, placeholder)
   }

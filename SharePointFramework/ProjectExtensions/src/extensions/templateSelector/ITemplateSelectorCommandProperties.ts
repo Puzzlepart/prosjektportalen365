@@ -1,16 +1,16 @@
 export interface ITemplateSelectorCommandProperties {
-    /**
-     * Template library to retrieve the documents from
-     */
-    templateLibrary: string;
+  /**
+   * Template library to retrieve the documents from
+   */
+  templateLibrary: string
 
-    /**
-     * Phase term set id
-     */
-    phaseTermSetId: string;
+  /**
+   * Phase term set id
+   */
+  phaseTermSetId: string
 
-    /**
-     * View xml
-     */
-    viewXml: string;
+  /**
+   * View xml
+   */
+  viewXml: string
 }

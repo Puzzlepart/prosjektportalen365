@@ -2,23 +2,23 @@ import { ListContentConfig, ProjectTemplate, ProjectExtension } from '../../mode
 import { ProjectSetupSettings } from '../../extensions/projectSetup/ProjectSetupSettings'
 
 export interface ITemplateSelectDialogState {
-    /**
-     * Currently selected project templates
-     */
-    selectedTemplate?: ProjectTemplate;
+  /**
+   * Currently selected project templates
+   */
+  selectedTemplate?: ProjectTemplate
 
-    /**
-     * Currently selected extensions
-     */
-    selectedExtensions?: ProjectExtension[];
+  /**
+   * Currently selected extensions
+   */
+  selectedExtensions?: ProjectExtension[]
 
-    /**
-     * Currently selected list content config
-     */
-    selectedListContentConfig?: ListContentConfig[];
+  /**
+   * Currently selected list content config
+   */
+  selectedListContentConfig?: ListContentConfig[]
 
-    /**
-     * Settings
-     */
-    settings?: ProjectSetupSettings;
+  /**
+   * Settings
+   */
+  settings?: ProjectSetupSettings
 }
