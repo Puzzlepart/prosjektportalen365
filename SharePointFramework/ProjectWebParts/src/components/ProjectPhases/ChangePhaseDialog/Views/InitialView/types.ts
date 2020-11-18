@@ -2,27 +2,27 @@ import { IPhaseChecklistItem } from 'models'
 
 export interface IInitialViewProps {
   /**
-  * Whether the component is loading
-  */
-  isLoading: boolean;
+   * Whether the component is loading
+   */
+  isLoading: boolean
 
   /**
- * Current check list items
- */
-  checklistItem: IPhaseChecklistItem;
+   * Current check list items
+   */
+  checklistItem: IPhaseChecklistItem
 
   /**
- * Next check point ation callback
- */
-  saveCheckPoint: (statusValue: string, commentsValue: string, updateStatus: boolean) => void;
+   * Next check point ation callback
+   */
+  saveCheckPoint: (statusValue: string, commentsValue: string, updateStatus: boolean) => void
 
   /**
- * Min length for comment
- */
-  commentMinLength?: number;
+   * Min length for comment
+   */
+  commentMinLength?: number
 
   /**
- * Style for comment field
- */
-  commentStyle?: React.CSSProperties;
+   * Style for comment field
+   */
+  commentStyle?: React.CSSProperties
 }
