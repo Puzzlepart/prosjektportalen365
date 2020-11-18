@@ -11,37 +11,37 @@ import { Customizer } from '@uifabric/utilities'
  * @extends React.Component
  */
 export class FilterPanel extends React.Component<IFilterPanelProps, IFilterPanelState> {
-    public static defaultProps: Partial<IFilterPanelProps> = {};
+  public static defaultProps: Partial<IFilterPanelProps> = {}
 
-    constructor(props: IFilterPanelProps) {
-        super(props)
-        this.state = { filters: props.filters }
-    }
+  constructor(props: IFilterPanelProps) {
+    super(props)
+    this.state = { filters: props.filters }
+  }
 
-    public render(): React.ReactElement<IFilterPanelProps> {
-        return (
-            <Customizer scopedSettings={{ Layer: { hostId: this.props.layerHostId } }}>
-                <Panel
-                    isOpen={this.props.isOpen}
-                    isLightDismiss={this.props.isLightDismiss}
-                    isBlocking={this.props.isBlocking}
-                    onDismiss={this.props.onDismiss}
-                    headerText={this.props.headerText}
-                    hasCloseButton={this.props.hasCloseButton}
-                    type={PanelType.smallFixedFar}>
-                    <div>
-                        {this._renderFilters()}
-                    </div>
-                </Panel>
-            </Customizer>
-        )
-    }
+  public render(): React.ReactElement<IFilterPanelProps> {
+    return (
+      <Customizer scopedSettings={{ Layer: { hostId: this.props.layerHostId } }}>
+        <Panel
+          isOpen={this.props.isOpen}
+          isLightDismiss={this.props.isLightDismiss}
+          isBlocking={this.props.isBlocking}
+          onDismiss={this.props.onDismiss}
+          headerText={this.props.headerText}
+          hasCloseButton={this.props.hasCloseButton}
+          type={PanelType.smallFixedFar}>
+          <div>{this._renderFilters()}</div>
+        </Panel>
+      </Customizer>
+    )
+  }
 
-    private _renderFilters() {
-        return this.props.filters
-            .filter(props => props.items.length > 1)
-            .map((props, idx) => <Filter key={idx} {...props} onFilterChange={this.props.onFilterChange} />)
-    }
+  private _renderFilters() {
+    return this.props.filters
+      .filter((props) => props.items.length > 1)
+      .map((props, idx) => (
+        <Filter key={idx} {...props} onFilterChange={this.props.onFilterChange} />
+      ))
+  }
 }
 
 export { IFilterPanelProps, IFilterProps, IFilterItemProps }

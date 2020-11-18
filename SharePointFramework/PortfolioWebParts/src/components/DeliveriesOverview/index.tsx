@@ -9,7 +9,9 @@ import { IDeliveriesOverviewProps } from './IDeliveriesOverviewProps'
  * @extends React.Component
  */
 export class DeliveriesOverview extends React.Component<IDeliveriesOverviewProps, {}> {
-  public static defaultProps: Partial<IDeliveriesOverviewProps> = { columns: DELIVERIES_OVERVIEW_COLUMNS };
+  public static defaultProps: Partial<IDeliveriesOverviewProps> = {
+    columns: DELIVERIES_OVERVIEW_COLUMNS
+  }
 
   /**
    * Constructor

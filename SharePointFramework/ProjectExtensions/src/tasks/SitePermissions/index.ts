@@ -1,7 +1,6 @@
 import { IProjectSetupData } from 'extensions/projectSetup'
 import * as strings from 'ProjectExtensionsStrings'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
-import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 
 export class SitePermissions extends BaseTask {
   public taskName = 'SitePermissions'
@@ -15,13 +14,9 @@ export class SitePermissions extends BaseTask {
    * Execute SitePermissions
    *
    * @param {IBaseTaskParams} params Task parameters
-   * @param {OnProgressCallbackFunction} _onProgress On progress function
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public async execute(
-    params: IBaseTaskParams,
-    _onProgress: OnProgressCallbackFunction
-  ): Promise<IBaseTaskParams> {
+  public async execute(params: IBaseTaskParams): Promise<IBaseTaskParams> {
     try {
       if (this.settings.includePortfolioAdministrators) {
         try {

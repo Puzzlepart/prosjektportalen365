@@ -4,7 +4,6 @@ import { PortalDataService } from 'shared/lib/services'
 import { SpEntityPortalService } from 'sp-entityportal-service'
 import initSpfxJsom, { ExecuteJsomQuery } from 'spfx-jsom'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
-import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 
 export class PreTask extends BaseTask {
   public taskName = 'PreTask'
@@ -20,10 +19,7 @@ export class PreTask extends BaseTask {
    * @param {OnProgressCallbackFunction} onProgress On progress function
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public async execute(
-    params: IBaseTaskParams,
-    _onProgress: OnProgressCallbackFunction
-  ): Promise<IBaseTaskParams> {
+  public async execute(params: IBaseTaskParams): Promise<IBaseTaskParams> {
     try {
       params.templateSchema = await this.data.selectedTemplate.getSchema()
       params.spfxJsomContext = await initSpfxJsom(params.context.pageContext.site.absoluteUrl, {

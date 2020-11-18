@@ -1,4 +1,4 @@
 export interface IPortfolioOverviewCommandsState {
-    showFilterPanel: boolean;
-    isExporting?: boolean;
+  showFilterPanel: boolean
+  isExporting?: boolean
 }

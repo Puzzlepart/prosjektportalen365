@@ -9,7 +9,7 @@ import { AggregatedSearchList } from '../AggregatedSearchList'
  * @extends React.Component
  */
 export class RiskOverview extends React.Component<IRiskOverviewProps, {}> {
-  public static defaultProps: Partial<IRiskOverviewProps> = { columns: RISKOVERVIEW_COLUMNS };
+  public static defaultProps: Partial<IRiskOverviewProps> = { columns: RISKOVERVIEW_COLUMNS }
 
   /**
    * Constructor

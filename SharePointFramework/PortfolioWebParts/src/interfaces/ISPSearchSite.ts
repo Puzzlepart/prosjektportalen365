@@ -1,4 +1,4 @@
 export interface ISPSearchSite {
-    Title: string;
-    SiteId: string;
+  Title: string
+  SiteId: string
 }

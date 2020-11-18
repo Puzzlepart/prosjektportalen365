@@ -3,58 +3,58 @@ import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { DataSource } from 'shared/lib/models/DataSource'
 
 export interface IAggregatedSearchListState {
-    /**
-     * Whether the component is loading
-     */
-    isLoading: boolean;
-    
-    /**
-     * Whether there's an export in progress
-     */
-    isExporting?: boolean;
+  /**
+   * Whether the component is loading
+   */
+  isLoading: boolean
 
-    /**
-     * Items to show in the details list
-     */
-    items?: any[];
+  /**
+   * Whether there's an export in progress
+   */
+  isExporting?: boolean
 
-    /**
-     * Selected data source
-     */
-    selectedDataSource?: DataSource;
+  /**
+   * Items to show in the details list
+   */
+  items?: any[]
 
-    /**
-     * Available data sources
-     */
-    dataSources?: DataSource[];
+  /**
+   * Selected data source
+   */
+  selectedDataSource?: DataSource
 
-    /**
-     * Columns to show in the DetailsList
-     */
-    columns: IColumn[];
+  /**
+   * Available data sources
+   */
+  dataSources?: DataSource[]
 
-    /**
-     * Column to group by
-     */
-    groupBy?: IColumn;
+  /**
+   * Columns to show in the DetailsList
+   */
+  columns: IColumn[]
 
-    /**
-     * Column to sort by
-     */
-    sortBy?: IColumn;
+  /**
+   * Column to group by
+   */
+  groupBy?: IColumn
 
-    /**
-     * Search term
-     */
-    searchTerm?: string;
+  /**
+   * Column to sort by
+   */
+  sortBy?: IColumn
 
-    /**
-     * Error
-     */
-    error?: string;
+  /**
+   * Search term
+   */
+  searchTerm?: string
 
-    /**
-     * Props for column header context menu
-     */
-    columnContextMenu?: IContextualMenuProps;
+  /**
+   * Error
+   */
+  error?: string
+
+  /**
+   * Props for column header context menu
+   */
+  columnContextMenu?: IContextualMenuProps
 }

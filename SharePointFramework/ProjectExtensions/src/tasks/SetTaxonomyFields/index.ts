@@ -3,7 +3,6 @@ import * as strings from 'ProjectExtensionsStrings'
 import { getObjectValue } from 'shared/lib/helpers/getObjectValue'
 import { ExecuteJsomQuery } from 'spfx-jsom'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
-import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 
 export class SetTaxonomyFields extends BaseTask {
   public taskName = 'SetTaxonomyFields'
@@ -19,10 +18,7 @@ export class SetTaxonomyFields extends BaseTask {
    * @param {OnProgressCallbackFunction} onProgress On progress function
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public async execute(
-    params: IBaseTaskParams,
-    _onProgress: OnProgressCallbackFunction
-  ): Promise<IBaseTaskParams> {
+  public async execute(params: IBaseTaskParams): Promise<IBaseTaskParams> {
     try {
       const {
         spfxJsomContext: { jsomContext, defaultTermStore }
