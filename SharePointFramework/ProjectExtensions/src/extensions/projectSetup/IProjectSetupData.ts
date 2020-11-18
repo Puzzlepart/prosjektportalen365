@@ -3,23 +3,23 @@ import { IHubSite } from 'sp-hubsite-service'
 import { ITemplateSelectDialogState } from '../../components/TemplateSelectDialog/ITemplateSelectDialogState'
 
 export interface IProjectSetupData extends ITemplateSelectDialogState {
-    /**
-     * Templates
-     */
-    templates?: ProjectTemplate[];
+  /**
+   * Templates
+   */
+  templates?: ProjectTemplate[]
 
-    /**
-     * Extensions
-     */
-    extensions?: ProjectExtension[];
+  /**
+   * Extensions
+   */
+  extensions?: ProjectExtension[]
 
-    /**
-     * List content config
-     */
-    listContentConfig?: ListContentConfig[];
+  /**
+   * List content config
+   */
+  listContentConfig?: ListContentConfig[]
 
-    /**
-     * Hub site
-     */
-    hub?: IHubSite;
+  /**
+   * Hub site
+   */
+  hub?: IHubSite
 }

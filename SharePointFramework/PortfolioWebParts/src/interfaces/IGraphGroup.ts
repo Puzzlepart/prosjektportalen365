@@ -1,4 +1,4 @@
 export interface IGraphGroup {
-    id: string;
-    displayName: string;
+  id: string
+  displayName: string
 }

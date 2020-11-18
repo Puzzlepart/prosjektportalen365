@@ -5,35 +5,35 @@ export interface IProjectListState {
   /**
    * Whether the component is loading
    */
-  isLoading: boolean;
+  isLoading: boolean
 
   /**
    * Search term
    */
-  searchTerm: string;
+  searchTerm: string
 
   /**
    * Projects
    */
-  projects?: ProjectListModel[];
+  projects?: ProjectListModel[]
 
   /**
    * Error
    */
-  error?: any;
+  error?: any
 
   /**
    * Show project info
    */
-  showProjectInfo?: ProjectListModel;
+  showProjectInfo?: ProjectListModel
 
   /**
    * Show as tiles (shown as list if false)
    */
-  showAsTiles?: boolean;
+  showAsTiles?: boolean
 
   /**
    * List view properties
    */
-  listView?: { projects: ProjectListModel[]; columns: IColumn[] };
+  listView?: { projects: ProjectListModel[]; columns: IColumn[] }
 }

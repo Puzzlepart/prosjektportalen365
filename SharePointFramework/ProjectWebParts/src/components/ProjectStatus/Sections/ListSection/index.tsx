@@ -1,5 +1,10 @@
 import { sp } from '@pnp/sp'
-import { DetailsList, DetailsListLayoutMode, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
+import {
+  DetailsList,
+  DetailsListLayoutMode,
+  IColumn,
+  SelectionMode
+} from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import * as strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
@@ -9,7 +14,10 @@ import { StatusElement } from '../../StatusElement'
 import { IListSectionProps, IListSectionState, IListSectionData } from './types'
 import styles from './ListSection.module.scss'
 
-export class ListSection extends BaseSection<IListSectionProps, IListSectionState<IListSectionData>> {
+export class ListSection extends BaseSection<
+  IListSectionProps,
+  IListSectionState<IListSectionData>
+> {
   constructor(props: IListSectionProps) {
     super(props)
     this.state = { isLoading: true }
@@ -48,7 +56,11 @@ export class ListSection extends BaseSection<IListSectionProps, IListSectionStat
       return null
     }
     if (this.state.error) {
-      return <MessageBar messageBarType={MessageBarType.error}>{strings.ListSectionDataErrorMessage}</MessageBar>
+      return (
+        <MessageBar messageBarType={MessageBarType.error}>
+          {strings.ListSectionDataErrorMessage}
+        </MessageBar>
+      )
     }
     return (
       <div className={`${styles.list} ms-Grid-col ms-sm12`}>
@@ -56,7 +68,8 @@ export class ListSection extends BaseSection<IListSectionProps, IListSectionStat
           columns={getObjectValue<IColumn[]>(this.state, 'data.columns', [])}
           items={getObjectValue<any[]>(this.state, 'data.items', [])}
           selectionMode={SelectionMode.none}
-          layoutMode={DetailsListLayoutMode.justified} />
+          layoutMode={DetailsListLayoutMode.justified}
+        />
       </div>
     )
   }
@@ -71,22 +84,24 @@ export class ListSection extends BaseSection<IListSectionProps, IListSectionStat
       const viewXml = `<View><Query>${viewQuery}</Query><RowLimit>${rowLimit}</RowLimit></View>`
       const [items, fields] = await Promise.all([
         list.getItemsByCAMLQuery({ ViewXml: viewXml }, 'FieldValuesAsText') as Promise<any[]>,
-        list.fields.select('Title', 'InternalName', 'TypeAsString').get<{ Title: string; InternalName: string; TypeAsString: string }[]>(),
+        list.fields
+          .select('Title', 'InternalName', 'TypeAsString')
+          .get<{ Title: string; InternalName: string; TypeAsString: string }[]>()
       ])
       if (items.length === 0) return null
-      const itemValues = items.map(i => i.FieldValuesAsText)
+      const itemValues = items.map((i) => i.FieldValuesAsText)
       const columns: IColumn[] = viewFields
-        .filter(vf => fields.filter(fld => fld.InternalName === vf).length === 1)
-        .map(vf => {
-          const [field] = fields.filter(fld => fld.InternalName === vf)
-          return ({
+        .filter((vf) => fields.filter((fld) => fld.InternalName === vf).length === 1)
+        .map((vf) => {
+          const [field] = fields.filter((fld) => fld.InternalName === vf)
+          return {
             key: field.InternalName,
             fieldName: field.InternalName,
             name: field.Title,
             minWidth: 100,
             maxWidth: { Text: 250, Note: 250, Choice: 150, Number: 100 }[field.TypeAsString] || 150,
-            isResizable: true,
-          } as IColumn)
+            isResizable: true
+          } as IColumn
         })
       return { items: itemValues, columns }
     } catch (error) {

@@ -1,4 +1,4 @@
 export function tryParseFloat(str: string, fallback: string | number): number | string {
-    var parsed = parseFloat(str);
-    return !isNaN(parsed) ? parsed : fallback;
-};
+  const parsed = parseFloat(str)
+  return !isNaN(parsed) ? parsed : fallback
+}

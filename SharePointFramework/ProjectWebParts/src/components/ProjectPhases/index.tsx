@@ -10,7 +10,7 @@ import * as format from 'string-format'
 import SPDataAdapter from '../../data'
 import { UserMessage } from '../UserMessage'
 import ChangePhaseDialog from './ChangePhaseDialog'
-import { IProjectPhasesProps,IProjectPhasesState,IProjectPhasesData } from './types'
+import { IProjectPhasesProps, IProjectPhasesState, IProjectPhasesData } from './types'
 import ProjectPhase from './ProjectPhase'
 import ProjectPhaseCallout from './ProjectPhaseCallout'
 import styles from './ProjectPhases.module.scss'
@@ -21,7 +21,7 @@ import styles from './ProjectPhases.module.scss'
 export class ProjectPhases extends React.Component<IProjectPhasesProps, IProjectPhasesState> {
   /**
    * Constructor
-   * 
+   *
    * @param {IProjectPhasesProps} props Initial props
    */
   constructor(props: IProjectPhasesProps) {
@@ -47,7 +47,9 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
       return (
         <div className={styles.projectPhases}>
           <div className={styles.container}>
-            <MessageBar messageBarType={MessageBarType.error}>{strings.WebPartNotConfiguredMessage}</MessageBar>
+            <MessageBar messageBarType={MessageBarType.error}>
+              {strings.WebPartNotConfiguredMessage}
+            </MessageBar>
           </div>
         </div>
       )
@@ -69,13 +71,14 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
         <UserMessage
           messageBarType={MessageBarType.severeWarning}
           onDismiss={() => this.setState({ hidden: true })}
-          text={strings.WebPartNoAccessMessage} />
+          text={strings.WebPartNoAccessMessage}
+        />
       )
     }
 
     const { phases, currentPhase } = this.state.data
 
-    const visiblePhases = phases.filter(p => p.properties.ShowOnFrontpage !== 'false')
+    const visiblePhases = phases.filter((p) => p.properties.ShowOnFrontpage !== 'false')
 
     return (
       <div className={styles.projectPhases}>
@@ -85,26 +88,29 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
               <ProjectPhase
                 key={idx}
                 phase={phase}
-                isCurrentPhase={currentPhase && (phase.id === currentPhase.id)}
-                onOpenCallout={target => this._onOpenCallout(target, phase)} />
+                isCurrentPhase={currentPhase && phase.id === currentPhase.id}
+                onOpenCallout={(target) => this._onOpenCallout(target, phase)}
+              />
             ))}
           </ul>
         </div>
         {this.state.phaseMouseOver && (
           <ProjectPhaseCallout
             phase={this.state.phaseMouseOver}
-            isCurrentPhase={currentPhase && (this.state.phaseMouseOver.model.id === currentPhase.id)}
+            isCurrentPhase={currentPhase && this.state.phaseMouseOver.model.id === currentPhase.id}
             webUrl={this.props.webUrl}
             isSiteAdmin={this.props.isSiteAdmin}
-            onChangePhase={phase => this.setState({ confirmPhase: phase })}
-            onDismiss={this._onProjectPhaseCalloutDismiss.bind(this)} />
+            onChangePhase={(phase) => this.setState({ confirmPhase: phase })}
+            onDismiss={this._onProjectPhaseCalloutDismiss.bind(this)}
+          />
         )}
         {this.state.confirmPhase && (
           <ChangePhaseDialog
             activePhase={this.state.data.currentPhase}
             newPhase={this.state.confirmPhase}
             onDismiss={() => this.setState({ confirmPhase: null })}
-            onChangePhase={this._onChangePhase.bind(this)} />
+            onChangePhase={this._onChangePhase.bind(this)}
+          />
         )}
       </div>
     )
@@ -112,7 +118,7 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
 
   /**
    * On open callout
-   * 
+   *
    * @param {HTMLSpanElement} target Target
    * @param {Phase} phase Phase
    */
@@ -129,42 +135,70 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
 
   /**
    * Change phase
-   * 
+   *
    * @param {Phase} phase Phase
    */
   private async _onChangePhase(phase: Phase) {
     try {
-      Logger.log({ message: `(ProjectPhases) _onChangePhase: Changing phase to ${phase.name}`, level: LogLevel.Info })
+      Logger.log({
+        message: `(ProjectPhases) _onChangePhase: Changing phase to ${phase.name}`,
+        level: LogLevel.Info
+      })
       this.setState({ isChangingPhase: true })
       await SPDataAdapter.project.updatePhase(phase, this.state.data.phaseTextField)
       await this._modifyDocumentViews(phase.name)
       sessionStorage.clear()
-      this.setState({ data: { ...this.state.data, currentPhase: phase }, confirmPhase: null, isChangingPhase: false })
-      window.setTimeout(() => document.location.href = `${this.props.webUrl}#syncproperties=1`, 3000)
+      this.setState({
+        data: { ...this.state.data, currentPhase: phase },
+        confirmPhase: null,
+        isChangingPhase: false
+      })
+      window.setTimeout(
+        () => (document.location.href = `${this.props.webUrl}#syncproperties=1`),
+        3000
+      )
     } catch (error) {
-      Logger.log({ message: '(ProjectPhases) _onChangePhase: Failed to change phase', level: LogLevel.Warning })
+      Logger.log({
+        message: '(ProjectPhases) _onChangePhase: Failed to change phase',
+        level: LogLevel.Warning
+      })
       this.setState({ confirmPhase: null, isChangingPhase: false })
     }
   }
 
   /**
    * Modify frontpage views
-   * 
+   *
    * @param {string} phaseTermName Phase term name
    */
   private async _modifyDocumentViews(phaseTermName: string) {
     const documentsViews = sp.web.lists.getByTitle(strings.DocumentsListName).views
-    const [documentsFrontpageView] = await documentsViews.select('Id', 'ViewQuery').filter(`Title eq '${this.props.currentPhaseViewName}'`).get<{ Id: string; ViewQuery: string }[]>()
+    const [documentsFrontpageView] = await documentsViews
+      .select('Id', 'ViewQuery')
+      .filter(`Title eq '${this.props.currentPhaseViewName}'`)
+      .get<{ Id: string; ViewQuery: string }[]>()
     if (!documentsFrontpageView) return
-    const viewQueryDom = new DOMParser().parseFromString(`<Query> ${documentsFrontpageView.ViewQuery}</Query> `, 'text/xml')
+    const viewQueryDom = new DOMParser().parseFromString(
+      `<Query> ${documentsFrontpageView.ViewQuery}</Query> `,
+      'text/xml'
+    )
     const orderByDomElement = viewQueryDom.getElementsByTagName('OrderBy')[0]
     const orderBy = orderByDomElement ? orderByDomElement.outerHTML : ''
-    const newViewQuery = [orderBy, `<Where><Eq><FieldRef Name='GtProjectPhase' /><Value Type='Text'>${phaseTermName}</Value></Eq></Where>`].join('')
+    const newViewQuery = [
+      orderBy,
+      `<Where><Eq><FieldRef Name='GtProjectPhase' /><Value Type='Text'>${phaseTermName}</Value></Eq></Where>`
+    ].join('')
     try {
       await documentsViews.getById(documentsFrontpageView.Id).update({ ViewQuery: newViewQuery })
-      Logger.write(`(ProjectPhases) _modifyDocumentViews: Successfully updated ViewQuery for view '${this.props.currentPhaseViewName}' for list '${strings.DocumentsListName}'`, LogLevel.Info)
+      Logger.write(
+        `(ProjectPhases) _modifyDocumentViews: Successfully updated ViewQuery for view '${this.props.currentPhaseViewName}' for list '${strings.DocumentsListName}'`,
+        LogLevel.Info
+      )
     } catch (err) {
-      Logger.write(`(ProjectPhases) _modifyDocumentViews: Failed to update ViewQuery for view '${this.props.currentPhaseViewName}' for list '${strings.DocumentsListName}'`, LogLevel.Error)
+      Logger.write(
+        `(ProjectPhases) _modifyDocumentViews: Failed to update ViewQuery for view '${this.props.currentPhaseViewName}' for list '${strings.DocumentsListName}'`,
+        LogLevel.Error
+      )
     }
   }
 
@@ -175,18 +209,21 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
     try {
       const [phaseFieldCtx, checklistData] = await Promise.all([
         SPDataAdapter.getTermFieldContext(this.props.phaseField),
-        SPDataAdapter.project.getChecklistData(strings.PhaseChecklistName),
+        SPDataAdapter.project.getChecklistData(strings.PhaseChecklistName)
       ])
       const [phases, currentPhaseName] = await Promise.all([
         SPDataAdapter.project.getPhases(phaseFieldCtx.termSetId, checklistData),
-        SPDataAdapter.project.getCurrentPhaseName(phaseFieldCtx.fieldName),
+        SPDataAdapter.project.getCurrentPhaseName(phaseFieldCtx.fieldName)
       ])
-      Logger.log({ message: '(ProjectPhases) _fetchData: Successfully fetch phases', level: LogLevel.Info })
-      const [currentPhase] = phases.filter(p => p.name === currentPhaseName)
+      Logger.log({
+        message: '(ProjectPhases) _fetchData: Successfully fetch phases',
+        level: LogLevel.Info
+      })
+      const [currentPhase] = phases.filter((p) => p.name === currentPhaseName)
       return {
         currentPhase,
         phases,
-        phaseTextField: phaseFieldCtx.phaseTextField,
+        phaseTextField: phaseFieldCtx.phaseTextField
       }
     } catch (error) {
       throw new Error()

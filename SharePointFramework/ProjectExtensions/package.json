@@ -11,7 +11,8 @@
     "deploy": "gulp uploadAppPkg && gulp deploySppkg",
     "packageAndDeploy": "npm run package && npm run deploy",
     "postversion": "gulp versionSync",
-    "lint": "eslint --ext .ts,.tsx ./src --color --fix"
+    "lint": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
+    "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent"
   },
   "dependencies": {
     "@microsoft/decorators": "1.11.0",
@@ -61,6 +62,9 @@
     "@types/underscore": "1.9.2",
     "@typescript-eslint/eslint-plugin": "2.30.0",
     "@typescript-eslint/parser": "2.30.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.1.1",
     "ajv": "~5.2.2",
     "colors": "1.4.0",
     "concurrently": "5.2.0",

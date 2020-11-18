@@ -7,58 +7,58 @@ import { ISpfxJsomContext } from 'spfx-jsom'
 import { IProjectSetupProperties } from '../../extensions/projectSetup/IProjectSetupProperties'
 
 export interface IBaseTaskParams {
-    /**
-     * Web
-     */
-    web: Web;
+  /**
+   * Web
+   */
+  web: Web
 
-    /**
-     * Web absolute URL
-     */
-    webAbsoluteUrl: string;
+  /**
+   * Web absolute URL
+   */
+  webAbsoluteUrl: string
 
-    /**
-     * Template parameters
-     */
-    templateParameters?: { [key: string]: string };
+  /**
+   * Template parameters
+   */
+  templateParameters?: { [key: string]: string }
 
-    /**
-     * Template exclude handlers
-     */
-    templateExcludeHandlers: string[];
+  /**
+   * Template exclude handlers
+   */
+  templateExcludeHandlers: string[]
 
-    /**
-     * Context for the Application Customizer
-     */
-    context: ApplicationCustomizerContext;
+  /**
+   * Context for the Application Customizer
+   */
+  context: ApplicationCustomizerContext
 
-    /**
-     * Properties
-     */
-    properties: IProjectSetupProperties;
+  /**
+   * Properties
+   */
+  properties: IProjectSetupProperties
 
-    /**
-     * SPFx JSOM context
-     */
-    spfxJsomContext?: ISpfxJsomContext;
+  /**
+   * SPFx JSOM context
+   */
+  spfxJsomContext?: ISpfxJsomContext
 
-    /**
-     * Template schema
-     */
-    templateSchema?: Schema;
+  /**
+   * Template schema
+   */
+  templateSchema?: Schema
 
-    /**
-     * Entity service
-     */
-    entityService?: SpEntityPortalService;
+  /**
+   * Entity service
+   */
+  entityService?: SpEntityPortalService
 
-    /**
-     * Portal data service
-     */
-    portal?: PortalDataService;
+  /**
+   * Portal data service
+   */
+  portal?: PortalDataService
 
-    /**
-     * Miscellaneous data
-     */
-    data?: TypedHash<any>;
+  /**
+   * Miscellaneous data
+   */
+  data?: TypedHash<any>
 }

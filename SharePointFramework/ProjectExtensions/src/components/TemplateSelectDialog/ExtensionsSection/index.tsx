@@ -7,37 +7,38 @@ import { IExtensionsSectionProps } from './IExtensionsSectionProps'
 
 // tslint:disable-next-line: naming-convention
 export const ExtensionsSection = (props: IExtensionsSectionProps) => {
-    /**
-     * On item toggle
-     *
-     * @param {ProjectTemplate} extension Extension
-     * @param {boolean} checked Checked
-     */
-    const onChange = (extension: ProjectExtension, checked: boolean): void => {
-        let selectedExtensions = []
-        if (checked) selectedExtensions = [extension, ...props.selectedExtensions]
-        else selectedExtensions = props.selectedExtensions.filter(ext => extension.text !== ext.text)
-        props.onChange(selectedExtensions)
-    }
+  /**
+   * On item toggle
+   *
+   * @param {ProjectTemplate} extension Extension
+   * @param {boolean} checked Checked
+   */
+  const onChange = (extension: ProjectExtension, checked: boolean): void => {
+    let selectedExtensions = []
+    if (checked) selectedExtensions = [extension, ...props.selectedExtensions]
+    else selectedExtensions = props.selectedExtensions.filter((ext) => extension.text !== ext.text)
+    props.onChange(selectedExtensions)
+  }
 
-    const selectedKeys = props.selectedExtensions.map(ext => ext.key)
+  const selectedKeys = props.selectedExtensions.map((ext) => ext.key)
 
-    return (
-        <div className={styles.extensionsSection}>
-            <div className={styles.container}>
-                {props.extensions.map(ext => (
-                    <div key={ext.key} className={styles.item}>
-                        <Toggle
-                            label={ext.text}
-                            defaultChecked={selectedKeys.indexOf(ext.key) !== -1}
-                            inlineLabel={true}
-                            onChange={(_event, checked) => onChange(ext, checked)} />
-                        <div className={styles.subText} hidden={stringIsNullOrEmpty(ext.subText)}>
-                            <span>{ext.subText}</span>
-                        </div>
-                    </div>
-                ))}
+  return (
+    <div className={styles.extensionsSection}>
+      <div className={styles.container}>
+        {props.extensions.map((ext) => (
+          <div key={ext.key} className={styles.item}>
+            <Toggle
+              label={ext.text}
+              defaultChecked={selectedKeys.indexOf(ext.key) !== -1}
+              inlineLabel={true}
+              onChange={(_event, checked) => onChange(ext, checked)}
+            />
+            <div className={styles.subText} hidden={stringIsNullOrEmpty(ext.subText)}>
+              <span>{ext.subText}</span>
             </div>
-        </div>
-    )
+          </div>
+        ))}
+      </div>
+    </div>
+  )
 }

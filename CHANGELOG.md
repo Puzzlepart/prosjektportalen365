@@ -8,6 +8,7 @@ Every change is marked with Pull Request ID.
 ## Added
 
 - Added "default" option for extensions, similar to list content
+- Added published/unpublished indicators for statusreports in dropdown and ribbon #341
 
 ## Fixed
 

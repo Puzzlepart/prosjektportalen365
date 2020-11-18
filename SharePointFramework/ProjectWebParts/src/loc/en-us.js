@@ -75,6 +75,8 @@ define([], function () {
     WebPartNoAccessMessage: 'You do not have access to view this web part. <br/> <br/> You must either have access to the portfolio area or the project must be free from the portfolio area.',
     ProjectsListName: 'Projects',
     NoStatusReportsMessage: 'The status of the project is not yet reported. If you are an owner of the site, you can report status by clicking _New Status Report_ in the menu above. ',
+    PublishedStatusReport: 'Published',
+    NotPublishedStatusReport: 'Not published',
     SyncNowText: 'Sync now',
     PhaseFieldFieldLabel: 'Phase Field',
     SkipSyncToHubLabel: 'Don\'t sync to hub',

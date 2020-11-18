@@ -1,0 +1,3 @@
+src/**/*.d.ts
+lib
+dist

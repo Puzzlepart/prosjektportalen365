@@ -12,86 +12,85 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   /**
    * Page
    */
-  page: 'Frontpage' | 'ProjectStatus' | 'Portfolio';
+  page: 'Frontpage' | 'ProjectStatus' | 'Portfolio'
 
   /**
    * Hide actions for the web part
    */
-  hideActions?: boolean;
+  hideActions?: boolean
 
   /**
    * Header text for status reports
    */
-  statusReportsHeader?: string;
+  statusReportsHeader?: string
 
   /**
    * Number of status reports to show (defaults to 0)
    */
-  statusReportsCount?: number;
+  statusReportsCount?: number
 
   /**
    * On field external changed
    */
-  onFieldExternalChanged?: (fieldName: string, checked: boolean) => void;
+  onFieldExternalChanged?: (fieldName: string, checked: boolean) => void
 
   /**
    * A hash object of fields to show for external users
    */
-  showFieldExternal?: TypedHash<boolean>;
+  showFieldExternal?: TypedHash<boolean>
 
   /**
    * Skip sync to hub
    */
-  skipSyncToHub?: boolean;
+  skipSyncToHub?: boolean
 
   /**
    * Custom actions/button to add
    */
-  customActions?: ActionType[];
+  customActions?: ActionType[]
 }
 
-
-export interface IProjectInformationState extends IBaseWebPartComponentState<IProjectInformationData>  {
+export interface IProjectInformationState
+  extends IBaseWebPartComponentState<IProjectInformationData> {
   /**
    * Properties
    */
-  properties?: ProjectPropertyModel[];
+  properties?: ProjectPropertyModel[]
 
   /**
    * Progress
    */
-  progress?: IProgressDialogProps;
+  progress?: IProgressDialogProps
 
   /**
    * Message to show to the user
    */
-  message?: IUserMessageProps;
+  message?: IUserMessageProps
 
   /**
    * Confirm action props
    */
-  confirmActionProps?: any;
+  confirmActionProps?: any
 }
 
 export interface IProjectInformationUrlHash {
-  syncproperties: string;
-  force: string;
+  syncproperties: string
+  force: string
 }
-
 
 export interface IProjectInformationData extends ProjectDataService.IGetPropertiesData {
   /**
    * Array of status reports
    */
-  statusReports?: StatusReport[];
+  statusReports?: StatusReport[]
 
   /**
    * Column configuration
    */
-  columns?: ProjectColumn[];
+  columns?: ProjectColumn[]
 
   /**
    * Array of fields from the entity
    */
-  fields?: IEntityField[];
+  fields?: IEntityField[]
 }

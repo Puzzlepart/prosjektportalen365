@@ -1,16 +1,16 @@
 export interface IStatusSectionFieldProps {
-    /**
-     * Label for the field
-     */
-    label: string;
+  /**
+   * Label for the field
+   */
+  label: string
 
-    /**
-     * Value for the field
-     */
-    value: string;
+  /**
+   * Value for the field
+   */
+  value: string
 
-    /**
-     * Width for the component
-     */
-    width: number;
+  /**
+   * Width for the component
+   */
+  width: number
 }

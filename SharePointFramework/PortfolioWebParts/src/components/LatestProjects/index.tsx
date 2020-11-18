@@ -22,7 +22,11 @@ export class LatestProjects extends React.Component<ILatestProjectsProps, ILates
 
   public async componentDidMount() {
     try {
-      const projects = await this.props.dataAdapter.fetchProjectSites(15, 'Created', SortDirection.Descending)
+      const projects = await this.props.dataAdapter.fetchProjectSites(
+        15,
+        'Created',
+        SortDirection.Descending
+      )
       this.setState({ projects, isLoading: false })
     } catch (error) {
       this.setState({ projects: [], isLoading: false })
@@ -38,12 +42,14 @@ export class LatestProjects extends React.Component<ILatestProjectsProps, ILates
         <WebPartTitle
           displayMode={DisplayMode.Read}
           title={this.props.title}
-          updateProperty={undefined} />
+          updateProperty={undefined}
+        />
         <div className={styles.container}>
-          {this.state.isLoading
-            ? <Spinner label={this.props.loadingText} type={SpinnerType.large} />
-            : this._renderProjectList()
-          }
+          {this.state.isLoading ? (
+            <Spinner label={this.props.loadingText} type={SpinnerType.large} />
+          ) : (
+            this._renderProjectList()
+          )}
         </div>
       </div>
     )
@@ -72,4 +78,3 @@ export class LatestProjects extends React.Component<ILatestProjectsProps, ILates
 }
 
 export { ILatestProjectsProps }
-
