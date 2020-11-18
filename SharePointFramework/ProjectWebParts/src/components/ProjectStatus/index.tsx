@@ -257,6 +257,10 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       name: formatDate(report.created, true),
       onClick: () => this._onReportChanged(report),
       canCheck: true,
+      iconProps: {
+        iconName: this.state.selectedReport && report.moderationStatus === strings.GtModerationStatus_Choice_Published ? 'BoxCheckmarkSolid' : 'CheckboxFill',
+        style: { color: this.state.selectedReport && report.moderationStatus === strings.GtModerationStatus_Choice_Published ? '#2DA748' : '#D2D2D2' }
+      },
       isChecked: this.state.selectedReport ? report.id === this.state.selectedReport.id : false,
     } as IContextualMenuItem))
     return reportOptions
