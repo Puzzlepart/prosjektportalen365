@@ -28,6 +28,7 @@ define([], function () {
     MoveOn: 'Gå videre',
     NewStatusReportModalHeaderText: 'Ny statusrapport',
     NewStatusReportTitle: 'Ny statusrapport for {0}',
+    UnpublishedStatusReportInfo: 'Det eksisterer upubliserte statusrapporter. Det er dermed ikke mulig å opprette ny statusrapport. Om du er eier på området, kan du publisere eller slette upubliserte rapporter ved å bruke knappene over etter valgt statusrapport.',
     No: 'Nei',
     NoPropertiesMessage: 'Finner ingen informasjon om prosjektet.',
     PageReloadMessage: 'Oppdater siden for å få oppdaterte listevisninger.',

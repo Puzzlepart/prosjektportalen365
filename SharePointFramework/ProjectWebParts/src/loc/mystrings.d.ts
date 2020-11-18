@@ -36,6 +36,7 @@ declare interface IProjectWebPartsStrings {
   MoveOn: string;
   NewStatusReportModalHeaderText: string;
   NewStatusReportTitle: string;
+  UnpublishedStatusReportInfo: string;
   No: string;
   NoPropertiesMessage: string;
   PageReloadMessage: string;
