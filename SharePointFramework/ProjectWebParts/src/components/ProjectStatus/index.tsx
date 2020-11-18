@@ -147,6 +147,16 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       disabled: reportOptions.length === 0,
       subMenuProps: { items: reportOptions },
     })
+    farItems.push({
+      id: getId('StatusIcon'),
+      key: getId('StatusIcon'),
+      name: this.state.selectedReport && selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published ? 'Publisert' : 'Ikke publisert',
+      iconProps: {
+        iconName: this.state.selectedReport && selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published ? 'BoxCheckmarkSolid' : 'CheckboxFill',
+        style: { color: this.state.selectedReport && selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published ? '#2DA748' : '#D2D2D2' }
+      },
+      disabled: true,
+    })
 
     return (
       <CommandBar
