@@ -1,5 +1,10 @@
 import { sp } from '@pnp/sp'
-import { DetailsList, DetailsListLayoutMode, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
+import {
+  DetailsList,
+  DetailsListLayoutMode,
+  IColumn,
+  SelectionMode
+} from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import * as strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
@@ -46,7 +51,12 @@ export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionStat
    */
   private _renderContent() {
     if (this.state.isLoading || !this.state.data) return null
-    if (this.state.error) return <MessageBar messageBarType={MessageBarType.error}>{strings.ListSectionDataErrorMessage}</MessageBar>
+    if (this.state.error)
+      return (
+        <MessageBar messageBarType={MessageBarType.error}>
+          {strings.ListSectionDataErrorMessage}
+        </MessageBar>
+      )
     return (
       <>
         <div className='ms-Grid-col ms-sm12'>
@@ -57,7 +67,8 @@ export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionStat
             columns={this.state.data.columns}
             items={this.state.data.items}
             selectionMode={SelectionMode.none}
-            layoutMode={DetailsListLayoutMode.justified} />
+            layoutMode={DetailsListLayoutMode.justified}
+          />
         </div>
       </>
     )
@@ -73,23 +84,25 @@ export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionStat
     try {
       const [items, fields] = await Promise.all([
         list.getItemsByCAMLQuery({ ViewXml: viewXml }, 'FieldValuesAsText') as Promise<any[]>,
-        list.fields.select('Title', 'InternalName', 'TypeAsString').get<{ Title: string; InternalName: string; TypeAsString: string }[]>(),
+        list.fields
+          .select('Title', 'InternalName', 'TypeAsString')
+          .get<{ Title: string; InternalName: string; TypeAsString: string }[]>()
       ])
       if (items.length === 0) return null
-      const itemValues = items.map(i => i.FieldValuesAsText)
-      const riskElements = itemValues.map(i => new RiskElementModel(i))
+      const itemValues = items.map((i) => i.FieldValuesAsText)
+      const riskElements = itemValues.map((i) => new RiskElementModel(i))
       const columns: IColumn[] = viewFields
-        .filter(vf => fields.filter(fld => fld.InternalName === vf).length === 1)
-        .map(vf => {
-          const [field] = fields.filter(fld => fld.InternalName === vf)
-          return ({
+        .filter((vf) => fields.filter((fld) => fld.InternalName === vf).length === 1)
+        .map((vf) => {
+          const [field] = fields.filter((fld) => fld.InternalName === vf)
+          return {
             key: field.InternalName,
             fieldName: field.InternalName,
             name: field.Title,
             minWidth: 100,
             maxWidth: { Text: 250, Note: 250, Choice: 150, Number: 100 }[field.TypeAsString] || 150,
-            isResizable: true,
-          } as IColumn)
+            isResizable: true
+          } as IColumn
         })
       return { items: itemValues, columns, riskElements }
     } catch (error) {

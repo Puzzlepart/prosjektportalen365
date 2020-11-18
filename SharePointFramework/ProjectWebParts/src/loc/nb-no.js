@@ -76,6 +76,8 @@ define([], function () {
     WebPartNoAccessMessage: 'Du har ikke tilgang til å se denne webdelen.<br/><br/>Du må enten ha tilgang til porteføljeområdet, eller så må prosjektet være fristilt fra porteføljeområdet.',
     ProjectsListName: 'Prosjekter',
     NoStatusReportsMessage: 'Det er ikke rapportert status for prosjektet enda. Om du er eier på området, kan du rapportere status ved å klikke på _Ny statusrapport_ i menyen over.',
+    PublishedStatusReport: 'Publisert',
+    NotPublishedStatusReport: 'Ikke publisert',
     SyncNowText: 'Synkroniser nå',
     PhaseFieldFieldLabel: 'Fasefelt',
     SkipSyncToHubLabel: 'Ikke synkroniser til hub',

@@ -4,100 +4,100 @@ import { IFilterProps } from '../FilterPanel'
 import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage'
 
 export interface IPortfolioOverviewState {
-    /**
-     * Whether the component is loading
-     */
-    isLoading?: boolean;
+  /**
+   * Whether the component is loading
+   */
+  isLoading?: boolean
 
-    /**
-     * Is exporting
-     */
-    isExporting?: boolean;
+  /**
+   * Is exporting
+   */
+  isExporting?: boolean
 
-    /**
-     * Is changing view
-     */
-    isChangingView?: PortfolioOverviewView;
+  /**
+   * Is changing view
+   */
+  isChangingView?: PortfolioOverviewView
 
-    /**
-     * Items
-     */
-    items?: any[];
+  /**
+   * Items
+   */
+  items?: any[]
 
-    /**
-     * @todo describe property
-     */
-    selectedItems?: any[];
+  /**
+   * @todo describe property
+   */
+  selectedItems?: any[]
 
-    /**
-     * Columns
-     */
-    columns?: ProjectColumn[];
+  /**
+   * Columns
+   */
+  columns?: ProjectColumn[]
 
-    /**
-     * Search term
-     */
-    searchTerm?: string;
+  /**
+   * Search term
+   */
+  searchTerm?: string
 
-    /**
-     * Filters
-     */
-    filters?: IFilterProps[];
+  /**
+   * Filters
+   */
+  filters?: IFilterProps[]
 
-    /**
-     * Current view
-     */
-    currentView?: PortfolioOverviewView;
+  /**
+   * Current view
+   */
+  currentView?: PortfolioOverviewView
 
-    /**
-     * Active filters
-     */
-    activeFilters?: { SelectedColumns?: string[]; [key: string]: string[] };
+  /**
+   * Active filters
+   */
+  activeFilters?: { SelectedColumns?: string[]; [key: string]: string[] }
 
-    /**
-     * Error
-     */
-    error?: PortfolioOverviewErrorMessage;
+  /**
+   * Error
+   */
+  error?: PortfolioOverviewErrorMessage
 
-    /**
-     * Show filter panel
-     */
-    showFilterPanel?: boolean;
+  /**
+   * Show filter panel
+   */
+  showFilterPanel?: boolean
 
-    /**
-     * Column to group by
-     */
-    groupBy?: ProjectColumn;
+  /**
+   * Column to group by
+   */
+  groupBy?: ProjectColumn
 
-    /**
-     * Column to sort by
-     */
-    sortBy?: ProjectColumn;
+  /**
+   * Column to sort by
+   */
+  sortBy?: ProjectColumn
 
-    /**
-     * Show project info
-     */
-    showProjectInfo?: any;
+  /**
+   * Show project info
+   */
+  showProjectInfo?: any
 
-    /**
-     * Is compact
-     */
-    isCompact?: boolean;
+  /**
+   * Is compact
+   */
+  isCompact?: boolean
 
-    /**
-     * Props for column header context menu
-     */
-    columnContextMenu?: IContextualMenuProps;
+  /**
+   * Props for column header context menu
+   */
+  columnContextMenu?: IContextualMenuProps
 }
 
 export interface IPortfolioOverviewHashStateState {
-    /**
-     * viewId found in hash (document.location.hash)
-     */
-    viewId?: string;
+  /**
+   * viewId found in hash (document.location.hash)
+   */
+  viewId?: string
 
-    /**
-     * groupBy found in hash (document.location.hash)
-     */
-    groupBy?: string;
+  /**
+   * groupBy found in hash (document.location.hash)
+   */
+  groupBy?: string
 }

@@ -3,7 +3,10 @@ import { Logger, LogLevel } from '@pnp/logging'
 import { getId } from '@uifabric/utilities'
 import { UserMessage } from 'components/UserMessage'
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar'
-import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu'
+import {
+  ContextualMenuItemType,
+  IContextualMenuItem
+} from 'office-ui-fabric-react/lib/ContextualMenu'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
 import * as strings from 'ProjectWebPartsStrings'
@@ -14,22 +17,37 @@ import { PortalDataService } from 'shared/lib/services'
 import { getUrlParam, parseUrlHash, setUrlHash, removeMenuBorder } from 'shared/lib/util'
 import * as formatString from 'string-format'
 import SPDataAdapter from '../../data'
-import { IProjectStatusProps, IProjectStatusState, IProjectStatusHashState, IProjectStatusData } from './types'
+import {
+  IProjectStatusProps,
+  IProjectStatusState,
+  IProjectStatusHashState,
+  IProjectStatusData
+} from './types'
 import styles from './ProjectStatus.module.scss'
-import { IBaseSectionProps, ListSection, ProjectPropertiesSection, RiskSection, StatusSection, SummarySection } from './Sections'
+import {
+  IBaseSectionProps,
+  ListSection,
+  ProjectPropertiesSection,
+  RiskSection,
+  StatusSection,
+  SummarySection
+} from './Sections'
 
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private _portalDataService: PortalDataService
 
   /**
    * Constructor
-   * 
+   *
    * @param {IProjectStatusProps} props Props
    */
   constructor(props: IProjectStatusProps) {
     super(props)
     this.state = { isLoading: true }
-    this._portalDataService = new PortalDataService().configure({ urlOrWeb: props.hubSite.web, siteId: props.siteId })
+    this._portalDataService = new PortalDataService().configure({
+      urlOrWeb: props.hubSite.web,
+      siteId: props.siteId
+    })
   }
 
   public async componentDidMount() {
@@ -40,15 +58,19 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       const selectedReportUrlParam = getUrlParam('selectedReport')
       const sourceUrlParam = getUrlParam('Source')
       if (hashState.selectedReport) {
-        [selectedReport] = data.reports.filter(report => report.id === parseInt(hashState.selectedReport, 10))
+        ;[selectedReport] = data.reports.filter(
+          (report) => report.id === parseInt(hashState.selectedReport, 10)
+        )
       } else if (selectedReportUrlParam) {
-        [selectedReport] = data.reports.filter(report => report.id === parseInt(selectedReportUrlParam, 10))
+        ;[selectedReport] = data.reports.filter(
+          (report) => report.id === parseInt(selectedReportUrlParam, 10)
+        )
       }
       this.setState({
         data,
         selectedReport,
         sourceUrl: decodeURIComponent(sourceUrlParam || ''),
-        isLoading: false,
+        isLoading: false
       })
     } catch (error) {
       this.setState({ error, isLoading: false })
@@ -94,9 +116,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           <div className={`${styles.header} ${styles.column12}`}>
             <div className={styles.title}>{this.props.title}</div>
           </div>
-          <div className={`${styles.sections} ${styles.column12}`}>
-            {this._renderSections()}
-          </div>
+          <div className={`${styles.sections} ${styles.column12}`}>{this._renderSections()}</div>
         </div>
       </div>
     )
@@ -111,8 +131,11 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         key: getId('NewStatusReport'),
         name: strings.NewStatusReportModalHeaderText,
         iconProps: { iconName: 'NewFolder' },
-        disabled: data.reports.filter((report) => report.moderationStatus.indexOf("Publisert")).length !== 0 ? true : false,
-        onClick: this._redirectNewStatusReport.bind(this),
+        disabled:
+          data.reports.filter((report) => report.moderationStatus.indexOf('Publisert')).length !== 0
+            ? true
+            : false,
+        onClick: this._redirectNewStatusReport.bind(this)
       },
       {
         id: getId('EditReport'),
@@ -120,16 +143,22 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         name: strings.EditReportButtonText,
         iconProps: { iconName: 'Edit' },
         href: selectedReport ? selectedReport.editFormUrl : null,
-        disabled: !selectedReport || selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published,
+        disabled:
+          !selectedReport ||
+          selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published
       },
       {
         id: getId('PublishReport'),
         key: getId('PublishReport'),
         name: strings.PublishReportButtonText,
         iconProps: { iconName: 'PublishContent' },
-        disabled: !selectedReport || selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published,
-        onClick: () => { this._publishReport(selectedReport) },
-      },
+        disabled:
+          !selectedReport ||
+          selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published,
+        onClick: () => {
+          this._publishReport(selectedReport)
+        }
+      }
     ]
     const farItems: IContextualMenuItem[] = []
     if (sourceUrl) {
@@ -138,7 +167,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         key: getId('NavigateToSourceUrl'),
         name: strings.NavigateToSourceUrlText,
         iconProps: { iconName: 'NavigateBack' },
-        href: sourceUrl,
+        href: sourceUrl
       })
     }
     farItems.push({
@@ -147,25 +176,52 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       name: selectedReport ? formatDate(selectedReport.created, true) : '',
       itemType: ContextualMenuItemType.Normal,
       disabled: reportOptions.length === 0,
-      subMenuProps: { items: reportOptions },
+      subMenuProps: { items: reportOptions }
+    })
+    farItems.push({
+      id: getId('StatusIcon'),
+      key: getId('StatusIcon'),
+      name:
+        this.state.selectedReport &&
+          selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published
+          ? strings.PublishedStatusReport
+          : strings.NotPublishedStatusReport,
+      iconProps: {
+        iconName:
+          this.state.selectedReport &&
+            selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published
+            ? 'BoxCheckmarkSolid'
+            : 'CheckboxFill',
+        style: {
+          color:
+            this.state.selectedReport &&
+              selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published
+              ? '#2DA748'
+              : '#D2D2D2'
+        }
+      },
+      disabled: true
     })
 
     return (
       <CommandBar
         items={removeMenuBorder<IContextualMenuItem>(items)}
-        farItems={removeMenuBorder<IContextualMenuItem>(farItems)} />
+        farItems={removeMenuBorder<IContextualMenuItem>(farItems)}
+      />
     )
   }
 
   /**
    * Get section base props
-   * 
+   *
    * @param {SectionModel} sec Section model
    */
   private _getSectionBaseProps(sec: SectionModel): IBaseSectionProps {
     const { selectedReport: report, data } = this.state
     const { value, comment } = report.getStatusValue(sec.fieldName)
-    const [columnConfig] = data.columnConfig.filter(c => c.columnFieldName === sec.fieldName && c.value === value)
+    const [columnConfig] = data.columnConfig.filter(
+      (c) => c.columnFieldName === sec.fieldName && c.value === value
+    )
     const baseProps: IBaseSectionProps = {
       headerProps: {
         label: sec.name,
@@ -173,14 +229,14 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         comment,
         iconName: sec.iconName,
         iconSize: 50,
-        iconColor: columnConfig ? columnConfig.color : '#444',
+        iconColor: columnConfig ? columnConfig.color : '#444'
       },
       report,
       model: sec,
       data: this.state.data,
       hubSiteUrl: this.props.hubSite.url,
       siteId: this.props.siteId,
-      webUrl: this.props.webUrl,
+      webUrl: this.props.webUrl
     }
     return baseProps
   }
@@ -192,18 +248,24 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     const { riskMatrixWidth, riskMatrixHeight, riskMatrixCalloutTemplate } = this.props
     const { data, selectedReport } = this.state
 
-    if (!selectedReport) return <UserMessage text={strings.NoStatusReportsMessage} messageBarType={MessageBarType.info} />
+    if (!selectedReport)
+      return (
+        <UserMessage text={strings.NoStatusReportsMessage} messageBarType={MessageBarType.info} />
+      )
     return data.sections
-      .filter(sec => sec.showAsSection || sec.type === SectionType.SummarySection)
-      .map(sec => {
+      .filter((sec) => sec.showAsSection || sec.type === SectionType.SummarySection)
+      .map((sec) => {
         const baseProps = this._getSectionBaseProps(sec)
         switch (sec.type) {
           case SectionType.SummarySection: {
             return (
               <SummarySection
                 {...baseProps}
-                sections={data.sections.filter(s => s.showInStatusSection || s.type === SectionType.SummarySection)}
-                columnConfig={data.columnConfig} />
+                sections={data.sections.filter(
+                  (s) => s.showInStatusSection || s.type === SectionType.SummarySection
+                )}
+                columnConfig={data.columnConfig}
+              />
             )
           }
           case SectionType.StatusSection: {
@@ -215,7 +277,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
                 {...baseProps}
                 fieldValues={{ ...data.properties.fieldValues, ...selectedReport.fieldValues }}
                 fields={[...data.properties.fields, ...data.reportFields]}
-                fieldWidth={this.props.fieldWidth} />
+                fieldWidth={this.props.fieldWidth}
+              />
             )
           }
           case SectionType.RiskSection: {
@@ -225,8 +288,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
                 riskMatrix={{
                   width: riskMatrixWidth,
                   height: riskMatrixHeight,
-                  calloutTemplate: riskMatrixCalloutTemplate,
-                }} />
+                  calloutTemplate: riskMatrixCalloutTemplate
+                }}
+              />
             )
           }
           case SectionType.ListSection: {
@@ -241,7 +305,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
 
   /**
    * On report changed
-   * 
+   *
    * @param {StatusReport} selectedReport Selected report
    */
   private _onReportChanged(selectedReport: StatusReport) {
@@ -250,17 +314,29 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
 
   /**
    * Get report options
-   * 
+   *
    * @param {IProjectStatusData} data Data
    */
   private _getReportOptions(data: IProjectStatusData): IContextualMenuItem[] {
-    const reportOptions: IContextualMenuItem[] = data.reports.map(report => ({
-      key: `${report.id}`,
-      name: formatDate(report.created, true),
-      onClick: () => this._onReportChanged(report),
-      canCheck: true,
-      isChecked: this.state.selectedReport ? report.id === this.state.selectedReport.id : false,
-    } as IContextualMenuItem))
+    const reportOptions: IContextualMenuItem[] = data.reports.map((report) => {
+      const isPublished = report.moderationStatus === strings.GtModerationStatus_Choice_Published
+      const isCurrent = this.state.selectedReport
+        ? report.id === this.state.selectedReport.id
+        : false
+      return {
+        key: `${report.id}`,
+        name: formatDate(report.created, true),
+        onClick: () => this._onReportChanged(report),
+        canCheck: true,
+        iconProps: {
+          iconName: isPublished ? 'BoxCheckmarkSolid' : 'CheckboxFill',
+          style: {
+            color: isPublished ? '#2DA748' : '#D2D2D2'
+          }
+        },
+        isChecked: isCurrent
+      } as IContextualMenuItem
+    })
     return reportOptions
   }
 
@@ -271,10 +347,10 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     const { webTitle, siteId } = this.props
     const { reports, reportFields, properties, reportEditFormUrl } = this.state.data
     const [previousReport] = reports
-    let fieldValues: TypedHash < string | number | boolean > = {}
+    let fieldValues: TypedHash<string | number | boolean> = {}
     if (previousReport) {
       fieldValues = reportFields
-        .filter(field => field.SchemaXml.indexOf('ReadOnly="TRUE"') === -1)
+        .filter((field) => field.SchemaXml.indexOf('ReadOnly="TRUE"') === -1)
         .reduce((obj, field) => {
           const fieldValue = previousReport.values[field.InternalName]
           if (fieldValue) obj[field.InternalName] = fieldValue
@@ -285,18 +361,24 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     fieldValues.GtSiteId = siteId
     fieldValues.ContentTypeId = properties.templateParameters.ProjectStatusContentTypeId
     fieldValues.GtModerationStatus = strings.GtModerationStatus_Choice_Draft
-    Logger.log({ message: '(ProjectStatus) _redirectNewStatusReport: Created new status report', data: { fieldValues }, level: LogLevel.Info })
+    Logger.log({
+      message: '(ProjectStatus) _redirectNewStatusReport: Created new status report',
+      data: { fieldValues },
+      level: LogLevel.Info
+    })
     const newReport = await this._portalDataService.addStatusReport(fieldValues, reportEditFormUrl)
     document.location.href = newReport.editFormUrl
   }
 
   /**
    * Publish report
-   * 
+   *
    * @param {StatusReport} report Report
    */
   private async _publishReport(report: StatusReport) {
-    await this._portalDataService.updateStatusReport(report.id, { GtModerationStatus: strings.GtModerationStatus_Choice_Published })
+    await this._portalDataService.updateStatusReport(report.id, {
+      GtModerationStatus: strings.GtModerationStatus_Choice_Published
+    })
     document.location.reload()
   }
 
@@ -305,13 +387,17 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    */
   private async _fetchData(): Promise<IProjectStatusData> {
     try {
-      Logger.log({ message: '(ProjectStatus) _fetchData: Fetching entity data, fields, column config, sections and reports', level: LogLevel.Info })
+      Logger.log({
+        message:
+          '(ProjectStatus) _fetchData: Fetching entity data, fields, column config, sections and reports',
+        level: LogLevel.Info
+      })
       if (!SPDataAdapter.isConfigured) {
         SPDataAdapter.configure(this.context, {
           siteId: this.props.siteId,
           webUrl: this.props.webUrl,
           hubSiteUrl: this.props.hubSite.url,
-          logLevel: (sessionStorage.DEBUG || DEBUG) ? LogLevel.Info : LogLevel.Warning,
+          logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
         })
       }
       const [
@@ -320,26 +406,30 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         reports,
         sections,
         columnConfig,
-        reportFields,
+        reportFields
       ] = await Promise.all([
         SPDataAdapter.project.getPropertiesData(),
         this._portalDataService.getStatusReportListProps(),
         this._portalDataService.getStatusReports(),
         this._portalDataService.getProjectStatusSections(),
         this._portalDataService.getProjectColumnConfig(),
-        this._portalDataService.getListFields('PROJECT_STATUS', 'Hidden eq false and Group ne \'Hidden\''),
+        this._portalDataService.getListFields(
+          'PROJECT_STATUS',
+          // eslint-disable-next-line quotes
+          "Hidden eq false and Group ne 'Hidden'"
+        )
       ])
       const sortedReports = reports
-        .map(item => item.setDefaultEditFormUrl(reportList.DefaultEditFormUrl))
+        .map((item) => item.setDefaultEditFormUrl(reportList.DefaultEditFormUrl))
         .sort((a, b) => b.created.getTime() - a.created.getTime())
-      const sortedSections = sections.sort((a, b) => a.sortOrder < b.sortOrder ? -1 : 1)
+      const sortedSections = sections.sort((a, b) => (a.sortOrder < b.sortOrder ? -1 : 1))
       return {
         properties,
         reportFields,
         reportEditFormUrl: reportList.DefaultEditFormUrl,
         reports: sortedReports,
         sections: sortedSections,
-        columnConfig,
+        columnConfig
       }
     } catch (error) {
       throw strings.ProjectStatusDataErrorText
@@ -348,4 +438,3 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
 }
 
 export * from './types'
-

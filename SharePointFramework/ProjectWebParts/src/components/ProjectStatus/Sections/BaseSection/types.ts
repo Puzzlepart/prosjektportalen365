@@ -6,42 +6,42 @@ export interface IBaseSectionProps {
   /**
    * Section model
    */
-  model: SectionModel;
+  model: SectionModel
 
   /**
    * Props for section header
    */
-  headerProps: IStatusElementProps;
+  headerProps: IStatusElementProps
 
   /**
    * The selected report
    */
-  report: StatusReport;
+  report: StatusReport
 
   /**
    * Data
    */
-  data?: IProjectStatusData;
+  data?: IProjectStatusData
 
   /**
    * URL for the hub site
    */
-  hubSiteUrl: string;
+  hubSiteUrl: string
 
   /**
    * ID of the site
    */
-  siteId: string;
+  siteId: string
 
   /**
    * URL for the web
    */
-  webUrl: string;
+  webUrl: string
 }
 
 export interface IBaseSectionState {
   /**
    * List items
    */
-  listItems?: any[];
+  listItems?: any[]
 }
