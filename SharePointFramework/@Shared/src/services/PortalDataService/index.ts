@@ -84,6 +84,19 @@ export class PortalDataService {
   }
 
   /**
+   * Update status report
+   * 
+   * @param {number} id Id
+   */
+  public async deleteStatusReport(id: number): Promise<void> {
+    await this._web.lists
+      .getByTitle(this._configuration.listNames.PROJECT_STATUS)
+      .items.getById(id)
+      .delete();
+    console.log(`Deleting report with id ${id}`);
+  }
+
+  /**
    * Get project column configuration
    */
   public async getProjectColumnConfig(): Promise<ProjectColumnConfig[]> {
@@ -206,7 +219,7 @@ export class PortalDataService {
           newField.updateAndPushChanges(true)
         }
         await ExecuteJsomQuery(jsomContext)
-      } catch (error) {}
+      } catch (error) { }
     }
     try {
       Logger.log({
@@ -222,7 +235,7 @@ export class PortalDataService {
         )
       newField.updateAndPushChanges(true)
       await ExecuteJsomQuery(jsomContext)
-    } catch {}
+    } catch { }
     if (ensureList.created && properties) {
       ensureList.list.items.add(properties)
     }

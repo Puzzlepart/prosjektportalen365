@@ -138,6 +138,14 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         onClick: this._redirectNewStatusReport.bind(this)
       },
       {
+        id: getId('DeleteReport'),
+        key: getId('DeleteReport'),
+        name: strings.DeletehReportButtonText,
+        iconProps: { iconName: 'Delete' },
+        disabled: !selectedReport || selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published,
+        onClick: () => { this._deleteReport(selectedReport) },
+      },
+      {
         id: getId('EditReport'),
         key: getId('EditReport'),
         name: strings.EditReportButtonText,
@@ -379,6 +387,17 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     await this._portalDataService.updateStatusReport(report.id, {
       GtModerationStatus: strings.GtModerationStatus_Choice_Published
     })
+    document.location.reload()
+  }
+
+  /**
+   * Delete report
+   * 
+   * @param {StatusReport} report Report
+   */
+  private async _deleteReport(report: StatusReport) {
+    await this._portalDataService.deleteStatusReport(report.id)
+    window.location.hash = ''
     document.location.reload()
   }
 

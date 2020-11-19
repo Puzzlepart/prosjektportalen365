@@ -10,6 +10,7 @@ Every change is marked with Pull Request ID.
 - Added "default" option for extensions, similar to list content #328
 - Added info message if there are unpublished statusreports #340
 - Added published/unpublished indicators for statusreports in dropdown and ribbon #341
+- Added possiblity to delete unpublished statusreports #342
 
 ## Fixed
 

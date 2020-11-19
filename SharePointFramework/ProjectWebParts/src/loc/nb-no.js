@@ -20,6 +20,7 @@ define([], function () {
     EditPropertiesText: 'Rediger egenskaper',
     EditReportButtonText: 'Rediger status',
     PublishReportButtonText: 'Publiser',
+    DeletehReportButtonText: 'Slett',
     EditSiteInformationText: 'Rediger områdeinformasjon',
     ErrorText: 'Det skjedde en feil under lasting av {0}.',
     ListSectionDataErrorMessage: 'Det skjedde en feil under uthenting av data for seksjonen. Er den riktig konfigurert?',
