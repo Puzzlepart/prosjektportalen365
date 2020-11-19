@@ -9,8 +9,9 @@ export class StatusReport {
    * Creates a new instance of StatusReport
    *
    * @param {TypedHash} item SP item
+   * @param {string} _publishedString Published string
    */
-  constructor(private _item: TypedHash<any>) {
+  constructor(private _item: TypedHash<any>,private _publishedString?: string) {
     this.id = _item.Id
     this.created = new Date(_item.Created)
   }
@@ -70,6 +71,10 @@ export class StatusReport {
 
   public get moderationStatus(): string {
     return this._item.FieldValuesAsText.GtModerationStatus
+  }
+
+  public get published(): boolean {
+    return this.moderationStatus === this._publishedString
   }
 
   /**
