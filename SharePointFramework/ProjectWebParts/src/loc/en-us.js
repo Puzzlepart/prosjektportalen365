@@ -20,7 +20,7 @@ define([], function () {
     EditPropertiesText: 'Edit properties',
     EditReportButtonText: 'Edit status',
     PublishReportButtonText: 'Publish',
-    DeletehReportButtonText: 'Slett',
+    DeleteReportButtonText: 'Slett',
     EditSiteInformationText: 'Edit site information',
     ErrorText: 'There was an error loading {0}.',
     ListSectionDataErrorMessage: 'An error occurred while retrieving data for the section. Is it configured correctly? ',

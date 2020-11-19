@@ -140,7 +140,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       {
         id: getId('DeleteReport'),
         key: getId('DeleteReport'),
-        name: strings.DeletehReportButtonText,
+        name: strings.DeleteReportButtonText,
         iconProps: { iconName: 'Delete' },
         disabled: selectedReport.published,
         onClick: () => {
