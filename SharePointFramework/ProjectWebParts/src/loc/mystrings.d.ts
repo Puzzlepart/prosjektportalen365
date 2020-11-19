@@ -28,6 +28,7 @@ declare interface IProjectWebPartsStrings {
   PublishReportButtonText: string;
   PublishedStatusReport: string;
   NotPublishedStatusReport: string;
+  DeleteReportButtonText: string;
   EditSiteInformationText: string;
   ErrorText: string;
   ListSectionDataErrorMessage: string;

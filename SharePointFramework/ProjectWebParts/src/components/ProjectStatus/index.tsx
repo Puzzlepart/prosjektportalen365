@@ -111,8 +111,11 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       <div className={styles.projectStatus}>
         {this._commandBar()}
         <div className={styles.container}>
-          {this.state.data.reports.filter((report) => report.moderationStatus.indexOf("Publisert")).length !== 0 &&
-            <MessageBar messageBarType={MessageBarType.info}>{strings.UnpublishedStatusReportInfo}</MessageBar>}
+          {this.state.data.reports.filter((report) => !report.published).length > 0 && (
+            <MessageBar messageBarType={MessageBarType.info}>
+              {strings.UnpublishedStatusReportInfo}
+            </MessageBar>
+          )}
           <div className={`${styles.header} ${styles.column12}`}>
             <div className={styles.title}>{this.props.title}</div>
           </div>
@@ -131,11 +134,18 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         key: getId('NewStatusReport'),
         name: strings.NewStatusReportModalHeaderText,
         iconProps: { iconName: 'NewFolder' },
-        disabled:
-          data.reports.filter((report) => report.moderationStatus.indexOf('Publisert')).length !== 0
-            ? true
-            : false,
+        disabled: data.reports.filter((report) => !report.published).length !== 0,
         onClick: this._redirectNewStatusReport.bind(this)
+      },
+      {
+        id: getId('DeleteReport'),
+        key: getId('DeleteReport'),
+        name: strings.DeleteReportButtonText,
+        iconProps: { iconName: 'Delete' },
+        disabled: selectedReport.published,
+        onClick: () => {
+          this._deleteReport(selectedReport)
+        }
       },
       {
         id: getId('EditReport'),
@@ -143,18 +153,14 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         name: strings.EditReportButtonText,
         iconProps: { iconName: 'Edit' },
         href: selectedReport ? selectedReport.editFormUrl : null,
-        disabled:
-          !selectedReport ||
-          selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published
+        disabled: selectedReport.published
       },
       {
         id: getId('PublishReport'),
         key: getId('PublishReport'),
         name: strings.PublishReportButtonText,
         iconProps: { iconName: 'PublishContent' },
-        disabled:
-          !selectedReport ||
-          selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published,
+        disabled: selectedReport.published,
         onClick: () => {
           this._publishReport(selectedReport)
         }
@@ -181,23 +187,13 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     farItems.push({
       id: getId('StatusIcon'),
       key: getId('StatusIcon'),
-      name:
-        this.state.selectedReport &&
-          selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published
-          ? strings.PublishedStatusReport
-          : strings.NotPublishedStatusReport,
+      name: selectedReport.published
+        ? strings.PublishedStatusReport
+        : strings.NotPublishedStatusReport,
       iconProps: {
-        iconName:
-          this.state.selectedReport &&
-            selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published
-            ? 'BoxCheckmarkSolid'
-            : 'CheckboxFill',
+        iconName: selectedReport.published ? 'BoxCheckmarkSolid' : 'CheckboxFill',
         style: {
-          color:
-            this.state.selectedReport &&
-              selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published
-              ? '#2DA748'
-              : '#D2D2D2'
+          color: selectedReport.published ? '#2DA748' : '#D2D2D2'
         }
       },
       disabled: true
@@ -217,8 +213,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    * @param {SectionModel} sec Section model
    */
   private _getSectionBaseProps(sec: SectionModel): IBaseSectionProps {
-    const { selectedReport: report, data } = this.state
-    const { value, comment } = report.getStatusValue(sec.fieldName)
+    const { selectedReport, data } = this.state
+    const { value, comment } = selectedReport.getStatusValue(sec.fieldName)
     const [columnConfig] = data.columnConfig.filter(
       (c) => c.columnFieldName === sec.fieldName && c.value === value
     )
@@ -231,7 +227,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         iconSize: 50,
         iconColor: columnConfig ? columnConfig.color : '#444'
       },
-      report,
+      report: selectedReport,
       model: sec,
       data: this.state.data,
       hubSiteUrl: this.props.hubSite.url,
@@ -319,7 +315,6 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    */
   private _getReportOptions(data: IProjectStatusData): IContextualMenuItem[] {
     const reportOptions: IContextualMenuItem[] = data.reports.map((report) => {
-      const isPublished = report.moderationStatus === strings.GtModerationStatus_Choice_Published
       const isCurrent = this.state.selectedReport
         ? report.id === this.state.selectedReport.id
         : false
@@ -329,9 +324,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         onClick: () => this._onReportChanged(report),
         canCheck: true,
         iconProps: {
-          iconName: isPublished ? 'BoxCheckmarkSolid' : 'CheckboxFill',
+          iconName: report.published ? 'BoxCheckmarkSolid' : 'CheckboxFill',
           style: {
-            color: isPublished ? '#2DA748' : '#D2D2D2'
+            color: report.published ? '#2DA748' : '#D2D2D2'
           }
         },
         isChecked: isCurrent
@@ -367,6 +362,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       level: LogLevel.Info
     })
     const newReport = await this._portalDataService.addStatusReport(fieldValues, reportEditFormUrl)
+    window.location.hash = ''
     document.location.href = newReport.editFormUrl
   }
 
@@ -379,6 +375,17 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     await this._portalDataService.updateStatusReport(report.id, {
       GtModerationStatus: strings.GtModerationStatus_Choice_Published
     })
+    document.location.reload()
+  }
+
+  /**
+   * Delete report
+   *
+   * @param {StatusReport} report Report
+   */
+  private async _deleteReport(report: StatusReport) {
+    await this._portalDataService.deleteStatusReport(report.id)
+    window.location.hash = ''
     document.location.reload()
   }
 
@@ -410,7 +417,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       ] = await Promise.all([
         SPDataAdapter.project.getPropertiesData(),
         this._portalDataService.getStatusReportListProps(),
-        this._portalDataService.getStatusReports(),
+        this._portalDataService.getStatusReports({
+          publishedString: strings.GtModerationStatus_Choice_Published
+        }),
         this._portalDataService.getProjectStatusSections(),
         this._portalDataService.getProjectColumnConfig(),
         this._portalDataService.getListFields(
