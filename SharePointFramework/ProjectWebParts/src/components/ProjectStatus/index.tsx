@@ -375,6 +375,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       level: LogLevel.Info
     })
     const newReport = await this._portalDataService.addStatusReport(fieldValues, reportEditFormUrl)
+    window.location.hash = ''
     document.location.href = newReport.editFormUrl
   }
 
