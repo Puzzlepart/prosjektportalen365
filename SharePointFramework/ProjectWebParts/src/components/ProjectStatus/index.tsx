@@ -111,7 +111,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       <div className={styles.projectStatus}>
         {this._commandBar()}
         <div className={styles.container}>
-          {this.state.data.reports.filter((report) => report.moderationStatus.indexOf("Publisert")).length !== 0 &&
+          {this.state.data.reports.filter((report) => report.moderationStatus.indexOf(strings.GtModerationStatus_Choice_Published)).length !== 0 &&
             <MessageBar messageBarType={MessageBarType.info}>{strings.UnpublishedStatusReportInfo}</MessageBar>}
           <div className={`${styles.header} ${styles.column12}`}>
             <div className={styles.title}>{this.props.title}</div>
@@ -125,16 +125,14 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   private _commandBar() {
     const { data, selectedReport, sourceUrl } = this.state
     const reportOptions = this._getReportOptions(data)
+    const isPublished = selectedReport && selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published
     const items: IContextualMenuItem[] = [
       {
         id: getId('NewStatusReport'),
         key: getId('NewStatusReport'),
         name: strings.NewStatusReportModalHeaderText,
         iconProps: { iconName: 'NewFolder' },
-        disabled:
-          data.reports.filter((report) => report.moderationStatus.indexOf('Publisert')).length !== 0
-            ? true
-            : false,
+        disabled: data.reports.filter((report) => report.moderationStatus !== strings.GtModerationStatus_Choice_Published).length !== 0,
         onClick: this._redirectNewStatusReport.bind(this)
       },
       {
@@ -142,8 +140,10 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         key: getId('DeleteReport'),
         name: strings.DeletehReportButtonText,
         iconProps: { iconName: 'Delete' },
-        disabled: !selectedReport || selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published,
-        onClick: () => { this._deleteReport(selectedReport) },
+        disabled: !selectedReport || isPublished,
+        onClick: () => {
+          this._deleteReport(selectedReport)
+        },
       },
       {
         id: getId('EditReport'),
@@ -151,18 +151,14 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         name: strings.EditReportButtonText,
         iconProps: { iconName: 'Edit' },
         href: selectedReport ? selectedReport.editFormUrl : null,
-        disabled:
-          !selectedReport ||
-          selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published
+        disabled: isPublished
       },
       {
         id: getId('PublishReport'),
         key: getId('PublishReport'),
         name: strings.PublishReportButtonText,
         iconProps: { iconName: 'PublishContent' },
-        disabled:
-          !selectedReport ||
-          selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published,
+        disabled: isPublished,
         onClick: () => {
           this._publishReport(selectedReport)
         }
@@ -189,23 +185,11 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     farItems.push({
       id: getId('StatusIcon'),
       key: getId('StatusIcon'),
-      name:
-        this.state.selectedReport &&
-          selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published
-          ? strings.PublishedStatusReport
-          : strings.NotPublishedStatusReport,
+      name: isPublished ? strings.PublishedStatusReport : strings.NotPublishedStatusReport,
       iconProps: {
-        iconName:
-          this.state.selectedReport &&
-            selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published
-            ? 'BoxCheckmarkSolid'
-            : 'CheckboxFill',
+        iconName: isPublished ? 'BoxCheckmarkSolid' : 'CheckboxFill',
         style: {
-          color:
-            this.state.selectedReport &&
-              selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published
-              ? '#2DA748'
-              : '#D2D2D2'
+          color: isPublished ? '#2DA748' : '#D2D2D2'
         }
       },
       disabled: true
