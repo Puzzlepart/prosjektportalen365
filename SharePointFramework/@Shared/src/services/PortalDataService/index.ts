@@ -22,6 +22,8 @@ import {
   PortalDataServiceList
 } from './IPortalDataServiceConfiguration'
 
+export type GetStatusReportsOptions = { filter?: string; top?: number; select?: string[]; publishedString?: string }
+
 export class PortalDataService {
   private _configuration: IPortalDataServiceConfiguration
   private _web: Web
@@ -218,7 +220,7 @@ export class PortalDataService {
           newField.updateAndPushChanges(true)
         }
         await ExecuteJsomQuery(jsomContext)
-      } catch (error) {}
+      } catch (error) { }
     }
     try {
       Logger.log({
@@ -234,7 +236,7 @@ export class PortalDataService {
         )
       newField.updateAndPushChanges(true)
       await ExecuteJsomQuery(jsomContext)
-    } catch {}
+    } catch { }
     if (ensureList.created && properties) {
       ensureList.list.items.add(properties)
     }
@@ -335,28 +337,21 @@ export class PortalDataService {
   /**
    * Get status reports
    *
-   * @param {string} filter Filter
-   * @param {number} top Number of reports to retrieve
-   * @param {string[]} select Fields to retrieve
-   * @param {string[]} expand Expand fields
+   * @param {GetStatusReportsOptions} options Options
    */
-  public async getStatusReports(
-    filter: string = '',
-    top?: number,
-    select?: string[],
-    expand: string[] = ['FieldValuesAsText']
-  ): Promise<StatusReport[]> {
+  public async getStatusReports({ filter = '', top, select, publishedString }: GetStatusReportsOptions): Promise<StatusReport[]> {
     if (!this._configuration.siteId) throw 'Property {siteId} missing in configuration'
     if (stringIsNullOrEmpty(filter)) filter = `GtSiteId eq '${this._configuration.siteId}'`
     try {
       let items = this._web.lists
         .getByTitle(this._configuration.listNames.PROJECT_STATUS)
-        .items.filter(filter)
-        .expand(...expand)
+        .items
+        .filter(filter)
+        .expand('FieldValuesAsText')
         .orderBy('Id', false)
       if (top) items = items.top(top)
       if (select) items = items.select(...select)
-      return (await items.get()).map((i) => new StatusReport(i))
+      return (await items.get()).map((i) => new StatusReport(i, publishedString))
     } catch (error) {
       throw error
     }

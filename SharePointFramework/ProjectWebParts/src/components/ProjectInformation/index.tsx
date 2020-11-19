@@ -281,10 +281,9 @@ export class ProjectInformation extends BaseWebPartComponent<
       }
 
       if (this.props.statusReportsCount > 0) {
-        data.statusReports = await this._portalDataService.getStatusReports(
-          undefined,
-          this.props.statusReportsCount
-        )
+        data.statusReports = await this._portalDataService.getStatusReports({
+          top: this.props.statusReportsCount
+        })
       }
 
       const properties = this._transformProperties(data.fieldValuesText, data)
