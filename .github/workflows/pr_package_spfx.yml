@@ -33,7 +33,7 @@ jobs:
       - name: Install npm packages
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          npm package
+          npm run package
 
       - name: Lint
         run: |
