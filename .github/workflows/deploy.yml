@@ -7,10 +7,6 @@ on:
 # Variables that are available for all the jobs in the workflow
 env:
   SPPKG_FILE_NAME: 'spfx-read-write-operations.sppkg'
-  DEPLOYMENT_SCRIPT: 'DeployAppToSite.ps1'
-  SITE_URL: 'https://bhavyamsdnlego.sharepoint.com/sites/TestExtensionGroupSite2/'
-  APP_NAME: 'spfx-read-write-operations4'
-  SEND_MAIL: 'true'
   
 jobs:
    deploy:
@@ -25,6 +21,6 @@ jobs:
       with:
         node-version: 10.x
       
-    - name: Run build release script Install/Build-Release.ps1
-      run: Install/Build-Release.ps1 -Silent -CI
+    - name: Run build release script Install/Build-Release.ps1 in CI mode
+      run: Install/Build-Release.ps1 -CI
       shell: powershell
