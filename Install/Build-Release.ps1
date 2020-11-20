@@ -65,7 +65,7 @@ Set-Location "$PSScriptRoot\..\SharePointFramework\@Shared"
 
 # https://github.com/SharePoint/sp-dev-docs/issues/2916
 if (-not $SkipBuildSharePointFramework.IsPresent) {
-    npm install --no-package-lock --no-package-lock --no-progress --silent --no-audit
+    npm install --no-package-lock --no-package-lock --no-progress --silent --no-audit --no-fund
     npm run build   
 }
 Write-Host "DONE" -ForegroundColor Green
@@ -76,7 +76,7 @@ $Solutions | ForEach-Object {
     Write-Host "[INFO] Packaging SPFx solution [$_] [v$($PackageSolutionJson.solution.version)]...  " -NoNewline
     # https://github.com/SharePoint/sp-dev-docs/issues/2916
     if (-not $SkipBuildSharePointFramework.IsPresent) {       
-        npm install --no-package-lock --no-package-lock --no-progress --silent --no-audit
+        npm install --no-package-lock --no-package-lock --no-progress --silent --no-audit --no-fund
         npm run package
     }
     Write-Host "DONE" -ForegroundColor Green
@@ -94,7 +94,7 @@ Write-Host "DONE" -ForegroundColor Green
 Write-Host "[INFO] Building PnP content templates...  " -NoNewline
 Set-Location "$PSScriptRoot/../Templates"
 
-npm install --no-package-lock --no-package-lock --no-progress --silent --no-audit
+npm install --no-package-lock --no-package-lock --no-progress --silent --no-audit --no-fund
 npm run generateJsonTemplates
 
 Get-ChildItem "./Content" -Directory -Filter "*no-NB*" | ForEach-Object {
