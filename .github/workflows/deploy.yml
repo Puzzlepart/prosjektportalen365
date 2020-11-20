@@ -20,6 +20,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
       
+    - name: Setup Node.js 10.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.x
+      
     - name: Run build release script Install/Build-Release.ps1
       run: Install/Build-Release.ps1 -silent
       shell: powershell
