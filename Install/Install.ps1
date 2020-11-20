@@ -1,4 +1,4 @@
-﻿Param(
+Param(
     [Parameter(Mandatory = $true, HelpMessage = "N/A")]
     [string]$Url,
     [Parameter(Mandatory = $false, HelpMessage = "N/A")]
@@ -33,7 +33,9 @@
     [string]$TenantAppCatalogUrl,
     [Parameter(Mandatory = $false, HelpMessage = "Language")]
     [ValidateSet('Norwegian')]
-    [string]$Language = "Norwegian"
+    [string]$Language = "Norwegian",
+    [Parameter(Mandatory = $false, HelpMessage = "CI")]
+    [string]$CI
 )
 
 #region Handling installation language
@@ -68,7 +70,14 @@ function Connect-SharePoint {
     )
 
     Try {
-        if ($UseWebLogin.IsPresent) {
+        if($null -ne $CI) {
+            $Cred = ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($CI))).Split(".")
+            [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("blahblah"))
+            $Password = convertto-securestring -String $Cred[1] -AsPlainText -Force
+            $Credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $Cred[0], $Password
+            Connect-PnPOnline -Url $Url -Credentials $Credentials -ErrorAction Stop
+        }
+        elseif ($UseWebLogin.IsPresent) {
             Connect-PnPOnline -Url $Url -UseWebLogin -ErrorAction Stop
         }
         elseif ($null -ne $PSCredential) {
