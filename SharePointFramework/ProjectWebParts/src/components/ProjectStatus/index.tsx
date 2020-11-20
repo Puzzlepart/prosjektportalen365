@@ -32,8 +32,8 @@ import {
   StatusSection,
   SummarySection
 } from './Sections'
-import domtoimage from 'dom-to-image';
-import * as moment from 'moment';
+import domtoimage from 'dom-to-image'
+import * as moment from 'moment'
 
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private _portalDataService: PortalDataService
@@ -110,7 +110,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     }
 
     return (
-      <div className={styles.projectStatus} >
+      <div className={styles.projectStatus}>
         {this._commandBar()}
         <div className={styles.container}>
           {this.state.data.reports.filter((report) => !report.published).length > 0 && (
@@ -164,9 +164,14 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         key: getId('PublishReport'),
         name: strings.PublishReportButtonText,
         iconProps: { iconName: 'PublishContent' },
-        disabled: (!selectedReport || selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published),
-        onClick: () => { this._publishReport(selectedReport); this.setState({isPublishing: true}) },
-      },
+        disabled:
+          !selectedReport ||
+          selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published,
+        onClick: () => {
+          this._publishReport(selectedReport)
+          this.setState({ isPublishing: true })
+        }
+      }
     ]
     const farItems: IContextualMenuItem[] = []
     if (sourceUrl) {
@@ -182,9 +187,11 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       id: getId('GetSnapshot'),
       key: getId('GetSnapShot'),
       name: strings.GetSnapshotButtonText,
-      iconProps: { iconName: 'Photo2',  },
+      iconProps: { iconName: 'Photo2' },
       disabled: !selectedReport || !selectedReport.values.Attachments,
-      onClick: () => { window.open(selectedReport.values.AttachmentFiles[0].ServerRelativeUrl) },
+      onClick: () => {
+        window.open(selectedReport.values.AttachmentFiles[0].ServerRelativeUrl)
+      }
     })
     farItems.push({
       id: getId('ReportDropdown'),
@@ -192,8 +199,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       name: selectedReport ? formatDate(selectedReport.created, true) : '',
       itemType: ContextualMenuItemType.Normal,
       disabled: reportOptions.length === 0,
-      iconProps: {iconName : 'FullHistory'},
-      subMenuProps: { items: reportOptions },
+      iconProps: { iconName: 'FullHistory' },
+      subMenuProps: { items: reportOptions }
     })
     farItems.push({
       id: getId('StatusIcon'),
@@ -378,11 +385,11 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   }
 
   /**
-   *  Creates png snapshot 
+   *  Creates png snapshot
    *  @param title: Report Title
    */
 
-   private async _captureReport(title: string | number | boolean) {
+  private async _captureReport(title: string | number | boolean) {
     const statusReportHtml = document.getElementById('pp-statussection')
     const date = moment(Date()).format('YYYY-MM-DD HH:mm')
     const dateStamp = document.createElement('p')
@@ -394,9 +401,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     const base64Png = await domtoimage.toBlob(statusReportHtml)
     const fileName = `${(title + '_' + date).toString().replace(/\/|\\| |\:/g, '-')}.png`
 
-    return {fileName: fileName, content: base64Png}
-   }
-
+    return { fileName: fileName, content: base64Png }
+  }
 
   /**
    * Publish report
@@ -405,14 +411,23 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    */
   private async _publishReport(report: StatusReport) {
     if (!this.state.isPublishing) {
-    try {
-      const attachment = await this._captureReport(report.values.Title)
-      await this._portalDataService.updateStatusReport(report.id, { GtModerationStatus: strings.GtModerationStatus_Choice_Published}, attachment)
-    } catch (error) {
-      Logger.log({ message: '(ProjectStatus) _publishReport: Failed to add attachment', level: LogLevel.Info })
-      await this._portalDataService.updateStatusReport(report.id, { GtModerationStatus: strings.GtModerationStatus_Choice_Published})
-    }
-    document.location.reload()
+      try {
+        const attachment = await this._captureReport(report.values.Title)
+        await this._portalDataService.updateStatusReport(
+          report.id,
+          { GtModerationStatus: strings.GtModerationStatus_Choice_Published },
+          attachment
+        )
+      } catch (error) {
+        Logger.log({
+          message: '(ProjectStatus) _publishReport: Failed to add attachment',
+          level: LogLevel.Info
+        })
+        await this._portalDataService.updateStatusReport(report.id, {
+          GtModerationStatus: strings.GtModerationStatus_Choice_Published
+        })
+      }
+      document.location.reload()
     }
   }
 
