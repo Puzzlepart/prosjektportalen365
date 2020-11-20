@@ -18,8 +18,5 @@
         "Prince 2"
     ],
     "author": "olemp@puzzlepart.com",
-    "license": "MIT",
-    "devDependencies": {
-        "rimraf": "^3.0.0"
-    }
+    "license": "MIT"
 }

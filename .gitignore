@@ -17,3 +17,4 @@ Templates/*.txt
 Templates/Resources.json
 .DS_Store
 SharePointFramework/ProjectWebParts/config/config.backup.json
+**/package-lock.json
