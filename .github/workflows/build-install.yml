@@ -37,7 +37,7 @@ jobs:
       with:
         name: release-package
     - name: Install to ${{ env.TARGET_URL }}
-      run: release-package/Install.ps1 -Url ${{ env.TARGET_URL }} -CI ${{ secrets.CI_CREDENTIALS }}
+      run: release-package/Install.ps1 -Url ${{ env.TARGET_URL }} -Upgrade -CI ${{ secrets.CI_CREDENTIALS }}
       shell: powershell
       
     - uses: actions/upload-artifact@v1
