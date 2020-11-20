@@ -20,7 +20,7 @@ $PNP_TEMPLATES_BASEPATH         = "$ROOT_PATH/Templates"
 $SITE_SCRIPTS_BASEPATH          = "$ROOT_PATH/SiteScripts/Src"
 $PNP_BUNDLE_PATH                = "$PSScriptRoot/SharePointPnPPowerShellOnline"
 $GIT_HASH                       = git log --pretty=format:'%h' -n 1
-$RELEASE_NAME                   = $($PACKAGE_FILE.name)-$($PACKAGE_FILE.version).$($GIT_HASH)
+$RELEASE_NAME                   = "$($PACKAGE_FILE.name)-$($PACKAGE_FILE.version).$($GIT_HASH)"
 $RELEASE_PATH                   = "$ROOT_PATH/release/$($RELEASE_NAME)"
 #endregion
 
