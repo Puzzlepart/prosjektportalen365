@@ -3,7 +3,7 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "Skip building of SharePoint Framework solutions")]
     [switch]$SkipBuildSharePointFramework,
     [Parameter(Mandatory = $false, HelpMessage = "Clean node_modules for all SharePoint Framework solutions")]
-    [switch]$CleanNodeModules,
+    [switch]$Force,
     [Parameter(Mandatory = $false)]
     [string[]]$Solutions = @("ProjectWebParts", "PortfolioWebParts", "ProjectExtensions"),
     [Parameter(Mandatory = $false, HelpMessage = "CI mode. Installs SharePointPnPPowerShellOnline.")]
@@ -25,8 +25,6 @@ $RELEASE_NAME                   = "$($PACKAGE_FILE.name)-$($PACKAGE_FILE.version
 $RELEASE_PATH                   = "$ROOT_PATH/release/$($RELEASE_NAME)"
 #endregion
 
-
-
 if ($CI.IsPresent) {
     Write-Host "[Running in CI mode. Installing module SharePointPnPPowerShellOnline.]" -ForegroundColor Yellow
     Install-Module -Name SharePointPnPPowerShellOnline -Force -Scope CurrentUser
@@ -41,10 +39,10 @@ if ($CI.IsPresent) {
 
 Write-Host "[INFO] Creating release folder $RELEASE_PATH...  " -NoNewline
 mkdir $RELEASE_PATH >$null 2>&1
-$RELEASE_PATH_TEMPLATES = (mkdir "$RELEASE_PATH/Templates").FullName
-$RELEASE_PATH_SITESCRIPTS = (mkdir "$RELEASE_PATH/SiteScripts").FullName
-$RELEASE_PATH_SCRIPTS = (mkdir "$RELEASE_PATH/Scripts").FullName
-$RELEASE_PATH_APPS = (mkdir "$RELEASE_PATH/Apps").FullName
+$RELEASE_PATH_TEMPLATES     = (mkdir "$RELEASE_PATH/Templates").FullName
+$RELEASE_PATH_SITESCRIPTS   = (mkdir "$RELEASE_PATH/SiteScripts").FullName
+$RELEASE_PATH_SCRIPTS       = (mkdir "$RELEASE_PATH/Scripts").FullName
+$RELEASE_PATH_APPS          = (mkdir "$RELEASE_PATH/Apps").FullName
 Write-Host "DONE" -ForegroundColor Green
 
 #region Copying source files
@@ -62,9 +60,8 @@ Write-Host "DONE" -ForegroundColor Green
 (Get-Content "$RELEASE_PATH/Install.ps1") -Replace 'VERSION_PLACEHOLDER', $PACKAGE_FILE.version | Set-Content "$RELEASE_PATH/Install.ps1"
 #endregion
 
-
 #region Clean node_modules for all SharePoint Framework solutions
-if ($CleanNodeModules.IsPresent) {
+if ($Force.IsPresent) {
     $Solutions | ForEach-Object {
         Write-Host "[INFO] Clearing node_modules for SPFx solution [$_]...  " -NoNewline
         rimraf "$SHAREPOINT_FRAMEWORK_BASEPATH\$_\node_modules\"
