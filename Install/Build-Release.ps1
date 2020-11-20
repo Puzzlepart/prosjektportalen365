@@ -11,7 +11,7 @@ Param(
 
 Write-Host "[Building release v$($PackageJson.version)]" -ForegroundColor Cyan
 
-if($CI.IsPresent) {
+if ($CI.IsPresent) {
     Write-Host "[Running in CI mode. Installing module SharePointPnPPowerShellOnline.]" -ForegroundColor Yellow
     Install-Module -Name SharePointPnPPowerShellOnline -Force -Scope CurrentUser
 }
@@ -24,7 +24,7 @@ $PackageJson = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Js
 $GitHash = git log --pretty=format:'%h' -n 1
 $ReleasePath = "$PSScriptRoot/../release/$($PackageJson.name)-$($PackageJson.version).$($GitHash)"
 
-if($CI.IsPresent) {
+if ($CI.IsPresent) {
     $ReleasePath = "$PSScriptRoot/../release"
 }
 
@@ -83,11 +83,7 @@ $Solutions | ForEach-Object {
         npm install --no-package-lock --no-package-lock --no-progress --silent --no-audit --no-fund
         npm run package
     }
-    try {
-        Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$ReleasePath/Apps/$_")) } | Copy-Item -Destination "$ReleasePath/Apps" -Force
-    } catch {
-
-    }
+    Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse -ErrorAction SilentlyContinue | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$ReleasePath/Apps/$_")) } | Copy-Item -Destination "$ReleasePath/Apps" -Force
     Write-Host "DONE" -ForegroundColor Green
 }
 #endregion
@@ -118,7 +114,7 @@ Write-Host "DONE" -ForegroundColor Green
 
 $sw.Stop()
 
-if(-not $CI.IsPresent) {
+if (-not $CI.IsPresent) {
     Add-Type -Assembly "System.IO.Compression.FileSystem"
     [IO.Compression.ZipFile]::CreateFromDirectory($ReleasePath, "$($ReleasePath).zip")  
     Write-Host "Done building release [v$($PackageJson.version)] in [$($sw.Elapsed)]" -ForegroundColor Cyan
