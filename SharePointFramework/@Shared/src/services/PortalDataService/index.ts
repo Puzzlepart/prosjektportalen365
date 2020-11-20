@@ -22,7 +22,7 @@ import {
   PortalDataServiceList
 } from './IPortalDataServiceConfiguration'
 
-export type GetStatusReportsOptions = { filter?: string; top?: number; select?: string[]; publishedString?: string, expand?: string[] }
+export type GetStatusReportsOptions = { filter?: string; top?: number; select?: string[]; publishedString?: string }
 
 export class PortalDataService {
   private _configuration: IPortalDataServiceConfiguration
@@ -343,7 +343,7 @@ export class PortalDataService {
    *
    * @param {GetStatusReportsOptions} options Options
    */
-  public async getStatusReports({ filter = '', top, select, publishedString, expand = ['FieldValuesAsText', 'AttachmentFiles'] }: GetStatusReportsOptions): Promise<StatusReport[]> {
+  public async getStatusReports({ filter = '', top, select, publishedString }: GetStatusReportsOptions): Promise<StatusReport[]> {
     if (!this._configuration.siteId) throw 'Property {siteId} missing in configuration'
     if (stringIsNullOrEmpty(filter)) filter = `GtSiteId eq '${this._configuration.siteId}'`
     try {
@@ -351,7 +351,7 @@ export class PortalDataService {
         .getByTitle(this._configuration.listNames.PROJECT_STATUS)
         .items
         .filter(filter)
-        .expand(...expand)
+        .expand('FieldValuesAsText', 'AttachmentFiles')
         .orderBy('Id', false)
       if (top) items = items.top(top)
       if (select) items = items.select(...select)
