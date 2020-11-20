@@ -12,13 +12,14 @@ Param(
 $PACKAGE_FILE = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Json
 
 #region Paths
-$SHAREPOINT_FRAMEWORK_BASEPATH  = "$PSScriptRoot\..\SharePointFramework"
-$PNP_TEMPLATES_BASEPATH         = "$PSScriptRoot\..\SharePointFramework"
-$SITE_SCRIPTS_BASEPATH          = "$PSScriptRoot/../SiteScripts/Src"
+$ROOT_PATH                      = "$PSScriptRoot/../"
+$SHAREPOINT_FRAMEWORK_BASEPATH  = "$ROOT_PATH/SharePointFramework"
+$PNP_TEMPLATES_BASEPATH         = "$ROOT_PATH/Templates"
+$SITE_SCRIPTS_BASEPATH          = "$ROOT_PATH/SiteScripts/Src"
 $PNP_BUNDLE_PATH                = "$PSScriptRoot/SharePointPnPPowerShellOnline"
 $GIT_HASH                       = git log --pretty=format:'%h' -n 1
 $RELEASE_NAME                   = $($PACKAGE_FILE.name)-$($PACKAGE_FILE.version).$($GIT_HASH)
-$RELEASE_PATH                   = "$PSScriptRoot/../release/$($RELEASE_NAME)"
+$RELEASE_PATH                   = "$ROOT_PATH/release/$($RELEASE_NAME)"
 #endregion
 
 
