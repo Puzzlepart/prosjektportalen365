@@ -5,8 +5,6 @@ Param(
     [switch]$CleanNodeModules,
     [Parameter(Mandatory = $false)]
     [string[]]$Solutions = @("ProjectWebParts", "PortfolioWebParts", "ProjectExtensions"),
-    [Parameter(Mandatory = $false)]
-    [switch]$Silent,
     [Parameter(Mandatory = $false, HelpMessage = "CI mode. Installs SharePointPnPPowerShellOnline.")]
     [switch]$CI
 )   
@@ -34,11 +32,6 @@ mkdir "$ReleasePath/Apps" >$null 2>&1
 #endregion
 
 Write-Host "[Building release v$($PackageJson.version)]" -ForegroundColor Cyan
-
-
-if ($Silent.IsPresent) {
-    Write-Host "[Running in silent mode. All output from npm will be surpressed.]" -ForegroundColor Yellow
-}
 
 #region Copying source files
 Write-Host "[INFO] Copying Install.ps1, PostInstall.ps1 and site script source files...  " -NoNewline
@@ -72,14 +65,8 @@ Set-Location "$PSScriptRoot\..\SharePointFramework\@Shared"
 
 # https://github.com/SharePoint/sp-dev-docs/issues/2916
 if (-not $SkipBuildSharePointFramework.IsPresent) {
-    if ($Silent.IsPresent) {
-        npm install --no-package-lock --no-progress --silent --no-audit >$null 2>&1
-        npm run build >$null 2>&1
-    }
-    else {
-        npm install --no-package-lock
-        npm run build   
-    }
+    npm install --no-package-lock
+    npm run build   
 }
 Write-Host "DONE" -ForegroundColor Green
 
@@ -88,15 +75,9 @@ $Solutions | ForEach-Object {
     $PackageSolutionJson = Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json
     Write-Host "[INFO] Packaging SPFx solution [$_] [v$($PackageSolutionJson.solution.version)]...  " -NoNewline
     # https://github.com/SharePoint/sp-dev-docs/issues/2916
-    if (-not $SkipBuildSharePointFramework.IsPresent) {
-        if ($Silent.IsPresent) {
-            npm install --no-package-lock --no-progress --silent --no-audit >$null 2>&1
-            npm run package >$null 2>&1
-        }
-        else {
-            npm install --no-package-lock
-            npm run package 
-        }
+    if (-not $SkipBuildSharePointFramework.IsPresent) {       
+        npm install --no-package-lock
+        npm run package
     }
     Write-Host "DONE" -ForegroundColor Green
     Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$ReleasePath/Apps/$_")) } | Copy-Item -Destination "$ReleasePath/Apps" -Force
@@ -112,14 +93,10 @@ Write-Host "DONE" -ForegroundColor Green
 
 Write-Host "[INFO] Building PnP content templates...  " -NoNewline
 Set-Location "$PSScriptRoot/../Templates"
-if ($Silent.IsPresent) {
-    npm install --no-package-lock --no-progress --silent --no-audit >$null 2>&1
-    npm run generateJsonTemplates >$null 2>&1
-}
-else {
-    npm install --no-package-lock
-    npm run generateJsonTemplates
-}
+
+npm install --no-package-lock --no-package-lock --no-progress --silent --no-audit
+npm run generateJsonTemplates
+
 Get-ChildItem "./Content" -Directory -Filter "*no-NB*" | ForEach-Object {
     Convert-PnPFolderToProvisioningTemplate -Out "$ReleasePath/Templates/$($_.BaseName).pnp" -Folder $_.FullName -Force
 }
