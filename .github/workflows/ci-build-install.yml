@@ -19,6 +19,46 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 10.x
+
+    - name: Cache node modules (@Shared)
+      uses: actions/cache@v1
+      with:
+        path: SharePointFramework/@Shared/node_modules
+        key: ${{ runner.OS }}-shared-${{ hashFiles('**/package.json') }}
+        restore-keys: |
+          ${{ runner.OS }}-shared-${{ env.cache-name }}-
+          ${{ runner.OS }}-shared-
+          ${{ runner.OS }}-
+
+    - name: Cache node modules (PortfolioWebParts)
+      uses: actions/cache@v1
+      with:
+        path: SharePointFramework/PortfolioWebParts/node_modules
+        key: ${{ runner.OS }}-portfoliowebparts-${{ hashFiles('**/package.json') }}
+        restore-keys: |
+          ${{ runner.OS }}-portfoliowebparts-${{ env.cache-name }}-
+          ${{ runner.OS }}-portfoliowebparts-
+          ${{ runner.OS }}-
+
+    - name: Cache node modules (ProjectExtensions)
+      uses: actions/cache@v1
+      with:
+        path: SharePointFramework/ProjectExtensions/node_modules
+        key: ${{ runner.OS }}-projectextensions-${{ hashFiles('**/package.json') }}
+        restore-keys: |
+          ${{ runner.OS }}-projectextensions-${{ env.cache-name }}-
+          ${{ runner.OS }}-projectextensions-
+          ${{ runner.OS }}-
+
+    - name: Cache node modules (ProjectWebParts)
+      uses: actions/cache@v1
+      with:
+        path: SharePointFramework/ProjectWebParts/node_modules
+        key: ${{ runner.OS }}-projectwebparts-${{ hashFiles('**/package.json') }}
+        restore-keys: |
+          ${{ runner.OS }}-projectwebparts-${{ env.cache-name }}-
+          ${{ runner.OS }}-projectwebparts-
+          ${{ runner.OS }}-
       
     - name: Run build release script Install/Build-Release.ps1 in CI mode
       run: Install/Build-Release.ps1 -CI
@@ -39,9 +79,3 @@ jobs:
     - name: Install to ${{ env.TARGET_URL }}
       run: release-package/Install.ps1 -Url ${{ env.TARGET_URL }} -Upgrade -CI ${{ secrets.CI_CREDENTIALS }}
       shell: powershell
-      
-    - uses: actions/upload-artifact@v1
-      with:
-        name: installation-log
-        path: release-package/Install_Log.txt
-
