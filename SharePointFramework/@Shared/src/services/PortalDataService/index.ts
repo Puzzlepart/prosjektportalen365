@@ -351,7 +351,7 @@ export class PortalDataService {
         .getByTitle(this._configuration.listNames.PROJECT_STATUS)
         .items
         .filter(filter)
-        .expand(expand.join(','))
+        .expand(...expand)
         .orderBy('Id', false)
       if (top) items = items.top(top)
       if (select) items = items.select(...select)
