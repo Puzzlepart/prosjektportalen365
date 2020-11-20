@@ -20,7 +20,7 @@ jobs:
       with:
         node-version: 10.x
 
-    - name: Run build release script Install/Build-Release.ps1 in CI mode
+    - name: Run Install/Build-Release.ps1 in CI mode
       run: Install/Build-Release.ps1 -CI
       shell: powershell
       
