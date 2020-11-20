@@ -1,3 +1,4 @@
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "")]
 Param(
     [Parameter(Mandatory = $true, HelpMessage = "N/A")]
     [string]$Url,
