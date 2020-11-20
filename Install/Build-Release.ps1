@@ -11,6 +11,8 @@ Param(
 
 $PACKAGE_FILE = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Json
 
+Write-Host "[Building release v$($PACKAGE_FILE.version)]" -ForegroundColor Cyan
+
 #region Paths
 $ROOT_PATH                      = "$PSScriptRoot/../"
 $SHAREPOINT_FRAMEWORK_BASEPATH  = "$ROOT_PATH/SharePointFramework"
@@ -23,7 +25,6 @@ $RELEASE_PATH                   = "$ROOT_PATH/release/$($RELEASE_NAME)"
 #endregion
 
 
-Write-Host "[Building release v$($PACKAGE_FILE.version)]" -ForegroundColor Cyan
 
 if ($CI.IsPresent) {
     Write-Host "[Running in CI mode. Installing module SharePointPnPPowerShellOnline.]" -ForegroundColor Yellow
