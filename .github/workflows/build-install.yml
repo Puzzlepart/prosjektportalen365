@@ -38,6 +38,6 @@ jobs:
       with:
         name: release-package
     - name: Run Tests
-      run: release-package/Install.ps1 -Url https://pzlcloud.sharepoint.com/sites/pp3test -SkipAppPackages -Upgrade -CI
+      run: release-package/Install.ps1 -Url https://pzlcloud.sharepoint.com/sites/pp3test -SkipAppPackages -Upgrade -CI ${{ secrets.CI_CREDENTIALS }}
       shell: powershell
 
