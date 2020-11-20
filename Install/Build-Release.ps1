@@ -7,7 +7,7 @@ Param(
     [string[]]$Solutions = @("ProjectWebParts", "PortfolioWebParts", "ProjectExtensions"),
     [Parameter(Mandatory = $false)]
     [switch]$Silent,
-    Parameter(Mandatory = $false, HelpMessage = "CI")]
+    [Parameter(Mandatory = $false, HelpMessage = "CI mode. Installs SharePointPnPPowerShellOnline.")]
     [switch]$CI
 )   
 
