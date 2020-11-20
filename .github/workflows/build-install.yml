@@ -6,7 +6,7 @@ on:
 
 # Variables that are available for all the jobs in the workflow
 env:
-  SPPKG_FILE_NAME: 'spfx-read-write-operations.sppkg'
+  TARGET_URL: 'https://puzzlepart.sharepoint.com/sites/pp365_ci'
   
 jobs:
    build:
@@ -38,6 +38,6 @@ jobs:
       with:
         name: release-package
     - name: Run Tests
-      run: release-package/Install.ps1 -Url https://pzlcloud.sharepoint.com/sites/pp3test -SkipAppPackages -Upgrade -CI ${{ secrets.CI_CREDENTIALS }}
+      run: release-package/Install.ps1 -Url ${{ env.TARGET_URL }} -SkipAppPackages -SkipSearchConfiguration -SkipSiteDesign -SkipTaxonomy -CI ${{ secrets.CI_CREDENTIALS }}
       shell: powershell
 
