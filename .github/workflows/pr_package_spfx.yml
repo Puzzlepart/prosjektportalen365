@@ -21,64 +21,65 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Install npm packages
+      - name: (@Shared) Install npm packages
         working-directory: ./SharePointFramework/@Shared
         run: |
-          npm install
+          npm install --no-progress --loglevel silent --no-shrinkwrap --no-fund
 
-      - name: Run npm script build
+      - name: (@Shared) Run npm script build
         working-directory: ./SharePointFramework/@Shared
         run: |
           npm run build
 
-      - name: Run npm script lint
+      - name: (@Shared) Run npm script lint
         working-directory: ./SharePointFramework/@Shared
         run: |
           npm run lint
         
 
-      - name: Install npm packages
+
+      - name: (ProjectWebParts) Install npm packages
+        working-directory: ./SharePointFramework/ProjectWebParts
+        run: |
+          npm install --no-progress --loglevel silent --no-shrinkwrap --no-fund
+
+      - name: (ProjectWebParts) Run npm script package
+        working-directory: ./SharePointFramework/ProjectWebParts
+        run: |
+          npm run package
+
+      - name: (ProjectWebParts) Run npm script lint
+        working-directory: ./SharePointFramework/ProjectWebParts
+        run: |
+          npm run lint
+
+      - name: (PortfolioWebParts) Install npm packages
         working-directory: ./SharePointFramework/PortfolioWebParts
         run: |
-          npm install
+          npm install --no-progress --loglevel silent --no-shrinkwrap --no-fund
 
-      - name: Run npm script package
+      - name: (PortfolioWebParts) Run npm script package
         working-directory: ./SharePointFramework/PortfolioWebParts
         run: |
           npm run package
 
-      - name: Run npm script lint
+      - name: (PortfolioWebParts) Run npm script lint
         working-directory: ./SharePointFramework/PortfolioWebParts
         run: |
           npm run lint
 
 
-      - name: Install npm packages
+      - name: (ProjectExtensions) Install npm packages
         working-directory: ./SharePointFramework/ProjectExtensions
         run: |
-          npm install
+          npm install --no-progress --loglevel silent --no-shrinkwrap --no-fund
 
-      - name: Run npm script package
+      - name: (ProjectExtensions) Run npm script package
         working-directory: ./SharePointFramework/ProjectExtensions
         run: |
           npm run package
 
-      - name: Run npm script lint
+      - name: (ProjectExtensions) Run npm script lint
         working-directory: ./SharePointFramework/ProjectExtensions
-        run: |
-          npm run lint
-
-      - name: Install npm packages
-        working-directory: ./SharePointFramework/ProjectWebParts
-        run: |
-          npm install
-
-      - name: Run npm script package
-        working-directory: ./SharePointFramework/ProjectWebParts
-        run: |
-          npm run package
-
-      - name: Run npm script lint
-        working-directory: ./SharePointFramework/ProjectWebParts
         run: |
           npm run lint
