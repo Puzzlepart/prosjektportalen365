@@ -30,6 +30,11 @@ jobs:
           ${{ runner.OS }}-shared-
           ${{ runner.OS }}-
 
+    - name: Install npm packages (@Shared)
+      working-directory: SharePointFramework/@Shared
+      run: |
+        npm install --no-progress --loglevel silent --no-shrinkwrap --no-fund
+
     - name: Cache node modules (PortfolioWebParts)
       uses: actions/cache@v1
       with:
@@ -39,6 +44,11 @@ jobs:
           ${{ runner.OS }}-portfoliowebparts-${{ env.cache-name }}-
           ${{ runner.OS }}-portfoliowebparts-
           ${{ runner.OS }}-
+
+    - name: Install npm packages (PortfolioWebParts)
+      working-directory: SharePointFramework/PortfolioWebParts
+      run: |
+        npm install --no-progress --loglevel silent --no-shrinkwrap --no-fund
 
     - name: Cache node modules (ProjectExtensions)
       uses: actions/cache@v1
@@ -50,6 +60,11 @@ jobs:
           ${{ runner.OS }}-projectextensions-
           ${{ runner.OS }}-
 
+    - name: Install npm packages (ProjectExtensions)
+      working-directory: SharePointFramework/ProjectExtensions
+      run: |
+        npm install --no-progress --loglevel silent --no-shrinkwrap --no-fund
+
     - name: Cache node modules (ProjectWebParts)
       uses: actions/cache@v1
       with:
@@ -59,6 +74,11 @@ jobs:
           ${{ runner.OS }}-projectwebparts-${{ env.cache-name }}-
           ${{ runner.OS }}-projectwebparts-
           ${{ runner.OS }}-
+
+    - name: Install npm packages (ProjectWebParts)
+      working-directory: SharePointFramework/ProjectWebParts
+      run: |
+        npm install --no-progress --loglevel silent --no-shrinkwrap --no-fund
       
     - name: Run build release script Install/Build-Release.ps1 in CI mode
       run: Install/Build-Release.ps1 -CI
