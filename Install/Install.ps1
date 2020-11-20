@@ -71,10 +71,9 @@ function Connect-SharePoint {
 
     Try {
         if($null -ne $CI) {
-            $Cred = ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($CI))).Split(".")
-            [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("blahblah"))
-            $Password = convertto-securestring -String $Cred[1] -AsPlainText -Force
-            $Credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $Cred[0], $Password
+            $DecodedCred = ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($CI))).Split("|")
+            $Password = ConvertTo-SecureString -String $DecodedCred[1] -AsPlainText -Force
+            $Credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $DecodedCred[0], $Password
             Connect-PnPOnline -Url $Url -Credentials $Credentials -ErrorAction Stop
         }
         elseif ($UseWebLogin.IsPresent) {
