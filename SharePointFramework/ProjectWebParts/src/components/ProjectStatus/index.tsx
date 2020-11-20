@@ -6,7 +6,10 @@ import { UserMessage } from 'components/UserMessage'
 import domToImage from 'dom-to-image'
 import * as moment from 'moment'
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar'
-import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu'
+import {
+  ContextualMenuItemType,
+  IContextualMenuItem
+} from 'office-ui-fabric-react/lib/ContextualMenu'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
 import * as strings from 'ProjectWebPartsStrings'
@@ -28,7 +31,9 @@ import {
   SummarySection
 } from './Sections'
 import {
-  IProjectStatusData, IProjectStatusHashState, IProjectStatusProps,
+  IProjectStatusData,
+  IProjectStatusHashState,
+  IProjectStatusProps,
   IProjectStatusState
 } from './types'
 
@@ -374,9 +379,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
 
   /**
    * Creates PNG snapshot
-   * 
+   *
    * @param {sting} title Report title
-   * 
+   *
    * @returns PNG file (AttachmentFileInfo) or null
    */
   private async _captureReport(title: string | number | boolean): Promise<AttachmentFileInfo> {
@@ -406,11 +411,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       try {
         const attachment = await this._captureReport(report.values.Title)
         const properties = { GtModerationStatus: strings.GtModerationStatus_Choice_Published }
-        await this._portalDataService.updateStatusReport(
-          report.id,
-          properties,
-          attachment
-        )
+        await this._portalDataService.updateStatusReport(report.id, properties, attachment)
       } catch (error) {
         Logger.log({
           message: `(ProjectStatus) _publishReport: Failed to publish status report: ${error.message}`,
