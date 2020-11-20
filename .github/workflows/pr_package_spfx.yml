@@ -7,7 +7,6 @@ on:
       - dev
 jobs:
   build:
-    working-directory: ./SharePointFramework/PortfolioWebParts
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -23,6 +22,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Cache node modules
+        working-directory: ./SharePointFramework/PortfolioWebParts
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
@@ -31,10 +31,12 @@ jobs:
           key: node_modules-${{ hashFiles('./package.json') }}
 
       - name: Install npm packages
+        working-directory: ./SharePointFramework/PortfolioWebParts
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           npm run package
 
       - name: Lint
+        working-directory: ./SharePointFramework/PortfolioWebParts
         run: |
           npm run lint
