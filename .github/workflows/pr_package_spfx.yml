@@ -6,10 +6,7 @@ on:
       - master
       - dev
 jobs:
-  spfx-shared:
-    defaults:
-      run:
-        working-directory: ./SharePointFramework/@Shared
+  spfx-package:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -24,140 +21,64 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      # - name: Cache node modules
-      #   uses: actions/cache@v2
-      #   env:
-      #     cache-name: cache-node-modules
-      #   with:
-      #     path: node_modules
-      #     key: node_modules-${{ hashFiles('**/package.json') }}
-
       - name: Install npm packages
-        # if: steps.cache.outputs.cache-hit != 'true'
+        working-directory: ./SharePointFramework/@Shared
         run: |
           npm install
 
       - name: Run npm script build
+        working-directory: ./SharePointFramework/@Shared
         run: |
           npm run build
 
       - name: Run npm script lint
+        working-directory: ./SharePointFramework/@Shared
         run: |
           npm run lint
-          
-  spfx-portfolio-webparts:
-    defaults:
-      run:
+        
+
+      - name: Install npm packages
         working-directory: ./SharePointFramework/PortfolioWebParts
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [10.22.0]
-    steps:
-      - uses: actions/checkout@v1
-        with:
-          ref: ${{ github.head_ref }}
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      # - name: Cache node modules
-      #   uses: actions/cache@v2
-      #   env:
-      #     cache-name: cache-node-modules
-      #   with:
-      #     path: node_modules
-      #     key: node_modules-${{ hashFiles('**/package.json') }}
-
-      - name: Install npm packages
-        # if: steps.cache.outputs.cache-hit != 'true'
         run: |
           npm install
 
       - name: Run npm script package
+        working-directory: ./SharePointFramework/PortfolioWebParts
         run: |
           npm run package
 
       - name: Run npm script lint
+        working-directory: ./SharePointFramework/PortfolioWebParts
         run: |
           npm run lint
 
-  spfx-project-extensions:
-    defaults:
-      run:
+
+      - name: Install npm packages
         working-directory: ./SharePointFramework/ProjectExtensions
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [10.22.0]
-    steps:
-      - uses: actions/checkout@v1
-        with:
-          ref: ${{ github.head_ref }}
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      # - name: Cache node modules
-      #   uses: actions/cache@v2
-      #   env:
-      #     cache-name: cache-node-modules
-      #   with:
-      #     path: node_modules
-      #     key: node_modules-${{ hashFiles('**/package.json') }}
-
-      - name: Install npm packages
-        # if: steps.cache.outputs.cache-hit != 'true'
         run: |
           npm install
 
       - name: Run npm script package
+        working-directory: ./SharePointFramework/ProjectExtensions
         run: |
           npm run package
 
       - name: Run npm script lint
+        working-directory: ./SharePointFramework/ProjectExtensions
         run: |
           npm run lint
 
-  spfx-project-webparts:
-    defaults:
-      run:
-        working-directory: ./SharePointFramework/ProjectWebParts
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [10.22.0]
-    steps:
-      - uses: actions/checkout@v1
-        with:
-          ref: ${{ github.head_ref }}
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      # - name: Cache node modules
-      #   uses: actions/cache@v2
-      #   env:
-      #     cache-name: cache-node-modules
-      #   with:
-      #     path: node_modules
-      #     key: node_modules-${{ hashFiles('**/package.json') }}
-
       - name: Install npm packages
-        # if: steps.cache.outputs.cache-hit != 'true'
+        working-directory: ./SharePointFramework/ProjectWebParts
         run: |
           npm install
 
       - name: Run npm script package
+        working-directory: ./SharePointFramework/ProjectWebParts
         run: |
           npm run package
 
       - name: Run npm script lint
+        working-directory: ./SharePointFramework/ProjectWebParts
         run: |
           npm run lint
