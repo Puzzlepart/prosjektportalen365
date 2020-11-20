@@ -368,8 +368,13 @@ if (-not $SkipSearchConfiguration.IsPresent) {
 Connect-SharePoint -Url $Url -ErrorAction Stop
 
 #region Post install
-Write-Host "[INFO] Running post-install steps"
-.\Scripts\PostInstall.ps1
+Write-Host "[INFO] Running post-install steps" 
+try {
+    ."$PSScriptRoot\Scripts\PostInstall.ps1"
+    Write-Host "[SUCCESS] Successfully ran post-install steps" -ForegroundColor Green
+} catch {
+    Write-Host "[WARNING] Failed to run post-install steps: $($_.Exception.Message)" -ForegroundColor Yellow
+}
 #endregion
 
 $sw.Stop()
