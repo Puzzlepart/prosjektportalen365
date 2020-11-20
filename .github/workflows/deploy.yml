@@ -16,7 +16,10 @@ jobs:
    deploy:
     runs-on: windows-latest
     
-    steps:        
+    steps:      
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
     - name: Run build release script Install/Build-Release.ps1
       run: Install/Build-Release.ps1
       shell: powershell
