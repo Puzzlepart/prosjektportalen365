@@ -1,7 +1,10 @@
 import { TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
+import { AttachmentFileInfo } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
 import { UserMessage } from 'components/UserMessage'
+import domToImage from 'dom-to-image'
+import * as moment from 'moment'
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar'
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
@@ -11,15 +14,10 @@ import * as React from 'react'
 import { formatDate } from 'shared/lib/helpers'
 import { SectionModel, SectionType, StatusReport } from 'shared/lib/models'
 import { PortalDataService } from 'shared/lib/services'
-import { getUrlParam, parseUrlHash, setUrlHash, removeMenuBorder } from 'shared/lib/util'
+import { getUrlParam, parseUrlHash, removeMenuBorder, setUrlHash } from 'shared/lib/util'
 import * as formatString from 'string-format'
+import { first } from 'underscore'
 import SPDataAdapter from '../../data'
-import {
-  IProjectStatusProps,
-  IProjectStatusState,
-  IProjectStatusHashState,
-  IProjectStatusData
-} from './types'
 import styles from './ProjectStatus.module.scss'
 import {
   IBaseSectionProps,
@@ -29,9 +27,10 @@ import {
   StatusSection,
   SummarySection
 } from './Sections'
-import domToImage from 'dom-to-image'
-import * as moment from 'moment'
-import { AttachmentFileInfo } from '@pnp/sp'
+import {
+  IProjectStatusData, IProjectStatusHashState, IProjectStatusProps,
+  IProjectStatusState
+} from './types'
 
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private _portalDataService: PortalDataService
@@ -129,20 +128,17 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
 
   private _commandBar() {
     const { data, selectedReport, sourceUrl } = this.state
-    console.log(selectedReport.values)
     const reportOptions = this._getReportOptions(data)
     const items: IContextualMenuItem[] = [
       {
-        id: getId('NewStatusReport'),
-        key: getId('NewStatusReport'),
+        key: 'NEW_STATUS_REPORT',
         name: strings.NewStatusReportModalHeaderText,
         iconProps: { iconName: 'NewFolder' },
         disabled: data.reports.filter((report) => !report.published).length !== 0,
         onClick: this._redirectNewStatusReport.bind(this)
       },
       {
-        id: getId('DeleteReport'),
-        key: getId('DeleteReport'),
+        key: 'DELETE_REPORT',
         name: strings.DeleteReportButtonText,
         iconProps: { iconName: 'Delete' },
         disabled: selectedReport.published,
@@ -151,16 +147,14 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         }
       },
       {
-        id: getId('EditReport'),
-        key: getId('EditReport'),
+        key: 'EDIT_REPORT',
         name: strings.EditReportButtonText,
         iconProps: { iconName: 'Edit' },
         href: selectedReport ? selectedReport.editFormUrl : null,
         disabled: selectedReport.published
       },
       {
-        id: getId('PublishReport'),
-        key: getId('PublishReport'),
+        key: 'PUBLISH_REPORT',
         name: strings.PublishReportButtonText,
         iconProps: { iconName: 'PublishContent' },
         disabled: selectedReport.published,
@@ -173,26 +167,23 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     const farItems: IContextualMenuItem[] = []
     if (sourceUrl) {
       farItems.push({
-        id: getId('NavigateToSourceUrl'),
-        key: getId('NavigateToSourceUrl'),
+        key: 'NAVIGATE_TO_SOURC_EURL',
         name: strings.NavigateToSourceUrlText,
         iconProps: { iconName: 'NavigateBack' },
         href: sourceUrl
       })
     }
     farItems.push({
-      id: getId('GetSnapshot'),
-      key: getId('GetSnapShot'),
+      key: 'GET_SNAPSHOT',
       name: strings.GetSnapshotButtonText,
       iconProps: { iconName: 'Photo2' },
-      disabled: !selectedReport || !selectedReport.values.Attachments,
+      disabled: !selectedReport.hasAttachments,
       onClick: () => {
-        window.open(selectedReport.values.AttachmentFiles[0].ServerRelativeUrl)
+        window.open(first(selectedReport.attachments).ServerRelativeUrl)
       }
     })
     farItems.push({
-      id: getId('ReportDropdown'),
-      key: getId('ReportDropdown'),
+      key: 'REPORT_DROPDOWN',
       name: selectedReport ? formatDate(selectedReport.created, true) : '',
       itemType: ContextualMenuItemType.Normal,
       disabled: reportOptions.length === 0,
@@ -201,7 +192,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     })
     farItems.push({
       id: getId('StatusIcon'),
-      key: getId('StatusIcon'),
+      key: 'STATUS_ICON',
       name: selectedReport.published
         ? strings.PublishedStatusReport
         : strings.NotPublishedStatusReport,
