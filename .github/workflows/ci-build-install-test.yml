@@ -1,0 +1,40 @@
+name: CI - Build and install TEST
+
+on:
+  push:
+    branches: [dev]
+
+env:
+  TARGET_URL: 'https://puzzlepart.sharepoint.com/sites/pp365_ci'
+  
+jobs:
+   build:
+    runs-on: windows-latest
+    
+    steps:      
+    - uses: actions/checkout@v2   
+    - uses: c-hive/gha-yarn-cache@v1   
+    - name: Setup Node.js 10.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.x
+
+    - name: Yarn install npm packages
+      working-directory: SharePointFramework/@Shared
+      run: yarn install
+      
+    - uses: actions/upload-artifact@v1
+      with:
+        name: release-package
+        path: release
+        
+   install:
+    needs: build
+    runs-on: windows-latest
+    steps:
+    - uses: actions/download-artifact@v1
+      with:
+        name: release-package
+    - name: Install to ${{ env.TARGET_URL }}
+      run: release-package/Install.ps1 -Url ${{ env.TARGET_URL }} -Upgrade -CI ${{ secrets.CI_CREDENTIALS }}
+      shell: powershell
