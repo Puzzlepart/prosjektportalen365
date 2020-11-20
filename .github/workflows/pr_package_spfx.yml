@@ -1,0 +1,40 @@
+name: Package SharePoint Framework
+on:
+  pull_request:
+    types: [assigned, opened, synchronize, reopened]
+    branches:
+      - master
+      - dev
+jobs:
+  build:
+    working-directory: ./SharePointFramework/PortfolioWebParts
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.22.0]
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('./package.json') }}
+
+      - name: Install npm packages
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          npm package
+
+      - name: Lint
+        run: |
+          npm run lint

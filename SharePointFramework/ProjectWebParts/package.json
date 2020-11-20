@@ -13,7 +13,8 @@
     "postversion": "gulp versionSync",
     "prepackage": "gulp setHiddenToolbox --ship",
     "preserve": "gulp setHiddenToolbox",
-    "lint": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
+    "lint": "eslint --ext .ts,.tsx ./src --color && npm run prettier",
+    "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
     "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",
     "setBundle": "node set-bundle"
   },
