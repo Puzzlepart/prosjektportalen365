@@ -9,7 +9,7 @@ env:
   SPPKG_FILE_NAME: 'spfx-read-write-operations.sppkg'
   
 jobs:
-   deploy:
+   build:
     runs-on: windows-latest
     
     steps:      
@@ -22,11 +22,22 @@ jobs:
         node-version: 10.x
       
     - name: Run build release script Install/Build-Release.ps1 in CI mode
-      run: Install/Build-Release.ps1 -CI
+      run: Install/Build-Release.ps1 -CI -SkipBuildSharePointFramework
       shell: powershell
       
     - uses: actions/upload-artifact@v1
       with:
         name: release-package
         path: Release
+        
+   test:
+    needs: build
+    runs-on: windows-latest
+    steps:
+    - uses: actions/download-artifact@v1
+      with:
+        name: release-package
+    - name: Run Tests
+      run: release-package/Install.ps1 -Url https://pzlcloud.sharepoint.com/sites/pp3test -SkipAppPackages -Upgrade -CI
+      shell: powershell
 
