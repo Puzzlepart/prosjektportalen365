@@ -9,6 +9,8 @@ Param(
     [switch]$CI
 )   
 
+$PackageJson = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Json
+
 Write-Host "[Building release v$($PackageJson.version)]" -ForegroundColor Cyan
 
 if ($CI.IsPresent) {
@@ -18,11 +20,11 @@ if ($CI.IsPresent) {
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
 
-$PackageJson = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Json
 
 #region Creating release path
 $GitHash = git log --pretty=format:'%h' -n 1
-$ReleasePath = "$PSScriptRoot/../release/$($PackageJson.name)-$($PackageJson.version).$($GitHash)"
+$RelaseName = $($PackageJson.name)-$($PackageJson.version).$($GitHash)
+$ReleasePath = "$PSScriptRoot/../release/$($RelaseName)"
 
 if ($CI.IsPresent) {
     $ReleasePath = "$PSScriptRoot/../release"
