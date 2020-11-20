@@ -22,10 +22,10 @@ $PackageJson = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Js
 
 #region Creating release path
 $GitHash = git log --pretty=format:'%h' -n 1
-$ReleasePath = "$PSScriptRoot/../Release/$($PackageJson.name)-$($PackageJson.version).$($GitHash)"
+$ReleasePath = "$PSScriptRoot/../release/$($PackageJson.name)-$($PackageJson.version).$($GitHash)"
 
 if($CI.IsPresent) {
-    $ReleasePath = "$PSScriptRoot/../Release"
+    $ReleasePath = "$PSScriptRoot/../release"
 }
 
 Write-Host "[INFO] Creating release folder $ReleasePath...  " -NoNewline
