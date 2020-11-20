@@ -1,6 +1,6 @@
 import { dateAdd, stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
-import { CamlQuery, ListEnsureResult, Web } from '@pnp/sp'
+import { AttachmentFileInfo, CamlQuery, ListEnsureResult, Web } from '@pnp/sp'
 import { default as initSpfxJsom, ExecuteJsomQuery } from 'spfx-jsom'
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
 import { transformFieldXml } from '../../helpers/transformFieldXml'
@@ -73,21 +73,23 @@ export class PortalDataService {
   }
 
 
-    /**
-     * Update status report
-     * 
-     * @param {number} id Id
-     * @param {TypedHash<string>} properties Properties
-     */
-    public async updateStatusReport(id: number, properties: TypedHash<string>, attachment?: {fileName: string, content: Blob}): Promise<void> {
-        const projectStatusList = this._web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
-        try {
-        await projectStatusList.items.getById(id).attachmentFiles.add(attachment.fileName, attachment.content)
-        } catch (error) {
-            Logger.log({ message: '(updateStatusReport): Unable to sync PNG snapshot, syncing without snapshot', level: LogLevel.Info })
-        }
-        await projectStatusList.items.getById(id).update(properties)
+  /**
+   * Update status report, and add snapshot as attachment
+   * 
+   * @param {number} id Id
+   * @param {TypedHash<string>} properties Properties
+   */
+  public async updateStatusReport(id: number, properties: TypedHash<string>, attachment?: AttachmentFileInfo): Promise<void> {
+    const list = this._web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
+    if (attachment) {
+      try {
+        await list.items.getById(id).attachmentFiles.addMultiple([attachment])
+      } catch (error) {
+        Logger.log({ message: `(updateStatusReport): Unable to attach PNG snapshot: ${error.message}`, level: LogLevel.Info })
+      }
     }
+    // await list.items.getById(id).update(properties)
+  }
 
   /**
    * Update status report
