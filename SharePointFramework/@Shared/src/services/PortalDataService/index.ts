@@ -80,13 +80,13 @@ export class PortalDataService {
      * @param {TypedHash<string>} properties Properties
      */
     public async updateStatusReport(id: number, properties: TypedHash<string>, attachment?: {fileName: string, content: Blob}): Promise<void> {
-        const projectStatusList = this._web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS);
+        const projectStatusList = this._web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
         try {
-        await projectStatusList.items.getById(id).attachmentFiles.add(attachment.fileName, attachment.content);
+        await projectStatusList.items.getById(id).attachmentFiles.add(attachment.fileName, attachment.content)
         } catch (error) {
-            Logger.log({ message: `(updateStatusReport): Unable to sync PNG snapshot, syncing without snapshot`, level: LogLevel.Info });
+            Logger.log({ message: '(updateStatusReport): Unable to sync PNG snapshot, syncing without snapshot', level: LogLevel.Info })
         }
-        await projectStatusList.items.getById(id).update(properties);
+        await projectStatusList.items.getById(id).update(properties)
     }
 
   /**
