@@ -9,7 +9,7 @@ Param(
     [switch]$CI
 )  
 
-$PackageJson = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Json
+$PACKAGE_FILE = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Json
 
 #region Paths
 $SHAREPOINT_FRAMEWORK_BASEPATH  = "$PSScriptRoot\..\SharePointFramework"
@@ -17,12 +17,12 @@ $PNP_TEMPLATES_BASEPATH         = "$PSScriptRoot\..\SharePointFramework"
 $SITE_SCRIPTS_BASEPATH          = "$PSScriptRoot/../SiteScripts/Src"
 $PNP_BUNDLE_PATH                = "$PSScriptRoot/SharePointPnPPowerShellOnline"
 $GIT_HASH                       = git log --pretty=format:'%h' -n 1
-$RELEASE_NAME                   = $($PackageJson.name)-$($PackageJson.version).$($GIT_HASH)
+$RELEASE_NAME                   = $($PACKAGE_FILE.name)-$($PACKAGE_FILE.version).$($GIT_HASH)
 $RELEASE_PATH                   = "$PSScriptRoot/../release/$($RELEASE_NAME)"
 #endregion
 
 
-Write-Host "[Building release v$($PackageJson.version)]" -ForegroundColor Cyan
+Write-Host "[Building release v$($PACKAGE_FILE.version)]" -ForegroundColor Cyan
 
 if ($CI.IsPresent) {
     Write-Host "[Running in CI mode. Installing module SharePointPnPPowerShellOnline.]" -ForegroundColor Yellow
@@ -56,7 +56,7 @@ Write-Host "[INFO] Copying SharePointPnPPowerShellOnline bundle...  " -NoNewline
 Copy-Item -Path $PNP_BUNDLE_PATH -Filter * -Destination $RELEASE_PATH -Force -Recurse
 Write-Host "DONE" -ForegroundColor Green
 
-(Get-Content "$RELEASE_PATH/Install.ps1") -Replace 'VERSION_PLACEHOLDER', $PackageJson.version | Set-Content "$RELEASE_PATH/Install.ps1"
+(Get-Content "$RELEASE_PATH/Install.ps1") -Replace 'VERSION_PLACEHOLDER', $PACKAGE_FILE.version | Set-Content "$RELEASE_PATH/Install.ps1"
 #endregion
 
 
@@ -71,7 +71,6 @@ if ($CleanNodeModules.IsPresent) {
 #endregion
 
 #region Package SharePoint Framework solutions
-# https://github.com/SharePoint/sp-dev-docs/issues/2916
 if (-not $SkipBuildSharePointFramework.IsPresent) {
     Write-Host "[INFO] Building SharePointFramework\@Shared...  " -NoNewline
     Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH\@Shared"
@@ -122,5 +121,5 @@ $sw.Stop()
 if (-not $CI.IsPresent) {
     Add-Type -Assembly "System.IO.Compression.FileSystem"
     [IO.Compression.ZipFile]::CreateFromDirectory($RELEASE_PATH, "$($RELEASE_PATH).zip")  
-    Write-Host "Done building release [v$($PackageJson.version)] in [$($sw.Elapsed)]" -ForegroundColor Cyan
+    Write-Host "Done building release [v$($PACKAGE_FILE.version)] in [$($sw.Elapsed)]" -ForegroundColor Cyan
 }
