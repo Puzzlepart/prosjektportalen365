@@ -78,6 +78,7 @@ export class PortalDataService {
    * 
    * @param {number} id Id
    * @param {TypedHash<string>} properties Properties
+   * @param {AttachmentFileInfo} attachment Attachment
    */
   public async updateStatusReport(id: number, properties: TypedHash<string>, attachment?: AttachmentFileInfo): Promise<void> {
     const list = this._web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
@@ -88,7 +89,12 @@ export class PortalDataService {
         Logger.log({ message: `(updateStatusReport): Unable to attach PNG snapshot: ${error.message}`, level: LogLevel.Info })
       }
     }
-    // await list.items.getById(id).update(properties)
+    try {
+      await list.items.getById(id).update(properties)
+    } catch (error) {
+      Logger.log({ message: `(updateStatusReport): Unable to update status report: ${error.message}`, level: LogLevel.Info })
+      throw error
+    }
   }
 
   /**

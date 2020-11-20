@@ -384,7 +384,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * Creates PNG snapshot
    * 
-   * @param {sting} title: Report Title
+   * @param {sting} title Report title
+   * 
+   * @returns PNG file (AttachmentFileInfo) or null
    */
   private async _captureReport(title: string | number | boolean): Promise<AttachmentFileInfo> {
     try {
@@ -420,12 +422,11 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         )
       } catch (error) {
         Logger.log({
-          message: '(ProjectStatus) _publishReport: Failed to publish status report',
+          message: `(ProjectStatus) _publishReport: Failed to publish status report: ${error.message}`,
           level: LogLevel.Info
         })
-
       }
-      // document.location.reload()
+      document.location.reload()
     }
   }
 
