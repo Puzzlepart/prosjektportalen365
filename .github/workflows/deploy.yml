@@ -24,3 +24,9 @@ jobs:
     - name: Run build release script Install/Build-Release.ps1 in CI mode
       run: Install/Build-Release.ps1 -CI
       shell: powershell
+      
+    - uses: actions/upload-artifact@v1
+      with:
+        name: release-package
+        path: Release
+
