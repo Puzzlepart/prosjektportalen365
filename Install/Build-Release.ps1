@@ -6,10 +6,13 @@ Param(
     [Parameter(Mandatory = $false)]
     [string[]]$Solutions = @("ProjectWebParts", "PortfolioWebParts", "ProjectExtensions"),
     [Parameter(Mandatory = $false)]
-    [switch]$Silent
+    [switch]$Silent,
+    [switch]$InstallModule,
 )   
 
-Install-Module -Name SharePointPnPPowerShellOnline -Force -Verbose -Scope CurrentUser             
+if($InstallModule.IsPresent) {
+    Install-Module -Name SharePointPnPPowerShellOnline -Force -Verbose -Scope CurrentUser    
+}
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
 
