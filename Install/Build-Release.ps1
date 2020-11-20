@@ -9,6 +9,8 @@ Param(
     [switch]$CI
 )   
 
+Write-Host "[Building release v$($PackageJson.version)]" -ForegroundColor Cyan
+
 if($CI.IsPresent) {
     Write-Host "[Running in CI mode. Installing module SharePointPnPPowerShellOnline.]" -ForegroundColor Yellow
     Install-Module -Name SharePointPnPPowerShellOnline -Force -Scope CurrentUser
@@ -26,14 +28,15 @@ if($CI.IsPresent) {
     $ReleasePath = "$PSScriptRoot/../Release"
 }
 
+Write-Host "[INFO] Creating release folder $ReleasePath...  " -NoNewline
+
 mkdir $ReleasePath >$null 2>&1
 mkdir "$ReleasePath/Templates" >$null 2>&1
 mkdir "$ReleasePath/SiteScripts" >$null 2>&1
 mkdir "$ReleasePath/Scripts" >$null 2>&1
 mkdir "$ReleasePath/Apps" >$null 2>&1
+Write-Host "DONE" -ForegroundColor Green
 #endregion
-
-Write-Host "[Building release v$($PackageJson.version)]" -ForegroundColor Cyan
 
 #region Copying source files
 Write-Host "[INFO] Copying Install.ps1, PostInstall.ps1 and site script source files...  " -NoNewline
@@ -80,7 +83,11 @@ $Solutions | ForEach-Object {
         npm install --no-package-lock --no-package-lock --no-progress --silent --no-audit --no-fund
         npm run package
     }
-    #Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$ReleasePath/Apps/$_")) } | Copy-Item -Destination "$ReleasePath/Apps" -Force
+    try {
+        Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$ReleasePath/Apps/$_")) } | Copy-Item -Destination "$ReleasePath/Apps" -Force
+    } catch {
+
+    }
     Write-Host "DONE" -ForegroundColor Green
 }
 #endregion

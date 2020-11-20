@@ -70,7 +70,7 @@ function Connect-SharePoint {
     )
 
     Try {
-        if($null -ne $CI) {
+        if ($null -ne $CI) {
             $DecodedCred = ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($CI))).Split("|")
             $Password = ConvertTo-SecureString -String $DecodedCred[1] -AsPlainText -Force
             $Credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $DecodedCred[0], $Password
@@ -100,12 +100,18 @@ function LoadBundle() {
     return (Get-Command Connect-PnPOnline).Version
 }
 
-if (-not $SkipLoadingBundle.IsPresent) {
-    $PnPVersion = LoadBundle    
-    Write-Host "[INFO] Loaded [SharePointPnPPowerShellOnline] v.$($PnPVersion) from bundle"
+if ($null -ne $CI) {
+    Write-Host "[Running in CI mode. Installing module SharePointPnPPowerShellOnline.]" -ForegroundColor Yellow
+    Install-Module -Name SharePointPnPPowerShellOnline -Force -Scope CurrentUser -ErrorAction Stop
 }
 else {
-    Write-Host "[INFO] Loaded [SharePointPnPPowerShellOnline] v.$((Get-Command Connect-PnPOnline).Version) from your environment"
+    if (-not $SkipLoadingBundle.IsPresent) {
+        $PnPVersion = LoadBundle    
+        Write-Host "[INFO] Loaded [SharePointPnPPowerShellOnline] v.$($PnPVersion) from bundle"
+    }
+    else {
+        Write-Host "[INFO] Loaded [SharePointPnPPowerShellOnline] v.$((Get-Command Connect-PnPOnline).Version) from your environment"
+    }
 }
 
 
@@ -308,7 +314,8 @@ if (-not $SkipTemplate.IsPresent) {
             Write-Host "[INFO] Applying PnP content template (Handlers:Files) to [$Url]"
             Apply-PnPProvisioningTemplate "$PSScriptRoot\Templates\Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
-        } else {
+        }
+        else {
             Write-Host "[INFO] Applying PnP content template to [$Url]"
             Apply-PnPProvisioningTemplate "$PSScriptRoot\Templates\Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
@@ -390,4 +397,7 @@ Disconnect-PnPOnline
 
 $InstallEntry.InstallUrl = $Url
 
-try { Invoke-WebRequest "https://pp365-install-pingback.azurewebsites.net/api/AddEntry" -Body ($InstallEntry | ConvertTo-Json) -Method 'POST' -ErrorAction SilentlyContinue >$null 2>&1 } catch {}
+try { 
+    Invoke-WebRequest "https://pp365-install-pingback.azurewebsites.net/api/AddEntry" -Body ($InstallEntry | ConvertTo-Json) -Method 'POST' -ErrorAction SilentlyContinue >$null 2>&1 
+}
+catch {}
