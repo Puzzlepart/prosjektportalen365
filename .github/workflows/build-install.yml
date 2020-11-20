@@ -30,14 +30,14 @@ jobs:
         name: release-package
         path: Release
         
-   test:
+   install:
     needs: build
     runs-on: windows-latest
     steps:
     - uses: actions/download-artifact@v1
       with:
         name: release-package
-    - name: Run Tests
+    - name: Install to ${{ env.TARGET_URL }}
       run: release-package/Install.ps1 -Url ${{ env.TARGET_URL }} -SkipAppPackages -SkipSearchConfiguration -SkipSiteDesign -SkipTaxonomy -CI ${{ secrets.CI_CREDENTIALS }}
       shell: powershell
 
