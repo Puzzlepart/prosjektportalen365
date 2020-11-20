@@ -6,6 +6,45 @@ on:
       - master
       - dev
 jobs:
+  spfx-shared:
+    defaults:
+      run:
+        working-directory: ./SharePointFramework/@Shared
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.22.0]
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('./package.json') }}
+
+      - name: Install npm packages
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          npm install
+
+      - name: Run npm script build
+        run: |
+          npm run build
+
+      - name: Run npm script lint
+        run: |
+          npm run lint
+          
   spfx-portfolio-webparts:
     defaults:
       run:
@@ -38,7 +77,84 @@ jobs:
           npm install
 
       - name: Run npm script package
+        run: |
+          npm run package
+
+      - name: Run npm script lint
+        run: |
+          npm run lint
+
+  spfx-project-extensions:
+    defaults:
+      run:
+        working-directory: ./SharePointFramework/ProjectExtensions
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.22.0]
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('./package.json') }}
+
+      - name: Install npm packages
         if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          npm install
+
+      - name: Run npm script package
+        run: |
+          npm run package
+
+      - name: Run npm script lint
+        run: |
+          npm run lint
+
+  spfx-project-webparts:
+    defaults:
+      run:
+        working-directory: ./SharePointFramework/ProjectWebParts
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.22.0]
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('./package.json') }}
+
+      - name: Install npm packages
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          npm install
+
+      - name: Run npm script package
         run: |
           npm run package
 
