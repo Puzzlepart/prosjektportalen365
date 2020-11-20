@@ -183,7 +183,7 @@ if (-not $SkipSiteDesign.IsPresent) {
         Write-Host "[INFO] Creating/updating site scripts"        
         Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
         $SiteScripts = Get-PnPSiteScript
-        $SiteScriptSrc = Get-ChildItem "./SiteScripts/*.txt"
+        $SiteScriptSrc = Get-ChildItem "$PSScriptRoot/SiteScripts/*.txt"
         foreach ($s in $SiteScriptSrc) {
             $Title = $s.BaseName.Substring(9)
             $Content = (Get-Content -Path $s.FullName -Raw | Out-String)
@@ -250,7 +250,7 @@ if (-not $SkipAppPackages.IsPresent) {
     }
     Try {
         Write-Host "[INFO] Installing SharePoint Framework app packages to [$TenantAppCatalogUrl]"
-        foreach ($AppPkg in (Get-ChildItem .\Apps\ -ErrorAction SilentlyContinue)) {
+        foreach ($AppPkg in (Get-ChildItem "$PSScriptRoot\Apps" -ErrorAction SilentlyContinue)) {
             Write-Host "[INFO] Installing $($AppPkg.BaseName)..."  -NoNewline
             Add-PnPApp -Path $AppPkg.FullName -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop >$null 2>&1
             Write-Host " DONE" -ForegroundColor Green
@@ -293,7 +293,7 @@ if (-not $SkipTemplate.IsPresent) {
         }
         if (-not $SkipTaxonomy.IsPresent -and -not $Upgrade.IsPresent) {
             Write-Host "[INFO] Applying PnP template [Taxonomy] to [$Url]"
-            Apply-PnPProvisioningTemplate .\Templates\Taxonomy.pnp -ErrorAction Stop
+            Apply-PnPProvisioningTemplate "$PSScriptRoot\Templates\Taxonomy.pnp" -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP template [Taxonomy] to [$Url]" -ForegroundColor Green
         }
         
@@ -301,16 +301,16 @@ if (-not $SkipTemplate.IsPresent) {
         $Instance = Read-PnPProvisioningTemplate .\Templates\Portfolio.pnp
         $Instance.SupportedUILanguages[0].LCID = $LanguageId
         Apply-PnPProvisioningTemplate -InputInstance $Instance -Handlers SupportedUILanguages
-        Apply-PnPProvisioningTemplate .\Templates\Portfolio.pnp -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
+        Apply-PnPProvisioningTemplate "$PSScriptRoot\Templates\Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
         Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
 
         if ($Upgrade.IsPresent) {
             Write-Host "[INFO] Applying PnP content template (Handlers:Files) to [$Url]"
-            Apply-PnPProvisioningTemplate ".\Templates\Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop
+            Apply-PnPProvisioningTemplate "$PSScriptRoot\Templates\Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
         } else {
             Write-Host "[INFO] Applying PnP content template to [$Url]"
-            Apply-PnPProvisioningTemplate ".\Templates\Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop
+            Apply-PnPProvisioningTemplate "$PSScriptRoot\Templates\Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
         }
         
@@ -345,7 +345,7 @@ if (-not $SkipSearchConfiguration.IsPresent) {
     Try {
         Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
         Write-Host "[INFO] Importing Search Configuration"    
-        Set-PnPSearchConfiguration -Scope Subscription -Path .\SearchConfiguration.xml -ErrorAction SilentlyContinue   
+        Set-PnPSearchConfiguration -Scope Subscription -Path "$PSScriptRoot/SearchConfiguration.xml" -ErrorAction SilentlyContinue   
         Disconnect-PnPOnline
         Write-Host "[SUCCESS] Successfully imported Search Configuration" -ForegroundColor Green
     }
