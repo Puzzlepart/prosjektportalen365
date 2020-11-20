@@ -1,3 +1,4 @@
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "")]
 Param(
     [Parameter(Mandatory = $false, HelpMessage = "Skip building of SharePoint Framework solutions")]
     [switch]$SkipBuildSharePointFramework,
@@ -40,17 +41,17 @@ if ($CI.IsPresent) {
 
 Write-Host "[INFO] Creating release folder $RELEASE_PATH...  " -NoNewline
 mkdir $RELEASE_PATH >$null 2>&1
-mkdir "$RELEASE_PATH/Templates" >$null 2>&1
-mkdir "$RELEASE_PATH/SiteScripts" >$null 2>&1
-mkdir "$RELEASE_PATH/Scripts" >$null 2>&1
-mkdir "$RELEASE_PATH/Apps" >$null 2>&1
+$RELEASE_PATH_TEMPLATES = (mkdir "$RELEASE_PATH/Templates").FullName
+$RELEASE_PATH_SITESCRIPTS = (mkdir "$RELEASE_PATH/SiteScripts").FullName
+$RELEASE_PATH_SCRIPTS = (mkdir "$RELEASE_PATH/Scripts").FullName
+$RELEASE_PATH_APPS = (mkdir "$RELEASE_PATH/Apps").FullName
 Write-Host "DONE" -ForegroundColor Green
 
 #region Copying source files
 Write-Host "[INFO] Copying Install.ps1, PostInstall.ps1 and site script source files...  " -NoNewline
-Copy-Item -Path "$SITE_SCRIPTS_BASEPATH/*.txt" -Filter *.txt -Destination "$RELEASE_PATH/SiteScripts" -Force
+Copy-Item -Path "$SITE_SCRIPTS_BASEPATH/*.txt" -Filter *.txt -Destination $RELEASE_PATH_SITESCRIPTS -Force
 Copy-Item -Path "$PSScriptRoot/Install.ps1" -Destination $RELEASE_PATH -Force
-Copy-Item -Path "$PSScriptRoot/Scripts/*.ps1" -Destination "$RELEASE_PATH/Scripts" -Force
+Copy-Item -Path "$PSScriptRoot/Scripts/*.ps1" -Destination $RELEASE_PATH_SCRIPTS -Force
 Copy-Item -Path "$PSScriptRoot/SearchConfiguration.xml" -Destination $RELEASE_PATH -Force
 Write-Host "DONE" -ForegroundColor Green
 
@@ -89,7 +90,7 @@ $Solutions | ForEach-Object {
         npm install --no-package-lock --no-package-lock --no-progress --silent --no-audit --no-fund
         npm run package
     }
-    Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse -ErrorAction SilentlyContinue | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$RELEASE_PATH/Apps/$_")) } | Copy-Item -Destination "$RELEASE_PATH/Apps" -Force
+    Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse -ErrorAction SilentlyContinue | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$RELEASE_PATH/Apps/$_")) } | Copy-Item -Destination $RELEASE_PATH_APPS -Force
     Write-Host "DONE" -ForegroundColor Green
 }
 #endregion
@@ -98,7 +99,7 @@ $Solutions | ForEach-Object {
 #region Build PnP templates
 Set-Location $PSScriptRoot
 Write-Host "[INFO] Building [Portfolio] PnP template...  " -NoNewline
-Convert-PnPFolderToProvisioningTemplate -Out "$RELEASE_PATH/Templates/Portfolio.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Portfolio" -Force
+Convert-PnPFolderToProvisioningTemplate -Out "$RELEASE_PATH_TEMPLATES/Portfolio.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Portfolio" -Force
 Write-Host "DONE" -ForegroundColor Green
 
 Write-Host "[INFO] Building PnP content templates...  " -NoNewline
@@ -108,13 +109,13 @@ npm install --no-package-lock --no-package-lock --no-progress --silent --no-audi
 npm run generateJsonTemplates
 
 Get-ChildItem "./Content" -Directory -Filter "*no-NB*" | ForEach-Object {
-    Convert-PnPFolderToProvisioningTemplate -Out "$RELEASE_PATH/Templates/$($_.BaseName).pnp" -Folder $_.FullName -Force
+    Convert-PnPFolderToProvisioningTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
 }
 Write-Host "DONE" -ForegroundColor Green
 Set-Location $PSScriptRoot
 
 Write-Host "[INFO] Building [Taxonomy] PnP template....  " -NoNewline
-Convert-PnPFolderToProvisioningTemplate -Out "$RELEASE_PATH/Templates/Taxonomy.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Taxonomy" -Force
+Convert-PnPFolderToProvisioningTemplate -Out "$RELEASE_PATH_TEMPLATES/Taxonomy.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Taxonomy" -Force
 Write-Host "DONE" -ForegroundColor Green
 #endregion
 
