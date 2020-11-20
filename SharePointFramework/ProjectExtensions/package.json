@@ -11,8 +11,10 @@
     "deploy": "gulp uploadAppPkg && gulp deploySppkg",
     "packageAndDeploy": "npm run package && npm run deploy",
     "postversion": "gulp versionSync",
-    "lint": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
-    "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent"
+    "lint": "eslint --ext .ts,.tsx ./src --color && npm run prettier",
+    "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier:write",
+    "prettier": "prettier --config .prettierrc '**/*.ts*' --loglevel silent",
+    "prettier:write": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent"
   },
   "dependencies": {
     "@microsoft/decorators": "1.11.0",
