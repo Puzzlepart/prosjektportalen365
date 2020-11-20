@@ -20,6 +20,7 @@ define([], function () {
     EditPropertiesText: 'Rediger egenskaper',
     EditReportButtonText: 'Rediger status',
     PublishReportButtonText: 'Publiser',
+    GetSnapshotButtonText: 'Åpne som øyeblikksbilde',
     DeleteReportButtonText: 'Slett',
     EditSiteInformationText: 'Rediger områdeinformasjon',
     ErrorText: 'Det skjedde en feil under lasting av {0}.',

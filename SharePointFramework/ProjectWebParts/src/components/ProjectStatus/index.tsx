@@ -121,7 +121,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           <div className={`${styles.header} ${styles.column12}`}>
             <div className={styles.title}>{this.props.title}</div>
           </div>
-          <div className={`${styles.sections} ${styles.column12}`} id="pp-statussection">
+          <div className={`${styles.sections} ${styles.column12}`} id='pp-statussection'>
             {this._renderSections()}
           </div>
         </div>
@@ -165,7 +165,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         name: strings.PublishReportButtonText,
         iconProps: { iconName: 'PublishContent' },
         disabled: (!selectedReport || selectedReport.moderationStatus === strings.GtModerationStatus_Choice_Published),
-        onClick: () => { this._publishReport(selectedReport); this.setState({isPublishing: true}); },
+        onClick: () => { this._publishReport(selectedReport); this.setState({isPublishing: true}) },
       },
     ]
     const farItems: IContextualMenuItem[] = []
@@ -179,9 +179,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       })
     }
     farItems.push({
-      id: "GetSnapshot",
-      key: "GetSnapShot",
-      name: "Åpne som øyeblikksbilde",
+      id: getId('GetSnapshot'),
+      key: getId('GetSnapShot'),
+      name: strings.GetSnapshotButtonText,
       iconProps: { iconName: 'Photo2',  },
       disabled: !selectedReport || !selectedReport.values.Attachments,
       onClick: () => { window.open(selectedReport.values.AttachmentFiles[0].ServerRelativeUrl) },
@@ -192,7 +192,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       name: selectedReport ? formatDate(selectedReport.created, true) : '',
       itemType: ContextualMenuItemType.Normal,
       disabled: reportOptions.length === 0,
-      iconProps: {iconName : "FullHistory"},
+      iconProps: {iconName : 'FullHistory'},
       subMenuProps: { items: reportOptions },
     })
     farItems.push({
@@ -383,18 +383,18 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    */
 
    private async _captureReport(title: string | number | boolean) {
-    let statusReportHtml = document.getElementById('pp-statussection');
-    const date = moment(Date()).format('YYYY-MM-DD HH:mm');
-    let dateStamp = document.createElement("p")
+    const statusReportHtml = document.getElementById('pp-statussection')
+    const date = moment(Date()).format('YYYY-MM-DD HH:mm')
+    const dateStamp = document.createElement('p')
     dateStamp.textContent = `${date}`
-    dateStamp.style.textAlign = "right"
-    statusReportHtml.appendChild(dateStamp);
-    statusReportHtml.style.backgroundColor = "#FFFFFF";
+    dateStamp.style.textAlign = 'right'
+    statusReportHtml.appendChild(dateStamp)
+    statusReportHtml.style.backgroundColor = '#FFFFFF'
 
-    let base64Png = await domtoimage.toBlob(statusReportHtml);
-    const fileName = `${(title + "_" + date).toString().replace(/\/|\\| |\:/g, '-')}.png`;
+    const base64Png = await domtoimage.toBlob(statusReportHtml)
+    const fileName = `${(title + '_' + date).toString().replace(/\/|\\| |\:/g, '-')}.png`
 
-    return {fileName: fileName, content: base64Png};
+    return {fileName: fileName, content: base64Png}
    }
 
 
@@ -405,8 +405,13 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    */
   private async _publishReport(report: StatusReport) {
     if (!this.state.isPublishing) {
-    let attachment = await this._captureReport(report.values.Title);
-    await this._portalDataService.updateStatusReport(report.id, { GtModerationStatus: strings.GtModerationStatus_Choice_Published}, attachment);
+    try {
+      const attachment = await this._captureReport(report.values.Title)
+      await this._portalDataService.updateStatusReport(report.id, { GtModerationStatus: strings.GtModerationStatus_Choice_Published}, attachment)
+    } catch (error) {
+      Logger.log({ message: '(ProjectStatus) _publishReport: Failed to add attachment', level: LogLevel.Info })
+      await this._portalDataService.updateStatusReport(report.id, { GtModerationStatus: strings.GtModerationStatus_Choice_Published})
+    }
     document.location.reload()
     }
   }
