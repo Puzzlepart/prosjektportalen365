@@ -35,7 +35,7 @@ $sw = [Diagnostics.Stopwatch]::StartNew()
 
 
 if ($CI.IsPresent) {
-    $RELEASE_PATH = "$PSScriptRoot/../release"
+    $RELEASE_PATH = "$ROOT_PATH/release"
 }
 
 Write-Host "[INFO] Creating release folder $RELEASE_PATH...  " -NoNewline
