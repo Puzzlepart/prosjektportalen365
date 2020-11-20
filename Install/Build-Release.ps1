@@ -12,6 +12,7 @@ Param(
 )   
 
 if($CI.IsPresent) {
+    Write-Host "[Running in CI mode. Installing module SharePointPnPPowerShellOnline.]" -ForegroundColor Yellow
     Install-Module -Name SharePointPnPPowerShellOnline -Force -Verbose -Scope CurrentUser    
 }
 
@@ -32,11 +33,11 @@ mkdir "$ReleasePath/Scripts" >$null 2>&1
 mkdir "$ReleasePath/Apps" >$null 2>&1
 #endregion
 
-Write-Host "Building release [v$($PackageJson.version)]" -ForegroundColor Cyan
+Write-Host "[Building release v$($PackageJson.version)]" -ForegroundColor Cyan
 
 
 if ($Silent.IsPresent) {
-    Write-Host "Running in silent mode. All output from npm will be surpressed." -ForegroundColor Yellow
+    Write-Host "[Running in silent mode. All output from npm will be surpressed.]" -ForegroundColor Yellow
 }
 
 #region Copying source files
