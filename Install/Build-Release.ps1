@@ -60,15 +60,14 @@ if ($CleanNodeModules.IsPresent) {
 #endregion
 
 #region Package SharePoint Framework solutions
-Write-Host "[INFO] Building SharePointFramework\@Shared...  " -NoNewline
-Set-Location "$PSScriptRoot\..\SharePointFramework\@Shared"
-
 # https://github.com/SharePoint/sp-dev-docs/issues/2916
 if (-not $SkipBuildSharePointFramework.IsPresent) {
+    Write-Host "[INFO] Building SharePointFramework\@Shared...  " -NoNewline
+    Set-Location "$PSScriptRoot\..\SharePointFramework\@Shared"
     npm install --no-package-lock --no-package-lock --no-progress --silent --no-audit --no-fund
     npm run build   
+    Write-Host "DONE" -ForegroundColor Green
 }
-Write-Host "DONE" -ForegroundColor Green
 
 $Solutions | ForEach-Object {
     Set-Location "$($PSScriptRoot)\..\SharePointFramework\$_"
@@ -79,8 +78,8 @@ $Solutions | ForEach-Object {
         npm install --no-package-lock --no-package-lock --no-progress --silent --no-audit --no-fund
         npm run package
     }
-    Write-Host "DONE" -ForegroundColor Green
     Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$ReleasePath/Apps/$_")) } | Copy-Item -Destination "$ReleasePath/Apps" -Force
+    Write-Host "DONE" -ForegroundColor Green
 }
 #endregion
 
