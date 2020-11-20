@@ -74,9 +74,7 @@ if ($Force.IsPresent) {
 if (-not $SkipBuildSharePointFramework.IsPresent) {
     Write-Host "[INFO] Building SharePointFramework\@Shared...  " -NoNewline
     Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH\@Shared"
-    if (-not $CI.IsPresent) {
-        npm install --no-package-lock --no-package-lock --no-progress --silent --no-audit --no-fund
-    }
+    npm install --no-package-lock --no-package-lock --no-progress --silent --no-audit --no-fund
     npm run build   
     Write-Host "DONE" -ForegroundColor Green
 }
@@ -86,9 +84,7 @@ $Solutions | ForEach-Object {
     $Version = (Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json).solution.version
     Write-Host "[INFO] Packaging SPFx solution [$_] v$Version...  " -NoNewline
     if (-not $SkipBuildSharePointFramework.IsPresent) {       
-        if (-not $CI.IsPresent) {
-            npm install --no-package-lock --no-package-lock --no-progress --silent --no-audit --no-fund
-        }
+        npm install --no-package-lock --no-package-lock --no-progress --silent --no-audit --no-fund
         npm run package
     }
     Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse -ErrorAction SilentlyContinue | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$RELEASE_PATH/Apps/$_")) } | Copy-Item -Destination $RELEASE_PATH_APPS -Force
