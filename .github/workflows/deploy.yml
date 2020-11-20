@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches: [dev]
+
+# Variables that are available for all the jobs in the workflow
+env:
+  SPPKG_FILE_NAME: 'spfx-read-write-operations.sppkg'
+  DEPLOYMENT_SCRIPT: 'DeployAppToSite.ps1'
+  SITE_URL: 'https://bhavyamsdnlego.sharepoint.com/sites/TestExtensionGroupSite2/'
+  APP_NAME: 'spfx-read-write-operations4'
+  SEND_MAIL: 'true'
+  
+jobs:
+   deploy:
+    runs-on: windows-latest
+    
+    steps:        
+    - name: Run build release script Install/Build-Release.ps1
+      run: Install/Build-Release.ps1
+      shell: powershell
