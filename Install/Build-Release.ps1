@@ -9,6 +9,7 @@ Param(
     [switch]$Silent
 )   
 
+Install-Module -Name SharePointPnPPowerShellOnline -Force -Verbose -Scope CurrentUser              
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
 
