@@ -11,7 +11,7 @@ Param(
 
 if($CI.IsPresent) {
     Write-Host "[Running in CI mode. Installing module SharePointPnPPowerShellOnline.]" -ForegroundColor Yellow
-    Install-Module -Name SharePointPnPPowerShellOnline -Force -Verbose -Scope CurrentUser >$null 2>&1
+    Install-Module -Name SharePointPnPPowerShellOnline -Force -Scope CurrentUser
 }
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
