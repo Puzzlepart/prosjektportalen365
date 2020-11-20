@@ -22,60 +22,52 @@ jobs:
 
     - name: Cache node modules (@Shared)
       uses: actions/cache@v1
+      id: cache_shared
       with:
         path: SharePointFramework/@Shared/node_modules
         key: ${{ runner.OS }}-shared-${{ hashFiles('**/package.json') }}
-        restore-keys: |
-          ${{ runner.OS }}-shared-${{ env.cache-name }}-
-          ${{ runner.OS }}-shared-
-          ${{ runner.OS }}-
 
     - name: Install npm packages (@Shared)
+      if: steps.cache_shared.outputs.cache-hit != 'true'
       working-directory: SharePointFramework/@Shared
       run: |
         npm install --no-progress --loglevel silent --no-shrinkwrap --no-fund
 
     - name: Cache node modules (PortfolioWebParts)
       uses: actions/cache@v1
+      id: cache_portfoliowebparts
       with:
         path: SharePointFramework/PortfolioWebParts/node_modules
         key: ${{ runner.OS }}-portfoliowebparts-${{ hashFiles('**/package.json') }}
-        restore-keys: |
-          ${{ runner.OS }}-portfoliowebparts-${{ env.cache-name }}-
-          ${{ runner.OS }}-portfoliowebparts-
-          ${{ runner.OS }}-
 
     - name: Install npm packages (PortfolioWebParts)
+      if: steps.cache_portfoliowebparts.outputs.cache-hit != 'true'
       working-directory: SharePointFramework/PortfolioWebParts
       run: |
         npm install --no-progress --loglevel silent --no-shrinkwrap --no-fund
 
     - name: Cache node modules (ProjectExtensions)
       uses: actions/cache@v1
+      id: cache_projectextensions
       with:
         path: SharePointFramework/ProjectExtensions/node_modules
         key: ${{ runner.OS }}-projectextensions-${{ hashFiles('**/package.json') }}
-        restore-keys: |
-          ${{ runner.OS }}-projectextensions-${{ env.cache-name }}-
-          ${{ runner.OS }}-projectextensions-
-          ${{ runner.OS }}-
 
     - name: Install npm packages (ProjectExtensions)
+      if: steps.cache_projectextensions.outputs.cache-hit != 'true'
       working-directory: SharePointFramework/ProjectExtensions
       run: |
         npm install --no-progress --loglevel silent --no-shrinkwrap --no-fund
 
     - name: Cache node modules (ProjectWebParts)
       uses: actions/cache@v1
+      id: cache_projectwebparts
       with:
         path: SharePointFramework/ProjectWebParts/node_modules
         key: ${{ runner.OS }}-projectwebparts-${{ hashFiles('**/package.json') }}
-        restore-keys: |
-          ${{ runner.OS }}-projectwebparts-${{ env.cache-name }}-
-          ${{ runner.OS }}-projectwebparts-
-          ${{ runner.OS }}-
 
     - name: Install npm packages (ProjectWebParts)
+      if: steps.cache_projectwebparts.outputs.cache-hit != 'true'
       working-directory: SharePointFramework/ProjectWebParts
       run: |
         npm install --no-progress --loglevel silent --no-shrinkwrap --no-fund
