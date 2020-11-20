@@ -1,4 +1,4 @@
-name: CI
+name: CI - Build and install
 
 on:
   push:
@@ -40,4 +40,9 @@ jobs:
     - name: Install to ${{ env.TARGET_URL }}
       run: release-package/Install.ps1 -Url ${{ env.TARGET_URL }} -SkipAppPackages -SkipSearchConfiguration -SkipSiteDesign -SkipTaxonomy -CI ${{ secrets.CI_CREDENTIALS }}
       shell: powershell
+      
+    - uses: actions/upload-artifact@v1
+      with:
+        name: installation-log
+        path: release-package/Install_Log.txt
 
