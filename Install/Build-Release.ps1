@@ -22,6 +22,9 @@ $PackageJson = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Js
 #region Creating release path
 $GitHash = git log --pretty=format:'%h' -n 1
 $ReleasePath = "$PSScriptRoot/../Release/$($PackageJson.name)-$($PackageJson.version).$($GitHash)"
+if($CI.IsPresent) {
+    $ReleasePath = "$PSScriptRoot/../Release"
+}
 mkdir $ReleasePath >$null 2>&1
 mkdir "$ReleasePath/Templates" >$null 2>&1
 mkdir "$ReleasePath/SiteScripts" >$null 2>&1
@@ -129,9 +132,8 @@ Write-Host "DONE" -ForegroundColor Green
 
 $sw.Stop()
 
-
-Add-Type -Assembly "System.IO.Compression.FileSystem"
-
-[IO.Compression.ZipFile]::CreateFromDirectory($ReleasePath, "$($ReleasePath).zip") 
-
-Write-Host "Done building release [v$($PackageJson.version)] in [$($sw.Elapsed)]" -ForegroundColor Cyan
+if(-not $CI.IsPresent) {
+    Add-Type -Assembly "System.IO.Compression.FileSystem"
+    [IO.Compression.ZipFile]::CreateFromDirectory($ReleasePath, "$($ReleasePath).zip")  
+    Write-Host "Done building release [v$($PackageJson.version)] in [$($sw.Elapsed)]" -ForegroundColor Cyan
+}
