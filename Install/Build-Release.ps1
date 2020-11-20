@@ -7,10 +7,11 @@ Param(
     [string[]]$Solutions = @("ProjectWebParts", "PortfolioWebParts", "ProjectExtensions"),
     [Parameter(Mandatory = $false)]
     [switch]$Silent,
-    [switch]$InstallModule,
+    Parameter(Mandatory = $false, HelpMessage = "CI")]
+    [switch]$CI
 )   
 
-if($InstallModule.IsPresent) {
+if($CI.IsPresent) {
     Install-Module -Name SharePointPnPPowerShellOnline -Force -Verbose -Scope CurrentUser    
 }
 
