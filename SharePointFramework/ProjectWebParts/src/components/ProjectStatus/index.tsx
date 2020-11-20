@@ -12,13 +12,13 @@ import {
 } from 'office-ui-fabric-react/lib/ContextualMenu'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
 import { formatDate } from 'shared/lib/helpers'
 import { SectionModel, SectionType, StatusReport } from 'shared/lib/models'
 import { PortalDataService } from 'shared/lib/services'
 import { getUrlParam, parseUrlHash, removeMenuBorder, setUrlHash } from 'shared/lib/util'
-import * as formatString from 'string-format'
 import { first } from 'underscore'
 import SPDataAdapter from '../../data'
 import styles from './ProjectStatus.module.scss'
@@ -95,7 +95,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       return (
         <div className={styles.projectStatus}>
           <div className={styles.container}>
-            <Spinner label={formatString(strings.LoadingText, this.props.title)} />
+            <Spinner label={format(strings.LoadingText, this.props.title)} />
           </div>
         </div>
       )
@@ -363,7 +363,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           return obj
         }, {})
     }
-    fieldValues.Title = formatString(strings.NewStatusReportTitle, webTitle)
+    fieldValues.Title = format(strings.NewStatusReportTitle, webTitle)
     fieldValues.GtSiteId = siteId
     fieldValues.ContentTypeId = properties.templateParameters.ProjectStatusContentTypeId
     fieldValues.GtModerationStatus = strings.GtModerationStatus_Choice_Draft

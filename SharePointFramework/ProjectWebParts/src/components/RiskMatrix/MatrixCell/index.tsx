@@ -22,7 +22,4 @@ export const MatrixHeaderCell: FunctionComponent<IMatrixHeaderCellProps> = (prop
   )
 }
 
-export enum MatrixCellType {
-  Header,
-  Cell
-}
+export * from './types'
