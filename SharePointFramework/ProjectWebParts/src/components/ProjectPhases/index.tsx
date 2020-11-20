@@ -6,7 +6,6 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
 import * as strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
-import * as format from 'string-format'
 import SPDataAdapter from '../../data'
 import { UserMessage } from '../UserMessage'
 import ChangePhaseDialog from './ChangePhaseDialog'
@@ -14,6 +13,7 @@ import { IProjectPhasesProps, IProjectPhasesState, IProjectPhasesData } from './
 import ProjectPhase from './ProjectPhase'
 import ProjectPhaseCallout from './ProjectPhaseCallout'
 import styles from './ProjectPhases.module.scss'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 
 /**
  * @component ProjectPhases

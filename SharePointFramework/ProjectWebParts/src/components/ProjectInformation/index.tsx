@@ -10,7 +10,6 @@ import { ConfirmAction, ConfirmDialog } from 'pzl-spfx-components/lib/components
 import * as React from 'react'
 import { PortalDataService } from 'shared/lib/services'
 import { parseUrlHash, sleep } from 'shared/lib/util'
-import * as formatString from 'string-format'
 import SPDataAdapter from '../../data'
 import { BaseWebPartComponent } from '../BaseWebPartComponent'
 import { ProgressDialog } from '../ProgressDialog'
@@ -26,6 +25,7 @@ import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
 import { ProjectProperty, ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
 import { StatusReports } from './StatusReports'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 
 export class ProjectInformation extends BaseWebPartComponent<
   IProjectInformationProps,
@@ -87,7 +87,7 @@ export class ProjectInformation extends BaseWebPartComponent<
   private get _contents() {
     if (this.state.isLoading) {
       return !stringIsNullOrEmpty(this.props.title) ? (
-        <Spinner label={formatString(strings.LoadingText, this.props.title.toLowerCase())} />
+        <Spinner label={format(strings.LoadingText, this.props.title.toLowerCase())} />
       ) : null
     }
     if (this.state.error) {
@@ -150,7 +150,7 @@ export class ProjectInformation extends BaseWebPartComponent<
     return new Promise((resolve) => {
       this.setState({
         message: {
-          text: formatString(text, duration.toString()),
+          text: format(text, duration.toString()),
           messageBarType,
           onDismiss: () => this.setState({ message: null })
         }

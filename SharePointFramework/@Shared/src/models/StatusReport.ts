@@ -1,4 +1,10 @@
 import { TypedHash } from '@pnp/common'
+import { isEmpty } from 'underscore'
+
+export type StatusReportAttachment = {
+  FileName: string
+  ServerRelativeUrl: string
+}
 
 export class StatusReport {
   public id: number
@@ -11,7 +17,7 @@ export class StatusReport {
    * @param {TypedHash} item SP item
    * @param {string} _publishedString Published string
    */
-  constructor(private _item: TypedHash<any>,private _publishedString?: string) {
+  constructor(private _item: TypedHash<any>, private _publishedString?: string) {
     this.id = _item.Id
     this.created = new Date(_item.Created)
   }
@@ -63,16 +69,36 @@ export class StatusReport {
   }
 
   /**
+   * Attachments
+   */
+  public get attachments(): StatusReportAttachment[] {
+    return this._item.AttachmentFiles || []
+  }
+
+  /**
+   * Has attachments
+   */
+  public get hasAttachments(): boolean {
+    return !isEmpty(this.attachments)
+  }
+
+  /**
    * Field values
    */
   public get fieldValues(): TypedHash<string> {
     return this._item.FieldValuesAsText || this._item
   }
 
+  /**
+   * Moderation status
+   */
   public get moderationStatus(): string {
     return this._item.FieldValuesAsText.GtModerationStatus
   }
 
+  /**
+   * Report published
+   */
   public get published(): boolean {
     return this.moderationStatus === this._publishedString
   }

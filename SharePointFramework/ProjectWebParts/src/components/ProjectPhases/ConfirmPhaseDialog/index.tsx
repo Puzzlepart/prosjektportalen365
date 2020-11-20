@@ -1,10 +1,10 @@
-import * as React from 'react'
-import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog'
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
+import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
+import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog'
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
-import { IConfirmPhaseDialogProps } from './types'
-import * as format from 'string-format'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectWebPartsStrings'
+import * as React from 'react'
+import { IConfirmPhaseDialogProps } from './types'
 
 /**
  * @component ConfirmPhaseDialog

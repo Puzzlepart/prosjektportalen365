@@ -1,15 +1,14 @@
-import * as React from 'react'
+import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
+import * as strings from 'ProjectWebPartsStrings'
+import React, { FunctionComponent } from 'react'
 import { RiskElementModel } from '../'
-import { IMatrixCell } from '../IMatrixCell'
-import { MatrixCell, MatrixCellType, MatrixHeaderCell } from '../MatrixCell'
+import { IMatrixCell, MatrixCell, MatrixCellType, MatrixHeaderCell } from '../MatrixCell'
 import { RiskElement } from '../RiskElement'
 import RISK_MATRIX_CELLS from '../RiskMatrixCells'
-import { IMatrixRowProps } from './types'
 import styles from './MatrixRow.module.scss'
-import * as strings from 'ProjectWebPartsStrings'
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
+import { IMatrixRowProps } from './types'
 
-export const MatrixRow = ({ children }: IMatrixRowProps) => {
+export const MatrixRow: FunctionComponent<IMatrixRowProps> = ({ children }: IMatrixRowProps) => {
   return <tr className={styles.matrixRow}>{children}</tr>
 }
 
