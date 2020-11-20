@@ -367,16 +367,18 @@ export class DataAdapter {
   }
 
   /**
-   *
+   * Checks if the current is in the specified group
    *
    * @private
    * @param {string} groupName
+   *
    * @returns {Promise<boolean>}
+   *
    * @memberof DataAdapter
    */
   private async _isUserInGroup(groupName: string): Promise<boolean> {
     try {
-        let siteGroups = await sp.web.siteGroups.select('CanCurrentUserViewMembership,Title').filter(`Title eq '${groupName}'`).get();
+        let siteGroups = await sp.web.siteGroups.select('CanCurrentUserViewMembership','Title').filter(`Title eq '${groupName}'`).get();
         return siteGroups.length === 1 && siteGroups[0].CanCurrentUserViewMembership;
     } catch (error) {
         return false;
