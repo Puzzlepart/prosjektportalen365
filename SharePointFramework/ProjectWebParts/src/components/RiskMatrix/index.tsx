@@ -1,9 +1,9 @@
-import * as React from 'react'
+import React, { FunctionComponent } from 'react'
 import { IRiskMatrixProps } from './types'
 import { MatrixRows } from './MatrixRow'
 import styles from './RiskMatrix.module.scss'
 
-export const RiskMatrix = ({
+export const RiskMatrix: FunctionComponent<IRiskMatrixProps> = ({
   items = [],
   width = 400,
   height = 300,

@@ -1,6 +1,5 @@
-import * as React from 'react'
-import { RiskElementModel } from '../'
-import { IMatrixCell } from '../IMatrixCell'
+import React, { FunctionComponent } from 'react'
+import { IMatrixCell, RiskElementModel } from '../'
 import { MatrixCell, MatrixCellType, MatrixHeaderCell } from '../MatrixCell'
 import { RiskElement } from '../RiskElement'
 import RISK_MATRIX_CELLS from '../RiskMatrixCells'
@@ -9,7 +8,7 @@ import styles from './MatrixRow.module.scss'
 import * as strings from 'ProjectWebPartsStrings'
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 
-export const MatrixRow = ({ children }: IMatrixRowProps) => {
+export const MatrixRow: FunctionComponent<IMatrixRowProps> = ({ children }: IMatrixRowProps) => {
   return <tr className={styles.matrixRow}>{children}</tr>
 }
 
