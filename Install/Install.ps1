@@ -298,7 +298,7 @@ if (-not $SkipTemplate.IsPresent) {
         }
         
         Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
-        $Instance = Read-PnPProvisioningTemplate .\Templates\Portfolio.pnp
+        $Instance = Read-PnPProvisioningTemplate "$PSScriptRoot\Templates\Portfolio.pnp"
         $Instance.SupportedUILanguages[0].LCID = $LanguageId
         Apply-PnPProvisioningTemplate -InputInstance $Instance -Handlers SupportedUILanguages
         Apply-PnPProvisioningTemplate "$PSScriptRoot\Templates\Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
