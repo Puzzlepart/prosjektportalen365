@@ -22,7 +22,7 @@ import {
   PortalDataServiceList
 } from './IPortalDataServiceConfiguration'
 
-export type GetStatusReportsOptions = { filter?: string; top?: number; select?: string[]; publishedString?: string }
+export type GetStatusReportsOptions = { filter?: string; top?: number; select?: string[]; publishedString?: string, expand?: string[] }
 
 export class PortalDataService {
   private _configuration: IPortalDataServiceConfiguration
@@ -85,8 +85,8 @@ export class PortalDataService {
         await projectStatusList.items.getById(id).attachmentFiles.add(attachment.fileName, attachment.content);
         } catch (error) {
             Logger.log({ message: `(updateStatusReport): Unable to sync PNG snapshot, syncing without snapshot`, level: LogLevel.Info });
-            await projectStatusList.items.getById(id).update(properties);
         }
+        await projectStatusList.items.getById(id).update(properties);
     }
 
   /**
@@ -343,7 +343,7 @@ export class PortalDataService {
    *
    * @param {GetStatusReportsOptions} options Options
    */
-  public async getStatusReports({ filter = '', top, select, publishedString }: GetStatusReportsOptions): Promise<StatusReport[]> {
+  public async getStatusReports({ filter = '', top, select, publishedString, expand = ['FieldValuesAsText', 'AttachmentFiles'] }: GetStatusReportsOptions): Promise<StatusReport[]> {
     if (!this._configuration.siteId) throw 'Property {siteId} missing in configuration'
     if (stringIsNullOrEmpty(filter)) filter = `GtSiteId eq '${this._configuration.siteId}'`
     try {
@@ -351,14 +351,13 @@ export class PortalDataService {
         .getByTitle(this._configuration.listNames.PROJECT_STATUS)
         .items
         .filter(filter)
-        .expand('FieldValuesAsText')
+        .expand(expand.join(','))
         .orderBy('Id', false)
       if (top) items = items.top(top)
       if (select) items = items.select(...select)
       return (await items.get()).map((i) => new StatusReport(i, publishedString))
     } catch (error) {
       throw error
-    public async getStatusReports(filter: string = '', top?: number, select?: string[], expand: string[] = ['FieldValuesAsText', 'AttachmentFiles']): Promise<StatusReport[]> {
     }
   }
 

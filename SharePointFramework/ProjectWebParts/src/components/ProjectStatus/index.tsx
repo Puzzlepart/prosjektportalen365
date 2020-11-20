@@ -45,7 +45,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    */
   constructor(props: IProjectStatusProps) {
     super(props)
-    this.state = { isLoading: true }
+    this.state = { isLoading: true, isPublishing: false }
     this._portalDataService = new PortalDataService().configure({
       urlOrWeb: props.hubSite.web,
       siteId: props.siteId
