@@ -1,0 +1,47 @@
+name: CI - Build and install TEST 2
+
+on:
+  push:
+    branches: [dev]
+
+env:
+  TARGET_URL: 'https://puzzlepart.sharepoint.com/sites/pp365_ci'
+  
+jobs:
+   build:
+    runs-on: windows-latest
+    
+    steps:      
+    - uses: actions/checkout@v2 
+    - name: Setup Node.js 10.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.x
+
+    - name: (@Shared) Cache node modules
+      id: cache_01
+      uses: actions/cache@v2
+      with:
+        path: |
+          **/node_modules
+        key: node-modules-${{ hashFiles('**/package.json') }}
+
+    - name: (@Shared) NPM install npm packages
+      if: steps.cache_01.outputs.cache-hit != 'true'
+      working-directory: SharePointFramework/@Shared
+      run: npm install
+
+    - name: (PortfolioWebParts) NPM install npm packages
+      if: steps.cache_01.outputs.cache-hit != 'true'
+      working-directory: SharePointFramework/PortfolioWebParts
+      run: npm install
+
+    - name: (ProjectExtensions) NPM install npm packages
+      if: steps.cache_01.outputs.cache-hit != 'true'
+      working-directory: SharePointFramework/ProjectExtensions
+      run: npm install
+
+    - name: (ProjectWebParts) NPM install npm packages
+      if: steps.cache_01.outputs.cache-hit != 'true'
+      working-directory: SharePointFramework/ProjectWebParts
+      run: npm install
