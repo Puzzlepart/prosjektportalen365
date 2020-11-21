@@ -1,6 +1,6 @@
 import { IProjectSetupData } from 'extensions/projectSetup'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
-import * as formatString from 'string-format'
 import { transformFieldXml } from 'shared/lib/helpers'
 import { SPField } from 'shared/lib/models'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
@@ -49,7 +49,7 @@ export class ProvisionSiteFields extends BaseTask {
           }
           onProgress(
             strings.ProvisionSiteFieldsText,
-            formatString(strings.ProvisionSiteFieldText, siteField.Title),
+            format(strings.ProvisionSiteFieldText, siteField.Title),
             'EditCreate'
           )
           const fieldXml = transformFieldXml(siteField.SchemaXml)

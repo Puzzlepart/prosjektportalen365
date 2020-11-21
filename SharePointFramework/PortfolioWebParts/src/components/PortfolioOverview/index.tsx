@@ -1,8 +1,9 @@
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library'
-import { Web } from '@pnp/sp'
 import { stringIsNullOrEmpty } from '@pnp/common'
+import { Web } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
 import * as arraySort from 'array-sort'
+import * as uniq from 'array-unique'
 import {
   ContextualMenu,
   ContextualMenuItemType,
@@ -14,8 +15,8 @@ import {
   DetailsListLayoutMode,
   IDetailsHeaderProps,
   IGroup,
-  SelectionMode,
-  Selection
+  Selection,
+  SelectionMode
 } from 'office-ui-fabric-react/lib/DetailsList'
 import { LayerHost } from 'office-ui-fabric-react/lib/Layer'
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection'
@@ -24,7 +25,7 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner'
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky'
-import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities'
+import { format, IRenderFunction } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationModal } from 'projectwebparts/lib/components/ProjectInformation'
 import * as React from 'react'
@@ -32,7 +33,6 @@ import { getObjectValue } from 'shared/lib/helpers/getObjectValue'
 import { PortfolioOverviewView, ProjectColumn } from 'shared/lib/models'
 import ExcelExportService from 'shared/lib/services/ExcelExportService'
 import { parseUrlHash, redirect, setUrlHash } from 'shared/lib/util'
-import * as format from 'string-format'
 import * as _ from 'underscore'
 import { IFilterItemProps, IFilterProps } from '../FilterPanel'
 import { IPortfolioOverviewProps } from './IPortfolioOverviewProps'
@@ -44,7 +44,6 @@ import styles from './PortfolioOverview.module.scss'
 import { PortfolioOverviewCommands } from './PortfolioOverviewCommands'
 import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage'
 import { renderItemColumn } from './RenderItemColumn'
-import * as uniq from 'array-unique'
 
 /**
  * @component PortfolioOverview

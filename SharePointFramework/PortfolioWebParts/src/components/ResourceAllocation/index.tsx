@@ -15,6 +15,7 @@ import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMen
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import * as React from 'react'
 import Timeline, {
@@ -26,7 +27,6 @@ import Timeline, {
 import 'react-calendar-timeline/lib/Timeline.css'
 import { tryParsePercentage } from 'shared/lib/helpers'
 import { DataSourceService } from 'shared/lib/services'
-import * as format from 'string-format'
 import * as _ from 'underscore'
 import { FilterPanel, IFilterItemProps, IFilterProps } from '../FilterPanel'
 import { DetailsCallout } from './DetailsCallout'

@@ -8,20 +8,46 @@ on:
 jobs:
   spfx-package:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [10.22.0]
     steps:
       - uses: actions/checkout@v1
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js 10.x
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 10.x
 
+      - name: (@Shared) Cache node modules
+        id: shared_node_modules_cache
+        uses: actions/cache@v2
+        with:
+          path: SharePointFramework/@Shared/node_modules
+          key: node-modules-${{ hashFiles('SharePointFramework/@Shared/package.json') }}
+
+      - name: (PortfolioWebParts) Cache node modules
+        id: portfolio_webparts_node_modules_cache
+        uses: actions/cache@v2
+        with:
+          path: SharePointFramework/PortfolioWebParts/node_modules
+          key: node-modules-${{ hashFiles('SharePointFramework/PortfolioWebParts/package.json') }}
+
+      - name: (ProjectExtensions) Cache node modules
+        id: project_extensions_node_modules_cache
+        uses: actions/cache@v2
+        with:
+          path: SharePointFramework/ProjectExtensions/node_modules
+          key: node-modules-${{ hashFiles('SharePointFramework/ProjectExtensions/package.json') }}
+
+      - name: (ProjectWebParts) Cache node modules
+        id: project_webparts_node_modules_cache
+        uses: actions/cache@v2
+        with:
+          path: SharePointFramework/ProjectWebParts/node_modules
+          key: node-modules-${{ hashFiles('SharePointFramework/ProjectWebParts/package.json') }}
+          
       - name: (@Shared) Install npm packages
+        if: steps.shared_node_modules_cache.outputs.cache-hit != 'true'
         working-directory: ./SharePointFramework/@Shared
         run: |
           npm install --no-progress --loglevel silent --no-shrinkwrap --no-fund
@@ -34,19 +60,18 @@ jobs:
       - name: (@Shared) Run npm script lint
         working-directory: ./SharePointFramework/@Shared
         run: |
-          npm run lint
-        
-
+          npm run lint     
 
       - name: (ProjectWebParts) Install npm packages
+        if: steps.project_webparts_node_modules_cache.outputs.cache-hit != 'true'
         working-directory: ./SharePointFramework/ProjectWebParts
         run: |
           npm install --no-progress --loglevel silent --no-shrinkwrap --no-fund
 
-      - name: (ProjectWebParts) Run npm script package
+      - name: (ProjectWebParts) Run npm script package:ci
         working-directory: ./SharePointFramework/ProjectWebParts
         run: |
-          npm run package
+          npm run package:ci
 
       - name: (ProjectWebParts) Run npm script lint
         working-directory: ./SharePointFramework/ProjectWebParts
@@ -54,30 +79,31 @@ jobs:
           npm run lint
 
       - name: (PortfolioWebParts) Install npm packages
+        if: steps.portfolio_webparts_node_modules_cache.outputs.cache-hit != 'true'
         working-directory: ./SharePointFramework/PortfolioWebParts
         run: |
           npm install --no-progress --loglevel silent --no-shrinkwrap --no-fund
 
-      - name: (PortfolioWebParts) Run npm script package
+      - name: (PortfolioWebParts) Run npm script package:ci
         working-directory: ./SharePointFramework/PortfolioWebParts
         run: |
-          npm run package
+          npm run package:ci
 
       - name: (PortfolioWebParts) Run npm script lint
         working-directory: ./SharePointFramework/PortfolioWebParts
         run: |
           npm run lint
 
-
       - name: (ProjectExtensions) Install npm packages
+        if: steps.project_extensions_node_modules_cache.outputs.cache-hit != 'true'
         working-directory: ./SharePointFramework/ProjectExtensions
         run: |
           npm install --no-progress --loglevel silent --no-shrinkwrap --no-fund
 
-      - name: (ProjectExtensions) Run npm script package
+      - name: (ProjectExtensions) Run npm script package:ci
         working-directory: ./SharePointFramework/ProjectExtensions
         run: |
-          npm run package
+          npm run package:ci
 
       - name: (ProjectExtensions) Run npm script lint
         working-directory: ./SharePointFramework/ProjectExtensions

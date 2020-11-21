@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as $script from 'scriptjs'
-import * as format from 'string-format'
 import { getObjectValue } from '../../helpers/getObjectValue'
 import { stringToArrayBuffer } from '../../util'
 import { ExcelExportServiceDefaultConfiguration } from './ExcelExportServiceDefaultConfiguration'

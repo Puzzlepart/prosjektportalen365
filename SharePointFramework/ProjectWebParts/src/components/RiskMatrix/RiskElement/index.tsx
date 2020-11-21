@@ -3,7 +3,11 @@ import { IRiskElementProps } from './types'
 import styles from './RiskElement.module.scss'
 import { RiskElementCallout } from './RiskElementCallout'
 
-export const RiskElement: FunctionComponent<IRiskElementProps> = ({ style, model, calloutTemplate }: IRiskElementProps) => {
+export const RiskElement: FunctionComponent<IRiskElementProps> = ({
+  style,
+  model,
+  calloutTemplate
+}: IRiskElementProps) => {
   const [callout, setCallout] = React.useState(null)
 
   const getTooltip = () => {

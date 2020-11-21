@@ -7,9 +7,7 @@ import { DeliveriesOverview, IDeliveriesOverviewProps } from 'components/Deliver
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from '../@basePortfolioWebPart'
 
-export default class DeliveriesOverviewWebPart extends BasePortfolioWebPart<
-  IDeliveriesOverviewProps
-> {
+export default class DeliveriesOverviewWebPart extends BasePortfolioWebPart<IDeliveriesOverviewProps> {
   public render(): void {
     this.renderComponent(DeliveriesOverview)
   }
