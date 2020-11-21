@@ -7,8 +7,10 @@
         "build": "tsc",
         "watch": "tsc --watch",
         "postversion": "tsc",
-        "lint": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
-        "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent"
+        "lint": "eslint --ext .ts,.tsx ./src --color && npm run prettier",
+        "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier:write",
+        "prettier": "prettier --config .prettierrc '**/*.ts*' --loglevel silent",
+        "prettier:write": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent"
     },
     "author": "",
     "license": "ISC",
