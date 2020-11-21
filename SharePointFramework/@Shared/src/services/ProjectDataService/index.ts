@@ -141,6 +141,7 @@ export class ProjectDataService {
             'SchemaXml',
             'TextField'
           )
+          // eslint-disable-next-line quotes
           .filter("substringof('Gt', InternalName)")
           .usingCaching()
           .get()
