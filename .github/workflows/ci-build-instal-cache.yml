@@ -20,12 +20,12 @@ jobs:
       with:
         node-version: 10.x
 
-  - name: (@Shared) Cache node modules
+    - name: (@Shared) Cache node modules
       id: cache_01
       uses: actions/cache@v2
       with:
-        path: SharePointFramework/@Shared/node_modules
-        key: node-modules-${{ hashFiles('SharePointFramework/@Shared/package.json') }}
+       path: SharePointFramework/@Shared/node_modules
+       key: node-modules-${{ hashFiles('SharePointFramework/@Shared/package.json') }}
 
     - name: (PortfolioWebParts) Cache node modules
       id: cache_02
