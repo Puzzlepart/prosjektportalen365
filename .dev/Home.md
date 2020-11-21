@@ -1,12 +1,12 @@
-# Development guide
+## Development guide
 
-## 1. Site Design / Site Scripts
+### 1. Site Design / Site Scripts
 
 Everything related to the site design and the corresponding site scripts reside in the folder **SiteScripts**. 
 
 The source files are found in the **src** folder.
 
-## 2. JS Provisioning Template
+### 2. JS Provisioning Template
 
 Not everything we want to do is available with site designs, so we're also using [sp-js-provisioning](https://github.com/Puzzlepart/sp-js-provisioning). Please note that we´re using the Puzzlepart fork from **pnp**.
 
@@ -56,9 +56,9 @@ Say you'd like to use the term set with ID **54da9f47-c64e-4a26-80f3-4d3c3fa1b7b
 
 
 
-## 3. Templates
+### 3. Templates
 
-### 3.1 JSON provisioning template
+#### 3.1 JSON provisioning template
 
 At the root level of the **Templates** folder, the following files are found:
 
@@ -71,7 +71,7 @@ At the root level of the **Templates** folder, the following files are found:
 | `Search-Resx.ps1`         | Script to search for unused **.resx** resources              |
 | `_JsonTemplate.json`      | JSON project template                                        |
 
-#### 3.11. Building JSON templates
+##### 3.1.1 Building JSON templates
 
 When doing changes to the JSON template the npm task `watch` can be used. This watches `_JsonTemplate.json` and builds localized version of this to the corresponding Content template.
 
@@ -90,7 +90,7 @@ Resources from the **.resx** files in the folder Portfolio can be used in the te
 
 
 
-### 3.2 PnP templates
+#### 3.2 PnP templates
 
 In addition we have two PnP provisioning templates. 
 
@@ -99,7 +99,7 @@ In addition we have two PnP provisioning templates.
 | [Portfolio](../Templates/Portfolio) | Portfolio assets |
 | [Taxonomy](../Templates/Taxonomy)   | Taxonomy         |
 
-### 3.2.1 Portfolio
+##### 3.2.1 Portfolio
 
 | File/Folder          | Description                                                  |
 | -------------------- | ------------------------------------------------------------ |
@@ -108,7 +108,7 @@ In addition we have two PnP provisioning templates.
 | Portfolio.xml        | Main template file                                           |
 | `Resources.*.resx` | Resource files                               |
 
-### 3.2.2 Content templates
+##### 3.2.2 Content templates
 
 Content templates are found in the **Content** folder. The name of the template follows the following pattern:
 
