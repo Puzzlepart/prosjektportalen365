@@ -30,11 +30,6 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
       working-directory: SharePointFramework/@Shared
       run: npm install
-      
-    - uses: actions/upload-artifact@v1
-      with:
-        name: release-package
-        path: release
         
    install:
     needs: build
