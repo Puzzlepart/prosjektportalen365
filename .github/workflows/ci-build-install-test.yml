@@ -23,28 +23,28 @@ jobs:
       uses: actions/cache@v2
       with:
         path: SharePointFramework/@Shared/node_modules
-        key: node-modules-${{ hashFiles('**/package.json') }}
+        key: node-modules-${{ hashFiles('SharePointFramework/@Shared/package.json') }}
 
     - name: (PortfolioWebParts) Cache node modules
       id: cache_02
       uses: actions/cache@v2
       with:
         path: SharePointFramework/PortfolioWebParts/node_modules
-        key: node-modules-${{ hashFiles('**/package.json') }}
+        key: node-modules-${{ hashFiles('SharePointFramework/PortfolioWebParts/package.json') }}
 
     - name: (ProjectExtensions) Cache node modules
       id: cache_03
       uses: actions/cache@v2
       with:
         path: SharePointFramework/ProjectExtensions/node_modules
-        key: node-modules-${{ hashFiles('**/package.json') }}
+        key: node-modules-${{ hashFiles('SharePointFramework/ProjectExtensions/package.json') }}
 
     - name: (ProjectWebParts) Cache node modules
       id: cache_04
       uses: actions/cache@v2
       with:
         path: SharePointFramework/ProjectWebParts/node_modules
-        key: node-modules-${{ hashFiles('**/package.json') }}
+        key: node-modules-${{ hashFiles('SharePointFramework/ProjectWebParts/package.json') }}
 
     - name: (@Shared) NPM install npm packages
       if: steps.cache_01.outputs.cache-hit != 'true'
