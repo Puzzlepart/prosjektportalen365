@@ -29,10 +29,10 @@ jobs:
         key: node_modules-${{ hashFiles('**/package.json') }}
 
 
-    - name: Yarn install npm packages
+    - name: NPM install npm packages
       if: steps.cache.outputs.cache-hit != 'true'
       working-directory: SharePointFramework/@Shared
-      run: yarn install
+      run: npm install
       
     - uses: actions/upload-artifact@v1
       with:
