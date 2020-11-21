@@ -15,8 +15,8 @@ import {
   DetailsListLayoutMode,
   IDetailsHeaderProps,
   IGroup,
-
-  Selection, SelectionMode
+  Selection,
+  SelectionMode
 } from 'office-ui-fabric-react/lib/DetailsList'
 import { LayerHost } from 'office-ui-fabric-react/lib/Layer'
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection'

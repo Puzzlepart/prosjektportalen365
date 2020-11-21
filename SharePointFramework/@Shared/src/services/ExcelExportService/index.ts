@@ -6,7 +6,6 @@ import { stringToArrayBuffer } from '../../util'
 import { ExcelExportServiceDefaultConfiguration } from './ExcelExportServiceDefaultConfiguration'
 import { IExcelExportServiceConfiguration } from './IExcelExportServiceConfiguration'
 
-
 export default new (class ExcelExportService {
   private _configuration: IExcelExportServiceConfiguration
   private _deps: string[]
