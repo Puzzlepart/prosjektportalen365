@@ -34,9 +34,7 @@ jobs:
       - name: (@Shared) Run npm script lint
         working-directory: ./SharePointFramework/@Shared
         run: |
-          npm run lint
-        
-
+          npm run lint     
 
       - name: (ProjectWebParts) Install npm packages
         working-directory: ./SharePointFramework/ProjectWebParts
