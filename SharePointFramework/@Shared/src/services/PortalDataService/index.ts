@@ -1,6 +1,6 @@
 import { dateAdd, stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
-import { CamlQuery, ListEnsureResult, Web } from '@pnp/sp'
+import { AttachmentFileInfo, CamlQuery, ListEnsureResult, Web } from '@pnp/sp'
 import { default as initSpfxJsom, ExecuteJsomQuery } from 'spfx-jsom'
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
 import { transformFieldXml } from '../../helpers/transformFieldXml'
@@ -22,7 +22,12 @@ import {
   PortalDataServiceList
 } from './IPortalDataServiceConfiguration'
 
-export type GetStatusReportsOptions = { filter?: string; top?: number; select?: string[]; publishedString?: string }
+export type GetStatusReportsOptions = {
+  filter?: string
+  top?: number
+  select?: string[]
+  publishedString?: string
+}
 
 export class PortalDataService {
   private _configuration: IPortalDataServiceConfiguration
@@ -73,16 +78,37 @@ export class PortalDataService {
   }
 
   /**
-   * Update status report
+   * Update status report, and add snapshot as attachment
    *
    * @param {number} id Id
    * @param {TypedHash<string>} properties Properties
+   * @param {AttachmentFileInfo} attachment Attachment
    */
-  public async updateStatusReport(id: number, properties: TypedHash<string>): Promise<void> {
-    await this._web.lists
-      .getByTitle(this._configuration.listNames.PROJECT_STATUS)
-      .items.getById(id)
-      .update(properties)
+  public async updateStatusReport(
+    id: number,
+    properties: TypedHash<string>,
+    attachment?: AttachmentFileInfo
+  ): Promise<void> {
+    const list = this._web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
+    if (attachment) {
+      try {
+        await list.items.getById(id).attachmentFiles.addMultiple([attachment])
+      } catch (error) {
+        Logger.log({
+          message: `(updateStatusReport): Unable to attach PNG snapshot: ${error.message}`,
+          level: LogLevel.Info
+        })
+      }
+    }
+    try {
+      await list.items.getById(id).update(properties)
+    } catch (error) {
+      Logger.log({
+        message: `(updateStatusReport): Unable to update status report: ${error.message}`,
+        level: LogLevel.Info
+      })
+      throw error
+    }
   }
 
   /**
@@ -220,7 +246,7 @@ export class PortalDataService {
           newField.updateAndPushChanges(true)
         }
         await ExecuteJsomQuery(jsomContext)
-      } catch (error) { }
+      } catch (error) {}
     }
     try {
       Logger.log({
@@ -236,7 +262,7 @@ export class PortalDataService {
         )
       newField.updateAndPushChanges(true)
       await ExecuteJsomQuery(jsomContext)
-    } catch { }
+    } catch {}
     if (ensureList.created && properties) {
       ensureList.list.items.add(properties)
     }
@@ -339,15 +365,19 @@ export class PortalDataService {
    *
    * @param {GetStatusReportsOptions} options Options
    */
-  public async getStatusReports({ filter = '', top, select, publishedString }: GetStatusReportsOptions): Promise<StatusReport[]> {
+  public async getStatusReports({
+    filter = '',
+    top,
+    select,
+    publishedString
+  }: GetStatusReportsOptions): Promise<StatusReport[]> {
     if (!this._configuration.siteId) throw 'Property {siteId} missing in configuration'
     if (stringIsNullOrEmpty(filter)) filter = `GtSiteId eq '${this._configuration.siteId}'`
     try {
       let items = this._web.lists
         .getByTitle(this._configuration.listNames.PROJECT_STATUS)
-        .items
-        .filter(filter)
-        .expand('FieldValuesAsText')
+        .items.filter(filter)
+        .expand('FieldValuesAsText', 'AttachmentFiles')
         .orderBy('Id', false)
       if (top) items = items.top(top)
       if (select) items = items.select(...select)

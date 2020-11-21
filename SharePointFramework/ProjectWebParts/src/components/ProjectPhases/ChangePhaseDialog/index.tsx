@@ -1,15 +1,15 @@
-import * as React from 'react'
+import { Logger, LogLevel } from '@pnp/logging'
+import { IPhaseChecklistItem } from 'models'
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog'
-import { View } from './Views'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
+import * as strings from 'ProjectWebPartsStrings'
+import * as React from 'react'
+import SPDataAdapter from '../../../data'
 import { Body } from './Body'
+import styles from './ChangePhaseDialog.module.scss'
 import { Footer } from './Footer'
 import { IChangePhaseDialogProps, IChangePhaseDialogState } from './types'
-import styles from './ChangePhaseDialog.module.scss'
-import * as strings from 'ProjectWebPartsStrings'
-import * as format from 'string-format'
-import { IPhaseChecklistItem } from 'models'
-import SPDataAdapter from '../../../data'
-import { Logger, LogLevel } from '@pnp/logging'
+import { View } from './Views'
 
 /**
  * @component ChangePhaseDialog

@@ -54,6 +54,7 @@ declare interface IProjectWebPartsStrings {
   StatusClosed: string;
   StatusNotRelevant: string;
   StatusOpen: string;
+  GetSnapshotButtonText: string;
   StatusStillOpen: string;
   TasksLinkText: string;
   UpdateViewsDocumentsFieldLabel: string;

@@ -24,6 +24,11 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
    * Hash state
    */
   hashState?: IProjectStatusHashState
+
+  /**
+   * Is the report being published?
+   */
+  isPublishing: boolean
 }
 
 export interface IProjectStatusHashState {

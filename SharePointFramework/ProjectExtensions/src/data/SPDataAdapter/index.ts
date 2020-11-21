@@ -76,6 +76,7 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
       .select('Id', 'Title', 'RootFolder/ServerRelativeUrl', 'RootFolder/Folders')
       .expand('RootFolder', 'RootFolder/Folders')
       .filter(
+        // eslint-disable-next-line quotes
         "BaseTemplate eq 101 and IsCatalog eq false and IsApplicationList eq false and ListItemEntityTypeFullName ne 'SP.Data.FormServerTemplatesItem'"
       )
       .get()

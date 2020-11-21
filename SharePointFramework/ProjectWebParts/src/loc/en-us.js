@@ -20,6 +20,7 @@ define([], function () {
     EditPropertiesText: 'Edit properties',
     EditReportButtonText: 'Edit status',
     PublishReportButtonText: 'Publish',
+    GetSnapshotButtonText: 'Open as snapshot',
     DeleteReportButtonText: 'Slett',
     EditSiteInformationText: 'Edit site information',
     ErrorText: 'There was an error loading {0}.',

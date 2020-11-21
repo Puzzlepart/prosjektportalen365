@@ -1,7 +1,10 @@
 import { TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
+import { AttachmentFileInfo } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
 import { UserMessage } from 'components/UserMessage'
+import domToImage from 'dom-to-image'
+import * as moment from 'moment'
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar'
 import {
   ContextualMenuItemType,
@@ -9,20 +12,15 @@ import {
 } from 'office-ui-fabric-react/lib/ContextualMenu'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
 import { formatDate } from 'shared/lib/helpers'
 import { SectionModel, SectionType, StatusReport } from 'shared/lib/models'
 import { PortalDataService } from 'shared/lib/services'
-import { getUrlParam, parseUrlHash, setUrlHash, removeMenuBorder } from 'shared/lib/util'
-import * as formatString from 'string-format'
+import { getUrlParam, parseUrlHash, removeMenuBorder, setUrlHash } from 'shared/lib/util'
+import { first } from 'underscore'
 import SPDataAdapter from '../../data'
-import {
-  IProjectStatusProps,
-  IProjectStatusState,
-  IProjectStatusHashState,
-  IProjectStatusData
-} from './types'
 import styles from './ProjectStatus.module.scss'
 import {
   IBaseSectionProps,
@@ -32,6 +30,12 @@ import {
   StatusSection,
   SummarySection
 } from './Sections'
+import {
+  IProjectStatusData,
+  IProjectStatusHashState,
+  IProjectStatusProps,
+  IProjectStatusState
+} from './types'
 
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private _portalDataService: PortalDataService
@@ -43,7 +47,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    */
   constructor(props: IProjectStatusProps) {
     super(props)
-    this.state = { isLoading: true }
+    this.state = { isLoading: true, isPublishing: false }
     this._portalDataService = new PortalDataService().configure({
       urlOrWeb: props.hubSite.web,
       siteId: props.siteId
@@ -91,7 +95,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       return (
         <div className={styles.projectStatus}>
           <div className={styles.container}>
-            <Spinner label={formatString(strings.LoadingText, this.props.title)} />
+            <Spinner label={format(strings.LoadingText, this.props.title)} />
           </div>
         </div>
       )
@@ -119,7 +123,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           <div className={`${styles.header} ${styles.column12}`}>
             <div className={styles.title}>{this.props.title}</div>
           </div>
-          <div className={`${styles.sections} ${styles.column12}`}>{this._renderSections()}</div>
+          <div className={`${styles.sections} ${styles.column12}`} id='pp-statussection'>
+            {this._renderSections()}
+          </div>
         </div>
       </div>
     )
@@ -130,16 +136,14 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     const reportOptions = this._getReportOptions(data)
     const items: IContextualMenuItem[] = [
       {
-        id: getId('NewStatusReport'),
-        key: getId('NewStatusReport'),
+        key: 'NEW_STATUS_REPORT',
         name: strings.NewStatusReportModalHeaderText,
         iconProps: { iconName: 'NewFolder' },
         disabled: data.reports.filter((report) => !report.published).length !== 0,
         onClick: this._redirectNewStatusReport.bind(this)
       },
       {
-        id: getId('DeleteReport'),
-        key: getId('DeleteReport'),
+        key: 'DELETE_REPORT',
         name: strings.DeleteReportButtonText,
         iconProps: { iconName: 'Delete' },
         disabled: selectedReport.published,
@@ -148,45 +152,52 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         }
       },
       {
-        id: getId('EditReport'),
-        key: getId('EditReport'),
+        key: 'EDIT_REPORT',
         name: strings.EditReportButtonText,
         iconProps: { iconName: 'Edit' },
         href: selectedReport ? selectedReport.editFormUrl : null,
         disabled: selectedReport.published
       },
       {
-        id: getId('PublishReport'),
-        key: getId('PublishReport'),
+        key: 'PUBLISH_REPORT',
         name: strings.PublishReportButtonText,
         iconProps: { iconName: 'PublishContent' },
         disabled: selectedReport.published,
         onClick: () => {
           this._publishReport(selectedReport)
+          this.setState({ isPublishing: true })
         }
       }
     ]
     const farItems: IContextualMenuItem[] = []
     if (sourceUrl) {
       farItems.push({
-        id: getId('NavigateToSourceUrl'),
-        key: getId('NavigateToSourceUrl'),
+        key: 'NAVIGATE_TO_SOURC_EURL',
         name: strings.NavigateToSourceUrlText,
         iconProps: { iconName: 'NavigateBack' },
         href: sourceUrl
       })
     }
     farItems.push({
-      id: getId('ReportDropdown'),
-      key: getId('ReportDropdown'),
+      key: 'GET_SNAPSHOT',
+      name: strings.GetSnapshotButtonText,
+      iconProps: { iconName: 'Photo2' },
+      disabled: !selectedReport.hasAttachments,
+      onClick: () => {
+        window.open(first(selectedReport.attachments).ServerRelativeUrl)
+      }
+    })
+    farItems.push({
+      key: 'REPORT_DROPDOWN',
       name: selectedReport ? formatDate(selectedReport.created, true) : '',
       itemType: ContextualMenuItemType.Normal,
       disabled: reportOptions.length === 0,
+      iconProps: { iconName: 'FullHistory' },
       subMenuProps: { items: reportOptions }
     })
     farItems.push({
       id: getId('StatusIcon'),
-      key: getId('StatusIcon'),
+      key: 'STATUS_ICON',
       name: selectedReport.published
         ? strings.PublishedStatusReport
         : strings.NotPublishedStatusReport,
@@ -352,7 +363,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           return obj
         }, {})
     }
-    fieldValues.Title = formatString(strings.NewStatusReportTitle, webTitle)
+    fieldValues.Title = format(strings.NewStatusReportTitle, webTitle)
     fieldValues.GtSiteId = siteId
     fieldValues.ContentTypeId = properties.templateParameters.ProjectStatusContentTypeId
     fieldValues.GtModerationStatus = strings.GtModerationStatus_Choice_Draft
@@ -367,15 +378,48 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   }
 
   /**
+   * Creates PNG snapshot
+   *
+   * @param {sting} title Report title
+   *
+   * @returns PNG file (AttachmentFileInfo) or null
+   */
+  private async _captureReport(title: string | number | boolean): Promise<AttachmentFileInfo> {
+    try {
+      const statusReportHtml = document.getElementById('pp-statussection')
+      const date = moment().format('YYYY-MM-DD HH:mm')
+      const dateStamp = document.createElement('p')
+      dateStamp.textContent = `${date}`
+      dateStamp.style.textAlign = 'right'
+      statusReportHtml.appendChild(dateStamp)
+      statusReportHtml.style.backgroundColor = '#FFFFFF'
+      const content = await domToImage.toBlob(statusReportHtml)
+      const name = `${(title + '_' + date).toString().replace(/\/|\\| |\:/g, '-')}.png`
+      return { name, content }
+    } catch (error) {
+      return null
+    }
+  }
+
+  /**
    * Publish report
    *
    * @param {StatusReport} report Report
    */
   private async _publishReport(report: StatusReport) {
-    await this._portalDataService.updateStatusReport(report.id, {
-      GtModerationStatus: strings.GtModerationStatus_Choice_Published
-    })
-    document.location.reload()
+    if (!this.state.isPublishing) {
+      try {
+        const attachment = await this._captureReport(report.values.Title)
+        const properties = { GtModerationStatus: strings.GtModerationStatus_Choice_Published }
+        await this._portalDataService.updateStatusReport(report.id, properties, attachment)
+      } catch (error) {
+        Logger.log({
+          message: `(ProjectStatus) _publishReport: Failed to publish status report: ${error.message}`,
+          level: LogLevel.Info
+        })
+      }
+      document.location.reload()
+    }
   }
 
   /**

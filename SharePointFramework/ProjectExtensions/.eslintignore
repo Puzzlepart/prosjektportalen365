@@ -1,1 +1,4 @@
-gulpfile.js
+src/**/*.d.ts
+src/**/*.scss.ts
+lib
+dist

@@ -11,8 +11,10 @@
     "deploy": "gulp uploadAppPkg && gulp deploySppkg",
     "packageAndDeploy": "npm run package && npm run deploy",
     "postversion": "gulp versionSync",
-    "lint": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
-    "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent"
+    "lint": "eslint --ext .ts,.tsx ./src --color && npm run prettier",
+    "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier:write",
+    "prettier": "prettier --config .prettierrc '**/*.ts*' --loglevel silent",
+    "prettier:write": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent"
   },
   "dependencies": {
     "@microsoft/decorators": "1.11.0",
@@ -51,7 +53,7 @@
     "@types/react": "16.8.8"
   },
   "devDependencies": {
-    "@microsoft/rush-stack-compiler-3.3": "0.3.5",
+    "@microsoft/rush-stack-compiler-3.9": "0.4.35",
     "@microsoft/sp-build-web": "1.11.0",
     "@microsoft/sp-module-interfaces": "1.11.0",
     "@microsoft/sp-tslint-rules": "1.11.0",
@@ -62,19 +64,19 @@
     "@types/underscore": "1.9.2",
     "@typescript-eslint/eslint-plugin": "2.30.0",
     "@typescript-eslint/parser": "2.30.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "prettier": "^2.1.1",
-    "ajv": "~5.2.2",
+    "ajv": "5.2.2",
     "colors": "1.4.0",
     "concurrently": "5.2.0",
     "eslint": "6.8.0",
+    "eslint-config-prettier": "6.11.0",
+    "eslint-plugin-prettier": "3.1.4",
     "eslint-plugin-react": "7.19.0",
     "find": "0.3.0",
-    "gulp": "~3.9.1",
+    "gulp": "3.9.1",
+    "prettier": "2.1.1",
     "spfx-pkgdeploy": "0.3.0",
     "webpack-bundle-analyzer": "3.5.2",
-    "webpack-livereload-plugin": "^2.3.0",
+    "webpack-livereload-plugin": "2.3.0",
     "webpackbar": "4.0.0"
   }
 }

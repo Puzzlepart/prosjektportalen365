@@ -378,10 +378,13 @@ export class DataAdapter {
    */
   private async _isUserInGroup(groupName: string): Promise<boolean> {
     try {
-        let siteGroups = await sp.web.siteGroups.select('CanCurrentUserViewMembership','Title').filter(`Title eq '${groupName}'`).get();
-        return siteGroups.length === 1 && siteGroups[0].CanCurrentUserViewMembership;
+      const siteGroups = await sp.web.siteGroups
+        .select('CanCurrentUserViewMembership', 'Title')
+        .filter(`Title eq '${groupName}'`)
+        .get()
+      return siteGroups.length === 1 && siteGroups[0].CanCurrentUserViewMembership
     } catch (error) {
-        return false;
-    }    
+      return false
+    }
   }
 }

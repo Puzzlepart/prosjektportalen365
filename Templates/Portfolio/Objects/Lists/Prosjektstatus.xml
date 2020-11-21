@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_ProjectStatus_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_ProjectStatus_Url}" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
+<pnp:ListInstance Title="{resource:Lists_ProjectStatus_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_ProjectStatus_Url}" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="true" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x010022252E35737A413FB56A1BA53862F6D5" Default="true" />
