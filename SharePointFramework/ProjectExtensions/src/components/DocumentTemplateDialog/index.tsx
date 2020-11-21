@@ -3,9 +3,9 @@ import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
-import * as formatString from 'string-format'
 import { SPDataAdapter } from '../../data'
 import { TemplateFile } from '../../models/index'
 import { BaseDialog } from '../@BaseDialog/index'
@@ -98,7 +98,7 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
         return (
           <InfoMessage
             type={MessageBarType.success}
-            text={formatString(strings.SummaryText, uploaded.length)}
+            text={format(strings.SummaryText, uploaded.length)}
           />
         )
       }
@@ -149,3 +149,4 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
 
 export * from './IDocumentTemplateDialogDismissProps'
 export { IDocumentTemplateDialogProps }
+

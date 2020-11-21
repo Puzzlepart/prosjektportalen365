@@ -1,15 +1,15 @@
 import { ChartData, ChartDataItem } from 'models'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import * as React from 'react'
-import * as format from 'string-format'
+import { PortfolioOverviewView } from 'shared/lib/models'
 import Chart from './Chart'
 import { IPortfolioInsightsProps } from './IPortfolioInsightsProps'
 import { IPortfolioInsightsState } from './IPortfolioInsightsState'
 import styles from './PortfolioInsights.module.scss'
 import PortfolioInsightsCommandBar from './PortfolioInsightsCommandBar'
-import { PortfolioOverviewView } from 'shared/lib/models'
 
 /**
  * @component PortfolioInsights

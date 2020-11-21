@@ -7,7 +7,7 @@ import {
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection'
 import * as strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
-import * as formatString from 'string-format'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 import { InfoMessage } from '../../InfoMessage'
 import {
   DocumentTemplateDialogScreenSelectDefaultProps,
@@ -24,7 +24,7 @@ export class DocumentTemplateDialogScreenSelect extends React.Component<
     return (
       <>
         <InfoMessage
-          text={formatString(
+          text={format(
             strings.DocumentTemplateDialogScreenSelectInfoText,
             this.props.templateLibrary.url,
             this.props.templateLibrary.title

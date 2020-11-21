@@ -1,7 +1,7 @@
 import { LogLevel } from '@pnp/logging'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import { Web, WebProvisioner } from 'sp-js-provisioning'
-import * as formatString from 'string-format'
 import * as _ from 'underscore'
 import { IProjectSetupData } from '../../extensions/projectSetup/IProjectSetupData'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
@@ -48,7 +48,7 @@ export class ApplyTemplate extends BaseTask {
       await provisioner.applyTemplate(templateSchema, null, (status) => {
         if (APPLY_TEMPLATE_STATUS_MAP[status]) {
           onProgress(
-            formatString(strings.ApplyTemplateText, this.data.selectedTemplate.text),
+            format(strings.ApplyTemplateText, this.data.selectedTemplate.text),
             APPLY_TEMPLATE_STATUS_MAP[status].text,
             APPLY_TEMPLATE_STATUS_MAP[status].iconName
           )
@@ -59,7 +59,7 @@ export class ApplyTemplate extends BaseTask {
         const extensionSchema = await this.data.selectedExtensions[i].getSchema()
         onProgress(
           strings.ApplyingExtensionsText,
-          formatString(strings.ApplyExtensionText, this.data.selectedExtensions[i].text),
+          format(strings.ApplyExtensionText, this.data.selectedExtensions[i].text),
           'ExternalBuild'
         )
         await provisioner.applyTemplate(extensionSchema, null)

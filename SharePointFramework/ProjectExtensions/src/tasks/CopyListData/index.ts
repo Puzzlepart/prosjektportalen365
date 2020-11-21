@@ -1,9 +1,9 @@
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { sp, Web } from '@pnp/sp'
 import { IProjectSetupData } from 'extensions/projectSetup'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import { SPField } from 'shared/lib/models/SPField'
-import * as formatString from 'string-format'
 import { IPlannerTaskSPItem, ListContentConfig, ListContentConfigType } from '../../models'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
@@ -127,7 +127,7 @@ export class CopyListData extends BaseTask {
   private async _processListItems(config: ListContentConfig, batchChunkSize = 25) {
     try {
       this.logInformation('Processing list items', { listConfig: config })
-      const progressText = formatString(
+      const progressText = format(
         strings.CopyListItemsText,
         config.sourceListProps.ItemCount,
         config.sourceListProps.Title,
@@ -150,7 +150,7 @@ export class CopyListData extends BaseTask {
         this.logInformation(`Processing batch ${j + 1} with ${batchItems.length} items`, {})
         this.onProgress(
           progressText,
-          formatString(strings.ProcessListItemText, j + 1, batchItems.length),
+          format(strings.ProcessListItemText, j + 1, batchItems.length),
           'List'
         )
         batchItems.forEach((item) =>
@@ -208,7 +208,7 @@ export class CopyListData extends BaseTask {
         }/${folder.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
         this.onProgress(
           progressText,
-          formatString(strings.ProcessFolderText, index + 1, folders.length),
+          format(strings.ProcessFolderText, index + 1, folders.length),
           'Documentation'
         )
         return chain.then(() =>
@@ -231,7 +231,7 @@ export class CopyListData extends BaseTask {
   private async _processFiles(config: ListContentConfig) {
     try {
       this.logInformation('Processing files', { listConfig: config })
-      const progressText = formatString(
+      const progressText = format(
         strings.CopyFilesText,
         config.sourceListProps.ItemCount,
         config.sourceListProps.Title,
@@ -269,7 +269,7 @@ export class CopyListData extends BaseTask {
           this.logInformation(`Copying file ${file.LinkFilename}`)
           this.onProgress(
             progressText,
-            formatString(strings.ProcessFileText, i + 1, files.length),
+            format(strings.ProcessFileText, i + 1, files.length),
             'Documentation'
           )
           const filename = file.LinkFilename

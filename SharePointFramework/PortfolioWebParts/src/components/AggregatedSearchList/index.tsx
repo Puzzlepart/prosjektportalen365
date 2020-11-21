@@ -20,18 +20,18 @@ import {
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import * as React from 'react'
 import { getObjectValue, isHubSite } from 'shared/lib/helpers'
 import { DataSource } from 'shared/lib/models/DataSource'
 import { DataSourceService, ExcelExportService } from 'shared/lib/services'
+import { removeMenuBorder } from 'shared/lib/util'
 import HubSiteService from 'sp-hubsite-service'
-import * as format from 'string-format'
 import * as _ from 'underscore'
 import styles from './AggregatedSearchList.module.scss'
 import { IAggregatedSearchListProps } from './IAggregatedSearchListProps'
 import { IAggregatedSearchListState } from './IAggregatedSearchListState'
-import { removeMenuBorder } from 'shared/lib/util'
 
 /**
  * @component AggregatedSearchList

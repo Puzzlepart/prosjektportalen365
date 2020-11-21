@@ -1,6 +1,7 @@
-import { dateAdd, TypedHash, PnPClientStorage, PnPClientStore } from '@pnp/common'
+import { dateAdd, PnPClientStorage, PnPClientStore, TypedHash } from '@pnp/common'
 import { ConsoleListener, Logger } from '@pnp/logging'
 import { SPConfiguration } from '@pnp/sp'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
 import { ISPList } from '../../interfaces/ISPList'
 import {
@@ -9,7 +10,6 @@ import {
   ProjectPhaseModel
 } from '../../models'
 import { IGetPropertiesData } from './IGetPropertiesData'
-import * as formatString from 'string-format'
 import { IProjectDataServiceParams } from './IProjectDataServiceParams'
 import { IPropertyItemContext } from './IPropertyItemContext'
 
@@ -40,7 +40,7 @@ export class ProjectDataService {
   private _initStorage() {
     this._storage = new PnPClientStorage().session
     this._storageKeys = Object.keys(this._storageKeys).reduce((obj, key) => {
-      obj[key] = formatString(this._storageKeys[key], this._params.siteId.replace(/-/g, ''))
+      obj[key] = format(this._storageKeys[key], this._params.siteId.replace(/-/g, ''))
       return obj
     }, {})
     this._storage.deleteExpired()
