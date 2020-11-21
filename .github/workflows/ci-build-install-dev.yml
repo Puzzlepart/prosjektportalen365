@@ -9,7 +9,7 @@ env:
   TARGET_URL: 'https://puzzlepart.sharepoint.com/sites/pp365'
   
 jobs:
-   build:
+   build-release:
     runs-on: windows-latest
     
     steps:      
@@ -30,8 +30,8 @@ jobs:
         name: release-package
         path: release
         
-   upgrade:
-    needs: build
+   install-script:
+    needs: build-release
     runs-on: windows-latest
     steps:
     - uses: actions/download-artifact@v1
@@ -40,16 +40,4 @@ jobs:
 
     - name: Install to ${{ env.TARGET_URL }}
       run: release-package/Install.ps1 -Url ${{ env.TARGET_URL }} -Upgrade -CI ${{ secrets.CI_CREDENTIALS }}
-      shell: powershell
-        
-   install:
-    needs: build
-    runs-on: windows-latest
-    steps:
-    - uses: actions/download-artifact@v1
-      with:
-        name: release-package
-
-    - name: Install to ${{ env.TARGET_URL }}
-      run: release-package/Install.ps1 -Url https://puzzlepart.sharepoint.com/sites/pp365-${{ env.SHA8 }} -CI ${{ secrets.CI_CREDENTIALS }}
       shell: powershell
