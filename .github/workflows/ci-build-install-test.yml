@@ -20,13 +20,12 @@ jobs:
 
     - name: Cache node modules
       id: cache
-      working-directory: SharePointFramework/@Shared
       uses: actions/cache@v2
-      with:
-        path: node_modules
-        key: node_modules-${{ hashFiles('**/package.json') }}
       env:
         cache-name: cache-node-modules
+      with:
+        path: SharePointFramework/@Shared/node_modules
+        key: node_modules-${{ hashFiles('**/package.json') }}
 
 
     - name: NPM install npm packages
