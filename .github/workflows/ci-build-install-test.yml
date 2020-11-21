@@ -18,15 +18,50 @@ jobs:
       with:
         node-version: 10.x
 
-    - name: Cache node modules
-      id: cache
+    - name: (@Shared) Cache node modules
+      id: cache_01
       uses: actions/cache@v2
       with:
         path: SharePointFramework/@Shared/node_modules
-        key: node_modules-${{ hashFiles('**/package.json') }}
+        key: node-modules-${{ hashFiles('**/package.json') }}
 
+    - name: (PortfolioWebParts) Cache node modules
+      id: cache_02
+      uses: actions/cache@v2
+      with:
+        path: SharePointFramework/PortfolioWebParts/node_modules
+        key: node-modules-${{ hashFiles('**/package.json') }}
 
-    - name: NPM install npm packages
-      if: steps.cache.outputs.cache-hit != 'true'
+    - name: (ProjectExtensions) Cache node modules
+      id: cache_03
+      uses: actions/cache@v2
+      with:
+        path: SharePointFramework/ProjectExtensions/node_modules
+        key: node-modules-${{ hashFiles('**/package.json') }}
+
+    - name: (ProjectWebParts) Cache node modules
+      id: cache_04
+      uses: actions/cache@v2
+      with:
+        path: SharePointFramework/ProjectWebParts/node_modules
+        key: node-modules-${{ hashFiles('**/package.json') }}
+
+    - name: (@Shared) NPM install npm packages
+      if: steps.cache_01.outputs.cache-hit != 'true'
       working-directory: SharePointFramework/@Shared
+      run: npm install
+
+    - name: (PortfolioWebParts) NPM install npm packages
+      if: steps.cache_02.outputs.cache-hit != 'true'
+      working-directory: SharePointFramework/PortfolioWebParts
+      run: npm install
+
+    - name: (ProjectExtensions) NPM install npm packages
+      if: steps.cache_03.outputs.cache-hit != 'true'
+      working-directory: SharePointFramework/ProjectExtensions
+      run: npm install
+
+    - name: (ProjectWebParts) NPM install npm packages
+      if: steps.cache_04.outputs.cache-hit != 'true'
+      working-directory: SharePointFramework/ProjectWebParts
       run: npm install
