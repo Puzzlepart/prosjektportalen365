@@ -30,14 +30,3 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
       working-directory: SharePointFramework/@Shared
       run: npm install
-        
-   install:
-    needs: build
-    runs-on: windows-latest
-    steps:
-    - uses: actions/download-artifact@v1
-      with:
-        name: release-package
-    - name: Install to ${{ env.TARGET_URL }}
-      run: release-package/Install.ps1 -Url ${{ env.TARGET_URL }} -Upgrade -CI ${{ secrets.CI_CREDENTIALS }}
-      shell: powershell
