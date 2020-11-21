@@ -2,7 +2,7 @@ name: CI - Build and install TEST
 
 on:
   push:
-    branches: [test1]
+    branches: [dev]
 
 env:
   TARGET_URL: 'https://puzzlepart.sharepoint.com/sites/pp365_ci'
