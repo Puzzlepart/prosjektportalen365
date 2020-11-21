@@ -379,7 +379,7 @@ try {
 
 $sw.Stop()
 
-if ($null -ne $CI) {
+if ($null -eq $CI) {
     Write-Host "[REQUIRED ACTION] Go to $($AdminSiteUrl)/_layouts/15/online/AdminHome.aspx#/webApiPermissionManagement and approve the pending requests" -ForegroundColor Yellow
     Write-Host "[RECOMMENDED ACTION] Go to https://github.com/Puzzlepart/prosjektportalen365/wiki/Installasjon#steg-4-manuelle-steg-etter-installasjonen and verify post-install steps" -ForegroundColor Yellow
 }
@@ -398,6 +398,10 @@ $InstallEntry = @{
     InstallEndTime   = $InstallEndTime; 
     InstallVersion   = "VERSION_PLACEHOLDER";
     InstallCommand   = $MyInvocation.Line.Substring(2);
+}
+
+if ($null -ne $CI) {
+    $InstallEntry.InstallCommand = "GitHub CI";
 }
 
 Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -ErrorAction SilentlyContinue >$null 2>&1
