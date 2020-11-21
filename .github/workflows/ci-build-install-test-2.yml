@@ -18,7 +18,7 @@ jobs:
       with:
         node-version: 10.x
 
-    - name: (@Shared) Cache node modules
+    - name: Cache node modules
       id: cache_01
       uses: actions/cache@v2
       with:
