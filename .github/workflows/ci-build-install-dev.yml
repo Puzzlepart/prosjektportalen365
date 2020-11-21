@@ -5,6 +5,7 @@ on:
     branches: [dev]
 
 env:
+  SHA8: ${GITHUB_SHA::8}
   TARGET_URL: 'https://puzzlepart.sharepoint.com/sites/pp365'
   
 jobs:
@@ -29,7 +30,7 @@ jobs:
         name: release-package
         path: release
         
-   install:
+   upgrade:
     needs: build
     runs-on: windows-latest
     steps:
@@ -39,4 +40,16 @@ jobs:
 
     - name: Install to ${{ env.TARGET_URL }}
       run: release-package/Install.ps1 -Url ${{ env.TARGET_URL }} -Upgrade -CI ${{ secrets.CI_CREDENTIALS }}
+      shell: powershell
+        
+   install:
+    needs: build
+    runs-on: windows-latest
+    steps:
+    - uses: actions/download-artifact@v1
+      with:
+        name: release-package
+
+    - name: Install to ${{ env.TARGET_URL }}
+      run: release-package/Install.ps1 -Url https://puzzlepart.sharepoint.com/sites/pp365-${{ env.SHA8 }} -CI ${{ secrets.CI_CREDENTIALS }}
       shell: powershell
