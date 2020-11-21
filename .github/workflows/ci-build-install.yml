@@ -1,8 +1,8 @@
 name: CI - Build and install
 
-on:
-  push:
-    branches: [disabled]
+# on:
+#   push:
+#     branches: [disabled]
 
 env:
   TARGET_URL: 'https://puzzlepart.sharepoint.com/sites/pp365_ci'

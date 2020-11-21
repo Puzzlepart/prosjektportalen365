@@ -1,8 +1,8 @@
 name: CI - Build and install (cache)
 
-on:
-  push:
-    branches: [feature/install-build-pipeline, dev]
+# on:
+#   push:
+#     branches: [feature/install-build-pipeline, dev]
 
 env:
   TARGET_URL: 'https://puzzlepart.sharepoint.com/sites/pp365_ci'
