@@ -2,7 +2,7 @@ name: CI - Build and install
 
 on:
   push:
-    branches: [master]
+    branches: [main]
 
 jobs:
    build-release:
@@ -35,5 +35,5 @@ jobs:
         name: release-package
 
     - name: Install to CI_MASTER_TARGET_URL
-      run: release-package/Install.ps1 -Url ${{ secrets.CI_MASTER_TARGET_URL }} -Upgrade -CI ${{ secrets.CI_MASTER_CREDENTIALS }}
+      run: release-package/Install.ps1 -Url ${{ secrets.CI_MAIN_TARGET_URL }} -Upgrade -CI ${{ secrets.CI_MAIN_CREDENTIALS }}
       shell: powershell
