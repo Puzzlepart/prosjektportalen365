@@ -5,50 +5,50 @@ export interface IProjectListProps extends IBaseComponentProps {
   /**
    * Loading text
    */
-  loadingText: string;
+  loadingText: string
 
   /**
    * Seach box placeholder text
    */
-  searchBoxPlaceholderText: string;
+  searchBoxPlaceholderText: string
 
   /**
    * Sort by property
    */
-  sortBy?: string;
+  sortBy?: string
 
   /**
    *Show search box
    */
-  showSearchBox?: boolean;
+  showSearchBox?: boolean
 
   /**
    * Show view selector
    */
-  showViewSelector?: boolean;
+  showViewSelector?: boolean
 
   /**
    * Show as tiles (shown as list if false)
    */
-  showAsTiles?: boolean;
+  showAsTiles?: boolean
 
   /**
    * Show Project Logo
    */
-  showProjectLogo?: boolean;
+  showProjectLogo?: boolean
 
   /**
    * Show Project Owner
    */
-  showProjectOwner?: boolean;
+  showProjectOwner?: boolean
 
   /**
    * Show Project Manager
    */
-  showProjectManager?: boolean;
+  showProjectManager?: boolean
 
   /**
    * Columns
    */
-  columns?: IColumn[];
+  columns?: IColumn[]
 }

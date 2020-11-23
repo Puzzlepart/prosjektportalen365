@@ -3,6 +3,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with Pull Request ID.
 
+## 1.2.4 - TBA
+
+## Added
+
+- Added "default" option for extensions, similar to list content #328
+- Added info message if there are unpublished statusreports #340
+- Added published/unpublished indicators for statusreports in dropdown and ribbon #341
+- Added possiblity to delete unpublished statusreports #343
+- Added "default" option for extensions, similar to list content
+- Added PNG snapshot when publishing project status
+
+## Fixed
+
+- Improved failure handling for PlannerConfiguration task in Project Setup #329
+- Support adding AD groups to get porfolio insights from SP group #332
+- Change to latest statusreport when creating a new statusreport #343
+
 ## 1.2.3 - 2020-10-07
 
 ## Added

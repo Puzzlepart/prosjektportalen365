@@ -83,7 +83,7 @@ build.configureWebpack.mergeConfig({
             log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('BundleAnalyzerPlugin')}...`)
             webpack.plugins.push(new BundleAnalyzerPlugin())
         }
-        if (webpack.optimization) {
+        if (webpack.optimization && webpack.optimization.minimizer) {
             log(`[${colors.cyan('configure-webpack')}] Setting ${colors.cyan('minimizer')} to run ${colors.cyan(buildConfig.parallel)} processes in parallel and enabling cache...`)
             webpack.optimization.minimizer[0].options.parallel = buildConfig.parallel
             webpack.optimization.minimizer[0].options.cache = true

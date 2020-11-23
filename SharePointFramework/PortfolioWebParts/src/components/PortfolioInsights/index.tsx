@@ -1,26 +1,29 @@
 import { ChartData, ChartDataItem } from 'models'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import * as React from 'react'
-import * as format from 'string-format'
+import { PortfolioOverviewView } from 'shared/lib/models'
 import Chart from './Chart'
 import { IPortfolioInsightsProps } from './IPortfolioInsightsProps'
 import { IPortfolioInsightsState } from './IPortfolioInsightsState'
 import styles from './PortfolioInsights.module.scss'
 import PortfolioInsightsCommandBar from './PortfolioInsightsCommandBar'
-import { PortfolioOverviewView } from 'shared/lib/models'
 
 /**
  * @component PortfolioInsights
  * @extends React.Component
  */
-export class PortfolioInsights extends React.Component<IPortfolioInsightsProps, IPortfolioInsightsState> {
-  public static defaultProps: Partial<IPortfolioInsightsProps> = {};
+export class PortfolioInsights extends React.Component<
+  IPortfolioInsightsProps,
+  IPortfolioInsightsState
+> {
+  public static defaultProps: Partial<IPortfolioInsightsProps> = {}
 
   /**
    * Constructor
-   * 
+   *
    * @param {IPortfolioInsightsProps} props Props
    */
   constructor(props: IPortfolioInsightsProps) {
@@ -36,7 +39,7 @@ export class PortfolioInsights extends React.Component<IPortfolioInsightsProps, 
         currentView,
         configuration,
         this.props.chartConfigurationListName,
-        this.props.pageContext.site.id.toString(),
+        this.props.pageContext.site.id.toString()
       )
       this.setState({
         charts,
@@ -44,7 +47,7 @@ export class PortfolioInsights extends React.Component<IPortfolioInsightsProps, 
         chartData,
         configuration,
         currentView,
-        isLoading: false,
+        isLoading: false
       })
     } catch (error) {
       this.setState({ error, isLoading: false })
@@ -56,7 +59,10 @@ export class PortfolioInsights extends React.Component<IPortfolioInsightsProps, 
       return (
         <div className={styles.portfolioInsights}>
           <div className={styles.container}>
-            <Spinner label={format(strings.LoadingText, this.props.title)} size={SpinnerSize.large} />
+            <Spinner
+              label={format(strings.LoadingText, this.props.title)}
+              size={SpinnerSize.large}
+            />
           </div>
         </div>
       )
@@ -70,7 +76,8 @@ export class PortfolioInsights extends React.Component<IPortfolioInsightsProps, 
             contentTypes={this.state.contentTypes}
             currentView={this.state.currentView}
             configuration={this.state.configuration}
-            onViewChanged={this._onViewChanged.bind(this)} />
+            onViewChanged={this._onViewChanged.bind(this)}
+          />
           <div className={styles.header}>
             <div className={styles.title}>{this.props.title}</div>
           </div>
@@ -107,13 +114,17 @@ export class PortfolioInsights extends React.Component<IPortfolioInsightsProps, 
   }
 
   /**
-  * On view changed
-  *
-  * @param {PortfolioOverviewView} view View
-  */
+   * On view changed
+   *
+   * @param {PortfolioOverviewView} view View
+   */
   private async _onViewChanged(view: PortfolioOverviewView) {
-    const items = await this.props.dataAdapter.fetchDataForView(view, this.state.configuration, this.props.pageContext.site.id.toString())
-    const chartData = new ChartData(items.map(item => new ChartDataItem(item.Title, item)))
+    const items = await this.props.dataAdapter.fetchDataForView(
+      view,
+      this.state.configuration,
+      this.props.pageContext.site.id.toString()
+    )
+    const chartData = new ChartData(items.map((item) => new ChartDataItem(item.Title, item)))
     this.setState({ currentView: view, chartData })
   }
 }

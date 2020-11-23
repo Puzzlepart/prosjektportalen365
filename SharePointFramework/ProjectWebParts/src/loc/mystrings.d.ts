@@ -26,6 +26,9 @@ declare interface IProjectWebPartsStrings {
   EditPropertiesText: string;
   EditReportButtonText: string;
   PublishReportButtonText: string;
+  PublishedStatusReport: string;
+  NotPublishedStatusReport: string;
+  DeleteReportButtonText: string;
   EditSiteInformationText: string;
   ErrorText: string;
   ListSectionDataErrorMessage: string;
@@ -34,6 +37,7 @@ declare interface IProjectWebPartsStrings {
   MoveOn: string;
   NewStatusReportModalHeaderText: string;
   NewStatusReportTitle: string;
+  UnpublishedStatusReportInfo: string;
   No: string;
   NoPropertiesMessage: string;
   PageReloadMessage: string;
@@ -50,6 +54,7 @@ declare interface IProjectWebPartsStrings {
   StatusClosed: string;
   StatusNotRelevant: string;
   StatusOpen: string;
+  GetSnapshotButtonText: string;
   StatusStillOpen: string;
   TasksLinkText: string;
   UpdateViewsDocumentsFieldLabel: string;

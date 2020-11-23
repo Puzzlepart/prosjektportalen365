@@ -13,10 +13,12 @@ const os = require('os')
 const argv = require('yargs').argv
 const log = require('@microsoft/gulp-core-build').log
 const colors = require("colors")
+
 let buildConfig = {
     parallel: os.cpus().length - 1,
     bundleAnalyzerEnabled: false
 }
+
 build.addSuppression(`Warning - [sass] The local CSS class 'ms-Grid' is not camelCase and will not be type-safe.`)
 build.addSuppression(`Warning - [sass] The local CSS class '-webkit-filter' is not camelCase and will not be type-safe.`)
 
@@ -81,7 +83,7 @@ build.configureWebpack.mergeConfig({
             log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('BundleAnalyzerPlugin')}...`)
             webpack.plugins.push(new BundleAnalyzerPlugin())
         }
-        if (webpack.optimization) {
+        if (webpack.optimization && webpack.optimization.minimizer) {
             log(`[${colors.cyan('configure-webpack')}] Setting ${colors.cyan('minimizer')} to run ${colors.cyan(buildConfig.parallel)} processes in parallel and enabling cache...`)
             webpack.optimization.minimizer[0].options.parallel = buildConfig.parallel
             webpack.optimization.minimizer[0].options.cache = true

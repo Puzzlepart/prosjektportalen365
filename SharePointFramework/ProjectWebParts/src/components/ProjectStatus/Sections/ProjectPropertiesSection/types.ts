@@ -3,18 +3,18 @@ import { SPField } from 'shared/lib/models'
 import { IBaseSectionProps } from '../BaseSection'
 
 export interface IProjectPropertiesSectionProps extends IBaseSectionProps {
-    /**
-     * Fields
-     */
-    fields: SPField[];
+  /**
+   * Fields
+   */
+  fields: SPField[]
 
-    /**
-     * Field values
-     */
-    fieldValues: TypedHash<string>;
+  /**
+   * Field values
+   */
+  fieldValues: TypedHash<string>
 
-    /**
-     * Field width
-     */
-    fieldWidth: number;
+  /**
+   * Field width
+   */
+  fieldWidth: number
 }

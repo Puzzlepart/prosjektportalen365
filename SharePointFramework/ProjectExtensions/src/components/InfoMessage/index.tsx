@@ -5,13 +5,13 @@ import { IInfoMessageProps } from './IInfoMessageProps'
 import styles from './InfoMessage.module.scss'
 
 export class InfoMessage extends React.PureComponent<IInfoMessageProps, {}> {
-    public render(): React.ReactElement<IInfoMessageProps> {
-        return (
-            <div className={styles.infoMessage}>
-                <MessageBar messageBarType={this.props.type}>
-                    <ReactMarkdown escapeHtml={false} linkTarget='_blank' source={this.props.text} />
-                </MessageBar>
-            </div>
-        )
-    }
+  public render(): React.ReactElement<IInfoMessageProps> {
+    return (
+      <div className={styles.infoMessage}>
+        <MessageBar messageBarType={this.props.type}>
+          <ReactMarkdown escapeHtml={false} linkTarget='_blank' source={this.props.text} />
+        </MessageBar>
+      </div>
+    )
+  }
 }

@@ -1,8 +1,11 @@
-import { IPropertyPaneConfiguration, PropertyPaneToggle, PropertyPaneTextField } from '@microsoft/sp-webpart-base'
+import {
+  IPropertyPaneConfiguration,
+  PropertyPaneToggle,
+  PropertyPaneTextField
+} from '@microsoft/sp-webpart-base'
 import { DeliveriesOverview, IDeliveriesOverviewProps } from 'components/DeliveriesOverview'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from '../@basePortfolioWebPart'
-
 
 export default class DeliveriesOverviewWebPart extends BasePortfolioWebPart<IDeliveriesOverviewProps> {
   public render(): void {
@@ -21,22 +24,22 @@ export default class DeliveriesOverviewWebPart extends BasePortfolioWebPart<IDel
               groupName: strings.GeneralGroupName,
               groupFields: [
                 PropertyPaneTextField('searchBoxPlaceholderText', {
-                  label: strings.SearchBoxPlaceholderTextLabel,
+                  label: strings.SearchBoxPlaceholderTextLabel
                 }),
                 PropertyPaneTextField('dataSource', {
-                  label: strings.DataSourceLabel,
+                  label: strings.DataSourceLabel
                 }),
                 PropertyPaneTextField('dataSourceCategory', {
-                  label: strings.DataSourceCategoryLabel,
+                  label: strings.DataSourceCategoryLabel
                 }),
                 PropertyPaneToggle('showCommandBar', {
-                  label: strings.ShowCommandBarLabel,
+                  label: strings.ShowCommandBarLabel
                 }),
                 PropertyPaneToggle('showExcelExportButton', {
-                  label: strings.ShowExcelExportButtonLabel,
-                }),
+                  label: strings.ShowExcelExportButtonLabel
+                })
               ]
-            },
+            }
           ]
         }
       ]

@@ -11,7 +11,14 @@
                 "resource": "Microsoft Graph",
                 "scope": "Group.ReadWrite.All"
             }
-        ]
+        ],
+        "developer": {
+            "name": "Puzzlepart AS",
+            "mpnId": "",
+            "privacyUrl": "https://puzzlepart.com/",
+            "termsOfUseUrl": "https://puzzlepart.com/",
+            "websiteUrl": "https://puzzlepart.com/"
+        }
     },
     "paths": {
         "zippedPackage": "solution/pp-project-extensions.sppkg"

@@ -5,7 +5,7 @@
     "scripts": {
         "buildReleasePackage": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -Silent",
         "buildReleasePackageSkipBuildSPFx": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -SkipBuildSharePointFramework -Silent",
-        "buildReleasePackageClean": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -CleanNodeModules"
+        "buildReleasePackageClean": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -Force"
     },
     "repository": {
         "type": "git",
@@ -18,8 +18,5 @@
         "Prince 2"
     ],
     "author": "olemp@puzzlepart.com",
-    "license": "MIT",
-    "devDependencies": {
-        "rimraf": "^3.0.0"
-    }
+    "license": "MIT"
 }

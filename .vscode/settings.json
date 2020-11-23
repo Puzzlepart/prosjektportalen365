@@ -3,6 +3,12 @@
         "node_modules": true,
         "Release": true,
         "wiki": true,
+        "**/lib": true,
+        "**/dist": true,
+        "**/temp": true,
+        "**/sharepoint": true,
+        "**/node_modules": true,
+        "**/.yo-rc.json": true
     },
     "files.associations": {
         "*.txt": "json"

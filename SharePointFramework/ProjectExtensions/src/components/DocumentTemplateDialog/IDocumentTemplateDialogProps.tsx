@@ -2,28 +2,28 @@ import { TemplateFile, IDocumentLibrary } from '../../models'
 import { IDocumentTemplateDialogDismissProps } from './IDocumentTemplateDialogDismissProps'
 
 export interface IDocumentTemplateDialogProps {
-    /**
-     * Title
-     */
-    title: string;
+  /**
+   * Title
+   */
+  title: string
 
-    /**
-     * Templates
-     */
-    templates: TemplateFile[];
+  /**
+   * Templates
+   */
+  templates: TemplateFile[]
 
-    /**
-     * Libraries
-     */
-    libraries: IDocumentLibrary[];
+  /**
+   * Libraries
+   */
+  libraries: IDocumentLibrary[]
 
-    /**
-     * Template library
-     */
-    templateLibrary: { title: string; url: string };
+  /**
+   * Template library
+   */
+  templateLibrary: { title: string; url: string }
 
-    /**
-     * On dismiss callback
-     */
-    onDismiss: (props: IDocumentTemplateDialogDismissProps) => void;
+  /**
+   * On dismiss callback
+   */
+  onDismiss: (props: IDocumentTemplateDialogDismissProps) => void
 }

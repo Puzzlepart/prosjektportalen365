@@ -1,4 +1,9 @@
-import { IPropertyPaneConfiguration, PropertyPaneDropdown, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane'
+import {
+  IPropertyPaneConfiguration,
+  PropertyPaneDropdown,
+  PropertyPaneTextField,
+  PropertyPaneToggle
+} from '@microsoft/sp-property-pane'
 import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
 import { IProjectPhasesProps, ProjectPhases } from 'components/ProjectPhases'
@@ -7,11 +12,15 @@ import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
 
 export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPhasesProps> {
-  private _fields: { Title: string; InternalName: string }[] = [];
+  private _fields: { Title: string; InternalName: string }[] = []
 
   public async onInit() {
     await super.onInit()
-    this._fields = await sp.web.fields.filter('TypeAsString eq \'TaxonomyFieldType\'').select('Title', 'InternalName').get()
+    this._fields = await sp.web.fields
+      // eslint-disable-next-line quotes
+      .filter("TypeAsString eq 'TaxonomyFieldType'")
+      .select('Title', 'InternalName')
+      .get()
   }
 
   public render(): void {
@@ -27,27 +36,27 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
               groupName: strings.SettingsGroupName,
               groupFields: [
                 PropertyPaneToggle('confirmPhaseChange', {
-                  label: strings.ConfirmPhaseChangeFieldLabel,
+                  label: strings.ConfirmPhaseChangeFieldLabel
                 }),
                 PropertyPaneDropdown('phaseField', {
                   label: strings.PhaseFieldFieldLabel,
-                  options: this._fields.map(f => ({
+                  options: this._fields.map((f) => ({
                     key: f.InternalName,
-                    text: `${f.Title} (${f.InternalName})`,
-                  })),
-                }),
+                    text: `${f.Title} (${f.InternalName})`
+                  }))
+                })
               ]
             },
             {
               groupName: strings.ViewsGroupName,
               groupFields: [
                 PropertyPaneTextField('currentPhaseViewName', {
-                  label: strings.CurrentPhaseViewNameFieldLabel,
-                }),
+                  label: strings.CurrentPhaseViewNameFieldLabel
+                })
               ]
             }
           ]
-        },
+        }
       ]
     }
   }

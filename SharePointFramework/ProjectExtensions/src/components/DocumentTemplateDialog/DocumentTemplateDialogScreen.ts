@@ -1,21 +1,21 @@
 export enum DocumentTemplateDialogScreen {
-    /**
-     * Select screen
-     */
-    Select,
+  /**
+   * Select screen
+   */
+  Select,
 
-    /**
-     * Edit copy screen
-     */
-    EditCopy,
+  /**
+   * Edit copy screen
+   */
+  EditCopy,
 
-    /**
-     * Copy progess screen
-     */
-    CopyProgress,
+  /**
+   * Copy progess screen
+   */
+  CopyProgress,
 
-    /**
-     * Summary scren
-     */
-    Summary,
+  /**
+   * Summary scren
+   */
+  Summary
 }

@@ -1,3 +1,3 @@
 export interface IDocumentTemplateDialogDismissProps {
-    reload?: boolean;
+  reload?: boolean
 }

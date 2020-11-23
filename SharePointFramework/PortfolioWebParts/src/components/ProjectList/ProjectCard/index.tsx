@@ -8,15 +8,13 @@ import { ProjectCardFooter } from './ProjectCardFooter'
 
 /**
  * Project Card
- * 
- * @param {IProjectCardProps} props Props  
+ *
+ * @param {IProjectCardProps} props Props
  */
 // tslint:disable-next-line: naming-convention
 export const ProjectCard = (props: IProjectCardProps): JSX.Element => {
   return (
-    <DocumentCard
-      className={styles.projectCard}
-      onClickHref={props.project.url}>
+    <DocumentCard className={styles.projectCard} onClickHref={props.project.url}>
       <ProjectCardHeader {...props} />
       <ProjectCardContent {...props} />
       <ProjectCardFooter {...props} />

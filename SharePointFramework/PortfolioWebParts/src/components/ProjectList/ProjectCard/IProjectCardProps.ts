@@ -5,30 +5,30 @@ export interface IProjectCardProps {
   /**
    * Project
    */
-  project: ProjectListModel;
+  project: ProjectListModel
 
   /**
    * Should the title be truncated
    */
-  shouldTruncateTitle: boolean;
+  shouldTruncateTitle: boolean
 
   /**
    * Show Project Logo
    */
-  showProjectLogo?: boolean;
+  showProjectLogo?: boolean
 
   /**
    * Show Project Owner
    */
-  showProjectOwner?: boolean;
+  showProjectOwner?: boolean
 
   /**
    * Show Project Manager
    */
-  showProjectManager?: boolean;
+  showProjectManager?: boolean
 
   /**
    * Actions
    */
-  actions: IButtonProps[];
+  actions: IButtonProps[]
 }

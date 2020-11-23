@@ -5,5 +5,5 @@ export interface IProjectInformationModalProps extends IProjectInformationProps 
   /**
    * Props for the modal
    */
-  modalProps: IModalProps;
+  modalProps: IModalProps
 }

@@ -1,4 +1,8 @@
-import { IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField } from '@microsoft/sp-property-pane'
+import {
+  IPropertyPaneConfiguration,
+  PropertyPaneSlider,
+  PropertyPaneTextField
+} from '@microsoft/sp-property-pane'
 import '@pnp/polyfill-ie11'
 import { IProjectStatusProps, ProjectStatus } from 'components/ProjectStatus'
 import 'office-ui-fabric-react/dist/css/fabric.min.css'
@@ -14,10 +18,9 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
     this.renderComponent(ProjectStatus, {
       riskMatrixWidth: this.properties.riskMatrixWidth,
       riskMatrixHeight: this.properties.riskMatrixHeight,
-      riskMatrixCalloutTemplate: this.properties.riskMatrixCalloutTemplate,
+      riskMatrixCalloutTemplate: this.properties.riskMatrixCalloutTemplate
     })
   }
-
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
@@ -32,20 +35,20 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   min: 400,
                   max: 1000,
                   value: 400,
-                  showValue: true,
+                  showValue: true
                 }),
                 PropertyPaneSlider('riskMatrixHeight', {
                   label: strings.HeightFieldLabel,
                   min: 400,
                   max: 1000,
                   value: 400,
-                  showValue: true,
+                  showValue: true
                 }),
                 PropertyPaneTextField('riskMatrixCalloutTemplate', {
                   label: strings.CalloutTemplateFieldLabel,
                   multiline: true,
-                  resizable: true,
-                }),
+                  resizable: true
+                })
               ]
             },
             {
@@ -56,7 +59,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   min: 150,
                   max: 350,
                   step: 10,
-                  value: 250,
+                  value: 250
                 })
               ]
             }
@@ -66,4 +69,3 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
     }
   }
 }
-
