@@ -337,42 +337,36 @@ export class PortfolioOverview extends React.Component<
         target: ev.currentTarget,
         items: [
           {
-            id: getId('SortDesc'),
-            key: getId('SortDesc'),
+            key: 'SORT_DESC',
             name: strings.SortDescLabel,
             canCheck: true,
             checked: column.isSorted && column.isSortedDescending,
             onClick: () => this._onColumnSort(column, true)
           },
           {
-            id: getId('SortAsc'),
-            key: getId('SortAsc'),
+            key: 'SORT_ASC',
             name: strings.SortAscLabel,
             canCheck: true,
             checked: column.isSorted && !column.isSortedDescending,
             onClick: () => this._onColumnSort(column, false)
           },
           {
-            id: getId('Divider'),
-            key: getId('Divider'),
+            key: 'DIVIDER_01',
             itemType: ContextualMenuItemType.Divider
           },
           {
-            id: getId('FilterBy'),
-            key: getId('FilterBy'),
+            key: 'FILTER_BY',
             name: strings.FilterBy,
             canCheck: true,
             checked: false,
             disabled: true
           },
           {
-            id: getId('Divider'),
-            key: getId('Divider'),
+            key: 'DIVIDER_02',
             itemType: ContextualMenuItemType.Divider
           },
           {
-            id: getId('GroupBy'),
-            key: getId('GroupBy'),
+            key: 'GROUP_BY',
             name: format(strings.GroupByColumnLabel, column.name),
             canCheck: true,
             checked:
@@ -381,13 +375,11 @@ export class PortfolioOverview extends React.Component<
             onClick: () => this._onColumnGroupBy(column)
           },
           {
-            id: getId('Divider'),
-            key: getId('Divider'),
+            key: 'DIVIDER_03',
             itemType: ContextualMenuItemType.Divider
           },
           {
-            id: getId('ColumSettings'),
-            key: getId('ColumSettings'),
+            key: 'COLUMN_SETTINGS',
             name: strings.ColumSettingsLabel,
             onClick: () =>
               redirect(`${this.props.configuration.columnUrls.defaultEditFormUrl}?ID=${column.id}`),
