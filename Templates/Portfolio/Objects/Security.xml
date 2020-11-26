@@ -3,7 +3,9 @@
         <pnp:SiteGroup
             Title="Porteføljeinnsyn"
             Description="Innsyn i portefølje"
-            Owner="{associatedownergroupid}">
+            Owner="{associatedownergroupid}"
+            AllowMembersEditMembership="false"
+            OnlyAllowMembersViewMembership="true">
         </pnp:SiteGroup>
     </pnp:SiteGroups>
 </pnp:Security>
