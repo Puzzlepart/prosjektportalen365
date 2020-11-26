@@ -174,15 +174,17 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         href: sourceUrl
       })
     }
-    farItems.push({
-      key: 'GET_SNAPSHOT',
-      name: strings.GetSnapshotButtonText,
-      iconProps: { iconName: 'Photo2' },
-      disabled: !selectedReport?.hasAttachments,
-      onClick: () => {
-        window.open(first(selectedReport.attachments).ServerRelativeUrl)
-      }
-    })
+    if (selectedReport) {
+      farItems.push({
+        key: 'GET_SNAPSHOT',
+        name: strings.GetSnapshotButtonText,
+        iconProps: { iconName: 'Photo2' },
+        disabled: !selectedReport?.hasAttachments,
+        onClick: () => {
+          window.open(first(selectedReport.attachments).ServerRelativeUrl)
+        }
+      })
+    }
     if (data.reports.length > 0) {
       const reportOptions = this._getReportOptions(data)
       farItems.push({
