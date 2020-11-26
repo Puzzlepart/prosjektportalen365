@@ -6,10 +6,7 @@ import { UserMessage } from 'components/UserMessage'
 import domToImage from 'dom-to-image'
 import * as moment from 'moment'
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar'
-import {
-  ContextualMenuItemType,
-  IContextualMenuItem
-} from 'office-ui-fabric-react/lib/ContextualMenu'
+import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
@@ -133,7 +130,6 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
 
   private _commandBar() {
     const { data, selectedReport, sourceUrl } = this.state
-    const reportOptions = this._getReportOptions(data)
     const items: IContextualMenuItem[] = [
       {
         key: 'NEW_STATUS_REPORT',
@@ -142,33 +138,33 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         disabled: data.reports.filter((report) => !report.published).length !== 0,
         onClick: this._redirectNewStatusReport.bind(this)
       },
-      {
+      selectedReport && {
         key: 'DELETE_REPORT',
         name: strings.DeleteReportButtonText,
         iconProps: { iconName: 'Delete' },
-        disabled: selectedReport.published,
+        disabled: selectedReport?.published,
         onClick: () => {
           this._deleteReport(selectedReport)
         }
       },
-      {
+      selectedReport && {
         key: 'EDIT_REPORT',
         name: strings.EditReportButtonText,
         iconProps: { iconName: 'Edit' },
-        href: selectedReport ? selectedReport.editFormUrl : null,
-        disabled: selectedReport.published
+        href: selectedReport?.editFormUrl,
+        disabled: selectedReport?.published
       },
-      {
+      selectedReport && {
         key: 'PUBLISH_REPORT',
         name: strings.PublishReportButtonText,
         iconProps: { iconName: 'PublishContent' },
-        disabled: selectedReport.published,
+        disabled: selectedReport?.published,
         onClick: () => {
           this._publishReport(selectedReport)
           this.setState({ isPublishing: true })
         }
       }
-    ]
+    ].filter((i) => i)
     const farItems: IContextualMenuItem[] = []
     if (sourceUrl) {
       farItems.push({
@@ -178,37 +174,42 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         href: sourceUrl
       })
     }
-    farItems.push({
-      key: 'GET_SNAPSHOT',
-      name: strings.GetSnapshotButtonText,
-      iconProps: { iconName: 'Photo2' },
-      disabled: !selectedReport.hasAttachments,
-      onClick: () => {
-        window.open(first(selectedReport.attachments).ServerRelativeUrl)
-      }
-    })
-    farItems.push({
-      key: 'REPORT_DROPDOWN',
-      name: selectedReport ? formatDate(selectedReport.created, true) : '',
-      itemType: ContextualMenuItemType.Normal,
-      disabled: reportOptions.length === 0,
-      iconProps: { iconName: 'FullHistory' },
-      subMenuProps: { items: reportOptions }
-    })
-    farItems.push({
-      id: getId('StatusIcon'),
-      key: 'STATUS_ICON',
-      name: selectedReport.published
-        ? strings.PublishedStatusReport
-        : strings.NotPublishedStatusReport,
-      iconProps: {
-        iconName: selectedReport.published ? 'BoxCheckmarkSolid' : 'CheckboxFill',
-        style: {
-          color: selectedReport.published ? '#2DA748' : '#D2D2D2'
+    if (selectedReport) {
+      farItems.push({
+        key: 'GET_SNAPSHOT',
+        name: strings.GetSnapshotButtonText,
+        iconProps: { iconName: 'Photo2' },
+        disabled: !selectedReport?.hasAttachments,
+        onClick: () => {
+          window.open(first(selectedReport.attachments).ServerRelativeUrl)
         }
-      },
-      disabled: true
-    })
+      })
+    }
+    if (data.reports.length > 0) {
+      const reportOptions = this._getReportOptions(data)
+      farItems.push({
+        key: 'REPORT_DROPDOWN',
+        name: selectedReport ? formatDate(selectedReport.created, true) : '',
+        iconProps: { iconName: 'FullHistory' },
+        subMenuProps: { items: reportOptions }
+      })
+    }
+    if (selectedReport) {
+      farItems.push({
+        id: getId('StatusIcon'),
+        key: 'STATUS_ICON',
+        name: selectedReport?.published
+          ? strings.PublishedStatusReport
+          : strings.NotPublishedStatusReport,
+        iconProps: {
+          iconName: selectedReport?.published ? 'BoxCheckmarkSolid' : 'CheckboxFill',
+          style: {
+            color: selectedReport?.published ? '#2DA748' : '#D2D2D2'
+          }
+        },
+        disabled: true
+      })
+    }
 
     return (
       <CommandBar
@@ -225,7 +226,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    */
   private _getSectionBaseProps(sec: SectionModel): IBaseSectionProps {
     const { selectedReport, data } = this.state
-    const { value, comment } = selectedReport.getStatusValue(sec.fieldName)
+    const { value, comment } = selectedReport?.getStatusValue(sec.fieldName)
     const [columnConfig] = data.columnConfig.filter(
       (c) => c.columnFieldName === sec.fieldName && c.value === value
     )
