@@ -16,7 +16,7 @@ import { IPortfolioOverviewCommandsState } from './IPortfolioOverviewCommandsSta
 export class PortfolioOverviewCommands extends React.Component<
   IPortfolioOverviewCommandsProps,
   IPortfolioOverviewCommandsState
-> {
+  > {
   constructor(props: IPortfolioOverviewCommandsProps) {
     super(props)
     this.state = { showFilterPanel: false }
@@ -30,8 +30,8 @@ export class PortfolioOverviewCommands extends React.Component<
           isOpen={this.state.showFilterPanel}
           layerHostId={this.props.layerHostId}
           headerText={strings.FiltersString}
-          hasCloseButton={false}
-          isLightDismiss={false}
+          onDismissed={() => this.setState({ showFilterPanel: false })}
+          isLightDismiss={true}
           filters={this._filters}
           onFilterChange={this.props.events.onFilterChange}
         />
