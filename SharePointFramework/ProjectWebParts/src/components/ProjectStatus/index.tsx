@@ -164,7 +164,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           this.setState({ isPublishing: true })
         }
       }
-    ].filter(i => i)
+    ].filter((i) => i)
     const farItems: IContextualMenuItem[] = []
     if (sourceUrl) {
       farItems.push({
@@ -212,7 +212,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     return (
       <CommandBar
         items={removeMenuBorder<IContextualMenuItem>(items)}
-        farItems={removeMenuBorder<IContextualMenuItem>(farItems)} />
+        farItems={removeMenuBorder<IContextualMenuItem>(farItems)}
+      />
     )
   }
 
