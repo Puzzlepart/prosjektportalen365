@@ -138,33 +138,33 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         disabled: data.reports.filter((report) => !report.published).length !== 0,
         onClick: this._redirectNewStatusReport.bind(this)
       },
-      {
+      selectedReport && {
         key: 'DELETE_REPORT',
         name: strings.DeleteReportButtonText,
         iconProps: { iconName: 'Delete' },
-        disabled: !selectedReport || selectedReport?.published,
+        disabled: selectedReport?.published,
         onClick: () => {
           this._deleteReport(selectedReport)
         }
       },
-      {
+      selectedReport && {
         key: 'EDIT_REPORT',
         name: strings.EditReportButtonText,
         iconProps: { iconName: 'Edit' },
         href: selectedReport?.editFormUrl,
-        disabled: !selectedReport || selectedReport?.published
+        disabled: selectedReport?.published
       },
-      {
+      selectedReport && {
         key: 'PUBLISH_REPORT',
         name: strings.PublishReportButtonText,
         iconProps: { iconName: 'PublishContent' },
-        disabled: !selectedReport || selectedReport?.published,
+        disabled: selectedReport?.published,
         onClick: () => {
           this._publishReport(selectedReport)
           this.setState({ isPublishing: true })
         }
       }
-    ]
+    ].filter(i => i)
     const farItems: IContextualMenuItem[] = []
     if (sourceUrl) {
       farItems.push({
