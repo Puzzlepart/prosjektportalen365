@@ -1,5 +1,4 @@
 import { isArray } from '@pnp/common'
-import { getId } from '@uifabric/utilities'
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar'
 import {
   ContextualMenuItemType,
@@ -30,8 +29,8 @@ export class PortfolioOverviewCommands extends React.Component<
           isOpen={this.state.showFilterPanel}
           layerHostId={this.props.layerHostId}
           headerText={strings.FiltersString}
-          hasCloseButton={false}
-          isLightDismiss={false}
+          onDismissed={() => this.setState({ showFilterPanel: false })}
+          isLightDismiss={true}
           filters={this._filters}
           onFilterChange={this.props.events.onFilterChange}
         />
@@ -42,8 +41,7 @@ export class PortfolioOverviewCommands extends React.Component<
   protected get _items(): IContextualMenuItem[] {
     return [
       {
-        id: getId('ExcelExport'),
-        key: getId('ExcelExport'),
+        key: 'EXCEL_EXPORT',
         name: strings.ExcelExportButtonLabel,
         iconProps: {
           iconName: 'ExcelDocument',
@@ -59,8 +57,7 @@ export class PortfolioOverviewCommands extends React.Component<
   protected get _farItems(): IContextualMenuItem[] {
     return [
       {
-        id: getId('NewView'),
-        key: getId('NewView'),
+        key: 'NEW_VIEW',
         name: strings.NewViewText,
         iconProps: { iconName: 'CirclePlus' },
         data: {
@@ -70,8 +67,7 @@ export class PortfolioOverviewCommands extends React.Component<
         onClick: () => redirect(this.props.configuration.viewsUrls.defaultNewFormUrl)
       } as IContextualMenuItem,
       {
-        id: getId('View'),
-        key: getId('View'),
+        key: 'VIEW_OPTIONS',
         name: this.props.currentView.title,
         iconProps: { iconName: 'List' },
         itemType: ContextualMenuItemType.Header,
@@ -79,8 +75,7 @@ export class PortfolioOverviewCommands extends React.Component<
         subMenuProps: {
           items: [
             {
-              id: getId('List'),
-              key: getId('List'),
+              key: 'VIEW_LIST',
               name: 'Liste',
               iconProps: { iconName: 'List' },
               canCheck: true,
@@ -88,8 +83,7 @@ export class PortfolioOverviewCommands extends React.Component<
               onClick: () => this.props.events.onSetCompact(false)
             },
             {
-              id: getId('CompactList'),
-              key: getId('CompactList'),
+              key: 'VIEW_COMPACT',
               name: 'Kompakt liste',
               iconProps: { iconName: 'AlignLeft' },
               canCheck: true,
@@ -97,15 +91,13 @@ export class PortfolioOverviewCommands extends React.Component<
               onClick: () => this.props.events.onSetCompact(true)
             },
             {
-              id: getId('Divider'),
-              key: getId('Divider'),
+              key: 'DIVIDER_01',
               itemType: ContextualMenuItemType.Divider
             },
             ...this.props.configuration.views.map(
               (view) =>
                 ({
-                  id: getId(view.id.toString()),
-                  key: getId(view.id.toString()),
+                  key: view.id.toString(),
                   name: view.title,
                   iconProps: { iconName: view.iconName },
                   canCheck: true,
@@ -114,19 +106,16 @@ export class PortfolioOverviewCommands extends React.Component<
                 } as IContextualMenuItem)
             ),
             {
-              id: getId('Divider'),
-              key: getId('Divider'),
+              key: 'DIVIDER_02',
               itemType: ContextualMenuItemType.Divider
             },
             {
-              id: getId('SaveViewAs'),
-              key: getId('SaveViewAs'),
+              key: 'SAVE_VIEW_AS',
               name: strings.SaveViewAsText,
               disabled: true
             },
             {
-              id: getId('EditView'),
-              key: getId('EditView'),
+              key: 'EDIT_VIEW',
               name: strings.EditViewText,
               onClick: () =>
                 redirect(
@@ -137,8 +126,7 @@ export class PortfolioOverviewCommands extends React.Component<
         }
       } as IContextualMenuItem,
       {
-        id: getId('Filters'),
-        key: getId('Filters'),
+        key: 'FILTERS',
         name: '',
         iconProps: { iconName: 'Filter' },
         itemType: ContextualMenuItemType.Normal,

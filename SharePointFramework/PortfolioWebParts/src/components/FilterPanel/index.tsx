@@ -21,14 +21,7 @@ export class FilterPanel extends React.Component<IFilterPanelProps, IFilterPanel
   public render(): React.ReactElement<IFilterPanelProps> {
     return (
       <Customizer scopedSettings={{ Layer: { hostId: this.props.layerHostId } }}>
-        <Panel
-          isOpen={this.props.isOpen}
-          isLightDismiss={this.props.isLightDismiss}
-          isBlocking={this.props.isBlocking}
-          onDismiss={this.props.onDismiss}
-          headerText={this.props.headerText}
-          hasCloseButton={this.props.hasCloseButton}
-          type={PanelType.smallFixedFar}>
+        <Panel {...this.props} type={PanelType.smallFixedFar}>
           <div>{this._renderFilters()}</div>
         </Panel>
       </Customizer>
