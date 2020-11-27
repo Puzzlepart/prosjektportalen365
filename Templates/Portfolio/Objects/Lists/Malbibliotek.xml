@@ -23,4 +23,5 @@
     <pnp:FieldRefs>
         <pnp:FieldRef ID="325543a5-815d-485d-a9a5-e0773ad762e9" Name="GtProjectPhase" />
     </pnp:FieldRefs>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>
