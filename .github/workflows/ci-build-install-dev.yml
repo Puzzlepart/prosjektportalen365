@@ -3,6 +3,14 @@ name: CI - Build and install (dev)
 on:
   push:
     branches: [dev]
+    paths:
+    - 'SharePointFramework/**'
+    - 'Install/**'
+    - 'Templates/**'
+
+env:
+  TARGET_URL: 'https://puzzlepart.sharepoint.com/sites/pp365'
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
 
 jobs:
    build-release:
@@ -34,6 +42,25 @@ jobs:
       with:
         name: release-package
 
-    - name: Install to CI_DEV_TARGET_URL
-      run: release-package/Install.ps1 -Url ${{ secrets.CI_DEV_TARGET_URL }} -Upgrade -CI ${{ secrets.CI_DEV_CREDENTIALS }}
+    - name: Upgrade
+      run: release-package/Install.ps1 -Url ${{ env.TARGET_URL }} -Upgrade -CI ${{ secrets.CI_DEV_CREDENTIALS }}
       shell: powershell
+
+    - name: Install
+      run: release-package/Install.ps1 -Url "${{ env.TARGET_URL }}_${{ github.run_id }}" -Title "Prosjektportalen 365 ${{ github.run_id }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }}
+      shell: powershell
+      
+    - name: Slack notify
+      uses: 8398a7/action-slack@v3
+      with:
+        status: custom
+        fields: workflow,job,commit,repo,ref,author,took
+        custom_payload: |
+          {
+            username: 'action-slack',
+            icon_emoji: ':octocat:',
+            attachments: [{
+              color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+              text: `${process.env.AS_WORKFLOW}\n${process.env.AS_JOB} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO}@${process.env.AS_REF} by ${process.env.AS_AUTHOR} succeeded in ${process.env.AS_TOOK}. A fresh install of Prosjektportalen 365 is ready at ${{ env.TARGET_URL }}_${{ github.run_id }}, and ${{ env.TARGET_URL }} have been upgraded with the latest goodies from the dev branch.`,
+            }]
+          }
