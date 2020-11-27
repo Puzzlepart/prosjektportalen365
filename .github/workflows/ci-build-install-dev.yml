@@ -6,6 +6,7 @@ on:
     paths:
     - 'SharePointFramework/**'
     - 'Install/**'
+    - 'Templates/**'
 
 env:
   TARGET_URL: 'https://puzzlepart.sharepoint.com/sites/pp365'
