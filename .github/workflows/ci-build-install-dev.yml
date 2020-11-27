@@ -3,6 +3,9 @@ name: CI - Build and install (dev)
 on:
   push:
     branches: [dev]
+    paths:
+    - 'SharePointFramework/**'
+    - 'Install/**'
 
 env:
   TARGET_URL: 'https://puzzlepart.sharepoint.com/sites/pp365'
