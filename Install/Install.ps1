@@ -16,7 +16,7 @@ Param(
     [switch]$SkipTaxonomy,
     [Parameter(Mandatory = $false, HelpMessage = "Skip Site Design")]
     [switch]$SkipSiteDesign,
-    [Parameter(Mandatory = $false, HelpMessage = "Skip a$pp packages")]
+    [Parameter(Mandatory = $false, HelpMessage = "Skip app packages")]
     [switch]$SkipAppPackages,
     [Parameter(Mandatory = $false, HelpMessage = "Skip site creation")]
     [switch]$SkipSiteCreation,
