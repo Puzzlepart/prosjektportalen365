@@ -43,5 +43,3 @@ To work with the various solutions, you have to to the following
 To be able to `package` and `deploy` directly you need to create a file `env.json` under `SharePointFramework/{solution}/config`. Take a look at `SharePointFramework/{solution}/config/env.sample.json`.
 
 When `env.json` is filled out and ready to go you can run the `npm` script `package-deploy`.
-
-
