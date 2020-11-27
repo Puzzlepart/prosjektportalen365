@@ -16,7 +16,7 @@ Param(
     [switch]$SkipTaxonomy,
     [Parameter(Mandatory = $false, HelpMessage = "Skip Site Design")]
     [switch]$SkipSiteDesign,
-    [Parameter(Mandatory = $false, HelpMessage = "Skip app packages")]
+    [Parameter(Mandatory = $false, HelpMessage = "Skip a$pp packages")]
     [switch]$SkipAppPackages,
     [Parameter(Mandatory = $false, HelpMessage = "Skip site creation")]
     [switch]$SkipSiteCreation,
@@ -71,7 +71,7 @@ function Connect-SharePoint {
     )
 
     Try {
-        if ($null -ne $CI) {
+        if (-not [string]::IsNullOrEmpty($CI)) {
             $DecodedCred = ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($CI))).Split("|")
             $Password = ConvertTo-SecureString -String $DecodedCred[1] -AsPlainText -Force
             $Credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $DecodedCred[0], $Password
@@ -101,7 +101,7 @@ function LoadBundle() {
     return (Get-Command Connect-PnPOnline).Version
 }
 
-if ($null -ne $CI) {
+if (-not [string]::IsNullOrEmpty($CI)) {
     Write-Host "[Running in CI mode. Installing module SharePointPnPPowerShellOnline.]" -ForegroundColor Yellow
     Install-Module -Name SharePointPnPPowerShellOnline -Force -Scope CurrentUser -ErrorAction Stop
 }
