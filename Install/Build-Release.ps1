@@ -118,9 +118,8 @@ Write-Host "DONE" -ForegroundColor Green
 
 $sw.Stop()
 
-Try {
+if (-not $CI.IsPresent) {
     Add-Type -Assembly "System.IO.Compression.FileSystem"
-    $ReleasePackageFileName = "$($PACKAGE_FILE.name)-$($PACKAGE_FILE.version).$($GIT_HASH).zip"
-    [IO.Compression.ZipFile]::CreateFromDirectory($RELEASE_PATH, "$ROOT_PATH/release/$ReleasePackageFileName")  
+    [IO.Compression.ZipFile]::CreateFromDirectory($RELEASE_PATH, "$($RELEASE_PATH).zip")  
     Write-Host "Done building release [v$($PACKAGE_FILE.version)] in [$($sw.Elapsed)]" -ForegroundColor Cyan
-} Catch {}
+}
