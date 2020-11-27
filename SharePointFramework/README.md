@@ -3,7 +3,7 @@
 ## @Shared
 Shared `functions` used by all the solutions.
 
-Build by using `tsc`.
+Build by `npm` script `build`.
 
 ## PortfolioWebParts
 Web parts for `portfolio` level of the portal.
