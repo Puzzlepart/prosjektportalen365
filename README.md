@@ -26,7 +26,7 @@ Vi gjør vårt beste for å støtte alle nettlesere, men følger retningslinjer 
 
 | Nettleser | Støtte |
 | --- | --- |
-| Edge (Chromium) | :smile: Støttet |
+| Edge (Chromium) | :bowtie: Anbefalt |
 | Edge (Classic) | :slightly_smiling_face: Grunnleggende støttet* |
 | Chrome | :smile: Støttet |
 | Safari | :smile: Støttet |
@@ -41,6 +41,6 @@ Vi gjør vårt beste for å støtte alle nettlesere, men følger retningslinjer 
 
 ## Maintainers
 
-Tarjei Ormestøyl (tarjeieo@puzzlepart.com)
-Ole Martin Pettersen (olemp@puzzlepart.com)
-I tillegg flere fra teamet bak [prosjektportalen@puzzlepart.com](mailto:prosjektportalen@puzzlepart.com).
+* Tarjei Ormestøyl (tarjeieo@puzzlepart.com)
+* Ole Martin Pettersen (olemp@puzzlepart.com)
+* I tillegg flere fra teamet bak [prosjektportalen@puzzlepart.com](mailto:prosjektportalen@puzzlepart.com)
