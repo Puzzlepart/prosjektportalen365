@@ -35,7 +35,8 @@ Vi gjør vårt beste for å støtte alle nettlesere, men følger retningslinjer 
 | Internet Explorer 11 | :expressionless: Ikke støttet** |
 | Internet Explorer 10 og eldre | :expressionless: Ikke støttet** |
 
- * _Grunnleggende støttet betyr at det meste vil fungere, men en kan risikere at noe funksjonalitet ikke virker_
+ \* _Grunnleggende støttet betyr at det meste vil fungere, men en kan risikere at noe funksjonalitet ikke virker_
+ 
  ** _Ikke støttet betyr at dette er browsere som er deprecated, og man vil mest sannsynlig treffe på funksjonalitet som ikke fungerer_
 
 ## Maintainers
