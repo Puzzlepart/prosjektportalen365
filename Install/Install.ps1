@@ -400,7 +400,7 @@ $InstallEntry = @{
     InstallCommand   = $MyInvocation.Line.Substring(2);
 }
 
-if ($null -ne $CI) {
+if (-not [string]::IsNullOrEmpty($CI)) {
     $InstallEntry.InstallCommand = "GitHub CI";
 }
 
