@@ -1,1 +1,11 @@
-<pnp:ClientSidePage PageName="{resource:ClientSidePages_ExperienceLog_PageName}" PromoteAsNewsArticle="false" Overwrite="false" Layout="SingleWebPartAppPage" EnableComments="false" Title="{resource:ClientSidePages_ExperienceLog_Title}" xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema"><pnp:Sections><pnp:Section Order="1" Type="OneColumn"><pnp:Controls><pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;properties&quot;:{&quot;dataSource&quot;:&quot;Alle loggelementer&quot;,&quot;showCommandBar&quot;:true,&quot;showSearchBox&quot;:true,&quot;showExcelExportButton&quot;:true}}" ControlId="3ec6bcaf-28bc-4f2e-9e90-77e8cebf0b5f" Order="1" Column="1" /></pnp:Controls></pnp:Section></pnp:Sections><pnp:Header Type="None" /></pnp:ClientSidePage>
+<pnp:ClientSidePage PageName="{resource:ClientSidePages_ExperienceLog_PageName}" PromoteAsNewsArticle="false" Overwrite="false" Layout="SingleWebPartAppPage" EnableComments="false" Title="{resource:ClientSidePages_ExperienceLog_Title}"
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    <pnp:Sections>
+        <pnp:Section Order="1" Type="OneColumn">
+            <pnp:Controls>
+                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;properties&quot;:{&quot;dataSource&quot;:&quot;Alle loggelementer&quot;,&quot;showCommandBar&quot;:true,&quot;showSearchBox&quot;:true,&quot;showExcelExportButton&quot;:true}}" ControlId="3ec6bcaf-28bc-4f2e-9e90-77e8cebf0b5f" Order="1" Column="1" />
+            </pnp:Controls>
+        </pnp:Section>
+    </pnp:Sections>
+    <pnp:Header Type="None" />
+</pnp:ClientSidePage>
