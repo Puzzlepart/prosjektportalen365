@@ -345,6 +345,7 @@ export class DataAdapter {
         // eslint-disable-next-line quotes
         .filter("GtProjectLifecycleStatus ne 'Avsluttet'")
         .orderBy('Title')
+        .top(500)
         .usingCaching()
         .get<ISPProjectItem[]>(),
       MSGraph.Get<IGraphGroup[]>(
