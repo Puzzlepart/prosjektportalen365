@@ -44,3 +44,7 @@ Vi gjør vårt beste for å støtte alle nettlesere, men følger retningslinjer 
 * Tarjei Ormestøyl (tarjeieo@puzzlepart.com)
 * Ole Martin Pettersen (olemp@puzzlepart.com)
 * I tillegg flere fra teamet bak [prosjektportalen@puzzlepart.com](mailto:prosjektportalen@puzzlepart.com)
+
+## Development
+
+Please read the [Development guide](./.dev/Home.md).
