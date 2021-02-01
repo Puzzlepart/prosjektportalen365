@@ -1,23 +1,23 @@
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
+import { ISPLibraryFolder } from 'data/SPDataAdapter/ISPLibraryFolder'
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog'
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown'
 import * as strings from 'ProjectExtensionsStrings'
-import * as React from 'react'
+import React, { useState } from 'react'
 import { InfoMessage } from '../../InfoMessage'
-import { DocumentTemplateDialogScreen } from '../DocumentTemplateDialogScreen'
+import { DocumentTemplateDialogScreen } from '../types'
 import styles from './DocumentTemplateDialogScreenEditCopy.module.scss'
 import { DocumentTemplateItem } from './DocumentTemplateItem'
-import { IDocumentTemplateDialogScreenEditCopyProps } from './IDocumentTemplateDialogScreenEditCopyProps'
-import { ISPLibraryFolder } from 'data/SPDataAdapter/ISPLibraryFolder'
+import { IDocumentTemplateDialogScreenEditCopyProps } from './types'
 
 // tslint:disable-next-line: naming-convention
 export const DocumentTemplateDialogScreenEditCopy = (
   props: IDocumentTemplateDialogScreenEditCopyProps
 ) => {
-  const [templates, setTemplates] = React.useState([...props.selectedTemplates])
-  const [selectedLibrary, setLibrary] = React.useState<ISPLibraryFolder>(props.libraries[0])
-  const [selectedFolder, setFolder] = React.useState<ISPLibraryFolder>(null)
+  const [templates, setTemplates] = useState([...props.selectedTemplates])
+  const [selectedLibrary, setLibrary] = useState<ISPLibraryFolder>(props.libraries[0])
+  const [selectedFolder, setFolder] = useState<ISPLibraryFolder>(null)
 
   /**
    * On input changed
@@ -45,11 +45,9 @@ export const DocumentTemplateDialogScreenEditCopy = (
   /**
    * On library changed
    *
-   * @param {any} _event Event
    * @param {IDropdownOption} option Option
-   * @param {number} _index Index
    */
-  function onLibraryChanged(_event: React.FormEvent<HTMLDivElement>, option: IDropdownOption) {
+  function onLibraryChanged(option: IDropdownOption) {
     setLibrary(option.data)
     setFolder(null)
   }
@@ -57,11 +55,9 @@ export const DocumentTemplateDialogScreenEditCopy = (
   /**
    * On folder changed
    *
-   * @param {any} _event Event
    * @param {IDropdownOption} option Option
-   * @param {number} _index Index
    */
-  function onFolderChanged(_event: React.FormEvent<HTMLDivElement>, option: IDropdownOption) {
+  function onFolderChanged(option: IDropdownOption) {
     setFolder(option.data)
   }
 
@@ -93,25 +89,28 @@ export const DocumentTemplateDialogScreenEditCopy = (
           disabled={props.libraries.length === 1}
           label={strings.DocumentLibraryDropdownLabel}
           defaultSelectedKey={selectedLibrary.Id}
-          onChange={onLibraryChanged}
+          onChange={(_,option) =>onLibraryChanged(option)}
           options={props.libraries.map((lib) => ({ key: lib.Id, text: lib.Title, data: lib }))}
         />
       </div>
       <div>
         <Dropdown
-          disabled={selectedLibrary.Folders.length < 2}
+          disabled={selectedLibrary.Folders.length < 1}
           label={strings.FolderDropdownLabel}
-          placeholder={
-            selectedLibrary.Folders.length === 0 &&
-            `Det finnes ingen mapper i ${selectedLibrary.Title}.`
-          }
-          defaultSelectedKey={selectedFolder && selectedFolder.Id}
-          options={selectedLibrary.Folders.map((fld) => ({
-            key: fld.Id,
-            text: fld.Title,
-            data: fld
-          }))}
-          onChange={onFolderChanged}
+          defaultSelectedKey={selectedFolder ? selectedFolder.Id : '-'}
+          options={[
+            {
+              key: '-',
+              text: strings.DocumentTemplateDialogScreenEditCopyRootLevelText,
+              data: null
+            },
+            ...selectedLibrary.Folders.map((fld) => ({
+              key: fld.Id,
+              text: fld.Title,
+              data: fld
+            }))
+          ]}
+          onChange={(_,option) =>onFolderChanged(option)}
         />
       </div>
       <DialogFooter>

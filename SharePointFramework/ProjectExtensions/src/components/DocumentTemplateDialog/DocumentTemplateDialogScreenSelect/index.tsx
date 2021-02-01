@@ -5,22 +5,22 @@ import {
   SelectionMode
 } from 'office-ui-fabric-react/lib/DetailsList'
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection'
-import * as strings from 'ProjectExtensionsStrings'
-import * as React from 'react'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
+import * as strings from 'ProjectExtensionsStrings'
+import React, { Component, ReactElement } from 'react'
 import { InfoMessage } from '../../InfoMessage'
 import {
   DocumentTemplateDialogScreenSelectDefaultProps,
   IDocumentTemplateDialogScreenSelectProps
-} from './IDocumentTemplateDialogScreenSelectProps'
+} from './types'
 
-export class DocumentTemplateDialogScreenSelect extends React.Component<
+export class DocumentTemplateDialogScreenSelect extends Component<
   IDocumentTemplateDialogScreenSelectProps,
   {}
-> {
+  > {
   public static defaultProps = DocumentTemplateDialogScreenSelectDefaultProps
 
-  public render(): React.ReactElement<IDocumentTemplateDialogScreenSelectProps> {
+  public render(): ReactElement<IDocumentTemplateDialogScreenSelectProps> {
     return (
       <>
         <InfoMessage

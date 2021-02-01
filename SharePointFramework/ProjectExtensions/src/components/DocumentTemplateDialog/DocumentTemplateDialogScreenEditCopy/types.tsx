@@ -1,5 +1,5 @@
+import { DocumentTemplateDialogScreen } from '..'
 import { IDocumentLibrary, TemplateFile } from '../../../models'
-import { DocumentTemplateDialogScreen } from '../DocumentTemplateDialogScreen'
 
 export interface IDocumentTemplateDialogScreenEditCopyProps {
   /**
