@@ -17,7 +17,7 @@ import {
 export class DocumentTemplateDialogScreenSelect extends Component<
   IDocumentTemplateDialogScreenSelectProps,
   {}
-  > {
+> {
   public static defaultProps = DocumentTemplateDialogScreenSelectDefaultProps
 
   public render(): ReactElement<IDocumentTemplateDialogScreenSelectProps> {

@@ -148,4 +148,3 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
 
 export * from './types'
 export { IDocumentTemplateDialogProps }
-

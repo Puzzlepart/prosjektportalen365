@@ -89,7 +89,7 @@ export const DocumentTemplateDialogScreenEditCopy = (
           disabled={props.libraries.length === 1}
           label={strings.DocumentLibraryDropdownLabel}
           defaultSelectedKey={selectedLibrary.Id}
-          onChange={(_,option) =>onLibraryChanged(option)}
+          onChange={(_, option) => onLibraryChanged(option)}
           options={props.libraries.map((lib) => ({ key: lib.Id, text: lib.Title, data: lib }))}
         />
       </div>
@@ -110,7 +110,7 @@ export const DocumentTemplateDialogScreenEditCopy = (
               data: fld
             }))
           ]}
-          onChange={(_,option) =>onFolderChanged(option)}
+          onChange={(_, option) => onFolderChanged(option)}
         />
       </div>
       <DialogFooter>
