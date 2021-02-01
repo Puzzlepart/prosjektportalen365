@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 define([], function () {
   return {
     ChangePhaseText: 'Endre til denne fasen',
@@ -69,7 +70,8 @@ define([], function () {
     SyncProjectPropertiesSuccessText: 'Prosjektegenskaper ble synkronisert til porteføljeområdet. Siden lastes på nytt om {0} sekunder.',
     SyncProjectPropertiesErrorText: 'Det skjedde feil under synkronisering',
     SyncProjectPropertiesListProgressDescription: 'Oppdaterer Prosjektegenskaper-listen',
-    SyncProjectPropertiesValuesProgressDescription: 'Synkroniserer egenskaper',
+    SyncProjectPropertiesValuesProgressLabel: 'Synkroniserer egenskaper',
+    SyncProjectPropertiesValuesProgressDescription: 'Vennligst vent...',
     ProjectStatusDataErrorText: 'Ingen tilgang. Du har ikke tillatelse til å se statusrapporter.',
     ShowFieldExternalUsers: 'Synlig for eksterne brukere',
     ExternalUsersConfigText: 'Konfigurasjon',
@@ -109,4 +111,4 @@ define([], function () {
     HeightFieldLabel: 'Høyde (piksler)',
     CalloutTemplateFieldLabel: 'Mal for callout'
   }
-});
+})
