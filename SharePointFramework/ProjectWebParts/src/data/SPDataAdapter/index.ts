@@ -56,7 +56,7 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
       })
       progressFunc({
         label: strings.SyncProjectPropertiesValuesProgressDescription,
-        description: 'Vennligst vent...'
+        description: strings.SyncProjectPropertiesValuesProgressDescription
       })
       const [fields, siteUsers] = await Promise.all([
         templateParameters.ProjectContentTypeId
