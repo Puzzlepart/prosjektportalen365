@@ -1,6 +1,6 @@
 import { IProjectSetupData } from 'extensions/projectSetup'
 import * as strings from 'ProjectExtensionsStrings'
-import { PortalDataService } from 'shared/lib/services'
+import { PortalDataService } from 'pp365-shared/lib/services'
 import { SpEntityPortalService } from 'sp-entityportal-service'
 import initSpfxJsom, { ExecuteJsomQuery } from 'spfx-jsom'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
