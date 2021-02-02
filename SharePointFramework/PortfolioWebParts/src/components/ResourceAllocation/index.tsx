@@ -25,8 +25,8 @@ import Timeline, {
   TodayMarker
 } from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css'
-import { tryParsePercentage } from 'shared/lib/helpers'
-import { DataSourceService } from 'shared/lib/services'
+import { tryParsePercentage } from 'pp365-shared/lib/helpers'
+import { DataSourceService } from 'pp365-shared/lib/services'
 import * as _ from 'underscore'
 import { FilterPanel, IFilterItemProps, IFilterProps } from '../FilterPanel'
 import { DetailsCallout } from './DetailsCallout'
