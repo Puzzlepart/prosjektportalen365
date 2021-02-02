@@ -121,5 +121,7 @@ The templates contains the JSON template(s), planner tasks and phase checklist i
 ### 4. NPM
 The SharePoint Framework solutions are published to `npm` independently.
 
+- [@Shared](https://www.npmjs.com/package/pp365-shared)
 - [ProjectWebParts](https://www.npmjs.com/package/pp365-projectwebparts)
-- 
+- [ProjectExtensions](https://www.npmjs.com/package/pp365-projectextensions)
+- [PortfolioWebParts](https://www.npmjs.com/package/pp365-portfoliowebparts)
