@@ -280,7 +280,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
             if (baseProps.headerProps.value) {
               return <StatusSection {...baseProps} />
             } else {
-              return null;
+              return null
             }
           }
           case SectionType.ProjectPropertiesSection: {

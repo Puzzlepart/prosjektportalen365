@@ -63,7 +63,7 @@ export class SummarySection extends BaseSection<ISummarySectionProps, ISummarySe
           <div key={idx} className='ms-Grid-col ms-sm6'>
             <StatusElement {...props} />
           </div>
-        );
+        )
       }
     })
   }
