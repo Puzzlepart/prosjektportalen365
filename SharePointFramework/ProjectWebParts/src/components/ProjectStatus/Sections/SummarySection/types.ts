@@ -1,4 +1,4 @@
-import { ProjectColumnConfig, SectionModel } from 'shared/lib/models'
+import { ProjectColumnConfig, SectionModel } from 'pp365-shared/lib/models'
 import { IBaseSectionProps, IBaseSectionState } from '../BaseSection'
 
 export interface ISummarySectionProps extends IBaseSectionProps {

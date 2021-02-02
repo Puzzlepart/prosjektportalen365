@@ -4,8 +4,8 @@ import { Logger, LogLevel } from '@pnp/logging'
 import { taxonomy } from '@pnp/sp-taxonomy'
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator'
 import * as strings from 'ProjectWebPartsStrings'
-import { SPDataAdapterBase } from 'shared/lib/data'
-import { ProjectDataService } from 'shared/lib/services'
+import { SPDataAdapterBase } from 'pp365-shared/lib/data'
+import { ProjectDataService } from 'pp365-shared/lib/services'
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
 
 export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
