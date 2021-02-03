@@ -12,6 +12,10 @@ npm-debug.log
 tests
 examples
 .github
+temp
+teams
+sharepoint
+dist
 
 #################
 ## Vscode
