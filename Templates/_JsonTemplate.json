@@ -13,10 +13,6 @@
             "Group": "{{ContentTypes_Group}}",
             "FieldRefs": [
                 {
-                    "ID": "c3beecea-c0e5-4d18-9b45-3c7d7949bee4",
-                    "Name": "GtDescription"
-                },
-                {
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
                     "Name": "GtProjectPhase"
                 },
@@ -63,7 +59,7 @@
                 {
                     "ID": "6c2da0dc-77b1-4152-b751-97adf436faa0",
                     "Name": "GtRiskStatus"
-                }
+                }                
             ]
         },
         {
