@@ -3,10 +3,10 @@
     "id": "4449d3dc-fa58-4982-b87c-5a893114e7b7",
     "alias": "ProjectPhasesWebPart",
     "componentType": "WebPart",
-    "version": "1.2.4",
+    "version": "1.2.6",
     "manifestVersion": 2,
     "requiresCustomScript": false,
-    "hiddenFromToolbox": false,
+    "hiddenFromToolbox": true,
     "supportedHosts": [
         "SharePointWebPart"
     ],

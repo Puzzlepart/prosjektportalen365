@@ -1,6 +1,6 @@
 import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
-import { ProjectColumnConfig, SectionModel, SPField, StatusReport } from 'shared/lib/models'
-import { IGetPropertiesData } from 'shared/lib/services'
+import { ProjectColumnConfig, SectionModel, SPField, StatusReport } from 'pp365-shared/lib/models'
+import { IGetPropertiesData } from 'pp365-shared/lib/services'
 
 export interface IProjectStatusProps extends IBaseWebPartComponentProps {
   riskMatrixCalloutTemplate: string

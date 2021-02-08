@@ -1,5 +1,5 @@
 import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu'
-import { PortfolioOverviewView, ProjectColumn } from 'shared/lib/models'
+import { PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
 import { IFilterProps } from '../FilterPanel'
 import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage'
 

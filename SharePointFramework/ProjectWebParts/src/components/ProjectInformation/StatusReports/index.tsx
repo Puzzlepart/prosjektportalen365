@@ -2,7 +2,7 @@ import { DisplayMode } from '@microsoft/sp-core-library'
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle'
 import { ActionButton } from 'office-ui-fabric-react/lib/Button'
 import * as React from 'react'
-import { formatDate } from 'shared/lib/helpers/formatDate'
+import { formatDate } from 'pp365-shared/lib/helpers/formatDate'
 import { IStatusReportsProps } from './types'
 import styles from './StatusReports.module.scss'
 

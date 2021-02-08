@@ -14,8 +14,8 @@ import {
 } from 'models'
 import MSGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
-import { PortfolioOverviewView } from 'shared/lib/models'
-import { PortalDataService } from 'shared/lib/services/PortalDataService'
+import { PortfolioOverviewView } from 'pp365-shared/lib/models'
+import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
 import * as _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS } from './DEFAULT_SEARCH_SETTINGS'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
@@ -345,6 +345,7 @@ export class DataAdapter {
         // eslint-disable-next-line quotes
         .filter("GtProjectLifecycleStatus ne 'Avsluttet'")
         .orderBy('Title')
+        .top(500)
         .usingCaching()
         .get<ISPProjectItem[]>(),
       MSGraph.Get<IGraphGroup[]>(

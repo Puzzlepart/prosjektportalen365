@@ -1,7 +1,6 @@
 {
-  "name": "projectwebparts",
-  "version": "1.2.4",
-  "private": true,
+  "name": "pp365-projectwebparts",
+  "version": "1.2.6",
   "engines": {
     "node": ">=0.10.0"
   },
@@ -39,13 +38,13 @@
     "get-value": "3.0.1",
     "msgraph-helper": "0.7.1",
     "office-ui-fabric-react": "6.214.0",
+    "pp365-shared": "1.2.5",
     "pzl-spfx-components": "0.0.11",
     "react": "16.8.5",
     "react-dom": "16.8.5",
     "react-image-fade-in": "1.0.2",
     "react-markdown": "4.2.2",
     "react-scroll": "1.7.11",
-    "shared": "file:../@Shared",
     "sp-entityportal-service": "1.3.0",
     "sp-hubsite-service": "0.5.1",
     "spfx-jsom": "0.6.0",

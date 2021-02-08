@@ -2,7 +2,9 @@ import { IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base'
 import { ResourceAllocation, IResourceAllocationProps } from 'components/ResourceAllocation'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
-export default class ResourceAllocationWebPart extends BasePortfolioWebPart<IResourceAllocationProps> {
+export default class ResourceAllocationWebPart extends BasePortfolioWebPart<
+  IResourceAllocationProps
+> {
   public render(): void {
     this.renderComponent(ResourceAllocation)
   }

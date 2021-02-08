@@ -1,7 +1,6 @@
 {
-  "name": "projectextensions",
-  "version": "1.2.4",
-  "private": true,
+  "name": "pp365-projectextensions",
+  "version": "1.2.5",
   "engines": {
     "node": ">=0.10.0"
   },
@@ -38,10 +37,10 @@
     "@uifabric/utilities": "6.45.1",
     "msgraph-helper": "0.8.3",
     "office-ui-fabric-react": "6.214.0",
+    "pp365-shared": "file:../@Shared",
     "react": "16.8.5",
     "react-dom": "16.8.5",
     "react-markdown": "4.2.2",
-    "shared": "file:../@Shared",
     "sp-entityportal-service": "1.3.0",
     "sp-hubsite-service": "0.7.1",
     "sp-js-provisioning": "1.0.4",

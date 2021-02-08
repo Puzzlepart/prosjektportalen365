@@ -1,6 +1,6 @@
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { FileAddResult, Folder, Web } from '@pnp/sp'
-import { formatDate } from 'shared/lib/helpers'
+import { formatDate } from 'pp365-shared/lib/helpers'
 
 export interface ITemplateFileSPItem {
   File?: {

@@ -1,7 +1,7 @@
 import { ITimelineItem } from 'interfaces/ITimelineItem'
 import { Callout } from 'office-ui-fabric-react/lib/Callout'
 import * as React from 'react'
-import { formatDate } from 'shared/lib/helpers/formatDate'
+import { formatDate } from 'pp365-shared/lib/helpers/formatDate'
 import styles from './DetailsCallout.module.scss'
 
 export interface IDetailsCalloutProps {

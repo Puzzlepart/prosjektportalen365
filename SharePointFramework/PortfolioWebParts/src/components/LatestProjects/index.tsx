@@ -1,7 +1,7 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { SortDirection } from '@pnp/sp'
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle'
-import { formatDate } from 'shared/lib/helpers'
+import { formatDate } from 'pp365-shared/lib/helpers'
 import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar'
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner'
 import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings'

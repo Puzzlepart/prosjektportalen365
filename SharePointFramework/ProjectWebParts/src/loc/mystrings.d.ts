@@ -73,6 +73,7 @@ declare interface IProjectWebPartsStrings {
   SyncProjectPropertiesSuccessText: string;
   SyncProjectPropertiesErrorText: string;
   SyncProjectPropertiesListProgressDescription: string;
+  SyncProjectPropertiesValuesProgressLabel: string;
   SyncProjectPropertiesValuesProgressDescription: string;
   ProjectStatusDataErrorText: string;
   ShowFieldExternalUsers: string;

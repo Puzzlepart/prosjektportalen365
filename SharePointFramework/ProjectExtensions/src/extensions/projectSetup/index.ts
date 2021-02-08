@@ -9,8 +9,8 @@ import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import * as strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { ListLogger } from 'shared/lib/logging'
-import { PortalDataService } from 'shared/lib/services'
+import { ListLogger } from 'pp365-shared/lib/logging'
+import { PortalDataService } from 'pp365-shared/lib/services'
 import { default as HubSiteService } from 'sp-hubsite-service'
 import {
   ErrorDialog,
