@@ -173,7 +173,7 @@ export class ProjectDataService {
         `${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`
       )
     )
-    
+
     // tslint:disable-next-line: early-exit
     if (propertyItem) {
       const templateParameters = tryParseJson(propertyItem.fieldValuesText.TemplateParameters, {})
