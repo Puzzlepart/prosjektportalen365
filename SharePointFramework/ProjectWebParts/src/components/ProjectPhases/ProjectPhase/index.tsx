@@ -30,11 +30,11 @@ export const ProjectPhase = ({ phase, isCurrentPhase, onOpenCallout }: IProjectP
             onMouseOver={() => onOpenCallout(targetRef.current, phase)}>
             {phase.name}
           </span>
-          <span
+          <div
             hidden={!context.props.showSubText}
             className={styles.phaseSubText}
             title={phase.subText}
-            dangerouslySetInnerHTML={{ __html: truncateString(phase.subText, context.props.subTextTruncateLength || 50) }}></span>
+            dangerouslySetInnerHTML={{ __html: truncateString(phase.subText, context.props.subTextTruncateLength || 50) }}></div>
         </div>
       </a>
     </li>

@@ -24,7 +24,7 @@ export const ProjectPhaseCallout = ({ phase, target }: IProjectPhaseCalloutProps
           <span className={styles.title}>{phase.name}</span>
         </div>
         <div className={styles.body}>
-          <p className={styles.subText} hidden={!context.props.showSubText}>{phase.subText}</p>
+          <p className={styles.subText}>{phase.subText}</p>
           <div>
             <div
               className={styles.stats}
