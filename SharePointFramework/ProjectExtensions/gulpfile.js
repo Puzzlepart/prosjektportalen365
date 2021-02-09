@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable prefer-const */
 'use strict'
 const fs = require('fs')
 const path = require('path')
@@ -10,16 +13,16 @@ const WebpackBar = require('webpackbar')
 const LiveReloadPlugin = require('webpack-livereload-plugin')
 const os = require('os')
 const log = require('@microsoft/gulp-core-build').log
-const colors = require("colors")
+const colors = require('colors')
 let buildConfig = {
     parallel: os.cpus().length - 1,
     bundleAnalyzerEnabled: false
 }
-build.addSuppression(`Warning - [sass] The local CSS class 'ms-Grid' is not camelCase and will not be type-safe.`)
-build.addSuppression(`Warning - [sass] The local CSS class '-webkit-filter' is not camelCase and will not be type-safe.`)
+build.addSuppression('Warning - [sass] The local CSS class \'ms-Grid\' is not camelCase and will not be type-safe.')
+build.addSuppression('Warning - [sass] The local CSS class \'-webkit-filter\' is not camelCase and will not be type-safe.')
 
 try {
-    var env = require('./config/env.json')
+    let env = require('./config/env.json')
     pkgDeploy(build, require('./config/package-solution.json'), env)
 } catch (error) {
     log(`Skipping '${colors.cyan('pkgDeploy')}' due to missing ${colors.cyan('config/env.json')}...`)
@@ -32,16 +35,16 @@ try {
 }
 
 gulp.task('versionSync', (done) => {
-    find.file(/\manifest.json$/, path.join(__dirname, "src"), (files) => {
-        var pkgSolution = require('./config/package-solution.json')
-        var newVersionNumber = require('./package.json').version.split('-')[0]
+    find.file(/\manifest.json$/, path.join(__dirname, 'src'), (files) => {
+        let pkgSolution = require('./config/package-solution.json')
+        let newVersionNumber = require('./package.json').version.split('-')[0]
         pkgSolution.solution.version = newVersionNumber + '.0'
-        fs.writeFile('./config/package-solution.json', JSON.stringify(pkgSolution, null, 4), (_error) => { })
+        fs.writeFile('./config/package-solution.json', JSON.stringify(pkgSolution, null, 4), () => { })
         for (let i = 0; i < files.length; i++) {
             let manifest = require(files[i])
             manifest.version = newVersionNumber
             log(`[${colors.cyan('versionSync')}] Setting ${colors.cyan('version')} to ${colors.cyan(newVersionNumber)} for ${colors.cyan(manifest.alias)}...`)
-            fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => { })
+            fs.writeFile(files[i], JSON.stringify(manifest, null, 4), () => { })
         }
         done()
     })

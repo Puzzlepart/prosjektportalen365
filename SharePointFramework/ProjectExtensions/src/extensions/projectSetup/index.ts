@@ -6,11 +6,11 @@ import { sp, Web } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
 import { default as MSGraphHelper } from 'msgraph-helper'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import * as strings from 'ProjectExtensionsStrings'
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
 import { ListLogger } from 'pp365-shared/lib/logging'
 import { PortalDataService } from 'pp365-shared/lib/services'
+import * as strings from 'ProjectExtensionsStrings'
+import { createElement } from 'react'
+import * as ReactDOM from 'react-dom'
 import { default as HubSiteService } from 'sp-hubsite-service'
 import {
   ErrorDialog,
@@ -23,6 +23,7 @@ import {
 } from '../../components'
 import { ListContentConfig, ProjectExtension, ProjectTemplate } from '../../models'
 import * as Tasks from '../../tasks'
+import { deleteCustomizer } from './deleteCustomizer'
 import { IProjectSetupData } from './IProjectSetupData'
 import { IProjectSetupProperties } from './IProjectSetupProperties'
 import { ProjectSetupError } from './ProjectSetupError'
@@ -55,7 +56,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       // eslint-disable-next-line default-case
       switch (this._validation) {
         case ProjectSetupValidation.InvalidWebLanguage: {
-          await this._deleteCustomizer(this.componentId, false)
+          await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, false)
           throw new ProjectSetupError(
             'onInit',
             strings.InvalidLanguageErrorMessage,
@@ -121,7 +122,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         iconName: 'Page'
       })
       await this._startProvision(taskParams, data)
-      await this._deleteCustomizer(this.componentId, true)
+      await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, true)
     } catch (error) {
       Logger.log({
         message: '(ProjectSetup) [_initializeSetup]: Failed initializing setup',
@@ -140,7 +141,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   private _getProvisioningInfo(data: IProjectSetupData): Promise<ITemplateSelectDialogState> {
     return new Promise((resolve, reject) => {
       const placeholder = this._getPlaceholder('TemplateSelectDialog')
-      const element = React.createElement<ITemplateSelectDialogProps>(TemplateSelectDialog, {
+      const element = createElement<ITemplateSelectDialogProps>(TemplateSelectDialog, {
         data,
         version: this.manifest.version,
         onSubmit: (state: ITemplateSelectDialogState) => {
@@ -169,7 +170,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    */
   private _renderProgressDialog(props: IProgressDialogProps) {
     const placeholder = this._getPlaceholder('ProgressDialog')
-    const element = React.createElement<IProgressDialogProps>(ProgressDialog, {
+    const element = createElement<IProgressDialogProps>(ProgressDialog, {
       ...props,
       version: this.manifest.version
     })
@@ -185,7 +186,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     const progressDialog = this._getPlaceholder('ProgressDialog')
     this._unmount(progressDialog)
     const placeholder = this._getPlaceholder('ErrorDialog')
-    const element = React.createElement<IErrorDialogProps>(ErrorDialog, {
+    const element = createElement<IErrorDialogProps>(ErrorDialog, {
       ...props,
       version: this.manifest.version,
       onDismiss: () => this._unmount(placeholder),
@@ -196,6 +197,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
   /**
    * Start provision
+   *
+   * Get tasks using Tasks.getTasks and runs through them in sequence
    *
    * @param {Tasks.IBaseTaskParams} taskParams Task params
    * @param {IProjectSetupData} data Data
@@ -240,33 +243,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    */
   private _onTaskStatusUpdated(text: string, subText: string, iconName: string) {
     this._renderProgressDialog({ text, subText, iconName })
-  }
-
-  /**
-   * Delete customizer
-   *
-   * @param {string} componentId Component ID
-   * @param {boolean} reload Reload page after customizer removal
-   */
-  private async _deleteCustomizer(componentId: string, reload: boolean): Promise<void> {
-    const web = new Web(this.context.pageContext.web.absoluteUrl)
-    const customActions = await web.userCustomActions.get<
-      { Id: string; ClientSideComponentId: string }[]
-    >()
-    for (let i = 0; i < customActions.length; i++) {
-      const customAction = customActions[i]
-      if (customAction.ClientSideComponentId === componentId) {
-        Logger.log({
-          message: `(ProjectSetup) [_deleteCustomizer]: Deleting custom action ${customAction.Id}`,
-          level: LogLevel.Info
-        })
-        await web.userCustomActions.getById(customAction.Id).delete()
-        break
-      }
-    }
-    if (reload) {
-      window.location.href = window.location.href
-    }
   }
 
   /**
