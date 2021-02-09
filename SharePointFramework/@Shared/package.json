@@ -1,8 +1,8 @@
 {
     "name": "pp365-shared",
-    "version": "1.2.5",
+    "version": "1.2.6",
     "description": "Shared utilities, helpers and models",
-    "main": "index.js",
+    "main": "lib/index.js",
     "scripts": {
         "build": "tsc",
         "watch": "tsc --watch",

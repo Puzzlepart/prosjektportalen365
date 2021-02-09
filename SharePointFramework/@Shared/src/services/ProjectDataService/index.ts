@@ -9,6 +9,7 @@ import {
   ProjectPhaseChecklistData,
   ProjectPhaseModel
 } from '../../models'
+import { tryParseJson } from '../../util/tryParseJson'
 import { IGetPropertiesData } from './IGetPropertiesData'
 import { IProjectDataServiceParams } from './IProjectDataServiceParams'
 import { IPropertyItemContext } from './IPropertyItemContext'
@@ -172,14 +173,10 @@ export class ProjectDataService {
         `${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`
       )
     )
+
     // tslint:disable-next-line: early-exit
     if (propertyItem) {
-      let templateParameters: TypedHash<any>
-      try {
-        templateParameters = JSON.parse(propertyItem.fieldValues.TemplateParameters) || {}
-      } catch {
-        templateParameters = {}
-      }
+      const templateParameters = tryParseJson(propertyItem.fieldValuesText.TemplateParameters, {})
       Logger.write('(ProjectDataService) (getPropertiesData) Local property item found.')
       return {
         ...propertyItem,
