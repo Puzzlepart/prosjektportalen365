@@ -1,4 +1,4 @@
-import { IPhaseChecklistItem, Phase } from 'models'
+import { IProjectPhaseChecklistItem, ProjectPhaseModel } from 'pp365-shared/lib/models'
 import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
 import { IProjectPhaseMouseOver } from './ProjectPhaseCallout'
 
@@ -23,7 +23,7 @@ export interface IProjectPhasesState extends IBaseWebPartComponentState<IProject
   /**
    * Confirm phase
    */
-  confirmPhase?: Phase
+  confirmPhase?: ProjectPhaseModel
 
   /**
    * Is changing phase
@@ -37,19 +37,19 @@ export interface IProjectPhasesState extends IBaseWebPartComponentState<IProject
 }
 
 export type ChecklistData = {
-  [termGuid: string]: { stats: { [status: string]: number }; items: IPhaseChecklistItem[] }
+  [termGuid: string]: { stats: { [status: string]: number }; items: IProjectPhaseChecklistItem[] }
 }
 
 export interface IProjectPhasesData {
   /**
    * Phases
    */
-  phases?: Phase[]
+  phases?: ProjectPhaseModel[]
 
   /**
    * Current phase
    */
-  currentPhase?: Phase
+  currentPhase?: ProjectPhaseModel
 
   /**
    * Check list data

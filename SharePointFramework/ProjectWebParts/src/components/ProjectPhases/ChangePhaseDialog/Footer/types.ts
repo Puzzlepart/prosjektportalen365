@@ -1,16 +1,16 @@
+import { ProjectPhaseModel } from 'pp365-shared/lib/models'
 import { View } from '../Views'
-import { Phase } from 'models'
 
 export default interface IFooterProps {
   /**
    * New phase
    */
-  newPhase: Phase
+  newPhase: ProjectPhaseModel
 
   /**
    * Active phase
    */
-  activePhase: Phase
+  activePhase: ProjectPhaseModel
 
   /**
    * Current view
@@ -25,7 +25,7 @@ export default interface IFooterProps {
   /**
    * On change phase
    */
-  onChangePhase: (phase: Phase) => Promise<void>
+  onChangePhase: (phase: ProjectPhaseModel) => Promise<void>
 
   /**
    * On dismiss

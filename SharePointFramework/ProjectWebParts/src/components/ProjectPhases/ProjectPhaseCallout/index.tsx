@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Callout } from 'office-ui-fabric-react/lib/Callout'
 import { ActionButton } from 'office-ui-fabric-react/lib/Button'
 import { IProjectPhaseCalloutProps } from './types'

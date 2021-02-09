@@ -1,12 +1,12 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
 import { sp } from '@pnp/sp'
-import { Phase } from 'models'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { ProjectPhaseModel } from 'pp365-shared/lib/models'
 import * as strings from 'ProjectWebPartsStrings'
-import * as React from 'react'
+import React, { Component } from 'react'
 import SPDataAdapter from '../../data'
 import { UserMessage } from '../UserMessage'
 import ChangePhaseDialog from './ChangePhaseDialog'
@@ -15,7 +15,7 @@ import { ProjectPhaseCallout } from './ProjectPhaseCallout'
 import styles from './ProjectPhases.module.scss'
 import { IProjectPhasesData, IProjectPhasesProps, IProjectPhasesState } from './types'
 
-export class ProjectPhases extends React.Component<IProjectPhasesProps, IProjectPhasesState> {
+export class ProjectPhases extends Component<IProjectPhasesProps, IProjectPhasesState> {
   /**
    * Constructor
    *
@@ -75,13 +75,11 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
 
     const { phases, currentPhase } = this.state.data
 
-    const visiblePhases = phases.filter((p) => p.properties.ShowOnFrontpage !== 'false')
-
     return (
       <div className={styles.projectPhases}>
         <div className={styles.container}>
           <ul className={styles.phaseList}>
-            {visiblePhases.map((phase, idx) => (
+            {phases.filter((p) => p.isVisible).map((phase, idx) => (
               <ProjectPhase
                 key={idx}
                 phase={phase}
@@ -117,9 +115,9 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
    * On open callout
    *
    * @param {HTMLSpanElement} target Target
-   * @param {Phase} phase Phase
+   * @param {ProjectPhaseModel} phase Phase
    */
-  private _onOpenCallout(target: HTMLSpanElement, phase: Phase): void {
+  private _onOpenCallout(target: HTMLSpanElement, phase: ProjectPhaseModel): void {
     this.setState({ phaseMouseOver: { target, model: phase } })
   }
 
@@ -133,9 +131,9 @@ export class ProjectPhases extends React.Component<IProjectPhasesProps, IProject
   /**
    * Change phase
    *
-   * @param {Phase} phase Phase
+   * @param {ProjectPhaseModel} phase Phase
    */
-  private async _onChangePhase(phase: Phase) {
+  private async _onChangePhase(phase: ProjectPhaseModel) {
     try {
       Logger.log({
         message: `(ProjectPhases) _onChangePhase: Changing phase to ${phase.name}`,

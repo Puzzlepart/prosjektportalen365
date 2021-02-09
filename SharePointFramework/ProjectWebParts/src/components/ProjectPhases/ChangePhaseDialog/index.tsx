@@ -1,9 +1,9 @@
 import { Logger, LogLevel } from '@pnp/logging'
-import { IPhaseChecklistItem } from 'models'
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
 import * as strings from 'ProjectWebPartsStrings'
-import * as React from 'react'
+import React, { Component } from 'react'
 import SPDataAdapter from '../../../data'
 import { Body } from './Body'
 import styles from './ChangePhaseDialog.module.scss'
@@ -11,7 +11,7 @@ import { Footer } from './Footer'
 import { IChangePhaseDialogProps, IChangePhaseDialogState } from './types'
 import { View } from './Views'
 
-export default class ChangePhaseDialog extends React.Component<
+export default class ChangePhaseDialog extends Component<
   IChangePhaseDialogProps,
   IChangePhaseDialogState
 > {
@@ -102,7 +102,7 @@ export default class ChangePhaseDialog extends React.Component<
    * @param {number} startIndex Start index (defaults to 0)
    */
   private _getNextIndex(
-    checklistItems: IPhaseChecklistItem[] = this.state.checklistItems,
+    checklistItems = this.state.checklistItems,
     startIndex = 0
   ): number {
     Logger.log({
@@ -120,9 +120,9 @@ export default class ChangePhaseDialog extends React.Component<
   /**
    * Check point open filter
    *
-   * @param {IPhaseChecklistItem} item Item
+   * @param {IProjectPhaseChecklistItem} item Item
    */
-  private _checkPointOpenFilter(item: IPhaseChecklistItem) {
+  private _checkPointOpenFilter(item: IProjectPhaseChecklistItem) {
     return item.GtChecklistStatus === strings.StatusOpen
   }
 

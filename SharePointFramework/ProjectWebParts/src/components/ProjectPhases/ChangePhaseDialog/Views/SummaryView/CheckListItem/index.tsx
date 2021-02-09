@@ -1,7 +1,7 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
 import * as strings from 'ProjectWebPartsStrings'
-import * as React from 'react'
+import React from 'react'
 import { useState } from 'react'
 import styles from './CheckListItem.module.scss'
 import IChecklistItemProps from './types'

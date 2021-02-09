@@ -1,11 +1,12 @@
-import * as React from 'react'
+import React, { useRef } from 'react'
 import styles from './ProjectPhase.module.scss'
 import { IProjectPhaseProps } from './types'
 
 const ProjectPhase = ({ phase, isCurrentPhase, onOpenCallout }: IProjectPhaseProps) => {
-  const phaseLetterRef = React.useRef()
+  const targetRef = useRef()
 
   const classNames = [styles.projectPhase]
+  
   if (isCurrentPhase) classNames.push(styles.isCurrentPhase)
   if (phase.properties.PhaseLevel) {
     const className = phase.properties.PhaseLevel.toLowerCase()
@@ -18,13 +19,13 @@ const ProjectPhase = ({ phase, isCurrentPhase, onOpenCallout }: IProjectPhasePro
         <div className={styles.phaseIcon}>
           <span
             className={styles.phaseLetter}
-            ref={phaseLetterRef}
-            onMouseOver={() => onOpenCallout(phaseLetterRef.current)}>
+            ref={targetRef}
+            onMouseOver={() => onOpenCallout(targetRef.current, phase)}>
             {phase.letter}
           </span>
           <span
             className={styles.phaseText}
-            onMouseOver={() => onOpenCallout(phaseLetterRef.current)}>
+            onMouseOver={() => onOpenCallout(targetRef.current, phase)}>
             {phase.name}
           </span>
           <span className={styles.phaseSubText}></span>

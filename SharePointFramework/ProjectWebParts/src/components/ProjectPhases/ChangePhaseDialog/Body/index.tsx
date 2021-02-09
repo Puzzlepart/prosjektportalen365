@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { ChangingPhaseView, InitialView, SummaryView, View } from '../Views'
 import IBodyProps from './types'
 

@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { CheckListItem } from './CheckListItem'
 import { ISummaryViewProps } from './types'
 import styles from './SummaryView.module.scss'

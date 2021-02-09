@@ -3,7 +3,7 @@ import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dia
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectWebPartsStrings'
-import * as React from 'react'
+import React from 'react'
 import { IConfirmPhaseDialogProps } from './types'
 
 const ConfirmPhaseDialog = ({
@@ -21,16 +21,18 @@ const ConfirmPhaseDialog = ({
         subText: format(strings.ConfirmPhaseDialogSubText, phase.name)
       }}
       modalProps={{ isBlocking: isBlocking }}>
-      {isChangingPhase ? (
-        <DialogFooter>
-          <Spinner />
-        </DialogFooter>
-      ) : (
-        <DialogFooter>
-          <PrimaryButton onClick={() => onConfirm(true)} text={strings.Yes} />
-          <DefaultButton onClick={() => onConfirm(false)} text={strings.No} />
-        </DialogFooter>
-      )}
+      {isChangingPhase
+        ? (
+          <DialogFooter>
+            <Spinner />
+          </DialogFooter>
+        )
+        : (
+          <DialogFooter>
+            <PrimaryButton onClick={() => onConfirm(true)} text={strings.Yes} />
+            <DefaultButton onClick={() => onConfirm(false)} text={strings.No} />
+          </DialogFooter>
+        )}
     </Dialog>
   )
 }

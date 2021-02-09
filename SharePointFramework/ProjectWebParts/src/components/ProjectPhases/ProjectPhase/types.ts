@@ -18,11 +18,16 @@ export interface IProjectPhaseProps {
 
   /**
    * On change phase handler
+   *
+   * @param {HTMLSpanElement} target Target
    */
-  onChangePhaseHandler?: (phase: Phase) => void
+  onChangePhaseHandler?: (target: HTMLSpanElement) => void
 
   /**
    * On open callout
+   *
+   * @param {HTMLSpanElement} target Target
+   * @param {Phase} phase Phase
    */
-  onOpenCallout: (target: any) => void
+  onOpenCallout: (target: HTMLSpanElement, phase: Phase) => void
 }

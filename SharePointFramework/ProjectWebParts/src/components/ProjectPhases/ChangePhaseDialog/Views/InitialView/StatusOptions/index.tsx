@@ -1,5 +1,5 @@
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button'
-import * as React from 'react'
+import React from 'react'
 import { IStatusOptionsProps } from './types'
 
 export const StatusOptions = ({ actions }: IStatusOptionsProps) => {
