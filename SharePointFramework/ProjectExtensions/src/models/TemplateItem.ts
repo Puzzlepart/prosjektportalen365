@@ -2,7 +2,13 @@ import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { FileAddResult, Folder, Web } from '@pnp/sp'
 import { formatDate } from 'pp365-shared/lib/helpers'
 
-export interface ITemplateFileSPItem {
+export interface ITemplateSPItem {
+  Folder?: {
+    ItemCount: number;
+    Name: string;
+    ServerRelativeUrl: string
+    TimeLastModified: string
+  }
   File?: {
     UniqueId: string
     Name: string
@@ -13,7 +19,7 @@ export interface ITemplateFileSPItem {
   FieldValuesAsText?: TypedHash<string>
 }
 
-export class TemplateFile {
+export class TemplateItem {
   /**
    * Item id
    */
@@ -59,26 +65,26 @@ export class TemplateFile {
    */
   public errorMessage: string
 
-  constructor(spItem: ITemplateFileSPItem, public web: Web) {
-    this.id = spItem.File.UniqueId
-    this.name = spItem.File.Name
-    this.title = spItem.File.Title
-    this.phase = spItem.FieldValuesAsText.GtProjectPhase
+  constructor(private _item: ITemplateSPItem, public web: Web) {
+    this.id = _item.File?.UniqueId
+    this.name = _item.File?.Name || _item.Folder?.Name
+    this.title = _item.File?.Title || this.name || _item.Folder?.Name
+    this.phase = _item.FieldValuesAsText.GtProjectPhase
     this.newName = this.name
     this.newTitle = this.title
-    this.serverRelativeUrl = spItem.File.ServerRelativeUrl
-    this.modified = formatDate(spItem.File.TimeLastModified)
+    this.serverRelativeUrl = _item.File?.ServerRelativeUrl || _item.Folder.ServerRelativeUrl
+    this.modified = formatDate(_item.File?.TimeLastModified || _item.Folder?.TimeLastModified)
   }
 
   /**
-   * Copy to
+   * Copy item to folder
    *
    * @param {Folder} folder Folder
    * @param {boolean} shouldOverwrite Should overwrite
    *
-   * @returns true if the operation is successful
+   * @returns {true} if the operation is successful
    */
-  public async copyTo(folder: Folder, shouldOverwrite = true): Promise<FileAddResult> {
+  public async copyTo(folder: Folder, shouldOverwrite: boolean = true): Promise<FileAddResult> {
     try {
       const content = await this.web.getFileByServerRelativeUrl(this.serverRelativeUrl).getBlob()
       // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -86,7 +92,7 @@ export class TemplateFile {
         this.newName,
         content,
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        () => {},
+        () => { },
         shouldOverwrite
       )
       await (await fileAddResult.file.getItem()).update({ Title: this.newTitle })
@@ -107,15 +113,40 @@ export class TemplateFile {
     })
   }
 
+  /**
+   * Name without extension
+   */
   public get nameWithoutExtension() {
     return this.name.split('.')[0]
   }
 
+  /**
+   * File extension
+   */
   public get fileExtension() {
     return this.name.split('.')[1]
   }
 
+  /**
+   * Folder server relative URL
+   */
   public get folderServerRelativeUrl() {
-    return this.serverRelativeUrl.replace(this.name, '')
+    return this.serverRelativeUrl.replace(`/${this.name}`, '')
+  }
+
+  /**
+   * Is folder
+   */
+  public get isFolder() {
+    return !!this._item.Folder
+  }
+
+  /**
+   * Folder level
+   * 
+   * Root level returns 1 etc
+   */
+  public get level(): number {
+    return this.serverRelativeUrl.split('/').length - 4
   }
 }
