@@ -33,8 +33,9 @@ export const ProjectPhaseCallout = ({ phase, target }: IProjectPhaseCalloutProps
                 return (
                   <div key={idx}>
                     <span>
-                      {phase.checklistData.stats[status]} {strings.CheckPointsMarkedAsText}{' '}
-                      {status}
+                      <span className={styles.count}>{phase.checklistData.stats[status]}</span> 
+                      <span className={styles.markedAs}>{strings.CheckPointsMarkedAsText}</span>
+                      <span className={styles.statusValue}>{status}</span>
                     </span>
                   </div>
                 )
