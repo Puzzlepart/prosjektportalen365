@@ -39,12 +39,16 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
                 PropertyPaneToggle('syncPropertiesAfterPhaseChange', {
                   label: strings.SyncPropertiesAfterPhaseChangeFieldLabel,
                 }),
+                PropertyPaneToggle('showSubText', {
+                  label: strings.ShowSubTextFieldLabel,
+                }),
                 PropertyPaneSlider('subTextTruncateLength', {
                   label: strings.SubTextTruncateLengthFieldLabel,
                   min: 20,
                   max: 100,
                   step: 2,
-                  showValue: true
+                  showValue: true,
+                  disabled: !this.properties.showSubText
                 }),
                 PropertyPaneDropdown('phaseField', {
                   label: strings.PhaseFieldFieldLabel,

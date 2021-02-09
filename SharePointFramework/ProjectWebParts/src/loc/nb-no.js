@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 define([], function () {
   return {
+    ShowSubTextFieldLabel: 'Vis fasetekst',
     SyncPropertiesAfterPhaseChangeFieldLabel: 'Synkroniser prosjektegenskaper etter faseendring',
     SubTextTruncateLengthFieldLabel: 'Max lengde fasetekst',
     ChangePhaseText: 'Endre til denne fasen',

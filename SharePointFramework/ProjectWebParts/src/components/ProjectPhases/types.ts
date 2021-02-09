@@ -14,6 +14,11 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   currentPhaseViewName: string
 
   /**
+   * Show sub text
+   */
+  showSubText: boolean
+
+  /**
    * Sub text truncate length
    */
   subTextTruncateLength: number

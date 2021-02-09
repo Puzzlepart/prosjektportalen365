@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 define([], function () {
   return {
+    ShowSubTextFieldLabel: 'Show sub text',
     SyncPropertiesAfterPhaseChangeFieldLabel: 'Sync propertis after phase change',
     SubTextTruncateLengthFieldLabel: 'Truncate length for sub text',
     ChangePhaseText: 'Change to this phase',
