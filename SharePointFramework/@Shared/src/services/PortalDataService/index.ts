@@ -112,7 +112,7 @@ export class PortalDataService {
   }
 
   /**
-   * Update status report
+   * Delete status report by id
    *
    * @param {number} id Id
    */
@@ -186,7 +186,7 @@ export class PortalDataService {
   ): Promise<ListEnsureResult> {
     const targetWeb = new Web(url)
     const { jsomContext } = await initSpfxJsom(url, { loadTaxonomy: true })
-    const [sourceContentType, destSiteFields, ensureList] = await Promise.all([
+    const [sourceContentType, targetSiteFields, ensureList] = await Promise.all([
       this._getHubContentType(contentTypeId),
       this._getSiteFields(targetWeb),
       targetWeb.lists.ensure(listName, '', 100, false, {
@@ -200,7 +200,7 @@ export class PortalDataService {
     for (const field of sourceContentType.Fields) {
       const [[listField], [siteField]] = [
         listFields.filter((fld) => fld.InternalName === field.InternalName),
-        destSiteFields.filter(
+        targetSiteFields.filter(
           (fld) =>
             fld.InternalName === field.InternalName &&
             fld.SchemaXml.indexOf('ShowInEditForm="FALSE"') === -1
