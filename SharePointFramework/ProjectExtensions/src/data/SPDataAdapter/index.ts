@@ -1,6 +1,6 @@
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
 import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
-import { TemplateFile } from 'models/TemplateFile'
+import { TemplateItem } from 'models/TemplateItem'
 import * as strings from 'ProjectExtensionsStrings'
 import { SPDataAdapterBase } from 'pp365-shared/lib/data'
 import { ProjectDataService } from 'pp365-shared/lib/services'
@@ -53,18 +53,16 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
    * Get document templates
    *
    * @param {string} templateLibrary Template library
-   * @param {string} viewXml View xml
+   * @param {string} viewXml View XML (CAML query)
    */
-  public async getDocumentTemplates(templateLibrary: string, viewXml?: string) {
+  public async getDocumentTemplates(templateLibrary: string, viewXml: string) {
     return await this.portal.getItems(
       templateLibrary,
-      TemplateFile,
+      TemplateItem,
       {
-        ViewXml:
-          viewXml ||
-          '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+        ViewXml: viewXml
       },
-      ['File', 'FieldValuesAsText']
+      ['File', 'Folder', 'FieldValuesAsText']
     )
   }
 
