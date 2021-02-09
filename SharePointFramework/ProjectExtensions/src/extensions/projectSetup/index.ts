@@ -56,7 +56,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       // eslint-disable-next-line default-case
       switch (this._validation) {
         case ProjectSetupValidation.InvalidWebLanguage: {
-          await deleteCustomizer(this.componentId, false)
+          await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, false)
           throw new ProjectSetupError(
             'onInit',
             strings.InvalidLanguageErrorMessage,
@@ -122,7 +122,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         iconName: 'Page'
       })
       await this._startProvision(taskParams, data)
-      await deleteCustomizer(this.componentId, true)
+      await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, true)
     } catch (error) {
       Logger.log({
         message: '(ProjectSetup) [_initializeSetup]: Failed initializing setup',
@@ -197,7 +197,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
   /**
    * Start provision
-   * 
+   *
    * Get tasks using Tasks.getTasks and runs through them in sequence
    *
    * @param {Tasks.IBaseTaskParams} taskParams Task params

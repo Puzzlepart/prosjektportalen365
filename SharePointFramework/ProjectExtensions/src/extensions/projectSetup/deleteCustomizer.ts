@@ -2,13 +2,18 @@ import { Logger, LogLevel } from '@pnp/logging'
 import { Web } from '@pnp/sp'
 
 /**
- * Delete customizer
+ * Delete customizer by componentId
  *
+ * @param {string} webAbsoluteUrl Web absolute URL
  * @param {string} componentId Component ID
  * @param {boolean} reload Reload page after customizer removal
  */
-export async function deleteCustomizer(componentId: string, reload: boolean): Promise<void>{
-  const web = new Web(this.context.pageContext.web.absoluteUrl)
+export async function deleteCustomizer(
+  webAbsoluteUrl: string,
+  componentId: string,
+  reload: boolean
+): Promise<void> {
+  const web = new Web(webAbsoluteUrl)
   const customActions = await web.userCustomActions.get<
     { Id: string; ClientSideComponentId: string }[]
   >()

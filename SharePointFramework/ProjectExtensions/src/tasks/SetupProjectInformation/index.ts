@@ -66,7 +66,7 @@ export class SetupProjectInformation extends BaseTask {
 
   /**
    * Add entry to hub project list
-   * 
+   *
    * Stores the project with
    * * Title
    * * GtSiteId
@@ -84,22 +84,22 @@ export class SetupProjectInformation extends BaseTask {
         params.context.pageContext.legacyPageContext.groupId
       )
       if (entity) return
-      const item: TypedHash<any> = {
+      const properties: TypedHash<any> = {
         Title: params.context.pageContext.web.title,
         GtSiteId: params.context.pageContext.site.id.toString(),
-        GtProjectTemplate: this.data.selectedTemplate.text,
+        GtProjectTemplate: this.data.selectedTemplate.text
       }
       if (params.templateSchema.Parameters.ProjectContentTypeId) {
-        item.ContentTypeId = params.templateSchema.Parameters.ProjectContentTypeId
+        properties.ContentTypeId = params.templateSchema.Parameters.ProjectContentTypeId
       }
       this.logInformation(
         `Adding project entity to list '${params.properties.projectsList}' at ${this.data.hub.url}`,
-        { item }
+        { properties }
       )
       await params.entityService.createNewEntity(
         params.context.pageContext.legacyPageContext.groupId,
         params.context.pageContext.web.absoluteUrl,
-        item
+        properties
       )
       this.logInformation(
         `Project entity added to list '${params.properties.projectsList}' at ${this.data.hub.url}`

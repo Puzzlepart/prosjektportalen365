@@ -19,7 +19,9 @@ import { ITemplateSelectorCommandProperties } from './ITemplateSelectorCommandPr
 Logger.subscribe(new ConsoleListener())
 Logger.activeLogLevel = LogLevel.Info
 
-export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITemplateSelectorCommandProperties> {
+export default class TemplateSelectorCommand extends BaseListViewCommandSet<
+  ITemplateSelectorCommandProperties
+> {
   private _hub: IHubSite
   private _templates: TemplateFile[] = []
   private _libraries: IDocumentLibrary[]

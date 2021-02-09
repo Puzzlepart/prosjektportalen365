@@ -117,11 +117,7 @@ export class TemplateSelectDialog extends React.Component<
   private _onRenderFooter() {
     return (
       <>
-        <DefaultButton
-          text={strings.CloseModalText}
-          onClick={this.props.onDismiss}
-          disabled={true}
-        />
+        <DefaultButton text={strings.CloseModalText} onClick={this.props.onDismiss} />
         <PrimaryButton
           text={strings.TemplateSelectDialogSubmitButtonText}
           iconProps={{ iconName: 'Settings' }}
@@ -132,7 +128,7 @@ export class TemplateSelectDialog extends React.Component<
   }
 
   /**
-   * On submit
+   * On submit the selected configuration
    */
   private _onSubmit() {
     const data = { ...this.state }
