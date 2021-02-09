@@ -77,6 +77,6 @@ define([], function () {
     TemplateListContentConfigText: 'Den valgte prosjektmalen inneholder konfigurasjon for standardinnhold.',
     FolderDropdownLabel:'Velg mappe',
     DocumentLibraryDropdownLabel: 'Velg dokumentbibliotek',
-    DocumentTemplateDialogScreenEditCopyRootLevelText: 'Rotnivå'
+    DocumentTemplateDialogScreenEditCopyRootLevelText: 'Øverste nivå'
   }
 });
