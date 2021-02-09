@@ -1,6 +1,6 @@
 import { IPhaseChecklistItem, Phase } from 'models'
 import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
-import { IProjectPhaseMouseOver } from './ProjectPhaseCallout/IProjectPhaseMouseOver'
+import { IProjectPhaseMouseOver } from './ProjectPhaseCallout'
 
 export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   /**

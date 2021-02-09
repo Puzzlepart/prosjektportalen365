@@ -27,7 +27,7 @@ export default class ChangePhaseDialog extends React.Component<
     super(props)
     const checklistItems = props.activePhase ? props.activePhase.checklistData.items : []
     this.state = {
-      isLoading: false,
+      loading: false,
       checklistItems,
       currentIdx: this._getNextIndex(checklistItems),
       currentView:
@@ -38,7 +38,7 @@ export default class ChangePhaseDialog extends React.Component<
   public render() {
     const dlgCntBaseProps = {
       currentView: this.state.currentView,
-      isLoading: this.state.isLoading,
+      isLoading: this.state.loading,
       onDismiss: this.props.onDismiss,
       onChangePhase: this.props.onChangePhase,
       newPhase: this.props.newPhase,
@@ -75,7 +75,7 @@ export default class ChangePhaseDialog extends React.Component<
    * @param {string} commentsValue Comments value
    */
   private async _saveCheckPoint(statusValue: string, commentsValue: string): Promise<void> {
-    this.setState({ isLoading: true })
+    this.setState({ loading: true })
     const { checklistItems, currentIdx } = { ...this.state } as IChangePhaseDialogState
     const currentItem = checklistItems[currentIdx]
     const updatedValues: { [key: string]: string } = {
@@ -90,7 +90,7 @@ export default class ChangePhaseDialog extends React.Component<
     checklistItems[currentIdx] = { ...currentItem, ...updatedValues }
     const newState: Partial<IChangePhaseDialogState> = {
       checklistItems,
-      isLoading: false
+      loading: false
     }
     const nextIndex = this._getNextIndex(undefined, currentIdx + 1)
     if (nextIndex !== -1) newState.currentIdx = nextIndex

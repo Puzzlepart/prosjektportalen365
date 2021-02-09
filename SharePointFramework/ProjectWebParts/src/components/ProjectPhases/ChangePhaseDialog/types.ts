@@ -4,12 +4,12 @@ import { View } from './Views'
 
 export interface IChangePhaseDialogProps extends IDialogProps {
   /**
-   * New phase
+   * The new phase
    */
   newPhase: Phase
 
   /**
-   * Active phase
+   * The active phase
    */
   activePhase: Phase
 
@@ -20,8 +20,23 @@ export interface IChangePhaseDialogProps extends IDialogProps {
 }
 
 export interface IChangePhaseDialogState {
-  isLoading?: boolean
+  /**
+   * Loading
+   */
+  loading?: boolean
+
+  /**
+   * Check list items
+   */
   checklistItems?: IPhaseChecklistItem[]
+
+  /**
+   * Currently selected index
+   */
   currentIdx?: number
+
+  /**
+   * Currently selected view
+   */
   currentView?: View
 }
