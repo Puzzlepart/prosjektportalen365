@@ -7,8 +7,8 @@ import { formatDate } from 'pp365-shared/lib/helpers'
 export interface ITemplateSPItem {
   Folder?: {
     UniqueId: string
-    ItemCount: number;
-    Name: string;
+    ItemCount: number
+    Name: string
     ServerRelativeUrl: string
     TimeLastModified: string
   }
@@ -95,7 +95,7 @@ export class TemplateItem {
         this.newName,
         content,
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        () => { },
+        () => {},
         shouldOverwrite
       )
       await (await fileAddResult.file.getItem()).update({ Title: this.newTitle })
@@ -146,7 +146,7 @@ export class TemplateItem {
 
   /**
    * Folder level
-   * 
+   *
    * Root level returns 1 etc
    */
   public get level(): number {

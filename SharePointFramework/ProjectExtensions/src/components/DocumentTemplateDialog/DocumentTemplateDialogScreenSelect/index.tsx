@@ -14,17 +14,21 @@ import React, { useMemo, useState } from 'react'
 import { isEmpty } from 'underscore'
 import { InfoMessage } from '../../InfoMessage'
 import columns from './columns'
-import {
-  IDocumentTemplateDialogScreenSelectProps
-} from './types'
+import { IDocumentTemplateDialogScreenSelectProps } from './types'
 
-export const DocumentTemplateDialogScreenSelect = (props: IDocumentTemplateDialogScreenSelectProps) => {
+export const DocumentTemplateDialogScreenSelect = (
+  props: IDocumentTemplateDialogScreenSelectProps
+) => {
   const [folder, setFolder] = useState<string>('')
 
   const folders = useMemo(() => folder.split('/').splice(4), [folder])
-  const templates = useMemo(() => [...props.templates].filter((item) => {
-    return !isEmpty(folder) ? folder === item.parentFolderUrl : item.level === 1
-  }), [folder])
+  const templates = useMemo(
+    () =>
+      [...props.templates].filter((item) => {
+        return !isEmpty(folder) ? folder === item.parentFolderUrl : item.level === 1
+      }),
+    [folder]
+  )
 
   const breadcrumb: IBreadcrumbItem[] = [
     { key: 'root', text: props.templateLibrary.title, onClick: () => setFolder('') },
@@ -34,11 +38,13 @@ export const DocumentTemplateDialogScreenSelect = (props: IDocumentTemplateDialo
         key: idx.toString(),
         text: f,
         isCurrentItem,
-        onClick: !isCurrentItem && (() => {
-          const delCount = (folders.length - (folders.length - 5 - idx))
-          const _folder = folder.split('/').splice(0, delCount).join('/')
-          setFolder(_folder)
-        })
+        onClick:
+          !isCurrentItem &&
+          (() => {
+            const delCount = folders.length - (folders.length - 5 - idx)
+            const _folder = folder.split('/').splice(0, delCount).join('/')
+            setFolder(_folder)
+          })
       }
     })
   ]
@@ -52,9 +58,7 @@ export const DocumentTemplateDialogScreenSelect = (props: IDocumentTemplateDialo
           props.templateLibrary.title
         )}
       />
-      <Breadcrumb
-        items={breadcrumb}
-        maxDisplayedItems={5} />
+      <Breadcrumb items={breadcrumb} maxDisplayedItems={5} />
       <MarqueeSelection selection={props.selection}>
         <DetailsList
           setKey={folder}

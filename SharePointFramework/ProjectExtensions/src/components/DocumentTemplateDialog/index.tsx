@@ -26,10 +26,10 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
   const [uploaded, setUploaded] = useState([])
 
   /**
-   * When selection is changed the non-folder items are set as selected 
+   * When selection is changed the non-folder items are set as selected
    */
   function onSelectionChanged() {
-    setSelected((selection.getSelection() as TemplateItem[]).filter(item => !item.isFolder))
+    setSelected((selection.getSelection() as TemplateItem[]).filter((item) => !item.isFolder))
   }
 
   /**
@@ -53,7 +53,7 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
       setProgress({ description: template.newName, percentComplete: i / templates.length })
       try {
         filesAdded.push(await template.copyTo(folder))
-      } catch (error) { }
+      } catch (error) {}
     }
 
     selection.setItems([], true)
@@ -70,7 +70,9 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
   }
 
   function onRenderContent() {
-    const templates = props.templates.sort((a, b) => (a.isFolder === b.isFolder) ? 0 : a.isFolder ? -1 : 1)
+    const templates = props.templates.sort((a, b) =>
+      a.isFolder === b.isFolder ? 0 : a.isFolder ? -1 : 1
+    )
     // eslint-disable-next-line default-case
     switch (screen) {
       case DocumentTemplateDialogScreen.Select: {

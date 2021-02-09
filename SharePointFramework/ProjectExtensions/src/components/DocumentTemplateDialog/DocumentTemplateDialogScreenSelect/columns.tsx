@@ -9,40 +9,42 @@ import React from 'react'
 
 initializeFileTypeIcons()
 
-export default ({ onNavigateFolder }: { onNavigateFolder: (folder: TemplateItem) => void }) => ([
+export default ({ onNavigateFolder }: { onNavigateFolder: (folder: TemplateItem) => void }) =>
+  [
     {
-        key: getId('icon'),
-        fieldName: 'icon',
-        name: null,
-        minWidth: 20,
-        maxWidth: 20,
-        onRender: (item: TemplateItem) => <Icon {...item.getIconProps()} />
+      key: getId('icon'),
+      fieldName: 'icon',
+      name: null,
+      minWidth: 20,
+      maxWidth: 20,
+      onRender: (item: TemplateItem) => <Icon {...item.getIconProps()} />
     },
     {
-        key: getId('name'),
-        fieldName: 'name',
-        name: ProjectExtensionsStrings.NameLabel,
-        minWidth: 200,
-        onRender: (item: TemplateItem) => {
-            if (item.isFolder) {
-                return (
-                    <Link onClick={() => onNavigateFolder(item)}>
-                        <span style={{ marginLeft: 4 }}>{item.name}</span>
-                    </Link>
-                )
-            }
-            return item.name
+      key: getId('name'),
+      fieldName: 'name',
+      name: ProjectExtensionsStrings.NameLabel,
+      minWidth: 200,
+      onRender: (item: TemplateItem) => {
+        if (item.isFolder) {
+          return (
+            <Link onClick={() => onNavigateFolder(item)}>
+              <span style={{ marginLeft: 4 }}>{item.name}</span>
+            </Link>
+          )
         }
+        return item.name
+      }
     },
     {
-        key: getId('phase'),
-        fieldName: 'phase',
-        name: ProjectExtensionsStrings.PhaseLabel,
-        minWidth: 100
+      key: getId('phase'),
+      fieldName: 'phase',
+      name: ProjectExtensionsStrings.PhaseLabel,
+      minWidth: 100
     },
     {
-        key: getId('modified'),
-        fieldName: 'modified',
-        name: ProjectExtensionsStrings.ModifiedLabel,
-        minWidth: 150
-    }] as IColumn[])
+      key: getId('modified'),
+      fieldName: 'modified',
+      name: ProjectExtensionsStrings.ModifiedLabel,
+      minWidth: 150
+    }
+  ] as IColumn[]

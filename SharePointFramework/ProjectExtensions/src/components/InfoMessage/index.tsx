@@ -8,13 +8,8 @@ export const InfoMessage = (props: IInfoMessageProps) => {
   const [hidden, setHidden] = useState(false)
   return (
     <div className={styles.infoMessage} hidden={hidden}>
-      <MessageBar
-        messageBarType={props.type}
-        onDismiss={() => setHidden(true)}>
-        <ReactMarkdown
-          escapeHtml={false}
-          linkTarget='_blank'
-          source={props.text} />
+      <MessageBar messageBarType={props.type} onDismiss={() => setHidden(true)}>
+        <ReactMarkdown escapeHtml={false} linkTarget='_blank' source={props.text} />
       </MessageBar>
     </div>
   )

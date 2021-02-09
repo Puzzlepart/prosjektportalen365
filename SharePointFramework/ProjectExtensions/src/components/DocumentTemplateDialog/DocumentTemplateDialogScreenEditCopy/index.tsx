@@ -47,7 +47,7 @@ export const DocumentTemplateDialogScreenEditCopy = (
 
   /**
    * On library changed
-   * 
+   *
    * Sets library in state, and sets folder to null
    *
    * @param {IDropdownOption} option Option
@@ -59,7 +59,7 @@ export const DocumentTemplateDialogScreenEditCopy = (
 
   /**
    * On folder changed
-   * 
+   *
    * Sets folder in state
    *
    * @param {IDropdownOption} option Option

@@ -56,11 +56,9 @@ export interface IProjectSetupData extends ITemplateSelectDialogState {
   hub?: IHubSite
 }
 
-
 export enum ProjectSetupValidation {
   InvalidWebLanguage,
   NoHubConnection,
   InvalidCulture,
   Ready
 }
-
