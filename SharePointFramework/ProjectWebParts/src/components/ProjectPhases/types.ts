@@ -12,6 +12,11 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
    * View name for current phase
    */
   currentPhaseViewName: boolean
+
+  /**
+   * Sub text truncate length
+   */
+  subTextTruncateLength: number
 }
 
 export interface IProjectPhasesState extends IBaseWebPartComponentState<IProjectPhasesData> {

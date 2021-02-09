@@ -1,11 +1,12 @@
 import { truncateString } from 'pp365-shared/lib/helpers/truncateString'
-import React, { useRef } from 'react'
+import React, { useContext, useRef } from 'react'
+import { ProjectPhasesContext } from '../context'
 import styles from './ProjectPhase.module.scss'
 import { IProjectPhaseProps } from './types'
 
 export const ProjectPhase = ({ phase, isCurrentPhase, onOpenCallout }: IProjectPhaseProps) => {
+  const context = useContext(ProjectPhasesContext)
   const targetRef = useRef()
-
   const classNames = [styles.projectPhase]
 
   if (isCurrentPhase) classNames.push(styles.isCurrentPhase)
@@ -29,7 +30,10 @@ export const ProjectPhase = ({ phase, isCurrentPhase, onOpenCallout }: IProjectP
             onMouseOver={() => onOpenCallout(targetRef.current, phase)}>
             {phase.name}
           </span>
-          <span className={styles.phaseSubText} dangerouslySetInnerHTML={{ __html: truncateString(phase.subText, 35) }}></span>
+          <span 
+          className={styles.phaseSubText} 
+          title={phase.subText}
+          dangerouslySetInnerHTML={{ __html: truncateString(phase.subText, context.props.subTextTruncateLength) }}></span>
         </div>
       </a>
     </li>

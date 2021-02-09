@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 define([], function () {
   return {
+    SubTextTruncateLengthFieldLabel: 'Max lengde fasetekst',
     ChangePhaseText: 'Endre til denne fasen',
     ChangingPhaseDescription: 'Endrer fase til {0}',
     PleaseWaitText: 'Vennligst vent',

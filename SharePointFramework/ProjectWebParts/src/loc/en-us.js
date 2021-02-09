@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 define([], function () {
   return {
+    SubTextTruncateLengthFieldLabel: 'Truncate length for sub text',
     ChangePhaseText: 'Change to this phase',
     ChangingPhaseDescription: 'Changes phase to {0}',
     PleaseWaitText: 'Please wait',

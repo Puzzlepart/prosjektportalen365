@@ -27,6 +27,7 @@
                 "phaseField": "Fase",
                 "automaticReload": true,
                 "reloadTimeout": 0,
+                "subTextTruncateLength": 40,
                 "currentPhaseViewName": "Gjeldende fase",
                 "gutter": 15,
                 "fontSize": 13
