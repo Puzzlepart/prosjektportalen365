@@ -76,6 +76,7 @@ define([], function () {
     UnknownErrorText: 'Ukjent feil',
     TemplateListContentConfigText: 'Den valgte prosjektmalen inneholder konfigurasjon for standardinnhold.',
     FolderDropdownLabel:'Velg mappe',
-    DocumentLibraryDropdownLabel: 'Velg dokumentbibliotek'
+    DocumentLibraryDropdownLabel: 'Velg dokumentbibliotek',
+    DocumentTemplateDialogScreenEditCopyRootLevelText: 'Øverste nivå'
   }
 });

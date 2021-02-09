@@ -17,3 +17,10 @@ export interface IDocumentTemplateItemProps {
    */
   folderServerRelativeUrl: string
 }
+
+export interface IDocumentTemplateItemState {
+  /**
+   * Is expanded
+   */
+  isExpanded: boolean
+}

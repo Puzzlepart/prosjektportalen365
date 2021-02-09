@@ -3,16 +3,16 @@ import { SPDataAdapter } from 'data'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
 import { TextField } from 'office-ui-fabric-react/lib/TextField'
 import * as strings from 'ProjectExtensionsStrings'
-import * as React from 'react'
+import React, { useState, useEffect, FormEvent } from 'react'
 import styles from './DocumentTemplateItem.module.scss'
-import { IDocumentTemplateItemProps } from './IDocumentTemplateItemProps'
+import { IDocumentTemplateItemProps } from './types'
 
 // tslint:disable-next-line: naming-convention
 export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
   const nameId = getId('name')
   const titleId = getId('title')
   let changeTimeout: number
-  const [isExpanded, setIsExpanded] = React.useState(false)
+  const [isExpanded, setIsExpanded] = useState(false)
 
   /**
    * On input change
@@ -22,9 +22,9 @@ export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
    * @param {number} resolveDelay Resolve delay
    */
   function onInputChange(
-    event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue: string,
-    resolveDelay = 400
+    resolveDelay: number = 400
   ) {
     clearTimeout(changeTimeout)
     changeTimeout = setTimeout(async () => {
@@ -49,7 +49,7 @@ export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
     }, resolveDelay)
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     SPDataAdapter.isFilenameValid(props.folderServerRelativeUrl, props.model.name).then(
       (errorMessage) => {
         if (errorMessage) {

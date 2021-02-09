@@ -3,7 +3,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with Pull Request ID.
 
-## 1.2.4 - TBA
+## 1.2.5 - TBA
+
+## Fixed
+
+- Fixes issues with single folder in "Hent dokumentmal" #376
+
+## 1.2.4 - 30.11.2020
 
 ## Added
 
