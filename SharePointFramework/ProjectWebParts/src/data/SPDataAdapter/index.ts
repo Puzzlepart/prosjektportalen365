@@ -153,8 +153,6 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
         level: LogLevel.Info
       })
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error)
       throw error
     }
   }
