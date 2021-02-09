@@ -53,11 +53,13 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
       state.data.phaseTextField,
       props.currentPhaseViewName
     )
-    dispatch(SET_PHASE({phase: state.confirmPhase}))
-    setTimeout(
-      () => (document.location.href = `${props.webUrl}#syncproperties=1`),
-      1000
-    )
+    dispatch(SET_PHASE({ phase: state.confirmPhase }))
+    if (props.syncPropertiesAfterPhaseChange) {
+      setTimeout(
+        () => (document.location.href = `${props.webUrl}#syncproperties=1`),
+        1000
+      )
+    }
   }
 
   return (

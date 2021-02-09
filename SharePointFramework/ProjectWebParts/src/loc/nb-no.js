@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 define([], function () {
   return {
+    SyncPropertiesAfterPhaseChangeFieldLabel: 'Synkroniser prosjektegenskaper etter faseendring',
     SubTextTruncateLengthFieldLabel: 'Max lengde fasetekst',
     ChangePhaseText: 'Endre til denne fasen',
     ChangingPhaseDescription: 'Endrer fase til {0}',
@@ -41,8 +42,8 @@ define([], function () {
     PhaseChecklistViewUrl: 'Lists/Fasesjekkliste/AllItems.aspx',
     PickReportText: 'Velg rapport',
     SaveText: 'Lagre',
-  RiskMatrixGroupName: 'Risikomatrise',
-  ProjectStatusProjectPropertiesGroupName: 'Prosjektegenskaper (Statusseksjoner)',
+    RiskMatrixGroupName: 'Risikomatrise',
+    ProjectStatusProjectPropertiesGroupName: 'Prosjektegenskaper (Statusseksjoner)',
     SettingsGroupName: 'Innstillinger',
     DataGroupName: 'Data',
     LookAndFeelGroupName: 'Utseende og funksjonalitet',

@@ -17,6 +17,11 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
    * Sub text truncate length
    */
   subTextTruncateLength: number
+
+  /**
+   * Sync properties after phase change
+   */
+  syncPropertiesAfterPhaseChange: boolean
 }
 
 export interface IProjectPhasesState extends IBaseWebPartComponentState<IProjectPhasesData> {
