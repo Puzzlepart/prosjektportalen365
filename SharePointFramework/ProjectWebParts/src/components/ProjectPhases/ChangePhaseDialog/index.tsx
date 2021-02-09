@@ -1,6 +1,6 @@
 import Dialog, { DialogType } from 'office-ui-fabric-react/lib/Dialog'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
-import strings from 'ProjectWebPartsStrings'
+import  * as strings from 'ProjectWebPartsStrings'
 import React, { useContext, useState } from 'react'
 import { isEmpty } from 'underscore'
 import { ProjectPhasesContext } from '../context'
@@ -16,7 +16,7 @@ import { View } from './Views'
 export const ChangePhaseDialog = () => {
   const context = useContext(ProjectPhasesContext)
   if (!context.state.confirmPhase) return null
-  const checklistItems = context.state.data.currentPhase?.checklistData?.items || []
+  const checklistItems = context.state.phase?.checklistData?.items || []
   const openCheclistItems = checklistItems.filter(item => item.GtChecklistStatus === strings.StatusOpen)
   const [state, setState] = useState<IChangePhaseDialogState>({
     view: isEmpty(openCheclistItems) ? View.Summary : View.Initial,

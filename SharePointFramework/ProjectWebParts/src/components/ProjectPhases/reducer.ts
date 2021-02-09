@@ -1,5 +1,6 @@
 
 import { createAction, createReducer } from '@reduxjs/toolkit'
+import { ProjectPhaseModel } from 'pp365-shared/lib/models'
 import { IProjectPhaseCalloutProps } from './ProjectPhase/ProjectPhaseCallout'
 import { IProjectPhasesData, IProjectPhasesState } from './types'
 
@@ -21,6 +22,12 @@ export const DISMISS_CALLOUT = createAction(
 export const DISMISS_CHANGE_PHASE_DIALOG = createAction(
     'DISMISS_CHANGE_PHASE_DIALOG'
 )
+export const INIT_CHANGE_PHASE = createAction(
+    'INIT_CHANGE_PHASE'
+)
+export const SET_PHASE = createAction<{ phase: ProjectPhaseModel }>(
+    'SET_PHASE'
+)
 
 export const initState = (): IProjectPhasesState => ({
     isLoading: true
@@ -29,6 +36,7 @@ export const initState = (): IProjectPhasesState => ({
 export default createReducer(initState(), {
     [INIT_DATA.type]: (state, { payload }: ReturnType<typeof INIT_DATA>) => {
         state.data = payload.data
+        state.phase = payload.data.currentPhase
         state.isLoading = false
     },
 
@@ -51,6 +59,15 @@ export default createReducer(initState(), {
 
     [DISMISS_CHANGE_PHASE_DIALOG.type]: (state) => {
         state.confirmPhase = null
+    },
+
+    [INIT_CHANGE_PHASE.type]: (state) => {
+        state.isChangingPhase = true
+    },
+
+    [SET_PHASE.type]: (state, { payload }: ReturnType<typeof SET_PHASE>) => {
+        state.phase = payload.phase
+        state.isChangingPhase = false
     }
 })
 

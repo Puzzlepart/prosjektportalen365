@@ -6,6 +6,7 @@ export interface IProjectPhasesContext<S, P, D = React.Dispatch<AnyAction>> {
     state: S
     props: P
     dispatch: D
+    onChangePhase: () => Promise<void>
 }
 
 export const ProjectPhasesContext = createContext<IProjectPhasesContext<IProjectPhasesState, IProjectPhasesProps>>(null)

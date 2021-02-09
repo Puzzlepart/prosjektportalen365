@@ -1,11 +1,14 @@
+import { ProjectPhasesContext } from 'components/ProjectPhases/context'
+import { DISMISS_CHANGE_PHASE_DIALOG } from 'components/ProjectPhases/reducer'
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog'
 import * as strings from 'ProjectWebPartsStrings'
-import React from 'react'
+import React, { useContext } from 'react'
 import { View } from '../Views'
 import IFooterProps from './types'
 
 export const Footer = (props: IFooterProps) => {
+  const context = useContext(ProjectPhasesContext)
   const actions = []
 
   // eslint-disable-next-line default-case
@@ -23,9 +26,9 @@ export const Footer = (props: IFooterProps) => {
         actions.push({
           text: strings.Yes,
           onClick: async () => {
-            // props.onChangeView(View.ChangingPhase)
-            // await props.onChangePhase(props.newPhase)
-            // props.onDismiss(null, true)
+            props.setView(View.ChangingPhase)
+            await context.onChangePhase()
+            context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())
           }
         })
       }
@@ -43,7 +46,9 @@ export const Footer = (props: IFooterProps) => {
   return (
     <DialogFooter>
       {actions.map((buttonProps, index) => <PrimaryButton key={index} {...buttonProps} />)}
-      <DefaultButton text={strings.CloseText} />
+      <DefaultButton
+        text={strings.CloseText}
+        onClick={() => context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())} />
     </DialogFooter>
   )
 }

@@ -1,7 +1,7 @@
 
 import SPDataAdapter from 'data'
 import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
-import strings from 'ProjectWebPartsStrings'
+import  * as strings from 'ProjectWebPartsStrings'
 import { IChangePhaseDialogState } from './types'
 import { View } from './Views'
 
