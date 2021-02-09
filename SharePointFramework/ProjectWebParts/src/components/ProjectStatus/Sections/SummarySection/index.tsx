@@ -58,7 +58,7 @@ export class SummarySection extends BaseSection<ISummarySectionProps, ISummarySe
         props.comment = props.value
         props.value = ''
       }
-      if (props.value) {
+      if (props.value || sec.fieldName === 'GtOverallStatus') {
         return (
           <div key={idx} className='ms-Grid-col ms-sm6'>
             <StatusElement {...props} />
