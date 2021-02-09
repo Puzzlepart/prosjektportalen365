@@ -3,7 +3,7 @@ import React, { useRef } from 'react'
 import styles from './ProjectPhase.module.scss'
 import { IProjectPhaseProps } from './types'
 
-const ProjectPhase = ({ phase, isCurrentPhase, onOpenCallout }: IProjectPhaseProps) => {
+export const ProjectPhase = ({ phase, isCurrentPhase, onOpenCallout }: IProjectPhaseProps) => {
   const targetRef = useRef()
 
   const classNames = [styles.projectPhase]
@@ -36,6 +36,4 @@ const ProjectPhase = ({ phase, isCurrentPhase, onOpenCallout }: IProjectPhasePro
   )
 }
 
-export default ProjectPhase
-
-export { IProjectPhaseProps }
+export * from './types'

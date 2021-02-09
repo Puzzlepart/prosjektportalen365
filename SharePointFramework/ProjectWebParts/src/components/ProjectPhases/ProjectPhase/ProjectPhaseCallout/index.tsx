@@ -1,34 +1,30 @@
-import React from 'react'
 import { Callout } from 'office-ui-fabric-react/lib/Callout'
-import { ActionButton } from 'office-ui-fabric-react/lib/Button'
-import { IProjectPhaseCalloutProps } from './types'
-import styles from './ProjectPhaseCallout.module.scss'
 import * as strings from 'ProjectWebPartsStrings'
+import React from 'react'
 import { isEmpty } from 'underscore'
+import styles from './ProjectPhaseCallout.module.scss'
+import { IProjectPhaseCalloutProps } from './types'
 
 export const ProjectPhaseCallout = ({
   phase,
-  webUrl,
-  isCurrentPhase,
-  isSiteAdmin,
-  onChangePhase,
+  target,
   onDismiss
 }: IProjectPhaseCalloutProps) => {
-  const stats = Object.keys(phase.model.checklistData.stats)
+  const stats = Object.keys(phase.checklistData.stats)
 
   return (
     <Callout
       gapSpace={5}
-      target={phase.target}
+      target={target}
       onDismiss={onDismiss}
       setInitialFocus={true}
       hidden={false}>
       <div className={styles.projectPhaseCallout}>
         <div className={styles.header}>
-          <span className={styles.title}>{phase.model.name}</span>
+          <span className={styles.title}>{phase.name}</span>
         </div>
         <div className={styles.body}>
-          <p className={styles.subText}>{phase.model.subText}</p>
+          <p className={styles.subText}>{phase.subText}</p>
           <div>
             <div
               className={styles.stats}
@@ -37,7 +33,7 @@ export const ProjectPhaseCallout = ({
                 return (
                   <div key={idx}>
                     <span>
-                      {phase.model.checklistData.stats[status]} {strings.CheckPointsMarkedAsText}{' '}
+                      {phase.checklistData.stats[status]} {strings.CheckPointsMarkedAsText}{' '}
                       {status}
                     </span>
                   </div>
@@ -45,8 +41,8 @@ export const ProjectPhaseCallout = ({
               })}
             </div>
             <div className={styles.actions}>
-              <ActionButton
-                href={phase.model.getFilteredPhaseChecklistViewUrl(`${webUrl}/${strings.PhaseChecklistViewUrl}`)}
+              {/* <ActionButton
+                href={phase.getFilteredPhaseChecklistViewUrl(`${webUrl}/${strings.PhaseChecklistViewUrl}`)}
                 text={strings.PhaseChecklistLinkText}
                 iconProps={{ iconName: 'CheckList' }}
               />
@@ -55,7 +51,7 @@ export const ProjectPhaseCallout = ({
                 text={strings.ChangePhaseText}
                 iconProps={{ iconName: 'TransitionPop' }}
                 disabled={isCurrentPhase || !isSiteAdmin}
-              />
+              /> */}
             </div>
           </div>
         </div>

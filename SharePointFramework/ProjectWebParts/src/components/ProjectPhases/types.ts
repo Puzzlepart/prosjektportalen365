@@ -1,6 +1,6 @@
 import { IProjectPhaseChecklistItem, ProjectPhaseModel } from 'pp365-shared/lib/models'
 import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
-import { IProjectPhaseMouseOver } from './ProjectPhase/ProjectPhaseCallout'
+import { IProjectPhaseCalloutProps } from './ProjectPhase/ProjectPhaseCallout'
 
 export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   /**
@@ -31,9 +31,9 @@ export interface IProjectPhasesState extends IBaseWebPartComponentState<IProject
   isChangingPhase?: boolean
 
   /**
-   * Phase mouse over
+   * Callout
    */
-  phaseMouseOver?: IProjectPhaseMouseOver
+  callout?: IProjectPhaseCalloutProps
 }
 
 export type ChecklistData = {
