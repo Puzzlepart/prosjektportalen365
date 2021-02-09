@@ -4,6 +4,7 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button'
 import { IProjectPhaseCalloutProps } from './types'
 import styles from './ProjectPhaseCallout.module.scss'
 import * as strings from 'ProjectWebPartsStrings'
+import { isEmpty } from 'underscore'
 
 export const ProjectPhaseCallout = ({
   phase,
@@ -13,6 +14,8 @@ export const ProjectPhaseCallout = ({
   onChangePhase,
   onDismiss
 }: IProjectPhaseCalloutProps) => {
+  const stats = Object.keys(phase.model.checklistData.stats)
+
   return (
     <Callout
       gapSpace={5}
@@ -29,8 +32,8 @@ export const ProjectPhaseCallout = ({
           <div>
             <div
               className={styles.stats}
-              hidden={Object.keys(phase.model.checklistData.stats).length === 0}>
-              {Object.keys(phase.model.checklistData.stats).map((status, idx) => {
+              hidden={isEmpty(stats)}>
+              {stats.map((status, idx) => {
                 return (
                   <div key={idx}>
                     <span>
