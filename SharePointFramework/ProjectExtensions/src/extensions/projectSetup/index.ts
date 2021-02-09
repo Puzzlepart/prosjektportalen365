@@ -27,6 +27,7 @@ import { IProjectSetupData } from './IProjectSetupData'
 import { IProjectSetupProperties } from './IProjectSetupProperties'
 import { ProjectSetupError } from './ProjectSetupError'
 import { ProjectSetupValidation } from './ProjectSetupValidation'
+import { deleteCustomizer } from './deleteCustomizer'
 
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
   private _portal: PortalDataService
@@ -55,7 +56,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       // eslint-disable-next-line default-case
       switch (this._validation) {
         case ProjectSetupValidation.InvalidWebLanguage: {
-          await this._deleteCustomizer(this.componentId, false)
+          await deleteCustomizer(this.componentId, false)
           throw new ProjectSetupError(
             'onInit',
             strings.InvalidLanguageErrorMessage,
@@ -121,7 +122,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         iconName: 'Page'
       })
       await this._startProvision(taskParams, data)
-      await this._deleteCustomizer(this.componentId, true)
+      await deleteCustomizer(this.componentId, true)
     } catch (error) {
       Logger.log({
         message: '(ProjectSetup) [_initializeSetup]: Failed initializing setup',
@@ -240,33 +241,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    */
   private _onTaskStatusUpdated(text: string, subText: string, iconName: string) {
     this._renderProgressDialog({ text, subText, iconName })
-  }
-
-  /**
-   * Delete customizer
-   *
-   * @param {string} componentId Component ID
-   * @param {boolean} reload Reload page after customizer removal
-   */
-  private async _deleteCustomizer(componentId: string, reload: boolean): Promise<void> {
-    const web = new Web(this.context.pageContext.web.absoluteUrl)
-    const customActions = await web.userCustomActions.get<
-      { Id: string; ClientSideComponentId: string }[]
-    >()
-    for (let i = 0; i < customActions.length; i++) {
-      const customAction = customActions[i]
-      if (customAction.ClientSideComponentId === componentId) {
-        Logger.log({
-          message: `(ProjectSetup) [_deleteCustomizer]: Deleting custom action ${customAction.Id}`,
-          level: LogLevel.Info
-        })
-        await web.userCustomActions.getById(customAction.Id).delete()
-        break
-      }
-    }
-    if (reload) {
-      window.location.href = window.location.href
-    }
   }
 
   /**
