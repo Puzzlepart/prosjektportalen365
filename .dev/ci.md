@@ -13,4 +13,3 @@ It runs [Build-Release.ps1](../Install/Build-Release.ps1) with `-CI` param, then
 With the current approach, with no cache, a full run takes about 30 minutes.
 
 ![image-20201121133532960](assets/image-20201121133532960.png)
-
