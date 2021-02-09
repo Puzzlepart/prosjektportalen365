@@ -6,11 +6,11 @@ import { sp, Web } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
 import { default as MSGraphHelper } from 'msgraph-helper'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import * as strings from 'ProjectExtensionsStrings'
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
 import { ListLogger } from 'pp365-shared/lib/logging'
 import { PortalDataService } from 'pp365-shared/lib/services'
+import * as strings from 'ProjectExtensionsStrings'
+import { createElement } from 'react'
+import * as ReactDOM from 'react-dom'
 import { default as HubSiteService } from 'sp-hubsite-service'
 import {
   ErrorDialog,
@@ -23,11 +23,11 @@ import {
 } from '../../components'
 import { ListContentConfig, ProjectExtension, ProjectTemplate } from '../../models'
 import * as Tasks from '../../tasks'
+import { deleteCustomizer } from './deleteCustomizer'
 import { IProjectSetupData } from './IProjectSetupData'
 import { IProjectSetupProperties } from './IProjectSetupProperties'
 import { ProjectSetupError } from './ProjectSetupError'
 import { ProjectSetupValidation } from './ProjectSetupValidation'
-import { deleteCustomizer } from './deleteCustomizer'
 
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
   private _portal: PortalDataService
@@ -141,7 +141,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   private _getProvisioningInfo(data: IProjectSetupData): Promise<ITemplateSelectDialogState> {
     return new Promise((resolve, reject) => {
       const placeholder = this._getPlaceholder('TemplateSelectDialog')
-      const element = React.createElement<ITemplateSelectDialogProps>(TemplateSelectDialog, {
+      const element = createElement<ITemplateSelectDialogProps>(TemplateSelectDialog, {
         data,
         version: this.manifest.version,
         onSubmit: (state: ITemplateSelectDialogState) => {
@@ -170,7 +170,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    */
   private _renderProgressDialog(props: IProgressDialogProps) {
     const placeholder = this._getPlaceholder('ProgressDialog')
-    const element = React.createElement<IProgressDialogProps>(ProgressDialog, {
+    const element = createElement<IProgressDialogProps>(ProgressDialog, {
       ...props,
       version: this.manifest.version
     })
@@ -186,7 +186,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     const progressDialog = this._getPlaceholder('ProgressDialog')
     this._unmount(progressDialog)
     const placeholder = this._getPlaceholder('ErrorDialog')
-    const element = React.createElement<IErrorDialogProps>(ErrorDialog, {
+    const element = createElement<IErrorDialogProps>(ErrorDialog, {
       ...props,
       version: this.manifest.version,
       onDismiss: () => this._unmount(placeholder),
@@ -197,6 +197,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
   /**
    * Start provision
+   * 
+   * Get tasks using Tasks.getTasks and runs through them in sequence
    *
    * @param {Tasks.IBaseTaskParams} taskParams Task params
    * @param {IProjectSetupData} data Data

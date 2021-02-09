@@ -65,7 +65,13 @@ export class SetupProjectInformation extends BaseTask {
   }
 
   /**
-   * Add entry to hub
+   * Add entry to hub project list
+   * 
+   * Stores the project with
+   * * Title
+   * * GtSiteId
+   * * GtProjectTemplate
+   * * ContentTypeId (if custom content type is specified in template parameters)
    *
    * @param {IBaseTaskParams} params Task parameters
    */
@@ -81,7 +87,7 @@ export class SetupProjectInformation extends BaseTask {
       const item: TypedHash<any> = {
         Title: params.context.pageContext.web.title,
         GtSiteId: params.context.pageContext.site.id.toString(),
-        GtProjectTemplate: params
+        GtProjectTemplate: this.data.selectedTemplate.text,
       }
       if (params.templateSchema.Parameters.ProjectContentTypeId) {
         item.ContentTypeId = params.templateSchema.Parameters.ProjectContentTypeId
