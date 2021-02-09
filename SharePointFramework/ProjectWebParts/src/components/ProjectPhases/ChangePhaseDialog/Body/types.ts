@@ -1,4 +1,5 @@
 import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
+import { INextCheckpointParams } from '../nextCheckpoint'
 import { View } from '../Views'
 
 export default interface IBodyProps {
@@ -15,12 +16,10 @@ export default interface IBodyProps {
 
   /**
    * Next checkpoint action callback
+   * 
+   * @param {INextCheckpointParams} params Params
    */
-  saveCheckPoint: (
-    statusValue: string,
-    commentsValue: string,
-    updateStatus: boolean
-  ) => Promise<void>
+  nextCheckpoint: (params: INextCheckpointParams) => Promise<void>
 
   /**
    * Current view

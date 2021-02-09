@@ -7,11 +7,6 @@ export interface IChangePhaseDialogProps extends IDialogProps {}
 
 export interface IChangePhaseDialogState {
   /**
-   * Loading
-   */
-  loading?: boolean
-
-  /**
    * Check list items
    */
   checklistItems?: IProjectPhaseChecklistItem[]
@@ -24,5 +19,5 @@ export interface IChangePhaseDialogState {
   /**
    * Currently selected view
    */
-  currentView?: View
+  view?: View
 }

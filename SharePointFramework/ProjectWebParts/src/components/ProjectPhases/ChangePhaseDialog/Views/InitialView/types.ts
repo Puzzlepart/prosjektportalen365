@@ -1,4 +1,5 @@
 import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
+import { INextCheckpointParams } from '../../nextCheckpoint'
 
 export interface IInitialViewProps {
   /**
@@ -7,14 +8,11 @@ export interface IInitialViewProps {
   checklistItem: IProjectPhaseChecklistItem
 
   /**
-   * Next check point ation callback
+   * Next checkpoint action callback
+   * 
+   * @param {INextCheckpointParams} params Params
    */
-  saveCheckPoint: (statusValue: string, commentsValue: string, updateStatus: boolean) => void
-
-  /**
-   * Min length for comment
-   */
-  commentMinLength?: number
+  nextCheckpoint: (params: INextCheckpointParams) => Promise<void>
 
   /**
    * Style for comment field

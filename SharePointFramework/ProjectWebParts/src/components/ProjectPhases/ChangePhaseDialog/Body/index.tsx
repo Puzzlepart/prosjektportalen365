@@ -9,7 +9,7 @@ export const Body = (props: IBodyProps) => {
       return (
         <InitialView
           checklistItem={currentChecklistItem}
-          saveCheckPoint={props.saveCheckPoint}
+          nextCheckpoint={props.nextCheckpoint}
         />
       )
     }
