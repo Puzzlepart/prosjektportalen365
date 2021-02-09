@@ -25,12 +25,9 @@
             "officeFabricIconFontName": "GitGraph",
             "properties": {
                 "phaseField": "Fase",
-                "automaticReload": true,
-                "reloadTimeout": 0,
+                "syncPropertiesAfterPhaseChange": true,
                 "subTextTruncateLength": 50,
-                "currentPhaseViewName": "Gjeldende fase",
-                "gutter": 15,
-                "fontSize": 13
+                "currentPhaseViewName": "Gjeldende fase"
             }
         }
     ]

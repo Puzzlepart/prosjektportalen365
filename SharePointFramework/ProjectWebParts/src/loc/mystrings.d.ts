@@ -1,4 +1,5 @@
 declare interface IProjectWebPartsStrings {
+  SyncPropertiesAfterPhaseChangeFieldLabel: string;
   SubTextTruncateLengthFieldLabel: string;
   SkipSyncToHubLabel: string;
   PhaseFieldFieldLabel: string;

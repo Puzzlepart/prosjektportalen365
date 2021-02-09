@@ -2,7 +2,8 @@ import {
   IPropertyPaneConfiguration,
   PropertyPaneDropdown,
   PropertyPaneSlider,
-  PropertyPaneTextField
+  PropertyPaneTextField,
+  PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
@@ -35,6 +36,9 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
             {
               groupName: strings.SettingsGroupName,
               groupFields: [
+                PropertyPaneToggle('syncPropertiesAfterPhaseChange', {
+                  label: strings.SyncPropertiesAfterPhaseChangeFieldLabel,
+                }),
                 PropertyPaneSlider('subTextTruncateLength', {
                   label: strings.SubTextTruncateLengthFieldLabel,
                   min: 20,
