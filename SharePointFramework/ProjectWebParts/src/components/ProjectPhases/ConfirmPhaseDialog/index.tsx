@@ -6,9 +6,6 @@ import * as strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
 import { IConfirmPhaseDialogProps } from './types'
 
-/**
- * @component ConfirmPhaseDialog
- */
 const ConfirmPhaseDialog = ({
   phase,
   isChangingPhase,

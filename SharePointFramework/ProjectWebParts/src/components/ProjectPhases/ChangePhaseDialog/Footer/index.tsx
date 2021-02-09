@@ -5,10 +5,6 @@ import * as React from 'react'
 import { View } from '../Views'
 import IFooterProps from './types'
 
-/**
- * @component Footer
- */
-
 export const Footer = (props: IFooterProps) => {
   const actions = []
 

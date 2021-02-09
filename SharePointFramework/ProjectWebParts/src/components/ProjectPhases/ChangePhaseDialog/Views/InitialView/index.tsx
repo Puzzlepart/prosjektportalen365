@@ -7,10 +7,6 @@ import { IInitialViewProps } from './types'
 import styles from './InitialView.module.scss'
 import { StatusOptions } from './StatusOptions'
 
-/**
- * @component InitialView
- */
-
 export const InitialView = (props: IInitialViewProps) => {
   if (!props.checklistItem) return null
 

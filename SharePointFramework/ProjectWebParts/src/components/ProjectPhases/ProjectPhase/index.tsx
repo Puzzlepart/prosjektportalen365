@@ -2,9 +2,6 @@ import * as React from 'react'
 import styles from './ProjectPhase.module.scss'
 import { IProjectPhaseProps } from './types'
 
-/**
- * @component ProjectPhase
- */
 const ProjectPhase = ({ phase, isCurrentPhase, onOpenCallout }: IProjectPhaseProps) => {
   const phaseLetterRef = React.useRef()
 

@@ -15,9 +15,6 @@ import { ProjectPhaseCallout } from './ProjectPhaseCallout'
 import styles from './ProjectPhases.module.scss'
 import { IProjectPhasesData, IProjectPhasesProps, IProjectPhasesState } from './types'
 
-/**
- * @component ProjectPhases
- */
 export class ProjectPhases extends React.Component<IProjectPhasesProps, IProjectPhasesState> {
   /**
    * Constructor

@@ -18,10 +18,6 @@ const STATUS_ICONS = {
   [strings.StatusNotRelevant]: 'Blocked'
 }
 
-/**
- * @component CheckListItem
- */
-
 export const CheckListItem = ({ item }: IChecklistItemProps) => {
   const [commentHidden, setCommentHidden] = useState(true)
 

@@ -11,9 +11,6 @@ import { Footer } from './Footer'
 import { IChangePhaseDialogProps, IChangePhaseDialogState } from './types'
 import { View } from './Views'
 
-/**
- * @component ChangePhaseDialog
- */
 export default class ChangePhaseDialog extends React.Component<
   IChangePhaseDialogProps,
   IChangePhaseDialogState
