@@ -13,7 +13,6 @@ define([], function () {
     CloseText: 'Lukk',
     CommentLabel: 'Kommentar',
     ConfirmChangePhase: 'Vil du endre fase til {0}?',
-    ConfirmPhaseChangeFieldLabel: 'Bekreft faseenendring',
     ConfirmPhaseDialogSubText: 'Endring av fasen til {0} vil endre dette for alle, vil du fortsette?',
     ConfirmPhaseDialogTitle: 'Endre fase',
     CurrentPhaseViewNameFieldLabel: 'Visningsnavn for gjeldende fase',

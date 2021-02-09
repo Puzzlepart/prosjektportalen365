@@ -40,9 +40,9 @@ export const nextCheckpoint = async ({ statusValue, comment, state }: INextCheck
         updatedValues
     )
     checklistItems[state.currentIdx] = { ...currentItem, ...updatedValues }
-    const newState: any = { checklistItems }
+    const newState: IChangePhaseDialogState = { checklistItems }
     const nextIndex = getNextIndex(checklistItems, state.currentIdx + 1)
     if (nextIndex !== -1) newState.currentIdx = nextIndex
-    else newState.currentView = View.Summary
+    else newState.view = View.Summary
     return newState
 }

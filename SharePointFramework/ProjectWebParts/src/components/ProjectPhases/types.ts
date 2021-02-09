@@ -9,11 +9,6 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   phaseField: string
 
   /**
-   * Should phase change be confirmed
-   */
-  confirmPhaseChange: boolean
-
-  /**
    * View name for current phase
    */
   currentPhaseViewName: boolean
@@ -21,7 +16,7 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
 
 export interface IProjectPhasesState extends IBaseWebPartComponentState<IProjectPhasesData> {
   /**
-   * Confirm phase
+   * Phase to be confirmed using ChangePhaseDialog
    */
   confirmPhase?: ProjectPhaseModel
 

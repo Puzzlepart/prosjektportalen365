@@ -26,7 +26,6 @@
             "properties": {
                 "phaseField": "Fase",
                 "automaticReload": true,
-                "confirmPhaseChange": true,
                 "reloadTimeout": 0,
                 "currentPhaseViewName": "Gjeldende fase",
                 "gutter": 15,

@@ -13,7 +13,6 @@ define([], function () {
     CloseText: 'Close',
     CommentLabel: 'Comment',
     ConfirmChangePhase: 'Do you want to change phase to {0}?',
-    ConfirmPhaseChangeFieldLabel: 'Confirm phase change',
     ConfirmPhaseDialogSubText: 'Changing the phase to {0} will change this for everyone, will you continue?',
     ConfirmPhaseDialogTitle: 'Change Phase',
     CurrentPhaseViewNameFieldLabel: 'Current phase display name',

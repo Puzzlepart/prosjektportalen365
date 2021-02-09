@@ -18,7 +18,6 @@ declare interface IProjectWebPartsStrings {
   CloseText: string;
   CommentLabel: string;
   ConfirmChangePhase: string;
-  ConfirmPhaseChangeFieldLabel: string;
   ConfirmPhaseDialogSubText: string;
   ConfirmPhaseDialogTitle: string;
   CurrentPhaseViewNameFieldLabel: string;

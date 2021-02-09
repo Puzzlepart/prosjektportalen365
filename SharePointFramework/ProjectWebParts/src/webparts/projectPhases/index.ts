@@ -35,9 +35,6 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
             {
               groupName: strings.SettingsGroupName,
               groupFields: [
-                PropertyPaneToggle('confirmPhaseChange', {
-                  label: strings.ConfirmPhaseChangeFieldLabel
-                }),
                 PropertyPaneDropdown('phaseField', {
                   label: strings.PhaseFieldFieldLabel,
                   options: this._fields.map((f) => ({

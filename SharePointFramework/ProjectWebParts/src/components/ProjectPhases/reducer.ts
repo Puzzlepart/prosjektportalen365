@@ -15,8 +15,11 @@ export const OPEN_CALLOUT = createAction<IProjectPhaseCalloutProps>(
 export const CHANGE_PHASE = createAction(
     'CHANGE_PHASE'
 )
-export const DISMISS_CALLOUT =createAction(
+export const DISMISS_CALLOUT = createAction(
     'DISMISS_CALLOUT'
+)
+export const DISMISS_CHANGE_PHASE_DIALOG = createAction(
+    'DISMISS_CHANGE_PHASE_DIALOG'
 )
 
 export const initState = (): IProjectPhasesState => ({
@@ -44,6 +47,10 @@ export default createReducer(initState(), {
 
     [DISMISS_CALLOUT.type]: (state) => {
         state.callout = null
+    },
+
+    [DISMISS_CHANGE_PHASE_DIALOG.type]: (state) => {
+        state.confirmPhase = null
     }
 })
 
