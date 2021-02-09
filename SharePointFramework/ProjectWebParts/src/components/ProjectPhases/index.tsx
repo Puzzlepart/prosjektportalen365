@@ -54,7 +54,7 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
       props.currentPhaseViewName
     )
     dispatch(SET_PHASE({ phase: state.confirmPhase }))
-    if (props.syncPropertiesAfterPhaseChange) {
+    if (props.syncPropertiesAfterPhaseChange === undefined || props.syncPropertiesAfterPhaseChange) {
       setTimeout(
         () => (document.location.href = `${props.webUrl}#syncproperties=1`),
         1000

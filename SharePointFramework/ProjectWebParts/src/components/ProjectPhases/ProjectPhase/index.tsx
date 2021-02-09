@@ -31,6 +31,7 @@ export const ProjectPhase = ({ phase, isCurrentPhase, onOpenCallout }: IProjectP
             {phase.name}
           </span>
           <span
+            hidden={!context.props.showSubText}
             className={styles.phaseSubText}
             title={phase.subText}
             dangerouslySetInnerHTML={{ __html: truncateString(phase.subText, context.props.subTextTruncateLength || 50) }}></span>
