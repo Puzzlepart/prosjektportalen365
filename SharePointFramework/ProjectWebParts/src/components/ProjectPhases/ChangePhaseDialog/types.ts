@@ -1,23 +1,9 @@
 import { IDialogProps } from 'office-ui-fabric-react/lib/Dialog'
-import { ProjectPhaseModel, IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
+import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
 import { View } from './Views'
 
-export interface IChangePhaseDialogProps extends IDialogProps {
-  /**
-   * The new phase
-   */
-  newPhase: ProjectPhaseModel
-
-  /**
-   * The active phase
-   */
-  activePhase: ProjectPhaseModel
-
-  /**
-   * On change phase
-   */
-  onChangePhase: (phase: ProjectPhaseModel) => Promise<void>
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface IChangePhaseDialogProps extends IDialogProps {}
 
 export interface IChangePhaseDialogState {
   /**
