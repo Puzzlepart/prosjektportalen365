@@ -80,7 +80,8 @@ export class SetupProjectInformation extends BaseTask {
       if (entity) return
       const item: TypedHash<any> = {
         Title: params.context.pageContext.web.title,
-        GtSiteId: params.context.pageContext.site.id.toString()
+        GtSiteId: params.context.pageContext.site.id.toString(),
+        GtProjectTemplate: params
       }
       if (params.templateSchema.Parameters.ProjectContentTypeId) {
         item.ContentTypeId = params.templateSchema.Parameters.ProjectContentTypeId
@@ -95,8 +96,7 @@ export class SetupProjectInformation extends BaseTask {
         item
       )
       this.logInformation(
-        `Project entity added to list '${params.properties.projectsList}' at ${this.data.hub.url}`,
-        {}
+        `Project entity added to list '${params.properties.projectsList}' at ${this.data.hub.url}`
       )
     } catch (error) {
       throw error

@@ -1,18 +1,17 @@
+import { ProjectTemplate } from 'models'
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
-import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot'
 import * as strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
 import { ProjectSetupSettings } from '../../extensions/projectSetup/ProjectSetupSettings'
 import { BaseDialog } from '../@BaseDialog'
 import { ExtensionsSection } from './ExtensionsSection'
-import { ITemplateSelectDialogProps } from './ITemplateSelectDialogProps'
-import { ITemplateSelectDialogState } from './ITemplateSelectDialogState'
 import { ListContentSection } from './ListContentSection'
 import { SettingsSection } from './SettingsSection'
 import styles from './TemplateSelectDialog.module.scss'
 import { TemplateSelector } from './TemplateSelector'
-import { ProjectTemplate } from 'models'
+import { ITemplateSelectDialogProps, ITemplateSelectDialogState } from './types'
 
 /**
  * @class TemplateSelectDialog
