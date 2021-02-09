@@ -5,16 +5,14 @@ import { IProjectPhaseCalloutProps } from './types'
 import styles from './ProjectPhaseCallout.module.scss'
 import * as strings from 'ProjectWebPartsStrings'
 
-export const ProjectPhaseCallout = ({ phase, webUrl, isCurrentPhase, isSiteAdmin, onChangePhase, onDismiss }: IProjectPhaseCalloutProps) => {
-  /**
-   * Get filtered phase checklist view url
-   *
-   * @param {IProjectPhaseCalloutProps} param0 Props
-   */
-  const getFilteredPhaseChecklistViewUrl = (): string => {
-    return `${webUrl}/${strings.PhaseChecklistViewUrl}?FilterField1=GtProjectPhase&FilterValue1=${phase.model.name}`
-  }
-
+export const ProjectPhaseCallout = ({
+  phase,
+  webUrl,
+  isCurrentPhase,
+  isSiteAdmin,
+  onChangePhase,
+  onDismiss
+}: IProjectPhaseCalloutProps) => {
   return (
     <Callout
       gapSpace={5}
@@ -27,7 +25,7 @@ export const ProjectPhaseCallout = ({ phase, webUrl, isCurrentPhase, isSiteAdmin
           <span className={styles.title}>{phase.model.name}</span>
         </div>
         <div className={styles.body}>
-          <p className={styles.subText}>{phase.model.properties.PhasePurpose}</p>
+          <p className={styles.subText}>{phase.model.subText}</p>
           <div>
             <div
               className={styles.stats}
@@ -45,7 +43,7 @@ export const ProjectPhaseCallout = ({ phase, webUrl, isCurrentPhase, isSiteAdmin
             </div>
             <div className={styles.actions}>
               <ActionButton
-                href={getFilteredPhaseChecklistViewUrl()}
+                href={phase.model.getFilteredPhaseChecklistViewUrl(`${webUrl}/${strings.PhaseChecklistViewUrl}`)}
                 text={strings.PhaseChecklistLinkText}
                 iconProps={{ iconName: 'CheckList' }}
               />

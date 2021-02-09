@@ -11,7 +11,7 @@ import SPDataAdapter from '../../data'
 import { UserMessage } from '../UserMessage'
 import ChangePhaseDialog from './ChangePhaseDialog'
 import ProjectPhase from './ProjectPhase'
-import { ProjectPhaseCallout } from './ProjectPhaseCallout'
+import { ProjectPhaseCallout } from './ProjectPhase/ProjectPhaseCallout'
 import styles from './ProjectPhases.module.scss'
 import { IProjectPhasesData, IProjectPhasesProps, IProjectPhasesState } from './types'
 

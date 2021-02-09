@@ -20,7 +20,7 @@ const ConfirmPhaseDialog = ({
         title: strings.ConfirmPhaseDialogTitle,
         subText: format(strings.ConfirmPhaseDialogSubText, phase.name)
       }}
-      modalProps={{ isBlocking: isBlocking }}>
+      modalProps={{ isBlocking }}>
       {isChangingPhase
         ? (
           <DialogFooter>

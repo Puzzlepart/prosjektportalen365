@@ -1,3 +1,5 @@
+import { TypedHash } from '@pnp/common'
+
 export type ProjectPhaseChecklistData = {
   stats?: {
     [status: string]: number
@@ -15,15 +17,26 @@ export interface IProjectPhaseChecklistItem {
   }
 }
 
+/**
+ * Model for projet phase
+ */
 export class ProjectPhaseModel {
   public id: string
   public checklistData: ProjectPhaseChecklistData
 
+  /**
+   * Constructor
+   * 
+   * @param {string} name Term name
+   * @param {string} id Term ID
+   * @param {ProjectPhaseChecklistData} checklistData Checklist data
+   * @param {TypedHash<any>} properties Properties
+   */
   constructor(
     public name: string,
     id: string,
     checklistData: ProjectPhaseChecklistData,
-    public properties: { [key: string]: any }
+    public properties: TypedHash<any>
   ) {
     this.id = id.substring(6, 42)
     this.checklistData = checklistData || { stats: {}, items: [] }
@@ -39,19 +52,36 @@ export class ProjectPhaseModel {
 
   /**
    * Phase sub text
+   * 
+   * Uses local custom property PhaseSubText from the term with
+   * fallback to PhasePurpose to support potential legacy use.
    */
   public get subText() {
-    return this.properties.PhaseSubText
+    return this.properties.PhaseSubText || this.properties.PhasePurpose
   }
 
   /**
    * Is visible
+   * 
+   * Uses local custom property ShowOnFrontpage
    */
   public get isVisible() {
     return this.properties.ShowOnFrontpage !== 'false'
   }
 
+  /**
+   * Returns a string representation of the phase model
+   */
   public toString() {
     return `-1;#${this.name}|${this.id}`
+  }
+
+   /**
+   * Get filtered phase checklist view url
+   *
+   * @param {string} baseUrl base URL
+   */
+  public getFilteredPhaseChecklistViewUrl = (baseUrl: string): string => {
+    return `${baseUrl}?FilterField1=GtProjectPhase&FilterValue1=${this.name}`
   }
 }
