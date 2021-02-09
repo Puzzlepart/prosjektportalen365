@@ -1,8 +1,8 @@
 import { IProjectSetupData } from 'extensions/projectSetup'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
-import { transformFieldXml } from 'shared/lib/helpers'
-import { SPField } from 'shared/lib/models'
+import { transformFieldXml } from 'pp365-shared/lib/helpers'
+import { SPField } from 'pp365-shared/lib/models'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 

@@ -1,4 +1,4 @@
-import { formatDate, tryParseCurrency } from 'shared/lib/helpers'
+import { formatDate, tryParseCurrency } from 'pp365-shared/lib/helpers'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
 import * as React from 'react'
 import { IPortfolioOverviewState } from '../IPortfolioOverviewState'
@@ -6,7 +6,7 @@ import { IRenderItemColumnProps } from './IRenderItemColumnProps'
 import { TagsColumn } from './TagsColumn'
 import { UserColumn } from './UserColumn'
 import { IFetchDataForViewItemResult } from 'data/IFetchDataForViewItemResult'
-import { ProjectColumn } from 'shared/lib/models'
+import { ProjectColumn } from 'pp365-shared/lib/models'
 
 /**
  * Mapping for rendering of the different data types

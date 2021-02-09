@@ -1,4 +1,4 @@
-import { ProjectColumn, PortfolioOverviewView } from 'shared/lib/models'
+import { ProjectColumn, PortfolioOverviewView } from 'pp365-shared/lib/models'
 
 export interface IPortfolioConfiguration {
   columns: ProjectColumn[]

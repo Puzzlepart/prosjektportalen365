@@ -8,7 +8,7 @@ import {
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import * as strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
-import { getObjectValue } from 'shared/lib/helpers'
+import { getObjectValue } from 'pp365-shared/lib/helpers'
 import { BaseSection } from '../BaseSection/index'
 import { StatusElement } from '../../StatusElement'
 import { IListSectionProps, IListSectionState, IListSectionData } from './types'

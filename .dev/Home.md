@@ -117,3 +117,11 @@ Content templates are found in the **Content** folder. The name of the template 
 `language_code` can be for example **no-NB** or **en-US**.
 
 The templates contains the JSON template(s), planner tasks and phase checklist items.
+
+### 4. NPM
+The SharePoint Framework solutions are published to `npm` independently.
+
+- [@Shared](https://www.npmjs.com/package/pp365-shared)
+- [ProjectWebParts](https://www.npmjs.com/package/pp365-projectwebparts)
+- [ProjectExtensions](https://www.npmjs.com/package/pp365-projectextensions)
+- [PortfolioWebParts](https://www.npmjs.com/package/pp365-portfoliowebparts)

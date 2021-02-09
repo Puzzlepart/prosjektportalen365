@@ -1,4 +1,4 @@
-import { ProjectColumn } from 'shared/lib/models/ProjectColumn'
+import { ProjectColumn } from 'pp365-shared/lib/models/ProjectColumn'
 
 export interface IRenderItemColumnProps {
   column: ProjectColumn
