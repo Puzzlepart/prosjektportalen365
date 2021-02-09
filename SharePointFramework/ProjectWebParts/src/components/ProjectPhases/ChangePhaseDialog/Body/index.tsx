@@ -8,7 +8,7 @@ export const Body = (props: IBodyProps) => {
       const currentChecklistItem = props.checklistItems[props.currentIdx]
       return (
         <InitialView
-          isLoading={props.isLoading}
+          loading={props.isLoading}
           checklistItem={currentChecklistItem}
           saveCheckPoint={props.saveCheckPoint}
         />

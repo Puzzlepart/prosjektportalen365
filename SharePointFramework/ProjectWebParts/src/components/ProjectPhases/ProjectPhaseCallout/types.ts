@@ -1,5 +1,5 @@
 import { ICalloutProps } from 'office-ui-fabric-react/lib/Callout'
-import { Phase } from 'models'
+import { ProjectPhaseModel } from 'pp365-shared/lib/models'
 
 export interface IProjectPhaseCalloutProps extends ICalloutProps {
   /**
@@ -25,7 +25,7 @@ export interface IProjectPhaseCalloutProps extends ICalloutProps {
   /**
    * On change phase callback
    */
-  onChangePhase: (phase: Phase) => void
+  onChangePhase: (phase: ProjectPhaseModel) => void
 }
 
 export interface IProjectPhaseMouseOver<Target = any> {
@@ -37,6 +37,6 @@ export interface IProjectPhaseMouseOver<Target = any> {
   /**
    * Phase model
    */
-  model: Phase
+  model: ProjectPhaseModel
 }
 

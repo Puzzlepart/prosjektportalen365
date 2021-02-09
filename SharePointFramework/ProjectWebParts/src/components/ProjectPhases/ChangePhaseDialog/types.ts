@@ -1,22 +1,22 @@
-import { Phase, IPhaseChecklistItem } from 'models'
 import { IDialogProps } from 'office-ui-fabric-react/lib/Dialog'
+import { ProjectPhaseModel, IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
 import { View } from './Views'
 
 export interface IChangePhaseDialogProps extends IDialogProps {
   /**
    * The new phase
    */
-  newPhase: Phase
+  newPhase: ProjectPhaseModel
 
   /**
    * The active phase
    */
-  activePhase: Phase
+  activePhase: ProjectPhaseModel
 
   /**
    * On change phase
    */
-  onChangePhase: (phase: Phase) => Promise<void>
+  onChangePhase: (phase: ProjectPhaseModel) => Promise<void>
 }
 
 export interface IChangePhaseDialogState {
@@ -28,7 +28,7 @@ export interface IChangePhaseDialogState {
   /**
    * Check list items
    */
-  checklistItems?: IPhaseChecklistItem[]
+  checklistItems?: IProjectPhaseChecklistItem[]
 
   /**
    * Currently selected index

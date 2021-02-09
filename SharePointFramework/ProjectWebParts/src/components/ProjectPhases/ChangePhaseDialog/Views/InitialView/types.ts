@@ -1,15 +1,15 @@
-import { IPhaseChecklistItem } from 'models'
+import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
 
 export interface IInitialViewProps {
   /**
    * Whether the component is loading
    */
-  isLoading: boolean
+  loading: boolean
 
   /**
    * Current check list items
    */
-  checklistItem: IPhaseChecklistItem
+  checklistItem: IProjectPhaseChecklistItem
 
   /**
    * Next check point ation callback
