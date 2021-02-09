@@ -71,7 +71,7 @@ export class TemplateItem {
   constructor(private _item: ITemplateSPItem, public web: Web) {
     this.id = _item.File?.UniqueId || _item.Folder.UniqueId
     this.name = _item.File?.Name || _item.Folder?.Name
-    this.title = _item.File?.Title || this.name || _item.Folder?.Name
+    this.title = _item.File?.Title || this.nameWithoutExtension || _item.Folder?.Name
     this.phase = _item.FieldValuesAsText.GtProjectPhase
     this.newName = this.name
     this.newTitle = this.title

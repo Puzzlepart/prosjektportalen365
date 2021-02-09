@@ -38,12 +38,17 @@ export const DocumentTemplateDialogScreenEditCopy = (
     )
   }
 
+  /**
+   * Check if file names are valid
+   */
   function isFileNamesValid(): boolean {
     return templates.filter((t) => !stringIsNullOrEmpty(t.errorMessage)).length === 0
   }
 
   /**
    * On library changed
+   * 
+   * Sets library in state, and sets folder to null
    *
    * @param {IDropdownOption} option Option
    */
@@ -54,6 +59,8 @@ export const DocumentTemplateDialogScreenEditCopy = (
 
   /**
    * On folder changed
+   * 
+   * Sets folder in state
    *
    * @param {IDropdownOption} option Option
    */

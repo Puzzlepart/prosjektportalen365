@@ -1,11 +1,11 @@
 import { TypedHash } from '@pnp/common'
-import { TemplateFile } from 'models/TemplateFile'
+import { TemplateItem } from 'models/TemplateItem'
 
 export interface IDocumentTemplateItemProps {
   /**
    * Model
    */
-  model: TemplateFile
+  model: TemplateItem
 
   /**
    * On input changed

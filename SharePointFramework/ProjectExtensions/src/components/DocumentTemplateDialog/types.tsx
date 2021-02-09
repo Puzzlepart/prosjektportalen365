@@ -1,4 +1,4 @@
-import { TemplateFile, IDocumentLibrary } from '../../models'
+import { TemplateItem, IDocumentLibrary } from '../../models'
 
 export interface IDocumentTemplateDialogDismissProps {
   reload?: boolean
@@ -13,7 +13,7 @@ export interface IDocumentTemplateDialogProps {
   /**
    * Templates
    */
-  templates: TemplateFile[]
+  templates: TemplateItem[]
 
   /**
    * Libraries

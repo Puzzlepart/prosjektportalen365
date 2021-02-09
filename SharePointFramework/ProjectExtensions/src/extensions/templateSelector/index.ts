@@ -13,15 +13,16 @@ import * as ReactDOM from 'react-dom'
 import { default as HubSiteService, IHubSite } from 'sp-hubsite-service'
 import { DocumentTemplateDialog, IDocumentTemplateDialogProps } from '../../components'
 import { SPDataAdapter } from '../../data'
-import { IDocumentLibrary, TemplateFile } from '../../models'
+import { IDocumentLibrary, TemplateItem } from '../../models'
 import { ITemplateSelectorCommandProperties } from './types'
 
 Logger.subscribe(new ConsoleListener())
 Logger.activeLogLevel = LogLevel.Info
 
 export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITemplateSelectorCommandProperties> {
+  private _openCmd: Command
   private _hub: IHubSite
-  private _templates: TemplateFile[] = []
+  private _templates: TemplateItem[] = []
   private _libraries: IDocumentLibrary[]
   private _templateLibrary: string
   private _placeholderIds = { DocumentTemplateDialog: getId('documenttemplatedialog') }
@@ -41,13 +42,13 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
       webUrl: this.context.pageContext.web.absoluteUrl,
       hubSiteUrl: this._hub.url
     })
-    const openTemplateSelectorCommand: Command = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR')
-    if (!openTemplateSelectorCommand) return
+    this._openCmd = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR')
+    if (!this._openCmd) return
     try {
       this._templateLibrary = this.properties.templateLibrary || 'Malbibliotek'
       this._templates = await SPDataAdapter.getDocumentTemplates(
         this._templateLibrary,
-        this.properties.viewXml
+        '<View Scope="RecursiveAll"></View>'
       )
       Logger.log({
         message: `(TemplateSelectorCommand) onInit: Retrieved ${this._templates.length} templates from the specified template library`,
@@ -73,7 +74,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
   public async onExecute(event: IListViewCommandSetExecuteEventParameters): Promise<void> {
     // eslint-disable-next-line default-case
     switch (event.itemId) {
-      case 'OPEN_TEMPLATE_SELECTOR':
+      case this._openCmd.id:
         this._libraries = await SPDataAdapter.getLibraries()
         Logger.log({
           message: `(TemplateSelectorCommand) onExecute: Retrieved ${this._libraries.length} libraries`,
@@ -88,7 +89,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
    * On open <DocumentTemplateDialog />
    */
   private _onOpenTemplateSelector() {
-    const placeholder = this._getPlaceholder('DocumentTemplateDialog')
+    const placeholder = this._getPlaceholder()
     const element = React.createElement<IDocumentTemplateDialogProps>(DocumentTemplateDialog, {
       title: strings.TemplateLibrarySelectModalTitle,
       onDismiss: (props) => {
@@ -109,7 +110,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
     ReactDOM.unmountComponentAtNode(container)
   }
 
-  private _getPlaceholder(key: 'DocumentTemplateDialog') {
+  private _getPlaceholder(key = 'DocumentTemplateDialog') {
     const id = this._placeholderIds[key]
     let placeholder = document.getElementById(id)
     if (placeholder === null) {

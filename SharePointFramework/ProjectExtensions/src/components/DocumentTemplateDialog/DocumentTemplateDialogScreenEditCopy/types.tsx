@@ -1,11 +1,11 @@
 import { DocumentTemplateDialogScreen } from '..'
-import { IDocumentLibrary, TemplateFile } from '../../../models'
+import { IDocumentLibrary, TemplateItem } from '../../../models'
 
 export interface IDocumentTemplateDialogScreenEditCopyProps {
   /**
    * Selected templates
    */
-  selectedTemplates: TemplateFile[]
+  selectedTemplates: TemplateItem[]
 
   /**
    * Libraries
@@ -14,11 +14,16 @@ export interface IDocumentTemplateDialogScreenEditCopyProps {
 
   /**
    * On start copy callback
+   *
+   * @param {TemplateItem[]} templates Templates
+   * @param {string} folderServerRelativeUrl Folder URL
    */
-  onStartCopy: (templates: TemplateFile[], selectedFolderServerRelativeUrl: string) => void
+  onStartCopy: (templates: TemplateItem[], folderServerRelativeUrl: string) => void
 
   /**
    * On change screen
+   *
+   * @param {DocumentTemplateDialogScreen} screen Screen
    */
   onChangeScreen: (screen: DocumentTemplateDialogScreen) => void
 }
