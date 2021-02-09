@@ -1,9 +1,12 @@
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { FileAddResult, Folder, Web } from '@pnp/sp'
+import { FileIconType, getFileTypeIconProps } from '@uifabric/file-type-icons'
+import { IIconProps } from 'office-ui-fabric-react/lib/Icon'
 import { formatDate } from 'pp365-shared/lib/helpers'
 
 export interface ITemplateSPItem {
   Folder?: {
+    UniqueId: string
     ItemCount: number;
     Name: string;
     ServerRelativeUrl: string
@@ -66,7 +69,7 @@ export class TemplateItem {
   public errorMessage: string
 
   constructor(private _item: ITemplateSPItem, public web: Web) {
-    this.id = _item.File?.UniqueId
+    this.id = _item.File?.UniqueId || _item.Folder.UniqueId
     this.name = _item.File?.Name || _item.Folder?.Name
     this.title = _item.File?.Title || this.name || _item.Folder?.Name
     this.phase = _item.FieldValuesAsText.GtProjectPhase
@@ -128,9 +131,9 @@ export class TemplateItem {
   }
 
   /**
-   * Folder server relative URL
+   * Parent folder URL
    */
-  public get folderServerRelativeUrl() {
+  public get parentFolderUrl() {
     return this.serverRelativeUrl.replace(`/${this.name}`, '')
   }
 
@@ -148,5 +151,15 @@ export class TemplateItem {
    */
   public get level(): number {
     return this.serverRelativeUrl.split('/').length - 4
+  }
+
+  /**
+   * Get icon props
+   */
+  public getIconProps(): IIconProps {
+    if (this.isFolder) {
+      return getFileTypeIconProps({ type: FileIconType.folder })
+    }
+    return getFileTypeIconProps({ extension: this.fileExtension })
   }
 }
