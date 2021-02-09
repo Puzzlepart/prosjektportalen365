@@ -3,12 +3,11 @@ import { ChangingPhaseView, InitialView, SummaryView, View } from '../Views'
 import IBodyProps from './types'
 
 export const Body = (props: IBodyProps) => {
-  switch (props.currentView) {
+  switch (props.view) {
     case View.Initial: {
       const currentChecklistItem = props.checklistItems[props.currentIdx]
       return (
         <InitialView
-          loading={props.isLoading}
           checklistItem={currentChecklistItem}
           saveCheckPoint={props.saveCheckPoint}
         />
@@ -17,7 +16,7 @@ export const Body = (props: IBodyProps) => {
     case View.Summary:
       return <SummaryView checklistItems={props.checklistItems} />
     case View.ChangingPhase:
-      return <ChangingPhaseView newPhase={props.newPhase} />
+      return <ChangingPhaseView />
     default:
       return null
   }

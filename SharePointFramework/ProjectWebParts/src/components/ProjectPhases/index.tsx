@@ -4,6 +4,7 @@ import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { useEffect, useReducer } from 'react'
+import { ChangePhaseDialog } from './ChangePhaseDialog'
 import { ProjectPhasesContext } from './context'
 import { fetchData } from './fetchData'
 import { ProjectPhase } from './ProjectPhase'
@@ -42,7 +43,7 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
   }
 
   return (
-    <ProjectPhasesContext.Provider value={{ state, dispatch }}>
+    <ProjectPhasesContext.Provider value={{ props, state, dispatch }}>
       <div className={styles.projectPhases}>
         <div className={styles.container}>
           <ul className={styles.phaseList}>
@@ -56,12 +57,8 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
             ))}
           </ul>
         </div>
-        {state.callout && (
-          <ProjectPhaseCallout {...state.callout} />
-        )}
-        {/* {this.state.confirmPhase && (
-            <ChangePhaseDialog onDismiss={() => this.setState({ confirmPhase: null })} />
-          )} */}
+        <ProjectPhaseCallout {...state.callout || {}} />
+        <ChangePhaseDialog />
       </div>
     </ProjectPhasesContext.Provider>
   )

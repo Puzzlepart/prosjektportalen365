@@ -9,13 +9,12 @@ export const Footer = (props: IFooterProps) => {
   const actions = []
 
   // eslint-disable-next-line default-case
-  switch (props.currentView) {
+  switch (props.view) {
     case View.Initial:
       {
         actions.push({
           text: strings.Skip,
-          disabled: props.isLoading,
-          onClick: () => props.onChangeView(View.Confirm)
+          onClick: () => props.setView(View.Confirm)
         })
       }
       break
@@ -23,11 +22,10 @@ export const Footer = (props: IFooterProps) => {
       {
         actions.push({
           text: strings.Yes,
-          disabled: props.isLoading,
           onClick: async () => {
-            props.onChangeView(View.ChangingPhase)
-            await props.onChangePhase(props.newPhase)
-            props.onDismiss(null, true)
+            // props.onChangeView(View.ChangingPhase)
+            // await props.onChangePhase(props.newPhase)
+            // props.onDismiss(null, true)
           }
         })
       }
@@ -36,8 +34,7 @@ export const Footer = (props: IFooterProps) => {
       {
         actions.push({
           text: strings.MoveOn,
-          disabled: props.isLoading,
-          onClick: () => props.onChangeView(View.Confirm)
+          onClick: () => props.setView(View.Confirm)
         })
       }
       break
@@ -45,14 +42,8 @@ export const Footer = (props: IFooterProps) => {
 
   return (
     <DialogFooter>
-      {actions.map((buttonProps, index) => (
-        <PrimaryButton key={index} {...buttonProps} />
-      ))}
-      <DefaultButton
-        text={strings.CloseText}
-        disabled={props.isLoading}
-        onClick={props.onDismiss}
-      />
+      {actions.map((buttonProps, index) => <PrimaryButton key={index} {...buttonProps} />)}
+      <DefaultButton text={strings.CloseText} />
     </DialogFooter>
   )
 }

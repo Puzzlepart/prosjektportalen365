@@ -1,16 +1,7 @@
-import { ProjectPhaseModel, IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
+import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
 import { View } from '../Views'
 
 export default interface IBodyProps {
-  /**
-   * New phase
-   */
-  newPhase: ProjectPhaseModel
-
-  /**
-   * Active phase
-   */
-  activePhase: ProjectPhaseModel
 
   /**
    * Check list items
@@ -34,20 +25,5 @@ export default interface IBodyProps {
   /**
    * Current view
    */
-  currentView: View
-
-  /**
-   * Is loading
-   */
-  isLoading: boolean
-
-  /**
-   * On change phase callback
-   */
-  onChangePhase: (phase: ProjectPhaseModel) => Promise<void>
-
-  /**
-   * On dismiss callback
-   */
-  onDismiss: (event: any, reload?: boolean) => void
+  view: View
 }

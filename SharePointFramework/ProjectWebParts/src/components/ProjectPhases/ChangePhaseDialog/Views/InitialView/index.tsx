@@ -26,7 +26,7 @@ export const InitialView = (props: IInitialViewProps) => {
   const actions: IButtonProps[] = [
     {
       text: strings.StatusNotRelevant,
-      disabled: props.loading || !isCommentValid,
+      disabled: !isCommentValid,
       title: !isCommentValid
         ? strings.CheckpointNotRelevantTooltipCommentEmpty
         : strings.CheckpointNotRelevantTooltip,
@@ -34,7 +34,7 @@ export const InitialView = (props: IInitialViewProps) => {
     },
     {
       text: strings.StatusStillOpen,
-      disabled: props.loading || !isCommentValid,
+      disabled: !isCommentValid,
       title: !isCommentValid
         ? strings.CheckpointStillOpenTooltipCommentEmpty
         : strings.CheckpointStillOpenTooltip,
@@ -42,7 +42,6 @@ export const InitialView = (props: IInitialViewProps) => {
     },
     {
       text: strings.StatusClosed,
-      disabled: props.loading,
       title: strings.CheckpointDoneTooltip,
       onClick: () => saveCheckPoint(strings.StatusClosed)
     }

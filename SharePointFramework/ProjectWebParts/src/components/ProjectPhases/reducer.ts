@@ -12,6 +12,12 @@ export const HIDE_MESSAGE = createAction(
 export const OPEN_CALLOUT = createAction<IProjectPhaseCalloutProps>(
     'OPEN_CALLOUT'
 )
+export const CHANGE_PHASE = createAction(
+    'CHANGE_PHASE'
+)
+export const DISMISS_CALLOUT =createAction(
+    'DISMISS_CALLOUT'
+)
 
 export const initState = (): IProjectPhasesState => ({
     isLoading: true
@@ -29,6 +35,15 @@ export default createReducer(initState(), {
 
     [OPEN_CALLOUT.type]: (state, { payload }) => {
         state.callout = payload
+    },
+
+    [CHANGE_PHASE.type]: (state) => {
+        state.confirmPhase = state.callout.phase
+        state.callout = null
+    },
+
+    [DISMISS_CALLOUT.type]: (state) => {
+        state.callout = null
     }
 })
 

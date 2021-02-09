@@ -1,24 +1,24 @@
+import { ProjectPhasesContext } from 'components/ProjectPhases/context'
+import { CHANGE_PHASE, DISMISS_CALLOUT } from 'components/ProjectPhases/reducer'
+import { ActionButton } from 'office-ui-fabric-react/lib/Button'
 import { Callout } from 'office-ui-fabric-react/lib/Callout'
 import * as strings from 'ProjectWebPartsStrings'
-import React from 'react'
+import React, { useContext } from 'react'
 import { isEmpty } from 'underscore'
 import styles from './ProjectPhaseCallout.module.scss'
 import { IProjectPhaseCalloutProps } from './types'
 
-export const ProjectPhaseCallout = ({
-  phase,
-  target,
-  onDismiss
-}: IProjectPhaseCalloutProps) => {
+export const ProjectPhaseCallout = ({ phase, target }: IProjectPhaseCalloutProps) => {
+  if(!target) return null
+  const context = useContext(ProjectPhasesContext)
   const stats = Object.keys(phase.checklistData.stats)
 
   return (
     <Callout
       gapSpace={5}
       target={target}
-      onDismiss={onDismiss}
-      setInitialFocus={true}
-      hidden={false}>
+      onDismiss={() => context.dispatch(DISMISS_CALLOUT())}
+      setInitialFocus={true}>
       <div className={styles.projectPhaseCallout}>
         <div className={styles.header}>
           <span className={styles.title}>{phase.name}</span>
@@ -41,17 +41,16 @@ export const ProjectPhaseCallout = ({
               })}
             </div>
             <div className={styles.actions}>
-              {/* <ActionButton
-                href={phase.getFilteredPhaseChecklistViewUrl(`${webUrl}/${strings.PhaseChecklistViewUrl}`)}
-                text={strings.PhaseChecklistLinkText}
-                iconProps={{ iconName: 'CheckList' }}
-              />
               <ActionButton
-                onClick={() => onChangePhase(phase.model)}
+                href={phase.getFilteredPhaseChecklistViewUrl(`${context.props.webUrl}/${strings.PhaseChecklistViewUrl}`)}
+                text={strings.PhaseChecklistLinkText}
+                iconProps={{ iconName: 'CheckList' }} />
+              <ActionButton
+                onClick={() => context.dispatch(CHANGE_PHASE())}
                 text={strings.ChangePhaseText}
                 iconProps={{ iconName: 'TransitionPop' }}
-                disabled={isCurrentPhase || !isSiteAdmin}
-              /> */}
+                disabled={phase.id === context.state.data?.currentPhase?.id || !context.props.isSiteAdmin}
+              />
             </div>
           </div>
         </div>

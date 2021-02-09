@@ -2,11 +2,6 @@ import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
 
 export interface IInitialViewProps {
   /**
-   * Whether the component is loading
-   */
-  loading: boolean
-
-  /**
    * Current check list items
    */
   checklistItem: IProjectPhaseChecklistItem

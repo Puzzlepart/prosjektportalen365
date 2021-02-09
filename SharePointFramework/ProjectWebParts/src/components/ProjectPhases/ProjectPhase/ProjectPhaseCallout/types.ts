@@ -5,5 +5,5 @@ export interface IProjectPhaseCalloutProps extends ICalloutProps {
   /**
    * Phase
    */
-  phase: ProjectPhaseModel
+  phase?: ProjectPhaseModel
 }

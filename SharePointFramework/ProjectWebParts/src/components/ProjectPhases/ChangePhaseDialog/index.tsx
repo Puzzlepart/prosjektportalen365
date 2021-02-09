@@ -1,20 +1,56 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react'
+import Dialog, { DialogType } from 'office-ui-fabric-react/lib/Dialog'
+import strings from 'ProjectWebPartsStrings'
+import React, { useContext, useState } from 'react'
+import { ProjectPhasesContext } from '../context'
+import { Body } from './Body'
+import styles from './ChangePhaseDialog.module.scss'
+import { Footer } from './Footer'
 import { IChangePhaseDialogProps } from './types'
+import { View } from './Views'
 
+/**
+ *  subText={
+          context.state.currentView === View.Confirm
+            ? format(strings.ConfirmChangePhase, this.props.newPhase.name)
+            : ''
+        }
+ */
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const ChangePhaseDialog = (props: IChangePhaseDialogProps) => {
-  return <span></span>
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const context = useContext(ProjectPhasesContext)
+  // eslint-disable-next-line no-console
+  console.log(context)
+  if (!context.state.confirmPhase) return null
+
+
+
+  const [view, setView] = useState<View>(View.Initial)
+  const [checklistItems] = useState(context.state.data.currentPhase?.checklistData?.items || [])
+  const [currentIdx] = useState(0)
+
+  // eslint-disable-next-line no-console
+  console.log(checklistItems)
+
+  return (
+    <Dialog
+      isOpen={true}
+      containerClassName={styles.root}
+      title={strings.ChangePhaseText}
+      dialogContentProps={{ type: DialogType.largeHeader }}
+      modalProps={{ isDarkOverlay: true, isBlocking: false }}>
+      <Body
+        view={view}
+        checklistItems={checklistItems}
+        currentIdx={currentIdx}
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        saveCheckPoint={async () => { }} />
+      <Footer view={view} setView={setView} />
+    </Dialog>
+  )
 }
 
-// export default class ChangePhaseDialog extends Component<
-//   IChangePhaseDialogProps,
-//   IChangePhaseDialogState
-// > {
-//   /**
-//    * Constructor
-//    *
-//    * @param {IChangePhaseDialogProps} props
-//    */
 //   constructor(props: IChangePhaseDialogProps) {
 //     super(props)
 //     const checklistItems = props.activePhase ? props.activePhase.checklistData.items : []
