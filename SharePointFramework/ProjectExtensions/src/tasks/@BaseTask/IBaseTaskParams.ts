@@ -4,7 +4,7 @@ import { PortalDataService } from 'pp365-shared/lib/services'
 import { SpEntityPortalService } from 'sp-entityportal-service'
 import { Schema, Web } from 'sp-js-provisioning'
 import { ISpfxJsomContext } from 'spfx-jsom'
-import { IProjectSetupProperties } from '../../extensions/projectSetup/IProjectSetupProperties'
+import { IProjectSetupProperties } from '../../extensions/projectSetup/types'
 
 export interface IBaseTaskParams {
   /**

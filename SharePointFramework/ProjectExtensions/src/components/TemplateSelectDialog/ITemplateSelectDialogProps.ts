@@ -1,4 +1,4 @@
-import { IProjectSetupData } from '../../extensions/projectSetup/IProjectSetupData'
+import { IProjectSetupData } from '../../extensions/projectSetup/types'
 import { IBaseDialogProps } from '../@BaseDialog/IBaseDialogProps'
 import { ITemplateSelectDialogState } from './ITemplateSelectDialogState'
 

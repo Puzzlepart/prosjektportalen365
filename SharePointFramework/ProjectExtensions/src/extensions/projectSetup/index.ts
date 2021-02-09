@@ -6,11 +6,11 @@ import { sp, Web } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
 import { default as MSGraphHelper } from 'msgraph-helper'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { ListLogger } from 'pp365-shared/lib/logging'
+import { PortalDataService } from 'pp365-shared/lib/services'
 import * as strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { ListLogger } from 'pp365-shared/lib/logging'
-import { PortalDataService } from 'pp365-shared/lib/services'
 import { default as HubSiteService } from 'sp-hubsite-service'
 import {
   ErrorDialog,
@@ -23,11 +23,8 @@ import {
 } from '../../components'
 import { ListContentConfig, ProjectExtension, ProjectTemplate } from '../../models'
 import * as Tasks from '../../tasks'
-import { IProjectSetupData } from './IProjectSetupData'
-import { IProjectSetupProperties } from './IProjectSetupProperties'
 import { ProjectSetupError } from './ProjectSetupError'
-import { ProjectSetupValidation } from './ProjectSetupValidation'
-
+import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
   private _portal: PortalDataService
   private _placeholderIds = {

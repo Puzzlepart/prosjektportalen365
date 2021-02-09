@@ -14,7 +14,7 @@ import { default as HubSiteService, IHubSite } from 'sp-hubsite-service'
 import { DocumentTemplateDialog, IDocumentTemplateDialogProps } from '../../components'
 import { SPDataAdapter } from '../../data'
 import { IDocumentLibrary, TemplateFile } from '../../models'
-import { ITemplateSelectorCommandProperties } from './ITemplateSelectorCommandProperties'
+import { ITemplateSelectorCommandProperties } from './types'
 
 Logger.subscribe(new ConsoleListener())
 Logger.activeLogLevel = LogLevel.Info
