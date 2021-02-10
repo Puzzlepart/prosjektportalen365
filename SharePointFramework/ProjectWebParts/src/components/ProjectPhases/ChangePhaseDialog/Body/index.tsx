@@ -1,20 +1,18 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { ChangePhaseDialogContext } from '../context'
 import { ChangingPhaseView, InitialView, SummaryView, View } from '../Views'
-import IBodyProps from './types'
 
-export const Body = (props: IBodyProps) => {
-  switch (props.view) {
+export const Body = () => {
+  const { state } = useContext(ChangePhaseDialogContext)
+  switch (state.view) {
     case View.Initial: {
-      const currentChecklistItem = props.checklistItems[props.currentIdx]
+      const checklistItem = state.checklistItems[state.currentIdx]
       return (
-        <InitialView
-          checklistItem={currentChecklistItem}
-          nextCheckpoint={props.nextCheckpoint}
-        />
+        <InitialView checklistItem={checklistItem} />
       )
     }
     case View.Summary:
-      return <SummaryView checklistItems={props.checklistItems} />
+      return <SummaryView checklistItems={state.checklistItems} />
     case View.ChangingPhase:
       return <ChangingPhaseView />
     default:
