@@ -138,7 +138,7 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
       modalProps={{ isBlocking, isDarkOverlay: isBlocking }}
       onRenderFooter={onRenderFooter}
       onDismiss={onClose}
-      containerClassName={styles.documentTemplateDialog}>
+      containerClassName={styles.root}>
       {onRenderContent()}
     </BaseDialog>
   )
