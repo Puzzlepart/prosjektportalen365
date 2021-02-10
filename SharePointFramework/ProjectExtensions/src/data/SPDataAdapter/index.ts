@@ -92,6 +92,7 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
           'BaseTemplate eq 101',
           'IsCatalog eq false',
           'IsApplicationList eq false',
+          // eslint-disable-next-line quotes
           "ListItemEntityTypeFullName ne 'SP.Data.FormServerTemplatesItem'"
         ].join(' and ')
       )
