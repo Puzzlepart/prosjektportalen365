@@ -84,7 +84,7 @@ export const EditCopyScreen = (props: IEditCopyScreenProps) => {
       {props.selectedTemplates.map((item, idx) => (
         <DocumentTemplateItem
           key={idx}
-          model={item}
+          item={item}
           folderServerRelativeUrl={
             selectedFolder ? selectedFolder.ServerRelativeUrl : selectedLibrary.ServerRelativeUrl
           }

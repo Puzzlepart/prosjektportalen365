@@ -3,9 +3,9 @@ import { TemplateItem } from 'models/TemplateItem'
 
 export interface IDocumentTemplateItemProps {
   /**
-   * Model
+   * Item
    */
-  model: TemplateItem
+  item: TemplateItem
 
   /**
    * On input changed

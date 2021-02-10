@@ -18,7 +18,7 @@ export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
    *
    * @param {React.FormEvent} event Event
    * @param {string} newValue New value
-   * @param {number} resolveDelay Resolve delay
+   * @param {number} resolveDelay Resolve delay in ms
    */
   function onInputChange(
     event: FormEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -31,25 +31,25 @@ export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
       switch ((event.target as HTMLInputElement).id) {
         case nameId:
           {
-            const newName = `${newValue}.${props.model.fileExtension}`
+            const newName = `${newValue}.${props.item.fileExtension}`
             const errorMsg = await SPDataAdapter.isFilenameValid(
               props.folderServerRelativeUrl,
               newName
             )
-            props.onInputChanged(props.model.id, { newName }, errorMsg)
+            props.onInputChanged(props.item.id, { newName }, errorMsg)
           }
           break
-        case titleId: props.onInputChanged(props.model.id, { newTitle: newValue })
+        case titleId: props.onInputChanged(props.item.id, { newTitle: newValue })
           break
       }
     }, resolveDelay)
   }
 
   useEffect(() => {
-    SPDataAdapter.isFilenameValid(props.folderServerRelativeUrl, props.model.name).then(
+    SPDataAdapter.isFilenameValid(props.folderServerRelativeUrl, props.item.name).then(
       (errorMessage) => {
         if (errorMessage) {
-          props.onInputChanged(props.model.id, {}, errorMessage)
+          props.onInputChanged(props.item.id, {}, errorMessage)
           setIsExpanded(true)
         }
       }
@@ -57,10 +57,13 @@ export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
   }, [props.folderServerRelativeUrl])
 
   return (
-    <div className={styles.documentTemplateItem}>
+    <div className={styles.root}>
       <div className={styles.header} onClick={() => setIsExpanded(!isExpanded)}>
-        <div className={styles.title}>{props.model.name}</div>
-        <div className={styles.icon}>
+        <div className={styles.fileTypeIcon}>
+          <Icon {...props.item.getIconProps()} />
+        </div>
+        <div className={styles.title}>{props.item.name}</div>
+        <div className={styles.chevronIcon}>
           <Icon iconName={isExpanded ? 'ChevronDown' : 'ChevronUp'} />
         </div>
       </div>
@@ -70,9 +73,9 @@ export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
             id={nameId}
             label={strings.NameLabel}
             placeholder={strings.NameLabel}
-            defaultValue={props.model.nameWithoutExtension}
-            suffix={`.${props.model.fileExtension}`}
-            errorMessage={props.model.errorMessage}
+            defaultValue={props.item.nameWithoutExtension}
+            suffix={`.${props.item.fileExtension}`}
+            errorMessage={props.item.errorMessage}
             onChange={onInputChange}
           />
         </div>
@@ -81,7 +84,7 @@ export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
             id={titleId}
             label={strings.TitleLabel}
             placeholder={strings.TitleLabel}
-            defaultValue={props.model.title}
+            defaultValue={props.item.title}
             onChange={onInputChange}
           />
         </div>
