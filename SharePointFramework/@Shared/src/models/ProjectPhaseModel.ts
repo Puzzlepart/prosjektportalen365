@@ -26,7 +26,7 @@ export class ProjectPhaseModel {
 
   /**
    * Constructor
-   * 
+   *
    * @param {string} name Term name
    * @param {string} id Term ID
    * @param {ProjectPhaseChecklistData} checklistData Checklist data
@@ -46,13 +46,13 @@ export class ProjectPhaseModel {
    * Phase letter
    */
   public get letter() {
-    if(this.properties.PhaseLetter) return this.properties.PhaseLetter
+    if (this.properties.PhaseLetter) return this.properties.PhaseLetter
     return this.name.substring(0, 1).toUpperCase()
   }
 
   /**
    * Phase sub text
-   * 
+   *
    * Uses local custom property PhaseSubText from the term with
    * fallback to PhasePurpose to support potential legacy use.
    */
@@ -62,7 +62,7 @@ export class ProjectPhaseModel {
 
   /**
    * Is visible
-   * 
+   *
    * Uses local custom property ShowOnFrontpage
    */
   public get isVisible() {
@@ -76,7 +76,7 @@ export class ProjectPhaseModel {
     return `-1;#${this.name}|${this.id}`
   }
 
-   /**
+  /**
    * Get filtered phase checklist view url
    *
    * @param {string} baseUrl base URL
