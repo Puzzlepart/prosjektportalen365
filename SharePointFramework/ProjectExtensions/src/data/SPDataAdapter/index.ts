@@ -74,7 +74,7 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
   public async getFolders(folderRelativeUrl: string): Promise<any[]> {
     const folders = await this.sp.web
       .getFolderByServerRelativePath(folderRelativeUrl)
-      .folders.filter('ItemCount gt 0')
+      .folders
       .usingCaching()
       .get()
     return folders.map((f) => new SPFolder(f))
