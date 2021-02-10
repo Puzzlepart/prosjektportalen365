@@ -1,9 +1,8 @@
 import { UserMessage } from 'components/UserMessage'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { Shimmer } from 'office-ui-fabric-react/lib/Shimmer'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { useEffect, useReducer } from 'react'
+import React, { useEffect, useReducer, useRef } from 'react'
 import { changePhase } from './changePhase'
 import { ChangePhaseDialog } from './ChangePhaseDialog'
 import { ProjectPhasesContext } from './context'
@@ -19,9 +18,11 @@ import reducer, {
   OPEN_CALLOUT,
   SET_PHASE
 } from './reducer'
+import { getShimmerElements } from './shimmer'
 import { IProjectPhasesProps } from './types'
 
 export const ProjectPhases = (props: IProjectPhasesProps) => {
+  const root = useRef(null)
   const [state, dispatch] = useReducer(reducer, initState())
 
   useEffect(() => {
@@ -29,16 +30,6 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
   }, [])
 
   if (state.hidden) return null
-
-  if (state.isLoading) {
-    return (
-      <div className={styles.projectPhases}>
-        <div className={styles.container}>
-          <Spinner label={format(strings.LoadingText, 'fasevelger')} />
-        </div>
-      </div>
-    )
-  }
 
   if (state.error) {
     return (
@@ -66,26 +57,30 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
   }
 
   return (
-    <ProjectPhasesContext.Provider value={{ props, state, dispatch, onChangePhase }}>
-      <div className={styles.projectPhases}>
-        <div className={styles.container}>
-          <ul className={styles.phaseList}>
-            {state.data.phases
-              .filter((p) => p.isVisible)
-              .map((phase, idx) => (
-                <ProjectPhase
-                  key={idx}
-                  phase={phase}
-                  isCurrentPhase={phase.id === state.phase?.id}
-                  onOpenCallout={(target) => dispatch(OPEN_CALLOUT({ phase, target }))}
-                />
-              ))}
-          </ul>
-        </div>
-        <ProjectPhaseCallout {...(state.callout || {})} />
-        <ChangePhaseDialog />
+    <div className={styles.root} ref={root}>
+      <div className={styles.container}>
+        <ProjectPhasesContext.Provider value={{ props, state, dispatch, onChangePhase }}>
+          <Shimmer
+            isDataLoaded={!state.loading}
+            shimmerElements={getShimmerElements(root.current?.clientWidth)} >
+            <ul className={styles.phaseList}>
+              {state.data.phases
+                .filter((p) => p.isVisible)
+                .map((phase, idx) => (
+                  <ProjectPhase
+                    key={idx}
+                    phase={phase}
+                    isCurrentPhase={phase.id === state.phase?.id}
+                    onOpenCallout={(target) => dispatch(OPEN_CALLOUT({ phase, target }))}
+                  />
+                ))}
+            </ul>
+            <ProjectPhaseCallout {...(state.callout || {})} />
+            <ChangePhaseDialog />
+          </Shimmer >
+        </ProjectPhasesContext.Provider>
       </div>
-    </ProjectPhasesContext.Provider>
+    </div>
   )
 }
 
