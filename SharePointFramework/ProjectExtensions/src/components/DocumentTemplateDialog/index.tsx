@@ -6,7 +6,7 @@ import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { useState } from 'react'
+import React, { useReducer } from 'react'
 import { isEmpty } from 'underscore'
 import { SPDataAdapter } from '../../data'
 import { TemplateItem } from '../../models/index'
@@ -14,23 +14,15 @@ import { BaseDialog } from '../@BaseDialog/index'
 import { InfoMessage } from '../InfoMessage'
 import styles from './DocumentTemplateDialog.module.scss'
 import { EditCopyScreen } from './EditCopyScreen'
+import reducer, { COPY_DONE, COPY_PROGRESS, initState, SELECTION_CHANGED, SET_SCREEN, START_COPY } from './reducer'
 import { SelectScreen } from './SelectScreen'
 import { DocumentTemplateDialogScreen, IDocumentTemplateDialogProps } from './types'
 
 export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
-  const selection = new Selection({ onSelectionChanged })
-  const [selected, setSelected] = useState<TemplateItem[]>([])
-  const [progress, setProgress] = useState(null)
-  const [screen, setScreen] = useState(DocumentTemplateDialogScreen.Select)
-  const [isBlocking, setIsBlocking] = useState(false)
-  const [uploaded, setUploaded] = useState([])
-
-  /**
-   * When selection is changed the non-folder items are set as selected
-   */
-  function onSelectionChanged() {
-    setSelected((selection.getSelection() as TemplateItem[]).filter((item) => !item.isFolder))
-  }
+  const [state, dispatch] = useReducer(reducer, initState())
+  const selection = new Selection({
+    onSelectionChanged: () => dispatch(SELECTION_CHANGED({ selection }))
+  })
 
   /**
    * On copy documents to web
@@ -39,61 +31,56 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
    * @param {string} folderServerRelativeUrl Folder URL
    */
   async function onStartCopy(templates: TemplateItem[], folderServerRelativeUrl: string): Promise<void> {
-    setScreen(DocumentTemplateDialogScreen.CopyProgress)
-    setIsBlocking(true)
-
+    dispatch(START_COPY())
     const folder = SPDataAdapter.sp.web.getFolderByServerRelativeUrl(folderServerRelativeUrl)
     const filesAdded: FileAddResult[] = []
 
     for (let i = 0; i < templates.length; i++) {
       const template = templates[i]
-      setProgress({ description: template.newName, percentComplete: i / templates.length })
+      dispatch(COPY_PROGRESS({ description: template.newName, percentComplete: i / templates.length }))
       try {
         filesAdded.push(await template.copyTo(folder))
       } catch (error) { }
     }
-
     selection.setItems([], true)
-    setScreen(DocumentTemplateDialogScreen.Summary)
-    setUploaded(filesAdded)
-    setIsBlocking(false)
+    dispatch(COPY_DONE({ files: filesAdded }))
   }
 
   /**
    * On close dialog
    */
   function onClose() {
-    props.onDismiss({ reload: screen === DocumentTemplateDialogScreen.Summary })
+    props.onDismiss({ reload: state.screen === DocumentTemplateDialogScreen.Summary })
   }
 
   function onRenderContent() {
     // eslint-disable-next-line default-case
-    switch (screen) {
+    switch (state.screen) {
       case DocumentTemplateDialogScreen.Select: {
         return (
           <SelectScreen
             selection={selection}
-            selectedItems={selected}
+            selectedItems={state.selected}
           />
         )
       }
       case DocumentTemplateDialogScreen.EditCopy: {
         return (
           <EditCopyScreen
-            selectedTemplates={selected}
+            selectedTemplates={state.selected}
             onStartCopy={onStartCopy}
-            onChangeScreen={(s) => setScreen(s)}
+            onChangeScreen={(screen) => dispatch(SET_SCREEN({ screen }))}
           />
         )
       }
       case DocumentTemplateDialogScreen.CopyProgress: {
-        return <ProgressIndicator label={strings.CopyProgressLabel} {...progress} />
+        return <ProgressIndicator label={strings.CopyProgressLabel} {...state.progress} />
       }
       case DocumentTemplateDialogScreen.Summary: {
         return (
           <InfoMessage
             type={MessageBarType.success}
-            text={format(strings.SummaryText, uploaded.length)}
+            text={format(strings.SummaryText, state.uploaded.length)}
           />
         )
       }
@@ -101,14 +88,14 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
   }
 
   function onRenderFooter() {
-    switch (screen) {
+    switch (state.screen) {
       case DocumentTemplateDialogScreen.Select: {
         return (
           <>
             <PrimaryButton
               text={strings.OnSubmitSelectionText}
-              onClick={() => setScreen(DocumentTemplateDialogScreen.EditCopy)}
-              disabled={isEmpty(selected)}
+              onClick={() => dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.EditCopy }))}
+              disabled={isEmpty(state.selected)}
             />
           </>
         )
@@ -118,7 +105,7 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
           <>
             <DefaultButton
               text={strings.GetMoreText}
-              onClick={() => setScreen(DocumentTemplateDialogScreen.Select)}
+              onClick={() => dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select }))}
             />
             <DefaultButton text={strings.CloseModalText} onClick={onClose} />
           </>
@@ -133,7 +120,10 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
   return (
     <BaseDialog
       dialogContentProps={{ title: props.title }}
-      modalProps={{ isBlocking, isDarkOverlay: isBlocking }}
+      modalProps={{
+        isBlocking: state.isBlocking,
+        isDarkOverlay: state.isBlocking,
+      }}
       onRenderFooter={onRenderFooter}
       onDismiss={onClose}
       containerClassName={styles.root}>
