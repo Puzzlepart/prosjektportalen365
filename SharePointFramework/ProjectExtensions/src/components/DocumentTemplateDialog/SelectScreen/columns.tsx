@@ -9,7 +9,7 @@ import React from 'react'
 
 initializeFileTypeIcons()
 
-export default ({ onNavigateFolder }: { onNavigateFolder: (folder: TemplateItem) => void }) =>
+export default ({ setFolder }: { setFolder: (folder: TemplateItem) => void }) =>
   [
     {
       key: getId('icon'),
@@ -27,7 +27,7 @@ export default ({ onNavigateFolder }: { onNavigateFolder: (folder: TemplateItem)
       onRender: (item: TemplateItem) => {
         if (item.isFolder) {
           return (
-            <Link onClick={() => onNavigateFolder(item)}>
+            <Link onClick={() => setFolder(item)}>
               <span style={{ marginLeft: 4 }}>{item.name}</span>
             </Link>
           )

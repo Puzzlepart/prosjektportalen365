@@ -49,7 +49,7 @@ export const SelectScreen = (props: ISelectScreenProps) => {
           getKey={(item: TemplateItem) => item.id}
           items={templates}
           columns={columns({
-            onNavigateFolder: ({ serverRelativeUrl }) => setFolder(serverRelativeUrl)
+            setFolder: ({ serverRelativeUrl }) => setFolder(serverRelativeUrl)
           })}
           selection={props.selection}
           selectionMode={SelectionMode.multiple}
