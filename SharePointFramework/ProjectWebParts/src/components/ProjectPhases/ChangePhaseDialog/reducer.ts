@@ -19,11 +19,17 @@ export const CHECKLIST_ITEM_UPDATED = createAction<{ properties: TypedHash<strin
 
 export default createReducer<IChangePhaseDialogState>({}, {
     [INIT.type]: (state, { payload }: ReturnType<typeof INIT>) => {
-        const checklistItems = payload.context.state.phase?.checklistData?.items || []
-        const openCheclistItems = checklistItems.filter(item => item.GtChecklistStatus === strings.StatusOpen)
-        state.view = isEmpty(openCheclistItems) ? View.Summary : View.Initial,
+        if (payload.context.state.phase) {
+            const checklistItems = payload.context.state.phase.checklistData?.items || []
+            const openCheclistItems = checklistItems.filter(item => item.GtChecklistStatus === strings.StatusOpen)
+            state.view = isEmpty(openCheclistItems)
+                ? View.Summary
+                : View.Initial
             state.checklistItems = checklistItems
-        state.currentIdx = getNextIndex(checklistItems)
+            state.currentIdx = getNextIndex(checklistItems)
+        } else {
+            state.view = View.Confirm
+        }
     },
 
     [SET_VIEW.type]: (state, { payload }: ReturnType<typeof SET_VIEW>) => {
@@ -31,8 +37,8 @@ export default createReducer<IChangePhaseDialogState>({}, {
     },
 
     [CHECKLIST_ITEM_UPDATED.type]: (state, { payload }: ReturnType<typeof CHECKLIST_ITEM_UPDATED>) => {
-        const currentItem = [...state.checklistItems][state.currentIdx]
-        state.checklistItems[state.currentIdx] = { ...currentItem, ...payload.properties }
+        const item = [...state.checklistItems][state.currentIdx]
+        state.checklistItems[state.currentIdx] = { ...item, ...payload.properties }
         const nextIndex = getNextIndex(state.checklistItems, state.currentIdx + 1)
         if (nextIndex !== -1) state.currentIdx = nextIndex
         else state.view = View.Summary

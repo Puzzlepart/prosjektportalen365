@@ -3,23 +3,22 @@ import { IButtonProps } from 'office-ui-fabric-react/lib/Button'
 import { TextField } from 'office-ui-fabric-react/lib/TextField'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { useContext, useState } from 'react'
-import { IInitialViewProps } from './types'
+import { ChangePhaseDialogContext } from '../../context'
 import styles from './InitialView.module.scss'
 import { StatusOptions } from './StatusOptions'
-import { ChangePhaseDialogContext } from '../../context'
+import { IInitialViewProps } from './types'
 
 export const InitialView = (props: IInitialViewProps) => {
   if (!props.checklistItem) return null
   const { nextChecklistItem } = useContext(ChangePhaseDialogContext)
-
   const [comment, setComment] = useState(props.checklistItem.GtComment || '')
 
   /**
-   * Save checkpoint
+   * On next check list item
    *
    * @param {string} statusValue Status value
    */
-  const saveCheckPoint = (statusValue: string) => {
+  const onNextChecklistItem = (statusValue: string) => {
     nextChecklistItem({ statusValue, comment })
     setComment('')
   }
@@ -32,7 +31,7 @@ export const InitialView = (props: IInitialViewProps) => {
       title: !isCommentValid
         ? strings.CheckpointNotRelevantTooltipCommentEmpty
         : strings.CheckpointNotRelevantTooltip,
-      onClick: () => saveCheckPoint(strings.StatusNotRelevant)
+      onClick: () => onNextChecklistItem(strings.StatusNotRelevant)
     },
     {
       text: strings.StatusStillOpen,
@@ -40,17 +39,17 @@ export const InitialView = (props: IInitialViewProps) => {
       title: !isCommentValid
         ? strings.CheckpointStillOpenTooltipCommentEmpty
         : strings.CheckpointStillOpenTooltip,
-      onClick: () => saveCheckPoint(strings.StatusOpen)
+      onClick: () => onNextChecklistItem(strings.StatusOpen)
     },
     {
       text: strings.StatusClosed,
       title: strings.CheckpointDoneTooltip,
-      onClick: () => saveCheckPoint(strings.StatusClosed)
+      onClick: () => onNextChecklistItem(strings.StatusClosed)
     }
   ]
 
   return (
-    <div className={styles.initialView}>
+    <div className={styles.root}>
       <div className={styles.header}>
         {props.checklistItem.ID}. {props.checklistItem.Title}
       </div>
