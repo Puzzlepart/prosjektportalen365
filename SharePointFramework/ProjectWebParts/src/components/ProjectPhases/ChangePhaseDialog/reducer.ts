@@ -9,9 +9,9 @@ import { View } from './Views'
 
 export const INIT = createAction<{ context: IProjectPhasesContext }>('INIT')
 export const SET_VIEW = createAction<{ view: View }>('SET_VIEW')
-export const CHECKLIST_ITEM_UPDATED = createAction<{ properties: Partial<IProjectPhaseChecklistItem> }>(
-  'CHECKLIST_ITEM_UPDATED'
-)
+export const CHECKLIST_ITEM_UPDATED = createAction<{
+  properties: Partial<IProjectPhaseChecklistItem>
+}>('CHECKLIST_ITEM_UPDATED')
 
 export default createReducer<IChangePhaseDialogState>(
   {},

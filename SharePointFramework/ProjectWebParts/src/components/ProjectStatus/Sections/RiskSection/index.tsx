@@ -18,15 +18,15 @@ import styles from './RiskSection.module.scss'
 export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionState> {
   constructor(props: IRiskSectionProps) {
     super(props)
-    this.state = { isLoading: true }
+    this.state = { loading: true }
   }
 
   public async componentDidMount() {
     try {
       const data = await this._fetchData()
-      this.setState({ data, isLoading: false })
+      this.setState({ data, loading: false })
     } catch (error) {
-      this.setState({ error, isLoading: false })
+      this.setState({ error, loading: false })
     }
   }
 
@@ -50,7 +50,7 @@ export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionStat
    * Render content
    */
   private _renderContent() {
-    if (this.state.isLoading || !this.state.data) return null
+    if (this.state.loading || !this.state.data) return null
     if (this.state.error)
       return (
         <MessageBar messageBarType={MessageBarType.error}>

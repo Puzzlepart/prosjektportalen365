@@ -8,7 +8,7 @@ export interface IChangePhaseDialogContext {
    * State
    */
   state: IChangePhaseDialogState
-  
+
   /**
    * Dispatches an action for ChangePhaseDialog
    */
@@ -16,10 +16,10 @@ export interface IChangePhaseDialogContext {
 
   /**
    * Next checklist item
-   * 
+   *
    * Updates the current checklist item, and dispatches CHECKLIST_ITEM_UPDATED
    * with the properties
-   * 
+   *
    * @param {Partial<IProjectPhaseChecklistItem>} properties Properties
    */
   nextChecklistItem: (properties: Partial<IProjectPhaseChecklistItem>) => void

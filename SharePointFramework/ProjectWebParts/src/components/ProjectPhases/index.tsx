@@ -62,7 +62,7 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
         <ProjectPhasesContext.Provider value={{ props, state, dispatch, onChangePhase }}>
           <Shimmer
             isDataLoaded={!state.loading}
-            shimmerElements={getShimmerElements(root.current?.clientWidth)} >
+            shimmerElements={getShimmerElements(root.current?.clientWidth)}>
             <ul className={styles.phaseList}>
               {state.data.phases
                 .filter((p) => p.isVisible)
@@ -77,7 +77,7 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
             </ul>
             <ProjectPhaseCallout {...(state.callout || {})} />
             <ChangePhaseDialog />
-          </Shimmer >
+          </Shimmer>
         </ProjectPhasesContext.Provider>
       </div>
     </div>
