@@ -31,7 +31,7 @@ export class SPFolder {
 
   /**
    * Is system folder
-   * 
+   *
    * Returns true if the folder name is Forms
    */
   public get isSystemFolder(): boolean {

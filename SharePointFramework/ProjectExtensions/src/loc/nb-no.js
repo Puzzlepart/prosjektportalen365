@@ -83,4 +83,4 @@ define([], function () {
     DocumentLibraryDropdownLabel: 'Velg dokumentbibliotek',
     DocumentTemplateDialogScreenEditCopyRootLevelText: 'Øverste nivå'
   }
-});
+})
