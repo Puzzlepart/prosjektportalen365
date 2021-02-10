@@ -37,16 +37,19 @@ export const TargetFolderScreen = ({ targetFolder, dispatch }: ITargetFolderScre
   return (
     <div className={styles.root}>
       <FolderNavigation
-        items={context.libraries.length > 2 && [
-          {
-            key: '_',
-            text: strings.Library,
-            onClick: () => setFolder(null)
-          }
-        ]}
+        items={
+          context.libraries.length > 2 && [
+            {
+              key: '_',
+              text: strings.Library,
+              onClick: () => setFolder(null)
+            }
+          ]
+        }
         root={root.name}
         currentFolder={folder}
-        setFolder={setFolder} />
+        setFolder={setFolder}
+      />
       <DetailsList
         items={folders}
         columns={columns()}

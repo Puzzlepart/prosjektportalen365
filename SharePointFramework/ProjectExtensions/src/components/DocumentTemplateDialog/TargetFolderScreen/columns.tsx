@@ -22,9 +22,11 @@ export default () =>
       minWidth: 20,
       maxWidth: 20,
       onRender: (folder: SPFolder) => (
-        <Icon {...getFileTypeIconProps({
-          type: folder.isLibrary ? FileIconType.list : FileIconType.folder
-        })} />
+        <Icon
+          {...getFileTypeIconProps({
+            type: folder.isLibrary ? FileIconType.list : FileIconType.folder
+          })}
+        />
       )
     },
     {

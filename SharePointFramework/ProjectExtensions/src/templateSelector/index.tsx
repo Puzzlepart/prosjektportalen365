@@ -22,7 +22,7 @@ Logger.activeLogLevel = LogLevel.Info
 
 export default class TemplateSelectorCommand extends BaseListViewCommandSet<
   ITemplateSelectorCommandProperties
-  > {
+> {
   private _openCmd: Command
   private _ctxValue: ITemplateSelectorContext = {}
   private _placeholderIds = { DocumentTemplateDialog: getId('documenttemplatedialog') }
@@ -78,8 +78,12 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<
     switch (event.itemId) {
       case this._openCmd.id:
         this._ctxValue.libraries = await SPDataAdapter.getLibraries()
-        this._ctxValue.currentLibrary = find(this._ctxValue.libraries, lib => lib.id === this.context.pageContext.list.id.toString())
-        if (!this._ctxValue.currentLibrary) this._ctxValue.currentLibrary = first(this._ctxValue.libraries)
+        this._ctxValue.currentLibrary = find(
+          this._ctxValue.libraries,
+          (lib) => lib.id === this.context.pageContext.list.id.toString()
+        )
+        if (!this._ctxValue.currentLibrary)
+          this._ctxValue.currentLibrary = first(this._ctxValue.libraries)
         this._onOpenTemplateSelector()
         break
     }

@@ -41,7 +41,8 @@ export const SelectScreen = (props: ISelectScreenProps) => {
       <FolderNavigation
         root={context.templateLibrary.title}
         currentFolder={folder}
-        setFolder={setFolder} />
+        setFolder={setFolder}
+      />
       <MarqueeSelection selection={props.selection}>
         <DetailsList
           setKey={folder}

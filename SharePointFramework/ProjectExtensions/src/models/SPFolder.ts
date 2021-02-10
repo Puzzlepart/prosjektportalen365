@@ -1,5 +1,5 @@
 interface ISPFolderData {
-  Id?: string;
+  Id?: string
   UniqueId?: string
   Title?: string
   Name?: string
@@ -25,9 +25,7 @@ export class SPFolder {
     this.name = _data?.Title || _data?.Name
     this.url = _data?.RootFolder?.ServerRelativeUrl || _data?.ServerRelativeUrl
     this.folders = (_data?.RootFolder?.Folders || _data?.Folders || [])
-      .map(
-        (f: any) => new SPFolder(f)
-      )
+      .map((f: any) => new SPFolder(f))
       .filter((f: SPFolder) => !f.isSystemFolder)
   }
 
@@ -37,7 +35,7 @@ export class SPFolder {
 
   /**
    * Checks if the folder is root level meaning it's a library.
-   * 
+   *
    * Checks if BaseTemplate is 101
    */
   public get isLibrary() {

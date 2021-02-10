@@ -9,7 +9,7 @@ import { IFolderNavigationProps } from './types'
 export const FolderNavigation = (props: IFolderNavigationProps) => {
   const items = useMemo(() => createItems(props), [props.currentFolder])
   const breadcrumb: IBreadcrumbItem[] = [
-    ...props.items || [],
+    ...(props.items || []),
     props.currentFolder !== null && {
       key: 'root',
       text: props.root,
@@ -17,7 +17,7 @@ export const FolderNavigation = (props: IFolderNavigationProps) => {
       onClick: () => props.setFolder('')
     },
     ...items
-  ].filter(i => i)
+  ].filter((i) => i)
 
   return (
     <div className={styles.root}>
