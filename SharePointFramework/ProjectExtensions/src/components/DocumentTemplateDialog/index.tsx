@@ -12,8 +12,8 @@ import { TemplateItem } from '../../models/index'
 import { BaseDialog } from '../@BaseDialog/index'
 import { InfoMessage } from '../InfoMessage'
 import styles from './DocumentTemplateDialog.module.scss'
-import { DocumentTemplateDialogScreenEditCopy } from './DocumentTemplateDialogScreenEditCopy'
-import { DocumentTemplateDialogScreenSelect } from './DocumentTemplateDialogScreenSelect'
+import { EditCopyScreen } from './EditCopyScreen'
+import { SelectScreen } from './SelectScreen'
 import { DocumentTemplateDialogScreen, IDocumentTemplateDialogProps } from './types'
 
 export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
@@ -73,7 +73,7 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
     switch (screen) {
       case DocumentTemplateDialogScreen.Select: {
         return (
-          <DocumentTemplateDialogScreenSelect
+          <SelectScreen
             selection={selection}
             selectedItems={selected}
           />
@@ -81,7 +81,7 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
       }
       case DocumentTemplateDialogScreen.EditCopy: {
         return (
-          <DocumentTemplateDialogScreenEditCopy
+          <EditCopyScreen
             selectedTemplates={selected}
             onStartCopy={onStartCopy}
             onChangeScreen={(s) => setScreen(s)}

@@ -1,7 +1,7 @@
 import { DocumentTemplateDialogScreen } from '..'
 import { TemplateItem } from '../../../models'
 
-export interface IDocumentTemplateDialogScreenEditCopyProps {
+export interface IEditCopyScreenProps {
   /**
    * Selected templates
    */

@@ -16,9 +16,9 @@ import { isEmpty } from 'underscore'
 import { InfoMessage } from '../../InfoMessage'
 import columns from './columns'
 import { getNav } from './nav'
-import { IDocumentTemplateDialogScreenSelectProps } from './types'
+import { ISelectScreenProps } from './types'
 
-export const DocumentTemplateDialogScreenSelect = (props: IDocumentTemplateDialogScreenSelectProps) => {
+export const SelectScreen = (props: ISelectScreenProps) => {
   const context = useContext(TemplateSelectorContext)
   const [folder, setFolder] = useState<string>('')
   const nav = useMemo(() => getNav({folder,setFolder}), [folder])

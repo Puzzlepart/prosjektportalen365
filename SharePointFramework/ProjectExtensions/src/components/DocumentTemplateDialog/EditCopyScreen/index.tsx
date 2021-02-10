@@ -9,12 +9,11 @@ import { TemplateSelectorContext } from 'templateSelector/context'
 import { first } from 'underscore'
 import { InfoMessage } from '../../InfoMessage'
 import { DocumentTemplateDialogScreen } from '../types'
-import styles from './DocumentTemplateDialogScreenEditCopy.module.scss'
+import styles from './EditCopyScreen.module.scss'
 import { DocumentTemplateItem } from './DocumentTemplateItem'
-import { IDocumentTemplateDialogScreenEditCopyProps } from './types'
+import { IEditCopyScreenProps } from './types'
 
-// tslint:disable-next-line: naming-convention
-export const DocumentTemplateDialogScreenEditCopy = (props: IDocumentTemplateDialogScreenEditCopyProps) => {
+export const EditCopyScreen = (props: IEditCopyScreenProps) => {
   const context = useContext(TemplateSelectorContext)
   const [templates, setTemplates] = useState([...props.selectedTemplates])
   const [selectedLibrary, setLibrary] = useState<ISPLibraryFolder>(first(context.libraries))
@@ -80,7 +79,7 @@ export const DocumentTemplateDialogScreenEditCopy = (props: IDocumentTemplateDia
   }
 
   return (
-    <div className={styles.documentTemplateDialogScreenEditCopy}>
+    <div className={styles.root}>
       <InfoMessage text={strings.DocumentTemplateDialogScreenEditCopyInfoText} />
       {props.selectedTemplates.map((item, idx) => (
         <DocumentTemplateItem

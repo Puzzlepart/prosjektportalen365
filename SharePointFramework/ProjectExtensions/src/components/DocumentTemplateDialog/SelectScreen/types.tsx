@@ -1,6 +1,6 @@
 import { IColumn, Selection } from 'office-ui-fabric-react/lib/DetailsList'
 
-export interface IDocumentTemplateDialogScreenSelectProps<ItemType = any> {
+export interface ISelectScreenProps<ItemType = any> {
   /**
    * Selection
    */
