@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    Library: 'Bibliotek',
     CopyHereText: 'Kopier hit',
     ApplyTemplateText: 'Legger på mal {0}',
     ApplyingExtensionsText: 'Legger på prosjekttilegg',
@@ -32,7 +33,8 @@ define([], function () {
     LibraryDropdownLabel: 'Bibliotek',
     ListContentTitle: 'Standardinnhold',
     ModifiedLabel: 'Endret',
-    NameLabel: 'Filnavn',
+    NameLabel: 'Navn',
+    FileNameLabel: 'Filnavn',
     NoHubSiteErrorMessage: 'Området er ikke koblet til en hub',
     NoHubSiteErrorStack: 'Området kan ikke settes opp uten å være koblet til en hub. Koble området til ett hubområde, og last siden på nytt.<br/><br/>Gå til `Innstillinger` (tannhjulet i øvre høyre hjørne), finn `Nettstedsinformasjon` og velg hub/portefølje under `Tilknytning til hubområde`.',
     OnGoBackText: 'Gå tilbake',

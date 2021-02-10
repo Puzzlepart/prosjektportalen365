@@ -13,6 +13,11 @@ export interface ITemplateSelectorContext {
   libraries?: SPFolder[]
 
   /**
+   * Current library
+   */
+  currentLibrary?: SPFolder
+
+  /**
    * Template library
    */
   templateLibrary?: { title: string; url: string }

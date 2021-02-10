@@ -9,6 +9,7 @@ export const createItems = ({
   currentFolder,
   setFolder
 }: Partial<IFolderNavigationProps>): IBreadcrumbItem[] => {
+  if (!currentFolder) return []
   const paths = currentFolder.split('/').splice(4)
   return paths.map((f, idx) => {
     const item: IBreadcrumbItem = {

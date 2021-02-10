@@ -6,6 +6,7 @@ interface ISPFolderData {
   ServerRelativeUrl?: string
   RootFolder?: ISPFolderData
   Folders?: ISPFolderData[]
+  BaseTemplate?: number
 }
 
 export class SPFolder {
@@ -17,13 +18,13 @@ export class SPFolder {
   /**
    * Constructor
    *
-   * @param {ISPFolderData} data Data
+   * @param {ISPFolderData} _data Data
    */
-  constructor(data: ISPFolderData) {
-    this.id = data?.Id || data?.UniqueId
-    this.name = data?.Title || data?.Name
-    this.url = data?.RootFolder?.ServerRelativeUrl || data?.ServerRelativeUrl
-    this.folders = (data?.RootFolder?.Folders || data?.Folders || [])
+  constructor(private _data: ISPFolderData) {
+    this.id = _data?.Id || _data?.UniqueId
+    this.name = _data?.Title || _data?.Name
+    this.url = _data?.RootFolder?.ServerRelativeUrl || _data?.ServerRelativeUrl
+    this.folders = (_data?.RootFolder?.Folders || _data?.Folders || [])
       .map(
         (f: any) => new SPFolder(f)
       )
@@ -32,5 +33,14 @@ export class SPFolder {
 
   public get isSystemFolder(): boolean {
     return this.name === 'Forms'
+  }
+
+  /**
+   * Checks if the folder is root level meaning it's a library.
+   * 
+   * Checks if BaseTemplate is 101
+   */
+  public get isLibrary() {
+    return this._data.BaseTemplate === 101
   }
 }

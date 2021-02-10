@@ -67,8 +67,8 @@ export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
         <div className={styles.inputField}>
           <TextField
             id={nameId}
-            label={strings.NameLabel}
-            placeholder={strings.NameLabel}
+            label={strings.FileNameLabel}
+            placeholder={strings.FileNameLabel}
             defaultValue={props.item.nameWithoutExtension}
             suffix={`.${props.item.fileExtension}`}
             errorMessage={props.item.errorMessage}

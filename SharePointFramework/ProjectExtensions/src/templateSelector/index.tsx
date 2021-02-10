@@ -11,6 +11,7 @@ import * as strings from 'ProjectExtensionsStrings'
 import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import HubSiteService from 'sp-hubsite-service'
+import { find, first } from 'underscore'
 import { DocumentTemplateDialog } from '../components'
 import { SPDataAdapter } from '../data'
 import { ITemplateSelectorContext, TemplateSelectorContext } from './context'
@@ -21,7 +22,7 @@ Logger.activeLogLevel = LogLevel.Info
 
 export default class TemplateSelectorCommand extends BaseListViewCommandSet<
   ITemplateSelectorCommandProperties
-> {
+  > {
   private _openCmd: Command
   private _ctxValue: ITemplateSelectorContext = {}
   private _placeholderIds = { DocumentTemplateDialog: getId('documenttemplatedialog') }
@@ -77,10 +78,8 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<
     switch (event.itemId) {
       case this._openCmd.id:
         this._ctxValue.libraries = await SPDataAdapter.getLibraries()
-        Logger.log({
-          message: `(TemplateSelectorCommand) onExecute: Retrieved ${this._ctxValue.libraries.length} libraries`,
-          level: LogLevel.Info
-        })
+        this._ctxValue.currentLibrary = find(this._ctxValue.libraries, lib => lib.id === this.context.pageContext.list.id.toString())
+        if (!this._ctxValue.currentLibrary) this._ctxValue.currentLibrary = first(this._ctxValue.libraries)
         this._onOpenTemplateSelector()
         break
     }

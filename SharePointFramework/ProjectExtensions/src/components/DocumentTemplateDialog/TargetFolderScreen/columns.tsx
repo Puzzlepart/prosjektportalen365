@@ -21,7 +21,11 @@ export default () =>
       name: null,
       minWidth: 20,
       maxWidth: 20,
-      onRender: () => <Icon {...getFileTypeIconProps({ type: FileIconType.folder })} />
+      onRender: (folder: SPFolder) => (
+        <Icon {...getFileTypeIconProps({
+          type: folder.isLibrary ? FileIconType.list : FileIconType.folder
+        })} />
+      )
     },
     {
       key: getId('name'),

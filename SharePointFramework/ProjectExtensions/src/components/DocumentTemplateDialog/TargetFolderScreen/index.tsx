@@ -12,7 +12,7 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { useContext, useEffect, useState } from 'react'
 import { TemplateSelectorContext } from 'templateSelector/context'
-import { first, isEmpty } from 'underscore'
+import { isEmpty } from 'underscore'
 import { DocumentTemplateDialogScreen } from '..'
 import { FolderNavigation } from '../FolderNavigation'
 import { SET_SCREEN, SET_TARGET } from '../reducer'
@@ -22,20 +22,29 @@ import { ITargetFolderScreenProps } from './types'
 
 export const TargetFolderScreen = ({ targetFolder, dispatch }: ITargetFolderScreenProps) => {
   const context = useContext(TemplateSelectorContext)
-  const library = first(context.libraries)
-  const [folders, setFolders] = useState(library.folders)
+  const [root, setRoot] = useState(context.currentLibrary)
+  const [folders, setFolders] = useState(root.folders)
   const [folder, setFolder] = useState(targetFolder)
 
   useEffect(() => {
-    if (isEmpty(folder)) {
-      setFolders(library.folders)
+    if (folder === null) {
+      setFolders(context.libraries)
+    } else if (isEmpty(folder)) {
+      setFolders(root.folders)
     } else SPDataAdapter.getFolders(folder).then(setFolders)
   }, [folder])
 
   return (
     <div className={styles.root}>
       <FolderNavigation
-        root={library.name}
+        items={context.libraries.length > 2 && [
+          {
+            key: '_',
+            text: strings.Library,
+            onClick: () => setFolder(null)
+          }
+        ]}
+        root={root.name}
         currentFolder={folder}
         setFolder={setFolder} />
       <DetailsList
@@ -44,7 +53,10 @@ export const TargetFolderScreen = ({ targetFolder, dispatch }: ITargetFolderScre
         selectionMode={SelectionMode.multiple}
         layoutMode={DetailsListLayoutMode.justified}
         constrainMode={ConstrainMode.horizontalConstrained}
-        onItemInvoked={(folder: SPFolder) => setFolder(folder.url)}
+        onItemInvoked={(folder: SPFolder) => {
+          if (folder.isLibrary) setRoot(folder)
+          setFolder(folder.url)
+        }}
       />
       <DialogFooter>
         <ActionButton
@@ -55,6 +67,7 @@ export const TargetFolderScreen = ({ targetFolder, dispatch }: ITargetFolderScre
         <ActionButton
           text={strings.CopyHereText}
           iconProps={{ iconName: 'Copy' }}
+          disabled={folder === null}
           onClick={() => {
             dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.EditCopy }))
             dispatch(SET_TARGET({ folder }))

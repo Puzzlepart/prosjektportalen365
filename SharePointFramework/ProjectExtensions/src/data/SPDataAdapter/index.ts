@@ -85,7 +85,7 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
    */
   public async getLibraries(): Promise<SPFolder[]> {
     const libraries = await this.sp.web.lists
-      .select('Id', 'Title', 'RootFolder/ServerRelativeUrl', 'RootFolder/Folders')
+      .select('Id', 'Title', 'BaseTemplate', 'RootFolder/ServerRelativeUrl', 'RootFolder/Folders')
       .expand('RootFolder', 'RootFolder/Folders')
       .filter(
         [
