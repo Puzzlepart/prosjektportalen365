@@ -17,8 +17,3 @@ export interface IChangePhaseDialogState {
    */
   view?: View
 }
-
-export interface INextChecklistItemParams {
-  statusValue: string
-  comment: string
-}

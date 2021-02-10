@@ -1,5 +1,5 @@
-import { TypedHash } from '@pnp/common'
 import { createAction, createReducer } from '@reduxjs/toolkit'
+import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { isEmpty } from 'underscore'
 import { IProjectPhasesContext } from '../context'
@@ -9,7 +9,7 @@ import { View } from './Views'
 
 export const INIT = createAction<{ context: IProjectPhasesContext }>('INIT')
 export const SET_VIEW = createAction<{ view: View }>('SET_VIEW')
-export const CHECKLIST_ITEM_UPDATED = createAction<{ properties: TypedHash<string> }>(
+export const CHECKLIST_ITEM_UPDATED = createAction<{ properties: Partial<IProjectPhaseChecklistItem> }>(
   'CHECKLIST_ITEM_UPDATED'
 )
 

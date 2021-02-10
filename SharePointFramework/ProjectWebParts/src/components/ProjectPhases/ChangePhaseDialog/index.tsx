@@ -1,7 +1,7 @@
-import { TypedHash } from '@pnp/common'
 import SPDataAdapter from 'data'
 import Dialog, { DialogType } from 'office-ui-fabric-react/lib/Dialog'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { useContext, useEffect, useReducer } from 'react'
 import { ProjectPhasesContext } from '../context'
@@ -11,7 +11,6 @@ import styles from './ChangePhaseDialog.module.scss'
 import { ChangePhaseDialogContext } from './context'
 import { Footer } from './Footer'
 import reducer, { CHECKLIST_ITEM_UPDATED, INIT } from './reducer'
-import { INextChecklistItemParams } from './types'
 import { View } from './Views'
 
 export const ChangePhaseDialog = () => {
@@ -21,12 +20,16 @@ export const ChangePhaseDialog = () => {
 
   useEffect(() => dispatch(INIT({ context })), [])
 
-  const nextChecklistItem = async ({ statusValue, comment }: INextChecklistItemParams) => {
+  /**
+   * Next checklist item
+   * 
+   * Updates the current checklist item, and dispatches CHECKLIST_ITEM_UPDATED
+   * with the properties
+   * 
+   * @param {Partial<IProjectPhaseChecklistItem>} properties Properties
+   */
+  const nextChecklistItem = async (properties: Partial<IProjectPhaseChecklistItem>) => {
     const currentItem = [...state.checklistItems][state.currentIdx]
-    const properties: TypedHash<string> = {
-      GtComment: comment,
-      GtChecklistStatus: statusValue
-    }
     await SPDataAdapter.project.updateChecklistItem(
       strings.PhaseChecklistName,
       currentItem.ID,
