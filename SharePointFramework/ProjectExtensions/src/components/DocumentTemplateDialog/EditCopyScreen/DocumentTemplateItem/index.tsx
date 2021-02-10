@@ -33,7 +33,7 @@ export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
           {
             const newName = `${newValue}.${props.item.fileExtension}`
             const errorMsg = await SPDataAdapter.isFilenameValid(
-              props.folderServerRelativeUrl,
+              props.folder,
               newName
             )
             props.onInputChanged(props.item.id, { newName }, errorMsg)
@@ -47,7 +47,7 @@ export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
   }
 
   useEffect(() => {
-    SPDataAdapter.isFilenameValid(props.folderServerRelativeUrl, props.item.name).then(
+    SPDataAdapter.isFilenameValid(props.folder, props.item.name).then(
       (errorMessage) => {
         if (errorMessage) {
           props.onInputChanged(props.item.id, {}, errorMessage)
@@ -55,7 +55,7 @@ export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
         }
       }
     )
-  }, [props.folderServerRelativeUrl])
+  }, [props.folder])
 
   return (
     <div className={styles.root}>

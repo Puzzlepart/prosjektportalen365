@@ -1,4 +1,4 @@
-import { DocumentTemplateDialogScreen } from '..'
+import { AnyAction } from '@reduxjs/toolkit'
 import { TemplateItem } from '../../../models'
 
 export interface IEditCopyScreenProps {
@@ -11,14 +11,13 @@ export interface IEditCopyScreenProps {
    * On start copy callback
    *
    * @param {TemplateItem[]} templates Templates
-   * @param {string} folderServerRelativeUrl Folder URL
    */
-  onStartCopy: (templates: TemplateItem[], folderServerRelativeUrl: string) => void
-
+  onStartCopy: (templates: TemplateItem[]) => void
+  
   /**
-   * On change screen
-   *
-   * @param {DocumentTemplateDialogScreen} screen Screen
+   * Target folder
    */
-  onChangeScreen: (screen: DocumentTemplateDialogScreen) => void
+  targetFolder: string
+
+  dispatch: React.Dispatch<AnyAction>
 }

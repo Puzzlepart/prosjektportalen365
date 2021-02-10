@@ -35,9 +35,14 @@ export interface IDocumentTemplateDialogState {
   progress?: ICopyProgressScreenProps
 
   /**
-   * Is blocking
+   * Dialog is blocked and can not be closed
    */
-  isBlocking?: boolean
+  locked?: boolean
+
+  /**
+   * Target folder selected in TargetFolderScreen
+   */
+  targetFolder?: string
 
   /**
    * Uploaded
@@ -50,6 +55,11 @@ export enum DocumentTemplateDialogScreen {
    * Select screen
    */
   Select,
+
+  /**
+   * Target folder screen
+   */
+  TargetFolder,
 
   /**
    * Edit copy screen

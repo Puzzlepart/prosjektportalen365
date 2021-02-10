@@ -23,6 +23,7 @@ import reducer, {
   START_COPY
 } from './reducer'
 import { SelectScreen } from './SelectScreen'
+import { TargetFolderScreen } from './TargetFolderScreen'
 import { DocumentTemplateDialogScreen, IDocumentTemplateDialogProps } from './types'
 
 export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
@@ -32,17 +33,13 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
   })
 
   /**
-   * On copy documents to web
+   * On copy documents to the selected target URL
    *
    * @param {TemplateItem[]} templates Templates
-   * @param {string} folderServerRelativeUrl Folder URL
    */
-  async function onStartCopy(
-    templates: TemplateItem[],
-    folderServerRelativeUrl: string
-  ): Promise<void> {
+  async function onStartCopy(templates: TemplateItem[]): Promise<void> {
     dispatch(START_COPY())
-    const folder = SPDataAdapter.sp.web.getFolderByServerRelativeUrl(folderServerRelativeUrl)
+    const folder = SPDataAdapter.sp.web.getFolderByServerRelativeUrl(state.targetFolder)
     const filesAdded: FileAddResult[] = []
 
     for (let i = 0; i < templates.length; i++) {
@@ -56,7 +53,7 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
       )
       try {
         filesAdded.push(await template.copyTo(folder))
-      } catch (error) {}
+      } catch (error) { }
     }
     selection.setItems([], true)
     dispatch(COPY_DONE({ files: filesAdded }))
@@ -69,79 +66,81 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
     props.onDismiss({ reload: state.screen === DocumentTemplateDialogScreen.Summary })
   }
 
+  /**
+   * On render content
+   */
   function onRenderContent() {
-    // eslint-disable-next-line default-case
-    switch (state.screen) {
-      case DocumentTemplateDialogScreen.Select: {
-        return <SelectScreen selection={selection} selectedItems={state.selected} />
-      }
-      case DocumentTemplateDialogScreen.EditCopy: {
-        return (
-          <EditCopyScreen
-            selectedTemplates={state.selected}
-            onStartCopy={onStartCopy}
-            onChangeScreen={(screen) => dispatch(SET_SCREEN({ screen }))}
-          />
-        )
-      }
-      case DocumentTemplateDialogScreen.CopyProgress: {
-        return <CopyProgressScreen {...state.progress} />
-      }
-      case DocumentTemplateDialogScreen.Summary: {
-        return (
-          <InfoMessage
-            type={MessageBarType.success}
-            text={format(strings.SummaryText, state.uploaded.length)}
-          />
-        )
-      }
-    }
+    return {
+      [DocumentTemplateDialogScreen.Select]: (
+        <SelectScreen
+          selection={selection}
+          selectedItems={state.selected} />
+      ),
+      [DocumentTemplateDialogScreen.TargetFolder]: (
+        <TargetFolderScreen
+          targetFolder={state.targetFolder}
+          dispatch={dispatch} />
+      ),
+      [DocumentTemplateDialogScreen.EditCopy]: (
+        <EditCopyScreen
+          selectedTemplates={state.selected}
+          onStartCopy={onStartCopy}
+          targetFolder={state.targetFolder}
+          dispatch={dispatch}
+        />
+      ),
+      [DocumentTemplateDialogScreen.CopyProgress]: (
+        <CopyProgressScreen {...state.progress} />
+      ),
+      [DocumentTemplateDialogScreen.Summary]: (
+        <InfoMessage
+          type={MessageBarType.success}
+          text={format(strings.SummaryText, state.uploaded.length)}
+        />
+      )
+    }[state.screen] || null
   }
 
+  /**
+   * On render footer
+   */
   function onRenderFooter() {
-    switch (state.screen) {
-      case DocumentTemplateDialogScreen.Select: {
-        return (
-          <>
-            <ActionButton
-              text={strings.OnSubmitSelectionText}
-              iconProps={{ iconName: 'CheckMark' }}
-              onClick={() =>
-                dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.EditCopy }))
-              }
-              disabled={isEmpty(state.selected)}
-            />
-          </>
-        )
-      }
-      case DocumentTemplateDialogScreen.Summary: {
-        return (
-          <>
-            <ActionButton
-              text={strings.GetMoreText}
-              iconProps={{ iconName: 'CirclePlus' }}
-              onClick={() => dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select }))}
-            />
-            <ActionButton
-              text={strings.CloseModalText}
-              iconProps={{ iconName: 'ClosePane' }}
-              onClick={onClose}
-            />
-          </>
-        )
-      }
-      default: {
-        return null
-      }
-    }
+    return {
+      [DocumentTemplateDialogScreen.Select]: (
+        <>
+          <ActionButton
+            text={strings.OnSubmitSelectionText}
+            iconProps={{ iconName: 'CheckMark' }}
+            onClick={() =>
+              dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.TargetFolder }))
+            }
+            disabled={isEmpty(state.selected)}
+          />
+        </>
+      ),
+      [DocumentTemplateDialogScreen.Summary]: (
+        <>
+          <ActionButton
+            text={strings.GetMoreText}
+            iconProps={{ iconName: 'CirclePlus' }}
+            onClick={() => dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select }))}
+          />
+          <ActionButton
+            text={strings.CloseModalText}
+            iconProps={{ iconName: 'ClosePane' }}
+            onClick={onClose}
+          />
+        </>
+      ),
+    }[state.screen] || null
   }
 
   return (
     <BaseDialog
       dialogContentProps={{ title: props.title }}
       modalProps={{
-        isBlocking: state.isBlocking,
-        isDarkOverlay: state.isBlocking
+        isBlocking: state.locked,
+        isDarkOverlay: state.locked
       }}
       onRenderFooter={onRenderFooter}
       onDismiss={onClose}
@@ -153,3 +152,4 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
 
 export * from './types'
 export { IDocumentTemplateDialogProps }
+

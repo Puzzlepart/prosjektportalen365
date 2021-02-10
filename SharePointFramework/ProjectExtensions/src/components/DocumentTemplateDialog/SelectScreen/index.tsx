@@ -15,8 +15,9 @@ import { TemplateSelectorContext } from 'templateSelector/context'
 import { isEmpty } from 'underscore'
 import { InfoMessage } from '../../InfoMessage'
 import columns from './columns'
-import { getNav } from './nav'
 import { ISelectScreenProps } from './types'
+
+const getNav = (obj) => []
 
 export const SelectScreen = (props: ISelectScreenProps) => {
   const context = useContext(TemplateSelectorContext)
@@ -31,7 +32,6 @@ export const SelectScreen = (props: ISelectScreenProps) => {
         .sort((a, b) => (a.isFolder === b.isFolder ? 0 : a.isFolder ? -1 : 1)),
     [folder]
   )
-
   const breadcrumb: IBreadcrumbItem[] = [
     {
       key: 'root',

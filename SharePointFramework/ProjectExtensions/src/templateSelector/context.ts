@@ -1,4 +1,4 @@
-import { TemplateItem, IDocumentLibrary } from 'models'
+import { TemplateItem, SPFolder } from 'models'
 import { createContext } from 'react'
 
 export interface ITemplateSelectorContext {
@@ -10,7 +10,7 @@ export interface ITemplateSelectorContext {
   /**
    * Libraries
    */
-  libraries?: IDocumentLibrary[]
+  libraries?: SPFolder[]
 
   /**
    * Template library

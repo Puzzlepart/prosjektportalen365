@@ -13,9 +13,9 @@ export interface IDocumentTemplateItemProps {
   onInputChanged: (id: string, properties: TypedHash<string>, errorMessage?: string) => void
 
   /**
-   * Folder server relative URL
+   * Folder URL
    */
-  folderServerRelativeUrl: string
+  folder: string
 }
 
 export interface IDocumentTemplateItemState {

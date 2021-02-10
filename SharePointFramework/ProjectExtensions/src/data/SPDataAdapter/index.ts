@@ -1,11 +1,11 @@
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
 import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
+import { SPFolder } from 'models'
 import { TemplateItem } from 'models/TemplateItem'
-import * as strings from 'ProjectExtensionsStrings'
 import { SPDataAdapterBase } from 'pp365-shared/lib/data'
 import { ProjectDataService } from 'pp365-shared/lib/services'
+import * as strings from 'ProjectExtensionsStrings'
 import * as validFilename from 'valid-filename'
-import { ISPLibraryFolder } from './ISPLibraryFolder'
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
 
 export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
@@ -66,30 +66,39 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
     )
   }
 
+
+  /**
+   * Get folders in the specified folder/library
+   * 
+   * @param {string} folderRelativeUrl Folder URL
+   */
+  public async getFolders(folderRelativeUrl: string): Promise<any[]> {
+    const folders = await this.sp.web
+      .getFolderByServerRelativePath(folderRelativeUrl)
+      .folders
+      .filter('ItemCount gt 0')
+      .usingCaching()
+      .get()
+    return folders.map((f) => new SPFolder(f))
+  }
+
   /**
    * Get libraries in the current web
    */
-  public async getLibraries(): Promise<ISPLibraryFolder[]> {
+  public async getLibraries(): Promise<SPFolder[]> {
     const libraries = await this.sp.web.lists
       .select('Id', 'Title', 'RootFolder/ServerRelativeUrl', 'RootFolder/Folders')
       .expand('RootFolder', 'RootFolder/Folders')
       .filter(
-        // eslint-disable-next-line quotes
-        "BaseTemplate eq 101 and IsCatalog eq false and IsApplicationList eq false and ListItemEntityTypeFullName ne 'SP.Data.FormServerTemplatesItem'"
+        [
+          'BaseTemplate eq 101',
+          'IsCatalog eq false',
+          'IsApplicationList eq false',
+          'ListItemEntityTypeFullName ne \'SP.Data.FormServerTemplatesItem\''
+        ].join(' and ')
       )
+      .usingCaching()
       .get()
-
-    return libraries.map((lib) => ({
-      Id: lib.Id,
-      Title: lib.Title,
-      ServerRelativeUrl: lib.RootFolder.ServerRelativeUrl,
-      Folders: lib.RootFolder.Folders.filter((f: { Name: string }) => f.Name !== 'Forms').map(
-        (f: { UniqueId: string; Name: string; ServerRelativeUrl: string }) => ({
-          Id: f.UniqueId,
-          Title: f.Name,
-          ServerRelativeUrl: f.ServerRelativeUrl
-        })
-      )
-    }))
+    return libraries.map((lib) => new SPFolder(lib))
   }
 })()
