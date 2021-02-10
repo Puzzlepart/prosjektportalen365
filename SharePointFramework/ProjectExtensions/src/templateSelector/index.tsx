@@ -8,12 +8,12 @@ import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { sp } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
 import * as strings from 'ProjectExtensionsStrings'
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
-import { default as HubSiteService, IHubSite } from 'sp-hubsite-service'
-import { DocumentTemplateDialog, IDocumentTemplateDialogProps } from '../components'
+import React from 'react'
+import { render, unmountComponentAtNode } from 'react-dom'
+import HubSiteService from 'sp-hubsite-service'
+import { DocumentTemplateDialog } from '../components'
 import { SPDataAdapter } from '../data'
-import { IDocumentLibrary, TemplateItem } from '../models'
+import { ITemplateSelectorContext, TemplateSelectorContext } from './context'
 import { ITemplateSelectorCommandProperties } from './types'
 
 Logger.subscribe(new ConsoleListener())
@@ -21,12 +21,9 @@ Logger.activeLogLevel = LogLevel.Info
 
 export default class TemplateSelectorCommand extends BaseListViewCommandSet<
   ITemplateSelectorCommandProperties
-> {
+  > {
   private _openCmd: Command
-  private _hub: IHubSite
-  private _templates: TemplateItem[] = []
-  private _libraries: IDocumentLibrary[]
-  private _templateLibrary: string
+  private _ctxValue: ITemplateSelectorContext = {}
   private _placeholderIds = { DocumentTemplateDialog: getId('documenttemplatedialog') }
 
   @override
@@ -38,22 +35,26 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<
     })
     Logger.subscribe(new ConsoleListener())
     Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-    this._hub = await HubSiteService.GetHubSite(sp, this.context.pageContext)
+    const hub = await HubSiteService.GetHubSite(sp, this.context.pageContext)
     SPDataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,
-      hubSiteUrl: this._hub.url
+      hubSiteUrl: hub.url
     })
     this._openCmd = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR')
     if (!this._openCmd) return
     try {
-      this._templateLibrary = this.properties.templateLibrary || 'Malbibliotek'
-      this._templates = await SPDataAdapter.getDocumentTemplates(
-        this._templateLibrary,
+      const templateLib = 'Malbibliotek'
+      this._ctxValue.templateLibrary = {
+        title: templateLib,
+        url: `${hub.url}/${templateLib}`
+      }
+      this._ctxValue.templates = await SPDataAdapter.getDocumentTemplates(
+        templateLib,
         '<View Scope="RecursiveAll"></View>'
       )
       Logger.log({
-        message: `(TemplateSelectorCommand) onInit: Retrieved ${this._templates.length} templates from the specified template library`,
+        message: `(TemplateSelectorCommand) onInit: Retrieved ${this._ctxValue.templates.length} templates from the specified template library`,
         level: LogLevel.Info
       })
     } catch (error) {
@@ -66,10 +67,8 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<
 
   @override
   public onListViewUpdated(): void {
-    const openTemplateSelectorCommand: Command = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR')
-    if (openTemplateSelectorCommand) {
-      openTemplateSelectorCommand.visible = true
-    }
+   this._openCmd = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR')
+    if (this._openCmd) this._openCmd.visible = true
   }
 
   @override
@@ -77,9 +76,9 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<
     // eslint-disable-next-line default-case
     switch (event.itemId) {
       case this._openCmd.id:
-        this._libraries = await SPDataAdapter.getLibraries()
+        this._ctxValue.libraries = await SPDataAdapter.getLibraries()
         Logger.log({
-          message: `(TemplateSelectorCommand) onExecute: Retrieved ${this._libraries.length} libraries`,
+          message: `(TemplateSelectorCommand) onExecute: Retrieved ${this._ctxValue.libraries.length} libraries`,
           level: LogLevel.Info
         })
         this._onOpenTemplateSelector()
@@ -92,24 +91,21 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<
    */
   private _onOpenTemplateSelector() {
     const placeholder = this._getPlaceholder()
-    const element = React.createElement<IDocumentTemplateDialogProps>(DocumentTemplateDialog, {
-      title: strings.TemplateLibrarySelectModalTitle,
-      onDismiss: (props) => {
-        this._unmount(placeholder)
-        if (props.reload) document.location.href = document.location.href
-      },
-      libraries: this._libraries,
-      templates: this._templates,
-      templateLibrary: {
-        title: this._templateLibrary,
-        url: `${this._hub.url}/${this._templateLibrary}`
-      }
-    })
-    ReactDOM.render(element, placeholder)
+    const element = (
+      <TemplateSelectorContext.Provider value={this._ctxValue}>
+      <DocumentTemplateDialog
+        title={strings.TemplateLibrarySelectModalTitle}
+        onDismiss={props => {
+          this._unmount(placeholder)
+          if (props.reload) document.location.href = document.location.href
+        }} />
+      </TemplateSelectorContext.Provider>
+    )
+    render(element, placeholder)
   }
 
   private _unmount(container: HTMLElement) {
-    ReactDOM.unmountComponentAtNode(container)
+    unmountComponentAtNode(container)
   }
 
   private _getPlaceholder(key = 'DocumentTemplateDialog') {

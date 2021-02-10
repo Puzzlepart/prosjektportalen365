@@ -1,4 +1,3 @@
-import { TemplateItem, IDocumentLibrary } from '../../models'
 
 export interface IDocumentTemplateDialogDismissProps {
   reload?: boolean
@@ -9,21 +8,6 @@ export interface IDocumentTemplateDialogProps {
    * Title
    */
   title: string
-
-  /**
-   * Templates
-   */
-  templates: TemplateItem[]
-
-  /**
-   * Libraries
-   */
-  libraries: IDocumentLibrary[]
-
-  /**
-   * Template library
-   */
-  templateLibrary: { title: string; url: string }
 
   /**
    * On dismiss callback

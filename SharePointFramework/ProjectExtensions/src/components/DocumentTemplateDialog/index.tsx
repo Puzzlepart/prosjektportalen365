@@ -16,7 +16,6 @@ import { DocumentTemplateDialogScreenEditCopy } from './DocumentTemplateDialogSc
 import { DocumentTemplateDialogScreenSelect } from './DocumentTemplateDialogScreenSelect'
 import { DocumentTemplateDialogScreen, IDocumentTemplateDialogProps } from './types'
 
-// tslint:disable-next-line: naming-convention
 export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
   const selection = new Selection({ onSelectionChanged })
   const [selected, setSelected] = useState<TemplateItem[]>([])
@@ -70,18 +69,13 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
   }
 
   function onRenderContent() {
-    const templates = props.templates.sort((a, b) =>
-      a.isFolder === b.isFolder ? 0 : a.isFolder ? -1 : 1
-    )
     // eslint-disable-next-line default-case
     switch (screen) {
       case DocumentTemplateDialogScreen.Select: {
         return (
           <DocumentTemplateDialogScreenSelect
-            templates={templates}
             selection={selection}
             selectedItems={selected}
-            templateLibrary={props.templateLibrary}
           />
         )
       }
@@ -89,7 +83,6 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
         return (
           <DocumentTemplateDialogScreenEditCopy
             selectedTemplates={selected}
-            libraries={props.libraries}
             onStartCopy={onStartCopy}
             onChangeScreen={(s) => setScreen(s)}
           />
@@ -153,3 +146,4 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
 
 export * from './types'
 export { IDocumentTemplateDialogProps }
+

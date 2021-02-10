@@ -10,30 +10,34 @@ import {
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { useMemo, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
+import { TemplateSelectorContext } from 'templateSelector/context'
 import { isEmpty } from 'underscore'
 import { InfoMessage } from '../../InfoMessage'
 import columns from './columns'
 import { IDocumentTemplateDialogScreenSelectProps } from './types'
 
-export const DocumentTemplateDialogScreenSelect = (
-  props: IDocumentTemplateDialogScreenSelectProps
-) => {
+export const DocumentTemplateDialogScreenSelect = (props: IDocumentTemplateDialogScreenSelectProps) => {
+  const context = useContext(TemplateSelectorContext)
   const [folder, setFolder] = useState<string>('')
 
-  const folders = useMemo(() => folder.split('/').splice(4), [folder])
+  const paths = useMemo(() => folder.split('/').splice(4), [folder])
   const templates = useMemo(
     () =>
-      [...props.templates].filter((item) => {
-        return !isEmpty(folder) ? folder === item.parentFolderUrl : item.level === 1
-      }),
+      [...context.templates]
+        .filter((item) => {
+          return !isEmpty(folder) ? folder === item.parentFolderUrl : item.level === 1
+        })
+        .sort((a, b) =>
+          a.isFolder === b.isFolder ? 0 : a.isFolder ? -1 : 1
+        ),
     [folder]
   )
 
   const breadcrumb: IBreadcrumbItem[] = [
-    { key: 'root', text: props.templateLibrary.title, onClick: () => setFolder('') },
-    ...folders.map((f, idx) => {
-      const isCurrentItem = folders.length - 1 === idx
+    { key: 'root', text: context.templateLibrary.title, onClick: () => setFolder('') },
+    ...paths.map((f, idx) => {
+      const isCurrentItem = (paths.length - 1 === idx)
       return {
         key: idx.toString(),
         text: f,
@@ -41,7 +45,7 @@ export const DocumentTemplateDialogScreenSelect = (
         onClick:
           !isCurrentItem &&
           (() => {
-            const delCount = folders.length - (folders.length - 5 - idx)
+            const delCount = paths.length - (paths.length - 5 - idx)
             const _folder = folder.split('/').splice(0, delCount).join('/')
             setFolder(_folder)
           })
@@ -54,8 +58,8 @@ export const DocumentTemplateDialogScreenSelect = (
       <InfoMessage
         text={format(
           strings.DocumentTemplateDialogScreenSelectInfoText,
-          props.templateLibrary.url,
-          props.templateLibrary.title
+          context.templateLibrary.url,
+          context.templateLibrary.title
         )}
       />
       <Breadcrumb items={breadcrumb} maxDisplayedItems={5} />

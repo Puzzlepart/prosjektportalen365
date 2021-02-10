@@ -4,7 +4,9 @@ import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog'
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import { TemplateSelectorContext } from 'templateSelector/context'
+import { first } from 'underscore'
 import { InfoMessage } from '../../InfoMessage'
 import { DocumentTemplateDialogScreen } from '../types'
 import styles from './DocumentTemplateDialogScreenEditCopy.module.scss'
@@ -12,11 +14,10 @@ import { DocumentTemplateItem } from './DocumentTemplateItem'
 import { IDocumentTemplateDialogScreenEditCopyProps } from './types'
 
 // tslint:disable-next-line: naming-convention
-export const DocumentTemplateDialogScreenEditCopy = (
-  props: IDocumentTemplateDialogScreenEditCopyProps
-) => {
+export const DocumentTemplateDialogScreenEditCopy = (props: IDocumentTemplateDialogScreenEditCopyProps) => {
+  const context = useContext(TemplateSelectorContext)
   const [templates, setTemplates] = useState([...props.selectedTemplates])
-  const [selectedLibrary, setLibrary] = useState<ISPLibraryFolder>(props.libraries[0])
+  const [selectedLibrary, setLibrary] = useState<ISPLibraryFolder>(first(context.libraries))
   const [selectedFolder, setFolder] = useState<ISPLibraryFolder>(null)
 
   /**
@@ -93,11 +94,11 @@ export const DocumentTemplateDialogScreenEditCopy = (
       ))}
       <div>
         <Dropdown
-          disabled={props.libraries.length === 1}
+          disabled={context.libraries.length === 1}
           label={strings.DocumentLibraryDropdownLabel}
           defaultSelectedKey={selectedLibrary.Id}
           onChange={(_, option) => onLibraryChanged(option)}
-          options={props.libraries.map((lib) => ({ key: lib.Id, text: lib.Title, data: lib }))}
+          options={context.libraries.map((lib) => ({ key: lib.Id, text: lib.Title, data: lib }))}
         />
       </div>
       <div>
