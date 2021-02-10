@@ -6,7 +6,6 @@ import { ListContentConfig } from '../../../models'
 import { IListContentSectionProps } from './IListContentSectionProps'
 import styles from './ListContentSection.module.scss'
 
-
 export const ListContentSection = (props: IListContentSectionProps) => {
   /**
    * On item toggle

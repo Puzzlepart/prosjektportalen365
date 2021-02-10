@@ -1,6 +1,6 @@
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { ISPLibraryFolder } from 'data/SPDataAdapter/ISPLibraryFolder'
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
+import { ActionButton } from 'office-ui-fabric-react/lib/Button'
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog'
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown'
 import * as strings from 'ProjectExtensionsStrings'
@@ -9,8 +9,8 @@ import { TemplateSelectorContext } from 'templateSelector/context'
 import { first } from 'underscore'
 import { InfoMessage } from '../../InfoMessage'
 import { DocumentTemplateDialogScreen } from '../types'
-import styles from './EditCopyScreen.module.scss'
 import { DocumentTemplateItem } from './DocumentTemplateItem'
+import styles from './EditCopyScreen.module.scss'
 import { IEditCopyScreenProps } from './types'
 
 export const EditCopyScreen = (props: IEditCopyScreenProps) => {
@@ -121,12 +121,12 @@ export const EditCopyScreen = (props: IEditCopyScreenProps) => {
         />
       </div>
       <DialogFooter>
-        <DefaultButton
+        <ActionButton
           text={strings.OnGoBackText}
           iconProps={{ iconName: 'NavigateBack' }}
           onClick={() => props.onChangeScreen(DocumentTemplateDialogScreen.Select)}
         />
-        <PrimaryButton
+        <ActionButton
           text={strings.OnStartCopyText}
           iconProps={{ iconName: 'Copy' }}
           disabled={!isFileNamesValid()}

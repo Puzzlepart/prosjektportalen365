@@ -7,7 +7,6 @@ import ReactMarkdown from 'react-markdown/with-html'
 import styles from './ErrorDialog.module.scss'
 import { IErrorDialogProps } from './types'
 
-
 export const ErrorDialog = ({
   error,
   version,

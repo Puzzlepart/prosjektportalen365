@@ -5,7 +5,6 @@ import { ISettingsSectionProps } from './ISettingsSectionProps'
 import styles from './SettingsSection.module.scss'
 import { getId } from '@uifabric/utilities'
 
-
 export const SettingsSection = (props: ISettingsSectionProps) => {
   function onChange(event: React.MouseEvent<HTMLElement, MouseEvent>, checked?: boolean) {
     props.onChange((event.currentTarget as HTMLElement).id, checked)

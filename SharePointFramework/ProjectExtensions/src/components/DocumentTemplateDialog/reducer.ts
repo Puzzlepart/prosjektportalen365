@@ -17,7 +17,9 @@ export const initState = (): IDocumentTemplateDialogState => ({
 
 export default createReducer(initState(), {
   [SELECTION_CHANGED.type]: (state, { payload }: ReturnType<typeof SELECTION_CHANGED>) => {
-    state.selected = (payload.selection.getSelection() as TemplateItem[]).filter((item) => !item.isFolder)
+    state.selected = (payload.selection.getSelection() as TemplateItem[]).filter(
+      (item) => !item.isFolder
+    )
   },
 
   [START_COPY.type]: (state) => {
@@ -33,9 +35,10 @@ export default createReducer(initState(), {
     state.uploaded = payload.files
     state.screen = DocumentTemplateDialogScreen.Summary
     state.isBlocking = false
+    state.selected = []
   },
 
   [SET_SCREEN.type]: (state, { payload }: ReturnType<typeof SET_SCREEN>) => {
     state.screen = payload.screen
-  },
+  }
 })

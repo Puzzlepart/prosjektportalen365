@@ -5,7 +5,6 @@ import { ProjectExtension } from '../../../models'
 import styles from './ExtensionsSection.module.scss'
 import { IExtensionsSectionProps } from './IExtensionsSectionProps'
 
-
 export const ExtensionsSection = (props: IExtensionsSectionProps) => {
   /**
    * On item toggle

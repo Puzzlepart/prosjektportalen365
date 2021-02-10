@@ -1,6 +1,6 @@
 import { FileAddResult } from '@pnp/sp'
 import { TemplateItem } from 'models/TemplateItem'
-import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator'
+import { ICopyProgressScreenProps } from './CopyProgressScreen/types'
 
 export interface IDocumentTemplateDialogDismissProps {
   reload?: boolean
@@ -32,7 +32,7 @@ export interface IDocumentTemplateDialogState {
   /**
    * Progress
    */
-  progress?: IProgressIndicatorProps
+  progress?: ICopyProgressScreenProps
 
   /**
    * Is blocking

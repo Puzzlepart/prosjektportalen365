@@ -21,16 +21,14 @@ import { ISelectScreenProps } from './types'
 export const SelectScreen = (props: ISelectScreenProps) => {
   const context = useContext(TemplateSelectorContext)
   const [folder, setFolder] = useState<string>('')
-  const nav = useMemo(() => getNav({folder,setFolder}), [folder])
+  const nav = useMemo(() => getNav({ folder, setFolder }), [folder])
   const templates = useMemo(
     () =>
       [...context.templates]
         .filter((item) => {
           return !isEmpty(folder) ? folder === item.parentFolderUrl : item.level === 1
         })
-        .sort((a, b) =>
-          a.isFolder === b.isFolder ? 0 : a.isFolder ? -1 : 1
-        ),
+        .sort((a, b) => (a.isFolder === b.isFolder ? 0 : a.isFolder ? -1 : 1)),
     [folder]
   )
 
@@ -39,7 +37,7 @@ export const SelectScreen = (props: ISelectScreenProps) => {
       key: 'root',
       text: context.templateLibrary.title,
       onClick: () => setFolder(''),
-      isCurrentItem: isEmpty(nav),
+      isCurrentItem: isEmpty(nav)
     },
     ...nav
   ]

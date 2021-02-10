@@ -21,7 +21,7 @@ Logger.activeLogLevel = LogLevel.Info
 
 export default class TemplateSelectorCommand extends BaseListViewCommandSet<
   ITemplateSelectorCommandProperties
-  > {
+> {
   private _openCmd: Command
   private _ctxValue: ITemplateSelectorContext = {}
   private _placeholderIds = { DocumentTemplateDialog: getId('documenttemplatedialog') }
@@ -67,7 +67,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<
 
   @override
   public onListViewUpdated(): void {
-   this._openCmd = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR')
+    this._openCmd = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR')
     if (this._openCmd) this._openCmd.visible = true
   }
 
@@ -93,12 +93,13 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<
     const placeholder = this._getPlaceholder()
     const element = (
       <TemplateSelectorContext.Provider value={this._ctxValue}>
-      <DocumentTemplateDialog
-        title={strings.TemplateLibrarySelectModalTitle}
-        onDismiss={props => {
-          this._unmount(placeholder)
-          if (props.reload) document.location.href = document.location.href
-        }} />
+        <DocumentTemplateDialog
+          title={strings.TemplateLibrarySelectModalTitle}
+          onDismiss={(props) => {
+            this._unmount(placeholder)
+            if (props.reload) document.location.href = document.location.href
+          }}
+        />
       </TemplateSelectorContext.Provider>
     )
     render(element, placeholder)

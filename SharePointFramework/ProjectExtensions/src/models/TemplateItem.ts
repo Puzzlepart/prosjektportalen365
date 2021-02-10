@@ -1,6 +1,6 @@
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { FileAddResult, Folder, Web } from '@pnp/sp'
-import { FileIconType, getFileTypeIconProps } from '@uifabric/file-type-icons'
+import { FileIconType, getFileTypeIconProps, IFileTypeIconOptions } from '@uifabric/file-type-icons'
 import { IIconProps } from 'office-ui-fabric-react/lib/Icon'
 import { formatDate } from 'pp365-shared/lib/helpers'
 
@@ -156,10 +156,9 @@ export class TemplateItem {
   /**
    * Get icon props
    */
-  public getIconProps(): IIconProps {
-    if (this.isFolder) {
-      return getFileTypeIconProps({ type: FileIconType.folder })
-    }
-    return getFileTypeIconProps({ extension: this.fileExtension })
+  public getIconProps(options: IFileTypeIconOptions = {}): IIconProps {
+    if (this.isFolder) options.type = FileIconType.folder
+    else options.extension = this.fileExtension
+    return getFileTypeIconProps(options)
   }
 }

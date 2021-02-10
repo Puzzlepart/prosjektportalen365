@@ -39,7 +39,8 @@ export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
             props.onInputChanged(props.item.id, { newName }, errorMsg)
           }
           break
-        case titleId: props.onInputChanged(props.item.id, { newTitle: newValue })
+        case titleId:
+          props.onInputChanged(props.item.id, { newTitle: newValue })
           break
       }
     }, resolveDelay)
