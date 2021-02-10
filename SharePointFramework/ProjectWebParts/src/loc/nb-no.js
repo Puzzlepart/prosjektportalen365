@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/camelcase */
 define([], function () {
   return {
+    ShowSubTextFieldLabel: 'Vis fasetekst',
+    SyncPropertiesAfterPhaseChangeFieldLabel: 'Synkroniser prosjektegenskaper etter faseendring',
+    SubTextTruncateLengthFieldLabel: 'Max lengde fasetekst',
     ChangePhaseText: 'Endre til denne fasen',
     ChangingPhaseDescription: 'Endrer fase til {0}',
     PleaseWaitText: 'Vennligst vent',
@@ -13,7 +16,6 @@ define([], function () {
     CloseText: 'Lukk',
     CommentLabel: 'Kommentar',
     ConfirmChangePhase: 'Vil du endre fase til {0}?',
-    ConfirmPhaseChangeFieldLabel: 'Bekreft faseenendring',
     ConfirmPhaseDialogSubText: 'Endring av fasen til {0} vil endre dette for alle, vil du fortsette?',
     ConfirmPhaseDialogTitle: 'Endre fase',
     CurrentPhaseViewNameFieldLabel: 'Visningsnavn for gjeldende fase',
@@ -41,8 +43,8 @@ define([], function () {
     PhaseChecklistViewUrl: 'Lists/Fasesjekkliste/AllItems.aspx',
     PickReportText: 'Velg rapport',
     SaveText: 'Lagre',
-  RiskMatrixGroupName: 'Risikomatrise',
-  ProjectStatusProjectPropertiesGroupName: 'Prosjektegenskaper (Statusseksjoner)',
+    RiskMatrixGroupName: 'Risikomatrise',
+    ProjectStatusProjectPropertiesGroupName: 'Prosjektegenskaper (Statusseksjoner)',
     SettingsGroupName: 'Innstillinger',
     DataGroupName: 'Data',
     LookAndFeelGroupName: 'Utseende og funksjonalitet',

@@ -3,7 +3,7 @@ import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator'
 import * as strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
 import { BaseDialog } from '../@BaseDialog/index'
-import { IProgressDialogProps } from './IProgressDialogProps'
+import { IProgressDialogProps } from './types'
 import styles from './ProgressDialog.module.scss'
 
 export class ProgressDialog extends React.PureComponent<IProgressDialogProps, {}> {

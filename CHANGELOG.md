@@ -3,11 +3,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with Pull Request ID.
 
-## 1.2.5 - TBA
+## 1.2.x - TBA
+
+## Added
+
+- Added project template name to project properties #380
+- Added support for phase sub text in phase selector #381
 
 ## Fixed
 
 - Fixes issues with single folder in "Hent dokumentmal" #376
+- Issues with custom project fields #378
 
 ## 1.2.4 - 30.11.2020
 
@@ -26,7 +32,6 @@ Every change is marked with Pull Request ID.
 - Support adding AD groups to get porfolio insights from SP group #332, #352
 - Change to latest statusreport when creating a new statusreport #343
 - Issue were user couldn't exit the portfolio filter pane #353
-- Issues with custom project fields #378
 
 ## 1.2.3 - 2020-10-07
 

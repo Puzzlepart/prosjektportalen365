@@ -5,7 +5,7 @@ import * as React from 'react'
 import { BaseDialog } from '../@BaseDialog'
 import ReactMarkdown from 'react-markdown/with-html'
 import styles from './ErrorDialog.module.scss'
-import { IErrorDialogProps } from './IErrorDialogProps'
+import { IErrorDialogProps } from './types'
 
 // tslint:disable-next-line: naming-convention
 export const ErrorDialog = ({

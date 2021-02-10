@@ -1,6 +1,6 @@
-import { IPhaseChecklistItem, Phase } from 'models'
+import { IProjectPhaseChecklistItem, ProjectPhaseModel } from 'pp365-shared/lib/models'
 import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
-import { IProjectPhaseMouseOver } from './ProjectPhaseCallout/IProjectPhaseMouseOver'
+import { IProjectPhaseCalloutProps } from './ProjectPhase/ProjectPhaseCallout'
 
 export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   /**
@@ -9,21 +9,36 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   phaseField: string
 
   /**
-   * Should phase change be confirmed
-   */
-  confirmPhaseChange: boolean
-
-  /**
    * View name for current phase
    */
-  currentPhaseViewName: boolean
+  currentPhaseViewName: string
+
+  /**
+   * Show sub text
+   */
+  showSubText: boolean
+
+  /**
+   * Sub text truncate length
+   */
+  subTextTruncateLength: number
+
+  /**
+   * Sync properties after phase change
+   */
+  syncPropertiesAfterPhaseChange: boolean
 }
 
 export interface IProjectPhasesState extends IBaseWebPartComponentState<IProjectPhasesData> {
   /**
-   * Confirm phase
+   * Phase
    */
-  confirmPhase?: Phase
+  phase?: ProjectPhaseModel
+
+  /**
+   * Phase to be confirmed using ChangePhaseDialog
+   */
+  confirmPhase?: ProjectPhaseModel
 
   /**
    * Is changing phase
@@ -31,25 +46,25 @@ export interface IProjectPhasesState extends IBaseWebPartComponentState<IProject
   isChangingPhase?: boolean
 
   /**
-   * Phase mouse over
+   * Callout
    */
-  phaseMouseOver?: IProjectPhaseMouseOver
+  callout?: IProjectPhaseCalloutProps
 }
 
 export type ChecklistData = {
-  [termGuid: string]: { stats: { [status: string]: number }; items: IPhaseChecklistItem[] }
+  [termGuid: string]: { stats: { [status: string]: number }; items: IProjectPhaseChecklistItem[] }
 }
 
 export interface IProjectPhasesData {
   /**
    * Phases
    */
-  phases?: Phase[]
+  phases?: ProjectPhaseModel[]
 
   /**
    * Current phase
    */
-  currentPhase?: Phase
+  currentPhase?: ProjectPhaseModel
 
   /**
    * Check list data

@@ -1,11 +1,11 @@
 {
   "name": "pp365-projectextensions",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "engines": {
     "node": ">=0.10.0"
   },
   "scripts": {
-    "serve": "gulp serve --locale=nb-no --nobrowser",
+    "serve": "gulp serve --locale=nb-no",
     "package": "gulp clean && gulp default --ship && gulp package-solution --ship",
     "package:ci": "gulp clean && gulp default && gulp package-solution",
     "deploy": "gulp uploadAppPkg && gulp deploySppkg",
@@ -38,7 +38,7 @@
     "@uifabric/utilities": "6.45.1",
     "msgraph-helper": "0.8.3",
     "office-ui-fabric-react": "6.214.0",
-    "pp365-shared": "1.2.6",
+    "pp365-shared": "1.2.7",
     "react": "16.8.5",
     "react-dom": "16.8.5",
     "react-markdown": "4.2.2",

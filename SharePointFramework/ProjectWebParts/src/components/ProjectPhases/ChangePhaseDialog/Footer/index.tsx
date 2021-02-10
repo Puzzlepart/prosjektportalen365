@@ -1,25 +1,25 @@
+import { ProjectPhasesContext } from 'components/ProjectPhases/context'
+import { DISMISS_CHANGE_PHASE_DIALOG } from 'components/ProjectPhases/reducer'
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog'
 import * as strings from 'ProjectWebPartsStrings'
-import * as React from 'react'
+import React, { useContext } from 'react'
+import { ChangePhaseDialogContext } from '../context'
+import { SET_VIEW } from '../reducer'
 import { View } from '../Views'
-import IFooterProps from './types'
 
-/**
- * @component Footer
- */
-
-export const Footer = (props: IFooterProps) => {
+export const Footer = () => {
+  const context = useContext(ProjectPhasesContext)
+  const { state, dispatch } = useContext(ChangePhaseDialogContext)
   const actions = []
 
   // eslint-disable-next-line default-case
-  switch (props.currentView) {
+  switch (state.view) {
     case View.Initial:
       {
         actions.push({
           text: strings.Skip,
-          disabled: props.isLoading,
-          onClick: () => props.onChangeView(View.Confirm)
+          onClick: () => dispatch(SET_VIEW({ view: View.Confirm }))
         })
       }
       break
@@ -27,11 +27,10 @@ export const Footer = (props: IFooterProps) => {
       {
         actions.push({
           text: strings.Yes,
-          disabled: props.isLoading,
           onClick: async () => {
-            props.onChangeView(View.ChangingPhase)
-            await props.onChangePhase(props.newPhase)
-            props.onDismiss(null, true)
+            dispatch(SET_VIEW({ view: View.ChangingPhase }))
+            await context.onChangePhase()
+            context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())
           }
         })
       }
@@ -40,8 +39,7 @@ export const Footer = (props: IFooterProps) => {
       {
         actions.push({
           text: strings.MoveOn,
-          disabled: props.isLoading,
-          onClick: () => props.onChangeView(View.Confirm)
+          onClick: () => dispatch(SET_VIEW({ view: View.Confirm }))
         })
       }
       break
@@ -54,8 +52,7 @@ export const Footer = (props: IFooterProps) => {
       ))}
       <DefaultButton
         text={strings.CloseText}
-        disabled={props.isLoading}
-        onClick={props.onDismiss}
+        onClick={() => context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())}
       />
     </DialogFooter>
   )

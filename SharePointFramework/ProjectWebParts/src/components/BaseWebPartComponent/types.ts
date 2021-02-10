@@ -43,7 +43,7 @@ export interface IBaseWebPartComponentState<T> {
   /**
    * The component is loading
    */
-  isLoading: boolean
+  loading: boolean
 
   /**
    * Data

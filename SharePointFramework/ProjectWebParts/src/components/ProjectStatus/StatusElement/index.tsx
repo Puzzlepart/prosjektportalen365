@@ -3,10 +3,6 @@ import * as React from 'react'
 import { IStatusElementProps } from './IStatusElementProps'
 import styles from './StatusElement.module.scss'
 
-/**
- * @component StatusElement
- */
-
 export const StatusElement = ({
   iconName,
   label,

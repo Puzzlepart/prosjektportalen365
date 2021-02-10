@@ -1,7 +1,7 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
 import * as strings from 'ProjectWebPartsStrings'
-import * as React from 'react'
+import React from 'react'
 import { useState } from 'react'
 import styles from './CheckListItem.module.scss'
 import IChecklistItemProps from './types'
@@ -17,10 +17,6 @@ const STATUS_ICONS = {
   [strings.StatusClosed]: 'Completed',
   [strings.StatusNotRelevant]: 'Blocked'
 }
-
-/**
- * @component CheckListItem
- */
 
 export const CheckListItem = ({ item }: IChecklistItemProps) => {
   const [commentHidden, setCommentHidden] = useState(true)
