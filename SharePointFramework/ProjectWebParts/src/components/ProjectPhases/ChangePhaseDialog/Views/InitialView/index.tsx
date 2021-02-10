@@ -2,13 +2,15 @@ import { stringIsNullOrEmpty } from '@pnp/common'
 import { IButtonProps } from 'office-ui-fabric-react/lib/Button'
 import { TextField } from 'office-ui-fabric-react/lib/TextField'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { IInitialViewProps } from './types'
 import styles from './InitialView.module.scss'
 import { StatusOptions } from './StatusOptions'
+import { ChangePhaseDialogContext } from '../../context'
 
 export const InitialView = (props: IInitialViewProps) => {
   if (!props.checklistItem) return null
+  const { nextChecklistItem } = useContext(ChangePhaseDialogContext)
 
   const [comment, setComment] = useState(props.checklistItem.GtComment || '')
 
@@ -18,7 +20,7 @@ export const InitialView = (props: IInitialViewProps) => {
    * @param {string} statusValue Status value
    */
   const saveCheckPoint = (statusValue: string) => {
-    props.nextCheckpoint({ statusValue, comment })
+    nextChecklistItem({ statusValue, comment })
     setComment('')
   }
 
