@@ -13,7 +13,7 @@ export interface IEditCopyScreenProps {
    * @param {TemplateItem[]} templates Templates
    */
   onStartCopy: (templates: TemplateItem[]) => void
-  
+
   /**
    * Target folder
    */

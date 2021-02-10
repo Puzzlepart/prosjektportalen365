@@ -24,18 +24,17 @@ export const COPY_PROGRESS = createAction<any>('COPY_PROGRESS')
  */
 export const COPY_DONE = createAction<{ files: FileAddResult[] }>('COPY_DONE')
 
-
 /**
  * Set screen
- * 
+ *
  * One of the following
- * 
+ *
  * * Select
  * * TargetFolder
  * * EditCopy
  * * CopyProgress
  * * Summary
- * 
+ *
  * When changing to Select screen, the selected state is reset.
  */
 export const SET_SCREEN = createAction<{ screen: DocumentTemplateDialogScreen }>('SET_SCREEN')

@@ -10,7 +10,12 @@ import { DocumentTemplateItem } from './DocumentTemplateItem'
 import styles from './EditCopyScreen.module.scss'
 import { IEditCopyScreenProps } from './types'
 
-export const EditCopyScreen = ({ selectedTemplates, targetFolder,onStartCopy, dispatch }: IEditCopyScreenProps) => {
+export const EditCopyScreen = ({
+  selectedTemplates,
+  targetFolder,
+  onStartCopy,
+  dispatch
+}: IEditCopyScreenProps) => {
   const [templates, setTemplates] = useState([...selectedTemplates])
 
   /**
@@ -54,7 +59,9 @@ export const EditCopyScreen = ({ selectedTemplates, targetFolder,onStartCopy, di
         <ActionButton
           text={strings.OnGoBackText}
           iconProps={{ iconName: 'NavigateBack' }}
-          onClick={() => dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.TargetFolder }))}
+          onClick={() =>
+            dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.TargetFolder }))
+          }
         />
         <ActionButton
           text={strings.OnStartCopyText}

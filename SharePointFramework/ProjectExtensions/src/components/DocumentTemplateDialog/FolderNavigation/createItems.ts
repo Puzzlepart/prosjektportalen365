@@ -5,7 +5,10 @@ import { IFolderNavigationProps } from './types'
  *
  * @param {Partial<IFolderNavigationProps>} props Folder navigation props
  */
-export const createItems = ({ currentFolder, setFolder }: Partial<IFolderNavigationProps>): IBreadcrumbItem[] => {
+export const createItems = ({
+  currentFolder,
+  setFolder
+}: Partial<IFolderNavigationProps>): IBreadcrumbItem[] => {
   const paths = currentFolder.split('/').splice(4)
   return paths.map((f, idx) => {
     const item: IBreadcrumbItem = {

@@ -1,4 +1,8 @@
-import { FileIconType, getFileTypeIconProps, initializeFileTypeIcons } from '@uifabric/file-type-icons'
+import {
+  FileIconType,
+  getFileTypeIconProps,
+  initializeFileTypeIcons
+} from '@uifabric/file-type-icons'
 import { getId } from '@uifabric/utilities'
 import { SPFolder } from 'models'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'

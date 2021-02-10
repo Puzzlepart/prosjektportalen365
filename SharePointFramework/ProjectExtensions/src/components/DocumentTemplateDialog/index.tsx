@@ -53,7 +53,7 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
       )
       try {
         filesAdded.push(await template.copyTo(folder))
-      } catch (error) { }
+      } catch (error) {}
     }
     selection.setItems([], true)
     dispatch(COPY_DONE({ files: filesAdded }))
@@ -70,69 +70,67 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
    * On render content
    */
   function onRenderContent() {
-    return {
-      [DocumentTemplateDialogScreen.Select]: (
-        <SelectScreen
-          selection={selection}
-          selectedItems={state.selected} />
-      ),
-      [DocumentTemplateDialogScreen.TargetFolder]: (
-        <TargetFolderScreen
-          targetFolder={state.targetFolder}
-          dispatch={dispatch} />
-      ),
-      [DocumentTemplateDialogScreen.EditCopy]: (
-        <EditCopyScreen
-          selectedTemplates={state.selected}
-          onStartCopy={onStartCopy}
-          targetFolder={state.targetFolder}
-          dispatch={dispatch}
-        />
-      ),
-      [DocumentTemplateDialogScreen.CopyProgress]: (
-        <CopyProgressScreen {...state.progress} />
-      ),
-      [DocumentTemplateDialogScreen.Summary]: (
-        <InfoMessage
-          type={MessageBarType.success}
-          text={format(strings.SummaryText, state.uploaded.length)}
-        />
-      )
-    }[state.screen] || null
+    return (
+      {
+        [DocumentTemplateDialogScreen.Select]: (
+          <SelectScreen selection={selection} selectedItems={state.selected} />
+        ),
+        [DocumentTemplateDialogScreen.TargetFolder]: (
+          <TargetFolderScreen targetFolder={state.targetFolder} dispatch={dispatch} />
+        ),
+        [DocumentTemplateDialogScreen.EditCopy]: (
+          <EditCopyScreen
+            selectedTemplates={state.selected}
+            onStartCopy={onStartCopy}
+            targetFolder={state.targetFolder}
+            dispatch={dispatch}
+          />
+        ),
+        [DocumentTemplateDialogScreen.CopyProgress]: <CopyProgressScreen {...state.progress} />,
+        [DocumentTemplateDialogScreen.Summary]: (
+          <InfoMessage
+            type={MessageBarType.success}
+            text={format(strings.SummaryText, state.uploaded.length)}
+          />
+        )
+      }[state.screen] || null
+    )
   }
 
   /**
    * On render footer
    */
   function onRenderFooter() {
-    return {
-      [DocumentTemplateDialogScreen.Select]: (
-        <>
-          <ActionButton
-            text={strings.OnSubmitSelectionText}
-            iconProps={{ iconName: 'CheckMark' }}
-            onClick={() =>
-              dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.TargetFolder }))
-            }
-            disabled={isEmpty(state.selected)}
-          />
-        </>
-      ),
-      [DocumentTemplateDialogScreen.Summary]: (
-        <>
-          <ActionButton
-            text={strings.GetMoreText}
-            iconProps={{ iconName: 'CirclePlus' }}
-            onClick={() => dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select }))}
-          />
-          <ActionButton
-            text={strings.CloseModalText}
-            iconProps={{ iconName: 'ClosePane' }}
-            onClick={onClose}
-          />
-        </>
-      ),
-    }[state.screen] || null
+    return (
+      {
+        [DocumentTemplateDialogScreen.Select]: (
+          <>
+            <ActionButton
+              text={strings.OnSubmitSelectionText}
+              iconProps={{ iconName: 'CheckMark' }}
+              onClick={() =>
+                dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.TargetFolder }))
+              }
+              disabled={isEmpty(state.selected)}
+            />
+          </>
+        ),
+        [DocumentTemplateDialogScreen.Summary]: (
+          <>
+            <ActionButton
+              text={strings.GetMoreText}
+              iconProps={{ iconName: 'CirclePlus' }}
+              onClick={() => dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select }))}
+            />
+            <ActionButton
+              text={strings.CloseModalText}
+              iconProps={{ iconName: 'ClosePane' }}
+              onClick={onClose}
+            />
+          </>
+        )
+      }[state.screen] || null
+    )
   }
 
   return (
@@ -152,4 +150,3 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
 
 export * from './types'
 export { IDocumentTemplateDialogProps }
-

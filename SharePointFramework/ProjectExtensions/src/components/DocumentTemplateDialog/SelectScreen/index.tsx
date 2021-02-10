@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { TemplateItem } from 'models'
-import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb'
 import {
   ConstrainMode,
   DetailsList,
@@ -14,15 +13,13 @@ import React, { useContext, useMemo, useState } from 'react'
 import { TemplateSelectorContext } from 'templateSelector/context'
 import { isEmpty } from 'underscore'
 import { InfoMessage } from '../../InfoMessage'
+import { FolderNavigation } from '../FolderNavigation'
 import columns from './columns'
 import { ISelectScreenProps } from './types'
-
-const getNav = (obj) => []
 
 export const SelectScreen = (props: ISelectScreenProps) => {
   const context = useContext(TemplateSelectorContext)
   const [folder, setFolder] = useState<string>('')
-  const nav = useMemo(() => getNav({ folder, setFolder }), [folder])
   const templates = useMemo(
     () =>
       [...context.templates]
@@ -32,16 +29,6 @@ export const SelectScreen = (props: ISelectScreenProps) => {
         .sort((a, b) => (a.isFolder === b.isFolder ? 0 : a.isFolder ? -1 : 1)),
     [folder]
   )
-  const breadcrumb: IBreadcrumbItem[] = [
-    {
-      key: 'root',
-      text: context.templateLibrary.title,
-      onClick: () => setFolder(''),
-      isCurrentItem: isEmpty(nav)
-    },
-    ...nav
-  ]
-
   return (
     <>
       <InfoMessage
@@ -51,7 +38,10 @@ export const SelectScreen = (props: ISelectScreenProps) => {
           context.templateLibrary.title
         )}
       />
-      <Breadcrumb items={breadcrumb} maxDisplayedItems={5} />
+      <FolderNavigation
+        root={context.templateLibrary.title}
+        currentFolder={folder}
+        setFolder={setFolder} />
       <MarqueeSelection selection={props.selection}>
         <DetailsList
           setKey={folder}

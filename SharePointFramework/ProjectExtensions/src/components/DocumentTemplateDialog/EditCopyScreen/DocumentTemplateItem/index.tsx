@@ -32,10 +32,7 @@ export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
         case nameId:
           {
             const newName = `${newValue}.${props.item.fileExtension}`
-            const errorMsg = await SPDataAdapter.isFilenameValid(
-              props.folder,
-              newName
-            )
+            const errorMsg = await SPDataAdapter.isFilenameValid(props.folder, newName)
             props.onInputChanged(props.item.id, { newName }, errorMsg)
           }
           break
@@ -47,14 +44,12 @@ export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
   }
 
   useEffect(() => {
-    SPDataAdapter.isFilenameValid(props.folder, props.item.name).then(
-      (errorMessage) => {
-        if (errorMessage) {
-          props.onInputChanged(props.item.id, {}, errorMessage)
-          setIsExpanded(true)
-        }
+    SPDataAdapter.isFilenameValid(props.folder, props.item.name).then((errorMessage) => {
+      if (errorMessage) {
+        props.onInputChanged(props.item.id, {}, errorMessage)
+        setIsExpanded(true)
       }
-    )
+    })
   }, [props.folder])
 
   return (

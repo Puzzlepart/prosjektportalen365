@@ -2,7 +2,12 @@
 import { SPDataAdapter } from 'data'
 import { SPFolder } from 'models'
 import { ActionButton } from 'office-ui-fabric-react/lib/Button'
-import { ConstrainMode, DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
+import {
+  ConstrainMode,
+  DetailsList,
+  DetailsListLayoutMode,
+  SelectionMode
+} from 'office-ui-fabric-react/lib/DetailsList'
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { useContext, useEffect, useState } from 'react'
@@ -32,8 +37,7 @@ export const TargetFolderScreen = ({ targetFolder, dispatch }: ITargetFolderScre
       <FolderNavigation
         root={library.name}
         currentFolder={folder}
-        setFolder={setFolder}
-      />
+        setFolder={setFolder} />
       <DetailsList
         items={folders}
         columns={columns()}
@@ -42,7 +46,6 @@ export const TargetFolderScreen = ({ targetFolder, dispatch }: ITargetFolderScre
         constrainMode={ConstrainMode.horizontalConstrained}
         onItemInvoked={(folder: SPFolder) => setFolder(folder.url)}
       />
-
       <DialogFooter>
         <ActionButton
           text={strings.OnGoBackText}

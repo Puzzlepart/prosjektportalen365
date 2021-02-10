@@ -66,17 +66,15 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
     )
   }
 
-
   /**
    * Get folders in the specified folder/library
-   * 
+   *
    * @param {string} folderRelativeUrl Folder URL
    */
   public async getFolders(folderRelativeUrl: string): Promise<any[]> {
     const folders = await this.sp.web
       .getFolderByServerRelativePath(folderRelativeUrl)
-      .folders
-      .filter('ItemCount gt 0')
+      .folders.filter('ItemCount gt 0')
       .usingCaching()
       .get()
     return folders.map((f) => new SPFolder(f))
@@ -94,7 +92,7 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
           'BaseTemplate eq 101',
           'IsCatalog eq false',
           'IsApplicationList eq false',
-          'ListItemEntityTypeFullName ne \'SP.Data.FormServerTemplatesItem\''
+          "ListItemEntityTypeFullName ne 'SP.Data.FormServerTemplatesItem'"
         ].join(' and ')
       )
       .usingCaching()
