@@ -21,5 +21,4 @@ export interface IChangePhaseDialogState {
 export interface INextChecklistItemParams {
   statusValue: string
   comment: string
-  state?: IChangePhaseDialogState
 }
