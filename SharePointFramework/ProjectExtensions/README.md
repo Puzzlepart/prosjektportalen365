@@ -3,7 +3,27 @@
 This solution contains SPFx extensions for the project level.
 
 ### ProjectSetup
+
 Extension for configuring a new project.
+
+Added to all projects, and removed when the configuration/setup is done.
+
+The user selectes a template, optional extensions and settings.
+
+
+#### Project template
+
+![image-20210210212851547](assets/image-20210210212851547.png)
+
+
+#### List content
+
+![image-20210210212959283](assets/image-20210210212959283.png)
+
+
+#### Settings
+
+![image-20210210213017732](assets/image-20210210213017732.png)
 
 ### TemplateSelector
 
