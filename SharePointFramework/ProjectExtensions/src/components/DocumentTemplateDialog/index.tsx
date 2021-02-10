@@ -7,6 +7,7 @@ import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { useState } from 'react'
+import { isEmpty } from 'underscore'
 import { SPDataAdapter } from '../../data'
 import { TemplateItem } from '../../models/index'
 import { BaseDialog } from '../@BaseDialog/index'
@@ -107,7 +108,7 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
             <PrimaryButton
               text={strings.OnSubmitSelectionText}
               onClick={() => setScreen(DocumentTemplateDialogScreen.EditCopy)}
-              disabled={selected.length === 0}
+              disabled={isEmpty(selected)}
             />
           </>
         )
