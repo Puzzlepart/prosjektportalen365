@@ -75,7 +75,7 @@ export const TargetFolderScreen = ({ targetFolder, dispatch }: ITargetFolderScre
           disabled={folder === null}
           onClick={() => {
             dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.EditCopy }))
-            dispatch(SET_TARGET({ folder }))
+            dispatch(SET_TARGET({ folder: folder || root.url }))
           }}
         />
       </DialogFooter>
