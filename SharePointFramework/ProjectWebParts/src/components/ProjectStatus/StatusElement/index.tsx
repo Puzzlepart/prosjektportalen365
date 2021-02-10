@@ -11,9 +11,6 @@ export const StatusElement = ({
   iconSize = 30,
   iconColor
 }: IStatusElementProps) => {
-  
-  // Replace \n with corresponding HTML tag to enable newlines in the comment.
-  const htmlComment = {__html: comment.replace(/\n/g,"<br />")};
   return (
     <div className={styles.statusElement}>
       <div className={styles.container}>
@@ -23,7 +20,7 @@ export const StatusElement = ({
         <div className={styles.statusContent}>
           <div className={styles.statusElementLabel}>{label}</div>
           <div className={styles.statusElementValue}>{value}</div>
-          <div className={styles.statusElementComment} dangerouslySetInnerHTML={htmlComment}></div>
+          <div className={styles.statusElementComment} dangerouslySetInnerHTML={{ __html: comment.replace(/\n/g, '<br />') }}></div>
         </div>
       </div>
     </div>
