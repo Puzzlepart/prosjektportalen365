@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    CopyHereText: 'Kopier hit',
     ApplyTemplateText: 'Legger på mal {0}',
     ApplyingExtensionsText: 'Legger på prosjekttilegg',
     ApplyExtensionText: 'Legger på prosjekttilegg {0}',
@@ -75,7 +76,7 @@ define([], function () {
     SetupAbortedText: 'Installasjon avbrutt av bruker',
     UnknownErrorText: 'Ukjent feil',
     TemplateListContentConfigText: 'Den valgte prosjektmalen inneholder konfigurasjon for standardinnhold.',
-    FolderDropdownLabel:'Velg mappe',
+    FolderDropdownLabel: 'Velg mappe',
     DocumentLibraryDropdownLabel: 'Velg dokumentbibliotek',
     DocumentTemplateDialogScreenEditCopyRootLevelText: 'Øverste nivå'
   }

@@ -1,4 +1,5 @@
 declare interface IProjectExtensionsStrings {
+  CopyHereText: string
   DocumentTemplateDialogScreenEditCopyRootLevelText: string
   ApplyExtensionText: string;
   ProcessListItemText: string;
