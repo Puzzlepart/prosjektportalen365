@@ -523,13 +523,11 @@
                                 {
                                     "Id": "4449d3dc-fa58-4982-b87c-5a893114e7b7",
                                     "Properties": {
-                                        "description": "",
-                                        "phaseSubTextProperty": "",
                                         "phaseField": "Fase",
-                                        "confirmPhaseChange": true,
-                                        "currentPhaseViewName": "Gjeldende fase",
-                                        "gutter": 15,
-                                        "fontSize": 13
+                                        "syncPropertiesAfterPhaseChange": true,
+                                        "showSubText":true,
+                                        "subTextTruncateLength": 50,
+                                        "currentPhaseViewName": "Gjeldende fase"
                                     }
                                 },
                                 {

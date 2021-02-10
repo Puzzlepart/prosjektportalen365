@@ -44,7 +44,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    */
   constructor(props: IProjectStatusProps) {
     super(props)
-    this.state = { isLoading: true, isPublishing: false }
+    this.state = { loading: true, isPublishing: false }
     this._portalDataService = new PortalDataService().configure({
       urlOrWeb: props.hubSite.web,
       siteId: props.siteId
@@ -71,10 +71,10 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         data,
         selectedReport,
         sourceUrl: decodeURIComponent(sourceUrlParam || ''),
-        isLoading: false
+        loading: false
       })
     } catch (error) {
-      this.setState({ error, isLoading: false })
+      this.setState({ error, loading: false })
     }
   }
 
@@ -88,7 +88,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    * Renders the <ProjectStatus /> component
    */
   public render(): React.ReactElement<IProjectStatusProps> {
-    if (this.state.isLoading) {
+    if (this.state.loading) {
       return (
         <div className={styles.projectStatus}>
           <div className={styles.container}>

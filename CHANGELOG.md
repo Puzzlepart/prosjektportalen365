@@ -8,6 +8,7 @@ Every change is marked with Pull Request ID.
 ## Added
 
 - Added project template name to project properties #380
+- Added support for phase sub text in phase selector #381
 
 ## Fixed
 

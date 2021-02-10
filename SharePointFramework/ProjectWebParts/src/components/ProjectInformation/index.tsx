@@ -43,7 +43,7 @@ export class ProjectInformation extends BaseWebPartComponent<
    * @param {IProjectInformationProps} props Props
    */
   constructor(props: IProjectInformationProps) {
-    super('ProjectInformation', props, { isLoading: true })
+    super('ProjectInformation', props, { loading: true })
     this._portalDataService = new PortalDataService().configure({
       urlOrWeb: props.hubSite.web,
       siteId: props.siteId
@@ -54,10 +54,10 @@ export class ProjectInformation extends BaseWebPartComponent<
     try {
       const urlHash = parseUrlHash<IProjectInformationUrlHash>(true)
       const data = await this._fetchData()
-      this.setState({ ...data, isLoading: false })
+      this.setState({ ...data, loading: false })
       if (urlHash.syncproperties === '1') this._onSyncProperties(undefined, urlHash.force === '1')
     } catch (error) {
-      this.setState({ error, isLoading: false })
+      this.setState({ error, loading: false })
     }
   }
 
@@ -85,7 +85,7 @@ export class ProjectInformation extends BaseWebPartComponent<
    * Contents
    */
   private get _contents() {
-    if (this.state.isLoading) {
+    if (this.state.loading) {
       return !stringIsNullOrEmpty(this.props.title) ? (
         <Spinner label={format(strings.LoadingText, this.props.title.toLowerCase())} />
       ) : null

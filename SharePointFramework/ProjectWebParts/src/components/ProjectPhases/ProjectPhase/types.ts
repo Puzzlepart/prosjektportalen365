@@ -1,10 +1,10 @@
-import { Phase } from 'models'
+import { ProjectPhaseModel } from 'pp365-shared/lib/models'
 
 export interface IProjectPhaseProps {
   /**
    * Phase
    */
-  phase: Phase
+  phase: ProjectPhaseModel
 
   /**
    * Is current phase
@@ -18,11 +18,16 @@ export interface IProjectPhaseProps {
 
   /**
    * On change phase handler
+   *
+   * @param {HTMLSpanElement} target Target
    */
-  onChangePhaseHandler?: (phase: Phase) => void
+  onChangePhaseHandler?: (target: HTMLSpanElement) => void
 
   /**
    * On open callout
+   *
+   * @param {HTMLSpanElement} target Target
+   * @param {Phase} phase Phase
    */
-  onOpenCallout: (target: any) => void
+  onOpenCallout: (target: HTMLSpanElement, phase: ProjectPhaseModel) => void
 }
