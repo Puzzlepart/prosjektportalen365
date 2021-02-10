@@ -1,4 +1,4 @@
-import { IProjectSetupData } from 'extensions/projectSetup'
+import { IProjectSetupData } from 'projectSetup'
 import * as strings from 'ProjectExtensionsStrings'
 import { PortalDataService } from 'pp365-shared/lib/services'
 import { SpEntityPortalService } from 'sp-entityportal-service'

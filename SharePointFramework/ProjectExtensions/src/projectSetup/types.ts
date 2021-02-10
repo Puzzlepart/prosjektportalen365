@@ -1,6 +1,6 @@
 import { ITemplateSelectDialogState } from 'components/TemplateSelectDialog'
 import { IHubSite } from 'sp-hubsite-service'
-import { ListContentConfig, ProjectExtension, ProjectTemplate } from '../../models/index'
+import { ListContentConfig, ProjectExtension, ProjectTemplate } from '../models/index'
 
 export interface IProjectSetupProperties {
   /**
@@ -57,8 +57,23 @@ export interface IProjectSetupData extends ITemplateSelectDialogState {
 }
 
 export enum ProjectSetupValidation {
+  /**
+   * The site has invalid web language
+   */
   InvalidWebLanguage,
+
+  /**
+   * The site is not connected to a hub
+   */
   NoHubConnection,
+
+  /**
+   * The site has invalid UI culture settings
+   */
   InvalidCulture,
+
+  /**
+   * The site is ready for setup/configuration
+   */
   Ready
 }

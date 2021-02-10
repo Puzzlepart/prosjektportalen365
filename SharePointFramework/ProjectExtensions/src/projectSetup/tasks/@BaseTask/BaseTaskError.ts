@@ -1,4 +1,4 @@
-import { ProjectSetupError } from '../../extensions/projectSetup/ProjectSetupError'
+import { ProjectSetupError } from '../../ProjectSetupError'
 
 export class BaseTaskError extends ProjectSetupError {
   /**

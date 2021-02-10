@@ -1,6 +1,6 @@
 import { PageContext } from '@microsoft/sp-page-context'
 import { getGUID } from '@pnp/common'
-import { IProjectSetupData } from 'extensions/projectSetup'
+import { IProjectSetupData } from 'projectSetup'
 import { default as MSGraphHelper } from 'msgraph-helper'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'

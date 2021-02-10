@@ -50,14 +50,14 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
   }
 
   /**
-   * Get document templates
+   * Get document templates from the specified library on the hub site
    *
-   * @param {string} templateLibrary Template library
+   * @param {string} libraryName Library name
    * @param {string} viewXml View XML (CAML query)
    */
-  public async getDocumentTemplates(templateLibrary: string, viewXml: string) {
+  public async getDocumentTemplates(libraryName: string, viewXml: string) {
     return await this.portal.getItems(
-      templateLibrary,
+      libraryName,
       TemplateItem,
       {
         ViewXml: viewXml
@@ -67,7 +67,7 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
   }
 
   /**
-   * Get libraries in web
+   * Get libraries in the current web
    */
   public async getLibraries(): Promise<ISPLibraryFolder[]> {
     const libraries = await this.sp.web.lists

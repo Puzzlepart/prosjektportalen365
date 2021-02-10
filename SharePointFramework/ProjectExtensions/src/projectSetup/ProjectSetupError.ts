@@ -14,7 +14,7 @@ export class ProjectSetupError extends Error {
     taskName: string,
     message: string,
     stack: any,
-    public messageType = MessageBarType.error
+    public messageType: MessageBarType = MessageBarType.error
   ) {
     super(message)
     this.name = taskName

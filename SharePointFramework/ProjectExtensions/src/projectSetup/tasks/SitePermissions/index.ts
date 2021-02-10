@@ -1,4 +1,4 @@
-import { IProjectSetupData } from 'extensions/projectSetup'
+import { IProjectSetupData } from 'projectSetup'
 import * as strings from 'ProjectExtensionsStrings'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 

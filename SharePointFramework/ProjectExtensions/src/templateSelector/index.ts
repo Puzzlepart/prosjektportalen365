@@ -11,9 +11,9 @@ import * as strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { default as HubSiteService, IHubSite } from 'sp-hubsite-service'
-import { DocumentTemplateDialog, IDocumentTemplateDialogProps } from '../../components'
-import { SPDataAdapter } from '../../data'
-import { IDocumentLibrary, TemplateItem } from '../../models'
+import { DocumentTemplateDialog, IDocumentTemplateDialogProps } from '../components'
+import { SPDataAdapter } from '../data'
+import { IDocumentLibrary, TemplateItem } from '../models'
 import { ITemplateSelectorCommandProperties } from './types'
 
 Logger.subscribe(new ConsoleListener())

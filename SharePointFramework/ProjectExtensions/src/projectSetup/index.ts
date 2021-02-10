@@ -20,9 +20,9 @@ import {
   ITemplateSelectDialogState,
   ProgressDialog,
   TemplateSelectDialog
-} from '../../components'
-import { ListContentConfig, ProjectExtension, ProjectTemplate } from '../../models'
-import * as Tasks from '../../tasks'
+} from '../components'
+import { ListContentConfig, ProjectExtension, ProjectTemplate } from '../models'
+import * as Tasks from './tasks'
 import { deleteCustomizer } from './deleteCustomizer'
 import { ProjectSetupError } from './ProjectSetupError'
 import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
