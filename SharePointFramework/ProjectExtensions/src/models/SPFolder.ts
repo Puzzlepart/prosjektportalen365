@@ -29,6 +29,11 @@ export class SPFolder {
       .filter((f: SPFolder) => !f.isSystemFolder)
   }
 
+  /**
+   * Is system folder
+   * 
+   * Returns true if the folder name is Forms
+   */
   public get isSystemFolder(): boolean {
     return this.name === 'Forms'
   }

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+import { InfoMessage } from 'components/InfoMessage'
 import { SPDataAdapter } from 'data'
 import { SPFolder } from 'models'
 import { ActionButton } from 'office-ui-fabric-react/lib/Button'
@@ -36,6 +37,7 @@ export const TargetFolderScreen = ({ targetFolder, dispatch }: ITargetFolderScre
 
   return (
     <div className={styles.root}>
+      <InfoMessage text={strings.DocumentTemplateDialogScreenTargetFolderInfoText} />
       <FolderNavigation
         items={
           context.libraries.length > 2 && [

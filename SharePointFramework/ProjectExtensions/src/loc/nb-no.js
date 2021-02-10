@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    DocumentTemplateDialogScreenTargetFolderInfoText: 'Velg mål for de valgte malene. Trykk **Bibliotek** for å velge et annet bibliotek.',
     Library: 'Bibliotek',
     CopyHereText: 'Kopier hit',
     ApplyTemplateText: 'Legger på mal {0}',

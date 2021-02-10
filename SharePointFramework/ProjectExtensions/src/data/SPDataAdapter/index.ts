@@ -77,7 +77,9 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
       .folders
       .usingCaching()
       .get()
-    return folders.map((f) => new SPFolder(f))
+    return folders
+      .map((f) => new SPFolder(f))
+      .filter((f) => !f.isSystemFolder)
   }
 
   /**

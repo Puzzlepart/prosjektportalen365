@@ -1,4 +1,5 @@
 declare interface IProjectExtensionsStrings {
+  DocumentTemplateDialogScreenTargetFolderInfoText: string
   Library: string
   CopyHereText: string
   DocumentTemplateDialogScreenEditCopyRootLevelText: string
