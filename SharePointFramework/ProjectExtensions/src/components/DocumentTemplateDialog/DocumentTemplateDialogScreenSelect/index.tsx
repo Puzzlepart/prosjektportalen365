@@ -15,13 +15,13 @@ import { TemplateSelectorContext } from 'templateSelector/context'
 import { isEmpty } from 'underscore'
 import { InfoMessage } from '../../InfoMessage'
 import columns from './columns'
+import { getNav } from './nav'
 import { IDocumentTemplateDialogScreenSelectProps } from './types'
 
 export const DocumentTemplateDialogScreenSelect = (props: IDocumentTemplateDialogScreenSelectProps) => {
   const context = useContext(TemplateSelectorContext)
   const [folder, setFolder] = useState<string>('')
-
-  const paths = useMemo(() => folder.split('/').splice(4), [folder])
+  const nav = useMemo(() => getNav({folder,setFolder}), [folder])
   const templates = useMemo(
     () =>
       [...context.templates]
@@ -35,22 +35,13 @@ export const DocumentTemplateDialogScreenSelect = (props: IDocumentTemplateDialo
   )
 
   const breadcrumb: IBreadcrumbItem[] = [
-    { key: 'root', text: context.templateLibrary.title, onClick: () => setFolder('') },
-    ...paths.map((f, idx) => {
-      const isCurrentItem = (paths.length - 1 === idx)
-      return {
-        key: idx.toString(),
-        text: f,
-        isCurrentItem,
-        onClick:
-          !isCurrentItem &&
-          (() => {
-            const delCount = paths.length - (paths.length - 5 - idx)
-            const _folder = folder.split('/').splice(0, delCount).join('/')
-            setFolder(_folder)
-          })
-      }
-    })
+    {
+      key: 'root',
+      text: context.templateLibrary.title,
+      onClick: () => setFolder(''),
+      isCurrentItem: isEmpty(nav),
+    },
+    ...nav
   ]
 
   return (
