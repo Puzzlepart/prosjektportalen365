@@ -39,7 +39,7 @@
     "get-value": "3.0.1",
     "msgraph-helper": "0.7.1",
     "office-ui-fabric-react": "6.214.0",
-    "pp365-shared": "file:../@Shared",
+    "pp365-shared": "1.2.7",
     "pzl-spfx-components": "0.0.11",
     "react": "16.8.5",
     "react-dom": "16.8.5",

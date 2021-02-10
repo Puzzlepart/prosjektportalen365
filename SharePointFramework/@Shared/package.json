@@ -1,6 +1,6 @@
 {
     "name": "pp365-shared",
-    "version": "1.2.6",
+    "version": "1.2.7",
     "description": "Shared utilities, helpers and models",
     "main": "lib/index.js",
     "scripts": {
