@@ -10,7 +10,8 @@
     "**/lib": true,
     "**/dist": true,
     "**/temp": true,
-    "src/**/*.scss.ts": true
+    "src/**/*.scss.ts": true,
+    "assets": true
   },
   "files.autoSave": "onWindowChange",
   "typescript.tsdk": ".\\node_modules\\typescript\\lib",

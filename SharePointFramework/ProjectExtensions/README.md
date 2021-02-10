@@ -6,8 +6,42 @@ This solution contains SPFx extensions for the project level.
 Extension for configuring a new project.
 
 ### TemplateSelector
+
 Extension for copying templates from the hub/portal site to the project site.
 
+The templates should be stored in a library named `Malbibliotek`. This library is created when installing Prosjektportalen 365.
+
+#### Selecting templates
+
+In the initial screen the desired templates are selected by the user. They can navigate in the folder structure like in a SharePoint library.
+
+![image-20210210211449675](assets/image-20210210211449675.png)
+
+
+
+#### Selecting target library and folder
+
+In the next screen the user decides where the templates should be copied. They can navigate in the folder structure just like when selecting the templates.
+
+![image-20210210211654080](assets/image-20210210211654080.png)
+
+If there's more than 1 library on the project site, the user can also pick another library.
+
+![image-20210210212421865](assets/image-20210210212421865.png)
+
+#### Adjust file name and title
+
+Next they can adjust the file names and titles.
+
+![image-20210210211724583](assets/image-20210210211724583.png)
+
+#### Follow the progress
+
+When the user has selected their templates, selected the target folder and clicked start - progress is shown.
+
+![image-20210210211809859](assets/image-20210210211809859.png)
+
 ## Serve
+
 - Take a copy of `config/serve.sample.json` and name it `serve.json`
 - Run `npm run serve`

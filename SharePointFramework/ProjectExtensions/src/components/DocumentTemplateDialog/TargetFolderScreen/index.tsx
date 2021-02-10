@@ -40,7 +40,7 @@ export const TargetFolderScreen = ({ targetFolder, dispatch }: ITargetFolderScre
       <InfoMessage text={strings.DocumentTemplateDialogScreenTargetFolderInfoText} />
       <FolderNavigation
         items={
-          context.libraries.length > 2 && [
+          context.libraries.length > 1 && [
             {
               key: '_',
               text: strings.Library,
