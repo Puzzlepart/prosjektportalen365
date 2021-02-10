@@ -5,7 +5,7 @@ import { ProjectExtension } from '../../../models'
 import styles from './ExtensionsSection.module.scss'
 import { IExtensionsSectionProps } from './IExtensionsSectionProps'
 
-// tslint:disable-next-line: naming-convention
+
 export const ExtensionsSection = (props: IExtensionsSectionProps) => {
   /**
    * On item toggle

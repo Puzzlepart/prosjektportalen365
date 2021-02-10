@@ -5,7 +5,7 @@ import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 import { IBaseTask } from './IBaseTask'
 import { IBaseTaskParams } from './IBaseTaskParams'
 
-// tslint:disable-next-line: naming-convention
+
 export abstract class BaseTask implements IBaseTask {
   public settings: IProjectSetupSettings<boolean>
   public params: IBaseTaskParams

@@ -6,7 +6,7 @@ import { ListContentConfig } from '../../../models'
 import { IListContentSectionProps } from './IListContentSectionProps'
 import styles from './ListContentSection.module.scss'
 
-// tslint:disable-next-line: naming-convention
+
 export const ListContentSection = (props: IListContentSectionProps) => {
   /**
    * On item toggle

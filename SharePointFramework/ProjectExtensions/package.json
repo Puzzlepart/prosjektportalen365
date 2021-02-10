@@ -56,7 +56,6 @@
     "@microsoft/rush-stack-compiler-3.9": "0.4.35",
     "@microsoft/sp-build-web": "1.11.0",
     "@microsoft/sp-module-interfaces": "1.11.0",
-    "@microsoft/sp-tslint-rules": "1.11.0",
     "@microsoft/sp-webpart-workbench": "1.11.0",
     "@types/chai": "3.4.34",
     "@types/mocha": "2.2.38",

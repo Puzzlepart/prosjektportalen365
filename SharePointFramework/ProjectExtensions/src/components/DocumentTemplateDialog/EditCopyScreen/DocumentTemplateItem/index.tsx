@@ -7,7 +7,6 @@ import React, { useState, useEffect, FormEvent } from 'react'
 import styles from './DocumentTemplateItem.module.scss'
 import { IDocumentTemplateItemProps } from './types'
 
-// tslint:disable-next-line: naming-convention
 export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
   const nameId = getId('name')
   const titleId = getId('title')

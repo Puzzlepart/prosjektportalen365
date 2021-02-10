@@ -37,10 +37,7 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
    * @param {TemplateItem[]} templates Templates
    * @param {string} folderServerRelativeUrl Folder URL
    */
-  async function onStartCopy(
-    templates: TemplateItem[],
-    folderServerRelativeUrl: string
-  ): Promise<void> {
+  async function onStartCopy(templates: TemplateItem[], folderServerRelativeUrl: string): Promise<void> {
     setScreen(DocumentTemplateDialogScreen.CopyProgress)
     setIsBlocking(true)
 
@@ -52,7 +49,7 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
       setProgress({ description: template.newName, percentComplete: i / templates.length })
       try {
         filesAdded.push(await template.copyTo(folder))
-      } catch (error) {}
+      } catch (error) { }
     }
 
     selection.setItems([], true)
