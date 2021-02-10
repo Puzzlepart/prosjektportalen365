@@ -26,14 +26,12 @@ export const ProjectPhaseCallout = ({ phase, target }: IProjectPhaseCalloutProps
         <div className={styles.body}>
           <p className={styles.subText}>{phase.subText}</p>
           <div>
-            <div
-              className={styles.stats}
-              hidden={isEmpty(stats)}>
+            <div className={styles.stats} hidden={isEmpty(stats)}>
               {stats.map((status, idx) => {
                 return (
                   <div key={idx}>
                     <span>
-                      <span className={styles.count}>{phase.checklistData.stats[status]}</span> 
+                      <span className={styles.count}>{phase.checklistData.stats[status]}</span>
                       <span className={styles.markedAs}>{strings.CheckPointsMarkedAsText}</span>
                       <span className={styles.statusValue}>{status}</span>
                     </span>
@@ -43,14 +41,19 @@ export const ProjectPhaseCallout = ({ phase, target }: IProjectPhaseCalloutProps
             </div>
             <div className={styles.actions}>
               <ActionButton
-                href={phase.getFilteredPhaseChecklistViewUrl(`${context.props.webUrl}/${strings.PhaseChecklistViewUrl}`)}
+                href={phase.getFilteredPhaseChecklistViewUrl(
+                  `${context.props.webUrl}/${strings.PhaseChecklistViewUrl}`
+                )}
                 text={strings.PhaseChecklistLinkText}
-                iconProps={{ iconName: 'CheckList' }} />
+                iconProps={{ iconName: 'CheckList' }}
+              />
               <ActionButton
                 onClick={() => context.dispatch(CHANGE_PHASE())}
                 text={strings.ChangePhaseText}
                 iconProps={{ iconName: 'TransitionPop' }}
-                disabled={phase.id === context.state.data?.currentPhase?.id || !context.props.isSiteAdmin}
+                disabled={
+                  phase.id === context.state.data?.currentPhase?.id || !context.props.isSiteAdmin
+                }
               />
             </div>
           </div>

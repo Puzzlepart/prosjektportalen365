@@ -7,9 +7,7 @@ export const Body = () => {
   switch (state.view) {
     case View.Initial: {
       const checklistItem = state.checklistItems[state.currentIdx]
-      return (
-        <InitialView checklistItem={checklistItem} />
-      )
+      return <InitialView checklistItem={checklistItem} />
     }
     case View.Summary:
       return <SummaryView checklistItems={state.checklistItems} />

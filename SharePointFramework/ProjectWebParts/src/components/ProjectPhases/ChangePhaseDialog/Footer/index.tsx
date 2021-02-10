@@ -10,7 +10,7 @@ import { View } from '../Views'
 
 export const Footer = () => {
   const context = useContext(ProjectPhasesContext)
-  const {state,dispatch} = useContext(ChangePhaseDialogContext)
+  const { state, dispatch } = useContext(ChangePhaseDialogContext)
   const actions = []
 
   // eslint-disable-next-line default-case
@@ -19,7 +19,7 @@ export const Footer = () => {
       {
         actions.push({
           text: strings.Skip,
-          onClick: () => dispatch(SET_VIEW({view:View.Confirm}))
+          onClick: () => dispatch(SET_VIEW({ view: View.Confirm }))
         })
       }
       break
@@ -28,7 +28,7 @@ export const Footer = () => {
         actions.push({
           text: strings.Yes,
           onClick: async () => {
-            dispatch(SET_VIEW({view:View.ChangingPhase}))
+            dispatch(SET_VIEW({ view: View.ChangingPhase }))
             await context.onChangePhase()
             context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())
           }
@@ -39,7 +39,7 @@ export const Footer = () => {
       {
         actions.push({
           text: strings.MoveOn,
-          onClick: () => dispatch(SET_VIEW({view:View.Confirm}))
+          onClick: () => dispatch(SET_VIEW({ view: View.Confirm }))
         })
       }
       break
@@ -47,10 +47,13 @@ export const Footer = () => {
 
   return (
     <DialogFooter>
-      {actions.map((buttonProps, index) => <PrimaryButton key={index} {...buttonProps} />)}
+      {actions.map((buttonProps, index) => (
+        <PrimaryButton key={index} {...buttonProps} />
+      ))}
       <DefaultButton
         text={strings.CloseText}
-        onClick={() => context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())} />
+        onClick={() => context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())}
+      />
     </DialogFooter>
   )
 }

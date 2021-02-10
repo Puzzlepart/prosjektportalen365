@@ -34,7 +34,7 @@ export interface IProjectPhasesState extends IBaseWebPartComponentState<IProject
    * Phase
    */
   phase?: ProjectPhaseModel
-  
+
   /**
    * Phase to be confirmed using ChangePhaseDialog
    */

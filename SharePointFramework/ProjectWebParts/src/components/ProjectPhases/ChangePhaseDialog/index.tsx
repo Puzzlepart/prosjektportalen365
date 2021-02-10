@@ -42,7 +42,8 @@ export const ChangePhaseDialog = () => {
         containerClassName={styles.root}
         title={strings.ChangePhaseText}
         subText={
-          state.view === View.Confirm && format(strings.ConfirmChangePhase, context.state.confirmPhase.name)
+          state.view === View.Confirm &&
+          format(strings.ConfirmChangePhase, context.state.confirmPhase.name)
         }
         dialogContentProps={{ type: DialogType.largeHeader }}
         modalProps={{ isDarkOverlay: true, isBlocking: false }}

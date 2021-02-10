@@ -11,14 +11,21 @@ import { fetchData } from './fetchData'
 import { ProjectPhase } from './ProjectPhase'
 import { ProjectPhaseCallout } from './ProjectPhase/ProjectPhaseCallout'
 import styles from './ProjectPhases.module.scss'
-import reducer, { HIDE_MESSAGE, initState, INIT_CHANGE_PHASE, INIT_DATA, OPEN_CALLOUT, SET_PHASE } from './reducer'
+import reducer, {
+  HIDE_MESSAGE,
+  initState,
+  INIT_CHANGE_PHASE,
+  INIT_DATA,
+  OPEN_CALLOUT,
+  SET_PHASE
+} from './reducer'
 import { IProjectPhasesProps } from './types'
 
 export const ProjectPhases = (props: IProjectPhasesProps) => {
   const [state, dispatch] = useReducer(reducer, initState())
 
   useEffect(() => {
-    fetchData(props.phaseField).then(data => dispatch(INIT_DATA({ data })))
+    fetchData(props.phaseField).then((data) => dispatch(INIT_DATA({ data })))
   }, [])
 
   if (state.hidden) return null
@@ -48,17 +55,13 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
    */
   const onChangePhase = async () => {
     dispatch(INIT_CHANGE_PHASE())
-    await changePhase(
-      state.confirmPhase,
-      state.data.phaseTextField,
-      props.currentPhaseViewName
-    )
+    await changePhase(state.confirmPhase, state.data.phaseTextField, props.currentPhaseViewName)
     dispatch(SET_PHASE({ phase: state.confirmPhase }))
-    if (props.syncPropertiesAfterPhaseChange === undefined || props.syncPropertiesAfterPhaseChange) {
-      setTimeout(
-        () => (document.location.href = `${props.webUrl}#syncproperties=1`),
-        1000
-      )
+    if (
+      props.syncPropertiesAfterPhaseChange === undefined ||
+      props.syncPropertiesAfterPhaseChange
+    ) {
+      setTimeout(() => (document.location.href = `${props.webUrl}#syncproperties=1`), 1000)
     }
   }
 
@@ -67,17 +70,19 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
       <div className={styles.projectPhases}>
         <div className={styles.container}>
           <ul className={styles.phaseList}>
-            {state.data.phases.filter((p) => p.isVisible).map((phase, idx) => (
-              <ProjectPhase
-                key={idx}
-                phase={phase}
-                isCurrentPhase={phase.id === state.phase?.id}
-                onOpenCallout={(target) => dispatch(OPEN_CALLOUT({ phase, target }))}
-              />
-            ))}
+            {state.data.phases
+              .filter((p) => p.isVisible)
+              .map((phase, idx) => (
+                <ProjectPhase
+                  key={idx}
+                  phase={phase}
+                  isCurrentPhase={phase.id === state.phase?.id}
+                  onOpenCallout={(target) => dispatch(OPEN_CALLOUT({ phase, target }))}
+                />
+              ))}
           </ul>
         </div>
-        <ProjectPhaseCallout {...state.callout || {}} />
+        <ProjectPhaseCallout {...(state.callout || {})} />
         <ChangePhaseDialog />
       </div>
     </ProjectPhasesContext.Provider>

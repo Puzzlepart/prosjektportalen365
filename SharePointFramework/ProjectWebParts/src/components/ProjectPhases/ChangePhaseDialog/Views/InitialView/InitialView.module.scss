@@ -2,8 +2,7 @@
 
 .root {
   .header {
-    @include ms-fontSize-16;
-    @include ms-fontWeight-semibold;
+    @include ms-fontSize-14;
   }
   .commentField {
     margin: 10px 0 0 0;

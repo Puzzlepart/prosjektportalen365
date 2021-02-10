@@ -37,10 +37,10 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
               groupName: strings.SettingsGroupName,
               groupFields: [
                 PropertyPaneToggle('syncPropertiesAfterPhaseChange', {
-                  label: strings.SyncPropertiesAfterPhaseChangeFieldLabel,
+                  label: strings.SyncPropertiesAfterPhaseChangeFieldLabel
                 }),
                 PropertyPaneToggle('showSubText', {
-                  label: strings.ShowSubTextFieldLabel,
+                  label: strings.ShowSubTextFieldLabel
                 }),
                 PropertyPaneSlider('subTextTruncateLength', {
                   label: strings.SubTextTruncateLengthFieldLabel,
