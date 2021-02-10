@@ -5,3 +5,5 @@ export * from './TemplateItem'
 export * from './IDocumentLibrary'
 export * from './IListProperties'
 export * from './IPlannerTaskSPItem'
+export * from './SPFolder'
+
