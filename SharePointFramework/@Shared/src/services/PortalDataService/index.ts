@@ -112,7 +112,7 @@ export class PortalDataService {
   }
 
   /**
-   * Update status report
+   * Delete status report by id
    *
    * @param {number} id Id
    */
@@ -172,7 +172,7 @@ export class PortalDataService {
 
   /**
    * Sync list from hub to the specified URL
-   * 
+   *
    * Skips fields that has ShowInEditForm set to FALSE
    *
    * @param {string} url Url
@@ -191,17 +191,11 @@ export class PortalDataService {
     const [hubContentType, targetSiteFields, ensureList] = await Promise.all([
       this._getHubContentType(contentTypeId),
       this._getSiteFields(targetWeb),
-      targetWeb.lists.ensure(
-        listName,
-        '',
-        100,
-        false,
-        {
-          Hidden: true,
-          EnableAttachments: false,
-          EnableVersioning: true
-        }
-      )
+      targetWeb.lists.ensure(listName, '', 100, false, {
+        Hidden: true,
+        EnableAttachments: false,
+        EnableVersioning: true
+      })
     ])
     const listFields = await this.getListFields(listName, undefined, targetWeb)
     const spList = jsomContext.web.get_lists().getByTitle(listName)
@@ -222,9 +216,7 @@ export class PortalDataService {
         continue
       }
       try {
-        const [fieldLink] = hubContentType.FieldLinks.filter(
-          (fl) => fl.Name === field.InternalName
-        )
+        const [fieldLink] = hubContentType.FieldLinks.filter((fl) => fl.Name === field.InternalName)
         Logger.log({
           message: `(PortalDataService) (syncList) Adding field [${field.InternalName}] to list [${listName}].`,
           level: LogLevel.Info,
@@ -254,7 +246,7 @@ export class PortalDataService {
           fieldToCreate.updateAndPushChanges(true)
         }
         await executeQuery(jsomContext)
-      } catch (error) { }
+      } catch (error) {}
     }
     try {
       Logger.log({
@@ -270,7 +262,7 @@ export class PortalDataService {
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch { }
+    } catch {}
     if (ensureList.created && properties) {
       ensureList.list.items.add(properties)
     }

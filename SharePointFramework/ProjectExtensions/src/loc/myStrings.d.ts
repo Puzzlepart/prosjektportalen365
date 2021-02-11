@@ -1,4 +1,7 @@
 declare interface IProjectExtensionsStrings {
+  DocumentTemplateDialogScreenTargetFolderInfoText: string
+  Library: string
+  CopyHereText: string
   DocumentTemplateDialogScreenEditCopyRootLevelText: string
   ApplyExtensionText: string;
   ProcessListItemText: string;
@@ -40,6 +43,7 @@ declare interface IProjectExtensionsStrings {
   ListContentTitle: string;
   ModifiedLabel: string;
   NameLabel: string;
+  FileNameLabel: string;
   NoHubSiteErrorMessage: string;
   NoHubSiteErrorStack: string;
   OnGoBackText: string;

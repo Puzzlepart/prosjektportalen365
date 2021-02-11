@@ -10,7 +10,6 @@ const build = require('@microsoft/sp-build-web')
 const pkgDeploy = require('spfx-pkgdeploy').default
 const tsConfig = require('./tsconfig.json')
 const WebpackBar = require('webpackbar')
-const LiveReloadPlugin = require('webpack-livereload-plugin')
 const os = require('os')
 const log = require('@microsoft/gulp-core-build').log
 const colors = require('colors')
@@ -62,8 +61,6 @@ build.configureWebpack.mergeConfig({
         webpack.plugins = webpack.plugins || []
         log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('WebpackBar')}...`)
         webpack.plugins.push(new WebpackBar())
-        log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('LiveReloadPlugin')}...`)
-        webpack.plugins.push(new LiveReloadPlugin())
         if (buildConfig.bundleAnalyzerEnabled) {
             log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('BundleAnalyzerPlugin')}...`)
             webpack.plugins.push(new BundleAnalyzerPlugin())

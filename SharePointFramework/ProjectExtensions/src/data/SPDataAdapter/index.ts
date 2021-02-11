@@ -1,11 +1,11 @@
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
 import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
-import { TemplateFile } from 'models/TemplateFile'
-import * as strings from 'ProjectExtensionsStrings'
+import { SPFolder } from 'models'
+import { TemplateItem } from 'models/TemplateItem'
 import { SPDataAdapterBase } from 'pp365-shared/lib/data'
 import { ProjectDataService } from 'pp365-shared/lib/services'
+import * as strings from 'ProjectExtensionsStrings'
 import * as validFilename from 'valid-filename'
-import { ISPLibraryFolder } from './ISPLibraryFolder'
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
 
 export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
@@ -50,48 +50,53 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
   }
 
   /**
-   * Get document templates
+   * Get document templates from the specified library on the hub site
    *
-   * @param {string} templateLibrary Template library
-   * @param {string} viewXml View xml
+   * @param {string} libraryName Library name
+   * @param {string} viewXml View XML (CAML query)
    */
-  public async getDocumentTemplates(templateLibrary: string, viewXml?: string) {
+  public async getDocumentTemplates(libraryName: string, viewXml: string) {
     return await this.portal.getItems(
-      templateLibrary,
-      TemplateFile,
+      libraryName,
+      TemplateItem,
       {
-        ViewXml:
-          viewXml ||
-          '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+        ViewXml: viewXml
       },
-      ['File', 'FieldValuesAsText']
+      ['File', 'Folder', 'FieldValuesAsText']
     )
   }
 
   /**
-   * Get libraries in web
+   * Get folders in the specified folder/library
+   *
+   * @param {string} folderRelativeUrl Folder URL
    */
-  public async getLibraries(): Promise<ISPLibraryFolder[]> {
+  public async getFolders(folderRelativeUrl: string): Promise<any[]> {
+    const folders = await this.sp.web
+      .getFolderByServerRelativePath(folderRelativeUrl)
+      .folders.usingCaching()
+      .get()
+    return folders.map((f) => new SPFolder(f)).filter((f) => !f.isSystemFolder)
+  }
+
+  /**
+   * Get libraries in the current web
+   */
+  public async getLibraries(): Promise<SPFolder[]> {
     const libraries = await this.sp.web.lists
-      .select('Id', 'Title', 'RootFolder/ServerRelativeUrl', 'RootFolder/Folders')
+      .select('Id', 'Title', 'BaseTemplate', 'RootFolder/ServerRelativeUrl', 'RootFolder/Folders')
       .expand('RootFolder', 'RootFolder/Folders')
       .filter(
-        // eslint-disable-next-line quotes
-        "BaseTemplate eq 101 and IsCatalog eq false and IsApplicationList eq false and ListItemEntityTypeFullName ne 'SP.Data.FormServerTemplatesItem'"
+        [
+          'BaseTemplate eq 101',
+          'IsCatalog eq false',
+          'IsApplicationList eq false',
+          // eslint-disable-next-line quotes
+          "ListItemEntityTypeFullName ne 'SP.Data.FormServerTemplatesItem'"
+        ].join(' and ')
       )
+      .usingCaching()
       .get()
-
-    return libraries.map((lib) => ({
-      Id: lib.Id,
-      Title: lib.Title,
-      ServerRelativeUrl: lib.RootFolder.ServerRelativeUrl,
-      Folders: lib.RootFolder.Folders.filter((f: { Name: string }) => f.Name !== 'Forms').map(
-        (f: { UniqueId: string; Name: string; ServerRelativeUrl: string }) => ({
-          Id: f.UniqueId,
-          Title: f.Name,
-          ServerRelativeUrl: f.ServerRelativeUrl
-        })
-      )
-    }))
+    return libraries.map((lib) => new SPFolder(lib))
   }
 })()

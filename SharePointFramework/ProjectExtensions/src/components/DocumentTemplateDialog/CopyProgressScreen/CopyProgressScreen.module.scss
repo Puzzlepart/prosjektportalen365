@@ -1,0 +1,12 @@
+.root {
+  display: flex;
+  flex-direction: row;
+
+  .icon {
+    padding: 6px 0 0 0;
+  }
+  
+  .indicator {
+    margin: 0 0 0 15px;
+  }
+}
