@@ -2,21 +2,18 @@ import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { ActionButton } from 'office-ui-fabric-react/lib/Button'
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { InfoMessage } from '../../InfoMessage'
+import { DocumentTemplateDialogContext } from '../context'
 import { SET_SCREEN } from '../reducer'
 import { DocumentTemplateDialogScreen } from '../types'
 import { DocumentTemplateItem } from './DocumentTemplateItem'
 import styles from './EditCopyScreen.module.scss'
 import { IEditCopyScreenProps } from './types'
 
-export const EditCopyScreen = ({
-  selectedTemplates,
-  targetFolder,
-  onStartCopy,
-  dispatch
-}: IEditCopyScreenProps) => {
-  const [templates, setTemplates] = useState([...selectedTemplates])
+export const EditCopyScreen = ({ onStartCopy }: IEditCopyScreenProps) => {
+  const { state, dispatch } = useContext(DocumentTemplateDialogContext)
+  const [templates, setTemplates] = useState([...state.selected])
 
   /**
    * On input changed
@@ -47,11 +44,10 @@ export const EditCopyScreen = ({
   return (
     <div className={styles.root}>
       <InfoMessage text={strings.DocumentTemplateDialogScreenEditCopyInfoText} />
-      {selectedTemplates.map((item, idx) => (
+      {state.selected.map((item, idx) => (
         <DocumentTemplateItem
           key={idx}
           item={item}
-          folder={targetFolder}
           onInputChanged={onInputChanged}
         />
       ))}

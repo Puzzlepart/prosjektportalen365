@@ -1,13 +1,15 @@
 import { getId } from '@uifabric/utilities'
+import { DocumentTemplateDialogContext } from 'components/DocumentTemplateDialog/context'
 import { SPDataAdapter } from 'data'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
 import { TextField } from 'office-ui-fabric-react/lib/TextField'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { useState, useEffect, FormEvent } from 'react'
+import React, { FormEvent, useContext, useEffect, useState } from 'react'
 import styles from './DocumentTemplateItem.module.scss'
 import { IDocumentTemplateItemProps } from './types'
 
 export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
+  const { state } = useContext(DocumentTemplateDialogContext)
   const nameId = getId('name')
   const titleId = getId('title')
   let changeTimeout: number
@@ -32,7 +34,7 @@ export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
         case nameId:
           {
             const newName = `${newValue}.${props.item.fileExtension}`
-            const errorMsg = await SPDataAdapter.isFilenameValid(props.folder, newName)
+            const errorMsg = await SPDataAdapter.isFilenameValid(state.targetFolder, newName)
             props.onInputChanged(props.item.id, { newName }, errorMsg)
           }
           break
@@ -44,13 +46,13 @@ export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
   }
 
   useEffect(() => {
-    SPDataAdapter.isFilenameValid(props.folder, props.item.name).then((errorMessage) => {
+    SPDataAdapter.isFilenameValid(state.targetFolder, props.item.name).then((errorMessage) => {
       if (errorMessage) {
         props.onInputChanged(props.item.id, {}, errorMessage)
         setIsExpanded(true)
       }
     })
-  }, [props.folder])
+  }, [state.targetFolder])
 
   return (
     <div className={styles.root}>
