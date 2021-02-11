@@ -84,8 +84,8 @@
         "spfx-pkgdeploy": "0.3.0",
         "typescript": "3.3.x",
         "webpack-bundle-analyzer": "3.5.2",
-        "webpack-livereload-plugin": "2.3.0",
         "webpackbar": "4.0.0",
-        "yargs": "14.2.0"
+        "yargs": "14.2.0",
+        "livereload": "0.9.1"
     }
 }

@@ -5,7 +5,10 @@
     "node": ">=0.10.0"
   },
   "scripts": {
+    "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
+    "watch:nobrowser": "concurrently \"npm run serve:nobrowser\" \"livereload './dist/*.js' -e 'js' -w 250\"",
     "serve": "gulp serve --locale=nb-no",
+    "serve:nobrowser": "gulp serve --locale=nb-no --nobrowser",
     "package": "gulp clean && gulp default --ship && gulp package-solution --ship",
     "package:ci": "gulp clean && gulp default && gulp package-solution",
     "deploy": "gulp uploadAppPkg && gulp deploySppkg",
@@ -73,6 +76,7 @@
     "eslint-plugin-react": "7.19.0",
     "find": "0.3.0",
     "gulp": "3.9.1",
+    "livereload": "0.9.1",
     "prettier": "2.1.1",
     "spfx-pkgdeploy": "0.3.0",
     "webpack-bundle-analyzer": "3.5.2",
