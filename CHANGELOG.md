@@ -15,6 +15,7 @@ Every change is marked with Pull Request ID.
 
 - Fixes issues with single folder in "Hent dokumentmal" #376
 - Issues with custom project fields #378
+- Fix for visible check in project information web part #385
 
 ## 1.2.4 - 30.11.2020
 
