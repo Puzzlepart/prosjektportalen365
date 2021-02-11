@@ -45,11 +45,7 @@ export const EditCopyScreen = ({ onStartCopy }: IEditCopyScreenProps) => {
     <div className={styles.root}>
       <InfoMessage text={strings.DocumentTemplateDialogScreenEditCopyInfoText} />
       {state.selected.map((item, idx) => (
-        <DocumentTemplateItem
-          key={idx}
-          item={item}
-          onInputChanged={onInputChanged}
-        />
+        <DocumentTemplateItem key={idx} item={item} onInputChanged={onInputChanged} />
       ))}
       <DialogFooter>
         <ActionButton

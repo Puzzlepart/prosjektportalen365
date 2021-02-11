@@ -21,11 +21,12 @@ export const SelectScreen = (props: ISelectScreenProps) => {
   const context = useContext(TemplateSelectorContext)
   const [folder, setFolder] = useState<string>('')
   const templates = useMemo(
-    () => context.templates
-      .filter((item) => {
-        return !isEmpty(folder) ? folder === item.parentFolderUrl : item.level === 1
-      })
-      .sort((a, b) => (a.isFolder === b.isFolder ? 0 : a.isFolder ? -1 : 1)),
+    () =>
+      context.templates
+        .filter((item) => {
+          return !isEmpty(folder) ? folder === item.parentFolderUrl : item.level === 1
+        })
+        .sort((a, b) => (a.isFolder === b.isFolder ? 0 : a.isFolder ? -1 : 1)),
     [folder]
   )
   return (

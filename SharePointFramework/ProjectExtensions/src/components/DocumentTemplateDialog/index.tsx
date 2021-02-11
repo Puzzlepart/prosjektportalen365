@@ -54,7 +54,7 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
       )
       try {
         filesAdded.push(await template.copyTo(folder))
-      } catch (error) { }
+      } catch (error) {}
     }
     selection.setItems([], true)
     dispatch(COPY_DONE({ files: filesAdded }))
@@ -76,12 +76,8 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
         [DocumentTemplateDialogScreen.Select]: (
           <SelectScreen selection={selection} selectedItems={state.selected} />
         ),
-        [DocumentTemplateDialogScreen.TargetFolder]: (
-          <TargetFolderScreen />
-        ),
-        [DocumentTemplateDialogScreen.EditCopy]: (
-          <EditCopyScreen onStartCopy={onStartCopy} />
-        ),
+        [DocumentTemplateDialogScreen.TargetFolder]: <TargetFolderScreen />,
+        [DocumentTemplateDialogScreen.EditCopy]: <EditCopyScreen onStartCopy={onStartCopy} />,
         [DocumentTemplateDialogScreen.CopyProgress]: <CopyProgressScreen {...state.progress} />,
         [DocumentTemplateDialogScreen.Summary]: (
           <InfoMessage
