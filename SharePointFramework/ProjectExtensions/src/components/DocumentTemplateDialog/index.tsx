@@ -11,6 +11,7 @@ import { SPDataAdapter } from '../../data'
 import { TemplateItem } from '../../models/index'
 import { BaseDialog } from '../@BaseDialog/index'
 import { InfoMessage } from '../InfoMessage'
+import { DocumentTemplateDialogContext } from './context'
 import { CopyProgressScreen } from './CopyProgressScreen'
 import styles from './DocumentTemplateDialog.module.scss'
 import { EditCopyScreen } from './EditCopyScreen'
@@ -53,7 +54,7 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
       )
       try {
         filesAdded.push(await template.copyTo(folder))
-      } catch (error) {}
+      } catch (error) { }
     }
     selection.setItems([], true)
     dispatch(COPY_DONE({ files: filesAdded }))
@@ -76,15 +77,10 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
           <SelectScreen selection={selection} selectedItems={state.selected} />
         ),
         [DocumentTemplateDialogScreen.TargetFolder]: (
-          <TargetFolderScreen targetFolder={state.targetFolder} dispatch={dispatch} />
+          <TargetFolderScreen />
         ),
         [DocumentTemplateDialogScreen.EditCopy]: (
-          <EditCopyScreen
-            selectedTemplates={state.selected}
-            onStartCopy={onStartCopy}
-            targetFolder={state.targetFolder}
-            dispatch={dispatch}
-          />
+          <EditCopyScreen onStartCopy={onStartCopy} />
         ),
         [DocumentTemplateDialogScreen.CopyProgress]: <CopyProgressScreen {...state.progress} />,
         [DocumentTemplateDialogScreen.Summary]: (
@@ -134,19 +130,20 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
   }
 
   return (
-    <BaseDialog
-      dialogContentProps={{ title: props.title }}
-      modalProps={{
-        isBlocking: state.locked,
-        isDarkOverlay: state.locked
-      }}
-      onRenderFooter={onRenderFooter}
-      onDismiss={onClose}
-      containerClassName={styles.root}>
-      <div className={styles.container}>{onRenderContent()}</div>
-    </BaseDialog>
+    <DocumentTemplateDialogContext.Provider value={{ state, dispatch }}>
+      <BaseDialog
+        dialogContentProps={{ title: props.title }}
+        modalProps={{
+          isBlocking: state.locked,
+          isDarkOverlay: state.locked
+        }}
+        onRenderFooter={onRenderFooter}
+        onDismiss={onClose}
+        containerClassName={styles.root}>
+        <div className={styles.container}>{onRenderContent()}</div>
+      </BaseDialog>
+    </DocumentTemplateDialogContext.Provider>
   )
 }
 
 export * from './types'
-export { IDocumentTemplateDialogProps }
