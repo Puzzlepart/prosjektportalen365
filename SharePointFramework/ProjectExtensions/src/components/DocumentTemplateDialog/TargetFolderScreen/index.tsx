@@ -15,17 +15,18 @@ import React, { useContext, useEffect, useState } from 'react'
 import { TemplateSelectorContext } from 'templateSelector/context'
 import { isEmpty } from 'underscore'
 import { DocumentTemplateDialogScreen } from '..'
+import { DocumentTemplateDialogContext } from '../context'
 import { FolderNavigation } from '../FolderNavigation'
 import { SET_SCREEN, SET_TARGET } from '../reducer'
 import columns from './columns'
 import styles from './TargetFolderScreen.module.scss'
-import { ITargetFolderScreenProps } from './types'
 
-export const TargetFolderScreen = ({ targetFolder, dispatch }: ITargetFolderScreenProps) => {
+export const TargetFolderScreen = () => {
+  const { state, dispatch } = useContext(DocumentTemplateDialogContext)
   const context = useContext(TemplateSelectorContext)
   const [root, setRoot] = useState(context.currentLibrary)
   const [folders, setFolders] = useState(root.folders)
-  const [folder, setFolder] = useState(targetFolder)
+  const [folder, setFolder] = useState(state.targetFolder)
 
   useEffect(() => {
     if (folder === null) {
