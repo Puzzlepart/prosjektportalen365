@@ -9,6 +9,7 @@ Every change is marked with Pull Request ID.
 
 - Added project template name to project properties #380
 - Added support for phase sub text in phase selector #381
+- Added support for navigating in folders in document template selector
 
 ## Fixed
 
