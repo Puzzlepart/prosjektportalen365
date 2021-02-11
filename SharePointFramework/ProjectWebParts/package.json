@@ -5,7 +5,10 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "serve": "gulp serve --locale=nb-no --nobrowser",
+    "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
+    "watch:nobrowser": "concurrently \"npm run serve:nobrowser\" \"livereload './dist/*.js' -e 'js' -w 250\"",
+    "serve": "gulp serve --locale=nb-no",
+    "serve:nobrowser": "gulp serve --locale=nb-no --nobrowser",
     "package": "gulp clean --ship && gulp default --ship && gulp package-solution --ship",
     "package:ci": "gulp clean && gulp default && gulp package-solution",
     "deploy": "gulp uploadAppPkg && gulp deploySppkg",
