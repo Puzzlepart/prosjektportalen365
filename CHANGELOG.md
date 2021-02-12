@@ -3,7 +3,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with Pull Request ID.
 
-## 1.2.6 - TBA
+## 1.2.6 - xx.02.2021
 
 ## Added
 
@@ -16,6 +16,7 @@ Every change is marked with Pull Request ID.
 - Fixes issues with single folder in "Hent dokumentmal" #376
 - Issues with custom project fields #378
 - Fix for visible check in project information web part #385
+- Setting phase check list and planner task list as visible #389
 
 ## 1.2.4 - 30.11.2020
 
