@@ -1,8 +1,10 @@
 /* eslint-disable no-console */
 import { SiteUserProps } from '@pnp/sp'
+import strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'projectSetup'
 import { isEmpty } from 'underscore'
 import { BaseTask, IBaseTaskParams } from '../@BaseTask'
+import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 
 /**
  * Sets up permissions for the SP web.
@@ -19,9 +21,15 @@ export class SitePermissions extends BaseTask {
    * Execute SitePermissions
    *
    * @param {IBaseTaskParams} params Task parameters
+   * @param {OnProgressCallbackFunction} onProgress On progress funtion
    */
-  public async execute(params: IBaseTaskParams): Promise<IBaseTaskParams> {
+  public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
     try {
+      onProgress(
+        strings.SitePermissionsText,
+        strings.SitePermissionsSubText,
+        'Permissions'
+      )
       const list = this.data.hub.web.lists.getByTitle('Tillatelseskonfigurasjon')
       const [config, roleDefinitions, groups] = await Promise.all([
         list.items.select('GtPermissionLevel', 'GtSPGroupName').get(),

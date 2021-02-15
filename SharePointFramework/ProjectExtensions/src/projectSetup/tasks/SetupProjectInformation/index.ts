@@ -13,7 +13,7 @@ export class SetupProjectInformation extends BaseTask {
    * Executes the SetupProjectInformation task
    *
    * @param {IBaseTaskParams} params Task parameters
-   * @param {OnProgressCallbackFunction} onProgress On progress funtion (not currently in use by this task)
+   * @param {OnProgressCallbackFunction} onProgress On progress funtion
    */
   public async execute(
     params: IBaseTaskParams,
@@ -32,7 +32,7 @@ export class SetupProjectInformation extends BaseTask {
    * Sync properties list
    *
    * @param {IBaseTaskParams} params Task parameters
-   * @param {OnProgressCallbackFunction} onProgress On progress funtion (not currently in use by this task)
+   * @param {OnProgressCallbackFunction} onProgress On progress funtion
    */
   private async _syncPropertiesList(
     params: IBaseTaskParams,

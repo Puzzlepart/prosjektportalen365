@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    SitePermissionsText: 'Setter opp tillatelser for området',
+    SitePermissionsSubText: 'Kopierer tillatelsekonfigurasjon fra hubområdet.',
     DocumentTemplateDialogScreenTargetFolderInfoText: 'Velg mål for de valgte malene. Trykk **Bibliotek** for å velge et annet bibliotek.',
     Library: 'Bibliotek',
     CopyHereText: 'Kopier hit',
