@@ -190,6 +190,12 @@
   <data name="Lists_StatusSections_Url" xml:space="preserve">
     <value>Lists/Statusseksjoner</value>
   </data>
+  <data name="Lists_Permission_Configuration_Title" xml:space="preserve">
+    <value>Tillatelseskonfigurasjon</value>
+  </data>
+  <data name="Lists_Permission_Configuration_Url" xml:space="preserve">
+    <value>Lists/Tillatelseskonfigurasjon</value>
+  </data>
   <data name="View_AllItems_DisplayName" xml:space="preserve">
     <value>Alle elementer</value>
   </data>
