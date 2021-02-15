@@ -3,10 +3,6 @@ name: CI - Build and install (feature/permissions-configuration-list-projects-38
 on:
   push:
     branches: [feature/permissions-configuration-list-projects-387]
-    paths:
-    - 'SharePointFramework/**'
-    - 'Install/**'
-    - 'Templates/**'
 
 env:
   TARGET_URL: 'https://puzzlepart.sharepoint.com/sites/pp365'
