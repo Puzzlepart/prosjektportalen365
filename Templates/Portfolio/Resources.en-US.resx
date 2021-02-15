@@ -355,6 +355,12 @@
   <data name="ContentTypes_BarChart_Description" xml:space="preserve">
     <value>Opprett et nytt stolpediagram</value>
   </data>
+  <data name="ContentTypes_Permission_Configuration_Element_Name" xml:space="preserve">
+    <value>Tillatelseskonfigurasjonelement</value>
+  </data>
+  <data name="ContentTypes_Permission_Configuration_Element_Description" xml:space="preserve">
+    <value>Opprett et nytt tillatelseskonfigurasjonselement</value>
+  </data>
   <data name="SiteFields_Project_Group" xml:space="preserve">
     <value>Kolonner for Prosjektportalen (Prosjekt)</value>
   </data>
