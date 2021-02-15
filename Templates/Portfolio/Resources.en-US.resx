@@ -1459,6 +1459,15 @@
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
   </data>
+  <data name="Choice_GtPermissionLevel_Read" xml:space="preserve">
+    <value>Read</value>
+  </data>
+  <data name="Choice_GtPermissionLevel_Contribute" xml:space="preserve">
+    <value>Contribute</value>
+  </data>
+  <data name="Choice_GtPermissionLevel_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
   <data name="Choice_GtRiskStatus_Identified" xml:space="preserve">
     <value>Identifisert</value>
   </data>
