@@ -1,4 +1,4 @@
-import { ActionType } from './ActionType'
+export type ActionType = [string, string | (() => void), string, boolean?, boolean?]
 
 export interface IActionsProps {
   /**
