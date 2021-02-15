@@ -7,5 +7,12 @@
             AllowMembersEditMembership="false"
             OnlyAllowMembersViewMembership="true">
         </pnp:SiteGroup>
+        <pnp:SiteGroup
+            Title="Porteføljeadministratorer"
+            Description="Porteføljeadministratorer. Har som standard full kontroll på alle prosjektområder gjennom listen Tillatelseskonfigurasjon."
+            Owner="{associatedownergroupid}"
+            AllowMembersEditMembership="false"
+            OnlyAllowMembersViewMembership="true">
+        </pnp:SiteGroup>
     </pnp:SiteGroups>
 </pnp:Security>
