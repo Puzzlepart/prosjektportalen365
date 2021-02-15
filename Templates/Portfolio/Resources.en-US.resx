@@ -1444,6 +1444,18 @@
   <data name="SiteFields_GtProjectLifecycleStatus_Description" xml:space="preserve">
     <value />
   </data>
+  <data name="SiteFields_GtSPGroupName_DisplayName" xml:space="preserve">
+    <value>SharePoint group name</value>
+  </data>
+  <data name="SiteFields_GtSPGroupName_Description" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SiteFields_GtPermissionLevel_DisplayName" xml:space="preserve">
+    <value>Permission level</value>
+  </data>
+  <data name="SiteFields_GtPermissionLevel_Description" xml:space="preserve">
+    <value>Define the SharePoint permission level for the project site.</value>
+  </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
   </data>

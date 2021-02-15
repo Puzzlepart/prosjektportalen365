@@ -1,7 +1,7 @@
-<Field Type="Choice" DisplayName="GtPermissionLevel" Description="Definerer rettighetsnivå på SharePoint-området til prosjektet." Format="Dropdown" Group="{resource:SiteFields_Project_Group}" ID="{80cdca83-d0da-4f8f-abcd-5695763556e9}" StaticName="GtPermissionLevel" Name="GtPermissionLevel">
-    <Default>Les</Default>
+<Field Type="Choice" DisplayName="{resource:SiteFields_GtPermissionLevel_DisplayName}" Description="{resource:SiteFields_GtPermissionLevel_Description}" Format="Dropdown" Group="{resource:SiteFields_Project_Group}" ID="{80cdca83-d0da-4f8f-abcd-5695763556e9}" StaticName="GtPermissionLevel" Name="GtPermissionLevel">
+    <Default>Lese</Default>
     <CHOICES>
-        <CHOICE>Les</CHOICE>
+        <CHOICE>Lese</CHOICE>
         <CHOICE>Rediger</CHOICE>
         <CHOICE>Full kontroll</CHOICE>
     </CHOICES>
