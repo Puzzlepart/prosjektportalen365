@@ -1,0 +1,1107 @@
+<?xml version="1.0"?>
+<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2020/02/ProvisioningSchema">
+  <pnp:Preferences Generator="PnP.Framework, Version=0.1.64.0, Culture=neutral, PublicKeyToken=null" />
+  <pnp:Templates ID="CONTAINER-TEMPLATE-8A54B843FF734ADA89CAD731C0A00AE7">
+    <pnp:ProvisioningTemplate ID="TEMPLATE-8A54B843FF734ADA89CAD731C0A00AE7" Version="1" BaseSiteTemplate="GROUP#0" Scope="RootSite">
+      <pnp:SiteFields>
+        <Field Type="Note" DisplayName="Fase_0" StaticName="j25543a5815d485da9a5e0773ad762e9" Name="j25543a5815d485da9a5e0773ad762e9" ID="{72a7424e-2a41-446a-b04a-895febb79e45}" ShowInViewForms="FALSE" Required="FALSE" Hidden="TRUE" CanToggleHidden="TRUE" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Type="Note" DisplayName="Rolle_0" StaticName="ja0ae560bd5545d4907f5119bf0a83bb" Name="ja0ae560bd5545d4907f5119bf0a83bb" ID="{3932680a-7128-4f3c-abb7-0f68c2090112}" ShowInViewForms="FALSE" Required="FALSE" Hidden="TRUE" CanToggleHidden="TRUE" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Type="Note" DisplayName="Prosjekttype_0" StaticName="ddb690447d2c486586ecb71413780409" Name="ddb690447d2c486586ecb71413780409" ID="{4f02bd7f-c4dd-4ad3-8fe6-61dc02d18bdb}" ShowInViewForms="FALSE" Required="FALSE" Hidden="TRUE" CanToggleHidden="TRUE" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Type="Note" DisplayName="Tjenesteområde_0" StaticName="j275d73afd4d48babcc131526460d57b" Name="j275d73afd4d48babcc131526460d57b" ID="{87b00cac-b21b-403b-bd62-0b2d4e8c304e}" ShowInViewForms="FALSE" Required="FALSE" Hidden="TRUE" CanToggleHidden="TRUE" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Decimals="0" Description="" DisplayName="Prognose for prosjektet" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{9076c206-ca80-4e17-b6f4-6fa3b90c421a}" LCID="1044" Min="0" Name="GtProjectForecast" StaticName="GtProjectForecast" Type="Currency" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Description="" DisplayName="Status gevinstoppnåelse" Format="RadioButtons" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{b1958607-cd56-4ecb-9ad7-65fb7d3c22c7}" Name="GtStatusGainAchievement" StaticName="GtStatusGainAchievement" Type="Choice" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <CHOICES>
+            <CHOICE>Foran plan</CHOICE>
+            <CHOICE>Forsinket</CHOICE>
+            <CHOICE>Ikke påbegynt</CHOICE>
+            <CHOICE>Mindre forsinkelser</CHOICE>
+            <CHOICE>På plan</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field DisplayName="Verdirekkefølge" Description="Rekkefølge for verdiene (f.eks. Konsept,Planlegge,Gjennomføre,Avslutte,Realisere)" Type="Note" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{15f09408-2ad7-4b9a-8dda-79d7be382a96}" StaticName="GtPiValueOrder" Name="GtPiValueOrder" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Description="" DisplayName="Message" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{4614d809-1d6f-42a4-a9a6-3255d2e1f9b7}" Name="GtLogMessage" StaticName="GtLogMessage" Type="Note" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field DisplayName="Undertekst" Description="" Type="Text" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{fca6d80c-225a-4bb0-a0b6-f4c004f8151c}" StaticName="GtPiSubTitle" Name="GtPiSubTitle" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field DisplayName="Tittel (Y-akse)" Description="Tittel på Y-aksen" Type="Text" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{c990240d-4c3b-4dfe-8abb-b6119b4b9856}" StaticName="GtPiYAxisTitle" Name="GtPiYAxisTitle" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field DisplayName="Intervall (sekunder) for automatisk oppdatering" Description="" Type="Number" Min="5" Decimals="0" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{704bbe10-8da4-4f39-8e47-51f03ceaa6cb}" StaticName="GtPiAutomaticRefreshInterval" Name="GtPiAutomaticRefreshInterval" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field ID="{6bd17911-c48a-4900-be61-54ae26207d78}" Name="GtShowInPortfolio" DisplayName="Vis i portefølje" Type="Boolean" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Huk av denne for å vise risikoen i oversikten på porteføljenivå" StaticName="GtShowInPortfolio" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Type="Text" DisplayName="Kategori" Description="" MaxLength="255" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{5ff9d412-67f4-42a0-8e46-78bcf0ebc6d7}" StaticName="GtCategory" Name="GtCategory" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Description="" DisplayName="Dato for siste rapportering av kostnader" Format="DateOnly" FriendlyDisplayFormat="Disabled" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{f4623214-ab74-4160-82a7-37d46901bc1b}" Name="GtBudgetLastReportDate" StaticName="GtBudgetLastReportDate" Type="DateTime" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field DisplayName="Diagramtype" Description="Type diagram" Type="Choice" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{e1457016-93d9-4eca-b05a-1a9491fa35db}" StaticName="GtPiCustomType" Name="GtPiCustomType" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <CHOICES>
+            <CHOICE>pie</CHOICE>
+            <CHOICE>bar</CHOICE>
+            <CHOICE>column</CHOICE>
+            <CHOICE>bubble</CHOICE>
+            <CHOICE>scatter</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field ID="{18d92e18-10b6-42ea-815d-b12d7827564e}" Name="GtProjectLifecycleStatus" DisplayName="Prosjektstatus" Type="Choice" Format="Dropdown" Group="Kolonner for Prosjektportalen (Portefølje)" Description="" StaticName="GtProjectLifecycleStatus" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>Aktivt</Default>
+          <CHOICES>
+            <CHOICE>Aktivt</CHOICE>
+            <CHOICE>Avsluttet</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field AppendOnly="FALSE" Description="Kommentar til status risiko angitt over" DisplayName="Kommentar, risiko" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{b5932b1d-bee4-410c-aac2-54a7cd9d5381}" Name="GtStatusRiskComment" NumLines="3" StaticName="GtStatusRiskComment" Type="Note" UnlimitedLengthInDocumentLibrary="TRUE" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field ID="{dc856c1d-0b98-4d38-9918-d7068f74bd8b}" Name="GtDeliveryAcceptanceResponsible" DisplayName="Godkjenningsansvar" Type="User" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hvem har ansvaret for å godkjenne leveransen?" StaticName="GtDeliveryAcceptanceResponsible" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Type="Note" DisplayName="Kommentar til måling" Description="" NumLines="3" RichText="FALSE" ID="{0b78e51d-84d9-4885-9e79-2fe382a2ceb9}" StaticName="GtMeasurementComment" Name="GtMeasurementComment" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Description="" DisplayName="Sak-/arkivreferanse" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{a59fe220-36c3-464a-8cfc-40d6d04debd2}" Name="GtArchiveReference" StaticName="GtArchiveReference" Type="Text" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Description="" DisplayName="Scope" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{80dea622-3202-4896-b33f-9720aa19adbc}" Name="GtLogScope" StaticName="GtLogScope" Type="Text" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Type="Note" DisplayName="Beskrivelse av utfordring" Description="" NumLines="3" RichText="FALSE" RichTextMode="Compatible" IsolateStyles="FALSE" ID="{1fb52a28-81c4-405f-8da6-883c29b6b856}" StaticName="GtChallengeDescription" Name="GtChallengeDescription" RestrictedMode="TRUE" AppendOnly="FALSE" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field ID="{7838332a-cf7f-47d5-924f-8c6d134935ea}" Name="GtProjectLogResponsible" DisplayName="Ansvarlig" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hvem er ansvarlig for dette?" FillInChoice="TRUE" StaticName="GtProjectLogResponsible" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}">
+          <CHOICES>
+            <CHOICE>Prosjekteier</CHOICE>
+            <CHOICE>Linjeorganisasjon</CHOICE>
+            <CHOICE>Prosjektleder</CHOICE>
+            <CHOICE>Prosjektgruppe</CHOICE>
+            <CHOICE>Leverandør</CHOICE>
+            <CHOICE>Referansegrupper</CHOICE>
+            <CHOICE>Andre</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field Description="" DisplayName="Sluttdato" Format="DateOnly" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{16623c2a-3fd1-41c2-87e7-958583dd88da}" Name="GtEndDate" StaticName="GtEndDate" Type="DateTime" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field DisplayName="Bredde (640px - 1023px)" Description="Bredde (1-12) for 640px til 1023px" Type="Number" Min="1" Max="12" Decimals="0" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{047c422a-fdcd-407c-839f-e96d7f639082}" StaticName="GtPiWidthLg" Name="GtPiWidthLg" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>12</Default>
+        </Field>
+        <Field AppendOnly="FALSE" Description="Kommentar til status gevinstoppnåelse angitt over" DisplayName="Kommentar, gevinstoppnåelse" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{cb41572a-78c6-4e33-8505-b97bfd8fd162}" Name="GtStatusGainAchievementComment" NumLines="3" StaticName="GtStatusGainAchievementComment" Type="Note" UnlimitedLengthInDocumentLibrary="TRUE" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Type="Text" DisplayName="Ikon" Description="Ikon fra https://developer.microsoft.com/en-us/fabric#/styles/icons" ID="{b5fc712a-9908-4ba1-a8ac-7e51eca7a251}" StaticName="GtPortfolioFabricIcon" Name="GtPortfolioFabricIcon" Group="Kolonner for Prosjektportalen (Portefølje)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>LocationCircle</Default>
+        </Field>
+        <Field Type="Text" DisplayName="Ikonnavn" Description="" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{d066062c-2fd0-486a-a30a-44bcb3bead4a}" StaticName="GtPortfolioColumnIconName" Name="GtPortfolioColumnIconName" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>CircleFill</Default>
+        </Field>
+        <Field Description="" DisplayName="Value" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{7711112c-e3f1-4a97-b162-c23dc78f4af4}" Name="GtValue" StaticName="GtValue" Type="Text" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field ID="{3bcfaa2c-e9bd-4a22-bf65-af4d68c308e7}" Name="GtDeliveryAcceptanceMethod" DisplayName="Godkjenningsmetode" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hvordan blir godkjenningen av leveransen bekreftet (test, brukerundersøkelse, demo, muntlig, skriftlig)?" AppendOnly="FALSE" StaticName="GtDeliveryAcceptanceMethod" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field DisplayName="Navn" Description="" ID="{88d9b92c-efed-45d0-a586-86d9196b77d0}" Type="User" Group="Kolonner for Prosjektportalen (Prosjekt)" StaticName="GtResourceUser" Name="GtResourceUser" ShowField="ImnName" UserSelectionMode="PeopleOnly" UserSelectionScope="0" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Type="Text" DisplayName="Kolonneverdi" Description="" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{bb6eac2d-9253-4cb9-a934-a9343ce875d2}" StaticName="GtPortfolioColumnValue" Name="GtPortfolioColumnValue" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Type="Note" DisplayName="Sjekkliste" Description="Sjekkpunkter separert med semikolon." Group="Kolonner for Prosjektportalen (Portefølje)" ID="{3eb0bf2f-9cda-47b7-9865-515e04d8a6f1}" StaticName="GtChecklist" Name="GtChecklist" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Type="Text" DisplayName="Prosjektmal" Description="" MaxLength="255" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{4cc4a931-3861-45ad-85de-6db88afe9fa0}" ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" StaticName="GtProjectTemplate" Name="GtProjectTemplate" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field ID="{00f17233-d4c0-49d0-aebd-5004552abb17}" Name="GtRiskConsequencePostAction" DisplayName="K etter tiltak" Type="Number" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Tall 0 til 5" Min="0" Max="5" StaticName="GtRiskConsequencePostAction" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field ID="{6219fd33-2f3c-42f5-9790-174143bfb99c}" Name="GtRiskAction" DisplayName="Tiltak" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" AppendOnly="FALSE" StaticName="GtRiskAction" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Description="" DisplayName="Områdeadresse" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{871c1234-9ac5-4841-8b56-50839c34a7a1}" Name="GtSiteUrl" ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" StaticName="GtSiteUrl" Type="Text" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Type="DateTime" DisplayName="Realiseringstidspunkt" Description="Forventet tidspunkt for realisering av gevinsten" Format="DateOnly" FriendlyDisplayFormat="Disabled" ID="{b0d03734-a5b1-4e85-a752-45b2da8df7dd}" StaticName="GtRealizationTime" Name="GtRealizationTime" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Type="Text" DisplayName="Farge" Description="" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{4cfafd35-e26f-44cf-bb90-47aa65a41827}" StaticName="GtPortfolioColumnColor" Name="GtPortfolioColumnColor" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>#000000</Default>
+        </Field>
+        <Field Type="LookupMulti" DisplayName="Kolonner" Description="" WebId="{siteid}" List="{{listid:Prosjektkolonner}}" ShowField="Title" Mult="TRUE" UnlimitedLengthInDocumentLibrary="TRUE" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{43c79736-a2b6-452c-9995-6b72bba0ec16}" StaticName="GtPortfolioColumns" Name="GtPortfolioColumns" SourceID="{{siteid}}" AllowDeletion="TRUE" />
+        <Field DisplayName="Bredde (320px - 479px)" Description="Bredde (1-12) for 320px til 479px" Type="Number" Min="1" Max="12" Decimals="0" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{69a75937-35ab-4b35-9081-c8f841460d44}" StaticName="GtPiWidthSm" Name="GtPiWidthSm" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>12</Default>
+        </Field>
+        <Field AllowDeletion="TRUE" AppendOnly="FALSE" Description="Kommentar til status økonomi angitt over" DisplayName="Kommentar, økonomi" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{f2bb8a37-f4cf-43a4-b180-0b07ab14abd5}" Name="GtStatusBudgetComment" NumLines="3" SourceID="{7ad6ed3c-f9bc-45a1-b9fc-61123de84c7f}" StaticName="GtStatusBudgetComment" Type="Note" UnlimitedLengthInDocumentLibrary="TRUE" />
+        <Field Description="" DisplayName="Gruppe-ID" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{167aef39-147b-40e1-befa-c1982af39d71}" Name="GtGroupId" ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" StaticName="GtGroupId" Type="Text" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Description="" DisplayName="Tjenesteområde" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{3275d73a-fd4d-48ba-bcc1-31526460d57b}" List="{{listid:TaxonomyHiddenList}}" Mult="TRUE" Name="GtProjectServiceArea" ShowField="Term1044" SourceID="{{siteid}}" StaticName="GtProjectServiceArea" Type="TaxonomyFieldTypeMulti" WebId="{siteid}" AllowDeletion="TRUE">
+          <Customization>
+            <ArrayOfProperty>
+              <Property>
+                <Name>SspId</Name>
+                <Value xmlns:q1="http://www.w3.org/2001/XMLSchema" p4:type="q1:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{sitecollectiontermstoreid}</Value>
+              </Property>
+              <Property>
+                <Name>GroupId</Name>
+              </Property>
+              <Property>
+                <Name>TermSetId</Name>
+                <Value xmlns:q2="http://www.w3.org/2001/XMLSchema" p4:type="q2:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{termsetid:Prosjektportalen:Tjenesteområde}</Value>
+              </Property>
+              <Property>
+                <Name>AnchorId</Name>
+                <Value xmlns:q3="http://www.w3.org/2001/XMLSchema" p4:type="q3:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">00000000-0000-0000-0000-000000000000</Value>
+              </Property>
+              <Property>
+                <Name>UserCreated</Name>
+                <Value xmlns:q4="http://www.w3.org/2001/XMLSchema" p4:type="q4:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>Open</Name>
+                <Value xmlns:q5="http://www.w3.org/2001/XMLSchema" p4:type="q5:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>TextField</Name>
+                <Value xmlns:q6="http://www.w3.org/2001/XMLSchema" p4:type="q6:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{87b00cac-b21b-403b-bd62-0b2d4e8c304e}</Value>
+              </Property>
+              <Property>
+                <Name>IsPathRendered</Name>
+                <Value xmlns:q7="http://www.w3.org/2001/XMLSchema" p4:type="q7:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>IsKeyword</Name>
+                <Value xmlns:q8="http://www.w3.org/2001/XMLSchema" p4:type="q8:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>TargetTemplate</Name>
+              </Property>
+              <Property>
+                <Name>CreateValuesInEditForm</Name>
+                <Value xmlns:q9="http://www.w3.org/2001/XMLSchema" p4:type="q9:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>FilterAssemblyStrongName</Name>
+                <Value xmlns:q10="http://www.w3.org/2001/XMLSchema" p4:type="q10:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">Microsoft.SharePoint.Taxonomy, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c</Value>
+              </Property>
+              <Property>
+                <Name>FilterClassName</Name>
+                <Value xmlns:q11="http://www.w3.org/2001/XMLSchema" p4:type="q11:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">Microsoft.SharePoint.Taxonomy.TaxonomyField</Value>
+              </Property>
+              <Property>
+                <Name>FilterMethodName</Name>
+                <Value xmlns:q12="http://www.w3.org/2001/XMLSchema" p4:type="q12:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">GetFilteringHtml</Value>
+              </Property>
+              <Property>
+                <Name>FilterJavascriptProperty</Name>
+                <Value xmlns:q13="http://www.w3.org/2001/XMLSchema" p4:type="q13:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">FilteringJavascript</Value>
+              </Property>
+            </ArrayOfProperty>
+          </Customization>
+        </Field>
+        <Field Type="Boolean" DisplayName="Standardvisning" Description="" ID="{3ccd363c-36ba-49aa-bf1e-52a2eb27a876}" StaticName="GtPortfolioIsDefaultView" Name="GtPortfolioIsDefaultView" Group="Kolonner for Prosjektportalen (Portefølje)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>0</Default>
+        </Field>
+        <Field Description="Velges som standard" DisplayName="Standard" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{19c0c03c-678a-4c2a-ab9b-cb9ffd903012}" Name="GtLccDefault" StaticName="GtLccDefault" Type="Boolean" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>1</Default>
+        </Field>
+        <Field ID="{4393ed3c-1599-4ab3-8444-444ab35754bb}" DisplayName="Kommentar, leveransestatus" Name="GtDeliveryStatusComment" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Kommentar til leveransestatus angitt over" NumLines="3" UnlimitedLengthInDocumentLibrary="TRUE" StaticName="GtDeliveryStatusComment" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+     
+        <Field Description="" DisplayName="Prosjekttype" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{ddb69044-7d2c-4865-86ec-b71413780409}" List="{{listid:TaxonomyHiddenList}}" Mult="TRUE" Name="GtProjectType" ShowField="Term1044" SourceID="{{siteid}}" StaticName="GtProjectType" Type="TaxonomyFieldTypeMulti" WebId="{siteid}" AllowDeletion="TRUE">
+          <Customization>
+            <ArrayOfProperty>
+              <Property>
+                <Name>SspId</Name>
+                <Value xmlns:q1="http://www.w3.org/2001/XMLSchema" p4:type="q1:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{sitecollectiontermstoreid}</Value>
+              </Property>
+              <Property>
+                <Name>GroupId</Name>
+              </Property>
+              <Property>
+                <Name>TermSetId</Name>
+                <Value xmlns:q2="http://www.w3.org/2001/XMLSchema" p4:type="q2:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{termsetid:Prosjektportalen:Prosjekttype}</Value>
+              </Property>
+              <Property>
+                <Name>AnchorId</Name>
+                <Value xmlns:q3="http://www.w3.org/2001/XMLSchema" p4:type="q3:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">00000000-0000-0000-0000-000000000000</Value>
+              </Property>
+              <Property>
+                <Name>UserCreated</Name>
+                <Value xmlns:q4="http://www.w3.org/2001/XMLSchema" p4:type="q4:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>Open</Name>
+                <Value xmlns:q5="http://www.w3.org/2001/XMLSchema" p4:type="q5:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>TextField</Name>
+                <Value xmlns:q6="http://www.w3.org/2001/XMLSchema" p4:type="q6:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{4f02bd7f-c4dd-4ad3-8fe6-61dc02d18bdb}</Value>
+              </Property>
+              <Property>
+                <Name>IsPathRendered</Name>
+                <Value xmlns:q7="http://www.w3.org/2001/XMLSchema" p4:type="q7:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>IsKeyword</Name>
+                <Value xmlns:q8="http://www.w3.org/2001/XMLSchema" p4:type="q8:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>TargetTemplate</Name>
+              </Property>
+              <Property>
+                <Name>CreateValuesInEditForm</Name>
+                <Value xmlns:q9="http://www.w3.org/2001/XMLSchema" p4:type="q9:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>FilterAssemblyStrongName</Name>
+                <Value xmlns:q10="http://www.w3.org/2001/XMLSchema" p4:type="q10:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">Microsoft.SharePoint.Taxonomy, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c</Value>
+              </Property>
+              <Property>
+                <Name>FilterClassName</Name>
+                <Value xmlns:q11="http://www.w3.org/2001/XMLSchema" p4:type="q11:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">Microsoft.SharePoint.Taxonomy.TaxonomyField</Value>
+              </Property>
+              <Property>
+                <Name>FilterMethodName</Name>
+                <Value xmlns:q12="http://www.w3.org/2001/XMLSchema" p4:type="q12:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">GetFilteringHtml</Value>
+              </Property>
+              <Property>
+                <Name>FilterJavascriptProperty</Name>
+                <Value xmlns:q13="http://www.w3.org/2001/XMLSchema" p4:type="q13:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">FilteringJavascript</Value>
+              </Property>
+            </ArrayOfProperty>
+          </Customization>
+        </Field>
+        <Field ID="{a3462545-ac76-4681-96b4-f883fea4b2ba}" Name="GtProjectLogDescription" DisplayName="Loggbeskrivelse" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hva handler dette om?" AppendOnly="FALSE" StaticName="GtProjectLogDescription" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Description="" DisplayName="Prosjektnummer" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{64d45745-0dd0-4c21-979b-67fb13748bb1}" Name="GtProjectNumber" StaticName="GtProjectNumber" Type="Text" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Type="Note" DisplayName="Vedlegg" Description="Vedlegg til oppgaven. Skrives på formatet url;tittel;type. Separer verdier med |. Type kan f.eks. være PowerPoint, Word, Excel eller Other." Group="Kolonner for Prosjektportalen (Portefølje)" ID="{43a2aa45-0383-40ff-9baf-458981180fac}" StaticName="GtAttachments" Name="GtAttachments" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Type="Boolean" DisplayName="Standard for kategori" Description="" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{1bfa0248-e65d-4fae-b5cf-fbffeb6c13da}" StaticName="GtDataSourceDefault" Name="GtDataSourceDefault" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>0</Default>
+        </Field>
+        <Field Decimals="0" Description="" DisplayName="Kostnader påløpt totalt" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{5af54348-bc38-4a18-a11f-0f84a96da4ea}" LCID="1044" Min="0" Name="GtCostsTotal" StaticName="GtCostsTotal" Type="Currency" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Description="" DisplayName="Function Name" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{0b2d3d49-fc49-4818-ac9b-23eda9697d27}" Name="GtLogFunctionName" StaticName="GtLogFunctionName" Type="Text" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Type="Number" DisplayName="Målt verdi" Description="" ID="{70dc7c4a-54ec-4674-b238-2b2a889e1b49}" StaticName="GtMeasurementValue" Name="GtMeasurementValue" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Type="Text" DisplayName="Felter" Description="" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{2d165a4d-a3e9-4756-acd2-abb537041fd4}" StaticName="GtSecViewFields" Name="GtSecViewFields" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Type="Text" DisplayName="Ikonnavn" Description="" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{a71d534e-9eb7-4ef1-9793-6a978cad8ef1}" StaticName="GtIconName" Name="GtIconName" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>CircleFill</Default>
+        </Field>
+        <Field Type="Text" DisplayName="Ikon" Description="Ikon fra https://dev.office.com/fabric#/styles/icons" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{b2af224f-5e07-4f9f-9a3a-9f5345bb3153}" StaticName="GtSecIcon" Name="GtSecIcon" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field DisplayName="Tittel (X-akse)" Description="Tittel på X-aksen" Type="Text" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{ed9bac4f-1bd5-4a54-9b9d-ba7d4af8ac5a}" StaticName="GtPiXAxisTitle" Name="GtPiXAxisTitle" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Description="" DisplayName="Web URL" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{b9bbd94f-f9c0-4512-ad77-404f8a2c64b1}" Name="GtLogWebUrl" StaticName="GtLogWebUrl" Type="Text" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Description="Er den rollen som har det overordnede ansvaret for at prosjektets gevinster blir realisert. Den gevinstansvarlige skal normalt være en leder plassert i den delen av en linjeorganisasjon som skal realisere gevinstene." DisplayName="Gevinstansvarlig" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{fcf9c850-8267-4452-8366-74b7a76da177}" Name="GtGainsResponsible" ShowField="ImnName" StaticName="GtGainsResponsible" Type="User" UserSelectionMode="PeopleOnly" UserSelectionScope="0" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Description="" DisplayName="Status fremdrift" Format="RadioButtons" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{1447ef51-8e9b-4d16-aa2a-526dc9f1539e}" Name="GtStatusTime" StaticName="GtStatusTime" Type="Choice" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <CHOICES>
+            <CHOICE>Foran plan</CHOICE>
+            <CHOICE>Forsinket</CHOICE>
+            <CHOICE>Mindre forsinkelser</CHOICE>
+            <CHOICE>På plan</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field Type="Choice" DisplayName="Måleenhet" Description="Se måleindikator for utdypning" Format="Dropdown" ID="{0d38db52-2040-44c1-823e-7642f76519ee}" StaticName="GtMeasurementUnit" Name="GtMeasurementUnit" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}">
+          <Default>Antall</Default>
+          <CHOICES>
+            <CHOICE>Antall</CHOICE>
+            <CHOICE>Kroner</CHOICE>
+            <CHOICE>Prosent</CHOICE>
+            <CHOICE>Timer</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field Description="" DisplayName="Prosjekteier" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{3121ac55-d68e-4fcb-8fc8-3d8ed8a601b2}" Name="GtProjectOwner" StaticName="GtProjectOwner" Type="User" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field ID="{2bb7e155-3af4-4353-a460-8da404c4e748}" Name="GtStakeholderInfluencePossibilty" DisplayName="Mulighet til påvirkning" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" StaticName="GtStakeholderInfluencePossibilty" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <CHOICES>
+            <CHOICE>Stor</CHOICE>
+            <CHOICE>Middels</CHOICE>
+            <CHOICE>Liten</CHOICE>
+            <CHOICE>Ingen</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field DisplayName="Belastning" Description="Hvor stor belastning har personen?" ID="{08ac9d56-f8eb-4a2c-868f-d39fc012fcd6}" Name="GtResourceLoad" Type="Number" Group="Kolonner for Prosjektportalen (Prosjekt)" Percentage="TRUE" StaticName="GtResourceLoad" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Type="Note" DisplayName="Gevinstomsetting" Description="Hvordan skal gevinsten realiseres?" NumLines="3" RichText="FALSE" ID="{d79d8a58-1079-4a3a-9f27-02de9a3eace1}" StaticName="GtGainsTurnover" Name="GtGainsTurnover" RestrictedMode="TRUE" RichTextMode="Compatible" IsolateStyles="FALSE" AppendOnly="FALSE" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field DisplayName="Min (Y-akse)" Description="Minimum verdi for Y-aksen" Percentage="FALSE" Type="Number" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{9a731b59-52ed-4b93-ab7a-3fd56914d0a6}" StaticName="GtPiYMin" Name="GtPiYMin" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field ID="{c755525b-3716-4ee8-a4f4-f9684808c009}" Name="GtRiskProximity" DisplayName="Nærhet" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" StaticName="GtRiskProximity" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}">
+          <CHOICES>
+            <CHOICE>Umiddelbart</CHOICE>
+            <CHOICE>I denne fasen</CHOICE>
+            <CHOICE>Innenfor prosjektet</CHOICE>
+            <CHOICE>Utenfor prosjektet</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field ID="{0e1b295d-2bfb-4ef6-ae92-e72068e56111}" Name="GtRiskProbability" DisplayName="Sannsynlighet (S)" Type="Number" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Tall 0 til 5" Min="0" Max="5" StaticName="GtRiskProbability" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Description="Dersom gevinstene skal realiseres i ulike deler av organisasjonen (eller i flere virksomheter) anbefales det å oppnevne en gevinsteier i de ulike delene av linjeorganisasjonen (eller virksomhetene) som eier ulike deler av de planlagte gevinstene. Gevinsteiere har da et distribuert ansvar for sin del av gevinstene, og har en viktig rolle som den gevinstansvarliges &amp;quot;forlengede arm&amp;quot; og lokale støttespiller." DisplayName="Gevinsteier" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{158b2f60-8068-447f-83e7-cabdb5bf4cf4}" Name="GtGainsOwner" ShowField="ImnName" StaticName="GtGainsOwner" Type="User" UserSelectionMode="PeopleOnly" UserSelectionScope="0" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field DisplayName="Bredde (1366px - 1919px)" Description="Bredde (1-12) for 1366px til 1919px" Type="Number" Min="1" Max="12" Decimals="0" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{af569b60-0010-4108-9c92-cb03a90b7498}" StaticName="GtPiWidthXxl" Name="GtPiWidthXxl" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>12</Default>
+        </Field>
+        <Field DisplayName="Rolle" Description="Hvilken rolle har personen?" ID="{3a0ae560-bd55-45d4-907f-5119bf0a83bb}" Type="TaxonomyFieldType" WebId="{siteid}" Group="Kolonner for Prosjektportalen (Prosjekt)" StaticName="GtResourceRole" Name="GtResourceRole" SourceID="{{siteid}}" List="{{listid:TaxonomyHiddenList}}" ShowField="Term1044">
+          <Customization>
+            <ArrayOfProperty>
+              <Property>
+                <Name>SspId</Name>
+                <Value xmlns:q1="http://www.w3.org/2001/XMLSchema" p4:type="q1:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{sitecollectiontermstoreid}</Value>
+              </Property>
+              <Property>
+                <Name>GroupId</Name>
+              </Property>
+              <Property>
+                <Name>TermSetId</Name>
+                <Value xmlns:q2="http://www.w3.org/2001/XMLSchema" p4:type="q2:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{termsetid:Prosjektportalen:Rolle}</Value>
+              </Property>
+              <Property>
+                <Name>AnchorId</Name>
+                <Value xmlns:q3="http://www.w3.org/2001/XMLSchema" p4:type="q3:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">00000000-0000-0000-0000-000000000000</Value>
+              </Property>
+              <Property>
+                <Name>UserCreated</Name>
+                <Value xmlns:q4="http://www.w3.org/2001/XMLSchema" p4:type="q4:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>Open</Name>
+                <Value xmlns:q5="http://www.w3.org/2001/XMLSchema" p4:type="q5:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>TextField</Name>
+                <Value xmlns:q6="http://www.w3.org/2001/XMLSchema" p4:type="q6:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{3932680a-7128-4f3c-abb7-0f68c2090112}</Value>
+              </Property>
+              <Property>
+                <Name>IsPathRendered</Name>
+                <Value xmlns:q7="http://www.w3.org/2001/XMLSchema" p4:type="q7:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>IsKeyword</Name>
+                <Value xmlns:q8="http://www.w3.org/2001/XMLSchema" p4:type="q8:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>TargetTemplate</Name>
+              </Property>
+              <Property>
+                <Name>CreateValuesInEditForm</Name>
+                <Value xmlns:q9="http://www.w3.org/2001/XMLSchema" p4:type="q9:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>FilterAssemblyStrongName</Name>
+                <Value xmlns:q10="http://www.w3.org/2001/XMLSchema" p4:type="q10:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">Microsoft.SharePoint.Taxonomy, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c</Value>
+              </Property>
+              <Property>
+                <Name>FilterClassName</Name>
+                <Value xmlns:q11="http://www.w3.org/2001/XMLSchema" p4:type="q11:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">Microsoft.SharePoint.Taxonomy.TaxonomyField</Value>
+              </Property>
+              <Property>
+                <Name>FilterMethodName</Name>
+                <Value xmlns:q12="http://www.w3.org/2001/XMLSchema" p4:type="q12:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">GetFilteringHtml</Value>
+              </Property>
+              <Property>
+                <Name>FilterJavascriptProperty</Name>
+                <Value xmlns:q13="http://www.w3.org/2001/XMLSchema" p4:type="q13:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">FilteringJavascript</Value>
+              </Property>
+            </ArrayOfProperty>
+          </Customization>
+        </Field>
+        <Field DisplayName="Konfigurasjonsfil" Description="Konfigurasjonsfil for egendefinert diagram" Type="Lookup" List="{{listid:Egendefinerte diagrammer}}" ShowField="Title" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{4795a463-b396-4987-a2d1-532c78933cf9}" StaticName="GtPiCustomConfiguration" Name="GtPiCustomConfiguration" SourceID="{{siteid}}" AllowDeletion="TRUE" />
+        <Field DisplayName="Farger" Description="Farger for verdien i formatet [VERDI1]:[FARGE1];[VERDI2]:[FARGE2]" Type="Note" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{a2d79665-fb4a-4367-830a-c0403bd724f0}" StaticName="GtPiColorsMap" Name="GtPiColorsMap" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field ID="{2391d165-5d13-46b7-87d2-e32040293210}" Name="GtProjectLogType" DisplayName="Loggelement" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" StaticName="GtProjectLogType" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}">
+          <Default>Kommentar/Bekymring/Hendelse</Default>
+          <CHOICES>
+            <CHOICE>Kommentar/Bekymring/Hendelse</CHOICE>
+            <CHOICE>Endringsforespørsel</CHOICE>
+            <CHOICE>Avvik fra spesifikasjon</CHOICE>
+            <CHOICE>Beslutning</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field Description="" DisplayName="Listenavn (mål)" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{008bb566-26c3-4cac-8d16-9bf3b1c5fb4b}" Name="GtLccDestinationList" StaticName="GtLccDestinationList" Type="Text" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Description="Felter som skal kopieres" DisplayName="Felter " Group="Kolonner for Prosjektportalen (Portefølje)" ID="{525a7269-b880-4266-8482-fe7a1bfaac3e}" Name="GtLccFields" StaticName="GtLccFields" Type="Text" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>Title</Default>
+        </Field>
+        <Field Type="Boolean" DisplayName="Personlig visning" Description="" ID="{9f4ee969-ea00-4cc1-a466-a05c7db4156d}" StaticName="GtPortfolioIsPersonalView" Name="GtPortfolioIsPersonalView" Group="Kolonner for Prosjektportalen (Portefølje)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>0</Default>
+        </Field>
+        <Field ID="{49b0ba6b-d1ec-4644-91b7-691a33524c90}" Name="GtProjectLogReporter" DisplayName="Meldt av" Type="User" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Oppgi den personen som meldte saken. Det er prosjektleders ansvar å opprette en Emnerapport på basis av emnet som er valgt etter prosedyrene valgt for dette prosjektet." StaticName="GtProjectLogReporter" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Type="Boolean" DisplayName="Vis i navigasjonslinjen" Description="" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{1c6ac96b-0f62-4396-8e87-d7db512d96b9}" StaticName="GtSecShowInNavbar" Name="GtSecShowInNavbar" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>1</Default>
+        </Field>
+        <Field Type="Lookup" DisplayName="Grupper etter" Description="" WebId="{siteid}" List="{{listid:Prosjektkolonner}}" ShowField="Title" UnlimitedLengthInDocumentLibrary="TRUE" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{0d7a146d-b41e-4357-82c3-76fb49eac011}" StaticName="GtPortfolioGroupBy" Name="GtPortfolioGroupBy" SourceID="{{siteid}}" AllowDeletion="TRUE" />
+        <Field Description="" DisplayName="Key" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{a2c95470-5762-407b-935f-412092a3a4cf}" Name="GtKey" StaticName="GtKey" Type="Text" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Description="" DisplayName="Fase (text)" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{1b9a1571-b300-4cc0-bd32-9311f72e1998}" Name="GtProjectPhaseText" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" StaticName="GtProjectPhaseText" Type="Text" WebId="223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19" ShowInEditForm="FALSE" AllowDeletion="TRUE" />
+        <Field Type="Note" DisplayName="Spørring" Description="" NumLines="6" RichText="FALSE" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{dd9a8b72-c646-4ec2-b834-614fa27fb79a}" StaticName="GtSecViewQuery" Name="GtSecViewQuery" CustomFormatter="" RestrictedMode="TRUE" AppendOnly="FALSE" UnlimitedLengthInDocumentLibrary="FALSE" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field ID="{45d5b378-67ce-4f21-b622-fe54b27c83a6}" Name="GtStakeholderActions" DisplayName="Tiltak" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Mulige strategier for å oppnå støtte eller redusere hindringer" AppendOnly="FALSE" StaticName="GtStakeholderActions" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Type="Text" DisplayName="Feltnavn" Description="" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{fe762779-f5d6-475d-ad1d-68e7d9ae0034}" StaticName="GtSecFieldName" Name="GtSecFieldName" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Description="Velges som standard" DisplayName="Standard" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{7ec0bc7a-f644-4ddb-86e0-5c8d70e3c16a}" Name="GtExtensionDefault" StaticName="GtExtensionDefault" Type="Boolean" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>0</Default>
+        </Field>
+        <Field DisplayName="Bredde (1024px - 1365px)" Description="Bredde (1-12) for 1024px til 1365px" Type="Number" Min="1" Max="12" Decimals="0" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{2a0d7d7e-44f4-40e5-a444-3df1e07ef71d}" StaticName="GtPiWidthXl" Name="GtPiWidthXl" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>12</Default>
+        </Field>
+        <Field DisplayName="Max (Y-akse)" Description="Max verdi for Y-aksen" Percentage="FALSE" Type="Number" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{f7fd2b80-26e4-472c-8629-02e898b2a19f}" StaticName="GtPiYMax" Name="GtPiYMax" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Type="Number" DisplayName="Startverdi" Description="Resultatet fra nullmålingen" ID="{c5fc8781-7fbd-43a2-a215-c8c959bbab69}" StaticName="GtStartValue" Name="GtStartValue" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field ID="{77450582-a061-4416-af17-6dfb99fa9036}" Name="GtActionDate" DisplayName="Tiltaksdato" Description="" Type="DateTime" Group="Kolonner for Prosjektportalen (Prosjekt)" Format="DateOnly" StaticName="GtActionDate" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Type="Boolean" DisplayName="Vis i statusseksjonen" Description="" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{9985ae83-9e19-48dc-b33d-2fbf84f7202b}" StaticName="GtSecShowInStatusSection" Name="GtSecShowInStatusSection" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>1</Default>
+        </Field>
+
+        <Field Description="" DisplayName="Status kvalitet" Format="RadioButtons" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{0bbe6a84-67e6-4a9c-b26b-a5973dacd473}" Name="GtStatusQuality" StaticName="GtStatusQuality" Type="Choice" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <CHOICES>
+            <CHOICE>Bedre enn spesifikasjon</CHOICE>
+            <CHOICE>Ihht. spesifikasjon</CHOICE>
+            <CHOICE>Mindre avvik fra spesifikasjon</CHOICE>
+            <CHOICE>Større avvik fra spesifikasjon</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field Type="Number" DisplayName="Antal elementer" Description="" Decimals="0" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{adf89685-f464-4ef5-8f7b-53b600aac14a}" StaticName="GtSecRowLimit" Name="GtSecRowLimit" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Description="Om elementet skjules, kan det ikke velges av brukerne i dialogen for oppsett av nytt prosjektområde." DisplayName="Skjult" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{f536ad85-248c-49b9-b6c7-0665943a2061}" Name="GtLccHidden" StaticName="GtLccHidden" Type="Boolean" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>0</Default>
+        </Field>
+        <Field ID="{6539658a-b186-402c-b224-9fb41cb48596}" Name="GtProjectLogActors" DisplayName="Aktører" Type="MultiChoice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" FillInChoice="TRUE" StaticName="GtProjectLogActors" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}">
+          <CHOICES>
+            <CHOICE>Leverandører</CHOICE>
+            <CHOICE>Prosjektstyre</CHOICE>
+            <CHOICE>Prosjektgruppe</CHOICE>
+            <CHOICE>Referansegruppe</CHOICE>
+            <CHOICE>Andre interessenter</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field ID="{3dd7058b-0ba1-46e5-b40a-4f2f542638ea}" Name="GtDeliveryQualityTolerance" DisplayName="Kvalitetstoleranse" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hvilke toleranser (slingringsmonn) gjelder for akseptansekriteriene?" AppendOnly="FALSE" StaticName="GtDeliveryQualityTolerance" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Description="" DisplayName="Log Level" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{d141ee8b-feea-4a9d-9dc1-a6feff4abb72}" Name="GtLogLevel" StaticName="GtLogLevel" Type="Text" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field ID="{c845028e-3395-49d4-86fe-6d94992c38c2}" Name="GtDeliveryQualityResponsible" DisplayName="Kvalitetsansvar" Type="User" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hvem er ansvarlig for å levere kvaliteten på leveransen?" StaticName="GtDeliveryQualityResponsible" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Type="Choice" DisplayName="Datatype" Description="Datatype for denne kolonnen. Styrer hvordan kolonnen blir vist i Porteføljeoversikten." Title="Datatype" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{7463d38f-5f51-4b25-a920-04ea1ec24a26}" StaticName="GtFieldDataType" Name="GtFieldDataType" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <CHOICES>
+            <CHOICE>Text</CHOICE>
+            <CHOICE>User</CHOICE>
+            <CHOICE>Tags</CHOICE>
+            <CHOICE>Number</CHOICE>
+            <CHOICE>Percentage</CHOICE>
+            <CHOICE>Date</CHOICE>
+            <CHOICE>URL</CHOICE>
+            <CHOICE>Currency</CHOICE>
+            <CHOICE>Note</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field Description="" DisplayName="Prosjektleder" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{d46bed8f-0fb6-4684-8221-632fdb12598f}" Name="GtProjectManager" StaticName="GtProjectManager" Type="User" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field AppendOnly="FALSE" Description="Overordnet status for prosjektet" DisplayName="Overordnet status" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{3e90aa95-4d32-4819-823f-10ae2fd412b5}" Name="GtOverallStatus" NumLines="6" StaticName="GtOverallStatus" Type="Note" UnlimitedLengthInDocumentLibrary="TRUE" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Description="" DisplayName="Sorteringsrekkefølge" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{0e82c395-9ed9-43f9-871a-208215b18558}" Name="GtSortOrder" StaticName="GtSortOrder" Type="Number" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>100</Default>
+        </Field>
+        <Field ID="{6aad1f97-ba6f-4865-b325-9deea7bd0564}" Name="GtProjectLogRecommendation" DisplayName="Anbefaling" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hva bør gjøres og hvorfor?" UnlimitedLengthInDocumentLibrary="TRUE" AppendOnly="FALSE" StaticName="GtProjectLogRecommendation" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Type="Choice" DisplayName="Status" Description="" Format="Dropdown" FillInChoice="FALSE" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{6ec4d897-ee44-42b2-80c0-3714021f6ac6}" StaticName="GtAllocationStatus" Name="GtAllocationStatus" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}">
+          <Default>Forespurt</Default>
+          <CHOICES>
+            <CHOICE>Forespurt</CHOICE>
+            <CHOICE>Tildelt</CHOICE>
+            <CHOICE>Avvist</CHOICE>
+            <CHOICE>Annet (beskriv i kommentar</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field Description="" DisplayName="Listenavn (kilde)" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{82c3fe98-7bce-4234-9eea-0ae30984dbd8}" Name="GtLccSourceList" StaticName="GtLccSourceList" Type="Text" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Type="Note" DisplayName="Leveransebeskrivelse" Description="" UnlimitedLengthInDocumentLibrary="TRUE" NumLines="6" RichText="FALSE" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{99430a99-1354-418f-921f-7ddfdb6c0d7f}" StaticName="GtDeliveryDescription" Name="GtDeliveryDescription" RichTextMode="Compatible" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Type="Note" DisplayName="Beskrivelse" Description="" UnlimitedLengthInDocumentLibrary="TRUE" NumLines="6" RichText="TRUE" RichTextMode="FullHtml" IsolateStyles="TRUE" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{27d85299-57fd-4c76-a752-edafe1ca944e}" StaticName="GtActionDescription" Name="GtActionDescription" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Type="Boolean" DisplayName="Grupperbar" Description="Brukere kan gruppere på denne kolonnen i Portføljeoversikten." ID="{b77be89a-346f-4897-b519-e55eedbc0aa9}" StaticName="GtIsGroupable" Name="GtIsGroupable" Group="Kolonner for Prosjektportalen (Portefølje)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Type="DateTime" DisplayName="Sluttidspunkt" Description="" Format="DateOnly" FriendlyDisplayFormat="Disabled" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{eb78509b-4109-474e-aca8-90d024a960de}" StaticName="GtDeliveryEndTime" Name="GtDeliveryEndTime" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field DisplayName="Intervall (Y-akse)" Description="" Percentage="FALSE" Type="Number" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{60dac89b-70f5-4a49-87a9-b253bd5df7ca}" StaticName="GtPiYTickInterval" Name="GtPiYTickInterval" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Description="" DisplayName="Status økonomi" Format="RadioButtons" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{a9902b9d-8aad-40df-9788-ba73c64c3cb5}" Name="GtStatusBudget" StaticName="GtStatusBudget" Type="Choice" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <CHOICES>
+            <CHOICE>Mindre overskridelser</CHOICE>
+            <CHOICE>Over budsjett</CHOICE>
+            <CHOICE>På budsjett</CHOICE>
+            <CHOICE>Under budsjett</CHOICE>
+            <CHOICE>Vet ikke</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field Description="" DisplayName="Status risiko" Format="RadioButtons" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{fc8a879d-83bc-4670-b1f6-c9817e333614}" Name="GtStatusRisk" StaticName="GtStatusRisk" Type="Choice" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <CHOICES>
+            <CHOICE>Høy</CHOICE>
+            <CHOICE>Lav</CHOICE>
+            <CHOICE>Medium</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field DisplayName="Kolonne(Y)" Description="Hvilken kolonne skal brukes for Y. Velges fra listen Prosjektkolonner." Type="Lookup" Group="Kolonner for Prosjektportalen (Portefølje)" WebId="{siteid}" List="{{listid:Prosjektkolonner}}" ShowField="Title" ID="{49b90b9f-d6bb-4337-b5cc-9b9ea9914e97}" StaticName="GtPiFieldY" Name="GtPiFieldY" SourceID="{{siteid}}" AllowDeletion="TRUE" />
+        <Field Type="Lookup" DisplayName="Kolonne" Description="" WebId="{siteid}" List="{{listid:Prosjektkolonner}}" ShowField="Title" UnlimitedLengthInDocumentLibrary="TRUE" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{6aefa59f-4300-4c22-94af-d77d05d792f6}" StaticName="GtPortfolioColumn" Name="GtPortfolioColumn" SourceID="{{siteid}}" AllowDeletion="TRUE" />
+        <Field ID="{554d32a0-0148-4b3c-bfc4-f101232ee501}" Name="GtRiskConsequence" DisplayName="Konsekvens (K)" Type="Number" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Tall 0 til 5" Min="0" Max="5" StaticName="GtRiskConsequence" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Type="Boolean" DisplayName="Vis på prosjektstatus-siden" Description="Skal kolonnen være synlig i Prosjektinformasjon på Prosjektstatus-siden." ID="{1e99fca0-3e0f-4632-9dd1-901bd09a13bc}" StaticName="GtShowFieldProjectStatus" Name="GtShowFieldProjectStatus" Group="Kolonner for Prosjektportalen (Portefølje)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field ID="{475d2ca1-5b8e-4479-96ae-81c0a89354f3}" Name="GtStakeholderInfluence" DisplayName="Påvirkes i hvilken grad" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" StaticName="GtStakeholderInfluence" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <CHOICES>
+            <CHOICE>Stor</CHOICE>
+            <CHOICE>Middels</CHOICE>
+            <CHOICE>Liten</CHOICE>
+            <CHOICE>Ingen</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field Type="Text" DisplayName="Kommunikasjonskanal" Description="" MaxLength="255" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{4d5e69a2-2eb5-422c-af04-70b67697cd23}" StaticName="GtActionChannel" Name="GtActionChannel" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field ID="{249527a3-c7f9-4ea5-9c33-f942c06c9215}" Name="GtChecklistStatus" DisplayName="Status" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" StaticName="GtChecklistStatus" CustomFormatter="{&#xA;&quot;$schema&quot;: &quot;https://developer.microsoft.com/json-schemas/sp/v2/column-formatting.schema.json&quot;,&#xA;&quot;elmType&quot;:&quot;div&quot;,&#xA;&quot;attributes&quot;:{&#xA;&quot;class&quot;: &quot;=if(@currentField == 'Åpen', 'sp-field-severity--low', if(@currentField == 'Utført', 'sp-field-severity--good', if(@currentField == 'Arkivert', 'sp-field-severity--warning', 'sp-field-severity--blocked'))) + ' ms-fontColor-neutralSecondary'&quot;&#xA;    },&#xA;    &quot;children&quot;: [&#xA;        {&#xA;            &quot;elmType&quot;: &quot;span&quot;,&#xA;            &quot;style&quot;: {&#xA;                &quot;display&quot;: &quot;inline-block&quot;,&#xA;                &quot;padding&quot;: &quot;0 4px&quot;&#xA;            },&#xA;            &quot;attributes&quot;: {&#xA;                &quot;iconName&quot;: &quot;=if(@currentField == 'Åpen', 'CircleRing', if(@currentField == 'Utført', 'Completed', if(@currentField == 'Arkivert', 'Archive', 'Blocked')))&quot;&#xA;}&#xA;},&#xA;{&#xA;&quot;elmType&quot;: &quot;span&quot;,&#xA;&quot;txtContent&quot;: &quot;@currentField&quot;&#xA;}&#xA;]&#xA;}" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}">
+          <Default>Åpen</Default>
+          <CHOICES>
+            <CHOICE>Åpen</CHOICE>
+            <CHOICE>Utført</CHOICE>
+            <CHOICE>Ikke relevant</CHOICE>
+            <CHOICE>Arkivert</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field DisplayName="Bredde (480px - 639px)" Description="Bredde (1-12) for 480px til 639px" Type="Number" Min="1" Max="12" Decimals="0" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{d25031a3-9fbb-48b7-8c3a-554805fc4eb9}" StaticName="GtPiWidthMd" Name="GtPiWidthMd" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>12</Default>
+        </Field>
+        <Field ID="{2ae541a5-5ecc-481d-afb6-c03a6f1e71b4}" Name="GtActionResponsible" DisplayName="Tiltaksansvarlig" Type="User" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" StaticName="GtActionResponsible" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Description="" DisplayName="Fase" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{325543a5-815d-485d-a9a5-e0773ad762e9}" Name="GtProjectPhase" ShowField="Term1044" SourceID="{{siteid}}" StaticName="GtProjectPhase" Type="TaxonomyFieldType" WebId="{siteid}" List="{{listid:TaxonomyHiddenList}}" AllowDeletion="TRUE">
+          <Customization>
+            <ArrayOfProperty>
+              <Property>
+                <Name>SspId</Name>
+                <Value xmlns:q1="http://www.w3.org/2001/XMLSchema" p4:type="q1:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{sitecollectiontermstoreid}</Value>
+              </Property>
+              <Property>
+                <Name>GroupId</Name>
+              </Property>
+              <Property>
+                <Name>TermSetId</Name>
+                <Value xmlns:q2="http://www.w3.org/2001/XMLSchema" p4:type="q2:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{termsetid:Prosjektportalen:Fase}</Value>
+              </Property>
+              <Property>
+                <Name>AnchorId</Name>
+                <Value xmlns:q3="http://www.w3.org/2001/XMLSchema" p4:type="q3:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">00000000-0000-0000-0000-000000000000</Value>
+              </Property>
+              <Property>
+                <Name>UserCreated</Name>
+                <Value xmlns:q4="http://www.w3.org/2001/XMLSchema" p4:type="q4:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>Open</Name>
+                <Value xmlns:q5="http://www.w3.org/2001/XMLSchema" p4:type="q5:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>TextField</Name>
+                <Value xmlns:q6="http://www.w3.org/2001/XMLSchema" p4:type="q6:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{72a7424e-2a41-446a-b04a-895febb79e45}</Value>
+              </Property>
+              <Property>
+                <Name>IsPathRendered</Name>
+                <Value xmlns:q7="http://www.w3.org/2001/XMLSchema" p4:type="q7:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>IsKeyword</Name>
+                <Value xmlns:q8="http://www.w3.org/2001/XMLSchema" p4:type="q8:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>TargetTemplate</Name>
+              </Property>
+              <Property>
+                <Name>CreateValuesInEditForm</Name>
+                <Value xmlns:q9="http://www.w3.org/2001/XMLSchema" p4:type="q9:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>FilterAssemblyStrongName</Name>
+                <Value xmlns:q10="http://www.w3.org/2001/XMLSchema" p4:type="q10:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">Microsoft.SharePoint.Taxonomy, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c</Value>
+              </Property>
+              <Property>
+                <Name>FilterClassName</Name>
+                <Value xmlns:q11="http://www.w3.org/2001/XMLSchema" p4:type="q11:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">Microsoft.SharePoint.Taxonomy.TaxonomyField</Value>
+              </Property>
+              <Property>
+                <Name>FilterMethodName</Name>
+                <Value xmlns:q12="http://www.w3.org/2001/XMLSchema" p4:type="q12:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">GetFilteringHtml</Value>
+              </Property>
+              <Property>
+                <Name>FilterJavascriptProperty</Name>
+                <Value xmlns:q13="http://www.w3.org/2001/XMLSchema" p4:type="q13:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">FilteringJavascript</Value>
+              </Property>
+            </ArrayOfProperty>
+          </Customization>
+        </Field>
+        <Field DisplayName="Kategorikolonne" Description="Kolonnefor kategorisering. Velges fra listen Prosjektkolonner." Type="Lookup" Group="Kolonner for Prosjektportalen (Portefølje)" WebId="{siteid}" List="{{listid:Prosjektkolonner}}" ShowField="Title" ID="{e3e71da7-e34b-4514-bc8f-5256e1f5c70f}" StaticName="GtPiCategoryField" Name="GtPiCategoryField" SourceID="{{siteid}}" AllowDeletion="TRUE" />
+        <Field Type="Boolean" DisplayName="Vis på forsiden" Description="Skal kolonnen være synlig i Prosjektinformasjon på forsiden av prosjektet." ID="{6c72e8a8-1bfa-4323-9103-8baa067bbfb3}" StaticName="GtShowFieldFrontpage" Name="GtShowFieldFrontpage" Group="Kolonner for Prosjektportalen (Portefølje)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Type="Boolean" DisplayName="Vis som egen seksjon" Description="" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{3aad67a9-d8bb-41ce-9324-17a757e6b14b}" StaticName="GtSecShowAsSection" Name="GtSecShowAsSection" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>1</Default>
+        </Field>
+        <Field Description="" DisplayName="Sist synkronisert" Format="DateOnly" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{5e2506aa-1fe1-4be6-8b45-2e94eb9afdd0}" ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" Name="GtLastSyncTime" StaticName="GtLastSyncTime" Type="DateTime" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Type="Note" DisplayName="Kommentar" Description="" UnlimitedLengthInDocumentLibrary="TRUE" NumLines="6" RichText="FALSE" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{42b501ac-c235-4b2a-a95d-8d00aad11779}" StaticName="GtAllocationComment" Name="GtAllocationComment" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Type="Text" DisplayName="Lenke" Description="Om seksjonen skal lenke til en annen side eller ett dokument" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{2d6790ad-9da9-408c-a87f-8d56d7b377f6}" StaticName="GtSecSource" Name="GtSecSource" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field ID="{2847b3b0-ed22-4c47-b7c0-3ebfc83dae4a}" Name="GtStakeholderGroup" DisplayName="Interessentgruppe" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" StaticName="GtStakeholderGroup" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <CHOICES>
+            <CHOICE>Medarbeidere</CHOICE>
+            <CHOICE>Ledelse</CHOICE>
+            <CHOICE>Innbyggere</CHOICE>
+            <CHOICE>Næringsliv</CHOICE>
+            <CHOICE>Frivillighet/Organisasjon</CHOICE>
+            <CHOICE>Fagforening</CHOICE>
+            <CHOICE>Andre offentlige aktører</CHOICE>
+            <CHOICE>Akademia</CHOICE>
+            <CHOICE>Virkemiddelapparat</CHOICE>
+            <CHOICE>Brukere</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field DisplayName="Kolonne(X)" Description="Hvilken kolonne skal brukes for X. Velges fra listen Prosjektkolonner." Type="Lookup" Group="Kolonner for Prosjektportalen (Portefølje)" WebId="{siteid}" List="{{listid:Prosjektkolonner}}" ShowField="Title" ID="{57cf13b1-d2d8-4a9e-beb2-99d0d0a13962}" StaticName="GtPiFieldX" Name="GtPiFieldX" SourceID="{{siteid}}" AllowDeletion="TRUE" />
+        <Field DisplayName="Fravær" Description="Hva er grunnen til fraværet?" FillInChoice="FALSE" Type="Choice" ID="{028e49b1-b141-4d35-8998-a17d729960d4}" Name="GtResourceAbsence" StaticName="GtResourceAbsence" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <CHOICES>
+            <CHOICE>Linjeoppgaver</CHOICE>
+            <CHOICE>Fravær</CHOICE>
+            <CHOICE>Kompetanseheving</CHOICE>
+            <CHOICE>Andre arbeidsoppgaver</CHOICE>
+            <CHOICE>Annet</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field Type="Text" DisplayName="Kategori" Description="" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{67a0a4b1-61d7-45c3-9157-7e302450a304}" StaticName="GtDataSourceCategory" Name="GtDataSourceCategory" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field DisplayName="Felter" Description="Hvilke felter skal inkluderes i diagrammet/datakilden. Velges fra listen Prosjektkolonner." Type="LookupMulti" Group="Kolonner for Prosjektportalen (Portefølje)" WebId="{siteid}" List="{{listid:Prosjektkolonner}}" ShowField="Title" Mult="TRUE" ID="{75f699b2-7ec6-4442-956d-7b35f409b521}" StaticName="GtPiFields" Name="GtPiFields" SourceID="{{siteid}}" AllowDeletion="TRUE" />
+        <Field ID="{970ed1b2-9e71-45aa-8f8d-c391a15f067f}" Name="GtStakeholderContext" DisplayName="Arena/Møteplass/Nettverk" Type="Text" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" StaticName="GtStakeholderContext" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Description="Navnet på den forvaltede egenskapen for denne kolonnen. Må settes om kolonnen skal kunne brukes i Porteføljeoversikten." DisplayName="Forvaltet egenskap" Type="Text" ID="{14dfd5b2-cf1d-4735-9e1b-7fa0d3658430}" StaticName="GtManagedProperty" Name="GtManagedProperty" Group="Kolonner for Prosjektportalen (Portefølje)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Description="" DisplayName="Prosjektnavn i økonomisystemet" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{983d5ab3-0a6c-4f6a-a7b5-d34d52d73676}" Name="GtProjectFinanceName" StaticName="GtProjectFinanceName" Type="Text" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field ID="{748ae9b5-223d-4daa-b8f8-dc14284b59db}" Name="GtStakeholderInterest" DisplayName="Interesse" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" AppendOnly="FALSE" StaticName="GtStakeholderInterest" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Type="Number" DisplayName="Ønsket verdi" Description="Verdi når gevinsten er realisert" ID="{8b399cb6-c53e-432c-8ffa-b48e2bfbbf71}" StaticName="GtDesiredValue" Name="GtDesiredValue" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Decimals="0" Description="Minimum bredde for denne kolonnen i piksler. Brukes blant annet i Porteføljeoversikten." DisplayName="Minimum bredde" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{a156e8b6-fc02-475c-a377-47c6795fed1d}" LCID="1044" Min="0" Name="GtColMinWidth" StaticName="GtColMinWidth" Type="Number" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>100</Default>
+        </Field>
+        <Field ID="{f81ebcb7-8791-44b0-9919-08ed5524b11d}" Name="GtRiskProbabilityPostAction" DisplayName="S etter tiltak" Type="Number" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Tall 0 til 5" Min="0" Max="5" StaticName="GtRiskProbabilityPostAction" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field AppendOnly="FALSE" Description="Kommentar til status fremdrift angitt over. Hva er fremdriften på leveransene i prosjektet?" DisplayName="Kommentar, fremdrift" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{cb1fc0b7-cbb8-40af-a782-c6b9ad4ee40f}" Name="GtStatusTimeComment" NumLines="3" StaticName="GtStatusTimeComment" Type="Note" UnlimitedLengthInDocumentLibrary="TRUE" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Type="Note" DisplayName="Forutsetninger for gevinstoppnåelse" Description="" NumLines="3" RichText="FALSE" ID="{de5cf8b7-6823-4dac-b4a7-916c53bd3376}" StaticName="GtPrereqProfitAchievement" Name="GtPrereqProfitAchievement" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field AppendOnly="FALSE" Description="Beskriv hva prosjektet skal levere" DisplayName="Målsetting" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{018f09b8-4954-41bb-a8f6-fa531b90b79f}" Name="GtProjectGoals" StaticName="GtProjectGoals" Type="Note" UnlimitedLengthInDocumentLibrary="TRUE" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Type="Boolean" DisplayName="Vis risikomatrise" Description="" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{f93b92b8-1a69-445f-b13f-0fc3ef924101}" StaticName="GtSecShowRiskMatrix" Name="GtSecShowRiskMatrix" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>1</Default>
+        </Field>
+        <Field Type="Choice" DisplayName="Status" Description="" Format="Dropdown" FillInChoice="FALSE" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{bf340fba-c512-4a07-a543-cdf2d10c578e}" StaticName="GtActionStatus" Name="GtActionStatus" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}">
+          <Default>Ikke påbegynt</Default>
+          <CHOICES>
+            <CHOICE>Ikke påbegynt</CHOICE>
+            <CHOICE>Påbegynt</CHOICE>
+            <CHOICE>Fullført</CHOICE>
+            <CHOICE>Utsatt</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field Type="DateTime" DisplayName="Dato for måling" Description="" Format="DateOnly" FriendlyDisplayFormat="Disabled" ID="{5c6fafbb-aee4-4e46-b110-5c798916c2ca}" StaticName="GtMeasurementDate" Name="GtMeasurementDate" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}">
+          <Default>[today]</Default>
+        </Field>
+        <Field Type="Choice" DisplayName="Gevinsttype" Format="RadioButtons" ID="{a1a56abd-5b3d-45d2-8617-32b2f8b195de}" StaticName="GtGainsType" Name="GtGainsType" Description="Direkte (økonomiske - NOK), Indirekte (frigjort tid - årsverk), Kvalitative (f.eks. omdømme)" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}">
+          <Default>Direkte</Default>
+          <CHOICES>
+            <CHOICE>Direkte</CHOICE>
+            <CHOICE>Indirekte</CHOICE>
+            <CHOICE>Kvalitativ</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field DisplayName="Automatisk oppdatering" Description="Automatisk oppdatering av data" Type="Boolean" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{35e89cbd-753d-42a1-a21a-ae6ad25de22a}" StaticName="GtPiAutomaticRefreshEnabled" Name="GtPiAutomaticRefreshEnabled" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}">
+          <Default>0</Default>
+        </Field>
+        <Field ID="{1150d6bd-c9ba-4014-bd74-7d559110841d}" Name="GtStakeholderStrategy" DisplayName="Plan/strategi/prosjekt" Type="Text" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" StaticName="GtStakeholderStrategy" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Description="Om det er dokumenter som skal kopieres, skriv inn relativ URL for biblioteket dokumentene skal kopieres til. F.eks. Delte dokumenter." DisplayName="Biblioteksurl (mål)" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{91d0b1bf-0a05-44f1-9885-cab0f3c3b77c}" Name="GtLccDestinationLibrary" StaticName="GtLccDestinationLibrary" Type="Text" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field ID="{04cfd3c0-5f18-4906-bdca-b5f84b693437}" Name="GtRiskStrategy" DisplayName="Usikkerhetstrategi" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" StaticName="GtRiskStrategy" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}">
+          <Default>Redusere</Default>
+          <CHOICES>
+            <CHOICE>Redusere</CHOICE>
+            <CHOICE>Overvåke</CHOICE>
+            <CHOICE>Unngå</CHOICE>
+            <CHOICE>Overføre</CHOICE>
+            <CHOICE>Dele</CHOICE>
+            <CHOICE>Akseptere</CHOICE>
+            <CHOICE>Øke</CHOICE>
+            <CHOICE>Utnytte</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field DisplayName="Verdisuffiks" Description="" Type="Text" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{5b12b6c1-2db4-4280-a52f-d11f62068162}" StaticName="GtPiValueSuffix" Name="GtPiValueSuffix" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field ID="{149a30c2-056d-44f0-9cb5-29bfc632ca25}" Name="GtDeliveryAcceptanceCriteria" DisplayName="Akseptansekriterier" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Målbare definisjoner av kravene leveransen må møte før den kan aksepteres av interessentene" AppendOnly="FALSE" StaticName="GtDeliveryAcceptanceCriteria" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field ID="{c8e260c2-6887-4f9e-a713-7200246c3b1c}" Name="GtDeliveryQualityExpectations" DisplayName="Kvalitetsforventninger" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hvilke forventninger er uttalt til kvaliteten på leveransen?" AppendOnly="FALSE" StaticName="GtDeliveryQualityExpectations" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Decimals="0" Description="" DisplayName="Totalbudsjett for prosjektet" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{28be4cc9-bc5e-4a55-a557-f652b564ca75}" LCID="1044" Min="0" Name="GtBudgetTotal" StaticName="GtBudgetTotal" Type="Currency" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field ID="{a3038ecc-69db-4179-b23b-5fdb0535b38c}" Name="GtProjectInfoDescription" DisplayName="Beskrivelse" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" UnlimitedLengthInDocumentLibrary="TRUE" AppendOnly="FALSE" StaticName="GtProjectInfoDescription" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field DisplayName="Ekspander egenskap" Description="Om feltet er et brukerfelt (e.l.) må du velge en egenskap ? ekspandere" Type="Text" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{6950d0d0-3806-4209-8cf4-fa76e3b061e3}" StaticName="GtPiExpandProperty" Name="GtPiExpandProperty" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field ID="{4322afd6-5f0f-4a22-819a-cb61668e6ede}" DisplayName="Leveransestatus" Name="GtDeliveryStatus" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" Format="RadioButtons" FillInChoice="FALSE" StaticName="GtDeliveryStatus" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}">
+          <Default>Ihht. plan</Default>
+          <CHOICES>
+            <CHOICE>Ihht. plan</CHOICE>
+            <CHOICE>Små avvik</CHOICE>
+            <CHOICE>Store avvik</CHOICE>
+            <CHOICE>Godkjent</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field Description="" DisplayName="Område-ID" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{fba7ced6-9970-4b14-ab9c-7c809310d86d}" Name="GtSiteId" ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" StaticName="GtSiteId" Type="Text" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>00000000-0000-0000-0000-000000000000</Default>
+        </Field>
+        <Field Type="Text" DisplayName="Prosess" Description="" ID="{68a5a2da-048c-4d2d-8ba4-5a8b32b60120}" StaticName="GtProcess" Name="GtProcess" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Description="" DisplayName="Startdato" Format="DateOnly" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{e39c32db-a7da-4c93-9369-8aa5a7bde92d}" Name="GtStartDate" StaticName="GtStartDate" Type="DateTime" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Type="Choice" DisplayName="Status usikkerhet" Description="" Format="RadioButtons" FillInChoice="FALSE" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{6c2da0dc-77b1-4152-b751-97adf436faa0}" StaticName="GtRiskStatus" Name="GtRiskStatus" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}">
+          <Default>Identifisert</Default>
+          <CHOICES>
+            <CHOICE>Identifisert</CHOICE>
+            <CHOICE>Tiltak gjennomført</CHOICE>
+            <CHOICE>Ikke lenger aktuell</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field Type="Boolean" DisplayName="Presiser" Description="Brukere kan filtrere på denne kolonnen i Portføljeoversikten." ID="{0956cadc-1268-4bc1-9baf-5d2e16190d06}" StaticName="GtIsRefinable" Name="GtIsRefinable" Group="Kolonner for Prosjektportalen (Portefølje)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field ID="{ce9474dd-407b-4480-951a-5381857fad6a}" Name="GtDeliveryAcceptanceDate" DisplayName="Godkjent dato" Type="DateTime" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" Format="DateOnly" StaticName="GtDeliveryAcceptanceDate" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Type="DateTime" DisplayName="Starttidspunkt" Description="" Format="DateOnly" FriendlyDisplayFormat="Disabled" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{219a5cdf-799c-48ee-8869-ea39e4b9a6aa}" StaticName="GtDeliveryStartTime" Name="GtDeliveryStartTime" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Type="Text" DisplayName="Søkespørring" Description="" ID="{31e405e0-2890-439d-9c9f-42354154feda}" StaticName="GtSearchQuery" Name="GtSearchQuery" Group="Kolonner for Prosjektportalen (Portefølje)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>DepartmentId:{d919435c-28e6-422a-911d-b2078a67069f} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*</Default>
+        </Field>
+        <Field AppendOnly="FALSE" Description="Kommentar til status kvalitet angitt over. Hva er kvaliteten på leveransene til prosjektet og om det må gjøres endringer i spesifikasjoner for å nå prosjektets fremdrifts- eller økonomimål" DisplayName="Kommentar, kvalitet" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{733a47e1-4465-41c0-89e3-037f9a65c403}" Name="GtStatusQualityComment" NumLines="3" StaticName="GtStatusQualityComment" Type="Note" UnlimitedLengthInDocumentLibrary="TRUE" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field ID="{9a81b4e1-64ea-40c2-9be1-946f20e78999}" Name="GtModerationStatus" DisplayName="Status" Type="Choice" Group="Kolonner for Prosjektportalen (Portefølje)" Description="" FillInChoice="FALSE" StaticName="GtModerationStatus" ShowInEditForm="FALSE" ShowInNewForm="FALSE" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>Kladd</Default>
+          <CHOICES>
+            <CHOICE>Kladd</CHOICE>
+            <CHOICE>Publisert</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field Type="Boolean" DisplayName="Vis i porteføljeoversikt" Description="" ID="{7441ace5-d9e4-4c1d-85fc-ce1614b056ca}" StaticName="GtShowFieldPortfolio" Name="GtShowFieldPortfolio" Group="Kolonner for Prosjektportalen (Portefølje)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field Description="" DisplayName="Prosjekttype (tekst)" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{7212b9e5-52fc-46cb-8b5e-9bf787dd115f}" Name="GtProjectTypeText" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" StaticName="GtProjectTypeText" Type="Text" WebId="223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19" ShowInEditForm="FALSE" AllowDeletion="TRUE" />
+        <Field ID="{7b424ee7-bcc8-490a-8c4c-01637da03347}" Name="GtProjectLogConsequence" DisplayName="Konsekvens" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Beskriv mer utfyllende hva dette kan føre til." UnlimitedLengthInDocumentLibrary="TRUE" AppendOnly="FALSE" StaticName="GtProjectLogConsequence" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field Description="" DisplayName="Tjenesteområde (tekst)" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{1b87b4e7-b9ed-4a31-96cc-abfaca61eea4}" Name="GtProjectServiceAreaText" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" StaticName="GtProjectServiceAreaText" Type="Text" WebId="223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19" ShowInEditForm="FALSE" AllowDeletion="TRUE" />
+        <Field Description="" DisplayName="Beskrivelse" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{c3beecea-c0e5-4d18-9b45-3c7d7949bee4}" Name="GtDescription" StaticName="GtDescription" Type="Note" UnlimitedLengthInDocumentLibrary="TRUE" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field ID="{832a2eeb-5709-40b4-9f7c-04ae67ddd86b}" Name="GtProjectLogExperience" DisplayName="Til erfaringslogg" Type="Boolean" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Huk av dersom dette skal vises i prosjektenes delte erfaringslogg." StaticName="GtProjectLogExperience" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field DisplayName="Kolonne(Z)" Description="Hvilken kolonne skal brukes for Z. Velges fra listen Prosjektkolonner." Type="Lookup" Group="Kolonner for Prosjektportalen (Portefølje)" WebId="{siteid}" List="{{listid:Prosjektkolonner}}" ShowField="Title" ID="{f26bdcf1-64c3-42f6-b551-048af56b361d}" StaticName="GtPiFieldZ" Name="GtPiFieldZ" SourceID="{{siteid}}" AllowDeletion="TRUE" />
+        <Field DisplayName="Stabling" Description="" Type="Choice" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{9c6285f2-0bf6-4092-8ca6-656859d797fd}" StaticName="GtPiStacking" Name="GtPiStacking" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>normal</Default>
+          <CHOICES>
+            <CHOICE>normal</CHOICE>
+            <CHOICE>percent</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field Type="Text" DisplayName="Listenavn" Description="" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{4b5ca6f2-a470-4c11-a738-edd9d55fb096}" StaticName="GtSecList" Name="GtSecList" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field DisplayName="Kommentar" Description="Eventuelle kommentarer" Title="Kommentar" Type="Text" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{1dd2e8f2-bf4f-4a66-b0dc-ad992d10eb64}" StaticName="GtResourceAbsenceComment" Name="GtResourceAbsenceComment" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field DisplayName="Vis merkelapp" Description="" Type="Boolean" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{f6c928f6-4b57-478c-866d-42d5f2874d57}" StaticName="GtPiShowLegend" Name="GtPiShowLegend" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}">
+          <Default>0</Default>
+        </Field>
+        <Field ID="{3A8EE3F8-166B-4394-B3E2-E98DCF86A847}" Name="A2ODMountCount" SourceID="http://schemas.microsoft.com/sharepoint/v3" StaticName="A2ODMountCount" Hidden="TRUE" Group="_Hidden" ReadOnly="TRUE" Type="Lookup" List="Docs" ShowField="A2ODMountCount" DisplayName="Antall A2OD-monteringer" FromBaseType="TRUE" DisplaceOnUpgrade="TRUE" FieldRef="ID" JoinColName="DoclibRowId" JoinRowOrdinal="0" JoinType="INNER" />
+        <Field Type="LookupMulti" DisplayName="Filter" Description="" WebId="{siteid}" List="{{listid:Prosjektkolonner}}" ShowField="Title" Mult="TRUE" UnlimitedLengthInDocumentLibrary="TRUE" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{503e35fd-ccee-4d66-af88-e016eab2f80b}" StaticName="GtPortfolioRefiners" Name="GtPortfolioRefiners" SourceID="{{siteid}}" AllowDeletion="TRUE" />
+        <Field Description="Internt feltnavn for denne kolonnen." DisplayName="Internt feltnavn" Type="Text" ID="{bfbf2ffe-4960-4752-aab4-7cf20c3a757b}" StaticName="GtInternalName" Name="GtInternalName" Group="Kolonner for Prosjektportalen (Portefølje)" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE" />
+        <Field ID="{509a6bfe-004e-41f9-bd73-9a0e02d5c4a7}" Name="GtComment" DisplayName="Kommentar" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" UnlimitedLengthInDocumentLibrary="TRUE" AppendOnly="FALSE" StaticName="GtComment" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" />
+        <Field DisplayName="Bredde (1920px og oppover)" Description="Bredde (1-12) for 1920px til oppover" Type="Number" Min="1" Max="12" Decimals="0" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{41d29afe-b026-4417-9166-3e22dda59d78}" StaticName="GtPiWidthXxxl" Name="GtPiWidthXxxl" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}" AllowDeletion="TRUE">
+          <Default>12</Default>
+        </Field>
+        <Field ID="{8499bd48-4c5d-43ae-8e27-7968d49ca14f}" Name="GtRiskFactor" DisplayName="Risikofaktor" Type="Calculated" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" ResultType="Number" StaticName="GtRiskFactor" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}">
+          <Formula>=[{fieldtitle:GtRiskProbability}]*[{fieldtitle:GtRiskConsequence}]</Formula>
+        </Field>
+        <Field ID="{62f0454d-1150-4d55-86ef-075f786d6e5c}" Name="GtRiskFactorPostAction" DisplayName="Risikofaktor etter tiltak" Type="Calculated" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" ResultType="Number" StaticName="GtRiskFactorPostAction" SourceID="{223c3a8b-6f3d-465e-9ac4-a5f7bb2c0e19}">
+          <Formula>=[{fieldtitle:GtRiskProbabilityPostAction}]*[{fieldtitle:GtRiskConsequencePostAction}]</Formula>
+        </Field>
+      </pnp:SiteFields>
+      <pnp:ContentTypes>
+        <pnp:ContentType ID="0x01000F43B5C9E86B4D7D9808100EC27E844A" Name="Planneroppgave" Description="" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="5ff9d412-67f4-42a0-8e46-78bcf0ebc6d7" Name="GtCategory" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="3eb0bf2f-9cda-47b7-9865-515e04d8a6f1" Name="GtChecklist" UpdateChildren="true" />
+            <pnp:FieldRef ID="43a2aa45-0383-40ff-9baf-458981180fac" Name="GtAttachments" UpdateChildren="true" />
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x0100189583AF4D61934E9E196AF1630A8314" Name="Tillatelseskonfigurasjonselement" Description="" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="d307d83e-7cce-4076-b74e-4a725407fbea" Name="GtSPGroupName" UpdateChildren="true" />
+            <pnp:FieldRef ID="80cdca83-d0da-4f8f-abcd-5695763556e9" Name="GtPermissionLevel" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x01001BE34662FF90874E9FEB29B37B6BB18C" Name="Porteføljevisning" Description="" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="31e405e0-2890-439d-9c9f-42354154feda" Name="GtSearchQuery" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="3ccd363c-36ba-49aa-bf1e-52a2eb27a876" Name="GtPortfolioIsDefaultView" UpdateChildren="true" />
+            <pnp:FieldRef ID="b5fc712a-9908-4ba1-a8ac-7e51eca7a251" Name="GtPortfolioFabricIcon" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="43c79736-a2b6-452c-9995-6b72bba0ec16" Name="GtPortfolioColumns" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="503e35fd-ccee-4d66-af88-e016eab2f80b" Name="GtPortfolioRefiners" UpdateChildren="true" />
+            <pnp:FieldRef ID="0d7a146d-b41e-4357-82c3-76fb49eac011" Name="GtPortfolioGroupBy" UpdateChildren="true" />
+            <pnp:FieldRef ID="9f4ee969-ea00-4cc1-a466-a05c7db4156d" Name="GtPortfolioIsPersonalView" UpdateChildren="true" />
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x010022252E35737A413FB56A1BA53862F6D5" Name="Prosjektstatus" Description="" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="3e90aa95-4d32-4819-823f-10ae2fd412b5" Name="GtOverallStatus" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="28be4cc9-bc5e-4a55-a557-f652b564ca75" Name="GtBudgetTotal" UpdateChildren="true" />
+            <pnp:FieldRef ID="5af54348-bc38-4a18-a11f-0f84a96da4ea" Name="GtCostsTotal" UpdateChildren="true" />
+            <pnp:FieldRef ID="9076c206-ca80-4e17-b6f4-6fa3b90c421a" Name="GtProjectForecast" UpdateChildren="true" />
+            <pnp:FieldRef ID="f4623214-ab74-4160-82a7-37d46901bc1b" Name="GtBudgetLastReportDate" UpdateChildren="true" />
+            <pnp:FieldRef ID="1447ef51-8e9b-4d16-aa2a-526dc9f1539e" Name="GtStatusTime" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="cb1fc0b7-cbb8-40af-a782-c6b9ad4ee40f" Name="GtStatusTimeComment" UpdateChildren="true" />
+            <pnp:FieldRef ID="a9902b9d-8aad-40df-9788-ba73c64c3cb5" Name="GtStatusBudget" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="f2bb8a37-f4cf-43a4-b180-0b07ab14abd5" Name="GtStatusBudgetComment" UpdateChildren="true" />
+            <pnp:FieldRef ID="0bbe6a84-67e6-4a9c-b26b-a5973dacd473" Name="GtStatusQuality" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="733a47e1-4465-41c0-89e3-037f9a65c403" Name="GtStatusQualityComment" UpdateChildren="true" />
+            <pnp:FieldRef ID="fc8a879d-83bc-4670-b1f6-c9817e333614" Name="GtStatusRisk" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="b5932b1d-bee4-410c-aac2-54a7cd9d5381" Name="GtStatusRiskComment" UpdateChildren="true" />
+            <pnp:FieldRef ID="b1958607-cd56-4ecb-9ad7-65fb7d3c22c7" Name="GtStatusGainAchievement" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="cb41572a-78c6-4e33-8505-b97bfd8fd162" Name="GtStatusGainAchievementComment" UpdateChildren="true" />
+            <pnp:FieldRef ID="9a81b4e1-64ea-40c2-9be1-946f20e78999" Name="GtModerationStatus" UpdateChildren="true" />
+            <pnp:FieldRef ID="fba7ced6-9970-4b14-ab9c-7c809310d86d" Name="GtSiteId" UpdateChildren="true" />
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x0100248005C277FADD45B7266F9151442472" Name="Prosjektkolonne" Description="" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="bfbf2ffe-4960-4752-aab4-7cf20c3a757b" Name="GtInternalName" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="14dfd5b2-cf1d-4735-9e1b-7fa0d3658430" Name="GtManagedProperty" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="1e99fca0-3e0f-4632-9dd1-901bd09a13bc" Name="GtShowFieldProjectStatus" UpdateChildren="true" />
+            <pnp:FieldRef ID="6c72e8a8-1bfa-4323-9103-8baa067bbfb3" Name="GtShowFieldFrontpage" UpdateChildren="true" />
+            <pnp:FieldRef ID="7441ace5-d9e4-4c1d-85fc-ce1614b056ca" Name="GtShowFieldPortfolio" UpdateChildren="true" />
+            <pnp:FieldRef ID="7463d38f-5f51-4b25-a920-04ea1ec24a26" Name="GtFieldDataType" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="a156e8b6-fc02-475c-a377-47c6795fed1d" Name="GtColMinWidth" UpdateChildren="true" />
+            <pnp:FieldRef ID="0956cadc-1268-4bc1-9baf-5d2e16190d06" Name="GtIsRefinable" UpdateChildren="true" />
+            <pnp:FieldRef ID="b77be89a-346f-4897-b519-e55eedbc0aa9" Name="GtIsGroupable" UpdateChildren="true" />
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x010029F45E75BA9CE340A83EFFB2927E11F4" Name="Ressursallokering" Description="" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="88d9b92c-efed-45d0-a586-86d9196b77d0" Name="GtResourceUser" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" UpdateChildren="true" />
+            <pnp:FieldRef ID="e39c32db-a7da-4c93-9369-8aa5a7bde92d" Name="GtStartDate" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="16623c2a-3fd1-41c2-87e7-958583dd88da" Name="GtEndDate" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="028e49b1-b141-4d35-8998-a17d729960d4" Name="GtResourceAbsence" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="08ac9d56-f8eb-4a2c-868f-d39fc012fcd6" Name="GtResourceLoad" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="1dd2e8f2-bf4f-4a66-b0dc-ad992d10eb64" Name="GtResourceAbsenceComment" UpdateChildren="true" />
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x0100486B1F8AEA24486FBA1C1BA9146C360C" Name="Sjekkpunkt" Description="" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="325543a5-815d-485d-a9a5-e0773ad762e9" Name="GtProjectPhase" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />
+            <pnp:FieldRef ID="f3b0adf9-c1a2-4b02-920d-943fba4b3611" Name="TaxCatchAll" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="8f6b6dd8-9357-4019-8172-966fcd502ed2" Name="TaxCatchAllLabel" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="72a7424e-2a41-446a-b04a-895febb79e45" Name="j25543a5815d485da9a5e0773ad762e9" Hidden="true" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x01004CEFE616A94A3A48A27D9DEBDF5EC828" Name="Seksjonsbase" Description="" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />
+            <pnp:FieldRef ID="b2af224f-5e07-4f9f-9a3a-9f5345bb3153" Name="GtSecIcon" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="1c6ac96b-0f62-4396-8e87-d7db512d96b9" Name="GtSecShowInNavbar" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="9985ae83-9e19-48dc-b33d-2fbf84f7202b" Name="GtSecShowInStatusSection" UpdateChildren="true" />
+            <pnp:FieldRef ID="3aad67a9-d8bb-41ce-9324-17a757e6b14b" Name="GtSecShowAsSection" UpdateChildren="true" />
+            <pnp:FieldRef ID="2d6790ad-9da9-408c-a87f-8d56d7b377f6" Name="GtSecSource" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82802" Name="Seksjon for statusfelt" Description="" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />
+            <pnp:FieldRef ID="b2af224f-5e07-4f9f-9a3a-9f5345bb3153" Name="GtSecIcon" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="1c6ac96b-0f62-4396-8e87-d7db512d96b9" Name="GtSecShowInNavbar" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="9985ae83-9e19-48dc-b33d-2fbf84f7202b" Name="GtSecShowInStatusSection" UpdateChildren="true" />
+            <pnp:FieldRef ID="3aad67a9-d8bb-41ce-9324-17a757e6b14b" Name="GtSecShowAsSection" UpdateChildren="true" />
+            <pnp:FieldRef ID="2d6790ad-9da9-408c-a87f-8d56d7b377f6" Name="GtSecSource" UpdateChildren="true" />
+            <pnp:FieldRef ID="fe762779-f5d6-475d-ad1d-68e7d9ae0034" Name="GtSecFieldName" Required="true" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82803" Name="Seksjon for prosjektegenskaper" Description="" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />
+            <pnp:FieldRef ID="b2af224f-5e07-4f9f-9a3a-9f5345bb3153" Name="GtSecIcon" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="1c6ac96b-0f62-4396-8e87-d7db512d96b9" Name="GtSecShowInNavbar" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="9985ae83-9e19-48dc-b33d-2fbf84f7202b" Name="GtSecShowInStatusSection" UpdateChildren="true" />
+            <pnp:FieldRef ID="3aad67a9-d8bb-41ce-9324-17a757e6b14b" Name="GtSecShowAsSection" UpdateChildren="true" />
+            <pnp:FieldRef ID="2d6790ad-9da9-408c-a87f-8d56d7b377f6" Name="GtSecSource" UpdateChildren="true" />
+            <pnp:FieldRef ID="2d165a4d-a3e9-4756-acd2-abb537041fd4" Name="GtSecViewFields" UpdateChildren="true" />
+            <pnp:FieldRef ID="fe762779-f5d6-475d-ad1d-68e7d9ae0034" Name="GtSecFieldName" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82804" Name="Risikoseksjon" Description="" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />
+            <pnp:FieldRef ID="b2af224f-5e07-4f9f-9a3a-9f5345bb3153" Name="GtSecIcon" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="1c6ac96b-0f62-4396-8e87-d7db512d96b9" Name="GtSecShowInNavbar" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="9985ae83-9e19-48dc-b33d-2fbf84f7202b" Name="GtSecShowInStatusSection" UpdateChildren="true" />
+            <pnp:FieldRef ID="3aad67a9-d8bb-41ce-9324-17a757e6b14b" Name="GtSecShowAsSection" UpdateChildren="true" />
+            <pnp:FieldRef ID="2d6790ad-9da9-408c-a87f-8d56d7b377f6" Name="GtSecSource" UpdateChildren="true" />
+            <pnp:FieldRef ID="4b5ca6f2-a470-4c11-a738-edd9d55fb096" Name="GtSecList" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="dd9a8b72-c646-4ec2-b834-614fa27fb79a" Name="GtSecViewQuery" UpdateChildren="true" />
+            <pnp:FieldRef ID="2d165a4d-a3e9-4756-acd2-abb537041fd4" Name="GtSecViewFields" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="adf89685-f464-4ef5-8f7b-53b600aac14a" Name="GtSecRowLimit" UpdateChildren="true" />
+            <pnp:FieldRef ID="fe762779-f5d6-475d-ad1d-68e7d9ae0034" Name="GtSecFieldName" UpdateChildren="true" />
+            <pnp:FieldRef ID="f93b92b8-1a69-445f-b13f-0fc3ef924101" Name="GtSecShowRiskMatrix" Hidden="true" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82805" Name="Listeseksjon" Description="" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />
+            <pnp:FieldRef ID="b2af224f-5e07-4f9f-9a3a-9f5345bb3153" Name="GtSecIcon" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="1c6ac96b-0f62-4396-8e87-d7db512d96b9" Name="GtSecShowInNavbar" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="9985ae83-9e19-48dc-b33d-2fbf84f7202b" Name="GtSecShowInStatusSection" UpdateChildren="true" />
+            <pnp:FieldRef ID="3aad67a9-d8bb-41ce-9324-17a757e6b14b" Name="GtSecShowAsSection" UpdateChildren="true" />
+            <pnp:FieldRef ID="2d6790ad-9da9-408c-a87f-8d56d7b377f6" Name="GtSecSource" UpdateChildren="true" />
+            <pnp:FieldRef ID="4b5ca6f2-a470-4c11-a738-edd9d55fb096" Name="GtSecList" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="dd9a8b72-c646-4ec2-b834-614fa27fb79a" Name="GtSecViewQuery" UpdateChildren="true" />
+            <pnp:FieldRef ID="2d165a4d-a3e9-4756-acd2-abb537041fd4" Name="GtSecViewFields" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="adf89685-f464-4ef5-8f7b-53b600aac14a" Name="GtSecRowLimit" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x01005CC009F95743674DAF31B3531CFFA586" Name="Prosjektkolonnekonfigurasjonselement" Description="" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="6aefa59f-4300-4c22-94af-d77d05d792f6" Name="GtPortfolioColumn" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="bb6eac2d-9253-4cb9-a934-a9343ce875d2" Name="GtPortfolioColumnValue" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="4cfafd35-e26f-44cf-bb90-47aa65a41827" Name="GtPortfolioColumnColor" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="d066062c-2fd0-486a-a30a-44bcb3bead4a" Name="GtPortfolioColumnIconName" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x010072C95831F8434782AB2FF6BE3E596F46" Name="Interessent" Description="" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="2847b3b0-ed22-4c47-b7c0-3ebfc83dae4a" Name="GtStakeholderGroup" UpdateChildren="true" />
+            <pnp:FieldRef ID="970ed1b2-9e71-45aa-8f8d-c391a15f067f" Name="GtStakeholderContext" UpdateChildren="true" />
+            <pnp:FieldRef ID="1150d6bd-c9ba-4014-bd74-7d559110841d" Name="GtStakeholderStrategy" UpdateChildren="true" />
+            <pnp:FieldRef ID="748ae9b5-223d-4daa-b8f8-dc14284b59db" Name="GtStakeholderInterest" UpdateChildren="true" />
+            <pnp:FieldRef ID="475d2ca1-5b8e-4479-96ae-81c0a89354f3" Name="GtStakeholderInfluence" UpdateChildren="true" />
+            <pnp:FieldRef ID="2bb7e155-3af4-4353-a460-8da404c4e748" Name="GtStakeholderInfluencePossibilty" UpdateChildren="true" />
+            <pnp:FieldRef ID="45d5b378-67ce-4f21-b622-fe54b27c83a6" Name="GtStakeholderActions" UpdateChildren="true" />
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x0100805E9E4FEAAB4F0EABAB2600D30DB70C" Name="Prosjekt" Description="" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="983d5ab3-0a6c-4f6a-a7b5-d34d52d73676" Name="GtProjectFinanceName" UpdateChildren="true" />
+            <pnp:FieldRef ID="64d45745-0dd0-4c21-979b-67fb13748bb1" Name="GtProjectNumber" UpdateChildren="true" />
+            <pnp:FieldRef ID="a59fe220-36c3-464a-8cfc-40d6d04debd2" Name="GtArchiveReference" UpdateChildren="true" />
+            <pnp:FieldRef ID="3275d73a-fd4d-48ba-bcc1-31526460d57b" Name="GtProjectServiceArea" UpdateChildren="true" />
+            <pnp:FieldRef ID="ddb69044-7d2c-4865-86ec-b71413780409" Name="GtProjectType" UpdateChildren="true" />
+            <pnp:FieldRef ID="325543a5-815d-485d-a9a5-e0773ad762e9" Name="GtProjectPhase" UpdateChildren="true" />
+            <pnp:FieldRef ID="d46bed8f-0fb6-4684-8221-632fdb12598f" Name="GtProjectManager" UpdateChildren="true" />
+            <pnp:FieldRef ID="3121ac55-d68e-4fcb-8fc8-3d8ed8a601b2" Name="GtProjectOwner" UpdateChildren="true" />
+            <pnp:FieldRef ID="fcf9c850-8267-4452-8366-74b7a76da177" Name="GtGainsResponsible" UpdateChildren="true" />
+            <pnp:FieldRef ID="e39c32db-a7da-4c93-9369-8aa5a7bde92d" Name="GtStartDate" UpdateChildren="true" />
+            <pnp:FieldRef ID="16623c2a-3fd1-41c2-87e7-958583dd88da" Name="GtEndDate" UpdateChildren="true" />
+            <pnp:FieldRef ID="018f09b8-4954-41bb-a8f6-fa531b90b79f" Name="GtProjectGoals" UpdateChildren="true" />
+            <pnp:FieldRef ID="28be4cc9-bc5e-4a55-a557-f652b564ca75" Name="GtBudgetTotal" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="5af54348-bc38-4a18-a11f-0f84a96da4ea" Name="GtCostsTotal" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="9076c206-ca80-4e17-b6f4-6fa3b90c421a" Name="GtProjectForecast" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="f4623214-ab74-4160-82a7-37d46901bc1b" Name="GtBudgetLastReportDate" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="167aef39-147b-40e1-befa-c1982af39d71" Name="GtGroupId" UpdateChildren="true" />
+            <pnp:FieldRef ID="fba7ced6-9970-4b14-ab9c-7c809310d86d" Name="GtSiteId" UpdateChildren="true" />
+            <pnp:FieldRef ID="871c1234-9ac5-4841-8b56-50839c34a7a1" Name="GtSiteUrl" UpdateChildren="true" />
+            <pnp:FieldRef ID="5e2506aa-1fe1-4be6-8b45-2e94eb9afdd0" Name="GtLastSyncTime" UpdateChildren="true" />
+            <pnp:FieldRef ID="18d92e18-10b6-42ea-815d-b12d7827564e" Name="GtProjectLifecycleStatus" UpdateChildren="true" />
+            <pnp:FieldRef ID="1b9a1571-b300-4cc0-bd32-9311f72e1998" Name="GtProjectPhaseText" UpdateChildren="true" />
+            <pnp:FieldRef ID="1b87b4e7-b9ed-4a31-96cc-abfaca61eea4" Name="GtProjectServiceAreaText" UpdateChildren="true" />
+            <pnp:FieldRef ID="7212b9e5-52fc-46cb-8b5e-9bf787dd115f" Name="GtProjectTypeText" UpdateChildren="true" />
+            <pnp:FieldRef ID="4cc4a931-3861-45ad-85de-6db88afe9fa0" Name="GtProjectTemplate" UpdateChildren="true" />
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="4f02bd7f-c4dd-4ad3-8fe6-61dc02d18bdb" Name="ddb690447d2c486586ecb71413780409" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="87b00cac-b21b-403b-bd62-0b2d4e8c304e" Name="j275d73afd4d48babcc131526460d57b" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="72a7424e-2a41-446a-b04a-895febb79e45" Name="j25543a5815d485da9a5e0773ad762e9" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="f3b0adf9-c1a2-4b02-920d-943fba4b3611" Name="TaxCatchAll" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="8f6b6dd8-9357-4019-8172-966fcd502ed2" Name="TaxCatchAllLabel" Hidden="true" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x0100A0AB42EFAB986D4A8E8038BC2391BEB2" Name="Datakilde" Description="" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="31e405e0-2890-439d-9c9f-42354154feda" Name="GtSearchQuery" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="67a0a4b1-61d7-45c3-9157-7e302450a304" Name="GtDataSourceCategory" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="1bfa0248-e65d-4fae-b5cf-fbffeb6c13da" Name="GtDataSourceDefault" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="a71d534e-9eb7-4ef1-9793-6a978cad8ef1" Name="GtIconName" UpdateChildren="true" />
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x0100A39D24CC7FD645868192E61A2376EBFD" Name="Loggelement" Description="" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="b9bbd94f-f9c0-4512-ad77-404f8a2c64b1" Name="GtLogWebUrl" UpdateChildren="true" />
+            <pnp:FieldRef ID="80dea622-3202-4896-b33f-9720aa19adbc" Name="GtLogScope" UpdateChildren="true" />
+            <pnp:FieldRef ID="0b2d3d49-fc49-4818-ac9b-23eda9697d27" Name="GtLogFunctionName" UpdateChildren="true" />
+            <pnp:FieldRef ID="4614d809-1d6f-42a4-a9a6-3255d2e1f9b7" Name="GtLogMessage" UpdateChildren="true" />
+            <pnp:FieldRef ID="d141ee8b-feea-4a9d-9dc1-a6feff4abb72" Name="GtLogLevel" UpdateChildren="true" />
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x0100B8B4EE61A547B247B49CFC21B67D5B7D" Name="Listeinnhold" Description="" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" UpdateChildren="true" />
+            <pnp:FieldRef ID="82c3fe98-7bce-4234-9eea-0ae30984dbd8" Name="GtLccSourceList" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="008bb566-26c3-4cac-8d16-9bf3b1c5fb4b" Name="GtLccDestinationList" UpdateChildren="true" />
+            <pnp:FieldRef ID="91d0b1bf-0a05-44f1-9885-cab0f3c3b77c" Name="GtLccDestinationLibrary" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="525a7269-b880-4266-8482-fe7a1bfaac3e" Name="GtLccFields" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="19c0c03c-678a-4c2a-ab9b-cb9ffd903012" Name="GtLccDefault" UpdateChildren="true" />
+            <pnp:FieldRef ID="f536ad85-248c-49b9-b6c7-0665943a2061" Name="GtLccHidden" UpdateChildren="true" />
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x0100B8B4EE61A547B247B49CFC21B67D5B7D01" Name="Planneroppgaver" Description="" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" UpdateChildren="true" />
+            <pnp:FieldRef ID="82c3fe98-7bce-4234-9eea-0ae30984dbd8" Name="GtLccSourceList" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="008bb566-26c3-4cac-8d16-9bf3b1c5fb4b" Name="GtLccDestinationList" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="91d0b1bf-0a05-44f1-9885-cab0f3c3b77c" Name="GtLccDestinationLibrary" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="525a7269-b880-4266-8482-fe7a1bfaac3e" Name="GtLccFields" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="19c0c03c-678a-4c2a-ab9b-cb9ffd903012" Name="GtLccDefault" UpdateChildren="true" />
+            <pnp:FieldRef ID="f536ad85-248c-49b9-b6c7-0665943a2061" Name="GtLccHidden" UpdateChildren="true" />
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x0100D20485A193174523B2070B1BF3243466" Name="Konfigurasjonselement" Description="" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="a2c95470-5762-407b-935f-412092a3a4cf" Name="GtKey" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="7711112c-e3f1-4a97-b162-c23dc78f4af4" Name="GtValue" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D" Name="Grafkonfigurasjonelement" Description="Opprett et nytt grafkonfigurasjonelement" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="fca6d80c-225a-4bb0-a0b6-f4c004f8151c" Name="GtPiSubTitle" UpdateChildren="true" />
+            <pnp:FieldRef ID="75f699b2-7ec6-4442-956d-7b35f409b521" Name="GtPiFields" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="e3e71da7-e34b-4514-bc8f-5256e1f5c70f" Name="GtPiCategoryField" UpdateChildren="true" />
+            <pnp:FieldRef ID="a2d79665-fb4a-4367-830a-c0403bd724f0" Name="GtPiColorsMap" UpdateChildren="true" />
+            <pnp:FieldRef ID="69a75937-35ab-4b35-9081-c8f841460d44" Name="GtPiWidthSm" UpdateChildren="true" />
+            <pnp:FieldRef ID="d25031a3-9fbb-48b7-8c3a-554805fc4eb9" Name="GtPiWidthMd" UpdateChildren="true" />
+            <pnp:FieldRef ID="047c422a-fdcd-407c-839f-e96d7f639082" Name="GtPiWidthLg" UpdateChildren="true" />
+            <pnp:FieldRef ID="2a0d7d7e-44f4-40e5-a444-3df1e07ef71d" Name="GtPiWidthXl" UpdateChildren="true" />
+            <pnp:FieldRef ID="af569b60-0010-4108-9c92-cb03a90b7498" Name="GtPiWidthXxl" UpdateChildren="true" />
+            <pnp:FieldRef ID="41d29afe-b026-4417-9166-3e22dda59d78" Name="GtPiWidthXxxl" UpdateChildren="true" />
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D01" Name="Stolpediagram" Description="Opprett et nytt stolpediagram" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="fca6d80c-225a-4bb0-a0b6-f4c004f8151c" Name="GtPiSubTitle" UpdateChildren="true" />
+            <pnp:FieldRef ID="75f699b2-7ec6-4442-956d-7b35f409b521" Name="GtPiFields" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="e3e71da7-e34b-4514-bc8f-5256e1f5c70f" Name="GtPiCategoryField" UpdateChildren="true" />
+            <pnp:FieldRef ID="a2d79665-fb4a-4367-830a-c0403bd724f0" Name="GtPiColorsMap" UpdateChildren="true" />
+            <pnp:FieldRef ID="15f09408-2ad7-4b9a-8dda-79d7be382a96" Name="GtPiValueOrder" UpdateChildren="true" />
+            <pnp:FieldRef ID="69a75937-35ab-4b35-9081-c8f841460d44" Name="GtPiWidthSm" UpdateChildren="true" />
+            <pnp:FieldRef ID="d25031a3-9fbb-48b7-8c3a-554805fc4eb9" Name="GtPiWidthMd" UpdateChildren="true" />
+            <pnp:FieldRef ID="047c422a-fdcd-407c-839f-e96d7f639082" Name="GtPiWidthLg" UpdateChildren="true" />
+            <pnp:FieldRef ID="2a0d7d7e-44f4-40e5-a444-3df1e07ef71d" Name="GtPiWidthXl" UpdateChildren="true" />
+            <pnp:FieldRef ID="af569b60-0010-4108-9c92-cb03a90b7498" Name="GtPiWidthXxl" UpdateChildren="true" />
+            <pnp:FieldRef ID="41d29afe-b026-4417-9166-3e22dda59d78" Name="GtPiWidthXxxl" UpdateChildren="true" />
+            <pnp:FieldRef ID="c990240d-4c3b-4dfe-8abb-b6119b4b9856" Name="GtPiYAxisTitle" UpdateChildren="true" />
+            <pnp:FieldRef ID="9a731b59-52ed-4b93-ab7a-3fd56914d0a6" Name="GtPiYMin" UpdateChildren="true" />
+            <pnp:FieldRef ID="f7fd2b80-26e4-472c-8629-02e898b2a19f" Name="GtPiYMax" UpdateChildren="true" />
+            <pnp:FieldRef ID="60dac89b-70f5-4a49-87a9-b253bd5df7ca" Name="GtPiYTickInterval" UpdateChildren="true" />
+            <pnp:FieldRef ID="ed9bac4f-1bd5-4a54-9b9d-ba7d4af8ac5a" Name="GtPiXAxisTitle" UpdateChildren="true" />
+            <pnp:FieldRef ID="5b12b6c1-2db4-4280-a52f-d11f62068162" Name="GtPiValueSuffix" UpdateChildren="true" />
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D02" Name="Kolonnediagram" Description="Opprett et nytt kolonnediagram" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="fca6d80c-225a-4bb0-a0b6-f4c004f8151c" Name="GtPiSubTitle" UpdateChildren="true" />
+            <pnp:FieldRef ID="75f699b2-7ec6-4442-956d-7b35f409b521" Name="GtPiFields" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="e3e71da7-e34b-4514-bc8f-5256e1f5c70f" Name="GtPiCategoryField" UpdateChildren="true" />
+            <pnp:FieldRef ID="a2d79665-fb4a-4367-830a-c0403bd724f0" Name="GtPiColorsMap" UpdateChildren="true" />
+            <pnp:FieldRef ID="15f09408-2ad7-4b9a-8dda-79d7be382a96" Name="GtPiValueOrder" UpdateChildren="true" />
+            <pnp:FieldRef ID="69a75937-35ab-4b35-9081-c8f841460d44" Name="GtPiWidthSm" UpdateChildren="true" />
+            <pnp:FieldRef ID="d25031a3-9fbb-48b7-8c3a-554805fc4eb9" Name="GtPiWidthMd" UpdateChildren="true" />
+            <pnp:FieldRef ID="047c422a-fdcd-407c-839f-e96d7f639082" Name="GtPiWidthLg" UpdateChildren="true" />
+            <pnp:FieldRef ID="2a0d7d7e-44f4-40e5-a444-3df1e07ef71d" Name="GtPiWidthXl" UpdateChildren="true" />
+            <pnp:FieldRef ID="af569b60-0010-4108-9c92-cb03a90b7498" Name="GtPiWidthXxl" UpdateChildren="true" />
+            <pnp:FieldRef ID="41d29afe-b026-4417-9166-3e22dda59d78" Name="GtPiWidthXxxl" UpdateChildren="true" />
+            <pnp:FieldRef ID="9c6285f2-0bf6-4092-8ca6-656859d797fd" Name="GtPiStacking" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="c990240d-4c3b-4dfe-8abb-b6119b4b9856" Name="GtPiYAxisTitle" UpdateChildren="true" />
+            <pnp:FieldRef ID="9a731b59-52ed-4b93-ab7a-3fd56914d0a6" Name="GtPiYMin" UpdateChildren="true" />
+            <pnp:FieldRef ID="f7fd2b80-26e4-472c-8629-02e898b2a19f" Name="GtPiYMax" UpdateChildren="true" />
+            <pnp:FieldRef ID="60dac89b-70f5-4a49-87a9-b253bd5df7ca" Name="GtPiYTickInterval" UpdateChildren="true" />
+            <pnp:FieldRef ID="ed9bac4f-1bd5-4a54-9b9d-ba7d4af8ac5a" Name="GtPiXAxisTitle" UpdateChildren="true" />
+            <pnp:FieldRef ID="5b12b6c1-2db4-4280-a52f-d11f62068162" Name="GtPiValueSuffix" UpdateChildren="true" />
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D03" Name="Sektordiagram" Description="Opprett et nytt sektordiagram" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="fca6d80c-225a-4bb0-a0b6-f4c004f8151c" Name="GtPiSubTitle" UpdateChildren="true" />
+            <pnp:FieldRef ID="75f699b2-7ec6-4442-956d-7b35f409b521" Name="GtPiFields" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="e3e71da7-e34b-4514-bc8f-5256e1f5c70f" Name="GtPiCategoryField" UpdateChildren="true" />
+            <pnp:FieldRef ID="a2d79665-fb4a-4367-830a-c0403bd724f0" Name="GtPiColorsMap" UpdateChildren="true" />
+            <pnp:FieldRef ID="69a75937-35ab-4b35-9081-c8f841460d44" Name="GtPiWidthSm" UpdateChildren="true" />
+            <pnp:FieldRef ID="d25031a3-9fbb-48b7-8c3a-554805fc4eb9" Name="GtPiWidthMd" UpdateChildren="true" />
+            <pnp:FieldRef ID="047c422a-fdcd-407c-839f-e96d7f639082" Name="GtPiWidthLg" UpdateChildren="true" />
+            <pnp:FieldRef ID="2a0d7d7e-44f4-40e5-a444-3df1e07ef71d" Name="GtPiWidthXl" UpdateChildren="true" />
+            <pnp:FieldRef ID="af569b60-0010-4108-9c92-cb03a90b7498" Name="GtPiWidthXxl" UpdateChildren="true" />
+            <pnp:FieldRef ID="41d29afe-b026-4417-9166-3e22dda59d78" Name="GtPiWidthXxxl" UpdateChildren="true" />
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D04" Name="Egendefinert diagram" Description="Opprett et nytt egendefinert diagram" Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="fca6d80c-225a-4bb0-a0b6-f4c004f8151c" Name="GtPiSubTitle" UpdateChildren="true" />
+            <pnp:FieldRef ID="e1457016-93d9-4eca-b05a-1a9491fa35db" Name="GtPiCustomType" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="4795a463-b396-4987-a2d1-532c78933cf9" Name="GtPiCustomConfiguration" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="75f699b2-7ec6-4442-956d-7b35f409b521" Name="GtPiFields" UpdateChildren="true" />
+            <pnp:FieldRef ID="57cf13b1-d2d8-4a9e-beb2-99d0d0a13962" Name="GtPiFieldX" UpdateChildren="true" />
+            <pnp:FieldRef ID="49b90b9f-d6bb-4337-b5cc-9b9ea9914e97" Name="GtPiFieldY" UpdateChildren="true" />
+            <pnp:FieldRef ID="f26bdcf1-64c3-42f6-b551-048af56b361d" Name="GtPiFieldZ" UpdateChildren="true" />
+            <pnp:FieldRef ID="e3e71da7-e34b-4514-bc8f-5256e1f5c70f" Name="GtPiCategoryField" UpdateChildren="true" />
+            <pnp:FieldRef ID="a2d79665-fb4a-4367-830a-c0403bd724f0" Name="GtPiColorsMap" UpdateChildren="true" />
+            <pnp:FieldRef ID="69a75937-35ab-4b35-9081-c8f841460d44" Name="GtPiWidthSm" UpdateChildren="true" />
+            <pnp:FieldRef ID="d25031a3-9fbb-48b7-8c3a-554805fc4eb9" Name="GtPiWidthMd" UpdateChildren="true" />
+            <pnp:FieldRef ID="047c422a-fdcd-407c-839f-e96d7f639082" Name="GtPiWidthLg" UpdateChildren="true" />
+            <pnp:FieldRef ID="2a0d7d7e-44f4-40e5-a444-3df1e07ef71d" Name="GtPiWidthXl" UpdateChildren="true" />
+            <pnp:FieldRef ID="af569b60-0010-4108-9c92-cb03a90b7498" Name="GtPiWidthXxl" UpdateChildren="true" />
+            <pnp:FieldRef ID="41d29afe-b026-4417-9166-3e22dda59d78" Name="GtPiWidthXxxl" UpdateChildren="true" />
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+      </pnp:ContentTypes>
+    </pnp:ProvisioningTemplate>
+  </pnp:Templates>
+</pnp:Provisioning>
