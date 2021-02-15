@@ -1,4 +1,4 @@
-import { StatusReport, SectionModel } from 'shared/lib/models'
+import { StatusReport, SectionModel } from 'pp365-shared/lib/models'
 import { IProjectStatusData } from '../..'
 import { IStatusElementProps } from '../../StatusElement/IStatusElementProps'
 

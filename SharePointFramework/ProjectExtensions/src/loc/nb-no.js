@@ -1,5 +1,8 @@
 define([], function () {
   return {
+    DocumentTemplateDialogScreenTargetFolderInfoText: 'Velg mål for de valgte malene. Trykk **Bibliotek** for å velge et annet bibliotek.',
+    Library: 'Bibliotek',
+    CopyHereText: 'Kopier hit',
     ApplyTemplateText: 'Legger på mal {0}',
     ApplyingExtensionsText: 'Legger på prosjekttilegg',
     ApplyExtensionText: 'Legger på prosjekttilegg {0}',
@@ -31,7 +34,8 @@ define([], function () {
     LibraryDropdownLabel: 'Bibliotek',
     ListContentTitle: 'Standardinnhold',
     ModifiedLabel: 'Endret',
-    NameLabel: 'Filnavn',
+    NameLabel: 'Navn',
+    FileNameLabel: 'Filnavn',
     NoHubSiteErrorMessage: 'Området er ikke koblet til en hub',
     NoHubSiteErrorStack: 'Området kan ikke settes opp uten å være koblet til en hub. Koble området til ett hubområde, og last siden på nytt.<br/><br/>Gå til `Innstillinger` (tannhjulet i øvre høyre hjørne), finn `Nettstedsinformasjon` og velg hub/portefølje under `Tilknytning til hubområde`.',
     OnGoBackText: 'Gå tilbake',
@@ -59,8 +63,8 @@ define([], function () {
     TemplateSelectorTitle: 'Prosjektmal',
     TitleLabel: 'Tittel',
     ProgressDialogSubText: 'Vennligst vent. Ikke lukk nettleservinduet.',
-    DocumentTemplateDialogScreenSelectInfoText: 'Velg dokumentmalene du vil kopiere til prosjektområdet.<br /><br />Malene hentes fra<a href="{0}" target="_blank">{1}</a> og det hentes _siste versjon_ av malene.<br /><br />Når du trykker \'Velg\' sendes du videre til et skjermbilde hvor du kan sette _tittel_ og _filnavn_ for dokumentene som kopieres over.',
-    DocumentTemplateDialogScreenEditCopyInfoText: 'Her kan du sette _Filnavn_ og _Tittel_ for dokumentene som kopieres over.<br /><br />Når du er ferdig, trykk \'Start kopering\' for å starte kopieringen.',
+    DocumentTemplateDialogScreenSelectInfoText: 'Velg dokumentmalene du vil kopiere til prosjektområdet.<br /><br />Malene hentes fra<a href="{0}" target="_blank">{1}</a> og det hentes **siste versjon** av malene.<br /><br />Når du trykker **Velg** sendes du videre til et skjermbilde hvor du kan sette tittel og filnavn for malene som kopieres over.',
+    DocumentTemplateDialogScreenEditCopyInfoText: 'Her kan du sette **Filnavn** og **Tittel** for dokumentene som kopieres over.<br /><br />Når du er ferdig, trykk **Start kopering** for å starte kopieringen.',
     FilenameAlreadyInUseErrorText: 'Filnavnet er allerede i bruk.',
     FilenameInValidErrorText: 'Filnavnet er ugyldig.',
     SyncLocalProjectPropertiesListText: 'Synkroniserer liste for prosjektegenskaper',
@@ -75,7 +79,8 @@ define([], function () {
     SetupAbortedText: 'Installasjon avbrutt av bruker',
     UnknownErrorText: 'Ukjent feil',
     TemplateListContentConfigText: 'Den valgte prosjektmalen inneholder konfigurasjon for standardinnhold.',
-    FolderDropdownLabel:'Velg mappe',
-    DocumentLibraryDropdownLabel: 'Velg dokumentbibliotek'
+    FolderDropdownLabel: 'Velg mappe',
+    DocumentLibraryDropdownLabel: 'Velg dokumentbibliotek',
+    DocumentTemplateDialogScreenEditCopyRootLevelText: 'Øverste nivå'
   }
-});
+})

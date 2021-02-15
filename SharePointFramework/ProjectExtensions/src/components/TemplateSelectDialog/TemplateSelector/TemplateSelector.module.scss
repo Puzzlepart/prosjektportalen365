@@ -19,7 +19,8 @@
     padding-top: 5px;
   }
   .body {
-    float: right;
+    float: left;
+    width: 80%;
     .text {
       @include ms-fontSize-14;
     }

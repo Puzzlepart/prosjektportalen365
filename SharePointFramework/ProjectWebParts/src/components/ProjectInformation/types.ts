@@ -1,11 +1,11 @@
 import { TypedHash } from '@pnp/common'
 import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
 import { ActionType } from './Actions/ActionType'
-import { StatusReport, ProjectColumn } from 'shared/lib/models'
+import { StatusReport, ProjectColumn } from 'pp365-shared/lib/models'
 import { IProgressDialogProps } from 'components/ProgressDialog/types'
 import { IUserMessageProps } from 'components/UserMessage'
 import { IEntityField } from 'sp-entityportal-service'
-import * as ProjectDataService from 'shared/lib/services/ProjectDataService'
+import * as ProjectDataService from 'pp365-shared/lib/services/ProjectDataService'
 import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
 
 export interface IProjectInformationProps extends IBaseWebPartComponentProps {

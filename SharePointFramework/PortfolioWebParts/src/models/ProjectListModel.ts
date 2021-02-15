@@ -1,6 +1,6 @@
 import { ISPUser } from 'interfaces'
 import { IPersonaSharedProps } from 'office-ui-fabric-react/lib/Persona'
-import { getUserPhoto } from 'shared/lib/helpers'
+import { getUserPhoto } from 'pp365-shared/lib/helpers'
 
 export class ProjectListModel {
   public manager: IPersonaSharedProps

@@ -8,7 +8,7 @@ import {
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import * as strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
-import { getObjectValue } from 'shared/lib/helpers'
+import { getObjectValue } from 'pp365-shared/lib/helpers'
 import { BaseSection } from '../BaseSection/index'
 import { StatusElement } from '../../StatusElement'
 import { IListSectionProps, IListSectionState, IListSectionData } from './types'
@@ -20,15 +20,15 @@ export class ListSection extends BaseSection<
 > {
   constructor(props: IListSectionProps) {
     super(props)
-    this.state = { isLoading: true }
+    this.state = { loading: true }
   }
 
   public async componentDidMount() {
     try {
       const data = await this._fetchData()
-      this.setState({ data, isLoading: false })
+      this.setState({ data, loading: false })
     } catch (error) {
-      this.setState({ error, isLoading: false })
+      this.setState({ error, loading: false })
     }
   }
 
@@ -52,7 +52,7 @@ export class ListSection extends BaseSection<
    * Render list
    */
   private _renderList() {
-    if (this.state.isLoading || !this.state.data) {
+    if (this.state.loading || !this.state.data) {
       return null
     }
     if (this.state.error) {

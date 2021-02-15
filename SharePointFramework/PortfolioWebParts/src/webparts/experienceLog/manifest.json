@@ -3,10 +3,10 @@
     "id": "3ec6bcaf-28bc-4f2e-9e90-77e8cebf0b5f",
     "alias": "ExperienceLogWebPart",
     "componentType": "WebPart",
-    "version": "1.2.4",
+    "version": "1.2.6",
     "manifestVersion": 2,
     "requiresCustomScript": false,
-    "hiddenFromToolbox": false,
+    "hiddenFromToolbox": true,
     "supportedHosts": [
         "SharePointWebPart"
     ],

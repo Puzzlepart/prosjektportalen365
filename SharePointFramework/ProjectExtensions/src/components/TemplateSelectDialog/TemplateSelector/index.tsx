@@ -5,7 +5,6 @@ import { ProjectTemplate } from '../../../models'
 import { ITemplateSelectorProps } from './ITemplateSelectorProps'
 import styles from './TemplateSelector.module.scss'
 
-// tslint:disable-next-line: naming-convention
 export const TemplateSelector = (props: ITemplateSelectorProps) => {
   /**
    * On template selected

@@ -1,59 +1,34 @@
-import { stringIsNullOrEmpty } from '@pnp/common'
-import { IButtonProps } from 'office-ui-fabric-react/lib/Button'
 import { TextField } from 'office-ui-fabric-react/lib/TextField'
 import * as strings from 'ProjectWebPartsStrings'
-import * as React from 'react'
-import { IInitialViewProps } from './types'
+import React, { useContext, useState } from 'react'
+import { ChangePhaseDialogContext } from '../../context'
+import getActions from './actions'
 import styles from './InitialView.module.scss'
 import { StatusOptions } from './StatusOptions'
-
-/**
- * @component InitialView
- */
+import { IInitialViewProps } from './types'
 
 export const InitialView = (props: IInitialViewProps) => {
   if (!props.checklistItem) return null
-
-  const [comment, setComment] = React.useState(props.checklistItem.GtComment || '')
+  const { nextChecklistItem } = useContext(ChangePhaseDialogContext)
+  const [comment, setComment] = useState(props.checklistItem.GtComment || '')
 
   /**
-   * Save checkpoint
+   * On next check list item
    *
-   * @param {string} status Status value
+   * @param {string} statusValue Status value
    */
-  const saveCheckPoint = (status: string) => {
-    props.saveCheckPoint(status, comment, true)
+  const onNextChecklistItem = (statusValue: string) => {
+    nextChecklistItem({
+      GtChecklistStatus: statusValue,
+      GtComment: comment
+    })
     setComment('')
   }
 
-  const isCommentValid = !stringIsNullOrEmpty(comment) && comment.length >= 4
-  const actions: IButtonProps[] = [
-    {
-      text: strings.StatusNotRelevant,
-      disabled: props.isLoading || !isCommentValid,
-      title: !isCommentValid
-        ? strings.CheckpointNotRelevantTooltipCommentEmpty
-        : strings.CheckpointNotRelevantTooltip,
-      onClick: () => saveCheckPoint(strings.StatusNotRelevant)
-    },
-    {
-      text: strings.StatusStillOpen,
-      disabled: props.isLoading || !isCommentValid,
-      title: !isCommentValid
-        ? strings.CheckpointStillOpenTooltipCommentEmpty
-        : strings.CheckpointStillOpenTooltip,
-      onClick: () => saveCheckPoint(strings.StatusOpen)
-    },
-    {
-      text: strings.StatusClosed,
-      disabled: props.isLoading,
-      title: strings.CheckpointDoneTooltip,
-      onClick: () => saveCheckPoint(strings.StatusClosed)
-    }
-  ]
+  const actions = getActions(comment, onNextChecklistItem)
 
   return (
-    <div className={styles.initialView}>
+    <div className={styles.root}>
       <div className={styles.header}>
         {props.checklistItem.ID}. {props.checklistItem.Title}
       </div>

@@ -1,4 +1,4 @@
-import { StatusReport } from 'shared/lib/models/StatusReport'
+import { StatusReport } from 'pp365-shared/lib/models/StatusReport'
 
 export interface IStatusReportsProps extends React.HTMLAttributes<HTMLElement> {
   /**

@@ -12,10 +12,10 @@ import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
-import { formatDate } from 'shared/lib/helpers'
-import { SectionModel, SectionType, StatusReport } from 'shared/lib/models'
-import { PortalDataService } from 'shared/lib/services'
-import { getUrlParam, parseUrlHash, removeMenuBorder, setUrlHash } from 'shared/lib/util'
+import { formatDate } from 'pp365-shared/lib/helpers'
+import { SectionModel, SectionType, StatusReport } from 'pp365-shared/lib/models'
+import { PortalDataService } from 'pp365-shared/lib/services'
+import { getUrlParam, parseUrlHash, removeMenuBorder, setUrlHash } from 'pp365-shared/lib/util'
 import { first } from 'underscore'
 import SPDataAdapter from '../../data'
 import styles from './ProjectStatus.module.scss'
@@ -44,7 +44,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    */
   constructor(props: IProjectStatusProps) {
     super(props)
-    this.state = { isLoading: true, isPublishing: false }
+    this.state = { loading: true, isPublishing: false }
     this._portalDataService = new PortalDataService().configure({
       urlOrWeb: props.hubSite.web,
       siteId: props.siteId
@@ -71,10 +71,10 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         data,
         selectedReport,
         sourceUrl: decodeURIComponent(sourceUrlParam || ''),
-        isLoading: false
+        loading: false
       })
     } catch (error) {
-      this.setState({ error, isLoading: false })
+      this.setState({ error, loading: false })
     }
   }
 
@@ -88,7 +88,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    * Renders the <ProjectStatus /> component
    */
   public render(): React.ReactElement<IProjectStatusProps> {
-    if (this.state.isLoading) {
+    if (this.state.loading) {
       return (
         <div className={styles.projectStatus}>
           <div className={styles.container}>
@@ -277,7 +277,11 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
             )
           }
           case SectionType.StatusSection: {
-            return <StatusSection {...baseProps} />
+            if (baseProps.headerProps.value) {
+              return <StatusSection {...baseProps} />
+            } else {
+              return null
+            }
           }
           case SectionType.ProjectPropertiesSection: {
             return (

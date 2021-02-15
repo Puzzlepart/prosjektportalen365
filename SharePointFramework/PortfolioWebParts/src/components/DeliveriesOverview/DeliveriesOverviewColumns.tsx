@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as strings from 'PortfolioWebPartsStrings'
-import { formatDate } from 'shared/lib/helpers'
+import { formatDate } from 'pp365-shared/lib/helpers'
 import { IAggregatedSearchListColumn } from 'interfaces'
 
 export const DELIVERIES_OVERVIEW_COLUMNS: IAggregatedSearchListColumn[] = [

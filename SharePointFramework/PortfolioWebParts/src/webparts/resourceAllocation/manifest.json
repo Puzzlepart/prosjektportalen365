@@ -3,10 +3,10 @@
     "id": "2ef269b2-6370-4841-8b35-2185b7ccb22a",
     "alias": "ResourceAllocationWebPart",
     "componentType": "WebPart",
-    "version": "1.2.4",
+    "version": "1.2.6",
     "manifestVersion": 2,
     "requiresCustomScript": false,
-    "hiddenFromToolbox": false,
+    "hiddenFromToolbox": true,
     "supportedHosts": [
         "SharePointWebPart"
     ],

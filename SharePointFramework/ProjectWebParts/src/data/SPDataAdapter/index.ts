@@ -4,8 +4,8 @@ import { Logger, LogLevel } from '@pnp/logging'
 import { taxonomy } from '@pnp/sp-taxonomy'
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator'
 import * as strings from 'ProjectWebPartsStrings'
-import { SPDataAdapterBase } from 'shared/lib/data'
-import { ProjectDataService } from 'shared/lib/services'
+import { SPDataAdapterBase } from 'pp365-shared/lib/data'
+import { ProjectDataService } from 'pp365-shared/lib/services'
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
 
 export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
@@ -56,7 +56,7 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
       })
       progressFunc({
         label: strings.SyncProjectPropertiesValuesProgressDescription,
-        description: 'Vennligst vent...'
+        description: strings.SyncProjectPropertiesValuesProgressDescription
       })
       const [fields, siteUsers] = await Promise.all([
         templateParameters.ProjectContentTypeId
@@ -105,13 +105,19 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
             break
           case 'User':
             {
-              const [siteUser] = siteUsers.filter(
-                (u) => u.Id === fieldValues[`${fld.InternalName}Id`]
-              )
-              const user = siteUser
-                ? await this.entityService.web.ensureUser(siteUser.LoginName)
-                : null
+              const [_user] = siteUsers.filter((u) => u.Id === fieldValues[`${fld.InternalName}Id`])
+              const user = _user ? await this.entityService.web.ensureUser(_user.LoginName) : null
               properties[`${fld.InternalName}Id`] = user ? user.data.Id : null
+            }
+            break
+          case 'UserMulti':
+            {
+              const userIds = fieldValues[`${fld.InternalName}Id`] || []
+              const users = siteUsers.filter((u) => userIds.indexOf(u.Id) !== -1)
+              const ensured = await Promise.all(
+                users.map(({ LoginName }) => this.entityService.web.ensureUser(LoginName))
+              )
+              properties[`${fld.InternalName}Id`] = { results: ensured.map(({ data }) => data.Id) }
             }
             break
           case 'DateTime':

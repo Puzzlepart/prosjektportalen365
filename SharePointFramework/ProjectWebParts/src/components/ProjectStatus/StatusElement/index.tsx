@@ -3,10 +3,6 @@ import * as React from 'react'
 import { IStatusElementProps } from './IStatusElementProps'
 import styles from './StatusElement.module.scss'
 
-/**
- * @component StatusElement
- */
-
 export const StatusElement = ({
   iconName,
   label,
@@ -24,7 +20,9 @@ export const StatusElement = ({
         <div className={styles.statusContent}>
           <div className={styles.statusElementLabel}>{label}</div>
           <div className={styles.statusElementValue}>{value}</div>
-          <div className={styles.statusElementComment}>{comment}</div>
+          <div
+            className={styles.statusElementComment}
+            dangerouslySetInnerHTML={{ __html: comment.replace(/\n/g, '<br />') }}></div>
         </div>
       </div>
     </div>

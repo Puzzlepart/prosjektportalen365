@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as strings from 'PortfolioWebPartsStrings'
-import { tryParseInt } from 'shared/lib/helpers'
+import { tryParseInt } from 'pp365-shared/lib/helpers'
 import { IAggregatedSearchListColumn } from 'interfaces'
 
 const onRenderLink = (item: any) => (

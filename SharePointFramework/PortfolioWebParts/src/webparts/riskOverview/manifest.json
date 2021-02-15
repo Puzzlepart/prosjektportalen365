@@ -3,10 +3,10 @@
     "id": "57530c94-4fb2-4ca2-9279-16c57881fa19",
     "alias": "RiskOverviewWebPart",
     "componentType": "WebPart",
-    "version": "1.2.4",
+    "version": "1.2.6",
     "manifestVersion": 2,
     "requiresCustomScript": false,
-    "hiddenFromToolbox": false,
+    "hiddenFromToolbox": true,
     "supportedHosts": [
         "SharePointWebPart"
     ],
