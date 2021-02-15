@@ -3,7 +3,7 @@ import { stringIsNullOrEmpty } from '@pnp/common'
 
 import * as React from 'react'
 import { ListContentConfig } from '../../../models'
-import { IListContentSectionProps } from './IListContentSectionProps'
+import { IListContentSectionProps } from './types'
 import styles from './ListContentSection.module.scss'
 
 export const ListContentSection = (props: IListContentSectionProps) => {

@@ -1,7 +1,7 @@
 import { ProjectSetupSettings } from 'projectSetup/ProjectSetupSettings'
 import { IProjectSetupData } from 'projectSetup/types'
 import { ListContentConfig, ProjectExtension, ProjectTemplate } from 'models'
-import { IBaseDialogProps } from '../@BaseDialog/IBaseDialogProps'
+import { IBaseDialogProps } from '../@BaseDialog/types'
 
 export interface ITemplateSelectDialogProps extends IBaseDialogProps {
   /**
