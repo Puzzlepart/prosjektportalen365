@@ -1,15 +1,18 @@
 /* eslint-disable no-console */
 import { SiteUserProps } from '@pnp/sp'
-import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'projectSetup'
 import { isEmpty } from 'underscore'
-import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
+import { BaseTask, IBaseTaskParams } from '../@BaseTask'
 
+/**
+ * Sets up permissions for the SP web.
+ * 
+ * Errors currently doesn't break the setup. Setup continues
+ * gracefully on error.
+ */
 export class SitePermissions extends BaseTask {
-  public taskName = 'SitePermissions'
-
   constructor(data: IProjectSetupData) {
-    super(data)
+    super('SitePermissions', data)
   }
 
   /**
@@ -43,7 +46,7 @@ export class SitePermissions extends BaseTask {
       return params
     } catch (error) {
       this.logError('Failed to set site permissions from configuration list.')
-      throw new BaseTaskError(this.taskName, strings.SitePermissionsErrorMessage, '')
+      return params
     }
   }
 

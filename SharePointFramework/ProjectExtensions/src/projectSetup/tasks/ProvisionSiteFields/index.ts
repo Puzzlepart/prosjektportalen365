@@ -7,10 +7,8 @@ import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 
 export class ProvisionSiteFields extends BaseTask {
-  public taskName = 'ProvisionSiteFields'
-
   constructor(data: IProjectSetupData) {
-    super(data)
+    super('ProvisionSiteFields',data)
   }
 
   /**

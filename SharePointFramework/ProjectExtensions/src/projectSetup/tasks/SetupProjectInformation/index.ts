@@ -1,10 +1,13 @@
-import * as strings from 'ProjectExtensionsStrings'
 import { TypedHash } from '@pnp/common'
+import * as strings from 'ProjectExtensionsStrings'
+import { IProjectSetupData } from 'projectSetup'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 
 export class SetupProjectInformation extends BaseTask {
-  public taskName = 'SetupProjectInformation'
+  constructor(data: IProjectSetupData) {
+    super('SetupProjectInformation', data)
+  }
 
   /**
    * Executes the SetupProjectInformation task
