@@ -1,7 +1,7 @@
 import { IToggleProps } from 'office-ui-fabric-react/lib/Toggle'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface IProjectSetupSettings<T> { }
+export interface IProjectSetupSettings<T> {}
 
 export class ProjectSetupSettings {
   private _labels: IProjectSetupSettings<string> = {}
@@ -27,7 +27,7 @@ export class ProjectSetupSettings {
       label: this._labels[key],
       title: this._descriptions[key],
       defaultChecked: this._values[key],
-      disabled: false,
+      disabled: false
     }
   }
 

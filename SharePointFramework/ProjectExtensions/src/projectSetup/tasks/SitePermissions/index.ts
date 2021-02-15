@@ -9,7 +9,7 @@ import { IPermissionConfiguration } from './types'
 
 /**
  * Sets up permissions for the SP web.
- * 
+ *
  * Errors currently doesn't break the setup. Setup continues
  * gracefully on error.
  */
@@ -24,13 +24,12 @@ export class SitePermissions extends BaseTask {
    * @param {IBaseTaskParams} params Task parameters
    * @param {OnProgressCallbackFunction} onProgress On progress funtion
    */
-  public async execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams> {
+  public async execute(
+    params: IBaseTaskParams,
+    onProgress: OnProgressCallbackFunction
+  ): Promise<IBaseTaskParams> {
     try {
-      onProgress(
-        strings.SitePermissionsText,
-        strings.SitePermissionsSubText,
-        'Permissions'
-      )
+      onProgress(strings.SitePermissionsText, strings.SitePermissionsSubText, 'Permissions')
       const list = this.data.hub.web.lists.getByTitle(strings.PermissionConfigurationList)
       const [config, roleDefinitions, groups] = await Promise.all([
         this._getConfiguration(list),
@@ -43,7 +42,9 @@ export class SitePermissions extends BaseTask {
         if (isEmpty(users)) continue
         const roleDefId = roleDefinitions[permissionLevel]
         if (roleDefId) {
-          this.logInformation(`Creating group ${groupName} with permission level ${permissionLevel}...`)
+          this.logInformation(
+            `Creating group ${groupName} with permission level ${permissionLevel}...`
+          )
           const { group, data } = await params.web.siteGroups.add({ Title: groupName })
           await params.web.roleAssignments.add(data.Id, roleDefId)
           for (let j = 0; j < users.length; j++) {
@@ -61,13 +62,11 @@ export class SitePermissions extends BaseTask {
 
   /**
    * Get configuration from the specified list
-   * 
+   *
    * @param {List} list List
    */
   private async _getConfiguration(list: List): Promise<IPermissionConfiguration[]> {
-    return (
-      await list.items.select('GtPermissionLevel', 'GtSPGroupName').get()
-    ).map(item => ({
+    return (await list.items.select('GtPermissionLevel', 'GtSPGroupName').get()).map((item) => ({
       groupName: item.GtSPGroupName,
       permissionLevel: item.GtPermissionLevel
     }))
@@ -75,34 +74,31 @@ export class SitePermissions extends BaseTask {
 
   /**
    * Get groups with users from specified web
-   * 
+   *
    * @param {any} web Web
    */
   private async _getGroups(web: any) {
-    return (
-      await web.siteGroups
-        .select('Title', 'Users')
-        .expand('Users')
-        .get()
-    ).reduce((grps, { Title, Users }) => ({
-      ...grps,
-      [Title]: Users.map((u: SiteUserProps) => u.LoginName)
-    }), {})
+    return (await web.siteGroups.select('Title', 'Users').expand('Users').get()).reduce(
+      (grps, { Title, Users }) => ({
+        ...grps,
+        [Title]: Users.map((u: SiteUserProps) => u.LoginName)
+      }),
+      {}
+    )
   }
 
   /**
    * Get role definitions for the specified web
-   * 
+   *
    * @param {any} web Web
    */
   private async _getRoleDefinitions(web: any) {
-    return (
-      await web.roleDefinitions
-        .select('Name', 'Id')
-        .get()
-    ).reduce((rds: { [key: string]: string }, { Name, Id }) => ({
-      ...rds,
-      [Name]: Id
-    }), {})
+    return (await web.roleDefinitions.select('Name', 'Id').get()).reduce(
+      (rds: { [key: string]: string }, { Name, Id }) => ({
+        ...rds,
+        [Name]: Id
+      }),
+      {}
+    )
   }
 }

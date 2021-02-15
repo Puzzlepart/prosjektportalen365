@@ -10,10 +10,7 @@ export abstract class BaseTask implements IBaseTask {
   public params: IBaseTaskParams
   public onProgress: OnProgressCallbackFunction
 
-  constructor(
-    public taskName: string,
-    public data: IProjectSetupData
-  ) {
+  constructor(public taskName: string, public data: IProjectSetupData) {
     this.settings = data.settings.values
   }
 

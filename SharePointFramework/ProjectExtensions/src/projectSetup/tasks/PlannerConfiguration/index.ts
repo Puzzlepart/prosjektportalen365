@@ -24,7 +24,7 @@ export class PlannerConfiguration extends BaseTask {
     private _configuration: IPlannerConfiguration,
     private _labels: string[] = []
   ) {
-    super('Planner',data)
+    super('Planner', data)
   }
 
   /**

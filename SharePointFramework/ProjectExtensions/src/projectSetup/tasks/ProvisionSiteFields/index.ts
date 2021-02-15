@@ -8,7 +8,7 @@ import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 
 export class ProvisionSiteFields extends BaseTask {
   constructor(data: IProjectSetupData) {
-    super('ProvisionSiteFields',data)
+    super('ProvisionSiteFields', data)
   }
 
   /**
