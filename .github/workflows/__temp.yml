@@ -60,3 +60,19 @@ jobs:
     - name: Install6
       run: release-package/Install.ps1 -Url "${{ env.TARGET_URL }}_${{ github.run_id }}_6" -Title "Prosjektportalen 365 ${{ github.run_id }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }}
       shell: powershell
+
+    - name: Install7
+      run: release-package/Install.ps1 -Url "${{ env.TARGET_URL }}_${{ github.run_id }}_7" -Title "Prosjektportalen 365 ${{ github.run_id }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }}
+      shell: powershell
+
+    - name: Install8
+      run: release-package/Install.ps1 -Url "${{ env.TARGET_URL }}_${{ github.run_id }}_8" -Title "Prosjektportalen 365 ${{ github.run_id }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }}
+      shell: powershell
+
+    - name: Install9
+      run: release-package/Install.ps1 -Url "${{ env.TARGET_URL }}_${{ github.run_id }}_9" -Title "Prosjektportalen 365 ${{ github.run_id }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }}
+      shell: powershell
+
+    - name: Install10
+      run: release-package/Install.ps1 -Url "${{ env.TARGET_URL }}_${{ github.run_id }}_10" -Title "Prosjektportalen 365 ${{ github.run_id }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }}
+      shell: powershell
