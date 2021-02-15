@@ -4,6 +4,7 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot'
 import * as strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
+import { isEmpty } from 'underscore'
 import { ProjectSetupSettings } from '../../projectSetup/ProjectSetupSettings'
 import { BaseDialog } from '../@BaseDialog'
 import { ExtensionsSection } from './ExtensionsSection'
@@ -63,7 +64,7 @@ export class TemplateSelectDialog extends React.Component<
               </MessageBar>
             )}
           </PivotItem>
-          {data.extensions.length > 0 && (
+          {!isEmpty(data.extensions) && (
             <PivotItem headerText={strings.ExtensionsTitle} itemIcon='ArrangeBringForward'>
               <ExtensionsSection
                 extensions={data.extensions}
@@ -95,16 +96,6 @@ export class TemplateSelectDialog extends React.Component<
     let [defaultTemplate] = this.props.data.templates.filter((tmpl) => tmpl.isDefault)
     if (!defaultTemplate) defaultTemplate = this.props.data.templates[0]
     return defaultTemplate
-  }
-
-  /**
-   * On setting change
-   *
-   * @param {string} key Key
-   * @param {string} bool Bool
-   */
-  private _onSettingsChanged(key: string, bool: boolean) {
-    this.setState({ settings: this.state.settings.set(key, bool) })
   }
 
   /**
