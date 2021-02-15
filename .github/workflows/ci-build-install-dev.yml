@@ -10,7 +10,6 @@ on:
 
 env:
   TARGET_URL: 'https://puzzlepart.sharepoint.com/sites/pp365'
-  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
 
 jobs:
    build-release:
@@ -41,10 +40,6 @@ jobs:
     - uses: actions/download-artifact@v1
       with:
         name: release-package
-
-    - name: Upgrade
-      run: release-package/Install.ps1 -Url ${{ env.TARGET_URL }} -Upgrade -CI ${{ secrets.CI_DEV_CREDENTIALS }}
-      shell: powershell
 
     - name: Install
       run: release-package/Install.ps1 -Url "${{ env.TARGET_URL }}_${{ github.run_id }}" -Title "Prosjektportalen 365 ${{ github.run_id }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }}
