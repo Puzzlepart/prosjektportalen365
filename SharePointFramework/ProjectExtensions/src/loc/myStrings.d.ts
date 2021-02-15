@@ -1,4 +1,5 @@
 declare interface IProjectExtensionsStrings {
+  PermissionConfigurationList: string
   SitePermissionsText: string
   SitePermissionsSubText: string
   DocumentTemplateDialogScreenTargetFolderInfoText: string

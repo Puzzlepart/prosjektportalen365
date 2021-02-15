@@ -1,10 +1,11 @@
 /* eslint-disable no-console */
-import { SiteUserProps } from '@pnp/sp'
+import { SiteUserProps, List } from '@pnp/sp'
 import strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'projectSetup'
 import { isEmpty } from 'underscore'
 import { BaseTask, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
+import { IPermissionConfiguration } from './types'
 
 /**
  * Sets up permissions for the SP web.
@@ -30,19 +31,19 @@ export class SitePermissions extends BaseTask {
         strings.SitePermissionsSubText,
         'Permissions'
       )
-      const list = this.data.hub.web.lists.getByTitle('Tillatelseskonfigurasjon')
+      const list = this.data.hub.web.lists.getByTitle(strings.PermissionConfigurationList)
       const [config, roleDefinitions, groups] = await Promise.all([
-        list.items.select('GtPermissionLevel', 'GtSPGroupName').get(),
+        this._getConfiguration(list),
         this._getRoleDefinitions(params.web),
         this._getGroups(this.data.hub.web)
       ])
       for (let i = 0; i < config.length; i++) {
-        const groupName = config[i].GtSPGroupName
+        const { groupName, permissionLevel } = config[i]
         const users = groups[groupName] || []
         if (isEmpty(users)) continue
-        const roleDefId = roleDefinitions[config[i].GtPermissionLevel]
+        const roleDefId = roleDefinitions[permissionLevel]
         if (roleDefId) {
-          this.logInformation(`Creating group ${groupName} with permission level ${config[i].GtPermissionLevel}...`)
+          this.logInformation(`Creating group ${groupName} with permission level ${permissionLevel}...`)
           const { group, data } = await params.web.siteGroups.add({ Title: groupName })
           await params.web.roleAssignments.add(data.Id, roleDefId)
           for (let j = 0; j < users.length; j++) {
@@ -56,6 +57,20 @@ export class SitePermissions extends BaseTask {
       this.logError('Failed to set site permissions from configuration list.')
       return params
     }
+  }
+
+  /**
+   * Get configuration from the specified list
+   * 
+   * @param {List} list List
+   */
+  private async _getConfiguration(list: List): Promise<IPermissionConfiguration[]> {
+    return (
+      await list.items.select('GtPermissionLevel', 'GtSPGroupName').get()
+    ).map(item => ({
+      groupName: item.GtSPGroupName,
+      permissionLevel: item.GtPermissionLevel
+    }))
   }
 
   /**

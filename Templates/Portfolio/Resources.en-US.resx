@@ -199,6 +199,9 @@
   <data name="Lists_Permission_Configuration_Url" xml:space="preserve">
     <value>Lists/Tillatelseskonfigurasjon</value>
   </data>
+  <data name="Lists_Permission_Configuration_Description" xml:space="preserve">
+    <value>Tillatelseskonfigurasjon for nye prosjekter. Denne listen må ikke endres på.</value>
+  </data>
   <data name="View_AllItems_DisplayName" xml:space="preserve">
     <value>Alle elementer</value>
   </data>
