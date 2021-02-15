@@ -1,24 +1,15 @@
-import * as strings from 'ProjectExtensionsStrings'
 import { IToggleProps } from 'office-ui-fabric-react/lib/Toggle'
 
-export interface IProjectSetupSettings<T> {
-  includeStandardFolders?: T
-  includePortfolioAdministrators?: T
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface IProjectSetupSettings<T> { }
 
 export class ProjectSetupSettings {
-  private _labels: IProjectSetupSettings<string> = {
-    includeStandardFolders: strings.IncludeStandardFoldersLabel,
-    includePortfolioAdministrators: strings.IncludePortfolioAdministratorsLabel
-  }
-  private _descriptions: IProjectSetupSettings<string> = {
-    includeStandardFolders: strings.IncludeStandardFoldersDescription,
-    includePortfolioAdministrators: strings.IncludePortfolioAdministratorsDescription
-  }
+  private _labels: IProjectSetupSettings<string> = {}
+  private _descriptions: IProjectSetupSettings<string> = {}
   private _values: IProjectSetupSettings<boolean> = {}
 
   public useDefault() {
-    this._values = { includeStandardFolders: false, includePortfolioAdministrators: true }
+    this._values = {}
     return this
   }
 
@@ -36,7 +27,7 @@ export class ProjectSetupSettings {
       label: this._labels[key],
       title: this._descriptions[key],
       defaultChecked: this._values[key],
-      disabled: key === 'includeStandardFolders'
+      disabled: false,
     }
   }
 

@@ -8,7 +8,6 @@ import { ProjectSetupSettings } from '../../projectSetup/ProjectSetupSettings'
 import { BaseDialog } from '../@BaseDialog'
 import { ExtensionsSection } from './ExtensionsSection'
 import { ListContentSection } from './ListContentSection'
-import { SettingsSection } from './SettingsSection'
 import styles from './TemplateSelectDialog.module.scss'
 import { TemplateSelector } from './TemplateSelector'
 import { ITemplateSelectDialogProps, ITemplateSelectDialogState } from './types'
@@ -37,7 +36,7 @@ export class TemplateSelectDialog extends React.Component<
 
   public render(): React.ReactElement<ITemplateSelectDialogProps> {
     const { version, onDismiss, data } = this.props
-    const { selectedTemplate, selectedListContentConfig, selectedExtensions, settings } = this.state
+    const { selectedTemplate, selectedListContentConfig, selectedExtensions } = this.state
 
     return (
       <BaseDialog
@@ -82,9 +81,6 @@ export class TemplateSelectDialog extends React.Component<
               />
             </PivotItem>
           )}
-          <PivotItem headerText={strings.SettingsSectionTitle} itemIcon='ConfigurationSolid'>
-            <SettingsSection settings={settings} onChange={this._onSettingsChanged.bind(this)} />
-          </PivotItem>
         </Pivot>
       </BaseDialog>
     )

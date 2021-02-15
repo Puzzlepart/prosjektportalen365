@@ -32,10 +32,6 @@ declare interface IProjectExtensionsStrings {
   GetMoreText: string;
   GetSetupDataErrorMessage: string;
   GetSetupDataErrorStack: string;
-  IncludeStandardFoldersLabel: string;
-  IncludeStandardFoldersDescription: string;
-  IncludePortfolioAdministratorsLabel: string;
-  IncludePortfolioAdministratorsDescription: string;
   InvalidLanguageErrorMessage: string;
   InvalidLanguageErrorStack: string;
   DocumentLibraryDropdownLabel: string;

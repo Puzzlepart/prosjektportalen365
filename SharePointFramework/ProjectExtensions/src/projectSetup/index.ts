@@ -120,7 +120,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         iconName: 'Page'
       })
       await this._startProvision(taskParams, data)
-      await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, true)
+      await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, !this.properties.skipReload)
     } catch (error) {
       Logger.log({
         message: '(ProjectSetup) [_initializeSetup]: Failed initializing setup',
