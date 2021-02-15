@@ -48,3 +48,15 @@ jobs:
     - name: Install3
       run: release-package/Install.ps1 -Url "${{ env.TARGET_URL }}_${{ github.run_id }}_3" -Title "Prosjektportalen 365 ${{ github.run_id }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }}
       shell: powershell
+
+    - name: Install4
+      run: release-package/Install.ps1 -Url "${{ env.TARGET_URL }}_${{ github.run_id }}_4" -Title "Prosjektportalen 365 ${{ github.run_id }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }}
+      shell: powershell
+
+    - name: Install5
+      run: release-package/Install.ps1 -Url "${{ env.TARGET_URL }}_${{ github.run_id }}_5" -Title "Prosjektportalen 365 ${{ github.run_id }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }}
+      shell: powershell
+
+    - name: Install6
+      run: release-package/Install.ps1 -Url "${{ env.TARGET_URL }}_${{ github.run_id }}_6" -Title "Prosjektportalen 365 ${{ github.run_id }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }}
+      shell: powershell
