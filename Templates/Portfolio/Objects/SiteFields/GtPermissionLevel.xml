@@ -1,9 +1,9 @@
 <Field Type="Choice" DisplayName="{resource:SiteFields_GtPermissionLevel_DisplayName}" Description="{resource:SiteFields_GtPermissionLevel_Description}" Format="Dropdown" Group="{resource:SiteFields_Project_Group}" ID="{80cdca83-d0da-4f8f-abcd-5695763556e9}" StaticName="GtPermissionLevel" Name="GtPermissionLevel">
     <Default>{resource:Choice_GtPermissionLevel_Read}</Default>
     <CHOICES>
-        <CHOICE>{resource:Choice_GtPermissionLevel_Read</CHOICE>
-        <CHOICE>{resource:Choice_GtPermissionLevel_Contribute</CHOICE>
-        <CHOICE>{resource:Choice_GtPermissionLevel_Edit</CHOICE>
-        <CHOICE>{resource:Choice_GtPermissionLevel_FullControl</CHOICE>
+        <CHOICE>{resource:Choice_GtPermissionLevel_Read}</CHOICE>
+        <CHOICE>{resource:Choice_GtPermissionLevel_Contribute}</CHOICE>
+        <CHOICE>{resource:Choice_GtPermissionLevel_Edit}</CHOICE>
+        <CHOICE>{resource:Choice_GtPermissionLevel_FullControl}</CHOICE>
     </CHOICES>
 </Field>

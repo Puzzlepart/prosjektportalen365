@@ -11,7 +11,7 @@
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Security.xml" />
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/@.xml" />
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/@.xml" />
-            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/*.xml" />
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/@.xml" />
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/RegionalSettings.xml" />
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Navigation.xml" />
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SupportedUILanguages.xml" />
