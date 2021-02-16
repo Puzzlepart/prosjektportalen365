@@ -23,7 +23,7 @@ export abstract class BasePortfolioWebPart<
    * @param {any} component Component
    * @param {T} props Props
    */
-  public renderComponent(component: React.ComponentClass<T>, props?: T): void {
+  public renderComponent(component: React.ComponentClass<T> | React.FunctionComponent<T>, props?: T): void {
     const combinedProps = merge({ title: this._pageTitle }, this.properties, props, {
       pageContext: this.context.pageContext,
       dataAdapter: this.dataAdapter

@@ -69,6 +69,12 @@
         "entrypoint": "./lib/webparts/riskOverview/index.js",
         "manifest": "./src/webparts/riskOverview/manifest.json"
       }]
+    },
+    "portfolio-aggregation-web-part": {
+      "components": [{
+        "entrypoint": "./lib/webparts/portfolioAggregation/index.js",
+        "manifest": "./src/webparts/portfolioAggregation/manifest.json"
+      }]
     }
   },
   "externals": {},
