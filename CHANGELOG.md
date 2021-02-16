@@ -17,6 +17,7 @@ Every change is marked with Pull Request ID.
 - Issues with custom project fields #378
 - Fix for visible check in project information web part #385
 - Setting phase check list and planner task list as visible #389
+- [flexible-portfolio-aggregation-views-webparts-394]
 
 ## 1.2.4 - 30.11.2020
 
