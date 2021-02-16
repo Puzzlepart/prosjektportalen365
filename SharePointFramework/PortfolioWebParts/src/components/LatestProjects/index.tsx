@@ -17,7 +17,7 @@ import styles from './LatestProjects.module.scss'
 export class LatestProjects extends React.Component<ILatestProjectsProps, ILatestProjectsState> {
   constructor(props: ILatestProjectsProps) {
     super(props)
-    this.state = { isLoading: true, projects: [] }
+    this.state = { loading: true, projects: [] }
   }
 
   public async componentDidMount() {
@@ -27,9 +27,9 @@ export class LatestProjects extends React.Component<ILatestProjectsProps, ILates
         'Created',
         SortDirection.Descending
       )
-      this.setState({ projects, isLoading: false })
+      this.setState({ projects, loading: false })
     } catch (error) {
-      this.setState({ projects: [], isLoading: false })
+      this.setState({ projects: [], loading: false })
     }
   }
 
@@ -45,7 +45,7 @@ export class LatestProjects extends React.Component<ILatestProjectsProps, ILates
           updateProperty={undefined}
         />
         <div className={styles.container}>
-          {this.state.isLoading ? (
+          {this.state.loading ? (
             <Spinner label={this.props.loadingText} type={SpinnerType.large} />
           ) : (
             this._renderProjectList()

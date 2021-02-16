@@ -2,7 +2,7 @@ export interface ILatestProjectsState {
   /**
    * Whether the component is loading
    */
-  isLoading: boolean
+  loading: boolean
 
   /**
    * Projects

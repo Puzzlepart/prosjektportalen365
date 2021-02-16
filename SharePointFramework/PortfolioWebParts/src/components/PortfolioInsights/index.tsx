@@ -28,7 +28,7 @@ export class PortfolioInsights extends React.Component<
    */
   constructor(props: IPortfolioInsightsProps) {
     super(props)
-    this.state = { isLoading: true }
+    this.state = { loading: true }
   }
 
   public async componentDidMount() {
@@ -47,15 +47,15 @@ export class PortfolioInsights extends React.Component<
         chartData,
         configuration,
         currentView,
-        isLoading: false
+        loading: false
       })
     } catch (error) {
-      this.setState({ error, isLoading: false })
+      this.setState({ error, loading: false })
     }
   }
 
   public render(): React.ReactElement<IPortfolioInsightsProps> {
-    if (this.state.isLoading) {
+    if (this.state.loading) {
       return (
         <div className={styles.portfolioInsights}>
           <div className={styles.container}>

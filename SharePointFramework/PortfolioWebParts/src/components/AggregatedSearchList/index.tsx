@@ -22,16 +22,15 @@ import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
-import * as React from 'react'
 import { getObjectValue, isHubSite } from 'pp365-shared/lib/helpers'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
 import { DataSourceService, ExcelExportService } from 'pp365-shared/lib/services'
 import { removeMenuBorder } from 'pp365-shared/lib/util'
+import * as React from 'react'
 import HubSiteService from 'sp-hubsite-service'
 import * as _ from 'underscore'
 import styles from './AggregatedSearchList.module.scss'
-import { IAggregatedSearchListProps } from './IAggregatedSearchListProps'
-import { IAggregatedSearchListState } from './IAggregatedSearchListState'
+import { IAggregatedSearchListProps, IAggregatedSearchListState } from './types'
 
 /**
  * @component AggregatedSearchList
@@ -53,21 +52,21 @@ export class AggregatedSearchList extends React.Component<
    */
   constructor(props: IAggregatedSearchListProps) {
     super(props)
-    this.state = { isLoading: true, columns: props.columns }
+    this.state = { loading: true, columns: props.columns }
   }
 
   public async componentDidMount(): Promise<void> {
     ExcelExportService.configure({ name: this.props.title })
     try {
       const { items, selectedDataSource, dataSources } = await this._fetchData()
-      this.setState({ items, selectedDataSource, dataSources, isLoading: false })
+      this.setState({ items, selectedDataSource, dataSources, loading: false })
     } catch (error) {
-      this.setState({ error, isLoading: false })
+      this.setState({ error, loading: false })
     }
   }
 
   public render(): React.ReactElement<IAggregatedSearchListProps> {
-    if (this.state.isLoading) {
+    if (this.state.loading) {
       return (
         <div className={this.props.className}>
           <div className={styles.container}>

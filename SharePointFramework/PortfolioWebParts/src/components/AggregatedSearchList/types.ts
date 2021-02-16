@@ -1,10 +1,16 @@
-import { DataAdapter } from 'data'
+import { SearchResult } from '@pnp/sp'
+import { IAggregatedSearchListColumn } from 'interfaces'
 import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
 import { IBaseComponentProps } from '../IBaseComponentProps'
 
-export interface IPortfolioAggregationProps extends IBaseComponentProps {
+export interface IAggregatedSearchListProps extends IBaseComponentProps {
+  /**
+   * Class name
+   */
+  className?: string
+
   /**
    * Data source name
    */
@@ -19,6 +25,16 @@ export interface IPortfolioAggregationProps extends IBaseComponentProps {
    * Query template
    */
   queryTemplate?: string
+
+  /**
+   * Transforms the data after it's fetched
+   */
+  postTransform?: (results: SearchResult[]) => any[]
+
+  /**
+   * Select properties
+   */
+  selectProperties?: string[]
 
   /**
    * Show command bar
@@ -46,16 +62,17 @@ export interface IPortfolioAggregationProps extends IBaseComponentProps {
   showExcelExportButton?: boolean
 
   /**
-   * Data adapter
+   * Columns to show in the DetailsList
    */
-  dataAdapter?: DataAdapter;
+  columns?: IAggregatedSearchListColumn[]
 }
 
-export interface IPortfolioAggregationState {
+
+export interface IAggregatedSearchListState {
   /**
    * Whether the component is loading
    */
-  loading?: boolean
+  loading: boolean
 
   /**
    * Whether there's an export in progress

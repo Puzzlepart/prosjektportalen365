@@ -4,7 +4,7 @@ export interface IResourceAllocationState {
   /**
    * Whether the component is loading
    */
-  isLoading: boolean
+  loading: boolean
 
   /**
    * Show filter panel

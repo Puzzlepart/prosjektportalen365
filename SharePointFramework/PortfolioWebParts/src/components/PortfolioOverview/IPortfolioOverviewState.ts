@@ -7,7 +7,7 @@ export interface IPortfolioOverviewState {
   /**
    * Whether the component is loading
    */
-  isLoading?: boolean
+  loading?: boolean
 
   /**
    * Is exporting

@@ -61,7 +61,7 @@ export class PortfolioOverview extends React.Component<
   constructor(props: IPortfolioOverviewProps) {
     super(props)
     this.state = {
-      isLoading: true,
+      loading: true,
       isCompact: false,
       searchTerm: '',
       activeFilters: {},
@@ -78,9 +78,9 @@ export class PortfolioOverview extends React.Component<
     ExcelExportService.configure({ name: this.props.title })
     try {
       const data = await this._fetchInitialData()
-      this.setState({ ...data, isLoading: false })
+      this.setState({ ...data, loading: false })
     } catch (error) {
-      this.setState({ error, isLoading: false })
+      this.setState({ error, loading: false })
     }
   }
 
@@ -99,7 +99,7 @@ export class PortfolioOverview extends React.Component<
   }
 
   public render(): React.ReactElement<IPortfolioOverviewProps> {
-    if (this.state.isLoading) {
+    if (this.state.loading) {
       return (
         <div className={styles.portfolioOverview}>
           <div className={styles.container}>

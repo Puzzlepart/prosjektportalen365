@@ -17,8 +17,9 @@ import * as strings from 'PortfolioWebPartsStrings'
 import { PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
 import * as _ from 'underscore'
-import { DEFAULT_SEARCH_SETTINGS } from './DEFAULT_SEARCH_SETTINGS'
+import { DEFAULT_SEARCH_SETTINGS } from './types'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
+import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
 
 export class DataAdapter {
   private _portalDataService: PortalDataService
@@ -135,7 +136,7 @@ export class DataAdapter {
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
     siteId: string,
-    siteIdProperty = 'GtSiteIdOWSTEXT'
+    siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IFetchDataForViewItemResult[]> {
     try {
       const { projects, sites, statusReports } = await this._fetchDataForView(
@@ -178,7 +179,7 @@ export class DataAdapter {
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
     siteId: string,
-    siteIdProperty = 'GtSiteIdOWSTEXT'
+    siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IFetchDataForViewItemResult[]> {
     try {
       const { projects, sites, statusReports } = await this._fetchDataForView(
@@ -217,7 +218,7 @@ export class DataAdapter {
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
     siteId: string,
-    siteIdProperty = 'GtSiteIdOWSTEXT'
+    siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ) {
     let [
       { PrimarySearchResults: projects },
@@ -371,6 +372,7 @@ export class DataAdapter {
    * Checks if the current is in the specified group
    *
    * @private
+   * 
    * @param {string} groupName
    *
    * @returns {Promise<boolean>}
@@ -386,6 +388,44 @@ export class DataAdapter {
       return siteGroup && siteGroup.CanCurrentUserViewMembership
     } catch (error) {
       return false
+    }
+  }
+
+  /**
+  * Fetch items
+  *
+  * @param {string} queryTemplate Query template
+  * @param {string[]} selectProperties Select properties
+  */
+  private async _fetchItems(queryTemplate: string, selectProperties: string[]) {
+    const response = await sp.search({
+      QueryTemplate: queryTemplate,
+      Querytext: '*',
+      RowLimit: 500,
+      TrimDuplicates: false,
+      SelectProperties: [
+        ...selectProperties,
+        'Path',
+        'SPWebUrl',
+      ]
+    })
+    return response.PrimarySearchResults
+  }
+
+  /**
+   * Fetch items with source
+   * 
+   * @param {string} dataSourceName Data source name
+   * @param {string[]} selectProperties Select properties
+   */
+  public async fetchItemsWithSource(dataSourceName: string, selectProperties: string[]): Promise<any> {
+    try {
+      const service = new DataSourceService(sp.web)
+      const { searchQuery } = await service.getByName(dataSourceName)
+      const items = await this._fetchItems(searchQuery, selectProperties)
+      return items
+    } catch (error) {
+      throw error
     }
   }
 }

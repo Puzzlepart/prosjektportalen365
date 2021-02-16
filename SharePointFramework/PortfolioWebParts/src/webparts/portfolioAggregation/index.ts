@@ -4,12 +4,16 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { PortfolioAggregation, IPortfolioAggregationProps } from 'components/PortfolioAggregation'
+import { DataAdapter } from 'data'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IPortfolioAggregationProps> {
   public render(): void {
-    this.renderComponent(PortfolioAggregation)
+    this.renderComponent(PortfolioAggregation, {
+      ...this.properties,
+      dataAdapter: new DataAdapter(this.context)
+    })
   }
 
   public async onInit(): Promise<void> {

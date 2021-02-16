@@ -3,7 +3,7 @@ import { IPortfolioConfiguration } from 'interfaces'
 import { PortfolioOverviewView } from 'pp365-shared/lib/models/PortfolioOverviewView'
 
 export interface IPortfolioInsightsState {
-  isLoading: boolean
+  loading: boolean
   chartData?: ChartData
   charts?: ChartConfiguration[]
   contentTypes?: { StringId: string; Name: string; NewFormUrl: string }[]

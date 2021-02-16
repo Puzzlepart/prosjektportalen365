@@ -35,7 +35,7 @@ export class ProjectList extends React.Component<IProjectListProps, IProjectList
    */
   constructor(props: IProjectListProps) {
     super(props)
-    this.state = { isLoading: true, searchTerm: '', showAsTiles: props.showAsTiles }
+    this.state = { loading: true, searchTerm: '', showAsTiles: props.showAsTiles }
   }
 
   public async componentDidMount() {
@@ -52,13 +52,13 @@ export class ProjectList extends React.Component<IProjectListProps, IProjectList
       this.setState({
         projects,
         listView: { projects, columns },
-        isLoading: false
+        loading: false
       })
       if (this.props.showProjectLogo) {
         this._getProjectLogos(20)
       }
     } catch (error) {
-      this.setState({ error, isLoading: false })
+      this.setState({ error, loading: false })
     }
   }
 
@@ -66,7 +66,7 @@ export class ProjectList extends React.Component<IProjectListProps, IProjectList
    * Renders the <ProjectList /> component
    */
   public render(): React.ReactElement<IProjectListProps> {
-    if (this.state.isLoading) {
+    if (this.state.loading) {
       return (
         <div className={styles.projectList}>
           <Spinner label={this.props.loadingText} type={SpinnerType.large} />

@@ -5,7 +5,7 @@ export interface IProjectListState {
   /**
    * Whether the component is loading
    */
-  isLoading: boolean
+  loading: boolean
 
   /**
    * Search term

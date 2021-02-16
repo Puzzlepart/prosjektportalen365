@@ -17,6 +17,8 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
+import { tryParsePercentage } from 'pp365-shared/lib/helpers'
+import { DataSourceService } from 'pp365-shared/lib/services'
 import * as React from 'react'
 import Timeline, {
   ReactCalendarGroupRendererProps,
@@ -25,8 +27,6 @@ import Timeline, {
   TodayMarker
 } from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css'
-import { tryParsePercentage } from 'pp365-shared/lib/helpers'
-import { DataSourceService } from 'pp365-shared/lib/services'
 import * as _ from 'underscore'
 import { FilterPanel, IFilterItemProps, IFilterProps } from '../FilterPanel'
 import { DetailsCallout } from './DetailsCallout'
@@ -72,21 +72,21 @@ export class ResourceAllocation extends React.Component<
    */
   constructor(props: IResourceAllocationProps) {
     super(props)
-    this.state = { isLoading: true, showFilterPanel: false, activeFilters: {} }
+    this.state = { loading: true, showFilterPanel: false, activeFilters: {} }
     moment.locale('nb')
   }
 
   public async componentDidMount(): Promise<void> {
     try {
       const data = await this._fetchData()
-      this.setState({ data, isLoading: false })
+      this.setState({ data, loading: false })
     } catch (error) {
-      this.setState({ error, isLoading: false })
+      this.setState({ error, loading: false })
     }
   }
 
   public render(): React.ReactElement<IResourceAllocationProps> {
-    if (this.state.isLoading) {
+    if (this.state.loading) {
       return (
         <div className={styles.resourceAllocation}>
           <div className={styles.container}>
@@ -134,7 +134,7 @@ export class ResourceAllocation extends React.Component<
             </MessageBar>
           </div>
           <div className={styles.timeline}>
-            <Timeline
+            <Timeline<any>
               groups={groups}
               items={items}
               stackItems={true}
@@ -248,7 +248,7 @@ export class ResourceAllocation extends React.Component<
   /**
    * Timeline item renderer
    */
-  private _itemRenderer(props: ReactCalendarItemRendererProps<ITimelineItem>) {
+  private _itemRenderer(props: ReactCalendarItemRendererProps<any>) {
     const htmlProps = props.getItemProps(props.item.itemProps)
     return (
       <div
