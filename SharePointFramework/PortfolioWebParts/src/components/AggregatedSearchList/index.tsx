@@ -24,7 +24,7 @@ import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getObjectValue, isHubSite } from 'pp365-shared/lib/helpers'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
-import { DataSourceService, ExcelExportService } from 'pp365-shared/lib/services'
+import { DataSourceService, ExcelExportService, ExcelExportColumn } from 'pp365-shared/lib/services'
 import { removeMenuBorder } from 'pp365-shared/lib/util'
 import * as React from 'react'
 import HubSiteService from 'sp-hubsite-service'
@@ -39,7 +39,7 @@ import { IAggregatedSearchListProps, IAggregatedSearchListState } from './types'
 export class AggregatedSearchList extends React.Component<
   IAggregatedSearchListProps,
   IAggregatedSearchListState
-> {
+  > {
   public static defaultProps: Partial<IAggregatedSearchListProps> = {
     showCommandBar: true,
     showSearchBox: true
@@ -393,7 +393,7 @@ export class AggregatedSearchList extends React.Component<
     this.setState({ isExporting: true })
     const { items, columns } = this._getData()
     try {
-      await ExcelExportService.export(items, columns)
+      await ExcelExportService.export(items, columns as ExcelExportColumn[])
       this.setState({ isExporting: false })
     } catch (error) {
       this.setState({ isExporting: false })

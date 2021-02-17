@@ -16,7 +16,6 @@ import { formatDate } from 'pp365-shared/lib/helpers'
 export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   const reducer = useMemo(() => createReducer(props), [])
   const [state, dispatch] = useReducer(reducer, initState(props))
-  const selectProperties = useMemo(() => state.columns.map(col => col.fieldName).sort(), [state.columns])
 
   useEffect(() => {
     if (props.dataSourceCategory) {
@@ -29,9 +28,9 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
     dispatch(START_FETCH())
     props.dataAdapter.fetchItemsWithSource(
       state.dataSource,
-      selectProperties
+      state.columns.map(col => col.fieldName)
     ).then(items => dispatch(DATA_FETCHED({ items })))
-  }, [selectProperties, state.dataSource])
+  }, [state.columnAdded, state.dataSource])
 
   const items = useMemo(() =>
     state.items.filter(i => JSON.stringify(i).toLowerCase().indexOf(state.searchTerm.toLowerCase()) !== -1),

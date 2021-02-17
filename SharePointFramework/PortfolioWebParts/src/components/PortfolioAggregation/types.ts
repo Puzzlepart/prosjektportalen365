@@ -124,6 +124,11 @@ export interface IPortfolioAggregationState {
   columnContextMenu?: { column: IColumn, target: Target }
 
   /**
+   * Column added timestamp
+   */
+  columnAdded?: number
+
+  /**
    * Error
    */
   error?: string

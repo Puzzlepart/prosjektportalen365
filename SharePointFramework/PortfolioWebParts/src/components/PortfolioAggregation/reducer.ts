@@ -59,7 +59,7 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
     dataSource: props.dataSource,
     dataSources: [],
     items: [],
-    searchTerm:'',
+    searchTerm: '',
     columns: props.columns,
     groups: null,
     addColumnPanel: { isOpen: false }
@@ -80,9 +80,9 @@ export default (props: IPortfolioAggregationProps) =>
                         { reverse: state.sortBy.isSortedDescending }
                     )
                 }
+                state.loading = false
             }
             if (payload.dataSources) state.dataSources = payload.dataSources
-            state.loading = false
         },
 
         [TOGGLE_COLUMN_FORM_PANEL.type]: (state, { payload }: ReturnType<typeof TOGGLE_COLUMN_FORM_PANEL>) => {
@@ -100,6 +100,7 @@ export default (props: IPortfolioAggregationProps) =>
             else state.columns = [...state.columns, payload.column]
             state.editColumn = null
             state.addColumnPanel = { isOpen: false }
+            state.columnAdded = new Date().getTime()
             props.onUpdateProperty('columns', current(state).columns)
         },
 
@@ -189,7 +190,6 @@ export default (props: IPortfolioAggregationProps) =>
 
         [MOVE_COLUMN.type]: (state, { payload }: ReturnType<typeof MOVE_COLUMN>) => {
             const index = indexOf(state.columns.map(c => c.fieldName), payload.column.fieldName)
-            if (index === 0) return
             state.columns = arrayMove(current(state).columns, index, index + payload.move)
             props.onUpdateProperty('columns', current(state).columns)
         },
