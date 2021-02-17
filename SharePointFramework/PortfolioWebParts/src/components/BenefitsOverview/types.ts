@@ -1,6 +1,6 @@
-import { IAggregatedSearchListProps } from '../AggregatedSearchList'
+import { IPortfolioAggregationProps } from 'components/PortfolioAggregation/types'
 
-export interface IBenefitsOverviewProps extends IAggregatedSearchListProps {
+export interface IBenefitsOverviewProps extends IPortfolioAggregationProps {
   /**
    * Columns to hide from the DetailsList
    */

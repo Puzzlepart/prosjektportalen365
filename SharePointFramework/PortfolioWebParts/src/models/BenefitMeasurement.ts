@@ -19,7 +19,7 @@ export class BenefitMeasurement extends BenefitBase {
    * @param {IBenefitsSearchResult} result Search result
    * @param {number} fractionDigits Fraction digits for valueDisplay
    */
-  constructor(result: IBenefitsSearchResult, fractionDigits = 2) {
+  constructor(result: IBenefitsSearchResult, fractionDigits: number = 2) {
     super(result)
     this.date = new Date(result.GtMeasurementDateOWSDATE)
     this.dateDisplay = this.date.toLocaleDateString()
@@ -41,7 +41,7 @@ export class BenefitMeasurement extends BenefitBase {
    */
   public calculcateAchievement(
     indicator: BenefitMeasurementIndicator,
-    fractionDigits = 2
+    fractionDigits: number = 2
   ): BenefitMeasurement {
     this.indicator = indicator
     const achievement =

@@ -15,24 +15,6 @@ import { IAggregatedSearchListColumn } from 'interfaces'
 export function getColumns(props: IBenefitsOverviewProps): IAggregatedSearchListColumn[] {
   const columns: IAggregatedSearchListColumn[] = [
     {
-      key: 'siteTitle',
-      fieldName: 'siteTitle',
-      name: strings.SiteTitleLabel,
-      minWidth: 100,
-      maxWidth: 180,
-      isResizable: true,
-      onRender: (indicator: BenefitMeasurementIndicator) => {
-        const webUrl = getObjectValue<string>(indicator, 'webUrl', null)
-        const siteTitle = getObjectValue<string>(indicator, 'siteTitle', null)
-        return (
-          <a href={webUrl} rel='noopener noreferrer' target='_blank'>
-            {siteTitle}
-          </a>
-        )
-      },
-      isGroupable: true
-    },
-    {
       key: 'benefit.title',
       fieldName: 'benefit.title',
       name: strings.BenefitTitleLabel,

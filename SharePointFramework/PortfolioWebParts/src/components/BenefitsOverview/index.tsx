@@ -1,6 +1,6 @@
+import { PortfolioAggregation } from 'components/PortfolioAggregation'
 import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from 'models'
 import React, { Component } from 'react'
-import { AggregatedSearchList } from '../AggregatedSearchList'
 import styles from './BenefitsOverview.module.scss'
 import { getColumns } from './BenefitsOverviewColumns'
 import { BenefitsOverviewDefaultProps, IBenefitsOverviewProps } from './types'
@@ -21,9 +21,10 @@ export class BenefitsOverview extends Component<IBenefitsOverviewProps, {}> {
     const columns = getColumns(this.props)
     return (
       <div className={styles.benefitsOverview}>
-        <AggregatedSearchList
+        <PortfolioAggregation
           {...this.props}
           columns={columns}
+          lockedColumns={true}
           postTransform={this._postTransform.bind(this)}
         />
       </div>
