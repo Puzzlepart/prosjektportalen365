@@ -57,6 +57,9 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
                 PropertyPaneToggle('showCommandBar', {
                   label: strings.ShowCommandBarLabel
                 }),
+                PropertyPaneToggle('showSearchBox', {
+                  label: strings.ShowSearchBoxLabel
+                }),
                 PropertyPaneToggle('showExcelExportButton', {
                   label: strings.ShowExcelExportButtonLabel
                 })

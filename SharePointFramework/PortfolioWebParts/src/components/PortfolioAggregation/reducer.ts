@@ -16,6 +16,7 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
     loading: true,
     items: [],
     columns: props.columns,
+    addColumnPanel: { isOpen: false }
 })
 
 /**

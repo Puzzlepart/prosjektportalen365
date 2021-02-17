@@ -1,8 +1,10 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { DetailsListLayoutMode } from 'office-ui-fabric-react/lib/DetailsList'
+import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList'
 import React, { useEffect, useMemo, useReducer } from 'react'
 import { addColumn, AddColumnPanel } from './AddColumnPanel'
+import { Commands } from './Commands'
 import { PortfolioAggregationContext } from './context'
 import styles from './PortfolioAggregation.module.scss'
 import createReducer, { DATA_FETCHED, initState } from './reducer'
@@ -21,16 +23,25 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   }, [state.columns])
 
   return (
-    <PortfolioAggregationContext.Provider value={{ state, dispatch }}>
+    <PortfolioAggregationContext.Provider value={{ props, state, dispatch }}>
       <div className={styles.root}>
-        <ShimmeredDetailsList
-          layoutMode={DetailsListLayoutMode.fixedColumns}
-          enableShimmer={state.loading}
-          items={state.items}
-          columns={[
-            ...state.columns,
-            props.displayMode === DisplayMode.Edit && addColumn(dispatch)
-          ].filter(c => c)} />
+        <Commands />
+        <div className={styles.header}>
+          <div className={styles.title}>{props.title}</div>
+        </div>
+        <div className={styles.searchBox} hidden={!props.showSearchBox}>
+          <SearchBox />
+        </div>
+        <div className={styles.listContainer}>
+          <ShimmeredDetailsList
+            layoutMode={DetailsListLayoutMode.fixedColumns}
+            enableShimmer={state.loading}
+            items={state.items}
+            columns={[
+              ...state.columns,
+              props.displayMode === DisplayMode.Edit && addColumn(dispatch)
+            ].filter(c => c)} />
+        </div>
         <AddColumnPanel />
       </div>
     </PortfolioAggregationContext.Provider>

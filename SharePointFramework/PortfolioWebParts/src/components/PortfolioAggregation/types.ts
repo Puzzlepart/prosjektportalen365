@@ -36,11 +36,6 @@ export interface IPortfolioAggregationProps extends IBaseComponentProps {
   showSearchBox?: boolean
 
   /**
-   * Text to show when loading
-   */
-  loadingText?: string
-
-  /**
    * Placeholder text for searchbox
    */
   searchBoxPlaceholderText?: string
