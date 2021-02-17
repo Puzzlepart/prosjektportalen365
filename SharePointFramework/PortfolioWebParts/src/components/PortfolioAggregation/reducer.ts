@@ -72,7 +72,9 @@ export default (props: IPortfolioAggregationProps) =>
     createReducer(initState(props), {
         [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {
             if (payload.items) {
-                state.items = payload.items
+                state.items = props.postTransform
+                    ? props.postTransform(payload.items)
+                    : payload.items
                 if (state.sortBy) {
                     state.items = sortArray(
                         [...state.items],

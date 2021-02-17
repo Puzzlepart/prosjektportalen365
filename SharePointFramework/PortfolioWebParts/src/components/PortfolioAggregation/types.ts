@@ -1,3 +1,4 @@
+import { SearchResult } from '@pnp/sp'
 import { DataAdapter } from 'data'
 import { Target } from 'office-ui-fabric-react/lib/Callout'
 import { IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList'
@@ -5,7 +6,7 @@ import { IPanelProps } from 'office-ui-fabric-react/lib/Panel'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
 import { IBaseComponentProps } from '../types'
 
-export interface IPortfolioAggregationProps extends IBaseComponentProps {
+export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps {
   /**
    * Data source name
    */
@@ -22,9 +23,9 @@ export interface IPortfolioAggregationProps extends IBaseComponentProps {
   columns?: IColumn[]
 
   /**
-   * Query template
+   * Select properties
    */
-  queryTemplate?: string
+  selectProperties?: string[]
 
   /**
    * Show command bar
@@ -47,6 +48,11 @@ export interface IPortfolioAggregationProps extends IBaseComponentProps {
   showExcelExportButton?: boolean
 
   /**
+   * Locked columns
+   */
+  lockedColumns?: boolean
+
+  /**
    * Data adapter
    */
   dataAdapter?: DataAdapter;
@@ -54,7 +60,12 @@ export interface IPortfolioAggregationProps extends IBaseComponentProps {
   /**
    * On update property
    */
-  onUpdateProperty: (key: string, value: any) => void
+  onUpdateProperty?: (key: string, value: any) => void
+
+  /**
+   * Transforms the data after it's fetched
+   */
+  postTransform?: (results: SearchResult[]) => T[]
 }
 
 export interface IPortfolioAggregationState {

@@ -2,16 +2,16 @@ import { DisplayMode } from '@microsoft/sp-core-library'
 import { DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList'
-import strings from 'PortfolioWebPartsStrings'
+import { getObjectValue as get } from 'pp365-shared/lib/helpers'
 import React, { useEffect, useMemo, useReducer } from 'react'
-import { addColumn, ColumnFormPanel } from './ColumnFormPanel'
 import { ColumnContextMenu } from './ColumnContextMenu'
+import { addColumn, ColumnFormPanel } from './ColumnFormPanel'
 import { Commands } from './Commands'
 import { PortfolioAggregationContext } from './context'
+import { renderItemColumn, siteTitleColumn } from './itemColumn'
 import styles from './PortfolioAggregation.module.scss'
 import createReducer, { COLUMN_HEADER_CONTEXT_MENU, DATA_FETCHED, initState, SEARCH, START_FETCH } from './reducer'
 import { IPortfolioAggregationProps } from './types'
-import { formatDate } from 'pp365-shared/lib/helpers'
 
 export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   const reducer = useMemo(() => createReducer(props), [])
@@ -28,14 +28,21 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
     dispatch(START_FETCH())
     props.dataAdapter.fetchItemsWithSource(
       state.dataSource,
-      state.columns.map(col => col.fieldName)
+      props.selectProperties || state.columns.map(col => col.fieldName)
     ).then(items => dispatch(DATA_FETCHED({ items })))
   }, [state.columnAdded, state.dataSource])
 
-  const items = useMemo(() =>
-    state.items.filter(i => JSON.stringify(i).toLowerCase().indexOf(state.searchTerm.toLowerCase()) !== -1),
-    [state.searchTerm, state.items]
-  )
+  const items = useMemo(() => {
+    return state.items.filter(i => {
+      const searchTerm = state.searchTerm.toLowerCase()
+      const searchObj = state.columns.reduce((obj, col) => {
+        return { ...obj, [col.fieldName]: get(i, col.fieldName, null) }
+      }, {})
+      return JSON.stringify(searchObj)
+        .toLowerCase()
+        .indexOf(searchTerm) !== -1
+    })
+  }, [state.searchTerm, state.items])
 
   return (
     <PortfolioAggregationContext.Provider value={{ props, state, dispatch }}>
@@ -55,14 +62,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
             layoutMode={DetailsListLayoutMode.fixedColumns}
             enableShimmer={state.loading}
             items={items}
-            onRenderItemColumn={(item, _i, column) => {
-              const value = item[column.fieldName]
-              switch (column?.data?.renderAs) {
-                case 'date': return formatDate(value, false)
-                case 'datetime': return formatDate(value, true)
-                default: return value
-              }
-            }}
+            onRenderItemColumn={renderItemColumn}
             onColumnHeaderContextMenu={(col, ev) => dispatch(
               COLUMN_HEADER_CONTEXT_MENU({
                 column: col,
@@ -70,22 +70,9 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
               })
             )}
             columns={[
-              {
-                key: 'SiteTitle',
-                fieldName: 'SiteTitle',
-                name: strings.SiteTitleLabel,
-                minWidth: 100,
-                maxWidth: 150,
-                isResizable: true,
-                onRender: (item: any) => (
-                  <a href={item.SPWebUrl} rel='noopener noreferrer' target='_blank'>
-                    {item.SiteTitle}
-                  </a>
-                ),
-                data: { isGroupable: true }
-              },
+             siteTitleColumn,
               ...state.columns,
-              props.displayMode === DisplayMode.Edit && addColumn(dispatch)
+              (props.displayMode === DisplayMode.Edit && !props.lockedColumns) && addColumn(dispatch)
             ].filter(c => c)}
             groups={state.groups} />
         </div>

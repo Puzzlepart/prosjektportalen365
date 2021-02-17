@@ -12,7 +12,7 @@ export const ColumnContextMenu = () => {
     if (!state.columnContextMenu) return null
     const { column, target } = state.columnContextMenu
     const columnIndex = indexOf(state.columns.map(c => c.fieldName), column.fieldName)
-    const columnEditable = (props.displayMode === DisplayMode.Edit && columnIndex !== -1)
+    const columnEditable = (props.displayMode === DisplayMode.Edit && columnIndex !== -1 && !props.lockedColumns)
     const items: IContextualMenuItem[] = [
         {
             key: 'SortDesc',
