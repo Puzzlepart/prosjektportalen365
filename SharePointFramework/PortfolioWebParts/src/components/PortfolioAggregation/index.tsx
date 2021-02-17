@@ -2,7 +2,6 @@ import { DisplayMode } from '@microsoft/sp-core-library'
 import { DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList'
-import { getObjectValue as get } from 'pp365-shared/lib/helpers'
 import React, { useEffect, useMemo, useReducer } from 'react'
 import { ColumnContextMenu } from './ColumnContextMenu'
 import { addColumn, ColumnFormPanel } from './ColumnFormPanel'
@@ -17,6 +16,7 @@ import createReducer, {
   SEARCH,
   START_FETCH
 } from './reducer'
+import { filterItem } from './search'
 import { IPortfolioAggregationProps } from './types'
 
 export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
@@ -42,13 +42,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   }, [state.columnAdded, state.dataSource])
 
   const items = useMemo(() => {
-    return state.items.filter((i) => {
-      const searchTerm = state.searchTerm.toLowerCase()
-      const searchObj = state.columns.reduce((obj, col) => {
-        return { ...obj, [col.fieldName]: get(i, col.fieldName, null) }
-      }, {})
-      return JSON.stringify(searchObj).toLowerCase().indexOf(searchTerm) !== -1
-    })
+    return state.items.filter((i) => filterItem(i, state.searchTerm, state.columns  ))
   }, [state.searchTerm, state.items])
 
   return (
