@@ -2,6 +2,8 @@ import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { Panel } from 'office-ui-fabric-react/lib/Panel'
 import { TextField } from 'office-ui-fabric-react/lib/TextField'
+import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
+import * as strings from 'PortfolioWebPartsStrings'
 import React, { useState } from 'react'
 import styles from './AddColumnPanel.module.scss'
 import { IAddColumnPanelProps } from './types'
@@ -9,10 +11,10 @@ import { IAddColumnPanelProps } from './types'
 export const addColumn = (onColumnClick: () => void) => ({
   key: '',
   fieldName: '',
-  name: 'Legg til kolonne',
+  name: strings.AddColumnText,
   iconName: 'CalculatorAddition',
   iconClassName: styles.addColumnIcon,
-  minWidth: 100,
+  minWidth: 150,
   onColumnClick,
 })
 
@@ -27,16 +29,17 @@ export const AddColumnPanel = (props: IAddColumnPanelProps) => {
 
   const onSave = () => {
     props.onAddColumn({ ...column, key: column.fieldName })
+    props.onDismiss()
   }
 
   return (
     <Panel
       isOpen={props.isOpen}
-      headerText='Ny kolonne'
+      headerText={strings.NewColumnHeaderText}
       className={styles.root}>
       <div className={styles.field}>
         <TextField
-          label='Søkeegenskap'
+          label={strings.SearchPropertyLabel}
           value={column.fieldName}
           onChange={(_, value) => setColumn({
             ...column,
@@ -45,7 +48,7 @@ export const AddColumnPanel = (props: IAddColumnPanelProps) => {
       </div>
       <div className={styles.field}>
         <TextField
-          label='Visningsnavn'
+          label={strings.DisplayNameLabel}
           value={column.name}
           onChange={(_, value) => setColumn({
             ...column,
@@ -54,7 +57,7 @@ export const AddColumnPanel = (props: IAddColumnPanelProps) => {
       </div>
       <div className={styles.field}>
         <TextField
-          label='Minium bredde'
+          label={strings.MinWidthLabel}
           type='number'
           value={column.minWidth.toString()}
           onChange={(_, value) => setColumn({
@@ -64,7 +67,7 @@ export const AddColumnPanel = (props: IAddColumnPanelProps) => {
       </div>
       <div className={styles.field}>
         <TextField
-          label='Maks bredde'
+          label={strings.MaxWidthLabel}
           type='number'
           value={column.maxWidth.toString()}
           onChange={(_, value) => setColumn({
@@ -72,10 +75,28 @@ export const AddColumnPanel = (props: IAddColumnPanelProps) => {
             maxWidth: parseInt(value)
           })} />
       </div>
+      <div className={styles.field}>
+        <Toggle
+          label={strings.IsMultilineLabel}
+          defaultChecked={column.isMultiline}
+          onChange={(_, checked) => setColumn({
+            ...column,
+            isMultiline: checked
+          })} />
+      </div>
+      <div className={styles.field}>
+        <Toggle
+          label={strings.IsResizablehLabel}
+          defaultChecked={column.isResizable}
+          onChange={(_, checked) => setColumn({
+            ...column,
+            isResizable: checked
+          })} />
+      </div>
       <div style={{ marginTop: 12 }} >
-        <PrimaryButton text='Lagre' onClick={onSave} />
+        <PrimaryButton text={strings.SaveButtonLabel} onClick={onSave} />
         <DefaultButton
-          text='Lukk'
+          text={strings.CloseButtonLabel}
           style={{ marginLeft: 4 }}
           onClick={() => props.onDismiss()} />
       </div>

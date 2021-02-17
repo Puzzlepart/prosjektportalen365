@@ -9,11 +9,28 @@ import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IPortfolioAggregationProps> {
+  constructor() {
+    super()
+    this._onUpdateProperty = this._onUpdateProperty.bind(this)
+  }
+
   public render(): void {
     this.renderComponent(PortfolioAggregation, {
       ...this.properties,
-      dataAdapter: new DataAdapter(this.context)
+      dataAdapter: new DataAdapter(this.context),
+      onUpdateProperty: this._onUpdateProperty
     })
+  }
+
+  /**
+   * On update property
+   * 
+   * @param {string} key Key
+   * @param {any} value Value
+   */
+  private _onUpdateProperty(key: string, value: any) {
+    this.properties[key] = value
+    this.context.propertyPane.refresh()
   }
 
   public async onInit(): Promise<void> {

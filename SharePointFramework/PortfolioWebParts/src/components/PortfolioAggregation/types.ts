@@ -1,5 +1,4 @@
 import { DataAdapter } from 'data'
-import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
 import { IBaseComponentProps } from '../IBaseComponentProps'
@@ -14,6 +13,11 @@ export interface IPortfolioAggregationProps extends IBaseComponentProps {
    * Category for data sources
    */
   dataSourceCategory?: string
+
+  /**
+   * Columns
+   */
+  columns?: IColumn[]
 
   /**
    * Query template
@@ -49,6 +53,11 @@ export interface IPortfolioAggregationProps extends IBaseComponentProps {
    * Data adapter
    */
   dataAdapter?: DataAdapter;
+
+  /**
+   * On update property
+   */
+  onUpdateProperty: (key: string, value: any) => void
 }
 
 export interface IPortfolioAggregationState {
@@ -68,6 +77,11 @@ export interface IPortfolioAggregationState {
   items?: any[]
 
   /**
+   * Columns
+   */
+  columns?: IColumn[]
+
+  /**
    * Selected data source
    */
   selectedDataSource?: DataSource
@@ -76,11 +90,6 @@ export interface IPortfolioAggregationState {
    * Available data sources
    */
   dataSources?: DataSource[]
-
-  /**
-   * Columns to show in the DetailsList
-   */
-  columns: IColumn[]
 
   /**
    * Column to group by
@@ -98,12 +107,12 @@ export interface IPortfolioAggregationState {
   searchTerm?: string
 
   /**
+   * Add column
+   */
+  addColumn?: boolean
+
+  /**
    * Error
    */
   error?: string
-
-  /**
-   * Props for column header context menu
-   */
-  columnContextMenu?: IContextualMenuProps
 }

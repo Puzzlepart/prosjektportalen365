@@ -1,5 +1,15 @@
 define([], function () {
   return {
+    NewColumnHeaderText: 'Ny kolonne',
+    AddColumnText: 'Legg til kolonne',
+    SearchPropertyLabel: 'Søkeegenskap',
+    DisplayNameLabel: 'Visningsnavn',
+    MinWidthLabel: 'Minimum bredde',
+    MaxWidthLabel: 'Maks bredde',
+    IsMultilineLabel: 'Flere linjer',
+    IsResizablehLabel: 'Justerbar',
+    SaveButtonLabel: 'Lagre',
+    CloseButtonLabel: 'Lukk',
     GroupByColumnLabel: 'Grupper etter {0}',
     FilterBy: 'Filtrer etter',
     DataSourceCategoryLabel: 'Kategori for datakilder',

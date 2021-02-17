@@ -11,7 +11,7 @@ import * as ReactDom from 'react-dom'
 // tslint:disable-next-line: naming-convention
 export abstract class BasePortfolioWebPart<
   T extends IBaseComponentProps
-> extends BaseClientSideWebPart<T> {
+  > extends BaseClientSideWebPart<T> {
   public dataAdapter: DataAdapter
   private _pageTitle: string
 
@@ -24,10 +24,16 @@ export abstract class BasePortfolioWebPart<
    * @param {T} props Props
    */
   public renderComponent(component: React.ComponentClass<T> | React.FunctionComponent<T>, props?: T): void {
-    const combinedProps = merge({ title: this._pageTitle }, this.properties, props, {
-      pageContext: this.context.pageContext,
-      dataAdapter: this.dataAdapter
-    })
+    const combinedProps = merge(
+      { title: this._pageTitle },
+      this.properties,
+      props,
+      {
+        pageContext: this.context.pageContext,
+        dataAdapter: this.dataAdapter,
+        displayMode: this.displayMode
+      }
+    )
     const element: React.ReactElement<T> = React.createElement(component, combinedProps)
     ReactDom.render(element, this.domElement)
   }
@@ -47,7 +53,7 @@ export abstract class BasePortfolioWebPart<
           .select('Title')
           .get<{ Title: string }>()
       ).Title
-    } catch (error) {}
+    } catch (error) { }
   }
 
   public async onInit(): Promise<void> {
