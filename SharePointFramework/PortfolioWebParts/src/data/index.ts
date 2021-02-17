@@ -405,7 +405,7 @@ export class DataAdapter {
       Querytext: '*',
       RowLimit: 500,
       TrimDuplicates: false,
-      SelectProperties: [...selectProperties, 'Path', 'SPWebUrl', 'SiteTitle']
+      SelectProperties: [...selectProperties, 'Path', 'SPWebURL', 'SiteTitle']
     })
     return response.PrimarySearchResults
   }
