@@ -23,11 +23,13 @@ import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
 
 export class DataAdapter {
   private _portalDataService: PortalDataService
+  private _dataSourceService: DataSourceService
 
   constructor(public context: WebPartContext) {
     this._portalDataService = new PortalDataService().configure({
       urlOrWeb: context.pageContext.web.absoluteUrl
     })
+    this._dataSourceService = new DataSourceService(sp.web)
   }
 
   /**
@@ -421,10 +423,22 @@ export class DataAdapter {
    */
   public async fetchItemsWithSource(dataSourceName: string, selectProperties: string[]): Promise<any> {
     try {
-      const service = new DataSourceService(sp.web)
-      const { searchQuery } = await service.getByName(dataSourceName)
+      const { searchQuery } = await this._dataSourceService.getByName(dataSourceName)
       const items = await this._fetchItems(searchQuery, selectProperties)
       return items
+    } catch (error) {
+      throw error
+    }
+  }
+
+  /**
+   * Fetch data sources by category
+   * 
+   * @param {string} category Data source category
+   */
+  public fetchDataSources(category: string): Promise<any> {
+    try {
+      return this._dataSourceService.getByCategory(category)
     } catch (error) {
       throw error
     }
