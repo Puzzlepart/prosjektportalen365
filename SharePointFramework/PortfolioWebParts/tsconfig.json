@@ -26,6 +26,7 @@
     "lib": [
       "es5",
       "dom",
+      "es2015",
       "es2015.collection"
     ],
     "baseUrl": "src",
