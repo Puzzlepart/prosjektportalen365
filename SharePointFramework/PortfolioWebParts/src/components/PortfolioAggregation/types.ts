@@ -1,5 +1,6 @@
 import { DataAdapter } from 'data'
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
+import { Target } from 'office-ui-fabric-react/lib/Callout'
+import { IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList'
 import { IPanelProps } from 'office-ui-fabric-react/lib/Panel'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
 import { IBaseComponentProps } from '../IBaseComponentProps'
@@ -78,6 +79,11 @@ export interface IPortfolioAggregationState {
   columns?: IColumn[]
 
   /**
+   * Groups
+   */
+  groups?: IGroup[]
+
+  /**
    * Selected data source
    */
   selectedDataSource?: DataSource
@@ -106,6 +112,11 @@ export interface IPortfolioAggregationState {
    * Add column panel
    */
   addColumnPanel?: IPanelProps
+
+  /**
+   * Column context menu
+   */
+  columnContextMenu?: { column: IColumn, target: Target }
 
   /**
    * Error

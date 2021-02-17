@@ -1,7 +1,7 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { sp } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
-import * as arraySort from 'array-sort'
+import sortArray from 'array-sort'
 import { IAggregatedSearchListColumn } from 'interfaces'
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar'
 import {
@@ -181,7 +181,7 @@ export class AggregatedSearchList extends React.Component<
    */
   private _onColumnSort(column: IAggregatedSearchListColumn, sortDesencing: boolean): void {
     const { items, columns } = { ...this.state } as IAggregatedSearchListState
-    const itemsSorted = arraySort(items, [column.fieldName], { reverse: !sortDesencing })
+    const itemsSorted = sortArray(items, [column.fieldName], { reverse: !sortDesencing })
     this.setState({
       sortBy: column,
       items: itemsSorted,
@@ -338,7 +338,7 @@ export class AggregatedSearchList extends React.Component<
       itemsSort.props.push(sortBy.fieldName)
       itemsSort.opts.reverse = !sortBy.isSortedDescending
     }
-    items = arraySort([...items], itemsSort.props, itemsSort.opts)
+    items = sortArray([...items], itemsSort.props, itemsSort.opts)
     const groupNames: string[] = items.map((g) =>
       getObjectValue<string>(g, groupBy.fieldName, strings.NotSet)
     )

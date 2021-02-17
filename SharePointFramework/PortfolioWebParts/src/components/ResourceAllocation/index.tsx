@@ -1,6 +1,6 @@
 import { sp } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
-import * as arraySort from 'array-sort'
+import sortArray from 'array-sort'
 import {
   IAllocationSearchResult,
   ITimelineData,
@@ -311,7 +311,7 @@ export class ResourceAllocation extends React.Component<
         type: type === 'R' ? TimelineGroupType.Role : TimelineGroupType.User
       }
     })
-    groups = arraySort(groups, ['type', 'title'])
+    groups = sortArray(groups, ['type', 'title'])
     return groups
   }
 

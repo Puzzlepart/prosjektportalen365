@@ -2,7 +2,7 @@ import { UrlQueryParameterCollection } from '@microsoft/sp-core-library'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { Web } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
-import * as arraySort from 'array-sort'
+import sortArray from 'array-sort'
 import * as uniq from 'array-unique'
 import {
   ContextualMenu,
@@ -251,7 +251,7 @@ export class PortfolioOverview extends React.Component<
    */
   private _onColumnSort(column: ProjectColumn, sortDesencing: boolean): void {
     const { items, columns } = { ...this.state } as IPortfolioOverviewState
-    const itemsSorted = arraySort(items, [column.fieldName], { reverse: !sortDesencing })
+    const itemsSorted = sortArray(items, [column.fieldName], { reverse: !sortDesencing })
     this.setState({
       sortBy: column,
       items: itemsSorted,
@@ -412,7 +412,7 @@ export class PortfolioOverview extends React.Component<
       itemsSort.props.push(sortBy.fieldName)
       itemsSort.opts.reverse = !sortBy.isSortedDescending
     }
-    items = arraySort([...items], itemsSort.props, itemsSort.opts)
+    items = sortArray([...items], itemsSort.props, itemsSort.opts)
     const groupNames: string[] = items.map((g) =>
       getObjectValue<string>(g, groupBy.fieldName, strings.NotSet)
     )

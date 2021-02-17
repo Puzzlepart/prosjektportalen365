@@ -4,10 +4,11 @@ import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList'
 import React, { useEffect, useMemo, useReducer } from 'react'
 import { addColumn, AddColumnPanel } from './AddColumnPanel'
+import { ColumnContextMenu } from './ColumnContextMenu'
 import { Commands } from './Commands'
 import { PortfolioAggregationContext } from './context'
 import styles from './PortfolioAggregation.module.scss'
-import createReducer, { DATA_FETCHED, initState } from './reducer'
+import createReducer, { COLUMN_HEADER_CONTEXT_MENU, DATA_FETCHED, initState } from './reducer'
 import { IPortfolioAggregationProps } from './types'
 
 export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
@@ -30,18 +31,26 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
           <div className={styles.title}>{props.title}</div>
         </div>
         <div className={styles.searchBox} hidden={!props.showSearchBox}>
-          <SearchBox />
+          <SearchBox placeholder={props.searchBoxPlaceholderText} />
         </div>
         <div className={styles.listContainer}>
           <ShimmeredDetailsList
             layoutMode={DetailsListLayoutMode.fixedColumns}
             enableShimmer={state.loading}
             items={state.items}
+            onColumnHeaderContextMenu={(col, ev) => dispatch(
+              COLUMN_HEADER_CONTEXT_MENU({
+                column: col,
+                target: ev.currentTarget
+              })
+            )}
             columns={[
               ...state.columns,
               props.displayMode === DisplayMode.Edit && addColumn(dispatch)
-            ].filter(c => c)} />
+            ].filter(c => c)}
+            groups={state.groups} />
         </div>
+        <ColumnContextMenu />
         <AddColumnPanel />
       </div>
     </PortfolioAggregationContext.Provider>
