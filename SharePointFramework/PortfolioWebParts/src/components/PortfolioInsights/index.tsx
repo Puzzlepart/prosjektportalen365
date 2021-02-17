@@ -3,19 +3,18 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
-import * as React from 'react'
 import { PortfolioOverviewView } from 'pp365-shared/lib/models'
+import React, { Component } from 'react'
 import Chart from './Chart'
-import { IPortfolioInsightsProps } from './IPortfolioInsightsProps'
-import { IPortfolioInsightsState } from './IPortfolioInsightsState'
 import styles from './PortfolioInsights.module.scss'
 import PortfolioInsightsCommandBar from './PortfolioInsightsCommandBar'
+import { IPortfolioInsightsProps, IPortfolioInsightsState } from './types'
 
 /**
  * @component PortfolioInsights
- * @extends React.Component
+ * @extends Component
  */
-export class PortfolioInsights extends React.Component<
+export class PortfolioInsights extends Component<
   IPortfolioInsightsProps,
   IPortfolioInsightsState
 > {

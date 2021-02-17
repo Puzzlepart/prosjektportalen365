@@ -17,3 +17,8 @@ export interface IPortfolioOverviewCommandsProps
   events: IPortfolioOverviewCommandsEvents
   layerHostId: string
 }
+
+export interface IPortfolioOverviewCommandsState {
+  showFilterPanel: boolean
+  isExporting?: boolean
+}

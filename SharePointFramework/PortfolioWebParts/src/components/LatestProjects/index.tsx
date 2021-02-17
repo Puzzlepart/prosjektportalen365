@@ -5,13 +5,13 @@ import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar'
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner'
 import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings'
 import { formatDate } from 'pp365-shared/lib/helpers'
-import * as React from 'react'
+import React from 'react'
 import styles from './LatestProjects.module.scss'
 import { ILatestProjectsProps, ILatestProjectsState } from './types'
 
 /**
  * @component LatestProjects
- * @extends React.Component
+ * @extends Component
  */
 export class LatestProjects extends React.Component<ILatestProjectsProps, ILatestProjectsState> {
   constructor(props: ILatestProjectsProps) {

@@ -32,7 +32,7 @@ import { getObjectValue } from 'pp365-shared/lib/helpers/getObjectValue'
 import { PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
 import ExcelExportService from 'pp365-shared/lib/services/ExcelExportService'
 import { parseUrlHash, redirect, setUrlHash } from 'pp365-shared/lib/util'
-import * as React from 'react'
+import React from 'react'
 import * as _ from 'underscore'
 import { IFilterItemProps, IFilterProps } from '../FilterPanel'
 import styles from './PortfolioOverview.module.scss'
@@ -42,7 +42,7 @@ import { IPortfolioOverviewHashStateState, IPortfolioOverviewProps, IPortfolioOv
 
 /**
  * @component PortfolioOverview
- * @extends React.Component
+ * @extends Component
  */
 export class PortfolioOverview extends React.Component<
   IPortfolioOverviewProps,

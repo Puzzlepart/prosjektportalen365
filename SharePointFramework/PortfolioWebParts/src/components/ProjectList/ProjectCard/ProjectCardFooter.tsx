@@ -1,5 +1,5 @@
 import { DocumentCardActions } from 'office-ui-fabric-react/lib/DocumentCard'
-import * as React from 'react'
+import React from 'react'
 import { IProjectCardProps } from './IProjectCardProps'
 
 /**

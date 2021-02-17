@@ -1,14 +1,13 @@
-import * as React from 'react'
+import { Customizer } from '@uifabric/utilities'
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel'
-import { IFilterPanelState } from './IFilterPanelState'
-import { IFilterPanelProps } from './IFilterPanelProps'
+import React from 'react'
 import { Filter, IFilterProps } from './Filter'
 import { IFilterItemProps } from './FilterItem/IFilterItemProps'
-import { Customizer } from '@uifabric/utilities'
+import { IFilterPanelProps, IFilterPanelState } from './types'
 
 /**
  * @component FilterPanel
- * @extends React.Component
+ * @extends Component
  */
 export class FilterPanel extends React.Component<IFilterPanelProps, IFilterPanelState> {
   public static defaultProps: Partial<IFilterPanelProps> = {}

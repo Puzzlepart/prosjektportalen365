@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import styles from './PortfolioInsightsCommandBar.module.scss'
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar'
 import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu'

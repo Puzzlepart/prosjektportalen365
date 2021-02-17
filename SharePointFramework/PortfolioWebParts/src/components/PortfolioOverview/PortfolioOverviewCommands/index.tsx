@@ -5,14 +5,13 @@ import {
   IContextualMenuItem
 } from 'office-ui-fabric-react/lib/ContextualMenu'
 import * as strings from 'PortfolioWebPartsStrings'
-import * as React from 'react'
 import ExcelExportService from 'pp365-shared/lib/services/ExcelExportService'
 import { redirect } from 'pp365-shared/lib/util'
+import React, { Component } from 'react'
 import { FilterPanel, IFilterProps } from '../../FilterPanel'
-import { IPortfolioOverviewCommandsProps } from './IPortfolioOverviewCommandsProps'
-import { IPortfolioOverviewCommandsState } from './IPortfolioOverviewCommandsState'
+import { IPortfolioOverviewCommandsProps, IPortfolioOverviewCommandsState } from './types'
 
-export class PortfolioOverviewCommands extends React.Component<
+export class PortfolioOverviewCommands extends Component<
   IPortfolioOverviewCommandsProps,
   IPortfolioOverviewCommandsState
 > {

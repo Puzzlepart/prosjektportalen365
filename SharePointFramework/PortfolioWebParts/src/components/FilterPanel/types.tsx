@@ -19,3 +19,10 @@ export interface IFilterPanelProps extends IPanelProps {
    */
   layerHostId?: string
 }
+
+export interface IFilterPanelState {
+  /**
+   * Filters
+   */
+  filters: IFilterProps[]
+}

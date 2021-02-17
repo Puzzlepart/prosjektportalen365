@@ -9,7 +9,7 @@ import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner'
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationModal } from 'pp365-projectwebparts/lib/components/ProjectInformation'
-import * as React from 'react'
+import React from 'react'
 import { getObjectValue, sortAlphabetically } from 'pp365-shared/lib/helpers'
 import * as _ from 'underscore'
 import { IProjectListProps } from './IProjectListProps'
@@ -20,7 +20,7 @@ import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
 
 /**
  * @component ProjectList
- * @extends React.Component
+ * @extends Component
  */
 export class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
   public static defaultProps: Partial<IProjectListProps> = {

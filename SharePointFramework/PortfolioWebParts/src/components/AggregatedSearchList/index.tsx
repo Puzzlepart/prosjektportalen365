@@ -26,7 +26,7 @@ import { getObjectValue, isHubSite } from 'pp365-shared/lib/helpers'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
 import { DataSourceService, ExcelExportService } from 'pp365-shared/lib/services'
 import { removeMenuBorder } from 'pp365-shared/lib/util'
-import * as React from 'react'
+import React, { Component } from 'react'
 import HubSiteService from 'sp-hubsite-service'
 import * as _ from 'underscore'
 import styles from './AggregatedSearchList.module.scss'
@@ -34,9 +34,9 @@ import { IAggregatedSearchListProps, IAggregatedSearchListState } from './types'
 
 /**
  * @component AggregatedSearchList
- * @extends React.Component
+ * @extends Component
  */
-export class AggregatedSearchList extends React.Component<
+export class AggregatedSearchList extends Component<
   IAggregatedSearchListProps,
   IAggregatedSearchListState
   > {

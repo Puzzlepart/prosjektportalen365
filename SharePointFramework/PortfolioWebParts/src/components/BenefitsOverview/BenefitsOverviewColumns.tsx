@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import * as strings from 'PortfolioWebPartsStrings'
 import BenefitMeasurementsModal from './BenefitMeasurementsModal'
 import { IBenefitsOverviewProps } from './types'

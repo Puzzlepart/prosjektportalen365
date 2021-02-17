@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import * as strings from 'PortfolioWebPartsStrings'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { BenefitMeasurement } from 'models'

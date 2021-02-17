@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Persona, PersonaPresence, PersonaSize } from 'office-ui-fabric-react/lib/Persona'
 import { IRenderItemColumnProps } from '../IRenderItemColumnProps'
 import { SearchValueType } from 'types'

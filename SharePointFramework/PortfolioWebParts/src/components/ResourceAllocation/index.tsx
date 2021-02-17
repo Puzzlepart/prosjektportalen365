@@ -19,7 +19,7 @@ import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import { tryParsePercentage } from 'pp365-shared/lib/helpers'
 import { DataSourceService } from 'pp365-shared/lib/services'
-import * as React from 'react'
+import React from 'react'
 import Timeline, {
   ReactCalendarGroupRendererProps,
   ReactCalendarItemRendererProps,
@@ -36,7 +36,7 @@ import { IResourceAllocationProps, IResourceAllocationState } from './types'
 
 /**
  * @component ResourceAllocation
- * @extends React.Component
+ * @extends Component
  */
 export class ResourceAllocation extends React.Component<
   IResourceAllocationProps,

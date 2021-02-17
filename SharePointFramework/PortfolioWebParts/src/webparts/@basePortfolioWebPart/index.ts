@@ -5,7 +5,7 @@ import { sp } from '@pnp/sp'
 import { IBaseComponentProps } from 'components/IBaseComponentProps'
 import { DataAdapter } from 'data'
 import * as merge from 'object-assign'
-import * as React from 'react'
+import React from 'react'
 import * as ReactDom from 'react-dom'
 
 // tslint:disable-next-line: naming-convention

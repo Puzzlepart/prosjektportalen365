@@ -1,5 +1,5 @@
 import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from 'models'
-import * as React from 'react'
+import React, { Component } from 'react'
 import { AggregatedSearchList } from '../AggregatedSearchList'
 import styles from './BenefitsOverview.module.scss'
 import { getColumns } from './BenefitsOverviewColumns'
@@ -11,10 +11,10 @@ const CONTENT_TYPE_ID_INDICATORS = '0x010073043EFE3E814A2BBEF96B8457623F95'
 
 /**
  * @component BenefitsOverview
- * @extends React.Component
+ * @extends Component
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
-export class BenefitsOverview extends React.Component<IBenefitsOverviewProps, {}> {
+export class BenefitsOverview extends Component<IBenefitsOverviewProps, {}> {
   public static defaultProps = BenefitsOverviewDefaultProps
 
   public render(): React.ReactElement<IBenefitsOverviewProps> {
