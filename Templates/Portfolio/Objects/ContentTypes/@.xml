@@ -23,4 +23,5 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Loggelement.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Prosjektkolonnekonfigurasjonselement.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Interessent.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Tillatelseskonfigurasjonselement.xml" />
 </pnp:ContentTypes> 

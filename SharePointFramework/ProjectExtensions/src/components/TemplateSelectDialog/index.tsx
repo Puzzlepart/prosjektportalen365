@@ -4,11 +4,11 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot'
 import * as strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
+import { isEmpty } from 'underscore'
 import { ProjectSetupSettings } from '../../projectSetup/ProjectSetupSettings'
 import { BaseDialog } from '../@BaseDialog'
 import { ExtensionsSection } from './ExtensionsSection'
 import { ListContentSection } from './ListContentSection'
-import { SettingsSection } from './SettingsSection'
 import styles from './TemplateSelectDialog.module.scss'
 import { TemplateSelector } from './TemplateSelector'
 import { ITemplateSelectDialogProps, ITemplateSelectDialogState } from './types'
@@ -37,7 +37,7 @@ export class TemplateSelectDialog extends React.Component<
 
   public render(): React.ReactElement<ITemplateSelectDialogProps> {
     const { version, onDismiss, data } = this.props
-    const { selectedTemplate, selectedListContentConfig, selectedExtensions, settings } = this.state
+    const { selectedTemplate, selectedListContentConfig, selectedExtensions } = this.state
 
     return (
       <BaseDialog
@@ -64,7 +64,7 @@ export class TemplateSelectDialog extends React.Component<
               </MessageBar>
             )}
           </PivotItem>
-          {data.extensions.length > 0 && (
+          {!isEmpty(data.extensions) && (
             <PivotItem headerText={strings.ExtensionsTitle} itemIcon='ArrangeBringForward'>
               <ExtensionsSection
                 extensions={data.extensions}
@@ -82,9 +82,6 @@ export class TemplateSelectDialog extends React.Component<
               />
             </PivotItem>
           )}
-          <PivotItem headerText={strings.SettingsSectionTitle} itemIcon='ConfigurationSolid'>
-            <SettingsSection settings={settings} onChange={this._onSettingsChanged.bind(this)} />
-          </PivotItem>
         </Pivot>
       </BaseDialog>
     )
@@ -99,16 +96,6 @@ export class TemplateSelectDialog extends React.Component<
     let [defaultTemplate] = this.props.data.templates.filter((tmpl) => tmpl.isDefault)
     if (!defaultTemplate) defaultTemplate = this.props.data.templates[0]
     return defaultTemplate
-  }
-
-  /**
-   * On setting change
-   *
-   * @param {string} key Key
-   * @param {string} bool Bool
-   */
-  private _onSettingsChanged(key: string, bool: boolean) {
-    this.setState({ settings: this.state.settings.set(key, bool) })
   }
 
   /**

@@ -1,7 +1,7 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as React from 'react'
-import { ISettingsSectionProps } from './ISettingsSectionProps'
+import { ISettingsSectionProps } from './types'
 import styles from './SettingsSection.module.scss'
 import { getId } from '@uifabric/utilities'
 
@@ -29,4 +29,4 @@ export const SettingsSection = (props: ISettingsSectionProps) => {
   )
 }
 
-export * from './ISettingsSectionProps'
+export * from './types'

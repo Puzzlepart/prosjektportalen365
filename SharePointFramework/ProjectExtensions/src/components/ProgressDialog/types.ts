@@ -1,4 +1,4 @@
-import { IBaseDialogProps } from '../@BaseDialog/IBaseDialogProps'
+import { IBaseDialogProps } from '../@BaseDialog/types'
 
 export interface IProgressDialogProps extends IBaseDialogProps {
   /**

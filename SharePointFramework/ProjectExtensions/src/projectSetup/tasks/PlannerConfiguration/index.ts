@@ -12,8 +12,6 @@ import { IPlannerBucket, IPlannerConfiguration, IPlannerPlan } from './types'
  * @class PlannerConfiguration
  */
 export class PlannerConfiguration extends BaseTask {
-  public taskName = 'Planner'
-
   /**
    * Constructor
    *
@@ -26,7 +24,7 @@ export class PlannerConfiguration extends BaseTask {
     private _configuration: IPlannerConfiguration,
     private _labels: string[] = []
   ) {
-    super(data)
+    super('Planner', data)
   }
 
   /**

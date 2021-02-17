@@ -1,5 +1,8 @@
 define([], function () {
   return {
+    PermissionConfigurationList: 'Tillatelseskonfigurasjon',
+    SitePermissionsText: 'Setter opp tillatelser for området',
+    SitePermissionsSubText: 'Kopierer tillatelsekonfigurasjon fra hubområdet.',
     DocumentTemplateDialogScreenTargetFolderInfoText: 'Velg mål for de valgte malene. Trykk **Bibliotek** for å velge et annet bibliotek.',
     Library: 'Bibliotek',
     CopyHereText: 'Kopier hit',
@@ -19,8 +22,6 @@ define([], function () {
     CopyListDataErrorMessage: 'Det skjedde en feil under kopiering av listeinnhold',
     CopyListItemsText: 'Kopierer {0} listeelementer fra {1} til {2}',
     CopyFilesText: 'Kopierer {0} dokumenter/mapper fra {1} til {2}',
-    IncludePortfolioAdministratorsLabel: 'Gi tilgang til porteføljeadministratorer',
-    IncludePortfolioAdministratorsDescription: 'Porteføljeadministratorer (brukerne i gruppen Porteføljeadministratorer) får tilgang til prosjektområdet.',
     CopyProgressLabel: 'Kopierer valgt(e) dokument(er) til prosjektområdet...',
     EditPropertiesLinkText: 'Du kan allerede nå<A HREF=\'{0}\' TARGET=\'_BLANK\'>redigere egenskaper</A> for prosjektet (åpnes i ny fane).',
     ErrorDialogTitle: 'Noe er galt',
@@ -28,7 +29,6 @@ define([], function () {
     GetMoreText: 'Hent flere',
     GetSetupDataErrorMessage: 'Det skjedde en feil',
     GetSetupDataErrorStack: 'Det skjedde en feil under uthenting av data fra hubområdet.',
-    IncludeStandardFoldersLabel: 'Inkluder standardmapper',
     InvalidLanguageErrorMessage: 'Ugyldig språk for området',
     InvalidLanguageErrorStack: 'Språket som er satt for området støttes ikke. Området må være opprettet med norsk språk.',
     LibraryDropdownLabel: 'Bibliotek',
@@ -75,7 +75,6 @@ define([], function () {
     ProcessFileText: 'Kopierer fil {0} av {1}',
     ProcessFolderText: 'Kopierer mappe {0} av {1}',
     PhaseLabel: 'Fase',
-    IncludeStandardFoldersDescription: 'Inkluder standardmapper for dokumentbiblioteket. Det opprettes en mappe per prosjetktfase.',
     SetupAbortedText: 'Installasjon avbrutt av bruker',
     UnknownErrorText: 'Ukjent feil',
     TemplateListContentConfigText: 'Den valgte prosjektmalen inneholder konfigurasjon for standardinnhold.',

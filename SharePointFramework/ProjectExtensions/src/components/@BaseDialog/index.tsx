@@ -7,7 +7,7 @@ import {
   IDialogContentProps
 } from 'office-ui-fabric-react/lib/Dialog'
 import { IModalProps } from 'office-ui-fabric-react/lib/Modal'
-import { IBaseDialogProps } from './IBaseDialogProps'
+import { IBaseDialogProps } from './types'
 
 export class BaseDialog extends React.PureComponent<IBaseDialogProps, {}> {
   public static defaultProps: Partial<IBaseDialogProps> = { onRenderFooter: () => null }

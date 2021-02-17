@@ -10,10 +10,8 @@ import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 import { ITaskDetails, PlannerConfiguration, TaskAttachment } from '../PlannerConfiguration'
 
 export class CopyListData extends BaseTask {
-  public taskName = 'CopyListData'
-
   constructor(data: IProjectSetupData) {
-    super(data)
+    super('CopyListData', data)
   }
 
   /**

@@ -7,5 +7,12 @@
             AllowMembersEditMembership="false"
             OnlyAllowMembersViewMembership="true">
         </pnp:SiteGroup>
+        <pnp:SiteGroup
+            Title="Porteføljeadministratorer"
+            Description="Porteføljeadministratorer har som standard full kontroll på alle prosjektområder gjennom listen &lt;a href=&quot;{site}/Lists/Tillatelseskonfigurasjon&quot;&gt;Tillatelseskonfigurasjon&lt;/a&gt;."
+            Owner="{associatedownergroupid}"
+            AllowMembersEditMembership="false"
+            OnlyAllowMembersViewMembership="true">
+        </pnp:SiteGroup>
     </pnp:SiteGroups>
 </pnp:Security>
