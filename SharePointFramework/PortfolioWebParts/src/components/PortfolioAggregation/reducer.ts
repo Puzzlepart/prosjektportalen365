@@ -3,7 +3,7 @@ import { Target } from 'office-ui-fabric-react/lib/Callout'
 import { IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList'
 import { IPortfolioAggregationProps, IPortfolioAggregationState } from './types'
 import sortArray from 'array-sort'
-import {uniq} from 'underscore'
+import { uniq } from 'underscore'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import * as strings from 'PortfolioWebPartsStrings'
 
@@ -41,6 +41,13 @@ export default (props: IPortfolioAggregationProps) =>
     createReducer(initState(props), {
         [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {
             state.items = payload.items
+            if (state.sortBy) {
+                state.items = sortArray(
+                    [...state.items],
+                    [state.sortBy.fieldName],
+                    { reverse: state.sortBy.isSortedDescending }
+                )
+            }
             state.loading = false
         },
 
@@ -63,13 +70,18 @@ export default (props: IPortfolioAggregationProps) =>
         },
 
         [SET_GROUP_BY.type]: (state, { payload }: ReturnType<typeof SET_GROUP_BY>) => {
-            state.groupBy = payload.column
-            const itemsSort = { props: [state.groupBy.fieldName], opts: { reverse: false } }
+            const itemsSort = { props: [state.groupBy?.fieldName], opts: { reverse: false } }
             if (state.sortBy) {
                 itemsSort.props.push(state.sortBy.fieldName)
                 itemsSort.opts.reverse = !state.sortBy.isSortedDescending
             }
             state.items = sortArray([...state.items], itemsSort.props, itemsSort.opts)
+            if (state.groupBy?.fieldName === payload.column?.fieldName) {
+                state.groupBy = null
+                state.groups = null
+                return
+            }
+            state.groupBy = payload.column
             const groupNames: string[] = state.items.map((g) =>
                 get<string>(g, state.groupBy.fieldName, strings.NotSet)
             )

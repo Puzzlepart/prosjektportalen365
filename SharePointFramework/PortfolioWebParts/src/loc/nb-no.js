@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    IsGroupableLabel:'Grupperbar',
     NewColumnHeaderText: 'Ny kolonne',
     AddColumnText: 'Legg til kolonne',
     SearchPropertyLabel: 'Søkeegenskap',

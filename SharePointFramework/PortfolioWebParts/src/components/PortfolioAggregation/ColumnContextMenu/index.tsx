@@ -37,7 +37,7 @@ export const ColumnContextMenu = () => {
             name: format(strings.GroupByColumnLabel, ''),
             canCheck: true,
             checked: state.groupBy?.fieldName === column.fieldName,
-            disabled: !column['isGroupable'],
+            disabled: !column.data?.isGroupable,
             onClick: () => dispatch(
                 SET_GROUP_BY({ column })
             )

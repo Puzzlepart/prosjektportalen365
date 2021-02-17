@@ -407,6 +407,7 @@ export class DataAdapter {
         ...selectProperties,
         'Path',
         'SPWebUrl',
+        'SiteTitle'
       ]
     })
     return response.PrimarySearchResults

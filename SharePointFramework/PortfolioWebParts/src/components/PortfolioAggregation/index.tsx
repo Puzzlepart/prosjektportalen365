@@ -1,7 +1,8 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
-import { DetailsListLayoutMode } from 'office-ui-fabric-react/lib/DetailsList'
+import { DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList'
+import strings from 'PortfolioWebPartsStrings'
 import React, { useEffect, useMemo, useReducer } from 'react'
 import { addColumn, AddColumnPanel } from './AddColumnPanel'
 import { ColumnContextMenu } from './ColumnContextMenu'
@@ -19,8 +20,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
     props.dataAdapter.fetchItemsWithSource(
       props.dataSource,
       state.columns.map(col => col.fieldName)
-    )
-      .then(items => dispatch(DATA_FETCHED({ items })))
+    ).then(items => dispatch(DATA_FETCHED({ items })))
   }, [state.columns])
 
   return (
@@ -35,6 +35,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
         </div>
         <div className={styles.listContainer}>
           <ShimmeredDetailsList
+            selectionMode={SelectionMode.none}
             layoutMode={DetailsListLayoutMode.fixedColumns}
             enableShimmer={state.loading}
             items={state.items}
@@ -45,6 +46,20 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
               })
             )}
             columns={[
+              {
+                key: 'SiteTitle',
+                fieldName: 'SiteTitle',
+                name: strings.SiteTitleLabel,
+                minWidth: 100,
+                maxWidth: 150,
+                isResizable: true,
+                onRender: (item: any) => (
+                  <a href={item.SPWebUrl} rel='noopener noreferrer' target='_blank'>
+                    {item.SiteTitle}
+                  </a>
+                ),
+                data: { isGroupable: true }
+              },
               ...state.columns,
               props.displayMode === DisplayMode.Edit && addColumn(dispatch)
             ].filter(c => c)}

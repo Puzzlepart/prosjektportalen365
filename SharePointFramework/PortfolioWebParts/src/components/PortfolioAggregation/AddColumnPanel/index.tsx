@@ -28,6 +28,7 @@ export const AddColumnPanel = () => {
     name: '',
     minWidth: 100,
     maxWidth: 300,
+    data: {},
   })
 
   const onSave = () => {
@@ -96,7 +97,19 @@ export const AddColumnPanel = () => {
             isResizable: checked
           })} />
       </div>
-      <div style={{ marginTop: 12 }} >
+      <div className={styles.field}>
+        <Toggle
+          label={strings.IsGroupableLabel}
+          defaultChecked={column.data.isGroupable}
+          onChange={(_, checked) => setColumn({
+            ...column,
+            data: {
+              ...column.data,
+              isGroupable: checked
+            }
+          })} />
+      </div>
+      <div className={styles.footer}>
         <PrimaryButton text={strings.SaveButtonLabel} onClick={onSave} />
         <DefaultButton
           text={strings.CloseButtonLabel}

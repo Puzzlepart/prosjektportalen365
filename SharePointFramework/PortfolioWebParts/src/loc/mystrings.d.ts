@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  IsGroupableLabel: string
   NewColumnHeaderText: string
   AddColumnText: string
   SearchPropertyLabel: string
