@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  ColumnRenderOptionNumber: string
   SearchPropertyDescription: string
   DataSourceGroupName: string
   CommandBarGroupName: string
@@ -101,7 +102,6 @@ declare interface IPortfolioWebPartsStrings {
   ResourceAllocationInfoText: string
   ResourceLabel: string
   ResponsibleLabel: string
-  RiskActionLabel: string
   RoleLabel: string
   SaveViewAsText: string
   SearchBoxPlaceholderText: string

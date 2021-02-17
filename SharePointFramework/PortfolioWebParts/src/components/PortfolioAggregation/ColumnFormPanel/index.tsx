@@ -160,6 +160,10 @@ export const ColumnFormPanel = () => {
               text: strings.ColumnRenderOptionText
             },
             {
+              key: 'number',
+              text: strings.ColumnRenderOptionNumber
+            },
+            {
               key: 'date',
               text: strings.ColumnRenderOptionDate
             },

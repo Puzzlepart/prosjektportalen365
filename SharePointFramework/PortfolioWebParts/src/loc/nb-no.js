@@ -5,6 +5,7 @@ define([], function () {
     CommandBarGroupName: 'Søkeboks',
     SearchBoxGroupName: 'Søkeboks',
     DeleteButtonLabel: 'Slett',
+    ColumnRenderOptionNumber: 'Tall',
     ColumnRenderOptionText: 'Tekst',
     ColumnRenderOptionDate: 'Dato',
     ColumnRenderOptionDateTime: 'Dato og tidspunkt',
@@ -94,11 +95,10 @@ define([], function () {
     ProjectOwner: 'Prosjekteier',
     ProjectStatusLinkText: 'Gå til prosjektstatus',
     RecommendationLabel: 'Anbefaling',
-    ResourceAllocationInfoText: "Ressursallokering eller fravær som gjelder på tvers av prosjekter legges inn i den<A HREF=\"../Lists/Ressursallokering/AllItems.aspx?Source={0}\">sentrale ressursallokeringslisten</A>. Disse oppføringene vil vises med blå og rød (fravær) farge i tabellen under. Prosjektallokeringer vises med grønn farge. Fargestyrken til allokeringen baserer seg på allokeringsprosenten.",
-    ResourceLabel: "Ressurs",
+    ResourceAllocationInfoText: 'Ressursallokering eller fravær som gjelder på tvers av prosjekter legges inn i den<A HREF="../Lists/Ressursallokering/AllItems.aspx?Source={0}">sentrale ressursallokeringslisten</A>. Disse oppføringene vil vises med blå og rød (fravær) farge i tabellen under. Prosjektallokeringer vises med grønn farge. Fargestyrken til allokeringen baserer seg på allokeringsprosenten.',
+    ResourceLabel: 'Ressurs',
     ResponsibleLabel: 'Ansvarlig',
-    RiskActionLabel: 'Tiltak',
-    RoleLabel: "Rolle",
+    RoleLabel: 'Rolle',
     SaveViewAsText: 'Lagre visning som',
     SearchBoxPlaceholderText: 'Søk i {0}...',
     SearchBoxPlaceholderTextLabel: 'Søkebokstekst',
@@ -128,4 +128,4 @@ define([], function () {
     ProjectsListName: 'Prosjekter',
     PortfolioManagerGroupName: 'Porteføljeinnsyn'
   }
-});
+})
