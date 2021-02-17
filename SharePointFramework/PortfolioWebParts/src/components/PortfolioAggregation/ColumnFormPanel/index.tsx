@@ -7,6 +7,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField'
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { Dispatch, useContext, useEffect, useState } from 'react'
+import { isEmpty } from 'underscore'
 import { PortfolioAggregationContext } from '../context'
 import { ADD_COLUMN, DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import styles from './ColumnFormPanel.module.scss'
@@ -52,6 +53,8 @@ export const ColumnFormPanel = () => {
       <div className={styles.field}>
         <TextField
           label={strings.SearchPropertyLabel}
+          description={strings.SearchPropertyDescription}
+          required={true}
           value={column.fieldName}
           disabled={!!state.editColumn}
           onChange={(_, value) => setColumn({
@@ -62,6 +65,7 @@ export const ColumnFormPanel = () => {
       <div className={styles.field}>
         <TextField
           label={strings.DisplayNameLabel}
+          required={true}
           value={column.name}
           onChange={(_, value) => setColumn({
             ...column,
@@ -145,7 +149,10 @@ export const ColumnFormPanel = () => {
           })} />
       </div>
       <div className={styles.footer}>
-        <PrimaryButton text={strings.SaveButtonLabel} onClick={onSave} />
+        <PrimaryButton
+          text={strings.SaveButtonLabel}
+          onClick={onSave}
+          disabled={column.fieldName.length < 2 || column.name.length < 2} />
         <DefaultButton
           text={strings.CloseButtonLabel}
           style={{ marginLeft: 4 }}
