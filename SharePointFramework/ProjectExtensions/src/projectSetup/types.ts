@@ -32,6 +32,11 @@ export interface IProjectSetupProperties {
    * Tasks
    */
   tasks: string[]
+
+  /**
+   * Skip reload after setup
+   */
+  skipReload?: boolean
 }
 
 export interface IProjectSetupData extends ITemplateSelectDialogState {

@@ -8,10 +8,9 @@ import { IBaseTaskParams } from './IBaseTaskParams'
 export abstract class BaseTask implements IBaseTask {
   public settings: IProjectSetupSettings<boolean>
   public params: IBaseTaskParams
-  public taskName: string
   public onProgress: OnProgressCallbackFunction
 
-  constructor(public data: IProjectSetupData) {
+  constructor(public taskName: string, public data: IProjectSetupData) {
     this.settings = data.settings.values
   }
 

@@ -6,10 +6,8 @@ import initSpfxJsom, { ExecuteJsomQuery } from 'spfx-jsom'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 
 export class PreTask extends BaseTask {
-  public taskName = 'PreTask'
-
   constructor(data: IProjectSetupData) {
-    super(data)
+    super('PreTask', data)
   }
 
   /**

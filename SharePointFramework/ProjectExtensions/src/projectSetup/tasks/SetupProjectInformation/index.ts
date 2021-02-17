@@ -1,16 +1,19 @@
-import * as strings from 'ProjectExtensionsStrings'
 import { TypedHash } from '@pnp/common'
+import * as strings from 'ProjectExtensionsStrings'
+import { IProjectSetupData } from 'projectSetup'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 
 export class SetupProjectInformation extends BaseTask {
-  public taskName = 'SetupProjectInformation'
+  constructor(data: IProjectSetupData) {
+    super('SetupProjectInformation', data)
+  }
 
   /**
    * Executes the SetupProjectInformation task
    *
    * @param {IBaseTaskParams} params Task parameters
-   * @param {OnProgressCallbackFunction} onProgress On progress funtion (not currently in use by this task)
+   * @param {OnProgressCallbackFunction} onProgress On progress funtion
    */
   public async execute(
     params: IBaseTaskParams,
@@ -29,7 +32,7 @@ export class SetupProjectInformation extends BaseTask {
    * Sync properties list
    *
    * @param {IBaseTaskParams} params Task parameters
-   * @param {OnProgressCallbackFunction} onProgress On progress funtion (not currently in use by this task)
+   * @param {OnProgressCallbackFunction} onProgress On progress funtion
    */
   private async _syncPropertiesList(
     params: IBaseTaskParams,

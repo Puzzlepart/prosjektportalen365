@@ -61,6 +61,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Group_Portfolio_administrators_Name" xml:space="preserve">
+    <value>Porteføljeadministratorer</value>
+  </data>
   <data name="Lists_SitePages_Title" xml:space="preserve">
     <value>Områdesider</value>
   </data>
@@ -189,6 +192,15 @@
   </data>
   <data name="Lists_StatusSections_Url" xml:space="preserve">
     <value>Lists/Statusseksjoner</value>
+  </data>
+  <data name="Lists_Permission_Configuration_Title" xml:space="preserve">
+    <value>Tillatelseskonfigurasjon</value>
+  </data>
+  <data name="Lists_Permission_Configuration_Url" xml:space="preserve">
+    <value>Lists/Tillatelseskonfigurasjon</value>
+  </data>
+  <data name="Lists_Permission_Configuration_Description" xml:space="preserve">
+    <value>Tillatelseskonfigurasjon for nye prosjekter. Denne listen må ikke endres på.</value>
   </data>
   <data name="View_AllItems_DisplayName" xml:space="preserve">
     <value>Alle elementer</value>
@@ -387,6 +399,12 @@
   </data>
   <data name="ContentTypes_BarChart_Description" xml:space="preserve">
     <value>Opprett et nytt stolpediagram</value>
+  </data>
+  <data name="ContentTypes_Permission_Configuration_Element_Name" xml:space="preserve">
+    <value>Tillatelseskonfigurasjonelement</value>
+  </data>
+  <data name="ContentTypes_Permission_Configuration_Element_Description" xml:space="preserve">
+    <value>Opprett et nytt tillatelseskonfigurasjonselement</value>
   </data>
   <data name="SiteFields_Project_Group" xml:space="preserve">
     <value>Kolonner for Prosjektportalen (Prosjekt)</value>
@@ -1483,8 +1501,32 @@
   <data name="SiteFields_GtExtensionDefault_DisplayName" xml:space="preserve">
     <value>Standard</value>
   </data>
+  <data name="SiteFields_GtSPGroupName_DisplayName" xml:space="preserve">
+    <value>SharePoint gruppenavn</value>
+  </data>
+  <data name="SiteFields_GtSPGroupName_Description" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SiteFields_GtPermissionLevel_DisplayName" xml:space="preserve">
+    <value>Rettighetsnivå</value>
+  </data>
+  <data name="SiteFields_GtPermissionLevel_Description" xml:space="preserve">
+    <value>Definerer rettighetsnivå på SharePoint-området til prosjektet.</value>
+  </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
+  </data>
+  <data name="Choice_GtPermissionLevel_Read" xml:space="preserve">
+    <value>Lese</value>
+  </data>
+  <data name="Choice_GtPermissionLevel_Contribute" xml:space="preserve">
+    <value>Bidra</value>
+  </data>
+  <data name="Choice_GtPermissionLevel_Edit" xml:space="preserve">
+    <value>Rediger</value>
+  </data>
+  <data name="Choice_GtPermissionLevel_FullControl" xml:space="preserve">
+    <value>Full kontroll</value>
   </data>
   <data name="Choice_GtRiskStatus_Identified" xml:space="preserve">
     <value>Identifisert</value>

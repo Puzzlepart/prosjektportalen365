@@ -2,7 +2,7 @@ import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
 import * as React from 'react'
 import { ProjectTemplate } from '../../../models'
-import { ITemplateSelectorProps } from './ITemplateSelectorProps'
+import { ITemplateSelectorProps } from './types'
 import styles from './TemplateSelector.module.scss'
 
 export const TemplateSelector = (props: ITemplateSelectorProps) => {

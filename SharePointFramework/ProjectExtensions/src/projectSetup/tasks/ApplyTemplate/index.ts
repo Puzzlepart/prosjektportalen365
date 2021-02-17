@@ -9,10 +9,8 @@ import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 import { APPLY_TEMPLATE_STATUS_MAP } from './ApplyTemplateStatusMap'
 
 export class ApplyTemplate extends BaseTask {
-  public taskName = 'ApplyTemplate'
-
   constructor(data: IProjectSetupData) {
-    super(data)
+    super('ApplyTemplate', data)
   }
 
   /**

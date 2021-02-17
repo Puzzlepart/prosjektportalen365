@@ -3,7 +3,7 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as React from 'react'
 import { ProjectExtension } from '../../../models'
 import styles from './ExtensionsSection.module.scss'
-import { IExtensionsSectionProps } from './IExtensionsSectionProps'
+import { IExtensionsSectionProps } from './types'
 
 export const ExtensionsSection = (props: IExtensionsSectionProps) => {
   /**

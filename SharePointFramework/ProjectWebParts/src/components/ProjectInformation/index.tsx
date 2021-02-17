@@ -5,32 +5,32 @@ import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator'
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
-import * as strings from 'ProjectWebPartsStrings'
-import { ConfirmAction, ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
-import * as React from 'react'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 import { PortalDataService } from 'pp365-shared/lib/services'
 import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
+import * as strings from 'ProjectWebPartsStrings'
+import { ConfirmAction, ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
+import React from 'react'
 import SPDataAdapter from '../../data'
 import { BaseWebPartComponent } from '../BaseWebPartComponent'
 import { ProgressDialog } from '../ProgressDialog'
 import { UserMessage } from '../UserMessage'
 import { Actions } from './Actions'
-import {
-  IProjectInformationProps,
-  IProjectInformationState,
-  IProjectInformationData,
-  IProjectInformationUrlHash
-} from './types'
 import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
-import { ProjectProperty, ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
+import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
 import { StatusReports } from './StatusReports'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
+import {
+  IProjectInformationData,
+  IProjectInformationProps,
+  IProjectInformationState,
+  IProjectInformationUrlHash
+} from './types'
 
 export class ProjectInformation extends BaseWebPartComponent<
   IProjectInformationProps,
   IProjectInformationState
-> {
+  > {
   public static defaultProps: Partial<IProjectInformationProps> = {
     statusReportsCount: 0,
     page: 'Frontpage'
@@ -72,7 +72,8 @@ export class ProjectInformation extends BaseWebPartComponent<
             <WebPartTitle
               displayMode={DisplayMode.Read}
               title={this.props.title}
-              updateProperty={undefined}
+              // eslint-disable-next-line @typescript-eslint/no-empty-function
+              updateProperty={() => { }}
             />
           </div>
           {this._contents}
@@ -146,7 +147,7 @@ export class ProjectInformation extends BaseWebPartComponent<
    * @param {MessageBarType} messageBarType Message type
    * @param {number} duration Duration in seconds (defaults to 5)
    */
-  private _addMessage(text: string, messageBarType: MessageBarType, duration = 5): Promise<void> {
+  private _addMessage(text: string, messageBarType: MessageBarType, duration: number = 5): Promise<void> {
     return new Promise((resolve) => {
       this.setState({
         message: {
@@ -168,7 +169,7 @@ export class ProjectInformation extends BaseWebPartComponent<
    * @param {React.MouseEvent<any>} event Event
    * @param {boolean} force Force sync of properties
    */
-  private async _onSyncProperties(event?: React.MouseEvent<any>, force = false): Promise<void> {
+  private async _onSyncProperties(event?: React.MouseEvent<any>, force: boolean = false): Promise<void> {
     if (event) {
       return ConfirmAction(
         strings.SyncProjectPropertiesText,
@@ -201,7 +202,7 @@ export class ProjectInformation extends BaseWebPartComponent<
         this.props.webUrl,
         strings.ProjectPropertiesListName,
         this.state.data.templateParameters.ProjectContentTypeId ||
-          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: this.props.webTitle }
       )
       if (!created) {
@@ -301,4 +302,5 @@ export class ProjectInformation extends BaseWebPartComponent<
 }
 
 export { ProjectInformationModal } from '../ProjectInformationModal'
-export { IProjectInformationProps, ProjectProperty }
+export * from './types'
+
