@@ -3,7 +3,7 @@ import { IAggregatedSearchListColumn } from 'interfaces'
 import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
-import { IBaseComponentProps } from '../IBaseComponentProps'
+import { IBaseComponentProps } from '../types'
 
 export interface IAggregatedSearchListProps extends IBaseComponentProps {
   /**

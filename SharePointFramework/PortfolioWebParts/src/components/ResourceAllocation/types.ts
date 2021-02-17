@@ -1,4 +1,4 @@
-import { IBaseComponentProps } from '../IBaseComponentProps'
+import { IBaseComponentProps } from '../types'
 import * as moment from 'moment'
 import { ITimelineData, ITimelineItem } from 'interfaces'
 

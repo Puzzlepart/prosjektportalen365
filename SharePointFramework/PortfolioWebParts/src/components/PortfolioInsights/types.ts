@@ -1,4 +1,4 @@
-import { IBaseComponentProps } from '../IBaseComponentProps'
+import { IBaseComponentProps } from '../types'
 import { ChartConfiguration, ChartData } from 'models'
 import { IPortfolioConfiguration } from 'interfaces'
 import { PortfolioOverviewView } from 'pp365-shared/lib/models/PortfolioOverviewView'

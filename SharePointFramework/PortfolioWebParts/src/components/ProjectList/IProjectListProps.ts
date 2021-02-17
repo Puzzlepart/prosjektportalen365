@@ -1,5 +1,5 @@
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
-import { IBaseComponentProps } from '../IBaseComponentProps'
+import { IBaseComponentProps } from '../types'
 
 export interface IProjectListProps extends IBaseComponentProps {
   /**

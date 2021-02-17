@@ -1,4 +1,4 @@
-import { IBaseComponentProps } from '../IBaseComponentProps'
+import { IBaseComponentProps } from '../types'
 
 export interface ILatestProjectsProps extends IBaseComponentProps {
   /**

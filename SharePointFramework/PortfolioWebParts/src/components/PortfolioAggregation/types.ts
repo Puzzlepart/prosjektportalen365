@@ -3,7 +3,7 @@ import { Target } from 'office-ui-fabric-react/lib/Callout'
 import { IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList'
 import { IPanelProps } from 'office-ui-fabric-react/lib/Panel'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
-import { IBaseComponentProps } from '../IBaseComponentProps'
+import { IBaseComponentProps } from '../types'
 
 export interface IPortfolioAggregationProps extends IBaseComponentProps {
   /**
