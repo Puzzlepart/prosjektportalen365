@@ -41,12 +41,12 @@
         "@types/sharepoint": "^2016.1.5",
         "@types/underscore": "^1.9.3",
         "@types/xmldom": "^0.1.29",
-        "@typescript-eslint/eslint-plugin": "2.30.0",
-        "@typescript-eslint/parser": "2.30.0",
-        "eslint": "6.8.0",
-        "eslint-config-prettier": "^6.11.0",
-        "eslint-plugin-prettier": "^3.1.4",
-        "eslint-plugin-react": "7.19.0",
+        "@typescript-eslint/eslint-plugin": "4.15.1",
+        "@typescript-eslint/parser": "4.15.1",
+        "eslint": "7.20.0",
+        "eslint-config-prettier": "7.2.0",
+        "eslint-plugin-prettier": "3.3.1",
+        "eslint-plugin-react": "7.22.0",
         "prettier": "^2.1.1",
         "typescript": "~3.3.x"
     }
