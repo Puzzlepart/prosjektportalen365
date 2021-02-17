@@ -1,4 +1,12 @@
 declare interface IPortfolioWebPartsStrings {
+  DeleteButtonLabel: string
+  ColumnRenderOptionText: string
+  ColumnRenderOptionDate: string
+  ColumnRenderOptionDateTime: string
+  ColumnRenderLabel: string
+  EditColumnLabel: any
+  MoveRightLabel: string
+  MoveLeftLabel: string
   IsGroupableLabel: string
   NewColumnHeaderText: string
   AddColumnText: string
@@ -7,7 +15,7 @@ declare interface IPortfolioWebPartsStrings {
   MinWidthLabel: string
   MaxWidthLabel: string
   IsMultilineLabel: string
-  IsResizablehLabel: string
+  IsResizableLabel: string
   SaveButtonLabel: string
   CloseButtonLabel: string
   GroupByColumnLabel: string
