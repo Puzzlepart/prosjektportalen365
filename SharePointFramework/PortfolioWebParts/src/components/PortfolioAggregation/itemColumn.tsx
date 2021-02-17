@@ -5,6 +5,7 @@ import strings from 'PortfolioWebPartsStrings'
 import { formatDate } from 'pp365-shared/lib/helpers/formatDate'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import React from 'react'
+import { isEmpty } from 'underscore'
 
 /**
  * Render item column
@@ -27,6 +28,15 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
       return formatDate(value, false)
     case 'datetime':
       return formatDate(value, true)
+    case 'list': {
+      const values: string[] = value ? value.split(';#') : []
+      if (isEmpty(values)) return null
+      return (
+        <ul style={{ listStyleType: 'none', margin: 0, padding: 0 }}>
+          {values.map((v, idx) => <li key={idx}>{v}</li>)}
+        </ul>
+      )
+    }
     default:
       return value
   }
