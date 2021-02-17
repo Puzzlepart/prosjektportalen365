@@ -1,5 +1,8 @@
 define([], function () {
   return {
+    DataSourceGroupName: 'Datakilder',
+    CommandBarGroupName: 'Søkeboks',
+    SearchBoxGroupName: 'Søkeboks',
     DeleteButtonLabel: 'Slett',
     ColumnRenderOptionText: 'Tekst',
     ColumnRenderOptionDate: 'Dato',

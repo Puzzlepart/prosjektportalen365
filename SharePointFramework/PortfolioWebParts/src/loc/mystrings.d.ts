@@ -1,4 +1,7 @@
 declare interface IPortfolioWebPartsStrings {
+  DataSourceGroupName: string
+  CommandBarGroupName: string
+  SearchBoxGroupName: string
   DeleteButtonLabel: string
   ColumnRenderOptionText: string
   ColumnRenderOptionDate: string
