@@ -8,6 +8,7 @@ import { IDeliveriesOverviewProps } from './IDeliveriesOverviewProps'
  * @component DeliveriesOverview
  * @extends React.Component
  */
+// eslint-disable-next-line @typescript-eslint/ban-types
 export class DeliveriesOverview extends React.Component<IDeliveriesOverviewProps, {}> {
   public static defaultProps: Partial<IDeliveriesOverviewProps> = {
     columns: DELIVERIES_OVERVIEW_COLUMNS
