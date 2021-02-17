@@ -1,10 +1,7 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styles from './Tag.module.scss'
-import { ITagProps } from './ITagProps'
+import { ITagProps } from './types'
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export class Tag extends Component<ITagProps, {}> {
-  public render(): React.ReactElement<ITagProps> {
-    return <span className={styles.tag}>{this.props.text}</span>
-  }
+export const Tag = ({ text }: ITagProps) => {
+  return <span className={styles.root}>{text}</span>
 }
