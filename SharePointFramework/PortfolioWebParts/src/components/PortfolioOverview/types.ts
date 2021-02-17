@@ -11,7 +11,6 @@ export class PortfolioOverviewErrorMessage extends Error {
   }
 }
 
-
 export interface IPortfolioOverviewProps extends IBaseComponentProps {
   /**
    * Configuration (columns and views etc)

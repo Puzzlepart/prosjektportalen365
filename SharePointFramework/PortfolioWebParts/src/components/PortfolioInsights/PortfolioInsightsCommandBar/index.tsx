@@ -1,8 +1,8 @@
-import React from 'react'
-import styles from './PortfolioInsightsCommandBar.module.scss'
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar'
 import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu'
+import React from 'react'
 import { IPortfolioInsightsCommandBarProps } from './IPortfolioInsightsCommandBarProps'
+import styles from './PortfolioInsightsCommandBar.module.scss'
 
 // tslint:disable-next-line: naming-convention
 const PortfolioInsightsCommandBar = (props: IPortfolioInsightsCommandBarProps) => {

@@ -374,7 +374,7 @@ export class DataAdapter {
    * Checks if the current is in the specified group
    *
    * @private
-   * 
+   *
    * @param {string} groupName
    *
    * @returns {Promise<boolean>}
@@ -394,34 +394,32 @@ export class DataAdapter {
   }
 
   /**
-  * Fetch items
-  *
-  * @param {string} queryTemplate Query template
-  * @param {string[]} selectProperties Select properties
-  */
+   * Fetch items
+   *
+   * @param {string} queryTemplate Query template
+   * @param {string[]} selectProperties Select properties
+   */
   private async _fetchItems(queryTemplate: string, selectProperties: string[]) {
     const response = await sp.searchWithCaching({
       QueryTemplate: queryTemplate,
       Querytext: '*',
       RowLimit: 500,
       TrimDuplicates: false,
-      SelectProperties: [
-        ...selectProperties,
-        'Path',
-        'SPWebUrl',
-        'SiteTitle'
-      ]
+      SelectProperties: [...selectProperties, 'Path', 'SPWebUrl', 'SiteTitle']
     })
     return response.PrimarySearchResults
   }
 
   /**
    * Fetch items with data source name
-   * 
+   *
    * @param {string} dataSourceName Data source name
    * @param {string[]} selectProperties Select properties
    */
-  public async fetchItemsWithSource(dataSourceName: string, selectProperties: string[]): Promise<any> {
+  public async fetchItemsWithSource(
+    dataSourceName: string,
+    selectProperties: string[]
+  ): Promise<any> {
     try {
       const { searchQuery } = await this._dataSourceService.getByName(dataSourceName)
       const items = await this._fetchItems(searchQuery, selectProperties)
@@ -433,7 +431,7 @@ export class DataAdapter {
 
   /**
    * Fetch data sources by category
-   * 
+   *
    * @param {string} category Data source category
    */
   public fetchDataSources(category: string): Promise<DataSource[]> {

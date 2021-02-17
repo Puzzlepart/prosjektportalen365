@@ -1,12 +1,12 @@
-import React from 'react'
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import * as strings from 'PortfolioWebPartsStrings'
+import { getBreakpoint } from 'pp365-shared/lib/helpers'
+import React, { Component } from 'react'
+import * as ReactHighcharts from 'react-highcharts'
 import { IChartProps } from './IChartProps'
 import { IChartState } from './IChartState'
-import * as ReactHighcharts from 'react-highcharts'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import { getBreakpoint } from 'pp365-shared/lib/helpers'
 
-export default class Chart extends React.Component<IChartProps, IChartState> {
+export default class Chart extends Component<IChartProps, IChartState> {
   public static defaultProps: Partial<IChartProps> = {}
   protected _chartRef: ReactHighcharts
 

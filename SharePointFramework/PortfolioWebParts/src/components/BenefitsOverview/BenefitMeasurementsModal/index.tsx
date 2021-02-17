@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import * as strings from 'PortfolioWebPartsStrings'
 import styles from './BenefitMeasurementsModal.module.scss'
 import { Modal, IModalProps } from 'office-ui-fabric-react/lib/Modal'
@@ -16,7 +16,7 @@ export interface IBenefitMeasurementsModalState {
   isOpen?: boolean
 }
 
-export default class BenefitMeasurementsModal extends React.PureComponent<
+export default class BenefitMeasurementsModal extends PureComponent<
   IBenefitMeasurementsModalProps,
   IBenefitMeasurementsModalState
 > {

@@ -8,7 +8,7 @@ import React from 'react'
 
 /**
  * Render item column
- * 
+ *
  * @param {any} item Item
  * @param {number} index Index
  * @param {IColumn} column Column
@@ -21,9 +21,12 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
   }
   const value = get(item, column.fieldName, null)
   switch (column?.data?.renderAs) {
-    case 'date': return formatDate(value, false)
-    case 'datetime': return formatDate(value, true)
-    default: return value
+    case 'date':
+      return formatDate(value, false)
+    case 'datetime':
+      return formatDate(value, true)
+    default:
+      return value
   }
 }
 

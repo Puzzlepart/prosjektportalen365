@@ -32,22 +32,24 @@ import { getObjectValue } from 'pp365-shared/lib/helpers/getObjectValue'
 import { PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
 import ExcelExportService from 'pp365-shared/lib/services/ExcelExportService'
 import { parseUrlHash, redirect, setUrlHash } from 'pp365-shared/lib/util'
-import React from 'react'
+import React, { Component } from 'react'
 import * as _ from 'underscore'
 import { IFilterItemProps, IFilterProps } from '../FilterPanel'
 import styles from './PortfolioOverview.module.scss'
 import { PortfolioOverviewCommands } from './PortfolioOverviewCommands'
 import { renderItemColumn } from './RenderItemColumn'
-import { IPortfolioOverviewHashStateState, IPortfolioOverviewProps, IPortfolioOverviewState, PortfolioOverviewErrorMessage } from './types'
+import {
+  IPortfolioOverviewHashStateState,
+  IPortfolioOverviewProps,
+  IPortfolioOverviewState,
+  PortfolioOverviewErrorMessage
+} from './types'
 
 /**
  * @component PortfolioOverview
  * @extends Component
  */
-export class PortfolioOverview extends React.Component<
-  IPortfolioOverviewProps,
-  IPortfolioOverviewState
-> {
+export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortfolioOverviewState> {
   public static defaultProps: Partial<IPortfolioOverviewProps> = {}
   private _selection: Selection
   private _onSearchDelay: number

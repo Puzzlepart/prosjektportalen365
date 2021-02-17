@@ -1,4 +1,5 @@
-import { BaseClientSideWebPart, IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base'
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
+import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
@@ -11,7 +12,7 @@ import * as ReactDom from 'react-dom'
 // tslint:disable-next-line: naming-convention
 export abstract class BasePortfolioWebPart<
   T extends IBaseComponentProps
-  > extends BaseClientSideWebPart<T> {
+> extends BaseClientSideWebPart<T> {
   public dataAdapter: DataAdapter
   private _pageTitle: string
 
@@ -23,17 +24,15 @@ export abstract class BasePortfolioWebPart<
    * @param {any} component Component
    * @param {T} props Props
    */
-  public renderComponent(component: React.ComponentClass<T> | React.FunctionComponent<T>, props?: T): void {
-    const combinedProps = merge(
-      { title: this._pageTitle },
-      this.properties,
-      props,
-      {
-        pageContext: this.context.pageContext,
-        dataAdapter: this.dataAdapter,
-        displayMode: this.displayMode
-      }
-    )
+  public renderComponent(
+    component: React.ComponentClass<T> | React.FunctionComponent<T>,
+    props?: T
+  ): void {
+    const combinedProps = merge({ title: this._pageTitle }, this.properties, props, {
+      pageContext: this.context.pageContext,
+      dataAdapter: this.dataAdapter,
+      displayMode: this.displayMode
+    })
     const element: React.ReactElement<T> = React.createElement(component, combinedProps)
     ReactDom.render(element, this.domElement)
   }
@@ -53,7 +52,7 @@ export abstract class BasePortfolioWebPart<
           .select('Title')
           .get<{ Title: string }>()
       ).Title
-    } catch (error) { }
+    } catch (error) {}
   }
 
   public async onInit(): Promise<void> {

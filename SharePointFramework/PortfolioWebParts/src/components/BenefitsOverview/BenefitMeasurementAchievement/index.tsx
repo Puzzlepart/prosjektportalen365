@@ -1,14 +1,15 @@
-import React from 'react'
 import { BenefitMeasurement } from 'models'
-import { Icon } from 'office-ui-fabric-react/lib/Icon'
 import * as objectGet from 'object-get'
+import { Icon } from 'office-ui-fabric-react/lib/Icon'
+import React, { HTMLProps, PureComponent } from 'react'
 
-export interface IBenefitMeasurementAchievementProps extends React.HTMLProps<HTMLSpanElement> {
+export interface IBenefitMeasurementAchievementProps extends HTMLProps<HTMLSpanElement> {
   measurement: BenefitMeasurement
 }
 
-export default class BenefitMeasurementAchievement extends React.PureComponent<
+export default class BenefitMeasurementAchievement extends PureComponent<
   IBenefitMeasurementAchievementProps,
+  // eslint-disable-next-line @typescript-eslint/ban-types
   {}
 > {
   constructor(props: IBenefitMeasurementAchievementProps) {

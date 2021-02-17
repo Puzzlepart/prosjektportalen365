@@ -8,7 +8,9 @@ import { DataAdapter } from 'data'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
-export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IPortfolioAggregationProps> {
+export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
+  IPortfolioAggregationProps
+> {
   constructor() {
     super()
     this._onUpdateProperty = this._onUpdateProperty.bind(this)
@@ -24,7 +26,7 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
 
   /**
    * On update property
-   * 
+   *
    * @param {string} key Key
    * @param {any} value Value
    */
@@ -50,7 +52,7 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
                 }),
                 PropertyPaneTextField('dataSourceCategory', {
                   label: strings.DataSourceCategoryLabel
-                }),
+                })
               ]
             },
             {
@@ -74,7 +76,7 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
                 PropertyPaneTextField('searchBoxPlaceholderText', {
                   label: strings.SearchBoxPlaceholderTextLabel,
                   disabled: !this.properties.showSearchBox
-                }),
+                })
               ]
             }
           ]

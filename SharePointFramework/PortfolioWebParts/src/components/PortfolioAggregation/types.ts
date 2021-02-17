@@ -55,7 +55,7 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   /**
    * Data adapter
    */
-  dataAdapter?: DataAdapter;
+  dataAdapter?: DataAdapter
 
   /**
    * On update property
@@ -132,7 +132,7 @@ export interface IPortfolioAggregationState {
   /**
    * Column context menu
    */
-  columnContextMenu?: { column: IColumn, target: Target }
+  columnContextMenu?: { column: IColumn; target: Target }
 
   /**
    * Column added timestamp

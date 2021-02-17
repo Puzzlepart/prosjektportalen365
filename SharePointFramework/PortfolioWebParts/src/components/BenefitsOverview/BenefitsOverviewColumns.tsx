@@ -1,11 +1,11 @@
-import React from 'react'
+import { IAggregatedSearchListColumn } from 'interfaces'
+import { BenefitMeasurementIndicator } from 'models'
 import * as strings from 'PortfolioWebPartsStrings'
+import { getObjectValue } from 'pp365-shared/lib/helpers'
+import React from 'react'
+import BenefitMeasurementAchievement from './BenefitMeasurementAchievement'
 import BenefitMeasurementsModal from './BenefitMeasurementsModal'
 import { IBenefitsOverviewProps } from './types'
-import { getObjectValue } from 'pp365-shared/lib/helpers'
-import { BenefitMeasurementIndicator } from 'models'
-import BenefitMeasurementAchievement from './BenefitMeasurementAchievement'
-import { IAggregatedSearchListColumn } from 'interfaces'
 
 /**
  * Get columns for DetailsList

@@ -10,7 +10,13 @@ import { Commands } from './Commands'
 import { PortfolioAggregationContext } from './context'
 import { renderItemColumn, siteTitleColumn } from './itemColumn'
 import styles from './PortfolioAggregation.module.scss'
-import createReducer, { COLUMN_HEADER_CONTEXT_MENU, DATA_FETCHED, initState, SEARCH, START_FETCH } from './reducer'
+import createReducer, {
+  COLUMN_HEADER_CONTEXT_MENU,
+  DATA_FETCHED,
+  initState,
+  SEARCH,
+  START_FETCH
+} from './reducer'
 import { IPortfolioAggregationProps } from './types'
 
 export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
@@ -19,28 +25,29 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
 
   useEffect(() => {
     if (props.dataSourceCategory) {
-      props.dataAdapter.fetchDataSources(props.dataSourceCategory)
-        .then(dataSources => dispatch(DATA_FETCHED({ items: null, dataSources })))
+      props.dataAdapter
+        .fetchDataSources(props.dataSourceCategory)
+        .then((dataSources) => dispatch(DATA_FETCHED({ items: null, dataSources })))
     }
   }, [props.dataSourceCategory])
 
   useEffect(() => {
     dispatch(START_FETCH())
-    props.dataAdapter.fetchItemsWithSource(
-      state.dataSource,
-      props.selectProperties || state.columns.map(col => col.fieldName)
-    ).then(items => dispatch(DATA_FETCHED({ items })))
+    props.dataAdapter
+      .fetchItemsWithSource(
+        state.dataSource,
+        props.selectProperties || state.columns.map((col) => col.fieldName)
+      )
+      .then((items) => dispatch(DATA_FETCHED({ items })))
   }, [state.columnAdded, state.dataSource])
 
   const items = useMemo(() => {
-    return state.items.filter(i => {
+    return state.items.filter((i) => {
       const searchTerm = state.searchTerm.toLowerCase()
       const searchObj = state.columns.reduce((obj, col) => {
         return { ...obj, [col.fieldName]: get(i, col.fieldName, null) }
       }, {})
-      return JSON.stringify(searchObj)
-        .toLowerCase()
-        .indexOf(searchTerm) !== -1
+      return JSON.stringify(searchObj).toLowerCase().indexOf(searchTerm) !== -1
     })
   }, [state.searchTerm, state.items])
 
@@ -54,7 +61,8 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
         <div className={styles.searchBox} hidden={!props.showSearchBox}>
           <SearchBox
             placeholder={props.searchBoxPlaceholderText}
-            onChange={(searchTerm) => dispatch(SEARCH({ searchTerm }))} />
+            onChange={(searchTerm) => dispatch(SEARCH({ searchTerm }))}
+          />
         </div>
         <div className={styles.listContainer}>
           <ShimmeredDetailsList
@@ -63,18 +71,21 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
             enableShimmer={state.loading}
             items={items}
             onRenderItemColumn={renderItemColumn}
-            onColumnHeaderContextMenu={(col, ev) => dispatch(
-              COLUMN_HEADER_CONTEXT_MENU({
-                column: col,
-                target: ev.currentTarget
-              })
-            )}
+            onColumnHeaderContextMenu={(col, ev) =>
+              dispatch(
+                COLUMN_HEADER_CONTEXT_MENU({
+                  column: col,
+                  target: ev.currentTarget
+                })
+              )
+            }
             columns={[
-             siteTitleColumn,
+              siteTitleColumn,
               ...state.columns,
-              (props.displayMode === DisplayMode.Edit && !props.lockedColumns) && addColumn(dispatch)
-            ].filter(c => c)}
-            groups={state.groups} />
+              props.displayMode === DisplayMode.Edit && !props.lockedColumns && addColumn(dispatch)
+            ].filter((c) => c)}
+            groups={state.groups}
+          />
         </div>
         <ColumnContextMenu />
         <ColumnFormPanel />

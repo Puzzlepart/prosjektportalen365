@@ -9,13 +9,13 @@ import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner'
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationModal } from 'pp365-projectwebparts/lib/components/ProjectInformation'
-import React, { Component } from 'react'
 import { getObjectValue, sortAlphabetically } from 'pp365-shared/lib/helpers'
+import React, { Component } from 'react'
 import * as _ from 'underscore'
-import { IProjectListProps, IProjectListState } from './types'
 import { ProjectCard } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
+import { IProjectListProps, IProjectListState } from './types'
 
 /**
  * @component ProjectList

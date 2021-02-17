@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import styles from './Filter.module.scss'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
 import { IFilterState } from './IFilterState'
@@ -6,7 +6,7 @@ import { IFilterProps } from './IFilterProps'
 import { FilterItem } from '../FilterItem'
 import { IFilterItemProps } from '../FilterItem/IFilterItemProps'
 
-export class Filter extends React.Component<IFilterProps, IFilterState> {
+export class Filter extends Component<IFilterProps, IFilterState> {
   constructor(props: IFilterProps) {
     super(props)
     this.state = { isCollapsed: props.defaultCollapsed, items: props.items }

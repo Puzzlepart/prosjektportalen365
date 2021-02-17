@@ -14,10 +14,7 @@ import { IPortfolioInsightsProps, IPortfolioInsightsState } from './types'
  * @component PortfolioInsights
  * @extends Component
  */
-export class PortfolioInsights extends Component<
-  IPortfolioInsightsProps,
-  IPortfolioInsightsState
-> {
+export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortfolioInsightsState> {
   public static defaultProps: Partial<IPortfolioInsightsProps> = {}
 
   /**
