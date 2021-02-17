@@ -43,26 +43,38 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
         {
           groups: [
             {
-              groupName: strings.GeneralGroupName,
+              groupName: strings.DataSourceGroupName,
               groupFields: [
-                PropertyPaneTextField('searchBoxPlaceholderText', {
-                  label: strings.SearchBoxPlaceholderTextLabel
-                }),
                 PropertyPaneTextField('dataSource', {
                   label: strings.DataSourceLabel
                 }),
                 PropertyPaneTextField('dataSourceCategory', {
                   label: strings.DataSourceCategoryLabel
                 }),
+              ]
+            },
+            {
+              groupName: strings.CommandBarGroupName,
+              groupFields: [
                 PropertyPaneToggle('showCommandBar', {
                   label: strings.ShowCommandBarLabel
                 }),
+                PropertyPaneToggle('showExcelExportButton', {
+                  label: strings.ShowExcelExportButtonLabel,
+                  disabled: !this.properties.showCommandBar
+                })
+              ]
+            },
+            {
+              groupName: strings.SearchBoxGroupName,
+              groupFields: [
                 PropertyPaneToggle('showSearchBox', {
                   label: strings.ShowSearchBoxLabel
                 }),
-                PropertyPaneToggle('showExcelExportButton', {
-                  label: strings.ShowExcelExportButtonLabel
-                })
+                PropertyPaneTextField('searchBoxPlaceholderText', {
+                  label: strings.SearchBoxPlaceholderTextLabel,
+                  disabled: !this.properties.showSearchBox
+                }),
               ]
             }
           ]

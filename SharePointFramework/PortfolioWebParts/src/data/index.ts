@@ -400,7 +400,7 @@ export class DataAdapter {
   * @param {string[]} selectProperties Select properties
   */
   private async _fetchItems(queryTemplate: string, selectProperties: string[]) {
-    const response = await sp.search({
+    const response = await sp.searchWithCaching({
       QueryTemplate: queryTemplate,
       Querytext: '*',
       RowLimit: 500,
