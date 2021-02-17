@@ -21,7 +21,7 @@ export default new (class ExcelExportService {
   }
 
   /**
-   * Load deps
+   * Load dependencies in _deps
    *
    * @param {string[]} deps Deps
    */
