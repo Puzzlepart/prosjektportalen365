@@ -3,6 +3,7 @@ import { ContextualMenu, ContextualMenuItemType, IContextualMenuItem } from 'off
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { useContext } from 'react'
+import { indexOf } from 'underscore'
 import { PortfolioAggregationContext } from '../context'
 import { COLUMN_HEADER_CONTEXT_MENU, MOVE_COLUMN, SET_GROUP_BY, SET_SORT, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 
@@ -10,6 +11,8 @@ export const ColumnContextMenu = () => {
     const { props, state, dispatch } = useContext(PortfolioAggregationContext)
     if (!state.columnContextMenu) return null
     const { column, target } = state.columnContextMenu
+    const columnIndex = indexOf(state.columns.map(c => c.fieldName), column.fieldName)
+    const columnEditable = (props.displayMode === DisplayMode.Edit && columnIndex !== -1)
     const items: IContextualMenuItem[] = [
         {
             key: 'SortDesc',
@@ -43,27 +46,29 @@ export const ColumnContextMenu = () => {
                 SET_GROUP_BY({ column })
             )
         },
-        props.displayMode === DisplayMode.Edit && {
+        columnEditable && {
             key: 'Divider2',
             itemType: ContextualMenuItemType.Divider
         },
-        props.displayMode === DisplayMode.Edit && {
+        columnEditable && {
             key: 'MoveLeft',
             name: strings.MoveLeftLabel,
             iconProps: { iconName: 'ChevronLeftMed' },
+            disabled: columnIndex === 0,
             onClick: () => dispatch(
                 MOVE_COLUMN({ column, move: -1 })
             )
         },
-        props.displayMode === DisplayMode.Edit && {
+        columnEditable && {
             key: 'MoveRight',
             name: strings.MoveRightLabel,
             iconProps: { iconName: 'ChevronRightMed' },
+            disabled: columnIndex === (state.columns.length - 1),
             onClick: () => dispatch(
                 MOVE_COLUMN({ column, move: 1 })
             )
         },
-        props.displayMode === DisplayMode.Edit && {
+        columnEditable && {
             key: 'Edit',
             name: strings.EditColumnLabel,
             iconProps: { iconName: 'SingleColumnEdit' },
