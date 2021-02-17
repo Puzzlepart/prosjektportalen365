@@ -1,7 +1,7 @@
 import { CommandBar, ICommandBarProps } from 'office-ui-fabric-react/lib/CommandBar'
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu'
 import * as strings from 'PortfolioWebPartsStrings'
-import ExcelExportService, { ExcelExportColumn } from 'pp365-shared/lib/services/ExcelExportService'
+import ExcelExportService from 'pp365-shared/lib/services/ExcelExportService'
 import React, { useContext } from 'react'
 import { isEmpty } from 'underscore'
 import { PortfolioAggregationContext } from '../context'
@@ -35,7 +35,7 @@ export const Commands = () => {
                             name: strings.SiteTitleLabel,
                             minWidth: null
                         },
-                        ...state.columns as ExcelExportColumn[]
+                        ...state.columns as any[]
                     ]
                 )
             }

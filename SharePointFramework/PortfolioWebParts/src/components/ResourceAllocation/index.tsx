@@ -351,9 +351,7 @@ export class ResourceAllocation extends React.Component<
         title: isAbsence
           ? `${res.GtResourceAbsenceOWSCHCS} (${allocation}%)`
           : `${res.RefinableString72} - ${res.SiteTitle} (${allocation}%)`,
-        // eslint-disable-next-line @typescript-eslint/camelcase
         start_time: moment(new Date(res.GtStartDateOWSDATE)),
-        // eslint-disable-next-line @typescript-eslint/camelcase
         end_time: moment(new Date(res.GtEndDateOWSDATE)),
         allocation,
         itemProps: { style },
