@@ -28,10 +28,10 @@ export default new (class ExcelExportService {
   protected loadDeps(): Promise<void> {
     return new Promise<void>((resolve) => {
       const _define = (<any>window).define
-        ; (<any>window).define = undefined
+      ;(<any>window).define = undefined
       $script(this._deps, 'deps')
       $script.ready('deps', () => {
-        ; (<any>window).define = _define
+        ;(<any>window).define = _define
         resolve()
       })
     })
@@ -60,13 +60,13 @@ export default new (class ExcelExportService {
       const workBook = (<any>window).XLSX.utils.book_new()
       sheets.forEach((s, index) => {
         const sheet = (<any>window).XLSX.utils.aoa_to_sheet(s.data)
-          ; (<any>window).XLSX.utils.book_append_sheet(workBook, sheet, s.name || `Sheet${index + 1}`)
+        ;(<any>window).XLSX.utils.book_append_sheet(workBook, sheet, s.name || `Sheet${index + 1}`)
       })
       const wbout = (<any>window).XLSX.write(workBook, this._configuration.options)
-        ; (<any>window).saveAs(
-          new Blob([stringToArrayBuffer(wbout)], { type: 'application/octet-stream' }),
-          format('{0}-{1}.xlsx', this._configuration.name, new Date().toISOString())
-        )
+      ;(<any>window).saveAs(
+        new Blob([stringToArrayBuffer(wbout)], { type: 'application/octet-stream' }),
+        format('{0}-{1}.xlsx', this._configuration.name, new Date().toISOString())
+      )
     } catch (error) {
       throw new Error(error)
     }
