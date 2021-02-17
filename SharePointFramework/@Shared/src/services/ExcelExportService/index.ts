@@ -28,10 +28,10 @@ export default new (class ExcelExportService {
   protected loadDeps(): Promise<void> {
     return new Promise<void>((resolve) => {
       const _define = (<any>window).define
-      ;(<any>window).define = undefined
+      (window as any).define = undefined
       $script(this._deps, 'deps')
       $script.ready('deps', () => {
-        ;(<any>window).define = _define
+        (window as any).define = _define
         resolve()
       })
     })
