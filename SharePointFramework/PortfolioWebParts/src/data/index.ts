@@ -14,7 +14,7 @@ import {
 } from 'models'
 import MSGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
-import { PortfolioOverviewView } from 'pp365-shared/lib/models'
+import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
 import * as _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
@@ -416,7 +416,7 @@ export class DataAdapter {
   }
 
   /**
-   * Fetch items with source
+   * Fetch items with data source name
    * 
    * @param {string} dataSourceName Data source name
    * @param {string[]} selectProperties Select properties
@@ -436,7 +436,7 @@ export class DataAdapter {
    * 
    * @param {string} category Data source category
    */
-  public fetchDataSources(category: string): Promise<any> {
+  public fetchDataSources(category: string): Promise<DataSource[]> {
     try {
       return this._dataSourceService.getByCategory(category)
     } catch (error) {

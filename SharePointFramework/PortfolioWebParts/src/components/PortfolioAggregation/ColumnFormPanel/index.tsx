@@ -135,7 +135,7 @@ export const ColumnFormPanel = () => {
               text: strings.ColumnRenderOptionDateTime,
             }
           ]}
-          defaultSelectedKey={column.data.renderAs}
+          defaultSelectedKey={column.data?.renderAs || 'text'}
           onChange={(_, opt) => setColumn({
             ...column,
             data: {

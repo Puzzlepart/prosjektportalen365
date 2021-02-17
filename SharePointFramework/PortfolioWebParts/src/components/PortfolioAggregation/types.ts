@@ -69,6 +69,16 @@ export interface IPortfolioAggregationState {
   isExporting?: boolean
 
   /**
+   * Data source name
+   */
+  dataSource?: string
+
+  /**
+   * Data sources
+   */
+  dataSources?: DataSource[]
+
+  /**
    * Items to show in the details list
    */
   items?: any[]
@@ -84,14 +94,9 @@ export interface IPortfolioAggregationState {
   groups?: IGroup[]
 
   /**
-   * Selected data source
+   * Column currently being edited
    */
-  selectedDataSource?: DataSource
-
-  /**
-   * Available data sources
-   */
-  dataSources?: DataSource[]
+  editColumn?: IColumn
 
   /**
    * Column to group by
