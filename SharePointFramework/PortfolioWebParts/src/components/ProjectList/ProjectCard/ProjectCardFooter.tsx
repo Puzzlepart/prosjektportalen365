@@ -1,6 +1,6 @@
 import { DocumentCardActions } from 'office-ui-fabric-react/lib/DocumentCard'
 import React from 'react'
-import { IProjectCardProps } from './IProjectCardProps'
+import { IProjectCardProps } from './types'
 
 /**
  * Project Card Footer

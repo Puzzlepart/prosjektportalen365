@@ -1,6 +1,6 @@
 import { DocumentCard } from 'office-ui-fabric-react/lib/DocumentCard'
 import React from 'react'
-import { IProjectCardProps } from './IProjectCardProps'
+import { IProjectCardProps } from './types'
 import styles from './ProjectCard.module.scss'
 import { ProjectCardHeader } from './ProjectCardHeader'
 import { ProjectCardContent } from './ProjectCardContent'

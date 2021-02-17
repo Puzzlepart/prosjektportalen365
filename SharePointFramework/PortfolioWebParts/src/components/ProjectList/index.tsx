@@ -9,11 +9,10 @@ import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner'
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationModal } from 'pp365-projectwebparts/lib/components/ProjectInformation'
-import React from 'react'
+import React, { Component } from 'react'
 import { getObjectValue, sortAlphabetically } from 'pp365-shared/lib/helpers'
 import * as _ from 'underscore'
-import { IProjectListProps } from './IProjectListProps'
-import { IProjectListState } from './IProjectListState'
+import { IProjectListProps, IProjectListState } from './types'
 import { ProjectCard } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
@@ -22,7 +21,7 @@ import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
  * @component ProjectList
  * @extends Component
  */
-export class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
+export class ProjectList extends Component<IProjectListProps, IProjectListState> {
   public static defaultProps: Partial<IProjectListProps> = {
     columns: PROJECTLIST_COLUMNS,
     sortBy: 'Title'
@@ -68,14 +67,14 @@ export class ProjectList extends React.Component<IProjectListProps, IProjectList
   public render(): React.ReactElement<IProjectListProps> {
     if (this.state.loading) {
       return (
-        <div className={styles.projectList}>
+        <div className={styles.root}>
           <Spinner label={this.props.loadingText} type={SpinnerType.large} />
         </div>
       )
     }
     if (this.state.error) {
       return (
-        <div className={styles.projectList}>
+        <div className={styles.root}>
           <MessageBar messageBarType={MessageBarType.error}>{strings.ErrorText}</MessageBar>
         </div>
       )
@@ -84,7 +83,7 @@ export class ProjectList extends React.Component<IProjectListProps, IProjectList
     const projects = this._filterProjets(this.state.projects)
 
     return (
-      <div className={styles.projectList}>
+      <div className={styles.root}>
         <div className={styles.container}>
           <div className={styles.searchBox} hidden={!this.props.showSearchBox}>
             <SearchBox
