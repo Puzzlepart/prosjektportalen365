@@ -10,6 +10,7 @@ import React, { Dispatch, useContext, useEffect, useState } from 'react'
 import { PortfolioAggregationContext } from '../context'
 import { ADD_COLUMN, DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import styles from './ColumnFormPanel.module.scss'
+import { renderOptions } from './renderOptions'
 
 export const addColumn = (dispatch: Dispatch<AnyAction>) => ({
   key: '',
@@ -154,24 +155,7 @@ export const ColumnFormPanel = () => {
       <div className={styles.field}>
         <Dropdown
           label={strings.ColumnRenderLabel}
-          options={[
-            {
-              key: 'text',
-              text: strings.ColumnRenderOptionText
-            },
-            {
-              key: 'int',
-              text: strings.ColumnRenderOptionInt
-            },
-            {
-              key: 'date',
-              text: strings.ColumnRenderOptionDate
-            },
-            {
-              key: 'datetime',
-              text: strings.ColumnRenderOptionDateTime
-            }
-          ]}
+          options={renderOptions}
           defaultSelectedKey={column.data?.renderAs || 'text'}
           onChange={(_, opt) =>
             setColumn({

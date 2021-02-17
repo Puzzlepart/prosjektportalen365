@@ -5,7 +5,7 @@ import { IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
-import { indexOf, uniq } from 'underscore'
+import { indexOf, omit, uniq } from 'underscore'
 import { IPortfolioAggregationProps, IPortfolioAggregationState } from './types'
 
 function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
@@ -37,6 +37,16 @@ export const MOVE_COLUMN = createAction<{ column: IColumn; move: number }>('MOVE
 export const SET_DATA_SOURCE = createAction<{ dataSource: DataSource }>('SET_DATA_SOURCE')
 export const START_FETCH = createAction('START_FETCH')
 export const SEARCH = createAction<{ searchTerm: string }>('SEARCH')
+
+/**
+ * Persist columns in web part properties
+ * 
+ * @param {IPortfolioAggregationProps} props Props
+ * @param {IPortfolioAggregationState} state State
+ */
+const persistColumns = (props: IPortfolioAggregationProps, columns: IColumn[]) => {
+  props.onUpdateProperty('columns', columns.map(col => omit(col, 'calculatedWidth', 'currentWidth')))
+}
 
 export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregationState => ({
   loading: true,
@@ -85,14 +95,14 @@ export default (props: IPortfolioAggregationProps) =>
       state.editColumn = null
       state.addColumnPanel = { isOpen: false }
       state.columnAdded = new Date().getTime()
-      props.onUpdateProperty('columns', current(state).columns)
+      persistColumns(props, current(state).columns)
     },
 
     [DELETE_COLUMN.type]: (state) => {
       state.columns = state.columns.filter((c) => c.fieldName !== state.editColumn.fieldName)
       state.editColumn = null
       state.addColumnPanel = { isOpen: false }
-      props.onUpdateProperty('columns', current(state).columns)
+      persistColumns(props, current(state).columns)
     },
 
     [COLUMN_HEADER_CONTEXT_MENU.type]: (
@@ -101,9 +111,9 @@ export default (props: IPortfolioAggregationProps) =>
     ) => {
       state.columnContextMenu = payload
         ? {
-            column: payload.column,
-            target: payload.target as any
-          }
+          column: payload.column,
+          target: payload.target as any
+        }
         : null
     },
 
@@ -173,7 +183,7 @@ export default (props: IPortfolioAggregationProps) =>
         payload.column.fieldName
       )
       state.columns = arrayMove(current(state).columns, index, index + payload.move)
-      props.onUpdateProperty('columns', current(state).columns)
+      persistColumns(props, current(state).columns)
     },
 
     [SET_DATA_SOURCE.type]: (state, { payload }: ReturnType<typeof SET_DATA_SOURCE>) => {
