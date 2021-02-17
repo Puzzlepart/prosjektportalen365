@@ -1,5 +1,6 @@
 import { DataAdapter } from 'data'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
+import { IPanelProps } from 'office-ui-fabric-react/lib/Panel'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
 import { IBaseComponentProps } from '../IBaseComponentProps'
 
@@ -107,9 +108,9 @@ export interface IPortfolioAggregationState {
   searchTerm?: string
 
   /**
-   * Add column
+   * Add column panel
    */
-  addColumn?: boolean
+  addColumnPanel?: IPanelProps
 
   /**
    * Error

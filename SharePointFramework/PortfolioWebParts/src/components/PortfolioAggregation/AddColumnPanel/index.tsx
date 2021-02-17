@@ -1,24 +1,27 @@
+import { AnyAction } from '@reduxjs/toolkit'
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { Panel } from 'office-ui-fabric-react/lib/Panel'
 import { TextField } from 'office-ui-fabric-react/lib/TextField'
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as strings from 'PortfolioWebPartsStrings'
-import React, { useState } from 'react'
+import React, { Dispatch, useContext, useState } from 'react'
+import { PortfolioAggregationContext } from '../context'
+import { ADD_COLUMN, TOGGLE_ADD_COLUMN_PANEL } from '../reducer'
 import styles from './AddColumnPanel.module.scss'
-import { IAddColumnPanelProps } from './types'
 
-export const addColumn = (onColumnClick: () => void) => ({
+export const addColumn = (dispatch: Dispatch<AnyAction>) => ({
   key: '',
   fieldName: '',
   name: strings.AddColumnText,
   iconName: 'CalculatorAddition',
   iconClassName: styles.addColumnIcon,
   minWidth: 150,
-  onColumnClick,
+  onColumnClick: () => dispatch(TOGGLE_ADD_COLUMN_PANEL({ isOpen: true })),
 })
 
-export const AddColumnPanel = (props: IAddColumnPanelProps) => {
+export const AddColumnPanel = () => {
+  const { state, dispatch } = useContext(PortfolioAggregationContext)
   const [column, setColumn] = useState<IColumn>({
     key: null,
     fieldName: '',
@@ -28,14 +31,14 @@ export const AddColumnPanel = (props: IAddColumnPanelProps) => {
   })
 
   const onSave = () => {
-    props.onAddColumn({ ...column, key: column.fieldName })
-    props.onDismiss()
+    dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
   }
 
   return (
     <Panel
-      isOpen={props.isOpen}
+      isOpen={state.addColumnPanel.isOpen}
       headerText={strings.NewColumnHeaderText}
+      onDismiss={() => dispatch(TOGGLE_ADD_COLUMN_PANEL({ isOpen: false }))}
       className={styles.root}>
       <div className={styles.field}>
         <TextField
@@ -98,10 +101,8 @@ export const AddColumnPanel = (props: IAddColumnPanelProps) => {
         <DefaultButton
           text={strings.CloseButtonLabel}
           style={{ marginLeft: 4 }}
-          onClick={() => props.onDismiss()} />
+          onClick={() => dispatch(TOGGLE_ADD_COLUMN_PANEL({ isOpen: false }))} />
       </div>
     </Panel>
   )
 }
-
-export * from './types'

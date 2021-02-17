@@ -1,61 +1,39 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
-import { DetailsListLayoutMode, IColumn } from 'office-ui-fabric-react/lib/DetailsList'
+import { DetailsListLayoutMode } from 'office-ui-fabric-react/lib/DetailsList'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useReducer } from 'react'
 import { addColumn, AddColumnPanel } from './AddColumnPanel'
+import { PortfolioAggregationContext } from './context'
 import styles from './PortfolioAggregation.module.scss'
-import { IPortfolioAggregationProps, IPortfolioAggregationState } from './types'
+import createReducer, { DATA_FETCHED, initState } from './reducer'
+import { IPortfolioAggregationProps } from './types'
 
 export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
-  const [state, setState] = useState<IPortfolioAggregationState>({
-    loading: true,
-    items: [],
-    columns: props.columns,
-  })
-
+  const reducer = useMemo(() => createReducer(props), [])
+  const [state, dispatch] = useReducer(reducer, initState(props))
 
   useEffect(() => {
     props.dataAdapter.fetchItemsWithSource(
       props.dataSource,
       state.columns.map(col => col.fieldName)
     )
-      .then(items =>
-        setState({ ...state, items, loading: false })
-      )
+      .then(items => dispatch(DATA_FETCHED({ items })))
   }, [state.columns])
 
-  /**
-   * On add column
-   * 
-   * @param {IColumn} column Column to add
-   */
-  const onAddColumn = (column: IColumn) => {
-    const _columns = [...state.columns, column]
-    setState({ ...state, columns: _columns })
-    props.onUpdateProperty('columns', _columns)
-  }
-
   return (
-    <div className={styles.root}>
-      <ShimmeredDetailsList
-        layoutMode={DetailsListLayoutMode.fixedColumns}
-        enableShimmer={state.loading}
-        items={state.items}
-        columns={[
-          ...state.columns,
-          props.displayMode === DisplayMode.Edit && addColumn(() => setState({
-            ...state,
-            addColumn: true
-          }))
-        ].filter(c => c)} />
-      <AddColumnPanel
-        isOpen={state.addColumn}
-        onAddColumn={onAddColumn}
-        onDismiss={() => setState({
-          ...state,
-          addColumn: false
-        })} />
-    </div>
+    <PortfolioAggregationContext.Provider value={{ state, dispatch }}>
+      <div className={styles.root}>
+        <ShimmeredDetailsList
+          layoutMode={DetailsListLayoutMode.fixedColumns}
+          enableShimmer={state.loading}
+          items={state.items}
+          columns={[
+            ...state.columns,
+            props.displayMode === DisplayMode.Edit && addColumn(dispatch)
+          ].filter(c => c)} />
+        <AddColumnPanel />
+      </div>
+    </PortfolioAggregationContext.Provider>
   )
 }
 
