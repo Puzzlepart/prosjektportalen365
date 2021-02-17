@@ -160,8 +160,8 @@ export const ColumnFormPanel = () => {
               text: strings.ColumnRenderOptionText
             },
             {
-              key: 'number',
-              text: strings.ColumnRenderOptionNumber
+              key: 'int',
+              text: strings.ColumnRenderOptionInt
             },
             {
               key: 'date',

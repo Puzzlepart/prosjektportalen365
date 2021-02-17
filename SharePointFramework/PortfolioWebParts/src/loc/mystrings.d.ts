@@ -1,5 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
-  ColumnRenderOptionNumber: string
+  ColumnRenderOptionInt: string
   SearchPropertyDescription: string
   DataSourceGroupName: string
   CommandBarGroupName: string

@@ -21,7 +21,7 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
   }
   const value = get(item, column.fieldName, null)
   switch (column?.data?.renderAs) {
-    case 'number':
+    case 'int':
       return value ? parseInt(value) : null
     case 'date':
       return formatDate(value, false)
