@@ -5,8 +5,7 @@ on:
     branches: [feature/flexible-portfolio-aggregation-views-webparts-394]
 
 env:
-  TARGET_URL: 'https://puzzlepart.sharepoint.com/sites/pp365'
-  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+  TARGET_URL: 'https://olemp.sharepoint.com/sites/pp365'
 
 jobs:
    build-release:
@@ -38,10 +37,6 @@ jobs:
       with:
         name: release-package
 
-    - name: Upgrade
-      run: release-package/Install.ps1 -Url ${{ env.TARGET_URL }} -Upgrade -CI ${{ secrets.CI_DEV_CREDENTIALS }}
-      shell: powershell
-
     - name: Install
-      run: release-package/Install.ps1 -Url "${{ env.TARGET_URL }}_${{ github.run_id }}" -Title "Prosjektportalen 365 ${{ github.run_id }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }} -SkipAppPackages -SkipSiteDesign -SkipTaxonomy
+      run: release-package/Install.ps1 -Url "${{ env.TARGET_URL }}_${{ github.run_id }}" -Title "Prosjektportalen 365 ${{ github.run_id }}" -CI ${{ secrets.CI_TEMP_CREDENTIALS }}
       shell: powershell
