@@ -28,22 +28,17 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky'
 import { format, IRenderFunction } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationModal } from 'pp365-projectwebparts/lib/components/ProjectInformation'
-import * as React from 'react'
 import { getObjectValue } from 'pp365-shared/lib/helpers/getObjectValue'
 import { PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
 import ExcelExportService from 'pp365-shared/lib/services/ExcelExportService'
 import { parseUrlHash, redirect, setUrlHash } from 'pp365-shared/lib/util'
+import * as React from 'react'
 import * as _ from 'underscore'
 import { IFilterItemProps, IFilterProps } from '../FilterPanel'
-import { IPortfolioOverviewProps } from './IPortfolioOverviewProps'
-import {
-  IPortfolioOverviewHashStateState,
-  IPortfolioOverviewState
-} from './IPortfolioOverviewState'
 import styles from './PortfolioOverview.module.scss'
 import { PortfolioOverviewCommands } from './PortfolioOverviewCommands'
-import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage'
 import { renderItemColumn } from './RenderItemColumn'
+import { IPortfolioOverviewHashStateState, IPortfolioOverviewProps, IPortfolioOverviewState, PortfolioOverviewErrorMessage } from './types'
 
 /**
  * @component PortfolioOverview
@@ -101,7 +96,7 @@ export class PortfolioOverview extends React.Component<
   public render(): React.ReactElement<IPortfolioOverviewProps> {
     if (this.state.loading) {
       return (
-        <div className={styles.portfolioOverview}>
+        <div className={styles.root}>
           <div className={styles.container}>
             <Spinner
               label={format(strings.LoadingText, this.props.title)}
@@ -113,7 +108,7 @@ export class PortfolioOverview extends React.Component<
     }
     if (this.state.error) {
       return (
-        <div className={styles.portfolioOverview}>
+        <div className={styles.root}>
           <div className={styles.container}>
             <MessageBar messageBarType={this.state.error.type}>
               {this.state.error.message}
@@ -126,7 +121,7 @@ export class PortfolioOverview extends React.Component<
     const { items, columns, groups } = this._getFilteredData()
 
     return (
-      <div className={styles.portfolioOverview}>
+      <div className={styles.root}>
         <PortfolioOverviewCommands
           {...{ ...this.props, ...this.state }}
           fltItems={items}

@@ -3,7 +3,7 @@ import * as React from 'react'
 import { AggregatedSearchList } from '../AggregatedSearchList'
 import styles from './BenefitsOverview.module.scss'
 import { getColumns } from './BenefitsOverviewColumns'
-import { BenefitsOverviewDefaultProps, IBenefitsOverviewProps } from './IBenefitsOverviewProps'
+import { BenefitsOverviewDefaultProps, IBenefitsOverviewProps } from './types'
 
 const CONTENT_TYPE_ID_BENEFITS = '0x01004F466123309D46BAB9D5C6DE89A6CF67'
 const CONTENT_TYPE_ID_MEASUREMENTS = '0x010039EAFDC2A1624C1BA1A444FC8FE85DEC'

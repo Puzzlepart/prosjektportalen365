@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as strings from 'PortfolioWebPartsStrings'
 import BenefitMeasurementsModal from './BenefitMeasurementsModal'
-import { IBenefitsOverviewProps } from './IBenefitsOverviewProps'
+import { IBenefitsOverviewProps } from './types'
 import { getObjectValue } from 'pp365-shared/lib/helpers'
 import { BenefitMeasurementIndicator } from 'models'
 import BenefitMeasurementAchievement from './BenefitMeasurementAchievement'

@@ -1,14 +1,13 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { SortDirection } from '@pnp/sp'
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle'
-import { formatDate } from 'pp365-shared/lib/helpers'
 import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar'
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner'
 import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings'
+import { formatDate } from 'pp365-shared/lib/helpers'
 import * as React from 'react'
-import { ILatestProjectsProps } from './ILatestProjectsProps'
-import { ILatestProjectsState } from './ILatestProjectsState'
 import styles from './LatestProjects.module.scss'
+import { ILatestProjectsProps, ILatestProjectsState } from './types'
 
 /**
  * @component LatestProjects
@@ -38,7 +37,7 @@ export class LatestProjects extends React.Component<ILatestProjectsProps, ILates
    */
   public render(): React.ReactElement<ILatestProjectsProps> {
     return (
-      <div className={styles.latestProjects}>
+      <div className={styles.root}>
         <WebPartTitle
           displayMode={DisplayMode.Read}
           title={this.props.title}

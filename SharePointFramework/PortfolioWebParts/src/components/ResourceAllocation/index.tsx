@@ -30,10 +30,9 @@ import 'react-calendar-timeline/lib/Timeline.css'
 import * as _ from 'underscore'
 import { FilterPanel, IFilterItemProps, IFilterProps } from '../FilterPanel'
 import { DetailsCallout } from './DetailsCallout'
-import { IResourceAllocationProps } from './IResourceAllocationProps'
-import { IResourceAllocationState } from './IResourceAllocationState'
 import styles from './ResourceAllocation.module.scss'
 import './Timeline.overrides.css'
+import { IResourceAllocationProps, IResourceAllocationState } from './types'
 
 /**
  * @component ResourceAllocation

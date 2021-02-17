@@ -1,7 +1,78 @@
+import { IPortfolioConfiguration } from 'interfaces'
 import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu'
 import { PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
 import { IFilterProps } from '../FilterPanel'
-import { PortfolioOverviewErrorMessage } from './PortfolioOverviewErrorMessage'
+import { IBaseComponentProps } from '../IBaseComponentProps'
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+
+export class PortfolioOverviewErrorMessage extends Error {
+  constructor(public message: string, public type: MessageBarType) {
+    super(message)
+  }
+}
+
+
+export interface IPortfolioOverviewProps extends IBaseComponentProps {
+  /**
+   * Configuration (columns and views etc)
+   */
+  configuration: IPortfolioConfiguration
+
+  /**
+   * List name for column config
+   */
+  columnConfigListName: string
+
+  /**
+   * List name for columns
+   */
+  columnsListName: string
+
+  /**
+   * List name for views
+   */
+  viewsListName: string
+
+  /**
+   * Number of status reports to show
+   */
+  statusReportsCount?: number
+
+  /**
+   * Show Excel export button
+   */
+  showExcelExportButton?: boolean
+
+  /**
+   * Show command bar
+   */
+  showCommandBar?: boolean
+
+  /**
+   * Show group by
+   */
+  showGroupBy?: boolean
+
+  /**
+   * Show search box
+   */
+  showSearchBox?: boolean
+
+  /**
+   * Show filters
+   */
+  showFilters?: boolean
+
+  /**
+   * Show view selector
+   */
+  showViewSelector?: boolean
+
+  /**
+   * Default view id
+   */
+  defaultViewId?: string
+}
 
 export interface IPortfolioOverviewState {
   /**
