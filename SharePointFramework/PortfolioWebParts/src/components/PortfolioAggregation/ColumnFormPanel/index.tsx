@@ -36,7 +36,16 @@ export const ColumnFormPanel = () => {
   })
 
   useEffect(() => {
-    if (state.editColumn) setColumn(state.editColumn)
+    if (state.editColumn) {
+      setColumn({
+        minWidth: 100,
+        maxWidth: 300,
+        data: {
+          renderAs: 'text'
+        },
+        ...state.editColumn
+      })
+    }
   }, [state.editColumn])
 
   const onSave = () => {

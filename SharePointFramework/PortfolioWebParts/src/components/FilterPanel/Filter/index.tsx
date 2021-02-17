@@ -43,7 +43,7 @@ export class Filter extends Component<IFilterProps, IFilterState> {
       <FilterItem
         key={idx}
         {...props}
-        onChanged={(event, checked) => this._onChanged(props, checked)}
+        onChanged={(_event, checked) => this._onChanged(props, checked)}
       />
     ))
   }
