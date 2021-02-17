@@ -10,22 +10,6 @@
         }
       ]
     },
-    "deliveries-overview-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/deliveriesOverview/index.js",
-          "manifest": "./src/webparts/deliveriesOverview/manifest.json"
-        }
-      ]
-    },
-    "experience-log-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/experienceLog/index.js",
-          "manifest": "./src/webparts/experienceLog/manifest.json"
-        }
-      ]
-    },
     "latest-projects-web-part": {
       "components": [
         {
@@ -62,12 +46,6 @@
       "components": [{
         "entrypoint": "./lib/webparts/resourceAllocation/index.js",
         "manifest": "./src/webparts/resourceAllocation/manifest.json"
-      }]
-    },
-    "risk-overview-web-part": {
-      "components": [{
-        "entrypoint": "./lib/webparts/riskOverview/index.js",
-        "manifest": "./src/webparts/riskOverview/manifest.json"
       }]
     },
     "portfolio-aggregation-web-part": {
