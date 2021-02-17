@@ -1,6 +1,7 @@
 import { CommandBar, ICommandBarProps } from 'office-ui-fabric-react/lib/CommandBar'
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu'
 import * as strings from 'PortfolioWebPartsStrings'
+import ExcelExportService, { ExcelExportColumn } from 'pp365-shared/lib/services/ExcelExportService'
 import React, { useContext } from 'react'
 import { isEmpty } from 'underscore'
 import { PortfolioAggregationContext } from '../context'
@@ -23,8 +24,21 @@ export const Commands = () => {
                 styles: { root: { color: 'green !important' } }
             },
             buttonStyles: { root: { border: 'none' } },
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            onClick: () => { }
+            onClick: () => {
+                ExcelExportService.configure({ name: props.title })
+                ExcelExportService.export(
+                    state.items,
+                    [
+                        {
+                            key: 'SiteTitle',
+                            fieldName: 'SiteTitle',
+                            name: strings.SiteTitleLabel,
+                            minWidth: null
+                        },
+                        ...state.columns as ExcelExportColumn[]
+                    ]
+                )
+            }
         })
     }
 
