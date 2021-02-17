@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    SearchPropertyDescription: 'Navnet på den forvaltede egenskapen for denne kolonnen.',
     DataSourceGroupName: 'Datakilder',
     CommandBarGroupName: 'Søkeboks',
     SearchBoxGroupName: 'Søkeboks',

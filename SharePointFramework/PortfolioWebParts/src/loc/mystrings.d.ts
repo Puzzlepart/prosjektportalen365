@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  SearchPropertyDescription: string
   DataSourceGroupName: string
   CommandBarGroupName: string
   SearchBoxGroupName: string
