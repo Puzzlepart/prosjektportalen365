@@ -1,4 +1,4 @@
-## Project Web Parts [![version](https://img.shields.io/badge/version-1.2.7-yellow.svg)](https://semver.org)
+## Project Web Parts [![version](https://img.shields.io/badge/version-1.2.8-yellow.svg)](https://semver.org)
 
 This solution contains SPFx web parts for the project level.
 
