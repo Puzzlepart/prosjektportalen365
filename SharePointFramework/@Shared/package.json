@@ -1,12 +1,12 @@
 {
   "name": "pp365-shared",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "description": "Shared utilities, helpers and models",
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
-    "postversion": "tsc",
+    "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color && npm run prettier",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier:write",
     "prettier": "prettier --config .prettierrc '**/*.ts*' --loglevel silent",
