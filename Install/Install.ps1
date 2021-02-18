@@ -75,19 +75,19 @@ function Connect-SharePoint {
             $DecodedCred = ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($CI))).Split("|")
             $Password = ConvertTo-SecureString -String $DecodedCred[1] -AsPlainText -Force
             $Credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $DecodedCred[0], $Password
-            Connect-PnPOnline -Url $Url -Credentials $Credentials -ErrorAction Stop
+            Connect-PnPOnline -Url $Url -Credentials $Credentials -ErrorAction Stop  -WarningAction Ignore
         }
         elseif ($UseWebLogin.IsPresent) {
-            Connect-PnPOnline -Url $Url -UseWebLogin -ErrorAction Stop
+            Connect-PnPOnline -Url $Url -UseWebLogin -ErrorAction Stop -WarningAction Ignore
         }
         elseif ($null -ne $PSCredential) {
-            Connect-PnPOnline -Url $Url -Credentials $PSCredential -ErrorAction Stop
+            Connect-PnPOnline -Url $Url -Credentials $PSCredential -ErrorAction Stop  -WarningAction Ignore
         }
         elseif ($null -ne $GenericCredential -and $GenericCredential -ne "") {
-            Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ErrorAction Stop
+            Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ErrorAction Stop  -WarningAction Ignore
         }
         else {
-            Connect-PnPOnline -Url $Url -ErrorAction Stop
+            Connect-PnPOnline -Url $Url -ErrorAction Stop -WarningAction Ignore
         }
     }
     Catch {
