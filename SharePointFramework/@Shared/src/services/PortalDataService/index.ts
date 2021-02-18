@@ -247,7 +247,7 @@ export class PortalDataService {
           fieldToCreate.updateAndPushChanges(true)
         }
         await executeQuery(jsomContext)
-      } catch (error) { }
+      } catch (error) {}
     }
     try {
       Logger.log({
@@ -263,7 +263,7 @@ export class PortalDataService {
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch { }
+    } catch {}
     if (ensureList.created && properties) {
       ensureList.list.items.add(properties)
     }
@@ -360,7 +360,7 @@ export class PortalDataService {
     const list = this._web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
     if (contentTypeId) {
       const contentTypes = await list.contentTypes.get()
-      const ct = find(contentTypes, ct => ct.StringId.indexOf(contentTypeId) === 0)
+      const ct = find(contentTypes, (ct) => ct.StringId.indexOf(contentTypeId) === 0)
       if (ct) properties.ContentTypeId = ct.StringId
     }
     const itemAddResult = await list.items.add(properties)
