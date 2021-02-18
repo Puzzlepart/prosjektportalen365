@@ -7,7 +7,7 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "postversion": "tsc && npm publish",
-    "lint": "eslint --ext .ts,.tsx ./src --color && npm run prettier",
+    "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier:write",
     "prettier": "prettier --config .prettierrc '**/*.ts*' --loglevel silent",
     "prettier:write": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent"
