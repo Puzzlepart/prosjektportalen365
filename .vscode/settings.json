@@ -1,5 +1,13 @@
 {
     "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/node_modules": true,
+        "**/lib": true,
+        "**/dist": true,
+        "**/temp": true,
+        "**/package-lock.json": true,
+        "**/pnpm-lock.yaml": true
     },
     "files.associations": {
         "*.txt": "json"
