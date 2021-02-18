@@ -6,7 +6,7 @@ import { ColumnContextMenu } from './ColumnContextMenu'
 import { addColumn, ColumnFormPanel } from './ColumnFormPanel'
 import { Commands } from './Commands'
 import { PortfolioAggregationContext } from './context'
-import { renderItemColumn, siteTitleColumn } from './itemColumn'
+import { renderItemColumn, getDefaultColumns } from './itemColumn'
 import styles from './PortfolioAggregation.module.scss'
 import createReducer, {
   COLUMN_HEADER_CONTEXT_MENU,
@@ -44,8 +44,10 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
     return state.items.filter((i) => filterItem(i, state.searchTerm, state.columns))
   }, [state.searchTerm, state.items])
 
+  const ctxValue = useMemo(() => ({ props, state, dispatch }), [state])
+
   return (
-    <PortfolioAggregationContext.Provider value={{ props, state, dispatch }}>
+    <PortfolioAggregationContext.Provider value={ctxValue}>
       <div className={styles.root}>
         <Commands />
         <div className={styles.header}>
@@ -68,7 +70,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
               )
             }
             columns={[
-              siteTitleColumn,
+              ...getDefaultColumns(ctxValue),
               ...state.columns,
               props.displayMode === DisplayMode.Edit && !props.lockedColumns && addColumn(dispatch)
             ].filter((c) => c)}

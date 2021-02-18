@@ -5,5 +5,5 @@ export interface IProjectInformationTooltipProps extends IProjectInformationProp
   /**
    * Props for the tooltip host
    */
-  tooltipProps: ITooltipHostProps
+  tooltipProps?: ITooltipHostProps
 }

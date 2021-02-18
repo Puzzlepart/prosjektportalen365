@@ -5,7 +5,6 @@ import { LogLevel } from '@pnp/logging'
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator'
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import { PortalDataService } from 'pp365-shared/lib/services'
 import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
@@ -31,7 +30,7 @@ import {
 export class ProjectInformation extends BaseWebPartComponent<
   IProjectInformationProps,
   IProjectInformationState
-> {
+  > {
   public static defaultProps: Partial<IProjectInformationProps> = {
     page: 'Frontpage'
   }
@@ -86,11 +85,7 @@ export class ProjectInformation extends BaseWebPartComponent<
    * Contents
    */
   private getContent() {
-    if (this.state.loading) {
-      return !stringIsNullOrEmpty(this.props.title) ? (
-        <Spinner label={format(strings.LoadingText, this.props.title.toLowerCase())} />
-      ) : null
-    }
+    if (this.state.loading) return null
     if (this.state.error) {
       return (
         <UserMessage
@@ -203,7 +198,7 @@ export class ProjectInformation extends BaseWebPartComponent<
         this.props.webUrl,
         strings.ProjectPropertiesListName,
         this.state.data.templateParameters.ProjectContentTypeId ||
-          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: this.props.webTitle }
       )
       if (!created) {
@@ -294,3 +289,4 @@ export class ProjectInformation extends BaseWebPartComponent<
 
 export { ProjectInformationModal } from '../ProjectInformationModal'
 export * from './types'
+

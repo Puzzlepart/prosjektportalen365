@@ -6,6 +6,9 @@ import { formatDate } from 'pp365-shared/lib/helpers/formatDate'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import React from 'react'
 import { isEmpty } from 'underscore'
+import { ProjectInformationTooltip } from 'pp365-projectwebparts/lib/components/ProjectInformationTooltip'
+import { IPortfolioAggregationContext } from './context'
+import { Web } from '@pnp/sp'
 
 /**
  * Render item column
@@ -44,19 +47,36 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
   }
 }
 
-export const siteTitleColumn: IColumn = {
-  key: 'SiteTitle',
-  fieldName: 'SiteTitle',
-  name: strings.SiteTitleLabel,
-  minWidth: 150,
-  maxWidth: 225,
-  isResizable: true,
-  onRender: (item: any) => {
-    return (
-      <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
-        {item.SiteTitle}
-      </Link>
-    )
-  },
-  data: { isGroupable: true }
-}
+/**
+ * Get default columns
+ * 
+ * @param {IPortfolioAggregationContext} context Context
+ */
+export const getDefaultColumns = (context: IPortfolioAggregationContext) => ([
+  {
+    key: 'SiteTitle',
+    fieldName: 'SiteTitle',
+    name: strings.SiteTitleLabel,
+    minWidth: 150,
+    maxWidth: 225,
+    isResizable: true,
+    onRender: (item: any) => {
+      return (
+        <ProjectInformationTooltip
+          title={item.SiteTitle}
+          siteId={item.SiteId}
+          webUrl={item.SPWebURL}
+          hubSite={{
+            web: new Web(context.props.pageContext.site.absoluteUrl),
+            url: context.props.pageContext.site.absoluteUrl
+          }}
+          page='Portfolio'>
+          <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
+            {item.SiteTitle}
+          </Link>
+        </ProjectInformationTooltip>
+      )
+    },
+    data: { isGroupable: true }
+  }
+])

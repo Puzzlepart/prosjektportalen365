@@ -1,7 +1,7 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { IHubSite } from 'sp-hubsite-service'
 
-export interface IBaseWebPartComponentProps {
+export interface IBaseWebPartComponentProps extends React.DOMAttributes<HTMLDivElement> {
   /**
    * Title of the web part
    */
