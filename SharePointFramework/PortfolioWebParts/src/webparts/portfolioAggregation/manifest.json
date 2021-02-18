@@ -1,90 +1,27 @@
 {
-    "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-    "id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
-    "alias": "PortfolioAggregationWebPart",
-    "componentType": "WebPart",
-    "version": "0.0.1",
-    "manifestVersion": 2,
-    "requiresCustomScript": false,
-    "hiddenFromToolbox": false,
-    "supportedHosts": [
-        "SharePointWebPart"
-    ],
-    "preconfiguredEntries": [
-        {
-            "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
-            "group": {
-                "default": "Other"
-            },
-            "title": {
-                "default": "Aggregeringswebdel"
-            },
-            "description": {
-                "default": " "
-            },
-            "officeFabricIconFontName": "Backlog",
-            "properties": {
-                "title": "Erfaringslogg",
-                "searchBoxPlaceholderText": "Søk..",
-                "dataSource": "Alle loggelementer",
-                "showCommandBar": true,
-                "showSearchBox": true,
-                "showExcelExportButton": true,
-                "columns": [
-                  {
-                    "key": "Title",
-                    "fieldName": "Title",
-                    "name": "Tittel",
-                    "minWidth": 220,
-                    "maxWidth": 250
-                  },
-                  {
-                    "key": "GtProjectLogDescriptionOWSMTXT",
-                    "fieldName": "GtProjectLogDescriptionOWSMTXT",
-                    "name": "Loggbeskrivelse",
-                    "minWidth": 150,
-                    "maxWidth": 225,
-                    "isResizable": true,
-                    "isMultiline": true
-                  },
-                  {
-                    "key": "GtProjectLogResponsibleOWSCHCS",
-                    "fieldName": "GtProjectLogResponsibleOWSCHCS",
-                    "name": "Ansvarlig",
-                    "minWidth": 100,
-                    "maxWidth": 150,
-                    "isResizable": true,
-                    "isGroupable": true
-                  },
-                  {
-                    "minWidth": 150,
-                    "maxWidth": 225,
-                    "key": "GtProjectLogConsequenceOWSMTXT",
-                    "fieldName": "GtProjectLogConsequenceOWSMTXT",
-                    "name": "Konsekvens",
-                    "isResizable": true,
-                    "isMultiline": true
-                  },
-                  {
-                    "key": "GtProjectLogRecommendationOWSMTXT",
-                    "fieldName": "GtProjectLogRecommendationOWSMTXT",
-                    "name": "Anbefaling",
-                    "minWidth": 150,
-                    "maxWidth": 225,
-                    "isResizable": true,
-                    "isMultiline": true
-                  },
-                  {
-                    "minWidth": 100,
-                    "maxWidth": 150,
-                    "data": { "renderAs": "list" },
-                    "key": "GtProjectLogActorsOWSCHCM",
-                    "fieldName": "GtProjectLogActorsOWSCHCM",
-                    "name": "Aktører",
-                    "isResizable": true
-                  }
-                ]
-            }
-        }
-    ]
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
+  "alias": "PortfolioAggregationWebPart",
+  "componentType": "WebPart",
+  "version": "0.0.1",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "hiddenFromToolbox": false,
+  "supportedHosts": ["SharePointWebPart"],
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "Aggregeringswebdel"
+      },
+      "description": {
+        "default": " "
+      },
+      "officeFabricIconFontName": "Backlog",
+      "properties": {}
+    }
+  ]
 }
