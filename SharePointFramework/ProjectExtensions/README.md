@@ -1,6 +1,8 @@
-## Project extensions
+## Project extensions [![version](https://img.shields.io/badge/version-1.2.6-yellow.svg)](https://semver.org)
 
 This solution contains SPFx extensions for the project level.
+
+_Published to **npm** as `pp365-projectextensions`_
 
 ### ProjectSetup
 

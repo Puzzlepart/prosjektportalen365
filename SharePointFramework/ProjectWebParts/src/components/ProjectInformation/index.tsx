@@ -29,7 +29,7 @@ import {
 export class ProjectInformation extends BaseWebPartComponent<
   IProjectInformationProps,
   IProjectInformationState
-  > {
+> {
   public static defaultProps: Partial<IProjectInformationProps> = {
     page: 'Frontpage'
   }
@@ -60,7 +60,9 @@ export class ProjectInformation extends BaseWebPartComponent<
       <div className={styles.root}>
         <div className={styles.container}>
           <div className={styles.header}>
-            <span role='heading' aria-level={2}>{this.props.title}</span>
+            <span role='heading' aria-level={2}>
+              {this.props.title}
+            </span>
           </div>
           {this.getContent()}
         </div>
@@ -185,7 +187,7 @@ export class ProjectInformation extends BaseWebPartComponent<
         this.props.webUrl,
         strings.ProjectPropertiesListName,
         this.state.data.templateParameters.ProjectContentTypeId ||
-        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: this.props.webTitle }
       )
       if (!created) {
@@ -212,7 +214,7 @@ export class ProjectInformation extends BaseWebPartComponent<
 
   /**
    * Transform properties from entity item and configuration
-   * 
+   *
    * @param {IProjectInformationData} data Data
    */
   private _transformProperties({ columns, fields, fieldValuesText }: IProjectInformationData) {
@@ -273,4 +275,3 @@ export class ProjectInformation extends BaseWebPartComponent<
 
 export { ProjectInformationModal } from '../ProjectInformationModal'
 export * from './types'
-

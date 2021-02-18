@@ -4,16 +4,18 @@ import { ProjectInformation } from '../ProjectInformation'
 import styles from './ProjectInformationTooltip.module.scss'
 import { IProjectInformationTooltipProps } from './types'
 
-export const ProjectInformationTooltip: FunctionComponent<IProjectInformationTooltipProps> = (props: IProjectInformationTooltipProps) => {
+export const ProjectInformationTooltip: FunctionComponent<IProjectInformationTooltipProps> = (
+  props: IProjectInformationTooltipProps
+) => {
   return (
     <TooltipHost
       {...props.tooltipProps}
       calloutProps={{ calloutMaxWidth: 500 }}
-      content={(
+      content={
         <div className={styles.root}>
           <ProjectInformation {...props} />
         </div>
-      )}>
+      }>
       {props.children}
     </TooltipHost>
   )

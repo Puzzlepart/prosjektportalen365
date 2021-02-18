@@ -4,7 +4,9 @@ import { ProjectInformation } from '../ProjectInformation'
 import styles from './ProjectInformationModal.module.scss'
 import { IProjectInformationModalProps } from './types'
 
-export const ProjectInformationModal: FunctionComponent<IProjectInformationModalProps> = (props: IProjectInformationModalProps) => {
+export const ProjectInformationModal: FunctionComponent<IProjectInformationModalProps> = (
+  props: IProjectInformationModalProps
+) => {
   return (
     <Modal {...props.modalProps} containerClassName={styles.root}>
       <ProjectInformation {...props} />

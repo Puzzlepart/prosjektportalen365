@@ -2,7 +2,7 @@
 
 _Due to the number of components, we decided to separate the components into 3 different solutions._
 
-## [@Shared](./@Shared/README.md)
+## [@Shared](./@Shared/README.md) [![version](https://img.shields.io/badge/version-1.2.9-yellow.svg)](https://semver.org)
 
 Shared `functions` used by all the solutions.
 
@@ -10,7 +10,7 @@ Build by `npm` script `build` and watch changes with `watch`.
 
 _Published to **npm** as `pp365-shared`_
 
-## [PortfolioWebParts](./PortfolioWebParts/README.md)](./ProjectWebParts/README.md)
+## [PortfolioWebParts](./PortfolioWebParts/README.md)](./ProjectWebParts/README.md) [![version](https://img.shields.io/badge/version-1.2.6-yellow.svg)](https://semver.org)
 
 **Name:** pp-portfolio-web-parts
 **ID:** 00483367-68e2-4977-9cc3-6cf0de623daa
@@ -23,7 +23,7 @@ To package and deploy directly to SharePoint, see `2. Build, package and deploy`
 
 _Published to **npm** as `pp365-projectwebparts`
 
-## [ProjectExtensions](./ProjectExtensions/README.md)](./ProjectWebParts/README.md)
+## [ProjectExtensions](./ProjectExtensions/README.md)](./ProjectWebParts/README.md) [![version](https://img.shields.io/badge/version-1.2.6-yellow.svg)](https://semver.org)
 
 **Name:** pp-project-extensons
 **ID:** fe723971-d5c2-4698-91e3-c16e2f72fb5b
@@ -36,7 +36,7 @@ To package and deploy directly to SharePoint, see `2. Build, package and deploy`
 
 _Published to **npm** as `pp365-projectextensions`_
 
-## [ProjectWebParts](./ProjectWebParts/README.md)
+## [ProjectWebParts](./ProjectWebParts/README.md) [![version](https://img.shields.io/badge/version-1.2.7-yellow.svg)](https://semver.org)
 
 **Name:** pp-project-web-parts
 **ID:** b69cb2f2-762d-425d-8e0b-d59c08918831
