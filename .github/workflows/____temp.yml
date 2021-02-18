@@ -3,7 +3,6 @@ name: CI - Build and install (feature/flexible-portfolio-aggregation-views-webpa
 on:
   push:
     branches: [feature/flexible-portfolio-aggregation-views-webparts-394]
-
 env:
   TARGET_URL: 'https://olemp.sharepoint.com/sites/pp365'
 
