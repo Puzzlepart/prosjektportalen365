@@ -1,6 +1,5 @@
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { Web } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
 import sortArray from 'array-sort'
 import * as uniq from 'array-unique'
@@ -27,7 +26,6 @@ import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner'
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky'
 import { format, IRenderFunction } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
-import { ProjectInformationModal } from 'pp365-projectwebparts/lib/components/ProjectInformation'
 import { getObjectValue } from 'pp365-shared/lib/helpers/getObjectValue'
 import { PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
 import ExcelExportService from 'pp365-shared/lib/services/ExcelExportService'
@@ -163,18 +161,6 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
             <LayerHost id={this._layerHostId} />
           </ScrollablePane>
         </div>
-        {this.state.showProjectInfo && (
-          <ProjectInformationModal
-            modalProps={{ isOpen: true, onDismiss: this._onDismissProjectInfoModal.bind(this) }}
-            title={this.state.showProjectInfo.Title}
-            siteId={this.state.showProjectInfo.SiteId}
-            webUrl={this.state.showProjectInfo.Path}
-            hubSite={{
-              web: new Web(this.props.pageContext.site.absoluteUrl),
-              url: this.props.pageContext.site.absoluteUrl
-            }}
-            page='Portfolio' />
-        )}
         {this.state.columnContextMenu && <ContextualMenu {...this.state.columnContextMenu} />}
       </div>
     )
@@ -190,7 +176,7 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
    * @param {string} searchTerm Search term
    * @param {number} delay Delay in ms
    */
-  private _onSearch(searchTerm: string, delay = 500) {
+  private _onSearch(searchTerm: string, delay: number = 500) {
     clearTimeout(this._onSearchDelay)
     this._onSearchDelay = setTimeout(() => {
       this.setState({ searchTerm: searchTerm.toLowerCase() })
@@ -385,14 +371,6 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
       } as IContextualMenuProps
     })
   }
-
-  /**
-   * On dismiss <ProjectInformationModal />
-   */
-  private _onDismissProjectInfoModal() {
-    this.setState({ showProjectInfo: null })
-  }
-
   /**
    * Create groups
    *

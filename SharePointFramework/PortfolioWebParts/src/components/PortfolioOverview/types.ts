@@ -145,11 +145,6 @@ export interface IPortfolioOverviewState {
   sortBy?: ProjectColumn
 
   /**
-   * Show project info
-   */
-  showProjectInfo?: any
-
-  /**
    * Is compact
    */
   isCompact?: boolean

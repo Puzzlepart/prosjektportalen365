@@ -1,5 +1,6 @@
 import { IFetchDataForViewItemResult } from 'data/IFetchDataForViewItemResult'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
+import { Link } from 'office-ui-fabric-react/lib/Link'
 import { formatDate, tryParseCurrency } from 'pp365-shared/lib/helpers'
 import { ProjectColumn } from 'pp365-shared/lib/models'
 import React from 'react'
@@ -38,21 +39,9 @@ export function renderItemColumn(
   switch (column.fieldName) {
     case 'Title': {
       return (
-        <span>
-          <a href={item.Path} rel='noopener noreferrer' target='_blank'>
-            {colValue}
-          </a>
-          {item.Path && (
-            <span
-              style={{ cursor: 'pointer', marginLeft: 8 }}
-              onClick={() => {
-                onUpdateState({ showProjectInfo: item })
-              }}>
-              {' '}
-              <Icon iconName='OpenInNewWindow' />
-            </span>
-          )}
-        </span>
+        <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
+          {colValue}
+        </Link>
       )
     }
   }
