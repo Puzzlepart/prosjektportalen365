@@ -3,9 +3,10 @@ import { TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
 import { taxonomy } from '@pnp/sp-taxonomy'
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator'
-import * as strings from 'ProjectWebPartsStrings'
 import { SPDataAdapterBase } from 'pp365-shared/lib/data'
 import { ProjectDataService } from 'pp365-shared/lib/services'
+import * as strings from 'ProjectWebPartsStrings'
+import { find } from 'underscore'
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
 
 export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
@@ -97,7 +98,7 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
               let [textField] = fields.filter((f) => f.InternalName === `${fld.InternalName}Text`)
               if (textField) properties[textField.InternalName] = fieldValuesText[fld.InternalName]
               else {
-                ;[textField] = fields.filter((f) => f.Id === fld.TextField)
+                textField = find(fields, (f) => f.Id === fld.TextField)
                 if (!textField) continue
                 properties[textField.InternalName] = fieldValuesText[textField.InternalName]
               }
