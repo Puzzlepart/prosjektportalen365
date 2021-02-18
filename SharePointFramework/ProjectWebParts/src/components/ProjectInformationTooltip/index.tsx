@@ -8,6 +8,7 @@ export const ProjectInformationTooltip: FunctionComponent<IProjectInformationToo
   return (
     <TooltipHost
       {...props.tooltipProps}
+      calloutProps={{ calloutMaxWidth: 500 }}
       content={(
         <div className={styles.root}>
           <ProjectInformation {...props} />

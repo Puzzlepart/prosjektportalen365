@@ -1,8 +1,7 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/common'
 import { LogLevel } from '@pnp/logging'
-import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
@@ -10,7 +9,7 @@ import { PortalDataService } from 'pp365-shared/lib/services'
 import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
 import * as strings from 'ProjectWebPartsStrings'
 import { ConfirmAction, ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
-import React from 'react'
+import React, { Fragment } from 'react'
 import { isEmpty } from 'underscore'
 import SPDataAdapter from '../../data'
 import { BaseWebPartComponent } from '../BaseWebPartComponent'
@@ -36,16 +35,11 @@ export class ProjectInformation extends BaseWebPartComponent<
   }
   private _portalDataService: PortalDataService
 
-  /**
-   * Constructor
-   *
-   * @param {IProjectInformationProps} props Props
-   */
   constructor(props: IProjectInformationProps) {
     super('ProjectInformation', props, { loading: true })
     this._portalDataService = new PortalDataService().configure({
-      urlOrWeb: props.hubSite.web,
-      siteId: props.siteId
+      urlOrWeb: this.props.hubSite.web,
+      siteId: this.props.siteId
     })
   }
 
@@ -62,18 +56,11 @@ export class ProjectInformation extends BaseWebPartComponent<
 
   public render() {
     if (this.state.hidden) return null
-
     return (
-      <div className={styles.projectInformation}>
+      <div className={styles.root}>
         <div className={styles.container}>
-          <div hidden={this.props.displayMode === DisplayMode.Edit}>
-            <WebPartTitle
-              displayMode={DisplayMode.Read}
-              title={this.props.title}
-              updateProperty={() => {
-                // We don't the users to change the web part title
-              }}
-            />
+          <div className={styles.header}>
+            <span role='heading' aria-level={2}>{this.props.title}</span>
           </div>
           {this.getContent()}
         </div>
@@ -99,7 +86,7 @@ export class ProjectInformation extends BaseWebPartComponent<
     const { editFormUrl, versionHistoryUrl } = this.state.data
 
     return (
-      <>
+      <Fragment>
         <ProjectProperties
           title={this.props.title}
           properties={this.state.properties}
@@ -125,7 +112,7 @@ export class ProjectInformation extends BaseWebPartComponent<
         />
         <ProgressDialog {...this.state.progress} />
         {this.state.confirmActionProps && <ConfirmDialog {...this.state.confirmActionProps} />}
-      </>
+      </Fragment>
     )
   }
 
@@ -225,25 +212,24 @@ export class ProjectInformation extends BaseWebPartComponent<
 
   /**
    * Transform properties from entity item and configuration
-   *
-   * @param {TypedHash} fieldValuesText Field values as text
+   * 
    * @param {IProjectInformationData} data Data
    */
-  private _transformProperties(fieldValuesText: TypedHash<any>, data: IProjectInformationData) {
+  private _transformProperties({ columns, fields, fieldValuesText }: IProjectInformationData) {
     const fieldNames: string[] = Object.keys(fieldValuesText).filter((fieldName) => {
-      const [field] = data.fields.filter((fld) => fld.InternalName === fieldName)
+      const [field] = fields.filter((fld) => fld.InternalName === fieldName)
       if (!field) return false
       if (
-        isEmpty(data.columns) &&
+        isEmpty(columns) &&
         ((this.props.showFieldExternal || {})[fieldName] || this.props.skipSyncToHub)
       ) {
         return true
       }
-      const [column] = data.columns.filter((c) => c.internalName === fieldName)
+      const [column] = columns.filter((c) => c.internalName === fieldName)
       return column ? column.isVisible(this.props.page) : false
     })
     const properties = fieldNames.map((fn) => {
-      const [field] = data.fields.filter((fld) => fld.InternalName === fn)
+      const [field] = fields.filter((fld) => fld.InternalName === fn)
       return new ProjectPropertyModel(field, fieldValuesText[fn])
     })
     return properties
@@ -254,14 +240,12 @@ export class ProjectInformation extends BaseWebPartComponent<
    */
   private async _fetchData(): Promise<Partial<IProjectInformationState>> {
     try {
-      if (!SPDataAdapter.isConfigured) {
-        SPDataAdapter.configure(this.context as WebPartContext, {
-          siteId: this.props.siteId,
-          webUrl: this.props.webUrl,
-          hubSiteUrl: this.props.hubSite.url,
-          logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-        })
-      }
+      SPDataAdapter.configure(this.context as WebPartContext, {
+        siteId: this.props.siteId,
+        webUrl: this.props.webUrl,
+        hubSiteUrl: this.props.hubSite.url,
+        logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+      })
 
       const [columns, propertiesData] = await Promise.all([
         this._portalDataService.getProjectColumns(),
@@ -273,7 +257,7 @@ export class ProjectInformation extends BaseWebPartComponent<
         ...propertiesData
       }
 
-      const properties = this._transformProperties(data.fieldValuesText, data)
+      const properties = this._transformProperties(data)
 
       this.logInfo('Succesfully retrieved data.', '_fetchData', {
         propertiesListId: data.propertiesListId
