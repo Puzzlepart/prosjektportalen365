@@ -63,7 +63,7 @@ When the user has selected their templates, selected the target folder and click
 
 ![image-20210210211809859](assets/image-20210210211809859.png)
 
-## Serve
+### Serve
 
 - Take a copy of `config/serve.sample.json` and name it `serve.json`
 - Run `npm run serve`
