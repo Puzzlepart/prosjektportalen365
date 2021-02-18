@@ -3,7 +3,7 @@ import { Persona, PersonaPresence, PersonaSize } from 'office-ui-fabric-react/li
 import { IRenderItemColumnProps } from '../IRenderItemColumnProps'
 import { SearchValueType } from 'types'
 
-export class UserColumn extends React.Component<IRenderItemColumnProps, {}> {
+export class UserColumn extends React.Component<IRenderItemColumnProps> {
   public render(): React.ReactElement<IRenderItemColumnProps> {
     if (this.props.column.searchType === SearchValueType.OWSUSER) {
       const [email, text] = this.props.colValue.split(' | ')

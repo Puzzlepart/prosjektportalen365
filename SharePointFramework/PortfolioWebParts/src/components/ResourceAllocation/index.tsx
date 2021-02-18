@@ -17,6 +17,8 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
+import { tryParsePercentage } from 'pp365-shared/lib/helpers'
+import { DataSourceService } from 'pp365-shared/lib/services'
 import * as React from 'react'
 import Timeline, {
   ReactCalendarGroupRendererProps,
@@ -25,8 +27,6 @@ import Timeline, {
   TodayMarker
 } from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css'
-import { tryParsePercentage } from 'pp365-shared/lib/helpers'
-import { DataSourceService } from 'pp365-shared/lib/services'
 import * as _ from 'underscore'
 import { FilterPanel, IFilterItemProps, IFilterProps } from '../FilterPanel'
 import { DetailsCallout } from './DetailsCallout'
@@ -351,9 +351,7 @@ export class ResourceAllocation extends React.Component<
         title: isAbsence
           ? `${res.GtResourceAbsenceOWSCHCS} (${allocation}%)`
           : `${res.RefinableString72} - ${res.SiteTitle} (${allocation}%)`,
-        // eslint-disable-next-line @typescript-eslint/camelcase
         start_time: moment(new Date(res.GtStartDateOWSDATE)),
-        // eslint-disable-next-line @typescript-eslint/camelcase
         end_time: moment(new Date(res.GtEndDateOWSDATE)),
         allocation,
         itemProps: { style },

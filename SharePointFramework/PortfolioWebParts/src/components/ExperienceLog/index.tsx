@@ -8,7 +8,7 @@ import { IExperienceLogProps } from './IExperienceLogProps'
  * @component ExperienceLog
  * @extends React.Component
  */
-export class ExperienceLog extends React.Component<IExperienceLogProps, {}> {
+export class ExperienceLog extends React.Component<IExperienceLogProps> {
   public static defaultProps: Partial<IExperienceLogProps> = {
     columns: EXPERIENCE_LOG_COLUMNS,
     showExcelExportButton: true
