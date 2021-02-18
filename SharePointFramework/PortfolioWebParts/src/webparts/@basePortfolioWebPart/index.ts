@@ -12,7 +12,7 @@ import * as ReactDom from 'react-dom'
 // tslint:disable-next-line: naming-convention
 export abstract class BasePortfolioWebPart<
   T extends IBaseComponentProps
-> extends BaseClientSideWebPart<T> {
+  > extends BaseClientSideWebPart<T> {
   public dataAdapter: DataAdapter
   private _pageTitle: string
 
@@ -24,7 +24,7 @@ export abstract class BasePortfolioWebPart<
    * @param {any} component Component
    * @param {T} props Props
    */
-  public renderComponent(
+  public renderComponent<T = any>(
     component: React.ComponentClass<T> | React.FunctionComponent<T>,
     props?: T
   ): void {
@@ -52,7 +52,7 @@ export abstract class BasePortfolioWebPart<
           .select('Title')
           .get<{ Title: string }>()
       ).Title
-    } catch (error) {}
+    } catch (error) { }
   }
 
   public async onInit(): Promise<void> {
