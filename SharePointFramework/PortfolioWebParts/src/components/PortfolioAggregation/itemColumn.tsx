@@ -48,8 +48,8 @@ export const siteTitleColumn: IColumn = {
   key: 'SiteTitle',
   fieldName: 'SiteTitle',
   name: strings.SiteTitleLabel,
-  minWidth: 100,
-  maxWidth: 150,
+  minWidth: 150,
+  maxWidth: 225,
   isResizable: true,
   onRender: (item: any) => {
     return (

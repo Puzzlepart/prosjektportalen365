@@ -1,6 +1,5 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList'
 import React, { useEffect, useMemo, useReducer } from 'react'
 import { ColumnContextMenu } from './ColumnContextMenu'
@@ -13,10 +12,10 @@ import createReducer, {
   COLUMN_HEADER_CONTEXT_MENU,
   DATA_FETCHED,
   initState,
-  SEARCH,
   START_FETCH
 } from './reducer'
 import { filterItem } from './search'
+import SearchBox from './SearchBox'
 import { IPortfolioAggregationProps } from './types'
 
 export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
@@ -52,12 +51,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
         <div className={styles.header}>
           <div className={styles.title}>{props.title}</div>
         </div>
-        <div className={styles.searchBox} hidden={!props.showSearchBox}>
-          <SearchBox
-            placeholder={props.searchBoxPlaceholderText}
-            onChange={(searchTerm) => dispatch(SEARCH({ searchTerm }))}
-          />
-        </div>
+        <SearchBox />
         <div className={styles.listContainer}>
           <ShimmeredDetailsList
             selectionMode={SelectionMode.none}

@@ -6,7 +6,7 @@
     "version": "0.0.1",
     "manifestVersion": 2,
     "requiresCustomScript": false,
-    "hiddenFromToolbox": true,
+    "hiddenFromToolbox": false,
     "supportedHosts": [
         "SharePointWebPart"
     ],
@@ -24,8 +24,66 @@
             },
             "officeFabricIconFontName": "Backlog",
             "properties": {
-                "title": "Aggregeringswebdel",
-                "searchBoxPlaceholderText": "Søk.."
+                "title": "Erfaringslogg",
+                "searchBoxPlaceholderText": "Søk..",
+                "dataSource": "Alle loggelementer",
+                "showCommandBar": true,
+                "showSearchBox": true,
+                "showExcelExportButton": true,
+                "columns": [
+                  {
+                    "key": "Title",
+                    "fieldName": "Title",
+                    "name": "Tittel",
+                    "minWidth": 220,
+                    "maxWidth": 250
+                  },
+                  {
+                    "key": "GtProjectLogDescriptionOWSMTXT",
+                    "fieldName": "GtProjectLogDescriptionOWSMTXT",
+                    "name": "Loggbeskrivelse",
+                    "minWidth": 150,
+                    "maxWidth": 225,
+                    "isResizable": true,
+                    "isMultiline": true
+                  },
+                  {
+                    "key": "GtProjectLogResponsibleOWSCHCS",
+                    "fieldName": "GtProjectLogResponsibleOWSCHCS",
+                    "name": "Ansvarlig",
+                    "minWidth": 100,
+                    "maxWidth": 150,
+                    "isResizable": true,
+                    "isGroupable": true
+                  },
+                  {
+                    "minWidth": 150,
+                    "maxWidth": 225,
+                    "key": "GtProjectLogConsequenceOWSMTXT",
+                    "fieldName": "GtProjectLogConsequenceOWSMTXT",
+                    "name": "Konsekvens",
+                    "isResizable": true,
+                    "isMultiline": true
+                  },
+                  {
+                    "key": "GtProjectLogRecommendationOWSMTXT",
+                    "fieldName": "GtProjectLogRecommendationOWSMTXT",
+                    "name": "Anbefaling",
+                    "minWidth": 150,
+                    "maxWidth": 225,
+                    "isResizable": true,
+                    "isMultiline": true
+                  },
+                  {
+                    "minWidth": 100,
+                    "maxWidth": 150,
+                    "data": { "renderAs": "list" },
+                    "key": "GtProjectLogActorsOWSCHCM",
+                    "fieldName": "GtProjectLogActorsOWSCHCM",
+                    "name": "Aktører",
+                    "isResizable": true
+                  }
+                ]
             }
         }
     ]
