@@ -1,3 +1,4 @@
+import { get } from '@microsoft/sp-lodash-subset'
 import { sp } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
 import sortArray from 'array-sort'
@@ -8,13 +9,11 @@ import {
   ITimelineItem,
   TimelineGroupType
 } from 'interfaces'
-import * as moment from 'moment'
-import { get } from '@microsoft/sp-lodash-subset'
-import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar'
+import moment from 'moment'
+import { CommandBar, ICommandBarProps } from 'office-ui-fabric-react/lib/CommandBar'
 import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import { tryParsePercentage } from 'pp365-shared/lib/helpers'
@@ -27,7 +26,7 @@ import Timeline, {
   TodayMarker
 } from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css'
-import * as _ from 'underscore'
+import _ from 'underscore'
 import { FilterPanel, IFilterItemProps, IFilterProps } from '../FilterPanel'
 import { DetailsCallout } from './DetailsCallout'
 import styles from './ResourceAllocation.module.scss'
@@ -41,7 +40,7 @@ import { IResourceAllocationProps, IResourceAllocationState } from './types'
 export class ResourceAllocation extends Component<
   IResourceAllocationProps,
   IResourceAllocationState
-> {
+  > {
   public static defaultProps: Partial<IResourceAllocationProps> = {
     itemBgColor: '51,153,51',
     itemAbsenceBgColor: '26,111,179',
@@ -85,18 +84,7 @@ export class ResourceAllocation extends Component<
   }
 
   public render(): React.ReactElement<IResourceAllocationProps> {
-    if (this.state.loading) {
-      return (
-        <div className={styles.resourceAllocation}>
-          <div className={styles.container}>
-            <Spinner
-              label={format(strings.LoadingText, this.props.dataSource.toLowerCase())}
-              type={SpinnerType.large}
-            />
-          </div>
-        </div>
-      )
-    }
+    if (this.state.loading) return null
     if (this.state.error) {
       return (
         <div className={styles.resourceAllocation}>
@@ -113,10 +101,7 @@ export class ResourceAllocation extends Component<
       <div className={styles.resourceAllocation}>
         <div className={styles.container}>
           <div className={styles.commandBar}>
-            <CommandBar
-              items={this._getCommandBarItems().left}
-              farItems={this._getCommandBarItems().right}
-            />
+            <CommandBar {...this._getCommandBarProps()} />
           </div>
           <div className={styles.header}>
             <div className={styles.title}>{this.props.title}</div>
@@ -226,21 +211,20 @@ export class ResourceAllocation extends Component<
   /**
    * Get command bar items
    */
-  private _getCommandBarItems() {
-    const right = [
-      {
-        key: getId('Filter'),
-        name: strings.FilterText,
-        iconProps: { iconName: 'Filter' },
-        itemType: ContextualMenuItemType.Header,
-        iconOnly: true,
-        onClick: (ev) => {
-          ev.preventDefault()
-          this.setState({ showFilterPanel: true })
-        }
+  private _getCommandBarProps(): ICommandBarProps {
+    const cmd: ICommandBarProps = { items: [], farItems: [] }
+    cmd.farItems.push({
+      key: getId('Filter'),
+      name: strings.FilterText,
+      iconProps: { iconName: 'Filter' },
+      itemType: ContextualMenuItemType.Header,
+      iconOnly: true,
+      onClick: (ev) => {
+        ev.preventDefault()
+        this.setState({ showFilterPanel: true })
       }
-    ] as ICommandBarItemProps[]
-    return { left: [], right }
+    })
+    return cmd
   }
 
   /**
