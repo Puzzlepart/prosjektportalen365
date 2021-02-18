@@ -68,8 +68,6 @@ _Published to **npm** as `pp365-projectwebparts`_`_
 | ProjectStatusWebPart        | 681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6 |      | ProjectWebParts   |
 | RiskMatrixWebPart           | e536ae15-0748-4d96-b160-3abb30f1b71e |      | ProjectWebParts   |
 
-
-
 # 3. Build, package and deploy
 
 ## Build for development
