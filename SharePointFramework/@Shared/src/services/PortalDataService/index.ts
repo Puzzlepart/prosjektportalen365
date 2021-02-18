@@ -2,6 +2,7 @@ import { dateAdd, stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
 import { AttachmentFileInfo, CamlQuery, ListEnsureResult, Web } from '@pnp/sp'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
+import { find } from 'underscore'
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
 import { transformFieldXml } from '../../helpers/transformFieldXml'
 import { ISPContentType } from '../../interfaces'
@@ -246,7 +247,7 @@ export class PortalDataService {
           fieldToCreate.updateAndPushChanges(true)
         }
         await executeQuery(jsomContext)
-      } catch (error) {}
+      } catch (error) { }
     }
     try {
       Logger.log({
@@ -262,7 +263,7 @@ export class PortalDataService {
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch {}
+    } catch { }
     if (ensureList.created && properties) {
       ensureList.list.items.add(properties)
     }
@@ -347,16 +348,22 @@ export class PortalDataService {
   /**
    * Add status report
    *
-   * @param {TypedHash} fieldValues Field values
+   * @param {TypedHash} properties Properties
+   * @param {string} contentTypeId Content type id
    * @param {string} defaultEditFormUrl Default edit form URL
    */
   public async addStatusReport(
-    fieldValues: TypedHash<string | number | boolean>,
+    properties: TypedHash<string | number | boolean>,
+    contentTypeId: string,
     defaultEditFormUrl: string
   ): Promise<StatusReport> {
-    const itemAddResult = await this._web.lists
-      .getByTitle(this._configuration.listNames.PROJECT_STATUS)
-      .items.add(fieldValues)
+    const list = this._web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
+    if (contentTypeId) {
+      const contentTypes = await list.contentTypes.get()
+      const ct = find(contentTypes, ct => ct.StringId.indexOf(contentTypeId) === 0)
+      if (ct) properties.ContentTypeId = ct.StringId
+    }
+    const itemAddResult = await list.items.add(properties)
     return new StatusReport(itemAddResult.data).setDefaultEditFormUrl(defaultEditFormUrl)
   }
 

@@ -355,31 +355,32 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    * Create new status report and send the user to the edit form
    */
   private async _redirectNewStatusReport(): Promise<void> {
-    const { webTitle, siteId } = this.props
-    const { reports, reportFields, properties, reportEditFormUrl } = this.state.data
-    const [previousReport] = reports
-    let fieldValues: TypedHash<string | number | boolean> = {}
-    if (previousReport) {
-      fieldValues = reportFields
+    const [lastReport] = this.state.data.reports
+    let properties: TypedHash<string | number | boolean> = {}
+    if (lastReport) {
+      properties = this.state.data.reportFields
         .filter((field) => field.SchemaXml.indexOf('ReadOnly="TRUE"') === -1)
         .reduce((obj, field) => {
-          const fieldValue = previousReport.values[field.InternalName]
+          const fieldValue = lastReport.values[field.InternalName]
           if (fieldValue) obj[field.InternalName] = fieldValue
           return obj
         }, {})
     }
-    fieldValues.Title = format(strings.NewStatusReportTitle, webTitle)
-    fieldValues.GtSiteId = siteId
-    fieldValues.ContentTypeId = properties.templateParameters.ProjectStatusContentTypeId
-    fieldValues.GtModerationStatus = strings.GtModerationStatus_Choice_Draft
+    properties.Title = format(strings.NewStatusReportTitle, this.props.webTitle)
+    properties.GtSiteId = this.props.siteId
+    properties.GtModerationStatus = strings.GtModerationStatus_Choice_Draft
     Logger.log({
       message: '(ProjectStatus) _redirectNewStatusReport: Created new status report',
-      data: { fieldValues },
+      data: { fieldValues: properties },
       level: LogLevel.Info
     })
-    const newReport = await this._portalDataService.addStatusReport(fieldValues, reportEditFormUrl)
-    window.location.hash = ''
-    document.location.href = newReport.editFormUrl
+    const { editFormUrl } = await this._portalDataService.addStatusReport(
+      properties,
+      this.state.data.properties.templateParameters?.ProjectStatusContentTypeId,
+      this.state.data.reportEditFormUrl
+    )
+    document.location.hash = ''
+    document.location.href = editFormUrl
   }
 
   /**
