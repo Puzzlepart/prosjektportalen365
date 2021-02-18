@@ -18,9 +18,8 @@
     "preserve": "gulp setHiddenToolbox",
     "preserveNoBrowser": "gulp setHiddenToolbox",
     "lint": "eslint --ext .ts,.tsx ./src --color",
-    "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier:write",
-    "prettier": "prettier --config .prettierrc '**/*.ts*' --loglevel silent",
-    "prettier:write": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent"
+    "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
+    "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent"
   },
   "dependencies": {
     "@microsoft/sp-core-library": "1.11.0",
