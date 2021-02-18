@@ -63,6 +63,7 @@ export const getDefaultColumns = (context: IPortfolioAggregationContext) => ([
     onRender: (item: any) => {
       return (
         <ProjectInformationTooltip
+          key={item.SiteId}
           title={item.SiteTitle}
           siteId={item.SiteId}
           webUrl={item.SPWebURL}
