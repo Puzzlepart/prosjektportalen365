@@ -42,7 +42,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   }, [state.columnAdded, state.dataSource])
 
   const items = useMemo(() => {
-    return state.items.filter((i) => filterItem(i, state.searchTerm, state.columns  ))
+    return state.items.filter((i) => filterItem(i, state.searchTerm, state.columns))
   }, [state.searchTerm, state.items])
 
   return (

@@ -33,7 +33,9 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
       if (isEmpty(values)) return null
       return (
         <ul style={{ listStyleType: 'none', margin: 0, padding: 0 }}>
-          {values.map((v, idx) => <li key={idx}>{v}</li>)}
+          {values.map((v, idx) => (
+            <li key={idx}>{v}</li>
+          ))}
         </ul>
       )
     }

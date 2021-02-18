@@ -175,8 +175,7 @@ export class ResourceAllocation extends Component<
     const activeFiltersKeys = Object.keys(activeFilters)
     if (activeFiltersKeys.length > 0) {
       const items = activeFiltersKeys.reduce(
-        (newItems, key) =>
-          newItems.filter((i) => activeFilters[key].indexOf(get(i, key)) !== -1),
+        (newItems, key) => newItems.filter((i) => activeFilters[key].indexOf(get(i, key)) !== -1),
         data.items
       )
       const groups = data.groups.filter((grp) => items.filter((i) => i.group === grp.id).length > 0)

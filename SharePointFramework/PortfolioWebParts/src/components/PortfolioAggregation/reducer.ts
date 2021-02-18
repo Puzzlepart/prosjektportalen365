@@ -40,12 +40,15 @@ export const SEARCH = createAction<{ searchTerm: string }>('SEARCH')
 
 /**
  * Persist columns in web part properties
- * 
+ *
  * @param {IPortfolioAggregationProps} props Props
  * @param {IPortfolioAggregationState} state State
  */
 const persistColumns = (props: IPortfolioAggregationProps, columns: IColumn[]) => {
-  props.onUpdateProperty('columns', columns.map(col => omit(col, 'calculatedWidth', 'currentWidth')))
+  props.onUpdateProperty(
+    'columns',
+    columns.map((col) => omit(col, 'calculatedWidth', 'currentWidth'))
+  )
 }
 
 export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregationState => ({
@@ -111,9 +114,9 @@ export default (props: IPortfolioAggregationProps) =>
     ) => {
       state.columnContextMenu = payload
         ? {
-          column: payload.column,
-          target: payload.target as any
-        }
+            column: payload.column,
+            target: payload.target as any
+          }
         : null
     },
 
