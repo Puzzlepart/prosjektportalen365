@@ -9,7 +9,7 @@ import {
   TimelineGroupType
 } from 'interfaces'
 import * as moment from 'moment'
-import * as objectGet from 'object-get'
+import { get } from '@microsoft/sp-lodash-subset'
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar'
 import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
@@ -176,7 +176,7 @@ export class ResourceAllocation extends Component<
     if (activeFiltersKeys.length > 0) {
       const items = activeFiltersKeys.reduce(
         (newItems, key) =>
-          newItems.filter((i) => activeFilters[key].indexOf(objectGet(i, key)) !== -1),
+          newItems.filter((i) => activeFilters[key].indexOf(get(i, key)) !== -1),
         data.items
       )
       const groups = data.groups.filter((grp) => items.filter((i) => i.group === grp.id).length > 0)
@@ -198,7 +198,7 @@ export class ResourceAllocation extends Component<
     return columns.map((col) => ({
       column: { key: col.fieldName, minWidth: 0, ...col },
       items: this.state.data.items
-        .map((i) => objectGet(i, col.fieldName))
+        .map((i) => get(i, col.fieldName))
         .filter((value, index, self) => value && self.indexOf(value) === index)
         .map((name) => {
           const filter = this.state.activeFilters[col.fieldName]

@@ -5,7 +5,7 @@ import { Modal, IModalProps } from 'office-ui-fabric-react/lib/Modal'
 import { DetailsList, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
 import { BENEFIT_MEASUREMENTS_MODAL_COLUMNS } from './BenefitMeasurementsModalColumns'
 import { BenefitMeasurementIndicator, BenefitMeasurement } from 'models'
-import * as objectGet from 'object-get'
+import { get } from '@microsoft/sp-lodash-subset'
 
 export interface IBenefitMeasurementsModalProps extends IModalProps {
   indicator: BenefitMeasurementIndicator
@@ -67,9 +67,9 @@ export default class BenefitMeasurementsModal extends PureComponent<
   }
 
   private _onRenderItemColumn = (item: BenefitMeasurement, index: number, column: IColumn) => {
-    const fieldNameDisplay: string = objectGet(column, 'data.fieldNameDisplay')
+    const fieldNameDisplay: string = get(column, 'data.fieldNameDisplay')
     return column.onRender
       ? column.onRender(item, index, column)
-      : objectGet(item, fieldNameDisplay || column.fieldName)
+      : get(item, fieldNameDisplay || column.fieldName)
   }
 }

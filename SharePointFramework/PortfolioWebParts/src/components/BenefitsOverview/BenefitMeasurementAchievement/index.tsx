@@ -1,6 +1,6 @@
 import { BenefitMeasurement } from 'models'
-import * as objectGet from 'object-get'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
+import { get } from '@microsoft/sp-lodash-subset'
 import React, { HTMLProps, PureComponent, ReactElement } from 'react'
 
 export interface IBenefitMeasurementAchievementProps extends HTMLProps<HTMLSpanElement> {
@@ -15,8 +15,8 @@ export default class BenefitMeasurementAchievement extends PureComponent<
   }
 
   public render(): ReactElement<IBenefitMeasurementAchievementProps> {
-    const colValue = objectGet(this.props.measurement, 'achievementDisplay')
-    const trendIconProps = objectGet(this.props.measurement, 'trendIconProps')
+    const colValue = get(this.props.measurement, 'achievementDisplay')
+    const trendIconProps = get(this.props.measurement, 'trendIconProps')
     if (colValue) {
       return (
         <span>
