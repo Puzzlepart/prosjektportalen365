@@ -1,4 +1,4 @@
-# 1. The SPFx solutions #
+# 1. The SPFx solutions
 
 _Due to the number of components, we decided to separate the components into 3 different solutions._
 
