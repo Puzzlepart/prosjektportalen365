@@ -33,8 +33,8 @@ export function renderItemColumn(
   column: ProjectColumn,
   props: IPortfolioOverviewProps
 ) {
-  const colValue = item[column.fieldName]
-  if (!colValue) return null
+  const columnValue = item[column.fieldName]
+  if (!columnValue) return null
 
   switch (column.fieldName) {
     case 'Title': {
@@ -51,27 +51,27 @@ export function renderItemColumn(
             }}
             page='Portfolio'>
             <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
-              {colValue}
+              {columnValue}
             </Link>
           </ProjectInformationTooltip>
         )
       }
-      return colValue
+      return columnValue
     }
   }
 
   if (renderDataTypeMap[column.dataType]) {
-    return renderDataTypeMap[column.dataType]({ column, colValue })
+    return renderDataTypeMap[column.dataType]({ column, columnValue })
   }
 
-  const config = column.config ? column.config[colValue] : null
+  const config = column.config ? column.config[columnValue] : null
   if (config) {
     return (
       <span>
         <Icon iconName={config.iconName} style={{ color: config.color, marginRight: 4 }} />
-        <span>{colValue}</span>
+        <span>{columnValue}</span>
       </span>
     )
   }
-  return <span>{colValue}</span>
+  return <span>{columnValue}</span>
 }
