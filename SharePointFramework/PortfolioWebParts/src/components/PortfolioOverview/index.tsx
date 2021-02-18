@@ -84,12 +84,8 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
     { currentView, groupBy }: IPortfolioOverviewState
   ) {
     const obj: IPortfolioOverviewHashStateState = {}
-    if (currentView) {
-      obj.viewId = currentView.id.toString()
-    }
-    if (groupBy) {
-      obj.groupBy = groupBy.fieldName
-    }
+    if (currentView) obj.viewId = currentView.id.toString()
+    if (groupBy) obj.groupBy = groupBy.fieldName
     setUrlHash<IPortfolioOverviewHashStateState>(obj)
   }
 

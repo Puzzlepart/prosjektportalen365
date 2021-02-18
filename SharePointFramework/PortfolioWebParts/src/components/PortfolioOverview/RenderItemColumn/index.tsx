@@ -1,6 +1,8 @@
+import { Web } from '@pnp/sp'
 import { IFetchDataForViewItemResult } from 'data/IFetchDataForViewItemResult'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
 import { Link } from 'office-ui-fabric-react/lib/Link'
+import { ProjectInformationTooltip } from 'pp365-projectwebparts/lib/components/ProjectInformationTooltip'
 import { formatDate, tryParseCurrency } from 'pp365-shared/lib/helpers'
 import { ProjectColumn } from 'pp365-shared/lib/models'
 import React from 'react'
@@ -32,21 +34,29 @@ export function renderItemColumn(
   props: IPortfolioOverviewProps
 ) {
   const colValue = item[column.fieldName]
-
   if (!colValue) return null
 
-  // eslint-disable-next-line no-console
-  console.log({ siteId: props.columnsListName })
-  
-
-  // eslint-disable-next-line default-case
   switch (column.fieldName) {
     case 'Title': {
-      return (
-        <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
-          {colValue}
-        </Link>
-      )
+      if (item.Path) {
+        return (
+          <ProjectInformationTooltip
+            key={item.SiteId}
+            title={item.Title}
+            siteId={item.SiteId}
+            webUrl={item.Path}
+            hubSite={{
+              web: new Web(props.pageContext.site.absoluteUrl),
+              url: props.pageContext.site.absoluteUrl
+            }}
+            page='Portfolio'>
+            <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
+              {colValue}
+            </Link>
+          </ProjectInformationTooltip>
+        )
+      }
+      return colValue
     }
   }
 
