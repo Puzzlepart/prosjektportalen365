@@ -47,7 +47,7 @@
     "object-assign": "4.1.1",
     "office-ui-fabric-react": "6.214.0",
     "pp365-projectwebparts": "1.2.6",
-    "pp365-shared": "1.2.9",
+    "pp365-shared": "latest",
     "react": "16.8.5",
     "react-calendar-timeline": "0.27.0",
     "react-dom": "16.8.5",
