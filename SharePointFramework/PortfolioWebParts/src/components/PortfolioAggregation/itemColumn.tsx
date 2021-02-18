@@ -44,7 +44,12 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
       )
     }
     case 'tags': {
-      return <TagsColumn columnValue={columnValue} valueSeparator=';#' />
+      return (
+        <TagsColumn
+          columnValue={columnValue}
+          valueSeparator=';#'
+          style={{ flexDirection: column.isMultiline ? 'column' : 'row' }} />
+      )
     }
     default:
       return columnValue
