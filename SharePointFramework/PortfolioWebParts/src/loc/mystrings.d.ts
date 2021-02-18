@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  ColumnRenderOptionTags: string
   ColumnRenderOptionList: string
   ColumnRenderOptionInt: string
   SearchPropertyDescription: string

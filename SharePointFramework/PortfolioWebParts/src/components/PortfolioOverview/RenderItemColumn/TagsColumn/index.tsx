@@ -2,8 +2,9 @@ import React, { FunctionComponent } from 'react'
 import { IRenderItemColumnProps } from '../IRenderItemColumnProps'
 import { Tag } from './Tag'
 
-export const TagsColumn: FunctionComponent<IRenderItemColumnProps> = ({ colValue }: IRenderItemColumnProps) => {
-  const tags: string[] = colValue.split(';')
+export const TagsColumn: FunctionComponent<IRenderItemColumnProps> = ({ columnValue, valueSeparator = ';' }: IRenderItemColumnProps) => {
+  if (!columnValue) return null
+  const tags: string[] = columnValue.split(valueSeparator)
   return (
     <span>
       {tags.map((text, idx) => (

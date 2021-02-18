@@ -5,6 +5,7 @@ define([], function () {
     CommandBarGroupName: 'Søkeboks',
     SearchBoxGroupName: 'Søkeboks',
     DeleteButtonLabel: 'Slett',
+    ColumnRenderOptionTags: 'Etiketter',
     ColumnRenderOptionList: 'Liste',
     ColumnRenderOptionInt: 'Tall',
     ColumnRenderOptionText: 'Tekst',

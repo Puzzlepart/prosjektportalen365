@@ -21,5 +21,9 @@ export const renderOptions: IDropdownOption[] = [
   {
     key: 'list',
     text: strings.ColumnRenderOptionList
+  },
+  {
+    key: 'tags',
+    text: strings.ColumnRenderOptionTags
   }
 ]

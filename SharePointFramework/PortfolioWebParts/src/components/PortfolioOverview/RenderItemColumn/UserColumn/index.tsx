@@ -6,7 +6,7 @@ import { IRenderItemColumnProps } from '../IRenderItemColumnProps'
 export class UserColumn extends Component<IRenderItemColumnProps> {
   public render(): ReactElement<IRenderItemColumnProps> {
     if (this.props.column.searchType === SearchValueType.OWSUSER) {
-      const [email, text] = this.props.colValue.split(' | ')
+      const [email, text] = this.props.columnValue.split(' | ')
       return (
         <span>
           <Persona
@@ -25,7 +25,7 @@ export class UserColumn extends Component<IRenderItemColumnProps> {
     return (
       <span>
         <Persona
-          text={this.props.colValue}
+          text={this.props.columnValue}
           size={PersonaSize.size24}
           presence={PersonaPresence.none}
         />

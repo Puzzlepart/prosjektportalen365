@@ -9,6 +9,7 @@ import { isEmpty } from 'underscore'
 import { ProjectInformationTooltip } from 'pp365-projectwebparts/lib/components/ProjectInformationTooltip'
 import { IPortfolioAggregationContext } from './context'
 import { Web } from '@pnp/sp'
+import { TagsColumn } from '../PortfolioOverview/RenderItemColumn/TagsColumn'
 
 /**
  * Render item column
@@ -23,16 +24,16 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
   if (!stringIsNullOrEmpty(column['fieldNameDisplay'])) {
     return get(item, column['fieldNameDisplay'], null)
   }
-  const value = get(item, column.fieldName, null)
+  const columnValue = get(item, column.fieldName, null)
   switch (column?.data?.renderAs) {
     case 'int':
-      return value ? parseInt(value) : null
+      return columnValue ? parseInt(columnValue) : null
     case 'date':
-      return formatDate(value, false)
+      return formatDate(columnValue, false)
     case 'datetime':
-      return formatDate(value, true)
+      return formatDate(columnValue, true)
     case 'list': {
-      const values: string[] = value ? value.split(';#') : []
+      const values: string[] = columnValue ? columnValue.split(';#') : []
       if (isEmpty(values)) return null
       return (
         <ul style={{ listStyleType: 'none', margin: 0, padding: 0 }}>
@@ -42,8 +43,11 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
         </ul>
       )
     }
+    case 'tags': {
+      return <TagsColumn columnValue={columnValue} valueSeparator=';#' />
+    }
     default:
-      return value
+      return columnValue
   }
 }
 
