@@ -48,7 +48,8 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
         <TagsColumn
           columnValue={columnValue}
           valueSeparator=';#'
-          style={{ flexDirection: column.isMultiline ? 'column' : 'row' }} />
+          style={{ flexDirection: column.isMultiline ? 'column' : 'row' }}
+        />
       )
     }
     default:
@@ -58,10 +59,10 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
 
 /**
  * Get default columns
- * 
+ *
  * @param {IPortfolioAggregationContext} context Context
  */
-export const getDefaultColumns = (context: IPortfolioAggregationContext) => ([
+export const getDefaultColumns = (context: IPortfolioAggregationContext) => [
   {
     key: 'SiteTitle',
     fieldName: 'SiteTitle',
@@ -89,4 +90,4 @@ export const getDefaultColumns = (context: IPortfolioAggregationContext) => ([
     },
     data: { isGroupable: true }
   }
-])
+]

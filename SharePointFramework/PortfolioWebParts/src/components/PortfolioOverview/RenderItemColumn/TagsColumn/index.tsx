@@ -4,11 +4,13 @@ import { IRenderItemColumnProps } from '../IRenderItemColumnProps'
 import { Tag } from './Tag'
 import styles from './TagsColumn.module.scss'
 
-export const TagsColumn: FunctionComponent<IRenderItemColumnProps> = ({ columnValue, valueSeparator = ';', style }: IRenderItemColumnProps) => {
+export const TagsColumn: FunctionComponent<IRenderItemColumnProps> = ({
+  columnValue,
+  valueSeparator = ';',
+  style
+}: IRenderItemColumnProps) => {
   if (!columnValue) return null
-  const tags: string[] = columnValue
-  .split(valueSeparator)
-  .filter(t => !stringIsNullOrEmpty(t))
+  const tags: string[] = columnValue.split(valueSeparator).filter((t) => !stringIsNullOrEmpty(t))
   return (
     <div className={styles.root} style={style}>
       {tags.map((text, idx) => (

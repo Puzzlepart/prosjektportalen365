@@ -40,7 +40,7 @@ import { IResourceAllocationProps, IResourceAllocationState } from './types'
 export class ResourceAllocation extends Component<
   IResourceAllocationProps,
   IResourceAllocationState
-  > {
+> {
   public static defaultProps: Partial<IResourceAllocationProps> = {
     itemBgColor: '51,153,51',
     itemAbsenceBgColor: '26,111,179',

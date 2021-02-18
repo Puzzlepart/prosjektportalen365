@@ -56,7 +56,9 @@ export class BenefitMeasurementIndicator extends BenefitBase {
    * @param {Benefit[]} benefits Benefits
    */
   public setBenefit(benefits: Benefit[]): BenefitMeasurementIndicator {
-    this.Benefit = benefits.filter((b) => b.Id === this.BenefitItemId && b.SiteId === this.SiteId)[0]
+    this.Benefit = benefits.filter(
+      (b) => b.Id === this.BenefitItemId && b.SiteId === this.SiteId
+    )[0]
     return this
   }
 }

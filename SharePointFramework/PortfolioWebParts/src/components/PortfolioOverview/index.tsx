@@ -10,7 +10,6 @@ import {
 } from 'office-ui-fabric-react/lib/ContextualMenu'
 import {
   ConstrainMode,
-
   DetailsListLayoutMode,
   IDetailsHeaderProps,
   IGroup,
@@ -61,7 +60,7 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
       searchTerm: '',
       activeFilters: {},
       items: [],
-      columns: [],
+      columns: []
     }
     this._selection = new Selection({
       onSelectionChanged: () => {
@@ -240,10 +239,7 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
    */
   private _onColumnGroupBy(column: ProjectColumn) {
     this.setState((prevState) => ({
-      groupBy:
-        get<string>(prevState, 'groupBy.fieldName', '') === column.fieldName
-          ? null
-          : column
+      groupBy: get<string>(prevState, 'groupBy.fieldName', '') === column.fieldName ? null : column
     }))
   }
 
@@ -337,8 +333,7 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
             key: 'GROUP_BY',
             name: format(strings.GroupByColumnLabel, column.name),
             canCheck: true,
-            checked:
-              get<string>(this.state, 'groupBy.fieldName', '') === column.fieldName,
+            checked: get<string>(this.state, 'groupBy.fieldName', '') === column.fieldName,
             disabled: !column.isGroupable,
             onClick: () => this._onColumnGroupBy(column)
           },
@@ -373,9 +368,7 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
       itemsSort.opts.reverse = !sortBy.isSortedDescending
     }
     items = sortArray([...items], itemsSort.props, itemsSort.opts)
-    const groupNames: string[] = items.map((g) =>
-      get<string>(g, groupBy.fieldName, strings.NotSet)
-    )
+    const groupNames: string[] = items.map((g) => get<string>(g, groupBy.fieldName, strings.NotSet))
     const uniqueGroupNames: string[] = _.uniq(groupNames)
     const groups = uniqueGroupNames
       .sort((a, b) => (a > b ? 1 : -1))
