@@ -1,19 +1,19 @@
 import { IToggleProps } from 'office-ui-fabric-react/lib/Toggle'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface IProjectSetupSettings<T> {}
+export interface IProjectSetupSettings {}
 
 export class ProjectSetupSettings {
-  private _labels: IProjectSetupSettings<string> = {}
-  private _descriptions: IProjectSetupSettings<string> = {}
-  private _values: IProjectSetupSettings<boolean> = {}
+  private _labels: IProjectSetupSettings = {}
+  private _descriptions: IProjectSetupSettings = {}
+  private _values: IProjectSetupSettings = {}
 
   public useDefault() {
     this._values = {}
     return this
   }
 
-  public get values(): IProjectSetupSettings<boolean> {
+  public get values(): IProjectSetupSettings {
     return this._values
   }
 

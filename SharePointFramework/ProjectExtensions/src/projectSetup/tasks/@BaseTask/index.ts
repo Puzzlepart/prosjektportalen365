@@ -6,7 +6,7 @@ import { IBaseTask } from './IBaseTask'
 import { IBaseTaskParams } from './IBaseTaskParams'
 
 export abstract class BaseTask implements IBaseTask {
-  public settings: IProjectSetupSettings<boolean>
+  public settings: IProjectSetupSettings
   public params: IBaseTaskParams
   public onProgress: OnProgressCallbackFunction
 
