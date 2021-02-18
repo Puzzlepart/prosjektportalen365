@@ -3,16 +3,15 @@ import { IProjectInformationProps, ProjectInformation } from 'components/Project
 import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from '../@baseProjectWebPart'
 
-export default class ProjectInformationWebPart extends BaseProjectWebPart<
-  IProjectInformationProps
-> {
+export default class ProjectInformationWebPart extends BaseProjectWebPart<IProjectInformationProps> {
   public async onInit() {
     await super.onInit()
   }
 
   public render(): void {
-    this.renderComponent(ProjectInformation, {
-      onFieldExternalChanged: this._onFieldExternalChanged.bind(this)
+    this.renderComponent<IProjectInformationProps>(ProjectInformation, {
+      onFieldExternalChanged: this._onFieldExternalChanged.bind(this),
+      webPartContext: this.context,
     })
   }
 

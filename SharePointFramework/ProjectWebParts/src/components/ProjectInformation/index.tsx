@@ -1,5 +1,4 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
-import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { LogLevel } from '@pnp/logging'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
@@ -29,7 +28,7 @@ import {
 export class ProjectInformation extends BaseWebPartComponent<
   IProjectInformationProps,
   IProjectInformationState
-> {
+  > {
   public static defaultProps: Partial<IProjectInformationProps> = {
     page: 'Frontpage'
   }
@@ -187,7 +186,7 @@ export class ProjectInformation extends BaseWebPartComponent<
         this.props.webUrl,
         strings.ProjectPropertiesListName,
         this.state.data.templateParameters.ProjectContentTypeId ||
-          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: this.props.webTitle }
       )
       if (!created) {
@@ -242,29 +241,21 @@ export class ProjectInformation extends BaseWebPartComponent<
    */
   private async _fetchData(): Promise<Partial<IProjectInformationState>> {
     try {
-      SPDataAdapter.configure(this.context as WebPartContext, {
+      SPDataAdapter.configure(this.props.webPartContext, {
         siteId: this.props.siteId,
         webUrl: this.props.webUrl,
         hubSiteUrl: this.props.hubSite.url,
-        logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+        logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning,
       })
-
       const [columns, propertiesData] = await Promise.all([
         this._portalDataService.getProjectColumns(),
         SPDataAdapter.project.getPropertiesData()
       ])
-
       const data: IProjectInformationData = {
         columns,
         ...propertiesData
       }
-
       const properties = this._transformProperties(data)
-
-      this.logInfo('Succesfully retrieved data.', '_fetchData', {
-        propertiesListId: data.propertiesListId
-      })
-
       return { data, properties }
     } catch (error) {
       this.logError('Failed to retrieve data.', '_fetchData', error)
@@ -275,3 +266,4 @@ export class ProjectInformation extends BaseWebPartComponent<
 
 export { ProjectInformationModal } from '../ProjectInformationModal'
 export * from './types'
+
