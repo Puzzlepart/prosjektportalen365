@@ -30,7 +30,7 @@ import {
 export class ProjectInformation extends BaseWebPartComponent<
   IProjectInformationProps,
   IProjectInformationState
-  > {
+> {
   public static defaultProps: Partial<IProjectInformationProps> = {
     statusReportsCount: 0,
     page: 'Frontpage'
@@ -73,7 +73,7 @@ export class ProjectInformation extends BaseWebPartComponent<
               displayMode={DisplayMode.Read}
               title={this.props.title}
               // eslint-disable-next-line @typescript-eslint/no-empty-function
-              updateProperty={() => { }}
+              updateProperty={() => {}}
             />
           </div>
           {this._contents}
@@ -147,7 +147,11 @@ export class ProjectInformation extends BaseWebPartComponent<
    * @param {MessageBarType} messageBarType Message type
    * @param {number} duration Duration in seconds (defaults to 5)
    */
-  private _addMessage(text: string, messageBarType: MessageBarType, duration: number = 5): Promise<void> {
+  private _addMessage(
+    text: string,
+    messageBarType: MessageBarType,
+    duration: number = 5
+  ): Promise<void> {
     return new Promise((resolve) => {
       this.setState({
         message: {
@@ -169,7 +173,10 @@ export class ProjectInformation extends BaseWebPartComponent<
    * @param {React.MouseEvent<any>} event Event
    * @param {boolean} force Force sync of properties
    */
-  private async _onSyncProperties(event?: React.MouseEvent<any>, force: boolean = false): Promise<void> {
+  private async _onSyncProperties(
+    event?: React.MouseEvent<any>,
+    force: boolean = false
+  ): Promise<void> {
     if (event) {
       return ConfirmAction(
         strings.SyncProjectPropertiesText,
@@ -202,7 +209,7 @@ export class ProjectInformation extends BaseWebPartComponent<
         this.props.webUrl,
         strings.ProjectPropertiesListName,
         this.state.data.templateParameters.ProjectContentTypeId ||
-        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: this.props.webTitle }
       )
       if (!created) {
@@ -303,4 +310,3 @@ export class ProjectInformation extends BaseWebPartComponent<
 
 export { ProjectInformationModal } from '../ProjectInformationModal'
 export * from './types'
-

@@ -16,7 +16,7 @@ import { formatDate } from 'pp365-shared/lib/helpers'
 import { SectionModel, SectionType, StatusReport } from 'pp365-shared/lib/models'
 import { PortalDataService } from 'pp365-shared/lib/services'
 import { getUrlParam, parseUrlHash, removeMenuBorder, setUrlHash } from 'pp365-shared/lib/util'
-import { first } from 'underscore'
+import { find, first } from 'underscore'
 import SPDataAdapter from '../../data'
 import styles from './ProjectStatus.module.scss'
 import {
@@ -54,16 +54,18 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   public async componentDidMount() {
     try {
       const data = await this._fetchData()
-      let selectedReport = data.reports[0]
+      let [selectedReport] = data.reports
       const hashState = parseUrlHash<IProjectStatusHashState>()
       const selectedReportUrlParam = getUrlParam('selectedReport')
       const sourceUrlParam = getUrlParam('Source')
       if (hashState.selectedReport) {
-        ;[selectedReport] = data.reports.filter(
+        selectedReport = find(
+          data.reports,
           (report) => report.id === parseInt(hashState.selectedReport, 10)
         )
       } else if (selectedReportUrlParam) {
-        ;[selectedReport] = data.reports.filter(
+        selectedReport = find(
+          data.reports,
           (report) => report.id === parseInt(selectedReportUrlParam, 10)
         )
       }
