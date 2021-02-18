@@ -5,14 +5,14 @@ import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
 import { IBaseComponentProps } from 'components/types'
 import { DataAdapter } from 'data'
-import * as merge from 'object-assign'
+import assign from 'object-assign'
 import React from 'react'
 import * as ReactDom from 'react-dom'
 
 // tslint:disable-next-line: naming-convention
 export abstract class BasePortfolioWebPart<
   T extends IBaseComponentProps
-> extends BaseClientSideWebPart<T> {
+  > extends BaseClientSideWebPart<T> {
   public dataAdapter: DataAdapter
   private _pageTitle: string
 
@@ -28,7 +28,7 @@ export abstract class BasePortfolioWebPart<
     component: React.ComponentClass<T> | React.FunctionComponent<T>,
     props?: T
   ): void {
-    const combinedProps = merge({ title: this._pageTitle }, this.properties, props, {
+    const combinedProps = assign({ title: this._pageTitle }, this.properties, props, {
       pageContext: this.context.pageContext,
       dataAdapter: this.dataAdapter,
       displayMode: this.displayMode
@@ -52,7 +52,7 @@ export abstract class BasePortfolioWebPart<
           .select('Title')
           .get<{ Title: string }>()
       ).Title
-    } catch (error) {}
+    } catch (error) { }
   }
 
   public async onInit(): Promise<void> {

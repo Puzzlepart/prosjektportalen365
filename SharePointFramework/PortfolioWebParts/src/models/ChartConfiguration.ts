@@ -1,6 +1,6 @@
 /* eslint-disable default-case */
+import assign from 'object-assign'
 import { ChartData, DataField, SPChartConfigurationItem } from './'
-import * as objectAssign from 'object-assign'
 
 export const CHARTCONFIGBASE_CONTENTTYPEID = '0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D'
 export const CHART_TYPES = ['bar', 'column', 'pie']
@@ -12,7 +12,7 @@ export class ChartConfiguration {
   }
 
   public clone(): ChartConfiguration {
-    return objectAssign(Object.create(this), this)
+    return assign(Object.create(this), this)
   }
 
   public get width(): { [key: string]: number } {
