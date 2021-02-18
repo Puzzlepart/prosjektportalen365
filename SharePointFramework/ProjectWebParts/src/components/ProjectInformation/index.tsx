@@ -1,4 +1,5 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { LogLevel } from '@pnp/logging'
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle'
@@ -19,7 +20,6 @@ import { Actions } from './Actions'
 import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
 import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
-import { StatusReports } from './StatusReports'
 import {
   IProjectInformationData,
   IProjectInformationProps,
@@ -32,7 +32,6 @@ export class ProjectInformation extends BaseWebPartComponent<
   IProjectInformationState
   > {
   public static defaultProps: Partial<IProjectInformationProps> = {
-    statusReportsCount: 0,
     page: 'Frontpage'
   }
   private _portalDataService: PortalDataService
@@ -87,9 +86,11 @@ export class ProjectInformation extends BaseWebPartComponent<
    */
   private get _contents() {
     if (this.state.loading) {
-      return !stringIsNullOrEmpty(this.props.title) ? (
-        <Spinner label={format(strings.LoadingText, this.props.title.toLowerCase())} />
-      ) : null
+      return !stringIsNullOrEmpty(this.props.title)
+        ? (
+          <Spinner label={format(strings.LoadingText, this.props.title.toLowerCase())} />
+        )
+        : null
     }
     if (this.state.error) {
       return (
@@ -101,7 +102,7 @@ export class ProjectInformation extends BaseWebPartComponent<
       )
     }
 
-    const { statusReports, editFormUrl, versionHistoryUrl } = this.state.data
+    const {  editFormUrl, versionHistoryUrl } = this.state.data
 
     return (
       <>
@@ -113,12 +114,6 @@ export class ProjectInformation extends BaseWebPartComponent<
           onFieldExternalChanged={this.props.onFieldExternalChanged}
           showFieldExternal={this.props.showFieldExternal}
           propertiesList={!stringIsNullOrEmpty(this.state.data.propertiesListId)}
-        />
-        <StatusReports
-          title={this.props.statusReportsHeader}
-          statusReports={statusReports}
-          urlSourceParam={document.location.href}
-          hidden={this.props.statusReportsCount === 0}
         />
         <UserMessage {...this.state.message} />
         <Actions
@@ -262,7 +257,7 @@ export class ProjectInformation extends BaseWebPartComponent<
   private async _fetchData(): Promise<Partial<IProjectInformationState>> {
     try {
       if (!SPDataAdapter.isConfigured) {
-        SPDataAdapter.configure(this.context, {
+        SPDataAdapter.configure(this.context as WebPartContext, {
           siteId: this.props.siteId,
           webUrl: this.props.webUrl,
           hubSiteUrl: this.props.hubSite.url,
@@ -276,15 +271,8 @@ export class ProjectInformation extends BaseWebPartComponent<
       ])
 
       const data: IProjectInformationData = {
-        statusReports: [],
         columns: columnConfig,
         ...propertiesData
-      }
-
-      if (this.props.statusReportsCount > 0) {
-        data.statusReports = await this._portalDataService.getStatusReports({
-          top: this.props.statusReportsCount
-        })
       }
 
       const properties = this._transformProperties(data.fieldValuesText, data)

@@ -1,16 +1,11 @@
-import {
-  IPropertyPaneConfiguration,
-  PropertyPaneSlider,
-  PropertyPaneTextField,
-  PropertyPaneToggle
-} from '@microsoft/sp-property-pane'
+import { IPropertyPaneConfiguration, PropertyPaneToggle } from '@microsoft/sp-property-pane'
 import { IProjectInformationProps, ProjectInformation } from 'components/ProjectInformation'
 import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from '../@baseProjectWebPart'
 
 export default class ProjectInformationWebPart extends BaseProjectWebPart<
   IProjectInformationProps
-> {
+  > {
   public async onInit() {
     await super.onInit()
   }
@@ -32,17 +27,8 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<
         {
           groups: [
             {
-              groupName: strings.ProjectStatusGroupName,
+              groupName: strings.GeneralGroupName,
               groupFields: [
-                PropertyPaneSlider('statusReportsCount', {
-                  label: strings.StatusReportsCountLabel,
-                  min: 0,
-                  max: 10,
-                  step: 1
-                }),
-                PropertyPaneTextField('statusReportsHeader', {
-                  label: strings.StatusReportsHeaderLabel
-                }),
                 PropertyPaneToggle('skipSyncToHub', {
                   label: strings.SkipSyncToHubLabel
                 })

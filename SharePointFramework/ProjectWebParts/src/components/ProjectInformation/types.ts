@@ -20,16 +20,6 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   hideActions?: boolean
 
   /**
-   * Header text for status reports
-   */
-  statusReportsHeader?: string
-
-  /**
-   * Number of status reports to show (defaults to 0)
-   */
-  statusReportsCount?: number
-
-  /**
    * On field external changed
    */
   onFieldExternalChanged?: (fieldName: string, checked: boolean) => void
@@ -79,11 +69,6 @@ export interface IProjectInformationUrlHash {
 }
 
 export interface IProjectInformationData extends ProjectDataService.IGetPropertiesData {
-  /**
-   * Array of status reports
-   */
-  statusReports?: StatusReport[]
-
   /**
    * Column configuration
    */
