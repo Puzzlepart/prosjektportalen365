@@ -1,4 +1,5 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { IHubSite } from 'sp-hubsite-service'
 
 export interface IBaseWebPartComponentProps extends React.DOMAttributes<HTMLDivElement> {
@@ -37,6 +38,11 @@ export interface IBaseWebPartComponentProps extends React.DOMAttributes<HTMLDivE
    * Display mode
    */
   displayMode?: DisplayMode
+
+  /**
+   * Web part context
+   */
+  webPartContext?: WebPartContext
 }
 
 export interface IBaseWebPartComponentState<T> {
