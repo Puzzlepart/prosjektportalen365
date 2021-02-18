@@ -1,6 +1,6 @@
 import { TypedHash } from '@pnp/common'
 import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
-import { StatusReport, ProjectColumn } from 'pp365-shared/lib/models'
+import { ProjectColumn } from 'pp365-shared/lib/models'
 import { IProgressDialogProps } from 'components/ProgressDialog/types'
 import { IUserMessageProps } from 'components/UserMessage'
 import { IEntityField } from 'sp-entityportal-service'

@@ -5,7 +5,7 @@ import { BaseProjectWebPart } from '../@baseProjectWebPart'
 
 export default class ProjectInformationWebPart extends BaseProjectWebPart<
   IProjectInformationProps
-  > {
+> {
   public async onInit() {
     await super.onInit()
   }

@@ -87,11 +87,9 @@ export class ProjectInformation extends BaseWebPartComponent<
    */
   private getContent() {
     if (this.state.loading) {
-      return !stringIsNullOrEmpty(this.props.title)
-        ? (
-          <Spinner label={format(strings.LoadingText, this.props.title.toLowerCase())} />
-        )
-        : null
+      return !stringIsNullOrEmpty(this.props.title) ? (
+        <Spinner label={format(strings.LoadingText, this.props.title.toLowerCase())} />
+      ) : null
     }
     if (this.state.error) {
       return (
