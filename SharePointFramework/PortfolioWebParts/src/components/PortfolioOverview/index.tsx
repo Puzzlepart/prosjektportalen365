@@ -173,9 +173,7 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
               web: new Web(this.props.pageContext.site.absoluteUrl),
               url: this.props.pageContext.site.absoluteUrl
             }}
-            page='Portfolio'
-            statusReportsCount={this.props.statusReportsCount}
-          />
+            page='Portfolio' />
         )}
         {this.state.columnContextMenu && <ContextualMenu {...this.state.columnContextMenu} />}
       </div>
