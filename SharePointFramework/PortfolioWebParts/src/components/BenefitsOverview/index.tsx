@@ -13,7 +13,7 @@ const CONTENT_TYPE_ID_INDICATORS = '0x010073043EFE3E814A2BBEF96B8457623F95'
  * @component BenefitsOverview
  * @extends React.Component
  */
-export class BenefitsOverview extends React.Component<IBenefitsOverviewProps, {}> {
+export class BenefitsOverview extends React.Component<IBenefitsOverviewProps> {
   public static defaultProps = BenefitsOverviewDefaultProps
 
   public render(): React.ReactElement<IBenefitsOverviewProps> {

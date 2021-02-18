@@ -1,13 +1,13 @@
 import { Modal } from 'office-ui-fabric-react/lib/Modal'
-import * as React from 'react'
+import React, { Component, ReactElement } from 'react'
 import { ProjectInformation } from '../ProjectInformation'
 import { IProjectInformationModalProps } from './types'
 import styles from './ProjectInformationModal.module.scss'
 
-export class ProjectInformationModal extends React.Component<IProjectInformationModalProps, {}> {
+export class ProjectInformationModal extends Component<IProjectInformationModalProps> {
   public static defaultProps: Partial<IProjectInformationModalProps> = {}
 
-  public render(): React.ReactElement<IProjectInformationModalProps> {
+  public render(): ReactElement<IProjectInformationModalProps> {
     return (
       <Modal {...this.props.modalProps} containerClassName={styles.projectInformationModal}>
         <ProjectInformation {...this.props} />

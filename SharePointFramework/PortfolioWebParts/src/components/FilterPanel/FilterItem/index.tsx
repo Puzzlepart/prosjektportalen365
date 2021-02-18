@@ -3,7 +3,7 @@ import styles from './FilterItem.module.scss'
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox'
 import { IFilterItemProps } from './IFilterItemProps'
 
-export class FilterItem extends React.PureComponent<IFilterItemProps, {}> {
+export class FilterItem extends React.PureComponent<IFilterItemProps> {
   constructor(props: IFilterItemProps) {
     super(props)
     this.state = {}

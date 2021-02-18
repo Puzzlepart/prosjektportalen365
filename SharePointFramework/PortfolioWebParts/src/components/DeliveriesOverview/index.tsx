@@ -8,7 +8,7 @@ import { IDeliveriesOverviewProps } from './IDeliveriesOverviewProps'
  * @component DeliveriesOverview
  * @extends React.Component
  */
-export class DeliveriesOverview extends React.Component<IDeliveriesOverviewProps, {}> {
+export class DeliveriesOverview extends React.Component<IDeliveriesOverviewProps> {
   public static defaultProps: Partial<IDeliveriesOverviewProps> = {
     columns: DELIVERIES_OVERVIEW_COLUMNS
   }

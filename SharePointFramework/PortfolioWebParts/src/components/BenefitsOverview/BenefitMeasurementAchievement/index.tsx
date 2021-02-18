@@ -8,8 +8,7 @@ export interface IBenefitMeasurementAchievementProps extends React.HTMLProps<HTM
 }
 
 export default class BenefitMeasurementAchievement extends React.PureComponent<
-  IBenefitMeasurementAchievementProps,
-  {}
+  IBenefitMeasurementAchievementProps
 > {
   constructor(props: IBenefitMeasurementAchievementProps) {
     super(props)

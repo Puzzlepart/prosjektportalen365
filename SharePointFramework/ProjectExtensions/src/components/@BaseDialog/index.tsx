@@ -9,7 +9,7 @@ import {
 import { IModalProps } from 'office-ui-fabric-react/lib/Modal'
 import { IBaseDialogProps } from './types'
 
-export class BaseDialog extends React.PureComponent<IBaseDialogProps, {}> {
+export class BaseDialog extends React.PureComponent<IBaseDialogProps> {
   public static defaultProps: Partial<IBaseDialogProps> = { onRenderFooter: () => null }
 
   public render(): React.ReactElement<IBaseDialogProps> {
