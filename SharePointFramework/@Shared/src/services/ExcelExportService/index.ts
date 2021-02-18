@@ -30,7 +30,7 @@ export default new (class ExcelExportService {
       const _define = ((<any>window).define(window as any).define = undefined)
       $script(this._deps, 'deps')
       $script.ready('deps', () => {
-        ;(window as any).define = _define
+        (window as any).define = _define
         resolve()
       })
     })
