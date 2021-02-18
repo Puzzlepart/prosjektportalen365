@@ -30,7 +30,7 @@ export default class BenefitMeasurementsModal extends PureComponent<
   }
 
   public render(): React.ReactElement<IBenefitMeasurementsModalProps> {
-    if (this.props.indicator.measurements.length === 0) {
+    if (this.props.indicator.Measurements.length === 0) {
       return null
     }
     return (
@@ -45,10 +45,10 @@ export default class BenefitMeasurementsModal extends PureComponent<
           onDismiss={this._onCloseModal.bind(this)}
           isBlocking={false}>
           <div className={styles.header}>
-            <div className={styles.title}>{this.props.indicator.title}</div>
+            <div className={styles.title}>{this.props.indicator.Title}</div>
           </div>
           <DetailsList
-            items={this.props.indicator.measurements}
+            items={this.props.indicator.Measurements}
             columns={this.props.columns}
             onRenderItemColumn={this._onRenderItemColumn}
             selectionMode={SelectionMode.none}

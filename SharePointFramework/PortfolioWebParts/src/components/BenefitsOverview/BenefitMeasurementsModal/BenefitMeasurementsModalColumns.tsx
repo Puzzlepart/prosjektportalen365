@@ -6,17 +6,17 @@ import BenefitMeasurementAchievement from '../BenefitMeasurementAchievement'
 
 export const BENEFIT_MEASUREMENTS_MODAL_COLUMNS: IColumn[] = [
   {
-    key: 'value',
-    fieldName: 'value',
+    key: 'Value',
+    fieldName: 'Value',
     name: strings.MeasurementValueLabel,
     minWidth: 100,
     maxWidth: 100,
-    data: { fieldNameDisplay: 'valueDisplay' },
+    data: { fieldNameDisplay: 'ValueDisplay' },
     isResizable: true
   },
   {
-    key: 'comment',
-    fieldName: 'comment',
+    key: 'Comment',
+    fieldName: 'Comment',
     name: strings.MeasurementCommentLabel,
     minWidth: 175,
     maxWidth: 175,
@@ -24,8 +24,8 @@ export const BENEFIT_MEASUREMENTS_MODAL_COLUMNS: IColumn[] = [
     isResizable: true
   },
   {
-    key: 'achievement',
-    fieldName: 'achievement',
+    key: 'Achievement',
+    fieldName: 'Achievement',
     name: strings.MeasurementAchievementLabel,
     minWidth: 100,
     maxWidth: 100,
@@ -35,8 +35,8 @@ export const BENEFIT_MEASUREMENTS_MODAL_COLUMNS: IColumn[] = [
     )
   },
   {
-    key: 'dateDisplay',
-    fieldName: 'dateDisplay',
+    key: 'DateDisplay',
+    fieldName: 'DateDisplay',
     name: strings.MeasurementDateLabel,
     minWidth: 150
   }

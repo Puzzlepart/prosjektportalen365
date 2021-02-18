@@ -7,7 +7,6 @@ export interface IBenefitsOverviewProps extends IPortfolioAggregationProps {
   hiddenColumns?: string[]
 }
 
-// tslint:disable-next-line: naming-convention
 export const BenefitsOverviewDefaultProps: Partial<IBenefitsOverviewProps> = {
   selectProperties: [
     'Path',

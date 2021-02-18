@@ -15,8 +15,8 @@ import { IBenefitsOverviewProps } from './types'
 export function getColumns(props: IBenefitsOverviewProps): IAggregatedSearchListColumn[] {
   const columns: IAggregatedSearchListColumn[] = [
     {
-      key: 'benefit.title',
-      fieldName: 'benefit.title',
+      key: 'Benefit.Title',
+      fieldName: 'Benefit.Title',
       name: strings.BenefitTitleLabel,
       minWidth: 100,
       maxWidth: 180,
@@ -24,8 +24,8 @@ export function getColumns(props: IBenefitsOverviewProps): IAggregatedSearchList
       isResizable: true
     },
     {
-      key: 'benefit.responsible',
-      fieldName: 'benefit.responsible',
+      key: 'Benefit.Responsible',
+      fieldName: 'Benefit.Responsible',
       name: strings.BenefitResponsibleLabel,
       minWidth: 50,
       maxWidth: 180,
@@ -33,8 +33,8 @@ export function getColumns(props: IBenefitsOverviewProps): IAggregatedSearchList
       isGroupable: true
     },
     {
-      key: 'benefit.owner',
-      fieldName: 'benefit.owner',
+      key: 'Benefit.Owner',
+      fieldName: 'Benefit.Owner',
       name: strings.BenefitOwnerLabel,
       minWidth: 50,
       maxWidth: 180,
@@ -42,8 +42,8 @@ export function getColumns(props: IBenefitsOverviewProps): IAggregatedSearchList
       isGroupable: true
     },
     {
-      key: 'title',
-      fieldName: 'title',
+      key: 'Title',
+      fieldName: 'Title',
       name: strings.MeasuremenentIdicatorLabel,
       minWidth: 50,
       maxWidth: 180,
@@ -51,43 +51,43 @@ export function getColumns(props: IBenefitsOverviewProps): IAggregatedSearchList
       isResizable: true
     },
     {
-      key: 'unit',
-      fieldName: 'unit',
+      key: 'Unit',
+      fieldName: 'Unit',
       name: strings.UnitLabel,
       minWidth: 50,
       maxWidth: 80,
       isResizable: true
     },
     {
-      key: 'startValue',
-      fieldName: 'startValue',
-      fieldNameDisplay: 'startValueDisplay',
+      key: 'StartValue',
+      fieldName: 'StartValue',
+      fieldNameDisplay: 'StartValueDisplay',
       name: strings.StartValueLabel,
       minWidth: 50,
       maxWidth: 80,
       isResizable: true
     },
     {
-      key: 'desiredValue',
-      fieldName: 'desiredValue',
-      fieldNameDisplay: 'desiredValueDisplay',
+      key: 'DesiredValue',
+      fieldName: 'DesiredValue',
+      fieldNameDisplay: 'DesiredValueDisplay',
       name: strings.DesiredValueLabel,
       minWidth: 50,
       maxWidth: 80,
       isResizable: true
     },
     {
-      key: 'measurements[0].value',
-      fieldName: 'measurements[0].value',
-      fieldNameDisplay: 'measurements[0].valueDisplay',
+      key: 'Measurements[0].Value',
+      fieldName: 'Measurements[0].Value',
+      fieldNameDisplay: 'Measurements[0].ValueDisplay',
       name: strings.LastMeasurementLabel,
       minWidth: 50,
       maxWidth: 80,
       isResizable: true
     },
     {
-      key: 'measurements[0].achievement',
-      fieldName: 'measurements[0].achievement',
+      key: 'Measurements[0].Achievement',
+      fieldName: 'Measurements[0].Achievement',
       name: strings.MeasurementAchievementLabel,
       minWidth: 50,
       maxWidth: 80,
