@@ -4,7 +4,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link'
 import { formatDate, tryParseCurrency } from 'pp365-shared/lib/helpers'
 import { ProjectColumn } from 'pp365-shared/lib/models'
 import React from 'react'
-import { IPortfolioOverviewState } from '../types'
+import { IPortfolioOverviewProps } from '../types'
 import { IRenderItemColumnProps } from './IRenderItemColumnProps'
 import { TagsColumn } from './TagsColumn'
 import { UserColumn } from './UserColumn'
@@ -24,16 +24,19 @@ const renderDataTypeMap = {
  *
  * @param {IFetchDataForViewItemResult} item Item
  * @param {ProjectColumn} column Column
- * @param {void} onUpdateState On update state
+ * @param {IPortfolioOverviewProps} props Props
  */
 export function renderItemColumn(
   item: IFetchDataForViewItemResult,
   column: ProjectColumn,
-  onUpdateState: (state: Partial<IPortfolioOverviewState>) => void
+  props: IPortfolioOverviewProps
 ) {
   const colValue = item[column.fieldName]
 
   if (!colValue) return null
+
+  // eslint-disable-next-line no-console
+  console.log({ siteId: props.columnsListName })
 
   // eslint-disable-next-line default-case
   switch (column.fieldName) {

@@ -151,7 +151,7 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
                 setKey='multiple'
                 onRenderDetailsHeader={this._onRenderDetailsHeader.bind(this)}
                 onRenderItemColumn={(item, _index, column: ProjectColumn) =>
-                  renderItemColumn(item, column, (state) => this.setState(state))
+                  renderItemColumn(item, column, this.props)
                 }
                 onColumnHeaderClick={this._onColumnHeaderClick.bind(this)}
                 onColumnHeaderContextMenu={this._onColumnHeaderContextMenu.bind(this)}
