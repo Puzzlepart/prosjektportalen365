@@ -10,7 +10,7 @@ import {
 } from 'office-ui-fabric-react/lib/ContextualMenu'
 import {
   ConstrainMode,
-  DetailsList,
+
   DetailsListLayoutMode,
   IDetailsHeaderProps,
   IGroup,
@@ -22,11 +22,11 @@ import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane'
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner'
+import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList'
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky'
 import { format, IRenderFunction } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
-import { getObjectValue } from 'pp365-shared/lib/helpers/getObjectValue'
+import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import { PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
 import ExcelExportService from 'pp365-shared/lib/services/ExcelExportService'
 import { parseUrlHash, redirect, setUrlHash } from 'pp365-shared/lib/util'
@@ -60,7 +60,8 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
       isCompact: false,
       searchTerm: '',
       activeFilters: {},
-      columns: []
+      items: [],
+      columns: [],
     }
     this._selection = new Selection({
       onSelectionChanged: () => {
@@ -90,18 +91,6 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
   }
 
   public render(): React.ReactElement<IPortfolioOverviewProps> {
-    if (this.state.loading) {
-      return (
-        <div className={styles.root}>
-          <div className={styles.container}>
-            <Spinner
-              label={format(strings.LoadingText, this.props.title)}
-              size={SpinnerSize.large}
-            />
-          </div>
-        </div>
-      )
-    }
     if (this.state.error) {
       return (
         <div className={styles.root}>
@@ -136,7 +125,8 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
             scrollbarVisibility={ScrollbarVisibility.auto}
             styles={{ root: { top: 75 } }}>
             <MarqueeSelection selection={this._selection} className={styles.listContainer}>
-              <DetailsList
+              <ShimmeredDetailsList
+                enableShimmer={this.state.loading || !!this.state.isChangingView}
                 items={items}
                 constrainMode={ConstrainMode.unconstrained}
                 layoutMode={DetailsListLayoutMode.fixedColumns}
@@ -163,6 +153,7 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
   }
 
   private get _searchBoxPlaceholderText() {
+    if (!this.state.currentView) return ''
     return format(strings.SearchBoxPlaceholderText, this.state.currentView.title.toLowerCase())
   }
 
@@ -183,16 +174,16 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
    * Get filters
    */
   private _getFilters(): IFilterProps[] {
+    if (!this.state.currentView) return []
     const selectedFilters = this.props.configuration.refiners.filter(
       (ref) => this.state.currentView.refiners.indexOf(ref) !== -1
     )
     const filters = selectedFilters.map((column) => {
-      // eslint-disable-next-line prefer-spread
       const uniqueValues = uniq(
         // eslint-disable-next-line prefer-spread
         [].concat.apply(
           [],
-          this.state.items.map((i) => getObjectValue(i, column.fieldName, '').split(';'))
+          this.state.items.map((i) => get(i, column.fieldName, '').split(';'))
         )
       )
       let items: IFilterItemProps[] = uniqueValues
@@ -250,7 +241,7 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
   private _onColumnGroupBy(column: ProjectColumn) {
     this.setState((prevState) => ({
       groupBy:
-        getObjectValue<string>(prevState, 'groupBy.fieldName', '') === column.fieldName
+        get<string>(prevState, 'groupBy.fieldName', '') === column.fieldName
           ? null
           : column
     }))
@@ -347,7 +338,7 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
             name: format(strings.GroupByColumnLabel, column.name),
             canCheck: true,
             checked:
-              getObjectValue<string>(this.state, 'groupBy.fieldName', '') === column.fieldName,
+              get<string>(this.state, 'groupBy.fieldName', '') === column.fieldName,
             disabled: !column.isGroupable,
             onClick: () => this._onColumnGroupBy(column)
           },
@@ -383,7 +374,7 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
     }
     items = sortArray([...items], itemsSort.props, itemsSort.opts)
     const groupNames: string[] = items.map((g) =>
-      getObjectValue<string>(g, groupBy.fieldName, strings.NotSet)
+      get<string>(g, groupBy.fieldName, strings.NotSet)
     )
     const uniqueGroupNames: string[] = _.uniq(groupNames)
     const groups = uniqueGroupNames
@@ -413,7 +404,7 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
     items = items.filter((item) => {
       return (
         columns.filter(
-          (col) => getObjectValue(item, col.fieldName, '').toLowerCase().indexOf(searchTerm) !== -1
+          (col) => get(item, col.fieldName, '').toLowerCase().indexOf(searchTerm) !== -1
         ).length > 0
       )
     })
@@ -422,7 +413,7 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
       .filter((key) => key !== 'SelectedColumns')
       .reduce((arr, key) => {
         return arr.filter((i) => {
-          const colValue = getObjectValue<string>(i, key, '')
+          const colValue = get<string>(i, key, '')
           return (
             activeFilters[key].filter((filterValue) => colValue.indexOf(filterValue) !== -1)
               .length > 0
