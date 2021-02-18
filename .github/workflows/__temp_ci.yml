@@ -3,10 +3,6 @@ name: CI - Build and install (#394)
 on:
   push:
     branches: [feature/flexible-portfolio-aggregation-views-webparts-394]
-    paths:
-      - "SharePointFramework/**"
-      - "Install/**"
-      - "Templates/**"
 
 env:
   TARGET_URL: "https://puzzlepart.sharepoint.com/sites/pp365"
