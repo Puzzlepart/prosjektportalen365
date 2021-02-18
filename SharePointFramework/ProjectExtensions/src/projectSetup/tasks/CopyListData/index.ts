@@ -247,11 +247,8 @@ export class CopyListData extends BaseTask {
       const files: any[] = []
 
       spItems.forEach((item) => {
-        if (item.Folder && item.Folder.hasOwnProperty('ServerRelativeUrl')) {
-          folders.push(item.Folder.ServerRelativeUrl)
-        } else {
-          files.push(item)
-        }
+        if (item.Folder?.ServerRelativeUrl) folders.push(item.Folder.ServerRelativeUrl)
+        else files.push(item)
       })
 
       await this._provisionFolderHierarchy(config, folders, progressText)
@@ -271,7 +268,7 @@ export class CopyListData extends BaseTask {
             'Documentation'
           )
           const filename = file.LinkFilename
-          const fileAddResult = await config.web
+          const fileAddResult = await sp.web
             .getFolderByServerRelativeUrl(destFolderUrl)
             .files.add(filename, file.Blob, true)
           filesCopied.push(fileAddResult)

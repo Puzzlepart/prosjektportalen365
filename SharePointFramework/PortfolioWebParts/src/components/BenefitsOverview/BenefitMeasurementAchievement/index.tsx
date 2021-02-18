@@ -1,22 +1,20 @@
 import { BenefitMeasurement } from 'models'
 import * as objectGet from 'object-get'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
-import React, { HTMLProps, PureComponent } from 'react'
+import React, { HTMLProps, PureComponent, ReactElement } from 'react'
 
 export interface IBenefitMeasurementAchievementProps extends HTMLProps<HTMLSpanElement> {
   measurement: BenefitMeasurement
 }
 
 export default class BenefitMeasurementAchievement extends PureComponent<
-  IBenefitMeasurementAchievementProps,
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  {}
+  IBenefitMeasurementAchievementProps
 > {
   constructor(props: IBenefitMeasurementAchievementProps) {
     super(props)
   }
 
-  public render(): React.ReactElement<IBenefitMeasurementAchievementProps> {
+  public render(): ReactElement<IBenefitMeasurementAchievementProps> {
     const colValue = objectGet(this.props.measurement, 'achievementDisplay')
     const trendIconProps = objectGet(this.props.measurement, 'trendIconProps')
     if (colValue) {

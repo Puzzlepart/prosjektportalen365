@@ -1,11 +1,10 @@
-import React, { Component } from 'react'
 import { Persona, PersonaPresence, PersonaSize } from 'office-ui-fabric-react/lib/Persona'
-import { IRenderItemColumnProps } from '../IRenderItemColumnProps'
+import React, { Component, ReactElement } from 'react'
 import { SearchValueType } from 'types'
+import { IRenderItemColumnProps } from '../IRenderItemColumnProps'
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export class UserColumn extends Component<IRenderItemColumnProps, {}> {
-  public render(): React.ReactElement<IRenderItemColumnProps> {
+export class UserColumn extends Component<IRenderItemColumnProps> {
+  public render(): ReactElement<IRenderItemColumnProps> {
     if (this.props.column.searchType === SearchValueType.OWSUSER) {
       const [email, text] = this.props.colValue.split(' | ')
       return (
