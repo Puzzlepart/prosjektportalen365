@@ -5,11 +5,11 @@ const path = require('path')
 const pkg = require('../package.json')
 const Jtr = require('@ptkdev/json-token-replace')
 const jtr = new Jtr()
-const resources = require('./Resources.json')
-const template = require('./_JsonTemplate.json')
+const resources = require('../Resources.json')
+const template = require('../_JsonTemplate.json')
 const output = {
-    'en-US': 'Portfolio_content.en-US/ProjectTemplates/DefaultTemplate.txt',
-    'no-NB': 'Portfolio_content.no-NB/ProjectTemplates/Standardmal.txt'
+    'en-US': '../Portfolio_content.en-US/ProjectTemplates/DefaultTemplate.txt',
+    'no-NB': '../Portfolio_content.no-NB/ProjectTemplates/Standardmal.txt'
 }
 
 Object.keys(resources).forEach(key => {
