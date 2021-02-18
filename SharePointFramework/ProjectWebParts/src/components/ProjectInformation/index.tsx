@@ -12,6 +12,7 @@ import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
 import * as strings from 'ProjectWebPartsStrings'
 import { ConfirmAction, ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
 import React from 'react'
+import { isEmpty } from 'underscore'
 import SPDataAdapter from '../../data'
 import { BaseWebPartComponent } from '../BaseWebPartComponent'
 import { ProgressDialog } from '../ProgressDialog'
@@ -61,9 +62,8 @@ export class ProjectInformation extends BaseWebPartComponent<
   }
 
   public render() {
-    if (this.state.hidden) {
-      return null
-    }
+    if (this.state.hidden) return null
+
     return (
       <div className={styles.projectInformation}>
         <div className={styles.container}>
@@ -71,11 +71,12 @@ export class ProjectInformation extends BaseWebPartComponent<
             <WebPartTitle
               displayMode={DisplayMode.Read}
               title={this.props.title}
-              // eslint-disable-next-line @typescript-eslint/no-empty-function
-              updateProperty={() => { }}
+              updateProperty={() => {
+                // We don't the users to change the web part title
+              }}
             />
           </div>
-          {this._contents}
+          {this.getContent()}
         </div>
       </div>
     )
@@ -84,7 +85,7 @@ export class ProjectInformation extends BaseWebPartComponent<
   /**
    * Contents
    */
-  private get _contents() {
+  private getContent() {
     if (this.state.loading) {
       return !stringIsNullOrEmpty(this.props.title)
         ? (
@@ -102,7 +103,7 @@ export class ProjectInformation extends BaseWebPartComponent<
       )
     }
 
-    const {  editFormUrl, versionHistoryUrl } = this.state.data
+    const { editFormUrl, versionHistoryUrl } = this.state.data
 
     return (
       <>
@@ -231,22 +232,19 @@ export class ProjectInformation extends BaseWebPartComponent<
   private _transformProperties(fieldValuesText: TypedHash<any>, data: IProjectInformationData) {
     const fieldNames: string[] = Object.keys(fieldValuesText).filter((fieldName) => {
       const [field] = data.fields.filter((fld) => fld.InternalName === fieldName)
-      if (!field) {
-        return false
-      }
+      if (!field) return false
       if (
-        data.columns.length === 0 &&
+        isEmpty(data.columns) &&
         ((this.props.showFieldExternal || {})[fieldName] || this.props.skipSyncToHub)
       ) {
         return true
       }
       const [column] = data.columns.filter((c) => c.internalName === fieldName)
-      if (column) return column.isVisible(this.props.page)
-      return false
+      return column ? column.isVisible(this.props.page) : false
     })
-    const properties = fieldNames.map((fieldName) => {
-      const [field] = data.fields.filter((fld) => fld.InternalName === fieldName)
-      return new ProjectPropertyModel(field, fieldValuesText[fieldName])
+    const properties = fieldNames.map((fn) => {
+      const [field] = data.fields.filter((fld) => fld.InternalName === fn)
+      return new ProjectPropertyModel(field, fieldValuesText[fn])
     })
     return properties
   }
@@ -265,13 +263,13 @@ export class ProjectInformation extends BaseWebPartComponent<
         })
       }
 
-      const [columnConfig, propertiesData] = await Promise.all([
+      const [columns, propertiesData] = await Promise.all([
         this._portalDataService.getProjectColumns(),
         SPDataAdapter.project.getPropertiesData()
       ])
 
       const data: IProjectInformationData = {
-        columns: columnConfig,
+        columns,
         ...propertiesData
       }
 
