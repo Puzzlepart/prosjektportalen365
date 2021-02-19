@@ -5,7 +5,7 @@ import {
   PropertyPaneSlider,
   PropertyPaneTextField,
   PropertyPaneToggle
-} from '@microsoft/sp-webpart-base'
+} from '@microsoft/sp-property-pane'
 import { PortfolioOverview, IPortfolioOverviewProps } from 'components/PortfolioOverview'
 import { IPortfolioConfiguration } from 'interfaces'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -27,11 +27,11 @@ export const PROPERTYPANE_CONFIGURATION_PROPS = {
 
 export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<
   IPortfolioOverviewProps
-> {
+  > {
   private _configuration: IPortfolioConfiguration
 
   public render(): void {
-    this.renderComponent(PortfolioOverview, {
+    this.renderComponent<IPortfolioOverviewProps>(PortfolioOverview, {
       configuration: this._configuration
     } as IPortfolioOverviewProps)
   }

@@ -13,11 +13,6 @@ import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
   IPortfolioAggregationProps
   > {
-  constructor() {
-    super()
-    this._onUpdateProperty = this._onUpdateProperty.bind(this)
-  }
-
   public render(): void {
     if (!this.properties.dataSource) {
       this.renderComponent<IMessageBarProps>(MessageBar, {
@@ -27,7 +22,7 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
       this.renderComponent<IPortfolioAggregationProps>(PortfolioAggregation, {
         ...this.properties,
         dataAdapter: new DataAdapter(this.context),
-        onUpdateProperty: this._onUpdateProperty
+        onUpdateProperty: this._onUpdateProperty.bind(this)
       })
     }
   }

@@ -9,7 +9,7 @@ import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export default class BenefitsOverviewWebPart extends BasePortfolioWebPart<IBenefitsOverviewProps> {
   public render(): void {
-    this.renderComponent(BenefitsOverview)
+    this.renderComponent<IBenefitsOverviewProps>(BenefitsOverview)
   }
 
   public async onInit(): Promise<void> {

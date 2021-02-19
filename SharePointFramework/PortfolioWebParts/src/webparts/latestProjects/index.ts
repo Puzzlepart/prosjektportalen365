@@ -1,15 +1,15 @@
-import { ILatestProjectsProps, LatestProjects } from 'components/LatestProjects'
 import {
   IPropertyPaneConfiguration,
-  PropertyPaneTextField,
-  PropertyPaneSlider
-} from '@microsoft/sp-webpart-base'
+
+  PropertyPaneSlider, PropertyPaneTextField
+} from '@microsoft/sp-property-pane'
+import { ILatestProjectsProps, LatestProjects } from 'components/LatestProjects'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export default class LatestProjectsWebPart extends BasePortfolioWebPart<ILatestProjectsProps> {
   public render(): void {
-    this.renderComponent(LatestProjects)
+    this.renderComponent<ILatestProjectsProps>(LatestProjects)
   }
 
   public async onInit(): Promise<void> {

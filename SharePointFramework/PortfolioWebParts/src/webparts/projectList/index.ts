@@ -2,14 +2,14 @@ import {
   IPropertyPaneConfiguration,
   PropertyPaneTextField,
   PropertyPaneToggle
-} from '@microsoft/sp-webpart-base'
-import { ProjectList, IProjectListProps } from 'components/ProjectList'
+} from '@microsoft/sp-property-pane'
+import { IProjectListProps, ProjectList } from 'components/ProjectList'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectListProps> {
   public render(): void {
-    this.renderComponent(ProjectList)
+    this.renderComponent<IProjectListProps>(ProjectList)
   }
 
   public async onInit(): Promise<void> {
