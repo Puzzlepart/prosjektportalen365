@@ -14,7 +14,7 @@ export const ProjectProperties: FunctionComponent<IProjectPropertiesProps> = (
 ) => {
   const nonEmptyProperties = props.properties.filter(({ empty }) => !empty)
 
-  if (props.displayMode === DisplayMode.Read) {
+  if (props.displayMode !== DisplayMode.Edit) {
     if (isEmpty(nonEmptyProperties)) {
       return <MessageBar>{strings.NoPropertiesMessage}</MessageBar>
     }

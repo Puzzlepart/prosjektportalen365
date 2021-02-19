@@ -32,7 +32,7 @@ export const Actions = (props: IActionsProps) => {
         else buttonProps.onClick = hrefOrOnClick
         return (
           <div key={idx} hidden={hidden}>
-            <DefaultButton {...buttonProps} style={{ width: 300 }} />
+            <DefaultButton {...buttonProps} className={styles.btn} />
           </div>
         )
       })}

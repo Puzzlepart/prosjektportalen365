@@ -3,8 +3,8 @@
 - [ ] Make sure you are requesting to **pull a topic/feature/bugfix branch** (right side). Don't request your main!
 - [ ] Make sure you are making a pull request against the **dev** branch (left side). Also you should start *your branch* off *dev*.
 - [ ] Check the commit's or even all commits' message 
-- [ ] Check your code additions will fail linting checks
-- [ ] Remember: Add PR description to [Changelog](https://github.com/Puzzlepart/prosjektportalen365/blob/dev/CHANGELOG.md) with the ID that matches this PR
+- [ ] Check if your code additions will fail linting checks
+- [ ] Remember: Add PR description to [CHANGELOG](https://github.com/Puzzlepart/prosjektportalen365/blob/dev/CHANGELOG.md) with the ID that matches this PR
 
 ### Description
 

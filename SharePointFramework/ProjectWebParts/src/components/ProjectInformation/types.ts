@@ -1,6 +1,6 @@
 import { TypedHash } from '@pnp/common'
 import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
-import { StatusReport, ProjectColumn } from 'pp365-shared/lib/models'
+import { ProjectColumn } from 'pp365-shared/lib/models'
 import { IProgressDialogProps } from 'components/ProgressDialog/types'
 import { IUserMessageProps } from 'components/UserMessage'
 import { IEntityField } from 'sp-entityportal-service'
@@ -18,16 +18,6 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
    * Hide actions for the web part
    */
   hideActions?: boolean
-
-  /**
-   * Header text for status reports
-   */
-  statusReportsHeader?: string
-
-  /**
-   * Number of status reports to show (defaults to 0)
-   */
-  statusReportsCount?: number
 
   /**
    * On field external changed
@@ -79,11 +69,6 @@ export interface IProjectInformationUrlHash {
 }
 
 export interface IProjectInformationData extends ProjectDataService.IGetPropertiesData {
-  /**
-   * Array of status reports
-   */
-  statusReports?: StatusReport[]
-
   /**
    * Column configuration
    */

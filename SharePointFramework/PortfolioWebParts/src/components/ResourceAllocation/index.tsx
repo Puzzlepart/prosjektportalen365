@@ -1,6 +1,7 @@
+import { get } from '@microsoft/sp-lodash-subset'
 import { sp } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
-import * as arraySort from 'array-sort'
+import sortArray from 'array-sort'
 import {
   IAllocationSearchResult,
   ITimelineData,
@@ -8,18 +9,16 @@ import {
   ITimelineItem,
   TimelineGroupType
 } from 'interfaces'
-import * as moment from 'moment'
-import * as objectGet from 'object-get'
-import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar'
+import moment from 'moment'
+import { CommandBar, ICommandBarProps } from 'office-ui-fabric-react/lib/CommandBar'
 import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import { tryParsePercentage } from 'pp365-shared/lib/helpers'
 import { DataSourceService } from 'pp365-shared/lib/services'
-import * as React from 'react'
+import React, { Component } from 'react'
 import Timeline, {
   ReactCalendarGroupRendererProps,
   ReactCalendarItemRendererProps,
@@ -27,19 +26,18 @@ import Timeline, {
   TodayMarker
 } from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css'
-import * as _ from 'underscore'
+import _ from 'underscore'
 import { FilterPanel, IFilterItemProps, IFilterProps } from '../FilterPanel'
 import { DetailsCallout } from './DetailsCallout'
-import { IResourceAllocationProps } from './IResourceAllocationProps'
-import { IResourceAllocationState } from './IResourceAllocationState'
 import styles from './ResourceAllocation.module.scss'
 import './Timeline.overrides.css'
+import { IResourceAllocationProps, IResourceAllocationState } from './types'
 
 /**
  * @component ResourceAllocation
- * @extends React.Component
+ * @extends Component
  */
-export class ResourceAllocation extends React.Component<
+export class ResourceAllocation extends Component<
   IResourceAllocationProps,
   IResourceAllocationState
 > {
@@ -72,32 +70,21 @@ export class ResourceAllocation extends React.Component<
    */
   constructor(props: IResourceAllocationProps) {
     super(props)
-    this.state = { isLoading: true, showFilterPanel: false, activeFilters: {} }
+    this.state = { loading: true, showFilterPanel: false, activeFilters: {} }
     moment.locale('nb')
   }
 
   public async componentDidMount(): Promise<void> {
     try {
       const data = await this._fetchData()
-      this.setState({ data, isLoading: false })
+      this.setState({ data, loading: false })
     } catch (error) {
-      this.setState({ error, isLoading: false })
+      this.setState({ error, loading: false })
     }
   }
 
   public render(): React.ReactElement<IResourceAllocationProps> {
-    if (this.state.isLoading) {
-      return (
-        <div className={styles.resourceAllocation}>
-          <div className={styles.container}>
-            <Spinner
-              label={format(strings.LoadingText, this.props.dataSource.toLowerCase())}
-              type={SpinnerType.large}
-            />
-          </div>
-        </div>
-      )
-    }
+    if (this.state.loading) return null
     if (this.state.error) {
       return (
         <div className={styles.resourceAllocation}>
@@ -114,10 +101,7 @@ export class ResourceAllocation extends React.Component<
       <div className={styles.resourceAllocation}>
         <div className={styles.container}>
           <div className={styles.commandBar}>
-            <CommandBar
-              items={this._getCommandBarItems().left}
-              farItems={this._getCommandBarItems().right}
-            />
+            <CommandBar {...this._getCommandBarProps()} />
           </div>
           <div className={styles.header}>
             <div className={styles.title}>{this.props.title}</div>
@@ -134,7 +118,7 @@ export class ResourceAllocation extends React.Component<
             </MessageBar>
           </div>
           <div className={styles.timeline}>
-            <Timeline
+            <Timeline<any>
               groups={groups}
               items={items}
               stackItems={true}
@@ -176,8 +160,7 @@ export class ResourceAllocation extends React.Component<
     const activeFiltersKeys = Object.keys(activeFilters)
     if (activeFiltersKeys.length > 0) {
       const items = activeFiltersKeys.reduce(
-        (newItems, key) =>
-          newItems.filter((i) => activeFilters[key].indexOf(objectGet(i, key)) !== -1),
+        (newItems, key) => newItems.filter((i) => activeFilters[key].indexOf(get(i, key)) !== -1),
         data.items
       )
       const groups = data.groups.filter((grp) => items.filter((i) => i.group === grp.id).length > 0)
@@ -199,7 +182,7 @@ export class ResourceAllocation extends React.Component<
     return columns.map((col) => ({
       column: { key: col.fieldName, minWidth: 0, ...col },
       items: this.state.data.items
-        .map((i) => objectGet(i, col.fieldName))
+        .map((i) => get(i, col.fieldName))
         .filter((value, index, self) => value && self.indexOf(value) === index)
         .map((name) => {
           const filter = this.state.activeFilters[col.fieldName]
@@ -228,27 +211,26 @@ export class ResourceAllocation extends React.Component<
   /**
    * Get command bar items
    */
-  private _getCommandBarItems() {
-    const right = [
-      {
-        key: getId('Filter'),
-        name: strings.FilterText,
-        iconProps: { iconName: 'Filter' },
-        itemType: ContextualMenuItemType.Header,
-        iconOnly: true,
-        onClick: (ev) => {
-          ev.preventDefault()
-          this.setState({ showFilterPanel: true })
-        }
+  private _getCommandBarProps(): ICommandBarProps {
+    const cmd: ICommandBarProps = { items: [], farItems: [] }
+    cmd.farItems.push({
+      key: getId('Filter'),
+      name: strings.FilterText,
+      iconProps: { iconName: 'Filter' },
+      itemType: ContextualMenuItemType.Header,
+      iconOnly: true,
+      onClick: (ev) => {
+        ev.preventDefault()
+        this.setState({ showFilterPanel: true })
       }
-    ] as ICommandBarItemProps[]
-    return { left: [], right }
+    })
+    return cmd
   }
 
   /**
    * Timeline item renderer
    */
-  private _itemRenderer(props: ReactCalendarItemRendererProps<ITimelineItem>) {
+  private _itemRenderer(props: ReactCalendarItemRendererProps<any>) {
     const htmlProps = props.getItemProps(props.item.itemProps)
     return (
       <div
@@ -311,7 +293,7 @@ export class ResourceAllocation extends React.Component<
         type: type === 'R' ? TimelineGroupType.Role : TimelineGroupType.User
       }
     })
-    groups = arraySort(groups, ['type', 'title'])
+    groups = sortArray(groups, ['type', 'title'])
     return groups
   }
 

@@ -9,20 +9,19 @@ import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner'
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationModal } from 'pp365-projectwebparts/lib/components/ProjectInformation'
-import * as React from 'react'
 import { getObjectValue, sortAlphabetically } from 'pp365-shared/lib/helpers'
+import React, { Component } from 'react'
 import * as _ from 'underscore'
-import { IProjectListProps } from './IProjectListProps'
-import { IProjectListState } from './IProjectListState'
 import { ProjectCard } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
+import { IProjectListProps, IProjectListState } from './types'
 
 /**
  * @component ProjectList
- * @extends React.Component
+ * @extends Component
  */
-export class ProjectList extends React.Component<IProjectListProps, IProjectListState> {
+export class ProjectList extends Component<IProjectListProps, IProjectListState> {
   public static defaultProps: Partial<IProjectListProps> = {
     columns: PROJECTLIST_COLUMNS,
     sortBy: 'Title'
@@ -35,7 +34,7 @@ export class ProjectList extends React.Component<IProjectListProps, IProjectList
    */
   constructor(props: IProjectListProps) {
     super(props)
-    this.state = { isLoading: true, searchTerm: '', showAsTiles: props.showAsTiles }
+    this.state = { loading: true, searchTerm: '', showAsTiles: props.showAsTiles }
   }
 
   public async componentDidMount() {
@@ -52,13 +51,13 @@ export class ProjectList extends React.Component<IProjectListProps, IProjectList
       this.setState({
         projects,
         listView: { projects, columns },
-        isLoading: false
+        loading: false
       })
       if (this.props.showProjectLogo) {
         this._getProjectLogos(20)
       }
     } catch (error) {
-      this.setState({ error, isLoading: false })
+      this.setState({ error, loading: false })
     }
   }
 
@@ -66,16 +65,16 @@ export class ProjectList extends React.Component<IProjectListProps, IProjectList
    * Renders the <ProjectList /> component
    */
   public render(): React.ReactElement<IProjectListProps> {
-    if (this.state.isLoading) {
+    if (this.state.loading) {
       return (
-        <div className={styles.projectList}>
+        <div className={styles.root}>
           <Spinner label={this.props.loadingText} type={SpinnerType.large} />
         </div>
       )
     }
     if (this.state.error) {
       return (
-        <div className={styles.projectList}>
+        <div className={styles.root}>
           <MessageBar messageBarType={MessageBarType.error}>{strings.ErrorText}</MessageBar>
         </div>
       )
@@ -84,7 +83,7 @@ export class ProjectList extends React.Component<IProjectListProps, IProjectList
     const projects = this._filterProjets(this.state.projects)
 
     return (
-      <div className={styles.projectList}>
+      <div className={styles.root}>
         <div className={styles.container}>
           <div className={styles.searchBox} hidden={!this.props.showSearchBox}>
             <SearchBox

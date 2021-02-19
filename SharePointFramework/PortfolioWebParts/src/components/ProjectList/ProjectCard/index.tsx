@@ -1,18 +1,12 @@
 import { DocumentCard } from 'office-ui-fabric-react/lib/DocumentCard'
-import * as React from 'react'
-import { IProjectCardProps } from './IProjectCardProps'
+import React, { FunctionComponent } from 'react'
 import styles from './ProjectCard.module.scss'
-import { ProjectCardHeader } from './ProjectCardHeader'
 import { ProjectCardContent } from './ProjectCardContent'
 import { ProjectCardFooter } from './ProjectCardFooter'
+import { ProjectCardHeader } from './ProjectCardHeader'
+import { IProjectCardProps } from './types'
 
-/**
- * Project Card
- *
- * @param {IProjectCardProps} props Props
- */
-// tslint:disable-next-line: naming-convention
-export const ProjectCard = (props: IProjectCardProps): JSX.Element => {
+export const ProjectCard: FunctionComponent<IProjectCardProps> = (props: IProjectCardProps) => {
   return (
     <DocumentCard className={styles.projectCard} onClickHref={props.project.url}>
       <ProjectCardHeader {...props} />

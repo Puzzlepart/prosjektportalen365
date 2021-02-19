@@ -3,6 +3,8 @@
   "compilerOptions": {
     "target": "es5",
     "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "noUnusedParameters": true,
     "module": "esnext",
     "moduleResolution": "node",
     "jsx": "react",
@@ -25,6 +27,7 @@
     "lib": [
       "es5",
       "dom",
+      "es2015",
       "es2015.collection"
     ],
     "baseUrl": "src",

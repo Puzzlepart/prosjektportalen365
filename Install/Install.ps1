@@ -75,19 +75,19 @@ function Connect-SharePoint {
             $DecodedCred = ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($CI))).Split("|")
             $Password = ConvertTo-SecureString -String $DecodedCred[1] -AsPlainText -Force
             $Credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $DecodedCred[0], $Password
-            Connect-PnPOnline -Url $Url -Credentials $Credentials -ErrorAction Stop
+            Connect-PnPOnline -Url $Url -Credentials $Credentials -ErrorAction Stop  -WarningAction Ignore
         }
         elseif ($UseWebLogin.IsPresent) {
-            Connect-PnPOnline -Url $Url -UseWebLogin -ErrorAction Stop
+            Connect-PnPOnline -Url $Url -UseWebLogin -ErrorAction Stop -WarningAction Ignore
         }
         elseif ($null -ne $PSCredential) {
-            Connect-PnPOnline -Url $Url -Credentials $PSCredential -ErrorAction Stop
+            Connect-PnPOnline -Url $Url -Credentials $PSCredential -ErrorAction Stop  -WarningAction Ignore
         }
         elseif ($null -ne $GenericCredential -and $GenericCredential -ne "") {
-            Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ErrorAction Stop
+            Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ErrorAction Stop  -WarningAction Ignore
         }
         else {
-            Connect-PnPOnline -Url $Url -ErrorAction Stop
+            Connect-PnPOnline -Url $Url -ErrorAction Stop -WarningAction Ignore
         }
     }
     Catch {
@@ -124,7 +124,6 @@ $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".share
 #endregion
 
 #region Print installation user
-
 Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
 $CurrentUser = Get-PnPProperty -Property CurrentUser -ClientObject (Get-PnPContext).Web
 Write-Host "[INFO] Installing with user [$($CurrentUser.Email)]"
@@ -282,11 +281,12 @@ if (-not $Upgrade.IsPresent) {
     }
     Catch {}
 }
+#endregion
 
 #region Applying PnP templates 
 if (-not $SkipTemplate.IsPresent) {
     Try {
-        $BasePath =  "$PSScriptRoot\Templates"
+        $BasePath = "$PSScriptRoot\Templates"
         Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
         Set-PnPTenantSite -NoScriptSite:$false -Url $Url -ErrorAction SilentlyContinue >$null 2>&1        
         Disconnect-PnPOnline
@@ -372,10 +372,11 @@ Write-Host "[INFO] Running post-install steps"
 try {
     ."$PSScriptRoot\Scripts\PostInstall.ps1"
     Write-Host "[SUCCESS] Successfully ran post-install steps" -ForegroundColor Green
-} catch {
+}
+catch {
     Write-Host "[WARNING] Failed to run post-install steps: $($_.Exception.Message)" -ForegroundColor Yellow
 }
-#endregion
+
 
 $sw.Stop()
 
@@ -390,7 +391,9 @@ if ($Upgrade.IsPresent) {
 else {
     Write-Host "[SUCCESS] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
 }
+#endregion
 
+#region Log installation
 $InstallEndTime = (Get-Date -Format o)
 
 $InstallEntry = @{
@@ -413,3 +416,4 @@ try {
     Invoke-WebRequest "https://pp365-install-pingback.azurewebsites.net/api/AddEntry" -Body ($InstallEntry | ConvertTo-Json) -Method 'POST' -ErrorAction SilentlyContinue >$null 2>&1 
 }
 catch {}
+#endregion

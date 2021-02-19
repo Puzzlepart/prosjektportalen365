@@ -1,6 +1,8 @@
-## Project extensions
+## Project extensions [![version](https://img.shields.io/badge/version-1.2.6-yellow.svg)](https://semver.org)
 
 This solution contains SPFx extensions for the project level.
+
+_Published to **npm** as `pp365-projectextensions`_
 
 ### ProjectSetup
 
@@ -61,7 +63,7 @@ When the user has selected their templates, selected the target folder and click
 
 ![image-20210210211809859](assets/image-20210210211809859.png)
 
-## Serve
+### Serve
 
 - Take a copy of `config/serve.sample.json` and name it `serve.json`
 - Run `npm run serve`

@@ -1,9 +1,7 @@
-import * as React from 'react'
+import React from 'react'
 import styles from './Tag.module.scss'
-import { ITagProps } from './ITagProps'
+import { ITagProps } from './types'
 
-export class Tag extends React.Component<ITagProps> {
-  public render(): React.ReactElement<ITagProps> {
-    return <span className={styles.tag}>{this.props.text}</span>
-  }
+export const Tag = ({ text }: ITagProps) => {
+  return <span className={styles.root}>{text}</span>
 }

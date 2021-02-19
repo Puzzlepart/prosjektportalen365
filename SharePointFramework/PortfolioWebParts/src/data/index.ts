@@ -14,19 +14,33 @@ import {
 } from 'models'
 import MSGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
-import { PortfolioOverviewView } from 'pp365-shared/lib/models'
+import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
+import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
 import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
-import * as _ from 'underscore'
-import { DEFAULT_SEARCH_SETTINGS } from './DEFAULT_SEARCH_SETTINGS'
+import HubSiteService from 'sp-hubsite-service'
+import _ from 'underscore'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
+import { DEFAULT_SEARCH_SETTINGS } from './types'
 
 export class DataAdapter {
   private _portalDataService: PortalDataService
+  private _dataSourceService: DataSourceService
 
   constructor(public context: WebPartContext) {
     this._portalDataService = new PortalDataService().configure({
       urlOrWeb: context.pageContext.web.absoluteUrl
     })
+  }
+
+  /**
+   * Configuring the DataAdapter enabling use
+   * of the DataSourceService.
+   */
+  public async configure(): Promise<DataAdapter> {
+    if (this._dataSourceService) return this
+    const { web } = await HubSiteService.GetHubSite(sp, this.context.pageContext)
+    this._dataSourceService = new DataSourceService(web)
+    return this
   }
 
   /**
@@ -135,7 +149,7 @@ export class DataAdapter {
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
     siteId: string,
-    siteIdProperty = 'GtSiteIdOWSTEXT'
+    siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IFetchDataForViewItemResult[]> {
     try {
       const { projects, sites, statusReports } = await this._fetchDataForView(
@@ -178,7 +192,7 @@ export class DataAdapter {
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
     siteId: string,
-    siteIdProperty = 'GtSiteIdOWSTEXT'
+    siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IFetchDataForViewItemResult[]> {
     try {
       const { projects, sites, statusReports } = await this._fetchDataForView(
@@ -217,7 +231,7 @@ export class DataAdapter {
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
     siteId: string,
-    siteIdProperty = 'GtSiteIdOWSTEXT'
+    siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ) {
     let [
       { PrimarySearchResults: projects },
@@ -371,6 +385,7 @@ export class DataAdapter {
    * Checks if the current is in the specified group
    *
    * @private
+   *
    * @param {string} groupName
    *
    * @returns {Promise<boolean>}
@@ -386,6 +401,55 @@ export class DataAdapter {
       return siteGroup && siteGroup.CanCurrentUserViewMembership
     } catch (error) {
       return false
+    }
+  }
+
+  /**
+   * Fetch items
+   *
+   * @param {string} queryTemplate Query template
+   * @param {string[]} selectProperties Select properties
+   */
+  private async _fetchItems(queryTemplate: string, selectProperties: string[]) {
+    const response = await sp.searchWithCaching({
+      QueryTemplate: queryTemplate,
+      Querytext: '*',
+      RowLimit: 500,
+      TrimDuplicates: false,
+      SelectProperties: [...selectProperties, 'Path', 'SPWebURL', 'SiteTitle']
+    })
+    return response.PrimarySearchResults
+  }
+
+  /**
+   * Fetch items with data source name
+   *
+   * @param {string} dataSourceName Data source name
+   * @param {string[]} selectProperties Select properties
+   */
+  public async fetchItemsWithSource(
+    dataSourceName: string,
+    selectProperties: string[]
+  ): Promise<any> {
+    try {
+      const { searchQuery } = await this._dataSourceService.getByName(dataSourceName)
+      const items = await this._fetchItems(searchQuery, selectProperties)
+      return items
+    } catch (error) {
+      throw error
+    }
+  }
+
+  /**
+   * Fetch data sources by category
+   *
+   * @param {string} category Data source category
+   */
+  public fetchDataSources(category: string): Promise<DataSource[]> {
+    try {
+      return this._dataSourceService.getByCategory(category)
+    } catch (error) {
+      throw error
     }
   }
 }

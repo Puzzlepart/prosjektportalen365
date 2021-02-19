@@ -1,11 +1,12 @@
-import { BaseClientSideWebPart, IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base'
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
+import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
-import { IBaseComponentProps } from 'components/IBaseComponentProps'
+import { IBaseComponentProps } from 'components/types'
 import { DataAdapter } from 'data'
-import * as merge from 'object-assign'
-import * as React from 'react'
+import assign from 'object-assign'
+import React from 'react'
 import * as ReactDom from 'react-dom'
 
 // tslint:disable-next-line: naming-convention
@@ -23,10 +24,14 @@ export abstract class BasePortfolioWebPart<
    * @param {any} component Component
    * @param {T} props Props
    */
-  public renderComponent(component: React.ComponentClass<T>, props?: T): void {
-    const combinedProps = merge({ title: this._pageTitle }, this.properties, props, {
+  public renderComponent<T = any>(
+    component: React.ComponentClass<T> | React.FunctionComponent<T>,
+    props?: T
+  ): void {
+    const combinedProps = assign({ title: this._pageTitle }, this.properties, props, {
       pageContext: this.context.pageContext,
-      dataAdapter: this.dataAdapter
+      dataAdapter: this.dataAdapter,
+      displayMode: this.displayMode
     })
     const element: React.ReactElement<T> = React.createElement(component, combinedProps)
     ReactDom.render(element, this.domElement)
