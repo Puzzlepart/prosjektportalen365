@@ -1,16 +1,16 @@
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar'
 import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu'
 import React from 'react'
-import { IPortfolioInsightsCommandBarProps } from './IPortfolioInsightsCommandBarProps'
+import {  ICommandsProps } from './types'
 import styles from './PortfolioInsightsCommandBar.module.scss'
 
-// tslint:disable-next-line: naming-convention
-const PortfolioInsightsCommandBar = (props: IPortfolioInsightsCommandBarProps) => {
+export const Commands = (props: ICommandsProps) => {
   const items: ICommandBarItemProps[] = [
     {
       key: 'NEW_ITEM',
       name: 'Ny',
       iconProps: { iconName: 'Add' },
+      buttonStyles: { root: { border: 'none' } },
       itemType: ContextualMenuItemType.Header,
       subMenuProps: {
         items: props.contentTypes.map((ct) => ({
@@ -29,6 +29,7 @@ const PortfolioInsightsCommandBar = (props: IPortfolioInsightsCommandBarProps) =
       key: 'VIEW_SELECTOR',
       name: props.currentView.title,
       iconProps: { iconName: 'List' },
+      buttonStyles: { root: { border: 'none' } },
       itemType: ContextualMenuItemType.Header,
       subMenuProps: {
         items: props.configuration.views.map((view) => ({
@@ -49,5 +50,3 @@ const PortfolioInsightsCommandBar = (props: IPortfolioInsightsCommandBarProps) =
     </div>
   )
 }
-
-export default PortfolioInsightsCommandBar

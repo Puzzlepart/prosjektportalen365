@@ -1,7 +1,7 @@
 import { IPortfolioConfiguration } from 'interfaces'
 import { PortfolioOverviewView } from 'pp365-shared/lib/models/PortfolioOverviewView'
 
-export interface IPortfolioInsightsCommandBarProps {
+export interface ICommandsProps {
   newFormUrl: string
   currentView: PortfolioOverviewView
   configuration: IPortfolioConfiguration

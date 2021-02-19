@@ -1,13 +1,10 @@
 import { ChartData, ChartDataItem } from 'models'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
-import * as strings from 'PortfolioWebPartsStrings'
 import { PortfolioOverviewView } from 'pp365-shared/lib/models'
 import React, { Component } from 'react'
 import Chart from './Chart'
+import { Commands } from './Commands'
 import styles from './PortfolioInsights.module.scss'
-import PortfolioInsightsCommandBar from './PortfolioInsightsCommandBar'
 import { IPortfolioInsightsProps, IPortfolioInsightsState } from './types'
 
 /**
@@ -51,23 +48,12 @@ export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortf
   }
 
   public render(): React.ReactElement<IPortfolioInsightsProps> {
-    if (this.state.loading) {
-      return (
-        <div className={styles.portfolioInsights}>
-          <div className={styles.container}>
-            <Spinner
-              label={format(strings.LoadingText, this.props.title)}
-              size={SpinnerSize.large}
-            />
-          </div>
-        </div>
-      )
-    }
+    if (this.state.loading) return null
 
     return (
       <div className={styles.portfolioInsights}>
         <div className={styles.container}>
-          <PortfolioInsightsCommandBar
+          <Commands
             newFormUrl={`${this.props.pageContext.web.absoluteUrl}/Lists/Grafkonfigurasjon/NewForm.aspx`}
             contentTypes={this.state.contentTypes}
             currentView={this.state.currentView}
