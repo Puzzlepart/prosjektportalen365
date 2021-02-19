@@ -283,6 +283,20 @@ if (-not $Upgrade.IsPresent) {
 }
 #endregion
 
+
+#region Remove pages with deprecated client side components
+if ($Upgrade.IsPresent) {
+    Try {
+        Connect-SharePoint -Url $Url -ErrorAction Stop
+        Write-Host "[INFO] Removing deprecated pages"    
+        ."$PSScriptRoot\Scripts\RemoveDeprecatedPages.ps1"
+        Disconnect-PnPOnline
+        Write-Host "[SUCCESS] Removed deprecated pages" -ForegroundColor Green
+    }
+    Catch {}
+}
+#endregion
+
 #region Applying PnP templates 
 if (-not $SkipTemplate.IsPresent) {
     Try {
