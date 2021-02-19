@@ -1,4 +1,4 @@
-import { sp } from '@pnp/sp'
+import { Web } from '@pnp/sp'
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -23,7 +23,7 @@ export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionStat
 
   public async componentDidMount() {
     try {
-      const data = await this._fetchData()
+      const data = await this._fetchListData()
       this.setState({ data, loading: false })
     } catch (error) {
       this.setState({ error, loading: false })
@@ -77,9 +77,9 @@ export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionStat
   /**
    * Fetch data
    */
-  private async _fetchData(): Promise<IRiskSectionData> {
+  private async _fetchListData(): Promise<IRiskSectionData> {
     const { listTitle, viewQuery, viewFields, rowLimit } = this.props.model
-    const list = sp.web.lists.getByTitle(listTitle)
+    const list = new Web(this.props.webUrl).lists.getByTitle(listTitle)
     const viewXml = `<View><Query>${viewQuery}</Query><RowLimit>${rowLimit}</RowLimit></View>`
     try {
       const [items, fields] = await Promise.all([
