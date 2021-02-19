@@ -12,8 +12,11 @@ _Published to **npm** as `pp365-shared`_
 
 ## [PortfolioWebParts](./PortfolioWebParts/README.md) [![version](https://img.shields.io/badge/version-1.2.6-yellow.svg)](https://semver.org)
 
-**Name:** pp-portfolio-web-parts
-**ID:** 00483367-68e2-4977-9cc3-6cf0de623daa
+| Solution name            | ID                                   |
+| ------------------------ | ------------------------------------ |
+| `pp-portfolio-web-parts` | 00483367-68e2-4977-9cc3-6cf0de623daa |
+
+
 
 Web parts for `portfolio` level of the portal.
 
@@ -25,8 +28,11 @@ _Published to **npm** as `pp365-projectwebparts`
 
 ## [ProjectExtensions](./ProjectExtensions/README.md) [![version](https://img.shields.io/badge/version-1.2.6-yellow.svg)](https://semver.org)
 
-**Name:** pp-project-extensons
-**ID:** fe723971-d5c2-4698-91e3-c16e2f72fb5b
+| Solution name          | ID                                   |
+| ---------------------- | ------------------------------------ |
+| `pp-project-extensons` | fe723971-d5c2-4698-91e3-c16e2f72fb5b |
+
+
 
 Extension for the `project` level of the portal.
 
@@ -38,8 +44,11 @@ _Published to **npm** as `pp365-projectextensions`_
 
 ## [ProjectWebParts](./ProjectWebParts/README.md) [![version](https://img.shields.io/badge/version-1.2.8-yellow.svg)](https://semver.org)
 
-**Name:** pp-project-web-parts
-**ID:** b69cb2f2-762d-425d-8e0b-d59c08918831
+| Solution name          | ID                                   |
+| ---------------------- | ------------------------------------ |
+| `pp-project-web-parts` | b69cb2f2-762d-425d-8e0b-d59c08918831 |
+
+
 
 Web parts for `project` level of the portal.
 
