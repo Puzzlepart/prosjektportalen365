@@ -44,6 +44,7 @@
     "office-ui-fabric-react": "6.214.0",
     "pp365-projectwebparts": "latest",
     "pp365-shared": "latest",
+    "pzl-react-reusable-components": "^0.0.14",
     "react": "16.8.5",
     "react-calendar-timeline": "0.27.0",
     "react-dom": "16.8.5",

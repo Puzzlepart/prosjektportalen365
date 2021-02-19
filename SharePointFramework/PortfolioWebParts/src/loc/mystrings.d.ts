@@ -57,6 +57,7 @@ declare interface IPortfolioWebPartsStrings {
   ConsequencePostActionLabel: string
   CreatedText: string
   DataSourceError: string
+  DataSourceCategoryError: string
   DataSourceNotFound: string
   DefaultViewLabel: string
   DeliveryDescriptionLabel: string
