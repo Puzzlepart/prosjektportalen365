@@ -1,4 +1,4 @@
-<pnp:ClientSidePage PageName="{resource:ClientSidePages_Configuration_PageName}" Layout="Home" Overwrite="true" EnableComments="false" Title="{resource:ClientSidePages_Configuration_Title}" xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+<pnp:ClientSidePage PageName="{resource:ClientSidePages_Configuration_PageName}" Layout="Home" Overwrite="false" EnableComments="false" Title="{resource:ClientSidePages_Configuration_Title}" xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:Sections>
         <pnp:Section Order="1" Type="OneColumn">
             <pnp:Controls>
