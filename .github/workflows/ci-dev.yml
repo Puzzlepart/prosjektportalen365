@@ -1,4 +1,4 @@
-name: CI - Build and install (dev)
+name: CI (dev)
 
 on:
   push:
