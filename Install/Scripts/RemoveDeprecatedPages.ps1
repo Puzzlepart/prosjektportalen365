@@ -9,6 +9,6 @@ $Pages = Get-PnPFolder -Url SitePages -Includes Files | Select-Object -ExpandPro
 $Pages | ForEach-Object {
     $DeprecatedComponents = Get-PnPClientSideComponent -Page $_.Name | Where-Object { $DeprecatedIds.Contains($_.WebPartId) }
     if($DeprecatedComponents.Count -gt 0) {
-        $_.Name
+        Remove-PnPClientSidePage $_.Name -Force
     }
 }
