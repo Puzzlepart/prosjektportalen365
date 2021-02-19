@@ -83,7 +83,7 @@ _Published to **npm** as `pp365-projectwebparts`_`_
 
 To work with the various solutions, you have to to the following
 
-1. Ensure you have pnpm installed
+1. Ensure you have `pnpm` or `npm` installed
 2. Build the Shared solution. Navigate to "@Shared" and run `pnpm i --shamefully-hoist` followed by `pnpm run-script build`
 3. Navigate to [ProjectWebParts](./ProjectWebParts) and run `npm i` followed by `pnpm run-script package`
 4. Navigate to [PortfolioWebParts](./PortfolioWebParts) and run `npm i` followed by `pnpm run-script package`
