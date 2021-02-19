@@ -24,29 +24,29 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
 
   useEffect(() => {
     if (props.dataSourceCategory) {
-      props.dataAdapter
-        .configure()
-        .then(adapter => {
-          adapter.fetchDataSources(props.dataSourceCategory)
-            .then((dataSources) => dispatch(DATA_FETCHED({
+      props.dataAdapter.configure().then((adapter) => {
+        adapter.fetchDataSources(props.dataSourceCategory).then((dataSources) =>
+          dispatch(
+            DATA_FETCHED({
               items: null,
               dataSources
-            })))
-        })
+            })
+          )
+        )
+      })
     }
   }, [props.dataSourceCategory])
 
   useEffect(() => {
     dispatch(START_FETCH())
-    props.dataAdapter
-      .configure()
-      .then(adapter => {
-        adapter.fetchItemsWithSource(
+    props.dataAdapter.configure().then((adapter) => {
+      adapter
+        .fetchItemsWithSource(
           state.dataSource,
           props.selectProperties || state.columns.map((col) => col.fieldName)
         )
         .then((items) => dispatch(DATA_FETCHED({ items })))
-      })
+    })
   }, [state.columnAdded, state.dataSource])
 
   const items = useMemo(() => {

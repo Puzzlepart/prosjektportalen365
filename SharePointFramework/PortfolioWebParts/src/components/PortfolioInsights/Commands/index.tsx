@@ -1,7 +1,7 @@
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar'
 import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu'
 import React from 'react'
-import {  ICommandsProps } from './types'
+import { ICommandsProps } from './types'
 import styles from './PortfolioInsightsCommandBar.module.scss'
 
 export const Commands = (props: ICommandsProps) => {

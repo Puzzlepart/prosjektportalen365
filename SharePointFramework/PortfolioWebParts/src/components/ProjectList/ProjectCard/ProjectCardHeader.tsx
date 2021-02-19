@@ -8,8 +8,7 @@ export const ProjectCardHeader: FunctionComponent<IProjectCardProps> = ({
   project,
   showProjectLogo,
   shouldTruncateTitle
-}: IProjectCardProps
-) => {
+}: IProjectCardProps) => {
   return (
     <div className={styles.header}>
       <div className={styles.logo} hidden={!showProjectLogo}>

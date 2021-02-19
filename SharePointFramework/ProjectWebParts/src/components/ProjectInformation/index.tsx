@@ -28,7 +28,7 @@ import {
 export class ProjectInformation extends BaseWebPartComponent<
   IProjectInformationProps,
   IProjectInformationState
-  > {
+> {
   public static defaultProps: Partial<IProjectInformationProps> = {
     page: 'Frontpage'
   }
@@ -186,7 +186,7 @@ export class ProjectInformation extends BaseWebPartComponent<
         this.props.webUrl,
         strings.ProjectPropertiesListName,
         this.state.data.templateParameters.ProjectContentTypeId ||
-        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: this.props.webTitle }
       )
       if (!created) {
@@ -245,7 +245,7 @@ export class ProjectInformation extends BaseWebPartComponent<
         siteId: this.props.siteId,
         webUrl: this.props.webUrl,
         hubSiteUrl: this.props.hubSite.url,
-        logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning,
+        logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
       })
       const [columns, propertiesData] = await Promise.all([
         this._portalDataService.getProjectColumns(),
@@ -266,4 +266,3 @@ export class ProjectInformation extends BaseWebPartComponent<
 
 export { ProjectInformationModal } from '../ProjectInformationModal'
 export * from './types'
-

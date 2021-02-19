@@ -19,7 +19,7 @@ export interface IBenefitMeasurementsModalState {
 export default class BenefitMeasurementsModal extends PureComponent<
   IBenefitMeasurementsModalProps,
   IBenefitMeasurementsModalState
-  > {
+> {
   public static defaultProps: Partial<IBenefitMeasurementsModalProps> = {
     columns
   }

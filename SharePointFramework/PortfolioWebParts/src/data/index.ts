@@ -33,7 +33,7 @@ export class DataAdapter {
   }
 
   /**
-   * Configuring the DataAdapter enabling use 
+   * Configuring the DataAdapter enabling use
    * of the DataSourceService.
    */
   public async configure(): Promise<DataAdapter> {

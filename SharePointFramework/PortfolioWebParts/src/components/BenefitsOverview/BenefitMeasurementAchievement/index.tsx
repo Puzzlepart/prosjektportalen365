@@ -2,9 +2,9 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon'
 import React from 'react'
 import { IBenefitMeasurementAchievementProps } from './types'
 
-
-
-export const BenefitMeasurementAchievement = ({ measurement }: IBenefitMeasurementAchievementProps) => {
+export const BenefitMeasurementAchievement = ({
+  measurement
+}: IBenefitMeasurementAchievementProps) => {
   if (measurement.AchievementDisplay) {
     return (
       <span>
