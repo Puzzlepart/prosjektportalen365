@@ -14,9 +14,6 @@
     "deploy": "gulp uploadAppPkg && gulp deploySppkg",
     "packageAndDeploy": "npm run package && npm run deploy",
     "postversion": "gulp versionSync",
-    "prepackage": "gulp setHiddenToolbox --ship",
-    "preserve": "gulp setHiddenToolbox",
-    "preserveNoBrowser": "gulp setHiddenToolbox",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
     "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent"
@@ -47,6 +44,7 @@
     "office-ui-fabric-react": "6.214.0",
     "pp365-projectwebparts": "latest",
     "pp365-shared": "latest",
+    "pzl-react-reusable-components": "^0.0.14",
     "react": "16.8.5",
     "react-calendar-timeline": "0.27.0",
     "react-dom": "16.8.5",

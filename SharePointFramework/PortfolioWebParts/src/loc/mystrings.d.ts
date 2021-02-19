@@ -1,4 +1,7 @@
 declare interface IPortfolioWebPartsStrings {
+  PortfolioAggregationNotConfiguredMessage: string
+  DataSourceCategoryDescription: string
+  DataSourceDescription: string
   ColumnRenderOptionTags: string
   ColumnRenderOptionList: string
   ColumnRenderOptionInt: string
@@ -54,6 +57,7 @@ declare interface IPortfolioWebPartsStrings {
   ConsequencePostActionLabel: string
   CreatedText: string
   DataSourceError: string
+  DataSourceCategoryError: string
   DataSourceNotFound: string
   DefaultViewLabel: string
   DeliveryDescriptionLabel: string

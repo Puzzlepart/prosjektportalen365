@@ -50,20 +50,6 @@ gulp.task('versionSync', (done) => {
     })
 })
 
-gulp.task('setHiddenToolbox', (done) => {
-    find.file(/\manifest.json$/, path.join(__dirname, "src", "webparts"), (files) => {
-        for (let i = 0; i < files.length; i++) {
-            let manifest = require(files[i])
-            if (manifest.hiddenFromToolbox != !!argv.ship) {
-                log(`[${colors.cyan('setHiddenToolbox')}] Setting ${colors.cyan('hiddenFromToolbox')} to ${colors.cyan(!!argv.ship)} for ${colors.cyan(manifest.alias)}...`)
-                manifest.hiddenFromToolbox = !!argv.ship
-                fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => { /* handle error */ })
-            }
-        }
-        done()
-    })
-})
-
 build.configureWebpack.mergeConfig({
     additionalConfiguration: (webpack) => {
         let { paths, outDir } = JSON.parse(JSON.stringify(tsConfig.compilerOptions).replace(/\/\*"/gm, '"'))

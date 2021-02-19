@@ -1,5 +1,8 @@
 define([], function () {
   return {
+    PortfolioAggregationNotConfiguredMessage: 'Webdelen må konfigureres med en datakilde. Rediger webdelen, og legg inn navnet på datakilden du vil bruke.',
+    DataSourceCategoryDescription: 'Angi en datakildekategori for å kunne velge mellom flere datakilder i webdelen.',
+    DataSourceDescription: 'Navnet på datakilden du vil bruke. Datakildene finner du i listen Datakilder på Portføljeområdet.',
     SearchPropertyDescription: 'Navnet på den forvaltede egenskapen for denne kolonnen.',
     DataSourceGroupName: 'Datakilder',
     CommandBarGroupName: 'Søkeboks',
@@ -52,8 +55,9 @@ define([], function () {
     ConsequenceLabel: 'Konsekvens (K)',
     ConsequencePostActionLabel: 'K etter tiltak',
     CreatedText: 'Opprettet',
-    DataSourceError: 'Det skjedde en feil under uthenting av data fra datakilde med navn {0}.',
-    DataSourceNotFound: 'Finner ingen datakilde med navn {0}.',
+    DataSourceCategoryError: 'Det skjedde en feil under uthenting av datakilder med kategori **{0}**.',
+    DataSourceError: 'Det skjedde en feil under uthenting av data fra datakilde med navn **{0}**.',
+    DataSourceNotFound: 'Finner ingen datakilde med navn **{0}**.',
     DefaultViewLabel: 'Standardvisning',
     DeliveryDescriptionLabel: 'Leveransebeskrivelse',
     DeliveryEndTimeLabel: 'Sluttidspunkt',

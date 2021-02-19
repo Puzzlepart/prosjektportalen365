@@ -1,6 +1,8 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList'
+import { UserMessage } from 'pzl-react-reusable-components/lib/UserMessage'
 import React, { useEffect, useMemo, useReducer } from 'react'
 import { ColumnContextMenu } from './ColumnContextMenu'
 import { addColumn, ColumnFormPanel } from './ColumnFormPanel'
@@ -11,6 +13,7 @@ import styles from './PortfolioAggregation.module.scss'
 import createReducer, {
   COLUMN_HEADER_CONTEXT_MENU,
   DATA_FETCHED,
+  DATA_FETCH_ERROR,
   initState,
   START_FETCH
 } from './reducer'
@@ -25,14 +28,17 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   useEffect(() => {
     if (props.dataSourceCategory) {
       props.dataAdapter.configure().then((adapter) => {
-        adapter.fetchDataSources(props.dataSourceCategory).then((dataSources) =>
-          dispatch(
-            DATA_FETCHED({
-              items: null,
-              dataSources
-            })
+        adapter
+          .fetchDataSources(props.dataSourceCategory)
+          .then((dataSources) =>
+            dispatch(
+              DATA_FETCHED({
+                items: null,
+                dataSources
+              })
+            )
           )
-        )
+          .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
       })
     }
   }, [props.dataSourceCategory])
@@ -46,6 +52,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
           props.selectProperties || state.columns.map((col) => col.fieldName)
         )
         .then((items) => dispatch(DATA_FETCHED({ items })))
+        .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
     })
   }, [state.columnAdded, state.dataSource])
 
@@ -54,6 +61,10 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   }, [state.searchTerm, state.items])
 
   const ctxValue = useMemo(() => ({ props, state, dispatch }), [state])
+
+  if (state.error) {
+    return <UserMessage type={MessageBarType.error} text={state.error.message} />
+  }
 
   return (
     <PortfolioAggregationContext.Provider value={ctxValue}>

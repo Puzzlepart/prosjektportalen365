@@ -13,6 +13,7 @@ import {
   SPContentType
 } from 'models'
 import MSGraph from 'msgraph-helper'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
@@ -424,19 +425,19 @@ export class DataAdapter {
   /**
    * Fetch items with data source name
    *
-   * @param {string} dataSourceName Data source name
+   * @param {string} name Data source name
    * @param {string[]} selectProperties Select properties
    */
-  public async fetchItemsWithSource(
-    dataSourceName: string,
-    selectProperties: string[]
-  ): Promise<any> {
+  public async fetchItemsWithSource(name: string, selectProperties: string[]): Promise<any> {
+    const dataSrc = await this._dataSourceService.getByName(name)
+    if (!dataSrc) {
+      throw new Error(format(strings.DataSourceNotFound, name))
+    }
     try {
-      const { searchQuery } = await this._dataSourceService.getByName(dataSourceName)
-      const items = await this._fetchItems(searchQuery, selectProperties)
+      const items = await this._fetchItems(dataSrc.searchQuery, selectProperties)
       return items
     } catch (error) {
-      throw error
+      throw new Error(format(strings.DataSourceError, name))
     }
   }
 
@@ -449,7 +450,7 @@ export class DataAdapter {
     try {
       return this._dataSourceService.getByCategory(category)
     } catch (error) {
-      throw error
+      throw new Error(format(strings.DataSourceCategoryError, category))
     }
   }
 }

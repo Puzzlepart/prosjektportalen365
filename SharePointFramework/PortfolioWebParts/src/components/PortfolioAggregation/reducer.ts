@@ -37,6 +37,7 @@ export const MOVE_COLUMN = createAction<{ column: IColumn; move: number }>('MOVE
 export const SET_DATA_SOURCE = createAction<{ dataSource: DataSource }>('SET_DATA_SOURCE')
 export const START_FETCH = createAction('START_FETCH')
 export const SEARCH = createAction<{ searchTerm: string }>('SEARCH')
+export const DATA_FETCH_ERROR = createAction<{ error: Error }>('DATA_FETCH_ERROR')
 
 /**
  * Persist columns in web part properties
@@ -57,7 +58,7 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
   dataSources: [],
   items: [],
   searchTerm: '',
-  columns: props.columns,
+  columns: props.columns || [],
   groups: null,
   addColumnPanel: { isOpen: false }
 })
@@ -199,5 +200,9 @@ export default (props: IPortfolioAggregationProps) =>
 
     [SEARCH.type]: (state, { payload }: ReturnType<typeof SEARCH>) => {
       state.searchTerm = payload.searchTerm
+    },
+
+    [DATA_FETCH_ERROR.type]: (state, { payload }: ReturnType<typeof DATA_FETCH_ERROR>) => {
+      state.error = payload.error
     }
   })

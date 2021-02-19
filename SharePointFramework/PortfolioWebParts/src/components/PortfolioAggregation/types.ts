@@ -142,5 +142,5 @@ export interface IPortfolioAggregationState {
   /**
    * Error
    */
-  error?: string
+  error?: Error
 }
