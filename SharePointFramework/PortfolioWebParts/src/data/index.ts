@@ -15,11 +15,12 @@ import {
 import MSGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
-import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
-import * as _ from 'underscore'
-import { DEFAULT_SEARCH_SETTINGS } from './types'
-import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
+import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
+import HubSiteService from 'sp-hubsite-service'
+import _ from 'underscore'
+import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
+import { DEFAULT_SEARCH_SETTINGS } from './types'
 
 export class DataAdapter {
   private _portalDataService: PortalDataService
@@ -29,7 +30,17 @@ export class DataAdapter {
     this._portalDataService = new PortalDataService().configure({
       urlOrWeb: context.pageContext.web.absoluteUrl
     })
-    this._dataSourceService = new DataSourceService(sp.web)
+  }
+
+  /**
+   * Configuring the DataAdapter enabling use 
+   * of the DataSourceService.
+   */
+  public async configure(): Promise<DataAdapter> {
+    if (this._dataSourceService) return this
+    const { web } = await HubSiteService.GetHubSite(sp, this.context.pageContext)
+    this._dataSourceService = new DataSourceService(web)
+    return this
   }
 
   /**

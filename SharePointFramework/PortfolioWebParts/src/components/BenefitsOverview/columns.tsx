@@ -3,7 +3,8 @@ import { BenefitMeasurementIndicator } from 'models'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getObjectValue } from 'pp365-shared/lib/helpers'
 import React from 'react'
-import BenefitMeasurementAchievement from './BenefitMeasurementAchievement'
+import { first } from 'underscore'
+import { BenefitMeasurementAchievement } from './BenefitMeasurementAchievement'
 import BenefitMeasurementsModal from './BenefitMeasurementsModal'
 import { IBenefitsOverviewProps } from './types'
 
@@ -28,7 +29,7 @@ export function getColumns(props: IBenefitsOverviewProps): IAggregatedSearchList
       fieldName: 'Benefit.Responsible',
       name: strings.BenefitResponsibleLabel,
       minWidth: 50,
-      maxWidth: 180,
+      maxWidth: 150,
       isResizable: true,
       isGroupable: true
     },
@@ -92,9 +93,8 @@ export function getColumns(props: IBenefitsOverviewProps): IAggregatedSearchList
       minWidth: 50,
       maxWidth: 80,
       isResizable: true,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       onRender: (indicator: BenefitMeasurementIndicator) => {
-        const measurement = getObjectValue(indicator, 'measurements[0]', null)
+        const measurement = first(indicator.Measurements)
         if (measurement) {
           return <BenefitMeasurementAchievement measurement={measurement} />
         }
@@ -102,11 +102,11 @@ export function getColumns(props: IBenefitsOverviewProps): IAggregatedSearchList
       }
     },
     {
-      fieldName: 'allMeasurements',
-      key: 'allMeasurements',
+      fieldName: 'BenefitMeasurementsModal',
+      key: 'BenefitMeasurementsModal',
       name: '',
-      minWidth: 50,
-      maxWidth: 80,
+      minWidth: 80,
+      maxWidth: 150,
       onRender: (indicator: BenefitMeasurementIndicator) => (
         <BenefitMeasurementsModal indicator={indicator} />
       )

@@ -6,7 +6,7 @@ import { ColumnContextMenu } from './ColumnContextMenu'
 import { addColumn, ColumnFormPanel } from './ColumnFormPanel'
 import { Commands } from './Commands'
 import { PortfolioAggregationContext } from './context'
-import { renderItemColumn, getDefaultColumns } from './itemColumn'
+import { getDefaultColumns, renderItemColumn } from './itemColumn'
 import styles from './PortfolioAggregation.module.scss'
 import createReducer, {
   COLUMN_HEADER_CONTEXT_MENU,
@@ -25,19 +25,28 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   useEffect(() => {
     if (props.dataSourceCategory) {
       props.dataAdapter
-        .fetchDataSources(props.dataSourceCategory)
-        .then((dataSources) => dispatch(DATA_FETCHED({ items: null, dataSources })))
+        .configure()
+        .then(adapter => {
+          adapter.fetchDataSources(props.dataSourceCategory)
+            .then((dataSources) => dispatch(DATA_FETCHED({
+              items: null,
+              dataSources
+            })))
+        })
     }
   }, [props.dataSourceCategory])
 
   useEffect(() => {
     dispatch(START_FETCH())
     props.dataAdapter
-      .fetchItemsWithSource(
-        state.dataSource,
-        props.selectProperties || state.columns.map((col) => col.fieldName)
-      )
-      .then((items) => dispatch(DATA_FETCHED({ items })))
+      .configure()
+      .then(adapter => {
+        adapter.fetchItemsWithSource(
+          state.dataSource,
+          props.selectProperties || state.columns.map((col) => col.fieldName)
+        )
+        .then((items) => dispatch(DATA_FETCHED({ items })))
+      })
   }, [state.columnAdded, state.dataSource])
 
   const items = useMemo(() => {

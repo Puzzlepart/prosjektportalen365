@@ -1,11 +1,11 @@
-import React, { PureComponent } from 'react'
-import * as strings from 'PortfolioWebPartsStrings'
-import styles from './BenefitMeasurementsModal.module.scss'
-import { Modal, IModalProps } from 'office-ui-fabric-react/lib/Modal'
+import { get, isEmpty } from '@microsoft/sp-lodash-subset'
+import { BenefitMeasurement, BenefitMeasurementIndicator } from 'models'
 import { DetailsList, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
-import { BENEFIT_MEASUREMENTS_MODAL_COLUMNS } from './BenefitMeasurementsModalColumns'
-import { BenefitMeasurementIndicator, BenefitMeasurement } from 'models'
-import { get } from '@microsoft/sp-lodash-subset'
+import { IModalProps, Modal } from 'office-ui-fabric-react/lib/Modal'
+import * as strings from 'PortfolioWebPartsStrings'
+import React, { PureComponent } from 'react'
+import styles from './BenefitMeasurementsModal.module.scss'
+import { columns } from './columns'
 
 export interface IBenefitMeasurementsModalProps extends IModalProps {
   indicator: BenefitMeasurementIndicator
@@ -19,9 +19,9 @@ export interface IBenefitMeasurementsModalState {
 export default class BenefitMeasurementsModal extends PureComponent<
   IBenefitMeasurementsModalProps,
   IBenefitMeasurementsModalState
-> {
+  > {
   public static defaultProps: Partial<IBenefitMeasurementsModalProps> = {
-    columns: BENEFIT_MEASUREMENTS_MODAL_COLUMNS
+    columns
   }
 
   constructor(props: IBenefitMeasurementsModalProps) {
@@ -30,9 +30,8 @@ export default class BenefitMeasurementsModal extends PureComponent<
   }
 
   public render(): React.ReactElement<IBenefitMeasurementsModalProps> {
-    if (this.props.indicator.Measurements.length === 0) {
-      return null
-    }
+    if (isEmpty(this.props.indicator.Measurements)) return null
+
     return (
       <div>
         <a href='#' onClick={this._onOpenModal.bind(this)}>

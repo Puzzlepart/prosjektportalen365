@@ -2,7 +2,7 @@ import { PortfolioAggregation } from 'components/PortfolioAggregation'
 import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from 'models'
 import React, { Component } from 'react'
 import styles from './BenefitsOverview.module.scss'
-import { getColumns } from './BenefitsOverviewColumns'
+import { getColumns } from './columns'
 import { BenefitsOverviewDefaultProps, IBenefitsOverviewProps } from './types'
 import * as config from './config'
 
@@ -55,4 +55,4 @@ export class BenefitsOverview extends Component<IBenefitsOverviewProps> {
   }
 }
 
-export { IBenefitsOverviewProps }
+export * from './types'

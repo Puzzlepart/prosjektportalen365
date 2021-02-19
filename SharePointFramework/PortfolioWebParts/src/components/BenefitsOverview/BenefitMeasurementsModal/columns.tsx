@@ -1,10 +1,10 @@
-import React from 'react'
-import * as strings from 'PortfolioWebPartsStrings'
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { BenefitMeasurement } from 'models'
-import BenefitMeasurementAchievement from '../BenefitMeasurementAchievement'
+import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
+import * as strings from 'PortfolioWebPartsStrings'
+import React from 'react'
+import { BenefitMeasurementAchievement } from '../BenefitMeasurementAchievement'
 
-export const BENEFIT_MEASUREMENTS_MODAL_COLUMNS: IColumn[] = [
+export const columns: IColumn[] = [
   {
     key: 'Value',
     fieldName: 'Value',
