@@ -27,7 +27,7 @@ export const PROPERTYPANE_CONFIGURATION_PROPS = {
 
 export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<
   IPortfolioOverviewProps
-  > {
+> {
   private _configuration: IPortfolioConfiguration
 
   public render(): void {

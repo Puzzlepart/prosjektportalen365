@@ -12,11 +12,11 @@ import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
   IPortfolioAggregationProps
-  > {
+> {
   public render(): void {
     if (!this.properties.dataSource) {
       this.renderComponent<IMessageBarProps>(MessageBar, {
-        children: <span>{strings.PortfolioAggregationNotConfiguredMessage}</span>,
+        children: <span>{strings.PortfolioAggregationNotConfiguredMessage}</span>
       })
     } else {
       this.renderComponent<IPortfolioAggregationProps>(PortfolioAggregation, {

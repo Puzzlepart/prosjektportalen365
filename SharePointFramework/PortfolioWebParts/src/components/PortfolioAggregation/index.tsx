@@ -28,7 +28,8 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   useEffect(() => {
     if (props.dataSourceCategory) {
       props.dataAdapter.configure().then((adapter) => {
-        adapter.fetchDataSources(props.dataSourceCategory)
+        adapter
+          .fetchDataSources(props.dataSourceCategory)
           .then((dataSources) =>
             dispatch(
               DATA_FETCHED({
@@ -62,9 +63,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   const ctxValue = useMemo(() => ({ props, state, dispatch }), [state])
 
   if (state.error) {
-    return (
-      <UserMessage type={MessageBarType.error} text={state.error.message} />
-    )
+    return <UserMessage type={MessageBarType.error} text={state.error.message} />
   }
 
   return (

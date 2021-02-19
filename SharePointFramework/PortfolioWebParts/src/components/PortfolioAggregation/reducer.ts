@@ -115,9 +115,9 @@ export default (props: IPortfolioAggregationProps) =>
     ) => {
       state.columnContextMenu = payload
         ? {
-          column: payload.column,
-          target: payload.target as any
-        }
+            column: payload.column,
+            target: payload.target as any
+          }
         : null
     },
 

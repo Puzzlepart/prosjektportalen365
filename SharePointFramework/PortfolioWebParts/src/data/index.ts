@@ -428,10 +428,7 @@ export class DataAdapter {
    * @param {string} name Data source name
    * @param {string[]} selectProperties Select properties
    */
-  public async fetchItemsWithSource(
-    name: string,
-    selectProperties: string[]
-  ): Promise<any> {
+  public async fetchItemsWithSource(name: string, selectProperties: string[]): Promise<any> {
     const dataSrc = await this._dataSourceService.getByName(name)
     if (!dataSrc) {
       throw new Error(format(strings.DataSourceNotFound, name))

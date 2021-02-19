@@ -6,7 +6,7 @@ import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export default class PortfolioInsightsWebPart extends BasePortfolioWebPart<
   IPortfolioInsightsProps
-  > {
+> {
   public render(): void {
     this.renderComponent<IPortfolioInsightsProps>(PortfolioInsights)
   }
