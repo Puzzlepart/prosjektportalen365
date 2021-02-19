@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  EditColumnHeaderText: string
   PortfolioAggregationNotConfiguredMessage: string
   DataSourceCategoryDescription: string
   DataSourceDescription: string
