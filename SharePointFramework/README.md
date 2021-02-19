@@ -4,7 +4,7 @@ _Due to the number of components, we decided to separate the components into 3 d
 
 ## [@Shared](./@Shared/README.md) [![version](https://img.shields.io/badge/version-1.2.9-yellow.svg)](https://semver.org)
 
-Shared `functions` used by all the solutions.
+Shared code for the SharePoint Framework solutions in PP365.
 
 Build by `npm` script `build` and watch changes with `watch`.
 
