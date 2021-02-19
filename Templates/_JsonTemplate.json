@@ -13,6 +13,10 @@
             "Group": "{{ContentTypes_Group}}",
             "FieldRefs": [
                 {
+                    "ID": "e930090a-480e-414a-bd4a-0ef5bca31443",
+                    "Name": "GtRiskDescription"
+                },
+                {
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
                     "Name": "GtProjectPhase"
                 },
@@ -909,6 +913,7 @@
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
+                        "GtRiskDescription",
                         "GtRiskProbability",
                         "GtRiskConsequence",
                         "GtRiskFactor",
@@ -931,6 +936,7 @@
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
+                        "GtRiskDescription",
                         "GtRiskProbability",
                         "GtRiskConsequence",
                         "GtRiskFactor",
@@ -950,6 +956,7 @@
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
+                        "GtRiskDescription",
                         "GtRiskProbability",
                         "GtRiskConsequence",
                         "GtRiskFactor",
@@ -969,6 +976,7 @@
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
+                        "GtRiskDescription",
                         "GtRiskProbability",
                         "GtRiskConsequence",
                         "GtRiskFactor",
@@ -991,6 +999,7 @@
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
+                        "GtRiskDescription",
                         "GtRiskFactor",
                         "GtRiskStatus",
                         "GtRiskAction",
@@ -1008,6 +1017,7 @@
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
+                        "GtRiskDescription",
                         "GtRiskProbability",
                         "GtRiskConsequence",
                         "GtRiskFactor",
