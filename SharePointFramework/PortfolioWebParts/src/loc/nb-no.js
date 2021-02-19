@@ -20,6 +20,7 @@ define([], function () {
     MoveLeftLabel: 'Flytt til venstre',
     IsGroupableLabel: 'Grupperbar',
     NewColumnHeaderText: 'Ny kolonne',
+    EditColumnHeaderText: 'Rediger kolonne',
     AddColumnText: 'Legg til kolonne',
     SearchPropertyLabel: 'Søkeegenskap',
     DisplayNameLabel: 'Visningsnavn',

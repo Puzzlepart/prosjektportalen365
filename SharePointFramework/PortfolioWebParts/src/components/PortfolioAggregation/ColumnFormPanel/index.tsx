@@ -56,7 +56,10 @@ export const ColumnFormPanel = () => {
   return (
     <Panel
       isOpen={state.addColumnPanel.isOpen}
-      headerText={strings.NewColumnHeaderText}
+      headerText={state.editColumn
+        ? strings.EditColumnHeaderText
+        : strings.NewColumnHeaderText
+      }
       onDismiss={() => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))}
       className={styles.root}>
       <div className={styles.field}>
