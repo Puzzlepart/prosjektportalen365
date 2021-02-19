@@ -14,9 +14,6 @@
     "deploy": "gulp uploadAppPkg && gulp deploySppkg",
     "packageAndDeploy": "npm run package && npm run deploy",
     "postversion": "gulp versionSync",
-    "prepackage": "gulp setHiddenToolbox --ship",
-    "preserve": "gulp setHiddenToolbox",
-    "preserveNoBrowser": "gulp setHiddenToolbox",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
     "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent"

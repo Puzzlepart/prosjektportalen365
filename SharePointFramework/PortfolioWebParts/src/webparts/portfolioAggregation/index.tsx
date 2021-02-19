@@ -3,25 +3,33 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { PortfolioAggregation, IPortfolioAggregationProps } from 'components/PortfolioAggregation'
+import { IPortfolioAggregationProps, PortfolioAggregation } from 'components/PortfolioAggregation'
 import { DataAdapter } from 'data'
+import { IMessageBarProps, MessageBar } from 'office-ui-fabric-react/lib/MessageBar'
 import * as strings from 'PortfolioWebPartsStrings'
+import React from 'react'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
   IPortfolioAggregationProps
-> {
+  > {
   constructor() {
     super()
     this._onUpdateProperty = this._onUpdateProperty.bind(this)
   }
 
   public render(): void {
-    this.renderComponent(PortfolioAggregation, {
-      ...this.properties,
-      dataAdapter: new DataAdapter(this.context),
-      onUpdateProperty: this._onUpdateProperty
-    })
+    if (!this.properties.dataSource) {
+      this.renderComponent<IMessageBarProps>(MessageBar, {
+        children: <span>{strings.PortfolioAggregationNotConfiguredMessage}</span>,
+      })
+    } else {
+      this.renderComponent<IPortfolioAggregationProps>(PortfolioAggregation, {
+        ...this.properties,
+        dataAdapter: new DataAdapter(this.context),
+        onUpdateProperty: this._onUpdateProperty
+      })
+    }
   }
 
   /**
@@ -48,10 +56,12 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
               groupName: strings.DataSourceGroupName,
               groupFields: [
                 PropertyPaneTextField('dataSource', {
-                  label: strings.DataSourceLabel
+                  label: strings.DataSourceLabel,
+                  description: strings.DataSourceDescription
                 }),
                 PropertyPaneTextField('dataSourceCategory', {
-                  label: strings.DataSourceCategoryLabel
+                  label: strings.DataSourceCategoryLabel,
+                  description: strings.DataSourceCategoryDescription
                 })
               ]
             },

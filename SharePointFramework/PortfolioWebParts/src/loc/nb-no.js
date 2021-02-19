@@ -1,5 +1,8 @@
 define([], function () {
   return {
+    PortfolioAggregationNotConfiguredMessage: 'Webdelen må konfigureres med en datakilde. Rediger webdelen, og legg inn navnet på datakilden du vil bruke.',
+    DataSourceCategoryDescription: 'Angi en datakildekategori for å kunne velge mellom flere datakilder i webdelen.',
+    DataSourceDescription: 'Navnet på datakilden du vil bruke. Datakildene finner du i listen Datakilder på Portføljeområdet.',
     SearchPropertyDescription: 'Navnet på den forvaltede egenskapen for denne kolonnen.',
     DataSourceGroupName: 'Datakilder',
     CommandBarGroupName: 'Søkeboks',
