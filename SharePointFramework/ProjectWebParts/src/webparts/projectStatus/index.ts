@@ -15,11 +15,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
   }
 
   public render(): void {
-    this.renderComponent(ProjectStatus, {
-      riskMatrixWidth: this.properties.riskMatrixWidth,
-      riskMatrixHeight: this.properties.riskMatrixHeight,
-      riskMatrixCalloutTemplate: this.properties.riskMatrixCalloutTemplate
-    })
+    this.renderComponent<IProjectStatusProps>(ProjectStatus)
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
