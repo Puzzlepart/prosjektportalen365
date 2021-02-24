@@ -280,7 +280,7 @@
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusTimeComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusTimeComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusTimeCommentOWSMTXT</pnp:DataValue>
-            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
@@ -293,7 +293,7 @@
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusBudget_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusBudget</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusBudgetOWSCHCS</pnp:DataValue>
-            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
@@ -306,7 +306,7 @@
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusBudgetComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusBudgetComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusBudgetCommentOWSMTXT</pnp:DataValue>
-            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
@@ -332,7 +332,7 @@
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusQualityComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusQualityComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusQualityCommentOWSMTXT</pnp:DataValue>
-            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
@@ -358,7 +358,7 @@
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusRiskComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusRiskComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusRiskCommentOWSMTXT</pnp:DataValue>
-            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
@@ -384,7 +384,7 @@
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusGainAchievementComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusGainAchievementComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusGainAchievementCommentOWSMTXT</pnp:DataValue>
-            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
