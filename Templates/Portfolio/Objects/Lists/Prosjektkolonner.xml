@@ -293,7 +293,7 @@
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusBudget_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusBudget</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStatusBudgetOWSCHCS</pnp:DataValue>
-            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
