@@ -11,6 +11,9 @@ Every change is marked with Pull Request ID.
 - Added support for phase sub text in phase selector #381
 - Added support for navigation folders in document template picker #382
 - Added support for permission configuration using a configuration list on the hubsite #387
+- Added Description field to Usikkerhet #410
+- Enabled version history on Prosjektmaler list #359
+
 
 ## Fixed
 
@@ -20,6 +23,9 @@ Every change is marked with Pull Request ID.
 - Setting phase check list and planner task list as visible #389
 - Flexible portfolio aggregation web part #395
 - Copying for documents to new projects #399
+- Fixes issues with more than one status report template #400
+- Fixed issues with missing projects on the front page #364
+- Fixed support for latest PnP PowerShell #377 
 
 ## 1.2.4 - 30.11.2020
 
