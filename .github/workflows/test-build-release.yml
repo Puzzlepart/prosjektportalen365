@@ -18,7 +18,7 @@ jobs:
         node-version: 10.x
 
     - name: Run Install/Build-Release.ps1 in CI mode
-      run: Install/Build-Release.ps1 -SkipBuildSharePointFramework
+      run: Install/Build-Release.ps1 -CI -SkipBuildSharePointFramework
       shell: powershell
       
     - uses: actions/upload-artifact@v1
