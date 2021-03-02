@@ -122,3 +122,5 @@ Add-Type -Assembly "System.IO.Compression.FileSystem"
 [IO.Compression.ZipFile]::CreateFromDirectory($RELEASE_PATH, "$($RELEASE_PATH).zip")  
 Write-Host "Done building release [v$($PACKAGE_FILE.version)] in [$($sw.Elapsed)]" -ForegroundColor Cyan
 
+
+Get-ChildItem "$($ROOT_PATH)*.zip"
