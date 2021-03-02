@@ -1,6 +1,7 @@
 import {
   IPropertyPaneConfiguration,
   PropertyPaneDropdown,
+  PropertyPaneSlider,
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
@@ -35,8 +36,19 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
             {
               groupName: strings.SettingsGroupName,
               groupFields: [
-                PropertyPaneToggle('confirmPhaseChange', {
-                  label: strings.ConfirmPhaseChangeFieldLabel
+                PropertyPaneToggle('syncPropertiesAfterPhaseChange', {
+                  label: strings.SyncPropertiesAfterPhaseChangeFieldLabel
+                }),
+                PropertyPaneToggle('showSubText', {
+                  label: strings.ShowSubTextFieldLabel
+                }),
+                PropertyPaneSlider('subTextTruncateLength', {
+                  label: strings.SubTextTruncateLengthFieldLabel,
+                  min: 20,
+                  max: 100,
+                  step: 2,
+                  showValue: true,
+                  disabled: !this.properties.showSubText
                 }),
                 PropertyPaneDropdown('phaseField', {
                   label: strings.PhaseFieldFieldLabel,

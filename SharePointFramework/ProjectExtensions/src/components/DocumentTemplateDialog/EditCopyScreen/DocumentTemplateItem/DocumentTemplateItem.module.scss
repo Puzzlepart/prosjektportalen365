@@ -1,0 +1,28 @@
+.root {
+  margin: 0 0 20px 0;
+
+  .header {
+    position: relative;
+    cursor: pointer;
+
+    .fileTypeIcon {
+      display: inline-block;
+    }
+
+    .title {
+      margin: 0 0 0 6px;
+      font-size: 18px;
+      font-weight: 100;
+      display: inline-block;
+    }
+
+    .chevronIcon {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+  .inputField {
+    margin: 5px 0 0 0;
+  }
+}

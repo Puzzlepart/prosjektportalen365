@@ -2,7 +2,7 @@ import { Web } from '@pnp/sp'
 import { ProjectInformation } from 'components/ProjectInformation'
 import * as React from 'react'
 import { StatusElement } from '../../StatusElement'
-import { IStatusElementProps } from '../../StatusElement/IStatusElementProps'
+import { IStatusElementProps } from '../../StatusElement/types'
 import { BaseSection } from '../BaseSection'
 import styles from './SummarySection.module.scss'
 import { ISummarySectionProps, ISummarySectionState } from './types'
@@ -58,11 +58,13 @@ export class SummarySection extends BaseSection<ISummarySectionProps, ISummarySe
         props.comment = props.value
         props.value = ''
       }
-      return (
-        <div key={idx} className='ms-Grid-col ms-sm6'>
-          <StatusElement {...props} />
-        </div>
-      )
+      if (props.value || sec.fieldName === 'GtOverallStatus') {
+        return (
+          <div key={idx} className='ms-Grid-col ms-sm6'>
+            <StatusElement {...props} />
+          </div>
+        )
+      }
     })
   }
 }

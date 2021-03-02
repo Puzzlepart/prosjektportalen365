@@ -1,14 +1,13 @@
 {
     "files.exclude": {
-        "node_modules": true,
-        "Release": true,
-        "wiki": true,
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/node_modules": true,
         "**/lib": true,
         "**/dist": true,
         "**/temp": true,
-        "**/sharepoint": true,
-        "**/node_modules": true,
-        "**/.yo-rc.json": true
+        "**/package-lock.json": true,
+        "**/pnpm-lock.yaml": true
     },
     "files.associations": {
         "*.txt": "json"

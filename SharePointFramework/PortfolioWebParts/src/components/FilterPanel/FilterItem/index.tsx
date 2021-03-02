@@ -1,15 +1,16 @@
-import * as React from 'react'
-import styles from './FilterItem.module.scss'
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox'
+import React, { PureComponent, ReactElement } from 'react'
+import styles from './FilterItem.module.scss'
 import { IFilterItemProps } from './IFilterItemProps'
 
-export class FilterItem extends React.PureComponent<IFilterItemProps, {}> {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export class FilterItem extends PureComponent<IFilterItemProps, {}> {
   constructor(props: IFilterItemProps) {
     super(props)
     this.state = {}
   }
 
-  public render(): React.ReactElement<IFilterItemProps> {
+  public render(): ReactElement<IFilterItemProps> {
     return (
       <li>
         <div className={styles.filterItem}>

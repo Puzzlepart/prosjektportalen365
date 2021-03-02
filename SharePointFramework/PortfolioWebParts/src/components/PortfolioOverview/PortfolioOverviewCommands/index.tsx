@@ -5,14 +5,13 @@ import {
   IContextualMenuItem
 } from 'office-ui-fabric-react/lib/ContextualMenu'
 import * as strings from 'PortfolioWebPartsStrings'
-import * as React from 'react'
-import ExcelExportService from 'shared/lib/services/ExcelExportService'
-import { redirect } from 'shared/lib/util'
+import ExcelExportService from 'pp365-shared/lib/services/ExcelExportService'
+import { redirect } from 'pp365-shared/lib/util'
+import React, { Component } from 'react'
 import { FilterPanel, IFilterProps } from '../../FilterPanel'
-import { IPortfolioOverviewCommandsProps } from './IPortfolioOverviewCommandsProps'
-import { IPortfolioOverviewCommandsState } from './IPortfolioOverviewCommandsState'
+import { IPortfolioOverviewCommandsProps, IPortfolioOverviewCommandsState } from './types'
 
-export class PortfolioOverviewCommands extends React.Component<
+export class PortfolioOverviewCommands extends Component<
   IPortfolioOverviewCommandsProps,
   IPortfolioOverviewCommandsState
 > {
@@ -47,6 +46,7 @@ export class PortfolioOverviewCommands extends React.Component<
           iconName: 'ExcelDocument',
           styles: { root: { color: 'green !important' } }
         },
+        buttonStyles: { root: { border: 'none' } },
         data: { isVisible: this.props.showExcelExportButton },
         disabled: this.state.isExporting,
         onClick: this._exportToExcel.bind(this)
@@ -60,6 +60,7 @@ export class PortfolioOverviewCommands extends React.Component<
         key: 'NEW_VIEW',
         name: strings.NewViewText,
         iconProps: { iconName: 'CirclePlus' },
+        buttonStyles: { root: { border: 'none' } },
         data: {
           isVisible:
             this.props.pageContext.legacyPageContext.isSiteAdmin && this.props.showViewSelector
@@ -68,8 +69,9 @@ export class PortfolioOverviewCommands extends React.Component<
       } as IContextualMenuItem,
       {
         key: 'VIEW_OPTIONS',
-        name: this.props.currentView.title,
+        name: this.props.currentView?.title,
         iconProps: { iconName: 'List' },
+        buttonStyles: { root: { border: 'none' } },
         itemType: ContextualMenuItemType.Header,
         data: { isVisible: this.props.showViewSelector },
         subMenuProps: {
@@ -101,7 +103,7 @@ export class PortfolioOverviewCommands extends React.Component<
                   name: view.title,
                   iconProps: { iconName: view.iconName },
                   canCheck: true,
-                  checked: view.id === this.props.currentView.id,
+                  checked: view.id === this.props.currentView?.id,
                   onClick: () => this.props.events.onChangeView(view)
                 } as IContextualMenuItem)
             ),
@@ -119,7 +121,7 @@ export class PortfolioOverviewCommands extends React.Component<
               name: strings.EditViewText,
               onClick: () =>
                 redirect(
-                  `${this.props.configuration.viewsUrls.defaultEditFormUrl}?ID=${this.props.currentView.id}`
+                  `${this.props.configuration.viewsUrls.defaultEditFormUrl}?ID=${this.props.currentView?.id}`
                 )
             }
           ]
@@ -129,6 +131,7 @@ export class PortfolioOverviewCommands extends React.Component<
         key: 'FILTERS',
         name: '',
         iconProps: { iconName: 'Filter' },
+        buttonStyles: { root: { border: 'none' } },
         itemType: ContextualMenuItemType.Normal,
         canCheck: true,
         checked: this.state.showFilterPanel,

@@ -1,9 +1,8 @@
 import { DefaultButton, IButtonProps } from 'office-ui-fabric-react/lib/Button'
 import * as strings from 'ProjectWebPartsStrings'
-import * as React from 'react'
+import React from 'react'
 import styles from './Actions.module.scss'
-import { ActionType } from './ActionType'
-import { IActionsProps } from './IActionsProps'
+import { IActionsProps, ActionType } from './types'
 
 export const Actions = (props: IActionsProps) => {
   const actions: ActionType[] = [
@@ -33,7 +32,7 @@ export const Actions = (props: IActionsProps) => {
         else buttonProps.onClick = hrefOrOnClick
         return (
           <div key={idx} hidden={hidden}>
-            <DefaultButton {...buttonProps} style={{ width: 300 }} />
+            <DefaultButton {...buttonProps} className={styles.btn} />
           </div>
         )
       })}

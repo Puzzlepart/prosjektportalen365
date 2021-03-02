@@ -1,7 +1,8 @@
 import { dateAdd, stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
 import { AttachmentFileInfo, CamlQuery, ListEnsureResult, Web } from '@pnp/sp'
-import { default as initSpfxJsom, ExecuteJsomQuery } from 'spfx-jsom'
+import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
+import { find } from 'underscore'
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
 import { transformFieldXml } from '../../helpers/transformFieldXml'
 import { ISPContentType } from '../../interfaces'
@@ -112,7 +113,7 @@ export class PortalDataService {
   }
 
   /**
-   * Update status report
+   * Delete status report by id
    *
    * @param {number} id Id
    */
@@ -171,11 +172,13 @@ export class PortalDataService {
   }
 
   /**
-   * Sync list from hub to the specified url
+   * Sync list from hub to the specified URL
+   *
+   * Skips fields that has ShowInEditForm set to FALSE
    *
    * @param {string} url Url
    * @param {stirng} listName List name
-   * @param {string} contentTypeId Content type id
+   * @param {string} contentTypeId Content type id for project properties
    * @param {TypedHash} properties Create a new item in the list with specified properties if the list was created
    */
   public async syncList(
@@ -185,8 +188,8 @@ export class PortalDataService {
     properties?: TypedHash<string>
   ): Promise<ListEnsureResult> {
     const targetWeb = new Web(url)
-    const { jsomContext } = await initSpfxJsom(url, { loadTaxonomy: true })
-    const [sourceContentType, destSiteFields, ensureList] = await Promise.all([
+    const { jsomContext } = await initJsom(url, { loadTaxonomy: true })
+    const [hubContentType, targetSiteFields, ensureList] = await Promise.all([
       this._getHubContentType(contentTypeId),
       this._getSiteFields(targetWeb),
       targetWeb.lists.ensure(listName, '', 100, false, {
@@ -197,10 +200,10 @@ export class PortalDataService {
     ])
     const listFields = await this.getListFields(listName, undefined, targetWeb)
     const spList = jsomContext.web.get_lists().getByTitle(listName)
-    for (const field of sourceContentType.Fields) {
+    for (const field of hubContentType.Fields) {
       const [[listField], [siteField]] = [
         listFields.filter((fld) => fld.InternalName === field.InternalName),
-        destSiteFields.filter(
+        targetSiteFields.filter(
           (fld) =>
             fld.InternalName === field.InternalName &&
             fld.SchemaXml.indexOf('ShowInEditForm="FALSE"') === -1
@@ -214,25 +217,23 @@ export class PortalDataService {
         continue
       }
       try {
-        const [fieldLink] = sourceContentType.FieldLinks.filter(
-          (fl) => fl.Name === field.InternalName
-        )
+        const [fieldLink] = hubContentType.FieldLinks.filter((fl) => fl.Name === field.InternalName)
         Logger.log({
           message: `(PortalDataService) (syncList) Adding field [${field.InternalName}] to list [${listName}].`,
           level: LogLevel.Info,
           data: { fieldLink, siteField: !!siteField }
         })
         if (siteField) {
-          const spSiteField = jsomContext.web
+          const fldToAdd = jsomContext.web
             .get_fields()
             .getByInternalNameOrTitle(siteField.InternalName)
-          const newField = spList.get_fields().add(spSiteField)
+          const newField = spList.get_fields().add(fldToAdd)
           if (fieldLink && fieldLink.Required) {
             newField.set_required(true)
             newField.updateAndPushChanges(true)
           }
         } else {
-          const newField = spList
+          const fieldToCreate = spList
             .get_fields()
             .addFieldAsXml(
               transformFieldXml(field.SchemaXml, { DisplayName: field.InternalName }),
@@ -240,12 +241,12 @@ export class PortalDataService {
               SP.AddFieldOptions.addToDefaultContentType
             )
           if (fieldLink && fieldLink.Required) {
-            newField.set_required(true)
+            fieldToCreate.set_required(true)
           }
-          newField.set_title(field.Title)
-          newField.updateAndPushChanges(true)
+          fieldToCreate.set_title(field.Title)
+          fieldToCreate.updateAndPushChanges(true)
         }
-        await ExecuteJsomQuery(jsomContext)
+        await executeQuery(jsomContext)
       } catch (error) {}
     }
     try {
@@ -253,15 +254,15 @@ export class PortalDataService {
         message: `(PortalDataService) (syncList) Attempting to add field [TemplateParameters] to list ${listName}.`,
         level: LogLevel.Info
       })
-      const newField = spList
+      const templateParametersField = spList
         .get_fields()
         .addFieldAsXml(
           this._configuration.templateParametersFieldXml,
           false,
           SP.AddFieldOptions.addToDefaultContentType
         )
-      newField.updateAndPushChanges(true)
-      await ExecuteJsomQuery(jsomContext)
+      templateParametersField.updateAndPushChanges(true)
+      await executeQuery(jsomContext)
     } catch {}
     if (ensureList.created && properties) {
       ensureList.list.items.add(properties)
@@ -347,16 +348,22 @@ export class PortalDataService {
   /**
    * Add status report
    *
-   * @param {TypedHash} fieldValues Field values
+   * @param {TypedHash} properties Properties
+   * @param {string} contentTypeId Content type id
    * @param {string} defaultEditFormUrl Default edit form URL
    */
   public async addStatusReport(
-    fieldValues: TypedHash<string | number | boolean>,
+    properties: TypedHash<string | number | boolean>,
+    contentTypeId: string,
     defaultEditFormUrl: string
   ): Promise<StatusReport> {
-    const itemAddResult = await this._web.lists
-      .getByTitle(this._configuration.listNames.PROJECT_STATUS)
-      .items.add(fieldValues)
+    const list = this._web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
+    if (contentTypeId) {
+      const contentTypes = await list.contentTypes.get()
+      const ct = find(contentTypes, (ct) => ct.StringId.indexOf(contentTypeId) === 0)
+      if (ct) properties.ContentTypeId = ct.StringId
+    }
+    const itemAddResult = await list.items.add(properties)
     return new StatusReport(itemAddResult.data).setDefaultEditFormUrl(defaultEditFormUrl)
   }
 

@@ -1,19 +1,17 @@
 import { IBenefitsSearchResult } from 'interfaces'
 
 export class BenefitBase {
-  public path: string
-  public title: string
-  public webUrl: string
-  public siteTitle: string
-  public id: number
-  public siteId: string
+  public SiteTitle: string
+  public SPWebURL: string
+  public Id: number
+  public Title: string
+  public SiteId: string
 
   constructor(result: IBenefitsSearchResult) {
-    this.path = result.Path
-    this.title = result.Title
-    this.webUrl = result.SPWebURL
-    this.siteTitle = result.SiteTitle
-    this.id = parseInt(result.ListItemId, 10)
-    this.siteId = result.SiteId
+    this.SiteTitle = result.SiteTitle
+    this.SPWebURL = result.SPWebURL
+    this.Id = parseInt(result.ListItemId, 10)
+    this.Title = result.Title
+    this.SiteId = result.SiteId
   }
 }

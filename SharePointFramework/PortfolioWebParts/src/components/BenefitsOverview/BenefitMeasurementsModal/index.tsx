@@ -1,11 +1,11 @@
-import * as React from 'react'
-import * as strings from 'PortfolioWebPartsStrings'
-import styles from './BenefitMeasurementsModal.module.scss'
-import { Modal, IModalProps } from 'office-ui-fabric-react/lib/Modal'
+import { get, isEmpty } from '@microsoft/sp-lodash-subset'
+import { BenefitMeasurement, BenefitMeasurementIndicator } from 'models'
 import { DetailsList, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
-import { BENEFIT_MEASUREMENTS_MODAL_COLUMNS } from './BenefitMeasurementsModalColumns'
-import { BenefitMeasurementIndicator, BenefitMeasurement } from 'models'
-import * as objectGet from 'object-get'
+import { IModalProps, Modal } from 'office-ui-fabric-react/lib/Modal'
+import * as strings from 'PortfolioWebPartsStrings'
+import React, { PureComponent } from 'react'
+import styles from './BenefitMeasurementsModal.module.scss'
+import { columns } from './columns'
 
 export interface IBenefitMeasurementsModalProps extends IModalProps {
   indicator: BenefitMeasurementIndicator
@@ -16,12 +16,12 @@ export interface IBenefitMeasurementsModalState {
   isOpen?: boolean
 }
 
-export default class BenefitMeasurementsModal extends React.PureComponent<
+export default class BenefitMeasurementsModal extends PureComponent<
   IBenefitMeasurementsModalProps,
   IBenefitMeasurementsModalState
 > {
   public static defaultProps: Partial<IBenefitMeasurementsModalProps> = {
-    columns: BENEFIT_MEASUREMENTS_MODAL_COLUMNS
+    columns
   }
 
   constructor(props: IBenefitMeasurementsModalProps) {
@@ -30,9 +30,8 @@ export default class BenefitMeasurementsModal extends React.PureComponent<
   }
 
   public render(): React.ReactElement<IBenefitMeasurementsModalProps> {
-    if (this.props.indicator.measurements.length === 0) {
-      return null
-    }
+    if (isEmpty(this.props.indicator.Measurements)) return null
+
     return (
       <div>
         <a href='#' onClick={this._onOpenModal.bind(this)}>
@@ -45,10 +44,10 @@ export default class BenefitMeasurementsModal extends React.PureComponent<
           onDismiss={this._onCloseModal.bind(this)}
           isBlocking={false}>
           <div className={styles.header}>
-            <div className={styles.title}>{this.props.indicator.title}</div>
+            <div className={styles.title}>{this.props.indicator.Title}</div>
           </div>
           <DetailsList
-            items={this.props.indicator.measurements}
+            items={this.props.indicator.Measurements}
             columns={this.props.columns}
             onRenderItemColumn={this._onRenderItemColumn}
             selectionMode={SelectionMode.none}
@@ -67,9 +66,9 @@ export default class BenefitMeasurementsModal extends React.PureComponent<
   }
 
   private _onRenderItemColumn = (item: BenefitMeasurement, index: number, column: IColumn) => {
-    const fieldNameDisplay: string = objectGet(column, 'data.fieldNameDisplay')
+    const fieldNameDisplay: string = get(column, 'data.fieldNameDisplay')
     return column.onRender
       ? column.onRender(item, index, column)
-      : objectGet(item, fieldNameDisplay || column.fieldName)
+      : get(item, fieldNameDisplay || column.fieldName)
   }
 }

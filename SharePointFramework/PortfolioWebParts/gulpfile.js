@@ -8,7 +8,6 @@ const tsConfig = require('./tsconfig.json')
 const find = require('find')
 const WebpackBar = require('webpackbar')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-const LiveReloadPlugin = require('webpack-livereload-plugin')
 const os = require('os')
 const argv = require('yargs').argv
 const log = require('@microsoft/gulp-core-build').log
@@ -51,20 +50,6 @@ gulp.task('versionSync', (done) => {
     })
 })
 
-gulp.task('setHiddenToolbox', (done) => {
-    find.file(/\manifest.json$/, path.join(__dirname, "src", "webparts"), (files) => {
-        for (let i = 0; i < files.length; i++) {
-            let manifest = require(files[i])
-            if (manifest.hiddenFromToolbox != !!argv.ship) {
-                log(`[${colors.cyan('setHiddenToolbox')}] Setting ${colors.cyan('hiddenFromToolbox')} to ${colors.cyan(!!argv.ship)} for ${colors.cyan(manifest.alias)}...`)
-                manifest.hiddenFromToolbox = !!argv.ship
-                fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => { /* handle error */ })
-            }
-        }
-        done()
-    })
-})
-
 build.configureWebpack.mergeConfig({
     additionalConfiguration: (webpack) => {
         let { paths, outDir } = JSON.parse(JSON.stringify(tsConfig.compilerOptions).replace(/\/\*"/gm, '"'))
@@ -77,8 +62,6 @@ build.configureWebpack.mergeConfig({
         webpack.plugins = webpack.plugins || []
         log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('WebpackBar')}...`)
         webpack.plugins.push(new WebpackBar())
-        log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('LiveReloadPlugin')}...`)
-        webpack.plugins.push(new LiveReloadPlugin())
         if (buildConfig.bundleAnalyzerEnabled) {
             log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('BundleAnalyzerPlugin')}...`)
             webpack.plugins.push(new BundleAnalyzerPlugin())

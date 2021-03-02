@@ -1,4 +1,4 @@
-import { sp } from '@pnp/sp'
+import { Web } from '@pnp/sp'
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -6,29 +6,29 @@ import {
   SelectionMode
 } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { getObjectValue } from 'pp365-shared/lib/helpers'
 import * as strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
-import { getObjectValue } from 'shared/lib/helpers'
-import { BaseSection } from '../BaseSection/index'
 import { StatusElement } from '../../StatusElement'
-import { IListSectionProps, IListSectionState, IListSectionData } from './types'
+import { BaseSection } from '../BaseSection/index'
 import styles from './ListSection.module.scss'
+import { IListSectionData, IListSectionProps, IListSectionState } from './types'
 
 export class ListSection extends BaseSection<
   IListSectionProps,
   IListSectionState<IListSectionData>
-> {
+  > {
   constructor(props: IListSectionProps) {
     super(props)
-    this.state = { isLoading: true }
+    this.state = { loading: true }
   }
 
   public async componentDidMount() {
     try {
-      const data = await this._fetchData()
-      this.setState({ data, isLoading: false })
+      const data = await this._fetchListData()
+      this.setState({ data, loading: false })
     } catch (error) {
-      this.setState({ error, isLoading: false })
+      this.setState({ error, loading: false })
     }
   }
 
@@ -52,7 +52,7 @@ export class ListSection extends BaseSection<
    * Render list
    */
   private _renderList() {
-    if (this.state.isLoading || !this.state.data) {
+    if (this.state.loading || !this.state.data) {
       return null
     }
     if (this.state.error) {
@@ -75,11 +75,16 @@ export class ListSection extends BaseSection<
   }
 
   /**
-   * Fetch data
+   * Fetch list data
    */
-  private async _fetchData(): Promise<IListSectionData> {
-    const { listTitle, viewQuery, viewFields, rowLimit } = this.props.model
-    const list = sp.web.lists.getByTitle(listTitle)
+  private async _fetchListData(): Promise<IListSectionData> {
+    const {
+      listTitle,
+      viewQuery,
+      viewFields,
+      rowLimit
+    } = this.props.model
+    const list = new Web(this.props.webUrl).lists.getByTitle(listTitle)
     try {
       const viewXml = `<View><Query>${viewQuery}</Query><RowLimit>${rowLimit}</RowLimit></View>`
       const [items, fields] = await Promise.all([
@@ -99,7 +104,12 @@ export class ListSection extends BaseSection<
             fieldName: field.InternalName,
             name: field.Title,
             minWidth: 100,
-            maxWidth: { Text: 250, Note: 250, Choice: 150, Number: 100 }[field.TypeAsString] || 150,
+            maxWidth: {
+              Text: 250,
+              Note: 250,
+              Choice: 150,
+              Number: 100
+            }[field.TypeAsString] || 150,
             isResizable: true
           } as IColumn
         })

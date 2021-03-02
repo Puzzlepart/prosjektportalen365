@@ -1,4 +1,4 @@
-import { sp } from '@pnp/sp'
+import { Web } from '@pnp/sp'
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -18,15 +18,15 @@ import styles from './RiskSection.module.scss'
 export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionState> {
   constructor(props: IRiskSectionProps) {
     super(props)
-    this.state = { isLoading: true }
+    this.state = { loading: true }
   }
 
   public async componentDidMount() {
     try {
-      const data = await this._fetchData()
-      this.setState({ data, isLoading: false })
+      const data = await this._fetchListData()
+      this.setState({ data, loading: false })
     } catch (error) {
-      this.setState({ error, isLoading: false })
+      this.setState({ error, loading: false })
     }
   }
 
@@ -50,7 +50,7 @@ export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionStat
    * Render content
    */
   private _renderContent() {
-    if (this.state.isLoading || !this.state.data) return null
+    if (this.state.loading || !this.state.data) return null
     if (this.state.error)
       return (
         <MessageBar messageBarType={MessageBarType.error}>
@@ -77,9 +77,9 @@ export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionStat
   /**
    * Fetch data
    */
-  private async _fetchData(): Promise<IRiskSectionData> {
+  private async _fetchListData(): Promise<IRiskSectionData> {
     const { listTitle, viewQuery, viewFields, rowLimit } = this.props.model
-    const list = sp.web.lists.getByTitle(listTitle)
+    const list = new Web(this.props.webUrl).lists.getByTitle(listTitle)
     const viewXml = `<View><Query>${viewQuery}</Query><RowLimit>${rowLimit}</RowLimit></View>`
     try {
       const [items, fields] = await Promise.all([

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
+import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as $script from 'scriptjs'
 import { getObjectValue } from '../../helpers/getObjectValue'
@@ -20,17 +21,17 @@ export default new (class ExcelExportService {
   }
 
   /**
-   * Load deps
+   * Load dependencies in _deps
    *
    * @param {string[]} deps Deps
    */
   protected loadDeps(): Promise<void> {
     return new Promise<void>((resolve) => {
-      const _define = (<any>window).define
-      ;(<any>window).define = undefined
+      const _define = ((<any>window).define(window as any).define = undefined)
       $script(this._deps, 'deps')
       $script.ready('deps', () => {
-        ;(<any>window).define = _define
+        // eslint-disable-next-line @typescript-eslint/no-extra-semi
+        ;(window as any).define = _define
         resolve()
       })
     })
@@ -40,9 +41,9 @@ export default new (class ExcelExportService {
    * Export to Excel
    *
    * @param {any[]} items Items
-   * @param {any[]} columns Columns
+   * @param {IColumn[]} columns Columns
    */
-  public async export(items: any[], columns: any[]) {
+  public async export(items: any[], columns: IColumn[]) {
     try {
       await this.loadDeps()
       const sheets = []
@@ -71,3 +72,5 @@ export default new (class ExcelExportService {
     }
   }
 })()
+
+export { IColumn as ExcelExportColumn }

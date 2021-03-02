@@ -35,16 +35,12 @@ export class ProjectPropertyModel {
    * @param {IEntityField} field Field
    * @param {string} value Value
    */
-  constructor(private _field: IEntityField, value: string) {
-    this.internalName = _field.InternalName
-    this.displayName = _field.Title
-    this.description = _field.Description
+  constructor(field: IEntityField, value: string) {
+    this.internalName = field.InternalName
+    this.displayName = field.Title
+    this.description = field.Description
     this.value = value
-    this.type = _field.TypeAsString
-  }
-
-  public get visible() {
-    return this._field.SchemaXml.indexOf('ShowInDisplayForm="FALSE"') === -1
+    this.type = field.TypeAsString
   }
 
   public get empty() {

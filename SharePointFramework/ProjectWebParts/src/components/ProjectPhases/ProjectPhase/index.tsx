@@ -1,14 +1,14 @@
-import * as React from 'react'
+import { truncateString } from 'pp365-shared/lib/helpers/truncateString'
+import React, { useContext, useRef } from 'react'
+import { ProjectPhasesContext } from '../context'
 import styles from './ProjectPhase.module.scss'
 import { IProjectPhaseProps } from './types'
 
-/**
- * @component ProjectPhase
- */
-const ProjectPhase = ({ phase, isCurrentPhase, onOpenCallout }: IProjectPhaseProps) => {
-  const phaseLetterRef = React.useRef()
-
+export const ProjectPhase = ({ phase, isCurrentPhase, onOpenCallout }: IProjectPhaseProps) => {
+  const context = useContext(ProjectPhasesContext)
+  const targetRef = useRef()
   const classNames = [styles.projectPhase]
+
   if (isCurrentPhase) classNames.push(styles.isCurrentPhase)
   if (phase.properties.PhaseLevel) {
     const className = phase.properties.PhaseLevel.toLowerCase()
@@ -21,22 +21,26 @@ const ProjectPhase = ({ phase, isCurrentPhase, onOpenCallout }: IProjectPhasePro
         <div className={styles.phaseIcon}>
           <span
             className={styles.phaseLetter}
-            ref={phaseLetterRef}
-            onMouseOver={() => onOpenCallout(phaseLetterRef.current)}>
+            ref={targetRef}
+            onMouseOver={() => onOpenCallout(targetRef.current, phase)}>
             {phase.letter}
           </span>
           <span
             className={styles.phaseText}
-            onMouseOver={() => onOpenCallout(phaseLetterRef.current)}>
+            onMouseOver={() => onOpenCallout(targetRef.current, phase)}>
             {phase.name}
           </span>
-          <span className={styles.phaseSubText}></span>
+          <div
+            hidden={!context.props.showSubText}
+            className={styles.phaseSubText}
+            title={phase.subText}
+            dangerouslySetInnerHTML={{
+              __html: truncateString(phase.subText, context.props.subTextTruncateLength || 50)
+            }}></div>
         </div>
       </a>
     </li>
   )
 }
 
-export default ProjectPhase
-
-export { IProjectPhaseProps }
+export * from './types'

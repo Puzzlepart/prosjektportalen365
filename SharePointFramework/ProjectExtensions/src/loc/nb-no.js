@@ -1,5 +1,11 @@
 define([], function () {
   return {
+    PermissionConfigurationList: 'Tillatelseskonfigurasjon',
+    SitePermissionsText: 'Setter opp tillatelser for området',
+    SitePermissionsSubText: 'Kopierer tillatelsekonfigurasjon fra hubområdet.',
+    DocumentTemplateDialogScreenTargetFolderInfoText: 'Velg mål for de valgte malene. Trykk **Bibliotek** for å velge et annet bibliotek.',
+    Library: 'Bibliotek',
+    CopyHereText: 'Kopier hit',
     ApplyTemplateText: 'Legger på mal {0}',
     ApplyingExtensionsText: 'Legger på prosjekttilegg',
     ApplyExtensionText: 'Legger på prosjekttilegg {0}',
@@ -16,8 +22,6 @@ define([], function () {
     CopyListDataErrorMessage: 'Det skjedde en feil under kopiering av listeinnhold',
     CopyListItemsText: 'Kopierer {0} listeelementer fra {1} til {2}',
     CopyFilesText: 'Kopierer {0} dokumenter/mapper fra {1} til {2}',
-    IncludePortfolioAdministratorsLabel: 'Gi tilgang til porteføljeadministratorer',
-    IncludePortfolioAdministratorsDescription: 'Porteføljeadministratorer (brukerne i gruppen Porteføljeadministratorer) får tilgang til prosjektområdet.',
     CopyProgressLabel: 'Kopierer valgt(e) dokument(er) til prosjektområdet...',
     EditPropertiesLinkText: 'Du kan allerede nå<A HREF=\'{0}\' TARGET=\'_BLANK\'>redigere egenskaper</A> for prosjektet (åpnes i ny fane).',
     ErrorDialogTitle: 'Noe er galt',
@@ -25,13 +29,13 @@ define([], function () {
     GetMoreText: 'Hent flere',
     GetSetupDataErrorMessage: 'Det skjedde en feil',
     GetSetupDataErrorStack: 'Det skjedde en feil under uthenting av data fra hubområdet.',
-    IncludeStandardFoldersLabel: 'Inkluder standardmapper',
     InvalidLanguageErrorMessage: 'Ugyldig språk for området',
     InvalidLanguageErrorStack: 'Språket som er satt for området støttes ikke. Området må være opprettet med norsk språk.',
     LibraryDropdownLabel: 'Bibliotek',
     ListContentTitle: 'Standardinnhold',
     ModifiedLabel: 'Endret',
-    NameLabel: 'Filnavn',
+    NameLabel: 'Navn',
+    FileNameLabel: 'Filnavn',
     NoHubSiteErrorMessage: 'Området er ikke koblet til en hub',
     NoHubSiteErrorStack: 'Området kan ikke settes opp uten å være koblet til en hub. Koble området til ett hubområde, og last siden på nytt.<br/><br/>Gå til `Innstillinger` (tannhjulet i øvre høyre hjørne), finn `Nettstedsinformasjon` og velg hub/portefølje under `Tilknytning til hubområde`.',
     OnGoBackText: 'Gå tilbake',
@@ -59,8 +63,8 @@ define([], function () {
     TemplateSelectorTitle: 'Prosjektmal',
     TitleLabel: 'Tittel',
     ProgressDialogSubText: 'Vennligst vent. Ikke lukk nettleservinduet.',
-    DocumentTemplateDialogScreenSelectInfoText: 'Velg dokumentmalene du vil kopiere til prosjektområdet.<br /><br />Malene hentes fra<a href="{0}" target="_blank">{1}</a> og det hentes _siste versjon_ av malene.<br /><br />Når du trykker \'Velg\' sendes du videre til et skjermbilde hvor du kan sette _tittel_ og _filnavn_ for dokumentene som kopieres over.',
-    DocumentTemplateDialogScreenEditCopyInfoText: 'Her kan du sette _Filnavn_ og _Tittel_ for dokumentene som kopieres over.<br /><br />Når du er ferdig, trykk \'Start kopering\' for å starte kopieringen.',
+    DocumentTemplateDialogScreenSelectInfoText: 'Velg dokumentmalene du vil kopiere til prosjektområdet.<br /><br />Malene hentes fra<a href="{0}" target="_blank">{1}</a> og det hentes **siste versjon** av malene.<br /><br />Når du trykker **Velg** sendes du videre til et skjermbilde hvor du kan sette tittel og filnavn for malene som kopieres over.',
+    DocumentTemplateDialogScreenEditCopyInfoText: 'Her kan du sette **Filnavn** og **Tittel** for dokumentene som kopieres over.<br /><br />Når du er ferdig, trykk **Start kopering** for å starte kopieringen.',
     FilenameAlreadyInUseErrorText: 'Filnavnet er allerede i bruk.',
     FilenameInValidErrorText: 'Filnavnet er ugyldig.',
     SyncLocalProjectPropertiesListText: 'Synkroniserer liste for prosjektegenskaper',
@@ -71,11 +75,11 @@ define([], function () {
     ProcessFileText: 'Kopierer fil {0} av {1}',
     ProcessFolderText: 'Kopierer mappe {0} av {1}',
     PhaseLabel: 'Fase',
-    IncludeStandardFoldersDescription: 'Inkluder standardmapper for dokumentbiblioteket. Det opprettes en mappe per prosjetktfase.',
     SetupAbortedText: 'Installasjon avbrutt av bruker',
     UnknownErrorText: 'Ukjent feil',
     TemplateListContentConfigText: 'Den valgte prosjektmalen inneholder konfigurasjon for standardinnhold.',
-    FolderDropdownLabel:'Velg mappe',
-    DocumentLibraryDropdownLabel: 'Velg dokumentbibliotek'
+    FolderDropdownLabel: 'Velg mappe',
+    DocumentLibraryDropdownLabel: 'Velg dokumentbibliotek',
+    DocumentTemplateDialogScreenEditCopyRootLevelText: 'Øverste nivå'
   }
-});
+})

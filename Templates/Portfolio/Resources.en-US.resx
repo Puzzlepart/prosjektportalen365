@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" 
-    xmlns="" 
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-    xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -61,6 +58,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Group_Portfolio_administrators_Name" xml:space="preserve">
+    <value>Portfolio administrators</value>
+  </data>
   <data name="Lists_SitePages_Title" xml:space="preserve">
     <value>Områdesider</value>
   </data>
@@ -189,6 +189,15 @@
   </data>
   <data name="Lists_StatusSections_Url" xml:space="preserve">
     <value>Lists/Statusseksjoner</value>
+  </data>
+  <data name="Lists_Permission_Configuration_Title" xml:space="preserve">
+    <value>Tillatelseskonfigurasjon</value>
+  </data>
+  <data name="Lists_Permission_Configuration_Url" xml:space="preserve">
+    <value>Lists/Tillatelseskonfigurasjon</value>
+  </data>
+  <data name="Lists_Permission_Configuration_Description" xml:space="preserve">
+    <value>Tillatelseskonfigurasjon for nye prosjekter. Denne listen må ikke endres på.</value>
   </data>
   <data name="View_AllItems_DisplayName" xml:space="preserve">
     <value>Alle elementer</value>
@@ -349,11 +358,23 @@
   <data name="ContentTypes_BarChart_Description" xml:space="preserve">
     <value>Opprett et nytt stolpediagram</value>
   </data>
+  <data name="ContentTypes_Permission_Configuration_Element_Name" xml:space="preserve">
+    <value>Tillatelseskonfigurasjonelement</value>
+  </data>
+  <data name="ContentTypes_Permission_Configuration_Element_Description" xml:space="preserve">
+    <value>Opprett et nytt tillatelseskonfigurasjonselement</value>
+  </data>
   <data name="SiteFields_Project_Group" xml:space="preserve">
     <value>Kolonner for Prosjektportalen (Prosjekt)</value>
   </data>
   <data name="SiteFields_Portfolio_Group" xml:space="preserve">
     <value>Kolonner for Prosjektportalen (Portefølje)</value>
+  </data>
+  <data name="SiteFields_GtRiskDescription_DisplayName" xml:space="preserve">
+    <value>Beskrivelse av usikkerhet</value>
+  </data>
+  <data name="SiteFields_GtRiskDescription_Description" xml:space="preserve">
+    <value></value>
   </data>
   <data name="SiteFields_GtSortOrder_DisplayName" xml:space="preserve">
     <value>Sorteringsrekkefølge</value>
@@ -1003,6 +1024,12 @@
   <data name="SiteFields_GtRiskConsequence_DisplayName" xml:space="preserve">
     <value>Konsekvens (K)</value>
   </data>
+  <data name="SiteFields_GtProjectTemplate_DisplayName" xml:space="preserve">
+    <value>Project template</value>
+  </data>
+  <data name="SiteFields_GtProjectTemplate_Description" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="SiteFields_GtRiskConsequence_Description" xml:space="preserve">
     <value>Tall 0 til 5</value>
   </data>
@@ -1432,8 +1459,29 @@
   <data name="SiteFields_GtProjectLifecycleStatus_Description" xml:space="preserve">
     <value />
   </data>
+  <data name="SiteFields_GtSPGroupName_DisplayName" xml:space="preserve">
+    <value>SharePoint group name</value>
+  </data>
+  <data name="SiteFields_GtSPGroupName_Description" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SiteFields_GtPermissionLevel_DisplayName" xml:space="preserve">
+    <value>Permission level</value>
+  </data>
+  <data name="SiteFields_GtPermissionLevel_Description" xml:space="preserve">
+    <value>Define the SharePoint permission level for the project site.</value>
+  </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
+  </data>
+  <data name="Choice_GtPermissionLevel_Read" xml:space="preserve">
+    <value>Read</value>
+  </data>
+  <data name="Choice_GtPermissionLevel_Contribute" xml:space="preserve">
+    <value>Contribute</value>
+  </data>
+  <data name="Choice_GtPermissionLevel_Edit" xml:space="preserve">
+    <value>Edit</value>
   </data>
   <data name="Choice_GtRiskStatus_Identified" xml:space="preserve">
     <value>Identifisert</value>

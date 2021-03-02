@@ -3,10 +3,10 @@
     "id": "681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6",
     "alias": "ProjectStatusWebPart",
     "componentType": "WebPart",
-    "version": "1.2.4",
+    "version": "1.2.8",
     "manifestVersion": 2,
     "requiresCustomScript": false,
-    "hiddenFromToolbox": false,
+    "hiddenFromToolbox": true,
     "supportedHosts": [
         "SharePointWebPart"
     ],

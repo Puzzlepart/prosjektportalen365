@@ -8,7 +8,7 @@ module.exports = {
         'plugin:react/recommended', // Uses the recommended rules from @eslint-plugin-react
         'plugin:@typescript-eslint/recommended', // Uses the recommended rules from @typescript-eslint/eslint-plugin
     ],
-    plugins: ['prettier'],
+    plugins: ['prettier', 'unused-imports'],
     parserOptions: {
         ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
         sourceType: 'module', // Allows for the use of imports
@@ -58,6 +58,8 @@ module.exports = {
         'require-await': 1,
 
         semi: ['error', 'never', {}],
+
+        'unused-imports/no-unused-imports': 'error'
     },
     settings: {
         react: {

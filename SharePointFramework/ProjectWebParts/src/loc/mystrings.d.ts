@@ -1,4 +1,7 @@
 declare interface IProjectWebPartsStrings {
+  ShowSubTextFieldLabel: string;
+  SyncPropertiesAfterPhaseChangeFieldLabel: string;
+  SubTextTruncateLengthFieldLabel: string;
   SkipSyncToHubLabel: string;
   PhaseFieldFieldLabel: string;
   NoLocalPropertiesListWarningText: string;
@@ -18,7 +21,6 @@ declare interface IProjectWebPartsStrings {
   CloseText: string;
   CommentLabel: string;
   ConfirmChangePhase: string;
-  ConfirmPhaseChangeFieldLabel: string;
   ConfirmPhaseDialogSubText: string;
   ConfirmPhaseDialogTitle: string;
   CurrentPhaseViewNameFieldLabel: string;
@@ -73,6 +75,7 @@ declare interface IProjectWebPartsStrings {
   SyncProjectPropertiesSuccessText: string;
   SyncProjectPropertiesErrorText: string;
   SyncProjectPropertiesListProgressDescription: string;
+  SyncProjectPropertiesValuesProgressLabel: string;
   SyncProjectPropertiesValuesProgressDescription: string;
   ProjectStatusDataErrorText: string;
   ShowFieldExternalUsers: string;

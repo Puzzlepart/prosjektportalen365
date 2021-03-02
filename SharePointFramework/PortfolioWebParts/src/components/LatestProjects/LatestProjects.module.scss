@@ -1,5 +1,6 @@
 @import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
-.latestProjects {
+
+.root {
   .title {
     @include ms-font-xl;
     color: "[theme: themePrimary, default: #0078d4]";

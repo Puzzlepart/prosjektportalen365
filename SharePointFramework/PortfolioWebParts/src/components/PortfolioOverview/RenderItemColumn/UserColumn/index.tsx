@@ -1,12 +1,12 @@
-import * as React from 'react'
 import { Persona, PersonaPresence, PersonaSize } from 'office-ui-fabric-react/lib/Persona'
-import { IRenderItemColumnProps } from '../IRenderItemColumnProps'
+import React, { Component, ReactElement } from 'react'
 import { SearchValueType } from 'types'
+import { IRenderItemColumnProps } from '../IRenderItemColumnProps'
 
-export class UserColumn extends React.Component<IRenderItemColumnProps, {}> {
-  public render(): React.ReactElement<IRenderItemColumnProps> {
+export class UserColumn extends Component<IRenderItemColumnProps> {
+  public render(): ReactElement<IRenderItemColumnProps> {
     if (this.props.column.searchType === SearchValueType.OWSUSER) {
-      const [email, text] = this.props.colValue.split(' | ')
+      const [email, text] = this.props.columnValue.split(' | ')
       return (
         <span>
           <Persona
@@ -25,7 +25,7 @@ export class UserColumn extends React.Component<IRenderItemColumnProps, {}> {
     return (
       <span>
         <Persona
-          text={this.props.colValue}
+          text={this.props.columnValue}
           size={PersonaSize.size24}
           presence={PersonaPresence.none}
         />

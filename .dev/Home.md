@@ -62,14 +62,16 @@ Say you'd like to use the term set with ID **54da9f47-c64e-4a26-80f3-4d3c3fa1b7b
 
 At the root level of the **Templates** folder, the following files are found:
 
-| File/Folder               | Description                                                  |
-| ------------------------- | ------------------------------------------------------------ |
-| `Clean-Resx.ps1`          | Script to remove unused **.resx** resources                  |
-| `Find-FieldUsage.ps1`     | Script to find field usage                                   |
-| `generateResxJson.js`     | Node script to generate a JSON representation of the **.resx** files |
-| `generateJsonTemplate.js` | Node script to generate JSON templates for each language     |
-| `Search-Resx.ps1`         | Script to search for unused **.resx** resources              |
-| `_JsonTemplate.json`      | JSON project template                                        |
+| File/Folder                     | Description                                                  |
+| ------------------------------- | ------------------------------------------------------------ |
+| `Clean-Resx.ps1`                | Script to remove unused **.resx** resources                  |
+| `Find-FieldUsage.ps1`           | Script to find field usage                                   |
+| `Get-ComponentProperties.ps1`   | Script to get component properties from `<pnp:ClientSidePage>` instances |
+| `Encode-JSON.ps1`               | Script to take the content of a JSON file, encode and minfiy at, and store it in a `.txt`file |
+| `Search-Resx.ps1`               | Script to search for unused **.resx** resources              |
+| `tasks/generateResxJson.js`     | Node script to generate a JSON representation of the **.resx** files |
+| `tasks/generateJsonTemplate.js` | Node script to generate JSON templates for each language     |
+| `_JsonTemplate.json`            | JSON project template                                        |
 
 ##### 3.1.1 Building JSON templates
 
@@ -117,3 +119,11 @@ Content templates are found in the **Content** folder. The name of the template 
 `language_code` can be for example **no-NB** or **en-US**.
 
 The templates contains the JSON template(s), planner tasks and phase checklist items.
+
+### 4. NPM
+The SharePoint Framework solutions are published to `npm` independently.
+
+- [@Shared](https://www.npmjs.com/package/pp365-shared)
+- [ProjectWebParts](https://www.npmjs.com/package/pp365-projectwebparts)
+- [ProjectExtensions](https://www.npmjs.com/package/pp365-projectextensions)
+- [PortfolioWebParts](https://www.npmjs.com/package/pp365-portfoliowebparts)

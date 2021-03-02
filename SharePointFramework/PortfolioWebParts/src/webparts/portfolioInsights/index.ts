@@ -1,12 +1,14 @@
-import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-webpart-base'
+import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane'
 import { PortfolioInsights, IPortfolioInsightsProps } from 'components/PortfolioInsights'
 import 'office-ui-fabric-react/dist/css/fabric.min.css'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
-export default class PortfolioInsightsWebPart extends BasePortfolioWebPart<IPortfolioInsightsProps> {
+export default class PortfolioInsightsWebPart extends BasePortfolioWebPart<
+  IPortfolioInsightsProps
+> {
   public render(): void {
-    this.renderComponent(PortfolioInsights)
+    this.renderComponent<IPortfolioInsightsProps>(PortfolioInsights)
   }
 
   public async onInit(): Promise<void> {

@@ -2,14 +2,14 @@ import {
   IPropertyPaneConfiguration,
   PropertyPaneTextField,
   PropertyPaneToggle
-} from '@microsoft/sp-webpart-base'
+} from '@microsoft/sp-property-pane'
 import { BenefitsOverview, IBenefitsOverviewProps } from 'components/BenefitsOverview'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export default class BenefitsOverviewWebPart extends BasePortfolioWebPart<IBenefitsOverviewProps> {
   public render(): void {
-    this.renderComponent(BenefitsOverview)
+    this.renderComponent<IBenefitsOverviewProps>(BenefitsOverview)
   }
 
   public async onInit(): Promise<void> {

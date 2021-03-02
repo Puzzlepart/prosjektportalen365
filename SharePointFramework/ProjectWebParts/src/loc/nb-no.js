@@ -1,5 +1,9 @@
+/* eslint-disable @typescript-eslint/camelcase */
 define([], function () {
   return {
+    ShowSubTextFieldLabel: 'Vis fasetekst',
+    SyncPropertiesAfterPhaseChangeFieldLabel: 'Synkroniser prosjektegenskaper etter faseendring',
+    SubTextTruncateLengthFieldLabel: 'Max lengde fasetekst',
     ChangePhaseText: 'Endre til denne fasen',
     ChangingPhaseDescription: 'Endrer fase til {0}',
     PleaseWaitText: 'Vennligst vent',
@@ -12,7 +16,6 @@ define([], function () {
     CloseText: 'Lukk',
     CommentLabel: 'Kommentar',
     ConfirmChangePhase: 'Vil du endre fase til {0}?',
-    ConfirmPhaseChangeFieldLabel: 'Bekreft faseenendring',
     ConfirmPhaseDialogSubText: 'Endring av fasen til {0} vil endre dette for alle, vil du fortsette?',
     ConfirmPhaseDialogTitle: 'Endre fase',
     CurrentPhaseViewNameFieldLabel: 'Visningsnavn for gjeldende fase',
@@ -40,8 +43,8 @@ define([], function () {
     PhaseChecklistViewUrl: 'Lists/Fasesjekkliste/AllItems.aspx',
     PickReportText: 'Velg rapport',
     SaveText: 'Lagre',
-  RiskMatrixGroupName: 'Risikomatrise',
-  ProjectStatusProjectPropertiesGroupName: 'Prosjektegenskaper (Statusseksjoner)',
+    RiskMatrixGroupName: 'Risikomatrise',
+    ProjectStatusProjectPropertiesGroupName: 'Prosjektegenskaper (Statusseksjoner)',
     SettingsGroupName: 'Innstillinger',
     DataGroupName: 'Data',
     LookAndFeelGroupName: 'Utseende og funksjonalitet',
@@ -69,7 +72,8 @@ define([], function () {
     SyncProjectPropertiesSuccessText: 'Prosjektegenskaper ble synkronisert til porteføljeområdet. Siden lastes på nytt om {0} sekunder.',
     SyncProjectPropertiesErrorText: 'Det skjedde feil under synkronisering',
     SyncProjectPropertiesListProgressDescription: 'Oppdaterer Prosjektegenskaper-listen',
-    SyncProjectPropertiesValuesProgressDescription: 'Synkroniserer egenskaper',
+    SyncProjectPropertiesValuesProgressLabel: 'Synkroniserer egenskaper',
+    SyncProjectPropertiesValuesProgressDescription: 'Vennligst vent...',
     ProjectStatusDataErrorText: 'Ingen tilgang. Du har ikke tillatelse til å se statusrapporter.',
     ShowFieldExternalUsers: 'Synlig for eksterne brukere',
     ExternalUsersConfigText: 'Konfigurasjon',
@@ -109,4 +113,4 @@ define([], function () {
     HeightFieldLabel: 'Høyde (piksler)',
     CalloutTemplateFieldLabel: 'Mal for callout'
   }
-});
+})

@@ -1,18 +1,17 @@
+import { ProjectTemplate } from 'models'
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
-import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot'
 import * as strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
-import { ProjectSetupSettings } from '../../extensions/projectSetup/ProjectSetupSettings'
+import { isEmpty } from 'underscore'
+import { ProjectSetupSettings } from '../../projectSetup/ProjectSetupSettings'
 import { BaseDialog } from '../@BaseDialog'
 import { ExtensionsSection } from './ExtensionsSection'
-import { ITemplateSelectDialogProps } from './ITemplateSelectDialogProps'
-import { ITemplateSelectDialogState } from './ITemplateSelectDialogState'
 import { ListContentSection } from './ListContentSection'
-import { SettingsSection } from './SettingsSection'
 import styles from './TemplateSelectDialog.module.scss'
 import { TemplateSelector } from './TemplateSelector'
-import { ProjectTemplate } from 'models'
+import { ITemplateSelectDialogProps, ITemplateSelectDialogState } from './types'
 
 /**
  * @class TemplateSelectDialog
@@ -38,7 +37,7 @@ export class TemplateSelectDialog extends React.Component<
 
   public render(): React.ReactElement<ITemplateSelectDialogProps> {
     const { version, onDismiss, data } = this.props
-    const { selectedTemplate, selectedListContentConfig, selectedExtensions, settings } = this.state
+    const { selectedTemplate, selectedListContentConfig, selectedExtensions } = this.state
 
     return (
       <BaseDialog
@@ -65,7 +64,7 @@ export class TemplateSelectDialog extends React.Component<
               </MessageBar>
             )}
           </PivotItem>
-          {data.extensions.length > 0 && (
+          {!isEmpty(data.extensions) && (
             <PivotItem headerText={strings.ExtensionsTitle} itemIcon='ArrangeBringForward'>
               <ExtensionsSection
                 extensions={data.extensions}
@@ -83,9 +82,6 @@ export class TemplateSelectDialog extends React.Component<
               />
             </PivotItem>
           )}
-          <PivotItem headerText={strings.SettingsSectionTitle} itemIcon='ConfigurationSolid'>
-            <SettingsSection settings={settings} onChange={this._onSettingsChanged.bind(this)} />
-          </PivotItem>
         </Pivot>
       </BaseDialog>
     )
@@ -103,26 +99,12 @@ export class TemplateSelectDialog extends React.Component<
   }
 
   /**
-   * On setting change
-   *
-   * @param {string} key Key
-   * @param {string} bool Bool
-   */
-  private _onSettingsChanged(key: string, bool: boolean) {
-    this.setState({ settings: this.state.settings.set(key, bool) })
-  }
-
-  /**
    * On render footrer
    */
   private _onRenderFooter() {
     return (
       <>
-        <DefaultButton
-          text={strings.CloseModalText}
-          onClick={this.props.onDismiss}
-          disabled={true}
-        />
+        <DefaultButton text={strings.CloseModalText} onClick={this.props.onDismiss} />
         <PrimaryButton
           text={strings.TemplateSelectDialogSubmitButtonText}
           iconProps={{ iconName: 'Settings' }}
@@ -133,7 +115,7 @@ export class TemplateSelectDialog extends React.Component<
   }
 
   /**
-   * On submit
+   * On submit the selected configuration
    */
   private _onSubmit() {
     const data = { ...this.state }
