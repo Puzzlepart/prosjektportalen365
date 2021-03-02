@@ -23,4 +23,4 @@ jobs:
       
     - uses: actions/upload-artifact@v1
       with:
-        path: /**/*.zip
+        path: "**/*.zip"
