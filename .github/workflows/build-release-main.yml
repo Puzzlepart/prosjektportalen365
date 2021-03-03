@@ -6,6 +6,9 @@ on:
     tags:
       - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
+env:
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
 jobs:
   build-release:
     name: Build release
@@ -32,7 +35,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        
+
       - uses: actions/download-artifact@v2
         with:
           name: release-package
@@ -73,3 +76,18 @@ jobs:
           asset_path: ./release-package.zip
           asset_name: "pp365-${{ steps.package-node-version.outputs.version }}.zip"
           asset_content_type: application/zip
+
+      - name: Slack notify
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          fields: workflow,job,commit,repo,ref,author,took
+          custom_payload: |
+            {
+              username: 'action-slack',
+              icon_emoji: ':octocat:',
+              attachments: [{
+                color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+                text: `A draft release of v${{ steps.package-node-version.outputs.version }} is ready at ${{ steps.create_release.outputs.html_url }}. Add the release notes and publish!.`,
+              }]
+            }
