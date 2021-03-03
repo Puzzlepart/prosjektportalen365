@@ -59,7 +59,7 @@ jobs:
       - name: Replace tokens in .github/RELEASE_TEMPLATE.md
         uses: datamonsters/replace-action
         with:
-          files: ".github/RELEASE_TEMPLATE.md"
+          files: '.github/RELEASE_TEMPLATE.md'
           replacements: '{{version}}=${{ steps.package-node-version.outputs.version }},{{date}}=${{ steps.date.outputs.date }}'
 
       - name: Create Release
@@ -70,7 +70,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
-          body_path: ".github/RELEASE_TEMPLATE.md"
+          body_path: '.github/RELEASE_TEMPLATE.md'
           draft: true
           prerelease: false
 
