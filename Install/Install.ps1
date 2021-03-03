@@ -6,8 +6,6 @@ Param(
     [string]$Title = "Prosjektportalen",
     [Parameter(Mandatory = $false, HelpMessage = "Stored credential from Windows Credential Manager")]
     [string]$GenericCredential,
-    [Parameter(Mandatory = $false, HelpMessage = "Use Web Login")]
-    [switch]$UseWebLogin,
     [Parameter(Mandatory = $false, HelpMessage = "PowerShell credential to authenticate with")]
     [System.Management.Automation.PSCredential]$PSCredential,
     [Parameter(Mandatory = $false, HelpMessage = "Skip PnP template")]
@@ -76,9 +74,6 @@ function Connect-SharePoint {
             $Password = ConvertTo-SecureString -String $DecodedCred[1] -AsPlainText -Force
             $Credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $DecodedCred[0], $Password
             Connect-PnPOnline -Url $Url -Credentials $Credentials -ErrorAction Stop  -WarningAction Ignore
-        }
-        elseif ($UseWebLogin.IsPresent) {
-            Connect-PnPOnline -Url $Url -UseWebLogin -ErrorAction Stop -WarningAction Ignore
         }
         elseif ($null -ne $PSCredential) {
             Connect-PnPOnline -Url $Url -Credentials $PSCredential -ErrorAction Stop  -WarningAction Ignore
