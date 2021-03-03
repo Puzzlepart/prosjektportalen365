@@ -2,12 +2,8 @@ name: Build release (main)
 
 on:
   push:
-    # Sequence of patterns matched against refs/tags
     tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
-
-env:
-  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+      - 'v*'
 
 jobs:
   build-release:
@@ -62,7 +58,7 @@ jobs:
         env:
           VERSION: ${{ steps.package-node-version.outputs.version }}
           RELEASE_DATE: ${{ steps.date.outputs.date }}
-          
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -88,6 +84,8 @@ jobs:
 
       - name: Slack notify
         uses: 8398a7/action-slack@v3
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
         with:
           status: custom
           fields: workflow,job,commit,repo,ref,author,took
