@@ -1,6 +1,8 @@
-## #{VERSION}# - #{RELEASE_DATE}#
-
 ## Added
+
+-
+
+## Improvements
 
 -
 
