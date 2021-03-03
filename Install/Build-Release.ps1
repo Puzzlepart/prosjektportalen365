@@ -53,10 +53,6 @@ Copy-Item -Path "$PSScriptRoot/Scripts/*.ps1" -Destination $RELEASE_PATH_SCRIPTS
 Copy-Item -Path "$PSScriptRoot/SearchConfiguration.xml" -Destination $RELEASE_PATH -Force
 Write-Host "DONE" -ForegroundColor Green
 
-Write-Host "[INFO] Copying SharePointPnPPowerShellOnline bundle...  " -NoNewline
-Copy-Item -Path $PNP_BUNDLE_PATH -Filter * -Destination $RELEASE_PATH -Force -Recurse
-Write-Host "DONE" -ForegroundColor Green
-
 (Get-Content "$RELEASE_PATH/Install.ps1") -Replace 'VERSION_PLACEHOLDER', $PACKAGE_FILE.version | Set-Content "$RELEASE_PATH/Install.ps1"
 #endregion
 
