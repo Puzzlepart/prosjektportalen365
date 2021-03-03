@@ -35,7 +35,7 @@ export const ProjectPhase = ({ phase, isCurrentPhase, onOpenCallout }: IProjectP
             className={styles.phaseSubText}
             title={phase.subText}
             dangerouslySetInnerHTML={{
-              __html: truncateString(phase.subText, context.props.subTextTruncateLength || 50)
+              __html: truncateString(phase.subText || '', context.props.subTextTruncateLength || 50)
             }}></div>
         </div>
       </a>
