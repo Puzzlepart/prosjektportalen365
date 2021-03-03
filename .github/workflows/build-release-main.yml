@@ -17,6 +17,11 @@ jobs:
       - name: Run Install/Build-Release.ps1 in CI mode
         run: Install/Build-Release.ps1 -CI -SkipBuildSharePointFramework
         shell: powershell
+      
+      - uses: actions/upload-artifact@v1
+        with:
+          name: release-package
+          path: release
 
   create-release:
     name: Create release
