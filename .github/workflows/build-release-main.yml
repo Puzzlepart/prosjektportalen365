@@ -28,11 +28,17 @@ jobs:
     runs-on: ubuntu-18.04
     needs: [build-release]
     steps:
+
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: release-package
+
       - name: Archive Release
         uses: thedoctor0/zip-release@master
         with:
-          filename: 'release.zip'
-          path: release
+          filename: 'release-package.zip'
+          path: release-package
 
       - name: Upload Release
         uses: ncipollo/release-action@v1
