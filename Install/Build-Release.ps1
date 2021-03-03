@@ -16,6 +16,7 @@ Write-Host "[Building release v$($PACKAGE_FILE.version)]" -ForegroundColor Cyan
 
 #region Paths
 $ROOT_PATH                      = "$PSScriptRoot/.."
+mkdir $ROOT_PATH/release >$null 2>&1
 $SHAREPOINT_FRAMEWORK_BASEPATH  = "$ROOT_PATH/SharePointFramework"
 $PNP_TEMPLATES_BASEPATH         = "$ROOT_PATH/Templates"
 $SITE_SCRIPTS_BASEPATH          = "$ROOT_PATH/SiteScripts/Src"
@@ -39,10 +40,14 @@ if ($CI.IsPresent) {
 
 Write-Host "[INFO] Creating release folder $RELEASE_PATH...  " -NoNewline
 mkdir $RELEASE_PATH >$null 2>&1
-$RELEASE_PATH_TEMPLATES     = (mkdir "$RELEASE_PATH/Templates").FullName
-$RELEASE_PATH_SITESCRIPTS   = (mkdir "$RELEASE_PATH/SiteScripts").FullName
-$RELEASE_PATH_SCRIPTS       = (mkdir "$RELEASE_PATH/Scripts").FullName
-$RELEASE_PATH_APPS          = (mkdir "$RELEASE_PATH/Apps").FullName
+mkdir "$RELEASE_PATH/Templates"
+mkdir "$RELEASE_PATH/SiteScripts"
+mkdir "$RELEASE_PATH/Scripts"
+mkdir "$RELEASE_PATH/Apps"
+$RELEASE_PATH_TEMPLATES     = "$RELEASE_PATH/Templates"
+$RELEASE_PATH_SITESCRIPTS   = "$RELEASE_PATH/SiteScripts"
+$RELEASE_PATH_SCRIPTS       = "$RELEASE_PATH/Scripts"
+$RELEASE_PATH_APPS          = "$RELEASE_PATH/Apps"
 Write-Host "DONE" -ForegroundColor Green
 
 #region Copying source files
