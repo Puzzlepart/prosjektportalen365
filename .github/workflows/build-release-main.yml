@@ -41,17 +41,11 @@ jobs:
           filename: 'release-package.zip'
           path: release-package
 
-      - name: Upload Release
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "release.zip"
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
@@ -74,5 +68,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./release-package.zip
-          asset_name: "pp365-${{ steps.package-node-version.outputs.version }}-${{ SHA8 }}.zip"
+          asset_name: "pp365-${{ steps.package-node-version.outputs.version }}.zip"
           asset_content_type: application/zip
