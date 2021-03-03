@@ -1,4 +1,4 @@
-## {{version}} - {{date}}
+## #{VERSION}# - #{RELEASE_DATE}#
 
 ## Added
 
