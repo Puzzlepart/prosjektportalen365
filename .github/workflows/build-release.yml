@@ -37,7 +37,7 @@ jobs:
           name: release-package
           path: release-package
 
-      - name: Archive Release
+      - name: ZIP release package
         uses: thedoctor0/zip-release@master
         with:
           filename: 'release-package.zip'
@@ -59,7 +59,7 @@ jobs:
           VERSION: ${{ steps.package-node-version.outputs.version }}
           RELEASE_DATE: ${{ steps.date.outputs.date }}
 
-      - name: Create Release
+      - name: Create GitHub release
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -95,6 +95,6 @@ jobs:
               icon_emoji: ':octocat:',
               attachments: [{
                 color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `A [draft release of v${{ steps.package-node-version.outputs.version }}](${{ steps.create_release.outputs.html_url }}) is ready. Add the release notes and publish!`,
+                text: `A draft release of v${{ steps.package-node-version.outputs.version }} is ready at ${{ steps.create_release.outputs.html_url }}. Add the release notes and publish!`,
               }]
             }
