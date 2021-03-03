@@ -56,6 +56,11 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%d-%m-%Y')"
 
+      - uses: datamonsters/replace-action
+        with:
+          files: '.github/RELEASE_TEMPLATE.md'
+          replacements: '{{version}}=${{ steps.package-node-version.outputs.version }},{{date}}=${{ steps.date.outputs.date }}'
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -64,17 +69,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
-          body: |
-            ## ${{ steps.package-node-version.outputs.version }} - ${{ steps.date.outputs.date }}
-
-            ## Added
-
-            - 
-
-            ## Fixed
-
-            - 
-
+          body_path: '.github/RELEASE_TEMPLATE.md'
           draft: true
           prerelease: false
 
@@ -100,6 +95,6 @@ jobs:
               icon_emoji: ':octocat:',
               attachments: [{
                 color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `A [draft release of v${{ steps.package-node-version.outputs.version }}](${{ steps.create_release.outputs.html_url }}) is ready. Add the release notes and publish!. @Jan Lindset Dette er bare testing.`,
+                text: `A [draft release of v${{ steps.package-node-version.outputs.version }}](${{ steps.create_release.outputs.html_url }}) is ready. Add the release notes and publish!`,
               }]
             }
