@@ -2,26 +2,28 @@ name: Build release (main)
 
 on:
   push:
-    branches: [main]
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
 jobs:
-   build-release:
-    runs-on: windows-latest
-    
-    steps:      
-    - name: Checkout code
-      uses: actions/checkout@v2
-      
-    - name: Setup Node.js 10.x
-      uses: actions/setup-node@v1
-      with:
-        node-version: 10.x
-
-    - name: Run Install/Build-Release.ps1 in CI mode
-      run: Install/Build-Release.ps1 -CI
-      shell: powershell
-      
-    - uses: actions/upload-artifact@v1
-      with:
-        name: release-package
-        path: release
+  build:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: true
+          prerelease: false
