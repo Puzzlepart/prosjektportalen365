@@ -103,12 +103,12 @@ In addition we have two PnP provisioning templates.
 
 ##### 3.2.1 Portfolio
 
-| File/Folder          | Description                                                  |
-| -------------------- | ------------------------------------------------------------ |
-| Objects              | PnP assets. See https://github.com/pnp/PnP-Provisioning-Schema |
-| SiteAssets           | Files to be uploaded to SiteAssets                           |
-| Portfolio.xml        | Main template file                                           |
-| `Resources.*.resx` | Resource files                               |
+| File/Folder        | Description                                                  |
+| ------------------ | ------------------------------------------------------------ |
+| Objects            | PnP assets. See https://github.com/pnp/PnP-Provisioning-Schema |
+| SiteAssets         | Files to be uploaded to SiteAssets                           |
+| Portfolio.xml      | Main template file                                           |
+| `Resources.*.resx` | Resource files                                               |
 
 ##### 3.2.2 Content templates
 
@@ -121,9 +121,22 @@ Content templates are found in the **Content** folder. The name of the template 
 The templates contains the JSON template(s), planner tasks and phase checklist items.
 
 ### 4. NPM
+
 The SharePoint Framework solutions are published to `npm` independently.
 
 - [@Shared](https://www.npmjs.com/package/pp365-shared)
 - [ProjectWebParts](https://www.npmjs.com/package/pp365-projectwebparts)
 - [ProjectExtensions](https://www.npmjs.com/package/pp365-projectextensions)
 - [PortfolioWebParts](https://www.npmjs.com/package/pp365-portfoliowebparts)
+
+### 5. Building a new release
+
+To build a new release make sure your on the `main`branch and in sync with **origin**.
+
+Run the npm script `build:release`:
+
+```shelll
+npm run build:release
+```
+
+The installation package should be found in the release folder.
