@@ -13,6 +13,23 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Run Install/Build-Release.ps1 in CI mode
+        run: Install/Build-Release.ps1 -CI
+        shell: powershell
+
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          filename: 'release.zip'
+          path: release
+
+      - name: Upload Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "release.zip"
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
