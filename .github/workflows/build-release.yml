@@ -47,6 +47,15 @@ jobs:
           filename: 'release-package.zip'
           path: release-package
 
+      - name: Read package.json
+        uses: culshaw/read-package-node-version-actions@v1
+        id: package-node-version
+
+
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%d-%m-%Y')"
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -56,15 +65,18 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
           body: |
-            Changes in this Release
-            - First Change
-            - Second Change
+            ## ${{ steps.package-node-version.outputs.version }} - ${{ steps.date.outputs.date }}
+
+            ## Added
+
+            - 
+
+            ## Fixed
+
+            - 
+
           draft: true
           prerelease: false
-
-      - name: Read package.json
-        uses: culshaw/read-package-node-version-actions@v1
-        id: package-node-version
 
       - name: Upload Release Asset
         id: upload-release-asset 
