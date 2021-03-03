@@ -56,7 +56,8 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%d-%m-%Y')"
 
-      - uses: datamonsters/replace-action
+      - name: Replace tokens in .github/RELEASE_TEMPLATE.md
+        uses: datamonsters/replace-action
         with:
           files: ".github/RELEASE_TEMPLATE.md"
           replacements: '{{version}}=${{ steps.package-node-version.outputs.version }},{{date}}=${{ steps.date.outputs.date }}'
