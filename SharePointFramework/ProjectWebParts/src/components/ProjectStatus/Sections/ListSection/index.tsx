@@ -17,7 +17,7 @@ import { IListSectionData, IListSectionProps, IListSectionState } from './types'
 export class ListSection extends BaseSection<
   IListSectionProps,
   IListSectionState<IListSectionData>
-  > {
+> {
   constructor(props: IListSectionProps) {
     super(props)
     this.state = { loading: true }
@@ -78,12 +78,7 @@ export class ListSection extends BaseSection<
    * Fetch list data
    */
   private async _fetchListData(): Promise<IListSectionData> {
-    const {
-      listTitle,
-      viewQuery,
-      viewFields,
-      rowLimit
-    } = this.props.model
+    const { listTitle, viewQuery, viewFields, rowLimit } = this.props.model
     const list = new Web(this.props.webUrl).lists.getByTitle(listTitle)
     try {
       const viewXml = `<View><Query>${viewQuery}</Query><RowLimit>${rowLimit}</RowLimit></View>`
@@ -104,12 +99,13 @@ export class ListSection extends BaseSection<
             fieldName: field.InternalName,
             name: field.Title,
             minWidth: 100,
-            maxWidth: {
-              Text: 250,
-              Note: 250,
-              Choice: 150,
-              Number: 100
-            }[field.TypeAsString] || 150,
+            maxWidth:
+              {
+                Text: 250,
+                Note: 250,
+                Choice: 150,
+                Number: 100
+              }[field.TypeAsString] || 150,
             isResizable: true
           } as IColumn
         })
