@@ -22,17 +22,21 @@ export const addColumn = (dispatch: Dispatch<AnyAction>) => ({
   onColumnClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
 })
 
+const initialColumn = {
+  key: null,
+  fieldName: '',
+  name: '',
+  minWidth: 100,
+  maxWidth: 300,
+  data: {
+    renderAs: 'text'
+  }
+}
+
 export const ColumnFormPanel = () => {
   const { state, dispatch } = useContext(PortfolioAggregationContext)
   const [column, setColumn] = useState<IColumn>({
-    key: null,
-    fieldName: '',
-    name: '',
-    minWidth: 100,
-    maxWidth: 300,
-    data: {
-      renderAs: 'text'
-    },
+    ...initialColumn,
     ...(state.editColumn || {})
   })
 
@@ -50,7 +54,13 @@ export const ColumnFormPanel = () => {
   }, [state.editColumn])
 
   const onSave = () => {
+    setColumn(initialColumn)
     dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
+  }
+
+  const onDismiss = () => {
+    setColumn(initialColumn)
+    dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
   }
 
   return (
@@ -60,7 +70,8 @@ export const ColumnFormPanel = () => {
         ? strings.EditColumnHeaderText
         : strings.NewColumnHeaderText
       }
-      onDismiss={() => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))}
+      onDismiss={onDismiss}
+      isLightDismiss={true}
       className={styles.root}>
       <div className={styles.field}>
         <TextField
