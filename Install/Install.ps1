@@ -4,12 +4,6 @@ Param(
     [string]$Url,
     [Parameter(Mandatory = $false, HelpMessage = "N/A")]
     [string]$Title = "Prosjektportalen",
-    [Parameter(Mandatory = $false, HelpMessage = "Stored credential from Windows Credential Manager")]
-    [string]$GenericCredential,
-    [Parameter(Mandatory = $false, HelpMessage = "Use Web Login")]
-    [switch]$UseWebLogin,
-    [Parameter(Mandatory = $false, HelpMessage = "PowerShell credential to authenticate with")]
-    [System.Management.Automation.PSCredential]$PSCredential,
     [Parameter(Mandatory = $false, HelpMessage = "Skip PnP template")]
     [switch]$SkipTemplate,
     [Parameter(Mandatory = $false, HelpMessage = "Do you want to skip deployment of taxonomy?")]
@@ -22,8 +16,8 @@ Param(
     [switch]$SkipSiteCreation,
     [Parameter(Mandatory = $false, HelpMessage = "Skip search configuration")]
     [switch]$SkipSearchConfiguration,
-    [Parameter(Mandatory = $false, HelpMessage = "Do you want to handle PnP libraries and PnP PowerShell without using bundled files?")]
-    [switch]$SkipLoadingBundle,
+    [Parameter(Mandatory = $false, HelpMessage = "Do you have PnP.PowerShell installed already?")]
+    [switch]$SkipInstallPnPPowerShell,
     [Parameter(Mandatory = $false, HelpMessage = "Do you want to perform an upgrade?")]
     [switch]$Upgrade,
     [Parameter(Mandatory = $false, HelpMessage = "Site design name")]
@@ -77,17 +71,8 @@ function Connect-SharePoint {
             $Credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $DecodedCred[0], $Password
             Connect-PnPOnline -Url $Url -Credentials $Credentials -ErrorAction Stop  -WarningAction Ignore
         }
-        elseif ($UseWebLogin.IsPresent) {
-            Connect-PnPOnline -Url $Url -UseWebLogin -ErrorAction Stop -WarningAction Ignore
-        }
-        elseif ($null -ne $PSCredential) {
-            Connect-PnPOnline -Url $Url -Credentials $PSCredential -ErrorAction Stop  -WarningAction Ignore
-        }
-        elseif ($null -ne $GenericCredential -and $GenericCredential -ne "") {
-            Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ErrorAction Stop  -WarningAction Ignore
-        }
         else {
-            Connect-PnPOnline -Url $Url -ErrorAction Stop -WarningAction Ignore
+            Connect-PnPOnline -Url $Url -Interactive -ErrorAction Stop -WarningAction Ignore
         }
     }
     Catch {
@@ -96,8 +81,8 @@ function Connect-SharePoint {
     }
 }
 
-function LoadBundle() {
-    Import-Module "$PSScriptRoot\SharePointPnPPowerShellOnline\SharePointPnPPowerShellOnline.psd1" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
+function InstallPnPPowerShell() {
+    Install-Module PnP.PowerShell -AllowPrerelease
     return (Get-Command Connect-PnPOnline).Version
 }
 
@@ -106,8 +91,8 @@ if (-not [string]::IsNullOrEmpty($CI)) {
     Install-Module -Name SharePointPnPPowerShellOnline -Force -Scope CurrentUser -ErrorAction Stop
 }
 else {
-    if (-not $SkipLoadingBundle.IsPresent) {
-        $PnPVersion = LoadBundle    
+    if (-not $SkipInstallPnPPowerShell.IsPresent) {
+        $PnPVersion = InstallPnPPowerShell    
         Write-Host "[INFO] Loaded [SharePointPnPPowerShellOnline] v.$($PnPVersion) from bundle"
     }
     else {
@@ -315,25 +300,25 @@ if (-not $SkipTemplate.IsPresent) {
         }
         if (-not $SkipTaxonomy.IsPresent -and -not $Upgrade.IsPresent) {
             Write-Host "[INFO] Applying PnP template [Taxonomy] to [$Url]"
-            Apply-PnPProvisioningTemplate "$BasePath\Taxonomy.pnp" -ErrorAction Stop
+            Invoke-PnPSiteTemplate "$BasePath\Taxonomy.pnp" -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP template [Taxonomy] to [$Url]" -ForegroundColor Green
         }
         
         Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
-        $Instance = Read-PnPProvisioningTemplate "$BasePath\Portfolio.pnp"
+        $Instance = Read-PnPSiteTemplate"$BasePath\Portfolio.pnp"
         $Instance.SupportedUILanguages[0].LCID = $LanguageId
-        Apply-PnPProvisioningTemplate -InputInstance $Instance -Handlers SupportedUILanguages
-        Apply-PnPProvisioningTemplate "$BasePath\Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
+        Invoke-PnPSiteTemplate -InputInstance $Instance -Handlers SupportedUILanguages
+        Invoke-PnPSiteTemplate "$BasePath\Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
         Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
 
         if ($Upgrade.IsPresent) {
             Write-Host "[INFO] Applying PnP content template (Handlers:Files) to [$Url]"
-            Apply-PnPProvisioningTemplate "$BasePath\Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop
+            Invoke-PnPSiteTemplate "$BasePath\Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
         }
         else {
             Write-Host "[INFO] Applying PnP content template to [$Url]"
-            Apply-PnPProvisioningTemplate "$BasePath\Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop
+            Invoke-PnPSiteTemplate "$BasePath\Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
         }
         
