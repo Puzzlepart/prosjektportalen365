@@ -102,6 +102,7 @@ define([], function () {
     ProjectOwner: 'Prosjekteier',
     ProjectStatusLinkText: 'Gå til prosjektstatus',
     RecommendationLabel: 'Anbefaling',
+    ProjectTimelineInfoText: 'Beskrivelse av prosjekttidslinje webpart, hvor man kan oppdater osv... <A HREF="../Lists/Tidslinje/AllItems.aspx?Source={0}">sentrale ressursallokeringslisten</A>..',
     ResourceAllocationInfoText: 'Ressursallokering eller fravær som gjelder på tvers av prosjekter legges inn i den<A HREF="../Lists/Ressursallokering/AllItems.aspx?Source={0}">sentrale ressursallokeringslisten</A>. Disse oppføringene vil vises med blå og rød (fravær) farge i tabellen under. Prosjektallokeringer vises med grønn farge. Fargestyrken til allokeringen baserer seg på allokeringsprosenten.',
     ResourceLabel: 'Ressurs',
     ResponsibleLabel: 'Ansvarlig',
