@@ -24,26 +24,14 @@ export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
           <span>{item.data.project}</span>
         </a>
       </p>
-      <p hidden={!item.data.resource}>
-        <b>Ressurs:</b> <span>{item.data.resource}</span>
-      </p>
-      <p hidden={!item.data.role}>
-        <b>Rolle:</b> <span>{item.data.role}</span>
+      <p>
+        <b>Gjeldende fase:</b> <span>{item.data.phase}</span>
       </p>
       <p>
-        <b>Allokeringsprosent:</b> <span>{item.data.allocation}%</span>
+        <b>Startdato:</b> <span>{formatDate(item.data.start_time.toString())}</span>
       </p>
       <p>
-        <b>Startdato:</b> <span>{formatDate(item.data.props.GtStartDateOWSDATE)}</span>
-      </p>
-      <p>
-        <b>Sluttdato:</b> <span>{formatDate(item.data.props.GtEndDateOWSDATE)}</span>
-      </p>
-      <p hidden={!item.data.props.GtAllocationStatusOWSCHCS}>
-        <b>Allokeringsstatus:</b> <span>{item.data.props.GtAllocationStatusOWSCHCS}</span>
-      </p>
-      <p hidden={!item.data.props.GtAllocationCommentOWSMTXT}>
-        <b>Kommentar:</b> <span>{item.data.props.GtAllocationCommentOWSMTXT}</span>
+        <b>Sluttdato:</b> <span>{formatDate(item.data.end_time.toString())}</span>
       </p>
     </Callout>
   )

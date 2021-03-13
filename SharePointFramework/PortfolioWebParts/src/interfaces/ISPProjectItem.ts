@@ -1,12 +1,10 @@
-import * as moment from 'moment'
-
 export interface ISPProjectItem {
   GtGroupId: string
   GtSiteId: string
   GtSiteUrl: string
   GtProjectPhaseText: string
-  GtStartDate: moment.Moment
-  GtEndDate: moment.Moment
+  GtStartDate: string
+  GtEndDate: string
   GtProjectOwnerId: number
   GtProjectManagerId: number
 }

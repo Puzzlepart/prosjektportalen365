@@ -1,22 +1,13 @@
 import { IBaseComponentProps } from '../types'
 import * as moment from 'moment'
 import { ITimelineData, ITimelineItem } from 'interfaces'
+import { ProjectListModel } from 'models'
 
 export interface IProjectTimelineProps extends IBaseComponentProps {
   /**
    * Data source
    */
   dataSource: string
-
-  /**
-   * Background color for item
-   */
-  itemBgColor?: string
-
-  /**
-   * Background color for absence items
-   */
-  itemAbsenceBgColor?: string
 
   /**
    * Default time start
@@ -27,11 +18,6 @@ export interface IProjectTimelineProps extends IBaseComponentProps {
    * Default time end
    */
   defaultTimeEnd?: [number, moment.unitOfTime.DurationConstructor]
-
-  /**
-   * Select properties
-   */
-  selectProperties?: string[]
 }
 
 export interface IProjectTimelineState {
@@ -49,6 +35,11 @@ export interface IProjectTimelineState {
    * Active filters
    */
   activeFilters: { [key: string]: string[] }
+
+  /**
+   * Projects
+   */
+  projects?: ProjectListModel[]
 
   /**
    * Data

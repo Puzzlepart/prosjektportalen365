@@ -3,7 +3,6 @@ import { sp } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
 import sortArray from 'array-sort'
 import {
-  IAllocationSearchResult,
   ITimelineData,
   ITimelineGroup,
   ITimelineItem,
@@ -16,7 +15,6 @@ import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
-import { tryParsePercentage } from 'pp365-shared/lib/helpers'
 import { DataSourceService } from 'pp365-shared/lib/services'
 import React, { Component } from 'react'
 import Timeline, {
@@ -32,6 +30,7 @@ import { DetailsCallout } from './DetailsCallout'
 import styles from './ProjectTimeline.module.scss'
 import './Timeline.overrides.css'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
+import { ProjectListModel } from 'models'
 
 /**
  * @component ProjectTimeline
@@ -42,27 +41,9 @@ export class ProjectTimeline extends Component<
   IProjectTimelineState
 > {
   public static defaultProps: Partial<IProjectTimelineProps> = {
-    itemBgColor: '51,153,51',
-    itemAbsenceBgColor: '26,111,179',
     defaultTimeStart: [-1, 'months'],
-    defaultTimeEnd: [1, 'years'],
-    selectProperties: [
-      'Path',
-      'SPWebUrl',
-      'ContentTypeId',
-      'SiteTitle',
-      'SiteName',
-      'RefinableString71',
-      'RefinableString72',
-      'GtResourceLoadOWSNMBR',
-      'GtResourceAbsenceOWSCHCS',
-      'GtStartDateOWSDATE',
-      'GtEndDateOWSDATE',
-      'GtAllocationStatusOWSCHCS',
-      'GtAllocationCommentOWSMTXT'
-    ]
+    defaultTimeEnd: [1, 'years']
   }
-
   /**
    * Constructor
    *
@@ -76,7 +57,7 @@ export class ProjectTimeline extends Component<
 
   public async componentDidMount(): Promise<void> {
     try {
-      const data = await this._fetchData()
+      const data = await this._fetchData();
       this.setState({ data, loading: false })
     } catch (error) {
       this.setState({ error, loading: false })
@@ -94,9 +75,9 @@ export class ProjectTimeline extends Component<
         </div>
       )
     }
-
+    
     const { groups, items } = this._getFilteredData()
-
+    
     return (
       <div className={styles.projectTimeline}>
         <div className={styles.container}>
@@ -176,6 +157,7 @@ export class ProjectTimeline extends Component<
   private _getFilters(): IFilterProps[] {
     const columns = [
       { fieldName: 'project', name: strings.SiteTitleLabel },
+      { fieldName: 'phase', name: strings.PhaseLabel },
     ]
     return columns.map((col) => ({
       column: { key: col.fieldName, minWidth: 0, ...col },
@@ -237,7 +219,7 @@ export class ProjectTimeline extends Component<
         onClick={(event) => this._onItemClick(event, props.item)}>
         <div
           className={`${styles.itemContent} rc-item-content`}
-          style={{ maxHeight: `${props.itemContext.dimensions.height}` }}>
+          style={{ maxHeight: `${props.itemContext.dimensions.height}`, paddingLeft: '8px' }}>
           {props.item.title}
         </div>
       </div>
@@ -270,16 +252,14 @@ export class ProjectTimeline extends Component<
   }
 
   /**
-   * Creating groups based on user property (RefinableString71) on the search result, with fallback to role (RefinableString72)
-   *
-   * @param {IAllocationSearchResult[]} searchResults Search results
+   * Creating groups based on projects title
    *
    * @returns {ITimelineGroup[]} Timeline groups
    */
-  private _transformGroups(searchResults: IAllocationSearchResult[]): ITimelineGroup[] {
-    const groupNames: string[] = searchResults
-      .map((res) => {
-        const name = res.RefinableString71 || `${res.RefinableString72}|R`
+  private _transformGroups(projects: ProjectListModel[]): ITimelineGroup[] {
+    const groupNames: string[] = projects
+      .map((project) => {
+        const name = project.title
         return name
       })
       .filter((value, index, self) => self.indexOf(value) === index)
@@ -298,48 +278,37 @@ export class ProjectTimeline extends Component<
   /**
    * Create items
    *
-   * @param {IAllocationSearchResult[]} searchResults Search results
    * @param {ITimelineGroup[]} groups Groups
    *
    * @returns {ITimelineItem[]} Timeline items
    */
   private _transformItems(
-    searchResults: IAllocationSearchResult[],
+    projects: ProjectListModel[],
     groups: ITimelineGroup[]
   ): ITimelineItem[] {
-    const items: ITimelineItem[] = searchResults.map((res, id) => {
+    const items: ITimelineItem[] = projects.map((project, id) => {
       const group = _.find(
         groups,
-        (grp) => [res.RefinableString71, res.RefinableString72].indexOf(grp.title) !== -1
+        (grp) => project.title.indexOf(grp.title) !== -1
       )
-      const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, false, 0) as number
-      const isAbsence = res.ContentTypeId.indexOf('0x010029F45E75BA9CE340A83EFFB2927E11F4') !== -1
-      const itemOpacity = allocation < 30 ? 0.3 : allocation / 100
-      const itemColor = allocation < 40 ? '#000' : '#fff'
-      const backgroundColor = isAbsence ? this.props.itemAbsenceBgColor : this.props.itemBgColor
       const style: React.CSSProperties = {
-        color: itemColor,
+        color: 'white',
         border: 'none',
         cursor: 'auto',
         outline: 'none',
-        background: `rgb(${backgroundColor})`,
-        backgroundColor: `rgba(${backgroundColor}, ${itemOpacity})`
+        background: 'gold',
+        backgroundColor: 'tomato'
       }
       return {
         id,
         group: group.id,
-        title: isAbsence
-          ? `${res.GtResourceAbsenceOWSCHCS} (${allocation}%)`
-          : `${res.RefinableString72} - ${res.SiteTitle} (${allocation}%)`,
-        start_time: moment(new Date(res.GtStartDateOWSDATE)),
-        end_time: moment(new Date(res.GtEndDateOWSDATE)),
-        allocation,
+        title: format(strings.ProjectTimelineItemInfo, project.title),
+        start_time: moment(new Date(project.startDate)),
+        end_time: moment(new Date(project.endDate)),
         itemProps: { style },
-        project: res.SiteTitle,
-        projectUrl: res.SiteName,
-        role: res.RefinableString72,
-        resource: res.RefinableString71,
-        props: res
+        project: project.title,
+        projectUrl: project.url,
+        phase: project.phase
       } as ITimelineItem
     })
     return items
@@ -354,17 +323,9 @@ export class ProjectTimeline extends Component<
     const dataSource = await new DataSourceService(sp.web).getByName(this.props.dataSource)
     if (!dataSource) throw format(strings.DataSourceNotFound, this.props.dataSource)
     try {
-      const results = (
-        await sp.search({
-          QueryTemplate: dataSource.searchQuery,
-          Querytext: '*',
-          RowLimit: 500,
-          TrimDuplicates: false,
-          SelectProperties: this.props.selectProperties
-        })
-      ).PrimarySearchResults as IAllocationSearchResult[]
-      const groups = this._transformGroups(results)
-      const items = this._transformItems(results, groups)
+      const projects = await this.props.dataAdapter.fetchEncrichedProjects()
+      const groups = this._transformGroups(projects)
+      const items = this._transformItems(projects, groups)
       return { items, groups }
     } catch (error) {
       throw error
