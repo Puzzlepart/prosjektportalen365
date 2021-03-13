@@ -137,6 +137,7 @@ declare interface IPortfolioWebPartsStrings {
   ViewsListNameLabel: string
   ProjectsListName: string
   PortfolioManagerGroupName: string
+  ProjectTimelineItemInfo: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

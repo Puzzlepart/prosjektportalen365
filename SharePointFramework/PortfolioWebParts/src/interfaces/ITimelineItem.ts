@@ -7,11 +7,12 @@ export interface ITimelineItem {
   group: number
   start_time: moment.Moment
   end_time: moment.Moment
-  allocation: number
+  allocation?: number
   itemProps: React.HTMLProps<HTMLDivElement>
   project: string
   projectUrl: string
-  role: string
-  resource: string
+  phase?: string
+  role?: string
+  resource?: string
   props: TypedHash<any>
 }

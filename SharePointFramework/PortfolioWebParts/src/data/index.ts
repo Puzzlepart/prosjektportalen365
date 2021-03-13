@@ -332,6 +332,8 @@ export class DataAdapter {
           group.displayName,
           item.GtSiteUrl,
           item.GtProjectPhaseText,
+          item.GtStartDate,
+          item.GtEndDate,
           manager,
           owner
         )
@@ -355,7 +357,9 @@ export class DataAdapter {
           'GtSiteUrl',
           'GtProjectOwnerId',
           'GtProjectManagerId',
-          'GtProjectPhaseText'
+          'GtProjectPhaseText',
+          'GtStartDate',
+          'GtEndDate'
         )
         // eslint-disable-next-line quotes
         .filter("GtProjectLifecycleStatus ne 'Avsluttet'")

@@ -1,6 +1,7 @@
 import { ISPUser } from 'interfaces'
 import { IPersonaSharedProps } from 'office-ui-fabric-react/lib/Persona'
 import { getUserPhoto } from 'pp365-shared/lib/helpers'
+import * as moment from 'moment'
 
 export class ProjectListModel {
   public manager: IPersonaSharedProps
@@ -14,6 +15,8 @@ export class ProjectListModel {
    * @param {string} title Title
    * @param {string} url Url
    * @param {string} phase Phase
+   * @param {moment.Moment} startDate Start Date
+   * @param {moment.Moment} endDate End Date
    * @param {ISPUser} manager Manager
    * @param {ISPUser} owner Owner
    */
@@ -23,6 +26,8 @@ export class ProjectListModel {
     public title: string,
     public url: string,
     public phase?: string,
+    public startDate?: moment.Moment,
+    public endDate?: moment.Moment,
     manager?: ISPUser,
     owner?: ISPUser
   ) {

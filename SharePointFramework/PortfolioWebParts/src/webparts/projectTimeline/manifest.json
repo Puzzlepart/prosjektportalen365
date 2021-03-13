@@ -20,7 +20,7 @@
                 "default": "Prosjektttidslinje"
             },
             "description": {
-                "default": "Description of webpart"
+                "default": " "
             },
             "officeFabricIconFontName": "TimelineDelivery",
             "properties": {
