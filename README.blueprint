@@ -1,0 +1,21 @@
+[[template:logo]] [[template:description]]
+
+[![version](https://img.shields.io/badge/version-[[pkg.version]]-green.svg)](https://semver.org)
+
+<details>
+<summary>📖 Innholdsfortegnelse</summary>
+<br />
+[[ template:toc ]]
+</details>
+
+[[load:readme/1-Hva-er-Prosjektportalen-for-Microsoft-365.md]]
+
+[[load:readme/2-Installering.md]]
+
+[[load:readme/3-Kontakt.md]]
+
+[[load:readme/4-Nettleserstotte.md]]
+
+[[load:readme/5-Maintainers.md]]
+
+[[load:readme/6-Development.md]]

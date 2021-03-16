@@ -14,3 +14,8 @@ With the current approach, with no cache, a full run takes about 30 minutes.
 
 ![image-20201121133532960](assets/image-20201121133532960.png)
 
+## Build release (main)
+
+[build-release](../.github/workflows/build-release.yml) builds a new release package on _tag_ to **main**, then drafts a new GitHub release with the installation package.
+
+![image-20210303133423458](assets/image-20210303133423458.png)
