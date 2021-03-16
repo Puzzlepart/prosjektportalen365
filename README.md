@@ -1,7 +1,7 @@
 <!-- ⚠️ This README has been generated from the file(s) "README.blueprint" ⚠️--><p align="center">
   <img src="assets/logo.png" alt="Logo" width="435" height="84" />
 </p> <p align="center">
-  <b>Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren. Mer informasjon på Puzzleparts nettsider.</b></br>
+  <b>Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.</b></br>
   <sub><sub>
 </p>
 
