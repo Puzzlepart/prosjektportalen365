@@ -1,13 +1,7 @@
 import { get } from '@microsoft/sp-lodash-subset'
-import { sp } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
 import sortArray from 'array-sort'
-import {
-  ITimelineData,
-  ITimelineGroup,
-  ITimelineItem,
-  TimelineGroupType
-} from 'interfaces'
+import { ITimelineData, ITimelineGroup, ITimelineItem, TimelineGroupType } from 'interfaces'
 import moment from 'moment'
 import { CommandBar, ICommandBarProps } from 'office-ui-fabric-react/lib/CommandBar'
 import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu'
@@ -15,7 +9,6 @@ import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
-import { DataSourceService } from 'pp365-shared/lib/services'
 import React, { Component } from 'react'
 import Timeline, {
   ReactCalendarGroupRendererProps,
@@ -36,10 +29,7 @@ import { ProjectListModel } from 'models'
  * @component ProjectTimeline
  * @extends Component
  */
-export class ProjectTimeline extends Component<
-  IProjectTimelineProps,
-  IProjectTimelineState
-> {
+export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTimelineState> {
   public static defaultProps: Partial<IProjectTimelineProps> = {
     defaultTimeStart: [-1, 'months'],
     defaultTimeEnd: [1, 'years']
@@ -57,7 +47,7 @@ export class ProjectTimeline extends Component<
 
   public async componentDidMount(): Promise<void> {
     try {
-      const data = await this._fetchData();
+      const data = await this._fetchData()
       this.setState({ data, loading: false })
     } catch (error) {
       this.setState({ error, loading: false })
@@ -75,9 +65,9 @@ export class ProjectTimeline extends Component<
         </div>
       )
     }
-    
+
     const { groups, items } = this._getFilteredData()
-    
+
     return (
       <div className={styles.projectTimeline}>
         <div className={styles.container}>
@@ -155,9 +145,7 @@ export class ProjectTimeline extends Component<
    * Get filters
    */
   private _getFilters(): IFilterProps[] {
-    const columns = [
-      { fieldName: 'project', name: strings.SiteTitleLabel },
-    ]
+    const columns = [{ fieldName: 'project', name: strings.SiteTitleLabel }]
     return columns.map((col) => ({
       column: { key: col.fieldName, minWidth: 0, ...col },
       items: this.state.data.items
@@ -281,15 +269,9 @@ export class ProjectTimeline extends Component<
    *
    * @returns {ITimelineItem[]} Timeline items
    */
-  private _transformItems(
-    projects: ProjectListModel[],
-    groups: ITimelineGroup[]
-  ): ITimelineItem[] {
+  private _transformItems(projects: ProjectListModel[], groups: ITimelineGroup[]): ITimelineItem[] {
     const items: ITimelineItem[] = projects.map((project, id) => {
-      const group = _.find(
-        groups,
-        (grp) => project.title.indexOf(grp.title) !== -1
-      )
+      const group = _.find(groups, (grp) => project.title.indexOf(grp.title) !== -1)
       const style: React.CSSProperties = {
         color: 'white',
         border: 'none',
