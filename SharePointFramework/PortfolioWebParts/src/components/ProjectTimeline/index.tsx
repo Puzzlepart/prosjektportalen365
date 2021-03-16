@@ -58,7 +58,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
     if (this.state.loading) return null
     if (this.state.error) {
       return (
-        <div className={styles.projectTimeline}>
+        <div className={styles.root}>
           <div className={styles.container}>
             <MessageBar messageBarType={MessageBarType.error}>{this.state.error}</MessageBar>
           </div>
@@ -69,7 +69,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
     const { groups, items } = this._getFilteredData()
 
     return (
-      <div className={styles.projectTimeline}>
+      <div className={styles.root}>
         <div className={styles.container}>
           <div className={styles.commandBar}>
             <CommandBar {...this._getCommandBarProps()} />

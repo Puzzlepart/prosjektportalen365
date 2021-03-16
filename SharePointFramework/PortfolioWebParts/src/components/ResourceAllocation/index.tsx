@@ -87,7 +87,7 @@ export class ResourceAllocation extends Component<
     if (this.state.loading) return null
     if (this.state.error) {
       return (
-        <div className={styles.resourceAllocation}>
+        <div className={styles.root}>
           <div className={styles.container}>
             <MessageBar messageBarType={MessageBarType.error}>{this.state.error}</MessageBar>
           </div>
@@ -98,7 +98,7 @@ export class ResourceAllocation extends Component<
     const { groups, items } = this._getFilteredData()
 
     return (
-      <div className={styles.resourceAllocation}>
+      <div className={styles.root}>
         <div className={styles.container}>
           <div className={styles.commandBar}>
             <CommandBar {...this._getCommandBarProps()} />
