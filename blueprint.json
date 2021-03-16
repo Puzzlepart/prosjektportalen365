@@ -6,8 +6,8 @@
   "text": "",
   "logo": {
     "src": "assets/logo.png",
-    "width": 435,
-    "height": 84
+    "width": 119,
+    "height": 119
   },
   "placeholder": ["[[", "]]"],
   "documentationConfig": {
