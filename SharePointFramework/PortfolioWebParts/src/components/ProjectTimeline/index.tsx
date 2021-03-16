@@ -1,14 +1,7 @@
 import { get } from '@microsoft/sp-lodash-subset'
-import { sp } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
 import sortArray from 'array-sort'
-import {
-  IAllocationSearchResult,
-  ITimelineData,
-  ITimelineGroup,
-  ITimelineItem,
-  TimelineGroupType
-} from 'interfaces'
+import { ITimelineData, ITimelineGroup, ITimelineItem, TimelineGroupType } from 'interfaces'
 import moment from 'moment'
 import { CommandBar, ICommandBarProps } from 'office-ui-fabric-react/lib/CommandBar'
 import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu'
@@ -16,8 +9,6 @@ import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
-import { tryParsePercentage } from 'pp365-shared/lib/helpers'
-import { DataSourceService } from 'pp365-shared/lib/services'
 import React, { Component } from 'react'
 import Timeline, {
   ReactCalendarGroupRendererProps,
@@ -29,46 +20,26 @@ import 'react-calendar-timeline/lib/Timeline.css'
 import _ from 'underscore'
 import { FilterPanel, IFilterItemProps, IFilterProps } from '../FilterPanel'
 import { DetailsCallout } from './DetailsCallout'
-import styles from './ResourceAllocation.module.scss'
+import styles from './ProjectTimeline.module.scss'
 import './Timeline.overrides.css'
-import { IResourceAllocationProps, IResourceAllocationState } from './types'
+import { IProjectTimelineProps, IProjectTimelineState } from './types'
+import { ProjectListModel } from 'models'
 
 /**
- * @component ResourceAllocation
+ * @component ProjectTimeline
  * @extends Component
  */
-export class ResourceAllocation extends Component<
-  IResourceAllocationProps,
-  IResourceAllocationState
-> {
-  public static defaultProps: Partial<IResourceAllocationProps> = {
-    itemBgColor: '51,153,51',
-    itemAbsenceBgColor: '26,111,179',
+export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTimelineState> {
+  public static defaultProps: Partial<IProjectTimelineProps> = {
     defaultTimeStart: [-1, 'months'],
-    defaultTimeEnd: [1, 'years'],
-    selectProperties: [
-      'Path',
-      'SPWebUrl',
-      'ContentTypeId',
-      'SiteTitle',
-      'SiteName',
-      'RefinableString71',
-      'RefinableString72',
-      'GtResourceLoadOWSNMBR',
-      'GtResourceAbsenceOWSCHCS',
-      'GtStartDateOWSDATE',
-      'GtEndDateOWSDATE',
-      'GtAllocationStatusOWSCHCS',
-      'GtAllocationCommentOWSMTXT'
-    ]
+    defaultTimeEnd: [1, 'years']
   }
-
   /**
    * Constructor
    *
-   * @param {IResourceAllocationProps} props Props
+   * @param {IProjectTimelineProps} props Props
    */
-  constructor(props: IResourceAllocationProps) {
+  constructor(props: IProjectTimelineProps) {
     super(props)
     this.state = { loading: true, showFilterPanel: false, activeFilters: {} }
     moment.locale('nb')
@@ -83,7 +54,7 @@ export class ResourceAllocation extends Component<
     }
   }
 
-  public render(): React.ReactElement<IResourceAllocationProps> {
+  public render(): React.ReactElement<IProjectTimelineProps> {
     if (this.state.loading) return null
     if (this.state.error) {
       return (
@@ -111,7 +82,7 @@ export class ResourceAllocation extends Component<
               <div
                 dangerouslySetInnerHTML={{
                   __html: format(
-                    strings.ResourceAllocationInfoText,
+                    strings.ProjectTimelineInfoText,
                     encodeURIComponent(window.location.href)
                   )
                 }}></div>
@@ -124,7 +95,7 @@ export class ResourceAllocation extends Component<
               stackItems={true}
               canMove={false}
               canChangeGroup={false}
-              sidebarWidth={250}
+              sidebarWidth={320}
               itemRenderer={this._itemRenderer.bind(this)}
               groupRenderer={this._groupRenderer.bind(this)}
               defaultTimeStart={moment().add(...this.props.defaultTimeStart)}
@@ -156,7 +127,7 @@ export class ResourceAllocation extends Component<
    * Get filtered data
    */
   private _getFilteredData(): ITimelineData {
-    const { activeFilters, data } = { ...this.state } as IResourceAllocationState
+    const { activeFilters, data } = { ...this.state } as IProjectTimelineState
     const activeFiltersKeys = Object.keys(activeFilters)
     if (activeFiltersKeys.length > 0) {
       const items = activeFiltersKeys.reduce(
@@ -174,11 +145,7 @@ export class ResourceAllocation extends Component<
    * Get filters
    */
   private _getFilters(): IFilterProps[] {
-    const columns = [
-      { fieldName: 'project', name: strings.SiteTitleLabel },
-      { fieldName: 'resource', name: strings.ResourceLabel },
-      { fieldName: 'role', name: strings.RoleLabel }
-    ]
+    const columns = [{ fieldName: 'project', name: strings.SiteTitleLabel }]
     return columns.map((col) => ({
       column: { key: col.fieldName, minWidth: 0, ...col },
       items: this.state.data.items
@@ -199,7 +166,7 @@ export class ResourceAllocation extends Component<
    * @param {IFilterItemProps[]} selectedItems Selected items
    */
   private _onFilterChange(column: IColumn, selectedItems: IFilterItemProps[]) {
-    const { activeFilters } = { ...this.state } as IResourceAllocationState
+    const { activeFilters } = { ...this.state } as IProjectTimelineState
     if (selectedItems.length > 0) {
       activeFilters[column.fieldName] = selectedItems.map((i) => i.value)
     } else {
@@ -239,7 +206,7 @@ export class ResourceAllocation extends Component<
         onClick={(event) => this._onItemClick(event, props.item)}>
         <div
           className={`${styles.itemContent} rc-item-content`}
-          style={{ maxHeight: `${props.itemContext.dimensions.height}` }}>
+          style={{ maxHeight: `${props.itemContext.dimensions.height}`, paddingLeft: '8px' }}>
           {props.item.title}
         </div>
       </div>
@@ -272,16 +239,14 @@ export class ResourceAllocation extends Component<
   }
 
   /**
-   * Creating groups based on user property (RefinableString71) on the search result, with fallback to role (RefinableString72)
-   *
-   * @param {IAllocationSearchResult[]} searchResults Search results
+   * Creating groups based on projects title
    *
    * @returns {ITimelineGroup[]} Timeline groups
    */
-  private _transformGroups(searchResults: IAllocationSearchResult[]): ITimelineGroup[] {
-    const groupNames: string[] = searchResults
-      .map((res) => {
-        const name = res.RefinableString71 || `${res.RefinableString72}|R`
+  private _transformGroups(projects: ProjectListModel[]): ITimelineGroup[] {
+    const groupNames: string[] = projects
+      .map((project) => {
+        const name = project.title
         return name
       })
       .filter((value, index, self) => self.indexOf(value) === index)
@@ -300,48 +265,31 @@ export class ResourceAllocation extends Component<
   /**
    * Create items
    *
-   * @param {IAllocationSearchResult[]} searchResults Search results
    * @param {ITimelineGroup[]} groups Groups
    *
    * @returns {ITimelineItem[]} Timeline items
    */
-  private _transformItems(
-    searchResults: IAllocationSearchResult[],
-    groups: ITimelineGroup[]
-  ): ITimelineItem[] {
-    const items: ITimelineItem[] = searchResults.map((res, id) => {
-      const group = _.find(
-        groups,
-        (grp) => [res.RefinableString71, res.RefinableString72].indexOf(grp.title) !== -1
-      )
-      const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, false, 0) as number
-      const isAbsence = res.ContentTypeId.indexOf('0x010029F45E75BA9CE340A83EFFB2927E11F4') !== -1
-      const itemOpacity = allocation < 30 ? 0.3 : allocation / 100
-      const itemColor = allocation < 40 ? '#000' : '#fff'
-      const backgroundColor = isAbsence ? this.props.itemAbsenceBgColor : this.props.itemBgColor
+  private _transformItems(projects: ProjectListModel[], groups: ITimelineGroup[]): ITimelineItem[] {
+    const items: ITimelineItem[] = projects.map((project, id) => {
+      const group = _.find(groups, (grp) => project.title.indexOf(grp.title) !== -1)
       const style: React.CSSProperties = {
-        color: itemColor,
+        color: 'white',
         border: 'none',
         cursor: 'auto',
         outline: 'none',
-        background: `rgb(${backgroundColor})`,
-        backgroundColor: `rgba(${backgroundColor}, ${itemOpacity})`
+        background: 'gold',
+        backgroundColor: 'tomato'
       }
       return {
         id,
         group: group.id,
-        title: isAbsence
-          ? `${res.GtResourceAbsenceOWSCHCS} (${allocation}%)`
-          : `${res.RefinableString72} - ${res.SiteTitle} (${allocation}%)`,
-        start_time: moment(new Date(res.GtStartDateOWSDATE)),
-        end_time: moment(new Date(res.GtEndDateOWSDATE)),
-        allocation,
+        title: format(strings.ProjectTimelineItemInfo, project.title),
+        start_time: moment(new Date(project.startDate)),
+        end_time: moment(new Date(project.endDate)),
         itemProps: { style },
-        project: res.SiteTitle,
-        projectUrl: res.SiteName,
-        role: res.RefinableString72,
-        resource: res.RefinableString71,
-        props: res
+        project: project.title,
+        projectUrl: project.url,
+        phase: project.phase
       } as ITimelineItem
     })
     return items
@@ -353,20 +301,10 @@ export class ResourceAllocation extends Component<
    * @returns {ITimelineData} Timeline data
    */
   private async _fetchData(): Promise<ITimelineData> {
-    const dataSource = await new DataSourceService(sp.web).getByName(this.props.dataSource)
-    if (!dataSource) throw format(strings.DataSourceNotFound, this.props.dataSource)
     try {
-      const results = (
-        await sp.search({
-          QueryTemplate: dataSource.searchQuery,
-          Querytext: '*',
-          RowLimit: 500,
-          TrimDuplicates: false,
-          SelectProperties: this.props.selectProperties
-        })
-      ).PrimarySearchResults as IAllocationSearchResult[]
-      const groups = this._transformGroups(results)
-      const items = this._transformItems(results, groups)
+      const projects = await this.props.dataAdapter.fetchEncrichedProjects()
+      const groups = this._transformGroups(projects)
+      const items = this._transformItems(projects, groups)
       return { items, groups }
     } catch (error) {
       throw error
@@ -374,4 +312,4 @@ export class ResourceAllocation extends Component<
   }
 }
 
-export { IResourceAllocationProps }
+export { IProjectTimelineProps }

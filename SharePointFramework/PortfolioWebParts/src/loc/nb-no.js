@@ -102,6 +102,7 @@ define([], function () {
     ProjectOwner: 'Prosjekteier',
     ProjectStatusLinkText: 'Gå til prosjektstatus',
     RecommendationLabel: 'Anbefaling',
+    ProjectTimelineInfoText: 'Her listes alle prosjektene med start- og sluttdato. Dersom det er akkurat utført endringer på prosjektet, tar det litt tid før endringene er reflektert under.',
     ResourceAllocationInfoText: 'Ressursallokering eller fravær som gjelder på tvers av prosjekter legges inn i den<A HREF="../Lists/Ressursallokering/AllItems.aspx?Source={0}">sentrale ressursallokeringslisten</A>. Disse oppføringene vil vises med blå og rød (fravær) farge i tabellen under. Prosjektallokeringer vises med grønn farge. Fargestyrken til allokeringen baserer seg på allokeringsprosenten.',
     ResourceLabel: 'Ressurs',
     ResponsibleLabel: 'Ansvarlig',
@@ -133,6 +134,7 @@ define([], function () {
     ViewsListNameLabel: 'Visninger',
     SelectedColumnsLabel: 'Felter',
     ProjectsListName: 'Prosjekter',
-    PortfolioManagerGroupName: 'Porteføljeinnsyn'
+    PortfolioManagerGroupName: 'Porteføljeinnsyn',
+    ProjectTimelineItemInfo: '{0} - prosjektets tidsforløp'
   }
 })

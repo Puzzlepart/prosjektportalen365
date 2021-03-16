@@ -14,6 +14,8 @@ export class ProjectListModel {
    * @param {string} title Title
    * @param {string} url Url
    * @param {string} phase Phase
+   * @param {string} startDate Start Date
+   * @param {string} endDate End Date
    * @param {ISPUser} manager Manager
    * @param {ISPUser} owner Owner
    */
@@ -23,6 +25,8 @@ export class ProjectListModel {
     public title: string,
     public url: string,
     public phase?: string,
+    public startDate?: string,
+    public endDate?: string,
     manager?: ISPUser,
     owner?: ISPUser
   ) {

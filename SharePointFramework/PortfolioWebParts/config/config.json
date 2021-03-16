@@ -48,6 +48,14 @@
         "manifest": "./src/webparts/resourceAllocation/manifest.json"
       }]
     },
+    "project-timeline-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/projectTimeline/index.js",
+          "manifest": "./src/webparts/projectTimeline/manifest.json"
+        }
+      ]
+    },
     "portfolio-aggregation-web-part": {
       "components": [{
         "entrypoint": "./lib/webparts/portfolioAggregation/index.js",

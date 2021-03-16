@@ -332,6 +332,8 @@ export class DataAdapter {
           group.displayName,
           item.GtSiteUrl,
           item.GtProjectPhaseText,
+          item.GtStartDate,
+          item.GtEndDate,
           manager,
           owner
         )
@@ -343,6 +345,11 @@ export class DataAdapter {
 
   /**
    * Fetch enriched projects
+   * 
+   * * Fetching project list items
+   * * Graph groups
+   * * Site users
+   * * Combines the data
    */
   public async fetchEncrichedProjects(): Promise<ProjectListModel[]> {
     await MSGraph.Init(this.context.msGraphClientFactory)
@@ -355,7 +362,9 @@ export class DataAdapter {
           'GtSiteUrl',
           'GtProjectOwnerId',
           'GtProjectManagerId',
-          'GtProjectPhaseText'
+          'GtProjectPhaseText',
+          'GtStartDate',
+          'GtEndDate'
         )
         // eslint-disable-next-line quotes
         .filter("GtProjectLifecycleStatus ne 'Avsluttet'")

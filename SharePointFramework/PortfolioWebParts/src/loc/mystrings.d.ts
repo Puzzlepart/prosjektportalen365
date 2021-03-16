@@ -106,6 +106,7 @@ declare interface IPortfolioWebPartsStrings {
   ProjectStatusLinkText: string
   PropertyPaneDescription: string
   RecommendationLabel: string
+  ProjectTimelineInfoText: string
   ResourceAllocationInfoText: string
   ResourceLabel: string
   ResponsibleLabel: string
@@ -136,6 +137,7 @@ declare interface IPortfolioWebPartsStrings {
   ViewsListNameLabel: string
   ProjectsListName: string
   PortfolioManagerGroupName: string
+  ProjectTimelineItemInfo: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

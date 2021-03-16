@@ -3,6 +3,8 @@ export interface ISPProjectItem {
   GtSiteId: string
   GtSiteUrl: string
   GtProjectPhaseText: string
+  GtStartDate: string
+  GtEndDate: string
   GtProjectOwnerId: number
   GtProjectManagerId: number
 }
