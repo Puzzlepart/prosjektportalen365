@@ -1,15 +1,19 @@
 {
-    "package": "package.json",
-    "blueprint": "README.blueprint",
-    "input": "README.blueprint",
-    "output": "README.md",
-    "text": "",
-    "placeholder": ["[[", "]]"],
-    "documentationConfig": {
-      "markdown": {
-        "titleLevel": 2
-      }
-    },
-    "line": "cut"
-  }
-  
+  "package": "package.json",
+  "blueprint": "README.blueprint",
+  "input": "README.blueprint",
+  "output": "README.md",
+  "text": "",
+  "logo": {
+    "src": "assets/logo.png",
+    "width": 435,
+    "height": 84
+  },
+  "placeholder": ["[[", "]]"],
+  "documentationConfig": {
+    "markdown": {
+      "titleLevel": 2
+    }
+  },
+  "line": "cut"
+}
