@@ -157,7 +157,6 @@ export class ProjectTimeline extends Component<
   private _getFilters(): IFilterProps[] {
     const columns = [
       { fieldName: 'project', name: strings.SiteTitleLabel },
-      { fieldName: 'phase', name: strings.PhaseLabel },
     ]
     return columns.map((col) => ({
       column: { key: col.fieldName, minWidth: 0, ...col },
@@ -320,8 +319,6 @@ export class ProjectTimeline extends Component<
    * @returns {ITimelineData} Timeline data
    */
   private async _fetchData(): Promise<ITimelineData> {
-    const dataSource = await new DataSourceService(sp.web).getByName(this.props.dataSource)
-    if (!dataSource) throw format(strings.DataSourceNotFound, this.props.dataSource)
     try {
       const projects = await this.props.dataAdapter.fetchEncrichedProjects()
       const groups = this._transformGroups(projects)

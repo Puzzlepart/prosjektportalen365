@@ -3,7 +3,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with Pull Request ID.
 
-## 1.2.6 - xx.02.2021
+## 1.3.0 - N/A
+
+## Added
+
+- Added a new portfolio webpart, 'Prosjekttidslinje' for showcasing projects on a timeline #435
+
+## 1.2.6 - 03.03.2021
 
 ## Added
 
@@ -13,7 +19,6 @@ Every change is marked with Pull Request ID.
 - Added support for permission configuration using a configuration list on the hubsite #387
 - Added Description field to Usikkerhet #410
 - Enabled version history on Prosjektmaler list #359
-
 
 ## Fixed
 
