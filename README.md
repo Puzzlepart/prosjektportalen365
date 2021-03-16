@@ -1,8 +1,17 @@
-# Prosjektportalen for Microsoft 365  [![version](https://img.shields.io/badge/version-1.2.6-yellow.svg)](https://semver.org)
+<!-- ⚠️ This README has been generated from the file(s) "README.blueprint" ⚠️-->[[template:logo]] <p align="center">
+  <b>Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren. Mer informasjon på Puzzleparts nettsider.</b></br>
+  <sub><sub>
+</p>
 
-Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på [Prosjektveiviseren](http://prosjektveiviseren.no). [Mer informasjon på Puzzleparts nettsider](http://www.puzzlepart.com/prosjektportalen).
+<br />
 
-## Hva er Prosjektportalen for Microsoft 365?
+
+[![version](https://img.shields.io/badge/version-1.2.6-green.svg)](https://semver.org)
+
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#hva-er-prosjektportalen-for-microsoft-365)
+
+## ➤ Hva er Prosjektportalen for Microsoft 365?
 
 Prosjektportalen for Microsoft 365 er bygget av [Puzzlepart AS](http://www.puzzlepart.com) og distribuert som åpen kildekode. Løsningen inneholder Microsoft 365 og SharePoint-tilpasninger som til sammen utgjør et prosjektstyringsverktøy. Det blir satt opp en porteføljeside der en får en oversikt over prosjekter og kan opprette nye prosjektrom. Hvert prosjektområde opprettes som en Microsoft 365 gruppe og det settes opp en del lister, en del standardelementer og logikk for å gjennomføre et prosjekt etter prosjektveiviserens modell. Prosjektveiviseren er Digitaliseringsdirektoratets anbefalte prosjektmodell for gjennomføring av digitaliseringsprosjekter i offentlige virksomheter.
 
@@ -10,17 +19,30 @@ Prosjektportalen ble i sin tid utviklet for Asker kommune og [KommIT](http://www
 
 Mer informasjon om løsningen, hvordan den er satt opp og hvordan overordnede komponenter fungerer kan du lese på om [wiki-sidene til Prosjektportalen 365](https://github.com/Puzzlepart/prosjektportalen365/wiki).
 
-## Installering
+
+
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#installering)
+
+## ➤ Installering
 
 Prosjektportalen 365 kan lastes under [releases](https://github.com/Puzzlepart/prosjektportalen365/releases/latest). Mer informasjon om løsningen, konfigurasjon, installasjon og feilsøking finner du på [wiki-sidene til Prosjektportalen 365](https://github.com/Puzzlepart/prosjektportalen365/wiki).
 
 Vi gjør oppmerksom at vi logger basis-info om hver installasjon til en sentral oversikt. Dette gjøres for å ha kontroll på installasjonshyppighet og hvordan installasjoner gjøres. Informasjonen brukes kun for å forbedre løsningen.
 
-## Kontakt
+
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#kontakt)
+
+## ➤ Kontakt
 
 Har du spørsmål vedrørende Prosjektportalen for Microsoft 365, behov for bistand til installasjon av løsningen eller ønsker om muligheter for videreutvikling og spesialtilpasninger, ta kontakt med [prosjektportalen@puzzlepart.com](mailto:prosjektportalen@puzzlepart.com). For tekniske og funksjonelle spørsmål, ta kontakt med [Jan Lindset](mailto:jan.lindset@puzzlepart.com). Vi gjør oppmerksom på at eventuell bistand vil være en fakturerbar tjeneste.
 
-## Nettleserstøtte
+
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#nettlesersttte)
+
+## ➤ Nettleserstøtte
 
 Vi gjør vårt beste for å støtte alle nettlesere, men følger retningslinjer fra Microsoft og Microsoft 365. Noen eldre nettlesere har dårligere støtte enn andre. Se følgende tabell:
 
@@ -39,12 +61,20 @@ Vi gjør vårt beste for å støtte alle nettlesere, men følger retningslinjer 
  
  ** _Ikke støttet betyr at dette er browsere som er deprecated, og man vil mest sannsynlig treffe på funksjonalitet som ikke fungerer_
 
-## Maintainers
+
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#maintainers)
+
+## ➤ Maintainers
 
 * Tarjei Ormestøyl (tarjeieo@puzzlepart.com)
 * Ole Martin Pettersen (olemp@puzzlepart.com)
 * I tillegg flere fra teamet bak [prosjektportalen@puzzlepart.com](mailto:prosjektportalen@puzzlepart.com)
 
-## Development
+
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#development)
+
+## ➤ Development
 
 Please read the [Development guide](./.dev/Home.md).

@@ -1,10 +1,11 @@
 {
     "name": "pp365",
     "version": "1.2.6",
-    "description": "Prosjektportalen for Office 365 er et prosjektstyringsverktøy for Office 365 basert på Prosjektveiviseren. Mer informasjon på Puzzleparts nettsider.",
+    "description": "Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren. Mer informasjon på Puzzleparts nettsider.",
     "scripts": {
         "build:release": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1",
-        "build:release:force": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -Force"
+        "build:release:force": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -Force",
+        "prepare": "husky install"
     },
     "repository": {
         "type": "git",
@@ -17,5 +18,8 @@
         "Prince 2"
     ],
     "author": "olemp@puzzlepart.com",
-    "license": "MIT"
+    "license": "MIT",
+    "devDependencies": {
+        "husky": "5.1.3"
+    }
 }

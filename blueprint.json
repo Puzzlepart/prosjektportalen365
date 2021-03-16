@@ -1,0 +1,15 @@
+{
+    "package": "package.json",
+    "blueprint": "README.blueprint",
+    "input": "README.blueprint",
+    "output": "README.md",
+    "text": "",
+    "placeholder": ["[[", "]]"],
+    "documentationConfig": {
+      "markdown": {
+        "titleLevel": 2
+      }
+    },
+    "line": "cut"
+  }
+  
