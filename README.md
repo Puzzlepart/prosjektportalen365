@@ -10,6 +10,22 @@
 
 [![version](https://img.shields.io/badge/version-1.2.6-green.svg)](https://semver.org)
 
+<details>
+<summary>📖 Innholdsfortegnelse</summary>
+<br />
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#table-of-contents)
+
+## ➤ Table of Contents
+
+* [➤ Hva er Prosjektportalen for Microsoft 365?](#-hva-er-prosjektportalen-for-microsoft-365)
+* [➤ Installering](#-installering)
+* [➤ Kontakt](#-kontakt)
+* [➤ Nettleserstøtte](#-nettlesersttte)
+* [➤ Maintainers](#-maintainers)
+* [➤ Development](#-development)
+</details>
+
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#hva-er-prosjektportalen-for-microsoft-365)
 
