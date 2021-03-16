@@ -345,6 +345,11 @@ export class DataAdapter {
 
   /**
    * Fetch enriched projects
+   * 
+   * * Fetching project list items
+   * * Graph groups
+   * * Site users
+   * * Combines the data
    */
   public async fetchEncrichedProjects(): Promise<ProjectListModel[]> {
     await MSGraph.Init(this.context.msGraphClientFactory)
