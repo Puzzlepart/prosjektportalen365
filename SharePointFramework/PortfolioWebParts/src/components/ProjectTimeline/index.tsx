@@ -95,7 +95,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
               stackItems={true}
               canMove={false}
               canChangeGroup={false}
-              sidebarWidth={250}
+              sidebarWidth={320}
               itemRenderer={this._itemRenderer.bind(this)}
               groupRenderer={this._groupRenderer.bind(this)}
               defaultTimeStart={moment().add(...this.props.defaultTimeStart)}
