@@ -70,7 +70,7 @@ define([], function () {
     ProjectPropertiesListName: 'Prosjektegenskaper',
     SyncProjectPropertiesProgressLabel: 'Synkroniserer prosjektegenskaper til porteføljeområdet',
     SyncProjectPropertiesSuccessText: 'Prosjektegenskaper ble synkronisert til porteføljeområdet. Siden lastes på nytt om {0} sekunder.',
-    SyncProjectPropertiesErrorText: 'Det skjedde feil under synkronisering',
+    SyncProjectPropertiesErrorText: 'Det skjedde feil under synkronisering av prosjektegenskaper til porteføljeområdet. Det kan for eksempel være et ugyldig felt.',
     SyncProjectPropertiesListProgressDescription: 'Oppdaterer Prosjektegenskaper-listen',
     SyncProjectPropertiesValuesProgressLabel: 'Synkroniserer egenskaper',
     SyncProjectPropertiesValuesProgressDescription: 'Vennligst vent...',
