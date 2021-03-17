@@ -1,0 +1,19 @@
+{
+  "package": "package.json",
+  "blueprint": "dev/README.blueprint",
+  "input": "dev/README.blueprint",
+  "output": "dev/README.md",
+  "text": "Development guide",
+  "logo": {
+    "src": "../assets/PP365 Piktogram Flat DIGITAL.png",
+    "width": 119,
+    "height": 119
+  },
+  "placeholder": ["[[", "]]"],
+  "documentationConfig": {
+    "markdown": {
+      "titleLevel": 2
+    }
+  },
+  "line": "cut"
+}

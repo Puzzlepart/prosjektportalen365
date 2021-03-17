@@ -8,7 +8,8 @@
         "**/temp": true,
         "**/package-lock.json": true,
         "**/pnpm-lock.yaml": true,
-        "README.md": true
+        "README.md": true,
+        "dev/README.md": true
     },
     "files.associations": {
         "*.txt": "json"

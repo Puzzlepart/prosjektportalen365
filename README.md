@@ -95,4 +95,4 @@ Vi gjør vårt beste for å støtte alle nettlesere, men følger retningslinjer 
 
 ## ➤ Development
 
-Please read the [Development guide](./.dev/Home.md).
+Please read the [Development guide](./dev/README.md).

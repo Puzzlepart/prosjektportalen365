@@ -1,12 +1,50 @@
-## Development guide
+<!-- ⚠️ This README has been generated from the file(s) "dev/README.blueprint" ⚠️--><p align="center">
+  <img src="../assets/PP365 Piktogram Flat DIGITAL.png" alt="Logo" width="119" height="119" />
+</p> <p align="center">
+  <b>Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.</b></br>
+  <sub>Development guide<sub>
+</p>
 
-### 1. Site Design / Site Scripts
+<br />
+
+
+<details>
+<summary>📖 Table of Contents</summary>
+<br />
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#table-of-contents)
+
+## ➤ Table of Contents
+
+* [➤ Site Design / Site Scripts](#-site-design--site-scripts)
+* [➤ JS Provisioning Template](#-js-provisioning-template)
+* [➤ Templates](#-templates)
+	* [JSON provisioning template](#json-provisioning-template)
+		* [Building JSON templates](#building-json-templates)
+	* [PnP templates](#pnp-templates)
+		* [Portfolio](#portfolio)
+		* [Content templates](#content-templates)
+* [➤ NPM](#-npm)
+* [➤ Building a new release](#-building-a-new-release)
+* [➤ Continuous integration](#-continuous-integration)
+	* [Build and install (dev)](#build-and-install-dev)
+	* [Build release (main)](#build-release-main)
+</details>
+
+
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#site-design--site-scripts)
+
+## ➤ Site Design / Site Scripts
 
 Everything related to the site design and the corresponding site scripts reside in the folder **SiteScripts**. 
 
 The source files are found in the **src** folder.
 
-### 2. JS Provisioning Template
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#js-provisioning-template)
+
+## ➤ JS Provisioning Template
 
 Not everything we want to do is available with site designs, so we're also using [sp-js-provisioning](https://github.com/Puzzlepart/sp-js-provisioning). Please note that we´re using the Puzzlepart fork from **pnp**.
 
@@ -56,9 +94,12 @@ Say you'd like to use the term set with ID **54da9f47-c64e-4a26-80f3-4d3c3fa1b7b
 
 
 
-### 3. Templates
 
-#### 3.1 JSON provisioning template
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#templates)
+
+## ➤ Templates
+
+### JSON provisioning template
 
 At the root level of the **Templates** folder, the following files are found:
 
@@ -73,7 +114,7 @@ At the root level of the **Templates** folder, the following files are found:
 | `tasks/generateJsonTemplate.js` | Node script to generate JSON templates for each language     |
 | `_JsonTemplate.json`            | JSON project template                                        |
 
-##### 3.1.1 Building JSON templates
+#### Building JSON templates
 
 When doing changes to the JSON template the npm task `watch` can be used. This watches `_JsonTemplate.json` and builds localized version of this to the corresponding Content template.
 
@@ -92,7 +133,7 @@ Resources from the **.resx** files in the folder Portfolio can be used in the te
 
 
 
-#### 3.2 PnP templates
+### PnP templates
 
 In addition we have two PnP provisioning templates. 
 
@@ -101,7 +142,7 @@ In addition we have two PnP provisioning templates.
 | [Portfolio](../Templates/Portfolio) | Portfolio assets |
 | [Taxonomy](../Templates/Taxonomy)   | Taxonomy         |
 
-##### 3.2.1 Portfolio
+#### Portfolio
 
 | File/Folder        | Description                                                  |
 | ------------------ | ------------------------------------------------------------ |
@@ -110,7 +151,7 @@ In addition we have two PnP provisioning templates.
 | Portfolio.xml      | Main template file                                           |
 | `Resources.*.resx` | Resource files                                               |
 
-##### 3.2.2 Content templates
+#### Content templates
 
 Content templates are found in the **Content** folder. The name of the template follows the following pattern:
 
@@ -120,7 +161,10 @@ Content templates are found in the **Content** folder. The name of the template 
 
 The templates contains the JSON template(s), planner tasks and phase checklist items.
 
-### 4. NPM
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#npm)
+
+## ➤ NPM
 
 The SharePoint Framework solutions are published to `npm` independently.
 
@@ -129,7 +173,10 @@ The SharePoint Framework solutions are published to `npm` independently.
 - [ProjectExtensions](https://www.npmjs.com/package/pp365-projectextensions)
 - [PortfolioWebParts](https://www.npmjs.com/package/pp365-portfoliowebparts)
 
-### 5. Building a new release
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#building-a-new-release)
+
+## ➤ Building a new release
 
 To build a new release make sure your on the `main`branch and in sync with **origin**.
 
@@ -140,3 +187,28 @@ npm run build:release
 ```
 
 The installation package should be found in the release folder.
+
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#continuous-integration)
+
+## ➤ Continuous integration
+
+![CI - Build and install (dev)](https://github.com/Puzzlepart/prosjektportalen365/workflows/CI%20-%20Build%20and%20install%20(dev)/badge.svg?branch=dev)
+
+We have set up continuous using GitHub actions.
+
+### Build and install (dev)
+
+[ci-build-install-dev](../.github/workflows/ci-dev.yml) builds a new release on _push_ to **dev**.
+
+It runs [Build-Release.ps1](../Install/Build-Release.ps1) with `-CI` param, then runs [Install.ps1](../Install/Install.ps1) (also with `-CI` param, this time with a encoded string consisting of the username and password, stored in a GitHub secret). The URL to install to is stored in the GitHub secret `CI_DEV_TARGET_URL`.
+
+With the current approach, with no cache, a full run takes about 30 minutes.
+
+![image-20201121133532960](assets/image-20201121133532960.png)
+
+### Build release (main)
+
+[build-release](../.github/workflows/build-release.yml) builds a new release package on _tag_ to **main**, then drafts a new GitHub release with the installation package.
+
+![image-20210303133423458](assets/image-20210303133423458.png)
