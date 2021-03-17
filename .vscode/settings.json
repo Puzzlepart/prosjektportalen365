@@ -12,6 +12,8 @@
         "dev/README.md": true
     },
     "files.associations": {
-        "*.txt": "json"
+        "*.txt": "json",
+        ".README": "markdown",
+        "dev/.README": "markdown"
     },
 }

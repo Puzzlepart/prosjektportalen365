@@ -1,4 +1,4 @@
-<!-- ⚠️ This README has been generated from the file(s) "dev/README.blueprint" ⚠️--><p align="center">
+<!-- ⚠️ This README has been generated from the file(s) "dev/.README" ⚠️--><p align="center">
   <img src="../assets/PP365 Piktogram Flat DIGITAL.png" alt="Logo" width="119" height="119" />
 </p> <p align="center">
   <b>Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.</b></br>

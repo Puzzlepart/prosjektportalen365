@@ -1,7 +1,7 @@
 {
   "package": "package.json",
-  "blueprint": "README.blueprint",
-  "input": "README.blueprint",
+  "blueprint": ".README",
+  "input": ".README",
   "output": "README.md",
   "text": "",
   "logo": {
