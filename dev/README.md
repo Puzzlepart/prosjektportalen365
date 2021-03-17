@@ -29,6 +29,7 @@
 * [➤ Continuous integration](#-continuous-integration)
 	* [Build and install (dev)](#build-and-install-dev)
 	* [Build release (main)](#build-release-main)
+* [➤ README generation](#-readme-generation)
 </details>
 
 
@@ -212,3 +213,11 @@ With the current approach, with no cache, a full run takes about 30 minutes.
 [build-release](../.github/workflows/build-release.yml) builds a new release package on _tag_ to **main**, then drafts a new GitHub release with the installation package.
 
 ![image-20210303133423458](assets/image-20210303133423458.png)
+
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#readme-generation)
+
+## ➤ README generation
+READMEs are automatically generated using [@appnest/readme](https://github.com/andreasbm/readme). The main README is generated from [.README](../.README) while this README is generated from [.README](.README). The generation is configured with the `blueprint.json` files.
+
+For the main [README.md)[../README.md] generation, the different parts are included from the [readme](../readme) folder at root level.

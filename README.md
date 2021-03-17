@@ -22,7 +22,7 @@
 * [➤ Installering](#-installering)
 * [➤ Kontakt](#-kontakt)
 * [➤ Nettleserstøtte](#-nettlesersttte)
-* [➤ Maintainers](#-maintainers)
+* [➤ Contributors](#-contributors)
 * [➤ Development](#-development)
 </details>
 
@@ -81,14 +81,17 @@ Vi gjør vårt beste for å støtte alle nettlesere, men følger retningslinjer 
 
 
 
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#maintainers)
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#contributors)
 
-## ➤ Maintainers
+## ➤ Contributors
+	
 
-* Tarjei Ormestøyl (tarjeieo@puzzlepart.com)
-* Ole Martin Pettersen (olemp@puzzlepart.com)
-* I tillegg flere fra teamet bak [prosjektportalen@puzzlepart.com](mailto:prosjektportalen@puzzlepart.com)
+| [Tarjei Ormestøyl](undefined)                    | [Ole Martin Pettersen](undefined)                |
+|:--------------------------------------------------:|:--------------------------------------------------:|
+| [tarjeieo@puzzlepart.com](mailto:tarjeieo@puzzlepart.com) | [olemp@puzzlepart.com](mailto:olemp@puzzlepart.com) |
 
+
+I tillegg flere fra teamet bak [prosjektportalen@puzzlepart.com](mailto:prosjektportalen@puzzlepart.com)
 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#development)
