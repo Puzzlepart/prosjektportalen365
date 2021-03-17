@@ -8,6 +8,7 @@ Every change is marked with Pull Request ID.
 ## Added
 
 - Added a new portfolio webpart, 'Prosjekttidslinje' for showcasing projects on a timeline #435
+- Added list 'Tidslinjeinnhold' to portfolio level
 
 ## Fixed
 
