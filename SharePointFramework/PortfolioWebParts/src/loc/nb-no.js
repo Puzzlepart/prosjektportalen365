@@ -130,6 +130,7 @@ define([], function () {
     TileViewGroupName: 'Flisevisning',
     TitleLabel: 'Tittel',
     UnitLabel: 'Måleenhet',
+    TypeLabel: 'Type',
     ViewNotFoundMessage: 'Finner ikke angitt visning.',
     ViewsListNameLabel: 'Visninger',
     SelectedColumnsLabel: 'Felter',

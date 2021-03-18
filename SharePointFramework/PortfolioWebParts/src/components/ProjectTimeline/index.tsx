@@ -146,7 +146,10 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    * Get filters
    */
   private _getFilters(): IFilterProps[] {
-    const columns = [{ fieldName: 'project', name: strings.SiteTitleLabel }]
+    const columns = [
+      { fieldName: 'project', name: strings.SiteTitleLabel },
+      { fieldName: 'type', name: strings.TypeLabel }
+    ]
     return columns.map((col) => ({
       column: { key: col.fieldName, minWidth: 0, ...col },
       items: this.state.data.items
@@ -319,6 +322,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         start_time: moment(new Date(item.startDate)),
         end_time: moment(new Date(item.endDate)),
         itemProps: { style },
+        project: item.title,
         type: item.type,
         budgetTotal: item.budgetTotal,
         costsTotal: item.costsTotal

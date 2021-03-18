@@ -133,6 +133,7 @@ declare interface IPortfolioWebPartsStrings {
   TileViewGroupName: string
   TitleLabel: string
   UnitLabel: string
+  TypeLabel: string
   ViewNotFoundMessage: string
   ViewsListNameLabel: string
   ProjectsListName: string

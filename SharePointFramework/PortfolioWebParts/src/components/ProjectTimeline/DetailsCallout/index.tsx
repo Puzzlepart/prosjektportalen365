@@ -20,7 +20,7 @@ export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
       target={item.element}
       onDismiss={onDismiss}
       setInitialFocus={true}>
-      <p hidden={!item.data.project}>
+      <p hidden={!item.data.projectUrl}>
         <b>Prosjekt:</b>{' '}
         <a href={item.data.projectUrl}>
           <span>{item.data.project}</span>
