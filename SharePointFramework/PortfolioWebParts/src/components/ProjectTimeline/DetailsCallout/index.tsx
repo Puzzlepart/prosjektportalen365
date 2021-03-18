@@ -1,6 +1,6 @@
 import { ITimelineItem } from 'interfaces/ITimelineItem'
 import { Callout } from 'office-ui-fabric-react/lib/Callout'
-import { formatDate } from 'pp365-shared/lib/helpers/formatDate'
+import { formatDate, tryParseCurrency } from 'pp365-shared/lib/helpers'
 import React from 'react'
 import styles from './DetailsCallout.module.scss'
 
@@ -11,6 +11,8 @@ export interface IDetailsCalloutProps {
 
 // tslint:disable-next-line: naming-convention
 export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
+  console.log(item);  
+
   return (
     <Callout
       className={styles.detailsCallout}
@@ -32,6 +34,17 @@ export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
       </p>
       <p>
         <b>Sluttdato:</b> <span>{formatDate(item.data.end_time.toString())}</span>
+      </p>
+      <p hidden={!item.data.budgetTotal}>
+        <b>Totalbudsjett for prosjektet:</b> <span>{tryParseCurrency(item.data.budgetTotal, '').toString().replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}</span>
+      </p>
+      <p hidden={!item.data.costsTotal}>
+        <b>Kostnader påløpt totalt:</b> <span>{tryParseCurrency(item.data.costsTotal, '').toString().replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}</span>
+      </p>
+      <p hidden={!item.data.budgetTotal || !item.data.costsTotal}>
+        <a target="_blank" href={`${item.data.projectUrl}/SitePages/Prosjektstatus.aspx`}>
+          <span>{`Siste publiserte statusrapport`}</span>
+        </a>
       </p>
     </Callout>
   )

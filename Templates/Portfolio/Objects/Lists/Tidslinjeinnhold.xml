@@ -33,8 +33,8 @@
     </pnp:Fields>
     <pnp:FieldRefs>
         <pnp:FieldRef ID="e39c32db-a7da-4c93-9369-8aa5a7bde92d" Name="GtStartDate" />
-        <pnp:FieldRef ID="16623c2a-3fd1-41c2-87e7-958583dd88da" Name="GtEndDate" />
-        <pnp:FieldRef ID="28be4cc9-bc5e-4a55-a557-f652b564ca75" Name="GtBudgetTotal" />
-        <pnp:FieldRef ID="5af54348-bc38-4a18-a11f-0f84a96da4ea" Name="GtCostsTotal" />
+        <pnp:FieldRef ID="16623c2a-3fd1-41c2-87e7-958583dd88da" Name="GtEndDate" DisplayName="Sluttdato (dato for milepæl)" />
+        <pnp:FieldRef ID="28be4cc9-bc5e-4a55-a557-f652b564ca75" Name="GtBudgetTotal" DisplayName="Budsjett for fasen (dersom aktuelt)" />
+        <pnp:FieldRef ID="5af54348-bc38-4a18-a11f-0f84a96da4ea" Name="GtCostsTotal" DisplayName="Kostnad for fasen (dersom aktuelt)" />
     </pnp:FieldRefs>
 </pnp:ListInstance>

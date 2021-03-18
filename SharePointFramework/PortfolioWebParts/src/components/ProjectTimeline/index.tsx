@@ -289,7 +289,9 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         itemProps: { style },
         project: project.title,
         projectUrl: project.url,
-        phase: project.phase
+        phase: project.phase,
+        budgetTotal: project.budgetTotal,
+        costsTotal: project.costsTotal
       } as ITimelineItem
     })
     return items
@@ -303,6 +305,13 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   private async _fetchData(): Promise<ITimelineData> {
     try {
       const projects = await this.props.dataAdapter.fetchEncrichedProjects()
+      
+      await Promise.all(projects.map(async (project) => {
+        const statusReport = (await this.props.dataAdapter._fetchDataForTimelineProject(project.siteId)).statusReports[0]
+        project['budgetTotal'] = statusReport && statusReport['GtBudgetTotalOWSCURR']
+        project['costsTotal'] = statusReport && statusReport['GtCostsTotalOWSCURR']
+      }))
+
       const groups = this._transformGroups(projects)
       const items = this._transformItems(projects, groups)
       return { items, groups }

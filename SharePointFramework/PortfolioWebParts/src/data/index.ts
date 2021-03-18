@@ -270,6 +270,35 @@ export class DataAdapter {
   }
 
   /**
+   *  Fetches data for portfolio views
+   * @param {string} siteId
+   * @param {string} [siteIdProperty='GtSiteIdOWSTEXT']
+   * @param {string} [costsTotalProperty='GtCostsTotalOWSCURR']
+   * @param {string} [budgetTotalProperty='GtBudgetTotalOWSCURR']
+   */
+
+  public async _fetchDataForTimelineProject(
+    siteId: string
+  ) {
+    const siteIdProperty: string = 'GtSiteIdOWSTEXT'
+    const costsTotalProperty: string = 'GtCostsTotalOWSCURR'
+    const budgetTotalProperty: string = 'GtBudgetTotalOWSCURR'
+
+    let [{ PrimarySearchResults: statusReports }] = await Promise.all([
+      sp.search({
+        ...DEFAULT_SEARCH_SETTINGS,
+        QueryTemplate: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} ${siteIdProperty}:{${siteId}}
+        ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        SelectProperties: [costsTotalProperty, budgetTotalProperty, siteIdProperty]
+      })
+    ])
+    statusReports = statusReports.map((item) => cleanDeep({ ...item }))
+    return {
+      statusReports
+    }
+  }
+
+  /**
    * Fetch project sites
    *
    * @param {number} rowLimit Row limit

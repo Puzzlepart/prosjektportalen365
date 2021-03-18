@@ -10,8 +10,10 @@ export interface ITimelineItem {
   allocation?: number
   itemProps: React.HTMLProps<HTMLDivElement>
   project: string
-  projectUrl: string
+  projectUrl?: string
   phase?: string
+  budgetTotal?: string
+  costsTotal?: string
   role?: string
   resource?: string
   props: TypedHash<any>

@@ -28,7 +28,9 @@ export class ProjectListModel {
     public startDate?: string,
     public endDate?: string,
     manager?: ISPUser,
-    owner?: ISPUser
+    owner?: ISPUser,
+    public budgetTotal?: string,
+    public costsTotal?: string
   ) {
     if (manager) this.manager = { text: manager.Title, imageUrl: getUserPhoto(manager.Email) }
     if (owner) this.owner = { text: owner.Title, imageUrl: getUserPhoto(owner.Email) }
