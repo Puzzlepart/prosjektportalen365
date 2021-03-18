@@ -12,6 +12,7 @@ export interface ITimelineItem {
   project: string
   projectUrl?: string
   phase?: string
+  type?: string
   budgetTotal?: string
   costsTotal?: string
   role?: string

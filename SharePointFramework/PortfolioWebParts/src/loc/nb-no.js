@@ -134,6 +134,7 @@ define([], function () {
     ViewsListNameLabel: 'Visninger',
     SelectedColumnsLabel: 'Felter',
     ProjectsListName: 'Prosjekter',
+    TimelineContentListName: 'Tidslinjeinnhold',
     PortfolioManagerGroupName: 'Porteføljeinnsyn',
     ProjectTimelineItemInfo: '{0} - prosjektets tidsforløp'
   }

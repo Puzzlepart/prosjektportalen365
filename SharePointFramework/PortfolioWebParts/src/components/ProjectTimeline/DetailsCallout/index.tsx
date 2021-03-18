@@ -20,13 +20,13 @@ export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
       target={item.element}
       onDismiss={onDismiss}
       setInitialFocus={true}>
-      <p>
+      <p hidden={!item.data.project}>
         <b>Prosjekt:</b>{' '}
         <a href={item.data.projectUrl}>
           <span>{item.data.project}</span>
         </a>
       </p>
-      <p>
+      <p hidden={!item.data.phase}>
         <b>Gjeldende fase:</b> <span>{item.data.phase}</span>
       </p>
       <p>
@@ -41,10 +41,13 @@ export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
       <p hidden={!item.data.costsTotal}>
         <b>Kostnader påløpt totalt:</b> <span>{tryParseCurrency(item.data.costsTotal, '').toString().replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}</span>
       </p>
-      <p hidden={!item.data.budgetTotal || !item.data.costsTotal}>
+      <p hidden={(!item.data.budgetTotal || !item.data.costsTotal) || item.data.type !== 'Prosjekt'}>
         <a target="_blank" href={`${item.data.projectUrl}/SitePages/Prosjektstatus.aspx`}>
           <span>{`Siste publiserte statusrapport`}</span>
         </a>
+      </p>
+      <p hidden={!item.data.type || item.data.type === 'Prosjekt'}>
+        <b>Type:</b> <span>{item.data.type}</span>
       </p>
     </Callout>
   )

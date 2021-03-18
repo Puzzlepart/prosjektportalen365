@@ -136,6 +136,7 @@ declare interface IPortfolioWebPartsStrings {
   ViewNotFoundMessage: string
   ViewsListNameLabel: string
   ProjectsListName: string
+  TimelineContentListName: string
   PortfolioManagerGroupName: string
   ProjectTimelineItemInfo: string
 }

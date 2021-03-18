@@ -23,7 +23,7 @@ import { DetailsCallout } from './DetailsCallout'
 import styles from './ProjectTimeline.module.scss'
 import './Timeline.overrides.css'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
-import { ProjectListModel } from 'models'
+import { ProjectListModel, TimelineContentListModel } from 'models'
 
 /**
  * @component ProjectTimeline
@@ -49,6 +49,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
     try {
       const data = await this._fetchData()
       this.setState({ data, loading: false })
+      console.log(data);
     } catch (error) {
       this.setState({ error, loading: false })
     }
@@ -269,7 +270,11 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    *
    * @returns {ITimelineItem[]} Timeline items
    */
-  private _transformItems(projects: ProjectListModel[], groups: ITimelineGroup[]): ITimelineItem[] {
+  private _transformItems(
+    projects: ProjectListModel[],
+    timelineItems: TimelineContentListModel[],
+    groups: ITimelineGroup[]
+  ): ITimelineItem[] {
     const items: ITimelineItem[] = projects.map((project, id) => {
       const group = _.find(groups, (grp) => project.title.indexOf(grp.title) !== -1)
       const style: React.CSSProperties = {
@@ -290,11 +295,36 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         project: project.title,
         projectUrl: project.url,
         phase: project.phase,
+        type: project.type,
         budgetTotal: project.budgetTotal,
         costsTotal: project.costsTotal
       } as ITimelineItem
     })
-    return items
+
+    const phases: ITimelineItem[] = timelineItems.filter((item) => item.type == 'Fase').map((item, id) => {
+      id += items.length
+      const group = _.find(groups, (grp) => item.title.indexOf(grp.title) !== -1)
+      const style: React.CSSProperties = {
+        color: 'white',
+        border: 'none',
+        cursor: 'auto',
+        outline: 'none',
+        background: '#0078D4',
+        backgroundColor: '#0078D4'
+      }
+      return {
+        id,
+        group: group.id,
+        title: item.itemTitle,
+        start_time: moment(new Date(item.startDate)),
+        end_time: moment(new Date(item.endDate)),
+        itemProps: { style },
+        type: item.type,
+        budgetTotal: item.budgetTotal,
+        costsTotal: item.costsTotal
+      } as ITimelineItem
+    })
+    return [...items, ...phases]
   }
 
   /**
@@ -304,16 +334,20 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    */
   private async _fetchData(): Promise<ITimelineData> {
     try {
-      const projects = await this.props.dataAdapter.fetchEncrichedProjects()
-      
+      let projects = await this.props.dataAdapter.fetchEncrichedProjects()
+
       await Promise.all(projects.map(async (project) => {
         const statusReport = (await this.props.dataAdapter._fetchDataForTimelineProject(project.siteId)).statusReports[0]
         project['budgetTotal'] = statusReport && statusReport['GtBudgetTotalOWSCURR']
         project['costsTotal'] = statusReport && statusReport['GtCostsTotalOWSCURR']
+        project['type'] = 'Prosjekt'
       }))
 
+      let timelineItems: any = (await this.props.dataAdapter._fetchTimelineContentItems()).timelineItems
+      console.log(timelineItems)
+
       const groups = this._transformGroups(projects)
-      const items = this._transformItems(projects, groups)
+      const items = this._transformItems(projects, timelineItems, groups)
       return { items, groups }
     } catch (error) {
       throw error

@@ -9,6 +9,7 @@ import {
   ChartDataItem,
   DataField,
   ProjectListModel,
+  TimelineContentListModel,
   SPChartConfigurationItem,
   SPContentType
 } from 'models'
@@ -171,6 +172,8 @@ export class DataAdapter {
         }
       })
 
+      console.log(items);
+
       return items
     } catch (err) {
       throw err
@@ -270,7 +273,7 @@ export class DataAdapter {
   }
 
   /**
-   *  Fetches data for portfolio views
+   *  Fetches data for the Projecttimeline project
    * @param {string} siteId
    * @param {string} [siteIdProperty='GtSiteIdOWSTEXT']
    * @param {string} [costsTotalProperty='GtCostsTotalOWSCURR']
@@ -295,6 +298,51 @@ export class DataAdapter {
     statusReports = statusReports.map((item) => cleanDeep({ ...item }))
     return {
       statusReports
+    }
+  }
+
+  /**
+   *  Fetches items from timelinecontent list
+   *
+   * * Fetching list items
+   * * Maps the items to TimelineContentListModel
+   */
+  public async _fetchTimelineContentItems() {
+    let [timelineItems] = await Promise.all([
+      sp.web.lists
+        .getByTitle(strings.TimelineContentListName)
+        .items.select(
+          'Title',
+          'TimelineType',
+          'GtStartDate',
+          'GtEndDate',
+          'GtBudgetTotal',
+          'GtCostsTotal',
+          'SiteIdLookup/Title',
+          'SiteIdLookup/GtSiteId',
+      ).expand('SiteIdLookup')
+      .get()
+    ])
+
+    console.log(timelineItems)
+
+    timelineItems = timelineItems.map((item) => {
+        const model = new TimelineContentListModel(
+          item.SiteIdLookup && item.SiteIdLookup[0].GtSiteId,
+          item.SiteIdLookup && item.SiteIdLookup[0].Title,
+          item.Title,
+          item.TimelineType,
+          item.GtStartDate,
+          item.GtEndDate,
+          item.GtBudgetTotal,
+          item.GtCostsTotal,
+        )
+        return model
+      })
+      .filter((p) => p)
+
+    return {
+      timelineItems
     }
   }
 
