@@ -3,11 +3,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with Pull Request ID.
 
-## 1.3.0 - N/A
+## 1.2.7 - N/A
 
 ## Added
 
 - Added a new portfolio webpart, 'Prosjekttidslinje' for showcasing projects on a timeline #435
+
+## Fixed
+
+- Avoiding overwrite of portfolio views, columns, column configuration and insights graphs on update
 
 ## 1.2.6 - 03.03.2021
 
