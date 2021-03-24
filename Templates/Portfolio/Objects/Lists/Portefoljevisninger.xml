@@ -33,7 +33,7 @@
         <pnp:FieldRef ID="b5fc712a-9908-4ba1-a8ac-7e51eca7a251" Name="GtPortfolioFabricIcon" Required="true" />
         <pnp:FieldRef ID="43c79736-a2b6-452c-9995-6b72bba0ec16" Name="GtPortfolioColumns" Required="true" />
     </pnp:FieldRefs>
-    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
+    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Alle prosjekter</pnp:DataValue>

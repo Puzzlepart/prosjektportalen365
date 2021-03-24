@@ -27,7 +27,7 @@
         <pnp:FieldRef ID="4cfafd35-e26f-44cf-bb90-47aa65a41827" Name="GtPortfolioColumnColor" Required="true" />
         <pnp:FieldRef ID="d066062c-2fd0-486a-a30a-44bcb3bead4a" Name="GtPortfolioColumnIconName" Required="true" />
     </pnp:FieldRefs>
-    <pnp:DataRows UpdateBehavior="Overwrite" KeyColumn="Title">
+    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip" >
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Status risiko (Lav)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">25</pnp:DataValue>
