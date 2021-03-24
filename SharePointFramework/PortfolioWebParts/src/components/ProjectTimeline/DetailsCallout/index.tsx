@@ -11,7 +11,7 @@ export interface IDetailsCalloutProps {
 
 // tslint:disable-next-line: naming-convention
 export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
-  console.log(item);  
+  console.log(item);
 
   return (
     <Callout
@@ -20,6 +20,10 @@ export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
       target={item.element}
       onDismiss={onDismiss}
       setInitialFocus={true}>
+      <p hidden={item.data.type !== 'Milepæl'}>
+        <b>Milepæl:</b>{' '}
+        <span>{item.data.title}</span>
+      </p>
       <p hidden={!item.data.projectUrl}>
         <b>Prosjekt:</b>{' '}
         <a href={item.data.projectUrl}>
@@ -29,10 +33,13 @@ export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
       <p hidden={!item.data.phase}>
         <b>Gjeldende fase:</b> <span>{item.data.phase}</span>
       </p>
-      <p>
+      <p hidden={item.data.type !== 'Milepæl'}>
+        <b>Milepælsdato:</b> <span>{formatDate(item.data.end_time.toString())}</span>
+      </p>
+      <p hidden={item.data.type === 'Milepæl'}>
         <b>Startdato:</b> <span>{formatDate(item.data.start_time.toString())}</span>
       </p>
-      <p>
+      <p hidden={item.data.type === 'Milepæl'}>
         <b>Sluttdato:</b> <span>{formatDate(item.data.end_time.toString())}</span>
       </p>
       <p hidden={!item.data.budgetTotal}>

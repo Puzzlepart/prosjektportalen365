@@ -203,6 +203,28 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    */
   private _itemRenderer(props: ReactCalendarItemRendererProps<any>) {
     const htmlProps = props.getItemProps(props.item.itemProps)
+
+    if (props.item.type === 'Milepæl')
+      return (
+        <div
+          {...htmlProps}
+          className={`${styles.timelineItem} rc-item`}
+          onClick={(event) => this._onItemClick(event, props.item)}>
+          <div
+            className={`${styles.itemContent} rc-milestoneitem-content`}
+            style={{
+              maxHeight: `${props.itemContext.dimensions.height}`,
+              clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
+              width: '22px',
+              height: '24px',
+              backgroundColor: '#ffc800',
+              marginTop: '-2px'
+            }}>
+          </div>
+        </div>
+
+      )
+
     return (
       <div
         {...htmlProps}
@@ -285,8 +307,8 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         border: 'none',
         cursor: 'auto',
         outline: 'none',
-        background: 'gold',
-        backgroundColor: 'tomato'
+        background: 'tomato',
+        backgroundColor: project.type === 'Milepæl' ? 'transparent' : 'tomato'
       }
       return {
         id,
@@ -304,30 +326,41 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
       } as ITimelineItem
     })
 
-    const phases: ITimelineItem[] = timelineItems.filter((item) => item.type == 'Fase').map((item, id) => {
+    const phases: ITimelineItem[] = timelineItems.filter((item) => item.type !== 'Prosjekt').map((item, id) => {
       id += items.length
+
+      const backgroundColor = item.type === 'Fase'
+        ? '#0078D4'
+        : item.type === 'Milepæl'
+          ? 'transparent'
+          : item.type === 'Delfase'
+            ? 'teal'
+            : '#484848'
+
       const group = _.find(groups, (grp) => item.title.indexOf(grp.title) !== -1)
       const style: React.CSSProperties = {
         color: 'white',
         border: 'none',
         cursor: 'auto',
+        width: '25px',
         outline: 'none',
-        background: '#0078D4',
-        backgroundColor: '#0078D4'
+        background: backgroundColor,
+        backgroundColor: backgroundColor
       }
       return {
         id,
         group: group.id,
         title: item.itemTitle,
-        start_time: moment(new Date(item.startDate)),
+        start_time: item.type === 'Milepæl' ? moment(new Date(item.endDate)) : moment(new Date(item.startDate)),
         end_time: moment(new Date(item.endDate)),
         itemProps: { style },
         project: item.title,
         type: item.type,
         budgetTotal: item.budgetTotal,
-        costsTotal: item.costsTotal
+        costsTotal: item.costsTotal,
       } as ITimelineItem
     })
+
     return [...items, ...phases]
   }
 

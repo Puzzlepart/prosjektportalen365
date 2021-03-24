@@ -12,6 +12,7 @@ export interface ITimelineItem {
   project: string
   projectUrl?: string
   phase?: string
+  milestoneDate?: moment.Moment
   type?: string
   budgetTotal?: string
   costsTotal?: string
