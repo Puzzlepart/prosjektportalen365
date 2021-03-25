@@ -27,10 +27,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       ...this.settings,
       entityService: this.entityService,
       propertiesListName: strings.ProjectPropertiesListName,
-      sp: this.sp,
       taxonomy
-    })
-    this.project.spConfiguration = this.spConfiguration
+    }, this.spConfiguration)
   }
 
   /**
