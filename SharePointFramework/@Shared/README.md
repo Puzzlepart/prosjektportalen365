@@ -1,4 +1,4 @@
-## Shared [![version](https://img.shields.io/badge/version-1.2.10-yellow.svg)](https://semver.org)
+## Shared [![version](https://img.shields.io/badge/version-1.2.11-yellow.svg)](https://semver.org)
 
 Shared code for the SharePoint Framework solutions in PP365.
 

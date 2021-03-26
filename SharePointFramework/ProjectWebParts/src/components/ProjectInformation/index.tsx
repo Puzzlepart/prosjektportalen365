@@ -41,6 +41,7 @@ export class ProjectInformation extends BaseWebPartComponent<
       siteId: this.props.siteId
     })
   }
+  
 
   public async componentDidMount() {
     try {
