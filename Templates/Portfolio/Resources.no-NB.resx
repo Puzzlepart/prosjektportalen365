@@ -418,6 +418,9 @@
   <data name="SiteFields_Portfolio_Group" xml:space="preserve">
     <value>Kolonner for Prosjektportalen (Portefølje)</value>
   </data>
+  <data name="SiteFields_CustomFields_Group" xml:space="preserve">
+    <value>Egendefinerte kolonner for Prosjektportalen</value>
+  </data>
   <data name="SiteFields_GtRiskDescription_DisplayName" xml:space="preserve">
     <value>Beskrivelse av usikkerhet</value>
   </data>

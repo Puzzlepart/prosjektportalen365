@@ -1,0 +1,5 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "Don't commit like it's 1999. Please use npm script commit like it's 2035 🚀"
+exit 125

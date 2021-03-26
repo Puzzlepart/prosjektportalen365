@@ -20,7 +20,10 @@ export class SummarySection extends BaseSection<ISummarySectionProps, ISummarySe
       <BaseSection {...this.props}>
         <div className={styles.projectInformation}>
           <ProjectInformation
-            hubSite={{ web: new Web(this.props.hubSiteUrl), url: this.props.hubSiteUrl }}
+            hubSite={{
+              web: new Web(this.props.hubSiteUrl),
+              url: this.props.hubSiteUrl
+            }}
             siteId={this.props.siteId}
             webUrl={this.props.webUrl}
             page='ProjectStatus'
