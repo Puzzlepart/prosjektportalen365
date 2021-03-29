@@ -172,8 +172,6 @@ export class DataAdapter {
         }
       })
 
-      console.log(items);
-
       return items
     } catch (err) {
       throw err
@@ -323,8 +321,6 @@ export class DataAdapter {
       ).expand('SiteIdLookup')
       .get()
     ])
-
-    console.log(timelineItems)
 
     timelineItems = timelineItems.map((item) => {
         const model = new TimelineContentListModel(

@@ -140,6 +140,10 @@ declare interface IPortfolioWebPartsStrings {
   TimelineContentListName: string
   PortfolioManagerGroupName: string
   ProjectTimelineItemInfo: string
+  LastPublishedStatusreport: string
+  MilestoneLabel: string
+  ProjectLabel: string
+  SubPhaseLabel: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

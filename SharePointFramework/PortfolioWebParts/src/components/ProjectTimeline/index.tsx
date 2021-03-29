@@ -49,7 +49,6 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
     try {
       const data = await this._fetchData()
       this.setState({ data, loading: false })
-      console.log(data);
     } catch (error) {
       this.setState({ error, loading: false })
     }
@@ -204,7 +203,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   private _itemRenderer(props: ReactCalendarItemRendererProps<any>) {
     const htmlProps = props.getItemProps(props.item.itemProps)
 
-    if (props.item.type === 'Milepæl')
+    if (props.item.type === strings.MilestoneLabel)
       return (
         <div
           {...htmlProps}
@@ -291,6 +290,8 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   /**
    * Create items
    *
+   * @param {ProjectListModel[]} projects Projects
+   * @param {TimelineContentListModel[]} timelineItems Timeline items
    * @param {ITimelineGroup[]} groups Groups
    *
    * @returns {ITimelineItem[]} Timeline items
@@ -307,8 +308,8 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         border: 'none',
         cursor: 'auto',
         outline: 'none',
-        background: 'tomato',
-        backgroundColor: project.type === 'Milepæl' ? 'transparent' : 'tomato'
+        background: '#f35d69',
+        backgroundColor: '#f35d69'
       }
       return {
         id,
@@ -326,15 +327,15 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
       } as ITimelineItem
     })
 
-    const phases: ITimelineItem[] = timelineItems.filter((item) => item.type !== 'Prosjekt').map((item, id) => {
+    const phases: ITimelineItem[] = timelineItems.filter((item) => item.type !== strings.ProjectLabel).map((item, id) => {
       id += items.length
 
-      const backgroundColor = item.type === 'Fase'
-        ? '#0078D4'
-        : item.type === 'Milepæl'
+      const backgroundColor = item.type === strings.PhaseLabel
+        ? '#2589d6'
+        : item.type === strings.MilestoneLabel
           ? 'transparent'
-          : item.type === 'Delfase'
-            ? 'teal'
+          : item.type === strings.SubPhaseLabel
+            ? '#249ea0'
             : '#484848'
 
       const group = _.find(groups, (grp) => item.title.indexOf(grp.title) !== -1)
@@ -342,7 +343,6 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         color: 'white',
         border: 'none',
         cursor: 'auto',
-        width: '25px',
         outline: 'none',
         background: backgroundColor,
         backgroundColor: backgroundColor
@@ -351,7 +351,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         id,
         group: group.id,
         title: item.itemTitle,
-        start_time: item.type === 'Milepæl' ? moment(new Date(item.endDate)) : moment(new Date(item.startDate)),
+        start_time: item.type === strings.MilestoneLabel ? moment(new Date(item.endDate)) : moment(new Date(item.startDate)),
         end_time: moment(new Date(item.endDate)),
         itemProps: { style },
         project: item.title,
@@ -371,17 +371,15 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    */
   private async _fetchData(): Promise<ITimelineData> {
     try {
-      let projects = await this.props.dataAdapter.fetchEncrichedProjects()
+      const projects = await this.props.dataAdapter.fetchEncrichedProjects()
+      const timelineItems: any = (await this.props.dataAdapter._fetchTimelineContentItems()).timelineItems
 
       await Promise.all(projects.map(async (project) => {
         const statusReport = (await this.props.dataAdapter._fetchDataForTimelineProject(project.siteId)).statusReports[0]
         project['budgetTotal'] = statusReport && statusReport['GtBudgetTotalOWSCURR']
         project['costsTotal'] = statusReport && statusReport['GtCostsTotalOWSCURR']
-        project['type'] = 'Prosjekt'
+        project['type'] = strings.ProjectLabel
       }))
-
-      let timelineItems: any = (await this.props.dataAdapter._fetchTimelineContentItems()).timelineItems
-      console.log(timelineItems)
 
       const groups = this._transformGroups(projects)
       const items = this._transformItems(projects, timelineItems, groups)
