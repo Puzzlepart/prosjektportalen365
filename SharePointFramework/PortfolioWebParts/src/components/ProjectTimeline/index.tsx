@@ -327,7 +327,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
       } as ITimelineItem
     })
 
-    const phases: ITimelineItem[] = timelineItems.filter((item) => item.type !== strings.ProjectLabel).map((item, id) => {
+    const phases: ITimelineItem[] = timelineItems.map((item, id) => {
       id += items.length
 
       const backgroundColor = item.type === strings.PhaseLabel

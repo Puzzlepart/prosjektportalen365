@@ -27,28 +27,28 @@ export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
         <span>{item.data.title}</span>
       </p>
       <p hidden={!item.data.projectUrl}>
-        <b>Prosjekt:</b>{' '}
+        <b>{strings.ProjectLabel}:</b>{' '}
         <a href={item.data.projectUrl}>
           <span>{item.data.project}</span>
         </a>
       </p>
       <p hidden={!item.data.phase}>
-        <b>Gjeldende fase:</b> <span>{item.data.phase}</span>
+        <b>{strings.CurrentPhaseLabel}:</b> <span>{item.data.phase}</span>
       </p>
       <p hidden={item.data.type !== strings.MilestoneLabel}>
-        <b>Milepælsdato:</b> <span>{formatDate(item.data.end_time.toString())}</span>
+        <b>{strings.MilestoneDateLabel}:</b> <span>{formatDate(item.data.end_time.toString())}</span>
       </p>
       <p hidden={item.data.type === strings.MilestoneLabel}>
-        <b>Startdato:</b> <span>{formatDate(item.data.start_time.toString())}</span>
+        <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.data.start_time.toString())}</span>
       </p>
       <p hidden={item.data.type === strings.MilestoneLabel}>
-        <b>Sluttdato:</b> <span>{formatDate(item.data.end_time.toString())}</span>
+        <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.data.end_time.toString())}</span>
       </p>
       <p hidden={!item.data.budgetTotal}>
-        <b>Totalbudsjett:</b> <span>{tryParseCurrency(item.data.budgetTotal, '').toString().replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}</span>
+        <b>{strings.BudgetTotalLabel}:</b> <span>{tryParseCurrency(item.data.budgetTotal, '').toString().replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}</span>
       </p>
       <p hidden={!item.data.costsTotal}>
-        <b>Kostnader påløpt totalt:</b> <span>{tryParseCurrency(item.data.costsTotal, '').toString().replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}</span>
+        <b>{strings.CostsTotalLabel}:</b> <span>{tryParseCurrency(item.data.costsTotal, '').toString().replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}</span>
       </p>
       <p hidden={(!item.data.budgetTotal || !item.data.costsTotal) || item.data.type !== strings.ProjectLabel}>
         <a target='_blank' rel='noreferrer' href={`${item.data.projectUrl}/SitePages/Prosjektstatus.aspx`}>
@@ -56,7 +56,7 @@ export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
         </a>
       </p>
       <p hidden={!item.data.type || item.data.type === strings.ProjectLabel}>
-        <b>Type:</b> <span>{item.data.type}</span>
+        <b>{strings.TypeLabel}:</b> <span>{item.data.type}</span>
       </p>
     </Callout>
   )
