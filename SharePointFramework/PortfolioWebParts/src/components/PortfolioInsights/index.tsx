@@ -6,6 +6,7 @@ import Chart from './Chart'
 import { Commands } from './Commands'
 import styles from './PortfolioInsights.module.scss'
 import { IPortfolioInsightsProps, IPortfolioInsightsState } from './types'
+import * as strings from 'PortfolioWebPartsStrings'
 
 /**
  * @component PortfolioInsights
@@ -82,7 +83,7 @@ export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortf
     if (this.state.chartData.isEmpty()) {
       return (
         <div className={styles.inner}>
-          <MessageBar messageBarType={MessageBarType.info}>Ingen prosjekter funnet.</MessageBar>
+          <MessageBar messageBarType={MessageBarType.info}>{strings.NoProjectsFound}</MessageBar>
         </div>
       )
     }

@@ -3,12 +3,13 @@ import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMen
 import React from 'react'
 import { ICommandsProps } from './types'
 import styles from './PortfolioInsightsCommandBar.module.scss'
+import * as strings from 'PortfolioWebPartsStrings'
 
 export const Commands = (props: ICommandsProps) => {
   const items: ICommandBarItemProps[] = [
     {
       key: 'NEW_ITEM',
-      name: 'Ny',
+      name: strings.NewLabel,
       iconProps: { iconName: 'Add' },
       buttonStyles: { root: { border: 'none' } },
       itemType: ContextualMenuItemType.Header,

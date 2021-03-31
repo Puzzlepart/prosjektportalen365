@@ -153,6 +153,8 @@ declare interface IPortfolioWebPartsStrings {
   EndDateLabel: string
   BudgetTotalLabel: string
   CostsTotalLabel: string
+  NoProjectsFound: string
+  NewLabel: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

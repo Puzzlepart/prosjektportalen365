@@ -151,5 +151,7 @@ define([], function () {
     EndDateLabel: 'Sluttdato',
     BudgetTotalLabel: 'Totalbudsjett',
     CostsTotalLabel: 'Kostnader påløpt totalt',
+    NoProjectsFound: 'Ingen prosjekter funnet.',
+    NewLabel: 'Ny',
   }
 })
