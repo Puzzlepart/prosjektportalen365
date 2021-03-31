@@ -1,10 +1,3 @@
-SharePointFramework/*/**/env.json
-SharePointFramework/*/**/config/serve.json
-SharePointFramework/*/**/.vscode/launch.json
-Release
-node_modules
-SharePointFramework/*/**/build.config.json
-Install/Templates
 Install/SiteScripts/*.txt
 Install/InstallLog.txt
 SharePointFramework/**/.vscode/launch.json
@@ -16,5 +9,5 @@ Templates/Content/**/ProjectTemplates/*.txt
 Templates/*.txt
 Templates/Resources.json
 .DS_Store
-SharePointFramework/ProjectWebParts/config/config.backup.json
-**/package-lock.json
+SharePointFramework/**/config/config.backup.json
+**/package-lock.json 

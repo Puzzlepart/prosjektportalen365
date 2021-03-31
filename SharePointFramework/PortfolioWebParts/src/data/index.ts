@@ -9,6 +9,7 @@ import {
   ChartDataItem,
   DataField,
   ProjectListModel,
+  TimelineContentListModel,
   SPChartConfigurationItem,
   SPContentType
 } from 'models'
@@ -266,6 +267,78 @@ export class DataAdapter {
       projects,
       sites,
       statusReports
+    }
+  }
+
+  /**
+   *  Fetches data for the Projecttimeline project
+   * @param {string} siteId
+   * @param {string} [siteIdProperty='GtSiteIdOWSTEXT']
+   * @param {string} [costsTotalProperty='GtCostsTotalOWSCURR']
+   * @param {string} [budgetTotalProperty='GtBudgetTotalOWSCURR']
+   */
+
+  public async _fetchDataForTimelineProject(
+    siteId: string
+  ) {
+    const siteIdProperty: string = 'GtSiteIdOWSTEXT'
+    const costsTotalProperty: string = 'GtCostsTotalOWSCURR'
+    const budgetTotalProperty: string = 'GtBudgetTotalOWSCURR'
+
+    let [{ PrimarySearchResults: statusReports }] = await Promise.all([
+      sp.search({
+        ...DEFAULT_SEARCH_SETTINGS,
+        QueryTemplate: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} ${siteIdProperty}:{${siteId}}
+        ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        SelectProperties: [costsTotalProperty, budgetTotalProperty, siteIdProperty]
+      })
+    ])
+    statusReports = statusReports.map((item) => cleanDeep({ ...item }))
+    return {
+      statusReports
+    }
+  }
+
+  /**
+   *  Fetches items from timelinecontent list
+   *
+   * * Fetching list items
+   * * Maps the items to TimelineContentListModel
+   */
+  public async _fetchTimelineContentItems() {
+    let [timelineItems] = await Promise.all([
+      sp.web.lists
+        .getByTitle(strings.TimelineContentListName)
+        .items.select(
+          'Title',
+          'TimelineType',
+          'GtStartDate',
+          'GtEndDate',
+          'GtBudgetTotal',
+          'GtCostsTotal',
+          'SiteIdLookup/Title',
+          'SiteIdLookup/GtSiteId',
+      ).expand('SiteIdLookup')
+      .get()
+    ])
+
+    timelineItems = timelineItems.map((item) => {
+        const model = new TimelineContentListModel(
+          item.SiteIdLookup && item.SiteIdLookup[0].GtSiteId,
+          item.SiteIdLookup && item.SiteIdLookup[0].Title,
+          item.Title,
+          item.TimelineType,
+          item.GtStartDate,
+          item.GtEndDate,
+          item.GtBudgetTotal,
+          item.GtCostsTotal,
+        )
+        return model
+      })
+      .filter((p) => p)
+
+    return {
+      timelineItems
     }
   }
 

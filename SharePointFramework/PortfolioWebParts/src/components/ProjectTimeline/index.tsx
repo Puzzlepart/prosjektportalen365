@@ -23,7 +23,7 @@ import { DetailsCallout } from './DetailsCallout'
 import styles from './ProjectTimeline.module.scss'
 import './Timeline.overrides.css'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
-import { ProjectListModel } from 'models'
+import { ProjectListModel, TimelineContentListModel } from 'models'
 
 /**
  * @component ProjectTimeline
@@ -145,7 +145,10 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    * Get filters
    */
   private _getFilters(): IFilterProps[] {
-    const columns = [{ fieldName: 'project', name: strings.SiteTitleLabel }]
+    const columns = [
+      { fieldName: 'project', name: strings.SiteTitleLabel },
+      { fieldName: 'type', name: strings.TypeLabel }
+    ]
     return columns.map((col) => ({
       column: { key: col.fieldName, minWidth: 0, ...col },
       items: this.state.data.items
@@ -199,6 +202,28 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    */
   private _itemRenderer(props: ReactCalendarItemRendererProps<any>) {
     const htmlProps = props.getItemProps(props.item.itemProps)
+
+    if (props.item.type === strings.MilestoneLabel)
+      return (
+        <div
+          {...htmlProps}
+          className={`${styles.timelineItem} rc-item`}
+          onClick={(event) => this._onItemClick(event, props.item)}>
+          <div
+            className={`${styles.itemContent} rc-milestoneitem-content`}
+            style={{
+              maxHeight: `${props.itemContext.dimensions.height}`,
+              clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
+              width: '22px',
+              height: '24px',
+              backgroundColor: '#ffc800',
+              marginTop: '-2px'
+            }}>
+          </div>
+        </div>
+
+      )
+
     return (
       <div
         {...htmlProps}
@@ -265,11 +290,17 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   /**
    * Create items
    *
+   * @param {ProjectListModel[]} projects Projects
+   * @param {TimelineContentListModel[]} timelineItems Timeline items
    * @param {ITimelineGroup[]} groups Groups
    *
    * @returns {ITimelineItem[]} Timeline items
    */
-  private _transformItems(projects: ProjectListModel[], groups: ITimelineGroup[]): ITimelineItem[] {
+  private _transformItems(
+    projects: ProjectListModel[],
+    timelineItems: TimelineContentListModel[],
+    groups: ITimelineGroup[]
+  ): ITimelineItem[] {
     const items: ITimelineItem[] = projects.map((project, id) => {
       const group = _.find(groups, (grp) => project.title.indexOf(grp.title) !== -1)
       const style: React.CSSProperties = {
@@ -277,8 +308,8 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         border: 'none',
         cursor: 'auto',
         outline: 'none',
-        background: 'gold',
-        backgroundColor: 'tomato'
+        background: '#f35d69',
+        backgroundColor: '#f35d69'
       }
       return {
         id,
@@ -289,10 +320,48 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         itemProps: { style },
         project: project.title,
         projectUrl: project.url,
-        phase: project.phase
+        phase: project.phase,
+        type: project.type,
+        budgetTotal: project.budgetTotal,
+        costsTotal: project.costsTotal
       } as ITimelineItem
     })
-    return items
+
+    const phases: ITimelineItem[] = timelineItems.filter((item) => item.type !== strings.ProjectLabel).map((item, id) => {
+      id += items.length
+
+      const backgroundColor = item.type === strings.PhaseLabel
+        ? '#2589d6'
+        : item.type === strings.MilestoneLabel
+          ? 'transparent'
+          : item.type === strings.SubPhaseLabel
+            ? '#249ea0'
+            : '#484848'
+
+      const group = _.find(groups, (grp) => item.title.indexOf(grp.title) !== -1)
+      const style: React.CSSProperties = {
+        color: 'white',
+        border: 'none',
+        cursor: 'auto',
+        outline: 'none',
+        background: backgroundColor,
+        backgroundColor: backgroundColor
+      }
+      return {
+        id,
+        group: group.id,
+        title: item.itemTitle,
+        start_time: item.type === strings.MilestoneLabel ? moment(new Date(item.endDate)) : moment(new Date(item.startDate)),
+        end_time: moment(new Date(item.endDate)),
+        itemProps: { style },
+        project: item.title,
+        type: item.type,
+        budgetTotal: item.budgetTotal,
+        costsTotal: item.costsTotal,
+      } as ITimelineItem
+    })
+
+    return [...items, ...phases]
   }
 
   /**
@@ -303,8 +372,17 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   private async _fetchData(): Promise<ITimelineData> {
     try {
       const projects = await this.props.dataAdapter.fetchEncrichedProjects()
+      const timelineItems: any = (await this.props.dataAdapter._fetchTimelineContentItems()).timelineItems
+
+      await Promise.all(projects.map(async (project) => {
+        const statusReport = (await this.props.dataAdapter._fetchDataForTimelineProject(project.siteId)).statusReports[0]
+        project['budgetTotal'] = statusReport && statusReport['GtBudgetTotalOWSCURR']
+        project['costsTotal'] = statusReport && statusReport['GtCostsTotalOWSCURR']
+        project['type'] = strings.ProjectLabel
+      }))
+
       const groups = this._transformGroups(projects)
-      const items = this._transformItems(projects, groups)
+      const items = this._transformItems(projects, timelineItems, groups)
       return { items, groups }
     } catch (error) {
       throw error

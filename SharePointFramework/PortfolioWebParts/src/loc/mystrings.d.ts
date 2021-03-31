@@ -133,11 +133,17 @@ declare interface IPortfolioWebPartsStrings {
   TileViewGroupName: string
   TitleLabel: string
   UnitLabel: string
+  TypeLabel: string
   ViewNotFoundMessage: string
   ViewsListNameLabel: string
   ProjectsListName: string
+  TimelineContentListName: string
   PortfolioManagerGroupName: string
   ProjectTimelineItemInfo: string
+  LastPublishedStatusreport: string
+  MilestoneLabel: string
+  ProjectLabel: string
+  SubPhaseLabel: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

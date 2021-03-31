@@ -16,7 +16,8 @@
     "postversion": "gulp versionSync",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
-    "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent"
+    "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",
+    "commit": "sexy-commits"
   },
   "dependencies": {
     "@microsoft/decorators": "1.11.0",
@@ -41,7 +42,7 @@
     "@uifabric/utilities": "6.45.1",
     "msgraph-helper": "0.8.3",
     "office-ui-fabric-react": "6.214.0",
-    "pp365-shared": "latest",
+    "pp365-shared": "1.2.11",
     "react": "16.8.5",
     "react-dom": "16.8.5",
     "react-markdown": "4.2.2",
@@ -64,11 +65,11 @@
     "@types/mocha": "2.2.38",
     "@types/sharepoint": "2016.1.7",
     "@types/underscore": "1.9.2",
+    "@typescript-eslint/eslint-plugin": "4.15.1",
+    "@typescript-eslint/parser": "4.15.1",
     "ajv": "5.2.2",
     "colors": "1.4.0",
     "concurrently": "5.2.0",
-    "@typescript-eslint/eslint-plugin": "4.15.1",
-    "@typescript-eslint/parser": "4.15.1",
     "eslint": "7.20.0",
     "eslint-config-prettier": "7.2.0",
     "eslint-plugin-prettier": "3.3.1",
@@ -78,8 +79,105 @@
     "gulp": "3.9.1",
     "livereload": "0.9.1",
     "prettier": "2.1.1",
+    "sexy-commits": "0.3.5",
     "spfx-pkgdeploy": "0.3.0",
     "webpack-bundle-analyzer": "3.5.2",
     "webpackbar": "4.0.0"
+  },
+  "gitmoji": {
+    "build": [
+      "🏗️",
+      "Make architectural changes"
+    ],
+    "ci": [
+      "👷",
+      "Add or update CI build system",
+      [
+        "integration"
+      ]
+    ],
+    "chore": [
+      "💄",
+      "Boring chores",
+      [
+        "boring",
+        "stuff"
+      ]
+    ],
+    "docs": [
+      "📝",
+      "Added or updated documentation",
+      [
+        "doc",
+        "dox"
+      ]
+    ],
+    "feat": [
+      "✨",
+      "Introduced new features"
+    ],
+    "fix": [
+      "🐛",
+      "Fixed a bug",
+      [
+        "bugfix"
+      ]
+    ],
+    "perf": [
+      "⚡",
+      "Improved performance"
+    ],
+    "refactor": [
+      "♻️",
+      "Refactored code"
+    ],
+    "revert": [
+      "⏪",
+      "Reverted changes"
+    ],
+    "style": [
+      "💄",
+      "Added or updated the UI and style files"
+    ],
+    "test": [
+      "✅",
+      "Added or updated tests"
+    ],
+    "dev": [
+      "🔨",
+      "Add or update development scripts"
+    ],
+    "i18n": [
+      "🌐",
+      "Internationalization and localization"
+    ],
+    "changelog": [
+      "📓",
+      "Updated changelog"
+    ],
+    "readme": [
+      "📝",
+      "Updated readme"
+    ],
+    "typo": [
+      "✏️",
+      "Fixed typos"
+    ],
+    "rename": [
+      "🚚",
+      "Moved or renamed resources (e.g.: files, paths, routes)"
+    ],
+    "merge": [
+      "🔀",
+      "Merged a branch into this one"
+    ],
+    "auth": [
+      "🛂",
+      "Worked on code related to authorization, roles and permissions"
+    ],
+    "syntax": [
+      "✏️",
+      "Adjusted code syntax"
+    ]
   }
 }
