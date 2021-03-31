@@ -9,6 +9,5 @@ Templates/Content/**/ProjectTemplates/*.txt
 Templates/*.txt
 Templates/Resources.json
 .DS_Store
-SharePointFramework/ProjectWebParts/config/config.backup.json
+SharePointFramework/**/config/config.backup.json
 **/package-lock.json 
-SharePointFramework/ProjectWebParts/config/config.backup.json 
