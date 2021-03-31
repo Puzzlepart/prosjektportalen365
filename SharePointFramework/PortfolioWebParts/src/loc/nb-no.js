@@ -141,7 +141,7 @@ define([], function () {
     TimelineContentListName: 'Tidslinjeinnhold',
     PortfolioManagerGroupName: 'Porteføljeinnsyn',
     ProjectTimelineItemInfo: '{0} - prosjektets tidsforløp',
-    LastPublishedStatusreport: 'Siste publiserte statusrapport',
+    LastPublishedStatusreport: 'Gå til siste statusrapport',
     MilestoneLabel: 'Milepæl',
     ProjectLabel: 'Prosjekt',
     SubPhaseLabel: 'Delfase',
