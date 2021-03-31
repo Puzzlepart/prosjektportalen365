@@ -111,6 +111,9 @@ declare interface IPortfolioWebPartsStrings {
   ResourceLabel: string
   ResponsibleLabel: string
   RoleLabel: string
+  AllocationPercetageLabel: string
+  AllocationStatusLabel: string
+  CommentLabel: string
   SaveViewAsText: string
   SearchBoxPlaceholderText: string
   SearchBoxPlaceholderTextLabel: string
@@ -144,6 +147,12 @@ declare interface IPortfolioWebPartsStrings {
   MilestoneLabel: string
   ProjectLabel: string
   SubPhaseLabel: string
+  CurrentPhaseLabel: string
+  MilestoneDateLabel: string
+  StartDateLabel: string
+  EndDateLabel: string
+  BudgetTotalLabel: string
+  CostsTotalLabel: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

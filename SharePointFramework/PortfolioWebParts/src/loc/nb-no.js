@@ -107,6 +107,9 @@ define([], function () {
     ResourceLabel: 'Ressurs',
     ResponsibleLabel: 'Ansvarlig',
     RoleLabel: 'Rolle',
+    AllocationPercetageLabel: 'Allokeringsprosent',
+    AllocationStatusLabel: 'Allokeringsstatus',
+    CommentLabel: 'Kommentar',
     SaveViewAsText: 'Lagre visning som',
     SearchBoxPlaceholderText: 'Søk i {0}...',
     SearchBoxPlaceholderTextLabel: 'Søkebokstekst',
@@ -141,6 +144,12 @@ define([], function () {
     LastPublishedStatusreport: 'Siste publiserte statusrapport',
     MilestoneLabel: 'Milepæl',
     ProjectLabel: 'Prosjekt',
-    SubPhaseLabel: 'Delfase'
+    SubPhaseLabel: 'Delfase',
+    CurrentPhaseLabel: 'Gjeldende fase',
+    MilestoneDateLabel: 'Milepælsdato',
+    StartDateLabel: 'Startdato',
+    EndDateLabel: 'Sluttdato',
+    BudgetTotalLabel: 'Totalbudsjett',
+    CostsTotalLabel: 'Kostnader påløpt totalt',
   }
 })
