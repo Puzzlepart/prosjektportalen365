@@ -25,10 +25,8 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
     this.project = new ProjectDataService({
       ...this.settings,
       entityService: this.entityService,
-      propertiesListName: strings.ProjectPropertiesListName,
-      sp: this.sp
-    })
-    this.project.spConfiguration = this.spConfiguration
+      propertiesListName: strings.ProjectPropertiesListName
+    }, this.spConfiguration)
   }
 
   /**

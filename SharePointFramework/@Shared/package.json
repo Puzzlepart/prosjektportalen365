@@ -9,7 +9,8 @@
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
-    "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent"
+    "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",
+    "commit": "sexy-commits"
   },
   "author": "",
   "license": "ISC",
@@ -48,6 +49,7 @@
     "eslint-plugin-react": "7.22.0",
     "eslint-plugin-unused-imports": "1.1.0",
     "prettier": "^2.1.1",
+    "sexy-commits": "0.3.5",
     "typescript": "~3.3.x"
   }
 }
