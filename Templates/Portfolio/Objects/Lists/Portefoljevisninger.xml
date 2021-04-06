@@ -50,7 +50,7 @@
             <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} NOT GtProjectLifecycleStatusOWSCHCS="Avsluttet" ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioIsDefaultView">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioFabricIcon">BarChart4</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioColumns">1,7,8,9,22,26,24,20,28,19</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumns">1,7,8,9,21,25,23,19,27</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioRefiners">5,6,7,8,9</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioGroupBy" />
         </pnp:DataRow>
