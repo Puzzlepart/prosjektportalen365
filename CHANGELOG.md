@@ -14,6 +14,9 @@ Every change is marked with Pull Request ID.
 
 - Avoiding overwrite of portfolio views, columns, column configuration and insights graphs on update
 
+## Changed
+
+- Changed Portfolio status view columns from "comments" to "status" 
 ## 1.2.6 - 03.03.2021
 
 ## Added
