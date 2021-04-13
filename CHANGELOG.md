@@ -13,6 +13,7 @@ Every change is marked with Pull Request ID.
 ## Fixed
 
 - Avoiding overwrite of portfolio views, columns, column configuration and insights graphs on update
+- Overwriting configuration page to support new configuration links on update #425
 
 ## Changed
 
