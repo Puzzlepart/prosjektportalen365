@@ -446,7 +446,7 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
         throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
       }
     } else if (defaultViewId) {
-      currentView = _.find(views, (v) => v.id.toString() === defaultViewId)
+      currentView = _.find(views, (v) => v.id.toString() === defaultViewId.toString())
       if (!currentView) {
         throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
       }
