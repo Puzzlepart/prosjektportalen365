@@ -12,13 +12,13 @@ Every change is marked with Pull Request ID.
 
 ## Fixed
 
-- Avoiding overwrite of portfolio views, columns, column configuration and insights graphs on update
+- Avoiding overwrite of portfolio views, columns, column configuration and insights graphs on update #440
 - Overwriting configuration page to support new configuration links on update #425
 
 ## Changed
 
-- Changed Portfolio status view columns from "comments" to "status" 
-
+- Changed Portfolio status view columns from "comments" to "status" #451
+- Improved project properties sync and fetching  #444 #449
 
 ## 1.2.6 - 03.03.2021
 
@@ -41,7 +41,7 @@ Every change is marked with Pull Request ID.
 - Copying for documents to new projects #399
 - Fixes issues with more than one status report template #400
 - Fixed issues with missing projects on the front page #364
-- Fixed support for latest PnP PowerShell #377 
+- Fixed support for latest PnP PowerShell #377
 
 ## 1.2.4 - 30.11.2020
 
