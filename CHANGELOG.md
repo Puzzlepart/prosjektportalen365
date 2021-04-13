@@ -10,6 +10,7 @@ Every change is marked with Pull Request ID.
 - Added a new portfolio webpart, 'Prosjekttidslinje' for showcasing projects on a timeline #435
 - Added list 'Tidslinjeinnhold' to portfolio level #437
 - Added "Last Report Date" to Portfolio status overview
+- Added report created date next to Project Status title
 
 ## Fixed
 
