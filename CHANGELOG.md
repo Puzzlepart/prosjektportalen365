@@ -18,6 +18,8 @@ Every change is marked with Pull Request ID.
 ## Changed
 
 - Changed Portfolio status view columns from "comments" to "status" 
+
+
 ## 1.2.6 - 03.03.2021
 
 ## Added
@@ -35,7 +37,7 @@ Every change is marked with Pull Request ID.
 - Issues with custom project fields #378
 - Fix for visible check in project information web part #385
 - Setting phase check list and planner task list as visible #389
-- Flexible portfolio aggregation web part #395
+- Flexible portfolio aggregation web part #394
 - Copying for documents to new projects #399
 - Fixes issues with more than one status report template #400
 - Fixed issues with missing projects on the front page #364
