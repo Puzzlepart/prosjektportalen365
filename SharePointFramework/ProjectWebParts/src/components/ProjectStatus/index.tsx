@@ -418,7 +418,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     if (!this.state.isPublishing) {
       try {
         const attachment = await this._captureReport(report.values.Title)
-        const properties = { GtModerationStatus: strings.GtModerationStatus_Choice_Published }
+        const properties = { GtModerationStatus: strings.GtModerationStatus_Choice_Published, GtLastReportDate: moment().format('YYYY-MM-DD HH:mm') }
         await this._portalDataService.updateStatusReport(report.id, properties, attachment)
       } catch (error) {
         Logger.log({

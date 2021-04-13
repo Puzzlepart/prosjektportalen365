@@ -1528,6 +1528,12 @@
   <data name="SiteFields_GtPermissionLevel_Description" xml:space="preserve">
     <value>Definerer rettighetsnivå på SharePoint-området til prosjektet.</value>
   </data>
+  <data name="SiteFields_GtLastReportDate_Description" xml:space="preserve">
+    <value>Siste dato for publisert rapport.</value>
+  </data>
+  <data name="SiteFields_GtLastReportDate_DisplayName" xml:space="preserve">
+    <value>Siste rapporteringsdato</value>
+  </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
   </data>
