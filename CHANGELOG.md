@@ -9,7 +9,7 @@ Every change is marked with Pull Request ID.
 
 - Added a new portfolio webpart, 'Prosjekttidslinje' for showcasing projects on a timeline #435
 - Added list 'Tidslinjeinnhold' to portfolio level #437
-
+- Added 'Description' to document templates
 ## Fixed
 
 - Avoiding overwrite of portfolio views, columns, column configuration and insights graphs on update #440
