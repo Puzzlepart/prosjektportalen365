@@ -276,13 +276,45 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         data: {},
         level: LogLevel.Info
       })
+
+      const templateFileName = (
+        await sp.web.select('Title', 'AllProperties').expand('AllProperties').get()
+      )['AllProperties']['pp_template']
+      let templateViewXml = `<View Scope="RecursiveAll">
+      <Query>
+          <Where>
+              <Eq>
+                  <FieldRef Name="FSObjType" />
+                  <Value Type="Integer">0</Value>
+              </Eq>
+          </Where>
+      </Query>
+  </View>`
+      if (templateFileName) {
+        templateViewXml = `<View Scope="RecursiveAll">
+        <Query>
+            <Where>
+                <And>
+                    <Eq>
+                        <FieldRef Name="FSObjType" />
+                        <Value Type="Integer">0</Value>
+                    </Eq>
+                    <Eq>
+                        <FieldRef Name="FileLeafRef" />
+                        <Value Type="Text">${templateFileName}</Value>
+                    </Eq>
+                </And>
+            </Where>
+        </Query>
+    </View>`
+      }
+
       const [templates, extensions, listContentConfig] = await Promise.all([
         this._portal.getItems(
           this.properties.templatesLibrary,
           ProjectTemplate,
           {
-            ViewXml:
-              '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+            ViewXml: templateViewXml
           },
           ['File', 'FieldValuesAsText']
         ),
