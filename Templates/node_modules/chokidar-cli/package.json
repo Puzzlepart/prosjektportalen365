@@ -1,0 +1,106 @@
+{
+  "name": "chokidar-cli",
+  "description": "Ultra-fast cross-platform command line utility to watch file system changes.",
+  "version": "2.1.0",
+  "keywords": [
+    "fs",
+    "watch",
+    "watchFile",
+    "watcher",
+    "watching",
+    "file",
+    "fsevents",
+    "chokidar",
+    "cli",
+    "command",
+    "shell",
+    "bash"
+  ],
+  "bin": {
+    "chokidar": "./index.js"
+  },
+  "homepage": "https://github.com/kimmobrunfeldt/chokidar-cli",
+  "author": "Kimmo Brunfeldt <kimmobrunfeldt@gmail.com> (http://kimmobrunfeldt.github.io/)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kimmobrunfeldt/chokidar-cli.git"
+  },
+  "bugs": {
+    "url": "http://github.com/kimmobrunfeldt/chokidar-cli/issues"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "chokidar": "^3.2.3",
+    "lodash.throttle": "^4.1.1",
+    "lodash.debounce": "^4.0.8",
+    "yargs": "^13.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "mocha": "^6.2.2"
+  },
+  "scripts": {
+    "lint": "eslint --report-unused-disable-directives --ignore-path .gitignore .",
+    "mocha": "mocha",
+    "test": "npm run lint && npm run mocha"
+  },
+  "engines": {
+    "node": ">= 8.10.0"
+  },
+  "files": [
+    "*.js"
+  ],
+  "eslintConfig": {
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaVersion": 9,
+      "sourceType": "script"
+    },
+    "env": {
+      "node": true,
+      "es6": true
+    },
+    "rules": {
+      "array-callback-return": "error",
+      "indent": [
+        "error",
+        4
+      ],
+      "no-empty": [
+        "error",
+        {
+          "allowEmptyCatch": true
+        }
+      ],
+      "object-shorthand": "error",
+      "prefer-arrow-callback": [
+        "error",
+        {
+          "allowNamedFunctions": true
+        }
+      ],
+      "prefer-const": [
+        "error",
+        {
+          "ignoreReadBeforeAssign": true
+        }
+      ],
+      "prefer-destructuring": [
+        "error",
+        {
+          "object": true,
+          "array": false
+        }
+      ],
+      "prefer-spread": "error",
+      "prefer-template": "error",
+      "radix": "error",
+      "strict": "error",
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "no-var": "error"
+    }
+  }
+}
