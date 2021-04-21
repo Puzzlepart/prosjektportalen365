@@ -280,10 +280,33 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       const templateFileName = (
         await sp.web.select('Title', 'AllProperties').expand('AllProperties').get()
       )['AllProperties']['pptemplate']
-      let templateViewXml =
-        '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+      let templateViewXml = `<View Scope="RecursiveAll">
+      <Query>
+          <Where>
+              <Eq>
+                  <FieldRef Name="FSObjType" />
+                  <Value Type="Integer">0</Value>
+              </Eq>
+          </Where>
+      </Query>
+  </View>`
       if (templateFileName) {
-        templateViewXml = `<View Scope="RecursiveAll"><Query><Where><And><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq><Eq><FieldRef Name="FileLeafRef" /><Value Type="Text">${templateFileName}</Value></Eq></And></Where></Query></View>`
+        templateViewXml = `<View Scope="RecursiveAll">
+        <Query>
+            <Where>
+                <And>
+                    <Eq>
+                        <FieldRef Name="FSObjType" />
+                        <Value Type="Integer">0</Value>
+                    </Eq>
+                    <Eq>
+                        <FieldRef Name="FileLeafRef" />
+                        <Value Type="Text">${templateFileName}</Value>
+                    </Eq>
+                </And>
+            </Where>
+        </Query>
+    </View>`
       }
 
       const [templates, extensions, listContentConfig] = await Promise.all([
