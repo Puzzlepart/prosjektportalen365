@@ -279,7 +279,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
       const templateFileName = (
         await sp.web.select('Title', 'AllProperties').expand('AllProperties').get()
-      )['AllProperties']['pptemplate']
+      )['AllProperties']['pp_template']
       let templateViewXml = `<View Scope="RecursiveAll">
       <Query>
           <Where>
