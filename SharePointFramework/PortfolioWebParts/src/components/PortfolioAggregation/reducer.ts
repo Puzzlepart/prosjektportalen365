@@ -71,11 +71,9 @@ export default (props: IPortfolioAggregationProps) =>
     [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {
       if (payload.items) {
         state.items = props.postTransform ? props.postTransform(payload.items) : payload.items
-        //if (state.sortBy) {
           state.items = sortArray([...state.items], [state.sortBy?.fieldName ? state.sortBy.fieldName : 'SiteTitle'], {
             reverse: state.sortBy?.isSortedDescending ? state.sortBy.isSortedDescending : false
           })
-        //}
         state.loading = false
       }
       if (payload.dataSources) state.dataSources = payload.dataSources
@@ -122,18 +120,7 @@ export default (props: IPortfolioAggregationProps) =>
     },
 
     [SET_GROUP_BY.type]: (state, { payload }: ReturnType<typeof SET_GROUP_BY>) => {
-      const itemsSort = { props: [(state.groupBy?.fieldName) ? state.groupBy.fieldName : 'SiteTitle' ], opts: { reverse: false } }
-      if (state.sortBy) {
-        itemsSort.props.push(state.sortBy.fieldName)
-        itemsSort.opts.reverse = !state.sortBy.isSortedDescending
-      }
-      console.log(itemsSort);
-      state.items = sortArray([...state.items], itemsSort.props, itemsSort.opts)
-      if (state.groupBy?.fieldName === payload.column?.fieldName) {
-        state.groupBy = null
-        state.groups = null
-        return
-      }
+      state.items = sortArray([...state.items], [payload.column.fieldName])
       state.groupBy = payload.column
       const groupNames: string[] = state.items.map((g) =>
         get<string>(g, state.groupBy.fieldName, strings.NotSet)
@@ -159,6 +146,10 @@ export default (props: IPortfolioAggregationProps) =>
     [SET_SORT.type]: (state, { payload }: ReturnType<typeof SET_SORT>) => {
       const { column, sortDesencing } = payload
       state.sortBy = column
+      if (state.groupBy) {
+        state.groupBy = null
+        state.groups = null
+      }
       state.items = sortArray([...state.items], [column.fieldName], { reverse: !sortDesencing })
       state.columns = [...state.columns].map((col) => {
         col.isSorted = col.key === column.key
