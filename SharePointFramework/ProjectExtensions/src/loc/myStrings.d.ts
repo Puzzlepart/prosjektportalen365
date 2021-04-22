@@ -29,6 +29,7 @@ declare interface IProjectExtensionsStrings {
   CopyListItemsText: string
   CopyFilesText: string
   CopyProgressLabel: string
+  DescriptionLabel: string
   EditPropertiesLinkText: string
   ErrorDialogTitle: string
   ExtensionsTitle: string

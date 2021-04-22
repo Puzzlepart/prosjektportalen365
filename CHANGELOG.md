@@ -9,7 +9,9 @@ Every change is marked with Pull Request ID.
 
 - Added a new portfolio webpart, 'Prosjekttidslinje' for showcasing projects on a timeline #435
 - Added list 'Tidslinjeinnhold' to portfolio level #437
-- Added "Last Report Date" to Portfolio status overview
+- Added 'Description' to document templates #379
+- Supporting pre-defined template setting #461
+- Added "Last Report Date" to Portfolio status overview #393
 - Added report created date next to Project Status title
 
 ## Fixed
@@ -17,11 +19,13 @@ Every change is marked with Pull Request ID.
 - Avoiding overwrite of portfolio views, columns, column configuration and insights graphs on update #440
 - Overwriting configuration page to support new configuration links on update #425
 - Fixed portfolio overview crashing when default view was selected #428
+- Fixed inconsistent version history settings of lists #465
 
 ## Changed
 
 - Changed Portfolio status view columns from "comments" to "status" #451
 - Improved project properties sync and fetching  #444 #449
+- Overviews using PortfolioAggregation (Benefit overview, Experience log, Delivery overview, Risk overview) now initially sort on project and grouping now automatically sorts group from A-Z by project. Also removes groups when sorting to avoid the issue found in #459
 
 ## 1.2.6 - 03.03.2021
 

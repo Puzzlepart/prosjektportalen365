@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_TemplateLibrary_Title}" TemplateType="101" Url="{resource:Lists_TemplateLibrary_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="500" DraftVersionVisibility="0" EnableAttachments="false" 
+<pnp:ListInstance Title="{resource:Lists_TemplateLibrary_Title}" TemplateType="101" Url="{resource:Lists_TemplateLibrary_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableAttachments="false" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllDocuments_DisplayName}" Url="{site}/{resource:Lists_TemplateLibrary_Url}/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
@@ -11,6 +11,7 @@
                 <FieldRef Name="DocIcon" />
                 <FieldRef Name="LinkFilename" />
                 <FieldRef Name="Title" />
+                <FieldRef Name="GtDescription" />
                 <FieldRef Name="GtProjectPhase" />
                 <FieldRef Name="Modified" />
                 <FieldRef Name="Editor" />
@@ -22,6 +23,7 @@
     </pnp:Views>
     <pnp:FieldRefs>
         <pnp:FieldRef ID="325543a5-815d-485d-a9a5-e0773ad762e9" Name="GtProjectPhase" />
+        <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" />
     </pnp:FieldRefs>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

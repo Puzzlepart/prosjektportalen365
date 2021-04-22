@@ -78,6 +78,7 @@ define([], function () {
     SetupAbortedText: 'Installasjon avbrutt av bruker',
     UnknownErrorText: 'Ukjent feil',
     TemplateListContentConfigText: 'Den valgte prosjektmalen inneholder konfigurasjon for standardinnhold.',
+    DescriptionLabel: "Beskrivelse",
     FolderDropdownLabel: 'Velg mappe',
     DocumentLibraryDropdownLabel: 'Velg dokumentbibliotek',
     DocumentTemplateDialogScreenEditCopyRootLevelText: 'Øverste nivå'
