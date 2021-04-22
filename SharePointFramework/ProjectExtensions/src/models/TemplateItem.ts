@@ -39,6 +39,11 @@ export class TemplateItem {
   public title: string
 
   /**
+   * The template description
+   */
+  public description: string
+
+  /**
    * The project phase
    */
   public phase: string
@@ -72,6 +77,7 @@ export class TemplateItem {
     this.id = _item.File?.UniqueId || _item.Folder.UniqueId
     this.name = _item.File?.Name || _item.Folder?.Name
     this.title = _item.File?.Title || this.nameWithoutExtension || _item.Folder?.Name
+    this.description = _item.FieldValuesAsText.GtDescription
     this.phase = _item.FieldValuesAsText.GtProjectPhase
     this.newName = this.name
     this.newTitle = this.title

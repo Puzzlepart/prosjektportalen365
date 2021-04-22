@@ -36,6 +36,13 @@ export default ({ setFolder }: { setFolder: (folder: TemplateItem) => void }) =>
       }
     },
     {
+      key: getId('description'),
+      fieldName: 'description',
+      name: ProjectExtensionsStrings.DescriptionLabel,
+      minWidth: 200,
+      isResizable:true
+    },
+    {
       key: getId('phase'),
       fieldName: 'phase',
       name: ProjectExtensionsStrings.PhaseLabel,
