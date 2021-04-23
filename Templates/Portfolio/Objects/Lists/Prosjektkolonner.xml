@@ -405,6 +405,19 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
+        <pnp:DataRow> <!-- ID: 30 -->
+            <pnp:DataValue FieldName="GtSortOrder">300</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtLastReportDate_DisplayName}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtLastReportDate</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtLastReportDateOWSDATE</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldPortfolio">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+        </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

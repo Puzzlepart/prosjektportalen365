@@ -11,6 +11,8 @@ Every change is marked with Pull Request ID.
 - Added list 'Tidslinjeinnhold' to portfolio level #437
 - Added 'Description' to document templates #379
 - Supporting pre-defined template setting #461
+- Added "Last Report Date" to Portfolio status overview #393
+- Added report created date next to Project Status title
 
 ## Fixed
 
