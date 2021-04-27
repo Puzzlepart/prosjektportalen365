@@ -120,7 +120,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
             </MessageBar>
           )}
           <div className={`${styles.header} ${styles.column12}`}>
-            <div className={styles.title}>{this.props.title} - {moment(this.state.selectedReport.created).format('DD.MM.yyyy')} </div>
+            <div className={styles.title}>{this.props.title} {this.state.selectedReport ? moment(this.state.selectedReport.created).format('DD.MM.yyyy') : null} </div>
           </div>
           <div className={`${styles.sections} ${styles.column12}`} id='pp-statussection'>
             {this._renderSections()}
