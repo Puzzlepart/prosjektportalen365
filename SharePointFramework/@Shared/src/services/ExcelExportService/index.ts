@@ -9,8 +9,8 @@ import { ExcelExportServiceDefaultConfiguration } from './ExcelExportServiceDefa
 import { IExcelExportServiceConfiguration } from './IExcelExportServiceConfiguration'
 
 export default new (class ExcelExportService {
-  private _configuration: IExcelExportServiceConfiguration
-  private _deps: string[]
+  public _configuration: IExcelExportServiceConfiguration
+  public _deps: string[]
 
   public configure(configuration: IExcelExportServiceConfiguration) {
     this._configuration = { ...ExcelExportServiceDefaultConfiguration, ...configuration }
