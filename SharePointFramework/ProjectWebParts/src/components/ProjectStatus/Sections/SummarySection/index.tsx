@@ -1,5 +1,5 @@
 import { Web } from '@pnp/sp'
-import { ProjectInformation } from 'components/ProjectInformation'
+import { ProjectInformation } from '../../../ProjectInformation'
 import * as React from 'react'
 import { StatusElement } from '../../StatusElement'
 import { IStatusElementProps } from '../../StatusElement/types'

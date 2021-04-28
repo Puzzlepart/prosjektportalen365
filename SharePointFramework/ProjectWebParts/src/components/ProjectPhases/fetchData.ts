@@ -1,5 +1,5 @@
 import { Logger, LogLevel } from '@pnp/logging'
-import SPDataAdapter from 'data'
+import SPDataAdapter from '../../data'
 import * as strings from 'ProjectWebPartsStrings'
 import { IProjectPhasesData } from '.'
 

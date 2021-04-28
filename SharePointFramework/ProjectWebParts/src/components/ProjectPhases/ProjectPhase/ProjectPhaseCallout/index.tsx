@@ -1,5 +1,5 @@
-import { ProjectPhasesContext } from 'components/ProjectPhases/context'
-import { CHANGE_PHASE, DISMISS_CALLOUT } from 'components/ProjectPhases/reducer'
+import { ProjectPhasesContext } from '../../context'
+import { CHANGE_PHASE, DISMISS_CALLOUT } from '../../reducer'
 import { ActionButton } from 'office-ui-fabric-react/lib/Button'
 import { Callout } from 'office-ui-fabric-react/lib/Callout'
 import * as strings from 'ProjectWebPartsStrings'

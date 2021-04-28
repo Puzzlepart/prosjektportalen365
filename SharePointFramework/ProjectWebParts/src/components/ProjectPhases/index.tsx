@@ -1,4 +1,4 @@
-import { UserMessage } from 'components/UserMessage'
+import { UserMessage } from '../UserMessage'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { Shimmer } from 'office-ui-fabric-react/lib/Shimmer'
 import * as strings from 'ProjectWebPartsStrings'

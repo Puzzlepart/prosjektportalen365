@@ -1,5 +1,5 @@
-import { ProjectPhasesContext } from 'components/ProjectPhases/context'
-import { DISMISS_CHANGE_PHASE_DIALOG } from 'components/ProjectPhases/reducer'
+import { ProjectPhasesContext } from '../../context'
+import { DISMISS_CHANGE_PHASE_DIALOG } from '../../reducer'
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog'
 import * as strings from 'ProjectWebPartsStrings'

@@ -1,4 +1,4 @@
-import SPDataAdapter from 'data'
+import SPDataAdapter from '../../../data'
 import Dialog, { DialogType } from 'office-ui-fabric-react/lib/Dialog'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'

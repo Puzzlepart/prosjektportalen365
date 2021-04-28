@@ -1,4 +1,4 @@
-import SPDataAdapter from 'data'
+import SPDataAdapter from '../../data'
 import { ProjectPhaseModel } from 'pp365-shared/lib/models'
 import { modifyCurrentPhaseView } from './modifyCurrentPhaseView'
 
