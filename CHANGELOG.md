@@ -20,6 +20,7 @@ Every change is marked with Pull Request ID.
 - Overwriting configuration page to support new configuration links on update #425
 - Fixed portfolio overview crashing when default view was selected #428
 - Fixed inconsistent version history settings of lists #465
+- Fixed Excel export on portfolio overview and aggregated portfolios #469
 
 ## Changed
 

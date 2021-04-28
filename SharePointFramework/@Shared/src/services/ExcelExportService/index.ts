@@ -9,8 +9,8 @@ import { ExcelExportServiceDefaultConfiguration } from './ExcelExportServiceDefa
 import { IExcelExportServiceConfiguration } from './IExcelExportServiceConfiguration'
 
 export default new (class ExcelExportService {
-  public _configuration: IExcelExportServiceConfiguration
-  public _deps: string[]
+  private _configuration: IExcelExportServiceConfiguration
+  private _deps: string[]
 
   public configure(configuration: IExcelExportServiceConfiguration) {
     this._configuration = { ...ExcelExportServiceDefaultConfiguration, ...configuration }
@@ -27,7 +27,7 @@ export default new (class ExcelExportService {
    */
 
 
-  public loadDeps(): Promise<void> {
+  protected loadDeps(): Promise<void> {
     return new Promise<void>((resolve) => {
       $script(this._deps, 'deps')
       $script.ready('deps', () => {
@@ -59,7 +59,7 @@ export default new (class ExcelExportService {
       const workBook = XLSX.utils.book_new()
       sheets.forEach((s, index) => {
         const sheet = XLSX.utils.aoa_to_sheet(s.data)
-        ;XLSX.utils.book_append_sheet(workBook, sheet, s.name || `Sheet${index + 1}`)
+        XLSX.utils.book_append_sheet(workBook, sheet, s.name || `Sheet${index + 1}`)
       })
       const wbout = XLSX.write(workBook, this._configuration.options)
       ;(<any>window).saveAs(
