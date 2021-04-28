@@ -15,6 +15,7 @@ Every change is marked with Pull Request ID.
 - Avoiding overwrite of portfolio views, columns, column configuration and insights graphs on update #440
 - Overwriting configuration page to support new configuration links on update #425
 - Fixed portfolio overview crashing when default view was selected #428
+- Fixed Excel export on portfolio overview and aggregated portfolios #469
 
 ## Changed
 
