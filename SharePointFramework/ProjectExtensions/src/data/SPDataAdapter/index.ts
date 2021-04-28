@@ -22,11 +22,14 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
     settings: ISPDataAdapterConfiguration
   ) {
     super.configure(spfxContext, settings)
-    this.project = new ProjectDataService({
-      ...this.settings,
-      entityService: this.entityService,
-      propertiesListName: strings.ProjectPropertiesListName
-    }, this.spConfiguration)
+    this.project = new ProjectDataService(
+      {
+        ...this.settings,
+        entityService: this.entityService,
+        propertiesListName: strings.ProjectPropertiesListName
+      },
+      this.spConfiguration
+    )
   }
 
   /**

@@ -1,5 +1,6 @@
 Install/SiteScripts/*.txt
 Install/InstallLog.txt
+release/*
 SharePointFramework/**/.vscode/launch.json
 SharePointFramework/**/package-lock.json
 SharePointFramework/**/pnpm-lock.yaml
