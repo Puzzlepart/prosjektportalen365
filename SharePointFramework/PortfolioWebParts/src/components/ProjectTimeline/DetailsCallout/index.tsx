@@ -39,7 +39,7 @@ export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
         <b>{strings.MilestoneDateLabel}:</b> <span>{formatDate(item.data.end_time.toString())}</span>
       </p>
       <p hidden={item.data.type === strings.MilestoneLabel}>
-        <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.data.start_time.toString())}</span>
+        <b>{strings.StartDateLabel}:</b> <span>{formatDate(item.data.start_time.toString())}</span>
       </p>
       <p hidden={item.data.type === strings.MilestoneLabel}>
         <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.data.end_time.toString())}</span>
