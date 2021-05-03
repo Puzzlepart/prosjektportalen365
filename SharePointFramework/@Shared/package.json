@@ -34,6 +34,7 @@
     "sp-hubsite-service": "0.7.1",
     "spfx-jsom": "0.6.6",
     "underscore": "^1.9.1",
+    "xlsx": "^0.16.9",
     "xmldom": "^0.1.27"
   },
   "devDependencies": {
