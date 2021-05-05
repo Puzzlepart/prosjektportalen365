@@ -812,7 +812,7 @@
     <value>Status</value>
   </data>
   <data name="SiteFields_GtChecklistStatus_Description" xml:space="preserve">
-    <value>Hva er statusen for sjekkpunktet? (Anbefalt status = "Åpen". Dette påvirker om man blir etterspurt sjekkpunktet ifm faseendring)</value>
+    <value>Hva er statusen for sjekkpunktet? (Anbefalt status = 'Åpen'. Dette påvirker om man blir etterspurt sjekkpunktet ifm faseendring)</value>
   </data>
   <data name="SiteFields_GtComment_DisplayName" xml:space="preserve">
     <value>Kommentar</value>
@@ -980,7 +980,7 @@
     <value>Måleenhet</value>
   </data>
   <data name="SiteFields_GtMeasurementUnit_Description" xml:space="preserve">
-    <value>Knytt målingen opp mot riktig måleindikator</value>
+    <value>Oppgi målenhet for måleindikatoren</value>
   </data>
   <data name="SiteFields_GtMeasurementValue_DisplayName" xml:space="preserve">
     <value>Målt verdi</value>
@@ -1004,7 +1004,7 @@
     <value>Prosess</value>
   </data>
   <data name="SiteFields_GtProcess_Description" xml:space="preserve">
-    <value>Dersom endringen påvirker en prosess, oppgi denne her. Eks "Onboarding"</value>
+    <value>Dersom endringen påvirker en prosess, oppgi denne her. Eks 'Onboarding'</value>
   </data>
   <data name="SiteFields_GtProjectInfoDescription_DisplayName" xml:space="preserve">
     <value>Beskrivelse</value>
@@ -1034,7 +1034,7 @@
     <value>Til erfaringslogg</value>
   </data>
   <data name="SiteFields_GtProjectLogExperience_Description" xml:space="preserve">
-    <value>Velg "Ja" dersom loggelementet skal synliggjøes i erfaringsloggen på porteføljenivå (gjør loggelementet synlig for alle med tilgang til prosjektporalen og prosjektet)</value>
+    <value>Velg 'Ja' dersom loggelementet skal synliggjøes i erfaringsloggen på porteføljenivå (gjør loggelementet synlig for alle med tilgang til prosjektporalen og prosjektet)</value>
   </data>
   <data name="SiteFields_GtProjectLogRecommendation_DisplayName" xml:space="preserve">
     <value>Anbefaling</value>
@@ -1136,7 +1136,7 @@
     <value>Vis i portefølje</value>
   </data>
   <data name="SiteFields_GtShowInPortfolio_Description" xml:space="preserve">
-    <value>Velg "Ja" dersom usikkerheten skal synliggjøes i den sentrale risikooversikten på porteføljenivå (gjør risikoen synlig for alle med tilgang til prosjektporalen og prosjektet)</value>
+    <value>Velg 'Ja' dersom usikkerheten skal synliggjøes i den sentrale risikooversikten på porteføljenivå (gjør risikoen synlig for alle med tilgang til prosjektporalen og prosjektet)</value>
   </data>
   <data name="SiteFields_GtStakeholderActions_DisplayName" xml:space="preserve">
     <value>Tiltak</value>
@@ -1226,7 +1226,7 @@
     <value>Hvis relevant, legg inn tilhørende sak- og arkivreferanse</value>
   </data>
   <data name="SiteFields_GtEndDate_Description" xml:space="preserve">
-    <value></value>
+    <value>Hva er (planlagt/forventet) startdato</value>
   </data>
   <data name="SiteFields_GtStatusBudgetComment_Description" xml:space="preserve">
     <value>Beskriv årsaken til eventuelle budsjettavvik og hvilke tiltak prosjektet har planlagt eller allerede implementert</value>
@@ -1274,10 +1274,10 @@
     <value>Hva er prosjektets målsetting?</value>
   </data>
   <data name="SiteFields_GtStartDate_Description" xml:space="preserve">
-    <value>Hva er (planlagt/forventet) sluttdato</value>
+    <value>Hva er (planlagt/forventet) startdato</value>
   </data>
   <data name="SiteFields_GtGainsResponsible_Description" xml:space="preserve">
-    <value>Er den rollen som har det overordnede ansvaret for at prosjektets gevinster blir realisert. Den gevinstansvarlige skal normalt være en leder plassert i den delen av en linjeorganisasjon som skal realisere gevinstene.</value>
+    <value>Hvem er gevinstansvarlig for prosjektet?</value>
   </data>
   <data name="SiteFields_GtGainsOwner_Description" xml:space="preserve">
     <value>Dersom gevinstene skal realiseres i ulike deler av organisasjonen (eller i flere virksomheter) anbefales det å oppnevne en gevinsteier i de ulike delene av linjeorganisasjonen (eller virksomhetene) som eier ulike deler av de planlagte gevinstene. Gevinsteiere har da et distribuert ansvar for sin del av gevinstene, og har en viktig rolle som den gevinstansvarliges forlengede arm og lokale støttespiller.</value>

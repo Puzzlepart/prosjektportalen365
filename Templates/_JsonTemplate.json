@@ -77,19 +77,13 @@
                     "ID": "6bd17911-c48a-4900-be61-54ae26207d78",
                     "Name": "GtShowInPortfolio"
                 }
-            ],
-            "Fields": [
-                "<Field ID=\"{fa564e0f-0c70-4ab9-b863-0177e6ddd247}\" Type=\"Text\" Name=\"Title\" StaticName=\"Title\" DisplayName=\"Tittel\" Description=\"Oppgi et navn/tittel på usikkerheten som registreres\" />"
             ]
         },
         {
             "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE89702",
             "Name": "{{ContentTypes_Possibility_Name}}",
             "Description": "",
-            "Group": "{{ContentTypes_Group}}",
-            "Fields": [
-                "<Field ID=\"{fa564e0f-0c70-4ab9-b863-0177e6ddd247}\" Type=\"Text\" Name=\"Title\" StaticName=\"Title\" DisplayName=\"Tittel\" Description=\"Oppgi et navn/tittel på usikkerheten som registreres\" />"
-            ]
+            "Group": "{{ContentTypes_Group}}"
         },
         {
             "ID": "0x010072C95831F8434782AB2FF6BE3E596F46",
@@ -696,7 +690,7 @@
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field ID=\"{fa564e0f-0c70-4ab9-b863-0177e6ddd247}\" Type=\"Text\" Name=\"Title\" StaticName=\"Title\" DisplayName=\"Tittel\" Description=\"Oppgi et navn/tittel på sjekkpunktet som registreres\" />"
+                "<Field ID=\"{249527a3-c7f9-4ea5-9c33-f942c06c9215}\" Type=\"Choice\" Name=\"GtChecklistStatus\" StaticName=\"GtChecklistStatus\" DisplayName=\"Status\" Description=\"Hva er statusen for sjekkpunktet? (Anbefalt status = 'Åpen'. Dette påvirker om man blir etterspurt sjekkpunktet ifm faseendring)\" />"
             ],
             "Views": [
                 {
@@ -755,9 +749,6 @@
             "AdditionalSettings": {
                 "EnableVersioning": true
             },
-            "Fields": [
-                "<Field ID=\"{fa564e0f-0c70-4ab9-b863-0177e6ddd247}\" Type=\"Text\" Name=\"Title\" StaticName=\"Title\" DisplayName=\"Tittel\" Description=\"Kort navn på interessent\" />"
-            ],
             "Views": [
                 {
                     "Title": "{{View_AllItems_DisplayName}}",
@@ -794,7 +785,6 @@
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field ID=\"{fa564e0f-0c70-4ab9-b863-0177e6ddd247}\" Type=\"Text\" Name=\"Title\" StaticName=\"Title\" DisplayName=\"Tittel\" Description=\"Oppgi navnet/tittelen på loggelementet\" />",
                 "<Field Type=\"LookupMulti\" DisplayName=\"Målgruppe\" List=\"{listid:Interessentregister}\" ShowField=\"Title\" ID=\"{d685f33f-51b5-4e9f-a314-4b3d9467a7e4}\" Description=\"Hvem er målgruppen (interessent) for kommunikasjonsaktiviteten?\" StaticName=\"GtCommunicationTarget\" Name=\"GtCommunicationTarget\" Mult=\"TRUE\" />"
             ],
             "Views": [
@@ -829,7 +819,6 @@
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field ID=\"{fa564e0f-0c70-4ab9-b863-0177e6ddd247}\" Type=\"Text\" Name=\"Title\" StaticName=\"Title\" DisplayName=\"Tittel\" Description=\"Oppgi navnet/tittelen på loggelementet\" />",
                 "<Field Type=\"Lookup\" DisplayName=\"Påvirker leveranse\" List=\"{listid:Prosjektleveranser}\" ShowField=\"Title\" ID=\"{022cc93f-13df-4420-bd47-55e4fdae5d18}\" Description=\"Hvis relevant, oppgi hvilken leveranse loggelementet påvirker\" StaticName=\"GtProjectLogProductLookup\" Name=\"GtProjectLogProductLookup\" />"
             ],
             "Views": [
@@ -867,7 +856,6 @@
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field ID=\"{fa564e0f-0c70-4ab9-b863-0177e6ddd247}\" Type=\"Text\" Name=\"Title\" StaticName=\"Title\" DisplayName=\"Tittel\" Description=\"Oppgi tittel/navn på prosjektleveransen\" />",
                 "<Field Type=\"LookupMulti\" DisplayName=\"Interessent(er)\" List=\"{listid:Interessentregister}\" ShowField=\"Title\" ID=\"{6d90e0b6-73e6-48fb-aa1e-b897b214f934}\" Description=\"Oppgi hvilken interessent(er) leveransen påvirker\" Name=\"GtDeliveryStakeholders\" StaticName=\"GtDeliveryStakeholders\" Name=\"GtDeliveryStakeholders\" Mult=\"TRUE\" />"
             ],
             "Views": [
@@ -1243,7 +1231,6 @@
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field ID=\"{fa564e0f-0c70-4ab9-b863-0177e6ddd247}\" Type=\"Text\" Name=\"Title\" StaticName=\"Title\" DisplayName=\"Tittel\" Description=\"Oppgi tittel/navn på måleindikator\" />",
                 "<Field Type=\"Lookup\" DisplayName=\"Gevinst\" List=\"{listid:Gevinstanalyse og gevinstrealiseringsplan}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
                 "<Field Type=\"Lookup\" DisplayName=\"Gevinst:ID\" List=\"{listid:Gevinstanalyse og gevinstrealiseringsplan}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
             ],
@@ -1288,8 +1275,7 @@
                 }
             ],
             "Fields": [
-                "<Field ID=\"{fa564e0f-0c70-4ab9-b863-0177e6ddd247}\" Type=\"Text\" Name=\"Title\" StaticName=\"Title\" DisplayName=\"Tittel\" Description=\"Kort navn for denne målingen\" />",
-                "<Field Type=\"Lookup\" DisplayName=\"Måleindikator\" List=\"{listid:Måleindikatorer}\" ShowField=\"Title\" ID=\"{92ae8541-f35e-4c05-8518-b9abce2d0860}\"  StaticName=\"GtMeasureIndicatorLookup\" Name=\"GtMeasureIndicatorLookup\" />",
+                "<Field Type=\"Lookup\" DisplayName=\"Måleindikator\" List=\"{listid:Måleindikatorer}\" ShowField=\"Title\" ID=\"{92ae8541-f35e-4c05-8518-b9abce2d0860}\" Description=\"Knytt målingen opp mot riktig måleindikator\" StaticName=\"GtMeasureIndicatorLookup\" Name=\"GtMeasureIndicatorLookup\" />",
                 "<Field Type=\"Lookup\" DisplayName=\"Måleindikator:ID\" List=\"{listid:Måleindikatorer}\" ShowField=\"ID\" FieldRef=\"92ae8541-f35e-4c05-8518-b9abce2d0860\" ReadOnly=\"TRUE\" ID=\"{571f95d9-4c0b-4b4d-8a0b-9a1771811f07}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtMeasureIndicatorLookup_ID\" Name=\"GtMeasureIndicatorLookup_ID\" />",
                 "<Field Type=\"Lookup\" DisplayName=\"Måleindikator:Ønsket verdi\" List=\"{listid:Måleindikatorer}\" ShowField=\"GtDesiredValue\" FieldRef=\"92ae8541-f35e-4c05-8518-b9abce2d0860\" ReadOnly=\"TRUE\" ID=\"{8fe2e615-999b-48dc-8889-151ed84a757a}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtMeasureIndicatorLookup_GtDesiredValue\" Name=\"GtMeasureIndicatorLookup_GtDesiredValue\" />"
             ],
