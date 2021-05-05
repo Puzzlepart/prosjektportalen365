@@ -96,7 +96,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<
                 }),
                 PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_EXCELEXPORT_BUTTON, {
                   label: strings.ShowExcelExportButtonLabel,
-                  disabled: !this.properties.showCommandBar
+                  disabled: true
                 }),
                 PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_VIEWSELECTOR, {
                   label: strings.ShowViewSelectorLabel,
