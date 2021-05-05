@@ -1034,7 +1034,7 @@
     <value>Til erfaringslogg</value>
   </data>
   <data name="SiteFields_GtProjectLogExperience_Description" xml:space="preserve">
-    <value>Velg 'Ja' dersom loggelementet skal synliggjøes i erfaringsloggen på porteføljenivå (gjør loggelementet synlig for alle med tilgang til prosjektporalen og prosjektet)</value>
+    <value>Velg 'Ja' dersom loggelementet skal synliggjøes i erfaringsloggen på porteføljenivå (gjør loggelementet synlig for alle med tilgang til prosjektportalen og prosjektet)</value>
   </data>
   <data name="SiteFields_GtProjectLogRecommendation_DisplayName" xml:space="preserve">
     <value>Anbefaling</value>
@@ -1226,7 +1226,7 @@
     <value>Hvis relevant, legg inn tilhørende sak- og arkivreferanse</value>
   </data>
   <data name="SiteFields_GtEndDate_Description" xml:space="preserve">
-    <value>Hva er (planlagt/forventet) startdato</value>
+    <value>Hva er (planlagt/forventet) sluttdato</value>
   </data>
   <data name="SiteFields_GtStatusBudgetComment_Description" xml:space="preserve">
     <value>Beskriv årsaken til eventuelle budsjettavvik og hvilke tiltak prosjektet har planlagt eller allerede implementert</value>

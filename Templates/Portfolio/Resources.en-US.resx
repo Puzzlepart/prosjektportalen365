@@ -992,7 +992,7 @@
     <value>Til erfaringslogg</value>
   </data>
   <data name="SiteFields_GtProjectLogExperience_Description" xml:space="preserve">
-    <value>Velg 'Ja' dersom loggelementet skal synliggjøes i erfaringsloggen på porteføljenivå (gjør loggelementet synlig for alle med tilgang til prosjektporalen og prosjektet)</value>
+    <value>Velg 'Ja' dersom loggelementet skal synliggjøes i erfaringsloggen på porteføljenivå (gjør loggelementet synlig for alle med tilgang til prosjektportalen og prosjektet)</value>
   </data>
   <data name="SiteFields_GtProjectLogRecommendation_DisplayName" xml:space="preserve">
     <value>Anbefaling</value>
