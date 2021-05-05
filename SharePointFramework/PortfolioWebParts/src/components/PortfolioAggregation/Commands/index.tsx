@@ -15,7 +15,7 @@ export const Commands = () => {
     farItems: []
   }
 
-  if (props.showExcelExportButton) {
+  if (props.showExcelExportButton == undefined) {
     cmd.items.push({
       key: 'ExcelExport',
       name: strings.ExcelExportButtonLabel,
