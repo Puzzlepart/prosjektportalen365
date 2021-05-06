@@ -37,7 +37,6 @@
                 <CHOICE>Milepæl</CHOICE>
             </CHOICES>
         </Field>
-        <Field Type="Choice" DisplayName="Type" Description="" Format="Dropdown" FillInChoice="FALSE" ID="{ecd50b9b-c143-4592-9595-9d2bee110abb}" StaticName="TimelineType" Name="TimelineType"/>
         <Field Decimals="0" Description="Hva er totalbudsjettet?" DisplayName="Budsjett for fasen (dersom aktuelt)" ID="{28be4cc9-bc5e-4a55-a557-f652b564ca75}" LCID="1044" Min="0" Name="GtBudgetTotal" StaticName="GtBudgetTotal" Type="Currency" />
     </pnp:Fields>
 </pnp:ListInstance>
