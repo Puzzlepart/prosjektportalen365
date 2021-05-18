@@ -12,7 +12,7 @@ Every change is marked with Pull Request ID.
 - Added 'Description' to document templates #379
 - Supporting pre-defined template setting #461
 - Added "Last Report Date" to Portfolio status overview #393
-- Added report created date next to Project Status title
+- Added report created date next to Project Status title #456
 
 ## Fixed
 
@@ -20,6 +20,7 @@ Every change is marked with Pull Request ID.
 - Overwriting configuration page to support new configuration links on update #425
 - Fixed portfolio overview crashing when default view was selected #428
 - Fixed inconsistent version history settings of lists #465
+- Fixed Excel export issues at portfolio level #480
 
 ## Changed
 
@@ -27,7 +28,6 @@ Every change is marked with Pull Request ID.
 - Improved project properties sync and fetching  #444 #449
 - Overviews using PortfolioAggregation (Benefit overview, Experience log, Delivery overview, Risk overview) now initially sort on project and grouping now automatically sorts group from A-Z by project. Also removes groups when sorting to avoid the issue found in #459
 - Updated description for most of the SiteFields throughout 'Prosjektportalen' #467
-- Deactivated Export to Excel button on portfolio overview as well as aggregated portfolio pages (Gevinstoversikt, Erfaringslogg, Leveranseoversikt, Risikooversikt) #475
 
 ## 1.2.6 - 03.03.2021
 
