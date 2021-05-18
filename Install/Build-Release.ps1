@@ -38,11 +38,11 @@ if ($CI.IsPresent) {
 }
 
 Write-Host "[INFO] Creating release folder $RELEASE_PATH...  " -NoNewline
-mkdir $RELEASE_PATH >$null 2>&1
-$RELEASE_PATH_TEMPLATES     = (mkdir "$RELEASE_PATH/Templates").FullName
-$RELEASE_PATH_SITESCRIPTS   = (mkdir "$RELEASE_PATH/SiteScripts").FullName
-$RELEASE_PATH_SCRIPTS       = (mkdir "$RELEASE_PATH/Scripts").FullName
-$RELEASE_PATH_APPS          = (mkdir "$RELEASE_PATH/Apps").FullName
+$RELEASE_PATH  = (New-Item -Path "$RELEASE_PATH" -ItemType Directory -Force).FullName
+$RELEASE_PATH_TEMPLATES     = (New-Item -Path "$RELEASE_PATH/Templates" -ItemType Directory -Force).FullName
+$RELEASE_PATH_SITESCRIPTS   = (New-Item -Path "$RELEASE_PATH/SiteScripts" -ItemType Directory -Force).FullName
+$RELEASE_PATH_SCRIPTS       = (New-Item -Path "$RELEASE_PATH/Scripts" -ItemType Directory -Force).FullName
+$RELEASE_PATH_APPS          = (New-Item -Path "$RELEASE_PATH/Apps" -ItemType Directory -Force).FullName
 Write-Host "DONE" -ForegroundColor Green
 
 #region Copying source files
@@ -57,7 +57,9 @@ Write-Host "[INFO] Copying SharePointPnPPowerShellOnline bundle...  " -NoNewline
 Copy-Item -Path $PNP_BUNDLE_PATH -Filter * -Destination $RELEASE_PATH -Force -Recurse
 Write-Host "DONE" -ForegroundColor Green
 
-(Get-Content "$RELEASE_PATH/Install.ps1") -Replace 'VERSION_PLACEHOLDER', $PACKAGE_FILE.version | Set-Content "$RELEASE_PATH/Install.ps1"
+Write-Host "[INFO] Replacing VERSION_PLACEHOLDER...  " -NoNewline
+(Get-Content "$RELEASE_PATH/Install.ps1") -Replace 'VERSION_PLACEHOLDER', "$($PACKAGE_FILE.version).$($GIT_HASH)" | Set-Content "$RELEASE_PATH/Install.ps1"
+Write-Host "DONE" -ForegroundColor Green
 #endregion
 
 #region Clean node_modules for all SharePoint Framework solutions
