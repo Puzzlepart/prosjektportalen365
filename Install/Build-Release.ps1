@@ -38,11 +38,11 @@ if ($CI.IsPresent) {
 }
 
 Write-Host "[INFO] Creating release folder $RELEASE_PATH...  " -NoNewline
-mkdir $RELEASE_PATH >$null 2>&1
-$RELEASE_PATH_TEMPLATES     = (mkdir "$RELEASE_PATH/Templates").FullName
-$RELEASE_PATH_SITESCRIPTS   = (mkdir "$RELEASE_PATH/SiteScripts").FullName
-$RELEASE_PATH_SCRIPTS       = (mkdir "$RELEASE_PATH/Scripts").FullName
-$RELEASE_PATH_APPS          = (mkdir "$RELEASE_PATH/Apps").FullName
+$RELEASE_PATH  = (New-Item -Path "$RELEASE_PATH" -ItemType Directory -Force).FullName
+$RELEASE_PATH_TEMPLATES     = (New-Item -Path "$RELEASE_PATH/Templates" -ItemType Directory -Force).FullName
+$RELEASE_PATH_SITESCRIPTS   = (New-Item -Path "$RELEASE_PATH/SiteScripts" -ItemType Directory -Force).FullName
+$RELEASE_PATH_SCRIPTS       = (New-Item -Path "$RELEASE_PATH/Scripts" -ItemType Directory -Force).FullName
+$RELEASE_PATH_APPS          = (New-Item -Path "$RELEASE_PATH/Apps" -ItemType Directory -Force).FullName
 Write-Host "DONE" -ForegroundColor Green
 
 #region Copying source files
