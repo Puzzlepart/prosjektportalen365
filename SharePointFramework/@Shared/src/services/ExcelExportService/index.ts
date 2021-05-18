@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
-import * as $script from 'scriptjs'
 import * as XLSX from 'xlsx'
+import * as FileSaver from 'file-saver'
 import { getObjectValue } from '../../helpers/getObjectValue'
 import { stringToArrayBuffer } from '../../util'
 import { ExcelExportServiceDefaultConfiguration } from './ExcelExportServiceDefaultConfiguration'
@@ -10,30 +10,9 @@ import { IExcelExportServiceConfiguration } from './IExcelExportServiceConfigura
 
 export default new (class ExcelExportService {
   private _configuration: IExcelExportServiceConfiguration
-  private _deps: string[]
 
   public configure(configuration: IExcelExportServiceConfiguration) {
     this._configuration = { ...ExcelExportServiceDefaultConfiguration, ...configuration }
-    this._deps = [
-      `FileSaver.js/${this._configuration.fileSaverVersion}/FileSaver.min.js`
-    ]
-    $script.path('https://cdnjs.cloudflare.com/ajax/libs/')
-  }
-
-  /**
-   * Load dependencies in _deps
-   *
-   * @param {string[]} deps Deps
-   */
-
-
-  protected loadDeps(): Promise<void> {
-    return new Promise<void>((resolve) => {
-      $script(this._deps, 'deps')
-      $script.ready('deps', () => {
-        resolve()
-      })
-    })
   }
 
   /**
@@ -42,9 +21,8 @@ export default new (class ExcelExportService {
    * @param {any[]} items Items
    * @param {IColumn[]} columns Columns
    */
-  public async export(items: any[], columns: IColumn[]) {
+  public export(items: any[], columns: IColumn[]) {
     try {
-      await this.loadDeps()
       const sheets = []
       const _columns = columns.filter((column) => column.name)
       sheets.push({
@@ -62,7 +40,7 @@ export default new (class ExcelExportService {
         XLSX.utils.book_append_sheet(workBook, sheet, s.name || `Sheet${index + 1}`)
       })
       const wbout = XLSX.write(workBook, this._configuration.options)
-      ;(<any>window).saveAs(
+      FileSaver.saveAs(
         new Blob([stringToArrayBuffer(wbout)], { type: 'application/octet-stream' }),
         format('{0}-{1}.xlsx', this._configuration.name, new Date().toISOString())
       )

@@ -38,7 +38,6 @@ export default class BenefitsOverviewWebPart extends BasePortfolioWebPart<IBenef
                 }),
                 PropertyPaneToggle('showExcelExportButton', {
                   label: strings.ShowExcelExportButtonLabel,
-                  disabled: true,
                 })
               ]
             }
