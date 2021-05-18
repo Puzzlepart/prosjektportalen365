@@ -57,7 +57,9 @@ Write-Host "[INFO] Copying SharePointPnPPowerShellOnline bundle...  " -NoNewline
 Copy-Item -Path $PNP_BUNDLE_PATH -Filter * -Destination $RELEASE_PATH -Force -Recurse
 Write-Host "DONE" -ForegroundColor Green
 
-(Get-Content "$RELEASE_PATH/Install.ps1") -Replace 'VERSION_PLACEHOLDER', $PACKAGE_FILE.version | Set-Content "$RELEASE_PATH/Install.ps1"
+Write-Host "[INFO] Replacing VERSION_PLACEHOLDER...  " -NoNewline
+(Get-Content "$RELEASE_PATH/Install.ps1") -Replace 'VERSION_PLACEHOLDER', "$($PACKAGE_FILE.version).$($GIT_HASH)" | Set-Content "$RELEASE_PATH/Install.ps1"
+Write-Host "DONE" -ForegroundColor Green
 #endregion
 
 #region Clean node_modules for all SharePoint Framework solutions
