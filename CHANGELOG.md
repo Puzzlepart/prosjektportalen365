@@ -28,6 +28,7 @@ Every change is marked with Pull Request ID.
 - Improved project properties sync and fetching  #444 #449
 - Overviews using PortfolioAggregation (Benefit overview, Experience log, Delivery overview, Risk overview) now initially sort on project and grouping now automatically sorts group from A-Z by project. Also removes groups when sorting to avoid the issue found in #459
 - Updated description for most of the SiteFields throughout 'Prosjektportalen' #467
+- Deactivated Export to Excel button on portfolio overview as well as aggregated portfolio pages (Gevinstoversikt, Erfaringslogg, Leveranseoversikt, Risikooversikt) #475
 
 ## 1.2.6 - 03.03.2021
 
