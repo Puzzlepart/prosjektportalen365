@@ -1,6 +1,6 @@
 {
   "name": "pp365-projectextensions",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "engines": {
     "node": ">=0.10.0"
   },
@@ -42,7 +42,7 @@
     "@uifabric/utilities": "6.45.1",
     "msgraph-helper": "0.8.3",
     "office-ui-fabric-react": "6.214.0",
-    "pp365-shared": "1.2.11",
+    "pp365-shared": "latest",
     "react": "16.8.5",
     "react-dom": "16.8.5",
     "react-markdown": "4.2.2",
