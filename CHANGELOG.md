@@ -12,7 +12,7 @@ Every change is marked with Pull Request ID.
 - Added 'Description' to document templates #379
 - Supporting pre-defined template setting #461
 - Added "Last Report Date" to Portfolio status overview #393
-- Added report created date next to Project Status title
+- Added report created date next to Project Status title #456
 
 ## Fixed
 
@@ -20,6 +20,7 @@ Every change is marked with Pull Request ID.
 - Overwriting configuration page to support new configuration links on update #425
 - Fixed portfolio overview crashing when default view was selected #428
 - Fixed inconsistent version history settings of lists #465
+- Fixed Excel export issues at portfolio level #480
 
 ## Changed
 
