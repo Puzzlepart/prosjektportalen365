@@ -47,7 +47,7 @@ export class PortfolioOverviewCommands extends Component<
           styles: { root: { color: 'green !important' } }
         },
         buttonStyles: { root: { border: 'none' } },
-        data: { isVisible: false },
+        data: { isVisible: this.props.showExcelExportButton },
         disabled: this.state.isExporting,
         onClick: this._exportToExcel.bind(this)
       } as IContextualMenuItem

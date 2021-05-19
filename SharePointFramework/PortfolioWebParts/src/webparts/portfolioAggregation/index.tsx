@@ -68,7 +68,7 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
                 }),
                 PropertyPaneToggle('showExcelExportButton', {
                   label: strings.ShowExcelExportButtonLabel,
-                  disabled: true
+                  disabled: !this.properties.showCommandBar
                 })
               ]
             },
