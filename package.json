@@ -1,6 +1,6 @@
 {
   "name": "pp365",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "description": "Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.",
   "scripts": {
     "commit": "sexy-commits",
