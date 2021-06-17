@@ -690,7 +690,7 @@
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field ID=\"{249527a3-c7f9-4ea5-9c33-f942c06c9215}\" Type=\"Choice\" Name=\"GtChecklistStatus\" StaticName=\"GtChecklistStatus\" DisplayName=\"Status\" Description=\"Hva er statusen for sjekkpunktet? (Anbefalt status = 'Åpen'. Dette påvirker om man blir etterspurt sjekkpunktet ifm faseendring)\" />"
+                "<Field ID=\"{fa564e0f-0c70-4ab9-b863-0177e6ddd247}\" Type=\"Text\" Name=\"Title\" StaticName=\"Title\" DisplayName=\"Tittel\" Description=\"Oppgi et navn/tittel på sjekkpunktet som registreres\" />"
             ],
             "Views": [
                 {
