@@ -3,7 +3,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with Pull Request ID.
 
-## 1.2.7 - N/A
+## 1.2.8 - 17.06.2021
+
+## Fixed
+- Fixed issue with checklist status field missing options #485
+
+## 1.2.7 - 20.05.2021
 
 ## Added
 
