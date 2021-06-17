@@ -689,9 +689,6 @@
             "AdditionalSettings": {
                 "EnableVersioning": true
             },
-            "Fields": [
-                "<Field ID=\"{fa564e0f-0c70-4ab9-b863-0177e6ddd247}\" Type=\"Text\" Name=\"Title\" StaticName=\"Title\" DisplayName=\"Tittel\" Description=\"Oppgi et navn/tittel på sjekkpunktet som registreres\" />"
-            ],
             "Views": [
                 {
                     "Title": "{{View_AllItems_DisplayName}}",
