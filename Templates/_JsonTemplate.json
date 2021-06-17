@@ -689,9 +689,6 @@
             "AdditionalSettings": {
                 "EnableVersioning": true
             },
-            "Fields": [
-                "<Field ID=\"{249527a3-c7f9-4ea5-9c33-f942c06c9215}\" Type=\"Choice\" Name=\"GtChecklistStatus\" StaticName=\"GtChecklistStatus\" DisplayName=\"Status\" Description=\"Hva er statusen for sjekkpunktet? (Anbefalt status = 'Åpen'. Dette påvirker om man blir etterspurt sjekkpunktet ifm faseendring)\" />"
-            ],
             "Views": [
                 {
                     "Title": "{{View_AllItems_DisplayName}}",
