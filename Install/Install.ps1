@@ -230,6 +230,9 @@ if (-not $SkipSiteDesign.IsPresent) {
             Write-Host "[INFO] Granting group $SiteDesignSecurityGroupId View access to site design [$SiteDesignName]"
             Grant-PnPSiteDesignRights -Identity $SiteDesign.Id.Guid -Principals @("c:0t.c|tenant|$SiteDesignSecurityGroupId")
         }
+        Write-Host "[INFO] Setting default site design for hub [$Url] to [$SiteDesignName]"
+        Set-PnPHubSite -Identity $Url -SiteDesignId $SiteDesign.Id.Guid
+
         Disconnect-PnPOnline
         Write-Host "[SUCCESS] Successfully created/updated site design [$SiteDesignName]" -ForegroundColor Green
     }
