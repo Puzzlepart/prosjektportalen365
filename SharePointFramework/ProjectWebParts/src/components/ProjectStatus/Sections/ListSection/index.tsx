@@ -106,7 +106,8 @@ export class ListSection extends BaseSection<
                 Choice: 150,
                 Number: 100
               }[field.TypeAsString] || 150,
-            isResizable: true
+            isResizable: true,
+            isMultiline: true
           } as IColumn
         })
       return { items: itemValues, columns }

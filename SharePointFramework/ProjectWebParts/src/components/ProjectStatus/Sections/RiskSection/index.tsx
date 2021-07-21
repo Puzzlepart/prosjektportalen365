@@ -101,7 +101,8 @@ export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionStat
             name: field.Title,
             minWidth: 100,
             maxWidth: { Text: 250, Note: 250, Choice: 150, Number: 100 }[field.TypeAsString] || 150,
-            isResizable: true
+            isResizable: true,
+            isMultiline: true
           } as IColumn
         })
       return { items: itemValues, columns, riskElements }
