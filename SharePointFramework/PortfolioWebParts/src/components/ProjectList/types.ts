@@ -52,6 +52,11 @@ export interface IProjectListProps extends IBaseComponentProps {
    * Columns
    */
   columns?: IColumn[]
+
+  /**
+   * Display all projects
+   */
+  showAllProjects?: boolean
 }
 
 export interface IProjectListState {
@@ -89,4 +94,9 @@ export interface IProjectListState {
    * List view properties
    */
   listView?: { projects: ProjectListModel[]; columns: IColumn[] }
+
+  /**
+   * Show all projects
+   */
+  showAllProjects?: boolean
 }

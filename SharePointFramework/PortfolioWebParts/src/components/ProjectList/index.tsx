@@ -34,12 +34,20 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
    */
   constructor(props: IProjectListProps) {
     super(props)
-    this.state = { loading: true, searchTerm: '', showAsTiles: props.showAsTiles }
+    this.state = {
+      loading: true,
+      searchTerm: '',
+      showAsTiles: props.showAsTiles,
+      showAllProjects: props.showAllProjects
+    }
   }
 
   public async componentDidMount() {
     try {
       let projects = await this.props.dataAdapter.fetchEncrichedProjects()
+      if (!this.state.showAllProjects)
+        projects = projects.filter((project) => project.readOnly == false)
+
       projects = projects.sort((a, b) => sortAlphabetically(a, b, true, this.props.sortBy))
       const columns = this.props.columns.map((col) => {
         if (col.fieldName === this.props.sortBy) {

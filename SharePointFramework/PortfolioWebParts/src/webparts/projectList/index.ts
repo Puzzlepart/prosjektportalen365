@@ -53,6 +53,9 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                 }),
                 PropertyPaneToggle('showProjectManager', {
                   label: strings.ShowProjectManagerFieldLabel
+                }),
+                PropertyPaneToggle('showAllProjects', {
+                  label: strings.DisplayAllProjects
                 })
               ]
             }

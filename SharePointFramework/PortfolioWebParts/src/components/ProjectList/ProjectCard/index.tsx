@@ -8,7 +8,9 @@ import { IProjectCardProps } from './types'
 
 export const ProjectCard: FunctionComponent<IProjectCardProps> = (props: IProjectCardProps) => {
   return (
-    <DocumentCard className={styles.projectCard} onClickHref={props.project.url}>
+    <DocumentCard
+      className={styles.projectCard}
+      onClickHref={props.project.readOnly ? '#' : props.project.url}>
       <ProjectCardHeader {...props} />
       <ProjectCardContent {...props} />
       <ProjectCardFooter {...props} />

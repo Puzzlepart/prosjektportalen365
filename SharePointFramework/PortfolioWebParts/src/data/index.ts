@@ -278,9 +278,7 @@ export class DataAdapter {
    * @param {string} [budgetTotalProperty='GtBudgetTotalOWSCURR']
    */
 
-  public async _fetchDataForTimelineProject(
-    siteId: string
-  ) {
+  public async _fetchDataForTimelineProject(siteId: string) {
     const siteIdProperty: string = 'GtSiteIdOWSTEXT'
     const costsTotalProperty: string = 'GtCostsTotalOWSCURR'
     const budgetTotalProperty: string = 'GtBudgetTotalOWSCURR'
@@ -317,12 +315,14 @@ export class DataAdapter {
           'GtBudgetTotal',
           'GtCostsTotal',
           'SiteIdLookup/Title',
-          'SiteIdLookup/GtSiteId',
-      ).expand('SiteIdLookup')
-      .get()
+          'SiteIdLookup/GtSiteId'
+        )
+        .expand('SiteIdLookup')
+        .get()
     ])
 
-    timelineItems = timelineItems.map((item) => {
+    timelineItems = timelineItems
+      .map((item) => {
         const model = new TimelineContentListModel(
           item.SiteIdLookup && item.SiteIdLookup[0].GtSiteId,
           item.SiteIdLookup && item.SiteIdLookup[0].Title,
@@ -331,7 +331,7 @@ export class DataAdapter {
           item.GtStartDate,
           item.GtEndDate,
           item.GtBudgetTotal,
-          item.GtCostsTotal,
+          item.GtCostsTotal
         )
         return model
       })
@@ -396,9 +396,23 @@ export class DataAdapter {
     const projects = items
       .map((item) => {
         const [group] = groups.filter((grp) => grp.id === item.GtGroupId)
-        if (!group) return null
         const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
         const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
+
+        if (!group) {
+          return new ProjectListModel(
+            item.GtSiteId,
+            item.GtGroupId,
+            item.Title,
+            item.GtSiteUrl,
+            item.GtProjectPhaseText,
+            item.GtStartDate,
+            item.GtEndDate,
+            manager,
+            owner,
+            true
+          )
+        }
         const model = new ProjectListModel(
           item.GtSiteId,
           group.id,
@@ -408,7 +422,8 @@ export class DataAdapter {
           item.GtStartDate,
           item.GtEndDate,
           manager,
-          owner
+          owner,
+          false
         )
         return model
       })
@@ -418,7 +433,6 @@ export class DataAdapter {
 
   /**
    * Fetch enriched projects
-   * 
    * * Fetching project list items
    * * Graph groups
    * * Site users
@@ -437,7 +451,8 @@ export class DataAdapter {
           'GtProjectManagerId',
           'GtProjectPhaseText',
           'GtStartDate',
-          'GtEndDate'
+          'GtEndDate',
+          'Title'
         )
         // eslint-disable-next-line quotes
         .filter("GtProjectLifecycleStatus ne 'Avsluttet'")
