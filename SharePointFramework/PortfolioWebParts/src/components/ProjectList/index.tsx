@@ -137,11 +137,6 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
    * @param {ProjectListModel[]} projects Projects
    */
   private _renderProjects(projects: ProjectListModel[]) {
-    if (this.state.showAllProjects && this.state.onlyAccessProjects) {
-      projects = projects.filter((project) => !project.readOnly)
-    }
-    console.log(projects)
-
     if (this.state.showAsTiles) {
       return projects.map((project, idx) => (
         <ProjectCard
@@ -274,6 +269,11 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
    * @param {ProjectListModel[]} projects Projects
    */
   private _filterProjets(projects: ProjectListModel[]) {
+    if (this.state.showAllProjects && this.state.onlyAccessProjects) {
+      projects = projects.filter((project) => !project.readOnly)
+    }
+    console.log(projects)
+
     return projects.filter((p) => {
       const matches = Object.keys(p).filter((key) => {
         const value = p[key]
