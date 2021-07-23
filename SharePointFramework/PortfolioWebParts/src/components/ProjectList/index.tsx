@@ -38,7 +38,8 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
       loading: true,
       searchTerm: '',
       showAsTiles: props.showAsTiles,
-      showAllProjects: props.showAllProjects
+      showAllProjects: props.showAllProjects,
+      onlyAccessProjects: true
     }
   }
 
@@ -46,7 +47,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
     try {
       let projects = await this.props.dataAdapter.fetchEncrichedProjects()
       if (!this.state.showAllProjects)
-        projects = projects.filter((project) => project.readOnly == false)
+        projects = projects.filter((project) => project.readOnly === false)
 
       projects = projects.sort((a, b) => sortAlphabetically(a, b, true, this.props.sortBy))
       const columns = this.props.columns.map((col) => {
@@ -107,6 +108,16 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
               inlineLabel={true}
               onChanged={(showAsTiles) => this.setState({ showAsTiles })}
             />
+            {this.state.showAllProjects && (
+              <Toggle
+                onText='Alle prosjekter'
+                offText='Mine prosjekter'
+                defaultChecked={false}
+                onChange={() =>
+                  this.setState({ onlyAccessProjects: !this.state.onlyAccessProjects })
+                }
+              />
+            )}
           </div>
           <div className={styles.emptyMessage} hidden={projects.length > 0}>
             <MessageBar>{strings.NoSearchResults}</MessageBar>
@@ -126,6 +137,11 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
    * @param {ProjectListModel[]} projects Projects
    */
   private _renderProjects(projects: ProjectListModel[]) {
+    if (this.state.showAllProjects && this.state.onlyAccessProjects) {
+      projects = projects.filter((project) => !project.readOnly)
+    }
+    console.log(projects)
+
     if (this.state.showAsTiles) {
       return projects.map((project, idx) => (
         <ProjectCard
@@ -160,8 +176,10 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
    */
   private _onRenderItemColumn(project: ProjectListModel, _index: number, column: IColumn) {
     const colValue = getObjectValue(project, column.fieldName, null)
-    if (column.fieldName === 'title') {
+    if (column.fieldName === 'title' && !project.readOnly) {
       return <a href={project.url}>{colValue}</a>
+    } else if (column.fieldName === 'title' && project.readOnly && this.state.showAllProjects) {
+      return <>{colValue}</>
     }
     return colValue
   }

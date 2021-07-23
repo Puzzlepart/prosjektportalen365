@@ -96,7 +96,12 @@ export interface IProjectListState {
   listView?: { projects: ProjectListModel[]; columns: IColumn[] }
 
   /**
-   * Show all projects
+   * Show all projects from web part properties
    */
   showAllProjects?: boolean
+
+  /**
+   * Only display projects that the user have access to
+   */
+  onlyAccessProjects?: boolean
 }
