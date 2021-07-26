@@ -45,6 +45,10 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
   public async componentDidMount() {
     try {
       let projects = await this.props.dataAdapter.fetchEncrichedProjects()
+      const inReadOnlyGroup = await this.props.dataAdapter.isUserInGroup(
+        strings.PortfolioManagerGroupName
+      )
+
       if (!this.state.showAllProjects)
         projects = projects.filter((project) => project.readOnly === false)
 
@@ -59,7 +63,8 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
       this.setState({
         projects,
         listView: { projects, columns },
-        loading: false
+        loading: false,
+        isUserInPortfolioManagerGroup: inReadOnlyGroup
       })
       if (this.props.showProjectLogo) {
         this._getProjectLogos(20)
@@ -107,17 +112,16 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
               inlineLabel={true}
               onChanged={(showAsTiles) => this.setState({ showAsTiles })}
             />
-            {this.state.showAllProjects &&
-              this.props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName) && (
-                <Toggle
-                  onText='Alle prosjekter'
-                  offText='Mine prosjekter'
-                  defaultChecked={false}
-                  onChange={() =>
-                    this.setState({ onlyAccessProjects: !this.state.onlyAccessProjects })
-                  }
-                />
-              )}
+            {this.state.showAllProjects && this.state.isUserInPortfolioManagerGroup && (
+              <Toggle
+                onText='Alle prosjekter'
+                offText='Mine prosjekter'
+                defaultChecked={false}
+                onChange={() =>
+                  this.setState({ onlyAccessProjects: !this.state.onlyAccessProjects })
+                }
+              />
+            )}
           </div>
           <div className={styles.emptyMessage} hidden={projects.length > 0}>
             <MessageBar>{strings.NoSearchResults}</MessageBar>

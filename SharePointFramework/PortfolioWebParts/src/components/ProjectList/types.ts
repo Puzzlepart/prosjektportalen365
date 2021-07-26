@@ -104,4 +104,9 @@ export interface IProjectListState {
    * Only display projects that the user have access to
    */
   onlyAccessProjects?: boolean
+
+  /**
+   * Is the current user in the PortfolioManagerGroup?
+   */
+  isUserInPortfolioManagerGroup?: boolean
 }
