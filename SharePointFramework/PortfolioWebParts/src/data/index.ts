@@ -23,6 +23,7 @@ import HubSiteService from 'sp-hubsite-service'
 import _ from 'underscore'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
+import { SPHttpClient } from '@pnp/sp'
 
 export class DataAdapter {
   private _portalDataService: PortalDataService
@@ -130,7 +131,7 @@ export class DataAdapter {
     configuration: IPortfolioConfiguration,
     siteId: string
   ): Promise<IFetchDataForViewItemResult[]> {
-    const isCurrentUserInManagerGroup = await this._isUserInGroup(strings.PortfolioManagerGroupName)
+    const isCurrentUserInManagerGroup = await this.isUserInGroup(strings.PortfolioManagerGroupName)
     if (isCurrentUserInManagerGroup) {
       return await this.fetchDataForManagerView(view, configuration, siteId)
     } else {
@@ -388,11 +389,11 @@ export class DataAdapter {
    * @param {Object} photos Photos
    * @param {ISPUser[]} users Users
    */
-  private _mapProjects(
+  private async _mapProjects(
     items: ISPProjectItem[],
     groups: IGraphGroup[],
     users: ISPUser[]
-  ): ProjectListModel[] {
+  ): Promise<ProjectListModel[]> {
     const projects = items
       .map((item) => {
         const [group] = groups.filter((grp) => grp.id === item.GtGroupId)
@@ -428,7 +429,39 @@ export class DataAdapter {
         return model
       })
       .filter((p) => p)
-    return projects
+
+    const filteredProjects = await this.filterDeletedProjects(projects)
+
+    return filteredProjects
+  }
+
+  /**
+   * @param {ProjectListModel[]} projects
+   * Checks each project of the array if the project URL is alive or not.
+   * Returns the projects that is alive.
+   */
+  private async filterDeletedProjects(projects: ProjectListModel[]): Promise<ProjectListModel[]> {
+    var client = new SPHttpClient()
+    const tenant = window.location.protocol + '//' + window.location.host
+
+    const filteredProjects = await Promise.all(
+      projects.map(async (project) => {
+        const val = await client.post(`${tenant}/_api/SP.Site.Exists`, {
+          body: JSON.stringify({
+            url: project.url
+          }),
+          headers: {
+            accept: 'application/json;'
+          }
+        })
+        const ans = await val.json()
+
+        if (ans.value) {
+          return project
+        }
+      })
+    )
+    return filteredProjects.filter((p) => p !== undefined)
   }
 
   /**
@@ -482,7 +515,7 @@ export class DataAdapter {
   /**
    * Checks if the current is in the specified group
    *
-   * @private
+   * @public
    *
    * @param {string} groupName
    *
@@ -490,7 +523,7 @@ export class DataAdapter {
    *
    * @memberof DataAdapter
    */
-  private async _isUserInGroup(groupName: string): Promise<boolean> {
+  public async isUserInGroup(groupName: string): Promise<boolean> {
     try {
       const [siteGroup] = await sp.web.siteGroups
         .select('CanCurrentUserViewMembership', 'Title')

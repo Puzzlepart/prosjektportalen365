@@ -16,7 +16,6 @@ import { ProjectCard } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
 import { IProjectListProps, IProjectListState } from './types'
-
 /**
  * @component ProjectList
  * @extends Component
@@ -108,16 +107,17 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
               inlineLabel={true}
               onChanged={(showAsTiles) => this.setState({ showAsTiles })}
             />
-            {this.state.showAllProjects && (
-              <Toggle
-                onText='Alle prosjekter'
-                offText='Mine prosjekter'
-                defaultChecked={false}
-                onChange={() =>
-                  this.setState({ onlyAccessProjects: !this.state.onlyAccessProjects })
-                }
-              />
-            )}
+            {this.state.showAllProjects &&
+              this.props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName) && (
+                <Toggle
+                  onText='Alle prosjekter'
+                  offText='Mine prosjekter'
+                  defaultChecked={false}
+                  onChange={() =>
+                    this.setState({ onlyAccessProjects: !this.state.onlyAccessProjects })
+                  }
+                />
+              )}
           </div>
           <div className={styles.emptyMessage} hidden={projects.length > 0}>
             <MessageBar>{strings.NoSearchResults}</MessageBar>
@@ -272,7 +272,6 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
     if (this.state.showAllProjects && this.state.onlyAccessProjects) {
       projects = projects.filter((project) => !project.readOnly)
     }
-    console.log(projects)
 
     return projects.filter((p) => {
       const matches = Object.keys(p).filter((key) => {
