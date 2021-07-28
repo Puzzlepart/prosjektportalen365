@@ -154,6 +154,8 @@ define([], function () {
     NoProjectsFound: 'Ingen prosjekter funnet.',
     NewLabel: 'Ny',
     ReadOnlyGroupName: "Porteføljeinnsyn",
-    DisplayAllProjects: "Vis alle prosjekter"
+    DisplayAllProjects: "Vis alle prosjekter",
+    MyProjectsLabel: "Mine prosjekter",
+    AllProjectsLabel: "Alle prosjekter"
   }
 })

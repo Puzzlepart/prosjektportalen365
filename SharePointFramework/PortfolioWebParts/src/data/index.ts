@@ -430,7 +430,7 @@ export class DataAdapter {
       })
       .filter((p) => p)
 
-    const filteredProjects = await this.filterDeletedProjects(projects)
+    const filteredProjects = await this._filterDeletedProjects(projects)
 
     return filteredProjects
   }
@@ -440,7 +440,7 @@ export class DataAdapter {
    * Checks each project of the array if the project URL is alive or not.
    * Returns the projects that is alive.
    */
-  private async filterDeletedProjects(projects: ProjectListModel[]): Promise<ProjectListModel[]> {
+  private async _filterDeletedProjects(projects: ProjectListModel[]): Promise<ProjectListModel[]> {
     var client = new SPHttpClient()
     const tenant = window.location.protocol + '//' + window.location.host
 

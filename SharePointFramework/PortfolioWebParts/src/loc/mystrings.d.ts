@@ -157,6 +157,8 @@ declare interface IPortfolioWebPartsStrings {
   NewLabel: string
   ReadOnlyGroupName: string
   DisplayAllProjects: string
+  MyProjectsLabel: string
+  AllProjectsLabel: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

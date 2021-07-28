@@ -16,6 +16,7 @@ import { ProjectCard } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
 import { IProjectListProps, IProjectListState } from './types'
+import { Pivot, PivotItem, Label, IStyleSet, IPivotItemProps } from 'office-ui-fabric-react'
 /**
  * @component ProjectList
  * @extends Component
@@ -94,17 +95,36 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
     }
 
     const projects = this._filterProjets(this.state.projects)
+    const shrinkSearchBox = this.state.showAllProjects && this.state.isUserInPortfolioManagerGroup
 
     return (
       <div className={styles.root}>
         <div className={styles.container}>
-          <div className={styles.searchBox} hidden={!this.props.showSearchBox}>
+          <div
+            className={shrinkSearchBox ? styles.shrinkedSearchBox : styles.searchBox}
+            hidden={!this.props.showSearchBox}>
             <SearchBox
               placeholder={this.props.searchBoxPlaceholderText}
               onChanged={this._onSearch.bind(this)}
             />
           </div>
-          <div className={styles.viewToggle} hidden={!this.props.showViewSelector}>
+          {this.state.showAllProjects && this.state.isUserInPortfolioManagerGroup && (
+            <div className={styles.projectDisplaySelect}>
+              <Pivot
+                onLinkClick={(item) =>
+                  item.props.itemKey === 'myProjects'
+                    ? this.setState({ onlyAccessProjects: true })
+                    : this.setState({ onlyAccessProjects: false })
+                }
+                selectedKey={this.state.onlyAccessProjects ? 'myProjects' : 'allProjects'}>
+                <PivotItem headerText={strings.MyProjectsLabel} itemKey='myProjects' />
+                <PivotItem headerText={strings.AllProjectsLabel} itemKey='allProjects' />
+              </Pivot>
+            </div>
+          )}
+          <div
+            className={shrinkSearchBox ? styles.shrinkedViewToggle : styles.viewToggle}
+            hidden={!this.props.showViewSelector}>
             <Toggle
               offText={strings.ShowAsListText}
               onText={strings.ShowAsTilesText}
@@ -112,16 +132,6 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
               inlineLabel={true}
               onChanged={(showAsTiles) => this.setState({ showAsTiles })}
             />
-            {this.state.showAllProjects && this.state.isUserInPortfolioManagerGroup && (
-              <Toggle
-                onText='Alle prosjekter'
-                offText='Mine prosjekter'
-                defaultChecked={false}
-                onChange={() =>
-                  this.setState({ onlyAccessProjects: !this.state.onlyAccessProjects })
-                }
-              />
-            )}
           </div>
           <div className={styles.emptyMessage} hidden={projects.length > 0}>
             <MessageBar>{strings.NoSearchResults}</MessageBar>
