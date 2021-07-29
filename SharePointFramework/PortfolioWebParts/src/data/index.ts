@@ -204,19 +204,48 @@ export class DataAdapter {
         siteId,
         siteIdProperty
       )
-      const items = projects.map((project) => {
+      const projectList = await sp.web.lists
+        .getByTitle(strings.ProjectsListName)
+        .items.select('GtSiteId', 'GtSiteUrl')
+        // eslint-disable-next-line quotes
+        .filter("GtProjectLifecycleStatus ne 'Avsluttet'")
+        .orderBy('Title')
+        .top(500)
+        .usingCaching()
+        .get<ISPProjectItem[]>()
+
+      console.log('projects', projects)
+      console.log('Sites', sites)
+      console.log('statusReports', statusReports)
+
+      let items = projects.map((project) => {
         const [statusReport] = statusReports.filter(
           (res) => res[siteIdProperty] === project[siteIdProperty]
         )
         const [site] = sites.filter((res) => res['SiteId'] === project[siteIdProperty])
+
+        const siteInfo: ISPProjectItem[] = projectList.filter(
+          (projectListItem) => projectListItem.GtSiteId == project['GtSiteIdOWSTEXT']
+        )
         return {
           ...statusReport,
           ...project,
           Path: site && site.Path,
-          SiteId: project[siteIdProperty]
+          SiteId: project[siteIdProperty],
+          filterPath: siteInfo[0].GtSiteUrl
         }
       })
-      return items
+
+      let filterItemsArr = await Promise.all(
+        items.map(async (item) => {
+          const ans = await this._isProjectAlive(item.filterPath)
+          return { ...item, ans }
+        })
+      )
+
+      filterItemsArr = filterItemsArr.filter((item) => item.ans)
+
+      return filterItemsArr
     } catch (err) {
       throw err
     }
@@ -462,6 +491,26 @@ export class DataAdapter {
       })
     )
     return filteredProjects.filter((p) => p !== undefined)
+  }
+
+  private async _isProjectAlive(url: string): Promise<boolean> {
+    var client = new SPHttpClient()
+    const tenant = window.location.protocol + '//' + window.location.host
+
+    const val = await client.post(`${tenant}/_api/SP.Site.Exists`, {
+      body: JSON.stringify({
+        url: url
+      }),
+      headers: {
+        accept: 'application/json;'
+      }
+    })
+    const ans = await val.json()
+
+    if (ans.value) {
+      return true
+    }
+    return false
   }
 
   /**
