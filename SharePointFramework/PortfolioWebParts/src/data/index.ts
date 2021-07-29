@@ -214,16 +214,11 @@ export class DataAdapter {
         .usingCaching()
         .get<ISPProjectItem[]>()
 
-      console.log('projects', projects)
-      console.log('Sites', sites)
-      console.log('statusReports', statusReports)
-
       let items = projects.map((project) => {
         const [statusReport] = statusReports.filter(
           (res) => res[siteIdProperty] === project[siteIdProperty]
         )
         const [site] = sites.filter((res) => res['SiteId'] === project[siteIdProperty])
-
         const siteInfo: ISPProjectItem[] = projectList.filter(
           (projectListItem) => projectListItem.GtSiteId == project['GtSiteIdOWSTEXT']
         )
@@ -242,10 +237,7 @@ export class DataAdapter {
           return { ...item, ans }
         })
       )
-
-      filterItemsArr = filterItemsArr.filter((item) => item.ans)
-
-      return filterItemsArr
+      return filterItemsArr.filter((item) => item.ans)
     } catch (err) {
       throw err
     }
