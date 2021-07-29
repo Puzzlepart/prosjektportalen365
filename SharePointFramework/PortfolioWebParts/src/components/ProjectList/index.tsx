@@ -16,7 +16,7 @@ import { ProjectCard } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
 import { IProjectListProps, IProjectListState } from './types'
-import { Pivot, PivotItem, Label, IStyleSet, IPivotItemProps } from 'office-ui-fabric-react'
+import { Pivot, PivotItem } from 'office-ui-fabric-react'
 /**
  * @component ProjectList
  * @extends Component

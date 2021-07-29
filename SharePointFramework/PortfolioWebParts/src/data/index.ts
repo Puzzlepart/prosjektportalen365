@@ -214,13 +214,13 @@ export class DataAdapter {
         .usingCaching()
         .get<ISPProjectItem[]>()
 
-      let items = projects.map((project) => {
+      const items = projects.map((project) => {
         const [statusReport] = statusReports.filter(
           (res) => res[siteIdProperty] === project[siteIdProperty]
         )
         const [site] = sites.filter((res) => res['SiteId'] === project[siteIdProperty])
         const siteInfo: ISPProjectItem[] = projectList.filter(
-          (projectListItem) => projectListItem.GtSiteId == project['GtSiteIdOWSTEXT']
+          (projectListItem) => projectListItem.GtSiteId === project['GtSiteIdOWSTEXT']
         )
         return {
           ...statusReport,
@@ -231,7 +231,7 @@ export class DataAdapter {
         }
       })
 
-      let filterItemsArr = await Promise.all(
+      const filterItemsArr = await Promise.all(
         items.map(async (item) => {
           const ans = await this._isProjectAlive(item.filterPath)
           return { ...item, ans }
@@ -462,7 +462,7 @@ export class DataAdapter {
    * Returns the projects that is alive.
    */
   private async _filterDeletedProjects(projects: ProjectListModel[]): Promise<ProjectListModel[]> {
-    var client = new SPHttpClient()
+    const client = new SPHttpClient()
     const tenant = window.location.protocol + '//' + window.location.host
 
     const filteredProjects = await Promise.all(
@@ -486,7 +486,7 @@ export class DataAdapter {
   }
 
   private async _isProjectAlive(url: string): Promise<boolean> {
-    var client = new SPHttpClient()
+    const client = new SPHttpClient()
     const tenant = window.location.protocol + '//' + window.location.host
 
     const val = await client.post(`${tenant}/_api/SP.Site.Exists`, {
