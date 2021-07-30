@@ -219,7 +219,7 @@ export class DataAdapter {
           (res) => res[siteIdProperty] === project[siteIdProperty]
         )
         const [site] = sites.filter((res) => res['SiteId'] === project[siteIdProperty])
-        const siteInfo: ISPProjectItem[] = projectList.filter(
+        const siteInfo = projectList.find(
           (projectListItem) => projectListItem.GtSiteId === project['GtSiteIdOWSTEXT']
         )
         return {
@@ -227,7 +227,7 @@ export class DataAdapter {
           ...project,
           Path: site && site.Path,
           SiteId: project[siteIdProperty],
-          filterPath: siteInfo[0].GtSiteUrl
+          filterPath: siteInfo.GtSiteUrl
         }
       })
 
