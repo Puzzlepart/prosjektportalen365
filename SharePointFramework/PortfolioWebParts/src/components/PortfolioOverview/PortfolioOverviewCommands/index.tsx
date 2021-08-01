@@ -173,7 +173,19 @@ export class PortfolioOverviewCommands extends Component<
     this.setState({ isExporting: true })
     try {
       const { fltItems, fltColumns, selectedItems } = this.props
-      const items = isArray(selectedItems) && selectedItems.length > 0 ? selectedItems : fltItems
+
+      let items = isArray(selectedItems) && selectedItems.length > 0 ? selectedItems : fltItems
+
+      items = items.map((item) => {
+        if (item.GtStartDateOWSDATE !== undefined) {
+          item.GtStartDateOWSDATE = new Date(item.GtStartDateOWSDATE)
+        }
+        if (item.GtEndDateOWSDATE !== undefined) {
+          item.GtEndDateOWSDATE = new Date(item.GtEndDateOWSDATE)
+        }
+        return item
+      })
+
       await ExcelExportService.export(items, fltColumns)
       this.setState({ isExporting: false })
     } catch (error) {
