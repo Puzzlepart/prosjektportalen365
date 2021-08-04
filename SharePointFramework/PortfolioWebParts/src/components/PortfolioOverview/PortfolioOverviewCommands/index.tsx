@@ -174,7 +174,7 @@ export class PortfolioOverviewCommands extends Component<
     try {
       const { fltItems, fltColumns, selectedItems } = this.props
 
-      let items = isArray(selectedItems) && selectedItems.length > 0 ? selectedItems : fltItems
+      const items = isArray(selectedItems) && selectedItems.length > 0 ? selectedItems : fltItems
 
       fltColumns.map((col) => {
         if (col.dataType === 'date') {
