@@ -176,14 +176,12 @@ export class PortfolioOverviewCommands extends Component<
 
       let items = isArray(selectedItems) && selectedItems.length > 0 ? selectedItems : fltItems
 
-      items = items.map((item) => {
-        if (item.GtStartDateOWSDATE !== undefined) {
-          item.GtStartDateOWSDATE = new Date(item.GtStartDateOWSDATE)
+      fltColumns.map((col) => {
+        if (col.dataType === 'date') {
+          items.map((item) => {
+            item[col.fieldName] = new Date(item[col.fieldName])
+          })
         }
-        if (item.GtEndDateOWSDATE !== undefined) {
-          item.GtEndDateOWSDATE = new Date(item.GtEndDateOWSDATE)
-        }
-        return item
       })
 
       await ExcelExportService.export(items, fltColumns)
