@@ -204,40 +204,21 @@ export class DataAdapter {
         siteId,
         siteIdProperty
       )
-      const projectList = await sp.web.lists
-        .getByTitle(strings.ProjectsListName)
-        .items.select('GtSiteId', 'GtSiteUrl')
-        // eslint-disable-next-line quotes
-        .filter("GtProjectLifecycleStatus ne 'Avsluttet'")
-        .orderBy('Title')
-        .top(500)
-        .usingCaching()
-        .get<ISPProjectItem[]>()
 
       const items = projects.map((project) => {
         const [statusReport] = statusReports.filter(
           (res) => res[siteIdProperty] === project[siteIdProperty]
         )
         const [site] = sites.filter((res) => res['SiteId'] === project[siteIdProperty])
-        const siteInfo = projectList.find(
-          (projectListItem) => projectListItem.GtSiteId === project['GtSiteIdOWSTEXT']
-        )
         return {
           ...statusReport,
           ...project,
           Path: site && site.Path,
-          SiteId: project[siteIdProperty],
-          filterPath: siteInfo.GtSiteUrl
+          SiteId: project[siteIdProperty]
         }
       })
 
-      const filterItemsArr = await Promise.all(
-        items.map(async (item) => {
-          const ans = await this._isProjectAlive(item.filterPath)
-          return { ...item, ans }
-        })
-      )
-      return filterItemsArr.filter((item) => item.ans)
+      return items
     } catch (err) {
       throw err
     }
@@ -285,6 +266,11 @@ export class DataAdapter {
     sites = sites.filter(
       (site) => projects.filter((res) => res[siteIdProperty] === site['SiteId']).length === 1
     )
+
+    console.log('projects', projects)
+    console.log('sites', sites)
+    console.log('statusreports', statusReports)
+
     return {
       projects,
       sites,
@@ -451,38 +437,7 @@ export class DataAdapter {
       })
       .filter((p) => p)
 
-    const filteredProjects = await this._filterDeletedProjects(projects)
-
-    return filteredProjects
-  }
-
-  /**
-   * @param {ProjectListModel[]} projects
-   * Checks each project of the array if the project URL is alive or not.
-   * Returns the projects that is alive.
-   */
-  private async _filterDeletedProjects(projects: ProjectListModel[]): Promise<ProjectListModel[]> {
-    const client = new SPHttpClient()
-    const tenant = window.location.protocol + '//' + window.location.host
-
-    const filteredProjects = await Promise.all(
-      projects.map(async (project) => {
-        const val = await client.post(`${tenant}/_api/SP.Site.Exists`, {
-          body: JSON.stringify({
-            url: project.url
-          }),
-          headers: {
-            accept: 'application/json;'
-          }
-        })
-        const ans = await val.json()
-
-        if (ans.value) {
-          return project
-        }
-      })
-    )
-    return filteredProjects.filter((p) => p !== undefined)
+    return projects
   }
 
   private async _isProjectAlive(url: string): Promise<boolean> {
@@ -503,6 +458,31 @@ export class DataAdapter {
       return true
     }
     return false
+  }
+
+  /**
+   * Checks for deleted projects in the project list and deletes them.
+   */
+  public async removeDeletedProjects() {
+    const list = sp.web.lists.getByTitle(strings.ProjectsListName)
+    const projects = await list.items.get<ISPProjectItem[]>()
+
+    const filteredProjects = await Promise.all(
+      projects.map(async (project) => {
+        const ans = await this._isProjectAlive(project.GtSiteUrl)
+        return { ...project, ans }
+      })
+    ).then((projects) => projects.filter((project) => !project.ans))
+
+    const deleted = await Promise.all(
+      filteredProjects.map(async (project) => {
+        return await list.items.getById(project.Id).delete()
+      })
+    )
+
+    console.log(deleted)
+
+    //return filtedredProjects.filter((item) => item.ans)
   }
 
   /**

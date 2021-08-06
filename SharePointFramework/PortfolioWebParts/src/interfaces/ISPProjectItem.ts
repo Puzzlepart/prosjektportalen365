@@ -8,4 +8,5 @@ export interface ISPProjectItem {
   GtProjectOwnerId: number
   GtProjectManagerId: number
   Title?: string
+  Id?: number
 }
