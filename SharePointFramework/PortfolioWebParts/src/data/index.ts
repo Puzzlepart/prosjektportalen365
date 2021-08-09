@@ -23,7 +23,6 @@ import HubSiteService from 'sp-hubsite-service'
 import _ from 'underscore'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
-import { SPHttpClient } from '@pnp/sp'
 
 export class DataAdapter {
   private _portalDataService: PortalDataService
@@ -266,10 +265,6 @@ export class DataAdapter {
     sites = sites.filter(
       (site) => projects.filter((res) => res[siteIdProperty] === site['SiteId']).length === 1
     )
-
-    console.log('projects', projects)
-    console.log('sites', sites)
-    console.log('statusreports', statusReports)
 
     return {
       projects,
