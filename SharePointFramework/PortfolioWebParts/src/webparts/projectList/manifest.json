@@ -27,7 +27,8 @@
                 "sortBy": "Title",
                 "showAsTiles": true,
                 "showProjectOwner": true,
-                "showProjectManager": true
+                "showProjectManager": true,
+                "showAllProjects": false
             }
         }
     ]

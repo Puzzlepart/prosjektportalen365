@@ -18,6 +18,7 @@ export class ProjectListModel {
    * @param {string} endDate End date
    * @param {ISPUser} manager Manager
    * @param {ISPUser} owner Owner
+   * @param {boolean} boolean ReadOnly
    * @param {string} budgetTotal Budget total
    * @param {string} costsTotal Costs total
    * @param {string} type Type
@@ -32,6 +33,7 @@ export class ProjectListModel {
     public endDate?: string,
     manager?: ISPUser,
     owner?: ISPUser,
+    public readOnly?: boolean,
     public budgetTotal?: string,
     public costsTotal?: string,
     public type?: string

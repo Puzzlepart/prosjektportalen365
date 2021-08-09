@@ -23,6 +23,7 @@ import HubSiteService from 'sp-hubsite-service'
 import _ from 'underscore'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
+import { SPHttpClient } from '@pnp/sp'
 
 export class DataAdapter {
   private _portalDataService: PortalDataService
@@ -130,7 +131,7 @@ export class DataAdapter {
     configuration: IPortfolioConfiguration,
     siteId: string
   ): Promise<IFetchDataForViewItemResult[]> {
-    const isCurrentUserInManagerGroup = await this._isUserInGroup(strings.PortfolioManagerGroupName)
+    const isCurrentUserInManagerGroup = await this.isUserInGroup(strings.PortfolioManagerGroupName)
     if (isCurrentUserInManagerGroup) {
       return await this.fetchDataForManagerView(view, configuration, siteId)
     } else {
@@ -203,6 +204,7 @@ export class DataAdapter {
         siteId,
         siteIdProperty
       )
+
       const items = projects.map((project) => {
         const [statusReport] = statusReports.filter(
           (res) => res[siteIdProperty] === project[siteIdProperty]
@@ -215,6 +217,7 @@ export class DataAdapter {
           SiteId: project[siteIdProperty]
         }
       })
+
       return items
     } catch (err) {
       throw err
@@ -263,6 +266,11 @@ export class DataAdapter {
     sites = sites.filter(
       (site) => projects.filter((res) => res[siteIdProperty] === site['SiteId']).length === 1
     )
+
+    console.log('projects', projects)
+    console.log('sites', sites)
+    console.log('statusreports', statusReports)
+
     return {
       projects,
       sites,
@@ -278,9 +286,7 @@ export class DataAdapter {
    * @param {string} [budgetTotalProperty='GtBudgetTotalOWSCURR']
    */
 
-  public async _fetchDataForTimelineProject(
-    siteId: string
-  ) {
+  public async _fetchDataForTimelineProject(siteId: string) {
     const siteIdProperty: string = 'GtSiteIdOWSTEXT'
     const costsTotalProperty: string = 'GtCostsTotalOWSCURR'
     const budgetTotalProperty: string = 'GtBudgetTotalOWSCURR'
@@ -317,12 +323,14 @@ export class DataAdapter {
           'GtBudgetTotal',
           'GtCostsTotal',
           'SiteIdLookup/Title',
-          'SiteIdLookup/GtSiteId',
-      ).expand('SiteIdLookup')
-      .get()
+          'SiteIdLookup/GtSiteId'
+        )
+        .expand('SiteIdLookup')
+        .get()
     ])
 
-    timelineItems = timelineItems.map((item) => {
+    timelineItems = timelineItems
+      .map((item) => {
         const model = new TimelineContentListModel(
           item.SiteIdLookup && item.SiteIdLookup[0].GtSiteId,
           item.SiteIdLookup && item.SiteIdLookup[0].Title,
@@ -331,7 +339,7 @@ export class DataAdapter {
           item.GtStartDate,
           item.GtEndDate,
           item.GtBudgetTotal,
-          item.GtCostsTotal,
+          item.GtCostsTotal
         )
         return model
       })
@@ -388,17 +396,31 @@ export class DataAdapter {
    * @param {Object} photos Photos
    * @param {ISPUser[]} users Users
    */
-  private _mapProjects(
+  private async _mapProjects(
     items: ISPProjectItem[],
     groups: IGraphGroup[],
     users: ISPUser[]
-  ): ProjectListModel[] {
+  ): Promise<ProjectListModel[]> {
     const projects = items
       .map((item) => {
         const [group] = groups.filter((grp) => grp.id === item.GtGroupId)
-        if (!group) return null
         const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
         const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
+
+        if (!group) {
+          return new ProjectListModel(
+            item.GtSiteId,
+            item.GtGroupId,
+            item.Title,
+            item.GtSiteUrl,
+            item.GtProjectPhaseText,
+            item.GtStartDate,
+            item.GtEndDate,
+            manager,
+            owner,
+            true
+          )
+        }
         const model = new ProjectListModel(
           item.GtSiteId,
           group.id,
@@ -408,7 +430,8 @@ export class DataAdapter {
           item.GtStartDate,
           item.GtEndDate,
           manager,
-          owner
+          owner,
+          false
         )
         return model
       })
@@ -418,7 +441,6 @@ export class DataAdapter {
 
   /**
    * Fetch enriched projects
-   * 
    * * Fetching project list items
    * * Graph groups
    * * Site users
@@ -437,7 +459,8 @@ export class DataAdapter {
           'GtProjectManagerId',
           'GtProjectPhaseText',
           'GtStartDate',
-          'GtEndDate'
+          'GtEndDate',
+          'Title'
         )
         // eslint-disable-next-line quotes
         .filter("GtProjectLifecycleStatus ne 'Avsluttet'")
@@ -467,7 +490,7 @@ export class DataAdapter {
   /**
    * Checks if the current is in the specified group
    *
-   * @private
+   * @public
    *
    * @param {string} groupName
    *
@@ -475,7 +498,7 @@ export class DataAdapter {
    *
    * @memberof DataAdapter
    */
-  private async _isUserInGroup(groupName: string): Promise<boolean> {
+  public async isUserInGroup(groupName: string): Promise<boolean> {
     try {
       const [siteGroup] = await sp.web.siteGroups
         .select('CanCurrentUserViewMembership', 'Title')

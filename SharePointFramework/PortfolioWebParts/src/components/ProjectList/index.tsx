@@ -16,7 +16,7 @@ import { ProjectCard } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
 import { IProjectListProps, IProjectListState } from './types'
-
+import { Pivot, PivotItem } from 'office-ui-fabric-react'
 /**
  * @component ProjectList
  * @extends Component
@@ -34,12 +34,25 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
    */
   constructor(props: IProjectListProps) {
     super(props)
-    this.state = { loading: true, searchTerm: '', showAsTiles: props.showAsTiles }
+    this.state = {
+      loading: true,
+      searchTerm: '',
+      showAsTiles: props.showAsTiles,
+      showAllProjects: props.showAllProjects,
+      onlyAccessProjects: true
+    }
   }
 
   public async componentDidMount() {
     try {
       let projects = await this.props.dataAdapter.fetchEncrichedProjects()
+      const inReadOnlyGroup = await this.props.dataAdapter.isUserInGroup(
+        strings.PortfolioManagerGroupName
+      )
+
+      if (!this.state.showAllProjects)
+        projects = projects.filter((project) => project.readOnly === false)
+
       projects = projects.sort((a, b) => sortAlphabetically(a, b, true, this.props.sortBy))
       const columns = this.props.columns.map((col) => {
         if (col.fieldName === this.props.sortBy) {
@@ -51,7 +64,8 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
       this.setState({
         projects,
         listView: { projects, columns },
-        loading: false
+        loading: false,
+        isUserInPortfolioManagerGroup: inReadOnlyGroup
       })
       if (this.props.showProjectLogo) {
         this._getProjectLogos(20)
@@ -81,17 +95,36 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
     }
 
     const projects = this._filterProjets(this.state.projects)
+    const shrinkSearchBox = this.state.showAllProjects && this.state.isUserInPortfolioManagerGroup
 
     return (
       <div className={styles.root}>
         <div className={styles.container}>
-          <div className={styles.searchBox} hidden={!this.props.showSearchBox}>
+          <div
+            className={shrinkSearchBox ? styles.shrinkedSearchBox : styles.searchBox}
+            hidden={!this.props.showSearchBox}>
             <SearchBox
               placeholder={this.props.searchBoxPlaceholderText}
               onChanged={this._onSearch.bind(this)}
             />
           </div>
-          <div className={styles.viewToggle} hidden={!this.props.showViewSelector}>
+          {this.state.showAllProjects && this.state.isUserInPortfolioManagerGroup && (
+            <div className={styles.projectDisplaySelect}>
+              <Pivot
+                onLinkClick={(item) =>
+                  item.props.itemKey === 'myProjects'
+                    ? this.setState({ onlyAccessProjects: true })
+                    : this.setState({ onlyAccessProjects: false })
+                }
+                selectedKey={this.state.onlyAccessProjects ? 'myProjects' : 'allProjects'}>
+                <PivotItem headerText={strings.MyProjectsLabel} itemKey='myProjects' />
+                <PivotItem headerText={strings.AllProjectsLabel} itemKey='allProjects' />
+              </Pivot>
+            </div>
+          )}
+          <div
+            className={shrinkSearchBox ? styles.shrinkedViewToggle : styles.viewToggle}
+            hidden={!this.props.showViewSelector}>
             <Toggle
               offText={strings.ShowAsListText}
               onText={strings.ShowAsTilesText}
@@ -152,8 +185,10 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
    */
   private _onRenderItemColumn(project: ProjectListModel, _index: number, column: IColumn) {
     const colValue = getObjectValue(project, column.fieldName, null)
-    if (column.fieldName === 'title') {
+    if (column.fieldName === 'title' && !project.readOnly) {
       return <a href={project.url}>{colValue}</a>
+    } else if (column.fieldName === 'title' && project.readOnly && this.state.showAllProjects) {
+      return <>{colValue}</>
     }
     return colValue
   }
@@ -248,6 +283,10 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
    * @param {ProjectListModel[]} projects Projects
    */
   private _filterProjets(projects: ProjectListModel[]) {
+    if (this.state.showAllProjects && this.state.onlyAccessProjects) {
+      projects = projects.filter((project) => !project.readOnly)
+    }
+
     return projects.filter((p) => {
       const matches = Object.keys(p).filter((key) => {
         const value = p[key]

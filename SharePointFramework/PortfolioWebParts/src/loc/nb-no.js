@@ -153,5 +153,9 @@ define([], function () {
     CostsTotalLabel: 'Kostnader påløpt totalt',
     NoProjectsFound: 'Ingen prosjekter funnet.',
     NewLabel: 'Ny',
+    ReadOnlyGroupName: "Porteføljeinnsyn",
+    DisplayAllProjects: "Vis alle prosjekter",
+    MyProjectsLabel: "Mine prosjekter",
+    AllProjectsLabel: "Alle prosjekter"
   }
 })
