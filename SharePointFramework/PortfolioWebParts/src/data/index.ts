@@ -396,11 +396,11 @@ export class DataAdapter {
    * @param {Object} photos Photos
    * @param {ISPUser[]} users Users
    */
-  private async _mapProjects(
+  private _mapProjects(
     items: ISPProjectItem[],
     groups: IGraphGroup[],
     users: ISPUser[]
-  ): Promise<ProjectListModel[]> {
+  ): ProjectListModel[] {
     const projects = items
       .map((item) => {
         const [group] = groups.filter((grp) => grp.id === item.GtGroupId)
