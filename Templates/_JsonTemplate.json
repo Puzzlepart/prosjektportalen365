@@ -439,6 +439,10 @@
                 "Title": "Prosjektstatus"
             },
             {
+                "Url": "SitePages/Prosjekttidslinje.aspx",
+                "Title": "Prosjekttidslinje"
+            },
+            {
                 "Url": "Lists/Prosjektlogg/AllItems.aspx",
                 "Title": "Prosjektlogg"
             },
@@ -665,6 +669,32 @@
                                         "riskMatrixCalloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>",
                                         "riskMatrixWidth": 800,
                                         "riskMatrixHeight": 400
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "Prosjekttidslinje.aspx",
+            "Title": "Prosjekttidslinje",
+            "PageLayoutType": "SingleWebPartAppPage",
+            "CommentsDisabled": true,
+            "Sections": [
+                {
+                    "Columns": [
+                        {
+                            "Factor": 12,
+                            "Controls": [
+                                {
+                                    "Id": "d156652b-9121-47af-89ae-1fe8427c53da",
+                                    "Properties": {
+                                        "title": "Prosjekttidslinje",
+                                        "listName": "Tidslinjeinnhold",
+                                        "width": 800,
+                                        "height": 400
                                     }
                                 }
                             ]

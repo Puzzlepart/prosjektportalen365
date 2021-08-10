@@ -1,12 +1,12 @@
 {
     "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-    "id": "7284c568-f66c-4218-bb2c-3734a3cfa581",
-    "alias": "ProjectTimelineWebPart",
+    "id": "d156652b-9121-47af-89ae-1fe8427c53da",
+    "alias": "ProjecttimelineWebPart",
     "componentType": "WebPart",
-    "version": "1.2.9",
+    "version": "1.2.8",
     "manifestVersion": 2,
     "requiresCustomScript": false,
-    "hiddenFromToolbox": true,
+    "hiddenFromToolbox": false,
     "supportedHosts": [
         "SharePointWebPart"
     ],
@@ -17,14 +17,17 @@
                 "default": "Other"
             },
             "title": {
-                "default": "Prosjektttidslinje"
+                "default": "Prosjekttidslinje"
             },
             "description": {
                 "default": " "
             },
             "officeFabricIconFontName": "TimelineDelivery",
             "properties": {
-                "dataSource": "Alle prosjekttidslinjeelementer"
+                "title": "Prosjekttidslinje",
+                "listName": "Tidslinjeinnhold",
+                "width": 800,
+                "height": 400
             }
         }
     ]
