@@ -111,6 +111,29 @@ define([], function () {
     ConsequencePostActionFieldNameFieldLabel: 'Feltnavn - Konsekvens (etter tiltak)',
     WidthFieldLabel: 'Bredde (piksler)',
     HeightFieldLabel: 'Høyde (piksler)',
-    CalloutTemplateFieldLabel: 'Mal for callout'
+    CalloutTemplateFieldLabel: 'Mal for callout',
+
+    TitleFieldLabel: 'Tittel',
+    FilterText: 'Filtrer',
+    PhaseLabel: 'Fase',
+    SiteTitleLabel: 'Prosjekt',
+    TypeLabel: 'Type',
+    ProjecttimelineGroupName: 'Prosjekttidslinje',
+
+
+    ProjectTimelineInfoText: 'Her listes alle prosjektene med start- og sluttdato. Prosjekttidslinjen støtter også faser, delfaser og milepæler, dette opprettes i den<A HREF="../Lists/Tidslinjeinnhold/AllItems.aspx?Source={0}">sentrale tidslinjeinnhold listen</A>. Prosjekter vises med rød farge, faser i blått, delfaser blågrønt, og milepæler i gult',
+    TimelineContentListName: 'Tidslinjeinnhold',
+    PortfolioManagerGroupName: 'Porteføljeinnsyn',
+    ProjectTimelineItemInfo: '{0} - prosjektets tidsforløp',
+    LastPublishedStatusreport: 'Gå til siste statusrapport',
+    MilestoneLabel: 'Milepæl',
+    ProjectLabel: 'Prosjekt',
+    SubPhaseLabel: 'Delfase',
+    CurrentPhaseLabel: 'Gjeldende fase',
+    MilestoneDateLabel: 'Milepælsdato',
+    StartDateLabel: 'Startdato',
+    EndDateLabel: 'Sluttdato',
+    BudgetTotalLabel: 'Totalbudsjett',
+    CostsTotalLabel: 'Kostnader påløpt totalt',
   }
 })

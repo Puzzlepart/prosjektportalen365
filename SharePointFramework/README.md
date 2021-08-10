@@ -77,6 +77,7 @@ _Published to **npm** as `pp365-projectwebparts`_`_
 | ProjectPhasesWebPart        | 4449d3dc-fa58-4982-b87c-5a893114e7b7 |     | ProjectWebParts   |
 | ProjectStatusWebPart        | 681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6 |     | ProjectWebParts   |
 | RiskMatrixWebPart           | e536ae15-0748-4d96-b160-3abb30f1b71e |     | ProjectWebParts   |
+| ProjectTimelineWebPart      | d156652b-9121-47af-89ae-1fe8427c53da |     | ProjectWebParts   |
 
 # 3. Build, package and deploy
 
