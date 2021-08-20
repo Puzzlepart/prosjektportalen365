@@ -24,7 +24,6 @@
             },
             "officeFabricIconFontName": "TimelineDelivery",
             "properties": {
-                "title": "Prosjekttidslinje",
                 "listName": "Tidslinjeinnhold",
                 "width": 800,
                 "height": 400

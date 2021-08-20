@@ -26,10 +26,6 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
             {
               groupName: strings.ProjecttimelineGroupName,
               groupFields: [
-                PropertyPaneTextField('title', {
-                  label: strings.TitleFieldLabel,
-                  value: 'Prosjekttidslinje'
-                }),
                 PropertyPaneTextField('listName', {
                   label: strings.ListNameFieldLabel,
                   value: 'Tidslinjeinnhold'

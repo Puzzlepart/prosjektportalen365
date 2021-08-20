@@ -33,6 +33,14 @@
                     "manifest": "./src/webparts/riskMatrix/manifest.json"
                 }
             ]
+        },
+        "project-timeline-web-part": {
+            "components": [
+                {
+                    "entrypoint": "./lib/webparts/projectTimeline/index.js",
+                    "manifest": "./src/webparts/projectTimeline/manifest.json"
+                }
+            ]
         }
     },
     "externals": {},
