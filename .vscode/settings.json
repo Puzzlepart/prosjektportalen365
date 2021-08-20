@@ -9,8 +9,7 @@
         "**/package-lock.json": true,
         "**/pnpm-lock.yaml": true,
         "README.md": true,
-        "dev/README.md": true,
-        ".husky": true,
+        "dev/README.md": true
     },
     "files.associations": {
         "*.txt": "json",
