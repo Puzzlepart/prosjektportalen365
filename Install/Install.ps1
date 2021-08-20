@@ -218,10 +218,10 @@ if (-not $SkipSiteDesign.IsPresent) {
         $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName 
 
         if ($null -ne $SiteDesign) {
-            $SiteDesign = Set-PnPSiteDesign -Identity $SiteDesign -SiteScriptIds $SiteScriptIds -Description "" -Version "1"
+            $SiteDesign = Set-PnPSiteDesign -Identity $SiteDesign -SiteScriptIds $SiteScriptIds -Description "Samarbeid i et prosjektområde fra Prosjektportalen" -Version "1"
         }
         else {
-            $SiteDesign = Add-PnPSiteDesign -Title $SiteDesignName -SiteScriptIds $SiteScriptIds -Description "" -WebTemplate TeamSite
+            $SiteDesign = Add-PnPSiteDesign -Title $SiteDesignName -SiteScriptIds $SiteScriptIds -Description "Samarbeid i et prosjektområde fra Prosjektportalen" -WebTemplate TeamSite
         }
         if ([string]::IsNullOrEmpty($SiteDesignSecurityGroupId)) {
             Write-Host "[INFO] You have not specified -SiteDesignSecurityGroupId. Everyone will have View access to site design [$SiteDesignName]" -ForegroundColor Yellow
