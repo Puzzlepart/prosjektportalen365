@@ -43,7 +43,7 @@ export interface IProjectTimelineState
   /**
    * Selection
    */
-  selectedItems?: any[]
+  selectedItem?: any[]
 
   /**
    * Show filter panel
