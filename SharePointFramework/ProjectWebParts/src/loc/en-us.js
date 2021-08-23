@@ -112,14 +112,13 @@ define([], function () {
     HeightFieldLabel: 'Height (pixels)',
     CalloutTemplateFieldLabel: 'Callout template',
 
-    TitleFieldLabel: 'Tittel',
     FilterText: 'Filtrer',
     PhaseLabel: 'Fase',
     SiteTitleLabel: 'Prosjekt',
     TypeLabel: 'Type',
     ProjecttimelineGroupName: 'Prosjekttidslinje',
 
-    ProjectTimelineInfoText: 'Her listes alle prosjektene med start- og sluttdato. Prosjekttidslinjen støtter også faser, delfaser og milepæler, dette opprettes i den<A HREF="../Lists/Tidslinjeinnhold/AllItems.aspx?Source={0}">sentrale tidslinjeinnhold listen</A>. Prosjekter vises med rød farge, faser i blått, delfaser blågrønt, og milepæler i gult',
+    ProjectTimelineInfoText: 'Her listes prosjektets tidslinje med start- og sluttdato. Prosjekttidslinjen støtter også faser, delfaser og milepæler, dette opprettes og vedlikeholdes i listen under. Prosjektet vises med rød farge, faser i blått, delfaser blågrønt, og milepæler i gult',
     TimelineContentListName: 'Tidslinjeinnhold',
     PortfolioManagerGroupName: 'Porteføljeinnsyn',
     ProjectTimelineItemInfo: '{0} - prosjektets tidsforløp',
