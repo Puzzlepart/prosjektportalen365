@@ -58,7 +58,7 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
    * @param {IProjectTimelineProps} props Props
    */
   constructor(props: IProjectTimelineProps) {
-    super('ProjectTimeline', props, { selectedItems: [], loading: true, showFilterPanel: false, activeFilters: {} })
+    super('ProjectTimeline', props, { selectedItem: [], loading: true, showFilterPanel: false, activeFilters: {} })
 
     this._portalDataService = new PortalDataService().configure({
       urlOrWeb: this.props.hubSite.web,
@@ -67,7 +67,7 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
 
     this._selection = new Selection({
       onSelectionChanged: () => {
-        this.setState({ selectedItems: this._selection.getSelection() })
+        this.setState({ selectedItem: this._selection.getSelection() })
       }
     })
 
@@ -322,13 +322,24 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
       iconProps: { iconName: 'Edit' },
       buttonStyles: { root: { border: 'none' }},
       iconOnly: false,
-      disabled: this.state.selectedItems.length === 0,
-      onClick: (ev) => {
-        ev.preventDefault()
-        this.setState({ showFilterPanel: true })
-      }
+      disabled: this.state.selectedItem.length === 0,
+      href: this.state.selectedItem[0]?.EditFormUrl
     })
     return cmd
+  }
+
+  /**
+   * Edit form URL with added Source parameter
+   */
+  public editFormUrl(item: any) {
+    return [
+      `${this.props.hubSite.url}`,
+      `/Lists/${strings.TimelineContentListName}/EditForm.aspx`,
+      '?ID=',
+      item.Id,
+      '&Source=',
+      encodeURIComponent(window.location.href)
+    ].join('')
   }
 
   /**
@@ -418,6 +429,7 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
         await this._web.lists
           .getByTitle(strings.TimelineContentListName)
           .items.select(
+            'Id',
             internalNames,
             'SiteIdLookup/Title',
             'SiteIdLookup/GtSiteId',
@@ -446,6 +458,10 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
       })
 
       console.log(timelineListItems)
+
+      timelineListItems = timelineListItems.map((item) => {
+        return { ...item,  EditFormUrl: this.editFormUrl(item) }
+      })
 
       timelineItems = timelineItems.map((item) => {
         const model = new TimelineContentModel(
