@@ -1,15 +1,15 @@
 import { get } from '@microsoft/sp-lodash-subset'
 import { getId } from '@uifabric/utilities'
 import sortArray from 'array-sort'
-import { ITimelineData, ITimelineGroup, ITimelineItem, TimelineGroupType } from 'interfaces'
+import { ITimelineData, ITimelineGroup, ITimelineItem } from './types'
 import moment from 'moment'
 import { CommandBar, ICommandBarProps } from 'office-ui-fabric-react/lib/CommandBar'
 import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
-import * as strings from 'PortfolioWebPartsStrings'
-import React, { Component } from 'react'
+import * as strings from 'ProjectWebPartsStrings'
+import React from 'react'
 import Timeline, {
   ReactCalendarGroupRendererProps,
   ReactCalendarItemRendererProps,
@@ -22,32 +22,62 @@ import { FilterPanel, IFilterItemProps, IFilterProps } from '../FilterPanel'
 import { DetailsCallout } from './DetailsCallout'
 import styles from './ProjectTimeline.module.scss'
 import './Timeline.overrides.css'
-import { IProjectTimelineProps, IProjectTimelineState } from './types'
-import { ProjectListModel, TimelineContentListModel } from 'models'
+import { IProjectTimelineProps, IProjectTimelineState, IProjectTimelineData, ProjectPropertyModel } from './types'
+import { ProjectModel, TimelineContentModel } from 'models'
+import { BaseWebPartComponent } from '../BaseWebPartComponent'
+
+import { Web } from '@pnp/sp'
+
+import { isEmpty } from 'underscore'
+import SPDataAdapter from '../../data'
+import { PortalDataService } from 'pp365-shared/lib/services'
+import { LogLevel } from '@pnp/logging'
+
+import { stringIsNullOrEmpty } from '@pnp/common'
+import { DetailsList, DetailsListLayoutMode, Selection, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
+import { tryParseCurrency } from 'pp365-shared/lib/helpers'
+import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection'
 
 /**
  * @component ProjectTimeline
  * @extends Component
  */
-export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTimelineState> {
+export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps, IProjectTimelineState> {
   public static defaultProps: Partial<IProjectTimelineProps> = {
     defaultTimeStart: [-1, 'months'],
     defaultTimeEnd: [1, 'years']
   }
+
+  private _portalDataService: PortalDataService
+  private _web: Web
+  private _selection: Selection;
+
   /**
    * Constructor
    *
    * @param {IProjectTimelineProps} props Props
    */
   constructor(props: IProjectTimelineProps) {
-    super(props)
-    this.state = { loading: true, showFilterPanel: false, activeFilters: {} }
+    super('ProjectTimeline', props, { selectedItems: [], loading: true, showFilterPanel: false, activeFilters: {} })
+
+    this._portalDataService = new PortalDataService().configure({
+      urlOrWeb: this.props.hubSite.web,
+      siteId: this.props.siteId
+    })
+
+    this._selection = new Selection({
+      onSelectionChanged: () => {
+        this.setState({ selectedItems: this._selection.getSelection() })
+      }
+    })
+
     moment.locale('nb')
   }
 
   public async componentDidMount(): Promise<void> {
     try {
       const data = await this._fetchData()
+      console.log(data)
       this.setState({ data, loading: false })
     } catch (error) {
       this.setState({ error, loading: false })
@@ -67,6 +97,8 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
     }
 
     const { groups, items } = this._getFilteredData()
+
+    console.log(this.state)
 
     return (
       <div className={styles.root}>
@@ -105,6 +137,22 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
               </TimelineMarkers>
             </Timeline>
           </div>
+          <div className={styles.timelineList}>
+            <div className={styles.commandBar}>
+              <CommandBar {...this._getListCommandBarProps()} />
+            </div>
+            <MarqueeSelection selection={this._selection}>
+              <DetailsList
+                // onRenderDetailsHeader={this._onRenderDetailsHeader.bind(this)}
+                columns={this.state.data.timelineColumns}
+                items={this.state.data.timelineListItems}
+                onRenderItemColumn={this._onRenderItemColumn.bind(this)}
+                selection={this._selection}
+                selectionMode={SelectionMode.single}
+                layoutMode={DetailsListLayoutMode.justified}
+              />
+            </MarqueeSelection>
+          </div>
         </div>
         <FilterPanel
           isOpen={this.state.showFilterPanel}
@@ -123,12 +171,66 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
     )
   }
 
+  private _onRenderItemColumn = (item: any, index: number, column: IColumn) => {
+    if (!column.fieldName) return null
+    if (column.onRender) return column.onRender(item, index, column)
+    if (!stringIsNullOrEmpty(column['fieldNameDisplay'])) {
+      return get(item, column['fieldNameDisplay'], null)
+    }
+    const columnValue = get(item, column.fieldName, null)
+
+    switch (column?.data?.type.toLowerCase()) {
+      case 'int':
+        return columnValue ? parseInt(columnValue) : null
+      case 'date':
+        return moment(columnValue).format('DD.MM.YYYY')
+      case 'datetime':
+        return moment(columnValue).format('DD.MM.YYYY')
+      case 'currency':
+        return tryParseCurrency(columnValue, '').toString().replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')
+      default:
+        return columnValue
+    }
+  }
+
+  // /**
+  //  * On render details header
+  //  *
+  //  * @param {IDetailsHeaderProps} props Props
+  //  * @param {IRenderFunction} defaultRender Default render
+  //  */
+  // private _onRenderDetailsHeader(
+  //   props: IDetailsHeaderProps,
+  //   defaultRender?: IRenderFunction<IDetailsHeaderProps>
+  // ) {
+  //   return (
+  //     <Sticky
+  //       stickyClassName={styles.stickyHeader}
+  //       stickyPosition={StickyPositionType.Header}
+  //       isScrollSynced={true}>
+  //       <div className={styles.header}>
+  //         <div className={styles.title}>{strings.TimelineContentListName}</div>
+  //       </div>
+  //       <div className={styles.infoText}>
+  //         <MessageBar>
+  //           <div
+  //             dangerouslySetInnerHTML={{
+  //               __html: strings.ProjectTimelineListInfoText
+  //             }}></div>
+  //         </MessageBar>
+  //       </div>
+  //       <div className={styles.headerColumns}>{defaultRender(props)}</div>
+  //     </Sticky>
+  //   )
+  // }
+
   /**
    * Get filtered data
    */
   private _getFilteredData(): ITimelineData {
     const { activeFilters, data } = { ...this.state } as IProjectTimelineState
     const activeFiltersKeys = Object.keys(activeFilters)
+
     if (activeFiltersKeys.length > 0) {
       const items = activeFiltersKeys.reduce(
         (newItems, key) => newItems.filter((i) => activeFilters[key].indexOf(get(i, key)) !== -1),
@@ -199,6 +301,37 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   }
 
   /**
+   * Get command bar items
+   */
+  private _getListCommandBarProps(): ICommandBarProps {
+    const cmd: ICommandBarProps = { items: [], farItems: [] }
+    cmd.items.push({
+      key: getId('NewElement'),
+      name: strings.NewElementLabel,
+      iconProps: { iconName: 'Add' },
+      buttonStyles: { root: { border: 'none' } },
+      iconOnly: false,
+      onClick: (ev) => {
+        ev.preventDefault()
+        this.setState({ showFilterPanel: true })
+      }
+    })
+    cmd.items.push({
+      key: getId('EditElement'),
+      name: strings.EditElementLabel,
+      iconProps: { iconName: 'Edit' },
+      buttonStyles: { root: { border: 'none' }},
+      iconOnly: false,
+      disabled: this.state.selectedItems.length === 0,
+      onClick: (ev) => {
+        ev.preventDefault()
+        this.setState({ showFilterPanel: true })
+      }
+    })
+    return cmd
+  }
+
+  /**
    * Timeline item renderer
    */
   private _itemRenderer(props: ReactCalendarItemRendererProps<any>) {
@@ -244,9 +377,6 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    */
   private _groupRenderer({ group }: ReactCalendarGroupRendererProps<ITimelineGroup>) {
     const style: React.CSSProperties = { display: 'block', width: '100%' }
-    if (group.type === TimelineGroupType.Role) {
-      style.fontStyle = 'italic'
-    }
     return (
       <div>
         <span style={style}>{group.title}</span>
@@ -265,11 +395,86 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   }
 
   /**
+   * Get timeline items and columns
+   */
+  public async _getProjecttimelineItemsAndColumns() {
+    this._web = new Web(this.props.hubSite.url)
+
+    try {
+      let [allColumns] = await Promise.all([
+        (await this._web.lists
+          .getByTitle(strings.TimelineContentListName).defaultView.fields.select('Items')
+          .get())['Items']])
+
+      let filterstring: string = allColumns
+        .map((x: any) => `(InternalName eq '${x}')`)
+        .join(' or ');
+
+      let internalNames: string = await allColumns
+        .map((x: any) => `${x}`)
+        .join(',');
+
+      let [timelineItems] = await Promise.all([
+        await this._web.lists
+          .getByTitle(strings.TimelineContentListName)
+          .items.select(
+            internalNames,
+            'SiteIdLookup/Title',
+            'SiteIdLookup/GtSiteId',
+          ).expand('SiteIdLookup')
+          .get()
+      ])
+
+      let timelineListItems = timelineItems.filter((item) => item.SiteIdLookup[0].Title === this.props.webTitle)
+
+      let [timelineColumns] = await Promise.all([
+        await this._web.lists
+          .getByTitle(strings.TimelineContentListName).fields.filter(filterstring)
+          .select("InternalName", "Title", "TypeAsString").get()])
+
+      const columns: IColumn[] = timelineColumns.filter((column) => column.InternalName !== 'SiteIdLookup').map((column) => {
+        return {
+          key: column.InternalName,
+          name: column.Title,
+          fieldName: column.InternalName,
+          data: { type: column.TypeAsString },
+          minWidth: 100,
+          maxWidth: 150,
+          sorting: true,
+          isResizable: true,
+        }
+      })
+
+      console.log(timelineListItems)
+
+      timelineItems = timelineItems.map((item) => {
+        const model = new TimelineContentModel(
+          item.SiteIdLookup && item.SiteIdLookup[0].GtSiteId,
+          item.SiteIdLookup && item.SiteIdLookup[0].Title,
+          item.Title,
+          item.TimelineType,
+          item.GtStartDate,
+          item.GtEndDate,
+          item.GtBudgetTotal,
+          item.GtCostsTotal,
+        )
+        return model
+      })
+        .filter((p) => p)
+
+
+      return [timelineItems, timelineListItems, columns]
+    } catch (error) {
+      return []
+    }
+  }
+
+  /**
    * Creating groups based on projects title
    *
    * @returns {ITimelineGroup[]} Timeline groups
    */
-  private _transformGroups(projects: ProjectListModel[]): ITimelineGroup[] {
+  private _transformGroups(projects: ProjectModel[]): ITimelineGroup[] {
     const groupNames: string[] = projects
       .map((project) => {
         const name = project.title
@@ -277,11 +482,11 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
       })
       .filter((value, index, self) => self.indexOf(value) === index)
     let groups: ITimelineGroup[] = groupNames.map((name, id) => {
-      const [title, type] = name.split('|')
+      const [title] = name.split('|')
       return {
         id,
         title,
-        type: type === 'R' ? TimelineGroupType.Role : TimelineGroupType.User
+        type: 'Prosjekt'
       }
     })
     groups = sortArray(groups, ['type', 'title'])
@@ -291,15 +496,15 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   /**
    * Create items
    *
-   * @param {ProjectListModel[]} projects Projects
-   * @param {TimelineContentListModel[]} timelineItems Timeline items
+   * @param {ProjectModel[]} projects Projects
+   * @param {TimelineContentModel[]} timelineItems Timeline items
    * @param {ITimelineGroup[]} groups Groups
    *
    * @returns {ITimelineItem[]} Timeline items
    */
   private _transformItems(
-    projects: ProjectListModel[],
-    timelineItems: TimelineContentListModel[],
+    projects: ProjectModel[],
+    timelineItems: TimelineContentModel[],
     groups: ITimelineGroup[]
   ): ITimelineItem[] {
     const items: ITimelineItem[] = projects.map((project, id) => {
@@ -312,6 +517,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         background: '#f35d69',
         backgroundColor: '#f35d69'
       }
+
       return {
         id,
         group: group.id,
@@ -322,13 +528,13 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         project: project.title,
         projectUrl: project.url,
         phase: project.phase,
-        type: project.type,
+        type: 'Prosjekt',
         budgetTotal: project.budgetTotal,
         costsTotal: project.costsTotal
       } as ITimelineItem
     })
 
-    const phases: ITimelineItem[] = timelineItems.map((item, id) => {
+    const phases: ITimelineItem[] = timelineItems.filter((item) => item.title === this.props.webTitle).map((item, id) => {
       id += items.length
 
       const backgroundColor = item.type === strings.PhaseLabel
@@ -349,7 +555,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         backgroundColor: backgroundColor
       }
       return {
-        id,
+        id: id,
         group: group.id,
         title: item.itemTitle,
         start_time: item.type === strings.MilestoneLabel ? moment(new Date(item.endDate)) : moment(new Date(item.startDate)),
@@ -366,25 +572,95 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   }
 
   /**
+   * Transform properties from entity item and configuration
+   *
+   * @param {IProjectInformationData} data Data
+   */
+  private _transformProperties({ columns, fields, fieldValuesText }: IProjectTimelineData) {
+    const fieldNames: string[] = Object.keys(fieldValuesText).filter((fieldName) => {
+      const [field] = fields.filter((fld) => fld.InternalName === fieldName)
+      if (!field) return false
+      if (
+        isEmpty(columns) &&
+        ((this.props.showFieldExternal || {})[fieldName] || this.props.skipSyncToHub)
+      ) {
+        return true
+      }
+      const [column] = columns.filter((c) => c.internalName === fieldName)
+      return column
+    })
+
+    const properties = fieldNames.map((fn) => {
+      const [field] = fields.filter((fld) => fld.InternalName === fn)
+      return new ProjectPropertyModel(field, fieldValuesText[fn])
+    })
+
+    return properties
+  }
+
+  /**
+   * Fetch data
+   */
+  private async _fetchProjectData(): Promise<Partial<IProjectTimelineState>> {
+    try {
+      SPDataAdapter.configure(this.props.webPartContext, {
+        siteId: this.props.siteId,
+        webUrl: this.props.webUrl,
+        hubSiteUrl: this.props.hubSite.url,
+        logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+      })
+
+      const [columns, propertiesData] = await Promise.all([
+        this._portalDataService.getProjectColumns(),
+        SPDataAdapter.project.getPropertiesData()
+      ])
+
+      const data: IProjectTimelineData = {
+        columns,
+        ...propertiesData
+      }
+
+      const properties = this._transformProperties(data)
+
+      return { data, properties }
+    } catch (error) {
+      this.logError('Failed to retrieve data.', '_fetchData', error)
+      throw error
+    }
+  }
+
+  /**
    * Fetch data
    *
    * @returns {ITimelineData} Timeline data
    */
   private async _fetchData(): Promise<ITimelineData> {
     try {
-      const projects = await this.props.dataAdapter.fetchEncrichedProjects()
-      const timelineItems: any = (await this.props.dataAdapter._fetchTimelineContentItems()).timelineItems
+      let projectData = (await this._fetchProjectData()).data.fieldValuesText;
 
-      await Promise.all(projects.map(async (project) => {
-        const statusReport = (await this.props.dataAdapter._fetchDataForTimelineProject(project.siteId)).statusReports[0]
-        project['budgetTotal'] = statusReport && statusReport['GtBudgetTotalOWSCURR']
-        project['costsTotal'] = statusReport && statusReport['GtCostsTotalOWSCURR']
-        project['type'] = strings.ProjectLabel
-      }))
+      console.log(projectData)
 
-      const groups = this._transformGroups(projects)
-      const items = this._transformItems(projects, timelineItems, groups)
-      return { items, groups }
+      const project = new ProjectModel(
+        this.props.siteId,
+        this.props.siteId,
+        this.props.webTitle,
+        this.props.webUrl,
+        projectData.GtProjectPhase,
+        projectData.GtStartDate,
+        projectData.GtEndDate,
+      )
+
+      project['type'] = strings.ProjectLabel
+      project['budgetTotal'] = projectData.GtBudgetTotal
+      project['costsTotal'] = projectData.GtCostsTotal
+
+      const [timelineItems, timelineListItems, timelineColumns] = await this._getProjecttimelineItemsAndColumns()
+
+      console.log(timelineColumns)
+
+      const groups = this._transformGroups([project])
+      const items = this._transformItems([project], timelineItems, groups)
+      return { items, groups, timelineListItems, timelineColumns }
     } catch (error) {
       throw error
     }

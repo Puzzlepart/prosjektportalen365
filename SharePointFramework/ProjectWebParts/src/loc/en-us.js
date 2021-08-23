@@ -117,9 +117,12 @@ define([], function () {
     SiteTitleLabel: 'Prosjekt',
     TypeLabel: 'Type',
     ProjecttimelineGroupName: 'Prosjekttidslinje',
-
+    
     ProjectTimelineInfoText: 'Her listes prosjektets tidslinje med start- og sluttdato. Prosjekttidslinjen støtter også faser, delfaser og milepæler, dette opprettes og vedlikeholdes i listen under. Prosjektet vises med rød farge, faser i blått, delfaser blågrønt, og milepæler i gult',
+    ProjectTimelineListInfoText: 'Her listes listeelementene for prosjektet. Her kan du redigere og legge til nye elementer. Dette vil synkroniseres til listen på hubområdet. ',
     TimelineContentListName: 'Tidslinjeinnhold',
+    NewElementLabel: 'Nytt element',
+    EditElementLabel: 'Rediger',
     PortfolioManagerGroupName: 'Porteføljeinnsyn',
     ProjectTimelineItemInfo: '{0} - prosjektets tidsforløp',
     LastPublishedStatusreport: 'Gå til siste statusrapport',

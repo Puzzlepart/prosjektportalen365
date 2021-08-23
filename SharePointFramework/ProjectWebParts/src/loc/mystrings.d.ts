@@ -118,7 +118,10 @@ declare interface IProjectWebPartsStrings {
   ProjecttimelineGroupName: string;
 
   ProjectTimelineInfoText: string;
+  ProjectTimelineListInfoText: string;
   TimelineContentListName: string;
+  NewElementLabel: string;
+  EditElementLabel: string;
   PortfolioManagerGroupName: string;
   ProjectTimelineItemInfo: string;
   LastPublishedStatusreport: string;
