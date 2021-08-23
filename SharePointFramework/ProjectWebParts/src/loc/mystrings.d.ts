@@ -111,7 +111,6 @@ declare interface IProjectWebPartsStrings {
   HeightFieldLabel: string;
   CalloutTemplateFieldLabel: string;
 
-  TitleFieldLabel: string;
   FilterText: string;
   PhaseLabel: string;
   SiteTitleLabel: string;
