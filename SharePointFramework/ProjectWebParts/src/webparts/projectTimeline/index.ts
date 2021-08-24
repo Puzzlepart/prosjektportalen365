@@ -1,6 +1,5 @@
 import {
   IPropertyPaneConfiguration,
-  PropertyPaneSlider,
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane'
 import '@pnp/polyfill-ie11'
@@ -29,20 +28,6 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                 PropertyPaneTextField('listName', {
                   label: strings.ListNameFieldLabel,
                   value: 'Tidslinjeinnhold'
-                }),
-                PropertyPaneSlider('width', {
-                  label: strings.WidthFieldLabel,
-                  min: 800,
-                  max: 1600,
-                  value: 800,
-                  showValue: true
-                }),
-                PropertyPaneSlider('height', {
-                  label: strings.HeightFieldLabel,
-                  min: 400,
-                  max: 1000,
-                  value: 400,
-                  showValue: true
                 })
               ]
             }
