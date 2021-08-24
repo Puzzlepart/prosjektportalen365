@@ -36,7 +36,6 @@ import { LogLevel } from '@pnp/logging'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { DetailsList, DetailsListLayoutMode, Selection, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
 import { tryParseCurrency } from 'pp365-shared/lib/helpers'
-import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection'
 
 /**
  * @component ProjectTimeline
@@ -141,7 +140,6 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
             <div className={styles.commandBar}>
               <CommandBar {...this._getListCommandBarProps()} />
             </div>
-            <MarqueeSelection selection={this._selection}>
               <DetailsList
                 // onRenderDetailsHeader={this._onRenderDetailsHeader.bind(this)}
                 columns={this.state.data.timelineColumns}
@@ -151,7 +149,6 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
                 selectionMode={SelectionMode.single}
                 layoutMode={DetailsListLayoutMode.justified}
               />
-            </MarqueeSelection>
           </div>
         </div>
         <FilterPanel
@@ -311,10 +308,13 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
       iconProps: { iconName: 'Add' },
       buttonStyles: { root: { border: 'none' } },
       iconOnly: false,
-      onClick: (ev) => {
-        ev.preventDefault()
-        this.setState({ showFilterPanel: true })
-      }
+      href: `${this.props.hubSite.url}/Lists/${strings.TimelineContentListName}/NewForm.aspx?&Source=${encodeURIComponent(
+        window.location.href
+      )}`
+      // onClick: (ev) => {
+      //   ev.preventDefault()
+      //   this.setState({ showFilterPanel: true })
+      // }
     })
     cmd.items.push({
       key: getId('EditElement'),
@@ -444,7 +444,9 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
           .getByTitle(strings.TimelineContentListName).fields.filter(filterstring)
           .select("InternalName", "Title", "TypeAsString").get()])
 
-      const columns: IColumn[] = timelineColumns.filter((column) => column.InternalName !== 'SiteIdLookup').map((column) => {
+      const columns: IColumn[] = timelineColumns
+        .filter((column) => column.InternalName !== 'SiteIdLookup')
+        .map((column) => {
         return {
           key: column.InternalName,
           name: column.Title,
