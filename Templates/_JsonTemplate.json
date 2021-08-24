@@ -439,10 +439,6 @@
                 "Title": "Prosjektstatus"
             },
             {
-                "Url": "SitePages/Prosjekttidslinje.aspx",
-                "Title": "Prosjekttidslinje"
-            },
-            {
                 "Url": "Lists/Prosjektlogg/AllItems.aspx",
                 "Title": "Prosjektlogg"
             },
@@ -507,6 +503,10 @@
             {
                 "Url": "Lists/Ressursallokering/AllItems.aspx",
                 "Title": "Ressursallokering"
+            },
+            {
+                "Url": "SitePages/Prosjekttidslinje.aspx",
+                "Title": "Prosjekttidslinje"
             },
             {
                 "Url": "_layouts/15/viewlsts.aspx",
@@ -692,9 +692,7 @@
                                     "Id": "d156652b-9121-47af-89ae-1fe8427c53da",
                                     "Properties": {
                                         "title": "Prosjekttidslinje",
-                                        "listName": "Tidslinjeinnhold",
-                                        "width": 800,
-                                        "height": 400
+                                        "listName": "Tidslinjeinnhold"
                                     }
                                 }
                             ]

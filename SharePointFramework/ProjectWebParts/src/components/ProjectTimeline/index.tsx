@@ -141,7 +141,6 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
               <CommandBar {...this._getListCommandBarProps()} />
             </div>
               <DetailsList
-                // onRenderDetailsHeader={this._onRenderDetailsHeader.bind(this)}
                 columns={this.state.data.timelineColumns}
                 items={this.state.data.timelineListItems}
                 onRenderItemColumn={this._onRenderItemColumn.bind(this)}
@@ -189,37 +188,6 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
         return columnValue
     }
   }
-
-  // /**
-  //  * On render details header
-  //  *
-  //  * @param {IDetailsHeaderProps} props Props
-  //  * @param {IRenderFunction} defaultRender Default render
-  //  */
-  // private _onRenderDetailsHeader(
-  //   props: IDetailsHeaderProps,
-  //   defaultRender?: IRenderFunction<IDetailsHeaderProps>
-  // ) {
-  //   return (
-  //     <Sticky
-  //       stickyClassName={styles.stickyHeader}
-  //       stickyPosition={StickyPositionType.Header}
-  //       isScrollSynced={true}>
-  //       <div className={styles.header}>
-  //         <div className={styles.title}>{strings.TimelineContentListName}</div>
-  //       </div>
-  //       <div className={styles.infoText}>
-  //         <MessageBar>
-  //           <div
-  //             dangerouslySetInnerHTML={{
-  //               __html: strings.ProjectTimelineListInfoText
-  //             }}></div>
-  //         </MessageBar>
-  //       </div>
-  //       <div className={styles.headerColumns}>{defaultRender(props)}</div>
-  //     </Sticky>
-  //   )
-  // }
 
   /**
    * Get filtered data
@@ -311,10 +279,6 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
       href: `${this.props.hubSite.url}/Lists/${strings.TimelineContentListName}/NewForm.aspx?&Source=${encodeURIComponent(
         window.location.href
       )}`
-      // onClick: (ev) => {
-      //   ev.preventDefault()
-      //   this.setState({ showFilterPanel: true })
-      // }
     })
     cmd.items.push({
       key: getId('EditElement'),
