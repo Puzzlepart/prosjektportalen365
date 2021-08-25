@@ -8,11 +8,6 @@ import { stringIsNullOrEmpty } from '@pnp/common'
 
 export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   /**
-   * Data source
-   */
-  dataSource: string
-
-  /**
    * Default time start
    */
   defaultTimeStart?: [number, moment.unitOfTime.DurationConstructor]
@@ -21,16 +16,6 @@ export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
    * Default time end
    */
   defaultTimeEnd?: [number, moment.unitOfTime.DurationConstructor]
-
-  /**
-   * A hash object of fields to show for external users
-   */
-  showFieldExternal?: TypedHash<boolean>
-
-  /**
-   * Skip sync to hub
-   */
-  skipSyncToHub?: boolean
 }
 
 export interface IProjectTimelineState
@@ -74,8 +59,8 @@ export interface IProjectTimelineState
 export interface ITimelineData {
   items: ITimelineItem[]
   groups: ITimelineGroup[],
-  timelineListItems?: any,
-  timelineColumns?: any;
+  timelineListItems?: any[],
+  timelineColumns?: any[];
 }
 
 export interface ITimelineGroup {

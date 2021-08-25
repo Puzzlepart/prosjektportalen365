@@ -5,7 +5,6 @@ import { ITimelineData, ITimelineGroup, ITimelineItem } from './types'
 import moment from 'moment'
 import { CommandBar, ICommandBarProps } from 'office-ui-fabric-react/lib/CommandBar'
 import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu'
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectWebPartsStrings'
@@ -17,39 +16,46 @@ import Timeline, {
   TodayMarker
 } from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css'
-import _ from 'underscore'
+import _, { isEmpty } from 'underscore'
 import { FilterPanel, IFilterItemProps, IFilterProps } from '../FilterPanel'
 import { DetailsCallout } from './DetailsCallout'
 import styles from './ProjectTimeline.module.scss'
 import './Timeline.overrides.css'
-import { IProjectTimelineProps, IProjectTimelineState, IProjectTimelineData, ProjectPropertyModel } from './types'
 import { ProjectModel, TimelineContentModel } from 'models'
 import { BaseWebPartComponent } from '../BaseWebPartComponent'
-
 import { Web } from '@pnp/sp'
-
-import { isEmpty } from 'underscore'
 import SPDataAdapter from '../../data'
 import { PortalDataService } from 'pp365-shared/lib/services'
 import { LogLevel } from '@pnp/logging'
-
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { DetailsList, DetailsListLayoutMode, Selection, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
 import { tryParseCurrency } from 'pp365-shared/lib/helpers'
+import {
+  DetailsList,
+  DetailsListLayoutMode,
+  Selection,
+  SelectionMode,
+  IColumn
+} from 'office-ui-fabric-react/lib/DetailsList'
+import {
+  IProjectTimelineProps,
+  IProjectTimelineState,
+  IProjectTimelineData,
+  ProjectPropertyModel
+} from './types'
 
 /**
- * @component ProjectTimeline
+ * @component ProjectTimeline (Project webpart)
  * @extends Component
  */
 export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps, IProjectTimelineState> {
+  private _portalDataService: PortalDataService
+  private _selection: Selection
+  private _web: Web
+
   public static defaultProps: Partial<IProjectTimelineProps> = {
     defaultTimeStart: [-1, 'months'],
     defaultTimeEnd: [1, 'years']
   }
-
-  private _portalDataService: PortalDataService
-  private _web: Web
-  private _selection: Selection;
 
   /**
    * Constructor
@@ -96,7 +102,6 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
     }
 
     const { groups, items } = this._getFilteredData()
-
     console.log(this.state)
 
     return (
@@ -140,14 +145,14 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
             <div className={styles.commandBar}>
               <CommandBar {...this._getListCommandBarProps()} />
             </div>
-              <DetailsList
-                columns={this.state.data.timelineColumns}
-                items={this.state.data.timelineListItems}
-                onRenderItemColumn={this._onRenderItemColumn.bind(this)}
-                selection={this._selection}
-                selectionMode={SelectionMode.single}
-                layoutMode={DetailsListLayoutMode.justified}
-              />
+            <DetailsList
+              columns={this.state.data.timelineColumns}
+              items={this.state.data.timelineListItems}
+              onRenderItemColumn={this._onRenderItemColumn.bind(this)}
+              selection={this._selection}
+              selectionMode={SelectionMode.single}
+              layoutMode={DetailsListLayoutMode.justified}
+            />
           </div>
         </div>
         <FilterPanel
@@ -167,6 +172,13 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
     )
   }
 
+  /**
+   * On render item column
+   *
+   * @param {any} item Item
+   * @param {number} _index Index
+   * @param {IColumn} column Column
+   */
   private _onRenderItemColumn = (item: any, index: number, column: IColumn) => {
     if (!column.fieldName) return null
     if (column.onRender) return column.onRender(item, index, column)
@@ -213,7 +225,6 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
    */
   private _getFilters(): IFilterProps[] {
     const columns = [
-      { fieldName: 'project', name: strings.SiteTitleLabel },
       { fieldName: 'type', name: strings.TypeLabel }
     ]
     return columns.map((col) => ({
@@ -275,7 +286,6 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
       name: strings.NewElementLabel,
       iconProps: { iconName: 'Add' },
       buttonStyles: { root: { border: 'none' } },
-      iconOnly: false,
       href: `${this.props.hubSite.url}/Lists/${strings.TimelineContentListName}/NewForm.aspx?&Source=${encodeURIComponent(
         window.location.href
       )}`
@@ -284,8 +294,7 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
       key: getId('EditElement'),
       name: strings.EditElementLabel,
       iconProps: { iconName: 'Edit' },
-      buttonStyles: { root: { border: 'none' }},
-      iconOnly: false,
+      buttonStyles: { root: { border: 'none' } },
       disabled: this.state.selectedItem.length === 0,
       href: this.state.selectedItem[0]?.EditFormUrl
     })
@@ -293,7 +302,9 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
   }
 
   /**
-   * Edit form URL with added Source parameter
+   * Edit form URL with added Source parameter generated from the item ID
+   * 
+   * @param {any} item Item
    */
   public editFormUrl(item: any) {
     return [
@@ -330,7 +341,6 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
             }}>
           </div>
         </div>
-
       )
 
     return (
@@ -376,25 +386,25 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
     this._web = new Web(this.props.hubSite.url)
 
     try {
-      let [allColumns] = await Promise.all([
+      const [allColumns] = await Promise.all([
         (await this._web.lists
           .getByTitle(strings.TimelineContentListName).defaultView.fields.select('Items')
           .get())['Items']])
 
-      let filterstring: string = allColumns
-        .map((x: any) => `(InternalName eq '${x}')`)
-        .join(' or ');
+      const filterstring: string = allColumns
+        .map((col: string) => `(InternalName eq '${col}')`)
+        .join(' or ')
 
-      let internalNames: string = await allColumns
-        .map((x: any) => `${x}`)
-        .join(',');
+      const internalNames: string = await allColumns
+        .map((col: string) => `${col}`)
+        .join(',')
 
       let [timelineItems] = await Promise.all([
         await this._web.lists
           .getByTitle(strings.TimelineContentListName)
           .items.select(
-            'Id',
             internalNames,
+            'Id',
             'SiteIdLookup/Title',
             'SiteIdLookup/GtSiteId',
           ).expand('SiteIdLookup')
@@ -406,27 +416,27 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
       let [timelineColumns] = await Promise.all([
         await this._web.lists
           .getByTitle(strings.TimelineContentListName).fields.filter(filterstring)
-          .select("InternalName", "Title", "TypeAsString").get()])
+          .select('InternalName', 'Title', 'TypeAsString').get()])
 
       const columns: IColumn[] = timelineColumns
         .filter((column) => column.InternalName !== 'SiteIdLookup')
         .map((column) => {
-        return {
-          key: column.InternalName,
-          name: column.Title,
-          fieldName: column.InternalName,
-          data: { type: column.TypeAsString },
-          minWidth: 100,
-          maxWidth: 150,
-          sorting: true,
-          isResizable: true,
-        }
-      })
+          return {
+            key: column.InternalName,
+            name: column.Title,
+            fieldName: column.InternalName,
+            data: { type: column.TypeAsString },
+            minWidth: 100,
+            maxWidth: 150,
+            sorting: true,
+            isResizable: true,
+          }
+        })
 
       console.log(timelineListItems)
 
       timelineListItems = timelineListItems.map((item) => {
-        return { ...item,  EditFormUrl: this.editFormUrl(item) }
+        return { ...item, EditFormUrl: this.editFormUrl(item) }
       })
 
       timelineItems = timelineItems.map((item) => {
@@ -442,8 +452,7 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
         )
         return model
       })
-        .filter((p) => p)
-
+        .filter((t) => t)
 
       return [timelineItems, timelineListItems, columns]
     } catch (error) {
@@ -563,8 +572,7 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
       const [field] = fields.filter((fld) => fld.InternalName === fieldName)
       if (!field) return false
       if (
-        isEmpty(columns) &&
-        ((this.props.showFieldExternal || {})[fieldName] || this.props.skipSyncToHub)
+        isEmpty(columns) && [fieldName]
       ) {
         return true
       }
@@ -618,7 +626,7 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
    */
   private async _fetchData(): Promise<ITimelineData> {
     try {
-      let projectData = (await this._fetchProjectData()).data.fieldValuesText;
+      let projectData = (await this._fetchProjectData()).data.fieldValuesText
 
       console.log(projectData)
 
