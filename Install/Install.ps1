@@ -212,16 +212,18 @@ if (-not $SkipSiteDesign.IsPresent) {
 
     Try {
         $SiteDesignName = [Uri]::UnescapeDataString($SiteDesignName)
+        $SiteDesignDesc = [Uri]::UnescapeDataString("Samarbeid i et prosjektomr%C3%A5de fra Prosjektportalen")
+        
         Write-Host "[INFO] Creating/updating site design [$SiteDesignName]"   
         Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
     
         $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName 
 
         if ($null -ne $SiteDesign) {
-            $SiteDesign = Set-PnPSiteDesign -Identity $SiteDesign -SiteScriptIds $SiteScriptIds -Description "" -Version "1"
+            $SiteDesign = Set-PnPSiteDesign -Identity $SiteDesign -SiteScriptIds $SiteScriptIds -Description $SiteDesignDesc -Version "1"
         }
         else {
-            $SiteDesign = Add-PnPSiteDesign -Title $SiteDesignName -SiteScriptIds $SiteScriptIds -Description "" -WebTemplate TeamSite
+            $SiteDesign = Add-PnPSiteDesign -Title $SiteDesignName -SiteScriptIds $SiteScriptIds -Description $SiteDesignDesc -WebTemplate TeamSite
         }
         if ([string]::IsNullOrEmpty($SiteDesignSecurityGroupId)) {
             Write-Host "[INFO] You have not specified -SiteDesignSecurityGroupId. Everyone will have View access to site design [$SiteDesignName]" -ForegroundColor Yellow

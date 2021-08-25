@@ -12,3 +12,4 @@ Templates/Resources.json
 .DS_Store
 SharePointFramework/**/config/config.backup.json
 **/package-lock.json 
+node_modules

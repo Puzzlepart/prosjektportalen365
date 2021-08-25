@@ -1,5 +1,0 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-npx @appnest/readme generate --silent
-npx @appnest/readme generate --config dev/blueprint.json --silent
