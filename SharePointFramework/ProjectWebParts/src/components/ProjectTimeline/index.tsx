@@ -26,8 +26,8 @@ import { BaseWebPartComponent } from '../BaseWebPartComponent'
 import { Web } from '@pnp/sp'
 import SPDataAdapter from '../../data'
 import { PortalDataService } from 'pp365-shared/lib/services'
-import { LogLevel } from '@pnp/logging'
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { Logger, LogLevel } from '@pnp/logging'
+import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { tryParseCurrency } from 'pp365-shared/lib/helpers'
 import {
   DetailsList,
@@ -82,7 +82,6 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
   public async componentDidMount(): Promise<void> {
     try {
       const data = await this._fetchData()
-      console.log(data)
       this.setState({ data, loading: false })
     } catch (error) {
       this.setState({ error, loading: false })
@@ -102,7 +101,6 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
     }
 
     const { groups, items } = this._getFilteredData()
-    console.log(this.state)
 
     return (
       <div className={styles.root}>
@@ -191,9 +189,9 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
       case 'int':
         return columnValue ? parseInt(columnValue) : null
       case 'date':
-        return moment(columnValue).format('DD.MM.YYYY')
+        return columnValue && moment(columnValue).format('DD.MM.YYYY')
       case 'datetime':
-        return moment(columnValue).format('DD.MM.YYYY')
+        return columnValue && moment(columnValue).format('DD.MM.YYYY')
       case 'currency':
         return tryParseCurrency(columnValue, '').toString().replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')
       default:
@@ -286,9 +284,13 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
       name: strings.NewElementLabel,
       iconProps: { iconName: 'Add' },
       buttonStyles: { root: { border: 'none' } },
-      href: `${this.props.hubSite.url}/Lists/${strings.TimelineContentListName}/NewForm.aspx?&Source=${encodeURIComponent(
-        window.location.href
-      )}`
+      // href: `${this.props.hubSite.url}/Lists/${strings.TimelineContentListName}/NewForm.aspx?&Source=${encodeURIComponent(
+      //   window.location.href
+      // )}`,
+      onClick: () => {
+        this._redirectNewTimelineItem()
+        console.log(this.state)
+      }
     })
     cmd.items.push({
       key: getId('EditElement'),
@@ -302,11 +304,48 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
   }
 
   /**
+   * Create new status report and send the user to the edit form
+   */
+  private async _redirectNewTimelineItem() {
+    const [project] = (await this._web.lists.getByTitle(strings.ProjectsListName).items.select('Id', 'Title').get()).filter((project) => project.Title === this.props.webTitle)
+    let properties: TypedHash<string | number | boolean | object> = {
+      Title: 'Nytt element',
+      SiteIdLookupId: project.Id
+    }
+    Logger.log({
+      message: '(TimelineItem) _redirectNewTimelineItem: Created new timeline item',
+      data: { fieldValues: properties },
+      level: LogLevel.Info
+    })
+
+    const itemId = await this._addTimelineItem(properties)
+    document.location.hash = ''
+    document.location.href = this._editFormUrl(itemId)
+  }
+
+  /**
+   * Add timeline item
+   *
+   * @param {TypedHash} properties Properties
+   * @param {string} contentTypeId Content type id
+   * @param {string} defaultEditFormUrl Default edit form URL
+   */
+  public async _addTimelineItem(
+    properties: TypedHash<string | number | boolean | object>,
+  ): Promise<any> {
+    const list = this._web.lists.getByTitle(strings.TimelineContentListName)
+    const itemAddResult = await list.items.add(properties)
+    console.log(itemAddResult)
+
+    return itemAddResult.data.Id
+  }
+
+  /**
    * Edit form URL with added Source parameter generated from the item ID
    * 
    * @param {any} item Item
    */
-  public editFormUrl(item: any) {
+  public _editFormUrl(item: any) {
     return [
       `${this.props.hubSite.url}`,
       `/Lists/${strings.TimelineContentListName}/EditForm.aspx`,
@@ -405,18 +444,23 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
           .items.select(
             internalNames,
             'Id',
+            'SiteIdLookupId',
             'SiteIdLookup/Title',
             'SiteIdLookup/GtSiteId',
           ).expand('SiteIdLookup')
           .get()
       ])
 
-      let timelineListItems = timelineItems.filter((item) => item.SiteIdLookup[0].Title === this.props.webTitle)
+      console.log(timelineItems)
+
+      let timelineListItems = timelineItems.filter((item) => item.SiteIdLookup.Title === this.props.webTitle)
 
       let [timelineColumns] = await Promise.all([
         await this._web.lists
           .getByTitle(strings.TimelineContentListName).fields.filter(filterstring)
           .select('InternalName', 'Title', 'TypeAsString').get()])
+
+      console.log(timelineColumns)
 
       const columns: IColumn[] = timelineColumns
         .filter((column) => column.InternalName !== 'SiteIdLookup')
@@ -436,13 +480,13 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
       console.log(timelineListItems)
 
       timelineListItems = timelineListItems.map((item) => {
-        return { ...item, EditFormUrl: this.editFormUrl(item) }
+        return { ...item, EditFormUrl: this._editFormUrl(item) }
       })
 
       timelineItems = timelineItems.map((item) => {
         const model = new TimelineContentModel(
-          item.SiteIdLookup && item.SiteIdLookup[0].GtSiteId,
-          item.SiteIdLookup && item.SiteIdLookup[0].Title,
+          item.SiteIdLookup && item.SiteIdLookup.GtSiteId,
+          item.SiteIdLookup && item.SiteIdLookup.Title,
           item.Title,
           item.TimelineType,
           item.GtStartDate,
