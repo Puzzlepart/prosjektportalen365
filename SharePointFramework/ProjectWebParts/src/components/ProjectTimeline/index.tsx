@@ -53,8 +53,8 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
   private _web: Web
 
   public static defaultProps: Partial<IProjectTimelineProps> = {
-    defaultTimeStart: [-1, 'months'],
-    defaultTimeEnd: [1, 'years']
+    defaultTimeStart: [-6, 'months'],
+    defaultTimeEnd: [2, 'years']
   }
 
   /**
@@ -284,12 +284,8 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
       name: strings.NewElementLabel,
       iconProps: { iconName: 'Add' },
       buttonStyles: { root: { border: 'none' } },
-      // href: `${this.props.hubSite.url}/Lists/${strings.TimelineContentListName}/NewForm.aspx?&Source=${encodeURIComponent(
-      //   window.location.href
-      // )}`,
       onClick: () => {
         this._redirectNewTimelineItem()
-        console.log(this.state)
       }
     })
     cmd.items.push({
@@ -304,11 +300,11 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
   }
 
   /**
-   * Create new status report and send the user to the edit form
+   * Create new timeline item and send the user to the edit form
    */
   private async _redirectNewTimelineItem() {
     const [project] = (await this._web.lists.getByTitle(strings.ProjectsListName).items.select('Id', 'Title').get()).filter((project) => project.Title === this.props.webTitle)
-    let properties: TypedHash<string | number | boolean | object> = {
+    const properties: TypedHash<string | number | boolean> = {
       Title: 'Nytt element',
       SiteIdLookupId: project.Id
     }
@@ -331,13 +327,11 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
    * @param {string} defaultEditFormUrl Default edit form URL
    */
   public async _addTimelineItem(
-    properties: TypedHash<string | number | boolean | object>,
+    properties: TypedHash<string | number | boolean>,
   ): Promise<any> {
     const list = this._web.lists.getByTitle(strings.TimelineContentListName)
     const itemAddResult = await list.items.add(properties)
-    console.log(itemAddResult)
-
-    return itemAddResult.data.Id
+    return itemAddResult.data
   }
 
   /**
@@ -451,16 +445,12 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
           .get()
       ])
 
-      console.log(timelineItems)
-
       let timelineListItems = timelineItems.filter((item) => item.SiteIdLookup.Title === this.props.webTitle)
 
-      let [timelineColumns] = await Promise.all([
+      const [timelineColumns] = await Promise.all([
         await this._web.lists
           .getByTitle(strings.TimelineContentListName).fields.filter(filterstring)
           .select('InternalName', 'Title', 'TypeAsString').get()])
-
-      console.log(timelineColumns)
 
       const columns: IColumn[] = timelineColumns
         .filter((column) => column.InternalName !== 'SiteIdLookup')
@@ -470,14 +460,12 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
             name: column.Title,
             fieldName: column.InternalName,
             data: { type: column.TypeAsString },
-            minWidth: 100,
-            maxWidth: 150,
+            minWidth: 150,
+            maxWidth: 200,
             sorting: true,
             isResizable: true,
           }
         })
-
-      console.log(timelineListItems)
 
       timelineListItems = timelineListItems.map((item) => {
         return { ...item, EditFormUrl: this._editFormUrl(item) }
@@ -670,9 +658,7 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
    */
   private async _fetchData(): Promise<ITimelineData> {
     try {
-      let projectData = (await this._fetchProjectData()).data.fieldValuesText
-
-      console.log(projectData)
+      const projectData = (await this._fetchProjectData()).data.fieldValuesText
 
       const project = new ProjectModel(
         this.props.siteId,
@@ -689,8 +675,6 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
       project['costsTotal'] = projectData.GtCostsTotal
 
       const [timelineItems, timelineListItems, timelineColumns] = await this._getProjecttimelineItemsAndColumns()
-
-      console.log(timelineColumns)
 
       const groups = this._transformGroups([project])
       const items = this._transformItems([project], timelineItems, groups)
