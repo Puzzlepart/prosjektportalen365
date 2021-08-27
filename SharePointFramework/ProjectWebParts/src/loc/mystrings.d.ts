@@ -110,18 +110,17 @@ declare interface IProjectWebPartsStrings {
   WidthFieldLabel: string;
   HeightFieldLabel: string;
   CalloutTemplateFieldLabel: string;
-
   FilterText: string;
   PhaseLabel: string;
   SiteTitleLabel: string;
   TypeLabel: string;
+  DeleteItemLabel: string;
   ProjecttimelineGroupName: string;
-
   ProjectTimelineInfoText: string;
   ProjectTimelineListInfoText: string;
   TimelineContentListName: string;
-  NewElementLabel: string;
-  EditElementLabel: string;
+  NewItemLabel: string;
+  EditItemLabel: string;
   PortfolioManagerGroupName: string;
   ProjectTimelineItemInfo: string;
   LastPublishedStatusreport: string;

@@ -32,6 +32,11 @@ Every change is marked with issue ID.
 - Fixed date not being recognized when exporting Portfolio overview to Excel. #495
 - Fixed issue where changing project phase did not always update the portfolio page #518
 
+## 1.X.X - TBA
+
+## Added
+- Added a new project webpart, 'Prosjekttidslinje' for showcasing projects and items for the current project on a timeline #503
+
 ## 1.2.8 - 17.06.2021
 
 ## Added
