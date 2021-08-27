@@ -176,7 +176,7 @@ export class PortfolioOverviewCommands extends Component<
 
       const items = isArray(selectedItems) && selectedItems.length > 0 ? selectedItems : fltItems
 
-      fltColumns.map((col) => {
+      fltColumns.forEach((col) => {
         if (col.dataType === 'date') {
           items.map((item) => {
             item[col.fieldName] = new Date(item[col.fieldName])
