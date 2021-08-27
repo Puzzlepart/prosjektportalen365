@@ -264,7 +264,7 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
       name: strings.FilterText,
       iconProps: { iconName: 'Filter' },
       itemType: ContextualMenuItemType.Header,
-      buttonStyles: { root: { border: 'none' } },
+      buttonStyles: { root: { border: 'none', height: '40px' } },
       iconOnly: true,
       onClick: (ev) => {
         ev.preventDefault()
@@ -280,8 +280,8 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
   private _getListCommandBarProps(): ICommandBarProps {
     const cmd: ICommandBarProps = { items: [], farItems: [] }
     cmd.items.push({
-      key: getId('NewElement'),
-      name: strings.NewElementLabel,
+      key: getId('NewItem'),
+      name: strings.NewItemLabel,
       iconProps: { iconName: 'Add' },
       buttonStyles: { root: { border: 'none' } },
       onClick: () => {
@@ -289,12 +289,22 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
       }
     })
     cmd.items.push({
-      key: getId('EditElement'),
-      name: strings.EditElementLabel,
+      key: getId('EditItem'),
+      name: strings.EditItemLabel,
       iconProps: { iconName: 'Edit' },
       buttonStyles: { root: { border: 'none' } },
       disabled: this.state.selectedItem.length === 0,
       href: this.state.selectedItem[0]?.EditFormUrl
+    })
+    cmd.farItems.push({
+      key: getId('DeleteItem'),
+      name: strings.DeleteItemLabel,
+      iconProps: { iconName: 'Delete' },
+      buttonStyles: { root: { border: 'none' } },
+      disabled: this.state.selectedItem.length === 0,
+      onClick: () => {
+        this._deleteTimelineItem(this.state.selectedItem[0])
+      }
     })
     return cmd
   }
@@ -323,8 +333,6 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
    * Add timeline item
    *
    * @param {TypedHash} properties Properties
-   * @param {string} contentTypeId Content type id
-   * @param {string} defaultEditFormUrl Default edit form URL
    */
   public async _addTimelineItem(
     properties: TypedHash<string | number | boolean>,
@@ -332,6 +340,18 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
     const list = this._web.lists.getByTitle(strings.TimelineContentListName)
     const itemAddResult = await list.items.add(properties)
     return itemAddResult.data
+  }
+
+  /**
+   * Delete timelineitem
+   *
+   * @param {any} item Item
+   */
+  private async _deleteTimelineItem(item: any) {
+    const list = this._web.lists.getByTitle(strings.TimelineContentListName)
+    await list.items.getById(item.Id).delete()
+    window.location.hash = ''
+    document.location.reload()
   }
 
   /**
