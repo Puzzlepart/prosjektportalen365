@@ -33,7 +33,10 @@ export const ProjectProperty = ({
       return (
         <div className={styles.projectProperty} title={model.description} style={style}>
           <div className={styles.label}>{model.displayName}</div>
-          <div className={styles.value}>{model.value}</div>
+          <div className={styles.value} dangerouslySetInnerHTML={{
+            __html:
+              model.value.replace(/\n/g, '<br />')
+          }}></div>
         </div>
       )
     }
