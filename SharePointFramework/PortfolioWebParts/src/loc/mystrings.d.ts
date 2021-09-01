@@ -159,6 +159,7 @@ declare interface IPortfolioWebPartsStrings {
   DisplayAllProjects: string
   MyProjectsLabel: string
   AllProjectsLabel: string
+  NoAccessMessage: string
 }
 
 declare module 'PortfolioWebPartsStrings' {
