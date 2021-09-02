@@ -1,4 +1,7 @@
 declare interface IProjectWebPartsStrings {
+  ShowSubTextFieldLabel: string;
+  SyncPropertiesAfterPhaseChangeFieldLabel: string;
+  SubTextTruncateLengthFieldLabel: string;
   SkipSyncToHubLabel: string;
   PhaseFieldFieldLabel: string;
   NoLocalPropertiesListWarningText: string;
@@ -18,7 +21,6 @@ declare interface IProjectWebPartsStrings {
   CloseText: string;
   CommentLabel: string;
   ConfirmChangePhase: string;
-  ConfirmPhaseChangeFieldLabel: string;
   ConfirmPhaseDialogSubText: string;
   ConfirmPhaseDialogTitle: string;
   CurrentPhaseViewNameFieldLabel: string;
@@ -26,6 +28,9 @@ declare interface IProjectWebPartsStrings {
   EditPropertiesText: string;
   EditReportButtonText: string;
   PublishReportButtonText: string;
+  PublishedStatusReport: string;
+  NotPublishedStatusReport: string;
+  DeleteReportButtonText: string;
   EditSiteInformationText: string;
   ErrorText: string;
   ListSectionDataErrorMessage: string;
@@ -34,6 +39,7 @@ declare interface IProjectWebPartsStrings {
   MoveOn: string;
   NewStatusReportModalHeaderText: string;
   NewStatusReportTitle: string;
+  UnpublishedStatusReportInfo: string;
   No: string;
   NoPropertiesMessage: string;
   PageReloadMessage: string;
@@ -50,6 +56,7 @@ declare interface IProjectWebPartsStrings {
   StatusClosed: string;
   StatusNotRelevant: string;
   StatusOpen: string;
+  GetSnapshotButtonText: string;
   StatusStillOpen: string;
   TasksLinkText: string;
   UpdateViewsDocumentsFieldLabel: string;
@@ -68,6 +75,7 @@ declare interface IProjectWebPartsStrings {
   SyncProjectPropertiesSuccessText: string;
   SyncProjectPropertiesErrorText: string;
   SyncProjectPropertiesListProgressDescription: string;
+  SyncProjectPropertiesValuesProgressLabel: string;
   SyncProjectPropertiesValuesProgressDescription: string;
   ProjectStatusDataErrorText: string;
   ShowFieldExternalUsers: string;

@@ -2,5 +2,5 @@ import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndi
 import { IDialogContentProps } from 'office-ui-fabric-react/lib/Dialog'
 
 export interface IProgressDialogProps extends IDialogContentProps {
-    progress: IProgressIndicatorProps;
+  progress: IProgressIndicatorProps
 }

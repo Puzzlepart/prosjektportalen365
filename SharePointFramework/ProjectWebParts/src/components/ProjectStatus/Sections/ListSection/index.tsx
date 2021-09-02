@@ -1,26 +1,34 @@
-import { sp } from '@pnp/sp'
-import { DetailsList, DetailsListLayoutMode, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
+import { Web } from '@pnp/sp'
+import {
+  DetailsList,
+  DetailsListLayoutMode,
+  IColumn,
+  SelectionMode
+} from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { getObjectValue } from 'pp365-shared/lib/helpers'
 import * as strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
-import { getObjectValue } from 'shared/lib/helpers'
-import { BaseSection } from '../BaseSection/index'
 import { StatusElement } from '../../StatusElement'
-import { IListSectionProps, IListSectionState, IListSectionData } from './types'
+import { BaseSection } from '../BaseSection/index'
 import styles from './ListSection.module.scss'
+import { IListSectionData, IListSectionProps, IListSectionState } from './types'
 
-export class ListSection extends BaseSection<IListSectionProps, IListSectionState<IListSectionData>> {
+export class ListSection extends BaseSection<
+  IListSectionProps,
+  IListSectionState<IListSectionData>
+> {
   constructor(props: IListSectionProps) {
     super(props)
-    this.state = { isLoading: true }
+    this.state = { loading: true }
   }
 
   public async componentDidMount() {
     try {
-      const data = await this._fetchData()
-      this.setState({ data, isLoading: false })
+      const data = await this._fetchListData()
+      this.setState({ data, loading: false })
     } catch (error) {
-      this.setState({ error, isLoading: false })
+      this.setState({ error, loading: false })
     }
   }
 
@@ -44,11 +52,15 @@ export class ListSection extends BaseSection<IListSectionProps, IListSectionStat
    * Render list
    */
   private _renderList() {
-    if (this.state.isLoading || !this.state.data) {
+    if (this.state.loading || !this.state.data) {
       return null
     }
     if (this.state.error) {
-      return <MessageBar messageBarType={MessageBarType.error}>{strings.ListSectionDataErrorMessage}</MessageBar>
+      return (
+        <MessageBar messageBarType={MessageBarType.error}>
+          {strings.ListSectionDataErrorMessage}
+        </MessageBar>
+      )
     }
     return (
       <div className={`${styles.list} ms-Grid-col ms-sm12`}>
@@ -56,37 +68,47 @@ export class ListSection extends BaseSection<IListSectionProps, IListSectionStat
           columns={getObjectValue<IColumn[]>(this.state, 'data.columns', [])}
           items={getObjectValue<any[]>(this.state, 'data.items', [])}
           selectionMode={SelectionMode.none}
-          layoutMode={DetailsListLayoutMode.justified} />
+          layoutMode={DetailsListLayoutMode.justified}
+        />
       </div>
     )
   }
 
   /**
-   * Fetch data
+   * Fetch list data
    */
-  private async _fetchData(): Promise<IListSectionData> {
+  private async _fetchListData(): Promise<IListSectionData> {
     const { listTitle, viewQuery, viewFields, rowLimit } = this.props.model
-    const list = sp.web.lists.getByTitle(listTitle)
+    const list = new Web(this.props.webUrl).lists.getByTitle(listTitle)
     try {
       const viewXml = `<View><Query>${viewQuery}</Query><RowLimit>${rowLimit}</RowLimit></View>`
       const [items, fields] = await Promise.all([
         list.getItemsByCAMLQuery({ ViewXml: viewXml }, 'FieldValuesAsText') as Promise<any[]>,
-        list.fields.select('Title', 'InternalName', 'TypeAsString').get<{ Title: string; InternalName: string; TypeAsString: string }[]>(),
+        list.fields
+          .select('Title', 'InternalName', 'TypeAsString')
+          .get<{ Title: string; InternalName: string; TypeAsString: string }[]>()
       ])
       if (items.length === 0) return null
-      const itemValues = items.map(i => i.FieldValuesAsText)
+      const itemValues = items.map((i) => i.FieldValuesAsText)
       const columns: IColumn[] = viewFields
-        .filter(vf => fields.filter(fld => fld.InternalName === vf).length === 1)
-        .map(vf => {
-          const [field] = fields.filter(fld => fld.InternalName === vf)
-          return ({
+        .filter((vf) => fields.filter((fld) => fld.InternalName === vf).length === 1)
+        .map((vf) => {
+          const [field] = fields.filter((fld) => fld.InternalName === vf)
+          return {
             key: field.InternalName,
             fieldName: field.InternalName,
             name: field.Title,
             minWidth: 100,
-            maxWidth: { Text: 250, Note: 250, Choice: 150, Number: 100 }[field.TypeAsString] || 150,
+            maxWidth:
+              {
+                Text: 250,
+                Note: 250,
+                Choice: 150,
+                Number: 100
+              }[field.TypeAsString] || 150,
             isResizable: true,
-          } as IColumn)
+            isMultiline: true
+          } as IColumn
         })
       return { items: itemValues, columns }
     } catch (error) {

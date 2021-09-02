@@ -3,7 +3,7 @@
     "solution": {
         "name": "pp-project-extensions",
         "id": "fe723971-d5c2-4698-91e3-c16e2f72fb5b",
-        "version": "1.2.2.0",
+        "version": "1.2.8.0",
         "includeClientSideAssets": true,
         "skipFeatureDeployment": true,
         "webApiPermissionRequests": [
@@ -11,7 +11,14 @@
                 "resource": "Microsoft Graph",
                 "scope": "Group.ReadWrite.All"
             }
-        ]
+        ],
+        "developer": {
+            "name": "Puzzlepart AS",
+            "mpnId": "",
+            "privacyUrl": "https://puzzlepart.com/",
+            "termsOfUseUrl": "https://puzzlepart.com/",
+            "websiteUrl": "https://puzzlepart.com/"
+        }
     },
     "paths": {
         "zippedPackage": "solution/pp-project-extensions.sppkg"

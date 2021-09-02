@@ -1,3 +1,3 @@
-import { ISPDataAdapterBaseConfiguration } from 'shared/lib/data'
+import { ISPDataAdapterBaseConfiguration } from 'pp365-shared/lib/data'
 
 export type ISPDataAdapterConfiguration = ISPDataAdapterBaseConfiguration

@@ -1,4 +1,8 @@
-.documentTemplateDialog {
+.root {
   width: 750px;
   max-width: 750px;
+
+  .container {
+    padding: 8px 0 0 0;
+  }
 }

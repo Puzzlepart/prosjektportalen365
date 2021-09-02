@@ -1,10 +1,19 @@
 {
     "files.exclude": {
-        "node_modules": true,
-        "Release": true,
-        "wiki": true,
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/node_modules": true,
+        "**/lib": true,
+        "**/dist": true,
+        "**/temp": true,
+        "**/package-lock.json": true,
+        "**/pnpm-lock.yaml": true,
+        "README.md": true,
+        "dev/README.md": true
     },
     "files.associations": {
-        "*.txt": "json"
+        "*.txt": "json",
+        ".README": "markdown",
+        "dev/.README": "markdown"
     },
 }

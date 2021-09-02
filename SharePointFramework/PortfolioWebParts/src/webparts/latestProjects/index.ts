@@ -1,11 +1,15 @@
+import {
+  IPropertyPaneConfiguration,
+  PropertyPaneSlider,
+  PropertyPaneTextField
+} from '@microsoft/sp-property-pane'
 import { ILatestProjectsProps, LatestProjects } from 'components/LatestProjects'
-import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneSlider } from '@microsoft/sp-webpart-base'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export default class LatestProjectsWebPart extends BasePortfolioWebPart<ILatestProjectsProps> {
   public render(): void {
-    this.renderComponent(LatestProjects)
+    this.renderComponent<ILatestProjectsProps>(LatestProjects)
   }
 
   public async onInit(): Promise<void> {
@@ -22,18 +26,18 @@ export default class LatestProjectsWebPart extends BasePortfolioWebPart<ILatestP
               groupFields: [
                 PropertyPaneTextField('loadingText', {
                   label: strings.LoadingTextLabel,
-                  description: strings.LoadingTextDescription,
+                  description: strings.LoadingTextDescription
                 }),
                 PropertyPaneTextField('emptyMessage', {
                   label: strings.EmptyMessageLabel,
-                  description: strings.EmptyMessageDescription,
+                  description: strings.EmptyMessageDescription
                 }),
                 PropertyPaneSlider('rowLimit', {
                   label: strings.RowLimitLabel,
                   min: 5,
                   max: 15,
-                  step: 1,
-                }),
+                  step: 1
+                })
               ]
             }
           ]

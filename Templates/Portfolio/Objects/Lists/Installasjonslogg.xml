@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_InstallationLog_Title}" Description="" Hidden="true" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_InstallationLog_Url}" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" EnableFolderCreation="false" 
+<pnp:ListInstance Title="{resource:Lists_InstallationLog_Title}" Description="" Hidden="true" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_InstallationLog_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableFolderCreation="false" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_InstallationLog_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
@@ -24,4 +24,5 @@
         <Field DisplayName="InstallVersion" Name="InstallVersion" Title="InstallVersion" Type="Text" ID="{5e7d44ea-0667-4155-a2b8-fa46c018dbb2}" SourceID="{{listid:Installasjonslogg}}" StaticName="InstallVersion" />
         <Field DisplayName="InstallCommand" Name="InstallCommand" Title="InstallCommand" Type="Text" ID="{265e131b-7825-421d-a1a1-c8eebe9d32e9}" SourceID="{{listid:Installasjonslogg}}" StaticName="InstallCommand" />
     </pnp:Fields>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

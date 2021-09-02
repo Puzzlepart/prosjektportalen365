@@ -8,7 +8,6 @@ const pkgDeploy = require('spfx-pkgdeploy').default
 const tsConfig = require('./tsconfig.json')
 const WebpackBar = require('webpackbar')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-const LiveReloadPlugin = require('webpack-livereload-plugin')
 const os = require('os')
 const argv = require('yargs').argv
 const log = require('@microsoft/gulp-core-build').log
@@ -77,13 +76,11 @@ build.configureWebpack.mergeConfig({
         webpack.plugins = webpack.plugins || []
         log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('WebpackBar')}...`)
         webpack.plugins.push(new WebpackBar())
-        log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('LiveReloadPlugin')}...`)
-        webpack.plugins.push(new LiveReloadPlugin())
         if (buildConfig.bundleAnalyzerEnabled) {
             log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('BundleAnalyzerPlugin')}...`)
             webpack.plugins.push(new BundleAnalyzerPlugin())
         }
-        if (webpack.optimization) {
+        if (webpack.optimization && webpack.optimization.minimizer) {
             log(`[${colors.cyan('configure-webpack')}] Setting ${colors.cyan('minimizer')} to run ${colors.cyan(buildConfig.parallel)} processes in parallel and enabling cache...`)
             webpack.optimization.minimizer[0].options.parallel = buildConfig.parallel
             webpack.optimization.minimizer[0].options.cache = true

@@ -1,5 +1,5 @@
-import { IPhaseChecklistItem } from 'models/IPhaseChecklistItem'
+import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
 
 export default interface IChecklistItemProps {
-    item: IPhaseChecklistItem;
+  item: IProjectPhaseChecklistItem
 }

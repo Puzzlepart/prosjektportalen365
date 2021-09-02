@@ -1,12 +1,15 @@
-import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base'
+import {
+  IPropertyPaneConfiguration,
+  PropertyPaneTextField,
+  PropertyPaneToggle
+} from '@microsoft/sp-property-pane'
 import { BenefitsOverview, IBenefitsOverviewProps } from 'components/BenefitsOverview'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
-
 export default class BenefitsOverviewWebPart extends BasePortfolioWebPart<IBenefitsOverviewProps> {
   public render(): void {
-    this.renderComponent(BenefitsOverview)
+    this.renderComponent<IBenefitsOverviewProps>(BenefitsOverview)
   }
 
   public async onInit(): Promise<void> {
@@ -22,22 +25,22 @@ export default class BenefitsOverviewWebPart extends BasePortfolioWebPart<IBenef
               groupName: strings.GeneralGroupName,
               groupFields: [
                 PropertyPaneTextField('searchBoxPlaceholderText', {
-                  label: strings.SearchBoxPlaceholderTextLabel,
+                  label: strings.SearchBoxPlaceholderTextLabel
                 }),
                 PropertyPaneTextField('dataSource', {
-                  label: strings.DataSourceLabel,
+                  label: strings.DataSourceLabel
                 }),
                 PropertyPaneTextField('dataSourceCategory', {
-                  label: strings.DataSourceCategoryLabel,
+                  label: strings.DataSourceCategoryLabel
                 }),
                 PropertyPaneToggle('showCommandBar', {
-                  label: strings.ShowCommandBarLabel,
+                  label: strings.ShowCommandBarLabel
                 }),
                 PropertyPaneToggle('showExcelExportButton', {
-                  label: strings.ShowExcelExportButtonLabel,
-                }),
+                  label: strings.ShowExcelExportButtonLabel
+                })
               ]
-            },
+            }
           ]
         }
       ]

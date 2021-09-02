@@ -1,0 +1,31 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+    "id": "7284c568-f66c-4218-bb2c-3734a3cfa581",
+    "alias": "ProjectTimelineWebPart",
+    "componentType": "WebPart",
+    "version": "1.2.8",
+    "manifestVersion": 2,
+    "requiresCustomScript": false,
+    "hiddenFromToolbox": true,
+    "supportedHosts": [
+        "SharePointWebPart"
+    ],
+    "preconfiguredEntries": [
+        {
+            "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+            "group": {
+                "default": "Other"
+            },
+            "title": {
+                "default": "Prosjektttidslinje"
+            },
+            "description": {
+                "default": " "
+            },
+            "officeFabricIconFontName": "TimelineDelivery",
+            "properties": {
+                "dataSource": "Alle ressursallokeringer"
+            }
+        }
+    ]
+}

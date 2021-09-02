@@ -1,4 +1,5 @@
-﻿Param(
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "")]
+Param(
     [Parameter(Mandatory = $true, HelpMessage = "N/A")]
     [string]$Url,
     [Parameter(Mandatory = $false, HelpMessage = "N/A")]
@@ -33,7 +34,9 @@
     [string]$TenantAppCatalogUrl,
     [Parameter(Mandatory = $false, HelpMessage = "Language")]
     [ValidateSet('Norwegian')]
-    [string]$Language = "Norwegian"
+    [string]$Language = "Norwegian",
+    [Parameter(Mandatory = $false, HelpMessage = "CI")]
+    [string]$CI
 )
 
 #region Handling installation language
@@ -68,17 +71,23 @@ function Connect-SharePoint {
     )
 
     Try {
-        if ($UseWebLogin.IsPresent) {
-            Connect-PnPOnline -Url $Url -UseWebLogin -ErrorAction Stop
+        if (-not [string]::IsNullOrEmpty($CI)) {
+            $DecodedCred = ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($CI))).Split("|")
+            $Password = ConvertTo-SecureString -String $DecodedCred[1] -AsPlainText -Force
+            $Credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $DecodedCred[0], $Password
+            Connect-PnPOnline -Url $Url -Credentials $Credentials -ErrorAction Stop  -WarningAction Ignore
+        }
+        elseif ($UseWebLogin.IsPresent) {
+            Connect-PnPOnline -Url $Url -UseWebLogin -ErrorAction Stop -WarningAction Ignore
         }
         elseif ($null -ne $PSCredential) {
-            Connect-PnPOnline -Url $Url -Credentials $PSCredential -ErrorAction Stop
+            Connect-PnPOnline -Url $Url -Credentials $PSCredential -ErrorAction Stop  -WarningAction Ignore
         }
         elseif ($null -ne $GenericCredential -and $GenericCredential -ne "") {
-            Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ErrorAction Stop
+            Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ErrorAction Stop  -WarningAction Ignore
         }
         else {
-            Connect-PnPOnline -Url $Url -ErrorAction Stop
+            Connect-PnPOnline -Url $Url -ErrorAction Stop -WarningAction Ignore
         }
     }
     Catch {
@@ -92,12 +101,18 @@ function LoadBundle() {
     return (Get-Command Connect-PnPOnline).Version
 }
 
-if (-not $SkipLoadingBundle.IsPresent) {
-    $PnPVersion = LoadBundle    
-    Write-Host "[INFO] Loaded [SharePointPnPPowerShellOnline] v.$($PnPVersion) from bundle"
+if (-not [string]::IsNullOrEmpty($CI)) {
+    Write-Host "[Running in CI mode. Installing module SharePointPnPPowerShellOnline.]" -ForegroundColor Yellow
+    Install-Module -Name SharePointPnPPowerShellOnline -Force -Scope CurrentUser -ErrorAction Stop
 }
 else {
-    Write-Host "[INFO] Loaded [SharePointPnPPowerShellOnline] v.$((Get-Command Connect-PnPOnline).Version) from your environment"
+    if (-not $SkipLoadingBundle.IsPresent) {
+        $PnPVersion = LoadBundle    
+        Write-Host "[INFO] Loaded [SharePointPnPPowerShellOnline] v.$($PnPVersion) from bundle"
+    }
+    else {
+        Write-Host "[INFO] Loaded [SharePointPnPPowerShellOnline] v.$((Get-Command Connect-PnPOnline).Version) from your environment"
+    }
 }
 
 
@@ -109,7 +124,6 @@ $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".share
 #endregion
 
 #region Print installation user
-
 Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
 $CurrentUser = Get-PnPProperty -Property CurrentUser -ClientObject (Get-PnPContext).Web
 Write-Host "[INFO] Installing with user [$($CurrentUser.Email)]"
@@ -123,7 +137,7 @@ if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -o
 }
 #endregion
 
-Set-PnPTraceLog -On -Level Debug -LogFile InstallLog.txt
+Set-PnPTraceLog -On -Level Debug -LogFile Install_Log.txt  
 
 #region Create site
 if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
@@ -175,7 +189,7 @@ if (-not $SkipSiteDesign.IsPresent) {
         Write-Host "[INFO] Creating/updating site scripts"        
         Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
         $SiteScripts = Get-PnPSiteScript
-        $SiteScriptSrc = Get-ChildItem "./SiteScripts/*.txt"
+        $SiteScriptSrc = Get-ChildItem "$PSScriptRoot/SiteScripts/*.txt"
         foreach ($s in $SiteScriptSrc) {
             $Title = $s.BaseName.Substring(9)
             $Content = (Get-Content -Path $s.FullName -Raw | Out-String)
@@ -198,16 +212,18 @@ if (-not $SkipSiteDesign.IsPresent) {
 
     Try {
         $SiteDesignName = [Uri]::UnescapeDataString($SiteDesignName)
+        $SiteDesignDesc = [Uri]::UnescapeDataString("Samarbeid i et prosjektomr%C3%A5de fra Prosjektportalen")
+        
         Write-Host "[INFO] Creating/updating site design [$SiteDesignName]"   
         Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
     
         $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName 
 
         if ($null -ne $SiteDesign) {
-            $SiteDesign = Set-PnPSiteDesign -Identity $SiteDesign -SiteScriptIds $SiteScriptIds -Description "" -Version "1"
+            $SiteDesign = Set-PnPSiteDesign -Identity $SiteDesign -SiteScriptIds $SiteScriptIds -Description $SiteDesignDesc -Version "1"
         }
         else {
-            $SiteDesign = Add-PnPSiteDesign -Title $SiteDesignName -SiteScriptIds $SiteScriptIds -Description "" -WebTemplate TeamSite
+            $SiteDesign = Add-PnPSiteDesign -Title $SiteDesignName -SiteScriptIds $SiteScriptIds -Description $SiteDesignDesc -WebTemplate TeamSite
         }
         if ([string]::IsNullOrEmpty($SiteDesignSecurityGroupId)) {
             Write-Host "[INFO] You have not specified -SiteDesignSecurityGroupId. Everyone will have View access to site design [$SiteDesignName]" -ForegroundColor Yellow
@@ -216,6 +232,9 @@ if (-not $SkipSiteDesign.IsPresent) {
             Write-Host "[INFO] Granting group $SiteDesignSecurityGroupId View access to site design [$SiteDesignName]"
             Grant-PnPSiteDesignRights -Identity $SiteDesign.Id.Guid -Principals @("c:0t.c|tenant|$SiteDesignSecurityGroupId")
         }
+        Write-Host "[INFO] Setting default site design for hub [$Url] to [$SiteDesignName]"
+        Set-PnPHubSite -Identity $Url -SiteDesignId $SiteDesign.Id.Guid
+
         Disconnect-PnPOnline
         Write-Host "[SUCCESS] Successfully created/updated site design [$SiteDesignName]" -ForegroundColor Green
     }
@@ -242,7 +261,7 @@ if (-not $SkipAppPackages.IsPresent) {
     }
     Try {
         Write-Host "[INFO] Installing SharePoint Framework app packages to [$TenantAppCatalogUrl]"
-        foreach ($AppPkg in (Get-ChildItem .\Apps\ -ErrorAction SilentlyContinue)) {
+        foreach ($AppPkg in (Get-ChildItem "$PSScriptRoot\Apps" -ErrorAction SilentlyContinue)) {
             Write-Host "[INFO] Installing $($AppPkg.BaseName)..."  -NoNewline
             Add-PnPApp -Path $AppPkg.FullName -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop >$null 2>&1
             Write-Host " DONE" -ForegroundColor Green
@@ -267,10 +286,26 @@ if (-not $Upgrade.IsPresent) {
     }
     Catch {}
 }
+#endregion
+
+
+#region Remove pages with deprecated client side components
+if ($Upgrade.IsPresent) {
+    Try {
+        Connect-SharePoint -Url $Url -ErrorAction Stop
+        Write-Host "[INFO] Removing deprecated pages"    
+        ."$PSScriptRoot\Scripts\RemoveDeprecatedPages.ps1"
+        Disconnect-PnPOnline
+        Write-Host "[SUCCESS] Removed deprecated pages" -ForegroundColor Green
+    }
+    Catch {}
+}
+#endregion
 
 #region Applying PnP templates 
 if (-not $SkipTemplate.IsPresent) {
     Try {
+        $BasePath = "$PSScriptRoot\Templates"
         Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
         Set-PnPTenantSite -NoScriptSite:$false -Url $Url -ErrorAction SilentlyContinue >$null 2>&1        
         Disconnect-PnPOnline
@@ -285,20 +320,25 @@ if (-not $SkipTemplate.IsPresent) {
         }
         if (-not $SkipTaxonomy.IsPresent -and -not $Upgrade.IsPresent) {
             Write-Host "[INFO] Applying PnP template [Taxonomy] to [$Url]"
-            Apply-PnPProvisioningTemplate .\Templates\Taxonomy.pnp -ErrorAction Stop
+            Apply-PnPProvisioningTemplate "$BasePath\Taxonomy.pnp" -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP template [Taxonomy] to [$Url]" -ForegroundColor Green
         }
         
         Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
-        $Instance = Read-PnPProvisioningTemplate .\Templates\Portfolio.pnp
+        $Instance = Read-PnPProvisioningTemplate "$BasePath\Portfolio.pnp"
         $Instance.SupportedUILanguages[0].LCID = $LanguageId
         Apply-PnPProvisioningTemplate -InputInstance $Instance -Handlers SupportedUILanguages
-        Apply-PnPProvisioningTemplate .\Templates\Portfolio.pnp -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
+        Apply-PnPProvisioningTemplate "$BasePath\Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
         Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
 
-        if (-not $Upgrade.IsPresent) {
+        if ($Upgrade.IsPresent) {
+            Write-Host "[INFO] Applying PnP content template (Handlers:Files) to [$Url]"
+            Apply-PnPProvisioningTemplate "$BasePath\Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop
+            Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
+        }
+        else {
             Write-Host "[INFO] Applying PnP content template to [$Url]"
-            Apply-PnPProvisioningTemplate ".\Templates\Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop
+            Apply-PnPProvisioningTemplate "$BasePath\Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
         }
         
@@ -333,7 +373,7 @@ if (-not $SkipSearchConfiguration.IsPresent) {
     Try {
         Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
         Write-Host "[INFO] Importing Search Configuration"    
-        Set-PnPSearchConfiguration -Scope Subscription -Path .\SearchConfiguration.xml -ErrorAction SilentlyContinue   
+        Set-PnPSearchConfiguration -Scope Subscription -Path "$PSScriptRoot/SearchConfiguration.xml" -ErrorAction SilentlyContinue   
         Disconnect-PnPOnline
         Write-Host "[SUCCESS] Successfully imported Search Configuration" -ForegroundColor Green
     }
@@ -347,15 +387,22 @@ if (-not $SkipSearchConfiguration.IsPresent) {
 Connect-SharePoint -Url $Url -ErrorAction Stop
 
 #region Post install
-Write-Host "[INFO] Running post-install steps"
-.\Scripts\PostInstall.ps1
-#endregion
+Write-Host "[INFO] Running post-install steps" 
+try {
+    ."$PSScriptRoot\Scripts\PostInstall.ps1"
+    Write-Host "[SUCCESS] Successfully ran post-install steps" -ForegroundColor Green
+}
+catch {
+    Write-Host "[WARNING] Failed to run post-install steps: $($_.Exception.Message)" -ForegroundColor Yellow
+}
+
 
 $sw.Stop()
 
-Write-Host "[REQUIRED ACTION] Go to $($AdminSiteUrl)/_layouts/15/online/AdminHome.aspx#/webApiPermissionManagement and approve the pending requests" -ForegroundColor Yellow
-Write-Host "[RECOMMENDED ACTION] Go to https://github.com/Puzzlepart/prosjektportalen365/wiki/Installasjon#steg-4-manuelle-steg-etter-installasjonen and verify post-install steps" -ForegroundColor Yellow
-
+if ($null -eq $CI) {
+    Write-Host "[REQUIRED ACTION] Go to $($AdminSiteUrl)/_layouts/15/online/AdminHome.aspx#/webApiPermissionManagement and approve the pending requests" -ForegroundColor Yellow
+    Write-Host "[RECOMMENDED ACTION] Go to https://github.com/Puzzlepart/prosjektportalen365/wiki/Installasjon#steg-4-manuelle-steg-etter-installasjonen and verify post-install steps" -ForegroundColor Yellow
+}
 
 if ($Upgrade.IsPresent) {
     Write-Host "[SUCCESS] Upgrade completed in $($sw.Elapsed)" -ForegroundColor Green
@@ -363,7 +410,9 @@ if ($Upgrade.IsPresent) {
 else {
     Write-Host "[SUCCESS] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
 }
+#endregion
 
+#region Log installation
 $InstallEndTime = (Get-Date -Format o)
 
 $InstallEntry = @{
@@ -373,9 +422,17 @@ $InstallEntry = @{
     InstallCommand   = $MyInvocation.Line.Substring(2);
 }
 
+if (-not [string]::IsNullOrEmpty($CI)) {
+    $InstallEntry.InstallCommand = "GitHub CI";
+}
+
 Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -ErrorAction SilentlyContinue >$null 2>&1
 Disconnect-PnPOnline
 
 $InstallEntry.InstallUrl = $Url
 
-try { Invoke-WebRequest "https://pp365-install-pingback.azurewebsites.net/api/AddEntry" -Body ($InstallEntry | ConvertTo-Json) -Method 'POST' -ErrorAction SilentlyContinue >$null 2>&1 } catch {}
+try { 
+    Invoke-WebRequest "https://pp365-install-pingback.azurewebsites.net/api/AddEntry" -Body ($InstallEntry | ConvertTo-Json) -Method 'POST' -ErrorAction SilentlyContinue >$null 2>&1 
+}
+catch {}
+#endregion

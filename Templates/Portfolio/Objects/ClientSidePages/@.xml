@@ -1,0 +1,12 @@
+<pnp:ClientSidePages xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Erfaringslogg.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Gevinstoversikt.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Home.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Leveranseoversikt.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Portefoljeinnsikt.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Portefoljeoversikt.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Ressursallokering.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Risikooversikt.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Konfigurasjon.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Prosjekttidslinje.xml" />
+</pnp:ClientSidePages>

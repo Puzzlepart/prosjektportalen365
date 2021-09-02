@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_ProjectTemplates_Title}" TemplateType="101" Description="" DocumentTemplate="" Url="{resource:Lists_ProjectTemplates_Url}" Hidden="true" EnableVersioning="false" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" EnableAttachments="false" 
+<pnp:ListInstance Title="{resource:Lists_ProjectTemplates_Title}" TemplateType="101" Description="" Url="{resource:Lists_ProjectTemplates_Url}" Hidden="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableAttachments="false" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:Views RemoveExistingViews="true">
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_ProjectTemplates_Url}/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
@@ -27,7 +27,7 @@
         <Field Type="Boolean" DisplayName="Standardmal" ID="{7bb7252a-a0eb-4e6b-b181-be89075e1d20}" SourceID="{{listid:Prosjektmaler}}" StaticName="IsDefaultTemplate" Name="IsDefaultTemplate">
             <Default>0</Default>
         </Field>
-        <Field Description="Ikon fra https://dev.office.com/fabric#/styles/icons" DisplayName="Ikon" EnforceUniqueValues="TRUE" Format="Dropdown" Indexed="TRUE" MaxLength="15" Name="IconName" Title="IconName" Type="Text" ID="{a655dfc5-5272-43ed-a57e-66e2fa07400a}" SourceID="{{listid:Prosjektmaler}}" StaticName="IconName">
+        <Field Description="Ikon fra https://dev.office.com/fabric#/styles/icons" DisplayName="Ikon" EnforceUniqueValues="FALSE" Format="Dropdown" Indexed="TRUE" MaxLength="15" Name="IconName" Title="IconName" Type="Text" ID="{a655dfc5-5272-43ed-a57e-66e2fa07400a}" SourceID="{{listid:Prosjektmaler}}" StaticName="IconName">
             <Default>Page</Default>
         </Field>
     </pnp:Fields>

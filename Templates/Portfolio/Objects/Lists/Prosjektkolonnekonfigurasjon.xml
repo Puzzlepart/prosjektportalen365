@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_ProjectColumnConfiguration_Title}" Description="" DocumentTemplate="" Hidden="true" TemplateType="100" Url="{resource:Lists_ProjectColumnConfiguration_Url}" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
+<pnp:ListInstance Title="{resource:Lists_ProjectColumnConfiguration_Title}" Description="" DocumentTemplate="" Hidden="true" TemplateType="100" Url="{resource:Lists_ProjectColumnConfiguration_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x01005CC009F95743674DAF31B3531CFFA586" Default="true" />
@@ -27,7 +27,7 @@
         <pnp:FieldRef ID="4cfafd35-e26f-44cf-bb90-47aa65a41827" Name="GtPortfolioColumnColor" Required="true" />
         <pnp:FieldRef ID="d066062c-2fd0-486a-a30a-44bcb3bead4a" Name="GtPortfolioColumnIconName" Required="true" />
     </pnp:FieldRefs>
-    <pnp:DataRows UpdateBehavior="Overwrite" KeyColumn="Title">
+    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip" >
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Status risiko (Lav)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">25</pnp:DataValue>
@@ -176,4 +176,5 @@
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

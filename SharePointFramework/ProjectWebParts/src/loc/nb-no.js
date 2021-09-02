@@ -1,5 +1,9 @@
+/* eslint-disable @typescript-eslint/camelcase */
 define([], function () {
   return {
+    ShowSubTextFieldLabel: 'Vis fasetekst',
+    SyncPropertiesAfterPhaseChangeFieldLabel: 'Synkroniser prosjektegenskaper etter faseendring',
+    SubTextTruncateLengthFieldLabel: 'Max lengde fasetekst',
     ChangePhaseText: 'Endre til denne fasen',
     ChangingPhaseDescription: 'Endrer fase til {0}',
     PleaseWaitText: 'Vennligst vent',
@@ -12,7 +16,6 @@ define([], function () {
     CloseText: 'Lukk',
     CommentLabel: 'Kommentar',
     ConfirmChangePhase: 'Vil du endre fase til {0}?',
-    ConfirmPhaseChangeFieldLabel: 'Bekreft faseenendring',
     ConfirmPhaseDialogSubText: 'Endring av fasen til {0} vil endre dette for alle, vil du fortsette?',
     ConfirmPhaseDialogTitle: 'Endre fase',
     CurrentPhaseViewNameFieldLabel: 'Visningsnavn for gjeldende fase',
@@ -20,6 +23,8 @@ define([], function () {
     EditPropertiesText: 'Rediger egenskaper',
     EditReportButtonText: 'Rediger status',
     PublishReportButtonText: 'Publiser',
+    GetSnapshotButtonText: 'Åpne som øyeblikksbilde',
+    DeleteReportButtonText: 'Slett',
     EditSiteInformationText: 'Rediger områdeinformasjon',
     ErrorText: 'Det skjedde en feil under lasting av {0}.',
     ListSectionDataErrorMessage: 'Det skjedde en feil under uthenting av data for seksjonen. Er den riktig konfigurert?',
@@ -28,6 +33,7 @@ define([], function () {
     MoveOn: 'Gå videre',
     NewStatusReportModalHeaderText: 'Ny statusrapport',
     NewStatusReportTitle: 'Ny statusrapport for {0}',
+    UnpublishedStatusReportInfo: 'Det eksisterer upubliserte statusrapporter. Det er dermed ikke mulig å opprette ny statusrapport. Om du er eier på området, kan du publisere eller slette upubliserte rapporter ved å bruke knappene over etter valgt statusrapport.',
     No: 'Nei',
     NoPropertiesMessage: 'Finner ingen informasjon om prosjektet.',
     PageReloadMessage: 'Oppdater siden for å få oppdaterte listevisninger.',
@@ -37,8 +43,8 @@ define([], function () {
     PhaseChecklistViewUrl: 'Lists/Fasesjekkliste/AllItems.aspx',
     PickReportText: 'Velg rapport',
     SaveText: 'Lagre',
-  RiskMatrixGroupName: 'Risikomatrise',
-  ProjectStatusProjectPropertiesGroupName: 'Prosjektegenskaper (Statusseksjoner)',
+    RiskMatrixGroupName: 'Risikomatrise',
+    ProjectStatusProjectPropertiesGroupName: 'Prosjektegenskaper (Statusseksjoner)',
     SettingsGroupName: 'Innstillinger',
     DataGroupName: 'Data',
     LookAndFeelGroupName: 'Utseende og funksjonalitet',
@@ -64,9 +70,10 @@ define([], function () {
     ProjectPropertiesListName: 'Prosjektegenskaper',
     SyncProjectPropertiesProgressLabel: 'Synkroniserer prosjektegenskaper til porteføljeområdet',
     SyncProjectPropertiesSuccessText: 'Prosjektegenskaper ble synkronisert til porteføljeområdet. Siden lastes på nytt om {0} sekunder.',
-    SyncProjectPropertiesErrorText: 'Det skjedde feil under synkronisering',
+    SyncProjectPropertiesErrorText: 'Det skjedde feil under synkronisering av prosjektegenskaper til porteføljeområdet. Det kan for eksempel være et ugyldig felt.',
     SyncProjectPropertiesListProgressDescription: 'Oppdaterer Prosjektegenskaper-listen',
-    SyncProjectPropertiesValuesProgressDescription: 'Synkroniserer egenskaper',
+    SyncProjectPropertiesValuesProgressLabel: 'Synkroniserer egenskaper',
+    SyncProjectPropertiesValuesProgressDescription: 'Vennligst vent...',
     ProjectStatusDataErrorText: 'Ingen tilgang. Du har ikke tillatelse til å se statusrapporter.',
     ShowFieldExternalUsers: 'Synlig for eksterne brukere',
     ExternalUsersConfigText: 'Konfigurasjon',
@@ -75,6 +82,8 @@ define([], function () {
     WebPartNoAccessMessage: 'Du har ikke tilgang til å se denne webdelen.<br/><br/>Du må enten ha tilgang til porteføljeområdet, eller så må prosjektet være fristilt fra porteføljeområdet.',
     ProjectsListName: 'Prosjekter',
     NoStatusReportsMessage: 'Det er ikke rapportert status for prosjektet enda. Om du er eier på området, kan du rapportere status ved å klikke på _Ny statusrapport_ i menyen over.',
+    PublishedStatusReport: 'Publisert',
+    NotPublishedStatusReport: 'Ikke publisert',
     SyncNowText: 'Synkroniser nå',
     PhaseFieldFieldLabel: 'Fasefelt',
     SkipSyncToHubLabel: 'Ikke synkroniser til hub',
@@ -104,4 +113,4 @@ define([], function () {
     HeightFieldLabel: 'Høyde (piksler)',
     CalloutTemplateFieldLabel: 'Mal for callout'
   }
-});
+})

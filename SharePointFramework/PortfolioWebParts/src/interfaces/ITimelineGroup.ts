@@ -1,10 +1,10 @@
 export enum TimelineGroupType {
-    User,
-    Role,
+  User,
+  Role
 }
 
 export interface ITimelineGroup {
-    id: number;
-    title: string;
-    type: TimelineGroupType;
+  id: number
+  title: string
+  type: TimelineGroupType
 }

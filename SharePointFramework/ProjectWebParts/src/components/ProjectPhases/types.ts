@@ -1,61 +1,78 @@
-import { IPhaseChecklistItem, Phase } from 'models'
+import { IProjectPhaseChecklistItem, ProjectPhaseModel } from 'pp365-shared/lib/models'
 import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
-import { IProjectPhaseMouseOver } from './ProjectPhaseCallout/IProjectPhaseMouseOver'
+import { IProjectPhaseCalloutProps } from './ProjectPhase/ProjectPhaseCallout'
 
 export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   /**
    * Field name for phase field
    */
-  phaseField: string;
-
-  /**
-   * Should phase change be confirmed
-   */
-  confirmPhaseChange: boolean;
+  phaseField: string
 
   /**
    * View name for current phase
    */
-  currentPhaseViewName: boolean;
+  currentPhaseViewName: string
+
+  /**
+   * Show sub text
+   */
+  showSubText: boolean
+
+  /**
+   * Sub text truncate length
+   */
+  subTextTruncateLength: number
+
+  /**
+   * Sync properties after phase change
+   */
+  syncPropertiesAfterPhaseChange: boolean
 }
 
 export interface IProjectPhasesState extends IBaseWebPartComponentState<IProjectPhasesData> {
   /**
-   * Confirm phase
+   * Phase
    */
-  confirmPhase?: Phase;
+  phase?: ProjectPhaseModel
+
+  /**
+   * Phase to be confirmed using ChangePhaseDialog
+   */
+  confirmPhase?: ProjectPhaseModel
 
   /**
    * Is changing phase
    */
-  isChangingPhase?: boolean;
+  isChangingPhase?: boolean
 
   /**
-   * Phase mouse over
+   * Callout
    */
-  phaseMouseOver?: IProjectPhaseMouseOver;
+  callout?: IProjectPhaseCalloutProps
 }
 
-export type ChecklistData = { [termGuid: string]: { stats: { [status: string]: number }; items: IPhaseChecklistItem[] } };
+export type ChecklistData = {
+  [termGuid: string]: { stats: { [status: string]: number }; items: IProjectPhaseChecklistItem[] }
+}
 
 export interface IProjectPhasesData {
-    /**
-     * Phases
-     */
-    phases?: Phase[];
+  /**
+   * Phases
+   */
+  phases?: ProjectPhaseModel[]
 
-    /**
-     * Current phase
-     */
-    currentPhase?: Phase;
+  /**
+   * Current phase
+   */
+  currentPhase?: ProjectPhaseModel
 
-    /**
-     * Check list data
-     */
-    checklistData?: ChecklistData;
+  /**
+   * Check list data
+   */
+  checklistData?: ChecklistData
 
-    /**
-     * Phase text field name
-     */
-    phaseTextField?: string;
+  /**
+   * Phase text field name
+   */
+  phaseTextField?: string
 }

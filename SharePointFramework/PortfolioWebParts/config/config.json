@@ -10,22 +10,6 @@
         }
       ]
     },
-    "deliveries-overview-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/deliveriesOverview/index.js",
-          "manifest": "./src/webparts/deliveriesOverview/manifest.json"
-        }
-      ]
-    },
-    "experience-log-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/experienceLog/index.js",
-          "manifest": "./src/webparts/experienceLog/manifest.json"
-        }
-      ]
-    },
     "latest-projects-web-part": {
       "components": [
         {
@@ -64,10 +48,18 @@
         "manifest": "./src/webparts/resourceAllocation/manifest.json"
       }]
     },
-    "risk-overview-web-part": {
+    "project-timeline-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/projectTimeline/index.js",
+          "manifest": "./src/webparts/projectTimeline/manifest.json"
+        }
+      ]
+    },
+    "portfolio-aggregation-web-part": {
       "components": [{
-        "entrypoint": "./lib/webparts/riskOverview/index.js",
-        "manifest": "./src/webparts/riskOverview/manifest.json"
+        "entrypoint": "./lib/webparts/portfolioAggregation/index.js",
+        "manifest": "./src/webparts/portfolioAggregation/manifest.json"
       }]
     }
   },
@@ -75,7 +67,7 @@
   "localizedResources": {
     "ControlStrings": "lib/loc/{locale}.js",
     "PortfolioWebPartsStrings": "lib/loc/{locale}.js",
-    "ProjectWebPartsStrings": "node_modules/projectwebparts/lib/loc/{locale}.js",
-    "PzlSPFxComponentsStrings": "node_modules/projectwebparts/lib/loc/{locale}.js"
+    "ProjectWebPartsStrings": "node_modules/pp365-projectwebparts/lib/loc/{locale}.js",
+    "PzlSPFxComponentsStrings": "node_modules/pp365-projectwebparts/lib/loc/{locale}.js"
   }
 }

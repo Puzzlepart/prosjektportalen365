@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_PortfolioViews_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_PortfolioViews_Url}" Hidden="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
+<pnp:ListInstance Title="{resource:Lists_PortfolioViews_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_PortfolioViews_Url}" Hidden="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x01001BE34662FF90874E9FEB29B37B6BB18C" Default="true" />
@@ -33,7 +33,7 @@
         <pnp:FieldRef ID="b5fc712a-9908-4ba1-a8ac-7e51eca7a251" Name="GtPortfolioFabricIcon" Required="true" />
         <pnp:FieldRef ID="43c79736-a2b6-452c-9995-6b72bba0ec16" Name="GtPortfolioColumns" Required="true" />
     </pnp:FieldRefs>
-    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
+    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Alle prosjekter</pnp:DataValue>
@@ -50,7 +50,7 @@
             <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} NOT GtProjectLifecycleStatusOWSCHCS="Avsluttet" ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioIsDefaultView">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioFabricIcon">BarChart4</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioColumns">1,7,8,9,22,26,24,20,28,19</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumns">1,7,8,9,21,25,23,19,27,30</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioRefiners">5,6,7,8,9</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioGroupBy" />
         </pnp:DataRow>

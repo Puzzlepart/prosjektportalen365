@@ -1,5 +1,9 @@
+/* eslint-disable @typescript-eslint/camelcase */
 define([], function () {
   return {
+    ShowSubTextFieldLabel: 'Show sub text',
+    SyncPropertiesAfterPhaseChangeFieldLabel: 'Sync propertis after phase change',
+    SubTextTruncateLengthFieldLabel: 'Truncate length for sub text',
     ChangePhaseText: 'Change to this phase',
     ChangingPhaseDescription: 'Changes phase to {0}',
     PleaseWaitText: 'Please wait',
@@ -12,7 +16,6 @@ define([], function () {
     CloseText: 'Close',
     CommentLabel: 'Comment',
     ConfirmChangePhase: 'Do you want to change phase to {0}?',
-    ConfirmPhaseChangeFieldLabel: 'Confirm phase change',
     ConfirmPhaseDialogSubText: 'Changing the phase to {0} will change this for everyone, will you continue?',
     ConfirmPhaseDialogTitle: 'Change Phase',
     CurrentPhaseViewNameFieldLabel: 'Current phase display name',
@@ -20,6 +23,8 @@ define([], function () {
     EditPropertiesText: 'Edit properties',
     EditReportButtonText: 'Edit status',
     PublishReportButtonText: 'Publish',
+    GetSnapshotButtonText: 'Open as snapshot',
+    DeleteReportButtonText: 'Slett',
     EditSiteInformationText: 'Edit site information',
     ErrorText: 'There was an error loading {0}.',
     ListSectionDataErrorMessage: 'An error occurred while retrieving data for the section. Is it configured correctly? ',
@@ -28,6 +33,7 @@ define([], function () {
     MoveOn: 'Go ahead',
     NewStatusReportModalHeaderText: 'New Status Report',
     NewStatusReportTitle: 'New Status Report for {0}',
+    UnpublishedStatusReportInfo: 'There are unpublished status reports. It is therefore not possible to create a new status report. If you are an owner of the site, you can publish or delete unpublished reports using the buttons above.',
     No: 'No',
     NoPropertiesMessage: 'No project information found.',
     PageReloadMessage: 'Refresh the page to get updated list views.',
@@ -54,7 +60,7 @@ define([], function () {
     ViewsGroupName: 'Views',
     ViewVersionHistoryText: 'View version history',
     WebPartNotConfiguredMessage: 'The web part is not configured properly. You need to set web host properties correctly. ',
-    Yes: "Yes",
+    Yes: 'Yes',
     StatusReportsHeaderLabel: 'Heading',
     StatusReportsCountLabel: 'Number of reports to view',
     ProjectStatusGroupName: 'Project Status',
@@ -64,9 +70,10 @@ define([], function () {
     ProjectPropertiesListName: 'Project Properties',
     SyncProjectPropertiesProgressLabel: 'Synchronizes project properties to the portfolio area',
     SyncProjectPropertiesSuccessText: 'Project properties were synchronized to the portfolio area. The page will reload in {0} seconds. ',
-    SyncProjectPropertiesErrorText: 'Synchronization error occurred',
+    SyncProjectPropertiesErrorText: 'An error occurred while syncing project properties to the portfolio site. For example, it could be an invalid field.',
     SyncProjectPropertiesListProgressDescription: 'Updating Project Properties List',
-    SyncProjectPropertiesValuesProgressDescription: 'Syncing properties',
+    SyncProjectPropertiesValuesProgressLabel: 'Syncing properties',
+    SyncProjectPropertiesValuesProgressDescription: 'Please wait...',
     ProjectStatusDataErrorText: 'No access. You are not allowed to view status reports. ',
     ShowFieldExternalUsers: 'Visible to external users',
     ExternalUsersConfigText: 'Configuration',
@@ -75,6 +82,8 @@ define([], function () {
     WebPartNoAccessMessage: 'You do not have access to view this web part. <br/> <br/> You must either have access to the portfolio area or the project must be free from the portfolio area.',
     ProjectsListName: 'Projects',
     NoStatusReportsMessage: 'The status of the project is not yet reported. If you are an owner of the site, you can report status by clicking _New Status Report_ in the menu above. ',
+    PublishedStatusReport: 'Published',
+    NotPublishedStatusReport: 'Not published',
     SyncNowText: 'Sync now',
     PhaseFieldFieldLabel: 'Phase Field',
     SkipSyncToHubLabel: 'Don\'t sync to hub',
@@ -103,4 +112,4 @@ define([], function () {
     HeightFieldLabel: 'Height (pixels)',
     CalloutTemplateFieldLabel: 'Callout template'
   }
-});
+})

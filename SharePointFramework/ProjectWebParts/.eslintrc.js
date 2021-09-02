@@ -1,14 +1,19 @@
 module.exports = {
-    parser: '@typescript-eslint/parser',  // Specifies the ESLint parser
+    env: {
+        'browser': true
+    },
+    parser: '@typescript-eslint/parser', // Specifies the ESLint parser
     extends: [
-        'plugin:react/recommended',  // Uses the recommended rules from @eslint-plugin-react
-        'plugin:@typescript-eslint/recommended',  // Uses the recommended rules from @typescript-eslint/eslint-plugin
+        'prettier',
+        'plugin:react/recommended', // Uses the recommended rules from @eslint-plugin-react
+        'plugin:@typescript-eslint/recommended', // Uses the recommended rules from @typescript-eslint/eslint-plugin
     ],
+    plugins: ['prettier', 'unused-imports'],
     parserOptions: {
-        ecmaVersion: 2018,  // Allows for the parsing of modern ECMAScript features
-        sourceType: 'module',  // Allows for the use of imports
+        ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
+        sourceType: 'module', // Allows for the use of imports
         ecmaFeatures: {
-            jsx: true,  // Allows for the parsing of JSX
+            jsx: true, // Allows for the parsing of JSX
         },
     },
     rules: {
@@ -20,11 +25,17 @@ module.exports = {
 
         '@typescript-eslint/no-explicit-any': 0,
 
+        '@typescript-eslint/member-delimiter-style': 0,
+
+        '@typescript-eslint/explicit-function-return-type': 0,
+
+        '@typescript-eslint/explicit-module-boundary-types': 0,
+
+        '@typescript-eslint/no-inferrable-types': 0,
+
         'react/prop-types': 0,
 
         'no-inferrable-types': 0,
-
-        '@typescript-eslint/explicit-function-return-type': 0,
 
         'react/display-name': 0,
 
@@ -32,25 +43,27 @@ module.exports = {
 
         'no-console': 2,
 
-        'default-case': 2,
+        'default-case': 0,
 
-        'eqeqeq': 1,
+        eqeqeq: 1,
 
         'max-classes-per-file': 1,
 
         'jsx-quotes': ['error', 'prefer-single'],
 
-        'quotes': ['error', 'single'],
+        quotes: ['error', 'single'],
 
-        'yoda': 2,
+        yoda: 2,
 
         'require-await': 1,
 
-        'semi': ['error', 'never', {}]
+        semi: ['error', 'never', {}],
+
+        'unused-imports/no-unused-imports': 'error'
     },
     settings: {
         react: {
-            version: 'detect',  // Tells eslint-plugin-react to automatically detect the version of React to use
+            version: 'detect', // Tells eslint-plugin-react to automatically detect the version of React to use
         },
     },
-};
+}

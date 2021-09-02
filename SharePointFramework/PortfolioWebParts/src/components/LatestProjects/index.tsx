@@ -1,31 +1,34 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { SortDirection } from '@pnp/sp'
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle'
-import { formatDate } from 'shared/lib/helpers'
 import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar'
 import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner'
 import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings'
-import * as React from 'react'
-import { ILatestProjectsProps } from './ILatestProjectsProps'
-import { ILatestProjectsState } from './ILatestProjectsState'
+import { formatDate } from 'pp365-shared/lib/helpers'
+import React, { Component } from 'react'
 import styles from './LatestProjects.module.scss'
+import { ILatestProjectsProps, ILatestProjectsState } from './types'
 
 /**
  * @component LatestProjects
- * @extends React.Component
+ * @extends Component
  */
-export class LatestProjects extends React.Component<ILatestProjectsProps, ILatestProjectsState> {
+export class LatestProjects extends Component<ILatestProjectsProps, ILatestProjectsState> {
   constructor(props: ILatestProjectsProps) {
     super(props)
-    this.state = { isLoading: true, projects: [] }
+    this.state = { loading: true, projects: [] }
   }
 
   public async componentDidMount() {
     try {
-      const projects = await this.props.dataAdapter.fetchProjectSites(15, 'Created', SortDirection.Descending)
-      this.setState({ projects, isLoading: false })
+      const projects = await this.props.dataAdapter.fetchProjectSites(
+        15,
+        'Created',
+        SortDirection.Descending
+      )
+      this.setState({ projects, loading: false })
     } catch (error) {
-      this.setState({ projects: [], isLoading: false })
+      this.setState({ projects: [], loading: false })
     }
   }
 
@@ -34,16 +37,18 @@ export class LatestProjects extends React.Component<ILatestProjectsProps, ILates
    */
   public render(): React.ReactElement<ILatestProjectsProps> {
     return (
-      <div className={styles.latestProjects}>
+      <div className={styles.root}>
         <WebPartTitle
           displayMode={DisplayMode.Read}
           title={this.props.title}
-          updateProperty={undefined} />
+          updateProperty={undefined}
+        />
         <div className={styles.container}>
-          {this.state.isLoading
-            ? <Spinner label={this.props.loadingText} type={SpinnerType.large} />
-            : this._renderProjectList()
-          }
+          {this.state.loading ? (
+            <Spinner label={this.props.loadingText} type={SpinnerType.large} />
+          ) : (
+            this._renderProjectList()
+          )}
         </div>
       </div>
     )
@@ -72,4 +77,3 @@ export class LatestProjects extends React.Component<ILatestProjectsProps, ILates
 }
 
 export { ILatestProjectsProps }
-

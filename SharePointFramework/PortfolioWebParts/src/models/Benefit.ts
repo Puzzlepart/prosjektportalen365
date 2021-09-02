@@ -5,21 +5,21 @@ import { BenefitBase } from './'
  * @class Benefit
  */
 export class Benefit extends BenefitBase {
-    public type: string;
-    public turnover: string;
-    public responsible: string;
-    public owner: string;
-    public realizationTime: Date;
+  public Type: string
+  public Turnover: string
+  public Responsible: string
+  public Owner: string
+  public RealizationTime: Date
 
-    /**
-     *
-     */
-    constructor(result: IBenefitsSearchResult) {
-        super(result)
-        this.type = result.GtGainsTypeOWSCHCS
-        this.turnover = result.GtGainsTurnoverOWSMTXT
-        this.responsible = result.GtGainsResponsible
-        this.owner = result.GtGainsOwner
-        this.realizationTime = new Date(result.GtRealizationTimeOWSDATE)
-    }
+  /**
+   *
+   */
+  constructor(result: IBenefitsSearchResult) {
+    super(result)
+    this.Type = result.GtGainsTypeOWSCHCS
+    this.Turnover = result.GtGainsTurnoverOWSMTXT
+    this.Responsible = result.GtGainsResponsible
+    this.Owner = result.GtGainsOwner
+    this.RealizationTime = new Date(result.GtRealizationTimeOWSDATE)
+  }
 }

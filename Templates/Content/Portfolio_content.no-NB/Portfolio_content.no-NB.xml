@@ -8,7 +8,7 @@
                 <pnp:File Src="ProjectTemplates\Standardmal.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Standardmal" />
-                        <pnp:Property Key="GtDescription" Value="Dette er standardmalen som følger med Prosjektportalen 365." />
+                        <pnp:Property Key="GtDescription" Value="Dette er standardmalen som følger med Prosjektportalen 365. Blir overskrevet ved en oppgradering." />
                         <pnp:Property Key="IconName" Value="Page" />
                         <pnp:Property Key="IsDefaultTemplate" Value="1" />
                     </pnp:Properties>
@@ -16,7 +16,7 @@
                 <pnp:Directory Src="Malbibliotek" Folder="Malbibliotek" Overwrite="false" Recursive="false" IncludedExtensions="*.doc,*.docx,*.xls,*.xlsx,*.ppt,*.pptx" />
             </pnp:Files>
             <pnp:Lists>
-                <pnp:ListInstance Title="Fasesjekkliste" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Fasesjekkliste" Hidden="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false">
+                <pnp:ListInstance Title="Fasesjekkliste" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Fasesjekkliste" EnableVersioning="true" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false">
                     <pnp:DataRows UpdateBehavior="Skip" KeyColumn="Title">
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Er det en tydelig definert problemstilling som synliggjør behovet for nærmere utredning?</pnp:DataValue>
@@ -240,7 +240,7 @@
                         </pnp:DataRow>
                     </pnp:DataRows>
                 </pnp:ListInstance>
-                <pnp:ListInstance Title="Planneroppgaver" TemplateType="100" Url="Lists/Planneroppgaver" Hidden="true" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
+                <pnp:ListInstance Title="Planneroppgaver" TemplateType="100" Url="Lists/Planneroppgaver" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
                     <pnp:DataRows UpdateBehavior="Skip" KeyColumn="Title">
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Beslutte utredning av idéen og utforme et førsteutkast til prosjektmandat</pnp:DataValue>

@@ -1,3 +1,4 @@
-src/loc/*.js'
-gulpfile.js
-set-bundle.js
+src/**/*.d.ts
+src/**/*.scss.ts
+lib
+dist

@@ -1,11 +1,15 @@
-import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-webpart-base'
-import { ProjectList, IProjectListProps } from 'components/ProjectList'
+import {
+  IPropertyPaneConfiguration,
+  PropertyPaneTextField,
+  PropertyPaneToggle
+} from '@microsoft/sp-property-pane'
+import { IProjectListProps, ProjectList } from 'components/ProjectList'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectListProps> {
   public render(): void {
-    this.renderComponent(ProjectList)
+    this.renderComponent<IProjectListProps>(ProjectList)
   }
 
   public async onInit(): Promise<void> {
@@ -22,33 +26,33 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
               groupFields: [
                 PropertyPaneTextField('sortBy', {
                   label: strings.SortByFieldLabel,
-                  disabled: true,
+                  disabled: true
                 }),
                 PropertyPaneTextField('searchBoxPlaceholderText', {
-                  label: strings.SearchBoxPlaceholderTextLabel,
+                  label: strings.SearchBoxPlaceholderTextLabel
                 }),
                 PropertyPaneToggle('showSearchBox', {
-                  label: strings.ShowSearchBoxLabel,
+                  label: strings.ShowSearchBoxLabel
                 }),
                 PropertyPaneToggle('showViewSelector', {
-                  label: strings.ShowViewSelectorLabel,
+                  label: strings.ShowViewSelectorLabel
                 }),
                 PropertyPaneToggle('showAsTiles', {
-                  label: strings.ShowAsTilesLabel,
-                }),
+                  label: strings.ShowAsTilesLabel
+                })
               ]
             },
             {
               groupName: strings.TileViewGroupName,
               groupFields: [
                 PropertyPaneToggle('showProjectLogo', {
-                  label: strings.ShowProjectLogoFieldLabel,
+                  label: strings.ShowProjectLogoFieldLabel
                 }),
                 PropertyPaneToggle('showProjectOwner', {
-                  label: strings.ShowProjectOwnerFieldLabel,
+                  label: strings.ShowProjectOwnerFieldLabel
                 }),
                 PropertyPaneToggle('showProjectManager', {
-                  label: strings.ShowProjectManagerFieldLabel,
+                  label: strings.ShowProjectManagerFieldLabel
                 })
               ]
             }

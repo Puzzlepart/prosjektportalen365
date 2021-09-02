@@ -1,69 +1,78 @@
 import { BenefitBase, BenefitMeasurementIndicator } from './'
 import { IBenefitsSearchResult } from 'interfaces'
+import { IIconProps } from 'office-ui-fabric-react/lib/Icon'
 
 export class BenefitMeasurement extends BenefitBase {
-    public date: Date;
-    public dateDisplay: string;
-    public comment: string;
-    public value: number;
-    public valueDisplay: string;
-    public achievement: number;
-    public achievementDisplay: string;
-    public trendIconProps: any;
-    public indicatorId: number;
-    public indicator: BenefitMeasurementIndicator;
+  public Date: Date
+  public DateDisplay: string
+  public Comment: string
+  public Value: number
+  public ValueDisplay: string
+  public Achievement: number
+  public AchievementDisplay: string
+  public TrendIconProps: IIconProps
+  public IndicatorId: number
+  public Indicator: BenefitMeasurementIndicator
 
-    /**
-    * Creates a new instance of BenefitMeasurement
-    *
-    * @param {IBenefitsSearchResult} result Search result
-    * @param {number} fractionDigits Fraction digits for valueDisplay
-    */
-    constructor(result: IBenefitsSearchResult, fractionDigits = 2) {
-        super(result)
-        this.date = new Date(result.GtMeasurementDateOWSDATE)
-        this.dateDisplay = this.date.toLocaleDateString()
-        this.value = !isNaN(parseFloat(result.GtMeasurementValueOWSNMBR)) ? parseFloat(result.GtMeasurementValueOWSNMBR) : null
-        if (this.value !== null) {
-            this.valueDisplay = this.value.toFixed(fractionDigits)
-        }
-        this.comment = result.GtMeasurementCommentOWSMTXT
-        this.indicatorId = parseInt(result.GtMeasureIndicatorLookupId, 10)
+  /**
+   * Creates a new instance of BenefitMeasurement
+   *
+   * @param {IBenefitsSearchResult} result Search result
+   * @param {number} fractionDigits Fraction digits for valueDisplay
+   */
+  constructor(result: IBenefitsSearchResult, fractionDigits: number = 2) {
+    super(result)
+    this.Date = new Date(result.GtMeasurementDateOWSDATE)
+    this.DateDisplay = this.Date.toLocaleDateString()
+    this.Value = !isNaN(parseFloat(result.GtMeasurementValueOWSNMBR))
+      ? parseFloat(result.GtMeasurementValueOWSNMBR)
+      : null
+    if (this.Value !== null) {
+      this.ValueDisplay = this.Value.toFixed(fractionDigits)
     }
+    this.Comment = result.GtMeasurementCommentOWSMTXT
+    this.IndicatorId = parseInt(result.GtMeasureIndicatorLookupId, 10)
+  }
 
-    /**
-     * Calculate achievement
-     *
-     * @param {BenefitMeasurementIndicator} indicator Indicator
-     * @param {number} fractionDigits Fraction digits used for achievementDisplay
-     */
-    public calculcateAchievement(indicator: BenefitMeasurementIndicator, fractionDigits = 2): BenefitMeasurement {
-        this.indicator = indicator
-        const achievement = (((this.value - this.indicator.startValue) / (this.indicator.desiredValue - this.indicator.startValue)) * 100)
-        this.achievement = achievement
-        this.achievementDisplay = `${achievement.toFixed(fractionDigits)}%`
-        return this
-    }
+  /**
+   * Calculate achievement
+   *
+   * @param {BenefitMeasurementIndicator} indicator Indicator
+   * @param {number} fractionDigits Fraction digits used for achievementDisplay
+   */
+  public calculcateAchievement(
+    indicator: BenefitMeasurementIndicator,
+    fractionDigits: number = 2
+  ): BenefitMeasurement {
+    this.Indicator = indicator
+    const achievement =
+      ((this.Value - this.Indicator.StartValue) /
+        (this.Indicator.DesiredValue - this.Indicator.StartValue)) *
+      100
+    this.Achievement = achievement
+    this.AchievementDisplay = `${achievement.toFixed(fractionDigits)}%`
+    return this
+  }
 
-    /**
-     * Set trend icon props
-     *
-     * @param {BenefitMeasurement} prevMeasurement Previous measurement
-     */
-    public setTrendIconProps(prevMeasurement: BenefitMeasurement): BenefitMeasurement {
-        const shouldIncrease = this.indicator.desiredValue > this.indicator.startValue
-        if (this.achievement >= 100) {
-            this.trendIconProps = { iconName: 'Trophy', style: { color: 'gold' } }
-            return this
-        }
-        if (prevMeasurement && prevMeasurement.value !== this.value) {
-            const hasIncreased = this.value > prevMeasurement.value
-            if (shouldIncrease && hasIncreased || !shouldIncrease && !hasIncreased) {
-                this.trendIconProps = { iconName: 'StockUp', style: { color: 'green' } }
-            } else {
-                this.trendIconProps = { iconName: 'StockDown', style: { color: 'red' } }
-            }
-        }
-        return this
+  /**
+   * Set trend icon props
+   *
+   * @param {BenefitMeasurement} prevMeasurement Previous measurement
+   */
+  public setTrendIconProps(prevMeasurement: BenefitMeasurement): BenefitMeasurement {
+    const shouldIncrease = this.Indicator.DesiredValue > this.Indicator.StartValue
+    if (this.Achievement >= 100) {
+      this.TrendIconProps = { iconName: 'Trophy', style: { color: 'gold' } }
+      return this
     }
+    if (prevMeasurement && prevMeasurement.Value !== this.Value) {
+      const hasIncreased = this.Value > prevMeasurement.Value
+      if ((shouldIncrease && hasIncreased) || (!shouldIncrease && !hasIncreased)) {
+        this.TrendIconProps = { iconName: 'StockUp', style: { color: 'green' } }
+      } else {
+        this.TrendIconProps = { iconName: 'StockDown', style: { color: 'red' } }
+      }
+    }
+    return this
+  }
 }

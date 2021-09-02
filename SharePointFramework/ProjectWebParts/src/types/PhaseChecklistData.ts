@@ -1,8 +1,8 @@
-import { IPhaseChecklistItem } from '../models'
+import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
 
 export type PhaseChecklistData = {
-    stats?: {
-        [status: string]: number;
-    };
-    items?: IPhaseChecklistItem[];
-};
+  stats?: {
+    [status: string]: number
+  }
+  items?: IProjectPhaseChecklistItem[]
+}

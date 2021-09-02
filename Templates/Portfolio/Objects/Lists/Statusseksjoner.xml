@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_StatusSections_Title}" TemplateType="100" Url="{resource:Lists_StatusSections_Url}" ContentTypesEnabled="true" Hidden="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
+<pnp:ListInstance Title="{resource:Lists_StatusSections_Title}" TemplateType="100" Url="{resource:Lists_StatusSections_Url}" ContentTypesEnabled="true" Hidden="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82803" Default="true" />
@@ -82,7 +82,7 @@
             <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecViewFields">Title,GtRiskProximity,GtRiskAction,GtRiskStrategy,GtRiskFactor,GtRiskFactorPostAction</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSecViewFields">ID,Title,GtRiskProximity,GtRiskAction,GtRiskStrategy,GtRiskFactor,GtRiskFactorPostAction</pnp:DataValue>
             <pnp:DataValue FieldName="GtSecFieldName">GtStatusRisk</pnp:DataValue>
             <pnp:DataValue FieldName="GtSecList">Usikkerhet</pnp:DataValue>
             <pnp:DataValue FieldName="GtSecViewQuery">&lt;OrderBy&gt;
