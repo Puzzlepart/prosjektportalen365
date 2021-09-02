@@ -18,8 +18,7 @@
     "preserve": "gulp setHiddenToolbox",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
-    "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",
-    "preinstall": "npx npm-force-resolutions"
+    "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent"
   },
   "dependencies": {
     "@microsoft/sp-core-library": "1.11.0",
@@ -55,8 +54,7 @@
     "underscore": "1.9.1"
   },
   "resolutions": {
-    "@types/react": "16.8.8",
-    "graceful-fs": "^4.2.4"
+    "@types/react": "16.8.8"
   },
   "devDependencies": {
     "@microsoft/rush-stack-compiler-3.9": "0.4.35",
