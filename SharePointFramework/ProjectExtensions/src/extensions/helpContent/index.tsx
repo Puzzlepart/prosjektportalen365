@@ -1,9 +1,9 @@
 import { override } from '@microsoft/decorators';
 import { BaseApplicationCustomizer, PlaceholderContent, PlaceholderName } from '@microsoft/sp-application-base';
 import { sp } from '@pnp/sp';
+import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { PortalDataService } from 'shared/lib/services/PortalDataService';
 import { default as HubSiteService } from 'sp-hubsite-service';
 import { HelpContent } from '../../components';
 import { HelpContentModel } from '../../models/HelpContentModel';
