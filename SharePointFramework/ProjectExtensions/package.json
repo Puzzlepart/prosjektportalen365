@@ -78,7 +78,6 @@
     "gulp": "4.0.2",
     "livereload": "0.9.1",
     "prettier": "2.1.1",
-    "spfx-pkgdeploy": "0.3.0",
     "webpack-bundle-analyzer": "3.5.2",
     "webpackbar": "4.0.0"
   }
