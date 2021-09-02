@@ -75,7 +75,7 @@
     "eslint-plugin-react": "7.22.0",
     "eslint-plugin-unused-imports": "1.1.0",
     "find": "0.3.0",
-    "gulp": "3.9.1",
+    "gulp": "4.0.2",
     "livereload": "0.9.1",
     "prettier": "2.1.1",
     "spfx-pkgdeploy": "0.3.0",
