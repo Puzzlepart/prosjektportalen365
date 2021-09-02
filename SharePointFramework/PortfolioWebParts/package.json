@@ -2,7 +2,7 @@
   "name": "pp365-portfoliowebparts",
   "version": "1.2.8",
   "engines": {
-    "node": ">=8.0.0 <11.0.0"
+    "node": ">=12.13.0"
   },
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
