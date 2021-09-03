@@ -79,7 +79,7 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
     }
   }
 
-  public componentWillUpdate(
+  public UNSAFE_componentWillUpdate(
     _nextProps: IPortfolioOverviewProps,
     { currentView, groupBy }: IPortfolioOverviewState
   ) {

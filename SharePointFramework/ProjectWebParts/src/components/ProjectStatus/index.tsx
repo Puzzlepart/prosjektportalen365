@@ -80,7 +80,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     }
   }
 
-  public componentWillUpdate(_: IProjectStatusProps, { selectedReport }: IProjectStatusState) {
+  public UNSAFE_componentWillUpdate(_: IProjectStatusProps, { selectedReport }: IProjectStatusState) {
     const obj: IProjectStatusHashState = {}
     if (selectedReport) obj.selectedReport = selectedReport.id.toString()
     setUrlHash<IProjectStatusHashState>(obj)
