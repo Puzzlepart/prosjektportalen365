@@ -9,7 +9,6 @@ Every change is marked with Pull Request ID.
 
 - Added multiline text-wrapping in project status #493
 - Added description for site template #500
-- Added opactiy and alert message to read only projects #507
 
 ## Fixed
 
