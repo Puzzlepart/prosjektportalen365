@@ -12,13 +12,21 @@ Please describe your pull request in detail.
 
 ### How to test
 
-Please describe how someone else can test this PR. In the form of a numbered list and checkboxes for Jan when the testing period occurs.
+Please describe how someone else (a regular user without coding skills) can test this PR. In the form of a numbered list and checkboxes for Jan when the testing period occurs.
 
 Example:
 
 - [ ] 1. Do this
 - [ ] 2. Then this
 - [ ] 3. Then that
+
+
+### Update of documentation
+- [ ] Check if user manual requires update
+   - [ ] No
+   - [ ] Yes
+    - [ ] Update user manual
+
 
 ### Relevant issues (if applicable)
 
