@@ -42,7 +42,7 @@ To package and deploy directly to SharePoint, see `2. Build, package and deploy`
 
 _Published to **npm** as `pp365-projectextensions`_
 
-## [ProjectWebParts](./ProjectWebParts/README.md) [![version](https://img.shields.io/badge/version-1.2.8-yellow.svg)](https://semver.org)
+## [ProjectWebParts](./ProjectWebParts/README.md) [![version](https://img.shields.io/badge/version-1.2.9-yellow.svg)](https://semver.org)
 
 | Solution name          | ID                                   |
 | ---------------------- | ------------------------------------ |

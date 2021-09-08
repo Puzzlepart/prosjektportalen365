@@ -1,12 +1,10 @@
 {
   "name": "pp365",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "description": "Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.",
   "scripts": {
-    "commit": "sexy-commits",
     "build:release": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1",
-    "build:release:force": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -Force",
-    "prepare": "husky install"
+    "build:release:force": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -Force"
   },
   "repository": {
     "type": "git",
@@ -29,91 +27,5 @@
     }
   ],
   "author": "olemp@puzzlepart.com",
-  "license": "MIT",
-  "devDependencies": {
-    "husky": "5.1.3",
-    "sexy-commits": "0.3.5"
-  },
-  "gitmoji": {
-    "build": [
-      "🏗️",
-      "Make architectural changes"
-    ],
-    "ci": [
-      "👷",
-      "Add or update CI build system"
-    ],
-    "chore": [
-      "💄",
-      "Boring chores"
-    ],
-    "docs": [
-      "📝",
-      "Added or updated documentation"
-    ],
-    "feat": [
-      "✨",
-      "Introduced new features"
-    ],
-    "fix": [
-      "🐛",
-      "Fixed a bug"
-    ],
-    "perf": [
-      "⚡",
-      "Improved performance"
-    ],
-    "refactor": [
-      "♻️",
-      "Refactored code"
-    ],
-    "revert": [
-      "⏪",
-      "Reverted changes"
-    ],
-    "style": [
-      "💄",
-      "Added or updated the UI and style files"
-    ],
-    "test": [
-      "✅",
-      "Added or updated tests"
-    ],
-    "dev": [
-      "🔨",
-      "Add or update development scripts"
-    ],
-    "i18n": [
-      "🌐",
-      "Internationalization and localization"
-    ],
-    "changelog": [
-      "📓",
-      "Updated changelog"
-    ],
-    "readme": [
-      "📝",
-      "Updated readme"
-    ],
-    "typo": [
-      "✏️",
-      "Fixed typos"
-    ],
-    "rename": [
-      "🚚",
-      "Moved or renamed resources (e.g.: files, paths, routes)"
-    ],
-    "merge": [
-      "🔀",
-      "Merged a branch into this one"
-    ],
-    "auth": [
-      "🛂",
-      "Worked on code related to authorization, roles and permissions"
-    ],
-    "syntax": [
-      "✏️",
-      "Adjusted code syntax"
-    ]
-  }
+  "license": "MIT"
 }
