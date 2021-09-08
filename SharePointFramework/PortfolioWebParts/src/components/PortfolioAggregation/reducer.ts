@@ -97,14 +97,14 @@ export default (props: IPortfolioAggregationProps) =>
       state.editColumn = null
       state.addColumnPanel = { isOpen: false }
       state.columnAdded = new Date().getTime()
-      persistColumns(props, current(state).columns as IColumn[])
+      persistColumns(props, current(state).columns)
     },
 
     [DELETE_COLUMN.type]: (state) => {
       state.columns = state.columns.filter((c) => c.fieldName !== state.editColumn.fieldName)
       state.editColumn = null
       state.addColumnPanel = { isOpen: false }
-      persistColumns(props, current(state).columns as IColumn[])
+      persistColumns(props, current(state).columns)
     },
 
     [COLUMN_HEADER_CONTEXT_MENU.type]: (
@@ -165,7 +165,7 @@ export default (props: IPortfolioAggregationProps) =>
         payload.column.fieldName
       )
       state.columns = arrayMove(current(state).columns, index, index + payload.move)
-      persistColumns(props, current(state).columns as IColumn[])
+      persistColumns(props, current(state).columns)
     },
 
     [SET_DATA_SOURCE.type]: (state, { payload }: ReturnType<typeof SET_DATA_SOURCE>) => {

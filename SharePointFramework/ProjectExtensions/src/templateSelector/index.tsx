@@ -36,7 +36,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<
     })
     Logger.subscribe(new ConsoleListener())
     Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-    const hub = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
+    const hub = await HubSiteService.GetHubSite(sp, this.context.pageContext)
     SPDataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,

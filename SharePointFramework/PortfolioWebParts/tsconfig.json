@@ -53,5 +53,8 @@
     "src/**/*.ts",
     "src/**/*.tsx"
   ],
-  "exclude": []
+  "exclude": [
+    "node_modules",
+    "lib"
+  ]
 }

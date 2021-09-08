@@ -24,7 +24,7 @@ export enum ListContentConfigType {
  * @model ListContentConfig
  */
 export class ListContentConfig implements IDropdownOption {
-  public id: string
+  public id: number
   public key: string
   public text: string
   public subText: string
@@ -36,7 +36,7 @@ export class ListContentConfig implements IDropdownOption {
   private _destinationList: string
 
   constructor(private _spItem: IListContentConfigSPItem, public web: Web) {
-    this.id = _spItem.Id.toString()
+    this.id = _spItem.Id
     this.key = `listcontentconfig_${this.id}`
     this.text = _spItem.Title
     this.subText = _spItem.GtDescription

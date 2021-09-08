@@ -1,8 +1,5 @@
 {
   "name": "pp365-shared",
-  "engines": {
-    "node": ">=12.13.0"
-  },
   "version": "1.2.13",
   "description": "Shared utilities, helpers and models",
   "main": "lib/index.js",

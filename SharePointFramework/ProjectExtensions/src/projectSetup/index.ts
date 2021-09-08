@@ -264,7 +264,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         level: LogLevel.Info
       })
       const data: IProjectSetupData = {}
-      data.hub = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
+      data.hub = await HubSiteService.GetHubSite(sp, this.context.pageContext)
       this._portal = new PortalDataService().configure({ urlOrWeb: data.hub.web })
       Logger.log({
         message: '(ProjectSetup) [_fetchData]: Retrieved hub site url',
