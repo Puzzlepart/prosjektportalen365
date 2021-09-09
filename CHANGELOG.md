@@ -9,6 +9,7 @@ Every change is marked with Pull Request ID.
 
 - Added multiline text-wrapping in project status #493
 - Added description for site template #500
+- Added rich text and lineshift support to field in project information #502
 
 ## Fixed
 
@@ -18,9 +19,6 @@ Every change is marked with Pull Request ID.
 
 ## 1.2.8 - 17.06.2021
 
-## Added
-
-- Added rich text and lineshift support to field in project information #502
 
 ## Fixed
 
