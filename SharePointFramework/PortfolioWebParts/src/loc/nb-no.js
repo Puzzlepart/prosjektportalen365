@@ -157,5 +157,6 @@ define([], function () {
     DisplayAllProjects: "Vis alle prosjekter",
     MyProjectsLabel: "Mine prosjekter",
     AllProjectsLabel: "Alle prosjekter",
+    NoAccessMessage: "Du har ikke tilgang til dette prosjektet"
   }
 })

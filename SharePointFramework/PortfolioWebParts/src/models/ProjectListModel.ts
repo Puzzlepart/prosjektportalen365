@@ -6,6 +6,7 @@ export class ProjectListModel {
   public manager: IPersonaSharedProps
   public owner: IPersonaSharedProps
   public logo: string
+  public exists: boolean
 
   /**
    * Creates a new instance of ProjectListModel
@@ -22,6 +23,8 @@ export class ProjectListModel {
    * @param {string} budgetTotal Budget total
    * @param {string} costsTotal Costs total
    * @param {string} type Type
+   * @param {boolean} boolean ReadOnly
+
    */
   constructor(
     public siteId: string,
