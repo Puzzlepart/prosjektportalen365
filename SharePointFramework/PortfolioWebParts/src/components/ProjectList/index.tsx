@@ -94,8 +94,6 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
     }
 
     const projects = this._filterProjets(this.state.projects)
-    console.log(this.state.isUserInPortfolioManagerGroup)
-    console.log(this.state.onlyAccessProjects)
     return (
       <div className={styles.root}>
         <div className={styles.container}>
