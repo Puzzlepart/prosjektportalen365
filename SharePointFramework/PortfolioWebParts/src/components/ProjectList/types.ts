@@ -52,11 +52,6 @@ export interface IProjectListProps extends IBaseComponentProps {
    * Columns
    */
   columns?: IColumn[]
-
-  /**
-   * Display all projects
-   */
-  showAllProjects?: boolean
 }
 
 export interface IProjectListState {
@@ -94,11 +89,6 @@ export interface IProjectListState {
    * List view properties
    */
   listView?: { projects: ProjectListModel[]; columns: IColumn[] }
-
-  /**
-   * Show all projects from web part properties
-   */
-  showAllProjects?: boolean
 
   /**
    * Only display projects that the user have access to
