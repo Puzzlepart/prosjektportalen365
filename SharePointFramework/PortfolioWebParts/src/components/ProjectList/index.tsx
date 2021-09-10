@@ -15,7 +15,7 @@ import * as _ from 'underscore'
 import { ProjectCard } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
-import { IProjectListProps, IProjectListState } from './types'
+import { IProjectListProps, IProjectListState, placeholderImage } from './types'
 import { Pivot, PivotItem } from 'office-ui-fabric-react'
 /**
  * @component ProjectList
@@ -38,7 +38,6 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
       loading: true,
       searchTerm: '',
       showAsTiles: props.showAsTiles,
-      showAllProjects: props.showAllProjects,
       onlyAccessProjects: true
     }
   }
@@ -50,7 +49,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
         strings.PortfolioManagerGroupName
       )
 
-      if (!this.state.showAllProjects)
+      if (!this.state.onlyAccessProjects)
         projects = projects.filter((project) => project.readOnly === false)
 
       projects = projects.sort((a, b) => sortAlphabetically(a, b, true, this.props.sortBy))
@@ -95,20 +94,18 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
     }
 
     const projects = this._filterProjets(this.state.projects)
-    const shrinkSearchBox = this.state.showAllProjects && this.state.isUserInPortfolioManagerGroup
-
     return (
       <div className={styles.root}>
         <div className={styles.container}>
           <div
-            className={shrinkSearchBox ? styles.shrinkedSearchBox : styles.searchBox}
+            className={this.state.isUserInPortfolioManagerGroup ? styles.shrinkedSearchBox : styles.searchBox}
             hidden={!this.props.showSearchBox}>
             <SearchBox
               placeholder={this.props.searchBoxPlaceholderText}
               onChanged={this._onSearch.bind(this)}
             />
           </div>
-          {this.state.showAllProjects && this.state.isUserInPortfolioManagerGroup && (
+          {this.state.isUserInPortfolioManagerGroup && (
             <div className={styles.projectDisplaySelect}>
               <Pivot
                 onLinkClick={(item) =>
@@ -123,7 +120,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
             </div>
           )}
           <div
-            className={shrinkSearchBox ? styles.shrinkedViewToggle : styles.viewToggle}
+            className={this.state.isUserInPortfolioManagerGroup ? styles.shrinkedViewToggle : styles.viewToggle}
             hidden={!this.props.showViewSelector}>
             <Toggle
               offText={strings.ShowAsListText}
@@ -187,7 +184,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
     const colValue = getObjectValue(project, column.fieldName, null)
     if (column.fieldName === 'title' && !project.readOnly) {
       return <a href={project.url}>{colValue}</a>
-    } else if (column.fieldName === 'title' && project.readOnly && this.state.showAllProjects) {
+    } else if (column.fieldName === 'title' && project.readOnly && this.state.onlyAccessProjects) {
       return <>{colValue}</>
     }
     return colValue
@@ -283,7 +280,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
    * @param {ProjectListModel[]} projects Projects
    */
   private _filterProjets(projects: ProjectListModel[]) {
-    if (this.state.showAllProjects && this.state.onlyAccessProjects) {
+    if (this.state.onlyAccessProjects) {
       projects = projects.filter((project) => !project.readOnly)
     }
 
@@ -327,9 +324,12 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
           const response = _.find(responses, (r) => r.id === p.groupId && r.status === 200)
           if (response) {
             p.logo = `data:image/png;base64, ${response.body}`
+          } else {
+            p.logo = placeholderImage
           }
           return p
-        })
+        }
+        )
         return { projects }
       })
     }

@@ -156,6 +156,6 @@ define([], function () {
     ReadOnlyGroupName: "Porteføljeinnsyn",
     DisplayAllProjects: "Vis alle prosjekter",
     MyProjectsLabel: "Mine prosjekter",
-    AllProjectsLabel: "Alle prosjekter"
+    AllProjectsLabel: "Alle prosjekter",
   }
 })
