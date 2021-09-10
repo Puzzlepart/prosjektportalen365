@@ -27,7 +27,7 @@ export default () => {
     <div className={styles.root} hidden={!props.showSearchBox}>
       <SearchBox
         placeholder={getPlaceholderText()}
-        onChange={getPlaceholderText}
+        onChange={(_event, searchTerm) => dispatch(SEARCH({ searchTerm }))}
       />
     </div>
   )
