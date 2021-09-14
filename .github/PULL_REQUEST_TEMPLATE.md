@@ -4,7 +4,7 @@
 - [ ] Make sure you are making a pull request against the **dev** branch (left side). Also you should start *your branch* off *dev*.
 - [ ] Check the commit's or even all commits' message 
 - [ ] Check if your code additions will fail linting checks
-- [ ] Remember: Add PR description to [CHANGELOG](https://github.com/Puzzlepart/prosjektportalen365/blob/dev/CHANGELOG.md) with the ID that matches this PR
+- [ ] Remember: Add PR description to [CHANGELOG](https://github.com/Puzzlepart/prosjektportalen365/blob/dev/CHANGELOG.md) with the ID of the Issue associated with this PR
 
 ### Description
 
@@ -23,8 +23,8 @@ Example:
 
 ### Update of documentation
 - [ ] Check if user manual requires update
-   - [ ] No
-   - [ ] Yes
+  - [ ] No
+  - [ ] Yes
     - [ ] Update user manual
 
 
