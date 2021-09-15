@@ -19,6 +19,12 @@ Every change is marked with issue ID.
 - Fixed UI bug by downgrading the `office-ui-fabric-react` package version to `6.214.0` #535
 - Fixed redirect after creating a new project status #530
 
+## 1.X.X - TBA
+
+## Added
+
+- Added a new project webpart, 'Prosjekttidslinje' for showcasing projects and items for the current project on a timeline #503
+
 ## 1.2.9 - 08.09.2021
 
 ## Added
@@ -31,11 +37,6 @@ Every change is marked with issue ID.
 - Fixed issue where the site design had to be applied post project creation #492
 - Fixed date not being recognized when exporting Portfolio overview to Excel. #495
 - Fixed issue where changing project phase did not always update the portfolio page #518
-
-## 1.X.X - TBA
-
-## Added
-- Added a new project webpart, 'Prosjekttidslinje' for showcasing projects and items for the current project on a timeline #503
 
 ## 1.2.8 - 17.06.2021
 
