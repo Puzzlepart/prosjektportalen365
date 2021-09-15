@@ -465,7 +465,7 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
           .get()
       ])
 
-      let timelineListItems = timelineItems.filter((item) => item.SiteIdLookup.Title === this.props.webTitle)
+      let timelineListItems = timelineItems.filter((item) => item.SiteIdLookup[0].Title === this.props.webTitle)
 
       const [timelineColumns] = await Promise.all([
         await this._web.lists
@@ -493,8 +493,8 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
 
       timelineItems = timelineItems.map((item) => {
         const model = new TimelineContentModel(
-          item.SiteIdLookup && item.SiteIdLookup.GtSiteId,
-          item.SiteIdLookup && item.SiteIdLookup.Title,
+          item.SiteIdLookup && item.SiteIdLookup[0].GtSiteId,
+          item.SiteIdLookup && item.SiteIdLookup[0].Title,
           item.Title,
           item.TimelineType,
           item.GtStartDate,
