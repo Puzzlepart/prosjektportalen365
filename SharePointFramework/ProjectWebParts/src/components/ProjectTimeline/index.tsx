@@ -17,8 +17,6 @@ import Timeline, {
 } from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css'
 import _, { isEmpty } from 'underscore'
-import { FilterPanel, IFilterItemProps, IFilterProps } from '../FilterPanel'
-import { DetailsCallout } from './DetailsCallout'
 import styles from './ProjectTimeline.module.scss'
 import './Timeline.overrides.css'
 import { ProjectModel, TimelineContentModel } from 'models'
@@ -42,6 +40,10 @@ import {
   IProjectTimelineData,
   ProjectPropertyModel
 } from './types'
+
+// TODO: Temporary imports, when 'npm i pp365-portfoliowebparts' works, change to correct dependency
+import { DetailsCallout } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/DetailsCallout'
+import { FilterPanel, IFilterItemProps, IFilterProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
 
 /**
  * @component ProjectTimeline (Project webpart)
