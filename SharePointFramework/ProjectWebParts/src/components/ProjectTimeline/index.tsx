@@ -9,16 +9,8 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectWebPartsStrings'
 import React from 'react'
-import Timeline, {
-  ReactCalendarGroupRendererProps,
-  ReactCalendarItemRendererProps,
-  TimelineMarkers,
-  TodayMarker
-} from 'react-calendar-timeline'
-import 'react-calendar-timeline/lib/Timeline.css'
 import _, { isEmpty } from 'underscore'
 import styles from './ProjectTimeline.module.scss'
-import './Timeline.overrides.css'
 import { ProjectModel, TimelineContentModel } from 'models'
 import { BaseWebPartComponent } from '../BaseWebPartComponent'
 import { Web } from '@pnp/sp'
@@ -43,21 +35,24 @@ import {
 
 // TODO: Temporary imports, when 'npm i pp365-portfoliowebparts' works, change to correct dependency
 import { DetailsCallout } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/DetailsCallout'
-import { FilterPanel, IFilterItemProps, IFilterProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
+import { Timeline } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/Timeline'
+import {
+  FilterPanel,
+  IFilterItemProps,
+  IFilterProps
+} from 'pp365-portfoliowebparts/lib/components/FilterPanel'
 
 /**
  * @component ProjectTimeline (Project webpart)
  * @extends Component
  */
-export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps, IProjectTimelineState> {
+export class ProjectTimeline extends BaseWebPartComponent<
+  IProjectTimelineProps,
+  IProjectTimelineState
+> {
   private _portalDataService: PortalDataService
   private _selection: Selection
   private _web: Web
-
-  public static defaultProps: Partial<IProjectTimelineProps> = {
-    defaultTimeStart: [-6, 'months'],
-    defaultTimeEnd: [2, 'years']
-  }
 
   /**
    * Constructor
@@ -65,7 +60,12 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
    * @param {IProjectTimelineProps} props Props
    */
   constructor(props: IProjectTimelineProps) {
-    super('ProjectTimeline', props, { selectedItem: [], loading: true, showFilterPanel: false, activeFilters: {} })
+    super('ProjectTimeline', props, {
+      selectedItem: [],
+      loading: true,
+      showFilterPanel: false,
+      activeFilters: {}
+    })
 
     this._portalDataService = new PortalDataService().configure({
       urlOrWeb: this.props.hubSite.web,
@@ -124,23 +124,13 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
                 }}></div>
             </MessageBar>
           </div>
-          <div className={styles.timeline}>
-            <Timeline<any>
-              groups={groups}
-              items={items}
-              stackItems={true}
-              canMove={false}
-              canChangeGroup={false}
-              sidebarWidth={320}
-              itemRenderer={this._itemRenderer.bind(this)}
-              groupRenderer={this._groupRenderer.bind(this)}
-              defaultTimeStart={moment().add(...this.props.defaultTimeStart)}
-              defaultTimeEnd={moment().add(...this.props.defaultTimeEnd)}>
-              <TimelineMarkers>
-                <TodayMarker date={moment().toDate()} />
-              </TimelineMarkers>
-            </Timeline>
-          </div>
+          <Timeline
+            defaultTimeStart={[-6, 'months']}
+            defaultTimeEnd={[2, 'years']}
+            _onItemClick={this._onItemClick.bind(this)}
+            groups={groups}
+            items={items}
+          />
           <div className={styles.timelineList}>
             <div className={styles.commandBar}>
               <CommandBar {...this._getListCommandBarProps()} />
@@ -195,7 +185,9 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
       case 'datetime':
         return columnValue && moment(columnValue).format('DD.MM.YYYY')
       case 'currency':
-        return tryParseCurrency(columnValue, '').toString().replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')
+        return tryParseCurrency(columnValue, '')
+          .toString()
+          .replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')
       default:
         return columnValue
     }
@@ -224,9 +216,7 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
    * Get filters
    */
   private _getFilters(): IFilterProps[] {
-    const columns = [
-      { fieldName: 'type', name: strings.TypeLabel }
-    ]
+    const columns = [{ fieldName: 'type', name: strings.TypeLabel }]
     return columns.map((col) => ({
       column: { key: col.fieldName, minWidth: 0, ...col },
       items: this.state.data.items
@@ -315,7 +305,9 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
    * Create new timeline item and send the user to the edit form
    */
   private async _redirectNewTimelineItem() {
-    const [project] = (await this._web.lists.getByTitle(strings.ProjectsListName).items.select('Id', 'Title').get()).filter((project) => project.Title === this.props.webTitle)
+    const [project] = (
+      await this._web.lists.getByTitle(strings.ProjectsListName).items.select('Id', 'Title').get()
+    ).filter((project) => project.Title === this.props.webTitle)
     const properties: TypedHash<string | number | boolean> = {
       Title: 'Nytt element',
       SiteIdLookupId: project.Id
@@ -336,9 +328,7 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
    *
    * @param {TypedHash} properties Properties
    */
-  public async _addTimelineItem(
-    properties: TypedHash<string | number | boolean>,
-  ): Promise<any> {
+  public async _addTimelineItem(properties: TypedHash<string | number | boolean>): Promise<any> {
     const list = this._web.lists.getByTitle(strings.TimelineContentListName)
     const itemAddResult = await list.items.add(properties)
     return itemAddResult.data
@@ -358,7 +348,7 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
 
   /**
    * Edit form URL with added Source parameter generated from the item ID
-   * 
+   *
    * @param {any} item Item
    */
   public _editFormUrl(item: any) {
@@ -370,58 +360,6 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
       '&Source=',
       encodeURIComponent(window.location.href)
     ].join('')
-  }
-
-  /**
-   * Timeline item renderer
-   */
-  private _itemRenderer(props: ReactCalendarItemRendererProps<any>) {
-    const htmlProps = props.getItemProps(props.item.itemProps)
-
-    if (props.item.type === strings.MilestoneLabel)
-      return (
-        <div
-          {...htmlProps}
-          className={`${styles.timelineItem} rc-item`}
-          onClick={(event) => this._onItemClick(event, props.item)}>
-          <div
-            className={`${styles.itemContent} rc-milestoneitem-content`}
-            style={{
-              maxHeight: `${props.itemContext.dimensions.height}`,
-              clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
-              width: '22px',
-              height: '24px',
-              backgroundColor: '#ffc800',
-              marginTop: '-2px'
-            }}>
-          </div>
-        </div>
-      )
-
-    return (
-      <div
-        {...htmlProps}
-        className={`${styles.timelineItem} rc-item`}
-        onClick={(event) => this._onItemClick(event, props.item)}>
-        <div
-          className={`${styles.itemContent} rc-item-content`}
-          style={{ maxHeight: `${props.itemContext.dimensions.height}`, paddingLeft: '8px' }}>
-          {props.item.title}
-        </div>
-      </div>
-    )
-  }
-
-  /**
-   * Timeline group renderer
-   */
-  private _groupRenderer({ group }: ReactCalendarGroupRendererProps<ITimelineGroup>) {
-    const style: React.CSSProperties = { display: 'block', width: '100%' }
-    return (
-      <div>
-        <span style={style}>{group.title}</span>
-      </div>
-    )
   }
 
   /**
@@ -442,17 +380,19 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
 
     try {
       const [allColumns] = await Promise.all([
-        (await this._web.lists
-          .getByTitle(strings.TimelineContentListName).defaultView.fields.select('Items')
-          .get())['Items']])
+        (
+          await this._web.lists
+            .getByTitle(strings.TimelineContentListName)
+            .defaultView.fields.select('Items')
+            .get()
+        )['Items']
+      ])
 
       const filterstring: string = allColumns
         .map((col: string) => `(InternalName eq '${col}')`)
         .join(' or ')
 
-      const internalNames: string = await allColumns
-        .map((col: string) => `${col}`)
-        .join(',')
+      const internalNames: string = await allColumns.map((col: string) => `${col}`).join(',')
 
       let [timelineItems] = await Promise.all([
         await this._web.lists
@@ -462,17 +402,23 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
             'Id',
             'SiteIdLookupId',
             'SiteIdLookup/Title',
-            'SiteIdLookup/GtSiteId',
-          ).expand('SiteIdLookup')
+            'SiteIdLookup/GtSiteId'
+          )
+          .expand('SiteIdLookup')
           .get()
       ])
 
-      let timelineListItems = timelineItems.filter((item) => item.SiteIdLookup[0].Title === this.props.webTitle)
+      let timelineListItems = timelineItems.filter(
+        (item) => item.SiteIdLookup[0].Title === this.props.webTitle
+      )
 
       const [timelineColumns] = await Promise.all([
         await this._web.lists
-          .getByTitle(strings.TimelineContentListName).fields.filter(filterstring)
-          .select('InternalName', 'Title', 'TypeAsString').get()])
+          .getByTitle(strings.TimelineContentListName)
+          .fields.filter(filterstring)
+          .select('InternalName', 'Title', 'TypeAsString')
+          .get()
+      ])
 
       const columns: IColumn[] = timelineColumns
         .filter((column) => column.InternalName !== 'SiteIdLookup')
@@ -485,7 +431,7 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
             minWidth: 150,
             maxWidth: 200,
             sorting: true,
-            isResizable: true,
+            isResizable: true
           }
         })
 
@@ -493,19 +439,20 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
         return { ...item, EditFormUrl: this._editFormUrl(item) }
       })
 
-      timelineItems = timelineItems.map((item) => {
-        const model = new TimelineContentModel(
-          item.SiteIdLookup && item.SiteIdLookup[0].GtSiteId,
-          item.SiteIdLookup && item.SiteIdLookup[0].Title,
-          item.Title,
-          item.TimelineType,
-          item.GtStartDate,
-          item.GtEndDate,
-          item.GtBudgetTotal,
-          item.GtCostsTotal,
-        )
-        return model
-      })
+      timelineItems = timelineItems
+        .map((item) => {
+          const model = new TimelineContentModel(
+            item.SiteIdLookup && item.SiteIdLookup[0].GtSiteId,
+            item.SiteIdLookup && item.SiteIdLookup[0].Title,
+            item.Title,
+            item.TimelineType,
+            item.GtStartDate,
+            item.GtEndDate,
+            item.GtBudgetTotal,
+            item.GtCostsTotal
+          )
+          return model
+        })
         .filter((t) => t)
 
       return [timelineItems, timelineListItems, columns]
@@ -579,39 +526,45 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
       } as ITimelineItem
     })
 
-    const phases: ITimelineItem[] = timelineItems.filter((item) => item.title === this.props.webTitle).map((item, id) => {
-      id += items.length
+    const phases: ITimelineItem[] = timelineItems
+      .filter((item) => item.title === this.props.webTitle)
+      .map((item, id) => {
+        id += items.length
 
-      const backgroundColor = item.type === strings.PhaseLabel
-        ? '#2589d6'
-        : item.type === strings.MilestoneLabel
-          ? 'transparent'
-          : item.type === strings.SubPhaseLabel
+        const backgroundColor =
+          item.type === strings.PhaseLabel
+            ? '#2589d6'
+            : item.type === strings.MilestoneLabel
+            ? 'transparent'
+            : item.type === strings.SubPhaseLabel
             ? '#249ea0'
             : '#484848'
 
-      const group = _.find(groups, (grp) => item.title.indexOf(grp.title) !== -1)
-      const style: React.CSSProperties = {
-        color: 'white',
-        border: 'none',
-        cursor: 'auto',
-        outline: 'none',
-        background: backgroundColor,
-        backgroundColor: backgroundColor
-      }
-      return {
-        id: id,
-        group: group.id,
-        title: item.itemTitle,
-        start_time: item.type === strings.MilestoneLabel ? moment(new Date(item.endDate)) : moment(new Date(item.startDate)),
-        end_time: moment(new Date(item.endDate)),
-        itemProps: { style },
-        project: item.title,
-        type: item.type,
-        budgetTotal: item.budgetTotal,
-        costsTotal: item.costsTotal,
-      } as ITimelineItem
-    })
+        const group = _.find(groups, (grp) => item.title.indexOf(grp.title) !== -1)
+        const style: React.CSSProperties = {
+          color: 'white',
+          border: 'none',
+          cursor: 'auto',
+          outline: 'none',
+          background: backgroundColor,
+          backgroundColor: backgroundColor
+        }
+        return {
+          id: id,
+          group: group.id,
+          title: item.itemTitle,
+          start_time:
+            item.type === strings.MilestoneLabel
+              ? moment(new Date(item.endDate))
+              : moment(new Date(item.startDate)),
+          end_time: moment(new Date(item.endDate)),
+          itemProps: { style },
+          project: item.title,
+          type: item.type,
+          budgetTotal: item.budgetTotal,
+          costsTotal: item.costsTotal
+        } as ITimelineItem
+      })
 
     return [...items, ...phases]
   }
@@ -625,9 +578,7 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
     const fieldNames: string[] = Object.keys(fieldValuesText).filter((fieldName) => {
       const [field] = fields.filter((fld) => fld.InternalName === fieldName)
       if (!field) return false
-      if (
-        isEmpty(columns) && [fieldName]
-      ) {
+      if (isEmpty(columns) && [fieldName]) {
         return true
       }
       const [column] = columns.filter((c) => c.internalName === fieldName)
@@ -689,14 +640,15 @@ export class ProjectTimeline extends BaseWebPartComponent<IProjectTimelineProps,
         this.props.webUrl,
         projectData.GtProjectPhase,
         projectData.GtStartDate,
-        projectData.GtEndDate,
+        projectData.GtEndDate
       )
 
       project['type'] = strings.ProjectLabel
       project['budgetTotal'] = projectData.GtBudgetTotal
       project['costsTotal'] = projectData.GtCostsTotal
 
-      const [timelineItems, timelineListItems, timelineColumns] = await this._getProjecttimelineItemsAndColumns()
+      const [timelineItems, timelineListItems, timelineColumns] =
+        await this._getProjecttimelineItemsAndColumns()
 
       const groups = this._transformGroups([project])
       const items = this._transformItems([project], timelineItems, groups)

@@ -6,17 +6,7 @@ import { ProjectColumn } from 'pp365-shared/lib/models'
 import { IEntityField } from 'sp-entityportal-service'
 import { stringIsNullOrEmpty } from '@pnp/common'
 
-export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
-  /**
-   * Default time start
-   */
-  defaultTimeStart?: [number, moment.unitOfTime.DurationConstructor]
-
-  /**
-   * Default time end
-   */
-  defaultTimeEnd?: [number, moment.unitOfTime.DurationConstructor]
-}
+export interface IProjectTimelineProps extends IBaseWebPartComponentProps {}
 
 export interface IProjectTimelineState
   extends IBaseWebPartComponentState<IProjectTimelineData> {
