@@ -15,7 +15,6 @@ import { FilterPanel, IFilterItemProps, IFilterProps } from '../FilterPanel'
 import { DetailsCallout } from './DetailsCallout'
 import { Timeline } from './Timeline'
 import styles from './ProjectTimeline.module.scss'
-import './Timeline.overrides.css'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
 import { ProjectListModel, TimelineContentListModel } from 'models'
 

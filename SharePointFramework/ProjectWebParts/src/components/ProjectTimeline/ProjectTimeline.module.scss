@@ -22,20 +22,6 @@
     .infoText {
       padding: 23px 32px 23px 32px;
     }
-    .timeline {
-      margin: 0px auto;
-      padding: 0 32px 0 32px;
-      font-size: 12px !important;
-
-      .timelineItem {
-        cursor: pointer !important;
-        .itemContent {
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          width: 100%;
-        }
-      }
-    }
     .timelineList {
       margin: 25px;
 

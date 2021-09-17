@@ -8,6 +8,7 @@ import ReactTimeline, {
 import 'react-calendar-timeline/lib/Timeline.css'
 import * as strings from 'PortfolioWebPartsStrings'
 import styles from './Timeline.module.scss'
+import './Timeline.overrides.css'
 import moment from 'moment'
 import React, { Component } from 'react'
 
