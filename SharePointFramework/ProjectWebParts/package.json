@@ -45,6 +45,7 @@
     "get-value": "3.0.1",
     "interactjs": "1.6.2",
     "msgraph-helper": "0.7.1",
+    "pp365-portfoliowebparts": "file:../PortfolioWebParts",
     "office-ui-fabric-react": "6.214.0",
     "pp365-shared": "latest",
     "pzl-spfx-components": "0.0.11",

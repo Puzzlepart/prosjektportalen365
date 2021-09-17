@@ -46,6 +46,7 @@
     "externals": {},
     "localizedResources": {
         "ProjectWebPartsStrings": "lib/loc/{locale}.js",
+        "PortfolioWebPartsStrings": "node_modules/pp365-portfoliowebparts/lib/loc/{locale}.js",
         "PzlSPFxComponentsStrings": "lib/loc/{locale}.js",
         "ControlStrings": "lib/loc/{locale}.js"
     }
