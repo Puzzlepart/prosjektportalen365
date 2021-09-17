@@ -10,16 +10,10 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { Component } from 'react'
-import Timeline, {
-  ReactCalendarGroupRendererProps,
-  ReactCalendarItemRendererProps,
-  TimelineMarkers,
-  TodayMarker
-} from 'react-calendar-timeline'
-import 'react-calendar-timeline/lib/Timeline.css'
 import _ from 'underscore'
 import { FilterPanel, IFilterItemProps, IFilterProps } from '../FilterPanel'
 import { DetailsCallout } from './DetailsCallout'
+import { Timeline } from './Timeline'
 import styles from './ProjectTimeline.module.scss'
 import './Timeline.overrides.css'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
@@ -30,10 +24,6 @@ import { ProjectListModel, TimelineContentListModel } from 'models'
  * @extends Component
  */
 export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTimelineState> {
-  public static defaultProps: Partial<IProjectTimelineProps> = {
-    defaultTimeStart: [-1, 'months'],
-    defaultTimeEnd: [1, 'years']
-  }
   /**
    * Constructor
    *
@@ -68,6 +58,8 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
 
     const { groups, items } = this._getFilteredData()
 
+    console.log(this.state)
+
     return (
       <div className={styles.root}>
         <div className={styles.container}>
@@ -88,23 +80,13 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
                 }}></div>
             </MessageBar>
           </div>
-          <div className={styles.timeline}>
-            <Timeline<any>
-              groups={groups}
-              items={items}
-              stackItems={true}
-              canMove={false}
-              canChangeGroup={false}
-              sidebarWidth={320}
-              itemRenderer={this._itemRenderer.bind(this)}
-              groupRenderer={this._groupRenderer.bind(this)}
-              defaultTimeStart={moment().add(...this.props.defaultTimeStart)}
-              defaultTimeEnd={moment().add(...this.props.defaultTimeEnd)}>
-              <TimelineMarkers>
-                <TodayMarker date={moment().toDate()} />
-              </TimelineMarkers>
-            </Timeline>
-          </div>
+          <Timeline
+            defaultTimeStart={[-1, 'months']}
+            defaultTimeEnd={[1, 'years']}
+            _onItemClick={this._onItemClick.bind(this)}
+            groups={groups}
+            items={items}
+          />
         </div>
         <FilterPanel
           isOpen={this.state.showFilterPanel}
@@ -121,6 +103,16 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         )}
       </div>
     )
+  }
+
+  /**
+   * On item click
+   *
+   * @param {React.MouseEvent} event Event
+   * @param {ITimelineItem} item Item
+   */
+  private _onItemClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) {
+    this.setState({ showDetails: { element: event.currentTarget, data: item } })
   }
 
   /**
@@ -196,72 +188,6 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
       }
     })
     return cmd
-  }
-
-  /**
-   * Timeline item renderer
-   */
-  private _itemRenderer(props: ReactCalendarItemRendererProps<any>) {
-    const htmlProps = props.getItemProps(props.item.itemProps)
-
-    if (props.item.type === strings.MilestoneLabel)
-      return (
-        <div
-          {...htmlProps}
-          className={`${styles.timelineItem} rc-item`}
-          onClick={(event) => this._onItemClick(event, props.item)}>
-          <div
-            className={`${styles.itemContent} rc-milestoneitem-content`}
-            style={{
-              maxHeight: `${props.itemContext.dimensions.height}`,
-              clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
-              width: '22px',
-              height: '24px',
-              backgroundColor: '#ffc800',
-              marginTop: '-2px'
-            }}>
-          </div>
-        </div>
-
-      )
-
-    return (
-      <div
-        {...htmlProps}
-        className={`${styles.timelineItem} rc-item`}
-        onClick={(event) => this._onItemClick(event, props.item)}>
-        <div
-          className={`${styles.itemContent} rc-item-content`}
-          style={{ maxHeight: `${props.itemContext.dimensions.height}`, paddingLeft: '8px' }}>
-          {props.item.title}
-        </div>
-      </div>
-    )
-  }
-
-  /**
-   * Timeline group renderer
-   */
-  private _groupRenderer({ group }: ReactCalendarGroupRendererProps<ITimelineGroup>) {
-    const style: React.CSSProperties = { display: 'block', width: '100%' }
-    if (group.type === TimelineGroupType.Role) {
-      style.fontStyle = 'italic'
-    }
-    return (
-      <div>
-        <span style={style}>{group.title}</span>
-      </div>
-    )
-  }
-
-  /**
-   * On item click
-   *
-   * @param {React.MouseEvent} event Event
-   * @param {ITimelineItem} item Item
-   */
-  private _onItemClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) {
-    this.setState({ showDetails: { element: event.currentTarget, data: item } })
   }
 
   /**
