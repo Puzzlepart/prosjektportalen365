@@ -15,6 +15,7 @@ $PACKAGE_FILE = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-J
 Write-Host "[Building release v$($PACKAGE_FILE.version)]" -ForegroundColor Cyan
 
 #region Paths
+$START_PATH                     = Get-Location
 $ROOT_PATH                      = "$PSScriptRoot/.."
 $SHAREPOINT_FRAMEWORK_BASEPATH  = "$ROOT_PATH/SharePointFramework"
 $PNP_TEMPLATES_BASEPATH         = "$ROOT_PATH/Templates"
@@ -28,6 +29,8 @@ $RELEASE_PATH                   = "$ROOT_PATH/release/$($RELEASE_NAME)"
 if ($CI.IsPresent) {
     Write-Host "[Running in CI mode. Installing module SharePointPnPPowerShellOnline.]" -ForegroundColor Yellow
     Install-Module -Name SharePointPnPPowerShellOnline -Force -Scope CurrentUser
+} else {
+    Import-Module $PSScriptRoot\SharePointPnPPowerShellOnline\SharePointPnPPowerShellOnline.psd1 -DisableNameChecking
 }
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
@@ -124,4 +127,5 @@ if (-not $CI.IsPresent) {
     Add-Type -Assembly "System.IO.Compression.FileSystem"
     [IO.Compression.ZipFile]::CreateFromDirectory($RELEASE_PATH, "$($RELEASE_PATH).zip")  
     Write-Host "Done building release [v$($PACKAGE_FILE.version)] in [$($sw.Elapsed)]" -ForegroundColor Cyan
+    Set-Location $START_PATH
 }

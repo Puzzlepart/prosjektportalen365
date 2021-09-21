@@ -13,7 +13,7 @@ export interface IProjectTemplateSPItem {
 }
 
 export class ProjectTemplate implements IDropdownOption {
-  public id: number
+  public id: string
   public key: string
   public text: string
   public subText: string
@@ -23,7 +23,7 @@ export class ProjectTemplate implements IDropdownOption {
   public listContentConfigIds: number[]
 
   constructor(spItem: IProjectTemplateSPItem, public web: Web) {
-    this.id = spItem.Id
+    this.id = spItem.Id.toString()
     this.key = `projecttemplate_${this.id}`
     this.text = spItem.File.Title
     this.subText = spItem.FieldValuesAsText.GtDescription

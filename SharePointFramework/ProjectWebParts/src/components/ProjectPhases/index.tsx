@@ -52,7 +52,7 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
       props.syncPropertiesAfterPhaseChange === undefined ||
       props.syncPropertiesAfterPhaseChange
     ) {
-      setTimeout(() => (document.location.href = `${props.webUrl}#syncproperties=1`), 1000)
+      setTimeout(() => (document.location.href = `${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`), 1000)
     }
   }
 
