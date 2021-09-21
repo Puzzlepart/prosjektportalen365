@@ -107,34 +107,34 @@ export class ProjectTimeline extends BaseWebPartComponent<
     return (
       <div className={styles.root}>
         <div className={styles.container}>
-          <div className={styles.commandBar}>
+          {this.props.showFilterButton && (<div className={styles.commandBar}>
             <CommandBar {...this._getCommandBarProps()} />
-          </div>
+          </div>)}
           <div className={styles.header}>
             <div className={styles.title}>{this.props.title}</div>
           </div>
-          <div className={styles.infoText}>
+          {this.props.showInfoMessage && (<div className={styles.infoText}>
             <MessageBar>
               <div
                 dangerouslySetInnerHTML={{
                   __html: format(
-                    strings.ProjectTimelineInfoText,
+                    strings.ProjectTimelineListInfoText,
                     encodeURIComponent(window.location.href)
                   )
                 }}></div>
             </MessageBar>
-          </div>
-          <Timeline
+          </div>)}
+          {this.props.showTimeline && (<Timeline
             defaultTimeStart={[-6, 'months']}
             defaultTimeEnd={[2, 'years']}
             _onItemClick={this._onItemClick.bind(this)}
             groups={groups}
             items={items}
-          />
-          <div className={styles.timelineList}>
-            <div className={styles.commandBar}>
+          />)}
+          {this.props.showTimelineList && (<div className={styles.timelineList}>
+            {this.props.showCmdTimelineList && (<div className={styles.commandBar}>
               <CommandBar {...this._getListCommandBarProps()} />
-            </div>
+            </div>)}
             <DetailsList
               columns={this.state.data.timelineColumns}
               items={this.state.data.timelineListItems}
@@ -143,7 +143,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
               selectionMode={SelectionMode.single}
               layoutMode={DetailsListLayoutMode.justified}
             />
-          </div>
+          </div>)}
         </div>
         <FilterPanel
           isOpen={this.state.showFilterPanel}
@@ -308,9 +308,10 @@ export class ProjectTimeline extends BaseWebPartComponent<
     const [project] = (
       await this._web.lists.getByTitle(strings.ProjectsListName).items.select('Id', 'Title').get()
     ).filter((project) => project.Title === this.props.webTitle)
-    const properties: TypedHash<string | number | boolean> = {
+
+    const properties: TypedHash<any> = {
       Title: 'Nytt element',
-      SiteIdLookupId: project.Id
+      SiteIdLookupId:  {"results": [project.Id] }
     }
     Logger.log({
       message: '(TimelineItem) _redirectNewTimelineItem: Created new timeline item',
@@ -328,7 +329,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
    *
    * @param {TypedHash} properties Properties
    */
-  public async _addTimelineItem(properties: TypedHash<string | number | boolean>): Promise<any> {
+  public async _addTimelineItem(properties: TypedHash<any>): Promise<any> {
     const list = this._web.lists.getByTitle(strings.TimelineContentListName)
     const itemAddResult = await list.items.add(properties)
     return itemAddResult.data
@@ -422,12 +423,13 @@ export class ProjectTimeline extends BaseWebPartComponent<
 
       const columns: IColumn[] = timelineColumns
         .filter((column) => column.InternalName !== 'SiteIdLookup')
-        .map((column) => {
+        .map((column, idx) => {
           return {
             key: column.InternalName,
             name: column.Title,
             fieldName: column.InternalName,
             data: { type: column.TypeAsString },
+            onColumnClick: this._onColumnClick.bind(this),
             minWidth: 150,
             maxWidth: 200,
             sorting: true,
@@ -460,6 +462,44 @@ export class ProjectTimeline extends BaseWebPartComponent<
       return []
     }
   }
+
+  /**
+   * For sorting detailslist on column click
+   *
+   * @param {React.MouseEvent} event Event
+   * @param {IColumn} column Column
+   */
+  private _onColumnClick = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
+    const newColumns: IColumn[] = this.state.data.timelineColumns.slice();
+    const currColumn: IColumn = newColumns.filter(currCol => column.key === currCol.key)[0];
+    newColumns.forEach((newCol: IColumn) => {
+      if (newCol === currColumn) {
+        currColumn.isSortedDescending = !currColumn.isSortedDescending;
+        currColumn.isSorted = true;
+
+      } else {
+        newCol.isSorted = false;
+        newCol.isSortedDescending = true;
+      }
+    });
+    const newItems = this._copyAndSort(this.state.data.timelineListItems, currColumn.fieldName!, currColumn.isSortedDescending);
+    this.setState({
+      data: {...this.state.data, timelineColumns: newColumns, timelineListItems: newItems},
+    });
+  };
+
+  /**
+   * Copies and sorts items based on columnKey in the timeline detailslist
+   *
+   * @param {T[]} items timelineListItems
+   * @param {string} columnKey Column key
+   * @param {boolean} isSortedDescending Is Sorted Descending?
+   * @returns {T[]} sorted timeline list items
+   */
+  private _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
+  const key = columnKey as keyof T;
+  return items.slice(0).sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
+}
 
   /**
    * Creating groups based on projects title

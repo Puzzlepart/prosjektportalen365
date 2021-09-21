@@ -6,7 +6,14 @@ import { ProjectColumn } from 'pp365-shared/lib/models'
 import { IEntityField } from 'sp-entityportal-service'
 import { stringIsNullOrEmpty } from '@pnp/common'
 
-export interface IProjectTimelineProps extends IBaseWebPartComponentProps {}
+export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
+  listName?: string
+  showFilterButton?: boolean
+  showTimeline?: boolean
+  showInfoMessage?: boolean
+  showCmdTimelineList?: boolean
+  showTimelineList?: boolean  
+}
 
 export interface IProjectTimelineState
   extends IBaseWebPartComponentState<IProjectTimelineData> {

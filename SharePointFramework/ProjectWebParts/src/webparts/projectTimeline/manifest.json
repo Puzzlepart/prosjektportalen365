@@ -24,7 +24,12 @@
             },
             "officeFabricIconFontName": "TimelineDelivery",
             "properties": {
-                "listName": "Tidslinjeinnhold"
+                "listName": "Tidslinjeinnhold",
+                "showFilterButton": true,
+                "showTimeline": true,
+                "showInfoMessage": true,
+                "showCmdTimelineList": true,
+                "showTimelineList": true
             }
         }
     ]
