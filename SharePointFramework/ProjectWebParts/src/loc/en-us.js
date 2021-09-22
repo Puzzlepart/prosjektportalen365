@@ -134,5 +134,10 @@ define([], function () {
     EndDateLabel: 'Sluttdato',
     BudgetTotalLabel: 'Totalbudsjett',
     CostsTotalLabel: 'Kostnader påløpt totalt',
+    ShowFilterButtonLabel: 'Vis filterknapp',
+    ShowTimelineLabel: 'Vis tidslinje',
+    ShowInfoMessageLabel: 'Vis infomelding',
+    ShowCmdTimelineListLabel: 'Vis kommandolinje for liste',
+    ShowTimelineListLabel: 'Vis liste'
   }
 })

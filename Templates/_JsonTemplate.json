@@ -692,7 +692,11 @@
                                     "Id": "d156652b-9121-47af-89ae-1fe8427c53da",
                                     "Properties": {
                                         "title": "Prosjekttidslinje",
-                                        "listName": "Tidslinjeinnhold"
+                                        "showFilterButton": true,
+                                        "showTimeline": true,
+                                        "showInfoMessage": true,
+                                        "showCmdTimelineList": true,
+                                        "showTimelineList": true
                                     }
                                 }
                             ]

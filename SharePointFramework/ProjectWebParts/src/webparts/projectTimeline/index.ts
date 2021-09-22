@@ -32,23 +32,23 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                   value: 'Tidslinjeinnhold'
                 }),
                 PropertyPaneToggle('showFilterButton', {
-                  label: 'Vis filterknapp',
+                  label: strings.ShowFilterButtonLabel,
                   checked: true
                 }),
                 PropertyPaneToggle('showTimeline', {
-                  label: 'Vis tidslinje',
+                  label: strings.ShowTimelineLabel,
                   checked: true
                 }),
                 PropertyPaneToggle('showInfoMessage', {
-                  label: 'Vis infomelding',
+                  label: strings.ShowInfoMessageLabel,
                   checked: true
                 }),
                 PropertyPaneToggle('showCmdTimelineList', {
-                  label: 'Vis kommandolinje for liste',
+                  label: strings.ShowCmdTimelineListLabel,
                   checked: true
                 }),
                 PropertyPaneToggle('showTimelineList', {
-                  label: 'Vis liste',
+                  label: strings.ShowTimelineListLabel,
                   checked: true
                 })
               ]
