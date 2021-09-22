@@ -256,13 +256,14 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
     const phases: ITimelineItem[] = timelineItems.map((item, id) => {
       id += items.length
 
-      const backgroundColor = item.type === strings.PhaseLabel
-        ? '#2589d6'
-        : item.type === strings.MilestoneLabel
+      const backgroundColor =
+        item.type === strings.PhaseLabel
+          ? '#2589d6'
+          : item.type === strings.MilestoneLabel
           ? 'transparent'
           : item.type === strings.SubPhaseLabel
-            ? '#249ea0'
-            : '#484848'
+          ? '#249ea0'
+          : '#484848'
 
       const group = _.find(groups, (grp) => item.title.indexOf(grp.title) !== -1)
       const style: React.CSSProperties = {
@@ -277,13 +278,16 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         id,
         group: group.id,
         title: item.itemTitle,
-        start_time: item.type === strings.MilestoneLabel ? moment(new Date(item.endDate)) : moment(new Date(item.startDate)),
+        start_time:
+          item.type === strings.MilestoneLabel
+            ? moment(new Date(item.endDate))
+            : moment(new Date(item.startDate)),
         end_time: moment(new Date(item.endDate)),
         itemProps: { style },
         project: item.title,
         type: item.type,
         budgetTotal: item.budgetTotal,
-        costsTotal: item.costsTotal,
+        costsTotal: item.costsTotal
       } as ITimelineItem
     })
 
@@ -298,14 +302,19 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   private async _fetchData(): Promise<ITimelineData> {
     try {
       const projects = await this.props.dataAdapter.fetchEncrichedProjects()
-      const timelineItems: any = (await this.props.dataAdapter._fetchTimelineContentItems()).timelineItems
+      const timelineItems: any = (await this.props.dataAdapter._fetchTimelineContentItems())
+        .timelineItems
 
-      await Promise.all(projects.map(async (project) => {
-        const statusReport = (await this.props.dataAdapter._fetchDataForTimelineProject(project.siteId)).statusReports[0]
-        project['budgetTotal'] = statusReport && statusReport['GtBudgetTotalOWSCURR']
-        project['costsTotal'] = statusReport && statusReport['GtCostsTotalOWSCURR']
-        project['type'] = strings.ProjectLabel
-      }))
+      await Promise.all(
+        projects.map(async (project) => {
+          const statusReport = (
+            await this.props.dataAdapter._fetchDataForTimelineProject(project.siteId)
+          ).statusReports[0]
+          project['budgetTotal'] = statusReport && statusReport['GtBudgetTotalOWSCURR']
+          project['costsTotal'] = statusReport && statusReport['GtCostsTotalOWSCURR']
+          project['type'] = strings.ProjectLabel
+        })
+      )
 
       const groups = this._transformGroups(projects)
       const items = this._transformItems(projects, timelineItems, groups)
