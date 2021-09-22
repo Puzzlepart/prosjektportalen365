@@ -17,6 +17,7 @@ import { Timeline } from './Timeline'
 import styles from './ProjectTimeline.module.scss'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
 import { ProjectListModel, TimelineContentListModel } from 'models'
+import './ProjectTimeline.overrides.css'
 
 /**
  * @component ProjectTimeline
