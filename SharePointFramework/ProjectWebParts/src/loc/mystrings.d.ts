@@ -133,6 +133,11 @@ declare interface IProjectWebPartsStrings {
   EndDateLabel: string;
   BudgetTotalLabel: string;
   CostsTotalLabel: string;
+  ShowFilterButtonLabel: string;
+  ShowTimelineLabel: string;
+  ShowInfoMessageLabel: string;
+  ShowCmdTimelineListLabel: string;
+  ShowTimelineListLabel: string;
 }
 
 declare module 'ProjectWebPartsStrings' {
