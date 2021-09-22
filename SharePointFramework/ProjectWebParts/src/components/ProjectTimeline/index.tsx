@@ -433,7 +433,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
 
       const columns: IColumn[] = timelineColumns
         .filter((column) => column.InternalName !== 'SiteIdLookup')
-        .map((column, idx) => {
+        .map((column) => {
           return {
             key: column.InternalName,
             name: column.Title,

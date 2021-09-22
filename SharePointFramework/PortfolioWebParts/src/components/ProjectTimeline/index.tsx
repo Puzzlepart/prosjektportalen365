@@ -58,8 +58,6 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
 
     const { groups, items } = this._getFilteredData()
 
-    console.log(this.state)
-
     return (
       <div className={styles.root}>
         <div className={styles.container}>
