@@ -14,9 +14,9 @@ import styles from './ProjectTimeline.module.scss'
 import { BaseWebPartComponent } from '../BaseWebPartComponent'
 import { Web } from '@pnp/sp'
 import SPDataAdapter from '../../data'
-import { PortalDataService } from 'pp365-shared/lib/services'
 import { Logger, LogLevel } from '@pnp/logging'
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
+import { PortalDataService } from 'pp365-shared/lib/services'
 import { tryParseCurrency } from 'pp365-shared/lib/helpers'
 import {
   DetailsList,
@@ -107,43 +107,53 @@ export class ProjectTimeline extends BaseWebPartComponent<
     return (
       <div className={styles.root}>
         <div className={styles.container}>
-          {this.props.showFilterButton && (<div className={styles.commandBar}>
-            <CommandBar {...this._getCommandBarProps()} />
-          </div>)}
+          {this.props.showFilterButton && (
+            <div className={styles.commandBar}>
+              <CommandBar {...this._getCommandBarProps()} />
+            </div>
+          )}
           <div className={styles.header}>
             <div className={styles.title}>{this.props.title}</div>
           </div>
-          {this.props.showInfoMessage && (<div className={styles.infoText}>
-            <MessageBar>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: format(
-                    strings.ProjectTimelineListInfoText,
-                    encodeURIComponent(window.location.href)
-                  )
-                }}></div>
-            </MessageBar>
-          </div>)}
-          {this.props.showTimeline && (<Timeline
-            defaultTimeStart={[-6, 'months']}
-            defaultTimeEnd={[2, 'years']}
-            _onItemClick={this._onItemClick.bind(this)}
-            groups={groups}
-            items={items}
-          />)}
-          {this.props.showTimelineList && (<div className={styles.timelineList}>
-            {this.props.showCmdTimelineList && (<div className={styles.commandBar}>
-              <CommandBar {...this._getListCommandBarProps()} />
-            </div>)}
-            <DetailsList
-              columns={this.state.data.timelineColumns}
-              items={this.state.data.timelineListItems}
-              onRenderItemColumn={this._onRenderItemColumn.bind(this)}
-              selection={this._selection}
-              selectionMode={SelectionMode.single}
-              layoutMode={DetailsListLayoutMode.justified}
+          {this.props.showInfoMessage && (
+            <div className={styles.infoText}>
+              <MessageBar>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: format(
+                      strings.ProjectTimelineListInfoText,
+                      encodeURIComponent(window.location.href)
+                    )
+                  }}></div>
+              </MessageBar>
+            </div>
+          )}
+          {this.props.showTimeline && (
+            <Timeline
+              defaultTimeStart={[-6, 'months']}
+              defaultTimeEnd={[2, 'years']}
+              _onItemClick={this._onItemClick.bind(this)}
+              groups={groups}
+              items={items}
             />
-          </div>)}
+          )}
+          {this.props.showTimelineList && (
+            <div className={styles.timelineList}>
+              {this.props.showCmdTimelineList && (
+                <div className={styles.commandBar}>
+                  <CommandBar {...this._getListCommandBarProps()} />
+                </div>
+              )}
+              <DetailsList
+                columns={this.state.data.timelineColumns}
+                items={this.state.data.timelineListItems}
+                onRenderItemColumn={this._onRenderItemColumn.bind(this)}
+                selection={this._selection}
+                selectionMode={SelectionMode.single}
+                layoutMode={DetailsListLayoutMode.justified}
+              />
+            </div>
+          )}
         </div>
         <FilterPanel
           isOpen={this.state.showFilterPanel}
@@ -311,7 +321,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
 
     const properties: TypedHash<any> = {
       Title: 'Nytt element',
-      SiteIdLookupId:  {"results": [project.Id] }
+      SiteIdLookupId: { results: [project.Id] }
     }
     Logger.log({
       message: '(TimelineItem) _redirectNewTimelineItem: Created new timeline item',
@@ -470,23 +480,26 @@ export class ProjectTimeline extends BaseWebPartComponent<
    * @param {IColumn} column Column
    */
   private _onColumnClick = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
-    const newColumns: IColumn[] = this.state.data.timelineColumns.slice();
-    const currColumn: IColumn = newColumns.filter(currCol => column.key === currCol.key)[0];
+    const newColumns: IColumn[] = this.state.data.timelineColumns.slice()
+    const currColumn: IColumn = newColumns.filter((currCol) => column.key === currCol.key)[0]
     newColumns.forEach((newCol: IColumn) => {
       if (newCol === currColumn) {
-        currColumn.isSortedDescending = !currColumn.isSortedDescending;
-        currColumn.isSorted = true;
-
+        currColumn.isSortedDescending = !currColumn.isSortedDescending
+        currColumn.isSorted = true
       } else {
-        newCol.isSorted = false;
-        newCol.isSortedDescending = true;
+        newCol.isSorted = false
+        newCol.isSortedDescending = true
       }
-    });
-    const newItems = this._copyAndSort(this.state.data.timelineListItems, currColumn.fieldName!, currColumn.isSortedDescending);
+    })
+    const newItems = this._copyAndSort(
+      this.state.data.timelineListItems,
+      currColumn.fieldName!,
+      currColumn.isSortedDescending
+    )
     this.setState({
-      data: {...this.state.data, timelineColumns: newColumns, timelineListItems: newItems},
-    });
-  };
+      data: { ...this.state.data, timelineColumns: newColumns, timelineListItems: newItems }
+    })
+  }
 
   /**
    * Copies and sorts items based on columnKey in the timeline detailslist
@@ -497,9 +510,11 @@ export class ProjectTimeline extends BaseWebPartComponent<
    * @returns {T[]} sorted timeline list items
    */
   private _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
-  const key = columnKey as keyof T;
-  return items.slice(0).sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
-}
+    const key = columnKey as keyof T
+    return items
+      .slice(0)
+      .sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1))
+  }
 
   /**
    * Creating groups based on projects title

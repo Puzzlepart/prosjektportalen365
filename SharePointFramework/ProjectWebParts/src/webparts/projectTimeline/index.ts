@@ -10,7 +10,7 @@ import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
 
 import * as strings from 'ProjectWebPartsStrings'
 
-export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectTimelineProps>  {
+export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectTimelineProps> {
   public async onInit() {
     await super.onInit()
   }

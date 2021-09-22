@@ -1,4 +1,7 @@
-import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent/types'
+import {
+  IBaseWebPartComponentProps,
+  IBaseWebPartComponentState
+} from '../BaseWebPartComponent/types'
 import { TypedHash } from '@pnp/common'
 import * as ProjectDataService from 'pp365-shared/lib/services/ProjectDataService'
 import * as moment from 'moment'
@@ -12,11 +15,10 @@ export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   showTimeline?: boolean
   showInfoMessage?: boolean
   showCmdTimelineList?: boolean
-  showTimelineList?: boolean  
+  showTimelineList?: boolean
 }
 
-export interface IProjectTimelineState
-  extends IBaseWebPartComponentState<IProjectTimelineData> {
+export interface IProjectTimelineState extends IBaseWebPartComponentState<IProjectTimelineData> {
   /**
    * Properties
    */
@@ -55,9 +57,9 @@ export interface IProjectTimelineState
 
 export interface ITimelineData {
   items: ITimelineItem[]
-  groups: ITimelineGroup[],
-  timelineListItems?: any[],
-  timelineColumns?: any[];
+  groups: ITimelineGroup[]
+  timelineListItems?: any[]
+  timelineColumns?: any[]
 }
 
 export interface ITimelineGroup {
