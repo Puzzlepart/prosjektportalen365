@@ -11,7 +11,6 @@ import * as strings from 'ProjectWebPartsStrings'
 import React from 'react'
 import _, { isEmpty } from 'underscore'
 import styles from './ProjectTimeline.module.scss'
-import { ProjectModel, TimelineContentModel } from 'models'
 import { BaseWebPartComponent } from '../BaseWebPartComponent'
 import { Web } from '@pnp/sp'
 import SPDataAdapter from '../../data'
@@ -34,6 +33,7 @@ import {
 } from './types'
 
 // TODO: Temporary imports, when 'npm i pp365-portfoliowebparts' works, change to correct dependency
+import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
 import { DetailsCallout } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/DetailsCallout'
 import { Timeline } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/Timeline'
 import {
@@ -443,7 +443,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
 
       timelineItems = timelineItems
         .map((item) => {
-          const model = new TimelineContentModel(
+          const model = new TimelineContentListModel(
             item.SiteIdLookup && item.SiteIdLookup[0].GtSiteId,
             item.SiteIdLookup && item.SiteIdLookup[0].Title,
             item.Title,
@@ -506,7 +506,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
    *
    * @returns {ITimelineGroup[]} Timeline groups
    */
-  private _transformGroups(projects: ProjectModel[]): ITimelineGroup[] {
+  private _transformGroups(projects: ProjectListModel[]): ITimelineGroup[] {
     const groupNames: string[] = projects
       .map((project) => {
         const name = project.title
@@ -528,15 +528,15 @@ export class ProjectTimeline extends BaseWebPartComponent<
   /**
    * Create items
    *
-   * @param {ProjectModel[]} projects Projects
-   * @param {TimelineContentModel[]} timelineItems Timeline items
+   * @param {ProjectListModel[]} projects Projects
+   * @param {TimelineContentListModel[]} timelineItems Timeline items
    * @param {ITimelineGroup[]} groups Groups
    *
    * @returns {ITimelineItem[]} Timeline items
    */
   private _transformItems(
-    projects: ProjectModel[],
-    timelineItems: TimelineContentModel[],
+    projects: ProjectListModel[],
+    timelineItems: TimelineContentListModel[],
     groups: ITimelineGroup[]
   ): ITimelineItem[] {
     const items: ITimelineItem[] = projects.map((project, id) => {
@@ -673,7 +673,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
     try {
       const projectData = (await this._fetchProjectData()).data.fieldValuesText
 
-      const project = new ProjectModel(
+      const project = new ProjectListModel(
         this.props.siteId,
         this.props.siteId,
         this.props.webTitle,
