@@ -117,7 +117,7 @@ define([], function () {
     TypeLabel: 'Type',
     DeleteItemLabel: 'Slett',
     ProjecttimelineGroupName: 'Prosjekttidslinje',
-    ProjectTimelineInfoText: 'Her listes prosjektets tidslinje med start- og sluttdato. Prosjekttidslinjen støtter også faser, delfaser og milepæler, dette opprettes og vedlikeholdes i listen under. Prosjektet vises med rød farge, faser i blått, delfaser blågrønt, og milepæler i gult',
+    ProjectTimelineInfoText: 'Her listes prosjektets tidslinje med start- og sluttdato. Prosjekttidslinjen støtter også faser, delfaser og milepæler, dette opprettes og vedlikeholdes i listen under. Prosjektet vises med rød farge, faser i blått, delfaser blågrønt, og milepæler i gult. For å zoome inn/ut i tidslinje: ALT+Musehjul',
     ProjectTimelineListInfoText: 'Her listes listeelementene for prosjektet. Her kan du redigere og legge til nye elementer. Dette vil synkroniseres til listen på hubområdet. ',
     TimelineContentListName: 'Tidslinjeinnhold',
     NewItemLabel: 'Nytt element',
