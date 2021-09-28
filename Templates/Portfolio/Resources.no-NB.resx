@@ -467,7 +467,7 @@
     <value>Prosjektleder</value>
   </data>
     <data name="SiteFields_GtProjectAssistingManager_DisplayName" xml:space="preserve">
-    <value>Assisterende rosjektleder</value>
+    <value>Assisterende prosjektleder</value>
   </data>
   <data name="SiteFields_GtStatusBudget_DisplayName" xml:space="preserve">
     <value>Status økonomi</value>
