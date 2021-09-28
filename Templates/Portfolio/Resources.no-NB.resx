@@ -466,7 +466,7 @@
   <data name="SiteFields_GtProjectManager_DisplayName" xml:space="preserve">
     <value>Prosjektleder</value>
   </data>
-    <data name="SiteFields_GtProjectAssistingManager_DisplayName" xml:space="preserve">
+    <data name="SiteFields_GtProjectSupport_DisplayName" xml:space="preserve">
     <value>Assisterende prosjektleder</value>
   </data>
   <data name="SiteFields_GtStatusBudget_DisplayName" xml:space="preserve">
@@ -1252,7 +1252,7 @@
   <data name="SiteFields_GtProjectManager_Description" xml:space="preserve">
     <value>Hvem er prosjektleder for prosjektet?</value>
   </data>
-    <data name="SiteFields_GtProjectAssistingManager_Description" xml:space="preserve">
+    <data name="SiteFields_GtProjectSupport_Description" xml:space="preserve">
     <value>Hvem er assisterende prosjektleder?</value>
   </data>
   <data name="SiteFields_GtStatusBudget_Description" xml:space="preserve">

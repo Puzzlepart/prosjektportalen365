@@ -102,9 +102,9 @@
                     </d4p1:Value>
                 </d4p1:KeyValueOfstringAliasInfoy6h3NzC8>
                 <d4p1:KeyValueOfstringAliasInfoy6h3NzC8>
-                    <d4p1:Key>GtProjectAssistingManager</d4p1:Key>
+                    <d4p1:Key>GtProjectSupport</d4p1:Key>
                     <d4p1:Value>
-                        <d3p1:Name>GtProjectAssistingManager</d3p1:Name>
+                        <d3p1:Name>GtProjectSupport</d3p1:Name>
                         <d3p1:ManagedPid>1000000060</d3p1:ManagedPid>
                         <d3p1:SchemaId>0</d3p1:SchemaId>
                     </d4p1:Value>
@@ -398,9 +398,9 @@
                             </d3p1:Value>
                         </d3p1:KeyValueOfstringCrawledPropertyInfoy6h3NzC8>
                         <d3p1:KeyValueOfstringCrawledPropertyInfoy6h3NzC8>
-                            <d3p1:Key>ows_GtProjectAssistingManager</d3p1:Key>
+                            <d3p1:Key>ows_GtProjectSupport</d3p1:Key>
                             <d3p1:Value>
-                                <d5p1:Name>ows_GtProjectAssistingManager</d5p1:Name>
+                                <d5p1:Name>ows_GtProjectSupport</d5p1:Name>
                                 <d5p1:CategoryName>SharePoint</d5p1:CategoryName>
                                 <d5p1:IsImplicit>false</d5p1:IsImplicit>
                                 <d5p1:IsMappedToContents>true</d5p1:IsMappedToContents>
@@ -563,10 +563,10 @@
                     </d4p1:Value>
                 </d4p1:KeyValueOfstringMappingInfoy6h3NzC8>
                 <d4p1:KeyValueOfstringMappingInfoy6h3NzC8>
-                    <d4p1:Key>00130329-0000-0130-c000-000000131346:ows_GtProjectAssistingManager-&gt;1000000060</d4p1:Key>
+                    <d4p1:Key>00130329-0000-0130-c000-000000131346:ows_GtProjectSupport-&gt;1000000060</d4p1:Key>
                     <d4p1:Value>
-                        <d3p1:Name>00130329-0000-0130-c000-000000131346:ows_GtProjectAssistingManager-&gt;1000000060</d3p1:Name>
-                        <d3p1:CrawledPropertyName>ows_GtProjectAssistingManager</d3p1:CrawledPropertyName>
+                        <d3p1:Name>00130329-0000-0130-c000-000000131346:ows_GtProjectSupport-&gt;1000000060</d3p1:Name>
+                        <d3p1:CrawledPropertyName>ows_GtProjectSupport</d3p1:CrawledPropertyName>
                         <d3p1:CrawledPropset>00130329-0000-0130-c000-000000131346</d3p1:CrawledPropset>
                         <d3p1:ManagedPid>1000000060</d3p1:ManagedPid>
                         <d3p1:MappingOrder>100</d3p1:MappingOrder>
