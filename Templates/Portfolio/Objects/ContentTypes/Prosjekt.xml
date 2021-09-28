@@ -8,8 +8,8 @@
         <pnp:FieldRef ID="ddb69044-7d2c-4865-86ec-b71413780409" Name="GtProjectType" />
         <pnp:FieldRef ID="325543a5-815d-485d-a9a5-e0773ad762e9" Name="GtProjectPhase" />
         <pnp:FieldRef ID="d46bed8f-0fb6-4684-8221-632fdb12598f" Name="GtProjectManager" />
-        <pnp:FieldRef ID="610cfd27-9943-4749-818e-b1d652d70482" Name="GtProjectSupport" />
         <pnp:FieldRef ID="3121ac55-d68e-4fcb-8fc8-3d8ed8a601b2" Name="GtProjectOwner" />
+        <pnp:FieldRef ID="610cfd27-9943-4749-818e-b1d652d70482" Name="GtProjectSupport" />
         <pnp:FieldRef ID="fcf9c850-8267-4452-8366-74b7a76da177" Name="GtGainsResponsible" />
         <pnp:FieldRef ID="e39c32db-a7da-4c93-9369-8aa5a7bde92d" Name="GtStartDate" />
         <pnp:FieldRef ID="16623c2a-3fd1-41c2-87e7-958583dd88da" Name="GtEndDate" />
