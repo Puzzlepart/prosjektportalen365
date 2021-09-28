@@ -1,4 +1,4 @@
-## Project extensions [![version](https://img.shields.io/badge/version-1.2.8-yellow.svg)](https://semver.org)
+## Project extensions [![version](https://img.shields.io/badge/version-1.2.9-yellow.svg)](https://semver.org)
 
 This solution contains SPFx extensions for the project level.
 

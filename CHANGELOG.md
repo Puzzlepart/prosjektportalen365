@@ -3,7 +3,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with Pull Request ID.
 
-## 1.2.9 - TBA
+## 1.2.9 - 08.09.2021
 
 ## Added
 
@@ -14,6 +14,7 @@ Every change is marked with Pull Request ID.
 
 - Fixed issue where the site design had to be applied post project creation #492
 - Fixed date not being recognized when exporting Portfolio overview to Excel. #495
+- Fixed issue where changing project phase did not always update the portfolio page #518
 
 ## 1.2.8 - 17.06.2021
 
