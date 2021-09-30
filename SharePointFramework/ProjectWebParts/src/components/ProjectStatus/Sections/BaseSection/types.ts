@@ -37,6 +37,11 @@ export interface IBaseSectionProps {
    * URL for the web
    */
   webUrl: string
+
+  /**
+   * Should list data be displayed?
+   */
+  showLists: boolean;
 }
 
 export interface IBaseSectionState {

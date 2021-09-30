@@ -42,7 +42,7 @@ export class ListSection extends BaseSection<
           <div className='ms-Grid-col ms-sm12'>
             <StatusElement {...this.props.headerProps} />
           </div>
-          {this._renderList()}
+          {this.props.showLists && this._renderList()}
         </div>
       </BaseSection>
     )
