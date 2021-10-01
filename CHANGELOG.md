@@ -3,6 +3,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with Pull Request ID.
 
+## 1.3.0 - TBA
+
+## Fixed
+
+- Fixed redirect after creating a new project status #530
+
 ## 1.2.9 - 08.09.2021
 
 ## Added
