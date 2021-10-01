@@ -80,6 +80,8 @@ declare interface IProjectExtensionsStrings {
   SetupAbortedText: string
   UnknownErrorText: string
   TemplateListContentConfigText: string
+  ProjectAlreadySetupMessage: string
+  ProjectAlreadySetupStack: string
 }
 
 declare module 'ProjectExtensionsStrings' {

@@ -81,6 +81,8 @@ define([], function () {
     DescriptionLabel: "Beskrivelse",
     FolderDropdownLabel: 'Velg mappe',
     DocumentLibraryDropdownLabel: 'Velg dokumentbibliotek',
-    DocumentTemplateDialogScreenEditCopyRootLevelText: 'Øverste nivå'
+    DocumentTemplateDialogScreenEditCopyRootLevelText: 'Øverste nivå',
+    ProjectAlreadySetupMessage: "Det ser ut til at prosjektet allerede er satt opp. Denne dialogen vil nå slettes.", 
+    ProjectAlreadySetupStack: "Prosjektet er allerede satt opp"
   }
 })

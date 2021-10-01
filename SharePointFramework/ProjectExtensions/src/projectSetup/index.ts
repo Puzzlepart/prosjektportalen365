@@ -29,6 +29,7 @@ import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } fr
 
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
   private _portal: PortalDataService
+  private isSetup = true
   private _placeholderIds = {
     ErrorDialog: getId('errordialog'),
     ProgressDialog: getId('progressdialog'),
@@ -51,6 +52,13 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         data: { version: this.context.manifest.version, validation: this._validation },
         level: LogLevel.Info
       })
+
+      try {
+        await sp.web.lists.getByTitle('Prosjektegenskaper').get()
+      } catch (err) {
+        this.isSetup = false
+      }
+
       // eslint-disable-next-line default-case
       switch (this._validation) {
         case ProjectSetupValidation.InvalidWebLanguage: {
@@ -67,6 +75,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             strings.NoHubSiteErrorMessage,
             strings.NoHubSiteErrorStack,
             MessageBarType.warning
+          )
+        }
+        case ProjectSetupValidation.AlreadySetup: {
+          await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, false)
+          throw new ProjectSetupError(
+            'onInit',
+             strings.ProjectAlreadySetupMessage,
+             strings.ProjectAlreadySetupStack
           )
         }
       }
@@ -361,6 +377,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       return ProjectSetupValidation.InvalidWebLanguage
     if (!this.context.pageContext.legacyPageContext.hubSiteId)
       return ProjectSetupValidation.NoHubConnection
+    if (this.isSetup) return ProjectSetupValidation.AlreadySetup
     return ProjectSetupValidation.Ready
   }
 
