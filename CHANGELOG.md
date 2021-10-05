@@ -7,7 +7,7 @@ Every change is marked with Pull Request ID.
 
 ## Fixed
 
-- Fixed ui bug by downgrading the ui fabric version #535
+- Fixed UI bug by downgrading the `office-ui-fabric-react` package version to `6.214.0` #535
 
 ## 1.2.9 - 08.09.2021
 
