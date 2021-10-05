@@ -1,7 +1,7 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-Every change is marked with Pull Request ID.
+Every change is marked with issue ID.
 
 ## 1.3.0 - TBA
 
@@ -15,6 +15,10 @@ Every change is marked with Pull Request ID.
 
 - Added multiline text-wrapping in project status #493
 - Added description for site template #500
+
+## Changed
+
+- Removed "Home" from Portfolio menu bar
 
 ## Fixed
 
