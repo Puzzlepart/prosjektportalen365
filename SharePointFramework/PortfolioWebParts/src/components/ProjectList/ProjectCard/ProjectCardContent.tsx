@@ -9,7 +9,6 @@ import { IProjectCardProps } from './types'
  *
  * @param {IProjectCardProps} props Props
  */
-// tslint:disable-next-line: naming-convention
 export const ProjectCardContent = ({
   project,
   showProjectOwner,

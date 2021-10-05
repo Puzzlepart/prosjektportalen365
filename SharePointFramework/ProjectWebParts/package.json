@@ -44,7 +44,7 @@
     "dom-to-image": "2.6.0",
     "get-value": "3.0.1",
     "msgraph-helper": "0.7.1",
-    "office-ui-fabric-react": "7.156.0",
+    "office-ui-fabric-react": "6.214.0",
     "pp365-shared": "latest",
     "pzl-spfx-components": "0.0.11",
     "react": "16.9.0",
