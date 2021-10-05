@@ -3,6 +3,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with Pull Request ID.
 
+## 1.3.0 - TBA
+
+## Fixed
+
+- Fixed ui bug by downgrading the ui fabric version #535
+
 ## 1.2.9 - 08.09.2021
 
 ## Added
