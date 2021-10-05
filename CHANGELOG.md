@@ -9,6 +9,12 @@ Every change is marked with issue ID.
 
 - Fixed UI bug by downgrading the `office-ui-fabric-react` package version to `6.214.0` #535
 
+## 1.3.0 - TBA
+
+## Fixed
+
+- Fixed redirect after creating a new project status #530
+
 ## 1.2.9 - 08.09.2021
 
 ## Added

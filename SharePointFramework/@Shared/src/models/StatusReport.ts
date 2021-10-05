@@ -122,7 +122,7 @@ export class StatusReport {
       '?ID=',
       this.id,
       '&Source=',
-      encodeURIComponent(window.location.href)
+      encodeURIComponent(`${window.location.origin}${window.location.pathname}`)
     ].join('')
   }
 }
