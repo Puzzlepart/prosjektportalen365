@@ -7,7 +7,11 @@ Every change is marked with issue ID.
 
 ## Added
 
-- Added new multi-user field; Prosjektstøtte #526
+- Added new multi-user field _Prosjektstøtte_ #526
+
+## Changed
+
+- Removed "Home" from Portfolio menu bar
 
 ## Fixed
 
@@ -20,10 +24,6 @@ Every change is marked with issue ID.
 
 - Added multiline text-wrapping in project status #493
 - Added description for site template #500
-
-## Changed
-
-- Removed "Home" from Portfolio menu bar
 
 ## Fixed
 
