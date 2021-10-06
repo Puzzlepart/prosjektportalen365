@@ -31,7 +31,6 @@ import {
   IProjectTimelineData,
   ProjectPropertyModel
 } from './types'
-
 // TODO: Temporary imports, when 'npm i pp365-portfoliowebparts' works, change to correct dependency
 import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
 import { DetailsCallout } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/DetailsCallout'
@@ -66,6 +65,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
       showFilterPanel: false,
       activeFilters: {}
     })
+
 
     this._portalDataService = new PortalDataService().configure({
       urlOrWeb: this.props.hubSite.web,
@@ -112,9 +112,9 @@ export class ProjectTimeline extends BaseWebPartComponent<
               <CommandBar {...this._getCommandBarProps()} />
             </div>
           )}
-          <div className={styles.header}>
+          {this.props.showTitle && (<div className={styles.header}>
             <div className={styles.title}>{this.props.title}</div>
-          </div>
+          </div>)}
           {this.props.showInfoMessage && (
             <div className={styles.infoText}>
               <MessageBar>
@@ -149,7 +149,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
                 items={this.state.data.timelineListItems}
                 onRenderItemColumn={this._onRenderItemColumn.bind(this)}
                 selection={this._selection}
-                selectionMode={SelectionMode.single}
+                selectionMode={this.props.isSelectionModeNone ? SelectionMode.none : SelectionMode.single}
                 layoutMode={DetailsListLayoutMode.justified}
               />
             </div>
