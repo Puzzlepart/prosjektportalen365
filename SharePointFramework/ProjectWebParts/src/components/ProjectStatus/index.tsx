@@ -25,7 +25,8 @@ import {
   ProjectPropertiesSection,
   RiskSection,
   StatusSection,
-  SummarySection
+  SummarySection,
+  TimeLineSection,
 } from './Sections'
 import {
   IProjectStatusData,
@@ -33,6 +34,8 @@ import {
   IProjectStatusProps,
   IProjectStatusState
 } from './types'
+
+
 
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private _portalDataService: PortalDataService
@@ -313,7 +316,18 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           }
           case SectionType.ListSection: {
             return <ListSection {...baseProps} />
-          }
+          } 
+          case SectionType.TimeLineSection: {
+            return(
+                 <TimeLineSection 
+                 {...baseProps}
+                 {...this.props}
+                 />
+              )
+            }
+          
+
+        
           default: {
             return null
           }
@@ -482,7 +496,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           'PROJECT_STATUS',
           // eslint-disable-next-line quotes
           "Hidden eq false and Group ne 'Hidden'"
-        )
+        ),
       ])
       const sortedReports = reports
         .map((item) => item.setDefaultEditFormUrl(reportList.DefaultEditFormUrl))
