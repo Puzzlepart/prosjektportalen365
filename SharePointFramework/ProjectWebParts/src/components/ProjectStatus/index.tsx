@@ -35,8 +35,6 @@ import {
   IProjectStatusState
 } from './types'
 
-
-
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private _portalDataService: PortalDataService
 
@@ -316,18 +314,15 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           }
           case SectionType.ListSection: {
             return <ListSection {...baseProps} />
-          } 
+          }
           case SectionType.TimeLineSection: {
-            return(
-                 <TimeLineSection 
-                 {...baseProps}
-                 {...this.props}
-                 />
-              )
-            }
-          
-
-        
+            return (
+              <TimeLineSection
+                {...baseProps}
+                {...this.props}
+              />
+            )
+          }
           default: {
             return null
           }

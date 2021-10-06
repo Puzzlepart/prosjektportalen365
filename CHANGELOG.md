@@ -21,10 +21,10 @@ Every change is marked with issue ID.
 
 ## 1.3.0 - TBA
 
-## Added 
+## Added
 
 - Added a new section in "ProjectStatus" for timelinelist #506  
-- Added a new project webpart, 'Prosjekttidslinje' for showcasing projects and items for the current project on a timeline #503
+- Added a new project webpart, 'Prosjekttidslinje' for showcasing projects and items for the current project on a timeline #497
 
 ## 1.2.9 - 08.09.2021
 

@@ -8,6 +8,7 @@ import * as moment from 'moment'
 import { ProjectColumn } from 'pp365-shared/lib/models'
 import { IEntityField } from 'sp-entityportal-service'
 import { stringIsNullOrEmpty } from '@pnp/common'
+
 export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   showTitle?: boolean
   listName?: string
@@ -18,7 +19,6 @@ export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   showTimelineList?: boolean
   isSelectionModeNone?: boolean
 }
-
 
 export interface IProjectTimelineState extends IBaseWebPartComponentState<IProjectTimelineData> {
   /**

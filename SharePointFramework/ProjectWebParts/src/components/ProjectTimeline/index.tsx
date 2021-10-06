@@ -31,6 +31,7 @@ import {
   IProjectTimelineData,
   ProjectPropertyModel
 } from './types'
+
 // TODO: Temporary imports, when 'npm i pp365-portfoliowebparts' works, change to correct dependency
 import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
 import { DetailsCallout } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/DetailsCallout'
@@ -65,7 +66,6 @@ export class ProjectTimeline extends BaseWebPartComponent<
       showFilterPanel: false,
       activeFilters: {}
     })
-
 
     this._portalDataService = new PortalDataService().configure({
       urlOrWeb: this.props.hubSite.web,

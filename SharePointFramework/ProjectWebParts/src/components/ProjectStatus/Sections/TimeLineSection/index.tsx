@@ -13,7 +13,6 @@ export class TimeLineSection extends BaseSection<ITimelineSectionProps, ITimelin
     }
   }
 
-
   /**
    * Renders the <TimeLineSection /> component
    */
