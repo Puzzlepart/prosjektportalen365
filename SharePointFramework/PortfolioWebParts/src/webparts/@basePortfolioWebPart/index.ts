@@ -9,7 +9,6 @@ import assign from 'object-assign'
 import React from 'react'
 import * as ReactDom from 'react-dom'
 
-// tslint:disable-next-line: naming-convention
 export abstract class BasePortfolioWebPart<
   T extends IBaseComponentProps
 > extends BaseClientSideWebPart<T> {
