@@ -12,17 +12,12 @@ Every change is marked with issue ID.
 ## Changed
 
 - Removed "Home" from Portfolio menu bar
+- Removed list views and risk matrix from previous status reports #374
 
 ## Fixed
 
 - Fixed UI bug by downgrading the `office-ui-fabric-react` package version to `6.214.0` #535
 - Fixed redirect after creating a new project status #530
-
-## 1.3.0 - TBA
-
-## Changed
-
-- Removed list views and risk matrix from previous status reports #531
 
 ## 1.2.9 - 08.09.2021
 
