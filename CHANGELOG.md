@@ -12,6 +12,7 @@ Every change is marked with issue ID.
 ## Changed
 
 - Removed "Home" from Portfolio menu bar
+- Removed list views and risk matrix from previous status reports #374
 
 ## Fixed
 

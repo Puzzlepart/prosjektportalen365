@@ -69,11 +69,14 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           (report) => report.id === parseInt(selectedReportUrlParam, 10)
         )
       }
+      const newestReportId = data.reports.length > 0 ? data.reports[0].id : 0
+
       this.setState({
         data,
         selectedReport,
         sourceUrl: decodeURIComponent(sourceUrlParam || ''),
-        loading: false
+        loading: false,
+        newestReportId
       })
     } catch (error) {
       this.setState({ error, loading: false })
@@ -212,13 +215,13 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         disabled: true
       })
     }
-
     return (
       <CommandBar
         items={removeMenuBorder<IContextualMenuItem>(items)}
         farItems={removeMenuBorder<IContextualMenuItem>(farItems)}
       />
     )
+    
   }
 
   /**
@@ -246,7 +249,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       data: this.state.data,
       hubSiteUrl: this.props.hubSite.url,
       siteId: this.props.siteId,
-      webUrl: this.props.webUrl
+      webUrl: this.props.webUrl,
+      showLists: this.state.data.reports ? this.state.selectedReport.id === this.state.newestReportId : true
     }
     return baseProps
   }
