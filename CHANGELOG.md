@@ -5,6 +5,9 @@ Every change is marked with issue ID.
 
 ## 1.3.0 - TBA 
 
+## Added 
+
+- Added "Avventer" as a new choice in Project LifeCycle #537
 ## Added
 
 - Added new multi-user field _Prosjektstøtte_ #526
