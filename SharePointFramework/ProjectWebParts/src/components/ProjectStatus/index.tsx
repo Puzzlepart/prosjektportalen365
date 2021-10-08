@@ -69,7 +69,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           (report) => report.id === parseInt(selectedReportUrlParam, 10)
         )
       }
-      const newestReportId = data.reports.length > 0 ? data.reports[0].id : 0;
+      const newestReportId = data.reports.length > 0 ? data.reports[0].id : 0
 
       this.setState({
         data,
