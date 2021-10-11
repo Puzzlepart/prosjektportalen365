@@ -29,7 +29,6 @@ import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } fr
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
   private _portal: PortalDataService
   private isSetup = true
-  private setupOverride = false
   private _placeholderIds = {
     ErrorDialog: getId('errordialog'),
     ProgressDialog: getId('progressdialog'),
@@ -208,9 +207,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       },
       messageType: props.error['messageType'],
       onSetupClick: () => {
-        this.setupOverride = true
+        this._initializeSetup({
+          web: new Web(this.context.pageContext.web.absoluteUrl) as any,
+          webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
+          templateExcludeHandlers: [],
+          context: this.context,
+          properties: this.properties
+        })
         this._unmount(placeholder)
-        this.onInit()
       }
     })
     ReactDOM.render(element, placeholder)
@@ -380,7 +384,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       return ProjectSetupValidation.InvalidWebLanguage
     if (!this.context.pageContext.legacyPageContext.hubSiteId)
       return ProjectSetupValidation.NoHubConnection
-    if (this.isSetup && !this.setupOverride) return ProjectSetupValidation.AlreadySetup
+    if (this.isSetup) return ProjectSetupValidation.AlreadySetup
     return ProjectSetupValidation.Ready
   }
 
