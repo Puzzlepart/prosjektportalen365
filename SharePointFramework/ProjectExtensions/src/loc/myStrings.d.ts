@@ -82,6 +82,9 @@ declare interface IProjectExtensionsStrings {
   TemplateListContentConfigText: string
   ProjectAlreadySetupMessage: string
   ProjectAlreadySetupStack: string
+  ProjectProvisioningSuccessLogText: string
+  ProjectProvisioningStartLogText: string
+  ProvisionTemplateText: string
 }
 
 declare module 'ProjectExtensionsStrings' {

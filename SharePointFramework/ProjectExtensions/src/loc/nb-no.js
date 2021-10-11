@@ -82,7 +82,10 @@ define([], function () {
     FolderDropdownLabel: 'Velg mappe',
     DocumentLibraryDropdownLabel: 'Velg dokumentbibliotek',
     DocumentTemplateDialogScreenEditCopyRootLevelText: 'Øverste nivå',
-    ProjectAlreadySetupMessage: "Det ser ut til at prosjektet allerede er satt opp. Denne dialogen vil nå slettes.", 
-    ProjectAlreadySetupStack: "Prosjektet er allerede satt opp"
+    ProjectAlreadySetupMessage: "Prosjektet er allerede satt opp", 
+    ProjectAlreadySetupStack: "Det ser ut til at prosjektet allerede er satt opp. Vil du legge på mal (ikke anbefalt) eller hoppe over oppsett?",
+    ProjectProvisioningSuccessLogText: "Project successfully provisioned.",
+    ProjectProvisioningStartLogText: "Starting provisioning of project.",
+    ProvisionTemplateText: "Legg på mal"
   }
 })

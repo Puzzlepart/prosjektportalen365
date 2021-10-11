@@ -1,4 +1,4 @@
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button'
+import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import * as strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
@@ -11,11 +11,13 @@ export const ErrorDialog = ({
   error,
   version,
   messageType = MessageBarType.error,
-  onDismiss
+  onDismiss,
+  onSetupClick
 }: IErrorDialogProps) => {
   const onRenderFooter = () => {
     return (
       <>
+        {error.stack === strings.ProjectAlreadySetupStack && <PrimaryButton onClick={onSetupClick} text={strings.ProvisionTemplateText} />}
         <DefaultButton text={strings.CloseModalText} onClick={onDismiss} />
       </>
     )

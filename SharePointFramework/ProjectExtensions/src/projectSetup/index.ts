@@ -26,10 +26,10 @@ import * as Tasks from './tasks'
 import { deleteCustomizer } from './deleteCustomizer'
 import { ProjectSetupError } from './ProjectSetupError'
 import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
-
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
   private _portal: PortalDataService
   private isSetup = true
+  private setupOverride = false
   private _placeholderIds = {
     ErrorDialog: getId('errordialog'),
     ProgressDialog: getId('progressdialog'),
@@ -52,12 +52,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         data: { version: this.context.manifest.version, validation: this._validation },
         level: LogLevel.Info
       })
-
-      try {
-        await sp.web.lists.getByTitle('Prosjektegenskaper').get()
-      } catch (err) {
-        this.isSetup = false
-      }
+      ;(await this._isProjectSetup()) ? (this.isSetup = true) : (this.isSetup = false)
 
       // eslint-disable-next-line default-case
       switch (this._validation) {
@@ -78,11 +73,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           )
         }
         case ProjectSetupValidation.AlreadySetup: {
-          await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, false)
           throw new ProjectSetupError(
             'onInit',
-             strings.ProjectAlreadySetupMessage,
-             strings.ProjectAlreadySetupStack
+            strings.ProjectAlreadySetupMessage,
+            strings.ProjectAlreadySetupStack
           )
         }
       }
@@ -207,8 +201,17 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     const element = createElement<IErrorDialogProps>(ErrorDialog, {
       ...props,
       version: this.manifest.version,
-      onDismiss: () => this._unmount(placeholder),
-      messageType: props.error['messageType']
+      onDismiss: async () => {
+        if (this.isSetup)
+          await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, false)
+        this._unmount(placeholder)
+      },
+      messageType: props.error['messageType'],
+      onSetupClick: () => {
+        this.setupOverride = true
+        this._unmount(placeholder)
+        this.onInit()
+      }
     })
     ReactDOM.render(element, placeholder)
   }
@@ -232,7 +235,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       level: LogLevel.Info
     })
     try {
-      await ListLogger.write('Starting provisioning of project.', 'Info')
+      await ListLogger.write(strings.ProjectProvisioningStartLogText, 'Info')
       for (let i = 0; i < tasks.length; i++) {
         const task = tasks[i]
         if (
@@ -246,7 +249,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         })
         taskParams = await task.execute(taskParams, this._onTaskStatusUpdated.bind(this))
       }
-      await ListLogger.write('Project successfully provisioned.', 'Info')
+      await ListLogger.write(strings.ProjectProvisioningSuccessLogText, 'Info')
     } catch (error) {
       throw error
     }
@@ -377,7 +380,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       return ProjectSetupValidation.InvalidWebLanguage
     if (!this.context.pageContext.legacyPageContext.hubSiteId)
       return ProjectSetupValidation.NoHubConnection
-    if (this.isSetup) return ProjectSetupValidation.AlreadySetup
+    if (this.isSetup && !this.setupOverride) return ProjectSetupValidation.AlreadySetup
     return ProjectSetupValidation.Ready
   }
 
@@ -434,6 +437,16 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       this.context.pageContext.web.absoluteUrl,
       'ProjectSetup'
     )
+  }
+
+  /**
+   * Check if the project is previously set up.
+   */
+  private async _isProjectSetup() {
+    const root = await sp.web.rootFolder.get()
+    if (root.WelcomePage === 'SitePages/Home.aspx') return false
+
+    return true
   }
 }
 
