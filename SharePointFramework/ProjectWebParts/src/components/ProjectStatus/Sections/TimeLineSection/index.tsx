@@ -20,8 +20,8 @@ export class TimelineSection extends BaseSection<ITimelineSectionProps, ITimelin
     return (
       <BaseSection {...this.props}>
         <StatusElement {...this.props.headerProps}
-          iconColor="#2da748"
-          value=""
+          iconColor='#2da748'
+          value=''
         />
 
         <div className='ms-Grid-row'>

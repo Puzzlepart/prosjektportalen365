@@ -491,6 +491,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
     })
     const newItems = this._copyAndSort(
       this.state.data.timelineListItems,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       currColumn.fieldName!,
       currColumn.isSortedDescending
     )
