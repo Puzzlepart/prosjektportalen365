@@ -78,15 +78,15 @@ define([], function () {
     SetupAbortedText: 'Installasjon avbrutt av bruker',
     UnknownErrorText: 'Ukjent feil',
     TemplateListContentConfigText: 'Den valgte prosjektmalen inneholder konfigurasjon for standardinnhold.',
-    DescriptionLabel: "Beskrivelse",
+    DescriptionLabel: 'Beskrivelse',
     FolderDropdownLabel: 'Velg mappe',
     DocumentLibraryDropdownLabel: 'Velg dokumentbibliotek',
     DocumentTemplateDialogScreenEditCopyRootLevelText: 'Øverste nivå',
-    ProjectAlreadySetupMessage: "Prosjektet er allerede satt opp", 
-    ProjectAlreadySetupStack: "Det ser ut til at prosjektet allerede er satt opp. Vil du legge på mal (ikke anbefalt) eller hoppe over oppsett?",
-    ProjectProvisioningSuccessLogText: "Project successfully provisioned.",
-    ProjectProvisioningStartLogText: "Starting provisioning of project.",
-    ProvisionTemplateText: "Gå til maloppsett",
-    ContinueToProjectText: "Fortsett til prosjekt"
+    ProjectAlreadySetupMessage: 'Prosjektet er allerede satt opp', 
+    ProjectAlreadySetupStack: 'Det ser ut til at prosjektet allerede er satt opp. Vil du legge på mal (ikke anbefalt) eller hoppe over oppsett?',
+    ProjectProvisioningSuccessLogText: 'Project successfully provisioned.',
+    ProjectProvisioningStartLogText: 'Starting provisioning of project.',
+    ProvisionTemplateText: 'Gå til maloppsett',
+    ContinueToProjectText: 'Fortsett til prosjekt'
   }
 })
