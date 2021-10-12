@@ -33,11 +33,20 @@
                     "manifest": "./src/webparts/riskMatrix/manifest.json"
                 }
             ]
+        },
+        "project-timeline-web-part": {
+            "components": [
+                {
+                    "entrypoint": "./lib/webparts/projectTimeline/index.js",
+                    "manifest": "./src/webparts/projectTimeline/manifest.json"
+                }
+            ]
         }
     },
     "externals": {},
     "localizedResources": {
         "ProjectWebPartsStrings": "lib/loc/{locale}.js",
+        "PortfolioWebPartsStrings": "node_modules/pp365-portfoliowebparts/lib/loc/{locale}.js",
         "PzlSPFxComponentsStrings": "lib/loc/{locale}.js",
         "ControlStrings": "lib/loc/{locale}.js"
     }

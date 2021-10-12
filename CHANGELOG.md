@@ -13,11 +13,19 @@ Every change is marked with issue ID.
 ### Changed
 
 - Removed "Home" from Portfolio menu bar
+- Removed list views and risk matrix from previous status reports #374
 
 ### Fixed
 
 - Fixed UI bug by downgrading the `office-ui-fabric-react` package version to `6.214.0` #535
 - Fixed redirect after creating a new project status #530
+
+## 1.3.0 - TBA
+
+## Added
+
+- Added a new section in "ProjectStatus" for timelinelist #506  
+- Added a new project webpart, 'Prosjekttidslinje' for showcasing projects and items for the current project on a timeline #497
 
 ## 1.2.9 - 08.09.2021
 

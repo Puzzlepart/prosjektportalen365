@@ -40,7 +40,7 @@ export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionStat
           <div className='ms-Grid-col ms-sm12'>
             <StatusElement {...this.props.headerProps} />
           </div>
-          {this._renderContent()}
+          {this.props.showLists && this._renderContent()}
         </div>
       </BaseSection>
     )
