@@ -10,7 +10,6 @@ export interface IDetailsCalloutProps {
   onDismiss: () => void
 }
 
-// tslint:disable-next-line: naming-convention
 export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
   return (
     <Callout

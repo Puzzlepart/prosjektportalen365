@@ -182,7 +182,6 @@ export class ChartConfiguration {
                 cursor: 'pointer',
                 dataLabels: {
                   enabled: true,
-                  // tslint:disable-next-line:no-function-expression
                   formatter: function () {
                     return `<b>${this.point.name}</b>: ${this.point.percentage.toFixed(2)} %`
                   },
