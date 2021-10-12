@@ -11,4 +11,9 @@ export interface IErrorDialogProps extends IBaseDialogProps {
    * Message type
    */
   messageType?: MessageBarType
+
+  /**
+   * On setup click
+   */
+  onSetupClick?(): void
 }

@@ -5,29 +5,34 @@ Every change is marked with issue ID.
 
 ## 1.3.0 - TBA
 
-## Added
+### Added 
 
 - Added new multi-user field _Prosjektstøtte_ #526
-- Added read-only project cards to projectlist #498
+- Added read-only project cards to project list #498
+- Added "Avventer" as a new choice for "Prosjektstatus" #537
+- Added a new section in "ProjectStatus" for timeline list #506  
+- Added a new project webpart 'Prosjekttidslinje' for showcasing projects and items for the current project on a timeline #497
 
-## Changed
+### Changed
 
 - Removed "Home" from Portfolio menu bar
 - Removed list views and risk matrix from previous status reports #374
 
-## Fixed
+### Fixed
 
 - Fixed UI bug by downgrading the `office-ui-fabric-react` package version to `6.214.0` #535
 - Fixed redirect after creating a new project status #530
+- Fixed project wizard bug when project is attached to another hub #532
+- Fixed wrong phases being displayed when switching between projects with different phases #520
 
 ## 1.2.9 - 08.09.2021
 
-## Added
+### Added
 
 - Added multiline text-wrapping in project status #493
 - Added description for site template #500
 
-## Fixed
+### Fixed
 
 - Fixed issue where the site design had to be applied post project creation #492
 - Fixed date not being recognized when exporting Portfolio overview to Excel. #495
@@ -35,17 +40,17 @@ Every change is marked with issue ID.
 
 ## 1.2.8 - 17.06.2021
 
-## Added
+### Added
 
 - Added rich text and lineshift support to field in project information #502
 
-## Fixed
+### Fixed
 
 - Fixed issue with checklist status field missing options #485
 
 ## 1.2.7 - 20.05.2021
 
-## Added
+### Added
 
 - Added a new portfolio webpart, 'Prosjekttidslinje' for showcasing projects on a timeline #435
 - Added list 'Tidslinjeinnhold' to portfolio level #437
@@ -54,7 +59,7 @@ Every change is marked with issue ID.
 - Added "Last Report Date" to Portfolio status overview #393
 - Added report created date next to Project Status title #456
 
-## Fixed
+### Fixed
 
 - Avoiding overwrite of portfolio views, columns, column configuration and insights graphs on update #440
 - Overwriting configuration page to support new configuration links on update #425
@@ -62,7 +67,7 @@ Every change is marked with issue ID.
 - Fixed inconsistent version history settings of lists #465
 - Fixed Excel export issues at portfolio level #480
 
-## Changed
+### Changed
 
 - Changed Portfolio status view columns from "comments" to "status" #451
 - Improved project properties sync and fetching #444 #449
@@ -72,7 +77,7 @@ Every change is marked with issue ID.
 
 ## 1.2.6 - 03.03.2021
 
-## Added
+### Added
 
 - Added project template name to project properties #380
 - Added support for phase sub text in phase selector #381
@@ -81,7 +86,7 @@ Every change is marked with issue ID.
 - Added Description field to Usikkerhet #410
 - Enabled version history on Prosjektmaler list #359
 
-## Fixed
+### Fixed
 
 - Fixes issues with single folder in "Hent dokumentmal" #376
 - Issues with custom project fields #378
@@ -95,7 +100,7 @@ Every change is marked with issue ID.
 
 ## 1.2.4 - 30.11.2020
 
-## Added
+### Added
 
 - Added "default" option for extensions, similar to list content #328
 - Added info message if there are unpublished statusreports #340
@@ -103,7 +108,7 @@ Every change is marked with issue ID.
 - Added possiblity to delete unpublished statusreports #343
 - Added PNG snapshot when publishing project status #337
 
-## Fixed
+### Fixed
 
 - Restricted access for members to certain lists #356
 - Improved failure handling for PlannerConfiguration task in Project Setup #329
@@ -113,7 +118,7 @@ Every change is marked with issue ID.
 
 ## 1.2.3 - 2020-10-07
 
-## Added
+### Added
 
 - Descriptions on configuration page #301
 - New group "Porteføljeinnsyn". Grants users in this group insight into all projects in the portfolio #305
@@ -121,12 +126,12 @@ Every change is marked with issue ID.
 - Risk matrix toggle: Before and after risk reduction measures #293
 - Support for planner tasks references/attachments #287
 
-## Fixed
+### Fixed
 
 - View in portfolio overview was not changeable for non-admin users #308
 - Projects set to Avsluttet are no longer visible on the front page #307
 
-## Changed
+### Changed
 
 - Disabled "Ny statusrapport" when a report is unpublished. #309
 

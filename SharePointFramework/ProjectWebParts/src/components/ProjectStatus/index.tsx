@@ -25,7 +25,8 @@ import {
   ProjectPropertiesSection,
   RiskSection,
   StatusSection,
-  SummarySection
+  SummarySection,
+  TimelineSection,
 } from './Sections'
 import {
   IProjectStatusData,
@@ -314,6 +315,14 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           case SectionType.ListSection: {
             return <ListSection {...baseProps} />
           }
+          case SectionType.TimelineSection: {
+            return (
+              <TimelineSection
+                {...baseProps}
+                {...this.props}
+              />
+            )
+          }
           default: {
             return null
           }
@@ -482,7 +491,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           'PROJECT_STATUS',
           // eslint-disable-next-line quotes
           "Hidden eq false and Group ne 'Hidden'"
-        )
+        ),
       ])
       const sortedReports = reports
         .map((item) => item.setDefaultEditFormUrl(reportList.DefaultEditFormUrl))

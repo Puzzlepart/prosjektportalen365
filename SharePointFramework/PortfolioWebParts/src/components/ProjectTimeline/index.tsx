@@ -10,30 +10,20 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { Component } from 'react'
-import Timeline, {
-  ReactCalendarGroupRendererProps,
-  ReactCalendarItemRendererProps,
-  TimelineMarkers,
-  TodayMarker
-} from 'react-calendar-timeline'
-import 'react-calendar-timeline/lib/Timeline.css'
 import _ from 'underscore'
 import { FilterPanel, IFilterItemProps, IFilterProps } from '../FilterPanel'
 import { DetailsCallout } from './DetailsCallout'
+import { Timeline } from './Timeline'
 import styles from './ProjectTimeline.module.scss'
-import './Timeline.overrides.css'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
 import { ProjectListModel, TimelineContentListModel } from 'models'
+import './ProjectTimeline.overrides.css'
 
 /**
  * @component ProjectTimeline
  * @extends Component
  */
 export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTimelineState> {
-  public static defaultProps: Partial<IProjectTimelineProps> = {
-    defaultTimeStart: [-1, 'months'],
-    defaultTimeEnd: [1, 'years']
-  }
   /**
    * Constructor
    *
@@ -88,23 +78,13 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
                 }}></div>
             </MessageBar>
           </div>
-          <div className={styles.timeline}>
-            <Timeline<any>
-              groups={groups}
-              items={items}
-              stackItems={true}
-              canMove={false}
-              canChangeGroup={false}
-              sidebarWidth={320}
-              itemRenderer={this._itemRenderer.bind(this)}
-              groupRenderer={this._groupRenderer.bind(this)}
-              defaultTimeStart={moment().add(...this.props.defaultTimeStart)}
-              defaultTimeEnd={moment().add(...this.props.defaultTimeEnd)}>
-              <TimelineMarkers>
-                <TodayMarker date={moment().toDate()} />
-              </TimelineMarkers>
-            </Timeline>
-          </div>
+          <Timeline
+            defaultTimeStart={[-1, 'months']}
+            defaultTimeEnd={[1, 'years']}
+            _onItemClick={this._onItemClick.bind(this)}
+            groups={groups}
+            items={items}
+          />
         </div>
         <FilterPanel
           isOpen={this.state.showFilterPanel}
@@ -121,6 +101,16 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         )}
       </div>
     )
+  }
+
+  /**
+   * On item click
+   *
+   * @param {React.MouseEvent} event Event
+   * @param {ITimelineItem} item Item
+   */
+  private _onItemClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) {
+    this.setState({ showDetails: { element: event.currentTarget, data: item } })
   }
 
   /**
@@ -188,6 +178,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
       name: strings.FilterText,
       iconProps: { iconName: 'Filter' },
       itemType: ContextualMenuItemType.Header,
+      buttonStyles: { root: { border: 'none' } },
       iconOnly: true,
       onClick: (ev) => {
         ev.preventDefault()
@@ -195,72 +186,6 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
       }
     })
     return cmd
-  }
-
-  /**
-   * Timeline item renderer
-   */
-  private _itemRenderer(props: ReactCalendarItemRendererProps<any>) {
-    const htmlProps = props.getItemProps(props.item.itemProps)
-
-    if (props.item.type === strings.MilestoneLabel)
-      return (
-        <div
-          {...htmlProps}
-          className={`${styles.timelineItem} rc-item`}
-          onClick={(event) => this._onItemClick(event, props.item)}>
-          <div
-            className={`${styles.itemContent} rc-milestoneitem-content`}
-            style={{
-              maxHeight: `${props.itemContext.dimensions.height}`,
-              clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
-              width: '22px',
-              height: '24px',
-              backgroundColor: '#ffc800',
-              marginTop: '-2px'
-            }}>
-          </div>
-        </div>
-
-      )
-
-    return (
-      <div
-        {...htmlProps}
-        className={`${styles.timelineItem} rc-item`}
-        onClick={(event) => this._onItemClick(event, props.item)}>
-        <div
-          className={`${styles.itemContent} rc-item-content`}
-          style={{ maxHeight: `${props.itemContext.dimensions.height}`, paddingLeft: '8px' }}>
-          {props.item.title}
-        </div>
-      </div>
-    )
-  }
-
-  /**
-   * Timeline group renderer
-   */
-  private _groupRenderer({ group }: ReactCalendarGroupRendererProps<ITimelineGroup>) {
-    const style: React.CSSProperties = { display: 'block', width: '100%' }
-    if (group.type === TimelineGroupType.Role) {
-      style.fontStyle = 'italic'
-    }
-    return (
-      <div>
-        <span style={style}>{group.title}</span>
-      </div>
-    )
-  }
-
-  /**
-   * On item click
-   *
-   * @param {React.MouseEvent} event Event
-   * @param {ITimelineItem} item Item
-   */
-  private _onItemClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) {
-    this.setState({ showDetails: { element: event.currentTarget, data: item } })
   }
 
   /**
@@ -330,13 +255,14 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
     const phases: ITimelineItem[] = timelineItems.map((item, id) => {
       id += items.length
 
-      const backgroundColor = item.type === strings.PhaseLabel
-        ? '#2589d6'
-        : item.type === strings.MilestoneLabel
+      const backgroundColor =
+        item.type === strings.PhaseLabel
+          ? '#2589d6'
+          : item.type === strings.MilestoneLabel
           ? 'transparent'
           : item.type === strings.SubPhaseLabel
-            ? '#249ea0'
-            : '#484848'
+          ? '#249ea0'
+          : '#484848'
 
       const group = _.find(groups, (grp) => item.title.indexOf(grp.title) !== -1)
       const style: React.CSSProperties = {
@@ -351,13 +277,16 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         id,
         group: group.id,
         title: item.itemTitle,
-        start_time: item.type === strings.MilestoneLabel ? moment(new Date(item.endDate)) : moment(new Date(item.startDate)),
+        start_time:
+          item.type === strings.MilestoneLabel
+            ? moment(new Date(item.endDate))
+            : moment(new Date(item.startDate)),
         end_time: moment(new Date(item.endDate)),
         itemProps: { style },
         project: item.title,
         type: item.type,
         budgetTotal: item.budgetTotal,
-        costsTotal: item.costsTotal,
+        costsTotal: item.costsTotal
       } as ITimelineItem
     })
 
@@ -372,14 +301,19 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   private async _fetchData(): Promise<ITimelineData> {
     try {
       const projects = await this.props.dataAdapter.fetchEncrichedProjects()
-      const timelineItems: any = (await this.props.dataAdapter._fetchTimelineContentItems()).timelineItems
+      const timelineItems: any = (await this.props.dataAdapter._fetchTimelineContentItems())
+        .timelineItems
 
-      await Promise.all(projects.map(async (project) => {
-        const statusReport = (await this.props.dataAdapter._fetchDataForTimelineProject(project.siteId)).statusReports[0]
-        project['budgetTotal'] = statusReport && statusReport['GtBudgetTotalOWSCURR']
-        project['costsTotal'] = statusReport && statusReport['GtCostsTotalOWSCURR']
-        project['type'] = strings.ProjectLabel
-      }))
+      await Promise.all(
+        projects.map(async (project) => {
+          const statusReport = (
+            await this.props.dataAdapter._fetchDataForTimelineProject(project.siteId)
+          ).statusReports[0]
+          project['budgetTotal'] = statusReport && statusReport['GtBudgetTotalOWSCURR']
+          project['costsTotal'] = statusReport && statusReport['GtCostsTotalOWSCURR']
+          project['type'] = strings.ProjectLabel
+        })
+      )
 
       const groups = this._transformGroups(projects)
       const items = this._transformItems(projects, timelineItems, groups)
