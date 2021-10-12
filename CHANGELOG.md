@@ -8,7 +8,7 @@ Every change is marked with issue ID.
 ## Added
 
 - Added new multi-user field _Prosjektstøtte_ #526
-- Added read-only project cards to projectlist
+- Added read-only project cards to projectlist #498
 
 ## Changed
 
