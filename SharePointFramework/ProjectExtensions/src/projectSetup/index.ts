@@ -51,7 +51,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         data: { version: this.context.manifest.version, validation: this._validation },
         level: LogLevel.Info
       })
-      ;(await this._isProjectSetup()) ? (this.isSetup = true) : (this.isSetup = false)
+        ; (await this._isProjectSetup()) ? (this.isSetup = true) : (this.isSetup = false)
 
       // eslint-disable-next-line default-case
       switch (this._validation) {
@@ -448,9 +448,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    * Check if the project is previously set up.
    */
   private async _isProjectSetup() {
-    const root = await sp.web.rootFolder.get()
-    if (root.WelcomePage === 'SitePages/Home.aspx') return false
-
+    const { WelcomePage } = await sp.web.rootFolder.select('WelcomePage').get()
+    if (WelcomePage === 'SitePages/Home.aspx') return false
     return true
   }
 }
