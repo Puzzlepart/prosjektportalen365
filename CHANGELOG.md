@@ -3,11 +3,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with issue ID.
 
-## 1.3.0 - TBA 
+## 1.3.0 - TBA
 
 ## Added
 
 - Added new multi-user field _Prosjektstøtte_ #526
+- Added read-only project cards to projectlist
 
 ## Changed
 
