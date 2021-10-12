@@ -58,14 +58,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         case ProjectSetupValidation.InvalidWebLanguage: {
           await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, false)
           throw new ProjectSetupError(
-            'onInit',
+            'InvalidWebLanguage',
             strings.InvalidLanguageErrorMessage,
             strings.InvalidLanguageErrorStack
           )
         }
         case ProjectSetupValidation.NoHubConnection: {
           throw new ProjectSetupError(
-            'onInit',
+            'NoHubConnection',
             strings.NoHubSiteErrorMessage,
             strings.NoHubSiteErrorStack,
             MessageBarType.warning
@@ -73,7 +73,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         }
         case ProjectSetupValidation.AlreadySetup: {
           throw new ProjectSetupError(
-            'onInit',
+            'AlreadySetup',
             strings.ProjectAlreadySetupMessage,
             strings.ProjectAlreadySetupStack
           )

@@ -15,7 +15,7 @@ export const ErrorDialog = ({
   onSetupClick
 }: IErrorDialogProps) => {
   const onRenderFooter = () => {
-    if (error.stack === strings.ProjectAlreadySetupStack) {
+    if (error.name === 'AlreadySetup') {
       return (
         <>
           <DefaultButton onClick={onSetupClick} text={strings.ProvisionTemplateText} />
