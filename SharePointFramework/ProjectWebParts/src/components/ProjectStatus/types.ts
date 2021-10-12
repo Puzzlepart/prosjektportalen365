@@ -29,6 +29,12 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
    * Is the report being published?
    */
   isPublishing: boolean
+
+  /**
+   * ID of the most recent report
+   */
+
+  newestReportId?: number;
 }
 
 export interface IProjectStatusHashState {
