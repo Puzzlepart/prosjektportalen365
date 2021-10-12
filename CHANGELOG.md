@@ -22,6 +22,7 @@ Every change is marked with issue ID.
 - Fixed UI bug by downgrading the `office-ui-fabric-react` package version to `6.214.0` #535
 - Fixed redirect after creating a new project status #530
 - Fixed project wizard bug when project is attached to another hub #532
+- Fixed wrong phases being displayed when switching between projects with different phases #520
 
 ## 1.2.9 - 08.09.2021
 
