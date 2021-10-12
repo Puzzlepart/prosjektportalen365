@@ -15,13 +15,21 @@ export const ErrorDialog = ({
   onSetupClick
 }: IErrorDialogProps) => {
   const onRenderFooter = () => {
+    if (error.stack === strings.ProjectAlreadySetupStack) {
+      return (
+        <>
+          <DefaultButton onClick={onSetupClick} text={strings.ProvisionTemplateText} />
+          <PrimaryButton text={strings.ContinueToProjectText} onClick={onDismiss} />
+        </>
+      )
+    }
     return (
       <>
-        {error.stack === strings.ProjectAlreadySetupStack && <PrimaryButton onClick={onSetupClick} text={strings.ProvisionTemplateText} />}
-        <DefaultButton text={strings.CloseModalText} onClick={onDismiss} />
+        <PrimaryButton text={strings.CloseModalText} onClick={onDismiss} />
       </>
     )
   }
+
 
   return (
     <BaseDialog

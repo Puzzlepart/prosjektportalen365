@@ -85,6 +85,7 @@ declare interface IProjectExtensionsStrings {
   ProjectProvisioningSuccessLogText: string
   ProjectProvisioningStartLogText: string
   ProvisionTemplateText: string
+  ContinueToProjectText: string
 }
 
 declare module 'ProjectExtensionsStrings' {

@@ -201,8 +201,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       ...props,
       version: this.manifest.version,
       onDismiss: async () => {
-        if (this.isSetup)
+        if (this.isSetup) {
           await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, false)
+        }
         this._unmount(placeholder)
       },
       messageType: props.error['messageType'],

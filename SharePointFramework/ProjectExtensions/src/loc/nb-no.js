@@ -86,6 +86,7 @@ define([], function () {
     ProjectAlreadySetupStack: "Det ser ut til at prosjektet allerede er satt opp. Vil du legge på mal (ikke anbefalt) eller hoppe over oppsett?",
     ProjectProvisioningSuccessLogText: "Project successfully provisioned.",
     ProjectProvisioningStartLogText: "Starting provisioning of project.",
-    ProvisionTemplateText: "Legg på mal"
+    ProvisionTemplateText: "Gå til maloppsett",
+    ContinueToProjectText: "Fortsett til prosjekt"
   }
 })
