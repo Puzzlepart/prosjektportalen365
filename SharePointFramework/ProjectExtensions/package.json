@@ -41,7 +41,7 @@
     "@uifabric/utilities": "6.45.1",
     "msgraph-helper": "0.8.3",
     "office-ui-fabric-react": "6.214.0",
-    "pp365-shared": "latest",
+    "pp365-shared": "1.3.0",
     "react": "16.9.0",
     "react-dom": "16.9.0",
     "react-markdown": "4.2.2",

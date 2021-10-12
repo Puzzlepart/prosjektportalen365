@@ -31,8 +31,6 @@ import {
   IProjectTimelineData,
   ProjectPropertyModel
 } from './types'
-
-// TODO: Temporary imports, when 'npm i pp365-portfoliowebparts' works, change to correct dependency
 import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
 import { DetailsCallout } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/DetailsCallout'
 import { Timeline } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/Timeline'
