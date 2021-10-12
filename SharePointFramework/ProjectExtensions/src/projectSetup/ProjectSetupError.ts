@@ -5,19 +5,19 @@ export class ProjectSetupError extends Error {
   /**
    * Creates a new instance of ProjectSetupError
    *
-   * @param {string} taskName Task name
-   * @param {string} message Message
-   * @param {string} stack Stack
-   * @param {MessageBarType} messageType Message type
+   * @param name - Name
+   * @param message - Message
+   * @param stack - Stack
+   * @param messageType - Message type
    */
   constructor(
-    taskName: string,
+    name: string,
     message: string,
     stack: any,
     public messageType: MessageBarType = MessageBarType.error
   ) {
     super(message)
-    this.name = taskName
+    this.name = name
     this.stack = parseErrorStack(stack)
   }
 }
