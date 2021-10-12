@@ -14,6 +14,7 @@ export async function fetchData(phaseField: string): Promise<IProjectPhasesData>
       SPDataAdapter.getTermFieldContext(phaseField),
       SPDataAdapter.project.getChecklistData(strings.PhaseChecklistName)
     ])
+    SPDataAdapter.clearCache()
     const [phases, currentPhaseName] = await Promise.all([
       SPDataAdapter.project.getPhases(phaseFieldCtx.termSetId, checklistData),
       SPDataAdapter.project.getCurrentPhaseName(phaseFieldCtx.fieldName)
