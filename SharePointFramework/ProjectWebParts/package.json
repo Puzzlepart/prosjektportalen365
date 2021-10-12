@@ -1,6 +1,6 @@
 {
   "name": "pp365-projectwebparts",
-  "version": "1.2.9",
+  "version": "1.3.0",
   "engines": {
     "node": ">=12.13.0"
   },
