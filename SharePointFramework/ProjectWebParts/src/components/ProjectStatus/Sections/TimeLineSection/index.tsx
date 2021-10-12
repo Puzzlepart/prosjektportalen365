@@ -14,7 +14,7 @@ export class TimelineSection extends BaseSection<ITimelineSectionProps, ITimelin
   }
 
   /**
-   * Renders the <TimeLineSection /> component
+   * Renders the <TimelineSection /> component
    */
   public render(): React.ReactElement<ITimelineSectionProps> {
     return (
@@ -23,7 +23,6 @@ export class TimelineSection extends BaseSection<ITimelineSectionProps, ITimelin
           iconColor='#2da748'
           value=''
         />
-
         <div className='ms-Grid-row'>
           <div className={`${styles.list} ms-Grid-col ms-sm12`}>
             <ProjectTimeline {...this.props}
