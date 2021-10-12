@@ -26,7 +26,7 @@ import {
   RiskSection,
   StatusSection,
   SummarySection,
-  TimeLineSection,
+  TimelineSection,
 } from './Sections'
 import {
   IProjectStatusData,
@@ -315,9 +315,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           case SectionType.ListSection: {
             return <ListSection {...baseProps} />
           }
-          case SectionType.TimeLineSection: {
+          case SectionType.TimelineSection: {
             return (
-              <TimeLineSection
+              <TimelineSection
                 {...baseProps}
                 {...this.props}
               />

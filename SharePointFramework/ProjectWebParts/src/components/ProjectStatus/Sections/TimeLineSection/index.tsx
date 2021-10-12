@@ -3,9 +3,9 @@ import { ITimelineSectionProps, ITimelineSectionState } from './types'
 import { BaseSection } from '../BaseSection'
 import { StatusElement } from '../../StatusElement'
 import { ProjectTimeline } from 'components/ProjectTimeline'
-import styles from './TimeLineSection.module.scss'
+import styles from './TimelineSection.module.scss'
 
-export class TimeLineSection extends BaseSection<ITimelineSectionProps, ITimelineSectionState> {
+export class TimelineSection extends BaseSection<ITimelineSectionProps, ITimelineSectionState> {
   constructor(props: ITimelineSectionProps) {
     super(props)
     this.state = {
