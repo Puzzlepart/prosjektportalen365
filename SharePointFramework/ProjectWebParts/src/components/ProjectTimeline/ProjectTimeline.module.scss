@@ -22,5 +22,14 @@
     .infoText {
       padding: 23px 32px 23px 32px;
     }
+    .timelineList {
+      margin: 25px;
+
+      .stickyHeader {
+      .headerColumns {
+        position: inherit;
+      }
+    }
+    }
   }
 }

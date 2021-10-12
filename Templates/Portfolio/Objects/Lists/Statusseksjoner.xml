@@ -5,6 +5,7 @@
         <pnp:ContentTypeBinding ContentTypeID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82802" />
         <pnp:ContentTypeBinding ContentTypeID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82804" />
         <pnp:ContentTypeBinding ContentTypeID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82805" />
+        <pnp:ContentTypeBinding ContentTypeID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82806" />
     </pnp:ContentTypeBindings>
     <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_StatusSections_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
@@ -112,6 +113,15 @@
             <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtSecFieldName">GtStatusGainAchievement</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82802</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Tidslinje</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSecIcon">Trophy</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82806</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />

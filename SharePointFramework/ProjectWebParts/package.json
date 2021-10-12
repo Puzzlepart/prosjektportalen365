@@ -1,6 +1,6 @@
 {
   "name": "pp365-projectwebparts",
-  "version": "1.2.9",
+  "version": "1.3.0",
   "engines": {
     "node": ">=12.13.0"
   },
@@ -43,12 +43,15 @@
     "@uifabric/utilities": "6.45.1",
     "dom-to-image": "2.6.0",
     "get-value": "3.0.1",
+    "interactjs": "1.6.2",
     "msgraph-helper": "0.7.1",
     "office-ui-fabric-react": "6.214.0",
-    "pp365-shared": "latest",
+    "pp365-portfoliowebparts": "1.3.1",
+    "pp365-shared": "1.3.3",
     "pzl-spfx-components": "0.0.11",
-    "react": "16.9.0",
-    "react-dom": "16.9.0",
+    "react": "16.8.5",
+    "react-calendar-timeline": "0.26.0",
+    "react-dom": "16.8.5",
     "react-image-fade-in": "1.0.2",
     "react-markdown": "4.2.2",
     "react-scroll": "1.7.11",

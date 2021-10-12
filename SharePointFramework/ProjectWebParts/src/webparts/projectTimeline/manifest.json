@@ -1,9 +1,9 @@
 {
     "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-    "id": "e58e3d32-057a-4418-97ce-172b92482ba2",
-    "alias": "PortfolioOverviewWebPart",
+    "id": "d156652b-9121-47af-89ae-1fe8427c53da",
+    "alias": "ProjecttimelineWebPart",
     "componentType": "WebPart",
-    "version": "1.3.1",
+    "version": "1.3.0",
     "manifestVersion": 2,
     "requiresCustomScript": false,
     "hiddenFromToolbox": true,
@@ -17,21 +17,19 @@
                 "default": "Other"
             },
             "title": {
-                "default": "Porteføljeoversikt"
+                "default": "Prosjekttidslinje"
             },
             "description": {
                 "default": " "
             },
-            "officeFabricIconFontName": "FolderList",
+            "officeFabricIconFontName": "TimelineDelivery",
             "properties": {
-                "title": "Porteføljeoversikt",
-                "statusReportsCount": 0,
-                "showCommandBar": true,
-                "showExcelExportButton": true,
-                "showGroupBy": true,
-                "showViewSelector": true,
-                "showSearchBox": true,
-                "showFilters": true
+                "listName": "Tidslinjeinnhold",
+                "showFilterButton": true,
+                "showTimeline": true,
+                "showInfoMessage": true,
+                "showCmdTimelineList": true,
+                "showTimelineList": true
             }
         }
     ]
