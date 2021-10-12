@@ -3,7 +3,8 @@ export enum SectionType {
   StatusSection,
   RiskSection,
   ProjectPropertiesSection,
-  ListSection
+  ListSection,
+  TimelineSection
 }
 
 export class SectionModel {
