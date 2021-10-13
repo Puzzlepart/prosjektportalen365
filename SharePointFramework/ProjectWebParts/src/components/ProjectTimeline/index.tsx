@@ -323,8 +323,9 @@ export class ProjectTimeline extends BaseWebPartComponent<
 
     const properties: TypedHash<any> = {
       Title: 'Nytt element',
-      SiteIdLookupId: { results: [project.Id] }
+      SiteIdLookupId: project.Id
     }
+
     Logger.log({
       message: '(TimelineItem) _redirectNewTimelineItem: Created new timeline item',
       data: { fieldValues: properties },
@@ -422,7 +423,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
       ])
 
       let timelineListItems = timelineItems.filter(
-        (item) => item.SiteIdLookup[0].Title === this.props.webTitle
+        (item) => item.SiteIdLookup.Title === this.props.webTitle
       )
 
       const [timelineColumns] = await Promise.all([
@@ -456,8 +457,8 @@ export class ProjectTimeline extends BaseWebPartComponent<
       timelineItems = timelineItems
         .map((item) => {
           const model = new TimelineContentListModel(
-            item.SiteIdLookup && item.SiteIdLookup[0].GtSiteId,
-            item.SiteIdLookup && item.SiteIdLookup[0].Title,
+            item.SiteIdLookup && item.SiteIdLookup.GtSiteId,
+            item.SiteIdLookup && item.SiteIdLookup.Title,
             item.Title,
             item.TimelineType,
             item.GtStartDate,
@@ -572,8 +573,8 @@ export class ProjectTimeline extends BaseWebPartComponent<
         id,
         group: group.id,
         title: format(strings.ProjectTimelineItemInfo, project.title),
-        start_time: moment(new Date(project.startDate)),
-        end_time: moment(new Date(project.endDate)),
+        start_time: moment(new Date(moment(project.startDate).format('DD.MM.YYYY'))),
+        end_time: moment(new Date(moment(project.endDate).format('DD.MM.YYYY'))),
         itemProps: { style },
         project: project.title,
         projectUrl: project.url,
