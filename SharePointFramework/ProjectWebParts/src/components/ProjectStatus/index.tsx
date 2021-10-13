@@ -26,7 +26,6 @@ import {
   RiskSection,
   StatusSection,
   SummarySection,
-  TimelineSection,
 } from './Sections'
 import {
   IProjectStatusData,
@@ -314,14 +313,6 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           }
           case SectionType.ListSection: {
             return <ListSection {...baseProps} />
-          }
-          case SectionType.TimelineSection: {
-            return (
-              <TimelineSection
-                {...baseProps}
-                {...this.props}
-              />
-            )
           }
           default: {
             return null
