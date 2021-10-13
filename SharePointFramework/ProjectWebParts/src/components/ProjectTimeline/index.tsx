@@ -110,9 +110,11 @@ export class ProjectTimeline extends BaseWebPartComponent<
               <CommandBar {...this._getCommandBarProps()} />
             </div>
           )}
-          {this.props.showTitle && (<div className={styles.header}>
-            <div className={styles.title}>{this.props.title}</div>
-          </div>)}
+          {this.props.showTitle && (
+            <div className={styles.header}>
+              <div className={styles.title}>{this.props.title}</div>
+            </div>
+          )}
           {this.props.showInfoMessage && (
             <div className={styles.infoText}>
               <MessageBar>
@@ -147,7 +149,9 @@ export class ProjectTimeline extends BaseWebPartComponent<
                 items={this.state.data.timelineListItems}
                 onRenderItemColumn={this._onRenderItemColumn.bind(this)}
                 selection={this._selection}
-                selectionMode={this.props.isSelectionModeNone ? SelectionMode.none : SelectionMode.single}
+                selectionMode={
+                  this.props.isSelectionModeNone ? SelectionMode.none : SelectionMode.single
+                }
                 layoutMode={DetailsListLayoutMode.justified}
               />
             </div>

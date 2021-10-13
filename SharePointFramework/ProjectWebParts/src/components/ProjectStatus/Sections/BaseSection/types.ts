@@ -41,7 +41,7 @@ export interface IBaseSectionProps {
   /**
    * Should list data be displayed?
    */
-  showLists: boolean;
+  showLists: boolean
 }
 
 export interface IBaseSectionState {
