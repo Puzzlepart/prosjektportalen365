@@ -2,7 +2,7 @@
 
 _Due to the number of components, we decided to separate the components into 3 different solutions._
 
-## [@Shared](./@Shared/README.md) [![version](https://img.shields.io/badge/version-1.2.9-yellow.svg)](https://semver.org)
+## [@Shared](./@Shared/README.md) [![version](https://img.shields.io/badge/version-1.3.4-yellow.svg)](https://semver.org)
 
 Shared code for the SharePoint Framework solutions in PP365.
 
@@ -10,7 +10,7 @@ Build by `npm` script `build` and watch changes with `watch`.
 
 _Published to **npm** as `pp365-shared`_
 
-## [PortfolioWebParts](./PortfolioWebParts/README.md) [![version](https://img.shields.io/badge/version-1.2.6-yellow.svg)](https://semver.org)
+## [PortfolioWebParts](./PortfolioWebParts/README.md) [![version](https://img.shields.io/badge/version-1.3.1-yellow.svg)](https://semver.org)
 
 | Solution name            | ID                                   |
 | ------------------------ | ------------------------------------ |
@@ -24,9 +24,9 @@ Build by `npm` script `package`.
 
 To package and deploy directly to SharePoint, see `2. Build, package and deploy`.
 
-_Published to **npm** as `pp365-projectwebparts`
+_Published to **npm** as `pp365-projectwebparts`_
 
-## [ProjectExtensions](./ProjectExtensions/README.md) [![version](https://img.shields.io/badge/version-1.2.6-yellow.svg)](https://semver.org)
+## [ProjectExtensions](./ProjectExtensions/README.md) [![version](https://img.shields.io/badge/version-1.3.0-yellow.svg)](https://semver.org)
 
 | Solution name          | ID                                   |
 | ---------------------- | ------------------------------------ |
@@ -42,7 +42,7 @@ To package and deploy directly to SharePoint, see `2. Build, package and deploy`
 
 _Published to **npm** as `pp365-projectextensions`_
 
-## [ProjectWebParts](./ProjectWebParts/README.md) [![version](https://img.shields.io/badge/version-1.2.9-yellow.svg)](https://semver.org)
+## [ProjectWebParts](./ProjectWebParts/README.md) [![version](https://img.shields.io/badge/version-1.3.0-yellow.svg)](https://semver.org)
 
 | Solution name          | ID                                   |
 | ---------------------- | ------------------------------------ |

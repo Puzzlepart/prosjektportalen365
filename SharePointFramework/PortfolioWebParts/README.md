@@ -1,4 +1,4 @@
-## Portfolio web parts [![version](https://img.shields.io/badge/version-1.2.9-yellow.svg)](https://semver.org)
+## Portfolio web parts [![version](https://img.shields.io/badge/version-1.3.1-yellow.svg)](https://semver.org)
 
 _Published to **npm** as `pp365-portfoliowebparts`_
 
