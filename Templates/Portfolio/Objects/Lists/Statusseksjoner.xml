@@ -114,15 +114,6 @@
             <pnp:DataValue FieldName="GtSecFieldName">GtStatusGainAchievement</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82802</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Tidslinje</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecIcon">Trophy</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82806</pnp:DataValue>
-        </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

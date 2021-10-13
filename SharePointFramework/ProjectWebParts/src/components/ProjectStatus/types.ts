@@ -34,7 +34,7 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
    * ID of the most recent report
    */
 
-  newestReportId?: number;
+  newestReportId?: number
 }
 
 export interface IProjectStatusHashState {
