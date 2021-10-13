@@ -25,8 +25,7 @@ import {
   ProjectPropertiesSection,
   RiskSection,
   StatusSection,
-  SummarySection,
-  TimelineSection,
+  SummarySection
 } from './Sections'
 import {
   IProjectStatusData,
@@ -84,7 +83,10 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     }
   }
 
-  public UNSAFE_componentWillUpdate(_: IProjectStatusProps, { selectedReport }: IProjectStatusState) {
+  public UNSAFE_componentWillUpdate(
+    _: IProjectStatusProps,
+    { selectedReport }: IProjectStatusState
+  ) {
     const obj: IProjectStatusHashState = {}
     if (selectedReport) obj.selectedReport = selectedReport.id.toString()
     setUrlHash<IProjectStatusHashState>(obj)
@@ -124,7 +126,12 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
             </MessageBar>
           )}
           <div className={`${styles.header} ${styles.column12}`}>
-            <div className={styles.title}>{this.props.title} {this.state.selectedReport ? moment(this.state.selectedReport.created).format('DD.MM.yyyy') : null} </div>
+            <div className={styles.title}>
+              {this.props.title}{' '}
+              {this.state.selectedReport
+                ? moment(this.state.selectedReport.created).format('DD.MM.yyyy')
+                : null}{' '}
+            </div>
           </div>
           <div className={`${styles.sections} ${styles.column12}`} id='pp-statussection'>
             {this._renderSections()}
@@ -222,7 +229,6 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         farItems={removeMenuBorder<IContextualMenuItem>(farItems)}
       />
     )
-    
   }
 
   /**
@@ -251,7 +257,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       hubSiteUrl: this.props.hubSite.url,
       siteId: this.props.siteId,
       webUrl: this.props.webUrl,
-      showLists: this.state.data.reports ? this.state.selectedReport.id === this.state.newestReportId : true
+      showLists: this.state.data.reports
+        ? this.state.selectedReport.id === this.state.newestReportId
+        : true
     }
     return baseProps
   }
@@ -314,14 +322,6 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           }
           case SectionType.ListSection: {
             return <ListSection {...baseProps} />
-          }
-          case SectionType.TimelineSection: {
-            return (
-              <TimelineSection
-                {...baseProps}
-                {...this.props}
-              />
-            )
           }
           default: {
             return null
@@ -431,7 +431,10 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     if (!this.state.isPublishing) {
       try {
         const attachment = await this._captureReport(report.values.Title)
-        const properties = { GtModerationStatus: strings.GtModerationStatus_Choice_Published, GtLastReportDate: moment().format('YYYY-MM-DD HH:mm') }
+        const properties = {
+          GtModerationStatus: strings.GtModerationStatus_Choice_Published,
+          GtLastReportDate: moment().format('YYYY-MM-DD HH:mm')
+        }
         await this._portalDataService.updateStatusReport(report.id, properties, attachment)
       } catch (error) {
         Logger.log({
@@ -472,27 +475,21 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
         })
       }
-      const [
-        properties,
-        reportList,
-        reports,
-        sections,
-        columnConfig,
-        reportFields
-      ] = await Promise.all([
-        SPDataAdapter.project.getPropertiesData(),
-        this._portalDataService.getStatusReportListProps(),
-        this._portalDataService.getStatusReports({
-          publishedString: strings.GtModerationStatus_Choice_Published
-        }),
-        this._portalDataService.getProjectStatusSections(),
-        this._portalDataService.getProjectColumnConfig(),
-        this._portalDataService.getListFields(
-          'PROJECT_STATUS',
-          // eslint-disable-next-line quotes
-          "Hidden eq false and Group ne 'Hidden'"
-        ),
-      ])
+      const [properties, reportList, reports, sections, columnConfig, reportFields] =
+        await Promise.all([
+          SPDataAdapter.project.getPropertiesData(),
+          this._portalDataService.getStatusReportListProps(),
+          this._portalDataService.getStatusReports({
+            publishedString: strings.GtModerationStatus_Choice_Published
+          }),
+          this._portalDataService.getProjectStatusSections(),
+          this._portalDataService.getProjectColumnConfig(),
+          this._portalDataService.getListFields(
+            'PROJECT_STATUS',
+            // eslint-disable-next-line quotes
+            "Hidden eq false and Group ne 'Hidden'"
+          )
+        ])
       const sortedReports = reports
         .map((item) => item.setDefaultEditFormUrl(reportList.DefaultEditFormUrl))
         .sort((a, b) => b.created.getTime() - a.created.getTime())

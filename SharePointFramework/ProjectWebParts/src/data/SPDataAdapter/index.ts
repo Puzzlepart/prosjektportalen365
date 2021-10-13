@@ -23,20 +23,23 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public configure(spfxContext: WebPartContext, configuration: ISPDataAdapterConfiguration) {
     super.configure(spfxContext, configuration)
     taxonomy.setup({ spfxContext })
-    this.project = new ProjectDataService({
-      ...this.settings,
-      entityService: this.entityService,
-      propertiesListName: strings.ProjectPropertiesListName,
-      taxonomy
-    }, this.spConfiguration)
+    this.project = new ProjectDataService(
+      {
+        ...this.settings,
+        entityService: this.entityService,
+        propertiesListName: strings.ProjectPropertiesListName,
+        taxonomy
+      },
+      this.spConfiguration
+    )
   }
 
   /**
    * Get fields to sync
-   * 
+   *
    * @param fields - Fields
    * @param customGroupName - Custom group name
-   * 
+   *
    * @returns Fields to sync
    */
   private _getFieldsToSync(fields: IEntityField[], customGroupName: string): any[] {
@@ -84,16 +87,16 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       const [fields, siteUsers] = await Promise.all([
         templateParameters.ProjectContentTypeId
           ? this.entityService
-            .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
-            .getEntityFields()
+              .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
+              .getEntityFields()
           : this.entityService.getEntityFields(),
-        this.sp.web.siteUsers
-          .select('Id', 'Email', 'LoginName')
-          .get<{
-            Id: number;
-            Email: string;
+        this.sp.web.siteUsers.select('Id', 'Email', 'LoginName').get<
+          {
+            Id: number
+            Email: string
             LoginName: string
-          }[]>()
+          }[]
+        >()
       ])
       const fieldsToSync = this._getFieldsToSync(fields, templateParameters.CustomSiteFields)
       const properties: TypedHash<any> = {}
