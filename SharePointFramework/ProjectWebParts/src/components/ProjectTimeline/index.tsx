@@ -334,7 +334,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
 
     const itemId = await this._addTimelineItem(properties)
     document.location.hash = ''
-    document.location.href = this._editFormUrl(itemId)
+    document.location.href = this.editFormUrl(itemId)
   }
 
   /**
@@ -365,7 +365,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
    *
    * @param {any} item Item
    */
-  public _editFormUrl(item: any) {
+  public editFormUrl(item: any) {
     return [
       `${this.props.hubSite.url}`,
       `/Lists/${strings.TimelineContentListName}/EditForm.aspx`,
@@ -389,7 +389,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
   /**
    * Get timeline items and columns
    */
-  public async _getProjecttimelineItemsAndColumns() {
+  public async getProjecttimelineItemsAndColumns() {
     this._web = new Web(this.props.hubSite.url)
 
     try {
@@ -411,7 +411,8 @@ export class ProjectTimeline extends BaseWebPartComponent<
       let [timelineItems] = await Promise.all([
         await this._web.lists
           .getByTitle(strings.TimelineContentListName)
-          .items.select(
+          .items
+          .select(
             internalNames,
             'Id',
             'SiteIdLookupId',
@@ -451,14 +452,14 @@ export class ProjectTimeline extends BaseWebPartComponent<
         })
 
       timelineListItems = timelineListItems.map((item) => {
-        return { ...item, EditFormUrl: this._editFormUrl(item) }
+        return { ...item, EditFormUrl: this.editFormUrl(item) }
       })
 
       timelineItems = timelineItems
         .map((item) => {
           const model = new TimelineContentListModel(
-            item.SiteIdLookup && item.SiteIdLookup.GtSiteId,
-            item.SiteIdLookup && item.SiteIdLookup.Title,
+            item.SiteIdLookup?.GtSiteId,
+            item.SiteIdLookup?.Title,
             item.Title,
             item.TimelineType,
             item.GtStartDate,
@@ -573,8 +574,8 @@ export class ProjectTimeline extends BaseWebPartComponent<
         id,
         group: group.id,
         title: format(strings.ProjectTimelineItemInfo, project.title),
-        start_time: moment(new Date(moment(project.startDate).format('DD.MM.YYYY'))),
-        end_time: moment(new Date(moment(project.endDate).format('DD.MM.YYYY'))),
+        start_time: moment(project.startDate),
+        end_time: moment(project.endDate),
         itemProps: { style },
         project: project.title,
         projectUrl: project.url,
@@ -594,10 +595,10 @@ export class ProjectTimeline extends BaseWebPartComponent<
           item.type === strings.PhaseLabel
             ? '#2589d6'
             : item.type === strings.MilestoneLabel
-            ? 'transparent'
-            : item.type === strings.SubPhaseLabel
-            ? '#249ea0'
-            : '#484848'
+              ? 'transparent'
+              : item.type === strings.SubPhaseLabel
+                ? '#249ea0'
+                : '#484848'
 
         const group = _.find(groups, (grp) => item.title.indexOf(grp.title) !== -1)
         const style: React.CSSProperties = {
@@ -707,7 +708,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
       project['costsTotal'] = projectData.GtCostsTotal
 
       const [timelineItems, timelineListItems, timelineColumns] =
-        await this._getProjecttimelineItemsAndColumns()
+        await this.getProjecttimelineItemsAndColumns()
 
       const groups = this._transformGroups([project])
       const items = this._transformItems([project], timelineItems, groups)
