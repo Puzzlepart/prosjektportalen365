@@ -2,7 +2,7 @@
 
 _Due to the number of components, we decided to separate the components into 3 different solutions._
 
-## [@Shared](./@Shared/README.md) [![version](https://img.shields.io/badge/version-1.3.4-yellow.svg)](https://semver.org)
+## [@Shared](./@Shared/README.md)
 
 Shared code for the SharePoint Framework solutions in PP365.
 
@@ -10,7 +10,7 @@ Build by `npm` script `build` and watch changes with `watch`.
 
 _Published to **npm** as `pp365-shared`_
 
-## [PortfolioWebParts](./PortfolioWebParts/README.md) [![version](https://img.shields.io/badge/version-1.3.1-yellow.svg)](https://semver.org)
+## [PortfolioWebParts](./PortfolioWebParts/README.md)
 
 | Solution name            | ID                                   |
 | ------------------------ | ------------------------------------ |
@@ -26,7 +26,7 @@ To package and deploy directly to SharePoint, see `2. Build, package and deploy`
 
 _Published to **npm** as `pp365-projectwebparts`_
 
-## [ProjectExtensions](./ProjectExtensions/README.md) [![version](https://img.shields.io/badge/version-1.3.0-yellow.svg)](https://semver.org)
+## [ProjectExtensions](./ProjectExtensions/README.md)
 
 | Solution name          | ID                                   |
 | ---------------------- | ------------------------------------ |
@@ -42,7 +42,7 @@ To package and deploy directly to SharePoint, see `2. Build, package and deploy`
 
 _Published to **npm** as `pp365-projectextensions`_
 
-## [ProjectWebParts](./ProjectWebParts/README.md) [![version](https://img.shields.io/badge/version-1.3.0-yellow.svg)](https://semver.org)
+## [ProjectWebParts](./ProjectWebParts/README.md)
 
 | Solution name          | ID                                   |
 | ---------------------- | ------------------------------------ |
@@ -89,10 +89,4 @@ To work with the various solutions, you have to to the following
 2. Build the Shared solution. Navigate to "@Shared" and run `pnpm i --shamefully-hoist` followed by `pnpm run-script build`
 3. Navigate to [ProjectWebParts](./ProjectWebParts) and run `npm i` followed by `pnpm run-script package`
 4. Navigate to [PortfolioWebParts](./PortfolioWebParts) and run `npm i` followed by `pnpm run-script package`
-5. Navigate to [ProjectExtensions](./ProjectExtensions) and run `npm i` followed by `pnpm run-script package`
-
-## Package and deploy
-
-To be able to `package` and `deploy` directly you need to create a file `env.json` under `SharePointFramework/{solution}/config`. Take a look at `SharePointFramework/{solution}/config/env.sample.json`.
-
-When `env.json` is filled out and ready to go you can run the `npm` script `package-deploy`.
+5. Navigate to [ProjectExtensions](./ProjectExtensions) and run `npm i` followed by `pnpm r
