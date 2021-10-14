@@ -16,21 +16,37 @@ const fs = require('fs')
 const path = require('path')
 const globMod = require('glob')
 const glob = util.promisify(globMod)
-const readFileAsync = util.promisify(fs.readFileSync)
 const pkgVersion = process.env.npm_package_version
 const version = pkgVersion.indexOf('-') === -1
     ? pkgVersion : pkgVersion.split('-')[0]
 
+/**
+ * Get file content
+ * 
+ * @param {*} file - File path
+ * @returns file content as JSON
+ */
 function getFileContent(file) {
     const fileContent = fs.readFileSync(path.resolve(__dirname, "..", file), 'UTF-8')
     const fileContentJson = JSON.parse(fileContent)
     return fileContentJson
 }
 
+/**
+ * Set file content
+ * 
+ * @param {*} file - File path
+ * @param {*} json - JSON
+ */
 function setFileContent(file, json) {
     fs.writeFileSync(path.resolve(__dirname, "..", file), JSON.stringify(json, null, 2), 'UTF-8')
 }
 
+/**
+ * Set package.json version
+ * 
+ * @param {*} files 
+ */
 function setPkgVersion(files) {
     for (let i = 0; i < files.length; i++) {
         let pkgContent = getFileContent(files[i])
@@ -39,6 +55,11 @@ function setPkgVersion(files) {
     }
 }
 
+/**
+ * Set package-solution.json version
+ * 
+ * @param {*} files 
+ */
 function setPkgSolutionVersion(files) {
     for (let i = 0; i < files.length; i++) {
         let pkgSolutionContent = getFileContent(files[i])
@@ -47,6 +68,11 @@ function setPkgSolutionVersion(files) {
     }
 }
 
+/**
+ * Set manifest.json version
+ * 
+ * @param {*} files 
+ */
 function setManifestVersion(files) {
     for (let i = 0; i < files.length; i++) {
         let manifestContent = getFileContent(files[i])
@@ -55,6 +81,9 @@ function setManifestVersion(files) {
     }
 }
 
+/**
+ * Main entry point for the task
+ */
 const _ = async () => {
     let pkgFiles = await glob('SharePointFramework/*/package.json')
     let pkgSolutionFiles = await glob('SharePointFramework/*/config/package-solution.json')
