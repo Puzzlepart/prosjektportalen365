@@ -13,7 +13,7 @@ export default class Chart extends Component<IChartProps, IChartState> {
   /**
    * Constructor
    *
-   * @param {IChartProps} props Props
+   * @param props Props
    */
   constructor(props: IChartProps) {
     super(props)

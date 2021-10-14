@@ -48,10 +48,10 @@ export class DataAdapter {
   /**
    * Fetch chart data (used by [PortfolioInsights])
    *
-   * @param {PortfolioOverviewView} view View configuration
-   * @param {IPortfolioConfiguration} configuration PortfolioOverviewConfiguration
-   * @param {string} chartConfigurationListName List name for chart configuration
-   * @param {string} siteId Site ID
+   * @param view View configuration
+   * @param configuration PortfolioOverviewConfiguration
+   * @param chartConfigurationListName List name for chart configuration
+   * @param siteId Site ID
    */
   public async fetchChartData(
     view: PortfolioOverviewView,
@@ -119,9 +119,9 @@ export class DataAdapter {
    *
    * @description Used by PortfolioOverview and PortfolioInsights
    *
-   * @param {PortfolioOverviewView} view
-   * @param {IPortfolioConfiguration} configuration
-   * @param {string} siteId
+   * @param view
+   * @param configuration
+   * @param siteId
    * @returns {Promise<IFetchDataForViewItemResult[]>}
    * @memberof DataAdapter
    */
@@ -142,10 +142,10 @@ export class DataAdapter {
    * Fetch data for regular view
    *
    *
-   * @param {PortfolioOverviewView} view View configuration
-   * @param {IPortfolioConfiguration} configuration PortfolioOverviewConfiguration
-   * @param {string} siteId Site ID
-   * @param {string} siteIdProperty Site ID property
+   * @param view View configuration
+   * @param configuration PortfolioOverviewConfiguration
+   * @param siteId Site ID
+   * @param siteIdProperty Site ID property
    */
   public async fetchDataForRegularView(
     view: PortfolioOverviewView,
@@ -183,10 +183,10 @@ export class DataAdapter {
    *
    * @description Used by PortfolioOverview and PortfolioInsights
    *
-   * @param {PortfolioOverviewView} view
-   * @param {IPortfolioConfiguration} configuration
-   * @param {string} siteId
-   * @param {string} [siteIdProperty='GtSiteIdOWSTEXT']
+   * @param view
+   * @param configuration
+   * @param siteId
+   * @param [siteIdProperty='GtSiteIdOWSTEXT']
    * @returns {Promise<IFetchDataForViewItemResult[]>}
    * @memberof DataAdapter
    */
@@ -225,10 +225,10 @@ export class DataAdapter {
 
   /**
    *  Fetches data for portfolio views
-   * @param {PortfolioOverviewView} view
-   * @param {IPortfolioConfiguration} configuration
-   * @param {string} siteId
-   * @param {string} [siteIdProperty='GtSiteIdOWSTEXT']
+   * @param view
+   * @param configuration
+   * @param siteId
+   * @param [siteIdProperty='GtSiteIdOWSTEXT']
    */
 
   private async _fetchDataForView(
@@ -275,10 +275,10 @@ export class DataAdapter {
 
   /**
    *  Fetches data for the Projecttimeline project
-   * @param {string} siteId
-   * @param {string} [siteIdProperty='GtSiteIdOWSTEXT']
-   * @param {string} [costsTotalProperty='GtCostsTotalOWSCURR']
-   * @param {string} [budgetTotalProperty='GtBudgetTotalOWSCURR']
+   * @param siteId
+   * @param [siteIdProperty='GtSiteIdOWSTEXT']
+   * @param [costsTotalProperty='GtCostsTotalOWSCURR']
+   * @param [budgetTotalProperty='GtBudgetTotalOWSCURR']
    */
 
   public async _fetchDataForTimelineProject(siteId: string) {
@@ -348,9 +348,9 @@ export class DataAdapter {
   /**
    * Fetch project sites
    *
-   * @param {number} rowLimit Row limit
-   * @param {string} sortProperty Sort property
-   * @param {SortDirection} sortDirection Sort direction
+   * @param rowLimit Row limit
+   * @param sortProperty Sort property
+   * @param sortDirection Sort direction
    */
   public async fetchProjectSites(
     rowLimit: number,
@@ -386,10 +386,10 @@ export class DataAdapter {
   /**
    * Map projects
    *
-   * @param {ISPProjectItem[]} items Items
-   * @param {IGraphGroup[]} groups Groups
-   * @param {Object} photos Photos
-   * @param {ISPUser[]} users Users
+   * @param items Items
+   * @param groups Groups
+   * @param photos Photos
+   * @param users Users
    */
   private _mapProjects(
     items: ISPProjectItem[],
@@ -472,7 +472,7 @@ export class DataAdapter {
    *
    * @public
    *
-   * @param {string} groupName
+   * @param groupName
    *
    * @returns {Promise<boolean>}
    *
@@ -493,8 +493,8 @@ export class DataAdapter {
   /**
    * Fetch items
    *
-   * @param {string} queryTemplate Query template
-   * @param {string[]} selectProperties Select properties
+   * @param queryTemplate Query template
+   * @param selectProperties Select properties
    */
   private async _fetchItems(queryTemplate: string, selectProperties: string[]) {
     const response = await sp.searchWithCaching({
@@ -510,8 +510,8 @@ export class DataAdapter {
   /**
    * Fetch items with data source name
    *
-   * @param {string} name Data source name
-   * @param {string[]} selectProperties Select properties
+   * @param name Data source name
+   * @param selectProperties Select properties
    */
   public async fetchItemsWithSource(name: string, selectProperties: string[]): Promise<any> {
     const dataSrc = await this._dataSourceService.getByName(name)
@@ -529,7 +529,7 @@ export class DataAdapter {
   /**
    * Fetch data sources by category
    *
-   * @param {string} category Data source category
+   * @param category Data source category
    */
   public fetchDataSources(category: string): Promise<DataSource[]> {
     try {

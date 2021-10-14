@@ -42,7 +42,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
   /**
    * Get options for PropertyPaneDropdown
    *
-   * @param {string} targetProperty Target property
+   * @param targetProperty Target property
    */
   protected _getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
     // eslint-disable-next-line default-case

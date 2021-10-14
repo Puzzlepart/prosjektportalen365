@@ -10,18 +10,18 @@ export class ProjectListModel {
   /**
    * Creates a new instance of ProjectListModel
    *
-   * @param {string} siteId Site id
-   * @param {string} title Title
-   * @param {string} url Url
-   * @param {string} phase Phase
-   * @param {string} startDate Start date
-   * @param {string} endDate End date
-   * @param {ISPUser} manager Manager
-   * @param {ISPUser} owner Owner
-   * @param {boolean} userIsMember User is member
-   * @param {string} budgetTotal Budget total
-   * @param {string} costsTotal Costs total
-   * @param {string} type Type
+   * @param siteId Site id
+   * @param title Title
+   * @param url Url
+   * @param phase Phase
+   * @param startDate Start date
+   * @param endDate End date
+   * @param manager Manager
+   * @param owner Owner
+   * @param userIsMember User is member
+   * @param budgetTotal Budget total
+   * @param costsTotal Costs total
+   * @param type Type
    */
   constructor(
     public siteId: string,

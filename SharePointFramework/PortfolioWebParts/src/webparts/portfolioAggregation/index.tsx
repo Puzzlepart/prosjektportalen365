@@ -28,8 +28,8 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
   /**
    * On update property
    *
-   * @param {string} key Key
-   * @param {any} value Value
+   * @param key Key
+   * @param value Value
    */
   private _onUpdateProperty(key: string, value: any) {
     this.properties[key] = value

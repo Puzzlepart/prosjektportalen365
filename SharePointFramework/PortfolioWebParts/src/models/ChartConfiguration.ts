@@ -51,8 +51,8 @@ export class ChartConfiguration {
   /**
    * Generate chart series
    *
-   * @param {string} type Type
-   * @param {ChartData} data Data
+   * @param type Type
+   * @param data Data
    */
   public generateSeries(type: string, data: ChartData) {
     switch (type) {
@@ -151,7 +151,7 @@ export class ChartConfiguration {
   /**
    * Generate HighChart chart config
    *
-   * @param {ChartData} data Chart data
+   * @param data Chart data
    */
   public generateHighChartConfig(data: ChartData) {
     try {
@@ -209,7 +209,7 @@ export class ChartConfiguration {
   /**
    * Get X axis based on type
    *
-   * @param {ChartData} data Data
+   * @param data Data
    */
   private _getXAxis(data: ChartData) {
     let categories = data.getNames()

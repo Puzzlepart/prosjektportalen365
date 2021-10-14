@@ -27,7 +27,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   /**
    * Constructor
    *
-   * @param {IProjectTimelineProps} props Props
+   * @param props Props
    */
   constructor(props: IProjectTimelineProps) {
     super(props)
@@ -106,8 +106,8 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   /**
    * On item click
    *
-   * @param {React.MouseEvent} event Event
-   * @param {ITimelineItem} item Item
+   * @param event Event
+   * @param item Item
    */
   private _onItemClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) {
     this.setState({ showDetails: { element: event.currentTarget, data: item } })
@@ -155,8 +155,8 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   /**
    * On filter change
    *
-   * @param {IColumn} column Column
-   * @param {IFilterItemProps[]} selectedItems Selected items
+   * @param column Column
+   * @param selectedItems Selected items
    */
   private _onFilterChange(column: IColumn, selectedItems: IFilterItemProps[]) {
     const { activeFilters } = { ...this.state } as IProjectTimelineState
@@ -215,9 +215,9 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   /**
    * Create items
    *
-   * @param {ProjectListModel[]} projects Projects
-   * @param {TimelineContentListModel[]} timelineItems Timeline items
-   * @param {ITimelineGroup[]} groups Groups
+   * @param projects Projects
+   * @param timelineItems Timeline items
+   * @param groups Groups
    *
    * @returns {ITimelineItem[]} Timeline items
    */
