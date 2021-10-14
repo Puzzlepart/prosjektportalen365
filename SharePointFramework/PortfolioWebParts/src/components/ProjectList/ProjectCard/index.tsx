@@ -10,11 +10,10 @@ import { IProjectCardProps } from './types'
 export const ProjectCard: FunctionComponent<IProjectCardProps> = (props: IProjectCardProps) => {
   return (
     <DocumentCard
-      title={props.project.readOnly ? strings.NoAccessMessage : ""}
+      title={props.project.readOnly ? strings.NoAccessMessage : ''}
       className={styles.projectCard}
       onClickHref={props.project.readOnly ? '#' : props.project.url}
-      style={props.project.readOnly ? { opacity: '20%', cursor: 'default' } : {}}
-    >
+      style={props.project.readOnly ? { opacity: '20%', cursor: 'default' } : {}}>
       <ProjectCardHeader {...props} />
       <ProjectCardContent {...props} />
       <ProjectCardFooter {...props} />

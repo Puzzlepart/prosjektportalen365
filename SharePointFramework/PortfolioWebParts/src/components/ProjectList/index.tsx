@@ -45,7 +45,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
   public async componentDidMount() {
     try {
       let projects = await this.props.dataAdapter.fetchEncrichedProjects()
-      const inReadOnlyGroup = await this.props.dataAdapter.isUserInGroup(
+      const isUserInPortfolioManagerGroup = await this.props.dataAdapter.isUserInGroup(
         strings.PortfolioManagerGroupName
       )
 
@@ -64,7 +64,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
         projects,
         listView: { projects, columns },
         loading: false,
-        isUserInPortfolioManagerGroup: inReadOnlyGroup
+        isUserInPortfolioManagerGroup
       })
       if (this.props.showProjectLogo) {
         this._getProjectLogos(20)
@@ -98,7 +98,9 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
       <div className={styles.root}>
         <div className={styles.container}>
           <div
-            className={this.state.isUserInPortfolioManagerGroup ? styles.shrinkedSearchBox : styles.searchBox}
+            className={
+              this.state.isUserInPortfolioManagerGroup ? styles.shrinkedSearchBox : styles.searchBox
+            }
             hidden={!this.props.showSearchBox}>
             <SearchBox
               placeholder={this.props.searchBoxPlaceholderText}
@@ -120,7 +122,11 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
             </div>
           )}
           <div
-            className={this.state.isUserInPortfolioManagerGroup ? styles.shrinkedViewToggle : styles.viewToggle}
+            className={
+              this.state.isUserInPortfolioManagerGroup
+                ? styles.shrinkedViewToggle
+                : styles.viewToggle
+            }
             hidden={!this.props.showViewSelector}>
             <Toggle
               offText={strings.ShowAsListText}
@@ -328,8 +334,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
             p.logo = placeholderImage
           }
           return p
-        }
-        )
+        })
         return { projects }
       })
     }
