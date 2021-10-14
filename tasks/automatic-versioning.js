@@ -40,11 +40,19 @@ function setPkgVersion(files) {
 }
 
 function setPkgSolutionVersion(files) {
-
+    for (let i = 0; i < files.length; i++) {
+        let pkgSolutionContent = getFileContent(files[i])
+        pkgSolutionContent.solution.version = version + '.0'
+        setFileContent(files[i], pkgSolutionContent)
+    }
 }
 
 function setManifestVersion(files) {
-
+    for (let i = 0; i < files.length; i++) {
+        let manifestContent = getFileContent(files[i])
+        manifestContent.version = version
+        setFileContent(files[i], manifestContent)
+    }
 }
 
 const _ = async () => {
