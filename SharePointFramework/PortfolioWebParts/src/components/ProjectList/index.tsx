@@ -30,7 +30,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
   /**
    * Constructor
    *
-   * @param {IProjectListProps} props Props
+   * @param props - Props
    */
   constructor(props: IProjectListProps) {
     super(props)
@@ -151,7 +151,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
   /**
    * Render projects
    *
-   * @param {ProjectListModel[]} projects Projects
+   * @param projects - Projects
    */
   private _renderProjects(projects: ProjectListModel[]) {
     if (this.state.showAsTiles) {
@@ -182,9 +182,9 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
   /**
    * On render item column
    *
-   * @param {ProjectListModel} project Project
-   * @param {number} _index Index
-   * @param {IColumn} column Column
+   * @param project - Project
+   * @param _index - Index
+   * @param column - Column
    */
   private _onRenderItemColumn(project: ProjectListModel, _index: number, column: IColumn) {
     const colValue = getObjectValue(project, column.fieldName, null)
@@ -199,8 +199,8 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
   /**
    * Sorting on column header click
    *
-   * @param {React.MouseEvent} _evt Event
-   * @param {IColumn} column Column
+   * @param _evt - Event
+   * @param column - Column
    */
   private _onListSort(_evt: React.MouseEvent<any>, column: IColumn): void {
     const { listView } = { ...this.state } as IProjectListState
@@ -249,7 +249,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
   /**
    * Get card ations
    *
-   * @param {ProjectListModel} project Project
+   * @param project - Project
    */
   private _getCardActions(project: ProjectListModel): IButtonProps[] {
     return [
@@ -264,8 +264,8 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
   /**
    * On execute card action
    *
-   * @param {React.MouseEvent} event Event
-   * @param {ProjectListModel} project Project
+   * @param event - Event
+   * @param project - Project
    */
   private _onExecuteCardAction(event: React.MouseEvent<any>, project: ProjectListModel) {
     event.preventDefault()
@@ -283,7 +283,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
   /**
    * Filter projects
    *
-   * @param {ProjectListModel[]} projects Projects
+   * @param  projects - Projects
    */
   private _filterProjets(projects: ProjectListModel[]) {
     if (this.state.onlyAccessProjects) {
@@ -306,7 +306,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
   /**
    * On search
    *
-   * @param {string} searchTerm Search term
+   * @param searchTerm - Search term
    */
   private _onSearch(searchTerm: string) {
     this.setState({ searchTerm: searchTerm.toLowerCase() })
@@ -315,9 +315,9 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
   /**
    * Get project logos (group photos)
    *
-   * @param {number} batchSize Batch size (defaults to 20)
+   * @param batchSize - Batch size (defaults to 20)
    */
-  private async _getProjectLogos(batchSize = 20) {
+  private async _getProjectLogos(batchSize: number = 20) {
     const requests = this.state.projects.map((p) => ({
       id: p.groupId,
       method: 'GET',
