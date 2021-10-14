@@ -19,12 +19,10 @@ export class ProjectListModel {
    * @param {string} endDate End date
    * @param {ISPUser} manager Manager
    * @param {ISPUser} owner Owner
-   * @param {boolean} boolean ReadOnly
+   * @param {boolean} userIsMember User is member
    * @param {string} budgetTotal Budget total
    * @param {string} costsTotal Costs total
    * @param {string} type Type
-   * @param {boolean} boolean ReadOnly
-
    */
   constructor(
     public siteId: string,
@@ -36,7 +34,7 @@ export class ProjectListModel {
     public endDate?: string,
     manager?: ISPUser,
     owner?: ISPUser,
-    public readOnly?: boolean,
+    public userIsMember?: boolean,
     public budgetTotal?: string,
     public costsTotal?: string,
     public type?: string

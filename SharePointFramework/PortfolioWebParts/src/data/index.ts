@@ -401,32 +401,17 @@ export class DataAdapter {
         const [group] = groups.filter((grp) => grp.id === item.GtGroupId)
         const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
         const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
-
-        if (!group) {
-          return new ProjectListModel(
-            item.GtSiteId,
-            item.GtGroupId,
-            item.Title,
-            item.GtSiteUrl,
-            item.GtProjectPhaseText,
-            item.GtStartDate,
-            item.GtEndDate,
-            manager,
-            owner,
-            true
-          )
-        }
         const model = new ProjectListModel(
           item.GtSiteId,
-          group.id,
-          group.displayName,
+          item.GtGroupId,
+          group?.displayName ?? item.Title,
           item.GtSiteUrl,
           item.GtProjectPhaseText,
           item.GtStartDate,
           item.GtEndDate,
           manager,
           owner,
-          false
+          !!group
         )
         return model
       })

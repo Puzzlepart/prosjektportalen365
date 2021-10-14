@@ -7,13 +7,14 @@ import { ProjectCardFooter } from './ProjectCardFooter'
 import { ProjectCardHeader } from './ProjectCardHeader'
 import { IProjectCardProps } from './types'
 
-export const ProjectCard: FunctionComponent<IProjectCardProps> = (props: IProjectCardProps) => {
+export const ProjectCard: FunctionComponent<IProjectCardProps> = (props) => {
+  const { project } = props
   return (
     <DocumentCard
-      title={props.project.readOnly ? strings.NoAccessMessage : ''}
+      title={!project.userIsMember ? strings.NoAccessMessage : ''}
       className={styles.projectCard}
-      onClickHref={props.project.readOnly ? '#' : props.project.url}
-      style={props.project.readOnly ? { opacity: '20%', cursor: 'default' } : {}}>
+      onClickHref={project.userIsMember ? project.url : '#'}
+      style={!project.userIsMember ? { opacity: '20%', cursor: 'default' } : {}}>
       <ProjectCardHeader {...props} />
       <ProjectCardContent {...props} />
       <ProjectCardFooter {...props} />

@@ -51,7 +51,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
       )
 
       if (!this.state.onlyAccessProjects)
-        projects = projects.filter((project) => project.readOnly === false)
+        projects = projects.filter((project) => project.userIsMember === false)
 
       projects = projects.sort((a, b) => sortAlphabetically(a, b, true, this.props.sortBy))
       const columns = this.props.columns.map((col) => {
@@ -189,9 +189,9 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
    */
   private _onRenderItemColumn(project: ProjectListModel, _index: number, column: IColumn) {
     const colValue = getObjectValue(project, column.fieldName, null)
-    if (column.fieldName === 'title' && !project.readOnly) {
+    if (column.fieldName === 'title' && !project.userIsMember) {
       return <a href={project.url}>{colValue}</a>
-    } else if (column.fieldName === 'title' && project.readOnly && this.state.onlyAccessProjects) {
+    } else if (column.fieldName === 'title' && project.userIsMember && this.state.onlyAccessProjects) {
       return <>{colValue}</>
     }
     return colValue
@@ -271,7 +271,6 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
   private _onExecuteCardAction(event: React.MouseEvent<any>, project: ProjectListModel) {
     event.preventDefault()
     event.stopPropagation()
-    // eslint-disable-next-line default-case
     switch (event.currentTarget.id) {
       case 'ON_SELECT_PROJECT':
         {
@@ -288,7 +287,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
    */
   private _filterProjets(projects: ProjectListModel[]) {
     if (this.state.onlyAccessProjects) {
-      projects = projects.filter((project) => !project.readOnly)
+      projects = projects.filter((project) => !project.userIsMember)
     }
 
     return projects.filter((p) => {
