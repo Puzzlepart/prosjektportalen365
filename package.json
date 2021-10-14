@@ -31,7 +31,6 @@
   "author": "olemp@puzzlepart.com",
   "license": "MIT",
   "devDependencies": {
-    "glob": "7.2.0",
-    "glob-fs": "0.1.7"
+    "glob": "7.2.0"
   }
 }
