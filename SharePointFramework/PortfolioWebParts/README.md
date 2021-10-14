@@ -62,3 +62,6 @@ When editing a column, you'll have the possiblity to delete the column.
 
 - Take a copy of `config/serve.sample.json` and name it `serve.json`
 - Run `npm run serve`
+
+### Versioning
+Never update the version of this solution independently. The version is automatically kept in sync with the other packages.

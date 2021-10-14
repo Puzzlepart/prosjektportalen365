@@ -90,3 +90,6 @@ To work with the various solutions, you have to to the following
 3. Navigate to [ProjectWebParts](./ProjectWebParts) and run `npm i` followed by `pnpm run-script package`
 4. Navigate to [PortfolioWebParts](./PortfolioWebParts) and run `npm i` followed by `pnpm run-script package`
 5. Navigate to [ProjectExtensions](./ProjectExtensions) and run `npm i` followed by `pnpm r
+
+# 4. Versioning
+Never update the version of the solutions independently. The version is automatically kept in sync with the other packages.
