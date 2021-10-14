@@ -96,9 +96,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
       <div className={styles.root}>
         <div className={styles.container}>
           <div
-            className={
-              this.state.isUserInPortfolioManagerGroup ? styles.shrinkedSearchBox : styles.searchBox
-            }
+            className={styles.searchBox}
             hidden={!this.props.showSearchBox}>
             <SearchBox
               placeholder={this.props.searchBoxPlaceholderText}
@@ -116,11 +114,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
             </div>
           )}
           <div
-            className={
-              this.state.isUserInPortfolioManagerGroup
-                ? styles.shrinkedViewToggle
-                : styles.viewToggle
-            }
+            className={styles.viewToggle}
             hidden={!this.props.showViewSelector}>
             <Toggle
               offText={strings.ShowAsListText}
