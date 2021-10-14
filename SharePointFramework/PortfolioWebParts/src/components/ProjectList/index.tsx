@@ -16,7 +16,7 @@ import * as _ from 'underscore'
 import { ProjectCard } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
-import { IProjectListProps, IProjectListState, placeholderImage } from './types'
+import { IProjectListProps, IProjectListState } from './types'
 
 /**
  * @component ProjectList
@@ -317,8 +317,6 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
           const response = _.find(responses, (r) => r.id === p.groupId && r.status === 200)
           if (response) {
             p.logo = `data:image/png;base64, ${response.body}`
-          } else {
-            p.logo = placeholderImage
           }
           return p
         })
