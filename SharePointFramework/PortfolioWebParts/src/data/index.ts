@@ -327,8 +327,8 @@ export class DataAdapter {
     timelineItems = timelineItems
       .map((item) => {
         const model = new TimelineContentListModel(
-          item.SiteIdLookup && item.SiteIdLookup[0].GtSiteId,
-          item.SiteIdLookup && item.SiteIdLookup[0].Title,
+          item.item.SiteIdLookup[0]?.GtSiteId,
+          item.item.SiteIdLookup[0]?.Title,
           item.Title,
           item.TimelineType,
           item.GtStartDate,

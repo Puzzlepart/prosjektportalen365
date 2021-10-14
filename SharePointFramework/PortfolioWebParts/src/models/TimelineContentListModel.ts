@@ -1,5 +1,4 @@
 export class TimelineContentListModel {
-
   /**
    * Creates a new instance of TimelineContentListModel
    *

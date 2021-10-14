@@ -422,9 +422,9 @@
             <pnp:DataValue FieldName="GtSortOrder">310</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Prosjektstøtte</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectSupport</pnp:DataValue>
-            <pnp:DataValue FieldName="GtManagedProperty">RefinableString61</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">RefinableString60</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
-            <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">175</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
