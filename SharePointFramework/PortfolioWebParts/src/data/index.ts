@@ -326,17 +326,19 @@ export class DataAdapter {
 
     timelineItems = timelineItems
       .map((item) => {
-        const model = new TimelineContentListModel(
-          item.item.SiteIdLookup[0]?.GtSiteId,
-          item.item.SiteIdLookup[0]?.Title,
-          item.Title,
-          item.TimelineType,
-          item.GtStartDate,
-          item.GtEndDate,
-          item.GtBudgetTotal,
-          item.GtCostsTotal
-        )
-        return model
+        if (item.SiteIdLookup?.Title) {
+          const model = new TimelineContentListModel(
+            item.SiteIdLookup?.GtSiteId,
+            item.SiteIdLookup?.Title,
+            item.Title,
+            item.TimelineType,
+            item.GtStartDate,
+            item.GtEndDate,
+            item.GtBudgetTotal,
+            item.GtCostsTotal
+          )
+          return model
+        }
       })
       .filter((p) => p)
 

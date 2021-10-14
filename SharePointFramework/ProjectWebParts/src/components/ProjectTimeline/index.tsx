@@ -318,11 +318,11 @@ export class ProjectTimeline extends BaseWebPartComponent<
    */
   private async _redirectNewTimelineItem() {
     const [project] = (
-      await this._web.lists.getByTitle(strings.ProjectsListName).items.select('Id', 'Title').get()
-    ).filter((project) => project.Title === this.props.webTitle)
+      await this._web.lists.getByTitle(strings.ProjectsListName).items.select('Id', 'GtSiteId').get()
+    ).filter(({ GtSiteId }) => GtSiteId === this.props.siteId)
 
     const properties: TypedHash<any> = {
-      Title: 'Nytt element',
+      Title: 'Nytt element på tidslinjen',
       SiteIdLookupId: project.Id
     }
 
@@ -574,8 +574,8 @@ export class ProjectTimeline extends BaseWebPartComponent<
         id,
         group: group.id,
         title: format(strings.ProjectTimelineItemInfo, project.title),
-        start_time: moment(project.startDate),
-        end_time: moment(project.endDate),
+        start_time: moment(new Date(project.startDate)),
+        end_time: moment(new Date(project.endDate)),
         itemProps: { style },
         project: project.title,
         projectUrl: project.url,
