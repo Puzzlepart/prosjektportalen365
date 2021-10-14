@@ -6,7 +6,7 @@
     "build:release": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1",
     "build:release:force": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -Force",
     "postversion": "node tasks/automatic-versioning.js",
-    "automatic-versioning": "node tasks/automatic-versioning.js"
+    "@sync-version": "node tasks/automatic-versioning.js"
   },
   "repository": {
     "type": "git",
