@@ -48,9 +48,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
       // eslint-disable-next-line prefer-const
       let [projects, isUserInPortfolioManagerGroup] = await Promise.all([
         this.props.dataAdapter.fetchEncrichedProjects(),
-        this.props.dataAdapter.isUserInGroup(
-          strings.PortfolioManagerGroupName
-        )
+        this.props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName)
       ])
       const columns = this.props.columns.map((col) => {
         if (col.fieldName === this.props.sortBy) {
@@ -95,9 +93,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
     return (
       <div className={styles.root}>
         <div className={styles.container}>
-          <div
-            className={styles.searchBox}
-            hidden={!this.props.showSearchBox}>
+          <div className={styles.searchBox} hidden={!this.props.showSearchBox}>
             <SearchBox
               placeholder={this.props.searchBoxPlaceholderText}
               onChanged={this._onSearch.bind(this)}
@@ -113,9 +109,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
               </Pivot>
             </div>
           )}
-          <div
-            className={styles.viewToggle}
-            hidden={!this.props.showViewSelector}>
+          <div className={styles.viewToggle} hidden={!this.props.showViewSelector}>
             <Toggle
               offText={strings.ShowAsListText}
               onText={strings.ShowAsTilesText}
