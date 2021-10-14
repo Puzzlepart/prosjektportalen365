@@ -5,6 +5,7 @@
     "**/node_modules": true,
     "**/lib": true,
     "**/temp": true,
+    "**/dist": true,
     "**/teams": true,
     "**/release": true,
     "**/sharepoint": true,
