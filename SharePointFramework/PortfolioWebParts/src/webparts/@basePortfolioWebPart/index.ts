@@ -20,8 +20,8 @@ export abstract class BasePortfolioWebPart<
   /**
    * Render component
    *
-   * @param {any} component Component
-   * @param {T} props Props
+   * @param component Component
+   * @param props Props
    */
   public renderComponent<T = any>(
     component: React.ComponentClass<T> | React.FunctionComponent<T>,

@@ -1,11 +1,12 @@
 import { Web } from '@pnp/sp'
 import { ProjectListModel } from 'models'
 import MSGraph from 'msgraph-helper'
+import { Pivot, PivotItem } from 'office-ui-fabric-react'
 import { IButtonProps } from 'office-ui-fabric-react/lib/Button'
 import { DetailsList, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
-import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner'
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner'
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationModal } from 'pp365-projectwebparts/lib/components/ProjectInformation'
@@ -30,17 +31,25 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
   /**
    * Constructor
    *
-   * @param {IProjectListProps} props Props
+   * @param props - Props
    */
   constructor(props: IProjectListProps) {
     super(props)
-    this.state = { loading: true, searchTerm: '', showAsTiles: props.showAsTiles }
+    this.state = {
+      loading: true,
+      searchTerm: '',
+      showAsTiles: props.showAsTiles,
+      selectedView: 'my_projects'
+    }
   }
 
   public async componentDidMount() {
     try {
-      let projects = await this.props.dataAdapter.fetchEncrichedProjects()
-      projects = projects.sort((a, b) => sortAlphabetically(a, b, true, this.props.sortBy))
+      // eslint-disable-next-line prefer-const
+      let [projects, isUserInPortfolioManagerGroup] = await Promise.all([
+        this.props.dataAdapter.fetchEncrichedProjects(),
+        this.props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName)
+      ])
       const columns = this.props.columns.map((col) => {
         if (col.fieldName === this.props.sortBy) {
           col.isSorted = true
@@ -51,7 +60,8 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
       this.setState({
         projects,
         listView: { projects, columns },
-        loading: false
+        loading: false,
+        isUserInPortfolioManagerGroup
       })
       if (this.props.showProjectLogo) {
         this._getProjectLogos(20)
@@ -68,7 +78,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
     if (this.state.loading) {
       return (
         <div className={styles.root}>
-          <Spinner label={this.props.loadingText} type={SpinnerType.large} />
+          <Spinner label={this.props.loadingText} size={SpinnerSize.large} />
         </div>
       )
     }
@@ -79,9 +89,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
         </div>
       )
     }
-
     const projects = this._filterProjets(this.state.projects)
-
     return (
       <div className={styles.root}>
         <div className={styles.container}>
@@ -91,6 +99,16 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
               onChanged={this._onSearch.bind(this)}
             />
           </div>
+          {this.state.isUserInPortfolioManagerGroup && (
+            <div className={styles.projectDisplaySelect}>
+              <Pivot
+                onLinkClick={({ props }) => this.setState({ selectedView: props.itemKey })}
+                selectedKey={this.state.selectedView}>
+                <PivotItem headerText={strings.MyProjectsLabel} itemKey='my_projects' />
+                <PivotItem headerText={strings.AllProjectsLabel} itemKey='all_projects' />
+              </Pivot>
+            </div>
+          )}
           <div className={styles.viewToggle} hidden={!this.props.showViewSelector}>
             <Toggle
               offText={strings.ShowAsListText}
@@ -115,7 +133,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
   /**
    * Render projects
    *
-   * @param {ProjectListModel[]} projects Projects
+   * @param projects - Projects
    */
   private _renderProjects(projects: ProjectListModel[]) {
     if (this.state.showAsTiles) {
@@ -133,7 +151,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
     } else {
       return (
         <DetailsList
-          items={this._filterProjets(this.state.listView.projects)}
+          items={projects}
           columns={this.state.listView.columns}
           onRenderItemColumn={this._onRenderItemColumn.bind(this)}
           onColumnHeaderClick={this._onListSort.bind(this)}
@@ -146,14 +164,15 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
   /**
    * On render item column
    *
-   * @param {ProjectListModel} project Project
-   * @param {number} _index Index
-   * @param {IColumn} column Column
+   * @param project - Project
+   * @param _index - Index
+   * @param column - Column
    */
   private _onRenderItemColumn(project: ProjectListModel, _index: number, column: IColumn) {
     const colValue = getObjectValue(project, column.fieldName, null)
     if (column.fieldName === 'title') {
-      return <a href={project.url}>{colValue}</a>
+      if (project.userIsMember) return <a href={project.url}>{colValue}</a>
+      return <>{colValue}</>
     }
     return colValue
   }
@@ -161,8 +180,8 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
   /**
    * Sorting on column header click
    *
-   * @param {React.MouseEvent} _evt Event
-   * @param {IColumn} column Column
+   * @param _evt - Event
+   * @param column - Column
    */
   private _onListSort(_evt: React.MouseEvent<any>, column: IColumn): void {
     const { listView } = { ...this.state } as IProjectListState
@@ -211,7 +230,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
   /**
    * Get card ations
    *
-   * @param {ProjectListModel} project Project
+   * @param project - Project
    */
   private _getCardActions(project: ProjectListModel): IButtonProps[] {
     return [
@@ -226,13 +245,12 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
   /**
    * On execute card action
    *
-   * @param {React.MouseEvent} event Event
-   * @param {ProjectListModel} project Project
+   * @param event - Event
+   * @param project - Project
    */
   private _onExecuteCardAction(event: React.MouseEvent<any>, project: ProjectListModel) {
     event.preventDefault()
     event.stopPropagation()
-    // eslint-disable-next-line default-case
     switch (event.currentTarget.id) {
       case 'ON_SELECT_PROJECT':
         {
@@ -245,26 +263,31 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
   /**
    * Filter projects
    *
-   * @param {ProjectListModel[]} projects Projects
+   * @param projects - Projects
    */
   private _filterProjets(projects: ProjectListModel[]) {
-    return projects.filter((p) => {
-      const matches = Object.keys(p).filter((key) => {
-        const value = p[key]
-        return (
-          value &&
-          typeof value === 'string' &&
-          value.toLowerCase().indexOf(this.state.searchTerm) !== -1
-        )
-      }).length
-      return matches > 0
-    })
+    return projects
+      .filter((project) => {
+        if (this.state.selectedView === 'my_projects') return project.userIsMember
+        return true
+      })
+      .filter((p) => {
+        const matches = Object.keys(p).filter((key) => {
+          const value = p[key]
+          return (
+            value &&
+            typeof value === 'string' &&
+            value.toLowerCase().indexOf(this.state.searchTerm) !== -1
+          )
+        }).length
+        return matches > 0
+      })
   }
 
   /**
    * On search
    *
-   * @param {string} searchTerm Search term
+   * @param searchTerm - Search term
    */
   private _onSearch(searchTerm: string) {
     this.setState({ searchTerm: searchTerm.toLowerCase() })
@@ -273,9 +296,9 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
   /**
    * Get project logos (group photos)
    *
-   * @param {number} batchSize Batch size (defaults to 20)
+   * @param batchSize - Batch size (defaults to 20)
    */
-  private async _getProjectLogos(batchSize = 20) {
+  private async _getProjectLogos(batchSize: number = 20) {
     const requests = this.state.projects.map((p) => ({
       id: p.groupId,
       method: 'GET',

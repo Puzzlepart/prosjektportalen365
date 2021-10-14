@@ -14,9 +14,9 @@ import { TagsColumn } from '../PortfolioOverview/RenderItemColumn/TagsColumn'
 /**
  * Render item column
  *
- * @param {any} item Item
- * @param {number} index Index
- * @param {IColumn} column Column
+ * @param item Item
+ * @param index Index
+ * @param column Column
  */
 export const renderItemColumn = (item: any, index: number, column: IColumn) => {
   if (!column.fieldName) return null
@@ -60,7 +60,7 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
 /**
  * Get default columns
  *
- * @param {IPortfolioAggregationContext} context Context
+ * @param context Context
  */
 export const getDefaultColumns = (context: IPortfolioAggregationContext) => [
   {

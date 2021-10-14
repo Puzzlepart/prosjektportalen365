@@ -11,7 +11,7 @@ import { IBenefitsOverviewProps } from './types'
 /**
  * Get columns for DetailsList
  *
- * @param {IBenefitsOverviewProps} props Props
+ * @param props Props
  */
 export function getColumns(props: IBenefitsOverviewProps): IAggregatedSearchListColumn[] {
   const columns: IAggregatedSearchListColumn[] = [

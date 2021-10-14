@@ -1,4 +1,4 @@
-@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
 
 .root {
   @include ms-Grid;
@@ -6,13 +6,20 @@
     @include ms-Grid-row;
     .searchBox {
       @include ms-Grid-col;
-      @include ms-sm9;
+      @include ms-sm6;
       @include ms-font-m;
     }
     .viewToggle {
       @include ms-Grid-col;
-      @include ms-sm3;
+      @include ms-sm12;
       @include ms-font-m;
+      margin-top: 8px;
+    }
+    .projectDisplaySelect {
+      @include ms-Grid-col;
+      @include ms-sm5;
+      @include ms-font-m;
+      margin-top: -7px;
     }
     .emptyMessage {
       @include ms-Grid-col;

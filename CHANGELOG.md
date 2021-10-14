@@ -8,8 +8,8 @@ Every change is marked with issue ID.
 ### Added 
 
 - Added new multi-user field _Prosjektstøtte_ #526
-- Added "Avventer" as a new choice in Project LifeCycle #537
-- Added a new section in "ProjectStatus" for timeline list #506  
+- Added read-only project cards to project list #498
+- Added "Avventer" as a new choice for "Prosjektstatus" #537
 - Added a new project webpart 'Prosjekttidslinje' for showcasing projects and items for the current project on a timeline #497
 
 ### Changed

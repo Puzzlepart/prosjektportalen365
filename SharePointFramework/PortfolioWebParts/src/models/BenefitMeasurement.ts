@@ -17,8 +17,8 @@ export class BenefitMeasurement extends BenefitBase {
   /**
    * Creates a new instance of BenefitMeasurement
    *
-   * @param {IBenefitsSearchResult} result Search result
-   * @param {number} fractionDigits Fraction digits for valueDisplay
+   * @param result Search result
+   * @param fractionDigits Fraction digits for valueDisplay
    */
   constructor(result: IBenefitsSearchResult, fractionDigits: number = 2) {
     super(result)
@@ -37,8 +37,8 @@ export class BenefitMeasurement extends BenefitBase {
   /**
    * Calculate achievement
    *
-   * @param {BenefitMeasurementIndicator} indicator Indicator
-   * @param {number} fractionDigits Fraction digits used for achievementDisplay
+   * @param indicator Indicator
+   * @param fractionDigits Fraction digits used for achievementDisplay
    */
   public calculcateAchievement(
     indicator: BenefitMeasurementIndicator,
@@ -57,7 +57,7 @@ export class BenefitMeasurement extends BenefitBase {
   /**
    * Set trend icon props
    *
-   * @param {BenefitMeasurement} prevMeasurement Previous measurement
+   * @param prevMeasurement Previous measurement
    */
   public setTrendIconProps(prevMeasurement: BenefitMeasurement): BenefitMeasurement {
     const shouldIncrease = this.Indicator.DesiredValue > this.Indicator.StartValue

@@ -51,8 +51,8 @@ export class Filter extends Component<IFilterProps, IFilterState> {
   /**
    * On changed
    *
-   * @param {IFilterItemProps} item Item that was changed
-   * @param {boolean} checked Item checked
+   * @param item Item that was changed
+   * @param checked Item checked
    */
   private _onChanged = (item: IFilterItemProps, checked: boolean) => {
     const { items } = this.state

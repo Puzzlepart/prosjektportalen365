@@ -15,8 +15,8 @@ export class BenefitMeasurementIndicator extends BenefitBase {
   /**
    * Creates a new instance of BenefitMeasurementIndicator
    *
-   * @param {IBenefitsSearchResult} result Search result
-   * @param {number} fractionDigits Fraction digits for valueDisplay
+   * @param result Search result
+   * @param fractionDigits Fraction digits for valueDisplay
    */
   constructor(result: IBenefitsSearchResult, fractionDigits: number = 2) {
     super(result)
@@ -40,7 +40,7 @@ export class BenefitMeasurementIndicator extends BenefitBase {
   /**
    * Set measurements
    *
-   * @param {BenefitMeasurement[]} measurements Measurements
+   * @param measurements Measurements
    */
   public setMeasurements(measurements: BenefitMeasurement[]): BenefitMeasurementIndicator {
     measurements = measurements.filter((m) => m.IndicatorId === this.Id && m.SiteId === this.SiteId)
@@ -53,7 +53,7 @@ export class BenefitMeasurementIndicator extends BenefitBase {
   /**
    * Set benefit
    *
-   * @param {Benefit[]} benefits Benefits
+   * @param benefits Benefits
    */
   public setBenefit(benefits: Benefit[]): BenefitMeasurementIndicator {
     this.Benefit = benefits.filter(

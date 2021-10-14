@@ -26,9 +26,9 @@ const renderDataTypeMap = {
 /**
  * On render item activeFilters
  *
- * @param {IFetchDataForViewItemResult} item Item
- * @param {ProjectColumn} column Column
- * @param {IPortfolioOverviewProps} props Props
+ * @param item Item
+ * @param column Column
+ * @param props Props
  */
 export function renderItemColumn(
   item: IFetchDataForViewItemResult,

@@ -7,7 +7,7 @@ import { IProjectCardProps } from './types'
 /**
  * Project Card Content
  *
- * @param {IProjectCardProps} props Props
+ * @param props Props
  */
 export const ProjectCardContent = ({
   project,

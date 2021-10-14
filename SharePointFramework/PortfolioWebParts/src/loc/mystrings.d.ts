@@ -155,6 +155,11 @@ declare interface IPortfolioWebPartsStrings {
   CostsTotalLabel: string
   NoProjectsFound: string
   NewLabel: string
+  ReadOnlyGroupName: string
+  DisplayAllProjects: string
+  MyProjectsLabel: string
+  AllProjectsLabel: string
+  NoAccessMessage: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

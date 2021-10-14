@@ -41,8 +41,8 @@ export const DATA_FETCH_ERROR = createAction<{ error: Error }>('DATA_FETCH_ERROR
 /**
  * Persist columns in web part properties
  *
- * @param {IPortfolioAggregationProps} props Props
- * @param {IPortfolioAggregationState} state State
+ * @param props Props
+ * @param state State
  */
 const persistColumns = (props: IPortfolioAggregationProps, columns: IColumn[]) => {
   props.onUpdateProperty(
