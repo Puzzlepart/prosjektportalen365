@@ -1,4 +1,4 @@
-## Project extensions [![version](https://img.shields.io/badge/version-1.3.0-yellow.svg)](https://semver.org)
+## Project extensions 
 
 This solution contains SPFx extensions for the project level.
 
@@ -67,3 +67,6 @@ When the user has selected their templates, selected the target folder and click
 
 - Take a copy of `config/serve.sample.json` and name it `serve.json`
 - Run `npm run serve`
+
+### Versioning
+Never update the version of this solution independently. The version is automatically kept in sync with the other packages.

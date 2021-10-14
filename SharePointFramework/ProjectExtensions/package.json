@@ -13,7 +13,6 @@
     "package:ci": "gulp clean && gulp default && gulp package-solution",
     "deploy": "gulp uploadAppPkg && gulp deploySppkg",
     "packageAndDeploy": "npm run package && npm run deploy",
-    "postversion": "gulp versionSync",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
     "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent"
