@@ -278,9 +278,7 @@ export class DataAdapter {
    * @param {string} [budgetTotalProperty='GtBudgetTotalOWSCURR']
    */
 
-  public async _fetchDataForTimelineProject(
-    siteId: string
-  ) {
+  public async _fetchDataForTimelineProject(siteId: string) {
     const siteIdProperty: string = 'GtSiteIdOWSTEXT'
     const costsTotalProperty: string = 'GtCostsTotalOWSCURR'
     const budgetTotalProperty: string = 'GtBudgetTotalOWSCURR'
@@ -317,21 +315,23 @@ export class DataAdapter {
           'GtBudgetTotal',
           'GtCostsTotal',
           'SiteIdLookup/Title',
-          'SiteIdLookup/GtSiteId',
-      ).expand('SiteIdLookup')
-      .get()
+          'SiteIdLookup/GtSiteId'
+        )
+        .expand('SiteIdLookup')
+        .get()
     ])
 
-    timelineItems = timelineItems.map((item) => {
+    timelineItems = timelineItems
+      .map((item) => {
         const model = new TimelineContentListModel(
-          item.SiteIdLookup && item.SiteIdLookup[0].GtSiteId,
-          item.SiteIdLookup && item.SiteIdLookup[0].Title,
+          item.item.SiteIdLookup[0]?.GtSiteId,
+          item.item.SiteIdLookup[0]?.Title,
           item.Title,
           item.TimelineType,
           item.GtStartDate,
           item.GtEndDate,
           item.GtBudgetTotal,
-          item.GtCostsTotal,
+          item.GtCostsTotal
         )
         return model
       })
@@ -418,7 +418,7 @@ export class DataAdapter {
 
   /**
    * Fetch enriched projects
-   * 
+   *
    * * Fetching project list items
    * * Graph groups
    * * Site users

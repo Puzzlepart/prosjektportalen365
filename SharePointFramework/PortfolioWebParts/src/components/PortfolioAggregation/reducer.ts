@@ -20,9 +20,8 @@ function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
   return _arr
 }
 
-export const DATA_FETCHED = createAction<{ items: any[]; dataSources?: DataSource[] }>(
-  'DATA_FETCHED'
-)
+export const DATA_FETCHED =
+  createAction<{ items: any[]; dataSources?: DataSource[] }>('DATA_FETCHED')
 export const TOGGLE_COLUMN_FORM_PANEL = createAction<{ isOpen: boolean; column?: IColumn }>(
   'TOGGLE_COLUMN_FORM_PANEL'
 )
@@ -71,9 +70,13 @@ export default (props: IPortfolioAggregationProps) =>
     [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {
       if (payload.items) {
         state.items = props.postTransform ? props.postTransform(payload.items) : payload.items
-          state.items = sortArray([...state.items], [state.sortBy?.fieldName ? state.sortBy.fieldName : 'SiteTitle'], {
+        state.items = sortArray(
+          [...state.items],
+          [state.sortBy?.fieldName ? state.sortBy.fieldName : 'SiteTitle'],
+          {
             reverse: state.sortBy?.isSortedDescending ? state.sortBy.isSortedDescending : false
-          })
+          }
+        )
         state.loading = false
       }
       if (payload.dataSources) state.dataSources = payload.dataSources

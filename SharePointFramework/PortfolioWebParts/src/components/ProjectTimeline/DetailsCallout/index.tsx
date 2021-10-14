@@ -19,11 +19,14 @@ export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
       onDismiss={onDismiss}
       setInitialFocus={true}>
       <p hidden={item.data.type === strings.ProjectLabel}>
-        <b>{item.data.type === strings.MilestoneLabel
-          ? strings.MilestoneLabel
-          : item.data.type === strings.PhaseLabel
+        <b>
+          {item.data.type === strings.MilestoneLabel
+            ? strings.MilestoneLabel
+            : item.data.type === strings.PhaseLabel
             ? strings.PhaseLabel
-            : strings.SubPhaseLabel}:</b>{' '}
+            : strings.SubPhaseLabel}
+          :
+        </b>{' '}
         <span>{item.data.title}</span>
       </p>
       <p hidden={!item.data.projectUrl}>
@@ -36,7 +39,8 @@ export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
         <b>{strings.CurrentPhaseLabel}:</b> <span>{item.data.phase}</span>
       </p>
       <p hidden={item.data.type !== strings.MilestoneLabel}>
-        <b>{strings.MilestoneDateLabel}:</b> <span>{formatDate(item.data.end_time.toString())}</span>
+        <b>{strings.MilestoneDateLabel}:</b>{' '}
+        <span>{formatDate(item.data.end_time.toString())}</span>
       </p>
       <p hidden={item.data.type === strings.MilestoneLabel}>
         <b>{strings.StartDateLabel}:</b> <span>{formatDate(item.data.start_time.toString())}</span>
@@ -45,13 +49,29 @@ export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
         <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.data.end_time.toString())}</span>
       </p>
       <p hidden={!item.data.budgetTotal}>
-        <b>{strings.BudgetTotalLabel}:</b> <span>{tryParseCurrency(item.data.budgetTotal, '').toString().replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}</span>
+        <b>{strings.BudgetTotalLabel}:</b>{' '}
+        <span>
+          {tryParseCurrency(item.data.budgetTotal, '')
+            .toString()
+            .replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}
+        </span>
       </p>
       <p hidden={!item.data.costsTotal}>
-        <b>{strings.CostsTotalLabel}:</b> <span>{tryParseCurrency(item.data.costsTotal, '').toString().replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}</span>
+        <b>{strings.CostsTotalLabel}:</b>{' '}
+        <span>
+          {tryParseCurrency(item.data.costsTotal, '')
+            .toString()
+            .replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}
+        </span>
       </p>
-      <p hidden={(!item.data.budgetTotal || !item.data.costsTotal) || item.data.type !== strings.ProjectLabel}>
-        <a target='_blank' rel='noreferrer' href={`${item.data.projectUrl}/SitePages/Prosjektstatus.aspx`}>
+      <p
+        hidden={
+          !item.data.budgetTotal || !item.data.costsTotal || item.data.type !== strings.ProjectLabel
+        }>
+        <a
+          target='_blank'
+          rel='noreferrer'
+          href={`${item.data.projectUrl}/SitePages/Prosjektstatus.aspx`}>
           <span>{strings.LastPublishedStatusreport}</span>
         </a>
       </p>
