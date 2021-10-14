@@ -244,8 +244,10 @@ if (-not $SkipSiteDesign.IsPresent) {
     }
 }
 if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
+    Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
     Write-Host "[INFO] Setting default site design for hub [$Url] to [$SiteDesignName]"
     Set-PnPHubSite -Identity $Url -SiteDesignId $SiteDesign.Id.Guid
+    Disconnect-PnPOnline
 }
 #endregion
 
