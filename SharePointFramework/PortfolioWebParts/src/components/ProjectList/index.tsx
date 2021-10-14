@@ -1,11 +1,12 @@
 import { Web } from '@pnp/sp'
 import { ProjectListModel } from 'models'
 import MSGraph from 'msgraph-helper'
+import { Pivot, PivotItem } from 'office-ui-fabric-react'
 import { IButtonProps } from 'office-ui-fabric-react/lib/Button'
 import { DetailsList, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
-import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner'
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner'
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationModal } from 'pp365-projectwebparts/lib/components/ProjectInformation'
@@ -16,7 +17,7 @@ import { ProjectCard } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
 import { IProjectListProps, IProjectListState, placeholderImage } from './types'
-import { Pivot, PivotItem } from 'office-ui-fabric-react'
+
 /**
  * @component ProjectList
  * @extends Component
@@ -81,7 +82,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
     if (this.state.loading) {
       return (
         <div className={styles.root}>
-          <Spinner label={this.props.loadingText} type={SpinnerType.large} />
+          <Spinner label={this.props.loadingText} size={SpinnerSize.large} />
         </div>
       )
     }
