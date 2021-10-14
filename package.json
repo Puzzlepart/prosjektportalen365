@@ -4,7 +4,9 @@
   "description": "Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.",
   "scripts": {
     "build:release": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1",
-    "build:release:force": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -Force"
+    "build:release:force": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -Force",
+    "postversion": "node tasks/automatic-versioning.js",
+    "automatic-versioning": "node tasks/automatic-versioning.js"
   },
   "repository": {
     "type": "git",
@@ -27,5 +29,9 @@
     }
   ],
   "author": "olemp@puzzlepart.com",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "glob": "7.2.0",
+    "glob-fs": "0.1.7"
+  }
 }
