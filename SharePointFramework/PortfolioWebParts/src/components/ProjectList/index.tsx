@@ -39,21 +39,19 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
       loading: true,
       searchTerm: '',
       showAsTiles: props.showAsTiles,
-      onlyAccessProjects: true
+      selectedView: 'my_projects'
     }
   }
 
   public async componentDidMount() {
     try {
-      let projects = await this.props.dataAdapter.fetchEncrichedProjects()
-      const isUserInPortfolioManagerGroup = await this.props.dataAdapter.isUserInGroup(
-        strings.PortfolioManagerGroupName
-      )
-
-      if (!this.state.onlyAccessProjects)
-        projects = projects.filter((project) => project.userIsMember === false)
-
-      projects = projects.sort((a, b) => sortAlphabetically(a, b, true, this.props.sortBy))
+      // eslint-disable-next-line prefer-const
+      let [projects, isUserInPortfolioManagerGroup] = await Promise.all([
+        this.props.dataAdapter.fetchEncrichedProjects(),
+        this.props.dataAdapter.isUserInGroup(
+          strings.PortfolioManagerGroupName
+        )
+      ])
       const columns = this.props.columns.map((col) => {
         if (col.fieldName === this.props.sortBy) {
           col.isSorted = true
@@ -93,7 +91,6 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
         </div>
       )
     }
-
     const projects = this._filterProjets(this.state.projects)
     return (
       <div className={styles.root}>
@@ -111,14 +108,10 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
           {this.state.isUserInPortfolioManagerGroup && (
             <div className={styles.projectDisplaySelect}>
               <Pivot
-                onLinkClick={(item) =>
-                  item.props.itemKey === 'myProjects'
-                    ? this.setState({ onlyAccessProjects: true })
-                    : this.setState({ onlyAccessProjects: false })
-                }
-                selectedKey={this.state.onlyAccessProjects ? 'myProjects' : 'allProjects'}>
-                <PivotItem headerText={strings.MyProjectsLabel} itemKey='myProjects' />
-                <PivotItem headerText={strings.AllProjectsLabel} itemKey='allProjects' />
+                onLinkClick={({ props }) => this.setState({ selectedView: props.itemKey })}
+                selectedKey={this.state.selectedView}>
+                <PivotItem headerText={strings.MyProjectsLabel} itemKey='my_projects' />
+                <PivotItem headerText={strings.AllProjectsLabel} itemKey='all_projects' />
               </Pivot>
             </div>
           )}
@@ -170,7 +163,7 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
     } else {
       return (
         <DetailsList
-          items={this._filterProjets(this.state.listView.projects)}
+          items={projects}
           columns={this.state.listView.columns}
           onRenderItemColumn={this._onRenderItemColumn.bind(this)}
           onColumnHeaderClick={this._onListSort.bind(this)}
@@ -189,9 +182,8 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
    */
   private _onRenderItemColumn(project: ProjectListModel, _index: number, column: IColumn) {
     const colValue = getObjectValue(project, column.fieldName, null)
-    if (column.fieldName === 'title' && !project.userIsMember) {
-      return <a href={project.url}>{colValue}</a>
-    } else if (column.fieldName === 'title' && project.userIsMember && this.state.onlyAccessProjects) {
+    if (column.fieldName === 'title') {
+      if (project.userIsMember) return <a href={project.url}>{colValue}</a>
       return <>{colValue}</>
     }
     return colValue
@@ -283,24 +275,25 @@ export class ProjectList extends Component<IProjectListProps, IProjectListState>
   /**
    * Filter projects
    *
-   * @param  projects - Projects
+   * @param projects - Projects
    */
   private _filterProjets(projects: ProjectListModel[]) {
-    if (this.state.onlyAccessProjects) {
-      projects = projects.filter((project) => !project.userIsMember)
-    }
-
-    return projects.filter((p) => {
-      const matches = Object.keys(p).filter((key) => {
-        const value = p[key]
-        return (
-          value &&
-          typeof value === 'string' &&
-          value.toLowerCase().indexOf(this.state.searchTerm) !== -1
-        )
-      }).length
-      return matches > 0
-    })
+    return projects
+      .filter((project) => {
+        if (this.state.selectedView === 'my_projects') return project.userIsMember
+        return true
+      })
+      .filter((p) => {
+        const matches = Object.keys(p).filter((key) => {
+          const value = p[key]
+          return (
+            value &&
+            typeof value === 'string' &&
+            value.toLowerCase().indexOf(this.state.searchTerm) !== -1
+          )
+        }).length
+        return matches > 0
+      })
   }
 
   /**

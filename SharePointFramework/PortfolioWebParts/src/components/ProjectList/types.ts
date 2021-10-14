@@ -91,9 +91,9 @@ export interface IProjectListState {
   listView?: { projects: ProjectListModel[]; columns: IColumn[] }
 
   /**
-   * Only display projects that the user have access to
+   * Current selected view
    */
-  onlyAccessProjects?: boolean
+  selectedView?: string
 
   /**
    * Is the current user in the PortfolioManagerGroup?
