@@ -16,6 +16,8 @@ Param(
     [switch]$SkipTaxonomy,
     [Parameter(Mandatory = $false, HelpMessage = "Skip Site Design")]
     [switch]$SkipSiteDesign,
+    [Parameter(Mandatory = $false, HelpMessage = "Skip default Site Design association")]
+    [switch]$SkipDefaultSiteDesignAssociation,
     [Parameter(Mandatory = $false, HelpMessage = "Skip app packages")]
     [switch]$SkipAppPackages,
     [Parameter(Mandatory = $false, HelpMessage = "Skip site creation")]
@@ -182,6 +184,9 @@ if (-not $Upgrade.IsPresent) {
 
 
 #region Install site design
+$SiteDesignName = [Uri]::UnescapeDataString($SiteDesignName)
+$SiteDesignDesc = [Uri]::UnescapeDataString("Samarbeid i et prosjektomr%C3%A5de fra Prosjektportalen")
+
 if (-not $SkipSiteDesign.IsPresent) {
     $SiteScriptIds = @()
 
@@ -211,9 +216,6 @@ if (-not $SkipSiteDesign.IsPresent) {
     }
 
     Try {
-        $SiteDesignName = [Uri]::UnescapeDataString($SiteDesignName)
-        $SiteDesignDesc = [Uri]::UnescapeDataString("Samarbeid i et prosjektomr%C3%A5de fra Prosjektportalen")
-        
         Write-Host "[INFO] Creating/updating site design [$SiteDesignName]"   
         Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
     
@@ -232,8 +234,6 @@ if (-not $SkipSiteDesign.IsPresent) {
             Write-Host "[INFO] Granting group $SiteDesignSecurityGroupId View access to site design [$SiteDesignName]"
             Grant-PnPSiteDesignRights -Identity $SiteDesign.Id.Guid -Principals @("c:0t.c|tenant|$SiteDesignSecurityGroupId")
         }
-        Write-Host "[INFO] Setting default site design for hub [$Url] to [$SiteDesignName]"
-        Set-PnPHubSite -Identity $Url -SiteDesignId $SiteDesign.Id.Guid
 
         Disconnect-PnPOnline
         Write-Host "[SUCCESS] Successfully created/updated site design [$SiteDesignName]" -ForegroundColor Green
@@ -242,6 +242,10 @@ if (-not $SkipSiteDesign.IsPresent) {
         Write-Host "[ERROR] Failed to create/update site design: $($_.Exception.Message)" -ForegroundColor Red
         exit 0
     }
+}
+if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
+    Write-Host "[INFO] Setting default site design for hub [$Url] to [$SiteDesignName]"
+    Set-PnPHubSite -Identity $Url -SiteDesignId $SiteDesign.Id.Guid
 }
 #endregion
 
