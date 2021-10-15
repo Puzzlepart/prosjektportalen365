@@ -1,44 +1,42 @@
 import { get } from '@microsoft/sp-lodash-subset'
+import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
+import { Logger, LogLevel } from '@pnp/logging'
+import { Web } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
 import sortArray from 'array-sort'
-import { ITimelineData, ITimelineGroup, ITimelineItem } from './types'
 import moment from 'moment'
 import { CommandBar, ICommandBarProps } from 'office-ui-fabric-react/lib/CommandBar'
 import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
-import * as strings from 'ProjectWebPartsStrings'
-import React from 'react'
-import _, { isEmpty } from 'underscore'
-import styles from './ProjectTimeline.module.scss'
-import { BaseWebPartComponent } from '../BaseWebPartComponent'
-import { Web } from '@pnp/sp'
-import SPDataAdapter from '../../data'
-import { Logger, LogLevel } from '@pnp/logging'
-import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
-import { PortalDataService } from 'pp365-shared/lib/services'
-import { tryParseCurrency } from 'pp365-shared/lib/helpers'
 import {
   DetailsList,
   DetailsListLayoutMode,
+  IColumn,
   Selection,
-  SelectionMode,
-  IColumn
+  SelectionMode
 } from 'office-ui-fabric-react/lib/DetailsList'
-import {
-  IProjectTimelineProps,
-  IProjectTimelineState,
-  IProjectTimelineData,
-  ProjectPropertyModel
-} from './types'
-import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
-import { DetailsCallout } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/DetailsCallout'
-import { Timeline } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/Timeline'
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 import {
   FilterPanel,
   IFilterItemProps,
   IFilterProps
 } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
+import { DetailsCallout } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/DetailsCallout'
+import { Timeline } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/Timeline'
+import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
+import { tryParseCurrency } from 'pp365-shared/lib/helpers'
+import * as strings from 'ProjectWebPartsStrings'
+import React from 'react'
+import _ from 'underscore'
+import { BaseWebPartComponent } from '../BaseWebPartComponent'
+import styles from './ProjectTimeline.module.scss'
+import {
+  IProjectTimelineProps,
+  IProjectTimelineState,
+  ITimelineData,
+  ITimelineGroup,
+  ITimelineItem
+} from './types'
 
 /**
  * @component ProjectTimeline (Project webpart)
@@ -48,7 +46,6 @@ export class ProjectTimeline extends BaseWebPartComponent<
   IProjectTimelineProps,
   IProjectTimelineState
 > {
-  private _portalDataService: PortalDataService
   private _selection: Selection
   private _web: Web
 
@@ -63,11 +60,6 @@ export class ProjectTimeline extends BaseWebPartComponent<
       loading: true,
       showFilterPanel: false,
       activeFilters: {}
-    })
-
-    this._portalDataService = new PortalDataService().configure({
-      urlOrWeb: this.props.hubSite.web,
-      siteId: this.props.siteId
     })
 
     this._selection = new Selection({
@@ -318,7 +310,10 @@ export class ProjectTimeline extends BaseWebPartComponent<
    */
   private async _redirectNewTimelineItem() {
     const [project] = (
-      await this._web.lists.getByTitle(strings.ProjectsListName).items.select('Id', 'GtSiteId').get()
+      await this._web.lists
+        .getByTitle(strings.ProjectsListName)
+        .items.select('Id', 'GtSiteId')
+        .get()
     ).filter(({ GtSiteId }) => GtSiteId === this.props.siteId)
 
     const properties: TypedHash<any> = {
@@ -389,7 +384,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
   /**
    * Get timeline items and columns
    */
-  public async getProjecttimelineItemsAndColumns() {
+  public async getTimelineData() {
     this._web = new Web(this.props.hubSite.url)
 
     try {
@@ -411,8 +406,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
       let [timelineItems] = await Promise.all([
         await this._web.lists
           .getByTitle(strings.TimelineContentListName)
-          .items
-          .select(
+          .items.select(
             internalNames,
             'Id',
             'SiteIdLookupId',
@@ -595,10 +589,10 @@ export class ProjectTimeline extends BaseWebPartComponent<
           item.type === strings.PhaseLabel
             ? '#2589d6'
             : item.type === strings.MilestoneLabel
-              ? 'transparent'
-              : item.type === strings.SubPhaseLabel
-                ? '#249ea0'
-                : '#484848'
+            ? 'transparent'
+            : item.type === strings.SubPhaseLabel
+            ? '#249ea0'
+            : '#484848'
 
         const group = _.find(groups, (grp) => item.title.indexOf(grp.title) !== -1)
         const style: React.CSSProperties = {
@@ -630,54 +624,25 @@ export class ProjectTimeline extends BaseWebPartComponent<
   }
 
   /**
-   * Transform properties from entity item and configuration
-   *
-   * @param {IProjectInformationData} data Data
-   */
-  private _transformProperties({ columns, fields, fieldValuesText }: IProjectTimelineData) {
-    const fieldNames: string[] = Object.keys(fieldValuesText).filter((fieldName) => {
-      const [field] = fields.filter((fld) => fld.InternalName === fieldName)
-      if (!field) return false
-      if (isEmpty(columns) && [fieldName]) {
-        return true
-      }
-      const [column] = columns.filter((c) => c.internalName === fieldName)
-      return column
-    })
-
-    const properties = fieldNames.map((fn) => {
-      const [field] = fields.filter((fld) => fld.InternalName === fn)
-      return new ProjectPropertyModel(field, fieldValuesText[fn])
-    })
-
-    return properties
-  }
-
-  /**
    * Fetch data
    */
-  private async _fetchProjectData(): Promise<Partial<IProjectTimelineState>> {
+  private async _fetchProjectData(): Promise<any> {
     try {
-      SPDataAdapter.configure(this.props.webPartContext, {
-        siteId: this.props.siteId,
-        webUrl: this.props.webUrl,
-        hubSiteUrl: this.props.hubSite.url,
-        logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-      })
-
-      const [columns, propertiesData] = await Promise.all([
-        this._portalDataService.getProjectColumns(),
-        SPDataAdapter.project.getPropertiesData()
-      ])
-
-      const data: IProjectTimelineData = {
-        columns,
-        ...propertiesData
-      }
-
-      const properties = this._transformProperties(data)
-
-      return { data, properties }
+      const [data] = await this.props.hubSite.web.lists
+        .getByTitle(strings.ProjectsListName)
+        .items.select(
+          'Id',
+          'GtStartDate',
+          'GtEndDate',
+          'GtProjectPhase',
+          'GtBudgetTotal',
+          'GtCostsTotal',
+          'FieldValuesAsText'
+        )
+        .expand('FieldValuesAsText')
+        .filter(`GtSiteId eq '${this.props.siteId}'`)
+        .get()
+      return data
     } catch (error) {
       this.logError('Failed to retrieve data.', '_fetchData', error)
       throw error
@@ -691,24 +656,23 @@ export class ProjectTimeline extends BaseWebPartComponent<
    */
   private async _fetchData(): Promise<ITimelineData> {
     try {
-      const projectData = (await this._fetchProjectData()).data.fieldValuesText
-
+      const projectData = await this._fetchProjectData()
       const project = new ProjectListModel(
         this.props.siteId,
         this.props.siteId,
         this.props.webTitle,
         this.props.webUrl,
-        projectData.GtProjectPhase,
+        projectData.FieldValuesAsText.GtProjectPhase,
         projectData.GtStartDate,
-        projectData.GtEndDate
+        projectData.GtEndDate,
+        null,
+        null,
+        projectData.FieldValuesAsText.GtBudgetTotal,
+        projectData.FieldValuesAsText.GtCostsTotal,
+        strings.ProjectLabel
       )
 
-      project['type'] = strings.ProjectLabel
-      project['budgetTotal'] = projectData.GtBudgetTotal
-      project['costsTotal'] = projectData.GtCostsTotal
-
-      const [timelineItems, timelineListItems, timelineColumns] =
-        await this.getProjecttimelineItemsAndColumns()
+      const [timelineItems, timelineListItems, timelineColumns] = await this.getTimelineData()
 
       const groups = this._transformGroups([project])
       const items = this._transformItems([project], timelineItems, groups)

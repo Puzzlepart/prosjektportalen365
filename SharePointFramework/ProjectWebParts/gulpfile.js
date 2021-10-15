@@ -15,6 +15,7 @@ let buildConfig = {
     parallel: os.cpus().length - 1,
     bundleAnalyzerEnabled: false
 }
+
 build.addSuppression(`Warning - [sass] The local CSS class 'ms-Grid' is not camelCase and will not be type-safe.`)
 build.addSuppression(`Warning - [sass] The local CSS class '-webkit-filter' is not camelCase and will not be type-safe.`)
 

@@ -178,7 +178,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
       name: strings.FilterText,
       iconProps: { iconName: 'Filter' },
       itemType: ContextualMenuItemType.Header,
-      buttonStyles: { root: { border: 'none' } },
+      buttonStyles: { root: { border: 'none', height: '40px' } },
       iconOnly: true,
       onClick: (ev) => {
         ev.preventDefault()
