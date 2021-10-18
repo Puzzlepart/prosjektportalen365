@@ -4,6 +4,23 @@ import { SearchValueType } from 'types'
 import { IRenderItemColumnProps } from '../IRenderItemColumnProps'
 
 export const UserColumn: FunctionComponent<IRenderItemColumnProps> = ({ columnValue, column }) => {
+  const isMultiUser = columnValue?.indexOf(';') !== -1
+  if (isMultiUser) {
+    return (
+      <span>
+        {columnValue.split(';').map((value, key) =>
+          <span key={key}>
+            <Persona
+              styles={{ root: { marginTop: 4 } }}
+              text={value}
+              size={PersonaSize.size24}
+              presence={PersonaPresence.none}
+            />
+          </span>
+        )}
+      </span>
+    )
+  }
   if (column.searchType === SearchValueType.OWSUSER) {
     const [email, text] = columnValue.split(' | ')
     return (
@@ -18,22 +35,6 @@ export const UserColumn: FunctionComponent<IRenderItemColumnProps> = ({ columnVa
           size={PersonaSize.size24}
           presence={PersonaPresence.none}
         />
-      </span>
-    )
-  }
-  if (columnValue?.indexOf(';') !== -1) {
-    return (
-      <span>
-        {columnValue.split(';').map((value, key) =>
-          <span key={key}>
-            <Persona
-              styles={{ root: { marginTop: 4 } }}
-              text={value}
-              size={PersonaSize.size24}
-              presence={PersonaPresence.none}
-            />
-          </span>
-        )}
       </span>
     )
   }
