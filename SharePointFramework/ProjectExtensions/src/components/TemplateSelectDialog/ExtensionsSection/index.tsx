@@ -9,8 +9,8 @@ export const ExtensionsSection = (props: IExtensionsSectionProps) => {
   /**
    * On item toggle
    *
-   * @param {ProjectTemplate} extension Extension
-   * @param {boolean} checked Checked
+   * @param extension Extension
+   * @param checked Checked
    */
   const onChange = (extension: ProjectExtension, checked: boolean): void => {
     let selectedExtensions = []

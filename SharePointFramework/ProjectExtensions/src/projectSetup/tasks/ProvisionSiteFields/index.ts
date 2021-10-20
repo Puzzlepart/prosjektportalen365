@@ -14,8 +14,8 @@ export class ProvisionSiteFields extends BaseTask {
   /**
    * Execute ProvisionSiteFields
    *
-   * @param {IBaseTaskParams} params Task parameters
-   * @param {OnProgressCallbackFunction} onProgress On progress function
+   * @param params Task parameters
+   * @param onProgress On progress function
    */
   public async execute(
     params: IBaseTaskParams,

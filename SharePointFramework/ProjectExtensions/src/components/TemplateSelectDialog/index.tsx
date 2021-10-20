@@ -23,7 +23,7 @@ export class TemplateSelectDialog extends React.Component<
   /**
    * Constructor
    *
-   * @param {ITemplateSelectDialogProps} props Props
+   * @param props Props
    */
   constructor(props: ITemplateSelectDialogProps) {
     super(props)

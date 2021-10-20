@@ -20,8 +20,8 @@ export class TaskAttachment {
   /**
    * Get type of attachment from URL
    *
-   * @param {string} url URL
-   * @param {string} type Type
+   * @param url URL
+   * @param type Type
    */
   private _getType(url: string, type: string) {
     if (!stringIsNullOrEmpty(type)) return type
