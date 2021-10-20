@@ -11,10 +11,10 @@ export const TitleColumn: FunctionComponent<ITitleColumnProps> = ({ item, props 
   let content = (
     <span>
       <span>{item.Title}</span>
-      <TooltipHost content={strings.NoProjectData} directionalHint={DirectionalHint.bottomAutoEdge}>
+      <TooltipHost content={strings.NoProjectData}>
         <Icon
-          iconName='ReportWarning'
-          style={{ color: '666666', marginLeft: 4, position: 'relative', top: '2px' }}
+          iconName='Hide'
+          style={{ color: '666666', marginLeft: 4, position: 'relative', top: '2px', fontSize: '1.1em' }}
         />
       </TooltipHost>
     </span>
