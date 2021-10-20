@@ -17,8 +17,8 @@ export abstract class BaseTask implements IBaseTask {
   /**
    * Execute task
    *
-   * @param {IBaseTaskParams} params Task parameters
-   * @param {OnProgressCallbackFunction} onProgress Progress function
+   * @param params Task parameters
+   * @param onProgress Progress function
    */
   public abstract execute(
     params: IBaseTaskParams,
@@ -28,8 +28,8 @@ export abstract class BaseTask implements IBaseTask {
   /**
    * Log error
    *
-   * @param {string} message Message
-   * @param {any} data Data
+   * @param message Message
+   * @param data Data
    */
   public logError(message: string, data?: any) {
     this._log(`(ProjectSetup) [${this.taskName}]: ${message}`, data, LogLevel.Error)
@@ -38,8 +38,8 @@ export abstract class BaseTask implements IBaseTask {
   /**
    * Log warning
    *
-   * @param {string} message Message
-   * @param {any} data Data
+   * @param message Message
+   * @param data Data
    */
   public logWarning(message: string, data?: any) {
     this._log(`(ProjectSetup) [${this.taskName}]: ${message}`, data, LogLevel.Warning)
@@ -48,8 +48,8 @@ export abstract class BaseTask implements IBaseTask {
   /**
    * Log information
    *
-   * @param {string} message Message
-   * @param {any} data Data
+   * @param message Message
+   * @param data Data
    */
   public logInformation(message: string, data?: any) {
     this._log(`(ProjectSetup) [${this.taskName}]: ${message}`, data, LogLevel.Info)
@@ -58,9 +58,9 @@ export abstract class BaseTask implements IBaseTask {
   /**
    * Log
    *
-   * @param {string} message Message
-   * @param {any} data Data
-   * @param {LogLevel} level Level
+   * @param message Message
+   * @param data Data
+   * @param level Level
    */
   protected _log(message: string, data: any, level: LogLevel) {
     Logger.log({ message, data, level })
