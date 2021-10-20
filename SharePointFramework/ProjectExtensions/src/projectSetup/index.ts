@@ -26,6 +26,7 @@ import * as Tasks from './tasks'
 import { deleteCustomizer } from './deleteCustomizer'
 import { ProjectSetupError } from './ProjectSetupError'
 import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
+
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
   private _portal: PortalDataService
   private isSetup = true
@@ -51,7 +52,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         data: { version: this.context.manifest.version, validation: this._validation },
         level: LogLevel.Info
       })
-        ; (await this._isProjectSetup()) ? (this.isSetup = true) : (this.isSetup = false)
+      this.isSetup = await this._isProjectSetup()
 
       // eslint-disable-next-line default-case
       switch (this._validation) {
