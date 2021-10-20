@@ -1,7 +1,7 @@
 import { Web } from '@pnp/sp'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
 import { Link } from 'office-ui-fabric-react/lib/Link'
-import { DirectionalHint, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip'
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationTooltip } from 'pp365-projectwebparts/lib/components/ProjectInformationTooltip'
 import React, { FunctionComponent } from 'react'
@@ -14,7 +14,13 @@ export const TitleColumn: FunctionComponent<ITitleColumnProps> = ({ item, props 
       <TooltipHost content={strings.NoProjectData}>
         <Icon
           iconName='Hide'
-          style={{ color: '666666', marginLeft: 4, position: 'relative', top: '2px', fontSize: '1.1em' }}
+          style={{
+            color: '666666',
+            marginLeft: 4,
+            position: 'relative',
+            top: '2px',
+            fontSize: '1.1em'
+          }}
         />
       </TooltipHost>
     </span>
@@ -35,10 +41,7 @@ export const TitleColumn: FunctionComponent<ITitleColumnProps> = ({ item, props 
           {item.Title}
         </Link>
       </ProjectInformationTooltip>
-
     )
   }
-  return (
-    content
-  )
+  return content
 }
