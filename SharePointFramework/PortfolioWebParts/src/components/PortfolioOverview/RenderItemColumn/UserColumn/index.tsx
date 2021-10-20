@@ -8,7 +8,7 @@ export const UserColumn: FunctionComponent<IRenderItemColumnProps> = ({ columnVa
   if (isMultiUser) {
     return (
       <span>
-        {columnValue.split(';').map((value, key) =>
+        {columnValue.split(';').map((value, key) => (
           <span key={key}>
             <Persona
               styles={{ root: { marginTop: 4 } }}
@@ -17,7 +17,7 @@ export const UserColumn: FunctionComponent<IRenderItemColumnProps> = ({ columnVa
               presence={PersonaPresence.none}
             />
           </span>
-        )}
+        ))}
       </span>
     )
   }
@@ -40,11 +40,7 @@ export const UserColumn: FunctionComponent<IRenderItemColumnProps> = ({ columnVa
   }
   return (
     <span>
-      <Persona
-        text={columnValue}
-        size={PersonaSize.size24}
-        presence={PersonaPresence.none}
-      />
+      <Persona text={columnValue} size={PersonaSize.size24} presence={PersonaPresence.none} />
     </span>
   )
 }

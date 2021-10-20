@@ -1,14 +1,10 @@
-import { Web } from '@pnp/sp'
 import { IFetchDataForViewItemResult } from 'data/IFetchDataForViewItemResult'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
-import { Link } from 'office-ui-fabric-react/lib/Link'
-import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip'
-import { ProjectInformationTooltip } from 'pp365-projectwebparts/lib/components/ProjectInformationTooltip'
 import { formatDate, tryParseCurrency } from 'pp365-shared/lib/helpers'
 import { ProjectColumn } from 'pp365-shared/lib/models'
-import strings from 'PortfolioWebPartsStrings'
 import React from 'react'
 import { IPortfolioOverviewProps } from '../types'
+import { TitleColumn } from './ TitleColumn'
 import { IRenderItemColumnProps } from './IRenderItemColumnProps'
 import { TagsColumn } from './TagsColumn'
 import { UserColumn } from './UserColumn'
@@ -42,44 +38,7 @@ export function renderItemColumn(
 
   switch (column.fieldName) {
     case 'Title': {
-      if (item.Path) {
-        return (
-          <ProjectInformationTooltip
-            key={item.SiteId}
-            title={item.Title}
-            siteId={item.SiteId}
-            webUrl={item.Path}
-            hubSite={{
-              web: new Web(props.pageContext.site.absoluteUrl),
-              url: props.pageContext.site.absoluteUrl
-            }}
-            page='Portfolio'>
-            <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
-              {columnValue}
-            </Link>
-          </ProjectInformationTooltip>
-        )
-      }
-      return (
-        <ProjectInformationTooltip
-          key={item.SiteId}
-          title={item.Title}
-          siteId={item.SiteId}
-          webUrl={props.pageContext.site.absoluteUrl}
-          hubSite={{
-            web: new Web(props.pageContext.site.absoluteUrl),
-            url: props.pageContext.site.absoluteUrl
-          }}
-          page='Portfolio'>
-          <span>
-            <span>{columnValue}</span>
-            <TooltipHost content={strings.NoProjectData}
-              directionalHint={DirectionalHint.bottomCenter} >
-              <Icon iconName='ReportWarning' style={{ color: '666666', marginLeft: 4, position: 'relative', top: '2px' }} />
-            </TooltipHost>
-          </span>
-        </ProjectInformationTooltip>
-      )
+      return <TitleColumn props={props} item={item} />
     }
   }
 
