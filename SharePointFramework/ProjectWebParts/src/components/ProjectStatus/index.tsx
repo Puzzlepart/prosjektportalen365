@@ -11,7 +11,7 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectWebPartsStrings'
-import * as React from 'react'
+import React from 'react'
 import { formatDate } from 'pp365-shared/lib/helpers'
 import { SectionModel, SectionType, StatusReport } from 'pp365-shared/lib/models'
 import { PortalDataService } from 'pp365-shared/lib/services'

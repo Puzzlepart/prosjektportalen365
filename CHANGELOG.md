@@ -11,6 +11,7 @@ Every change is marked with issue ID.
 - Added read-only project cards to project list #498
 - Added "Avventer" as a new choice for "Prosjektstatus" #537
 - Added a new project webpart 'Prosjekttidslinje' for showcasing projects and items for the current project on a timeline #497
+- Improved rendering of user fields in "Prosjektinformasjon" #576
 
 ### Changed
 
