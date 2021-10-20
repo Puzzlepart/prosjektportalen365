@@ -21,8 +21,8 @@ export class SitePermissions extends BaseTask {
   /**
    * Execute SitePermissions
    *
-   * @param {IBaseTaskParams} params Task parameters
-   * @param {OnProgressCallbackFunction} onProgress On progress funtion
+   * @param params Task parameters
+   * @param onProgress On progress funtion
    */
   public async execute(
     params: IBaseTaskParams,
@@ -63,7 +63,7 @@ export class SitePermissions extends BaseTask {
   /**
    * Get configuration from the specified list
    *
-   * @param {List} list List
+   * @param list List
    */
   private async _getConfiguration(list: List): Promise<IPermissionConfiguration[]> {
     return (await list.items.select('GtPermissionLevel', 'GtSPGroupName').get()).map((item) => ({
@@ -75,7 +75,7 @@ export class SitePermissions extends BaseTask {
   /**
    * Get groups with users from specified web
    *
-   * @param {any} web Web
+   * @param web Web
    */
   private async _getGroups(web: any) {
     return (await web.siteGroups.select('Title', 'Users').expand('Users').get()).reduce(
@@ -90,7 +90,7 @@ export class SitePermissions extends BaseTask {
   /**
    * Get role definitions for the specified web
    *
-   * @param {any} web Web
+   * @param web Web
    */
   private async _getRoleDefinitions(web: any) {
     return (await web.roleDefinitions.select('Name', 'Id').get()).reduce(

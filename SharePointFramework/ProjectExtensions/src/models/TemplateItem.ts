@@ -88,8 +88,8 @@ export class TemplateItem {
   /**
    * Copy item to folder
    *
-   * @param {Folder} folder Folder
-   * @param {boolean} shouldOverwrite Should overwrite
+   * @param folder Folder
+   * @param shouldOverwrite Should overwrite
    *
    * @returns {true} if the operation is successful
    */
@@ -114,7 +114,7 @@ export class TemplateItem {
   /**
    * On input changed
    *
-   * @param {Object} properties Updated properties
+   * @param properties Updated properties
    */
   public update(properties: TypedHash<string>) {
     Object.keys(properties).forEach((prop) => {

@@ -34,8 +34,8 @@ export class ProjectSetupSettings {
   /**
    * Set setting
    *
-   * @param {string} key Key
-   * @param {bool} bool Bool
+   * @param key Key
+   * @param bool Bool
    */
   public set(key: string, bool: boolean): ProjectSetupSettings {
     this._values[key] = bool
