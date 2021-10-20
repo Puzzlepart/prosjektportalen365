@@ -9,14 +9,15 @@ export const ProjectCardHeader: FunctionComponent<IProjectCardProps> = ({
   showProjectLogo,
   shouldTruncateTitle
 }: IProjectCardProps) => {
-  const [isLoaded,setIsLoaded] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false)
   return (
     <div className={styles.header}>
       <div className={styles.logo} hidden={!showProjectLogo}>
-        <img 
-        className={isLoaded && styles.isLoaded} 
-        src={project.logo ?? placeholderImage} 
-        onLoad={() => setIsLoaded(true)} />
+        <img
+          className={isLoaded && styles.isLoaded}
+          src={project.logo ?? placeholderImage}
+          onLoad={() => setIsLoaded(true)}
+        />
       </div>
       <DocumentCardTitle title={project.title} shouldTruncate={shouldTruncateTitle} />
     </div>

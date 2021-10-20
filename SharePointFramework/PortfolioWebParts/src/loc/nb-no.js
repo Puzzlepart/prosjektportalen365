@@ -90,6 +90,7 @@ define([], function () {
     NewViewText: 'Opprett ny visning',
     NoDefaultViewMessage: 'Det er ikke satt noen standardvisning.',
     NoGroupingText: 'Ingen gruppering',
+    NoProjectData: 'Kan ikke hente alle data fra prosjektområdet. Det kan være at du ikke har tilgang til selve området. Det kan også være at området nylig er opprettet eller at prosjektegenskaper ikke er utfylt.',
     NoProperties: 'Det er ikke satt noen egenskaper for prosjektet',
     NoSearchResults: 'Søket ga ingen resultater',
     NotSet: 'Ikke satt',

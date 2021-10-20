@@ -92,6 +92,7 @@ declare interface IPortfolioWebPartsStrings {
   NewViewText: string
   NoDefaultViewMessage: string
   NoGroupingText: string
+  NoProjectData: string
   NoProperties: string
   NoSearchResults: string
   NotSet: string
