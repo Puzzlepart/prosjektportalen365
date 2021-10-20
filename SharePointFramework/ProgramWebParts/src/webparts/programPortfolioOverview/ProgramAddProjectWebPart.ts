@@ -7,8 +7,8 @@ import {
 } from "@microsoft/sp-property-pane";
 import { BaseClientSideWebPart } from "@microsoft/sp-webpart-base";
 import * as strings from "ProgramWebPartsStrings";
-import ProgramAddProject from "../../components/ProgramAddProject";
-import { IProgramAddProjectProps } from "../../components/IProgramAddProjectProps";
+import ProgramAddProject from "components/ProgramAddProject/ProgramAddProject";
+import { IProgramAddProjectProps } from "../../components/ProgramAddProject/IProgramAddProjectProps";
 
 export interface IProgramAddProjectWebPartProps {
   description: string;
