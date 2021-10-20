@@ -21,23 +21,24 @@ export const TitleColumn: FunctionComponent<ITitleColumnProps> = ({ item, props 
   )
   if (item.Path) {
     content = (
-      <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
-        {item.Title}
-      </Link>
+      <ProjectInformationTooltip
+        key={item.SiteId}
+        title={item.Title}
+        siteId={item.SiteId}
+        webUrl={item.Path}
+        hubSite={{
+          web: new Web(props.pageContext.site.absoluteUrl),
+          url: props.pageContext.site.absoluteUrl
+        }}
+        page='Portfolio'>
+        <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
+          {item.Title}
+        </Link>
+      </ProjectInformationTooltip>
+
     )
   }
   return (
-    <ProjectInformationTooltip
-      key={item.SiteId}
-      title={item.Title}
-      siteId={item.SiteId}
-      webUrl={props.pageContext.site.absoluteUrl}
-      hubSite={{
-        web: new Web(props.pageContext.site.absoluteUrl),
-        url: props.pageContext.site.absoluteUrl
-      }}
-      page='Portfolio'>
-      {content}
-    </ProjectInformationTooltip>
+    content
   )
 }
