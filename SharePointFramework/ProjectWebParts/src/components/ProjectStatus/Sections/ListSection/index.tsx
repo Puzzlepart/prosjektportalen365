@@ -8,7 +8,7 @@ import {
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { getObjectValue } from 'pp365-shared/lib/helpers'
 import * as strings from 'ProjectWebPartsStrings'
-import * as React from 'react'
+import React from 'react'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection/index'
 import styles from './ListSection.module.scss'
