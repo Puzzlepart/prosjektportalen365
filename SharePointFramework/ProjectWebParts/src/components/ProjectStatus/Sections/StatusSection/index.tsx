@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { IStatusSectionProps, IStatusSectionState } from './types'
 import { BaseSection } from '../BaseSection'
 import { StatusElement } from '../../StatusElement'
