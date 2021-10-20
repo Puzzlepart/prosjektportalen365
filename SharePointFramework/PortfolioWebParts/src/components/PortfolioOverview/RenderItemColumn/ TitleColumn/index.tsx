@@ -8,22 +8,22 @@ import React, { FunctionComponent } from 'react'
 import { ITitleColumnProps } from './types'
 
 export const TitleColumn: FunctionComponent<ITitleColumnProps> = ({ item, props }) => {
+  let content = (
+    <span>
+      <span>{item.Title}</span>
+      <TooltipHost content={strings.NoProjectData} directionalHint={DirectionalHint.bottomAutoEdge}>
+        <Icon
+          iconName='ReportWarning'
+          style={{ color: '666666', marginLeft: 4, position: 'relative', top: '2px' }}
+        />
+      </TooltipHost>
+    </span>
+  )
   if (item.Path) {
-    return (
-      <ProjectInformationTooltip
-        key={item.SiteId}
-        title={item.Title}
-        siteId={item.SiteId}
-        webUrl={item.Path}
-        hubSite={{
-          web: new Web(props.pageContext.site.absoluteUrl),
-          url: props.pageContext.site.absoluteUrl
-        }}
-        page='Portfolio'>
-        <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
-          {item.Title}
-        </Link>
-      </ProjectInformationTooltip>
+    content = (
+      <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
+        {item.Title}
+      </Link>
     )
   }
   return (
@@ -37,15 +37,7 @@ export const TitleColumn: FunctionComponent<ITitleColumnProps> = ({ item, props 
         url: props.pageContext.site.absoluteUrl
       }}
       page='Portfolio'>
-      <span>
-        <span>{item.Title}</span>
-        <TooltipHost content={strings.NoProjectData} directionalHint={DirectionalHint.bottomCenter}>
-          <Icon
-            iconName='ReportWarning'
-            style={{ color: '666666', marginLeft: 4, position: 'relative', top: '2px' }}
-          />
-        </TooltipHost>
-      </span>
+      {content}
     </ProjectInformationTooltip>
   )
 }
