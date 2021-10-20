@@ -1,18 +1,17 @@
 import { Web } from '@pnp/sp'
 import { ProjectListModel } from 'models'
 import MSGraph from 'msgraph-helper'
-import { Pivot, PivotItem } from 'office-ui-fabric-react'
+import { Pivot, PivotItem, ShimmeredDetailsList } from 'office-ui-fabric-react'
 import { IButtonProps } from 'office-ui-fabric-react/lib/Button'
-import { DetailsList, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
+import { IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner'
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationModal } from 'pp365-projectwebparts/lib/components/ProjectInformation'
 import { getObjectValue, sortAlphabetically } from 'pp365-shared/lib/helpers'
 import React, { FunctionComponent, useEffect, useState } from 'react'
-import _ from 'underscore'
+import { find, isEmpty } from 'underscore'
 import { ProjectCard } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
@@ -23,10 +22,10 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
     loading: true,
     searchTerm: '',
     showAsTiles: props.showAsTiles,
-    selectedView: 'my_projects'
+    selectedView: 'my_projects',
+    projects: [],
+    sort: { fieldName: props.sortBy, isSortedDescending: true }
   })
-
-
 
   /**
    * Render projects
@@ -47,10 +46,18 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
         />
       ))
     } else {
+      const columns = props.columns.map((col) => {
+        col.isSorted = col.key === state.sort?.fieldName
+        if (col.isSorted) {
+          col.isSortedDescending = state.sort?.isSortedDescending
+        }
+        return col
+      })
       return (
-        <DetailsList
-          items={filterProjets(state.listView.projects)}
-          columns={state.listView.columns}
+        <ShimmeredDetailsList
+          enableShimmer={state.loading}
+          items={projects}
+          columns={columns}
           onRenderItemColumn={onRenderItemColumn}
           onColumnHeaderClick={onListSort}
           selectionMode={SelectionMode.none}
@@ -82,24 +89,11 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
    * @param column - Column
    */
   function onListSort(_evt: React.MouseEvent<any>, column: IColumn): void {
-    const { listView } = { ...state } as IProjectListState
     let isSortedDescending = column.isSortedDescending
     if (column.isSorted) {
       isSortedDescending = !isSortedDescending
     }
-    listView.projects = listView.projects
-      .concat([])
-      .sort((a, b) =>
-        sortAlphabetically<ProjectListModel>(a, b, isSortedDescending, column.fieldName)
-      )
-    listView.columns = listView.columns.map((col) => {
-      col.isSorted = col.key === column.key
-      if (col.isSorted) {
-        col.isSortedDescending = isSortedDescending
-      }
-      return col
-    })
-    setState({ ...state, listView })
+    setState({ ...state, sort: { fieldName: column.fieldName, isSortedDescending } })
   }
 
   /**
@@ -109,7 +103,10 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
     if (state.showProjectInfo) {
       return (
         <ProjectInformationModal
-          modalProps={{ isOpen: true, onDismiss: () => setState({ ...state, showProjectInfo: null }) }}
+          modalProps={{
+            isOpen: true,
+            onDismiss: () => setState({ ...state, showProjectInfo: null })
+          }}
           title={state.showProjectInfo.title}
           webUrl={props.pageContext.site.absoluteUrl}
           hubSite={{
@@ -180,6 +177,14 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
         }).length
         return matches > 0
       })
+      .sort((a, b) =>
+        sortAlphabetically<ProjectListModel>(
+          a,
+          b,
+          state?.sort?.isSortedDescending,
+          state?.sort?.fieldName
+        )
+      )
   }
 
   /**
@@ -194,26 +199,37 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
   /**
    * Get project logos (group photos)
    *
+   * @param projects - Projects
    * @param batchSize - Batch size (defaults to 20)
    */
-  async function getProjectLogos(batchSize: number = 20) {
-    const requests = state.projects.map((p) => ({
+  async function getProjectLogos(projects: ProjectListModel[], batchSize: number = 20) {
+    const batchReq = projects.map((p) => ({
       id: p.groupId,
       method: 'GET',
       url: `groups/${p.groupId}/photo/$value`
     }))
-    while (requests.length > 0) {
-      const { responses } = await MSGraph.Batch(requests.splice(0, batchSize))
-      setState((prevState: IProjectListState) => {
-        const projects = prevState.projects.map((p) => {
-          const response = _.find(responses, (r) => r.id === p.groupId && r.status === 200)
-          if (response) {
-            p.logo = `data:image/png;base64, ${response.body}`
-          }
-          return p
-        })
-        return { ...state, projects }
+    while (!isEmpty(batchReq)) {
+      const { responses } = await MSGraph.Batch(batchReq.splice(0, batchSize))
+      const projects_ = projects.map((p) => {
+        const response = find(responses, (r) => r.id === p.groupId && r.status === 200)
+        if (response) {
+          p.logo = `data:image/png;base64, ${response.body}`
+        }
+        return p
       })
+      setState((prevState) => ({ ...prevState, projects: projects_ }))
+    }
+  }
+
+  /**
+   * Get searchbox placeholder text based on `state.selectedView`
+   */
+  function getSearchBoxPlaceholder() {
+    switch (state.selectedView) {
+      case 'my_projects':
+        return strings.MyProjectsSearchBoxPlaceholderText
+      case 'all_projects':
+        return strings.AllProjectsSearchBoxPlaceholderText
     }
   }
 
@@ -221,38 +237,19 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
     Promise.all([
       props.dataAdapter.fetchEncrichedProjects(),
       props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName)
-    ])
-      .then(([projects, isUserInPortfolioManagerGroup]) => {
-        const columns = props.columns.map((col) => {
-          if (col.fieldName === props.sortBy) {
-            col.isSorted = true
-            col.isSortedDescending = true
-          }
-          return col
-        })
-        setState({
-          ...state,
-          projects,
-          listView: { projects, columns },
-          loading: false,
-          isUserInPortfolioManagerGroup
-        })
-        if (props.showProjectLogo) {
-          getProjectLogos(20)
-        }
+    ]).then(([projects, isUserInPortfolioManagerGroup]) => {
+      setState({
+        ...state,
+        projects,
+        loading: false,
+        isUserInPortfolioManagerGroup
       })
+      if (props.showProjectLogo) {
+        getProjectLogos(projects, 20)
+      }
+    })
   }, [])
 
-
-
-
-  if (state.loading) {
-    return (
-      <div className={styles.root}>
-        <Spinner label={props.loadingText} size={SpinnerSize.large} />
-      </div>
-    )
-  }
   if (state.error) {
     return (
       <div className={styles.root}>
@@ -262,14 +259,12 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
   }
 
   const projects = filterProjets(state.projects)
+
   return (
     <div className={styles.root}>
       <div className={styles.container}>
         <div className={styles.searchBox} hidden={!props.showSearchBox}>
-          <SearchBox
-            placeholder={props.searchBoxPlaceholderText}
-            onChanged={onSearch.bind(this)}
-          />
+          <SearchBox placeholder={getSearchBoxPlaceholder()} onChanged={onSearch.bind(this)} />
         </div>
         {state.isUserInPortfolioManagerGroup && (
           <div className={styles.projectDisplaySelect}>
