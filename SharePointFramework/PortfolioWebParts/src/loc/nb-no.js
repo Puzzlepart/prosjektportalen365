@@ -112,6 +112,8 @@ define([], function () {
     AllocationStatusLabel: 'Allokeringsstatus',
     CommentLabel: 'Kommentar',
     SaveViewAsText: 'Lagre visning som',
+    MyProjectsSearchBoxPlaceholderText: 'Søk i prosjekter du er medlem av...',
+    AllProjectsSearchBoxPlaceholderText: 'Søk i alle prosjekter...',
     SearchBoxPlaceholderText: 'Søk i {0}...',
     SearchBoxPlaceholderTextLabel: 'Søkebokstekst',
     ShowAllMeasurementsLinkText: 'Vis alle målinger',

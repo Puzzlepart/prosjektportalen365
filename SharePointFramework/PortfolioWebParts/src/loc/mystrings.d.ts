@@ -116,6 +116,8 @@ declare interface IPortfolioWebPartsStrings {
   AllocationStatusLabel: string
   CommentLabel: string
   SaveViewAsText: string
+  MyProjectsSearchBoxPlaceholderText: string
+  AllProjectsSearchBoxPlaceholderText: string
   SearchBoxPlaceholderText: string
   SearchBoxPlaceholderTextLabel: string
   ShowAllMeasurementsLinkText: string
