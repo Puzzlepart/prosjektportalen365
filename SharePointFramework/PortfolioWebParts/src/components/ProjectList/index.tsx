@@ -264,7 +264,7 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
     <div className={styles.root}>
       <div className={styles.container}>
         <div className={styles.searchBox} hidden={!props.showSearchBox}>
-          <SearchBox placeholder={getSearchBoxPlaceholder()} onChanged={onSearch.bind(this)} />
+          <SearchBox placeholder={getSearchBoxPlaceholder()} onChanged={onSearch} />
         </div>
         {state.isUserInPortfolioManagerGroup && (
           <div className={styles.projectDisplaySelect}>
