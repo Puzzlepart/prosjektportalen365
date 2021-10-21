@@ -18,7 +18,7 @@ export const TemplateSelector = (props: ITemplateSelectorProps) => {
   /**
    * On render option
    *
-   * @param {ProjectTemplate} opt Option
+   * @param opt Option
    */
   const onRenderOption = (option: ProjectTemplate): JSX.Element => {
     return (

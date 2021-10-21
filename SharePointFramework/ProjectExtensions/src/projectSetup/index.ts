@@ -29,6 +29,7 @@ import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } fr
 
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
   private _portal: PortalDataService
+  private isSetup = true
   private _placeholderIds = {
     ErrorDialog: getId('errordialog'),
     ProgressDialog: getId('progressdialog'),
@@ -51,22 +52,31 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         data: { version: this.context.manifest.version, validation: this._validation },
         level: LogLevel.Info
       })
+      this.isSetup = await this._isProjectSetup()
+
       // eslint-disable-next-line default-case
       switch (this._validation) {
         case ProjectSetupValidation.InvalidWebLanguage: {
           await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, false)
           throw new ProjectSetupError(
-            'onInit',
+            'InvalidWebLanguage',
             strings.InvalidLanguageErrorMessage,
             strings.InvalidLanguageErrorStack
           )
         }
         case ProjectSetupValidation.NoHubConnection: {
           throw new ProjectSetupError(
-            'onInit',
+            'NoHubConnection',
             strings.NoHubSiteErrorMessage,
             strings.NoHubSiteErrorStack,
             MessageBarType.warning
+          )
+        }
+        case ProjectSetupValidation.AlreadySetup: {
+          throw new ProjectSetupError(
+            'AlreadySetup',
+            strings.ProjectAlreadySetupMessage,
+            strings.ProjectAlreadySetupStack
           )
         }
       }
@@ -91,7 +101,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Intiialize setup
    *
-   * @param {Tasks.IBaseTaskParams} taskParams Task params
+   * @param taskParams Task params
    */
   private async _initializeSetup(taskParams: Tasks.IBaseTaskParams) {
     try {
@@ -138,7 +148,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Get provisioning info from TemplateSelectDialog
    *
-   * @param {IProjectSetupData} data Data
+   * @param data Data
    */
   private _getProvisioningInfo(data: IProjectSetupData): Promise<ITemplateSelectDialogState> {
     return new Promise((resolve, reject) => {
@@ -168,7 +178,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Render ProgressDialog
    *
-   * @param {IProgressDialogProps} props Props
+   * @param props Props
    */
   private _renderProgressDialog(props: IProgressDialogProps) {
     const placeholder = this._getPlaceholder('ProgressDialog')
@@ -182,7 +192,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Render ErrorDialog
    *
-   * @param {IProgressDialogProps} props Props
+   * @param props Props
    */
   private _renderErrorDialog(props: IErrorDialogProps) {
     const progressDialog = this._getPlaceholder('ProgressDialog')
@@ -191,8 +201,23 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     const element = createElement<IErrorDialogProps>(ErrorDialog, {
       ...props,
       version: this.manifest.version,
-      onDismiss: () => this._unmount(placeholder),
-      messageType: props.error['messageType']
+      onDismiss: async () => {
+        if (this.isSetup) {
+          await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, false)
+        }
+        this._unmount(placeholder)
+      },
+      messageType: props.error['messageType'],
+      onSetupClick: () => {
+        this._initializeSetup({
+          web: new Web(this.context.pageContext.web.absoluteUrl) as any,
+          webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
+          templateExcludeHandlers: [],
+          context: this.context,
+          properties: this.properties
+        })
+        this._unmount(placeholder)
+      }
     })
     ReactDOM.render(element, placeholder)
   }
@@ -202,8 +227,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    *
    * Get tasks using Tasks.getTasks and runs through them in sequence
    *
-   * @param {Tasks.IBaseTaskParams} taskParams Task params
-   * @param {IProjectSetupData} data Data
+   * @param taskParams Task params
+   * @param data Data
    */
   private async _startProvision(
     taskParams: Tasks.IBaseTaskParams,
@@ -216,7 +241,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       level: LogLevel.Info
     })
     try {
-      await ListLogger.write('Starting provisioning of project.', 'Info')
+      await ListLogger.write(strings.ProjectProvisioningStartLogText, 'Info')
       for (let i = 0; i < tasks.length; i++) {
         const task = tasks[i]
         if (
@@ -230,7 +255,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         })
         taskParams = await task.execute(taskParams, this._onTaskStatusUpdated.bind(this))
       }
-      await ListLogger.write('Project successfully provisioned.', 'Info')
+      await ListLogger.write(strings.ProjectProvisioningSuccessLogText, 'Info')
     } catch (error) {
       throw error
     }
@@ -239,9 +264,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * On task status updated
    *
-   * @param {string} text Text
-   * @param {string} subText Sub text
-   * @param {string} iconName Icon name
+   * @param text Text
+   * @param subText Sub text
+   * @param iconName Icon name
    */
   private _onTaskStatusUpdated(text: string, subText: string, iconName: string) {
     this._renderProgressDialog({ text, subText, iconName })
@@ -361,13 +386,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       return ProjectSetupValidation.InvalidWebLanguage
     if (!this.context.pageContext.legacyPageContext.hubSiteId)
       return ProjectSetupValidation.NoHubConnection
+    if (this.isSetup) return ProjectSetupValidation.AlreadySetup
     return ProjectSetupValidation.Ready
   }
 
   /**
    * Unmount component at container
    *
-   * @param {HTMLElement} container Container
+   * @param container Container
    */
   private _unmount(container: HTMLElement): boolean {
     return ReactDOM.unmountComponentAtNode(container)
@@ -384,7 +410,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Get placeholder by key
    *
-   * @param {string} key Key
+   * @param key Key
    */
   private _getPlaceholder(key: 'ErrorDialog' | 'ProgressDialog' | 'TemplateSelectDialog') {
     const id = this._placeholderIds[key]
@@ -401,8 +427,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Init SP list logging
    *
-   * @param {Web} hubWeb Hub web
-   * @param {string} listName List name
+   * @param hubWeb Hub web
+   * @param listName List name
    */
   private _initializeSPListLogging(hubWeb: Web, listName: string = 'Logg') {
     ListLogger.init(
@@ -417,6 +443,15 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       this.context.pageContext.web.absoluteUrl,
       'ProjectSetup'
     )
+  }
+
+  /**
+   * Check if the project is previously set up.
+   */
+  private async _isProjectSetup() {
+    const { WelcomePage } = await sp.web.rootFolder.select('WelcomePage').get()
+    if (WelcomePage === 'SitePages/Home.aspx') return false
+    return true
   }
 }
 

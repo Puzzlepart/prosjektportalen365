@@ -90,6 +90,7 @@ define([], function () {
     NewViewText: 'Opprett ny visning',
     NoDefaultViewMessage: 'Det er ikke satt noen standardvisning.',
     NoGroupingText: 'Ingen gruppering',
+    NoProjectData: 'Kan ikke hente alle data fra prosjektområdet. Det kan være at du ikke har tilgang til selve området. Det kan også være at området nylig er opprettet eller at prosjektegenskaper ikke er utfylt.',
     NoProperties: 'Det er ikke satt noen egenskaper for prosjektet',
     NoSearchResults: 'Søket ga ingen resultater',
     NotSet: 'Ikke satt',
@@ -102,7 +103,7 @@ define([], function () {
     ProjectOwner: 'Prosjekteier',
     ProjectStatusLinkText: 'Gå til prosjektstatus',
     RecommendationLabel: 'Anbefaling',
-    ProjectTimelineInfoText: 'Her listes alle prosjektene med start- og sluttdato. Prosjekttidslinjen støtter også faser, delfaser og milepæler, dette opprettes i den<A HREF="../Lists/Tidslinjeinnhold/AllItems.aspx?Source={0}">sentrale tidslinjeinnhold listen</A>. Prosjekter vises med rød farge, faser i blått, delfaser blågrønt, og milepæler i gult',
+    ProjectTimelineInfoText: 'Her listes alle prosjektene med start- og sluttdato. Prosjekttidslinjen støtter også faser, delfaser og milepæler, dette opprettes i den<A HREF="../Lists/Tidslinjeinnhold/AllItems.aspx?Source={0}">sentrale tidslinjeinnhold listen</A>. Prosjekter vises med rød farge, faser i blått, delfaser blågrønt, og milepæler i gult. For å zoome inn/ut i tidslinje: ALT+Musehjul',
     ResourceAllocationInfoText: 'Ressursallokering eller fravær som gjelder på tvers av prosjekter legges inn i den<A HREF="../Lists/Ressursallokering/AllItems.aspx?Source={0}">sentrale ressursallokeringslisten</A>. Disse oppføringene vil vises med blå og rød (fravær) farge i tabellen under. Prosjektallokeringer vises med grønn farge. Fargestyrken til allokeringen baserer seg på allokeringsprosenten.',
     ResourceLabel: 'Ressurs',
     ResponsibleLabel: 'Ansvarlig',
@@ -111,6 +112,8 @@ define([], function () {
     AllocationStatusLabel: 'Allokeringsstatus',
     CommentLabel: 'Kommentar',
     SaveViewAsText: 'Lagre visning som',
+    MyProjectsSearchBoxPlaceholderText: 'Søk i prosjekter du er medlem av...',
+    AllProjectsSearchBoxPlaceholderText: 'Søk i alle prosjekter...',
     SearchBoxPlaceholderText: 'Søk i {0}...',
     SearchBoxPlaceholderTextLabel: 'Søkebokstekst',
     ShowAllMeasurementsLinkText: 'Vis alle målinger',
@@ -153,5 +156,10 @@ define([], function () {
     CostsTotalLabel: 'Kostnader påløpt totalt',
     NoProjectsFound: 'Ingen prosjekter funnet.',
     NewLabel: 'Ny',
+    ReadOnlyGroupName: "Porteføljeinnsyn",
+    DisplayAllProjects: "Vis alle prosjekter",
+    MyProjectsLabel: "Mine prosjekter",
+    AllProjectsLabel: "Alle prosjekter",
+    NoAccessMessage: "Du har ikke tilgang til dette prosjektet"
   }
 })

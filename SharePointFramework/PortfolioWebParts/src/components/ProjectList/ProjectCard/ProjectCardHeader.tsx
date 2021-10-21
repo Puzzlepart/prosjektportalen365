@@ -1,6 +1,6 @@
 import { DocumentCardTitle } from 'office-ui-fabric-react/lib/DocumentCard'
-import React, { FunctionComponent } from 'react'
-import ImageFadeIn from 'react-image-fade-in'
+import React, { FunctionComponent, useState } from 'react'
+import { placeholderImage } from '../types'
 import styles from './ProjectCard.module.scss'
 import { IProjectCardProps } from './types'
 
@@ -9,10 +9,15 @@ export const ProjectCardHeader: FunctionComponent<IProjectCardProps> = ({
   showProjectLogo,
   shouldTruncateTitle
 }: IProjectCardProps) => {
+  const [isLoaded, setIsLoaded] = useState(false)
   return (
     <div className={styles.header}>
       <div className={styles.logo} hidden={!showProjectLogo}>
-        {project.logo && <ImageFadeIn opacityTransition={1.5} src={project.logo} />}
+        <img
+          className={isLoaded && styles.isLoaded}
+          src={project.logo ?? placeholderImage}
+          onLoad={() => setIsLoaded(true)}
+        />
       </div>
       <DocumentCardTitle title={project.title} shouldTruncate={shouldTruncateTitle} />
     </div>

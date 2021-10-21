@@ -7,7 +7,7 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import * as strings from 'ProjectWebPartsStrings'
-import * as React from 'react'
+import React from 'react'
 import { RiskMatrix } from '../../../RiskMatrix'
 import { RiskElementModel } from '../../../RiskMatrix'
 import { StatusElement } from '../../StatusElement'
@@ -40,7 +40,7 @@ export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionStat
           <div className='ms-Grid-col ms-sm12'>
             <StatusElement {...this.props.headerProps} />
           </div>
-          {this._renderContent()}
+          {this.props.showLists && this._renderContent()}
         </div>
       </BaseSection>
     )

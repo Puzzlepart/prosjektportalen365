@@ -18,7 +18,7 @@ export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortf
   /**
    * Constructor
    *
-   * @param {IPortfolioInsightsProps} props Props
+   * @param props Props
    */
   constructor(props: IPortfolioInsightsProps) {
     super(props)
@@ -99,7 +99,7 @@ export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortf
   /**
    * On view changed
    *
-   * @param {PortfolioOverviewView} view View
+   * @param view View
    */
   private async _onViewChanged(view: PortfolioOverviewView) {
     const items = await this.props.dataAdapter.fetchDataForView(

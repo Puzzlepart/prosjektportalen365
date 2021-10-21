@@ -184,6 +184,20 @@ git push --tags
 Then create a Pull Request to merge dev into main. The output from GitHub Actions will include a release package that can be shared as a release on GitHub. No manual build required.
 
 ## README generation
+
 READMEs are automatically generated using [@appnest/readme](https://github.com/andreasbm/readme). The main README is generated from [.README](../.README) while this README is generated from [.README](.README). The generation is configured with the `blueprint.json` files.
 
 For the main [README.md)[../README.md] generation, the different parts are included from the [readme](../readme) folder at root level.
+
+## Versioning
+
+After updating the version using `npm version patch` or `npm version minor` the task `tasks/automatic-versioning.js` are run. This synchronizes versions across the solution.
+
+This `automatic-versioning.js` task can also be run as a **npm script** outside the `postversion` event.
+
+```dockerfile
+npm run @sync-version
+```
+
+
+

@@ -1,16 +1,15 @@
 export class TimelineContentListModel {
-
   /**
    * Creates a new instance of TimelineContentListModel
    *
-   * @param {string} siteId Site id
-   * @param {string} title Title
-   * @param {string} itemTitle Item title
-   * @param {string} type Type
-   * @param {string} startDate Start Date
-   * @param {string} endDate End Date
-   * @param {string} budgetTotal Budget total
-   * @param {string} costsTotal Costs total
+   * @param siteId Site id
+   * @param title Title
+   * @param itemTitle Item title
+   * @param type Type
+   * @param startDate Start Date
+   * @param endDate End Date
+   * @param budgetTotal Budget total
+   * @param costsTotal Costs total
    */
   constructor(
     public siteId: string,

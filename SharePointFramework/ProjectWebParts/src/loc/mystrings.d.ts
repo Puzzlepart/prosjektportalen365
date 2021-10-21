@@ -110,6 +110,34 @@ declare interface IProjectWebPartsStrings {
   WidthFieldLabel: string;
   HeightFieldLabel: string;
   CalloutTemplateFieldLabel: string;
+  FilterText: string;
+  PhaseLabel: string;
+  SiteTitleLabel: string;
+  TypeLabel: string;
+  DeleteItemLabel: string;
+  ProjecttimelineGroupName: string;
+  ProjectTimelineInfoText: string;
+  ProjectTimelineListInfoText: string;
+  TimelineContentListName: string;
+  NewItemLabel: string;
+  EditItemLabel: string;
+  PortfolioManagerGroupName: string;
+  ProjectTimelineItemInfo: string;
+  LastPublishedStatusreport: string;
+  MilestoneLabel: string;
+  ProjectLabel: string;
+  SubPhaseLabel: string;
+  CurrentPhaseLabel: string;
+  MilestoneDateLabel: string;
+  StartDateLabel: string;
+  EndDateLabel: string;
+  BudgetTotalLabel: string;
+  CostsTotalLabel: string;
+  ShowFilterButtonLabel: string;
+  ShowTimelineLabel: string;
+  ShowInfoMessageLabel: string;
+  ShowCmdTimelineListLabel: string;
+  ShowTimelineListLabel: string;
 }
 
 declare module 'ProjectWebPartsStrings' {

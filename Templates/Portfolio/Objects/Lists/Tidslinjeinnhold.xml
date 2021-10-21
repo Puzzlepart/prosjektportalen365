@@ -29,7 +29,7 @@
     </pnp:FieldRefs>
     <pnp:Fields>
         <Field Type="Text" Name="Title" StaticName="Title" DisplayName="Tittel" Description="Et kortfattet navn for å beskrive tidslinje elementet" ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}"  />
-        <Field Type="Lookup" Mult="TRUE" DisplayName="Prosjekttilknytning" Description="Hvilket prosjekt er elementet knyttet til?" List="{listid:Prosjekter}" ShowField="Title" RelationshipDeleteBehavior="None" ID="{08e2c51f-b138-416a-a4b5-638b2f80b4f6}" SourceID="{{listid:Tidslinjeinnhold}}" StaticName="SiteIdLookup" Name="SiteIdLookup" />
+        <Field Type="Lookup" Mult="FALSE" DisplayName="Prosjekttilknytning" Description="Hvilket prosjekt er elementet knyttet til?" List="{listid:Prosjekter}" ShowField="Title" RelationshipDeleteBehavior="None" ID="{08e2c51f-b138-416a-a4b5-638b2f80b4f6}" SourceID="{{listid:Tidslinjeinnhold}}" StaticName="SiteIdLookup" Name="SiteIdLookup" />
         <Field Type="Choice" DisplayName="Type" Description="Hva slags type tidslinje element er dette?" Format="Dropdown" FillInChoice="FALSE" ID="{ecd50b9b-c143-4592-9595-9d2bee110abb}" StaticName="TimelineType" Name="TimelineType">
             <CHOICES>
                 <CHOICE>Fase</CHOICE>

@@ -80,5 +80,10 @@ export enum ProjectSetupValidation {
   /**
    * The site is ready for setup/configuration
    */
-  Ready
+  Ready,
+
+  /**
+   * The site is already finished setup
+   */
+  AlreadySetup
 }

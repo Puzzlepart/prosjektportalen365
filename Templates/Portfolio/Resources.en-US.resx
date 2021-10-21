@@ -268,6 +268,12 @@
   <data name="ContentTypes_ListSection_Description" xml:space="preserve">
     <value></value>
   </data>
+  <data name="ContentTypes_TimelineSection_Name" xml:space="preserve">
+    <value>Tidslinjeseksjon</value>
+  </data>
+  <data name="ContentTypes_TimelineSection_Description" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="ContentTypes_LogElement_Name" xml:space="preserve">
     <value>Loggelement</value>
   </data>
@@ -423,6 +429,9 @@
   </data>
   <data name="SiteFields_GtProjectManager_DisplayName" xml:space="preserve">
     <value>Prosjektleder</value>
+  </data>
+  <data name="SiteFields_GtProjectSupport_DisplayName" xml:space="preserve">
+    <value>Prosjektstøtte</value>
   </data>
   <data name="SiteFields_GtStatusBudget_DisplayName" xml:space="preserve">
     <value>Status økonomi</value>
@@ -1206,6 +1215,9 @@
   </data>
   <data name="SiteFields_GtProjectManager_Description" xml:space="preserve">
     <value>Hvem er prosjektleder for prosjektet?</value>
+  </data>
+  <data name="SiteFields_GtProjectSupport_Description" xml:space="preserve">
+    <value>Hvem er prosjektstøtte for prosjektet? Dette kan være assisterende prosjektledere eller andre involverte.</value>
   </data>
   <data name="SiteFields_GtStatusBudget_Description" xml:space="preserve">
     <value>Hva er status på prosjektets økonomi?</value>

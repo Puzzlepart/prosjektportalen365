@@ -1,0 +1,16 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/lib": true,
+    "**/temp": true,
+    "**/dist": true,
+    "**/teams": true,
+    "**/release": true,
+    "**/sharepoint": true,
+    "**/src/**/*.scss.ts": true,
+    "**/package-lock*": true
+  },
+  "typescript.tsdk": ".\\node_modules\\typescript\\lib"
+}

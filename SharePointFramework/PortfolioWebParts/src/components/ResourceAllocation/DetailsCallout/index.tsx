@@ -10,7 +10,6 @@ export interface IDetailsCalloutProps {
   onDismiss: () => void
 }
 
-// tslint:disable-next-line: naming-convention
 export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
   return (
     <Callout
@@ -35,13 +34,15 @@ export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
         <b>{strings.AllocationPercetageLabel}:</b> <span>{item.data.allocation}%</span>
       </p>
       <p>
-        <b>{strings.StartDateLabel}:</b> <span>{formatDate(item.data.props.GtStartDateOWSDATE)}</span>
+        <b>{strings.StartDateLabel}:</b>{' '}
+        <span>{formatDate(item.data.props.GtStartDateOWSDATE)}</span>
       </p>
       <p>
         <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.data.props.GtEndDateOWSDATE)}</span>
       </p>
       <p hidden={!item.data.props.GtAllocationStatusOWSCHCS}>
-        <b>{strings.AllocationStatusLabel}:</b> <span>{item.data.props.GtAllocationStatusOWSCHCS}</span>
+        <b>{strings.AllocationStatusLabel}:</b>{' '}
+        <span>{item.data.props.GtAllocationStatusOWSCHCS}</span>
       </p>
       <p hidden={!item.data.props.GtAllocationCommentOWSMTXT}>
         <b>{strings.CommentLabel}:</b> <span>{item.data.props.GtAllocationCommentOWSMTXT}</span>

@@ -1,12 +1,10 @@
-import { Web } from '@pnp/sp'
 import { IFetchDataForViewItemResult } from 'data/IFetchDataForViewItemResult'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
-import { Link } from 'office-ui-fabric-react/lib/Link'
-import { ProjectInformationTooltip } from 'pp365-projectwebparts/lib/components/ProjectInformationTooltip'
 import { formatDate, tryParseCurrency } from 'pp365-shared/lib/helpers'
 import { ProjectColumn } from 'pp365-shared/lib/models'
 import React from 'react'
 import { IPortfolioOverviewProps } from '../types'
+import { TitleColumn } from './TitleColumn'
 import { IRenderItemColumnProps } from './IRenderItemColumnProps'
 import { TagsColumn } from './TagsColumn'
 import { UserColumn } from './UserColumn'
@@ -26,9 +24,9 @@ const renderDataTypeMap = {
 /**
  * On render item activeFilters
  *
- * @param {IFetchDataForViewItemResult} item Item
- * @param {ProjectColumn} column Column
- * @param {IPortfolioOverviewProps} props Props
+ * @param item Item
+ * @param column Column
+ * @param props Props
  */
 export function renderItemColumn(
   item: IFetchDataForViewItemResult,
@@ -40,25 +38,7 @@ export function renderItemColumn(
 
   switch (column.fieldName) {
     case 'Title': {
-      if (item.Path) {
-        return (
-          <ProjectInformationTooltip
-            key={item.SiteId}
-            title={item.Title}
-            siteId={item.SiteId}
-            webUrl={item.Path}
-            hubSite={{
-              web: new Web(props.pageContext.site.absoluteUrl),
-              url: props.pageContext.site.absoluteUrl
-            }}
-            page='Portfolio'>
-            <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
-              {columnValue}
-            </Link>
-          </ProjectInformationTooltip>
-        )
-      }
-      return columnValue
+      return <TitleColumn props={props} item={item} />
     }
   }
 

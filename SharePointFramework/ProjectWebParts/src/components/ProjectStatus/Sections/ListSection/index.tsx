@@ -8,7 +8,7 @@ import {
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { getObjectValue } from 'pp365-shared/lib/helpers'
 import * as strings from 'ProjectWebPartsStrings'
-import * as React from 'react'
+import React from 'react'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection/index'
 import styles from './ListSection.module.scss'
@@ -42,7 +42,7 @@ export class ListSection extends BaseSection<
           <div className='ms-Grid-col ms-sm12'>
             <StatusElement {...this.props.headerProps} />
           </div>
-          {this._renderList()}
+          {this.props.showLists && this._renderList()}
         </div>
       </BaseSection>
     )

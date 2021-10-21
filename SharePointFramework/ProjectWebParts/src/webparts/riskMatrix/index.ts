@@ -6,7 +6,7 @@ import {
 import { sp } from '@pnp/sp'
 import { IRiskMatrixProps, RiskMatrix, RiskElementModel } from 'components/RiskMatrix'
 import * as getValue from 'get-value'
-import * as ReactDom from 'react-dom'
+import ReactDom from 'react-dom'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
 import { IRiskMatrixWebPartProps } from './IRiskMatrixWebPartProps'
 import * as strings from 'ProjectWebPartsStrings'

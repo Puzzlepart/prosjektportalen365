@@ -16,6 +16,7 @@ let buildConfig = {
     parallel: os.cpus().length - 1,
     bundleAnalyzerEnabled: false
 }
+
 build.addSuppression(`Warning - [sass] The local CSS class 'ms-Grid' is not camelCase and will not be type-safe.`)
 build.addSuppression(`Warning - [sass] The local CSS class '-webkit-filter' is not camelCase and will not be type-safe.`)
 
@@ -31,22 +32,6 @@ try {
 } catch (error) {
     log(`Missing '${colors.cyan('./build.config.json')}'. Using defaults...`)
 }
-
-gulp.task('versionSync', (done) => {
-    find.file(/\manifest.json$/, path.join(__dirname, "src", "webparts"), (files) => {
-        var pkgSolution = require('./config/package-solution.json')
-        var newVersionNumber = require('./package.json').version.split('-')[0]
-        pkgSolution.solution.version = newVersionNumber + '.0'
-        fs.writeFile('./config/package-solution.json', JSON.stringify(pkgSolution, null, 4), (_error) => { })
-        for (let i = 0; i < files.length; i++) {
-            let manifest = require(files[i])
-            manifest.version = newVersionNumber
-            log(`[${colors.cyan('versionSync')}] Setting ${colors.cyan('version')} to ${colors.cyan(newVersionNumber)} for ${colors.cyan(manifest.alias)}...`)
-            fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => { })
-        }
-        done()
-    })
-})
 
 gulp.task('setHiddenToolbox', (done) => {
     find.file(/\manifest.json$/, path.join(__dirname, "src"), (files) => {

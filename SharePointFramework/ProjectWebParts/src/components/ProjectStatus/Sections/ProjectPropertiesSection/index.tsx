@@ -1,5 +1,5 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
-import * as React from 'react'
+import React from 'react'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection'
 import { IProjectPropertiesSectionProps } from './types'

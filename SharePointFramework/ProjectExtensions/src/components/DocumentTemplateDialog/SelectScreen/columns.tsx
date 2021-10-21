@@ -40,7 +40,7 @@ export default ({ setFolder }: { setFolder: (folder: TemplateItem) => void }) =>
       fieldName: 'description',
       name: ProjectExtensionsStrings.DescriptionLabel,
       minWidth: 200,
-      isResizable:true
+      isResizable: true
     },
     {
       key: getId('phase'),

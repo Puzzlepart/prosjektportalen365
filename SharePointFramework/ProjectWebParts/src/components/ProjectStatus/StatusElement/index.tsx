@@ -1,5 +1,5 @@
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
-import * as React from 'react'
+import React from 'react'
 import { IStatusElementProps } from './types'
 import styles from './StatusElement.module.scss'
 

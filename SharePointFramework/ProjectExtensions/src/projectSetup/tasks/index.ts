@@ -21,7 +21,7 @@ const tasks: (new (data: IProjectSetupData) => IBaseTask)[] = [
 /**
  * Get tasks
  *
- * @param {IProjectSetupData} data Data
+ * @param data Data
  */
 export function getTasks(data: IProjectSetupData) {
   return tasks.map((ctor) => new ctor(data))

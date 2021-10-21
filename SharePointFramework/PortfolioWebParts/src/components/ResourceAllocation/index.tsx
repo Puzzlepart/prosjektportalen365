@@ -66,7 +66,7 @@ export class ResourceAllocation extends Component<
   /**
    * Constructor
    *
-   * @param {IResourceAllocationProps} props Props
+   * @param props Props
    */
   constructor(props: IResourceAllocationProps) {
     super(props)
@@ -195,8 +195,8 @@ export class ResourceAllocation extends Component<
   /**
    * On filter change
    *
-   * @param {IColumn} column Column
-   * @param {IFilterItemProps[]} selectedItems Selected items
+   * @param column Column
+   * @param selectedItems Selected items
    */
   private _onFilterChange(column: IColumn, selectedItems: IFilterItemProps[]) {
     const { activeFilters } = { ...this.state } as IResourceAllocationState
@@ -264,8 +264,8 @@ export class ResourceAllocation extends Component<
   /**
    * On item click
    *
-   * @param {React.MouseEvent} event Event
-   * @param {ITimelineItem} item Item
+   * @param event Event
+   * @param item Item
    */
   private _onItemClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) {
     this.setState({ showDetails: { element: event.currentTarget, data: item } })
@@ -274,7 +274,7 @@ export class ResourceAllocation extends Component<
   /**
    * Creating groups based on user property (RefinableString71) on the search result, with fallback to role (RefinableString72)
    *
-   * @param {IAllocationSearchResult[]} searchResults Search results
+   * @param searchResults Search results
    *
    * @returns {ITimelineGroup[]} Timeline groups
    */
@@ -300,8 +300,8 @@ export class ResourceAllocation extends Component<
   /**
    * Create items
    *
-   * @param {IAllocationSearchResult[]} searchResults Search results
-   * @param {ITimelineGroup[]} groups Groups
+   * @param searchResults Search results
+   * @param groups Groups
    *
    * @returns {ITimelineItem[]} Timeline items
    */

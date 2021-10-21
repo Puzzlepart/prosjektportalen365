@@ -18,7 +18,7 @@ export class ProjectDataService {
   private _storage: PnPClientStore
   private _storageKeys: TypedHash<string> = {
     _getPropertyItemContext: '{0}_propertyitemcontext',
-    getPhases: 'projectphases_terms'
+    getPhases: '{0}_projectphases_terms'
   }
   private _web: Web
 

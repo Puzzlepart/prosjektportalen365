@@ -1,7 +1,8 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
+import { Persona, PersonaSize } from 'office-ui-fabric-react'
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as strings from 'ProjectWebPartsStrings'
-import * as React from 'react'
+import React from 'react'
 import styles from './ProjectProperty.module.scss'
 import { IProjectPropertyProps } from './types'
 
@@ -12,11 +13,50 @@ export const ProjectProperty = ({
   onFieldExternalChanged,
   showFieldExternal
 }: IProjectPropertyProps) => {
+  const renderValue = () => {
+    switch (model.type) {
+      case 'User': {
+        return (
+          <div>
+            <Persona
+              text={model.value}
+              size={PersonaSize.size24}
+              styles={{ root: { marginTop: 6 } }}
+            />
+          </div>
+        )
+      }
+      case 'UserMulti': {
+        return (
+          <div>
+            {model.value.split(';').map((text, key) => (
+              <Persona
+                key={key}
+                text={text}
+                size={PersonaSize.size24}
+                styles={{ root: { marginTop: 6 } }}
+              />
+            ))}
+          </div>
+        )
+      }
+      default: {
+        return (
+          <div
+            className={styles.value}
+            dangerouslySetInnerHTML={{
+              __html: model.value.replace(/\n/g, '<br />')
+            }}></div>
+        )
+      }
+    }
+  }
+
   switch (displayMode) {
     case DisplayMode.Edit: {
       const defaultChecked = showFieldExternal ? showFieldExternal[model.internalName] : false
       return (
-        <div className={styles.projectProperty} title={model.description} style={style}>
+        <div className={styles.root} title={model.description} style={style}>
           <div className={styles.label}>{model.displayName}</div>
           <div className={styles.value}>
             <Toggle
@@ -31,12 +71,9 @@ export const ProjectProperty = ({
     }
     default: {
       return (
-        <div className={styles.projectProperty} title={model.description} style={style}>
+        <div className={styles.root} style={style}>
           <div className={styles.label}>{model.displayName}</div>
-          <div className={styles.value} dangerouslySetInnerHTML={{
-            __html:
-              model.value.replace(/\n/g, '<br />')
-          }}></div>
+          {renderValue()}
         </div>
       )
     }
