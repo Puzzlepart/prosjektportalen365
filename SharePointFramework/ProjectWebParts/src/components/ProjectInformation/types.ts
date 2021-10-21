@@ -61,6 +61,11 @@ export interface IProjectInformationState
    * Confirm action props
    */
   confirmActionProps?: any
+
+  /**
+   * Display parent creation modal
+   */
+  displayParentCreationModal?: boolean
 }
 
 export interface IProjectInformationUrlHash {

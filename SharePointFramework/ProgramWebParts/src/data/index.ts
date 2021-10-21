@@ -15,7 +15,7 @@ import {
 } from 'models'
 import MSGraph from 'msgraph-helper'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
-import * as strings from 'PortfolioWebPartsStrings'
+import * as strings from 'ProgramWebPartsStrings'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
 import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
