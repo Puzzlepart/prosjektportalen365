@@ -25,6 +25,7 @@ Every change is marked with issue ID.
 - Fixed redirect after creating a new project status #530
 - Fixed project wizard bug when project is attached to another hub #532
 - Fixed wrong phases being displayed when switching between projects with different phases #520
+- Fixed issue while upgrading where deprecated pages/webparts were not removed #588
 
 ## 1.2.9 - 08.09.2021
 
