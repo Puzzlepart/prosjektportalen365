@@ -160,6 +160,52 @@ declare interface IProgramWebPartsStrings {
   MyProjectsLabel: string;
   AllProjectsLabel: string;
   NoAccessMessage: string;
+  ProgramProjectsTimelineSync_LogListHeader: string;
+  ProgramProjectsTimelineSync_DeleteLog: string;
+  ProgramProjectsTimelineSync_EmptyLog: string;
+  ProgramProjectsTimelineSync_RemoveFromProgram: string;
+  ProgramProjectsTimelineSync_SyncToTimeline: string;
+  ProgramProjectsTimelineSync_SyncingToTimeline: string;
+  ProgramProjectsTimelineSync_SyncAllToTimeline: string;
+  ProgramProjectsTimelineSync_SyncingAllToTimeline: string;
+  ProgramProjectsTimelineSync_AddToTimelineAutomatically: string;
+  ProgramProjectsTimelineSync_IncludeExpiredProjects: string;
+  ProgramProjectsTimelineSync_StoredProjectsListHeader: string;
+  ProgramProjectsTimelineSync_LoadingText: string;
+  ProgramProjectsTimelineSync_ProjectRemoved: string;
+  ProgramProjectsTimelineSync_ProjectDoesNotExist: string;
+  ProgramProjectsTimelineSync_TimelineItemUpdated: string;
+  ProgramProjectsTimelineSync_TimelineItemUpdateError: string;
+  ProgramProjectsTimelineSync_TimelineItemAdded: string;
+  ProgramProjectsTimelineSync_TimelineItemAddedToTimeline: string;
+  ProgramProjectsTimelineSync_TimelineItemExpired: string;
+  ProgramProjectsTimelineSync_TimelineItemNoDates: string;
+  ProgramProjectsTimelineSync_PagingStatusText: string;
+  ProgramProjectsTimelineSync_CountText: string;
+  ProgramProjectStatus_LoadingText: string;
+  ProgramProjectStatus_LoadingTextDescription: string;
+  ProgramProjectStatus_LoadingFailedMessage: string;
+  ProgramAddProject_AddingProjectToProgram: string;
+  ProgramAddProject_AddingProjectToProgramDescription: string;
+  ProgramAddProject_ProjectWasAddedToProgram: string; 
+  ProgramAddProject_ProjectsWasAddedToProgram: string;
+  ProgramAddProject_AddProjectToProgram: string;
+  ProgramAddProject_ProjectAlreadyInProgram: string;
+  ProgramAddProject_ProjectsAlreadyInProgram: string;
+  ProgramAddProject_AddAllProjectsToProgram: string;
+  ProgramAddProject_EmptyMessage: string;
+  ProgramAddProject_SearchBoxLabelText: string;
+  Lists_StoredProjects_MaxLimitError: string;
+  Lists_StoredProjects_DoesNotExist: string;
+  Lists_ProjectsTimeline_DoesNotExist: string;
+  ProgramPortfolio_LoadingText: string;
+  ProgramPortfolio_SearchBoxLabelText: string;
+  ProgramPortfolio_ShowCountText: string;
+  Yes: string;
+  No: string;
+  PreviousPage: string;
+  NextPage: string;
+
 }
 
 declare module "ProgramWebPartsStrings" {
