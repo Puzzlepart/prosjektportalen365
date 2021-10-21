@@ -3,20 +3,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with issue ID.
 
-## 1.3.0 - TBA
+## 1.3.0 - 22.10.2021
 
 ### Added 
 
-- Added new multi-user field _Prosjektstøtte_ #526
-- Added read-only project cards to project list #498
-- Added "Avventer" as a new choice for "Prosjektstatus" #537
 - Added a new project webpart 'Prosjekttidslinje' for showcasing projects and items for the current project on a timeline #497
-- Improved rendering of user fields in "Prosjektinformasjon" #576
+- Added read-only project cards to project list on the frontpage #498
+- Added new multi-user field _Prosjektstøtte_ #526
+- Added "Avventer" as a new choice for "Prosjektstatus" #537
 
 ### Changed
 
-- Removed "Home" from Portfolio menu bar
+- Removed "Home" from Portfolio menu bar #527
 - Removed list views and risk matrix from previous status reports #374
+- Improved rendering of user fields in "Prosjektinformasjon" #576
+- Added visual indicator in the portfolio overview for projects where you don't have access #563 #578
 
 ### Fixed
 
