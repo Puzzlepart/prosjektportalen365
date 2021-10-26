@@ -203,6 +203,24 @@ define([], function () {
     No: "Nei",
     PreviousPage: "Forrige side",
     NextPage: "Neste side",
-    
+    ProjectTimelineSync_RemoveFromProject: "Fjern fra prosjekt",
+    ProjectsTimelineSync_StoredProjectsListHeader: "Underordnede prosjekter",
+    ProjectsTimelineSync_LoadingText: "Laster inn underordnede prosjekter...",
+    ProjectsTimelineSync_ProjectRemoved: "{0} ble fjernet fra prosjektet.",
+    ProjectsTimelineSync_CountText: "Prosjektet inneholder {0} underordnede prosjekter",
+    ProjectStatus_LoadingText: "Laster inn status for underordnede prosjekter ({0}%)...",
+    ProjectAddProject_AddingProjectToProject: "Kobler prosjekter til overordnede prosjekt ({0}%)",
+    ProjectAddProject_AddingProjectToProjectDescription: "Legger til prosjektet '{0}' i overordnet prosjekt...",
+    ProjectAddProject_ProjectWasAddedToProject: "Prosjektet '{0}' ble lagt til som underordnet prosjekt.",
+    ProjectAddProject_ProjectsWasAddedToProject: "{0} prosjekter ({1}) ble lagt til i det overordnede prosjektet.",
+    ProjectAddProject_AddProjectToProject: "Legg til i et overordnet prosjekt",
+    ProjectAddProject_ProjectAlreadyExist: "Prosjektet ligger allerede som et underordnet prosjekt i dette prosjektet.",
+    ProjectAddProject_ProjectsAlreadyExist: "Alle prosjektene i utvalget ligger allerede som underordnede prosjekter i prosjektet",
+    ProjectAddProject_AddAllProjects: "Legg til hele utvalget ({0} prosjekter) i det overordnede prosjektet",
+    ProjectLists_StoredProjects_MaxLimitError: "Du har {0} underordnede prosjekter i dette prosjektet. Det er satt en grense på {1}.",
+    ProjectLists_StoredProjects_DoesNotExist: "Listen 'Underordnede prosjekter' finnes ikke på området",
+    ProjectPortfolio_LoadingText: "Laster prosjektportefølje...",
+    ProjectPortfolio_SearchBoxLabelText: "Søk i tilkoblede underordnede prosjekter...",
+    ProjectPortfolio_ShowCountTex: "Viser {0} av totalt {1} underordnede prosjekter tilknyttet dette prosjektet"
   }
 })

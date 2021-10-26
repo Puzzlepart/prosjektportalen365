@@ -205,7 +205,25 @@ declare interface IProgramWebPartsStrings {
   No: string;
   PreviousPage: string;
   NextPage: string;
-
+  ProjectTimelineSync_RemoveFromProject: string;
+  ProjectsTimelineSync_StoredProjectsListHeader: string;
+  ProjectsTimelineSync_LoadingText: string;
+  ProjectsTimelineSync_ProjectRemoved: string;
+  ProjectsTimelineSync_CountText: string;
+  ProjectStatus_LoadingText: string;
+  ProjectAddProject_AddingProjectToProject: string;
+  ProjectAddProject_AddingProjectToProjectDescription: string;
+  ProjectAddProject_ProjectWasAddedToProject: string;
+  ProjectAddProject_ProjectsWasAddedToProject: string;
+  ProjectAddProject_AddProjectToProject: string;
+  ProjectAddProject_ProjectAlreadyExist: string;
+  ProjectAddProject_ProjectsAlreadyExist: string;
+  ProjectAddProject_AddAllProjects: string;
+  ProjectLists_StoredProjects_MaxLimitError: string;
+  ProjectLists_StoredProjects_DoesNotExist: string;
+  ProjectPortfolio_LoadingText: string;
+  ProjectPortfolio_SearchBoxLabelText: string;
+  ProjectPortfolio_ShowCountText: string;
 }
 
 declare module "ProgramWebPartsStrings" {
