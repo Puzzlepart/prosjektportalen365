@@ -12,14 +12,9 @@ export const CreateParentModal: FunctionComponent<ParentModalProps> = ({ isOpen,
 
     async function applySiteDesign() {
         setLoading(true)
-        const partDefs = await sp.web.getClientSideWebParts()
 
-        const component = partDefs.map(comp => comp.Id.indexOf("ce34553d-ab47-4107-8dd1-e980d953996d"))
-        console.log(component)
-        console.log(partDefs)
-
-        // await sp.siteDesigns.applySiteDesign("bf3dfdb8-abc7-4f27-97f5-5ae9b26477bd", window.location.href)
-        // location.reload()
+        await sp.siteDesigns.applySiteDesign("bf3dfdb8-abc7-4f27-97f5-5ae9b26477bd", window.location.href)
+        location.reload()
 
     }
 
