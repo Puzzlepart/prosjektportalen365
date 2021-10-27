@@ -1,0 +1,1 @@
+<Field Name="GtChildProjects" ID="{e007ef7e-9c47-4bc2-8171-5c32688f3e0c}" DisplayName="{resource:SiteFields_GtChildProjects_DisplayName}" Type="Note" Group="{resource:SiteFields_Project_Group}" AppendOnly="FALSE" AllowUnlimitedLengthInLibraries="TRUE" StaticName="GtChildProjects" />
