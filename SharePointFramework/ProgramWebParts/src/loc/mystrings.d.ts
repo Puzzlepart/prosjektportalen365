@@ -15,6 +15,7 @@ declare interface IProgramWebPartsStrings {
   ColumnRenderOptionDate: string;
   ColumnRenderOptionDateTime: string;
   ColumnRenderLabel: string;
+  ProjectPropertiesListName: string
   EditColumnLabel: any;
   MoveRightLabel: string;
   MoveLeftLabel: string;
