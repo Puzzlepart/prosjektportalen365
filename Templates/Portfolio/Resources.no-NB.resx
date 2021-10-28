@@ -1011,7 +1011,7 @@
     <value></value>
   </data>
   <data name="SiteFields_GtParentProjects_DisplayName" xml:space="preserve">
-    <value>Overordnet prosjekt</value>
+    <value>Overordnede prosjekter</value>
   </data>
   <data name="SiteFields_GtPrereqProfitAchievement_DisplayName" xml:space="preserve">
     <value>Forutsetninger for gevinstoppnåelse</value>
