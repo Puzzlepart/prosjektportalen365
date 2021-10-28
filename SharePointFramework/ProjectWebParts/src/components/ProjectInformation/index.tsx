@@ -15,6 +15,8 @@ import { BaseWebPartComponent } from '../BaseWebPartComponent'
 import { ProgressDialog } from '../ProgressDialog'
 import { UserMessage } from '../UserMessage'
 import { Actions } from './Actions'
+import { ActionType } from './Actions/types'
+import { CreateParentModal } from './ParentProjectModal'
 import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
 import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
@@ -111,11 +113,35 @@ export class ProjectInformation extends BaseWebPartComponent<
             stringIsNullOrEmpty(this.state.data.propertiesListId) &&
             this._onSyncProperties.bind(this)
           }
+          customActions={this.transformToParentProject()}
         />
         <ProgressDialog {...this.state.progress} />
         {this.state.confirmActionProps && <ConfirmDialog {...this.state.confirmActionProps} />}
+        {this.state.displayParentCreationModal && <CreateParentModal isOpen={this.state.displayParentCreationModal} onDismiss={this.onDismissParentModal.bind(this)} />}
       </Fragment>
     )
+  }
+
+  private onDismissParentModal() {
+    this.setState({ displayParentCreationModal: false })
+  }
+
+  /**
+   * Creates an action and initializes project -> parentproject transformation
+   */
+  private transformToParentProject() {
+    const onButtonClick = async () => {
+      this.setState({ displayParentCreationModal: true })
+    }
+
+    const action: ActionType = [
+      strings.CreateExecutiveProjectlabel,
+      onButtonClick,
+      'Org',
+      false
+    ]
+
+    return [action]
   }
 
   /**
@@ -187,7 +213,7 @@ export class ProjectInformation extends BaseWebPartComponent<
         this.props.webUrl,
         strings.ProjectPropertiesListName,
         this.state.data.templateParameters.ProjectContentTypeId ||
-          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: this.props.webTitle }
       )
       if (!created) {

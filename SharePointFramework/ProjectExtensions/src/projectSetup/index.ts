@@ -26,6 +26,7 @@ import * as Tasks from './tasks'
 import { deleteCustomizer } from './deleteCustomizer'
 import { ProjectSetupError } from './ProjectSetupError'
 import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
+import { ProjectSetupSettings } from './ProjectSetupSettings'
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
   private _portal: PortalDataService
   private isSetup = true
@@ -51,9 +52,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         data: { version: this.context.manifest.version, validation: this._validation },
         level: LogLevel.Info
       })
-        ; (await this._isProjectSetup()) ? (this.isSetup = true) : (this.isSetup = false)
+      ;(await this._isProjectSetup()) ? (this.isSetup = true) : (this.isSetup = false)
 
-      // eslint-disable-next-line default-case
       switch (this._validation) {
         case ProjectSetupValidation.InvalidWebLanguage: {
           await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, false)
@@ -70,6 +70,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             strings.NoHubSiteErrorStack,
             MessageBarType.warning
           )
+        }
+        case ProjectSetupValidation.SkipTemplateSelection: {
+          break
         }
         case ProjectSetupValidation.AlreadySetup: {
           throw new ProjectSetupError(
@@ -111,7 +114,22 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       })
       let data = await this._fetchData()
       this._initializeSPListLogging(data.hub.web)
-      const provisioningInfo = await this._getProvisioningInfo(data)
+      let provisioningInfo: ITemplateSelectDialogState
+
+      if (this.properties.skipSelection) {
+        const [defaultTemplate] = data.templates.filter(
+          (template) => template.text.indexOf('Overordnet') != -1
+        )
+        provisioningInfo = {
+          selectedExtensions: [],
+          selectedListContentConfig: [],
+          selectedTemplate: defaultTemplate,
+          settings: new ProjectSetupSettings()
+        }
+      } else {
+        provisioningInfo = await this._getProvisioningInfo(data)
+      }
+
       Logger.log({
         message: '(ProjectSetup) [_initializeSetup]: Template selected by user',
         data: {},
@@ -385,6 +403,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       return ProjectSetupValidation.InvalidWebLanguage
     if (!this.context.pageContext.legacyPageContext.hubSiteId)
       return ProjectSetupValidation.NoHubConnection
+    if (this.properties.skipSelection) return ProjectSetupValidation.SkipTemplateSelection
     if (this.isSetup) return ProjectSetupValidation.AlreadySetup
     return ProjectSetupValidation.Ready
   }

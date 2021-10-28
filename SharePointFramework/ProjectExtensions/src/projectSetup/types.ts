@@ -37,6 +37,11 @@ export interface IProjectSetupProperties {
    * Skip reload after setup
    */
   skipReload?: boolean
+
+  /**
+   * Skip template selection
+   */
+  skipSelection: boolean
 }
 
 export interface IProjectSetupData extends ITemplateSelectDialogState {
@@ -85,5 +90,10 @@ export enum ProjectSetupValidation {
   /**
    * The site is already finished setup
    */
-  AlreadySetup
+  AlreadySetup,
+
+  /**
+   * Skip template selection
+   */
+  SkipTemplateSelection
 }
