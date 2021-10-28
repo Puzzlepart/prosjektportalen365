@@ -940,6 +940,10 @@
   <data name="SiteFields_GtIconName_Description" xml:space="preserve">
     <value></value>
   </data>
+
+   <data name="SiteFields_GtIsParentProject_DisplayName" xml:space="preserve">
+    <value>Is Parent Project</value>
+  </data>
   <data name="SiteFields_GtKey_DisplayName" xml:space="preserve">
     <value>Key</value>
   </data>
