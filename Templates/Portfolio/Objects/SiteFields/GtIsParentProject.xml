@@ -1,0 +1,1 @@
+<Field Name="GtIsParentProject" ID="{8f1f38cb-7eb2-4122-a866-4c9e99b2ebed}" DisplayName="{resource:SiteFields_GtIsParentProject_DisplayName}" Type="Boolean" Group="{resource:SiteFields_Project_Group}" AppendOnly="FALSE" AllowUnlimitedLengthInLibraries="TRUE" StaticName="GtIsParentProject" />
