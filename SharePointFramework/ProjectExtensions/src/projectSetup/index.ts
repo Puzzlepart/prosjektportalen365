@@ -1,6 +1,6 @@
 import { override } from '@microsoft/decorators'
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base'
-import { isArray } from '@pnp/common'
+import { isArray, stringIsNullOrEmpty } from '@pnp/common'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { sp, Web } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
@@ -26,6 +26,9 @@ import * as Tasks from './tasks'
 import { deleteCustomizer } from './deleteCustomizer'
 import { ProjectSetupError } from './ProjectSetupError'
 import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
+import { find } from 'underscore'
+import { endsWith } from 'lodash'
+import { ProjectSetupSettings } from './ProjectSetupSettings'
 
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
   private _portal: PortalDataService
@@ -72,13 +75,13 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             MessageBarType.warning
           )
         }
-        case ProjectSetupValidation.AlreadySetup: {
-          throw new ProjectSetupError(
-            'AlreadySetup',
-            strings.ProjectAlreadySetupMessage,
-            strings.ProjectAlreadySetupStack
-          )
-        }
+        // case ProjectSetupValidation.AlreadySetup: {
+        //   throw new ProjectSetupError(
+        //     'AlreadySetup',
+        //     strings.ProjectAlreadySetupMessage,
+        //     strings.ProjectAlreadySetupStack
+        //   )
+        // }
       }
 
       this._initializeSetup({
@@ -146,32 +149,55 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
+   * Checks for force template
+   *
+   * @param data - Data
+   */
+  private _checkForceTemplate(data: IProjectSetupData): ITemplateSelectDialogState {
+    if (stringIsNullOrEmpty(this.properties.forceTemplate)) return null
+    const selectedTemplate = find(data.templates, tmpl => endsWith(tmpl.serverRelativeUrl, this.properties.forceTemplate))
+    if (!selectedTemplate) return null
+    return {
+      selectedTemplate,
+      selectedExtensions: [],
+      selectedListContentConfig: [],
+      settings: new ProjectSetupSettings().useDefault()
+    }
+  }
+
+  /**
    * Get provisioning info from TemplateSelectDialog
    *
-   * @param data Data
+   * @param data - Data
    */
   private _getProvisioningInfo(data: IProjectSetupData): Promise<ITemplateSelectDialogState> {
     return new Promise((resolve, reject) => {
       const placeholder = this._getPlaceholder('TemplateSelectDialog')
-      const element = createElement<ITemplateSelectDialogProps>(TemplateSelectDialog, {
-        data,
-        version: this.manifest.version,
-        onSubmit: (state: ITemplateSelectDialogState) => {
-          this._unmount(placeholder)
-          resolve(state)
-        },
-        onDismiss: () => {
-          this._unmount(placeholder)
-          reject(
-            new ProjectSetupError(
-              '_getProvisioningInfo',
-              strings.SetupAbortedText,
-              strings.SetupAbortedText
+      const forceTemplate = this._checkForceTemplate(data)
+      if (forceTemplate !== null) {
+        this._unmount(placeholder)
+        resolve(forceTemplate)
+      } else {
+        const element = createElement<ITemplateSelectDialogProps>(TemplateSelectDialog, {
+          data,
+          version: this.manifest.version,
+          onSubmit: (state: ITemplateSelectDialogState) => {
+            this._unmount(placeholder)
+            resolve(state)
+          },
+          onDismiss: () => {
+            this._unmount(placeholder)
+            reject(
+              new ProjectSetupError(
+                '_getProvisioningInfo',
+                strings.SetupAbortedText,
+                strings.SetupAbortedText
+              )
             )
-          )
-        }
-      })
-      ReactDOM.render(element, placeholder)
+          }
+        })
+        ReactDOM.render(element, placeholder)
+      }
     })
   }
 
@@ -343,7 +369,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           },
           ['File', 'FieldValuesAsText']
         ),
-        this._portal.getItems(
+        this.properties.extensionsLibrary ? this._portal.getItems(
           this.properties.extensionsLibrary,
           ProjectExtension,
           {
@@ -351,8 +377,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
               '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
           },
           ['File', 'FieldValuesAsText']
-        ),
-        this._portal.getItems(this.properties.contentConfigList, ListContentConfig)
+        ) : Promise.resolve([]),
+        this.properties.contentConfigList ? this._portal.getItems(this.properties.contentConfigList, ListContentConfig) : Promise.resolve([])
       ])
       Logger.log({
         message: '(ProjectSetup) [_fetchData]: Retrieved templates, extensions and content config',

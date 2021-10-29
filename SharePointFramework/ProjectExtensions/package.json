@@ -1,14 +1,9 @@
 {
   "name": "pp365-projectextensions",
   "version": "1.3.0",
-  "engines": {
-    "node": ">=0.10.0"
-  },
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
-    "watch:nobrowser": "concurrently \"npm run serve:nobrowser\" \"livereload './dist/*.js' -e 'js' -w 250\"",
-    "serve": "gulp serve --locale=nb-no",
-    "serve:nobrowser": "gulp serve --locale=nb-no --nobrowser",
+    "serve": "gulp serve-deprecated --nobrowser --locale=nb-no",
     "package": "gulp clean && gulp default --ship && gulp package-solution --ship",
     "package:ci": "gulp clean && gulp default && gulp package-solution",
     "deploy": "gulp uploadAppPkg && gulp deploySppkg",
@@ -40,7 +35,7 @@
     "@uifabric/utilities": "6.45.1",
     "msgraph-helper": "0.8.3",
     "office-ui-fabric-react": "6.214.0",
-    "pp365-shared": "latest",
+    "pp365-shared": "1.3.4",
     "react": "16.9.0",
     "react-dom": "16.9.0",
     "react-markdown": "4.2.2",
