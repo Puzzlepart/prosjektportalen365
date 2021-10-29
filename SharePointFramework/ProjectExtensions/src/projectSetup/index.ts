@@ -75,13 +75,13 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             MessageBarType.warning
           )
         }
-        // case ProjectSetupValidation.AlreadySetup: {
-        //   throw new ProjectSetupError(
-        //     'AlreadySetup',
-        //     strings.ProjectAlreadySetupMessage,
-        //     strings.ProjectAlreadySetupStack
-        //   )
-        // }
+        case ProjectSetupValidation.AlreadySetup: {
+          throw new ProjectSetupError(
+            'AlreadySetup',
+            strings.ProjectAlreadySetupMessage,
+            strings.ProjectAlreadySetupStack
+          )
+        }
       }
 
       this._initializeSetup({
@@ -155,7 +155,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    */
   private _checkForceTemplate(data: IProjectSetupData): ITemplateSelectDialogState {
     if (stringIsNullOrEmpty(this.properties.forceTemplate)) return null
-    const selectedTemplate = find(data.templates, tmpl => endsWith(tmpl.serverRelativeUrl, this.properties.forceTemplate))
+    const selectedTemplate = find(data.templates, (tmpl) =>
+      endsWith(tmpl.serverRelativeUrl, this.properties.forceTemplate)
+    )
     if (!selectedTemplate) return null
     return {
       selectedTemplate,
@@ -369,16 +371,20 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           },
           ['File', 'FieldValuesAsText']
         ),
-        this.properties.extensionsLibrary ? this._portal.getItems(
-          this.properties.extensionsLibrary,
-          ProjectExtension,
-          {
-            ViewXml:
-              '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
-          },
-          ['File', 'FieldValuesAsText']
-        ) : Promise.resolve([]),
-        this.properties.contentConfigList ? this._portal.getItems(this.properties.contentConfigList, ListContentConfig) : Promise.resolve([])
+        this.properties.extensionsLibrary
+          ? this._portal.getItems(
+              this.properties.extensionsLibrary,
+              ProjectExtension,
+              {
+                ViewXml:
+                  '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+              },
+              ['File', 'FieldValuesAsText']
+            )
+          : Promise.resolve([]),
+        this.properties.contentConfigList
+          ? this._portal.getItems(this.properties.contentConfigList, ListContentConfig)
+          : Promise.resolve([])
       ])
       Logger.log({
         message: '(ProjectSetup) [_fetchData]: Retrieved templates, extensions and content config',
