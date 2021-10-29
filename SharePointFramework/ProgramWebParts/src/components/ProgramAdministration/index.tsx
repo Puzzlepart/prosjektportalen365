@@ -1,17 +1,24 @@
-import * as React from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import styles from './ProgramAddProject.module.scss';
-import { IProgramAddProjectProps } from './IProgramAddProjectProps';
+import { IProgramAdministrationProps } from './types';
 import { Timeline } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/Timeline'
 import moment from 'moment'
-export default class ProgramAddProject extends React.Component<IProgramAddProjectProps, {}> {
-  public render(): React.ReactElement<IProgramAddProjectProps> {
-    return (
-      <>
-        <Timeline items={items} groups={groups} _onItemClick={() => console.log()} defaultTimeStart={[-1, 'months']}
-          defaultTimeEnd={[1, 'years']} />
-      </>
-    );
-  }
+
+
+export const ProgramAdministration: FunctionComponent<IProgramAdministrationProps> = (props) => {
+
+  useEffect(() => {
+
+  }, [])
+
+  console.log(props)
+
+  return (
+    <>
+      <Timeline items={items} groups={groups} _onItemClick={() => console.log()} defaultTimeStart={[-1, 'months']}
+        defaultTimeEnd={[1, 'years']} />
+    </>
+  );
 }
 
 const groups = [{ id: 1, title: 'group 1' }, { id: 2, title: 'group 2' }]

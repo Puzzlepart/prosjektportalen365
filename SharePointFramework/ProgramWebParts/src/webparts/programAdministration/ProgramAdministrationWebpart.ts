@@ -2,25 +2,24 @@ import * as React from 'react'
 import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
 import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane'
-import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import * as strings from 'ProgramWebPartsStrings'
-import ProgramAddProject from 'components/ProgramAddProject/ProgramAddProject'
-import { IProgramAddProjectProps } from '../../components/ProgramAddProject/IProgramAddProjectProps'
+import { IProgramAdministrationProps } from 'components/ProgramAdministration/types'
+import { BaseProgramWebPart } from 'webparts/baseProgramWebPart/baseProgramWebPart'
+import { DataAdapter } from 'data'
+import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
+import { ProgramAdministration } from 'components/ProgramAdministration'
 
-export interface IProgramAddProjectWebPartProps {
-  description: string
-}
+export default class ProgramAdministrationWebPart extends BaseProgramWebPart<IProgramAdministrationProps> {
+  public async onInit(): Promise<void> {
+    await super.onInit()
+  }
 
-export default class ProgramAddProjectWebPart extends BaseClientSideWebPart<IProgramAddProjectWebPartProps> {
   public render(): void {
-    const element: React.ReactElement<IProgramAddProjectProps> = React.createElement(
-      ProgramAddProject,
-      {
-        description: this.properties.description
-      }
-    )
-
-    ReactDom.render(element, this.domElement)
+    this.renderComponent<IProgramAdministrationProps>(ProgramAdministration, {
+      description: this.description,
+      context: this.context,
+      dataAdapter: this.dataAdapter
+    })
   }
 
   protected onDispose(): void {
@@ -31,7 +30,7 @@ export default class ProgramAddProjectWebPart extends BaseClientSideWebPart<IPro
     return Version.parse('1.0')
   }
 
-  protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+  public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
         {

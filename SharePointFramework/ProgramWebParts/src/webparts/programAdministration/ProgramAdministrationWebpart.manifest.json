@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
   "id": "9570e369-21a6-4bf5-8198-13506499de52",
-  "alias": "ProgramAddProjectWebPart",
+  "alias": "ProgramAdministrationWebpart",
   "componentType": "WebPart",
   "version": "*",
   "manifestVersion": 2,
