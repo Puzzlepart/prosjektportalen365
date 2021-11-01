@@ -36,7 +36,7 @@ export class DataAdapter {
       urlOrWeb: hubSite.url
     })
     sp.setup({
-      sp: {baseUrl: 'https://pzlpab.sharepoint.com/sites/prosjektportalen_365'}
+      sp: {baseUrl: hubSite.url}
     })
     this._sp = sp
   }
@@ -86,7 +86,7 @@ export class DataAdapter {
   public async fetchDataForView(
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
-    siteId: string
+    siteId: string[]
   ): Promise<IFetchDataForViewItemResult[]> {
     siteId = this._webPartContext.pageContext.legacyPageContext.departmentId
     const isCurrentUserInManagerGroup = await this.isUserInGroup(strings.PortfolioManagerGroupName)
@@ -109,12 +109,10 @@ export class DataAdapter {
   public async fetchDataForRegularView(
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
-    siteId: string,
+    siteId: string[],
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IFetchDataForViewItemResult[]> {
     try {
-      console.log('fffffffffffffff')
-      console.log(siteId);
       const { projects, sites, statusReports } = await this._fetchDataForView(
         view,
         configuration,
@@ -154,7 +152,7 @@ export class DataAdapter {
   public async fetchDataForManagerView(
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
-    siteId: string,
+    siteId: string[],
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IFetchDataForViewItemResult[]> {
     try {
@@ -184,6 +182,23 @@ export class DataAdapter {
     }
   }
 
+  /*
+  Array av GtSiteIdOWSTEXT
+  Legg til GtSideIdOWSTEXT="SiteID"
+  GtSiteIdOWSTEXT=6f06b080-d861-46dd-bc53-c0039493be99
+  If Array.length > 50
+    Nytt element
+  Ny array
+  */
+  public splitQuery(siteIds: string[], view: PortfolioOverviewView): string[] {
+    siteIds
+    view
+    /**
+     * Previous try didn't work. Reducer?
+     */    
+    return []
+  }
+
   /**
    *  Fetches data for portfolio views
    * @param view
@@ -195,7 +210,7 @@ export class DataAdapter {
   private async _fetchDataForView(
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
-    siteId: string,
+    siteId: string[],
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ) {
     let [
