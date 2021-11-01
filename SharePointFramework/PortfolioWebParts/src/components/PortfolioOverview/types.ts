@@ -71,6 +71,11 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
    * Default view id
    */
   defaultViewId?: string
+
+  /**
+   * Child project site ids
+   */
+  childSiteIds?: string[]
 }
 
 export interface IPortfolioOverviewState {
