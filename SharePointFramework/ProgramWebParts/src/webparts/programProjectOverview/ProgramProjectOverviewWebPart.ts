@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
-import { IPropertyPaneConfiguration, IPropertyPaneDropdownOption, PropertyPaneDropdown, PropertyPaneTextField } from '@microsoft/sp-property-pane'
+import { IPropertyPaneConfiguration, IPropertyPaneDropdownOption, PropertyPaneDropdown, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane'
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import * as strings from 'ProgramWebPartsStrings'
 import {ProgramOverview} from '../../components/ProgramProjectOverview/ProgramProjectOverview';
@@ -10,29 +10,55 @@ import {IPortfolioConfiguration} from 'pp365-portfoliowebparts/lib/interfaces';
 import {BaseProgramWebPart} from '../baseProgramWebPart/baseProgramWebPart'
 import {IBaseWebPartComponentProps} from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
 import {PortalDataService} from 'pp365-shared/lib/services/PortalDataService';
-import {DataAdapter} from '../../data';
 import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
 import HubSiteService from 'sp-hubsite-service'
-import {HubSite, sp, Web} from '@pnp/sp'
+import {sp} from '@pnp/sp'
+import {ChildProject} from 'models/ChildProject'
 
 interface IProgramOverviewProps extends IBaseWebPartComponentProps {
+  showCommandBar: any
   description: string;
 }
+
+export const PROPERTYPANE_CONFIGURATION_PROPS = {
+  COLUMN_CONFIG_LISTNAME: 'columnConfigListName',
+  COLUMNS_LISTNAME: 'columnsListName',
+  DEFAULT_VIEW_ID: 'defaultViewId',
+  SHOW_COMMANDBAR: 'showCommandBar',
+  SHOW_EXCELEXPORT_BUTTON: 'showExcelExportButton',
+  SHOW_FILTERS: 'showFilters',
+  SHOW_GROUPBY: 'showGroupBy',
+  SHOW_SEARCH_BOX: 'showSearchBox',
+  SHOW_VIEWSELECTOR: 'showViewSelector',
+  VIEWS_LISTNAME: 'viewsListName'
+}
+
 export default class programProjectOverview extends BaseProgramWebPart<IProgramOverviewProps> {
   private _configuration: IPortfolioConfiguration
+  protected childProjects: ChildProject[]
+  protected siteIds: string[]
 
   public async onInit(): Promise<void> {
     await super.onInit()
+    sp.setup({sp: {baseUrl: this.context.pageContext.web.absoluteUrl}})
     this._configuration = await this.dataAdapter.getPortfolioConfig()
+    this.childProjects = await this.getChildProjects()
+  }
+  
+  private async getChildProjects(): Promise<ChildProject[]> {
+    const projectProperties = await sp.web.lists.getByTitle("Prosjektegenskaper").items.getById(1).get()
+    const childProjects: ChildProject[] = JSON.parse(projectProperties.GtChildProjects)
+    this.siteIds = childProjects.map(project => {return project.SiteID})
+    return childProjects 
   }
 
   public render(): void {
-    console.log("HUBSITE", this.hubSite)
     this.renderComponent<IProjectProgramOverviewProps>(ProgramOverview, {
       description: this.description,
       context: this.context,
+      dataAdapter: this.dataAdapter,
       configuration: this._configuration,
-      dataAdapt: this.dataAdapter
+      childProjects: this.siteIds
     });
   }
 
@@ -45,19 +71,82 @@ export default class programProjectOverview extends BaseProgramWebPart<IProgramO
     return Version.parse('1.0')
   }
 
+  protected _getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
+    // eslint-disable-next-line default-case
+    switch (targetProperty) {
+      case PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID:
+        {
+          if (this._configuration) {
+            return [
+              { key: null, text: '' },
+              ...this._configuration.views.map((view) => ({ key: view.id, text: view.title }))
+            ]
+          }
+        }
+        break
+    }
+    return []
+  }
+
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
         {
-          header: {
-            description: strings.BenefitOwnerLabel
-          },
           groups: [
             {
-              groupName: strings.BasicGroupName,
+              groupName: strings.GeneralGroupName,
               groupFields: [
-                PropertyPaneTextField('description', {
-                  label: 'test'
+                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_SEARCH_BOX, {
+                  label: strings.ShowSearchBoxLabel
+                }),
+                PropertyPaneDropdown(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID, {
+                  label: strings.DefaultViewLabel,
+                  options: this._getOptions(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID)
+                })
+              ]
+            },
+            {
+              groupName: strings.CommandBarGroupName,
+              groupFields: [
+                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_COMMANDBAR, {
+                  label: strings.ShowCommandBarLabel
+                }),
+                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_GROUPBY, {
+                  label: strings.ShowGroupByLabel,
+                  disabled: !this.properties.showCommandBar
+                }),
+                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_FILTERS, {
+                  label: strings.ShowFiltersLabel,
+                  disabled: !this.properties.showCommandBar
+                }),
+                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_EXCELEXPORT_BUTTON, {
+                  label: strings.ShowExcelExportButtonLabel,
+                  disabled: !this.properties.showCommandBar
+                }),
+                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_VIEWSELECTOR, {
+                  label: strings.ShowViewSelectorLabel,
+                  disabled: !this.properties.showCommandBar
+                })
+              ]
+            }
+          ]
+        },
+        {
+          groups: [
+            {
+              groupName: strings.ConfigurationGroupName,
+              groupFields: [
+                PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.COLUMN_CONFIG_LISTNAME, {
+                  label: strings.ColumnConfigListNameLabel,
+                  disabled: true
+                }),
+                PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.COLUMNS_LISTNAME, {
+                  label: strings.ColumnsListNameLabel,
+                  disabled: true
+                }),
+                PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.VIEWS_LISTNAME, {
+                  label: strings.ViewsListNameLabel,
+                  disabled: true
                 })
               ]
             }
