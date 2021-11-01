@@ -139,6 +139,7 @@ declare interface IProjectWebPartsStrings {
   ShowCmdTimelineListLabel: string;
   ShowTimelineListLabel: string;
   CreateExecutiveProjectlabel: string;
+  ChildProjectAdmin: string;
 }
 
 declare module 'ProjectWebPartsStrings' {

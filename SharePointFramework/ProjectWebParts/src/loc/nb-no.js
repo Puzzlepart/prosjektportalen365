@@ -140,6 +140,7 @@ define([], function () {
     ShowInfoMessageLabel: 'Vis infomelding',
     ShowCmdTimelineListLabel: 'Vis kommandolinje for liste',
     ShowTimelineListLabel: 'Vis liste',
-    CreateExecutiveProjectlabel: "Gjør om til overordnet prosjekt"
+    CreateExecutiveProjectlabel: "Gjør om til overordnet prosjekt",
+    ChildProjectAdmin: "Administrasjon av underordnede prosjekter"
   }
 })

@@ -38,6 +38,8 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
    * Custom actions/button to add
    */
   customActions?: ActionType[]
+
+  
 }
 
 export interface IProjectInformationState
@@ -66,6 +68,10 @@ export interface IProjectInformationState
    * Display parent creation modal
    */
   displayParentCreationModal?: boolean
+
+  isParentProject?: any
+
+  
 }
 
 export interface IProjectInformationUrlHash {
