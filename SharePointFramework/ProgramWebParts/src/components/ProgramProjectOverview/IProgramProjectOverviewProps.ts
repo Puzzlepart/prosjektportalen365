@@ -5,5 +5,6 @@ export interface IProjectProgramOverviewProps {
   description: string;
   context: any;
   configuration: IPortfolioConfiguration;
-  dataAdapt: DataAdapter
+  dataAdapter: DataAdapter;
+  childProjects?: string[];
 }
