@@ -8,8 +8,11 @@ import { BaseProgramWebPart } from 'webparts/baseProgramWebPart/baseProgramWebPa
 import { DataAdapter } from 'data'
 import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
 import { ProgramAdministration } from 'components/ProgramAdministration'
+import { SPRest } from '@pnp/sp'
 
 export default class TEST extends BaseProgramWebPart<IProgramAdministrationProps> {
+  private _sp: SPRest
+
   public async onInit(): Promise<void> {
     await super.onInit()
   }
@@ -18,7 +21,8 @@ export default class TEST extends BaseProgramWebPart<IProgramAdministrationProps
     this.renderComponent<IProgramAdministrationProps>(ProgramAdministration, {
       description: this.description,
       context: this.context,
-      dataAdapter: this.dataAdapter
+      dataAdapter: this.dataAdapter,
+      sp: this._sp
     })
   }
 

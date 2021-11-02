@@ -2,7 +2,12 @@ import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd } from '@pnp/common'
 import { QueryPropertyValueType, SearchResult, SortDirection, SPRest, sp } from '@pnp/sp'
 import * as cleanDeep from 'clean-deep'
-import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'pp365-portfoliowebparts/lib/interfaces'
+import {
+  IGraphGroup,
+  IPortfolioConfiguration,
+  ISPProjectItem,
+  ISPUser
+} from 'pp365-portfoliowebparts/lib/interfaces'
 import {
   ChartConfiguration,
   ChartData,
@@ -28,7 +33,7 @@ export class DataAdapter {
   private _portalDataService: PortalDataService
   private _dataSourceService: DataSourceService
   private _sp: SPRest
-  private _webPartContext: WebPartContext;
+  private _webPartContext: WebPartContext
 
   constructor(public context: WebPartContext, public hubSite: IHubSite) {
     this._webPartContext = context
@@ -36,7 +41,7 @@ export class DataAdapter {
       urlOrWeb: hubSite.url
     })
     sp.setup({
-      sp: {baseUrl: 'https://pzlpab.sharepoint.com/sites/prosjektportalen_365'}
+      sp: { baseUrl: hubSite.url }
     })
     this._sp = sp
   }
@@ -113,8 +118,6 @@ export class DataAdapter {
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IFetchDataForViewItemResult[]> {
     try {
-      console.log('fffffffffffffff')
-      console.log(siteId);
       const { projects, sites, statusReports } = await this._fetchDataForView(
         view,
         configuration,

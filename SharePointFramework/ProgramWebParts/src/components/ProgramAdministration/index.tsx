@@ -1,48 +1,105 @@
-import React, { FunctionComponent, useEffect } from 'react';
-import styles from './ProgramAddProject.module.scss';
-import { IProgramAdministrationProps } from './types';
-import { Timeline } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/Timeline'
-import moment from 'moment'
+import React, { FunctionComponent, useEffect, useState } from 'react';
+import styles from './programAdministration.module.scss'
+import { IProgramAdministrationProps, IChildProject } from './types';
+import { useStore } from './store';
+import { SPRest } from '@pnp/sp';
+import { IViewField, SelectionMode } from "@pnp/spfx-controls-react/lib/ListView";
+import { IColumn, ShimmeredDetailsList } from 'office-ui-fabric-react'
+import { ProjectTable } from './ProjectTable';
+import { Commandbar } from './Commands';
+import { AddProjectDialog } from './AddProjectDialog';
 
 
-export const ProgramAdministration: FunctionComponent<IProgramAdministrationProps> = (props) => {
+
+export const ProgramAdministration: FunctionComponent<IProgramAdministrationProps> = ({ sp }) => {
+
+  const setProjects = useStore(state => state.setProjects)
+  const toggleLoading = useStore(state => state.toggleLoading)
+  const displayProjectDialog = useStore(state => state.displayProjectDialog)
+  const projects = useStore(state => state.projects)
+  const isLoading = useStore(state => state.isLoading)
 
   useEffect(() => {
-
+    const fetch = async () => {
+      setProjects(await fetchChildProjects(sp))
+      toggleLoading()
+    }
+    toggleLoading()
+    fetch()
   }, [])
 
-  console.log(props)
+  if (isLoading) {
+    return <ShimmeredDetailsList items={[]} shimmerLines={15} columns={shimmeredColumns} enableShimmer />
+  }
 
   return (
-    <>
-      <Timeline items={items} groups={groups} _onItemClick={() => console.log()} defaultTimeStart={[-1, 'months']}
-        defaultTimeEnd={[1, 'years']} />
-    </>
-  );
+    <div className={styles.root}>
+      <div>
+        <Commandbar />
+      </div>
+      <div>
+        <ProjectTable fields={fields} projects={projects} onSelect={(selectedItem) => console.log(selectedItem)} selectionMode={SelectionMode.multiple} />
+      </div>
+      {displayProjectDialog && <AddProjectDialog />}
+    </div>
+
+  )
 }
 
-const groups = [{ id: 1, title: 'group 1' }, { id: 2, title: 'group 2' }]
+/**
+ * Fetches current child projects
+ */
+async function fetchChildProjects(_sp: SPRest) {
 
-const items = [
+  const [data] = await _sp.web.lists.getByTitle("Prosjektegenskaper").items.select('GtChildProjects').get()
+  const children = await JSON.parse(data.GtChildProjects)
+  return children
+}
+
+/**
+ * Add a child project
+ */
+async function addChildProject(_sp: SPRest, project: IChildProject) {
+
+  const [currentData] = await _sp.web.lists.getByTitle("Prosjektegenskaper").items.select('GtChildProjects').get()
+  const projects: IChildProject[] = JSON.parse(currentData.GtChildProjects)
+
+  const updatedProjects = [...projects, project]
+  const ans = await _sp.web.lists.getByTitle("Prosjektegenskaper").items.getById(1).update({ GtChildProjects: JSON.stringify(updatedProjects) })
+  console.log(ans)
+}
+
+export const fields: IViewField[] = [
   {
-    id: 1,
-    group: 1,
-    title: 'item 1',
-    start_time: moment(),
-    end_time: moment().add(1, 'hour')
+    name: "siteUrl",
+    displayName: "Url",
+    isResizable: true,
+    sorting: true,
+    maxWidth: 250.
+
   },
   {
-    id: 2,
-    group: 2,
-    title: 'item 2',
-    start_time: moment().add(-0.5, 'hour'),
-    end_time: moment().add(0.5, 'hour')
+    name: "siteId",
+    displayName: "Id",
+    isResizable: true,
+    sorting: true,
+    maxWidth: 250.
+  }
+]
+
+const shimmeredColumns: IColumn[] = [
+  {
+    key: "1",
+    name: "siteUrl",
+    isResizable: true,
+    maxWidth: 250,
+    minWidth: 100
   },
   {
-    id: 3,
-    group: 1,
-    title: 'item 3',
-    start_time: moment().add(2, 'hour'),
-    end_time: moment().add(3, 'hour')
+    key: "2",
+    name: "siteId",
+    isResizable: true,
+    maxWidth: 250,
+    minWidth: 100
   }
 ]

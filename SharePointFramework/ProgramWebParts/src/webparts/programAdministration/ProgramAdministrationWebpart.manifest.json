@@ -12,8 +12,8 @@
     {
       "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
       "group": { "default": "Other" },
-      "title": { "default": "programAddProject" },
-      "description": { "default": "programAddProject description" },
+      "title": { "default": "program administration" },
+      "description": { "default": "Program administration description" },
       "officeFabricIconFontName": "Page",
       "properties": {
         "description": "programAddProject"

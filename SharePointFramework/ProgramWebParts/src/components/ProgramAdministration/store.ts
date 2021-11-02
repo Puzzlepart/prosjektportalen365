@@ -1,13 +1,20 @@
 import create from 'zustand'
+import { IChildProject } from './types'
 
 interface IProgramAdministrationState {
   isLoading: boolean
-  projects: []
+  projects: IChildProject[]
+  displayProjectDialog: boolean
+  toggleProjectDialog: () => void
   toggleLoading: () => void
+  setProjects: (project: IChildProject[]) => void
 }
 
-const useStore = create<IProgramAdministrationState>((set) => ({
+export const useStore = create<IProgramAdministrationState>((set) => ({
   isLoading: false,
   projects: [],
-  toggleLoading: () => set((state) => ({ isLoading: !state.isLoading }))
+  displayProjectDialog: false,
+  toggleLoading: () => set((state) => ({ isLoading: !state.isLoading })),
+  setProjects: (projects) => set(() => ({ projects: projects })),
+  toggleProjectDialog: () => set((state) => ({ displayProjectDialog: !state.displayProjectDialog }))
 }))
