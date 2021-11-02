@@ -8,13 +8,15 @@ import styles from '../programAdministration.module.scss'
 
 
 export const AddProjectDialog: FunctionComponent<IAddProjectProps> = () => {
-    const projects = useStore(state => state.projects)
+    const projects = useStore(state => state.childProjects)
     const toggleProjectDialog = useStore(state => state.toggleProjectDialog)
 
     return (
         <>
-            <Dialog hidden={false} onDismiss={() => toggleProjectDialog()} maxWidth={"1000px"} dialogContentProps={dialogContentProps}>
-                <ProjectTable fields={fields} projects={projects} onSelect={(item) => console.log(item)} width={"50em"} />
+            <Dialog hidden={false} onDismiss={() => toggleProjectDialog()} maxWidth={"1000px"} dialogContentProps={dialogContentProps} >
+                <div className={styles.dialogContent}>
+                    <ProjectTable fields={fields} projects={projects} onSelect={(item) => console.log(item)} width={"50em"} />
+                </div>
                 <DialogFooter>
                     <PrimaryButton text="Legg til" onClick={() => toggleProjectDialog()} />
                     <DefaultButton text="Avbryt" onClick={() => toggleProjectDialog()} />

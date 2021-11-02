@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import styles from './programAdministration.module.scss'
-import { IProgramAdministrationProps, IChildProject } from './types';
+import { IProgramAdministrationProps } from './types';
 import { useStore } from './store';
 import { SPRest } from '@pnp/sp';
 import { IViewField, SelectionMode } from "@pnp/spfx-controls-react/lib/ListView";
@@ -8,20 +8,20 @@ import { IColumn, ShimmeredDetailsList } from 'office-ui-fabric-react'
 import { ProjectTable } from './ProjectTable';
 import { Commandbar } from './Commands';
 import { AddProjectDialog } from './AddProjectDialog';
-
+import { getHubSiteProjects, fetchChildProjects } from './helpers';
 
 
 export const ProgramAdministration: FunctionComponent<IProgramAdministrationProps> = ({ sp }) => {
-
-  const setProjects = useStore(state => state.setProjects)
+  const setChildProjects = useStore(state => state.setChildProjects)
   const toggleLoading = useStore(state => state.toggleLoading)
   const displayProjectDialog = useStore(state => state.displayProjectDialog)
-  const projects = useStore(state => state.projects)
+  const childProjects = useStore(state => state.childProjects)
   const isLoading = useStore(state => state.isLoading)
 
   useEffect(() => {
     const fetch = async () => {
-      setProjects(await fetchChildProjects(sp))
+      await getHubSiteProjects(sp)
+      setChildProjects(await fetchChildProjects(sp))
       toggleLoading()
     }
     toggleLoading()
@@ -33,41 +33,18 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
   }
 
   return (
-    <div className={styles.root}>
-      <div>
-        <Commandbar />
+    <>
+      <Commandbar />
+      <div className={styles.root}>
+        <div>
+          <ProjectTable fields={fields} projects={childProjects} onSelect={(selectedItem) => console.log(selectedItem)} selectionMode={SelectionMode.multiple} />
+        </div>
+        {displayProjectDialog && <AddProjectDialog />}
       </div>
-      <div>
-        <ProjectTable fields={fields} projects={projects} onSelect={(selectedItem) => console.log(selectedItem)} selectionMode={SelectionMode.multiple} />
-      </div>
-      {displayProjectDialog && <AddProjectDialog />}
-    </div>
-
+    </>
   )
 }
 
-/**
- * Fetches current child projects
- */
-async function fetchChildProjects(_sp: SPRest) {
-
-  const [data] = await _sp.web.lists.getByTitle("Prosjektegenskaper").items.select('GtChildProjects').get()
-  const children = await JSON.parse(data.GtChildProjects)
-  return children
-}
-
-/**
- * Add a child project
- */
-async function addChildProject(_sp: SPRest, project: IChildProject) {
-
-  const [currentData] = await _sp.web.lists.getByTitle("Prosjektegenskaper").items.select('GtChildProjects').get()
-  const projects: IChildProject[] = JSON.parse(currentData.GtChildProjects)
-
-  const updatedProjects = [...projects, project]
-  const ans = await _sp.web.lists.getByTitle("Prosjektegenskaper").items.getById(1).update({ GtChildProjects: JSON.stringify(updatedProjects) })
-  console.log(ans)
-}
 
 export const fields: IViewField[] = [
   {
@@ -76,7 +53,6 @@ export const fields: IViewField[] = [
     isResizable: true,
     sorting: true,
     maxWidth: 250.
-
   },
   {
     name: "siteId",
@@ -90,14 +66,14 @@ export const fields: IViewField[] = [
 const shimmeredColumns: IColumn[] = [
   {
     key: "1",
-    name: "siteUrl",
+    name: "URL",
     isResizable: true,
     maxWidth: 250,
     minWidth: 100
   },
   {
     key: "2",
-    name: "siteId",
+    name: "Id",
     isResizable: true,
     maxWidth: 250,
     minWidth: 100

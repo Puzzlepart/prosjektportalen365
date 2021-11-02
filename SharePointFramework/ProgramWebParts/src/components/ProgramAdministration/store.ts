@@ -3,18 +3,23 @@ import { IChildProject } from './types'
 
 interface IProgramAdministrationState {
   isLoading: boolean
-  projects: IChildProject[]
+  childProjects: IChildProject[]
   displayProjectDialog: boolean
+  availableProjects: any[]
   toggleProjectDialog: () => void
   toggleLoading: () => void
-  setProjects: (project: IChildProject[]) => void
+  setChildProjects: (projects: IChildProject[]) => void
+  setAvailableProjects: (projects: any[]) => void
 }
 
 export const useStore = create<IProgramAdministrationState>((set) => ({
   isLoading: false,
-  projects: [],
   displayProjectDialog: false,
+  childProjects: [],
+  availableProjects: [],
   toggleLoading: () => set((state) => ({ isLoading: !state.isLoading })),
-  setProjects: (projects) => set(() => ({ projects: projects })),
-  toggleProjectDialog: () => set((state) => ({ displayProjectDialog: !state.displayProjectDialog }))
+  toggleProjectDialog: () =>
+    set((state) => ({ displayProjectDialog: !state.displayProjectDialog })),
+  setAvailableProjects: (projects) => set(() => ({ availableProjects: projects })),
+  setChildProjects: (projects) => set(() => ({ childProjects: projects }))
 }))
