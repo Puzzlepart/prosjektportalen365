@@ -1,11 +1,11 @@
-import { IChildProject } from '../types'
+import { ChildProject } from '../types'
 import { IViewField, SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
 
 export interface IProjectTableProps {
   selectionMode?: SelectionMode
   title?: string
   width?: string
-  projects: IChildProject[] | []
+  projects: ChildProject[] | []
   fields: IViewField[]
   onSelect?: (items: any[]) => void
 }

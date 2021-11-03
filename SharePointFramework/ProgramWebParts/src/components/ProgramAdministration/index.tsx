@@ -1,14 +1,13 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import styles from './programAdministration.module.scss'
-import { IProgramAdministrationProps } from './types';
+import { IProgramAdministrationProps, shimmeredColumns } from './types';
 import { useStore } from './store';
-import { SPRest } from '@pnp/sp';
 import { IViewField, SelectionMode } from "@pnp/spfx-controls-react/lib/ListView";
 import { IColumn, ShimmeredDetailsList } from 'office-ui-fabric-react'
 import { ProjectTable } from './ProjectTable';
 import { Commandbar } from './Commands';
 import { AddProjectDialog } from './AddProjectDialog';
-import { getHubSiteProjects, fetchChildProjects } from './helpers';
+import { fetchChildProjects } from './helpers';
 
 
 export const ProgramAdministration: FunctionComponent<IProgramAdministrationProps> = ({ sp }) => {
@@ -20,7 +19,6 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
 
   useEffect(() => {
     const fetch = async () => {
-      await getHubSiteProjects(sp)
       setChildProjects(await fetchChildProjects(sp))
       toggleLoading()
     }
@@ -36,10 +34,11 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
     <>
       <Commandbar />
       <div className={styles.root}>
+        <h2>Administrasjon av underordnede prosjekter</h2>
         <div>
           <ProjectTable fields={fields} projects={childProjects} onSelect={(selectedItem) => console.log(selectedItem)} selectionMode={SelectionMode.multiple} />
         </div>
-        {displayProjectDialog && <AddProjectDialog />}
+        {displayProjectDialog && <AddProjectDialog sp={sp} />}
       </div>
     </>
   )
@@ -48,34 +47,18 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
 
 export const fields: IViewField[] = [
   {
-    name: "siteUrl",
-    displayName: "Url",
+    name: "title",
+    displayName: "Tittel",
     isResizable: true,
     sorting: true,
     maxWidth: 250.
   },
   {
-    name: "siteId",
-    displayName: "Id",
+    name: "GtSiteIdOWSTEXT",
+    displayName: "Site id",
     isResizable: true,
     sorting: true,
     maxWidth: 250.
   }
 ]
 
-const shimmeredColumns: IColumn[] = [
-  {
-    key: "1",
-    name: "URL",
-    isResizable: true,
-    maxWidth: 250,
-    minWidth: 100
-  },
-  {
-    key: "2",
-    name: "Id",
-    isResizable: true,
-    maxWidth: 250,
-    minWidth: 100
-  }
-]

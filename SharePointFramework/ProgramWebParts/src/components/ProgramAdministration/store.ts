@@ -1,15 +1,18 @@
+import { SPRest } from '@pnp/sp'
 import create from 'zustand'
-import { IChildProject } from './types'
+import { addChildProject } from './helpers'
+import { ChildProject, ProjectChildListItem } from './types'
 
 interface IProgramAdministrationState {
   isLoading: boolean
-  childProjects: IChildProject[]
+  childProjects: ChildProject[]
   displayProjectDialog: boolean
-  availableProjects: any[]
+  availableProjects: ChildProject[]
   toggleProjectDialog: () => void
   toggleLoading: () => void
-  setChildProjects: (projects: IChildProject[]) => void
-  setAvailableProjects: (projects: any[]) => void
+  setChildProjects: (projects: ChildProject[]) => void
+  setAvailableProjects: (projects: ChildProject[]) => void
+  addChildProject: (project: ChildProject, _sp: SPRest) => void
 }
 
 export const useStore = create<IProgramAdministrationState>((set) => ({
@@ -17,9 +20,16 @@ export const useStore = create<IProgramAdministrationState>((set) => ({
   displayProjectDialog: false,
   childProjects: [],
   availableProjects: [],
+
   toggleLoading: () => set((state) => ({ isLoading: !state.isLoading })),
+
   toggleProjectDialog: () =>
     set((state) => ({ displayProjectDialog: !state.displayProjectDialog })),
+
   setAvailableProjects: (projects) => set(() => ({ availableProjects: projects })),
-  setChildProjects: (projects) => set(() => ({ childProjects: projects }))
+
+  setChildProjects: (projects) => set(() => ({ childProjects: projects })),
+
+  addChildProject: (project) =>
+    set((state) => ({ childProjects: [...state.childProjects, project] }))
 }))
