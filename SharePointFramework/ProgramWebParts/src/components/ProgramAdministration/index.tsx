@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import styles from './programAdministration.module.scss'
-import { IProgramAdministrationProps, shimmeredColumns } from './types';
+import { ChildProject, IProgramAdministrationProps, shimmeredColumns } from './types';
 import { useStore } from './store';
 import { IViewField, SelectionMode } from "@pnp/spfx-controls-react/lib/ListView";
 import { IColumn, ShimmeredDetailsList } from 'office-ui-fabric-react'
@@ -16,6 +16,7 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
   const displayProjectDialog = useStore(state => state.displayProjectDialog)
   const childProjects = useStore(state => state.childProjects)
   const isLoading = useStore(state => state.isLoading)
+  const setSelected = useStore(state => state.setSelectedToDelete)
 
   useEffect(() => {
     const fetch = async () => {
@@ -32,11 +33,11 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
 
   return (
     <>
-      <Commandbar />
+      <Commandbar _sp={sp} />
       <div className={styles.root}>
         <h2>Administrasjon av underordnede prosjekter</h2>
         <div>
-          <ProjectTable fields={fields} projects={childProjects} onSelect={(selectedItem) => console.log(selectedItem)} selectionMode={SelectionMode.multiple} />
+          <ProjectTable fields={fields} projects={childProjects} onSelect={(selectedItem: any) => setSelected(selectedItem)} selectionMode={SelectionMode.multiple} />
         </div>
         {displayProjectDialog && <AddProjectDialog sp={sp} />}
       </div>

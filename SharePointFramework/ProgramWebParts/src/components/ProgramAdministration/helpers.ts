@@ -1,5 +1,5 @@
 import { SPRest, sp } from '@pnp/sp'
-import { ChildProject, ProjectChildListItem } from './types'
+import { ChildProject } from './types'
 import * as cleanDeep from 'clean-deep'
 
 /**
@@ -32,21 +32,9 @@ export async function fetchChildProjects(_sp: SPRest) {
     .getByTitle('Prosjektegenskaper')
     .items.select('GtChildProjects')
     .get()
-  const childrenSiteIds: ProjectChildListItem[] = await JSON.parse(data.GtChildProjects)
-  const allProjects: any = await getHubSiteProjects(_sp)
+  const children: ChildProject[] = await JSON.parse(data.GtChildProjects)
 
-  const enrichedProjects: ChildProject[] = allProjects.PrimarySearchResults.map(
-    (project: any, idx: number) => {
-      if (project?.GtSiteIdOWSTEXT == childrenSiteIds[idx]?.GtSiteIdOWSTEXT) {
-        return {
-          GtSiteIdOWSTEXT: project.GtSiteIdOWSTEXT,
-          title: project.Title
-        }
-      }
-    }
-  )
-
-  return enrichedProjects.filter((a) => a)
+  return children.filter((a) => a)
 }
 
 /**
@@ -55,11 +43,11 @@ export async function fetchChildProjects(_sp: SPRest) {
  * @returns ChildProject[]
  */
 export async function fetchAvailableProjects(_sp: SPRest) {
-  const [data] = await _sp.web.lists
+  const [currentProjects] = await _sp.web.lists
     .getByTitle('Prosjektegenskaper')
     .items.select('GtChildProjects')
     .get()
-  const childrenSiteIds: ProjectChildListItem[] = await JSON.parse(data.GtChildProjects)
+  const childrenSiteIds: ChildProject[] = await JSON.parse(currentProjects.GtChildProjects)
   const allProjects: any = await getHubSiteProjects(_sp)
 
   const enrichedProjects: ChildProject[] = childrenSiteIds.map((el) => {
@@ -94,17 +82,34 @@ async function enrichChildProjects(_sp: SPRest) {
 /**
  * Add a child project
  */
-export async function addChildProject(_sp: SPRest, project: ProjectChildListItem) {
+export async function addChildProject(_sp: SPRest, project: ChildProject[]) {
   const [currentData] = await _sp.web.lists
     .getByTitle('Prosjektegenskaper')
     .items.select('GtChildProjects')
     .get()
-  const projects: ProjectChildListItem[] = JSON.parse(currentData.GtChildProjects)
+  const projects: ChildProject[] = JSON.parse(currentData.GtChildProjects)
+  const updatedProjects = [...projects, ...project]
 
-  const updatedProjects = [...projects, project]
   const ans = await _sp.web.lists
     .getByTitle('Prosjektegenskaper')
     .items.getById(1)
     .update({ GtChildProjects: JSON.stringify(updatedProjects) })
   console.log(ans)
+}
+
+/**
+ * Add a child project
+ */
+export async function removeChildProject(_sp: SPRest, toDelete: ChildProject[]) {
+  const [currentData] = await _sp.web.lists
+    .getByTitle('Prosjektegenskaper')
+    .items.select('GtChildProjects')
+    .get()
+  const projects: ChildProject[] = JSON.parse(currentData.GtChildProjects)
+  const updatedProjects = projects.filter((p) => p.GtSiteIdOWSTEXT !== toDelete[0].GtSiteIdOWSTEXT)
+
+  await _sp.web.lists
+    .getByTitle('Prosjektegenskaper')
+    .items.getById(1)
+    .update({ GtChildProjects: JSON.stringify(updatedProjects) })
 }

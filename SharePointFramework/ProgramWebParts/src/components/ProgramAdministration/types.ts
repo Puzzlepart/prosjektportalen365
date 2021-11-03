@@ -14,10 +14,6 @@ export interface ChildProject {
   title: string
 }
 
-export interface ProjectChildListItem {
-  GtSiteIdOWSTEXT: string
-}
-
 export const shimmeredColumns: IColumn[] = [
   {
     key: '1',
