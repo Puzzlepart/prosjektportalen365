@@ -5,7 +5,7 @@ export interface IProjectTableProps {
   selectionMode?: SelectionMode
   title?: string
   width?: string
-  projects: IChildProject | any
+  projects: IChildProject[] | []
   fields: IViewField[]
-  onSelect: (items: any[]) => void
+  onSelect?: (items: any[]) => void
 }

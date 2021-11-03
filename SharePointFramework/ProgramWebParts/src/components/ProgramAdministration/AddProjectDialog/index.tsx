@@ -1,4 +1,4 @@
-import { DefaultButton, Dialog, DialogFooter, PrimaryButton, DialogType } from 'office-ui-fabric-react'
+import { DefaultButton, Dialog, DialogFooter, PrimaryButton, DialogType, SelectionMode } from 'office-ui-fabric-react'
 import React, { FunctionComponent } from 'react'
 import { IAddProjectProps } from './types'
 import { ProjectTable } from '../ProjectTable'
@@ -14,8 +14,8 @@ export const AddProjectDialog: FunctionComponent<IAddProjectProps> = () => {
     return (
         <>
             <Dialog hidden={false} onDismiss={() => toggleProjectDialog()} maxWidth={"1000px"} dialogContentProps={dialogContentProps} >
-                <div className={styles.dialogContent}>
-                    <ProjectTable fields={fields} projects={projects} onSelect={(item) => console.log(item)} width={"50em"} />
+                <div className={styles.dialogContent}>Sele
+                    <ProjectTable fields={fields} projects={projects} onSelect={(selectedItem) => console.log(selectedItem)} width={"50em"} selectionMode={SelectionMode.single} />
                 </div>
                 <DialogFooter>
                     <PrimaryButton text="Legg til" onClick={() => toggleProjectDialog()} />

@@ -16,7 +16,7 @@
       "description": { "default": "Program administration description" },
       "officeFabricIconFontName": "Page",
       "properties": {
-        "description": "programAddProject"
+        "description": "Porteføljeadministrasjon"
       }
     }
   ]
