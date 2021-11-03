@@ -1,5 +1,5 @@
 
-## Installering
+## Installering og oppgradering
 
 Prosjektportalen 365 kan lastes under [releases](https://github.com/Puzzlepart/prosjektportalen365/releases/latest). Mer informasjon om løsningen, konfigurasjon, installasjon og feilsøking finner du på [wiki-sidene til Prosjektportalen 365](https://github.com/Puzzlepart/prosjektportalen365/wiki).
 
