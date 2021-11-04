@@ -57,5 +57,4 @@ export abstract class BaseProgramWebPart<
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return { pages: [] }
   }
-
 }
