@@ -12,6 +12,8 @@ import styles from '../programAdministration.module.scss'
 export const AddProjectDialog: FunctionComponent<IAddProjectProps> = ({ sp }) => {
     const projects = useStore(state => state.availableProjects)
     const setAvailableProjects = useStore(state => state.setAvailableProjects)
+    const setChildProjects = useStore(state => state.setChildProjects)
+    const childProjects = useStore(state => state.childProjects)
     const toggleProjectDialog = useStore(state => state.toggleProjectDialog)
     const [isLoading, setIsLoading] = useState(false)
     const selectedItem = useRef([])
@@ -19,7 +21,7 @@ export const AddProjectDialog: FunctionComponent<IAddProjectProps> = ({ sp }) =>
     useEffect(() => {
         const fetch = async () => {
             const data: any = await fetchAvailableProjects(sp)
-            setAvailableProjects(data[0])
+            setAvailableProjects(data)
             setIsLoading(false)
         }
         setIsLoading(true)
@@ -39,8 +41,8 @@ export const AddProjectDialog: FunctionComponent<IAddProjectProps> = ({ sp }) =>
                 </div>
                 <DialogFooter>
                     <PrimaryButton text="Legg til" onClick={() => {
-                        console.log(selectedItem.current)
                         addChildProject(sp, selectedItem.current)
+                        setChildProjects([...childProjects, ...selectedItem.current])
                         toggleProjectDialog()
                     }
                     } />

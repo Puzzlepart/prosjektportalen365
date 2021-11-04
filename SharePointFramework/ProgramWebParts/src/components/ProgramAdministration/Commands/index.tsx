@@ -31,7 +31,6 @@ export const Commandbar: FunctionComponent<commandBarProps> = ({ _sp }) => {
             disabled: selectedProjectsToDelete == null,
             onClick: (): any => {
                 removeChildProject(_sp, selectedProjectsToDelete).then(async () => setChildProjects(await fetchChildProjects(_sp)))
-
             }
         },
     ];

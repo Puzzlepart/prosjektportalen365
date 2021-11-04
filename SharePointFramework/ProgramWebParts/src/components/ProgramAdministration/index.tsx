@@ -48,7 +48,7 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
 
 export const fields: IViewField[] = [
   {
-    name: "title",
+    name: "Title",
     displayName: "Tittel",
     isResizable: true,
     sorting: true,

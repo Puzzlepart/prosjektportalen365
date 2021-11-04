@@ -50,18 +50,24 @@ export async function fetchAvailableProjects(_sp: SPRest) {
   const childrenSiteIds: ChildProject[] = await JSON.parse(currentProjects.GtChildProjects)
   const allProjects: any = await getHubSiteProjects(_sp)
 
-  const enrichedProjects: ChildProject[] = childrenSiteIds.map((el) => {
-    return allProjects.PrimarySearchResults.map((project) => {
-      if (el.GtSiteIdOWSTEXT != project.GtSiteIdOWSTEXT) {
-        return {
-          GtSiteIdOWSTEXT: project.GtSiteIdOWSTEXT,
-          title: project.Title
-        }
-      }
-    })
+  //   const enrichedProjects: ChildProject[] = childrenSiteIds.map((el) => {
+  //     return allProjects.PrimarySearchResults.map((project) => {
+  //       if (el.GtSiteIdOWSTEXT != project.GtSiteIdOWSTEXT) {
+  //         return {
+  //           GtSiteIdOWSTEXT: project.GtSiteIdOWSTEXT,
+  //           title: project.Title
+  //         }
+  //       }
+  //     })
+  //   })
+
+  const availableProjects = allProjects.PrimarySearchResults.filter((project) => {
+    return !childrenSiteIds.some((el) => el.GtSiteIdOWSTEXT === project.GtSiteIdOWSTEXT)
   })
 
-  return cleanDeep(enrichedProjects)
+  console.log(availableProjects)
+
+  return availableProjects
 }
 
 /**
