@@ -2,9 +2,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable prefer-const */
 'use strict'
-const fs = require('fs')
 const path = require('path')
-const find = require('find')
 const gulp = require('gulp')
 const build = require('@microsoft/sp-build-web')
 const tsConfig = require('./tsconfig.json')

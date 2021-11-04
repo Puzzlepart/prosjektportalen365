@@ -1217,7 +1217,7 @@
     <value>Hvem er prosjektleder for prosjektet?</value>
   </data>
   <data name="SiteFields_GtProjectSupport_Description" xml:space="preserve">
-    <value>Hvem er prosjektstøtte for prosjektet?</value>
+    <value>Hvem er prosjektstøtte for prosjektet? Dette kan være assisterende prosjektledere eller andre involverte.</value>
   </data>
   <data name="SiteFields_GtStatusBudget_Description" xml:space="preserve">
     <value>Hva er status på prosjektets økonomi?</value>

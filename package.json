@@ -1,6 +1,6 @@
 {
   "name": "pp365",
-  "version": "1.2.9",
+  "version": "1.3.0",
   "description": "Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.",
   "scripts": {
     "build:release": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1",

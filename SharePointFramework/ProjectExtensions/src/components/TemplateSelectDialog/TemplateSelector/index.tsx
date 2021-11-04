@@ -9,18 +9,16 @@ export const TemplateSelector = (props: ITemplateSelectorProps) => {
   /**
    * On template selected
    *
-   * @param opt - Option
-   * @param _idx - Index
+   * @param {ProjectTemplate} opt Option
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onTemplateSelected = (opt: ProjectTemplate, _idx: number): void => {
+  const onTemplateSelected = (opt: ProjectTemplate): void => {
     props.onChange(opt)
   }
 
   /**
    * On render option
    *
-   * @param {ProjectTemplate} opt Option
+   * @param opt Option
    */
   const onRenderOption = (option: ProjectTemplate): JSX.Element => {
     return (

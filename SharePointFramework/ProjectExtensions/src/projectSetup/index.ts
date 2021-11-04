@@ -1,6 +1,6 @@
 import { override } from '@microsoft/decorators'
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base'
-import { isArray } from '@pnp/common'
+import { isArray, stringIsNullOrEmpty } from '@pnp/common'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { sp, Web } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
@@ -27,6 +27,10 @@ import { deleteCustomizer } from './deleteCustomizer'
 import { ProjectSetupError } from './ProjectSetupError'
 import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
 import { ProjectSetupSettings } from './ProjectSetupSettings'
+import { find } from 'underscore'
+import { endsWith } from 'lodash'
+import { ProjectSetupSettings } from './ProjectSetupSettings'
+
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
   private _portal: PortalDataService
   private isSetup = true
@@ -53,6 +57,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         level: LogLevel.Info
       })
       ;(await this._isProjectSetup()) ? (this.isSetup = true) : (this.isSetup = false)
+      this.isSetup = await this._isProjectSetup()
 
       switch (this._validation) {
         case ProjectSetupValidation.InvalidWebLanguage: {
@@ -75,11 +80,13 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           break
         }
         case ProjectSetupValidation.AlreadySetup: {
-          throw new ProjectSetupError(
-            'AlreadySetup',
-            strings.ProjectAlreadySetupMessage,
-            strings.ProjectAlreadySetupStack
-          )
+          if (!stringIsNullOrEmpty(this.properties.forceTemplate)) {
+            throw new ProjectSetupError(
+              'AlreadySetup',
+              strings.ProjectAlreadySetupMessage,
+              strings.ProjectAlreadySetupStack
+            )
+          }
         }
       }
 
@@ -103,7 +110,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Intiialize setup
    *
-   * @param {Tasks.IBaseTaskParams} taskParams Task params
+   * @param taskParams Task params
    */
   private async _initializeSetup(taskParams: Tasks.IBaseTaskParams) {
     try {
@@ -163,39 +170,64 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
+   * Checks for force template
+   *
+   * @param data - Data
+   */
+  private _checkForceTemplate(data: IProjectSetupData): ITemplateSelectDialogState {
+    if (stringIsNullOrEmpty(this.properties.forceTemplate)) return null
+    const selectedTemplate = find(data.templates, (tmpl) =>
+      endsWith(tmpl.serverRelativeUrl, this.properties.forceTemplate)
+    )
+    if (!selectedTemplate) return null
+    return {
+      selectedTemplate,
+      selectedExtensions: [],
+      selectedListContentConfig: [],
+      settings: new ProjectSetupSettings().useDefault()
+    }
+  }
+
+  /**
    * Get provisioning info from TemplateSelectDialog
    *
-   * @param {IProjectSetupData} data Data
+   * @param data - Data
    */
   private _getProvisioningInfo(data: IProjectSetupData): Promise<ITemplateSelectDialogState> {
     return new Promise((resolve, reject) => {
       const placeholder = this._getPlaceholder('TemplateSelectDialog')
-      const element = createElement<ITemplateSelectDialogProps>(TemplateSelectDialog, {
-        data,
-        version: this.manifest.version,
-        onSubmit: (state: ITemplateSelectDialogState) => {
-          this._unmount(placeholder)
-          resolve(state)
-        },
-        onDismiss: () => {
-          this._unmount(placeholder)
-          reject(
-            new ProjectSetupError(
-              '_getProvisioningInfo',
-              strings.SetupAbortedText,
-              strings.SetupAbortedText
+      const forceTemplate = this._checkForceTemplate(data)
+      if (forceTemplate !== null) {
+        this._unmount(placeholder)
+        resolve(forceTemplate)
+      } else {
+        const element = createElement<ITemplateSelectDialogProps>(TemplateSelectDialog, {
+          data,
+          version: this.manifest.version,
+          onSubmit: (state: ITemplateSelectDialogState) => {
+            this._unmount(placeholder)
+            resolve(state)
+          },
+          onDismiss: () => {
+            this._unmount(placeholder)
+            reject(
+              new ProjectSetupError(
+                '_getProvisioningInfo',
+                strings.SetupAbortedText,
+                strings.SetupAbortedText
+              )
             )
-          )
-        }
-      })
-      ReactDOM.render(element, placeholder)
+          }
+        })
+        ReactDOM.render(element, placeholder)
+      }
     })
   }
 
   /**
    * Render ProgressDialog
    *
-   * @param {IProgressDialogProps} props Props
+   * @param props Props
    */
   private _renderProgressDialog(props: IProgressDialogProps) {
     const placeholder = this._getPlaceholder('ProgressDialog')
@@ -209,7 +241,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Render ErrorDialog
    *
-   * @param {IProgressDialogProps} props Props
+   * @param props Props
    */
   private _renderErrorDialog(props: IErrorDialogProps) {
     const progressDialog = this._getPlaceholder('ProgressDialog')
@@ -244,8 +276,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    *
    * Get tasks using Tasks.getTasks and runs through them in sequence
    *
-   * @param {Tasks.IBaseTaskParams} taskParams Task params
-   * @param {IProjectSetupData} data Data
+   * @param taskParams Task params
+   * @param data Data
    */
   private async _startProvision(
     taskParams: Tasks.IBaseTaskParams,
@@ -281,9 +313,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * On task status updated
    *
-   * @param {string} text Text
-   * @param {string} subText Sub text
-   * @param {string} iconName Icon name
+   * @param text Text
+   * @param subText Sub text
+   * @param iconName Icon name
    */
   private _onTaskStatusUpdated(text: string, subText: string, iconName: string) {
     this._renderProgressDialog({ text, subText, iconName })
@@ -360,16 +392,20 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           },
           ['File', 'FieldValuesAsText']
         ),
-        this._portal.getItems(
-          this.properties.extensionsLibrary,
-          ProjectExtension,
-          {
-            ViewXml:
-              '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
-          },
-          ['File', 'FieldValuesAsText']
-        ),
-        this._portal.getItems(this.properties.contentConfigList, ListContentConfig)
+        this.properties.extensionsLibrary
+          ? this._portal.getItems(
+            this.properties.extensionsLibrary,
+            ProjectExtension,
+            {
+              ViewXml:
+                '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+            },
+            ['File', 'FieldValuesAsText']
+          )
+          : Promise.resolve([]),
+        this.properties.contentConfigList
+          ? this._portal.getItems(this.properties.contentConfigList, ListContentConfig)
+          : Promise.resolve([])
       ])
       Logger.log({
         message: '(ProjectSetup) [_fetchData]: Retrieved templates, extensions and content config',
@@ -411,7 +447,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Unmount component at container
    *
-   * @param {HTMLElement} container Container
+   * @param container Container
    */
   private _unmount(container: HTMLElement): boolean {
     return ReactDOM.unmountComponentAtNode(container)
@@ -428,7 +464,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Get placeholder by key
    *
-   * @param {string} key Key
+   * @param key Key
    */
   private _getPlaceholder(key: 'ErrorDialog' | 'ProgressDialog' | 'TemplateSelectDialog') {
     const id = this._placeholderIds[key]
@@ -445,8 +481,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Init SP list logging
    *
-   * @param {Web} hubWeb Hub web
-   * @param {string} listName List name
+   * @param hubWeb Hub web
+   * @param listName List name
    */
   private _initializeSPListLogging(hubWeb: Web, listName: string = 'Logg') {
     ListLogger.init(

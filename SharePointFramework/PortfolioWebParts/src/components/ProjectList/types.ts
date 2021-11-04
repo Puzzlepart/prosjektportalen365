@@ -9,11 +9,6 @@ export interface IProjectListProps extends IBaseComponentProps {
   loadingText: string
 
   /**
-   * Seach box placeholder text
-   */
-  searchBoxPlaceholderText: string
-
-  /**
    * Sort by property
    */
   sortBy?: string
@@ -86,11 +81,6 @@ export interface IProjectListState {
   showAsTiles?: boolean
 
   /**
-   * List view properties
-   */
-  listView?: { projects: ProjectListModel[]; columns: IColumn[] }
-
-  /**
    * Current selected view
    */
   selectedView?: string
@@ -99,6 +89,11 @@ export interface IProjectListState {
    * Is the current user in the PortfolioManagerGroup?
    */
   isUserInPortfolioManagerGroup?: boolean
+
+  /**
+   * Current sort
+   */
+  sort?: { fieldName: string; isSortedDescending: boolean }
 }
 
 /**

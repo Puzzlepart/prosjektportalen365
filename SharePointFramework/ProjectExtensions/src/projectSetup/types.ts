@@ -39,9 +39,10 @@ export interface IProjectSetupProperties {
   skipReload?: boolean
 
   /**
-   * Skip template selection
+   * Force template to be selected and
+   * auto-run the provisioning.
    */
-  skipSelection: boolean
+  forceTemplate?: string
 }
 
 export interface IProjectSetupData extends ITemplateSelectDialogState {

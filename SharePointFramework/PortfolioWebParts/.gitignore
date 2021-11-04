@@ -11,8 +11,8 @@ dist
 lib
 solution
 temp
-release
 *.sppkg
+release/**/*
 
 # Coverage directory used by tools like istanbul
 coverage

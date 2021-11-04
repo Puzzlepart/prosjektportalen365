@@ -23,7 +23,7 @@ export class TemplateSelectDialog extends React.Component<
   /**
    * Constructor
    *
-   * @param {ITemplateSelectDialogProps} props Props
+   * @param props Props
    */
   constructor(props: ITemplateSelectDialogProps) {
     super(props)
@@ -121,7 +121,7 @@ export class TemplateSelectDialog extends React.Component<
     const data = { ...this.state }
     if (data.selectedTemplate.listContentConfigIds) {
       data.selectedListContentConfig = this.props.data.listContentConfig.filter(
-        (lcc) => data.selectedTemplate.listContentConfigIds.indexOf(parseInt(lcc.id)) !== -1
+        (lcc) => data.selectedTemplate.listContentConfigIds.indexOf(lcc.id) !== -1
       )
     }
     this.props.onSubmit(data)

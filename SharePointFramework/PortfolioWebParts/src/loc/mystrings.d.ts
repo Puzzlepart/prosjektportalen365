@@ -92,6 +92,7 @@ declare interface IPortfolioWebPartsStrings {
   NewViewText: string
   NoDefaultViewMessage: string
   NoGroupingText: string
+  NoProjectData: string
   NoProperties: string
   NoSearchResults: string
   NotSet: string
@@ -115,6 +116,8 @@ declare interface IPortfolioWebPartsStrings {
   AllocationStatusLabel: string
   CommentLabel: string
   SaveViewAsText: string
+  MyProjectsSearchBoxPlaceholderText: string
+  AllProjectsSearchBoxPlaceholderText: string
   SearchBoxPlaceholderText: string
   SearchBoxPlaceholderTextLabel: string
   ShowAllMeasurementsLinkText: string

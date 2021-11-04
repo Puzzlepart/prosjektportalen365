@@ -10,8 +10,8 @@ export const ListContentSection = (props: IListContentSectionProps) => {
   /**
    * On item toggle
    *
-   * @param {ListContentConfig} listContentConfig List content config
-   * @param {boolean} checked Checked
+   * @param listContentConfig List content config
+   * @param checked Checked
    */
   const onChanged = (listContentConfig: ListContentConfig, checked: boolean): void => {
     let selectedListContentConfig = []

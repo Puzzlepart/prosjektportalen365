@@ -30,7 +30,6 @@ export const ErrorDialog = ({
     )
   }
 
-
   return (
     <BaseDialog
       version={version}

@@ -40,7 +40,7 @@ export class DataAdapter {
    */
   public async configure(): Promise<DataAdapter> {
     if (this._dataSourceService) return this
-    const { web } = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
+    const { web } = await HubSiteService.GetHubSite(sp, this.context.pageContext)
     this._dataSourceService = new DataSourceService(web)
     return this
   }

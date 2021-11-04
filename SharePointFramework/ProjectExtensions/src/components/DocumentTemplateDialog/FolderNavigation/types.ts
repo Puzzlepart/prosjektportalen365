@@ -14,7 +14,7 @@ export interface IFolderNavigationProps extends Partial<IBreadcrumbProps> {
   /**
    * Set folder
    *
-   * @param {string} folder Folder URL
+   * @param folder Folder URL
    */
   setFolder: (folder: string) => void
 }

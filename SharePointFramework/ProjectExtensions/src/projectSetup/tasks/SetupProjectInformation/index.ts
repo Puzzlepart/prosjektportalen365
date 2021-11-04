@@ -12,8 +12,8 @@ export class SetupProjectInformation extends BaseTask {
   /**
    * Executes the SetupProjectInformation task
    *
-   * @param {IBaseTaskParams} params Task parameters
-   * @param {OnProgressCallbackFunction} onProgress On progress funtion
+   * @param params Task parameters
+   * @param onProgress On progress funtion
    */
   public async execute(
     params: IBaseTaskParams,
@@ -31,8 +31,8 @@ export class SetupProjectInformation extends BaseTask {
   /**
    * Sync properties list
    *
-   * @param {IBaseTaskParams} params Task parameters
-   * @param {OnProgressCallbackFunction} onProgress On progress funtion
+   * @param params Task parameters
+   * @param onProgress On progress funtion
    */
   private async _syncPropertiesList(
     params: IBaseTaskParams,
@@ -76,7 +76,7 @@ export class SetupProjectInformation extends BaseTask {
    * * GtProjectTemplate
    * * ContentTypeId (if custom content type is specified in template parameters)
    *
-   * @param {IBaseTaskParams} params Task parameters
+   * @param params Task parameters
    */
   private async _addEntryToHub(params: IBaseTaskParams) {
     try {
