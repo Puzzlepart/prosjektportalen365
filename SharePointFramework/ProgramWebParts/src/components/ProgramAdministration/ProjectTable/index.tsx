@@ -7,14 +7,14 @@ export const ProjectTable: FunctionComponent<IProjectTableProps> = ({ fields, pr
 
     if (projects?.length > 0) {
         return (
-            <div style={width ? { width, height: "600px", overflow: "scroll" } : {}}>
+            <div style={width ? { width, height: "600px", overflowX: "auto" } : {}}>
                 <ListView items={projects} viewFields={fields} selectionMode={selectionMode} showFilter filterPlaceHolder="Søk i prosjekter" selection={(item) => onSelect(item)} />
             </div>
         )
     }
 
     return (
-        <div style={width ? { width, height: "600px", overflowY: "scroll" } : {}}>
+        <div style={width ? { width, height: "600px", overflowX: "auto" } : {}}>
             <ListView items={projects} viewFields={fields} selectionMode={selectionMode} showFilter filterPlaceHolder="Søk i prosjekter" />
         </div>
 

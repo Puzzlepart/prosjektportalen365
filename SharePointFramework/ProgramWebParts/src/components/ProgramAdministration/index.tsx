@@ -7,20 +7,20 @@ import { IColumn, ShimmeredDetailsList } from 'office-ui-fabric-react'
 import { ProjectTable } from './ProjectTable';
 import { Commandbar } from './Commands';
 import { AddProjectDialog } from './AddProjectDialog';
-import { fetchChildProjects } from './helpers';
+// import { fetchChildProjects } from './helpers';
 
 
 export const ProgramAdministration: FunctionComponent<IProgramAdministrationProps> = ({ sp }) => {
-  const setChildProjects = useStore(state => state.setChildProjects)
   const toggleLoading = useStore(state => state.toggleLoading)
   const displayProjectDialog = useStore(state => state.displayProjectDialog)
   const childProjects = useStore(state => state.childProjects)
   const isLoading = useStore(state => state.isLoading)
   const setSelected = useStore(state => state.setSelectedToDelete)
+  const fetchChildProjects = useStore(state => state.fetchChildProjects)
 
   useEffect(() => {
     const fetch = async () => {
-      setChildProjects(await fetchChildProjects(sp))
+      await fetchChildProjects(sp)
       toggleLoading()
     }
     toggleLoading()

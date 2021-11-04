@@ -1,6 +1,6 @@
 import { SPRest } from '@pnp/sp'
 import create from 'zustand'
-import { addChildProject } from './helpers'
+import { addChildProject, fetchAvailableProjects } from './helpers'
 import { ChildProject } from './types'
 
 interface IProgramAdministrationState {
@@ -15,6 +15,8 @@ interface IProgramAdministrationState {
   setAvailableProjects: (projects: ChildProject[]) => void
   addChildProject: (project: ChildProject, _sp: SPRest) => void
   setSelectedToDelete: (project: ChildProject[]) => void
+  fetchChildProjects: (_sp: SPRest) => Promise<void>
+  fetchAvailableProjects: (_sp: SPRest) => Promise<void>
 }
 
 export const useStore = create<IProgramAdministrationState>((set) => ({
@@ -36,5 +38,21 @@ export const useStore = create<IProgramAdministrationState>((set) => ({
   addChildProject: (project) =>
     set((state) => ({ childProjects: [...state.childProjects, project] })),
 
-  setSelectedToDelete: (project) => set(() => ({ selectedProjectsToDelete: project }))
+  setSelectedToDelete: (project) => set(() => ({ selectedProjectsToDelete: project })),
+
+  fetchChildProjects: async (_sp) => {
+    const [data] = await _sp.web.lists
+      .getByTitle('Prosjektegenskaper')
+      .items.select('GtChildProjects')
+      .get()
+    const children: ChildProject[] = await JSON.parse(data.GtChildProjects)
+
+    set(() => ({ childProjects: children.filter((a) => a) }))
+  },
+
+  fetchAvailableProjects: async (_sp) => {
+    const data = await fetchAvailableProjects(_sp)
+
+    set(() => ({ availableProjects: data }))
+  }
 }))
