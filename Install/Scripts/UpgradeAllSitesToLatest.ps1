@@ -14,10 +14,10 @@ function EnsureProjectTimelinePage($Url) {
         $existingNode = $existingNodes | Where-Object { $_.Title -eq "Prosjekttidslinje" } -ErrorAction SilentlyContinue
         if ($null -eq $existingNode) {
             Write-Host "`t`tAdding project timeline page"
-            $page = Add-PnPClientSidePage -Name "Prosjekttidslinje.aspx" -LayoutType SingleWebPartAppPage -CommentsEnabled:$false
+            $page = Add-PnPClientSidePage -Name "Prosjekttidslinje.aspx" -HeaderLayoutType NoImage -PromoteAs None -LayoutType SingleWebPartAppPage -CommentsEnabled:$false -Publish
             Write-Host "`t`tAdding project timeline app"
             $webpart = Add-PnPClientSideWebPart -Page "Prosjekttidslinje" -Component "Prosjekttidslinje" -WebPartProperties '{"listName":"Tidslinjeinnhold","showFilterButton":true,"showTimeline":true,"showInfoMessage":true,"showCmdTimelineList":true,"showTimelineList":true,"title":"Prosjekttidslinje"}'
-            $page = Set-PnPClientSidePage -Identity $page -Publish
+            $page = Set-PnPClientSidePage -Identity "Prosjekttidslinje" -LayoutType SingleWebPartAppPage -HeaderLayoutType NoImage -HeaderType None -Publish 
             Write-Host "`t`tAdding project timeline navigation item"
             $node = Add-PnPNavigationNode -Location QuickLaunch -Title "Prosjekttidslinje" -Url "SitePages/Prosjekttidslinje.aspx"
         }
