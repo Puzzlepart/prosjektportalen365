@@ -1,1 +1,3 @@
-<Field Name="GtParentProjects" ID="{98e55335-a95a-4755-83a3-6f8b64af2420}" DisplayName="{resource:SiteFields_GtParentProjects_DisplayName}" Type="Note" Group="{resource:SiteFields_Project_Group}" AppendOnly="FALSE" AllowUnlimitedLengthInLibraries="TRUE" StaticName="GtParentProjects" />
+<Field Name="GtParentProjects" ID="{98e55335-a95a-4755-83a3-6f8b64af2420}" DisplayName="{resource:SiteFields_GtParentProjects_DisplayName}" Type="Note" Group="{resource:SiteFields_Portfolio_Group}" AppendOnly="FALSE" AllowUnlimitedLengthInLibraries="TRUE" StaticName="GtParentProjects">
+<Default>[""]</Default>
+</Field>
