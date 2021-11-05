@@ -467,10 +467,10 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
       const { configuration, pageContext } = this.props
       const hashState = parseUrlHash<IPortfolioOverviewHashStateState>()
       const currentView = this._getCurrentView(hashState)
-      const items = await this.props.dataAdapter.fetchDataForView(
+      const items = await this.props.dataAdapter.fetchDataForView2(
         currentView,
         configuration,
-        pageContext.site.id.toString()
+        [pageContext.legacyPageContext.hubSiteId]
       )
       const newState: Partial<IPortfolioOverviewState> = {
         columns: currentView.columns,
@@ -500,7 +500,7 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
     const items = await this.props.dataAdapter.fetchDataForView(
       view,
       this.props.configuration,
-      this.props.pageContext.site.id.toString()
+      this.props.pageContext.legacyPageContext.hubSiteId
     )
     const updatedState: Partial<IPortfolioOverviewState> = {
       isChangingView: null,

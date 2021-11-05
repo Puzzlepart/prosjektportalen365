@@ -193,26 +193,55 @@ export class DataAdapter {
   Ny array
   */
 
-  public queryBuilder(view?: PortfolioOverviewView, maxLength: number=3500): string[] {
+  public queryBuilder(maxQueryLength: number=2500, maxProjects: number=25): string[] {
     const queryArray = []
     let queryString = ''
-    if (this._siteIds.length > maxLength) {
+    if (this._siteIds.length > maxProjects) {
       this._siteIds.forEach((siteId) => {
         queryString += `GtSiteIdOWSTEXT:"${siteId}" `
-        if (queryString.length > maxLength) {
-          queryArray.push(`${queryString} ${view?.searchQuery ?? ''}`)
+        if (queryString.length > maxQueryLength) {
+          queryArray.push(queryString)
+          queryString = ''
         }
     })
     } else {
-      let r = this._siteIds.reduce((acc, curr) => {
+      let query = this._siteIds.reduce((acc, curr) => {
         return "GtSiteIdOWSTEXT:"+ acc + " GtSiteIdOWSTEXT:"+ curr
       })
-      queryArray.push(`${r} ${view?.searchQuery ?? ''}`)
+      queryArray.push(query)
     }
     return queryArray
   }
 
-  // reduce array of strings to single string
+
+  // do a dynamic amount of sp.search calls
+  public async fetchDataForView2(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string[]): Promise<IFetchDataForViewItemResult[]> {
+    const queryArray = this.queryBuilder()
+    const items = []
+    for (let i = 0; i < queryArray.length; i++) {
+      const { projects, sites, statusReports } = await this._fetchDataForView(
+        view,
+        configuration,
+        siteId,
+        'GtSiteIdOWSTEXT',
+        queryArray[i]
+      )
+      const item = sites.map((site) => {
+        const [project] = projects.filter((res) => res['GtSiteIdOWSTEXT'] === site['SiteId'])
+        const [statusReport] = statusReports.filter((res) => res['GtSiteIdOWSTEXT'] === site['SiteId'])
+        return {
+          ...statusReport,
+          ...project,
+          Title: site.Title,
+          Path: site.Path,
+          SiteId: site['SiteId']
+        }
+      })
+      items.push(...item)
+    }
+    return items
+  }
+
   
 
 
@@ -228,27 +257,29 @@ export class DataAdapter {
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
     siteId: string[],
-    siteIdProperty: string = 'GtSiteIdOWSTEXT'
+    siteIdProperty: string = 'GtSiteIdOWSTEXT',
+    queryArray?: string
   ) {
-    const queries = this.queryBuilder(view)
+    const searchQuery = `${queryArray} ${view.searchQuery}`
     let [
       { PrimarySearchResults: projects },
       { PrimarySearchResults: sites },
       { PrimarySearchResults: statusReports }
     ] = await Promise.all([
+
       this._sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: this.queryBuilder(view)[0],
+        QueryTemplate: searchQuery,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty]
       }),
       this._sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${this.queryBuilder()[0]} DepartmentId:{${siteId[0]}} contentclass:STS_Site`,
+        QueryTemplate: `DepartmentId:{${siteId[0]}} contentclass:STS_Site`,
         SelectProperties: ['Path', 'Title', 'SiteId']
       }),
       this._sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${this.queryBuilder()[0]} DepartmentId:{${siteId[0]}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        QueryTemplate: `${queryArray} DepartmentId:{${siteId[0]}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
         Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
       })

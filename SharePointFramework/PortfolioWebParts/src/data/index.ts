@@ -225,6 +225,34 @@ export class DataAdapter {
     }
   }
 
+
+  public async fetchDataForView2(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string[]): Promise<IFetchDataForViewItemResult[]> {
+    const queryArray = this.queryBuilder()
+    const items = []
+    for (let i = 0; i < queryArray.length; i++) {
+      const { projects, sites, statusReports } = await this._fetchDataForView(
+        view,
+        configuration,
+        siteId[0],
+        'GtSiteIdOWSTEXT',
+        queryArray[i]
+      )
+      const item = sites.map((site) => {
+        const [project] = projects.filter((res) => res['GtSiteIdOWSTEXT'] === site['SiteId'])
+        const [statusReport] = statusReports.filter((res) => res['GtSiteIdOWSTEXT'] === site['SiteId'])
+        return {
+          ...statusReport,
+          ...project,
+          Title: site.Title,
+          Path: site.Path,
+          SiteId: site['SiteId']
+        }
+      })
+      items.push(...item)
+    }
+    return items
+  }
+
   /**
    *  Fetches data for portfolio views
    * @param view
@@ -237,8 +265,10 @@ export class DataAdapter {
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
     siteId: string,
-    siteIdProperty: string = 'GtSiteIdOWSTEXT'
+    siteIdProperty: string = 'GtSiteIdOWSTEXT',
+    queryArray?: string
   ) {
+    view
     let [
       { PrimarySearchResults: projects },
       { PrimarySearchResults: sites },
@@ -246,17 +276,17 @@ export class DataAdapter {
     ] = await Promise.all([
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: this.queryBuilder(view)[0],
+        QueryTemplate: queryArray,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty]
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `DepartmentId:{${siteId}} contentclass:STS_Site`,
+        QueryTemplate: `${queryArray} DepartmentId:{${siteId}} contentclass:STS_Site`,
         SelectProperties: ['Path', 'Title', 'SiteId']
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        QueryTemplate: `${queryArray} DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
         Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
       })
@@ -494,21 +524,22 @@ export class DataAdapter {
     }
   }
 
-  public queryBuilder(view?: PortfolioOverviewView, maxLength: number=3500): string[] {
+  public queryBuilder(maxQueryLength: number=2500, maxSites: number=30): string[] {
     const queryArray = []
     let queryString = ''
-    if (this.siteIds.length > maxLength) {
+    if (this.siteIds.length > maxSites) {
       this.siteIds.forEach((siteId) => {
         queryString += `GtSiteIdOWSTEXT:"${siteId}" `
-        if (queryString.length > maxLength) {
-          queryArray.push(`${queryString} ${view?.searchQuery ?? ''}`)
+        if (queryString.length > maxQueryLength) {
+          queryArray.push(queryString)
+          queryString = ''
         }
     })
     } else {
-      let r = this.siteIds.reduce((acc, curr) => {
+      const query = this.siteIds.reduce((acc, curr) => {
         return "GtSiteIdOWSTEXT:"+ acc + "GtSiteIdOWSTEXT:"+ curr
       })
-      queryArray.push(`${r} ${view?.searchQuery ?? ''}`)
+      queryArray.push(query)
     }
     return queryArray
   }
