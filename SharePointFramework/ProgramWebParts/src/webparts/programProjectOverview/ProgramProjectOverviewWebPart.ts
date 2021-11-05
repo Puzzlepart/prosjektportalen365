@@ -36,20 +36,10 @@ export const PROPERTYPANE_CONFIGURATION_PROPS = {
 export default class programProjectOverview extends BaseProgramWebPart<IProgramOverviewProps> {
   private _configuration: IPortfolioConfiguration
   protected childProjects: ChildProject[]
-  protected siteIds: string[]
 
   public async onInit(): Promise<void> {
     await super.onInit()
-    sp.setup({sp: {baseUrl: this.context.pageContext.web.absoluteUrl}})
     this._configuration = await this.dataAdapter.getPortfolioConfig()
-    this.childProjects = await this.getChildProjects()
-  }
-  
-  private async getChildProjects(): Promise<ChildProject[]> {
-    const projectProperties = await sp.web.lists.getByTitle("Prosjektegenskaper").items.getById(1).get()
-    const childProjects: ChildProject[] = JSON.parse(projectProperties.GtChildProjects)
-    this.siteIds = childProjects.map(project => {return project.SiteID})
-    return childProjects 
   }
 
   public render(): void {

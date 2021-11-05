@@ -27,11 +27,13 @@ import { DEFAULT_SEARCH_SETTINGS } from './types'
 export class DataAdapter {
   private _portalDataService: PortalDataService
   private _dataSourceService: DataSourceService
+  private _siteIds: string[]
 
-  constructor(public context: WebPartContext) {
+  constructor(public context: WebPartContext, private siteIds?: string[]) {
     this._portalDataService = new PortalDataService().configure({
       urlOrWeb: context.pageContext.web.absoluteUrl
     })
+    this._siteIds = siteIds
   }
 
   /**
@@ -244,7 +246,7 @@ export class DataAdapter {
     ] = await Promise.all([
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: view.searchQuery,
+        QueryTemplate: this.queryBuilder(view)[0],
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty]
       }),
       sp.search({
@@ -491,6 +493,26 @@ export class DataAdapter {
       return false
     }
   }
+
+  public queryBuilder(view?: PortfolioOverviewView, maxLength: number=3500): string[] {
+    const queryArray = []
+    let queryString = ''
+    if (this.siteIds.length > maxLength) {
+      this.siteIds.forEach((siteId) => {
+        queryString += `GtSiteIdOWSTEXT:"${siteId}" `
+        if (queryString.length > maxLength) {
+          queryArray.push(`${queryString} ${view?.searchQuery ?? ''}`)
+        }
+    })
+    } else {
+      let r = this.siteIds.reduce((acc, curr) => {
+        return "GtSiteIdOWSTEXT:"+ acc + "GtSiteIdOWSTEXT:"+ curr
+      })
+      queryArray.push(`${r} ${view?.searchQuery ?? ''}`)
+    }
+    return queryArray
+  }
+  
 
   /**
    * Fetch items

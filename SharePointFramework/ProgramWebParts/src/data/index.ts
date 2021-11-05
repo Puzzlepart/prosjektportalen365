@@ -28,10 +28,12 @@ export class DataAdapter {
   private _portalDataService: PortalDataService
   private _dataSourceService: DataSourceService
   private _sp: SPRest
-  private _webPartContext: WebPartContext;
+  private _webPartContext: WebPartContext
+  private _siteIds: string[]
 
-  constructor(public context: WebPartContext, public hubSite: IHubSite) {
+  constructor(public context: WebPartContext, public hubSite: IHubSite, siteIds: string[]) {
     this._webPartContext = context
+    this._siteIds = siteIds
     this._portalDataService = new PortalDataService().configure({
       urlOrWeb: hubSite.url
     })
@@ -190,14 +192,29 @@ export class DataAdapter {
     Nytt element
   Ny array
   */
-  public splitQuery(siteIds: string[], view: PortfolioOverviewView): string[] {
-    siteIds
-    view
-    /**
-     * Previous try didn't work. Reducer?
-     */    
-    return []
+
+  public queryBuilder(view?: PortfolioOverviewView, maxLength: number=3500): string[] {
+    const queryArray = []
+    let queryString = ''
+    if (this._siteIds.length > maxLength) {
+      this._siteIds.forEach((siteId) => {
+        queryString += `GtSiteIdOWSTEXT:"${siteId}" `
+        if (queryString.length > maxLength) {
+          queryArray.push(`${queryString} ${view?.searchQuery ?? ''}`)
+        }
+    })
+    } else {
+      let r = this._siteIds.reduce((acc, curr) => {
+        return "GtSiteIdOWSTEXT:"+ acc + " GtSiteIdOWSTEXT:"+ curr
+      })
+      queryArray.push(`${r} ${view?.searchQuery ?? ''}`)
+    }
+    return queryArray
   }
+
+  // reduce array of strings to single string
+  
+
 
   /**
    *  Fetches data for portfolio views
@@ -213,6 +230,7 @@ export class DataAdapter {
     siteId: string[],
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ) {
+    const queries = this.queryBuilder(view)
     let [
       { PrimarySearchResults: projects },
       { PrimarySearchResults: sites },
@@ -220,17 +238,17 @@ export class DataAdapter {
     ] = await Promise.all([
       this._sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: view.searchQuery,
+        QueryTemplate: this.queryBuilder(view)[0],
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty]
       }),
       this._sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `DepartmentId:{${siteId}} contentclass:STS_Site`,
+        QueryTemplate: `${this.queryBuilder()[0]} DepartmentId:{${siteId[0]}} contentclass:STS_Site`,
         SelectProperties: ['Path', 'Title', 'SiteId']
       }),
       this._sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        QueryTemplate: `${this.queryBuilder()[0]} DepartmentId:{${siteId[0]}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
         Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
       })
