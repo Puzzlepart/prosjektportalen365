@@ -50,7 +50,7 @@
     "react-highcharts": "16.0.2",
     "sp-hubsite-service": "0.5.1",
     "underscore": "1.9.1",
-    "zustand": "^3.6.1"
+    "zustand": "^3.6.4"
   },
   "resolutions": {
     "@types/react": "16.8.8"
