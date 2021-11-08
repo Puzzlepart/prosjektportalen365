@@ -9,6 +9,7 @@ import assign from 'object-assign'
 import React from 'react'
 import * as ReactDom from 'react-dom'
 import HubSiteService, { IHubSite } from 'sp-hubsite-service'
+import { ChildProject } from 'models/ChildProject'
 
 export abstract class BaseProgramWebPart<
   T extends IBaseComponentProps
@@ -16,6 +17,7 @@ export abstract class BaseProgramWebPart<
   public dataAdapter: DataAdapter
   public pageTitle: string
   public hubSite: IHubSite
+  public siteIds: string[]
 
   public abstract render(): void
 
@@ -30,6 +32,16 @@ export abstract class BaseProgramWebPart<
     })
     const element: React.ReactElement<T> = React.createElement(component, combinedProps)
     ReactDom.render(element, this.domElement)
+  }
+
+  private async getChildProjectSiteIds(): Promise<void> {
+    try {
+    const projectProperties = await sp.web.lists.getByTitle("Prosjektegenskaper").items.getById(1).get()
+    const childProjects: ChildProject[] = JSON.parse(projectProperties.GtChildProjects)
+    this.siteIds = childProjects.map(project => {return project.SiteID})
+    } catch (error) {
+      Logger.write(error, LogLevel.Error)
+    }
   }
 
   private async _setup() {
@@ -49,7 +61,9 @@ export abstract class BaseProgramWebPart<
 
   public async onInit(): Promise<void> {
     this.hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext)
-    this.dataAdapter = new DataAdapter(this.context, this.hubSite)
+    sp.setup({sp: {baseUrl: this.context.pageContext.web.absoluteUrl}})
+    await this.getChildProjectSiteIds()
+    this.dataAdapter = new DataAdapter(this.context, this.hubSite, this.siteIds)
     this.context.statusRenderer.clearLoadingIndicator(this.domElement)
     await this._setup()
   }
