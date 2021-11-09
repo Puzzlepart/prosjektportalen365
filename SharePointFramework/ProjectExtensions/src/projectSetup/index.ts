@@ -2,7 +2,7 @@ import { override } from '@microsoft/decorators'
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base'
 import { isArray, stringIsNullOrEmpty } from '@pnp/common'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
-import { sp, Web } from '@pnp/sp'
+import { MenuNode, sp, Web } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
 import { default as MSGraphHelper } from 'msgraph-helper'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
@@ -26,7 +26,6 @@ import * as Tasks from './tasks'
 import { deleteCustomizer } from './deleteCustomizer'
 import { ProjectSetupError } from './ProjectSetupError'
 import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
-import { ProjectSetupSettings } from './ProjectSetupSettings'
 import { find } from 'underscore'
 import { endsWith } from 'lodash'
 import { ProjectSetupSettings } from './ProjectSetupSettings'
@@ -56,9 +55,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         data: { version: this.context.manifest.version, validation: this._validation },
         level: LogLevel.Info
       })
-      ;(await this._isProjectSetup()) ? (this.isSetup = true) : (this.isSetup = false)
       this.isSetup = await this._isProjectSetup()
 
+      // eslint-disable-next-line default-case
       switch (this._validation) {
         case ProjectSetupValidation.InvalidWebLanguage: {
           await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, false)
@@ -76,11 +75,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             MessageBarType.warning
           )
         }
-        case ProjectSetupValidation.SkipTemplateSelection: {
-          break
-        }
         case ProjectSetupValidation.AlreadySetup: {
-          if (!stringIsNullOrEmpty(this.properties.forceTemplate)) {
+          if (stringIsNullOrEmpty(this.properties.forceTemplate)) {
             throw new ProjectSetupError(
               'AlreadySetup',
               strings.ProjectAlreadySetupMessage,
@@ -121,22 +117,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       })
       let data = await this._fetchData()
       this._initializeSPListLogging(data.hub.web)
-      let provisioningInfo: ITemplateSelectDialogState
-
-      if (this.properties.skipSelection) {
-        const [defaultTemplate] = data.templates.filter(
-          (template) => template.text.indexOf('Overordnet') != -1
-        )
-        provisioningInfo = {
-          selectedExtensions: [],
-          selectedListContentConfig: [],
-          selectedTemplate: defaultTemplate,
-          settings: new ProjectSetupSettings()
-        }
-      } else {
-        provisioningInfo = await this._getProvisioningInfo(data)
-      }
-
+      const provisioningInfo = await this._getProvisioningInfo(data)
       Logger.log({
         message: '(ProjectSetup) [_initializeSetup]: Template selected by user',
         data: {},
@@ -154,6 +135,11 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         iconName: 'Page'
       })
       await this._startProvision(taskParams, data)
+
+      if(!stringIsNullOrEmpty(this.properties.forceTemplate)) {
+        this.reacreateNavMenu()
+      }
+
       await deleteCustomizer(
         this.context.pageContext.web.absoluteUrl,
         this.componentId,
@@ -168,6 +154,30 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       this._renderErrorDialog({ error })
     }
   }
+
+  /**
+   * Adds the old custom navigation nodes to the quick launch menu
+   */
+     private async reacreateNavMenu() {
+        const oldNodes: MenuNode[] = await JSON.parse(localStorage.getItem('navigationNodes'))
+        const newNodes: MenuNode[] = await this.getNavigationNodes()
+  
+        const nodesToAdd = oldNodes.filter(
+          (node) => !newNodes.some((newNode) => newNode.Title === node.Title)
+        )
+        await Promise.all(
+          nodesToAdd.map((node) => sp.web.navigation.quicklaunch.add(node.Title, node.SimpleUrl))
+        )
+    }
+
+    /**
+     * Fetches the navigation nodes from local storage
+     * @returns Promise<MenuNode[]>
+     */
+    private async getNavigationNodes(): Promise<MenuNode[]> {
+        const menuState = await sp.navigation.getMenuState()
+        return menuState.Nodes
+    }
 
   /**
    * Checks for force template
@@ -439,7 +449,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       return ProjectSetupValidation.InvalidWebLanguage
     if (!this.context.pageContext.legacyPageContext.hubSiteId)
       return ProjectSetupValidation.NoHubConnection
-    if (this.properties.skipSelection) return ProjectSetupValidation.SkipTemplateSelection
     if (this.isSetup) return ProjectSetupValidation.AlreadySetup
     return ProjectSetupValidation.Ready
   }
