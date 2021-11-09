@@ -114,7 +114,7 @@ export class ProjectInformation extends BaseWebPartComponent<
             stringIsNullOrEmpty(this.state.data.propertiesListId) &&
             this._onSyncProperties.bind(this)
           }
-          customActions={!this.state.isParentProject && this.transformToParentProject() }
+          customActions={!this.state.isParentProject && this.transformToParentProject()}
         />
         <ProgressDialog {...this.state.progress} />
         {this.state.confirmActionProps && <ConfirmDialog {...this.state.confirmActionProps} />}
@@ -141,14 +141,13 @@ export class ProjectInformation extends BaseWebPartComponent<
     }
 
     const action: ActionType = [
-      strings.CreateExecutiveProjectlabel,
+      strings.CreateParentProjectLabel,
       onButtonClick,
       'Org',
       false
     ]
 
     return [action]
-
   }
 
   /**

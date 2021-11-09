@@ -44,7 +44,7 @@ export abstract class BaseProjectWebPart<
    */
   private async _setup() {
     sp.setup({ spfxContext: this.context })
-    this._hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext)
+    this._hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
     SPDataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,

@@ -92,9 +92,4 @@ export enum ProjectSetupValidation {
    * The site is already finished setup
    */
   AlreadySetup,
-
-  /**
-   * Skip template selection
-   */
-  SkipTemplateSelection
 }
