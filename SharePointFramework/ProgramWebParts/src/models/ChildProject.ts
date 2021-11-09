@@ -1,5 +1,4 @@
-
 export interface ChildProject {
-    ID: number;
-    SiteID: string;
+  ID: number
+  GtSiteIdOWSTEXT: string
 }

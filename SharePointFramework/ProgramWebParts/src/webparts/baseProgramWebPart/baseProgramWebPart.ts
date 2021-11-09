@@ -38,7 +38,7 @@ export abstract class BaseProgramWebPart<
     try {
     const projectProperties = await sp.web.lists.getByTitle("Prosjektegenskaper").items.getById(1).get()
     const childProjects: ChildProject[] = JSON.parse(projectProperties.GtChildProjects)
-    this.siteIds = childProjects.map(project => {return project.SiteID})
+    this.siteIds = childProjects.map(project => {return project.GtSiteIdOWSTEXT})
     } catch (error) {
       Logger.write(error, LogLevel.Error)
     }
