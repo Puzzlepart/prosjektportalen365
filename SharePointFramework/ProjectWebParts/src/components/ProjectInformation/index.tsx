@@ -114,7 +114,7 @@ export class ProjectInformation extends BaseWebPartComponent<
             stringIsNullOrEmpty(this.state.data.propertiesListId) &&
             this._onSyncProperties.bind(this)
           }
-          customActions={this.transformToParentProject()}
+          customActions={!this.state.isParentProject && this.transformToParentProject()}
         />
         <ProgressDialog {...this.state.progress} />
         {this.state.confirmActionProps && <ConfirmDialog {...this.state.confirmActionProps} />}
