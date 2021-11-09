@@ -77,7 +77,6 @@ export class ProjectInformation extends BaseWebPartComponent<
    * Contents
    */
   private getContent() {
-    console.log(this.state.isParentProject, "This new shit -------->")
     if (this.state.loading) return null
     if (this.state.error) {
       return (
@@ -115,7 +114,7 @@ export class ProjectInformation extends BaseWebPartComponent<
             stringIsNullOrEmpty(this.state.data.propertiesListId) &&
             this._onSyncProperties.bind(this)
           }
-          customActions={this.state.isParentProject ? this.underProjects() : this.transformToParentProject() }
+          customActions={!this.state.isParentProject && this.transformToParentProject() }
         />
         <ProgressDialog {...this.state.progress} />
         {this.state.confirmActionProps && <ConfirmDialog {...this.state.confirmActionProps} />}
@@ -127,35 +126,11 @@ export class ProjectInformation extends BaseWebPartComponent<
   private onDismissParentModal() {
     this.setState({ displayParentCreationModal: false })
   }
-// TO DO: Need to fix the sitefields in templates
+
   private async isParentProject() {
-    const [data] = await sp.web.lists.getByTitle("Prosjektegenskaper").items.select(("IsParentProject")).get()
-    console.log(data, "--------> This shit")
-    /* this.setState({ isParentProject: data && data.length > 0 && !!data.IsParentProject }) */
-    this.setState({ isParentProject: true })
+    const [data] = await sp.web.lists.getByTitle("Prosjektegenskaper").items.getById(1).select(("GtIsParentProject")).get()
+    this.setState({ isParentProject: data.GtIsParentProject })
   }
-
-  private underProjects() {
-    const onButtonClick = async () => {
-      const quick = await sp.web.navigation.quicklaunch.getById(2034).children.getById(2035);
-      
-      console.log(quick, "Navigation ----------->")
-
-      // window.location.href = ""
-
-    }
-
-    const action: ActionType = [
-      strings.ChildProjectAdmin,
-      onButtonClick,
-      'Org',
-      false
-    ]
-
-    return [action]
-
-  }
-
 
   /**
    * Creates an action and initializes project -> parentproject transformation
