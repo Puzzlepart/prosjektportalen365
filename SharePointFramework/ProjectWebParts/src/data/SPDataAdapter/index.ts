@@ -145,6 +145,11 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
               properties[fld.InternalName] = fldValue || null
             }
             break
+          case 'Boolean':
+            {
+              properties[fld.InternalName] = fldValue || null
+            }
+            break
           default:
             {
               properties[fld.InternalName] = fldValueTxt || null
