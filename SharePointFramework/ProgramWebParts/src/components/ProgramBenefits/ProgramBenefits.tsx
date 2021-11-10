@@ -2,8 +2,9 @@ import React, {FunctionComponent, useEffect} from 'react'
 import styles from './ProgramBenefits.module.scss'
 import {IProgramBenefitsProps} from './ProgramBenefitsProps'
 import {PortfolioAggregation} from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
-import {getColumns} from 'pp365-portfoliowebparts/lib/components/BenefitsOverview/columns'
 import { IAggregatedSearchListColumn } from 'pp365-portfoliowebparts/lib/interfaces'
+import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from 'pp365-portfoliowebparts/lib/models'
+import {CONTENT_TYPE_ID_BENEFITS, CONTENT_TYPE_ID_MEASUREMENTS, CONTENT_TYPE_ID_INDICATORS} from 'pp365-portfoliowebparts/lib/components/BenefitsOverview/config'
 
 export const ProgramBenefits: FunctionComponent<IProgramBenefitsProps> = (props) => {
 
@@ -19,16 +20,36 @@ export const ProgramBenefits: FunctionComponent<IProgramBenefitsProps> = (props)
       dataAdapter={props.dataAdapter}
       showCommandBar={true}
       showExcelExportButton={true}
-      dataSource="Gevinstoversikt (Prosjektnivå)"
+      dataSource="Gevinstoversikt"
       columns={columns}
       selectProperties={proper}
-
-      // childSiteIds={props.childProjects}
+      postTransform={_postTransform}
       />
       </>
     );
   
 }
+
+ function _postTransform(results: any[]): any[] {
+   const benefits = results
+     .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_BENEFITS) === 0)
+     .map((res) => new Benefit(res))
+   const measurements = results
+     .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_MEASUREMENTS) === 0)
+     .map((res) => new BenefitMeasurement(res))
+     .sort((a, b) => b.Date.getTime() - a.Date.getTime())
+   const indicactors = results
+     .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_INDICATORS) === 0)
+     .map((res) => {
+       const indicator = new BenefitMeasurementIndicator(res)
+         .setMeasurements(measurements)
+         .setBenefit(benefits)
+       return indicator
+     })
+     .filter((i) => i.Benefit)
+   return indicactors
+ }
+
 const proper = ["Path","SPWebURL","Title","ListItemId","SiteTitle","SiteId","ContentTypeID","GtDesiredValueOWSNMBR","GtMeasureIndicatorOWSTEXT","GtMeasurementUnitOWSCHCS", "GtStartValueOWSNMBR", "GtMeasurementValueOWSNMBR", "GtMeasurementCommentOWSMTXT", "GtMeasurementDateOWSDATE", "GtGainsResponsibleOWSUSER", "GtGainsTurnoverOWSMTXT", "GtGainsTypeOWSCHCS", "GtPrereqProfitAchievementOWSMTXT", "GtRealizationTimeOWSDATE", "GtGainLookupId", "GtMeasureIndicatorLookupId", "GtGainsResponsible", "GtGainsOwner", "Path", "SPWebURL", "SiteTitle"]
 
 
@@ -36,7 +57,7 @@ const proper = ["Path","SPWebURL","Title","ListItemId","SiteTitle","SiteId","Con
     {
       key: 'Benefit.Title',
       fieldName: 'Benefit.Title',
-      name: "Benefit.Title",
+      name: "Gevinst",
       minWidth: 100,
       maxWidth: 180,
       isMultiline: true,
@@ -45,7 +66,7 @@ const proper = ["Path","SPWebURL","Title","ListItemId","SiteTitle","SiteId","Con
     {
       key: 'Benefit.Responsible',
       fieldName: 'Benefit.Responsible',
-      name: "Benefit.Responsible",
+      name: "Gevinstansvarlig",
       minWidth: 50,
       maxWidth: 150,
       isResizable: true,
@@ -54,7 +75,7 @@ const proper = ["Path","SPWebURL","Title","ListItemId","SiteTitle","SiteId","Con
     {
       key: 'Benefit.Owner',
       fieldName: 'Benefit.Owner',
-      name: "Benefit.Owner",
+      name: "Gevinsteier",
       minWidth: 50,
       maxWidth: 180,
       isResizable: true,

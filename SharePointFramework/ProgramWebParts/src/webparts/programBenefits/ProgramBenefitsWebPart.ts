@@ -16,7 +16,6 @@ interface IProgramOverviewProps extends IBaseWebPartComponentProps {
 
 export default class programProjectOverview extends BaseProgramWebPart<IProgramOverviewProps> {
   private _configuration: IPortfolioConfiguration
-  protected childProjects: ChildProject[]
 
   public async onInit(): Promise<void> {
     await super.onInit()
