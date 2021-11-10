@@ -9,16 +9,14 @@ import * as cleanDeep from 'clean-deep'
  */
 export async function getHubSiteProjects(_sp: SPRest) {
   const data = await _sp.site.select('HubSiteId').get()
-
   const searchData = await _sp.search({
     Querytext: `ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* DepartmentId: ${data.HubSiteId} `,
     RowLimit: 500,
     StartRow: 0,
     ClientType: 'ContentSearchRegular',
-    SelectProperties: ['GtSiteIdOWSTEXT', 'Title', 'GtSiteUrl']
+    SelectProperties: ['GtSiteIdOWSTEXT', 'Title', 'GtSiteUrlOWSTEXT']
   })
 
-  console.log(searchData)
   return searchData
 }
 
@@ -57,21 +55,6 @@ export async function fetchAvailableProjects(_sp: SPRest) {
   console.log(availableProjects)
 
   return availableProjects
-}
-
-/**
- * Fetches additional data to the child projects
- */
-async function enrichChildProjects(_sp: SPRest) {
-  const data = await _sp.site.select('HubSiteId').get()
-
-  const searchData = await _sp.search({
-    Querytext: `ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* DepartmentId: ${data.HubSiteId} `,
-    RowLimit: 500,
-    StartRow: 0,
-    ClientType: 'ContentSearchRegular',
-    SelectProperties: ['GtSiteIdOWSTEXT', 'Title', 'GtProjectOwner']
-  })
 }
 
 /**
