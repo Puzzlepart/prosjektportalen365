@@ -195,7 +195,6 @@ export class DataAdapter {
   public aggregatedQueryBuilder(maxQueryLength: number=2500, maxProjects: number=25): string[] {
     const queryArray = []
     let queryString = ''
-    console.log(maxProjects)
     if (this._childProjects.length > maxProjects) {
       this._childProjects.forEach((childProject, index) => {
         queryString += `Path:${childProject.SPWebURL} `
@@ -228,7 +227,6 @@ export class DataAdapter {
   public queryBuilder(maxQueryLength: number=2500, maxProjects: number=25): string[] {
     const queryArray = []
     let queryString = ''
-    console.log(maxProjects)
     if (this._childProjects.length > maxProjects) {
       this._childProjects.forEach((childProject, index) => {
         queryString += `GtSiteIdOWSTEXT:${childProject.GtSiteIdOWSTEXT} `
@@ -560,8 +558,6 @@ export class DataAdapter {
    */
   private async _fetchItems(queryTemplate: string, selectProperties: string[]) {
      const programFilter = this._childProjects && this.aggregatedQueryBuilder()
-     console.log('ffff')
-     console.log(programFilter)
      const promises = []
      programFilter.forEach(element => {
      promises.push(sp.searchWithCaching({
@@ -571,15 +567,16 @@ export class DataAdapter {
        TrimDuplicates: false,
        SelectProperties: [...selectProperties, 'Path', 'SiteTitle']
      }))})
-    const responses: SearchResults[] = (await Promise.all(promises))
-    // const response = await sp.searchWithCaching({
-    //   QueryTemplate: `${queryTemplate}`,
-    //   Querytext: '*',
-    //   RowLimit: 500,
-    //   TrimDuplicates: false,
-    //   SelectProperties: [...selectProperties, 'Path', 'SPWebURL', 'SiteTitle']
-    // })
-    return responses[0].PrimarySearchResults
+    const responses: any[] = (await Promise.all(promises))
+    const searchResults = []
+    responses.forEach(element => {
+      searchResults.push(element.PrimarySearchResults)
+    });
+
+    const duplicateArray = [].concat(...searchResults)
+    //remove duplicate objects from array
+    const uniqueArray = duplicateArray.filter((obj, index, self) => self.findIndex(t => t.Path === obj.Path) === index)
+    return uniqueArray
   }
 
   /**
