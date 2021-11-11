@@ -17,6 +17,7 @@ export abstract class BaseProgramWebPart<
   public dataAdapter: DataAdapter
   public pageTitle: string
   public hubSite: IHubSite
+  public childProjects: ChildProject[]
   public siteIds: string[]
 
   public abstract render(): void
@@ -38,7 +39,7 @@ export abstract class BaseProgramWebPart<
     try {
     const projectProperties = await sp.web.lists.getByTitle("Prosjektegenskaper").items.getById(1).get()
     const childProjects: ChildProject[] = JSON.parse(projectProperties.GtChildProjects)
-    this.siteIds = childProjects.map(project => {return project.GtSiteIdOWSTEXT})
+    this.childProjects = childProjects
     } catch (error) {
       Logger.write(error, LogLevel.Error)
     }
@@ -63,7 +64,7 @@ export abstract class BaseProgramWebPart<
     this.hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext)
     sp.setup({sp: {baseUrl: this.context.pageContext.web.absoluteUrl}})
     await this.getChildProjectSiteIds()
-    this.dataAdapter = new DataAdapter(this.context, this.hubSite, this.siteIds)
+    this.dataAdapter = new DataAdapter(this.context, this.hubSite, this.childProjects)
     this.context.statusRenderer.clearLoadingIndicator(this.domElement)
     await this._setup()
   }

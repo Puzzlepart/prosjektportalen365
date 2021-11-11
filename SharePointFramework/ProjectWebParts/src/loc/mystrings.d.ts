@@ -138,7 +138,7 @@ declare interface IProjectWebPartsStrings {
   ShowInfoMessageLabel: string;
   ShowCmdTimelineListLabel: string;
   ShowTimelineListLabel: string;
-  CreateExecutiveProjectlabel: string;
+  CreateParentProjectLabel: string;
   ChildProjectAdmin: string;
 }
 

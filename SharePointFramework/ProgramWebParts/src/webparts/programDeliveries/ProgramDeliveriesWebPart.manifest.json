@@ -1,7 +1,7 @@
 {
     "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-    "id": "01417142-67c8-498b-a6da-6e78003023dd",
-    "alias": "ProgramProjectOverviewWebPart",
+    "id": "7ff12e9d-1565-4694-b1de-948d1b174487",
+    "alias": "Program-Leveranser",
     "componentType": "WebPart",
     "version": "*",
     "manifestVersion": 2,
@@ -11,11 +11,14 @@
     "preconfiguredEntries": [{
         "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
         "group": { "default": "Other" },
-        "title": { "default": "Oversikt over underprosjekter" },
-        "description": { "default": "Gir en listevisning av underprosjekter" },
+        "title": { "default": "Underleveranser" },
+        "description": { "default": "Git en oversikt over leveranser i underprosjekter" },
         "officeFabricIconFontName": "Page",
         "properties": {
-            "description": "programProjectOverview"
+            "dataSource": "Alle prosjektleveranser",
+            "showCommandBar": true,
+            "showSearchBox": true,
+            "showExcelExportButton": true
         }
     }]
 }

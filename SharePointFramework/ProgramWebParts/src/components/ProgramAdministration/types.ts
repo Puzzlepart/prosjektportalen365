@@ -11,6 +11,7 @@ export interface IProgramAdministrationProps {
 
 export interface ChildProject {
   GtSiteIdOWSTEXT: string
+  GtSiteUrlOWSTEXT: string
   title: string
 }
 
@@ -24,7 +25,7 @@ export const shimmeredColumns: IColumn[] = [
   },
   {
     key: '2',
-    name: 'Site id',
+    name: 'Site URL',
     isResizable: true,
     maxWidth: 250,
     minWidth: 100
