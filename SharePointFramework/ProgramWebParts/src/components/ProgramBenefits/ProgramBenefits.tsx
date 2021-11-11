@@ -1,8 +1,7 @@
 import React, {FunctionComponent, useEffect} from 'react'
 import styles from './ProgramBenefits.module.scss'
-import {IProgramBenefitsProps} from './ProgramBenefitsProps'
+import {IProgramBenefitsProps, BenefitColumns, selectProperties} from './ProgramBenefitsProps'
 import {PortfolioAggregation} from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
-import { IAggregatedSearchListColumn } from 'pp365-portfoliowebparts/lib/interfaces'
 import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from 'pp365-portfoliowebparts/lib/models'
 import {CONTENT_TYPE_ID_BENEFITS, CONTENT_TYPE_ID_MEASUREMENTS, CONTENT_TYPE_ID_INDICATORS} from 'pp365-portfoliowebparts/lib/components/BenefitsOverview/config'
 
@@ -21,8 +20,8 @@ export const ProgramBenefits: FunctionComponent<IProgramBenefitsProps> = (props)
       showCommandBar={true}
       showExcelExportButton={true}
       dataSource="Gevinstoversikt"
-      columns={columns}
-      selectProperties={proper}
+      columns={BenefitColumns}
+      selectProperties={selectProperties}
       postTransform={_postTransform}
       />
       </>
@@ -49,53 +48,3 @@ export const ProgramBenefits: FunctionComponent<IProgramBenefitsProps> = (props)
      .filter((i) => i.Benefit)
    return indicactors
  }
-
-const proper = ["Path","SPWebURL","Title","ListItemId","SiteTitle","SiteId","ContentTypeID","GtDesiredValueOWSNMBR","GtMeasureIndicatorOWSTEXT","GtMeasurementUnitOWSCHCS", "GtStartValueOWSNMBR", "GtMeasurementValueOWSNMBR", "GtMeasurementCommentOWSMTXT", "GtMeasurementDateOWSDATE", "GtGainsResponsibleOWSUSER", "GtGainsTurnoverOWSMTXT", "GtGainsTypeOWSCHCS", "GtPrereqProfitAchievementOWSMTXT", "GtRealizationTimeOWSDATE", "GtGainLookupId", "GtMeasureIndicatorLookupId", "GtGainsResponsible", "GtGainsOwner", "Path", "SPWebURL", "SiteTitle"]
-
-
-  const columns: IAggregatedSearchListColumn[] = [
-    {
-      key: 'Benefit.Title',
-      fieldName: 'Benefit.Title',
-      name: "Gevinst",
-      minWidth: 100,
-      maxWidth: 180,
-      isMultiline: true,
-      isResizable: true
-    },
-    {
-      key: 'Benefit.Responsible',
-      fieldName: 'Benefit.Responsible',
-      name: "Gevinstansvarlig",
-      minWidth: 50,
-      maxWidth: 150,
-      isResizable: true,
-      isGroupable: true
-    },
-    {
-      key: 'Benefit.Owner',
-      fieldName: 'Benefit.Owner',
-      name: "Gevinsteier",
-      minWidth: 50,
-      maxWidth: 180,
-      isResizable: true,
-      isGroupable: true
-    },
-    {
-      key: 'Title',
-      fieldName: 'Title',
-      name: "Title",
-      minWidth: 50,
-      maxWidth: 180,
-      isMultiline: true,
-      isResizable: true
-    },
-    {
-      key: 'Unit',
-      fieldName: 'Unit',
-      name: "Unit",
-      minWidth: 50,
-      maxWidth: 80,
-      isResizable: true
-    }
-  ]

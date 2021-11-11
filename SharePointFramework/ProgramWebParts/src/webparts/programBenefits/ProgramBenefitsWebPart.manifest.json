@@ -15,7 +15,12 @@
         "description": { "default": "programBenefits" },
         "officeFabricIconFontName": "Page",
         "properties": {
-            "description": "programBenefits"
+            "title": "Gevinstoversikt",
+            "dataSource": "Gevinstoversikt",
+            "searchBoxPlaceholderText": "Søk i gevinster...",
+            "hiddenColumns": [
+                "siteTitle"
+            ]
         }
     }]
 }

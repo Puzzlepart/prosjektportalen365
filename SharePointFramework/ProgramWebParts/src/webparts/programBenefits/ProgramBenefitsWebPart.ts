@@ -9,12 +9,15 @@ import {IBaseWebPartComponentProps} from 'pp365-projectwebparts/lib/components/B
 import {ChildProject} from 'models/ChildProject'
 import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane';
 
-interface IProgramOverviewProps extends IBaseWebPartComponentProps {
-  showCommandBar: any
-  description: string;
+interface IProgramBenefitsProps extends IBaseWebPartComponentProps {
+  webPartTitle: string
+  dataSource: string
+  showExcelExportButton: boolean
+  showSearchBox: boolean
+  showCommandBar: boolean
 }
 
-export default class programProjectOverview extends BaseProgramWebPart<IProgramOverviewProps> {
+export default class programBenefits extends BaseProgramWebPart<IProgramBenefitsProps> {
   private _configuration: IPortfolioConfiguration
 
   public async onInit(): Promise<void> {
@@ -27,8 +30,6 @@ export default class programProjectOverview extends BaseProgramWebPart<IProgramO
       description: this.description,
       context: this.context,
       dataAdapter: this.dataAdapter,
-      configuration: this._configuration,
-      childProjects: this.siteIds
     });
   }
 
@@ -44,15 +45,28 @@ export default class programProjectOverview extends BaseProgramWebPart<IProgramO
     return {
       pages: [
         {
-          header: {
-            description: strings.BenefitOwnerLabel
-          },
           groups: [
             {
-              groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('description', {
-                  label: 'test'
+                PropertyPaneTextField('webPartTitle', {
+                  label: strings.WebPartTitleLabel,
+                  value: strings.DeliveriesTitle
+                }),
+                PropertyPaneTextField('dataSource', {
+                  label: strings.DataSourceLabel,
+                  value: strings.DeliveriesDatasource
+                }),
+                PropertyPaneToggle('showCommandBar', {
+                  label: strings.ShowCommandBarLabel,
+                  checked: true
+                }),
+                PropertyPaneToggle('showSearchBox', {
+                  label: strings.ShowSearchBoxLabel,
+                  checked: true
+                }),
+                PropertyPaneToggle('showExcelExportButton', {
+                  label: strings.ShowExcelExportButtonLabel,
+                  checked: true
                 })
               ]
             }
@@ -61,5 +75,4 @@ export default class programProjectOverview extends BaseProgramWebPart<IProgramO
       ]
     }
   }
-
 }
