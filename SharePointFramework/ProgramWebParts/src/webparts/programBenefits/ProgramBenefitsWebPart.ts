@@ -2,33 +2,37 @@ import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
 import * as strings from 'ProgramWebPartsStrings'
 import {ProgramBenefits} from 'components/ProgramBenefits/ProgramBenefits';
-import {IProjectProgramOverviewProps} from '../../components/ProgramProjectOverview/IProgramProjectOverviewProps';
-import {IPortfolioConfiguration} from 'pp365-portfoliowebparts/lib/interfaces';
 import {BaseProgramWebPart} from '../baseProgramWebPart/baseProgramWebPart'
 import {IBaseWebPartComponentProps} from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
-import {ChildProject} from 'models/ChildProject'
-import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane';
+import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane';
+import { IAggregatedPortfolioProps } from 'models/AggregatedPortfolioProps';
 
-interface IProgramOverviewProps extends IBaseWebPartComponentProps {
-  showCommandBar: any
-  description: string;
+interface IProgramBenefitsPropertyPaneProps extends IBaseWebPartComponentProps {
+  webPartTitle: string
+  dataSource: string
+  showExcelExportButton: boolean
+  showSearchBox: boolean
+  showCommandBar: boolean
 }
 
-export default class programProjectOverview extends BaseProgramWebPart<IProgramOverviewProps> {
-  private _configuration: IPortfolioConfiguration
+export default class programBenefits extends BaseProgramWebPart<IProgramBenefitsPropertyPaneProps> {
 
   public async onInit(): Promise<void> {
     await super.onInit()
-    this._configuration = await this.dataAdapter.getPortfolioConfig()
   }
 
   public render(): void {
-    this.renderComponent<IProjectProgramOverviewProps>(ProgramBenefits, {
-      description: this.description,
+    this.renderComponent<IAggregatedPortfolioProps>(ProgramBenefits, {
+      title: this.properties.webPartTitle,
       context: this.context,
       dataAdapter: this.dataAdapter,
-      configuration: this._configuration,
-      childProjects: this.siteIds
+      properties: {
+        dataSource: this.properties.dataSource,
+        showExcelExportButton: this.properties.showExcelExportButton,
+        showSearchBox: this.properties.showSearchBox,
+        showCommandBar: this.properties.showCommandBar
+      }
+      
     });
   }
 
@@ -44,15 +48,28 @@ export default class programProjectOverview extends BaseProgramWebPart<IProgramO
     return {
       pages: [
         {
-          header: {
-            description: strings.BenefitOwnerLabel
-          },
           groups: [
             {
-              groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('description', {
-                  label: 'test'
+                PropertyPaneTextField('webPartTitle', {
+                  label: strings.WebPartTitleLabel,
+                  value: strings.DeliveriesTitle
+                }),
+                PropertyPaneTextField('dataSource', {
+                  label: strings.DataSourceLabel,
+                  value: strings.DeliveriesDatasource
+                }),
+                PropertyPaneToggle('showCommandBar', {
+                  label: strings.ShowCommandBarLabel,
+                  checked: true
+                }),
+                PropertyPaneToggle('showSearchBox', {
+                  label: strings.ShowSearchBoxLabel,
+                  checked: true
+                }),
+                PropertyPaneToggle('showExcelExportButton', {
+                  label: strings.ShowExcelExportButtonLabel,
+                  checked: true
                 })
               ]
             }
@@ -61,5 +78,4 @@ export default class programProjectOverview extends BaseProgramWebPart<IProgramO
       ]
     }
   }
-
 }
