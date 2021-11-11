@@ -55,8 +55,8 @@ export const fields: IViewField[] = [
     maxWidth: 250.
   },
   {
-    name: "GtSiteIdOWSTEXT",
-    displayName: "Site id",
+    name: "GtSiteUrlOWSTEXT",
+    displayName: "Site URL",
     isResizable: true,
     sorting: true,
     maxWidth: 250.

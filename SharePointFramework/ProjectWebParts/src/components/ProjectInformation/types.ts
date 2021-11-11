@@ -69,9 +69,10 @@ export interface IProjectInformationState
    */
   displayParentCreationModal?: boolean
 
-  isParentProject?: any
-
-  
+  /**
+   * Is the project a parent project
+   */
+  isParentProject?: boolean
 }
 
 export interface IProjectInformationUrlHash {
