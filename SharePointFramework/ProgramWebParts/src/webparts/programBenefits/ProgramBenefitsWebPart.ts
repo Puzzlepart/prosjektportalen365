@@ -53,11 +53,11 @@ export default class programBenefits extends BaseProgramWebPart<IProgramBenefits
               groupFields: [
                 PropertyPaneTextField('webPartTitle', {
                   label: strings.WebPartTitleLabel,
-                  value: strings.DeliveriesTitle
+                  value: strings.BenefitsTitle
                 }),
                 PropertyPaneTextField('dataSource', {
                   label: strings.DataSourceLabel,
-                  value: strings.DeliveriesDatasource
+                  value: strings.BenefitDataSource
                 }),
                 PropertyPaneToggle('showCommandBar', {
                   label: strings.ShowCommandBarLabel,

@@ -42,6 +42,8 @@ define([], function() {
         BenefitResponsibleLabel: 'Gevinstansvarlig',
         BenefitOwnerLabel: 'Gevinsteier',
         BenefitTitleLabel: 'Gevinst',
+        BenefitsTitle: "Gevinster",
+        BenefitDataSource: "Gevinstoversikt",
         ChartConfigurationListNameLabel: 'Grafkonfigurasjon',
         ChartErrorText: 'Grafen er ugyldig konfigurert.',
         ColumnConfigListNameLabel: 'Kolonnekonfigurasjon',
