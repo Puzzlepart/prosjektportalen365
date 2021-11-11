@@ -11,8 +11,8 @@
     "preconfiguredEntries": [{
         "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
         "group": { "default": "Other" },
-        "title": { "default": "programBenefits" },
-        "description": { "default": "programBenefits" },
+        "title": { "default": "Gevinstoversikt i underprosjekter" },
+        "description": { "default": "Gir en listeoversikt over gevinster i underprosjekter" },
         "officeFabricIconFontName": "Page",
         "properties": {
             "title": "Gevinstoversikt",

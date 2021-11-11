@@ -11,8 +11,8 @@
     "preconfiguredEntries": [{
         "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
         "group": { "default": "Other" },
-        "title": { "default": "programDeliveries" },
-        "description": { "default": "programDeliveries" },
+        "title": { "default": "Underleveranser" },
+        "description": { "default": "Git en oversikt over leveranser i underprosjekter" },
         "officeFabricIconFontName": "Page",
         "properties": {
             "dataSource": "Alle prosjektleveranser",
