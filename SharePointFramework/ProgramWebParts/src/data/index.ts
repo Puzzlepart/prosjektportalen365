@@ -575,6 +575,8 @@ export class DataAdapter {
 
     const duplicateArray = [].concat(...searchResults)
     //remove duplicate objects from array
+    // Only needed for development if we have to run queries on the same projects due to lack of data
+    // will be changed to `return responses` in production
     const uniqueArray = duplicateArray.filter((obj, index, self) => self.findIndex(t => t.Path === obj.Path) === index)
     return uniqueArray
   }

@@ -551,7 +551,7 @@ export class DataAdapter {
   public queryBuilder(maxQueryLength: number=2500, maxSites: number=30): string[] {
     const queryArray = []
     let queryString = ''
-    //if (this.siteIds.length > maxSites) {
+    if (this.siteIds.length > maxSites) {
       this.siteIds.forEach((siteId, index) => {
         queryString += `GtSiteIdOWSTEXT:"${siteId}" `
         if (queryString.length > maxQueryLength) {
@@ -562,12 +562,12 @@ export class DataAdapter {
           queryArray.push(queryString)
         }
     })
-    // } else {
-    //   const query = this.siteIds.reduce((acc, curr) => {
-    //     return "GtSiteIdOWSTEXT:"+ acc + "GtSiteIdOWSTEXT:"+ curr
-    //   })
-    //   queryArray.push(query)
-    // }
+    } else {
+      const query = this.siteIds.reduce((acc, curr) => {
+        return "GtSiteIdOWSTEXT:"+ acc + "GtSiteIdOWSTEXT:"+ curr
+      })
+      queryArray.push(query)
+    }
     return queryArray
   }
   
