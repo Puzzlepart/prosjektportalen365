@@ -1,6 +1,13 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd } from '@pnp/common'
-import { QueryPropertyValueType, SearchResult, SortDirection, SPRest, sp, SearchResults } from '@pnp/sp'
+import {
+  QueryPropertyValueType,
+  SearchResult,
+  SortDirection,
+  SPRest,
+  sp,
+  SearchResults
+} from '@pnp/sp'
 import * as cleanDeep from 'clean-deep'
 import {
   IGraphGroup,
@@ -8,16 +15,7 @@ import {
   ISPProjectItem,
   ISPUser
 } from 'pp365-portfoliowebparts/lib/interfaces'
-import {
-  ChartConfiguration,
-  ChartData,
-  ChartDataItem,
-  DataField,
-  ProjectListModel,
-  TimelineContentListModel,
-  SPChartConfigurationItem,
-  SPContentType
-} from 'pp365-portfoliowebparts/lib/models'
+import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
 import MSGraph from 'msgraph-helper'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProgramWebPartsStrings'
@@ -37,15 +35,18 @@ export class DataAdapter {
   private _webPartContext: WebPartContext
   private _childProjects: ChildProject[]
 
-
-  constructor(public context: WebPartContext, public hubSite: IHubSite, childProjects: ChildProject[]) {
+  constructor(
+    public context: WebPartContext,
+    public hubSite: IHubSite,
+    childProjects: ChildProject[]
+  ) {
     this._webPartContext = context
     this._childProjects = childProjects
     this._portalDataService = new PortalDataService().configure({
       urlOrWeb: hubSite.url
     })
     sp.setup({
-      sp: {baseUrl: hubSite.url}
+      sp: { baseUrl: hubSite.url }
     })
     this._sp = sp
   }
@@ -191,13 +192,12 @@ export class DataAdapter {
     }
   }
 
-
-  public aggregatedQueryBuilder(maxQueryLength: number=2500, maxProjects: number=25): string[] {
+  public aggregatedQueryBuilder(maxQueryLength: number = 2500, maxProjects: number = 25): string[] {
     const queryArray = []
     let queryString = ''
     if (this._childProjects.length > maxProjects) {
       this._childProjects.forEach((childProject, index) => {
-        queryString += `Path:${childProject.SPWebURL} `
+        queryString += `Path:${childProject.GtSiteUrlOWSTEXT} `
         if (queryString.length > maxQueryLength) {
           queryArray.push(queryString)
           queryString = ''
@@ -205,11 +205,11 @@ export class DataAdapter {
         if (index == this._childProjects.length - 1) {
           queryArray.push(queryString)
         }
-    })
-     } else {
-       this._childProjects.forEach((childProject) => {
-          queryString += `Path:${childProject.SPWebURL} `
-       })
+      })
+    } else {
+      this._childProjects.forEach((childProject) => {
+        queryString += `Path:${childProject.GtSiteUrlOWSTEXT} `
+      })
       queryArray.push(queryString)
     }
     return queryArray
@@ -224,7 +224,7 @@ export class DataAdapter {
   Ny array
   */
 
-  public queryBuilder(maxQueryLength: number=2500, maxProjects: number=25): string[] {
+  public queryBuilder(maxQueryLength: number = 2500, maxProjects: number = 25): string[] {
     const queryArray = []
     let queryString = ''
     if (this._childProjects.length > maxProjects) {
@@ -237,18 +237,22 @@ export class DataAdapter {
         if (index == this._childProjects.length - 1) {
           queryArray.push(queryString)
         }
-    })
-     } else {
-       this._childProjects.forEach((childProject) => {
-          queryString += `GtSiteIdOWSTEXT:${childProject.GtSiteIdOWSTEXT} `
-       })
+      })
+    } else {
+      this._childProjects.forEach((childProject) => {
+        queryString += `GtSiteIdOWSTEXT:${childProject.GtSiteIdOWSTEXT} `
+      })
       queryArray.push(queryString)
     }
     return queryArray
   }
 
   // do a dynamic amount of sp.search calls
-  public async fetchDataForView2(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string[]): Promise<IFetchDataForViewItemResult[]> {
+  public async fetchDataForView2(
+    view: PortfolioOverviewView,
+    configuration: IPortfolioConfiguration,
+    siteId: string[]
+  ): Promise<IFetchDataForViewItemResult[]> {
     const queryArray = this.queryBuilder()
     const items = []
     for (let i = 0; i < queryArray.length; i++) {
@@ -261,7 +265,9 @@ export class DataAdapter {
       )
       const item = sites.map((site) => {
         const [project] = projects.filter((res) => res['GtSiteIdOWSTEXT'] === site['SiteId'])
-        const [statusReport] = statusReports.filter((res) => res['GtSiteIdOWSTEXT'] === site['SiteId'])
+        const [statusReport] = statusReports.filter(
+          (res) => res['GtSiteIdOWSTEXT'] === site['SiteId']
+        )
         return {
           ...statusReport,
           ...project,
@@ -274,9 +280,6 @@ export class DataAdapter {
     }
     return items
   }
-
-  
-
 
   /**
    *  Fetches data for portfolio views
@@ -299,7 +302,6 @@ export class DataAdapter {
       { PrimarySearchResults: sites },
       { PrimarySearchResults: statusReports }
     ] = await Promise.all([
-
       this._sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: searchQuery,
@@ -557,25 +559,30 @@ export class DataAdapter {
    * @param selectProperties Select properties
    */
   private async _fetchItems(queryTemplate: string, selectProperties: string[]) {
-     const programFilter = this._childProjects && this.aggregatedQueryBuilder()
-     const promises = []
-     programFilter.forEach(element => {
-     promises.push(sp.searchWithCaching({
-       QueryTemplate: `${element} ${queryTemplate}`,
-       Querytext: '*',
-       RowLimit: 500,
-       TrimDuplicates: false,
-       SelectProperties: [...selectProperties, 'Path', 'SiteTitle']
-     }))})
-    const responses: any[] = (await Promise.all(promises))
+    const programFilter = this._childProjects && this.aggregatedQueryBuilder()
+    const promises = []
+    programFilter.forEach((element) => {
+      promises.push(
+        sp.searchWithCaching({
+          QueryTemplate: `${element} ${queryTemplate}`,
+          Querytext: '*',
+          RowLimit: 500,
+          TrimDuplicates: false,
+          SelectProperties: [...selectProperties, 'Path', 'SiteTitle']
+        })
+      )
+    })
+    const responses: any[] = await Promise.all(promises)
     const searchResults = []
-    responses.forEach(element => {
+    responses.forEach((element) => {
       searchResults.push(element.PrimarySearchResults)
-    });
+    })
 
     const duplicateArray = [].concat(...searchResults)
     //remove duplicate objects from array
-    const uniqueArray = duplicateArray.filter((obj, index, self) => self.findIndex(t => t.Path === obj.Path) === index)
+    const uniqueArray = duplicateArray.filter(
+      (obj, index, self) => self.findIndex((t) => t.Path === obj.Path) === index
+    )
     return uniqueArray
   }
 

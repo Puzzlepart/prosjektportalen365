@@ -19,7 +19,14 @@
                 "entrypoint": "./lib/webparts/programBenefits/ProgramBenefitsWebPart.js",
                 "manifest": "./src/webparts/programBenefits/ProgramBenefitsWebPart.manifest.json"
             }]
+        },
+        "program-risk-web-part": {
+            "components": [{
+                "entrypoint": "./lib/webparts/programRiskOverview/ProgramRiskWebPart.js",
+                "manifest": "./src/webparts/programRiskOverview/ProgramRiskWebPart.manifest.json"
+            }]
         }
+
     },
     "externals": {},
     "localizedResources": {
