@@ -524,15 +524,42 @@ export class DataAdapter {
     }
   }
 
+
+  public aggregatedQueryBuilder(maxQueryLength: number=2500, maxProjects: number=25): string[] {
+    const queryArray = []
+    let queryString = ''
+    if (this._siteIds.length > maxProjects) {
+      this._siteIds.forEach((siteId, index) => {
+        queryString += `SPWebUrl="${siteId}"`
+        if (queryString.length > maxQueryLength) {
+          queryArray.push(queryString)
+          queryString = ''
+        }
+        if (index == this._siteIds.length - 1) {
+          queryArray.push(queryString)
+        }
+    })
+     } else {
+       this._siteIds.forEach((siteId) => {
+          queryString += `SPWebUrl="${siteId}"`
+       })
+      queryArray.push(queryString)
+    }
+    return queryArray
+  }
+
   public queryBuilder(maxQueryLength: number=2500, maxSites: number=30): string[] {
     const queryArray = []
     let queryString = ''
     if (this.siteIds.length > maxSites) {
-      this.siteIds.forEach((siteId) => {
+      this.siteIds.forEach((siteId, index) => {
         queryString += `GtSiteIdOWSTEXT:"${siteId}" `
         if (queryString.length > maxQueryLength) {
           queryArray.push(queryString)
           queryString = ''
+        }
+        if (index == this.siteIds.length - 1) {
+          queryArray.push(queryString)
         }
     })
     } else {
@@ -552,8 +579,9 @@ export class DataAdapter {
    * @param selectProperties Select properties
    */
   private async _fetchItems(queryTemplate: string, selectProperties: string[]) {
+    const programFilter = this._siteIds && this.queryBuilder()
     const response = await sp.searchWithCaching({
-      QueryTemplate: queryTemplate,
+      QueryTemplate: `${programFilter ?? ''} ${queryTemplate}`,
       Querytext: '*',
       RowLimit: 500,
       TrimDuplicates: false,
