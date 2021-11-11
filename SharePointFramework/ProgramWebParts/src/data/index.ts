@@ -1,6 +1,6 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd } from '@pnp/common'
-import { QueryPropertyValueType, SearchResult, SortDirection, SPRest, sp } from '@pnp/sp'
+import { QueryPropertyValueType, SearchResult, SortDirection, SPRest, sp, SearchResults } from '@pnp/sp'
 import * as cleanDeep from 'clean-deep'
 import {
   IGraphGroup,
@@ -28,17 +28,19 @@ import HubSiteService, { IHubSite } from 'sp-hubsite-service'
 import _ from 'underscore'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
+import { ChildProject } from 'models/ChildProject'
 
 export class DataAdapter {
   private _portalDataService: PortalDataService
   private _dataSourceService: DataSourceService
   private _sp: SPRest
   private _webPartContext: WebPartContext
-  private _siteIds: string[]
+  private _childProjects: ChildProject[]
 
-  constructor(public context: WebPartContext, public hubSite: IHubSite, siteIds: string[]) {
+
+  constructor(public context: WebPartContext, public hubSite: IHubSite, childProjects: ChildProject[]) {
     this._webPartContext = context
-    this._siteIds = siteIds
+    this._childProjects = childProjects
     this._portalDataService = new PortalDataService().configure({
       urlOrWeb: hubSite.url
     })
@@ -189,6 +191,30 @@ export class DataAdapter {
     }
   }
 
+
+  public aggregatedQueryBuilder(maxQueryLength: number=2500, maxProjects: number=25): string[] {
+    const queryArray = []
+    let queryString = ''
+    if (this._childProjects.length > maxProjects) {
+      this._childProjects.forEach((childProject, index) => {
+        queryString += `Path:${childProject.SPWebURL} `
+        if (queryString.length > maxQueryLength) {
+          queryArray.push(queryString)
+          queryString = ''
+        }
+        if (index == this._childProjects.length - 1) {
+          queryArray.push(queryString)
+        }
+    })
+     } else {
+       this._childProjects.forEach((childProject) => {
+          queryString += `Path:${childProject.SPWebURL} `
+       })
+      queryArray.push(queryString)
+    }
+    return queryArray
+  }
+
   /*
   Array av GtSiteIdOWSTEXT
   Legg til GtSideIdOWSTEXT="SiteID"
@@ -201,23 +227,25 @@ export class DataAdapter {
   public queryBuilder(maxQueryLength: number=2500, maxProjects: number=25): string[] {
     const queryArray = []
     let queryString = ''
-    if (this._siteIds.length > maxProjects) {
-      this._siteIds.forEach((siteId) => {
-        queryString += `GtSiteIdOWSTEXT:"${siteId}" `
+    if (this._childProjects.length > maxProjects) {
+      this._childProjects.forEach((childProject, index) => {
+        queryString += `GtSiteIdOWSTEXT:${childProject.GtSiteIdOWSTEXT} `
         if (queryString.length > maxQueryLength) {
           queryArray.push(queryString)
           queryString = ''
         }
+        if (index == this._childProjects.length - 1) {
+          queryArray.push(queryString)
+        }
     })
-    } else {
-      let query = this._siteIds.reduce((acc, curr) => {
-        return "GtSiteIdOWSTEXT:"+ acc + " GtSiteIdOWSTEXT:"+ curr
-      })
-      queryArray.push(query)
+     } else {
+       this._childProjects.forEach((childProject) => {
+          queryString += `GtSiteIdOWSTEXT:${childProject.GtSiteIdOWSTEXT} `
+       })
+      queryArray.push(queryString)
     }
     return queryArray
   }
-
 
   // do a dynamic amount of sp.search calls
   public async fetchDataForView2(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string[]): Promise<IFetchDataForViewItemResult[]> {
@@ -529,14 +557,26 @@ export class DataAdapter {
    * @param selectProperties Select properties
    */
   private async _fetchItems(queryTemplate: string, selectProperties: string[]) {
-    const response = await this._sp.searchWithCaching({
-      QueryTemplate: queryTemplate,
-      Querytext: '*',
-      RowLimit: 500,
-      TrimDuplicates: false,
-      SelectProperties: [...selectProperties, 'Path', 'SPWebURL', 'SiteTitle']
-    })
-    return response.PrimarySearchResults
+     const programFilter = this._childProjects && this.aggregatedQueryBuilder()
+     const promises = []
+     programFilter.forEach(element => {
+     promises.push(sp.searchWithCaching({
+       QueryTemplate: `${element} ${queryTemplate}`,
+       Querytext: '*',
+       RowLimit: 500,
+       TrimDuplicates: false,
+       SelectProperties: [...selectProperties, 'Path', 'SiteTitle']
+     }))})
+    const responses: any[] = (await Promise.all(promises))
+    const searchResults = []
+    responses.forEach(element => {
+      searchResults.push(element.PrimarySearchResults)
+    });
+
+    const duplicateArray = [].concat(...searchResults)
+    //remove duplicate objects from array
+    const uniqueArray = duplicateArray.filter((obj, index, self) => self.findIndex(t => t.Path === obj.Path) === index)
+    return uniqueArray
   }
 
   /**

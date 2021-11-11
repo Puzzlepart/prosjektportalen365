@@ -1,31 +1,33 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
-  "version": "2.0",
-  "bundles": {
-    "program-administration-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/programAdministration/ProgramAdministrationWebpart.js",
-          "manifest": "./src/webparts/programAdministration/ProgramAdministrationWebpart.manifest.json"
+    "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+    "version": "2.0",
+    "bundles": {
+        "program-administration-web-part": {
+            "components": [{
+                "entrypoint": "./lib/webparts/programAdministration/ProgramAdministrationWebpart.js",
+                "manifest": "./src/webparts/programAdministration/ProgramAdministrationWebpart.manifest.json"
+            }]
+        },
+        "program-project-overview-web-part": {
+            "components": [{
+                "entrypoint": "./lib/webparts/programProjectOverview/ProgramProjectOverviewWebPart.js",
+                "manifest": "./src/webparts/programProjectOverview/ProgramProjectOverviewWebPart.manifest.json"
+            }]
+        },
+        "program-benefits-web-part": {
+            "components": [{
+                "entrypoint": "./lib/webparts/programBenefits/ProgramBenefitsWebPart.js",
+                "manifest": "./src/webparts/programBenefits/ProgramBenefitsWebPart.manifest.json"
+            }]
         }
-      ]
     },
-    "program-project-overview-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/programProjectOverview/ProgramProjectOverviewWebPart.js",
-          "manifest": "./src/webparts/programProjectOverview/ProgramProjectOverviewWebPart.manifest.json"
-        }
-      ]
+    "externals": {},
+    "localizedResources": {
+        "ProgramWebPartsStrings": "lib/loc/{locale}.js",
+        "PortfolioWebPartsStrings": "lib/loc/{locale}.js",
+        "ProjectWebPartsStrings": "node_modules/pp365-projectwebparts/lib/loc/{locale}.js",
+        "PzlSPFxComponentsStrings": "node_modules/pp365-projectwebparts/lib/loc/{locale}.js",
+        "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js",
+        "ControlStrings": "lib/loc/{locale}.js"
     }
-  },
-  "externals": {},
-  "localizedResources": {
-    "ProgramWebPartsStrings": "lib/loc/{locale}.js",
-    "PortfolioWebPartsStrings": "lib/loc/{locale}.js",
-    "ProjectWebPartsStrings": "node_modules/pp365-projectwebparts/lib/loc/{locale}.js",
-    "PzlSPFxComponentsStrings": "node_modules/pp365-projectwebparts/lib/loc/{locale}.js",
-    "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js",
-    "ControlStrings": "lib/loc/{locale}.js"
-  }
 }
