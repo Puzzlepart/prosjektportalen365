@@ -18,7 +18,7 @@ export const ProgramDeliveries: FunctionComponent<IProgramDeliveriesProps> = (pr
       dataAdapter={props.dataAdapter}
       showCommandBar={props.properties.showCommandBar}
       showSearchBox={props.properties.showSearchBox}
-      showExcelExportButton={props.properties.showExcelExport}
+      showExcelExportButton={props.properties.showExcelExportButton}
       dataSource={props.properties.dataSource}
       columns={DeliveriesColumns.columns}
       />

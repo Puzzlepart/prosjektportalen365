@@ -8,7 +8,6 @@ import {BaseProgramWebPart} from '../baseProgramWebPart/baseProgramWebPart'
 import {IBaseWebPartComponentProps} from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
 import {ChildProject} from 'models/ChildProject'
 import { IPropertyPaneConfiguration, PropertyPaneButton, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane';
-import { IProgramDeliveriesPropertyPaneProps } from 'models/PropertyPanes';
 import { IProgramDeliveriesProps } from 'components/ProgramDeliveries/ProgramDeliveriesProps';
 
 interface IProgramDeliveriesWebPartProps extends IBaseWebPartComponentProps {
@@ -34,7 +33,7 @@ export default class programProjectDeliveries extends BaseProgramWebPart<IProgra
         dataSource: this.properties.dataSource,
         showCommandBar: this.properties.showCommandBar,
         showSearchBox: this.properties.showSearchBox,
-        showExcelExport: this.properties.showExcelExportButton
+        showExcelExportButton: this.properties.showExcelExportButton
       }
     })
   }
