@@ -48,6 +48,8 @@ declare interface IProgramWebPartsStrings {
   BenefitResponsibleLabel: string;
   BenefitOwnerLabel: string;
   BenefitTitleLabel: string;
+  BenefitDataSource: string;
+  BenefitsTitle: string;
   ChartConfigurationListNameLabel: string;
   ChartErrorText: string;
   ColumnConfigListNameLabel: string;
