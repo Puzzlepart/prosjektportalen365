@@ -39,6 +39,10 @@ declare interface IProgramWebPartsStrings {
   SortAscLabel: string;
   ColumSettingsLabel: string;
   AdvancedGroupName: string;
+  DeliveriesDatasource: string;
+  DeliveriesTitle: string;
+  WebPartTitleLabel: string;
+  SettingsLabel: string;
   ActorsLabel: string;
   BasicGroupName: string;
   BenefitResponsibleLabel: string;

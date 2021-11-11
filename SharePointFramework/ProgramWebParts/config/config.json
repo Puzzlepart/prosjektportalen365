@@ -19,6 +19,12 @@
                 "entrypoint": "./lib/webparts/programBenefits/ProgramBenefitsWebPart.js",
                 "manifest": "./src/webparts/programBenefits/ProgramBenefitsWebPart.manifest.json"
             }]
+        },
+        "program-deliveries-web-part": {
+            "components": [{
+                "entrypoint": "./lib/webparts/programDeliveries/ProgramDeliveriesWebPart.js",
+                "manifest": "./src/webparts/programDeliveries/ProgramDeliveriesWebPart.manifest.json"
+            }]
         }
     },
     "externals": {},
