@@ -1,6 +1,6 @@
-export interface IProgramDeliveriesPropertyPaneProps {
+export interface IAggregatedPortfolioPropertyPane {
     dataSource: string;
-    showExcelExport: boolean;
+    showExcelExportButton: boolean;
     showCommandBar: boolean;
     showSearchBox: boolean;
 }

@@ -1,11 +1,12 @@
 import { DataAdapter } from 'data'
+import { IAggregatedPortfolioPropertyPane } from 'models/PropertyPanes'
 import { IAggregatedSearchListColumn } from 'pp365-portfoliowebparts/lib/interfaces'
 
 export interface IProgramBenefitsProps {
-  description: string;
-  context: any;
-  dataAdapter: DataAdapter;
-  childProjects?: string[];
+  title: string
+  context: any
+  dataAdapter: DataAdapter
+  properties: IAggregatedPortfolioPropertyPane
 }
 
 export const selectProperties = ["Path","SPWebURL","Title","ListItemId","SiteTitle","SiteId","ContentTypeID","GtDesiredValueOWSNMBR","GtMeasureIndicatorOWSTEXT","GtMeasurementUnitOWSCHCS", "GtStartValueOWSNMBR", "GtMeasurementValueOWSNMBR", "GtMeasurementCommentOWSMTXT", "GtMeasurementDateOWSDATE", "GtGainsResponsibleOWSUSER", "GtGainsTurnoverOWSMTXT", "GtGainsTypeOWSCHCS", "GtPrereqProfitAchievementOWSMTXT", "GtRealizationTimeOWSDATE", "GtGainLookupId", "GtMeasureIndicatorLookupId", "GtGainsResponsible", "GtGainsOwner", "Path", "SPWebURL", "SiteTitle"]
