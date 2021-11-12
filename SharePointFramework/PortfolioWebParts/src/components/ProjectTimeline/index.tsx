@@ -38,7 +38,6 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   public async componentDidMount(): Promise<void> {
     try {
       const data = await this._fetchData()
-      console.log(data)
       this.setState({ data, loading: false })
     } catch (error) {
       this.setState({ error, loading: false })

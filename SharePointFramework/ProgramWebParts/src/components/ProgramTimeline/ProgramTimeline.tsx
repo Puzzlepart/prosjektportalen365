@@ -6,15 +6,14 @@ import { ProjectTimeline } from 'pp365-portfoliowebparts/lib/components/ProjectT
 // import {PortfolioOverview} from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
 
 export const ProgramTimeline: FunctionComponent<IProgramTimelineProps> = (props) => {
-  
+
   return (
     <>
       <ProjectTimeline
         title="Tidslinje"
-        dataSource={"test"}
+        dataSource={"Prosjekttidslinje"}
         dataAdapter={props.dataAdapter}
         pageContext={props.context.pageContext as any}
-        displayMode={1}
       />
     </>
   )

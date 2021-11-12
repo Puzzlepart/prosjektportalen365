@@ -32,7 +32,7 @@ import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
 import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
 import HubSiteService, { IHubSite } from 'sp-hubsite-service'
-import _, { some } from 'underscore'
+import _, { some, find } from 'underscore'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
 import { ChildProject } from 'models/ChildProject'
@@ -392,22 +392,14 @@ export class DataAdapter {
         .expand('SiteIdLookup')
         .get()
     ])
-
-    timelineItems = timelineItems
-      .map((item) => {
-        return this._childProjects.some((child) => child.GtSiteIdOWSTEXT == item.siteId)
-          ? item
-          : undefined
-      })
-      .filter((p) => p)
     console.log(timelineItems)
 
     timelineItems = timelineItems
       .map((item) => {
-        if (item?.SiteIdLookup[0]?.Title) {
+        if (item?.SiteIdLookup[0]?.Title && _.find(this._childProjects, ((child) => child.GtSiteIdOWSTEXT == item?.SiteIdLookup[0]?.GtSiteId))) { // Må aksessere index 0 ettersom lookup er en array...
           const model = new TimelineContentListModel(
-            item.SiteIdLookup?.GtSiteId,
-            item.SiteIdLookup?.Title,
+            item.SiteIdLookup[0]?.GtSiteId, 
+            item.SiteIdLookup[0]?.Title,
             item.Title,
             item.TimelineType,
             item.GtStartDate,
