@@ -1,8 +1,6 @@
 import React, { FunctionComponent, useEffect } from 'react'
-import styles from './ProgramBenefits.module.scss'
 import { IProgramBenefitsProps } from './ProgramRiskProps'
 import { PortfolioAggregation } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
-import { IAggregatedSearchListColumn } from 'pp365-portfoliowebparts/lib/interfaces'
 
 export const ProgramRiskOverview: FunctionComponent<IProgramBenefitsProps> = (props) => {
 
