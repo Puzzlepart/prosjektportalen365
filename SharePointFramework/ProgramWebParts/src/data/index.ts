@@ -392,7 +392,6 @@ export class DataAdapter {
         .expand('SiteIdLookup')
         .get()
     ])
-    console.log(timelineItems)
 
     timelineItems = timelineItems
       .map((item) => {
