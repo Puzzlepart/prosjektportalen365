@@ -1,7 +1,7 @@
 import { get } from '@microsoft/sp-lodash-subset'
 import { getId } from '@uifabric/utilities'
 import sortArray from 'array-sort'
-import { ITimelineData, ITimelineGroup, ITimelineItem, TimelineGroupType } from 'interfaces'
+import { ITimelineData, ITimelineGroup, ITimelineItem, TimelineGroupType } from '../../interfaces'
 import moment from 'moment'
 import { CommandBar, ICommandBarProps } from 'office-ui-fabric-react/lib/CommandBar'
 import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu'
@@ -259,10 +259,10 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         item.type === strings.PhaseLabel
           ? '#2589d6'
           : item.type === strings.MilestoneLabel
-          ? 'transparent'
-          : item.type === strings.SubPhaseLabel
-          ? '#249ea0'
-          : '#484848'
+            ? 'transparent'
+            : item.type === strings.SubPhaseLabel
+              ? '#249ea0'
+              : '#484848'
 
       const group = _.find(groups, (grp) => item.title.indexOf(grp.title) !== -1)
       const style: React.CSSProperties = {

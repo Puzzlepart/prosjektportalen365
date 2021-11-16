@@ -25,6 +25,14 @@
                 "entrypoint": "./lib/webparts/programDeliveries/ProgramDeliveriesWebPart.js",
                 "manifest": "./src/webparts/programDeliveries/ProgramDeliveriesWebPart.manifest.json"
             }]
+        },
+        "program-timeline-web-part": {
+          "components": [
+            {
+              "entrypoint": "./lib/webparts/programTimeline/ProgramTimelineWebPart.js",
+              "manifest": "./src/webparts/programTimeline/ProgramTimelineWebPart.manifest.json"
+            }
+          ]
         }
     },
     "externals": {},
