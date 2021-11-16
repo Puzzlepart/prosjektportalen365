@@ -10,8 +10,7 @@ export interface IProgramAdministrationProps {
 }
 
 export interface ChildProject {
-  GtSiteIdOWSTEXT: string
-  GtSiteUrlOWSTEXT: string
+  SiteId: string
   title: string
 }
 

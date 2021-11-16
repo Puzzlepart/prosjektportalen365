@@ -49,24 +49,29 @@ export async function fetchAvailableProjects(_sp: SPRest) {
   const allProjects: any = await getHubSiteProjects(_sp)
 
   const availableProjects = allProjects.PrimarySearchResults.filter((project) => {
-    return !childrenSiteIds.some((el) => el.GtSiteIdOWSTEXT === project.GtSiteIdOWSTEXT)
+    return !childrenSiteIds.some((el) => el.SiteId === project.GtSiteIdOWSTEXT)
   })
 
-  console.log(availableProjects)
-
-  return availableProjects
+  const mappedProjects = availableProjects.map(proj => {
+    return {
+      SiteId: proj.GtSiteIdOWSTEXT,
+      Title: proj.Title
+    }
+  })
+  return mappedProjects
 }
 
 /**
  * Add a child project
  */
-export async function addChildProject(_sp: SPRest, project: ChildProject[]) {
+export async function addChildProject(_sp: SPRest, newProjects: ChildProject[]) {
   const [currentData] = await _sp.web.lists
     .getByTitle('Prosjektegenskaper')
     .items.select('GtChildProjects')
     .get()
   const projects: ChildProject[] = JSON.parse(currentData.GtChildProjects)
-  const updatedProjects = [...projects, ...project]
+  console.log(projects)
+  const updatedProjects = [...projects, ...newProjects]
 
   const ans = await _sp.web.lists
     .getByTitle('Prosjektegenskaper')
@@ -84,7 +89,7 @@ export async function removeChildProject(_sp: SPRest, toDelete: ChildProject[]) 
     .items.select('GtChildProjects')
     .get()
   const projects: ChildProject[] = JSON.parse(currentData.GtChildProjects)
-  const updatedProjects = projects.filter((p) => p.GtSiteIdOWSTEXT !== toDelete[0].GtSiteIdOWSTEXT)
+  const updatedProjects = projects.filter((p) => p.SiteId !== toDelete[0].SiteId)
 
   await _sp.web.lists
     .getByTitle('Prosjektegenskaper')
