@@ -28,8 +28,6 @@ export const AddProjectDialog: FunctionComponent<IAddProjectProps> = ({ sp }) =>
         fetch()
     }, [])
 
-    console.log(selectedItem, 'selected item')
-
     return (
         <>
             <Dialog hidden={false} onDismiss={() => toggleProjectDialog()} maxWidth={"1000px"} dialogContentProps={dialogContentProps} >

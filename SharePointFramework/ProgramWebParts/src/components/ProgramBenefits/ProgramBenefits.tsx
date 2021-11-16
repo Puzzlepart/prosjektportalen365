@@ -1,5 +1,4 @@
 import React, {FunctionComponent, useEffect} from 'react'
-import styles from './ProgramBenefits.module.scss'
 import {IProgramBenefitsProps, BenefitColumns, selectProperties} from './ProgramBenefitsProps'
 import {PortfolioAggregation} from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
 import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from 'pp365-portfoliowebparts/lib/models'

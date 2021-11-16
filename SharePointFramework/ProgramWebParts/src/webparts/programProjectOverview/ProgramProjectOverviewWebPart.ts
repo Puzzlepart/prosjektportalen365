@@ -1,18 +1,12 @@
 import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
 import { IPropertyPaneConfiguration, IPropertyPaneDropdownOption, PropertyPaneDropdown, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane'
-import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import * as strings from 'ProgramWebPartsStrings'
 import {ProgramOverview} from '../../components/ProgramProjectOverview/ProgramProjectOverview';
 import {IProjectProgramOverviewProps} from '../../components/ProgramProjectOverview/IProgramProjectOverviewProps';
 import {IPortfolioConfiguration} from 'pp365-portfoliowebparts/lib/interfaces';
 import {BaseProgramWebPart} from '../baseProgramWebPart/baseProgramWebPart'
 import {IBaseWebPartComponentProps} from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
-import {PortalDataService} from 'pp365-shared/lib/services/PortalDataService';
-import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
-import HubSiteService from 'sp-hubsite-service'
-import {sp} from '@pnp/sp'
-import {ChildProject} from 'models/ChildProject'
 
 interface IProgramOverviewProps extends IBaseWebPartComponentProps {
   showCommandBar: any

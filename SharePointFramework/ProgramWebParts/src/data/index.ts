@@ -5,8 +5,7 @@ import {
   SearchResult,
   SortDirection,
   SPRest,
-  sp,
-  SearchResults
+  sp
 } from '@pnp/sp'
 import * as cleanDeep from 'clean-deep'
 import {
@@ -16,14 +15,8 @@ import {
   ISPUser
 } from 'pp365-portfoliowebparts/lib/interfaces'
 import {
-  ChartConfiguration,
-  ChartData,
-  ChartDataItem,
-  DataField,
   ProjectListModel,
   TimelineContentListModel,
-  SPChartConfigurationItem,
-  SPContentType
 } from 'pp365-portfoliowebparts/lib/models'
 import MSGraph from 'msgraph-helper'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
@@ -32,7 +25,7 @@ import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
 import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
 import HubSiteService, { IHubSite } from 'sp-hubsite-service'
-import _, { some, find } from 'underscore'
+import _ from 'underscore'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
 import { ChildProject } from 'models/ChildProject'
@@ -206,7 +199,7 @@ export class DataAdapter {
     let queryString = ''
     if (this._childProjects.length > maxProjects) {
       this._childProjects.forEach((childProject, index) => {
-        queryString += `Path:${childProject.SPWebURL} `
+        queryString += `SiteId:${childProject.SiteId} `
         if (queryString.length > maxQueryLength) {
           queryArray.push(queryString)
           queryString = ''
@@ -217,7 +210,7 @@ export class DataAdapter {
       })
     } else {
       this._childProjects.forEach((childProject) => {
-        queryString += `Path:${childProject.SPWebURL} `
+        queryString += `SiteId:${childProject.SiteId} `
       })
       queryArray.push(queryString)
     }
@@ -238,7 +231,7 @@ export class DataAdapter {
     let queryString = ''
     if (this._childProjects.length > maxProjects) {
       this._childProjects.forEach((childProject, index) => {
-        queryString += `GtSiteIdOWSTEXT:${childProject.GtSiteIdOWSTEXT} `
+        queryString += `GtSiteIdOWSTEXT:${childProject.SiteId} `
         if (queryString.length > maxQueryLength) {
           queryArray.push(queryString)
           queryString = ''
@@ -249,7 +242,7 @@ export class DataAdapter {
       })
     } else {
       this._childProjects.forEach((childProject) => {
-        queryString += `GtSiteIdOWSTEXT:${childProject.GtSiteIdOWSTEXT} `
+        queryString += `GtSiteIdOWSTEXT:${childProject.SiteId} `
       })
       queryArray.push(queryString)
     }
@@ -395,7 +388,7 @@ export class DataAdapter {
 
     timelineItems = timelineItems
       .map((item) => {
-        if (item?.SiteIdLookup[0]?.Title && _.find(this._childProjects, ((child) => child.GtSiteIdOWSTEXT == item?.SiteIdLookup[0]?.GtSiteId))) { // Må aksessere index 0 ettersom lookup er en array...
+        if (item?.SiteIdLookup[0]?.Title && _.find(this._childProjects, ((child) => child.SiteId == item?.SiteIdLookup[0]?.GtSiteId))) { // Må aksessere index 0 ettersom lookup er en array...
           const model = new TimelineContentListModel(
             item.SiteIdLookup[0]?.GtSiteId, 
             item.SiteIdLookup[0]?.Title,
@@ -488,7 +481,7 @@ export class DataAdapter {
 
     projects = projects
       .map((project) => {
-        return this._childProjects.some((child) => child.GtSiteIdOWSTEXT == project.siteId)
+        return this._childProjects.some((child) => child.SiteId == project.siteId)
           ? project
           : undefined
       })

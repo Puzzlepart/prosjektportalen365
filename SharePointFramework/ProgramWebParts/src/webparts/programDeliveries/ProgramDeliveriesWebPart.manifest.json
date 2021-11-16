@@ -15,6 +15,7 @@
         "description": { "default": "Gir en oversikt over leveranser i underprosjekter" },
         "officeFabricIconFontName": "Page",
         "properties": {
+            "webPartTitle": "Prosjektleveranser",
             "dataSource": "Alle prosjektleveranser",
             "showCommandBar": true,
             "showSearchBox": true,

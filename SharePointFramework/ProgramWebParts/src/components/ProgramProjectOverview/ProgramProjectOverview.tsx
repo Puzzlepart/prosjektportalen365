@@ -1,5 +1,4 @@
 import React, {FunctionComponent, useEffect} from 'react'
-import styles from './ProgramProjectOverview.module.scss'
 import {IProjectProgramOverviewProps} from './IProgramProjectOverviewProps'
 import {PortfolioOverview} from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
 

@@ -1,5 +1,4 @@
 export interface ChildProject {
-  ID: number
-  GtSiteIdOWSTEXT: string
-  SPWebURL: string
+  SiteId: string
+  Title: string
 }

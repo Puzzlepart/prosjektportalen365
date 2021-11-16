@@ -2,12 +2,7 @@ import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
 import {
   IPropertyPaneConfiguration
-  // IPropertyPaneDropdownOption,
-  // PropertyPaneDropdown,
-  // PropertyPaneTextField,
-  // PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import * as strings from 'ProgramWebPartsStrings'
 import { BaseProgramWebPart } from '../baseProgramWebPart/baseProgramWebPart'
 import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
 import { ChildProject } from 'models/ChildProject'

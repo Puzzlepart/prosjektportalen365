@@ -11,11 +11,11 @@
     "preconfiguredEntries": [{
         "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
         "group": { "default": "Other" },
-        "title": { "default": "Administrasjon underprosjekter" },
+        "title": { "default": "Administrasjon av underprosjekter" },
         "description": { "default": "Webpart for å administrere (legge til/fjerne) underprosjekter" },
-        "officeFabricIconFontName": "Page",
+        "officeFabricIconFontName": "Org",
         "properties": {
-            "description": "Porteføljeadministrasjon"
+            "webPartTitle": "Administrasjon"
         }
     }]
 }
