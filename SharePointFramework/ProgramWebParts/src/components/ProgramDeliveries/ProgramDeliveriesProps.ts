@@ -1,11 +1,11 @@
 import { DataAdapter } from 'data'
-import { IProgramDeliveriesPropertyPaneProps } from 'models/PropertyPanes'
+import { IAggregatedPortfolioPropertyPane } from 'models/PropertyPanes'
 
 export interface IProgramDeliveriesProps {
   title: string
   context: any
   dataAdapter: DataAdapter
-  properties: IProgramDeliveriesPropertyPaneProps
+  properties: IAggregatedPortfolioPropertyPane
   childProjects?: string[]
 }
 

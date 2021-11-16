@@ -2,13 +2,9 @@ import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
 import * as strings from 'ProgramWebPartsStrings'
 import {ProgramDeliveries} from 'components/ProgramDeliveries/ProgramDeliveries';
-import {IProjectProgramOverviewProps} from '../../components/ProgramProjectOverview/IProgramProjectOverviewProps';
-import {IPortfolioConfiguration} from 'pp365-portfoliowebparts/lib/interfaces';
 import {BaseProgramWebPart} from '../baseProgramWebPart/baseProgramWebPart'
 import {IBaseWebPartComponentProps} from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
-import {ChildProject} from 'models/ChildProject'
-import { IPropertyPaneConfiguration, PropertyPaneButton, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane';
-import { IProgramDeliveriesPropertyPaneProps } from 'models/PropertyPanes';
+import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane';
 import { IProgramDeliveriesProps } from 'components/ProgramDeliveries/ProgramDeliveriesProps';
 
 interface IProgramDeliveriesWebPartProps extends IBaseWebPartComponentProps {
@@ -34,7 +30,7 @@ export default class programProjectDeliveries extends BaseProgramWebPart<IProgra
         dataSource: this.properties.dataSource,
         showCommandBar: this.properties.showCommandBar,
         showSearchBox: this.properties.showSearchBox,
-        showExcelExport: this.properties.showExcelExportButton
+        showExcelExportButton: this.properties.showExcelExportButton
       }
     })
   }

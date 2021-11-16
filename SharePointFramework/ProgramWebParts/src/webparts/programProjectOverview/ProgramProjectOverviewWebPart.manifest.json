@@ -11,8 +11,8 @@
     "preconfiguredEntries": [{
         "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
         "group": { "default": "Other" },
-        "title": { "default": "programProjectOverview" },
-        "description": { "default": "programProjectOverview description" },
+        "title": { "default": "Oversikt over underprosjekter" },
+        "description": { "default": "Gir en listevisning av underprosjekter" },
         "officeFabricIconFontName": "Page",
         "properties": {
             "description": "programProjectOverview"

@@ -1,5 +1,4 @@
 import React, { FunctionComponent } from "react"
-import { useStore } from '../store';
 import { ListView } from "@pnp/spfx-controls-react/lib/ListView";
 import { IProjectTableProps } from './types'
 
