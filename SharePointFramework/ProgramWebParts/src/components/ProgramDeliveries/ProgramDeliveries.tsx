@@ -1,5 +1,4 @@
 import React, {FunctionComponent, useEffect} from 'react'
-import styles from './ProgramDeliveries.module.scss'
 import {IProgramDeliveriesProps} from './ProgramDeliveriesProps'
 import {PortfolioAggregation} from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
 import { DeliveriesColumns } from './ProgramDeliveriesProps'

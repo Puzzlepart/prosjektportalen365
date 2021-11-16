@@ -1,6 +1,6 @@
 import { SPRest } from '@pnp/sp'
 import create from 'zustand'
-import { addChildProject, fetchAvailableProjects } from './helpers'
+import { fetchAvailableProjects } from './helpers'
 import { ChildProject } from 'models'
 
 interface IProgramAdministrationState {

@@ -1,6 +1,5 @@
 import { SPRest, sp } from '@pnp/sp'
 import { ChildProject } from 'models'
-import * as cleanDeep from 'clean-deep'
 
 /**
  * Fetches all projects associated with the current hubsite context

@@ -7,7 +7,6 @@ import { ShimmeredDetailsList } from 'office-ui-fabric-react'
 import { ProjectTable } from './ProjectTable'
 import { Commandbar } from './Commands'
 import { AddProjectDialog } from './AddProjectDialog'
-// import { fetchChildProjects } from './helpers';
 
 
 export const ProgramAdministration: FunctionComponent<IProgramAdministrationProps> = ({ sp }) => {
