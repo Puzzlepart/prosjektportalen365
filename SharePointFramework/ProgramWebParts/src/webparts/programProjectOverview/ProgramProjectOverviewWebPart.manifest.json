@@ -15,7 +15,7 @@
         "description": { "default": "Gir en listevisning av underprosjekter" },
         "officeFabricIconFontName": "Page",
         "properties": {
-            "description": "programProjectOverview"
+            "webPartTitle": "Oversikt over underprosjekter"
         }
     }]
 }

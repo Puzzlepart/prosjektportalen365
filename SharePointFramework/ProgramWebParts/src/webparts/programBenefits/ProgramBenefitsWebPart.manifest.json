@@ -15,7 +15,7 @@
         "description": { "default": "Gir en listeoversikt over gevinster i underprosjekter" },
         "officeFabricIconFontName": "Page",
         "properties": {
-            "title": "Gevinstoversikt",
+            "webPartTitle": "Gevinstoversikt i underprosjekter",
             "dataSource": "Gevinstoversikt",
             "searchBoxPlaceholderText": "Søk i gevinster...",
             "showCommandBar": true,

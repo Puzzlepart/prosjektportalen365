@@ -15,7 +15,7 @@
         "description": { "default": "programTimeline description" },
         "officeFabricIconFontName": "Page",
         "properties": {
-            "description": "programTimeline"
+            "webPartTitle": "Program Tidslinje"
         }
     }]
 }

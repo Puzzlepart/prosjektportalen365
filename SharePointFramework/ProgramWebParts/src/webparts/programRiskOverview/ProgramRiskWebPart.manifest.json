@@ -15,7 +15,7 @@
         "description": { "default": "programBenefits" },
         "officeFabricIconFontName": "Page",
         "properties": {
-            "description": "programBenefits"
+            "webPartTitle": "Program risk overview"
         }
     }]
 }
