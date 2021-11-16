@@ -1,12 +1,12 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import styles from './programAdministration.module.scss'
-import { ChildProject, IProgramAdministrationProps, shimmeredColumns } from './types';
-import { useStore } from './store';
-import { IViewField, SelectionMode } from "@pnp/spfx-controls-react/lib/ListView";
-import { IColumn, ShimmeredDetailsList } from 'office-ui-fabric-react'
-import { ProjectTable } from './ProjectTable';
-import { Commandbar } from './Commands';
-import { AddProjectDialog } from './AddProjectDialog';
+import { IProgramAdministrationProps, shimmeredColumns } from './types'
+import { useStore } from './store'
+import { IViewField, SelectionMode } from "@pnp/spfx-controls-react/lib/ListView"
+import { ShimmeredDetailsList } from 'office-ui-fabric-react'
+import { ProjectTable } from './ProjectTable'
+import { Commandbar } from './Commands'
+import { AddProjectDialog } from './AddProjectDialog'
 // import { fetchChildProjects } from './helpers';
 
 

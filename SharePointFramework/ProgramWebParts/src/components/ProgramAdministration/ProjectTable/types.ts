@@ -1,4 +1,4 @@
-import { ChildProject } from '../types'
+import { ChildProject } from 'models'
 import { IViewField, SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
 
 export interface IProjectTableProps {

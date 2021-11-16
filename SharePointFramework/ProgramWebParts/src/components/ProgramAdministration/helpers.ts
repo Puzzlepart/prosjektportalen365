@@ -1,5 +1,5 @@
 import { SPRest, sp } from '@pnp/sp'
-import { ChildProject } from './types'
+import { ChildProject } from 'models'
 import * as cleanDeep from 'clean-deep'
 
 /**

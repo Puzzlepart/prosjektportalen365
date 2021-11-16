@@ -9,11 +9,6 @@ export interface IProgramAdministrationProps {
   sp: SPRest
 }
 
-export interface ChildProject {
-  SiteId: string
-  title: string
-}
-
 export const shimmeredColumns: IColumn[] = [
   {
     key: '1',
