@@ -18,6 +18,9 @@
             "title": "Gevinstoversikt",
             "dataSource": "Gevinstoversikt",
             "searchBoxPlaceholderText": "Søk i gevinster...",
+            "showCommandBar": true,
+            "showSearchBox": true,
+            "showExcelExportButton": true,
             "hiddenColumns": [
                 "siteTitle"
             ]
