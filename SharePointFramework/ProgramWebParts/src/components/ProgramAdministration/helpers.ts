@@ -69,14 +69,12 @@ export async function addChildProject(_sp: SPRest, newProjects: ChildProject[]) 
     .items.select('GtChildProjects')
     .get()
   const projects: ChildProject[] = JSON.parse(currentData.GtChildProjects)
-  console.log(projects)
   const updatedProjects = [...projects, ...newProjects]
 
   const ans = await _sp.web.lists
     .getByTitle('Prosjektegenskaper')
     .items.getById(1)
     .update({ GtChildProjects: JSON.stringify(updatedProjects) })
-  console.log(ans)
 }
 
 /**
