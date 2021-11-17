@@ -12,7 +12,7 @@
         "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
         "group": { "default": "Other" },
         "title": { "default": "Program risk overview" },
-        "description": { "default": "programBenefits" },
+        "description": { "default": "programRisk" },
         "officeFabricIconFontName": "Page",
         "properties": {
             "webPartTitle": "Program risk overview"
