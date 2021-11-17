@@ -16,7 +16,7 @@ export const ProgramRiskOverview: FunctionComponent<IProgramBenefitsProps> = (pr
         dataAdapter={props.dataAdapter}
         showCommandBar={true}
         showExcelExportButton={true}
-        dataSource="Risikoelementer på porteføljenivå"
+        dataSource="Programrisiko"
         columns={columns}
         selectProperties={proper}
       />

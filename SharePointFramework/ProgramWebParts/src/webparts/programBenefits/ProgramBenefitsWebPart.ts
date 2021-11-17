@@ -5,7 +5,7 @@ import {ProgramBenefits} from 'components/ProgramBenefits/ProgramBenefits';
 import {BaseProgramWebPart} from '../baseProgramWebPart/baseProgramWebPart'
 import {IBaseWebPartComponentProps} from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
 import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane';
-import { IAggregatedPortfolioProps } from 'models/AggregatedPortfolioProps';
+import { IProgramBenefitsProps } from 'components/ProgramBenefits/ProgramBenefitsProps';
 
 interface IProgramBenefitsPropertyPaneProps extends IBaseWebPartComponentProps {
   webPartTitle: string
@@ -22,7 +22,7 @@ export default class programBenefits extends BaseProgramWebPart<IProgramBenefits
   }
 
   public render(): void {
-    this.renderComponent<IAggregatedPortfolioProps>(ProgramBenefits, {
+    this.renderComponent<IProgramBenefitsProps>(ProgramBenefits, {
       title: this.properties.webPartTitle,
       context: this.context,
       dataAdapter: this.dataAdapter,
@@ -30,9 +30,9 @@ export default class programBenefits extends BaseProgramWebPart<IProgramBenefits
         dataSource: this.properties.dataSource,
         showExcelExportButton: this.properties.showExcelExportButton,
         showSearchBox: this.properties.showSearchBox,
-        showCommandBar: this.properties.showCommandBar
+        showCommandBar: this.properties.showCommandBar,
+        displayMode: this.displayMode
       }
-      
     });
   }
 
