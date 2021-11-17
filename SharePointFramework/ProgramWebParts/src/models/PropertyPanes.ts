@@ -1,6 +1,10 @@
-export interface IProgramDeliveriesPropertyPaneProps {
+import { DisplayMode } from "@microsoft/sp-core-library";
+
+export interface IAggregatedPortfolioPropertyPane {
     dataSource: string;
     showExcelExport: boolean;
     showCommandBar: boolean;
     showSearchBox: boolean;
+    columns?: Array<{key: string, fieldName: string, name: string, minWidth:number,maxWidth:number, isMultiline:boolean, isResizable:boolean}>
+    displayMode: DisplayMode;
 }

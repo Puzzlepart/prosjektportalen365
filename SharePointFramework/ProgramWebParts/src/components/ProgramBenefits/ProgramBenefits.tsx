@@ -13,9 +13,8 @@ export const ProgramBenefits: FunctionComponent<IProgramBenefitsProps> = (props)
   }, []);
 
     return (
-      <>
       <PortfolioAggregation 
-      title={"Gevinstoversikt"}
+      title={props.title}
       pageContext={props.context.pageContext}
       dataAdapter={props.dataAdapter}
       showCommandBar={true}
@@ -24,8 +23,8 @@ export const ProgramBenefits: FunctionComponent<IProgramBenefitsProps> = (props)
       columns={columns}
       selectProperties={proper}
       postTransform={_postTransform}
+      lockedColumns={true}
       />
-      </>
     );
   
 }

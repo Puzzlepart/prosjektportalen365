@@ -16,15 +16,17 @@ interface IProgramDeliveriesWebPartProps extends IBaseWebPartComponentProps {
   showExcelExportButton: boolean
   showSearchBox: boolean
   showCommandBar: boolean
+  columns: Array<{key: string, fieldName: string, name: string, minWidth:number,maxWidth:number, isMultiline:boolean, isResizable:boolean}>
 }
 
 export default class programProjectDeliveries extends BaseProgramWebPart<IProgramDeliveriesWebPartProps> {
   public async onInit(): Promise<void> {
     await super.onInit()
-
   }
 
   public render(): void {
+    console.log(this.properties)
+    console.log(this)
     this.renderComponent<IProgramDeliveriesProps>(ProgramDeliveries, {
       title: this.properties.webPartTitle,
       context: this.context,
@@ -33,8 +35,11 @@ export default class programProjectDeliveries extends BaseProgramWebPart<IProgra
         dataSource: this.properties.dataSource,
         showCommandBar: this.properties.showCommandBar,
         showSearchBox: this.properties.showSearchBox,
-        showExcelExportButton: this.properties.showExcelExportButton
-      }
+        showExcelExportButton: this.properties.showExcelExportButton,
+        columns: this.properties.columns,
+        displayMode: this.displayMode
+      },
+      onUpdateProperty: this._onUpdateProperty.bind(this)
     })
   }
 
@@ -44,6 +49,11 @@ export default class programProjectDeliveries extends BaseProgramWebPart<IProgra
 
   protected get dataVersion(): Version {
     return Version.parse('1.0')
+  }
+
+  private _onUpdateProperty(key: string, value: any) {
+    this.properties[key] = value
+    this.context.propertyPane.refresh()
   }
   
 

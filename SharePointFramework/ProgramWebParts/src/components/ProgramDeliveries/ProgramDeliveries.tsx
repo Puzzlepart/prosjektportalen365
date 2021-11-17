@@ -2,16 +2,14 @@ import React, {FunctionComponent, useEffect} from 'react'
 import styles from './ProgramDeliveries.module.scss'
 import {IProgramDeliveriesProps} from './ProgramDeliveriesProps'
 import {PortfolioAggregation} from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
-import { DeliveriesColumns } from './ProgramDeliveriesProps'
 
 
 export const ProgramDeliveries: FunctionComponent<IProgramDeliveriesProps> = (props) => {
 
   useEffect(() => {    
-
+    console.log(props.properties.columns)
   }, []);
     return (
-      <>
       <PortfolioAggregation 
       title={props.title}
       pageContext={props.context.pageContext}
@@ -19,10 +17,12 @@ export const ProgramDeliveries: FunctionComponent<IProgramDeliveriesProps> = (pr
       showCommandBar={props.properties.showCommandBar}
       showSearchBox={props.properties.showSearchBox}
       showExcelExportButton={props.properties.showExcelExportButton}
+      lockedColumns={false}
+      displayMode={props.properties.displayMode}
+      onUpdateProperty={props.onUpdateProperty}
       dataSource={props.properties.dataSource}
-      columns={DeliveriesColumns.columns}
+      columns={props.properties.columns}
       />
-      </>
     );
   
 }

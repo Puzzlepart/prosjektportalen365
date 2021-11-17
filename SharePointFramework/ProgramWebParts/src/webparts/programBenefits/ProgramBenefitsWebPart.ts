@@ -6,8 +6,8 @@ import {IProjectProgramOverviewProps} from '../../components/ProgramProjectOverv
 import {IPortfolioConfiguration} from 'pp365-portfoliowebparts/lib/interfaces';
 import {BaseProgramWebPart} from '../baseProgramWebPart/baseProgramWebPart'
 import {IBaseWebPartComponentProps} from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
-import {ChildProject} from 'models/ChildProject'
-import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane';
+import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane';
+import { IProgramBenefitsProps } from 'components/ProgramBenefits/ProgramBenefitsProps';
 
 interface IProgramOverviewProps extends IBaseWebPartComponentProps {
   showCommandBar: any
@@ -23,12 +23,17 @@ export default class programProjectOverview extends BaseProgramWebPart<IProgramO
   }
 
   public render(): void {
-    this.renderComponent<IProjectProgramOverviewProps>(ProgramBenefits, {
-      description: this.description,
+    this.renderComponent<IProgramBenefitsProps>(ProgramBenefits, {
+      title: this.properties.webPartTitle,
       context: this.context,
       dataAdapter: this.dataAdapter,
-      configuration: this._configuration,
-      childProjects: this.siteIds
+      properties: {
+        dataSource: this.properties.dataSource,
+        showExcelExportButton: this.properties.showExcelExportButton,
+        showSearchBox: this.properties.showSearchBox,
+        showCommandBar: this.properties.showCommandBar,
+        displayMode: this.displayMode
+      }
     });
   }
 
