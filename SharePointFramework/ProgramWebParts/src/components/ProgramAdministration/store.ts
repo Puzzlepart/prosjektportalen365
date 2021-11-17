@@ -2,17 +2,18 @@ import { SPRest } from '@pnp/sp'
 import create from 'zustand'
 import { fetchAvailableProjects } from './helpers'
 import { ChildProject } from 'models'
+import { ChildProjectListItem } from './types'
 
 interface IProgramAdministrationState {
   isLoading: boolean
   childProjects: ChildProject[]
   displayProjectDialog: boolean
-  availableProjects: ChildProject[]
+  availableProjects: ChildProjectListItem[]
   selectedProjectsToDelete: ChildProject[]
   toggleProjectDialog: () => void
   toggleLoading: () => void
   setChildProjects: (projects: ChildProject[]) => void
-  setAvailableProjects: (projects: ChildProject[]) => void
+  setAvailableProjects: (projects: ChildProjectListItem[]) => void
   addChildProject: (project: ChildProject, _sp: SPRest) => void
   setSelectedToDelete: (project: ChildProject[]) => void
   fetchChildProjects: (_sp: SPRest) => Promise<void>

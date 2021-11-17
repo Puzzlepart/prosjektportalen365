@@ -54,7 +54,8 @@ export async function fetchAvailableProjects(_sp: SPRest) {
   const mappedProjects = availableProjects.map(proj => {
     return {
       SiteId: proj.GtSiteIdOWSTEXT,
-      Title: proj.Title
+      Title: proj.Title,
+      GtSiteUrlOWSTEXT: proj.GtSiteUrlOWSTEXT
     }
   })
   return mappedProjects

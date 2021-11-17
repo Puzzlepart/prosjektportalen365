@@ -7,6 +7,7 @@ import { useStore } from '../store';
 import { addChildProject, fetchAvailableProjects } from '../helpers'
 import { shimmeredColumns } from '../types'
 import styles from '../programAdministration.module.scss'
+import * as strings from 'ProgramWebPartsStrings'
 
 
 export const AddProjectDialog: FunctionComponent<IAddProjectProps> = ({ sp }) => {
@@ -38,13 +39,13 @@ export const AddProjectDialog: FunctionComponent<IAddProjectProps> = ({ sp }) =>
                         <ProjectTable fields={fields} projects={projects} width={"50em"} onSelect={(item) => selectedItem.current = item} selectionMode={SelectionMode.multiple} />}
                 </div>
                 <DialogFooter>
-                    <PrimaryButton text="Legg til" onClick={() => {
+                    <PrimaryButton text={strings.Add} onClick={() => {
                         addChildProject(sp, selectedItem.current)
                         setChildProjects([...childProjects, ...selectedItem.current])
                         toggleProjectDialog()
                     }
                     } />
-                    <DefaultButton text="Avbryt" onClick={() => toggleProjectDialog()} />
+                    <DefaultButton text={strings.Cancel} onClick={() => toggleProjectDialog()} />
                 </DialogFooter>
             </Dialog>
         </>

@@ -208,6 +208,13 @@ declare interface IProgramWebPartsStrings {
   ProgramPortfolio_LoadingText: string;
   ProgramPortfolio_SearchBoxLabelText: string;
   ProgramPortfolio_ShowCountText: string;
+  ProgramTimelineHeader: string
+  ProgramAdministrationHeader: string
+  ProgramAddProjectButtonText: string
+  ProgramRemoveChildButtonText: string
+  ProgramSearchProjectsText: string
+  Add: string,
+  Cancel: string,
   Yes: string;
   No: string;
   PreviousPage: string;

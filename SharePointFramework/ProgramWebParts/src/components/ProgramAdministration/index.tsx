@@ -7,6 +7,7 @@ import { ShimmeredDetailsList } from 'office-ui-fabric-react'
 import { ProjectTable } from './ProjectTable'
 import { Commandbar } from './Commands'
 import { AddProjectDialog } from './AddProjectDialog'
+import * as strings from 'ProgramWebPartsStrings'
 
 
 export const ProgramAdministration: FunctionComponent<IProgramAdministrationProps> = ({ sp }) => {
@@ -26,6 +27,8 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
     fetch()
   }, [])
 
+  console.log(childProjects)
+
   if (isLoading) {
     return <ShimmeredDetailsList items={[]} shimmerLines={15} columns={shimmeredColumns} enableShimmer />
   }
@@ -34,7 +37,7 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
     <>
       <Commandbar _sp={sp} />
       <div className={styles.root}>
-        <h2>Administrasjon av underordnede prosjekter</h2>
+        <h2>{strings.ProgramAdministrationHeader}</h2>
         <div>
           <ProjectTable fields={fields} projects={childProjects} onSelect={(selectedItem: any) => setSelected(selectedItem)} selectionMode={SelectionMode.multiple} />
         </div>
