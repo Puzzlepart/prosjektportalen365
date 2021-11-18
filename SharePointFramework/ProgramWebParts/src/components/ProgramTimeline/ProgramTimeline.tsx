@@ -1,13 +1,14 @@
 import React, { FunctionComponent } from 'react'
 import { IProgramTimelineProps } from 'webparts/programTimeline/ProgramTimelineWebPart'
 import { ProjectTimeline } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/index'
+import * as strings from 'ProgramWebPartsStrings'
 
 export const ProgramTimeline: FunctionComponent<IProgramTimelineProps> = (props) => {
 
   return (
     <>
       <ProjectTimeline
-        title="Tidslinje"
+        title={strings.ProgramTimelineHeader}
         dataSource={"Prosjekttidslinje"}
         dataAdapter={props.dataAdapter}
         pageContext={props.context.pageContext as any}
