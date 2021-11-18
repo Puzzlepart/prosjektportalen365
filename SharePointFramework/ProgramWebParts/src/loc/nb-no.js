@@ -200,6 +200,7 @@ define([], function() {
         ProgramAddProject_EmptyMessage: "Ingen prosjekter funnet. Visningen bruker søk, så det kan ta noen minutter fra prosjekter er lagt til eller oppdatert til de vises her.",
         ProgramAddProject_SearchBoxLabelText: "Søk i alle prosjekter..",
         ProgramTimelineHeader: "Tidslinje",
+        ProgramAddProject: "Legg til prosjekt",
         ProgramAdministrationHeader: "Administrasjon av underordnede prosjekter",
         ProgramAddProjectButtonText: "Legg til prosjekt",
         ProgramRemoveChildButtonText: "Fjern underordnet prosjekt",

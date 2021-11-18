@@ -54,5 +54,5 @@ export const AddProjectDialog: FunctionComponent<IAddProjectProps> = ({ sp }) =>
 
 const dialogContentProps = {
     type: DialogType.largeHeader,
-    title: 'Legg til prosjekt'
+    title: strings.ProgramAddProject
 };

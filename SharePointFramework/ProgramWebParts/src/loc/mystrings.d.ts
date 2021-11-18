@@ -197,6 +197,7 @@ declare interface IProgramWebPartsStrings {
   ProgramAddProject_ProjectWasAddedToProgram: string; 
   ProgramAddProject_ProjectsWasAddedToProgram: string;
   ProgramAddProject_AddProjectToProgram: string;
+  ProgramAddProject: string;
   ProgramAddProject_ProjectAlreadyInProgram: string;
   ProgramAddProject_ProjectsAlreadyInProgram: string;
   ProgramAddProject_AddAllProjectsToProgram: string;
