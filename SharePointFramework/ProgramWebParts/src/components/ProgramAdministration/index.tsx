@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from 'react'
+import React, { FunctionComponent, useEffect } from 'react'
 import styles from './programAdministration.module.scss'
 import { IProgramAdministrationProps, shimmeredColumns } from './types'
 import { useStore } from './store'
@@ -7,6 +7,7 @@ import { ShimmeredDetailsList } from 'office-ui-fabric-react'
 import { ProjectTable } from './ProjectTable'
 import { Commandbar } from './Commands'
 import { AddProjectDialog } from './AddProjectDialog'
+import { UserMessage } from 'pp365-projectwebparts/lib/components/UserMessage'
 import * as strings from 'ProgramWebPartsStrings'
 
 
@@ -17,6 +18,7 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
   const isLoading = useStore(state => state.isLoading)
   const setSelected = useStore(state => state.setSelectedToDelete)
   const fetchChildProjects = useStore(state => state.fetchChildProjects)
+  const error = useStore(state => state.error)
 
   useEffect(() => {
     const fetch = async () => {
@@ -27,7 +29,19 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
     fetch()
   }, [])
 
-  console.log(childProjects)
+  if (error) {
+    return (
+      <>
+        <div className={styles.root}>
+          <h2>{strings.ProgramAdministrationHeader}</h2>
+          <UserMessage
+            messageBarType={error.messageBarType}
+            text={error.text}
+          />
+        </div>
+      </>
+    )
+  }
 
   if (isLoading) {
     return <ShimmeredDetailsList items={[]} shimmerLines={15} columns={shimmeredColumns} enableShimmer />

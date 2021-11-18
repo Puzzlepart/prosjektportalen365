@@ -1,9 +1,7 @@
 import React, { FunctionComponent } from 'react'
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar'
 import { useStore } from '../store'
-import { removeChildProject } from '../helpers'
 import { SPRest } from '@pnp/sp'
-import { fetchChildProjects } from '../helpers'
 import * as strings from 'ProgramWebPartsStrings'
 
 
@@ -14,7 +12,7 @@ interface commandBarProps {
 export const Commandbar: FunctionComponent<commandBarProps> = ({ _sp }) => {
     const toggleProjectDialog = useStore(state => state.toggleProjectDialog)
     const selectedProjectsToDelete = useStore(state => state.selectedProjectsToDelete)
-    const setChildProjects = useStore(state => state.setChildProjects)
+    const deleteChildProjects = useStore(state => state.deleteChildProjects)
 
     const _items: ICommandBarItemProps[] = [
         {
@@ -31,7 +29,7 @@ export const Commandbar: FunctionComponent<commandBarProps> = ({ _sp }) => {
             buttonStyles: { root: { border: 'none' } },
             disabled: selectedProjectsToDelete == null,
             onClick: (): any => {
-                removeChildProject(_sp, selectedProjectsToDelete).then(async () => setChildProjects(await fetchChildProjects(_sp)))
+                deleteChildProjects(selectedProjectsToDelete, _sp)
             }
         },
     ];

@@ -1,8 +1,9 @@
 import { SPRest } from '@pnp/sp'
 import create from 'zustand'
-import { fetchAvailableProjects } from './helpers'
+import { fetchAvailableProjects, removeChildProjects } from './helpers'
 import { ChildProject } from 'models'
-import { ChildProjectListItem } from './types'
+import { ChildProjectListItem, UserMessageProps } from './types'
+import { MessageBarType } from 'office-ui-fabric-react'
 
 interface IProgramAdministrationState {
   isLoading: boolean
@@ -10,6 +11,7 @@ interface IProgramAdministrationState {
   displayProjectDialog: boolean
   availableProjects: ChildProjectListItem[]
   selectedProjectsToDelete: ChildProject[]
+  error: UserMessageProps
   toggleProjectDialog: () => void
   toggleLoading: () => void
   setChildProjects: (projects: ChildProject[]) => void
@@ -18,6 +20,8 @@ interface IProgramAdministrationState {
   setSelectedToDelete: (project: ChildProject[]) => void
   fetchChildProjects: (_sp: SPRest) => Promise<void>
   fetchAvailableProjects: (_sp: SPRest) => Promise<void>
+  deleteChildProjects: (projects: ChildProject[], _sp: SPRest) => Promise<void>
+  setError: (message: string, messageBarType: MessageBarType) => void
 }
 
 export const useStore = create<IProgramAdministrationState>((set) => ({
@@ -26,6 +30,7 @@ export const useStore = create<IProgramAdministrationState>((set) => ({
   childProjects: [],
   availableProjects: [],
   selectedProjectsToDelete: null,
+  error: null,
 
   toggleLoading: () => set((state) => ({ isLoading: !state.isLoading })),
 
@@ -42,18 +47,43 @@ export const useStore = create<IProgramAdministrationState>((set) => ({
   setSelectedToDelete: (project) => set(() => ({ selectedProjectsToDelete: project })),
 
   fetchChildProjects: async (_sp) => {
-    const [data] = await _sp.web.lists
+    try {
+      const [data] = await _sp.web.lists
       .getByTitle('Prosjektegenskaper')
       .items.select('GtChildProjects')
       .get()
     const children: ChildProject[] = await JSON.parse(data.GtChildProjects)
-
     set(() => ({ childProjects: children.filter((a) => a) }))
+    } catch (error) {
+      set(() => ({ error: { text: error, messageBarType: MessageBarType.error } }))
+    }
   },
 
   fetchAvailableProjects: async (_sp) => {
-    const data = await fetchAvailableProjects(_sp)
+    try {
+      const data = await fetchAvailableProjects(_sp)
+      set(() => ({ availableProjects: data }))
+    } catch (error) {
+      set(() => ({ error: { text: error, messageBarType: MessageBarType.error } }))
+    }
+  },
 
-    set(() => ({ availableProjects: data }))
-  }
+  deleteChildProjects: async (projects, _sp) => {
+    try {
+      set(() => ({ isLoading: true}))
+      await removeChildProjects(_sp, projects)
+      const [data] = await _sp.web.lists
+        .getByTitle('Prosjektegenskaper')
+        .items.select('GtChildProjects')
+        .get()
+      const children: ChildProject[] = await JSON.parse(data.GtChildProjects)
+      set(() => ({ childProjects: children.filter((a) => a) }))
+      set(() => ({ isLoading: false}))
+    } catch (error) {
+      set(() => ({ isLoading: false}))
+      set(() => ({ error: { text: error.message, messageBarType: MessageBarType.error } }))
+    }
+  },
+
+  setError: (message, messagebarType) => set(() => ({ error: { text: message, messageBarType: messagebarType }, isLoading: false })),
 }))

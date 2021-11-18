@@ -79,15 +79,15 @@ export async function addChildProject(_sp: SPRest, newProjects: ChildProject[]) 
 }
 
 /**
- * Add a child project
+ * Remove child elements
  */
-export async function removeChildProject(_sp: SPRest, toDelete: ChildProject[]) {
+export async function removeChildProjects(_sp: SPRest, toDelete: ChildProject[]) {
   const [currentData] = await _sp.web.lists
     .getByTitle('Prosjektegenskaper')
     .items.select('GtChildProjects')
     .get()
   const projects: ChildProject[] = JSON.parse(currentData.GtChildProjects)
-  const updatedProjects = projects.filter((p) => p.SiteId !== toDelete[0].SiteId)
+  const updatedProjects = projects.filter((p) => !toDelete.some((el) => el.SiteId === p.SiteId))
 
   await _sp.web.lists
     .getByTitle('Prosjektegenskaper')
