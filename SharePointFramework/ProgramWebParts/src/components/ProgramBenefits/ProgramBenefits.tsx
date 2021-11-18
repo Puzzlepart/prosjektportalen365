@@ -23,6 +23,7 @@ export const ProgramBenefits: FunctionComponent<IProgramBenefitsProps> = (props)
       selectProperties={selectProperties}
       postTransform={_postTransform}
       lockedColumns={true}
+      isParent={true}
       />
     );
   

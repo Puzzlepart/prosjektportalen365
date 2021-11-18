@@ -62,7 +62,7 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
  *
  * @param context Context
  */
-export const getDefaultColumns = (context: IPortfolioAggregationContext) => [
+export const getDefaultColumns = (context: IPortfolioAggregationContext, isParent?: boolean) => [
   {
     key: 'SiteTitle',
     fieldName: 'SiteTitle',
@@ -71,7 +71,7 @@ export const getDefaultColumns = (context: IPortfolioAggregationContext) => [
     maxWidth: 225,
     isResizable: true,
     onRender: (item: any) => {
-      return (
+      if(!isParent) { return (
         <ProjectInformationTooltip
           key={item.SiteId}
           title={item.SiteTitle}
@@ -86,7 +86,10 @@ export const getDefaultColumns = (context: IPortfolioAggregationContext) => [
             {item.SiteTitle}
           </Link>
         </ProjectInformationTooltip>
-      )
+      ) }
+      else {
+        return item.SPWebURL ? <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>{item.SiteTitle}</Link> : <span>{item.SiteTitle}</span>
+      }
     },
     data: { isGroupable: true }
   }

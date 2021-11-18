@@ -21,6 +21,7 @@ export const ProgramDeliveries: FunctionComponent<IProgramDeliveriesProps> = (pr
       onUpdateProperty={props.onUpdateProperty}
       dataSource={props.properties.dataSource}
       columns={props.properties.columns}
+      isParent={true}
       />
     );
   

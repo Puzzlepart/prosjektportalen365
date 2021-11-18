@@ -21,6 +21,7 @@ export const ProgramOverview: FunctionComponent<IProjectProgramOverviewProps> = 
       showGroupBy={true}
       showSearchBox={true}
       childSiteIds={props.childProjects}
+      isParentProject={true}
       />
       </>
     );
