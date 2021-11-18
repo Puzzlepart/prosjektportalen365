@@ -30,7 +30,8 @@ export abstract class BaseProgramWebPart<
     const combinedProps = assign({ title: this.pageTitle }, this.properties, props, {
       pageContext: this.context.pageContext,
       dataAdapter: this.dataAdapter,
-      displayMode: this.displayMode
+      displayMode: this.displayMode,
+      title: this.properties.title,
     })
     const element: React.ReactElement<T> = React.createElement(component, combinedProps)
     ReactDom.render(element, this.domElement)

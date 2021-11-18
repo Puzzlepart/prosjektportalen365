@@ -21,7 +21,8 @@ export default class ProgramAdministrationWebPart extends BaseProgramWebPart<IPr
       description: this.description,
       context: this.context,
       dataAdapter: this.dataAdapter,
-      sp: this._sp
+      sp: this._sp,
+      title: this.properties.title
     })
   }
 
@@ -37,15 +38,12 @@ export default class ProgramAdministrationWebPart extends BaseProgramWebPart<IPr
     return {
       pages: [
         {
-          header: {
-            description: strings.BenefitOwnerLabel
-          },
           groups: [
             {
               groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('description', {
-                  label: 'test'
+                PropertyPaneTextField('title', {
+                  label: 'Overskrift'
                 })
               ]
             }

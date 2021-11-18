@@ -8,6 +8,7 @@ export interface IProgramAdministrationProps {
   context: WebPartContext
   dataAdapter: DataAdapter
   sp: SPRest
+  title: string
 }
 
 export interface UserMessageProps {
