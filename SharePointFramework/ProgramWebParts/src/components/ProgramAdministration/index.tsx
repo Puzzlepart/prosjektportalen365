@@ -12,20 +12,20 @@ import * as strings from 'ProgramWebPartsStrings'
 
 
 export const ProgramAdministration: FunctionComponent<IProgramAdministrationProps> = ({ sp }) => {
-  const toggleLoading = useStore(state => state.toggleLoading)
   const displayProjectDialog = useStore(state => state.displayProjectDialog)
   const childProjects = useStore(state => state.childProjects)
-  const isLoading = useStore(state => state.isLoading)
   const setSelected = useStore(state => state.setSelectedToDelete)
   const fetchChildProjects = useStore(state => state.fetchChildProjects)
   const error = useStore(state => state.error)
+  const [isLoading, setIsLoading] = React.useState(false)
+
 
   useEffect(() => {
     const fetch = async () => {
       await fetchChildProjects(sp)
-      toggleLoading()
+      setIsLoading(false)
     }
-    toggleLoading()
+    setIsLoading(true)
     fetch()
   }, [])
 
