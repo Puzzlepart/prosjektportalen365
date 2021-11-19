@@ -6,8 +6,8 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { PortfolioOverview, IPortfolioOverviewProps } from 'components/PortfolioOverview'
-import { IPortfolioConfiguration } from 'interfaces'
+import { PortfolioOverview, IPortfolioOverviewProps } from '../../components/PortfolioOverview'
+import { IPortfolioConfiguration } from '../../interfaces'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
