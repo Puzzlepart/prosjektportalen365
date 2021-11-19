@@ -18,6 +18,7 @@ export default class ProgramAdministrationWebPart extends BaseProgramWebPart<IPr
 
   public render(): void {
     this.renderComponent<IProgramAdministrationProps>(ProgramAdministration, {
+      webPartTitle: this.properties.webPartTitle,
       description: this.description,
       context: this.context,
       dataAdapter: this.dataAdapter,
@@ -44,8 +45,8 @@ export default class ProgramAdministrationWebPart extends BaseProgramWebPart<IPr
             {
               groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('description', {
-                  label: 'test'
+                PropertyPaneTextField('webPartTitle', {
+                  label: 'Tittel'
                 })
               ]
             }

@@ -4,6 +4,7 @@ import { SPRest } from '@pnp/sp'
 import { IColumn, MessageBarType } from 'office-ui-fabric-react'
 import { ChildProject } from 'models'
 export interface IProgramAdministrationProps {
+  webPartTitle: string
   description: string
   context: WebPartContext
   dataAdapter: DataAdapter
