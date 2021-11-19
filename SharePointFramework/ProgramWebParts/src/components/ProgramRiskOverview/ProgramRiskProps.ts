@@ -1,9 +1,12 @@
 import { DataAdapter } from 'data'
+import { IAggregatedPortfolioPropertyPane } from 'models'
 import { IPortfolioConfiguration } from 'pp365-portfoliowebparts/lib/interfaces'
 
-export interface IProgramBenefitsProps {
-  description: string;
-  context: any;
-  dataAdapter: DataAdapter;
-  childProjects?: string[];
+export interface IProgramRiskOverview {
+  title: string
+  context: any
+  dataAdapter: DataAdapter
+  properties: IAggregatedPortfolioPropertyPane
 }
+
+export const SelectedRiskProperties = ["Path", "SPWebURL", "Title", "ListItemId", "SiteTitle", "SiteId", "ContentTypeID", "GtRiskProbabilityOWSNMBR", "GtRiskProbabilityPostActionOWSNMBR", "GtRiskConsequenceOWSNMBR", "GtRiskConsequencePostActionOWSNMBR", "GtRiskActionOWSMTXT", "Path", "SPWebURL", "SiteTitle"]

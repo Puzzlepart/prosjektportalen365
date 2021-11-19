@@ -204,6 +204,8 @@ define([], function() {
         ProgramAdministrationHeader: "Administrasjon av underordnede prosjekter",
         ProgramAddProjectButtonText: "Legg til prosjekt",
         ProgramRemoveChildButtonText: "Fjern underordnet prosjekt",
+        RiskWebPartTitle: "Risikooversikt",
+        RiskDataSource: "Programrisiko",
         Add: "Legg til",
         Cancel: "Avbryt",
         ProgramSearchProjectsText: "Søk i prosjekter",

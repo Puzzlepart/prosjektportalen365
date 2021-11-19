@@ -7,28 +7,38 @@ import { IPortfolioConfiguration } from 'pp365-portfoliowebparts/lib/interfaces'
 import { BaseProgramWebPart } from '../baseProgramWebPart/baseProgramWebPart'
 import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
 import { ChildProject } from 'models/ChildProject'
-import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane'
+import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane'
+import { IProgramRiskOverview } from 'components/ProgramRiskOverview/ProgramRiskProps'
+import { AggreationColumn } from 'models'
 
 interface IProgramRiskProps extends IBaseWebPartComponentProps {
-  showCommandBar: any
-  description: string
+  webPartTitle: string
+  dataSource: string
+  showExcelExportButton: boolean
+  showSearchBox: boolean
+  columns: AggreationColumn[]
+  showCommandBar: boolean
 }
 
 export default class programRiskOverview extends BaseProgramWebPart<IProgramRiskProps> {
-  private _configuration: IPortfolioConfiguration
 
   public async onInit(): Promise<void> {
     await super.onInit()
-    this._configuration = await this.dataAdapter.getPortfolioConfig()
   }
 
   public render(): void {
-    this.renderComponent<IProjectProgramOverviewProps>(ProgramRiskOverview, {
-      description: this.description,
+    this.renderComponent<IProgramRiskOverview>(ProgramRiskOverview, {
       context: this.context,
       dataAdapter: this.dataAdapter,
-      configuration: this._configuration,
-      childProjects: this.siteIds
+      properties: {
+        dataSource: this.properties.dataSource,
+        showExcelExportButton: this.properties.showExcelExportButton,
+        showSearchBox: this.properties.showSearchBox,
+        showCommandBar: this.properties.showCommandBar,
+        columns: this.properties.columns,
+        displayMode: this.displayMode
+      },
+      title: this.properties.webPartTitle
     })
   }
 
@@ -44,15 +54,28 @@ export default class programRiskOverview extends BaseProgramWebPart<IProgramRisk
     return {
       pages: [
         {
-          header: {
-            description: strings.BenefitOwnerLabel
-          },
           groups: [
             {
-              groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('description', {
-                  label: 'test'
+                PropertyPaneTextField('webPartTitle', {
+                  label: strings.WebPartTitleLabel,
+                  value: strings.RiskWebPartTitle
+                }),
+                PropertyPaneTextField('dataSource', {
+                  label: strings.DataSourceLabel,
+                  value: strings.RiskDataSource
+                }),
+                PropertyPaneToggle('showCommandBar', {
+                  label: strings.ShowCommandBarLabel,
+                  checked: true
+                }),
+                PropertyPaneToggle('showSearchBox', {
+                  label: strings.ShowSearchBoxLabel,
+                  checked: true
+                }),
+                PropertyPaneToggle('showExcelExportButton', {
+                  label: strings.ShowExcelExportButtonLabel,
+                  checked: true
                 })
               ]
             }
