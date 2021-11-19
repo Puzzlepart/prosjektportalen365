@@ -2,14 +2,14 @@ import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
 import { IPropertyPaneConfiguration, IPropertyPaneDropdownOption, PropertyPaneDropdown, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane'
 import * as strings from 'ProgramWebPartsStrings'
-import {ProgramOverview} from '../../components/ProgramProjectOverview/ProgramProjectOverview';
-import {IProjectProgramOverviewProps} from '../../components/ProgramProjectOverview/IProgramProjectOverviewProps';
+import {ProgramStatus} from '../../components/ProgramStatus/ProgramStatus';
 import {IPortfolioConfiguration} from 'pp365-portfoliowebparts/lib/interfaces';
 import {BaseProgramWebPart} from '../baseProgramWebPart/baseProgramWebPart'
 import {PROPERTYPANE_CONFIGURATION_PROPS} from 'pp365-portfoliowebparts/lib/webparts/portfolioOverview'
 import {IBaseWebPartComponentProps} from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
+import { IProgramStatusProps } from 'components/ProgramStatus/IProgramStatusProps';
 
-interface IProgramOverviewProps extends IBaseWebPartComponentProps {
+interface IProgramStatusWebPartProps extends IBaseWebPartComponentProps {
   webPartTitle: string
   showCommandBar: boolean
   showFilters: boolean
@@ -18,7 +18,7 @@ interface IProgramOverviewProps extends IBaseWebPartComponentProps {
   showSearchBox: boolean
   showExcelExportButton: boolean
 }
-export default class programProjectOverview extends BaseProgramWebPart<IProgramOverviewProps> {
+export default class programProjectOverview extends BaseProgramWebPart<IProgramStatusWebPartProps> {
   private _configuration: IPortfolioConfiguration
 
   public async onInit(): Promise<void> {
@@ -27,7 +27,7 @@ export default class programProjectOverview extends BaseProgramWebPart<IProgramO
   }
 
   public render(): void {
-    this.renderComponent<IProjectProgramOverviewProps>(ProgramOverview, {
+    this.renderComponent<IProgramStatusProps>(ProgramStatus, {
       webPartTitle: this.properties.webPartTitle,
       context: this.context,
       dataAdapter: this.dataAdapter,
@@ -39,8 +39,7 @@ export default class programProjectOverview extends BaseProgramWebPart<IProgramO
         showViewSelector: this.properties.showViewSelector,
         showGroupBy: this.properties.showGroupBy,
         showSearchBox: this.properties.showSearchBox
-      },
-      childProjects: this.siteIds
+      }
     });
   }
 
@@ -104,10 +103,6 @@ export default class programProjectOverview extends BaseProgramWebPart<IProgramO
                   label: strings.ShowExcelExportButtonLabel,
                   disabled: !this.properties.showCommandBar
                 }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_VIEWSELECTOR, {
-                  label: strings.ShowViewSelectorLabel,
-                  disabled: !this.properties.showCommandBar
-                })
               ]
             }
           ]
