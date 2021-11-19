@@ -497,10 +497,10 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
       return
     }
     this.setState({ isChangingView: view })
-    const items = await this.props.dataAdapter.fetchDataForView(
+    const items = await this.props.dataAdapter.fetchDataForView2(
       view,
       this.props.configuration,
-      this.props.pageContext.legacyPageContext.hubSiteId
+      [this.props.pageContext.legacyPageContext.hubSiteId]
     )
     const updatedState: Partial<IPortfolioOverviewState> = {
       isChangingView: null,

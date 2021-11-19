@@ -9,10 +9,23 @@ import {BaseProgramWebPart} from '../baseProgramWebPart/baseProgramWebPart'
 import {PROPERTYPANE_CONFIGURATION_PROPS} from 'pp365-portfoliowebparts/lib/webparts/portfolioOverview'
 import {IBaseWebPartComponentProps} from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
 
+export interface ICommandBarProperties {
+  showCommandBar: boolean
+  showExcelExportButton: boolean
+  showFilters: boolean
+  showViewSelector: boolean
+  showGroupBy: boolean
+  showSearchBox: boolean
+  
+}
 interface IProgramOverviewProps extends IBaseWebPartComponentProps {
-  webPartTitle: string;
-  showCommandBar: any
-  description: string;
+  webPartTitle: string
+  showCommandBar: boolean
+  showFilters: boolean
+  showViewSelector: boolean
+  showGroupBy: boolean
+  showSearchBox: boolean
+  showExcelExportButton: boolean
 }
 export default class programProjectOverview extends BaseProgramWebPart<IProgramOverviewProps> {
   private _configuration: IPortfolioConfiguration
@@ -28,6 +41,14 @@ export default class programProjectOverview extends BaseProgramWebPart<IProgramO
       context: this.context,
       dataAdapter: this.dataAdapter,
       configuration: this._configuration,
+      commandBarProperties: {
+        showCommandBar: this.properties.showCommandBar,
+        showExcelExportButton: this.properties.showExcelExportButton,
+        showFilters: this.properties.showFilters,
+        showViewSelector: this.properties.showViewSelector,
+        showGroupBy: this.properties.showGroupBy,
+        showSearchBox: this.properties.showSearchBox
+      },
       childProjects: this.siteIds
     });
   }

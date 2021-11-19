@@ -14,13 +14,12 @@ export const ProgramOverview: FunctionComponent<IProjectProgramOverviewProps> = 
       pageContext={props.context.pageContext}
       configuration={props.configuration}
       dataAdapter={props.dataAdapter}
-      showCommandBar={true}
-      showExcelExportButton={true}
-      showFilters={true}
-      showViewSelector={true}
-      showGroupBy={true}
-      showSearchBox={true}
-      childSiteIds={props.childProjects}
+      showCommandBar={props.commandBarProperties.showCommandBar}
+      showExcelExportButton={props.commandBarProperties.showExcelExportButton}
+      showFilters={props.commandBarProperties.showFilters}
+      showViewSelector={props.commandBarProperties.showViewSelector}
+      showGroupBy={props.commandBarProperties.showGroupBy}
+      showSearchBox={props.commandBarProperties.showSearchBox}
       isParentProject={true}
       />
       </>
