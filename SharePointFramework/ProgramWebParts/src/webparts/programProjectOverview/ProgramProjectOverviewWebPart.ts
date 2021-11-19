@@ -6,26 +6,13 @@ import {ProgramOverview} from '../../components/ProgramProjectOverview/ProgramPr
 import {IProjectProgramOverviewProps} from '../../components/ProgramProjectOverview/IProgramProjectOverviewProps';
 import {IPortfolioConfiguration} from 'pp365-portfoliowebparts/lib/interfaces';
 import {BaseProgramWebPart} from '../baseProgramWebPart/baseProgramWebPart'
+import {PROPERTYPANE_CONFIGURATION_PROPS} from 'pp365-portfoliowebparts/lib/webparts/portfolioOverview'
 import {IBaseWebPartComponentProps} from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
 
 interface IProgramOverviewProps extends IBaseWebPartComponentProps {
   showCommandBar: any
   description: string;
 }
-
-export const PROPERTYPANE_CONFIGURATION_PROPS = {
-  COLUMN_CONFIG_LISTNAME: 'columnConfigListName',
-  COLUMNS_LISTNAME: 'columnsListName',
-  DEFAULT_VIEW_ID: 'defaultViewId',
-  SHOW_COMMANDBAR: 'showCommandBar',
-  SHOW_EXCELEXPORT_BUTTON: 'showExcelExportButton',
-  SHOW_FILTERS: 'showFilters',
-  SHOW_GROUPBY: 'showGroupBy',
-  SHOW_SEARCH_BOX: 'showSearchBox',
-  SHOW_VIEWSELECTOR: 'showViewSelector',
-  VIEWS_LISTNAME: 'viewsListName'
-}
-
 export default class programProjectOverview extends BaseProgramWebPart<IProgramOverviewProps> {
   private _configuration: IPortfolioConfiguration
 
