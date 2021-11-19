@@ -10,6 +10,7 @@ import {PROPERTYPANE_CONFIGURATION_PROPS} from 'pp365-portfoliowebparts/lib/webp
 import {IBaseWebPartComponentProps} from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
 
 interface IProgramOverviewProps extends IBaseWebPartComponentProps {
+  webPartTitle: string;
   showCommandBar: any
   description: string;
 }
@@ -23,7 +24,7 @@ export default class programProjectOverview extends BaseProgramWebPart<IProgramO
 
   public render(): void {
     this.renderComponent<IProjectProgramOverviewProps>(ProgramOverview, {
-      description: this.description,
+      webPartTitle: this.properties.webPartTitle,
       context: this.context,
       dataAdapter: this.dataAdapter,
       configuration: this._configuration,

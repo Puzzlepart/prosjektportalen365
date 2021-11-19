@@ -10,7 +10,7 @@ export const ProgramOverview: FunctionComponent<IProjectProgramOverviewProps> = 
     return (
       <>
       <PortfolioOverview 
-      title={"Programoversikt"}
+      title={props.webPartTitle}
       pageContext={props.context.pageContext}
       configuration={props.configuration}
       dataAdapter={props.dataAdapter}
