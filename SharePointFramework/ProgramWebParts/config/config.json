@@ -27,17 +27,21 @@
             }]
         },
         "program-timeline-web-part": {
-          "components": [
-            {
-              "entrypoint": "./lib/webparts/programTimeline/ProgramTimelineWebPart.js",
-              "manifest": "./src/webparts/programTimeline/ProgramTimelineWebPart.manifest.json"
-            }
-          ]
+            "components": [{
+                "entrypoint": "./lib/webparts/programTimeline/ProgramTimelineWebPart.js",
+                "manifest": "./src/webparts/programTimeline/ProgramTimelineWebPart.manifest.json"
+            }]
         },
         "program-risk-web-part": {
             "components": [{
                 "entrypoint": "./lib/webparts/programRiskOverview/ProgramRiskWebPart.js",
                 "manifest": "./src/webparts/programRiskOverview/ProgramRiskWebPart.manifest.json"
+            }]
+        },
+        "program-status-web-part": {
+            "components": [{
+                "entrypoint": "./lib/webparts/programStatus/ProgramStatusWebPart.js",
+                "manifest": "./src/webparts/programStatus/ProgramStatusWebPart.manifest.json"
             }]
         }
 

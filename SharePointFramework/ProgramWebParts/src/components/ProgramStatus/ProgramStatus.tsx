@@ -1,0 +1,31 @@
+import React, {FunctionComponent, useEffect} from 'react'
+import {IProgramStatusProps} from './IProgramStatusProps'
+import {PortfolioOverview} from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
+
+export const ProgramStatus: FunctionComponent<IProgramStatusProps> = (props) => {
+
+  useEffect(() => { 
+     
+  }, []);
+
+    return (
+      <>
+      <PortfolioOverview 
+      title={props.webPartTitle}
+      pageContext={props.context.pageContext}
+      configuration={props.configuration}
+      dataAdapter={props.dataAdapter}
+      defaultViewId={'2'}
+      showCommandBar={props.commandBarProperties.showCommandBar}
+      showExcelExportButton={props.commandBarProperties.showExcelExportButton}
+      showFilters={props.commandBarProperties.showFilters}
+      showViewSelector={props.commandBarProperties.showViewSelector}
+      showGroupBy={props.commandBarProperties.showGroupBy}
+      showSearchBox={props.commandBarProperties.showSearchBox}
+      isParentProject={true}
+      />
+      </>
+    );
+  
+}
+
