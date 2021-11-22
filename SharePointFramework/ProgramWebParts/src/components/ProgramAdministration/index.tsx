@@ -11,21 +11,21 @@ import { UserMessage } from 'pp365-projectwebparts/lib/components/UserMessage'
 import * as strings from 'ProgramWebPartsStrings'
 
 
-export const ProgramAdministration: FunctionComponent<IProgramAdministrationProps> = ({ sp }) => {
-  const toggleLoading = useStore(state => state.toggleLoading)
+export const ProgramAdministration: FunctionComponent<IProgramAdministrationProps> = ({ sp, title }) => {
   const displayProjectDialog = useStore(state => state.displayProjectDialog)
   const childProjects = useStore(state => state.childProjects)
-  const isLoading = useStore(state => state.isLoading)
   const setSelected = useStore(state => state.setSelectedToDelete)
   const fetchChildProjects = useStore(state => state.fetchChildProjects)
   const error = useStore(state => state.error)
+  const [isLoading, setIsLoading] = React.useState(false)
+
 
   useEffect(() => {
     const fetch = async () => {
       await fetchChildProjects(sp)
-      toggleLoading()
+      setIsLoading(false)
     }
-    toggleLoading()
+    setIsLoading(true)
     fetch()
   }, [])
 
@@ -51,7 +51,11 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
     <>
       <Commandbar _sp={sp} />
       <div className={styles.root}>
-        <h2>{strings.ProgramAdministrationHeader}</h2>
+        <div className={styles.header}>
+          <div className={styles.title}>
+            {title}
+          </div>
+        </div>
         <div>
           <ProjectTable fields={fields} projects={childProjects} onSelect={(selectedItem: any) => setSelected(selectedItem)} selectionMode={SelectionMode.multiple} />
         </div>
