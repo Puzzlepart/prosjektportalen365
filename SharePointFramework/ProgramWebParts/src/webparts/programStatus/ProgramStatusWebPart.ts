@@ -17,6 +17,7 @@ interface IProgramStatusWebPartProps extends IBaseWebPartComponentProps {
   showGroupBy: boolean
   showSearchBox: boolean
   showExcelExportButton: boolean
+  defaultViewId: string
 }
 export default class programProjectOverview extends BaseProgramWebPart<IProgramStatusWebPartProps> {
   private _configuration: IPortfolioConfiguration
@@ -38,7 +39,8 @@ export default class programProjectOverview extends BaseProgramWebPart<IProgramS
         showFilters: this.properties.showFilters,
         showViewSelector: this.properties.showViewSelector,
         showGroupBy: this.properties.showGroupBy,
-        showSearchBox: this.properties.showSearchBox
+        showSearchBox: this.properties.showSearchBox,
+        defaultViewId: this.properties.defaultViewId
       }
     });
   }

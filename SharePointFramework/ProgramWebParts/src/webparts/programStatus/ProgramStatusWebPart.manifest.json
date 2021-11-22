@@ -15,7 +15,8 @@
         "description": { "default": "Gir en listevisning av underprosjekters status" },
         "officeFabricIconFontName": "Page",
         "properties": {
-            "webPartTitle": "Underprosjekters status"
+            "webPartTitle": "Underprosjekters status",
+            "defaultViewId": "2"
         }
     }]
 }
