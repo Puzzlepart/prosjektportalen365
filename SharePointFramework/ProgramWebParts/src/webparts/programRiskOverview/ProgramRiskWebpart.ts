@@ -38,7 +38,7 @@ export default class programRiskOverview extends BaseProgramWebPart<IProgramRisk
         columns: this.properties.columns,
         displayMode: this.displayMode
       },
-      title: this.properties.webPartTitle
+      webPartTitle: this.properties.webPartTitle
     })
   }
 

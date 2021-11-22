@@ -7,12 +7,11 @@ import {CONTENT_TYPE_ID_BENEFITS, CONTENT_TYPE_ID_MEASUREMENTS, CONTENT_TYPE_ID_
 export const ProgramBenefits: FunctionComponent<IProgramBenefitsProps> = (props) => {
 
   useEffect(() => {    
-
   }, []);
 
     return (
       <PortfolioAggregation 
-      title={props.title}
+      title={props.webPartTitle}
       pageContext={props.context.pageContext}
       dataAdapter={props.dataAdapter}
       showCommandBar={props.properties.showCommandBar}

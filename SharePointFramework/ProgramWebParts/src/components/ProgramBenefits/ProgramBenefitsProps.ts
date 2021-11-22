@@ -3,7 +3,7 @@ import { IAggregatedPortfolioPropertyPane } from 'models/PropertyPanes'
 import { IAggregatedSearchListColumn } from 'pp365-portfoliowebparts/lib/interfaces'
 
 export interface IProgramBenefitsProps {
-  title: string
+  webPartTitle: string
   context: any
   dataAdapter: DataAdapter
   properties: IAggregatedPortfolioPropertyPane

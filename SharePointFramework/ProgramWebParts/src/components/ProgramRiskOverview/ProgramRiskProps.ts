@@ -3,7 +3,7 @@ import { IAggregatedPortfolioPropertyPane } from 'models'
 import { IPortfolioConfiguration } from 'pp365-portfoliowebparts/lib/interfaces'
 
 export interface IProgramRiskOverview {
-  title: string
+  webPartTitle: string
   context: any
   dataAdapter: DataAdapter
   properties: IAggregatedPortfolioPropertyPane

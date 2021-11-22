@@ -10,7 +10,7 @@ export const ProgramDeliveries: FunctionComponent<IProgramDeliveriesProps> = (pr
   }, []);
     return (
       <PortfolioAggregation 
-      title={props.title}
+      title={props.webPartTitle}
       pageContext={props.context.pageContext}
       dataAdapter={props.dataAdapter}
       showCommandBar={props.properties.showCommandBar}

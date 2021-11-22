@@ -25,7 +25,7 @@ export default class programProjectDeliveries extends BaseProgramWebPart<IProgra
     console.log(this.properties)
     console.log(this)
     this.renderComponent<IProgramDeliveriesProps>(ProgramDeliveries, {
-      title: this.properties.webPartTitle,
+      webPartTitle: this.properties.webPartTitle,
       context: this.context,
       dataAdapter: this.dataAdapter,
       properties: {

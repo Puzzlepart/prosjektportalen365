@@ -23,7 +23,7 @@ export default class programBenefits extends BaseProgramWebPart<IProgramBenefits
 
   public render(): void {
     this.renderComponent<IProgramBenefitsProps>(ProgramBenefits, {
-      title: this.properties.webPartTitle,
+      webPartTitle: this.properties.webPartTitle,
       context: this.context,
       dataAdapter: this.dataAdapter,
       properties: {

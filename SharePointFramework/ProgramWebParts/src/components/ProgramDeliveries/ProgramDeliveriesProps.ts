@@ -2,7 +2,7 @@ import { DataAdapter } from 'data'
 import { IAggregatedPortfolioPropertyPane } from 'models'
 
 export interface IProgramDeliveriesProps {
-  title: string
+  webPartTitle: string
   context: any
   dataAdapter: DataAdapter
   properties: IAggregatedPortfolioPropertyPane

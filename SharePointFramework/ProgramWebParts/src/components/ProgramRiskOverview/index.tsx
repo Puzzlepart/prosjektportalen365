@@ -11,7 +11,7 @@ export const ProgramRiskOverview: FunctionComponent<IProgramRiskOverview> = (pro
   return (
     <>
       <PortfolioAggregation
-        title={props.title}
+        title={props.webPartTitle}
         pageContext={props.context.pageContext}
         dataAdapter={props.dataAdapter}
         showCommandBar={props.properties.showCommandBar}
