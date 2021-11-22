@@ -1,0 +1,344 @@
+{
+  "Version": "1.2.9",
+  "Parameters": {
+    "ProvisionSiteFields": "Kolonner for Prosjektportalen (Prosjekt)",
+    "CustomSiteFields": "Egendefinerte kolonner for Prosjektportalen",
+    "ProjectContentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
+    "ProjectStatusContentTypeId": "0x010022252E35737A413FB56A1BA53862F6D5"
+  },
+  "Navigation": {
+    "QuickLaunch": [
+      {
+        "Url": "#",
+        "Title": "Underordnede prosjekter",
+        "Children": [
+          {
+            "Url": "SitePages/programAdministrasjon.aspx",
+            "Title": "Administrasjon"
+          },
+          {
+            "Url": "SitePages/programOversikt.aspx",
+            "Title": "Oversikt"
+          },
+          {
+            "Url": "SitePages/programGevinster.aspx",
+            "Title": "Gevinster"
+          },
+          {
+            "Url": "SitePages/programTidslinje.aspx",
+            "Title": "Tidslinje"
+          },
+          {
+            "Url": "SitePages/programStatus.aspx",
+            "Title": "Status"
+          },
+          {
+            "Url": "SitePages/programLeveranser.aspx",
+            "Title": "Leveranser"
+          },
+          {
+            "Url": "SitePages/programUsikkerheter.aspx",
+            "Title": "Usikkerheter"
+          }
+        ]
+      }
+    ]
+  },
+  "ClientSidePages": [
+    {
+      "Name": "programAdministrasjon.aspx",
+      "Title": "Administrasjon",
+      "PageLayoutType": "SingleWebPartAppPage",
+      "CommentsDisabled": true,
+      "Sections": [
+        {
+          "Columns": [
+            {
+              "Factor": 12,
+              "Controls": [
+                {
+                  "Id": "9570e369-21a6-4bf5-8198-13506499de52",
+                  "Properties": {
+                    "webPartTitle": "Administrasjon av underprosjekter"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "programOversikt.aspx",
+      "Title": "Oversikt",
+      "PageLayoutType": "SingleWebPartAppPage",
+      "CommentsDisabled": true,
+      "Sections": [
+        {
+          "Columns": [
+            {
+              "Factor": 12,
+              "Controls": [
+                {
+                  "Id": "01417142-67c8-498b-a6da-6e78003023dd",
+                  "Properties": {
+                    "webPartTitle": "Oversikt over underprosjekter"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "programGevinster.aspx",
+      "Title": "Gevinster",
+      "PageLayoutType": "SingleWebPartAppPage",
+      "CommentsDisabled": true,
+      "Sections": [
+        {
+          "Columns": [
+            {
+              "Factor": 12,
+              "Controls": [
+                {
+                  "Id": "1ca1e22e-2a44-490f-9e1b-759f986df0d8",
+                  "Properties": {
+                    "webPartTitle": "Gevinstoversikt i underprosjekter",
+                    "dataSource": "Gevinstoversikt",
+                    "searchBoxPlaceholderText": "Søk i gevinster...",
+                    "showCommandBar": true,
+                    "showSearchBox": true,
+                    "showExcelExportButton": true,
+                    "hiddenColumns": [
+                      "siteTitle"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "programTidslinje.aspx",
+      "Title": "Tidslinje",
+      "PageLayoutType": "SingleWebPartAppPage",
+      "CommentsDisabled": true,
+      "Sections": [
+        {
+          "Columns": [
+            {
+              "Factor": 12,
+              "Controls": [
+                {
+                  "Id": "f97a38ab-78c2-400e-899f-b0d4cda76166",
+                  "Properties": {
+                    "webPartTitle": "Program Tidslinje"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "programStatus.aspx",
+      "Title": "Status",
+      "PageLayoutType": "SingleWebPartAppPage",
+      "CommentsDisabled": true,
+      "Sections": [
+        {
+          "Columns": [
+            {
+              "Factor": 12,
+              "Controls": [
+                {
+                  "Id": "9af4ad23-3d77-452b-b73e-b31a6b5d0161",
+                  "Properties": {
+                    "webPartTitle": "Underprosjekters status"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "programLeveranser.aspx",
+      "Title": "Leveranser",
+      "PageLayoutType": "SingleWebPartAppPage",
+      "CommentsDisabled": true,
+      "Sections": [
+        {
+          "Columns": [
+            {
+              "Factor": 12,
+              "Controls": [
+                {
+                  "Id": "7ff12e9d-1565-4694-b1de-948d1b174487",
+                  "Properties": {
+                    "webPartTitle": "Prosjektleveranser",
+                    "dataSource": "Alle prosjektleveranser",
+                    "showCommandBar": true,
+                    "showSearchBox": true,
+                    "showExcelExportButton": true,
+                    "columns": [
+                      {
+                        "key": "Title",
+                        "fieldName": "Title",
+                        "name": "Tittel",
+                        "minWidth": 220,
+                        "maxWidth": 250,
+                        "isMultiline": true,
+                        "isResizable": true
+                      },
+                      {
+                        "key": "GtDeliveryDescriptionOWSMTXT",
+                        "fieldName": "GtDeliveryDescriptionOWSMTXT",
+                        "name": "Leveransebeskrivelse",
+                        "minWidth": 220,
+                        "maxWidth": 220,
+                        "isMultiline": true,
+                        "isResizable": true
+                      },
+                      {
+                        "key": "GtDeliveryStartTimeOWSDATE",
+                        "fieldName": "GtDeliveryStartTimeOWSDATE",
+                        "name": "Starttidspunkt",
+                        "minWidth": 100,
+                        "maxWidth": 150,
+                        "isResizable": true,
+                        "data": {
+                          "renderAs": "date"
+                        }
+                      },
+                      {
+                        "key": "GtDeliveryEndTimeOWSDATE",
+                        "fieldName": "GtDeliveryEndTimeOWSDATE",
+                        "name": "Sluttidspunkt",
+                        "minWidth": 100,
+                        "maxWidth": 150,
+                        "isResizable": true,
+                        "data": {
+                          "renderAs": "date"
+                        }
+                      },
+                      {
+                        "key": "GtDeliveryStatusOWSCHCS",
+                        "fieldName": "GtDeliveryStatusOWSCHCS",
+                        "name": "Leveransestatus",
+                        "minWidth": 100,
+                        "maxWidth": 150,
+                        "isResizable": true
+                      },
+                      {
+                        "key": "GtDeliveryStatusCommentOWSMTXT",
+                        "fieldName": "GtDeliveryStatusCommentOWSMTXT",
+                        "name": "Kommentar, leveransestatus",
+                        "minWidth": 220,
+                        "maxWidth": 220,
+                        "isMultiline": true,
+                        "isResizable": true
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "programUsikkerheter.aspx",
+      "Title": "Usikkerheter",
+      "PageLayoutType": "SingleWebPartAppPage",
+      "CommentsDisabled": true,
+      "Sections": [
+        {
+          "Columns": [
+            {
+              "Factor": 12,
+              "Controls": [
+                {
+                  "Id": "3e189ba9-e1c2-4143-9598-820512e48c47",
+                  "Properties": {
+                    "webPartTitle": "Program risk overview",
+                    "dataSource": "Programrisiko",
+                    "showCommandBar": true,
+                    "showSearchBox": true,
+                    "showExcelExportButton": true,
+                    "columns": [
+                      {
+                        "key": "Title",
+                        "fieldName": "Title",
+                        "name": "Tittel",
+                        "minWidth": 220,
+                        "maxWidth": 250,
+                        "isMultiline": true,
+                        "isResizable": true
+                      },
+                      {
+                        "key": "GtDeliveryDescriptionOWSMTXT",
+                        "fieldName": "GtDeliveryDescriptionOWSMTXT",
+                        "name": "Leveransebeskrivelse",
+                        "minWidth": 220,
+                        "maxWidth": 220,
+                        "isMultiline": true,
+                        "isResizable": true
+                      },
+                      {
+                        "key": "GtDeliveryStartTimeOWSDATE",
+                        "fieldName": "GtDeliveryStartTimeOWSDATE",
+                        "name": "Starttidspunkt",
+                        "minWidth": 100,
+                        "maxWidth": 150,
+                        "isResizable": true,
+                        "data": {
+                          "renderAs": "date"
+                        }
+                      },
+                      {
+                        "key": "GtDeliveryEndTimeOWSDATE",
+                        "fieldName": "GtDeliveryEndTimeOWSDATE",
+                        "name": "Sluttidspunkt",
+                        "minWidth": 100,
+                        "maxWidth": 150,
+                        "isResizable": true,
+                        "data": {
+                          "renderAs": "date"
+                        }
+                      },
+                      {
+                        "key": "GtDeliveryStatusOWSCHCS",
+                        "fieldName": "GtDeliveryStatusOWSCHCS",
+                        "name": "Leveransestatus",
+                        "minWidth": 100,
+                        "maxWidth": 150,
+                        "isResizable": true
+                      },
+                      {
+                        "key": "GtDeliveryStatusCommentOWSMTXT",
+                        "fieldName": "GtDeliveryStatusCommentOWSMTXT",
+                        "name": "Kommentar, leveransestatus",
+                        "minWidth": 220,
+                        "maxWidth": 220,
+                        "isMultiline": true,
+                        "isResizable": true
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
