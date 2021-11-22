@@ -128,7 +128,7 @@ export class ProjectInformation extends BaseWebPartComponent<
   }
 
   private async isParentProject() {
-    const [data] = await sp.web.lists.getByTitle("Prosjektegenskaper").items.getById(1).select(("GtIsParentProject")).get()
+    const data = await sp.web.lists.getByTitle("Prosjektegenskaper").items.getById(1).select(("GtIsParentProject")).get()
     this.setState({ isParentProject: data.GtIsParentProject })
   }
 
@@ -139,7 +139,7 @@ export class ProjectInformation extends BaseWebPartComponent<
     const onButtonClick = async () => {
       this.setState({ displayParentCreationModal: true })
     }
-
+    
     const action: ActionType = [
       strings.CreateParentProjectLabel,
       onButtonClick,
