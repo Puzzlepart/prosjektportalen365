@@ -6,7 +6,6 @@ import {PortfolioAggregation} from 'pp365-portfoliowebparts/lib/components/Portf
 export const ProgramDeliveries: FunctionComponent<IProgramDeliveriesProps> = (props) => {
 
   useEffect(() => {    
-    console.log(props.properties.columns)
   }, []);
     return (
       <PortfolioAggregation 
