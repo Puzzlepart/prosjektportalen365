@@ -114,13 +114,28 @@ export class ProjectInformation extends BaseWebPartComponent<
             stringIsNullOrEmpty(this.state.data.propertiesListId) &&
             this._onSyncProperties.bind(this)
           }
-          customActions={!this.state.isParentProject && this.transformToParentProject()}
+          customActions={!this.state.isParentProject ? this.transformToParentProject() : this.administerChildren()}
         />
         <ProgressDialog {...this.state.progress} />
         {this.state.confirmActionProps && <ConfirmDialog {...this.state.confirmActionProps} />}
         {this.state.displayParentCreationModal && <CreateParentModal isOpen={this.state.displayParentCreationModal} onDismiss={this.onDismissParentModal.bind(this)} />}
       </Fragment>
     )
+  }
+
+  private administerChildren() {
+    const onButtonClick = async () => {
+      window.location.href = this.props.webPartContext.pageContext.web.serverRelativeUrl + "/SitePages/ProgramAdministrasjon.aspx"
+    }
+    
+    const action: ActionType = [
+      strings.ChildProjectAdminLabel,
+      onButtonClick,
+      'Org',
+      false
+    ]
+
+    return [action]
   }
 
   private onDismissParentModal() {
