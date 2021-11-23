@@ -16,7 +16,7 @@
         "officeFabricIconFontName": "Page",
         "properties": {
             "webPartTitle": "Gevinstoversikt i underprosjekter",
-            "dataSource": "Gevinstoversikt",
+            "dataSource": "Alle gevinstelementer",
             "searchBoxPlaceholderText": "Søk i gevinster...",
             "showCommandBar": true,
             "showSearchBox": true,
