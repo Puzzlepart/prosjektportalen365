@@ -250,7 +250,7 @@ export class DataAdapter {
   }
 
   // do a dynamic amount of sp.search calls
-  public async fetchDataForView2(
+  public async fetchDataForViewBatch(
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
     siteId: string[]
