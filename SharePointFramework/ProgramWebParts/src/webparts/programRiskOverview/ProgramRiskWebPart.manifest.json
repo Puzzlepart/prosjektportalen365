@@ -15,7 +15,7 @@
         "description": { "default": "programRisk" },
         "officeFabricIconFontName": "Page",
         "properties": {
-            "webPartTitle": "Program risk overview",
+            "webPartTitle": "Programusikkerhet",
             "dataSource": "Programrisiko",
             "showCommandBar": true,
             "showSearchBox": true,
