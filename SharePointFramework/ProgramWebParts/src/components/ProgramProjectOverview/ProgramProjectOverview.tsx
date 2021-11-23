@@ -20,7 +20,7 @@ export const ProgramOverview: FunctionComponent<IProjectProgramOverviewProps> = 
       showViewSelector={props.commandBarProperties.showViewSelector}
       showGroupBy={props.commandBarProperties.showGroupBy}
       showSearchBox={props.commandBarProperties.showSearchBox}
-      isParentProject={true}
+      isParentProject={props.isParentProject}
       />
       </>
     );

@@ -40,7 +40,7 @@ export default class programProjectOverview extends BaseProgramWebPart<IProgramO
         showGroupBy: this.properties.showGroupBy,
         showSearchBox: this.properties.showSearchBox
       },
-      childProjects: this.siteIds
+      isParentProject: true
     });
   }
 

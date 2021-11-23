@@ -8,5 +8,5 @@ export interface IProjectProgramOverviewProps {
   commandBarProperties: ICommandBarProperties
   configuration: IPortfolioConfiguration;
   dataAdapter: DataAdapter;
-  childProjects?: string[];
+  isParentProject: boolean;
 }
