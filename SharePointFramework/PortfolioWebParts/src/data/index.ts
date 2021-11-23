@@ -226,14 +226,14 @@ export class DataAdapter {
   }
 
 
-  public async fetchDataForView2(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string[]): Promise<IFetchDataForViewItemResult[]> {
+  public async fetchDataForViewBatch(view: PortfolioOverviewView, configuration: IPortfolioConfiguration, siteId: string): Promise<IFetchDataForViewItemResult[]> {
     const queryArray = this.queryBuilder()
     const items = []
     for (let i = 0; i < queryArray.length; i++) {
       const { projects, sites, statusReports } = await this._fetchDataForView(
         view,
         configuration,
-        siteId[0],
+        siteId,
         'GtSiteIdOWSTEXT',
         queryArray[i]
       )
@@ -276,17 +276,17 @@ export class DataAdapter {
     ] = await Promise.all([
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: queryArray,
+        QueryTemplate: `${queryArray ?? ''} ${view.searchQuery} `,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty]
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${queryArray} DepartmentId:{${siteId}} contentclass:STS_Site`,
+        QueryTemplate: `${queryArray ?? ''} DepartmentId:{${siteId}} contentclass:STS_Site`,
         SelectProperties: ['Path', 'Title', 'SiteId']
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${queryArray} DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        QueryTemplate: `${queryArray ?? ''} DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
         Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
       })
