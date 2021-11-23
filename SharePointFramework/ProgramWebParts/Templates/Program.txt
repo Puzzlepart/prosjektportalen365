@@ -435,7 +435,7 @@
         "Title": "Hjem"
       },
       {
-        "Url": "SitePages/Programstatus.aspx",
+        "Url": "SitePages/Status.aspx",
         "Title": "Programstatus"
       },
       {
@@ -569,29 +569,6 @@
       ]
     },
     {
-      "Name": "Programstatus.aspx",
-      "Title": "Programstatus",
-      "PageLayoutType": "SingleWebPartAppPage",
-      "CommentsDisabled": true,
-      "Sections": [
-        {
-          "Columns": [
-            {
-              "Factor": 12,
-              "Controls": [
-                {
-                  "Id": "9af4ad23-3d77-452b-b73e-b31a6b5d0161",
-                  "Properties": {
-                    "webPartTitle": "Underprosjekters status"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
       "Name": "Oppgaver.aspx",
       "Title": "Oppgaver",
       "PageLayoutType": "SingleWebPartAppPage",
@@ -715,6 +692,32 @@
       ]
     },
     {
+      "Name": "Status.aspx",
+      "Title": "Programstatus",
+      "PageLayoutType": "SingleWebPartAppPage",
+      "CommentsDisabled": true,
+      "Sections": [
+        {
+          "Columns": [
+            {
+              "Factor": 12,
+              "Controls": [
+                {
+                  "Id": "681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6",
+                  "Properties": {
+                    "title": "Programstatus",
+                    "riskMatrixCalloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>",
+                    "riskMatrixWidth": 800,
+                    "riskMatrixHeight": 400
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "Name": "ProgramStatus.aspx",
       "Title": "Status",
       "PageLayoutType": "SingleWebPartAppPage",
@@ -728,7 +731,13 @@
                 {
                   "Id": "9af4ad23-3d77-452b-b73e-b31a6b5d0161",
                   "Properties": {
-                    "webPartTitle": "Underprosjekters status"
+                    "webPartTitle": "Underprosjekters status",
+                    "showCommandBar": true,
+                    "showFilters": false,
+                    "showViewSelectors": false,
+                    "showSearchBox": false,
+                    "showExcelExportButton": true,
+                    "defaultViewId": "2"
                   }
                 }
               ]
@@ -837,93 +846,7 @@
                 {
                   "Id": "3e189ba9-e1c2-4143-9598-820512e48c47",
                   "Properties": {
-                    "webPartTitle": "Program risk overview",
-                    "dataSource": "Programrisiko",
-                    "showCommandBar": true,
-                    "showSearchBox": true,
-                    "showExcelExportButton": true,
-                    "columns": [
-                      {
-                        "key": "Title",
-                        "fieldName": "Title",
-                        "name": "Tittel",
-                        "minWidth": 220,
-                        "maxWidth": 250,
-                        "isMultiline": true,
-                        "isResizable": true
-                      },
-                      {
-                        "key": "GtDeliveryDescriptionOWSMTXT",
-                        "fieldName": "GtDeliveryDescriptionOWSMTXT",
-                        "name": "Leveransebeskrivelse",
-                        "minWidth": 220,
-                        "maxWidth": 220,
-                        "isMultiline": true,
-                        "isResizable": true
-                      },
-                      {
-                        "key": "GtDeliveryStartTimeOWSDATE",
-                        "fieldName": "GtDeliveryStartTimeOWSDATE",
-                        "name": "Starttidspunkt",
-                        "minWidth": 100,
-                        "maxWidth": 150,
-                        "isResizable": true,
-                        "data": {
-                          "renderAs": "date"
-                        }
-                      },
-                      {
-                        "key": "GtDeliveryEndTimeOWSDATE",
-                        "fieldName": "GtDeliveryEndTimeOWSDATE",
-                        "name": "Sluttidspunkt",
-                        "minWidth": 100,
-                        "maxWidth": 150,
-                        "isResizable": true,
-                        "data": {
-                          "renderAs": "date"
-                        }
-                      },
-                      {
-                        "key": "GtDeliveryStatusOWSCHCS",
-                        "fieldName": "GtDeliveryStatusOWSCHCS",
-                        "name": "Leveransestatus",
-                        "minWidth": 100,
-                        "maxWidth": 150,
-                        "isResizable": true
-                      },
-                      {
-                        "key": "GtDeliveryStatusCommentOWSMTXT",
-                        "fieldName": "GtDeliveryStatusCommentOWSMTXT",
-                        "name": "Kommentar, leveransestatus",
-                        "minWidth": 220,
-                        "maxWidth": 220,
-                        "isMultiline": true,
-                        "isResizable": true
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Name": "Usikkerhet.aspx",
-      "Title": "Usikkerhet",
-      "PageLayoutType": "SingleWebPartAppPage",
-      "CommentsDisabled": true,
-      "Sections": [
-        {
-          "Columns": [
-            {
-              "Factor": 12,
-              "Controls": [
-                {
-                  "Id": "3e189ba9-e1c2-4143-9598-820512e48c47",
-                  "Properties": {
-                    "webPartTitle": "Program risk overview",
+                    "webPartTitle": "Programusikkerhet",
                     "dataSource": "Programrisiko",
                     "showCommandBar": true,
                     "showSearchBox": true,
