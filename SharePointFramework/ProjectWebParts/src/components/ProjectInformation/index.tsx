@@ -53,7 +53,7 @@ export class ProjectInformation extends BaseWebPartComponent<
     } catch (error) {
       this.setState({ error, loading: false })
     }
-    this.isParentProject();
+    this.isParentProjectOrProgram();
   }
 
   public render() {
@@ -142,9 +142,9 @@ export class ProjectInformation extends BaseWebPartComponent<
     this.setState({ displayParentCreationModal: false })
   }
 
-  private async isParentProject() {
-    const data = await sp.web.lists.getByTitle("Prosjektegenskaper").items.getById(1).select(("GtIsParentProject")).get()
-    this.setState({ isParentProject: data.GtIsParentProject })
+  public async isParentProjectOrProgram() {
+    const data = await sp.web.lists.getByTitle("Prosjektegenskaper").items.getById(1).select(("GtIsParentProject,GtIsProgram")).get()
+    this.setState({ isParentProject: (data?.GtIsParentProject || data?.GtIsProgram)})
   }
 
   /**

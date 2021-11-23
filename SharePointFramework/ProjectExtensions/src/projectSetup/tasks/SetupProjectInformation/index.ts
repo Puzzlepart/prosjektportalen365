@@ -20,7 +20,7 @@ export class SetupProjectInformation extends BaseTask {
     onProgress: OnProgressCallbackFunction
   ): Promise<IBaseTaskParams> {
     try {
-      await this._syncPropertiesList(params, onProgress)
+      await this._syncPropertiesList(params, onProgress, this.data.selectedTemplate.isProgram)
       await this._addEntryToHub(params)
       return params
     } catch (error) {
@@ -36,7 +36,8 @@ export class SetupProjectInformation extends BaseTask {
    */
   private async _syncPropertiesList(
     params: IBaseTaskParams,
-    onProgress: OnProgressCallbackFunction
+    onProgress: OnProgressCallbackFunction,
+    isProgram: boolean
   ) {
     try {
       onProgress(
@@ -60,7 +61,8 @@ export class SetupProjectInformation extends BaseTask {
       )
       await list.items.add({
         Title: params.context.pageContext.web.title,
-        TemplateParameters: JSON.stringify(params.templateSchema.Parameters)
+        TemplateParameters: JSON.stringify(params.templateSchema.Parameters),
+        GtIsProgram: isProgram
       })
     } catch (error) {
       throw error
@@ -90,7 +92,8 @@ export class SetupProjectInformation extends BaseTask {
       const properties: TypedHash<any> = {
         Title: params.context.pageContext.web.title,
         GtSiteId: params.context.pageContext.site.id.toString(),
-        GtProjectTemplate: this.data.selectedTemplate.text
+        GtProjectTemplate: this.data.selectedTemplate.text,
+        GtIsProgram: this.data.selectedTemplate.isProgram
       }
       if (params.templateSchema.Parameters.ProjectContentTypeId) {
         properties.ContentTypeId = params.templateSchema.Parameters.ProjectContentTypeId

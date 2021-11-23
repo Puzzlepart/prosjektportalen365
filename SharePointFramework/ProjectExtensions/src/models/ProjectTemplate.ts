@@ -10,6 +10,7 @@ export interface IProjectTemplateSPItem {
   ListContentConfigLookupId?: number[]
   File?: { UniqueId: string; Name: string; Title: string; ServerRelativeUrl: string }
   FieldValuesAsText?: TypedHash<string>
+  GtIsProgram: boolean
 }
 
 export class ProjectTemplate implements IDropdownOption {
@@ -21,6 +22,7 @@ export class ProjectTemplate implements IDropdownOption {
   public iconName: string
   public serverRelativeUrl: string
   public listContentConfigIds: number[]
+  public isProgram: boolean
 
   constructor(spItem: IProjectTemplateSPItem, public web: Web) {
     this.id = spItem.Id
@@ -34,6 +36,7 @@ export class ProjectTemplate implements IDropdownOption {
       spItem.ListContentConfigLookupId && spItem.ListContentConfigLookupId.length > 0
         ? spItem.ListContentConfigLookupId
         : null
+    this.isProgram = spItem.GtIsProgram
   }
 
   public async getSchema(): Promise<Schema> {
