@@ -10,7 +10,8 @@ export const CreateParentModal: FunctionComponent<ParentModalProps> = ({ isOpen,
 
     async function applyCustomAction() {
         setLoading(true)
-        await sp.web.userCustomActions.add(userCustomAction);
+        await sp.web.userCustomActions.add(userCustomAction)
+        await sp.web.lists.getByTitle("Prosjektegenskaper").items.getById(1).update({GtIsParentProject: true})
         location.reload()
     }
 
