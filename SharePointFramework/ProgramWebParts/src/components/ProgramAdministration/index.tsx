@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import styles from './programAdministration.module.scss'
 import { IProgramAdministrationProps, shimmeredColumns } from './types'
 import { useStore } from './store'
@@ -17,7 +17,7 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
   const setSelected = useStore(state => state.setSelectedToDelete)
   const fetchChildProjects = useStore(state => state.fetchChildProjects)
   const error = useStore(state => state.error)
-  const [isLoading, setIsLoading] = React.useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
           </div>
         </div>
         <div>
-          <ProjectTable fields={fields} projects={childProjects} onSelect={(selectedItem: any) => setSelected(selectedItem)} selectionMode={SelectionMode.multiple} />
+          {childProjects.length > 0 && <ProjectTable fields={fields} projects={childProjects} onSelect={(selectedItem: any) => setSelected(selectedItem)} selectionMode={SelectionMode.multiple} />}
         </div>
         {displayProjectDialog && <AddProjectDialog sp={sp} />}
       </div>
