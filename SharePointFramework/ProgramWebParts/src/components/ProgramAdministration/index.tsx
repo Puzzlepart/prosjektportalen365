@@ -11,7 +11,7 @@ import { UserMessage } from 'pp365-projectwebparts/lib/components/UserMessage'
 import * as strings from 'ProgramWebPartsStrings'
 
 
-export const ProgramAdministration: FunctionComponent<IProgramAdministrationProps> = ({ sp, webPartTitle }) => {
+export const ProgramAdministration: FunctionComponent<IProgramAdministrationProps> = ({ sp, webPartTitle, dataAdapter }) => {
   const displayProjectDialog = useStore(state => state.displayProjectDialog)
   const childProjects = useStore(state => state.childProjects)
   const setSelected = useStore(state => state.setSelectedToDelete)
@@ -22,7 +22,7 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
 
   useEffect(() => {
     const fetch = async () => {
-      await fetchChildProjects(sp)
+      await fetchChildProjects(sp, dataAdapter)
       setIsLoading(false)
     }
     setIsLoading(true)
@@ -75,7 +75,7 @@ export const fields: IViewField[] = [
     maxWidth: 250.
   },
   {
-    name: "GtSiteUrlOWSTEXT",
+    name: "SPWebURL",
     displayName: "Site URL",
     isResizable: true,
     sorting: true,

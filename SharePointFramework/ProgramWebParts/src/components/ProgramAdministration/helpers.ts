@@ -1,5 +1,6 @@
 import { SPRest, sp } from '@pnp/sp'
 import { ChildProject } from 'models'
+import _ from 'underscore'
 
 /**
  * Fetches all projects associated with the current hubsite context
@@ -9,14 +10,26 @@ import { ChildProject } from 'models'
 export async function getHubSiteProjects(_sp: SPRest) {
   const data = await _sp.site.select('HubSiteId').get()
   const searchData = await _sp.search({
-    Querytext: `ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* DepartmentId:{${data.HubSiteId}}`,
+    Querytext: `DepartmentId:{${data.HubSiteId}} contentclass:STS_Site`,
     RowLimit: 500,
     StartRow: 0,
     ClientType: 'ContentSearchRegular',
-    SelectProperties: ['GtSiteIdOWSTEXT', 'Title', 'GtSiteUrlOWSTEXT']
+    SelectProperties: ['SPWebURL', 'Title'],
+    TrimDuplicates: false
   })
-
   return searchData
+}
+
+async function batchFetch(_sp, hubId, query) {
+    const searchData = await _sp.search({
+      Querytext: `${query} DepartmentId:{${hubId}} contentclass:STS_Site`,
+      RowLimit: 500,
+      StartRow: 0,
+      ClientType: 'ContentSearchRegular',
+      SelectProperties: ['GtSiteIdOWSTEXT', 'SPWebURL', 'Title'],
+      TrimDuplicates: false
+    })
+    return searchData
 }
 
 /**
@@ -24,14 +37,19 @@ export async function getHubSiteProjects(_sp: SPRest) {
  * @param _sp SPRest
  * @returns ChildProject[]
  */
-export async function fetchChildProjects(_sp: SPRest) {
-  const [data] = await _sp.web.lists
-    .getByTitle('Prosjektegenskaper')
-    .items.select('GtChildProjects')
-    .get()
-  const children: ChildProject[] = await JSON.parse(data.GtChildProjects)
-
-  return children.filter((a) => a)
+export async function getChildProjects(_sp: SPRest, dataAdapter: any): Promise<ChildProject[]> {
+  const queryArray = dataAdapter.aggregatedQueryBuilder()
+  const hubData = await _sp.site.select('HubSiteId').get()
+  const searchPromises = []
+  for (const query of queryArray) {
+    searchPromises.push(batchFetch(_sp, hubData.HubSiteId, query))
+  }
+  const responses: any[] = await Promise.all(searchPromises)
+  const searchResults = []
+  responses.forEach((response) => {
+    searchResults.push(response.PrimarySearchResults)
+  })
+  return _.flatten(searchResults)
 }
 
 /**
@@ -44,18 +62,18 @@ export async function fetchAvailableProjects(_sp: SPRest) {
     .getByTitle('Prosjektegenskaper')
     .items.select('GtChildProjects')
     .get()
-  const childrenSiteIds: ChildProject[] = await JSON.parse(currentProjects.GtChildProjects)
+  const childrenSiteIds: any[] = await JSON.parse(currentProjects.GtChildProjects)
   const allProjects: any = await getHubSiteProjects(_sp)
-
-  const availableProjects = allProjects.PrimarySearchResults.filter((project) => {
-    return !childrenSiteIds.some((el) => el.SiteId === project.GtSiteIdOWSTEXT)
+  let availableProjects = allProjects.PrimarySearchResults.filter((project) => {
+    return !childrenSiteIds.some((el) => el.SiteId === project.SiteId)
   })
+  availableProjects = availableProjects.filter((project) => project.SPWebURL)
 
   const mappedProjects = availableProjects.map(proj => {
     return {
-      SiteId: proj.GtSiteIdOWSTEXT,
+      SiteId: proj.SiteId,
       Title: proj.Title,
-      GtSiteUrlOWSTEXT: proj.GtSiteUrlOWSTEXT
+      SPWebURL: proj.SPWebURL
     }
   })
   return mappedProjects
@@ -72,7 +90,7 @@ export async function addChildProject(_sp: SPRest, newProjects: ChildProject[]) 
   const projects: ChildProject[] = JSON.parse(currentData.GtChildProjects)
   const updatedProjects = [...projects, ...newProjects]
 
-  const ans = await _sp.web.lists
+  await _sp.web.lists
     .getByTitle('Prosjektegenskaper')
     .items.getById(1)
     .update({ GtChildProjects: JSON.stringify(updatedProjects) })

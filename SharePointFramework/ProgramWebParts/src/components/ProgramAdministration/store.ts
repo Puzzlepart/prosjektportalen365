@@ -1,6 +1,6 @@
 import { SPRest } from '@pnp/sp'
 import create from 'zustand'
-import { fetchAvailableProjects, removeChildProjects } from './helpers'
+import { fetchAvailableProjects, getChildProjects, removeChildProjects } from './helpers'
 import { ChildProject } from 'models'
 import { ChildProjectListItem, UserMessageProps } from './types'
 import { MessageBarType } from 'office-ui-fabric-react'
@@ -18,7 +18,7 @@ interface IProgramAdministrationState {
   setAvailableProjects: (projects: ChildProjectListItem[]) => void
   addChildProject: (project: ChildProject, _sp: SPRest) => void
   setSelectedToDelete: (project: ChildProject[]) => void
-  fetchChildProjects: (_sp: SPRest) => Promise<void>
+  fetchChildProjects: (_sp: SPRest, dataAdapter: any) => Promise<void>
   fetchAvailableProjects: (_sp: SPRest) => Promise<void>
   deleteChildProjects: (projects: ChildProject[], _sp: SPRest) => Promise<void>
   setError: (message: string, messageBarType: MessageBarType) => void
@@ -46,14 +46,10 @@ export const useStore = create<IProgramAdministrationState>((set) => ({
 
   setSelectedToDelete: (project) => set(() => ({ selectedProjectsToDelete: project })),
 
-  fetchChildProjects: async (_sp) => {
+  fetchChildProjects: async (_sp, dataAdapter) => {
     try {
-      const [data] = await _sp.web.lists
-      .getByTitle('Prosjektegenskaper')
-      .items.select('GtChildProjects')
-      .get()
-    const children: ChildProject[] = await JSON.parse(data.GtChildProjects)
-    set(() => ({ childProjects: children.filter((a) => a) }))
+      const children = await getChildProjects(_sp, dataAdapter)
+      set(() => ({ childProjects: children }))
     } catch (error) {
       set(() => ({ error: { text: error, messageBarType: MessageBarType.error } }))
     }
