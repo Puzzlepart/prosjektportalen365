@@ -11,6 +11,7 @@ export interface IProjectTemplateSPItem {
   File?: { UniqueId: string; Name: string; Title: string; ServerRelativeUrl: string }
   FieldValuesAsText?: TypedHash<string>
   GtIsProgram: boolean
+  IsHiddenTemplate: boolean
 }
 
 export class ProjectTemplate implements IDropdownOption {
@@ -23,6 +24,7 @@ export class ProjectTemplate implements IDropdownOption {
   public serverRelativeUrl: string
   public listContentConfigIds: number[]
   public isProgram: boolean
+  public isHidden: boolean
 
   constructor(spItem: IProjectTemplateSPItem, public web: Web) {
     this.id = spItem.Id
@@ -37,6 +39,7 @@ export class ProjectTemplate implements IDropdownOption {
         ? spItem.ListContentConfigLookupId
         : null
     this.isProgram = spItem.GtIsProgram
+    this.isHidden = spItem.IsHiddenTemplate
   }
 
   public async getSchema(): Promise<Schema> {

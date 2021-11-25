@@ -367,16 +367,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       let templateViewXml = `<View Scope="RecursiveAll">
       <Query>
           <Where>
-          <And>
               <Eq>
                   <FieldRef Name="FSObjType" />
                   <Value Type="Integer">0</Value>
               </Eq>
-              <Neq>
-                  <FieldRef Name="IsHiddenTemplate" />
-                  <Value Type="Boolean">1</Value>
-              </Neq>
-            </And>
           </Where>
       </Query>
   </View>`
