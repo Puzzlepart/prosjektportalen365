@@ -388,10 +388,11 @@ export class DataAdapter {
 
     timelineItems = timelineItems
       .map((item) => {
-        if (item?.SiteIdLookup[0]?.Title && _.find(this._childProjects, ((child) => child.SiteId == item?.SiteIdLookup[0]?.GtSiteId))) { // Må aksessere index 0 ettersom lookup er en array...
+        console.log(item.SiteIdLookup.GtSiteId)
+        if (item?.SiteIdLookup?.Title && _.find(this._childProjects, ((child) => child.SiteId == item?.SiteIdLookup?.GtSiteId))) {
           const model = new TimelineContentListModel(
-            item.SiteIdLookup[0]?.GtSiteId, 
-            item.SiteIdLookup[0]?.Title,
+            item.SiteIdLookup?.GtSiteId, 
+            item.SiteIdLookup?.Title,
             item.Title,
             item.TimelineType,
             item.GtStartDate,
@@ -403,7 +404,6 @@ export class DataAdapter {
         }
       })
       .filter((p) => p)
-
     return {
       timelineItems
     }
