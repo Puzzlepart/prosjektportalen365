@@ -3,6 +3,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with issue ID.
 
+## 1.3.2 - TBA
+
+### Changed
+
+- Changed behavior when deleting timeline item #569
+
 ## 1.3.1 - 03.11.2021
 
 ### Added
