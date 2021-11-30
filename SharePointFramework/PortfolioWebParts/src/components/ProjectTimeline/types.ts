@@ -18,6 +18,11 @@ export interface IProjectTimelineProps extends IBaseComponentProps {
    * Default time end
    */
   defaultTimeEnd?: [number, moment.unitOfTime.DurationConstructor]
+
+  /**
+   * Conditional infotext
+   */
+  infoText?: string
 }
 
 export interface IProjectTimelineState {

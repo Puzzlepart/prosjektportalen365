@@ -12,6 +12,7 @@ export const ProgramTimeline: FunctionComponent<IProgramTimelineProps> = (props)
         dataSource={"Prosjekttidslinje"}
         dataAdapter={props.dataAdapter}
         pageContext={props.context.pageContext as any}
+        infoText={props?.infoText}
       />
     </>
   )

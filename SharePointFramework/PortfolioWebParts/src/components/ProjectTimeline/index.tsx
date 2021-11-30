@@ -72,7 +72,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
               <div
                 dangerouslySetInnerHTML={{
                   __html: format(
-                    strings.ProjectTimelineInfoText,
+                    this.props.infoText ? this.props.infoText : strings.ProjectTimelineInfoText,
                     encodeURIComponent(window.location.href)
                   )
                 }}></div>
