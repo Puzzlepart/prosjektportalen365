@@ -113,7 +113,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
                 <div
                   dangerouslySetInnerHTML={{
                     __html: format(
-                      strings.ProjectTimelineListInfoText,
+                      this.props.infoText ? this.props.infoText : strings.ProjectTimelineListInfoText,
                       encodeURIComponent(window.location.href)
                     )
                   }}></div>

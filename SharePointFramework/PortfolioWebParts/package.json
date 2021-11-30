@@ -47,7 +47,8 @@
     "react-dom": "16.8.5",
     "react-highcharts": "16.0.2",
     "sp-hubsite-service": "0.7.1",
-    "underscore": "1.9.1"
+    "underscore": "1.9.1",
+    "webpack": "^5.64.4"
   },
   "resolutions": {
     "@types/react": "16.8.8"
@@ -76,7 +77,7 @@
     "gulp": "3.9.1",
     "livereload": "0.9.1",
     "prettier": "2.1.1",
-    "spfx-pkgdeploy": "0.3.0",
+    "spfx-pkgdeploy": "^0.3.0",
     "typescript": "3.9.x",
     "webpack-bundle-analyzer": "3.5.2",
     "webpackbar": "4.0.0",

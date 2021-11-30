@@ -9,7 +9,7 @@ export const ProgramTimeline: FunctionComponent<IProgramTimelineProps> = (props)
     <>
       <ProjectTimeline
         title={strings.ProgramTimelineHeader}
-        dataSource={"Prosjekttidslinje"}
+        dataSource={props.dataSource}
         dataAdapter={props.dataAdapter}
         pageContext={props.context.pageContext as any}
         infoText={props?.infoText}

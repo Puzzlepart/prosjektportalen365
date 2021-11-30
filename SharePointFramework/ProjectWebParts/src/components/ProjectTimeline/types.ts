@@ -18,6 +18,7 @@ export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   showCmdTimelineList?: boolean
   showTimelineList?: boolean
   isSelectionModeNone?: boolean
+  infoText?: string
 }
 
 export interface IProjectTimelineState extends IBaseWebPartComponentState<IProjectTimelineData> {
