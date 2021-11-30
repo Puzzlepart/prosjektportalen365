@@ -3,11 +3,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with issue ID.
 
+## 1.3.2 - TBA
+
+### Changed
+
+- Changed behavior when deleting a status report #597
+
+
 ## 1.3.1 - 03.11.2021
 
 ### Added
 
 - Added upgrade script for existing projects to add 1.3.0 functionality (project timeline page) #591
+
 
 ## 1.3.0 - 22.10.2021
 
