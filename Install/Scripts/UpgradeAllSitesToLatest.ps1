@@ -3,6 +3,9 @@ Param(
     [string]$PortfolioUrl
 )
 
+$ScriptDir = (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
+. $ScriptDir\PP365Functions.ps1
+
 function EnsureProjectTimelinePage($Url) {
     Connect-PnPOnline -Url $Url -UseWebLogin
         
@@ -40,7 +43,8 @@ $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".share
 Connect-PnPOnline -Url $AdminSiteUrl -UseWebLogin
 
 $PPHubSite = Get-PnPHubSite -Identity $PortfolioUrl
-$ProjectsInHub = Get-PnPHubSiteChild -Identity $PPHubSite
+
+$ProjectsInHub = Get-PP365HubSiteChild -Identity $PPHubSite
 
 # Get current logged in user
 $ctx = Get-PnPContext
