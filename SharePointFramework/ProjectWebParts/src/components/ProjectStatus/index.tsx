@@ -453,8 +453,12 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    */
   private async _deleteReport(report: StatusReport) {
     await this._portalDataService.deleteStatusReport(report.id)
-    window.location.hash = ''
-    document.location.reload()
+    try {
+      const data = await this._fetchData()
+      this.setState({ data, loading: false })
+    } catch (error) {
+      this.setState({ error, loading: false })
+    }
   }
 
   /**
