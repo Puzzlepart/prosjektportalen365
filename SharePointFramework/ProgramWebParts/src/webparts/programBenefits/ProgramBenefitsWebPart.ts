@@ -32,7 +32,8 @@ export default class programBenefits extends BaseProgramWebPart<IProgramBenefits
         showSearchBox: this.properties.showSearchBox,
         showCommandBar: this.properties.showCommandBar,
         displayMode: this.displayMode
-      }
+      },
+      onUpdateProperty: this._onUpdateProperty.bind(this)
     });
   }
 
@@ -42,6 +43,11 @@ export default class programBenefits extends BaseProgramWebPart<IProgramBenefits
 
   protected get dataVersion(): Version {
     return Version.parse('1.0')
+  }
+
+  private _onUpdateProperty(key: string, value: any) {
+    this.properties[key] = value
+    this.context.propertyPane.refresh()
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {

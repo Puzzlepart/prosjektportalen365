@@ -38,12 +38,18 @@ export default class programRiskOverview extends BaseProgramWebPart<IProgramRisk
         columns: this.properties.columns,
         displayMode: this.displayMode
       },
-      webPartTitle: this.properties.webPartTitle
+      webPartTitle: this.properties.webPartTitle,
+      onUpdateProperty: this._onUpdateProperty.bind(this)
     })
   }
 
   protected onDispose(): void {
     ReactDom.unmountComponentAtNode(this.domElement)
+  }
+
+  public _onUpdateProperty(key: string, value: any) {
+    this.properties[key] = value
+    this.context.propertyPane.refresh()
   }
 
   protected get dataVersion(): Version {

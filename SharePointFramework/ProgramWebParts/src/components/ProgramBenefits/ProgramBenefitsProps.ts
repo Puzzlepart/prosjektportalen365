@@ -7,6 +7,7 @@ export interface IProgramBenefitsProps {
   context: any
   dataAdapter: DataAdapter
   properties: IAggregatedPortfolioPropertyPane
+  onUpdateProperty: (key: string, value: any) => void
 }
 
 export const selectProperties = ["Path","SPWebURL","Title","ListItemId","SiteTitle","SiteId","ContentTypeID","GtDesiredValueOWSNMBR","GtMeasureIndicatorOWSTEXT","GtMeasurementUnitOWSCHCS", "GtStartValueOWSNMBR", "GtMeasurementValueOWSNMBR", "GtMeasurementCommentOWSMTXT", "GtMeasurementDateOWSDATE", "GtGainsResponsibleOWSUSER", "GtGainsTurnoverOWSMTXT", "GtGainsTypeOWSCHCS", "GtPrereqProfitAchievementOWSMTXT", "GtRealizationTimeOWSDATE", "GtGainLookupId", "GtMeasureIndicatorLookupId", "GtGainsResponsible", "GtGainsOwner", "Path", "SPWebURL", "SiteTitle"]
