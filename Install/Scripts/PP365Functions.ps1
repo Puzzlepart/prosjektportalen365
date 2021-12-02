@@ -15,7 +15,11 @@
         $filterId = $Identity
     }
 
-  
-    $items = Invoke-PnPSPRestMethod -Method Get ("/_api/web/lists/getbytitle('DO_NOT_DELETE_SPLIST_TENANTADMIN_AGGREGATED_SITECOLLECTIONS')/items?`$filter=HubSiteId eq '{0}' and SiteId ne '{0}' and TimeDeleted eq null&$select=SiteUrl" -f $filterId)
-    return $items.value.SiteUrl
+    $ViewXml =
+@"
+<Query><Where><And><Eq><FieldRef Name='HubSiteId' /><Value Type='Guid'>{0}</Value></Eq><And><Neq><FieldRef Name='SiteId' /><Value Type='Guid'>{0}</Value></Neq><IsNull><FieldRef Name='TimeDeleted'/></IsNull></And></And></Where></Query>
+"@ -f $filterId
+
+    $items = Get-PnPListItem -List "DO_NOT_DELETE_SPLIST_TENANTADMIN_AGGREGATED_SITECOLLECTIONS" -PageSize 500 -Query $ViewXml
+    return $items.FieldValues.SiteUrl
 }
