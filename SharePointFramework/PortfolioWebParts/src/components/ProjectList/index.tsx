@@ -164,6 +164,8 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
     return projects
       .filter((project) => {
         if (state.selectedView === 'my_projects') return project.userIsMember
+        if (state.selectedView === 'parent_projects') return project.isParent
+        if (state.selectedView === 'program') return project.isProgram
         return true
       })
       .filter((p) => {
@@ -230,6 +232,10 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
         return strings.MyProjectsSearchBoxPlaceholderText
       case 'all_projects':
         return strings.AllProjectsSearchBoxPlaceholderText
+      case 'parent_projects':
+        return strings.ParentProjectsSearchBoxPlaceholderText
+      case 'program':
+        return strings.ProgramSearchBoxPlaceholderText
     }
   }
 
@@ -263,9 +269,6 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
   return (
     <div className={styles.root}>
       <div className={styles.container}>
-        <div className={styles.searchBox} hidden={!props.showSearchBox}>
-          <SearchBox placeholder={getSearchBoxPlaceholder()} onChanged={onSearch} />
-        </div>
         {state.isUserInPortfolioManagerGroup && (
           <div className={styles.projectDisplaySelect}>
             <Pivot
@@ -273,9 +276,14 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
               selectedKey={state.selectedView}>
               <PivotItem headerText={strings.MyProjectsLabel} itemKey='my_projects' />
               <PivotItem headerText={strings.AllProjectsLabel} itemKey='all_projects' />
+              <PivotItem headerText={strings.ParentProjectLabel} itemKey='parent_projects' />
+              <PivotItem headerText={strings.ProgramLabel} itemKey='program' />
             </Pivot>
           </div>
         )}
+         <div className={styles.searchBox} hidden={!props.showSearchBox}>
+          <SearchBox placeholder={getSearchBoxPlaceholder()} onChanged={onSearch} />
+        </div>
         <div className={styles.viewToggle} hidden={!props.showViewSelector}>
           <Toggle
             offText={strings.ShowAsListText}

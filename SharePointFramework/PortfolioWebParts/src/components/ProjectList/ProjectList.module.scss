@@ -1,38 +1,38 @@
 @import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
-
 .root {
-  @include ms-Grid;
-  .container {
-    @include ms-Grid-row;
-    .searchBox {
-      @include ms-Grid-col;
-      @include ms-sm6;
-      @include ms-font-m;
+    @include ms-Grid;
+    .container {
+        @include ms-Grid-row;
+        .searchBox {
+            @include ms-Grid-col;
+            @include ms-sm8;
+            @include ms-font-m;
+            margin-top: 8px;
+        }
+        .viewToggle {
+            @include ms-Grid-col;
+            @include ms-sm4;
+            @include ms-font-m;
+            margin-top: 8px;
+        }
+        .projectDisplaySelect {
+            @include ms-Grid-col;
+            @include ms-sm12;
+            @include ms-font-m;
+            margin-top: -7px;
+        }
+        .emptyMessage {
+            @include ms-Grid-col;
+            @include ms-sm12;
+            margin: 15px 0 0 0;
+        }
+        .projects {
+            @include ms-Grid-col;
+            @include ms-sm12;
+            margin: 10px 0 0 0;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+        }
     }
-    .viewToggle {
-      @include ms-Grid-col;
-      @include ms-sm12;
-      @include ms-font-m;
-      margin-top: 8px;
-    }
-    .projectDisplaySelect {
-      @include ms-Grid-col;
-      @include ms-sm5;
-      @include ms-font-m;
-      margin-top: -7px;
-    }
-    .emptyMessage {
-      @include ms-Grid-col;
-      @include ms-sm12;
-      margin: 15px 0 0 0;
-    }
-    .projects {
-      @include ms-Grid-col;
-      @include ms-sm12;
-      margin: 10px 0 0 0;
-      display: flex;
-      flex-wrap: wrap;
-      flex-direction: row;
-    }
-  }
 }

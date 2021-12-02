@@ -445,7 +445,12 @@ export class DataAdapter {
           item.GtEndDate,
           manager,
           owner,
-          !!group
+          !!group,
+          null,
+          null,
+          null,
+          item.GtIsParentProject,
+          item.GtIsProgram
         )
         return model
       })
@@ -474,7 +479,9 @@ export class DataAdapter {
           'GtProjectPhaseText',
           'GtStartDate',
           'GtEndDate',
-          'Title'
+          'Title',
+          'GtIsParentProject',
+          'GtIsProgram'
         )
         // eslint-disable-next-line quotes
         .filter("GtProjectLifecycleStatus ne 'Avsluttet'")
