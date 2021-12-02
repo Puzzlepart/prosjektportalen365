@@ -114,7 +114,7 @@ define([], function() {
         SaveViewAsText: 'Lagre visning som',
         MyProjectsSearchBoxPlaceholderText: 'Søk i prosjekter du er medlem av...',
         AllProjectsSearchBoxPlaceholderText: 'Søk i alle prosjekter...',
-        ParentProjectsSearchBoxPlaceholderText: 'Søk i overordnede prosjekter og program...',
+        ParentProjectsSearchBoxPlaceholderText: 'Søk i overordnede prosjekter...',
         ProgramSearchBoxPlaceholderText: 'Søk i program...',
         SearchBoxPlaceholderText: 'Søk i {0}...',
         SearchBoxPlaceholderTextLabel: 'Søkebokstekst',
@@ -163,6 +163,7 @@ define([], function() {
         MyProjectsLabel: "Mine prosjekter",
         AllProjectsLabel: "Alle prosjekter",
         ParentProjectLabel: "Overordnede områder",
+        ProgramLabel: "Program",
         NoAccessMessage: "Du har ikke tilgang til dette prosjektet"
     }
 })
