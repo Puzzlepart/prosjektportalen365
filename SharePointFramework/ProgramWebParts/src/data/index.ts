@@ -385,11 +385,9 @@ export class DataAdapter {
         .expand('SiteIdLookup')
         .get()
     ])
-
     timelineItems = timelineItems
       .map((item) => {
-        console.log(item.SiteIdLookup.GtSiteId)
-        if (item?.SiteIdLookup?.Title && _.find(this._childProjects, ((child) => child.SiteId == item?.SiteIdLookup?.GtSiteId))) {
+        if (item?.SiteIdLookup?.Title && _.find(this._childProjects, ((child) => (child?.SiteId == item?.SiteIdLookup?.GtSiteId) || (item?.SiteIdLookup?.GtSiteId == this?.context?.pageContext?.site?.id?.toString())))) {
           const model = new TimelineContentListModel(
             item.SiteIdLookup?.GtSiteId, 
             item.SiteIdLookup?.Title,
@@ -481,7 +479,7 @@ export class DataAdapter {
 
     projects = projects
       .map((project) => {
-        return this._childProjects.some((child) => child.SiteId == project.siteId)
+        return this._childProjects.some((child) => child?.SiteId == project?.siteId || project?.siteId == this.context.pageContext.site.id.toString())
           ? project
           : undefined
       })
