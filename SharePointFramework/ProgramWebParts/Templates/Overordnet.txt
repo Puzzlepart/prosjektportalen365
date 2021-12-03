@@ -87,7 +87,7 @@
                         "Id": "1ca1e22e-2a44-490f-9e1b-759f986df0d8",
                         "Properties": {
                             "webPartTitle": "Gevinstoversikt i underprosjekter",
-                            "dataSource": "Gevinstoversikt",
+                            "dataSource": "Alle Gevinstelementer",
                             "searchBoxPlaceholderText": "Søk i gevinster...",
                             "showCommandBar": true,
                             "showSearchBox": true,
