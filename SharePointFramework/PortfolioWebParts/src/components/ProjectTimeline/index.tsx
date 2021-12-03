@@ -119,6 +119,13 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   private _getFilteredData(): ITimelineData {
     const { activeFilters, data } = { ...this.state } as IProjectTimelineState
     const activeFiltersKeys = Object.keys(activeFilters)
+
+    // Moves the current project to the top of the timeline (if it's in a program/parent project)
+    // TODO: Check if this works both in regular projects and in programs
+    const projectId = data.items.find((i) => i?.projectUrl == this.props.pageContext.site.absoluteUrl)?.id
+    const aboveGroup = data.groups.find((i) => i?.id == projectId)
+    projectId && (data.groups = [aboveGroup, ...data.groups.filter(grp => grp?.id != projectId)].filter(grp => grp))
+
     if (activeFiltersKeys.length > 0) {
       const items = activeFiltersKeys.reduce(
         (newItems, key) => newItems.filter((i) => activeFilters[key].indexOf(get(i, key)) !== -1),
