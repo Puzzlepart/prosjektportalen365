@@ -24,58 +24,55 @@
                     "key": "Title",
                     "fieldName": "Title",
                     "name": "Tittel",
-                    "minWidth": 220,
-                    "maxWidth": 250,
-                    "isMultiline": true,
-                    "isResizable": true
+                    "minWidth": 150,
+                    "maxWidth": 300
                 },
                 {
-                    "key": "GtDeliveryDescriptionOWSMTXT",
-                    "fieldName": "GtDeliveryDescriptionOWSMTXT",
-                    "name": "Leveransebeskrivelse",
-                    "minWidth": 220,
-                    "maxWidth": 220,
-                    "isMultiline": true,
-                    "isResizable": true
-                },
-                {
-                    "key": "GtDeliveryStartTimeOWSDATE",
-                    "fieldName": "GtDeliveryStartTimeOWSDATE",
-                    "name": "Starttidspunkt",
+                    "key": "GtRiskProbabilityOWSNMBR",
+                    "fieldName": "GtRiskProbabilityOWSNMBR",
+                    "name": "Sannsynlighet (S)",
                     "minWidth": 100,
-                    "maxWidth": 150,
-                    "isResizable": true,
+                    "maxWidth": 125,
                     "data": {
-                        "renderAs": "date"
+                        "renderAs": "int"
                     }
                 },
                 {
-                    "key": "GtDeliveryEndTimeOWSDATE",
-                    "fieldName": "GtDeliveryEndTimeOWSDATE",
-                    "name": "Sluttidspunkt",
+                    "key": "GtRiskConsequenceOWSNMBR",
+                    "fieldName": "GtRiskConsequenceOWSNMBR",
+                    "name": "Konsekvens (K)",
                     "minWidth": 100,
-                    "maxWidth": 150,
-                    "isResizable": true,
+                    "maxWidth": 125,
                     "data": {
-                        "renderAs": "date"
+                        "renderAs": "int"
                     }
                 },
                 {
-                    "key": "GtDeliveryStatusOWSCHCS",
-                    "fieldName": "GtDeliveryStatusOWSCHCS",
-                    "name": "Leveransestatus",
+                    "key": "GtRiskProbabilityPostActionOWSNMBR",
+                    "fieldName": "GtRiskProbabilityPostActionOWSNMBR",
+                    "name": "S etter tiltak",
                     "minWidth": 100,
-                    "maxWidth": 150,
-                    "isResizable": true
+                    "maxWidth": 125,
+                    "data": {
+                        "renderAs": "int"
+                    }
                 },
                 {
-                    "key": "GtDeliveryStatusCommentOWSMTXT",
-                    "fieldName": "GtDeliveryStatusCommentOWSMTXT",
-                    "name": "Kommentar, leveransestatus",
-                    "minWidth": 220,
-                    "maxWidth": 220,
-                    "isMultiline": true,
-                    "isResizable": true
+                    "key": "GtRiskConsequencePostActionOWSNMBR",
+                    "fieldName": "GtRiskConsequencePostActionOWSNMBR",
+                    "name": "K etter tiltak",
+                    "minWidth": 100,
+                    "maxWidth": 125,
+                    "data": {
+                        "renderAs": "int"
+                    }
+                },
+                {
+                    "key": "GtRiskActionOWSMTXT",
+                    "fieldName": "GtRiskActionOWSMTXT",
+                    "name": "Tiltak",
+                    "minWidth": 300,
+                    "isMultiline": true
                 }
             ]
         }
