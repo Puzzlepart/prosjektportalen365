@@ -59,7 +59,6 @@ export class SetupProjectInformation extends BaseTask {
         strings.CreatingLocalProjectPropertiesListItemText,
         'AlignCenter'
       )
-      console.log('Logging list items', list.items.get())
 
       if((await list.items.getAll())?.length >= 1) {
         await list.items.getById(1).update({
