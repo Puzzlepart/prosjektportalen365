@@ -103,6 +103,11 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     }
   }
 
+  private async _ensureParentProjectPatch(data: IProjectSetupData): Promise<void> {
+    const [singleItem] = await data.hub.web.lists.getByTitle('Prosjekter').items.filter(`GtSiteId eq '${this.context.pageContext.legacyPageContext.siteId.replace(/([{}])/g, '')}'`).get();
+    await data.hub.web.lists.getByTitle("Prosjekter").items.getById(singleItem.Id).update({GtIsParentProject: true});
+  }
+
   /**
    * Intiialize setup
    *
@@ -139,6 +144,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       if(!stringIsNullOrEmpty(this.properties.forceTemplate)) {
         this.reacreateNavMenu()
         await sp.web.lists.getByTitle(strings.ProjectPropertiesListName).items.getById(1).update({GtIsParentProject: true})
+        await this._ensureParentProjectPatch(data)
+        
+        
       }
 
       await deleteCustomizer(
@@ -190,6 +198,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     const selectedTemplate = find(data.templates, (tmpl) =>
       endsWith(tmpl.serverRelativeUrl, this.properties.forceTemplate)
     )
+    
     if (!selectedTemplate) return null
     return {
       selectedTemplate,
