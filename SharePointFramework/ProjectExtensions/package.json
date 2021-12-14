@@ -1,6 +1,9 @@
 {
   "name": "pp365-projectextensions",
   "version": "1.3.0",
+  "engines": {
+    "node": "^12"
+  },
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
     "serve": "gulp serve-deprecated --nobrowser --locale=nb-no",
