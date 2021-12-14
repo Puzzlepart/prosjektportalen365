@@ -9,6 +9,10 @@ Every change is marked with issue ID.
 
 - Added upgrade script for existing projects to add 1.3.0 functionality (project timeline page) #591
 
+### Fixed
+
+- Fixed bug in upgrade script for existing projects to add 1.3.0 functionality (project timeline page) #607
+
 ## 1.3.0 - 22.10.2021
 
 ### Added 
