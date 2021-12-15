@@ -17,7 +17,7 @@
 
     $ViewXml =
 @"
-<Query><Where><And><Eq><FieldRef Name='HubSiteId' /><Value Type='Guid'>{0}</Value></Eq><And><Neq><FieldRef Name='SiteId' /><Value Type='Guid'>{0}</Value></Neq><IsNull><FieldRef Name='TimeDeleted'/></IsNull></And></And></Where></Query>
+<View><Query><Where><And><Eq><FieldRef Name='HubSiteId' /><Value Type='Guid'>{0}</Value></Eq><And><Neq><FieldRef Name='SiteId' /><Value Type='Guid'>{0}</Value></Neq><IsNull><FieldRef Name='TimeDeleted'/></IsNull></And></And></Where></Query></View>
 "@ -f $filterId
 
     $items = Get-PnPListItem -List "DO_NOT_DELETE_SPLIST_TENANTADMIN_AGGREGATED_SITECOLLECTIONS" -PageSize 500 -Query $ViewXml
