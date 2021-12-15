@@ -15,11 +15,7 @@
         $filterId = $Identity
     }
 
-    $ViewXml =
-@"
-<View><Query><Where><And><Eq><FieldRef Name='HubSiteId' /><Value Type='Guid'>{0}</Value></Eq><And><Neq><FieldRef Name='SiteId' /><Value Type='Guid'>{0}</Value></Neq><IsNull><FieldRef Name='TimeDeleted'/></IsNull></And></And></Where></Query></View>
-"@ -f $filterId
-
-    $items = Get-PnPListItem -List "DO_NOT_DELETE_SPLIST_TENANTADMIN_AGGREGATED_SITECOLLECTIONS" -PageSize 500 -Query $ViewXml
-    return $items.FieldValues.SiteUrl
+    $items = Get-PnPListItem -List "DO_NOT_DELETE_SPLIST_TENANTADMIN_AGGREGATED_SITECOLLECTIONS" -PageSize 500
+    $filteredItems = $items | Where-Object {$_["HubSiteId"] -eq $filterId -and $_["SiteId"] -ne $filterId}
+    return $filteredItems.FieldValues.SiteUrl
 }
