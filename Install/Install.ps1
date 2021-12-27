@@ -345,8 +345,10 @@ if (-not $SkipTemplate.IsPresent) {
         Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
         $Instance = Read-PnPProvisioningTemplate "$BasePath\Portfolio.pnp"
         $Instance.SupportedUILanguages[0].LCID = $LanguageId
-        Apply-PnPProvisioningTemplate -InputInstance $Instance -Handlers SupportedUILanguages
+        $OldNavNodes = Get-PnPNavigationNode -Location TopNavigationBar
+        Apply-PnPProvisioningTemplate -InputInstance $Instance -Handlers SupportedUILanguages, Navigation
         Apply-PnPProvisioningTemplate "$BasePath\Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
+        ApplyOldNavigation($OldNavNodes)
         Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
 
         if ($Upgrade.IsPresent) {
