@@ -110,7 +110,6 @@ function ApplyOldNavigation($existingNodes) {
         $index = $existingNodes.IndexOf($_)
         if($newNodes.Title -notcontains $existingNodes[$index].Title) {
             Add-PnPNavigationNode -Location TopNavigationBar -Title $existingNodes[$index].Title -Url $existingNodes[$index].Url
-            Write-Host "[INFO] ADDED $(existingNodes[$index].Title) FROM OLD NAVIGATION"
         }
     }
 }
