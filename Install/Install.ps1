@@ -103,6 +103,18 @@ function LoadBundle() {
     return (Get-Command Connect-PnPOnline).Version
 }
 
+function ApplyOldNavigation($existingNodes) {
+    $newNodes = Get-PnPNavigationNode -Location TopNavigationBar
+
+    $existingNodes | ForEach-Object {
+        $index = $existingNodes.IndexOf($_)
+        if($newNodes.Title -notcontains $existingNodes[$index].Title) {
+            Add-PnPNavigationNode -Location TopNavigationBar -Title $existingNodes[$index].Title -Url $existingNodes[$index].Url
+            Write-Host "[INFO] ADDED $(existingNodes[$index].Title) FROM OLD NAVIGATION"
+        }
+    }
+}
+
 if (-not [string]::IsNullOrEmpty($CI)) {
     Write-Host "[Running in CI mode. Installing module SharePointPnPPowerShellOnline.]" -ForegroundColor Yellow
     Install-Module -Name SharePointPnPPowerShellOnline -Force -Scope CurrentUser -ErrorAction Stop
