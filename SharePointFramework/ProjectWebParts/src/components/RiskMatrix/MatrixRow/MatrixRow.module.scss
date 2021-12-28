@@ -1,3 +1,9 @@
 .matrixRow {
   min-height: 50px;
 }
+
+.toggleContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 5vh;
+}

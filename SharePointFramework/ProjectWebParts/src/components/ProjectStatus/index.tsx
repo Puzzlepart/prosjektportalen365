@@ -324,7 +324,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
                 riskMatrix={{
                   width: riskMatrixWidth,
                   height: riskMatrixHeight,
-                  calloutTemplate: riskMatrixCalloutTemplate
+                  calloutTemplate: riskMatrixCalloutTemplate,
+                  pageContext: this.props.pageContext
                 }}
               />
             )
