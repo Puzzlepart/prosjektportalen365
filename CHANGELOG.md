@@ -3,7 +3,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with issue ID.
 
-## 1.3.1 - 03.11.2021
+## 1.3.2 - 07.01.2022
+
+### Changed
+
+- Added support for syncing number and currency fields in project properties
+
+## 1.3.1 - 20.12.2021
 
 ### Added
 
