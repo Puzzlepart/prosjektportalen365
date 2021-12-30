@@ -329,20 +329,24 @@ if (-not $SkipTemplate.IsPresent) {
             Apply-PnPProvisioningTemplate "$BasePath\Taxonomy.pnp" -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP template [Taxonomy] to [$Url]" -ForegroundColor Green
         }
-        
-        Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
-        $Instance = Read-PnPProvisioningTemplate "$BasePath\Portfolio.pnp"
-        $Instance.SupportedUILanguages[0].LCID = $LanguageId
-        Apply-PnPProvisioningTemplate -InputInstance $Instance -Handlers SupportedUILanguages
-        Apply-PnPProvisioningTemplate "$BasePath\Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
-        Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
 
         if ($Upgrade.IsPresent) {
+            Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
+            Apply-PnPProvisioningTemplate "$BasePath\Portfolio.pnp" -ExcludeHandlers Navigation -ErrorAction Stop
+            Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
+
             Write-Host "[INFO] Applying PnP content template (Handlers:Files) to [$Url]"
             Apply-PnPProvisioningTemplate "$BasePath\Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
         }
         else {
+            Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
+            $Instance = Read-PnPProvisioningTemplate "$BasePath\Portfolio.pnp"
+            $Instance.SupportedUILanguages[0].LCID = $LanguageId
+            Apply-PnPProvisioningTemplate -InputInstance $Instance -Handlers SupportedUILanguages
+            Apply-PnPProvisioningTemplate "$BasePath\Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
+            Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
+
             Write-Host "[INFO] Applying PnP content template to [$Url]"
             Apply-PnPProvisioningTemplate "$BasePath\Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
