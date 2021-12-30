@@ -139,7 +139,11 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
               properties[fld.InternalName] = fldValue ? new Date(fldValue) : null
             }
             break
+          case 'Number': 
           case 'Currency':
+            {
+              properties[fld.InternalName] = fldValue ? parseFloat(fldValue) : null
+            }
           case 'URL':
             {
               properties[fld.InternalName] = fldValue || null
