@@ -8,6 +8,7 @@ Every change is marked with issue ID.
 ### Changed
 
 - Added support for syncing number and currency fields in project properties
+- Added fix for not resetting portfolio navigation on upgrade #567
 
 ## 1.3.1 - 20.12.2021
 
