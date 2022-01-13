@@ -2,12 +2,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable prefer-const */
 'use strict'
-const fs = require('fs')
 const path = require('path')
-const find = require('find')
 const gulp = require('gulp')
 const build = require('@microsoft/sp-build-web')
-const pkgDeploy = require('spfx-pkgdeploy').default
 const tsConfig = require('./tsconfig.json')
 const WebpackBar = require('webpackbar')
 const os = require('os')
@@ -21,33 +18,10 @@ build.addSuppression('Warning - [sass] The local CSS class \'ms-Grid\' is not ca
 build.addSuppression('Warning - [sass] The local CSS class \'-webkit-filter\' is not camelCase and will not be type-safe.')
 
 try {
-    let env = require('./config/env.json')
-    pkgDeploy(build, require('./config/package-solution.json'), env)
-} catch (error) {
-    log(`Skipping '${colors.cyan('pkgDeploy')}' due to missing ${colors.cyan('config/env.json')}...`)
-}
-
-try {
     buildConfig = require('./build.config.json')
 } catch (error) {
     log(`Missing '${colors.cyan('./build.config.json')}'. Using defaults...`)
 }
-
-gulp.task('versionSync', (done) => {
-    find.file(/\manifest.json$/, path.join(__dirname, 'src'), (files) => {
-        let pkgSolution = require('./config/package-solution.json')
-        let newVersionNumber = require('./package.json').version.split('-')[0]
-        pkgSolution.solution.version = newVersionNumber + '.0'
-        fs.writeFile('./config/package-solution.json', JSON.stringify(pkgSolution, null, 4), () => { })
-        for (let i = 0; i < files.length; i++) {
-            let manifest = require(files[i])
-            manifest.version = newVersionNumber
-            log(`[${colors.cyan('versionSync')}] Setting ${colors.cyan('version')} to ${colors.cyan(newVersionNumber)} for ${colors.cyan(manifest.alias)}...`)
-            fs.writeFile(files[i], JSON.stringify(manifest, null, 4), () => { })
-        }
-        done()
-    })
-})
 
 build.configureWebpack.mergeConfig({
     additionalConfiguration: (webpack) => {

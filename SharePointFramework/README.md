@@ -2,7 +2,7 @@
 
 _Due to the number of components, we decided to separate the components into 3 different solutions._
 
-## [@Shared](./@Shared/README.md) [![version](https://img.shields.io/badge/version-1.2.9-yellow.svg)](https://semver.org)
+## [@Shared](./@Shared/README.md)
 
 Shared code for the SharePoint Framework solutions in PP365.
 
@@ -10,7 +10,7 @@ Build by `npm` script `build` and watch changes with `watch`.
 
 _Published to **npm** as `pp365-shared`_
 
-## [PortfolioWebParts](./PortfolioWebParts/README.md) [![version](https://img.shields.io/badge/version-1.2.6-yellow.svg)](https://semver.org)
+## [PortfolioWebParts](./PortfolioWebParts/README.md)
 
 | Solution name            | ID                                   |
 | ------------------------ | ------------------------------------ |
@@ -24,9 +24,9 @@ Build by `npm` script `package`.
 
 To package and deploy directly to SharePoint, see `2. Build, package and deploy`.
 
-_Published to **npm** as `pp365-projectwebparts`
+_Published to **npm** as `pp365-projectwebparts`_
 
-## [ProjectExtensions](./ProjectExtensions/README.md) [![version](https://img.shields.io/badge/version-1.2.6-yellow.svg)](https://semver.org)
+## [ProjectExtensions](./ProjectExtensions/README.md)
 
 | Solution name          | ID                                   |
 | ---------------------- | ------------------------------------ |
@@ -42,7 +42,7 @@ To package and deploy directly to SharePoint, see `2. Build, package and deploy`
 
 _Published to **npm** as `pp365-projectextensions`_
 
-## [ProjectWebParts](./ProjectWebParts/README.md) [![version](https://img.shields.io/badge/version-1.2.8-yellow.svg)](https://semver.org)
+## [ProjectWebParts](./ProjectWebParts/README.md)
 
 | Solution name          | ID                                   |
 | ---------------------- | ------------------------------------ |
@@ -60,22 +60,24 @@ _Published to **npm** as `pp365-projectwebparts`_`_
 
 # 2. Component overview
 
-| Name                        | Id                                   | -    | Solution          |
-| --------------------------- | ------------------------------------ | ---- | ----------------- |
-| BenefitsOverviewWebPart     | 5f925484-cfb4-42ce-9f90-79a874bb8a68 |      | PortfolioWebParts |
-| LatestProjectsWebPart       | 941fd73c-b957-41c3-8d4f-082268407f10 |      | PortfolioWebParts |
-| PortfolioAggregationWebPart | 6c0e484d-f6da-40d4-81fc-ec1389ef29a8 |      | PortfolioWebParts |
-| PortfolioInsightsWebPart    | 875ca87a-e331-4ffb-bc69-0272fdf80e41 |      | PortfolioWebParts |
-| PortfolioOverviewWebPart    | e58e3d32-057a-4418-97ce-172b92482ba2 |      | PortfolioWebParts |
-| ProjectListWebPart          | 54fbeb7d-e463-4dcc-8873-50a3ab2f0f68 |      | PortfolioWebParts |
-| ResourceAllocationWebPart   | 2ef269b2-6370-4841-8b35-2185b7ccb22a |      | PortfolioWebParts |
-| ProjectSetup                | ce34553d-ab47-4107-8dd1-e980d953996d |      | ProjectExtensions |
-| ProjectUpgrade              | 453a6c1e-e1d0-4b12-a3fc-690a36da1f0c |      | ProjectExtensions |
-| TemplateSelectorCommand     | c9080212-e63e-47cc-8278-00ad38c3f5a5 |      | ProjectExtensions |
-| ProjectInformationWebPart   | b8bec0be-2354-443d-a3ca-24b36e8ea7dc |      | ProjectWebParts   |
-| ProjectPhasesWebPart        | 4449d3dc-fa58-4982-b87c-5a893114e7b7 |      | ProjectWebParts   |
-| ProjectStatusWebPart        | 681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6 |      | ProjectWebParts   |
-| RiskMatrixWebPart           | e536ae15-0748-4d96-b160-3abb30f1b71e |      | ProjectWebParts   |
+| Name                        | Id                                   | -   | Solution          |
+| --------------------------- | ------------------------------------ | --- | ----------------- |
+| BenefitsOverviewWebPart     | 5f925484-cfb4-42ce-9f90-79a874bb8a68 |     | PortfolioWebParts |
+| LatestProjectsWebPart       | 941fd73c-b957-41c3-8d4f-082268407f10 |     | PortfolioWebParts |
+| PortfolioAggregationWebPart | 6c0e484d-f6da-40d4-81fc-ec1389ef29a8 |     | PortfolioWebParts |
+| PortfolioInsightsWebPart    | 875ca87a-e331-4ffb-bc69-0272fdf80e41 |     | PortfolioWebParts |
+| PortfolioOverviewWebPart    | e58e3d32-057a-4418-97ce-172b92482ba2 |     | PortfolioWebParts |
+| ProjectListWebPart          | 54fbeb7d-e463-4dcc-8873-50a3ab2f0f68 |     | PortfolioWebParts |
+| ResourceAllocationWebPart   | 2ef269b2-6370-4841-8b35-2185b7ccb22a |     | PortfolioWebParts |
+| ProjectTimelineWebPart      | 7284c568-f66c-4218-bb2c-3734a3cfa581 |     | PortfolioWebParts |
+| ProjectSetup                | ce34553d-ab47-4107-8dd1-e980d953996d |     | ProjectExtensions |
+| ProjectUpgrade              | 453a6c1e-e1d0-4b12-a3fc-690a36da1f0c |     | ProjectExtensions |
+| TemplateSelectorCommand     | c9080212-e63e-47cc-8278-00ad38c3f5a5 |     | ProjectExtensions |
+| ProjectInformationWebPart   | b8bec0be-2354-443d-a3ca-24b36e8ea7dc |     | ProjectWebParts   |
+| ProjectPhasesWebPart        | 4449d3dc-fa58-4982-b87c-5a893114e7b7 |     | ProjectWebParts   |
+| ProjectStatusWebPart        | 681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6 |     | ProjectWebParts   |
+| RiskMatrixWebPart           | e536ae15-0748-4d96-b160-3abb30f1b71e |     | ProjectWebParts   |
+| ProjectTimelineWebPart      | d156652b-9121-47af-89ae-1fe8427c53da |     | ProjectWebParts   |
 
 # 3. Build, package and deploy
 
@@ -87,10 +89,7 @@ To work with the various solutions, you have to to the following
 2. Build the Shared solution. Navigate to "@Shared" and run `pnpm i --shamefully-hoist` followed by `pnpm run-script build`
 3. Navigate to [ProjectWebParts](./ProjectWebParts) and run `npm i` followed by `pnpm run-script package`
 4. Navigate to [PortfolioWebParts](./PortfolioWebParts) and run `npm i` followed by `pnpm run-script package`
-5. Navigate to [ProjectExtensions](./ProjectExtensions) and run `npm i` followed by `pnpm run-script package`
+5. Navigate to [ProjectExtensions](./ProjectExtensions) and run `npm i` followed by `pnpm r
 
-## Package and deploy
-
-To be able to `package` and `deploy` directly you need to create a file `env.json` under `SharePointFramework/{solution}/config`. Take a look at `SharePointFramework/{solution}/config/env.sample.json`.
-
-When `env.json` is filled out and ready to go you can run the `npm` script `package-deploy`.
+# 4. Versioning
+Never update the version of the solutions independently. The version is automatically kept in sync with the other packages.

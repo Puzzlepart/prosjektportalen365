@@ -1,0 +1,16 @@
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+
+.timeline {
+    margin: 0px auto;
+    padding: 0 32px 0 32px;
+    font-size: 12px !important;
+
+    .timelineItem {
+        cursor: pointer !important;
+        .itemContent {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 100%;
+        }
+    }
+}

@@ -10,9 +10,7 @@ import * as strings from 'PortfolioWebPartsStrings'
 import React from 'react'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
-export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
-  IPortfolioAggregationProps
-> {
+export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IPortfolioAggregationProps> {
   public render(): void {
     if (!this.properties.dataSource) {
       this.renderComponent<IMessageBarProps>(MessageBar, {
@@ -30,8 +28,8 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
   /**
    * On update property
    *
-   * @param {string} key Key
-   * @param {any} value Value
+   * @param key Key
+   * @param value Value
    */
   private _onUpdateProperty(key: string, value: any) {
     this.properties[key] = value

@@ -25,9 +25,7 @@ export const PROPERTYPANE_CONFIGURATION_PROPS = {
   VIEWS_LISTNAME: 'viewsListName'
 }
 
-export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<
-  IPortfolioOverviewProps
-> {
+export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPortfolioOverviewProps> {
   private _configuration: IPortfolioConfiguration
 
   public render(): void {
@@ -44,7 +42,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<
   /**
    * Get options for PropertyPaneDropdown
    *
-   * @param {string} targetProperty Target property
+   * @param targetProperty Target property
    */
   protected _getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
     // eslint-disable-next-line default-case

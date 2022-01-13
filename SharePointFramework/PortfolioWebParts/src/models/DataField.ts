@@ -6,9 +6,9 @@ export class DataField {
   /**
    * Constructor
    *
-   * @param {string} title Title
-   * @param {string} fieldName Field name
-   * @param {string} type Data field type
+   * @param title Title
+   * @param fieldName Field name
+   * @param type Data field type
    */
   constructor(public title: string, public fieldName: string, type: string) {
     this.title = title

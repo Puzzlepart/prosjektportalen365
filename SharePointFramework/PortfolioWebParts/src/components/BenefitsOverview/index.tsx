@@ -30,7 +30,7 @@ export class BenefitsOverview extends Component<IBenefitsOverviewProps> {
   /**
    * Post fetch
    *
-   * @param {any]} results Results
+   * @param results Results
    */
   private _postTransform(results: any[]): any[] {
     const benefits = results

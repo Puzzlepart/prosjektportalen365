@@ -7,9 +7,13 @@
         "**/dist": true,
         "**/temp": true,
         "**/package-lock.json": true,
-        "**/pnpm-lock.yaml": true
+        "**/pnpm-lock.yaml": true,
+        "README.md": true,
+        "dev/README.md": true
     },
     "files.associations": {
-        "*.txt": "json"
+        "*.txt": "json",
+        ".README": "markdown",
+        "dev/.README": "markdown"
     },
 }

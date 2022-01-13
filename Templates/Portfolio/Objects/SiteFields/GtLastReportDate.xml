@@ -1,0 +1,1 @@
+<Field Description="{resource:SiteFields_GtLastReportDate_Description}" DisplayName="{resource:SiteFields_GtLastReportDate_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{B3004225-79DE-42CC-A4B7-80968A9AFC58}" Name="GtLastReportDate" StaticName="GtLastReportDate" Type="DateTime" ShowInEditForm="FALSE" ShowInDisplayForm="FALSE" />

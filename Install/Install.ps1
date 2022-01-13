@@ -10,6 +10,8 @@ Param(
     [switch]$SkipTaxonomy,
     [Parameter(Mandatory = $false, HelpMessage = "Skip Site Design")]
     [switch]$SkipSiteDesign,
+    [Parameter(Mandatory = $false, HelpMessage = "Skip default Site Design association")]
+    [switch]$SkipDefaultSiteDesignAssociation,
     [Parameter(Mandatory = $false, HelpMessage = "Skip app packages")]
     [switch]$SkipAppPackages,
     [Parameter(Mandatory = $false, HelpMessage = "Skip site creation")]
@@ -167,6 +169,9 @@ if (-not $Upgrade.IsPresent) {
 
 
 #region Install site design
+$SiteDesignName = [Uri]::UnescapeDataString($SiteDesignName)
+$SiteDesignDesc = [Uri]::UnescapeDataString("Samarbeid i et prosjektomr%C3%A5de fra Prosjektportalen")
+
 if (-not $SkipSiteDesign.IsPresent) {
     $SiteScriptIds = @()
 
@@ -196,17 +201,16 @@ if (-not $SkipSiteDesign.IsPresent) {
     }
 
     Try {
-        $SiteDesignName = [Uri]::UnescapeDataString($SiteDesignName)
         Write-Host "[INFO] Creating/updating site design [$SiteDesignName]"   
         Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
     
         $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName 
 
         if ($null -ne $SiteDesign) {
-            $SiteDesign = Set-PnPSiteDesign -Identity $SiteDesign -SiteScriptIds $SiteScriptIds -Description "" -Version "1"
+            $SiteDesign = Set-PnPSiteDesign -Identity $SiteDesign -SiteScriptIds $SiteScriptIds -Description $SiteDesignDesc -Version "1"
         }
         else {
-            $SiteDesign = Add-PnPSiteDesign -Title $SiteDesignName -SiteScriptIds $SiteScriptIds -Description "" -WebTemplate TeamSite
+            $SiteDesign = Add-PnPSiteDesign -Title $SiteDesignName -SiteScriptIds $SiteScriptIds -Description $SiteDesignDesc -WebTemplate TeamSite
         }
         if ([string]::IsNullOrEmpty($SiteDesignSecurityGroupId)) {
             Write-Host "[INFO] You have not specified -SiteDesignSecurityGroupId. Everyone will have View access to site design [$SiteDesignName]" -ForegroundColor Yellow
@@ -215,6 +219,7 @@ if (-not $SkipSiteDesign.IsPresent) {
             Write-Host "[INFO] Granting group $SiteDesignSecurityGroupId View access to site design [$SiteDesignName]"
             Grant-PnPSiteDesignRights -Identity $SiteDesign.Id.Guid -Principals @("c:0t.c|tenant|$SiteDesignSecurityGroupId")
         }
+
         Disconnect-PnPOnline
         Write-Host "[SUCCESS] Successfully created/updated site design [$SiteDesignName]" -ForegroundColor Green
     }
@@ -222,6 +227,26 @@ if (-not $SkipSiteDesign.IsPresent) {
         Write-Host "[ERROR] Failed to create/update site design: $($_.Exception.Message)" -ForegroundColor Red
         exit 0
     }
+}
+if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
+    Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
+    $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName 
+    Write-Host "[INFO] Setting default site design for hub [$Url] to [$SiteDesignName]"
+    Set-PnPHubSite -Identity $Url -SiteDesignId $SiteDesign.Id.Guid
+    Disconnect-PnPOnline
+}
+#endregion
+
+#region Remove pages with deprecated client side components
+if ($Upgrade.IsPresent) {
+    Try {
+        Connect-SharePoint -Url $Url -ErrorAction Stop
+        Write-Host "[INFO] Removing deprecated pages"    
+        ."$PSScriptRoot\Scripts\RemoveDeprecatedPages.ps1"
+        Disconnect-PnPOnline
+        Write-Host "[SUCCESS] Removed deprecated pages" -ForegroundColor Green
+    }
+    Catch {}
 }
 #endregion
 
@@ -263,20 +288,6 @@ if (-not $Upgrade.IsPresent) {
         Connect-SharePoint -Url $Url -ErrorAction Stop
         Remove-PnPFile -ServerRelativeUrl "$($Uri.LocalPath)/SitePages/Home.aspx" -Recycle -Force
         Disconnect-PnPOnline
-    }
-    Catch {}
-}
-#endregion
-
-
-#region Remove pages with deprecated client side components
-if ($Upgrade.IsPresent) {
-    Try {
-        Connect-SharePoint -Url $Url -ErrorAction Stop
-        Write-Host "[INFO] Removing deprecated pages"    
-        ."$PSScriptRoot\Scripts\RemoveDeprecatedPages.ps1"
-        Disconnect-PnPOnline
-        Write-Host "[SUCCESS] Removed deprecated pages" -ForegroundColor Green
     }
     Catch {}
 }

@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_ProjectColumns_Title}" Description="" DocumentTemplate="" TemplateType="100" Hidden="true" Url="{resource:Lists_ProjectColumns_Url}" EnableVersioning="true" EnableAttachments="false" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+<pnp:ListInstance Title="{resource:Lists_ProjectColumns_Title}" Description="" DocumentTemplate="" TemplateType="100" Hidden="true" Url="{resource:Lists_ProjectColumns_Url}" EnableVersioning="true" EnableAttachments="false" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100248005C277FADD45B7266F9151442472" Default="true" />
     </pnp:ContentTypeBindings>
@@ -27,7 +27,7 @@
             <JSLink>hierarchytaskslist.js</JSLink>
         </View>
     </pnp:Views>
-    <pnp:DataRows KeyColumn="GtInternalName" UpdateBehavior="Overwrite">
+    <pnp:DataRows KeyColumn="GtInternalName" UpdateBehavior="Skip">
         <!-- ID: 1 -->
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
@@ -405,6 +405,33 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
+        <pnp:DataRow> <!-- ID: 30 -->
+            <pnp:DataValue FieldName="GtSortOrder">300</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtLastReportDate_DisplayName}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtLastReportDate</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtLastReportDateOWSDATE</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldPortfolio">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+        </pnp:DataRow>
+            <pnp:DataRow> <!-- ID: 31 -->
+            <pnp:DataValue FieldName="GtSortOrder">310</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Prosjektstøtte</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtProjectSupport</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">RefinableString60</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">175</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
+
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

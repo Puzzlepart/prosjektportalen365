@@ -1,6 +1,6 @@
 import { dateAdd, PnPClientStorage, PnPClientStore, TypedHash } from '@pnp/common'
 import { ConsoleListener, Logger } from '@pnp/logging'
-import { SPConfiguration } from '@pnp/sp'
+import { SPConfiguration, Web } from '@pnp/sp'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
 import { ISPList } from '../../interfaces/ISPList'
@@ -15,24 +15,29 @@ import { IProjectDataServiceParams } from './IProjectDataServiceParams'
 import { IPropertyItemContext } from './IPropertyItemContext'
 
 export class ProjectDataService {
-  public spConfiguration: SPConfiguration
   private _storage: PnPClientStore
   private _storageKeys: TypedHash<string> = {
     _getPropertyItemContext: '{0}_propertyitemcontext',
-    getPhases: 'projectphases_terms'
+    getPhases: '{0}_projectphases_terms'
   }
+  private _web: Web
 
   /**
    * Creates a new instance of ProjectDataService
    *
-   * @param {IProjectDataServiceParams} _params Parameters
+   * @param _params - Parameters
+   * @param  _spConfiguration - SP configuration
    */
-  constructor(private _params: IProjectDataServiceParams) {
+  constructor(
+    private _params: IProjectDataServiceParams,
+    private _spConfiguration: SPConfiguration
+  ) {
     this._initStorage()
     if (_params.logLevel) {
       Logger.subscribe(new ConsoleListener())
       Logger.activeLogLevel = _params.logLevel
     }
+    this._web = new Web(this._params.webUrl)
   }
 
   /**
@@ -71,7 +76,7 @@ export class ProjectDataService {
           Logger.write(
             `(ProjectDataService) (_getPropertyItemContext) Checking if list ${this._params.propertiesListName} exists in web.`
           )
-          const [list] = await this._params.sp.web.lists
+          const [list] = await this._web.lists
             .filter(`Title eq '${this._params.propertiesListName}'`)
             .select('Id', 'DefaultEditFormUrl')
             .usingCaching()
@@ -85,7 +90,7 @@ export class ProjectDataService {
           Logger.write(
             `(ProjectDataService) (_getPropertyItemContext) Checking if there's a entry in list ${this._params.propertiesListName}.`
           )
-          const [item] = await this._params.sp.web.lists
+          const [item] = await this._web.lists
             .getById(list.Id)
             .items.select('Id')
             .top(1)
@@ -113,8 +118,8 @@ export class ProjectDataService {
     )
     return {
       ...context,
-      list: this._params.sp.web.lists.getById(context.listId),
-      item: this._params.sp.web.lists.getById(context.listId).items.getById(context.itemId)
+      list: this._web.lists.getById(context.listId),
+      item: this._web.lists.getById(context.listId).items.getById(context.itemId)
     }
   }
 
@@ -188,7 +193,7 @@ export class ProjectDataService {
         '(ProjectDataService) (getPropertiesData) Local property item not found. Retrieving data from portal site.'
       )
       const entity = await this._params.entityService
-        .configure(this.spConfiguration)
+        .configure(this._spConfiguration)
         .fetchEntity(this._params.siteId, this._params.webUrl)
       return {
         fieldValues: entity.fieldValues,
@@ -207,8 +212,7 @@ export class ProjectDataService {
    * @param {IGetPropertiesData} data Data
    */
   public async getPropertiesLastUpdated(data: IGetPropertiesData): Promise<number> {
-    // tslint:disable-next-line: naming-convention
-    const { Modified } = await this._params.sp.web.lists
+    const { Modified } = await this._web.lists
       .getById(data.propertiesListId)
       .items.getById(data.fieldValues.Id)
       .select('Modified')
@@ -291,7 +295,7 @@ export class ProjectDataService {
     listName: string
   ): Promise<{ [termGuid: string]: ProjectPhaseChecklistData }> {
     try {
-      const items = await this._params.sp.web.lists
+      const items = await this._web.lists
         .getByTitle(listName)
         .items.select('ID', 'Title', 'GtComment', 'GtChecklistStatus', 'GtProjectPhase')
         .get<IProjectPhaseChecklistItem[]>()
@@ -321,7 +325,7 @@ export class ProjectDataService {
    * @param {TypedHash} properties Properties
    */
   public async updateChecklistItem(listName: string, id: number, properties: TypedHash<any>) {
-    return await this._params.sp.web.lists.getByTitle(listName).items.getById(id).update(properties)
+    return await this._web.lists.getByTitle(listName).items.getById(id).update(properties)
   }
 
   /**

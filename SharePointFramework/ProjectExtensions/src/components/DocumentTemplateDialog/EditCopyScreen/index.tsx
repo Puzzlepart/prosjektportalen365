@@ -18,9 +18,9 @@ export const EditCopyScreen = ({ onStartCopy }: IEditCopyScreenProps) => {
   /**
    * On input changed
    *
-   * @param {string} id Id
-   * @param {Object} properties Updated properties
-   * @param {string} errorMessage Error message
+   * @param id Id
+   * @param properties Updated properties
+   * @param errorMessage Error message
    */
   function onInputChanged(id: string, properties: TypedHash<string>, errorMessage?: string) {
     setTemplates(

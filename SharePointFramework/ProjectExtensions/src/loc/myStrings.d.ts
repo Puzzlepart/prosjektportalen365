@@ -29,6 +29,7 @@ declare interface IProjectExtensionsStrings {
   CopyListItemsText: string
   CopyFilesText: string
   CopyProgressLabel: string
+  DescriptionLabel: string
   EditPropertiesLinkText: string
   ErrorDialogTitle: string
   ExtensionsTitle: string
@@ -79,6 +80,12 @@ declare interface IProjectExtensionsStrings {
   SetupAbortedText: string
   UnknownErrorText: string
   TemplateListContentConfigText: string
+  ProjectAlreadySetupMessage: string
+  ProjectAlreadySetupStack: string
+  ProjectProvisioningSuccessLogText: string
+  ProjectProvisioningStartLogText: string
+  ProvisionTemplateText: string
+  ContinueToProjectText: string
 }
 
 declare module 'ProjectExtensionsStrings' {

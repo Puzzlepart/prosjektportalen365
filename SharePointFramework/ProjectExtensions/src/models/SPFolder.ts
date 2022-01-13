@@ -18,7 +18,7 @@ export class SPFolder {
   /**
    * Constructor
    *
-   * @param {ISPFolderData} _data Data
+   * @param _data Data
    */
   constructor(private _data: ISPFolderData) {
     this.id = _data?.Id || _data?.UniqueId

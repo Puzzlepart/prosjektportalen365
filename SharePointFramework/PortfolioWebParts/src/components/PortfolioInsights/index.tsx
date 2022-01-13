@@ -6,6 +6,7 @@ import Chart from './Chart'
 import { Commands } from './Commands'
 import styles from './PortfolioInsights.module.scss'
 import { IPortfolioInsightsProps, IPortfolioInsightsState } from './types'
+import * as strings from 'PortfolioWebPartsStrings'
 
 /**
  * @component PortfolioInsights
@@ -17,7 +18,7 @@ export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortf
   /**
    * Constructor
    *
-   * @param {IPortfolioInsightsProps} props Props
+   * @param props Props
    */
   constructor(props: IPortfolioInsightsProps) {
     super(props)
@@ -82,7 +83,7 @@ export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortf
     if (this.state.chartData.isEmpty()) {
       return (
         <div className={styles.inner}>
-          <MessageBar messageBarType={MessageBarType.info}>Ingen prosjekter funnet.</MessageBar>
+          <MessageBar messageBarType={MessageBarType.info}>{strings.NoProjectsFound}</MessageBar>
         </div>
       )
     }
@@ -98,7 +99,7 @@ export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortf
   /**
    * On view changed
    *
-   * @param {PortfolioOverviewView} view View
+   * @param view View
    */
   private async _onViewChanged(view: PortfolioOverviewView) {
     const items = await this.props.dataAdapter.fetchDataForView(

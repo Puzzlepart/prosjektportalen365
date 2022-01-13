@@ -92,6 +92,7 @@ declare interface IPortfolioWebPartsStrings {
   NewViewText: string
   NoDefaultViewMessage: string
   NoGroupingText: string
+  NoProjectData: string
   NoProperties: string
   NoSearchResults: string
   NotSet: string
@@ -106,11 +107,17 @@ declare interface IPortfolioWebPartsStrings {
   ProjectStatusLinkText: string
   PropertyPaneDescription: string
   RecommendationLabel: string
+  ProjectTimelineInfoText: string
   ResourceAllocationInfoText: string
   ResourceLabel: string
   ResponsibleLabel: string
   RoleLabel: string
+  AllocationPercetageLabel: string
+  AllocationStatusLabel: string
+  CommentLabel: string
   SaveViewAsText: string
+  MyProjectsSearchBoxPlaceholderText: string
+  AllProjectsSearchBoxPlaceholderText: string
   SearchBoxPlaceholderText: string
   SearchBoxPlaceholderTextLabel: string
   ShowAllMeasurementsLinkText: string
@@ -132,10 +139,30 @@ declare interface IPortfolioWebPartsStrings {
   TileViewGroupName: string
   TitleLabel: string
   UnitLabel: string
+  TypeLabel: string
   ViewNotFoundMessage: string
   ViewsListNameLabel: string
   ProjectsListName: string
+  TimelineContentListName: string
   PortfolioManagerGroupName: string
+  ProjectTimelineItemInfo: string
+  LastPublishedStatusreport: string
+  MilestoneLabel: string
+  ProjectLabel: string
+  SubPhaseLabel: string
+  CurrentPhaseLabel: string
+  MilestoneDateLabel: string
+  StartDateLabel: string
+  EndDateLabel: string
+  BudgetTotalLabel: string
+  CostsTotalLabel: string
+  NoProjectsFound: string
+  NewLabel: string
+  ReadOnlyGroupName: string
+  DisplayAllProjects: string
+  MyProjectsLabel: string
+  AllProjectsLabel: string
+  NoAccessMessage: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

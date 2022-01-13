@@ -4,7 +4,7 @@ export interface IExcelExportServiceConfiguration {
   fileSaverVersion?: string
   xlsxVersion?: string
   options?: {
-    type: string
-    bookType: string
+    type: any
+    bookType: any
   }
 }

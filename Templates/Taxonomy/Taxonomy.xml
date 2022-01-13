@@ -14,6 +14,7 @@
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
                                         <pnp:Property Key="ShowOnFrontpage" Value="false" />
+                                        <pnp:Property Key="PhaseSubText" Value="" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Flere faser" ID="777cc6ac-4639-4633-85b9-f1ef61197c4d" CustomSortOrder="2" SourceTermId="777cc6ac-4639-4633-85b9-f1ef61197c4d">
@@ -22,6 +23,7 @@
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
                                         <pnp:Property Key="ShowOnFrontpage" Value="false" />
+                                        <pnp:Property Key="PhaseSubText" Value="" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Konsept" ID="99e85650-33de-4af4-b8db-edffbc8a310b" CustomSortOrder="3" SourceTermId="99e85650-33de-4af4-b8db-edffbc8a310b">
@@ -31,6 +33,7 @@
                                     <pnp:LocalCustomProperties>
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Portfolio" />
+                                        <pnp:Property Key="PhaseSubText" Value="" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Planlegge" ID="cda4f1e1-3488-4e57-8a04-6973df239689" CustomSortOrder="4" SourceTermId="cda4f1e1-3488-4e57-8a04-6973df239689">
@@ -40,6 +43,7 @@
                                     <pnp:LocalCustomProperties>
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Project" />
+                                        <pnp:Property Key="PhaseSubText" Value="" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Gjennomføre" ID="99d7765a-c786-4792-a1a1-866ef0f982b9" CustomSortOrder="5" SourceTermId="99d7765a-c786-4792-a1a1-866ef0f982b9">
@@ -49,6 +53,7 @@
                                     <pnp:LocalCustomProperties>
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Project" />
+                                        <pnp:Property Key="PhaseSubText" Value="" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Avslutte" ID="30e03c52-8c3e-4cfe-9b18-ca71593ce130" CustomSortOrder="6" SourceTermId="30e03c52-8c3e-4cfe-9b18-ca71593ce130">
@@ -58,6 +63,7 @@
                                     <pnp:LocalCustomProperties>
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Project" />
+                                        <pnp:Property Key="PhaseSubText" Value="" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Realisere" ID="b7ba84f0-70b9-45c4-8c50-8f73bf15bbec" CustomSortOrder="7" SourceTermId="b7ba84f0-70b9-45c4-8c50-8f73bf15bbec">
@@ -67,6 +73,7 @@
                                     <pnp:LocalCustomProperties>
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Portfolio" />
+                                        <pnp:Property Key="PhaseSubText" Value="" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                             </pnp:Terms>

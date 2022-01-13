@@ -55,6 +55,7 @@ export class ProjectInformation extends BaseWebPartComponent<
 
   public render() {
     if (this.state.hidden) return null
+
     return (
       <div className={styles.root}>
         <div className={styles.container}>

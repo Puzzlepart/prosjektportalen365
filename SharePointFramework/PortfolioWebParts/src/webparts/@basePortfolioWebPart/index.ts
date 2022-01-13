@@ -9,7 +9,6 @@ import assign from 'object-assign'
 import React from 'react'
 import * as ReactDom from 'react-dom'
 
-// tslint:disable-next-line: naming-convention
 export abstract class BasePortfolioWebPart<
   T extends IBaseComponentProps
 > extends BaseClientSideWebPart<T> {
@@ -21,8 +20,8 @@ export abstract class BasePortfolioWebPart<
   /**
    * Render component
    *
-   * @param {any} component Component
-   * @param {T} props Props
+   * @param component Component
+   * @param props Props
    */
   public renderComponent<T = any>(
     component: React.ComponentClass<T> | React.FunctionComponent<T>,

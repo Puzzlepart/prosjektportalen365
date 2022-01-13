@@ -15,27 +15,28 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
    * Configure the SP data adapter
    *
    * @param {ApplicationCustomizerContext | ListViewCommandSetContext} spfxContext Context
-   * @param {ISPDataAdapterConfiguration} settings Settings
+   * @param settings Settings
    */
   public configure(
     spfxContext: ApplicationCustomizerContext | ListViewCommandSetContext,
     settings: ISPDataAdapterConfiguration
   ) {
     super.configure(spfxContext, settings)
-    this.project = new ProjectDataService({
-      ...this.settings,
-      entityService: this.entityService,
-      propertiesListName: strings.ProjectPropertiesListName,
-      sp: this.sp
-    })
-    this.project.spConfiguration = this.spConfiguration
+    this.project = new ProjectDataService(
+      {
+        ...this.settings,
+        entityService: this.entityService,
+        propertiesListName: strings.ProjectPropertiesListName
+      },
+      this.spConfiguration
+    )
   }
 
   /**
    * Checks if the filename is valid
    *
-   * @param {string} folderServerRelativeUrl Folder server relative URL
-   * @param {string} name File name
+   * @param folderServerRelativeUrl Folder server relative URL
+   * @param name File name
    */
   public async isFilenameValid(folderServerRelativeUrl: string, name: string): Promise<string> {
     if (!validFilename(name)) return strings.FilenameInValidErrorText
@@ -52,8 +53,8 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
   /**
    * Get document templates from the specified library on the hub site
    *
-   * @param {string} libraryName Library name
-   * @param {string} viewXml View XML (CAML query)
+   * @param libraryName Library name
+   * @param viewXml View XML (CAML query)
    */
   public async getDocumentTemplates(libraryName: string, viewXml: string) {
     return await this.portal.getItems(
@@ -69,7 +70,7 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
   /**
    * Get folders in the specified folder/library
    *
-   * @param {string} folderRelativeUrl Folder URL
+   * @param folderRelativeUrl Folder URL
    */
   public async getFolders(folderRelativeUrl: string): Promise<any[]> {
     const folders = await this.sp.web

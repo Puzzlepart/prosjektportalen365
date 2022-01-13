@@ -17,8 +17,8 @@ export class CopyListData extends BaseTask {
   /**
    * Execute CopyListData
    *
-   * @param {IBaseTaskParams} params Task parameters
-   * @param {OnProgressCallbackFunction} onProgress On progress function
+   * @param params Task parameters
+   * @param onProgress On progress function
    */
   public async execute(
     params: IBaseTaskParams,
@@ -78,7 +78,7 @@ export class CopyListData extends BaseTask {
   /**
    * Get source items
    *
-   * @param {ListContentConfig} listContentConfig List config
+   * @param listContentConfig List config
    * @param {string[]} fields Fields
    */
   private async _getSourceItems<T = any>(
@@ -106,7 +106,7 @@ export class CopyListData extends BaseTask {
   /**
    * Get source fields
    *
-   * @param {ListContentConfig} config List config
+   * @param config List config
    */
   private async _getSourceFields(config: ListContentConfig): Promise<SPField[]> {
     try {
@@ -119,8 +119,8 @@ export class CopyListData extends BaseTask {
   /**
    * Process list items
    *
-   * @param {ListContentConfig} config List config
-   * @param {number} batchChunkSize Batch chunk size (defaults to 25)
+   * @param config List config
+   * @param batchChunkSize Batch chunk size (defaults to 25)
    */
   private async _processListItems(config: ListContentConfig, batchChunkSize = 25) {
     try {
@@ -166,7 +166,7 @@ export class CopyListData extends BaseTask {
   /**
    * Get file contents
    *
-   * @param {Web} web Web
+   * @param web Web
    * @param {IFile[]} files Files to get content for
    */
   private async _getFileContents(web: Web, files: any[]): Promise<any[]> {
@@ -190,9 +190,9 @@ export class CopyListData extends BaseTask {
   /**
    * Create folder hierarchy
    *
-   * @param {ListContentConfig} config List config
+   * @param config List config
    * @param {string[]} folders An array of folders to provision
-   * @param {string} progressText Progress text
+   * @param progressText Progress text
    */
   private async _provisionFolderHierarchy(
     config: ListContentConfig,
@@ -224,7 +224,7 @@ export class CopyListData extends BaseTask {
   /**
    * Process files
    *
-   * @param {ListContentConfig} config List config
+   * @param config List config
    */
   private async _processFiles(config: ListContentConfig) {
     try {
@@ -285,7 +285,7 @@ export class CopyListData extends BaseTask {
    * Get item properties
    *
    * @param {string[]} fields Fields
-   * @param {TypedHash} sourceItem Source item
+   * @param sourceItem Source item
    * @param {any[]} sourceFields Source fields
    */
   private _getProperties(fields: string[], sourceItem: TypedHash<any>, sourceFields: SPField[]) {

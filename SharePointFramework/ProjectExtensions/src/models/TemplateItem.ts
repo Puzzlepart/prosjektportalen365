@@ -39,6 +39,11 @@ export class TemplateItem {
   public title: string
 
   /**
+   * The template description
+   */
+  public description: string
+
+  /**
    * The project phase
    */
   public phase: string
@@ -72,6 +77,7 @@ export class TemplateItem {
     this.id = _item.File?.UniqueId || _item.Folder.UniqueId
     this.name = _item.File?.Name || _item.Folder?.Name
     this.title = _item.File?.Title || this.nameWithoutExtension || _item.Folder?.Name
+    this.description = _item.FieldValuesAsText.GtDescription
     this.phase = _item.FieldValuesAsText.GtProjectPhase
     this.newName = this.name
     this.newTitle = this.title
@@ -82,8 +88,8 @@ export class TemplateItem {
   /**
    * Copy item to folder
    *
-   * @param {Folder} folder Folder
-   * @param {boolean} shouldOverwrite Should overwrite
+   * @param folder Folder
+   * @param shouldOverwrite Should overwrite
    *
    * @returns {true} if the operation is successful
    */
@@ -108,7 +114,7 @@ export class TemplateItem {
   /**
    * On input changed
    *
-   * @param {Object} properties Updated properties
+   * @param properties Updated properties
    */
   public update(properties: TypedHash<string>) {
     Object.keys(properties).forEach((prop) => {

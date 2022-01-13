@@ -19,5 +19,6 @@
         <pnp:FieldRef ID="cb41572a-78c6-4e33-8505-b97bfd8fd162" Name="GtStatusGainAchievementComment" />
         <pnp:FieldRef ID="9a81b4e1-64ea-40c2-9be1-946f20e78999" Name="GtModerationStatus" />
         <pnp:FieldRef ID="fba7ced6-9970-4b14-ab9c-7c809310d86d" Name="GtSiteId" />
+        <pnp:FieldRef ID="B3004225-79DE-42CC-A4B7-80968A9AFC58" Name="GtLastReportDate"/>
     </pnp:FieldRefs>
 </pnp:ContentType>

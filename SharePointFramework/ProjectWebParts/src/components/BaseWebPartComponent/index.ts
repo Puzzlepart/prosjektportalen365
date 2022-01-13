@@ -1,5 +1,5 @@
 import { Logger, LogLevel } from '@pnp/logging'
-import * as React from 'react'
+import React from 'react'
 import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from './types'
 
 export class BaseWebPartComponent<

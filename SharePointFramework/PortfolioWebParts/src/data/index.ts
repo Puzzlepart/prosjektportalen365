@@ -9,6 +9,7 @@ import {
   ChartDataItem,
   DataField,
   ProjectListModel,
+  TimelineContentListModel,
   SPChartConfigurationItem,
   SPContentType
 } from 'models'
@@ -47,10 +48,10 @@ export class DataAdapter {
   /**
    * Fetch chart data (used by [PortfolioInsights])
    *
-   * @param {PortfolioOverviewView} view View configuration
-   * @param {IPortfolioConfiguration} configuration PortfolioOverviewConfiguration
-   * @param {string} chartConfigurationListName List name for chart configuration
-   * @param {string} siteId Site ID
+   * @param view View configuration
+   * @param configuration PortfolioOverviewConfiguration
+   * @param chartConfigurationListName List name for chart configuration
+   * @param siteId Site ID
    */
   public async fetchChartData(
     view: PortfolioOverviewView,
@@ -118,9 +119,9 @@ export class DataAdapter {
    *
    * @description Used by PortfolioOverview and PortfolioInsights
    *
-   * @param {PortfolioOverviewView} view
-   * @param {IPortfolioConfiguration} configuration
-   * @param {string} siteId
+   * @param view
+   * @param configuration
+   * @param siteId
    * @returns {Promise<IFetchDataForViewItemResult[]>}
    * @memberof DataAdapter
    */
@@ -129,7 +130,7 @@ export class DataAdapter {
     configuration: IPortfolioConfiguration,
     siteId: string
   ): Promise<IFetchDataForViewItemResult[]> {
-    const isCurrentUserInManagerGroup = await this._isUserInGroup(strings.PortfolioManagerGroupName)
+    const isCurrentUserInManagerGroup = await this.isUserInGroup(strings.PortfolioManagerGroupName)
     if (isCurrentUserInManagerGroup) {
       return await this.fetchDataForManagerView(view, configuration, siteId)
     } else {
@@ -141,10 +142,10 @@ export class DataAdapter {
    * Fetch data for regular view
    *
    *
-   * @param {PortfolioOverviewView} view View configuration
-   * @param {IPortfolioConfiguration} configuration PortfolioOverviewConfiguration
-   * @param {string} siteId Site ID
-   * @param {string} siteIdProperty Site ID property
+   * @param view View configuration
+   * @param configuration PortfolioOverviewConfiguration
+   * @param siteId Site ID
+   * @param siteIdProperty Site ID property
    */
   public async fetchDataForRegularView(
     view: PortfolioOverviewView,
@@ -182,10 +183,10 @@ export class DataAdapter {
    *
    * @description Used by PortfolioOverview and PortfolioInsights
    *
-   * @param {PortfolioOverviewView} view
-   * @param {IPortfolioConfiguration} configuration
-   * @param {string} siteId
-   * @param {string} [siteIdProperty='GtSiteIdOWSTEXT']
+   * @param view
+   * @param configuration
+   * @param siteId
+   * @param [siteIdProperty='GtSiteIdOWSTEXT']
    * @returns {Promise<IFetchDataForViewItemResult[]>}
    * @memberof DataAdapter
    */
@@ -202,6 +203,7 @@ export class DataAdapter {
         siteId,
         siteIdProperty
       )
+
       const items = projects.map((project) => {
         const [statusReport] = statusReports.filter(
           (res) => res[siteIdProperty] === project[siteIdProperty]
@@ -214,6 +216,7 @@ export class DataAdapter {
           SiteId: project[siteIdProperty]
         }
       })
+
       return items
     } catch (err) {
       throw err
@@ -222,10 +225,10 @@ export class DataAdapter {
 
   /**
    *  Fetches data for portfolio views
-   * @param {PortfolioOverviewView} view
-   * @param {IPortfolioConfiguration} configuration
-   * @param {string} siteId
-   * @param {string} [siteIdProperty='GtSiteIdOWSTEXT']
+   * @param view
+   * @param configuration
+   * @param siteId
+   * @param [siteIdProperty='GtSiteIdOWSTEXT']
    */
 
   private async _fetchDataForView(
@@ -262,6 +265,7 @@ export class DataAdapter {
     sites = sites.filter(
       (site) => projects.filter((res) => res[siteIdProperty] === site['SiteId']).length === 1
     )
+
     return {
       projects,
       sites,
@@ -270,11 +274,85 @@ export class DataAdapter {
   }
 
   /**
+   *  Fetches data for the Projecttimeline project
+   * @param siteId
+   * @param [siteIdProperty='GtSiteIdOWSTEXT']
+   * @param [costsTotalProperty='GtCostsTotalOWSCURR']
+   * @param [budgetTotalProperty='GtBudgetTotalOWSCURR']
+   */
+
+  public async _fetchDataForTimelineProject(siteId: string) {
+    const siteIdProperty: string = 'GtSiteIdOWSTEXT'
+    const costsTotalProperty: string = 'GtCostsTotalOWSCURR'
+    const budgetTotalProperty: string = 'GtBudgetTotalOWSCURR'
+
+    let [{ PrimarySearchResults: statusReports }] = await Promise.all([
+      sp.search({
+        ...DEFAULT_SEARCH_SETTINGS,
+        QueryTemplate: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} ${siteIdProperty}:{${siteId}}
+        ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        SelectProperties: [costsTotalProperty, budgetTotalProperty, siteIdProperty]
+      })
+    ])
+    statusReports = statusReports.map((item) => cleanDeep({ ...item }))
+    return {
+      statusReports
+    }
+  }
+
+  /**
+   *  Fetches items from timelinecontent list
+   *
+   * * Fetching list items
+   * * Maps the items to TimelineContentListModel
+   */
+  public async _fetchTimelineContentItems() {
+    let [timelineItems] = await Promise.all([
+      sp.web.lists
+        .getByTitle(strings.TimelineContentListName)
+        .items.select(
+          'Title',
+          'TimelineType',
+          'GtStartDate',
+          'GtEndDate',
+          'GtBudgetTotal',
+          'GtCostsTotal',
+          'SiteIdLookup/Title',
+          'SiteIdLookup/GtSiteId'
+        )
+        .expand('SiteIdLookup')
+        .get()
+    ])
+
+    timelineItems = timelineItems
+      .map((item) => {
+        if (item.SiteIdLookup?.Title) {
+          const model = new TimelineContentListModel(
+            item.SiteIdLookup?.GtSiteId,
+            item.SiteIdLookup?.Title,
+            item.Title,
+            item.TimelineType,
+            item.GtStartDate,
+            item.GtEndDate,
+            item.GtBudgetTotal,
+            item.GtCostsTotal
+          )
+          return model
+        }
+      })
+      .filter((p) => p)
+
+    return {
+      timelineItems
+    }
+  }
+
+  /**
    * Fetch project sites
    *
-   * @param {number} rowLimit Row limit
-   * @param {string} sortProperty Sort property
-   * @param {SortDirection} sortDirection Sort direction
+   * @param rowLimit Row limit
+   * @param sortProperty Sort property
+   * @param sortDirection Sort direction
    */
   public async fetchProjectSites(
     rowLimit: number,
@@ -310,10 +388,10 @@ export class DataAdapter {
   /**
    * Map projects
    *
-   * @param {ISPProjectItem[]} items Items
-   * @param {IGraphGroup[]} groups Groups
-   * @param {Object} photos Photos
-   * @param {ISPUser[]} users Users
+   * @param items Items
+   * @param groups Groups
+   * @param photos Photos
+   * @param users Users
    */
   private _mapProjects(
     items: ISPProjectItem[],
@@ -323,17 +401,19 @@ export class DataAdapter {
     const projects = items
       .map((item) => {
         const [group] = groups.filter((grp) => grp.id === item.GtGroupId)
-        if (!group) return null
         const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
         const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
         const model = new ProjectListModel(
           item.GtSiteId,
-          group.id,
-          group.displayName,
+          item.GtGroupId,
+          group?.displayName ?? item.Title,
           item.GtSiteUrl,
           item.GtProjectPhaseText,
+          item.GtStartDate,
+          item.GtEndDate,
           manager,
-          owner
+          owner,
+          !!group
         )
         return model
       })
@@ -343,6 +423,10 @@ export class DataAdapter {
 
   /**
    * Fetch enriched projects
+   * * Fetching project list items
+   * * Graph groups
+   * * Site users
+   * * Combines the data
    */
   public async fetchEncrichedProjects(): Promise<ProjectListModel[]> {
     await MSGraph.Init(this.context.msGraphClientFactory)
@@ -355,7 +439,10 @@ export class DataAdapter {
           'GtSiteUrl',
           'GtProjectOwnerId',
           'GtProjectManagerId',
-          'GtProjectPhaseText'
+          'GtProjectPhaseText',
+          'GtStartDate',
+          'GtEndDate',
+          'Title'
         )
         // eslint-disable-next-line quotes
         .filter("GtProjectLifecycleStatus ne 'Avsluttet'")
@@ -385,15 +472,15 @@ export class DataAdapter {
   /**
    * Checks if the current is in the specified group
    *
-   * @private
+   * @public
    *
-   * @param {string} groupName
+   * @param groupName
    *
    * @returns {Promise<boolean>}
    *
    * @memberof DataAdapter
    */
-  private async _isUserInGroup(groupName: string): Promise<boolean> {
+  public async isUserInGroup(groupName: string): Promise<boolean> {
     try {
       const [siteGroup] = await sp.web.siteGroups
         .select('CanCurrentUserViewMembership', 'Title')
@@ -408,8 +495,8 @@ export class DataAdapter {
   /**
    * Fetch items
    *
-   * @param {string} queryTemplate Query template
-   * @param {string[]} selectProperties Select properties
+   * @param queryTemplate Query template
+   * @param selectProperties Select properties
    */
   private async _fetchItems(queryTemplate: string, selectProperties: string[]) {
     const response = await sp.searchWithCaching({
@@ -425,8 +512,8 @@ export class DataAdapter {
   /**
    * Fetch items with data source name
    *
-   * @param {string} name Data source name
-   * @param {string[]} selectProperties Select properties
+   * @param name Data source name
+   * @param selectProperties Select properties
    */
   public async fetchItemsWithSource(name: string, selectProperties: string[]): Promise<any> {
     const dataSrc = await this._dataSourceService.getByName(name)
@@ -444,7 +531,7 @@ export class DataAdapter {
   /**
    * Fetch data sources by category
    *
-   * @param {string} category Data source category
+   * @param category Data source category
    */
   public fetchDataSources(category: string): Promise<DataSource[]> {
     try {

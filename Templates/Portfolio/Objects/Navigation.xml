@@ -1,14 +1,14 @@
 <pnp:Navigation xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:GlobalNavigation NavigationType="Structural">
         <pnp:StructuralNavigation RemoveExistingNodes="true">
-            <pnp:NavigationNode Title="{resource:ClientSidePages_Home_Title}" Url="{site}/SitePages/{resource:ClientSidePages_Home_PageName}" />
-            <pnp:NavigationNode Title="{resource:ClientSidePages_PortfolioOverview_Title}" Url="{site}/SitePages/{resource:ClientSidePages_PortfolioOverview_PageName}" />
+            <pnp:NavigationNode Title="{resource:ClientSidePages_PortfolioOverview_Title}" Url="{site}/SitePages/{resource:ClientSidePages_PortfolioOverview_PageName}" /> 
             <pnp:NavigationNode Title="{resource:ClientSidePages_PortfolioInsights_Title}" Url="{site}/SitePages/{resource:ClientSidePages_PortfolioInsights_PageName}" />
             <pnp:NavigationNode Title="{resource:ClientSidePages_BenefitOverview_Title}" Url="{site}/SitePages/{resource:ClientSidePages_BenefitOverview_PageName}" />
             <pnp:NavigationNode Title="{resource:ClientSidePages_ExperienceLog_Title}" Url="{site}/SitePages/{resource:ClientSidePages_ExperienceLog_PageName}" />
             <pnp:NavigationNode Title="{resource:ClientSidePages_DeliveryOverview_Title}" Url="{site}/SitePages/{resource:ClientSidePages_DeliveryOverview_PageName}" />
             <pnp:NavigationNode Title="{resource:ClientSidePages_RiskOverview_Title}" Url="{site}/SitePages/{resource:ClientSidePages_RiskOverview_PageName}" />
             <pnp:NavigationNode Title="{resource:ClientSidePages_ResourceAllocation_Title}" Url="{site}/SitePages/{resource:ClientSidePages_ResourceAllocation_PageName}" />
+            <pnp:NavigationNode Title="{resource:ClientSidePages_ProjectTimeline_Title}" Url="{site}/SitePages/{resource:ClientSidePages_ProjectTimeline_PageName}" />
         </pnp:StructuralNavigation>
     </pnp:GlobalNavigation>
 </pnp:Navigation>

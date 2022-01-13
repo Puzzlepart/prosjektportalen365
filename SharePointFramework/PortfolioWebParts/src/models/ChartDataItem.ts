@@ -7,8 +7,8 @@ export class ChartDataItem {
   /**
    * Constructor
    *
-   * @param {string} name Name
-   * @param {Object} data Data
+   * @param name Name
+   * @param data Data
    */
   constructor(name: string, data: { [key: string]: any }) {
     this.name = name
@@ -18,7 +18,7 @@ export class ChartDataItem {
   /**
    * Checks if there's a value for the data field
    *
-   * @param {DataField} field Field
+   * @param field Field
    */
   public hasValue(field: DataField): boolean {
     return this._getRawValue(field) !== null
@@ -27,7 +27,7 @@ export class ChartDataItem {
   /**
    * Get value for data field
    *
-   * @param {DataField} field Field
+   * @param field Field
    */
   public getValue(field: DataField) {
     const rawValue = this._getRawValue(field)
@@ -67,7 +67,7 @@ export class ChartDataItem {
   /**
    * Get raw value for data field
    *
-   * @param {DataField} field Field
+   * @param field Field
    */
   protected _getRawValue(field: DataField): any {
     const rawValue = this.data[field.fieldName]

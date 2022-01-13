@@ -6,10 +6,11 @@ import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndi
 import { SPDataAdapterBase } from 'pp365-shared/lib/data'
 import { ProjectDataService } from 'pp365-shared/lib/services'
 import * as strings from 'ProjectWebPartsStrings'
+import { IEntityField } from 'sp-entityportal-service/types'
 import { find } from 'underscore'
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
 
-export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
+class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
   private _name = 'SPDataAdapter'
 
@@ -22,23 +23,51 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
   public configure(spfxContext: WebPartContext, configuration: ISPDataAdapterConfiguration) {
     super.configure(spfxContext, configuration)
     taxonomy.setup({ spfxContext })
-    this.project = new ProjectDataService({
-      ...this.settings,
-      entityService: this.entityService,
-      propertiesListName: strings.ProjectPropertiesListName,
-      sp: this.sp,
-      taxonomy
-    })
-    this.project.spConfiguration = this.spConfiguration
+    this.project = new ProjectDataService(
+      {
+        ...this.settings,
+        entityService: this.entityService,
+        propertiesListName: strings.ProjectPropertiesListName,
+        taxonomy
+      },
+      this.spConfiguration
+    )
+  }
+
+  /**
+   * Get fields to sync
+   *
+   * @param fields - Fields
+   * @param customGroupName - Custom group name
+   *
+   * @returns Fields to sync
+   */
+  private _getFieldsToSync(fields: IEntityField[], customGroupName: string): any[] {
+    const fieldToSync = [
+      {
+        InternalName: 'Title',
+        TypeAsString: 'Text',
+        TextField: undefined
+      },
+      ...fields.filter(({ SchemaXml, InternalName, Group }) => {
+        const hideFromEditForm = SchemaXml.indexOf('ShowInEditForm="FALSE"') !== -1
+        const gtPrefix = InternalName.indexOf('Gt') === 0
+        const inCustomGroup = Group === customGroupName
+        if (hideFromEditForm) return false
+        if (!gtPrefix && !inCustomGroup) return false
+        return true
+      })
+    ]
+    return fieldToSync
   }
 
   /**
    * Sync property item from site to associated hub
    *
-   * @param {TypedHash} fieldValues Field values for the properties item
-   * @param {TypedHash} fieldValuesText Field values in text format for the properties item
-   * @param {TypedHash<any>} templateParameters Template parameters
-   * @param {void} progressFunc Progress function
+   * @param {TypedHash} fieldValues - Field values for the properties item
+   * @param {TypedHash} fieldValuesText - Field values in text format for the properties item
+   * @param {TypedHash<any>} templateParameters - Template parameters
+   * @param {void} progressFunc - Progress function
    */
   public async syncPropertyItemToHub(
     fieldValues: TypedHash<any>,
@@ -51,10 +80,6 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
         (obj, key) => ({ ...obj, [key.replace(/_x005f_/gm, '_')]: fieldValuesText[key] }),
         {}
       )
-      Logger.log({
-        message: `(${this._name}) (syncPropertyItemToHub) Starting sync of property item to hub.`,
-        level: LogLevel.Info
-      })
       progressFunc({
         label: strings.SyncProjectPropertiesValuesProgressDescription,
         description: strings.SyncProjectPropertiesValuesProgressDescription
@@ -62,33 +87,21 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
       const [fields, siteUsers] = await Promise.all([
         templateParameters.ProjectContentTypeId
           ? this.entityService
-              .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
-              .getEntityFields()
+            .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
+            .getEntityFields()
           : this.entityService.getEntityFields(),
-        this.sp.web.siteUsers
-          .select('Id', 'Email', 'LoginName')
-          .get<{ Id: number; Email: string; LoginName: string }[]>()
+        this.sp.web.siteUsers.select('Id', 'Email', 'LoginName').get<
+          {
+            Id: number
+            Email: string
+            LoginName: string
+          }[]
+        >()
       ])
-      Logger.log({
-        message: `(${this._name}) (syncPropertyItemToHub) Retreived ${fields.length} from entity.`,
-        level: LogLevel.Info
-      })
-      const fieldToSync = [
-        { InternalName: 'Title', TypeAsString: 'Text', TextField: undefined },
-        ...fields.filter((fld) => {
-          if (fld.SchemaXml.indexOf('ShowInEditForm="FALSE"') !== -1) return false
-          if (fld.InternalName.indexOf('Gt') !== 0) return false
-          return true
-        })
-      ]
-      Logger.log({
-        message: `(${this._name}) (syncPropertyItemToHub) Syncing ${fieldToSync.length} to hub entity.`,
-        data: { fieldToSync: fieldToSync.map((f) => f.InternalName) },
-        level: LogLevel.Info
-      })
+      const fieldsToSync = this._getFieldsToSync(fields, templateParameters.CustomSiteFields)
       const properties: TypedHash<any> = {}
-      for (let i = 0; i < fieldToSync.length; i++) {
-        const fld = fieldToSync[i]
+      for (let i = 0; i < fieldsToSync.length; i++) {
+        const fld = fieldsToSync[i]
         const fldValue = fieldValues[fld.InternalName]
         const fldValueTxt = fieldValuesText[fld.InternalName]
         switch (fld.TypeAsString) {
@@ -126,8 +139,17 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
               properties[fld.InternalName] = fldValue ? new Date(fldValue) : null
             }
             break
+          case 'Number':
           case 'Currency':
+            {
+              properties[fld.InternalName] = fldValue ? parseFloat(fldValue) : null
+            }
           case 'URL':
+            {
+              properties[fld.InternalName] = fldValue || null
+            }
+            break
+          case 'Boolean':
             {
               properties[fld.InternalName] = fldValue || null
             }
@@ -139,11 +161,6 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
             break
         }
       }
-      Logger.log({
-        message: `(${this._name}) (syncPropertyItemToHub) Syncing item to hub entity.`,
-        data: { properties },
-        level: LogLevel.Info
-      })
       await this.entityService.updateEntityItem(this.settings.siteId, properties)
       Logger.log({
         message: `(${this._name}) (syncPropertyItemToHub) Successfully synced item to hub entity.`,
@@ -184,4 +201,6 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
   public clearCache() {
     this.project.clearCache()
   }
-})()
+}
+
+export default new SPDataAdapter()

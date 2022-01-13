@@ -173,7 +173,17 @@ export class PortfolioOverviewCommands extends Component<
     this.setState({ isExporting: true })
     try {
       const { fltItems, fltColumns, selectedItems } = this.props
+
       const items = isArray(selectedItems) && selectedItems.length > 0 ? selectedItems : fltItems
+
+      fltColumns.forEach((col) => {
+        if (col.dataType === 'date') {
+          items.map((item) => {
+            item[col.fieldName] = new Date(item[col.fieldName])
+          })
+        }
+      })
+
       await ExcelExportService.export(items, fltColumns)
       this.setState({ isExporting: false })
     } catch (error) {

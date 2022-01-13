@@ -4,9 +4,9 @@ import { getObjectValue as get } from 'pp365-shared/lib/helpers'
 /**
  * Filter item
  *
- * @param {any} item Item
- * @param {string} searchTerm Search term
- * @param {IColumn[]} columns Columns
+ * @param item Item
+ * @param searchTerm Search term
+ * @param columns Columns
  */
 export const filterItem = (item: any, searchTerm: string, columns: IColumn[]) => {
   searchTerm = searchTerm.toLowerCase()
