@@ -8,6 +8,7 @@ Every change is marked with issue ID.
 ### Changed
 
 - Added support for syncing number and currency fields in project properties
+- Reformulated GtShowInPorfolio description to encompass more than uncertainties #615
 
 ## 1.3.1 - 20.12.2021
 
