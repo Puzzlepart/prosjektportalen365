@@ -1,5 +1,5 @@
 <pnp:ListInstance Title="{resource:Lists_Projects_Title}" TemplateType="100" Url="{resource:Lists_Projects_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100805E9E4FEAAB4F0EABAB2600D30DB70C" Default="true" />
     </pnp:ContentTypeBindings>
@@ -25,9 +25,9 @@
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="28be4cc9-bc5e-4a55-a557-f652b564ca75" Name="GtBudgetTotal" Hidden="true" />
-        <pnp:FieldRef ID="5af54348-bc38-4a18-a11f-0f84a96da4ea" Name="GtCostsTotal" Hidden="true" />
-        <pnp:FieldRef ID="9076c206-ca80-4e17-b6f4-6fa3b90c421a" Name="GtProjectForecast" Hidden="true" />
-        <pnp:FieldRef ID="f4623214-ab74-4160-82a7-37d46901bc1b" Name="GtBudgetLastReportDate" Hidden="true" />
+        <pnp:FieldRef ID="28be4cc9-bc5e-4a55-a557-f652b564ca75" Name="GtBudgetTotal" Hidden="true" DisplayName="" />
+        <pnp:FieldRef ID="5af54348-bc38-4a18-a11f-0f84a96da4ea" Name="GtCostsTotal" Hidden="true" DisplayName="" />
+        <pnp:FieldRef ID="9076c206-ca80-4e17-b6f4-6fa3b90c421a" Name="GtProjectForecast" Hidden="true" DisplayName="" />
+        <pnp:FieldRef ID="f4623214-ab74-4160-82a7-37d46901bc1b" Name="GtBudgetLastReportDate" Hidden="true" DisplayName="" />
     </pnp:FieldRefs>
 </pnp:ListInstance>

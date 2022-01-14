@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_Permission_Configuration_Title}" Description="{resource:Lists_Permission_Configuration_Description}" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_Permission_Configuration_Url}" Hidden="true" RemoveExistingContentTypes="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false" xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+<pnp:ListInstance Title="{resource:Lists_Permission_Configuration_Title}" Description="{resource:Lists_Permission_Configuration_Description}" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_Permission_Configuration_Url}" Hidden="true" RemoveExistingContentTypes="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100189583AF4D61934E9E196AF1630A8314" Default="true" />
     </pnp:ContentTypeBindings>
@@ -19,7 +19,7 @@
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" />
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" DisplayName="" />
     </pnp:FieldRefs>
     <pnp:DataRows KeyColumn="GtSPGroupName" UpdateBehavior="Overwrite">
         <pnp:DataRow>

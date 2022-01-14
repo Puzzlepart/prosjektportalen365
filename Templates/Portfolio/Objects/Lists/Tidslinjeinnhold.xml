@@ -1,5 +1,5 @@
 <pnp:ListInstance Title="{resource:Lists_TimelineContent_Title}" TemplateType="100" Url="{resource:Lists_TimelineContent_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_TimelineContent_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
             <Query>
@@ -22,7 +22,7 @@
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="e39c32db-a7da-4c93-9369-8aa5a7bde92d" Name="GtStartDate" />
+        <pnp:FieldRef ID="e39c32db-a7da-4c93-9369-8aa5a7bde92d" Name="GtStartDate" DisplayName="" />
         <pnp:FieldRef ID="16623c2a-3fd1-41c2-87e7-958583dd88da" Name="GtEndDate" DisplayName="Sluttdato (dato for milepæl)" />
         <pnp:FieldRef ID="28be4cc9-bc5e-4a55-a557-f652b564ca75" Name="GtBudgetTotal" DisplayName="Budsjett for fasen (dersom aktuelt)" />
         <pnp:FieldRef ID="5af54348-bc38-4a18-a11f-0f84a96da4ea" Name="GtCostsTotal" DisplayName="Kostnad for fasen (dersom aktuelt)" />

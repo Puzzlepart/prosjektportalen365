@@ -1,5 +1,5 @@
 <pnp:ListInstance Title="{resource:Lists_PortfolioViews_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_PortfolioViews_Url}" Hidden="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x01001BE34662FF90874E9FEB29B37B6BB18C" Default="true" />
     </pnp:ContentTypeBindings>
@@ -27,11 +27,11 @@
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" Required="true" />
-        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
-        <pnp:FieldRef ID="31e405e0-2890-439d-9c9f-42354154feda" Name="GtSearchQuery" Required="true" />
-        <pnp:FieldRef ID="b5fc712a-9908-4ba1-a8ac-7e51eca7a251" Name="GtPortfolioFabricIcon" Required="true" />
-        <pnp:FieldRef ID="43c79736-a2b6-452c-9995-6b72bba0ec16" Name="GtPortfolioColumns" Required="true" />
+        <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" Required="true" DisplayName="" />
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" DisplayName="" />
+        <pnp:FieldRef ID="31e405e0-2890-439d-9c9f-42354154feda" Name="GtSearchQuery" Required="true" DisplayName="" />
+        <pnp:FieldRef ID="b5fc712a-9908-4ba1-a8ac-7e51eca7a251" Name="GtPortfolioFabricIcon" Required="true" DisplayName="" />
+        <pnp:FieldRef ID="43c79736-a2b6-452c-9995-6b72bba0ec16" Name="GtPortfolioColumns" Required="true" DisplayName="" />
     </pnp:FieldRefs>
     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
         <pnp:DataRow>

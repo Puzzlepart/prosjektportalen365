@@ -1,5 +1,5 @@
 <pnp:ListInstance Title="{resource:Lists_ProjectColumnConfiguration_Title}" Description="" DocumentTemplate="" Hidden="true" TemplateType="100" Url="{resource:Lists_ProjectColumnConfiguration_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x01005CC009F95743674DAF31B3531CFFA586" Default="true" />
     </pnp:ContentTypeBindings>
@@ -22,10 +22,10 @@
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="6aefa59f-4300-4c22-94af-d77d05d792f6" Name="GtPortfolioColumn" Required="true" />
-        <pnp:FieldRef ID="bb6eac2d-9253-4cb9-a934-a9343ce875d2" Name="GtPortfolioColumnValue" Required="true" />
-        <pnp:FieldRef ID="4cfafd35-e26f-44cf-bb90-47aa65a41827" Name="GtPortfolioColumnColor" Required="true" />
-        <pnp:FieldRef ID="d066062c-2fd0-486a-a30a-44bcb3bead4a" Name="GtPortfolioColumnIconName" Required="true" />
+        <pnp:FieldRef ID="6aefa59f-4300-4c22-94af-d77d05d792f6" Name="GtPortfolioColumn" Required="true" DisplayName="" />
+        <pnp:FieldRef ID="bb6eac2d-9253-4cb9-a934-a9343ce875d2" Name="GtPortfolioColumnValue" Required="true" DisplayName="" />
+        <pnp:FieldRef ID="4cfafd35-e26f-44cf-bb90-47aa65a41827" Name="GtPortfolioColumnColor" Required="true" DisplayName="" />
+        <pnp:FieldRef ID="d066062c-2fd0-486a-a30a-44bcb3bead4a" Name="GtPortfolioColumnIconName" Required="true" DisplayName="" />
     </pnp:FieldRefs>
     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip" >
         <pnp:DataRow>
