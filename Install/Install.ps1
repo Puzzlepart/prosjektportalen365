@@ -109,10 +109,10 @@ function EnsurePnPPowerShell() {
         # PnP.PowerShell is availiable, lets check the version number
         # TODO: Set version number as variable
         if ( (get-module PnP.PowerShell -ListAvailable).Version -lt [version]'1.9.0') {
-            Update-Module PnP.PowerShell -AcceptLicense -Confirm:$true
+            Update-Module PnP.PowerShell -Scope CurrentUser
         }   
     } else {
-        Install-Module PnP.PowerShell -AllowPrerelease
+        Install-Module PnP.PowerShell -Scope CurrentUser
     }
     Import-Module PnP.PowerShell
     return (Get-Command Connect-PnPOnline).Version
@@ -324,36 +324,30 @@ if (-not $Upgrade.IsPresent) {
 #region Applying PnP templates 
 if (-not $SkipTemplate.IsPresent) {
     Try {
-        $BasePath = "$PSScriptRoot\Templates"
+        $BasePath = $PSScriptRoot + [IO.Path]::DirectorySeparatorChar + "Templates"
         Set-PnPTenantSite @AdminSite -NoScriptSite:$false -Url $Url -ErrorAction SilentlyContinue >$null 2>&1
 
-        # Applying additional check that we're connected to the correct site before applying templates
-        $CurrentContext = Get-PnPContext @Portfolio
-        if ($CurrentContext.Url -ne $Url) {
-            Write-Host "[ERROR] Attempted to install to $Url but connection was active against $($CurrentContext.Url)"
-            throw "Wrong connection identified - you are not connected to the correct site"
-        }
         if (-not $SkipTaxonomy.IsPresent -and -not $Upgrade.IsPresent) {
             Write-Host "[INFO] Applying PnP template [Taxonomy] to [$Url]"
-            Invoke-PnPSiteTemplate @Portfolio "$BasePath\Taxonomy.pnp" -ErrorAction Stop
+            Invoke-PnPSiteTemplate @Portfolio ($BasePath + [IO.Path]::DirectorySeparatorChar + "Taxonomy.pnp") -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP template [Taxonomy] to [$Url]" -ForegroundColor Green
         }
         
         Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
-        $Instance = Read-PnPSiteTemplate"$BasePath\Portfolio.pnp"
-        $Instance.SupportedUILanguages[0].LCID = $LanguageId
-        Invoke-PnPSiteTemplate @Portfolio -InputInstance $Instance -Handlers SupportedUILanguages
-        Invoke-PnPSiteTemplate @Portfolio "$BasePath\Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
+        $Instance = Read-PnPSiteTemplate ($BasePath + [IO.Path]::DirectorySeparatorChar + "Portfolio.pnp")
+        #$Instance.SupportedUILanguages[0].LCID = $LanguageId
+        #Invoke-PnPSiteTemplate @Portfolio -InputInstance $Instance -Handlers SupportedUILanguages
+        Invoke-PnPSiteTemplate @Portfolio ($BasePath + [IO.Path]::DirectorySeparatorChar + "Portfolio.pnp") -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
         Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
 
         if ($Upgrade.IsPresent) {
             Write-Host "[INFO] Applying PnP content template (Handlers:Files) to [$Url]"
-            Invoke-PnPSiteTemplate @Portfolio "$BasePath\Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop
+            Invoke-PnPSiteTemplate @Portfolio ($BasePath + [IO.Path]::DirectorySeparatorChar + "Portfolio_content.$LanguageCode.pnp") -Handlers Files -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
         }
         else {
             Write-Host "[INFO] Applying PnP content template to [$Url]"
-            Invoke-PnPSiteTemplate @Portfolio "$BasePath\Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop
+            Invoke-PnPSiteTemplate @Portfolio ($BasePath + [IO.Path]::DirectorySeparatorChar + "Portfolio_content.$LanguageCode.pnp") -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
         }
 
@@ -382,7 +376,7 @@ Catch {
 if (-not $SkipSearchConfiguration.IsPresent) {
     Try {
         Write-Host "[INFO] Importing Search Configuration"    
-        Set-PnPSearchConfiguration @AdminSite -Scope Subscription -Path "$PSScriptRoot/SearchConfiguration.xml" -ErrorAction SilentlyContinue   
+        Set-PnPSearchConfiguration @AdminSite -Scope Subscription -Path ($PSScriptRoot + [IO.Path]::DirectorySeparatorChar + "SearchConfiguration.xml") -ErrorAction SilentlyContinue   
         Write-Host "[SUCCESS] Successfully imported Search Configuration" -ForegroundColor Green
     }
     Catch {
