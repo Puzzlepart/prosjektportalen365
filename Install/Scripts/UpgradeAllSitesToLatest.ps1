@@ -3,6 +3,9 @@ Param(
     [string]$PortfolioUrl
 )
 
+$ScriptDir = (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
+. $ScriptDir\PP365Functions.ps1
+
 function EnsureProjectTimelinePage($Url) {
     Connect-PnPOnline -Url $Url -UseWebLogin
         
@@ -14,10 +17,10 @@ function EnsureProjectTimelinePage($Url) {
         $existingNode = $existingNodes | Where-Object { $_.Title -eq "Prosjekttidslinje" } -ErrorAction SilentlyContinue
         if ($null -eq $existingNode) {
             Write-Host "`t`tAdding project timeline page"
-            $page = Add-PnPClientSidePage -Name "Prosjekttidslinje.aspx" -HeaderLayoutType NoImage -PromoteAs None -LayoutType SingleWebPartAppPage -CommentsEnabled:$false -Publish
+            $page = Add-PnPClientSidePage -Name "Prosjekttidslinje.aspx" -PromoteAs None -LayoutType SingleWebPartAppPage -CommentsEnabled:$false -Publish
             Write-Host "`t`tAdding project timeline app"
             $webpart = Add-PnPClientSideWebPart -Page "Prosjekttidslinje" -Component "Prosjekttidslinje" -WebPartProperties '{"listName":"Tidslinjeinnhold","showFilterButton":true,"showTimeline":true,"showInfoMessage":true,"showCmdTimelineList":true,"showTimelineList":true,"title":"Prosjekttidslinje"}'
-            $page = Set-PnPClientSidePage -Identity "Prosjekttidslinje" -LayoutType SingleWebPartAppPage -HeaderLayoutType NoImage -HeaderType None -Publish 
+            $page = Set-PnPClientSidePage -Identity "Prosjekttidslinje" -LayoutType SingleWebPartAppPage -HeaderType None -Publish 
             Write-Host "`t`tAdding project timeline navigation item"
             $node = Add-PnPNavigationNode -Location QuickLaunch -Title "Prosjekttidslinje" -Url "SitePages/Prosjekttidslinje.aspx"
         }
@@ -40,7 +43,8 @@ $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".share
 Connect-PnPOnline -Url $AdminSiteUrl -UseWebLogin
 
 $PPHubSite = Get-PnPHubSite -Identity $PortfolioUrl
-$ProjectsInHub = Get-PnPHubSiteChild -Identity $PPHubSite
+
+$ProjectsInHub = Get-PP365HubSiteChild -Identity $PPHubSite
 
 # Get current logged in user
 $ctx = Get-PnPContext
