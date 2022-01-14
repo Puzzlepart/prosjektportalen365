@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:Preferences></pnp:Preferences>
     <pnp:Templates ID="CONTAINER-PP">
-        <pnp:ProvisioningTemplate ID="TEMPLATE-PP-TAXONOMY" Version="0">
+        <pnp:ProvisioningTemplate ID="TEMPLATE-PP-TAXONOMY" Version="0" DisplayName="PP Taxonomy">
             <pnp:TermGroups>
                 <pnp:TermGroup Name="Prosjektportalen" ID="c56bb677-f782-4cf6-a6d6-17685ee9f19d" Description=" ">
                     <pnp:TermSets>
