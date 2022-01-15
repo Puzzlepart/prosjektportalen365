@@ -10,6 +10,7 @@ Every change is marked with issue ID.
 - Added support for syncing number and currency fields in project properties
 - Reformulated GtShowInPorfolio description to encompass more than uncertainties #615
 - Changed behavior when deleting a status report #597
+- Changed behavior when deleting timeline item #569
 
 ## 1.3.1 - 20.12.2021
 
