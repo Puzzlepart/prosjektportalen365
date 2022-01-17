@@ -5,6 +5,11 @@ Every change is marked with issue ID.
 
 ## 1.3.2 - 07.01.2022
 
+### Added
+
+- Added GtProjectLifecycleStatus in "Prosjektegenskaper" and as a filter in "Porteføljeoversikt"
+
+
 ### Changed
 
 - Added support for syncing number and currency fields in project properties
