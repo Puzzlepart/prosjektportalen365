@@ -7,7 +7,7 @@ Every change is marked with issue ID.
 
 ### Added
 
-- Added GtProjectLifecycleStatus in "Prosjektegenskaper" and as a filter in "Porteføljeoversikt"
+- Added GtProjectLifecycleStatus in "Prosjektegenskaper" and as a filter in "Porteføljeoversikt" #587
 
 
 ### Changed
