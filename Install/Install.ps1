@@ -334,10 +334,14 @@ if (-not $SkipTemplate.IsPresent) {
         }
         
         Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
-        $Instance = Read-PnPSiteTemplate ($BasePath + [IO.Path]::DirectorySeparatorChar + "Portfolio.pnp")
-        #$Instance.SupportedUILanguages[0].LCID = $LanguageId
-        #Invoke-PnPSiteTemplate @Portfolio -InputInstance $Instance -Handlers SupportedUILanguages
-        Invoke-PnPSiteTemplate @Portfolio ($BasePath + [IO.Path]::DirectorySeparatorChar + "Portfolio.pnp") -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
+        # $UILanguage = [PnP.Framework.Provisioning.Model.SupportedUILanguage]::new()
+        # $UILanguage.LCID = $LanguageId
+
+        # $Instance = Read-PnPSiteTemplate ($BasePath + [IO.Path]::DirectorySeparatorChar + "Portfolio.pnp")
+        # $Instance.SupportedUILanguages = @($UILanguage)
+        # Invoke-PnPSiteTemplate @Portfolio -InputInstance $Instance -Handlers SupportedUILanguages
+        Invoke-PnPSiteTemplate @Portfolio ($BasePath + [IO.Path]::DirectorySeparatorChar + "Portfolio.pnp") -ErrorAction Stop
+        
         Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
 
         if ($Upgrade.IsPresent) {
