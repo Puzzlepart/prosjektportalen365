@@ -10,6 +10,12 @@ export interface IProjectTemplateSPItem {
   ListContentConfigLookupId?: number[]
   File?: { UniqueId: string; Name: string; Title: string; ServerRelativeUrl: string }
   FieldValuesAsText?: TypedHash<string>
+  GtProjectTemplateId?: number
+  GtProjectExtensionsId?: number[]
+  GtProjectColumns: string
+  GtProjectCustomColumns: string
+  GtProjectContentType: string
+  GtProjectStatusContentType: string
 }
 
 export class ProjectTemplate implements IDropdownOption {
@@ -21,22 +27,51 @@ export class ProjectTemplate implements IDropdownOption {
   public iconName: string
   public serverRelativeUrl: string
   public listContentConfigIds: number[]
+  public projectTemplateId: number
+  public listExtensionIds: number[]
+  public projectContentType: string
+  public projectStatusContentType: string
+  public projectColumns: string
+  public projectCustomColumns: string
 
   constructor(spItem: IProjectTemplateSPItem, public web: Web) {
     this.id = spItem.Id
-    this.key = `projecttemplate_${this.id}`
-    this.text = spItem.File.Title
+    this.key = `reworkedTemplate${this.id}`
+    this.text = spItem.FieldValuesAsText.Title
     this.subText = spItem.FieldValuesAsText.GtDescription
-    this.isDefault = spItem.IsDefaultTemplate
+    this.isDefault = spItem?.IsDefaultTemplate
     this.iconName = spItem.IconName
-    this.serverRelativeUrl = spItem.File.ServerRelativeUrl
     this.listContentConfigIds =
       spItem.ListContentConfigLookupId && spItem.ListContentConfigLookupId.length > 0
         ? spItem.ListContentConfigLookupId
         : null
+    this.projectTemplateId = spItem.GtProjectTemplateId
+    this.listExtensionIds =
+      spItem.GtProjectExtensionsId && spItem.GtProjectExtensionsId.length > 0
+        ? spItem.GtProjectExtensionsId
+        : null
+    this.projectContentType = spItem.GtProjectContentType
+    this.projectStatusContentType = spItem.GtProjectStatusContentType
+    this.projectColumns = spItem.GtProjectColumns
+    this.projectCustomColumns = spItem.GtProjectCustomColumns
+
+    this.setServerRelativeUrl()
   }
 
   public async getSchema(): Promise<Schema> {
-    return await this.web.getFileByServerRelativeUrl(this.serverRelativeUrl).getJSON()
+    const schema = await this.web.getFileByServerRelativeUrl(this.serverRelativeUrl).getJSON()
+      schema.Parameters.ProjectContentTypeId = this?.projectContentType
+      schema.Parameters.ProjectStatusContentTypeId = this?.projectStatusContentType
+
+    return schema
+  }
+
+  private async setServerRelativeUrl(): Promise<void> {
+    const fileInfo = await this.web.lists
+      .getByTitle('Prosjektmaler')
+      .items.expand('File')
+      .getById(this.projectTemplateId)
+      .file.get()
+    this.serverRelativeUrl = fileInfo.ServerRelativeUrl
   }
 }
