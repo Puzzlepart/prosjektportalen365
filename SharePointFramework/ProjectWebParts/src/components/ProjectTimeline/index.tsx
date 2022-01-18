@@ -351,8 +351,12 @@ export class ProjectTimeline extends BaseWebPartComponent<
   private async _deleteTimelineItem(item: any) {
     const list = this._web.lists.getByTitle(strings.TimelineContentListName)
     await list.items.getById(item.Id).delete()
-    window.location.hash = ''
-    document.location.reload()
+    try {
+      const data = await this._fetchData()
+      this.setState({ data, loading: false })
+    } catch (error) {
+      this.setState({ error, loading: false })
+    }
   }
 
   /**
