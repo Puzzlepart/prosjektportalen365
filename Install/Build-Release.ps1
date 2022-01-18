@@ -16,12 +16,10 @@ Write-Host "[Building release v$($PACKAGE_FILE.version)]" -ForegroundColor Cyan
 
 #region Paths
 $START_PATH                     = Get-Location
-$ROOT_PATH                      = "$PSScriptRoot/.."
-mkdir $ROOT_PATH/release >$null 2>&1
 $SHAREPOINT_FRAMEWORK_BASEPATH  = "$ROOT_PATH/SharePointFramework"
 $PNP_TEMPLATES_BASEPATH         = "$ROOT_PATH/Templates"
 $SITE_SCRIPTS_BASEPATH          = "$ROOT_PATH/SiteScripts/Src"
-$PNP_BUNDLE_PATH                = "$PSScriptRoot/SharePointPnPPowerShellOnline"
+$PNP_BUNDLE_PATH                = "$PSScriptRoot/PnP.PowerShell"
 $GIT_HASH                       = git log --pretty=format:'%h' -n 1
 $RELEASE_NAME                   = "$($PACKAGE_FILE.name)-$($PACKAGE_FILE.version).$($GIT_HASH)"
 $RELEASE_PATH                   = "$ROOT_PATH/release/$($RELEASE_NAME)"
