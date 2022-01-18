@@ -13,5 +13,6 @@
         <pnp:FieldRef ID="2a0d7d7e-44f4-40e5-a444-3df1e07ef71d" Name="GtPiWidthXl" />
         <pnp:FieldRef ID="af569b60-0010-4108-9c92-cb03a90b7498" Name="GtPiWidthXxl" />
         <pnp:FieldRef ID="41d29afe-b026-4417-9166-3e22dda59d78" Name="GtPiWidthXxxl" />
+        <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" />
     </pnp:FieldRefs>
 </pnp:ContentType>

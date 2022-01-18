@@ -20,5 +20,6 @@
         <pnp:FieldRef ID="60dac89b-70f5-4a49-87a9-b253bd5df7ca" Name="GtPiYTickInterval" />
         <pnp:FieldRef ID="ed9bac4f-1bd5-4a54-9b9d-ba7d4af8ac5a" Name="GtPiXAxisTitle" />
         <pnp:FieldRef ID="5b12b6c1-2db4-4280-a52f-d11f62068162" Name="GtPiValueSuffix" />
+        <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" />
     </pnp:FieldRefs>
 </pnp:ContentType>
