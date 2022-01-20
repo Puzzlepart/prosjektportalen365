@@ -2,14 +2,15 @@ import React, { FunctionComponent, useState } from 'react'
 import styles from './Card.module.scss'
 import { IProjectCardProps } from '../types'
 import { placeholderImage } from '../../types'
-import { DocumentCardTitle } from 'office-ui-fabric-react/lib/DocumentCard'
+import { DocumentCardActions, DocumentCardTitle } from 'office-ui-fabric-react/lib/DocumentCard'
 import { Facepile, IFacepilePersona, PersonaSize } from 'office-ui-fabric-react'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
 import strings from 'PortfolioWebPartsStrings'
 
 export const Card: FunctionComponent<IProjectCardProps> = ({
   project,
-  shouldTruncateTitle
+  shouldTruncateTitle,
+  actions
 }: IProjectCardProps) => {
   const ownerPersona = {
     personaName: project.owner
@@ -41,12 +42,14 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
       <hr />
       <div className={styles.content}>
         <div className={styles.phase}>
-          <Icon className={styles.icon} iconName='AlarmClock' />
+          <Icon className={styles.phaseIcon} iconName='AlarmClock' />
           <p className={styles.text}>{project.phase ? project.phase : 'Ikke satt'}</p>
         </div>
       </div>
       <div className={styles.footer}>
         <Facepile personaSize={PersonaSize.size32} personas={personas} />
+        {/* <Icon className={styles.infoIcon} iconName='OpenInNewWindow' /> */}
+        <DocumentCardActions actions={actions} />
       </div>
     </div>
   )
