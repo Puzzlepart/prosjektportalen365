@@ -1,13 +1,12 @@
-import React, {FunctionComponent, useEffect} from 'react'
-import {IProgramBenefitsProps, BenefitColumns, selectProperties} from './ProgramBenefitsProps'
+import React, {FunctionComponent} from 'react'
+import {IProgramBenefitsProps, selectProperties} from './ProgramBenefitsProps'
+import { getColumns } from 'pp365-portfoliowebparts/lib/components/BenefitsOverview/columns'
 import {PortfolioAggregation} from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
 import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from 'pp365-portfoliowebparts/lib/models'
 import {CONTENT_TYPE_ID_BENEFITS, CONTENT_TYPE_ID_MEASUREMENTS, CONTENT_TYPE_ID_INDICATORS} from 'pp365-portfoliowebparts/lib/components/BenefitsOverview/config'
 
 export const ProgramBenefits: FunctionComponent<IProgramBenefitsProps> = (props) => {
-
-  useEffect(() => {    
-  }, []);
+  const columns = getColumns({hiddenColumns: []})
 
     return (
       <PortfolioAggregation 
@@ -18,14 +17,14 @@ export const ProgramBenefits: FunctionComponent<IProgramBenefitsProps> = (props)
       showExcelExportButton={props.properties.showExcelExportButton}
       showSearchBox={props.properties.showSearchBox}
       dataSource={props.properties.dataSource}
-      columns={BenefitColumns}
+      columns={columns}
       selectProperties={selectProperties}
       postTransform={_postTransform}
       lockedColumns={true}
       isParent={true}
       onUpdateProperty={props.onUpdateProperty}
       />
-    );
+    )
   
 }
 
