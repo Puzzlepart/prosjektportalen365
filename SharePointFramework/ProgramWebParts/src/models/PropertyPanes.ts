@@ -1,4 +1,4 @@
-import { DisplayMode } from "@microsoft/sp-core-library";
+import { DisplayMode } from '@microsoft/sp-core-library'
 
 export interface IAggregatedPortfolioPropertyPane {
     dataSource: string;

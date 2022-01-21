@@ -1,12 +1,8 @@
-import React, { FunctionComponent, useEffect } from 'react'
-import { IProgramRiskOverview, SelectedRiskProperties, riskColumns } from './ProgramRiskProps'
+import React, { FunctionComponent } from 'react'
+import { IProgramRiskOverview, SelectedRiskProperties } from './ProgramRiskProps'
 import { PortfolioAggregation } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
 
 export const ProgramRiskOverview: FunctionComponent<IProgramRiskOverview> = (props) => {
-
-  useEffect(() => {
-
-  }, []);
 
   return (
     <>
@@ -23,7 +19,7 @@ export const ProgramRiskOverview: FunctionComponent<IProgramRiskOverview> = (pro
         onUpdateProperty={props.onUpdateProperty}
       />
     </>
-  );
+  )
 }
 
 

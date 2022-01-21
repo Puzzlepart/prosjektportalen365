@@ -204,7 +204,7 @@ export class DataAdapter {
           queryArray.push(queryString)
           queryString = ''
         }
-        if (index == this._childProjects.length - 1) {
+        if (index === this._childProjects.length - 1) {
           queryArray.push(queryString)
         }
       })
@@ -236,7 +236,7 @@ export class DataAdapter {
           queryArray.push(queryString)
           queryString = ''
         }
-        if (index == this._childProjects.length - 1) {
+        if (index === this._childProjects.length - 1) {
           queryArray.push(queryString)
         }
       })
@@ -387,7 +387,7 @@ export class DataAdapter {
     ])
     timelineItems = timelineItems
       .map((item) => {
-        if (item?.SiteIdLookup?.Title && _.find(this._childProjects, ((child) => (child?.SiteId == item?.SiteIdLookup?.GtSiteId) || (item?.SiteIdLookup?.GtSiteId == this?.context?.pageContext?.site?.id?.toString())))) {
+        if (item?.SiteIdLookup?.Title && _.find(this._childProjects, ((child) => (child?.SiteId === item?.SiteIdLookup?.GtSiteId) || (item?.SiteIdLookup?.GtSiteId === this?.context?.pageContext?.site?.id?.toString())))) {
           const model = new TimelineContentListModel(
             item.SiteIdLookup?.GtSiteId, 
             item.SiteIdLookup?.Title,
@@ -479,7 +479,7 @@ export class DataAdapter {
 
     projects = projects
       .map((project) => {
-        return this._childProjects.some((child) => child?.SiteId == project?.siteId || project?.siteId == this.context.pageContext.site.id.toString())
+        return this._childProjects.some((child) => child?.SiteId === project?.siteId || project?.siteId === this.context.pageContext.site.id.toString())
           ? project
           : undefined
       })

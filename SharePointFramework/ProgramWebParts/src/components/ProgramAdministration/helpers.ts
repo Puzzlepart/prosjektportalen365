@@ -1,4 +1,4 @@
-import { SPRest, sp } from '@pnp/sp'
+import { SPRest } from '@pnp/sp'
 import { ChildProject } from 'models'
 import _ from 'underscore'
 

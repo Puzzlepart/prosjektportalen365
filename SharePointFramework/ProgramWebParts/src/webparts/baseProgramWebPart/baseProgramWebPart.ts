@@ -39,9 +39,9 @@ export abstract class BaseProgramWebPart<
 
   public async getChildProjectSiteIds(): Promise<void> {
     try {
-    const projectProperties = await sp.web.lists.getByTitle("Prosjektegenskaper").items.getById(1).get()
+    const projectProperties = await sp.web.lists.getByTitle('Prosjektegenskaper').items.getById(1).get()
     const childProjects: ChildProject[] = JSON.parse(projectProperties.GtChildProjects)
-    this.childProjects = childProjects.length > 0 ? childProjects : [{SiteId:'00000000-0000-0000-0000-000000000000', Title:""}]    
+    this.childProjects = childProjects.length > 0 ? childProjects : [{SiteId:'00000000-0000-0000-0000-000000000000', Title:''}]    
     } catch (error) {
       Logger.write(error, LogLevel.Error)
     }

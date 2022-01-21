@@ -2,9 +2,9 @@ import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
 import { IPropertyPaneConfiguration, IPropertyPaneDropdownOption, PropertyPaneDropdown, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane'
 import * as strings from 'ProgramWebPartsStrings'
-import {ProgramOverview} from '../../components/ProgramProjectOverview/ProgramProjectOverview';
-import {IProjectProgramOverviewProps} from '../../components/ProgramProjectOverview/IProgramProjectOverviewProps';
-import {IPortfolioConfiguration} from 'pp365-portfoliowebparts/lib/interfaces';
+import {ProgramOverview} from '../../components/ProgramProjectOverview/ProgramProjectOverview'
+import {IProjectProgramOverviewProps} from '../../components/ProgramProjectOverview/IProgramProjectOverviewProps'
+import {IPortfolioConfiguration} from 'pp365-portfoliowebparts/lib/interfaces'
 import {BaseProgramWebPart} from '../baseProgramWebPart/baseProgramWebPart'
 import {PROPERTYPANE_CONFIGURATION_PROPS} from 'pp365-portfoliowebparts/lib/webparts/portfolioOverview'
 import {IBaseWebPartComponentProps} from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
@@ -41,7 +41,7 @@ export default class programProjectOverview extends BaseProgramWebPart<IProgramO
         showSearchBox: this.properties.showSearchBox
       },
       isParentProject: true
-    });
+    })
   }
 
   protected onDispose(): void {

@@ -1,9 +1,9 @@
-import { DefaultButton, Dialog, DialogFooter, PrimaryButton, DialogType, SelectionMode, Spinner, SpinnerSize, ShimmeredDetailsList } from 'office-ui-fabric-react'
+import { DefaultButton, Dialog, DialogFooter, PrimaryButton, DialogType, SelectionMode, ShimmeredDetailsList } from 'office-ui-fabric-react'
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react'
 import { IAddProjectProps } from './types'
 import { ProjectTable } from '../ProjectTable'
 import { fields } from '../index'
-import { useStore } from '../store';
+import { useStore } from '../store'
 import { addChildProject, fetchAvailableProjects } from '../helpers'
 import { shimmeredColumns } from '../types'
 import styles from '../programAdministration.module.scss'
@@ -31,12 +31,12 @@ export const AddProjectDialog: FunctionComponent<IAddProjectProps> = ({ sp }) =>
 
     return (
         <>
-            <Dialog hidden={false} onDismiss={() => toggleProjectDialog()} maxWidth={"1000px"} dialogContentProps={dialogContentProps} >
+            <Dialog hidden={false} onDismiss={() => toggleProjectDialog()} maxWidth={'1000px'} dialogContentProps={dialogContentProps} >
                 <div className={styles.dialogContent}>
                     {isLoading ?
                         <ShimmeredDetailsList items={[]} shimmerLines={15} columns={shimmeredColumns} enableShimmer />
                         :
-                        <ProjectTable fields={fields} projects={projects} width={"50em"} onSelect={(item) => selectedItem.current = item} selectionMode={SelectionMode.multiple} />}
+                        <ProjectTable fields={fields} projects={projects} width={'50em'} onSelect={(item) => selectedItem.current = item} selectionMode={SelectionMode.multiple} />}
                 </div>
                 <DialogFooter>
                     <PrimaryButton text={strings.Add} onClick={() => {
@@ -55,4 +55,4 @@ export const AddProjectDialog: FunctionComponent<IAddProjectProps> = ({ sp }) =>
 const dialogContentProps = {
     type: DialogType.largeHeader,
     title: strings.ProgramAddProject
-};
+}

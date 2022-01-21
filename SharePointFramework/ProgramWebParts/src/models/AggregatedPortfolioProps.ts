@@ -1,5 +1,5 @@
-import { DataAdapter } from "data";
-import { IAggregatedPortfolioPropertyPane } from "./PropertyPanes";
+import { DataAdapter } from 'data'
+import { IAggregatedPortfolioPropertyPane } from './PropertyPanes'
 
 export interface IAggregatedPortfolioProps {
     title: string

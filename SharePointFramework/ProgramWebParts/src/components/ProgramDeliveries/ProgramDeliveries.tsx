@@ -1,12 +1,10 @@
-import React, {FunctionComponent, useEffect} from 'react'
+import React, {FunctionComponent} from 'react'
 import {IProgramDeliveriesProps} from './ProgramDeliveriesProps'
 import {PortfolioAggregation} from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
 
 
 export const ProgramDeliveries: FunctionComponent<IProgramDeliveriesProps> = (props) => {
 
-  useEffect(() => {    
-  }, []);
     return (
       <PortfolioAggregation 
       title={props.webPartTitle}
@@ -22,7 +20,7 @@ export const ProgramDeliveries: FunctionComponent<IProgramDeliveriesProps> = (pr
       columns={props.properties.columns}
       isParent={true}
       />
-    );
+    )
   
 }
 

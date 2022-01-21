@@ -1,11 +1,11 @@
 import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
 import * as strings from 'ProgramWebPartsStrings'
-import {ProgramDeliveries} from 'components/ProgramDeliveries/ProgramDeliveries';
+import {ProgramDeliveries} from 'components/ProgramDeliveries/ProgramDeliveries'
 import {BaseProgramWebPart} from '../baseProgramWebPart/baseProgramWebPart'
 import {IBaseWebPartComponentProps} from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
-import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane';
-import { IProgramDeliveriesProps } from 'components/ProgramDeliveries/ProgramDeliveriesProps';
+import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane'
+import { IProgramDeliveriesProps } from 'components/ProgramDeliveries/ProgramDeliveriesProps'
 
 interface IProgramDeliveriesWebPartProps extends IBaseWebPartComponentProps {
   webPartTitle: string

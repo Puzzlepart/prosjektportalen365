@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect, useState } from 'react'
 import styles from './programAdministration.module.scss'
 import { IProgramAdministrationProps, shimmeredColumns } from './types'
 import { useStore } from './store'
-import { IViewField, SelectionMode } from "@pnp/spfx-controls-react/lib/ListView"
+import { IViewField, SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react'
 import { ProjectTable } from './ProjectTable'
 import { Commandbar } from './Commands'
@@ -68,15 +68,15 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
 
 export const fields: IViewField[] = [
   {
-    name: "Title",
-    displayName: "Tittel",
+    name: 'Title',
+    displayName: 'Tittel',
     isResizable: true,
     sorting: true,
     maxWidth: 250.
   },
   {
-    name: "SPWebURL",
-    displayName: "Site URL",
+    name: 'SPWebURL',
+    displayName: 'Site URL',
     isResizable: true,
     sorting: true,
     maxWidth: 250.

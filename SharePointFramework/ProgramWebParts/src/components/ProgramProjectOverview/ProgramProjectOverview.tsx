@@ -1,11 +1,9 @@
-import React, {FunctionComponent, useEffect} from 'react'
+import React, {FunctionComponent} from 'react'
 import {IProjectProgramOverviewProps} from './IProgramProjectOverviewProps'
 import {PortfolioOverview} from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
 
 export const ProgramOverview: FunctionComponent<IProjectProgramOverviewProps> = (props) => {
 
-  useEffect(() => {    
-  }, []);
 
     return (
       <>
@@ -23,7 +21,7 @@ export const ProgramOverview: FunctionComponent<IProjectProgramOverviewProps> = 
       isParentProject={props.isParentProject}
       />
       </>
-    );
+    )
   
 }
 

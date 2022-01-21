@@ -3,7 +3,7 @@ import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/Com
 import { useStore } from '../store'
 import { SPRest } from '@pnp/sp'
 import * as strings from 'ProgramWebPartsStrings'
-import { Spinner, ProgressIndicator } from 'office-ui-fabric-react'
+import { Spinner } from 'office-ui-fabric-react'
 
 
 
@@ -47,6 +47,5 @@ export const Commandbar: FunctionComponent<commandBarProps> = ({ _sp }) => {
         }
     ]
 
-    return <CommandBar items={_items} style={{ backgroundColor: "white", marginBottom: "5px" }} />
-}
+    return <CommandBar items={_items} style={{ backgroundColor: 'white', marginBottom: '5px' }} />}
 
