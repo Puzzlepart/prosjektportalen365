@@ -29,7 +29,7 @@ export class TemplateSelectDialog extends React.Component<
     super(props)
     this.state = {
       selectedTemplate: this._getDefaultTemplate(),
-      selectedExtensions: props.data.extensions.filter((ext) => ext.isDefault),
+      selectedExtensions: props.data.extensions.filter((ext) => this._getDefaultTemplate().listExtensionIds?.some((id) => id === ext.id)),
       selectedListContentConfig: props.data.listContentConfig.filter((lcc) => lcc.isDefault),
       settings: new ProjectSetupSettings().useDefault()
     }
@@ -56,7 +56,7 @@ export class TemplateSelectDialog extends React.Component<
             <TemplateSelector
               templates={data.templates}
               selectedTemplate={selectedTemplate}
-              onChange={(s) => this.setState({ selectedTemplate: s })}
+              onChange={this._onTemplateChange.bind(this)}
             />
             {selectedTemplate.listContentConfigIds && (
               <MessageBar messageBarType={MessageBarType.info}>
@@ -85,6 +85,17 @@ export class TemplateSelectDialog extends React.Component<
         </Pivot>
       </BaseDialog>
     )
+  }
+
+  /**
+   * Sets the selected template to the state, and updates the predfined selected extensions
+   * @param template 
+   */
+  private _onTemplateChange(template: ProjectTemplate): void {
+    this.setState({
+      selectedTemplate: template,
+      selectedExtensions: this.props.data.extensions.filter((ext) => template.listExtensionIds?.some((id) => id === ext.id))
+    })
   }
 
   /**

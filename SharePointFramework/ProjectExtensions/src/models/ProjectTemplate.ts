@@ -62,7 +62,8 @@ export class ProjectTemplate implements IDropdownOption {
     const schema = await this.web.getFileByServerRelativeUrl(this.serverRelativeUrl).getJSON()
       schema.Parameters.ProjectContentTypeId = this?.projectContentType
       schema.Parameters.ProjectStatusContentTypeId = this?.projectStatusContentType
-
+      schema.Parameters.ProvisionSiteFields = this?.projectColumns
+      schema.Parameters.CustomSiteFields = this?.projectCustomColumns
     return schema
   }
 
