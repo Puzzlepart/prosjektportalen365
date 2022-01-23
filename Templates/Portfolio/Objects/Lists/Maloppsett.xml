@@ -37,17 +37,17 @@
   </pnp:FieldRefs>
   <pnp:DataRows UpdateBehavior="Overwrite">
     <pnp:DataRow>
-      <pnp:DataValue FieldName="Title">Eiendom</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">Standardmal</pnp:DataValue>
       <pnp:DataValue FieldName="Order">100</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectTemplate">1</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectExtensions" />
       <pnp:DataValue FieldName="GtProjectContentType">0x0100805E9E4FEAAB4F0EABAB2600D30DB70C</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectStatusContentType">0x010022252E35737A413FB56A1BA53862F6D5</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectColumns">&lt;Prosjektportalenkolonner&gt; gruppa (placeholder)</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectCustomColumns">&lt;Kundespesifikke kolonner&gt; gruppa (placeholder)</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectColumns">Kolonner for Prosjektportalen (Prosjekt)</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectCustomColumns">Egendefinerte kolonner for Prosjektportalen</pnp:DataValue>
       <pnp:DataValue FieldName="IsDefaultTemplate">True</pnp:DataValue>
       <pnp:DataValue FieldName="ListContentConfigLookup">1,2</pnp:DataValue>
-      <pnp:DataValue FieldName="GtDescription">Dette er en beskrivelse
+      <pnp:DataValue FieldName="GtDescription">Dette er standardmalen som følger med Prosjektportalen 365. Blir overskrevet ved en oppgradering.
       </pnp:DataValue>
       <pnp:DataValue FieldName="IconName">Page</pnp:DataValue>
     </pnp:DataRow>
