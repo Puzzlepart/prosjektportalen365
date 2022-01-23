@@ -36,7 +36,7 @@ export class ProjectTemplate implements IDropdownOption {
 
   constructor(spItem: IProjectTemplateSPItem, public web: Web) {
     this.id = spItem.Id
-    this.key = `reworkedTemplate${this.id}`
+    this.key = `Template${this.id}`
     this.text = spItem.FieldValuesAsText.Title
     this.subText = spItem.FieldValuesAsText.GtDescription
     this.isDefault = spItem?.IsDefaultTemplate
