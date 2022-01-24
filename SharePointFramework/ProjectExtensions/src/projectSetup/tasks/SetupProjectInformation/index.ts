@@ -69,7 +69,6 @@ export class SetupProjectInformation extends BaseTask {
         }
       } else {
         await list.items.add({
-          Title: params.context.pageContext.web.title,
           TemplateParameters: JSON.stringify(params.templateSchema.Parameters)
         })
       }
