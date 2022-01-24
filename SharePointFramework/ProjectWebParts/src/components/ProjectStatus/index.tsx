@@ -129,7 +129,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
             <div className={styles.title}>
               {this.props.title}{' '}
               {this.state.selectedReport
-                ? moment(this.state.selectedReport.created).format('DD.MM.yyyy')
+                ? moment(this.state.selectedReport.created).format('DD.MM.YYYY')
                 : null}{' '}
             </div>
           </div>
