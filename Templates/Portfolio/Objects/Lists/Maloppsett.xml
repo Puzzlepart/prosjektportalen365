@@ -58,7 +58,7 @@ xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
       <pnp:DataValue FieldName="GtProjectColumns">Kolonner for Prosjektportalen (Prosjekt)</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectCustomColumns">Egendefinerte kolonner for Prosjektportalen</pnp:DataValue>
       <pnp:DataValue FieldName="IsDefaultTemplate">True</pnp:DataValue>
-      <pnp:DataValue FieldName="ListContentConfigLookup">1,2</pnp:DataValue>
+      <pnp:DataValue FieldName="ListContentConfigLookup"></pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">Dette er standardmalen som følger med Prosjektportalen 365. Blir overskrevet ved en oppgradering.
       </pnp:DataValue>
       <pnp:DataValue FieldName="IconName">Page</pnp:DataValue>
