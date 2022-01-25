@@ -70,7 +70,7 @@ export class SetupProjectInformation extends BaseTask {
         await list.items.add({
           Title: params.context.pageContext.web.title,
           TemplateParameters: JSON.stringify(params.templateSchema.Parameters)
-      })
+        })
       }
     } catch (error) {
       throw error
