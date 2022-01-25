@@ -4,7 +4,6 @@ import { PortalDataService } from 'pp365-shared/lib/services'
 import { SpEntityPortalService } from 'sp-entityportal-service'
 import initSpfxJsom, { ExecuteJsomQuery } from 'spfx-jsom'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
-import { Schema } from 'sp-js-provisioning'
 import _ from 'underscore'
 
 export class PreTask extends BaseTask {
