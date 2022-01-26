@@ -58,10 +58,20 @@ export class SetupProjectInformation extends BaseTask {
         strings.CreatingLocalProjectPropertiesListItemText,
         'AlignCenter'
       )
-      await list.items.add({
-        Title: params.context.pageContext.web.title,
-        TemplateParameters: JSON.stringify(params.templateSchema.Parameters)
-      })
+
+      const items = await list.items.getAll()
+      if (items.length >= 1) {
+        if (!(await list.items.getById(1).select('TemplateParameters').get()).TemplateParameters) {
+          await list.items.getById(1).update({
+            TemplateParameters: JSON.stringify(params.templateSchema.Parameters)
+          })
+        }
+      } else {
+        await list.items.add({
+          Title: params.context.pageContext.web.title,
+          TemplateParameters: JSON.stringify(params.templateSchema.Parameters)
+        })
+      }
     } catch (error) {
       throw error
     }

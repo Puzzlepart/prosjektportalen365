@@ -3,11 +3,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with issue ID.
 
-## 1.3.2 - 07.01.2022
+## 1.3.2 - 25.01.2022
+
+### Added
+
+- Added GtProjectLifecycleStatus in "Prosjektegenskaper" and as a filter in "Porteføljeoversikt" #587
+
 
 ### Changed
 
 - Added support for syncing number and currency fields in project properties
+- Added fix for not resetting portfolio navigation on upgrade #567
 - Reformulated GtShowInPorfolio description to encompass more than uncertainties #615
 - Changed behavior when deleting a status report #597
 - Changed behavior when deleting timeline item #569
