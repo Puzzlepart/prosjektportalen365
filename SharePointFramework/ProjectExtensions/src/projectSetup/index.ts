@@ -366,7 +366,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
       const [templates, extensions, listContentConfig] = await Promise.all([
         this._portal.getItems(
-          'Maloppsett', //Temp test value
+          this.properties.templatesLibrary,
           ProjectTemplate,
           {
             ViewXml: templateViewXml
