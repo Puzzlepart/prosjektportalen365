@@ -44,6 +44,7 @@ define([], function () {
     PlannerConfigurationErrorMessage: 'Det skjedde en feil under opprettelse av standardoppgaver i Planner. Prøv igjen ved å laste siden på nytt.',
     PlannerConfigurationText: 'Oppretter standardoppgaver i Planner',
     PreTaskErrorMessage: 'Det skjedde en feil',
+    PreTaskContentTypeValidationErrorMessage: 'Validering av innholdstypen feilet. Sjekk at prosjektegenskaper- og prosjektstatusinnholdstypene er korrekte i maloppsettet.',
     ProgressDialogDescription: 'Vennligst vent. Ikke lukk nettleservinduet.',
     ProgressDialogLabel: 'Klargjør prosjektområdet',
     ProgressDialogTitle: 'Setter opp prosjektområdet',

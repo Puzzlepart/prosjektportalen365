@@ -54,8 +54,8 @@ export class PreTask extends BaseTask {
         try {
           await this.data.hub.web.contentTypes.getById(ct).get()
         } catch (error) {
-          throw new BaseTaskError(this.taskName,strings.PreTaskErrorMessage,`Innholdstypen ${ct} eksisterer ikke. 
-          Sjekk om prosjektegenskaper og prosjektstatus innholdstypene er korrekt i maloppsett.`)
+          this.logError(`Failed to validate content type ${ct}`)
+          throw new BaseTaskError(this.taskName, strings.PreTaskContentTypeValidationErrorMessage, error)
         }
       })
     )

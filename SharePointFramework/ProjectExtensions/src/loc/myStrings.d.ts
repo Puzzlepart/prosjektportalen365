@@ -52,6 +52,7 @@ declare interface IProjectExtensionsStrings {
   PlannerConfigurationErrorMessage: string
   PlannerConfigurationText: string
   PreTaskErrorMessage: string
+  PreTaskContentTypeValidationErrorMessage: string
   ProgressDialogDescription: string
   ProgressDialogLabel: string
   ProgressDialogTitle: string
