@@ -32,7 +32,7 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
   personas.push(managerPersona)
 
   return (
-    <div className={styles.card}>
+    <div className={styles.card} style={!project.userIsMember ? {opacity: '50%', cursor: 'default'} : {}} onClick={project.userIsMember ? () => window.open(project.url, "_self") : null}>
       <img className={styles.logo} src={project.logo ?? placeholderImage} />
       <DocumentCardTitle
         className={styles.title}
@@ -48,7 +48,6 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
       </div>
       <div className={styles.footer}>
         <Facepile personaSize={PersonaSize.size32} personas={personas} />
-        {/* <Icon className={styles.infoIcon} iconName='OpenInNewWindow' /> */}
         <DocumentCardActions actions={actions} />
       </div>
     </div>
