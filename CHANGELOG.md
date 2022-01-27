@@ -3,13 +3,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with issue ID.
 
-## 1.3.2 - 25.01.2022
+## 1.3.2 - 28.01.2022
 
 ### Added
 
 - Added GtProjectLifecycleStatus in "Prosjektegenskaper" and as a filter in "Porteføljeoversikt" #587
 - Added new template settings list used for project setup  #617
-
 
 ### Changed
 
@@ -22,6 +21,7 @@ Every change is marked with issue ID.
 ### Fixed
 
 - Fixed persistant filter checkbox on view change #545
+- Fixed installation error with hidden fieldrefs #622
 
 ## 1.3.1 - 20.12.2021
 
