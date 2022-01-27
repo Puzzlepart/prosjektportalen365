@@ -55,9 +55,8 @@ const getRiskElementsPostActionForCell = (
 
 export const MatrixRows = ({ items, calloutTemplate, customCells }) => {
   const [showPostAction, setShowPostAction] = React.useState(false)
-  const [useCustomCells, setShowCustomCells] = React.useState(false)
 
-  const selectedCells = useCustomCells ? customCells : RISK_MATRIX_CELLS
+  const selectedCells = customCells ?? RISK_MATRIX_CELLS
 
   const children = selectedCells.map((rows, i) => {
     const cells = rows.map((c, j) => {
@@ -98,12 +97,6 @@ export const MatrixRows = ({ items, calloutTemplate, customCells }) => {
         offText={strings.No}
         onChange={(_event, _showPostAction) => setShowPostAction(_showPostAction)}
         />
-      <Toggle
-        label="Bytt konfigurasjon"
-        onText={strings.Yes}
-        offText={strings.No}
-        onChange={(_event, _useCustomCells) => setShowCustomCells(_useCustomCells)}
-      />
       </div>
     </>
   )
