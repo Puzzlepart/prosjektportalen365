@@ -2,8 +2,8 @@ import React, { FunctionComponent, useEffect } from 'react'
 import { IRiskMatrixProps } from './types'
 import { MatrixRows } from './MatrixRow'
 import styles from './RiskMatrix.module.scss'
-import { Web, } from '@pnp/sp/'
-import { PageContext } from '@microsoft/sp-page-context'
+import { sp } from '@pnp/sp/'
+import HubSiteService from 'sp-hubsite-service'
 
 export const RiskMatrix: FunctionComponent<IRiskMatrixProps> = ({
   items = [],
@@ -12,28 +12,27 @@ export const RiskMatrix: FunctionComponent<IRiskMatrixProps> = ({
   calloutTemplate,
   pageContext,
 }: IRiskMatrixProps) => {
-  const [jsonConfig, setJsonConfig] = React.useState([])
+  const [jsonConfig, setJsonConfig] = React.useState<undefined | []>()
 
   useEffect(() => {
     async function fetchJson() {
-      await fetchJsonConfiguration(pageContext)
+      await fetchJsonConfiguration()
     }
     pageContext && fetchJson()
   }, [])
 
-  async function fetchJsonConfiguration(pageContext: PageContext) {
-    const web: Web = new Web(pageContext.web.absoluteUrl)
-    const { ServerRelativeUrl } = await web.get()
-    const json = await web.getFileByServerRelativeUrl(ServerRelativeUrl + '/SiteAssets/custom-cells.txt').getJSON()
+  async function fetchJsonConfiguration() {
+    const hubSite = await HubSiteService.GetHubSite(sp, pageContext as any)
+    const { ServerRelativeUrl } = await hubSite.web.get()
+    const json = await hubSite.web.getFileByServerRelativeUrl(`/${ServerRelativeUrl}/SiteAssets/custom-cells.txt`).getJSON()
     setJsonConfig(json)
   }
-  
 
   return (
     <div className={styles.riskMatrix} style={{ width, height }}>
       <table className={styles.table}>
         <tbody>
-          <MatrixRows items={items} calloutTemplate={calloutTemplate} customCells={jsonConfig}/>
+          <MatrixRows items={items} calloutTemplate={calloutTemplate} customCells={jsonConfig} />
         </tbody>
       </table>
     </div>
