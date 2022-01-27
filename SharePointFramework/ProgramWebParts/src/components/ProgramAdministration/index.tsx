@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import styles from './programAdministration.module.scss'
-import { IProgramAdministrationProps, shimmeredColumns } from './types'
+import { IProgramAdministrationItem, IProgramAdministrationProps, shimmeredColumns } from './types'
 import { useStore } from './store'
 import { IViewField, SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react'
@@ -78,6 +78,10 @@ export const fields: IViewField[] = [
     name: 'SPWebURL',
     displayName: 'Site URL',
     isResizable: true,
+    render: (item: IProgramAdministrationItem) => {
+      console.log(item)
+      return <a href={item.SPWebURL} target="_blank" data-interception="off" >{item.SPWebURL}</a>
+    },
     sorting: true,
     maxWidth: 250.
   }

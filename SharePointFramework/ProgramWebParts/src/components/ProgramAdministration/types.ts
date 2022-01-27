@@ -21,6 +21,11 @@ export interface ChildProjectListItem extends ChildProject {
   GtSiteUrl: string
 }
 
+export interface IProgramAdministrationItem {
+  Title: string;
+  SPWebURL: string;
+}
+
 export const shimmeredColumns: IColumn[] = [
   {
     key: '1',
