@@ -8,6 +8,7 @@ Every change is marked with issue ID.
 ### Added
 
 - Added GtProjectLifecycleStatus in "Prosjektegenskaper" and as a filter in "Porteføljeoversikt" #587
+- Added new template settings list used for project setup  #617
 
 ### Changed
 

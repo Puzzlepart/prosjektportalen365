@@ -33,7 +33,6 @@ export class ApplyTemplate extends BaseTask {
             ? LogLevel.Info
             : LogLevel.Error) as any
         },
-        parameters: params.templateParameters,
         spConfiguration: {
           cacheExpirationIntervalMilliseconds: 5000,
           defaultCachingStore: 'session',
