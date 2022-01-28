@@ -332,7 +332,7 @@ if (-not $SkipTemplate.IsPresent) {
 
         if ($Upgrade.IsPresent) {
             Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
-            Apply-PnPProvisioningTemplate "$BasePath\Portfolio.pnp" -ExcludeHandlers Navigation -ErrorAction Stop
+            Apply-PnPProvisioningTemplate "$BasePath\Portfolio.pnp" -ExcludeHandlers Navigation,SupportedUILanguages -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
 
             Write-Host "[INFO] Applying PnP content template (Handlers:Files) to [$Url]"
