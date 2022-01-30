@@ -4,7 +4,10 @@
         "ProvisionSiteFields": "Kolonner for Prosjektportalen (Prosjekt)",
         "CustomSiteFields": "Egendefinerte kolonner for Prosjektportalen",
         "ProjectContentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
-        "ProjectStatusContentTypeId": "0x010022252E35737A413FB56A1BA53862F6D5"
+        "ProjectStatusContentTypeId": "0x010022252E35737A413FB56A1BA53862F6D5",
+        "TermSetIds": {
+            "GtProjectPhase": "54f92279-2602-4d70-95b5-e6113f27666e"
+        }
     },
     "ContentTypes": [{
             "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE897",
