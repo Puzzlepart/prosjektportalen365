@@ -12,11 +12,12 @@ Every change is marked with issue ID.
 
 ### Changed
 
-- Added support for syncing number and currency fields in project properties
+- Added support for syncing number and currency fields in project properties #612
 - Added fix for not resetting portfolio navigation on upgrade #567
 - Reformulated GtShowInPorfolio description to encompass more than uncertainties #615
 - Changed behavior when deleting a status report #597
 - Changed behavior when deleting timeline item #569
+- Major changes implamented to project templates #594
 
 ### Fixed
 
