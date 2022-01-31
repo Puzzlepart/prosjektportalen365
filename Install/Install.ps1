@@ -329,20 +329,24 @@ if (-not $SkipTemplate.IsPresent) {
             Apply-PnPProvisioningTemplate "$BasePath\Taxonomy.pnp" -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP template [Taxonomy] to [$Url]" -ForegroundColor Green
         }
-        
-        Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
-        $Instance = Read-PnPProvisioningTemplate "$BasePath\Portfolio.pnp"
-        $Instance.SupportedUILanguages[0].LCID = $LanguageId
-        Apply-PnPProvisioningTemplate -InputInstance $Instance -Handlers SupportedUILanguages
-        Apply-PnPProvisioningTemplate "$BasePath\Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
-        Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
 
         if ($Upgrade.IsPresent) {
+            Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
+            Apply-PnPProvisioningTemplate "$BasePath\Portfolio.pnp" -ExcludeHandlers Navigation,SupportedUILanguages -ErrorAction Stop
+            Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
+
             Write-Host "[INFO] Applying PnP content template (Handlers:Files) to [$Url]"
             Apply-PnPProvisioningTemplate "$BasePath\Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
         }
         else {
+            Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
+            $Instance = Read-PnPProvisioningTemplate "$BasePath\Portfolio.pnp"
+            $Instance.SupportedUILanguages[0].LCID = $LanguageId
+            Apply-PnPProvisioningTemplate -InputInstance $Instance -Handlers SupportedUILanguages
+            Apply-PnPProvisioningTemplate "$BasePath\Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
+            Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
+
             Write-Host "[INFO] Applying PnP content template to [$Url]"
             Apply-PnPProvisioningTemplate "$BasePath\Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
@@ -402,6 +406,22 @@ catch {
     Write-Host "[WARNING] Failed to run post-install steps: $($_.Exception.Message)" -ForegroundColor Yellow
 }
 
+if ($Upgrade.IsPresent) {
+    try {
+        $LastInstall = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>" | Select-Object -First 1
+        if ($null -ne $LastInstall) {
+            $PreviousVersion = $LastInstall.FieldValues["InstallVersion"]
+
+            if ($PreviousVersion -lt "1.2.7") {
+                Write-Host "[INFO] In version v1.2.7 we added 'Prosjekttidslinje' to the top navigation. Adding this navigation item now as part of the upgrade" 
+                Add-PnPNavigationNode -Location TopNavigationBar -Title "Prosjekttidslinje" -Url "$($Uri.LocalPath)/SitePages/Prosjekttidslinje.aspx"
+            }
+        }
+    }
+    catch {
+        Write-Host "[WARNING] Failed to run upgrade steps: $($_.Exception.Message)" -ForegroundColor Yellow
+    }
+}
 
 $sw.Stop()
 

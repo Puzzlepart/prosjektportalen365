@@ -414,18 +414,18 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         ),
         this.properties.extensionsLibrary
           ? this._portal.getItems(
-            this.properties.extensionsLibrary,
-            ProjectExtension,
-            {
-              ViewXml:
-                '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
-            },
-            ['File', 'FieldValuesAsText']
-          )
+              this.properties.extensionsLibrary,
+              ProjectExtension,
+              {
+                ViewXml:
+                  '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+              },
+              ['File', 'FieldValuesAsText']
+            )
           : Promise.resolve([]),
         this.properties.contentConfigList
           ? this._portal.getItems(this.properties.contentConfigList, ListContentConfig)
-          : Promise.resolve([])
+          : Promise.resolve([]),
       ])
       Logger.log({
         message: '(ProjectSetup) [_fetchData]: Retrieved templates, extensions and content config',
@@ -438,9 +438,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       })
       return {
         ...data,
-        templates,
         extensions,
-        listContentConfig
+        listContentConfig,
+        templates
       }
     } catch (error) {
       throw new ProjectSetupError(

@@ -188,9 +188,27 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
       let items: IFilterItemProps[] = uniqueValues
         .filter((value: string) => !stringIsNullOrEmpty(value))
         .map((value: string) => ({ name: value, value }))
-      items = items.sort((a, b) => (a.value > b.value ? 1 : -1))
+      items = items.sort((a, b) => (a.value > b.value ? 1 : -1))    
       return { column, items }
     })
+
+    const activeFilters = this.state.activeFilters
+    if (!_.isEmpty(activeFilters)) {
+    const filteredFields = Object.keys(activeFilters)
+    filteredFields.forEach((key) => {  
+      filters.forEach(filter => {
+        if (filter.column.fieldName === key) {
+          activeFilters[key].forEach((value) => {
+            filter.items.forEach((item) => {
+              if (value === item.name) {
+                 item.selected = true
+               }
+            })
+          })          
+        }})
+      })
+    }
+
     return filters
   }
 

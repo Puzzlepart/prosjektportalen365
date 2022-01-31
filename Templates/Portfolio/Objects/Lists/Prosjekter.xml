@@ -24,10 +24,4 @@
             <JSLink>clienttemplates.js</JSLink>
         </View>
     </pnp:Views>
-    <pnp:FieldRefs>
-        <pnp:FieldRef ID="28be4cc9-bc5e-4a55-a557-f652b564ca75" Name="GtBudgetTotal" Hidden="true" />
-        <pnp:FieldRef ID="5af54348-bc38-4a18-a11f-0f84a96da4ea" Name="GtCostsTotal" Hidden="true" />
-        <pnp:FieldRef ID="9076c206-ca80-4e17-b6f4-6fa3b90c421a" Name="GtProjectForecast" Hidden="true" />
-        <pnp:FieldRef ID="f4623214-ab74-4160-82a7-37d46901bc1b" Name="GtBudgetLastReportDate" Hidden="true" />
-    </pnp:FieldRefs>
 </pnp:ListInstance>
