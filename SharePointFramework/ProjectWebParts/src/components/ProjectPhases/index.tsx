@@ -54,7 +54,11 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
     ) {
       setTimeout(
         () =>
-          (document.location.href = `${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`),
+          {
+            document.location.href = `${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`
+            window.location.reload()
+
+          }          ,
         1000
       )
     }
