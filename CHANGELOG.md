@@ -2,10 +2,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 Every change is marked with issue ID.
-## 1.X.X - TBD
-- Fixed issue where changing phase via phase selector web part was not synced to the portfolio site #628  
 
-## 1.3.2 - 28.01.2022
+## 1.3.2 - 04.02.2022
 
 ### Added
 
@@ -24,6 +22,7 @@ Every change is marked with issue ID.
 
 - Fixed persistant filter checkbox on view change #545
 - Fixed installation error with hidden fieldrefs #622
+- Fixed issue where changing phase via phase selector web part was not synced to the portfolio site #628 
 
 ## 1.3.1 - 20.12.2021
 
