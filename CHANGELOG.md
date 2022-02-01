@@ -8,7 +8,7 @@ Every change is marked with issue ID.
 ### Added
 
 - Added GtProjectLifecycleStatus in "Prosjektegenskaper" and as a filter in "Porteføljeoversikt" #587
-- Added new template settings list used for project setup  #617
+- Added new template configuration list used for project setup #617 #594
 
 ### Changed
 
@@ -17,7 +17,6 @@ Every change is marked with issue ID.
 - Reformulated GtShowInPorfolio description to encompass more than uncertainties #615
 - Changed behavior when deleting a status report #597
 - Changed behavior when deleting timeline item #569
-- Major changes implamented to project templates #594
 
 ### Fixed
 
