@@ -8,9 +8,32 @@
                 <pnp:File Src="ProjectTemplates\Standardmal.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Standardmal" />
-                        <pnp:Property Key="GtDescription" Value="Dette er standardmalen som følger med Prosjektportalen 365. Blir overskrevet ved en oppgradering." />
+                        <pnp:Property Key="GtDescription" Value="Dette er standardmalen for prosjekt som følger med Prosjektportalen 365. Blir overskrevet ved en oppgradering." />
                         <pnp:Property Key="IconName" Value="Page" />
                         <pnp:Property Key="IsDefaultTemplate" Value="1" />
+                        <pnp:Property Key="GtIsProgram" Value="0" />
+                        <pnp:Property Key="GtIsParentProject" Value="0" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="ProjectTemplates\Overordnet.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Overordnet" />
+                        <pnp:Property Key="GtDescription" Value="Dette er standardmalen for overordnet prosjekt som følger med Prosjektportalen 365. Blir overskrevet ved en oppgradering." />
+                        <pnp:Property Key="IconName" Value="Page" />
+                        <pnp:Property Key="IsHiddenTemplate" Value="1" />
+                        <pnp:Property Key="GtIsProgram" Value="0" />
+                        <pnp:Property Key="GtIsParentProject" Value="1" />
+                        <pnp:Property Key="IsDefaultTemplate" Value="0" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="ProjectTemplates\Programmal.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Programmal" />
+                        <pnp:Property Key="GtDescription" Value="Dette er standardmalen for program som følger med Prosjektportalen 365. Blir overskrevet ved en oppgradering." />
+                        <pnp:Property Key="IconName" Value="Page" />
+                        <pnp:Property Key="GtIsProgram" Value="1" />
+                        <pnp:Property Key="GtIsParentProject" Value="0" />
+                        <pnp:Property Key="IsDefaultTemplate" Value="0" />
                     </pnp:Properties>
                 </pnp:File>
                 <pnp:Directory Src="Malbibliotek" Folder="Malbibliotek" Overwrite="false" Recursive="false" IncludedExtensions="*.doc,*.docx,*.xls,*.xlsx,*.ppt,*.pptx" />
