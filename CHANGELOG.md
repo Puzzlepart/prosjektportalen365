@@ -22,7 +22,8 @@ Every change is marked with issue ID.
 
 - Fixed persistant filter checkbox on view change #545
 - Fixed installation error with hidden fieldrefs #622
-- Fixed issue where changing phase via phase selector web part was not synced to the portfolio site #628 
+- Fixed issue where changing phase via phase selector web part was not synced to the portfolio site #628
+- Fixed small alignment issue with project template selector #638
 
 ## 1.3.1 - 20.12.2021
 
