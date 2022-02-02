@@ -8,11 +8,11 @@ Every change is marked with issue ID.
 ### Added
 
 - Added GtProjectLifecycleStatus in "Prosjektegenskaper" and as a filter in "Porteføljeoversikt" #587
-- Added new template settings list used for project setup  #617
+- Added new template configuration list used for project setup #617 #594
 
 ### Changed
 
-- Added support for syncing number and currency fields in project properties
+- Added support for syncing number and currency fields in project properties #612
 - Added fix for not resetting portfolio navigation on upgrade #567
 - Reformulated GtShowInPorfolio description to encompass more than uncertainties #615
 - Changed behavior when deleting a status report #597
