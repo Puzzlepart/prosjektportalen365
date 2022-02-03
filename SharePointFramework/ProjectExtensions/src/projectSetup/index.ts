@@ -388,7 +388,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           ? this._portal.getItems(this.properties.contentConfigList, ListContentConfig, {}, ['File'])
           : Promise.resolve([]),
       ])
-      const files = await this._portal.getItems('Prosjektmaler', ProjectTemplateFile, {}, ['File'])
+      const files = await this._portal.getItems(strings.Lists_ProjectTemplateFiles_Title, ProjectTemplateFile, {}, ['File'])
        templates.map((template) => {
          const [relativeUrl] = files.filter(file => {return file.id === template.projectTemplateId})
          template.serverRelativeUrl = relativeUrl.serverRelativeUrl
