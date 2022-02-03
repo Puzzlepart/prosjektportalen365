@@ -23,8 +23,10 @@ export class PreTask extends BaseTask {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async execute(params: IBaseTaskParams): Promise<IBaseTaskParams> {
     params.templateSchema = await this.data.selectedTemplate.getSchema()
+    if (!params.properties.forceTemplate) {
+      await this.validateParameters(params)
+    }
 
-    await this.validateParameters(params)
     try {
       params.spfxJsomContext = await initSpfxJsom(params.context.pageContext.site.absoluteUrl, {
         loadTaxonomy: true

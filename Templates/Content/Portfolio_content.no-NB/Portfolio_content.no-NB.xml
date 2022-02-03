@@ -20,7 +20,6 @@
                         <pnp:Property Key="Title" Value="Overordnet" />
                         <pnp:Property Key="GtDescription" Value="Dette er standardmalen for overordnet prosjekt som følger med Prosjektportalen 365. Blir overskrevet ved en oppgradering." />
                         <pnp:Property Key="IconName" Value="Page" />
-                        <pnp:Property Key="IsHiddenTemplate" Value="1" />
                         <pnp:Property Key="GtIsProgram" Value="0" />
                         <pnp:Property Key="GtIsParentProject" Value="1" />
                         <pnp:Property Key="IsDefaultTemplate" Value="0" />
