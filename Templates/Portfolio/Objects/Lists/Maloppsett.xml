@@ -1,5 +1,5 @@
-<pnp:ListInstance Title="{resource:Lists_TemplateOptions_Title}" Url="{resource:Lists_TemplateOptions_Url}" Description="" DocumentTemplate=""  TemplateType="100" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0"  EnableFolderCreation="false"  IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage=""
-xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+<pnp:ListInstance Title="{resource:Lists_TemplateOptions_Title}" Url="{resource:Lists_TemplateOptions_Url}" Description="" DocumentTemplate="" TemplateType="100" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" EnableFolderCreation="false" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage=""
+  xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
   <pnp:Views>
     <View Name="{895C5324-0C85-46D5-B425-A6CD69AD143D}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Maloppsett/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
       <Query />
@@ -27,19 +27,19 @@ xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <Field Type="LookupMulti" DisplayName="Utvidelser" Required="FALSE" EnforceUniqueValues="FALSE" List="{listid:Prosjekttillegg}" ShowField="Title" Mult="TRUE" Sortable="FALSE" UnlimitedLengthInDocumentLibrary="FALSE" RelationshipDeleteBehavior="None" ID="{5627c98b-c725-44d0-9415-3125b8f61302}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectExtensions" Name="GtProjectExtensions" />
     <Field Type="Text" DisplayName="Prosjekt innholdstype" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" ID="{056c0b81-1a7c-4c9c-a0d1-d2cbe0fc0f02}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectContentType" Name="GtProjectContentType">
       <Default>0x0100805E9E4FEAAB4F0EABAB2600D30DB70C</Default>
-      </Field>
-      <Field Type="Text" DisplayName="Prosjektfase Termsett ID" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" ID="{6287b5c6-85da-420d-815b-47de8122ec14}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectPhaseTermId" Name="GtProjectPhaseTermId ">
+    </Field>
+    <Field Type="Text" DisplayName="Prosjektfase Termsett ID" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" ID="{6287b5c6-85da-420d-815b-47de8122ec14}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectPhaseTermId" Name="GtProjectPhaseTermId">
       <Default>abcfc9d9-a263-4abb-8234-be973c46258a</Default>
     </Field>
     <Field Type="Text" DisplayName="Prosjektstatus innholdstype" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" ID="{eff52d5b-052b-4ba2-8fdc-ca3ca5c49cb1}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectStatusContentType" Name="GtProjectStatusContentType">
       <Default>0x010022252E35737A413FB56A1BA53862F6D5</Default>
-      </Field>
+    </Field>
     <Field Type="Text" DisplayName="Prosjektkolonner" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" ID="{69742a29-9bba-413e-b2cc-989d4430170b}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectColumns" Name="GtProjectColumns">
       <Default>Kolonner for Prosjektportalen (Prosjekt)</Default>
-      </Field>
+    </Field>
     <Field Type="Text" DisplayName="Kundespesifikke kolonner" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" ID="{4efd9b9f-62ba-42e7-9dec-a37ad8b125a7}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectCustomColumns" Name="GtProjectCustomColumns">
       <Default>Egendefinerte kolonner for Prosjektportalen</Default>
-      </Field>
+    </Field>
     <Field Type="Boolean" DisplayName="Standard mal?" EnforceUniqueValues="FALSE" Indexed="FALSE" ID="{80a9dc17-834e-4c30-af28-87f3ef1900df}" SourceID="{{listid:Maloppsett}}" StaticName="IsDefaultTemplate" Name="IsDefaultTemplate" CustomFormatter="" Required="FALSE" Version="1">
       <Default>0</Default>
     </Field>
