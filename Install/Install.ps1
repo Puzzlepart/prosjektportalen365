@@ -347,7 +347,7 @@ if (-not $SkipTemplate.IsPresent) {
             Apply-PnPProvisioningTemplate "$BasePath\Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
 
-            Write-Host "[INFO] Applying PnP content template to [$Url]"
+            Write-Host "[INFO] Applying PnP template [Portfolio_content] to [$Url]"
             Apply-PnPProvisioningTemplate "$BasePath\Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
         }
