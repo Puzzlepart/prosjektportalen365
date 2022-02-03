@@ -3,16 +3,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with issue ID.
 
-## 1.3.2 - 28.01.2022
+## 1.3.2 - 04.02.2022
 
 ### Added
 
 - Added GtProjectLifecycleStatus in "Prosjektegenskaper" and as a filter in "Porteføljeoversikt" #587
-- Added new template settings list used for project setup  #617
+- Added new template configuration list used for project setup #617 #594
 
 ### Changed
 
-- Added support for syncing number and currency fields in project properties
+- Added support for syncing number and currency fields in project properties #612
 - Added fix for not resetting portfolio navigation on upgrade #567
 - Reformulated GtShowInPorfolio description to encompass more than uncertainties #615
 - Changed behavior when deleting a status report #597
@@ -22,6 +22,8 @@ Every change is marked with issue ID.
 
 - Fixed persistant filter checkbox on view change #545
 - Fixed installation error with hidden fieldrefs #622
+- Fixed issue where changing phase via phase selector web part was not synced to the portfolio site #628
+- Fixed small alignment issue with project template selector #638
 
 ## 1.3.1 - 20.12.2021
 

@@ -11,6 +11,9 @@
 }
 
 .dropdownOption {
+  width: 100%;
+  margin-top: 5px;
+
   .icon {
     @include ms-fontSize-18;
     float: left;
@@ -19,8 +22,7 @@
     padding-top: 5px;
   }
   .body {
-    float: left;
-    width: 80%;
+    margin-left: 30px;
     .text {
       @include ms-fontSize-14;
     }

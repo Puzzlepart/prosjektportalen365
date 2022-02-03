@@ -19,6 +19,7 @@ export interface IProjectTemplateSPItem {
   GtIsProgram: boolean
   GtIsParentProject: boolean
   IsHiddenTemplate: boolean
+  GtProjectPhaseTermId: string
 }
 
 export class ProjectTemplate implements IDropdownOption {
@@ -36,6 +37,7 @@ export class ProjectTemplate implements IDropdownOption {
   public projectStatusContentType: string
   public projectColumns: string
   public projectCustomColumns: string
+  public projectPhaseTermId: string
   public isProgram: boolean
   public isParentProject: boolean
   public isHidden: boolean
@@ -63,25 +65,23 @@ export class ProjectTemplate implements IDropdownOption {
     this.projectStatusContentType = spItem.GtProjectStatusContentType
     this.projectColumns = spItem.GtProjectColumns
     this.projectCustomColumns = spItem.GtProjectCustomColumns
-
-    this.setServerRelativeUrl()
+    this.projectPhaseTermId = spItem.GtProjectPhaseTermId
+    this.serverRelativeUrl = spItem.File?.ServerRelativeUrl
   }
 
   public async getSchema(): Promise<Schema> {
     const schema = await this.web.getFileByServerRelativeUrl(this.serverRelativeUrl).getJSON()
-      schema.Parameters.ProjectContentTypeId = this?.projectContentType
-      schema.Parameters.ProjectStatusContentTypeId = this?.projectStatusContentType
-      schema.Parameters.ProvisionSiteFields = this?.projectColumns
-      schema.Parameters.CustomSiteFields = this?.projectCustomColumns
+    if (!schema.Parameters){
+      schema.Parameters = {}
+    }
+      schema.Parameters.ProjectContentTypeId = this?.projectContentType ?? schema.Parameters.ProjectContentTypeId 
+      schema.Parameters.ProjectStatusContentTypeId = this?.projectStatusContentType ?? schema.Parameters.ProjectStatusContentTypeId
+      schema.Parameters.ProvisionSiteFields = this?.projectColumns ?? schema.Parameters.ProvisionSiteFields
+      schema.Parameters.CustomSiteFields = this?.projectCustomColumns ?? schema.Parameters.CustomSiteFields
+      if (!schema.Parameters.TermSetIds) {
+        schema.Parameters.TermSetIds = {}
+      }
+      schema.Parameters.TermSetIds.GtProjectPhase = this?.projectPhaseTermId ?? schema.Parameters.TermSetIds.GtProjectPhase
     return schema
-  }
-
-  private async setServerRelativeUrl(): Promise<void> {
-    const fileInfo = await this.web.lists
-      .getByTitle('Prosjektmaler')
-      .items.expand('File')
-      .getById(this.projectTemplateId)
-      .file.get()
-    this.serverRelativeUrl = fileInfo.ServerRelativeUrl
   }
 }

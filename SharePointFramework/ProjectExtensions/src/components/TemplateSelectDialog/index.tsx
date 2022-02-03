@@ -140,11 +140,7 @@ export class TemplateSelectDialog extends React.Component<
    */
   private _onSubmit() {
     const data = { ...this.state }
-    if (data.selectedTemplate.listContentConfigIds) {
-      data.selectedListContentConfig = this.props.data.listContentConfig.filter(
-        (lcc) => data.selectedTemplate.listContentConfigIds.indexOf(lcc.id) !== -1
-      )
-    }
+    data.selectedTemplate.listContentConfigIds = this.state.selectedListContentConfig.map((lcc) => lcc.id)
     this.props.onSubmit(data)
   }
 }
