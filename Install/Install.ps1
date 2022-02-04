@@ -462,3 +462,5 @@ try {
 }
 catch {}
 #endregion
+
+Set-PnPTraceLog -Off
