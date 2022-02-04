@@ -1,4 +1,3 @@
-Set-PnPList -Identity Prosjektstatus -EnableContentTypes:$false 
 Set-PnPList -Identity Prosjektkolonnekonfigurasjon -EnableContentTypes:$false 
 Set-PnPList -Identity Fasesjekkliste -EnableContentTypes:$false 
 Set-PnPList -Identity Konfigurasjon -EnableContentTypes:$false 
