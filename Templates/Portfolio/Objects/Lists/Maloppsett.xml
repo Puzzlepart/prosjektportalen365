@@ -14,6 +14,7 @@ xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
         <FieldRef Name="GtProjectContentType" />
         <FieldRef Name="GtProjectStatusContentType" />
         <FieldRef Name="GtProjectColumns" />
+        <FieldRef Name="GtIsProgram" />
         <FieldRef Name="GtProjectCustomColumns" />
         <FieldRef Name="IsDefaultTemplate" />
         <FieldRef Name="ListContentConfigLookup" />
@@ -24,6 +25,7 @@ xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
   </pnp:Views>
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
   <pnp:Fields>
+  
     <Field Type="Lookup" DisplayName="Mal" Required="TRUE" EnforceUniqueValues="FALSE" List="{listid:Prosjektmaler}" ShowField="Title" UnlimitedLengthInDocumentLibrary="FALSE" RelationshipDeleteBehavior="None" ID="{8e762956-13a9-4cbd-965b-bbfed0d0d7a0}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectTemplate" Name="GtProjectTemplate" Group="" Version="1" />
     <Field Type="LookupMulti" DisplayName="Utvidelser" Required="FALSE" EnforceUniqueValues="FALSE" List="{listid:Prosjekttillegg}" ShowField="Title" Mult="TRUE" Sortable="FALSE" UnlimitedLengthInDocumentLibrary="FALSE" RelationshipDeleteBehavior="None" ID="{5627c98b-c725-44d0-9415-3125b8f61302}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectExtensions" Name="GtProjectExtensions" />
     <Field Type="Text" DisplayName="Prosjekt innholdstype" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" ID="{056c0b81-1a7c-4c9c-a0d1-d2cbe0fc0f02}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectContentType" Name="GtProjectContentType">
@@ -54,6 +56,7 @@ xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
   </pnp:Fields>
   <pnp:FieldRefs>
     <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" DisplayName="Beskrivelse" />
+    <pnp:FieldRef ID="77baede1-38df-454c-a53a-dd7904ba0046" Name="GtIsProgram" />
   </pnp:FieldRefs>
   <pnp:DataRows UpdateBehavior="Overwrite">
     <pnp:DataRow>
@@ -97,6 +100,7 @@ xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
       <pnp:DataValue FieldName="GtProjectColumns">Kolonner for Prosjektportalen (Prosjekt)</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectCustomColumns">Egendefinerte kolonner for Prosjektportalen</pnp:DataValue>
       <pnp:DataValue FieldName="IsDefaultTemplate">False</pnp:DataValue>
+      <pnp:DataValue FieldName="GtIsProgram">True</pnp:DataValue>
       <pnp:DataValue FieldName="ListContentConfigLookup"></pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">Dette er standardmalen for program som følger med Prosjektportalen 365.
       </pnp:DataValue>
