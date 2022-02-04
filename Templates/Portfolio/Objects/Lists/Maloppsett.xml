@@ -51,7 +51,7 @@
   <pnp:FieldRefs>
     <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" DisplayName="Beskrivelse" />
   </pnp:FieldRefs>
-  <pnp:DataRows UpdateBehavior="Overwrite">
+  <pnp:DataRows UpdateBehavior="Overwrite" KeyColumn="Title">
     <pnp:DataRow>
       <pnp:DataValue FieldName="Title">Standardmal</pnp:DataValue>
       <pnp:DataValue FieldName="Order">100</pnp:DataValue>
