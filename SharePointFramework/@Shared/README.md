@@ -1,4 +1,4 @@
-## Shared
+# Shared
 
 Shared code for the SharePoint Framework solutions in PP365.
 
@@ -6,5 +6,6 @@ Contains data services, helpers, interfaces, logging utils, models, utils and ty
 
 _Published to **npm** as `pp365-shared`_
 
-### Versioning
+## Versioning
+
 Never update the version of this solution independently. The version is automatically kept in sync with the other packages.
