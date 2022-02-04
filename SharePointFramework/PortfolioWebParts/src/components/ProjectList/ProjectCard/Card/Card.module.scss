@@ -4,11 +4,11 @@
   flex-direction: column;
   position: relative;
 
-  height: 230px;
-  width: 270px;
+  height: 250px;
+  width: 260px;
   margin: 30px;
-  padding: 20px;
-  // box-shadow: -26px 22px 17px -7px rgba(0, 0, 0, 0.07);
+  padding: 15px;
+  box-shadow: 0px 2px 9px -1px rgba(0, 0, 0, 0.63);
   border-radius: 20px;
   background-color: #f4f4f4a1;
 
@@ -21,9 +21,9 @@
 
   &:hover {
     cursor: pointer;
-    > img {
-      width: 65px;
-    }
+    // > img {
+    //   width: 65px;
+    // }
   }
 
   .logo {
@@ -32,11 +32,44 @@
     top: -40px;
     left: 0px;
     border-radius: 50%;
-    width: 60px;
+    width: 70px;
     box-shadow: 0 10px 40px -2px gray;
     object-fit: cover;
 
     transition: width 0.2s;
+  }
+
+  .labelTag {
+    display: inline-block;
+    position: relative;
+    align-items: center;
+    border: 1px solid;
+    border-color: transparent;
+    border-radius: 4px;
+    display: flex;
+    flex-wrap: nowrap;
+    font-size: 12px;
+    font-weight: bold;
+    font-weight: 400;
+    height: 16px;
+    justify-content: center;
+    line-height: 16px;
+    max-width: 65px;
+    min-width: 4px;
+    padding: 1px 2px;
+    top: -60px;
+    left: 70%;
+
+    // &:hover {
+    //   border-color: #0078d4;
+    // }
+
+    .labelTitle {
+      white-space: nowrap;
+      pointer-events: none;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   .title {
@@ -45,14 +78,16 @@
     font-weight: bold;
     margin: 0;
     padding: 0;
-    margin-top: -15px;
+    margin-top: -25px;
   }
 
   .content {
-    .phase {
+    .startDate,
+    .endDate {
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 8px 0px;
 
       .phaseIcon {
         margin: 0;
