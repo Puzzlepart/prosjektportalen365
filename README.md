@@ -8,7 +8,7 @@
 <br />
 
 
-[![version](https://img.shields.io/badge/version-1.3.0-green.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.3.1-green.svg)](https://semver.org)
 
 <details>
 <summary>📖 Innholdsfortegnelse</summary>
@@ -19,7 +19,7 @@
 ## ➤ Table of Contents
 
 * [➤ Hva er Prosjektportalen for Microsoft 365?](#-hva-er-prosjektportalen-for-microsoft-365)
-* [➤ Installering](#-installering)
+* [➤ Installering og oppgradering](#-installering-og-oppgradering)
 * [➤ Kontakt](#-kontakt)
 * [➤ Nettleserstøtte](#-nettlesersttte)
 * [➤ Contributors](#-contributors)
@@ -40,9 +40,9 @@ Mer informasjon om løsningen, hvordan den er satt opp og hvordan overordnede ko
 
 
 
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#installering)
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#installering-og-oppgradering)
 
-## ➤ Installering
+## ➤ Installering og oppgradering
 
 Prosjektportalen 365 kan lastes under [releases](https://github.com/Puzzlepart/prosjektportalen365/releases/latest). Mer informasjon om løsningen, konfigurasjon, installasjon og feilsøking finner du på [wiki-sidene til Prosjektportalen 365](https://github.com/Puzzlepart/prosjektportalen365/wiki).
 
