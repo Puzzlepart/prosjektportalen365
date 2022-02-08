@@ -27,6 +27,11 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
    * Sync properties after phase change
    */
   syncPropertiesAfterPhaseChange: boolean
+
+  /**
+   * If the site uses a dynamic homepage based off of the phase
+   */
+  useDynamicHomepage: boolean
 }
 
 export interface IProjectPhasesState extends IBaseWebPartComponentState<IProjectPhasesData> {

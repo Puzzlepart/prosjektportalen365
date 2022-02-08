@@ -25,7 +25,7 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
   }
 
   public render(): void {
-    this.renderComponent(ProjectPhases, {})
+    this.renderComponent(ProjectPhases, { webPartContext: this.context })
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -64,6 +64,14 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
               groupFields: [
                 PropertyPaneTextField('currentPhaseViewName', {
                   label: strings.CurrentPhaseViewNameFieldLabel
+                })
+              ]
+            },
+            {
+              groupName: strings.AdvancedGroupName,
+              groupFields: [
+                PropertyPaneToggle('useDynamicHomepage', {
+                  label: strings.UseDynamicHomepageFieldLabel
                 })
               ]
             }

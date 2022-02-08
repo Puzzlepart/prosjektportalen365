@@ -138,6 +138,8 @@ declare interface IProjectWebPartsStrings {
   ShowInfoMessageLabel: string;
   ShowCmdTimelineListLabel: string;
   ShowTimelineListLabel: string;
+  UseDynamicHomepageFieldLabel: string;
+  AdvancedGroupName: string;
 }
 
 declare module 'ProjectWebPartsStrings' {

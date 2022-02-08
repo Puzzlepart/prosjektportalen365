@@ -139,6 +139,8 @@ define([], function () {
     ShowTimelineLabel: 'Vis tidslinje',
     ShowInfoMessageLabel: 'Vis infomelding',
     ShowCmdTimelineListLabel: 'Vis kommandolinje for liste',
-    ShowTimelineListLabel: 'Vis liste'
+    ShowTimelineListLabel: 'Vis liste',
+    UseDynamicHomepageFieldLabel: 'Bruk dynamisk hjemmeside',
+    AdvancedGroupName: 'Avansert'
   }
 })

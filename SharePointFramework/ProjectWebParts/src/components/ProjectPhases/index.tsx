@@ -4,6 +4,7 @@ import { Shimmer } from 'office-ui-fabric-react/lib/Shimmer'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { useEffect, useReducer, useRef } from 'react'
 import { changePhase } from './changePhase'
+import { changeWelcomePage } from './changeWelcomePage'
 import { ChangePhaseDialog } from './ChangePhaseDialog'
 import { ProjectPhasesContext } from './context'
 import { fetchData } from './fetchData'
@@ -26,10 +27,12 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
   const [state, dispatch] = useReducer(reducer, initState())
 
   useEffect(() => {
-    fetchData(props.phaseField).then((data) => dispatch(INIT_DATA({ data })))
+    fetchData(props).then((data) => dispatch(INIT_DATA({ data })))
   }, [])
 
   if (state.hidden) return null
+
+  console.log(state, props)
 
   if (state.error) {
     return (
@@ -47,6 +50,7 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
   const onChangePhase = async () => {
     dispatch(INIT_CHANGE_PHASE())
     await changePhase(state.confirmPhase, state.data.phaseTextField, props.currentPhaseViewName)
+    if (props.useDynamicHomepage) await changeWelcomePage(state.confirmPhase.name, props.webPartContext.pageContext.web.absoluteUrl);
     dispatch(SET_PHASE({ phase: state.confirmPhase }))
     if (
       props.syncPropertiesAfterPhaseChange === undefined ||

@@ -1,14 +1,16 @@
 import { Logger, LogLevel } from '@pnp/logging'
+import { sp } from "@pnp/sp";
 import SPDataAdapter from 'data'
 import * as strings from 'ProjectWebPartsStrings'
-import { IProjectPhasesData } from '.'
+import { IProjectPhasesData, IProjectPhasesProps } from '.'
 
 /***
  * Fetch phase terms
  *
- * @param {string} phaseField Phase field
+ * @param {IProjectPhasesProps} props IProjectPhasesProps props
  */
-export async function fetchData(phaseField: string): Promise<IProjectPhasesData> {
+export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPhasesData> {
+  const { phaseField, useDynamicHomepage } = props;
   try {
     const [phaseFieldCtx, checklistData] = await Promise.all([
       SPDataAdapter.getTermFieldContext(phaseField),
@@ -18,6 +20,25 @@ export async function fetchData(phaseField: string): Promise<IProjectPhasesData>
       SPDataAdapter.project.getPhases(phaseFieldCtx.termSetId, checklistData),
       SPDataAdapter.project.getCurrentPhaseName(phaseFieldCtx.fieldName)
     ])
+
+    if (!useDynamicHomepage) {
+      let sitepages = await sp.web.lists.getByTitle('Områdesider').items.get()
+      console.log("1", sitepages)
+
+      sitepages = sitepages.filter(sitepage => {
+        return phases.some(phase => phase.name === sitepage.Title)
+      })
+
+      sitepages = sitepages.map((item) => ({
+        id: item.Id,
+        title: item.Title
+      }))
+
+      console.log(sitepages)
+    }
+
+    console.log(phases)
+
     Logger.log({
       message: '(ProjectPhases) _fetchData: Successfully fetch phases',
       level: LogLevel.Info

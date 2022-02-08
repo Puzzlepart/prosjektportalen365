@@ -46,7 +46,7 @@ export const ChangePhaseDialog = () => {
         title={strings.ChangePhaseText}
         subText={
           state.view === View.Confirm &&
-          format(strings.ConfirmChangePhase, context.state.confirmPhase.name)
+          format(strings.ConfirmChangePhase, context.state.confirmPhase.name) + "Endring til denne fasen vil også medføre endring av forside til prosjektet."
         }
         dialogContentProps={{ type: DialogType.largeHeader }}
         modalProps={{ isDarkOverlay: true, isBlocking: false }}
