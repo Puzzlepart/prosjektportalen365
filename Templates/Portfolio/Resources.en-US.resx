@@ -205,6 +205,12 @@
   <data name="Lists_TimelineContent_Url" xml:space="preserve">
     <value>Lists/Tidslinjeinnhold</value>
   </data>
+    <data name="Lists_TemplateOptions_Title" xml:space="preserve">
+    <value>Maloppsett</value>
+  </data>
+  <data name="Lists_TemplateOptions_Url" xml:space="preserve">
+    <value>Lists/Maloppsett</value>
+  </data>
   <data name="View_AllItems_DisplayName" xml:space="preserve">
     <value>Alle elementer</value>
   </data>
@@ -1256,7 +1262,7 @@
     <value></value>
   </data>
   <data name="SiteFields_GtSecIcon_Description" xml:space="preserve">
-    <value>Ikon fra https://dev.office.com/fabric#/styles/icons</value>
+    <value>Ikon fra https://uifabricicons.azurewebsites.net/</value>
   </data>
   <data name="SiteFields_GtSecShowInNavbar_Description" xml:space="preserve">
     <value></value>
@@ -1286,7 +1292,7 @@
     <value></value>
   </data>
   <data name="SiteFields_GtPortfolioFabricIcon_Description" xml:space="preserve">
-    <value>Ikon fra https://developer.microsoft.com/en-us/fabric#/styles/icons</value>
+    <value>Ikon fra https://uifabricicons.azurewebsites.net/</value>
   </data>
   <data name="SiteFields_GtPortfolioColumn_Description" xml:space="preserve">
     <value></value>

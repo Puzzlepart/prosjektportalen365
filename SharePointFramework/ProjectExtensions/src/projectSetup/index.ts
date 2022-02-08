@@ -29,6 +29,7 @@ import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } fr
 import { find } from 'underscore'
 import { endsWith } from 'lodash'
 import { ProjectSetupSettings } from './ProjectSetupSettings'
+import { ProjectTemplateFile } from 'models/ProjectTemplateFile'
 
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
   private _portal: PortalDataService
@@ -363,7 +364,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         </Query>
     </View>`
       }
-
       const [templates, extensions, listContentConfig] = await Promise.all([
         this._portal.getItems(
           this.properties.templatesLibrary,
@@ -371,23 +371,28 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           {
             ViewXml: templateViewXml
           },
-          ['File', 'FieldValuesAsText']
+          ['File','FieldValuesAsText']
         ),
         this.properties.extensionsLibrary
           ? this._portal.getItems(
-            this.properties.extensionsLibrary,
-            ProjectExtension,
-            {
-              ViewXml:
-                '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
-            },
-            ['File', 'FieldValuesAsText']
-          )
+              this.properties.extensionsLibrary,
+              ProjectExtension,
+              {
+                ViewXml:
+                  '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+              },
+              ['File', 'FieldValuesAsText']
+            )
           : Promise.resolve([]),
         this.properties.contentConfigList
-          ? this._portal.getItems(this.properties.contentConfigList, ListContentConfig)
-          : Promise.resolve([])
+          ? this._portal.getItems(this.properties.contentConfigList, ListContentConfig, {}, ['File'])
+          : Promise.resolve([]),
       ])
+      const files = await this._portal.getItems(strings.Lists_ProjectTemplateFiles_Title, ProjectTemplateFile, {}, ['File'])
+       templates.map((template) => {
+         const [relativeUrl] = files.filter(file => {return file.id === template.projectTemplateId})
+         template.serverRelativeUrl = relativeUrl.serverRelativeUrl
+       })
       Logger.log({
         message: '(ProjectSetup) [_fetchData]: Retrieved templates, extensions and content config',
         data: {
@@ -399,9 +404,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       })
       return {
         ...data,
-        templates,
         extensions,
-        listContentConfig
+        listContentConfig,
+        templates
       }
     } catch (error) {
       throw new ProjectSetupError(

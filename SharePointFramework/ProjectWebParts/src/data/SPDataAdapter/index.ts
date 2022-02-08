@@ -87,8 +87,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       const [fields, siteUsers] = await Promise.all([
         templateParameters.ProjectContentTypeId
           ? this.entityService
-              .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
-              .getEntityFields()
+            .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
+            .getEntityFields()
           : this.entityService.getEntityFields(),
         this.sp.web.siteUsers.select('Id', 'Email', 'LoginName').get<
           {
@@ -139,8 +139,17 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
               properties[fld.InternalName] = fldValue ? new Date(fldValue) : null
             }
             break
+          case 'Number':
           case 'Currency':
+            {
+              properties[fld.InternalName] = fldValue ? parseFloat(fldValue) : null
+            }
           case 'URL':
+            {
+              properties[fld.InternalName] = fldValue || null
+            }
+            break
+          case 'Boolean':
             {
               properties[fld.InternalName] = fldValue || null
             }
