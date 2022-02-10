@@ -94,6 +94,17 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
         title={project.title}
         shouldTruncate={shouldTruncateTitle}
       />
+      {/* div with two labels within */}
+      <div
+        title={project.GtProjectLifecycleStatus}
+        style={
+          project.phase
+            ? { backgroundColor: phaseBgColor, color: phaseColor }
+            : { backgroundColor: '#C0C0C0', color: 'black' }
+        }
+        className={styles.labelTag}>
+        <span className={styles.labelTitle}>{project.phase ? project.phase : 'Ikke satt'}</span>
+      </div>
       <hr />
       <div className={styles.content}>
         <div title='Startdato' className={styles.startDate}>

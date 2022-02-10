@@ -12,6 +12,13 @@
   border-radius: 20px;
   background-color: #f4f4f4a1;
 
+  .label {
+    display: flex;
+    .labelIcon {
+      overflow: hidden;
+    }
+  }
+
   hr {
     margin-top: 15px;
     border: 0;
