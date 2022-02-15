@@ -3,14 +3,13 @@
   display: flex;
   flex-direction: column;
   position: relative;
-
   height: 250px;
   width: 260px;
-  margin: 30px;
+  margin: 25px;
   padding: 15px;
   box-shadow: 0px 2px 9px -1px rgba(0, 0, 0, 0.63);
-  border-radius: 20px;
-  background-color: #f4f4f4a1;
+  border-radius: 5px;
+  background-color: transparent;
 
   .label {
     display: flex;
@@ -28,9 +27,6 @@
 
   &:hover {
     cursor: pointer;
-    // > img {
-    //   width: 65px;
-    // }
   }
 
   .logo {
@@ -46,7 +42,7 @@
     transition: width 0.2s;
   }
 
-  .labelTag {
+  .phaseLabel {
     display: inline-block;
     position: relative;
     align-items: center;
@@ -61,17 +57,13 @@
     height: 16px;
     justify-content: center;
     line-height: 16px;
-    max-width: 65px;
+    max-width: 75px;
     min-width: 4px;
     padding: 1px 2px;
     top: -60px;
-    left: 70%;
+    left: 65%;
 
-    // &:hover {
-    //   border-color: #0078d4;
-    // }
-
-    .labelTitle {
+    .phaseLabelTitle {
       white-space: nowrap;
       pointer-events: none;
       overflow: hidden;
@@ -88,20 +80,47 @@
     margin-top: -25px;
   }
 
+  .labels {
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 5px;
+
+
+    .tag {
+      display: inline-block;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid;
+      border-color: transparent;
+      border-radius: 4px;
+      flex-wrap: nowrap;
+      font-size: 12px;
+      font-weight: bold;
+      font-weight: 400;
+      height: 16px;
+      line-height: 16px;
+      min-width: 4px;
+      padding: 1px 2px;
+      margin-right: 5px;
+      
+  
+    }
+  }
+
   .content {
-    .startDate,
+    // .startDate,
     .endDate {
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 8px 0px;
 
-      .phaseIcon {
+      .endDateIcon {
         margin: 0;
         font-size: 1.2rem;
         margin-right: 5px;
       }
-      .text {
+      .endDateText {
         width: 100%;
         font-size: 0.8rem;
         font-weight: 100;

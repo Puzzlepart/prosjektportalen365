@@ -35,10 +35,9 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
         <div>
           <Facepile personaSize={PersonaSize.size32} personas={personas} />
         </div>
-      )  
+      )
     }
-  }  
-
+  }
 
   const personas: IFacepilePersona[] = []
   personas.push(ownerPersona)
@@ -49,29 +48,50 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
 
   switch (project.phase) {
     case 'Konsept':
-      phaseBgColor = '#F7941D'
+    case 'Realisere':
+      phaseBgColor = '#68AABC'
       break
     case 'Planlegge':
-      phaseBgColor = '#FDB913'
-      break
     case 'Gjennomføre':
-      phaseBgColor = '#008E9F'
-      phaseColor = 'white'
-      break
     case 'Avslutte':
-      phaseBgColor = '#8AC2C4'
-      phaseColor = 'white'
-      break
-    case 'Realisere':
-      phaseBgColor = '#17a2b8'
-      phaseColor = 'white'
+      phaseBgColor = '#8FB246'
       break
     // default:
     //   phaseBgColor = '#343a40'
   }
 
-  let startDate = moment(project.startDate).format('DD.MM.YYYY')
-  let endDate = moment(project.startDate).format('DD.MM.YYYY')
+  const serviceAreaText =
+    project.GtProjectServiceAreaText && project.GtProjectServiceAreaText.split(';')
+  const typeText = project.GtProjectTypeText && project.GtProjectTypeText.split(';')
+
+  const _renderServiceAreaText = () => {
+    if (serviceAreaText) {
+      return (
+        <div>
+          {serviceAreaText.map((text) => (
+            <div className={styles.tag}>{text}</div>
+          ))}
+        </div>
+      )
+    }
+  }
+
+  const _renderTypeText = () => {
+    if (typeText) {
+      return (
+        <div>
+          {typeText.map((type) => {
+            return <div className={styles.tag}>{type}</div>
+          })}
+        </div>
+      )
+    }
+  }
+
+  console.log(serviceAreaText)
+
+  // let startDate = moment(project.startDate).format('DD.MM.YYYY')
+  let endDate = moment(project.endDate).format('DD.MM.YYYY')
 
   return (
     <div
@@ -86,39 +106,64 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
             ? { backgroundColor: phaseBgColor, color: phaseColor }
             : { backgroundColor: '#C0C0C0', color: 'black' }
         }
-        className={styles.labelTag}>
-        <span className={styles.labelTitle}>{project.phase ? project.phase : 'Ikke satt'}</span>
+        className={styles.phaseLabel}>
+        <span className={styles.phaseLabelTitle}>
+          {project.phase ? project.phase : 'Ikke satt'}
+        </span>
       </div>
       <DocumentCardTitle
         className={styles.title}
         title={project.title}
         shouldTruncate={shouldTruncateTitle}
       />
-      {/* div with two labels within */}
-      <div
-        title={project.GtProjectLifecycleStatus}
-        style={
-          project.phase
-            ? { backgroundColor: phaseBgColor, color: phaseColor }
-            : { backgroundColor: '#C0C0C0', color: 'black' }
-        }
-        className={styles.labelTag}>
-        <span className={styles.labelTitle}>{project.phase ? project.phase : 'Ikke satt'}</span>
-      </div>
       <hr />
+      <div className={styles.labels}>
+        <div
+          title={project.GtProjectServiceAreaText}
+          style={
+            project.phase
+              ? { backgroundColor: phaseBgColor, color: phaseColor }
+              : { backgroundColor: '#C0C0C0', color: 'black' }
+          }>
+          <span>{_renderServiceAreaText()}</span>
+        </div>
+        <div
+          title={project.GtProjectTypeText}
+          style={
+            project.phase
+              ? { backgroundColor: phaseBgColor, color: phaseColor }
+              : { backgroundColor: '#C0C0C0', color: 'black' }
+          }>
+          <span>{_renderTypeText()}</span>
+        </div>
+      </div>
+
       <div className={styles.content}>
-        <div title='Startdato' className={styles.startDate}>
+        {/* <div title='Startdato' className={styles.startDate}>
           <Icon className={styles.phaseIcon} iconName='Calendar' />
           <span className={styles.text}>{project.startDate ? startDate : 'Ikke satt'}</span>
-        </div>
+        </div> */}
         <div title='Sluttdato' className={styles.endDate}>
-          <Icon className={styles.phaseIcon} iconName='PrimaryCalendar' />
-          <span className={styles.text}>{project.startDate ? endDate : 'Ikke satt'}</span>
+          {/* Show Calendar icon, with red color if endDate has passed */}
+          <Icon
+            className={styles.endDateIcon}
+            iconName='Calendar'
+            style={
+              project.endDate && moment(project.endDate).isBefore(moment())
+                ? { color: 'red' }
+                : { color: 'black' }
+            }
+          />
+          {/* <Icon className={styles.phaseIcon} iconName='Calendar' /> */}
+          <span className={styles.endDateText}>{project.endDate ? endDate : 'Ikke satt'}</span>
         </div>
       </div>
       <div className={styles.footer}>
-        <Facepile personaSize={PersonaSize.size32} personas={personas} /*onRenderPersonaCoin={_renderDefaultPersona}*//>
-        <DocumentCardActions actions={actions}/>
+        <Facepile
+          personaSize={PersonaSize.size32}
+          personas={personas} /*onRenderPersonaCoin={_renderDefaultPersona}*/
+        />
+        <DocumentCardActions actions={actions} />
       </div>
     </div>
   )
