@@ -6,7 +6,6 @@ import { DocumentCardActions, DocumentCardTitle } from 'office-ui-fabric-react/l
 import { Facepile, IFacepilePersona, PersonaSize } from 'office-ui-fabric-react'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
 import strings from 'PortfolioWebPartsStrings'
-import { formatDate } from 'pp365-shared/lib/helpers'
 import moment from 'moment'
 
 export const Card: FunctionComponent<IProjectCardProps> = ({
@@ -29,32 +28,31 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
     title: strings.ProjectManager
   }
 
-  const _renderDefaultPersona = () => {
-    if (project.owner) {
-      return (
-        <div>
-          <Facepile personaSize={PersonaSize.size32} personas={personas} />
-        </div>
-      )
-    }
-  }
+  // const _renderDefaultPersona = () => {
+  //   if (project.owner) {
+  //     return (
+  //       <div>
+  //         <Facepile personaSize={PersonaSize.size32} personas={personas} />
+  //       </div>
+  //     )
+  //   }
+  // }
 
   const personas: IFacepilePersona[] = []
   personas.push(ownerPersona)
   personas.push(managerPersona)
 
   let phaseBgColor = '#343a40'
-  let phaseColor = 'black'
 
   switch (project.phase) {
     case 'Konsept':
     case 'Realisere':
-      phaseBgColor = '#68AABC'
+      phaseBgColor = 'rgb(0,114,198,0.8)'
       break
     case 'Planlegge':
     case 'Gjennomføre':
     case 'Avslutte':
-      phaseBgColor = '#8FB246'
+      phaseBgColor = 'rgb(51,153,51,0.8)'
       break
     // default:
     //   phaseBgColor = '#343a40'
@@ -64,14 +62,34 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
     project.GtProjectServiceAreaText && project.GtProjectServiceAreaText.split(';')
   const typeText = project.GtProjectTypeText && project.GtProjectTypeText.split(';')
 
+  const _renderLifeCycleStatus = () => {
+    if (project.GtProjectLifecycleStatus) {
+      return (
+        <div
+          className={styles.tag}
+          style={{ backgroundColor: 'rgb(234,163,0,0.6)', color: 'black' }}>
+          <span>{project.GtProjectLifecycleStatus}</span>
+        </div>
+      )
+    }
+  }
+
   const _renderServiceAreaText = () => {
     if (serviceAreaText) {
       return (
-        <div>
+        <>
           {serviceAreaText.map((text) => (
-            <div className={styles.tag}>{text}</div>
+            <div
+              className={styles.tag}
+              style={
+                project.phase
+                  ? { backgroundColor: 'rgb(234,163,0,0.6)', color: 'black' }
+                  : { backgroundColor: 'rgb(234,163,0)', color: 'black' }
+              }>
+              <span>{text}</span>
+            </div>
           ))}
-        </div>
+        </>
       )
     }
   }
@@ -79,18 +97,22 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
   const _renderTypeText = () => {
     if (typeText) {
       return (
-        <div>
-          {typeText.map((type) => {
-            return <div className={styles.tag}>{type}</div>
-          })}
-        </div>
+        <>
+          {typeText.map((type) => (
+            <div
+              className={styles.tag}
+              style={
+                project.phase
+                  ? { backgroundColor: 'rgb(234,163,0,0.6)', color: 'black' }
+                  : { backgroundColor: '#C0C0C0', color: 'black' }
+              }>
+              <span>{type}</span>
+            </div>
+          ))}
+        </>
       )
     }
   }
-
-  console.log(serviceAreaText)
-
-  // let startDate = moment(project.startDate).format('DD.MM.YYYY')
   let endDate = moment(project.endDate).format('DD.MM.YYYY')
 
   return (
@@ -103,7 +125,7 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
         title={project.phase}
         style={
           project.phase
-            ? { backgroundColor: phaseBgColor, color: phaseColor }
+            ? { backgroundColor: phaseBgColor, color: 'white' }
             : { backgroundColor: '#C0C0C0', color: 'black' }
         }
         className={styles.phaseLabel}>
@@ -118,33 +140,13 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
       />
       <hr />
       <div className={styles.labels}>
-        <div
-          title={project.GtProjectServiceAreaText}
-          style={
-            project.phase
-              ? { backgroundColor: phaseBgColor, color: phaseColor }
-              : { backgroundColor: '#C0C0C0', color: 'black' }
-          }>
-          <span>{_renderServiceAreaText()}</span>
-        </div>
-        <div
-          title={project.GtProjectTypeText}
-          style={
-            project.phase
-              ? { backgroundColor: phaseBgColor, color: phaseColor }
-              : { backgroundColor: '#C0C0C0', color: 'black' }
-          }>
-          <span>{_renderTypeText()}</span>
-        </div>
+        {_renderLifeCycleStatus()}
+        {_renderServiceAreaText()}
+        {_renderTypeText()}
       </div>
 
       <div className={styles.content}>
-        {/* <div title='Startdato' className={styles.startDate}>
-          <Icon className={styles.phaseIcon} iconName='Calendar' />
-          <span className={styles.text}>{project.startDate ? startDate : 'Ikke satt'}</span>
-        </div> */}
         <div title='Sluttdato' className={styles.endDate}>
-          {/* Show Calendar icon, with red color if endDate has passed */}
           <Icon
             className={styles.endDateIcon}
             iconName='Calendar'
@@ -154,13 +156,12 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
                 : { color: 'black' }
             }
           />
-          {/* <Icon className={styles.phaseIcon} iconName='Calendar' /> */}
           <span className={styles.endDateText}>{project.endDate ? endDate : 'Ikke satt'}</span>
         </div>
       </div>
       <div className={styles.footer}>
         <Facepile
-          personaSize={PersonaSize.size32}
+          personaSize={PersonaSize.size40}
           personas={personas} /*onRenderPersonaCoin={_renderDefaultPersona}*/
         />
         <DocumentCardActions actions={actions} />
