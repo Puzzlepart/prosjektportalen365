@@ -557,6 +557,8 @@ export class DataAdapter implements IDataAdapter {
           'GtProjectManagerId',
           'GtProjectPhaseText',
           'GtProjectLifecycleStatus',
+          'GtProjectServiceAreaText',
+          'GtProjectTypeText',
           'GtStartDate',
           'GtEndDate',
           'Title',
