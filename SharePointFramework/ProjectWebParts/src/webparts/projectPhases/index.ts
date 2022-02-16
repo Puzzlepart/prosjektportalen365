@@ -5,12 +5,15 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
+import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader';
+import { PropertyFieldToggleWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldToggleWithCallout';
 import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
 import { IProjectPhasesProps, ProjectPhases } from 'components/ProjectPhases'
 import 'office-ui-fabric-react/dist/css/fabric.min.css'
 import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
+import React from 'react';
 
 export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPhasesProps> {
   private _fields: { Title: string; InternalName: string }[] = []
@@ -70,8 +73,15 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
             {
               groupName: strings.AdvancedGroupName,
               groupFields: [
-                PropertyPaneToggle('useDynamicHomepage', {
-                  label: strings.UseDynamicHomepageFieldLabel
+                PropertyFieldToggleWithCallout('useDynamicHomepage', {
+                  calloutTrigger: CalloutTriggers.Click,
+                  key: 'useDynamicHomepageFieldId',
+                  label: strings.UseDynamicHomepageFieldLabel,
+                  onText: 'På',
+                  offText: 'Av',
+                  calloutWidth: 430,
+                  calloutContent: React.createElement('p', {}, strings.UseDynamicHomepageCalloutText),
+                  checked: this.properties.useDynamicHomepage
                 })
               ]
             }

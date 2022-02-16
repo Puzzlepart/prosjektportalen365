@@ -139,6 +139,7 @@ declare interface IProjectWebPartsStrings {
   ShowCmdTimelineListLabel: string;
   ShowTimelineListLabel: string;
   UseDynamicHomepageFieldLabel: string;
+  UseDynamicHomepageCalloutText: string;
   AdvancedGroupName: string;
 }
 

@@ -141,6 +141,7 @@ define([], function () {
     ShowCmdTimelineListLabel: 'Vis kommandolinje for liste',
     ShowTimelineListLabel: 'Vis liste',
     UseDynamicHomepageFieldLabel: 'Bruk dynamisk hjemmeside',
+    UseDynamicHomepageCalloutText: 'Her kan du velge om fasevelgeren skal være dynamisk og bruke egne sider for hver fase. Det krever at det er opprettet sider for hver fase på forhånd. Navnene på sidene må være identiske med navnene på fasene.',
     AdvancedGroupName: 'Avansert'
   }
 })

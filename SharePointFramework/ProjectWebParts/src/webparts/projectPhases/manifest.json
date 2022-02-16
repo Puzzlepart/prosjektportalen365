@@ -28,7 +28,8 @@
         "syncPropertiesAfterPhaseChange": true,
         "showSubText": true,
         "subTextTruncateLength": 50,
-        "currentPhaseViewName": "Gjeldende fase"
+        "currentPhaseViewName": "Gjeldende fase",
+        "useDynamicHomepage": false
       }
     }
   ]
