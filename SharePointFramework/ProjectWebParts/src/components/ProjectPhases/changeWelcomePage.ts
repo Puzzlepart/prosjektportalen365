@@ -12,13 +12,10 @@ export const changeWelcomePage = async (
 ) => {
   try {
     console.log("changeWelcomePage", phaseName)
-
     let spfxJsomContext = await initSpfxJsom(absoluteUrl)
     spfxJsomContext.jsomContext.web['get_rootFolder']()['set_welcomePage'](`SitePages/${phaseName}.aspx`);
     spfxJsomContext.jsomContext.web.update()
     await ExecuteJsomQuery(spfxJsomContext.jsomContext)
-
-    sessionStorage.clear()
   } catch (error) {
     throw error
   }

@@ -141,6 +141,7 @@ declare interface IProjectWebPartsStrings {
   UseDynamicHomepageFieldLabel: string;
   UseDynamicHomepageCalloutText: string;
   AdvancedGroupName: string;
+  UseDynamicHomepageChangePhaseDescription: string;
 }
 
 declare module 'ProjectWebPartsStrings' {

@@ -1,4 +1,5 @@
 import SPDataAdapter from 'data'
+import { Icon } from 'office-ui-fabric-react'
 import Dialog, { DialogType } from 'office-ui-fabric-react/lib/Dialog'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
@@ -46,11 +47,17 @@ export const ChangePhaseDialog = () => {
         title={strings.ChangePhaseText}
         subText={
           state.view === View.Confirm &&
-          format(strings.ConfirmChangePhase, context.state.confirmPhase.name) + "Endring til denne fasen vil også medføre endring av forside til prosjektet."
+          format(strings.ConfirmChangePhase, context.state.confirmPhase.name)
         }
         dialogContentProps={{ type: DialogType.largeHeader }}
         modalProps={{ isDarkOverlay: true, isBlocking: false }}
         onDismiss={() => context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())}>
+        {state.view === View.Confirm && context.props.useDynamicHomepage &&
+          <div className={styles.useDynamicHomepageContent}>
+            <Icon iconName={'Info'} className={styles.descriptionIcon} />
+            {strings.UseDynamicHomepageChangePhaseDescription}
+          </div>
+        }
         <Body />
         <Footer />
       </Dialog>
