@@ -1,53 +1,54 @@
 {
-    "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
-    "version": "2.0",
-    "bundles": {
-        "project-status-web-part": {
-            "components": [
-                {
-                    "entrypoint": "./lib/webparts/projectStatus/index.js",
-                    "manifest": "./src/webparts/projectStatus/manifest.json"
-                }
-            ]
-        },
-        "project-phases-web-part": {
-            "components": [
-                {
-                    "entrypoint": "./lib/webparts/projectPhases/index.js",
-                    "manifest": "./src/webparts/projectPhases/manifest.json"
-                }
-            ]
-        },
-        "project-information-web-part": {
-            "components": [
-                {
-                    "entrypoint": "./lib/webparts/projectInformation/index.js",
-                    "manifest": "./src/webparts/projectInformation/manifest.json"
-                }
-            ]
-        },
-        "risk-matrix-web-part": {
-            "components": [
-                {
-                    "entrypoint": "./lib/webparts/riskMatrix/index.js",
-                    "manifest": "./src/webparts/riskMatrix/manifest.json"
-                }
-            ]
-        },
-        "project-timeline-web-part": {
-            "components": [
-                {
-                    "entrypoint": "./lib/webparts/projectTimeline/index.js",
-                    "manifest": "./src/webparts/projectTimeline/manifest.json"
-                }
-            ]
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "project-status-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/projectStatus/index.js",
+          "manifest": "./src/webparts/projectStatus/manifest.json"
         }
+      ]
     },
-    "externals": {},
-    "localizedResources": {
-        "ProjectWebPartsStrings": "lib/loc/{locale}.js",
-        "PortfolioWebPartsStrings": "node_modules/pp365-portfoliowebparts/lib/loc/{locale}.js",
-        "PzlSPFxComponentsStrings": "lib/loc/{locale}.js",
-        "ControlStrings": "lib/loc/{locale}.js"
+    "project-phases-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/projectPhases/index.js",
+          "manifest": "./src/webparts/projectPhases/manifest.json"
+        }
+      ]
+    },
+    "project-information-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/projectInformation/index.js",
+          "manifest": "./src/webparts/projectInformation/manifest.json"
+        }
+      ]
+    },
+    "risk-matrix-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/riskMatrix/index.js",
+          "manifest": "./src/webparts/riskMatrix/manifest.json"
+        }
+      ]
+    },
+    "project-timeline-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/projectTimeline/index.js",
+          "manifest": "./src/webparts/projectTimeline/manifest.json"
+        }
+      ]
     }
+  },
+  "externals": {},
+  "localizedResources": {
+    "ProjectWebPartsStrings": "lib/loc/{locale}.js",
+    "PortfolioWebPartsStrings": "node_modules/pp365-portfoliowebparts/lib/loc/{locale}.js",
+    "PzlSPFxComponentsStrings": "lib/loc/{locale}.js",
+    "ControlStrings": "lib/loc/{locale}.js",
+    "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js"
+  }
 }
