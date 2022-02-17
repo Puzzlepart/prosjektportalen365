@@ -3,6 +3,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with issue ID.
 
+## 1.X.X - TBA
+
+### Added
+
+- Added functionality for dynamic welcomepages based on project phases #643
+
 ## 1.4.0 - 08.02.2022
 
 ### Added
