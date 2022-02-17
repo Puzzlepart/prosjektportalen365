@@ -3,7 +3,7 @@ import styles from './Card.module.scss'
 import { IProjectCardProps } from '../types'
 import { placeholderImage } from '../../types'
 import { DocumentCardActions, DocumentCardTitle } from 'office-ui-fabric-react/lib/DocumentCard'
-import { Facepile, IFacepilePersona, PersonaSize } from 'office-ui-fabric-react'
+import { IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
 import strings from 'PortfolioWebPartsStrings'
 import moment from 'moment'
@@ -13,34 +13,18 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
   shouldTruncateTitle,
   actions
 }: IProjectCardProps) => {
-  const ownerPersona = {
-    personaName: project.owner
+  const ownerPersona: IPersonaSharedProps = {
+    title: project.owner
       ? `${project.owner.text} | ${strings.ProjectOwner}`
       : `Prosjekteier ikke satt`,
-    imageUrl: project.owner ? project.owner.imageUrl : null,
-    title: strings.ProjectOwner
+    imageUrl: project.owner ? project.owner.imageUrl : null
   }
-  const managerPersona = {
-    personaName: project.manager
+  const managerPersona: IPersonaSharedProps = {
+    title: project.manager
       ? `${project.manager.text} | ${strings.ProjectManager}`
       : `Prosjektleder ikke satt`,
-    imageUrl: project.manager ? project.manager.imageUrl : null,
-    title: strings.ProjectManager
+    imageUrl: project.manager ? project.manager.imageUrl : null
   }
-
-  // const _renderDefaultPersona = () => {
-  //   if (project.owner) {
-  //     return (
-  //       <div>
-  //         <Facepile personaSize={PersonaSize.size32} personas={personas} />
-  //       </div>
-  //     )
-  //   }
-  // }
-
-  const personas: IFacepilePersona[] = []
-  personas.push(ownerPersona)
-  personas.push(managerPersona)
 
   let phaseBgColor = '#343a40'
 
@@ -81,11 +65,7 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
           {serviceAreaText.map((text) => (
             <div
               className={styles.tag}
-              style={
-                project.phase
-                  ? { backgroundColor: 'rgb(234,163,0,0.6)', color: 'black' }
-                  : { backgroundColor: 'rgb(234,163,0)', color: 'black' }
-              }>
+              style={{ backgroundColor: 'rgb(234,163,0,0.6)', color: 'black' }}>
               <span>{text}</span>
             </div>
           ))}
@@ -101,11 +81,7 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
           {typeText.map((type) => (
             <div
               className={styles.tag}
-              style={
-                project.phase
-                  ? { backgroundColor: 'rgb(234,163,0,0.6)', color: 'black' }
-                  : { backgroundColor: '#C0C0C0', color: 'black' }
-              }>
+              style={{ backgroundColor: 'rgb(234,163,0,0.6)', color: 'black' }}>
               <span>{type}</span>
             </div>
           ))}
@@ -113,6 +89,7 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
       )
     }
   }
+
   let endDate = moment(project.endDate).format('DD.MM.YYYY')
 
   return (
@@ -160,10 +137,14 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
         </div>
       </div>
       <div className={styles.footer}>
-        <Facepile
-          personaSize={PersonaSize.size40}
-          personas={personas} /*onRenderPersonaCoin={_renderDefaultPersona}*/
-        />
+        <div className={styles.persona}>
+          {project.owner && (
+            <Persona {...ownerPersona} size={PersonaSize.size40} hidePersonaDetails />
+          )}
+          {project.manager && (
+            <Persona {...managerPersona} size={PersonaSize.size40} hidePersonaDetails />
+          )}
+        </div>
         <DocumentCardActions actions={actions} />
       </div>
     </div>

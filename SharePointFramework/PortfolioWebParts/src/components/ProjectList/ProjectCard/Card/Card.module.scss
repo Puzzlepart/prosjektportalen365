@@ -43,19 +43,18 @@
   }
 
   .phaseLabel {
-    display: inline-block;
-    position: relative;
+    display: flex;
+    justify-content: center;
     align-items: center;
+    position: relative;
     border: 1px solid;
     border-color: transparent;
     border-radius: 4px;
-    display: flex;
     flex-wrap: nowrap;
     font-size: 12px;
     font-weight: bold;
     font-weight: 400;
     height: 16px;
-    justify-content: center;
     line-height: 16px;
     max-width: 75px;
     min-width: 4px;
@@ -84,7 +83,6 @@
     display: flex;
     flex-wrap: wrap;
     padding-top: 5px;
-
 
     .tag {
       display: inline-block;
@@ -133,5 +131,11 @@
     position: absolute;
     bottom: 10px;
     width: 90%;
+
+    .persona {
+      display: flex;
+      justify-content: space-between;
+      width: 90px;
+    }
   }
 }
