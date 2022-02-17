@@ -18,7 +18,7 @@ export const changePhase = async (
 ) => {
   try {
     await SPDataAdapter.project.updatePhase(phase, phaseTextField)
-    if (props.useDynamicHomepage) await changeWelcomePage(phase.name, props.webPartContext.pageContext.web.absoluteUrl);
+    if (props.useDynamicHomepage) await changeWelcomePage(phase.name, props.webPartContext.pageContext.web.absoluteUrl)
     await modifyCurrentPhaseView(phase.name, props.currentPhaseViewName)
     sessionStorage.clear()
   } catch (error) {

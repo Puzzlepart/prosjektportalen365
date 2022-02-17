@@ -9,7 +9,7 @@ import { IProjectPhasesData, IProjectPhasesProps } from '.'
  * @param {IProjectPhasesProps} props IProjectPhasesProps props
  */
 export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPhasesData> {
-  const { phaseField } = props;
+  const { phaseField } = props
   try {
     const [phaseFieldCtx, checklistData] = await Promise.all([
       SPDataAdapter.getTermFieldContext(phaseField),
