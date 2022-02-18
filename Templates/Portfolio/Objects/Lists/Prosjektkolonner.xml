@@ -431,7 +431,6 @@
             <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
-        </pnp:DataRow>
             <pnp:DataRow> <!-- ID: 32 -->
             <pnp:DataValue FieldName="GtSortOrder">320</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Program</pnp:DataValue>
@@ -445,7 +444,6 @@
             <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
-        </pnp:DataRow>
             <pnp:DataRow> <!-- ID: 33 -->
             <pnp:DataValue FieldName="GtSortOrder">330</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Overordnet</pnp:DataValue>
@@ -455,6 +453,19 @@
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
+            <pnp:DataRow> <!-- ID: 32 -->
+            <pnp:DataValue FieldName="GtSortOrder">320</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Prosjektstatus</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtProjectLifecycleStatus</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtProjectLifecycleStatusOWSCHCS</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>

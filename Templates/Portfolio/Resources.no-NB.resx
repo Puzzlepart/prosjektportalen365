@@ -202,6 +202,12 @@
   <data name="Lists_Permission_Configuration_Description" xml:space="preserve">
     <value>Tillatelseskonfigurasjon for nye prosjekter. Denne listen må ikke endres på.</value>
   </data>
+  <data name="Lists_TemplateOptions_Title" xml:space="preserve">
+    <value>Maloppsett</value>
+  </data>
+  <data name="Lists_TemplateOptions_Url" xml:space="preserve">
+    <value>Lists/Maloppsett</value>
+  </data>
   <data name="Lists_TimelineContent_Title" xml:space="preserve">
     <value>Tidslinjeinnhold</value>
   </data>
@@ -1158,7 +1164,7 @@
     <value>Vis i portefølje</value>
   </data>
   <data name="SiteFields_GtShowInPortfolio_Description" xml:space="preserve">
-    <value>Velg 'Ja' dersom usikkerheten skal synliggjøes i den sentrale risikooversikten på porteføljenivå (gjør risikoen synlig for alle med tilgang til prosjektporalen og prosjektet)</value>
+    <value>Velg 'Ja' dersom elementet skal synliggjøres i den sentrale oversikten på porteføljenivå (gjør elementet synlig for alle med tilgang til prosjektportalen og prosjektet)</value>
   </data>
   <data name="SiteFields_GtStakeholderActions_DisplayName" xml:space="preserve">
     <value>Tiltak</value>
@@ -1311,7 +1317,7 @@
     <value></value>
   </data>
   <data name="SiteFields_GtSecIcon_Description" xml:space="preserve">
-    <value>Ikon fra https://dev.office.com/fabric#/styles/icons</value>
+    <value>Ikon fra https://uifabricicons.azurewebsites.net/</value>
   </data>
   <data name="SiteFields_GtSecShowInNavbar_Description" xml:space="preserve">
     <value></value>
@@ -1341,7 +1347,7 @@
     <value></value>
   </data>
   <data name="SiteFields_GtPortfolioFabricIcon_Description" xml:space="preserve">
-    <value>Ikon fra https://developer.microsoft.com/en-us/fabric#/styles/icons</value>
+    <value>Ikon fra https://uifabricicons.azurewebsites.net/</value>
   </data>
   <data name="SiteFields_GtPortfolioColumn_Description" xml:space="preserve">
     <value></value>

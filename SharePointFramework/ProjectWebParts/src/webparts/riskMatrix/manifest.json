@@ -1,39 +1,39 @@
 {
-    "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-    "id": "e536ae15-0748-4d96-b160-3abb30f1b71e",
-    "alias": "RiskMatrixWebPart",
-    "componentType": "WebPart",
-    "version": "1.3.0",
-    "manifestVersion": 2,
-    "requiresCustomScript": false,
-    "hiddenFromToolbox": false,
-    "supportedHosts": [
-        "SharePointWebPart"
-    ],
-    "preconfiguredEntries": [
-        {
-            "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
-            "group": {
-                "default": "Other"
-            },
-            "title": {
-                "default": "Risikomatrise"
-            },
-            "description": {
-                "default": " "
-            },
-            "officeFabricIconFontName": "AsteriskSolid",
-            "properties": {
-                "listName": "Usikkerhet",
-                "viewXml": "<View><Query><Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">Risiko</Value></Eq></Where></Query></View>",
-                "probabilityFieldName": "GtRiskProbability",
-                "consequenceFieldName": "GtRiskConsequence",
-                "probabilityPostActionFieldName": "GtRiskProbabilityPostAction",
-                "consequencePostActionFieldName": "GtRiskConsequencePostAction",
-                "width": 800,
-                "height": 400,
-                "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>"
-            }
-        }
-    ]
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "e536ae15-0748-4d96-b160-3abb30f1b71e",
+  "alias": "RiskMatrixWebPart",
+  "componentType": "WebPart",
+  "version": "1.4.0",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "hiddenFromToolbox": false,
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "Risikomatrise"
+      },
+      "description": {
+        "default": " "
+      },
+      "officeFabricIconFontName": "AsteriskSolid",
+      "properties": {
+        "listName": "Usikkerhet",
+        "viewXml": "<View><Query><Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">Risiko</Value></Eq></Where></Query></View>",
+        "probabilityFieldName": "GtRiskProbability",
+        "consequenceFieldName": "GtRiskConsequence",
+        "probabilityPostActionFieldName": "GtRiskProbabilityPostAction",
+        "consequencePostActionFieldName": "GtRiskConsequencePostAction",
+        "width": 800,
+        "height": 400,
+        "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>"
+      }
+    }
+  ]
 }

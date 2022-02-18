@@ -30,6 +30,9 @@ export class SetTaxonomyFields extends BaseTask {
       )
       Object.keys(termSetIds).forEach((fieldName) => {
         const termSetId = termSetIds[fieldName]
+        if (!termSetId) {
+          return params
+        }
         this.logInformation(`Setting Term Set ID ${termSetId} for ${fieldName}`)
         const field: SP.Field = jsomContext.rootWeb.get_fields().getByInternalNameOrTitle(fieldName)
         const taxField: SP.Taxonomy.TaxonomyField = jsomContext.clientContext.castTo(

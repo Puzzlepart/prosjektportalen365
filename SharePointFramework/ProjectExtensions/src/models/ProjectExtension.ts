@@ -13,6 +13,7 @@ export interface IProjectExtension {
 
 export class ProjectExtension implements IDropdownOption {
   public key: string
+  public id: number
   public text: string
   public isDefault: boolean
   public subText: string
@@ -24,6 +25,7 @@ export class ProjectExtension implements IDropdownOption {
     this.isDefault = spItem.GtExtensionDefault
     this.subText = spItem.FieldValuesAsText.GtDescription
     this.serverRelativeUrl = spItem.File.ServerRelativeUrl
+    this.id = spItem.Id
   }
 
   public async getSchema(): Promise<Schema> {

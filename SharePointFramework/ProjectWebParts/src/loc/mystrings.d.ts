@@ -138,6 +138,10 @@ declare interface IProjectWebPartsStrings {
   ShowInfoMessageLabel: string;
   ShowCmdTimelineListLabel: string;
   ShowTimelineListLabel: string;
+  UseDynamicHomepageFieldLabel: string;
+  UseDynamicHomepageCalloutText: string;
+  AdvancedGroupName: string;
+  UseDynamicHomepageChangePhaseDescription: string;
   CreateParentProjectLabel: string;
   ChildProjectAdminLabel: string;
 }

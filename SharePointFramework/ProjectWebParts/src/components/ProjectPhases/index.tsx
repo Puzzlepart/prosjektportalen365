@@ -26,7 +26,7 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
   const [state, dispatch] = useReducer(reducer, initState())
 
   useEffect(() => {
-    fetchData(props.phaseField).then((data) => dispatch(INIT_DATA({ data })))
+    fetchData(props).then((data) => dispatch(INIT_DATA({ data })))
   }, [])
 
   if (state.hidden) return null
@@ -46,7 +46,7 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
    */
   const onChangePhase = async () => {
     dispatch(INIT_CHANGE_PHASE())
-    await changePhase(state.confirmPhase, state.data.phaseTextField, props.currentPhaseViewName)
+    await changePhase(state.confirmPhase, state.data.phaseTextField, props)
     dispatch(SET_PHASE({ phase: state.confirmPhase }))
     if (
       props.syncPropertiesAfterPhaseChange === undefined ||
@@ -54,7 +54,10 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
     ) {
       setTimeout(
         () =>
-          (document.location.href = `${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`),
+          {
+            document.location.href = `${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`
+            window.location.reload()
+          },
         1000
       )
     }

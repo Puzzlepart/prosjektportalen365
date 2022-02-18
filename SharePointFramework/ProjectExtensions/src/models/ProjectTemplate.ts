@@ -10,9 +10,16 @@ export interface IProjectTemplateSPItem {
   ListContentConfigLookupId?: number[]
   File?: { UniqueId: string; Name: string; Title: string; ServerRelativeUrl: string }
   FieldValuesAsText?: TypedHash<string>
+  GtProjectTemplateId?: number
+  GtProjectExtensionsId?: number[]
+  GtProjectColumns: string
+  GtProjectCustomColumns: string
+  GtProjectContentType: string
+  GtProjectStatusContentType: string
   GtIsProgram: boolean
   GtIsParentProject: boolean
   IsHiddenTemplate: boolean
+  GtProjectPhaseTermId: string
 }
 
 export class ProjectTemplate implements IDropdownOption {
@@ -24,18 +31,24 @@ export class ProjectTemplate implements IDropdownOption {
   public iconName: string
   public serverRelativeUrl: string
   public listContentConfigIds: number[]
+  public projectTemplateId: number
+  public listExtensionIds: number[]
+  public projectContentType: string
+  public projectStatusContentType: string
+  public projectColumns: string
+  public projectCustomColumns: string
+  public projectPhaseTermId: string
   public isProgram: boolean
   public isParentProject: boolean
   public isHidden: boolean
 
   constructor(spItem: IProjectTemplateSPItem, public web: Web) {
     this.id = spItem.Id
-    this.key = `projecttemplate_${this.id}`
-    this.text = spItem.File.Title
+    this.key = `Template${this.id}`
+    this.text = spItem.FieldValuesAsText.Title
     this.subText = spItem.FieldValuesAsText.GtDescription
-    this.isDefault = spItem.IsDefaultTemplate
+    this.isDefault = spItem?.IsDefaultTemplate
     this.iconName = spItem.IconName
-    this.serverRelativeUrl = spItem.File.ServerRelativeUrl
     this.listContentConfigIds =
       spItem.ListContentConfigLookupId && spItem.ListContentConfigLookupId.length > 0
         ? spItem.ListContentConfigLookupId
@@ -43,9 +56,32 @@ export class ProjectTemplate implements IDropdownOption {
     this.isProgram = spItem.GtIsProgram
     this.isParentProject = spItem.GtIsParentProject
     this.isHidden = spItem.IsHiddenTemplate
+    this.projectTemplateId = spItem.GtProjectTemplateId
+    this.listExtensionIds =
+      spItem.GtProjectExtensionsId && spItem.GtProjectExtensionsId.length > 0
+        ? spItem.GtProjectExtensionsId
+        : null
+    this.projectContentType = spItem.GtProjectContentType
+    this.projectStatusContentType = spItem.GtProjectStatusContentType
+    this.projectColumns = spItem.GtProjectColumns
+    this.projectCustomColumns = spItem.GtProjectCustomColumns
+    this.projectPhaseTermId = spItem.GtProjectPhaseTermId
+    this.serverRelativeUrl = spItem.File?.ServerRelativeUrl
   }
 
   public async getSchema(): Promise<Schema> {
-    return await this.web.getFileByServerRelativeUrl(this.serverRelativeUrl).getJSON()
+    const schema = await this.web.getFileByServerRelativeUrl(this.serverRelativeUrl).getJSON()
+    if (!schema.Parameters){
+      schema.Parameters = {}
+    }
+      schema.Parameters.ProjectContentTypeId = this?.projectContentType ?? schema.Parameters.ProjectContentTypeId 
+      schema.Parameters.ProjectStatusContentTypeId = this?.projectStatusContentType ?? schema.Parameters.ProjectStatusContentTypeId
+      schema.Parameters.ProvisionSiteFields = this?.projectColumns ?? schema.Parameters.ProvisionSiteFields
+      schema.Parameters.CustomSiteFields = this?.projectCustomColumns ?? schema.Parameters.CustomSiteFields
+      if (!schema.Parameters.TermSetIds) {
+        schema.Parameters.TermSetIds = {}
+      }
+      schema.Parameters.TermSetIds.GtProjectPhase = this?.projectPhaseTermId ?? schema.Parameters.TermSetIds.GtProjectPhase
+    return schema
   }
 }

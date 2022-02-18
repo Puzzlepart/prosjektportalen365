@@ -20,10 +20,10 @@ const templateNames = {
 }
 
 const RESOURCES_JSON = require('../Resources.json')
-fs.readdirSync('../JsonTemplates').forEach(file => {
+
+fs.readdirSync(path.resolve(__dirname, '../JsonTemplates')).forEach(file => {
     const TEMPLATE_JSON = require(`../JsonTemplates/${file}`)
     const templateType = file.substring("_JsonTemplate".length).replace((/\.[^.]+/), '')
-    console.log(templateNames['nb-NO'][templateType]);
     const OUTPUT_PATHS = {
         'en-US': path.resolve(__dirname, `../Content/Portfolio_content.en-US/ProjectTemplates/${templateNames['en-US'][templateType]}.txt`),
         'no-NB': path.resolve(__dirname, `../Content/Portfolio_content.no-NB/ProjectTemplates/${templateNames['nb-NO'][templateType]}.txt`)

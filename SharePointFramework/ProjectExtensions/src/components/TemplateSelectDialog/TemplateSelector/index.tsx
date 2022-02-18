@@ -38,7 +38,7 @@ export const TemplateSelector = (props: ITemplateSelectorProps) => {
     <div className={styles.templateSelector}>
       <div className={styles.dropdown}>
         <Dropdown
-          disabled={props.templates.length <= 1}
+          disabled={props.templates?.length <= 1}
           defaultSelectedKey={props.selectedTemplate.key}
           onChanged={onTemplateSelected}
           options={props.templates}
