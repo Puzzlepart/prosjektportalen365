@@ -176,17 +176,8 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
             typeof value === 'string' &&
             value.toLowerCase().indexOf(state.searchTerm) !== -1
           )
-        }).length
-        return matches > 0
-      })
-      .sort((a, b) =>
-        sortAlphabetically<ProjectListModel>(
-          a,
-          b,
-          state?.sort?.isSortedDescending,
-          state?.sort?.fieldName
         )
-      )
+    )
   }
 
   /**

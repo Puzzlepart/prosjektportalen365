@@ -566,7 +566,7 @@ export class DataAdapter implements IDataAdapter {
           'GtIsProgram'
         )
         // eslint-disable-next-line quotes
-        .filter("GtProjectLifecycleStatus ne 'Avsluttet'")
+        .filter(getAll ? '' : "GtProjectLifecycleStatus ne 'Avsluttet'")
         .orderBy('Title')
         .top(500)
         .usingCaching()

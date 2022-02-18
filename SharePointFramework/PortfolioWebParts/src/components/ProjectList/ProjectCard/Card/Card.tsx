@@ -11,7 +11,8 @@ import moment from 'moment'
 export const Card: FunctionComponent<IProjectCardProps> = ({
   project,
   shouldTruncateTitle,
-  actions
+  actions,
+  showProjectOwner
 }: IProjectCardProps) => {
   const ownerPersona: IPersonaSharedProps = {
     title: project.owner
@@ -51,7 +52,11 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
       return (
         <div
           className={styles.tag}
-          style={{ backgroundColor: 'rgb(234,163,0,0.6)', color: 'black' }}>
+          style={
+            project.GtProjectLifecycleStatus == 'Aktivt'
+              ? { backgroundColor: 'rgb(234,163,0,0.6)', color: 'black' }
+              : { backgroundColor: 'rgb(255,0,0,0.5)', color: 'black' }
+          }>
           <span>{project.GtProjectLifecycleStatus}</span>
         </div>
       )
@@ -91,6 +96,7 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
   }
 
   let endDate = moment(project.endDate).format('DD.MM.YYYY')
+  console.log(project.GtProjectLifecycleStatus)
 
   return (
     <div
@@ -138,7 +144,7 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
       </div>
       <div className={styles.footer}>
         <div className={styles.persona}>
-          {project.owner && (
+          {showProjectOwner && project.owner && (
             <Persona {...ownerPersona} size={PersonaSize.size40} hidePersonaDetails />
           )}
           {project.manager && (
