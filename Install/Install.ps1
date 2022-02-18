@@ -408,7 +408,7 @@ catch {
 
 if ($Upgrade.IsPresent) {
     try {
-        $LastInstall = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>" | Select-Object -First 1
+        $LastInstall = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>" | Select-Object -First 1 -Wait
         if ($null -ne $LastInstall) {
             $PreviousVersion = $LastInstall.FieldValues["InstallVersion"]
 
@@ -439,6 +439,7 @@ else {
 #endregion
 
 #region Log installation
+Write-Host "[INFO] Logged installation entry" 
 $InstallEndTime = (Get-Date -Format o)
 
 $InstallEntry = @{
