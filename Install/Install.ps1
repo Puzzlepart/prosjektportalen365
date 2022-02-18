@@ -347,7 +347,7 @@ if (-not $SkipTemplate.IsPresent) {
             Apply-PnPProvisioningTemplate "$BasePath\Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
 
-            Write-Host "[INFO] Applying PnP content template to [$Url]"
+            Write-Host "[INFO] Applying PnP template [Portfolio_content] to [$Url]"
             Apply-PnPProvisioningTemplate "$BasePath\Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
         }
@@ -408,7 +408,7 @@ catch {
 
 if ($Upgrade.IsPresent) {
     try {
-        $LastInstall = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>" | Select-Object -First 1
+        $LastInstall = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>" | Select-Object -First 1 -Wait
         if ($null -ne $LastInstall) {
             $PreviousVersion = $LastInstall.FieldValues["InstallVersion"]
 
@@ -439,6 +439,7 @@ else {
 #endregion
 
 #region Log installation
+Write-Host "[INFO] Logged installation entry" 
 $InstallEndTime = (Get-Date -Format o)
 
 $InstallEntry = @{
@@ -462,3 +463,5 @@ try {
 }
 catch {}
 #endregion
+
+Set-PnPTraceLog -Off

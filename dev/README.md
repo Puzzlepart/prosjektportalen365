@@ -29,7 +29,9 @@
 * [➤ Continuous integration](#-continuous-integration)
 	* [Build and install (dev)](#build-and-install-dev)
 	* [Build release (main)](#build-release-main)
+* [➤ Creating a new release](#-creating-a-new-release)
 * [➤ README generation](#-readme-generation)
+* [➤ Versioning](#-versioning)
 </details>
 
 
@@ -215,9 +217,41 @@ With the current approach, with no cache, a full run takes about 30 minutes.
 ![image-20210303133423458](assets/image-20210303133423458.png)
 
 
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#creating-a-new-release)
+
+## ➤ Creating a new release
+
+For creating a new release, we have two options: Minor and patch. New minor version should be created when there is new functionality of interest to users, while patch versions can be created often with bug fixes, adjustments and minimal functional improvements.
+
+Increasing the version number is done by npm scripts. This is done on the dev-branch when the functionality currently in dev is deemed ready for release. To create a new patch-release:
+
+```shelll
+npm version patch
+git push --tags
+```
+
+Then create a Pull Request to merge dev into main. The output from GitHub Actions will include a release package that can be shared as a release on GitHub. No manual build required.
+
+
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#readme-generation)
 
 ## ➤ README generation
+
 READMEs are automatically generated using [@appnest/readme](https://github.com/andreasbm/readme). The main README is generated from [.README](../.README) while this README is generated from [.README](.README). The generation is configured with the `blueprint.json` files.
 
 For the main [README.md)[../README.md] generation, the different parts are included from the [readme](../readme) folder at root level.
+
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#versioning)
+
+## ➤ Versioning
+
+After updating the version using `npm version patch` or `npm version minor` the task `tasks/automatic-versioning.js` are run. This synchronizes versions across the solution.
+
+This `automatic-versioning.js` task can also be run as a **npm script** outside the `postversion` event.
+
+```dockerfile
+npm run @sync-version
+```
+
+

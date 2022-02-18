@@ -1317,7 +1317,7 @@
     <value></value>
   </data>
   <data name="SiteFields_GtSecIcon_Description" xml:space="preserve">
-    <value>Ikon fra https://dev.office.com/fabric#/styles/icons</value>
+    <value>Ikon fra https://uifabricicons.azurewebsites.net/</value>
   </data>
   <data name="SiteFields_GtSecShowInNavbar_Description" xml:space="preserve">
     <value></value>
@@ -1347,7 +1347,7 @@
     <value></value>
   </data>
   <data name="SiteFields_GtPortfolioFabricIcon_Description" xml:space="preserve">
-    <value>Ikon fra https://developer.microsoft.com/en-us/fabric#/styles/icons</value>
+    <value>Ikon fra https://uifabricicons.azurewebsites.net/</value>
   </data>
   <data name="SiteFields_GtPortfolioColumn_Description" xml:space="preserve">
     <value></value>

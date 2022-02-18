@@ -1,14 +1,15 @@
 import { Logger, LogLevel } from '@pnp/logging'
 import SPDataAdapter from 'data'
 import * as strings from 'ProjectWebPartsStrings'
-import { IProjectPhasesData } from '.'
+import { IProjectPhasesData, IProjectPhasesProps } from '.'
 
 /***
  * Fetch phase terms
  *
- * @param {string} phaseField Phase field
+ * @param {IProjectPhasesProps} props IProjectPhasesProps props
  */
-export async function fetchData(phaseField: string): Promise<IProjectPhasesData> {
+export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPhasesData> {
+  const { phaseField } = props
   try {
     const [phaseFieldCtx, checklistData] = await Promise.all([
       SPDataAdapter.getTermFieldContext(phaseField),
@@ -18,6 +19,7 @@ export async function fetchData(phaseField: string): Promise<IProjectPhasesData>
       SPDataAdapter.project.getPhases(phaseFieldCtx.termSetId, checklistData),
       SPDataAdapter.project.getCurrentPhaseName(phaseFieldCtx.fieldName)
     ])
+
     Logger.log({
       message: '(ProjectPhases) _fetchData: Successfully fetch phases',
       level: LogLevel.Info
