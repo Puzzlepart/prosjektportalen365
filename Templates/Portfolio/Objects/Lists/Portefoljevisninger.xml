@@ -45,26 +45,6 @@
             <pnp:DataValue FieldName="GtPortfolioGroupBy" />
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">11</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Alle Program</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} NOT GtProjectLifecycleStatusOWSCHCS="Avsluttet" ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* GtIsProgramOWSBOOL="1"</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioIsDefaultView">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioFabricIcon">PhotoCollection</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioColumns">1,3,5,6,7,8,9,13</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioRefiners">5,6,7,8,9</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioGroupBy" />
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">12</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Alle Overordnede Prosjekter</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} NOT GtProjectLifecycleStatusOWSCHCS="Avsluttet" ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* GtIsParentProjectOWSBOOL="1"</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioIsDefaultView">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioFabricIcon">PhotoCollection</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioColumns">1,3,5,6,7,8,9,13</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioRefiners">5,6,7,8,9</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioGroupBy" />
-        </pnp:DataRow>
-        <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Porteføljestatus</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} NOT GtProjectLifecycleStatusOWSCHCS="Avsluttet" ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*</pnp:DataValue>
@@ -100,6 +80,26 @@
             <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* GtProjectLifecycleStatusOWSCHCS="Avsluttet"</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioIsDefaultView">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioFabricIcon">CircleStop</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumns">1,3,5,6,7,8,9,13</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioRefiners">5,6,7,8,9</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioGroupBy" />
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">11</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Alle program</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} NOT GtProjectLifecycleStatusOWSCHCS="Avsluttet" ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* GtIsProgramOWSBOOL="1"</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioIsDefaultView">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioFabricIcon">PhotoCollection</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumns">1,3,5,6,7,8,9,13</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioRefiners">5,6,7,8,9</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioGroupBy" />
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">12</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Alle overordnede prosjekter</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} NOT GtProjectLifecycleStatusOWSCHCS="Avsluttet" ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* GtIsParentProjectOWSBOOL="1"</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioIsDefaultView">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioFabricIcon">PhotoCollection</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumns">1,3,5,6,7,8,9,13</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioRefiners">5,6,7,8,9</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioGroupBy" />
