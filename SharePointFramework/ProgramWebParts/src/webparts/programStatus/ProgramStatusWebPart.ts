@@ -1,6 +1,6 @@
 import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
-import { IPropertyPaneConfiguration, IPropertyPaneDropdownOption, PropertyPaneDropdown, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane'
+import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane'
 import * as strings from 'ProgramWebPartsStrings'
 import {ProgramStatus} from '../../components/ProgramStatus/ProgramStatus'
 import {IPortfolioConfiguration} from 'pp365-portfoliowebparts/lib/interfaces'
@@ -54,7 +54,6 @@ export default class programProjectOverview extends BaseProgramWebPart<IProgramS
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    console.log('getPropPane')
     return {
       pages: [
         {
