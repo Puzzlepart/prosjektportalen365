@@ -44,6 +44,11 @@ export interface IProjectListProps extends IBaseComponentProps {
   showProjectManager?: boolean
 
   /**
+   * Show Life Cycle Status
+   */
+  showLifeCycleStatus?: boolean
+
+  /**
    * Columns
    */
   columns?: IColumn[]

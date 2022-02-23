@@ -50,7 +50,10 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                 }),
                 PropertyPaneToggle('showProjectManager', {
                   label: strings.ShowProjectManagerFieldLabel
-                })
+                }),
+                PropertyPaneToggle('showLifeCycleStatus', {
+                  label: strings.ShowLifeCycleStatusFieldLabel
+                }),
               ]
             }
           ]

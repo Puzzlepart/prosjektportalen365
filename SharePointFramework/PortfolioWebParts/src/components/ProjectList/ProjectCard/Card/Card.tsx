@@ -12,7 +12,9 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
   project,
   shouldTruncateTitle,
   actions,
-  showProjectOwner
+  showProjectOwner,
+  showProjectManager,
+  showLifeCycleStatus
 }: IProjectCardProps) => {
   const ownerPersona: IPersonaSharedProps = {
     title: project.owner
@@ -123,7 +125,7 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
       />
       <hr />
       <div className={styles.labels}>
-        {_renderLifeCycleStatus()}
+        {showLifeCycleStatus && (_renderLifeCycleStatus())}
         {_renderServiceAreaText()}
         {_renderTypeText()}
       </div>
@@ -147,7 +149,7 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
           {showProjectOwner && project.owner && (
             <Persona {...ownerPersona} size={PersonaSize.size40} hidePersonaDetails />
           )}
-          {project.manager && (
+          {showProjectManager && project.manager && (
             <Persona {...managerPersona} size={PersonaSize.size40} hidePersonaDetails />
           )}
         </div>

@@ -142,6 +142,7 @@ declare interface IPortfolioWebPartsStrings {
   ShowGroupByLabel: string
   ShowProjectLogoFieldLabel: string
   ShowProjectManagerFieldLabel: string
+  ShowLifeCycleStatusFieldLabel: string
   ShowProjectOwnerFieldLabel: string
   ShowSearchBoxLabel: string
   ShowViewSelectorLabel: string

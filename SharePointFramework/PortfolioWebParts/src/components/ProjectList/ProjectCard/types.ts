@@ -28,6 +28,11 @@ export interface IProjectCardProps {
   showProjectManager?: boolean
 
   /**
+   * Show Life Cycle Status
+   */
+  showLifeCycleStatus?: boolean
+
+  /**
    * Actions
    */
   actions: IButtonProps[]
