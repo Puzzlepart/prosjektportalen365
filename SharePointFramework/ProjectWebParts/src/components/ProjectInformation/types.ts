@@ -30,6 +30,11 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   showFieldExternal?: TypedHash<boolean>
 
   /**
+   * Link to the admin page
+   */
+  adminPageLink?: string
+
+  /**
    * Skip sync to hub
    */
   skipSyncToHub?: boolean

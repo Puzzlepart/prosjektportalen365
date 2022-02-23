@@ -125,7 +125,7 @@ export class ProjectInformation extends BaseWebPartComponent<
 
   private administerChildren() {
     const onButtonClick = async () => {
-      window.location.href = this.props.webPartContext.pageContext.web.serverRelativeUrl + "/SitePages/ProgramAdministrasjon.aspx"
+      window.location.href = `${this.props.webPartContext.pageContext.web.serverRelativeUrl}/SitePages/${this.props.adminPageLink}`
     }
     
     const action: ActionType = [

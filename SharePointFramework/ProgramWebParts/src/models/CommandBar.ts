@@ -5,5 +5,4 @@ export interface ICommandBarProperties {
     showViewSelector: boolean
     showGroupBy: boolean
     showSearchBox: boolean
-    defaultViewId?: string
   }

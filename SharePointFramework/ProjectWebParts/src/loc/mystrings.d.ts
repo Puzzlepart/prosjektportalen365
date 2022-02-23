@@ -144,6 +144,7 @@ declare interface IProjectWebPartsStrings {
   UseDynamicHomepageChangePhaseDescription: string;
   CreateParentProjectLabel: string;
   ChildProjectAdminLabel: string;
+  AdminPageLinkLabel: string;
 }
 
 declare module 'ProjectWebPartsStrings' {
