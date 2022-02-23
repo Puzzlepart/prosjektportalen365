@@ -11,7 +11,7 @@ export const ProgramStatus: FunctionComponent<IProgramStatusProps> = (props) => 
       pageContext={props.context.pageContext}
       configuration={props.configuration}
       dataAdapter={props.dataAdapter}
-      defaultViewId={'2'}
+      defaultViewId={props.defaultViewId}
       showCommandBar={props.commandBarProperties.showCommandBar}
       showExcelExportButton={props.commandBarProperties.showExcelExportButton}
       showFilters={props.commandBarProperties.showFilters}

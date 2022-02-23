@@ -8,4 +8,5 @@ export interface IProgramStatusProps {
   commandBarProperties: ICommandBarProperties
   configuration: IPortfolioConfiguration
   dataAdapter: DataAdapter
+  defaultViewId: string
 }

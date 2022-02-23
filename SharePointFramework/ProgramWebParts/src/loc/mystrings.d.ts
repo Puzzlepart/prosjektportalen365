@@ -241,6 +241,7 @@ declare interface IProgramWebPartsStrings {
   ProjectPortfolio_LoadingText: string;
   ProjectPortfolio_SearchBoxLabelText: string;
   ProjectPortfolio_ShowCountText: string;
+  ProgramStatus_ViewIdLabel: string;
 }
 
 declare module "ProgramWebPartsStrings" {
