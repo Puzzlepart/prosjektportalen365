@@ -11,11 +11,11 @@
     "preconfiguredEntries": [{
         "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
         "group": { "default": "Other" },
-        "title": { "default": "Underleveranser" },
+        "title": { "default": "Underområder - leveranser" },
         "description": { "default": "Gir en oversikt over leveranser i underprosjekter" },
         "officeFabricIconFontName": "Page",
         "properties": {
-            "webPartTitle": "Prosjektleveranser",
+            "webPartTitle": "Underområder - leveranser",
             "dataSource": "Alle prosjektleveranser",
             "showCommandBar": true,
             "showSearchBox": true,

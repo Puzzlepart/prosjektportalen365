@@ -11,11 +11,11 @@
     "preconfiguredEntries": [{
         "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
         "group": { "default": "Other" },
-        "title": { "default": "Gevinstoversikt i underprosjekter" },
+        "title": { "default": "Underområder - gevinster" },
         "description": { "default": "Gir en listeoversikt over gevinster i underprosjekter" },
         "officeFabricIconFontName": "Page",
         "properties": {
-            "webPartTitle": "Gevinstoversikt i underprosjekter",
+            "webPartTitle": "Underområder - gevinster",
             "dataSource": "Alle gevinstelementer",
             "searchBoxPlaceholderText": "Søk i gevinster...",
             "showCommandBar": true,

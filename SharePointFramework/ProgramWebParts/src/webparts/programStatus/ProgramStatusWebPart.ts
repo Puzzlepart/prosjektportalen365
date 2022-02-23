@@ -33,6 +33,7 @@ export default class programProjectOverview extends BaseProgramWebPart<IProgramS
       context: this.context,
       dataAdapter: this.dataAdapter,
       configuration: this._configuration,
+      defaultViewId: this.properties.defaultViewId,
       commandBarProperties: {
         showCommandBar: this.properties.showCommandBar,
         showExcelExportButton: this.properties.showExcelExportButton,
@@ -40,7 +41,6 @@ export default class programProjectOverview extends BaseProgramWebPart<IProgramS
         showViewSelector: this.properties.showViewSelector,
         showGroupBy: this.properties.showGroupBy,
         showSearchBox: this.properties.showSearchBox,
-        defaultViewId: this.properties.defaultViewId
       }
     })
   }
@@ -53,24 +53,8 @@ export default class programProjectOverview extends BaseProgramWebPart<IProgramS
     return Version.parse('1.0')
   }
 
-  protected _getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
-    // eslint-disable-next-line default-case
-    switch (targetProperty) {
-      case PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID:
-        {
-          if (this._configuration) {
-            return [
-              { key: null, text: '' },
-              ...this._configuration.views.map((view) => ({ key: view.id, text: view.title }))
-            ]
-          }
-        }
-        break
-    }
-    return []
-  }
-
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+    console.log('getPropPane')
     return {
       pages: [
         {
@@ -81,9 +65,8 @@ export default class programProjectOverview extends BaseProgramWebPart<IProgramS
                 PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_SEARCH_BOX, {
                   label: strings.ShowSearchBoxLabel
                 }),
-                PropertyPaneDropdown(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID, {
-                  label: strings.DefaultViewLabel,
-                  options: this._getOptions(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID)
+                PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID, {
+                  label: strings.ProgramStatus_ViewIdLabel
                 })
               ]
             },

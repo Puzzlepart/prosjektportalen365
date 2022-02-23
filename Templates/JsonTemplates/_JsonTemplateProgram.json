@@ -423,9 +423,9 @@
             },
             {
                 "Url": "#",
-                "Title": "Programmets prosjekter",
+                "Title": "Programinnhold",
                 "Children": [{
-                        "Url": "SitePages/ProgramAdministrasjon.aspx",
+                        "Url": "SitePages/Admin.aspx",
                         "Title": "Administrasjon"
                     },
                     {
@@ -490,14 +490,6 @@
                                     }
                                 },
                                 {
-                                    "Id": "39c4c1c2-63fa-41be-8cc2-f6c0b49b253d",
-                                    "Properties": {
-                                        "title": "Oppgaver",
-                                        "isFullScreen": false,
-                                        "plannerViewMode": "bucketchart"
-                                    }
-                                },
-                                {
                                     "Id": "6676088b-e28e-4a90-b9cb-d0d0303cd2eb",
                                     "Properties": {
                                         "showPerPage": 5,
@@ -515,7 +507,8 @@
                                         "title": "Programinformasjon",
                                         "statusReportsCount": 0,
                                         "statusReportsHeader": "Prosjektstatus",
-                                        "filterField": "GtShowFieldFrontpage"
+                                        "filterField": "GtShowFieldFrontpage",
+                                        "adminPageLink": "Admin.aspx"
                                     }
                                 },
                                 {
@@ -563,7 +556,7 @@
             }]
         },
         {
-            "Name": "ProgramAdministrasjon.aspx",
+            "Name": "Admin.aspx",
             "Title": "Administrasjon",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
@@ -590,7 +583,13 @@
                     "Controls": [{
                         "Id": "01417142-67c8-498b-a6da-6e78003023dd",
                         "Properties": {
-                            "webPartTitle": "Oversikt over underområder"
+                            "webPartTitle": "Underområder - oversikt",
+                            "showCommandBar": true,
+                            "showFilters": true,
+                            "showGroupBy": true,
+                            "showSearchBox": true,
+                            "showViewSelector": true,
+                            "showExcelExportButton": true
                         }
                     }]
                 }]
@@ -607,7 +606,7 @@
                     "Controls": [{
                         "Id": "1ca1e22e-2a44-490f-9e1b-759f986df0d8",
                         "Properties": {
-                            "webPartTitle": "Gevinster fra underområder",
+                            "webPartTitle": "Underområder - gevinster",
                             "dataSource": "Alle gevinstelementer",
                             "searchBoxPlaceholderText": "Søk i gevinster...",
                             "showCommandBar": true,
@@ -632,7 +631,7 @@
                     "Controls": [{
                         "Id": "f97a38ab-78c2-400e-899f-b0d4cda76166",
                         "Properties": {
-                            "webPartTitle": "Tidslinjeelementer fra underområder",
+                            "webPartTitle": "Underområder - tidslinje",
                             "infoText": "Her listes alle prosjektene med start- og sluttdato i programmet. Tidslinjen støtter også faser, delfaser og milepæler. Tidslinjeelementer til dette programmet opprettes i den<A HREF=\"../sitePages/Tidslinje.aspx\">lokale tidslinjeinnhold listen</A>. Prosjekter vises med rød farge, faser i blått, delfaser blågrønt, og milepæler i gult. For å zoome inn/ut i tidslinje: ALT+Musehjul",
                             "dataSource": "Prosjekttidslinje"
                         }
@@ -671,7 +670,7 @@
                     "Controls": [{
                         "Id": "9af4ad23-3d77-452b-b73e-b31a6b5d0161",
                         "Properties": {
-                            "webPartTitle": "Statusoversikt over underområder",
+                            "webPartTitle": "Underområder - status",
                             "showCommandBar": true,
                             "showFilters": false,
                             "showViewSelectors": false,
@@ -717,7 +716,7 @@
                     "Controls": [{
                         "Id": "7ff12e9d-1565-4694-b1de-948d1b174487",
                         "Properties": {
-                            "webPartTitle": "Leveranser fra underområder",
+                            "webPartTitle": "Underområder - leveranser",
                             "dataSource": "Alle prosjektleveranser",
                             "showCommandBar": true,
                             "showSearchBox": true,
@@ -796,7 +795,7 @@
                     "Controls": [{
                         "Id": "3e189ba9-e1c2-4143-9598-820512e48c47",
                         "Properties": {
-                            "webPartTitle": "Usikkerheter fra underområder",
+                            "webPartTitle": "Underområder - usikkerhet",
                             "dataSource": "Programrisiko",
                             "showCommandBar": true,
                             "showSearchBox": true,

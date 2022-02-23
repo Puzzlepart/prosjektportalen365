@@ -17,6 +17,7 @@ export interface IProgramTimelineProps extends IBaseWebPartComponentProps {
   childProjects: string[]
   infoText?: string
   dataSource: string
+  webPartTitle: string
 }
 
 export default class programTimelineWebPart extends BaseProgramWebPart<IProgramTimelineProps> {
@@ -33,7 +34,8 @@ export default class programTimelineWebPart extends BaseProgramWebPart<IProgramT
       dataAdapter: this.dataAdapter,
       childProjects: this.siteIds,
       infoText: this.properties.infoText,
-      dataSource: this.properties.dataSource
+      dataSource: this.properties.dataSource,
+      webPartTitle: this.properties.webPartTitle
     })
   }
 
