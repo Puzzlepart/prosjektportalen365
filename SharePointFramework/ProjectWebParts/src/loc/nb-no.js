@@ -21,6 +21,7 @@ define([], function () {
     CurrentPhaseViewNameFieldLabel: 'Visningsnavn for gjeldende fase',
     DocumentsListName: 'Dokumenter',
     EditPropertiesText: 'Rediger egenskaper',
+    ViewAllPropertiesText: 'Vis alle egenskaper',
     EditReportButtonText: 'Rediger status',
     PublishReportButtonText: 'Publiser',
     GetSnapshotButtonText: 'Åpne som øyeblikksbilde',

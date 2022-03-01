@@ -21,6 +21,7 @@ define([], function () {
     CurrentPhaseViewNameFieldLabel: 'Current phase display name',
     DocumentsListName: 'Documents',
     EditPropertiesText: 'Edit properties',
+    ViewAllPropertiesText: 'View all properties',
     EditReportButtonText: 'Edit status',
     PublishReportButtonText: 'Publish',
     GetSnapshotButtonText: 'Open as snapshot',
