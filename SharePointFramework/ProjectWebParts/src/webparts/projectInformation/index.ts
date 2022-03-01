@@ -30,6 +30,11 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
               groupFields: [
                 PropertyPaneToggle('skipSyncToHub', {
                   label: strings.SkipSyncToHubLabel
+                }),
+                PropertyPaneToggle('setMediumPanelWidth', {
+                  label: strings.SetMediumPanelWidthLabel,
+                  onText: strings.PanelWidthOnText,
+                  offText: strings.PanelWidthOffText,
                 })
               ]
             }

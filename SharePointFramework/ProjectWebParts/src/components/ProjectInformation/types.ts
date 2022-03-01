@@ -35,6 +35,11 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   skipSyncToHub?: boolean
 
   /**
+   * Set medium panel width (true/false), false = small
+   */
+  setMediumPanelWidth?: boolean
+
+  /**
    * Custom actions/button to add
    */
   customActions?: ActionType[]

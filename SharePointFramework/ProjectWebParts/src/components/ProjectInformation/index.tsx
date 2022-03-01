@@ -123,7 +123,7 @@ export class ProjectInformation extends BaseWebPartComponent<
         <ProgressDialog {...this.state.progress} />
         {this.state.confirmActionProps && <ConfirmDialog {...this.state.confirmActionProps} />}
         <Panel
-          type={PanelType.medium}
+          type={this.props.setMediumPanelWidth ? PanelType.medium : PanelType.smallFixedFar}
           headerText={strings.ProjectPropertiesListName}
           isOpen={this.state.showProjectPropertiesPanel}
           onDismiss={() => this.setState({ showProjectPropertiesPanel: false })}
@@ -132,6 +132,7 @@ export class ProjectInformation extends BaseWebPartComponent<
           closeButtonAriaLabel={strings.CloseText}
         >
           <ProjectProperties
+            title={this.props.title}
             properties={this.state.allProperties}
             displayMode={this.props.displayMode}
             isSiteAdmin={this.props.isSiteAdmin}
