@@ -144,9 +144,6 @@ define([], function () {
     UseDynamicHomepageFieldLabel: 'Bruk dynamisk hjemmeside',
     UseDynamicHomepageCalloutText: 'Her kan du velge om fasevelgeren skal være dynamisk og bruke egne sider for hver fase. Det krever at det er opprettet sider for hver fase på forhånd. Navnene på sidene må være identiske med navnene på fasene.',
     AdvancedGroupName: 'Avansert',
-    UseDynamicHomepageChangePhaseDescription: 'Endring til denne fasen vil også medføre endring av forside til prosjektet, dersom side er opprettet for fasen du endrer til.',
-    SetMediumPanelWidthLabel: 'Middels eller smalt panel?',
-    PanelWidthOnText: 'Middels',
-    PanelWidthOffText: 'Smalt',
+    UseDynamicHomepageChangePhaseDescription: 'Endring til denne fasen vil også medføre endring av forside til prosjektet, dersom side er opprettet for fasen du endrer til.'
   }
 })
