@@ -948,7 +948,7 @@
   </data>
 
    <data name="SiteFields_GtIsParentProject_DisplayName" xml:space="preserve">
-    <value>Overordnet?</value>
+    <value>Overordnet</value>
   </data>
    <data name="SiteFields_GtIsProgram_DisplayName" xml:space="preserve">
     <value>Program</value>
