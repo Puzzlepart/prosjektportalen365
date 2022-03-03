@@ -54,6 +54,6 @@ async function getNavigationNodes(): Promise<MenuNode[]> {
 
 const dialogContentProps = {
     type: DialogType.largeHeader,
-    title: 'Overordnet prosjekt',
-    subText: 'Ønsker du å gjøre om prosjektet til et overordnet prosjekt? Denne handlingen er ikke reversibel.',
+    title: 'Overordnet område',
+    subText: 'Ønsker du å gjøre om området til et overordnet område? Denne handlingen er ikke reversibel.',
 };
