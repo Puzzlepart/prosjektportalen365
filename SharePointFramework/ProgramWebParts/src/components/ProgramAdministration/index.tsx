@@ -11,7 +11,7 @@ import { UserMessage } from 'pp365-projectwebparts/lib/components/UserMessage'
 import * as strings from 'ProgramWebPartsStrings'
 
 
-export const ProgramAdministration: FunctionComponent<IProgramAdministrationProps> = ({ sp, webPartTitle, dataAdapter }) => {
+export const ProgramAdministration: FunctionComponent<IProgramAdministrationProps> = ({ sp, webPartTitle, dataAdapter, context }) => {
   const displayProjectDialog = useStore(state => state.displayProjectDialog)
   const childProjects = useStore(state => state.childProjects)
   const setSelected = useStore(state => state.setSelectedToDelete)
@@ -49,7 +49,7 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
 
   return (
     <>
-      <Commandbar _sp={sp} />
+      <Commandbar _sp={sp} isSiteAdmin={context.pageContext.legacyPageContext.isSiteAdmin} />
       <div className={styles.root}>
         <div className={styles.header}>
           <div className={styles.title}>

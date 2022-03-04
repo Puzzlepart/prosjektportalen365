@@ -9,14 +9,14 @@ import { Spinner } from 'office-ui-fabric-react'
 
 interface commandBarProps {
     _sp: SPRest
+    isSiteAdmin: boolean
 }
 
-export const Commandbar: FunctionComponent<commandBarProps> = ({ _sp }) => {
+export const Commandbar: FunctionComponent<commandBarProps> = ({ _sp, isSiteAdmin }) => {
     const toggleProjectDialog = useStore(state => state.toggleProjectDialog)
     const deleteChildProjects = useStore(state => state.deleteChildProjects)
     const selectedProjectsToDelete = useStore(state => state.selectedProjectsToDelete)
     const isLoading = useStore(state => state.isLoading)
-
 
     const getLoadingBar = () => {
         const commandBarButtonAs = () => <div style={{ width: '120px', display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}><Spinner /></div>
@@ -32,18 +32,19 @@ export const Commandbar: FunctionComponent<commandBarProps> = ({ _sp }) => {
             text: strings.ProgramAddProjectButtonText,
             iconProps: { iconName: 'Add' },
             buttonStyles: { root: { border: 'none' } },
-            onClick: () => toggleProjectDialog()
+            onClick: () => toggleProjectDialog(),
+            disabled: !isSiteAdmin
         },
         {
             key: 'delete',
             text: strings.ProgramRemoveChildButtonText,
             iconProps: { iconName: 'Delete' },
             buttonStyles: { root: { border: 'none' } },
-            disabled: selectedProjectsToDelete?.length > 0 ? false : true,
+            disabled: selectedProjectsToDelete?.length > 0 ? false : true || !isSiteAdmin,
             onClick: (): any => {
                 deleteChildProjects(selectedProjectsToDelete, _sp)
             },
-            commandBarButtonAs: getLoadingBar()
+            commandBarButtonAs: getLoadingBar(),
         }
     ]
 
