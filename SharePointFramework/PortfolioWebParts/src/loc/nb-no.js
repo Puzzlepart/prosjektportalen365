@@ -164,6 +164,8 @@ define([], function() {
         AllProjectsLabel: "Alle prosjekter",
         ParentProjectLabel: "Overordnede områder",
         ProgramLabel: "Program",
-        NoAccessMessage: "Du har ikke tilgang til dette prosjektet"
+        NoAccessMessage: "Du har ikke tilgang til dette prosjektet",
+        BooleanYes: "Ja",
+        BooleanNo: "Nei"
     }
 })

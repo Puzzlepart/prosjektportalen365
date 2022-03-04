@@ -167,6 +167,8 @@ declare interface IPortfolioWebPartsStrings {
   ProgramLabel: string
   ParentProjectLabel: string
   NoAccessMessage: string
+  BooleanYes: string
+  BooleanNo: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

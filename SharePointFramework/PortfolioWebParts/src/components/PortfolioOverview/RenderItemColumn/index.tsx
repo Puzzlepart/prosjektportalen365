@@ -8,6 +8,7 @@ import { TitleColumn } from './TitleColumn'
 import { IRenderItemColumnProps } from './IRenderItemColumnProps'
 import { TagsColumn } from './TagsColumn'
 import { UserColumn } from './UserColumn'
+import * as strings from 'PortfolioWebPartsStrings'
 
 /**
  * Mapping for rendering of the different data types
@@ -18,7 +19,10 @@ const renderDataTypeMap = {
   currency: ({ columnValue: colValue }: IRenderItemColumnProps) => (
     <span>{tryParseCurrency(colValue, '')}</span>
   ),
-  tags: (props: IRenderItemColumnProps) => <TagsColumn {...props} />
+  tags: (props: IRenderItemColumnProps) => <TagsColumn {...props} />,
+  boolean: ({columnValue: colValue}: IRenderItemColumnProps) => (
+    <span>{parseInt(colValue) === 1 ? strings.BooleanYes : strings.BooleanNo}</span>
+  ) 
 }
 
 /**
