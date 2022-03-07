@@ -11,6 +11,7 @@ export class StatusReport {
   public created: Date
   public defaultEditFormUrl: string
   public modified: Date
+  public gtLastReportDate: Date
 
   /**
    * Creates a new instance of StatusReport
@@ -22,6 +23,7 @@ export class StatusReport {
     this.id = _item.Id
     this.created = new Date(_item.Created)
     this.modified = new Date(_item.Modified)
+    this.gtLastReportDate = new Date(_item.GtLastReportDate)
   }
 
   public setDefaultEditFormUrl(defaultEditFormUrl: string) {
