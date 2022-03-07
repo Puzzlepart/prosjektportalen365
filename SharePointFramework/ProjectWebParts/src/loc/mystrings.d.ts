@@ -26,6 +26,7 @@ declare interface IProjectWebPartsStrings {
   CurrentPhaseViewNameFieldLabel: string;
   DocumentsListName: string;
   EditPropertiesText: string;
+  ViewAllPropertiesText: string;
   EditReportButtonText: string;
   PublishReportButtonText: string;
   PublishedStatusReport: string;

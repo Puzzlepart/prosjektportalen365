@@ -4,6 +4,8 @@ import { LogLevel } from '@pnp/logging'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel'
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { PortalDataService } from 'pp365-shared/lib/services'
 import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
 import * as strings from 'ProjectWebPartsStrings'
@@ -112,8 +114,33 @@ export class ProjectInformation extends BaseWebPartComponent<
             this._onSyncProperties.bind(this)
           }
         />
+        <DefaultButton
+          text={strings.ViewAllPropertiesText}
+          iconProps={{ iconName: 'EntryView' }}
+          className={styles.btn}
+          onClick={() => this.setState({ showProjectPropertiesPanel: true })}
+        />
         <ProgressDialog {...this.state.progress} />
         {this.state.confirmActionProps && <ConfirmDialog {...this.state.confirmActionProps} />}
+        <Panel
+          type={PanelType.medium}
+          headerText={strings.ProjectPropertiesListName}
+          isOpen={this.state.showProjectPropertiesPanel}
+          onDismiss={() => this.setState({ showProjectPropertiesPanel: false })}
+          onLightDismissClick={() => this.setState({ showProjectPropertiesPanel: false })}
+          isLightDismiss
+          closeButtonAriaLabel={strings.CloseText}
+        >
+          <ProjectProperties
+            title={this.props.title}
+            properties={this.state.allProperties}
+            displayMode={this.props.displayMode}
+            isSiteAdmin={this.props.isSiteAdmin}
+            onFieldExternalChanged={this.props.onFieldExternalChanged}
+            showFieldExternal={this.props.showFieldExternal}
+            propertiesList={!stringIsNullOrEmpty(this.state.data.propertiesListId)}
+          />
+        </Panel>
       </Fragment>
     )
   }
@@ -187,7 +214,7 @@ export class ProjectInformation extends BaseWebPartComponent<
         this.props.webUrl,
         strings.ProjectPropertiesListName,
         this.state.data.templateParameters.ProjectContentTypeId ||
-          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: this.props.webTitle }
       )
       if (!created) {
@@ -216,8 +243,9 @@ export class ProjectInformation extends BaseWebPartComponent<
    * Transform properties from entity item and configuration
    *
    * @param {IProjectInformationData} data Data
+   * @param {boolean} useVisibleFilter Set to false if all properties should be returned
    */
-  private _transformProperties({ columns, fields, fieldValuesText }: IProjectInformationData) {
+  private _transformProperties({ columns, fields, fieldValuesText }: IProjectInformationData, useVisibleFilter: boolean = true) {
     const fieldNames: string[] = Object.keys(fieldValuesText).filter((fieldName) => {
       const [field] = fields.filter((fld) => fld.InternalName === fieldName)
       if (!field) return false
@@ -227,9 +255,15 @@ export class ProjectInformation extends BaseWebPartComponent<
       ) {
         return true
       }
+
       const [column] = columns.filter((c) => c.internalName === fieldName)
-      return column ? column.isVisible(this.props.page) : false
+      return column
+        ? useVisibleFilter
+          ? column.isVisible(this.props.page)
+          : true
+        : false
     })
+
     const properties = fieldNames.map((fn) => {
       const [field] = fields.filter((fld) => fld.InternalName === fn)
       return new ProjectPropertyModel(field, fieldValuesText[fn])
@@ -256,8 +290,10 @@ export class ProjectInformation extends BaseWebPartComponent<
         columns,
         ...propertiesData
       }
+
       const properties = this._transformProperties(data)
-      return { data, properties }
+      const allProperties = this._transformProperties(data, false)
+      return { data, properties, allProperties }
     } catch (error) {
       this.logError('Failed to retrieve data.', '_fetchData', error)
       throw error

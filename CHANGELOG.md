@@ -8,6 +8,7 @@ Every change is marked with issue ID.
 ### Added
 
 - Added functionality for dynamic welcomepages based on project phases #643
+- Added 'Vis alle egenskaper' button with panel to ProjectInformation webpart #650
 
 ## 1.4.0 - 08.02.2022
 

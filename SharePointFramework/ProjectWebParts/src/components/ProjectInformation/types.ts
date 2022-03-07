@@ -48,6 +48,11 @@ export interface IProjectInformationState
   properties?: ProjectPropertyModel[]
 
   /**
+   * All Properties
+   */
+  allProperties?: ProjectPropertyModel[]
+
+  /**
    * Progress
    */
   progress?: IProgressDialogProps
@@ -61,6 +66,11 @@ export interface IProjectInformationState
    * Confirm action props
    */
   confirmActionProps?: any
+
+  /**
+   * Show project properties panel
+   */
+  showProjectPropertiesPanel?: boolean
 }
 
 export interface IProjectInformationUrlHash {
