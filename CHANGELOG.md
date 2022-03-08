@@ -11,7 +11,7 @@ Every change is marked with issue ID.
 - Added 'Vis alle egenskaper' button with panel to ProjectInformation webpart #650
 - Added support for {site} token in Planner-tasks #646
 - Add possibility to lock'project template configurations #645
-- Changed header in projectstatus report to show date when published instead of when created. 
+- Changed header in projectstatus report to show date when published instead of when created. #654
 
 ### Changed
 
