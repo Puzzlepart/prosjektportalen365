@@ -35,15 +35,15 @@ export class PlannerConfiguration extends BaseTask {
    * @param pageContext - Page context
    */
   private replaceUrlTokens(str: string, pageContext: PageContext) {
-    return str.replace('{site}', pageContext.site.absoluteUrl)
+    const siteAbsoluteUrl = pageContext.site.absoluteUrl.split('%').join('%25').split('.').join('%2E').split(':').join('%3A')
+    return str.replace('{site}', siteAbsoluteUrl)
   }
 
   /**
    * Create plans
    *
-   * @param owner Owner (group id)
+   * @param pageContext - Page context
    * @param onProgress On progress function
-   * @param defaultBucketName Default bucket name
    */
   private async _createPlan(
     pageContext: PageContext,
@@ -126,7 +126,7 @@ export class PlannerConfiguration extends BaseTask {
    * Ensure bucket
    *
    * @param name Bucket name
-   * @param {IPlannerBucket[]} existingBuckets Existing buckets
+   * @param existingBuckets Existing buckets
    * @param planId Plan Id
    */
   private async _ensureBucket(name: string, existingBuckets: IPlannerBucket[], planId: string) {
