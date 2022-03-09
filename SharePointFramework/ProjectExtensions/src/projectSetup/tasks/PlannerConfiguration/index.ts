@@ -54,7 +54,7 @@ export class PlannerConfiguration extends BaseTask {
           format(strings.CreatingPlannerTaskText, bucketName),
           'PlannerLogo'
         )
-        await this._createTasks(plan.id, bucket)
+        await this._createTasks(plan.id, bucket, pageContext)
       }
       return plan
     } catch (error) {
@@ -148,6 +148,7 @@ export class PlannerConfiguration extends BaseTask {
   private async _createTasks(
     planId: string,
     bucket: IPlannerBucket,
+    contextUrl: PageContext,
     appliedCategories: Record<string, boolean> = { category1: true },
     delay: number = 1
   ) {
@@ -188,6 +189,7 @@ export class PlannerConfiguration extends BaseTask {
                       alias: attachment.alias,
                       type: attachment.type
                     }
+                    [attachment.url].replace('{site}', contextUrl.site.absoluteUrl)
                   }),
                   {}
                 )
