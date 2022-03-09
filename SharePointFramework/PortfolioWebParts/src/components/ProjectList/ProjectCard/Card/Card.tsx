@@ -14,7 +14,9 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
   actions,
   showProjectOwner,
   showProjectManager,
-  showLifeCycleStatus
+  showLifeCycleStatus,
+  showServiceArea,
+  showType,
 }: IProjectCardProps) => {
   const ownerPersona: IPersonaSharedProps = {
     title: project.owner
@@ -126,8 +128,8 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
       <hr />
       <div className={styles.labels}>
         {showLifeCycleStatus && (_renderLifeCycleStatus())}
-        {_renderServiceAreaText()}
-        {_renderTypeText()}
+        {showServiceArea && (_renderServiceAreaText())}
+        {showType && (_renderTypeText())}
       </div>
 
       <div className={styles.content}>

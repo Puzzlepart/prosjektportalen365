@@ -9,6 +9,7 @@ import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectListProps> {
   public render(): void {
+    console.log(this.properties);
     this.renderComponent<IProjectListProps>(ProjectList)
   }
 
@@ -52,8 +53,14 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   label: strings.ShowProjectManagerFieldLabel
                 }),
                 PropertyPaneToggle('showLifeCycleStatus', {
-                  label: strings.ShowLifeCycleStatusFieldLabel
+                  label: strings.ShowLifeCycleStatusFieldLabel,
                 }),
+                PropertyPaneToggle('showServiceArea', {
+                  label: strings.ShowServiceAreaFieldLabel
+                }),
+                PropertyPaneToggle('showType', {
+                  label: strings.ShowTypeFieldLabel
+                })
               ]
             }
           ]

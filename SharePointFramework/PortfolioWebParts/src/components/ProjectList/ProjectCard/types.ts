@@ -33,6 +33,16 @@ export interface IProjectCardProps {
   showLifeCycleStatus?: boolean
 
   /**
+   * Show Service Area
+   */
+   showServiceArea?: boolean
+
+   /**
+   * Show Type
+   */
+  showType?: boolean
+
+  /**
    * Actions
    */
   actions: IButtonProps[]

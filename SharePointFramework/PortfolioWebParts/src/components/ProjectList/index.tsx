@@ -43,6 +43,8 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
           showProjectOwner={props.showProjectOwner}
           showProjectManager={props.showProjectManager}
           showLifeCycleStatus={props.showLifeCycleStatus}
+          showServiceArea={props.showServiceArea}
+          showType={props.showType}
           actions={getCardActions(project)}
         />
       ))

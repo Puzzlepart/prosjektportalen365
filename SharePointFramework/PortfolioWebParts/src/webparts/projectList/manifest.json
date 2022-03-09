@@ -27,8 +27,12 @@
         "sortBy": "Title",
         "showAsTiles": true,
         "showProjectOwner": true,
-        "showProjectManager": true
-      }
-    }
-  ]
+                "showProjectManager": true,
+                "showProjectStatus": true,
+                "showLifeCycleStatus": true,
+                "showServiceArea": true,
+                "showType": true
+            }
+        }
+    ]
 }
