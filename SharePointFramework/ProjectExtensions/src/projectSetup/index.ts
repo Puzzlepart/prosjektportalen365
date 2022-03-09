@@ -4,6 +4,7 @@ import { isArray, stringIsNullOrEmpty } from '@pnp/common'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { sp, Web } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
+import { endsWith } from 'lodash'
 import { default as MSGraphHelper } from 'msgraph-helper'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { ListLogger } from 'pp365-shared/lib/logging'
@@ -12,6 +13,7 @@ import * as strings from 'ProjectExtensionsStrings'
 import { createElement } from 'react'
 import * as ReactDOM from 'react-dom'
 import { default as HubSiteService } from 'sp-hubsite-service'
+import { find } from 'underscore'
 import {
   ErrorDialog,
   IErrorDialogProps,
@@ -22,14 +24,11 @@ import {
   TemplateSelectDialog
 } from '../components'
 import { ListContentConfig, ProjectExtension, ProjectTemplate } from '../models'
-import * as Tasks from './tasks'
 import { deleteCustomizer } from './deleteCustomizer'
 import { ProjectSetupError } from './ProjectSetupError'
-import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
-import { find } from 'underscore'
-import { endsWith } from 'lodash'
 import { ProjectSetupSettings } from './ProjectSetupSettings'
-import { ProjectTemplateFile } from 'models/ProjectTemplateFile'
+import * as Tasks from './tasks'
+import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
 
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
   private _portal: PortalDataService
