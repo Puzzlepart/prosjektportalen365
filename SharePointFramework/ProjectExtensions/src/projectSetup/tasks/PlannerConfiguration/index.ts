@@ -1,10 +1,10 @@
 import { PageContext } from '@microsoft/sp-page-context'
 import { getGUID } from '@pnp/common'
-import { IProjectSetupData } from 'projectSetup'
 import { default as MSGraphHelper } from 'msgraph-helper'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
-import * as strings from 'ProjectExtensionsStrings'
 import { sleep } from 'pp365-shared/lib/util'
+import * as strings from 'ProjectExtensionsStrings'
+import { IProjectSetupData } from 'projectSetup'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 import { IPlannerBucket, IPlannerConfiguration, IPlannerPlan } from './types'
@@ -25,6 +25,17 @@ export class PlannerConfiguration extends BaseTask {
     private _labels: string[] = []
   ) {
     super('Planner', data)
+  }
+
+  /**
+   * Replacing site tokens. For now it supports `{site}` which is replaced
+   * with the site absolute URL.
+   *
+   * @param str - String
+   * @param pageContext - Page context
+   */
+  private replaceUrlTokens(str: string, pageContext: PageContext) {
+    return str.replace('{site}', pageContext.site.absoluteUrl)
   }
 
   /**
@@ -148,7 +159,7 @@ export class PlannerConfiguration extends BaseTask {
   private async _createTasks(
     planId: string,
     bucket: IPlannerBucket,
-    contextUrl: PageContext,
+    pageContext: PageContext,
     appliedCategories: Record<string, boolean> = { category1: true },
     delay: number = 1
   ) {
@@ -173,26 +184,25 @@ export class PlannerConfiguration extends BaseTask {
           const taskDetails: Record<string, any> = {
             checklist: checklist
               ? checklist.reduce(
-                  (obj, title) => ({
-                    ...obj,
-                    [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }
-                  }),
-                  {}
-                )
+                (obj, title) => ({
+                  ...obj,
+                  [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }
+                }),
+                {}
+              )
               : {},
             references: attachments
               ? attachments.reduce(
-                  (obj, attachment) => ({
-                    ...obj,
-                    [attachment.url]: {
-                      '@odata.type': 'microsoft.graph.plannerExternalReference',
-                      alias: attachment.alias,
-                      type: attachment.type
-                    }
-                    [attachment.url].replace('{site}', contextUrl.site.absoluteUrl)
-                  }),
-                  {}
-                )
+                (obj, attachment) => ({
+                  ...obj,
+                  [this.replaceUrlTokens(attachment.url, pageContext)]: {
+                    '@odata.type': 'microsoft.graph.plannerExternalReference',
+                    alias: attachment.alias,
+                    type: attachment.type
+                  }
+                }),
+                {}
+              )
               : {},
             previewType: attachments ? 'reference' : 'checklist'
           }
