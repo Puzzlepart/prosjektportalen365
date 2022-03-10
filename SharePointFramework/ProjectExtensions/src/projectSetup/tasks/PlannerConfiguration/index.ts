@@ -35,7 +35,7 @@ export class PlannerConfiguration extends BaseTask {
    * @param pageContext - Page context
    */
   private replaceUrlTokens(str: string, pageContext: PageContext) {
-    const siteAbsoluteUrl = pageContext.site.absoluteUrl.split('%').join('%25').split('.').join('%2E').split(':').join('%3A')
+    const siteAbsoluteUrl = pageContext.site.absoluteUrl.split('%').join('%25').split('.').join('%2E').split(':').join('%3A');
     return str.replace('{site}', siteAbsoluteUrl)
   }
 
