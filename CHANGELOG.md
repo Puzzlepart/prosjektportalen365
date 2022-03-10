@@ -9,6 +9,7 @@ Every change is marked with issue ID.
 
 - Added functionality for dynamic welcomepages based on project phases #643
 - Added 'Vis alle egenskaper' button with panel to ProjectInformation webpart #650
+- Added support for {site} token in plannertasks #646
 
 ## 1.4.0 - 08.02.2022
 
