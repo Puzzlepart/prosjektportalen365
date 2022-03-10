@@ -4,6 +4,7 @@ import { isArray, stringIsNullOrEmpty } from '@pnp/common'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { sp, Web } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
+import { endsWith } from 'lodash'
 import { default as MSGraphHelper } from 'msgraph-helper'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { ListLogger } from 'pp365-shared/lib/logging'
@@ -12,6 +13,7 @@ import * as strings from 'ProjectExtensionsStrings'
 import { createElement } from 'react'
 import * as ReactDOM from 'react-dom'
 import { default as HubSiteService } from 'sp-hubsite-service'
+import { find } from 'underscore'
 import {
   ErrorDialog,
   IErrorDialogProps,
@@ -21,15 +23,12 @@ import {
   ProgressDialog,
   TemplateSelectDialog
 } from '../components'
-import { ListContentConfig, ProjectExtension, ProjectTemplate } from '../models'
-import * as Tasks from './tasks'
+import { ListContentConfig, ProjectExtension, ProjectTemplate, ProjectTemplateFile } from '../models'
 import { deleteCustomizer } from './deleteCustomizer'
 import { ProjectSetupError } from './ProjectSetupError'
-import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
-import { find } from 'underscore'
-import { endsWith } from 'lodash'
 import { ProjectSetupSettings } from './ProjectSetupSettings'
-import { ProjectTemplateFile } from 'models/ProjectTemplateFile'
+import * as Tasks from './tasks'
+import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
 
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
   private _portal: PortalDataService
@@ -159,7 +158,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   private _checkForceTemplate(data: IProjectSetupData): ITemplateSelectDialogState {
     if (stringIsNullOrEmpty(this.properties.forceTemplate)) return null
     const selectedTemplate = find(data.templates, (tmpl) =>
-      endsWith(tmpl.serverRelativeUrl, this.properties.forceTemplate)
+      endsWith(tmpl.projectTemplateUrl, this.properties.forceTemplate)
     )
     if (!selectedTemplate) return null
     return {
@@ -332,67 +331,43 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         data: {},
         level: LogLevel.Info
       })
-
-      const templateFileName = (
-        await sp.web.select('Title', 'AllProperties').expand('AllProperties').get()
-      )['AllProperties']['pp_template']
-      let templateViewXml = `<View Scope="RecursiveAll">
-      <Query>
-          <Where>
-              <Eq>
-                  <FieldRef Name="FSObjType" />
-                  <Value Type="Integer">0</Value>
-              </Eq>
-          </Where>
-      </Query>
-  </View>`
-      if (templateFileName) {
-        templateViewXml = `<View Scope="RecursiveAll">
-        <Query>
-            <Where>
-                <And>
-                    <Eq>
-                        <FieldRef Name="FSObjType" />
-                        <Value Type="Integer">0</Value>
-                    </Eq>
-                    <Eq>
-                        <FieldRef Name="FileLeafRef" />
-                        <Value Type="Text">${templateFileName}</Value>
-                    </Eq>
-                </And>
-            </Where>
-        </Query>
-    </View>`
-      }
-      const [templates, extensions, listContentConfig] = await Promise.all([
+      const [_templates, extensions, listContentConfig, templateFiles] = await Promise.all([
         this._portal.getItems(
           this.properties.templatesLibrary,
           ProjectTemplate,
           {
-            ViewXml: templateViewXml
+            ViewXml: '<View></View>'
           },
-          ['File','FieldValuesAsText']
+          ['FieldValuesAsText']
         ),
         this.properties.extensionsLibrary
           ? this._portal.getItems(
-              this.properties.extensionsLibrary,
-              ProjectExtension,
-              {
-                ViewXml:
-                  '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
-              },
-              ['File', 'FieldValuesAsText']
-            )
+            this.properties.extensionsLibrary,
+            ProjectExtension,
+            {
+              ViewXml:
+                '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+            },
+            ['File', 'FieldValuesAsText']
+          )
           : Promise.resolve([]),
         this.properties.contentConfigList
           ? this._portal.getItems(this.properties.contentConfigList, ListContentConfig, {}, ['File'])
           : Promise.resolve([]),
+        this._portal.getItems(
+          strings.Lists_ProjectTemplateFiles_Title,
+          ProjectTemplateFile,
+          {
+            ViewXml: '<View></View>'
+          },
+          ['File']
+        )
       ])
-      const files = await this._portal.getItems(strings.Lists_ProjectTemplateFiles_Title, ProjectTemplateFile, {}, ['File'])
-       templates.map((template) => {
-         const [relativeUrl] = files.filter(file => {return file.id === template.projectTemplateId})
-         template.serverRelativeUrl = relativeUrl.serverRelativeUrl
-       })
+      const templates = _templates.map((tmpl) => {
+        const [tmplFile] = templateFiles.filter(file => file.id === tmpl.projectTemplateId)
+        tmpl.projectTemplateUrl = tmplFile?.serverRelativeUrl
+        return tmpl
+      })
       Logger.log({
         message: '(ProjectSetup) [_fetchData]: Retrieved templates, extensions and content config',
         data: {
