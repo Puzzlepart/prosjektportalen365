@@ -16,7 +16,7 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
   showProjectManager,
   showLifeCycleStatus,
   showServiceArea,
-  showType,
+  showType
 }: IProjectCardProps) => {
   const ownerPersona: IPersonaSharedProps = {
     title: project.owner

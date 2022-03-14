@@ -6,6 +6,7 @@ import {
 import { IProjectListProps, ProjectList } from 'components/ProjectList'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
+import { taxonomy } from '@pnp/sp-taxonomy'
 
 export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectListProps> {
   public render(): void {
@@ -13,9 +14,15 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
     this.renderComponent<IProjectListProps>(ProjectList)
   }
 
+  private async _setupTaxonomy() {
+    taxonomy.setup({spfxContext: this.context})
+  }
+
   public async onInit(): Promise<void> {
     await super.onInit()
+    await this._setupTaxonomy()
   }
+
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {

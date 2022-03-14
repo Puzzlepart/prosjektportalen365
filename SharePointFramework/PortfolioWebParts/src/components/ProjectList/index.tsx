@@ -1,4 +1,4 @@
-import { Web } from '@pnp/sp'
+import { sp, Web } from '@pnp/sp'
 import { ProjectListModel } from 'models'
 import MSGraph from 'msgraph-helper'
 import { Pivot, PivotItem, ShimmeredDetailsList } from 'office-ui-fabric-react'
@@ -16,6 +16,7 @@ import { ProjectCard } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
 import { IProjectListProps, IProjectListState } from './types'
+// import { ITaxonomySession } from '@pnp/sp-taxonomy'
 
 export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
   const [state, setState] = useState<IProjectListState>({
@@ -27,6 +28,11 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
     sort: { fieldName: props.sortBy, isSortedDescending: true }
   })
 
+  async function fetchPhaseColors() {
+   //const r = await props.taxonomy.getDefaultSiteCollectionTermStore()
+   console.log(props.taxonomy)
+  }
+
   /**
    * Render projects
    *
@@ -34,6 +40,7 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
    */
   function renderProjects(projects: ProjectListModel[]) {
     if (state.showAsTiles) {
+      fetchPhaseColors();
       return projects.map((project, idx) => (
         <ProjectCard
           key={idx}
