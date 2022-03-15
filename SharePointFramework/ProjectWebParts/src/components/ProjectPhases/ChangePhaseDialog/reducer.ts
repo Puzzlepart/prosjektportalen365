@@ -19,10 +19,15 @@ export default createReducer<IChangePhaseDialogState>(
     [INIT.type]: (state, { payload }: ReturnType<typeof INIT>) => {
       if (payload.context.state.phase) {
         const checklistItems = payload.context.state.phase.checklistData?.items || []
+        const items = Object.keys(payload.context.state.phase.checklistData.items)
         const openCheclistItems = checklistItems.filter(
           (item) => item.GtChecklistStatus === strings.StatusOpen
         )
-        state.view = isEmpty(openCheclistItems) ? View.Summary : View.Initial
+        state.view = isEmpty(openCheclistItems)
+          ? isEmpty(items)
+            ? View.Confirm
+            : View.Summary
+          : View.Initial
         state.checklistItems = checklistItems
         state.currentIdx = getNextIndex(checklistItems)
       } else {
