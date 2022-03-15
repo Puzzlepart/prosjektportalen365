@@ -14,7 +14,7 @@ import { Footer } from './Footer'
 import reducer, { CHECKLIST_ITEM_UPDATED, INIT } from './reducer'
 import { View } from './Views'
 
-export const ChangePhaseDialog = () => {
+export const ChangePhaseDialog = (phaseSitePages?: any) => {
   const context = useContext(ProjectPhasesContext)
   if (!context.state.confirmPhase) return null
   const [state, dispatch] = useReducer(reducer, {})
@@ -39,6 +39,8 @@ export const ChangePhaseDialog = () => {
     dispatch(CHECKLIST_ITEM_UPDATED({ properties }))
   }
 
+  console.log(phaseSitePages)
+
   return (
     <ChangePhaseDialogContext.Provider value={{ state, dispatch, nextChecklistItem }}>
       <Dialog
@@ -55,7 +57,7 @@ export const ChangePhaseDialog = () => {
         {state.view === View.Confirm && context.props.useDynamicHomepage &&
           <div className={styles.useDynamicHomepageContent}>
             <Icon iconName={'Info'} className={styles.descriptionIcon} />
-            {strings.UseDynamicHomepageChangePhaseDescription}
+            {strings.UseDynamicHomepageChangePhaseDescription}phaseSitePages
           </div>
         }
         <Body />

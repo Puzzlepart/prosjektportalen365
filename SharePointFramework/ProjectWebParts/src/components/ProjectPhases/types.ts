@@ -80,4 +80,26 @@ export interface IProjectPhasesData {
    * Phase text field name
    */
   phaseTextField?: string
+
+  /**
+   * Phase SitePages
+   */
+  phaseSitePages?: IPhaseSitePageModel
+}
+
+export interface IPhaseSitePageModel {
+  /**
+   * Id of SitePage
+   */
+  id?: number;
+
+  /**
+   * Title of SitePage
+   */
+  title?: string
+
+  /**
+   * FileLeafRef of SitePage
+   */
+  fileLeafRef?: string
 }

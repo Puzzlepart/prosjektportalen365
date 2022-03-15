@@ -2,19 +2,21 @@ import SPDataAdapter from 'data'
 import { ProjectPhaseModel } from 'pp365-shared/lib/models'
 import { changeWelcomePage } from './changeWelcomePage'
 import { modifyCurrentPhaseView } from './modifyCurrentPhaseView'
-import { IProjectPhasesProps } from './types'
+import { IPhaseSitePageModel, IProjectPhasesProps } from './types'
 
 /**
  * Change phase
  *
  * @param {ProjectPhaseModel} phase Phase
- * @param {string} currentPhaseViewName Current phase view name
+ * @param {string} phaseTextField Phase TextField
  * @param {IProjectPhasesProps} props IProjectPhasesProps props
+ * @param {IPhaseSitePageModel} phaseSitePages Phase SitePages
  */
 export const changePhase = async (
   phase: ProjectPhaseModel,
   phaseTextField: string,
   props: IProjectPhasesProps,
+  phaseSitePages?: IPhaseSitePageModel,
 ) => {
   try {
     await SPDataAdapter.project.updatePhase(phase, phaseTextField)

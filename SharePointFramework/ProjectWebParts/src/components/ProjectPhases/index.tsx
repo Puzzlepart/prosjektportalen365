@@ -83,7 +83,7 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
                 ))}
             </ul>
             <ProjectPhaseCallout {...(state.callout || {})} />
-            <ChangePhaseDialog />
+            <ChangePhaseDialog phaseSitePages={state.data.phaseSitePages} />
           </Shimmer>
         </ProjectPhasesContext.Provider>
       </div>
