@@ -1,13 +1,14 @@
 import { get } from '@microsoft/sp-lodash-subset'
 import { getId } from '@uifabric/utilities'
 import sortArray from 'array-sort'
-import { ITimelineData, ITimelineGroup, ITimelineItem, TimelineGroupType } from 'interfaces'
+import { ITimelineData, ITimelineGroup, ITimelineItem } from 'interfaces'
 import moment from 'moment'
 import { CommandBar, ICommandBarProps } from 'office-ui-fabric-react/lib/CommandBar'
 import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { Component } from 'react'
 import _ from 'underscore'
@@ -40,12 +41,20 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
       const data = await this._fetchData()
       this.setState({ data, loading: false })
     } catch (error) {
-      this.setState({ error, loading: false })
+      this.setState({ error: error.message || error.status, loading: false })
     }
   }
 
   public render(): React.ReactElement<IProjectTimelineProps> {
-    if (this.state.loading) return null
+    if (this.state.loading) {
+      return (
+        <div className={styles.root}>
+          <div className={styles.container}>
+            <Spinner label={format(strings.LoadingText, this.props.title)} />
+          </div>
+        </div>
+      )
+    }
     if (this.state.error) {
       return (
         <div className={styles.root}>
@@ -201,11 +210,10 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
       })
       .filter((value, index, self) => self.indexOf(value) === index)
     let groups: ITimelineGroup[] = groupNames.map((name, id) => {
-      const [title, type] = name.split('|')
+      const [title] = name.split('|')
       return {
         id,
-        title,
-        type: type === 'R' ? TimelineGroupType.Role : TimelineGroupType.User
+        title
       }
     })
     groups = sortArray(groups, ['type', 'title'])
@@ -259,10 +267,10 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         item.type === strings.PhaseLabel
           ? '#2589d6'
           : item.type === strings.MilestoneLabel
-          ? 'transparent'
-          : item.type === strings.SubPhaseLabel
-          ? '#249ea0'
-          : '#484848'
+            ? 'transparent'
+            : item.type === strings.SubPhaseLabel
+              ? '#249ea0'
+              : '#484848'
 
       const group = _.find(groups, (grp) => item.title.indexOf(grp.title) !== -1)
       const style: React.CSSProperties = {
@@ -301,11 +309,21 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   private async _fetchData(): Promise<ITimelineData> {
     try {
       const projects = await this.props.dataAdapter.fetchEncrichedProjects()
-      const timelineItems: any = (await this.props.dataAdapter._fetchTimelineContentItems())
+      const timelineItems: TimelineContentListModel[] = (await this.props.dataAdapter._fetchTimelineContentItems())
         .timelineItems
 
+      const filteredProjects = projects.filter((project) => {
+        return project.startDate != null && project.endDate != null
+      })
+
+      const filteredTimelineItems = timelineItems.filter((item) => {
+        return filteredProjects.some((project) => {
+          return project.title.indexOf(item.title) !== -1
+        })
+      })
+
       await Promise.all(
-        projects.map(async (project) => {
+        filteredProjects.map(async (project) => {
           const statusReport = (
             await this.props.dataAdapter._fetchDataForTimelineProject(project.siteId)
           ).statusReports[0]
@@ -314,9 +332,8 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
           project['type'] = strings.ProjectLabel
         })
       )
-
-      const groups = this._transformGroups(projects)
-      const items = this._transformItems(projects, timelineItems, groups)
+      const groups = this._transformGroups(filteredProjects)
+      const items = this._transformItems(filteredProjects, filteredTimelineItems, groups)
       return { items, groups }
     } catch (error) {
       throw error
