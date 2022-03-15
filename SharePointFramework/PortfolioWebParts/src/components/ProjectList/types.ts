@@ -66,9 +66,15 @@ export interface IProjectListProps extends IBaseComponentProps {
   columns?: IColumn[]
 
   /**
-   * Taxonomy
+   * Term Set IDs
    */
-   taxonomy: ITaxonomySession
+   termSetIds?: string
+
+   /**
+   * Phase Levels (Portfolio, Project)
+   */
+    phaseLevel?: any[]
+   
 }
 
 export interface IProjectListState {

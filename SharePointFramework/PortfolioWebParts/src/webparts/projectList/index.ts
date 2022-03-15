@@ -6,7 +6,8 @@ import {
 import { IProjectListProps, ProjectList } from 'components/ProjectList'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
-import { taxonomy } from '@pnp/sp-taxonomy'
+import { Session, ITaxonomySession } from '@pnp/sp-taxonomy'
+import * as _ from 'lodash'
 
 export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectListProps> {
   public render(): void {
@@ -15,7 +16,20 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
   }
 
   private async _setupTaxonomy() {
-    taxonomy.setup({spfxContext: this.context})
+    const taxonomySession: ITaxonomySession = new Session()
+    const termSetIds = this.properties.termSetIds ? this.properties.termSetIds.split(',') : []
+    const termSetArray = []
+    const termStore = await taxonomySession.getDefaultSiteCollectionTermStore()
+    for (const termSetId of termSetIds) {
+      termSetArray.push(termStore.getTermSetById(termSetId).terms.get())
+    }
+    const fullTerms = _.flatten(await Promise.all(termSetArray))
+    this.properties.phaseLevel = fullTerms.map(term => {
+      return {
+        name: term.Name,
+        phaseLevel: term.LocalCustomProperties?.PhaseLevel ? term.LocalCustomProperties?.PhaseLevel : 0,
+      }
+    })
   }
 
   public async onInit(): Promise<void> {
@@ -67,6 +81,9 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                 }),
                 PropertyPaneToggle('showType', {
                   label: strings.ShowTypeFieldLabel
+                }),
+                PropertyPaneTextField('termSetIds', {
+                  label: strings.PhaseTermSetIdLabel
                 })
               ]
             }

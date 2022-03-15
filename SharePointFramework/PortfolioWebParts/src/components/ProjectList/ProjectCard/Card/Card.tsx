@@ -16,7 +16,8 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
   showProjectManager,
   showLifeCycleStatus,
   showServiceArea,
-  showType
+  showType,
+  phaseLevel
 }: IProjectCardProps) => {
   const ownerPersona: IPersonaSharedProps = {
     title: project.owner
@@ -29,22 +30,6 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
       ? `${project.manager.text} | ${strings.ProjectManager}`
       : `Prosjektleder ikke satt`,
     imageUrl: project.manager ? project.manager.imageUrl : null
-  }
-
-  let phaseBgColor = '#343a40'
-
-  switch (project.phase) {
-    case 'Konsept':
-    case 'Realisere':
-      phaseBgColor = 'rgb(0,114,198,0.8)'
-      break
-    case 'Planlegge':
-    case 'Gjennomføre':
-    case 'Avslutte':
-      phaseBgColor = 'rgb(51,153,51,0.8)'
-      break
-    // default:
-    //   phaseBgColor = '#343a40'
   }
 
   const serviceAreaText =
@@ -99,6 +84,17 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
     }
   }
 
+  const _setPhaseColor = (phaseLevel) => {
+    switch (phaseLevel) {
+      case 'Portfolio':
+        return 'rgb(0,114,198,0.8)'
+      case 'Project':
+        return 'rgb(51,153,51,0.8)'
+      default:
+        return 'grey'
+    }
+  }
+
   let endDate = moment(project.endDate).format('DD.MM.YYYY')
   console.log(project.GtProjectLifecycleStatus)
 
@@ -110,11 +106,7 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
       <img className={styles.logo} src={project.logo ?? placeholderImage} />
       <div
         title={project.phase}
-        style={
-          project.phase
-            ? { backgroundColor: phaseBgColor, color: 'white' }
-            : { backgroundColor: '#C0C0C0', color: 'black' }
-        }
+        style={{ backgroundColor: _setPhaseColor(phaseLevel), color: 'white' }}
         className={styles.phaseLabel}>
         <span className={styles.phaseLabelTitle}>
           {project.phase ? project.phase : 'Ikke satt'}
@@ -127,9 +119,9 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
       />
       <hr />
       <div className={styles.labels}>
-        {showLifeCycleStatus && (_renderLifeCycleStatus())}
-        {showServiceArea && (_renderServiceAreaText())}
-        {showType && (_renderTypeText())}
+        {showLifeCycleStatus && _renderLifeCycleStatus()}
+        {showServiceArea && _renderServiceAreaText()}
+        {showType && _renderTypeText()}
       </div>
 
       <div className={styles.content}>

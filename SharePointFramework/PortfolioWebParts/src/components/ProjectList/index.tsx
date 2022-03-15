@@ -12,7 +12,7 @@ import { ProjectInformationModal } from 'pp365-projectwebparts/lib/components/Pr
 import { getObjectValue, sortAlphabetically } from 'pp365-shared/lib/helpers'
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { find, isEmpty } from 'underscore'
-import { ProjectCard } from './ProjectCard'
+import { Card } from './ProjectCard/Card/Card'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
 import { IProjectListProps, IProjectListState } from './types'
@@ -28,9 +28,10 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
     sort: { fieldName: props.sortBy, isSortedDescending: true }
   })
 
-  async function fetchPhaseColors() {
-   //const r = await props.taxonomy.getDefaultSiteCollectionTermStore()
-   console.log(props.taxonomy)
+  function fetchPhaseLevel(phase: string): string {
+    const [level] = phase ? props.phaseLevel.filter((term) => term.name == phase) : ['none']
+    console.log(level.phaseLevel)
+    return level.phaseLevel
   }
 
   /**
@@ -40,9 +41,8 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
    */
   function renderProjects(projects: ProjectListModel[]) {
     if (state.showAsTiles) {
-      fetchPhaseColors();
       return projects.map((project, idx) => (
-        <ProjectCard
+        <Card
           key={idx}
           project={project}
           shouldTruncateTitle={true}
@@ -53,6 +53,7 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
           showServiceArea={props.showServiceArea}
           showType={props.showType}
           actions={getCardActions(project)}
+          phaseLevel={fetchPhaseLevel(project.phase)}
         />
       ))
     } else {
@@ -186,8 +187,17 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
             typeof value === 'string' &&
             value.toLowerCase().indexOf(state.searchTerm) !== -1
           )
+        }).length
+        return matches > 0
+      })
+      .sort((a, b) =>
+        sortAlphabetically<ProjectListModel>(
+          a,
+          b,
+          state?.sort?.isSortedDescending,
+          state?.sort?.fieldName
         )
-    )
+      )
   }
 
   /**

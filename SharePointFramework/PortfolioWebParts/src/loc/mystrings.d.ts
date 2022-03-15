@@ -145,6 +145,7 @@ declare interface IPortfolioWebPartsStrings {
   ShowLifeCycleStatusFieldLabel: string
   ShowServiceAreaFieldLabel: string
   ShowTypeFieldLabel: string
+  PhaseTermSetIdLabel: string  
   ShowProjectOwnerFieldLabel: string
   ShowSearchBoxLabel: string
   ShowViewSelectorLabel: string
