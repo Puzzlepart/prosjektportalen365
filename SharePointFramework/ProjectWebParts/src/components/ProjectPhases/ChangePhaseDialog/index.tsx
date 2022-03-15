@@ -1,10 +1,11 @@
 import SPDataAdapter from 'data'
-import { Icon } from 'office-ui-fabric-react'
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react'
 import Dialog, { DialogType } from 'office-ui-fabric-react/lib/Dialog'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { useContext, useEffect, useReducer } from 'react'
+import * as ReactMarkdown from 'react-markdown/with-html'
 import { ProjectPhasesContext } from '../context'
 import { DISMISS_CHANGE_PHASE_DIALOG } from '../reducer'
 import { Body } from './Body'
@@ -14,10 +15,11 @@ import { Footer } from './Footer'
 import reducer, { CHECKLIST_ITEM_UPDATED, INIT } from './reducer'
 import { View } from './Views'
 
-export const ChangePhaseDialog = (phaseSitePages?: any) => {
+export const ChangePhaseDialog = ({ data }) => {
   const context = useContext(ProjectPhasesContext)
   if (!context.state.confirmPhase) return null
   const [state, dispatch] = useReducer(reducer, {})
+  const phaseSitePage = data.phaseSitePages.filter((phaseSitePage) => phaseSitePage.title === context.state.confirmPhase.name)[0];
 
   useEffect(() => dispatch(INIT({ context })), [])
 
@@ -39,8 +41,6 @@ export const ChangePhaseDialog = (phaseSitePages?: any) => {
     dispatch(CHECKLIST_ITEM_UPDATED({ properties }))
   }
 
-  console.log(phaseSitePages)
-
   return (
     <ChangePhaseDialogContext.Provider value={{ state, dispatch, nextChecklistItem }}>
       <Dialog
@@ -55,9 +55,12 @@ export const ChangePhaseDialog = (phaseSitePages?: any) => {
         modalProps={{ isDarkOverlay: true, isBlocking: false }}
         onDismiss={() => context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())}>
         {state.view === View.Confirm && context.props.useDynamicHomepage &&
-          <div className={styles.useDynamicHomepageContent}>
-            <Icon iconName={'Info'} className={styles.descriptionIcon} />
-            {strings.UseDynamicHomepageChangePhaseDescription}phaseSitePages
+          <div className={styles.useDynamicHomepageContent} >
+            <MessageBar messageBarType={phaseSitePage ? MessageBarType.info : MessageBarType.warning}>
+              <ReactMarkdown escapeHtml={false} source={phaseSitePage
+                ? format(strings.PhaseSitePageFoundDescription, phaseSitePage && phaseSitePage.fileLeafRef)
+                : format(strings.PhaseSitePageNotFoundDescription, context.state.confirmPhase.name)} />
+            </MessageBar>
           </div>
         }
         <Body />

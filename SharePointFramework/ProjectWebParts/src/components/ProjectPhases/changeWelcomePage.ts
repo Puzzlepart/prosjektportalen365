@@ -14,10 +14,7 @@ export const changeWelcomePage = async (
   phaseSitePages?: IPhaseSitePageModel[],
 ) => {
   try {
-    // filter phaseSitePages on phaseName
     const phaseSitePage = phaseSitePages.filter((phaseSitePage) => phaseSitePage.title === phaseName)[0]
-    console.log(phaseSitePage)
-
     const spfxJsomContext = await initSpfxJsom(absoluteUrl)
     spfxJsomContext.jsomContext.web['get_rootFolder']()['set_welcomePage'](`SitePages/${phaseSitePage.fileLeafRef}`)
     spfxJsomContext.jsomContext.web.update()

@@ -25,7 +25,6 @@ export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPha
 
     if (props.useDynamicHomepage) {
       phaseSitePages = await getPhaseSitePages(phases);
-      console.log("fetchData", phaseSitePages)
     }
 
     Logger.log({
@@ -33,11 +32,6 @@ export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPha
       level: LogLevel.Info
     })
     const [currentPhase] = phases.filter((p) => p.name === currentPhaseName)
-
-    console.log(props)
-
-    console.log(phaseSitePages)
-
 
     return {
       currentPhase,

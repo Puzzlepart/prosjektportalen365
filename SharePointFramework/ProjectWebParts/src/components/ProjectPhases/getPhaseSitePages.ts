@@ -12,8 +12,6 @@ export const getPhaseSitePages = async (
 ) => {
   try {
     let sitepages = await sp.web.lists.getByTitle('Områdesider').items.select("Id, Title, FileRef, EncodedAbsUrl, FileLeafRef").get()
-    console.log("sitepages", sitepages)
-
     sitepages = sitepages.filter(sitepage => {
       return phases.some(phase => phase.name === sitepage.Title)
     })
@@ -23,8 +21,6 @@ export const getPhaseSitePages = async (
       title: item.Title,
       fileLeafRef: item.FileLeafRef
     }))
-
-    console.log("getPhaseSitePages", phaseSitePages)
 
     return phaseSitePages
     
