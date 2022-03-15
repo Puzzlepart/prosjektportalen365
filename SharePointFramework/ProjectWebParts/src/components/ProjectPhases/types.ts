@@ -84,7 +84,7 @@ export interface IProjectPhasesData {
   /**
    * Phase SitePages
    */
-  phaseSitePages?: IPhaseSitePageModel
+  phaseSitePages?: IPhaseSitePageModel[]
 }
 
 export interface IPhaseSitePageModel {

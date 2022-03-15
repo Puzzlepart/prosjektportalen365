@@ -6,16 +6,20 @@ import { IPhaseSitePageModel } from './types'
  *
  * @param {string} phaseName
  * @param {string} absoluteUrl absoluteurl
- * @param {IPhaseSitePageModel} phaseSitePages Phase SitePages
+ * @param {IPhaseSitePageModel[]} phaseSitePages Phase SitePages
  */
 export const changeWelcomePage = async (
   phaseName: string,
   absoluteUrl: string,
-  phaseSitePages?: IPhaseSitePageModel,
+  phaseSitePages?: IPhaseSitePageModel[],
 ) => {
   try {
+    // filter phaseSitePages on phaseName
+    const phaseSitePage = phaseSitePages.filter((phaseSitePage) => phaseSitePage.title === phaseName)[0]
+    console.log(phaseSitePage)
+
     const spfxJsomContext = await initSpfxJsom(absoluteUrl)
-    spfxJsomContext.jsomContext.web['get_rootFolder']()['set_welcomePage'](`SitePages/${phaseName}.aspx`)
+    spfxJsomContext.jsomContext.web['get_rootFolder']()['set_welcomePage'](`SitePages/${phaseSitePage.fileLeafRef}`)
     spfxJsomContext.jsomContext.web.update()
     await ExecuteJsomQuery(spfxJsomContext.jsomContext)
   } catch (error) {

@@ -46,7 +46,7 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
    */
   const onChangePhase = async () => {
     dispatch(INIT_CHANGE_PHASE())
-    await changePhase(state.confirmPhase, state.data.phaseTextField, props)
+    await changePhase(state.confirmPhase, state.data.phaseTextField, props, state.data.phaseSitePages)
     dispatch(SET_PHASE({ phase: state.confirmPhase }))
     if (
       props.syncPropertiesAfterPhaseChange === undefined ||
