@@ -15,11 +15,12 @@ import { Footer } from './Footer'
 import reducer, { CHECKLIST_ITEM_UPDATED, INIT } from './reducer'
 import { View } from './Views'
 
-export const ChangePhaseDialog = ({ data }) => {
+export const ChangePhaseDialog = () => {
   const context = useContext(ProjectPhasesContext)
   if (!context.state.confirmPhase) return null
   const [state, dispatch] = useReducer(reducer, {})
-  const phaseSitePage = data.phaseSitePages.filter((phaseSitePage) => phaseSitePage.title === context.state.confirmPhase.name)[0];
+  const phaseSitePage = context.state.data.phaseSitePages && context.state.data.phaseSitePages
+    .filter((phaseSitePage) => phaseSitePage.title === context.state.confirmPhase.name)[0];
 
   useEffect(() => dispatch(INIT({ context })), [])
 

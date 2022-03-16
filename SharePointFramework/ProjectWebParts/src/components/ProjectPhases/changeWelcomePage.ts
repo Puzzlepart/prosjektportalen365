@@ -15,10 +15,13 @@ export const changeWelcomePage = async (
 ) => {
   try {
     const phaseSitePage = phaseSitePages.filter((phaseSitePage) => phaseSitePage.title === phaseName)[0]
-    const spfxJsomContext = await initSpfxJsom(absoluteUrl)
-    spfxJsomContext.jsomContext.web['get_rootFolder']()['set_welcomePage'](`SitePages/${phaseSitePage.fileLeafRef}`)
-    spfxJsomContext.jsomContext.web.update()
-    await ExecuteJsomQuery(spfxJsomContext.jsomContext)
+    if (phaseSitePage && phaseSitePage.fileLeafRef) {
+      const spfxJsomContext = await initSpfxJsom(absoluteUrl)
+      spfxJsomContext.jsomContext.web['get_rootFolder']()['set_welcomePage'](`SitePages/${phaseSitePage.fileLeafRef}`)
+      spfxJsomContext.jsomContext.web.update()
+      await ExecuteJsomQuery(spfxJsomContext.jsomContext)
+    }
+
   } catch (error) {
     throw error
   }
