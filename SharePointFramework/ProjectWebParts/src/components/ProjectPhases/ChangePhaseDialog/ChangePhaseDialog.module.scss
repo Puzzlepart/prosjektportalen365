@@ -1,17 +1,9 @@
 .root {
   width: 550px;
   max-width: 550px;
+  font-weight: 300;
 
-  .useDynamicHomepageContent {
-    display: flex;
-    margin-top: 10px;
+  .dynamicHomepageContent {
     font-weight: 300;
-
-    .descriptionIcon {
-      vertical-align: middle;
-      padding-top: 15px;
-      padding-right: 10px;
-      padding-left: 10px;
-    }
   }
 }

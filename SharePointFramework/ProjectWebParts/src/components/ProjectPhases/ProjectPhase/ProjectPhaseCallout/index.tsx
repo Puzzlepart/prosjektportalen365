@@ -12,7 +12,7 @@ export const ProjectPhaseCallout = ({ phase, target }: IProjectPhaseCalloutProps
   if (!target) return null
   const context = useContext(ProjectPhasesContext)
   const stats = Object.keys(phase.checklistData.stats)
-
+  const items = Object.keys(phase.checklistData.items)
   return (
     <Callout
       gapSpace={5}
@@ -40,13 +40,13 @@ export const ProjectPhaseCallout = ({ phase, target }: IProjectPhaseCalloutProps
               })}
             </div>
             <div className={styles.actions}>
-              <ActionButton
+              {!isEmpty(items) && <ActionButton
                 href={phase.getFilteredPhaseChecklistViewUrl(
                   `${context.props.webUrl}/${strings.PhaseChecklistViewUrl}`
                 )}
                 text={strings.PhaseChecklistLinkText}
                 iconProps={{ iconName: 'CheckList' }}
-              />
+              />}
               <ActionButton
                 onClick={() => context.dispatch(CHANGE_PHASE())}
                 text={strings.ChangePhaseText}

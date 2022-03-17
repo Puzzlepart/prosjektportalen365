@@ -10,7 +10,11 @@ Every change is marked with issue ID.
 - Added functionality for dynamic welcomepages based on project phases #643
 - Added 'Vis alle egenskaper' button with panel to ProjectInformation webpart #650
 - Added support for {site} token in Planner-tasks #646
-- Add possibility to 'lock' project template configurations #645
+- Add possibility to lock'project template configurations #645
+
+### Changed
+
+- If there are no items in the list "Fasesjekkeliste". "Gå til fasesjekklisten" button won't show and the empty dialog when changing phase is skipped #660
 
 ### Fixed
 
