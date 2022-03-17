@@ -6,7 +6,8 @@ export class ProjectTemplateFile {
   public name: string
 
   constructor(item: IProjectTemplateSPItem) {
-    ;(this.id = item.Id), (this.name = item.File.Name)
+    this.id = item.Id
+    this.name = item.File.Name
     this.serverRelativeUrl = item.File.ServerRelativeUrl
   }
 }
