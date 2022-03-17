@@ -76,6 +76,7 @@ export class TemplateSelectDialog extends React.Component<
               <ExtensionsSection
                 extensions={data.extensions}
                 selectedExtensions={selectedExtensions}
+                lockDefault={selectedTemplate.isDefaultExtensionsLocked}
                 onChange={(s) => this.setState({ selectedExtensions: s })}
               />
             </PivotItem>
@@ -92,6 +93,7 @@ export class TemplateSelectDialog extends React.Component<
               <ListContentSection
                 listContentConfig={data.listContentConfig}
                 selectedListContentConfig={selectedListContentConfig}
+                lockDefault={selectedTemplate.isDefaultListContentLocked}
                 onChange={(s) => this.setState({ selectedListContentConfig: s })}
               />
             </PivotItem>

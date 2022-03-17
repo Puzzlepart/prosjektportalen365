@@ -29,6 +29,7 @@ export const ExtensionsSection = (props: IExtensionsSectionProps) => {
             <Toggle
               label={ext.text}
               defaultChecked={selectedKeys.indexOf(ext.key) !== -1}
+              disabled={props.lockDefault && selectedKeys.indexOf(ext.key) !== -1}
               inlineLabel={true}
               onChange={(_event, checked) => onChange(ext, checked)}
             />
