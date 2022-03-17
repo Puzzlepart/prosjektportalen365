@@ -82,24 +82,24 @@ export interface IProjectPhasesData {
   phaseTextField?: string
 
   /**
-   * Phase SitePages
+   * Phase site pages
    */
   phaseSitePages?: IPhaseSitePageModel[]
 }
 
 export interface IPhaseSitePageModel {
   /**
-   * Id of SitePage
+   * Id of phase site page
    */
   id?: number;
 
   /**
-   * Title of SitePage
+   * Title of phase site page
    */
   title?: string
 
   /**
-   * FileLeafRef of SitePage
+   * FileLeafRef of phase site page
    */
   fileLeafRef?: string
 }

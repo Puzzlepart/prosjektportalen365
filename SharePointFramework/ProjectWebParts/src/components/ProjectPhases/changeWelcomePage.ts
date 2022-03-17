@@ -1,4 +1,5 @@
 import initSpfxJsom, { ExecuteJsomQuery } from 'spfx-jsom'
+import _ from 'underscore'
 import { IPhaseSitePageModel } from './types'
 
 /**
@@ -14,7 +15,7 @@ export const changeWelcomePage = async (
   phaseSitePages?: IPhaseSitePageModel[],
 ) => {
   try {
-    const phaseSitePage = phaseSitePages.filter((phaseSitePage) => phaseSitePage.title === phaseName)[0]
+    const phaseSitePage = phaseSitePages && _.find(phaseSitePages, (p) => p.title === phaseName)
     if (phaseSitePage && phaseSitePage.fileLeafRef) {
       const spfxJsomContext = await initSpfxJsom(absoluteUrl)
       spfxJsomContext.jsomContext.web['get_rootFolder']()['set_welcomePage'](`SitePages/${phaseSitePage.fileLeafRef}`)

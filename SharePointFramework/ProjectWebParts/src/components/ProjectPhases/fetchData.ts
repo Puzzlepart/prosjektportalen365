@@ -11,7 +11,7 @@ import { getPhaseSitePages } from './getPhaseSitePages'
  */
 export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPhasesData> {
   const { phaseField } = props
-  let phaseSitePages;
+  let phaseSitePages
 
   try {
     const [phaseFieldCtx, checklistData] = await Promise.all([
@@ -24,7 +24,7 @@ export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPha
     ])
 
     if (props.useDynamicHomepage) {
-      phaseSitePages = await getPhaseSitePages(phases);
+      phaseSitePages = await getPhaseSitePages(phases)
     }
 
     Logger.log({
