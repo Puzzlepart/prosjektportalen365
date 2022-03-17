@@ -29,7 +29,9 @@ export class PlannerConfiguration extends BaseTask {
 
   /**
    * Replacing site tokens. For now it supports `{site}` which is replaced
-   * with the site absolute URL.
+   * with the site absolute URL. Encodes URL, replacing %, . and :
+   *
+   * @see https://docs.microsoft.com/en-gb/graph/api/resources/plannerexternalreferences?view=graph-rest-1.0
    *
    * @param str - String
    * @param pageContext - Page context
