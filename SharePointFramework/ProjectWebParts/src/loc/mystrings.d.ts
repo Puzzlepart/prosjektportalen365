@@ -142,7 +142,8 @@ declare interface IProjectWebPartsStrings {
   UseDynamicHomepageFieldLabel: string;
   UseDynamicHomepageCalloutText: string;
   AdvancedGroupName: string;
-  UseDynamicHomepageChangePhaseDescription: string;
+  PhaseSitePageFoundDescription: string;
+  PhaseSitePageNotFoundDescription: string;
 }
 
 declare module 'ProjectWebPartsStrings' {

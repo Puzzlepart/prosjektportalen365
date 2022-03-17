@@ -1,10 +1,12 @@
 import SPDataAdapter from 'data'
-import { Icon } from 'office-ui-fabric-react'
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react'
 import Dialog, { DialogType } from 'office-ui-fabric-react/lib/Dialog'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { useContext, useEffect, useReducer } from 'react'
+import * as ReactMarkdown from 'react-markdown/with-html'
+import _ from 'underscore'
 import { ProjectPhasesContext } from '../context'
 import { DISMISS_CHANGE_PHASE_DIALOG } from '../reducer'
 import { Body } from './Body'
@@ -18,6 +20,9 @@ export const ChangePhaseDialog = () => {
   const context = useContext(ProjectPhasesContext)
   if (!context.state.confirmPhase) return null
   const [state, dispatch] = useReducer(reducer, {})
+  const phaseSitePages = context.state.data.phaseSitePages
+  const confirmPhaseName = context.state.confirmPhase.name
+  const phaseSitePage = phaseSitePages && _.find(phaseSitePages, (p) => p.title === confirmPhaseName)
 
   useEffect(() => dispatch(INIT({ context })), [])
 
@@ -47,15 +52,18 @@ export const ChangePhaseDialog = () => {
         title={strings.ChangePhaseText}
         subText={
           state.view === View.Confirm &&
-          format(strings.ConfirmChangePhase, context.state.confirmPhase.name)
+          format(strings.ConfirmChangePhase, confirmPhaseName)
         }
         dialogContentProps={{ type: DialogType.largeHeader }}
         modalProps={{ isDarkOverlay: true, isBlocking: false }}
         onDismiss={() => context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())}>
         {state.view === View.Confirm && context.props.useDynamicHomepage &&
-          <div className={styles.useDynamicHomepageContent}>
-            <Icon iconName={'Info'} className={styles.descriptionIcon} />
-            {strings.UseDynamicHomepageChangePhaseDescription}
+          <div className={styles.dynamicHomepageContent} >
+            <MessageBar messageBarType={phaseSitePage ? MessageBarType.info : MessageBarType.warning}>
+              <ReactMarkdown escapeHtml={false} source={phaseSitePage
+                ? format(strings.PhaseSitePageFoundDescription, phaseSitePage && phaseSitePage.fileLeafRef)
+                : format(strings.PhaseSitePageNotFoundDescription, confirmPhaseName)} />
+            </MessageBar>
           </div>
         }
         <Body />
