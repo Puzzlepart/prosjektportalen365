@@ -12,6 +12,11 @@ export interface IListContentSectionProps {
   selectedListContentConfig?: ListContentConfig[]
 
   /**
+   * Locks (disables) the default list content config
+   */
+  lockDefault?: boolean
+
+  /**
    * On list content config changed
    */
   onChange: (selectedListConfig: ListContentConfig[]) => void

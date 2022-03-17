@@ -5,9 +5,7 @@ import { SpEntityPortalService } from 'sp-entityportal-service'
 import initSpfxJsom, { ExecuteJsomQuery } from 'spfx-jsom'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import _ from 'underscore'
-import {ITaxonomySession, Session} from '@pnp/sp-taxonomy'
-
-
+import { ITaxonomySession, Session } from '@pnp/sp-taxonomy'
 
 export class PreTask extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -46,19 +44,28 @@ export class PreTask extends BaseTask {
   }
 
   private async validateParameters(params: IBaseTaskParams): Promise<void> {
-    const parametersToValidate: string[] = (_.toArray(params.templateSchema.Parameters) as string[])
+    const parametersToValidate: string[] = _.toArray(params.templateSchema.Parameters) as string[]
     const [termSetIds] = parametersToValidate.filter((param) => _.isObject(param))
-    const contentTypesToValidate = parametersToValidate.filter((param) => !_.isObject(param)).filter((ct) => ct.includes('0x'))
+    const contentTypesToValidate = parametersToValidate
+      .filter((param) => !_.isObject(param))
+      .filter((ct) => ct.includes('0x'))
     await this.validateTermSetIds(termSetIds)
     await this.validateContentTypes(contentTypesToValidate)
   }
 
   private async validateTermSetIds(termSetIds: any) {
     const taxonomySession: ITaxonomySession = new Session()
-    const termSet = await taxonomySession.getDefaultSiteCollectionTermStore().getTermSetById(termSetIds.GtProjectPhase).get()
+    const termSet = await taxonomySession
+      .getDefaultSiteCollectionTermStore()
+      .getTermSetById(termSetIds.GtProjectPhase)
+      .get()
     if (!termSet.Name) {
       this.logError(`Failed to validate term set ${termSetIds.GtProjectPhase}`)
-      throw new BaseTaskError(this.taskName, strings.PreTaskTermSetIdValidationErrorMessage, strings.TermSetDoesNotExistError)
+      throw new BaseTaskError(
+        this.taskName,
+        strings.PreTaskTermSetIdValidationErrorMessage,
+        strings.TermSetDoesNotExistError
+      )
     }
   }
 
@@ -73,7 +80,11 @@ export class PreTask extends BaseTask {
           await this.data.hub.web.contentTypes.getById(ct).get()
         } catch (error) {
           this.logError(`Failed to validate content type ${ct}`)
-          throw new BaseTaskError(this.taskName, strings.PreTaskContentTypeValidationErrorMessage, error)
+          throw new BaseTaskError(
+            this.taskName,
+            strings.PreTaskContentTypeValidationErrorMessage,
+            error
+          )
         }
       })
     )

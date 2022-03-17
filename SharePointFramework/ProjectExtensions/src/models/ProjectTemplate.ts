@@ -6,6 +6,8 @@ import { Schema } from 'sp-js-provisioning'
 export interface IProjectTemplateSPItem {
   Id?: number
   IsDefaultTemplate?: boolean
+  IsDefaultExtensionsLocked?: boolean
+  IsDefaultListContentLocked?: boolean
   IconName?: string
   ListContentConfigLookupId?: number[]
   File?: { UniqueId: string; Name: string; Title: string; ServerRelativeUrl: string }
@@ -25,6 +27,8 @@ export class ProjectTemplate implements IDropdownOption {
   public text: string
   public subText: string
   public isDefault: boolean
+  public isDefaultExtensionsLocked: boolean
+  public isDefaultListContentLocked: boolean
   public iconName: string
   public listContentConfigIds: number[]
   public projectTemplateId: number
@@ -42,14 +46,14 @@ export class ProjectTemplate implements IDropdownOption {
     this.text = spItem.FieldValuesAsText.Title
     this.subText = spItem.FieldValuesAsText.GtDescription
     this.isDefault = spItem?.IsDefaultTemplate
+    this.isDefaultExtensionsLocked = spItem?.IsDefaultExtensionsLocked
+    this.isDefaultListContentLocked = spItem?.IsDefaultListContentLocked
     this.iconName = spItem.IconName
-    this.listContentConfigIds = spItem.ListContentConfigLookupId?.length > 0
-      ? spItem.ListContentConfigLookupId
-      : null
+    this.listContentConfigIds =
+      spItem.ListContentConfigLookupId?.length > 0 ? spItem.ListContentConfigLookupId : null
     this.projectTemplateId = spItem.GtProjectTemplateId
-    this.listExtensionIds = spItem.GtProjectExtensionsId?.length > 0
-      ? spItem.GtProjectExtensionsId
-      : null
+    this.listExtensionIds =
+      spItem.GtProjectExtensionsId?.length > 0 ? spItem.GtProjectExtensionsId : null
     this.projectContentType = spItem.GtProjectContentType
     this.projectStatusContentType = spItem.GtProjectStatusContentType
     this.projectColumns = spItem.GtProjectColumns
@@ -60,14 +64,19 @@ export class ProjectTemplate implements IDropdownOption {
   public async getSchema(): Promise<Schema> {
     const schema = await this.web.getFileByServerRelativeUrl(this.projectTemplateUrl).getJSON()
     schema.Parameters = schema.Parameters || {}
-    schema.Parameters.ProjectContentTypeId = this?.projectContentType ?? schema.Parameters.ProjectContentTypeId
-    schema.Parameters.ProjectStatusContentTypeId = this?.projectStatusContentType ?? schema.Parameters.ProjectStatusContentTypeId
-    schema.Parameters.ProvisionSiteFields = this?.projectColumns ?? schema.Parameters.ProvisionSiteFields
-    schema.Parameters.CustomSiteFields = this?.projectCustomColumns ?? schema.Parameters.CustomSiteFields
+    schema.Parameters.ProjectContentTypeId =
+      this?.projectContentType ?? schema.Parameters.ProjectContentTypeId
+    schema.Parameters.ProjectStatusContentTypeId =
+      this?.projectStatusContentType ?? schema.Parameters.ProjectStatusContentTypeId
+    schema.Parameters.ProvisionSiteFields =
+      this?.projectColumns ?? schema.Parameters.ProvisionSiteFields
+    schema.Parameters.CustomSiteFields =
+      this?.projectCustomColumns ?? schema.Parameters.CustomSiteFields
     if (!schema.Parameters.TermSetIds) {
       schema.Parameters.TermSetIds = {}
     }
-    schema.Parameters.TermSetIds.GtProjectPhase = this?.projectPhaseTermId ?? schema.Parameters.TermSetIds.GtProjectPhase
+    schema.Parameters.TermSetIds.GtProjectPhase =
+      this?.projectPhaseTermId ?? schema.Parameters.TermSetIds.GtProjectPhase
     return schema
   }
 }
