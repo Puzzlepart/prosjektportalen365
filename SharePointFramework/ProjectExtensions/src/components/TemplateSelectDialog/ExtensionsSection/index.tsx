@@ -35,7 +35,9 @@ export const ExtensionsSection = (props: IExtensionsSectionProps) => {
                 inlineLabel={true}
                 onChange={(_event, checked) => onChange(ext, checked)}
               />
-              {props.lockDefault && ext.isDefault && <Icon iconName={'Lock'} className={styles.icon} />}
+              {props.lockDefault && ext.isDefault && (
+                <Icon iconName={'Lock'} className={styles.icon} />
+              )}
             </div>
             <div className={styles.subText} hidden={stringIsNullOrEmpty(ext.subText)}>
               <span>{ext.subText}</span>

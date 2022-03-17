@@ -42,7 +42,9 @@ export const ListContentSection = (props: IListContentSectionProps) => {
                   inlineLabel={true}
                   onChanged={(checked) => onChanged(lcc, checked)}
                 />
-                {props.lockDefault && lcc.isDefault && <Icon iconName={'Lock'} className={styles.icon} />}
+                {props.lockDefault && lcc.isDefault && (
+                  <Icon iconName={'Lock'} className={styles.icon} />
+                )}
               </div>
               <div className={styles.subText} hidden={stringIsNullOrEmpty(lcc.subText)}>
                 <span>{lcc.subText}</span>

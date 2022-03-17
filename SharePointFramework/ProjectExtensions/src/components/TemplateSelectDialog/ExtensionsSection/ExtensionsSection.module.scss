@@ -4,12 +4,12 @@
   @include ms-Grid-col;
   @include ms-sm12;
   padding: 10px 0 10px 0;
-  
+
   .container {
     .item {
       width: 50%;
       display: inline-block;
-      vertical-align: top; 
+      vertical-align: top;
       padding-right: 5px;
       box-sizing: border-box;
 
@@ -17,7 +17,7 @@
         display: flex;
         align-items: baseline;
 
-        .icon{
+        .icon {
           padding-left: 5px;
           color: #a6a6a6;
         }

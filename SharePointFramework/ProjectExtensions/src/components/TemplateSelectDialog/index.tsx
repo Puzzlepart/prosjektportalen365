@@ -29,8 +29,15 @@ export class TemplateSelectDialog extends React.Component<
     super(props)
     this.state = {
       selectedTemplate: this._getDefaultTemplate(),
-      selectedExtensions: props.data.extensions.filter((ext) => ext.isDefault || this._getDefaultTemplate().listExtensionIds?.some((id) => id === ext.id)),
-      selectedListContentConfig: props.data.listContentConfig.filter((lcc) => lcc.isDefault || this._getDefaultTemplate().listContentConfigIds?.some((id) => id === lcc.id)),
+      selectedExtensions: props.data.extensions.filter(
+        (ext) =>
+          ext.isDefault || this._getDefaultTemplate().listExtensionIds?.some((id) => id === ext.id)
+      ),
+      selectedListContentConfig: props.data.listContentConfig.filter(
+        (lcc) =>
+          lcc.isDefault ||
+          this._getDefaultTemplate().listContentConfigIds?.some((id) => id === lcc.id)
+      ),
       settings: new ProjectSetupSettings().useDefault()
     }
   }
@@ -105,13 +112,17 @@ export class TemplateSelectDialog extends React.Component<
 
   /**
    * Sets the selected template to the state, and updates the predfined selected extensions
-   * @param template 
+   * @param template
    */
   private _onTemplateChange(template: ProjectTemplate): void {
     this.setState({
       selectedTemplate: template,
-      selectedExtensions: this.props.data.extensions.filter((ext) => ext.isDefault || template.listExtensionIds?.some((id) => id === ext.id)),
-      selectedListContentConfig: this.props.data.listContentConfig.filter((lcc) => lcc.isDefault || template.listContentConfigIds?.some((id) => id === lcc.id)),
+      selectedExtensions: this.props.data.extensions.filter(
+        (ext) => ext.isDefault || template.listExtensionIds?.some((id) => id === ext.id)
+      ),
+      selectedListContentConfig: this.props.data.listContentConfig.filter(
+        (lcc) => lcc.isDefault || template.listContentConfigIds?.some((id) => id === lcc.id)
+      )
     })
   }
 
@@ -147,7 +158,9 @@ export class TemplateSelectDialog extends React.Component<
    */
   private _onSubmit() {
     const data = { ...this.state }
-    data.selectedTemplate.listContentConfigIds = this.state.selectedListContentConfig.map((lcc) => lcc.id)
+    data.selectedTemplate.listContentConfigIds = this.state.selectedListContentConfig.map(
+      (lcc) => lcc.id
+    )
     this.props.onSubmit(data)
   }
 }

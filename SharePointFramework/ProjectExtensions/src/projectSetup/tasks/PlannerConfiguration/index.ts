@@ -35,7 +35,13 @@ export class PlannerConfiguration extends BaseTask {
    * @param pageContext - Page context
    */
   private replaceUrlTokens(str: string, pageContext: PageContext) {
-    const siteAbsoluteUrl = pageContext.site.absoluteUrl.split('%').join('%25').split('.').join('%2E').split(':').join('%3A')
+    const siteAbsoluteUrl = pageContext.site.absoluteUrl
+      .split('%')
+      .join('%25')
+      .split('.')
+      .join('%2E')
+      .split(':')
+      .join('%3A')
     return str.replace('{site}', siteAbsoluteUrl)
   }
 
@@ -184,25 +190,25 @@ export class PlannerConfiguration extends BaseTask {
           const taskDetails: Record<string, any> = {
             checklist: checklist
               ? checklist.reduce(
-                (obj, title) => ({
-                  ...obj,
-                  [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }
-                }),
-                {}
-              )
+                  (obj, title) => ({
+                    ...obj,
+                    [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }
+                  }),
+                  {}
+                )
               : {},
             references: attachments
               ? attachments.reduce(
-                (obj, attachment) => ({
-                  ...obj,
-                  [this.replaceUrlTokens(attachment.url, pageContext)]: {
-                    '@odata.type': 'microsoft.graph.plannerExternalReference',
-                    alias: attachment.alias,
-                    type: attachment.type
-                  }
-                }),
-                {}
-              )
+                  (obj, attachment) => ({
+                    ...obj,
+                    [this.replaceUrlTokens(attachment.url, pageContext)]: {
+                      '@odata.type': 'microsoft.graph.plannerExternalReference',
+                      alias: attachment.alias,
+                      type: attachment.type
+                    }
+                  }),
+                  {}
+                )
               : {},
             previewType: attachments ? 'reference' : 'checklist'
           }
