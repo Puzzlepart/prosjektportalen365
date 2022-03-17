@@ -67,9 +67,11 @@ export class TemplateSelectDialog extends React.Component<
           {!isEmpty(data.extensions) && (
             <PivotItem headerText={strings.ExtensionsTitle} itemIcon='ArrangeBringForward'>
               {selectedTemplate.listExtensionIds && (
-                <MessageBar messageBarType={MessageBarType.info}>
-                  {strings.TemplateListContentConfigText}
-                </MessageBar>
+                <div style={{ marginTop: 20 }}>
+                  <MessageBar messageBarType={MessageBarType.info}>
+                    {strings.TemplateListContentConfigText}
+                  </MessageBar>
+                </div>
               )}
               <ExtensionsSection
                 extensions={data.extensions}
@@ -81,9 +83,11 @@ export class TemplateSelectDialog extends React.Component<
           {!isEmpty(data.listContentConfig) && (
             <PivotItem headerText={strings.ListContentTitle} itemIcon='ViewList'>
               {selectedTemplate.listContentConfigIds && (
-                <MessageBar messageBarType={MessageBarType.info}>
-                  {strings.TemplateListContentConfigText}
-                </MessageBar>
+                <div style={{ marginTop: 20 }}>
+                  <MessageBar messageBarType={MessageBarType.info}>
+                    {strings.TemplateListContentConfigText}
+                  </MessageBar>
+                </div>
               )}
               <ListContentSection
                 listContentConfig={data.listContentConfig}
