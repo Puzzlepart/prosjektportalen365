@@ -12,6 +12,11 @@ export interface IExtensionsSectionProps {
   selectedExtensions?: ProjectExtension[]
 
   /**
+   * Locks (disables) the default extensions
+   */
+  lockDefault?: boolean
+
+  /**
    * On extensions changed
    */
   onChange: (selectedExtensions: ProjectExtension[]) => void

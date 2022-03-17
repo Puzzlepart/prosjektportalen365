@@ -37,6 +37,7 @@ export const ListContentSection = (props: IListContentSectionProps) => {
               <Toggle
                 label={lcc.text}
                 defaultChecked={selectedKeys.indexOf(lcc.key) !== -1}
+                disabled={props.lockDefault && selectedKeys.indexOf(lcc.key) !== -1}
                 inlineLabel={true}
                 onChanged={(checked) => onChanged(lcc, checked)}
               />

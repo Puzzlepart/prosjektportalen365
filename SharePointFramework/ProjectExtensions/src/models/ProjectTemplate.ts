@@ -6,6 +6,8 @@ import { Schema } from 'sp-js-provisioning'
 export interface IProjectTemplateSPItem {
   Id?: number
   IsDefaultTemplate?: boolean
+  IsDefaultExtensionsLocked?: boolean
+  IsDefaultListContentLocked?: boolean
   IconName?: string
   ListContentConfigLookupId?: number[]
   File?: { UniqueId: string; Name: string; Title: string; ServerRelativeUrl: string }
@@ -25,6 +27,8 @@ export class ProjectTemplate implements IDropdownOption {
   public text: string
   public subText: string
   public isDefault: boolean
+  public isDefaultExtensionsLocked: boolean
+  public isDefaultListContentLocked: boolean
   public iconName: string
   public listContentConfigIds: number[]
   public projectTemplateId: number
@@ -42,6 +46,8 @@ export class ProjectTemplate implements IDropdownOption {
     this.text = spItem.FieldValuesAsText.Title
     this.subText = spItem.FieldValuesAsText.GtDescription
     this.isDefault = spItem?.IsDefaultTemplate
+    this.isDefaultExtensionsLocked = spItem?.IsDefaultExtensionsLocked
+    this.isDefaultListContentLocked = spItem?.IsDefaultListContentLocked
     this.iconName = spItem.IconName
     this.listContentConfigIds = spItem.ListContentConfigLookupId?.length > 0
       ? spItem.ListContentConfigLookupId
