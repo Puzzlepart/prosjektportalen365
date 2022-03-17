@@ -1,6 +1,6 @@
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
+import { Icon } from 'office-ui-fabric-react/lib/Icon'
 import { stringIsNullOrEmpty } from '@pnp/common'
-
 import * as React from 'react'
 import { ListContentConfig } from '../../../models'
 import { IListContentSectionProps } from './types'
@@ -34,13 +34,16 @@ export const ListContentSection = (props: IListContentSectionProps) => {
           .filter((lcc) => !lcc.hidden)
           .map((lcc) => (
             <div key={lcc.key} className={styles.item}>
-              <Toggle
-                label={lcc.text}
-                defaultChecked={selectedKeys.indexOf(lcc.key) !== -1}
-                disabled={props.lockDefault && selectedKeys.indexOf(lcc.key) !== -1}
-                inlineLabel={true}
-                onChanged={(checked) => onChanged(lcc, checked)}
-              />
+              <div className={styles.toggle}>
+                <Toggle
+                  label={lcc.text}
+                  defaultChecked={selectedKeys.indexOf(lcc.key) !== -1}
+                  disabled={props.lockDefault && lcc.isDefault}
+                  inlineLabel={true}
+                  onChanged={(checked) => onChanged(lcc, checked)}
+                />
+                {props.lockDefault && lcc.isDefault && <Icon iconName={'Lock'} className={styles.icon} />}
+              </div>
               <div className={styles.subText} hidden={stringIsNullOrEmpty(lcc.subText)}>
                 <span>{lcc.subText}</span>
               </div>
