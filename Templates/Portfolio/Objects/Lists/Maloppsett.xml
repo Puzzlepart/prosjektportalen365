@@ -46,13 +46,13 @@
     <Field Type="Text" DisplayName="Kundespesifikke kolonner" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" ID="{4efd9b9f-62ba-42e7-9dec-a37ad8b125a7}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectCustomColumns" Name="GtProjectCustomColumns">
       <Default>Egendefinerte kolonner for Prosjektportalen</Default>
     </Field>
-    <Field Type="Boolean" DisplayName="Standard mal?" EnforceUniqueValues="FALSE" Indexed="FALSE" ID="{80a9dc17-834e-4c30-af28-87f3ef1900df}" SourceID="{{listid:Maloppsett}}" StaticName="IsDefaultTemplate" Name="IsDefaultTemplate" CustomFormatter="" Required="FALSE" Version="1">
+    <Field Type="Boolean" DisplayName="Standard mal?" EnforceUniqueValues="FALSE" Indexed="FALSE" ID="{80a9dc17-834e-4c30-af28-87f3ef1900df}" SourceID="{{listid:Maloppsett}}" StaticName="IsDefaultTemplate" Name="IsDefaultTemplate" Required="FALSE">
       <Default>0</Default>
     </Field>
-    <Field Type="Boolean" DisplayName="Lås standard utvidelser?" EnforceUniqueValues="FALSE" Indexed="FALSE" ID="{c5091d4a-9b05-4cd4-96e7-9076d4d66379}" SourceID="{{listid:Maloppsett}}" StaticName="IsDefaultExtensionsLocked" Name="IsDefaultExtensionsLocked" CustomFormatter="" Required="FALSE" Version="1">
+    <Field Type="Boolean" DisplayName="Lås standard utvidelser?" EnforceUniqueValues="FALSE" Indexed="FALSE" ID="{c5091d4a-9b05-4cd4-96e7-9076d4d66379}" SourceID="{{listid:Maloppsett}}" StaticName="IsDefaultExtensionsLocked" Name="IsDefaultExtensionsLocked" Required="FALSE">
       <Default>0</Default>
     </Field>
-    <Field Type="Boolean" DisplayName="Lås standard listeinnhold?" EnforceUniqueValues="FALSE" Indexed="FALSE" ID="{6e551826-2069-4ac9-a199-01f573fbccff}" SourceID="{{listid:Maloppsett}}" StaticName="IsDefaultListContentLocked" Name="IsDefaultListContentLocked" CustomFormatter="" Required="FALSE" Version="1">
+    <Field Type="Boolean" DisplayName="Lås standard listeinnhold?" EnforceUniqueValues="FALSE" Indexed="FALSE" ID="{6e551826-2069-4ac9-a199-01f573fbccff}" SourceID="{{listid:Maloppsett}}" StaticName="IsDefaultListContentLocked" Name="IsDefaultListContentLocked" Required="FALSE">
       <Default>0</Default>
     </Field>
   </pnp:Fields>
