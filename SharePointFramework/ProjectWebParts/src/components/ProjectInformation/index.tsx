@@ -26,7 +26,7 @@ import {
   IProjectInformationState,
   IProjectInformationUrlHash
 } from './types'
-import { sp } from "@pnp/sp";
+import { sp } from '@pnp/sp'
 export class ProjectInformation extends BaseWebPartComponent<
   IProjectInformationProps,
   IProjectInformationState
@@ -53,7 +53,7 @@ export class ProjectInformation extends BaseWebPartComponent<
     } catch (error) {
       this.setState({ error, loading: false })
     }
-    this.isParentProjectOrProgram();
+    this.isParentProjectOrProgram()
   }
 
   public render() {
@@ -124,7 +124,7 @@ export class ProjectInformation extends BaseWebPartComponent<
   }
 
   private administerChildren() {
-    const onButtonClick = async () => {
+    const onButtonClick = () => {
       window.location.href = `${this.props.webPartContext.pageContext.web.serverRelativeUrl}/SitePages/${this.props.adminPageLink}`
     }
     
@@ -143,7 +143,7 @@ export class ProjectInformation extends BaseWebPartComponent<
   }
 
   public async isParentProjectOrProgram() {
-    const data = await sp.web.lists.getByTitle("Prosjektegenskaper").items.getById(1).select(("GtIsParentProject,GtIsProgram")).get()
+    const data = await sp.web.lists.getByTitle('Prosjektegenskaper').items.getById(1).select(('GtIsParentProject,GtIsProgram')).get()
     this.setState({ isParentProject: (data?.GtIsParentProject || data?.GtIsProgram)})
   }
 
@@ -151,7 +151,7 @@ export class ProjectInformation extends BaseWebPartComponent<
    * Creates an action and initializes project -> parentproject transformation
    */
   private transformToParentProject() {
-    const onButtonClick = async () => {
+    const onButtonClick = () => {
       this.setState({ displayParentCreationModal: true })
     }
     
