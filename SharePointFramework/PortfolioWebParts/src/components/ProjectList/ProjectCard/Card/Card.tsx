@@ -36,6 +36,17 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
     project.GtProjectServiceAreaText && project.GtProjectServiceAreaText.split(';')
   const typeText = project.GtProjectTypeText && project.GtProjectTypeText.split(';')
 
+  const _setPhaseColor = (phaseLevel) => {
+    switch (phaseLevel) {
+      case 'Portfolio':
+        return 'rgb(0,114,198,0.8)'
+      case 'Project':
+        return 'rgb(51,153,51,0.8)'
+      default:
+        return 'grey'
+    }
+  }
+
   const _renderLifeCycleStatus = () => {
     if (project.GtProjectLifecycleStatus) {
       return (
@@ -84,17 +95,6 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
     }
   }
 
-  const _setPhaseColor = (phaseLevel) => {
-    switch (phaseLevel) {
-      case 'Portfolio':
-        return 'rgb(0,114,198,0.8)'
-      case 'Project':
-        return 'rgb(51,153,51,0.8)'
-      default:
-        return 'grey'
-    }
-  }
-
   let endDate = moment(project.endDate).format('DD.MM.YYYY')
   console.log(project.GtProjectLifecycleStatus)
 
@@ -103,7 +103,9 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
       className={styles.card}
       style={!project.userIsMember ? { opacity: '50%', cursor: 'default' } : {}}
       onClick={project.userIsMember ? () => window.open(project.url, '_self') : null}>
-      <img className={styles.logo} src={project.logo ?? placeholderImage} />
+      <div className={styles.logo}>
+        <img src={project.logo ?? placeholderImage} />
+      </div>
       <div
         title={project.phase}
         style={{ backgroundColor: _setPhaseColor(phaseLevel), color: 'white' }}
