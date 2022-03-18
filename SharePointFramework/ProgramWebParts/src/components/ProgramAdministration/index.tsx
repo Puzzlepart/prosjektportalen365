@@ -71,15 +71,8 @@ export const fields: IViewField[] = [
     name: 'Title',
     displayName: 'Tittel',
     isResizable: true,
-    sorting: true,
-    maxWidth: 250.
-  },
-  {
-    name: 'SPWebURL',
-    displayName: 'Site URL',
-    isResizable: true,
     render: (item: IProgramAdministrationItem) => {
-      return <a href={item.SPWebURL} target='_blank' data-interception='off' rel='noreferrer' >{item.SPWebURL}</a>
+      return <a href={item.SPWebURL} target='_blank' data-interception='off' rel='noreferrer' >{item.Title}</a>
     },
     sorting: true,
     maxWidth: 250.
