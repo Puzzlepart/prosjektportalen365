@@ -91,6 +91,7 @@ define([], function() {
         ProjectProvisioningStartLogText: 'Starting provisioning of project.',
         ProvisionTemplateText: 'Gå til maloppsett',
         Lists_ProjectTemplateFiles_Title: 'Prosjektmaler',
-        ContinueToProjectText: 'Fortsett til prosjekt'
+        ContinueToProjectText: 'Fortsett til prosjekt',
+        RecycleBinText: 'Papirkurv'
     }
 })

@@ -90,6 +90,7 @@ declare interface IProjectExtensionsStrings {
   ProjectProvisioningStartLogText: string
   ProvisionTemplateText: string
   ContinueToProjectText: string
+  RecycleBinText: string
 }
 
 declare module 'ProjectExtensionsStrings' {

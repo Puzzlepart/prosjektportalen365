@@ -26,7 +26,7 @@ import * as Tasks from './tasks'
 import { deleteCustomizer } from './deleteCustomizer'
 import { ProjectSetupError } from './ProjectSetupError'
 import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
-import { find } from 'underscore'
+import { find, uniq } from 'underscore'
 import { endsWith } from 'lodash'
 import { ProjectSetupSettings } from './ProjectSetupSettings'
 import { ProjectTemplateFile } from 'models/ProjectTemplateFile'
@@ -143,7 +143,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       await this._startProvision(taskParams, data)
 
       if(!stringIsNullOrEmpty(this.properties.forceTemplate)) {
-        this.reacreateNavMenu()
+        await this.reacreateNavMenu()
         await sp.web.lists.getByTitle(strings.ProjectPropertiesListName).items.getById(1).update({GtIsParentProject: true})
         await this._ensureParentProjectPatch(data)
         
@@ -170,23 +170,20 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    */
      private async reacreateNavMenu() {
         const oldNodes: MenuNode[] = await JSON.parse(localStorage.getItem('navigationNodes'))
-        const newNodes: MenuNode[] = await this.getNavigationNodes()
-  
-        const nodesToAdd = oldNodes.filter(
-          (node) => !newNodes.some((newNode) => newNode.Title === node.Title)
-        )
-        await Promise.all(
-          nodesToAdd.map((node) => sp.web.navigation.quicklaunch.add(node.Title, node.SimpleUrl))
-        )
-    }
 
-    /**
-     * Fetches the navigation nodes from local storage
-     * @returns Promise<MenuNode[]>
-     */
-    private async getNavigationNodes(): Promise<MenuNode[]> {
-        const menuState = await sp.navigation.getMenuState()
-        return menuState.Nodes
+        const navigationNodes = uniq([...oldNodes])
+        for await (const node of navigationNodes) {
+          if (node.Title == strings.RecycleBinText){
+            continue
+          }
+          const addedNode = await sp.web.navigation.quicklaunch.add(node.Title, node.SimpleUrl)  
+          if (node.Nodes.length > 0) {
+            for await (const childNode of node.Nodes) {
+              await addedNode.node.children.add(childNode.Title, childNode.SimpleUrl)
+            }
+            
+          }
+        }
     }
 
   /**
