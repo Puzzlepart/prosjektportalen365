@@ -441,10 +441,6 @@
                         "Title": "Tidslinje"
                     },
                     {
-                        "Url": "SitePages/ProgramStatus.aspx",
-                        "Title": "Status"
-                    },
-                    {
                         "Url": "SitePages/ProgramLeveranser.aspx",
                         "Title": "Leveranser"
                     },
@@ -654,29 +650,6 @@
                             "riskMatrixCalloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>",
                             "riskMatrixWidth": 800,
                             "riskMatrixHeight": 400
-                        }
-                    }]
-                }]
-            }]
-        },
-        {
-            "Name": "ProgramStatus.aspx",
-            "Title": "Status",
-            "PageLayoutType": "SingleWebPartAppPage",
-            "CommentsDisabled": true,
-            "Sections": [{
-                "Columns": [{
-                    "Factor": 12,
-                    "Controls": [{
-                        "Id": "9af4ad23-3d77-452b-b73e-b31a6b5d0161",
-                        "Properties": {
-                            "webPartTitle": "Underområder - status",
-                            "showCommandBar": true,
-                            "showFilters": false,
-                            "showViewSelectors": false,
-                            "showSearchBox": false,
-                            "showExcelExportButton": true,
-                            "defaultViewId": "2"
                         }
                     }]
                 }]

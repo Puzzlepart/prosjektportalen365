@@ -27,10 +27,6 @@
                     "Title": "Tidslinje"
                 },
                 {
-                    "Url": "SitePages/OverordnetStatus.aspx",
-                    "Title": "Status"
-                },
-                {
                     "Url": "SitePages/OverordnetLeveranser.aspx",
                     "Title": "Leveranser"
                 },
@@ -120,30 +116,6 @@
                             "webPartTitle": "Underområder - tidslinje",
                             "infoText": "Her listes alle prosjektene med start- og sluttdato i prosjektet. Prosjekttidslinjen støtter også faser, delfaser og milepæler. Tidslinjeelementer til dette prosjektet opprettes i den<A HREF=\"../sitePages/Prosjekttidslinje.aspx\">lokale tidslinjeinnhold listen</A>. Prosjekter vises med rød farge, faser i blått, delfaser blågrønt, og milepæler i gult. For å zoome inn/ut i tidslinje: ALT+Musehjul",
                             "dataSource": "Prosjekttidslinje"
-                        }
-                    }]
-                }]
-            }]
-        },
-        {
-            "Name": "OverordnetStatus.aspx",
-            "Title": "Status",
-            "PageLayoutType": "SingleWebPartAppPage",
-            "CommentsDisabled": true,
-            "Sections": [{
-                "Columns": [{
-                    "Factor": 12,
-                    "Controls": [{
-                        "Id": "9af4ad23-3d77-452b-b73e-b31a6b5d0161",
-                        "Properties": {
-                            "webPartTitle": "Underområder - status",
-                            "defaultViewId": "2",
-                            "showCommandBar": true,
-                            "showSearchBox": true,
-                            "showExcelExportButton": true,
-                            "showFilters": false,
-                            "showViewSelector": false,
-                            "showGroupBy": false
                         }
                     }]
                 }]
