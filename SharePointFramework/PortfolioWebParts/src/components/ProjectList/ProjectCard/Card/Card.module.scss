@@ -26,6 +26,7 @@
     position: relative;
     top: -40px;
     border-radius: 50%;
+    background-color: #666666;
     width: 75px;
     height: 75px;
     min-width: 75px;
@@ -81,6 +82,8 @@
     display: flex;
     flex-wrap: wrap;
     padding-top: 5px;
+    max-height: 50px;
+    overflow: hidden;
 
     .tag {
       display: inline-block;
@@ -105,7 +108,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 8px 0px;
+      padding: 10px 4px;
 
       .endDateIcon {
         margin: 0;

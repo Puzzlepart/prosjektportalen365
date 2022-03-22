@@ -54,7 +54,7 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
           className={styles.tag}
           style={
             project.GtProjectLifecycleStatus == 'Aktivt'
-              ? { backgroundColor: 'rgb(234,163,0,0.6)', color: 'black' }
+              ? { backgroundColor: 'rgb(234,163,0,0.5)', color: 'black' }
               : { backgroundColor: 'rgb(255,0,0,0.5)', color: 'black' }
           }>
           <span>{project.GtProjectLifecycleStatus}</span>
@@ -70,7 +70,7 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
           {serviceAreaText.map((text) => (
             <div
               className={styles.tag}
-              style={{ backgroundColor: 'rgb(234,163,0,0.6)', color: 'black' }}>
+              style={{ backgroundColor: 'rgb(234,163,0,0.5)', color: 'black' }}>
               <span>{text}</span>
             </div>
           ))}
@@ -86,7 +86,7 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
           {typeText.map((type) => (
             <div
               className={styles.tag}
-              style={{ backgroundColor: 'rgb(234,163,0,0.6)', color: 'black' }}>
+              style={{ backgroundColor: 'rgb(234,163,0,0.5)', color: 'black' }}>
               <span>{type}</span>
             </div>
           ))}
@@ -96,7 +96,6 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
   }
 
   let endDate = moment(project.endDate).format('DD.MM.YYYY')
-  console.log(project.GtProjectLifecycleStatus)
 
   return (
     <div
