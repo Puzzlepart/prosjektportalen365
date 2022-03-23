@@ -12,6 +12,7 @@
             <ViewFields>
                 <FieldRef Name="GtSPGroupName" />
                 <FieldRef Name="GtPermissionLevel" />
+                <FieldRef Name="GtTemplates" />
             </ViewFields>
             <RowLimit Paged="TRUE">100</RowLimit>
             <Aggregations Value="Off" />
