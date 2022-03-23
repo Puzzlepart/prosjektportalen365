@@ -16,12 +16,9 @@ export class PreTask extends BaseTask {
    * Execute PreTask
    *
    * @param params Task parameters
-   * @param onProgress On progress function
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async execute(params: IBaseTaskParams): Promise<IBaseTaskParams> {
     params.templateSchema = await this.data.selectedTemplate.getSchema()
-
     await this.validateParameters(params)
     try {
       params.spfxJsomContext = await initSpfxJsom(params.context.pageContext.site.absoluteUrl, {
@@ -43,6 +40,11 @@ export class PreTask extends BaseTask {
     }
   }
 
+  /**
+   * Checks that the parameters are valid
+   * 
+   * @param params - Task params
+   */
   private async validateParameters(params: IBaseTaskParams): Promise<void> {
     const parametersToValidate: string[] = _.toArray(params.templateSchema.Parameters) as string[]
     const [termSetIds] = parametersToValidate.filter((param) => _.isObject(param))
@@ -53,6 +55,11 @@ export class PreTask extends BaseTask {
     await this.validateContentTypes(contentTypesToValidate)
   }
 
+  /**
+   * Checks that the term set IDs are valid
+   * 
+   * @param termSetIds - Term set IDs
+   */
   private async validateTermSetIds(termSetIds: any) {
     const taxonomySession: ITaxonomySession = new Session()
     const termSet = await taxonomySession
@@ -71,11 +78,12 @@ export class PreTask extends BaseTask {
 
   /**
    * Checks that the content types are valid and exist in the hub
-   * @param params IBaseTaskParams
+   * 
+   * @param contentTypes - Content types to validate
    */
-  private async validateContentTypes(contenttypes: string[]): Promise<void> {
+  private async validateContentTypes(contentTypes: string[]): Promise<void> {
     await Promise.all(
-      contenttypes.map(async (ct) => {
+      contentTypes.map(async (ct) => {
         try {
           await this.data.hub.web.contentTypes.getById(ct).get()
         } catch (error) {

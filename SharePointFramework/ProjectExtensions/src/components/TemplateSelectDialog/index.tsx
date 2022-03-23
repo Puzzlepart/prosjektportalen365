@@ -111,8 +111,9 @@ export class TemplateSelectDialog extends React.Component<
   }
 
   /**
-   * Sets the selected template to the state, and updates the predfined selected extensions
-   * @param template
+   * Sets the selected template to the state, and updates the pre-defined selected extensions
+   * 
+   * @param template - Project template
    */
   private _onTemplateChange(template: ProjectTemplate): void {
     this.setState({
@@ -146,7 +147,7 @@ export class TemplateSelectDialog extends React.Component<
         <DefaultButton text={strings.CloseModalText} onClick={this.props.onDismiss} />
         <PrimaryButton
           text={strings.TemplateSelectDialogSubmitButtonText}
-          iconProps={{ iconName: 'Settings' }}
+          iconProps={{ iconName: 'ChevronRight' }}
           onClick={this._onSubmit.bind(this)}
         />
       </>
