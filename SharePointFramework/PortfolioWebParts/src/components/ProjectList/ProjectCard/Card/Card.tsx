@@ -98,58 +98,59 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
   let endDate = moment(project.endDate).format('DD.MM.YYYY')
 
   return (
-    <div
-      className={styles.card}
-      style={!project.userIsMember ? { opacity: '50%', cursor: 'default' } : {}}
-      onClick={project.userIsMember ? () => window.open(project.url, '_self') : null}>
-      <div className={styles.logo}>
-        <img src={project.logo ?? placeholderImage} />
-      </div>
+    <a href={project.userIsMember ? project.url : null} style={{ textDecoration: 'none' }}>
       <div
-        title={project.phase}
-        style={{ backgroundColor: _setPhaseColor(phaseLevel), color: 'white' }}
-        className={styles.phaseLabel}>
-        <span className={styles.phaseLabelTitle}>
-          {project.phase ? project.phase : 'Ikke satt'}
-        </span>
-      </div>
-      <DocumentCardTitle
-        className={styles.title}
-        title={project.title}
-        shouldTruncate={shouldTruncateTitle}
-      />
-      <hr />
-      <div className={styles.labels}>
-        {showLifeCycleStatus && _renderLifeCycleStatus()}
-        {showServiceArea && _renderServiceAreaText()}
-        {showType && _renderTypeText()}
-      </div>
+        className={styles.card}
+        style={!project.userIsMember ? { opacity: '50%', cursor: 'default' } : {}}>
+        <div className={styles.logo}>
+          <img src={project.logo ?? placeholderImage} />
+        </div>
+        <div
+          title={project.phase}
+          style={{ backgroundColor: _setPhaseColor(phaseLevel), color: 'white' }}
+          className={styles.phaseLabel}>
+          <span className={styles.phaseLabelTitle}>
+            {project.phase ? project.phase : 'Ikke satt'}
+          </span>
+        </div>
+        <DocumentCardTitle
+          className={styles.title}
+          title={project.title}
+          shouldTruncate={shouldTruncateTitle}
+        />
+        <hr />
+        <div className={styles.labels}>
+          {showLifeCycleStatus && _renderLifeCycleStatus()}
+          {showServiceArea && _renderServiceAreaText()}
+          {showType && _renderTypeText()}
+        </div>
 
-      <div className={styles.content}>
-        <div title='Sluttdato' className={styles.endDate}>
-          <Icon
-            className={styles.endDateIcon}
-            iconName='Calendar'
-            style={
-              project.endDate && moment(project.endDate).isBefore(moment())
-                ? { color: 'red' }
-                : { color: 'black' }
-            }
-          />
-          <span className={styles.endDateText}>{project.endDate ? endDate : 'Ikke satt'}</span>
+        <div className={styles.content}>
+          <div title='Sluttdato' className={styles.endDate}>
+            <Icon
+              className={styles.endDateIcon}
+              iconName='Calendar'
+              style={
+                project.endDate && moment(project.endDate).isBefore(moment())
+                  ? { color: 'red' }
+                  : { color: 'black' }
+              }
+            />
+            <span className={styles.endDateText}>{project.endDate ? endDate : 'Ikke satt'}</span>
+          </div>
+        </div>
+        <div className={styles.footer}>
+          <div className={styles.persona}>
+            {showProjectOwner && project.owner && (
+              <Persona {...ownerPersona} size={PersonaSize.size40} hidePersonaDetails />
+            )}
+            {showProjectManager && project.manager && (
+              <Persona {...managerPersona} size={PersonaSize.size40} hidePersonaDetails />
+            )}
+          </div>
+          <DocumentCardActions actions={actions} />
         </div>
       </div>
-      <div className={styles.footer}>
-        <div className={styles.persona}>
-          {showProjectOwner && project.owner && (
-            <Persona {...ownerPersona} size={PersonaSize.size40} hidePersonaDetails />
-          )}
-          {showProjectManager && project.manager && (
-            <Persona {...managerPersona} size={PersonaSize.size40} hidePersonaDetails />
-          )}
-        </div>
-        <DocumentCardActions actions={actions} />
-      </div>
-    </div>
+    </a>
   )
 }
