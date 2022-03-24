@@ -111,7 +111,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Intiialize setup
    *
-   * @param taskParams Task params
+   * @param taskParams - Task params
    */
   private async _initializeSetup(taskParams: Tasks.IBaseTaskParams) {
     try {
@@ -213,7 +213,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Render ProgressDialog
    *
-   * @param props Props
+   * @param props - Props
    */
   private _renderProgressDialog(props: IProgressDialogProps) {
     const placeholder = this._getPlaceholder('ProgressDialog')
@@ -227,7 +227,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Render ErrorDialog
    *
-   * @param props Props
+   * @param props - Props
    */
   private _renderErrorDialog(props: IErrorDialogProps) {
     const progressDialog = this._getPlaceholder('ProgressDialog')
@@ -262,8 +262,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    *
    * Get tasks using Tasks.getTasks and runs through them in sequence
    *
-   * @param taskParams Task params
-   * @param data Data
+   * @param taskParams - Task params
+   * @param data - Data
    */
   private async _startProvision(
     taskParams: Tasks.IBaseTaskParams,
@@ -299,9 +299,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * On task status updated
    *
-   * @param text Text
-   * @param subText Sub text
-   * @param iconName Icon name
+   * @param text - Text
+   * @param subText - Sub text
+   * @param iconName - Icon name
    */
   private _onTaskStatusUpdated(text: string, subText: string, iconName: string) {
     this._renderProgressDialog({ text, subText, iconName })
@@ -414,7 +414,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Unmount component at container
    *
-   * @param container Container
+   * @param container - HTML container elememnt
    */
   private _unmount(container: HTMLElement): boolean {
     return ReactDOM.unmountComponentAtNode(container)
@@ -431,7 +431,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Get placeholder by key
    *
-   * @param key Key
+   * @param key - Key
    */
   private _getPlaceholder(key: 'ErrorDialog' | 'ProgressDialog' | 'TemplateSelectDialog') {
     const id = this._placeholderIds[key]
@@ -448,8 +448,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Init SP list logging
    *
-   * @param hubWeb Hub web
-   * @param listName List name
+   * @param hubWeb - Hub web
+   * @param listName - List name
    */
   private _initializeSPListLogging(hubWeb: Web, listName: string = 'Logg') {
     ListLogger.init(

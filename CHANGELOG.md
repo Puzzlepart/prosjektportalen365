@@ -3,7 +3,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with issue ID.
 
-## 1.X.X - TBA
+## 1.5.0 - TBA
 
 ### Added
 
@@ -11,7 +11,8 @@ Every change is marked with issue ID.
 - Added 'Vis alle egenskaper' button with panel to ProjectInformation webpart #650
 - Added support for {site} token in Planner-tasks #646
 - Add possibility to lock'project template configurations #645
-- Changed header in projectstatus report to show date when published instead of when created. #654
+- Changed header in projectstatus report to show date when published instead of when created #654
+- Supporting permission groups for specific project template #651
 
 ### Changed
 
