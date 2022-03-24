@@ -543,7 +543,7 @@ export class DataAdapter {
           queryArray.push(queryString)
           queryString = ''
         }
-        if (index == this._siteIds.length - 1) {
+        if (index === this._siteIds.length - 1) {
           queryArray.push(queryString)
         }
     })
@@ -566,13 +566,13 @@ export class DataAdapter {
           queryArray.push(queryString)
           queryString = ''
         }
-        if (index == this.siteIds.length - 1) {
+        if (index === this.siteIds.length - 1) {
           queryArray.push(queryString)
         }
     })
     } else {
       const query = this.siteIds.reduce((acc, curr) => {
-        return "GtSiteIdOWSTEXT:"+ acc + "GtSiteIdOWSTEXT:"+ curr
+        return 'GtSiteIdOWSTEXT:'+ acc + 'GtSiteIdOWSTEXT:'+ curr
       })
       queryArray.push(query)
     }
