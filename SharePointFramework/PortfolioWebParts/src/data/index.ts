@@ -352,6 +352,7 @@ export class DataAdapter {
           'SiteIdLookup/Title',
           'SiteIdLookup/GtSiteId'
         )
+        .top(500)
         .expand('SiteIdLookup')
         .get()
     ])

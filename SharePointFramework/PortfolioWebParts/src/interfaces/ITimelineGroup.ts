@@ -6,5 +6,5 @@ export enum TimelineGroupType {
 export interface ITimelineGroup {
   id: number
   title: string
-  type: TimelineGroupType
+  type?: TimelineGroupType
 }

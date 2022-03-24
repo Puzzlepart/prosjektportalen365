@@ -3,11 +3,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with issue ID.
 
-## 1.X.X - TBA
+## 1.5.0 - TBA
 
 ### Added
 
 - Added functionality for dynamic welcomepages based on project phases #643
+- Added 'Vis alle egenskaper' button with panel to ProjectInformation webpart #650
+- Added support for {site} token in Planner-tasks #646
+- Add possibility to lock'project template configurations #645
+- Changed header in projectstatus report to show date when published instead of when created #654
+- Supporting permission groups for specific project template #651
+
+### Changed
+
+- If there are no items in the list "Fasesjekkeliste". "Gå til fasesjekklisten" button won't show and the empty dialog when changing phase is skipped #660
+
+### Fixed
+
+- Fixed bug where ProjectTimeline would not load properly #661
 
 ## 1.4.0 - 08.02.2022
 

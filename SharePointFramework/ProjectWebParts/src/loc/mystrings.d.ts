@@ -26,6 +26,7 @@ declare interface IProjectWebPartsStrings {
   CurrentPhaseViewNameFieldLabel: string;
   DocumentsListName: string;
   EditPropertiesText: string;
+  ViewAllPropertiesText: string;
   EditReportButtonText: string;
   PublishReportButtonText: string;
   PublishedStatusReport: string;
@@ -141,6 +142,8 @@ declare interface IProjectWebPartsStrings {
   UseDynamicHomepageFieldLabel: string;
   UseDynamicHomepageCalloutText: string;
   AdvancedGroupName: string;
+  PhaseSitePageFoundDescription: string;
+  PhaseSitePageNotFoundDescription: string;
   UseDynamicHomepageChangePhaseDescription: string;
   CreateParentProjectLabel: string;
   ChildProjectAdminLabel: string;

@@ -10,6 +10,8 @@ export class StatusReport {
   public id: number
   public created: Date
   public defaultEditFormUrl: string
+  public modified: Date
+  public publishedDate: Date
 
   /**
    * Creates a new instance of StatusReport
@@ -20,6 +22,8 @@ export class StatusReport {
   constructor(private _item: TypedHash<any>, private _publishedString?: string) {
     this.id = _item.Id
     this.created = new Date(_item.Created)
+    this.modified = new Date(_item.Modified)
+    this.publishedDate = new Date(_item.GtLastReportDate)
   }
 
   public setDefaultEditFormUrl(defaultEditFormUrl: string) {

@@ -29,8 +29,15 @@ export class TemplateSelectDialog extends React.Component<
     super(props)
     this.state = {
       selectedTemplate: this._getDefaultTemplate(),
-      selectedExtensions: props.data.extensions.filter((ext) => ext.isDefault || this._getDefaultTemplate().listExtensionIds?.some((id) => id === ext.id)),
-      selectedListContentConfig: props.data.listContentConfig.filter((lcc) => lcc.isDefault || this._getDefaultTemplate().listContentConfigIds?.some((id) => id === lcc.id)),
+      selectedExtensions: props.data.extensions.filter(
+        (ext) =>
+          ext.isDefault || this._getDefaultTemplate().listExtensionIds?.some((id) => id === ext.id)
+      ),
+      selectedListContentConfig: props.data.listContentConfig.filter(
+        (lcc) =>
+          lcc.isDefault ||
+          this._getDefaultTemplate().listContentConfigIds?.some((id) => id === lcc.id)
+      ),
       settings: new ProjectSetupSettings().useDefault()
     }
   }
@@ -66,13 +73,16 @@ export class TemplateSelectDialog extends React.Component<
           {!isEmpty(data.extensions) && (
             <PivotItem headerText={strings.ExtensionsTitle} itemIcon='ArrangeBringForward'>
               {selectedTemplate.listExtensionIds && (
-                <MessageBar messageBarType={MessageBarType.info}>
-                  {strings.TemplateListContentConfigText}
-                </MessageBar>
+                <div style={{ marginTop: 20 }}>
+                  <MessageBar messageBarType={MessageBarType.info}>
+                    {strings.TemplateListContentConfigText}
+                  </MessageBar>
+                </div>
               )}
               <ExtensionsSection
                 extensions={data.extensions}
                 selectedExtensions={selectedExtensions}
+                lockDefault={selectedTemplate.isDefaultExtensionsLocked}
                 onChange={(s) => this.setState({ selectedExtensions: s })}
               />
             </PivotItem>
@@ -80,13 +90,16 @@ export class TemplateSelectDialog extends React.Component<
           {!isEmpty(data.listContentConfig) && (
             <PivotItem headerText={strings.ListContentTitle} itemIcon='ViewList'>
               {selectedTemplate.listContentConfigIds && (
-                <MessageBar messageBarType={MessageBarType.info}>
-                  {strings.TemplateListContentConfigText}
-                </MessageBar>
+                <div style={{ marginTop: 20 }}>
+                  <MessageBar messageBarType={MessageBarType.info}>
+                    {strings.TemplateListContentConfigText}
+                  </MessageBar>
+                </div>
               )}
               <ListContentSection
                 listContentConfig={data.listContentConfig}
                 selectedListContentConfig={selectedListContentConfig}
+                lockDefault={selectedTemplate.isDefaultListContentLocked}
                 onChange={(s) => this.setState({ selectedListContentConfig: s })}
               />
             </PivotItem>
@@ -97,14 +110,19 @@ export class TemplateSelectDialog extends React.Component<
   }
 
   /**
-   * Sets the selected template to the state, and updates the predfined selected extensions
-   * @param template 
+   * Sets the selected template to the state, and updates the pre-defined selected extensions
+   * 
+   * @param template - Project template
    */
   private _onTemplateChange(template: ProjectTemplate): void {
     this.setState({
       selectedTemplate: template,
-      selectedExtensions: this.props.data.extensions.filter((ext) => ext.isDefault || template.listExtensionIds?.some((id) => id === ext.id)),
-      selectedListContentConfig: this.props.data.listContentConfig.filter((lcc) => lcc.isDefault || template.listContentConfigIds?.some((id) => id === lcc.id)),
+      selectedExtensions: this.props.data.extensions.filter(
+        (ext) => ext.isDefault || template.listExtensionIds?.some((id) => id === ext.id)
+      ),
+      selectedListContentConfig: this.props.data.listContentConfig.filter(
+        (lcc) => lcc.isDefault || template.listContentConfigIds?.some((id) => id === lcc.id)
+      )
     })
   }
 
@@ -128,7 +146,7 @@ export class TemplateSelectDialog extends React.Component<
         <DefaultButton text={strings.CloseModalText} onClick={this.props.onDismiss} />
         <PrimaryButton
           text={strings.TemplateSelectDialogSubmitButtonText}
-          iconProps={{ iconName: 'Settings' }}
+          iconProps={{ iconName: 'ChevronRight' }}
           onClick={this._onSubmit.bind(this)}
         />
       </>
@@ -140,7 +158,9 @@ export class TemplateSelectDialog extends React.Component<
    */
   private _onSubmit() {
     const data = { ...this.state }
-    data.selectedTemplate.listContentConfigIds = this.state.selectedListContentConfig.map((lcc) => lcc.id)
+    data.selectedTemplate.listContentConfigIds = this.state.selectedListContentConfig.map(
+      (lcc) => lcc.id
+    )
     this.props.onSubmit(data)
   }
 }

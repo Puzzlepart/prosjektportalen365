@@ -1,10 +1,10 @@
 import { PageContext } from '@microsoft/sp-page-context'
 import { getGUID } from '@pnp/common'
-import { IProjectSetupData } from 'projectSetup'
 import { default as MSGraphHelper } from 'msgraph-helper'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
-import * as strings from 'ProjectExtensionsStrings'
 import { sleep } from 'pp365-shared/lib/util'
+import * as strings from 'ProjectExtensionsStrings'
+import { IProjectSetupData } from 'projectSetup'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 import { IPlannerBucket, IPlannerConfiguration, IPlannerPlan } from './types'
@@ -28,11 +28,30 @@ export class PlannerConfiguration extends BaseTask {
   }
 
   /**
+   * Replacing site tokens. For now it supports `{site}` which is replaced
+   * with the site absolute URL. Encodes URL, replacing %, . and :
+   *
+   * @see https://docs.microsoft.com/en-gb/graph/api/resources/plannerexternalreferences?view=graph-rest-1.0
+   *
+   * @param str - String
+   * @param pageContext - Page context
+   */
+  private replaceUrlTokens(str: string, pageContext: PageContext) {
+    const siteAbsoluteUrl = pageContext.site.absoluteUrl
+      .split('%')
+      .join('%25')
+      .split('.')
+      .join('%2E')
+      .split(':')
+      .join('%3A')
+    return str.replace('{site}', siteAbsoluteUrl)
+  }
+
+  /**
    * Create plans
    *
-   * @param owner Owner (group id)
+   * @param pageContext - Page context
    * @param onProgress On progress function
-   * @param defaultBucketName Default bucket name
    */
   private async _createPlan(
     pageContext: PageContext,
@@ -54,7 +73,7 @@ export class PlannerConfiguration extends BaseTask {
           format(strings.CreatingPlannerTaskText, bucketName),
           'PlannerLogo'
         )
-        await this._createTasks(plan.id, bucket)
+        await this._createTasks(plan.id, bucket, pageContext)
       }
       return plan
     } catch (error) {
@@ -115,7 +134,7 @@ export class PlannerConfiguration extends BaseTask {
    * Ensure bucket
    *
    * @param name Bucket name
-   * @param {IPlannerBucket[]} existingBuckets Existing buckets
+   * @param existingBuckets Existing buckets
    * @param planId Plan Id
    */
   private async _ensureBucket(name: string, existingBuckets: IPlannerBucket[], planId: string) {
@@ -148,6 +167,7 @@ export class PlannerConfiguration extends BaseTask {
   private async _createTasks(
     planId: string,
     bucket: IPlannerBucket,
+    pageContext: PageContext,
     appliedCategories: Record<string, boolean> = { category1: true },
     delay: number = 1
   ) {
@@ -183,7 +203,7 @@ export class PlannerConfiguration extends BaseTask {
               ? attachments.reduce(
                   (obj, attachment) => ({
                     ...obj,
-                    [attachment.url]: {
+                    [this.replaceUrlTokens(attachment.url, pageContext)]: {
                       '@odata.type': 'microsoft.graph.plannerExternalReference',
                       alias: attachment.alias,
                       type: attachment.type

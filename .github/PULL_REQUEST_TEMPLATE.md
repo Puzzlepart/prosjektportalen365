@@ -23,10 +23,7 @@ Example:
 
 
 ### Update of documentation
-- [ ] Check if user manual requires update
-  - [ ] No
-  - [ ] Yes
-    - [ ] Update user manual
+- [ ] Update user manual if needed
 
 
 ### Relevant issues (if applicable)

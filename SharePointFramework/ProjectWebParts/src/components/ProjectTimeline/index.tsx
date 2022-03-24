@@ -417,6 +417,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
             'SiteIdLookup/Title',
             'SiteIdLookup/GtSiteId'
           )
+          .top(500)
           .expand('SiteIdLookup')
           .get()
       ])

@@ -35,7 +35,7 @@ export class TaskAttachment {
   /**
    * Encode URL, replacing %, . and :
    *
-   * See https://docs.microsoft.com/en-gb/graph/api/resources/plannerexternalreferences?view=graph-rest-1.0
+   * @see https://docs.microsoft.com/en-gb/graph/api/resources/plannerexternalreferences?view=graph-rest-1.0
    *
    * @param url URL
    */

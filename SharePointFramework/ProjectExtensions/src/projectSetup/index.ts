@@ -4,6 +4,7 @@ import { isArray, stringIsNullOrEmpty } from '@pnp/common'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { MenuNode, sp, Web } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
+import { endsWith } from 'lodash'
 import { default as MSGraphHelper } from 'msgraph-helper'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { ListLogger } from 'pp365-shared/lib/logging'
@@ -12,6 +13,7 @@ import * as strings from 'ProjectExtensionsStrings'
 import { createElement } from 'react'
 import * as ReactDOM from 'react-dom'
 import { default as HubSiteService } from 'sp-hubsite-service'
+import { find } from 'underscore'
 import {
   ErrorDialog,
   IErrorDialogProps,
@@ -21,15 +23,20 @@ import {
   ProgressDialog,
   TemplateSelectDialog
 } from '../components'
-import { ListContentConfig, ProjectExtension, ProjectTemplate } from '../models'
-import * as Tasks from './tasks'
+import {
+  ListContentConfig,
+  ProjectExtension,
+  ProjectTemplate,
+  ProjectTemplateFile
+} from '../models'
 import { deleteCustomizer } from './deleteCustomizer'
 import { ProjectSetupError } from './ProjectSetupError'
 import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
 import { find, uniq } from 'underscore'
 import { endsWith } from 'lodash'
 import { ProjectSetupSettings } from './ProjectSetupSettings'
-import { ProjectTemplateFile } from 'models/ProjectTemplateFile'
+import * as Tasks from './tasks'
+import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
 
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
   private _portal: PortalDataService
@@ -112,7 +119,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Intiialize setup
    *
-   * @param taskParams Task params
+   * @param taskParams - Task params
    */
   private async _initializeSetup(taskParams: Tasks.IBaseTaskParams) {
     try {
@@ -194,7 +201,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   private _checkForceTemplate(data: IProjectSetupData): ITemplateSelectDialogState {
     if (stringIsNullOrEmpty(this.properties.forceTemplate)) return null
     const selectedTemplate = find(data.templates, (tmpl) =>
-      endsWith(tmpl.serverRelativeUrl, this.properties.forceTemplate)
+      endsWith(tmpl.projectTemplateUrl, this.properties.forceTemplate)
     )
     
     if (!selectedTemplate) return null
@@ -245,7 +252,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Render ProgressDialog
    *
-   * @param props Props
+   * @param props - Props
    */
   private _renderProgressDialog(props: IProgressDialogProps) {
     const placeholder = this._getPlaceholder('ProgressDialog')
@@ -259,7 +266,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Render ErrorDialog
    *
-   * @param props Props
+   * @param props - Props
    */
   private _renderErrorDialog(props: IErrorDialogProps) {
     const progressDialog = this._getPlaceholder('ProgressDialog')
@@ -294,8 +301,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    *
    * Get tasks using Tasks.getTasks and runs through them in sequence
    *
-   * @param taskParams Task params
-   * @param data Data
+   * @param taskParams - Task params
+   * @param data - Data
    */
   private async _startProvision(
     taskParams: Tasks.IBaseTaskParams,
@@ -331,9 +338,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * On task status updated
    *
-   * @param text Text
-   * @param subText Sub text
-   * @param iconName Icon name
+   * @param text - Text
+   * @param subText - Sub text
+   * @param iconName - Icon name
    */
   private _onTaskStatusUpdated(text: string, subText: string, iconName: string) {
     this._renderProgressDialog({ text, subText, iconName })
@@ -368,46 +375,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         data: {},
         level: LogLevel.Info
       })
-
-      const templateFileName = (
-        await sp.web.select('Title', 'AllProperties').expand('AllProperties').get()
-      )['AllProperties']['pp_template']
-      let templateViewXml = `<View Scope="RecursiveAll">
-      <Query>
-          <Where>
-              <Eq>
-                  <FieldRef Name="FSObjType" />
-                  <Value Type="Integer">0</Value>
-              </Eq>
-          </Where>
-      </Query>
-  </View>`
-      if (templateFileName) {
-        templateViewXml = `<View Scope="RecursiveAll">
-        <Query>
-            <Where>
-                <And>
-                    <Eq>
-                        <FieldRef Name="FSObjType" />
-                        <Value Type="Integer">0</Value>
-                    </Eq>
-                    <Eq>
-                        <FieldRef Name="FileLeafRef" />
-                        <Value Type="Text">${templateFileName}</Value>
-                    </Eq>
-                </And>
-            </Where>
-        </Query>
-    </View>`
-      }
-      const [templates, extensions, listContentConfig] = await Promise.all([
+      const [_templates, extensions, listContentConfig, templateFiles] = await Promise.all([
         this._portal.getItems(
           this.properties.templatesLibrary,
           ProjectTemplate,
           {
-            ViewXml: templateViewXml
+            ViewXml: '<View></View>'
           },
-          ['File','FieldValuesAsText']
+          ['FieldValuesAsText']
         ),
         this.properties.extensionsLibrary
           ? this._portal.getItems(
@@ -421,8 +396,18 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             )
           : Promise.resolve([]),
         this.properties.contentConfigList
-          ? this._portal.getItems(this.properties.contentConfigList, ListContentConfig, {}, ['File'])
+          ? this._portal.getItems(this.properties.contentConfigList, ListContentConfig, {}, [
+              'File'
+            ])
           : Promise.resolve([]),
+        this._portal.getItems(
+          strings.Lists_ProjectTemplateFiles_Title,
+          ProjectTemplateFile,
+          {
+            ViewXml: '<View></View>'
+          },
+          ['File']
+        )
       ])
       const files = await this._portal.getItems(strings.Lists_ProjectTemplateFiles_Title, ProjectTemplateFile, {}, ['File'])
       if (this.properties.templatesLibrary !== 'Prosjektmaler') {
@@ -470,7 +455,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Unmount component at container
    *
-   * @param container Container
+   * @param container - HTML container elememnt
    */
   private _unmount(container: HTMLElement): boolean {
     return ReactDOM.unmountComponentAtNode(container)
@@ -487,7 +472,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Get placeholder by key
    *
-   * @param key Key
+   * @param key - Key
    */
   private _getPlaceholder(key: 'ErrorDialog' | 'ProgressDialog' | 'TemplateSelectDialog') {
     const id = this._placeholderIds[key]
@@ -504,8 +489,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Init SP list logging
    *
-   * @param hubWeb Hub web
-   * @param listName List name
+   * @param hubWeb - Hub web
+   * @param listName - List name
    */
   private _initializeSPListLogging(hubWeb: Web, listName: string = 'Logg') {
     ListLogger.init(
