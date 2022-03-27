@@ -79,9 +79,8 @@
       <pnp:DataValue FieldName="IsDefaultTemplate">True</pnp:DataValue>
       <pnp:DataValue FieldName="IsDefaultExtensionsLocked">False</pnp:DataValue>
       <pnp:DataValue FieldName="IsDefaultListContentLocked">False</pnp:DataValue>
-      <pnp:DataValue FieldName="GtDescription">Dette er standardmalen for prosjekt som følger med Prosjektportalen 365.
+      <pnp:DataValue FieldName="GtDescription">Dette er standardmalen for prosjekt som følger med Prosjektportalen 365.</pnp:DataValue>
       <pnp:DataValue FieldName="ListContentConfigLookup"></pnp:DataValue>
-      </pnp:DataValue>
       <pnp:DataValue FieldName="IconName">Page</pnp:DataValue>
     </pnp:DataRow>
     <pnp:DataRow>
@@ -92,12 +91,11 @@
       <pnp:DataValue FieldName="GtProjectContentType">0x0100805E9E4FEAAB4F0EABAB2600D30DB70C</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectStatusContentType">0x010022252E35737A413FB56A1BA53862F6D5</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectColumns">Kolonner for Prosjektportalen (Prosjekt)</pnp:DataValue>
-      <pnp:DataValue FieldName="IsHiddenTemplate">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectCustomColumns">Egendefinerte kolonner for Prosjektportalen</pnp:DataValue>
       <pnp:DataValue FieldName="IsDefaultTemplate">False</pnp:DataValue>
+      <pnp:DataValue FieldName="IsHiddenTemplate">True</pnp:DataValue>
       <pnp:DataValue FieldName="ListContentConfigLookup"></pnp:DataValue>
-      <pnp:DataValue FieldName="GtDescription">Dette er standardmalen for overordnet prosjekt som følger med Prosjektportalen 365.
-      </pnp:DataValue>
+      <pnp:DataValue FieldName="GtDescription">Dette er standardmalen for overordnet prosjekt som følger med Prosjektportalen 365.</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">Page</pnp:DataValue>
     </pnp:DataRow>
     <pnp:DataRow>
@@ -113,8 +111,7 @@
       <pnp:DataValue FieldName="IsDefaultTemplate">False</pnp:DataValue>
       <pnp:DataValue FieldName="GtIsProgram">True</pnp:DataValue>
       <pnp:DataValue FieldName="ListContentConfigLookup"></pnp:DataValue>
-      <pnp:DataValue FieldName="GtDescription">Dette er standardmalen for program som følger med Prosjektportalen 365.
-      </pnp:DataValue>
+      <pnp:DataValue FieldName="GtDescription">Dette er standardmalen for program som følger med Prosjektportalen 365.</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">Page</pnp:DataValue>
     </pnp:DataRow>
   </pnp:DataRows>
