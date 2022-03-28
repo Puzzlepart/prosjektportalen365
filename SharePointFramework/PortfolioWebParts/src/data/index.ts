@@ -507,7 +507,7 @@ export class DataAdapter implements IDataAdapter {
    * @param selectProperties Select properties
    */
   private async _fetchItems(queryTemplate: string, selectProperties: string[]) {
-    const response = await sp.searchWithCaching({
+    const response = await sp.search({
       QueryTemplate: `${queryTemplate}`,
       Querytext: '*',
       RowLimit: 500,

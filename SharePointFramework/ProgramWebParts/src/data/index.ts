@@ -555,7 +555,7 @@ export class DataAdapter {
     const promises = []
     programFilter.forEach((element) => {
       promises.push(
-        sp.searchWithCaching({
+        sp.search({
           QueryTemplate: `${element} ${queryTemplate}`,
           Querytext: '*',
           RowLimit: 500,
