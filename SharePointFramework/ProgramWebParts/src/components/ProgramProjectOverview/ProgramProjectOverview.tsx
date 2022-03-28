@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react'
-import { IProjectProgramOverviewProps } from './IProgramProjectOverviewProps'
+import { IProjectProgramOverviewProps } from './types'
 import { PortfolioOverview } from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
 
 export const ProgramOverview: FunctionComponent<IProjectProgramOverviewProps> = (props) => {

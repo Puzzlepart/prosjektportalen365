@@ -9,7 +9,7 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { IProgramDeliveriesProps } from 'components/ProgramDeliveries/ProgramDeliveriesProps'
+import { IProgramDeliveriesProps } from 'components/ProgramDeliveries/types'
 
 interface IProgramDeliveriesWebPartProps extends IBaseWebPartComponentProps {
   webPartTitle: string

@@ -9,7 +9,7 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { IProgramRiskOverview } from 'components/ProgramRiskOverview/ProgramRiskProps'
+import { IProgramRiskOverview } from 'components/ProgramRiskOverview/types'
 import { AggreationColumn } from 'models'
 
 interface IProgramRiskProps extends IBaseWebPartComponentProps {

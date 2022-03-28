@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react'
-import { IProgramDeliveriesProps } from './ProgramDeliveriesProps'
+import { IProgramDeliveriesProps } from './types'
 import { PortfolioAggregation } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
 
 export const ProgramDeliveries: FunctionComponent<IProgramDeliveriesProps> = (props) => {
