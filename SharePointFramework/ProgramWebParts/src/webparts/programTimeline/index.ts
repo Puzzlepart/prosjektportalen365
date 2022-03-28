@@ -1,7 +1,7 @@
 import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
 import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane'
-import { BaseProgramWebPart } from '../baseProgramWebPart/baseProgramWebPart'
+import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
 import { ChildProject } from 'models/ChildProject'
 import { ProgramTimeline } from 'components/ProgramTimeline/ProgramTimeline'

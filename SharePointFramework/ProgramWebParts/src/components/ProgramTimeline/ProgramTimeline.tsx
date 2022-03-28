@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react'
-import { IProgramTimelineProps } from 'webparts/programTimeline/ProgramTimelineWebPart'
+import { IProgramTimelineProps } from 'webparts/programTimeline'
 import { ProjectTimeline } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/index'
 
 export const ProgramTimeline: FunctionComponent<IProgramTimelineProps> = (props) => {

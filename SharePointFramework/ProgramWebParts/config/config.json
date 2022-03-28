@@ -4,44 +4,44 @@
     "bundles": {
         "program-administration-web-part": {
             "components": [{
-                "entrypoint": "./lib/webparts/programAdministration/ProgramAdministrationWebPart.js",
-                "manifest": "./src/webparts/programAdministration/ProgramAdministrationWebPart.manifest.json"
+                "entrypoint": "./lib/webparts/programAdministration/index.js",
+                "manifest": "./src/webparts/programAdministration/manifest.json"
             }]
         },
         "program-project-overview-web-part": {
             "components": [{
-                "entrypoint": "./lib/webparts/programProjectOverview/ProgramProjectOverviewWebPart.js",
-                "manifest": "./src/webparts/programProjectOverview/ProgramProjectOverviewWebPart.manifest.json"
+                "entrypoint": "./lib/webparts/programProjectOverview/index.js",
+                "manifest": "./src/webparts/programProjectOverview/manifest.json"
             }]
         },
         "program-benefits-web-part": {
             "components": [{
-                "entrypoint": "./lib/webparts/programBenefits/ProgramBenefitsWebPart.js",
-                "manifest": "./src/webparts/programBenefits/ProgramBenefitsWebPart.manifest.json"
+                "entrypoint": "./lib/webparts/programBenefits/index.js",
+                "manifest": "./src/webparts/programBenefits/manifest.json"
             }]
         },
         "program-deliveries-web-part": {
             "components": [{
-                "entrypoint": "./lib/webparts/programDeliveries/ProgramDeliveriesWebPart.js",
-                "manifest": "./src/webparts/programDeliveries/ProgramDeliveriesWebPart.manifest.json"
+                "entrypoint": "./lib/webparts/programDeliveries/index.js",
+                "manifest": "./src/webparts/programDeliveries/manifest.json"
             }]
         },
         "program-timeline-web-part": {
             "components": [{
-                "entrypoint": "./lib/webparts/programTimeline/ProgramTimelineWebPart.js",
-                "manifest": "./src/webparts/programTimeline/ProgramTimelineWebPart.manifest.json"
+                "entrypoint": "./lib/webparts/programTimeline/index.js",
+                "manifest": "./src/webparts/programTimeline/manifest.json"
             }]
         },
         "program-risk-web-part": {
             "components": [{
-                "entrypoint": "./lib/webparts/programRiskOverview/ProgramRiskWebPart.js",
-                "manifest": "./src/webparts/programRiskOverview/ProgramRiskWebPart.manifest.json"
+                "entrypoint": "./lib/webparts/programRiskOverview/index.js",
+                "manifest": "./src/webparts/programRiskOverview/manifest.json"
             }]
         },
         "program-status-web-part": {
             "components": [{
-                "entrypoint": "./lib/webparts/programStatus/ProgramStatusWebPart.js",
-                "manifest": "./src/webparts/programStatus/ProgramStatusWebPart.manifest.json"
+                "entrypoint": "./lib/webparts/programStatus/index.js",
+                "manifest": "./src/webparts/programStatus/manifest.json"
             }]
         }
 

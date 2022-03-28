@@ -4,7 +4,7 @@ import { sp, SPRest } from '@pnp/sp'
 import { ProgramAdministration } from 'components/ProgramAdministration'
 import { IProgramAdministrationProps } from 'components/ProgramAdministration/types'
 import * as ReactDom from 'react-dom'
-import { BaseProgramWebPart } from 'webparts/baseProgramWebPart/baseProgramWebPart'
+import { BaseProgramWebPart } from 'webparts/baseProgramWebPart'
 
 export default class ProgramAdministrationWebPart extends BaseProgramWebPart<IProgramAdministrationProps> {
   private _sp: SPRest

@@ -2,18 +2,20 @@ import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
 import {
   IPropertyPaneConfiguration,
+  IPropertyPaneDropdownOption,
+  PropertyPaneDropdown,
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import * as strings from 'ProgramWebPartsStrings'
-import { ProgramStatus } from '../../components/ProgramStatus/ProgramStatus'
+import { ProgramOverview } from '../../components/ProgramProjectOverview/ProgramProjectOverview'
+import { IProjectProgramOverviewProps } from '../../components/ProgramProjectOverview/types'
 import { IPortfolioConfiguration } from 'pp365-portfoliowebparts/lib/interfaces'
-import { BaseProgramWebPart } from '../baseProgramWebPart/baseProgramWebPart'
+import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { PROPERTYPANE_CONFIGURATION_PROPS } from 'pp365-portfoliowebparts/lib/webparts/portfolioOverview'
 import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
-import { IProgramStatusProps } from 'components/ProgramStatus/types'
 
-interface IProgramStatusWebPartProps extends IBaseWebPartComponentProps {
+interface IProgramOverviewProps extends IBaseWebPartComponentProps {
   webPartTitle: string
   showCommandBar: boolean
   showFilters: boolean
@@ -21,10 +23,9 @@ interface IProgramStatusWebPartProps extends IBaseWebPartComponentProps {
   showGroupBy: boolean
   showSearchBox: boolean
   showExcelExportButton: boolean
-  defaultViewId: string
 }
 
-export default class ProgramStatusWebPart extends BaseProgramWebPart<IProgramStatusWebPartProps> {
+export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramOverviewProps> {
   private _configuration: IPortfolioConfiguration
 
   public async onInit(): Promise<void> {
@@ -33,12 +34,11 @@ export default class ProgramStatusWebPart extends BaseProgramWebPart<IProgramSta
   }
 
   public render(): void {
-    this.renderComponent<IProgramStatusProps>(ProgramStatus, {
+    this.renderComponent<IProjectProgramOverviewProps>(ProgramOverview, {
       webPartTitle: this.properties.webPartTitle,
       context: this.context,
       dataAdapter: this.dataAdapter,
       configuration: this._configuration,
-      defaultViewId: this.properties.defaultViewId,
       commandBarProperties: {
         showCommandBar: this.properties.showCommandBar,
         showExcelExportButton: this.properties.showExcelExportButton,
@@ -46,7 +46,8 @@ export default class ProgramStatusWebPart extends BaseProgramWebPart<IProgramSta
         showViewSelector: this.properties.showViewSelector,
         showGroupBy: this.properties.showGroupBy,
         showSearchBox: this.properties.showSearchBox
-      }
+      },
+      isParentProject: true
     })
   }
 
@@ -56,6 +57,23 @@ export default class ProgramStatusWebPart extends BaseProgramWebPart<IProgramSta
 
   protected get dataVersion(): Version {
     return Version.parse('1.0')
+  }
+
+  protected _getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
+    // eslint-disable-next-line default-case
+    switch (targetProperty) {
+      case PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID:
+        {
+          if (this._configuration) {
+            return [
+              { key: null, text: '' },
+              ...this._configuration.views.map((view) => ({ key: view.id, text: view.title }))
+            ]
+          }
+        }
+        break
+    }
+    return []
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -69,8 +87,9 @@ export default class ProgramStatusWebPart extends BaseProgramWebPart<IProgramSta
                 PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_SEARCH_BOX, {
                   label: strings.ShowSearchBoxLabel
                 }),
-                PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID, {
-                  label: strings.ProgramStatus_ViewIdLabel
+                PropertyPaneDropdown(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID, {
+                  label: strings.DefaultViewLabel,
+                  options: this._getOptions(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID)
                 })
               ]
             },
@@ -90,6 +109,10 @@ export default class ProgramStatusWebPart extends BaseProgramWebPart<IProgramSta
                 }),
                 PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_EXCELEXPORT_BUTTON, {
                   label: strings.ShowExcelExportButtonLabel,
+                  disabled: !this.properties.showCommandBar
+                }),
+                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_VIEWSELECTOR, {
+                  label: strings.ShowViewSelectorLabel,
                   disabled: !this.properties.showCommandBar
                 })
               ]

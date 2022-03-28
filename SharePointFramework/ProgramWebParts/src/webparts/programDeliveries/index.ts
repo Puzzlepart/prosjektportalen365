@@ -1,44 +1,51 @@
 import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
 import * as strings from 'ProgramWebPartsStrings'
-import { ProgramRiskOverview } from 'components/ProgramRiskOverview/index'
-import { BaseProgramWebPart } from '../baseProgramWebPart/baseProgramWebPart'
+import { ProgramDeliveries } from 'components/ProgramDeliveries/ProgramDeliveries'
+import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
 import {
   IPropertyPaneConfiguration,
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { IProgramRiskOverview } from 'components/ProgramRiskOverview/types'
-import { AggreationColumn } from 'models'
+import { IProgramDeliveriesProps } from 'components/ProgramDeliveries/types'
 
-interface IProgramRiskProps extends IBaseWebPartComponentProps {
+interface IProgramDeliveriesWebPartProps extends IBaseWebPartComponentProps {
   webPartTitle: string
   dataSource: string
   showExcelExportButton: boolean
   showSearchBox: boolean
-  columns: AggreationColumn[]
   showCommandBar: boolean
+  columns: Array<{
+    key: string
+    fieldName: string
+    name: string
+    minWidth: number
+    maxWidth: number
+    isMultiline: boolean
+    isResizable: boolean
+  }>
 }
 
-export default class ProgramRiskOverviewWebPart extends BaseProgramWebPart<IProgramRiskProps> {
+export default class ProgramDeliveriesWebPart extends BaseProgramWebPart<IProgramDeliveriesWebPartProps> {
   public async onInit(): Promise<void> {
     await super.onInit()
   }
 
   public render(): void {
-    this.renderComponent<IProgramRiskOverview>(ProgramRiskOverview, {
+    this.renderComponent<IProgramDeliveriesProps>(ProgramDeliveries, {
+      webPartTitle: this.properties.webPartTitle,
       context: this.context,
       dataAdapter: this.dataAdapter,
       properties: {
         dataSource: this.properties.dataSource,
-        showExcelExportButton: this.properties.showExcelExportButton,
-        showSearchBox: this.properties.showSearchBox,
         showCommandBar: this.properties.showCommandBar,
+        showSearchBox: this.properties.showSearchBox,
+        showExcelExportButton: this.properties.showExcelExportButton,
         columns: this.properties.columns,
         displayMode: this.displayMode
       },
-      webPartTitle: this.properties.webPartTitle,
       onUpdateProperty: this._onUpdateProperty.bind(this)
     })
   }
@@ -47,13 +54,13 @@ export default class ProgramRiskOverviewWebPart extends BaseProgramWebPart<IProg
     ReactDom.unmountComponentAtNode(this.domElement)
   }
 
-  public _onUpdateProperty(key: string, value: any) {
-    this.properties[key] = value
-    this.context.propertyPane.refresh()
-  }
-
   protected get dataVersion(): Version {
     return Version.parse('1.0')
+  }
+
+  private _onUpdateProperty(key: string, value: any) {
+    this.properties[key] = value
+    this.context.propertyPane.refresh()
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -65,11 +72,11 @@ export default class ProgramRiskOverviewWebPart extends BaseProgramWebPart<IProg
               groupFields: [
                 PropertyPaneTextField('webPartTitle', {
                   label: strings.WebPartTitleLabel,
-                  value: strings.RiskWebPartTitle
+                  value: strings.DeliveriesTitle
                 }),
                 PropertyPaneTextField('dataSource', {
                   label: strings.DataSourceLabel,
-                  value: strings.RiskDataSource
+                  value: strings.DeliveriesDatasource
                 }),
                 PropertyPaneToggle('showCommandBar', {
                   label: strings.ShowCommandBarLabel,
