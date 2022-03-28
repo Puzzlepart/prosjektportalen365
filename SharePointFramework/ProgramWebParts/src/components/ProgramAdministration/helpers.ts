@@ -38,7 +38,7 @@ async function batchFetch(_sp, hubId, query) {
  * @returns ChildProject[]
  */
 export async function getChildProjects(_sp: SPRest, dataAdapter: any): Promise<ChildProject[]> {
-  const queryArray = dataAdapter.aggregatedQueryBuilder()
+  const queryArray = dataAdapter.aggregatedQueryBuilder('SiteId')
   const hubData = await _sp.site.select('HubSiteId').get()
   const searchPromises = []
   for (const query of queryArray) {
