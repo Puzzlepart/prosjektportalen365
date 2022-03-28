@@ -22,9 +22,9 @@ import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
 import HubSiteService from 'sp-hubsite-service'
 import _ from 'underscore'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
-import { DEFAULT_SEARCH_SETTINGS } from './types'
+import { DEFAULT_SEARCH_SETTINGS,IDataAdapter } from './types'
 
-export class DataAdapter {
+export class DataAdapter implements IDataAdapter {
   private _portalDataService: PortalDataService
   private _dataSourceService: DataSourceService
   private _siteIds: string[]

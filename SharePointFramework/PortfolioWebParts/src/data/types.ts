@@ -15,3 +15,7 @@ export const DEFAULT_SEARCH_SETTINGS: SearchQuery = {
   ],
   SortList: [{ Property: 'LastModifiedTime', Direction: SortDirection.Descending }]
 }
+
+export interface IDataAdapter {
+  configure(): Promise<IDataAdapter>;
+}
