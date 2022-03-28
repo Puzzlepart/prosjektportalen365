@@ -11,7 +11,7 @@ import { IPortfolioConfiguration } from 'pp365-portfoliowebparts/lib/interfaces'
 import { BaseProgramWebPart } from '../baseProgramWebPart/baseProgramWebPart'
 import { PROPERTYPANE_CONFIGURATION_PROPS } from 'pp365-portfoliowebparts/lib/webparts/portfolioOverview'
 import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
-import { IProgramStatusProps } from 'components/ProgramStatus/IProgramStatusProps'
+import { IProgramStatusProps } from 'components/ProgramStatus/types'
 
 interface IProgramStatusWebPartProps extends IBaseWebPartComponentProps {
   webPartTitle: string

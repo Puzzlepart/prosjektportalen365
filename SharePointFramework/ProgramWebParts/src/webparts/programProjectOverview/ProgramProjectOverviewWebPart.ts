@@ -9,7 +9,7 @@ import {
 } from '@microsoft/sp-property-pane'
 import * as strings from 'ProgramWebPartsStrings'
 import { ProgramOverview } from '../../components/ProgramProjectOverview/ProgramProjectOverview'
-import { IProjectProgramOverviewProps } from '../../components/ProgramProjectOverview/IProgramProjectOverviewProps'
+import { IProjectProgramOverviewProps } from '../../components/ProgramProjectOverview/types'
 import { IPortfolioConfiguration } from 'pp365-portfoliowebparts/lib/interfaces'
 import { BaseProgramWebPart } from '../baseProgramWebPart/baseProgramWebPart'
 import { PROPERTYPANE_CONFIGURATION_PROPS } from 'pp365-portfoliowebparts/lib/webparts/portfolioOverview'

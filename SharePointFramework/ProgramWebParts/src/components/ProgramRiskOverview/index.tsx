@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react'
-import { IProgramRiskOverview, SelectedRiskProperties } from './ProgramRiskProps'
+import { IProgramRiskOverview, SelectedRiskProperties } from './types'
 import { PortfolioAggregation } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
 
 export const ProgramRiskOverview: FunctionComponent<IProgramRiskOverview> = (props) => {

@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react'
-import { IProgramBenefitsProps, selectProperties } from './ProgramBenefitsProps'
+import { IProgramBenefitsProps, selectProperties } from './types'
 import { getColumns } from 'pp365-portfoliowebparts/lib/components/BenefitsOverview/columns'
 import { PortfolioAggregation } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
 import {
