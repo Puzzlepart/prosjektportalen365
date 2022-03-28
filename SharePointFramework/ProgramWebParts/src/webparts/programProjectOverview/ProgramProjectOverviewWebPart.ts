@@ -18,7 +18,8 @@ interface IProgramOverviewProps extends IBaseWebPartComponentProps {
   showSearchBox: boolean
   showExcelExportButton: boolean
 }
-export default class programProjectOverview extends BaseProgramWebPart<IProgramOverviewProps> {
+
+export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramOverviewProps> {
   private _configuration: IPortfolioConfiguration
 
   public async onInit(): Promise<void> {

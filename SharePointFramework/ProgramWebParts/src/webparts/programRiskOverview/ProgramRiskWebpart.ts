@@ -17,8 +17,7 @@ interface IProgramRiskProps extends IBaseWebPartComponentProps {
   showCommandBar: boolean
 }
 
-export default class programRiskOverview extends BaseProgramWebPart<IProgramRiskProps> {
-
+export default class ProgramRiskOverviewWebPart extends BaseProgramWebPart<IProgramRiskProps> {
   public async onInit(): Promise<void> {
     await super.onInit()
   }

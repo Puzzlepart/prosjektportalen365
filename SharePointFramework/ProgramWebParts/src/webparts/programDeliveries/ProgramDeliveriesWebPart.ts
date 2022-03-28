@@ -16,7 +16,7 @@ interface IProgramDeliveriesWebPartProps extends IBaseWebPartComponentProps {
   columns: Array<{key: string, fieldName: string, name: string, minWidth:number,maxWidth:number, isMultiline:boolean, isResizable:boolean}>
 }
 
-export default class programProjectDeliveries extends BaseProgramWebPart<IProgramDeliveriesWebPartProps> {
+export default class ProgramDeliveriesWebPart extends BaseProgramWebPart<IProgramDeliveriesWebPartProps> {
   public async onInit(): Promise<void> {
     await super.onInit()
   }

@@ -19,7 +19,8 @@ interface IProgramStatusWebPartProps extends IBaseWebPartComponentProps {
   showExcelExportButton: boolean
   defaultViewId: string
 }
-export default class programProjectOverview extends BaseProgramWebPart<IProgramStatusWebPartProps> {
+
+export default class ProgramStatusWebPart extends BaseProgramWebPart<IProgramStatusWebPartProps> {
   private _configuration: IPortfolioConfiguration
 
   public async onInit(): Promise<void> {

@@ -1,11 +1,10 @@
-import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
 import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane'
-import * as strings from 'ProgramWebPartsStrings'
-import { IProgramAdministrationProps } from 'components/ProgramAdministration/types'
-import { BaseProgramWebPart } from 'webparts/baseProgramWebPart/baseProgramWebPart'
-import { ProgramAdministration } from 'components/ProgramAdministration'
 import { sp, SPRest } from '@pnp/sp'
+import { ProgramAdministration } from 'components/ProgramAdministration'
+import { IProgramAdministrationProps } from 'components/ProgramAdministration/types'
+import * as ReactDom from 'react-dom'
+import { BaseProgramWebPart } from 'webparts/baseProgramWebPart/baseProgramWebPart'
 
 export default class ProgramAdministrationWebPart extends BaseProgramWebPart<IProgramAdministrationProps> {
   private _sp: SPRest
@@ -41,7 +40,6 @@ export default class ProgramAdministrationWebPart extends BaseProgramWebPart<IPr
         {
           groups: [
             {
-              groupName: strings.BasicGroupName,
               groupFields: [
                 PropertyPaneTextField('webPartTitle', {
                   label: 'Tittel'

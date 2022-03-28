@@ -20,7 +20,7 @@ export interface IProgramTimelineProps extends IBaseWebPartComponentProps {
   webPartTitle: string
 }
 
-export default class programTimelineWebPart extends BaseProgramWebPart<IProgramTimelineProps> {
+export default class ProgramTimelineWebPart extends BaseProgramWebPart<IProgramTimelineProps> {
   public childProjects: ChildProject[]
 
   public async onInit(): Promise<void> {

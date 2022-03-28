@@ -15,8 +15,7 @@ interface IProgramBenefitsPropertyPaneProps extends IBaseWebPartComponentProps {
   showCommandBar: boolean
 }
 
-export default class programBenefits extends BaseProgramWebPart<IProgramBenefitsPropertyPaneProps> {
-
+export default class ProgramBenefitsWebPart extends BaseProgramWebPart<IProgramBenefitsPropertyPaneProps> {
   public async onInit(): Promise<void> {
     await super.onInit()
   }
