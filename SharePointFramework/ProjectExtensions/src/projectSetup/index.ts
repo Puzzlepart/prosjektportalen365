@@ -13,7 +13,7 @@ import * as strings from 'ProjectExtensionsStrings'
 import { createElement } from 'react'
 import * as ReactDOM from 'react-dom'
 import { default as HubSiteService } from 'sp-hubsite-service'
-import { find } from 'underscore'
+import { find, uniq } from 'underscore'
 import {
   ErrorDialog,
   IErrorDialogProps,
@@ -31,9 +31,6 @@ import {
 } from '../models'
 import { deleteCustomizer } from './deleteCustomizer'
 import { ProjectSetupError } from './ProjectSetupError'
-import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
-import { find, uniq } from 'underscore'
-import { endsWith } from 'lodash'
 import { ProjectSetupSettings } from './ProjectSetupSettings'
 import * as Tasks from './tasks'
 import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
@@ -409,13 +406,11 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           ['File']
         )
       ])
-      const files = await this._portal.getItems(strings.Lists_ProjectTemplateFiles_Title, ProjectTemplateFile, {}, ['File'])
-      if (this.properties.templatesLibrary !== 'Prosjektmaler') {
-       templates.map((template) => {
-         const [relativeUrl] = files.filter(file => {return file.id === template.projectTemplateId})
-         template.serverRelativeUrl = relativeUrl.serverRelativeUrl
-       })
-      }
+      const templates = _templates.map((tmpl) => {
+        const [tmplFile] = templateFiles.filter((file) => file.id === tmpl.projectTemplateId)
+        tmpl.projectTemplateUrl = tmplFile?.serverRelativeUrl
+        return tmpl
+      })
       Logger.log({
         message: '(ProjectSetup) [_fetchData]: Retrieved templates, extensions and content config',
         data: {
