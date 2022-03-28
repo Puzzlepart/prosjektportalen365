@@ -1,10 +1,14 @@
 import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
 import * as strings from 'ProgramWebPartsStrings'
-import {ProgramDeliveries} from 'components/ProgramDeliveries/ProgramDeliveries'
-import {BaseProgramWebPart} from '../baseProgramWebPart/baseProgramWebPart'
-import {IBaseWebPartComponentProps} from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
-import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane'
+import { ProgramDeliveries } from 'components/ProgramDeliveries/ProgramDeliveries'
+import { BaseProgramWebPart } from '../baseProgramWebPart/baseProgramWebPart'
+import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
+import {
+  IPropertyPaneConfiguration,
+  PropertyPaneTextField,
+  PropertyPaneToggle
+} from '@microsoft/sp-property-pane'
 import { IProgramDeliveriesProps } from 'components/ProgramDeliveries/ProgramDeliveriesProps'
 
 interface IProgramDeliveriesWebPartProps extends IBaseWebPartComponentProps {
@@ -13,7 +17,15 @@ interface IProgramDeliveriesWebPartProps extends IBaseWebPartComponentProps {
   showExcelExportButton: boolean
   showSearchBox: boolean
   showCommandBar: boolean
-  columns: Array<{key: string, fieldName: string, name: string, minWidth:number,maxWidth:number, isMultiline:boolean, isResizable:boolean}>
+  columns: Array<{
+    key: string
+    fieldName: string
+    name: string
+    minWidth: number
+    maxWidth: number
+    isMultiline: boolean
+    isResizable: boolean
+  }>
 }
 
 export default class ProgramDeliveriesWebPart extends BaseProgramWebPart<IProgramDeliveriesWebPartProps> {
@@ -50,7 +62,6 @@ export default class ProgramDeliveriesWebPart extends BaseProgramWebPart<IProgra
     this.properties[key] = value
     this.context.propertyPane.refresh()
   }
-  
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
@@ -86,5 +97,4 @@ export default class ProgramDeliveriesWebPart extends BaseProgramWebPart<IProgra
       ]
     }
   }
-
 }

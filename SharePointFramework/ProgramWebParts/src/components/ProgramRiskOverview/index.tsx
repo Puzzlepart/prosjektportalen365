@@ -3,7 +3,6 @@ import { IProgramRiskOverview, SelectedRiskProperties } from './ProgramRiskProps
 import { PortfolioAggregation } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
 
 export const ProgramRiskOverview: FunctionComponent<IProgramRiskOverview> = (props) => {
-
   return (
     <>
       <PortfolioAggregation
@@ -21,5 +20,3 @@ export const ProgramRiskOverview: FunctionComponent<IProgramRiskOverview> = (pro
     </>
   )
 }
-
-

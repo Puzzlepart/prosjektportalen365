@@ -66,7 +66,7 @@ export const useStore = create<IProgramAdministrationState>((set) => ({
 
   deleteChildProjects: async (projects, _sp) => {
     try {
-      set(() => ({ isLoading: true}))
+      set(() => ({ isLoading: true }))
       await removeChildProjects(_sp, projects)
       const [data] = await _sp.web.lists
         .getByTitle('Prosjektegenskaper')
@@ -74,12 +74,13 @@ export const useStore = create<IProgramAdministrationState>((set) => ({
         .get()
       const children: ChildProject[] = await JSON.parse(data.GtChildProjects)
       set(() => ({ childProjects: children.filter((a) => a) }))
-      set(() => ({ isLoading: false}))
+      set(() => ({ isLoading: false }))
     } catch (error) {
-      set(() => ({ isLoading: false}))
+      set(() => ({ isLoading: false }))
       set(() => ({ error: { text: error.message, messageBarType: MessageBarType.error } }))
     }
   },
 
-  setError: (message, messagebarType) => set(() => ({ error: { text: message, messageBarType: messagebarType }, isLoading: false })),
+  setError: (message, messagebarType) =>
+    set(() => ({ error: { text: message, messageBarType: messagebarType }, isLoading: false }))
 }))

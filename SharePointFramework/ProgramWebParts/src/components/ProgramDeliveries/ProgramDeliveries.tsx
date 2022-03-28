@@ -1,12 +1,10 @@
-import React, {FunctionComponent} from 'react'
-import {IProgramDeliveriesProps} from './ProgramDeliveriesProps'
-import {PortfolioAggregation} from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
-
+import React, { FunctionComponent } from 'react'
+import { IProgramDeliveriesProps } from './ProgramDeliveriesProps'
+import { PortfolioAggregation } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
 
 export const ProgramDeliveries: FunctionComponent<IProgramDeliveriesProps> = (props) => {
-
-    return (
-      <PortfolioAggregation 
+  return (
+    <PortfolioAggregation
       title={props.webPartTitle}
       pageContext={props.context.pageContext}
       dataAdapter={props.dataAdapter}
@@ -19,8 +17,6 @@ export const ProgramDeliveries: FunctionComponent<IProgramDeliveriesProps> = (pr
       dataSource={props.properties.dataSource}
       columns={props.properties.columns}
       isParent={true}
-      />
-    )
-  
+    />
+  )
 }
-

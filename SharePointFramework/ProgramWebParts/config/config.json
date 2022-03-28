@@ -4,8 +4,8 @@
     "bundles": {
         "program-administration-web-part": {
             "components": [{
-                "entrypoint": "./lib/webparts/programAdministration/ProgramAdministrationWebpart.js",
-                "manifest": "./src/webparts/programAdministration/ProgramAdministrationWebpart.manifest.json"
+                "entrypoint": "./lib/webparts/programAdministration/ProgramAdministrationWebPart.js",
+                "manifest": "./src/webparts/programAdministration/ProgramAdministrationWebPart.manifest.json"
             }]
         },
         "program-project-overview-web-part": {

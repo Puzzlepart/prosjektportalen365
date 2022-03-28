@@ -31,7 +31,7 @@ export abstract class BaseProgramWebPart<
       pageContext: this.context.pageContext,
       dataAdapter: this.dataAdapter,
       displayMode: this.displayMode,
-      title: this.properties.title,
+      title: this.properties.title
     })
     const element: React.ReactElement<T> = React.createElement(component, combinedProps)
     ReactDom.render(element, this.domElement)
@@ -39,9 +39,15 @@ export abstract class BaseProgramWebPart<
 
   public async getChildProjectSiteIds(): Promise<void> {
     try {
-    const projectProperties = await sp.web.lists.getByTitle('Prosjektegenskaper').items.getById(1).get()
-    const childProjects: ChildProject[] = JSON.parse(projectProperties.GtChildProjects)
-    this.childProjects = childProjects.length > 0 ? childProjects : [{SiteId:'00000000-0000-0000-0000-000000000000', Title:''}]    
+      const projectProperties = await sp.web.lists
+        .getByTitle('Prosjektegenskaper')
+        .items.getById(1)
+        .get()
+      const childProjects: ChildProject[] = JSON.parse(projectProperties.GtChildProjects)
+      this.childProjects =
+        childProjects.length > 0
+          ? childProjects
+          : [{ SiteId: '00000000-0000-0000-0000-000000000000', Title: '' }]
     } catch (error) {
       Logger.write(error, LogLevel.Error)
     }
@@ -64,7 +70,7 @@ export abstract class BaseProgramWebPart<
 
   public async onInit(): Promise<void> {
     this.hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext)
-    sp.setup({sp: {baseUrl: this.context.pageContext.web.absoluteUrl}})
+    sp.setup({ sp: { baseUrl: this.context.pageContext.web.absoluteUrl } })
     await this.getChildProjectSiteIds()
     this.dataAdapter = new DataAdapter(this.context, this.hubSite, this.childProjects)
     this.context.statusRenderer.clearLoadingIndicator(this.domElement)

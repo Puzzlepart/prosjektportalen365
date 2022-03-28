@@ -1,10 +1,14 @@
 import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
 import * as strings from 'ProgramWebPartsStrings'
-import {ProgramBenefits} from 'components/ProgramBenefits/ProgramBenefits'
-import {BaseProgramWebPart} from '../baseProgramWebPart/baseProgramWebPart'
-import {IBaseWebPartComponentProps} from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
-import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane'
+import { ProgramBenefits } from 'components/ProgramBenefits/ProgramBenefits'
+import { BaseProgramWebPart } from '../baseProgramWebPart/baseProgramWebPart'
+import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
+import {
+  IPropertyPaneConfiguration,
+  PropertyPaneTextField,
+  PropertyPaneToggle
+} from '@microsoft/sp-property-pane'
 import { IProgramBenefitsProps } from 'components/ProgramBenefits/ProgramBenefitsProps'
 
 interface IProgramBenefitsPropertyPaneProps extends IBaseWebPartComponentProps {

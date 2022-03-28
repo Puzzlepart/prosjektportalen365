@@ -1,15 +1,23 @@
-import React, {FunctionComponent} from 'react'
-import {IProgramBenefitsProps, selectProperties} from './ProgramBenefitsProps'
+import React, { FunctionComponent } from 'react'
+import { IProgramBenefitsProps, selectProperties } from './ProgramBenefitsProps'
 import { getColumns } from 'pp365-portfoliowebparts/lib/components/BenefitsOverview/columns'
-import {PortfolioAggregation} from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
-import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from 'pp365-portfoliowebparts/lib/models'
-import {CONTENT_TYPE_ID_BENEFITS, CONTENT_TYPE_ID_MEASUREMENTS, CONTENT_TYPE_ID_INDICATORS} from 'pp365-portfoliowebparts/lib/components/BenefitsOverview/config'
+import { PortfolioAggregation } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
+import {
+  Benefit,
+  BenefitMeasurement,
+  BenefitMeasurementIndicator
+} from 'pp365-portfoliowebparts/lib/models'
+import {
+  CONTENT_TYPE_ID_BENEFITS,
+  CONTENT_TYPE_ID_MEASUREMENTS,
+  CONTENT_TYPE_ID_INDICATORS
+} from 'pp365-portfoliowebparts/lib/components/BenefitsOverview/config'
 
 export const ProgramBenefits: FunctionComponent<IProgramBenefitsProps> = (props) => {
-  const columns = getColumns({hiddenColumns: []})
+  const columns = getColumns({ hiddenColumns: [] })
 
-    return (
-      <PortfolioAggregation 
+  return (
+    <PortfolioAggregation
       title={props.webPartTitle}
       pageContext={props.context.pageContext}
       dataAdapter={props.dataAdapter}
@@ -23,27 +31,26 @@ export const ProgramBenefits: FunctionComponent<IProgramBenefitsProps> = (props)
       lockedColumns={true}
       isParent={true}
       onUpdateProperty={props.onUpdateProperty}
-      />
-    )
-  
+    />
+  )
 }
 
- function _postTransform(results: any[]): any[] {
-   const benefits = results
-     .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_BENEFITS) === 0)
-     .map((res) => new Benefit(res))
-   const measurements = results
-     .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_MEASUREMENTS) === 0)
-     .map((res) => new BenefitMeasurement(res))
-     .sort((a, b) => b.Date.getTime() - a.Date.getTime())
-   const indicactors = results
-     .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_INDICATORS) === 0)
-     .map((res) => {
-       const indicator = new BenefitMeasurementIndicator(res)
-         .setMeasurements(measurements)
-         .setBenefit(benefits)
-       return indicator
-     })
-     .filter((i) => i.Benefit)
-   return indicactors
- }
+function _postTransform(results: any[]): any[] {
+  const benefits = results
+    .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_BENEFITS) === 0)
+    .map((res) => new Benefit(res))
+  const measurements = results
+    .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_MEASUREMENTS) === 0)
+    .map((res) => new BenefitMeasurement(res))
+    .sort((a, b) => b.Date.getTime() - a.Date.getTime())
+  const indicactors = results
+    .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_INDICATORS) === 0)
+    .map((res) => {
+      const indicator = new BenefitMeasurementIndicator(res)
+        .setMeasurements(measurements)
+        .setBenefit(benefits)
+      return indicator
+    })
+    .filter((i) => i.Benefit)
+  return indicactors
+}

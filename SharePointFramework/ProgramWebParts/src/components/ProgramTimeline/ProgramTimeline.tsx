@@ -3,7 +3,6 @@ import { IProgramTimelineProps } from 'webparts/programTimeline/ProgramTimelineW
 import { ProjectTimeline } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/index'
 
 export const ProgramTimeline: FunctionComponent<IProgramTimelineProps> = (props) => {
-
   return (
     <>
       <ProjectTimeline

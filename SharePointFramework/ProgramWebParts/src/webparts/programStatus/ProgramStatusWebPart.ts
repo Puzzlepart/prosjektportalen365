@@ -1,12 +1,16 @@
 import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
-import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane'
+import {
+  IPropertyPaneConfiguration,
+  PropertyPaneTextField,
+  PropertyPaneToggle
+} from '@microsoft/sp-property-pane'
 import * as strings from 'ProgramWebPartsStrings'
-import {ProgramStatus} from '../../components/ProgramStatus/ProgramStatus'
-import {IPortfolioConfiguration} from 'pp365-portfoliowebparts/lib/interfaces'
-import {BaseProgramWebPart} from '../baseProgramWebPart/baseProgramWebPart'
-import {PROPERTYPANE_CONFIGURATION_PROPS} from 'pp365-portfoliowebparts/lib/webparts/portfolioOverview'
-import {IBaseWebPartComponentProps} from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
+import { ProgramStatus } from '../../components/ProgramStatus/ProgramStatus'
+import { IPortfolioConfiguration } from 'pp365-portfoliowebparts/lib/interfaces'
+import { BaseProgramWebPart } from '../baseProgramWebPart/baseProgramWebPart'
+import { PROPERTYPANE_CONFIGURATION_PROPS } from 'pp365-portfoliowebparts/lib/webparts/portfolioOverview'
+import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
 import { IProgramStatusProps } from 'components/ProgramStatus/IProgramStatusProps'
 
 interface IProgramStatusWebPartProps extends IBaseWebPartComponentProps {
@@ -41,7 +45,7 @@ export default class ProgramStatusWebPart extends BaseProgramWebPart<IProgramSta
         showFilters: this.properties.showFilters,
         showViewSelector: this.properties.showViewSelector,
         showGroupBy: this.properties.showGroupBy,
-        showSearchBox: this.properties.showSearchBox,
+        showSearchBox: this.properties.showSearchBox
       }
     })
   }
@@ -87,7 +91,7 @@ export default class ProgramStatusWebPart extends BaseProgramWebPart<IProgramSta
                 PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_EXCELEXPORT_BUTTON, {
                   label: strings.ShowExcelExportButtonLabel,
                   disabled: !this.properties.showCommandBar
-                }),
+                })
               ]
             }
           ]

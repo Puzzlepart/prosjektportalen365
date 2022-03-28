@@ -4,7 +4,11 @@ import * as strings from 'ProgramWebPartsStrings'
 import { ProgramRiskOverview } from 'components/ProgramRiskOverview/index'
 import { BaseProgramWebPart } from '../baseProgramWebPart/baseProgramWebPart'
 import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
-import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane'
+import {
+  IPropertyPaneConfiguration,
+  PropertyPaneTextField,
+  PropertyPaneToggle
+} from '@microsoft/sp-property-pane'
 import { IProgramRiskOverview } from 'components/ProgramRiskOverview/ProgramRiskProps'
 import { AggreationColumn } from 'models'
 

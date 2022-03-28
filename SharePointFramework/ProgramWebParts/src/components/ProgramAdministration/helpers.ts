@@ -21,15 +21,15 @@ export async function getHubSiteProjects(_sp: SPRest) {
 }
 
 async function batchFetch(_sp, hubId, query) {
-    const searchData = await _sp.search({
-      Querytext: `${query} DepartmentId:{${hubId}} contentclass:STS_Site`,
-      RowLimit: 500,
-      StartRow: 0,
-      ClientType: 'ContentSearchRegular',
-      SelectProperties: ['GtSiteIdOWSTEXT', 'SPWebURL', 'Title'],
-      TrimDuplicates: false
-    })
-    return searchData
+  const searchData = await _sp.search({
+    Querytext: `${query} DepartmentId:{${hubId}} contentclass:STS_Site`,
+    RowLimit: 500,
+    StartRow: 0,
+    ClientType: 'ContentSearchRegular',
+    SelectProperties: ['GtSiteIdOWSTEXT', 'SPWebURL', 'Title'],
+    TrimDuplicates: false
+  })
+  return searchData
 }
 
 /**
@@ -69,7 +69,7 @@ export async function fetchAvailableProjects(_sp: SPRest) {
   })
   availableProjects = availableProjects.filter((project) => project.SPWebURL)
 
-  const mappedProjects = availableProjects.map(proj => {
+  const mappedProjects = availableProjects.map((proj) => {
     return {
       SiteId: proj.SiteId,
       Title: proj.Title,

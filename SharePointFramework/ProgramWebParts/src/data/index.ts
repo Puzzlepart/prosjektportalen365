@@ -1,12 +1,6 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd } from '@pnp/common'
-import {
-  QueryPropertyValueType,
-  SearchResult,
-  SortDirection,
-  SPRest,
-  sp
-} from '@pnp/sp'
+import { QueryPropertyValueType, SearchResult, SortDirection, SPRest, sp } from '@pnp/sp'
 import * as cleanDeep from 'clean-deep'
 import {
   IGraphGroup,
@@ -14,10 +8,7 @@ import {
   ISPProjectItem,
   ISPUser
 } from 'pp365-portfoliowebparts/lib/interfaces'
-import {
-  ProjectListModel,
-  TimelineContentListModel,
-} from 'pp365-portfoliowebparts/lib/models'
+import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
 import MSGraph from 'msgraph-helper'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProgramWebPartsStrings'
@@ -387,9 +378,17 @@ export class DataAdapter {
     ])
     timelineItems = timelineItems
       .map((item) => {
-        if (item?.SiteIdLookup?.Title && _.find(this._childProjects, ((child) => (child?.SiteId === item?.SiteIdLookup?.GtSiteId) || (item?.SiteIdLookup?.GtSiteId === this?.context?.pageContext?.site?.id?.toString())))) {
+        if (
+          item?.SiteIdLookup?.Title &&
+          _.find(
+            this._childProjects,
+            (child) =>
+              child?.SiteId === item?.SiteIdLookup?.GtSiteId ||
+              item?.SiteIdLookup?.GtSiteId === this?.context?.pageContext?.site?.id?.toString()
+          )
+        ) {
           const model = new TimelineContentListModel(
-            item.SiteIdLookup?.GtSiteId, 
+            item.SiteIdLookup?.GtSiteId,
             item.SiteIdLookup?.Title,
             item.Title,
             item.TimelineType,
@@ -479,7 +478,11 @@ export class DataAdapter {
 
     projects = projects
       .map((project) => {
-        return this._childProjects.some((child) => child?.SiteId === project?.siteId || project?.siteId === this.context.pageContext.site.id.toString())
+        return this._childProjects.some(
+          (child) =>
+            child?.SiteId === project?.siteId ||
+            project?.siteId === this.context.pageContext.site.id.toString()
+        )
           ? project
           : undefined
       })

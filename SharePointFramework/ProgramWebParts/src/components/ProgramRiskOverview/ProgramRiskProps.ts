@@ -7,10 +7,25 @@ export interface IProgramRiskOverview {
   dataAdapter: DataAdapter
   properties: IAggregatedPortfolioPropertyPane
   onUpdateProperty: (key: string, value: any) => void
-  
 }
 
-export const SelectedRiskProperties = ['Path', 'SPWebURL', 'Title', 'ListItemId', 'SiteTitle', 'SiteId', 'ContentTypeID', 'GtRiskProbabilityOWSNMBR', 'GtRiskProbabilityPostActionOWSNMBR', 'GtRiskConsequenceOWSNMBR', 'GtRiskConsequencePostActionOWSNMBR', 'GtRiskActionOWSMTXT', 'Path', 'SPWebURL', 'SiteTitle']
+export const SelectedRiskProperties = [
+  'Path',
+  'SPWebURL',
+  'Title',
+  'ListItemId',
+  'SiteTitle',
+  'SiteId',
+  'ContentTypeID',
+  'GtRiskProbabilityOWSNMBR',
+  'GtRiskProbabilityPostActionOWSNMBR',
+  'GtRiskConsequenceOWSNMBR',
+  'GtRiskConsequencePostActionOWSNMBR',
+  'GtRiskActionOWSMTXT',
+  'Path',
+  'SPWebURL',
+  'SiteTitle'
+]
 
 export const riskColumns: any[] = [
   {

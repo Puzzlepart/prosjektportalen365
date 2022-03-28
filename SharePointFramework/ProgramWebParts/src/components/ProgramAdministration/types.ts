@@ -3,6 +3,7 @@ import { DataAdapter } from 'data'
 import { SPRest } from '@pnp/sp'
 import { IColumn, MessageBarType } from 'office-ui-fabric-react'
 import { ChildProject } from 'models'
+
 export interface IProgramAdministrationProps {
   webPartTitle: string
   description: string
@@ -22,8 +23,8 @@ export interface ChildProjectListItem extends ChildProject {
 }
 
 export interface IProgramAdministrationItem {
-  Title: string;
-  SPWebURL: string;
+  Title: string
+  SPWebURL: string
 }
 
 export const shimmeredColumns: IColumn[] = [
@@ -42,4 +43,3 @@ export const shimmeredColumns: IColumn[] = [
     minWidth: 100
   }
 ]
-
