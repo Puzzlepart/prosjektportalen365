@@ -230,7 +230,7 @@ export class DataAdapter {
     configuration: IPortfolioConfiguration,
     siteId: string
   ): Promise<IFetchDataForViewItemResult[]> {
-    const queryArray = this.queryBuilder()
+    const queryArray = this.aggregatedQueryBuilder('')
     const items = []
     for (let i = 0; i < queryArray.length; i++) {
       const { projects, sites, statusReports } = await this._fetchDataForView(
@@ -539,50 +539,15 @@ export class DataAdapter {
     }
   }
 
-  public aggregatedQueryBuilder(maxQueryLength: number = 2500, maxProjects: number = 25): string[] {
-    const queryArray = []
-    let queryString = ''
-    if (this._siteIds.length > maxProjects) {
-      this._siteIds.forEach((siteId, index) => {
-        queryString += `SPWebUrl="${siteId}"`
-        if (queryString.length > maxQueryLength) {
-          queryArray.push(queryString)
-          queryString = ''
-        }
-        if (index === this._siteIds.length - 1) {
-          queryArray.push(queryString)
-        }
-      })
-    } else {
-      this._siteIds.forEach((siteId) => {
-        queryString += `SPWebUrl="${siteId}"`
-      })
-      queryArray.push(queryString)
-    }
-    return queryArray
-  }
-
-  public queryBuilder(maxQueryLength: number = 2500, maxSites: number = 30): string[] {
-    const queryArray = []
-    let queryString = ''
-    if (this.siteIds.length > maxSites) {
-      this.siteIds.forEach((siteId, index) => {
-        queryString += `GtSiteIdOWSTEXT:"${siteId}" `
-        if (queryString.length > maxQueryLength) {
-          queryArray.push(queryString)
-          queryString = ''
-        }
-        if (index === this.siteIds.length - 1) {
-          queryArray.push(queryString)
-        }
-      })
-    } else {
-      const query = this.siteIds.reduce((acc, curr) => {
-        return 'GtSiteIdOWSTEXT:' + acc + 'GtSiteIdOWSTEXT:' + curr
-      })
-      queryArray.push(query)
-    }
-    return queryArray
+  /**
+   * Required method for Portfolio components to be usable by Program components
+   * 
+   * @param _maxQueryLength 
+   * @param _maxProjects 
+   * @returns [] 
+   */
+  public aggregatedQueryBuilder(queryParameter: string, _maxQueryLength: number = 2500, _maxProjects: number = 25): string[] {
+    return []
   }
 
   /**
@@ -592,9 +557,8 @@ export class DataAdapter {
    * @param selectProperties Select properties
    */
   private async _fetchItems(queryTemplate: string, selectProperties: string[]) {
-    const programFilter = this._siteIds && this.queryBuilder()
     const response = await sp.searchWithCaching({
-      QueryTemplate: `${programFilter ?? ''} ${queryTemplate}`,
+      QueryTemplate: `${queryTemplate}`,
       Querytext: '*',
       RowLimit: 500,
       TrimDuplicates: false,

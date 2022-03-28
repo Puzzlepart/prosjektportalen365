@@ -185,12 +185,23 @@ export class DataAdapter {
     }
   }
 
-  public aggregatedQueryBuilder(maxQueryLength: number = 2500, maxProjects: number = 25): string[] {
+    /**
+   * Create queries if number of projects exceeds threshold to avoid 4096 character limitation by SharePoint
+   *
+   * @description Used by all postqueries in Program webparts
+   *
+   * @param queryProperty Dependant on whether it is aggregated portfolio or portfolio overview
+   * @param maxQueryLength Maximum length of query before pushing to array
+   * @param maxProjects Maximum projects required before creating strings
+   * @returns {string[]}
+   * @memberof DataAdapter
+   */
+  public aggregatedQueryBuilder(queryProperty: string, maxQueryLength: number = 2500, maxProjects: number = 25): string[] {
     const queryArray = []
     let queryString = ''
     if (this._childProjects.length > maxProjects) {
       this._childProjects.forEach((childProject, index) => {
-        queryString += `SiteId:${childProject.SiteId} `
+        queryString += `${queryProperty}:${childProject.SiteId} `
         if (queryString.length > maxQueryLength) {
           queryArray.push(queryString)
           queryString = ''
@@ -201,30 +212,7 @@ export class DataAdapter {
       })
     } else {
       this._childProjects.forEach((childProject) => {
-        queryString += `SiteId:${childProject.SiteId} `
-      })
-      queryArray.push(queryString)
-    }
-    return queryArray
-  }
-  
-  public queryBuilder(maxQueryLength: number = 2500, maxProjects: number = 25): string[] {
-    const queryArray = []
-    let queryString = ''
-    if (this._childProjects.length > maxProjects) {
-      this._childProjects.forEach((childProject, index) => {
-        queryString += `GtSiteIdOWSTEXT:${childProject.SiteId} `
-        if (queryString.length > maxQueryLength) {
-          queryArray.push(queryString)
-          queryString = ''
-        }
-        if (index === this._childProjects.length - 1) {
-          queryArray.push(queryString)
-        }
-      })
-    } else {
-      this._childProjects.forEach((childProject) => {
-        queryString += `GtSiteIdOWSTEXT:${childProject.SiteId} `
+        queryString += `${queryProperty}:${childProject.SiteId} `
       })
       queryArray.push(queryString)
     }
@@ -237,7 +225,7 @@ export class DataAdapter {
     configuration: IPortfolioConfiguration,
     siteId: string[]
   ): Promise<IFetchDataForViewItemResult[]> {
-    const queryArray = this.queryBuilder()
+    const queryArray = this.aggregatedQueryBuilder('GtSiteIdOWSTEXT')
     const items = []
     for (let i = 0; i < queryArray.length; i++) {
       const { projects, sites, statusReports } = await this._fetchDataForView(
@@ -561,7 +549,7 @@ export class DataAdapter {
    * @param selectProperties Select properties
    */
   private async _fetchItems(queryTemplate: string, selectProperties: string[]) {
-    const programFilter = this._childProjects && this.aggregatedQueryBuilder()
+    const programFilter = this._childProjects && this.aggregatedQueryBuilder('SiteId')
     const promises = []
     programFilter.forEach((element) => {
       promises.push(
