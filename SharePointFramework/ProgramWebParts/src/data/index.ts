@@ -207,16 +207,7 @@ export class DataAdapter {
     }
     return queryArray
   }
-
-  /*
-  Array av GtSiteIdOWSTEXT
-  Legg til GtSideIdOWSTEXT="SiteID"
-  GtSiteIdOWSTEXT=6f06b080-d861-46dd-bc53-c0039493be99
-  If Array.length > 50
-    Nytt element
-  Ny array
-  */
-
+  
   public queryBuilder(maxQueryLength: number = 2500, maxProjects: number = 25): string[] {
     const queryArray = []
     let queryString = ''
