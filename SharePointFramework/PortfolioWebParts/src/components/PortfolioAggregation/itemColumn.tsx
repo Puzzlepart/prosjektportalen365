@@ -62,7 +62,7 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
  *
  * @param context Context
  */
-export const getDefaultColumns = (context: IPortfolioAggregationContext) => [
+export const getDefaultColumns = (context: IPortfolioAggregationContext, isParent?: boolean) => [
   {
     key: 'SiteTitle',
     fieldName: 'SiteTitle',
@@ -71,22 +71,32 @@ export const getDefaultColumns = (context: IPortfolioAggregationContext) => [
     maxWidth: 225,
     isResizable: true,
     onRender: (item: any) => {
-      return (
-        <ProjectInformationTooltip
-          key={item.SiteId}
-          title={item.SiteTitle}
-          siteId={item.SiteId}
-          webUrl={item.SPWebURL}
-          hubSite={{
-            web: new Web(context.props.pageContext.site.absoluteUrl),
-            url: context.props.pageContext.site.absoluteUrl
-          }}
-          page='Portfolio'>
+      if (!isParent) {
+        return (
+          <ProjectInformationTooltip
+            key={item.SiteId}
+            title={item.SiteTitle}
+            siteId={item.SiteId}
+            webUrl={item.SPWebURL}
+            hubSite={{
+              web: new Web(context.props.pageContext.site.absoluteUrl),
+              url: context.props.pageContext.site.absoluteUrl
+            }}
+            page='Portfolio'>
+            <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
+              {item.SiteTitle}
+            </Link>
+          </ProjectInformationTooltip>
+        )
+      } else {
+        return item.SPWebURL ? (
           <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
             {item.SiteTitle}
           </Link>
-        </ProjectInformationTooltip>
-      )
+        ) : (
+          <span>{item.SiteTitle}</span>
+        )
+      }
     },
     data: { isGroupable: true }
   }

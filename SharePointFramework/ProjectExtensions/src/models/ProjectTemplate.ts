@@ -18,6 +18,9 @@ export interface IProjectTemplateSPItem {
   GtProjectCustomColumns: string
   GtProjectContentType: string
   GtProjectStatusContentType: string
+  GtIsProgram: boolean
+  GtIsParentProject: boolean
+  IsHiddenTemplate: boolean
   GtProjectPhaseTermId: string
 }
 
@@ -39,6 +42,9 @@ export class ProjectTemplate implements IDropdownOption {
   public projectColumns: string
   public projectCustomColumns: string
   public projectPhaseTermId: string
+  public isProgram: boolean
+  public isParentProject: boolean
+  public isHidden: boolean
 
   constructor(spItem: IProjectTemplateSPItem, public web: Web) {
     this.id = spItem.Id
@@ -50,6 +56,12 @@ export class ProjectTemplate implements IDropdownOption {
     this.isDefaultListContentLocked = spItem?.IsDefaultListContentLocked
     this.iconName = spItem.IconName
     this.listContentConfigIds =
+      spItem.ListContentConfigLookupId && spItem.ListContentConfigLookupId.length > 0
+        ? spItem.ListContentConfigLookupId
+        : null
+    this.isProgram = spItem.GtIsProgram
+    this.isParentProject = spItem.GtIsParentProject
+    this.isHidden = spItem.IsHiddenTemplate
       spItem.ListContentConfigLookupId?.length > 0 ? spItem.ListContentConfigLookupId : null
     this.projectTemplateId = spItem.GtProjectTemplateId
     this.listExtensionIds =

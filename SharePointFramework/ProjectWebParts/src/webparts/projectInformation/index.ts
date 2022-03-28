@@ -1,9 +1,15 @@
-import { IPropertyPaneConfiguration, PropertyPaneToggle } from '@microsoft/sp-property-pane'
+import {
+  IPropertyPaneConfiguration,
+  PropertyPaneTextField,
+  PropertyPaneToggle
+} from '@microsoft/sp-property-pane'
 import { IProjectInformationProps, ProjectInformation } from 'components/ProjectInformation'
 import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from '../@baseProjectWebPart'
 
-export default class ProjectInformationWebPart extends BaseProjectWebPart<IProjectInformationProps> {
+export default class ProjectInformationWebPart extends BaseProjectWebPart<
+  IProjectInformationProps
+> {
   public async onInit() {
     await super.onInit()
   }
@@ -11,6 +17,7 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
   public render(): void {
     this.renderComponent<IProjectInformationProps>(ProjectInformation, {
       onFieldExternalChanged: this._onFieldExternalChanged.bind(this),
+      adminPageLink: this.properties.adminPageLink,
       webPartContext: this.context
     })
   }
@@ -30,6 +37,9 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
               groupFields: [
                 PropertyPaneToggle('skipSyncToHub', {
                   label: strings.SkipSyncToHubLabel
+                }),
+                PropertyPaneTextField('adminPageLink', {
+                  label: strings.AdminPageLinkLabel
                 })
               ]
             }

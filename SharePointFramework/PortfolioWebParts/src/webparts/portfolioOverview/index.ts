@@ -6,8 +6,8 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { PortfolioOverview, IPortfolioOverviewProps } from 'components/PortfolioOverview'
-import { IPortfolioConfiguration } from 'interfaces'
+import { PortfolioOverview, IPortfolioOverviewProps } from '../../components/PortfolioOverview'
+import { IPortfolioConfiguration } from '../../interfaces'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
@@ -25,7 +25,9 @@ export const PROPERTYPANE_CONFIGURATION_PROPS = {
   VIEWS_LISTNAME: 'viewsListName'
 }
 
-export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPortfolioOverviewProps> {
+export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<
+  IPortfolioOverviewProps
+> {
   private _configuration: IPortfolioConfiguration
 
   public render(): void {

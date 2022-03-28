@@ -90,7 +90,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
               )
             }
             columns={[
-              ...getDefaultColumns(ctxValue),
+              ...getDefaultColumns(ctxValue, props.isParent),
               ...state.columns,
               props.displayMode === DisplayMode.Edit && !props.lockedColumns && addColumn(dispatch)
             ].filter((c) => c)}

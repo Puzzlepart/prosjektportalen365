@@ -20,7 +20,7 @@ export class SetupProjectInformation extends BaseTask {
     onProgress: OnProgressCallbackFunction
   ): Promise<IBaseTaskParams> {
     try {
-      await this._syncPropertiesList(params, onProgress)
+      await this._syncPropertiesList(params, onProgress, this.data.selectedTemplate.isProgram, this.data.selectedTemplate.isParentProject)
       await this._addEntryToHub(params)
       return params
     } catch (error) {
@@ -36,7 +36,9 @@ export class SetupProjectInformation extends BaseTask {
    */
   private async _syncPropertiesList(
     params: IBaseTaskParams,
-    onProgress: OnProgressCallbackFunction
+    onProgress: OnProgressCallbackFunction,
+    isProgram: boolean,
+    isParent: boolean
   ) {
     try {
       onProgress(
@@ -58,6 +60,23 @@ export class SetupProjectInformation extends BaseTask {
         strings.CreatingLocalProjectPropertiesListItemText,
         'AlignCenter'
       )
+
+      if((await list.items.getAll())?.length >= 1) {
+        await list.items.getById(1).update({
+          Title: params.context.pageContext.web.title,
+          TemplateParameters: JSON.stringify(params.templateSchema.Parameters),
+          GtIsProgram: isProgram,
+          GtIsParentProject: isParent
+        })
+      } else {
+        await list.items.add({
+          Title: params.context.pageContext.web.title,
+          TemplateParameters: JSON.stringify(params.templateSchema.Parameters),
+          GtIsProgram: isProgram,
+          GtIsParentProject: isParent
+        })
+      }
+
 
       const items = await list.items.getAll()
       if (items.length >= 1) {
@@ -100,7 +119,9 @@ export class SetupProjectInformation extends BaseTask {
       const properties: TypedHash<any> = {
         Title: params.context.pageContext.web.title,
         GtSiteId: params.context.pageContext.site.id.toString(),
-        GtProjectTemplate: this.data.selectedTemplate.text
+        GtProjectTemplate: this.data.selectedTemplate.text,
+        GtIsProgram: this.data.selectedTemplate.isProgram,
+        GtIsParentProject: this.data.selectedTemplate.isParentProject
       }
       if (params.templateSchema.Parameters.ProjectContentTypeId) {
         properties.ContentTypeId = params.templateSchema.Parameters.ProjectContentTypeId

@@ -144,6 +144,10 @@ declare interface IProjectWebPartsStrings {
   AdvancedGroupName: string;
   PhaseSitePageFoundDescription: string;
   PhaseSitePageNotFoundDescription: string;
+  UseDynamicHomepageChangePhaseDescription: string;
+  CreateParentProjectLabel: string;
+  ChildProjectAdminLabel: string;
+  AdminPageLinkLabel: string;
 }
 
 declare module 'ProjectWebPartsStrings' {

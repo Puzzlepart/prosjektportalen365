@@ -9,5 +9,6 @@
         <CHOICE>URL</CHOICE>
         <CHOICE>Currency</CHOICE>
         <CHOICE>Note</CHOICE>
+        <CHOICE>Boolean</CHOICE>
     </CHOICES>
 </Field>

@@ -1,0 +1,3 @@
+<Field Name="GtIsProgram" ID="{77baede1-38df-454c-a53a-dd7904ba0046}" DisplayName="{resource:SiteFields_GtIsProgram_DisplayName}" Type="Boolean"  Group="{resource:SiteFields_Portfolio_Group}" AppendOnly="FALSE" UnlimitedLengthInDocumentLibrary="TRUE" ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" StaticName="GtIsProgram" >
+<Default>0</Default>
+</Field>

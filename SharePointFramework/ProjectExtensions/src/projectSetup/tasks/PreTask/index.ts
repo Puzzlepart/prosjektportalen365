@@ -19,7 +19,10 @@ export class PreTask extends BaseTask {
    */
   public async execute(params: IBaseTaskParams): Promise<IBaseTaskParams> {
     params.templateSchema = await this.data.selectedTemplate.getSchema()
-    await this.validateParameters(params)
+    if (!params.properties.forceTemplate) {
+      await this.validateParameters(params)
+    }
+
     try {
       params.spfxJsomContext = await initSpfxJsom(params.context.pageContext.site.absoluteUrl, {
         loadTaxonomy: true

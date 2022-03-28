@@ -118,6 +118,8 @@ declare interface IPortfolioWebPartsStrings {
   SaveViewAsText: string
   MyProjectsSearchBoxPlaceholderText: string
   AllProjectsSearchBoxPlaceholderText: string
+  ParentProjectsSearchBoxPlaceholderText: string
+  ProgramSearchBoxPlaceholderText: string
   SearchBoxPlaceholderText: string
   SearchBoxPlaceholderTextLabel: string
   ShowAllMeasurementsLinkText: string
@@ -162,7 +164,11 @@ declare interface IPortfolioWebPartsStrings {
   DisplayAllProjects: string
   MyProjectsLabel: string
   AllProjectsLabel: string
+  ProgramLabel: string
+  ParentProjectLabel: string
   NoAccessMessage: string
+  BooleanYes: string
+  BooleanNo: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

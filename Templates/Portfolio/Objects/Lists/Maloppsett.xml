@@ -8,12 +8,14 @@
         <FieldRef Name="GtDescription" />
         <FieldRef Name="IconName" />
         <FieldRef Name="GtProjectTemplate" />
+        <FieldRef Name="IsHiddenTemplate" />
         <FieldRef Name="GtProjectExtensions" />
         <FieldRef Name="ListContentConfigLookup" />
         <FieldRef Name="GtProjectPhaseTermId" />
         <FieldRef Name="GtProjectContentType" />
         <FieldRef Name="GtProjectStatusContentType" />
         <FieldRef Name="GtProjectColumns" />
+        <FieldRef Name="GtIsProgram" />
         <FieldRef Name="GtProjectCustomColumns" />
         <FieldRef Name="IsDefaultTemplate" />
         <FieldRef Name="IsDefaultExtensionsLocked" />
@@ -39,7 +41,10 @@
     </Field>
     <Field Type="Text" DisplayName="Prosjektstatus innholdstype" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" ID="{eff52d5b-052b-4ba2-8fdc-ca3ca5c49cb1}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectStatusContentType" Name="GtProjectStatusContentType">
       <Default>0x010022252E35737A413FB56A1BA53862F6D5</Default>
-    </Field>
+      </Field>
+      <Field Type="Boolean" DisplayName="Skjult" ID="{09735712-3dcd-4158-b661-9dce9f80e4f0}" StaticName="IsHiddenTemplate" Name="IsHiddenTemplate">
+            <Default>0</Default>
+        </Field>
     <Field Type="Text" DisplayName="Prosjektkolonner" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" ID="{69742a29-9bba-413e-b2cc-989d4430170b}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectColumns" Name="GtProjectColumns">
       <Default>Kolonner for Prosjektportalen (Prosjekt)</Default>
     </Field>
@@ -58,6 +63,7 @@
   </pnp:Fields>
   <pnp:FieldRefs>
     <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" DisplayName="Beskrivelse" />
+    <pnp:FieldRef ID="77baede1-38df-454c-a53a-dd7904ba0046" Name="GtIsProgram" />
   </pnp:FieldRefs>
   <pnp:DataRows UpdateBehavior="Overwrite" KeyColumn="Title">
     <pnp:DataRow>
@@ -73,7 +79,39 @@
       <pnp:DataValue FieldName="IsDefaultTemplate">True</pnp:DataValue>
       <pnp:DataValue FieldName="IsDefaultExtensionsLocked">False</pnp:DataValue>
       <pnp:DataValue FieldName="IsDefaultListContentLocked">False</pnp:DataValue>
-      <pnp:DataValue FieldName="GtDescription">Dette er standardmalen som følger med Prosjektportalen 365. Blir overskrevet ved en oppgradering.</pnp:DataValue>
+      <pnp:DataValue FieldName="GtDescription">Dette er standardmalen for prosjekt som følger med Prosjektportalen 365.</pnp:DataValue>
+      <pnp:DataValue FieldName="ListContentConfigLookup"></pnp:DataValue>
+      <pnp:DataValue FieldName="IconName">Page</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="Title">Overordnet mal</pnp:DataValue>
+      <pnp:DataValue FieldName="Order">110</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectTemplate">2</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectExtensions" />
+      <pnp:DataValue FieldName="GtProjectContentType">0x0100805E9E4FEAAB4F0EABAB2600D30DB70C</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectStatusContentType">0x010022252E35737A413FB56A1BA53862F6D5</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectColumns">Kolonner for Prosjektportalen (Prosjekt)</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectCustomColumns">Egendefinerte kolonner for Prosjektportalen</pnp:DataValue>
+      <pnp:DataValue FieldName="IsDefaultTemplate">False</pnp:DataValue>
+      <pnp:DataValue FieldName="IsHiddenTemplate">True</pnp:DataValue>
+      <pnp:DataValue FieldName="ListContentConfigLookup"></pnp:DataValue>
+      <pnp:DataValue FieldName="GtDescription">Dette er standardmalen for overordnet prosjekt som følger med Prosjektportalen 365.</pnp:DataValue>
+      <pnp:DataValue FieldName="IconName">Page</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="Title">Programmal</pnp:DataValue>
+      <pnp:DataValue FieldName="Order">120</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectTemplate">3</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectExtensions" />
+      <pnp:DataValue FieldName="GtProjectContentType">0x0100805E9E4FEAAB4F0EABAB2600D30DB70C</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectStatusContentType">0x010022252E35737A413FB56A1BA53862F6D5</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectPhaseTermId">54f92279-2602-4d70-95b5-e6113f27666e</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectColumns">Kolonner for Prosjektportalen (Prosjekt)</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectCustomColumns">Egendefinerte kolonner for Prosjektportalen</pnp:DataValue>
+      <pnp:DataValue FieldName="IsDefaultTemplate">False</pnp:DataValue>
+      <pnp:DataValue FieldName="GtIsProgram">True</pnp:DataValue>
+      <pnp:DataValue FieldName="ListContentConfigLookup"></pnp:DataValue>
+      <pnp:DataValue FieldName="GtDescription">Dette er standardmalen for program som følger med Prosjektportalen 365.</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">Page</pnp:DataValue>
     </pnp:DataRow>
   </pnp:DataRows>

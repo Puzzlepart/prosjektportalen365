@@ -81,7 +81,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
               <div
                 dangerouslySetInnerHTML={{
                   __html: format(
-                    strings.ProjectTimelineInfoText,
+                    this.props.infoText ? this.props.infoText : strings.ProjectTimelineInfoText,
                     encodeURIComponent(window.location.href)
                   )
                 }}></div>
@@ -128,6 +128,15 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   private _getFilteredData(): ITimelineData {
     const { activeFilters, data } = { ...this.state } as IProjectTimelineState
     const activeFiltersKeys = Object.keys(activeFilters)
+    const projectId = data.items.find(
+      (i) => i?.projectUrl === this.props.pageContext.site.absoluteUrl
+    )?.id
+    const topGroup = data.groups.find((i) => i?.id === projectId)
+    projectId &&
+      (data.groups = [topGroup, ...data.groups.filter((grp) => grp?.id !== projectId)].filter(
+        (grp) => grp
+      ))
+
     if (activeFiltersKeys.length > 0) {
       const items = activeFiltersKeys.reduce(
         (newItems, key) => newItems.filter((i) => activeFilters[key].indexOf(get(i, key)) !== -1),
@@ -267,10 +276,10 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         item.type === strings.PhaseLabel
           ? '#2589d6'
           : item.type === strings.MilestoneLabel
-            ? 'transparent'
-            : item.type === strings.SubPhaseLabel
-              ? '#249ea0'
-              : '#484848'
+          ? 'transparent'
+          : item.type === strings.SubPhaseLabel
+          ? '#249ea0'
+          : '#484848'
 
       const group = _.find(groups, (grp) => item.title.indexOf(grp.title) !== -1)
       const style: React.CSSProperties = {
@@ -309,11 +318,12 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   private async _fetchData(): Promise<ITimelineData> {
     try {
       const projects = await this.props.dataAdapter.fetchEncrichedProjects()
-      const timelineItems: TimelineContentListModel[] = (await this.props.dataAdapter._fetchTimelineContentItems())
-        .timelineItems
+      const timelineItems: TimelineContentListModel[] = (
+        await this.props.dataAdapter.fetchTimelineContentItems()
+      ).timelineItems
 
       const filteredProjects = projects.filter((project) => {
-        return project.startDate != null && project.endDate != null
+        return project.startDate !== null && project.endDate !== null
       })
 
       const filteredTimelineItems = timelineItems.filter((item) => {
@@ -325,7 +335,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
       await Promise.all(
         filteredProjects.map(async (project) => {
           const statusReport = (
-            await this.props.dataAdapter._fetchDataForTimelineProject(project.siteId)
+            await this.props.dataAdapter.fetchDataForTimelineProject(project.siteId)
           ).statusReports[0]
           project['budgetTotal'] = statusReport && statusReport['GtBudgetTotalOWSCURR']
           project['costsTotal'] = statusReport && statusReport['GtCostsTotalOWSCURR']

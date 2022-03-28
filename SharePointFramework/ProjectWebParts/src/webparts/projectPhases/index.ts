@@ -80,7 +80,11 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
                   onText: 'På',
                   offText: 'Av',
                   calloutWidth: 430,
-                  calloutContent: React.createElement('p', {}, strings.UseDynamicHomepageCalloutText),
+                  calloutContent: React.createElement(
+                    'p',
+                    {},
+                    strings.UseDynamicHomepageCalloutText
+                  ),
                   checked: this.properties.useDynamicHomepage
                 })
               ]

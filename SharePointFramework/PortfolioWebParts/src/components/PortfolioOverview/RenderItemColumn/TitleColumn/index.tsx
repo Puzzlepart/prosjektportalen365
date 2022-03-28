@@ -25,7 +25,7 @@ export const TitleColumn: FunctionComponent<ITitleColumnProps> = ({ item, props 
       </TooltipHost>
     </span>
   )
-  if (item.Path) {
+  if (item.Path && !props.isParentProject) {
     content = (
       <ProjectInformationTooltip
         key={item.SiteId}
@@ -41,6 +41,12 @@ export const TitleColumn: FunctionComponent<ITitleColumnProps> = ({ item, props 
           {item.Title}
         </Link>
       </ProjectInformationTooltip>
+    )
+  } else if (item.Path && props.isParentProject) {
+    content = (
+      <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
+        {item.Title}
+      </Link>
     )
   }
   return content

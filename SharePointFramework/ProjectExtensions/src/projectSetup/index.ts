@@ -2,7 +2,7 @@ import { override } from '@microsoft/decorators'
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base'
 import { isArray, stringIsNullOrEmpty } from '@pnp/common'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
-import { sp, Web } from '@pnp/sp'
+import { MenuNode, sp, Web } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
 import { endsWith } from 'lodash'
 import { default as MSGraphHelper } from 'msgraph-helper'
@@ -13,7 +13,7 @@ import * as strings from 'ProjectExtensionsStrings'
 import { createElement } from 'react'
 import * as ReactDOM from 'react-dom'
 import { default as HubSiteService } from 'sp-hubsite-service'
-import { find } from 'underscore'
+import { find, uniq } from 'underscore'
 import {
   ErrorDialog,
   IErrorDialogProps,
@@ -81,7 +81,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           )
         }
         case ProjectSetupValidation.AlreadySetup: {
-          if (!stringIsNullOrEmpty(this.properties.forceTemplate)) {
+          if (stringIsNullOrEmpty(this.properties.forceTemplate)) {
             throw new ProjectSetupError(
               'AlreadySetup',
               strings.ProjectAlreadySetupMessage,
@@ -106,6 +106,11 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       })
       this._renderErrorDialog({ error })
     }
+  }
+
+  private async _ensureParentProjectPatch(data: IProjectSetupData): Promise<void> {
+    const [singleItem] = await data.hub.web.lists.getByTitle('Prosjekter').items.filter(`GtSiteId eq '${this.context.pageContext.legacyPageContext.siteId.replace(/([{}])/g, '')}'`).get()
+    await data.hub.web.lists.getByTitle('Prosjekter').items.getById(singleItem.Id).update({GtIsParentProject: true})
   }
 
   /**
@@ -140,6 +145,15 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         iconName: 'Page'
       })
       await this._startProvision(taskParams, data)
+
+      if(!stringIsNullOrEmpty(this.properties.forceTemplate)) {
+        await this.reacreateNavMenu()
+        await sp.web.lists.getByTitle(strings.ProjectPropertiesListName).items.getById(1).update({GtIsParentProject: true})
+        await this._ensureParentProjectPatch(data)
+        
+        
+      }
+
       await deleteCustomizer(
         this.context.pageContext.web.absoluteUrl,
         this.componentId,
@@ -156,6 +170,27 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
+   * Adds the old custom navigation nodes to the quick launch menu
+   */
+     private async reacreateNavMenu() {
+        const oldNodes: MenuNode[] = await JSON.parse(localStorage.getItem('navigationNodes'))
+
+        const navigationNodes = uniq([...oldNodes])
+        for await (const node of navigationNodes) {
+          if (node.Title === strings.RecycleBinText){
+            continue
+          }
+          const addedNode = await sp.web.navigation.quicklaunch.add(node.Title, node.SimpleUrl)  
+          if (node.Nodes.length > 0) {
+            for await (const childNode of node.Nodes) {
+              await addedNode.node.children.add(childNode.Title, childNode.SimpleUrl)
+            }
+            
+          }
+        }
+    }
+
+  /**
    * Checks for force template
    *
    * @param data - Data
@@ -165,6 +200,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     const selectedTemplate = find(data.templates, (tmpl) =>
       endsWith(tmpl.projectTemplateUrl, this.properties.forceTemplate)
     )
+    
     if (!selectedTemplate) return null
     return {
       selectedTemplate,

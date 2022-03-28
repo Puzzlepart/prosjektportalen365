@@ -22,7 +22,8 @@ export const ChangePhaseDialog = () => {
   const [state, dispatch] = useReducer(reducer, {})
   const phaseSitePages = context.state.data.phaseSitePages
   const confirmPhaseName = context.state.confirmPhase.name
-  const phaseSitePage = phaseSitePages && _.find(phaseSitePages, (p) => p.title === confirmPhaseName)
+  const phaseSitePage =
+    phaseSitePages && _.find(phaseSitePages, (p) => p.title === confirmPhaseName)
 
   useEffect(() => dispatch(INIT({ context })), [])
 
@@ -51,21 +52,29 @@ export const ChangePhaseDialog = () => {
         containerClassName={styles.root}
         title={strings.ChangePhaseText}
         subText={
-          state.view === View.Confirm &&
-          format(strings.ConfirmChangePhase, confirmPhaseName)
+          state.view === View.Confirm && format(strings.ConfirmChangePhase, confirmPhaseName)
         }
         dialogContentProps={{ type: DialogType.largeHeader }}
         modalProps={{ isDarkOverlay: true, isBlocking: false }}
         onDismiss={() => context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())}>
-        {state.view === View.Confirm && context.props.useDynamicHomepage &&
-          <div className={styles.dynamicHomepageContent} >
-            <MessageBar messageBarType={phaseSitePage ? MessageBarType.info : MessageBarType.warning}>
-              <ReactMarkdown escapeHtml={false} source={phaseSitePage
-                ? format(strings.PhaseSitePageFoundDescription, phaseSitePage && phaseSitePage.fileLeafRef)
-                : format(strings.PhaseSitePageNotFoundDescription, confirmPhaseName)} />
+        {state.view === View.Confirm && context.props.useDynamicHomepage && (
+          <div className={styles.dynamicHomepageContent}>
+            <MessageBar
+              messageBarType={phaseSitePage ? MessageBarType.info : MessageBarType.warning}>
+              <ReactMarkdown
+                escapeHtml={false}
+                source={
+                  phaseSitePage
+                    ? format(
+                        strings.PhaseSitePageFoundDescription,
+                        phaseSitePage && phaseSitePage.fileLeafRef
+                      )
+                    : format(strings.PhaseSitePageNotFoundDescription, confirmPhaseName)
+                }
+              />
             </MessageBar>
           </div>
-        }
+        )}
         <Body />
         <Footer />
       </Dialog>

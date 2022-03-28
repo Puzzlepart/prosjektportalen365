@@ -16,11 +16,16 @@ export const changePhase = async (
   phase: ProjectPhaseModel,
   phaseTextField: string,
   props: IProjectPhasesProps,
-  phaseSitePages?: IPhaseSitePageModel[],
+  phaseSitePages?: IPhaseSitePageModel[]
 ) => {
   try {
     await SPDataAdapter.project.updatePhase(phase, phaseTextField)
-    if (props.useDynamicHomepage) await changeWelcomePage(phase.name, props.webPartContext.pageContext.web.absoluteUrl, phaseSitePages)
+    if (props.useDynamicHomepage)
+      await changeWelcomePage(
+        phase.name,
+        props.webPartContext.pageContext.web.absoluteUrl,
+        phaseSitePages
+      )
     await modifyCurrentPhaseView(phase.name, props.currentPhaseViewName)
     sessionStorage.clear()
   } catch (error) {

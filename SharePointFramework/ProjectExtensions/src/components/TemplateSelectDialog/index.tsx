@@ -45,7 +45,6 @@ export class TemplateSelectDialog extends React.Component<
   public render(): React.ReactElement<ITemplateSelectDialogProps> {
     const { version, onDismiss, data } = this.props
     const { selectedTemplate, selectedListContentConfig, selectedExtensions } = this.state
-
     return (
       <BaseDialog
         version={version}
@@ -61,7 +60,7 @@ export class TemplateSelectDialog extends React.Component<
         <Pivot>
           <PivotItem headerText={strings.TemplateSelectorTitle} itemIcon='ViewListGroup'>
             <TemplateSelector
-              templates={data.templates}
+              templates={data.templates.filter((t) => !t.isHidden)}
               selectedTemplate={selectedTemplate}
               onChange={this._onTemplateChange.bind(this)}
             />

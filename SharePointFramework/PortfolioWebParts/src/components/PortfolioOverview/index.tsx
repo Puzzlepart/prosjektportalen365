@@ -188,24 +188,25 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
       let items: IFilterItemProps[] = uniqueValues
         .filter((value: string) => !stringIsNullOrEmpty(value))
         .map((value: string) => ({ name: value, value }))
-      items = items.sort((a, b) => (a.value > b.value ? 1 : -1))    
+      items = items.sort((a, b) => (a.value > b.value ? 1 : -1))
       return { column, items }
     })
 
     const activeFilters = this.state.activeFilters
     if (!_.isEmpty(activeFilters)) {
-    const filteredFields = Object.keys(activeFilters)
-    filteredFields.forEach((key) => {  
-      filters.forEach(filter => {
-        if (filter.column.fieldName === key) {
-          activeFilters[key].forEach((value) => {
-            filter.items.forEach((item) => {
-              if (value === item.name) {
-                 item.selected = true
-               }
+      const filteredFields = Object.keys(activeFilters)
+      filteredFields.forEach((key) => {
+        filters.forEach((filter) => {
+          if (filter.column.fieldName === key) {
+            activeFilters[key].forEach((value) => {
+              filter.items.forEach((item) => {
+                if (value === item.name) {
+                  item.selected = true
+                }
+              })
             })
-          })          
-        }})
+          }
+        })
       })
     }
 
@@ -482,14 +483,20 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
    */
   private async _fetchInitialData(): Promise<Partial<IPortfolioOverviewState>> {
     try {
-      const { configuration, pageContext } = this.props
+      const { configuration, pageContext, isParentProject } = this.props
       const hashState = parseUrlHash<IPortfolioOverviewHashStateState>()
       const currentView = this._getCurrentView(hashState)
-      const items = await this.props.dataAdapter.fetchDataForView(
-        currentView,
-        configuration,
-        pageContext.site.id.toString()
-      )
+      const items = isParentProject
+        ? await this.props.dataAdapter.fetchDataForViewBatch(
+            currentView,
+            configuration,
+            pageContext.legacyPageContext.hubSiteId
+          )
+        : await this.props.dataAdapter.fetchDataForView(
+            currentView,
+            configuration,
+            pageContext.legacyPageContext.hubSiteId
+          )
       const newState: Partial<IPortfolioOverviewState> = {
         columns: currentView.columns,
         items,
@@ -515,11 +522,17 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
       return
     }
     this.setState({ isChangingView: view })
-    const items = await this.props.dataAdapter.fetchDataForView(
-      view,
-      this.props.configuration,
-      this.props.pageContext.site.id.toString()
-    )
+    const items = this.props.isParentProject
+      ? await this.props.dataAdapter.fetchDataForViewBatch(
+          view,
+          this.props.configuration,
+          this.props.pageContext.legacyPageContext.hubSiteId
+        )
+      : await this.props.dataAdapter.fetchDataForView(
+          view,
+          this.props.configuration,
+          this.props.pageContext.legacyPageContext.hubSiteId
+        )
     const updatedState: Partial<IPortfolioOverviewState> = {
       isChangingView: null,
       items,

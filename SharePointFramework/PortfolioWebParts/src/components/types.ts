@@ -1,10 +1,10 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { PageContext } from '@microsoft/sp-page-context'
-import { DataAdapter } from 'data'
+import { IDataAdapter } from 'data/types'
 
 export interface IBaseComponentProps {
   title?: string
   pageContext?: PageContext
-  dataAdapter?: DataAdapter
+  dataAdapter?: IDataAdapter
   displayMode?: DisplayMode
 }

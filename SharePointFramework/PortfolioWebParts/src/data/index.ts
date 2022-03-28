@@ -22,16 +22,18 @@ import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
 import HubSiteService from 'sp-hubsite-service'
 import _ from 'underscore'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
-import { DEFAULT_SEARCH_SETTINGS } from './types'
+import { DEFAULT_SEARCH_SETTINGS, IDataAdapter } from './types'
 
-export class DataAdapter {
+export class DataAdapter implements IDataAdapter {
   private _portalDataService: PortalDataService
   private _dataSourceService: DataSourceService
+  private _siteIds: string[]
 
-  constructor(public context: WebPartContext) {
+  constructor(public context: WebPartContext, private siteIds?: string[]) {
     this._portalDataService = new PortalDataService().configure({
       urlOrWeb: context.pageContext.web.absoluteUrl
     })
+    this._siteIds = siteIds
   }
 
   /**
@@ -40,7 +42,7 @@ export class DataAdapter {
    */
   public async configure(): Promise<DataAdapter> {
     if (this._dataSourceService) return this
-    const { web } = await HubSiteService.GetHubSite(sp, this.context.pageContext)
+    const { web } = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
     this._dataSourceService = new DataSourceService(web)
     return this
   }
@@ -230,13 +232,14 @@ export class DataAdapter {
    * @param siteId
    * @param [siteIdProperty='GtSiteIdOWSTEXT']
    */
-
   private async _fetchDataForView(
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
     siteId: string,
-    siteIdProperty: string = 'GtSiteIdOWSTEXT'
+    siteIdProperty: string = 'GtSiteIdOWSTEXT',
+    queryArray?: string
   ) {
+    view
     let [
       { PrimarySearchResults: projects },
       { PrimarySearchResults: sites },
@@ -244,17 +247,19 @@ export class DataAdapter {
     ] = await Promise.all([
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: view.searchQuery,
+        QueryTemplate: `${queryArray ?? ''} ${view.searchQuery} `,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty]
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `DepartmentId:{${siteId}} contentclass:STS_Site`,
+        QueryTemplate: `${queryArray ?? ''} DepartmentId:{${siteId}} contentclass:STS_Site`,
         SelectProperties: ['Path', 'Title', 'SiteId']
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        QueryTemplate: `${
+          queryArray ?? ''
+        } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
         Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
       })
@@ -274,14 +279,11 @@ export class DataAdapter {
   }
 
   /**
-   *  Fetches data for the Projecttimeline project
+   * Fetches data for the Projecttimeline project
+   *
    * @param siteId
-   * @param [siteIdProperty='GtSiteIdOWSTEXT']
-   * @param [costsTotalProperty='GtCostsTotalOWSCURR']
-   * @param [budgetTotalProperty='GtBudgetTotalOWSCURR']
    */
-
-  public async _fetchDataForTimelineProject(siteId: string) {
+  public async fetchDataForTimelineProject(siteId: string) {
     const siteIdProperty: string = 'GtSiteIdOWSTEXT'
     const costsTotalProperty: string = 'GtCostsTotalOWSCURR'
     const budgetTotalProperty: string = 'GtBudgetTotalOWSCURR'
@@ -306,7 +308,7 @@ export class DataAdapter {
    * * Fetching list items
    * * Maps the items to TimelineContentListModel
    */
-  public async _fetchTimelineContentItems() {
+  public async fetchTimelineContentItems() {
     let [timelineItems] = await Promise.all([
       sp.web.lists
         .getByTitle(strings.TimelineContentListName)
@@ -388,10 +390,8 @@ export class DataAdapter {
 
   /**
    * Map projects
-   *
    * @param items Items
    * @param groups Groups
-   * @param photos Photos
    * @param users Users
    */
   private _mapProjects(
@@ -414,7 +414,12 @@ export class DataAdapter {
           item.GtEndDate,
           manager,
           owner,
-          !!group
+          !!group,
+          null,
+          null,
+          null,
+          item.GtIsParentProject,
+          item.GtIsProgram
         )
         return model
       })
@@ -443,7 +448,9 @@ export class DataAdapter {
           'GtProjectPhaseText',
           'GtStartDate',
           'GtEndDate',
-          'Title'
+          'Title',
+          'GtIsParentProject',
+          'GtIsProgram'
         )
         // eslint-disable-next-line quotes
         .filter("GtProjectLifecycleStatus ne 'Avsluttet'")
@@ -501,7 +508,7 @@ export class DataAdapter {
    */
   private async _fetchItems(queryTemplate: string, selectProperties: string[]) {
     const response = await sp.searchWithCaching({
-      QueryTemplate: queryTemplate,
+      QueryTemplate: `${queryTemplate}`,
       Querytext: '*',
       RowLimit: 500,
       TrimDuplicates: false,

@@ -36,7 +36,9 @@ export class ProjectListModel {
     public userIsMember?: boolean,
     public budgetTotal?: string,
     public costsTotal?: string,
-    public type?: string
+    public type?: string,
+    public isParent?: boolean,
+    public isProgram?: boolean
   ) {
     if (manager) this.manager = { text: manager.Title, imageUrl: getUserPhoto(manager.Email) }
     if (owner) this.owner = { text: owner.Title, imageUrl: getUserPhoto(owner.Email) }

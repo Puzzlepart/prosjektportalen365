@@ -1,4 +1,5 @@
-<pnp:ContentType ID="0x0100805E9E4FEAAB4F0EABAB2600D30DB70C" Name="{resource:ContentTypes_Project_Name}" Description="{resource:ContentTypes_Project_Description}" Group="{resource:ContentTypes_Group}" xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+<pnp:ContentType ID="0x0100805E9E4FEAAB4F0EABAB2600D30DB70C" Name="{resource:ContentTypes_Project_Name}" Description="{resource:ContentTypes_Project_Description}" Group="{resource:ContentTypes_Group}"
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" />
         <pnp:FieldRef ID="983d5ab3-0a6c-4f6a-a7b5-d34d52d73676" Name="GtProjectFinanceName" />
@@ -27,5 +28,10 @@
         <pnp:FieldRef ID="1b87b4e7-b9ed-4a31-96cc-abfaca61eea4" Name="GtProjectServiceAreaText" />
         <pnp:FieldRef ID="7212b9e5-52fc-46cb-8b5e-9bf787dd115f" Name="GtProjectTypeText" />
         <pnp:FieldRef ID="4cc4a931-3861-45ad-85de-6db88afe9fa0" Name="GtProjectTemplate" />
+        <pnp:FieldRef ID="98e55335-a95a-4755-83a3-6f8b64af2420" Name="GtParentProjects" />
+        <pnp:FieldRef ID="e007ef7e-9c47-4bc2-8171-5c32688f3e0c" Name="GtChildProjects"  />
+        <pnp:FieldRef ID="8f1f38cb-7eb2-4122-a866-4c9e99b2ebed" Name="GtIsParentProject" />
+        <pnp:FieldRef ID="77baede1-38df-454c-a53a-dd7904ba0046" Name="GtIsProgram" />
+        
     </pnp:FieldRefs>
 </pnp:ContentType>

@@ -30,6 +30,11 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   showFieldExternal?: TypedHash<boolean>
 
   /**
+   * Link to the admin page
+   */
+  adminPageLink?: string
+
+  /**
    * Skip sync to hub
    */
   skipSyncToHub?: boolean
@@ -66,6 +71,16 @@ export interface IProjectInformationState
    * Confirm action props
    */
   confirmActionProps?: any
+
+  /**
+   * Display parent creation modal
+   */
+  displayParentCreationModal?: boolean
+
+  /**
+   * Is the project a parent project
+   */
+  isParentProject?: boolean
 
   /**
    * Show project properties panel

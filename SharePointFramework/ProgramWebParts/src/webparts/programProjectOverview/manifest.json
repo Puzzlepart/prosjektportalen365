@@ -1,0 +1,27 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+    "id": "01417142-67c8-498b-a6da-6e78003023dd",
+    "alias": "ProgramProjectOverviewWebPart",
+    "componentType": "WebPart",
+    "version": "*",
+    "manifestVersion": 2,
+    "requiresCustomScript": false,
+    "supportedHosts": ["SharePointWebPart"],
+
+    "preconfiguredEntries": [{
+        "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+        "group": { "default": "Other" },
+        "title": { "default": "Underområder - oversikt" },
+        "description": { "default": "Gir en listevisning av underprosjekter" },
+        "officeFabricIconFontName": "Page",
+        "properties": {
+            "webPartTitle": "Underområder - oversikt",
+            "showCommandBar": true,
+            "showFilters": true,
+            "showGroupBy": true,
+            "showSearchBox": true,
+            "showViewSelector": true,
+            "showExcelExportButton": true
+        }
+    }]
+}

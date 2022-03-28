@@ -829,6 +829,9 @@
   <data name="SiteFields_GtChecklistStatus_Description" xml:space="preserve">
     <value>Hva er statusen for sjekkpunktet? (Anbefalt status = 'Åpen'. Dette påvirker om man blir etterspurt sjekkpunktet ifm faseendring)</value>
   </data>
+  <data name="SiteFields_GtChildProjects_DisplayName" xml:space="preserve">
+    <value>Underområder</value>
+  </data>
   <data name="SiteFields_GtComment_DisplayName" xml:space="preserve">
     <value>Kommentar</value>
   </data>
@@ -943,6 +946,13 @@
   <data name="SiteFields_GtIconName_Description" xml:space="preserve">
     <value></value>
   </data>
+
+   <data name="SiteFields_GtIsParentProject_DisplayName" xml:space="preserve">
+    <value>Overordnet</value>
+  </data>
+   <data name="SiteFields_GtIsProgram_DisplayName" xml:space="preserve">
+    <value>Program</value>
+  </data>
   <data name="SiteFields_GtKey_DisplayName" xml:space="preserve">
     <value>Key</value>
   </data>
@@ -1008,6 +1018,9 @@
   </data>
   <data name="SiteFields_GtModerationStatus_Description" xml:space="preserve">
     <value></value>
+  </data>
+  <data name="SiteFields_GtParentProjects_DisplayName" xml:space="preserve">
+    <value>Overordnede prosjekter</value>
   </data>
   <data name="SiteFields_GtPrereqProfitAchievement_DisplayName" xml:space="preserve">
     <value>Forutsetninger for gevinstoppnåelse</value>
