@@ -15,14 +15,23 @@ export const CreateParentModal: FunctionComponent<ParentModalProps> = ({ isOpen,
 
     return (
         <>
-            <Dialog hidden={!isOpen} onDismiss={onDismiss} dialogContentProps={dialogContentProps}>
-                {!isLoading && <DialogFooter>
-                    <PrimaryButton text='Gjør om' onClick={() => {
-                        saveNavigationNodes()
-                        applyCustomAction()
-                    }} />
-                    <DefaultButton text='Avbryt' onClick={() => onDismiss()} />
-                </DialogFooter>}
+            <Dialog
+                hidden={!isOpen}
+                onDismiss={onDismiss}
+                dialogContentProps={{
+                    type: DialogType.largeHeader,
+                    title: 'Overordnet område',
+                    subText: 'Ønsker du å gjøre om området til et overordnet område? Denne handlingen er ikke reversibel.',
+                }}>
+                {!isLoading && (
+                    <DialogFooter>
+                        <PrimaryButton text='Gjør om' onClick={() => {
+                            saveNavigationNodes()
+                            applyCustomAction()
+                        }} />
+                        <DefaultButton text='Avbryt' onClick={() => onDismiss()} />
+                    </DialogFooter>
+                )}
                 {isLoading && <Spinner size={SpinnerSize.medium} />}
             </Dialog>
         </>
@@ -30,12 +39,14 @@ export const CreateParentModal: FunctionComponent<ParentModalProps> = ({ isOpen,
 }
 
 /**
- * Fetches current navigation nodes and stores it in local storage. The nodes are used to create new nodes in the navigation menu after the template is applied.
+ * Fetches current navigation nodes and stores it in local storage. 
+ * The nodes are used to create new nodes in the navigation menu 
+ * after the template is applied.
  */
 async function saveNavigationNodes() {
     try {
         const nodes = await getNavigationNodes()
-        localStorage.setItem('navigationNodes', JSON.stringify(nodes))
+        localStorage.setItem('pp_navigationNodes', JSON.stringify(nodes))
     } catch (error) {
         throw error
     }
@@ -48,11 +59,4 @@ async function getNavigationNodes(): Promise<MenuNode[]> {
     } catch (error) {
         throw error
     }
-}
-
-
-const dialogContentProps = {
-    type: DialogType.largeHeader,
-    title: 'Overordnet område',
-    subText: 'Ønsker du å gjøre om området til et overordnet område? Denne handlingen er ikke reversibel.',
 }
