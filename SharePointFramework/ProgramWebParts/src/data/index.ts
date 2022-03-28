@@ -185,7 +185,7 @@ export class DataAdapter {
     }
   }
 
-    /**
+  /**
    * Create queries if number of projects exceeds threshold to avoid 4096 character limitation by SharePoint
    *
    * @description Used by all postqueries in Program webparts
@@ -196,7 +196,11 @@ export class DataAdapter {
    * @returns {string[]}
    * @memberof DataAdapter
    */
-  public aggregatedQueryBuilder(queryProperty: string, maxQueryLength: number = 2500, maxProjects: number = 25): string[] {
+  public aggregatedQueryBuilder(
+    queryProperty: string,
+    maxQueryLength: number = 2500,
+    maxProjects: number = 25
+  ): string[] {
     const queryArray = []
     let queryString = ''
     if (this._childProjects.length > maxProjects) {
@@ -307,10 +311,8 @@ export class DataAdapter {
 
   /**
    *  Fetches data for the Projecttimeline project
-   * @param siteId
-   * @param [siteIdProperty='GtSiteIdOWSTEXT']
-   * @param [costsTotalProperty='GtCostsTotalOWSCURR']
-   * @param [budgetTotalProperty='GtBudgetTotalOWSCURR']
+   *
+   * @param siteId - Site ID
    */
 
   public async _fetchDataForTimelineProject(siteId: string) {
@@ -388,9 +390,9 @@ export class DataAdapter {
   /**
    * Fetch project sites
    *
-   * @param rowLimit Row limit
-   * @param sortProperty Sort property
-   * @param sortDirection Sort direction
+   * @param rowLimit - Row limit
+   * @param sortProperty - Sort property
+   * @param sortDirection - Sort direction
    */
   public async fetchProjectSites(
     rowLimit: number,

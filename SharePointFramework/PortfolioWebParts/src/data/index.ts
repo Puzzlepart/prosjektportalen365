@@ -22,7 +22,7 @@ import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
 import HubSiteService from 'sp-hubsite-service'
 import _ from 'underscore'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
-import { DEFAULT_SEARCH_SETTINGS,IDataAdapter } from './types'
+import { DEFAULT_SEARCH_SETTINGS, IDataAdapter } from './types'
 
 export class DataAdapter implements IDataAdapter {
   private _portalDataService: PortalDataService
@@ -225,39 +225,6 @@ export class DataAdapter implements IDataAdapter {
     }
   }
 
-  public async fetchDataForViewBatch(
-    view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
-    siteId: string
-  ): Promise<IFetchDataForViewItemResult[]> {
-    const queryArray = this.aggregatedQueryBuilder('')
-    const items = []
-    for (let i = 0; i < queryArray.length; i++) {
-      const { projects, sites, statusReports } = await this._fetchDataForView(
-        view,
-        configuration,
-        siteId,
-        'GtSiteIdOWSTEXT',
-        queryArray[i]
-      )
-      const item = sites.map((site) => {
-        const [project] = projects.filter((res) => res['GtSiteIdOWSTEXT'] === site['SiteId'])
-        const [statusReport] = statusReports.filter(
-          (res) => res['GtSiteIdOWSTEXT'] === site['SiteId']
-        )
-        return {
-          ...statusReport,
-          ...project,
-          Title: site.Title,
-          Path: site.Path,
-          SiteId: site['SiteId']
-        }
-      })
-      items.push(...item)
-    }
-    return items
-  }
-
   /**
    *  Fetches data for portfolio views
    * @param view
@@ -265,7 +232,6 @@ export class DataAdapter implements IDataAdapter {
    * @param siteId
    * @param [siteIdProperty='GtSiteIdOWSTEXT']
    */
-
   private async _fetchDataForView(
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
@@ -313,14 +279,11 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   *  Fetches data for the Projecttimeline project
+   * Fetches data for the Projecttimeline project
+   *
    * @param siteId
-   * @param [siteIdProperty='GtSiteIdOWSTEXT']
-   * @param [costsTotalProperty='GtCostsTotalOWSCURR']
-   * @param [budgetTotalProperty='GtBudgetTotalOWSCURR']
    */
-
-  public async _fetchDataForTimelineProject(siteId: string) {
+  public async fetchDataForTimelineProject(siteId: string) {
     const siteIdProperty: string = 'GtSiteIdOWSTEXT'
     const costsTotalProperty: string = 'GtCostsTotalOWSCURR'
     const budgetTotalProperty: string = 'GtBudgetTotalOWSCURR'
@@ -345,7 +308,7 @@ export class DataAdapter implements IDataAdapter {
    * * Fetching list items
    * * Maps the items to TimelineContentListModel
    */
-  public async _fetchTimelineContentItems() {
+  public async fetchTimelineContentItems() {
     let [timelineItems] = await Promise.all([
       sp.web.lists
         .getByTitle(strings.TimelineContentListName)
@@ -427,10 +390,8 @@ export class DataAdapter implements IDataAdapter {
 
   /**
    * Map projects
-   *
    * @param items Items
    * @param groups Groups
-   * @param photos Photos
    * @param users Users
    */
   private _mapProjects(
@@ -537,17 +498,6 @@ export class DataAdapter implements IDataAdapter {
     } catch (error) {
       return false
     }
-  }
-
-  /**
-   * Required method for Portfolio components to be usable by Program components
-   * 
-   * @param _maxQueryLength 
-   * @param _maxProjects 
-   * @returns [] 
-   */
-  public aggregatedQueryBuilder(queryParameter: string, _maxQueryLength: number = 2500, _maxProjects: number = 25): string[] {
-    return []
   }
 
   /**

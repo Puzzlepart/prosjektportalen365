@@ -1,5 +1,5 @@
 import { SearchResult } from '@pnp/sp'
-import { DataAdapter } from 'data'
+import { IDataAdapter } from 'data/types'
 import { Target } from 'office-ui-fabric-react/lib/Callout'
 import { IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList'
 import { IPanelProps } from 'office-ui-fabric-react/lib/Panel'
@@ -55,7 +55,7 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   /**
    * Data adapter
    */
-  dataAdapter?: DataAdapter
+  dataAdapter?: IDataAdapter
 
   /**
    * On update property
