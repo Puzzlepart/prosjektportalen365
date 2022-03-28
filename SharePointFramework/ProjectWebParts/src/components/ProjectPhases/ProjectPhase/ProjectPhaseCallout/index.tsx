@@ -40,13 +40,15 @@ export const ProjectPhaseCallout = ({ phase, target }: IProjectPhaseCalloutProps
               })}
             </div>
             <div className={styles.actions}>
-              {!isEmpty(items) && <ActionButton
-                href={phase.getFilteredPhaseChecklistViewUrl(
-                  `${context.props.webUrl}/${strings.PhaseChecklistViewUrl}`
-                )}
-                text={strings.PhaseChecklistLinkText}
-                iconProps={{ iconName: 'CheckList' }}
-              />}
+              {!isEmpty(items) && (
+                <ActionButton
+                  href={phase.getFilteredPhaseChecklistViewUrl(
+                    `${context.props.webUrl}/${strings.PhaseChecklistViewUrl}`
+                  )}
+                  text={strings.PhaseChecklistLinkText}
+                  iconProps={{ iconName: 'CheckList' }}
+                />
+              )}
               <ActionButton
                 onClick={() => context.dispatch(CHANGE_PHASE())}
                 text={strings.ChangePhaseText}

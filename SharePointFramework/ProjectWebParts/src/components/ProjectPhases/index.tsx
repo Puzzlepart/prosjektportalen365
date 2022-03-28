@@ -46,20 +46,21 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
    */
   const onChangePhase = async () => {
     dispatch(INIT_CHANGE_PHASE())
-    await changePhase(state.confirmPhase, state.data.phaseTextField, props, state.data.phaseSitePages)
+    await changePhase(
+      state.confirmPhase,
+      state.data.phaseTextField,
+      props,
+      state.data.phaseSitePages
+    )
     dispatch(SET_PHASE({ phase: state.confirmPhase }))
     if (
       props.syncPropertiesAfterPhaseChange === undefined ||
       props.syncPropertiesAfterPhaseChange
     ) {
-      setTimeout(
-        () =>
-          {
-            document.location.href = `${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`
-            window.location.reload()
-          },
-        1000
-      )
+      setTimeout(() => {
+        document.location.href = `${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`
+        window.location.reload()
+      }, 1000)
     }
   }
 

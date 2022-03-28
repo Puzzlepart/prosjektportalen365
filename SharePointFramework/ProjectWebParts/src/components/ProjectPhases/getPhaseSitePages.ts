@@ -7,13 +7,14 @@ import { IPhaseSitePageModel } from './types'
  *
  * @param {ProjectPhaseModel} phases
  */
-export const getPhaseSitePages = async (
-  phases: ProjectPhaseModel[]
-) => {
+export const getPhaseSitePages = async (phases: ProjectPhaseModel[]) => {
   try {
-    let sitePages = await sp.web.lists.getByTitle('Områdesider').items.select('Id, Title, FileRef, EncodedAbsUrl, FileLeafRef').get()
+    let sitePages = await sp.web.lists
+      .getByTitle('Områdesider')
+      .items.select('Id, Title, FileRef, EncodedAbsUrl, FileLeafRef')
+      .get()
     sitePages = sitePages.filter((p) => {
-      return phases.some(phase => phase.name === p.Title)
+      return phases.some((phase) => phase.name === p.Title)
     })
 
     const phaseSitePages: IPhaseSitePageModel[] = sitePages.map((p) => ({
@@ -23,7 +24,6 @@ export const getPhaseSitePages = async (
     }))
 
     return phaseSitePages
-    
   } catch (error) {
     throw error
   }

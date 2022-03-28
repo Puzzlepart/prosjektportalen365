@@ -9,6 +9,6 @@ export interface ISPProjectItem {
   GtProjectManagerId: number
   Title?: string
   Id?: number
-  GtIsProgram? : boolean
-  GtIsParentProject? : boolean
+  GtIsProgram?: boolean
+  GtIsParentProject?: boolean
 }

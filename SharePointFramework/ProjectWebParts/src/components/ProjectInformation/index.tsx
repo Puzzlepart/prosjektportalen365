@@ -116,7 +116,11 @@ export class ProjectInformation extends BaseWebPartComponent<
             stringIsNullOrEmpty(this.state.data.propertiesListId) &&
             this._onSyncProperties.bind(this)
           }
-          customActions={!this.state.isParentProject ? this.transformToParentProject() : this.administerChildren()}
+          customActions={
+            !this.state.isParentProject
+              ? this.transformToParentProject()
+              : this.administerChildren()
+          }
         />
         <DefaultButton
           text={strings.ViewAllPropertiesText}
@@ -133,8 +137,7 @@ export class ProjectInformation extends BaseWebPartComponent<
           onDismiss={() => this.setState({ showProjectPropertiesPanel: false })}
           onLightDismissClick={() => this.setState({ showProjectPropertiesPanel: false })}
           isLightDismiss
-          closeButtonAriaLabel={strings.CloseText}
-        >
+          closeButtonAriaLabel={strings.CloseText}>
           <ProjectProperties
             title={this.props.title}
             properties={this.state.allProperties}
@@ -145,7 +148,12 @@ export class ProjectInformation extends BaseWebPartComponent<
             propertiesList={!stringIsNullOrEmpty(this.state.data.propertiesListId)}
           />
         </Panel>
-        {this.state.displayParentCreationModal && <CreateParentModal isOpen={this.state.displayParentCreationModal} onDismiss={this.onDismissParentModal.bind(this)} />}
+        {this.state.displayParentCreationModal && (
+          <CreateParentModal
+            isOpen={this.state.displayParentCreationModal}
+            onDismiss={this.onDismissParentModal.bind(this)}
+          />
+        )}
       </Fragment>
     )
   }
@@ -154,13 +162,8 @@ export class ProjectInformation extends BaseWebPartComponent<
     const onButtonClick = () => {
       window.location.href = `${this.props.webPartContext.pageContext.web.serverRelativeUrl}/SitePages/${this.props.adminPageLink}`
     }
-    
-    const action: ActionType = [
-      strings.ChildProjectAdminLabel,
-      onButtonClick,
-      'Org',
-      false
-    ]
+
+    const action: ActionType = [strings.ChildProjectAdminLabel, onButtonClick, 'Org', false]
 
     return [action]
   }
@@ -170,8 +173,12 @@ export class ProjectInformation extends BaseWebPartComponent<
   }
 
   public async isParentProjectOrProgram() {
-    const data = await sp.web.lists.getByTitle('Prosjektegenskaper').items.getById(1).select(('GtIsParentProject,GtIsProgram')).get()
-    this.setState({ isParentProject: (data?.GtIsParentProject || data?.GtIsProgram)})
+    const data = await sp.web.lists
+      .getByTitle('Prosjektegenskaper')
+      .items.getById(1)
+      .select('GtIsParentProject,GtIsProgram')
+      .get()
+    this.setState({ isParentProject: data?.GtIsParentProject || data?.GtIsProgram })
   }
 
   /**
@@ -181,13 +188,8 @@ export class ProjectInformation extends BaseWebPartComponent<
     const onButtonClick = () => {
       this.setState({ displayParentCreationModal: true })
     }
-    
-    const action: ActionType = [
-      strings.CreateParentProjectLabel,
-      onButtonClick,
-      'Org',
-      false
-    ]
+
+    const action: ActionType = [strings.CreateParentProjectLabel, onButtonClick, 'Org', false]
 
     return [action]
   }
@@ -261,7 +263,7 @@ export class ProjectInformation extends BaseWebPartComponent<
         this.props.webUrl,
         strings.ProjectPropertiesListName,
         this.state.data.templateParameters.ProjectContentTypeId ||
-        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: this.props.webTitle }
       )
       if (!created) {
@@ -292,7 +294,10 @@ export class ProjectInformation extends BaseWebPartComponent<
    * @param {IProjectInformationData} data Data
    * @param {boolean} useVisibleFilter Set to false if all properties should be returned
    */
-  private _transformProperties({ columns, fields, fieldValuesText }: IProjectInformationData, useVisibleFilter: boolean = true) {
+  private _transformProperties(
+    { columns, fields, fieldValuesText }: IProjectInformationData,
+    useVisibleFilter: boolean = true
+  ) {
     const fieldNames: string[] = Object.keys(fieldValuesText).filter((fieldName) => {
       const [field] = fields.filter((fld) => fld.InternalName === fieldName)
       if (!field) return false
@@ -304,11 +309,7 @@ export class ProjectInformation extends BaseWebPartComponent<
       }
 
       const [column] = columns.filter((c) => c.internalName === fieldName)
-      return column
-        ? useVisibleFilter
-          ? column.isVisible(this.props.page)
-          : true
-        : false
+      return column ? (useVisibleFilter ? column.isVisible(this.props.page) : true) : false
     })
 
     const properties = fieldNames.map((fn) => {

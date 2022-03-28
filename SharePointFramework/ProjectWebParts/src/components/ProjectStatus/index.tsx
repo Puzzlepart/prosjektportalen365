@@ -128,7 +128,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
             <div className={styles.title}>
               {this.props.title}{' '}
               {this.state.selectedReport
-                ? moment(this.state.selectedReport.publishedDate ?? this.state.selectedReport.created).format('DD.MM.yyyy')
+                ? moment(
+                    this.state.selectedReport.publishedDate ?? this.state.selectedReport.created
+                  ).format('DD.MM.yyyy')
                 : null}{' '}
             </div>
           </div>
@@ -456,8 +458,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       const data = await this._fetchData()
       let [selectedReport] = data.reports
       const sourceUrlParam = getUrlParam('Source')
-      
-      if(data.reports.length > 0) {
+
+      if (data.reports.length > 0) {
         selectedReport = data.reports[0]
       }
 
@@ -493,21 +495,27 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
         })
       }
-      const [properties, reportList, reports, sections, columnConfig, reportFields] =
-        await Promise.all([
-          SPDataAdapter.project.getPropertiesData(),
-          this._portalDataService.getStatusReportListProps(),
-          this._portalDataService.getStatusReports({
-            publishedString: strings.GtModerationStatus_Choice_Published
-          }),
-          this._portalDataService.getProjectStatusSections(),
-          this._portalDataService.getProjectColumnConfig(),
-          this._portalDataService.getListFields(
-            'PROJECT_STATUS',
-            // eslint-disable-next-line quotes
-            "Hidden eq false and Group ne 'Hidden'"
-          )
-        ])
+      const [
+        properties,
+        reportList,
+        reports,
+        sections,
+        columnConfig,
+        reportFields
+      ] = await Promise.all([
+        SPDataAdapter.project.getPropertiesData(),
+        this._portalDataService.getStatusReportListProps(),
+        this._portalDataService.getStatusReports({
+          publishedString: strings.GtModerationStatus_Choice_Published
+        }),
+        this._portalDataService.getProjectStatusSections(),
+        this._portalDataService.getProjectColumnConfig(),
+        this._portalDataService.getListFields(
+          'PROJECT_STATUS',
+          // eslint-disable-next-line quotes
+          "Hidden eq false and Group ne 'Hidden'"
+        )
+      ])
       const sortedReports = reports
         .map((item) => item.setDefaultEditFormUrl(reportList.DefaultEditFormUrl))
         .sort((a, b) => b.created.getTime() - a.created.getTime())

@@ -44,7 +44,9 @@ export const TitleColumn: FunctionComponent<ITitleColumnProps> = ({ item, props 
     )
   } else if (item.Path && props.isParentProject) {
     content = (
-      <Link href={item.Path} rel='noopener noreferrer' target='_blank'>{item.Title}</Link>
+      <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
+        {item.Title}
+      </Link>
     )
   }
   return content

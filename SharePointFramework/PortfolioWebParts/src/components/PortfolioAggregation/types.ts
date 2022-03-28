@@ -70,7 +70,7 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   /**
    * Is the component used in a parent project or program
    */
-  isParent?:boolean
+  isParent?: boolean
 }
 
 export interface IPortfolioAggregationState {

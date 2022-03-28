@@ -71,24 +71,31 @@ export const getDefaultColumns = (context: IPortfolioAggregationContext, isParen
     maxWidth: 225,
     isResizable: true,
     onRender: (item: any) => {
-      if(!isParent) { return (
-        <ProjectInformationTooltip
-          key={item.SiteId}
-          title={item.SiteTitle}
-          siteId={item.SiteId}
-          webUrl={item.SPWebURL}
-          hubSite={{
-            web: new Web(context.props.pageContext.site.absoluteUrl),
-            url: context.props.pageContext.site.absoluteUrl
-          }}
-          page='Portfolio'>
+      if (!isParent) {
+        return (
+          <ProjectInformationTooltip
+            key={item.SiteId}
+            title={item.SiteTitle}
+            siteId={item.SiteId}
+            webUrl={item.SPWebURL}
+            hubSite={{
+              web: new Web(context.props.pageContext.site.absoluteUrl),
+              url: context.props.pageContext.site.absoluteUrl
+            }}
+            page='Portfolio'>
+            <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
+              {item.SiteTitle}
+            </Link>
+          </ProjectInformationTooltip>
+        )
+      } else {
+        return item.SPWebURL ? (
           <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
             {item.SiteTitle}
           </Link>
-        </ProjectInformationTooltip>
-      ) }
-      else {
-        return item.SPWebURL ? <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>{item.SiteTitle}</Link> : <span>{item.SiteTitle}</span>
+        ) : (
+          <span>{item.SiteTitle}</span>
+        )
       }
     },
     data: { isGroupable: true }

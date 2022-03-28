@@ -20,9 +20,9 @@ const renderDataTypeMap = {
     <span>{tryParseCurrency(colValue, '')}</span>
   ),
   tags: (props: IRenderItemColumnProps) => <TagsColumn {...props} />,
-  boolean: ({columnValue: colValue}: IRenderItemColumnProps) => (
+  boolean: ({ columnValue: colValue }: IRenderItemColumnProps) => (
     <span>{parseInt(colValue) === 1 ? strings.BooleanYes : strings.BooleanNo}</span>
-  ) 
+  )
 }
 
 /**

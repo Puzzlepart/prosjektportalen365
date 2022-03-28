@@ -20,8 +20,9 @@ function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
   return _arr
 }
 
-export const DATA_FETCHED =
-  createAction<{ items: any[]; dataSources?: DataSource[] }>('DATA_FETCHED')
+export const DATA_FETCHED = createAction<{ items: any[]; dataSources?: DataSource[] }>(
+  'DATA_FETCHED'
+)
 export const TOGGLE_COLUMN_FORM_PANEL = createAction<{ isOpen: boolean; column?: IColumn }>(
   'TOGGLE_COLUMN_FORM_PANEL'
 )

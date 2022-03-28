@@ -43,8 +43,6 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
    * Custom actions/button to add
    */
   customActions?: ActionType[]
-
-  
 }
 
 export interface IProjectInformationState

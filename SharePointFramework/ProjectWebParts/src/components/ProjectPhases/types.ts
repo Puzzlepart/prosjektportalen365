@@ -91,7 +91,7 @@ export interface IPhaseSitePageModel {
   /**
    * Id of phase site page
    */
-  id?: number;
+  id?: number
 
   /**
    * Title of phase site page

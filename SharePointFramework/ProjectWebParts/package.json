@@ -1,6 +1,6 @@
 {
     "name": "pp365-projectwebparts",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "engines": {
         "node": "^12"
     },
@@ -9,9 +9,6 @@
         "serve": "gulp serve-deprecated --locale=nb-no --nobrowser",
         "package": "gulp clean --ship && gulp default --ship && gulp package-solution --ship",
         "package:ci": "gulp clean && gulp default && gulp package-solution",
-        "deploy": "gulp uploadAppPkg && gulp deploySppkg",
-        "packageAndDeploy": "npm run package && npm run deploy",
-        "prepackage": "gulp setHiddenToolbox --ship",
         "preserve": "gulp setHiddenToolbox",
         "lint": "eslint --ext .ts,.tsx ./src --color",
         "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
@@ -40,8 +37,8 @@
         "interactjs": "1.6.2",
         "msgraph-helper": "0.7.1",
         "office-ui-fabric-react": "6.214.0",
-        "pp365-portfoliowebparts": "1.3.1",
-        "pp365-shared": "^1.4.1",
+        "pp365-portfoliowebparts": "latest",
+        "pp365-shared": "latest",
         "pzl-spfx-components": "0.0.11",
         "react": "16.8.5",
         "react-calendar-timeline": "0.26.0",

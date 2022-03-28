@@ -281,7 +281,7 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
             </Pivot>
           </div>
         )}
-         <div className={styles.searchBox} hidden={!props.showSearchBox}>
+        <div className={styles.searchBox} hidden={!props.showSearchBox}>
           <SearchBox placeholder={getSearchBoxPlaceholder()} onChanged={onSearch} />
         </div>
         <div className={styles.viewToggle} hidden={!props.showViewSelector}>
