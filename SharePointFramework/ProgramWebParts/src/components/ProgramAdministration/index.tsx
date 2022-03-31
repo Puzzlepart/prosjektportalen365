@@ -5,7 +5,7 @@ import { useStore } from './store'
 import { IViewField, SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react'
 import { ProjectTable } from './ProjectTable'
-import { Commandbar } from './Commands'
+import { Commands } from './Commands'
 import { AddProjectDialog } from './AddProjectDialog'
 import { UserMessage } from 'pp365-projectwebparts/lib/components/UserMessage'
 import * as strings from 'ProgramWebPartsStrings'
@@ -51,20 +51,18 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
 
   return (
     <>
-      <Commandbar _sp={sp} isSiteAdmin={context.pageContext.legacyPageContext.isSiteAdmin} />
+      <Commands _sp={sp} isSiteAdmin={context.pageContext.legacyPageContext.isSiteAdmin} />
       <div className={styles.root}>
         <div className={styles.header}>
           <div className={styles.title}>{webPartTitle}</div>
         </div>
         <div>
-          {childProjects.length > 0 && (
-            <ProjectTable
-              fields={fields}
-              projects={childProjects}
-              onSelect={(selectedItem: any) => setSelected(selectedItem)}
-              selectionMode={SelectionMode.multiple}
-            />
-          )}
+          <ProjectTable
+            fields={fields}
+            projects={childProjects}
+            onSelect={(selectedItem: any) => setSelected(selectedItem)}
+            selectionMode={SelectionMode.multiple}
+          />
         </div>
         {displayProjectDialog && <AddProjectDialog sp={sp} />}
       </div>
