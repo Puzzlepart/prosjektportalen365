@@ -340,8 +340,8 @@ export class DataAdapter {
    * * Fetching list items
    * * Maps the items to TimelineContentListModel
    */
-  public async _fetchTimelineContentItems() {
-    let [timelineItems] = await Promise.all([
+  public async fetchTimelineContentItems() {
+    const [timelineItems] = await Promise.all([
       this._sp.web.lists
         .getByTitle(strings.TimelineContentListName)
         .items.select(
@@ -357,7 +357,7 @@ export class DataAdapter {
         .expand('SiteIdLookup')
         .get()
     ])
-    timelineItems = timelineItems
+    return timelineItems
       .map((item) => {
         if (
           item?.SiteIdLookup?.Title &&
@@ -382,9 +382,6 @@ export class DataAdapter {
         }
       })
       .filter((p) => p)
-    return {
-      timelineItems
-    }
   }
 
   /**
