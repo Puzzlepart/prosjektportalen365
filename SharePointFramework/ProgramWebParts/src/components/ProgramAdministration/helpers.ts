@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { SPRest } from '@pnp/sp'
 import { ChildProject } from 'models'
 import _ from 'underscore'
@@ -9,7 +11,7 @@ import _ from 'underscore'
  */
 export async function getHubSiteProjects(_sp: SPRest) {
   const data = await _sp.site.select('HubSiteId').get()
-  const searchData = await _sp.search({
+  const { PrimarySearchResults } = await _sp.search({
     Querytext: `DepartmentId:{${data.HubSiteId}} contentclass:STS_Site`,
     RowLimit: 500,
     StartRow: 0,
@@ -17,7 +19,7 @@ export async function getHubSiteProjects(_sp: SPRest) {
     SelectProperties: ['SPWebURL', 'Title'],
     TrimDuplicates: false
   })
-  return searchData
+  return PrimarySearchResults
 }
 
 async function batchFetch(_sp, hubId, query) {
@@ -54,26 +56,31 @@ export async function getChildProjects(_sp: SPRest, dataAdapter: any): Promise<C
 
 /**
  * Fetches projects which is not in the children array.
- * @param _sp SPRest
+ *
+ * @param _sp - SPRest instance
+ * @param context - Web part context
  * @returns ChildProject[]
  */
-export async function fetchAvailableProjects(_sp: SPRest) {
-  const [currentProjects] = await _sp.web.lists
+export async function fetchAvailableProjects(_sp: SPRest, context: WebPartContext): Promise<any[]> {
+  const [currentProject] = await _sp.web.lists
     .getByTitle('Prosjektegenskaper')
-    .items.select('GtChildProjects')
+    .items
+    .select('GtChildProjects')
     .get()
-  const childrenSiteIds: any[] = await JSON.parse(currentProjects.GtChildProjects)
-  const allProjects: any = await getHubSiteProjects(_sp)
-  let availableProjects = allProjects.PrimarySearchResults.filter((project) => {
-    return !childrenSiteIds.some((el) => el.SiteId === project.SiteId)
-  })
-  availableProjects = availableProjects.filter((project) => project.SPWebURL)
-
-  const mappedProjects = availableProjects.map((proj) => {
+  const childrenSiteIds: any[] = await JSON.parse(currentProject.GtChildProjects)
+  const allProjects = await getHubSiteProjects(_sp)
+  const availableProjects: any[] = allProjects
+    .filter(
+      (project) =>
+        !childrenSiteIds.some((el) => el.SiteId === project['SiteId']) &&
+        project['SiteId'] !== context.pageContext.site.id.toString()
+    )
+    .filter((project) => project['SPWebURL'])
+  const mappedProjects: any[] = availableProjects.map(({ Title, SiteId, SPWebURL }) => {
     return {
-      SiteId: proj.SiteId,
-      Title: proj.Title,
-      SPWebURL: proj.SPWebURL
+      SiteId,
+      Title,
+      SPWebURL
     }
   })
   return mappedProjects

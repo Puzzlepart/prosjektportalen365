@@ -1,14 +1,14 @@
-import React, { FunctionComponent, useEffect, useState } from 'react'
-import styles from './programAdministration.module.scss'
-import { IProgramAdministrationItem, IProgramAdministrationProps, shimmeredColumns } from './types'
-import { useStore } from './store'
 import { IViewField, SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react'
-import { ProjectTable } from './ProjectTable'
-import { Commands } from './Commands'
-import { AddProjectDialog } from './AddProjectDialog'
 import { UserMessage } from 'pp365-projectwebparts/lib/components/UserMessage'
 import * as strings from 'ProgramWebPartsStrings'
+import React, { FunctionComponent, useEffect, useState } from 'react'
+import { AddProjectDialog } from './AddProjectDialog'
+import { Commands } from './Commands'
+import styles from './programAdministration.module.scss'
+import { ProjectTable } from './ProjectTable'
+import { useStore } from './store'
+import { IProgramAdministrationItem, IProgramAdministrationProps, shimmeredColumns } from './types'
 
 export const ProgramAdministration: FunctionComponent<IProgramAdministrationProps> = ({
   sp,
@@ -57,14 +57,18 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
           <div className={styles.title}>{webPartTitle}</div>
         </div>
         <div>
-          <ProjectTable
-            fields={fields}
-            projects={childProjects}
-            onSelect={(selectedItem: any) => setSelected(selectedItem)}
-            selectionMode={SelectionMode.multiple}
-          />
+          {childProjects.length > 0 ? (
+            <ProjectTable
+              fields={fields}
+              projects={childProjects}
+              onSelect={(selectedItem: any) => setSelected(selectedItem)}
+              selectionMode={SelectionMode.multiple}
+            />
+          ) : (
+            <UserMessage text={strings.ProgramAdministration_EmptyMessage} />
+          )}
         </div>
-        {displayProjectDialog && <AddProjectDialog sp={sp} />}
+        {displayProjectDialog && <AddProjectDialog sp={sp} context={context} />}
       </div>
     </>
   )
