@@ -80,7 +80,6 @@
       <pnp:DataValue FieldName="IsDefaultExtensionsLocked">False</pnp:DataValue>
       <pnp:DataValue FieldName="IsDefaultListContentLocked">False</pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">Dette er standardmalen for prosjekt som følger med Prosjektportalen 365.</pnp:DataValue>
-      <pnp:DataValue FieldName="ListContentConfigLookup"></pnp:DataValue>
       <pnp:DataValue FieldName="IconName">Page</pnp:DataValue>
     </pnp:DataRow>
     <pnp:DataRow>
