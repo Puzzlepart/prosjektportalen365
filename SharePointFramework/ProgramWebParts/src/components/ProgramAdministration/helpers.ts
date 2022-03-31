@@ -64,8 +64,7 @@ export async function getChildProjects(_sp: SPRest, dataAdapter: any): Promise<C
 export async function fetchAvailableProjects(_sp: SPRest, context: WebPartContext): Promise<any[]> {
   const [currentProject] = await _sp.web.lists
     .getByTitle('Prosjektegenskaper')
-    .items
-    .select('GtChildProjects')
+    .items.select('GtChildProjects')
     .get()
   const childrenSiteIds: any[] = await JSON.parse(currentProject.GtChildProjects)
   const allProjects = await getHubSiteProjects(_sp)
@@ -113,7 +112,6 @@ export async function removeChildProjects(_sp: SPRest, toDelete: ChildProject[])
     .get()
   const projects: ChildProject[] = JSON.parse(currentData.GtChildProjects)
   const updatedProjects = projects.filter((p) => !toDelete.some((el) => el.SiteId === p.SiteId))
-
   await _sp.web.lists
     .getByTitle('Prosjektegenskaper')
     .items.getById(1)
