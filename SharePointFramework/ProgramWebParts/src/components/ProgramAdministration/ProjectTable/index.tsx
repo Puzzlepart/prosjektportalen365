@@ -10,21 +10,6 @@ export const ProjectTable: FunctionComponent<IProjectTableProps> = ({
   selectionMode,
   width
 }) => {
-  if (projects?.length > 0) {
-    return (
-      <div style={width ? { width, height: '600px', overflowX: 'auto' } : {}}>
-        <ListView
-          items={projects}
-          viewFields={fields}
-          selectionMode={selectionMode}
-          showFilter
-          filterPlaceHolder={strings.ProgramSearchProjectsText}
-          selection={(item) => onSelect(item)}
-        />
-      </div>
-    )
-  }
-
   return (
     <div style={width ? { width, height: '600px', overflowX: 'auto' } : {}}>
       <ListView
@@ -33,6 +18,7 @@ export const ProjectTable: FunctionComponent<IProjectTableProps> = ({
         selectionMode={selectionMode}
         showFilter
         filterPlaceHolder={strings.ProgramSearchProjectsText}
+        selection={(item) => onSelect(item)}
       />
     </div>
   )

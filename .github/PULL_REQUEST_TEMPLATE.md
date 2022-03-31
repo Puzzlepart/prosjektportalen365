@@ -4,7 +4,7 @@
 - [ ] Make sure you are making a pull request against the **dev** branch (left side). Also you should start *your branch* off *dev*.
 - [ ] Check the commit's or even all commits' message 
 - [ ] Check if your code additions will fail linting checks
-- [ ] Remember: Add issue description to [CHANGELOG](https://github.com/Puzzlepart/prosjektportalen365/blob/dev/CHANGELOG.md) with the **ID of the Issue** associated with this PR
+- [ ] Remember: Add issue description to [CHANGELOG](https://github.com/Puzzlepart/prosjektportalen365/blob/dev/CHANGELOG.md) with the **ID of the issue** associated with this PR
 - [ ] Documentation: Have a look at the [PP365 User manual](https://puzzlepart.github.io/prosjektportalen-manual/) and consider the need for updates to be made. Updates can be done directly into the 'Kladd' branch or by providing information to test team for implementation.
 
 ### Description
@@ -17,14 +17,12 @@ Please describe how someone else (a regular user without coding skills) can test
 
 Example:
 
-- [ ] 1. Do this
-- [ ] 2. Then this
-- [ ] 3. Then that
-
+1. Do this
+2. Then this
+3. Then that
 
 ### Update of documentation
 - [ ] Update user manual if needed
-
 
 ### Relevant issues (if applicable)
 

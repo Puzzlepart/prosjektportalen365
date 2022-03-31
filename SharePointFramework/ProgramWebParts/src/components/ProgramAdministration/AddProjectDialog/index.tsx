@@ -17,7 +17,7 @@ import { shimmeredColumns } from '../types'
 import styles from '../programAdministration.module.scss'
 import * as strings from 'ProgramWebPartsStrings'
 
-export const AddProjectDialog: FunctionComponent<IAddProjectProps> = ({ sp }) => {
+export const AddProjectDialog: FunctionComponent<IAddProjectProps> = ({ sp, context }) => {
   const projects = useStore((state) => state.availableProjects)
   const setAvailableProjects = useStore((state) => state.setAvailableProjects)
   const setChildProjects = useStore((state) => state.setChildProjects)
@@ -28,7 +28,7 @@ export const AddProjectDialog: FunctionComponent<IAddProjectProps> = ({ sp }) =>
 
   useEffect(() => {
     const fetch = async () => {
-      const data: any = await fetchAvailableProjects(sp)
+      const data = await fetchAvailableProjects(sp, context)
       setAvailableProjects(data)
       setIsLoading(false)
     }
@@ -41,7 +41,8 @@ export const AddProjectDialog: FunctionComponent<IAddProjectProps> = ({ sp }) =>
       <Dialog
         hidden={false}
         onDismiss={() => toggleProjectDialog()}
-        maxWidth={'1000px'}
+        minWidth='50em'
+        maxWidth='1000px'
         dialogContentProps={dialogContentProps}>
         <div className={styles.dialogContent}>
           {isLoading ? (
@@ -55,7 +56,7 @@ export const AddProjectDialog: FunctionComponent<IAddProjectProps> = ({ sp }) =>
             <ProjectTable
               fields={fields}
               projects={projects}
-              width={'50em'}
+              width='50em'
               onSelect={(item) => (selectedItem.current = item)}
               selectionMode={SelectionMode.multiple}
             />
