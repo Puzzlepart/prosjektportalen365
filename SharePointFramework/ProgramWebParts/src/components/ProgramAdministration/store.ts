@@ -4,6 +4,7 @@ import { fetchAvailableProjects, getChildProjects, removeChildProjects } from '.
 import { ChildProject } from 'models'
 import { ChildProjectListItem, UserMessageProps } from './types'
 import { MessageBarType } from 'office-ui-fabric-react'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
 
 interface IProgramAdministrationState {
   isLoading: boolean
@@ -19,7 +20,7 @@ interface IProgramAdministrationState {
   addChildProject: (project: ChildProject, _sp: SPRest) => void
   setSelectedToDelete: (project: ChildProject[]) => void
   fetchChildProjects: (_sp: SPRest, dataAdapter: any) => Promise<void>
-  fetchAvailableProjects: (_sp: SPRest) => Promise<void>
+  fetchAvailableProjects: (_sp: SPRest, context: WebPartContext) => Promise<void>
   deleteChildProjects: (projects: ChildProject[], _sp: SPRest) => Promise<void>
   setError: (message: string, messageBarType: MessageBarType) => void
 }
@@ -55,9 +56,9 @@ export const useStore = create<IProgramAdministrationState>((set) => ({
     }
   },
 
-  fetchAvailableProjects: async (_sp) => {
+  fetchAvailableProjects: async (_sp, context) => {
     try {
-      const data = await fetchAvailableProjects(_sp)
+      const data = await fetchAvailableProjects(_sp, context)
       set(() => ({ availableProjects: data }))
     } catch (error) {
       set(() => ({ error: { text: error, messageBarType: MessageBarType.error } }))

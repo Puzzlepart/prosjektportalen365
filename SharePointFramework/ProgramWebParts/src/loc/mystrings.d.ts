@@ -202,6 +202,7 @@ declare interface IProgramWebPartsStrings {
   ProgramAddProject_AddAllProjectsToProgram: string
   ProgramAddProject_EmptyMessage: string
   ProgramAddProject_SearchBoxLabelText: string
+  ProgramAdministration_EmptyMessage: string
   RiskWebPartTitle: string
   RiskDataSource: string
   Lists_StoredProjects_MaxLimitError: string

@@ -199,6 +199,7 @@ define([], function() {
         ProgramAddProject_AddAllProjectsToProgram: "Legg til hele utvalget ({0} områder) i programmet",
         ProgramAddProject_EmptyMessage: "Ingen områder funnet. Visningen bruker søk, så det kan ta noen minutter fra området er lagt til eller oppdatert til de vises her.",
         ProgramAddProject_SearchBoxLabelText: "Søk i alle områder..",
+        ProgramAdministration_EmptyMessage: "Ingen områder er koblet til programmet.",
         ProgramTimelineHeader: "Tidslinje",
         ProgramAddProject: "Legg til prosjekt",
         ProgramAdministrationHeader: "Administrasjon av underordnede områder",

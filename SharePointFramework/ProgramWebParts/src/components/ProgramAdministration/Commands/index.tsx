@@ -1,16 +1,11 @@
 import React, { FunctionComponent } from 'react'
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar'
 import { useStore } from '../store'
-import { SPRest } from '@pnp/sp'
 import * as strings from 'ProgramWebPartsStrings'
 import { Spinner } from 'office-ui-fabric-react'
+import { ICommandsProps } from './types'
 
-interface commandBarProps {
-  _sp: SPRest
-  isSiteAdmin: boolean
-}
-
-export const Commandbar: FunctionComponent<commandBarProps> = ({ _sp, isSiteAdmin }) => {
+export const Commands: FunctionComponent<ICommandsProps> = ({ _sp, isSiteAdmin }) => {
   const toggleProjectDialog = useStore((state) => state.toggleProjectDialog)
   const deleteChildProjects = useStore((state) => state.deleteChildProjects)
   const selectedProjectsToDelete = useStore((state) => state.selectedProjectsToDelete)
