@@ -21,6 +21,7 @@ Every change is marked with issue ID.
 ### Fixed
 
 - Fixed bug where ProjectTimeline would not load properly #661
+- Fixed bug where Risks, Deliveries and Exp.Log would sometimes not load #668
 
 ## 1.4.0 - 08.02.2022
 
