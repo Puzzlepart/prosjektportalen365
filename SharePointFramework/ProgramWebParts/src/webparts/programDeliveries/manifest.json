@@ -1,83 +1,93 @@
 {
-    "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-    "id": "7ff12e9d-1565-4694-b1de-948d1b174487",
-    "alias": "Program-Leveranser",
-    "componentType": "WebPart",
-    "version": "*",
-    "manifestVersion": 2,
-    "requiresCustomScript": false,
-    "supportedHosts": ["SharePointWebPart"],
-
-    "preconfiguredEntries": [{
-        "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
-        "group": { "default": "Other" },
-        "title": { "default": "Underområder - leveranser" },
-        "description": { "default": "Gir en oversikt over leveranser i underprosjekter" },
-        "officeFabricIconFontName": "Page",
-        "properties": {
-            "webPartTitle": "Underområder - leveranser",
-            "dataSource": "Alle prosjektleveranser",
-            "showCommandBar": true,
-            "showSearchBox": true,
-            "showExcelExportButton": true,
-            "columns": [{
-                    "key": "Title",
-                    "fieldName": "Title",
-                    "name": "Tittel",
-                    "minWidth": 220,
-                    "maxWidth": 250,
-                    "isMultiline": true,
-                    "isResizable": true
-                },
-                {
-                    "key": "GtDeliveryDescriptionOWSMTXT",
-                    "fieldName": "GtDeliveryDescriptionOWSMTXT",
-                    "name": "Leveransebeskrivelse",
-                    "minWidth": 220,
-                    "maxWidth": 220,
-                    "isMultiline": true,
-                    "isResizable": true
-                },
-                {
-                    "key": "GtDeliveryStartTimeOWSDATE",
-                    "fieldName": "GtDeliveryStartTimeOWSDATE",
-                    "name": "Starttidspunkt",
-                    "minWidth": 100,
-                    "maxWidth": 150,
-                    "isResizable": true,
-                    "data": {
-                        "renderAs": "date"
-                    }
-                },
-                {
-                    "key": "GtDeliveryEndTimeOWSDATE",
-                    "fieldName": "GtDeliveryEndTimeOWSDATE",
-                    "name": "Sluttidspunkt",
-                    "minWidth": 100,
-                    "maxWidth": 150,
-                    "isResizable": true,
-                    "data": {
-                        "renderAs": "date"
-                    }
-                },
-                {
-                    "key": "GtDeliveryStatusOWSCHCS",
-                    "fieldName": "GtDeliveryStatusOWSCHCS",
-                    "name": "Leveransestatus",
-                    "minWidth": 100,
-                    "maxWidth": 150,
-                    "isResizable": true
-                },
-                {
-                    "key": "GtDeliveryStatusCommentOWSMTXT",
-                    "fieldName": "GtDeliveryStatusCommentOWSMTXT",
-                    "name": "Kommentar, leveransestatus",
-                    "minWidth": 220,
-                    "maxWidth": 220,
-                    "isMultiline": true,
-                    "isResizable": true
-                }
-            ]
-        }
-    }]
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "7ff12e9d-1565-4694-b1de-948d1b174487",
+  "alias": "Program-Leveranser",
+  "componentType": "WebPart",
+  "version": "1.5.0",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "Underområder - leveranser"
+      },
+      "description": {
+        "default": "Gir en oversikt over leveranser i underprosjekter"
+      },
+      "officeFabricIconFontName": "Page",
+      "properties": {
+        "webPartTitle": "Underområder - leveranser",
+        "dataSource": "Alle prosjektleveranser",
+        "showCommandBar": true,
+        "showSearchBox": true,
+        "showExcelExportButton": true,
+        "columns": [
+          {
+            "key": "Title",
+            "fieldName": "Title",
+            "name": "Tittel",
+            "minWidth": 220,
+            "maxWidth": 250,
+            "isMultiline": true,
+            "isResizable": true
+          },
+          {
+            "key": "GtDeliveryDescriptionOWSMTXT",
+            "fieldName": "GtDeliveryDescriptionOWSMTXT",
+            "name": "Leveransebeskrivelse",
+            "minWidth": 220,
+            "maxWidth": 220,
+            "isMultiline": true,
+            "isResizable": true
+          },
+          {
+            "key": "GtDeliveryStartTimeOWSDATE",
+            "fieldName": "GtDeliveryStartTimeOWSDATE",
+            "name": "Starttidspunkt",
+            "minWidth": 100,
+            "maxWidth": 150,
+            "isResizable": true,
+            "data": {
+              "renderAs": "date"
+            }
+          },
+          {
+            "key": "GtDeliveryEndTimeOWSDATE",
+            "fieldName": "GtDeliveryEndTimeOWSDATE",
+            "name": "Sluttidspunkt",
+            "minWidth": 100,
+            "maxWidth": 150,
+            "isResizable": true,
+            "data": {
+              "renderAs": "date"
+            }
+          },
+          {
+            "key": "GtDeliveryStatusOWSCHCS",
+            "fieldName": "GtDeliveryStatusOWSCHCS",
+            "name": "Leveransestatus",
+            "minWidth": 100,
+            "maxWidth": 150,
+            "isResizable": true
+          },
+          {
+            "key": "GtDeliveryStatusCommentOWSMTXT",
+            "fieldName": "GtDeliveryStatusCommentOWSMTXT",
+            "name": "Kommentar, leveransestatus",
+            "minWidth": 220,
+            "maxWidth": 220,
+            "isMultiline": true,
+            "isResizable": true
+          }
+        ]
+      }
+    }
+  ]
 }
