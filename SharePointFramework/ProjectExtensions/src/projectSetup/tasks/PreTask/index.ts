@@ -45,7 +45,7 @@ export class PreTask extends BaseTask {
 
   /**
    * Checks that the parameters are valid
-   * 
+   *
    * @param params - Task params
    */
   private async validateParameters(params: IBaseTaskParams): Promise<void> {
@@ -60,7 +60,7 @@ export class PreTask extends BaseTask {
 
   /**
    * Checks that the term set IDs are valid
-   * 
+   *
    * @param termSetIds - Term set IDs
    */
   private async validateTermSetIds(termSetIds: any) {
@@ -81,7 +81,7 @@ export class PreTask extends BaseTask {
 
   /**
    * Checks that the content types are valid and exist in the hub
-   * 
+   *
    * @param contentTypes - Content types to validate
    */
   private async validateContentTypes(contentTypes: string[]): Promise<void> {

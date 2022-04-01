@@ -111,7 +111,7 @@ export class TemplateSelectDialog extends React.Component<
 
   /**
    * Sets the selected template to the state, and updates the pre-defined selected extensions
-   * 
+   *
    * @param template - Project template
    */
   private _onTemplateChange(template: ProjectTemplate): void {

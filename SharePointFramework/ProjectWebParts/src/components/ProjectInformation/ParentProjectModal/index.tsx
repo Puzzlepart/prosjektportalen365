@@ -10,14 +10,14 @@ import {
 } from 'office-ui-fabric-react'
 import { sp, MenuNode } from '@pnp/sp'
 import { ParentModalProps } from './types'
-import { userCustomAction } from './types'
+import { ProjectSetupCustomAction } from './types'
 
 export const CreateParentModal: FunctionComponent<ParentModalProps> = ({ isOpen, onDismiss }) => {
   const [isLoading, setLoading] = useState(false)
 
   async function applyCustomAction() {
     setLoading(true)
-    await sp.web.userCustomActions.add(userCustomAction)
+    await sp.web.userCustomActions.add(ProjectSetupCustomAction)
     location.reload()
   }
 

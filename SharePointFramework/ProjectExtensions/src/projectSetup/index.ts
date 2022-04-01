@@ -4,7 +4,6 @@ import { isArray, stringIsNullOrEmpty } from '@pnp/common'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { MenuNode, sp, Web } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
-import { endsWith } from 'lodash'
 import { default as MSGraphHelper } from 'msgraph-helper'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { ListLogger } from 'pp365-shared/lib/logging'
@@ -109,8 +108,16 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   private async _ensureParentProjectPatch(data: IProjectSetupData): Promise<void> {
-    const [singleItem] = await data.hub.web.lists.getByTitle('Prosjekter').items.filter(`GtSiteId eq '${this.context.pageContext.legacyPageContext.siteId.replace(/([{}])/g, '')}'`).get()
-    await data.hub.web.lists.getByTitle('Prosjekter').items.getById(singleItem.Id).update({GtIsParentProject: true})
+    const [singleItem] = await data.hub.web.lists
+      .getByTitle('Prosjekter')
+      .items.filter(
+        `GtSiteId eq '${this.context.pageContext.legacyPageContext.siteId.replace(/([{}])/g, '')}'`
+      )
+      .get()
+    await data.hub.web.lists
+      .getByTitle('Prosjekter')
+      .items.getById(singleItem.Id)
+      .update({ GtIsParentProject: true })
   }
 
   /**
@@ -146,12 +153,13 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       })
       await this._startProvision(taskParams, data)
 
-      if(!stringIsNullOrEmpty(this.properties.forceTemplate)) {
+      if (!stringIsNullOrEmpty(this.properties.forceTemplate)) {
         await this.reacreateNavMenu()
-        await sp.web.lists.getByTitle(strings.ProjectPropertiesListName).items.getById(1).update({GtIsParentProject: true})
+        await sp.web.lists
+          .getByTitle(strings.ProjectPropertiesListName)
+          .items.getById(1)
+          .update({ GtIsParentProject: true })
         await this._ensureParentProjectPatch(data)
-        
-        
       }
 
       await deleteCustomizer(
@@ -172,23 +180,22 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Adds the old custom navigation nodes to the quick launch menu
    */
-     private async reacreateNavMenu() {
-        const oldNodes: MenuNode[] = await JSON.parse(localStorage.getItem('navigationNodes'))
+  private async reacreateNavMenu() {
+    const oldNodes: MenuNode[] = await JSON.parse(localStorage.getItem('navigationNodes'))
 
-        const navigationNodes = uniq([...oldNodes])
-        for await (const node of navigationNodes) {
-          if (node.Title === strings.RecycleBinText){
-            continue
-          }
-          const addedNode = await sp.web.navigation.quicklaunch.add(node.Title, node.SimpleUrl)  
-          if (node.Nodes.length > 0) {
-            for await (const childNode of node.Nodes) {
-              await addedNode.node.children.add(childNode.Title, childNode.SimpleUrl)
-            }
-            
-          }
+    const navigationNodes = uniq([...oldNodes])
+    for await (const node of navigationNodes) {
+      if (node.Title === strings.RecycleBinText) {
+        continue
+      }
+      const addedNode = await sp.web.navigation.quicklaunch.add(node.Title, node.SimpleUrl)
+      if (node.Nodes.length > 0) {
+        for await (const childNode of node.Nodes) {
+          await addedNode.node.children.add(childNode.Title, childNode.SimpleUrl)
         }
+      }
     }
+  }
 
   /**
    * Checks for force template
@@ -197,10 +204,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    */
   private _checkForceTemplate(data: IProjectSetupData): ITemplateSelectDialogState {
     if (stringIsNullOrEmpty(this.properties.forceTemplate)) return null
-    const selectedTemplate = find(data.templates, (tmpl) =>
-      endsWith(tmpl.projectTemplateUrl, this.properties.forceTemplate)
+    const selectedTemplate = find(
+      data.templates,
+      (tmpl) => tmpl.text === this.properties.forceTemplate
     )
-    
     if (!selectedTemplate) return null
     return {
       selectedTemplate,
