@@ -114,11 +114,21 @@ Get-ChildItem "./Content" -Directory -Filter "*no-NB*" | ForEach-Object {
     Convert-PnPFolderToProvisioningTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
 }
 Write-Host "DONE" -ForegroundColor Green
+
+Write-Host "[INFO] Building PnP upgrade templates...  " -NoNewline
+Set-Location $PNP_TEMPLATES_BASEPATH
+
+Get-ChildItem "./Upgrade" -Directory | ForEach-Object {
+    Convert-PnPFolderToProvisioningTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
+}
+Write-Host "DONE" -ForegroundColor Green
+
 Set-Location $PSScriptRoot
 
 Write-Host "[INFO] Building [Taxonomy] PnP template....  " -NoNewline
 Convert-PnPFolderToProvisioningTemplate -Out "$RELEASE_PATH_TEMPLATES/Taxonomy.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Taxonomy" -Force
 Write-Host "DONE" -ForegroundColor Green
+
 #endregion
 
 $sw.Stop()
