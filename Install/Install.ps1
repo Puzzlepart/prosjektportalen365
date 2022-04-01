@@ -123,6 +123,7 @@ else {
 $ManagedPath = $Uri.Segments[1]
 $Alias = $Uri.Segments[2].TrimEnd('/')
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
+$BasePath = "$PSScriptRoot\Templates"
 #endregion
 
 #region Print installation user
@@ -311,7 +312,6 @@ if (-not $Upgrade.IsPresent) {
 #region Applying PnP templates 
 if (-not $SkipTemplate.IsPresent) {
     Try {
-        $BasePath = "$PSScriptRoot\Templates"
         Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
         Set-PnPTenantSite -NoScriptSite:$false -Url $Url -ErrorAction SilentlyContinue >$null 2>&1        
         Disconnect-PnPOnline
@@ -332,7 +332,7 @@ if (-not $SkipTemplate.IsPresent) {
 
         if ($Upgrade.IsPresent) {
             Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
-            Apply-PnPProvisioningTemplate "$BasePath\Portfolio.pnp" -ExcludeHandlers Navigation,SupportedUILanguages -ErrorAction Stop
+            Apply-PnPProvisioningTemplate "$BasePath\Portfolio.pnp" -ExcludeHandlers Navigation, SupportedUILanguages -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
 
             Write-Host "[INFO] Applying PnP content template (Handlers:Files) to [$Url]"
@@ -407,19 +407,13 @@ catch {
 }
 
 if ($Upgrade.IsPresent) {
+    Write-Host "[INFO] Running post-install upgrade steps" 
     try {
-        $LastInstall = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>" | Select-Object -First 1 -Wait
-        if ($null -ne $LastInstall) {
-            $PreviousVersion = $LastInstall.FieldValues["InstallVersion"]
-
-            if ($PreviousVersion -lt "1.2.7") {
-                Write-Host "[INFO] In version v1.2.7 we added 'Prosjekttidslinje' to the top navigation. Adding this navigation item now as part of the upgrade" 
-                Add-PnPNavigationNode -Location TopNavigationBar -Title "Prosjekttidslinje" -Url "$($Uri.LocalPath)/SitePages/Prosjekttidslinje.aspx"
-            }
-        }
+        ."$PSScriptRoot\Scripts\PostInstallUpgrade.ps1"
+        Write-Host "[SUCCESS] Successfully ran post-install upgrade steps" -ForegroundColor Green
     }
     catch {
-        Write-Host "[WARNING] Failed to run upgrade steps: $($_.Exception.Message)" -ForegroundColor Yellow
+        Write-Host "[WARNING] Failed to run post-install upgrade steps: $($_.Exception.Message)" -ForegroundColor Yellow
     }
 }
 
