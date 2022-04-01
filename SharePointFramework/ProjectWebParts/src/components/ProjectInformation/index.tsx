@@ -1,15 +1,16 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { LogLevel } from '@pnp/logging'
+import { sp } from '@pnp/sp'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel'
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
-import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel'
 import { PortalDataService } from 'pp365-shared/lib/services'
 import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
 import * as strings from 'ProjectWebPartsStrings'
 import { ConfirmAction, ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
-import React, { Fragment } from 'react'
+import React from 'react'
 import { isEmpty } from 'underscore'
 import SPDataAdapter from '../../data'
 import { BaseWebPartComponent } from '../BaseWebPartComponent'
@@ -27,7 +28,6 @@ import {
   IProjectInformationState,
   IProjectInformationUrlHash
 } from './types'
-import { sp } from '@pnp/sp'
 
 export class ProjectInformation extends BaseWebPartComponent<
   IProjectInformationProps,
@@ -105,10 +105,7 @@ export class ProjectInformation extends BaseWebPartComponent<
         />
         <UserMessage {...this.state.message} />
         <Actions
-          hidden={
-            this.props.hideActions ||
-            this.props.displayMode === DisplayMode.Edit
-          }
+          hidden={this.props.hideActions || this.props.displayMode === DisplayMode.Edit}
           isSiteAdmin={this.props.isSiteAdmin}
           versionHistoryUrl={versionHistoryUrl}
           editFormUrl={editFormUrl}
@@ -263,7 +260,7 @@ export class ProjectInformation extends BaseWebPartComponent<
         this.props.webUrl,
         strings.ProjectPropertiesListName,
         this.state.data.templateParameters.ProjectContentTypeId ||
-        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: this.props.webTitle }
       )
       if (!created) {
