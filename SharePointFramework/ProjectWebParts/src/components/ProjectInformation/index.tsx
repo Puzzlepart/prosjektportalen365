@@ -107,20 +107,16 @@ export class ProjectInformation extends BaseWebPartComponent<
         <Actions
           hidden={
             this.props.hideActions ||
-            !this.props.isSiteAdmin ||
             this.props.displayMode === DisplayMode.Edit
           }
+          isSiteAdmin={this.props.isSiteAdmin}
           versionHistoryUrl={versionHistoryUrl}
           editFormUrl={editFormUrl}
           onSyncProperties={
             stringIsNullOrEmpty(this.state.data.propertiesListId) &&
             this._onSyncProperties.bind(this)
           }
-          customActions={
-            !this.state.isParentProject
-              ? [this.transformToParentProject(), this.viewAllProperties()]
-              : [this.administerChildren(), this.viewAllProperties()]
-          }
+          customActions={this.getCustomActions()}
         />
         <ProgressDialog {...this.state.progress} />
         {this.state.confirmActionProps && <ConfirmDialog {...this.state.confirmActionProps} />}
@@ -152,18 +148,37 @@ export class ProjectInformation extends BaseWebPartComponent<
     )
   }
 
-  private administerChildren(): ActionType {
-    const onButtonClick = () => {
-      window.location.href = `${this.props.webPartContext.pageContext.web.serverRelativeUrl}/SitePages/${this.props.adminPageLink}`
+  private getCustomActions(): ActionType[] {
+    const administerChildrenAction: ActionType = [
+      strings.ChildProjectAdminLabel,
+      () => {
+        window.location.href = `${this.props.webPartContext.pageContext.web.serverRelativeUrl}/SitePages/${this.props.adminPageLink}`
+      },
+      'Org',
+      false,
+      !this.props.isSiteAdmin
+    ]
+    const transformToParentProject: ActionType = [
+      strings.CreateParentProjectLabelAction,
+      () => {
+        this.setState({ displayParentCreationModal: true })
+      },
+      'Org',
+      false,
+      !this.props.isSiteAdmin
+    ]
+    const viewAllPropertiesAction: ActionType = [
+      strings.ViewAllPropertiesText,
+      () => {
+        this.setState({ showProjectPropertiesPanel: true })
+      },
+      'EntryView',
+      false
+    ]
+    if (this.state.isParentProject) {
+      return [transformToParentProject, viewAllPropertiesAction]
     }
-    return [strings.ChildProjectAdminLabel, onButtonClick, 'Org', false]
-  }
-
-  private viewAllProperties(): ActionType {
-    const onButtonClick = () => {
-      this.setState({ showProjectPropertiesPanel: true })
-    }
-    return [strings.ViewAllPropertiesText, onButtonClick, 'EntryView', false]
+    return [administerChildrenAction, viewAllPropertiesAction]
   }
 
   private onDismissParentModal() {
@@ -177,13 +192,6 @@ export class ProjectInformation extends BaseWebPartComponent<
       .select('GtIsParentProject', 'GtIsProgram')
       .get()
     this.setState({ isParentProject: data?.GtIsParentProject || data?.GtIsProgram })
-  }
-
-  private transformToParentProject(): ActionType {
-    const onButtonClick = () => {
-      this.setState({ displayParentCreationModal: true })
-    }
-    return [strings.CreateParentProjectLabel, onButtonClick, 'Org', false]
   }
 
   /**
@@ -255,7 +263,7 @@ export class ProjectInformation extends BaseWebPartComponent<
         this.props.webUrl,
         strings.ProjectPropertiesListName,
         this.state.data.templateParameters.ProjectContentTypeId ||
-          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: this.props.webTitle }
       )
       if (!created) {

@@ -25,4 +25,9 @@ export interface IActionsProps {
    * Custom actions
    */
   customActions?: ActionType[]
+
+  /**
+   * Is the current user site admin
+   */
+  isSiteAdmin?: boolean
 }

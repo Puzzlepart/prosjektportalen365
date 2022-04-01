@@ -145,7 +145,7 @@ declare interface IProjectWebPartsStrings {
   PhaseSitePageFoundDescription: string;
   PhaseSitePageNotFoundDescription: string;
   UseDynamicHomepageChangePhaseDescription: string;
-  CreateParentProjectLabel: string;
+  CreateParentProjectLabelAction: string;
   ChildProjectAdminLabel: string;
   AdminPageLinkLabel: string;
 }
