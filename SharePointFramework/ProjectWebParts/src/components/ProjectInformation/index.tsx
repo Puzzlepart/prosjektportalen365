@@ -174,14 +174,11 @@ export class ProjectInformation extends BaseWebPartComponent<
     const data = await sp.web.lists
       .getByTitle('Prosjektegenskaper')
       .items.getById(1)
-      .select('GtIsParentProject,GtIsProgram')
+      .select('GtIsParentProject', 'GtIsProgram')
       .get()
     this.setState({ isParentProject: data?.GtIsParentProject || data?.GtIsProgram })
   }
 
-  /**
-   * Creates an action and initializes project -> parentproject transformation
-   */
   private transformToParentProject(): ActionType {
     const onButtonClick = () => {
       this.setState({ displayParentCreationModal: true })
