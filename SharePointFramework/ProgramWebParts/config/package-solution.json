@@ -1,21 +1,21 @@
 {
-    "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
-    "solution": {
-        "name": "pp-program-web-parts",
-        "id": "8a9a0f4a-2e2f-4f13-aceb-867f82bd77eb",
-        "version": "1.3.1.0",
-        "includeClientSideAssets": true,
-        "skipFeatureDeployment": true,
-        "isDomainIsolated": false,
-        "developer": {
-            "name": "",
-            "websiteUrl": "",
-            "privacyUrl": "",
-            "termsOfUseUrl": "",
-            "mpnId": ""
-        }
-    },
-    "paths": {
-        "zippedPackage": "solution/pp-program-web-parts.sppkg"
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "pp-program-web-parts",
+    "id": "8a9a0f4a-2e2f-4f13-aceb-867f82bd77eb",
+    "version": "1.5.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": ""
     }
+  },
+  "paths": {
+    "zippedPackage": "solution/pp-program-web-parts.sppkg"
+  }
 }

@@ -1,29 +1,38 @@
 {
-    "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-    "id": "1ca1e22e-2a44-490f-9e1b-759f986df0d8",
-    "alias": "ProgramBenefits",
-    "componentType": "WebPart",
-    "version": "*",
-    "manifestVersion": 2,
-    "requiresCustomScript": false,
-    "supportedHosts": ["SharePointWebPart"],
-
-    "preconfiguredEntries": [{
-        "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
-        "group": { "default": "Other" },
-        "title": { "default": "Underområder - gevinster" },
-        "description": { "default": "Gir en listeoversikt over gevinster i underprosjekter" },
-        "officeFabricIconFontName": "Page",
-        "properties": {
-            "webPartTitle": "Underområder - gevinster",
-            "dataSource": "Alle gevinstelementer",
-            "searchBoxPlaceholderText": "Søk i gevinster...",
-            "showCommandBar": true,
-            "showSearchBox": true,
-            "showExcelExportButton": true,
-            "hiddenColumns": [
-                "siteTitle"
-            ]
-        }
-    }]
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "1ca1e22e-2a44-490f-9e1b-759f986df0d8",
+  "alias": "ProgramBenefits",
+  "componentType": "WebPart",
+  "version": "1.5.0",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "Underområder - gevinster"
+      },
+      "description": {
+        "default": "Gir en listeoversikt over gevinster i underprosjekter"
+      },
+      "officeFabricIconFontName": "Page",
+      "properties": {
+        "webPartTitle": "Underområder - gevinster",
+        "dataSource": "Alle gevinstelementer",
+        "searchBoxPlaceholderText": "Søk i gevinster...",
+        "showCommandBar": true,
+        "showSearchBox": true,
+        "showExcelExportButton": true,
+        "hiddenColumns": [
+          "siteTitle"
+        ]
+      }
+    }
+  ]
 }
