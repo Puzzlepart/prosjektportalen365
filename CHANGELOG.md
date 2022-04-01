@@ -13,6 +13,12 @@ Every change is marked with issue ID.
 - Add possibility to lock'project template configurations #645
 - Changed header in projectstatus report to show date when published instead of when created #654
 - Supporting permission groups for specific project template #651
+- Added Program and parent functionality (Can add projects as children of another to give the following overviews):
+  - General Overview and status (Portfolio overview)
+  - Gains overview
+  - Timeline
+  - Deliveries
+  - Risks and benefits 
 
 ### Changed
 
