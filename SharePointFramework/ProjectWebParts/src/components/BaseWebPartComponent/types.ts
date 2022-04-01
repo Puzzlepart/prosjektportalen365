@@ -31,7 +31,6 @@ export interface IBaseWebPartComponentProps extends React.DOMAttributes<HTMLDivE
   /**
    * Is the current user site admin
    */
-
   isSiteAdmin?: boolean
 
   /**
