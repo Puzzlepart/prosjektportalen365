@@ -181,8 +181,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    * Adds the old custom navigation nodes to the quick launch menu
    */
   private async reacreateNavMenu() {
-    const oldNodes: MenuNode[] = await JSON.parse(localStorage.getItem('navigationNodes'))
-
+    const oldNodes: MenuNode[] = await JSON.parse(localStorage.getItem('pp_navigationNodes'))
     const navigationNodes = uniq([...oldNodes])
     for await (const node of navigationNodes) {
       if (node.Title === strings.RecycleBinText) {
