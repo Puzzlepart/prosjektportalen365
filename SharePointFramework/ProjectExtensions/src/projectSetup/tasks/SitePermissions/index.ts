@@ -80,10 +80,13 @@ export class SitePermissions extends BaseTask {
     </Query>
 </View>`
     }
-    return (await list.getItemsByCAMLQuery(query)).map((item: any) => ({
-      groupName: item.GtSPGroupName,
-      permissionLevel: item.GtPermissionLevel
-    } as IPermissionConfiguration))
+    return (await list.getItemsByCAMLQuery(query)).map(
+      (item: any) =>
+        ({
+          groupName: item.GtSPGroupName,
+          permissionLevel: item.GtPermissionLevel
+        } as IPermissionConfiguration)
+    )
   }
 
   /**

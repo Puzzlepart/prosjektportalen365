@@ -42,7 +42,7 @@ export const ListContentSection = (props: IListContentSectionProps) => {
                   inlineLabel={true}
                   onChanged={(checked) => onChanged(lcc, checked)}
                 />
-                {(props.lockDefault && lcc.isDefault) && (
+                {props.lockDefault && lcc.isDefault && (
                   <Icon iconName={'Lock'} className={styles.icon} />
                 )}
               </div>

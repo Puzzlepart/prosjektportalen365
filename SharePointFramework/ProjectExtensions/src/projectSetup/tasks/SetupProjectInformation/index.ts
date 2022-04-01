@@ -20,7 +20,12 @@ export class SetupProjectInformation extends BaseTask {
     onProgress: OnProgressCallbackFunction
   ): Promise<IBaseTaskParams> {
     try {
-      await this._syncPropertiesList(params, onProgress, this.data.selectedTemplate.isProgram, this.data.selectedTemplate.isParentProject)
+      await this._syncPropertiesList(
+        params,
+        onProgress,
+        this.data.selectedTemplate.isProgram,
+        this.data.selectedTemplate.isParentProject
+      )
       await this._addEntryToHub(params)
       return params
     } catch (error) {
@@ -61,7 +66,7 @@ export class SetupProjectInformation extends BaseTask {
         'AlignCenter'
       )
 
-      if((await list.items.getAll())?.length >= 1) {
+      if ((await list.items.getAll())?.length >= 1) {
         await list.items.getById(1).update({
           Title: params.context.pageContext.web.title,
           TemplateParameters: JSON.stringify(params.templateSchema.Parameters),
@@ -76,7 +81,6 @@ export class SetupProjectInformation extends BaseTask {
           GtIsParentProject: isParent
         })
       }
-
 
       const items = await list.items.getAll()
       if (items.length >= 1) {

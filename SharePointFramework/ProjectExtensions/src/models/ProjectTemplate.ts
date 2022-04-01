@@ -62,7 +62,7 @@ export class ProjectTemplate implements IDropdownOption {
     this.isProgram = spItem.GtIsProgram
     this.isParentProject = spItem.GtIsParentProject
     this.isHidden = spItem.IsHiddenTemplate
-      spItem.ListContentConfigLookupId?.length > 0 ? spItem.ListContentConfigLookupId : null
+    spItem.ListContentConfigLookupId?.length > 0 ? spItem.ListContentConfigLookupId : null
     this.projectTemplateId = spItem.GtProjectTemplateId
     this.listExtensionIds =
       spItem.GtProjectExtensionsId?.length > 0 ? spItem.GtProjectExtensionsId : null
