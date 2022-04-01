@@ -5,7 +5,6 @@ import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel'
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { PortalDataService } from 'pp365-shared/lib/services'
 import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
 import * as strings from 'ProjectWebPartsStrings'
@@ -119,15 +118,9 @@ export class ProjectInformation extends BaseWebPartComponent<
           }
           customActions={
             !this.state.isParentProject
-              ? this.transformToParentProject()
-              : this.administerChildren()
+              ? [this.transformToParentProject(), this.viewAllProperties()]
+              : [this.administerChildren(), this.viewAllProperties()]
           }
-        />
-        <DefaultButton
-          text={strings.ViewAllPropertiesText}
-          iconProps={{ iconName: 'EntryView' }}
-          className={styles.btn}
-          onClick={() => this.setState({ showProjectPropertiesPanel: true })}
         />
         <ProgressDialog {...this.state.progress} />
         {this.state.confirmActionProps && <ConfirmDialog {...this.state.confirmActionProps} />}
@@ -159,14 +152,18 @@ export class ProjectInformation extends BaseWebPartComponent<
     )
   }
 
-  private administerChildren() {
+  private administerChildren(): ActionType {
     const onButtonClick = () => {
       window.location.href = `${this.props.webPartContext.pageContext.web.serverRelativeUrl}/SitePages/${this.props.adminPageLink}`
     }
+    return [strings.ChildProjectAdminLabel, onButtonClick, 'Org', false]
+  }
 
-    const action: ActionType = [strings.ChildProjectAdminLabel, onButtonClick, 'Org', false]
-
-    return [action]
+  private viewAllProperties(): ActionType {
+    const onButtonClick = () => {
+      this.setState({ showProjectPropertiesPanel: true })
+    }
+    return [strings.ViewAllPropertiesText, onButtonClick, 'EntryView', false]
   }
 
   private onDismissParentModal() {
@@ -185,14 +182,11 @@ export class ProjectInformation extends BaseWebPartComponent<
   /**
    * Creates an action and initializes project -> parentproject transformation
    */
-  private transformToParentProject() {
+  private transformToParentProject(): ActionType {
     const onButtonClick = () => {
       this.setState({ displayParentCreationModal: true })
     }
-
-    const action: ActionType = [strings.CreateParentProjectLabel, onButtonClick, 'Org', false]
-
-    return [action]
+    return [strings.CreateParentProjectLabel, onButtonClick, 'Org', false]
   }
 
   /**
@@ -264,7 +258,7 @@ export class ProjectInformation extends BaseWebPartComponent<
         this.props.webUrl,
         strings.ProjectPropertiesListName,
         this.state.data.templateParameters.ProjectContentTypeId ||
-        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: this.props.webTitle }
       )
       if (!created) {
