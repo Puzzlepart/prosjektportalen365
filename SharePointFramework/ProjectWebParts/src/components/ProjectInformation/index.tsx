@@ -93,7 +93,7 @@ export class ProjectInformation extends BaseWebPartComponent<
     const { editFormUrl, versionHistoryUrl } = this.state.data
 
     return (
-      <Fragment>
+      <>
         <ProjectProperties
           title={this.props.title}
           properties={this.state.properties}
@@ -144,7 +144,7 @@ export class ProjectInformation extends BaseWebPartComponent<
             onDismiss={this.onDismissParentModal.bind(this)}
           />
         )}
-      </Fragment>
+      </>
     )
   }
 
