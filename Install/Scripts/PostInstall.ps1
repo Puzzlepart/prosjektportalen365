@@ -1,5 +1,12 @@
-Connect-PnPOnline -Url "https://puzzlepart.sharepoint.com/sites/pp365" -UseWebLogin
+Set-PnPList -Identity Prosjektkolonnekonfigurasjon -EnableContentTypes:$false 
+Set-PnPList -Identity Fasesjekkliste -EnableContentTypes:$false 
+Set-PnPList -Identity Konfigurasjon -EnableContentTypes:$false 
+Set-PnPList -Identity Porteføljevisninger -EnableContentTypes:$false 
+Set-PnPList -Identity Prosjektkolonner -EnableContentTypes:$false 
+Set-PnPList -Identity Ressursallokering -EnableContentTypes:$false 
+Set-PnPList -Identity Planneroppgaver -EnableContentTypes:$false 
 
+Write-Host "[INFO] Post-install action: Ensuring default project templates"
 $TemplateSetups = Get-PnPListItem -List "Maloppsett"
 $TemplateFiles = Get-PnPListItem -List "Prosjektmaler"
 

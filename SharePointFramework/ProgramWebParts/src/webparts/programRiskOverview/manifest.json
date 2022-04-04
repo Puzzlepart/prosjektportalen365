@@ -3,7 +3,7 @@
   "id": "3e189ba9-e1c2-4143-9598-820512e48c47",
   "alias": "ProgramRisk",
   "componentType": "WebPart",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "supportedHosts": [
