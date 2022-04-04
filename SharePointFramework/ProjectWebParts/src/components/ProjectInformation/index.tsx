@@ -156,7 +156,7 @@ export class ProjectInformation extends BaseWebPartComponent<
       !this.props.isSiteAdmin
     ]
     const transformToParentProject: ActionType = [
-      strings.CreateParentProjectLabelAction,
+      strings.CreateParentProjectLabel,
       () => {
         this.setState({ displayParentCreationModal: true })
       },
@@ -165,7 +165,7 @@ export class ProjectInformation extends BaseWebPartComponent<
       !this.props.isSiteAdmin
     ]
     const viewAllPropertiesAction: ActionType = [
-      strings.ViewAllPropertiesText,
+      strings.ViewAllPropertiesLabel,
       () => {
         this.setState({ showProjectPropertiesPanel: true })
       },
@@ -173,9 +173,9 @@ export class ProjectInformation extends BaseWebPartComponent<
       false
     ]
     if (this.state.isParentProject) {
-      return [transformToParentProject, viewAllPropertiesAction]
+      return [administerChildrenAction, viewAllPropertiesAction]
     }
-    return [administerChildrenAction, viewAllPropertiesAction]
+    return [transformToParentProject, viewAllPropertiesAction]
   }
 
   private onDismissParentModal() {
@@ -260,7 +260,7 @@ export class ProjectInformation extends BaseWebPartComponent<
         this.props.webUrl,
         strings.ProjectPropertiesListName,
         this.state.data.templateParameters.ProjectContentTypeId ||
-          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: this.props.webTitle }
       )
       if (!created) {
