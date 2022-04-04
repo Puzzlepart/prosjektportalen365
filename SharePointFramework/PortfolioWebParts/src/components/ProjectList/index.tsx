@@ -16,7 +16,6 @@ import { Card } from './ProjectCard/Card/Card'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
 import { IProjectListProps, IProjectListState } from './types'
-// import { ITaxonomySession } from '@pnp/sp-taxonomy'
 
 export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
   const [state, setState] = useState<IProjectListState>({
