@@ -1,4 +1,4 @@
-import { TypedHash } from '@pnp/common'
+import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
 import { AttachmentFileInfo } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
@@ -115,8 +115,6 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         </div>
       )
     }
-    // eslint-disable-next-line no-console
-    console.log(this.state.selectedReport.publishedDate, this.state.selectedReport.created)
     return (
       <div className={styles.projectStatus}>
         {this._commandBar()}
@@ -279,6 +277,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         <UserMessage text={strings.NoStatusReportsMessage} messageBarType={MessageBarType.info} />
       )
     return data.sections
+      .filter((sec) => !stringIsNullOrEmpty(selectedReport.getStatusValue(sec.fieldName).value))
       .filter((sec) => sec.showAsSection || sec.type === SectionType.SummarySection)
       .map((sec) => {
         const baseProps = this._getSectionBaseProps(sec)
