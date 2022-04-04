@@ -115,8 +115,6 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         </div>
       )
     }
-    // eslint-disable-next-line no-console
-    console.log(this.state.selectedReport.publishedDate, this.state.selectedReport.created)
     return (
       <div className={styles.projectStatus}>
         {this._commandBar()}
