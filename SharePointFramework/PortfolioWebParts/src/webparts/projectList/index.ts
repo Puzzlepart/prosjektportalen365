@@ -23,10 +23,12 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
       termSetArray.push(termStore.getTermSetById(termSetId).terms.get())
     }
     const fullTerms = _.flatten(await Promise.all(termSetArray))
-    this.properties.phaseLevel = fullTerms.map(term => {
+    this.properties.phaseLevel = fullTerms.map((term) => {
       return {
         name: term.Name,
-        phaseLevel: term.LocalCustomProperties?.PhaseLevel ? term.LocalCustomProperties?.PhaseLevel : 0,
+        phaseLevel: term.LocalCustomProperties?.PhaseLevel
+          ? term.LocalCustomProperties?.PhaseLevel
+          : 0
       }
     })
   }
@@ -35,7 +37,6 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
     await super.onInit()
     await this._setupTaxonomy()
   }
-
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
@@ -73,7 +74,7 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   label: strings.ShowProjectManagerFieldLabel
                 }),
                 PropertyPaneToggle('showLifeCycleStatus', {
-                  label: strings.ShowLifeCycleStatusFieldLabel,
+                  label: strings.ShowLifeCycleStatusFieldLabel
                 }),
                 PropertyPaneToggle('showServiceArea', {
                   label: strings.ShowServiceAreaFieldLabel

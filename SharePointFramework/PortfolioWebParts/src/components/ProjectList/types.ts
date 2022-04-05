@@ -1,8 +1,6 @@
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { IBaseComponentProps } from '../types'
 import { ProjectListModel } from 'models'
-import { SPRest } from '@pnp/sp'
-import { ITaxonomySession } from '@pnp/sp-taxonomy'
 
 export interface IProjectListProps extends IBaseComponentProps {
   /**
@@ -68,13 +66,12 @@ export interface IProjectListProps extends IBaseComponentProps {
   /**
    * Term Set IDs
    */
-   termSetIds?: string
+  termSetIds?: string
 
-   /**
+  /**
    * Phase Levels (Portfolio, Project)
    */
-    phaseLevel?: any[]
-   
+  phaseLevel?: any[]
 }
 
 export interface IProjectListState {

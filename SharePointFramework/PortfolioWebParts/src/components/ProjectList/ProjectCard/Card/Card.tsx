@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react'
+import React, { FunctionComponent } from 'react'
 import styles from './Card.module.scss'
 import { IProjectCardProps } from '../types'
 import { placeholderImage } from '../../types'
@@ -22,13 +22,13 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
   const ownerPersona: IPersonaSharedProps = {
     title: project.owner
       ? `${project.owner.text} | ${strings.ProjectOwner}`
-      : `Prosjekteier ikke satt`,
+      : 'Prosjekteier ikke satt',
     imageUrl: project.owner ? project.owner.imageUrl : null
   }
   const managerPersona: IPersonaSharedProps = {
     title: project.manager
       ? `${project.manager.text} | ${strings.ProjectManager}`
-      : `Prosjektleder ikke satt`,
+      : 'Prosjektleder ikke satt',
     imageUrl: project.manager ? project.manager.imageUrl : null
   }
 
@@ -53,7 +53,7 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
         <div
           className={styles.tag}
           style={
-            project.GtProjectLifecycleStatus == 'Aktivt'
+            project.GtProjectLifecycleStatus === 'Aktivt'
               ? { backgroundColor: 'rgb(234,163,0,0.5)', color: 'black' }
               : { backgroundColor: 'rgb(255,0,0,0.5)', color: 'black' }
           }>
@@ -67,8 +67,9 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
     if (serviceAreaText) {
       return (
         <>
-          {serviceAreaText.map((text) => (
+          {serviceAreaText.map((text, idx) => (
             <div
+              key={idx}
               className={styles.tag}
               style={{ backgroundColor: 'rgb(234,163,0,0.5)', color: 'black' }}>
               <span>{text}</span>
@@ -83,8 +84,9 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
     if (typeText) {
       return (
         <>
-          {typeText.map((type) => (
+          {typeText.map((type, idx) => (
             <div
+              key={idx}
               className={styles.tag}
               style={{ backgroundColor: 'rgb(234,163,0,0.5)', color: 'black' }}>
               <span>{type}</span>
@@ -95,7 +97,7 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
     }
   }
 
-  let endDate = moment(project.endDate).format('DD.MM.YYYY')
+  const endDate = moment(project.endDate).format('DD.MM.YYYY')
 
   return (
     <a href={project.userIsMember ? project.url : null} style={{ textDecoration: 'none' }}>

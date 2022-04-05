@@ -35,9 +35,9 @@ export interface IProjectCardProps {
   /**
    * Show Service Area
    */
-   showServiceArea?: boolean
+  showServiceArea?: boolean
 
-   /**
+  /**
    * Show Type
    */
   showType?: boolean
