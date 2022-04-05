@@ -102,7 +102,7 @@ export const ProjectCard: FunctionComponent<IProjectCardProps> = ({
   return (
     <a href={project.userIsMember ? project.url : null} style={{ textDecoration: 'none' }}>
       <div
-        className={styles.card}
+        className={styles.root}
         style={!project.userIsMember ? { opacity: '50%', cursor: 'default' } : {}}>
         <div className={styles.logo}>
           <img src={project.logo ?? placeholderImage} />
