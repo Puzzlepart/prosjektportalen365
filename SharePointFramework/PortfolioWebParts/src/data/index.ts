@@ -513,9 +513,10 @@ export class DataAdapter implements IDataAdapter {
 
   /**
    * Map projects
-   * @param items Items
-   * @param groups Groups
-   * @param users Users
+   * 
+   * @param items - Items
+   * @param groups - Groups
+   * @param users - Users
    */
   private _mapProjects(
     items: ISPProjectItem[],

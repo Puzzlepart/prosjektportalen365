@@ -12,7 +12,7 @@ import { ProjectInformationModal } from 'pp365-projectwebparts/lib/components/Pr
 import { getObjectValue, sortAlphabetically } from 'pp365-shared/lib/helpers'
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { find, isEmpty } from 'underscore'
-import { Card } from './ProjectCard/Card'
+import { ProjectCard } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
 import { IProjectListProps, IProjectListState } from './types'
@@ -40,7 +40,7 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
   function renderProjects(projects: ProjectListModel[]) {
     if (state.showAsTiles) {
       return projects.map((project, idx) => (
-        <Card
+        <ProjectCard
           key={idx}
           project={project}
           shouldTruncateTitle={true}
