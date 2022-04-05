@@ -12,8 +12,7 @@
     "preserve": "gulp setHiddenToolbox",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
-    "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",
-    "prepublish": "tsc --build"
+    "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent"
   },
   "dependencies": {
     "@microsoft/sp-core-library": "1.12.1",
