@@ -543,6 +543,7 @@ export class DataAdapter implements IDataAdapter {
    * * Graph groups
    * * Site users
    * * Combines the data
+   * @param getAll If true, all projects are fetched
    */
   public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
     await MSGraph.Init(this.context.msGraphClientFactory)
