@@ -3,7 +3,7 @@
   "engines": {
     "node": "^12"
   },
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Shared utilities, helpers and models",
   "main": "lib/index.js",
   "scripts": {
@@ -12,7 +12,8 @@
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
-    "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent"
+    "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",
+    "prepublish": "tsc --build"
   },
   "author": "",
   "license": "ISC",
