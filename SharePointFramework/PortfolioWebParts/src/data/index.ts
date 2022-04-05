@@ -41,7 +41,7 @@ export class DataAdapter implements IDataAdapter {
   private _portalDataService: PortalDataService
   public dataSourceService: DataSourceService
 
-  constructor(public context: WebPartContext, private siteIds?: string[]) {
+  constructor(public context: WebPartContext) {
     this._portalDataService = new PortalDataService().configure({
       urlOrWeb: context.pageContext.web.absoluteUrl
     })

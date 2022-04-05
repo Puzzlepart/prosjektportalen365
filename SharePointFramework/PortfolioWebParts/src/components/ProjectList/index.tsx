@@ -27,9 +27,9 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
     sort: { fieldName: props.sortBy, isSortedDescending: true }
   })
 
-  function fetchPhaseLevel(phase: string): string {
+  function getPhaseLevel(phase: string): string {
     const [level] = phase ? props.phaseLevel.filter((term) => term.name === phase) : ['none']
-    return level.phaseLevel
+    return level?.phaseLevel
   }
 
   /**
@@ -43,7 +43,6 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
         <ProjectCard
           key={idx}
           project={project}
-          shouldTruncateTitle={true}
           showProjectLogo={props.showProjectLogo}
           showProjectOwner={props.showProjectOwner}
           showProjectManager={props.showProjectManager}
@@ -51,7 +50,7 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
           showServiceArea={props.showServiceArea}
           showType={props.showType}
           actions={getCardActions(project)}
-          phaseLevel={fetchPhaseLevel(project.phase)}
+          phaseLevel={getPhaseLevel(project.phase)}
         />
       ))
     } else {

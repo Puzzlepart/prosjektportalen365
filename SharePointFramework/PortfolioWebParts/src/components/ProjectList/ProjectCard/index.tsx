@@ -10,7 +10,6 @@ import moment from 'moment'
 
 export const ProjectCard: FunctionComponent<IProjectCardProps> = ({
   project,
-  shouldTruncateTitle,
   actions,
   showProjectOwner,
   showProjectManager,
@@ -18,7 +17,7 @@ export const ProjectCard: FunctionComponent<IProjectCardProps> = ({
   showServiceArea,
   showType,
   phaseLevel
-}: IProjectCardProps) => {
+}) => {
   const ownerPersona: IPersonaSharedProps = {
     title: project.owner
       ? `${project.owner.text} | ${strings.ProjectOwner}`
@@ -31,10 +30,6 @@ export const ProjectCard: FunctionComponent<IProjectCardProps> = ({
       : 'Prosjektleder ikke satt',
     imageUrl: project.manager ? project.manager.imageUrl : null
   }
-
-  const serviceAreaText =
-    project.serviceArea && project.serviceArea.split(';')
-  const typeText = project.projectType && project.projectType.split(';')
 
   const _setPhaseColor = (phaseLevel) => {
     switch (phaseLevel) {
@@ -64,10 +59,9 @@ export const ProjectCard: FunctionComponent<IProjectCardProps> = ({
   }
 
   const _renderServiceAreaText = () => {
-    if (serviceAreaText) {
       return (
         <>
-          {serviceAreaText.map((text, idx) => (
+          {project.serviceArea.map((text, idx) => (
             <div
               key={idx}
               className={styles.tag}
@@ -77,14 +71,12 @@ export const ProjectCard: FunctionComponent<IProjectCardProps> = ({
           ))}
         </>
       )
-    }
   }
 
   const _renderTypeText = () => {
-    if (typeText) {
       return (
         <>
-          {typeText.map((type, idx) => (
+          {project.type.map((type, idx) => (
             <div
               key={idx}
               className={styles.tag}
@@ -94,7 +86,6 @@ export const ProjectCard: FunctionComponent<IProjectCardProps> = ({
           ))}
         </>
       )
-    }
   }
 
   const endDate = moment(project.endDate).format('DD.MM.YYYY')
@@ -118,7 +109,7 @@ export const ProjectCard: FunctionComponent<IProjectCardProps> = ({
         <DocumentCardTitle
           className={styles.title}
           title={project.title}
-          shouldTruncate={shouldTruncateTitle}
+          shouldTruncate={true}
         />
         <hr />
         <div className={styles.labels}>

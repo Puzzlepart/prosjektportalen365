@@ -8,11 +8,6 @@ export interface IProjectCardProps {
   project: ProjectListModel
 
   /**
-   * Should the title be truncated
-   */
-  shouldTruncateTitle: boolean
-
-  /**
    * Show Project Logo
    */
   showProjectLogo?: boolean
