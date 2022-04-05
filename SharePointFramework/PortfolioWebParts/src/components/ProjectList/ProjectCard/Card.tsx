@@ -1,7 +1,7 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useState } from 'react'
 import styles from './Card.module.scss'
-import { IProjectCardProps } from '../types'
-import { placeholderImage } from '../../types'
+import { IProjectCardProps } from './types'
+import { placeholderImage } from '../types'
 import { DocumentCardActions, DocumentCardTitle } from 'office-ui-fabric-react/lib/DocumentCard'
 import { IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
@@ -22,19 +22,19 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
   const ownerPersona: IPersonaSharedProps = {
     title: project.owner
       ? `${project.owner.text} | ${strings.ProjectOwner}`
-      : 'Prosjekteier ikke satt',
+      : `Prosjekteier ikke satt`,
     imageUrl: project.owner ? project.owner.imageUrl : null
   }
   const managerPersona: IPersonaSharedProps = {
     title: project.manager
       ? `${project.manager.text} | ${strings.ProjectManager}`
-      : 'Prosjektleder ikke satt',
+      : `Prosjektleder ikke satt`,
     imageUrl: project.manager ? project.manager.imageUrl : null
   }
 
   const serviceAreaText =
-    project.GtProjectServiceAreaText && project.GtProjectServiceAreaText.split(';')
-  const typeText = project.GtProjectTypeText && project.GtProjectTypeText.split(';')
+    project.serviceArea && project.serviceArea.split(';')
+  const typeText = project.projectType && project.projectType.split(';')
 
   const _setPhaseColor = (phaseLevel) => {
     switch (phaseLevel) {
@@ -48,16 +48,16 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
   }
 
   const _renderLifeCycleStatus = () => {
-    if (project.GtProjectLifecycleStatus) {
+    if (project.lifecycleStatus) {
       return (
         <div
           className={styles.tag}
           style={
-            project.GtProjectLifecycleStatus === 'Aktivt'
+            project.lifecycleStatus == 'Aktivt'
               ? { backgroundColor: 'rgb(234,163,0,0.5)', color: 'black' }
               : { backgroundColor: 'rgb(255,0,0,0.5)', color: 'black' }
           }>
-          <span>{project.GtProjectLifecycleStatus}</span>
+          <span>{project.lifecycleStatus}</span>
         </div>
       )
     }
@@ -67,9 +67,8 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
     if (serviceAreaText) {
       return (
         <>
-          {serviceAreaText.map((text, idx) => (
+          {serviceAreaText.map((text) => (
             <div
-              key={idx}
               className={styles.tag}
               style={{ backgroundColor: 'rgb(234,163,0,0.5)', color: 'black' }}>
               <span>{text}</span>
@@ -84,9 +83,8 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
     if (typeText) {
       return (
         <>
-          {typeText.map((type, idx) => (
+          {typeText.map((type) => (
             <div
-              key={idx}
               className={styles.tag}
               style={{ backgroundColor: 'rgb(234,163,0,0.5)', color: 'black' }}>
               <span>{type}</span>
@@ -97,7 +95,7 @@ export const Card: FunctionComponent<IProjectCardProps> = ({
     }
   }
 
-  const endDate = moment(project.endDate).format('DD.MM.YYYY')
+  let endDate = moment(project.endDate).format('DD.MM.YYYY')
 
   return (
     <a href={project.userIsMember ? project.url : null} style={{ textDecoration: 'none' }}>

@@ -12,7 +12,7 @@ import { ProjectInformationModal } from 'pp365-projectwebparts/lib/components/Pr
 import { getObjectValue, sortAlphabetically } from 'pp365-shared/lib/helpers'
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { find, isEmpty } from 'underscore'
-import { Card } from './ProjectCard/Card/Card'
+import { Card } from './ProjectCard/Card'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
 import { IProjectListProps, IProjectListState } from './types'
@@ -172,7 +172,8 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
   function filterProjets(projects: ProjectListModel[]) {
     return projects
       .filter((project) => {
-        if (state.selectedView === 'my_projects') return project.userIsMember
+        if (state.selectedView === 'my_projects')
+          return project.userIsMember && project.lifecycleStatus !== 'Avsluttet'
         if (state.selectedView === 'parent_projects') return project.isParent
         if (state.selectedView === 'program') return project.isProgram
         return true
