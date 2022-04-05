@@ -314,8 +314,7 @@ export class DataAdapter {
    *
    * @param siteId - Site ID
    */
-
-  public async _fetchDataForTimelineProject(siteId: string) {
+  public async fetchDataForTimelineProject(siteId: string) {
     const siteIdProperty: string = 'GtSiteIdOWSTEXT'
     const costsTotalProperty: string = 'GtCostsTotalOWSCURR'
     const budgetTotalProperty: string = 'GtBudgetTotalOWSCURR'
