@@ -3,7 +3,7 @@
   "id": "9af4ad23-3d77-452b-b73e-b31a6b5d0161",
   "alias": "ProgramStatusWebPart",
   "componentType": "WebPart",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "supportedHosts": [
