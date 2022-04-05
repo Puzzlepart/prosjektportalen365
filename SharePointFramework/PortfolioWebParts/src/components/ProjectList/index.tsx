@@ -29,7 +29,6 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
 
   function fetchPhaseLevel(phase: string): string {
     const [level] = phase ? props.phaseLevel.filter((term) => term.name == phase) : ['none']
-    console.log(level.phaseLevel)
     return level.phaseLevel
   }
 

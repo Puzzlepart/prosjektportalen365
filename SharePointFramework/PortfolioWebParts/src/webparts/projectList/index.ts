@@ -11,7 +11,6 @@ import * as _ from 'lodash'
 
 export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectListProps> {
   public render(): void {
-    console.log(this.properties);
     this.renderComponent<IProjectListProps>(ProjectList)
   }
 
