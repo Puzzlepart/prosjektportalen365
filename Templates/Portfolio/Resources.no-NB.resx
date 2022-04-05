@@ -214,6 +214,42 @@
   <data name="Lists_TimelineContent_Url" xml:space="preserve">
     <value>Lists/Tidslinjeinnhold</value>
   </data>
+  <data name="Lists_TimelineContent_Field_Title_DisplayName" xml:space="preserve">
+    <value>Tittel</value>
+  </data>
+  <data name="Lists_TimelineContent_Field_Title_Description" xml:space="preserve">
+    <value>Et kortfattet navn for å beskrive tidslinje elementet</value>
+  </data>
+  <data name="Lists_TimelineContent_Field_SiteIdLookup_DisplayName" xml:space="preserve">
+    <value>Prosjekttilknytning</value>
+  </data>
+  <data name="Lists_TimelineContent_Field_SiteIdLookup_Description" xml:space="preserve">
+    <value>Hvilket prosjekt er elementet knyttet til?</value>
+  </data>
+  <data name="Lists_TimelineContent_Field_TimelineType_DisplayName" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Lists_TimelineContent_Field_TimelineType_Description" xml:space="preserve">
+    <value>Hva slags type tidslinje element er dette?</value>
+  </data>
+  <data name="Lists_TimelineContent_Field_GtBudgetTotal_DisplayName" xml:space="preserve">
+    <value>Hva er totalbudsjettet?</value>
+  </data>
+  <data name="Lists_TimelineContent_Field_GtBudgetTotal_Description" xml:space="preserve">
+    <value>Budsjett for fasen/elementet (dersom aktuelt)</value>
+  </data>
+  <data name="Lists_TimelineContent_Field_GtCostsTotal_DisplayName" xml:space="preserve">
+    <value>Kostnad for fasen/elementet (dersom aktuelt)</value>
+  </data>
+  <data name="Lists_TimelineContent_Field_GtEndDate_DisplayName" xml:space="preserve">
+    <value>Sluttdato (dato for milepæl)</value>
+  </data>
+  <data name="Lists_Timeline_Configuration_Title" xml:space="preserve">
+    <value>Tidslinjekonfigurasjon</value>
+  </data>
+  <data name="Lists_Timeline_Configuration_Url" xml:space="preserve">
+    <value>Lists/Tidslinjekonfigurasjon</value>
+  </data>
   <data name="View_AllItems_DisplayName" xml:space="preserve">
     <value>Alle elementer</value>
   </data>
@@ -423,6 +459,18 @@
   </data>
   <data name="ContentTypes_Permission_Configuration_Element_Description" xml:space="preserve">
     <value>Opprett et nytt tillatelseskonfigurasjonselement</value>
+  </data>
+  <data name="ContentTypes_Timeline_Configuration_Element_Name" xml:space="preserve">
+    <value>Tidslinjekonfigurasjonelement</value>
+  </data>
+  <data name="ContentTypes_Timeline_Configuration_Element_Description" xml:space="preserve">
+    <value>Opprett et nytt tidslinjekonfigurasjonelement</value>
+  </data>
+  <data name="ContentTypes_Timeline_Element_Name" xml:space="preserve">
+    <value>Tidslinjeelement</value>
+  </data>
+  <data name="ContentTypes_Timeline_Element_Description" xml:space="preserve">
+    <value>Opprett et nytt tidslinjeelement</value>
   </data>
   <data name="SiteFields_Project_Group" xml:space="preserve">
     <value>Kolonner for Prosjektportalen (Prosjekt)</value>
@@ -1559,12 +1607,17 @@
   <data name="SiteFields_GtPermissionLevel_Description" xml:space="preserve">
     <value>Definerer rettighetsnivå på SharePoint-området til prosjektet.</value>
   </data>
-  <data name="SiteFields_GtLastReportDate_Description" xml:space="preserve">
-    <value>Siste dato for publisert rapport.</value>
-  </data>
   <data name="SiteFields_GtLastReportDate_DisplayName" xml:space="preserve">
     <value>Siste rapporteringsdato</value>
   </data>
+  <data name="SiteFields_GtLastReportDate_Description" xml:space="preserve">
+    <value>Siste dato for publisert rapport.</value>
+  </data>
+
+
+
+
+
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
   </data>

@@ -1,0 +1,38 @@
+<pnp:ListInstance Title="{resource:Lists_Timeline_Configuration_Title}" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_Timeline_Configuration_Url}" Hidden="true" RemoveExistingContentTypes="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false"
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    <pnp:ContentTypeBindings>
+        <pnp:ContentTypeBinding ContentTypeID="0x0100DAFD9901A59F445EB29B2CE3D663A87D" Default="true" />
+    </pnp:ContentTypeBindings>
+    <pnp:Views>
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_Timeline_Configuration_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+            <Query>
+                <OrderBy>
+                    <FieldRef Name="GtSortOrder" Ascending="FALSE" />
+                </OrderBy>
+            </Query>
+            <ViewFields>
+                <FieldRef Name="GtSortOrder" />
+                <FieldRef Name="Title" />
+                <FieldRef Name="GtHexColor" />
+                <FieldRef Name="GtTimelineType" />
+                <FieldRef Name="GtShowOnCard" />
+                <FieldRef Name="GtShowFieldPortfolio" />
+                <FieldRef Name="GtShowFieldProgram" />
+                <FieldRef Name="GtTimelineFilter" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">30</RowLimit>
+            <Aggregations Value="Off" />
+            <JSLink>clienttemplates.js</JSLink>
+        </View>
+    </pnp:Views>
+    <pnp:FieldRefs>
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" />
+    </pnp:FieldRefs>
+    TODO: Add pnp:DataRows
+    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
+            <pnp:DataValue FieldName="Title"></pnp:DataValue>
+        </pnp:DataRow>
+    </pnp:DataRows>
+</pnp:ListInstance>
