@@ -15,9 +15,8 @@
                 <FieldRef Name="Title" />
                 <FieldRef Name="GtHexColor" />
                 <FieldRef Name="GtTimelineType" />
-                <FieldRef Name="GtShowOnCard" />
-                <FieldRef Name="GtShowFieldPortfolio" />
-                <FieldRef Name="GtShowFieldProgram" />
+                <FieldRef Name="GtShowElementPortfolio" />
+                <FieldRef Name="GtShowElementProgram" />
                 <FieldRef Name="GtTimelineFilter" />
             </ViewFields>
             <RowLimit Paged="TRUE">30</RowLimit>

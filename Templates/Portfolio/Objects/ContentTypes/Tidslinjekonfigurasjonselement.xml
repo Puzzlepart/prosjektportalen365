@@ -6,7 +6,8 @@
         <pnp:FieldRef ID="aaf7828e-a937-4c7e-834b-406cf1166d77" Name="GtHexColor" />
         <pnp:FieldRef ID="f90fc288-ece1-4913-a432-54a4cd31212b" Name="GtTimelineType" Required="true" />
         <pnp:FieldRef ID="d63aec38-756b-4515-9217-73fca62fcd7e" Name="GtShowOnCard" />
-        <pnp:FieldRef ID="7441ace5-d9e4-4c1d-85fc-ce1614b056ca" Name="GtShowFieldPortfolio" />
+        <pnp:FieldRef ID="6ef97f12-3ac3-4ebc-8975-d658eea33571" Name="GtShowElementPortfolio" />
+        <pnp:FieldRef ID="a00b13f6-2761-488d-85d9-37f85879b433" Name="GtShowElementProgram" />
         <pnp:FieldRef ID="2e70b590-4f03-4292-80a1-766564082f1e" Name="GtTimelineFilter" />
     </pnp:FieldRefs>
 </pnp:ContentType>

@@ -1,0 +1,1 @@
+﻿<Field Type="Boolean" DisplayName="{resource:SiteFields_GtShowElementPortfolio_DisplayName}" Description="{resource:SiteFields_GtShowElementPortfolio_Description}" ID="{6ef97f12-3ac3-4ebc-8975-d658eea33571}" StaticName="GtShowElementPortfolio" Name="GtShowElementPortfolio" Group="{resource:SiteFields_Portfolio_Group}" />

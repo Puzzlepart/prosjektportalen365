@@ -211,18 +211,6 @@
   <data name="Lists_TimelineContent_Field_Title_Description" xml:space="preserve">
     <value>Et kortfattet navn for å beskrive tidslinje elementet</value>
   </data>
-  <data name="Lists_TimelineContent_Field_SiteIdLookup_DisplayName" xml:space="preserve">
-    <value>Prosjekttilknytning</value>
-  </data>
-  <data name="Lists_TimelineContent_Field_SiteIdLookup_Description" xml:space="preserve">
-    <value>Hvilket prosjekt er elementet knyttet til?</value>
-  </data>
-  <data name="Lists_TimelineContent_Field_TimelineType_DisplayName" xml:space="preserve">
-    <value>Type</value>
-  </data>
-  <data name="Lists_TimelineContent_Field_TimelineType_Description" xml:space="preserve">
-    <value>Hva slags type tidslinje element er dette?</value>
-  </data>
   <data name="Lists_TimelineContent_Field_GtBudgetTotal_DisplayName" xml:space="preserve">
     <value>Hva er totalbudsjettet?</value>
   </data>
@@ -1549,17 +1537,48 @@
   <data name="SiteFields_GtLastReportDate_Description" xml:space="preserve">
     <value>Last date for published report.</value>
   </data>
-
-  <data name="TimelineContent_Title_DisplayName" xml:space="preserve">
-    <value>Last report date</value>
+  <data name="SiteFields_GtSiteIdLookup_DisplayName" xml:space="preserve">
+    <value>Prosjekttilknytning</value>
   </data>
-  <data name="TimelineContent_Title_Description" xml:space="preserve">
-    <value>Last date for published report.</value>
+  <data name="SiteFields_GtSiteIdLookup_Description" xml:space="preserve">
+    <value>Hvilket prosjekt er elementet knyttet til?</value>
   </data>
-
-
-
-
+  <data name="SiteFields_GtTimelineTypeLookup_DisplayName" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="SiteFields_GtTimelineTypeLookup_Description" xml:space="preserve">
+    <value>Hva slags type tidslinje element er dette?</value>
+  </data>
+  <data name="SiteFields_GtTimelineType_DisplayName" xml:space="preserve">
+    <value>Type/Form</value>
+  </data>
+  <data name="SiteFields_GtTimelineType_Description" xml:space="preserve">
+    <value>Hva slags element type/form skal denne ha?</value>
+  </data>
+  <data name="SiteFields_GtHexColor_DisplayName" xml:space="preserve">
+    <value>Farge (hexadesimal verdi)</value>
+  </data>
+  <data name="SiteFields_GtHexColor_Description" xml:space="preserve">
+    <value>Hva er fargen for elementet (hexadesimal verdi)?</value>
+  </data>
+  <data name="SiteFields_GtShowElementPortfolio_DisplayName" xml:space="preserve">
+    <value>Vis på portefølje</value>
+  </data>
+  <data name="SiteFields_GtShowElementPortfolio_Description" xml:space="preserve">
+    <value>Velg 'Ja' dersom elementet skal synliggjøes i på porteføljetidslinjen</value>
+  </data>
+  <data name="SiteFields_GtShowElementProgram_DisplayName" xml:space="preserve">
+    <value>Vis på program</value>
+  </data>
+  <data name="SiteFields_GtShowElementProgram_Description" xml:space="preserve">
+    <value>Velg 'Ja' dersom elementet skal synliggjøes i på programtidslinjen</value>
+  </data>
+  <data name="SiteFields_GtTimelineFilter_DisplayName" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="SiteFields_GtTimelineFilter_Description" xml:space="preserve">
+    <value>Velg 'Ja' dersom elementet skal være filtrerbart i tidslinjen</value>
+  </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
   </data>
