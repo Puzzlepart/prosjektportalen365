@@ -40,10 +40,10 @@ export interface IProjectCardProps {
   /**
    * Actions
    */
-  actions: IButtonProps[]
+  actions?: IButtonProps[]
 
   /**
    * Phase Level (Portfolio, Project)
    */
-  phaseLevel: string
+  phaseLevel?: string
 }
