@@ -263,7 +263,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         project: project.title,
         projectUrl: project.url,
         phase: project.phase,
-        type: project.type,
+        type: strings.ProjectLabel,
         budgetTotal: project.budgetTotal,
         costsTotal: project.costsTotal
       } as ITimelineItem

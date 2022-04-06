@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
   "id": "d156652b-9121-47af-89ae-1fe8427c53da",
-  "alias": "ProjecttimelineWebPart",
+  "alias": "ProjectTimelineWebPart",
   "componentType": "WebPart",
   "version": "1.5.3",
   "manifestVersion": 2,

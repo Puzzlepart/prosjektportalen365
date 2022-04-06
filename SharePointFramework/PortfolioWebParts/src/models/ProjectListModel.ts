@@ -21,7 +21,6 @@ export class ProjectListModel {
    * @param userIsMember User is member
    * @param budgetTotal Budget total
    * @param costsTotal Costs total
-   * @param type Type
    */
   constructor(
     public siteId: string,
@@ -36,7 +35,6 @@ export class ProjectListModel {
     public userIsMember?: boolean,
     public budgetTotal?: string,
     public costsTotal?: string,
-    public type?: string,
     public isParent?: boolean,
     public isProgram?: boolean
   ) {
