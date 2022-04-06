@@ -1,7 +1,7 @@
 import { sp, Web } from '@pnp/sp'
 import { ProjectListModel } from 'models'
 import MSGraph from 'msgraph-helper'
-import { Pivot, PivotItem, ShimmeredDetailsList } from 'office-ui-fabric-react'
+import { Pivot, PivotItem, ShimmeredDetailsList, Spinner } from 'office-ui-fabric-react'
 import { IButtonProps } from 'office-ui-fabric-react/lib/Button'
 import { IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
@@ -291,7 +291,7 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
           </div>
         )}
         <div className={styles.searchBox} hidden={!props.showSearchBox}>
-          <SearchBox placeholder={getSearchBoxPlaceholder()} onChanged={onSearch} />
+          <SearchBox placeholder={getSearchBoxPlaceholder()} onChanged={onSearch} disabled={state.loading} />
         </div>
         <div className={styles.viewToggle} hidden={!props.showViewSelector}>
           <Toggle
@@ -302,10 +302,13 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
             onChanged={(showAsTiles) => setState({ ...state, showAsTiles })}
           />
         </div>
-        <div className={styles.emptyMessage} hidden={projects.length > 0}>
+        <div className={styles.emptyMessage} hidden={projects.length > 0 || state.loading}>
           <MessageBar>{strings.NoSearchResults}</MessageBar>
         </div>
-        <div className={styles.projects} hidden={projects.length === 0}>
+        <div className={styles.loadingIndicator} hidden={!state.loading}>
+          <Spinner label={strings.ProjectListLoadingText} />
+        </div>
+        <div className={styles.projects} hidden={projects.length === 0 || state.loading}>
           {renderProjects(projects)}
         </div>
       </div>

@@ -71,12 +71,12 @@ export const ProjectCard: FunctionComponent<IProjectCardProps> = ({
             <ProjectType hidden={!showType} type={project.type} />
           </div>
           <div className={styles.content}>
-            <div title='Sluttdato' className={styles.endDate}>
+            <div title={strings.EndDateLabel} className={styles.endDate}>
               <Icon
                 className={styles.endDateIcon}
                 iconName='Calendar'
                 style={
-                  project.endDate && moment(project.endDate).isBefore(moment())
+                  project.endDate && moment(project.endDate).isBefore()
                     ? { color: 'red' }
                     : { color: 'black' }
                 }

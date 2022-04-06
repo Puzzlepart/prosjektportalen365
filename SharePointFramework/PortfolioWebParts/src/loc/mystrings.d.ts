@@ -92,6 +92,7 @@ declare interface IPortfolioWebPartsStrings {
   IndicatorLabel: string
   LastMeasurementLabel: string
   LoadingText: string
+  ProjectListLoadingText: string
   LogDescriptionLabel: string
   MeasuremenentIdicatorLabel: string
   MeasurementAchievementLabel: string
