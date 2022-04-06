@@ -56,7 +56,7 @@ export const ProjectCard: FunctionComponent<IProjectCardProps> = ({
           style={{ backgroundColor: _setPhaseColor(phaseLevel), color: 'white' }}
           className={styles.phaseLabel}>
           <span className={styles.phaseLabelTitle}>
-            {project.phase ? project.phase : 'Ikke satt'}
+            {project.phase ? project.phase : strings.NotSet}
           </span>
         </div>
         <DocumentCardTitle className={styles.title} title={project.title} shouldTruncate={true} />
@@ -82,7 +82,7 @@ export const ProjectCard: FunctionComponent<IProjectCardProps> = ({
                 }
               />
               <span className={styles.endDateText}>
-                {project.endDate ? moment(project.endDate).format('DD.MM.YYYY') : 'Ikke satt'}
+                {project.endDate ? moment(project.endDate).format('DD.MM.YYYY') : strings.NotSet}
               </span>
             </div>
           </div>
