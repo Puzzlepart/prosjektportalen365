@@ -1,5 +1,8 @@
-<pnp:ListInstance Title="{resource:Lists_TimelineContent_Title}" TemplateType="100" Url="{resource:Lists_TimelineContent_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
+<pnp:ListInstance Title="{resource:Lists_TimelineContent_Title}" TemplateType="100" Url="{resource:Lists_TimelineContent_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" ContentTypesEnabled="false" RemoveExistingContentTypes="false" EnableFolderCreation="false" EnableAttachments="false" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    <pnp:ContentTypeBindings>
+        <pnp:ContentTypeBinding ContentTypeID="0x01006EE320A23C8F4A6C83F3E36A19F076B9" Default="true" />
+    </pnp:ContentTypeBindings>
     <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_TimelineContent_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
             <Query>
@@ -9,12 +12,12 @@
             </Query>
             <ViewFields>
                 <FieldRef Name="Title" />
-                <FieldRef Name="TimelineType" />
+                <FieldRef Name="GtTimelineTypeLookup" />
                 <FieldRef Name="GtStartDate" />
                 <FieldRef Name="GtEndDate" />
                 <FieldRef Name="GtBudgetTotal" />
                 <FieldRef Name="GtCostsTotal" />
-                <FieldRef Name="SiteIdLookup" />
+                <FieldRef Name="GtSiteIdLookup" />
             </ViewFields>
             <RowLimit Paged="TRUE">30</RowLimit>
             <Aggregations Value="Off" />
@@ -22,21 +25,12 @@
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="e39c32db-a7da-4c93-9369-8aa5a7bde92d" Name="GtStartDate" />
         <pnp:FieldRef ID="16623c2a-3fd1-41c2-87e7-958583dd88da" Name="GtEndDate" DisplayName="{resource:Lists_TimelineContent_Field_GtEndDate_DisplayName}" />
         <pnp:FieldRef ID="28be4cc9-bc5e-4a55-a557-f652b564ca75" Name="GtBudgetTotal" DisplayName="{resource:Lists_TimelineContent_Field_GtBudgetTotal_Description}" />
         <pnp:FieldRef ID="5af54348-bc38-4a18-a11f-0f84a96da4ea" Name="GtCostsTotal" DisplayName="{resource:Lists_TimelineContent_Field_GtCostsTotal_DisplayName}" />
     </pnp:FieldRefs>
     <pnp:Fields>
         <Field Type="Text" Name="Title" StaticName="Title" DisplayName="{resource:Lists_TimelineContent_Field_Title_DisplayName}" Description="{resource:Lists_TimelineContent_Field_Description}" ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}"  />
-        <Field Type="Lookup" Mult="FALSE" DisplayName="{resource:Lists_TimelineContent_Field_SiteIdLookup_DisplayName}" Description="{resource:Lists_TimelineContent_Field_SiteIdLookup_Description}" List="{listid:{resource:Lists_Projects_Title}}}" ShowField="Title" RelationshipDeleteBehavior="None" ID="{08e2c51f-b138-416a-a4b5-638b2f80b4f6}" SourceID="{{listid:{resource:Lists_TimelineContent_Title}}}" StaticName="SiteIdLookup" Name="SiteIdLookup" />
-        <Field Type="Choice" DisplayName="{resource:Lists_TimelineContent_Field_TimelineType_DisplayName}" Description="{resource:Lists_TimelineContent_Field_TimelineType_Description}" Format="Dropdown" FillInChoice="FALSE" ID="{ecd50b9b-c143-4592-9595-9d2bee110abb}" StaticName="TimelineType" Name="TimelineType">
-            <CHOICES>
-                <CHOICE>Fase</CHOICE>
-                <CHOICE>Delfase</CHOICE>
-                <CHOICE>Milepæl</CHOICE>
-            </CHOICES>
-        </Field>
         <Field Decimals="0" DisplayName="{resource:Lists_TimelineContent_Field_GtBudgetTotal_DisplayName}" Description="{resource:Lists_TimelineContent_Field_GtBudgetTotal_Description}" ID="{28be4cc9-bc5e-4a55-a557-f652b564ca75}" LCID="1044" Min="0" Name="GtBudgetTotal" StaticName="GtBudgetTotal" Type="Currency" />
     </pnp:Fields>
 </pnp:ListInstance>
