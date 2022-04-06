@@ -1,25 +1,26 @@
-import React, { FunctionComponent } from 'react'
-import styles from './ProjectCard.module.scss'
-import { IProjectCardProps } from './types'
-import { placeholderImage } from '../types'
-import { DocumentCardActions, DocumentCardTitle } from 'office-ui-fabric-react/lib/DocumentCard'
-import { IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react'
-import { Icon } from 'office-ui-fabric-react/lib/Icon'
-import strings from 'PortfolioWebPartsStrings'
 import moment from 'moment'
-import { ProjectCardContent } from './ProjectCardContent'
+import { Icon, IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react'
+import { DocumentCardActions, DocumentCardTitle } from 'office-ui-fabric-react/lib/DocumentCard'
+import strings from 'PortfolioWebPartsStrings'
+import React, { FunctionComponent } from 'react'
+import { placeholderImage } from '../types'
+import styles from './ProjectCard.module.scss'
+import { ProjectLifecycleStatus } from './ProjectLifecycleStatus'
+import { ProjectServiceArea } from './ProjectServiceArea'
+import { ProjectType } from './ProjectType'
+import { IProjectCardProps } from './types'
 
 export const ProjectCard: FunctionComponent<IProjectCardProps> = ({
   project,
   actions,
   showProjectOwner,
   showProjectManager,
-  // showLifeCycleStatus,
-  // showServiceArea,
-  // showType,
+  showLifeCycleStatus,
+  showServiceArea,
+  showType,
   phaseLevel
 }) => {
-  
+
 
   const ownerPersona: IPersonaSharedProps = {
     title: project.owner
@@ -44,55 +45,6 @@ export const ProjectCard: FunctionComponent<IProjectCardProps> = ({
         return 'grey'
     }
   }
-
-  // const _renderLifeCycleStatus = () => {
-  //   if (project.lifecycleStatus) {
-  //     return (
-  //       <div
-  //         className={styles.tag}
-  //         style={
-  //           project.lifecycleStatus === 'Aktivt'
-  //             ? { backgroundColor: 'rgb(234,163,0,0.5)', color: 'black' }
-  //             : { backgroundColor: 'rgb(255,0,0,0.5)', color: 'black' }
-  //         }>
-  //         <span>{project.lifecycleStatus}</span>
-  //       </div>
-  //     )
-  //   }
-  // }
-
-  // const _renderServiceAreaText = () => {
-  //     return (
-  //       <>
-  //         {project.serviceArea.map((text, idx) => (
-  //           <div
-  //             key={idx}
-  //             className={styles.tag}
-  //             style={{ backgroundColor: 'rgb(234,163,0,0.5)', color: 'black' }}>
-  //             <span>{text}</span>
-  //           </div>
-  //         ))}
-  //       </>
-  //     )
-  // }
-
-  // const _renderTypeText = () => {
-  //     return (
-  //       <>
-  //         {project.type.map((type, idx) => (
-  //           <div
-  //             key={idx}
-  //             className={styles.tag}
-  //             style={{ backgroundColor: 'rgb(234,163,0,0.5)', color: 'black' }}>
-  //             <span>{type}</span>
-  //           </div>
-  //         ))}
-  //       </>
-  //     )
-  // }
-
-  // const endDate = moment(project.endDate).format('DD.MM.YYYY')
-
   return (
     <a href={project.userIsMember ? project.url : null} style={{ textDecoration: 'none' }}>
       <div
@@ -115,29 +67,33 @@ export const ProjectCard: FunctionComponent<IProjectCardProps> = ({
           shouldTruncate={true}
         />
         <hr />
-
-        <ProjectCardContent project={project} />
-
-        {/* <div className={styles.labels}>
-          {showLifeCycleStatus && _renderLifeCycleStatus()}
-          {showServiceArea && _renderServiceAreaText()}
-          {showType && _renderTypeText()}
-        </div>
-
-        <div className={styles.content}>
-          <div title='Sluttdato' className={styles.endDate}>
-            <Icon
-              className={styles.endDateIcon}
-              iconName='Calendar'
-              style={
-                project.endDate && moment(project.endDate).isBefore(moment())
-                  ? { color: 'red' }
-                  : { color: 'black' }
-              }
-            />
-            <span className={styles.endDateText}>{project.endDate ? endDate : 'Ikke satt'}</span>
+        <div>
+          <div className={styles.labels}>
+            <ProjectLifecycleStatus
+              hidden={!showLifeCycleStatus}
+              lifecycleStatus={project.lifecycleStatus} />
+            <ProjectServiceArea
+              hidden={!showServiceArea}
+              serviceArea={project.serviceArea} />
+            <ProjectType
+              hidden={!showType}
+              type={project.type} />
           </div>
-        </div> */}
+          <div className={styles.content}>
+            <div title='Sluttdato' className={styles.endDate}>
+              <Icon
+                className={styles.endDateIcon}
+                iconName='Calendar'
+                style={
+                  project.endDate && moment(project.endDate).isBefore(moment())
+                    ? { color: 'red' }
+                    : { color: 'black' }
+                }
+              />
+              <span className={styles.endDateText}>{project.endDate ? moment(project.endDate).format('DD.MM.YYYY') : 'Ikke satt'}</span>
+            </div>
+          </div>
+        </div>
         <div className={styles.footer}>
           <div className={styles.persona}>
             {showProjectOwner && project.owner && (
