@@ -31,7 +31,39 @@
     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
-            <pnp:DataValue FieldName="Title"></pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Prosjekt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHexColor">#f35d69</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTimelineType">Bar</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowElementPortfolio">1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowElementProgram">1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTimelineFilter">1</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Fase</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHexColor">#2589d6</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTimelineType">Bar</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowElementPortfolio">1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowElementProgram">1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTimelineFilter">1</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Delfase</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHexColor">#249ea0</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTimelineType">Bar</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowElementPortfolio">1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowElementProgram">1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTimelineFilter">1</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Milepæl</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHexColor">#ffc800</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTimelineType">Diamant</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowElementPortfolio">1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowElementProgram">1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTimelineFilter">1</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
 </pnp:ListInstance>
