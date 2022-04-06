@@ -20,8 +20,6 @@ export const ProjectCard: FunctionComponent<IProjectCardProps> = ({
   showType,
   phaseLevel
 }) => {
-
-
   const ownerPersona: IPersonaSharedProps = {
     title: project.owner
       ? `${project.owner.text} | ${strings.ProjectOwner}`
@@ -61,23 +59,16 @@ export const ProjectCard: FunctionComponent<IProjectCardProps> = ({
             {project.phase ? project.phase : 'Ikke satt'}
           </span>
         </div>
-        <DocumentCardTitle
-          className={styles.title}
-          title={project.title}
-          shouldTruncate={true}
-        />
+        <DocumentCardTitle className={styles.title} title={project.title} shouldTruncate={true} />
         <hr />
         <div>
           <div className={styles.labels}>
             <ProjectLifecycleStatus
               hidden={!showLifeCycleStatus}
-              lifecycleStatus={project.lifecycleStatus} />
-            <ProjectServiceArea
-              hidden={!showServiceArea}
-              serviceArea={project.serviceArea} />
-            <ProjectType
-              hidden={!showType}
-              type={project.type} />
+              lifecycleStatus={project.lifecycleStatus}
+            />
+            <ProjectServiceArea hidden={!showServiceArea} serviceArea={project.serviceArea} />
+            <ProjectType hidden={!showType} type={project.type} />
           </div>
           <div className={styles.content}>
             <div title='Sluttdato' className={styles.endDate}>
@@ -90,7 +81,9 @@ export const ProjectCard: FunctionComponent<IProjectCardProps> = ({
                     : { color: 'black' }
                 }
               />
-              <span className={styles.endDateText}>{project.endDate ? moment(project.endDate).format('DD.MM.YYYY') : 'Ikke satt'}</span>
+              <span className={styles.endDateText}>
+                {project.endDate ? moment(project.endDate).format('DD.MM.YYYY') : 'Ikke satt'}
+              </span>
             </div>
           </div>
         </div>
