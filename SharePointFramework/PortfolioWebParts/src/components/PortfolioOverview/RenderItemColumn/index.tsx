@@ -17,7 +17,7 @@ const renderDataTypeMap = {
   user: (props: IRenderItemColumnProps) => <UserColumn {...props} />,
   date: ({ columnValue: colValue }: IRenderItemColumnProps) => <span>{formatDate(colValue)}</span>,
   currency: ({ columnValue: colValue }: IRenderItemColumnProps) => (
-    <span>{tryParseCurrency(colValue, '')}</span>
+    <span>{tryParseCurrency(colValue)}</span>
   ),
   tags: (props: IRenderItemColumnProps) => <TagsColumn {...props} />,
   boolean: ({ columnValue: colValue }: IRenderItemColumnProps) => (
