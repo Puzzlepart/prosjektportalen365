@@ -51,17 +51,13 @@ export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
       <p hidden={!item.data.budgetTotal}>
         <b>{strings.BudgetTotalLabel}:</b>{' '}
         <span>
-          {tryParseCurrency(item.data.budgetTotal, '')
-            .toString()
-            .replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}
+          {tryParseCurrency(item.data.budgetTotal)}
         </span>
       </p>
       <p hidden={!item.data.costsTotal}>
         <b>{strings.CostsTotalLabel}:</b>{' '}
         <span>
-          {tryParseCurrency(item.data.costsTotal, '')
-            .toString()
-            .replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}
+          {tryParseCurrency(item.data.costsTotal)}
         </span>
       </p>
       <p
