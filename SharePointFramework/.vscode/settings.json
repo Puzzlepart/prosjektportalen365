@@ -9,8 +9,7 @@
     "**/teams": true,
     "**/release": true,
     "**/sharepoint": true,
-    "**/src/**/*.scss.ts": true,
-    "**/package-lock*": true
+    "**/src/**/*.scss.ts": true
   },
   "typescript.tsdk": ".\\node_modules\\typescript\\lib"
 }

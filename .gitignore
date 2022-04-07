@@ -2,7 +2,6 @@ Install/SiteScripts/*.txt
 Install/InstallLog.txt
 release/*
 SharePointFramework/**/.vscode/launch.json
-SharePointFramework/**/package-lock.json
 SharePointFramework/**/pnpm-lock.yaml
 SharePointFramework/**/shrinkwrap.yaml
 SharePointFramework/**/config/serve.json
@@ -11,5 +10,4 @@ Templates/Content/**/ProjectTemplates/*.txt
 Templates/*.txt
 Templates/Resources.json
 .DS_Store
-**/package-lock.json 
 node_modules
