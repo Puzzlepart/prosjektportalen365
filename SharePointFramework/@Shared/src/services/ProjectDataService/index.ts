@@ -179,7 +179,6 @@ export class ProjectDataService {
       )
     )
 
-    // tslint:disable-next-line: early-exit
     if (propertyItem) {
       const templateParameters = tryParseJson(propertyItem.fieldValuesText.TemplateParameters, {})
       Logger.write('(ProjectDataService) (getPropertiesData) Local property item found.')
