@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_Timeline_Configuration_Title}" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_Timeline_Configuration_Url}" Hidden="true" RemoveExistingContentTypes="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false"
+<pnp:ListInstance Title="{resource:Lists_Timeline_Configuration_Title}" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_Timeline_Configuration_Url}" Hidden="false" RemoveExistingContentTypes="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100DAFD9901A59F445EB29B2CE3D663A87D" Default="true" />
@@ -7,11 +7,11 @@
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_Timeline_Configuration_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
             <Query>
                 <OrderBy>
-                    <FieldRef Name="GtSortOrder" Ascending="FALSE" />
+                    <FieldRef Name="GtSortOrder" Ascending="TRUE" />
                 </OrderBy>
             </Query>
             <ViewFields>
-                <FieldRef Name="GtSortOrder" />
+                <FieldRef Name="GtSortOrder" Width="200" />
                 <FieldRef Name="Title" />
                 <FieldRef Name="GtHexColor" />
                 <FieldRef Name="GtTimelineType" />
@@ -27,7 +27,10 @@
     <pnp:FieldRefs>
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" />
     </pnp:FieldRefs>
-    TODO: Add pnp:DataRows
+    <pnp:Fields>
+        <Field Type="Text" DisplayName="{resource:SiteFields_GtHexColor_DisplayName}" Description="{resource:SiteFields_GtHexColor_Description}" ID="{aaf7828e-a937-4c7e-834b-406cf1166d77}" StaticName="GtHexColor" Name="GtHexColor" CustomFormatter="{&quot;$schema&quot;:&quot;https://developer.microsoft.com/json-schemas/sp/v2/column-formatting.schema.json&quot;,&quot;elmType&quot;:&quot;div&quot;,&quot;style&quot;:{&quot;box-sizing&quot;:&quot;border-box&quot;,&quot;padding&quot;:&quot;02px&quot;,&quot;overflow&quot;:&quot;hidden&quot;,&quot;text-overflow&quot;:&quot;ellipsis&quot;,&quot;background-color&quot;:&quot;[$GtHexColor]&quot;,&quot;color&quot;:&quot;white&quot;,&quot;border-style&quot;:&quot;solid&quot;,&quot;border-color&quot;:&quot;[$GtHexColor]&quot;},&quot;txtContent&quot;:&quot;[$GtHexColor]&quot;}" />
+        <Field DisplayName="{resource:SiteFields_GtSortOrder_DisplayName}" Description="{resource:Lists_Timeline_Configuration_Field_GtSortOrder_Description}"  ID="{0e82c395-9ed9-43f9-871a-208215b18558}" Name="GtSortOrder" StaticName="GtSortOrder" Type="Number" />
+    </pnp:Fields>
     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
