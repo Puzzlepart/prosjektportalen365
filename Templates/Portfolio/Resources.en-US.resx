@@ -1553,7 +1553,7 @@
     <value>Hva slags type tidslinje element er dette?</value>
   </data>
   <data name="SiteFields_GtTimelineType_DisplayName" xml:space="preserve">
-    <value>Type</value>
+    <value>Elementtype</value>
   </data>
   <data name="SiteFields_GtTimelineType_Description" xml:space="preserve">
     <value>Hva slags element type/form skal denne ha?</value>
