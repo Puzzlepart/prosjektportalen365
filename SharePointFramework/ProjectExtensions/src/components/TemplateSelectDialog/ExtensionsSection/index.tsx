@@ -5,8 +5,9 @@ import * as React from 'react'
 import { ProjectExtension } from '../../../models'
 import styles from './ExtensionsSection.module.scss'
 import { IExtensionsSectionProps } from './types'
+import { ScrollablePane } from 'office-ui-fabric-react'
 
-export const ExtensionsSection = (props: IExtensionsSectionProps) => {
+export const ExtensionsSection: React.FunctionComponent<IExtensionsSectionProps> = (props) => {
   /**
    * On item toggle
    *
@@ -24,7 +25,7 @@ export const ExtensionsSection = (props: IExtensionsSectionProps) => {
 
   return (
     <div className={styles.extensionsSection}>
-      <div className={styles.container}>
+      <ScrollablePane className={styles.container}>
         {props.extensions.map((ext) => (
           <div key={ext.key} className={styles.item}>
             <div className={styles.toggle}>
@@ -44,7 +45,7 @@ export const ExtensionsSection = (props: IExtensionsSectionProps) => {
             </div>
           </div>
         ))}
-      </div>
+      </ScrollablePane>
     </div>
   )
 }

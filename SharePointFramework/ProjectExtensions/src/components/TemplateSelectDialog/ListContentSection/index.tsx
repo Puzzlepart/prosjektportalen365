@@ -5,8 +5,9 @@ import * as React from 'react'
 import { ListContentConfig } from '../../../models'
 import { IListContentSectionProps } from './types'
 import styles from './ListContentSection.module.scss'
+import { ScrollablePane } from 'office-ui-fabric-react'
 
-export const ListContentSection = (props: IListContentSectionProps) => {
+export const ListContentSection: React.FunctionComponent<IListContentSectionProps> = (props) => {
   /**
    * On item toggle
    *
@@ -29,7 +30,7 @@ export const ListContentSection = (props: IListContentSectionProps) => {
 
   return (
     <div className={styles.listContentSection}>
-      <div className={styles.container}>
+      <ScrollablePane className={styles.container}>
         {props.listContentConfig
           .filter((lcc) => !lcc.hidden)
           .map((lcc) => (
@@ -51,7 +52,7 @@ export const ListContentSection = (props: IListContentSectionProps) => {
               </div>
             </div>
           ))}
-      </div>
+      </ScrollablePane>
     </div>
   )
 }

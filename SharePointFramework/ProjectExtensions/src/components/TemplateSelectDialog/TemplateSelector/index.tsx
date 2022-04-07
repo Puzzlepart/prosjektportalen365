@@ -5,7 +5,7 @@ import { ProjectTemplate } from '../../../models'
 import { ITemplateSelectorProps } from './types'
 import styles from './TemplateSelector.module.scss'
 
-export const TemplateSelector = (props: ITemplateSelectorProps) => {
+export const TemplateSelector: React.FunctionComponent<ITemplateSelectorProps> = (props) => {
   /**
    * On template selected
    *
