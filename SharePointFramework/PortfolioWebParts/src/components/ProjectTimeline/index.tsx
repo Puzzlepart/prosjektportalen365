@@ -317,7 +317,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    */
   private async _fetchData(): Promise<ITimelineData> {
     try {
-      const projects = await this.props.dataAdapter.fetchEncrichedProjects()
+      const projects = await this.props.dataAdapter.fetchEnrichedProjects()
       const timelineItems = await this.props.dataAdapter.fetchTimelineContentItems()
       const filteredProjects = projects.filter((project) => {
         return project.startDate !== null && project.endDate !== null

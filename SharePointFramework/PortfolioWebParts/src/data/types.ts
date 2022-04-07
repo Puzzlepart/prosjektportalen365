@@ -42,7 +42,7 @@ export interface IDataAdapter {
   isUserInGroup?(PortfolioManagerGroupName: string): Promise<boolean>
   fetchDataForTimelineProject?(siteId: any): Promise<any>
   fetchTimelineContentItems?(): Promise<TimelineContentListModel[]>
-  fetchEncrichedProjects?(): Promise<any>
+  fetchEnrichedProjects?(): Promise<any>
   fetchProjectSites(arg0: number, arg1: string, Descending: SortDirection): Promise<any>
   fetchItemsWithSource?(dataSource: string, arg1: string[]): Promise<any>
 }

@@ -430,7 +430,7 @@ export class DataAdapter implements IDataAdapter {
    * * Site users
    * * Combines the data
    */
-  public async fetchEncrichedProjects(): Promise<ProjectListModel[]> {
+  public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
     await MSGraph.Init(this.context.msGraphClientFactory)
     const [items, groups, users] = await Promise.all([
       sp.web.lists
@@ -463,7 +463,7 @@ export class DataAdapter implements IDataAdapter {
       sp.web.siteUsers
         .select('Id', 'Title', 'Email')
         .usingCaching({
-          key: 'fetchencrichedprojects_siteusers',
+          key: 'fetchenrichedprojects_siteusers',
           storeName: 'session',
           expiration: dateAdd(new Date(), 'minute', 15)
         })
