@@ -1,46 +1,42 @@
-import { ISPUser } from 'interfaces'
-import { IPersonaSharedProps } from 'office-ui-fabric-react/lib/Persona'
-import { getUserPhoto } from 'pp365-shared/lib/helpers'
+import {
+  IPersonaSharedProps
+} from 'office-ui-fabric-react/lib/Persona'
 
 export class ProjectListModel {
+  public siteId: string
+  public groupId: string
+  public url: string
+  public lifecycleStatus: string
+  public type?: string[]
+  public serviceArea: string[]
+  public phase?: string
+  public startDate?: string
+  public endDate?: string
   public manager: IPersonaSharedProps
   public owner: IPersonaSharedProps
   public logo: string
+  public userIsMember?: boolean
+  public data?: any[]
+  public isParent?: boolean
+  public isProgram?: boolean
 
   /**
    * Creates a new instance of ProjectListModel
    *
-   * @param siteId Site id
-   * @param title Title
-   * @param url Url
-   * @param phase Phase
-   * @param startDate Start date
-   * @param endDate End date
-   * @param manager Manager
-   * @param owner Owner
-   * @param userIsMember User is member
-   * @param budgetTotal Budget total
-   * @param costsTotal Costs total
-   * @param type Type
+   * @param title - Title
+   * @param item - Item
    */
-  constructor(
-    public siteId: string,
-    public groupId: string,
-    public title: string,
-    public url: string,
-    public phase?: string,
-    public startDate?: string,
-    public endDate?: string,
-    manager?: ISPUser,
-    owner?: ISPUser,
-    public userIsMember?: boolean,
-    public budgetTotal?: string,
-    public costsTotal?: string,
-    public type?: string,
-    public isParent?: boolean,
-    public isProgram?: boolean
-  ) {
-    if (manager) this.manager = { text: manager.Title, imageUrl: getUserPhoto(manager.Email) }
-    if (owner) this.owner = { text: owner.Title, imageUrl: getUserPhoto(owner.Email) }
+  constructor(public title: string, item: any) {
+    this.siteId = item.GtSiteId
+    this.groupId = item.GtGroupId
+    this.url = item.GtSiteUrl
+    this.lifecycleStatus = item.GtProjectLifecycleStatus
+    this.serviceArea = item.GtProjectServiceAreaText?.split(';') ?? []
+    this.type = item.GtProjectTypeText?.split(';') ?? []
+    this.phase = item.GtProjectPhaseText
+    this.startDate = item.GtStartDate
+    this.endDate = item.GtEndDate
+    this.isParent = item.GtIsParentProject
+    this.isProgram = item.GtIsProgram
   }
 }

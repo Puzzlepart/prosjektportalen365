@@ -209,24 +209,20 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   /**
    * Creating groups based on projects title
    *
+   * @param projects Projects
+   *
    * @returns {ITimelineGroup[]} Timeline groups
    */
   private _transformGroups(projects: ProjectListModel[]): ITimelineGroup[] {
-    const groupNames: string[] = projects
-      .map((project) => {
-        const name = project.title
-        return name
+    let groups: ITimelineGroup[] = _.uniq(projects
+      .map((project) => project.title))
+      .map((title, id) => {
+        return {
+          id,
+          title
+        }
       })
-      .filter((value, index, self) => self.indexOf(value) === index)
-    let groups: ITimelineGroup[] = groupNames.map((name, id) => {
-      const [title] = name.split('|')
-      return {
-        id,
-        title
-      }
-    })
-    groups = sortArray(groups, ['type', 'title'])
-    return groups
+    return sortArray(groups, ['type', 'title'])
   }
 
   /**
@@ -239,61 +235,27 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    * @returns {ITimelineItem[]} Timeline items
    */
   private _transformItems(
-    projects: ProjectListModel[],
     timelineItems: TimelineContentListModel[],
     groups: ITimelineGroup[]
   ): ITimelineItem[] {
-    const items: ITimelineItem[] = projects.map((project, id) => {
-      const group = _.find(groups, (grp) => project.title.indexOf(grp.title) !== -1)
-      const style: React.CSSProperties = {
-        color: 'white',
-        border: 'none',
-        cursor: 'auto',
-        outline: 'none',
-        background: '#f35d69',
-        backgroundColor: '#f35d69'
-      }
-      return {
-        id,
-        group: group.id,
-        title: format(strings.ProjectTimelineItemInfo, project.title),
-        start_time: moment(new Date(project.startDate)),
-        end_time: moment(new Date(project.endDate)),
-        itemProps: { style },
-        project: project.title,
-        projectUrl: project.url,
-        phase: project.phase,
-        type: strings.ProjectLabel,
-        budgetTotal: project.budgetTotal,
-        costsTotal: project.costsTotal
-      } as ITimelineItem
-    })
 
-    const phases: ITimelineItem[] = timelineItems.map((item, id) => {
-      id += items.length
-
-      const backgroundColor =
-        item.type === strings.PhaseLabel
-          ? '#2589d6'
-          : item.type === strings.MilestoneLabel
-            ? 'transparent'
-            : item.type === strings.SubPhaseLabel
-              ? '#249ea0'
-              : '#484848'
-
+    const items: ITimelineItem[] = timelineItems.map((item, id) => {
       const group = _.find(groups, (grp) => item.title.indexOf(grp.title) !== -1)
       const style: React.CSSProperties = {
         color: 'white',
         border: 'none',
         cursor: 'auto',
         outline: 'none',
-        background: backgroundColor,
-        backgroundColor: backgroundColor
+        background: item.hexColor || '#f35d69',
+        backgroundColor: item.hexColor || '#f35d69'
       }
       return {
         id,
         group: group.id,
-        title: item.itemTitle,
+        title:
+          item.type === strings.ProjectLabel
+            ? format(strings.ProjectTimelineItemInfo, item.title)
+            : item.itemTitle,
         start_time:
           item.type === strings.MilestoneLabel
             ? moment(new Date(item.endDate))
@@ -301,13 +263,14 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         end_time: moment(new Date(item.endDate)),
         itemProps: { style },
         project: item.title,
+        projectUrl: item.url,
+        phase: item.phase,
         type: item.type,
         budgetTotal: item.budgetTotal,
         costsTotal: item.costsTotal
       } as ITimelineItem
     })
-
-    return [...items, ...phases]
+    return items
   }
 
   /**
@@ -317,30 +280,35 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    */
   private async _fetchData(): Promise<ITimelineData> {
     try {
-      const projects = await this.props.dataAdapter.fetchEnrichedProjects()
-      const timelineItems = await this.props.dataAdapter.fetchTimelineContentItems()
+      const [projects, timelineContentItems] = await Promise.all([
+        this.props.dataAdapter.fetchEnrichedProjects(),
+        this.props.dataAdapter.fetchTimelineContentItems()
+      ])
       const filteredProjects = projects.filter((project) => {
         return project.startDate !== null && project.endDate !== null
       })
 
-      const filteredTimelineItems = timelineItems.filter((item) => {
+      const filteredTimelineItems = timelineContentItems.filter((item) => {
         return filteredProjects.some((project) => {
           return project.title.indexOf(item.title) !== -1
         })
       })
 
-      await Promise.all(
-        filteredProjects.map(async (project) => {
-          const statusReport = (
-            await this.props.dataAdapter.fetchDataForTimelineProject(project.siteId)
-          ).statusReports[0]
-          project['budgetTotal'] = statusReport && statusReport['GtBudgetTotalOWSCURR']
-          project['costsTotal'] = statusReport && statusReport['GtCostsTotalOWSCURR']
-          project['type'] = strings.ProjectLabel
-        })
-      )
+      let timelineItems: TimelineContentListModel[] = await Promise.all(filteredProjects.map(async (project) => {
+        const projectData = await this.props.dataAdapter.fetchDataForTimelineProject(project.siteId)
+        return {
+          ...project,
+          ...projectData
+        }
+      }))
+
+      console.log(timelineItems, filteredTimelineItems)
+      
+      timelineItems = [...timelineItems, ...filteredTimelineItems]
+      console.log(timelineItems)
+
       const groups = this._transformGroups(filteredProjects)
-      const items = this._transformItems(filteredProjects, filteredTimelineItems, groups)
+      const items = this._transformItems(timelineItems, groups)
       return { items, groups }
     } catch (error) {
       throw error
