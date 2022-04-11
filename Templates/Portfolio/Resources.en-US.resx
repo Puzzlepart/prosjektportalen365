@@ -1552,10 +1552,10 @@
   <data name="SiteFields_GtTimelineTypeLookup_Description" xml:space="preserve">
     <value>Hva slags type tidslinje element er dette?</value>
   </data>
-  <data name="SiteFields_GtTimelineType_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtElementType_DisplayName" xml:space="preserve">
     <value>Elementtype</value>
   </data>
-  <data name="SiteFields_GtTimelineType_Description" xml:space="preserve">
+  <data name="SiteFields_GtElementType_Description" xml:space="preserve">
     <value>Hva slags element type/form skal denne ha?</value>
   </data>
   <data name="SiteFields_GtHexColor_DisplayName" xml:space="preserve">
