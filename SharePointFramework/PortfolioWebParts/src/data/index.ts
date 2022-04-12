@@ -363,7 +363,7 @@ export class DataAdapter implements IDataAdapter {
         const type = item.GtTimelineTypeLookup && item.GtTimelineTypeLookup.Title
         const config = _.find(timelineConfig, (col) => col.Title === type)
 
-        if (item.GtSiteIdLookup?.Title) {
+        if (item.GtSiteIdLookup?.Title && (config && config.GtShowElementPortfolio)) {
           const model = new TimelineContentListModel(
             item.GtSiteIdLookup?.GtSiteId,
             item.GtSiteIdLookup?.Title,

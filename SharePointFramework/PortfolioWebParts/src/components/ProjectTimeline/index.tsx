@@ -100,6 +100,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
           headerText={strings.FilterText}
           filters={this._getFilters()}
           onFilterChange={this._onFilterChange.bind(this)}
+          isLightDismiss
           onDismiss={() => this.setState({ showFilterPanel: false })}
         />
         {this.state.showDetails && (
@@ -157,7 +158,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   private _getFilters(): IFilterProps[] {
     const columns = [
       { fieldName: 'project', name: strings.SiteTitleLabel },
-      { fieldName: 'type', name: strings.TypeLabel }
+      { fieldName: 'data.type', name: strings.TypeLabel }
     ]
     return columns.map((col) => ({
       column: { key: col.fieldName, minWidth: 0, ...col },
