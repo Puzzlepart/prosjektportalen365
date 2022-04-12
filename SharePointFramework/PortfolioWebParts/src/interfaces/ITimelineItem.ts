@@ -1,6 +1,16 @@
 import { TypedHash } from '@pnp/common'
 import * as moment from 'moment'
 
+export interface IItemData {
+  phase?: string
+  milestoneDate?: moment.Moment
+  type?: string
+  budgetTotal?: string
+  costsTotal?: string
+  sortOrder?: number,
+  hexColor?: string,
+  elementType?: string,
+}
 export interface ITimelineItem {
   id: number
   title: string
@@ -11,11 +21,7 @@ export interface ITimelineItem {
   itemProps: React.HTMLProps<HTMLDivElement>
   project: string
   projectUrl?: string
-  phase?: string
-  milestoneDate?: moment.Moment
-  type?: string
-  budgetTotal?: string
-  costsTotal?: string
+  data?: IItemData
   role?: string
   resource?: string
   props: TypedHash<any>

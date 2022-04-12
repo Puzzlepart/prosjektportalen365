@@ -308,8 +308,6 @@ export class DataAdapter implements IDataAdapter {
     ])
     const [data] = (statusReports.map((item) => cleanDeep({ ...item })))
     const config = _.find(timelineConfig, (col) => col.Title === strings.ProjectLabel)
-    console.log(config)
-    console.log(data)
     return {
       type: strings.ProjectLabel,
       costsTotal: data && data['GtCostsTotalOWSCURR'],
@@ -359,8 +357,6 @@ export class DataAdapter implements IDataAdapter {
         .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
         .get()
     ])
-
-    console.log(timelineConfig, timelineItems)
 
     return timelineItems
       .map((item) => {

@@ -104,7 +104,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         />
         {this.state.showDetails && (
           <DetailsCallout
-            item={this.state.showDetails}
+            timelineItem={this.state.showDetails}
             onDismiss={() => this.setState({ showDetails: null })}
           />
         )}
@@ -119,7 +119,8 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    * @param item Item
    */
   private _onItemClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) {
-    this.setState({ showDetails: { element: event.currentTarget, data: item } })
+    console.log(item)
+    this.setState({ showDetails: { element: event.currentTarget, item } })
   }
 
   /**
@@ -145,6 +146,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
       const groups = data.groups.filter((grp) => items.filter((i) => i.group === grp.id).length > 0)
       return { items, groups }
     } else {
+      console.log(data)
       return data
     }
   }
@@ -246,8 +248,14 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         border: 'none',
         cursor: 'auto',
         outline: 'none',
-        background: item.hexColor || '#f35d69',
-        backgroundColor: item.hexColor || '#f35d69'
+        background:
+          item.elementType !== strings.BarLabel
+            ? 'transparent'
+            : item.hexColor || '#f35d69',
+        backgroundColor:
+          item.elementType !== strings.BarLabel
+            ? 'transparent'
+            : item.hexColor || '#f35d69'
       }
       return {
         id,
@@ -257,17 +265,22 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
             ? format(strings.ProjectTimelineItemInfo, item.title)
             : item.itemTitle,
         start_time:
-          item.type === strings.MilestoneLabel
+          item.elementType !== strings.BarLabel
             ? moment(new Date(item.endDate))
             : moment(new Date(item.startDate)),
         end_time: moment(new Date(item.endDate)),
         itemProps: { style },
         project: item.title,
         projectUrl: item.url,
-        phase: item.phase,
-        type: item.type,
-        budgetTotal: item.budgetTotal,
-        costsTotal: item.costsTotal
+        data: {
+          phase: item.phase,
+          type: item.type,
+          budgetTotal: item.budgetTotal,
+          costsTotal: item.costsTotal,
+          sortOrder: item.sortOrder,
+          hexColor: item.hexColor,
+          elementType: item.elementType
+        },
       } as ITimelineItem
     })
     return items
@@ -302,8 +315,6 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         }
       }))
 
-      console.log(timelineItems, filteredTimelineItems)
-      
       timelineItems = [...timelineItems, ...filteredTimelineItems]
       console.log(timelineItems)
 

@@ -57,37 +57,61 @@ export class Timeline extends Component<ITimelineProps> {
   private _itemRenderer(props: ReactCalendarItemRendererProps<any>) {
     const htmlProps = props.getItemProps(props.item.itemProps)
 
-    if (props.item.type === strings.MilestoneLabel)
-      return (
-        <div
-          {...htmlProps}
-          className={`${styles.timelineItem} rc-item`}
-          onClick={(event) => this.props._onItemClick(event, props.item)}>
+    switch (props.item.data.elementType) {
+      case strings.DiamondLabel: {
+        return (
           <div
-            className={`${styles.itemContent} rc-milestoneitem-content`}
-            style={{
-              maxHeight: `${props.itemContext.dimensions.height}`,
-              clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
-              width: '22px',
-              height: '24px',
-              backgroundColor: '#ffc800',
-              marginTop: '-2px'
-            }}></div>
-        </div>
-      )
-
-    return (
-      <div
-        {...htmlProps}
-        className={`${styles.timelineItem} rc-item`}
-        onClick={(event) => this.props._onItemClick(event, props.item)}>
-        <div
-          className={`${styles.itemContent} rc-item-content`}
-          style={{ maxHeight: `${props.itemContext.dimensions.height}`, paddingLeft: '8px' }}>
-          {props.item.title}
-        </div>
-      </div>
-    )
+            {...htmlProps}
+            className={`${styles.timelineItem} rc-item`}
+            onClick={(event) => this.props._onItemClick(event, props.item)}>
+            <div
+              className={`${styles.itemContent} rc-milestoneitem-content`}
+              style={{
+                maxHeight: `${props.itemContext.dimensions.height}`,
+                clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
+                width: '22px',
+                height: '24px',
+                backgroundColor: props.item.data.hexColor || '#ffc800',
+                marginTop: '-2px'
+              }} />
+          </div>
+        )
+      }
+      case strings.TriangleLabel: {
+        return (
+          <div
+            {...htmlProps}
+            className={`${styles.timelineItem} rc-item`}
+            onClick={(event) => this.props._onItemClick(event, props.item)}>
+            <div
+              className={`${styles.itemContent} rc-milestoneitem-content`}
+              style={{
+                maxHeight: `${props.itemContext.dimensions.height}`,
+                width: '0',
+                height: '0',
+                borderLeft: '11px solid transparent',
+                borderRight: '11px solid transparent',
+                borderBottom: `22px solid ${props.item.data.hexColor || 'lightblue'}`,
+                marginTop: '-3px'
+              }} />
+          </div>
+        )
+      }
+      default: {
+        return (
+          <div
+            {...htmlProps}
+            className={`${styles.timelineItem} rc-item`}
+            onClick={(event) => this.props._onItemClick(event, props.item)}>
+            <div
+              className={`${styles.itemContent} rc-item-content`}
+              style={{ maxHeight: `${props.itemContext.dimensions.height}`, paddingLeft: '8px' }}>
+              {props.item.title}
+            </div>
+          </div>
+        )
+      }
+    }
   }
 
   /**
@@ -95,6 +119,9 @@ export class Timeline extends Component<ITimelineProps> {
    */
   private _groupRenderer({ group }: ReactCalendarGroupRendererProps<ITimelineGroup>) {
     const style: React.CSSProperties = { display: 'block', width: '100%' }
+
+    console.log(group)
+
     return (
       <div>
         <span style={style}>{group.title}</span>

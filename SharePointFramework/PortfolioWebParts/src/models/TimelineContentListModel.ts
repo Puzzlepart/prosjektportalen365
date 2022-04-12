@@ -24,7 +24,7 @@ export class TimelineContentListModel {
     public title: string,
     public itemTitle: string,
     public type: string,
-    public sortOrder: string,
+    public sortOrder: number,
     public hexColor: string,
     public elementType: any,
     public showElementPortfolio: any,
