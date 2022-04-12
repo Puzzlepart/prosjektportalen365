@@ -119,9 +119,6 @@ export class Timeline extends Component<ITimelineProps> {
    */
   private _groupRenderer({ group }: ReactCalendarGroupRendererProps<ITimelineGroup>) {
     const style: React.CSSProperties = { display: 'block', width: '100%' }
-
-    console.log(group)
-
     return (
       <div>
         <span style={style}>{group.title}</span>

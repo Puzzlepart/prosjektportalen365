@@ -12,181 +12,130 @@ export interface IDetailsCalloutProps {
 
 export const DetailsCallout = ({ timelineItem, onDismiss }: IDetailsCalloutProps) => {
   const item = timelineItem.item.data
-  let calloutTitle = ''
 
-  switch (item.type) {
-    case strings.MilestoneLabel: {
-      return (
-        <Callout
-          className={styles.detailsCallout}
-          gapSpace={10}
-          target={timelineItem.element}
-          onDismiss={onDismiss}
-          setInitialFocus={true}>
-          <p hidden={!item.type}>
-            <b>{item.type}:</b>{' '}
-            <span>{timelineItem.item.title}</span>
-          </p>
-          <p>
-            <b>{strings.MilestoneDateLabel}:</b>{' '}
-            <span>{formatDate(timelineItem.item.end_time.toString())}</span>
-          </p>
-          <p hidden={!item.budgetTotal}>
-            <b>{strings.BudgetTotalLabel}:</b>{' '}
-            <span>
-              {tryParseCurrency(item.budgetTotal, '')
-                .toString()
-                .replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}
-            </span>
-          </p>
-          <p hidden={!item.costsTotal}>
-            <b>{strings.CostsTotalLabel}:</b>{' '}
-            <span>
-              {tryParseCurrency(item.costsTotal, '')
-                .toString()
-                .replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}
-            </span>
-          </p>
-          <p hidden={!item.type}>
-            <b>{strings.TypeLabel}:</b> <span>{item.type}</span>
-          </p>
-        </Callout>
-      )
+  const _calloutContent = (): JSX.Element => {
+    switch (item.type) {
+      case strings.MilestoneLabel: {
+        return (
+          <>
+            <p hidden={!item.type}>
+              <b>{item.type}:</b>{' '}
+              <span>{timelineItem.item.title}</span>
+            </p>
+            <p>
+              <b>{strings.MilestoneDateLabel}:</b>{' '}
+              <span>{formatDate(timelineItem.item.end_time.toString())}</span>
+            </p>
+          </>
+        )
+      }
+      case strings.PhaseLabel:
+      case strings.SubPhaseLabel: {
+        return (
+          <>
+            <p hidden={!item.type}>
+              <b>{item.type}:</b>{' '}
+              <span>{timelineItem.item.title}</span>
+            </p>
+            <p>
+              <b>{strings.StartDateLabel}:</b>{' '}<span>{formatDate(timelineItem.item.start_time.toString())}</span>
+            </p>
+            <p>
+              <b>{strings.EndDateLabel}:</b> <span>{formatDate(timelineItem.item.end_time.toString())}</span>
+            </p>
+          </>
+        )
+      }
+      case strings.ProjectLabel: {
+        return (
+          <>
+            <p hidden={!timelineItem.item.projectUrl}>
+              <b>{strings.ProjectLabel}:</b>{' '}
+              <a href={timelineItem.item.projectUrl}>
+                <span>{timelineItem.item.project}</span>
+              </a>
+            </p>
+            <p hidden={!item.budgetTotal || !item.costsTotal}>
+              <a
+                target='_blank'
+                rel='noreferrer'
+                href={`${timelineItem.item.projectUrl}/SitePages/Prosjektstatus.aspx`}>
+                <span>{strings.LastPublishedStatusreport}</span>
+              </a>
+            </p>
+            <p hidden={!item.phase}>
+              <b>{strings.CurrentPhaseLabel}:</b>{' '}<span>{item.phase}</span>
+            </p>
+            <p>
+              <b>{strings.StartDateLabel}:</b>{' '}<span>{formatDate(timelineItem.item.start_time.toString())}</span>
+            </p>
+            <p>
+              <b>{strings.EndDateLabel}:</b> <span>{formatDate(timelineItem.item.end_time.toString())}</span>
+            </p>
+          </>
+        )
+      }
+      default: {
+        return (
+          <>
+            <p>
+              <b>{strings.NameLabel}:</b>{' '}
+              <span>{timelineItem.item.title}</span>
+            </p>
+            <p hidden={item.elementType !== strings.TriangleLabel}>
+              <b>{strings.ColumnRenderOptionDate}:</b>{' '}
+              <span>{formatDate(timelineItem.item.end_time.toString())}</span>
+            </p>
+            <p hidden={item.elementType === strings.TriangleLabel}>
+              <b>{strings.StartDateLabel}:</b>{' '}<span>{formatDate(timelineItem.item.start_time.toString())}</span>
+            </p>
+            <p hidden={item.elementType === strings.TriangleLabel}>
+              <b>{strings.EndDateLabel}:</b> <span>{formatDate(timelineItem.item.end_time.toString())}</span>
+            </p>
+          </>
+        )
+      }
     }
-    case strings.PhaseLabel:
-    case strings.SubPhaseLabel: {
-      return (
-        <Callout
-          className={styles.detailsCallout}
-          gapSpace={10}
-          target={timelineItem.element}
-          onDismiss={onDismiss}
-          setInitialFocus={true}>
-          <p hidden={!item.type}>
-            <b>{item.type}:</b>{' '}
-            <span>{timelineItem.item.title}</span>
-          </p>
-          <p>
-            <b>{strings.StartDateLabel}:</b>{' '}<span>{formatDate(timelineItem.item.start_time.toString())}</span>
-          </p>
-          <p>
-            <b>{strings.EndDateLabel}:</b> <span>{formatDate(timelineItem.item.end_time.toString())}</span>
-          </p>
-          <p hidden={!item.budgetTotal}>
-            <b>{strings.BudgetTotalLabel}:</b>{' '}
-            <span>
-              {tryParseCurrency(item.budgetTotal, '')
-                .toString()
-                .replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}
-            </span>
-          </p>
-          <p hidden={!item.costsTotal}>
-            <b>{strings.CostsTotalLabel}:</b>{' '}
-            <span>
-              {tryParseCurrency(item.costsTotal, '')
-                .toString()
-                .replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}
-            </span>
-          </p>
-          <p hidden={!item.type}>
-            <b>{strings.TypeLabel}:</b> <span>{item.type}</span>
-          </p>
-        </Callout>
-      )
-    }
-    case strings.ProjectLabel: {
-      return (
-        <Callout
-          className={styles.detailsCallout}
-          gapSpace={10}
-          target={timelineItem.element}
-          onDismiss={onDismiss}
-          setInitialFocus={true}>
-          <p hidden={!timelineItem.item.projectUrl}>
-            <b>{strings.ProjectLabel}:</b>{' '}
-            <a href={timelineItem.item.projectUrl}>
-              <span>{timelineItem.item.project}</span>
-            </a>
-          </p>
-          <p hidden={!item.phase}>
-            <b>{strings.CurrentPhaseLabel}:</b>{' '}<span>{item.phase}</span>
-          </p>
-          <p>
-            <b>{strings.StartDateLabel}:</b>{' '}<span>{formatDate(timelineItem.item.start_time.toString())}</span>
-          </p>
-          <p>
-            <b>{strings.EndDateLabel}:</b> <span>{formatDate(timelineItem.item.end_time.toString())}</span>
-          </p>
-          <p hidden={!item.budgetTotal}>
-            <b>{strings.BudgetTotalLabel}:</b>{' '}
-            <span>
-              {tryParseCurrency(item.budgetTotal, '')
-                .toString()
-                .replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}
-            </span>
-          </p>
-          <p hidden={!item.costsTotal}>
-            <b>{strings.CostsTotalLabel}:</b>{' '}
-            <span>
-              {tryParseCurrency(item.costsTotal, '')
-                .toString()
-                .replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}
-            </span>
-          </p>
-          <p hidden={!item.budgetTotal || !item.costsTotal}>
-            <a
-              target='_blank'
-              rel='noreferrer'
-              href={`${timelineItem.item.projectUrl}/SitePages/Prosjektstatus.aspx`}>
-              <span>{strings.LastPublishedStatusreport}</span>
-            </a>
-          </p>
-        </Callout>
-      )
-    }
-    default: {
-      return (
-        <Callout
-          className={styles.detailsCallout}
-          gapSpace={10}
-          target={timelineItem.element}
-          onDismiss={onDismiss}
-          setInitialFocus={true}>
-          <p>
-            <b>{strings.NameLabel}:</b>{' '}
-            <span>{timelineItem.item.title}</span>
-          </p>
-          <p hidden={item.elementType !== strings.TriangleLabel}>
-            <b>{strings.ColumnRenderOptionDate}:</b>{' '}
-            <span>{formatDate(timelineItem.item.end_time.toString())}</span>
-          </p>
-          <p hidden={item.elementType === strings.TriangleLabel}>
-            <b>{strings.StartDateLabel}:</b>{' '}<span>{formatDate(timelineItem.item.start_time.toString())}</span>
-          </p>
-          <p hidden={item.elementType === strings.TriangleLabel}>
-            <b>{strings.EndDateLabel}:</b> <span>{formatDate(timelineItem.item.end_time.toString())}</span>
-          </p>
-          <p hidden={!item.budgetTotal}>
-            <b>{strings.BudgetTotalLabel}:</b>{' '}
-            <span>
-              {tryParseCurrency(item.budgetTotal, '')
-                .toString()
-                .replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}
-            </span>
-          </p>
-          <p hidden={!item.costsTotal}>
-            <b>{strings.CostsTotalLabel}:</b>{' '}
-            <span>
-              {tryParseCurrency(item.costsTotal, '')
-                .toString()
-                .replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}
-            </span>
-          </p>
-          <p hidden={!item.type}>
-            <b>{strings.TypeLabel}:</b> <span>{item.type}</span>
-          </p>
-        </Callout>
-      )
-    }
-  }
+  };
+
+  let bound = document.getElementsByClassName('rct-scroll')[0].getBoundingClientRect();
+  const bounds = {
+    top: bound.top,
+    left: bound.left,
+    right: bound.right,
+    bottom: bound.bottom + 450,
+    width: bound.width,
+    height: bound.height + 450
+  };
+
+  return (
+    <Callout
+      className={styles.detailsCallout}
+      styles={{ beak: { backgroundColor: item.hexColor }, beakCurtain: { borderTop: `6px solid ${item.hexColor}` } }}
+      target={timelineItem.element}
+      bounds={bounds}
+      onDismiss={onDismiss}
+      setInitialFocus={true}>
+      {_calloutContent()}
+      <p hidden={!item.budgetTotal}>
+        <b>{strings.BudgetTotalLabel}:</b>{' '}
+        <span>
+          {tryParseCurrency(item.budgetTotal, '')
+            .toString()
+            .replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}
+        </span>
+      </p>
+      <p hidden={!item.costsTotal}>
+        <b>{strings.CostsTotalLabel}:</b>{' '}
+        <span>
+          {tryParseCurrency(item.costsTotal, '')
+            .toString()
+            .replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')}
+        </span>
+      </p>
+      <p hidden={!item.type}>
+        <b>{strings.TypeLabel}:</b> <span>{item.type}</span>
+      </p>
+    </Callout>
+  )
 }
