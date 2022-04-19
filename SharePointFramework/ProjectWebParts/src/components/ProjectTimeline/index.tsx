@@ -191,9 +191,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
       case 'datetime':
         return columnValue && moment(columnValue).format('DD.MM.YYYY')
       case 'currency':
-        return tryParseCurrency(columnValue, '')
-          .toString()
-          .replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ')
+        return tryParseCurrency(columnValue)
       default:
         return columnValue
     }

@@ -21,7 +21,6 @@ export interface IPortalDataServiceConfiguration extends Object {
   templateParametersFieldXml?: string
 }
 
-// tslint:disable-next-line: naming-convention
 export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceConfiguration> = {
   listNames: {
     STATUS_SECTIONS: 'Statusseksjoner',

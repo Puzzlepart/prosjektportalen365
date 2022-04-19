@@ -50,7 +50,7 @@ $ProjectsInHub = Get-PP365HubSiteChild -Identity $PPHubSite
 $ctx = Get-PnPContext
 $ctx.Load($ctx.Web.CurrentUser)
 $ctx.ExecuteQuery()
-$UserName = $ctx.Web.CurrentUser.Email
+$UserName = $ctx.Web.CurrentUser.LoginName
 
 Write-Host "The following sites were found to be part of the Project Portal hub:"
 $ProjectsInHub | ForEach-Object { Write-Host "`t$_" }

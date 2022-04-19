@@ -151,6 +151,7 @@ declare interface IProjectWebPartsStrings {
   CreateParentProjectLabel: string;
   ChildProjectAdminLabel: string;
   AdminPageLinkLabel: string;
+  DefaultAdminPageLink: string;
 }
 
 declare module 'ProjectWebPartsStrings' {
