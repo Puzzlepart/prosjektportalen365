@@ -38,8 +38,8 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
 
   public async componentDidMount(): Promise<void> {
     try {
-      const data = await this._fetchData()
-      this.setState({ data, loading: false })
+      const [data, timelineConfiguration] = await this._fetchData()
+      this.setState({ data, timelineConfiguration, loading: false })
     } catch (error) {
       this.setState({ error: error.message || error.status, loading: false })
     }
@@ -156,13 +156,19 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    * Get filters
    */
   private _getFilters(): IFilterProps[] {
+    const config = this.state.timelineConfiguration;
+
     const columns = [
-      { fieldName: 'project', name: strings.SiteTitleLabel },
+      (config.find((item) => item?.Title === strings.ProjectLabel)).GtTimelineFilter && { fieldName: 'project', name: strings.SiteTitleLabel },
       { fieldName: 'data.type', name: strings.TypeLabel }
     ]
+
+    const hiddenItems = (config.filter((item) => !item?.GtTimelineFilter)).map((item) => item.Title)
+
     return columns.map((col) => ({
       column: { key: col.fieldName, minWidth: 0, ...col },
       items: this.state.data.items
+        .filter((item) => !hiddenItems.includes(item.data?.type))
         .map((i) => get(i, col.fieldName))
         .filter((value, index, self) => value && self.indexOf(value) === index)
         .map((name) => {
@@ -280,7 +286,8 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
           costsTotal: item.costsTotal,
           sortOrder: item.sortOrder,
           hexColor: item.hexColor,
-          elementType: item.elementType
+          elementType: item.elementType,
+          filter: item.timelineFilter
         },
       } as ITimelineItem
     })
@@ -292,11 +299,12 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    *
    * @returns {ITimelineData} Timeline data
    */
-  private async _fetchData(): Promise<ITimelineData> {
+  private async _fetchData(): Promise<[ITimelineData, any]> {
     try {
-      const [projects, timelineContentItems] = await Promise.all([
+      const [projects, timelineContentItems, timelineConfiguration] = await Promise.all([
         this.props.dataAdapter.fetchEnrichedProjects(),
-        this.props.dataAdapter.fetchTimelineContentItems()
+        this.props.dataAdapter.fetchTimelineContentItems(),
+        this.props.dataAdapter.fetchTimelineConfiguration()
       ])
       const filteredProjects = projects.filter((project) => {
         return project.startDate !== null && project.endDate !== null
@@ -321,7 +329,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
 
       const groups = this._transformGroups(filteredProjects)
       const items = this._transformItems(timelineItems, groups)
-      return { items, groups }
+      return [{ items, groups }, timelineConfiguration]
     } catch (error) {
       throw error
     }

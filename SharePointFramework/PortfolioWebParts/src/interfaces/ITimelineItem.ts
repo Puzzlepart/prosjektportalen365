@@ -10,6 +10,7 @@ export interface IItemData {
   sortOrder?: number,
   hexColor?: string,
   elementType?: string,
+  filter?: boolean,
 }
 export interface ITimelineItem {
   id: number

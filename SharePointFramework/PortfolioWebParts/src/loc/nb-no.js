@@ -144,6 +144,7 @@ define([], function() {
         SelectedColumnsLabel: 'Felter',
         ProjectsListName: 'Prosjekter',
         TimelineContentListName: 'Tidslinjeinnhold',
+        TimelineConfigurationListName: 'Tidslinjekonfigurasjon',
         PortfolioManagerGroupName: 'Porteføljeinnsyn',
         ProjectTimelineItemInfo: '{0} - prosjektets tidsforløp',
         LastPublishedStatusreport: 'Gå til siste statusrapport',

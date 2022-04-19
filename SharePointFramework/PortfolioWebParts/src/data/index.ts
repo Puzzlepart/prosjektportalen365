@@ -287,18 +287,7 @@ export class DataAdapter implements IDataAdapter {
     const siteIdProperty: string = 'GtSiteIdOWSTEXT'
 
     let [timelineConfig, { PrimarySearchResults: statusReports }] = await Promise.all([
-      sp.web.lists
-        .getByTitle("Tidslinjekonfigurasjon")
-        .items.select(
-          'Title',
-          'GtSortOrder',
-          'GtHexColor',
-          'GtElementType',
-          'GtShowElementPortfolio',
-          'GtShowElementProgram',
-          'GtTimelineFilter',
-        )
-        .get(),
+      this.fetchTimelineConfiguration(),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} ${siteIdProperty}:{${siteId}}
@@ -329,18 +318,7 @@ export class DataAdapter implements IDataAdapter {
    */
   public async fetchTimelineContentItems() {
     const [timelineConfig, timelineItems] = await Promise.all([
-      sp.web.lists
-        .getByTitle("Tidslinjekonfigurasjon")
-        .items.select(
-          'Title',
-          'GtSortOrder',
-          'GtHexColor',
-          'GtElementType',
-          'GtShowElementPortfolio',
-          'GtShowElementProgram',
-          'GtTimelineFilter',
-        )
-        .get(),
+      this.fetchTimelineConfiguration(),
       sp.web.lists
         .getByTitle(strings.TimelineContentListName)
         .items.select(
@@ -384,6 +362,25 @@ export class DataAdapter implements IDataAdapter {
         }
       })
       .filter((p) => p)
+  }
+
+  /**
+   * Fetches configuration data for the Projecttimeline
+   *
+   */
+  public async fetchTimelineConfiguration() {
+    return await sp.web.lists
+      .getByTitle(strings.TimelineConfigurationListName)
+      .items.select(
+        'Title',
+        'GtSortOrder',
+        'GtHexColor',
+        'GtElementType',
+        'GtShowElementPortfolio',
+        'GtShowElementProgram',
+        'GtTimelineFilter',
+      )
+      .get()
   }
 
   /**

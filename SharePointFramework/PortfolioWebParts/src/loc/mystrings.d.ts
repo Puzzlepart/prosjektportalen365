@@ -146,6 +146,7 @@ declare interface IPortfolioWebPartsStrings {
   ViewsListNameLabel: string
   ProjectsListName: string
   TimelineContentListName: string
+  TimelineConfigurationListName: string
   PortfolioManagerGroupName: string
   ProjectTimelineItemInfo: string
   LastPublishedStatusreport: string

@@ -52,6 +52,11 @@ export interface IProjectTimelineState {
   data?: ITimelineData
 
   /**
+   * Timeline Configuration
+   */
+  timelineConfiguration?: any
+
+  /**
    * Error
    */
   error?: string
