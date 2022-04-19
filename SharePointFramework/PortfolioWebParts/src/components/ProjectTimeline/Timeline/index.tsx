@@ -56,7 +56,7 @@ export class Timeline extends Component<ITimelineProps> {
    */
   private _itemRenderer(props: ReactCalendarItemRendererProps<any>) {
     const htmlProps = props.getItemProps(props.item.itemProps)
-
+    
     switch (props.item.data.elementType) {
       case strings.DiamondLabel: {
         return (

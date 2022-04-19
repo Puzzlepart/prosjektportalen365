@@ -130,6 +130,8 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   private _getFilteredData(): ITimelineData {
     const { activeFilters, data } = { ...this.state } as IProjectTimelineState
     const activeFiltersKeys = Object.keys(activeFilters)
+    data.items = sortArray(data.items, 'data.sortOrder')
+    
     const projectId = data.items.find(
       (i) => i?.projectUrl === this.props.pageContext.site.absoluteUrl
     )?.id

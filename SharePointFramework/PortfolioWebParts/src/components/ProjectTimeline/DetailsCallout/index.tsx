@@ -117,11 +117,11 @@ export const DetailsCallout = ({ timelineItem, onDismiss }: IDetailsCalloutProps
       onDismiss={onDismiss}
       setInitialFocus={true}>
       {_calloutContent()}
-      <p hidden={!item.data.budgetTotal}>
-        <b>{strings.BudgetTotalLabel}:</b> <span>{tryParseCurrency(item.data.budgetTotal)}</span>
+      <p hidden={!item.budgetTotal}>
+        <b>{strings.BudgetTotalLabel}:</b> <span>{tryParseCurrency(item.budgetTotal)}</span>
       </p>
-      <p hidden={!item.data.costsTotal}>
-        <b>{strings.CostsTotalLabel}:</b> <span>{tryParseCurrency(item.data.costsTotal)}</span>
+      <p hidden={!item.costsTotal}>
+        <b>{strings.CostsTotalLabel}:</b> <span>{tryParseCurrency(item.costsTotal)}</span>
       </p>
       <p hidden={!item.type}>
         <b>{strings.TypeLabel}:</b> <span>{item.type}</span>
