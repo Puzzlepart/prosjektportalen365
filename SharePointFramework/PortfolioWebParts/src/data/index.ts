@@ -286,7 +286,7 @@ export class DataAdapter implements IDataAdapter {
   public async fetchDataForTimelineProject(siteId: string) {
     const siteIdProperty: string = 'GtSiteIdOWSTEXT'
 
-    let [timelineConfig, { PrimarySearchResults: statusReports }] = await Promise.all([
+    const [timelineConfig, { PrimarySearchResults: statusReports }] = await Promise.all([
       this.fetchTimelineConfiguration(),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,

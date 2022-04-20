@@ -158,7 +158,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    * Get filters
    */
   private _getFilters(): IFilterProps[] {
-    const config = this.state.timelineConfiguration;
+    const config = this.state.timelineConfiguration
 
     const columns = [
       (config.find((item) => item?.Title === strings.ProjectLabel)).GtTimelineFilter && { fieldName: 'project', name: strings.SiteTitleLabel },
@@ -225,7 +225,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    * @returns {ITimelineGroup[]} Timeline groups
    */
   private _transformGroups(projects: ProjectListModel[]): ITimelineGroup[] {
-    let groups: ITimelineGroup[] = _.uniq(projects
+    const groups: ITimelineGroup[] = _.uniq(projects
       .map((project) => project.title))
       .map((title, id) => {
         return {

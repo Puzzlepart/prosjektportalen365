@@ -96,17 +96,17 @@ export const DetailsCallout = ({ timelineItem, onDismiss }: IDetailsCalloutProps
         )
       }
     }
-  };
+  }
 
-  let bound = document.getElementsByClassName('rct-scroll')[0].getBoundingClientRect();
+  const boundRect = document.getElementsByClassName('rct-scroll')[0].getBoundingClientRect()
   const bounds = {
-    top: bound.top,
-    left: bound.left,
-    right: bound.right,
-    bottom: bound.bottom + 450,
-    width: bound.width,
-    height: bound.height + 450
-  };
+    top: boundRect.top,
+    left: boundRect.left,
+    right: boundRect.right,
+    bottom: boundRect.bottom + 450,
+    width: boundRect.width,
+    height: boundRect.height + 450
+  }
 
   return (
     <Callout

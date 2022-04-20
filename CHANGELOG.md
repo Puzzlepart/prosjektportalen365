@@ -3,6 +3,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with issue ID.
 
+## 1.5.X - TBA
+
+### Added
+
+- Added timeline configuration list (Customize how timeline elements are displayed, their colors, sorting and more) #678
+
 ## 1.5.0 - 01.04.2022
 
 ### Added
