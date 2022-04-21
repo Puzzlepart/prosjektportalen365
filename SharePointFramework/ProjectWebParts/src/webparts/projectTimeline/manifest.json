@@ -29,7 +29,10 @@
         "showTimeline": true,
         "showInfoMessage": true,
         "showCmdTimelineList": true,
-        "showTimelineList": true
+        "showTimelineList": true,
+        "showProjectDeliveries": false,
+        "projectDeliveriesListName": "Prosjektleveranser",
+        "configItemTitle": "Prosjektleveranse"
       }
     }
   ]

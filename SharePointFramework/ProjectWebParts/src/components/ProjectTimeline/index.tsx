@@ -1,7 +1,7 @@
 import { get } from '@microsoft/sp-lodash-subset'
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
-import { Web } from '@pnp/sp'
+import { sp, Web } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
 import sortArray from 'array-sort'
 import moment from 'moment'
@@ -396,6 +396,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
    */
   public async getTimelineData() {
     this._web = new Web(this.props.hubSite.url)
+    let projectDeliveries = []
 
     try {
       const [timelineConfig] = await Promise.all([
@@ -413,6 +414,41 @@ export class ProjectTimeline extends BaseWebPartComponent<
           .get()
       ])
 
+      if (this.props.showProjectDeliveries) {
+        [projectDeliveries] = await Promise.all([
+          await sp.web.lists
+            .getByTitle(this.props.projectDeliveriesListName)
+            .items.select(
+              'Title',
+              'GtDeliveryDescription',
+              'GtDeliveryStartTime',
+              'GtDeliveryEndTime',
+            )
+            .get()
+        ])
+
+        projectDeliveries = projectDeliveries
+          .map((item) => {
+            const config = _.find(timelineConfig, (col) => col.Title === this.props.configItemTitle)
+            const model = new TimelineContentListModel(
+              this.props.siteId,
+              this.props.webTitle,
+              item.Title,
+              config && config.Title || this.props.configItemTitle,
+              config && config.GtSortOrder || 90,
+              config && config.GtHexColor || "#384f61",
+              config && config.GtElementType || strings.BarLabel,
+              config && config.GtShowElementPortfolio || false,
+              config && config.GtShowElementProgram || false,
+              config && config.GtTimelineFilter || true,
+              item.GtDeliveryStartTime,
+              item.GtDeliveryEndTime,
+            )
+            return model
+          })
+          .filter((t) => t)
+
+      }
 
       const [allColumns] = await Promise.all([
         (
@@ -502,6 +538,8 @@ export class ProjectTimeline extends BaseWebPartComponent<
           return model
         })
         .filter((t) => t)
+
+      timelineContentItems = [...timelineContentItems, ...projectDeliveries]
 
       return [timelineContentItems, timelineListItems, columns, timelineConfig]
     } catch (error) {
@@ -628,7 +666,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
   }
 
   /**
-   * Fetch data
+   * Fetch project data
    */
   private async _fetchProjectData(): Promise<any> {
     try {

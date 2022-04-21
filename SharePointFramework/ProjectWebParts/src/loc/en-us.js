@@ -150,6 +150,9 @@ define([], function () {
     PhaseSitePageFoundDescription: 'Endring til denne fasen vil også medføre endring av forside til prosjektet.<br /><br />Side for fase funnet: \'{0}\'. Denne siden vil bli brukt som forside for prosjektet. Trykk \'Ja\' for å fortsette.',
     PhaseSitePageNotFoundDescription: 'Dynamisk forside er aktivert.<br /><br />Side for \'{0}\' ble ikke funnet, vennligst opprett. Ved trykk på \'Ja\' vil ikke forside endres.',
     AdminPageLinkLabel: 'Path to Admin page',
-    DefaultAdminPageLink: "Admin.aspx"
-    }
+    DefaultAdminPageLink: "Admin.aspx",
+    ConfigItemTitleFieldLabel: 'Element tittel (konfigurasjon)',
+    ShowProjectDeliveriesLabel: 'Vis prosjektleveranser',
+    ProjectDeliveriesGroupName: 'Prosjektleveranser (beta)'
+  }
 })

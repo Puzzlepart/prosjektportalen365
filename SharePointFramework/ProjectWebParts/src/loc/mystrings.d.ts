@@ -153,6 +153,9 @@ declare interface IProjectWebPartsStrings {
   ChildProjectAdminLabel: string;
   AdminPageLinkLabel: string;
   DefaultAdminPageLink: string;
+  ConfigItemTitleFieldLabel: string;
+  ShowProjectDeliveriesLabel: string;
+  ProjectDeliveriesGroupName: string;
 }
 
 declare module 'ProjectWebPartsStrings' {

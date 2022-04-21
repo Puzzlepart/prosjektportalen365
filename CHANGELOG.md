@@ -8,6 +8,8 @@ Every change is marked with issue ID.
 ### Added
 
 - Added timeline configuration list (Customize how timeline elements are displayed, their colors, sorting and more) #678
+  - This applies to Portfolio, Project and Program timelines
+- Added possibility to include project deliveries on timeline (beta) #679
 
 ## 1.5.0 - 01.04.2022
 
@@ -24,7 +26,7 @@ Every change is marked with issue ID.
   - Gains overview
   - Timeline
   - Deliveries
-  - Risks and benefits 
+  - Risks and benefits
 
 ### Changed
 
