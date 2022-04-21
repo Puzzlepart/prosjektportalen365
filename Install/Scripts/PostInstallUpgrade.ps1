@@ -1,4 +1,4 @@
-
+ï»¿
 $LastInstall = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>" | Select-Object -First 1 -Wait
 if ($null -ne $LastInstall) {
     $PreviousVersion = $LastInstall.FieldValues["InstallVersion"]
@@ -11,20 +11,24 @@ if ($null -ne $LastInstall) {
         Write-Host "[INFO] In version v1.5.5 we added Project timeline configuration and reworked the TimelineContent list. Merging data now as part of the upgrade"
 
         $Items = Get-PnPListItem -List "Tidslinjeinnhold"
+        $Milestone = [Uri]::UnescapeDataString("Milep%C3%A6l")
         foreach ($Item in $Items) {
             $OldSiteId = $Item.FieldValues["SiteIdLookup"].LookupId
             $OldType = $Item.FieldValues["TimelineType"]
 
-            $Item["GtSiteIdLookup"] = $OldSiteId
-
-            Switch ($OldType)
-            {
-                "Prosjekt" { $Item["GtTimelineTypeLookup"] = 1 }
-                "Fase" { $Item["GtTimelineTypeLookup"] = 2 }
-                "Delfase" { $Item["GtTimelineTypeLookup"] = 3 }
-                "Milepæl" { $Item["GtTimelineTypeLookup"] = 4 }
+            if($null -ne $OldSiteId) {
+                $Item["GtSiteIdLookup"] = $OldSiteId
             }
-
+            
+            if($null -ne $OldType) {
+                Switch ($OldType)
+                {
+                    "Prosjekt" { $Item["GtTimelineTypeLookup"] = 1 }
+                    "Fase" { $Item["GtTimelineTypeLookup"] = 2 }
+                    "Delfase" { $Item["GtTimelineTypeLookup"] = 3 }
+                    $Milestone { $Item["GtTimelineTypeLookup"] = 4 }
+                }
+            }
             
             $Item.Update()
             Invoke-PnPQuery
