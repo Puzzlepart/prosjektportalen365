@@ -1,6 +1,6 @@
 {
   "name": "pp365-program",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "engines": {
     "node": ">=12.13.0"
   },
