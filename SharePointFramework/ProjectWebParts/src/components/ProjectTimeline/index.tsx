@@ -436,13 +436,18 @@ export class ProjectTimeline extends BaseWebPartComponent<
               item.Title,
               config && config.Title || this.props.configItemTitle,
               config && config.GtSortOrder || 90,
-              config && config.GtHexColor || "#384f61",
+              config && config.GtHexColor || '#384f61',
               config && config.GtElementType || strings.BarLabel,
               config && config.GtShowElementPortfolio || false,
               config && config.GtShowElementProgram || false,
               config && config.GtTimelineFilter || true,
               item.GtDeliveryStartTime,
               item.GtDeliveryEndTime,
+              null,
+              null,
+              null,
+              null,
+              item.GtDeliveryDescription
             )
             return model
           })
@@ -652,6 +657,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
         projectUrl: item.url,
         data: {
           phase: item.phase,
+          description: item.description,
           type: item.type,
           budgetTotal: item.budgetTotal,
           costsTotal: item.costsTotal,
@@ -659,7 +665,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
           hexColor: item.hexColor,
           elementType: item.elementType,
           filter: item.timelineFilter
-        },
+        }
       } as ITimelineItem
     })
     return items

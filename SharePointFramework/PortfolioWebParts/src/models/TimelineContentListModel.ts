@@ -18,6 +18,7 @@ export class TimelineContentListModel {
    * @param costsTotal Costs total
    * @param url Url
    * @param phase Phase
+   * @param description Description
    */
   constructor(
     public siteId: string,
@@ -35,6 +36,7 @@ export class TimelineContentListModel {
     public budgetTotal?: string,
     public costsTotal?: string,
     public url?: string,
-    public phase?: string
+    public phase?: string,
+    public description?: string
   ) {}
 }

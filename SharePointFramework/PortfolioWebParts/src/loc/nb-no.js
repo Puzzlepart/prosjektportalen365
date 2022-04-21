@@ -66,6 +66,7 @@ define([], function() {
         DeliveryStatusCommentLabel: 'Kommentar, leveransestatus',
         DeliveryStatusLabel: 'Leveransestatus',
         DesiredValueLabel: 'Ønsket verdi',
+        DescriptionFieldLabel: 'Beskrivelse',
         EditViewText: 'Rediger gjeldende visning',
         ErrorText: 'Det skjedde en feil under uthenting av prosjekter.',
         ExcelExportButtonLabel: 'Eksporter til Excel',

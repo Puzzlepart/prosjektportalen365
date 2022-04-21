@@ -3,6 +3,7 @@ import * as moment from 'moment'
 
 export interface IItemData {
   phase?: string
+  description?: string
   milestoneDate?: moment.Moment
   type?: string
   budgetTotal?: string
