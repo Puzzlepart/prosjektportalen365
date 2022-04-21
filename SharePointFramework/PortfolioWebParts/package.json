@@ -1,6 +1,6 @@
 {
   "name": "pp365-portfoliowebparts",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "engines": {
     "node": "^12"
   },
@@ -39,7 +39,7 @@
     "object-assign": "4.1.1",
     "office-ui-fabric-react": "6.214.0",
     "pp365-projectwebparts": "latest",
-    "pp365-shared": "1.5.3-635.7",
+    "pp365-shared": "latest",
     "pzl-react-reusable-components": "^0.0.14",
     "react": "16.8.5",
     "react-calendar-timeline": "0.27.0",
