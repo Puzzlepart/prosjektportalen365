@@ -62,7 +62,7 @@ export interface IProjectTimelineState {
   error?: string
 
   /**
-   * Item to show show details for
+   * Item to show details for
    */
   showDetails?: { item: ITimelineItem; element: HTMLElement }
 }

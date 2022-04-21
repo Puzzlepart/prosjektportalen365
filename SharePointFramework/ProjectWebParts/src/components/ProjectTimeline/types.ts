@@ -48,14 +48,19 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<IProje
   data?: any
 
   /**
+   * Timeline Configuration
+   */
+  timelineConfiguration?: any
+
+  /**
    * Error
    */
   error?: string
 
   /**
-   * Item to show show details for
+   * Item to show details for
    */
-  showDetails?: { data: ITimelineItem; element: HTMLElement }
+  showDetails?: { item: ITimelineItem; element: HTMLElement }
 }
 
 export interface ITimelineData {
@@ -68,7 +73,18 @@ export interface ITimelineData {
 export interface ITimelineGroup {
   id: number
   title: string
-  type: string
+}
+
+export interface IItemData {
+  phase?: string
+  milestoneDate?: moment.Moment
+  type?: string
+  budgetTotal?: string
+  costsTotal?: string
+  sortOrder?: number,
+  hexColor?: string,
+  elementType?: string,
+  filter?: boolean
 }
 
 export interface ITimelineItem {
@@ -77,14 +93,13 @@ export interface ITimelineItem {
   group: number
   start_time: moment.Moment
   end_time: moment.Moment
+  allocation?: number
   itemProps: React.HTMLProps<HTMLDivElement>
   project: string
   projectUrl?: string
-  phase?: string
-  milestoneDate?: moment.Moment
-  type?: string
-  budgetTotal?: string
-  costsTotal?: string
+  data?: IItemData
+  role?: string
+  resource?: string
   props: TypedHash<any>
 }
 
@@ -129,8 +144,8 @@ export class ProjectPropertyModel {
   /**
    * Creates an instance of ProjectPropertyModel
    *
-   * @param {IEntityField} field Field
-   * @param {string} value Value
+   * @param field Field
+   * @param value Value
    */
   constructor(field: IEntityField, value: string) {
     this.internalName = field.InternalName

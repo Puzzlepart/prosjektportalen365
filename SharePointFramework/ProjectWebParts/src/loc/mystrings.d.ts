@@ -120,6 +120,7 @@ declare interface IProjectWebPartsStrings {
   ProjectTimelineInfoText: string;
   ProjectTimelineListInfoText: string;
   TimelineContentListName: string;
+  TimelineConfigurationListName: string
   NewItemLabel: string;
   EditItemLabel: string;
   PortfolioManagerGroupName: string;

@@ -120,7 +120,6 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    * @param item Item
    */
   private _onItemClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) {
-    console.log(item)
     this.setState({ showDetails: { element: event.currentTarget, item } })
   }
 
@@ -149,7 +148,6 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
       const groups = data.groups.filter((grp) => items.filter((i) => i.group === grp.id).length > 0)
       return { items, groups }
     } else {
-      console.log(data)
       return data
     }
   }
@@ -159,12 +157,10 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    */
   private _getFilters(): IFilterProps[] {
     const config = this.state.timelineConfiguration
-
     const columns = [
       (config.find((item) => item?.Title === strings.ProjectLabel)).GtTimelineFilter && { fieldName: 'project', name: strings.SiteTitleLabel },
       { fieldName: 'data.type', name: strings.TypeLabel }
     ]
-
     const hiddenItems = (config.filter((item) => !item?.GtTimelineFilter)).map((item) => item.Title)
 
     return columns.map((col) => ({
@@ -222,7 +218,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    *
    * @param projects Projects
    *
-   * @returns {ITimelineGroup[]} Timeline groups
+   * @returns Timeline groups
    */
   private _transformGroups(projects: ProjectListModel[]): ITimelineGroup[] {
     const groups: ITimelineGroup[] = _.uniq(projects
@@ -237,13 +233,12 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   }
 
   /**
-   * Create items
+   * Transform items for timeline
    *
-   * @param projects Projects
    * @param timelineItems Timeline items
    * @param groups Groups
    *
-   * @returns {ITimelineItem[]} Timeline items
+   * @returns Timeline items
    */
   private _transformItems(
     timelineItems: TimelineContentListModel[],
@@ -299,7 +294,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   /**
    * Fetch data
    *
-   * @returns {ITimelineData} Timeline data
+   * @returns Timeline data and timeline configuration
    */
   private async _fetchData(): Promise<[ITimelineData, any]> {
     try {
@@ -327,8 +322,6 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
       }))
 
       timelineItems = [...timelineItems, ...filteredTimelineItems]
-      console.log(timelineItems)
-
       const groups = this._transformGroups(filteredProjects)
       const items = this._transformItems(timelineItems, groups)
       return [{ items, groups }, timelineConfiguration]
