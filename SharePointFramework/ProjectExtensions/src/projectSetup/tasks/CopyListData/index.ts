@@ -31,7 +31,8 @@ export class CopyListData extends BaseTask {
     try {
       await new PlannerConfiguration(this.data, {}).ensurePlan(
         params.context.pageContext.web.title,
-        params.context.pageContext.legacyPageContext.groupId
+        params.context.pageContext.legacyPageContext.groupId,
+        false
       )
       for (let i = 0; i < this.data.selectedListContentConfig.length; i++) {
         const config = this.data.selectedListContentConfig[i]
