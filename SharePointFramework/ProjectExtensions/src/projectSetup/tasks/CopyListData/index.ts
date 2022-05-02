@@ -15,7 +15,10 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Execute CopyListData
+   * Execute CopyListData.
+   * 
+   * Creates a Planner plan for the Microsoft 365 group, then loops
+   * through all list data configurations.
    *
    * @param params Task parameters
    * @param onProgress On progress function
