@@ -26,6 +26,10 @@ export class CopyListData extends BaseTask {
   ): Promise<IBaseTaskParams> {
     this.onProgress = onProgress
     try {
+      await new PlannerConfiguration(this.data, {}).ensurePlan(
+        params.context.pageContext.web.title,
+        params.context.pageContext.legacyPageContext.groupId
+      )
       for (let i = 0; i < this.data.selectedListContentConfig.length; i++) {
         const config = this.data.selectedListContentConfig[i]
         await config.load()

@@ -158,7 +158,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         await sp.web.lists
           .getByTitle(strings.ProjectPropertiesListName)
           .items.getById(1)
-          .update({ GtIsParentProject: true, GtChildProjects : '[]' })
+          .update({ GtIsParentProject: true, GtChildProjects: '[]' })
         await this._ensureParentProjectPatch(data)
       }
 

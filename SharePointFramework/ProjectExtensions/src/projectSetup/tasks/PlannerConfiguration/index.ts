@@ -60,9 +60,8 @@ export class PlannerConfiguration extends BaseTask {
     try {
       const planTitle = pageContext.web.title
       const owner = pageContext.legacyPageContext.groupId
-      const existingGroupPlans = await this._fetchPlans(owner)
       this.logInformation(`Creating plan ${planTitle}`)
-      const plan = await this._ensurePlan(planTitle, existingGroupPlans, owner)
+      const plan = await this.ensurePlan(planTitle, owner)
       const existingBuckets = await this._fetchBuckets(plan.id)
       for (let i = 0; i < Object.keys(this._configuration).length; i++) {
         const bucketName = Object.keys(this._configuration)[i]
@@ -85,16 +84,12 @@ export class PlannerConfiguration extends BaseTask {
    * Ensure plan
    *
    * @param title Plan title
-   * @param {IPlannerPlan[]} existingPlans Existing plans
    * @param owner Owner (group id)
    */
-  private async _ensurePlan(
-    title: string,
-    existingPlans: IPlannerPlan[],
-    owner: string
-  ): Promise<IPlannerPlan> {
+  public async ensurePlan(title: string, owner: string): Promise<IPlannerPlan> {
     try {
-      let [plan] = existingPlans.filter((p) => p.title === title)
+      const existingGroupPlans = await this._fetchPlans(owner)
+      let [plan] = existingGroupPlans.filter((p) => p.title === title)
       if (!plan) {
         plan = await MSGraphHelper.Post('planner/plans', JSON.stringify({ title, owner }))
       }
