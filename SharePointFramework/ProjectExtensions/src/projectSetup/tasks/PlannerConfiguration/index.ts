@@ -87,14 +87,14 @@ export class PlannerConfiguration extends BaseTask {
    * @param owner Owner (group id)
    * @param setupLabels Setup labels for the plan
    */
-  public async ensurePlan(title: string, owner: string, setupLabels =  true): Promise<IPlannerPlan> {
+  public async ensurePlan(title: string, owner: string, setupLabels = true): Promise<IPlannerPlan> {
     try {
       const existingGroupPlans = await this._fetchPlans(owner)
       let [plan] = existingGroupPlans.filter((p) => p.title === title)
       if (!plan) {
         plan = await MSGraphHelper.Post('planner/plans', JSON.stringify({ title, owner }))
       }
-      if(setupLabels) await this._setupLabels(plan)
+      if (setupLabels) await this._setupLabels(plan)
       return plan
     } catch (error) {
       throw error
