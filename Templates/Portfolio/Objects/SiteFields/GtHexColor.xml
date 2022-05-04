@@ -1,0 +1,1 @@
+<Field Type="Text" DisplayName="{resource:SiteFields_GtHexColor_DisplayName}" Description="{resource:SiteFields_GtHexColor_Description}" ID="{aaf7828e-a937-4c7e-834b-406cf1166d77}" StaticName="GtHexColor" Name="GtHexColor" Group="{resource:SiteFields_Portfolio_Group}" />

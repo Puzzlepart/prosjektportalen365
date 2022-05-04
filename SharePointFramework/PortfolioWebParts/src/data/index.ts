@@ -16,6 +16,7 @@ import {
 import MSGraph from 'msgraph-helper'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
+import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
 import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
@@ -257,9 +258,8 @@ export class DataAdapter implements IDataAdapter {
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${
-          queryArray ?? ''
-        } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        QueryTemplate: `${queryArray ?? ''
+          } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
         Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
       })
@@ -285,20 +285,28 @@ export class DataAdapter implements IDataAdapter {
    */
   public async fetchDataForTimelineProject(siteId: string) {
     const siteIdProperty: string = 'GtSiteIdOWSTEXT'
-    const costsTotalProperty: string = 'GtCostsTotalOWSCURR'
-    const budgetTotalProperty: string = 'GtBudgetTotalOWSCURR'
 
-    let [{ PrimarySearchResults: statusReports }] = await Promise.all([
+    const [timelineConfig, { PrimarySearchResults: statusReports }] = await Promise.all([
+      this.fetchTimelineConfiguration(),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} ${siteIdProperty}:{${siteId}}
         ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
-        SelectProperties: [costsTotalProperty, budgetTotalProperty, siteIdProperty]
+        SelectProperties: [siteIdProperty, 'GtCostsTotalOWSCURR', 'GtBudgetTotalOWSCURR']
       })
     ])
-    statusReports = statusReports.map((item) => cleanDeep({ ...item }))
+    const [data] = (statusReports.map((item) => cleanDeep({ ...item })))
+    const config = _.find(timelineConfig, (col) => col.Title === strings.ProjectLabel)
     return {
-      statusReports
+      type: strings.ProjectLabel,
+      costsTotal: data && data['GtCostsTotalOWSCURR'],
+      budgetTotal: data && data['GtBudgetTotalOWSCURR'],
+      sortOrder: config && config.GtSortOrder,
+      hexColor: config && config.GtHexColor,
+      elementType: config && config.GtElementType,
+      showElementPortfolio: config && config.GtShowElementPortfolio,
+      showElementProgram: config && config.GtShowElementProgram,
+      timelineFilter: config && config.GtTimelineFilter,
     }
   }
 
@@ -309,32 +317,42 @@ export class DataAdapter implements IDataAdapter {
    * * Maps the items to TimelineContentListModel
    */
   public async fetchTimelineContentItems() {
-    const [timelineItems] = await Promise.all([
+    const [timelineConfig, timelineItems] = await Promise.all([
+      this.fetchTimelineConfiguration(),
       sp.web.lists
         .getByTitle(strings.TimelineContentListName)
         .items.select(
           'Title',
-          'TimelineType',
+          'GtTimelineTypeLookup/Title',
           'GtStartDate',
           'GtEndDate',
           'GtBudgetTotal',
           'GtCostsTotal',
-          'SiteIdLookup/Title',
-          'SiteIdLookup/GtSiteId'
+          'GtSiteIdLookup/Title',
+          'GtSiteIdLookup/GtSiteId'
         )
         .top(500)
-        .expand('SiteIdLookup')
+        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
         .get()
     ])
 
     return timelineItems
       .map((item) => {
-        if (item.SiteIdLookup?.Title) {
+        const type = item.GtTimelineTypeLookup && item.GtTimelineTypeLookup.Title
+        const config = _.find(timelineConfig, (col) => col.Title === type)
+
+        if (item.GtSiteIdLookup?.Title && (config && config.GtShowElementPortfolio)) {
           const model = new TimelineContentListModel(
-            item.SiteIdLookup?.GtSiteId,
-            item.SiteIdLookup?.Title,
+            item.GtSiteIdLookup?.GtSiteId,
+            item.GtSiteIdLookup?.Title,
             item.Title,
-            item.TimelineType,
+            config && config.Title,
+            config && config.GtSortOrder,
+            config && config.GtHexColor,
+            config && config.GtElementType,
+            config && config.GtShowElementPortfolio,
+            config && config.GtShowElementProgram,
+            config && config.GtTimelineFilter,
             item.GtStartDate,
             item.GtEndDate,
             item.GtBudgetTotal,
@@ -344,6 +362,25 @@ export class DataAdapter implements IDataAdapter {
         }
       })
       .filter((p) => p)
+  }
+
+  /**
+   * Fetches configuration data for the Projecttimeline
+   *
+   */
+  public async fetchTimelineConfiguration() {
+    return await sp.web.lists
+      .getByTitle(strings.TimelineConfigurationListName)
+      .items.select(
+        'Title',
+        'GtSortOrder',
+        'GtHexColor',
+        'GtElementType',
+        'GtShowElementPortfolio',
+        'GtShowElementProgram',
+        'GtTimelineFilter',
+      )
+      .get()
   }
 
   /**
@@ -400,23 +437,10 @@ export class DataAdapter implements IDataAdapter {
         const [group] = groups.filter((grp) => grp.id === item.GtGroupId)
         const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
         const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
-        const model = new ProjectListModel(
-          item.GtSiteId,
-          item.GtGroupId,
-          group?.displayName ?? item.Title,
-          item.GtSiteUrl,
-          item.GtProjectPhaseText,
-          item.GtStartDate,
-          item.GtEndDate,
-          manager,
-          owner,
-          !!group,
-          null,
-          null,
-          null,
-          item.GtIsParentProject,
-          item.GtIsProgram
-        )
+        const model = new ProjectListModel(group?.displayName ?? item.Title, item)
+        model.userIsMember = !!group
+        if (manager) model.manager = { text: manager.Title, imageUrl: getUserPhoto(manager.Email) }
+        if (owner) model.owner = { text: owner.Title, imageUrl: getUserPhoto(owner.Email) }
         return model
       })
       .filter((p) => p)
@@ -430,7 +454,7 @@ export class DataAdapter implements IDataAdapter {
    * * Site users
    * * Combines the data
    */
-  public async fetchEncrichedProjects(): Promise<ProjectListModel[]> {
+  public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
     await MSGraph.Init(this.context.msGraphClientFactory)
     const [items, groups, users] = await Promise.all([
       sp.web.lists
@@ -463,7 +487,7 @@ export class DataAdapter implements IDataAdapter {
       sp.web.siteUsers
         .select('Id', 'Title', 'Email')
         .usingCaching({
-          key: 'fetchencrichedprojects_siteusers',
+          key: 'fetchenrichedprojects_siteusers',
           storeName: 'session',
           expiration: dateAdd(new Date(), 'minute', 15)
         })

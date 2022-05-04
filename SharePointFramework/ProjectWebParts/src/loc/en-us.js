@@ -121,11 +121,15 @@ define([], function () {
     ProjectTimelineInfoText: 'Her listes prosjektets tidslinje med start- og sluttdato. Prosjekttidslinjen støtter også faser, delfaser og milepæler, dette opprettes og vedlikeholdes i listen under. Prosjektet vises med rød farge, faser i blått, delfaser blågrønt, og milepæler i gult. For å zoome inn/ut i tidslinje: ALT+Musehjul',
     ProjectTimelineListInfoText: 'Her listes listeelementene for prosjektet. Her kan du redigere og legge til nye elementer. Dette vil synkroniseres til listen på hubområdet. For å zoome inn/ut i tidslinje: ALT+Musehjul',
     TimelineContentListName: 'Tidslinjeinnhold',
+    TimelineConfigurationListName: 'Tidslinjekonfigurasjon',
     NewItemLabel: 'Nytt element',
     EditItemLabel: 'Rediger',
     PortfolioManagerGroupName: 'Porteføljeinnsyn',
     ProjectTimelineItemInfo: '{0} - prosjektets tidsforløp',
     LastPublishedStatusreport: 'Gå til siste statusrapport',
+    DiamondLabel: 'Diamant',
+    BarLabel: 'Bar',
+    TriangleLabel: 'Trekant',
     MilestoneLabel: 'Milepæl',
     ProjectLabel: 'Prosjekt',
     SubPhaseLabel: 'Delfase',
@@ -146,6 +150,9 @@ define([], function () {
     PhaseSitePageFoundDescription: 'Endring til denne fasen vil også medføre endring av forside til prosjektet.<br /><br />Side for fase funnet: \'{0}\'. Denne siden vil bli brukt som forside for prosjektet. Trykk \'Ja\' for å fortsette.',
     PhaseSitePageNotFoundDescription: 'Dynamisk forside er aktivert.<br /><br />Side for \'{0}\' ble ikke funnet, vennligst opprett. Ved trykk på \'Ja\' vil ikke forside endres.',
     AdminPageLinkLabel: 'Path to Admin page',
-    DefaultAdminPageLink: "Admin.aspx"
-    }
+    DefaultAdminPageLink: "Admin.aspx",
+    ConfigItemTitleFieldLabel: 'Element tittel (konfigurasjon)',
+    ShowProjectDeliveriesLabel: 'Vis prosjektleveranser',
+    ProjectDeliveriesGroupName: 'Prosjektleveranser (beta)'
+  }
 })

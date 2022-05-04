@@ -1,0 +1,1 @@
+<Field Type="Boolean" DisplayName="{resource:SiteFields_GtTimelineFilter_DisplayName}" Description="{resource:SiteFields_GtTimelineFilter_Description}" ID="{2e70b590-4f03-4292-80a1-766564082f1e}" StaticName="GtTimelineFilter" Name="GtTimelineFilter" Group="{resource:SiteFields_Portfolio_Group}" />

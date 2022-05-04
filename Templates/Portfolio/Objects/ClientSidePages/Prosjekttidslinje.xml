@@ -2,7 +2,7 @@
     <pnp:Sections>
         <pnp:Section Order="1" Type="OneColumn">
             <pnp:Controls>
-                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;properties&quot;:{&quot;dataSource&quot;:&quot;Alle ressursallokeringer&quot;}}" ControlId="7284c568-f66c-4218-bb2c-3734a3cfa581" Order="1" Column="1" />
+                <pnp:CanvasControl WebPartType="Custom" JsonControlData="" ControlId="7284c568-f66c-4218-bb2c-3734a3cfa581" Order="1" Column="1" />
             </pnp:Controls>
         </pnp:Section>
     </pnp:Sections>

@@ -1,7 +1,7 @@
 import { get } from '@microsoft/sp-lodash-subset'
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
-import { Web } from '@pnp/sp'
+import { sp, Web } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
 import sortArray from 'array-sort'
 import moment from 'moment'
@@ -52,7 +52,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
   /**
    * Constructor
    *
-   * @param {IProjectTimelineProps} props Props
+   * @param props Props
    */
   constructor(props: IProjectTimelineProps) {
     super('ProjectTimeline', props, {
@@ -73,10 +73,10 @@ export class ProjectTimeline extends BaseWebPartComponent<
 
   public async componentDidMount(): Promise<void> {
     try {
-      const data = await this._fetchData()
-      this.setState({ data, loading: false })
+      const [data, timelineConfiguration] = await this._fetchData()
+      this.setState({ data, timelineConfiguration, loading: false })
     } catch (error) {
-      this.setState({ error, loading: false })
+      this.setState({ error: error.message || error.status, loading: false })
     }
   }
 
@@ -93,7 +93,6 @@ export class ProjectTimeline extends BaseWebPartComponent<
     }
 
     const { groups, items } = this._getFilteredData()
-
     return (
       <div className={styles.root}>
         <div className={styles.container}>
@@ -160,7 +159,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
         />
         {this.state.showDetails && (
           <DetailsCallout
-            item={this.state.showDetails}
+            timelineItem={this.state.showDetails}
             onDismiss={() => this.setState({ showDetails: null })}
           />
         )}
@@ -171,9 +170,9 @@ export class ProjectTimeline extends BaseWebPartComponent<
   /**
    * On render item column
    *
-   * @param {any} item Item
-   * @param {number} _index Index
-   * @param {IColumn} column Column
+   * @param item Item
+   * @param index Index
+   * @param column Column
    */
   private _onRenderItemColumn = (item: any, index: number, column: IColumn) => {
     if (!column.fieldName) return null
@@ -192,6 +191,8 @@ export class ProjectTimeline extends BaseWebPartComponent<
         return columnValue && moment(columnValue).format('DD.MM.YYYY')
       case 'currency':
         return tryParseCurrency(columnValue)
+      case 'lookup':
+        return columnValue && columnValue.Title
       default:
         return columnValue
     }
@@ -203,6 +204,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
   private _getFilteredData(): ITimelineData {
     const { activeFilters, data } = { ...this.state } as IProjectTimelineState
     const activeFiltersKeys = Object.keys(activeFilters)
+    data.items = sortArray(data.items, 'data.sortOrder')
 
     if (activeFiltersKeys.length > 0) {
       const items = activeFiltersKeys.reduce(
@@ -220,10 +222,14 @@ export class ProjectTimeline extends BaseWebPartComponent<
    * Get filters
    */
   private _getFilters(): IFilterProps[] {
-    const columns = [{ fieldName: 'type', name: strings.TypeLabel }]
+    const config = this.state.timelineConfiguration
+    const columns = [{ fieldName: 'data.type', name: strings.TypeLabel }]
+    const hiddenItems = (config.filter((item) => !item?.GtTimelineFilter)).map((item) => item.Title)
+
     return columns.map((col) => ({
       column: { key: col.fieldName, minWidth: 0, ...col },
       items: this.state.data.items
+        .filter((item) => !hiddenItems.includes(item.data?.type))
         .map((i) => get(i, col.fieldName))
         .filter((value, index, self) => value && self.indexOf(value) === index)
         .map((name) => {
@@ -237,8 +243,8 @@ export class ProjectTimeline extends BaseWebPartComponent<
   /**
    * On filter change
    *
-   * @param {IColumn} column Column
-   * @param {IFilterItemProps[]} selectedItems Selected items
+   * @param column Column
+   * @param selectedItems Selected items
    */
   private _onFilterChange(column: IColumn, selectedItems: IFilterItemProps[]) {
     const { activeFilters } = { ...this.state } as IProjectTimelineState
@@ -318,7 +324,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
 
     const properties: TypedHash<any> = {
       Title: 'Nytt element på tidslinjen',
-      SiteIdLookupId: project.Id
+      GtSiteIdLookupId: project.Id
     }
 
     Logger.log({
@@ -335,7 +341,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
   /**
    * Add timeline item
    *
-   * @param {TypedHash} properties Properties
+   * @param properties Properties
    */
   public async _addTimelineItem(properties: TypedHash<any>): Promise<any> {
     const list = this._web.lists.getByTitle(strings.TimelineContentListName)
@@ -346,14 +352,14 @@ export class ProjectTimeline extends BaseWebPartComponent<
   /**
    * Delete timelineitem
    *
-   * @param {any} item Item
+   * @param item Item
    */
   private async _deleteTimelineItem(item: any) {
     const list = this._web.lists.getByTitle(strings.TimelineContentListName)
     await list.items.getById(item.Id).delete()
     try {
-      const data = await this._fetchData()
-      this.setState({ data, loading: false })
+      const [data, timelineConfiguration] = await this._fetchData()
+      this.setState({ data, timelineConfiguration, loading: false })
     } catch (error) {
       this.setState({ error, loading: false })
     }
@@ -362,7 +368,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
   /**
    * Edit form URL with added Source parameter generated from the item ID
    *
-   * @param {any} item Item
+   * @param item Item
    */
   public editFormUrl(item: any) {
     return [
@@ -378,11 +384,11 @@ export class ProjectTimeline extends BaseWebPartComponent<
   /**
    * On item click
    *
-   * @param {React.MouseEvent} event Event
-   * @param {ITimelineItem} item Item
+   * @param event Event
+   * @param item Item
    */
   private _onItemClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) {
-    this.setState({ showDetails: { element: event.currentTarget, data: item } })
+    this.setState({ showDetails: { element: event.currentTarget, item } })
   }
 
   /**
@@ -390,8 +396,65 @@ export class ProjectTimeline extends BaseWebPartComponent<
    */
   public async getTimelineData() {
     this._web = new Web(this.props.hubSite.url)
+    let projectDeliveries = []
 
     try {
+      const [timelineConfig] = await Promise.all([
+        await this.props.hubSite.web.lists
+          .getByTitle(strings.TimelineConfigurationListName)
+          .items.select(
+            'Title',
+            'GtSortOrder',
+            'GtHexColor',
+            'GtElementType',
+            'GtShowElementPortfolio',
+            'GtShowElementProgram',
+            'GtTimelineFilter',
+          )
+          .get()
+      ])
+
+      if (this.props.showProjectDeliveries) {
+        [projectDeliveries] = await Promise.all([
+          await sp.web.lists
+            .getByTitle(this.props.projectDeliveriesListName)
+            .items.select(
+              'Title',
+              'GtDeliveryDescription',
+              'GtDeliveryStartTime',
+              'GtDeliveryEndTime',
+            )
+            .get()
+        ])
+
+        projectDeliveries = projectDeliveries
+          .map((item) => {
+            const config = _.find(timelineConfig, (col) => col.Title === this.props.configItemTitle)
+            const model = new TimelineContentListModel(
+              this.props.siteId,
+              this.props.webTitle,
+              item.Title,
+              config && config.Title || this.props.configItemTitle,
+              config && config.GtSortOrder || 90,
+              config && config.GtHexColor || '#384f61',
+              config && config.GtElementType || strings.BarLabel,
+              config && config.GtShowElementPortfolio || false,
+              config && config.GtShowElementProgram || false,
+              config && config.GtTimelineFilter || true,
+              item.GtDeliveryStartTime,
+              item.GtDeliveryEndTime,
+              null,
+              null,
+              null,
+              null,
+              item.GtDeliveryDescription
+            )
+            return model
+          })
+          .filter((t) => t)
+
+      }
+
       const [allColumns] = await Promise.all([
         (
           await this._web.lists
@@ -407,23 +470,24 @@ export class ProjectTimeline extends BaseWebPartComponent<
 
       const internalNames: string = await allColumns.map((col: string) => `${col}`).join(',')
 
-      let [timelineItems] = await Promise.all([
+      let [timelineContentItems] = await Promise.all([
         await this._web.lists
           .getByTitle(strings.TimelineContentListName)
           .items.select(
             internalNames,
             'Id',
-            'SiteIdLookupId',
-            'SiteIdLookup/Title',
-            'SiteIdLookup/GtSiteId'
+            'GtTimelineTypeLookup/Title',
+            'GtSiteIdLookupId',
+            'GtSiteIdLookup/Title',
+            'GtSiteIdLookup/GtSiteId'
           )
           .top(500)
-          .expand('SiteIdLookup')
+          .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
           .get()
       ])
 
-      let timelineListItems = timelineItems.filter(
-        (item) => item.SiteIdLookup.Title === this.props.webTitle
+      let timelineListItems = timelineContentItems.filter(
+        (item) => item.GtSiteIdLookup.Title === this.props.webTitle
       )
 
       const [timelineColumns] = await Promise.all([
@@ -435,7 +499,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
       ])
 
       const columns: IColumn[] = timelineColumns
-        .filter((column) => column.InternalName !== 'SiteIdLookup')
+        .filter((column) => column.InternalName !== 'GtSiteIdLookup')
         .map((column) => {
           return {
             key: column.InternalName,
@@ -454,13 +518,23 @@ export class ProjectTimeline extends BaseWebPartComponent<
         return { ...item, EditFormUrl: this.editFormUrl(item) }
       })
 
-      timelineItems = timelineItems
+      timelineContentItems = timelineContentItems
+        .filter((item) => item.GtSiteIdLookup.Title === this.props.webTitle)
         .map((item) => {
+          const type = item.GtTimelineTypeLookup && item.GtTimelineTypeLookup.Title
+          const config = _.find(timelineConfig, (col) => col.Title === type)
+
           const model = new TimelineContentListModel(
-            item.SiteIdLookup?.GtSiteId,
-            item.SiteIdLookup?.Title,
+            item.GtSiteIdLookup?.GtSiteId,
+            item.GtSiteIdLookup?.Title,
             item.Title,
-            item.TimelineType,
+            config && config.Title,
+            config && config.GtSortOrder,
+            config && config.GtHexColor,
+            config && config.GtElementType,
+            config && config.GtShowElementPortfolio,
+            config && config.GtShowElementProgram,
+            config && config.GtTimelineFilter,
             item.GtStartDate,
             item.GtEndDate,
             item.GtBudgetTotal,
@@ -470,7 +544,9 @@ export class ProjectTimeline extends BaseWebPartComponent<
         })
         .filter((t) => t)
 
-      return [timelineItems, timelineListItems, columns]
+      timelineContentItems = [...timelineContentItems, ...projectDeliveries]
+
+      return [timelineContentItems, timelineListItems, columns, timelineConfig]
     } catch (error) {
       return []
     }
@@ -479,8 +555,8 @@ export class ProjectTimeline extends BaseWebPartComponent<
   /**
    * For sorting detailslist on column click
    *
-   * @param {React.MouseEvent} event Event
-   * @param {IColumn} column Column
+   * @param event Event
+   * @param column Column
    */
   private _onColumnClick = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     const newColumns: IColumn[] = this.state.data.timelineColumns.slice()
@@ -508,10 +584,10 @@ export class ProjectTimeline extends BaseWebPartComponent<
   /**
    * Copies and sorts items based on columnKey in the timeline detailslist
    *
-   * @param {T[]} items timelineListItems
-   * @param {string} columnKey Column key
-   * @param {boolean} isSortedDescending Is Sorted Descending?
-   * @returns {T[]} sorted timeline list items
+   * @param items timelineListItems
+   * @param columnKey Column key
+   * @param isSortedDescending Is Sorted Descending?
+   * @returns sorted timeline list items
    */
   private _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
     const key = columnKey as keyof T
@@ -523,131 +599,121 @@ export class ProjectTimeline extends BaseWebPartComponent<
   /**
    * Creating groups based on projects title
    *
-   * @returns {ITimelineGroup[]} Timeline groups
+   * @param projects Projects
+   *
+   * @returns Timeline groups
    */
   private _transformGroups(projects: ProjectListModel[]): ITimelineGroup[] {
-    const groupNames: string[] = projects
-      .map((project) => {
-        const name = project.title
-        return name
+    const groups: ITimelineGroup[] = _.uniq(projects
+      .map((project) => project.title))
+      .map((title, id) => {
+        return {
+          id,
+          title
+        }
       })
-      .filter((value, index, self) => self.indexOf(value) === index)
-    let groups: ITimelineGroup[] = groupNames.map((name, id) => {
-      const [title] = name.split('|')
-      return {
-        id,
-        title,
-        type: 'Prosjekt'
-      }
-    })
-    groups = sortArray(groups, ['type', 'title'])
-    return groups
+    return sortArray(groups, ['type', 'title'])
   }
 
   /**
-   * Create items
+   * Transform items for timeline
    *
-   * @param {ProjectListModel[]} projects Projects
-   * @param {TimelineContentListModel[]} timelineItems Timeline items
-   * @param {ITimelineGroup[]} groups Groups
+   * @param timelineItems Timeline items
    *
-   * @returns {ITimelineItem[]} Timeline items
+   * @returns Timeline items
    */
   private _transformItems(
-    projects: ProjectListModel[],
-    timelineItems: TimelineContentListModel[],
-    groups: ITimelineGroup[]
+    timelineItems: TimelineContentListModel[]
   ): ITimelineItem[] {
-    const items: ITimelineItem[] = projects.map((project, id) => {
-      const group = _.find(groups, (grp) => project.title.indexOf(grp.title) !== -1)
+    const items: ITimelineItem[] = timelineItems.map((item, id) => {
       const style: React.CSSProperties = {
         color: 'white',
         border: 'none',
         cursor: 'auto',
         outline: 'none',
-        background: '#f35d69',
-        backgroundColor: '#f35d69'
+        background:
+          item.elementType !== strings.BarLabel
+            ? 'transparent'
+            : item.hexColor || '#f35d69',
+        backgroundColor:
+          item.elementType !== strings.BarLabel
+            ? 'transparent'
+            : item.hexColor || '#f35d69'
       }
-
       return {
         id,
-        group: group.id,
-        title: format(strings.ProjectTimelineItemInfo, project.title),
-        start_time: moment(new Date(project.startDate)),
-        end_time: moment(new Date(project.endDate)),
+        group: 0,
+        title:
+          item.type === strings.ProjectLabel
+            ? format(strings.ProjectTimelineItemInfo, item.title)
+            : item.itemTitle,
+        start_time:
+          item.elementType !== strings.BarLabel
+            ? moment(new Date(item.endDate))
+            : moment(new Date(item.startDate)),
+        end_time: moment(new Date(item.endDate)),
         itemProps: { style },
-        project: project.title,
-        projectUrl: project.url,
-        phase: project.phase,
-        type: 'Prosjekt',
-        budgetTotal: project.budgetTotal,
-        costsTotal: project.costsTotal
-      } as ITimelineItem
-    })
-
-    const phases: ITimelineItem[] = timelineItems
-      .filter((item) => item.title === this.props.webTitle)
-      .map((item, id) => {
-        id += items.length
-
-        const backgroundColor =
-          item.type === strings.PhaseLabel
-            ? '#2589d6'
-            : item.type === strings.MilestoneLabel
-            ? 'transparent'
-            : item.type === strings.SubPhaseLabel
-            ? '#249ea0'
-            : '#484848'
-
-        const group = _.find(groups, (grp) => item.title.indexOf(grp.title) !== -1)
-        const style: React.CSSProperties = {
-          color: 'white',
-          border: 'none',
-          cursor: 'auto',
-          outline: 'none',
-          background: backgroundColor,
-          backgroundColor: backgroundColor
-        }
-        return {
-          id: id,
-          group: group.id,
-          title: item.itemTitle,
-          start_time:
-            item.type === strings.MilestoneLabel
-              ? moment(new Date(item.endDate))
-              : moment(new Date(item.startDate)),
-          end_time: moment(new Date(item.endDate)),
-          itemProps: { style },
-          project: item.title,
+        project: item.title,
+        projectUrl: item.url,
+        data: {
+          phase: item.phase,
+          description: item.description,
           type: item.type,
           budgetTotal: item.budgetTotal,
-          costsTotal: item.costsTotal
-        } as ITimelineItem
-      })
-
-    return [...items, ...phases]
+          costsTotal: item.costsTotal,
+          sortOrder: item.sortOrder,
+          hexColor: item.hexColor,
+          elementType: item.elementType,
+          filter: item.timelineFilter
+        }
+      } as ITimelineItem
+    })
+    return items
   }
 
   /**
-   * Fetch data
+   * Fetch project data
    */
   private async _fetchProjectData(): Promise<any> {
     try {
-      const [data] = await this.props.hubSite.web.lists
-        .getByTitle(strings.ProjectsListName)
-        .items.select(
-          'Id',
-          'GtStartDate',
-          'GtEndDate',
-          'GtProjectPhase',
-          'GtBudgetTotal',
-          'GtCostsTotal',
-          'FieldValuesAsText'
-        )
-        .expand('FieldValuesAsText')
-        .filter(`GtSiteId eq '${this.props.siteId}'`)
-        .get()
-      return data
+      const [projectData, timelineConfig] = await Promise.all([
+        this.props.hubSite.web.lists
+          .getByTitle(strings.ProjectsListName)
+          .items.select(
+            'Id',
+            'GtStartDate',
+            'GtEndDate',
+          )
+          .filter(`GtSiteId eq '${this.props.siteId}'`)
+          .get(),
+        this.props.hubSite.web.lists
+          .getByTitle(strings.TimelineConfigurationListName)
+          .items.select(
+            'Title',
+            'GtSortOrder',
+            'GtHexColor',
+            'GtElementType',
+            'GtShowElementPortfolio',
+            'GtShowElementProgram',
+            'GtTimelineFilter',
+          )
+          .get()
+      ])
+
+      const config = _.find(timelineConfig, (col) => col.Title === strings.ProjectLabel)
+      return {
+        id: projectData && projectData[0].Id,
+        startDate: projectData && projectData[0].GtStartDate,
+        endDate: projectData && projectData[0].GtEndDate,
+        type: strings.ProjectLabel,
+        sortOrder: config && config.GtSortOrder,
+        hexColor: config && config.GtHexColor,
+        elementType: config && config.GtElementType,
+        showElementPortfolio: config && config.GtShowElementPortfolio,
+        showElementProgram: config && config.GtShowElementProgram,
+        timelineFilter: config && config.GtTimelineFilter,
+      }
+
     } catch (error) {
       this.logError('Failed to retrieve data.', '_fetchData', error)
       throw error
@@ -657,31 +723,25 @@ export class ProjectTimeline extends BaseWebPartComponent<
   /**
    * Fetch data
    *
-   * @returns {ITimelineData} Timeline data
+   * @returns Timeline data
    */
-  private async _fetchData(): Promise<ITimelineData> {
+  private async _fetchData(): Promise<[ITimelineData, any]> {
     try {
       const projectData = await this._fetchProjectData()
-      const project = new ProjectListModel(
-        this.props.siteId,
-        this.props.siteId,
-        this.props.webTitle,
-        this.props.webUrl,
-        projectData.FieldValuesAsText.GtProjectPhase,
-        projectData.GtStartDate,
-        projectData.GtEndDate,
-        null,
-        null,
-        projectData.FieldValuesAsText.GtBudgetTotal,
-        projectData.FieldValuesAsText.GtCostsTotal,
-        strings.ProjectLabel
-      )
 
-      const [timelineItems, timelineListItems, timelineColumns] = await this.getTimelineData()
+      const project = {
+        siteId: this.props.siteId,
+        groupId: this.props.siteId,
+        title: this.props.webTitle,
+        url: this.props.webUrl,
+        ...projectData
+      }
 
+      const [timelineContentItems, timelineListItems, timelineColumns, timelineConfig] = await this.getTimelineData()
+      const timelineItems = [...timelineContentItems, ...[project]]
       const groups = this._transformGroups([project])
-      const items = this._transformItems([project], timelineItems, groups)
-      return { items, groups, timelineListItems, timelineColumns }
+      const items = this._transformItems(timelineItems)
+      return [{ items, groups, timelineListItems, timelineColumns }, timelineConfig]
     } catch (error) {
       throw error
     }

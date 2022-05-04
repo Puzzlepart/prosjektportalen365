@@ -52,12 +52,17 @@ export interface IProjectTimelineState {
   data?: ITimelineData
 
   /**
+   * Timeline Configuration
+   */
+  timelineConfiguration?: any
+
+  /**
    * Error
    */
   error?: string
 
   /**
-   * Item to show show details for
+   * Item to show details for
    */
-  showDetails?: { data: ITimelineItem; element: HTMLElement }
+  showDetails?: { item: ITimelineItem; element: HTMLElement }
 }

@@ -1,6 +1,6 @@
 {
   "name": "pp365-portfoliowebparts",
-  "version": "1.5.4",
+  "version": "1.5.4-749.2",
   "engines": {
     "node": "^12"
   },
