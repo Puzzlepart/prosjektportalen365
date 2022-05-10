@@ -1,4 +1,6 @@
 /* eslint-disable max-classes-per-file */
+import { ProjectColumn } from './ProjectColumn'
+
 export class SPDataSourceItem {
   public Id?: number = -1
   public Title?: string = ''
@@ -6,9 +8,9 @@ export class SPDataSourceItem {
   public GtSearchQuery?: string = ''
   public GtDataSourceCategory?: string = ''
   public GtDataSourceDefault?: boolean = false
-  public GtPortfolioColumns?: any[]
-  public GtPortfolioRefiners?: any[]
-  public GtPortfolioGroupBy?: any[]
+  public GtPortfolioColumnsId?: any[] = []
+  public GtPortfolioRefinersId?: any[] = []
+  public GtPortfolioGroupById?: any = null
   public GtODataQuery?: string = ''
 }
 
@@ -19,28 +21,27 @@ export class DataSource {
   public searchQuery: string
   public category: string
   public isDefault: boolean
-  public projectColumns: any[]
+  public projectColumns: ProjectColumn[]
   public projectRefiners: any[]
-  public projectGroupBy: any[]
+  public projectGroupBy: any
   public odataQuery: string
 
   /**
-   * DataSource
+   * Constructor for DataSource
    *
-   * @param {SPDataSourceItem} item Item
+   * @param item Item
+   * @param columns Project columns
    */
-  constructor(public item: SPDataSourceItem) {
-    // eslint-disable-next-line no-console
-    console.log(item)
+  constructor(public item: SPDataSourceItem, columns: ProjectColumn[] = []) {
     this.id = item.Id
     this.title = item.Title
     this.iconName = item.GtIconName
     this.searchQuery = item.GtSearchQuery
     this.category = item.GtDataSourceCategory
     this.isDefault = item.GtDataSourceDefault
-    this.projectColumns = item.GtPortfolioColumns
-    this.projectRefiners = item.GtPortfolioRefiners
-    this.projectGroupBy = item.GtPortfolioGroupBy
+    this.projectColumns = columns.filter(col => item.GtPortfolioColumnsId.indexOf(col.id) !== -1)
+    this.projectRefiners = columns.filter(col => item.GtPortfolioRefinersId.indexOf(col.id) !== -1)
+    this.projectGroupBy = columns.find(col => col.id === item.GtPortfolioGroupById)
     this.odataQuery = item.GtODataQuery
   }
 }
