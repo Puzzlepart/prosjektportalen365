@@ -46,12 +46,21 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   useEffect(() => {
     dispatch(START_FETCH())
     props.dataAdapter.configure().then((adapter) => {
-      adapter
+      Promise.all([
+        adapter
         .fetchItemsWithSource(
           state.dataSource,
           props.selectProperties || state.columns.map((col) => col.fieldName)
-        )
-        .then((items) => dispatch(DATA_FETCHED({ items })))
+        ),
+        adapter.fetchProjects(state.dataSource)
+      ])
+        .then(([items, projects]) => {
+          const _items = items.map(i => {
+            i.Project = projects.find(p => p.SPWebUrl === i.GtSiteUrl)
+            return i
+          })
+          dispatch(DATA_FETCHED({ items: _items }))
+        })
         .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
     })
   }, [state.columnAdded, state.dataSource])

@@ -1,6 +1,6 @@
 import { QueryPropertyValueType, SearchQuery, SortDirection } from '@pnp/sp'
 import { IPortfolioConfiguration } from 'interfaces'
-import { TimelineContentListModel } from 'models'
+import { ProjectListModel, TimelineContentListModel } from 'models'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 
 export const DEFAULT_SEARCH_SETTINGS: SearchQuery = {
@@ -43,7 +43,8 @@ export interface IDataAdapter {
   fetchDataForTimelineProject?(siteId: any): Promise<any>
   fetchTimelineContentItems?(): Promise<TimelineContentListModel[]>
   fetchTimelineConfiguration?(): Promise<any>
-  fetchEnrichedProjects?(): Promise<any>
-  fetchProjectSites(arg0: number, arg1: string, Descending: SortDirection): Promise<any>
-  fetchItemsWithSource?(dataSource: string, arg1: string[]): Promise<any>
+  fetchEnrichedProjects?(): Promise<ProjectListModel[]>
+  fetchProjects?(dataSourceName: string): Promise<any[]>
+  fetchProjectSites(rowLimit: number, sortProperty: string, sortDirection: SortDirection): Promise<any>
+  fetchItemsWithSource?(dataSourceName: string, arg1: string[]): Promise<any[]>
 }

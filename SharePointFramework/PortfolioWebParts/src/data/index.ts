@@ -28,13 +28,11 @@ import { DEFAULT_SEARCH_SETTINGS, IDataAdapter } from './types'
 export class DataAdapter implements IDataAdapter {
   private _portalDataService: PortalDataService
   private _dataSourceService: DataSourceService
-  private _siteIds: string[]
 
   constructor(public context: WebPartContext, private siteIds?: string[]) {
     this._portalDataService = new PortalDataService().configure({
       urlOrWeb: context.pageContext.web.absoluteUrl
     })
-    this._siteIds = siteIds
   }
 
   /**
@@ -498,6 +496,21 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
+   * Fetch projects
+   *
+   * @param dataSourceName Data source name
+   */
+  public async fetchProjects(dataSourceName: string): Promise<any[]> {
+    const dataSrc = await this._dataSourceService.getByName(dataSourceName)
+    if (!dataSrc) {
+      throw new Error(format(strings.DataSourceNotFound, dataSourceName))
+    }
+    // eslint-disable-next-line no-console
+    console.log(dataSrc)
+    return await sp.web.lists.getByTitle(strings.ProjectsListName).items.get<any[]>()
+  }
+
+  /**
    * Checks if the current is in the specified group
    *
    * @public
@@ -540,19 +553,19 @@ export class DataAdapter implements IDataAdapter {
   /**
    * Fetch items with data source name
    *
-   * @param name Data source name
+   * @param dataSourceName Data source name
    * @param selectProperties Select properties
    */
-  public async fetchItemsWithSource(name: string, selectProperties: string[]): Promise<any> {
-    const dataSrc = await this._dataSourceService.getByName(name)
+  public async fetchItemsWithSource(dataSourceName: string, selectProperties: string[]): Promise<any> {
+    const dataSrc = await this._dataSourceService.getByName(dataSourceName)
     if (!dataSrc) {
-      throw new Error(format(strings.DataSourceNotFound, name))
+      throw new Error(format(strings.DataSourceNotFound, dataSourceName))
     }
     try {
       const items = await this._fetchItems(dataSrc.searchQuery, selectProperties)
       return items
     } catch (error) {
-      throw new Error(format(strings.DataSourceError, name))
+      throw new Error(format(strings.DataSourceError, dataSourceName))
     }
   }
 
