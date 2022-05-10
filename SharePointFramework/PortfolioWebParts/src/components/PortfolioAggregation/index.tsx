@@ -46,6 +46,10 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   useEffect(() => {
     dispatch(START_FETCH())
     props.dataAdapter.configure().then((adapter) => {
+      // TODO: 
+      // 1. Fetch data source
+      // 2. Use data source model as input for fetchItemsWithSource and fetchProjects
+      // 3. Set the project columns from the data source in the state
       Promise.all([
         adapter
         .fetchItemsWithSource(
@@ -54,12 +58,12 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
         ),
         adapter.fetchProjects(state.dataSource)
       ])
-        .then(([items, projects]) => {
-          const _items = items.map(i => {
+        .then(([_items, projects]) => {
+          const items = _items.map(i => {
             i.Project = projects.find(p => p.SPWebUrl === i.GtSiteUrl)
             return i
           })
-          dispatch(DATA_FETCHED({ items: _items }))
+          dispatch(DATA_FETCHED({ items }))
         })
         .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
     })
