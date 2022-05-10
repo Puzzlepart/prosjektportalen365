@@ -15,6 +15,10 @@
                 <FieldRef Name="GtSearchQuery" />
                 <FieldRef Name="GtDataSourceCategory" />
                 <FieldRef Name="GtDataSourceDefault" />
+                <FieldRef Name="GtPortfolioColumns" />
+                <FieldRef Name="GtPortfolioRefiners" />
+                <FieldRef Name="GtPortfolioGroupBy" />
+                <FieldRef Name="GtODataQuery" />
                 <FieldRef Name="GtIconName" />
             </ViewFields>
             <RowLimit Paged="TRUE">100</RowLimit>
@@ -26,6 +30,10 @@
         <pnp:FieldRef ID="31e405e0-2890-439d-9c9f-42354154feda" Name="GtSearchQuery" Required="true" />
         <pnp:FieldRef ID="67a0a4b1-61d7-45c3-9157-7e302450a304" Name="GtDataSourceCategory" Required="true" />
         <pnp:FieldRef ID="1bfa0248-e65d-4fae-b5cf-fbffeb6c13da" Name="GtDataSourceDefault" Required="true" />
+        <pnp:FieldRef ID="43c79736-a2b6-452c-9995-6b72bba0ec16" Name="GtPortfolioColumns" DisplayName="Prosjektkolonner" />
+        <pnp:FieldRef ID="503e35fd-ccee-4d66-af88-e016eab2f80b" Name="GtPortfolioRefiners" DisplayName="Prosjektfilter" />
+        <pnp:FieldRef ID="0d7a146d-b41e-4357-82c3-76fb49eac011" Name="GtPortfolioGroupBy" />
+        <pnp:FieldRef ID="40b5cbd9-4d0a-42eb-a790-65d83b9c7035" Name="GtODataQuery" />
     </pnp:FieldRefs>
     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
         <pnp:DataRow>
