@@ -1582,6 +1582,12 @@
   <data name="SiteFields_GtTimelineFilter_Description" xml:space="preserve">
     <value>Velg 'Ja' dersom elementet skal være filtrerbart i tidslinjen</value>
   </data>
+  <data name="SiteFields_GtODataQuery_DisplayName" xml:space="preserve">
+    <value>OData spørring</value>
+  </data>
+  <data name="SiteFields_GtODataQuery_Description" xml:space="preserve">
+    <value>Odata spørring for å filtrere og konfigurere visningen</value>
+  </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
   </data>
