@@ -176,6 +176,6 @@ define([], function() {
         ProjectDeliveriesGroupName: 'Prosjektleveranser (beta)',
         ShowProjectDeliveriesLabel: 'Vis prosjektleveranser',
         ConfigItemTitleFieldLabel: 'Element tittel (konfigurasjon)',
-        ConfigItemTitleFieldDescription: 'Dersom det er spesifisert et element med tittelen angitt her i tidslinjekonfigurasjon listen så vil dette vises på tidslinjen.',
+        ConfigItemTitleFieldDescription: 'Dersom det er spesifisert et element med tittelen angitt her i tidslinjekonfigurasjon listen så vil dette vises på tidslinjen.'
     }
 })

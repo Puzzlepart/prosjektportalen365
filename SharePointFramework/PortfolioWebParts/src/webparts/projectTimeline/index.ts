@@ -1,4 +1,4 @@
-import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane'
+import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane'
 import { IProjectTimelineProps, ProjectTimeline } from 'components/ProjectTimeline'
 import strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
