@@ -23,7 +23,9 @@
       },
       "officeFabricIconFontName": "Page",
       "properties": {
-        "webPartTitle": "Underområder - tidslinje"
+        "webPartTitle": "Underområder - tidslinje",
+        "dataSourceName": "Alle prosjektleveranser",
+        "configItemTitle": "Prosjektleveranse"
       }
     }
   ]

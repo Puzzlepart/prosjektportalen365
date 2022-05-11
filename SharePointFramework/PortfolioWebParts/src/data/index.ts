@@ -407,8 +407,6 @@ export class DataAdapter implements IDataAdapter {
         })
       ])
 
-      console.log(projectDeliveries)
-
       return projectDeliveries
         .map((item) => {
           const model = new TimelineContentListModel(
