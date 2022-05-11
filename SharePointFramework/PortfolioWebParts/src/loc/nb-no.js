@@ -172,6 +172,10 @@ define([], function() {
         ProgramLabel: "Program",
         NoAccessMessage: "Du har ikke tilgang til dette prosjektet",
         BooleanYes: "Ja",
-        BooleanNo: "Nei"
+        BooleanNo: "Nei",
+        ProjectDeliveriesGroupName: 'Prosjektleveranser (beta)',
+        ShowProjectDeliveriesLabel: 'Vis prosjektleveranser',
+        ConfigItemTitleFieldLabel: 'Element tittel (konfigurasjon)',
+        ConfigItemTitleFieldDescription: 'Dersom det er spesifisert et element med tittelen angitt her i tidslinjekonfigurasjon listen så vil dette vises på tidslinjen.',
     }
 })

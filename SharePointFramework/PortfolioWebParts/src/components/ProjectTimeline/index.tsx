@@ -298,15 +298,60 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    * @returns Timeline data and timeline configuration
    */
   private async _fetchData(): Promise<[ITimelineData, any]> {
+    let projectDeliveries = []
+
     try {
       const [projects, timelineContentItems, timelineConfiguration] = await Promise.all([
         this.props.dataAdapter.fetchEnrichedProjects(),
         this.props.dataAdapter.fetchTimelineContentItems(),
         this.props.dataAdapter.fetchTimelineConfiguration()
       ])
+
       const filteredProjects = projects.filter((project) => {
         return project.startDate !== null && project.endDate !== null
       })
+
+      const config: any = _.find(timelineConfiguration, (col) => col.Title === this.props.configItemTitle)
+
+      if (config && config.GtShowElementPortfolio) {
+        [projectDeliveries] = await Promise.all([
+          this.props.dataAdapter.configure().then((adapter) => {
+            return adapter.fetchItemsWithSource(this.props.dataSourceName, ['Title', 'GtDeliveryDescriptionOWSMTXT', 'GtDeliveryStartTimeOWSDATE', 'GtDeliveryEndTimeOWSDATE'])
+            .then((deliveries) => {
+              return deliveries
+            })
+            .catch((error) => {
+              throw error
+            })
+          })
+        ])
+        
+        projectDeliveries = projectDeliveries
+          .map((item) => {
+            const model = new TimelineContentListModel(
+              item.SiteId,
+              item.SiteTitle,
+              item.Title,
+              config && config.Title || this.props.configItemTitle,
+              config && config.GtSortOrder || 90,
+              config && config.GtHexColor || '#384f61',
+              config && config.GtElementType || strings.BarLabel,
+              config && config.GtShowElementPortfolio || false,
+              config && config.GtShowElementProgram || false,
+              config && config.GtTimelineFilter || true,
+              item.GtDeliveryStartTimeOWSDATE,
+              item.GtDeliveryEndTimeOWSDATE,
+              null,
+              null,
+              null,
+              null,
+              item.GtDeliveryDescriptionOWSMTXT
+            )
+            return model
+          })
+          .filter((item) => filteredProjects.find((project) => project.title === item.title))
+          .filter((t) => t)
+      }
 
       const filteredTimelineItems = timelineContentItems.filter((item) => {
         return filteredProjects.some((project) => {
@@ -322,7 +367,8 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         }
       }))
 
-      timelineItems = [...timelineItems, ...filteredTimelineItems]
+
+      timelineItems = [...timelineItems, ...filteredTimelineItems, ...projectDeliveries]
       const groups = this._transformGroups(filteredProjects)
       const items = this._transformItems(timelineItems, groups)
       return [{ items, groups }, timelineConfiguration]
