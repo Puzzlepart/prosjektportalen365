@@ -444,7 +444,7 @@ export class DataAdapter {
     if (config && config.GtShowElementProgram) {
       const [projectDeliveries] = await Promise.all([
         this.configure().then((adapter) => {
-          return adapter.fetchItemsWithSource(dataSourceName, ['Title', 'GtDeliveryDescriptionOWSMTXT', 'GtDeliveryStartTimeOWSDATE', 'GtDeliveryEndTimeOWSDATE'])
+          return adapter.fetchItemsWithSource(dataSourceName, ['Title', 'GtDeliveryDescriptionOWSMTXT', 'GtDeliveryStartTimeOWSDATE', 'GtDeliveryEndTimeOWSDATE'], true)
             .then((deliveries) => {
               return deliveries
             })
@@ -638,8 +638,10 @@ export class DataAdapter {
    * @param queryTemplate Query template
    * @param selectProperties Select properties
    */
-  private async _fetchItems(queryTemplate: string, selectProperties: string[]) {
+  private async _fetchItems(queryTemplate: string, selectProperties: string[], includeSelf: boolean = false) {
+    const siteId = this.context.pageContext.site.id.toString()
     const programFilter = this._childProjects && this.aggregatedQueryBuilder('SiteId')
+    if (includeSelf) programFilter.unshift(`SiteId:${siteId}`)
     const promises = []
     programFilter.forEach((element) => {
       promises.push(
@@ -659,7 +661,7 @@ export class DataAdapter {
     })
 
     const duplicateArray = [].concat(...searchResults)
-    //remove duplicate objects from array
+    // Remove duplicate objects from array
     // Only needed for development if we have to run queries on the same projects due to lack of data
     // will be changed to `return responses` in production
     const uniqueArray = duplicateArray.filter(
@@ -674,13 +676,14 @@ export class DataAdapter {
    * @param name Data source name
    * @param selectProperties Select properties
    */
-  public async fetchItemsWithSource(name: string, selectProperties: string[]): Promise<any> {
+  public async fetchItemsWithSource(name: string, selectProperties: string[], includeSelf: boolean = false): Promise<any> {
     const dataSrc = await this._dataSourceService.getByName(name)
     if (!dataSrc) {
       throw new Error(format(strings.DataSourceNotFound, name))
     }
+
     try {
-      const items = await this._fetchItems(dataSrc.searchQuery, selectProperties)
+      const items = await this._fetchItems(dataSrc.searchQuery, selectProperties, includeSelf)
       return items
     } catch (error) {
       throw new Error(format(strings.DataSourceError, name))
