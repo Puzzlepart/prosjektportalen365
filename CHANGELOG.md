@@ -11,6 +11,8 @@ Every change is marked with issue ID.
   - This applies to Portfolio, Project and Program timelines
 - Added possibility to include project deliveries on timeline (beta) #679
   - This applies to Portfolio, Project and Program timelines
+- Added ability to run hooks in the txt provisioning template #700
+  - Example: Trigger API's, Flows, Logic Apps, Azure Functions, etc...
 
 ## 1.5.0 - 01.04.2022
 
