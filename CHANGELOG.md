@@ -3,13 +3,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with issue ID.
 
-## 1.5.X - TBA
+## 1.6.0 - 01.06.2022
 
 ### Added
 
 - Added timeline configuration list (Customize how timeline elements are displayed, their colors, sorting and more) #678
   - This applies to Portfolio, Project and Program timelines
 - Added possibility to include project deliveries on timeline (beta) #679
+  - This applies to Portfolio, Project and Program timelines
 
 ## 1.5.0 - 01.04.2022
 
