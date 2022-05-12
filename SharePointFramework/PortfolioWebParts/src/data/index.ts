@@ -384,6 +384,57 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
+   * Fetches configuration data for the Projecttimeline
+   *
+   */
+  public async fetchTimelineAggregatedContent(configItemTitle: string, dataSourceName: string) {
+    const [timelineConfig] = await Promise.all([
+      this.fetchTimelineConfiguration()
+    ])
+    
+    const config: any = _.find(timelineConfig, (col) => col.Title === configItemTitle)
+    
+    if (config && config.GtShowElementPortfolio) {
+      const [projectDeliveries] = await Promise.all([
+        this.configure().then((adapter) => {
+          return adapter.fetchItemsWithSource(dataSourceName, ['Title', 'GtDeliveryDescriptionOWSMTXT', 'GtDeliveryStartTimeOWSDATE', 'GtDeliveryEndTimeOWSDATE'])
+            .then((deliveries) => {
+              return deliveries
+            })
+            .catch((error) => {
+              throw error
+            })
+        })
+      ])
+
+      return projectDeliveries
+        .map((item) => {
+          const model = new TimelineContentListModel(
+            item.SiteId,
+            item.SiteTitle,
+            item.Title,
+            config && config.Title || configItemTitle,
+            config && config.GtSortOrder || 90,
+            config && config.GtHexColor || '#384f61',
+            config && config.GtElementType || strings.BarLabel,
+            config && config.GtShowElementPortfolio || false,
+            config && config.GtShowElementProgram || false,
+            config && config.GtTimelineFilter || true,
+            item.GtDeliveryStartTimeOWSDATE,
+            item.GtDeliveryEndTimeOWSDATE,
+            null,
+            null,
+            null,
+            null,
+            item.GtDeliveryDescriptionOWSMTXT
+          )
+          return model
+        })
+        .filter((t) => t)
+    }
+  }
+
+  /**
    * Fetch project sites
    *
    * @param rowLimit Row limit

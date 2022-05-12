@@ -174,6 +174,10 @@ declare interface IPortfolioWebPartsStrings {
   NoAccessMessage: string
   BooleanYes: string
   BooleanNo: string
+  ProjectDeliveriesGroupName: string;
+  ShowProjectDeliveriesLabel: string;
+  ConfigItemTitleFieldLabel: string;
+  ConfigItemTitleFieldDescription: string;
 }
 
 declare module 'PortfolioWebPartsStrings' {
