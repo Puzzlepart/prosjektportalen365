@@ -11,6 +11,10 @@ Every change is marked with issue ID.
   - This applies to Portfolio, Project and Program timelines
 - Added possibility to include project deliveries on timeline (beta) #679
 
+### Fixed
+
+- Fixed issue with resource allocation percentage not showing #610. NB: The script UpgradeAllSitesToLatest.ps1 needs to be run to fix the issue for old sites!
+
 ## 1.5.0 - 01.04.2022
 
 ### Added
