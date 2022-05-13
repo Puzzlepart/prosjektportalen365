@@ -7,6 +7,11 @@ if ($null -ne $LastInstall) {
         Write-Host "[INFO] In version v1.2.7 we added 'Prosjekttidslinje' to the top navigation. Adding this navigation item now as part of the upgrade" 
         Add-PnPNavigationNode -Location TopNavigationBar -Title "Prosjekttidslinje" -Url "$($Uri.LocalPath)/SitePages/Prosjekttidslinje.aspx"
     }
+    if ($PreviousVersion -lt "1.5.0") {
+        Write-Host "[INFO] Applying PnP template [1.5.0] to [$Url]"
+        Apply-PnPProvisioningTemplate "$BasePath\1.5.0.pnp" -ErrorAction Stop
+        Write-Host "[SUCCESS] Successfully applied PnP template [1.5.0] to [$Url]" -ForegroundColor Green
+    }
     if ($PreviousVersion -lt "1.5.5") {
         Write-Host "[INFO] In version v1.5.5 we added Project timeline configuration and reworked the TimelineContent list. Merging data now as part of the upgrade"
 
@@ -33,11 +38,6 @@ if ($null -ne $LastInstall) {
             $Item.Update()
             Invoke-PnPQuery
         }
-    }
-    if ($PreviousVersion -lt "1.5.0") {
-        Write-Host "[INFO] Applying PnP template [1.5.0] to [$Url]"
-        Apply-PnPProvisioningTemplate "$BasePath\1.5.0.pnp" -ErrorAction Stop
-        Write-Host "[SUCCESS] Successfully applied PnP template [1.5.0] to [$Url]" -ForegroundColor Green
     }
     
 }
