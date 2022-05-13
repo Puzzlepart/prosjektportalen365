@@ -23,7 +23,10 @@
         "default": " "
       },
       "officeFabricIconFontName": "TimelineDelivery",
-      "properties": {}
+      "properties": {
+        "dataSourceName": "Alle prosjektleveranser",
+        "configItemTitle": "Prosjektleveranse"
+      }
     }
   ]
 }

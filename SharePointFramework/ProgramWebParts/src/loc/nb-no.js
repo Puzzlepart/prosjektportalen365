@@ -69,6 +69,7 @@ define([], function() {
         DeliveryStatusLabel: 'Leveransestatus',
         DeliveriesTitle: "Leveranser",
         DesiredValueLabel: 'Ønsket verdi',
+        DescriptionFieldLabel: 'Beskrivelse',
         DeliveriesDatasource: "Alle prosjektleveranser",
         WebPartTitleLabel: 'Navn på webpart',
         SettingsLabel: "Innstillinger",
@@ -157,6 +158,7 @@ define([], function() {
         SubPhaseLabel: 'Delfase',
         CurrentPhaseLabel: 'Gjeldende fase',
         MilestoneDateLabel: 'Milepælsdato',
+        NameLabel: 'Navn',
         StartDateLabel: 'Startdato',
         EndDateLabel: 'Sluttdato',
         BudgetTotalLabel: 'Totalbudsjett',
@@ -243,6 +245,10 @@ define([], function() {
         ProjectPortfolio_LoadingText: "Laster prosjektportefølje...",
         ProjectPortfolio_SearchBoxLabelText: "Søk i tilkoblede underordnede områder...",
         ProjectPortfolio_ShowCountTex: "Viser {0} av totalt {1} underordnede områder tilknyttet dette prosjektet",
-        ProgramStatus_ViewIdLabel: "ID for programstatus visningen"
+        ProgramStatus_ViewIdLabel: "ID for programstatus visningen",
+        ProjectDeliveriesGroupName: 'Prosjektleveranser (beta)',
+        ShowProjectDeliveriesLabel: 'Vis prosjektleveranser',
+        ConfigItemTitleFieldLabel: 'Element tittel (konfigurasjon)',
+        ConfigItemTitleFieldDescription: 'Dersom det er spesifisert et element med tittelen angitt her i tidslinjekonfigurasjon listen så vil dette vises på tidslinjen.'
     }
 })

@@ -1,5 +1,6 @@
-import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane'
+import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane'
 import { IProjectTimelineProps, ProjectTimeline } from 'components/ProjectTimeline'
+import strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export default class ProjectTimelineWebPart extends BasePortfolioWebPart<IProjectTimelineProps> {
@@ -12,6 +13,27 @@ export default class ProjectTimelineWebPart extends BasePortfolioWebPart<IProjec
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    return super.getPropertyPaneConfiguration()
+    return {
+      pages: [
+        {
+          groups: [
+            {
+              groupName: strings.ProjectDeliveriesGroupName,
+              groupFields: [
+                PropertyPaneTextField('dataSourceName', {
+                  label: strings.DataSourceLabel,
+                  value: 'Alle prosjektleveranser'
+                }),
+                PropertyPaneTextField('configItemTitle', {
+                  label: strings.ConfigItemTitleFieldLabel,
+                  description: strings.ConfigItemTitleFieldDescription,
+                  value: 'Prosjektleveranse'
+                }),
+              ]
+            }
+          ]
+        }
+      ]
+    }
   }
 }
