@@ -319,6 +319,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
       await this._web.lists
         .getByTitle(strings.ProjectsListName)
         .items.select('Id', 'GtSiteId')
+        .top(500)
         .get()
     ).filter(({ GtSiteId }) => GtSiteId === this.props.siteId)
 
@@ -411,6 +412,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
             'GtShowElementProgram',
             'GtTimelineFilter',
           )
+          .top(500)
           .get()
       ])
 
@@ -424,6 +426,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
               'GtDeliveryStartTime',
               'GtDeliveryEndTime',
             )
+            .top(500)
             .get()
         ])
 
@@ -460,6 +463,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
           await this._web.lists
             .getByTitle(strings.TimelineContentListName)
             .defaultView.fields.select('Items')
+            .top(500)
             .get()
         )['Items']
       ])
@@ -495,6 +499,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
           .getByTitle(strings.TimelineContentListName)
           .fields.filter(filterstring)
           .select('InternalName', 'Title', 'TypeAsString')
+          .top(500)
           .get()
       ])
 
@@ -685,6 +690,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
             'GtEndDate',
           )
           .filter(`GtSiteId eq '${this.props.siteId}'`)
+          .top(500)
           .get(),
         this.props.hubSite.web.lists
           .getByTitle(strings.TimelineConfigurationListName)
@@ -696,7 +702,8 @@ export class ProjectTimeline extends BaseWebPartComponent<
             'GtShowElementPortfolio',
             'GtShowElementProgram',
             'GtTimelineFilter',
-          )
+        )
+          .top(500)
           .get()
       ])
 

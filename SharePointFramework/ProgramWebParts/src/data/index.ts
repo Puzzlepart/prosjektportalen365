@@ -427,6 +427,7 @@ export class DataAdapter {
         'GtShowElementProgram',
         'GtTimelineFilter',
       )
+      .top(500)
       .get()
   }
 
