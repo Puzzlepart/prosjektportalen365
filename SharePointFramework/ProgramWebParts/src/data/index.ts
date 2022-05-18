@@ -55,6 +55,10 @@ export class DataAdapter {
     this._dataSourceService = new DataSourceService(web)
     return this
   }
+
+  /**
+   * Get portfolio configuration
+   */
   public async getPortfolioConfig(): Promise<IPortfolioConfiguration> {
     // eslint-disable-next-line prefer-const
     let [columnConfig, columns, views, viewsUrls, columnUrls] = await Promise.all([
@@ -367,6 +371,8 @@ export class DataAdapter {
         .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
         .get()
     ])
+
+
     return timelineItems
       .map((item) => {
         const type = item.GtTimelineTypeLookup && item.GtTimelineTypeLookup.Title
@@ -422,6 +428,57 @@ export class DataAdapter {
         'GtTimelineFilter',
       )
       .get()
+  }
+
+  /**
+   * Fetches configuration data for the Projecttimeline
+   *
+   */
+  public async fetchTimelineAggregatedContent(configItemTitle: string, dataSourceName: string) {
+    const [timelineConfig] = await Promise.all([
+      this.fetchTimelineConfiguration()
+    ])
+
+    const config: any = _.find(timelineConfig, (col) => col.Title === configItemTitle)
+
+    if (config && config.GtShowElementProgram) {
+      const [projectDeliveries] = await Promise.all([
+        this.configure().then((adapter) => {
+          return adapter.fetchItemsWithSource(dataSourceName, ['Title', 'GtDeliveryDescriptionOWSMTXT', 'GtDeliveryStartTimeOWSDATE', 'GtDeliveryEndTimeOWSDATE'], true)
+            .then((deliveries) => {
+              return deliveries
+            })
+            .catch((error) => {
+              throw error
+            })
+        })
+      ])
+
+      return projectDeliveries
+        .map((item) => {
+          const model = new TimelineContentListModel(
+            item.SiteId,
+            item.SiteTitle,
+            item.Title,
+            config && config.Title || configItemTitle,
+            config && config.GtSortOrder || 90,
+            config && config.GtHexColor || '#384f61',
+            config && config.GtElementType || strings.BarLabel,
+            config && config.GtShowElementPortfolio || false,
+            config && config.GtShowElementProgram || false,
+            config && config.GtTimelineFilter || true,
+            item.GtDeliveryStartTimeOWSDATE,
+            item.GtDeliveryEndTimeOWSDATE,
+            null,
+            null,
+            null,
+            null,
+            item.GtDeliveryDescriptionOWSMTXT
+          )
+          return model
+        })
+        .filter((t) => t)
+    }
   }
 
   /**
@@ -581,8 +638,10 @@ export class DataAdapter {
    * @param queryTemplate Query template
    * @param selectProperties Select properties
    */
-  private async _fetchItems(queryTemplate: string, selectProperties: string[]) {
+  private async _fetchItems(queryTemplate: string, selectProperties: string[], includeSelf: boolean = false) {
+    const siteId = this.context.pageContext.site.id.toString()
     const programFilter = this._childProjects && this.aggregatedQueryBuilder('SiteId')
+    if (includeSelf) programFilter.unshift(`SiteId:${siteId}`)
     const promises = []
     programFilter.forEach((element) => {
       promises.push(
@@ -602,7 +661,7 @@ export class DataAdapter {
     })
 
     const duplicateArray = [].concat(...searchResults)
-    //remove duplicate objects from array
+    // Remove duplicate objects from array
     // Only needed for development if we have to run queries on the same projects due to lack of data
     // will be changed to `return responses` in production
     const uniqueArray = duplicateArray.filter(
@@ -617,13 +676,14 @@ export class DataAdapter {
    * @param name Data source name
    * @param selectProperties Select properties
    */
-  public async fetchItemsWithSource(name: string, selectProperties: string[]): Promise<any> {
+  public async fetchItemsWithSource(name: string, selectProperties: string[], includeSelf: boolean = false): Promise<any> {
     const dataSrc = await this._dataSourceService.getByName(name)
     if (!dataSrc) {
       throw new Error(format(strings.DataSourceNotFound, name))
     }
+
     try {
-      const items = await this._fetchItems(dataSrc.searchQuery, selectProperties)
+      const items = await this._fetchItems(dataSrc.searchQuery, selectProperties, includeSelf)
       return items
     } catch (error) {
       throw new Error(format(strings.DataSourceError, name))

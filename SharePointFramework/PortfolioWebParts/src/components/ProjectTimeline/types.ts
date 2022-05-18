@@ -4,25 +4,12 @@ import { ITimelineData, ITimelineItem } from 'interfaces'
 import { ProjectListModel } from 'models'
 
 export interface IProjectTimelineProps extends IBaseComponentProps {
-  /**
-   * Data source
-   */
-  dataSource: string
-
-  /**
-   * Default time start
-   */
   defaultTimeStart?: [number, moment.unitOfTime.DurationConstructor]
-
-  /**
-   * Default time end
-   */
   defaultTimeEnd?: [number, moment.unitOfTime.DurationConstructor]
-
-  /**
-   * Conditional infotext
-   */
   infoText?: string
+  showProjectDeliveries?: boolean
+  dataSourceName?: string
+  configItemTitle?: string
 }
 
 export interface IProjectTimelineState {

@@ -299,16 +299,18 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    */
   private async _fetchData(): Promise<[ITimelineData, any]> {
     try {
-      const [projects, timelineContentItems, timelineConfiguration] = await Promise.all([
+      const [projects, timelineContentItems, timelineAggregatedContent = [], timelineConfiguration] = await Promise.all([
         this.props.dataAdapter.fetchEnrichedProjects(),
         this.props.dataAdapter.fetchTimelineContentItems(),
+        this.props.dataAdapter.fetchTimelineAggregatedContent(this.props.configItemTitle, this.props.dataSourceName),
         this.props.dataAdapter.fetchTimelineConfiguration()
       ])
+
       const filteredProjects = projects.filter((project) => {
         return project.startDate !== null && project.endDate !== null
       })
 
-      const filteredTimelineItems = timelineContentItems.filter((item) => {
+      const filteredTimelineItems = [...timelineContentItems, ...timelineAggregatedContent].filter((item) => {
         return filteredProjects.some((project) => {
           return project.title.indexOf(item.title) !== -1
         })
