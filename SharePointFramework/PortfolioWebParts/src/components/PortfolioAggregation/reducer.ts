@@ -70,7 +70,6 @@ export default (props: IPortfolioAggregationProps) =>
   createReducer(initState(props), {
     [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {
       // eslint-disable-next-line no-console
-      console.log({ payload })
       if (payload.items) {
         state.items = props.postTransform ? props.postTransform(payload.items) : payload.items
         state.items = sortArray(
@@ -92,8 +91,24 @@ export default (props: IPortfolioAggregationProps) =>
       state.addColumnPanel = { isOpen: payload.isOpen }
     },
     [COLUMNS_FETCHED.type]: (state, { payload }: ReturnType<typeof COLUMNS_FETCHED>) => {
-      state.columns = [...state.columns, ...payload.columns] // Concats the new columns to the existing columns
-      //state.columns = payload.columns //
+      // eslint-disable-next-line no-console
+      console.log({ payload })
+
+      const newColumns = payload.columns.map((col) => {
+        const existingColumn = state.columns.find((c) => c.key === col.key)
+        if (existingColumn) {
+          return { ...existingColumn, ...col }
+        }
+        return col
+      })
+
+      // Object.assign state.columns with newColumns based on same key value
+      const mergedColumns = Object.assign(state.columns, newColumns)
+      // eslint-disable-next-line no-console
+      console.log({ newColumns })
+      state.columns = mergedColumns
+
+      persistColumns(props, current(state).columns)
     },
     [ADD_COLUMN.type]: (state, { payload }: ReturnType<typeof ADD_COLUMN>) => {
       if (state.editColumn) {

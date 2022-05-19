@@ -63,7 +63,7 @@ export const ColumnFormPanel = () => {
     dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
   }
   // eslint-disable-next-line no-console
-  console.log(column)
+  console.log({column})
 
   return (
     <Panel

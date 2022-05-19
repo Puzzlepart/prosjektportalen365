@@ -25,6 +25,9 @@ import { IPortfolioAggregationProps } from './types'
 export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   const reducer = useMemo(() => createReducer(props), [])
   const [state, dispatch] = useReducer(reducer, initState(props))
+  
+  // eslint-disable-next-line no-console
+  console.log({ state, props })
 
   useEffect(() => {
     if (props.dataSourceCategory) {
