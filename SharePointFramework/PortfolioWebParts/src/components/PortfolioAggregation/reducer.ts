@@ -1,5 +1,6 @@
 import { createAction, createReducer, current } from '@reduxjs/toolkit'
 import sortArray from 'array-sort'
+import { merge } from 'office-ui-fabric-react'
 import { Target } from 'office-ui-fabric-react/lib/Callout'
 import { IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -19,13 +20,12 @@ function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
   _arr.splice(new_index, 0, _arr.splice(old_index, 1)[0])
   return _arr
 }
-export const DATA_FETCHED = createAction<{ items: any[]; dataSources?: DataSource[] }>(
+export const DATA_FETCHED = createAction<{ items: any[]; dataSources?: DataSource[]; columns?: IColumn[] }>(
   'DATA_FETCHED'
 )
 export const TOGGLE_COLUMN_FORM_PANEL = createAction<{ isOpen: boolean; column?: IColumn }>(
   'TOGGLE_COLUMN_FORM_PANEL'
 )
-export const COLUMNS_FETCHED = createAction<{ columns: IColumn[] }>('COLUMNS_FETCHED')
 export const ADD_COLUMN = createAction<{ column: IColumn }>('ADD_COLUMN')
 export const DELETE_COLUMN = createAction('DELETE_COLUMN')
 export const COLUMN_HEADER_CONTEXT_MENU = createAction<{ column: IColumn; target: Target }>(
@@ -42,8 +42,8 @@ export const DATA_FETCH_ERROR = createAction<{ error: Error }>('DATA_FETCH_ERROR
 /**
  * Persist columns in web part properties
  *
- * @param props Props
- * @param state State
+ * @param props - Props
+ * @param columns - State
  */
 const persistColumns = (props: IPortfolioAggregationProps, columns: IColumn[]) => {
   props.onUpdateProperty(
@@ -81,7 +81,27 @@ export default (props: IPortfolioAggregationProps) =>
         )
         state.loading = false
       }
-      if (payload.dataSources) state.dataSources = payload.dataSources
+      if (payload.dataSources) {
+        state.dataSources = payload.dataSources
+      }
+      if (payload.columns) {
+        // merge values from persistedColumnsData with payload.columns based on key
+        const mergedColumns = current(state).columns.map((col) => {
+          const payCol = payload.columns.find((c) => c.key === col.key)
+          return {
+            ...col,
+            name: payCol.name
+          }
+        })
+
+        // eslint-disable-next-line no-console
+        console.log({ mergedColumns, payCols: payload.columns, stateCols: current(state).columns, propsCols: props.columns })
+
+        if(mergedColumns.length >= 1)
+          state.columns = mergedColumns
+        else
+          state.columns = sortArray(payload.columns, 'sortOrder')
+      }
     },
     [TOGGLE_COLUMN_FORM_PANEL.type]: (
       state,
@@ -89,26 +109,6 @@ export default (props: IPortfolioAggregationProps) =>
     ) => {
       state.editColumn = payload.column || null
       state.addColumnPanel = { isOpen: payload.isOpen }
-    },
-    [COLUMNS_FETCHED.type]: (state, { payload }: ReturnType<typeof COLUMNS_FETCHED>) => {
-      // eslint-disable-next-line no-console
-      console.log({ payload })
-
-      const newColumns = payload.columns.map((col) => {
-        const existingColumn = state.columns.find((c) => c.key === col.key)
-        if (existingColumn) {
-          return { ...existingColumn, ...col }
-        }
-        return col
-      })
-
-      // Object.assign state.columns with newColumns based on same key value
-      const mergedColumns = Object.assign(state.columns, newColumns)
-      // eslint-disable-next-line no-console
-      console.log({ newColumns })
-      state.columns = mergedColumns
-
-      persistColumns(props, current(state).columns)
     },
     [ADD_COLUMN.type]: (state, { payload }: ReturnType<typeof ADD_COLUMN>) => {
       if (state.editColumn) {

@@ -65,6 +65,7 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
 export const getDefaultColumns = (context: IPortfolioAggregationContext, isParent?: boolean) => [
   {
     key: 'SiteTitle',
+    idx: 0,
     fieldName: 'SiteTitle',
     name: strings.SiteTitleLabel,
     minWidth: 150,

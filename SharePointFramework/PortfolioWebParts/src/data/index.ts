@@ -556,8 +556,6 @@ export class DataAdapter implements IDataAdapter {
     if (!dataSrc) {
       throw new Error(format(strings.DataSourceNotFound, dataSourceName))
     }
-    // eslint-disable-next-line no-console
-    console.log({ dataSrc })
     return await sp.web.lists.getByTitle(strings.ProjectsListName).items.get<any[]>()
   }
 

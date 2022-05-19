@@ -14,7 +14,6 @@ import createReducer, {
   COLUMN_HEADER_CONTEXT_MENU,
   DATA_FETCHED,
   DATA_FETCH_ERROR,
-  COLUMNS_FETCHED,
   initState,
   START_FETCH
 } from './reducer'
@@ -26,9 +25,6 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   const reducer = useMemo(() => createReducer(props), [])
   const [state, dispatch] = useReducer(reducer, initState(props))
   
-  // eslint-disable-next-line no-console
-  console.log({ state, props })
-
   useEffect(() => {
     if (props.dataSourceCategory) {
       props.dataAdapter.configure().then((adapter) => {
@@ -50,27 +46,21 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   useEffect(() => {
     dispatch(START_FETCH())
     props.dataAdapter.configure().then((adapter) => {
-      // TODO: 
-      // 1. Fetch data source
-      // 2. Use data source model as input for fetchItemsWithSource and fetchProjects
-      // 3. Set the project columns from the data source in the state
       Promise.all([
         adapter.dataSourceService.getByName(state.dataSource),
         adapter
           .fetchItemsWithSource(
             state.dataSource,
             props.selectProperties || state.columns.map((col) => col.fieldName)
-          ),
-        adapter.fetchProjects(state.dataSource)
+          )
+        // adapter.fetchProjects(state.dataSource) // Is this needed?
       ])
-        .then(([dataSrc, _items, projects]) => {
-          const items = _items.map(i => {
-            i.Project = projects.find(p => p.SPWebUrl === i.GtSiteUrl)
-            return i
-          })
-          const columns = dataSrc.projectColumns
-          if (props.useNewDataSourceExperience) dispatch(COLUMNS_FETCHED({ columns }))
-          dispatch(DATA_FETCHED({ items }))
+        .then(([dataSrc, items]) => {
+          // const items = _items.map(i => {
+          //   i.Project = projects.find(p => p.SPWebUrl === i.GtSiteUrl)
+          //   return i
+          // })
+          dispatch(DATA_FETCHED({ items, columns: dataSrc.projectColumns }))
         })
         .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
     })
