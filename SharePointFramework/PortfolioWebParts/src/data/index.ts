@@ -27,7 +27,7 @@ import { DEFAULT_SEARCH_SETTINGS, IDataAdapter } from './types'
 
 export class DataAdapter implements IDataAdapter {
   private _portalDataService: PortalDataService
-  private _dataSourceService: DataSourceService
+  public dataSourceService: DataSourceService
 
   constructor(public context: WebPartContext, private siteIds?: string[]) {
     this._portalDataService = new PortalDataService().configure({
@@ -40,9 +40,9 @@ export class DataAdapter implements IDataAdapter {
    * of the DataSourceService.
    */
   public async configure(): Promise<DataAdapter> {
-    if (this._dataSourceService) return this
+    if (this.dataSourceService) return this
     const { web } = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
-    this._dataSourceService = new DataSourceService(web)
+    this.dataSourceService = new DataSourceService(web)
     return this
   }
 
@@ -389,9 +389,9 @@ export class DataAdapter implements IDataAdapter {
     const [timelineConfig] = await Promise.all([
       this.fetchTimelineConfiguration()
     ])
-    
+
     const config: any = _.find(timelineConfig, (col) => col.Title === configItemTitle)
-    
+
     if (config && config.GtShowElementPortfolio) {
       const [projectDeliveries] = await Promise.all([
         this.configure().then((adapter) => {
@@ -552,12 +552,12 @@ export class DataAdapter implements IDataAdapter {
    * @param dataSourceName Data source name
    */
   public async fetchProjects(dataSourceName: string): Promise<any[]> {
-    const dataSrc = await this._dataSourceService.getByName(dataSourceName)
+    const dataSrc = await this.dataSourceService.getByName(dataSourceName)
     if (!dataSrc) {
       throw new Error(format(strings.DataSourceNotFound, dataSourceName))
     }
     // eslint-disable-next-line no-console
-    console.log(dataSrc)
+    console.log({ dataSrc: dataSrc })
     return await sp.web.lists.getByTitle(strings.ProjectsListName).items.get<any[]>()
   }
 
@@ -608,17 +608,39 @@ export class DataAdapter implements IDataAdapter {
    * @param selectProperties Select properties
    */
   public async fetchItemsWithSource(dataSourceName: string, selectProperties: string[]): Promise<any> {
-    const dataSrc = await this._dataSourceService.getByName(dataSourceName)
+    const dataSrc = await this.dataSourceService.getByName(dataSourceName)
     if (!dataSrc) {
       throw new Error(format(strings.DataSourceNotFound, dataSourceName))
     }
+
+    const dataSrcProperties = dataSrc.projectColumns.map((col) => col.fieldName) || []
+
     try {
-      const items = await this._fetchItems(dataSrc.searchQuery, selectProperties)
+      const items = await this._fetchItems(dataSrc.searchQuery, [...selectProperties, ...dataSrcProperties])
       return items
     } catch (error) {
       throw new Error(format(strings.DataSourceError, dataSourceName))
     }
+
   }
+
+  // /**
+  // * Fetch data source by name
+  // *
+  // * @param dataSourceName Data source name
+  // */
+  // public async fetchDataSource(dataSourceName: string): Promise<DataSource> {
+  //   try {
+  //     const dataSrc = await this.dataSourceService.getByName(dataSourceName)
+  //     if (!dataSrc) {
+  //       throw new Error(format(strings.DataSourceNotFound, dataSourceName))
+  //     }
+
+  //     return dataSrc
+  //   } catch (error) {
+  //     throw new Error(format(strings.DataSourceNotFound, dataSourceName))
+  //   }
+  // }
 
   /**
    * Fetch data sources by category
@@ -627,7 +649,7 @@ export class DataAdapter implements IDataAdapter {
    */
   public fetchDataSources(category: string): Promise<DataSource[]> {
     try {
-      return this._dataSourceService.getByCategory(category)
+      return this.dataSourceService.getByCategory(category)
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, category))
     }

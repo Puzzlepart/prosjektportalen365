@@ -19,13 +19,13 @@ function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
   _arr.splice(new_index, 0, _arr.splice(old_index, 1)[0])
   return _arr
 }
-
 export const DATA_FETCHED = createAction<{ items: any[]; dataSources?: DataSource[] }>(
   'DATA_FETCHED'
 )
 export const TOGGLE_COLUMN_FORM_PANEL = createAction<{ isOpen: boolean; column?: IColumn }>(
   'TOGGLE_COLUMN_FORM_PANEL'
 )
+export const COLUMNS_FETCHED = createAction<{ columns: IColumn[] }>('COLUMNS_FETCHED')
 export const ADD_COLUMN = createAction<{ column: IColumn }>('ADD_COLUMN')
 export const DELETE_COLUMN = createAction('DELETE_COLUMN')
 export const COLUMN_HEADER_CONTEXT_MENU = createAction<{ column: IColumn; target: Target }>(
@@ -69,6 +69,8 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
 export default (props: IPortfolioAggregationProps) =>
   createReducer(initState(props), {
     [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {
+      // eslint-disable-next-line no-console
+      console.log({ payload })
       if (payload.items) {
         state.items = props.postTransform ? props.postTransform(payload.items) : payload.items
         state.items = sortArray(
@@ -82,7 +84,6 @@ export default (props: IPortfolioAggregationProps) =>
       }
       if (payload.dataSources) state.dataSources = payload.dataSources
     },
-
     [TOGGLE_COLUMN_FORM_PANEL.type]: (
       state,
       { payload }: ReturnType<typeof TOGGLE_COLUMN_FORM_PANEL>
@@ -90,7 +91,10 @@ export default (props: IPortfolioAggregationProps) =>
       state.editColumn = payload.column || null
       state.addColumnPanel = { isOpen: payload.isOpen }
     },
-
+    [COLUMNS_FETCHED.type]: (state, { payload }: ReturnType<typeof COLUMNS_FETCHED>) => {
+      state.columns = [...state.columns, ...payload.columns] // Concats the new columns to the existing columns
+      //state.columns = payload.columns //
+    },
     [ADD_COLUMN.type]: (state, { payload }: ReturnType<typeof ADD_COLUMN>) => {
       if (state.editColumn) {
         state.columns = [...state.columns].map((c) => {
@@ -103,26 +107,23 @@ export default (props: IPortfolioAggregationProps) =>
       state.columnAdded = new Date().getTime()
       persistColumns(props, current(state).columns)
     },
-
     [DELETE_COLUMN.type]: (state) => {
       state.columns = state.columns.filter((c) => c.fieldName !== state.editColumn.fieldName)
       state.editColumn = null
       state.addColumnPanel = { isOpen: false }
       persistColumns(props, current(state).columns)
     },
-
     [COLUMN_HEADER_CONTEXT_MENU.type]: (
       state,
       { payload }: ReturnType<typeof COLUMN_HEADER_CONTEXT_MENU>
     ) => {
       state.columnContextMenu = payload
         ? {
-            column: payload.column,
-            target: payload.target as any
-          }
+          column: payload.column,
+          target: payload.target as any
+        }
         : null
     },
-
     [SET_GROUP_BY.type]: (state, { payload }: ReturnType<typeof SET_GROUP_BY>) => {
       state.items = sortArray([...state.items], [payload.column.fieldName])
       state.groupBy = payload.column
@@ -146,7 +147,6 @@ export default (props: IPortfolioAggregationProps) =>
           return group
         })
     },
-
     [SET_SORT.type]: (state, { payload }: ReturnType<typeof SET_SORT>) => {
       const { column, sortDesencing } = payload
       state.sortBy = column
@@ -171,19 +171,15 @@ export default (props: IPortfolioAggregationProps) =>
       state.columns = arrayMove(current(state).columns, index, index + payload.move)
       persistColumns(props, current(state).columns)
     },
-
     [SET_DATA_SOURCE.type]: (state, { payload }: ReturnType<typeof SET_DATA_SOURCE>) => {
       state.dataSource = payload.dataSource.title
     },
-
     [START_FETCH.type]: (state) => {
       state.loading = true
     },
-
     [SEARCH.type]: (state, { payload }: ReturnType<typeof SEARCH>) => {
       state.searchTerm = payload.searchTerm
     },
-
     [DATA_FETCH_ERROR.type]: (state, { payload }: ReturnType<typeof DATA_FETCH_ERROR>) => {
       state.error = payload.error
     }

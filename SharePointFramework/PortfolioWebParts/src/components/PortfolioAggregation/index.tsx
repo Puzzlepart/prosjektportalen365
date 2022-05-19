@@ -14,6 +14,7 @@ import createReducer, {
   COLUMN_HEADER_CONTEXT_MENU,
   DATA_FETCHED,
   DATA_FETCH_ERROR,
+  COLUMNS_FETCHED,
   initState,
   START_FETCH
 } from './reducer'
@@ -51,18 +52,21 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
       // 2. Use data source model as input for fetchItemsWithSource and fetchProjects
       // 3. Set the project columns from the data source in the state
       Promise.all([
+        adapter.dataSourceService.getByName(state.dataSource),
         adapter
-        .fetchItemsWithSource(
-          state.dataSource,
-          props.selectProperties || state.columns.map((col) => col.fieldName)
-        ),
+          .fetchItemsWithSource(
+            state.dataSource,
+            props.selectProperties || state.columns.map((col) => col.fieldName)
+          ),
         adapter.fetchProjects(state.dataSource)
       ])
-        .then(([_items, projects]) => {
+        .then(([dataSrc, _items, projects]) => {
           const items = _items.map(i => {
             i.Project = projects.find(p => p.SPWebUrl === i.GtSiteUrl)
             return i
           })
+          const columns = dataSrc.projectColumns
+          if (props.useNewDataSourceExperience) dispatch(COLUMNS_FETCHED({ columns }))
           dispatch(DATA_FETCHED({ items }))
         })
         .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))

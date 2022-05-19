@@ -62,6 +62,8 @@ export const ColumnFormPanel = () => {
     setColumn(initialColumn)
     dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
   }
+  // eslint-disable-next-line no-console
+  console.log(column)
 
   return (
     <Panel
@@ -100,6 +102,7 @@ export const ColumnFormPanel = () => {
       </div>
       <div className={styles.field}>
         <TextField
+          disabled={column['_item']}
           label={strings.MinWidthLabel}
           type='number'
           value={column.minWidth.toString()}

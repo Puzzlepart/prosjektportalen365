@@ -17,6 +17,8 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
    */
   dataSourceCategory?: string
 
+  useNewDataSourceExperience?: boolean
+
   /**
    * Columns
    */

@@ -2,6 +2,7 @@ import { QueryPropertyValueType, SearchQuery, SortDirection } from '@pnp/sp'
 import { IPortfolioConfiguration } from 'interfaces'
 import { ProjectListModel, TimelineContentListModel } from 'models'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
+import { DataSourceService } from 'pp365-shared/lib/services'
 
 export const DEFAULT_SEARCH_SETTINGS: SearchQuery = {
   Querytext: '*',
@@ -21,12 +22,13 @@ export const DEFAULT_SEARCH_SETTINGS: SearchQuery = {
 
 export interface IDataAdapter {
   configure(): Promise<IDataAdapter>
+  dataSourceService?: DataSourceService
   fetchDataSources?(dataSourceCategory: string): Promise<DataSource[]>
   fetchChartData?(
     currentView: any,
     configuration: any,
     chartConfigurationListName: string,
-    arg3: string
+    siteId: string
   ): Promise<{ charts: any; chartData: any; contentTypes: any }>
   getPortfolioConfig?(): Promise<IPortfolioConfiguration>
   fetchDataForViewBatch?(
@@ -47,5 +49,5 @@ export interface IDataAdapter {
   fetchEnrichedProjects?(): Promise<ProjectListModel[]>
   fetchProjects?(dataSourceName: string): Promise<any[]>
   fetchProjectSites(rowLimit: number, sortProperty: string, sortDirection: SortDirection): Promise<any>
-  fetchItemsWithSource?(dataSourceName: string, arg1: string[]): Promise<any[]>
+  fetchItemsWithSource?(dataSourceName: string, selectProperties: string[]): Promise<any[]>
 }
