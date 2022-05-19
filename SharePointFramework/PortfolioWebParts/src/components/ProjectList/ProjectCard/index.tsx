@@ -36,11 +36,11 @@ export const ProjectCard: FunctionComponent<IProjectCardProps> = ({
   const _setPhaseColor = (phaseLevel) => {
     switch (phaseLevel) {
       case 'Portfolio':
-        return 'rgb(0,114,198,0.8)'
+        return '#0072c6'
       case 'Project':
-        return 'rgb(51,153,51,0.8)'
+        return '#339933'
       default:
-        return 'grey'
+        return '#808080'
     }
   }
   return (
@@ -53,7 +53,7 @@ export const ProjectCard: FunctionComponent<IProjectCardProps> = ({
         </div>
         <div
           title={project.phase}
-          style={{ backgroundColor: _setPhaseColor(phaseLevel), color: 'white' }}
+          style={{ backgroundColor: _setPhaseColor(phaseLevel), opacity: 0.9, color: 'white' }}
           className={styles.phaseLabel}>
           <span className={styles.phaseLabelTitle}>
             {project.phase ? project.phase : strings.NotSet}
@@ -77,7 +77,7 @@ export const ProjectCard: FunctionComponent<IProjectCardProps> = ({
                 iconName='Calendar'
                 style={
                   project.endDate && moment(project.endDate).isBefore()
-                    ? { color: 'red' }
+                    ? { color: '#FF6666' }
                     : { color: 'black' }
                 }
               />

@@ -15,8 +15,8 @@ export const ProjectLifecycleStatus: React.FunctionComponent<IProjectLifecycleSt
       className={styles.tag}
       style={
         lifecycleStatus === 'Aktivt'
-          ? { backgroundColor: 'rgb(234,163,0,0.5)', color: 'black' }
-          : { backgroundColor: 'rgb(255,0,0,0.5)', color: 'black' }
+          ? { backgroundColor: '#EAA30080', color: 'black' }
+          : { backgroundColor: '#FF000080', color: 'black' }
       }>
       <span>{lifecycleStatus}</span>
     </div>

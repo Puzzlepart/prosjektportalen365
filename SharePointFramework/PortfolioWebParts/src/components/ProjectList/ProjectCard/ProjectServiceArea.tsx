@@ -15,7 +15,7 @@ export const ProjectServiceArea: React.FunctionComponent<IProjectServiceAreaProp
         <div
           key={idx}
           className={styles.tag}
-          style={{ backgroundColor: 'rgb(234,163,0,0.5)', color: 'black' }}>
+          style={{ backgroundColor: '#EAA30080', color: 'black' }}>
           <span>{text}</span>
         </div>
       ))}
