@@ -1,6 +1,5 @@
 import { createAction, createReducer, current } from '@reduxjs/toolkit'
 import sortArray from 'array-sort'
-import { merge } from 'office-ui-fabric-react'
 import { Target } from 'office-ui-fabric-react/lib/Callout'
 import { IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -85,20 +84,27 @@ export default (props: IPortfolioAggregationProps) =>
         state.dataSources = payload.dataSources
       }
       if (payload.columns) {
-        // merge values from persistedColumnsData with payload.columns based on key
         const mergedColumns = current(state).columns.map((col) => {
           const payCol = payload.columns.find((c) => c.key === col.key)
-          return {
-            ...col,
-            name: payCol.name
-          }
+          if(payCol)
+            return {
+              ...col,
+              name: payCol.name,
+              isFromDataSource: !!payCol['internalName']
+            }
+          else
+            return col
         })
 
+        // find difference between mergedColumns and payload.columns and add them to mergedColumns if there are any
+        const newColumns = payload.columns.filter((col) => {
+          return !mergedColumns.find((c) => c.key === col.key)
+        })
         // eslint-disable-next-line no-console
-        console.log({ mergedColumns, payCols: payload.columns, stateCols: current(state).columns, propsCols: props.columns })
+        console.log({ newColumns, mergedColumns, payCols: payload.columns, stateCols: current(state).columns, propsCols: props.columns })
 
         if(mergedColumns.length >= 1)
-          state.columns = mergedColumns
+          state.columns = [...mergedColumns, ...newColumns]
         else
           state.columns = sortArray(payload.columns, 'sortOrder')
       }

@@ -90,7 +90,7 @@ export const ColumnFormPanel = () => {
       </div>
       <div className={styles.field}>
         <TextField
-          disabled={column['internalName']}
+          disabled={column['isFromDataSource']}
           label={strings.DisplayNameLabel}
           required={true}
           value={column.name}
