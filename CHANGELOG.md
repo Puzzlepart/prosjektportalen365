@@ -11,6 +11,7 @@ Every change is marked with issue ID.
   - This applies to Portfolio, Project and Program timelines
 - Added possibility to include project deliveries on timeline (beta) #679
   - This applies to Portfolio, Project and Program timelines
+- Improvements to styling, sorting and information messages for the Document Template Selector #711
 
 ## 1.5.0 - 01.04.2022
 
