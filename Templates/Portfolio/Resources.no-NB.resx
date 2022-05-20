@@ -1646,7 +1646,7 @@
     <value>Velg 'Ja' dersom elementet skal være filtrerbart i tidslinjen</value>
   </data>
   <data name="SiteFields_GtODataQuery_DisplayName" xml:space="preserve">
-    <value>Prosjekt OData spørring</value>
+    <value>Prosjekt odata spørring</value>
   </data>
   <data name="SiteFields_GtODataQuery_Description" xml:space="preserve">
     <value>Odata spørring for å filtrere prosjekter</value>

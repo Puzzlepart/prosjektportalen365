@@ -96,7 +96,6 @@ export default (props: IPortfolioAggregationProps) =>
             return col
         })
 
-        // find difference between mergedColumns and payload.columns and add them to mergedColumns if there are any
         const newColumns = payload.columns.filter((col) => {
           return !mergedColumns.find((c) => c.key === col.key)
         })
