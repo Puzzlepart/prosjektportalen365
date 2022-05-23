@@ -16,12 +16,13 @@ function EnsureProjectTimelinePage($Url) {
     else {
         $existingNode = $existingNodes | Where-Object { $_.Title -eq "Prosjekttidslinje" -or $_.Title -eq "Programtidslinje" } -ErrorAction SilentlyContinue
         if ($null -eq $existingNode) {
-            Write-Host "`t`tAdding project timeline page"
+            Write-Host "`t`tAdding project timeline to site"
+            Write-Host "`t`t`tAdding project timeline page"
             $page = Add-PnPClientSidePage -Name "Prosjekttidslinje.aspx" -PromoteAs None -LayoutType SingleWebPartAppPage -CommentsEnabled:$false -Publish
-            Write-Host "`t`tAdding project timeline app"
+            Write-Host "`t`t`tAdding project timeline app"
             $webpart = Add-PnPClientSideWebPart -Page "Prosjekttidslinje" -Component "Prosjekttidslinje" -WebPartProperties '{"listName":"Tidslinjeinnhold","showFilterButton":true,"showTimeline":true,"showInfoMessage":true,"showCmdTimelineList":true,"showTimelineList":true,"title":"Prosjekttidslinje"}'
             $page = Set-PnPClientSidePage -Identity "Prosjekttidslinje" -LayoutType SingleWebPartAppPage -HeaderType None -Publish 
-            Write-Host "`t`tAdding project timeline navigation item"
+            Write-Host "`t`t`tAdding project timeline navigation item"
             $node = Add-PnPNavigationNode -Location QuickLaunch -Title "Prosjekttidslinje" -Url "SitePages/Prosjekttidslinje.aspx"
         }
         else {        
@@ -71,7 +72,12 @@ function EnsureResourceLoadIsSiteColumn($Url) {
                 
                 Write-Host "`t`t`tRestoring previous values"
                 $PreviousValues | ForEach-Object {
-                    $NewValue = Set-PnPListItem -List $ResourceAllocation -Identity $_.Id -Values @{"GtResourceLoad" = $_.GtResourceLoad} -SystemUpdate
+                    $ResourceLoad = $_.GtResourceLoad
+
+                    if ($ResourceLoad -gt 2 ) { # Assuming that noone had more than 200% previously
+                        $ResourceLoad = ($ResourceLoad/100) # Convert to percentage if it wasn't previously
+                    }
+                    $NewValue = Set-PnPListItem -List $ResourceAllocation -Identity $_.Id -Values @{"GtResourceLoad" = $ResourceLoad} -SystemUpdate
                 } 
 
                 Write-Host "`t`t`tField swap completed" -ForegroundColor Green
