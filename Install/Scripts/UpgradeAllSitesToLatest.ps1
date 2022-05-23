@@ -41,8 +41,8 @@ function EnsureResourceLoadIsSiteColumn($Url) {
         $ResourceLoadListColumn = Get-PnPField -Identity "GtResourceLoad" -List $ResourceAllocation
         if ($null -ne $ResourceLoadSiteColumn) {
             Write-Host "`t`tReplacing GtResourceLoad field"
-            $PreviousValues = Get-PnPListItem -List $ResourceAllocation -Fields "ID","GtResourceLoad" | ForEach-Object {
-                @{Id = $_.Id; GtResourceLoad = $_.FieldValues["GtResourceLoad"]}
+            $PreviousValues = Get-PnPListItem -List $ResourceAllocation -Fields "ID", "GtResourceLoad" | ForEach-Object {
+                @{Id = $_.Id; GtResourceLoad = $_.FieldValues["GtResourceLoad"] }
             }
             
             if ($PreviousValues.length -gt 0) {
@@ -70,19 +70,24 @@ function EnsureResourceLoadIsSiteColumn($Url) {
                     $DefaultView.Context.ExecuteQuery()
                 }
                 
-                Write-Host "`t`t`tRestoring previous values"
-                $PreviousValues | ForEach-Object {
-                    $ResourceLoad = $_.GtResourceLoad
+                
+                if ($PreviousValues.length -gt 0) {
+                    Write-Host "`t`t`tRestoring previous values"
+                    $PreviousValues | ForEach-Object {
+                        $ResourceLoad = $_.GtResourceLoad
 
-                    if ($ResourceLoad -gt 2 ) { # Assuming that noone had more than 200% previously
-                        $ResourceLoad = ($ResourceLoad/100) # Convert to percentage if it wasn't previously
+                        if ($ResourceLoad -gt 2 ) {
+                            # Assuming that noone had more than 200% previously
+                            $ResourceLoad = ($ResourceLoad / 100) # Convert to percentage if it wasn't previously
+                        }
+                        $NewValue = Set-PnPListItem -List $ResourceAllocation -Identity $_.Id -Values @{"GtResourceLoad" = $ResourceLoad } -SystemUpdate
                     }
-                    $NewValue = Set-PnPListItem -List $ResourceAllocation -Identity $_.Id -Values @{"GtResourceLoad" = $ResourceLoad} -SystemUpdate
-                } 
+                }
 
                 Write-Host "`t`t`tField swap completed" -ForegroundColor Green
             }
-        } else {
+        }
+        else {
             Write-Host "`t`tThe site already has the correct GtResourceLoad field" -ForegroundColor Green
         }
     }
@@ -119,7 +124,7 @@ Write-Host "We can grant $UserName admin access to existing projects. This will 
 do {
     $YesOrNo = Read-Host "Do you want to grant $UserName access to all sites in the hub (listed above)? (y/n)"
 } 
-while ("y","n" -notcontains $YesOrNo)
+while ("y", "n" -notcontains $YesOrNo)
 
 if ($YesOrNo -eq "y") {
     $ProjectsInHub | ForEach-Object {
@@ -139,7 +144,7 @@ Write-Host "We can remove $UserName's admin access from existing projects."
 do {
     $YesOrNo = Read-Host "Do you want to remove $UserName's admin access from all sites in the hub? (y/n)"
 } 
-while ("y","n" -notcontains $YesOrNo)
+while ("y", "n" -notcontains $YesOrNo)
 
 if ($YesOrNo -eq "y") {
     $ProjectsInHub | ForEach-Object {
