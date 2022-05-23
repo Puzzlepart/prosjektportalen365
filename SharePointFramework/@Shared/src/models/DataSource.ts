@@ -8,9 +8,9 @@ export class SPDataSourceItem {
   public GtSearchQuery?: string = ''
   public GtDataSourceCategory?: string = ''
   public GtDataSourceDefault?: boolean = false
-  public GtPortfolioColumnsId?: any[] = []
-  public GtPortfolioRefinersId?: any[] = []
-  public GtPortfolioGroupById?: any = null
+  public GtProjectContentColumnsId?: any[] = []
+  public GtProjectContentRefinersId?: any[] = []
+  public GtProjectContentGroupById?: any = null
   public GtODataQuery?: string = ''
 }
 
@@ -39,9 +39,9 @@ export class DataSource {
     this.searchQuery = item.GtSearchQuery
     this.category = item.GtDataSourceCategory
     this.isDefault = item.GtDataSourceDefault
-    this.projectColumns = columns.filter(col => item.GtPortfolioColumnsId.indexOf(col.id) !== -1)
-    this.projectRefiners = columns.filter(col => item.GtPortfolioRefinersId.indexOf(col.id) !== -1)
-    this.projectGroupBy = columns.find(col => col.id === item.GtPortfolioGroupById)
+    this.projectColumns = columns.filter(col => item.GtProjectContentColumnsId.indexOf(col.id) !== -1)
+    this.projectRefiners = columns.filter(col => item.GtProjectContentRefinersId.indexOf(col.id) !== -1)
+    this.projectGroupBy = columns.find(col => col.id === item.GtProjectContentGroupById)
     this.odataQuery = item.GtODataQuery
   }
 }

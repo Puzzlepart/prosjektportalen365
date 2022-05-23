@@ -1,4 +1,3 @@
-import { DisplayMode } from '@microsoft/sp-core-library'
 import {
   ContextualMenu,
   ContextualMenuItemType,

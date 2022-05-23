@@ -13,7 +13,7 @@ export class DataSourceService {
    * @param listName List name
    * @param columnsListName Columns list name
    */
-  constructor(public web: Web, listName = 'Datakilder', columnsListName = 'Prosjektkolonner') {
+  constructor(public web: Web, listName = 'Datakilder', columnsListName = 'Prosjektinnholdskolonner') {
     this.list = web.lists.getByTitle(listName)
     this.columnsList = web.lists.getByTitle(columnsListName)
   }
