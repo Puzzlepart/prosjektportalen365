@@ -380,6 +380,7 @@ export class DataAdapter implements IDataAdapter {
         'GtShowElementProgram',
         'GtTimelineFilter',
       )
+      .top(500)
       .get()
   }
 
@@ -391,9 +392,9 @@ export class DataAdapter implements IDataAdapter {
     const [timelineConfig] = await Promise.all([
       this.fetchTimelineConfiguration()
     ])
-    
+
     const config: any = _.find(timelineConfig, (col) => col.Title === configItemTitle)
-    
+
     if (config && config.GtShowElementPortfolio) {
       const [projectDeliveries] = await Promise.all([
         this.configure().then((adapter) => {
