@@ -108,8 +108,12 @@ export default (props: IPortfolioAggregationProps) =>
           return !mergedColumns.find((c) => c.key === col.key)
         })
 
+        const filteredColumns = [...mergedColumns, ...newColumns].filter((col) => {
+          return payload.columns.find((c) => c.fieldName === col.fieldName)
+        })
+
         if (mergedColumns.length >= 1)
-          state.columns = [...mergedColumns, ...newColumns]
+          state.columns = filteredColumns
         else
           state.columns = sortArray(payload.columns, 'sortOrder')
       }
@@ -122,9 +126,10 @@ export default (props: IPortfolioAggregationProps) =>
               state.items.map((i) => get(i, column.fieldName, '').split(';'))
             )
           )
+
           let items: IFilterItemProps[] = uniqueValues
             .filter((value: string) => !stringIsNullOrEmpty(value))
-            .map((value: string) => ({ name: value, value }))
+            .map((value: string) => ({ name: value, value, selected: false }))
           items = items.sort((a, b) => (a.value > b.value ? 1 : -1))
           return { column, items }
         })
@@ -264,7 +269,7 @@ export default (props: IPortfolioAggregationProps) =>
       } else {
         delete state.activeFilters[payload.column.fieldName]
       }
-      
+
       state.activeFilters = activeFilters
     },
     [DATA_FETCH_ERROR.type]: (state, { payload }: ReturnType<typeof DATA_FETCH_ERROR>) => {

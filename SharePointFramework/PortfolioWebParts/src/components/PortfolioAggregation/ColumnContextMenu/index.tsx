@@ -25,8 +25,7 @@ export const ColumnContextMenu = () => {
     state.columns.map((c) => c.fieldName),
     column.fieldName
   )
-  const columnEditable =
-    props.displayMode === DisplayMode.Edit && columnIndex !== -1 && !props.lockedColumns
+  const columnEditable = props.pageContext.legacyPageContext.isSiteAdmin && columnIndex !== -1 && !props.lockedColumns
   const items: IContextualMenuItem[] = [
     {
       key: 'SortDesc',
