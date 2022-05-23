@@ -7,7 +7,7 @@ import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
 import { indexOf, omit, uniq } from 'underscore'
 import { IPortfolioAggregationProps, IPortfolioAggregationState } from './types'
-import { IFilterItemProps, IFilterProps } from '../FilterPanel'
+import { IFilterItemProps } from '../FilterPanel'
 import _ from 'lodash'
 import { stringIsNullOrEmpty } from '@pnp/common'
 
@@ -114,7 +114,7 @@ export default (props: IPortfolioAggregationProps) =>
           state.columns = sortArray(payload.columns, 'sortOrder')
       }
       if (payload.filters) {
-        let filters = payload.filters.map((column) => {
+        const filters = payload.filters.map((column) => {
           const uniqueValues = uniq(
             // eslint-disable-next-line prefer-spread
             [].concat.apply(

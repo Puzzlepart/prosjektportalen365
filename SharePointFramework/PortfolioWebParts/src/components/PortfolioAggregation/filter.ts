@@ -1,5 +1,5 @@
-import { IFilterItemProps, IFilterProps } from 'components/FilterPanel'
-import _, { cloneDeep } from 'lodash'
+import { IFilterItemProps } from 'components/FilterPanel'
+import _ from 'lodash'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers'

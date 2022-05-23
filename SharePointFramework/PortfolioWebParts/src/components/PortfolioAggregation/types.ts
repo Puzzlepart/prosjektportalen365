@@ -1,7 +1,6 @@
 import { SearchResult } from '@pnp/sp'
 import { IFilterProps } from 'components/FilterPanel'
 import { IDataAdapter } from 'data/types'
-import { IPortfolioConfiguration } from 'interfaces/IPortfolioConfiguration'
 import { Target } from 'office-ui-fabric-react/lib/Callout'
 import { IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList'
 import { IPanelProps } from 'office-ui-fabric-react/lib/Panel'

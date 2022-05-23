@@ -86,6 +86,9 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
     return <UserMessage type={MessageBarType.error} text={state.error.message} />
   }
 
+  // eslint-disable-next-line no-console  
+  console.log({state})
+
   return (
     <PortfolioAggregationContext.Provider value={ctxValue}>
       <div className={styles.root}>

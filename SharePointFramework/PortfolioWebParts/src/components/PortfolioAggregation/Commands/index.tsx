@@ -50,7 +50,10 @@ export const Commands = () => {
           isVisible:
             props.pageContext.legacyPageContext.isSiteAdmin && props.showViewSelector
         },
-        onClick: () => console.log('NEW VIEW')
+        onClick: () => {
+          // eslint-disable-next-line no-console
+          console.log('NewView')
+        }
       } as IContextualMenuItem,
       {
         key: 'ViewOptions',
@@ -101,8 +104,10 @@ export const Commands = () => {
             {
               key: 'EditView',
               name: strings.EditViewText,
-              onClick: () =>
+              onClick: () => {
+                // eslint-disable-next-line no-console
                 console.log('EditView')
+              }
             }
           ]
         }
@@ -124,8 +129,6 @@ export const Commands = () => {
       } as IContextualMenuItem
     )
   }
-
-  console.log(state.filters)
 
   return (
     <div hidden={!props.showCommandBar}>
