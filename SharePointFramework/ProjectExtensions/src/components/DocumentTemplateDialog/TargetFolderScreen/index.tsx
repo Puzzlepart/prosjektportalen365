@@ -54,9 +54,9 @@ export const TargetFolderScreen = () => {
         setFolder={setFolder}
       />
       <DetailsList
-        items={folders}
+        items={folders.sort((a, b) => (a.name > b.name ? 1 : -1)) }
         columns={columns()}
-        selectionMode={SelectionMode.multiple}
+        selectionMode={SelectionMode.none}
         layoutMode={DetailsListLayoutMode.justified}
         constrainMode={ConstrainMode.horizontalConstrained}
         onItemInvoked={(folder: SPFolder) => {

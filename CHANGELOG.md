@@ -13,6 +13,7 @@ Every change is marked with issue ID.
   - This applies to Portfolio, Project and Program timelines
 - Added ability to run hooks in the txt provisioning template #700
   - Example: Trigger API's, Flows, Logic Apps, Azure Functions, etc...
+- Improvements to styling, sorting and information messages for the Document Template Selector #711
 
 ## 1.5.0 - 01.04.2022
 
