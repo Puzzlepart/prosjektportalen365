@@ -2,6 +2,7 @@ import { DisplayMode } from '@microsoft/sp-core-library'
 import { DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList'
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
 import { UserMessage } from 'pzl-react-reusable-components/lib/UserMessage'
 import React, { useEffect, useMemo, useReducer } from 'react'
 import { ColumnContextMenu } from './ColumnContextMenu'
@@ -16,8 +17,9 @@ import createReducer, {
   DATA_FETCH_ERROR,
   initState,
   START_FETCH
+  TOGGLE_FILTER_PANEL
 } from './reducer'
-import { filterItem } from './search'
+import { searchItem } from './search'
 import SearchBox from './SearchBox'
 import { IPortfolioAggregationProps } from './types'
 
@@ -53,27 +55,32 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
             state.dataSource,
             props.selectProperties || state.columns.map((col) => col.fieldName)
           )
-        // adapter.fetchProjects(state.dataSource) // Is this needed?
       ])
         .then(([dataSrc, items]) => {
           // const items = _items.map(i => {
-          //   i.Project = projects.find(p => p.SPWebUrl === i.GtSiteUrl)
-          //   return i
-          // })
-          dispatch(DATA_FETCHED({ items, columns: dataSrc.projectColumns }))
         })
         .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
     })
   }, [state.columnAdded, state.dataSource])
 
   const items = useMemo(() => {
-    return state.items.filter((i) => filterItem(i, state.searchTerm, state.columns))
+    return state.items.filter((i) => searchItem(i, state.searchTerm, state.columns))
   }, [state.searchTerm, state.items])
 
   const ctxValue = useMemo(() => ({ props, state, dispatch }), [state])
 
   if (state.error) {
     return <UserMessage type={MessageBarType.error} text={state.error.message} />
+  }
+
+  if (state.loading) {
+    return (
+      <div className={styles.root}>
+        <div className={styles.header}>
+          <Spinner label={format(strings.LoadingText, props.title)} />
+        </div>
+      </div>
+    )
   }
 
   return (

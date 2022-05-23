@@ -1,4 +1,5 @@
 import { SearchResult } from '@pnp/sp'
+import { IFilterProps } from 'components/FilterPanel'
 import { IDataAdapter } from 'data/types'
 import { Target } from 'office-ui-fabric-react/lib/Callout'
 import { IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList'
@@ -40,6 +41,11 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   showSearchBox?: boolean
 
   /**
+   * Show filters
+   */
+  showFilters?: boolean
+
+  /**
    * Placeholder text for searchbox
    */
   searchBoxPlaceholderText?: string
@@ -48,6 +54,11 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
    * Show Excel export button
    */
   showExcelExportButton?: boolean
+
+  /**
+   * Show Excel export button
+   */
+  showViewSelector?: boolean
 
   /**
    * Locked columns
@@ -150,4 +161,19 @@ export interface IPortfolioAggregationState {
    * Error
    */
   error?: Error
+
+  /**
+   * Show filter panel
+   */
+  showFilterPanel?: boolean
+
+  /**
+   * Is compact
+   */
+  isCompact?: boolean
+
+  /**
+   * Active filters
+   */
+  activeFilters?: { SelectedColumns?: string[];[key: string]: string[] }
 }

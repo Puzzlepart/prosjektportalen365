@@ -22,8 +22,14 @@ function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
 export const DATA_FETCHED = createAction<{ items: any[]; dataSources?: DataSource[]; columns?: IColumn[] }>(
   'DATA_FETCHED'
 )
-export const TOGGLE_COLUMN_FORM_PANEL = createAction<{ isOpen: boolean; column?: IColumn }>(
+export const TOGGLE_COLUMN_FORM_PANEL = createAction<{ isOpen: boolean, column?: IColumn }>(
   'TOGGLE_COLUMN_FORM_PANEL'
+)
+export const TOGGLE_FILTER_PANEL = createAction<{ isOpen: boolean }>(
+  'TOGGLE_FILTER_PANEL'
+)
+export const TOGGLE_COMPACT = createAction<{ isCompact: boolean }>(
+  'TOGGLE_FILTER_PANEL'
 )
 export const ADD_COLUMN = createAction<{ column: IColumn }>('ADD_COLUMN')
 export const DELETE_COLUMN = createAction('DELETE_COLUMN')
@@ -31,8 +37,8 @@ export const COLUMN_HEADER_CONTEXT_MENU = createAction<{ column: IColumn; target
   'COLUMN_HEADER_CONTEXT_MENU'
 )
 export const SET_GROUP_BY = createAction<{ column: IColumn }>('SET_GROUP_BY')
-export const SET_SORT = createAction<{ column: IColumn; sortDesencing: boolean }>('SET_SORT')
-export const MOVE_COLUMN = createAction<{ column: IColumn; move: number }>('MOVE_COLUMN')
+export const SET_SORT = createAction<{ column: IColumn, sortDesencing: boolean }>('SET_SORT')
+export const MOVE_COLUMN = createAction<{ column: IColumn, move: number }>('MOVE_COLUMN')
 export const SET_DATA_SOURCE = createAction<{ dataSource: DataSource }>('SET_DATA_SOURCE')
 export const START_FETCH = createAction('START_FETCH')
 export const SEARCH = createAction<{ searchTerm: string }>('SEARCH')
@@ -53,11 +59,13 @@ const persistColumns = (props: IPortfolioAggregationProps, columns: IColumn[]) =
 
 export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregationState => ({
   loading: true,
+  isCompact: false,
+  searchTerm: '',
+  activeFilters: {},
+  items: [],
+  columns: props.columns || [],
   dataSource: props.dataSource,
   dataSources: [],
-  items: [],
-  searchTerm: '',
-  columns: props.columns || [],
   groups: null,
   addColumnPanel: { isOpen: false }
 })
@@ -68,7 +76,7 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
 export default (props: IPortfolioAggregationProps) =>
   createReducer(initState(props), {
     [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {
-      // eslint-disable-next-line no-console
+
       if (payload.items) {
         state.items = props.postTransform ? props.postTransform(payload.items) : payload.items
         state.items = sortArray(
@@ -78,15 +86,11 @@ export default (props: IPortfolioAggregationProps) =>
             reverse: state.sortBy?.isSortedDescending ? state.sortBy.isSortedDescending : false
           }
         )
-        state.loading = false
-      }
-      if (payload.dataSources) {
-        state.dataSources = payload.dataSources
       }
       if (payload.columns) {
         const mergedColumns = current(state).columns.map((col) => {
           const payCol = payload.columns.find((c) => c.key === col.key)
-          if(payCol)
+          if (payCol)
             return {
               ...col,
               name: payCol.name,
@@ -99,10 +103,8 @@ export default (props: IPortfolioAggregationProps) =>
         const newColumns = payload.columns.filter((col) => {
           return !mergedColumns.find((c) => c.key === col.key)
         })
-        // eslint-disable-next-line no-console
-        console.log({ newColumns, mergedColumns, payCols: payload.columns, stateCols: current(state).columns, propsCols: props.columns })
 
-        if(mergedColumns.length >= 1)
+        if (mergedColumns.length >= 1)
           state.columns = [...mergedColumns, ...newColumns]
         else
           state.columns = sortArray(payload.columns, 'sortOrder')
@@ -114,6 +116,18 @@ export default (props: IPortfolioAggregationProps) =>
     ) => {
       state.editColumn = payload.column || null
       state.addColumnPanel = { isOpen: payload.isOpen }
+    },
+    [TOGGLE_FILTER_PANEL.type]: (
+      state,
+      { payload }: ReturnType<typeof TOGGLE_FILTER_PANEL>
+    ) => {
+      state.showFilterPanel = payload.isOpen
+    },
+    [TOGGLE_COMPACT.type]: (
+      state,
+      { payload }: ReturnType<typeof TOGGLE_COMPACT>
+    ) => {
+      state.isCompact = payload.isCompact
     },
     [ADD_COLUMN.type]: (state, { payload }: ReturnType<typeof ADD_COLUMN>) => {
       if (state.editColumn) {

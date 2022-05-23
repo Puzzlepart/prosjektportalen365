@@ -64,7 +64,7 @@ export const ColumnFormPanel = () => {
   }
   
   // eslint-disable-next-line no-console
-  console.log({column})
+  if (state.addColumnPanel.isOpen) console.log({ column })
 
   return (
     <Panel
