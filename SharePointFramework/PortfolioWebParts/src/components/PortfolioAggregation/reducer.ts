@@ -7,6 +7,9 @@ import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
 import { indexOf, omit, uniq } from 'underscore'
 import { IPortfolioAggregationProps, IPortfolioAggregationState } from './types'
+import { IFilterItemProps, IFilterProps } from '../FilterPanel'
+import _ from 'lodash'
+import { stringIsNullOrEmpty } from '@pnp/common'
 
 function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
   const _arr = [...arr]
@@ -19,7 +22,7 @@ function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
   _arr.splice(new_index, 0, _arr.splice(old_index, 1)[0])
   return _arr
 }
-export const DATA_FETCHED = createAction<{ items: any[]; dataSources?: DataSource[]; columns?: IColumn[] }>(
+export const DATA_FETCHED = createAction<{ items: any[], dataSources?: DataSource[], columns?: IColumn[], filters?: any[] }>(
   'DATA_FETCHED'
 )
 export const TOGGLE_COLUMN_FORM_PANEL = createAction<{ isOpen: boolean, column?: IColumn }>(
@@ -29,7 +32,7 @@ export const TOGGLE_FILTER_PANEL = createAction<{ isOpen: boolean }>(
   'TOGGLE_FILTER_PANEL'
 )
 export const TOGGLE_COMPACT = createAction<{ isCompact: boolean }>(
-  'TOGGLE_FILTER_PANEL'
+  'TOGGLE_COMPACT'
 )
 export const ADD_COLUMN = createAction<{ column: IColumn }>('ADD_COLUMN')
 export const DELETE_COLUMN = createAction('DELETE_COLUMN')
@@ -42,6 +45,7 @@ export const MOVE_COLUMN = createAction<{ column: IColumn, move: number }>('MOVE
 export const SET_DATA_SOURCE = createAction<{ dataSource: DataSource }>('SET_DATA_SOURCE')
 export const START_FETCH = createAction('START_FETCH')
 export const SEARCH = createAction<{ searchTerm: string }>('SEARCH')
+export const ON_FILTER_CHANGE = createAction<{ column: IColumn, selectedItems: IFilterItemProps[] }>('ON_FILTER_CHANGE')
 export const DATA_FETCH_ERROR = createAction<{ error: Error }>('DATA_FETCH_ERROR')
 
 /**
@@ -67,7 +71,7 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
   dataSource: props.dataSource,
   dataSources: [],
   groups: null,
-  addColumnPanel: { isOpen: false }
+  addColumnPanel: { isOpen: false },
 })
 
 /**
@@ -76,7 +80,6 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
 export default (props: IPortfolioAggregationProps) =>
   createReducer(initState(props), {
     [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {
-
       if (payload.items) {
         state.items = props.postTransform ? props.postTransform(payload.items) : payload.items
         state.items = sortArray(
@@ -86,6 +89,7 @@ export default (props: IPortfolioAggregationProps) =>
             reverse: state.sortBy?.isSortedDescending ? state.sortBy.isSortedDescending : false
           }
         )
+        state.loading = false
       }
       if (payload.columns) {
         const mergedColumns = current(state).columns.map((col) => {
@@ -108,6 +112,45 @@ export default (props: IPortfolioAggregationProps) =>
           state.columns = [...mergedColumns, ...newColumns]
         else
           state.columns = sortArray(payload.columns, 'sortOrder')
+      }
+      if (payload.filters) {
+        let filters = payload.filters.map((column) => {
+          const uniqueValues = uniq(
+            // eslint-disable-next-line prefer-spread
+            [].concat.apply(
+              [],
+              state.items.map((i) => get(i, column.fieldName, '').split(';'))
+            )
+          )
+          let items: IFilterItemProps[] = uniqueValues
+            .filter((value: string) => !stringIsNullOrEmpty(value))
+            .map((value: string) => ({ name: value, value }))
+          items = items.sort((a, b) => (a.value > b.value ? 1 : -1))
+          return { column, items }
+        })
+
+        const activeFilters = state.activeFilters
+        if (!_.isEmpty(activeFilters)) {
+          const filteredFields = Object.keys(activeFilters)
+          filteredFields.forEach((key) => {
+            filters.forEach((filter) => {
+              if (filter.column.fieldName === key) {
+                activeFilters[key].forEach((value) => {
+                  filter.items.forEach((item) => {
+                    if (value === item.name) {
+                      item.selected = true
+                    }
+                  })
+                })
+              }
+            })
+          })
+        }
+
+        state.filters = filters
+      }
+      if (payload.dataSources) {
+        state.dataSources = payload.dataSources
       }
     },
     [TOGGLE_COLUMN_FORM_PANEL.type]: (
@@ -213,6 +256,16 @@ export default (props: IPortfolioAggregationProps) =>
     },
     [SEARCH.type]: (state, { payload }: ReturnType<typeof SEARCH>) => {
       state.searchTerm = payload.searchTerm
+    },
+    [ON_FILTER_CHANGE.type]: (state, { payload }: ReturnType<typeof ON_FILTER_CHANGE>) => {
+      const { activeFilters } = { ...state }
+      if (payload.selectedItems.length > 0) {
+        activeFilters[payload.column.fieldName] = payload.selectedItems.map((i) => i.value)
+      } else {
+        delete state.activeFilters[payload.column.fieldName]
+      }
+      
+      state.activeFilters = activeFilters
     },
     [DATA_FETCH_ERROR.type]: (state, { payload }: ReturnType<typeof DATA_FETCH_ERROR>) => {
       state.error = payload.error

@@ -6,7 +6,6 @@ import React, { useContext } from 'react'
 import { isEmpty } from 'underscore'
 import { PortfolioAggregationContext } from '../context'
 import { SET_DATA_SOURCE, TOGGLE_COMPACT, TOGGLE_FILTER_PANEL } from '../reducer'
-import _ from 'lodash'
 
 export const Commands = () => {
   const { props, state, dispatch } = useContext(PortfolioAggregationContext)
@@ -99,6 +98,12 @@ export const Commands = () => {
               name: strings.SaveViewAsText,
               disabled: true
             },
+            {
+              key: 'EditView',
+              name: strings.EditViewText,
+              onClick: () =>
+                console.log('EditView')
+            }
           ]
         }
       } as IContextualMenuItem,

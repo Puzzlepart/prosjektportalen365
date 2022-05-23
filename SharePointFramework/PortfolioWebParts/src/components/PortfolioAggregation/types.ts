@@ -1,6 +1,7 @@
 import { SearchResult } from '@pnp/sp'
 import { IFilterProps } from 'components/FilterPanel'
 import { IDataAdapter } from 'data/types'
+import { IPortfolioConfiguration } from 'interfaces/IPortfolioConfiguration'
 import { Target } from 'office-ui-fabric-react/lib/Callout'
 import { IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList'
 import { IPanelProps } from 'office-ui-fabric-react/lib/Panel'
@@ -17,8 +18,6 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
    * Category for data sources
    */
   dataSourceCategory?: string
-
-  useNewDataSourceExperience?: boolean
 
   /**
    * Columns
@@ -176,4 +175,9 @@ export interface IPortfolioAggregationState {
    * Active filters
    */
   activeFilters?: { SelectedColumns?: string[];[key: string]: string[] }
+
+  /**
+   * Filters
+   */
+  filters?: IFilterProps[]
 }

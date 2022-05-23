@@ -57,9 +57,6 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
                 PropertyPaneTextField('dataSourceCategory', {
                   label: strings.DataSourceCategoryLabel,
                   description: strings.DataSourceCategoryDescription
-                }),
-                PropertyPaneToggle('useNewDataSourceExperience', { // Used for testing the new dataSource experience (dev only)
-                  label: 'Bruk ny datakilde-opplevelse',
                 })
               ]
             },
