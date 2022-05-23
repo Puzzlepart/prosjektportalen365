@@ -255,6 +255,7 @@ export default (props: IPortfolioAggregationProps) =>
     },
     [SET_DATA_SOURCE.type]: (state, { payload }: ReturnType<typeof SET_DATA_SOURCE>) => {
       state.dataSource = payload.dataSource.title
+      state.activeFilters = {}
     },
     [START_FETCH.type]: (state) => {
       state.loading = true

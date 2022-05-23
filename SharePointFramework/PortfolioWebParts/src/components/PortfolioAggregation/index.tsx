@@ -78,7 +78,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
 
   const filters = useMemo(() => {
     return getFilters(state.columns)
-  }, [state.activeFilters])
+  }, [state.columns, state.activeFilters])
 
   const ctxValue = useMemo(() => ({ props, state, dispatch }), [state])
 
