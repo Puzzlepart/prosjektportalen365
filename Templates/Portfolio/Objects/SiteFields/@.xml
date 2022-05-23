@@ -182,7 +182,6 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtValue.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtProjectLifecycleStatus.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtModerationStatus.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtODataQuery.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtAllocationComment.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtAllocationStatus.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtCategory.xml" />
@@ -199,4 +198,5 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtShowElementProgram.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtShowElementPortfolio.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtTimelineFilter.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtODataQuery.xml" />
 </pnp:SiteFields>

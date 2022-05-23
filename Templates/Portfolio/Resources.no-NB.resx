@@ -163,6 +163,12 @@
   <data name="Lists_ProjectColumns_Url" xml:space="preserve">
     <value>Lists/Prosjektkolonner</value>
   </data>
+  <data name="Lists_ProjectContentColumns_Title" xml:space="preserve">
+    <value>Prosjektinnholdskolonner</value>
+  </data>
+  <data name="Lists_ProjectContentColumns_Url" xml:space="preserve">
+    <value>Lists/Prosjektinnholdskolonner</value>
+  </data>
   <data name="Lists_ProjectTemplates_Title" xml:space="preserve">
     <value>Prosjektmaler</value>
   </data>
@@ -383,6 +389,12 @@
     <value>Prosjektkolonne</value>
   </data>
   <data name="ContentTypes_ProjectColumn_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ContentTypes_ProjectContentColumn_Name" xml:space="preserve">
+    <value>Prosjektinnholdskolonne</value>
+  </data>
+  <data name="ContentTypes_ProjectContentColumn_Description" xml:space="preserve">
     <value></value>
   </data>
   <data name="ContentTypes_ProjectColumnConfiguration_Name" xml:space="preserve">

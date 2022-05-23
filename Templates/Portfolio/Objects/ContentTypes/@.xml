@@ -27,4 +27,5 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Tillatelseskonfigurasjonselement.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Tidslinjeelement.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Tidslinjekonfigurasjonselement.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Prosjektinnholdskolonne.xml" />
 </pnp:ContentTypes> 
