@@ -378,6 +378,7 @@ export class DataAdapter implements IDataAdapter {
         'GtShowElementProgram',
         'GtTimelineFilter',
       )
+      .top(500)
       .get()
   }
 

@@ -25,7 +25,7 @@ export const SelectScreen = (props: ISelectScreenProps) => {
       context.templates
         .filter((item) => {
           return !isEmpty(folder) ? folder === item.parentFolderUrl : item.level === 1
-        })
+        }).sort((a, b) => (a.name > b.name ? 1 : -1))
         .sort((a, b) => (a.isFolder === b.isFolder ? 0 : a.isFolder ? -1 : 1)),
     [folder]
   )
