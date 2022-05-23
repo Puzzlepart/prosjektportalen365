@@ -96,6 +96,7 @@ function UpgradeSite($Url) {
 Write-Host "This script will update all existing sites in a Prosjektportalen installation. This requires you to have the SharePoint admin role"
 
 Set-PnPTraceLog -Off
+Start-Transcript -Path "$PSScriptRoot\UpgradeSites_Log-$((Get-Date).ToString('yyyy-MM-dd-HH-mm')).txt"
 
 [System.Uri]$Uri = $PortfolioUrl
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
@@ -149,5 +150,4 @@ if ($YesOrNo -eq "y") {
 }
 
 
-
-
+Stop-Transcript
