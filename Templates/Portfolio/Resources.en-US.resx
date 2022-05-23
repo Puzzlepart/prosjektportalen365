@@ -586,6 +586,9 @@
   <data name="SiteFields_GtPortfolioColumns_DisplayName" xml:space="preserve">
     <value>Kolonner</value>
   </data>
+  <data name="SiteFields_GtProjectContentColumns_DisplayName" xml:space="preserve">
+    <value>Kolonner</value>
+  </data>
   <data name="SiteFields_GtPortfolioIsDefaultView_DisplayName" xml:space="preserve">
     <value>Standardvisning</value>
   </data>
@@ -604,7 +607,13 @@
   <data name="SiteFields_GtPortfolioRefiners_DisplayName" xml:space="preserve">
     <value>Filter</value>
   </data>
+  <data name="SiteFields_GtProjectContentRefiners_DisplayName" xml:space="preserve">
+    <value>Filter</value>
+  </data>
   <data name="SiteFields_GtPortfolioGroupBy_DisplayName" xml:space="preserve">
+    <value>Grupper etter</value>
+  </data>
+  <data name="SiteFields_GtProjectContentGroupBy_DisplayName" xml:space="preserve">
     <value>Grupper etter</value>
   </data>
   <data name="SiteFields_GtLccDefault_DisplayName" xml:space="preserve">
@@ -1348,6 +1357,9 @@
   <data name="SiteFields_GtPortfolioColumns_Description" xml:space="preserve">
     <value></value>
   </data>
+  <data name="SiteFields_GtProjectContentColumns_Description" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="SiteFields_GtPortfolioIsDefaultView_Description" xml:space="preserve">
     <value></value>
   </data>
@@ -1366,7 +1378,13 @@
   <data name="SiteFields_GtPortfolioRefiners_Description" xml:space="preserve">
     <value></value>
   </data>
+  <data name="SiteFields_GtProjectContentRefiners_Description" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="SiteFields_GtPortfolioGroupBy_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtProjectContentGroupBy_Description" xml:space="preserve">
     <value></value>
   </data>
   <data name="SiteFields_GtLccDefault_Description" xml:space="preserve">
