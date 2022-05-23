@@ -6,11 +6,11 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionTags: string
   ColumnRenderOptionList: string
   ColumnRenderOptionInt: string
-  SearchPropertyDescription: string
   DataSourceGroupName: string
   CommandBarGroupName: string
   SearchBoxGroupName: string
   DeleteButtonLabel: string
+  RemoveButtonLabel: string
   ColumnRenderOptionText: string
   ColumnRenderOptionDate: string
   ColumnRenderOptionDateTime: string
@@ -22,6 +22,9 @@ declare interface IPortfolioWebPartsStrings {
   NewColumnHeaderText: string
   AddColumnText: string
   SearchPropertyLabel: string
+  SearchPropertyDescription: string
+  InternalNameLabel: string
+  InternalNameDescription: string
   DisplayNameLabel: string
   MinWidthLabel: string
   MaxWidthLabel: string

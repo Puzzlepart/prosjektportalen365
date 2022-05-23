@@ -52,7 +52,7 @@ export const Commands = () => {
         },
         onClick: () => {
           // eslint-disable-next-line no-console
-          console.log('NewView')
+          console.log('NewView') // TODO: Implement
         }
       } as IContextualMenuItem,
       {
@@ -106,7 +106,7 @@ export const Commands = () => {
               name: strings.EditViewText,
               onClick: () => {
                 // eslint-disable-next-line no-console
-                console.log('EditView')
+                console.log('EditView') // TODO: Implement
               }
             }
           ]

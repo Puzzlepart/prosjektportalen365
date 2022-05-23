@@ -8,7 +8,7 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { Dispatch, useContext, useEffect, useState } from 'react'
 import { PortfolioAggregationContext } from '../context'
-import { ADD_COLUMN, DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
+import { ADD_COLUMN, REMOVE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import styles from './ColumnFormPanel.module.scss'
 import { renderOptions } from './renderOptions'
 
@@ -203,10 +203,10 @@ export const ColumnFormPanel = () => {
         />
         {state.editColumn && (
           <DefaultButton
-            text={strings.DeleteButtonLabel}
+            text={strings.RemoveButtonLabel}
             style={{ marginLeft: 4 }}
             onClick={() => {
-              dispatch(DELETE_COLUMN())
+              dispatch(REMOVE_COLUMN())
             }}
           />
         )}

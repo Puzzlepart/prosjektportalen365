@@ -35,7 +35,7 @@ export const TOGGLE_COMPACT = createAction<{ isCompact: boolean }>(
   'TOGGLE_COMPACT'
 )
 export const ADD_COLUMN = createAction<{ column: IColumn }>('ADD_COLUMN')
-export const DELETE_COLUMN = createAction('DELETE_COLUMN')
+export const REMOVE_COLUMN = createAction('REMOVE_COLUMN')
 export const COLUMN_HEADER_CONTEXT_MENU = createAction<{ column: IColumn; target: Target }>(
   'COLUMN_HEADER_CONTEXT_MENU'
 )
@@ -189,7 +189,7 @@ export default (props: IPortfolioAggregationProps) =>
       state.columnAdded = new Date().getTime()
       persistColumns(props, current(state).columns)
     },
-    [DELETE_COLUMN.type]: (state) => {
+    [REMOVE_COLUMN.type]: (state) => {
       state.columns = state.columns.filter((c) => c.fieldName !== state.editColumn.fieldName)
       state.editColumn = null
       state.addColumnPanel = { isOpen: false }
