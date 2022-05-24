@@ -158,6 +158,7 @@ export default (props: IPortfolioAggregationProps) =>
         state.filters = filters
       }
       if (payload.dataSources) {
+        state.currentView = payload.dataSources.find((ds) => ds.title === state.dataSource)
         state.dataSources = payload.dataSources
       }
     },

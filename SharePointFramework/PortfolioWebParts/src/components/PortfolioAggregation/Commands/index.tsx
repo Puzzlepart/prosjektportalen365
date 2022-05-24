@@ -102,10 +102,9 @@ export const Commands = () => {
             {
               key: 'EditView',
               name: strings.EditViewText,
-              onClick: () => {
-                // eslint-disable-next-line no-console
-                console.log('EditView') // TODO: Implement
-              }
+              onClick: () => redirect(
+                `${props.configuration.viewsUrls.defaultEditFormUrl}?ID=${state.currentView.id}`
+              )
             }
           ]
         }

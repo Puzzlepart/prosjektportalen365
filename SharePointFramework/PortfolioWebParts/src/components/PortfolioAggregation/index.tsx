@@ -48,7 +48,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
           .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
       })
     }
-  }, [props.dataSourceCategory])
+  }, [props.dataSourceCategory, state.dataSource])
 
   useEffect(() => {
     dispatch(START_FETCH())

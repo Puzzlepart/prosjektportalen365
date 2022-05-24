@@ -188,4 +188,9 @@ export interface IPortfolioAggregationState {
    * Filters
    */
   filters?: IFilterProps[]
+
+  /**
+   * Current view
+   */
+  currentView?: DataSource
 }
