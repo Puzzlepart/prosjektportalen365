@@ -102,7 +102,6 @@ export default (props: IPortfolioAggregationProps) =>
         state.loading = false
       }
       if (payload.columns) {
-        console.log(payload.columns)
         if (payload.columns.length > 0) {
           const mergedColumns = state.columns.map((col) => {
             const payCol = payload.columns.find((c) => c.key === col.key)

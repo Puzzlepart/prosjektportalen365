@@ -571,8 +571,8 @@ export class DataAdapter implements IDataAdapter {
    * @param dataSource Data source
    */
   public async fetchProjects(configuration?: IAggregatedListConfiguration, dataSource?: string): Promise<any[]> {
-    let odata = configuration.views.find(v => v.title === dataSource).odataQuery
-    let projects;
+    const odata = configuration.views.find(v => v.title === dataSource).odataQuery
+    let projects
 
     if (odata) {
       [projects] = await Promise.all([
