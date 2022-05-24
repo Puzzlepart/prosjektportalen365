@@ -1,7 +1,7 @@
 import { createAction, createReducer, current } from '@reduxjs/toolkit'
 import sortArray from 'array-sort'
 import { Target } from 'office-ui-fabric-react/lib/Callout'
-import { IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList'
+import { IGroup } from 'office-ui-fabric-react/lib/DetailsList'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
@@ -10,6 +10,7 @@ import { IPortfolioAggregationProps, IPortfolioAggregationState } from './types'
 import { IFilterItemProps } from '../FilterPanel'
 import _ from 'lodash'
 import { stringIsNullOrEmpty } from '@pnp/common'
+import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 
 function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
   const _arr = [...arr]
@@ -22,10 +23,10 @@ function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
   _arr.splice(new_index, 0, _arr.splice(old_index, 1)[0])
   return _arr
 }
-export const DATA_FETCHED = createAction<{ items: any[], dataSources?: DataSource[], columns?: IColumn[], filters?: any[] }>(
+export const DATA_FETCHED = createAction<{ items: any[], dataSources?: DataSource[], columns?: IProjectContentColumn[], filters?: any[] }>(
   'DATA_FETCHED'
 )
-export const TOGGLE_COLUMN_FORM_PANEL = createAction<{ isOpen: boolean, column?: IColumn }>(
+export const TOGGLE_COLUMN_FORM_PANEL = createAction<{ isOpen: boolean, column?: IProjectContentColumn }>(
   'TOGGLE_COLUMN_FORM_PANEL'
 )
 export const TOGGLE_FILTER_PANEL = createAction<{ isOpen: boolean }>(
@@ -34,18 +35,18 @@ export const TOGGLE_FILTER_PANEL = createAction<{ isOpen: boolean }>(
 export const TOGGLE_COMPACT = createAction<{ isCompact: boolean }>(
   'TOGGLE_COMPACT'
 )
-export const ADD_COLUMN = createAction<{ column: IColumn }>('ADD_COLUMN')
+export const ADD_COLUMN = createAction<{ column: IProjectContentColumn }>('ADD_COLUMN')
 export const REMOVE_COLUMN = createAction('REMOVE_COLUMN')
-export const COLUMN_HEADER_CONTEXT_MENU = createAction<{ column: IColumn; target: Target }>(
+export const COLUMN_HEADER_CONTEXT_MENU = createAction<{ column: IProjectContentColumn; target: Target }>(
   'COLUMN_HEADER_CONTEXT_MENU'
 )
-export const SET_GROUP_BY = createAction<{ column: IColumn }>('SET_GROUP_BY')
-export const SET_SORT = createAction<{ column: IColumn, sortDesencing: boolean }>('SET_SORT')
-export const MOVE_COLUMN = createAction<{ column: IColumn, move: number }>('MOVE_COLUMN')
+export const SET_GROUP_BY = createAction<{ column: IProjectContentColumn }>('SET_GROUP_BY')
+export const SET_SORT = createAction<{ column: IProjectContentColumn, sortDesencing: boolean }>('SET_SORT')
+export const MOVE_COLUMN = createAction<{ column: IProjectContentColumn, move: number }>('MOVE_COLUMN')
 export const SET_DATA_SOURCE = createAction<{ dataSource: DataSource }>('SET_DATA_SOURCE')
 export const START_FETCH = createAction('START_FETCH')
 export const SEARCH = createAction<{ searchTerm: string }>('SEARCH')
-export const ON_FILTER_CHANGE = createAction<{ column: IColumn, selectedItems: IFilterItemProps[] }>('ON_FILTER_CHANGE')
+export const ON_FILTER_CHANGE = createAction<{ column: IProjectContentColumn, selectedItems: IFilterItemProps[] }>('ON_FILTER_CHANGE')
 export const DATA_FETCH_ERROR = createAction<{ error: Error }>('DATA_FETCH_ERROR')
 
 /**
@@ -54,7 +55,7 @@ export const DATA_FETCH_ERROR = createAction<{ error: Error }>('DATA_FETCH_ERROR
  * @param props - Props
  * @param columns - State
  */
-const persistColumns = (props: IPortfolioAggregationProps, columns: IColumn[]) => {
+const persistColumns = (props: IPortfolioAggregationProps, columns: IProjectContentColumn[]) => {
   props.onUpdateProperty(
     'columns',
     columns.map((col) => omit(col, 'calculatedWidth', 'currentWidth'))
@@ -92,12 +93,13 @@ export default (props: IPortfolioAggregationProps) =>
         state.loading = false
       }
       if (payload.columns) {
-        const mergedColumns = current(state).columns.map((col) => {
+        const mergedColumns = state.columns.map((col) => {
           const payCol = payload.columns.find((c) => c.key === col.key)
           if (payCol)
             return {
               ...col,
               name: payCol.name,
+              internalName: payCol.internalName,
               isFromDataSource: !!payCol['internalName']
             }
           else
@@ -178,12 +180,45 @@ export default (props: IPortfolioAggregationProps) =>
       state.isCompact = payload.isCompact
     },
     [ADD_COLUMN.type]: (state, { payload }: ReturnType<typeof ADD_COLUMN>) => {
+      console.log('ADD_COLUMN', payload)
+
       if (state.editColumn) {
         state.columns = [...state.columns].map((c) => {
           if (c.fieldName === payload.column.fieldName) return payload.column
           return c
         })
-      } else state.columns = [...state.columns, payload.column]
+      } else {
+        const renderAs = payload.column.data?.renderAs.charAt(0).toUpperCase() + payload.column.data?.renderAs.slice(1)
+        const dataSource = current(state).dataSource
+
+        console.log(dataSource)
+
+        const newItem = {
+          GtSortOrder: payload.column.sortOrder || 100,
+          Title: payload.column.name,
+          GtInternalName: payload.column.internalName,
+          GtManagedProperty: payload.column.fieldName,
+          GtFieldDataType: renderAs,
+          GtDataSourceCategory: props.title
+        }
+
+        // TODO: Add new column to state correctly, right now it's filtered out because query to the list happens to fast, await here doesn't help
+        props.dataAdapter.configure().then(async (adapter) => {
+          await Promise.all([
+            adapter.addItemToList('Prosjektinnholdskolonner', newItem),
+          ])
+            .then(async ([result]) => {
+              const updateItem = {
+                GtProjectContentColumnsId: result['Id'],
+              }
+              await Promise.resolve(
+                adapter.updateDataSourceItem(updateItem, dataSource)
+              )
+            })
+            .catch((error) => state.error = error)
+        })
+        state.columns = [...state.columns, payload.column]
+      }
       state.editColumn = null
       state.addColumnPanel = { isOpen: false }
       state.columnAdded = new Date().getTime()

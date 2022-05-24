@@ -7,8 +7,8 @@ export const renderOptions: IDropdownOption[] = [
     text: strings.ColumnRenderOptionText
   },
   {
-    key: 'int',
-    text: strings.ColumnRenderOptionInt
+    key: 'number',
+    text: strings.ColumnRenderOptionNumber
   },
   {
     key: 'date',

@@ -1,5 +1,5 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { dateAdd } from '@pnp/common'
+import { dateAdd, TypedHash } from '@pnp/common'
 import { QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
 import * as cleanDeep from 'clean-deep'
 import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces'
@@ -623,24 +623,6 @@ export class DataAdapter implements IDataAdapter {
 
   }
 
-  // /**
-  // * Fetch data source by name
-  // *
-  // * @param dataSourceName Data source name
-  // */
-  // public async fetchDataSource(dataSourceName: string): Promise<DataSource> {
-  //   try {
-  //     const dataSrc = await this.dataSourceService.getByName(dataSourceName)
-  //     if (!dataSrc) {
-  //       throw new Error(format(strings.DataSourceNotFound, dataSourceName))
-  //     }
-
-  //     return dataSrc
-  //   } catch (error) {
-  //     throw new Error(format(strings.DataSourceNotFound, dataSourceName))
-  //   }
-  // }
-
   /**
    * Fetch data sources by category
    *
@@ -651,6 +633,60 @@ export class DataAdapter implements IDataAdapter {
       return this.dataSourceService.getByCategory(category)
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, category))
+    }
+  }
+
+  /**
+   * Add item to a list
+   *
+   * @param listName List name
+   * @param properties Properties
+   */
+  public async addItemToList(listName: string, properties: TypedHash<any>): Promise<any> {
+    try {
+      console.log(properties)
+      const list = sp.web.lists.getByTitle(listName)
+      const itemAddResult = await list.items.add(properties)
+      return itemAddResult.data
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
+  /**
+   * Update datasource item
+   *
+   * @param properties Properties
+   * @param itemTitle Title of item to update
+   */
+  public async updateDataSourceItem(properties: TypedHash<any>, itemTitle?: string): Promise<any> {
+    try {
+      console.log(properties)
+      const list = sp.web.lists.getByTitle(strings.DataSourceGroupName)
+      const items = await list.items.get()
+      const item = items.find((i) => i.Title === itemTitle)
+
+      if (!item) {
+        throw new Error(format(strings.DataSourceItemNotFound, itemTitle))
+      }
+
+      if (item.GtProjectContentColumnsId) {
+        properties.GtProjectContentColumnsId = {
+          results: [...item.GtProjectContentColumnsId, properties.GtProjectContentColumnsId]
+        }
+
+        const itemUpdateResult = await list.items.getById(item.Id).update(properties)
+        return itemUpdateResult.data
+      } else {
+        properties.GtProjectContentColumnsId = {
+          results: properties.GtProjectContentColumnsId
+        }
+
+        const itemUpdateResult = await list.items.getById(item.Id).update(properties)
+        return itemUpdateResult.data
+      }
+    } catch (error) {
+      throw new Error(error)
     }
   }
 }

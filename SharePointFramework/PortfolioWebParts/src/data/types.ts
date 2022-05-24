@@ -1,3 +1,4 @@
+import { TypedHash } from '@pnp/common'
 import { QueryPropertyValueType, SearchQuery, SortDirection } from '@pnp/sp'
 import { IPortfolioConfiguration } from 'interfaces'
 import { ProjectListModel, TimelineContentListModel } from 'models'
@@ -50,4 +51,6 @@ export interface IDataAdapter {
   fetchProjects?(dataSourceName: string): Promise<any[]>
   fetchProjectSites(rowLimit: number, sortProperty: string, sortDirection: SortDirection): Promise<any>
   fetchItemsWithSource?(dataSourceName: string, selectProperties: string[]): Promise<any[]>
+  addItemToList?(listName: string, properties: TypedHash<any>): Promise<any[]>
+  updateDataSourceItem?(properties: TypedHash<any>, itemTitle?: string): Promise<any[]>
 }

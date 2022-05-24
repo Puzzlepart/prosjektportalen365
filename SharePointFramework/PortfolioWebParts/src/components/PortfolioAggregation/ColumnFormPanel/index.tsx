@@ -1,7 +1,7 @@
 import { AnyAction } from '@reduxjs/toolkit'
-import { Dropdown } from 'office-ui-fabric-react'
+import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
+import { Dropdown, SpinButton } from 'office-ui-fabric-react'
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { Panel } from 'office-ui-fabric-react/lib/Panel'
 import { TextField } from 'office-ui-fabric-react/lib/TextField'
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
@@ -12,6 +12,8 @@ import { ADD_COLUMN, REMOVE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import styles from './ColumnFormPanel.module.scss'
 import { renderOptions } from './renderOptions'
 
+
+// TODO: Evaluate if we need the custom column form panel or just use newform  for the list 
 export const addColumn = (dispatch: Dispatch<AnyAction>) => ({
   key: '',
   fieldName: '',
@@ -20,11 +22,12 @@ export const addColumn = (dispatch: Dispatch<AnyAction>) => ({
   iconClassName: styles.addColumnIcon,
   minWidth: 150,
   onColumnClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
-})
+}) // TODO: Make this more stable + add 'Vis/Skjul kolonner' option
 
 const initialColumn = {
   key: null,
   fieldName: '',
+  internalname: '',
   name: '',
   minWidth: 100,
   maxWidth: 300,
@@ -35,7 +38,7 @@ const initialColumn = {
 
 export const ColumnFormPanel = () => {
   const { state, dispatch } = useContext(PortfolioAggregationContext)
-  const [column, setColumn] = useState<IColumn>({
+  const [column, setColumn] = useState<IProjectContentColumn>({
     ...initialColumn,
     ...(state.editColumn || {})
   })
@@ -75,6 +78,21 @@ export const ColumnFormPanel = () => {
       className={styles.root}>
       <div className={styles.field}>
         <TextField
+          label={strings.SortOrderLabel}
+          description={strings.SortOrderLabel}
+          type={'number'}
+          value={column.sortOrder && column.sortOrder.toString() || '100'}
+          disabled={!!state.editColumn}
+          onChange={(_, value) =>
+            setColumn({
+              ...column,
+              sortOrder: parseInt(value)
+            })
+          }
+        />
+      </div>
+      <div className={styles.field}>
+        <TextField
           label={strings.SearchPropertyLabel}
           description={strings.SearchPropertyDescription}
           required={true}
@@ -84,6 +102,21 @@ export const ColumnFormPanel = () => {
             setColumn({
               ...column,
               fieldName: value
+            })
+          }
+        />
+      </div>
+      <div className={styles.field}>
+        <TextField
+          label={strings.InternalNameLabel}
+          description={strings.InternalNameDescription}
+          required={true}
+          value={column.internalName}
+          disabled={!!state.editColumn}
+          onChange={(_, value) =>
+            setColumn({
+              ...column,
+              internalName: value
             })
           }
         />

@@ -1,6 +1,7 @@
 import { SearchResult } from '@pnp/sp'
 import { IFilterProps } from 'components/FilterPanel'
 import { IDataAdapter } from 'data/types'
+import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 import { Target } from 'office-ui-fabric-react/lib/Callout'
 import { IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList'
 import { IPanelProps } from 'office-ui-fabric-react/lib/Panel'
@@ -21,7 +22,7 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   /**
    * Columns
    */
-  columns?: IColumn[]
+  columns?: IProjectContentColumn[]
 
   /**
    * Select properties
@@ -113,7 +114,7 @@ export interface IPortfolioAggregationState {
   /**
    * Columns
    */
-  columns?: IColumn[]
+  columns?: IProjectContentColumn[]
 
   /**
    * Groups
@@ -123,7 +124,7 @@ export interface IPortfolioAggregationState {
   /**
    * Column currently being edited
    */
-  editColumn?: IColumn
+  editColumn?: IProjectContentColumn
 
   /**
    * Column to group by

@@ -5,7 +5,7 @@ declare interface IPortfolioWebPartsStrings {
   DataSourceDescription: string
   ColumnRenderOptionTags: string
   ColumnRenderOptionList: string
-  ColumnRenderOptionInt: string
+  ColumnRenderOptionNumber: string
   DataSourceGroupName: string
   CommandBarGroupName: string
   SearchBoxGroupName: string
@@ -150,6 +150,7 @@ declare interface IPortfolioWebPartsStrings {
   ProjectsListName: string
   TimelineContentListName: string
   TimelineConfigurationListName: string
+  DataSourceListName: string
   PortfolioManagerGroupName: string
   ProjectTimelineItemInfo: string
   LastPublishedStatusreport: string
@@ -177,10 +178,12 @@ declare interface IPortfolioWebPartsStrings {
   NoAccessMessage: string
   BooleanYes: string
   BooleanNo: string
-  ProjectDeliveriesGroupName: string;
-  ShowProjectDeliveriesLabel: string;
-  ConfigItemTitleFieldLabel: string;
-  ConfigItemTitleFieldDescription: string;
+  ProjectDeliveriesGroupName: string
+  ShowProjectDeliveriesLabel: string
+  ConfigItemTitleFieldLabel: string
+  ConfigItemTitleFieldDescription: string
+  SortOrderLabel: string
+  DataSourceItemNotFound: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

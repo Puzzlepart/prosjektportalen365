@@ -10,7 +10,7 @@ define([], function() {
         RemoveButtonLabel: 'Fjern',
         ColumnRenderOptionTags: 'Etiketter',
         ColumnRenderOptionList: 'Liste',
-        ColumnRenderOptionInt: 'Tall',
+        ColumnRenderOptionNumber: 'Tall',
         ColumnRenderOptionText: 'Tekst',
         ColumnRenderOptionDate: 'Dato',
         ColumnRenderOptionDateTime: 'Dato og tidspunkt',
@@ -149,6 +149,7 @@ define([], function() {
         ProjectsListName: 'Prosjekter',
         TimelineContentListName: 'Tidslinjeinnhold',
         TimelineConfigurationListName: 'Tidslinjekonfigurasjon',
+        DataSourceListName: 'Datakilder',
         PortfolioManagerGroupName: 'Porteføljeinnsyn',
         ProjectTimelineItemInfo: '{0} - prosjektets tidsforløp',
         LastPublishedStatusreport: 'Gå til siste statusrapport',
@@ -179,6 +180,8 @@ define([], function() {
         ProjectDeliveriesGroupName: 'Prosjektleveranser (beta)',
         ShowProjectDeliveriesLabel: 'Vis prosjektleveranser',
         ConfigItemTitleFieldLabel: 'Element tittel (konfigurasjon)',
-        ConfigItemTitleFieldDescription: 'Dersom det er spesifisert et element med tittelen angitt her i tidslinjekonfigurasjon listen så vil dette vises på tidslinjen.'
+        ConfigItemTitleFieldDescription: 'Dersom det er spesifisert et element med tittelen angitt her i tidslinjekonfigurasjon listen så vil dette vises på tidslinjen.',
+        SortOrderLabel: 'Sorteringsrekkefølge',
+        DataSourceItemNotFound: 'Datakilde ble ikke funnet'
     }
 })
