@@ -3,6 +3,7 @@ import { dateAdd, TypedHash } from '@pnp/common'
 import { QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
 import * as cleanDeep from 'clean-deep'
 import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces'
+import { IAggregatedListConfiguration } from 'interfaces/IAggregatedListConfiguration'
 import {
   ChartConfiguration,
   ChartData,
@@ -115,13 +116,17 @@ export class DataAdapter implements IDataAdapter {
     }
   }
 
-  public async getAggregatedListConfig(): Promise<any> {
+  public async getAggregatedListConfig(category: string): Promise<IAggregatedListConfiguration> {
     // eslint-disable-next-line prefer-const
-    let [viewsUrls, columnUrls] = await Promise.all([
+    let [views, viewsUrls, columnUrls] = await Promise.all([
+      await this.configure().then((adapter) => {
+        return adapter.fetchDataSources(category)
+      }),
       this._portalDataService.getListFormUrls('DATA_SOURCES'),
       this._portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS')
     ]) 
     return {
+      views,
       viewsUrls,
       columnUrls
     }
@@ -640,9 +645,9 @@ export class DataAdapter implements IDataAdapter {
    *
    * @param category Data source category
    */
-  public fetchDataSources(category: string): Promise<DataSource[]> {
+  public async fetchDataSources(category: string): Promise<DataSource[]> {
     try {
-      return this.dataSourceService.getByCategory(category)
+      return await this.dataSourceService.getByCategory(category)
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, category))
     }

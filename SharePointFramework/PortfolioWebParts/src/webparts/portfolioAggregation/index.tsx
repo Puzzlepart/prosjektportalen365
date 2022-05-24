@@ -13,15 +13,18 @@ import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
   IPortfolioAggregationProps
 > {
-  public render(): void {
+  public async render(): Promise<void> {
     if (!this.properties.dataSource) {
       this.renderComponent<IMessageBarProps>(MessageBar, {
         children: <span>{strings.PortfolioAggregationNotConfiguredMessage}</span>
       })
     } else {
+      console.log(this.properties)
+
       this.renderComponent<IPortfolioAggregationProps>(PortfolioAggregation, {
         ...this.properties,
         dataAdapter: new DataAdapter(this.context),
+        configuration: await this.dataAdapter.getAggregatedListConfig(this.properties.dataSourceCategory),
         onUpdateProperty: this._onUpdateProperty.bind(this)
       })
     }

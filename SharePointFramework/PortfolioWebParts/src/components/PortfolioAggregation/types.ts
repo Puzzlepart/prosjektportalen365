@@ -1,6 +1,7 @@
 import { SearchResult } from '@pnp/sp'
 import { IFilterProps } from 'components/FilterPanel'
 import { IDataAdapter } from 'data/types'
+import { IAggregatedListConfiguration } from 'interfaces'
 import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 import { Target } from 'office-ui-fabric-react/lib/Callout'
 import { IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList'
@@ -9,6 +10,12 @@ import { DataSource } from 'pp365-shared/lib/models/DataSource'
 import { IBaseComponentProps } from '../types'
 
 export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps {
+
+  /**
+   * Configuration (columns and views etc)
+   */
+  configuration?: IAggregatedListConfiguration
+  
   /**
    * Data source name
    */
@@ -86,6 +93,7 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
 }
 
 export interface IPortfolioAggregationState {
+
   /**
    * Whether the component is loading
    */
@@ -180,9 +188,4 @@ export interface IPortfolioAggregationState {
    * Filters
    */
   filters?: IFilterProps[]
-  
-  /**
-   * Views
-   */
-  views?: any[]
 }

@@ -2,6 +2,7 @@ import { CommandBar, ICommandBarProps } from 'office-ui-fabric-react/lib/Command
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu'
 import * as strings from 'PortfolioWebPartsStrings'
 import ExcelExportService from 'pp365-shared/lib/services/ExcelExportService'
+import { redirect } from 'pp365-shared/lib/util'
 import React, { useContext } from 'react'
 import { isEmpty } from 'underscore'
 import { PortfolioAggregationContext } from '../context'
@@ -50,10 +51,7 @@ export const Commands = () => {
           isVisible:
             props.pageContext.legacyPageContext.isSiteAdmin && props.showViewSelector
         },
-        onClick: () => {
-          // eslint-disable-next-line no-console
-          console.log('NewView') // TODO: Implement
-        }
+        onClick: () => redirect(props.configuration.viewsUrls.defaultNewFormUrl)
       } as IContextualMenuItem,
       {
         key: 'ViewOptions',

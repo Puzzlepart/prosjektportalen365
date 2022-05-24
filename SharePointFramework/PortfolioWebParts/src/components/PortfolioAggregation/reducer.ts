@@ -11,6 +11,7 @@ import { IFilterItemProps } from '../FilterPanel'
 import _ from 'lodash'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
+import { IAggregatedListConfiguration } from 'interfaces'
 
 function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
   const _arr = [...arr]
@@ -23,7 +24,7 @@ function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
   _arr.splice(new_index, 0, _arr.splice(old_index, 1)[0])
   return _arr
 }
-export const DATA_FETCHED = createAction<{ items: any[], dataSources?: DataSource[], columns?: IProjectContentColumn[], filters?: any[], views?: any[] }>(
+export const DATA_FETCHED = createAction<{ items: any[], dataSources?: DataSource[], columns?: IProjectContentColumn[], filters?: any[] }>(
   'DATA_FETCHED'
 )
 export const TOGGLE_COLUMN_FORM_PANEL = createAction<{ isOpen: boolean, column?: IProjectContentColumn }>(
@@ -155,9 +156,6 @@ export default (props: IPortfolioAggregationProps) =>
         }
 
         state.filters = filters
-      }
-      if (payload.views) {
-        state.views = payload.views
       }
       if (payload.dataSources) {
         state.dataSources = payload.dataSources

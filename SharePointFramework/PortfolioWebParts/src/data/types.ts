@@ -1,6 +1,6 @@
 import { TypedHash } from '@pnp/common'
 import { QueryPropertyValueType, SearchQuery, SortDirection } from '@pnp/sp'
-import { IPortfolioConfiguration } from 'interfaces'
+import { IPortfolioConfiguration, IAggregatedListConfiguration } from 'interfaces'
 import { ProjectListModel, TimelineContentListModel } from 'models'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services'
@@ -32,7 +32,7 @@ export interface IDataAdapter {
     siteId: string
   ): Promise<{ charts: any; chartData: any; contentTypes: any }>
   getPortfolioConfig?(): Promise<IPortfolioConfiguration>
-  getAggregatedListConfig?(): Promise<any[]>
+  getAggregatedListConfig?(category: string): Promise<IAggregatedListConfiguration>
   fetchDataForViewBatch?(
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
