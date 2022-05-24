@@ -19,8 +19,6 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
         children: <span>{strings.PortfolioAggregationNotConfiguredMessage}</span>
       })
     } else {
-      console.log(this.properties)
-
       this.renderComponent<IPortfolioAggregationProps>(PortfolioAggregation, {
         ...this.properties,
         dataAdapter: new DataAdapter(this.context),

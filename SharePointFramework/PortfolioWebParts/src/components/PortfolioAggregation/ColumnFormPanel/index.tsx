@@ -1,6 +1,6 @@
 import { AnyAction } from '@reduxjs/toolkit'
 import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
-import { Dropdown, SpinButton } from 'office-ui-fabric-react'
+import { Dropdown } from 'office-ui-fabric-react'
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import { Panel } from 'office-ui-fabric-react/lib/Panel'
 import { TextField } from 'office-ui-fabric-react/lib/TextField'

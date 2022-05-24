@@ -661,7 +661,6 @@ export class DataAdapter implements IDataAdapter {
    */
   public async addItemToList(listName: string, properties: TypedHash<any>): Promise<any> {
     try {
-      console.log(properties)
       const list = sp.web.lists.getByTitle(listName)
       const itemAddResult = await list.items.add(properties)
       return itemAddResult.data
@@ -678,7 +677,6 @@ export class DataAdapter implements IDataAdapter {
    */
   public async updateDataSourceItem(properties: TypedHash<any>, itemTitle?: string): Promise<any> {
     try {
-      console.log(properties)
       const list = sp.web.lists.getByTitle(strings.DataSourceGroupName)
       const items = await list.items.get()
       const item = items.find((i) => i.Title === itemTitle)

@@ -11,7 +11,6 @@ import { IFilterItemProps } from '../FilterPanel'
 import _ from 'lodash'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
-import { IAggregatedListConfiguration } from 'interfaces'
 
 function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
   const _arr = [...arr]
@@ -182,8 +181,6 @@ export default (props: IPortfolioAggregationProps) =>
       state.isCompact = payload.isCompact
     },
     [ADD_COLUMN.type]: (state, { payload }: ReturnType<typeof ADD_COLUMN>) => {
-      console.log('ADD_COLUMN', payload)
-
       if (state.editColumn) {
         state.columns = [...state.columns].map((c) => {
           if (c.fieldName === payload.column.fieldName) return payload.column
@@ -192,8 +189,6 @@ export default (props: IPortfolioAggregationProps) =>
       } else {
         const renderAs = payload.column.data?.renderAs.charAt(0).toUpperCase() + payload.column.data?.renderAs.slice(1)
         const dataSource = current(state).dataSource
-
-        console.log(dataSource)
 
         const newItem = {
           GtSortOrder: payload.column.sortOrder || 100,

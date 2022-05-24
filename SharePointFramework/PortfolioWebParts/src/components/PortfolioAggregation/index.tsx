@@ -62,7 +62,6 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
         )
       ])
         .then(([dataSrc, items]) => {
-          console.log(dataSrc)
           dispatch(DATA_FETCHED({ items, columns: dataSrc.projectColumns, filters: dataSrc.projectRefiners }))
         })
         .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
