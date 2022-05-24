@@ -59,10 +59,11 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
           .fetchItemsWithSource(
             state.dataSource,
             props.selectProperties || state.columns.map((col) => col.fieldName)
-        )
+        ),
+        adapter.fetchProjects(props.configuration, state.dataSource)
       ])
-        .then(([dataSrc, items]) => {
-          dispatch(DATA_FETCHED({ items, columns: dataSrc.projectColumns, filters: dataSrc.projectRefiners }))
+        .then(([dataSrc, items, projects]) => {
+          dispatch(DATA_FETCHED({ items, columns: dataSrc.projectColumns, filters: dataSrc.projectRefiners, projects }))
         })
         .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
     })

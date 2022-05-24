@@ -23,7 +23,7 @@ function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
   _arr.splice(new_index, 0, _arr.splice(old_index, 1)[0])
   return _arr
 }
-export const DATA_FETCHED = createAction<{ items: any[], dataSources?: DataSource[], columns?: IProjectContentColumn[], filters?: any[] }>(
+export const DATA_FETCHED = createAction<{ items: any[], dataSources?: DataSource[], columns?: IProjectContentColumn[], filters?: any[], projects?: any[] }>(
   'DATA_FETCHED'
 )
 export const TOGGLE_COLUMN_FORM_PANEL = createAction<{ isOpen: boolean, column?: IProjectContentColumn }>(
@@ -90,6 +90,15 @@ export default (props: IPortfolioAggregationProps) =>
             reverse: state.sortBy?.isSortedDescending ? state.sortBy.isSortedDescending : false
           }
         )
+
+        if (payload.projects) {
+          state.items = state.items.filter((item) => {
+            return payload.projects.find((project) => {
+              return project.GtSiteId === item.SiteId
+            })
+          })
+        }
+          
         state.loading = false
       }
       if (payload.columns) {

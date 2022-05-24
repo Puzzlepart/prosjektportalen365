@@ -49,7 +49,7 @@ export interface IDataAdapter {
   fetchTimelineAggregatedContent?(configItemTitle: string, dataSourceName: string): Promise<TimelineContentListModel[]>
   fetchTimelineConfiguration?(): Promise<any>
   fetchEnrichedProjects?(): Promise<ProjectListModel[]>
-  fetchProjects?(dataSourceName: string): Promise<any[]>
+  fetchProjects?(configuration?: IAggregatedListConfiguration, dataSource?: string): Promise<any[]>
   fetchProjectSites(rowLimit: number, sortProperty: string, sortDirection: SortDirection): Promise<any>
   fetchItemsWithSource?(dataSourceName: string, selectProperties: string[]): Promise<any[]>
   addItemToList?(listName: string, properties: TypedHash<any>): Promise<any[]>

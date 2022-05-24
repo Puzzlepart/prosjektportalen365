@@ -124,7 +124,7 @@ export class DataAdapter implements IDataAdapter {
       }),
       this._portalDataService.getListFormUrls('DATA_SOURCES'),
       this._portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS')
-    ]) 
+    ])
     return {
       views,
       viewsUrls,
@@ -567,14 +567,19 @@ export class DataAdapter implements IDataAdapter {
   /**
    * Fetch projects
    *
-   * @param dataSourceName Data source name
+   * @param configuration Configuration
+   * @param dataSource Data source
    */
-  public async fetchProjects(dataSourceName: string): Promise<any[]> {
-    const dataSrc = await this.dataSourceService.getByName(dataSourceName)
-    if (!dataSrc) {
-      throw new Error(format(strings.DataSourceNotFound, dataSourceName))
+  public async fetchProjects(configuration?: IAggregatedListConfiguration, dataSource?: string): Promise<any[]> {
+    let odata = configuration.views.find(v => v.title === dataSource).odataQuery
+    let projects;
+
+    if (odata) {
+      [projects] = await Promise.all([
+        await sp.web.lists.getByTitle(strings.ProjectsListName).items.filter(`${odata}`).get<any[]>()
+      ])
     }
-    return await sp.web.lists.getByTitle(strings.ProjectsListName).items.get<any[]>()
+    return projects
   }
 
   /**
