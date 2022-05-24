@@ -78,6 +78,56 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 6 -->
             <pnp:DataValue FieldName="GtSortOrder">200</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Sannsynlighet (S)</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtRiskProbability</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtRiskProbabilityOWSNMBR</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Risikooversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 7 -->
+            <pnp:DataValue FieldName="GtSortOrder">210</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Konsekvens (K)</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtRiskConsequence</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtRiskConsequenceOWSNMBR</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Risikooversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 8 -->
+            <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">S etter tiltak</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtRiskProbabilityPostAction</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtRiskProbabilityPostActionOWSNMBR</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Risikooversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 9 -->
+            <pnp:DataValue FieldName="GtSortOrder">230</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">K etter tiltak</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtRiskConsequencePostAction</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtRiskConsequencePostActionOWSNMBR</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Risikooversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 10 -->
+            <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Tiltak</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtRiskActionOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtRiskActionOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Risikooversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 11 -->
+            <pnp:DataValue FieldName="GtSortOrder">300</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Loggbeskrivelse</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectLogDescription</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectLogDescriptionOWSMTXT</pnp:DataValue>
@@ -86,8 +136,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>            <!-- ID: 7 -->
-            <pnp:DataValue FieldName="GtSortOrder">210</pnp:DataValue>
+        <pnp:DataRow>            <!-- ID: 12 -->
+            <pnp:DataValue FieldName="GtSortOrder">310</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Aktører</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectLogActors</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectLogActorsOWSCHCM</pnp:DataValue>
@@ -96,8 +146,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>            <!-- ID: 8 -->
-            <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
+        <pnp:DataRow>            <!-- ID: 13 -->
+            <pnp:DataValue FieldName="GtSortOrder">320</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Ansvarlig</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectLogResponsible</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectLogResponsibleOWSCHCS</pnp:DataValue>
@@ -106,8 +156,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>            <!-- ID: 9 -->
-            <pnp:DataValue FieldName="GtSortOrder">230</pnp:DataValue>
+        <pnp:DataRow>            <!-- ID: 14 -->
+            <pnp:DataValue FieldName="GtSortOrder">330</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Konsekvens</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectLogConsequence</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectLogConsequenceOWSMTXT</pnp:DataValue>
@@ -116,8 +166,8 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>            <!-- ID: 10 -->
-            <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
+        <pnp:DataRow>            <!-- ID: 15 -->
+            <pnp:DataValue FieldName="GtSortOrder">340</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Anbefaling</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectLogRecommendation</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectLogRecommendationOWSMTXT</pnp:DataValue>
