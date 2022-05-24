@@ -180,4 +180,9 @@ export interface IPortfolioAggregationState {
    * Filters
    */
   filters?: IFilterProps[]
+  
+  /**
+   * Views
+   */
+  views?: any[]
 }

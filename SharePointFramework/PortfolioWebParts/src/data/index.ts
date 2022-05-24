@@ -115,6 +115,18 @@ export class DataAdapter implements IDataAdapter {
     }
   }
 
+  public async getAggregatedListConfig(): Promise<any> {
+    // eslint-disable-next-line prefer-const
+    let [viewsUrls, columnUrls] = await Promise.all([
+      this._portalDataService.getListFormUrls('DATA_SOURCES'),
+      this._portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS')
+    ]) 
+    return {
+      viewsUrls,
+      columnUrls
+    }
+  }
+
   /**
    * Fetch data for view
    *

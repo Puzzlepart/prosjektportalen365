@@ -32,6 +32,7 @@ export interface IDataAdapter {
     siteId: string
   ): Promise<{ charts: any; chartData: any; contentTypes: any }>
   getPortfolioConfig?(): Promise<IPortfolioConfiguration>
+  getAggregatedListConfig?(): Promise<any[]>
   fetchDataForViewBatch?(
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
