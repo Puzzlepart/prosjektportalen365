@@ -102,31 +102,36 @@ export default (props: IPortfolioAggregationProps) =>
         state.loading = false
       }
       if (payload.columns) {
-        const mergedColumns = state.columns.map((col) => {
-          const payCol = payload.columns.find((c) => c.key === col.key)
-          if (payCol)
-            return {
-              ...col,
-              name: payCol.name,
-              internalName: payCol.internalName,
-              isFromDataSource: !!payCol['internalName']
-            }
+        console.log(payload.columns)
+        if (payload.columns.length > 0) {
+          const mergedColumns = state.columns.map((col) => {
+            const payCol = payload.columns.find((c) => c.key === col.key)
+            if (payCol)
+              return {
+                ...col,
+                name: payCol.name,
+                internalName: payCol.internalName,
+                isFromDataSource: !!payCol['internalName']
+              }
+            else
+              return col
+          })
+
+          const newColumns = payload.columns.filter((col) => {
+            return !mergedColumns.find((c) => c.key === col.key)
+          })
+
+          const filteredColumns = [...mergedColumns, ...newColumns].filter((col) => {
+            return payload.columns.find((c) => c.fieldName === col.fieldName)
+          })
+
+          if (mergedColumns.length >= 1)
+            state.columns = filteredColumns
           else
-            return col
-        })
-
-        const newColumns = payload.columns.filter((col) => {
-          return !mergedColumns.find((c) => c.key === col.key)
-        })
-
-        const filteredColumns = [...mergedColumns, ...newColumns].filter((col) => {
-          return payload.columns.find((c) => c.fieldName === col.fieldName)
-        })
-
-        if (mergedColumns.length >= 1)
-          state.columns = filteredColumns
-        else
-          state.columns = sortArray(payload.columns, 'sortOrder')
+            state.columns = sortArray(payload.columns, 'sortOrder')
+        } else {
+          state.columns = props.columns || []
+        }
       }
       if (payload.filters) {
         const filters = payload.filters.map((column) => {
