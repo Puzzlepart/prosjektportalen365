@@ -104,7 +104,7 @@ export function getColumns(props: IBenefitsOverviewProps): IAggregatedSearchList
     {
       fieldName: 'BenefitMeasurementsModal',
       key: 'BenefitMeasurementsModal',
-      name: '',
+      name: strings.ShowAllMeasurementsLinkText,
       minWidth: 80,
       maxWidth: 150,
       onRender: (indicator: BenefitMeasurementIndicator) => (
