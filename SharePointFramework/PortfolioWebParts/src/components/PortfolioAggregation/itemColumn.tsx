@@ -28,6 +28,8 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
   switch (column?.data?.renderAs) {
     case 'number':
       return columnValue ? parseInt(columnValue) : null
+    case 'int':
+      return columnValue ? parseInt(columnValue) : null
     case 'date':
       return formatDate(columnValue, false)
     case 'datetime':
@@ -54,7 +56,7 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
     }
     default:
       return columnValue
-  }
+  } // TODO: Add more types (ex: tax, modal, percentage, currency, etc.)
 }
 
 /**

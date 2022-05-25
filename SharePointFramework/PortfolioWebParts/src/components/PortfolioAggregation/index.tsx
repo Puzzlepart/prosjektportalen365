@@ -52,18 +52,24 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
 
   useEffect(() => {
     dispatch(START_FETCH())
-    props.dataAdapter.configure().then((adapter) => {
+    props.dataAdapter.configure().then(async (adapter) => {
       Promise.all([
         adapter.dataSourceService.getByName(state.dataSource),
-        adapter
-          .fetchItemsWithSource(
-            state.dataSource,
-            props.selectProperties || state.columns.map((col) => col.fieldName)
-        ),
         adapter.fetchProjects(props.configuration, state.dataSource)
       ])
-        .then(([dataSrc, items, projects]) => {
-          dispatch(DATA_FETCHED({ items, columns: dataSrc.projectColumns, filters: dataSrc.projectRefiners, projects }))
+        .then(([dataSrc, projects]) => {
+          Promise.all([
+            adapter
+              .fetchItemsWithSource(
+                state.dataSource,
+                props.selectProperties || dataSrc.projectColumns.map((col) => col.fieldName),
+                props.dataSourceCategory
+              )
+          ])
+            .then(([items]) => {
+              dispatch(DATA_FETCHED({ items, columns: dataSrc.projectColumns, filters: dataSrc.projectRefiners, projects }))
+            })
+            .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
         })
         .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
     })

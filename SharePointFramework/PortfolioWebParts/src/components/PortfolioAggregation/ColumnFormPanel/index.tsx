@@ -22,7 +22,7 @@ export const addColumn = (dispatch: Dispatch<AnyAction>) => ({
   iconClassName: styles.addColumnIcon,
   minWidth: 150,
   onColumnClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
-}) // TODO: Make this more stable + add 'Vis/Skjul kolonner' option
+}) // TODO: Make this is more stable + add 'Vis/Skjul kolonner' option if there is time
 
 const initialColumn = {
   key: null,

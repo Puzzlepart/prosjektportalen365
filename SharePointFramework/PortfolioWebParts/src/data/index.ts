@@ -12,7 +12,10 @@ import {
   ProjectListModel,
   TimelineContentListModel,
   SPChartConfigurationItem,
-  SPContentType
+  SPContentType,
+  Benefit,
+  BenefitMeasurement,
+  BenefitMeasurementIndicator
 } from 'models'
 import MSGraph from 'msgraph-helper'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
@@ -24,7 +27,14 @@ import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
 import HubSiteService from 'sp-hubsite-service'
 import _ from 'underscore'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
-import { DEFAULT_SEARCH_SETTINGS, IDataAdapter } from './types'
+import {
+  DEFAULT_SEARCH_SETTINGS,
+  CONTENT_TYPE_ID_BENEFITS,
+  CONTENT_TYPE_ID_MEASUREMENTS,
+  CONTENT_TYPE_ID_INDICATORS,
+  IDataAdapter,
+  DEFAULT_GAINS_PROPERTIES
+} from './types'
 
 export class DataAdapter implements IDataAdapter {
   private _portalDataService: PortalDataService
@@ -117,18 +127,30 @@ export class DataAdapter implements IDataAdapter {
   }
 
   public async getAggregatedListConfig(category: string): Promise<IAggregatedListConfiguration> {
-    // eslint-disable-next-line prefer-const
-    let [views, viewsUrls, columnUrls] = await Promise.all([
-      await this.configure().then((adapter) => {
-        return adapter.fetchDataSources(category)
-      }),
-      this._portalDataService.getListFormUrls('DATA_SOURCES'),
-      this._portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS')
-    ])
-    return {
-      views,
-      viewsUrls,
-      columnUrls
+    let portal = this._portalDataService
+
+    try {
+      if (category.includes('(Prosjektnivå)')) {
+        const { web } = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
+        portal = new PortalDataService().configure({ urlOrWeb: web })
+
+      }
+
+      // eslint-disable-next-line prefer-const
+      let [views, viewsUrls, columnUrls] = await Promise.all([
+        await this.configure().then((adapter) => {
+          return adapter.fetchDataSources(category)
+        }),
+        portal.getListFormUrls('DATA_SOURCES'),
+        portal.getListFormUrls('PROJECT_CONTENT_COLUMNS')
+      ])
+      return {
+        views,
+        viewsUrls,
+        columnUrls
+      }
+    } catch (error) {
+      return null
     }
   }
 
@@ -571,10 +593,10 @@ export class DataAdapter implements IDataAdapter {
    * @param dataSource Data source
    */
   public async fetchProjects(configuration?: IAggregatedListConfiguration, dataSource?: string): Promise<any[]> {
-    const odata = configuration.views.find(v => v.title === dataSource).odataQuery
+    const odata = configuration.views.find(v => v.title === dataSource)?.odataQuery
     let projects
 
-    if (odata) {
+    if (odata && !dataSource.includes('(Prosjektnivå)')) {
       [projects] = await Promise.all([
         await sp.web.lists.getByTitle(strings.ProjectsListName).items.filter(`${odata}`).get<any[]>()
       ])
@@ -628,18 +650,94 @@ export class DataAdapter implements IDataAdapter {
    * @param dataSourceName Data source name
    * @param selectProperties Select properties
    */
-  public async fetchItemsWithSource(dataSourceName: string, selectProperties: string[]): Promise<any> {
-    const dataSrc = await this.dataSourceService.getByName(dataSourceName)
-    if (!dataSrc) {
-      throw new Error(format(strings.DataSourceNotFound, dataSourceName))
-    }
+  public async fetchBenefitItemsWithSource(dataSource: DataSource, selectProperties: string[]): Promise<any> {
+    console.log({ DEFAULT_GAINS_PROPERTIES, selectProperties })
+    const results: any[] = await this._fetchItems(dataSource.searchQuery, [...DEFAULT_GAINS_PROPERTIES, ...selectProperties])
+    console.log(results)
 
-    const dataSrcProperties = dataSrc.projectColumns.map((col) => col.fieldName) || []
+    const benefits = results
+      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_BENEFITS) === 0)
+      .map((res) => new Benefit(res))
+
+    const measurements = results
+      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_MEASUREMENTS) === 0)
+      .map((res) => new BenefitMeasurement(res))
+      .sort((a, b) => b.Date.getTime() - a.Date.getTime())
+
+    const indicactors = results
+      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_INDICATORS) === 0)
+      .map((res) => {
+        const indicator = new BenefitMeasurementIndicator(res)
+          .setMeasurements(measurements)
+          .setBenefit(benefits)
+        return indicator
+      })
+      .filter((i) => i.Benefit)
+
+    console.log({ benefits, measurements, indicactors })
+
+    const items = indicactors.map((i) => {
+      console.log(i)
+      const benefit = i.Benefit
+      const measurements = i.Measurements
+
+      _.pick(measurements[0]?.Properties, _.identity)
+
+      const item = {
+        ..._.pick(measurements[0]?.Properties, _.identity),
+        ..._.pick(benefit.Properties, _.identity),
+        Title: benefit.Title,
+        GtGainsResponsible: benefit.Responsible,
+        GtGainsOwner: benefit.Owner,
+        MeasurementIndicator: i.Title,
+        GtMeasurementUnitOWSCHCS: i.Unit,
+        GtStartValueOWSNMBR: i.StartValue,
+        GtDesiredValueOWSNMBR: i.DesiredValue,
+        LastMeasurementValue: measurements[0]?.Value,
+        MeasurementAchievement: measurements[0]?.Achievement,
+        Measurements: JSON.stringify(measurements?.map((m) => {
+          return {
+            Value: m.Value,
+            Comment: m.Comment,
+            Achievement: m.Achievement,
+            DateDisplay: m.DateDisplay
+          }
+        }))
+      }
+      return item
+    })
+
+    console.log(items)
+    return items
+  }
+
+  /**
+   * Fetch items with data source name
+   *
+   * @param dataSourceName Data source name
+   * @param selectProperties Select properties
+   */
+  public async fetchItemsWithSource(dataSourceName: string, selectProperties: string[], dataSourceCategory?: string): Promise<any> {
+    let items
 
     try {
-      const items = await this._fetchItems(dataSrc.searchQuery, [...selectProperties, ...dataSrcProperties])
+      const dataSrc = await this.dataSourceService.getByName(dataSourceName)
+      if (!dataSrc) {
+        throw new Error(format(strings.DataSourceNotFound, dataSourceName))
+      }
+
+      const dataSrcProperties = dataSrc.projectColumns.map((col) => col.fieldName) || []
+
+      if (dataSourceCategory === 'Gevinstoversikt' || dataSourceCategory === 'GevinstoversiktAgg') {
+        items = await this.fetchBenefitItemsWithSource(dataSrc, [...selectProperties, ...dataSrcProperties])
+      } else {
+        items = await this._fetchItems(dataSrc.searchQuery, [...selectProperties, ...dataSrcProperties])
+      }
+
+      console.log(items)
       return items
     } catch (error) {
+      console.log(error)
       throw new Error(format(strings.DataSourceError, dataSourceName))
     }
 
