@@ -651,9 +651,7 @@ export class DataAdapter implements IDataAdapter {
    * @param selectProperties Select properties
    */
   public async fetchBenefitItemsWithSource(dataSource: DataSource, selectProperties: string[]): Promise<any> {
-    console.log({ DEFAULT_GAINS_PROPERTIES, selectProperties })
     const results: any[] = await this._fetchItems(dataSource.searchQuery, [...DEFAULT_GAINS_PROPERTIES, ...selectProperties])
-    console.log(results)
 
     const benefits = results
       .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_BENEFITS) === 0)
@@ -674,10 +672,10 @@ export class DataAdapter implements IDataAdapter {
       })
       .filter((i) => i.Benefit)
 
+    // eslint-disable-next-line no-console
     console.log({ benefits, measurements, indicactors })
 
     const items = indicactors.map((i) => {
-      console.log(i)
       const benefit = i.Benefit
       const measurements = i.Measurements
 
@@ -707,7 +705,6 @@ export class DataAdapter implements IDataAdapter {
       return item
     })
 
-    console.log(items)
     return items
   }
 
@@ -734,10 +731,8 @@ export class DataAdapter implements IDataAdapter {
         items = await this._fetchItems(dataSrc.searchQuery, [...selectProperties, ...dataSrcProperties])
       }
 
-      console.log(items)
       return items
     } catch (error) {
-      console.log(error)
       throw new Error(format(strings.DataSourceError, dataSourceName))
     }
 
