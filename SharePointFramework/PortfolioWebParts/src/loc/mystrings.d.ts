@@ -6,14 +6,18 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionTags: string
   ColumnRenderOptionList: string
   ColumnRenderOptionNumber: string
+  ColumnRenderOptionText: string
+  ColumnRenderOptionDate: string
+  ColumnRenderOptionDateTime: string
+  ColumnRenderOptionPercentage: string
+  ColumnRenderOptionTrend: string
+  ColumnRenderOptionTaxonomy: string
+  ColumnRenderOptionModal: string
   DataSourceGroupName: string
   CommandBarGroupName: string
   SearchBoxGroupName: string
   DeleteButtonLabel: string
   RemoveButtonLabel: string
-  ColumnRenderOptionText: string
-  ColumnRenderOptionDate: string
-  ColumnRenderOptionDateTime: string
   ColumnRenderLabel: string
   EditColumnLabel: any
   MoveRightLabel: string

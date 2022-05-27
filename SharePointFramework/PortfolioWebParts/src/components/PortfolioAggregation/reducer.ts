@@ -108,9 +108,8 @@ export default (props: IPortfolioAggregationProps) =>
             if (payCol)
               return {
                 ...col,
-                name: payCol.name,
+                // name: payCol.name, // Is this needed?
                 internalName: payCol.internalName,
-                isFromDataSource: !!payCol['internalName']
               }
             else
               return col

@@ -25,7 +25,7 @@ import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
 import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
 import HubSiteService from 'sp-hubsite-service'
-import _ from 'underscore'
+import _, { first } from 'underscore'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import {
   DEFAULT_SEARCH_SETTINGS,
@@ -678,11 +678,10 @@ export class DataAdapter implements IDataAdapter {
     const items = indicactors.map((i) => {
       const benefit = i.Benefit
       const measurements = i.Measurements
-
-      _.pick(measurements[0]?.Properties, _.identity)
+      const firstMeasurement = first(i.Measurements)
 
       const item = {
-        ..._.pick(measurements[0]?.Properties, _.identity),
+        ..._.pick(firstMeasurement?.Properties, _.identity),
         ..._.pick(benefit.Properties, _.identity),
         Title: benefit.Title,
         GtGainsResponsible: benefit.Responsible,
@@ -691,14 +690,22 @@ export class DataAdapter implements IDataAdapter {
         GtMeasurementUnitOWSCHCS: i.Unit,
         GtStartValueOWSNMBR: i.StartValue,
         GtDesiredValueOWSNMBR: i.DesiredValue,
-        LastMeasurementValue: measurements[0]?.Value,
-        MeasurementAchievement: measurements[0]?.Achievement,
+        LastMeasurementValue: firstMeasurement?.Value,
+        MeasurementAchievement: JSON.stringify({
+          Achievement: firstMeasurement?.Achievement,
+          AchievementDisplay: firstMeasurement?.AchievementDisplay,
+          TrendIconProps: firstMeasurement?.TrendIconProps
+        }),
         Measurements: JSON.stringify(measurements?.map((m) => {
           return {
+            Title: i.Title,
             Value: m.Value,
+            ValueDisplay: m.ValueDisplay,
             Comment: m.Comment,
             Achievement: m.Achievement,
-            DateDisplay: m.DateDisplay
+            AchievementDisplay: m.AchievementDisplay,
+            DateDisplay: m.DateDisplay,
+            TrendIconProps: m.TrendIconProps
           }
         }))
       }
@@ -731,8 +738,10 @@ export class DataAdapter implements IDataAdapter {
         items = await this._fetchItems(dataSrc.searchQuery, [...selectProperties, ...dataSrcProperties])
       }
 
+      console.log(items)
       return items
     } catch (error) {
+      console.log(error)
       throw new Error(format(strings.DataSourceError, dataSourceName))
     }
 

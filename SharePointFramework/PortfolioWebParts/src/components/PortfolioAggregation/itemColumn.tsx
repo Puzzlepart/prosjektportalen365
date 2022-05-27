@@ -1,8 +1,7 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
-import { Link } from 'office-ui-fabric-react/lib/Link'
+import { IColumn, Link, Icon } from 'office-ui-fabric-react/lib'
+import { formatDate, tryParseCurrency, tryParsePercentage } from 'pp365-shared/lib/helpers'
 import strings from 'PortfolioWebPartsStrings'
-import { formatDate } from 'pp365-shared/lib/helpers/formatDate'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import React from 'react'
 import { isEmpty } from 'underscore'
@@ -10,6 +9,7 @@ import { ProjectInformationTooltip } from 'pp365-projectwebparts/lib/components/
 import { IPortfolioAggregationContext } from './context'
 import { Web } from '@pnp/sp'
 import { TagsColumn } from '../PortfolioOverview/RenderItemColumn/TagsColumn'
+import ItemModal from './ItemModal'
 
 /**
  * Render item column
@@ -30,6 +30,10 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
       return columnValue ? parseInt(columnValue) : null
     case 'int':
       return columnValue ? parseInt(columnValue) : null
+    case 'percentage':
+      return columnValue ? tryParsePercentage(columnValue, true, 0) : null
+    case 'currency':
+      return columnValue ? tryParseCurrency(columnValue) : null
     case 'date':
       return formatDate(columnValue, false)
     case 'datetime':
@@ -45,7 +49,7 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
         </ul>
       )
     }
-    case 'tags': {
+    case 'tags':
       return (
         <TagsColumn
           columnValue={columnValue}
@@ -53,10 +57,26 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
           style={{ flexDirection: column.isMultiline ? 'column' : 'row' }}
         />
       )
+    case 'taxonomy': // TODO: Render this correctly
+      return columnValue ? parseInt(columnValue) : null
+    case 'trend': {
+      const trend = columnValue ? JSON.parse(columnValue) : null
+      return (
+        <span>
+          <span style={{ display: 'inline-block', width: 20 }}>
+            {trend.TrendIconProps && <Icon {...trend.TrendIconProps} />}
+          </span>
+          <span>{trend.AchievementDisplay}</span>
+        </span>
+      )
     }
+    case 'modal':
+      return (
+        <ItemModal title={item.MeasurementIndicator} value={JSON.parse(columnValue)} />
+      )
     default:
       return columnValue
-  } // TODO: Add more types (ex: tax, modal, percentage, currency, etc.)
+  }
 }
 
 /**

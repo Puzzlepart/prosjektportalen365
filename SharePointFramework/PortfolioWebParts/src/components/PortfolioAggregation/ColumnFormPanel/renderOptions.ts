@@ -27,11 +27,19 @@ export const renderOptions: IDropdownOption[] = [
     text: strings.ColumnRenderOptionTags
   },
   {
-    key: 'taxonomy', // TODO: Add this to the list of options and render correctly
-    text: 'Taksonomi'
+    key: 'percentage',
+    text: strings.ColumnRenderOptionPercentage
   },
   {
-    key: 'modal', // TODO: Add this to the list of options and render correctly
-    text: 'Modal'
+    key: 'trend',
+    text: strings.ColumnRenderOptionTrend
+  },
+  {
+    key: 'taxonomy',
+    text: strings.ColumnRenderOptionTaxonomy
+  },
+  {
+    key: 'modal',
+    text: strings.ColumnRenderOptionModal
   }
 ]

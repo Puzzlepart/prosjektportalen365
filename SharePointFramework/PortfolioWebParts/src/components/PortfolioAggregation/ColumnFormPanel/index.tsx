@@ -30,7 +30,7 @@ const initialColumn = {
   internalname: '',
   name: '',
   minWidth: 100,
-  maxWidth: 300,
+  maxWidth: 150,
   data: {
     renderAs: 'text'
   }
@@ -47,7 +47,7 @@ export const ColumnFormPanel = () => {
     if (state.editColumn) {
       setColumn({
         minWidth: 100,
-        maxWidth: 300,
+        maxWidth: 150,
         data: {
           renderAs: 'text'
         },
@@ -66,9 +66,6 @@ export const ColumnFormPanel = () => {
     dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
   }
   
-  // eslint-disable-next-line no-console
-  if (state.addColumnPanel.isOpen) console.log({ column })
-
   return (
     <Panel
       isOpen={state.addColumnPanel.isOpen}
@@ -123,7 +120,6 @@ export const ColumnFormPanel = () => {
       </div>
       <div className={styles.field}>
         <TextField
-          disabled={column['isFromDataSource']}
           label={strings.DisplayNameLabel}
           required={true}
           value={column.name}
