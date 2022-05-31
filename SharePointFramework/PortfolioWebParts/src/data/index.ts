@@ -737,7 +737,7 @@ export class DataAdapter implements IDataAdapter {
    * @param dataSourceName Data source name
    * @param selectProperties Select properties
    * @param dataSourceCategory Data source category
-   * 
+   *
    */
   public async fetchItemsWithSource(
     dataSourceName: string,
@@ -782,12 +782,13 @@ export class DataAdapter implements IDataAdapter {
       const list = sp.web.lists.getByTitle('Prosjektinnholdskolonner')
       const items = await list.items.get()
       const filteredItems = items
-        .filter((item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory).map(
-          (item) => {
-            const projectColumn = new ProjectColumn(item)
-            return projectColumn
-          }
+        .filter(
+          (item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory
         )
+        .map((item) => {
+          const projectColumn = new ProjectColumn(item)
+          return projectColumn
+        })
 
       return filteredItems
     } catch (error) {

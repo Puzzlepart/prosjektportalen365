@@ -348,7 +348,8 @@ export default (props: IPortfolioAggregationProps) =>
       state.filters = state.filters.map((f) => {
         if (payload.column.key === f.column.key) {
           f.items = f.items.map((i) => {
-            const isSelected = filter(payload.selectedItems, (_i) => _i.value === i.value).length > 0
+            const isSelected =
+              filter(payload.selectedItems, (_i) => _i.value === i.value).length > 0
             return {
               ...i,
               selected: isSelected
