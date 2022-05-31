@@ -81,7 +81,8 @@ export interface IDataAdapter {
   fetchProjects?(configuration?: IAggregatedListConfiguration, dataSource?: string): Promise<any[]>
   fetchProjectSites(rowLimit: number, sortProperty: string, sortDirection: SortDirection): Promise<any>
   fetchItemsWithSource?(dataSourceName: string, selectProperties: string[], dataSourceCategory?: string): Promise<any[]>
-  fetchBenefitItemsWithSource?(dataSource: DataSource, selectProperties: string[]): Promise<any[]>
+  fetchBenefitItemsWithSource?(dataSource: DataSource, selectProperties: string[], dataSourceCategory?: string): Promise<any[]>
+  fetchProjectContentColumns?(dataSourceCategory: string): Promise<any[]>
   addItemToList?(listName: string, properties: TypedHash<any>): Promise<any[]>
   updateDataSourceItem?(properties: TypedHash<any>, dataSourceTitle?: string): Promise<any[]>
   removeDataSourceColumnItem?(properties: TypedHash<any>, dataSourceTitle?: string)

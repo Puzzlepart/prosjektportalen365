@@ -23,7 +23,7 @@ function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
   _arr.splice(new_index, 0, _arr.splice(old_index, 1)[0])
   return _arr
 }
-export const DATA_FETCHED = createAction<{ items: any[], dataSources?: DataSource[], columns?: IProjectContentColumn[], projects?: any[] }>(
+export const DATA_FETCHED = createAction<{ items: any[], dataSources?: DataSource[], columns?: IProjectContentColumn[], fltColumns?: IProjectContentColumn[], projects?: any[] }>(
   'DATA_FETCHED'
 )
 export const TOGGLE_COLUMN_FORM_PANEL = createAction<{ isOpen: boolean, column?: IProjectContentColumn }>(
@@ -104,6 +104,8 @@ export default (props: IPortfolioAggregationProps) =>
         state.loading = false
       }
       if (payload.columns) {
+        state.fltColumns = payload.fltColumns
+
         if (payload.columns.length > 0) {
           const mergedColumns = state.columns.map((col) => {
             const payCol = payload.columns.find((c) => c.key === col.key)
@@ -191,7 +193,7 @@ export default (props: IPortfolioAggregationProps) =>
             })
             .catch((error) => state.error = error)
         })
-        state.columns = [...state.columns, payload.column]
+        state.columns = [...state.fltColumns, payload.column]
       }
       state.editColumn = null
       state.addColumnPanel = { isOpen: false }
@@ -296,13 +298,12 @@ export default (props: IPortfolioAggregationProps) =>
         return { column, items }
       })
 
-      const activeFilters = state.activeFilters
-      if (!_.isEmpty(activeFilters)) {
-        const filteredFields = Object.keys(activeFilters)
+      if (!_.isEmpty(state.activeFilters)) {
+        const filteredFields = Object.keys(state.activeFilters)
         filteredFields.forEach((key) => {
           payloadFilters.forEach((filter) => {
             if (filter.column.fieldName === key) {
-              activeFilters[key].forEach((value) => {
+              state.activeFilters[key].forEach((value) => {
                 filter.items.forEach((item) => {
                   if (value === item.name) {
                     item.selected = true
@@ -313,6 +314,7 @@ export default (props: IPortfolioAggregationProps) =>
           })
         })
       }
+
       state.filters = [
         {
           column: {
@@ -324,12 +326,17 @@ export default (props: IPortfolioAggregationProps) =>
           items: current(state).columns.map((col) => ({
             name: col.name,
             value: col.fieldName,
-            selected: _.some(current(state).columns, (c) => c.fieldName === col.fieldName)
+            selected: _.some(current(state).fltColumns, (c) => c.fieldName === col.fieldName)
           })),
           defaultCollapsed: false
         },
         ...payloadFilters
       ]
+
+      state.activeFilters = {
+        ...state.activeFilters,
+        ['SelectedColumns']: current(state).fltColumns.map((col) => col.fieldName)
+      }
     },
     [ON_FILTER_CHANGE.type]: (state, { payload }: ReturnType<typeof ON_FILTER_CHANGE>) => {
       if (payload.selectedItems.length > 0) {
@@ -340,6 +347,15 @@ export default (props: IPortfolioAggregationProps) =>
       } else {
         state.activeFilters = omit(state.activeFilters, payload.column.fieldName)
       }
+      
+      state.filters.forEach((filter) => {
+        if (filter.column.fieldName === payload.column.fieldName) {
+          filter.items = filter.items.map((item) => {
+            item.selected = _.some(payload.selectedItems, (i) => i.value === item.value)
+            return item
+          })
+        }
+      })
     },
     [DATA_FETCH_ERROR.type]: (state, { payload }: ReturnType<typeof DATA_FETCH_ERROR>) => {
       state.error = payload.error

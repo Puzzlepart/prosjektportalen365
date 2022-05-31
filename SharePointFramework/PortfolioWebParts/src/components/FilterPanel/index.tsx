@@ -28,7 +28,7 @@ export class FilterPanel extends Component<IFilterPanelProps, IFilterPanelState>
   }
 
   private _renderFilters() {
-    return this.state.filters
+    return this.props.filters
       .filter((props) => props.items.length > 1)
       .map((props, idx) => (
         <Filter
