@@ -163,6 +163,7 @@ export default (props: IPortfolioAggregationProps) =>
           if (c.fieldName === payload.column.fieldName) return payload.column
           return c
         })
+        persistColumns(props, current(state).columns)
       } else {
         const renderAs = payload.column.data?.renderAs.charAt(0).toUpperCase() + payload.column.data?.renderAs.slice(1)
         const dataSource = current(state).dataSource
@@ -176,7 +177,6 @@ export default (props: IPortfolioAggregationProps) =>
           GtDataSourceCategory: props.title
         }
 
-        // TODO: Add new column to state correctly, right now it's filtered out because query to the list happens to fast, await here doesn't help
         props.dataAdapter.configure().then(async (adapter) => {
           await Promise.all([
             adapter.addItemToList('Prosjektinnholdskolonner', newItem),
@@ -196,7 +196,6 @@ export default (props: IPortfolioAggregationProps) =>
       state.editColumn = null
       state.addColumnPanel = { isOpen: false }
       state.columnAdded = new Date().getTime()
-      persistColumns(props, current(state).columns)
     },
     [REMOVE_COLUMN.type]: (state) => {
       state.columns = state.columns.filter((c) => c.fieldName !== state.editColumn.fieldName)
