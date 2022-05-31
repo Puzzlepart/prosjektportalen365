@@ -63,9 +63,10 @@ export class Filter extends Component<IFilterProps, IFilterState> {
         return i
       })
       return { items }
+    }, () => {
+      const selectedItems = this.state.items.filter((i) => i.selected)
+      this.props.onFilterChange(this.props.column, selectedItems)
     })
-    const selectedItems = this.state.items.filter((i) => i.selected)
-    this.props.onFilterChange(this.props.column, selectedItems)
   }
 }
 

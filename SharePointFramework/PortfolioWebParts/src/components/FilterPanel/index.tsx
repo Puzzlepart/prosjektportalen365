@@ -28,10 +28,13 @@ export class FilterPanel extends Component<IFilterPanelProps, IFilterPanelState>
   }
 
   private _renderFilters() {
-    return this.props.filters
+    return this.state.filters
       .filter((props) => props.items.length > 1)
       .map((props, idx) => (
-        <Filter key={idx} {...props} onFilterChange={this.props.onFilterChange} />
+        <Filter
+          {...props}
+          key={idx}
+          onFilterChange={this.props.onFilterChange} />
       ))
   }
 }
