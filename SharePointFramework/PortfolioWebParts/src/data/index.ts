@@ -602,7 +602,7 @@ export class DataAdapter implements IDataAdapter {
     let projects
 
     if (odata && !dataSource.includes('(Prosjektnivå)')) {
-      ;[projects] = await Promise.all([
+      [projects] = await Promise.all([
         await sp.web.lists
           .getByTitle(strings.ProjectsListName)
           .items.filter(`${odata}`)
