@@ -112,6 +112,8 @@ export default (props: IPortfolioAggregationProps) =>
         state.loading = false
       }
       if (payload.columns) {
+        state.fltColumns = payload.fltColumns
+
         if (payload.columns.length > 0) {
           const mergedColumns = state.columns.map((col) => {
             const payCol = payload.columns.find((c) => c.key === col.key)
@@ -188,7 +190,7 @@ export default (props: IPortfolioAggregationProps) =>
             })
             .catch((error) => (state.error = error))
         })
-        state.columns = [...state.columns, payload.column]
+        state.columns = [...state.fltColumns, payload.column]
       }
       state.editColumn = null
       state.addColumnPanel = { isOpen: false }
@@ -294,13 +296,12 @@ export default (props: IPortfolioAggregationProps) =>
         return { column, items }
       })
 
-      const activeFilters = state.activeFilters
-      if (!_.isEmpty(activeFilters)) {
-        const filteredFields = Object.keys(activeFilters)
+      if (!_.isEmpty(state.activeFilters)) {
+        const filteredFields = Object.keys(state.activeFilters)
         filteredFields.forEach((key) => {
           payloadFilters.forEach((filter) => {
             if (filter.column.fieldName === key) {
-              activeFilters[key].forEach((value) => {
+              state.activeFilters[key].forEach((value) => {
                 filter.items.forEach((item) => {
                   if (value === item.name) {
                     item.selected = true
@@ -311,6 +312,7 @@ export default (props: IPortfolioAggregationProps) =>
           })
         })
       }
+
       state.filters = [
         {
           column: {
@@ -322,12 +324,17 @@ export default (props: IPortfolioAggregationProps) =>
           items: current(state).columns.map((col) => ({
             name: col.name,
             value: col.fieldName,
-            selected: _.some(current(state).columns, (c) => c.fieldName === col.fieldName)
+            selected: _.some(current(state).fltColumns, (c) => c.fieldName === col.fieldName)
           })),
           defaultCollapsed: false
         },
         ...payloadFilters
       ]
+
+      state.activeFilters = {
+        ...state.activeFilters,
+        ['SelectedColumns']: current(state).fltColumns.map((col) => col.fieldName)
+      }
     },
     [ON_FILTER_CHANGE.type]: (state, { payload }: ReturnType<typeof ON_FILTER_CHANGE>) => {
       if (payload.selectedItems.length > 0) {

@@ -123,6 +123,11 @@ export interface IPortfolioAggregationState {
   columns?: IProjectContentColumn[]
 
   /**
+   * Filtered columns
+   */
+  fltColumns?: IProjectContentColumn[]
+
+  /**
    * Groups
    */
   groups?: IGroup[]

@@ -21,7 +21,7 @@ import MSGraph from 'msgraph-helper'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
-import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
+import { DataSource, PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
 import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
 import HubSiteService from 'sp-hubsite-service'
@@ -736,6 +736,8 @@ export class DataAdapter implements IDataAdapter {
    *
    * @param dataSourceName Data source name
    * @param selectProperties Select properties
+   * @param dataSourceCategory Data source category
+   * 
    */
   public async fetchItemsWithSource(
     dataSourceName: string,
@@ -767,6 +769,29 @@ export class DataAdapter implements IDataAdapter {
       return items
     } catch (error) {
       throw new Error(format(strings.DataSourceError, dataSourceName))
+    }
+  }
+
+  /**
+   * Fetch items from the ContentColumns
+   *
+   * @param dataSourceCategory Data source category
+   */
+  public async fetchProjectContentColumns(dataSourceCategory: string): Promise<any> {
+    try {
+      const list = sp.web.lists.getByTitle('Prosjektinnholdskolonner')
+      const items = await list.items.get()
+      const filteredItems = items
+        .filter((item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory).map(
+          (item) => {
+            const projectColumn = new ProjectColumn(item)
+            return projectColumn
+          }
+        )
+
+      return filteredItems
+    } catch (error) {
+      throw new Error(format(strings.DataSourceError, dataSourceCategory))
     }
   }
 
