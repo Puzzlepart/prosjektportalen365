@@ -28,7 +28,7 @@ export default class ProjectTimelineWebPart extends BasePortfolioWebPart<IProjec
                   label: strings.ConfigItemTitleFieldLabel,
                   description: strings.ConfigItemTitleFieldDescription,
                   value: 'Prosjektleveranse'
-                }),
+                })
               ]
             }
           ]

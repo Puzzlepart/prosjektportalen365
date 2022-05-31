@@ -16,10 +16,7 @@ export interface IItemModalState {
   isOpen?: boolean
 }
 
-export default class ItemModal extends PureComponent<
-  IItemModalProps,
-  IItemModalState
-> {
+export default class ItemModal extends PureComponent<IItemModalProps, IItemModalState> {
   public static defaultProps: Partial<IItemModalProps> = {
     columns
   }

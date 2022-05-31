@@ -130,7 +130,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
     const { activeFilters, data } = { ...this.state } as IProjectTimelineState
     const activeFiltersKeys = Object.keys(activeFilters)
     data.items = sortArray(data.items, 'data.sortOrder')
-    
+
     const projectId = data.items.find(
       (i) => i?.projectUrl === this.props.pageContext.site.absoluteUrl
     )?.id
@@ -158,10 +158,13 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   private _getFilters(): IFilterProps[] {
     const config = this.state.timelineConfiguration
     const columns = [
-      (config.find((item) => item?.Title === strings.ProjectLabel)).GtTimelineFilter && { fieldName: 'project', name: strings.SiteTitleLabel },
+      config.find((item) => item?.Title === strings.ProjectLabel).GtTimelineFilter && {
+        fieldName: 'project',
+        name: strings.SiteTitleLabel
+      },
       { fieldName: 'data.type', name: strings.TypeLabel }
     ]
-    const hiddenItems = (config.filter((item) => !item?.GtTimelineFilter)).map((item) => item.Title)
+    const hiddenItems = config.filter((item) => !item?.GtTimelineFilter).map((item) => item.Title)
 
     return columns.map((col) => ({
       column: { key: col.fieldName, minWidth: 0, ...col },
@@ -221,14 +224,14 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    * @returns Timeline groups
    */
   private _transformGroups(projects: ProjectListModel[]): ITimelineGroup[] {
-    const groups: ITimelineGroup[] = _.uniq(projects
-      .map((project) => project.title))
-      .map((title, id) => {
+    const groups: ITimelineGroup[] = _.uniq(projects.map((project) => project.title)).map(
+      (title, id) => {
         return {
           id,
           title
         }
-      })
+      }
+    )
     return sortArray(groups, ['type', 'title'])
   }
 
@@ -244,7 +247,6 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
     timelineItems: TimelineContentListModel[],
     groups: ITimelineGroup[]
   ): ITimelineItem[] {
-
     const items: ITimelineItem[] = timelineItems.map((item, id) => {
       const group = _.find(groups, (grp) => item.title.indexOf(grp.title) !== -1)
       const style: React.CSSProperties = {
@@ -253,13 +255,9 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         cursor: 'auto',
         outline: 'none',
         background:
-          item.elementType !== strings.BarLabel
-            ? 'transparent'
-            : item.hexColor || '#f35d69',
+          item.elementType !== strings.BarLabel ? 'transparent' : item.hexColor || '#f35d69',
         backgroundColor:
-          item.elementType !== strings.BarLabel
-            ? 'transparent'
-            : item.hexColor || '#f35d69'
+          item.elementType !== strings.BarLabel ? 'transparent' : item.hexColor || '#f35d69'
       }
       return {
         id,
@@ -286,7 +284,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
           hexColor: item.hexColor,
           elementType: item.elementType,
           filter: item.timelineFilter
-        },
+        }
       } as ITimelineItem
     })
     return items
@@ -299,10 +297,18 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    */
   private async _fetchData(): Promise<[ITimelineData, any]> {
     try {
-      const [projects, timelineContentItems, timelineAggregatedContent = [], timelineConfiguration] = await Promise.all([
+      const [
+        projects,
+        timelineContentItems,
+        timelineAggregatedContent = [],
+        timelineConfiguration
+      ] = await Promise.all([
         this.props.dataAdapter.fetchEnrichedProjects(),
         this.props.dataAdapter.fetchTimelineContentItems(),
-        this.props.dataAdapter.fetchTimelineAggregatedContent(this.props.configItemTitle, this.props.dataSourceName),
+        this.props.dataAdapter.fetchTimelineAggregatedContent(
+          this.props.configItemTitle,
+          this.props.dataSourceName
+        ),
         this.props.dataAdapter.fetchTimelineConfiguration()
       ])
 
@@ -310,19 +316,25 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         return project.startDate !== null && project.endDate !== null
       })
 
-      const filteredTimelineItems = [...timelineContentItems, ...timelineAggregatedContent].filter((item) => {
-        return filteredProjects.some((project) => {
-          return project.title.indexOf(item.title) !== -1
-        })
-      })
-
-      let timelineItems: TimelineContentListModel[] = await Promise.all(filteredProjects.map(async (project) => {
-        const projectData = await this.props.dataAdapter.fetchDataForTimelineProject(project.siteId)
-        return {
-          ...project,
-          ...projectData
+      const filteredTimelineItems = [...timelineContentItems, ...timelineAggregatedContent].filter(
+        (item) => {
+          return filteredProjects.some((project) => {
+            return project.title.indexOf(item.title) !== -1
+          })
         }
-      }))
+      )
+
+      let timelineItems: TimelineContentListModel[] = await Promise.all(
+        filteredProjects.map(async (project) => {
+          const projectData = await this.props.dataAdapter.fetchDataForTimelineProject(
+            project.siteId
+          )
+          return {
+            ...project,
+            ...projectData
+          }
+        })
+      )
 
       timelineItems = [...timelineItems, ...filteredTimelineItems]
       const groups = this._transformGroups(filteredProjects)
