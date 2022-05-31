@@ -28,7 +28,7 @@ define([], function() {
         ExtensionsTitle: 'Prosjekttillegg',
         GetMoreText: 'Hent flere',
         GetSetupDataErrorMessage: 'Det skjedde en feil',
-        GetSetupDataErrorStack: 'Det skjedde en feil under uthenting av data fra hubområdet.',
+        GetSetupDataErrorStack: 'Det skjedde en feil under uthenting av data fra hubområdet. Dersom Prosjektportalen nylig er installert, kan det være grunnen. Prøv igjen litt senere.',
         InvalidLanguageErrorMessage: 'Ugyldig språk for området',
         InvalidLanguageErrorStack: 'Språket som er satt for området støttes ikke. Området må være opprettet med norsk språk.',
         LibraryDropdownLabel: 'Bibliotek',
