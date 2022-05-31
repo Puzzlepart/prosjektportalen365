@@ -55,10 +55,16 @@ export class Filter extends Component<IFilterProps, IFilterState> {
    * @param checked Item checked
    */
   private _onChanged = (item: IFilterItemProps, checked: boolean) => {
-    const { items } = this.state
-    items.filter((i) => i.value === item.value)[0].selected = checked
-    this.setState({ items })
-    const selectedItems = items.filter((i) => i.selected)
+    this.setState(prevState => {
+      const items = prevState.items.map(i => {
+        if (i.value === item.value) {
+          return { ...i, selected: checked }
+        }
+        return i
+      })
+      return { items }
+    })
+    const selectedItems = this.state.items.filter((i) => i.selected)
     this.props.onFilterChange(this.props.column, selectedItems)
   }
 }
