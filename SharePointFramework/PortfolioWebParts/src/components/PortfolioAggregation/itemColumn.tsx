@@ -71,9 +71,7 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
       )
     }
     case 'modal':
-      return (
-        <ItemModal title={item.MeasurementIndicator} value={JSON.parse(columnValue)} />
-      )
+      return <ItemModal title={item.MeasurementIndicator} value={JSON.parse(columnValue)} />
     default:
       return columnValue
   }

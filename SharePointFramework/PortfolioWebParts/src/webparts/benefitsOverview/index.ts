@@ -6,12 +6,13 @@ import {
 import { BenefitsOverview, IBenefitsOverviewProps } from 'components/BenefitsOverview'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
-export default class BenefitsOverviewWebPart extends BasePortfolioWebPart<
-  IBenefitsOverviewProps> {
+export default class BenefitsOverviewWebPart extends BasePortfolioWebPart<IBenefitsOverviewProps> {
   public async render(): Promise<void> {
     this.renderComponent<IBenefitsOverviewProps>(BenefitsOverview, {
       ...this.properties,
-      configuration: await this.dataAdapter.getAggregatedListConfig(this.properties.dataSourceCategory),
+      configuration: await this.dataAdapter.getAggregatedListConfig(
+        this.properties.dataSourceCategory
+      )
     })
   }
 

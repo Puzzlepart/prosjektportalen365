@@ -133,11 +133,8 @@ export class DataAdapter implements IDataAdapter {
       if (category.includes('(Prosjektnivå)')) {
         const { web } = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
         portal = new PortalDataService().configure({ urlOrWeb: web })
-
       }
-
-      // eslint-disable-next-line prefer-const
-      let [views, viewsUrls, columnUrls] = await Promise.all([
+      const [views, viewsUrls, columnUrls] = await Promise.all([
         await this.configure().then((adapter) => {
           return adapter.fetchDataSources(category)
         }),
@@ -295,8 +292,9 @@ export class DataAdapter implements IDataAdapter {
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${queryArray ?? ''
-          } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        QueryTemplate: `${
+          queryArray ?? ''
+        } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
         Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
       })
@@ -332,7 +330,7 @@ export class DataAdapter implements IDataAdapter {
         SelectProperties: [siteIdProperty, 'GtCostsTotalOWSCURR', 'GtBudgetTotalOWSCURR']
       })
     ])
-    const [data] = (statusReports.map((item) => cleanDeep({ ...item })))
+    const [data] = statusReports.map((item) => cleanDeep({ ...item }))
     const config = _.find(timelineConfig, (col) => col.Title === strings.ProjectLabel)
     return {
       type: strings.ProjectLabel,
@@ -343,7 +341,7 @@ export class DataAdapter implements IDataAdapter {
       elementType: config && config.GtElementType,
       showElementPortfolio: config && config.GtShowElementPortfolio,
       showElementProgram: config && config.GtShowElementProgram,
-      timelineFilter: config && config.GtTimelineFilter,
+      timelineFilter: config && config.GtTimelineFilter
     }
   }
 
@@ -378,7 +376,7 @@ export class DataAdapter implements IDataAdapter {
         const type = item.GtTimelineTypeLookup && item.GtTimelineTypeLookup.Title
         const config = _.find(timelineConfig, (col) => col.Title === type)
 
-        if (item.GtSiteIdLookup?.Title && (config && config.GtShowElementPortfolio)) {
+        if (item.GtSiteIdLookup?.Title && config && config.GtShowElementPortfolio) {
           const model = new TimelineContentListModel(
             item.GtSiteIdLookup?.GtSiteId,
             item.GtSiteIdLookup?.Title,
@@ -415,7 +413,7 @@ export class DataAdapter implements IDataAdapter {
         'GtElementType',
         'GtShowElementPortfolio',
         'GtShowElementProgram',
-        'GtTimelineFilter',
+        'GtTimelineFilter'
       )
       .top(500)
       .get()
@@ -426,16 +424,20 @@ export class DataAdapter implements IDataAdapter {
    *
    */
   public async fetchTimelineAggregatedContent(configItemTitle: string, dataSourceName: string) {
-    const [timelineConfig] = await Promise.all([
-      this.fetchTimelineConfiguration()
-    ])
+    const [timelineConfig] = await Promise.all([this.fetchTimelineConfiguration()])
 
     const config: any = _.find(timelineConfig, (col) => col.Title === configItemTitle)
 
     if (config && config.GtShowElementPortfolio) {
       const [projectDeliveries] = await Promise.all([
         this.configure().then((adapter) => {
-          return adapter.fetchItemsWithSource(dataSourceName, ['Title', 'GtDeliveryDescriptionOWSMTXT', 'GtDeliveryStartTimeOWSDATE', 'GtDeliveryEndTimeOWSDATE'])
+          return adapter
+            .fetchItemsWithSource(dataSourceName, [
+              'Title',
+              'GtDeliveryDescriptionOWSMTXT',
+              'GtDeliveryStartTimeOWSDATE',
+              'GtDeliveryEndTimeOWSDATE'
+            ])
             .then((deliveries) => {
               return deliveries
             })
@@ -451,13 +453,13 @@ export class DataAdapter implements IDataAdapter {
             item.SiteId,
             item.SiteTitle,
             item.Title,
-            config && config.Title || configItemTitle,
-            config && config.GtSortOrder || 90,
-            config && config.GtHexColor || '#384f61',
-            config && config.GtElementType || strings.BarLabel,
-            config && config.GtShowElementPortfolio || false,
-            config && config.GtShowElementProgram || false,
-            config && config.GtTimelineFilter || true,
+            (config && config.Title) || configItemTitle,
+            (config && config.GtSortOrder) || 90,
+            (config && config.GtHexColor) || '#384f61',
+            (config && config.GtElementType) || strings.BarLabel,
+            (config && config.GtShowElementPortfolio) || false,
+            (config && config.GtShowElementProgram) || false,
+            (config && config.GtTimelineFilter) || true,
             item.GtDeliveryStartTimeOWSDATE,
             item.GtDeliveryEndTimeOWSDATE,
             null,
@@ -592,13 +594,19 @@ export class DataAdapter implements IDataAdapter {
    * @param configuration Configuration
    * @param dataSource Data source
    */
-  public async fetchProjects(configuration?: IAggregatedListConfiguration, dataSource?: string): Promise<any[]> {
-    const odata = configuration.views.find(v => v.title === dataSource)?.odataQuery
+  public async fetchProjects(
+    configuration?: IAggregatedListConfiguration,
+    dataSource?: string
+  ): Promise<any[]> {
+    const odata = configuration.views.find((v) => v.title === dataSource)?.odataQuery
     let projects
 
     if (odata && !dataSource.includes('(Prosjektnivå)')) {
-      [projects] = await Promise.all([
-        await sp.web.lists.getByTitle(strings.ProjectsListName).items.filter(`${odata}`).get<any[]>()
+      ;[projects] = await Promise.all([
+        await sp.web.lists
+          .getByTitle(strings.ProjectsListName)
+          .items.filter(`${odata}`)
+          .get<any[]>()
       ])
     }
     return projects
@@ -650,8 +658,14 @@ export class DataAdapter implements IDataAdapter {
    * @param dataSourceName Data source name
    * @param selectProperties Select properties
    */
-  public async fetchBenefitItemsWithSource(dataSource: DataSource, selectProperties: string[]): Promise<any> {
-    const results: any[] = await this._fetchItems(dataSource.searchQuery, [...DEFAULT_GAINS_PROPERTIES, ...selectProperties])
+  public async fetchBenefitItemsWithSource(
+    dataSource: DataSource,
+    selectProperties: string[]
+  ): Promise<any> {
+    const results: any[] = await this._fetchItems(dataSource.searchQuery, [
+      ...DEFAULT_GAINS_PROPERTIES,
+      ...selectProperties
+    ])
 
     const benefits = results
       .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_BENEFITS) === 0)
@@ -696,18 +710,20 @@ export class DataAdapter implements IDataAdapter {
           AchievementDisplay: firstMeasurement?.AchievementDisplay,
           TrendIconProps: firstMeasurement?.TrendIconProps
         }),
-        Measurements: JSON.stringify(measurements?.map((m) => {
-          return {
-            Title: i.Title,
-            Value: m.Value,
-            ValueDisplay: m.ValueDisplay,
-            Comment: m.Comment,
-            Achievement: m.Achievement,
-            AchievementDisplay: m.AchievementDisplay,
-            DateDisplay: m.DateDisplay,
-            TrendIconProps: m.TrendIconProps
-          }
-        }))
+        Measurements: JSON.stringify(
+          measurements?.map((m) => {
+            return {
+              Title: i.Title,
+              Value: m.Value,
+              ValueDisplay: m.ValueDisplay,
+              Comment: m.Comment,
+              Achievement: m.Achievement,
+              AchievementDisplay: m.AchievementDisplay,
+              DateDisplay: m.DateDisplay,
+              TrendIconProps: m.TrendIconProps
+            }
+          })
+        )
       }
       return item
     })
@@ -721,7 +737,11 @@ export class DataAdapter implements IDataAdapter {
    * @param dataSourceName Data source name
    * @param selectProperties Select properties
    */
-  public async fetchItemsWithSource(dataSourceName: string, selectProperties: string[], dataSourceCategory?: string): Promise<any> {
+  public async fetchItemsWithSource(
+    dataSourceName: string,
+    selectProperties: string[],
+    dataSourceCategory?: string
+  ): Promise<any> {
     let items
 
     try {
@@ -733,16 +753,21 @@ export class DataAdapter implements IDataAdapter {
       const dataSrcProperties = dataSrc.projectColumns.map((col) => col.fieldName) || []
 
       if (dataSourceCategory === 'Gevinstoversikt' || dataSourceCategory === 'GevinstoversiktAgg') {
-        items = await this.fetchBenefitItemsWithSource(dataSrc, [...selectProperties, ...dataSrcProperties])
+        items = await this.fetchBenefitItemsWithSource(dataSrc, [
+          ...selectProperties,
+          ...dataSrcProperties
+        ])
       } else {
-        items = await this._fetchItems(dataSrc.searchQuery, [...selectProperties, ...dataSrcProperties])
+        items = await this._fetchItems(dataSrc.searchQuery, [
+          ...selectProperties,
+          ...dataSrcProperties
+        ])
       }
 
       return items
     } catch (error) {
       throw new Error(format(strings.DataSourceError, dataSourceName))
     }
-
   }
 
   /**

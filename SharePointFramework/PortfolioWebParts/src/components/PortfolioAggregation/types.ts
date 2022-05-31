@@ -10,12 +10,11 @@ import { DataSource } from 'pp365-shared/lib/models/DataSource'
 import { IBaseComponentProps } from '../types'
 
 export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps {
-
   /**
    * Configuration (columns and views etc)
    */
   configuration?: IAggregatedListConfiguration
-  
+
   /**
    * Data source name
    */
@@ -93,7 +92,6 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
 }
 
 export interface IPortfolioAggregationState {
-
   /**
    * Whether the component is loading
    */
@@ -182,7 +180,7 @@ export interface IPortfolioAggregationState {
   /**
    * Active filters
    */
-  activeFilters?: { SelectedColumns?: string[];[key: string]: string[] }
+  activeFilters?: { SelectedColumns?: string[]; [key: string]: string[] }
 
   /**
    * Filters

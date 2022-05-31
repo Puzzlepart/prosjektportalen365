@@ -27,7 +27,7 @@ import createReducer, {
 import { searchItem } from './search'
 import SearchBox from './SearchBox'
 import { IPortfolioAggregationProps } from './types'
-  
+
 export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   const reducer = useMemo(() => createReducer(props), [])
   const [state, dispatch] = useReducer(reducer, initState(props))
@@ -56,12 +56,11 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
     props.dataAdapter.configure().then((adapter) => {
       Promise.all([
         adapter.dataSourceService.getByName(state.dataSource),
-        adapter
-          .fetchItemsWithSource(
-            state.dataSource,
-            props.selectProperties || state.columns.map((col) => col.fieldName),
-            props.dataSourceCategory
-          ),
+        adapter.fetchItemsWithSource(
+          state.dataSource,
+          props.selectProperties || state.columns.map((col) => col.fieldName),
+          props.dataSourceCategory
+        ),
         adapter.fetchProjects(props.configuration, state.dataSource)
       ])
         .then(([dataSrc, items, projects]) => {
@@ -133,8 +132,6 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
         />
       </div>
     </PortfolioAggregationContext.Provider>
-
-
   )
 }
 

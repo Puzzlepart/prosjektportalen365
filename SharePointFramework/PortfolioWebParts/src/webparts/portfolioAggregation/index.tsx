@@ -22,7 +22,9 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
       this.renderComponent<IPortfolioAggregationProps>(PortfolioAggregation, {
         ...this.properties,
         dataAdapter: new DataAdapter(this.context),
-        configuration: await this.dataAdapter.getAggregatedListConfig(this.properties.dataSourceCategory),
+        configuration: await this.dataAdapter.getAggregatedListConfig(
+          this.properties.dataSourceCategory
+        ),
         onUpdateProperty: this._onUpdateProperty.bind(this)
       })
     }

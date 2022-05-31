@@ -1,5 +1,8 @@
 import { CommandBar, ICommandBarProps } from 'office-ui-fabric-react/lib/CommandBar'
-import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu'
+import {
+  ContextualMenuItemType,
+  IContextualMenuItem
+} from 'office-ui-fabric-react/lib/ContextualMenu'
 import * as strings from 'PortfolioWebPartsStrings'
 import ExcelExportService from 'pp365-shared/lib/services/ExcelExportService'
 import { redirect } from 'pp365-shared/lib/util'
@@ -48,8 +51,7 @@ export const Commands = () => {
         iconProps: { iconName: 'CirclePlus' },
         buttonStyles: { root: { border: 'none' } },
         data: {
-          isVisible:
-            props.pageContext.legacyPageContext.isSiteAdmin && props.showViewSelector
+          isVisible: props.pageContext.legacyPageContext.isSiteAdmin && props.showViewSelector
         },
         onClick: () => redirect(props.configuration.viewsUrls.defaultNewFormUrl)
       } as IContextualMenuItem,
@@ -82,14 +84,14 @@ export const Commands = () => {
               key: 'Divider01',
               itemType: ContextualMenuItemType.Divider
             },
-            ...state.dataSources.map((ds) => ({
+            ...(state.dataSources.map((ds) => ({
               key: `DataSources_${ds.id}`,
               name: ds.title,
               iconProps: { iconName: ds.iconName || 'DataConnectionLibrary' },
               canCheck: true,
               checked: ds.title === state.dataSource,
               onClick: () => dispatch(SET_DATA_SOURCE({ dataSource: ds }))
-            })) as IContextualMenuItem[],
+            })) as IContextualMenuItem[]),
             {
               key: 'Divider02',
               itemType: ContextualMenuItemType.Divider
@@ -102,9 +104,10 @@ export const Commands = () => {
             {
               key: 'EditView',
               name: strings.EditViewText,
-              onClick: () => redirect(
-                `${props.configuration.viewsUrls.defaultEditFormUrl}?ID=${state.currentView.id}`
-              )
+              onClick: () =>
+                redirect(
+                  `${props.configuration.viewsUrls.defaultEditFormUrl}?ID=${state.currentView.id}`
+                )
             }
           ]
         }
@@ -118,7 +121,7 @@ export const Commands = () => {
         canCheck: true,
         checked: state.showFilterPanel,
         data: { isVisible: props.showFilters },
-        onClick: (ev,) => {
+        onClick: (ev) => {
           ev.preventDefault()
           ev.stopPropagation()
           dispatch(TOGGLE_FILTER_PANEL({ isOpen: true }))

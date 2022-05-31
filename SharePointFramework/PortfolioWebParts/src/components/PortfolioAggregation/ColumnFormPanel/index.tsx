@@ -12,7 +12,6 @@ import { ADD_COLUMN, REMOVE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import styles from './ColumnFormPanel.module.scss'
 import { renderOptions } from './renderOptions'
 
-
 export const addColumn = (dispatch: Dispatch<AnyAction>) => ({
   key: '',
   fieldName: '',
@@ -64,7 +63,7 @@ export const ColumnFormPanel = () => {
     setColumn(initialColumn)
     dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
   }
-  
+
   return (
     <Panel
       isOpen={state.addColumnPanel.isOpen}
@@ -77,7 +76,7 @@ export const ColumnFormPanel = () => {
           label={strings.SortOrderLabel}
           description={strings.SortOrderLabel}
           type={'number'}
-          value={column.sortOrder && column.sortOrder.toString() || '100'}
+          value={(column.sortOrder && column.sortOrder.toString()) || '100'}
           disabled={!!state.editColumn}
           onChange={(_, value) =>
             setColumn({

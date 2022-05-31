@@ -8,7 +8,7 @@ import { DataSource } from 'pp365-shared/lib/models/DataSource'
 import { indexOf, omit, uniq } from 'underscore'
 import { IPortfolioAggregationProps, IPortfolioAggregationState } from './types'
 import { IFilterItemProps } from '../FilterPanel'
-import _ from 'lodash'
+import _, { filter } from 'lodash'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 
@@ -23,31 +23,39 @@ function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
   _arr.splice(new_index, 0, _arr.splice(old_index, 1)[0])
   return _arr
 }
-export const DATA_FETCHED = createAction<{ items: any[], dataSources?: DataSource[], columns?: IProjectContentColumn[], projects?: any[] }>(
-  'DATA_FETCHED'
-)
-export const TOGGLE_COLUMN_FORM_PANEL = createAction<{ isOpen: boolean, column?: IProjectContentColumn }>(
-  'TOGGLE_COLUMN_FORM_PANEL'
-)
-export const TOGGLE_FILTER_PANEL = createAction<{ isOpen: boolean }>(
-  'TOGGLE_FILTER_PANEL'
-)
-export const TOGGLE_COMPACT = createAction<{ isCompact: boolean }>(
-  'TOGGLE_COMPACT'
-)
+export const DATA_FETCHED = createAction<{
+  items: any[]
+  dataSources?: DataSource[]
+  columns?: IProjectContentColumn[]
+  projects?: any[]
+}>('DATA_FETCHED')
+export const TOGGLE_COLUMN_FORM_PANEL = createAction<{
+  isOpen: boolean
+  column?: IProjectContentColumn
+}>('TOGGLE_COLUMN_FORM_PANEL')
+export const TOGGLE_FILTER_PANEL = createAction<{ isOpen: boolean }>('TOGGLE_FILTER_PANEL')
+export const TOGGLE_COMPACT = createAction<{ isCompact: boolean }>('TOGGLE_COMPACT')
 export const ADD_COLUMN = createAction<{ column: IProjectContentColumn }>('ADD_COLUMN')
 export const REMOVE_COLUMN = createAction('REMOVE_COLUMN')
-export const COLUMN_HEADER_CONTEXT_MENU = createAction<{ column: IProjectContentColumn; target: Target }>(
-  'COLUMN_HEADER_CONTEXT_MENU'
-)
+export const COLUMN_HEADER_CONTEXT_MENU = createAction<{
+  column: IProjectContentColumn
+  target: Target
+}>('COLUMN_HEADER_CONTEXT_MENU')
 export const SET_GROUP_BY = createAction<{ column: IProjectContentColumn }>('SET_GROUP_BY')
-export const SET_SORT = createAction<{ column: IProjectContentColumn, sortDesencing: boolean }>('SET_SORT')
-export const MOVE_COLUMN = createAction<{ column: IProjectContentColumn, move: number }>('MOVE_COLUMN')
+export const SET_SORT = createAction<{ column: IProjectContentColumn; sortDesencing: boolean }>(
+  'SET_SORT'
+)
+export const MOVE_COLUMN = createAction<{ column: IProjectContentColumn; move: number }>(
+  'MOVE_COLUMN'
+)
 export const SET_DATA_SOURCE = createAction<{ dataSource: DataSource }>('SET_DATA_SOURCE')
 export const START_FETCH = createAction('START_FETCH')
 export const SEARCH = createAction<{ searchTerm: string }>('SEARCH')
 export const GET_FILTERS = createAction<{ filters: any[] }>('GET_FILTERS')
-export const ON_FILTER_CHANGE = createAction<{ column: IProjectContentColumn, selectedItems: IFilterItemProps[] }>('ON_FILTER_CHANGE')
+export const ON_FILTER_CHANGE = createAction<{
+  column: IProjectContentColumn
+  selectedItems: IFilterItemProps[]
+}>('ON_FILTER_CHANGE')
 export const DATA_FETCH_ERROR = createAction<{ error: Error }>('DATA_FETCH_ERROR')
 
 /**
@@ -74,7 +82,7 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
   dataSource: props.dataSource,
   dataSources: [],
   groups: null,
-  addColumnPanel: { isOpen: false },
+  addColumnPanel: { isOpen: false }
 })
 
 /**
@@ -111,10 +119,9 @@ export default (props: IPortfolioAggregationProps) =>
               return {
                 ...col,
                 // name: payCol.name, // Is this needed?
-                internalName: payCol.internalName,
+                internalName: payCol.internalName
               }
-            else
-              return col
+            else return col
           })
 
           const newColumns = payload.columns.filter((col) => {
@@ -125,10 +132,8 @@ export default (props: IPortfolioAggregationProps) =>
             return payload.columns.find((c) => c.fieldName === col.fieldName)
           })
 
-          if (mergedColumns.length >= 1)
-            state.columns = filteredColumns
-          else
-            state.columns = sortArray(payload.columns, 'sortOrder')
+          if (mergedColumns.length >= 1) state.columns = filteredColumns
+          else state.columns = sortArray(payload.columns, 'sortOrder')
         } else {
           state.columns = props.columns || []
         }
@@ -145,16 +150,10 @@ export default (props: IPortfolioAggregationProps) =>
       state.editColumn = payload.column || null
       state.addColumnPanel = { isOpen: payload.isOpen }
     },
-    [TOGGLE_FILTER_PANEL.type]: (
-      state,
-      { payload }: ReturnType<typeof TOGGLE_FILTER_PANEL>
-    ) => {
+    [TOGGLE_FILTER_PANEL.type]: (state, { payload }: ReturnType<typeof TOGGLE_FILTER_PANEL>) => {
       state.showFilterPanel = payload.isOpen
     },
-    [TOGGLE_COMPACT.type]: (
-      state,
-      { payload }: ReturnType<typeof TOGGLE_COMPACT>
-    ) => {
+    [TOGGLE_COMPACT.type]: (state, { payload }: ReturnType<typeof TOGGLE_COMPACT>) => {
       state.isCompact = payload.isCompact
     },
     [ADD_COLUMN.type]: (state, { payload }: ReturnType<typeof ADD_COLUMN>) => {
@@ -165,7 +164,9 @@ export default (props: IPortfolioAggregationProps) =>
         })
         persistColumns(props, current(state).columns)
       } else {
-        const renderAs = payload.column.data?.renderAs.charAt(0).toUpperCase() + payload.column.data?.renderAs.slice(1)
+        const renderAs =
+          payload.column.data?.renderAs.charAt(0).toUpperCase() +
+          payload.column.data?.renderAs.slice(1)
         const dataSource = current(state).dataSource
 
         const newItem = {
@@ -178,18 +179,14 @@ export default (props: IPortfolioAggregationProps) =>
         }
 
         props.dataAdapter.configure().then(async (adapter) => {
-          await Promise.all([
-            adapter.addItemToList('Prosjektinnholdskolonner', newItem),
-          ])
+          await Promise.all([adapter.addItemToList('Prosjektinnholdskolonner', newItem)])
             .then(async ([result]) => {
               const updateItem = {
-                GtProjectContentColumnsId: result['Id'],
+                GtProjectContentColumnsId: result['Id']
               }
-              await Promise.resolve(
-                adapter.updateDataSourceItem(updateItem, dataSource)
-              )
+              await Promise.resolve(adapter.updateDataSourceItem(updateItem, dataSource))
             })
-            .catch((error) => state.error = error)
+            .catch((error) => (state.error = error))
         })
         state.columns = [...state.columns, payload.column]
       }
@@ -201,8 +198,9 @@ export default (props: IPortfolioAggregationProps) =>
       const dataSource = current(state).dataSource
       const column = current(state).editColumn
       props.dataAdapter.configure().then((adapter) => {
-        adapter.removeDataSourceColumnItem(column, dataSource)
-          .catch((error) => state.error = error)
+        adapter
+          .removeDataSourceColumnItem(column, dataSource)
+          .catch((error) => (state.error = error))
       })
 
       state.columns = state.columns.filter((c) => c.fieldName !== state.editColumn.fieldName)
@@ -216,9 +214,9 @@ export default (props: IPortfolioAggregationProps) =>
     ) => {
       state.columnContextMenu = payload
         ? {
-          column: payload.column,
-          target: payload.target as any
-        }
+            column: payload.column,
+            target: payload.target as any
+          }
         : null
     },
     [SET_GROUP_BY.type]: (state, { payload }: ReturnType<typeof SET_GROUP_BY>) => {
@@ -340,6 +338,18 @@ export default (props: IPortfolioAggregationProps) =>
       } else {
         state.activeFilters = omit(state.activeFilters, payload.column.fieldName)
       }
+      state.filters = state.filters.map((f) => {
+        if (payload.column.key === f.column.key) {
+          f.items = f.items.map((i) => {
+            const isSelected = filter(payload.selectedItems, (_i) => _i.value === i.value).length > 0
+            return {
+              ...i,
+              selected: isSelected
+            }
+          })
+        }
+        return f
+      })
     },
     [DATA_FETCH_ERROR.type]: (state, { payload }: ReturnType<typeof DATA_FETCH_ERROR>) => {
       state.error = payload.error
