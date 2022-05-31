@@ -14,7 +14,7 @@ export class FilterPanel extends Component<IFilterPanelProps, IFilterPanelState>
 
   constructor(props: IFilterPanelProps) {
     super(props)
-    this.state = { filters: props.filters }
+    this.state = { filters: [...props.filters] }
   }
 
   public render(): React.ReactElement<IFilterPanelProps> {

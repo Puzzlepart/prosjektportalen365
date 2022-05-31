@@ -27,7 +27,7 @@ import createReducer, {
 import { searchItem } from './search'
 import SearchBox from './SearchBox'
 import { IPortfolioAggregationProps } from './types'
-
+  
 export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   const reducer = useMemo(() => createReducer(props), [])
   const [state, dispatch] = useReducer(reducer, initState(props))
