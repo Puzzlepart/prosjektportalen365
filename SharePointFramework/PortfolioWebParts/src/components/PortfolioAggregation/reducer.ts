@@ -198,6 +198,13 @@ export default (props: IPortfolioAggregationProps) =>
       state.columnAdded = new Date().getTime()
     },
     [REMOVE_COLUMN.type]: (state) => {
+      const dataSource = current(state).dataSource
+      const column = current(state).editColumn
+      props.dataAdapter.configure().then((adapter) => {
+        adapter.removeDataSourceColumnItem(column, dataSource)
+          .catch((error) => state.error = error)
+      })
+
       state.columns = state.columns.filter((c) => c.fieldName !== state.editColumn.fieldName)
       state.editColumn = null
       state.addColumnPanel = { isOpen: false }

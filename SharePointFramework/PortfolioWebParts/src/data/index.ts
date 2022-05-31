@@ -809,4 +809,35 @@ export class DataAdapter implements IDataAdapter {
       throw new Error(error)
     }
   }
+
+  /**
+   * Update datasource item
+   *
+   * @param property Property
+   * @param itemTitle Title of item to update
+   */
+  public async removeDataSourceColumnItem(property: TypedHash<any>, itemTitle?: string) {
+    try {
+      const list = sp.web.lists.getByTitle(strings.DataSourceGroupName)
+      const items = await list.items.get()
+      const item = items.find((i) => i.Title === itemTitle)
+
+      if (!item) {
+        throw new Error(format(strings.DataSourceItemNotFound, itemTitle))
+      }
+
+      if (item.GtProjectContentColumnsId) {
+        const properties = {
+          GtProjectContentColumnsId: {
+            results: item.GtProjectContentColumnsId.filter((i) => i !== property.id)
+          }
+        }
+
+        const itemUpdateResult = await list.items.getById(item.Id).update(properties)
+        return itemUpdateResult.data
+      }
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
 }
