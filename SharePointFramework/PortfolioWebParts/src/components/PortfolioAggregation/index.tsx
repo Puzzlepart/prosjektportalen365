@@ -1,15 +1,17 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
-import { getId } from 'office-ui-fabric-react/lib/Utilities'
 import { DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList'
+import { getId } from 'office-ui-fabric-react/lib/Utilities'
+import strings from 'PortfolioWebPartsStrings'
 import { UserMessage } from 'pzl-react-reusable-components/lib/UserMessage'
 import React, { useEffect, useMemo, useReducer } from 'react'
+import { FilterPanel } from '../FilterPanel'
 import { ColumnContextMenu } from './ColumnContextMenu'
 import { addColumn, ColumnFormPanel } from './ColumnFormPanel'
-import { FilterPanel } from '../FilterPanel'
 import { Commands } from './Commands'
 import { PortfolioAggregationContext } from './context'
+import { filterItems } from './filter'
 import { getDefaultColumns, renderItemColumn } from './itemColumn'
 import styles from './PortfolioAggregation.module.scss'
 import createReducer, {
@@ -23,11 +25,8 @@ import createReducer, {
   TOGGLE_FILTER_PANEL
 } from './reducer'
 import { searchItem } from './search'
-import { filterItems } from './filter'
 import SearchBox from './SearchBox'
 import { IPortfolioAggregationProps } from './types'
-import strings from 'PortfolioWebPartsStrings'
-import { cloneDeep } from '@microsoft/sp-lodash-subset'
 
 export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   const reducer = useMemo(() => createReducer(props), [])
@@ -75,29 +74,17 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
 
   const items = useMemo(() => {
     const filteredItems = filterItems(state.items, state.columns, state.activeFilters)
-
     return {
       listItems: filteredItems.items.filter((i) => searchItem(i, state.searchTerm, state.columns)),
       columns: filteredItems.columns
     }
   }, [state.searchTerm, state.items, state.activeFilters])
 
-  const filters = useMemo(() => {
-    // Cloning state.filters to be able to mutate it and update the filters in the filter panel
-    // This of course cases the filterpanel to re-render with the original filters when closing and opening it again
-    // When selecting/deselecting a filter, the filter panel should instead re-render with the new filters
-    // TODO: Find a better way to do this and recreate state.filter instead of cloning it
-    return cloneDeep(state.filters)
-  }, [state.filters, state.activeFilters])
-
   const ctxValue = useMemo(() => ({ props, state, dispatch }), [state])
 
   if (state.error) {
     return <UserMessage type={MessageBarType.error} text={state.error.message} />
   }
-
-  // eslint-disable-next-line no-console  
-  console.log(state.activeFilters, state.filters)
 
   return (
     <PortfolioAggregationContext.Provider value={ctxValue}>
@@ -139,7 +126,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
           headerText={strings.FiltersString}
           onDismissed={() => dispatch(TOGGLE_FILTER_PANEL({ isOpen: false }))}
           isLightDismiss={true}
-          filters={filters}
+          filters={state.filters}
           onFilterChange={(column, selectedItems) => {
             dispatch(ON_FILTER_CHANGE({ column, selectedItems }))
           }}
@@ -147,7 +134,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
       </div>
     </PortfolioAggregationContext.Provider>
 
-    
+
   )
 }
 
