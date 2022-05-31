@@ -8,7 +8,7 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { Dispatch, useContext, useEffect, useState } from 'react'
 import { PortfolioAggregationContext } from '../context'
-import { ADD_COLUMN, REMOVE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
+import { ADD_COLUMN, DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import styles from './ColumnFormPanel.module.scss'
 import { renderOptions } from './renderOptions'
 
@@ -21,6 +21,7 @@ export const addColumn = (dispatch: Dispatch<AnyAction>) => ({
   minWidth: 150,
   onColumnClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
 }) // TODO: Add 'Vis/Skjul kolonner' option as a dropdown element if there is time
+
 
 const initialColumn = {
   key: null,
@@ -230,10 +231,10 @@ export const ColumnFormPanel = () => {
         />
         {state.editColumn && (
           <DefaultButton
-            text={strings.RemoveButtonLabel}
+            text={strings.DeleteButtonLabel}
             style={{ marginLeft: 4 }}
             onClick={() => {
-              dispatch(REMOVE_COLUMN())
+              dispatch(DELETE_COLUMN())
             }}
           />
         )}

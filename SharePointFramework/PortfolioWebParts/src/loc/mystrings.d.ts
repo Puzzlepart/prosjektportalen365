@@ -155,6 +155,7 @@ declare interface IPortfolioWebPartsStrings {
   TimelineContentListName: string
   TimelineConfigurationListName: string
   DataSourceListName: string
+  ProjectContentColumnsListName: string
   PortfolioManagerGroupName: string
   ProjectTimelineItemInfo: string
   LastPublishedStatusreport: string
@@ -188,6 +189,7 @@ declare interface IPortfolioWebPartsStrings {
   ConfigItemTitleFieldDescription: string
   SortOrderLabel: string
   DataSourceItemNotFound: string
+  ProjectContentColumnItemNotFound: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

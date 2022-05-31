@@ -98,7 +98,8 @@ export interface IDataAdapter {
     dataSourceCategory?: string
   ): Promise<any[]>
   fetchProjectContentColumns?(dataSourceCategory: string): Promise<any[]>
+  deleteProjectContentColumn?(property: TypedHash<any>)
   addItemToList?(listName: string, properties: TypedHash<any>): Promise<any[]>
   updateDataSourceItem?(properties: TypedHash<any>, dataSourceTitle?: string): Promise<any[]>
-  removeDataSourceColumnItem?(properties: TypedHash<any>, dataSourceTitle?: string)
+  removeDataSourceColumnItem?(property: TypedHash<any>, dataSourceTitle?: string)
 }

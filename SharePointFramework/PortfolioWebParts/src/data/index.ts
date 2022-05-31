@@ -754,7 +754,7 @@ export class DataAdapter implements IDataAdapter {
 
       const dataSrcProperties = dataSrc.projectColumns.map((col) => col.fieldName) || []
 
-      if (dataSourceCategory === 'Gevinstoversikt' || dataSourceCategory === 'GevinstoversiktAgg') {
+      if (dataSourceCategory === 'Gevinstoversikt') {
         items = await this.fetchBenefitItemsWithSource(dataSrc, [
           ...selectProperties,
           ...dataSrcProperties
@@ -779,7 +779,12 @@ export class DataAdapter implements IDataAdapter {
    */
   public async fetchProjectContentColumns(dataSourceCategory: string): Promise<any> {
     try {
-      const list = sp.web.lists.getByTitle('Prosjektinnholdskolonner')
+      if (dataSourceCategory.includes('(Prosjektnivå)')) {
+        return []
+      }
+
+
+      const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
       const items = await list.items.get()
       const filteredItems = items
         .filter(
@@ -793,6 +798,28 @@ export class DataAdapter implements IDataAdapter {
       return filteredItems
     } catch (error) {
       throw new Error(format(strings.DataSourceError, dataSourceCategory))
+    }
+  }
+
+  /**
+   * Delete project content column
+   *
+   * @param property Property
+   */
+  public async deleteProjectContentColumn(property: TypedHash<any>) {
+    try {
+      const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
+      const items = await list.items.get()
+      const item = items.find((i) => i.GtManagedProperty === property.fieldName)
+
+      if (!item) {
+        throw new Error(format(strings.ProjectContentColumnItemNotFound, property.fieldName))
+      }
+
+      const itemDeleteResult = list.items.getById(item.Id).delete()
+      return itemDeleteResult
+    } catch (error) {
+      throw new Error(error)
     }
   }
 
@@ -833,7 +860,7 @@ export class DataAdapter implements IDataAdapter {
    */
   public async updateDataSourceItem(properties: TypedHash<any>, itemTitle?: string): Promise<any> {
     try {
-      const list = sp.web.lists.getByTitle(strings.DataSourceGroupName)
+      const list = sp.web.lists.getByTitle(strings.DataSourceListName)
       const items = await list.items.get()
       const item = items.find((i) => i.Title === itemTitle)
 
@@ -862,14 +889,14 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Update datasource item
+   * Remove datasource item
    *
    * @param property Property
    * @param itemTitle Title of item to update
    */
   public async removeDataSourceColumnItem(property: TypedHash<any>, itemTitle?: string) {
     try {
-      const list = sp.web.lists.getByTitle(strings.DataSourceGroupName)
+      const list = sp.web.lists.getByTitle(strings.DataSourceListName)
       const items = await list.items.get()
       const item = items.find((i) => i.Title === itemTitle)
 
@@ -891,4 +918,5 @@ export class DataAdapter implements IDataAdapter {
       throw new Error(error)
     }
   }
+
 }

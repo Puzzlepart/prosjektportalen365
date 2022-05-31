@@ -154,6 +154,7 @@ define([], function() {
         TimelineContentListName: 'Tidslinjeinnhold',
         TimelineConfigurationListName: 'Tidslinjekonfigurasjon',
         DataSourceListName: 'Datakilder',
+        ProjectContentColumnsListName: 'Prosjektinnholdskolonner',
         PortfolioManagerGroupName: 'Porteføljeinnsyn',
         ProjectTimelineItemInfo: '{0} - prosjektets tidsforløp',
         LastPublishedStatusreport: 'Gå til siste statusrapport',
@@ -186,6 +187,7 @@ define([], function() {
         ConfigItemTitleFieldLabel: 'Element tittel (konfigurasjon)',
         ConfigItemTitleFieldDescription: 'Dersom det er spesifisert et element med tittelen angitt her i tidslinjekonfigurasjon listen så vil dette vises på tidslinjen.',
         SortOrderLabel: 'Sorteringsrekkefølge',
-        DataSourceItemNotFound: 'Datakilde ble ikke funnet'
+        DataSourceItemNotFound: 'Datakilde ble ikke funnet',
+        ProjectContentColumnItemNotFound: 'Prosjektinnholdskolonne ble ikke funnet',
     }
 })

@@ -37,7 +37,7 @@ export const TOGGLE_COLUMN_FORM_PANEL = createAction<{
 export const TOGGLE_FILTER_PANEL = createAction<{ isOpen: boolean }>('TOGGLE_FILTER_PANEL')
 export const TOGGLE_COMPACT = createAction<{ isCompact: boolean }>('TOGGLE_COMPACT')
 export const ADD_COLUMN = createAction<{ column: IProjectContentColumn }>('ADD_COLUMN')
-export const REMOVE_COLUMN = createAction('REMOVE_COLUMN')
+export const DELETE_COLUMN = createAction('DELETE_COLUMN')
 export const COLUMN_HEADER_CONTEXT_MENU = createAction<{
   column: IProjectContentColumn
   target: Target
@@ -113,7 +113,10 @@ export default (props: IPortfolioAggregationProps) =>
         state.loading = false
       }
       if (payload.columns) {
-        state.fltColumns = payload.fltColumns
+        if (payload.fltColumns.length > 0)
+          state.fltColumns = payload.fltColumns
+        else
+          state.fltColumns = payload.columns
 
         if (payload.columns.length > 0) {
           const mergedColumns = state.columns.map((col) => {
@@ -182,7 +185,7 @@ export default (props: IPortfolioAggregationProps) =>
         }
 
         props.dataAdapter.configure().then(async (adapter) => {
-          await Promise.all([adapter.addItemToList('Prosjektinnholdskolonner', newItem)])
+          await Promise.all([adapter.addItemToList(strings.ProjectContentColumnsListName, newItem)])
             .then(async ([result]) => {
               const updateItem = {
                 GtProjectContentColumnsId: result['Id']
@@ -191,18 +194,19 @@ export default (props: IPortfolioAggregationProps) =>
             })
             .catch((error) => (state.error = error))
         })
-        state.columns = [...state.fltColumns, payload.column]
+
+        state.columns = [...current(state).columns, payload.column]
+        state.fltColumns = [...current(state).fltColumns, payload.column]
       }
       state.editColumn = null
       state.addColumnPanel = { isOpen: false }
       state.columnAdded = new Date().getTime()
     },
-    [REMOVE_COLUMN.type]: (state) => {
-      const dataSource = current(state).dataSource
+    [DELETE_COLUMN.type]: (state) => {
       const column = current(state).editColumn
       props.dataAdapter.configure().then((adapter) => {
         adapter
-          .removeDataSourceColumnItem(column, dataSource)
+          .deleteProjectContentColumn(column)
           .catch((error) => (state.error = error))
       })
 
@@ -217,9 +221,9 @@ export default (props: IPortfolioAggregationProps) =>
     ) => {
       state.columnContextMenu = payload
         ? {
-            column: payload.column,
-            target: payload.target as any
-          }
+          column: payload.column,
+          target: payload.target as any
+        }
         : null
     },
     [SET_GROUP_BY.type]: (state, { payload }: ReturnType<typeof SET_GROUP_BY>) => {
@@ -279,7 +283,6 @@ export default (props: IPortfolioAggregationProps) =>
     [SEARCH.type]: (state, { payload }: ReturnType<typeof SEARCH>) => {
       state.searchTerm = payload.searchTerm
     },
-
     [GET_FILTERS.type]: (state, { payload }: ReturnType<typeof GET_FILTERS>) => {
       const payloadFilters = payload.filters.map((column) => {
         const uniqueValues = uniq(
@@ -325,16 +328,21 @@ export default (props: IPortfolioAggregationProps) =>
           items: current(state).columns.map((col) => ({
             name: col.name,
             value: col.fieldName,
-            selected: _.some(current(state).fltColumns, (c) => c.fieldName === col.fieldName)
+            selected: current(state).fltColumns.length > 0
+              ? _.some(current(state).fltColumns, (c) => c.fieldName === col.fieldName)
+              : true
           })),
-          defaultCollapsed: false
+          defaultCollapsed: true
         },
         ...payloadFilters
       ]
 
+
       state.activeFilters = {
         ...state.activeFilters,
-        ['SelectedColumns']: current(state).fltColumns.map((col) => col.fieldName)
+        ['SelectedColumns']: current(state).fltColumns.length > 0
+          ? current(state).fltColumns.map((col) => col.fieldName)
+          : current(state).columns.map((col) => col.fieldName)
       }
     },
     [ON_FILTER_CHANGE.type]: (state, { payload }: ReturnType<typeof ON_FILTER_CHANGE>) => {
