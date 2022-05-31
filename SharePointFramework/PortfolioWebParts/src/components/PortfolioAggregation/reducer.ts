@@ -23,18 +23,19 @@ function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
   _arr.splice(new_index, 0, _arr.splice(old_index, 1)[0])
   return _arr
 }
-export const DATA_FETCHED = createAction<{ items: any[], dataSources?: DataSource[], columns?: IProjectContentColumn[], fltColumns?: IProjectContentColumn[], projects?: any[] }>(
-  'DATA_FETCHED'
-)
-export const TOGGLE_COLUMN_FORM_PANEL = createAction<{ isOpen: boolean, column?: IProjectContentColumn }>(
-  'TOGGLE_COLUMN_FORM_PANEL'
-)
-export const TOGGLE_FILTER_PANEL = createAction<{ isOpen: boolean }>(
-  'TOGGLE_FILTER_PANEL'
-)
-export const TOGGLE_COMPACT = createAction<{ isCompact: boolean }>(
-  'TOGGLE_COMPACT'
-)
+export const DATA_FETCHED = createAction<{
+  items: any[],
+  dataSources?: DataSource[],
+  columns?: IProjectContentColumn[],
+  fltColumns?: IProjectContentColumn[],
+  projects?: any[]
+}>('DATA_FETCHED')
+export const TOGGLE_COLUMN_FORM_PANEL = createAction<{
+  isOpen: boolean,
+  column?: IProjectContentColumn
+}>('TOGGLE_COLUMN_FORM_PANEL')
+export const TOGGLE_FILTER_PANEL = createAction<{ isOpen: boolean }>('TOGGLE_FILTER_PANEL')
+export const TOGGLE_COMPACT = createAction<{ isCompact: boolean }>('TOGGLE_COMPACT')
 export const ADD_COLUMN = createAction<{ column: IProjectContentColumn }>('ADD_COLUMN')
 export const REMOVE_COLUMN = createAction('REMOVE_COLUMN')
 export const COLUMN_HEADER_CONTEXT_MENU = createAction<{
