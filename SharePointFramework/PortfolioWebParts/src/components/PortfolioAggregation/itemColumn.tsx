@@ -58,7 +58,7 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
         />
       )
     case 'taxonomy': // TODO: Render this correctly
-      return columnValue ? parseInt(columnValue) : null
+      return null
     case 'trend': {
       const trend = columnValue ? JSON.parse(columnValue) : null
       return (

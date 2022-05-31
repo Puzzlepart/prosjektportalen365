@@ -16,22 +16,24 @@ import createReducer, {
   COLUMN_HEADER_CONTEXT_MENU,
   DATA_FETCHED,
   DATA_FETCH_ERROR,
+  GET_FILTERS,
   initState,
   ON_FILTER_CHANGE,
   START_FETCH,
   TOGGLE_FILTER_PANEL
 } from './reducer'
 import { searchItem } from './search'
-import { filterItems, getFilters } from './filter'
+import { filterItems } from './filter'
 import SearchBox from './SearchBox'
 import { IPortfolioAggregationProps } from './types'
 import strings from 'PortfolioWebPartsStrings'
+import { cloneDeep } from '@microsoft/sp-lodash-subset'
 
 export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   const reducer = useMemo(() => createReducer(props), [])
   const [state, dispatch] = useReducer(reducer, initState(props))
   const layerHostId = getId('layerHost')
-  
+
   useEffect(() => {
     if (props.dataSourceCategory) {
       props.dataAdapter.configure().then((adapter) => {
@@ -60,27 +62,33 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
             state.dataSource,
             props.selectProperties || state.columns.map((col) => col.fieldName),
             props.dataSourceCategory
-        ),
+          ),
         adapter.fetchProjects(props.configuration, state.dataSource)
       ])
         .then(([dataSrc, items, projects]) => {
-          dispatch(DATA_FETCHED({ items, columns: dataSrc.projectColumns, filters: dataSrc.projectRefiners, projects }))
+          dispatch(DATA_FETCHED({ items, columns: dataSrc.projectColumns, projects }))
+          dispatch(GET_FILTERS({ filters: dataSrc.projectRefiners }))
         })
         .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
     })
   }, [state.columnAdded, state.dataSource])
 
   const items = useMemo(() => {
-    return state.items.filter((i) => searchItem(i, state.searchTerm, state.columns))
-  }, [state.searchTerm, state.items])
+    const filteredItems = filterItems(state.items, state.columns, state.activeFilters)
 
-  const columns = useMemo(() => {
-    return filterItems(state.items, state.columns, state.activeFilters)
-  }, [state.columns, state.activeFilters])
+    return {
+      listItems: filteredItems.items.filter((i) => searchItem(i, state.searchTerm, state.columns)),
+      columns: filteredItems.columns
+    }
+  }, [state.searchTerm, state.items, state.activeFilters])
 
   const filters = useMemo(() => {
-    return getFilters(state.columns)
-  }, [state.columns, state.activeFilters])
+    // Cloning state.filters to be able to mutate it and update the filters in the filter panel
+    // This of course cases the filterpanel to re-render with the original filters when closing and opening it again
+    // When selecting/deselecting a filter, the filter panel should instead re-render with the new filters
+    // TODO: Find a better way to do this and recreate state.filter instead of cloning it
+    return cloneDeep(state.filters)
+  }, [state.filters, state.activeFilters])
 
   const ctxValue = useMemo(() => ({ props, state, dispatch }), [state])
 
@@ -89,7 +97,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   }
 
   // eslint-disable-next-line no-console  
-  console.log({state, props})
+  console.log(state.activeFilters, state.filters)
 
   return (
     <PortfolioAggregationContext.Provider value={ctxValue}>
@@ -104,7 +112,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
             selectionMode={SelectionMode.none}
             layoutMode={DetailsListLayoutMode.fixedColumns}
             enableShimmer={state.loading}
-            items={items}
+            items={items.listItems}
             onRenderItemColumn={renderItemColumn}
             onColumnHeaderContextMenu={(col, ev) =>
               dispatch(
@@ -116,7 +124,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
             }
             columns={[
               ...getDefaultColumns(ctxValue, props.isParent),
-              ...columns,
+              ...items.columns,
               props.displayMode === DisplayMode.Edit && !props.lockedColumns && addColumn(dispatch)
             ].filter((c) => c)}
             groups={state.groups}
@@ -138,6 +146,8 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
         />
       </div>
     </PortfolioAggregationContext.Provider>
+
+    
   )
 }
 

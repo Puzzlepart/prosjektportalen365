@@ -738,10 +738,8 @@ export class DataAdapter implements IDataAdapter {
         items = await this._fetchItems(dataSrc.searchQuery, [...selectProperties, ...dataSrcProperties])
       }
 
-      console.log(items)
       return items
     } catch (error) {
-      console.log(error)
       throw new Error(format(strings.DataSourceError, dataSourceName))
     }
 

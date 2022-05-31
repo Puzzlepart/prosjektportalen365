@@ -13,7 +13,6 @@ import styles from './ColumnFormPanel.module.scss'
 import { renderOptions } from './renderOptions'
 
 
-// TODO: Evaluate if we need the custom column form panel or just use newform  for the list 
 export const addColumn = (dispatch: Dispatch<AnyAction>) => ({
   key: '',
   fieldName: '',
@@ -22,7 +21,7 @@ export const addColumn = (dispatch: Dispatch<AnyAction>) => ({
   iconClassName: styles.addColumnIcon,
   minWidth: 150,
   onColumnClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
-}) // TODO: Make this is more stable + add 'Vis/Skjul kolonner' option if there is time
+}) // TODO: Add 'Vis/Skjul kolonner' option as a dropdown element if there is time
 
 const initialColumn = {
   key: null,

@@ -23,7 +23,7 @@ function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
   _arr.splice(new_index, 0, _arr.splice(old_index, 1)[0])
   return _arr
 }
-export const DATA_FETCHED = createAction<{ items: any[], dataSources?: DataSource[], columns?: IProjectContentColumn[], filters?: any[], projects?: any[] }>(
+export const DATA_FETCHED = createAction<{ items: any[], dataSources?: DataSource[], columns?: IProjectContentColumn[], projects?: any[] }>(
   'DATA_FETCHED'
 )
 export const TOGGLE_COLUMN_FORM_PANEL = createAction<{ isOpen: boolean, column?: IProjectContentColumn }>(
@@ -46,6 +46,7 @@ export const MOVE_COLUMN = createAction<{ column: IProjectContentColumn, move: n
 export const SET_DATA_SOURCE = createAction<{ dataSource: DataSource }>('SET_DATA_SOURCE')
 export const START_FETCH = createAction('START_FETCH')
 export const SEARCH = createAction<{ searchTerm: string }>('SEARCH')
+export const GET_FILTERS = createAction<{ filters: any[] }>('GET_FILTERS')
 export const ON_FILTER_CHANGE = createAction<{ column: IProjectContentColumn, selectedItems: IFilterItemProps[] }>('ON_FILTER_CHANGE')
 export const DATA_FETCH_ERROR = createAction<{ error: Error }>('DATA_FETCH_ERROR')
 
@@ -67,6 +68,7 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
   isCompact: false,
   searchTerm: '',
   activeFilters: {},
+  filters: [],
   items: [],
   columns: props.columns || [],
   dataSource: props.dataSource,
@@ -98,7 +100,7 @@ export default (props: IPortfolioAggregationProps) =>
             })
           })
         }
-          
+
         state.loading = false
       }
       if (payload.columns) {
@@ -130,43 +132,6 @@ export default (props: IPortfolioAggregationProps) =>
         } else {
           state.columns = props.columns || []
         }
-      }
-      if (payload.filters) {
-        const filters = payload.filters.map((column) => {
-          const uniqueValues = uniq(
-            // eslint-disable-next-line prefer-spread
-            [].concat.apply(
-              [],
-              state.items.map((i) => get(i, column.fieldName, '').split(';'))
-            )
-          )
-
-          let items: IFilterItemProps[] = uniqueValues
-            .filter((value: string) => !stringIsNullOrEmpty(value))
-            .map((value: string) => ({ name: value, value, selected: false }))
-          items = items.sort((a, b) => (a.value > b.value ? 1 : -1))
-          return { column, items }
-        })
-
-        const activeFilters = state.activeFilters
-        if (!_.isEmpty(activeFilters)) {
-          const filteredFields = Object.keys(activeFilters)
-          filteredFields.forEach((key) => {
-            filters.forEach((filter) => {
-              if (filter.column.fieldName === key) {
-                activeFilters[key].forEach((value) => {
-                  filter.items.forEach((item) => {
-                    if (value === item.name) {
-                      item.selected = true
-                    }
-                  })
-                })
-              }
-            })
-          })
-        }
-
-        state.filters = filters
       }
       if (payload.dataSources) {
         state.currentView = payload.dataSources.find((ds) => ds.title === state.dataSource)
@@ -307,6 +272,62 @@ export default (props: IPortfolioAggregationProps) =>
     [SEARCH.type]: (state, { payload }: ReturnType<typeof SEARCH>) => {
       state.searchTerm = payload.searchTerm
     },
+
+    [GET_FILTERS.type]: (state, { payload }: ReturnType<typeof GET_FILTERS>) => {
+      const payloadFilters = payload.filters.map((column) => {
+        const uniqueValues = uniq(
+          // eslint-disable-next-line prefer-spread
+          [].concat.apply(
+            [],
+            state.items.map((i) => get(i, column.fieldName, '').split(';'))
+          )
+        )
+
+        let items: IFilterItemProps[] = uniqueValues
+          .filter((value: string) => !stringIsNullOrEmpty(value))
+          .map((value: string) => ({ name: value, value, selected: false }))
+        items = items.sort((a, b) => (a.value > b.value ? 1 : -1))
+        return { column, items }
+      })
+
+      const activeFilters = state.activeFilters
+      if (!_.isEmpty(activeFilters)) {
+        const filteredFields = Object.keys(activeFilters)
+        filteredFields.forEach((key) => {
+          payloadFilters.forEach((filter) => {
+            if (filter.column.fieldName === key) {
+              activeFilters[key].forEach((value) => {
+                filter.items.forEach((item) => {
+                  if (value === item.name) {
+                    item.selected = true
+                  }
+                })
+              })
+            }
+          })
+        })
+      }
+
+      const filters = [
+        {
+          column: {
+            key: 'SelectedColumns',
+            fieldName: 'SelectedColumns',
+            name: strings.SelectedColumnsLabel,
+            minWidth: 0
+          },
+          items: current(state).columns.map((col) => ({
+            name: col.name,
+            value: col.fieldName,
+            selected: _.some(current(state).columns, (c) => c.fieldName === col.fieldName)
+          })),
+          defaultCollapsed: false
+        },
+        ...payloadFilters
+      ]
+
+      state.filters = filters
+    },
     [ON_FILTER_CHANGE.type]: (state, { payload }: ReturnType<typeof ON_FILTER_CHANGE>) => {
       const { activeFilters } = { ...state }
       if (payload.selectedItems.length > 0) {
@@ -314,8 +335,6 @@ export default (props: IPortfolioAggregationProps) =>
       } else {
         delete state.activeFilters[payload.column.fieldName]
       }
-
-      state.activeFilters = activeFilters
     },
     [DATA_FETCH_ERROR.type]: (state, { payload }: ReturnType<typeof DATA_FETCH_ERROR>) => {
       state.error = payload.error
