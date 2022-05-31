@@ -307,8 +307,7 @@ export default (props: IPortfolioAggregationProps) =>
           })
         })
       }
-
-      const filters = [
+      state.filters = [
         {
           column: {
             key: 'SelectedColumns',
@@ -325,15 +324,15 @@ export default (props: IPortfolioAggregationProps) =>
         },
         ...payloadFilters
       ]
-
-      state.filters = filters
     },
     [ON_FILTER_CHANGE.type]: (state, { payload }: ReturnType<typeof ON_FILTER_CHANGE>) => {
-      const { activeFilters } = { ...state }
       if (payload.selectedItems.length > 0) {
-        activeFilters[payload.column.fieldName] = payload.selectedItems.map((i) => i.value)
+        state.activeFilters = {
+          ...state.activeFilters,
+          [payload.column.fieldName]: payload.selectedItems.map((i) => i.value)
+        }
       } else {
-        delete state.activeFilters[payload.column.fieldName]
+        state.activeFilters = omit(state.activeFilters, payload.column.fieldName)
       }
     },
     [DATA_FETCH_ERROR.type]: (state, { payload }: ReturnType<typeof DATA_FETCH_ERROR>) => {
