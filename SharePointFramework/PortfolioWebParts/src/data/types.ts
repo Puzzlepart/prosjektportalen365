@@ -101,5 +101,4 @@ export interface IDataAdapter {
   deleteProjectContentColumn?(property: TypedHash<any>): Promise<any>
   addItemToList?(listName: string, properties: TypedHash<any>): Promise<any[]>
   updateDataSourceItem?(properties: TypedHash<any>, dataSourceTitle: string, shouldReplace?: boolean): Promise<ItemUpdateResult>
-  removeDataSourceColumnItem?(property: TypedHash<any>, dataSourceTitle?: string)
 }
