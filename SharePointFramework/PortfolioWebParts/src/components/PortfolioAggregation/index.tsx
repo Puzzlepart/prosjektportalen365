@@ -122,7 +122,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
             columns={[
               ...getDefaultColumns(ctxValue, props.isParent),
               ...items.columns,
-              addColumn()
+              !props.lockedColumns && addColumn()
             ].filter((c) => c)}
             groups={state.groups}
             compact={state.isCompact}

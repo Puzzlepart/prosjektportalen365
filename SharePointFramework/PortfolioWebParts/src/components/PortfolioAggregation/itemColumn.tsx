@@ -57,8 +57,6 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
           style={{ flexDirection: column.isMultiline ? 'column' : 'row' }}
         />
       )
-    case 'taxonomy': // TODO: Render this correctly
-      return null
     case 'trend': {
       const trend = columnValue ? JSON.parse(columnValue) : null
       return (

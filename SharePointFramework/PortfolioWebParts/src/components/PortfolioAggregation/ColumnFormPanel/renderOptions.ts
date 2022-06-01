@@ -35,10 +35,6 @@ export const renderOptions: IDropdownOption[] = [
     text: strings.ColumnRenderOptionTrend
   },
   {
-    key: 'taxonomy',
-    text: strings.ColumnRenderOptionTaxonomy
-  },
-  {
     key: 'modal',
     text: strings.ColumnRenderOptionModal
   }
