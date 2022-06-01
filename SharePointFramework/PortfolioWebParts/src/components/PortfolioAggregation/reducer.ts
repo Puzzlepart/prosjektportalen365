@@ -5,9 +5,9 @@ import { IGroup } from 'office-ui-fabric-react/lib/DetailsList'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
-import { first, indexOf, omit, uniq } from 'underscore'
+import { indexOf, omit, uniq } from 'underscore'
 import { IPortfolioAggregationProps, IPortfolioAggregationState } from './types'
-import { IFilterItemProps, IFilterProps } from '../FilterPanel'
+import { IFilterItemProps } from '../FilterPanel'
 import _, { filter } from 'lodash'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
@@ -180,86 +180,13 @@ export default (props: IPortfolioAggregationProps) =>
           if (c.fieldName === payload.column.fieldName) return payload.column
           return c
         })
-        persistColumns(props, current(state).columns)
-      } else {
-        // const renderAs =
-        //   payload.column.data?.renderAs.charAt(0).toUpperCase() +
-        //   payload.column.data?.renderAs.slice(1)
-        // const dataSource = current(state).dataSource
-
-        // const newItem = {
-        //   GtSortOrder: payload.column.sortOrder || 100,
-        //   Title: payload.column.name,
-        //   GtInternalName: payload.column.internalName,
-        //   GtManagedProperty: payload.column.fieldName,
-        //   GtFieldDataType: renderAs,
-        //   GtDataSourceCategory: props.title
-        // }
-
-        // props.dataAdapter.configure().then(async (adapter) => {
-        //   await Promise.all([adapter.addItemToList(strings.ProjectContentColumnsListName, newItem)])
-        //     .then(async ([result]) => {
-        //       const updateItem = {
-        //         GtProjectContentColumnsId: result['Id']
-        //       }
-        //       await Promise.resolve(adapter.updateDataSourceItem(updateItem, dataSource))
-        //     })
-        //     .catch((error) => (state.error = error))
-        // })
-
-        // console.log(payload.column)
-
-        // state.columns = [...current(state).columns, payload.column]
-        // state.fltColumns = [...current(state).fltColumns, payload.column]
-
-        // state.activeFilters = {
-        //   ...state.activeFilters,
-        //   ['SelectedColumns']: current(state).fltColumns.map((col) => col.fieldName)
-        // }
-
-        // state.filters = state.filters.map((f) => {
-        //   if ('SelectedColumns' === f.column.key) {
-        //     f.items = f.items.map((i) => {
-        //       const isSelected =
-        //         filter(current(state).fltColumns, (_i) => _i.fieldName === i.value).length > 0
-        //       return {
-        //         ...i,
-        //         selected: isSelected
-        //       }
-        //     })
-        //   }
-        //   return f
-        // })
       }
       state.editColumn = null
       state.addColumnPanel = { isOpen: false }
       state.columnAdded = new Date().getTime()
+      persistColumns(props, current(state).columns)
     },
     [DELETE_COLUMN.type]: (state) => {
-      // const column = current(state).editColumn
-      // props.dataAdapter.configure().then((adapter) => {
-      //   adapter
-      //     .deleteProjectContentColumn(column).
-      //     then(() => {
-      //     })
-      //     .catch((error) => (state.error = error))
-      // })
-
-      // state.columns = state.columns.filter((c) => c.fieldName !== state.editColumn.fieldName)
-      // state.fltColumns = state.fltColumns.filter((c) => c.fieldName !== state.editColumn.fieldName)
-
-      // state.activeFilters = {
-      //   ...state.activeFilters,
-      //   ['SelectedColumns']: current(state).fltColumns.map((col) => col.fieldName)
-      // }
-
-      // state.filters = state.filters.map((f) => {
-      //   if ('SelectedColumns' === f.column.key) {
-      //     f.items = f.items.filter((item) => item.value !== state.editColumn.fieldName)
-      //   }
-      //   return f
-      // })
-
       state.editColumn = null
       state.addColumnPanel = { isOpen: false }
       state.columnDeleted = new Date().getTime()
@@ -267,47 +194,9 @@ export default (props: IPortfolioAggregationProps) =>
     },
     [SHOW_HIDE_COLUMNS.type]: (state, { payload }: ReturnType<typeof SHOW_HIDE_COLUMNS>) => {
       payload
-      // const dataSource = current(state).dataSource
-
-      // const selectedColumns = payload.columns.filter((c) => c.selected)
-      // console.log(selectedColumns)
-
-      // const updateItems = {
-      //   GtProjectContentColumnsId: selectedColumns.map((c) => c.id)
-      // }
-
-      // state.fltColumns = current(state).columns.filter(
-      //   (col) => _.some(selectedColumns, (c) => col.fieldName === c.value)
-      // )
-
-      // state.activeFilters = {
-      //   ...state.activeFilters,
-      //   ['SelectedColumns']: current(state).fltColumns.map((col) => col.fieldName)
-      // }
-
-      // state.filters = state.filters.map((f) => {
-      //   if ('SelectedColumns' === f.column.key) {
-      //     f.items = f.items.map((i) => {
-      //       const isSelected =
-      //         filter(selectedColumns, (_i) => _i.value === i.value).length > 0
-      //       return {
-      //         ...i,
-      //         selected: isSelected
-      //       }
-      //     })
-      //   }
-      //   return f
-      // })
-
-      // props.dataAdapter.configure().then((adapter) => {
-      //   adapter
-      //     .updateDataSourceItem(updateItems, dataSource, true)
-      //     .catch((error) => (state.error = error))
-      // })
-
       state.showHideColumnPanel = { isOpen: false }
       state.columnShowHide = new Date().getTime()
-      // persistColumns(props, current(state).columns)
+      persistColumns(props, current(state).columns)
     },
     [COLUMN_HEADER_CONTEXT_MENU.type]: (
       state,
@@ -430,7 +319,6 @@ export default (props: IPortfolioAggregationProps) =>
         },
         ...payloadFilters
       ]
-
 
       state.activeFilters = {
         ...state.activeFilters,

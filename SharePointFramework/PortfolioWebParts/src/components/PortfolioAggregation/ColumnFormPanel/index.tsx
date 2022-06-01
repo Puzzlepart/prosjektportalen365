@@ -1,4 +1,3 @@
-import { AnyAction } from '@reduxjs/toolkit'
 import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 import { Dropdown } from 'office-ui-fabric-react'
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
@@ -71,9 +70,9 @@ export const ColumnFormPanel = () => {
         GtDataSourceCategory: props.title
       }
 
-      await Promise.resolve(props.dataAdapter.configure().then(async (adapter) => {
+      await Promise.resolve(props.dataAdapter.configure().then((adapter) => {
         adapter.addItemToList(strings.ProjectContentColumnsListName, newItem)
-          .then(async (result) => {
+          .then((result) => {
             const updateItem = {
               GtProjectContentColumnsId: result['Id']
             }

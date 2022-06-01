@@ -43,7 +43,6 @@ export const ColumnContextMenu = () => {
     }
   ]
   
-  
   const items: IContextualMenuItem[] = [
     {
       key: 'SortDesc',

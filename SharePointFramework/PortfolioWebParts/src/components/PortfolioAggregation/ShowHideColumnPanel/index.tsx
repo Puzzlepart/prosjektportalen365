@@ -9,8 +9,6 @@ import { PortfolioAggregationContext } from '../context'
 import { SHOW_HIDE_COLUMNS, TOGGLE_SHOW_HIDE_COLUMN_PANEL } from '../reducer'
 import styles from './ShowHideColumnPanel.module.scss'
 
-
-
 export const ShowHideColumnPanel = () => {
   const { state, props, dispatch } = useContext(PortfolioAggregationContext)
   const [isChanged, setIsChanged] = useState(false)
@@ -50,7 +48,6 @@ export const ShowHideColumnPanel = () => {
   }
 
   const onChange = (col: IFilterItemProps, checked: boolean) => {
-    console.log(col, checked)
     const items = selectedColumns.map((i) => {
       if (i.value === col.value) {
         return { ...i, selected: checked }

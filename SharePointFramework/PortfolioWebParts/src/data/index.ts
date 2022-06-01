@@ -785,7 +785,6 @@ export class DataAdapter implements IDataAdapter {
 
       const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
       const items = await list.items.get()
-      console.log(items)
       const filteredItems = items
         .filter(
           (item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory
@@ -794,8 +793,6 @@ export class DataAdapter implements IDataAdapter {
           const projectColumn = new ProjectColumn(item)
           return projectColumn
         })
-      console.log(filteredItems)
-
       return filteredItems
     } catch (error) {
       throw new Error(format(strings.DataSourceError, dataSourceCategory))
@@ -881,8 +878,6 @@ export class DataAdapter implements IDataAdapter {
           results: properties.GtProjectContentColumnsId
         }
 
-        console.log(properties)
-
         const itemUpdateResult = await list.items.getById(item.Id).update(properties)
         return itemUpdateResult
       }
@@ -921,5 +916,4 @@ export class DataAdapter implements IDataAdapter {
       throw new Error(error)
     }
   }
-
 }
