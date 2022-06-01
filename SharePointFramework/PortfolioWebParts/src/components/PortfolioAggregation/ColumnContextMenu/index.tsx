@@ -14,7 +14,8 @@ import {
   MOVE_COLUMN,
   SET_GROUP_BY,
   SET_SORT,
-  TOGGLE_COLUMN_FORM_PANEL
+  TOGGLE_COLUMN_FORM_PANEL,
+  TOGGLE_SHOW_HIDE_COLUMN_PANEL
 } from '../reducer'
 
 export const ColumnContextMenu = () => {
@@ -27,6 +28,22 @@ export const ColumnContextMenu = () => {
   )
   const columnEditable =
     props.displayMode === DisplayMode.Edit && columnIndex !== -1 && !props.lockedColumns
+  
+  const addColumnItems: IContextualMenuItem[] = [
+    {
+      key: 'AddColumn',
+      name: strings.AddColumnText,
+      disabled: props.displayMode !== DisplayMode.Edit && !props.lockedColumns,
+      onClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
+    },
+    {
+      key: 'ShowHideColumns',
+      name: strings.ShowHideColumnsLabel,
+      onClick: () => dispatch(TOGGLE_SHOW_HIDE_COLUMN_PANEL({ isOpen: true }))
+    }
+  ]
+  
+  
   const items: IContextualMenuItem[] = [
     {
       key: 'SortDesc',
@@ -82,7 +99,7 @@ export const ColumnContextMenu = () => {
   return (
     <ContextualMenu
       target={target}
-      items={items}
+      items={column.name === strings.AddColumnText ? addColumnItems : items}
       onDismiss={() => dispatch(COLUMN_HEADER_CONTEXT_MENU(null))}
     />
   )

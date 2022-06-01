@@ -6,22 +6,20 @@ import { Panel } from 'office-ui-fabric-react/lib/Panel'
 import { TextField } from 'office-ui-fabric-react/lib/TextField'
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as strings from 'PortfolioWebPartsStrings'
-import React, { Dispatch, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { PortfolioAggregationContext } from '../context'
 import { ADD_COLUMN, DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import styles from './ColumnFormPanel.module.scss'
 import { renderOptions } from './renderOptions'
 
-export const addColumn = (dispatch: Dispatch<AnyAction>) => ({
+export const addColumn = () => ({
   key: '',
   fieldName: '',
   name: strings.AddColumnText,
   iconName: 'CalculatorAddition',
   iconClassName: styles.addColumnIcon,
-  minWidth: 150,
-  onColumnClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
-}) // TODO: Add 'Vis/Skjul kolonner' option as a dropdown element if there is time
-
+  minWidth: 175,
+})
 
 const initialColumn = {
   key: null,
@@ -36,7 +34,7 @@ const initialColumn = {
 }
 
 export const ColumnFormPanel = () => {
-  const { state, dispatch } = useContext(PortfolioAggregationContext)
+  const { state, props, dispatch } = useContext(PortfolioAggregationContext)
   const [column, setColumn] = useState<IProjectContentColumn>({
     ...initialColumn,
     ...(state.editColumn || {})
@@ -55,9 +53,40 @@ export const ColumnFormPanel = () => {
     }
   }, [state.editColumn])
 
-  const onSave = () => {
+  const onSave = async () => {
     setColumn(initialColumn)
-    dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
+    if (state.editColumn)
+      dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
+    else {
+      const renderAs =
+        column.data?.renderAs.charAt(0).toUpperCase() +
+        column.data?.renderAs.slice(1)
+
+      const newItem = {
+        GtSortOrder: column.sortOrder || 100,
+        Title: column.name,
+        GtInternalName: column.internalName,
+        GtManagedProperty: column.fieldName,
+        GtFieldDataType: renderAs,
+        GtDataSourceCategory: props.title
+      }
+
+      await Promise.resolve(props.dataAdapter.configure().then(async (adapter) => {
+        adapter.addItemToList(strings.ProjectContentColumnsListName, newItem)
+          .then(async (result) => {
+            const updateItem = {
+              GtProjectContentColumnsId: result['Id']
+            }
+
+            adapter.updateDataSourceItem(updateItem, state.dataSource)
+              .then(() => {
+                dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
+              })
+              .catch((error) => (state.error = error))
+          })
+          .catch((error) => (state.error = error))
+      }))
+    }
   }
 
   const onDismiss = () => {
@@ -233,8 +262,15 @@ export const ColumnFormPanel = () => {
           <DefaultButton
             text={strings.DeleteButtonLabel}
             style={{ marginLeft: 4 }}
-            onClick={() => {
-              dispatch(DELETE_COLUMN())
+            onClick={async () => {
+              await Promise.resolve(props.dataAdapter.configure().then((adapter) => {
+                adapter
+                  .deleteProjectContentColumn(state.editColumn)
+                  .then(() => {
+                    dispatch(DELETE_COLUMN())
+                  })
+                  .catch((error) => (state.error = error))
+              }))
             }}
           />
         )}

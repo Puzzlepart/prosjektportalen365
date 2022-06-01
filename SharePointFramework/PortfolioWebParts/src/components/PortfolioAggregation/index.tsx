@@ -1,4 +1,3 @@
-import { DisplayMode } from '@microsoft/sp-core-library'
 import { DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList'
@@ -26,6 +25,7 @@ import createReducer, {
 } from './reducer'
 import { searchItem } from './search'
 import SearchBox from './SearchBox'
+import { ShowHideColumnPanel } from './ShowHideColumnPanel'
 import { IPortfolioAggregationProps } from './types'
 
 export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
@@ -77,7 +77,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
         })
         .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
     })
-  }, [state.columnAdded, state.dataSource])
+  }, [state.columnAdded, state.columnDeleted, state.columnShowHide, state.dataSource])
 
   const items = useMemo(() => {
     const filteredItems = filterItems(state.items, state.columns, state.activeFilters)
@@ -85,13 +85,15 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
       listItems: filteredItems.items.filter((i) => searchItem(i, state.searchTerm, state.columns)),
       columns: filteredItems.columns
     }
-  }, [state.searchTerm, state.items, state.activeFilters, state.columns])
+  }, [state.columnAdded, state.searchTerm, state.items, state.activeFilters, state.columns])
 
   const ctxValue = useMemo(() => ({ props, state, dispatch }), [state])
 
   if (state.error) {
     return <UserMessage type={MessageBarType.error} text={state.error.message} />
   }
+
+  console.log(state, props)
 
   return (
     <PortfolioAggregationContext.Provider value={ctxValue}>
@@ -108,18 +110,18 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
             enableShimmer={state.loading}
             items={items.listItems}
             onRenderItemColumn={renderItemColumn}
-            onColumnHeaderContextMenu={(col, ev) =>
+            onColumnHeaderClick={(ev, col) => {
               dispatch(
                 COLUMN_HEADER_CONTEXT_MENU({
                   column: col,
                   target: ev.currentTarget
                 })
               )
-            }
+            }}
             columns={[
               ...getDefaultColumns(ctxValue, props.isParent),
               ...items.columns,
-              props.displayMode === DisplayMode.Edit && !props.lockedColumns && addColumn(dispatch)
+              addColumn()
             ].filter((c) => c)}
             groups={state.groups}
             compact={state.isCompact}
@@ -127,6 +129,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
         </div>
         <ColumnContextMenu />
         <ColumnFormPanel />
+        <ShowHideColumnPanel />
         <FilterPanel
           isOpen={state.showFilterPanel}
           layerHostId={layerHostId}

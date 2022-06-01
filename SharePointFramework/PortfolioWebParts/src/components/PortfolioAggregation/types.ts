@@ -158,6 +158,11 @@ export interface IPortfolioAggregationState {
   addColumnPanel?: IPanelProps
 
   /**
+   * Show/hide column panel
+   */
+  showHideColumnPanel?: IPanelProps
+
+  /**
    * Column context menu
    */
   columnContextMenu?: { column: IColumn; target: Target }
@@ -166,6 +171,16 @@ export interface IPortfolioAggregationState {
    * Column added timestamp
    */
   columnAdded?: number
+
+  /**
+   * Column deleted timestamp
+   */
+  columnDeleted?: number
+
+  /**
+   * Column shown/hidden timestamp
+   */
+  columnShowHide?: number
 
   /**
    * Error

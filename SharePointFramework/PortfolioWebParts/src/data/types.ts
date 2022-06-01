@@ -1,5 +1,5 @@
 import { TypedHash } from '@pnp/common'
-import { QueryPropertyValueType, SearchQuery, SortDirection } from '@pnp/sp'
+import { ItemUpdateResult, QueryPropertyValueType, SearchQuery, SortDirection } from '@pnp/sp'
 import { IPortfolioConfiguration, IAggregatedListConfiguration } from 'interfaces'
 import { ProjectListModel, TimelineContentListModel } from 'models'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
@@ -98,8 +98,8 @@ export interface IDataAdapter {
     dataSourceCategory?: string
   ): Promise<any[]>
   fetchProjectContentColumns?(dataSourceCategory: string): Promise<any[]>
-  deleteProjectContentColumn?(property: TypedHash<any>)
+  deleteProjectContentColumn?(property: TypedHash<any>): Promise<any>
   addItemToList?(listName: string, properties: TypedHash<any>): Promise<any[]>
-  updateDataSourceItem?(properties: TypedHash<any>, dataSourceTitle?: string): Promise<any[]>
+  updateDataSourceItem?(properties: TypedHash<any>, dataSourceTitle: string, shouldReplace?: boolean): Promise<ItemUpdateResult>
   removeDataSourceColumnItem?(property: TypedHash<any>, dataSourceTitle?: string)
 }

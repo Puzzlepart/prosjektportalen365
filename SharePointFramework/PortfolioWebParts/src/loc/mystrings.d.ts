@@ -190,6 +190,8 @@ declare interface IPortfolioWebPartsStrings {
   SortOrderLabel: string
   DataSourceItemNotFound: string
   ProjectContentColumnItemNotFound: string
+  ShowHideColumnsLabel: string
+  ShowHideColumnsDescription: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

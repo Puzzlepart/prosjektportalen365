@@ -1,6 +1,6 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, TypedHash } from '@pnp/common'
-import { QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
+import { ItemUpdateResult, QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
 import * as cleanDeep from 'clean-deep'
 import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces'
 import { IAggregatedListConfiguration } from 'interfaces/IAggregatedListConfiguration'
@@ -783,9 +783,9 @@ export class DataAdapter implements IDataAdapter {
         return []
       }
 
-
       const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
       const items = await list.items.get()
+      console.log(items)
       const filteredItems = items
         .filter(
           (item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory
@@ -794,6 +794,7 @@ export class DataAdapter implements IDataAdapter {
           const projectColumn = new ProjectColumn(item)
           return projectColumn
         })
+      console.log(filteredItems)
 
       return filteredItems
     } catch (error) {
@@ -806,7 +807,7 @@ export class DataAdapter implements IDataAdapter {
    *
    * @param property Property
    */
-  public async deleteProjectContentColumn(property: TypedHash<any>) {
+  public async deleteProjectContentColumn(property: TypedHash<any>): Promise<any> {
     try {
       const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
       const items = await list.items.get()
@@ -856,32 +857,34 @@ export class DataAdapter implements IDataAdapter {
    * Update datasource item
    *
    * @param properties Properties
-   * @param itemTitle Title of item to update
+   * @param dataSourceTitle Data source title
    */
-  public async updateDataSourceItem(properties: TypedHash<any>, itemTitle?: string): Promise<any> {
+  public async updateDataSourceItem(properties: TypedHash<any>, dataSourceTitle: string, shouldReplace: boolean = false): Promise<ItemUpdateResult> {
     try {
       const list = sp.web.lists.getByTitle(strings.DataSourceListName)
       const items = await list.items.get()
-      const item = items.find((i) => i.Title === itemTitle)
+      const item = items.find((i) => i.Title === dataSourceTitle)
 
       if (!item) {
-        throw new Error(format(strings.DataSourceItemNotFound, itemTitle))
+        throw new Error(format(strings.DataSourceItemNotFound, dataSourceTitle))
       }
 
-      if (item.GtProjectContentColumnsId) {
+      if (item.GtProjectContentColumnsId && !shouldReplace) {
         properties.GtProjectContentColumnsId = {
           results: [...item.GtProjectContentColumnsId, properties.GtProjectContentColumnsId]
         }
 
         const itemUpdateResult = await list.items.getById(item.Id).update(properties)
-        return itemUpdateResult.data
+        return itemUpdateResult
       } else {
         properties.GtProjectContentColumnsId = {
           results: properties.GtProjectContentColumnsId
         }
 
+        console.log(properties)
+
         const itemUpdateResult = await list.items.getById(item.Id).update(properties)
-        return itemUpdateResult.data
+        return itemUpdateResult
       }
     } catch (error) {
       throw new Error(error)
