@@ -773,6 +773,19 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
+   * Fetch data sources by category
+   *
+   * @param category Data source category
+   */
+  public async fetchDataSources(category: string): Promise<DataSource[]> {
+    try {
+      return await this.dataSourceService.getByCategory(category)
+    } catch (error) {
+      throw new Error(format(strings.DataSourceCategoryError, category))
+    }
+  }
+
+  /**
    * Fetch items from the ContentColumns
    *
    * @param dataSourceCategory Data source category
@@ -818,19 +831,6 @@ export class DataAdapter implements IDataAdapter {
       return itemDeleteResult
     } catch (error) {
       throw new Error(error)
-    }
-  }
-
-  /**
-   * Fetch data sources by category
-   *
-   * @param category Data source category
-   */
-  public async fetchDataSources(category: string): Promise<DataSource[]> {
-    try {
-      return await this.dataSourceService.getByCategory(category)
-    } catch (error) {
-      throw new Error(format(strings.DataSourceCategoryError, category))
     }
   }
 
