@@ -50,6 +50,7 @@ export const Commands = () => {
         name: strings.NewViewText,
         iconProps: { iconName: 'CirclePlus' },
         buttonStyles: { root: { border: 'none' } },
+        disabled: !props.showViewSelector,
         data: {
           isVisible: props.pageContext.legacyPageContext.isSiteAdmin && props.showViewSelector
         },
@@ -61,6 +62,7 @@ export const Commands = () => {
         iconProps: { iconName: 'List' },
         buttonStyles: { root: { border: 'none' } },
         itemType: ContextualMenuItemType.Header,
+        disabled: !props.showViewSelector,
         data: { isVisible: props.showViewSelector },
         subMenuProps: {
           items: [
@@ -120,6 +122,7 @@ export const Commands = () => {
         itemType: ContextualMenuItemType.Normal,
         canCheck: true,
         checked: state.showFilterPanel,
+        disabled: !props.showFilters,
         data: { isVisible: props.showFilters },
         onClick: (ev) => {
           ev.preventDefault()
