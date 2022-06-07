@@ -7,7 +7,5 @@
         <pnp:FieldRef ID="14dfd5b2-cf1d-4735-9e1b-7fa0d3658430" Name="GtManagedProperty" Required="true" />
         <pnp:FieldRef ID="7463d38f-5f51-4b25-a920-04ea1ec24a26" Name="GtFieldDataType" Required="true" />
         <pnp:FieldRef ID="67a0a4b1-61d7-45c3-9157-7e302450a304" Name="GtDataSourceCategory" />
-        <pnp:FieldRef ID="0956cadc-1268-4bc1-9baf-5d2e16190d06" Name="GtIsRefinable" />
-        <pnp:FieldRef ID="b77be89a-346f-4897-b519-e55eedbc0aa9" Name="GtIsGroupable" />
     </pnp:FieldRefs>
 </pnp:ContentType>

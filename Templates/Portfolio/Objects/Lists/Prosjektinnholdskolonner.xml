@@ -17,8 +17,6 @@
                 <FieldRef Name="GtManagedProperty" />
                 <FieldRef Name="GtFieldDataType" />
                 <FieldRef Name="GtDataSourceCategory" />
-                <FieldRef Name="GtIsRefinable" />
-                <FieldRef Name="GtIsGroupable" />
             </ViewFields>
             <RowLimit Paged="TRUE">100</RowLimit>
             <Aggregations Value="Off" />
@@ -33,8 +31,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">Title</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory"></pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 2 -->
             <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
@@ -43,8 +39,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtDeliveryDescriptionOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Leveranseoversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 3 -->
             <pnp:DataValue FieldName="GtSortOrder">110</pnp:DataValue>
@@ -53,8 +47,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtDeliveryEndTimeOWSDATE</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Leveranseoversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 4 -->
             <pnp:DataValue FieldName="GtSortOrder">120</pnp:DataValue>
@@ -63,8 +55,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtDeliveryStatusOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Leveranseoversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 5 -->
             <pnp:DataValue FieldName="GtSortOrder">130</pnp:DataValue>
@@ -73,8 +63,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtDeliveryStatusCommentOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Leveranseoversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 6 -->
             <pnp:DataValue FieldName="GtSortOrder">200</pnp:DataValue>
@@ -83,8 +71,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtRiskProbabilityOWSNMBR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Risikooversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 7 -->
             <pnp:DataValue FieldName="GtSortOrder">210</pnp:DataValue>
@@ -93,8 +79,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtRiskConsequenceOWSNMBR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Risikooversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 8 -->
             <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
@@ -103,8 +87,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtRiskProbabilityPostActionOWSNMBR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Risikooversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 9 -->
             <pnp:DataValue FieldName="GtSortOrder">230</pnp:DataValue>
@@ -113,8 +95,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtRiskConsequencePostActionOWSNMBR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Risikooversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 10 -->
             <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
@@ -123,8 +103,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtRiskActionOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Risikooversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 11 -->
             <pnp:DataValue FieldName="GtSortOrder">300</pnp:DataValue>
@@ -133,8 +111,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectLogDescriptionOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Erfaringslogg</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 12 -->
             <pnp:DataValue FieldName="GtSortOrder">310</pnp:DataValue>
@@ -143,8 +119,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectLogActorsOWSCHCM</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Erfaringslogg</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 13 -->
             <pnp:DataValue FieldName="GtSortOrder">320</pnp:DataValue>
@@ -153,8 +127,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectLogResponsibleOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Erfaringslogg</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 14 -->
             <pnp:DataValue FieldName="GtSortOrder">330</pnp:DataValue>
@@ -163,8 +135,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectLogConsequenceOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Erfaringslogg</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 15 -->
             <pnp:DataValue FieldName="GtSortOrder">340</pnp:DataValue>
@@ -173,8 +143,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectLogRecommendationOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Erfaringslogg</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 16 -->
             <pnp:DataValue FieldName="GtSortOrder">400</pnp:DataValue>
@@ -183,8 +151,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtGainsResponsible</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 17 -->
             <pnp:DataValue FieldName="GtSortOrder">410</pnp:DataValue>
@@ -193,8 +159,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtGainsOwner</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 18 -->
             <pnp:DataValue FieldName="GtSortOrder">420</pnp:DataValue>
@@ -203,8 +167,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtDesiredValueOWSNMBR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 19 -->
             <pnp:DataValue FieldName="GtSortOrder">430</pnp:DataValue>
@@ -213,8 +175,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtMeasurementUnitOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 20 -->
             <pnp:DataValue FieldName="GtSortOrder">440</pnp:DataValue>
@@ -223,8 +183,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtStartValueOWSNMBR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 21 -->
             <pnp:DataValue FieldName="GtSortOrder">450</pnp:DataValue>
@@ -233,8 +191,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtMeasurementValueOWSNMBR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 22 -->
             <pnp:DataValue FieldName="GtSortOrder">460</pnp:DataValue>
@@ -243,8 +199,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtMeasurementCommentOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 23 -->
             <pnp:DataValue FieldName="GtSortOrder">470</pnp:DataValue>
@@ -253,8 +207,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtMeasurementDateOWSDATE</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 24 -->
             <pnp:DataValue FieldName="GtSortOrder">480</pnp:DataValue>
@@ -263,8 +215,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtGainsTurnoverOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 25 -->
             <pnp:DataValue FieldName="GtSortOrder">490</pnp:DataValue>
@@ -273,8 +223,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtGainsTypeOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 26 -->
             <pnp:DataValue FieldName="GtSortOrder">500</pnp:DataValue>
@@ -283,8 +231,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtPrereqProfitAchievementOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 27 -->
             <pnp:DataValue FieldName="GtSortOrder">510</pnp:DataValue>
@@ -293,8 +239,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">GtRealizationTimeOWSDATE</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 28 -->
             <pnp:DataValue FieldName="GtSortOrder">520</pnp:DataValue>
@@ -303,8 +247,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">MeasurementIndicator</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 29 -->
             <pnp:DataValue FieldName="GtSortOrder">530</pnp:DataValue>
@@ -313,8 +255,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">LastMeasurementValue</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 30 -->
             <pnp:DataValue FieldName="GtSortOrder">540</pnp:DataValue>
@@ -323,8 +263,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">MeasurementAchievement</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Trend</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 31 -->
             <pnp:DataValue FieldName="GtSortOrder">550</pnp:DataValue>
@@ -333,8 +271,6 @@
             <pnp:DataValue FieldName="GtManagedProperty">Measurements</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Modal</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
