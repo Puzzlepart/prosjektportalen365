@@ -210,27 +210,31 @@ export default (props: IPortfolioAggregationProps) =>
         : null
     },
     [SET_GROUP_BY.type]: (state, { payload }: ReturnType<typeof SET_GROUP_BY>) => {
-      state.items = sortArray([...state.items], [payload.column.fieldName])
-      state.groupBy = payload.column
-      const groupNames: string[] = state.items.map((g) =>
-        get<string>(g, state.groupBy.fieldName, strings.NotSet)
-      )
-      const uniqueGroupNames: string[] = uniq(groupNames)
-      state.groups = uniqueGroupNames
-        .sort((a, b) => (a > b ? 1 : -1))
-        .map((name, idx) => {
-          const count = groupNames.filter((n) => n === name).length
-          const group: IGroup = {
-            key: `Group_${idx}`,
-            name: `${state.groupBy.name}: ${name}`,
-            startIndex: groupNames.indexOf(name, 0),
-            count,
-            isShowingAll: count === state.items.length,
-            isDropEnabled: false,
-            isCollapsed: false
-          }
-          return group
-        })
+      if (payload.column) {
+        state.items = sortArray([...state.items], [payload.column.fieldName])
+        state.groupBy = payload.column
+        const groupNames: string[] = state.items.map((g) =>
+          get<string>(g, state.groupBy.fieldName, strings.NotSet)
+        )
+        const uniqueGroupNames: string[] = uniq(groupNames)
+        state.groups = uniqueGroupNames
+          .sort((a, b) => (a > b ? 1 : -1))
+          .map((name, idx) => {
+            const count = groupNames.filter((n) => n === name).length
+            const group: IGroup = {
+              key: `Group_${idx}`,
+              name: `${state.groupBy.name}: ${name}`,
+              startIndex: groupNames.indexOf(name, 0),
+              count,
+              isShowingAll: count === state.items.length,
+              isDropEnabled: false,
+              isCollapsed: false
+            }
+            return group
+          })
+      } else {
+        state.groups = null
+      }
     },
     [SET_SORT.type]: (state, { payload }: ReturnType<typeof SET_SORT>) => {
       const { column, sortDesencing } = payload

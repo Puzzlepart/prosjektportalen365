@@ -20,6 +20,7 @@ import createReducer, {
   GET_FILTERS,
   initState,
   ON_FILTER_CHANGE,
+  SET_GROUP_BY,
   START_FETCH,
   TOGGLE_FILTER_PANEL
 } from './reducer'
@@ -74,6 +75,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
             })
           )
           dispatch(GET_FILTERS({ filters: dataSrc.projectRefiners }))
+          dispatch(SET_GROUP_BY({ column: dataSrc.projectGroupBy }))
         })
         .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
     })
