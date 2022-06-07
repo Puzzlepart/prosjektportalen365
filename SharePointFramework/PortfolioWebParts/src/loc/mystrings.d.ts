@@ -9,6 +9,7 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionText: string
   ColumnRenderOptionDate: string
   ColumnRenderOptionDateTime: string
+  ColumnRenderOptionUser: string
   ColumnRenderOptionPercentage: string
   ColumnRenderOptionTrend: string
   ColumnRenderOptionTaxonomy: string

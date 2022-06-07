@@ -38,6 +38,8 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
       return formatDate(columnValue, false)
     case 'datetime':
       return formatDate(columnValue, true)
+    case 'user':
+      return columnValue // TODO: Implement user rendering correctly at some point
     case 'list': {
       const values: string[] = columnValue ? columnValue.split(';#') : []
       if (isEmpty(values)) return null

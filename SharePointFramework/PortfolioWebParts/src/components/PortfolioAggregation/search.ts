@@ -9,7 +9,6 @@ import { getObjectValue as get } from 'pp365-shared/lib/helpers'
  * @param columns Columns
  */
 
-// TODO: Add DefaultColumn to possible searchable column?
 export const searchItem = (item: any, searchTerm: string, columns: IColumn[]) => {
   searchTerm = searchTerm.toLowerCase()
   const searchObj = columns.reduce((obj, col) => {

@@ -14,6 +14,7 @@ define([], function() {
         ColumnRenderOptionText: 'Tekst',
         ColumnRenderOptionDate: 'Dato',
         ColumnRenderOptionDateTime: 'Dato og tidspunkt',
+        ColumnRenderOptionUser: 'Person',
         ColumnRenderOptionPercentage: 'Prosent',
         ColumnRenderOptionTrend: 'Trend',
         ColumnRenderOptionTaxonomy: 'Taksonomi',

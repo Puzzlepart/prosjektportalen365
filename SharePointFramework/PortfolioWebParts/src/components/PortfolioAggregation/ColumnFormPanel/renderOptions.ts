@@ -19,6 +19,10 @@ export const renderOptions: IDropdownOption[] = [
     text: strings.ColumnRenderOptionDateTime
   },
   {
+    key: 'user',
+    text: strings.ColumnRenderOptionUser
+  },
+  {
     key: 'list',
     text: strings.ColumnRenderOptionList
   },
