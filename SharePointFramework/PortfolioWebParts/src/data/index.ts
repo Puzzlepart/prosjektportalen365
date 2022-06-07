@@ -686,9 +686,6 @@ export class DataAdapter implements IDataAdapter {
       })
       .filter((i) => i.Benefit)
 
-    // eslint-disable-next-line no-console
-    console.log({ benefits, measurements, indicactors })
-
     const items = indicactors.map((i) => {
       const benefit = i.Benefit
       const measurements = i.Measurements
