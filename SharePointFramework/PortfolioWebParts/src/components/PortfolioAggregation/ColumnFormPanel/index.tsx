@@ -257,7 +257,7 @@ export const ColumnFormPanel = () => {
             })
           }}
         />
-        {state.editColumn && (
+        {state.editColumn && state.editColumn.fieldName !== 'Title' && (
           <DefaultButton
             text={strings.DeleteButtonLabel}
             style={{ marginLeft: 4 }}
