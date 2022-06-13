@@ -160,6 +160,12 @@
   <data name="Lists_ProjectColumns_Url" xml:space="preserve">
     <value>Lists/Prosjektkolonner</value>
   </data>
+  <data name="Lists_ProjectContentColumns_Title" xml:space="preserve">
+    <value>Prosjektinnholdskolonner</value>
+  </data>
+  <data name="Lists_ProjectContentColumns_Url" xml:space="preserve">
+    <value>Lists/Prosjektinnholdskolonner</value>
+  </data>
   <data name="Lists_ProjectTemplates_Title" xml:space="preserve">
     <value>Prosjektmaler</value>
   </data>
@@ -341,6 +347,12 @@
     <value>Prosjektkolonne</value>
   </data>
   <data name="ContentTypes_ProjectColumn_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ContentTypes_ProjectContentColumn_Name" xml:space="preserve">
+    <value>Prosjektinnholdskolonne</value>
+  </data>
+  <data name="ContentTypes_ProjectContentColumn_Description" xml:space="preserve">
     <value></value>
   </data>
   <data name="ContentTypes_ProjectColumnConfiguration_Name" xml:space="preserve">
@@ -574,6 +586,9 @@
   <data name="SiteFields_GtPortfolioColumns_DisplayName" xml:space="preserve">
     <value>Kolonner</value>
   </data>
+  <data name="SiteFields_GtProjectContentColumns_DisplayName" xml:space="preserve">
+    <value>Kolonner</value>
+  </data>
   <data name="SiteFields_GtPortfolioIsDefaultView_DisplayName" xml:space="preserve">
     <value>Standardvisning</value>
   </data>
@@ -592,7 +607,13 @@
   <data name="SiteFields_GtPortfolioRefiners_DisplayName" xml:space="preserve">
     <value>Filter</value>
   </data>
+  <data name="SiteFields_GtProjectContentRefiners_DisplayName" xml:space="preserve">
+    <value>Filter</value>
+  </data>
   <data name="SiteFields_GtPortfolioGroupBy_DisplayName" xml:space="preserve">
+    <value>Grupper etter</value>
+  </data>
+  <data name="SiteFields_GtProjectContentGroupBy_DisplayName" xml:space="preserve">
     <value>Grupper etter</value>
   </data>
   <data name="SiteFields_GtLccDefault_DisplayName" xml:space="preserve">
@@ -1336,6 +1357,9 @@
   <data name="SiteFields_GtPortfolioColumns_Description" xml:space="preserve">
     <value></value>
   </data>
+  <data name="SiteFields_GtProjectContentColumns_Description" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="SiteFields_GtPortfolioIsDefaultView_Description" xml:space="preserve">
     <value></value>
   </data>
@@ -1354,7 +1378,13 @@
   <data name="SiteFields_GtPortfolioRefiners_Description" xml:space="preserve">
     <value></value>
   </data>
+  <data name="SiteFields_GtProjectContentRefiners_Description" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="SiteFields_GtPortfolioGroupBy_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtProjectContentGroupBy_Description" xml:space="preserve">
     <value></value>
   </data>
   <data name="SiteFields_GtLccDefault_Description" xml:space="preserve">
@@ -1581,6 +1611,12 @@
   </data>
   <data name="SiteFields_GtTimelineFilter_Description" xml:space="preserve">
     <value>Velg 'Ja' dersom elementet skal være filtrerbart i tidslinjen</value>
+  </data>
+  <data name="SiteFields_GtODataQuery_DisplayName" xml:space="preserve">
+    <value>Prosjekt odata spørring</value>
+  </data>
+  <data name="SiteFields_GtODataQuery_Description" xml:space="preserve">
+    <value>Odata spørring for å filtrere prosjekter</value>
   </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>

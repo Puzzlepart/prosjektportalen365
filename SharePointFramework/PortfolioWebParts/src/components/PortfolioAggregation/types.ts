@@ -1,5 +1,8 @@
 import { SearchResult } from '@pnp/sp'
+import { IFilterProps } from 'components/FilterPanel'
 import { IDataAdapter } from 'data/types'
+import { IAggregatedListConfiguration } from 'interfaces'
+import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 import { Target } from 'office-ui-fabric-react/lib/Callout'
 import { IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList'
 import { IPanelProps } from 'office-ui-fabric-react/lib/Panel'
@@ -7,6 +10,11 @@ import { DataSource } from 'pp365-shared/lib/models/DataSource'
 import { IBaseComponentProps } from '../types'
 
 export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps {
+  /**
+   * Configuration (columns and views etc)
+   */
+  configuration?: IAggregatedListConfiguration
+
   /**
    * Data source name
    */
@@ -20,7 +28,7 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   /**
    * Columns
    */
-  columns?: IColumn[]
+  columns?: IProjectContentColumn[]
 
   /**
    * Select properties
@@ -38,6 +46,11 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   showSearchBox?: boolean
 
   /**
+   * Show filters
+   */
+  showFilters?: boolean
+
+  /**
    * Placeholder text for searchbox
    */
   searchBoxPlaceholderText?: string
@@ -46,6 +59,11 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
    * Show Excel export button
    */
   showExcelExportButton?: boolean
+
+  /**
+   * Show Excel export button
+   */
+  showViewSelector?: boolean
 
   /**
    * Locked columns
@@ -102,7 +120,12 @@ export interface IPortfolioAggregationState {
   /**
    * Columns
    */
-  columns?: IColumn[]
+  columns?: IProjectContentColumn[]
+
+  /**
+   * Filtered columns
+   */
+  fltColumns?: IProjectContentColumn[]
 
   /**
    * Groups
@@ -112,7 +135,7 @@ export interface IPortfolioAggregationState {
   /**
    * Column currently being edited
    */
-  editColumn?: IColumn
+  editColumn?: IProjectContentColumn
 
   /**
    * Column to group by
@@ -135,6 +158,11 @@ export interface IPortfolioAggregationState {
   addColumnPanel?: IPanelProps
 
   /**
+   * Show/hide column panel
+   */
+  showHideColumnPanel?: IPanelProps
+
+  /**
    * Column context menu
    */
   columnContextMenu?: { column: IColumn; target: Target }
@@ -145,7 +173,42 @@ export interface IPortfolioAggregationState {
   columnAdded?: number
 
   /**
+   * Column deleted timestamp
+   */
+  columnDeleted?: number
+
+  /**
+   * Column shown/hidden timestamp
+   */
+  columnShowHide?: number
+
+  /**
    * Error
    */
   error?: Error
+
+  /**
+   * Show filter panel
+   */
+  showFilterPanel?: boolean
+
+  /**
+   * Is compact
+   */
+  isCompact?: boolean
+
+  /**
+   * Active filters
+   */
+  activeFilters?: { SelectedColumns?: string[]; [key: string]: string[] }
+
+  /**
+   * Filters
+   */
+  filters?: IFilterProps[]
+
+  /**
+   * Current view
+   */
+  currentView?: DataSource
 }

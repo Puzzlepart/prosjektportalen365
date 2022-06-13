@@ -19,8 +19,7 @@ export const DetailsCallout = ({ timelineItem, onDismiss }: IDetailsCalloutProps
         return (
           <>
             <p hidden={!item.type}>
-              <b>{item.type}:</b>{' '}
-              <span>{timelineItem.item.title}</span>
+              <b>{item.type}:</b> <span>{timelineItem.item.title}</span>
             </p>
             <p>
               <b>{strings.MilestoneDateLabel}:</b>{' '}
@@ -34,14 +33,15 @@ export const DetailsCallout = ({ timelineItem, onDismiss }: IDetailsCalloutProps
         return (
           <>
             <p hidden={!item.type}>
-              <b>{item.type}:</b>{' '}
-              <span>{timelineItem.item.title}</span>
+              <b>{item.type}:</b> <span>{timelineItem.item.title}</span>
             </p>
             <p>
-              <b>{strings.StartDateLabel}:</b>{' '}<span>{formatDate(timelineItem.item.start_time.toString())}</span>
+              <b>{strings.StartDateLabel}:</b>{' '}
+              <span>{formatDate(timelineItem.item.start_time.toString())}</span>
             </p>
             <p>
-              <b>{strings.EndDateLabel}:</b> <span>{formatDate(timelineItem.item.end_time.toString())}</span>
+              <b>{strings.EndDateLabel}:</b>{' '}
+              <span>{formatDate(timelineItem.item.end_time.toString())}</span>
             </p>
           </>
         )
@@ -64,13 +64,15 @@ export const DetailsCallout = ({ timelineItem, onDismiss }: IDetailsCalloutProps
               </a>
             </p>
             <p hidden={!item.phase}>
-              <b>{strings.CurrentPhaseLabel}:</b>{' '}<span>{item.phase}</span>
+              <b>{strings.CurrentPhaseLabel}:</b> <span>{item.phase}</span>
             </p>
             <p>
-              <b>{strings.StartDateLabel}:</b>{' '}<span>{formatDate(timelineItem.item.start_time.toString())}</span>
+              <b>{strings.StartDateLabel}:</b>{' '}
+              <span>{formatDate(timelineItem.item.start_time.toString())}</span>
             </p>
             <p>
-              <b>{strings.EndDateLabel}:</b> <span>{formatDate(timelineItem.item.end_time.toString())}</span>
+              <b>{strings.EndDateLabel}:</b>{' '}
+              <span>{formatDate(timelineItem.item.end_time.toString())}</span>
             </p>
           </>
         )
@@ -79,22 +81,22 @@ export const DetailsCallout = ({ timelineItem, onDismiss }: IDetailsCalloutProps
         return (
           <>
             <p>
-              <b>{strings.NameLabel}:</b>{' '}
-              <span>{timelineItem.item.title}</span>
+              <b>{strings.NameLabel}:</b> <span>{timelineItem.item.title}</span>
             </p>
             <p hidden={!item.description}>
-              <b>{strings.DescriptionFieldLabel}:</b>{' '}
-              <span>{item.description}</span>
+              <b>{strings.DescriptionFieldLabel}:</b> <span>{item.description}</span>
             </p>
             <p hidden={item.elementType !== strings.TriangleLabel}>
               <b>{strings.ColumnRenderOptionDate}:</b>{' '}
               <span>{formatDate(timelineItem.item.end_time.toString())}</span>
             </p>
             <p hidden={item.elementType === strings.TriangleLabel}>
-              <b>{strings.StartDateLabel}:</b>{' '}<span>{formatDate(timelineItem.item.start_time.toString())}</span>
+              <b>{strings.StartDateLabel}:</b>{' '}
+              <span>{formatDate(timelineItem.item.start_time.toString())}</span>
             </p>
             <p hidden={item.elementType === strings.TriangleLabel}>
-              <b>{strings.EndDateLabel}:</b> <span>{formatDate(timelineItem.item.end_time.toString())}</span>
+              <b>{strings.EndDateLabel}:</b>{' '}
+              <span>{formatDate(timelineItem.item.end_time.toString())}</span>
             </p>
           </>
         )
@@ -115,7 +117,10 @@ export const DetailsCallout = ({ timelineItem, onDismiss }: IDetailsCalloutProps
   return (
     <Callout
       className={styles.detailsCallout}
-      styles={{ beak: { backgroundColor: item.hexColor }, beakCurtain: { borderTop: `6px solid ${item.hexColor}` } }}
+      styles={{
+        beak: { backgroundColor: item.hexColor },
+        beakCurtain: { borderTop: `6px solid ${item.hexColor}` }
+      }}
       target={timelineItem.element}
       bounds={bounds}
       onDismiss={onDismiss}

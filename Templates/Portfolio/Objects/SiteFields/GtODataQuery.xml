@@ -1,0 +1,1 @@
+<Field Type="Note" DisplayName="{resource:SiteFields_GtODataQuery_DisplayName}" Description="{resource:SiteFields_GtODataQuery_Description}" EnforceUniqueValues="FALSE" Indexed="FALSE" NumLines="6" RichText="FALSE" Sortable="FALSE" Group="{resource:SiteFields_Portfolio_Group}" ID="{40b5cbd9-4d0a-42eb-a790-65d83b9c7035}" StaticName="GtODataQuery" Name="GtODataQuery" />

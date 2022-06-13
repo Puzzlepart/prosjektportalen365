@@ -5,15 +5,20 @@ declare interface IPortfolioWebPartsStrings {
   DataSourceDescription: string
   ColumnRenderOptionTags: string
   ColumnRenderOptionList: string
-  ColumnRenderOptionInt: string
-  SearchPropertyDescription: string
+  ColumnRenderOptionNumber: string
+  ColumnRenderOptionText: string
+  ColumnRenderOptionDate: string
+  ColumnRenderOptionDateTime: string
+  ColumnRenderOptionUser: string
+  ColumnRenderOptionPercentage: string
+  ColumnRenderOptionTrend: string
+  ColumnRenderOptionTaxonomy: string
+  ColumnRenderOptionModal: string
   DataSourceGroupName: string
   CommandBarGroupName: string
   SearchBoxGroupName: string
   DeleteButtonLabel: string
-  ColumnRenderOptionText: string
-  ColumnRenderOptionDate: string
-  ColumnRenderOptionDateTime: string
+  RemoveButtonLabel: string
   ColumnRenderLabel: string
   EditColumnLabel: any
   MoveRightLabel: string
@@ -22,6 +27,9 @@ declare interface IPortfolioWebPartsStrings {
   NewColumnHeaderText: string
   AddColumnText: string
   SearchPropertyLabel: string
+  SearchPropertyDescription: string
+  InternalNameLabel: string
+  InternalNameDescription: string
   DisplayNameLabel: string
   MinWidthLabel: string
   MaxWidthLabel: string
@@ -147,6 +155,8 @@ declare interface IPortfolioWebPartsStrings {
   ProjectsListName: string
   TimelineContentListName: string
   TimelineConfigurationListName: string
+  DataSourceListName: string
+  ProjectContentColumnsListName: string
   PortfolioManagerGroupName: string
   ProjectTimelineItemInfo: string
   LastPublishedStatusreport: string
@@ -174,10 +184,15 @@ declare interface IPortfolioWebPartsStrings {
   NoAccessMessage: string
   BooleanYes: string
   BooleanNo: string
-  ProjectDeliveriesGroupName: string;
-  ShowProjectDeliveriesLabel: string;
-  ConfigItemTitleFieldLabel: string;
-  ConfigItemTitleFieldDescription: string;
+  ProjectDeliveriesGroupName: string
+  ShowProjectDeliveriesLabel: string
+  ConfigItemTitleFieldLabel: string
+  ConfigItemTitleFieldDescription: string
+  SortOrderLabel: string
+  DataSourceItemNotFound: string
+  ProjectContentColumnItemNotFound: string
+  ShowHideColumnsLabel: string
+  ShowHideColumnsDescription: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

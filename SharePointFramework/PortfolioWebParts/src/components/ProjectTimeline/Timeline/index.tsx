@@ -56,7 +56,7 @@ export class Timeline extends Component<ITimelineProps> {
    */
   private _itemRenderer(props: ReactCalendarItemRendererProps<any>) {
     const htmlProps = props.getItemProps(props.item.itemProps)
-    
+
     switch (props.item.data.elementType) {
       case strings.DiamondLabel: {
         return (
@@ -73,7 +73,8 @@ export class Timeline extends Component<ITimelineProps> {
                 height: '24px',
                 backgroundColor: props.item.data.hexColor || '#ffc800',
                 marginTop: '-2px'
-              }} />
+              }}
+            />
           </div>
         )
       }
@@ -93,7 +94,8 @@ export class Timeline extends Component<ITimelineProps> {
                 borderRight: '11px solid transparent',
                 borderBottom: `22px solid ${props.item.data.hexColor || 'lightblue'}`,
                 marginTop: '-3px'
-              }} />
+              }}
+            />
           </div>
         )
       }

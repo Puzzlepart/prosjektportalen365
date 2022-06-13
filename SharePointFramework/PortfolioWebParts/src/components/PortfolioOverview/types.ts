@@ -106,7 +106,7 @@ export interface IPortfolioOverviewState {
   items?: any[]
 
   /**
-   * @todo describe property
+   * Selected items
    */
   selectedItems?: any[]
 

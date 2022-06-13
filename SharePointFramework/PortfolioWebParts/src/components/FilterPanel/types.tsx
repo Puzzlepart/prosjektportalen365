@@ -1,7 +1,7 @@
 import { IPanelProps } from 'office-ui-fabric-react/lib/Panel'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
-import { IFilterProps } from './Filter/IFilterProps'
-import { IFilterItemProps } from './FilterItem/IFilterItemProps'
+import { IFilterProps } from './Filter/types'
+import { IFilterItemProps } from './FilterItem/types'
 
 export interface IFilterPanelProps extends IPanelProps {
   /**

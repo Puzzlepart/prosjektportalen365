@@ -1,41 +1,40 @@
-import { AnyAction } from '@reduxjs/toolkit'
+import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 import { Dropdown } from 'office-ui-fabric-react'
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { Panel } from 'office-ui-fabric-react/lib/Panel'
 import { TextField } from 'office-ui-fabric-react/lib/TextField'
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as strings from 'PortfolioWebPartsStrings'
-import React, { Dispatch, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { PortfolioAggregationContext } from '../context'
 import { ADD_COLUMN, DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import styles from './ColumnFormPanel.module.scss'
 import { renderOptions } from './renderOptions'
 
-export const addColumn = (dispatch: Dispatch<AnyAction>) => ({
+export const addColumn = () => ({
   key: '',
   fieldName: '',
   name: strings.AddColumnText,
   iconName: 'CalculatorAddition',
   iconClassName: styles.addColumnIcon,
-  minWidth: 150,
-  onColumnClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
+  minWidth: 175,
 })
 
 const initialColumn = {
   key: null,
   fieldName: '',
+  internalname: '',
   name: '',
   minWidth: 100,
-  maxWidth: 300,
+  maxWidth: 150,
   data: {
     renderAs: 'text'
   }
 }
 
 export const ColumnFormPanel = () => {
-  const { state, dispatch } = useContext(PortfolioAggregationContext)
-  const [column, setColumn] = useState<IColumn>({
+  const { state, props, dispatch } = useContext(PortfolioAggregationContext)
+  const [column, setColumn] = useState<IProjectContentColumn>({
     ...initialColumn,
     ...(state.editColumn || {})
   })
@@ -44,7 +43,7 @@ export const ColumnFormPanel = () => {
     if (state.editColumn) {
       setColumn({
         minWidth: 100,
-        maxWidth: 300,
+        maxWidth: 150,
         data: {
           renderAs: 'text'
         },
@@ -53,9 +52,40 @@ export const ColumnFormPanel = () => {
     }
   }, [state.editColumn])
 
-  const onSave = () => {
+  const onSave = async () => {
     setColumn(initialColumn)
-    dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
+    if (state.editColumn)
+      dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
+    else {
+      const renderAs =
+        column.data?.renderAs.charAt(0).toUpperCase() +
+        column.data?.renderAs.slice(1)
+
+      const newItem = {
+        GtSortOrder: column.sortOrder || 100,
+        Title: column.name,
+        GtInternalName: column.internalName,
+        GtManagedProperty: column.fieldName,
+        GtFieldDataType: renderAs,
+        GtDataSourceCategory: props.title
+      }
+
+      await Promise.resolve(props.dataAdapter.configure().then((adapter) => {
+        adapter.addItemToList(strings.ProjectContentColumnsListName, newItem)
+          .then((result) => {
+            const updateItem = {
+              GtProjectContentColumnsId: result['Id']
+            }
+
+            adapter.updateDataSourceItem(updateItem, state.dataSource)
+              .then(() => {
+                dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
+              })
+              .catch((error) => (state.error = error))
+          })
+          .catch((error) => (state.error = error))
+      }))
+    }
   }
 
   const onDismiss = () => {
@@ -72,6 +102,21 @@ export const ColumnFormPanel = () => {
       className={styles.root}>
       <div className={styles.field}>
         <TextField
+          label={strings.SortOrderLabel}
+          description={strings.SortOrderLabel}
+          type={'number'}
+          value={(column.sortOrder && column.sortOrder.toString()) || '100'}
+          disabled={!!state.editColumn}
+          onChange={(_, value) =>
+            setColumn({
+              ...column,
+              sortOrder: parseInt(value)
+            })
+          }
+        />
+      </div>
+      <div className={styles.field}>
+        <TextField
           label={strings.SearchPropertyLabel}
           description={strings.SearchPropertyDescription}
           required={true}
@@ -81,6 +126,21 @@ export const ColumnFormPanel = () => {
             setColumn({
               ...column,
               fieldName: value
+            })
+          }
+        />
+      </div>
+      <div className={styles.field}>
+        <TextField
+          label={strings.InternalNameLabel}
+          description={strings.InternalNameDescription}
+          required={true}
+          value={column.internalName}
+          disabled={!!state.editColumn}
+          onChange={(_, value) =>
+            setColumn({
+              ...column,
+              internalName: value
             })
           }
         />
@@ -197,12 +257,19 @@ export const ColumnFormPanel = () => {
             })
           }}
         />
-        {state.editColumn && (
+        {state.editColumn && state.editColumn.fieldName !== 'Title' && (
           <DefaultButton
             text={strings.DeleteButtonLabel}
             style={{ marginLeft: 4 }}
-            onClick={() => {
-              dispatch(DELETE_COLUMN())
+            onClick={async () => {
+              await Promise.resolve(props.dataAdapter.configure().then((adapter) => {
+                adapter
+                  .deleteProjectContentColumn(state.editColumn)
+                  .then(() => {
+                    dispatch(DELETE_COLUMN())
+                  })
+                  .catch((error) => (state.error = error))
+              }))
             }}
           />
         )}
