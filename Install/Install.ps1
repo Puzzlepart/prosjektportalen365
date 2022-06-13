@@ -266,6 +266,18 @@ if ($Upgrade.IsPresent) {
 }
 #endregion
 
+#region Pre install
+if ($Upgrade.IsPresent) {
+    Write-Host "[INFO] Running pre-install upgrade steps" 
+    try {
+        ."$PSScriptRoot\Scripts\PreInstallUpgrade.ps1"
+        Disconnect-PnPOnline
+        Write-Host "[SUCCESS] Successfully ran pre-install upgrade steps" -ForegroundColor Green
+    }
+    Catch {}
+}
+#endregion
+
 #region Install app packages
 if (-not $SkipAppPackages.IsPresent) {
     Try {

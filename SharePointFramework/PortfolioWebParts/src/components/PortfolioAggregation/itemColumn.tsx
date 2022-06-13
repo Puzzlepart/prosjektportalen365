@@ -25,7 +25,10 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
     return get(item, column['fieldNameDisplay'], null)
   }
   const columnValue = get(item, column.fieldName, null)
-  switch (column?.data?.renderAs) {
+
+  const type = column?.data ? column?.data?.renderAs : column['dataType']
+
+  switch (type) {
     case 'number':
       return columnValue ? parseInt(columnValue) : null
     case 'int':

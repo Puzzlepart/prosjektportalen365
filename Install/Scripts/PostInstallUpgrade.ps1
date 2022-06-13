@@ -38,6 +38,9 @@ if ($null -ne $LastInstall) {
             $Item.Update()
             Invoke-PnPQuery
         }
+
+        Remove-PnPField -List "Tidslinjeinnhold" -Identity "SiteIdLookup" -Force -Erroraction 'silentlycontinue' 
+        Remove-PnPField -List "Tidslinjeinnhold" -Identity "TimelineType" -Force -Erroraction 'silentlycontinue'
+        Invoke-PnPQuery
     }
-    
 }
