@@ -130,7 +130,7 @@ export class DataAdapter implements IDataAdapter {
     let portal = this._portalDataService
 
     try {
-      if (category.includes('(Prosjektnivå)')) {
+      if (category.includes('(Prosjektnivå)') || !category) {
         const { web } = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
         portal = new PortalDataService().configure({ urlOrWeb: web })
       }
@@ -789,7 +789,7 @@ export class DataAdapter implements IDataAdapter {
    */
   public async fetchProjectContentColumns(dataSourceCategory: string): Promise<any> {
     try {
-      if (dataSourceCategory.includes('(Prosjektnivå)')) {
+      if (dataSourceCategory.includes('(Prosjektnivå)') || !dataSourceCategory) {
         return []
       }
 
