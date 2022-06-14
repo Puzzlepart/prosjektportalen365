@@ -3,6 +3,9 @@ $LastInstall = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><O
 if ($null -ne $LastInstall) {
     $PreviousVersion = $LastInstall.FieldValues["InstallVersion"]
     if ($PreviousVersion -lt "1.5.5") {
+        Get-PnPProvisioningTemplate -Out "$BasePath\Navigation.xml" -Handlers Navigation -Erroraction 'silentlycontinue'
+        ((Get-Content -path "$BasePath\Navigation.xml" -Raw) -replace 'false','true') | Set-Content -Path "$BasePath\Navigation.xml" -Force -Erroraction 'silentlycontinue'
+
         Write-Host "[INFO] In version v1.5.5 we reworked the aggregated webparts and removed the benefits webpart as this is now handled in the aggregated webpart. Removing pages so that we overwrite the old pages correctly"
         
         $PnPClientSidePages = @(

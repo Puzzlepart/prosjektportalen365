@@ -42,5 +42,7 @@ if ($null -ne $LastInstall) {
         Remove-PnPField -List "Tidslinjeinnhold" -Identity "SiteIdLookup" -Force -Erroraction 'silentlycontinue' 
         Remove-PnPField -List "Tidslinjeinnhold" -Identity "TimelineType" -Force -Erroraction 'silentlycontinue'
         Invoke-PnPQuery
+
+        Apply-PnPProvisioningTemplate "$BasePath\Navigation.xml" -ErrorAction Stop
     }
 }
