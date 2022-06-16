@@ -20,6 +20,7 @@ import {
 import MSGraph from 'msgraph-helper'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
+import { isNull } from 'pp365-shared/lib/helpers'
 import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
 import { DataSource, PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
@@ -598,7 +599,7 @@ export class DataAdapter implements IDataAdapter {
     configuration?: IAggregatedListConfiguration,
     dataSource?: string
   ): Promise<any[]> {
-    const odata = configuration.views.find((v) => v.title === dataSource)?.odataQuery
+    const odata = configuration && configuration.views.find((v) => v.title === dataSource)?.odataQuery
     let projects
 
     if (odata && !dataSource.includes('(Prosjektnivå)')) {
@@ -789,21 +790,22 @@ export class DataAdapter implements IDataAdapter {
    */
   public async fetchProjectContentColumns(dataSourceCategory: string): Promise<any> {
     try {
-      if (dataSourceCategory.includes('(Prosjektnivå)') || !dataSourceCategory) {
+      if (isNull(dataSourceCategory) || !dataSourceCategory || dataSourceCategory.includes('(Prosjektnivå)')) {
         return []
+      } else {
+        const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
+        const items = await list.items.get()
+        const filteredItems = items
+          .filter(
+            (item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory
+          )
+          .map((item) => {
+            const projectColumn = new ProjectColumn(item)
+            return projectColumn
+          })
+        return filteredItems
       }
 
-      const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
-      const items = await list.items.get()
-      const filteredItems = items
-        .filter(
-          (item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory
-        )
-        .map((item) => {
-          const projectColumn = new ProjectColumn(item)
-          return projectColumn
-        })
-      return filteredItems
     } catch (error) {
       throw new Error(format(strings.DataSourceError, dataSourceCategory))
     }
