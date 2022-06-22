@@ -55,7 +55,14 @@ export const ColumnFormPanel = () => {
   const onSave = async () => {
     setColumn(initialColumn)
     if (state.editColumn)
-      dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
+      await Promise.resolve(props.dataAdapter.configure().then((adapter) => {
+        adapter
+          .updateProjectContentColumn(column)
+          .then(() => {
+            dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
+          })
+          .catch((error) => (state.error = error))
+      }))
     else {
       const renderAs =
         column.data?.renderAs.charAt(0).toUpperCase() +

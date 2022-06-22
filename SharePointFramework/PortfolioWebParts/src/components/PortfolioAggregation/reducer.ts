@@ -131,7 +131,10 @@ export default (props: IPortfolioAggregationProps) =>
               return {
                 ...col,
                 id: payCol.id,
-                internalName: payCol.internalName
+                internalName: payCol.internalName,
+                data: {
+                  renderAs: payCol.dataType ? payCol.dataType.toLowerCase() : 'text'
+                }
               }
             else return col
           })
