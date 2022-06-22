@@ -3,7 +3,7 @@
   "engines": {
     "node": "^12"
   },
-  "version": "1.5.4-706.10",
+  "version": "1.5.4-706.11",
   "description": "Shared utilities, helpers and models",
   "main": "lib/index.js",
   "scripts": {

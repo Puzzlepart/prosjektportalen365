@@ -55,7 +55,14 @@ export const ColumnFormPanel = () => {
   const onSave = async () => {
     setColumn(initialColumn)
     if (state.editColumn)
-      dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
+      await Promise.resolve(props.dataAdapter.configure().then((adapter) => {
+        adapter
+          .updateProjectContentColumn(column)
+          .then(() => {
+            dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
+          })
+          .catch((error) => (state.error = error))
+      }))
     else {
       const renderAs =
         column.data?.renderAs.charAt(0).toUpperCase() +
@@ -67,7 +74,8 @@ export const ColumnFormPanel = () => {
         GtInternalName: column.internalName,
         GtManagedProperty: column.fieldName,
         GtFieldDataType: renderAs,
-        GtDataSourceCategory: props.title
+        GtDataSourceCategory: props.title,
+        GtColMinWidth: column.minWidth
       }
 
       await Promise.resolve(props.dataAdapter.configure().then((adapter) => {
@@ -174,6 +182,7 @@ export const ColumnFormPanel = () => {
       <div className={styles.field}>
         <TextField
           label={strings.MaxWidthLabel}
+          disabled={true}
           type='number'
           value={column.maxWidth.toString()}
           onChange={(_, value) =>
