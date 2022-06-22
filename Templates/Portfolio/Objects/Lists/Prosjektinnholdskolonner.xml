@@ -133,7 +133,7 @@
             <pnp:DataValue FieldName="Title">Konsekvens</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectLogConsequence</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectLogConsequenceOWSMTXT</pnp:DataValue>
-            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Erfaringslogg</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 15 -->

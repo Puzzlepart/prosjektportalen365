@@ -902,7 +902,7 @@
     <value>Kategori</value>
   </data>
   <data name="SiteFields_GtDataSourceCategory_Description" xml:space="preserve">
-    <value></value>
+    <value>Navnet på kategorien som brukes av oversiktssidene. Se Datakilder-listen for eksempler på verdier.</value>
   </data>
   <data name="SiteFields_GtDataSourceDefault_DisplayName" xml:space="preserve">
     <value>Standard for kategori</value>
@@ -1004,7 +1004,7 @@
     <value>Ikonnavn</value>
   </data>
   <data name="SiteFields_GtIconName_Description" xml:space="preserve">
-    <value></value>
+    <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
   </data>
    <data name="SiteFields_GtIsParentProject_DisplayName" xml:space="preserve">
     <value>Overordnet</value>
@@ -1376,7 +1376,7 @@
     <value></value>
   </data>
   <data name="SiteFields_GtSecIcon_Description" xml:space="preserve">
-    <value>Ikon fra https://uifabricicons.azurewebsites.net/</value>
+    <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
   </data>
   <data name="SiteFields_GtSecShowInNavbar_Description" xml:space="preserve">
     <value></value>
@@ -1406,7 +1406,7 @@
     <value></value>
   </data>
   <data name="SiteFields_GtPortfolioFabricIcon_Description" xml:space="preserve">
-    <value>Ikon fra https://uifabricicons.azurewebsites.net/</value>
+    <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
   </data>
   <data name="SiteFields_GtPortfolioColumn_Description" xml:space="preserve">
     <value></value>
@@ -1430,7 +1430,7 @@
     <value>Internt feltnavn for denne kolonnen.</value>
   </data>
   <data name="SiteFields_GtSearchQuery_Description" xml:space="preserve">
-    <value></value>
+    <value>Søkespørringen for å hente data. DepartmentId refererer til Prosjektportalen-huben og bør ikke endres. ContentTypeId refererer til innholdstypen til dataelementet du vil hente. Gå til Datakilder-listen for å se eksempler.</value>
   </data>
   <data name="SiteFields_GtPortfolioRefiners_Description" xml:space="preserve">
     <value></value>
@@ -1601,7 +1601,7 @@
     <value></value>
   </data>
   <data name="SiteFields_GtPortfolioColumnIconName_Description" xml:space="preserve">
-    <value></value>
+    <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
   </data>
   <data name="SiteFields_GtLastSyncTime_Description" xml:space="preserve">
     <value></value>
@@ -1676,10 +1676,10 @@
     <value>Velg 'Ja' dersom elementet skal være filtrerbart i tidslinjen</value>
   </data>
   <data name="SiteFields_GtODataQuery_DisplayName" xml:space="preserve">
-    <value>Prosjekt odata spørring</value>
+    <value>Prosjekt OData-spørring</value>
   </data>
   <data name="SiteFields_GtODataQuery_Description" xml:space="preserve">
-    <value>Odata spørring for å filtrere prosjekter</value>
+    <value>OData-spørring for å filtrere datakilden mot prosjekter. Spørringen brukes mot Prosjekter-listen for å kun vise data fra et utvalg prosjekter. Eksempel: "GtProjectPhaseText eq 'Konsept'" vil kun returnere data fra prosjekter i konsept-fasen.</value>
   </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
