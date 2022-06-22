@@ -253,23 +253,11 @@ if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
 }
 #endregion
 
-#region Remove pages with deprecated client side components
-if ($Upgrade.IsPresent) {
-    Try {
-        Connect-SharePoint -Url $Url -ErrorAction Stop
-        Write-Host "[INFO] Removing deprecated pages"    
-        ."$PSScriptRoot\Scripts\RemoveDeprecatedPages.ps1"
-        Disconnect-PnPOnline
-        Write-Host "[SUCCESS] Removed deprecated pages" -ForegroundColor Green
-    }
-    Catch {}
-}
-#endregion
-
 #region Pre install
 if ($Upgrade.IsPresent) {
     Write-Host "[INFO] Running pre-install upgrade steps" 
     try {
+        Connect-SharePoint -Url $Url -ErrorAction Stop
         ."$PSScriptRoot\Scripts\PreInstallUpgrade.ps1"
         Disconnect-PnPOnline
         Write-Host "[SUCCESS] Successfully ran pre-install upgrade steps" -ForegroundColor Green
