@@ -47,7 +47,7 @@ export class ProjectColumn implements IColumn {
       this.sortOrder = _item.GtSortOrder
       this.internalName = _item.GtInternalName
       this.dataType = _item.GtFieldDataType && _item.GtFieldDataType.toLowerCase()
-      this.isMultiline = this.dataType === 'note'
+      this.isMultiline = this.dataType === 'note' || this.dataType === 'tags'
       this.isRefinable = _item.GtIsRefinable
       this.isGroupable = _item.GtIsGroupable
       this.isResizable = true

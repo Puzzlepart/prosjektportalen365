@@ -97,7 +97,7 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
  */
 export default (props: IPortfolioAggregationProps) =>
   createReducer(initState(props), {
-    [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {
+    [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {      
       if (payload.items) {
         state.items = props.postTransform ? props.postTransform(payload.items) : payload.items
         state.items = sortArray(
@@ -132,8 +132,9 @@ export default (props: IPortfolioAggregationProps) =>
                 ...col,
                 id: payCol.id,
                 internalName: payCol.internalName,
+                minWidth: payCol.minWidth,
                 data: {
-                  renderAs: payCol.dataType ? payCol.dataType.toLowerCase() : 'text'
+                  renderAs: payCol.dataType ? payCol.dataType !== 'note' ? payCol.dataType.toLowerCase() : 'text' : 'text'
                 }
               }
             else return col

@@ -74,7 +74,8 @@ export const ColumnFormPanel = () => {
         GtInternalName: column.internalName,
         GtManagedProperty: column.fieldName,
         GtFieldDataType: renderAs,
-        GtDataSourceCategory: props.title
+        GtDataSourceCategory: props.title,
+        GtColMinWidth: column.minWidth
       }
 
       await Promise.resolve(props.dataAdapter.configure().then((adapter) => {
@@ -181,6 +182,7 @@ export const ColumnFormPanel = () => {
       <div className={styles.field}>
         <TextField
           label={strings.MaxWidthLabel}
+          disabled={true}
           type='number'
           value={column.maxWidth.toString()}
           onChange={(_, value) =>
