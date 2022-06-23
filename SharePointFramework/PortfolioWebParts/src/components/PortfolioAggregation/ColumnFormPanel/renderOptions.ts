@@ -7,6 +7,10 @@ export const renderOptions: IDropdownOption[] = [
     text: strings.ColumnRenderOptionText
   },
   {
+    key: 'note',
+    text: strings.ColumnRenderOptionNote
+  },
+  {
     key: 'number',
     text: strings.ColumnRenderOptionNumber
   },

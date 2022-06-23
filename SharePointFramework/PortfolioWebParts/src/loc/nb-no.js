@@ -12,6 +12,7 @@ define([], function() {
         ColumnRenderOptionList: 'Liste',
         ColumnRenderOptionNumber: 'Tall',
         ColumnRenderOptionText: 'Tekst',
+        ColumnRenderOptionNote: 'Notat',
         ColumnRenderOptionDate: 'Dato',
         ColumnRenderOptionDateTime: 'Dato og tidspunkt',
         ColumnRenderOptionUser: 'Person',

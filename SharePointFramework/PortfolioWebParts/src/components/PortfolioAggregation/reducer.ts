@@ -133,8 +133,9 @@ export default (props: IPortfolioAggregationProps) =>
                 id: payCol.id,
                 internalName: payCol.internalName,
                 minWidth: payCol.minWidth,
+                dataType: payCol.dataType,
                 data: {
-                  renderAs: payCol.dataType ? payCol.dataType !== 'note' ? payCol.dataType.toLowerCase() : 'text' : 'text'
+                  renderAs: payCol.dataType ? payCol.dataType.toLowerCase() : 'text'
                 }
               }
             else return col

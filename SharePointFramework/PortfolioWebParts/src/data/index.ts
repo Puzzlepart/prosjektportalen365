@@ -800,6 +800,9 @@ export class DataAdapter implements IDataAdapter {
           )
           .map((item) => {
             const projectColumn = new ProjectColumn(item)
+            projectColumn['data'] = {
+              renderAs: projectColumn.dataType ? projectColumn.dataType.toLowerCase() : 'text'
+            }
             return projectColumn
           })
         return filteredItems
