@@ -5,7 +5,7 @@ import { sp } from '@pnp/sp'
  */
 export const getWelcomePage = async () => {
   try {
-    let welcomepage = await sp.web.rootFolder.select('welcomepage').get()
+    const welcomepage = await sp.web.rootFolder.select('welcomepage').get()
     
     return welcomepage.WelcomePage
   } catch (error) {
