@@ -27,7 +27,9 @@ Every change is marked with issue ID.
 
 ### Fixed
 
+- Fixed issue with syncing of project properties not always triggering #736
 - Fixed issue with resource allocation percentage not showing #610. NB: The script UpgradeAllSitesToLatest.ps1 needs to be run to fix the issue for old sites!
+- Fixed issue with setup dialog, where having more than 6 default items didn't render well #702
 
 ## 1.5.0 - 01.04.2022
 

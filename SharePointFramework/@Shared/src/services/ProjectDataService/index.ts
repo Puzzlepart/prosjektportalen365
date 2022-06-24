@@ -129,12 +129,12 @@ export class ProjectDataService {
    * @param {string} urlSource Url source
    */
   private async _getPropertyItem(
-    urlSource: string = encodeURIComponent(document.location.href)
+    urlSource: string = document.location.href
   ): Promise<IGetPropertiesData> {
     try {
       const propertyItemContext = await this._getPropertyItemContext()
       if (!propertyItemContext) return null
-      const [fieldValuesText, fieldValues, fields] = await Promise.all([
+      const [fieldValuesText, fieldValues, fields, welcomepage] = await Promise.all([
         propertyItemContext.item.fieldValuesAsText.get(),
         propertyItemContext.item.get(),
         propertyItemContext.list.fields
@@ -150,10 +150,14 @@ export class ProjectDataService {
           // eslint-disable-next-line quotes
           .filter("substringof('Gt', InternalName)")
           .usingCaching()
-          .get()
+          .get(),
+          this._web.rootFolder.select('welcomepage').get()
       ])
+
+      urlSource = !urlSource.includes(welcomepage.WelcomePage) ? urlSource.replace('#syncproperties=1', `/${welcomepage.WelcomePage}#syncproperties=1`) : urlSource
+      
       const editFormUrl = makeUrlAbsolute(
-        `${propertyItemContext.defaultEditFormUrl}?ID=${propertyItemContext.itemId}&Source=${urlSource}`
+        `${propertyItemContext.defaultEditFormUrl}?ID=${propertyItemContext.itemId}&Source=${encodeURIComponent(urlSource)}`
       )
       const versionHistoryUrl = `${this._params.webUrl}/_layouts/15/versions.aspx?list=${propertyItemContext.listId}&ID=${propertyItemContext.itemId}`
       return {
@@ -173,15 +177,11 @@ export class ProjectDataService {
    * Get properties data
    */
   public async getPropertiesData(): Promise<IGetPropertiesData> {
-    const propertyItem = await this._getPropertyItem(
-      encodeURIComponent(
-        `${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`
-      )
-    )
+    const propertyItem = await this._getPropertyItem(`${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`)
 
     if (propertyItem) {
       const templateParameters = tryParseJson(propertyItem.fieldValuesText.TemplateParameters, {})
-      Logger.write('(ProjectDataService) (getPropertiesData) Local property item found.')
+      Logger.write('(ProjectDataService) (getPropertiesData) Local property item found.') 
       return {
         ...propertyItem,
         propertiesListId: propertyItem.propertiesListId,
