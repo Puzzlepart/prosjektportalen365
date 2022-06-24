@@ -57,8 +57,9 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
       props.syncPropertiesAfterPhaseChange === undefined ||
       props.syncPropertiesAfterPhaseChange
     ) {
+      const welcomepage = document.location.pathname.indexOf(state.data.welcomepage) === -1 ? document.location.pathname + state.data.welcomepage : document.location.pathname
       setTimeout(() => {
-        document.location.href = `${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`
+        document.location.href = `${document.location.protocol}//${document.location.hostname}${welcomepage}#syncproperties=1`
         window.location.reload()
       }, 1000)
     }

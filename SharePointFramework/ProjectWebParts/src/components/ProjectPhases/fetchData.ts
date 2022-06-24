@@ -3,6 +3,7 @@ import SPDataAdapter from 'data'
 import * as strings from 'ProjectWebPartsStrings'
 import { IProjectPhasesData, IProjectPhasesProps } from '.'
 import { getPhaseSitePages } from './getPhaseSitePages'
+import { getWelcomePage } from './getWelcomePage'
 
 /***
  * Fetch phase terms
@@ -14,9 +15,10 @@ export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPha
   let phaseSitePages
 
   try {
-    const [phaseFieldCtx, checklistData] = await Promise.all([
+    const [phaseFieldCtx, checklistData, welcomepage] = await Promise.all([
       SPDataAdapter.getTermFieldContext(phaseField),
-      SPDataAdapter.project.getChecklistData(strings.PhaseChecklistName)
+      SPDataAdapter.project.getChecklistData(strings.PhaseChecklistName),
+      getWelcomePage()
     ])
     const [phases, currentPhaseName] = await Promise.all([
       SPDataAdapter.project.getPhases(phaseFieldCtx.termSetId, checklistData),
@@ -37,7 +39,8 @@ export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPha
       currentPhase,
       phases,
       phaseTextField: phaseFieldCtx.phaseTextField,
-      phaseSitePages
+      phaseSitePages,
+      welcomepage
     }
   } catch (error) {
     throw new Error()
