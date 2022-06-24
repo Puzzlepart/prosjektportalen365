@@ -154,7 +154,7 @@ export class ProjectDataService {
           this._web.rootFolder.select('welcomepage').get()
       ])
 
-      urlSource = !urlSource.includes(welcomepage) ? urlSource.replace('#syncproperties=1', welcomepage + '#syncproperties=1') : urlSource
+      urlSource = !urlSource.includes(welcomepage.WelcomePage) ? urlSource.replace('#syncproperties=1', '/' + welcomepage.WelcomePage + '#syncproperties=1') : urlSource
       
       const editFormUrl = makeUrlAbsolute(
         `${propertyItemContext.defaultEditFormUrl}?ID=${propertyItemContext.itemId}&Source=${encodeURIComponent(urlSource)}`
@@ -181,7 +181,7 @@ export class ProjectDataService {
 
     if (propertyItem) {
       const templateParameters = tryParseJson(propertyItem.fieldValuesText.TemplateParameters, {})
-      Logger.write('(ProjectDataService) (getPropertiesData) Local property item found.')
+      Logger.write('(ProjectDataService) (getPropertiesData) Local property item found.') 
       return {
         ...propertyItem,
         propertiesListId: propertyItem.propertiesListId,

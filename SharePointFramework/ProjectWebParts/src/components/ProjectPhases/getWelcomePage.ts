@@ -7,7 +7,7 @@ export const getWelcomePage = async () => {
   try {
     let welcomepage = await sp.web.rootFolder.select('welcomepage').get()
     
-    return welcomepage
+    return welcomepage.WelcomePage
   } catch (error) {
     throw error
   }
