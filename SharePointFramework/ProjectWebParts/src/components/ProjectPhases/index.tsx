@@ -57,9 +57,13 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
       props.syncPropertiesAfterPhaseChange === undefined ||
       props.syncPropertiesAfterPhaseChange
     ) {
-      const welcomepage = document.location.pathname.indexOf(state.data.welcomepage) === -1 ? `${document.location.pathname}${state.data.welcomepage}` : document.location.pathname
+      const currentUrlIsPageRelative = document.location.pathname.indexOf(state.data.welcomepage) > -1
+      const welcomepage = !currentUrlIsPageRelative ? `${document.location.pathname}/${state.data.welcomepage}` : document.location.pathname
       setTimeout(() => {
-        window.location.href = `${document.location.protocol}//${document.location.hostname}${welcomepage}#syncproperties=1`
+        window.location.assign(`${document.location.protocol}//${document.location.hostname}${welcomepage}#syncproperties=1`)
+        if (currentUrlIsPageRelative) {
+          window.location.reload()
+        } 
       }, 1000)
     }
   }
