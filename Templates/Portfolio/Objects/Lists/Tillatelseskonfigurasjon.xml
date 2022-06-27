@@ -3,7 +3,7 @@
         <pnp:ContentTypeBinding ContentTypeID="0x0100189583AF4D61934E9E196AF1630A8314" Default="true" />
     </pnp:ContentTypeBindings>
     <pnp:Views>
-        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_ResourceAllocation_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_Permission_Configuration_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
             <Query>
                 <OrderBy>
                     <FieldRef Name="GtSPGroupName" Ascending="FALSE" />

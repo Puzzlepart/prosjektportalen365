@@ -1,0 +1,1 @@
+<Field Type="Boolean" DisplayName="{resource:SiteFields_GtShowElementProgram_DisplayName}" Description="{resource:SiteFields_GtShowElementProgram_Description}" ID="{a00b13f6-2761-488d-85d9-37f85879b433}" StaticName="GtShowElementProgram" Name="GtShowElementProgram" Group="{resource:SiteFields_Portfolio_Group}" />

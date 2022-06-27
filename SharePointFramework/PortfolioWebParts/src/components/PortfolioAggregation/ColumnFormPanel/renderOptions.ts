@@ -7,8 +7,12 @@ export const renderOptions: IDropdownOption[] = [
     text: strings.ColumnRenderOptionText
   },
   {
-    key: 'int',
-    text: strings.ColumnRenderOptionInt
+    key: 'note',
+    text: strings.ColumnRenderOptionNote
+  },
+  {
+    key: 'number',
+    text: strings.ColumnRenderOptionNumber
   },
   {
     key: 'date',
@@ -19,11 +23,27 @@ export const renderOptions: IDropdownOption[] = [
     text: strings.ColumnRenderOptionDateTime
   },
   {
+    key: 'user',
+    text: strings.ColumnRenderOptionUser
+  },
+  {
     key: 'list',
     text: strings.ColumnRenderOptionList
   },
   {
     key: 'tags',
     text: strings.ColumnRenderOptionTags
+  },
+  {
+    key: 'percentage',
+    text: strings.ColumnRenderOptionPercentage
+  },
+  {
+    key: 'trend',
+    text: strings.ColumnRenderOptionTrend
+  },
+  {
+    key: 'modal',
+    text: strings.ColumnRenderOptionModal
   }
 ]

@@ -24,7 +24,8 @@
       },
       "officeFabricIconFontName": "TimelineDelivery",
       "properties": {
-        "dataSource": "Alle ressursallokeringer"
+        "dataSourceName": "Alle prosjektleveranser",
+        "configItemTitle": "Prosjektleveranse"
       }
     }
   ]

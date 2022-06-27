@@ -241,7 +241,7 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
 
   useEffect(() => {
     Promise.all([
-      props.dataAdapter.fetchEncrichedProjects(),
+      props.dataAdapter.fetchEnrichedProjects(),
       props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName)
     ]).then(([projects, isUserInPortfolioManagerGroup]) => {
       setState({

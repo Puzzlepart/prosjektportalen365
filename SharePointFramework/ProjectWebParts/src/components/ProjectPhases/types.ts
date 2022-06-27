@@ -85,6 +85,11 @@ export interface IProjectPhasesData {
    * Phase site pages
    */
   phaseSitePages?: IPhaseSitePageModel[]
+
+  /**
+   * Welcome page of web
+   */
+  welcomepage?: string
 }
 
 export interface IPhaseSitePageModel {

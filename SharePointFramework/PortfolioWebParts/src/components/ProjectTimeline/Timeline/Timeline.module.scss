@@ -7,6 +7,7 @@
 
     .timelineItem {
         cursor: pointer !important;
+        min-width: 28px;
         .itemContent {
             text-overflow: ellipsis;
             white-space: nowrap;

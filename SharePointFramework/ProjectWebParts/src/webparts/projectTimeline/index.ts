@@ -52,6 +52,23 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                   checked: true
                 })
               ]
+            },
+            {
+              groupName: strings.ProjectDeliveriesGroupName,
+              groupFields: [
+                PropertyPaneToggle('showProjectDeliveries', {
+                  label: strings.ShowProjectDeliveriesLabel,
+                  checked: false
+                }),
+                PropertyPaneTextField('projectDeliveriesListName', {
+                  label: strings.ListNameFieldLabel,
+                  value: 'Prosjektleveranser'
+                }),
+                PropertyPaneTextField('configItemTitle', {
+                  label: strings.ConfigItemTitleFieldLabel,
+                  value: 'Prosjektleveranse'
+                }),
+              ]
             }
           ]
         }

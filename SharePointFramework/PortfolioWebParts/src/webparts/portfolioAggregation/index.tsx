@@ -13,7 +13,7 @@ import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
   IPortfolioAggregationProps
 > {
-  public render(): void {
+  public async render(): Promise<void> {
     if (!this.properties.dataSource) {
       this.renderComponent<IMessageBarProps>(MessageBar, {
         children: <span>{strings.PortfolioAggregationNotConfiguredMessage}</span>
@@ -22,6 +22,9 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
       this.renderComponent<IPortfolioAggregationProps>(PortfolioAggregation, {
         ...this.properties,
         dataAdapter: new DataAdapter(this.context),
+        configuration: await this.dataAdapter.getAggregatedListConfig(
+          this.properties.dataSourceCategory
+        ),
         onUpdateProperty: this._onUpdateProperty.bind(this)
       })
     }
@@ -66,8 +69,16 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
                 PropertyPaneToggle('showCommandBar', {
                   label: strings.ShowCommandBarLabel
                 }),
+                PropertyPaneToggle('showFilters', {
+                  label: strings.ShowFiltersLabel,
+                  disabled: !this.properties.showCommandBar
+                }),
                 PropertyPaneToggle('showExcelExportButton', {
                   label: strings.ShowExcelExportButtonLabel,
+                  disabled: !this.properties.showCommandBar
+                }),
+                PropertyPaneToggle('showViewSelector', {
+                  label: strings.ShowViewSelectorLabel,
                   disabled: !this.properties.showCommandBar
                 })
               ]

@@ -6,67 +6,134 @@ import styles from './DetailsCallout.module.scss'
 import React from 'react'
 
 export interface IDetailsCalloutProps {
-  item: { data: ITimelineItem; element: HTMLElement }
+  timelineItem: { item: ITimelineItem; element: HTMLElement }
   onDismiss: () => void
 }
 
-export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
+export const DetailsCallout = ({ timelineItem, onDismiss }: IDetailsCalloutProps) => {
+  const item = timelineItem.item.data
+
+  const _calloutContent = (): JSX.Element => {
+    switch (item.type) {
+      case strings.MilestoneLabel: {
+        return (
+          <>
+            <p hidden={!item.type}>
+              <b>{item.type}:</b> <span>{timelineItem.item.title}</span>
+            </p>
+            <p>
+              <b>{strings.MilestoneDateLabel}:</b>{' '}
+              <span>{formatDate(timelineItem.item.end_time.toString())}</span>
+            </p>
+          </>
+        )
+      }
+      case strings.PhaseLabel:
+      case strings.SubPhaseLabel: {
+        return (
+          <>
+            <p hidden={!item.type}>
+              <b>{item.type}:</b> <span>{timelineItem.item.title}</span>
+            </p>
+            <p>
+              <b>{strings.StartDateLabel}:</b>{' '}
+              <span>{formatDate(timelineItem.item.start_time.toString())}</span>
+            </p>
+            <p>
+              <b>{strings.EndDateLabel}:</b>{' '}
+              <span>{formatDate(timelineItem.item.end_time.toString())}</span>
+            </p>
+          </>
+        )
+      }
+      case strings.ProjectLabel: {
+        return (
+          <>
+            <p hidden={!timelineItem.item.projectUrl}>
+              <b>{strings.ProjectLabel}:</b>{' '}
+              <a href={timelineItem.item.projectUrl}>
+                <span>{timelineItem.item.project}</span>
+              </a>
+            </p>
+            <p hidden={!item.budgetTotal || !item.costsTotal}>
+              <a
+                target='_blank'
+                rel='noreferrer'
+                href={`${timelineItem.item.projectUrl}/SitePages/Prosjektstatus.aspx`}>
+                <span>{strings.LastPublishedStatusreport}</span>
+              </a>
+            </p>
+            <p hidden={!item.phase}>
+              <b>{strings.CurrentPhaseLabel}:</b> <span>{item.phase}</span>
+            </p>
+            <p>
+              <b>{strings.StartDateLabel}:</b>{' '}
+              <span>{formatDate(timelineItem.item.start_time.toString())}</span>
+            </p>
+            <p>
+              <b>{strings.EndDateLabel}:</b>{' '}
+              <span>{formatDate(timelineItem.item.end_time.toString())}</span>
+            </p>
+          </>
+        )
+      }
+      default: {
+        return (
+          <>
+            <p>
+              <b>{strings.NameLabel}:</b> <span>{timelineItem.item.title}</span>
+            </p>
+            <p hidden={!item.description}>
+              <b>{strings.DescriptionFieldLabel}:</b> <span>{item.description}</span>
+            </p>
+            <p hidden={item.elementType !== strings.TriangleLabel}>
+              <b>{strings.ColumnRenderOptionDate}:</b>{' '}
+              <span>{formatDate(timelineItem.item.end_time.toString())}</span>
+            </p>
+            <p hidden={item.elementType === strings.TriangleLabel}>
+              <b>{strings.StartDateLabel}:</b>{' '}
+              <span>{formatDate(timelineItem.item.start_time.toString())}</span>
+            </p>
+            <p hidden={item.elementType === strings.TriangleLabel}>
+              <b>{strings.EndDateLabel}:</b>{' '}
+              <span>{formatDate(timelineItem.item.end_time.toString())}</span>
+            </p>
+          </>
+        )
+      }
+    }
+  }
+
+  const boundRect = document.getElementsByClassName('rct-scroll')[0].getBoundingClientRect()
+  const bounds = {
+    top: boundRect.top,
+    left: boundRect.left,
+    right: boundRect.right,
+    bottom: boundRect.bottom + 450,
+    width: boundRect.width,
+    height: boundRect.height + 450
+  }
+
   return (
     <Callout
       className={styles.detailsCallout}
-      gapSpace={10}
-      target={item.element}
+      styles={{
+        beak: { backgroundColor: item.hexColor },
+        beakCurtain: { borderTop: `6px solid ${item.hexColor}` }
+      }}
+      target={timelineItem.element}
+      bounds={bounds}
       onDismiss={onDismiss}
       setInitialFocus={true}>
-      <p hidden={item.data.type === strings.ProjectLabel}>
-        <b>
-          {item.data.type === strings.MilestoneLabel
-            ? strings.MilestoneLabel
-            : item.data.type === strings.PhaseLabel
-            ? strings.PhaseLabel
-            : strings.SubPhaseLabel}
-          :
-        </b>{' '}
-        <span>{item.data.title}</span>
+      {_calloutContent()}
+      <p hidden={!item.budgetTotal}>
+        <b>{strings.BudgetTotalLabel}:</b> <span>{tryParseCurrency(item.budgetTotal)}</span>
       </p>
-      <p hidden={!item.data.projectUrl}>
-        <b>{strings.ProjectLabel}:</b>{' '}
-        <a href={item.data.projectUrl}>
-          <span>{item.data.project}</span>
-        </a>
+      <p hidden={!item.costsTotal}>
+        <b>{strings.CostsTotalLabel}:</b> <span>{tryParseCurrency(item.costsTotal)}</span>
       </p>
-      <p hidden={!item.data.phase}>
-        <b>{strings.CurrentPhaseLabel}:</b> <span>{item.data.phase}</span>
-      </p>
-      <p hidden={item.data.type !== strings.MilestoneLabel}>
-        <b>{strings.MilestoneDateLabel}:</b>{' '}
-        <span>{formatDate(item.data.end_time.toString())}</span>
-      </p>
-      <p hidden={item.data.type === strings.MilestoneLabel}>
-        <b>{strings.StartDateLabel}:</b> <span>{formatDate(item.data.start_time.toString())}</span>
-      </p>
-      <p hidden={item.data.type === strings.MilestoneLabel}>
-        <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.data.end_time.toString())}</span>
-      </p>
-      <p hidden={!item.data.budgetTotal}>
-        <b>{strings.BudgetTotalLabel}:</b> <span>{tryParseCurrency(item.data.budgetTotal)}</span>
-      </p>
-      <p hidden={!item.data.costsTotal}>
-        <b>{strings.CostsTotalLabel}:</b> <span>{tryParseCurrency(item.data.costsTotal)}</span>
-      </p>
-      <p
-        hidden={
-          !item.data.budgetTotal || !item.data.costsTotal || item.data.type !== strings.ProjectLabel
-        }>
-        <a
-          target='_blank'
-          rel='noreferrer'
-          href={`${item.data.projectUrl}/SitePages/Prosjektstatus.aspx`}>
-          <span>{strings.LastPublishedStatusreport}</span>
-        </a>
-      </p>
-      <p hidden={!item.data.type || item.data.type === strings.ProjectLabel}>
-        <b>{strings.TypeLabel}:</b> <span>{item.data.type}</span>
+      <p hidden={!item.type}>
+        <b>{strings.TypeLabel}:</b> <span>{item.type}</span>
       </p>
     </Callout>
   )

@@ -7,10 +7,11 @@ export const ProgramTimeline: FunctionComponent<IProgramTimelineProps> = (props)
     <>
       <ProjectTimeline
         title={props.webPartTitle}
-        dataSource={props.dataSource}
         dataAdapter={props.dataAdapter}
         pageContext={props.context.pageContext as any}
         infoText={props?.infoText}
+        dataSourceName={props?.dataSourceName}
+        configItemTitle={props?.configItemTitle}
       />
     </>
   )

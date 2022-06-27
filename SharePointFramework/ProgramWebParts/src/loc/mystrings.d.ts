@@ -147,14 +147,19 @@ declare interface IProgramWebPartsStrings {
   ViewsListNameLabel: string
   ProjectsListName: string
   TimelineContentListName: string
+  TimelineConfigurationListName: string
   PortfolioManagerGroupName: string
   ProjectTimelineItemInfo: string
   LastPublishedStatusreport: string
+  DiamondLabel: string
+  BarLabel: string
+  TriangleLabel: string
   MilestoneLabel: string
   ProjectLabel: string
   SubPhaseLabel: string
   CurrentPhaseLabel: string
   MilestoneDateLabel: string
+  NameLabel: string
   StartDateLabel: string
   EndDateLabel: string
   BudgetTotalLabel: string
@@ -242,6 +247,10 @@ declare interface IProgramWebPartsStrings {
   ProjectPortfolio_SearchBoxLabelText: string
   ProjectPortfolio_ShowCountText: string
   ProgramStatus_ViewIdLabel: string
+  ProjectDeliveriesGroupName: string;
+  ShowProjectDeliveriesLabel: string;
+  ConfigItemTitleFieldLabel: string;
+  ConfigItemTitleFieldDescription: string;
 }
 
 declare module 'ProgramWebPartsStrings' {

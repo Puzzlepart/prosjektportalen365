@@ -120,11 +120,15 @@ declare interface IProjectWebPartsStrings {
   ProjectTimelineInfoText: string;
   ProjectTimelineListInfoText: string;
   TimelineContentListName: string;
+  TimelineConfigurationListName: string
   NewItemLabel: string;
   EditItemLabel: string;
   PortfolioManagerGroupName: string;
   ProjectTimelineItemInfo: string;
   LastPublishedStatusreport: string;
+  DiamondLabel: string
+  BarLabel: string
+  TriangleLabel: string
   MilestoneLabel: string;
   ProjectLabel: string;
   SubPhaseLabel: string;
@@ -149,6 +153,9 @@ declare interface IProjectWebPartsStrings {
   ChildProjectAdminLabel: string;
   AdminPageLinkLabel: string;
   DefaultAdminPageLink: string;
+  ConfigItemTitleFieldLabel: string;
+  ShowProjectDeliveriesLabel: string;
+  ProjectDeliveriesGroupName: string;
 }
 
 declare module 'ProjectWebPartsStrings' {

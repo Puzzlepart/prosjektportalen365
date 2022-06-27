@@ -1,6 +1,6 @@
 {
   "name": "pp365",
-  "version": "1.5.4",
+  "version": "1.6.0",
   "engines": {
     "node": "^12"
   },
@@ -8,6 +8,7 @@
   "scripts": {
     "build:release": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1",
     "build:release:force": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -Force",
+    "build:pnpTemplates": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -SkipBuildSharePointFramework",
     "sync-version": "node tasks/automatic-versioning.js"
   },
   "repository": {

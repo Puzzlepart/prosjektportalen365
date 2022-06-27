@@ -12,6 +12,7 @@ import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebpa
 import MSGraph from 'msgraph-helper'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProgramWebPartsStrings'
+import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
 import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
@@ -54,6 +55,10 @@ export class DataAdapter {
     this._dataSourceService = new DataSourceService(web)
     return this
   }
+
+  /**
+   * Get portfolio configuration
+   */
   public async getPortfolioConfig(): Promise<IPortfolioConfiguration> {
     // eslint-disable-next-line prefer-const
     let [columnConfig, columns, views, viewsUrls, columnUrls] = await Promise.all([
@@ -316,20 +321,28 @@ export class DataAdapter {
    */
   public async fetchDataForTimelineProject(siteId: string) {
     const siteIdProperty: string = 'GtSiteIdOWSTEXT'
-    const costsTotalProperty: string = 'GtCostsTotalOWSCURR'
-    const budgetTotalProperty: string = 'GtBudgetTotalOWSCURR'
 
-    let [{ PrimarySearchResults: statusReports }] = await Promise.all([
-      this._sp.search({
+    const [timelineConfig, { PrimarySearchResults: statusReports }] = await Promise.all([
+      this.fetchTimelineConfiguration(),
+      sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} ${siteIdProperty}:{${siteId}}
         ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
-        SelectProperties: [costsTotalProperty, budgetTotalProperty, siteIdProperty]
+        SelectProperties: [siteIdProperty, 'GtCostsTotalOWSCURR', 'GtBudgetTotalOWSCURR']
       })
     ])
-    statusReports = statusReports.map((item) => cleanDeep({ ...item }))
+    const [data] = (statusReports.map((item) => cleanDeep({ ...item })))
+    const config = _.find(timelineConfig, (col) => col.Title === strings.ProjectLabel)
     return {
-      statusReports
+      type: strings.ProjectLabel,
+      costsTotal: data && data['GtCostsTotalOWSCURR'],
+      budgetTotal: data && data['GtBudgetTotalOWSCURR'],
+      sortOrder: config && config.GtSortOrder,
+      hexColor: config && config.GtHexColor,
+      elementType: config && config.GtElementType,
+      showElementPortfolio: config && config.GtShowElementPortfolio,
+      showElementProgram: config && config.GtShowElementProgram,
+      timelineFilter: config && config.GtTimelineFilter,
     }
   }
 
@@ -340,47 +353,133 @@ export class DataAdapter {
    * * Maps the items to TimelineContentListModel
    */
   public async fetchTimelineContentItems() {
-    const [timelineItems] = await Promise.all([
+    const [timelineConfig, timelineItems] = await Promise.all([
+      this.fetchTimelineConfiguration(),
       this._sp.web.lists
         .getByTitle(strings.TimelineContentListName)
         .items.select(
           'Title',
-          'TimelineType',
+          'GtTimelineTypeLookup/Title',
           'GtStartDate',
           'GtEndDate',
           'GtBudgetTotal',
           'GtCostsTotal',
-          'SiteIdLookup/Title',
-          'SiteIdLookup/GtSiteId'
+          'GtSiteIdLookup/Title',
+          'GtSiteIdLookup/GtSiteId'
         )
-        .expand('SiteIdLookup')
+        .top(500)
+        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
         .get()
     ])
+
+
     return timelineItems
       .map((item) => {
+        const type = item.GtTimelineTypeLookup && item.GtTimelineTypeLookup.Title
+        const config = _.find(timelineConfig, (col) => col.Title === type)
+
         if (
-          item?.SiteIdLookup?.Title &&
+          item?.GtSiteIdLookup?.Title &&
           _.find(
             this._childProjects,
             (child) =>
-              child?.SiteId === item?.SiteIdLookup?.GtSiteId ||
-              item?.SiteIdLookup?.GtSiteId === this?.context?.pageContext?.site?.id?.toString()
+              child?.SiteId === item?.GtSiteIdLookup?.GtSiteId ||
+              item?.GtSiteIdLookup?.GtSiteId === this?.context?.pageContext?.site?.id?.toString()
           )
         ) {
-          const model = new TimelineContentListModel(
-            item.SiteIdLookup?.GtSiteId,
-            item.SiteIdLookup?.Title,
-            item.Title,
-            item.TimelineType,
-            item.GtStartDate,
-            item.GtEndDate,
-            item.GtBudgetTotal,
-            item.GtCostsTotal
-          )
-          return model
+          if (item.GtSiteIdLookup?.Title && (config && config.GtShowElementProgram)) {
+            const model = new TimelineContentListModel(
+              item.GtSiteIdLookup?.GtSiteId,
+              item.GtSiteIdLookup?.Title,
+              item.Title,
+              config && config.Title,
+              config && config.GtSortOrder,
+              config && config.GtHexColor,
+              config && config.GtElementType,
+              config && config.GtShowElementPortfolio,
+              config && config.GtShowElementProgram,
+              config && config.GtTimelineFilter,
+              item.GtStartDate,
+              item.GtEndDate,
+              item.GtBudgetTotal,
+              item.GtCostsTotal
+            )
+            return model
+          }
         }
       })
       .filter((p) => p)
+  }
+
+  /**
+   * Fetches configuration data for the Projecttimeline
+   *
+   */
+  public async fetchTimelineConfiguration() {
+    return await sp.web.lists
+      .getByTitle(strings.TimelineConfigurationListName)
+      .items.select(
+        'Title',
+        'GtSortOrder',
+        'GtHexColor',
+        'GtElementType',
+        'GtShowElementPortfolio',
+        'GtShowElementProgram',
+        'GtTimelineFilter',
+      )
+      .top(500)
+      .get()
+  }
+
+  /**
+   * Fetches configuration data for the Projecttimeline
+   *
+   */
+  public async fetchTimelineAggregatedContent(configItemTitle: string, dataSourceName: string) {
+    const [timelineConfig] = await Promise.all([
+      this.fetchTimelineConfiguration()
+    ])
+
+    const config: any = _.find(timelineConfig, (col) => col.Title === configItemTitle)
+
+    if (config && config.GtShowElementProgram) {
+      const [projectDeliveries] = await Promise.all([
+        this.configure().then((adapter) => {
+          return adapter.fetchItemsWithSource(dataSourceName, ['Title', 'GtDeliveryDescriptionOWSMTXT', 'GtDeliveryStartTimeOWSDATE', 'GtDeliveryEndTimeOWSDATE'], true)
+            .then((deliveries) => {
+              return deliveries
+            })
+            .catch((error) => {
+              throw error
+            })
+        })
+      ])
+
+      return projectDeliveries
+        .map((item) => {
+          const model = new TimelineContentListModel(
+            item.SiteId,
+            item.SiteTitle,
+            item.Title,
+            config && config.Title || configItemTitle,
+            config && config.GtSortOrder || 90,
+            config && config.GtHexColor || '#384f61',
+            config && config.GtElementType || strings.BarLabel,
+            config && config.GtShowElementPortfolio || false,
+            config && config.GtShowElementProgram || false,
+            config && config.GtTimelineFilter || true,
+            item.GtDeliveryStartTimeOWSDATE,
+            item.GtDeliveryEndTimeOWSDATE,
+            null,
+            null,
+            null,
+            null,
+            item.GtDeliveryDescriptionOWSMTXT
+          )
+          return model
+        })
+        .filter((t) => t)
+    }
   }
 
   /**
@@ -434,24 +533,18 @@ export class DataAdapter {
     groups: IGraphGroup[],
     users: ISPUser[]
   ): ProjectListModel[] {
-    let projects = items.map((item) => {
-      const [group] = groups.filter((grp) => grp.id === item.GtGroupId)
-      const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
-      const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
-      const model = new ProjectListModel(
-        item.GtSiteId,
-        item.GtGroupId,
-        group?.displayName ?? item.Title,
-        item.GtSiteUrl,
-        item.GtProjectPhaseText,
-        item.GtStartDate,
-        item.GtEndDate,
-        manager,
-        owner,
-        !!group
-      )
-      return model
-    })
+    let projects = items
+      .map((item) => {
+        const [group] = groups.filter((grp) => grp.id === item.GtGroupId)
+        const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
+        const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
+        const model = new ProjectListModel(group?.displayName ?? item.Title, item)
+        model.userIsMember = !!group
+        if (manager) model.manager = { text: manager.Title, imageUrl: getUserPhoto(manager.Email) }
+        if (owner) model.owner = { text: owner.Title, imageUrl: getUserPhoto(owner.Email) }
+        return model
+      })
+      .filter((p) => p)
 
     projects = projects
       .map((project) => {
@@ -475,7 +568,7 @@ export class DataAdapter {
    * Site users
    * Combines the data
    */
-  public async fetchEncrichedProjects(): Promise<ProjectListModel[]> {
+  public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
     await MSGraph.Init(this.context.msGraphClientFactory)
     const [items, groups, users] = await Promise.all([
       this._sp.web.lists
@@ -506,7 +599,7 @@ export class DataAdapter {
       this._sp.web.siteUsers
         .select('Id', 'Title', 'Email')
         .usingCaching({
-          key: 'fetchencrichedprojects_siteusers',
+          key: 'fetchenrichedprojects_siteusers',
           storeName: 'session',
           expiration: dateAdd(new Date(), 'minute', 15)
         })
@@ -546,8 +639,10 @@ export class DataAdapter {
    * @param queryTemplate Query template
    * @param selectProperties Select properties
    */
-  private async _fetchItems(queryTemplate: string, selectProperties: string[]) {
+  private async _fetchItems(queryTemplate: string, selectProperties: string[], includeSelf: boolean = false) {
+    const siteId = this.context.pageContext.site.id.toString()
     const programFilter = this._childProjects && this.aggregatedQueryBuilder('SiteId')
+    if (includeSelf) programFilter.unshift(`SiteId:${siteId}`)
     const promises = []
     programFilter.forEach((element) => {
       promises.push(
@@ -567,7 +662,7 @@ export class DataAdapter {
     })
 
     const duplicateArray = [].concat(...searchResults)
-    //remove duplicate objects from array
+    // Remove duplicate objects from array
     // Only needed for development if we have to run queries on the same projects due to lack of data
     // will be changed to `return responses` in production
     const uniqueArray = duplicateArray.filter(
@@ -582,13 +677,14 @@ export class DataAdapter {
    * @param name Data source name
    * @param selectProperties Select properties
    */
-  public async fetchItemsWithSource(name: string, selectProperties: string[]): Promise<any> {
+  public async fetchItemsWithSource(name: string, selectProperties: string[], includeSelf: boolean = false): Promise<any> {
     const dataSrc = await this._dataSourceService.getByName(name)
     if (!dataSrc) {
       throw new Error(format(strings.DataSourceNotFound, name))
     }
+
     try {
-      const items = await this._fetchItems(dataSrc.searchQuery, selectProperties)
+      const items = await this._fetchItems(dataSrc.searchQuery, selectProperties, includeSelf)
       return items
     } catch (error) {
       throw new Error(format(strings.DataSourceError, name))

@@ -15,7 +15,10 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Execute CopyListData
+   * Execute CopyListData.
+   *
+   * Creates a Planner plan for the Microsoft 365 group, then loops
+   * through all list data configurations.
    *
    * @param params Task parameters
    * @param onProgress On progress function
@@ -26,6 +29,11 @@ export class CopyListData extends BaseTask {
   ): Promise<IBaseTaskParams> {
     this.onProgress = onProgress
     try {
+      await new PlannerConfiguration(this.data, {}).ensurePlan(
+        params.context.pageContext.web.title,
+        params.context.pageContext.legacyPageContext.groupId,
+        false
+      )
       for (let i = 0; i < this.data.selectedListContentConfig.length; i++) {
         const config = this.data.selectedListContentConfig[i]
         await config.load()

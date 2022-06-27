@@ -3,6 +3,34 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with issue ID.
 
+## 1.6.0 - 16.06.2022
+
+### Added
+
+- Added timeline configuration list (Customize how timeline elements are displayed, their colors, sorting and more) #678
+  - This applies to Portfolio, Project and Program timelines
+- Added possibility to include project deliveries on timeline (beta) #679
+  - This applies to Portfolio, Project and Program timelines
+- Added ability to run hooks in the txt provisioning template #700
+  - Example: Trigger API's, Flows, Logic Apps, Azure Functions, etc...
+- Added 'Prosjektinnholdskolonner' list to define columns which are used for the aggregated webparts #706
+  - 'Datakilder' has been expanded with 'Prosjekt odata spørring' column to filter the projects in the datasource query
+
+### Changed
+
+- Expanded aggregated webparts with similar functionality as PortfolioOverview #706
+  - Views, Filters, Grouping has been added to make them more dynamic
+  - The aggregated webparts are: 'Erfaringslogg', 'Leveranseoversikt' and 'Risikooversikt'
+  - 'Gevinstoversikt'has been reworked as an aggregated webpart and will work the same
+  - 'Datakilder' list has been expanded with three new columns connected to 'Prosjektinnholdskolonner' list
+- Improvements to styling, sorting and information messages for the Document Template Selector #711
+
+### Fixed
+
+- Fixed issue with syncing of project properties not always triggering #736
+- Fixed issue with resource allocation percentage not showing #610. NB: The script UpgradeAllSitesToLatest.ps1 needs to be run to fix the issue for old sites!
+- Fixed issue with setup dialog, where having more than 6 default items didn't render well #702
+
 ## 1.5.0 - 01.04.2022
 
 ### Added
@@ -18,7 +46,7 @@ Every change is marked with issue ID.
   - Gains overview
   - Timeline
   - Deliveries
-  - Risks and benefits 
+  - Risks and benefits
 
 ### Changed
 
