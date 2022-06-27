@@ -23,7 +23,7 @@ if ($null -ne $LastInstall) {
     }
 
     if ($PreviousVersion -lt "1.6.0") {
-        Get-PnPProvisioningTemplate -Out "$BasePath\Navigation.xml" -Handlers Navigation -Erroraction SilentlyContinue
+        Get-PnPProvisioningTemplate -Out "$BasePath\Navigation.xml" -Handlers Navigation -Force -Erroraction SilentlyContinue
         ((Get-Content -path "$BasePath\Navigation.xml" -Raw) -replace 'false', 'true') | Set-Content -Path "$BasePath\Navigation.xml" -Force -ErrorAction SilentlyContinue
 
         Write-Host "[INFO] Removing deprecated pages"
