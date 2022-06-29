@@ -432,7 +432,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
 
         projectDeliveries = projectDeliveries
           .map((item) => {
-            const config = _.find(timelineConfig, (col) => col.Title === this.props.configItemTitle)
+            const config = _.find(timelineConfig, (col) => col.Title === (this.props.configItemTitle || 'Prosjektleveranse'))
             const model = new TimelineContentListModel(
               this.props.siteId,
               this.props.webTitle,
