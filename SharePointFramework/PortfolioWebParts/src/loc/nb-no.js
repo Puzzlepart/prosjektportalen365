@@ -69,6 +69,7 @@ define([], function() {
         DataSourceError: 'Det skjedde en feil under uthenting av data fra datakilde med navn **{0}**.',
         DataSourceNotFound: 'Finner ingen datakilde med navn **{0}**.',
         DefaultViewLabel: 'Standardvisning',
+        DefaultDataSourceViewLabel: 'Standardvisning (datakilde)',
         DeliveryDescriptionLabel: 'Leveransebeskrivelse',
         DeliveryEndTimeLabel: 'Sluttidspunkt',
         DeliveryStartTimeLabel: 'Starttidspunkt',
