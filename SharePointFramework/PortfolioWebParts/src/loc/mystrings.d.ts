@@ -70,6 +70,7 @@ declare interface IPortfolioWebPartsStrings {
   DataSourceCategoryError: string
   DataSourceNotFound: string
   DefaultViewLabel: string
+  DefaultDataSourceViewLabel: string
   DeliveryDescriptionLabel: string
   DeliveryEndTimeLabel: string
   DeliveryStartTimeLabel: string

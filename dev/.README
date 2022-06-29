@@ -6,7 +6,6 @@
 [[ template:toc ]]
 </details>
 
-
 ## Site Design / Site Scripts
 
 Everything related to the site design and the corresponding site scripts reside in the folder **SiteScripts**. 
@@ -31,22 +30,19 @@ Please note the **Parameters** object.
 }
 ```
 
-| Parameter                  | Description                                                  |
-| -------------------------- | ------------------------------------------------------------ |
+| Parameter                  | Description                                                                           |
+| -------------------------- | ------------------------------------------------------------------------------------- |
 | ProvisionSiteFields        | The site fields in this group will be copied to the project site during provisioning. |
-| ProjectContentTypeId       | Content type ID for the Project properties content type      |
-| ProjectStatusContentTypeId | Content type ID for the Project status content type          |
-
-
+| ProjectContentTypeId       | Content type ID for the Project properties content type                               |
+| ProjectStatusContentTypeId | Content type ID for the Project status content type                                   |
 
 In addition to the parameters specified in [Standardmal.txt](../Templates/Portfolio/Prosjektmaler/Standardmal.txt), there's also the following parameters:
 
-| Parameter  | Description                                                  |
-| ---------- | ------------------------------------------------------------ |
+| Parameter  | Description                                                                           |
+| ---------- | ------------------------------------------------------------------------------------- |
 | TermSetIds | An map of term set fields and term set id. Used to override the default term set ids. |
 
 Say you'd like to use the term set with ID **54da9f47-c64e-4a26-80f3-4d3c3fa1b7b2** for project phase. The internal field name for project phase is **GtProjectPhase**. With the default template, the **Parameters** object would look like this:
-
 
 ```json
 {
@@ -61,24 +57,22 @@ Say you'd like to use the term set with ID **54da9f47-c64e-4a26-80f3-4d3c3fa1b7b
 }
 ```
 
-
-
 ## Templates
 
 ### JSON provisioning template
 
 At the root level of the **Templates** folder, the following files are found:
 
-| File/Folder                     | Description                                                  |
-| ------------------------------- | ------------------------------------------------------------ |
-| `Clean-Resx.ps1`                | Script to remove unused **.resx** resources                  |
-| `Find-FieldUsage.ps1`           | Script to find field usage                                   |
-| `Get-ComponentProperties.ps1`   | Script to get component properties from `<pnp:ClientSidePage>` instances |
+| File/Folder                     | Description                                                                                   |
+| ------------------------------- | --------------------------------------------------------------------------------------------- |
+| `Clean-Resx.ps1`                | Script to remove unused **.resx** resources                                                   |
+| `Find-FieldUsage.ps1`           | Script to find field usage                                                                    |
+| `Get-ComponentProperties.ps1`   | Script to get component properties from `<pnp:ClientSidePage>` instances                      |
 | `Encode-JSON.ps1`               | Script to take the content of a JSON file, encode and minfiy at, and store it in a `.txt`file |
-| `Search-Resx.ps1`               | Script to search for unused **.resx** resources              |
-| `tasks/generateResxJson.js`     | Node script to generate a JSON representation of the **.resx** files |
-| `tasks/generateJsonTemplate.js` | Node script to generate JSON templates for each language     |
-| `_JsonTemplate.json`            | JSON project template                                        |
+| `Search-Resx.ps1`               | Script to search for unused **.resx** resources                                               |
+| `tasks/generateResxJson.js`     | Node script to generate a JSON representation of the **.resx** files                          |
+| `tasks/generateJsonTemplate.js` | Node script to generate JSON templates for each language                                      |
+| `_JsonTemplate.json`            | JSON project template                                                                         |
 
 #### Building JSON templates
 
@@ -97,8 +91,6 @@ Resources from the **.resx** files in the folder Portfolio can be used in the te
 }
 ```
 
-
-
 ### PnP templates
 
 In addition we have two PnP provisioning templates. 
@@ -110,12 +102,12 @@ In addition we have two PnP provisioning templates.
 
 #### Portfolio
 
-| File/Folder        | Description                                                  |
-| ------------------ | ------------------------------------------------------------ |
+| File/Folder        | Description                                                    |
+| ------------------ | -------------------------------------------------------------- |
 | Objects            | PnP assets. See https://github.com/pnp/PnP-Provisioning-Schema |
-| SiteAssets         | Files to be uploaded to SiteAssets                           |
-| Portfolio.xml      | Main template file                                           |
-| `Resources.*.resx` | Resource files                                               |
+| SiteAssets         | Files to be uploaded to SiteAssets                             |
+| Portfolio.xml      | Main template file                                             |
+| `Resources.*.resx` | Resource files                                                 |
 
 #### Content templates
 
@@ -142,7 +134,7 @@ To build a new release make sure your on the `main`branch and in sync with **ori
 
 Run the npm script `build:release`:
 
-```shelll
+```powershell
 npm run build:release
 ```
 
@@ -174,20 +166,19 @@ With the current approach, with no cache, a full run takes about 30 minutes.
 
 For creating a new release, we have two options: Minor and patch. New minor version should be created when there is new functionality of interest to users, while patch versions can be created often with bug fixes, adjustments and minimal functional improvements.
 
-Increasing the version number is done by npm scripts. This is done on the dev-branch when the functionality currently in dev is deemed ready for release. To create a new patch-release:
+Increasing the version number is done by npm scripts. This is done on the dev-branch when the functionality currently in dev is deemed ready for release.
 
-```shelll
+```powershell
+# patch-release
 npm version patch
+git push --tags
+
+# minor-release
+npm version minor
 git push --tags
 ```
 
 Then create a Pull Request to merge dev into main. The output from GitHub Actions will include a release package that can be shared as a release on GitHub. No manual build required.
-
-## README generation
-
-READMEs are automatically generated using [@appnest/readme](https://github.com/andreasbm/readme). The main README is generated from [.README](../.README) while this README is generated from [.README](.README). The generation is configured with the `blueprint.json` files.
-
-For the main [README.md)[../README.md] generation, the different parts are included from the [readme](../readme) folder at root level.
 
 ## Versioning
 
@@ -195,8 +186,28 @@ After updating the version using `npm version patch` or `npm version minor` the 
 
 This `automatic-versioning.js` task can also be run as a **npm script** outside the `postversion` event.
 
-```dockerfile
-npm run @sync-version
+```powershell
+npm run sync-version
 ```
 
+After the `sync-version` script has been run, it is important to publish the SharePointFramework packages (@Shared, PortfolioWebParts, etc...) to npmjs.
 
+This is done for each package by running the following script:
+
+```powershell
+npm install; npm run build; npm publish;
+```
+
+If you have to update and use a package under development add a temp tag:
+
+```powershell
+npm install; npm run build; npm publish --tag temp;
+```
+
+N.B.: To be able to publish you must sign in with an account that has access to the packages at [npmjs](https://www.npmjs.com)
+
+## README generation
+
+READMEs are automatically generated using [@appnest/readme](https://github.com/andreasbm/readme). The main README is generated from [.README](../.README) while this README is generated from [.README](.README). The generation is configured with the `blueprint.json` files.
+
+For the main [README.md)[../README.md] generation, the different parts are included from the [readme](../readme) folder at root level.
