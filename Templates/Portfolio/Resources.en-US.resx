@@ -1616,7 +1616,7 @@
     <value>Prosjekt OData-spørring</value>
   </data>
   <data name="SiteFields_GtODataQuery_Description" xml:space="preserve">
-    <value>OData-spørring for å filtrere datakilden mot prosjekter. Spørringen brukes mot Prosjekter-listen for å kun vise data fra et utvalg prosjekter. Eksempel: "GtProjectPhaseText eq 'Konsept'" vil kun returnere data fra prosjekter i konsept-fasen.</value>
+    <value>OData-spørring for å filtrere datakilden mot prosjekter. Spørringen brukes mot Prosjekter-listen for å kun vise data fra et utvalg prosjekter. Eksempel: GtProjectPhaseText eq 'Konsept' vil kun returnere data fra prosjekter i konsept-fasen.</value>
   </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
