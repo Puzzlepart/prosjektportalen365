@@ -440,12 +440,18 @@ export class DataAdapter {
       this.fetchTimelineConfiguration()
     ])
 
-    const config: any = _.find(timelineConfig, (col) => col.Title === configItemTitle)
+    const config: any = _.find(timelineConfig, (col) => col.Title === (configItemTitle || 'Prosjektleveranse'))
 
     if (config && config.GtShowElementProgram) {
       const [projectDeliveries] = await Promise.all([
         this.configure().then((adapter) => {
-          return adapter.fetchItemsWithSource(dataSourceName, ['Title', 'GtDeliveryDescriptionOWSMTXT', 'GtDeliveryStartTimeOWSDATE', 'GtDeliveryEndTimeOWSDATE'], true)
+          return adapter.fetchItemsWithSource(dataSourceName || 'Alle prosjektleveranser',
+            [
+              'Title',
+              'GtDeliveryDescriptionOWSMTXT',
+              'GtDeliveryStartTimeOWSDATE',
+              'GtDeliveryEndTimeOWSDATE'],
+            true)
             .then((deliveries) => {
               return deliveries
             })

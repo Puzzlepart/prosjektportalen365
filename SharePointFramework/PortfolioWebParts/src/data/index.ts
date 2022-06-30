@@ -426,13 +426,12 @@ export class DataAdapter implements IDataAdapter {
   public async fetchTimelineAggregatedContent(configItemTitle: string, dataSourceName: string) {
     const [timelineConfig] = await Promise.all([this.fetchTimelineConfiguration()])
 
-    const config: any = _.find(timelineConfig, (col) => col.Title === configItemTitle)
-
+    const config: any = _.find(timelineConfig, (col) => col.Title === (configItemTitle || 'Prosjektleveranse'))
     if (config && config.GtShowElementPortfolio) {
       const [projectDeliveries] = await Promise.all([
         this.configure().then((adapter) => {
           return adapter
-            .fetchItemsWithSource(dataSourceName, [
+            .fetchItemsWithSource(dataSourceName || 'Alle prosjektleveranser', [
               'Title',
               'GtDeliveryDescriptionOWSMTXT',
               'GtDeliveryStartTimeOWSDATE',
