@@ -1,6 +1,7 @@
 import SPDataAdapter from 'data'
 import { ProjectPhaseModel } from 'pp365-shared/lib/models'
 import { changeWelcomePage } from './changeWelcomePage'
+import { runPhaseHook } from './runPhaseHook'
 import { modifyCurrentPhaseView } from './modifyCurrentPhaseView'
 import { IPhaseSitePageModel, IProjectPhasesProps } from './types'
 
@@ -20,6 +21,7 @@ export const changePhase = async (
 ) => {
   try {
     await SPDataAdapter.project.updatePhase(phase, phaseTextField)
+    await runPhaseHook(props.hookUrl, props.hookAuth)
     if (props.useDynamicHomepage)
       await changeWelcomePage(
         phase.name,

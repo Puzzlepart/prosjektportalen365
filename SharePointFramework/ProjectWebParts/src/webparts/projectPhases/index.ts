@@ -86,6 +86,28 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
                     strings.UseDynamicHomepageCalloutText
                   ),
                   checked: this.properties.useDynamicHomepage
+                }),
+                PropertyFieldToggleWithCallout('usePhaseHooks', {
+                  calloutTrigger: CalloutTriggers.Click,
+                  key: 'usePhaseHooksFieldId',
+                  label: strings.UsePhaseHooksFieldLabel,
+                  onText: 'På',
+                  offText: 'Av',
+                  calloutWidth: 430,
+                  calloutContent: React.createElement(
+                    'p',
+                    {},
+                    strings.UsePhaseHooksCalloutText
+                  ),
+                  checked: this.properties.usePhaseHooks
+                }),
+                this.properties.usePhaseHooks && PropertyPaneTextField('hookUrl', {
+                  label: strings.HookUrlFieldLabel,
+                  description: strings.HookUrlFieldDescription,
+                }),
+                this.properties.usePhaseHooks && PropertyPaneTextField('hookAuth', {
+                  label: strings.HookAuthFieldLabel,
+                  description: strings.HookAuthFieldDescription
                 })
               ]
             }
