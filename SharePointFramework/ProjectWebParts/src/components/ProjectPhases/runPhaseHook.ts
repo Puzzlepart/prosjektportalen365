@@ -11,8 +11,8 @@ export const runPhaseHook = async (hookUrl: string, hookAuth: string) => {
     const web = await sp.web.get()
 
     const body = {
-        auth: hookAuth,
-        pp_webUrl: web.Url
+        apiKey: hookAuth,
+        webUrl: web.Url
       }
 
     const postRequest = {

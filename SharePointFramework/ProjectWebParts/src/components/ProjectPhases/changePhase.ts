@@ -21,7 +21,7 @@ export const changePhase = async (
 ) => {
   try {
     await SPDataAdapter.project.updatePhase(phase, phaseTextField)
-    await runPhaseHook(props.hookUrl, props.hookAuth)
+    if (props.usePhaseHooks) runPhaseHook(props.hookUrl, props.hookAuth)
     if (props.useDynamicHomepage)
       await changeWelcomePage(
         phase.name,
