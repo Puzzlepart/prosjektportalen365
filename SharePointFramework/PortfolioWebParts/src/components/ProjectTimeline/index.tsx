@@ -224,11 +224,20 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    * @returns Timeline groups
    */
   private _transformGroups(projects: ProjectListModel[]): ITimelineGroup[] {
-    const groups: ITimelineGroup[] = _.uniq(projects.map((project) => project.title)).map(
-      (title, id) => {
+    const mappedProjects = _.uniq(projects.map((project) => project.title)).map((title) => {
+      const project = projects.find((project) => project.title === title)
+      return {
+        title: project.title,
+        siteId: project.siteId,
+      }
+    })
+
+    const groups: ITimelineGroup[] = mappedProjects.map(
+      (project, id) => {
         return {
           id,
-          title
+          title: project.title,
+          siteId: project.siteId,
         }
       }
     )
@@ -248,7 +257,11 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
     groups: ITimelineGroup[]
   ): ITimelineItem[] {
     const items: ITimelineItem[] = timelineItems.map((item, id) => {
-      const group = _.find(groups, (grp) => item.title.indexOf(grp.title) !== -1)
+      const group = _.find(groups, (grp) => item.siteId.indexOf(grp.siteId) !== -1)
+
+      if (group === null)
+        return
+      
       const style: React.CSSProperties = {
         color: 'white',
         border: 'none',
@@ -287,7 +300,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         }
       } as ITimelineItem
     })
-    return items
+    return items.filter((i) => i)
   }
 
   /**
@@ -333,7 +346,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
             ...project,
             ...projectData
           }
-        })
+        }).filter((i) => i)
       )
 
       timelineItems = [...timelineItems, ...filteredTimelineItems]

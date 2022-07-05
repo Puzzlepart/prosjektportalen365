@@ -319,30 +319,32 @@ export class DataAdapter implements IDataAdapter {
    * @param siteId
    */
   public async fetchDataForTimelineProject(siteId: string) {
-    const siteIdProperty: string = 'GtSiteIdOWSTEXT'
+    try {
+      const siteIdProperty: string = 'GtSiteIdOWSTEXT'
 
-    const [timelineConfig, { PrimarySearchResults: statusReports }] = await Promise.all([
-      this.fetchTimelineConfiguration(),
-      sp.search({
-        ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} ${siteIdProperty}:{${siteId}}
+      const [timelineConfig, { PrimarySearchResults: statusReports }] = await Promise.all([
+        this.fetchTimelineConfiguration(),
+        sp.search({
+          ...DEFAULT_SEARCH_SETTINGS,
+          QueryTemplate: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} ${siteIdProperty}:{${siteId}}
         ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
-        SelectProperties: [siteIdProperty, 'GtCostsTotalOWSCURR', 'GtBudgetTotalOWSCURR']
-      })
-    ])
-    const [data] = statusReports.map((item) => cleanDeep({ ...item }))
-    const config = _.find(timelineConfig, (col) => col.Title === strings.ProjectLabel)
-    return {
-      type: strings.ProjectLabel,
-      costsTotal: data && data['GtCostsTotalOWSCURR'],
-      budgetTotal: data && data['GtBudgetTotalOWSCURR'],
-      sortOrder: config && config.GtSortOrder,
-      hexColor: config && config.GtHexColor,
-      elementType: config && config.GtElementType,
-      showElementPortfolio: config && config.GtShowElementPortfolio,
-      showElementProgram: config && config.GtShowElementProgram,
-      timelineFilter: config && config.GtTimelineFilter
-    }
+          SelectProperties: [siteIdProperty, 'GtCostsTotalOWSCURR', 'GtBudgetTotalOWSCURR']
+        })
+      ])
+      const [data] = statusReports.map((item) => cleanDeep({ ...item }))
+      const config = _.find(timelineConfig, (col) => col.Title === strings.ProjectLabel)
+      return {
+        type: strings.ProjectLabel,
+        costsTotal: data && data['GtCostsTotalOWSCURR'],
+        budgetTotal: data && data['GtBudgetTotalOWSCURR'],
+        sortOrder: config && config.GtSortOrder,
+        hexColor: config && config.GtHexColor,
+        elementType: config && config.GtElementType,
+        showElementPortfolio: config && config.GtShowElementPortfolio,
+        showElementProgram: config && config.GtShowElementProgram,
+        timelineFilter: config && config.GtTimelineFilter
+      }
+    } catch (error) {}
   }
 
   /**
