@@ -7,4 +7,5 @@ export interface ITimelineGroup {
   id: number
   title: string
   type?: TimelineGroupType
+  siteId?: string
 }
