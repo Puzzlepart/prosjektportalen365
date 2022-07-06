@@ -8,6 +8,8 @@ Every change is marked with issue ID.
 ### Added
 
 - Added ViewId for views in aggregated web parts which is set in the url
+- Added errormessage when trying to add template to hubsite. #744
+
 
 ## 1.6.0 - 16.06.2022
 
