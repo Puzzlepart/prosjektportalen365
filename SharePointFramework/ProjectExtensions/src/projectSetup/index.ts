@@ -71,6 +71,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             strings.InvalidLanguageErrorStack
           )
         }
+        case ProjectSetupValidation.IsHubSite: {
+          await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, false)
+          throw new ProjectSetupError(
+            'IsHubSite',
+            strings.IsHubSiteErrorMessage,
+            strings.IsHubSiteErrorStack
+          )
+        }
         case ProjectSetupValidation.NoHubConnection: {
           throw new ProjectSetupError(
             'NoHubConnection',
@@ -97,6 +105,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         context: this.context,
         properties: this.properties
       })
+
     } catch (error) {
       Logger.log({
         message: '(ProjectSetup) [onInit]: Failed initializing pre-conditionals',
@@ -449,6 +458,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       return ProjectSetupValidation.InvalidWebLanguage
     if (!this.context.pageContext.legacyPageContext.hubSiteId)
       return ProjectSetupValidation.NoHubConnection
+    if (this.context.pageContext.legacyPageContext.siteId.includes(this.context.pageContext.legacyPageContext.hubSiteId))
+      return ProjectSetupValidation.IsHubSite
     if (this.isSetup) return ProjectSetupValidation.AlreadySetup
     return ProjectSetupValidation.Ready
   }

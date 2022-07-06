@@ -38,6 +38,8 @@ declare interface IProjectExtensionsStrings {
   GetSetupDataErrorStack: string
   InvalidLanguageErrorMessage: string
   InvalidLanguageErrorStack: string
+  IsHubSiteErrorMessage: string
+  IsHubSiteErrorStack: string
   DocumentLibraryDropdownLabel: string
   FolderDropdownLabel: string
   ListContentTitle: string

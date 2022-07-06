@@ -92,6 +92,8 @@ define([], function() {
         ProvisionTemplateText: 'Gå til maloppsett',
         Lists_ProjectTemplateFiles_Title: 'Prosjektmaler',
         ContinueToProjectText: 'Fortsett til prosjekt',
-        RecycleBinText: 'Papirkurv'
+        RecycleBinText: 'Papirkurv',
+        IsHubSiteErrorMessage: "Kan ikke legge prosjektmal på Hubsite",
+        IsHubSiteErrorStack: "Dette er en Hubsite. Kan ikke legge på prosjektmal på hubsite. Operasjon avbrutt."
     }
 })
