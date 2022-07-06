@@ -149,7 +149,7 @@ define([], function() {
         UseDynamicHomepageFieldLabel: 'Bruk dynamisk hjemmeside',
         UseDynamicHomepageCalloutText: 'Her kan du velge om fasevelgeren skal være dynamisk og bruke egne sider for hver fase. Det krever at det er opprettet sider for hver fase på forhånd. Navnene på sidene må være identiske med navnene på fasene.',
         UsePhaseHooksFieldLabel: 'Bruk fasevelger hooks',
-        UsePhaseHooksCalloutText: 'Her kan du velge om det skal kjøres hooks ved endring av faser. Ved endring av fase vil det bli eksekvert et kall mot url-en som er spesifisert under. Dersom kallet krever autentisering, kan dette fylles inn under url feltet.',
+        UsePhaseHooksCalloutText: 'Her kan du velge om det skal kjøres hooks ved endring av faser. Ved endring av fase vil det bli eksekvert et kall mot url-en som er spesifisert under. Dersom kallet krever autentisering, kan dette fylles inn under url feltet. Kallet som blir eksekvert sender med følgende parametere:  \'webUrl\' og  \'apiKey\', disse er begge av typen  \'string\'.',
         HookUrlFieldLabel: 'Hook url',
         HookUrlFieldDescription: 'Url som skal kalles ved endring av fase',
         HookAuthFieldLabel: 'Hook autentisering',

@@ -101,11 +101,11 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
                   ),
                   checked: this.properties.usePhaseHooks
                 }),
-                this.properties.usePhaseHooks && PropertyPaneTextField('hookUrl', {
+                PropertyPaneTextField('hookUrl', {
                   label: strings.HookUrlFieldLabel,
                   description: strings.HookUrlFieldDescription,
                 }),
-                this.properties.usePhaseHooks && PropertyPaneTextField('hookAuth', {
+                PropertyPaneTextField('hookAuth', {
                   label: strings.HookAuthFieldLabel,
                   description: strings.HookAuthFieldDescription
                 })
