@@ -1,7 +1,7 @@
 import { sp } from '@pnp/sp'
 
 /**
- * Run hook when chaging phase
+ * Run hook when changing phase
  *
  * @param {string} hookUrl Hook url
  * @param {string} hookAuth Hook auth
@@ -11,9 +11,9 @@ export const runPhaseHook = async (hookUrl: string, hookAuth: string) => {
     const web = await sp.web.get()
 
     const body = {
-        apiKey: hookAuth,
-        webUrl: web.Url
-      }
+      apiKey: hookAuth,
+      webUrl: web.Url
+    }
 
     const postRequest = {
       method: 'POST',
@@ -21,11 +21,9 @@ export const runPhaseHook = async (hookUrl: string, hookAuth: string) => {
       headers: {
         'Content-Type': 'application/json',
         'Cache-Control': 'no-cache'
-      },
+      }
     }
 
     fetch(hookUrl, postRequest)
-  } catch (error) {
-    throw error
-  }
+  } catch (error) {}
 }
