@@ -9,6 +9,10 @@ Every change is marked with issue ID.
 
 - Added support to run hooks when changing phases
 
+### Changed
+
+- Changed ProjectPhaseCallout from hover to onClick #734
+
 ## 1.6.1 - 01.07.2022
 
 ### Added
