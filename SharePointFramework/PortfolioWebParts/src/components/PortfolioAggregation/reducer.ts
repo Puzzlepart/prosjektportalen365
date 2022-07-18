@@ -5,12 +5,14 @@ import { IGroup } from 'office-ui-fabric-react/lib/DetailsList'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
-import { indexOf, omit, uniq } from 'underscore'
-import { IPortfolioAggregationProps, IPortfolioAggregationState } from './types'
+import { first, indexOf, omit, uniq } from 'underscore'
+import { IPortfolioAggregationHashState, IPortfolioAggregationProps, IPortfolioAggregationState, PortfolioAggregationErrorMessage } from './types'
 import { IFilterItemProps } from '../FilterPanel'
 import _, { filter } from 'lodash'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
+import { parseUrlHash, setUrlHash } from 'pp365-shared/lib/util'
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 
 function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
   const _arr = [...arr]
@@ -54,6 +56,7 @@ export const SET_SORT = createAction<{ column: IProjectContentColumn; sortDesenc
 export const MOVE_COLUMN = createAction<{ column: IProjectContentColumn; move: number }>(
   'MOVE_COLUMN'
 )
+export const SET_CURRENT_VIEW = createAction('SET_CURRENT_VIEW')
 export const SET_DATA_SOURCE = createAction<{ dataSource: DataSource }>('SET_DATA_SOURCE')
 export const START_FETCH = createAction('START_FETCH')
 export const SEARCH = createAction<{ searchTerm: string }>('SEARCH')
@@ -85,7 +88,7 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
   filters: [],
   items: [],
   columns: props.columns || [],
-  dataSource: props.dataSource,
+  dataSource: first(props.configuration.views)?.title || props.dataSource,
   dataSources: [],
   groups: null,
   addColumnPanel: { isOpen: false },
@@ -156,7 +159,6 @@ export default (props: IPortfolioAggregationProps) =>
         }
       }
       if (payload.dataSources) {
-        state.currentView = payload.dataSources.find((ds) => ds.title === state.dataSource)
         state.dataSources = payload.dataSources
       }
     },
@@ -265,8 +267,53 @@ export default (props: IPortfolioAggregationProps) =>
       state.columns = arrayMove(current(state).columns, index, index + payload.move)
       persistColumns(props, current(state).columns)
     },
+    [SET_CURRENT_VIEW.type]: (state) => {
+      const hashState = parseUrlHash<IPortfolioAggregationHashState>()
+      const viewIdUrlParam = new URLSearchParams(document.location.href).get(
+        'viewId'
+      )
+
+      const { configuration, defaultViewId } = props
+      const { views } = configuration
+      let currentView = null
+
+      if (viewIdUrlParam) {
+        currentView = _.find(views, (v) => v.id.toString() === viewIdUrlParam)
+        if (!currentView) {
+          throw new PortfolioAggregationErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
+        }
+      } else if (hashState.viewId) {
+        currentView = _.find(views, (v) => v.id.toString() === hashState.viewId)
+        if (!currentView) {
+          throw new PortfolioAggregationErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
+        }
+      } else if (defaultViewId) {
+        currentView = _.find(views, (v) => v.id.toString() === defaultViewId.toString())
+        if (!currentView) {
+          throw new PortfolioAggregationErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
+        }
+      } else {
+        currentView = _.find(views, (v) => v.isDefault)
+        if (!currentView) {
+          currentView = first(configuration.views)
+        }
+      }
+      const obj: IPortfolioAggregationHashState = {}
+      if (currentView) obj.viewId = currentView.id.toString()
+      if (state.groupBy) obj.groupBy = state.groupBy.fieldName
+      setUrlHash<IPortfolioAggregationHashState>(obj)
+      state.currentView = currentView
+      state.dataSource = currentView.title
+      // state.currentView = payload.dataSources.find((ds) => ds.title === state.dataSource)
+      state.activeFilters = {}
+    },
     [SET_DATA_SOURCE.type]: (state, { payload }: ReturnType<typeof SET_DATA_SOURCE>) => {
+      const obj: IPortfolioAggregationHashState = {}
+      if (state.currentView) obj.viewId = payload.dataSource.id.toString()
+      if (state.groupBy) obj.groupBy = state.groupBy.fieldName
+      setUrlHash<IPortfolioAggregationHashState>(obj)
       state.dataSource = payload.dataSource.title
+      state.currentView = payload.dataSource
       state.activeFilters = {}
     },
     [START_FETCH.type]: (state) => {

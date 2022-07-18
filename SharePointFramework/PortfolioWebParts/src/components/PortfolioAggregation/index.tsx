@@ -17,6 +17,7 @@ import createReducer, {
   COLUMN_HEADER_CONTEXT_MENU,
   DATA_FETCHED,
   DATA_FETCH_ERROR,
+  SET_CURRENT_VIEW,
   GET_FILTERS,
   initState,
   ON_FILTER_CHANGE,
@@ -35,6 +36,11 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   const layerHostId = getId('layerHost')
 
   useEffect(() => {
+    if (props.dataSourceCategory)
+      dispatch(SET_CURRENT_VIEW)
+  }, [props.dataSourceCategory, props.defaultViewId])
+
+  useEffect(() => {
     if (props.dataSourceCategory) {
       props.dataAdapter.configure().then((adapter) => {
         adapter
@@ -50,7 +56,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
           .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
       })
     }
-  }, [props.dataSourceCategory, state.dataSource])
+  }, [props.dataSourceCategory, props.defaultViewId])
 
   useEffect(() => {
     dispatch(START_FETCH())
@@ -79,7 +85,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
         })
         .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
     })
-  }, [state.columnAdded, state.columnDeleted, state.columnShowHide, state.dataSource])
+  }, [state.columnAdded, state.columnDeleted, state.columnShowHide, state.currentView])
 
   const items = useMemo(() => {
     const filteredItems = filterItems(state.items, state.columns, state.activeFilters)

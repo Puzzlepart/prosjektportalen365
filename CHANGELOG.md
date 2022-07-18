@@ -3,6 +3,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with issue ID.
 
+## 1.6.2 - TBA
+
+### Added
+
+- Added support to run hooks when changing phases
+
+### Changed
+
+- Changed ProjectPhaseCallout from hover to onClick #734
+
+## 1.6.1 - 01.07.2022
+
+### Added
+
+- Added ViewId for views in aggregated web parts which is set in the url
+
 ## 1.6.0 - 16.06.2022
 
 ### Added
@@ -13,7 +29,7 @@ Every change is marked with issue ID.
   - This applies to Portfolio, Project and Program timelines
 - Added ability to run hooks in the txt provisioning template #700
   - Example: Trigger API's, Flows, Logic Apps, Azure Functions, etc...
-- Added 'Prosjektinnholdskolonner' list to define columns which are used for the aggregated webparts #706
+- Added 'Prosjektinnholdskolonner' list to define columns which are used for the aggregated web parts #706
   - 'Datakilder' has been expanded with 'Prosjekt odata spørring' column to filter the projects in the datasource query
 
 ### Changed

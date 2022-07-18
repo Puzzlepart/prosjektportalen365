@@ -6,8 +6,15 @@ import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 import { Target } from 'office-ui-fabric-react/lib/Callout'
 import { IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList'
 import { IPanelProps } from 'office-ui-fabric-react/lib/Panel'
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
 import { IBaseComponentProps } from '../types'
+
+export class PortfolioAggregationErrorMessage extends Error {
+  constructor(public message: string, public type: MessageBarType) {
+    super(message)
+  }
+}
 
 export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps {
   /**
@@ -64,6 +71,11 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
    * Show Excel export button
    */
   showViewSelector?: boolean
+
+  /**
+   * Default view id
+   */
+  defaultViewId?: string
 
   /**
    * Locked columns
@@ -211,4 +223,16 @@ export interface IPortfolioAggregationState {
    * Current view
    */
   currentView?: DataSource
+}
+
+export interface IPortfolioAggregationHashState {
+  /**
+   * viewId found in hash (document.location.hash)
+   */
+  viewId?: string
+
+  /**
+   * groupBy found in hash (document.location.hash)
+   */
+  groupBy?: string
 }

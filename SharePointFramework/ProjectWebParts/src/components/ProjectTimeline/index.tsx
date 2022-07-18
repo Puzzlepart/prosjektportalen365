@@ -419,7 +419,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
       if (this.props.showProjectDeliveries) {
         [projectDeliveries] = await Promise.all([
           await sp.web.lists
-            .getByTitle(this.props.projectDeliveriesListName)
+            .getByTitle(this.props.projectDeliveriesListName || 'Prosjektleveranser')
             .items.select(
               'Title',
               'GtDeliveryDescription',
@@ -432,7 +432,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
 
         projectDeliveries = projectDeliveries
           .map((item) => {
-            const config = _.find(timelineConfig, (col) => col.Title === this.props.configItemTitle)
+            const config = _.find(timelineConfig, (col) => col.Title === (this.props.configItemTitle || 'Prosjektleveranse'))
             const model = new TimelineContentListModel(
               this.props.siteId,
               this.props.webTitle,
