@@ -247,10 +247,10 @@ declare interface IProgramWebPartsStrings {
   ProjectPortfolio_SearchBoxLabelText: string
   ProjectPortfolio_ShowCountText: string
   ProgramStatus_ViewIdLabel: string
-  ProjectDeliveriesGroupName: string;
-  ShowProjectDeliveriesLabel: string;
-  ConfigItemTitleFieldLabel: string;
-  ConfigItemTitleFieldDescription: string;
+  ProjectDeliveriesGroupName: string
+  ShowProjectDeliveriesLabel: string
+  ConfigItemTitleFieldLabel: string
+  ConfigItemTitleFieldDescription: string
 }
 
 declare module 'ProgramWebPartsStrings' {
