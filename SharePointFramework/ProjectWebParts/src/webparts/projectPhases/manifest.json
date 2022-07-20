@@ -29,7 +29,8 @@
         "showSubText": true,
         "subTextTruncateLength": 50,
         "currentPhaseViewName": "Gjeldende fase",
-        "useDynamicHomepage": false
+        "useDynamicHomepage": false,
+        "usePhaseHooks": false
       }
     }
   ]
