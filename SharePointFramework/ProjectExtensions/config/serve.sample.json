@@ -8,7 +8,7 @@
   },
   "serveConfigurations": {
     "default": {
-      "pageUrl": "https://puzzlepart.sharepoint.com/sites/pp365/",
+      "pageUrl": "https://tenant.sharepoint.com/sites/site",
       "customActions": {
         "ce34553d-ab47-4107-8dd1-e980d953996d": {
           "location": "ClientSideExtension.ApplicationCustomizer",
@@ -26,7 +26,7 @@
       }
     },
     "ProjectUpgrade": {
-      "pageUrl": "https://puzzlepart.sharepoint.com/sites/pp365/",
+      "pageUrl": "https://tenant.sharepoint.com/sites/site",
       "customActions": {
         "453a6c1e-e1d0-4b12-a3fc-690a36da1f0c": {
           "location": "ClientSideExtension.ApplicationCustomizer",
@@ -35,7 +35,7 @@
       }
     },
     "TemplateSelectorCommand": {
-      "pageUrl": "https://puzzlepart.sharepoint.com/sites/pp365/",
+      "pageUrl": "https://tenant.sharepoint.com/sites/site",
       "customActions": {
         "c9080212-e63e-47cc-8278-00ad38c3f5a5": {
           "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
