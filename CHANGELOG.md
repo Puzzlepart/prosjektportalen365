@@ -3,13 +3,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with issue ID.
 
+## 1.6.2 - N/A
+
+### Added
+
+- Added ViewId for views in aggregated web parts which is set in the url
+
 ## 1.6.1 - 01.07.2022
 
 ### Added
 
 - Added ViewId for views in aggregated web parts which is set in the url
-- Added error message when trying to add template to hubsite. #744
-
 
 ## 1.6.0 - 16.06.2022
 
