@@ -8,6 +8,7 @@ Every change is marked with issue ID.
 ### Added
 
 - Added support to run hooks when changing phases
+- Added ViewId for views in aggregated web parts which is set in the url
 
 ### Changed
 
