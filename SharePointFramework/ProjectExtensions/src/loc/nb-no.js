@@ -36,8 +36,8 @@ define([], function() {
         ModifiedLabel: 'Endret',
         NameLabel: 'Navn',
         FileNameLabel: 'Filnavn',
-        NoHubSiteErrorMessage: 'Området er ikke koblet til en hub',
-        NoHubSiteErrorStack: 'Området kan ikke settes opp uten å være koblet til en hub. Koble området til ett hubområde, og last siden på nytt.<br/><br/>Gå til `Innstillinger` (tannhjulet i øvre høyre hjørne), finn `Nettstedsinformasjon` og velg hub/portefølje under `Tilknytning til hubområde`.',
+        NoHubSiteErrorMessage: 'SharePoint-området er ikke koblet til en hubområde',
+        NoHubSiteErrorStack: 'SharePoint-området kan ikke settes opp uten å være koblet til et hubområde. Koble til et hubområde for portefølje, og last siden på nytt.<br/><br/>Gå til `Innstillinger` (tannhjulet i øvre høyre hjørne), finn `Nettstedsinformasjon` og velg hub/portefølje under `Tilknytning til hubområde`.',
         OnGoBackText: 'Gå tilbake',
         OnStartCopyText: 'Start kopiering',
         OnSubmitSelectionText: 'Velg',
@@ -93,7 +93,7 @@ define([], function() {
         Lists_ProjectTemplateFiles_Title: 'Prosjektmaler',
         ContinueToProjectText: 'Fortsett til prosjekt',
         RecycleBinText: 'Papirkurv',
-        IsHubSiteErrorMessage: 'Kan ikke legge prosjektmal på hubsite',
-        IsHubSiteErrorStack: 'Dette er en hubsite. Kan ikke legge på prosjektmal på hubsite. Operasjon avbrutt.'
+        IsHubSiteErrorMessage: 'Kan ikke legge prosjektmalen på et hubområde',
+        IsHubSiteErrorStack: 'Det er ikke mulig å legge områdedesign for prosjekt på et hubområde. Operasjon avbrutt.'
     }
 })
