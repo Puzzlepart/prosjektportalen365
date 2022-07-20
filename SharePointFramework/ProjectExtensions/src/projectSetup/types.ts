@@ -93,7 +93,7 @@ export enum ProjectSetupValidation {
    */
   AlreadySetup,
 
-   /**
+  /**
    * The site is hubsite
    */
   IsHubSite
