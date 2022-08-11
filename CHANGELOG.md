@@ -7,12 +7,13 @@ Every change is marked with issue ID.
 
 ### Added
 
-- Added support to run hooks when changing phases
-- Added ViewId for views in aggregated web parts which is set in the url
+- Added support to run hooks when changing phases #747
+  - Example: Trigger API's, Flows, Logic Apps, Azure Functions, etc...
+- Addeded check if projecttemplate is attempted to be applied to portfolio level #748
 
 ### Changed
 
-- Changed ProjectPhaseCallout from hover to onClick #734
+- Changed phase callout from hover to clickable #734
 
 ## 1.6.1 - 01.07.2022
 
