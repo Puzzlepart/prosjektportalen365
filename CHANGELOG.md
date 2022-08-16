@@ -10,6 +10,7 @@ Every change is marked with issue ID.
 - Added support to run hooks when changing phases #747
   - Example: Trigger API's, Flows, Logic Apps, Azure Functions, etc...
 - Addeded check if projecttemplate is attempted to be applied to portfolio level #748
+- Fixed slow loading of project logos #648
 
 ### Changed
 

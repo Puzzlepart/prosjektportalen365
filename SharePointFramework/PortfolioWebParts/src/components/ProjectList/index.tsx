@@ -1,6 +1,5 @@
 import { Web } from '@pnp/sp'
 import { ProjectListModel } from 'models'
-import MSGraph from 'msgraph-helper'
 import { Pivot, PivotItem, ShimmeredDetailsList } from 'office-ui-fabric-react'
 import { IButtonProps } from 'office-ui-fabric-react/lib/Button'
 import { IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
@@ -11,7 +10,6 @@ import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationModal } from 'pp365-projectwebparts/lib/components/ProjectInformation'
 import { getObjectValue, sortAlphabetically } from 'pp365-shared/lib/helpers'
 import React, { FunctionComponent, useEffect, useState } from 'react'
-import { find, isEmpty } from 'underscore'
 import { ProjectCard } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
@@ -198,30 +196,6 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
     setState({ ...state, searchTerm: searchTerm.toLowerCase() })
   }
 
-  /**
-   * Get project logos (group photos)
-   *
-   * @param projects - Projects
-   * @param batchSize - Batch size (defaults to 20)
-   */
-  async function getProjectLogos(projects: ProjectListModel[], batchSize: number = 20) {
-    const batchReq = projects.map((p) => ({
-      id: p.groupId,
-      method: 'GET',
-      url: `groups/${p.groupId}/photo/$value`
-    }))
-    while (!isEmpty(batchReq)) {
-      const { responses } = await MSGraph.Batch(batchReq.splice(0, batchSize))
-      const projects_ = projects.map((p) => {
-        const response = find(responses, (r) => r.id === p.groupId && r.status === 200)
-        if (response) {
-          p.logo = `data:image/png;base64, ${response.body}`
-        }
-        return p
-      })
-      setState((prevState) => ({ ...prevState, projects: projects_ }))
-    }
-  }
 
   /**
    * Get searchbox placeholder text based on `state.selectedView`
@@ -250,9 +224,6 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
         loading: false,
         isUserInPortfolioManagerGroup
       })
-      if (props.showProjectLogo) {
-        getProjectLogos(projects, 20)
-      }
     })
   }, [])
 
