@@ -1,4 +1,4 @@
-import { sp, Web } from '@pnp/sp'
+import { Web } from '@pnp/sp'
 import { ProjectListModel } from 'models'
 import MSGraph from 'msgraph-helper'
 import { Pivot, PivotItem, ShimmeredDetailsList, Spinner } from 'office-ui-fabric-react'
