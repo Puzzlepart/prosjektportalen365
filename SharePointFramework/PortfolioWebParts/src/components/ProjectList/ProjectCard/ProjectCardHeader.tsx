@@ -1,6 +1,5 @@
 import { DocumentCardTitle } from 'office-ui-fabric-react/lib/DocumentCard'
 import React, { FunctionComponent, useState } from 'react'
-import { placeholderImage } from '../types'
 import styles from './ProjectCard.module.scss'
 import { IProjectCardProps } from './types'
 
