@@ -15,7 +15,7 @@ export const ProjectCardHeader: FunctionComponent<IProjectCardProps> = ({
       <div className={styles.logo} hidden={!showProjectLogo}>
         <img
           className={isLoaded && styles.isLoaded}
-          src={project.logo ?? placeholderImage}
+          src={project.logo ?? `${project.url}/_api/siteiconmanager/getsitelogo`}
           onLoad={() => setIsLoaded(true)}
         />
       </div>
