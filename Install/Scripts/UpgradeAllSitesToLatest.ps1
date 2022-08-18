@@ -96,7 +96,7 @@ function EnsureResourceLoadIsSiteColumn($Url) {
 
 function EnsurePlannerPlan([string]$Url){
 
-    Connect-PnPOnline -Url $_ -Interactive
+    Connect-PnPOnline -Url $_ -UseWebLogin
     $groupId = (Get-PnPSite -Includes GroupId).GroupId.toString()
     $plannerPlan = Get-PnPPlannerPlan -Group $groupId 
     
