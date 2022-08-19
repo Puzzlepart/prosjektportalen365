@@ -1,7 +1,6 @@
 Param(
     [Parameter(Mandatory = $true, HelpMessage = "The url to the project portal portfolio site")]
-    [string]$PortfolioUrl,
-    [switch]$FixPlannerPlans
+    [string]$PortfolioUrl
 )
 
 $ScriptDir = (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
@@ -94,30 +93,10 @@ function EnsureResourceLoadIsSiteColumn($Url) {
     }
 }
 
-function EnsurePlannerPlan([string]$Url){
-
-    Connect-PnPOnline -Url $_ -UseWebLogin
-    $groupId = (Get-PnPSite -Includes GroupId).GroupId.toString()
-    $plannerPlan = Get-PnPPlannerPlan -Group $groupId 
-    
-    Write-Host "Gruppen $_ har plannerPlan: $($null -ne $plannerPlan)"
-    
-    if ($null -eq $plannerPlan) { 
-        New-PnPPlannerPlan -Group $groupId -Title (Get-PnPWeb).Title | Out-Null
-        Write-Host "`t Opprettet planner plan for gruppen"
-    }
-
-}
-
 
 function UpgradeSite($Url) {
-    if($FixPlannerPlans){
-        EnsurePlannerPlan -Url $Url
-        
-    } else {
         EnsureProjectTimelinePage -Url $Url
         EnsureResourceLoadIsSiteColumn -Url $Url
-    }
 }
 
 Write-Host "This script will update all existing sites in a Prosjektportalen installation. This requires you to have the SharePoint admin role"
