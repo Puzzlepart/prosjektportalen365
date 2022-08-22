@@ -49,26 +49,22 @@ if($GrantPermissions) {
     Write-Host "Granting permissions to $CurrentUser" -ForegroundColor Green
     $children | ForEach-Object { GrantPermissions $_ }
     Write-Host "[x] Done" -ForegroundColor Green
-}
+} else {
 
-$children | ForEach-Object {
-    $childSiteUrl = $_
-
-    Connect-PnPOnline -Url $childSiteUrl -TenantAdminUrl $TenantAdminUrl -Interactive;
-    $groupId = (Get-PnPSite -Includes GroupId -ErrorAction Ignore).GroupId.toString()
-  
-    $plannerPlan = Get-PnPPlannerPlan -Group $groupId
+    $children | ForEach-Object {
+        $childSiteUrl = $_
     
-    if ($null -eq $plannerPlan) { 
-         Write-Host "[ ] Gruppen $childSiteUrl ($groupId) har IKKE plannerPlann" -ForegroundColor Yellow
-         New-PnPPlannerPlan -Group $groupId -Title (Get-PnPWeb).Title | out-null
-         Write-Host "`t[x] Planner plan opprettet" -ForegroundColor Green
-    } else {
-        Write-Host "[x] Gruppen $childSiteUrl ($groupId) har plannerPlan" -ForegroundColor Green
+        Connect-PnPOnline -Url $childSiteUrl -TenantAdminUrl $TenantAdminUrl -Interactive;
+        $groupId = (Get-PnPSite -Includes GroupId -ErrorAction Ignore).GroupId.toString()
+      
+        $plannerPlan = Get-PnPPlannerPlan -Group $groupId
+        
+        if ($null -eq $plannerPlan) { 
+             Write-Host "[ ] Gruppen $childSiteUrl ($groupId) har IKKE plannerPlann" -ForegroundColor Yellow
+             New-PnPPlannerPlan -Group $groupId -Title (Get-PnPWeb).Title | out-null
+             Write-Host "`t[x] Planner plan opprettet" -ForegroundColor Green
+        } else {
+            Write-Host "[x] Gruppen $childSiteUrl ($groupId) har plannerPlan" -ForegroundColor Green
+        }
     }
 }
-
-# if($cleanUpOnComplete) {
-#     Write-Host "Cleaning up permissions"
-#     CleanupPermissions
-# }
