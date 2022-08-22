@@ -60,11 +60,19 @@ if($GrantPermissions) {
         $plannerPlan = Get-PnPPlannerPlan -Group $groupId
         
         if ($null -eq $plannerPlan) { 
-             Write-Host "[ ] Gruppen $childSiteUrl ($groupId) har IKKE plannerPlann" -ForegroundColor Yellow
-             New-PnPPlannerPlan -Group $groupId -Title (Get-PnPWeb).Title | out-null
-             Write-Host "`t[x] Planner plan opprettet" -ForegroundColor Green
+             Write-Host "[ ] Gruppen $childSiteUrl ($groupId) har IKKE Planner plan" -ForegroundColor Yellow
+             try {
+                New-PnPPlannerPlan -Group $groupId -Title (Get-PnPWeb).Title -ErrorAction SilentlyContinue | out-null
+                Write-Host "`t[x] Planner plan opprettet" -ForegroundColor Green
+             }
+             catch {
+                Write-Host "`t[ ] Planner plan ble IKKE opprettet" -ForegroundColor Red
+             }
+
         } else {
             Write-Host "[x] Gruppen $childSiteUrl ($groupId) har plannerPlan" -ForegroundColor Green
         }
     }
 }
+
+
