@@ -18,6 +18,7 @@ $groupsWhereAdded = [System.Collections.ArrayList]@()
 function GrantPermissions ($Url) {
     Write-Host "`tGranting owner permissions to site collection $Url"
     Set-PnPTenantSite -Url $Url -Owners $CurrentUser
+    Connect-PnPOnline -Url $Url -TenantAdminUrl $TenantAdminUrl -Interactive
     $groupId = (Get-PnPSite -Includes GroupId -ErrorAction Ignore).GroupId.toString()
     Write-Host "`tGranting owner permissions to group $groupId"
     Set-PnPMicrosoft365Group -Identity $groupId -Owners $CurrentUser 
@@ -33,9 +34,9 @@ if(Get-Module | Where-Object{$_.Name -like "*SharePointPnPPowerShellOnline*"}){
     Remove-Module -Name SharePointPnPPowerShellOnline -Force
 }
 
-if (-not (Test-Path "..\PnP.PowerShell") ) {
-   Expand-Archive "..\PnP.PowerShell.zip" -DestinationPath "..\"
-   Import-Module "..\PnP.PowerShell\1.11.0\PnP.PowerShell.psd1"
+if (-not (Get-Module | Where-Object{$_.Name -like "PnP.PowerShell"}) ) {
+    Install-Module PnP.PowerShell -Scope CurrentUser
+    Import-Module PnP.PowerShell
 }
 
 
@@ -53,7 +54,7 @@ if($GrantPermissions) {
 $children | ForEach-Object {
     $childSiteUrl = $_
 
-    Connect-PnPOnline -Url $childSiteUrl  -TenantAdminUrl $TenantAdminUrl -Interactive;
+    Connect-PnPOnline -Url $childSiteUrl -TenantAdminUrl $TenantAdminUrl -Interactive;
     $groupId = (Get-PnPSite -Includes GroupId -ErrorAction Ignore).GroupId.toString()
   
     $plannerPlan = Get-PnPPlannerPlan -Group $groupId
