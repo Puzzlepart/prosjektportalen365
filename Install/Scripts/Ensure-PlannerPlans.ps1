@@ -21,7 +21,7 @@ function GrantPermissions ($Url) {
     Connect-PnPOnline -Url $Url -TenantAdminUrl $TenantAdminUrl -Interactive
     $groupId = (Get-PnPSite -Includes GroupId -ErrorAction Ignore).GroupId.toString()
     Write-Host "`tGranting owner permissions to group $groupId"
-    Set-PnPMicrosoft365Group -Identity $groupId -Owners $CurrentUser 
+    Set-PnPMicrosoft365Group -Identity $groupId -Owners $CurrentUser -Members $CurrentUser
     $groupsWhereAdded.Add($groupId) | out-null
 }
 
@@ -57,7 +57,8 @@ if($GrantPermissions) {
         Connect-PnPOnline -Url $childSiteUrl -TenantAdminUrl $TenantAdminUrl -Interactive;
         $groupId = (Get-PnPSite -Includes GroupId -ErrorAction Ignore).GroupId.toString()
       
-        $plannerPlan = Get-PnPPlannerPlan -Group $groupId
+        $plannerPlan = Get-PnPPlannerPlan -Group $groupId 
+        
         
         if ($null -eq $plannerPlan) { 
              Write-Host "[ ] Gruppen $childSiteUrl ($groupId) har IKKE Planner plan" -ForegroundColor Yellow
