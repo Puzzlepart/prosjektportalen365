@@ -35,9 +35,10 @@ if(Get-Module | Where-Object{$_.Name -like "*SharePointPnPPowerShellOnline*"}){
 
 if (-not (Test-Path "..\PnP.PowerShell") ) {
    Expand-Archive "..\PnP.PowerShell.zip" -DestinationPath "..\"
+   Import-Module "..\PnP.PowerShell\1.11.0\PnP.PowerShell.psd1"
 }
 
-Import-Module "..\PnP.PowerShell\1.11.0\PnP.PowerShell.psd1"
+
 
 Connect-PnPOnline -TenantAdminUrl $TenantAdminUrl -Url $PortfolioUrl -Interactive
 
