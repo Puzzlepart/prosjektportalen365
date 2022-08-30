@@ -97,12 +97,12 @@ export class TemplateItem {
     try {
       const content = await this.web.getFileByServerRelativeUrl(this.serverRelativeUrl).getBlob()
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      const fileAddResult = await folder.files.addChunked(
+      const fileAddResult = await folder.files.addUsingPath(
         this.newName,
         content,
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        () => {},
-        shouldOverwrite
+        {
+          Overwrite: shouldOverwrite
+        }
       )
       await (await fileAddResult.file.getItem()).update({ Title: this.newTitle })
       return fileAddResult
