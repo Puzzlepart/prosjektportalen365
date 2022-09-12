@@ -1,6 +1,7 @@
 import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar'
 import React, { useState } from 'react'
-import ReactMarkdown from 'react-markdown/with-html'
+import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
 import { IInfoMessageProps } from './IInfoMessageProps'
 import styles from './InfoMessage.module.scss'
 
@@ -9,7 +10,7 @@ export const InfoMessage = (props: IInfoMessageProps) => {
   return (
     <div className={styles.infoMessage} hidden={hidden}>
       <MessageBar messageBarType={props.type} onDismiss={() => setHidden(true)}>
-        <ReactMarkdown escapeHtml={false} linkTarget='_blank' source={props.text} />
+        <ReactMarkdown linkTarget='_blank' children={props.text} rehypePlugins={[rehypeRaw]} />
       </MessageBar>
     </div>
   )

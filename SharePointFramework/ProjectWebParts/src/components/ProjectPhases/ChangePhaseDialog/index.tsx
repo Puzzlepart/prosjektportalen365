@@ -5,7 +5,8 @@ import { format } from 'office-ui-fabric-react/lib/Utilities'
 import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { useContext, useEffect, useReducer } from 'react'
-import * as ReactMarkdown from 'react-markdown/with-html'
+import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
 import _ from 'underscore'
 import { ProjectPhasesContext } from '../context'
 import { DISMISS_CHANGE_PHASE_DIALOG } from '../reducer'
@@ -62,15 +63,15 @@ export const ChangePhaseDialog = () => {
             <MessageBar
               messageBarType={phaseSitePage ? MessageBarType.info : MessageBarType.warning}>
               <ReactMarkdown
-                escapeHtml={false}
-                source={
+                children={
                   phaseSitePage
                     ? format(
-                        strings.PhaseSitePageFoundDescription,
-                        phaseSitePage && phaseSitePage.fileLeafRef
-                      )
+                      strings.PhaseSitePageFoundDescription,
+                      phaseSitePage && phaseSitePage.fileLeafRef
+                    )
                     : format(strings.PhaseSitePageNotFoundDescription, confirmPhaseName)
                 }
+                rehypePlugins={[rehypeRaw]}
               />
             </MessageBar>
           </div>

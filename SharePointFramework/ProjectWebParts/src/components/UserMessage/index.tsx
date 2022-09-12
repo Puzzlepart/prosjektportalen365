@@ -1,7 +1,8 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import React from 'react'
-import * as ReactMarkdown from 'react-markdown/with-html'
+import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
 import { IUserMessageProps } from './types'
 import styles from './UserMessage.module.scss'
 
@@ -17,7 +18,7 @@ export const UserMessage = ({
   return (
     <div className={className} style={style} hidden={hidden}>
       <MessageBar messageBarType={messageBarType} onDismiss={onDismiss}>
-        <ReactMarkdown escapeHtml={false} source={text} />
+        <ReactMarkdown linkTarget='_blank' children={text} rehypePlugins={[rehypeRaw]} />
       </MessageBar>
     </div>
   )

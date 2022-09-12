@@ -15,6 +15,7 @@ Every change is marked with issue ID.
 ### Changed
 
 - Changed phase callout from hover to clickable #734
+- Information messages now uses a newer and stable version to render HTML #762
 
 ### Fixed
 
