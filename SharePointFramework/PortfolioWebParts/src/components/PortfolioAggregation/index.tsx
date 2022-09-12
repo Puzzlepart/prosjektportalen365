@@ -3,7 +3,7 @@ import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList'
 import { getId } from 'office-ui-fabric-react/lib/Utilities'
 import strings from 'PortfolioWebPartsStrings'
-import { UserMessage } from 'pzl-react-reusable-components/lib/UserMessage'
+import { UserMessage } from 'pp365-projectwebparts/lib/components/UserMessage' // OLD: import { UserMessage } from 'pzl-react-reusable-components/lib/UserMessage'
 import React, { useEffect, useMemo, useReducer } from 'react'
 import { FilterPanel } from '../FilterPanel'
 import { ColumnContextMenu } from './ColumnContextMenu'
@@ -98,7 +98,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   const ctxValue = useMemo(() => ({ props, state, dispatch }), [state])
 
   if (state.error) {
-    return <UserMessage type={MessageBarType.error} text={state.error.message} />
+    return <UserMessage messageBarType={MessageBarType.error} text={state.error.message} />
   }
 
   return (
