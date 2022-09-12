@@ -3,7 +3,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with issue ID.
 
-## 1.6.2 - TBA
+## 1.7.0 - TBA
 
 ### Added
 
@@ -15,6 +15,10 @@ Every change is marked with issue ID.
 ### Changed
 
 - Changed phase callout from hover to clickable #734
+
+### Fixed
+
+- Fixed a bug where default column values were wiped when importing documents through TemplateSelector dialog #761
 
 ## 1.6.1 - 01.07.2022
 
