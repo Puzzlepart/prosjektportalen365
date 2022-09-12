@@ -10,7 +10,7 @@ export const InfoMessage = (props: IInfoMessageProps) => {
   return (
     <div className={styles.infoMessage} hidden={hidden}>
       <MessageBar messageBarType={props.type} onDismiss={() => setHidden(true)}>
-        <ReactMarkdown linkTarget='_blank' children={props.text} rehypePlugins={[rehypeRaw]} />
+        <ReactMarkdown linkTarget='_blank' rehypePlugins={[rehypeRaw]}>{props.text}</ReactMarkdown>
       </MessageBar>
     </div>
   )

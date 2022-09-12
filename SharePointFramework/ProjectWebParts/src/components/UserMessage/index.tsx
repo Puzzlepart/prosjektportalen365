@@ -18,7 +18,7 @@ export const UserMessage = ({
   return (
     <div className={className} style={style} hidden={hidden}>
       <MessageBar messageBarType={messageBarType} onDismiss={onDismiss}>
-        <ReactMarkdown linkTarget='_blank' children={text} rehypePlugins={[rehypeRaw]} />
+        <ReactMarkdown linkTarget='_blank' rehypePlugins={[rehypeRaw]}>{text}</ReactMarkdown>
       </MessageBar>
     </div>
   )

@@ -62,8 +62,8 @@ export const ChangePhaseDialog = () => {
           <div className={styles.dynamicHomepageContent}>
             <MessageBar
               messageBarType={phaseSitePage ? MessageBarType.info : MessageBarType.warning}>
-              <ReactMarkdown
-                children={
+              <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+                {
                   phaseSitePage
                     ? format(
                       strings.PhaseSitePageFoundDescription,
@@ -71,8 +71,7 @@ export const ChangePhaseDialog = () => {
                     )
                     : format(strings.PhaseSitePageNotFoundDescription, confirmPhaseName)
                 }
-                rehypePlugins={[rehypeRaw]}
-              />
+              </ReactMarkdown>
             </MessageBar>
           </div>
         )}
