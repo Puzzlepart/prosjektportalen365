@@ -1,0 +1,26 @@
+.root {
+    margin: 20px 0 0 0;     
+    .filterSectionHeader {
+        position: relative;
+        color: #666666;
+        height: 20px;
+        padding: 6px 0;
+        cursor: pointer;
+
+        .titleText {
+            font-size: 14px;
+            font-weight: 400;
+        }
+        .titleIcon {            
+            font-size: 14px;
+            position: absolute;
+            right: 0;
+        }
+    }
+    .filterSectionContent {
+        font-size: 12px;
+        list-style-type: none;
+        margin: 4px 0 0 0;
+        padding: 0;
+    }
+}

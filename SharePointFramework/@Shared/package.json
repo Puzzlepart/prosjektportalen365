@@ -3,7 +3,7 @@
   "engines": {
     "node": "^12"
   },
-  "version": "1.6.1-743.5",
+  "version": "1.6.1-743.6",
   "description": "Shared utilities, helpers and models",
   "main": "lib/index.js",
   "scripts": {
@@ -61,6 +61,6 @@
     "eslint-plugin-react": "7.22.0",
     "eslint-plugin-unused-imports": "1.1.0",
     "prettier": "^2.1.1",
-    "typescript": "~3.3.x"
+    "typescript": "3.9.x"
   }
 }

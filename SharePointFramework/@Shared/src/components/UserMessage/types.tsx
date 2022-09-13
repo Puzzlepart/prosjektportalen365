@@ -22,7 +22,7 @@ export interface IUserMessageProps extends IMessageBarProps {
   onDismiss?: () => void;
 
   /**
-   * Type (info, warning, erro etc)
+   * Type (info, warning, error, etc...)
    */
   type?: MessageBarType;
 
@@ -35,4 +35,9 @@ export interface IUserMessageProps extends IMessageBarProps {
    * To flex the message center, speficy a min height
    */
   fixedCenter?: number;
+
+  /**
+   * To reduce size of the message bar and make it compact
+   */
+  isCompact?: boolean;
 }

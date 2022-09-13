@@ -20,7 +20,7 @@ import {
   FilterPanel,
   IFilterItemProps,
   IFilterProps
-} from 'pp365-shared/lib/components/FilterPanel'
+} from 'pp365-portfoliowebparts/lib/components/FilterPanel'
 import { DetailsCallout } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/DetailsCallout'
 import { Timeline } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/Timeline'
 import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'

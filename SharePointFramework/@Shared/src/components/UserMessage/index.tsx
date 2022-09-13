@@ -1,6 +1,7 @@
 import { IMessageBarStyleProps, IMessageBarStyles, MessageBar } from 'office-ui-fabric-react/lib/MessageBar'
 import { IStyleFunctionOrObject } from 'office-ui-fabric-react'
-import React, { FunctionComponent } from 'react'
+import * as React from 'react'
+import { FunctionComponent } from 'react'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import { IUserMessageProps } from './types'
@@ -19,6 +20,13 @@ export const UserMessage: FunctionComponent<IUserMessageProps> = (props: IUserMe
       alignItems: 'center',
       justifyContent: 'center',
       minHeight: props.fixedCenter,
+    }
+  }
+
+  if (props.isCompact) {
+    _styles.text = {
+      marginTop: '3px',
+      marginBottom: '0px'
     }
   }
 
