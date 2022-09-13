@@ -318,12 +318,11 @@ export class DataAdapter implements IDataAdapter {
    *
    * @param siteId
    */
-  public async fetchDataForTimelineProject(siteId: string) {
+  public async fetchDataForTimelineProject(siteId: string, timelineConfig: any[]) {
     try {
       const siteIdProperty: string = 'GtSiteIdOWSTEXT'
 
-      const [timelineConfig, { PrimarySearchResults: statusReports }] = await Promise.all([
-        this.fetchTimelineConfiguration(),
+      const [{ PrimarySearchResults: statusReports }] = await Promise.all([
         sp.search({
           ...DEFAULT_SEARCH_SETTINGS,
           QueryTemplate: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} ${siteIdProperty}:{${siteId}}
@@ -353,9 +352,8 @@ export class DataAdapter implements IDataAdapter {
    * * Fetching list items
    * * Maps the items to TimelineContentListModel
    */
-  public async fetchTimelineContentItems() {
-    const [timelineConfig, timelineItems] = await Promise.all([
-      this.fetchTimelineConfiguration(),
+  public async fetchTimelineContentItems(timelineConfig: any[]) {
+    const [timelineItems] = await Promise.all([
       sp.web.lists
         .getByTitle(strings.TimelineContentListName)
         .items.select(
@@ -425,8 +423,7 @@ export class DataAdapter implements IDataAdapter {
    * Fetches configuration data for the Projecttimeline
    *
    */
-  public async fetchTimelineAggregatedContent(configItemTitle: string, dataSourceName: string) {
-    const [timelineConfig] = await Promise.all([this.fetchTimelineConfiguration()])
+  public async fetchTimelineAggregatedContent(configItemTitle: string, dataSourceName: string, timelineConfig: any[]) {
 
     const config: any = _.find(timelineConfig, (col) => col.Title === (configItemTitle || 'Prosjektleveranse'))
     if (config && config.GtShowElementPortfolio) {
