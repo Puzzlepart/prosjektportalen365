@@ -5,7 +5,7 @@ import {
   IColumn,
   SelectionMode
 } from 'office-ui-fabric-react/lib/DetailsList'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import * as strings from 'ProjectWebPartsStrings'
 import React from 'react'
 import { RiskMatrix } from '../../../RiskMatrix'
@@ -14,6 +14,7 @@ import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection'
 import { IRiskSectionProps, IRiskSectionState, IRiskSectionData } from './types'
 import styles from './RiskSection.module.scss'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 
 export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionState> {
   constructor(props: IRiskSectionProps) {
@@ -53,9 +54,10 @@ export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionStat
     if (this.state.loading || !this.state.data) return null
     if (this.state.error)
       return (
-        <MessageBar messageBarType={MessageBarType.error}>
-          {strings.ListSectionDataErrorMessage}
-        </MessageBar>
+        <UserMessage
+          text={strings.ListSectionDataErrorMessage}
+          type={MessageBarType.error}
+        />
       )
     return (
       <>

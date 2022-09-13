@@ -14,16 +14,17 @@ import {
   Selection,
   SelectionMode
 } from 'office-ui-fabric-react/lib/DetailsList'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import {
   FilterPanel,
   IFilterItemProps,
   IFilterProps
-} from 'pp365-portfoliowebparts/lib/components/FilterPanel'
+} from 'pp365-shared/lib/components/FilterPanel'
 import { DetailsCallout } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/DetailsCallout'
 import { Timeline } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/Timeline'
 import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { tryParseCurrency } from 'pp365-shared/lib/helpers'
 import * as strings from 'ProjectWebPartsStrings'
 import React from 'react'
@@ -82,17 +83,22 @@ export class ProjectTimeline extends BaseWebPartComponent<
 
   public render(): React.ReactElement<IProjectTimelineProps> {
     if (this.state.loading) return null
+
     if (this.state.error) {
       return (
         <div className={styles.root}>
           <div className={styles.container}>
-            <MessageBar messageBarType={MessageBarType.error}>{this.state.error}</MessageBar>
+            <UserMessage
+              text={this.state.error}
+              type={MessageBarType.error}
+            />
           </div>
         </div>
       )
     }
 
     const { groups, items } = this._getFilteredData()
+
     return (
       <div className={styles.root}>
         <div className={styles.container}>
@@ -108,17 +114,16 @@ export class ProjectTimeline extends BaseWebPartComponent<
           )}
           {this.props.showInfoMessage && (
             <div className={styles.infoText}>
-              <MessageBar>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: format(
-                      this.props.infoText
-                        ? this.props.infoText
-                        : strings.ProjectTimelineListInfoText,
-                      encodeURIComponent(window.location.href)
-                    )
-                  }}></div>
-              </MessageBar>
+              <UserMessage
+                text={format(
+                  this.props.infoText
+                    ? this.props.infoText
+                    : strings.ProjectTimelineListInfoText,
+                  encodeURIComponent(window.location.href)
+                )}
+                type={MessageBarType.info}
+                isCompact
+              />
             </div>
           )}
           {this.props.showTimeline && (
@@ -702,7 +707,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
             'GtShowElementPortfolio',
             'GtShowElementProgram',
             'GtTimelineFilter',
-        )
+          )
           .top(500)
           .get()
       ])
