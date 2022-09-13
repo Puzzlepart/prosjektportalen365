@@ -790,7 +790,7 @@ export class DataAdapter implements IDataAdapter {
    */
   public async fetchProjectContentColumns(dataSourceCategory: string): Promise<any> {
     try {
-      if (isNull(dataSourceCategory) || !dataSourceCategory || dataSourceCategory.includes('(Prosjektnivå)')) {
+      if (isNull(dataSourceCategory) || !dataSourceCategory || dataSourceCategory === "" || dataSourceCategory.includes('(Prosjektnivå)')) {
         return []
       } else {
         const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
@@ -810,7 +810,7 @@ export class DataAdapter implements IDataAdapter {
       }
 
     } catch (error) {
-      throw new Error(format(strings.DataSourceError, dataSourceCategory))
+      throw new Error(format(strings.DataSourceCategoryError, dataSourceCategory))
     }
   }
 

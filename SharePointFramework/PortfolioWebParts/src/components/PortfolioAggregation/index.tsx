@@ -61,6 +61,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   useEffect(() => {
     dispatch(START_FETCH())
     props.dataAdapter.configure().then((adapter) => {
+      console.log(state, props)
       Promise.all([
         adapter.dataSourceService.getByName(state.dataSource),
         adapter.fetchProjectContentColumns(props.dataSourceCategory),
