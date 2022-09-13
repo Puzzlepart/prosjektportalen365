@@ -118,6 +118,7 @@ declare interface IPortfolioWebPartsStrings {
   PropertyPaneDescription: string
   RecommendationLabel: string
   ProjectTimelineInfoText: string
+  ProjectTimelineErrorTransformItemText: string
   ResourceAllocationInfoText: string
   ResourceLabel: string
   ResponsibleLabel: string

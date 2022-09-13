@@ -19,6 +19,7 @@ import styles from './ProjectTimeline.module.scss'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
 import { ProjectListModel, TimelineContentListModel } from 'models'
 import './ProjectTimeline.overrides.css'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 
 /**
  * @component ProjectTimeline
@@ -59,7 +60,10 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
       return (
         <div className={styles.root}>
           <div className={styles.container}>
-            <MessageBar messageBarType={MessageBarType.error}>{this.state.error}</MessageBar>
+            <UserMessage
+              text={this.state.error}
+              type={MessageBarType.error}
+            />
           </div>
         </div>
       )
@@ -256,51 +260,67 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
     timelineItems: TimelineContentListModel[],
     groups: ITimelineGroup[]
   ): ITimelineItem[] {
-    const items: ITimelineItem[] = timelineItems.map((item, id) => {
-      const group = _.find(groups, (grp) => item.siteId.indexOf(grp.siteId) !== -1)
+    let _project, _siteId, _itemTitle
+    try {
+      const items: ITimelineItem[] = timelineItems.map((item, id) => {
+        _project = item.title
+        _itemTitle = item.itemTitle
 
-      if (group === null)
-        return
-      
-      const style: React.CSSProperties = {
-        color: 'white',
-        border: 'none',
-        cursor: 'auto',
-        outline: 'none',
-        background:
-          item.elementType !== strings.BarLabel ? 'transparent' : item.hexColor || '#f35d69',
-        backgroundColor:
-          item.elementType !== strings.BarLabel ? 'transparent' : item.hexColor || '#f35d69'
-      }
-      return {
-        id,
-        group: group.id,
-        title:
-          item.type === strings.ProjectLabel
-            ? format(strings.ProjectTimelineItemInfo, item.title)
-            : item.itemTitle,
-        start_time:
-          item.elementType !== strings.BarLabel
-            ? moment(new Date(item.endDate))
-            : moment(new Date(item.startDate)),
-        end_time: moment(new Date(item.endDate)),
-        itemProps: { style },
-        project: item.title,
-        projectUrl: item.url,
-        data: {
-          phase: item.phase,
-          description: item.description,
-          type: item.type,
-          budgetTotal: item.budgetTotal,
-          costsTotal: item.costsTotal,
-          sortOrder: item.sortOrder,
-          hexColor: item.hexColor,
-          elementType: item.elementType,
-          filter: item.timelineFilter
+        const group = _.find(groups, (grp) => item.siteId.indexOf(grp.siteId) !== -1)
+        _siteId = group.siteId || 'N/A'
+
+        if (group === null)
+          return
+
+        const style: React.CSSProperties = {
+          color: 'white',
+          border: 'none',
+          cursor: 'auto',
+          outline: 'none',
+          background:
+            item.elementType !== strings.BarLabel ? 'transparent' : item.hexColor || '#f35d69',
+          backgroundColor:
+            item.elementType !== strings.BarLabel ? 'transparent' : item.hexColor || '#f35d69'
         }
-      } as ITimelineItem
-    })
-    return items.filter((i) => i)
+        return {
+          id,
+          group: group.id,
+          title:
+            item.type === strings.ProjectLabel
+              ? format(strings.ProjectTimelineItemInfo, item.title)
+              : item.itemTitle,
+          start_time:
+            item.elementType !== strings.BarLabel
+              ? moment(new Date(item.endDate))
+              : moment(new Date(item.startDate)),
+          end_time: moment(new Date(item.endDate)),
+          itemProps: { style },
+          project: item.title,
+          projectUrl: item.url,
+          data: {
+            phase: item.phase,
+            description: item.description,
+            type: item.type,
+            budgetTotal: item.budgetTotal,
+            costsTotal: item.costsTotal,
+            sortOrder: item.sortOrder,
+            hexColor: item.hexColor,
+            elementType: item.elementType,
+            filter: item.timelineFilter
+          }
+        } as ITimelineItem
+      })
+      return items.filter((i) => i)
+    } catch (error) {
+      throw new Error(
+        format(
+          strings.ProjectTimelineErrorTransformItemText,
+          _siteId,
+          _itemTitle ? `${_itemTitle} (${_project})` : _project,
+          error
+        )
+      )
+    }
   }
 
   /**
@@ -310,19 +330,20 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    */
   private async _fetchData(): Promise<[ITimelineData, any]> {
     try {
+      const timelineConfiguration = await this.props.dataAdapter.fetchTimelineConfiguration()
+
       const [
         projects,
         timelineContentItems,
         timelineAggregatedContent = [],
-        timelineConfiguration
       ] = await Promise.all([
         this.props.dataAdapter.fetchEnrichedProjects(),
-        this.props.dataAdapter.fetchTimelineContentItems(),
+        this.props.dataAdapter.fetchTimelineContentItems(timelineConfiguration),
         this.props.dataAdapter.fetchTimelineAggregatedContent(
           this.props.configItemTitle,
-          this.props.dataSourceName
-        ),
-        this.props.dataAdapter.fetchTimelineConfiguration()
+          this.props.dataSourceName,
+          timelineConfiguration
+        )
       ])
 
       const filteredProjects = projects.filter((project) => {
@@ -340,7 +361,8 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
       let timelineItems: TimelineContentListModel[] = await Promise.all(
         filteredProjects.map(async (project) => {
           const projectData = await this.props.dataAdapter.fetchDataForTimelineProject(
-            project.siteId
+            project.siteId,
+            timelineConfiguration
           )
           return {
             ...project,
@@ -352,6 +374,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
       timelineItems = [...timelineItems, ...filteredTimelineItems]
       const groups = this._transformGroups(filteredProjects)
       const items = this._transformItems(timelineItems, groups)
+
       return [{ items, groups }, timelineConfiguration]
     } catch (error) {
       throw error
