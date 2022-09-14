@@ -1,4 +1,3 @@
-import { Web } from '@pnp/sp'
 import { ProjectListModel } from 'models'
 import { Pivot, PivotItem, ShimmeredDetailsList } from 'office-ui-fabric-react'
 import { IButtonProps } from 'office-ui-fabric-react/lib/Button'

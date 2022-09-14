@@ -9,17 +9,20 @@ Every change is marked with issue ID.
 
 - Added support to run hooks when changing phases #747
   - Example: Trigger API's, Flows, Logic Apps, Azure Functions, etc...
-- Addeded check if projecttemplate is attempted to be applied to portfolio level #748
-- Fixed slow loading of project logos #648
+- Added check if projecttemplate is attempted to be applied to portfolio level #748
+- Added better error handling for ProjectTimelines (Portfolio and project level) #755
 
 ### Changed
 
 - Changed phase callout from hover to clickable #734
 - Information messages now uses a newer and stable version to render HTML #762
+- Reduced amount of calls when loading ProjectTimeline, this improves the speed by alot! #743
 
 ### Fixed
 
+- Fixed slow loading of project logos #648
 - Fixed a bug where default column values were wiped when importing documents through TemplateSelector dialog #761
+- Fixed a bug where users could't see the callout dialog for ProjectTimeline at the bottom of the page #771
 
 ## 1.6.1 - 01.07.2022
 

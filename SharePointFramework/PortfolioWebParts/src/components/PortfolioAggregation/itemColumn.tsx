@@ -5,8 +5,6 @@ import strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import React from 'react'
 import { isEmpty } from 'underscore'
-import { IPortfolioAggregationContext } from './context'
-import { Web } from '@pnp/sp'
 import { TagsColumn } from '../PortfolioOverview/RenderItemColumn/TagsColumn'
 import ItemModal from './ItemModal'
 
