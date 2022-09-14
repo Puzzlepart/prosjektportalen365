@@ -329,47 +329,51 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    * @returns Timeline data and timeline configuration
    */
   private async _fetchData(): Promise<[ITimelineData, any]> {
-    try {
-      const timelineConfiguration = await this.props.dataAdapter.fetchTimelineConfiguration()
+    const data = this.props.dataAdapter
 
+    try {
+      const timelineConfiguration = await data.fetchTimelineConfiguration()
+
+      
       const [
         projects,
+        projectData,
         timelineContentItems,
         timelineAggregatedContent = [],
       ] = await Promise.all([
-        this.props.dataAdapter.fetchEnrichedProjects(),
-        this.props.dataAdapter.fetchTimelineContentItems(timelineConfiguration),
-        this.props.dataAdapter.fetchTimelineAggregatedContent(
+        data.fetchEnrichedProjects(),
+        data.fetchTimelineProjectData(timelineConfiguration),
+        data.fetchTimelineContentItems(timelineConfiguration),
+        data.fetchTimelineAggregatedContent(
           this.props.configItemTitle,
           this.props.dataSourceName,
           timelineConfiguration
-        )
-      ])
-
-      const filteredProjects = projects.filter((project) => {
-        return project.startDate !== null && project.endDate !== null
-      })
-
-      const filteredTimelineItems = [...timelineContentItems, ...timelineAggregatedContent].filter(
-        (item) => {
-          return filteredProjects.some((project) => {
-            return project.title.indexOf(item.title) !== -1
-          })
-        }
-      )
-
-      let timelineItems: TimelineContentListModel[] = await Promise.all(
-        filteredProjects.map(async (project) => {
-          const projectData = await this.props.dataAdapter.fetchDataForTimelineProject(
-            project.siteId,
-            timelineConfiguration
           )
-          return {
-            ...project,
-            ...projectData
+        ])
+        
+        const filteredProjects = projects.filter((project) => {
+          return project.startDate !== null && project.endDate !== null
+        })
+        
+        const filteredTimelineItems = [...timelineContentItems, ...timelineAggregatedContent].filter(
+          (item) => {
+            return filteredProjects.some((project) => {
+              return project.title.indexOf(item.title) !== -1
+            })
           }
-        }).filter((i) => i)
-      )
+          )
+      
+      let timelineItems: TimelineContentListModel[] = filteredProjects.map((project) => {
+        const config = projectData.configElement
+        const statusReport = projectData.reports.find((statusReport) => {
+          return statusReport.siteId === project.siteId
+        })
+        return {
+          ...project,
+          ...statusReport,
+          ...config
+        }
+      })
 
       timelineItems = [...timelineItems, ...filteredTimelineItems]
       const groups = this._transformGroups(filteredProjects)
