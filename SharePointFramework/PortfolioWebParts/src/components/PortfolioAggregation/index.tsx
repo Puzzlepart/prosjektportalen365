@@ -125,7 +125,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
               )
             }}
             columns={[
-              ...getDefaultColumns(ctxValue, props.isParent),
+              ...getDefaultColumns(props.isParent), //ctxValue, 
               ...items.columns,
               !props.lockedColumns && addColumn()
             ].filter((c) => c)}

@@ -118,6 +118,8 @@ declare interface IProjectWebPartsStrings {
   DeleteItemLabel: string
   ProjecttimelineGroupName: string
   ProjectTimelineInfoText: string
+  ProjectTimelineErrorTransformItemText: string
+  ProjectTimelineErrorFetchText: string
   ProjectTimelineListInfoText: string
   TimelineContentListName: string
   TimelineConfigurationListName: strin

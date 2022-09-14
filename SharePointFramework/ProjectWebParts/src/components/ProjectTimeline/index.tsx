@@ -635,50 +635,69 @@ export class ProjectTimeline extends BaseWebPartComponent<
   private _transformItems(
     timelineItems: TimelineContentListModel[]
   ): ITimelineItem[] {
-    const items: ITimelineItem[] = timelineItems.map((item, id) => {
-      const style: React.CSSProperties = {
-        color: 'white',
-        border: 'none',
-        cursor: 'auto',
-        outline: 'none',
-        background:
-          item.elementType !== strings.BarLabel
-            ? 'transparent'
-            : item.hexColor || '#f35d69',
-        backgroundColor:
-          item.elementType !== strings.BarLabel
-            ? 'transparent'
-            : item.hexColor || '#f35d69'
-      }
-      return {
-        id,
-        group: 0,
-        title:
-          item.type === strings.ProjectLabel
-            ? format(strings.ProjectTimelineItemInfo, item.title)
-            : item.itemTitle,
-        start_time:
-          item.elementType !== strings.BarLabel
-            ? moment(new Date(item.endDate))
-            : moment(new Date(item.startDate)),
-        end_time: moment(new Date(item.endDate)),
-        itemProps: { style },
-        project: item.title,
-        projectUrl: item.url,
-        data: {
-          phase: item.phase,
-          description: item.description,
-          type: item.type,
-          budgetTotal: item.budgetTotal,
-          costsTotal: item.costsTotal,
-          sortOrder: item.sortOrder,
-          hexColor: item.hexColor,
-          elementType: item.elementType,
-          filter: item.timelineFilter
+    let _project: any
+    let _siteId: any
+    let _itemTitle: any
+    try {
+      const items: ITimelineItem[] = timelineItems.map((item, id) => {
+        _project = item.title
+        _itemTitle = item.itemTitle
+        _siteId = item.siteId || 'N/A'
+
+        const style: React.CSSProperties = {
+          color: 'white',
+          border: 'none',
+          cursor: 'auto',
+          outline: 'none',
+          background:
+            item.elementType !== strings.BarLabel
+              ? 'transparent'
+              : item.hexColor || '#f35d69',
+          backgroundColor:
+            item.elementType !== strings.BarLabel
+              ? 'transparent'
+              : item.hexColor || '#f35d69'
         }
-      } as ITimelineItem
-    })
-    return items
+        return {
+          id,
+          group: 0,
+          title:
+            item.type === strings.ProjectLabel
+              ? format(strings.ProjectTimelineItemInfo, item.title)
+              : item.itemTitle,
+          start_time:
+            item.elementType !== strings.BarLabel
+              ? moment(new Date(item.endDate))
+              : moment(new Date(item.startDate)),
+          end_time: moment(new Date(item.endDate)),
+          itemProps: { style },
+          project: item.title,
+          projectUrl: item.url,
+          data: {
+            phase: item.phase,
+            description: item.description,
+            type: item.type,
+            budgetTotal: item.budgetTotal,
+            costsTotal: item.costsTotal,
+            sortOrder: item.sortOrder,
+            hexColor: item.hexColor,
+            elementType: item.elementType,
+            filter: item.timelineFilter
+          }
+        } as ITimelineItem
+      })
+      return items
+    } catch (error) {
+      throw new Error(
+        format(
+          strings.ProjectTimelineErrorTransformItemText,
+          _siteId,
+          _itemTitle ? `${_itemTitle} (${_project})` : _project,
+          error
+        )
+      )
+    }
+
   }
 
   /**
@@ -727,8 +746,14 @@ export class ProjectTimeline extends BaseWebPartComponent<
       }
 
     } catch (error) {
-      this.logError('Failed to retrieve data.', '_fetchData', error)
-      throw error
+      throw new Error(
+        format(
+          strings.ProjectTimelineErrorFetchText,
+          this.props.siteId,
+          this.props.webTitle,
+          error
+        )
+      )
     }
   }
 
@@ -740,7 +765,6 @@ export class ProjectTimeline extends BaseWebPartComponent<
   private async _fetchData(): Promise<[ITimelineData, any]> {
     try {
       const projectData = await this._fetchProjectData()
-
       const project = {
         siteId: this.props.siteId,
         groupId: this.props.siteId,
