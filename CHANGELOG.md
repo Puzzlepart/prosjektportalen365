@@ -11,6 +11,7 @@ Every change is marked with issue ID.
   - Example: Trigger API's, Flows, Logic Apps, Azure Functions, etc...
 - Added check if projecttemplate is attempted to be applied to portfolio level #748
 - Added better error handling for ProjectTimelines (Portfolio and project level) #755
+- Custom Risk matrix cells (colors, headers, text, etc...) #624
 
 ### Changed
 

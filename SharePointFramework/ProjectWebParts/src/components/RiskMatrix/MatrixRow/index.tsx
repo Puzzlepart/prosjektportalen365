@@ -53,12 +53,14 @@ const getRiskElementsPostActionForCell = (
   return riskElements
 }
 
-export const MatrixRows = ({ items, calloutTemplate }) => {
+export const MatrixRows = ({ items, calloutTemplate, customCells }) => {
   const [showPostAction, setShowPostAction] = React.useState(false)
 
-  const children = RISK_MATRIX_CELLS.map((rows, i) => {
+  const selectedCells = customCells ?? RISK_MATRIX_CELLS
+
+  const children = selectedCells.map((rows, i) => {
     const cells = rows.map((c, j) => {
-      const cell = RISK_MATRIX_CELLS[i][j]
+      const cell = selectedCells[i][j]
       const riskElements = getRiskElementsForCell(items, cell, calloutTemplate)
       const riskElementsPostAction = getRiskElementsPostActionForCell(items, cell, calloutTemplate)
       switch (cell.cellType) {
@@ -89,11 +91,11 @@ export const MatrixRows = ({ items, calloutTemplate }) => {
     <>
       {children}
       <Toggle
-        label={strings.RiskMatrix_ToggleElements}
+        label={'strings.RiskMatrix_ToggleElements'}
         onText={strings.Yes}
         offText={strings.No}
         onChange={(_event, _showPostAction) => setShowPostAction(_showPostAction)}
-      />
+        />
     </>
   )
 }
