@@ -1,6 +1,7 @@
 Install/SiteScripts/*.txt
 Install/InstallLog.txt
 Install/Scripts/UpgradeSites_Log*
+Install/PnP.PowerShell/*
 release/*
 SharePointFramework/**/.vscode/launch.json
 SharePointFramework/**/pnpm-lock.yaml
