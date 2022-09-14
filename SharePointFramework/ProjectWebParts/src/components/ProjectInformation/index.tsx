@@ -104,7 +104,7 @@ export class ProjectInformation extends BaseWebPartComponent<
           showFieldExternal={this.props.showFieldExternal}
           propertiesList={!stringIsNullOrEmpty(this.state.data.propertiesListId)}
         />
-        <UserMessage {...this.state.message} />
+        {!this.props.hideActions && <UserMessage {...this.state.message} />}
         <Actions
           hidden={this.props.hideActions || this.props.displayMode === DisplayMode.Edit}
           isSiteAdmin={this.props.isSiteAdmin}
