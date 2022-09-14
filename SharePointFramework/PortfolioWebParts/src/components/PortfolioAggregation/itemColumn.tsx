@@ -5,9 +5,6 @@ import strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import React from 'react'
 import { isEmpty } from 'underscore'
-import { ProjectInformationTooltip } from 'pp365-projectwebparts/lib/components/ProjectInformationTooltip'
-import { IPortfolioAggregationContext } from './context'
-import { Web } from '@pnp/sp'
 import { TagsColumn } from '../PortfolioOverview/RenderItemColumn/TagsColumn'
 import ItemModal from './ItemModal'
 
@@ -82,10 +79,8 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
 
 /**
  * Get default columns
- *
- * @param context Context
  */
-export const getDefaultColumns = (context: IPortfolioAggregationContext, isParent?: boolean) => [
+export const getDefaultColumns = (isParent?: boolean) => [ // context: IPortfolioAggregationContext, 
   {
     key: 'SiteTitle',
     idx: 0,
@@ -96,23 +91,23 @@ export const getDefaultColumns = (context: IPortfolioAggregationContext, isParen
     isResizable: true,
     onRender: (item: any) => {
       if (!isParent) {
-        return (
-          <ProjectInformationTooltip
-            key={item.SiteId}
-            title={item.SiteTitle}
-            siteId={item.SiteId}
-            webUrl={item.SPWebURL}
-            hubSite={{
-              web: new Web(context.props.pageContext.site.absoluteUrl),
-              url: context.props.pageContext.site.absoluteUrl
-            }}
-            page='Portfolio'>
-            <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
-              {item.SiteTitle}
-            </Link>
-          </ProjectInformationTooltip>
-        )
-      } else {
+        //   return ( // TODO: REDO how tooltip is rendered, use panel instead and make this non dependendt of projectWebParts
+        //     <ProjectInformationTooltip
+        //       key={item.SiteId}
+        //       title={item.SiteTitle}
+        //       siteId={item.SiteId}
+        //       webUrl={item.SPWebURL}
+        //       hubSite={{
+        //         web: new Web(context.props.pageContext.site.absoluteUrl),
+        //         url: context.props.pageContext.site.absoluteUrl
+        //       }}
+        //       page='Portfolio'>
+        //       <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
+        //         {item.SiteTitle}
+        //       </Link>
+        //     </ProjectInformationTooltip>
+        //   )
+        // } else {
         return item.SPWebURL ? (
           <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
             {item.SiteTitle}

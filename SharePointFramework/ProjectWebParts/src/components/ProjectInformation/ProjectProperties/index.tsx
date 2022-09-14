@@ -1,10 +1,10 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FunctionComponent } from 'react'
 import { isEmpty } from 'underscore'
-import { UserMessage } from '../../UserMessage'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import styles from './ProjectProperties.module.scss'
 import { ProjectProperty } from './ProjectProperty'
 import { IProjectPropertiesProps } from './types'
@@ -16,7 +16,7 @@ export const ProjectProperties: FunctionComponent<IProjectPropertiesProps> = (
 
   if (props.displayMode !== DisplayMode.Edit) {
     if (isEmpty(nonEmptyProperties)) {
-      return <MessageBar>{strings.NoPropertiesMessage}</MessageBar>
+      return <UserMessage text={strings.NoPropertiesMessage} />
     }
     return (
       <div className={styles.projectProperties}>
@@ -47,7 +47,7 @@ export const ProjectProperties: FunctionComponent<IProjectPropertiesProps> = (
                   hidden={props.propertiesList}
                   className={styles.pivotItemUserMessage}
                   text={strings.NoLocalPropertiesListWarningText}
-                  messageBarType={MessageBarType.warning}
+                  type={MessageBarType.warning}
                 />
                 <div hidden={!props.propertiesList}>
                   {props.properties.map((model, idx) => (

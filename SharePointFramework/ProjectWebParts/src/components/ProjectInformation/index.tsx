@@ -15,7 +15,8 @@ import { isEmpty } from 'underscore'
 import SPDataAdapter from '../../data'
 import { BaseWebPartComponent } from '../BaseWebPartComponent'
 import { ProgressDialog } from '../ProgressDialog'
-import { UserMessage } from '../UserMessage'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
+
 import { Actions } from './Actions'
 import { ActionType } from './Actions/types'
 import { CreateParentModal } from './ParentProjectModal'
@@ -83,7 +84,7 @@ export class ProjectInformation extends BaseWebPartComponent<
     if (this.state.error) {
       return (
         <UserMessage
-          messageBarType={MessageBarType.severeWarning}
+          type={MessageBarType.severeWarning}
           onDismiss={() => this.setState({ hidden: true })}
           text={strings.WebPartNoAccessMessage}
         />
@@ -103,7 +104,7 @@ export class ProjectInformation extends BaseWebPartComponent<
           showFieldExternal={this.props.showFieldExternal}
           propertiesList={!stringIsNullOrEmpty(this.state.data.propertiesListId)}
         />
-        <UserMessage {...this.state.message} />
+        {!this.props.hideActions && <UserMessage {...this.state.message} />}
         <Actions
           hidden={this.props.hideActions || this.props.displayMode === DisplayMode.Edit}
           isSiteAdmin={this.props.isSiteAdmin}

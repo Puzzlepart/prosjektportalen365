@@ -2,12 +2,12 @@ import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
 import { AttachmentFileInfo } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
-import { UserMessage } from 'components/UserMessage'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import domToImage from 'dom-to-image'
 import * as moment from 'moment'
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar'
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectWebPartsStrings'
@@ -110,7 +110,10 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       return (
         <div className={styles.projectStatus}>
           <div className={styles.container}>
-            <MessageBar messageBarType={MessageBarType.info}>{this.state.error}</MessageBar>
+            <UserMessage
+              text={this.state.error}
+              type={MessageBarType.info}
+            />
           </div>
         </div>
       )
@@ -120,9 +123,10 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         {this._commandBar()}
         <div className={styles.container}>
           {this.state.data.reports.filter((report) => !report.published).length > 0 && (
-            <MessageBar messageBarType={MessageBarType.info}>
-              {strings.UnpublishedStatusReportInfo}
-            </MessageBar>
+            <UserMessage
+              text={strings.UnpublishedStatusReportInfo}
+              type={MessageBarType.info}
+            />
           )}
           <div className={`${styles.header} ${styles.column12}`}>
             <div className={styles.title}>
@@ -274,7 +278,10 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
 
     if (!selectedReport)
       return (
-        <UserMessage text={strings.NoStatusReportsMessage} messageBarType={MessageBarType.info} />
+        <UserMessage
+          text={strings.NoStatusReportsMessage}
+          type={MessageBarType.info}
+        />
       )
     return data.sections
       .filter((sec) => !stringIsNullOrEmpty(selectedReport.getStatusValue(sec.fieldName).value))

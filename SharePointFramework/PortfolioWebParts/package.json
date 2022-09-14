@@ -1,6 +1,6 @@
 {
   "name": "pp365-portfoliowebparts",
-  "version": "1.6.1",
+  "version": "1.6.1-743.2",
   "engines": {
     "node": "^12"
   },
@@ -28,6 +28,7 @@
     "@pnp/sp-clientsvc": "1.3.8",
     "@pnp/sp-taxonomy": "1.3.8",
     "@pnp/spfx-controls-react": "1.11.0",
+    "@pnp/spfx-property-controls": "^2.1.1",
     "@reduxjs/toolkit": "1.5.0",
     "@types/array-sort": "1.0.0",
     "array-sort": "1.0.0",
@@ -38,9 +39,7 @@
     "msgraph-helper": "0.7.3",
     "object-assign": "4.1.1",
     "office-ui-fabric-react": "6.214.0",
-    "pp365-projectwebparts": "latest",
-    "pp365-shared": "latest",
-    "pzl-react-reusable-components": "^0.0.14",
+    "pp365-shared": "temp",
     "react": "16.8.5",
     "react-calendar-timeline": "0.27.0",
     "react-dom": "16.8.5",

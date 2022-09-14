@@ -3,7 +3,7 @@ import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList'
 import { getId } from 'office-ui-fabric-react/lib/Utilities'
 import strings from 'PortfolioWebPartsStrings'
-import { UserMessage } from 'pzl-react-reusable-components/lib/UserMessage'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import React, { useEffect, useMemo, useReducer } from 'react'
 import { FilterPanel } from '../FilterPanel'
 import { ColumnContextMenu } from './ColumnContextMenu'
@@ -125,7 +125,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
               )
             }}
             columns={[
-              ...getDefaultColumns(ctxValue, props.isParent),
+              ...getDefaultColumns(props.isParent), //ctxValue, 
               ...items.columns,
               !props.lockedColumns && addColumn()
             ].filter((c) => c)}

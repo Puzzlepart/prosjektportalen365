@@ -120,6 +120,8 @@ define([], function() {
         DeleteItemLabel: 'Slett',
         ProjecttimelineGroupName: 'Prosjekttidslinje',
         ProjectTimelineInfoText: 'Her listes prosjektets tidslinje med start- og sluttdato. Prosjekttidslinjen støtter også faser, delfaser og milepæler, dette opprettes og vedlikeholdes i listen under. Prosjektet vises med rød farge, faser i blått, delfaser blågrønt, og milepæler i gult. For å zoome inn/ut i tidslinje: ALT+Musehjul',
+        ProjectTimelineErrorTransformItemText: 'Feil ved knytning av elementer til tidslinje.<br><br>Dette kan være grunnet problem med et element i "Prosjekter" listen (duplikat, slettet prosjekt), eller at et tidslinjeelement ikke har gyldig tilknytning. <br><br>- SiteId: {0} <br> - Tittel: {1} <br><br>Feilmelding: {2}',
+        ProjectTimelineErrorFetchText: 'Feil ved henting av prosjektets data.<br><br>Sjekk at følgende SiteId er riktig med hva som ligger i "Prosjekter" listen. <br><br>- SiteId: {0} <br> - Tittel: {1} <br><br>Feilmelding: {2}',
         ProjectTimelineListInfoText: 'Her listes listeelementene for prosjektet. Her kan du redigere og legge til nye elementer. Dette vil synkroniseres til listen på hubområdet. For å zoome inn/ut i tidslinje: ALT+Musehjul',
         TimelineContentListName: 'Tidslinjeinnhold',
         TimelineConfigurationListName: 'Tidslinjekonfigurasjon',

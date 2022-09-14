@@ -1,4 +1,3 @@
-import { Web } from '@pnp/sp'
 import { ProjectListModel } from 'models'
 import { Pivot, PivotItem, ShimmeredDetailsList } from 'office-ui-fabric-react'
 import { IButtonProps } from 'office-ui-fabric-react/lib/Button'
@@ -7,7 +6,6 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as strings from 'PortfolioWebPartsStrings'
-import { ProjectInformationModal } from 'pp365-projectwebparts/lib/components/ProjectInformation'
 import { getObjectValue, sortAlphabetically } from 'pp365-shared/lib/helpers'
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { ProjectCard } from './ProjectCard'
@@ -97,28 +95,28 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
   /**
    * Render <ProjectInformationModal />
    */
-  function renderProjectInformation() {
-    if (state.showProjectInfo) {
-      return (
-        <ProjectInformationModal
-          modalProps={{
-            isOpen: true,
-            onDismiss: () => setState({ ...state, showProjectInfo: null })
-          }}
-          title={state.showProjectInfo.title}
-          webUrl={props.pageContext.site.absoluteUrl}
-          hubSite={{
-            web: new Web(props.pageContext.site.absoluteUrl),
-            url: props.pageContext.site.absoluteUrl
-          }}
-          siteId={state.showProjectInfo.siteId}
-          hideActions={true}
-          page='Portfolio'
-        />
-      )
-    }
-    return null
-  }
+  // function renderProjectInformation() { // TODO: REDO how tooltip is rendered, use panel instead and make this non dependendt of projectWebParts
+  //   if (state.showProjectInfo) {
+  //     return (
+  //       <ProjectInformationModal
+  //         modalProps={{
+  //           isOpen: true,
+  //           onDismiss: () => setState({ ...state, showProjectInfo: null })
+  //         }}
+  //         title={state.showProjectInfo.title}
+  //         webUrl={props.pageContext.site.absoluteUrl}
+  //         hubSite={{
+  //           web: new Web(props.pageContext.site.absoluteUrl),
+  //           url: props.pageContext.site.absoluteUrl
+  //         }}
+  //         siteId={state.showProjectInfo.siteId}
+  //         hideActions={true}
+  //         page='Portfolio'
+  //       />
+  //     )
+  //   }
+  //   return null
+  // }
 
   /**
    * Get card ations
@@ -271,7 +269,7 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
           {renderProjects(projects)}
         </div>
       </div>
-      {renderProjectInformation()}
+      {/* {renderProjectInformation()} */}
     </div>
   )
 }
