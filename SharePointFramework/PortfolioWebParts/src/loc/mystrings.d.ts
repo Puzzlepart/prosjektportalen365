@@ -120,6 +120,7 @@ declare interface IPortfolioWebPartsStrings {
   ProjectTimelineInfoText: string
   ProjectTimelineErrorTransformItemText: string
   ResourceAllocationInfoText: string
+  ResourceAllocationErrorTransformGroupText: string
   ResourceLabel: string
   ResponsibleLabel: string
   RoleLabel: string
