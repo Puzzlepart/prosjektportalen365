@@ -160,6 +160,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
           headerText={strings.FilterText}
           filters={this._getFilters()}
           onFilterChange={this._onFilterChange.bind(this)}
+          isLightDismiss
           onDismiss={() => this.setState({ showFilterPanel: false })}
         />
         {this.state.showDetails && (
@@ -228,7 +229,9 @@ export class ProjectTimeline extends BaseWebPartComponent<
    */
   private _getFilters(): IFilterProps[] {
     const config = this.state.timelineConfiguration
-    const columns = [{ fieldName: 'data.type', name: strings.TypeLabel }]
+    const columns = [
+      { fieldName: 'data.type', name: strings.TypeLabel },
+      { fieldName: 'data.tag', name: strings.TagFieldLabel }]
     const hiddenItems = (config.filter((item) => !item?.GtTimelineFilter)).map((item) => item.Title)
 
     return columns.map((col) => ({
@@ -680,7 +683,8 @@ export class ProjectTimeline extends BaseWebPartComponent<
             sortOrder: item.sortOrder,
             hexColor: item.hexColor,
             elementType: item.elementType,
-            filter: item.timelineFilter
+            filter: item.timelineFilter,
+            tag: item.tag
           }
         } as ITimelineItem
       })

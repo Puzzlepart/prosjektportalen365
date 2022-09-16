@@ -115,6 +115,7 @@ declare interface IProjectWebPartsStrings {
   PhaseLabel: string
   SiteTitleLabel: string
   TypeLabel: string
+  TagFieldLabel: string
   DeleteItemLabel: string
   ProjecttimelineGroupName: string
   ProjectTimelineInfoText: string
