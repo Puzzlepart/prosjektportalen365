@@ -83,9 +83,6 @@ export const DetailsCallout = ({ timelineItem, onDismiss }: IDetailsCalloutProps
             <p>
               <b>{strings.NameLabel}:</b> <span>{timelineItem.item.title}</span>
             </p>
-            <p hidden={!item.description}>
-              <b>{strings.DescriptionFieldLabel}:</b> <span>{item.description}</span>
-            </p>
             <p hidden={item.elementType !== strings.TriangleLabel}>
               <b>{strings.ColumnRenderOptionDate}:</b>{' '}
               <span>{formatDate(timelineItem.item.end_time.toString())}</span>
@@ -119,18 +116,35 @@ export const DetailsCallout = ({ timelineItem, onDismiss }: IDetailsCalloutProps
       className={styles.detailsCallout}
       styles={{
         beak: { backgroundColor: item.hexColor },
-        beakCurtain: { borderTop: `6px solid ${item.hexColor}` }
+        beakCurtain: {
+          borderTop: `8px solid ${item.hexColor}`,
+          borderRadius: '4px'
+        }
       }}
       target={timelineItem.element}
       bounds={bounds}
       onDismiss={onDismiss}
       setInitialFocus={true}>
+      <div className={styles.calloutHeader}>
+        <div
+          hidden={!item.tag}
+          title={strings.TagFieldLabel}
+          className={styles.tag}
+          style={{
+            backgroundColor: item.hexColor,
+          }}>
+          {item.tag}
+        </div>
+      </div>
       {_calloutContent()}
       <p hidden={!item.budgetTotal}>
         <b>{strings.BudgetTotalLabel}:</b> <span>{tryParseCurrency(item.budgetTotal)}</span>
       </p>
       <p hidden={!item.costsTotal}>
         <b>{strings.CostsTotalLabel}:</b> <span>{tryParseCurrency(item.costsTotal)}</span>
+      </p>
+      <p hidden={!item.description}>
+        <b>{strings.DescriptionFieldLabel}:</b> <span>{item.description}</span>
       </p>
       <p hidden={!item.type}>
         <b>{strings.TypeLabel}:</b> <span>{item.type}</span>

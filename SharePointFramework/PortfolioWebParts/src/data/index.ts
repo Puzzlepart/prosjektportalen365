@@ -375,6 +375,8 @@ export class DataAdapter implements IDataAdapter {
           'GtEndDate',
           'GtBudgetTotal',
           'GtCostsTotal',
+          'GtDescription',
+          'GtTag',
           'GtSiteIdLookup/Title',
           'GtSiteIdLookup/GtSiteId'
         )
@@ -402,6 +404,8 @@ export class DataAdapter implements IDataAdapter {
             config && config.GtTimelineFilter,
             item.GtStartDate,
             item.GtEndDate,
+            item.GtDescription,
+            item.GtTag,
             item.GtBudgetTotal,
             item.GtCostsTotal
           )
@@ -456,6 +460,7 @@ export class DataAdapter implements IDataAdapter {
             ])
             .then((deliveries) => {
               return deliveries
+                .filter((delivery) => delivery.GtDeliveryStartTimeOWSDATE && delivery.GtDeliveryEndTimeOWSDATE)
             })
             .catch((error) => {
               throw error
@@ -478,10 +483,6 @@ export class DataAdapter implements IDataAdapter {
             (config && config.GtTimelineFilter) || true,
             item.GtDeliveryStartTimeOWSDATE,
             item.GtDeliveryEndTimeOWSDATE,
-            null,
-            null,
-            null,
-            null,
             item.GtDeliveryDescriptionOWSMTXT
           )
           return model

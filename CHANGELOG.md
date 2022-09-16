@@ -13,12 +13,15 @@ Every change is marked with issue ID.
 - Added better error handling for ProjectTimelines (Portfolio and project level) #755
 - Custom Risk matrix cells (colors, headers, text, etc...) #624
 - Script to fix planner issues, see 'Ensure-PlannerPlans' script #752
+- Added 'Description' and 'Tag' as two new default fields to ProjectTimelineContent list #764
+- Added better error handling for Resource allocation #776
 
 ### Changed
 
 - Changed phase callout from hover to clickable #734
 - Information messages now uses a newer and stable version to render HTML #762
 - Reduced amount of calls when loading ProjectTimeline, this improves the speed by alot! #743
+- Filterpanel for Timeline: Project is now collapsed by default in the panel #776
 
 ### Fixed
 

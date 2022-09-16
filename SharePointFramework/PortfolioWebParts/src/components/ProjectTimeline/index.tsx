@@ -164,9 +164,11 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
     const columns = [
       config.find((item) => item?.Title === strings.ProjectLabel).GtTimelineFilter && {
         fieldName: 'project',
-        name: strings.SiteTitleLabel
+        name: strings.SiteTitleLabel,
+        isCollapsed: true
       },
-      { fieldName: 'data.type', name: strings.TypeLabel }
+      { fieldName: 'data.type', name: strings.TypeLabel },
+      { fieldName: 'data.tag', name: strings.TagFieldLabel }
     ]
     const hiddenItems = config.filter((item) => !item?.GtTimelineFilter).map((item) => item.Title)
 
@@ -180,7 +182,8 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
           const filter = this.state.activeFilters[col.fieldName]
           const selected = filter ? filter.indexOf(name) !== -1 : false
           return { name, value: name, selected }
-        })
+        }),
+      defaultCollapsed: col.isCollapsed
     }))
   }
 
@@ -260,11 +263,10 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
     timelineItems: TimelineContentListModel[],
     groups: ITimelineGroup[]
   ): ITimelineItem[] {
-    let _project, _siteId, _itemTitle
+    let _item, _siteId
     try {
       const items: ITimelineItem[] = timelineItems.map((item, id) => {
-        _project = item.title
-        _itemTitle = item.itemTitle
+        _item = item
 
         const group = _.find(groups, (grp) => item.siteId.indexOf(grp.siteId) !== -1)
         _siteId = group.siteId || 'N/A'
@@ -306,17 +308,20 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
             sortOrder: item.sortOrder,
             hexColor: item.hexColor,
             elementType: item.elementType,
-            filter: item.timelineFilter
+            filter: item.timelineFilter,
+            tag: item.tag
           }
         } as ITimelineItem
       })
+
       return items.filter((i) => i)
     } catch (error) {
       throw new Error(
         format(
           strings.ProjectTimelineErrorTransformItemText,
           _siteId,
-          _itemTitle ? `${_itemTitle} (${_project})` : _project,
+          _item.itemTitle ? `${_item.itemTitle} (${_item.title})` : _item.title,
+          _item.type,
           error
         )
       )
@@ -333,7 +338,6 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
 
     try {
       const timelineConfiguration = await data.fetchTimelineConfiguration()
-
       
       const [
         projects,
