@@ -57,7 +57,10 @@ export const AddProjectDialog: FunctionComponent<IAddProjectProps> = ({ sp, cont
               fields={fields}
               projects={projects}
               width='50em'
-              onSelect={(item) => (selectedItem.current = item)}
+              onSelect={(item: any[]) => {
+                (selectedItem.current = item)
+                console.log("selected", item);
+              }}
               selectionMode={SelectionMode.multiple}
             />
           )}

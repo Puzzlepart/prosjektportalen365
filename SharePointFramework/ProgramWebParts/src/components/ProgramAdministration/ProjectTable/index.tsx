@@ -18,7 +18,7 @@ export const ProjectTable: FunctionComponent<IProjectTableProps> = ({
         selectionMode={selectionMode}
         showFilter
         filterPlaceHolder={strings.ProgramSearchProjectsText}
-        selection={(item) => onSelect(item)}
+        selection={(item: any[]): void => onSelect(item)}
       />
     </div>
   )
