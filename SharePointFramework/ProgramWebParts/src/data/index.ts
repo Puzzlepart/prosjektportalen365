@@ -401,6 +401,8 @@ export class DataAdapter {
               config && config.GtTimelineFilter,
               item.GtStartDate,
               item.GtEndDate,
+              item.GtDescription,
+              item.GtTag,
               item.GtBudgetTotal,
               item.GtCostsTotal
             )
@@ -476,10 +478,6 @@ export class DataAdapter {
             config && config.GtTimelineFilter || true,
             item.GtDeliveryStartTimeOWSDATE,
             item.GtDeliveryEndTimeOWSDATE,
-            null,
-            null,
-            null,
-            null,
             item.GtDeliveryDescriptionOWSMTXT
           )
           return model

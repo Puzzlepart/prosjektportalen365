@@ -45,6 +45,16 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Beslutningspunkt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHexColor">#6495ED</pnp:DataValue>
+            <pnp:DataValue FieldName="GtElementType">Diamant</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTimelineCategory">Styring</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowElementPortfolio">1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowElementProgram">1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTimelineFilter">1</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Fase</pnp:DataValue>
             <pnp:DataValue FieldName="GtHexColor">#2589d6</pnp:DataValue>
             <pnp:DataValue FieldName="GtTimelineCategory">Styring</pnp:DataValue>
@@ -54,7 +64,7 @@
             <pnp:DataValue FieldName="GtTimelineFilter">1</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Delfase</pnp:DataValue>
             <pnp:DataValue FieldName="GtHexColor">#249ea0</pnp:DataValue>
             <pnp:DataValue FieldName="GtTimelineCategory">Styring</pnp:DataValue>
@@ -64,7 +74,7 @@
             <pnp:DataValue FieldName="GtTimelineFilter">1</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Milepæl</pnp:DataValue>
             <pnp:DataValue FieldName="GtHexColor">#ffc800</pnp:DataValue>
             <pnp:DataValue FieldName="GtElementType">Diamant</pnp:DataValue>

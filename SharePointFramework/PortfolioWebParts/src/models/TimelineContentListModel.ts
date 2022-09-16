@@ -14,11 +14,12 @@ export class TimelineContentListModel {
    * @param timelineFilter Timeline filterable
    * @param startDate Start Date
    * @param endDate End Date
+   * @param description Description
+   * @param tag Tag
    * @param budgetTotal Budget total
    * @param costsTotal Costs total
    * @param url Url
    * @param phase Phase
-   * @param description Description
    */
   constructor(
     public siteId: string,
@@ -33,10 +34,11 @@ export class TimelineContentListModel {
     public timelineFilter: any,
     public startDate?: string,
     public endDate?: string,
+    public description?: string,
+    public tag?: string,
     public budgetTotal?: string,
     public costsTotal?: string,
     public url?: string,
     public phase?: string,
-    public description?: string
   ) {}
 }

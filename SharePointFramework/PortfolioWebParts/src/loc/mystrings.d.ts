@@ -77,6 +77,7 @@ declare interface IPortfolioWebPartsStrings {
   DeliveryStatusCommentLabel: string
   DeliveryStatusLabel: string
   DescriptionFieldLabel: string
+  TagFieldLabel: string
   DesiredValueLabel: string
   EditViewText: string
   ErrorText: string

@@ -77,6 +77,7 @@ define([], function() {
         DeliveryStatusLabel: 'Leveransestatus',
         DesiredValueLabel: 'Ønsket verdi',
         DescriptionFieldLabel: 'Beskrivelse',
+        TagFieldLabel: 'Etikett',
         EditViewText: 'Rediger gjeldende visning',
         ErrorText: 'Det skjedde en feil under uthenting av prosjekter.',
         ExcelExportButtonLabel: 'Eksporter til Excel',

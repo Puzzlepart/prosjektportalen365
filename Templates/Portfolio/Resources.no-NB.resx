@@ -1640,10 +1640,10 @@
     <value>Hvilket prosjekt er elementet knyttet til?</value>
   </data>
   <data name="SiteFields_GtTag_DisplayName" xml:space="preserve">
-    <value>Tagg</value>
+    <value>Etikett</value>
   </data>
   <data name="SiteFields_GtTag_Description" xml:space="preserve">
-    <value>Hvilken tagg ønsker du å sette på tidslinje elementet</value>
+    <value>Hvilken etikett ønsker du å sette på tidslinje elementet</value>
   </data>
   <data name="SiteFields_GtTimelineTypeLookup_DisplayName" xml:space="preserve">
     <value>Type</value>
