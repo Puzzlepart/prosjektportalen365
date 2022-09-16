@@ -460,6 +460,7 @@ export class DataAdapter implements IDataAdapter {
             ])
             .then((deliveries) => {
               return deliveries
+                .filter((delivery) => delivery.GtDeliveryStartTimeOWSDATE && delivery.GtDeliveryEndTimeOWSDATE)
             })
             .catch((error) => {
               throw error

@@ -124,7 +124,6 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    * @param item Item
    */
   private _onItemClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) {
-    console.log(item)
     this.setState({ showDetails: { element: event.currentTarget, item } })
   }
 
@@ -264,11 +263,10 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
     timelineItems: TimelineContentListModel[],
     groups: ITimelineGroup[]
   ): ITimelineItem[] {
-    let _project, _siteId, _itemTitle
+    let _item, _siteId
     try {
       const items: ITimelineItem[] = timelineItems.map((item, id) => {
-        _project = item.title
-        _itemTitle = item.itemTitle
+        _item = item
 
         const group = _.find(groups, (grp) => item.siteId.indexOf(grp.siteId) !== -1)
         _siteId = group.siteId || 'N/A'
@@ -322,7 +320,8 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         format(
           strings.ProjectTimelineErrorTransformItemText,
           _siteId,
-          _itemTitle ? `${_itemTitle} (${_project})` : _project,
+          _item.itemTitle ? `${_item.itemTitle} (${_item.title})` : _item.title,
+          _item.type,
           error
         )
       )
