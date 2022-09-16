@@ -451,10 +451,6 @@ export class ProjectTimeline extends BaseWebPartComponent<
               config && config.GtTimelineFilter || true,
               item.GtDeliveryStartTime,
               item.GtDeliveryEndTime,
-              null,
-              null,
-              null,
-              null,
               item.GtDeliveryDescription
             )
             return model
@@ -547,6 +543,8 @@ export class ProjectTimeline extends BaseWebPartComponent<
             config && config.GtTimelineFilter,
             item.GtStartDate,
             item.GtEndDate,
+            item.GtDescription,
+            item.GtTag,
             item.GtBudgetTotal,
             item.GtCostsTotal
           )

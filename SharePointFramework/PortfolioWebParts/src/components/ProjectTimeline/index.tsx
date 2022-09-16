@@ -124,6 +124,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    * @param item Item
    */
   private _onItemClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) {
+    console.log(item)
     this.setState({ showDetails: { element: event.currentTarget, item } })
   }
 
@@ -164,9 +165,11 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
     const columns = [
       config.find((item) => item?.Title === strings.ProjectLabel).GtTimelineFilter && {
         fieldName: 'project',
-        name: strings.SiteTitleLabel
+        name: strings.SiteTitleLabel,
+        isCollapsed: true
       },
-      { fieldName: 'data.type', name: strings.TypeLabel }
+      { fieldName: 'data.type', name: strings.TypeLabel },
+      { fieldName: 'data.tag', name: strings.TagFieldLabel }
     ]
     const hiddenItems = config.filter((item) => !item?.GtTimelineFilter).map((item) => item.Title)
 
@@ -180,7 +183,8 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
           const filter = this.state.activeFilters[col.fieldName]
           const selected = filter ? filter.indexOf(name) !== -1 : false
           return { name, value: name, selected }
-        })
+        }),
+      defaultCollapsed: col.isCollapsed
     }))
   }
 
@@ -306,10 +310,12 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
             sortOrder: item.sortOrder,
             hexColor: item.hexColor,
             elementType: item.elementType,
-            filter: item.timelineFilter
+            filter: item.timelineFilter,
+            tag: item.tag
           }
         } as ITimelineItem
       })
+
       return items.filter((i) => i)
     } catch (error) {
       throw new Error(
@@ -333,7 +339,6 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
 
     try {
       const timelineConfiguration = await data.fetchTimelineConfiguration()
-
       
       const [
         projects,
