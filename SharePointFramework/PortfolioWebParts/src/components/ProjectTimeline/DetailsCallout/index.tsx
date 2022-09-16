@@ -83,9 +83,6 @@ export const DetailsCallout = ({ timelineItem, onDismiss }: IDetailsCalloutProps
             <p>
               <b>{strings.NameLabel}:</b> <span>{timelineItem.item.title}</span>
             </p>
-            <p hidden={!item.description}>
-              <b>{strings.DescriptionFieldLabel}:</b> <span>{item.description}</span>
-            </p>
             <p hidden={item.elementType !== strings.TriangleLabel}>
               <b>{strings.ColumnRenderOptionDate}:</b>{' '}
               <span>{formatDate(timelineItem.item.end_time.toString())}</span>

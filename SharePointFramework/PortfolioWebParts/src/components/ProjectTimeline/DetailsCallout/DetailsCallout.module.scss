@@ -2,7 +2,6 @@
 
 .detailsCallout {
   border-style: none !important;
-  border-radius: 4px;
   padding: 28px;
   max-width: 500px;
   .calloutHeader {
@@ -23,7 +22,6 @@
       cursor: default;
     }
     .tag:hover {
-      background-color: lighten($color: #fff, $amount: 100);
       border: 1px solid #00000036;
     }
   }
