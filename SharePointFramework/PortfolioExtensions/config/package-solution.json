@@ -14,6 +14,17 @@
       "termsOfUseUrl": "https://puzzlepart.com/",
       "websiteUrl": "https://puzzlepart.com/"
     },
+    "metadata": {
+      "shortDescription": {
+        "default": "Prosjektportalen - PortfolioExtensions"
+      },
+      "longDescription": {
+        "default": "Prosjektportalen - PortfolioExtensions: Collection of various extensions used in Prosjektportalen portfolio"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
     "features": [
       {
         "title": "Application Extension - Deployment of custom action",

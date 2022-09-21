@@ -3,13 +3,13 @@ import {
   Command,
   IListViewCommandSetExecuteEventParameters,
 } from '@microsoft/sp-listview-extensibility'
-import { Dialog } from '@microsoft/sp-dialog'
 import { SPFI, spfi, SPFx } from '@pnp/sp'
 import '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/site-groups/web'
 
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
+import IdeaDialog from 'components/IdeaDialog'
 
 export interface IIdeaProjectDataCommandProperties {
   ideaId: number
@@ -32,7 +32,6 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
     this._openCmd = this.tryGetCommand('OPEN_IDEA_PROJECTDATA_DIALOG')
     this._openCmd.visible = false
     this._userAuthorized = await this._isUserAuthorized(sp)
-    console.log(this._isUserAuthorized)
 
     this.context.listView.listViewStateChangedEvent.add(this, this._onListViewStateChanged)
 
@@ -44,12 +43,12 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
       case this._openCmd.id:
         // const ideaId = event.selectedRows[0].getValueByName('ID')
         // const ideaTitle = event.selectedRows[0].getValueByName('Title')
-        // const ideaUrl = `${this.context.pageContext.web.absoluteUrl}/Lists/Idebehandling%20pnp/NewForm.aspx?IdeaId=${ideaId}&IdeaTitle=${ideaTitle}`
+        // const ideaUrl = `${this.context.pageContext.web.absoluteUrl}/Lists/Idebehandling/NewForm.aspx?Title=${ideaTitle}`
         // window.open(ideaUrl, '_blank')
-        
-        Dialog.alert('OPEN_IDEA_PROJECTDATA_DIALOG').catch(() => {
-          /* handle error */
-        })
+        const dialog: IdeaDialog = new IdeaDialog()
+
+        dialog.ideaTitle = event.selectedRows[0].getValueByName('Title')
+        dialog.show()
         break
       default:
         throw new Error('Unknown command')
@@ -59,7 +58,6 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
   private _onListViewStateChanged = (): void => {
     Logger.log({
       message: '(IdeaProjectDataCommand) onListViewStateChanged: ListView state changed',
-      data: { version: this.context.manifest.version },
       level: LogLevel.Info
     })
     
@@ -69,10 +67,6 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
         this._userAuthorized &&
         location.href.includes('Idebehandling')
     }
-
-    // TODO: Add your logic here
-
-    // You should call this.raiseOnChage() to update the command bar
     this.raiseOnChange()
   }
 
