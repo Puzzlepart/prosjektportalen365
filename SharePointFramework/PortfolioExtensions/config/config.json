@@ -13,6 +13,6 @@
   },
   "externals": {},
   "localizedResources": {
-    "PortfolioExtenionsStrings": "lib/loc/{locale}.js"
+    "PortfolioExtensionsStrings": "lib/loc/{locale}.js"
   }
 }
