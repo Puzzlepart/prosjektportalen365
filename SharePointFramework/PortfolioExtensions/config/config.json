@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "idea-projectdata-command-set": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/ideaProjectData/index.js",
+          "manifest": "./src/extensions/ideaProjectData/manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "PortfolioExtenionsStrings": "lib/loc/{locale}.js"
+  }
+}

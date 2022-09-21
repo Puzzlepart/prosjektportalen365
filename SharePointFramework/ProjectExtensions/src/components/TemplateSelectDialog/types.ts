@@ -1,5 +1,5 @@
-import { ProjectSetupSettings } from 'projectSetup/ProjectSetupSettings'
-import { IProjectSetupData } from 'projectSetup/types'
+import { ProjectSetupSettings } from 'extensions/projectSetup/ProjectSetupSettings'
+import { IProjectSetupData } from 'extensions/projectSetup/types'
 import { ListContentConfig, ProjectExtension, ProjectTemplate } from 'models'
 import { IBaseDialogProps } from '../@BaseDialog/types'
 

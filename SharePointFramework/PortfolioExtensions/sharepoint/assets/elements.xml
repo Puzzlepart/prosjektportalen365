@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+    <CustomAction
+        Title="IdeaProjectData"
+        RegistrationId="100"
+        RegistrationType="List"
+        Location="ClientSideExtension.ListViewCommandSet.CommandBar"
+        ClientSideComponentId="b13831c6-c4f8-4bbc-9da3-bd5f960f7e2b"
+        ClientSideComponentProperties="">
+    </CustomAction>
+</Elements>
