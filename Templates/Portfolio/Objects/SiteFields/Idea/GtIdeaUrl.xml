@@ -1,0 +1,1 @@
+<Field Type="Text" DisplayName="{resource:SiteFields_GtIdeaUrl_DisplayName}" Description="{resource:SiteFields_GtIdeaUrl_Description}" Group="{resource:SiteFields_Idea_Group}" ID="{724036b3-ff76-40d7-a7df-9613e6f4e8fa}" StaticName="GtIdeaUrl" Name="GtIdeaUrl" ShowInEditForm="TRUE" ShowInNewForm="FALSE" />

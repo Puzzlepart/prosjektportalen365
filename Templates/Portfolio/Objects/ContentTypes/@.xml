@@ -28,6 +28,8 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Tidslinjeelement.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Tidslinjekonfigurasjonselement.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Prosjektinnholdskolonne.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Idebehandling.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Prosjektide.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Prosjektadministrasjonsrolle.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Prosjektadministrasjonsrolle koblet mot prosjektegenskaper.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Prosjektadministrasjonsrolle koblet mot SharePoint-gruppe.xml" />
