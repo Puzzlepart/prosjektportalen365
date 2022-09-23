@@ -14,5 +14,12 @@
             AllowMembersEditMembership="false"
             OnlyAllowMembersViewMembership="true">
         </pnp:SiteGroup>
+        <pnp:SiteGroup
+            Title="Idebehandlere"
+            Description="Idebehandlere er personer som kan kan godkjenne og behandle idéer: &lt;a href=&quot;{site}/Lists/Idebehandling&quot;&gt;Idebehandling&lt;/a&gt;."
+            Owner="{associatedownergroupid}"
+            AllowMembersEditMembership="false"
+            OnlyAllowMembersViewMembership="true">
+        </pnp:SiteGroup>
     </pnp:SiteGroups>
 </pnp:Security>
