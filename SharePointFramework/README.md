@@ -10,6 +10,20 @@ Build by `npm` script `build` and watch changes with `watch`.
 
 _Published to **npm** as `pp365-shared`_
 
+## [PortfolioExtensions](./PortfolioExtensions/README.md)
+
+| Solution name            | ID                                               |
+| ------------------------ | ------------------------------------------------ |
+| `pp-portfolio-extensons` | a3bf3315-0710-41f9-8836-2b61396d032fc16e2f72fb5b |
+
+Extension for the `portfolio` level of the portal.
+
+Build by `npm` script `package`.
+
+To package and deploy directly to SharePoint, see `2. Build, package and deploy`.
+
+_Published to **npm** as `pp365-portfolioextensions`_
+
 ## [PortfolioWebParts](./PortfolioWebParts/README.md)
 
 | Solution name            | ID                                   |
@@ -24,19 +38,19 @@ To package and deploy directly to SharePoint, see `2. Build, package and deploy`
 
 _Published to **npm** as `pp365-projectwebparts`_
 
-## [PortfolioExtensions](./PortfolioExtensions/README.md)
+## [ProgramWebParts](./ProgramWebParts/README.md)
 
-| Solution name            | ID                                               |
-| ------------------------ | ------------------------------------------------ |
-| `pp-portfolio-extensons` | a3bf3315-0710-41f9-8836-2b61396d032fc16e2f72fb5b |
+| Solution name          | ID                                   |
+| ---------------------- | ------------------------------------ |
+| `pp-program-web-parts` | 8a9a0f4a-2e2f-4f13-aceb-867f82bd77eb |
 
-Extension for the `portfolio` level of the portal.
+Web parts for `program` level of the portal.
 
 Build by `npm` script `package`.
 
 To package and deploy directly to SharePoint, see `2. Build, package and deploy`.
 
-_Published to **npm** as `pp365-portfolioextensions`_
+_Published to **npm** as `pp365-programwebparts`_`_
 
 ## [ProjectExtensions](./ProjectExtensions/README.md)
 
@@ -66,24 +80,14 @@ To package and deploy directly to SharePoint, see `2. Build, package and deploy`
 
 _Published to **npm** as `pp365-projectwebparts`_`_
 
-## [ProgramWebParts](./ProgramWebParts/README.md)
-
-| Solution name          | ID                                   |
-| ---------------------- | ------------------------------------ |
-| `pp-program-web-parts` | 8a9a0f4a-2e2f-4f13-aceb-867f82bd77eb |
-
-Web parts for `program` level of the portal.
-
-Build by `npm` script `package`.
-
-To package and deploy directly to SharePoint, see `2. Build, package and deploy`.
-
-_Published to **npm** as `pp365-programwebparts`_`_
 
 # 2. Component overview
 
 | Name                        | Id                                   | Solution            |
 | --------------------------- | ------------------------------------ | ------------------- |
+| IdeaProcessingCommand       | 5af28222-4bf8-419c-9533-5a31967b9f20 | PortfolioExtensions |
+| IdeaProjectDataCommand      | b13831c6-c4f8-4bbc-9da3-bd5f960f7e2b | PortfolioExtensions |
+| IdeaRegistrationCommand     | c93a4a2a-f5f0-41ee-9ab6-04ad85004d20 | PortfolioExtensions |
 | BenefitsOverviewWebPart     | 5f925484-cfb4-42ce-9f90-79a874bb8a68 | PortfolioWebParts   |
 | LatestProjectsWebPart       | 941fd73c-b957-41c3-8d4f-082268407f10 | PortfolioWebParts   |
 | PortfolioAggregationWebPart | 6c0e484d-f6da-40d4-81fc-ec1389ef29a8 | PortfolioWebParts   |
@@ -92,9 +96,12 @@ _Published to **npm** as `pp365-programwebparts`_`_
 | ProjectListWebPart          | 54fbeb7d-e463-4dcc-8873-50a3ab2f0f68 | PortfolioWebParts   |
 | ResourceAllocationWebPart   | 2ef269b2-6370-4841-8b35-2185b7ccb22a | PortfolioWebParts   |
 | ProjectTimelineWebPart      | 7284c568-f66c-4218-bb2c-3734a3cfa581 | PortfolioWebParts   |
-| IdeaProcessingCommand       | 5af28222-4bf8-419c-9533-5a31967b9f20 | PortfolioExtensions |
-| IdeaProjectDataCommand      | b13831c6-c4f8-4bbc-9da3-bd5f960f7e2b | PortfolioExtensions |
-| IdeaRegistrationCommand     | c93a4a2a-f5f0-41ee-9ab6-04ad85004d20 | PortfolioExtensions |
+| ???                         | xxx                                  | ProgramWebParts     |
+| ???                         | xxx                                  | ProgramWebParts     |
+| ???                         | xxx                                  | ProgramWebParts     |
+| ???                         | xxx                                  | ProgramWebParts     |
+| ???                         | xxx                                  | ProgramWebParts     |
+| ???                         | xxx                                  | ProgramWebParts     |
 | ProjectSetup                | ce34553d-ab47-4107-8dd1-e980d953996d | ProjectExtensions   |
 | ProjectUpgrade              | 453a6c1e-e1d0-4b12-a3fc-690a36da1f0c | ProjectExtensions   |
 | TemplateSelectorCommand     | c9080212-e63e-47cc-8278-00ad38c3f5a5 | ProjectExtensions   |
