@@ -1,15 +1,18 @@
+import { override } from '@microsoft/decorators'
 import {
   BaseListViewCommandSet,
   Command,
   IListViewCommandSetExecuteEventParameters,
 } from '@microsoft/sp-listview-extensibility'
-import { SPFI, spfi, SPFx } from '@pnp/sp'
+import { spfi, SPFx } from '@pnp/sp'
 import '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/site-groups/web'
 
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import IdeaDialog from 'components/IdeaDialog'
+import { isUserAuthorized } from 'helpers/isUserAuthorized'
+import strings from 'PortfolioExtensionsStrings'
 
 export interface IIdeaProjectDataCommandProperties {
   ideaId: number
@@ -22,6 +25,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
   private _userAuthorized: boolean
   private _openCmd: Command
 
+  @override
   public async onInit(): Promise<void> {
     Logger.log({
       message: '(IdeaProjectDataCommand) onInit: Initializing...',
@@ -31,13 +35,12 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
     const sp = spfi().using(SPFx(this.context))
     this._openCmd = this.tryGetCommand('OPEN_IDEA_PROJECTDATA_DIALOG')
     this._openCmd.visible = false
-    this._userAuthorized = await this._isUserAuthorized(sp)
-
+    this._userAuthorized = await isUserAuthorized(sp, strings.IdeaProcessorsSiteGroup)
     this.context.listView.listViewStateChangedEvent.add(this, this._onListViewStateChanged)
-
     return Promise.resolve()
   }
 
+  @override
   public onExecute(event: IListViewCommandSetExecuteEventParameters): void {
     switch (event.itemId) {
       case this._openCmd.id:
@@ -65,18 +68,8 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
     if (this._openCmd) {
       this._openCmd.visible = this.context.listView.selectedRows?.length === 1 &&
         this._userAuthorized &&
-        location.href.includes('Idebehandling')
+        location.href.includes(strings.IdeaProcessingUrlTitle)
     }
     this.raiseOnChange()
-  }
-
-  /**
-   * Checks if the current user has premisions to access the command
-   */
-  private async _isUserAuthorized(sp: SPFI): Promise<boolean> {
-    const users = await sp.web.siteGroups.getByName('Idebehandlere').users()
-    return users.some(
-      (user: { Email: string }) => user.Email === this.context.pageContext.user.email
-    )
   }
 }

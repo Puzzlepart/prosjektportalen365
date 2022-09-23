@@ -3,24 +3,30 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { BaseDialog, IDialogConfiguration } from '@microsoft/sp-dialog'
 import {
-  PrimaryButton,
   DialogFooter,
   DialogContent,
+  DialogType,
+  PrimaryButton,
+  DefaultButton,
   Dropdown,
   IDropdownOption,
-  DefaultButton,
   TextField,
+  MessageBarType
 } from '@fluentui/react'
+import { format } from '@fluentui/utilities'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
+import strings from 'PortfolioExtensionsStrings'
+
 interface IDialogContentProps {
   close: () => void
   submit: (choice: string, comment: string) => void
   ideaTitle?: string
+  dialogDescription?: string
 }
 
 interface IDialogContentState {
   choice: string
   comment: string
-  isSubmitDisabled: boolean
 }
 
 class DialogPrompt extends React.Component<
@@ -32,33 +38,37 @@ class DialogPrompt extends React.Component<
 
     this.state = {
       choice: '',
-      comment: '',
-      isSubmitDisabled: true,
+      comment: ''
     }
   }
 
   public render(): JSX.Element {
     return (
       <DialogContent
-        title='Anbefaling'
-        subText={`Velg anbefaling for: ${this.props.ideaTitle}`}
+        title={strings.SetRecommendationTitle}
+        subText={format(strings.SetRecommendationSubtitle, this.props.ideaTitle)}
+        type={DialogType.largeHeader}
         onDismiss={this.props.close}
         showCloseButton={true}
       >
+        <UserMessage
+          text={this.props.dialogDescription}
+          type={MessageBarType.info}
+        />
         <Dropdown
+          label={strings.ActionLabel}
+          placeholder={strings.ActionLabelPlaceholder}
           options={[
-            { key: 'accept', text: 'Godkjenn' },
-            { key: 'decline', text: 'Avvis' },
-            { key: 'postpone', text: 'Under vurdering' },
+            { key: 'approve', text: strings.ApproveChoice },
+            { key: 'consideration', text: strings.ConsiderationChoice },
+            { key: 'reject', text: strings.RejectChoice }
           ]}
           onChange={this._onChoiceChange}
-          label='Valg'
-          placeholder='Vennligst velg handling'
         />
 
         <TextField
-          placeholder='Kommentar'
-          label='Kommentar til valg'
+          placeholder={strings.CommentLabel}
+          label={strings.CommentLabelPlaceholder}
           multiline
           rows={3}
           onChange={this._onCommentChange}
@@ -66,13 +76,13 @@ class DialogPrompt extends React.Component<
 
         <DialogFooter>
           <DefaultButton
-            text='Cancel'
-            title='Cancel'
+            text={strings.CancelLabel}
+            title={strings.CancelLabel}
             onClick={this.props.close}
           />
           <PrimaryButton
-            text='OK'
-            title='OK'
+            text={strings.SubmitLabel}
+            title={strings.SubmitLabel}
             onClick={() => {
               this.props.submit(this.state.choice, this.state.comment)
             }}
@@ -123,8 +133,6 @@ export default class RecommendationDialog extends BaseDialog {
 
   protected onAfterClose(): void {
     super.onAfterClose()
-
-    // Clean up the element for the next dialog
     ReactDOM.unmountComponentAtNode(this.domElement)
   }
 

@@ -2,13 +2,15 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import {
-  PrimaryButton,
   DialogFooter,
   DialogContent,
-  DefaultButton,
   DialogType,
+  PrimaryButton,
+  DefaultButton,
+  MessageBarType
 } from '@fluentui/react'
 import { BaseDialog, IDialogConfiguration } from '@microsoft/sp-dialog'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 
 interface IDialogContentProps {
   close: () => void
@@ -31,6 +33,10 @@ class IdeaDialog extends React.Component<IDialogContentProps> {
         showCloseButton={true}
         closeButtonAriaLabel={'Lukk'}
       >
+        <UserMessage
+          text={'this.props.dialogDescription'}
+          type={MessageBarType.info}
+        />
         <DialogFooter>
           <DefaultButton
             text={'Avbryt'}

@@ -1,6 +1,27 @@
-define([], function() {
+define([], function () {
   return {
+    SetRecommendationTitle: 'Sett anbefaling',
+    SetRecommendationSubtitle: 'Velg anbefaling for: {0}',
     IdeaProjectDataDialogTitle: 'Tillatelseskonfigurasjon',
-    IdeaProjectDataDialogInfoText: 'Informasjon goes here'
+    IdeaProjectDataDialogInfoText: 'Informasjon goes here',
+    IdeaProcessorsSiteGroup: 'Idebehandlere',
+    IdeaProcessingTitle: 'Idébehandling',
+    IdeaProcessingUrlTitle: 'Idebehandling',
+    IdeaRegistrationTitle: 'Idéregistrering',
+    IdeaRegistrationUrlTitle: 'Ideregistrering',
+    ApproveChoice: 'Godkjenn',
+    ConsiderationChoice: 'Under vurdering',
+    RejectChoice: 'Avvis',
+    ApprovedSyncText: 'Godkjent og synronisert',
+    ApprovedText: 'Godkjent for konseptutredning',
+    ConsiderationText: 'Under vurdering',
+    RejectedText: 'Avvist',
+    IdeaAlreadyApproved: 'Denne idéen er allerede godkjent',
+    ActionLabel: 'Handling',
+    ActionLabelPlaceholder: 'Vennligst velg handling...',
+    CommentLabel: 'Kommentar',
+    CommentLabelPlaceholder: 'Kommentar til valg...',
+    CancelLabel: 'Avbryt',
+    SubmitLabel: 'Send',
   }
 });
