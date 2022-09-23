@@ -24,6 +24,15 @@
           "properties": {}
         }
       }
+    },
+    "ideaRegistration": {
+      "pageUrl": "https://puzzlepart.sharepoint.com/sites/pp365/Lists/Ideregistrering/AllItems.aspx",
+      "customActions": {
+        "c93a4a2a-f5f0-41ee-9ab6-04ad85004d20": {
+          "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
+          "properties": {}
+        }
+      }
     }
   }
 }

@@ -17,6 +17,14 @@
           "manifest": "./src/extensions/ideaProcessing/manifest.json"
         }
       ]
+    },
+    "idea-registration-command-set": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/ideaRegistration/index.js",
+          "manifest": "./src/extensions/ideaRegistration/manifest.json"
+        }
+      ]
     }
   },
   "externals": {},

@@ -23,14 +23,14 @@ enum RecommendationType {
   Declined = 'Avvist',
 }
 
-export default class IdeaProcessCommandSet extends BaseListViewCommandSet<any> {
+export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   private _userAuthorized: boolean
   private _sp: SPFI
 
   @override
   public async onInit(): Promise<void> {
     Logger.log({
-      message: '(IdeaProcessCommandSet) onInit: Initializing...',
+      message: '(IdeaProcessCommand) onInit: Initializing...',
       data: { version: this.context.manifest.version },
       level: LogLevel.Info
     })
