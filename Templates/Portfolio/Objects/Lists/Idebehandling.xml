@@ -1,5 +1,5 @@
 <pnp:ListInstance Title="{resource:Lists_IdeaProcessing_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_IdeaProcessing_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false"
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x01000E7513A76B934F449CDB9B25FC172F44" Default="true" />
     </pnp:ContentTypeBindings>
@@ -12,8 +12,8 @@
             </Query>
             <ViewFields>
                 <FieldRef Name="LinkTitle" />
-                <FieldRef Name="GtRegistratedIdea" />
                 <FieldRef Name="GtIdeaUrl" />
+                <FieldRef Name="GtRegistratedIdea" />
                 <FieldRef Name="GtIdeaOwner"/>
                 <FieldRef Name="GtIdeaSolutionDescription" />
                 <FieldRef Name="GtIdeaExpectedGains" />
@@ -21,9 +21,9 @@
                 <FieldRef Name="GtIdeaExecutionPlanResourceNeeds" />
                 <FieldRef Name="GtIdeaExecutionPlanSuccessFactors" />
                 <FieldRef Name="GtIdeaReference" />
-                <FieldRef Name="GtIdeaDecision" />
                 <FieldRef Name="GtIdeaOtherComments" />
                 <FieldRef Name="GtIdeaDecisionComment" />
+                <FieldRef Name="GtIdeaDecision" />
                 <FieldRef Name="GtIdeaProjectData"/>
             </ViewFields>
             <RowLimit Paged="TRUE">100</RowLimit>

@@ -1,5 +1,5 @@
 <pnp:ListInstance Title="{resource:Lists_TemplateOptions_Title}" Url="{resource:Lists_TemplateOptions_Url}" Description="" DocumentTemplate="" TemplateType="100" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" EnableFolderCreation="false" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage=""
-  xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+  xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
   <pnp:Views>
     <View Name="{895C5324-0C85-46D5-B425-A6CD69AD143D}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Maloppsett/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
       <Query />
@@ -62,8 +62,8 @@
     </Field>
   </pnp:Fields>
   <pnp:FieldRefs>
-    <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" DisplayName="Beskrivelse" />
-    <pnp:FieldRef ID="77baede1-38df-454c-a53a-dd7904ba0046" Name="GtIsProgram" />
+    <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" DisplayName="{resource:Lists_GtDescription_DisplayName}" />
+    <pnp:FieldRef ID="77baede1-38df-454c-a53a-dd7904ba0046" Name="GtIsProgram" DisplayName="{resource:Lists_GtIsProgram_DisplayName}" />
   </pnp:FieldRefs>
   <pnp:DataRows UpdateBehavior="Overwrite" KeyColumn="Title">
     <pnp:DataRow>
