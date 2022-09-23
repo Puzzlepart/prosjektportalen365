@@ -8,4 +8,12 @@
         ClientSideComponentId="b13831c6-c4f8-4bbc-9da3-bd5f960f7e2b"
         ClientSideComponentProperties="">
     </CustomAction>
+    <CustomAction
+        Title="IdeaProcessing"
+        RegistrationId="100"
+        RegistrationType="List"
+        Location="ClientSideExtension.ListViewCommandSet.CommandBar"
+        ClientSideComponentId="5af28222-4bf8-419c-9533-5a31967b9f20"
+        ClientSideComponentProperties="">
+    </CustomAction>
 </Elements>

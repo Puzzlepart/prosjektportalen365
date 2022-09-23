@@ -9,6 +9,14 @@
           "manifest": "./src/extensions/ideaProjectData/manifest.json"
         }
       ]
+    },
+    "idea-processing-command-set": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/ideaProcessing/index.js",
+          "manifest": "./src/extensions/ideaProcessing/manifest.json"
+        }
+      ]
     }
   },
   "externals": {},

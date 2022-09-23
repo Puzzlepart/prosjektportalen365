@@ -15,6 +15,15 @@
           "properties": {}
         }
       }
+    },
+    "ideaProcessing": {
+      "pageUrl": "https://puzzlepart.sharepoint.com/sites/pp365/Lists/Idebehandling/AllItems.aspx",
+      "customActions": {
+        "5af28222-4bf8-419c-9533-5a31967b9f20": {
+          "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
+          "properties": {}
+        }
+      }
     }
   }
 }
