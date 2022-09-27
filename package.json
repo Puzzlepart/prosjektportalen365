@@ -9,7 +9,9 @@
     "build:release": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1",
     "build:release:force": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -Force",
     "build:pnpTemplates": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -SkipBuildSharePointFramework",
-    "sync-version": "node tasks/automatic-versioning.js"
+    "sync-version": "node tasks/automatic-versioning.js",
+    "generate-readme": "npx @appnest/readme generate",
+    "postversion": "npm run generate-readme"
   },
   "repository": {
     "type": "git",

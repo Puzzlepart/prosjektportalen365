@@ -8,7 +8,7 @@
 <br />
 
 
-[![version](https://img.shields.io/badge/version-1.5.4-green.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.6.1-green.svg)](https://semver.org)
 
 <details>
 <summary>📖 Innholdsfortegnelse</summary>
@@ -86,9 +86,9 @@ Vi gjør vårt beste for å støtte alle nettlesere, men følger retningslinjer 
 ## ➤ Contributors
 	
 
-| [Tarjei Ormestøyl](undefined)                    | [Ole Martin Pettersen](undefined)                |
-|:--------------------------------------------------:|:--------------------------------------------------:|
-| [tarjeieo@puzzlepart.com](mailto:tarjeieo@puzzlepart.com) | [olemp@puzzlepart.com](mailto:olemp@puzzlepart.com) |
+| [Tarjei Ormestøyl](undefined)                    | [Ole Martin Pettersen](undefined)                | [Remi Blom-Ohlsen](undefined)                    |
+|:--------------------------------------------------:|:--------------------------------------------------:|:--------------------------------------------------:|
+| [tarjeieo@puzzlepart.com](mailto:tarjeieo@puzzlepart.com) | [olemp@puzzlepart.com](mailto:olemp@puzzlepart.com) | [remi.blom-ohlsen@puzzlepart.com](mailto:remi.blom-ohlsen@puzzlepart.com) |
 
 
 I tillegg flere fra teamet bak [prosjektportalen@puzzlepart.com](mailto:prosjektportalen@puzzlepart.com)
