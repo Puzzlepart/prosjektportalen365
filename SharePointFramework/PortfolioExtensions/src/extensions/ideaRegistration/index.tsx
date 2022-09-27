@@ -160,7 +160,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
       .then(() => Log.info(LOG_SOURCE, 'Updated Idéregistrering: Approved'))
       .catch((e) => Log.error(LOG_SOURCE, e))
 
-    this._updateWorkList(rowId, rowTitle)
+    this._updateProcessingList(rowId, rowTitle)
     this._createSitePage(row)
   }
 
@@ -170,7 +170,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    * @param rowId Id of the row in the registration list
    * @param rowTitle Title of the row in the registration list
    */
-  private _updateWorkList(rowId: number, rowTitle: string) {
+  private _updateProcessingList(rowId: number, rowTitle: string) {
     const url = rowTitle.replace(/ /g, '-')
     const baseUrl = this.context.pageContext.web.absoluteUrl
     const ideaUrl = baseUrl.concat('/SitePages/', url, '.aspx')

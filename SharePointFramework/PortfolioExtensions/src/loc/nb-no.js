@@ -9,6 +9,7 @@ define([], function () {
     IdeaProcessingUrlTitle: 'Idebehandling',
     IdeaRegistrationTitle: 'Idéregistrering',
     IdeaRegistrationUrlTitle: 'Ideregistrering',
+    IdeaProjectDataTitle: 'Prosjektdata',
     ApproveChoice: 'Godkjenn',
     ConsiderationChoice: 'Under vurdering',
     RejectChoice: 'Avvis',
