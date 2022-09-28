@@ -40,7 +40,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
     this._sp = spfi().using(SPFx(this.context))
     this._openCmd = this.tryGetCommand('OPEN_IDEA_PROCESSING_DIALOG')
     this._openCmd.visible = false
-    this._userAuthorized = await isUserAuthorized(this._sp, strings.IdeaProcessorsSiteGroup)
+    this._userAuthorized = await isUserAuthorized(this._sp, strings.IdeaProcessorsSiteGroup, this.context)
     this.context.listView.listViewStateChangedEvent.add(this, this._onListViewStateChanged)
     return Promise.resolve()
   }

@@ -8,6 +8,7 @@ import {
 import { TypedHash } from '@pnp/common'
 import { SPFI, spfi, SPFx } from '@pnp/sp'
 import '@pnp/sp/webs'
+import '@pnp/sp/items'
 import '@pnp/sp/lists'
 import '@pnp/sp/site-groups/web'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
@@ -35,10 +36,10 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
       data: { version: this.context.manifest.version },
       level: LogLevel.Info
     })
-    const sp = spfi().using(SPFx(this.context))
+    this._sp = spfi().using(SPFx(this.context))
     this._openCmd = this.tryGetCommand('OPEN_IDEA_PROJECTDATA_DIALOG')
     this._openCmd.visible = false
-    this._userAuthorized = await isUserAuthorized(sp, strings.IdeaProcessorsSiteGroup)
+    this._userAuthorized = await isUserAuthorized(this._sp, strings.IdeaProcessorsSiteGroup, this.context)
     this.context.listView.listViewStateChangedEvent.add(this, this._onListViewStateChanged)
     return Promise.resolve()
   }
@@ -51,9 +52,9 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
         const row = event.selectedRows[0]
 
         dialog.ideaTitle = row.getValueByName('Title')
-        dialog.show().then(() => {
-            this._onSubmit(row)
-        })
+        dialog.isBlocked = !!row.getValueByName('GtIdeaProjectData')
+        dialog.show()
+        dialog.submit = this._onSubmit.bind(this, row)
         break
       default:
         throw new Error('Unknown command')
@@ -65,7 +66,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
       message: '(IdeaProjectDataCommand) onListViewStateChanged: ListView state changed',
       level: LogLevel.Info
     })
-    
+
     this._openCmd = this.tryGetCommand('OPEN_IDEA_PROJECTDATA_DIALOG')
     if (this._openCmd) {
       this._openCmd.visible = this.context.listView.selectedRows?.length === 1 &&
@@ -88,12 +89,15 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
   }
 
   /**
-   * Create new item and send the user to the edit form
+   * Create new item, update selected item and send the user to the edit form for the new item
+   * 
+   * @param rowId: ID of the selected row
+   * @param rowTitle: Title of the selected row
    */
   private async _redirectNewItem(rowId: number, rowTitle: string) {
     const properties: TypedHash<any> = {
       Title: rowTitle,
-      GtIdeaProjectData: rowId
+      GtProjectFinanceName: rowTitle,
     }
 
     Logger.log({
@@ -102,9 +106,25 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
       level: LogLevel.Info
     })
 
-    const itemId = await this._addItem(properties)
+    const item = await this._addItem(properties)
+    await this._updateItem(rowId, item)
     document.location.hash = ''
-    document.location.href = this.editFormUrl(itemId)
+    document.location.href = this.editFormUrl(item)
+  }
+
+  /**
+   * Add item
+   *
+   * @param rowId: ID of the selected row
+   * @param item: Item
+   */
+  public async _updateItem(rowId: number, item: any): Promise<any> {
+    const list = this._sp.web.lists.getByTitle(strings.IdeaProcessingTitle)
+    const itemUpdateResult = await list.items.getById(rowId)
+      .update({
+        GtIdeaProjectDataId: item.Id,
+      })
+    return itemUpdateResult.data
   }
 
   /**

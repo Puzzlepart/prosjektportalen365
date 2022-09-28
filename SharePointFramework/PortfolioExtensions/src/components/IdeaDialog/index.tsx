@@ -7,15 +7,18 @@ import {
   DialogType,
   PrimaryButton,
   DefaultButton,
-  MessageBarType
+  MessageBarType,
+  format
 } from '@fluentui/react'
 import { BaseDialog, IDialogConfiguration } from '@microsoft/sp-dialog'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
+import strings from 'PortfolioExtensionsStrings'
 
 interface IDialogContentProps {
   close: () => void
   submit: () => void
   ideaTitle?: string
+  isBlocked?: boolean
 }
 
 class IdeaDialog extends React.Component<IDialogContentProps> {
@@ -24,31 +27,38 @@ class IdeaDialog extends React.Component<IDialogContentProps> {
   }
 
   public render(): JSX.Element {
+
     return (
       <DialogContent
-        title={'Opprett prosjektdata for idéen'}
-        subText={`Dette vil opprette et element i prosjektdata for følgende idé: ${this.props.ideaTitle}`}
+        title={strings.IdeaProjectDataDialogTitle}
+        subText={format(strings.IdeaProjectDataDialogSubText, this.props.ideaTitle)}
         onDismiss={this.props.close}
         type={DialogType.largeHeader}
         showCloseButton={true}
-        closeButtonAriaLabel={'Lukk'}
+        closeButtonAriaLabel={strings.CloseLabel}
       >
         <UserMessage
-          text={'this.props.dialogDescription'}
-          type={MessageBarType.info}
+          text={format(
+            this.props.isBlocked
+              ? strings.IdeaProjectDataDialogBlockedText
+              : strings.IdeaProjectDataDialogInfoText,
+            encodeURIComponent(window.location.href)
+          )}
+          type={this.props.isBlocked
+            ? MessageBarType.warning
+            : MessageBarType.info}
         />
         <DialogFooter>
           <DefaultButton
-            text={'Avbryt'}
-            title={'Avbryt'}
+            text={strings.CancelLabel}
+            title={strings.CancelLabel}
             onClick={this.props.close}
           />
           <PrimaryButton
-            text={'Opprett'}
-            title={'Opprett'}
-            onClick={() => {
-              this.props.submit()
-            }}
+            text={strings.CreateLabel}
+            title={strings.CreateLabel}
+            onClick={this.props.submit}
+            disabled={this.props.isBlocked}
           />
         </DialogFooter>
       </DialogContent>
@@ -58,13 +68,15 @@ class IdeaDialog extends React.Component<IDialogContentProps> {
 
 export default class ProjectDataDialog extends BaseDialog {
   public ideaTitle: string
+  public isBlocked: boolean
 
   public render(): void {
     ReactDOM.render(
       <IdeaDialog
         close={this.close}
-        submit={this._submit}
+        submit={this.submit}
         ideaTitle={this.ideaTitle}
+        isBlocked={this.isBlocked}
       />,
       this.domElement
     )
@@ -81,7 +93,7 @@ export default class ProjectDataDialog extends BaseDialog {
     ReactDOM.unmountComponentAtNode(this.domElement)
   }
 
-  private _submit = () => {
-    this.close()
+  public submit = () => {
+    // Submit
   }
 }

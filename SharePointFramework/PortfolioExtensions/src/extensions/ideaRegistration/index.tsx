@@ -43,13 +43,13 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     this._sp = spfi().using(SPFx(this.context))
     this._openCmd = this.tryGetCommand('OPEN_IDEA_REGISTRATION_DIALOG')
     this._openCmd.visible = false
-    this._userAuthorized = await isUserAuthorized(this._sp, strings.IdeaProcessorsSiteGroup)
+    this._userAuthorized = await isUserAuthorized(this._sp, strings.IdeaProcessorsSiteGroup, this.context)
     this.context.listView.listViewStateChangedEvent.add(this, this._onListViewStateChanged)
     return Promise.resolve()
   }
 
   @override
-  public onExecute(
+  public async onExecute(
     event: IListViewCommandSetExecuteEventParameters
   ) {
     switch (event.itemId) {
@@ -58,7 +58,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         const row = event.selectedRows[0]
 
         dialog.ideaTitle = row.getValueByName('Title')
-        dialog.show()
+        await dialog.show()
         if (dialog.comment && dialog.selectedChoice === strings.ApproveChoice) {
           this._isIdeaRecommended(row)
             ? Dialog.alert(strings.IdeaAlreadyApproved)
@@ -200,7 +200,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
       .addColumn(6)
       .addControl(
         new ClientsideText(`
-    <h3>Tittel</h3<br>
+    <h3>Tittel</h3><br>
      ${row.getValueByName('Title')}
     `)
       )

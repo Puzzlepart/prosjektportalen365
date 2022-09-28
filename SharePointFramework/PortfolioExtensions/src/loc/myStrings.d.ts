@@ -2,7 +2,9 @@ declare interface IPortfolioExtensionsStrings {
   SetRecommendationTitle: string
   SetRecommendationSubtitle: string
   IdeaProjectDataDialogTitle: string
+  IdeaProjectDataDialogSubText: string
   IdeaProjectDataDialogInfoText: string
+  IdeaProjectDataDialogBlockedText: string
   IdeaProcessorsSiteGroup: string
   IdeaProcessingTitle: string
   IdeaProcessingUrlTitle: string
@@ -22,7 +24,9 @@ declare interface IPortfolioExtensionsStrings {
   CommentLabel: string
   CommentLabelPlaceholder: string
   CancelLabel: string
+  CloseLabel: string
   SubmitLabel: string
+  CreateLabel: string
 }
 
 declare module 'PortfolioExtensionsStrings' {

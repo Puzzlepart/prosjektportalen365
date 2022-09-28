@@ -2,8 +2,10 @@ define([], function () {
   return {
     SetRecommendationTitle: 'Sett anbefaling',
     SetRecommendationSubtitle: 'Velg anbefaling for: {0}',
-    IdeaProjectDataDialogTitle: 'Tillatelseskonfigurasjon',
-    IdeaProjectDataDialogInfoText: 'Informasjon goes here',
+    IdeaProjectDataDialogTitle: 'Opprett prosjektdata for idéen',
+    IdeaProjectDataDialogSubText: 'Tilknytt prosjektdata til idéen for å synkronisere data til et prosjekt senere.',
+    IdeaProjectDataDialogInfoText: 'Denne handlingen vil opprette et element i<a href="../Prosjektdata/AllItems.aspx" target="_blank">prosjektdata</a> listen for valgt idé.',
+    IdeaProjectDataDialogBlockedText: 'Det er allerede opprettet og tilknyttet prosjektdata for denne idéen.',
     IdeaProcessorsSiteGroup: 'Idebehandlere',
     IdeaProcessingTitle: 'Idébehandling',
     IdeaProcessingUrlTitle: 'Idebehandling',
@@ -23,6 +25,8 @@ define([], function () {
     CommentLabel: 'Kommentar',
     CommentLabelPlaceholder: 'Kommentar til valg...',
     CancelLabel: 'Avbryt',
+    CloseLabel: 'Lukk',
     SubmitLabel: 'Send',
+    CreateLabel: 'Opprett'
   }
 });
