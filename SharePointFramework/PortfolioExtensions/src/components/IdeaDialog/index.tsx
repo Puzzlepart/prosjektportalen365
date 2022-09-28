@@ -94,6 +94,6 @@ export default class ProjectDataDialog extends BaseDialog {
   }
 
   public submit = () => {
-    // Submit
+    return
   }
 }
