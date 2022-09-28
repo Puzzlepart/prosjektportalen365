@@ -1,3 +1,5 @@
+import { string } from "ProjectWebPartsStrings"
+
 declare interface IProjectWebPartsStrings {
   ShowSubTextFieldLabel: string
   SyncPropertiesAfterPhaseChangeFieldLabel: string
@@ -165,6 +167,8 @@ declare interface IProjectWebPartsStrings {
   ConfigItemTitleFieldLabel: string
   ShowProjectDeliveriesLabel: string
   ProjectDeliveriesGroupName: string
+  UseIdeaProcessingFieldLabel: string
+  UseIdeaProcessingCalloutText: string
   GroupLevelProject: string
   GroupLevelPortfolio: string
 }

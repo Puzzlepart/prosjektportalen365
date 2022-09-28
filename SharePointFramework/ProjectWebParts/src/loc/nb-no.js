@@ -167,6 +167,8 @@ define([], function () {
         ConfigItemTitleFieldLabel: 'Element tittel (konfigurasjon)',
         ShowProjectDeliveriesLabel: 'Vis prosjektleveranser',
         ProjectDeliveriesGroupName: 'Prosjektleveranser (beta)',
+        UseIdeaProcessingFieldLabel: 'Bruk idébehandlingsfunksjonalitet',
+        UseIdeaProcessingCalloutText: 'Dersom idébehandlingsfunksjonalitet brukes for synkronisering av prosjektegenskaper, må dette feltet være aktivert for å kunne synkronisere prosjektegenskaper fra \'Prosjektdata\' listen ned til prosjektet. Dersom det ligger et element i \'Prosjektdata\' listen med samme \'Områdeadresse\', vil det dukke opp en knapp for å sykronisere prosjektegenskaper. Dersom dette ikke er tilfellet, vil det ikke dukke opp noen knapp for å synkronisere prosjektegenskaper.'
         GroupLevelProject: 'Prosjekt',
         GroupLevelPortfolio: 'Portefølje'
     }

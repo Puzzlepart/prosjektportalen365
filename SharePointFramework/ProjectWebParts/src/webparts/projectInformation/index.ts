@@ -3,8 +3,11 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
+import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader'
+import { PropertyFieldToggleWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldToggleWithCallout'
 import { IProjectInformationProps, ProjectInformation } from 'components/ProjectInformation'
 import * as strings from 'ProjectWebPartsStrings'
+import React from 'react'
 import { BaseProjectWebPart } from '../@baseProjectWebPart'
 
 export default class ProjectInformationWebPart extends BaseProjectWebPart<
@@ -40,6 +43,25 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<
                 }),
                 PropertyPaneTextField('adminPageLink', {
                   label: strings.AdminPageLinkLabel
+                })
+              ]
+            },
+            {
+              groupName: strings.AdvancedGroupName,
+              groupFields: [
+                PropertyFieldToggleWithCallout('useIdeaProcessing', {
+                  calloutTrigger: CalloutTriggers.Click,
+                  key: 'useIdeaProcessingFieldId',
+                  label: strings.UseIdeaProcessingFieldLabel,
+                  onText: 'På',
+                  offText: 'Av',
+                  calloutWidth: 430,
+                  calloutContent: React.createElement(
+                    'p',
+                    {},
+                    strings.UseIdeaProcessingCalloutText
+                  ),
+                  checked: this.properties.useIdeaProcessing
                 })
               ]
             }

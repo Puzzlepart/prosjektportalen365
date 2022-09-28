@@ -170,10 +170,19 @@ export class ProjectInformation extends BaseWebPartComponent<
       'EntryView',
       false
     ]
+    const syncProjectPropertiesAction: ActionType = [
+      strings.SyncProjectPropertiesText,
+      () => {
+        console.log('Open sync dialog')
+      },
+      'Sync',
+      false,
+      !this.props.useIdeaProcessing
+    ]
     if (this.state.isParentProject) {
-      return [administerChildrenAction, viewAllPropertiesAction]
+      return [administerChildrenAction, viewAllPropertiesAction, syncProjectPropertiesAction]
     }
-    return [transformToParentProject, viewAllPropertiesAction]
+    return [transformToParentProject, viewAllPropertiesAction, syncProjectPropertiesAction]
   }
 
   private onDismissParentModal() {
