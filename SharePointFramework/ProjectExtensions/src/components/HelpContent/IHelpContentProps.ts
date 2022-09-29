@@ -1,6 +1,6 @@
-import { HelpContentModel } from '../../models/HelpContentModel';
+import { HelpContentModel } from '../../models/HelpContentModel'
 
 export interface IHelpContentProps { 
-    linkText: string;
-    content: HelpContentModel[];
+    linkText: string
+    content: HelpContentModel[]
 }
