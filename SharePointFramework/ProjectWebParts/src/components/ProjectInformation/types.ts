@@ -89,6 +89,11 @@ export interface IProjectInformationState
   isParentProject?: boolean
 
   /**
+   * Display sync modal
+   */
+  displaySyncProjectModal?: boolean
+
+  /**
    * Show project properties panel
    */
   showProjectPropertiesPanel?: boolean

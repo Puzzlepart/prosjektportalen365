@@ -27,6 +27,7 @@ import {
   IProjectInformationState,
   IProjectInformationUrlHash
 } from './types'
+import { SyncProjectModal } from './SyncProjectModal'
 
 export class ProjectInformation extends BaseWebPartComponent<
   IProjectInformationProps,
@@ -136,7 +137,13 @@ export class ProjectInformation extends BaseWebPartComponent<
         {this.state.displayParentCreationModal && (
           <CreateParentModal
             isOpen={this.state.displayParentCreationModal}
-            onDismiss={this.onDismissParentModal.bind(this)}
+            onDismiss={this.onDismissModal.bind(this, 'ParentCreation')}
+          />
+        )}
+        {this.state.displaySyncProjectModal && (
+          <SyncProjectModal
+            isOpen={this.state.displaySyncProjectModal}
+            onDismiss={this.onDismissModal.bind(this, 'SyncProject')}
           />
         )}
       </>
@@ -173,7 +180,7 @@ export class ProjectInformation extends BaseWebPartComponent<
     const syncProjectPropertiesAction: ActionType = [
       strings.SyncProjectPropertiesText,
       () => {
-        console.log('Open sync dialog')
+        this.setState({ displaySyncProjectModal: true })
       },
       'Sync',
       false,
@@ -185,8 +192,15 @@ export class ProjectInformation extends BaseWebPartComponent<
     return [transformToParentProject, viewAllPropertiesAction, syncProjectPropertiesAction]
   }
 
-  private onDismissParentModal() {
-    this.setState({ displayParentCreationModal: false })
+  private onDismissModal(type: string) {
+    switch (type) {
+      case 'ParentCreation':
+        this.setState({ displayParentCreationModal: false })
+        break;
+      case 'SyncProject':
+        this.setState({ displaySyncProjectModal: false })
+        break;
+    }
   }
 
   /**

@@ -1,5 +1,3 @@
-import { string } from "ProjectWebPartsStrings"
-
 declare interface IProjectWebPartsStrings {
   ShowSubTextFieldLabel: string
   SyncPropertiesAfterPhaseChangeFieldLabel: string
