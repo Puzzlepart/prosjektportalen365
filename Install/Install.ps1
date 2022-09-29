@@ -16,6 +16,8 @@ Param(
     [switch]$SkipTaxonomy,
     [Parameter(Mandatory = $false, HelpMessage = "Skip Site Design")]
     [switch]$SkipSiteDesign,
+    [Parameter(Mandatory = $false, HelpMessage = "Skip default Site Design association")]
+    [switch]$SkipDefaultSiteDesignAssociation,
     [Parameter(Mandatory = $false, HelpMessage = "Skip app packages")]
     [switch]$SkipAppPackages,
     [Parameter(Mandatory = $false, HelpMessage = "Skip site creation")]
@@ -121,6 +123,7 @@ else {
 $ManagedPath = $Uri.Segments[1]
 $Alias = $Uri.Segments[2].TrimEnd('/')
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
+$BasePath = "$PSScriptRoot\Templates"
 #endregion
 
 #region Print installation user
@@ -182,6 +185,9 @@ if (-not $Upgrade.IsPresent) {
 
 
 #region Install site design
+$SiteDesignName = [Uri]::UnescapeDataString($SiteDesignName)
+$SiteDesignDesc = [Uri]::UnescapeDataString("Samarbeid i et prosjektomr%C3%A5de fra Prosjektportalen")
+
 if (-not $SkipSiteDesign.IsPresent) {
     $SiteScriptIds = @()
 
@@ -211,9 +217,6 @@ if (-not $SkipSiteDesign.IsPresent) {
     }
 
     Try {
-        $SiteDesignName = [Uri]::UnescapeDataString($SiteDesignName)
-        $SiteDesignDesc = [Uri]::UnescapeDataString("Samarbeid i et prosjektomr%C3%A5de fra Prosjektportalen")
-        
         Write-Host "[INFO] Creating/updating site design [$SiteDesignName]"   
         Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
     
@@ -232,8 +235,6 @@ if (-not $SkipSiteDesign.IsPresent) {
             Write-Host "[INFO] Granting group $SiteDesignSecurityGroupId View access to site design [$SiteDesignName]"
             Grant-PnPSiteDesignRights -Identity $SiteDesign.Id.Guid -Principals @("c:0t.c|tenant|$SiteDesignSecurityGroupId")
         }
-        Write-Host "[INFO] Setting default site design for hub [$Url] to [$SiteDesignName]"
-        Set-PnPHubSite -Identity $Url -SiteDesignId $SiteDesign.Id.Guid
 
         Disconnect-PnPOnline
         Write-Host "[SUCCESS] Successfully created/updated site design [$SiteDesignName]" -ForegroundColor Green
@@ -242,6 +243,26 @@ if (-not $SkipSiteDesign.IsPresent) {
         Write-Host "[ERROR] Failed to create/update site design: $($_.Exception.Message)" -ForegroundColor Red
         exit 0
     }
+}
+if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
+    Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
+    $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName 
+    Write-Host "[INFO] Setting default site design for hub [$Url] to [$SiteDesignName]"
+    Set-PnPHubSite -Identity $Url -SiteDesignId $SiteDesign.Id.Guid
+    Disconnect-PnPOnline
+}
+#endregion
+
+#region Pre install
+if ($Upgrade.IsPresent) {
+    Write-Host "[INFO] Running pre-install upgrade steps" 
+    try {
+        Connect-SharePoint -Url $Url -ErrorAction Stop
+        ."$PSScriptRoot\Scripts\PreInstallUpgrade.ps1"
+        Disconnect-PnPOnline
+        Write-Host "[SUCCESS] Successfully ran pre-install upgrade steps" -ForegroundColor Green
+    }
+    Catch {}
 }
 #endregion
 
@@ -288,24 +309,9 @@ if (-not $Upgrade.IsPresent) {
 }
 #endregion
 
-
-#region Remove pages with deprecated client side components
-if ($Upgrade.IsPresent) {
-    Try {
-        Connect-SharePoint -Url $Url -ErrorAction Stop
-        Write-Host "[INFO] Removing deprecated pages"    
-        ."$PSScriptRoot\Scripts\RemoveDeprecatedPages.ps1"
-        Disconnect-PnPOnline
-        Write-Host "[SUCCESS] Removed deprecated pages" -ForegroundColor Green
-    }
-    Catch {}
-}
-#endregion
-
 #region Applying PnP templates 
 if (-not $SkipTemplate.IsPresent) {
     Try {
-        $BasePath = "$PSScriptRoot\Templates"
         Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
         Set-PnPTenantSite -NoScriptSite:$false -Url $Url -ErrorAction SilentlyContinue >$null 2>&1        
         Disconnect-PnPOnline
@@ -323,21 +329,25 @@ if (-not $SkipTemplate.IsPresent) {
             Apply-PnPProvisioningTemplate "$BasePath\Taxonomy.pnp" -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP template [Taxonomy] to [$Url]" -ForegroundColor Green
         }
-        
-        Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
-        $Instance = Read-PnPProvisioningTemplate "$BasePath\Portfolio.pnp"
-        $Instance.SupportedUILanguages[0].LCID = $LanguageId
-        Apply-PnPProvisioningTemplate -InputInstance $Instance -Handlers SupportedUILanguages
-        Apply-PnPProvisioningTemplate "$BasePath\Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
-        Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
 
         if ($Upgrade.IsPresent) {
+            Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
+            Apply-PnPProvisioningTemplate "$BasePath\Portfolio.pnp" -ExcludeHandlers Navigation, SupportedUILanguages -ErrorAction Stop
+            Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
+
             Write-Host "[INFO] Applying PnP content template (Handlers:Files) to [$Url]"
             Apply-PnPProvisioningTemplate "$BasePath\Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
         }
         else {
-            Write-Host "[INFO] Applying PnP content template to [$Url]"
+            Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
+            $Instance = Read-PnPProvisioningTemplate "$BasePath\Portfolio.pnp"
+            $Instance.SupportedUILanguages[0].LCID = $LanguageId
+            Apply-PnPProvisioningTemplate -InputInstance $Instance -Handlers SupportedUILanguages
+            Apply-PnPProvisioningTemplate "$BasePath\Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
+            Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
+
+            Write-Host "[INFO] Applying PnP template [Portfolio_content] to [$Url]"
             Apply-PnPProvisioningTemplate "$BasePath\Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
         }
@@ -396,6 +406,16 @@ catch {
     Write-Host "[WARNING] Failed to run post-install steps: $($_.Exception.Message)" -ForegroundColor Yellow
 }
 
+if ($Upgrade.IsPresent) {
+    Write-Host "[INFO] Running post-install upgrade steps" 
+    try {
+        ."$PSScriptRoot\Scripts\PostInstallUpgrade.ps1"
+        Write-Host "[SUCCESS] Successfully ran post-install upgrade steps" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "[WARNING] Failed to run post-install upgrade steps: $($_.Exception.Message)" -ForegroundColor Yellow
+    }
+}
 
 $sw.Stop()
 
@@ -413,6 +433,7 @@ else {
 #endregion
 
 #region Log installation
+Write-Host "[INFO] Logged installation entry" 
 $InstallEndTime = (Get-Date -Format o)
 
 $InstallEntry = @{
@@ -436,3 +457,5 @@ try {
 }
 catch {}
 #endregion
+
+Set-PnPTraceLog -Off

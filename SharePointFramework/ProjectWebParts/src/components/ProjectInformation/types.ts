@@ -2,7 +2,7 @@ import { TypedHash } from '@pnp/common'
 import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
 import { ProjectColumn } from 'pp365-shared/lib/models'
 import { IProgressDialogProps } from 'components/ProgressDialog/types'
-import { IUserMessageProps } from 'components/UserMessage'
+import { IUserMessageProps } from 'pp365-shared/lib/components/UserMessage'
 import { IEntityField } from 'sp-entityportal-service'
 import * as ProjectDataService from 'pp365-shared/lib/services/ProjectDataService'
 import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
@@ -30,6 +30,11 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   showFieldExternal?: TypedHash<boolean>
 
   /**
+   * Link to the admin page
+   */
+  adminPageLink?: string
+
+  /**
    * Skip sync to hub
    */
   skipSyncToHub?: boolean
@@ -48,6 +53,11 @@ export interface IProjectInformationState
   properties?: ProjectPropertyModel[]
 
   /**
+   * All Properties
+   */
+  allProperties?: ProjectPropertyModel[]
+
+  /**
    * Progress
    */
   progress?: IProgressDialogProps
@@ -61,6 +71,21 @@ export interface IProjectInformationState
    * Confirm action props
    */
   confirmActionProps?: any
+
+  /**
+   * Display parent creation modal
+   */
+  displayParentCreationModal?: boolean
+
+  /**
+   * Is the project a parent project
+   */
+  isParentProject?: boolean
+
+  /**
+   * Show project properties panel
+   */
+  showProjectPropertiesPanel?: boolean
 }
 
 export interface IProjectInformationUrlHash {

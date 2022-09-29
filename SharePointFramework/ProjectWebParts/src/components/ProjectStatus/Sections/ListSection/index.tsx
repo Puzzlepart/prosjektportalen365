@@ -5,10 +5,11 @@ import {
   IColumn,
   SelectionMode
 } from 'office-ui-fabric-react/lib/DetailsList'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { getObjectValue } from 'pp365-shared/lib/helpers'
 import * as strings from 'ProjectWebPartsStrings'
-import * as React from 'react'
+import React from 'react'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection/index'
 import styles from './ListSection.module.scss'
@@ -42,7 +43,7 @@ export class ListSection extends BaseSection<
           <div className='ms-Grid-col ms-sm12'>
             <StatusElement {...this.props.headerProps} />
           </div>
-          {this._renderList()}
+          {this.props.showLists && this._renderList()}
         </div>
       </BaseSection>
     )
@@ -57,9 +58,10 @@ export class ListSection extends BaseSection<
     }
     if (this.state.error) {
       return (
-        <MessageBar messageBarType={MessageBarType.error}>
-          {strings.ListSectionDataErrorMessage}
-        </MessageBar>
+        <UserMessage
+          text={strings.ListSectionDataErrorMessage}
+          type={MessageBarType.error}
+        />
       )
     }
     return (

@@ -1,16 +1,18 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
+import { Icon } from 'office-ui-fabric-react/lib/Icon'
 import * as React from 'react'
 import { ProjectExtension } from '../../../models'
 import styles from './ExtensionsSection.module.scss'
 import { IExtensionsSectionProps } from './types'
+import { ScrollablePane } from 'office-ui-fabric-react'
 
-export const ExtensionsSection = (props: IExtensionsSectionProps) => {
+export const ExtensionsSection: React.FunctionComponent<IExtensionsSectionProps> = (props) => {
   /**
    * On item toggle
    *
-   * @param {ProjectTemplate} extension Extension
-   * @param {boolean} checked Checked
+   * @param extension Extension
+   * @param checked Checked
    */
   const onChange = (extension: ProjectExtension, checked: boolean): void => {
     let selectedExtensions = []
@@ -23,21 +25,27 @@ export const ExtensionsSection = (props: IExtensionsSectionProps) => {
 
   return (
     <div className={styles.extensionsSection}>
-      <div className={styles.container}>
+      <ScrollablePane className={styles.container}>
         {props.extensions.map((ext) => (
           <div key={ext.key} className={styles.item}>
-            <Toggle
-              label={ext.text}
-              defaultChecked={selectedKeys.indexOf(ext.key) !== -1}
-              inlineLabel={true}
-              onChange={(_event, checked) => onChange(ext, checked)}
-            />
+            <div className={styles.toggle}>
+              <Toggle
+                label={ext.text}
+                defaultChecked={selectedKeys.indexOf(ext.key) !== -1}
+                disabled={props.lockDefault && ext.isDefault}
+                inlineLabel={true}
+                onChange={(_event, checked) => onChange(ext, checked)}
+              />
+              {props.lockDefault && ext.isDefault && (
+                <Icon iconName={'Lock'} className={styles.icon} />
+              )}
+            </div>
             <div className={styles.subText} hidden={stringIsNullOrEmpty(ext.subText)}>
               <span>{ext.subText}</span>
             </div>
           </div>
         ))}
-      </div>
+      </ScrollablePane>
     </div>
   )
 }

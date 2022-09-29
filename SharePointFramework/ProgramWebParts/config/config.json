@@ -1,0 +1,58 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+    "version": "2.0",
+    "bundles": {
+        "program-administration-web-part": {
+            "components": [{
+                "entrypoint": "./lib/webparts/programAdministration/index.js",
+                "manifest": "./src/webparts/programAdministration/manifest.json"
+            }]
+        },
+        "program-project-overview-web-part": {
+            "components": [{
+                "entrypoint": "./lib/webparts/programProjectOverview/index.js",
+                "manifest": "./src/webparts/programProjectOverview/manifest.json"
+            }]
+        },
+        "program-benefits-web-part": {
+            "components": [{
+                "entrypoint": "./lib/webparts/programBenefits/index.js",
+                "manifest": "./src/webparts/programBenefits/manifest.json"
+            }]
+        },
+        "program-deliveries-web-part": {
+            "components": [{
+                "entrypoint": "./lib/webparts/programDeliveries/index.js",
+                "manifest": "./src/webparts/programDeliveries/manifest.json"
+            }]
+        },
+        "program-timeline-web-part": {
+            "components": [{
+                "entrypoint": "./lib/webparts/programTimeline/index.js",
+                "manifest": "./src/webparts/programTimeline/manifest.json"
+            }]
+        },
+        "program-risk-web-part": {
+            "components": [{
+                "entrypoint": "./lib/webparts/programRiskOverview/index.js",
+                "manifest": "./src/webparts/programRiskOverview/manifest.json"
+            }]
+        },
+        "program-status-web-part": {
+            "components": [{
+                "entrypoint": "./lib/webparts/programStatus/index.js",
+                "manifest": "./src/webparts/programStatus/manifest.json"
+            }]
+        }
+
+    },
+    "externals": {},
+    "localizedResources": {
+        "ProgramWebPartsStrings": "lib/loc/{locale}.js",
+        "PortfolioWebPartsStrings": "lib/loc/{locale}.js",
+        "ProjectWebPartsStrings": "node_modules/pp365-projectwebparts/lib/loc/{locale}.js",
+        "PzlSPFxComponentsStrings": "node_modules/pp365-projectwebparts/lib/loc/{locale}.js",
+        "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js",
+        "ControlStrings": "lib/loc/{locale}.js"
+    }
+}

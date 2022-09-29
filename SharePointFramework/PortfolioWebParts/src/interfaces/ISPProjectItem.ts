@@ -7,4 +7,8 @@ export interface ISPProjectItem {
   GtEndDate: string
   GtProjectOwnerId: number
   GtProjectManagerId: number
+  Title?: string
+  Id?: number
+  GtIsProgram?: boolean
+  GtIsParentProject?: boolean
 }

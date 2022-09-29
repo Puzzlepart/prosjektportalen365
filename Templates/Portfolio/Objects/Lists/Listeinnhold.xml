@@ -18,8 +18,8 @@
                 <FieldRef Name="GtLccSourceList" />
                 <FieldRef Name="GtLccDestinationList" />
                 <FieldRef Name="GtLccFields" />
-                <FieldRef Name="GtLccDefault" />
                 <FieldRef Name="GtLccHidden" />
+                <FieldRef Name="GtLccDefault" />
                 <FieldRef Name="Modified" />
             </ViewFields>
             <RowLimit Paged="TRUE">30</RowLimit>
@@ -33,7 +33,7 @@
             <pnp:DataValue FieldName="GtLccSourceList">Fasesjekkliste</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccDestinationList">Fasesjekkliste</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccFields">GtSortOrder,Title,GtProjectPhase</pnp:DataValue>
-            <pnp:DataValue FieldName="GtLccDefault">1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccDefault">0</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccHidden">0</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
@@ -42,7 +42,7 @@
             <pnp:DataValue FieldName="GtDescription">Standard prosjektoppgaver for å understøtte Prosjektveiviserens metodikk</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccSourceList">Planneroppgaver</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccFields">N/A</pnp:DataValue>
-            <pnp:DataValue FieldName="GtLccDefault">1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccDefault">0</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccHidden">0</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>

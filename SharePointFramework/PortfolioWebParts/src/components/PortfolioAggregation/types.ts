@@ -1,12 +1,27 @@
 import { SearchResult } from '@pnp/sp'
-import { DataAdapter } from 'data'
+import { IFilterProps } from 'components/FilterPanel'
+import { IDataAdapter } from 'data/types'
+import { IAggregatedListConfiguration } from 'interfaces'
+import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 import { Target } from 'office-ui-fabric-react/lib/Callout'
 import { IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList'
 import { IPanelProps } from 'office-ui-fabric-react/lib/Panel'
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
 import { IBaseComponentProps } from '../types'
 
+export class PortfolioAggregationErrorMessage extends Error {
+  constructor(public message: string, public type: MessageBarType) {
+    super(message)
+  }
+}
+
 export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps {
+  /**
+   * Configuration (columns and views etc)
+   */
+  configuration?: IAggregatedListConfiguration
+
   /**
    * Data source name
    */
@@ -20,7 +35,7 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   /**
    * Columns
    */
-  columns?: IColumn[]
+  columns?: IProjectContentColumn[]
 
   /**
    * Select properties
@@ -38,6 +53,11 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   showSearchBox?: boolean
 
   /**
+   * Show filters
+   */
+  showFilters?: boolean
+
+  /**
    * Placeholder text for searchbox
    */
   searchBoxPlaceholderText?: string
@@ -48,6 +68,16 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   showExcelExportButton?: boolean
 
   /**
+   * Show Excel export button
+   */
+  showViewSelector?: boolean
+
+  /**
+   * Default view id
+   */
+  defaultViewId?: string
+
+  /**
    * Locked columns
    */
   lockedColumns?: boolean
@@ -55,7 +85,7 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   /**
    * Data adapter
    */
-  dataAdapter?: DataAdapter
+  dataAdapter?: IDataAdapter
 
   /**
    * On update property
@@ -66,6 +96,11 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
    * Transforms the data after it's fetched
    */
   postTransform?: (results: SearchResult[]) => T[]
+
+  /**
+   * Is the component used in a parent project or program
+   */
+  isParent?: boolean
 }
 
 export interface IPortfolioAggregationState {
@@ -97,7 +132,12 @@ export interface IPortfolioAggregationState {
   /**
    * Columns
    */
-  columns?: IColumn[]
+  columns?: IProjectContentColumn[]
+
+  /**
+   * Filtered columns
+   */
+  fltColumns?: IProjectContentColumn[]
 
   /**
    * Groups
@@ -107,7 +147,7 @@ export interface IPortfolioAggregationState {
   /**
    * Column currently being edited
    */
-  editColumn?: IColumn
+  editColumn?: IProjectContentColumn
 
   /**
    * Column to group by
@@ -130,6 +170,11 @@ export interface IPortfolioAggregationState {
   addColumnPanel?: IPanelProps
 
   /**
+   * Show/hide column panel
+   */
+  showHideColumnPanel?: IPanelProps
+
+  /**
    * Column context menu
    */
   columnContextMenu?: { column: IColumn; target: Target }
@@ -140,7 +185,54 @@ export interface IPortfolioAggregationState {
   columnAdded?: number
 
   /**
+   * Column deleted timestamp
+   */
+  columnDeleted?: number
+
+  /**
+   * Column shown/hidden timestamp
+   */
+  columnShowHide?: number
+
+  /**
    * Error
    */
   error?: Error
+
+  /**
+   * Show filter panel
+   */
+  showFilterPanel?: boolean
+
+  /**
+   * Is compact
+   */
+  isCompact?: boolean
+
+  /**
+   * Active filters
+   */
+  activeFilters?: { SelectedColumns?: string[]; [key: string]: string[] }
+
+  /**
+   * Filters
+   */
+  filters?: IFilterProps[]
+
+  /**
+   * Current view
+   */
+  currentView?: DataSource
+}
+
+export interface IPortfolioAggregationHashState {
+  /**
+   * viewId found in hash (document.location.hash)
+   */
+  viewId?: string
+
+  /**
+   * groupBy found in hash (document.location.hash)
+   */
+  groupBy?: string
 }

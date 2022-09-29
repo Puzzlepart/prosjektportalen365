@@ -20,10 +20,10 @@ export class IListLoggerMemberMap {
 }
 
 export default new (class ListLogger {
-  private _list: any
-  private _memberMap: IListLoggerMemberMap
-  private _webUrl: string = ''
-  private _scope: string = ''
+  public list: any
+  public memberMap: IListLoggerMemberMap
+  public webUrl: string = ''
+  public scope: string = ''
 
   /**
    * Initialize ListLogger
@@ -34,10 +34,10 @@ export default new (class ListLogger {
    * @param {string} scope scope
    */
   public init(list: any, memberMap: IListLoggerMemberMap, webUrl?: string, scope?: string) {
-    this._list = list
-    this._memberMap = memberMap
-    this._webUrl = webUrl
-    this._scope = scope
+    this.list = list
+    this.memberMap = memberMap
+    this.webUrl = webUrl
+    this.scope = scope
   }
 
   /**
@@ -47,7 +47,7 @@ export default new (class ListLogger {
    */
   public log(entry: IListLoggerEntry): Promise<ItemAddResult> {
     const spItem = this.getSpItem(entry)
-    return (this._list as List).items.add(spItem)
+    return (this.list as List).items.add(spItem)
   }
 
   /**
@@ -58,7 +58,7 @@ export default new (class ListLogger {
    * @param {string} functionName Function name
    */
   public write(message: string, level: ListLoggerEntryLevel = 'Info', functionName?: string) {
-    return this.log({ message, level, functionName, webUrl: this._webUrl, scope: this._scope })
+    return this.log({ message, level, functionName, webUrl: this.webUrl, scope: this.scope })
   }
 
   /**
@@ -66,17 +66,17 @@ export default new (class ListLogger {
    *
    * @param {IListLoggerEntry} entry Entry
    */
-  private getSpItem(entry: IListLoggerEntry) {
+  public getSpItem(entry: IListLoggerEntry) {
     let item: { [key: string]: string } = {}
 
-    if (this._webUrl && this._memberMap.webUrl) {
-      item[this._memberMap.webUrl] = this._webUrl
+    if (this.webUrl && this.memberMap.webUrl) {
+      item[this.memberMap.webUrl] = this.webUrl
     }
-    if (this._scope && this._memberMap.scope) {
-      item[this._memberMap.scope] = this._scope
+    if (this.scope && this.memberMap.scope) {
+      item[this.memberMap.scope] = this.scope
     }
-    item = Object.keys(this._memberMap).reduce((_item, key) => {
-      const fieldName = this._memberMap[key]
+    item = Object.keys(this.memberMap).reduce((_item, key) => {
+      const fieldName = this.memberMap[key]
       _item[fieldName] = entry[key]
       return _item
     }, item)

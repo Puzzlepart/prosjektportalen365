@@ -4,6 +4,7 @@ import { PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
 import { IFilterProps } from '../FilterPanel'
 import { IBaseComponentProps } from '../types'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
 
 export class PortfolioOverviewErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -71,6 +72,16 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
    * Default view id
    */
   defaultViewId?: string
+
+  /**
+   * Child project site ids
+   */
+  childSiteIds?: string[]
+
+  /**
+   * isParentProject
+   */
+  isParentProject?: boolean
 }
 
 export interface IPortfolioOverviewState {
@@ -95,7 +106,7 @@ export interface IPortfolioOverviewState {
   items?: any[]
 
   /**
-   * @todo describe property
+   * Selected items
    */
   selectedItems?: any[]
 
@@ -148,6 +159,11 @@ export interface IPortfolioOverviewState {
    * Is compact
    */
   isCompact?: boolean
+
+  /**
+   * Program context
+   */
+  programContext?: WebPartContext
 
   /**
    * Props for column header context menu

@@ -11,7 +11,8 @@
     "node_modules": true,
     "sharepoint": true,
     "temp": true,
-    "teams": true
+    "teams": true,
+    "release": true
   },
   "typescript.tsdk": ".\\node_modules\\typescript\\lib"
 }

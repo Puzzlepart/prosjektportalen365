@@ -1,29 +1,44 @@
-import { DisplayMode } from '@microsoft/sp-core-library'
 import { DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList'
-import { UserMessage } from 'pzl-react-reusable-components/lib/UserMessage'
+import { getId } from 'office-ui-fabric-react/lib/Utilities'
+import strings from 'PortfolioWebPartsStrings'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import React, { useEffect, useMemo, useReducer } from 'react'
+import { FilterPanel } from '../FilterPanel'
 import { ColumnContextMenu } from './ColumnContextMenu'
 import { addColumn, ColumnFormPanel } from './ColumnFormPanel'
 import { Commands } from './Commands'
 import { PortfolioAggregationContext } from './context'
+import { filterItems } from './filter'
 import { getDefaultColumns, renderItemColumn } from './itemColumn'
 import styles from './PortfolioAggregation.module.scss'
 import createReducer, {
   COLUMN_HEADER_CONTEXT_MENU,
   DATA_FETCHED,
   DATA_FETCH_ERROR,
+  SET_CURRENT_VIEW,
+  GET_FILTERS,
   initState,
-  START_FETCH
+  ON_FILTER_CHANGE,
+  SET_GROUP_BY,
+  START_FETCH,
+  TOGGLE_FILTER_PANEL
 } from './reducer'
-import { filterItem } from './search'
+import { searchItem } from './search'
 import SearchBox from './SearchBox'
+import { ShowHideColumnPanel } from './ShowHideColumnPanel'
 import { IPortfolioAggregationProps } from './types'
 
 export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   const reducer = useMemo(() => createReducer(props), [])
   const [state, dispatch] = useReducer(reducer, initState(props))
+  const layerHostId = getId('layerHost')
+
+  useEffect(() => {
+    if (props.dataSourceCategory)
+      dispatch(SET_CURRENT_VIEW)
+  }, [props.dataSourceCategory, props.defaultViewId])
 
   useEffect(() => {
     if (props.dataSourceCategory) {
@@ -41,24 +56,44 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
           .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
       })
     }
-  }, [props.dataSourceCategory])
+  }, [props.dataSourceCategory, props.defaultViewId])
 
   useEffect(() => {
     dispatch(START_FETCH())
     props.dataAdapter.configure().then((adapter) => {
-      adapter
-        .fetchItemsWithSource(
+      Promise.all([
+        adapter.dataSourceService.getByName(state.dataSource),
+        adapter.fetchProjectContentColumns(props.dataSourceCategory),
+        adapter.fetchItemsWithSource(
           state.dataSource,
-          props.selectProperties || state.columns.map((col) => col.fieldName)
-        )
-        .then((items) => dispatch(DATA_FETCHED({ items })))
+          props.selectProperties || state.columns.map((col) => col.fieldName),
+          props.dataSourceCategory
+        ),
+        adapter.fetchProjects(props.configuration, state.dataSource)
+      ])
+        .then(([dataSrc, projectColumns, items, projects]) => {
+          dispatch(
+            DATA_FETCHED({
+              items,
+              columns: projectColumns,
+              fltColumns: dataSrc.projectColumns,
+              projects
+            })
+          )
+          dispatch(GET_FILTERS({ filters: dataSrc.projectRefiners }))
+          dispatch(SET_GROUP_BY({ column: dataSrc.projectGroupBy }))
+        })
         .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
     })
-  }, [state.columnAdded, state.dataSource])
+  }, [state.columnAdded, state.columnDeleted, state.columnShowHide, state.currentView])
 
   const items = useMemo(() => {
-    return state.items.filter((i) => filterItem(i, state.searchTerm, state.columns))
-  }, [state.searchTerm, state.items])
+    const filteredItems = filterItems(state.items, state.columns, state.activeFilters)
+    return {
+      listItems: filteredItems.items.filter((i) => searchItem(i, state.searchTerm, state.columns)),
+      columns: filteredItems.columns
+    }
+  }, [state.columnAdded, state.searchTerm, state.items, state.activeFilters, state.columns])
 
   const ctxValue = useMemo(() => ({ props, state, dispatch }), [state])
 
@@ -79,26 +114,39 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
             selectionMode={SelectionMode.none}
             layoutMode={DetailsListLayoutMode.fixedColumns}
             enableShimmer={state.loading}
-            items={items}
+            items={items.listItems}
             onRenderItemColumn={renderItemColumn}
-            onColumnHeaderContextMenu={(col, ev) =>
+            onColumnHeaderClick={(ev, col) => {
               dispatch(
                 COLUMN_HEADER_CONTEXT_MENU({
                   column: col,
                   target: ev.currentTarget
                 })
               )
-            }
+            }}
             columns={[
-              ...getDefaultColumns(ctxValue),
-              ...state.columns,
-              props.displayMode === DisplayMode.Edit && !props.lockedColumns && addColumn(dispatch)
+              ...getDefaultColumns(props.isParent), //ctxValue, 
+              ...items.columns,
+              !props.lockedColumns && addColumn()
             ].filter((c) => c)}
             groups={state.groups}
+            compact={state.isCompact}
           />
         </div>
         <ColumnContextMenu />
         <ColumnFormPanel />
+        <ShowHideColumnPanel />
+        <FilterPanel
+          isOpen={state.showFilterPanel}
+          layerHostId={layerHostId}
+          headerText={strings.FiltersString}
+          onDismissed={() => dispatch(TOGGLE_FILTER_PANEL({ isOpen: false }))}
+          isLightDismiss={true}
+          filters={state.filters}
+          onFilterChange={(column, selectedItems) => {
+            dispatch(ON_FILTER_CHANGE({ column, selectedItems }))
+          }}
+        />
       </div>
     </PortfolioAggregationContext.Provider>
   )

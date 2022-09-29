@@ -1,16 +1,155 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-Every change is marked with Pull Request ID.
+Every change is marked with issue ID.
+
+## 1.7.0 - TBA
+
+### Added
+
+- Added support to run hooks when changing phases #747
+  - Example: Trigger API's, Flows, Logic Apps, Azure Functions, etc...
+- Added check if projecttemplate is attempted to be applied to portfolio level #748
+- Added better error handling for ProjectTimelines (Portfolio and project level) #755
+- Custom Risk matrix cells (colors, headers, text, etc...) #624
+- Script to fix planner issues, see 'Ensure-PlannerPlans' script #752
+- Added 'Description' and 'Tag' as two new default fields to ProjectTimelineContent list #764
+- Added better error handling for Resource allocation #776
+
+### Changed
+
+- Changed phase callout from hover to clickable #734
+- Information messages now uses a newer and stable version to render HTML #762
+- Reduced amount of calls when loading ProjectTimeline, this improves the speed by alot! #743
+- Filterpanel for Timeline: Project is now collapsed by default in the panel #776
+
+### Fixed
+
+- Fixed slow loading of project logos #648
+- Fixed a bug where default column values were wiped when importing documents through TemplateSelector dialog #761
+- Fixed a bug where users could't see the callout dialog for ProjectTimeline at the bottom of the page #771
+
+## 1.6.1 - 01.07.2022
+
+### Added
+
+- Added ViewId for views in aggregated web parts which is set in the url
+
+## 1.6.0 - 16.06.2022
+
+### Added
+
+- Added timeline configuration list (Customize how timeline elements are displayed, their colors, sorting and more) #678
+  - This applies to Portfolio, Project and Program timelines
+- Added possibility to include project deliveries on timeline (beta) #679
+  - This applies to Portfolio, Project and Program timelines
+- Added ability to run hooks in the txt provisioning template #700
+  - Example: Trigger API's, Flows, Logic Apps, Azure Functions, etc...
+- Added 'Prosjektinnholdskolonner' list to define columns which are used for the aggregated web parts #706
+  - 'Datakilder' has been expanded with 'Prosjekt odata spørring' column to filter the projects in the datasource query
+
+### Changed
+
+- Expanded aggregated webparts with similar functionality as PortfolioOverview #706
+  - Views, Filters, Grouping has been added to make them more dynamic
+  - The aggregated webparts are: 'Erfaringslogg', 'Leveranseoversikt' and 'Risikooversikt'
+  - 'Gevinstoversikt'has been reworked as an aggregated webpart and will work the same
+  - 'Datakilder' list has been expanded with three new columns connected to 'Prosjektinnholdskolonner' list
+- Improvements to styling, sorting and information messages for the Document Template Selector #711
+
+### Fixed
+
+- Fixed issue with syncing of project properties not always triggering #736
+- Fixed issue with resource allocation percentage not showing #610. NB: The script UpgradeAllSitesToLatest.ps1 needs to be run to fix the issue for old sites!
+- Fixed issue with setup dialog, where having more than 6 default items didn't render well #702
+
+## 1.5.0 - 01.04.2022
+
+### Added
+
+- Added functionality for dynamic welcomepages based on project phases #643
+- Added 'Vis alle egenskaper' button with panel to ProjectInformation webpart #650
+- Added support for {site} token in Planner-tasks #646
+- Add possibility to lock'project template configurations #645
+- Changed header in projectstatus report to show date when published instead of when created #654
+- Supporting permission groups for specific project template #651
+- Added Program and parent functionality (Can add projects as children of another to give the following overviews):
+  - General Overview and status (Portfolio overview)
+  - Gains overview
+  - Timeline
+  - Deliveries
+  - Risks and benefits
+
+### Changed
+
+- If there are no items in the list "Fasesjekkeliste". "Gå til fasesjekklisten" button won't show and the empty dialog when changing phase is skipped #660
+
+### Fixed
+
+- Fixed bug where ProjectTimeline would not load properly #661
+- Fixed bug where Risks, Deliveries and Exp.Log would sometimes not load #668
+
+## 1.4.0 - 08.02.2022
+
+### Added
+
+- Added new template configuration list "Maloppsett" used for project setup #617 #594
+- Added GtProjectLifecycleStatus in "Prosjektegenskaper" and as a filter in "Porteføljeoversikt" #587
+
+### Changed
+
+- No longer resetting portfolio navigation on upgrade #567
+
+### Fixed
+
+- Fixed persistant filter checkbox on view change #545
+- Fixed installation error with hidden fieldrefs #622
+- Fixed issue where changing phase via phase selector web part was not synced to the portfolio site #628
+- Fixed small alignment issue with project template selector #638
+- Reformulated GtShowInPorfolio description to encompass more than uncertainties #615
+- Added support for syncing number and currency fields in project properties #612
+- Changed behavior when deleting a status report #597
+- Changed behavior when deleting timeline item #569
+
+## 1.3.1 - 20.12.2021
+
+### Added
+
+- Added upgrade script for existing projects to add 1.3.0 functionality (project timeline page) #591
+
+
+## 1.3.0 - 22.10.2021
+
+### Added 
+
+- Added a new project webpart 'Prosjekttidslinje' for showcasing projects and items for the current project on a timeline #497
+- Added read-only project cards to project list on the frontpage #498
+- Added new multi-user field _Prosjektstøtte_ #526
+- Added "Avventer" as a new choice for "Prosjektstatus" #537
+
+### Changed
+
+- Removed "Home" from Portfolio menu bar #527
+- Removed list views and risk matrix from previous status reports #374
+- Improved rendering of user fields in "Prosjektinformasjon" #576
+- Added visual indicator in the portfolio overview for projects where you don't have access #563 #578
+
+### Fixed
+
+- Fixed UI bug by downgrading the `office-ui-fabric-react` package version to `6.214.0` #535
+- Fixed redirect after creating a new project status #530
+- Fixed project wizard bug when project is attached to another hub #532
+- Fixed wrong phases being displayed when switching between projects with different phases #520
+- Fixed issue with upgrading where deprecated pages/webparts were not removed #588
 
 ## 1.2.9 - 08.09.2021
 
-## Added
+### Added
 
 - Added multiline text-wrapping in project status #493
 - Added description for site template #500
 
-## Fixed
+### Fixed
 
 - Fixed issue where the site design had to be applied post project creation #492
 - Fixed date not being recognized when exporting Portfolio overview to Excel. #495
@@ -18,17 +157,17 @@ Every change is marked with Pull Request ID.
 
 ## 1.2.8 - 17.06.2021
 
-## Added
+### Added
 
 - Added rich text and lineshift support to field in project information #502
 
-## Fixed
+### Fixed
 
 - Fixed issue with checklist status field missing options #485
 
 ## 1.2.7 - 20.05.2021
 
-## Added
+### Added
 
 - Added a new portfolio webpart, 'Prosjekttidslinje' for showcasing projects on a timeline #435
 - Added list 'Tidslinjeinnhold' to portfolio level #437
@@ -37,7 +176,7 @@ Every change is marked with Pull Request ID.
 - Added "Last Report Date" to Portfolio status overview #393
 - Added report created date next to Project Status title #456
 
-## Fixed
+### Fixed
 
 - Avoiding overwrite of portfolio views, columns, column configuration and insights graphs on update #440
 - Overwriting configuration page to support new configuration links on update #425
@@ -45,7 +184,7 @@ Every change is marked with Pull Request ID.
 - Fixed inconsistent version history settings of lists #465
 - Fixed Excel export issues at portfolio level #480
 
-## Changed
+### Changed
 
 - Changed Portfolio status view columns from "comments" to "status" #451
 - Improved project properties sync and fetching #444 #449
@@ -55,7 +194,7 @@ Every change is marked with Pull Request ID.
 
 ## 1.2.6 - 03.03.2021
 
-## Added
+### Added
 
 - Added project template name to project properties #380
 - Added support for phase sub text in phase selector #381
@@ -64,7 +203,7 @@ Every change is marked with Pull Request ID.
 - Added Description field to Usikkerhet #410
 - Enabled version history on Prosjektmaler list #359
 
-## Fixed
+### Fixed
 
 - Fixes issues with single folder in "Hent dokumentmal" #376
 - Issues with custom project fields #378
@@ -78,7 +217,7 @@ Every change is marked with Pull Request ID.
 
 ## 1.2.4 - 30.11.2020
 
-## Added
+### Added
 
 - Added "default" option for extensions, similar to list content #328
 - Added info message if there are unpublished statusreports #340
@@ -86,7 +225,7 @@ Every change is marked with Pull Request ID.
 - Added possiblity to delete unpublished statusreports #343
 - Added PNG snapshot when publishing project status #337
 
-## Fixed
+### Fixed
 
 - Restricted access for members to certain lists #356
 - Improved failure handling for PlannerConfiguration task in Project Setup #329
@@ -96,7 +235,7 @@ Every change is marked with Pull Request ID.
 
 ## 1.2.3 - 2020-10-07
 
-## Added
+### Added
 
 - Descriptions on configuration page #301
 - New group "Porteføljeinnsyn". Grants users in this group insight into all projects in the portfolio #305
@@ -104,12 +243,12 @@ Every change is marked with Pull Request ID.
 - Risk matrix toggle: Before and after risk reduction measures #293
 - Support for planner tasks references/attachments #287
 
-## Fixed
+### Fixed
 
 - View in portfolio overview was not changeable for non-admin users #308
 - Projects set to Avsluttet are no longer visible on the front page #307
 
-## Changed
+### Changed
 
 - Disabled "Ny statusrapport" when a report is unpublished. #309
 

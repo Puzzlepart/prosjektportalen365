@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    <pnp:Preferences></pnp:Preferences>
+    <pnp:Templates ID="CONTAINER-PP">
+        <pnp:ProvisioningTemplate ID="TEMPLATE-PP-TAXONOMY-1.5.0" Version="0">
+            <pnp:TermGroups>
+                <pnp:TermGroup Name="Prosjektportalen" ID="c56bb677-f782-4cf6-a6d6-17685ee9f19d" Description=" ">
+                    <pnp:TermSets>
+                        <pnp:TermSet Name="Fase (Program)" ID="54f92279-2602-4d70-95b5-e6113f27666e" Description=" ">
+                            <pnp:Terms>
+                                <pnp:Term Name="Identifisere" ID="592ee277-62db-4a62-84f4-9f63faa07224" CustomSortOrder="1" SourceTermId="592ee277-62db-4a62-84f4-9f63faa07224">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Identify" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                    <pnp:LocalCustomProperties>
+                                        <pnp:Property Key="ShowOnFrontpage" Value="true" />
+                                        <pnp:Property Key="PhaseLevel" Value="Program" />
+                                        <pnp:Property Key="PhaseSubText" Value="" />
+                                    </pnp:LocalCustomProperties>
+                                </pnp:Term>
+                                <pnp:Term Name="Definere" ID="50c203e7-f912-4454-afda-d8c373e7f96a" CustomSortOrder="2" SourceTermId="50c203e7-f912-4454-afda-d8c373e7f96a">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Define" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                    <pnp:LocalCustomProperties>
+                                        <pnp:Property Key="ShowOnFrontpage" Value="true" />
+                                        <pnp:Property Key="PhaseLevel" Value="Program" />
+                                        <pnp:Property Key="PhaseSubText" Value="" />
+                                    </pnp:LocalCustomProperties>
+                                </pnp:Term>
+                                <pnp:Term Name="Gjennomføre" ID="c245386f-6906-410d-ada5-27c64710df90" CustomSortOrder="3" SourceTermId="c245386f-6906-410d-ada5-27c64710df90">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Directing" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                    <pnp:LocalCustomProperties>
+                                        <pnp:Property Key="ShowOnFrontpage" Value="true" />
+                                        <pnp:Property Key="PhaseLevel" Value="Program" />
+                                        <pnp:Property Key="PhaseSubText" Value="" />
+                                    </pnp:LocalCustomProperties>
+                                </pnp:Term>
+                                <pnp:Term Name="Avslutte" ID="5a42cd6a-0fba-46d3-aada-5caaa551915e" CustomSortOrder="4" SourceTermId="5a42cd6a-0fba-46d3-aada-5caaa551915e">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Closing" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                    <pnp:LocalCustomProperties>
+                                        <pnp:Property Key="ShowOnFrontpage" Value="true" />
+                                        <pnp:Property Key="PhaseLevel" Value="Program" />
+                                        <pnp:Property Key="PhaseSubText" Value="" />
+                                    </pnp:LocalCustomProperties>
+                                </pnp:Term>
+                            </pnp:Terms>
+                        </pnp:TermSet>
+                    </pnp:TermSets>
+                </pnp:TermGroup>
+            </pnp:TermGroups>
+        </pnp:ProvisioningTemplate>
+    </pnp:Templates>
+</pnp:Provisioning>

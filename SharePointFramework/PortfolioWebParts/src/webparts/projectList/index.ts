@@ -28,9 +28,6 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   label: strings.SortByFieldLabel,
                   disabled: true
                 }),
-                PropertyPaneTextField('searchBoxPlaceholderText', {
-                  label: strings.SearchBoxPlaceholderTextLabel
-                }),
                 PropertyPaneToggle('showSearchBox', {
                   label: strings.ShowSearchBoxLabel
                 }),

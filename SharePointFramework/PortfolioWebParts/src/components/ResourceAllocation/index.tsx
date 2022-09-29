@@ -16,6 +16,7 @@ import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { tryParsePercentage } from 'pp365-shared/lib/helpers'
 import { DataSourceService } from 'pp365-shared/lib/services'
 import React, { Component } from 'react'
@@ -66,7 +67,7 @@ export class ResourceAllocation extends Component<
   /**
    * Constructor
    *
-   * @param {IResourceAllocationProps} props Props
+   * @param props Props
    */
   constructor(props: IResourceAllocationProps) {
     super(props)
@@ -85,11 +86,15 @@ export class ResourceAllocation extends Component<
 
   public render(): React.ReactElement<IResourceAllocationProps> {
     if (this.state.loading) return null
+
     if (this.state.error) {
       return (
         <div className={styles.root}>
           <div className={styles.container}>
-            <MessageBar messageBarType={MessageBarType.error}>{this.state.error}</MessageBar>
+            <UserMessage
+              text={this.state.error}
+              type={MessageBarType.success}
+            />
           </div>
         </div>
       )
@@ -195,8 +200,8 @@ export class ResourceAllocation extends Component<
   /**
    * On filter change
    *
-   * @param {IColumn} column Column
-   * @param {IFilterItemProps[]} selectedItems Selected items
+   * @param column Column
+   * @param selectedItems Selected items
    */
   private _onFilterChange(column: IColumn, selectedItems: IFilterItemProps[]) {
     const { activeFilters } = { ...this.state } as IResourceAllocationState
@@ -264,8 +269,8 @@ export class ResourceAllocation extends Component<
   /**
    * On item click
    *
-   * @param {React.MouseEvent} event Event
-   * @param {ITimelineItem} item Item
+   * @param event Event
+   * @param item Item
    */
   private _onItemClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) {
     this.setState({ showDetails: { element: event.currentTarget, data: item } })
@@ -274,7 +279,7 @@ export class ResourceAllocation extends Component<
   /**
    * Creating groups based on user property (RefinableString71) on the search result, with fallback to role (RefinableString72)
    *
-   * @param {IAllocationSearchResult[]} searchResults Search results
+   * @param searchResults Search results
    *
    * @returns {ITimelineGroup[]} Timeline groups
    */
@@ -282,9 +287,14 @@ export class ResourceAllocation extends Component<
     const groupNames: string[] = searchResults
       .map((res) => {
         const name = res.RefinableString71 || `${res.RefinableString72}|R`
+        if (name === null)
+          this.setState({
+            error: format(strings.ResourceAllocationErrorTransformGroupText, res.SiteTitle)
+          })
         return name
       })
       .filter((value, index, self) => self.indexOf(value) === index)
+
     let groups: ITimelineGroup[] = groupNames.map((name, id) => {
       const [title, type] = name.split('|')
       return {
@@ -300,8 +310,8 @@ export class ResourceAllocation extends Component<
   /**
    * Create items
    *
-   * @param {IAllocationSearchResult[]} searchResults Search results
-   * @param {ITimelineGroup[]} groups Groups
+   * @param searchResults Search results
+   * @param groups Groups
    *
    * @returns {ITimelineItem[]} Timeline items
    */

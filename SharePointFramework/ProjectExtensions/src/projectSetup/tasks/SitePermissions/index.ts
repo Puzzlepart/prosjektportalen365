@@ -1,5 +1,4 @@
-/* eslint-disable no-console */
-import { SiteUserProps, List } from '@pnp/sp'
+import { CamlQuery, SiteUserProps } from '@pnp/sp'
 import strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'projectSetup'
 import { isEmpty } from 'underscore'
@@ -21,8 +20,8 @@ export class SitePermissions extends BaseTask {
   /**
    * Execute SitePermissions
    *
-   * @param {IBaseTaskParams} params Task parameters
-   * @param {OnProgressCallbackFunction} onProgress On progress funtion
+   * @param params - Task parameters
+   * @param onProgress - On progress funtion
    */
   public async execute(
     params: IBaseTaskParams,
@@ -30,14 +29,13 @@ export class SitePermissions extends BaseTask {
   ): Promise<IBaseTaskParams> {
     try {
       onProgress(strings.SitePermissionsText, strings.SitePermissionsSubText, 'Permissions')
-      const list = this.data.hub.web.lists.getByTitle(strings.PermissionConfigurationList)
-      const [config, roleDefinitions, groups] = await Promise.all([
-        this._getConfiguration(list),
+      const [permConfig, roleDefinitions, groups] = await Promise.all([
+        this._getPermissionConfiguration(),
         this._getRoleDefinitions(params.web),
-        this._getGroups(this.data.hub.web)
+        this._getSiteGroups(this.data.hub.web)
       ])
-      for (let i = 0; i < config.length; i++) {
-        const { groupName, permissionLevel } = config[i]
+      for (let i = 0; i < permConfig.length; i++) {
+        const { groupName, permissionLevel } = permConfig[i]
         const users = groups[groupName] || []
         if (isEmpty(users)) continue
         const roleDefId = roleDefinitions[permissionLevel]
@@ -61,23 +59,42 @@ export class SitePermissions extends BaseTask {
   }
 
   /**
-   * Get configuration from the specified list
-   *
-   * @param {List} list List
+   * Get configurations for the selected template from list
    */
-  private async _getConfiguration(list: List): Promise<IPermissionConfiguration[]> {
-    return (await list.items.select('GtPermissionLevel', 'GtSPGroupName').get()).map((item) => ({
-      groupName: item.GtSPGroupName,
-      permissionLevel: item.GtPermissionLevel
-    }))
+  private async _getPermissionConfiguration(): Promise<IPermissionConfiguration[]> {
+    const list = this.data.hub.web.lists.getByTitle(strings.PermissionConfigurationList)
+    const query: CamlQuery = {
+      ViewXml: `<View>
+    <Query>
+      <Where>
+        <Or>
+          <Eq>
+            <FieldRef Name='GtTemplates' LookupId='TRUE' />
+            <Value Type='LookupMulti'>${this.data.selectedTemplate.id}</Value>
+          </Eq>
+          <IsNull>
+            <FieldRef Name='GtTemplates' />
+          </IsNull>
+        </Or>
+      </Where>
+    </Query>
+</View>`
+    }
+    return (await list.getItemsByCAMLQuery(query)).map(
+      (item: any) =>
+        ({
+          groupName: item.GtSPGroupName,
+          permissionLevel: item.GtPermissionLevel
+        } as IPermissionConfiguration)
+    )
   }
 
   /**
-   * Get groups with users from specified web
+   * Get site groups with users from specified web
    *
-   * @param {any} web Web
+   * @param web - Web
    */
-  private async _getGroups(web: any) {
+  private async _getSiteGroups(web: any) {
     return (await web.siteGroups.select('Title', 'Users').expand('Users').get()).reduce(
       (grps, { Title, Users }) => ({
         ...grps,
@@ -90,7 +107,7 @@ export class SitePermissions extends BaseTask {
   /**
    * Get role definitions for the specified web
    *
-   * @param {any} web Web
+   * @param web Web
    */
   private async _getRoleDefinitions(web: any) {
     return (await web.roleDefinitions.select('Name', 'Id').get()).reduce(

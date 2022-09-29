@@ -43,10 +43,12 @@
       ]
     },
     "resource-allocation-web-part": {
-      "components": [{
-        "entrypoint": "./lib/webparts/resourceAllocation/index.js",
-        "manifest": "./src/webparts/resourceAllocation/manifest.json"
-      }]
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/resourceAllocation/index.js",
+          "manifest": "./src/webparts/resourceAllocation/manifest.json"
+        }
+      ]
     },
     "project-timeline-web-part": {
       "components": [
@@ -57,17 +59,19 @@
       ]
     },
     "portfolio-aggregation-web-part": {
-      "components": [{
-        "entrypoint": "./lib/webparts/portfolioAggregation/index.js",
-        "manifest": "./src/webparts/portfolioAggregation/manifest.json"
-      }]
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/portfolioAggregation/index.js",
+          "manifest": "./src/webparts/portfolioAggregation/manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
   "localizedResources": {
     "ControlStrings": "lib/loc/{locale}.js",
     "PortfolioWebPartsStrings": "lib/loc/{locale}.js",
-    "ProjectWebPartsStrings": "node_modules/pp365-projectwebparts/lib/loc/{locale}.js",
-    "PzlSPFxComponentsStrings": "node_modules/pp365-projectwebparts/lib/loc/{locale}.js"
+    "PzlSPFxComponentsStrings": "lib/loc/{locale}.js",
+    "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js"
   }
 }

@@ -1,43 +1,35 @@
 import { get } from '@microsoft/sp-lodash-subset'
 import { getId } from '@uifabric/utilities'
 import sortArray from 'array-sort'
-import { ITimelineData, ITimelineGroup, ITimelineItem, TimelineGroupType } from 'interfaces'
+import { ITimelineData, ITimelineGroup, ITimelineItem } from 'interfaces'
 import moment from 'moment'
 import { CommandBar, ICommandBarProps } from 'office-ui-fabric-react/lib/CommandBar'
 import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { Component } from 'react'
-import Timeline, {
-  ReactCalendarGroupRendererProps,
-  ReactCalendarItemRendererProps,
-  TimelineMarkers,
-  TodayMarker
-} from 'react-calendar-timeline'
-import 'react-calendar-timeline/lib/Timeline.css'
 import _ from 'underscore'
 import { FilterPanel, IFilterItemProps, IFilterProps } from '../FilterPanel'
 import { DetailsCallout } from './DetailsCallout'
+import { Timeline } from './Timeline'
 import styles from './ProjectTimeline.module.scss'
-import './Timeline.overrides.css'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
 import { ProjectListModel, TimelineContentListModel } from 'models'
+import './ProjectTimeline.overrides.css'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 
 /**
  * @component ProjectTimeline
  * @extends Component
  */
 export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTimelineState> {
-  public static defaultProps: Partial<IProjectTimelineProps> = {
-    defaultTimeStart: [-1, 'months'],
-    defaultTimeEnd: [1, 'years']
-  }
   /**
    * Constructor
    *
-   * @param {IProjectTimelineProps} props Props
+   * @param props Props
    */
   constructor(props: IProjectTimelineProps) {
     super(props)
@@ -47,20 +39,31 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
 
   public async componentDidMount(): Promise<void> {
     try {
-      const data = await this._fetchData()
-      this.setState({ data, loading: false })
+      const [data, timelineConfiguration] = await this._fetchData()
+      this.setState({ data, timelineConfiguration, loading: false })
     } catch (error) {
-      this.setState({ error, loading: false })
+      this.setState({ error: error.message || error.status, loading: false })
     }
   }
 
   public render(): React.ReactElement<IProjectTimelineProps> {
-    if (this.state.loading) return null
+    if (this.state.loading) {
+      return (
+        <div className={styles.root}>
+          <div className={styles.container}>
+            <Spinner label={format(strings.LoadingText, this.props.title)} />
+          </div>
+        </div>
+      )
+    }
     if (this.state.error) {
       return (
         <div className={styles.root}>
           <div className={styles.container}>
-            <MessageBar messageBarType={MessageBarType.error}>{this.state.error}</MessageBar>
+            <UserMessage
+              text={this.state.error}
+              type={MessageBarType.error}
+            />
           </div>
         </div>
       )
@@ -82,40 +85,31 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
               <div
                 dangerouslySetInnerHTML={{
                   __html: format(
-                    strings.ProjectTimelineInfoText,
+                    this.props.infoText ? this.props.infoText : strings.ProjectTimelineInfoText,
                     encodeURIComponent(window.location.href)
                   )
                 }}></div>
             </MessageBar>
           </div>
-          <div className={styles.timeline}>
-            <Timeline<any>
-              groups={groups}
-              items={items}
-              stackItems={true}
-              canMove={false}
-              canChangeGroup={false}
-              sidebarWidth={320}
-              itemRenderer={this._itemRenderer.bind(this)}
-              groupRenderer={this._groupRenderer.bind(this)}
-              defaultTimeStart={moment().add(...this.props.defaultTimeStart)}
-              defaultTimeEnd={moment().add(...this.props.defaultTimeEnd)}>
-              <TimelineMarkers>
-                <TodayMarker date={moment().toDate()} />
-              </TimelineMarkers>
-            </Timeline>
-          </div>
+          <Timeline
+            defaultTimeStart={[-1, 'months']}
+            defaultTimeEnd={[1, 'years']}
+            _onItemClick={this._onItemClick.bind(this)}
+            groups={groups}
+            items={items}
+          />
         </div>
         <FilterPanel
           isOpen={this.state.showFilterPanel}
           headerText={strings.FilterText}
           filters={this._getFilters()}
           onFilterChange={this._onFilterChange.bind(this)}
+          isLightDismiss
           onDismiss={() => this.setState({ showFilterPanel: false })}
         />
         {this.state.showDetails && (
           <DetailsCallout
-            item={this.state.showDetails}
+            timelineItem={this.state.showDetails}
             onDismiss={() => this.setState({ showDetails: null })}
           />
         )}
@@ -124,11 +118,32 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   }
 
   /**
+   * On item click
+   *
+   * @param event Event
+   * @param item Item
+   */
+  private _onItemClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) {
+    this.setState({ showDetails: { element: event.currentTarget, item } })
+  }
+
+  /**
    * Get filtered data
    */
   private _getFilteredData(): ITimelineData {
     const { activeFilters, data } = { ...this.state } as IProjectTimelineState
     const activeFiltersKeys = Object.keys(activeFilters)
+    data.items = sortArray(data.items, 'data.sortOrder')
+
+    const projectId = data.items.find(
+      (i) => i?.projectUrl === this.props.pageContext.site.absoluteUrl
+    )?.id
+    const topGroup = data.groups.find((i) => i?.id === projectId)
+    projectId &&
+      (data.groups = [topGroup, ...data.groups.filter((grp) => grp?.id !== projectId)].filter(
+        (grp) => grp
+      ))
+
     if (activeFiltersKeys.length > 0) {
       const items = activeFiltersKeys.reduce(
         (newItems, key) => newItems.filter((i) => activeFilters[key].indexOf(get(i, key)) !== -1),
@@ -145,28 +160,38 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    * Get filters
    */
   private _getFilters(): IFilterProps[] {
+    const config = this.state.timelineConfiguration
     const columns = [
-      { fieldName: 'project', name: strings.SiteTitleLabel },
-      { fieldName: 'type', name: strings.TypeLabel }
+      config.find((item) => item?.Title === strings.ProjectLabel).GtTimelineFilter && {
+        fieldName: 'project',
+        name: strings.SiteTitleLabel,
+        isCollapsed: true
+      },
+      { fieldName: 'data.type', name: strings.TypeLabel },
+      { fieldName: 'data.tag', name: strings.TagFieldLabel }
     ]
+    const hiddenItems = config.filter((item) => !item?.GtTimelineFilter).map((item) => item.Title)
+
     return columns.map((col) => ({
       column: { key: col.fieldName, minWidth: 0, ...col },
       items: this.state.data.items
+        .filter((item) => !hiddenItems.includes(item.data?.type))
         .map((i) => get(i, col.fieldName))
         .filter((value, index, self) => value && self.indexOf(value) === index)
         .map((name) => {
           const filter = this.state.activeFilters[col.fieldName]
           const selected = filter ? filter.indexOf(name) !== -1 : false
           return { name, value: name, selected }
-        })
+        }),
+      defaultCollapsed: col.isCollapsed
     }))
   }
 
   /**
    * On filter change
    *
-   * @param {IColumn} column Column
-   * @param {IFilterItemProps[]} selectedItems Selected items
+   * @param column Column
+   * @param selectedItems Selected items
    */
   private _onFilterChange(column: IColumn, selectedItems: IFilterItemProps[]) {
     const { activeFilters } = { ...this.state } as IProjectTimelineState
@@ -188,6 +213,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
       name: strings.FilterText,
       iconProps: { iconName: 'Filter' },
       itemType: ContextualMenuItemType.Header,
+      buttonStyles: { root: { border: 'none', height: '40px' } },
       iconOnly: true,
       onClick: (ev) => {
         ev.preventDefault()
@@ -198,192 +224,166 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
   }
 
   /**
-   * Timeline item renderer
-   */
-  private _itemRenderer(props: ReactCalendarItemRendererProps<any>) {
-    const htmlProps = props.getItemProps(props.item.itemProps)
-
-    if (props.item.type === strings.MilestoneLabel)
-      return (
-        <div
-          {...htmlProps}
-          className={`${styles.timelineItem} rc-item`}
-          onClick={(event) => this._onItemClick(event, props.item)}>
-          <div
-            className={`${styles.itemContent} rc-milestoneitem-content`}
-            style={{
-              maxHeight: `${props.itemContext.dimensions.height}`,
-              clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
-              width: '22px',
-              height: '24px',
-              backgroundColor: '#ffc800',
-              marginTop: '-2px'
-            }}>
-          </div>
-        </div>
-
-      )
-
-    return (
-      <div
-        {...htmlProps}
-        className={`${styles.timelineItem} rc-item`}
-        onClick={(event) => this._onItemClick(event, props.item)}>
-        <div
-          className={`${styles.itemContent} rc-item-content`}
-          style={{ maxHeight: `${props.itemContext.dimensions.height}`, paddingLeft: '8px' }}>
-          {props.item.title}
-        </div>
-      </div>
-    )
-  }
-
-  /**
-   * Timeline group renderer
-   */
-  private _groupRenderer({ group }: ReactCalendarGroupRendererProps<ITimelineGroup>) {
-    const style: React.CSSProperties = { display: 'block', width: '100%' }
-    if (group.type === TimelineGroupType.Role) {
-      style.fontStyle = 'italic'
-    }
-    return (
-      <div>
-        <span style={style}>{group.title}</span>
-      </div>
-    )
-  }
-
-  /**
-   * On item click
-   *
-   * @param {React.MouseEvent} event Event
-   * @param {ITimelineItem} item Item
-   */
-  private _onItemClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) {
-    this.setState({ showDetails: { element: event.currentTarget, data: item } })
-  }
-
-  /**
    * Creating groups based on projects title
    *
-   * @returns {ITimelineGroup[]} Timeline groups
+   * @param projects Projects
+   *
+   * @returns Timeline groups
    */
   private _transformGroups(projects: ProjectListModel[]): ITimelineGroup[] {
-    const groupNames: string[] = projects
-      .map((project) => {
-        const name = project.title
-        return name
-      })
-      .filter((value, index, self) => self.indexOf(value) === index)
-    let groups: ITimelineGroup[] = groupNames.map((name, id) => {
-      const [title, type] = name.split('|')
+    const mappedProjects = _.uniq(projects.map((project) => project.title)).map((title) => {
+      const project = projects.find((project) => project.title === title)
       return {
-        id,
-        title,
-        type: type === 'R' ? TimelineGroupType.Role : TimelineGroupType.User
+        title: project.title,
+        siteId: project.siteId,
       }
     })
-    groups = sortArray(groups, ['type', 'title'])
-    return groups
+
+    const groups: ITimelineGroup[] = mappedProjects.map(
+      (project, id) => {
+        return {
+          id,
+          title: project.title,
+          siteId: project.siteId,
+        }
+      }
+    )
+    return sortArray(groups, ['type', 'title'])
   }
 
   /**
-   * Create items
+   * Transform items for timeline
    *
-   * @param {ProjectListModel[]} projects Projects
-   * @param {TimelineContentListModel[]} timelineItems Timeline items
-   * @param {ITimelineGroup[]} groups Groups
+   * @param timelineItems Timeline items
+   * @param groups Groups
    *
-   * @returns {ITimelineItem[]} Timeline items
+   * @returns Timeline items
    */
   private _transformItems(
-    projects: ProjectListModel[],
     timelineItems: TimelineContentListModel[],
     groups: ITimelineGroup[]
   ): ITimelineItem[] {
-    const items: ITimelineItem[] = projects.map((project, id) => {
-      const group = _.find(groups, (grp) => project.title.indexOf(grp.title) !== -1)
-      const style: React.CSSProperties = {
-        color: 'white',
-        border: 'none',
-        cursor: 'auto',
-        outline: 'none',
-        background: '#f35d69',
-        backgroundColor: '#f35d69'
-      }
-      return {
-        id,
-        group: group.id,
-        title: format(strings.ProjectTimelineItemInfo, project.title),
-        start_time: moment(new Date(project.startDate)),
-        end_time: moment(new Date(project.endDate)),
-        itemProps: { style },
-        project: project.title,
-        projectUrl: project.url,
-        phase: project.phase,
-        type: project.type,
-        budgetTotal: project.budgetTotal,
-        costsTotal: project.costsTotal
-      } as ITimelineItem
-    })
+    let _item, _siteId
+    try {
+      const items: ITimelineItem[] = timelineItems.map((item, id) => {
+        _item = item
 
-    const phases: ITimelineItem[] = timelineItems.map((item, id) => {
-      id += items.length
+        const group = _.find(groups, (grp) => item.siteId.indexOf(grp.siteId) !== -1)
+        _siteId = group.siteId || 'N/A'
 
-      const backgroundColor = item.type === strings.PhaseLabel
-        ? '#2589d6'
-        : item.type === strings.MilestoneLabel
-          ? 'transparent'
-          : item.type === strings.SubPhaseLabel
-            ? '#249ea0'
-            : '#484848'
+        if (group === null)
+          return
 
-      const group = _.find(groups, (grp) => item.title.indexOf(grp.title) !== -1)
-      const style: React.CSSProperties = {
-        color: 'white',
-        border: 'none',
-        cursor: 'auto',
-        outline: 'none',
-        background: backgroundColor,
-        backgroundColor: backgroundColor
-      }
-      return {
-        id,
-        group: group.id,
-        title: item.itemTitle,
-        start_time: item.type === strings.MilestoneLabel ? moment(new Date(item.endDate)) : moment(new Date(item.startDate)),
-        end_time: moment(new Date(item.endDate)),
-        itemProps: { style },
-        project: item.title,
-        type: item.type,
-        budgetTotal: item.budgetTotal,
-        costsTotal: item.costsTotal,
-      } as ITimelineItem
-    })
+        const style: React.CSSProperties = {
+          color: 'white',
+          border: 'none',
+          cursor: 'auto',
+          outline: 'none',
+          background:
+            item.elementType !== strings.BarLabel ? 'transparent' : item.hexColor || '#f35d69',
+          backgroundColor:
+            item.elementType !== strings.BarLabel ? 'transparent' : item.hexColor || '#f35d69'
+        }
+        return {
+          id,
+          group: group.id,
+          title:
+            item.type === strings.ProjectLabel
+              ? format(strings.ProjectTimelineItemInfo, item.title)
+              : item.itemTitle,
+          start_time:
+            item.elementType !== strings.BarLabel
+              ? moment(new Date(item.endDate))
+              : moment(new Date(item.startDate)),
+          end_time: moment(new Date(item.endDate)),
+          itemProps: { style },
+          project: item.title,
+          projectUrl: item.url,
+          data: {
+            phase: item.phase,
+            description: item.description,
+            type: item.type,
+            budgetTotal: item.budgetTotal,
+            costsTotal: item.costsTotal,
+            sortOrder: item.sortOrder,
+            hexColor: item.hexColor,
+            elementType: item.elementType,
+            filter: item.timelineFilter,
+            tag: item.tag
+          }
+        } as ITimelineItem
+      })
 
-    return [...items, ...phases]
+      return items.filter((i) => i)
+    } catch (error) {
+      throw new Error(
+        format(
+          strings.ProjectTimelineErrorTransformItemText,
+          _siteId,
+          _item.itemTitle ? `${_item.itemTitle} (${_item.title})` : _item.title,
+          _item.type,
+          error
+        )
+      )
+    }
   }
 
   /**
    * Fetch data
    *
-   * @returns {ITimelineData} Timeline data
+   * @returns Timeline data and timeline configuration
    */
-  private async _fetchData(): Promise<ITimelineData> {
+  private async _fetchData(): Promise<[ITimelineData, any]> {
+    const data = this.props.dataAdapter
+
     try {
-      const projects = await this.props.dataAdapter.fetchEncrichedProjects()
-      const timelineItems: any = (await this.props.dataAdapter._fetchTimelineContentItems()).timelineItems
+      const timelineConfiguration = await data.fetchTimelineConfiguration()
+      
+      const [
+        projects,
+        projectData,
+        timelineContentItems,
+        timelineAggregatedContent = [],
+      ] = await Promise.all([
+        data.fetchEnrichedProjects(),
+        data.fetchTimelineProjectData(timelineConfiguration),
+        data.fetchTimelineContentItems(timelineConfiguration),
+        data.fetchTimelineAggregatedContent(
+          this.props.configItemTitle,
+          this.props.dataSourceName,
+          timelineConfiguration
+          )
+        ])
+        
+        const filteredProjects = projects.filter((project) => {
+          return project.startDate !== null && project.endDate !== null
+        })
+        
+        const filteredTimelineItems = [...timelineContentItems, ...timelineAggregatedContent].filter(
+          (item) => {
+            return filteredProjects.some((project) => {
+              return project.title.indexOf(item.title) !== -1
+            })
+          }
+          )
+      
+      let timelineItems: TimelineContentListModel[] = filteredProjects.map((project) => {
+        const config = projectData.configElement
+        const statusReport = projectData.reports.find((statusReport) => {
+          return statusReport.siteId === project.siteId
+        })
+        return {
+          ...project,
+          ...statusReport,
+          ...config
+        }
+      })
 
-      await Promise.all(projects.map(async (project) => {
-        const statusReport = (await this.props.dataAdapter._fetchDataForTimelineProject(project.siteId)).statusReports[0]
-        project['budgetTotal'] = statusReport && statusReport['GtBudgetTotalOWSCURR']
-        project['costsTotal'] = statusReport && statusReport['GtCostsTotalOWSCURR']
-        project['type'] = strings.ProjectLabel
-      }))
+      timelineItems = [...timelineItems, ...filteredTimelineItems]
+      const groups = this._transformGroups(filteredProjects)
+      const items = this._transformItems(timelineItems, groups)
 
-      const groups = this._transformGroups(projects)
-      const items = this._transformItems(projects, timelineItems, groups)
-      return { items, groups }
+      return [{ items, groups }, timelineConfiguration]
     } catch (error) {
       throw error
     }

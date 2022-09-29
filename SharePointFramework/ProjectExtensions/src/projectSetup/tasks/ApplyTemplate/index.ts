@@ -16,8 +16,8 @@ export class ApplyTemplate extends BaseTask {
   /**
    * Execute ApplyTemplate
    *
-   * @param {IBaseTaskParams} params Task parameters
-   * @param {OnProgressCallbackFunction} onProgress On progress function
+   * @param params Task parameters
+   * @param onProgress On progress function
    */
   public async execute(
     params: IBaseTaskParams,
@@ -33,7 +33,6 @@ export class ApplyTemplate extends BaseTask {
             ? LogLevel.Info
             : LogLevel.Error) as any
         },
-        parameters: params.templateParameters,
         spConfiguration: {
           cacheExpirationIntervalMilliseconds: 5000,
           defaultCachingStore: 'session',

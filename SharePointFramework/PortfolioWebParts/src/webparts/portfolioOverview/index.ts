@@ -6,8 +6,8 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { PortfolioOverview, IPortfolioOverviewProps } from 'components/PortfolioOverview'
-import { IPortfolioConfiguration } from 'interfaces'
+import { PortfolioOverview, IPortfolioOverviewProps } from '../../components/PortfolioOverview'
+import { IPortfolioConfiguration } from '../../interfaces'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
@@ -44,7 +44,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<
   /**
    * Get options for PropertyPaneDropdown
    *
-   * @param {string} targetProperty Target property
+   * @param targetProperty Target property
    */
   protected _getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
     // eslint-disable-next-line default-case

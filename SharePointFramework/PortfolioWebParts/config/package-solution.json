@@ -1,26 +1,26 @@
 {
-    "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
-    "solution": {
-        "name": "pp-portfolio-web-parts",
-        "id": "00483367-68e2-4977-9cc3-6cf0de623daa",
-        "version": "1.2.9.0",
-        "includeClientSideAssets": true,
-        "skipFeatureDeployment": true,
-        "webApiPermissionRequests": [
-            {
-                "resource": "Microsoft Graph",
-                "scope": "Directory.Read.All"
-            }
-        ],
-        "developer": {
-            "name": "Puzzlepart AS",
-            "mpnId": "",
-            "privacyUrl": "https://puzzlepart.com/",
-            "termsOfUseUrl": "https://puzzlepart.com/",
-            "websiteUrl": "https://puzzlepart.com/"
-        }
-    },
-    "paths": {
-        "zippedPackage": "solution/pp-portfolio-web-parts.sppkg"
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "pp-portfolio-web-parts",
+    "id": "00483367-68e2-4977-9cc3-6cf0de623daa",
+    "version": "1.6.1.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "webApiPermissionRequests": [
+      {
+        "resource": "Microsoft Graph",
+        "scope": "Directory.Read.All"
+      }
+    ],
+    "developer": {
+      "name": "Puzzlepart AS",
+      "mpnId": "",
+      "privacyUrl": "https://puzzlepart.com/",
+      "termsOfUseUrl": "https://puzzlepart.com/",
+      "websiteUrl": "https://puzzlepart.com/"
     }
+  },
+  "paths": {
+    "zippedPackage": "solution/pp-portfolio-web-parts.sppkg"
+  }
 }

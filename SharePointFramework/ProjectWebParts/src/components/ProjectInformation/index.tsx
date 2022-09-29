@@ -1,20 +1,25 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { LogLevel } from '@pnp/logging'
+import { sp } from '@pnp/sp'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel'
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import { PortalDataService } from 'pp365-shared/lib/services'
 import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
 import * as strings from 'ProjectWebPartsStrings'
 import { ConfirmAction, ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
-import React, { Fragment } from 'react'
+import React from 'react'
 import { isEmpty } from 'underscore'
 import SPDataAdapter from '../../data'
 import { BaseWebPartComponent } from '../BaseWebPartComponent'
 import { ProgressDialog } from '../ProgressDialog'
-import { UserMessage } from '../UserMessage'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
+
 import { Actions } from './Actions'
+import { ActionType } from './Actions/types'
+import { CreateParentModal } from './ParentProjectModal'
 import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
 import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
@@ -41,7 +46,6 @@ export class ProjectInformation extends BaseWebPartComponent<
       siteId: this.props.siteId
     })
   }
-  
 
   public async componentDidMount() {
     try {
@@ -52,10 +56,12 @@ export class ProjectInformation extends BaseWebPartComponent<
     } catch (error) {
       this.setState({ error, loading: false })
     }
+    this.isParentProjectOrProgram()
   }
 
   public render() {
     if (this.state.hidden) return null
+
     return (
       <div className={styles.root}>
         <div className={styles.container}>
@@ -78,7 +84,7 @@ export class ProjectInformation extends BaseWebPartComponent<
     if (this.state.error) {
       return (
         <UserMessage
-          messageBarType={MessageBarType.severeWarning}
+          type={MessageBarType.severeWarning}
           onDismiss={() => this.setState({ hidden: true })}
           text={strings.WebPartNoAccessMessage}
         />
@@ -88,7 +94,7 @@ export class ProjectInformation extends BaseWebPartComponent<
     const { editFormUrl, versionHistoryUrl } = this.state.data
 
     return (
-      <Fragment>
+      <>
         <ProjectProperties
           title={this.props.title}
           properties={this.state.properties}
@@ -98,24 +104,92 @@ export class ProjectInformation extends BaseWebPartComponent<
           showFieldExternal={this.props.showFieldExternal}
           propertiesList={!stringIsNullOrEmpty(this.state.data.propertiesListId)}
         />
-        <UserMessage {...this.state.message} />
+        {!this.props.hideActions && <UserMessage {...this.state.message} />}
         <Actions
-          hidden={
-            this.props.hideActions ||
-            !this.props.isSiteAdmin ||
-            this.props.displayMode === DisplayMode.Edit
-          }
+          hidden={this.props.hideActions || this.props.displayMode === DisplayMode.Edit}
+          isSiteAdmin={this.props.isSiteAdmin}
           versionHistoryUrl={versionHistoryUrl}
           editFormUrl={editFormUrl}
           onSyncProperties={
             stringIsNullOrEmpty(this.state.data.propertiesListId) &&
             this._onSyncProperties.bind(this)
           }
+          customActions={this.getCustomActions()}
         />
         <ProgressDialog {...this.state.progress} />
         {this.state.confirmActionProps && <ConfirmDialog {...this.state.confirmActionProps} />}
-      </Fragment>
+        <Panel
+          type={PanelType.medium}
+          headerText={strings.ProjectPropertiesListName}
+          isOpen={this.state.showProjectPropertiesPanel}
+          onDismiss={() => this.setState({ showProjectPropertiesPanel: false })}
+          onLightDismissClick={() => this.setState({ showProjectPropertiesPanel: false })}
+          isLightDismiss
+          closeButtonAriaLabel={strings.CloseText}>
+          <ProjectProperties
+            title={this.props.title}
+            properties={this.state.allProperties}
+            displayMode={this.props.displayMode}
+            isSiteAdmin={this.props.isSiteAdmin}
+            onFieldExternalChanged={this.props.onFieldExternalChanged}
+            showFieldExternal={this.props.showFieldExternal}
+            propertiesList={!stringIsNullOrEmpty(this.state.data.propertiesListId)}
+          />
+        </Panel>
+        {this.state.displayParentCreationModal && (
+          <CreateParentModal
+            isOpen={this.state.displayParentCreationModal}
+            onDismiss={this.onDismissParentModal.bind(this)}
+          />
+        )}
+      </>
     )
+  }
+
+  private getCustomActions(): ActionType[] {
+    const administerChildrenAction: ActionType = [
+      strings.ChildProjectAdminLabel,
+      () => {
+        window.location.href = `${this.props.webPartContext.pageContext.web.serverRelativeUrl}/SitePages/${this.props.adminPageLink}`
+      },
+      'Org',
+      false,
+      !this.props.isSiteAdmin
+    ]
+    const transformToParentProject: ActionType = [
+      strings.CreateParentProjectLabel,
+      () => {
+        this.setState({ displayParentCreationModal: true })
+      },
+      'Org',
+      false,
+      !this.props.isSiteAdmin
+    ]
+    const viewAllPropertiesAction: ActionType = [
+      strings.ViewAllPropertiesLabel,
+      () => {
+        this.setState({ showProjectPropertiesPanel: true })
+      },
+      'EntryView',
+      false
+    ]
+    if (this.state.isParentProject) {
+      return [administerChildrenAction, viewAllPropertiesAction]
+    }
+    return [transformToParentProject, viewAllPropertiesAction]
+  }
+
+  private onDismissParentModal() {
+    this.setState({ displayParentCreationModal: false })
+  }
+
+  public async isParentProjectOrProgram() {
+    const data = await sp.web.lists
+      .getByTitle('Prosjektegenskaper')
+      .items.getById(1)
+      .select('GtIsParentProject', 'GtIsProgram')
+      .get()
+    this.setState({ isParentProject: data?.GtIsParentProject || data?.GtIsProgram })
   }
 
   /**
@@ -216,8 +290,12 @@ export class ProjectInformation extends BaseWebPartComponent<
    * Transform properties from entity item and configuration
    *
    * @param {IProjectInformationData} data Data
+   * @param {boolean} useVisibleFilter Set to false if all properties should be returned
    */
-  private _transformProperties({ columns, fields, fieldValuesText }: IProjectInformationData) {
+  private _transformProperties(
+    { columns, fields, fieldValuesText }: IProjectInformationData,
+    useVisibleFilter: boolean = true
+  ) {
     const fieldNames: string[] = Object.keys(fieldValuesText).filter((fieldName) => {
       const [field] = fields.filter((fld) => fld.InternalName === fieldName)
       if (!field) return false
@@ -227,9 +305,11 @@ export class ProjectInformation extends BaseWebPartComponent<
       ) {
         return true
       }
+
       const [column] = columns.filter((c) => c.internalName === fieldName)
-      return column ? column.isVisible(this.props.page) : false
+      return column ? (useVisibleFilter ? column.isVisible(this.props.page) : true) : false
     })
+
     const properties = fieldNames.map((fn) => {
       const [field] = fields.filter((fld) => fld.InternalName === fn)
       return new ProjectPropertyModel(field, fieldValuesText[fn])
@@ -256,8 +336,10 @@ export class ProjectInformation extends BaseWebPartComponent<
         columns,
         ...propertiesData
       }
+
       const properties = this._transformProperties(data)
-      return { data, properties }
+      const allProperties = this._transformProperties(data, false)
+      return { data, properties, allProperties }
     } catch (error) {
       this.logError('Failed to retrieve data.', '_fetchData', error)
       throw error
@@ -267,4 +349,3 @@ export class ProjectInformation extends BaseWebPartComponent<
 
 export { ProjectInformationModal } from '../ProjectInformationModal'
 export * from './types'
-

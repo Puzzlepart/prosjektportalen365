@@ -1,9 +1,10 @@
 {
   "extends": "./node_modules/@microsoft/rush-stack-compiler-3.9/includes/tsconfig-web.json",
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
     "target": "es5",
     "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "noUnusedParameters": true,
     "module": "esnext",
     "moduleResolution": "node",
     "jsx": "react",
@@ -26,10 +27,27 @@
     "lib": [
       "es5",
       "dom",
+      "es2015",
       "es2015.collection"
     ],
     "baseUrl": "src",
-    "paths": {}
+    "paths": {
+      "components": [
+        "components"
+      ],
+      "models": [
+        "models"
+      ],
+      "interfaces": [
+        "interfaces"
+      ],
+      "types": [
+        "types"
+      ],
+      "data": [
+        "data"
+      ]
+    }
   },
   "include": [
     "src/**/*.ts",

@@ -12,8 +12,8 @@ export class SetTaxonomyFields extends BaseTask {
   /**
    * Execute CopyListData
    *
-   * @param {IBaseTaskParams} params Task parameters
-   * @param {OnProgressCallbackFunction} onProgress On progress function
+   * @param params Task parameters
+   * @param onProgress On progress function
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async execute(params: IBaseTaskParams): Promise<IBaseTaskParams> {
@@ -30,6 +30,9 @@ export class SetTaxonomyFields extends BaseTask {
       )
       Object.keys(termSetIds).forEach((fieldName) => {
         const termSetId = termSetIds[fieldName]
+        if (!termSetId) {
+          return params
+        }
         this.logInformation(`Setting Term Set ID ${termSetId} for ${fieldName}`)
         const field: SP.Field = jsomContext.rootWeb.get_fields().getByInternalNameOrTitle(fieldName)
         const taxField: SP.Taxonomy.TaxonomyField = jsomContext.clientContext.castTo(

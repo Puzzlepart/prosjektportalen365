@@ -9,5 +9,9 @@
         <CHOICE>URL</CHOICE>
         <CHOICE>Currency</CHOICE>
         <CHOICE>Note</CHOICE>
+        <CHOICE>Boolean</CHOICE>
+        <CHOICE>List</CHOICE>
+        <CHOICE>Trend</CHOICE>
+        <CHOICE>Modal</CHOICE>
     </CHOICES>
 </Field>

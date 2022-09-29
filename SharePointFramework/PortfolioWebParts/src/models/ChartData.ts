@@ -8,7 +8,7 @@ export class ChartData {
   /**
    * Constructor
    *
-   * @param {ChartDataItem[]} items ITems
+   * @param items ITems
    */
   constructor(items: ChartDataItem[]) {
     this._items = items
@@ -17,7 +17,7 @@ export class ChartData {
   /**
    * Get items
    *
-   * @param {DataField} field Field
+   * @param field Field
    */
   public getItems(field?: DataField): ChartDataItem[] {
     if (field) {
@@ -29,7 +29,7 @@ export class ChartData {
   /**
    * Get items with non zero value
    *
-   * @param {DataField} field Field
+   * @param field Field
    */
   public getItemsWithNonZeroValue(field: DataField): ChartDataItem[] {
     return this._items.filter((i) => i.getValue(field) !== 0)
@@ -38,8 +38,8 @@ export class ChartData {
   /**
    * Get items with the specified string value
    *
-   * @param {DataField} field Field
-   * @param {string} value Value
+   * @param field Field
+   * @param value Value
    */
   public getItemsWithStringValue(field: DataField, value: string): ChartDataItem[] {
     return this.getItems(field).filter((i) => i.getValue(field) === value)
@@ -48,7 +48,7 @@ export class ChartData {
   /**
    * Get item at index
    *
-   * @param {number} index Index
+   * @param index Index
    */
   public getItem(index: number): ChartDataItem {
     return this._items[index]
@@ -57,7 +57,7 @@ export class ChartData {
   /**
    * Get count
    *
-   * @param {DataField} field Field
+   * @param field Field
    */
   public getCount(field?: DataField): number {
     return this.getItems(field).length
@@ -70,7 +70,7 @@ export class ChartData {
   /**
    * Get average
    *
-   * @param {DataField} field Field
+   * @param field Field
    */
   public getAverage(field?: DataField) {
     return this.getTotal(field) / this.getCount(field)
@@ -79,7 +79,7 @@ export class ChartData {
   /**
    * Get values for the specified field
    *
-   * @param {DataField} field Field
+   * @param field Field
    */
   public getValues(field: DataField) {
     return this._items
@@ -90,7 +90,7 @@ export class ChartData {
   /**
    * Get unique values for the specified field
    *
-   * @param {DataField} field Field
+   * @param field Field
    */
   public getValuesUnique(field: DataField): Array<string> {
     return this.getValues(field).filter((value, index, self) => self.indexOf(value) === index)
@@ -101,7 +101,7 @@ export class ChartData {
    *
    * If field is specified and includeEmptyValues is set to false, it will only return names where the field(s) has value
    *
-   * @param {Array<DataField>} field Field(s) to check
+   * @param field Field(s) to check
    */
   public getNames(...field: Array<DataField>) {
     if (field) {
@@ -124,7 +124,7 @@ export class ChartData {
   /**
    * Get total
    *
-   * @param {DataField} field Field
+   * @param field Field
    */
   public getTotal(field: DataField) {
     return this._items
@@ -136,9 +136,9 @@ export class ChartData {
   /**
    * Get percentage
    *
-   * @param {DataField} field Field
-   * @param {number} index Index
-   * @param {number} fractionDigits Number of decimals (defaults to 2)
+   * @param field Field
+   * @param index Index
+   * @param fractionDigits Number of decimals (defaults to 2)
    */
   public getPercentage(field: DataField, index: number, fractionDigits = 2) {
     return parseFloat(

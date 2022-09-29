@@ -79,7 +79,7 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
     }
   }
 
-  public UNSAFE_componentWillUpdate(
+  public componentWillUpdate(
     _nextProps: IPortfolioOverviewProps,
     { currentView, groupBy }: IPortfolioOverviewState
   ) {
@@ -159,8 +159,8 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
   /**
    * On search
    *
-   * @param {string} searchTerm Search term
-   * @param {number} delay Delay in ms
+   * @param searchTerm Search term
+   * @param delay Delay in ms
    */
   private _onSearch(searchTerm: string, delay: number = 500) {
     clearTimeout(this._onSearchDelay)
@@ -191,14 +191,33 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
       items = items.sort((a, b) => (a.value > b.value ? 1 : -1))
       return { column, items }
     })
+
+    const activeFilters = this.state.activeFilters
+    if (!_.isEmpty(activeFilters)) {
+      const filteredFields = Object.keys(activeFilters)
+      filteredFields.forEach((key) => {
+        filters.forEach((filter) => {
+          if (filter.column.fieldName === key) {
+            activeFilters[key].forEach((value) => {
+              filter.items.forEach((item) => {
+                if (value === item.name) {
+                  item.selected = true
+                }
+              })
+            })
+          }
+        })
+      })
+    }
+
     return filters
   }
 
   /**
    * On filter change
    *
-   * @param {ProjectColumn} column Column
-   * @param {IFilterItemProps[]} selectedItems Selected items
+   * @param column Column
+   * @param selectedItems Selected items
    */
   private _onFilterChange(column: ProjectColumn, selectedItems: IFilterItemProps[]) {
     const { activeFilters } = { ...this.state } as IPortfolioOverviewState
@@ -213,8 +232,8 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
   /**
    * On column sort
    *
-   * @param {ProjectColumn} column The column config
-   * @param {boolean} sortDesencing Sort descending
+   * @param column The column config
+   * @param sortDesencing Sort descending
    */
   private _onColumnSort(column: ProjectColumn, sortDesencing: boolean): void {
     const { items, columns } = { ...this.state } as IPortfolioOverviewState
@@ -235,7 +254,7 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
   /**
    * On column group by
    *
-   * @param {ProjectColumn} column The column config
+   * @param column The column config
    */
   private _onColumnGroupBy(column: ProjectColumn) {
     this.setState((prevState) => ({
@@ -246,8 +265,8 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
   /**
    * On render details header
    *
-   * @param {IDetailsHeaderProps} props Props
-   * @param {IRenderFunction} defaultRender Default render
+   * @param props Props
+   * @param defaultRender Default render
    */
   private _onRenderDetailsHeader(
     props: IDetailsHeaderProps,
@@ -275,8 +294,8 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
   /**
    * On column header click
    *
-   * @param {React.MouseEvent<HTMLElement, MouseEvent>} ev Event
-   * @param {ProjectColumn} column Column
+   * @param ev Event
+   * @param column Column
    */
   private _onColumnHeaderClick(
     ev?: React.MouseEvent<HTMLElement, MouseEvent>,
@@ -288,8 +307,8 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
   /**
    * On column header context menu
    *
-   * @param {ProjectColumn} column Column
-   * @param {React.MouseEvent<HTMLElement, MouseEvent>} ev Event
+   * @param column Column
+   * @param ev Event
    */
   private _onColumnHeaderContextMenu(
     column?: ProjectColumn,
@@ -356,8 +375,8 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
   /**
    * Create groups
    *
-   * @param {any[]} items Items
-   * @param {ProjectColumn[]} columns Columns
+   * @param items Items
+   * @param columns Columns
    */
   private _createGroups(items: any[], columns: ProjectColumn[]) {
     const { groupBy, sortBy } = { ...this.state } as IPortfolioOverviewState
@@ -425,7 +444,7 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
   /**
    * Get current view
    *
-   * @param {IPortfolioOverviewHashStateState} hashState Hash state
+   * @param hashState Hash state
    */
   private _getCurrentView(hashState: IPortfolioOverviewHashStateState): PortfolioOverviewView {
     const viewIdUrlParam = new UrlQueryParameterCollection(document.location.href).getValue(
@@ -464,14 +483,20 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
    */
   private async _fetchInitialData(): Promise<Partial<IPortfolioOverviewState>> {
     try {
-      const { configuration, pageContext } = this.props
+      const { configuration, pageContext, isParentProject } = this.props
       const hashState = parseUrlHash<IPortfolioOverviewHashStateState>()
       const currentView = this._getCurrentView(hashState)
-      const items = await this.props.dataAdapter.fetchDataForView(
-        currentView,
-        configuration,
-        pageContext.site.id.toString()
-      )
+      const items = isParentProject
+        ? await this.props.dataAdapter.fetchDataForViewBatch(
+            currentView,
+            configuration,
+            pageContext.legacyPageContext.hubSiteId
+          )
+        : await this.props.dataAdapter.fetchDataForView(
+            currentView,
+            configuration,
+            pageContext.legacyPageContext.hubSiteId
+          )
       const newState: Partial<IPortfolioOverviewState> = {
         columns: currentView.columns,
         items,
@@ -490,18 +515,24 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
   /**
    * Changes view, doing a new search
    *
-   * @param {PortfolioOverviewView} view View configuration
+   * @param view View configuration
    */
   private async _onChangeView(view: PortfolioOverviewView) {
     if (this.state.currentView.id === view.id) {
       return
     }
     this.setState({ isChangingView: view })
-    const items = await this.props.dataAdapter.fetchDataForView(
-      view,
-      this.props.configuration,
-      this.props.pageContext.site.id.toString()
-    )
+    const items = this.props.isParentProject
+      ? await this.props.dataAdapter.fetchDataForViewBatch(
+          view,
+          this.props.configuration,
+          this.props.pageContext.legacyPageContext.hubSiteId
+        )
+      : await this.props.dataAdapter.fetchDataForView(
+          view,
+          this.props.configuration,
+          this.props.pageContext.legacyPageContext.hubSiteId
+        )
     const updatedState: Partial<IPortfolioOverviewState> = {
       isChangingView: null,
       items,

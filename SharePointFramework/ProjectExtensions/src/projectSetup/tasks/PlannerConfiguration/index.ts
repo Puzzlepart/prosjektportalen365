@@ -1,10 +1,10 @@
 import { PageContext } from '@microsoft/sp-page-context'
 import { getGUID } from '@pnp/common'
-import { IProjectSetupData } from 'projectSetup'
 import { default as MSGraphHelper } from 'msgraph-helper'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
-import * as strings from 'ProjectExtensionsStrings'
 import { sleep } from 'pp365-shared/lib/util'
+import * as strings from 'ProjectExtensionsStrings'
+import { IProjectSetupData } from 'projectSetup'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 import { IPlannerBucket, IPlannerConfiguration, IPlannerPlan } from './types'
@@ -15,8 +15,8 @@ export class PlannerConfiguration extends BaseTask {
   /**
    * Constructor
    *
-   * @param {IProjectSetupData} data Project setup data
-   * @param {IPlannerConfiguration} _configuration Planner configuration object
+   * @param data Project setup data
+   * @param _configuration Planner configuration object
    * @param {string[]} _labels Planner labels
    */
   constructor(
@@ -28,11 +28,30 @@ export class PlannerConfiguration extends BaseTask {
   }
 
   /**
+   * Replacing site tokens. For now it supports `{site}` which is replaced
+   * with the site absolute URL. Encodes URL, replacing %, . and :
+   *
+   * @see https://docs.microsoft.com/en-gb/graph/api/resources/plannerexternalreferences?view=graph-rest-1.0
+   *
+   * @param str - String
+   * @param pageContext - Page context
+   */
+  private replaceUrlTokens(str: string, pageContext: PageContext) {
+    const siteAbsoluteUrl = pageContext.site.absoluteUrl
+      .split('%')
+      .join('%25')
+      .split('.')
+      .join('%2E')
+      .split(':')
+      .join('%3A')
+    return str.replace('{site}', siteAbsoluteUrl)
+  }
+
+  /**
    * Create plans
    *
-   * @param {string} owner Owner (group id)
-   * @param {OnProgressCallbackFunction} onProgress On progress function
-   * @param {string} defaultBucketName Default bucket name
+   * @param pageContext - Page context
+   * @param onProgress On progress function
    */
   private async _createPlan(
     pageContext: PageContext,
@@ -41,9 +60,8 @@ export class PlannerConfiguration extends BaseTask {
     try {
       const planTitle = pageContext.web.title
       const owner = pageContext.legacyPageContext.groupId
-      const existingGroupPlans = await this._fetchPlans(owner)
       this.logInformation(`Creating plan ${planTitle}`)
-      const plan = await this._ensurePlan(planTitle, existingGroupPlans, owner)
+      const plan = await this.ensurePlan(planTitle, owner)
       const existingBuckets = await this._fetchBuckets(plan.id)
       for (let i = 0; i < Object.keys(this._configuration).length; i++) {
         const bucketName = Object.keys(this._configuration)[i]
@@ -54,7 +72,7 @@ export class PlannerConfiguration extends BaseTask {
           format(strings.CreatingPlannerTaskText, bucketName),
           'PlannerLogo'
         )
-        await this._createTasks(plan.id, bucket)
+        await this._createTasks(plan.id, bucket, pageContext)
       }
       return plan
     } catch (error) {
@@ -65,21 +83,18 @@ export class PlannerConfiguration extends BaseTask {
   /**
    * Ensure plan
    *
-   * @param {string} title Plan title
-   * @param {IPlannerPlan[]} existingPlans Existing plans
-   * @param {string} owner Owner (group id)
+   * @param title Plan title
+   * @param owner Owner (group id)
+   * @param setupLabels Setup labels for the plan
    */
-  private async _ensurePlan(
-    title: string,
-    existingPlans: IPlannerPlan[],
-    owner: string
-  ): Promise<IPlannerPlan> {
+  public async ensurePlan(title: string, owner: string, setupLabels = true): Promise<IPlannerPlan> {
     try {
-      let [plan] = existingPlans.filter((p) => p.title === title)
+      const existingGroupPlans = await this._fetchPlans(owner)
+      let [plan] = existingGroupPlans.filter((p) => p.title === title)
       if (!plan) {
         plan = await MSGraphHelper.Post('planner/plans', JSON.stringify({ title, owner }))
       }
-      await this._setupLabels(plan)
+      if (setupLabels) await this._setupLabels(plan)
       return plan
     } catch (error) {
       throw error
@@ -89,8 +104,8 @@ export class PlannerConfiguration extends BaseTask {
   /**
    * Sets up labels for the plan
    *
-   * @param {IPlannerPlan} plan Plan
-   * @param {number} delay Delay in seconds before updating the plan to ensure it's created properly
+   * @param plan Plan
+   * @param delay Delay in seconds before updating the plan to ensure it's created properly
    */
   private async _setupLabels(plan: IPlannerPlan, delay: number = 5) {
     this.logInformation(`Sleeping ${delay} seconds before updating the plan with labels`)
@@ -114,9 +129,9 @@ export class PlannerConfiguration extends BaseTask {
   /**
    * Ensure bucket
    *
-   * @param {string} name Bucket name
-   * @param {IPlannerBucket[]} existingBuckets Existing buckets
-   * @param {string} planId Plan Id
+   * @param name Bucket name
+   * @param existingBuckets Existing buckets
+   * @param planId Plan Id
    */
   private async _ensureBucket(name: string, existingBuckets: IPlannerBucket[], planId: string) {
     try {
@@ -140,14 +155,15 @@ export class PlannerConfiguration extends BaseTask {
   /**
    * Create tasks for the bucket in the specified plan
    *
-   * @param {string} planId Plan Id
-   * @param {IPlannerBucket} bucket Bucket
+   * @param planId Plan Id
+   * @param bucket Bucket
    * @param {Record<string, boolean>} appliedCategories Categories to apply to the task
-   * @param {number} delay Delay in seconds before updating the plan to ensure it's created properly
+   * @param delay Delay in seconds before updating the plan to ensure it's created properly
    */
   private async _createTasks(
     planId: string,
     bucket: IPlannerBucket,
+    pageContext: PageContext,
     appliedCategories: Record<string, boolean> = { category1: true },
     delay: number = 1
   ) {
@@ -183,7 +199,7 @@ export class PlannerConfiguration extends BaseTask {
               ? attachments.reduce(
                   (obj, attachment) => ({
                     ...obj,
-                    [attachment.url]: {
+                    [this.replaceUrlTokens(attachment.url, pageContext)]: {
                       '@odata.type': 'microsoft.graph.plannerExternalReference',
                       alias: attachment.alias,
                       type: attachment.type
@@ -218,7 +234,7 @@ export class PlannerConfiguration extends BaseTask {
   /**
    * Fetch plans
    *
-   * @param {string} owner Owner (group id)
+   * @param owner Owner (group id)
    */
   private _fetchPlans(owner: string) {
     return MSGraphHelper.Get<IPlannerPlan[]>(`groups/${owner}/planner/plans`, ['id', 'title'])
@@ -227,7 +243,7 @@ export class PlannerConfiguration extends BaseTask {
   /**
    * Fetch buckets
    *
-   * @param {string} planId Plan Id
+   * @param planId Plan Id
    */
   private _fetchBuckets(planId: string) {
     return MSGraphHelper.Get<IPlannerBucket[]>(`planner/plans/${planId}/buckets`, [
@@ -240,9 +256,9 @@ export class PlannerConfiguration extends BaseTask {
   /**
    * Execute PlannerConfiguration
    *
-   * @param {IBaseTaskParams} params Task parameters
-   * @param {IBaseTaskParams} params Task parameters
-   * @param {OnProgressCallbackFunction} onProgress On progress function
+   * @param params Task parameters
+   * @param params Task parameters
+   * @param onProgress On progress function
    */
   public async execute(
     params: IBaseTaskParams,

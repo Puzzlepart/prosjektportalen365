@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
-import styles from './Filter.module.scss'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
-import { IFilterState } from './IFilterState'
-import { IFilterProps } from './IFilterProps'
+import * as React from 'react'
+import { Component } from 'react'
 import { FilterItem } from '../FilterItem'
-import { IFilterItemProps } from '../FilterItem/IFilterItemProps'
+import { IFilterItemProps } from '../FilterItem/types'
+import styles from './Filter.module.scss'
+import { IFilterProps, IFilterState } from './types'
 
 export class Filter extends Component<IFilterProps, IFilterState> {
   constructor(props: IFilterProps) {
@@ -14,7 +14,7 @@ export class Filter extends Component<IFilterProps, IFilterState> {
 
   public render(): React.ReactElement<IFilterProps> {
     return (
-      <div className={styles.filter}>
+      <div className={styles.root}>
         <div className={styles.filterSectionHeader} onClick={this._onToggleSectionContent}>
           <span className={styles.titleText}>{this.props.column.name}</span>
           <span className={styles.titleIcon}>
@@ -51,15 +51,25 @@ export class Filter extends Component<IFilterProps, IFilterState> {
   /**
    * On changed
    *
-   * @param {IFilterItemProps} item Item that was changed
-   * @param {boolean} checked Item checked
+   * @param item Item that was changed
+   * @param checked Item checked
    */
   private _onChanged = (item: IFilterItemProps, checked: boolean) => {
-    const { items } = this.state
-    items.filter((i) => i.value === item.value)[0].selected = checked
-    this.setState({ items })
-    const selectedItems = items.filter((i) => i.selected)
-    this.props.onFilterChange(this.props.column, selectedItems)
+    this.setState(
+      (prevState) => {
+        const items = prevState.items.map((i) => {
+          if (i.value === item.value) {
+            return { ...i, selected: checked }
+          }
+          return i
+        })
+        return { items }
+      },
+      () => {
+        const selectedItems = this.state.items.filter((i) => i.selected)
+        this.props.onFilterChange(this.props.column, selectedItems)
+      }
+    )
   }
 }
 

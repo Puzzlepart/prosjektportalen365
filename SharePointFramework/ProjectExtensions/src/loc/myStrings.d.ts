@@ -38,6 +38,8 @@ declare interface IProjectExtensionsStrings {
   GetSetupDataErrorStack: string
   InvalidLanguageErrorMessage: string
   InvalidLanguageErrorStack: string
+  IsHubSiteErrorMessage: string
+  IsHubSiteErrorStack: string
   DocumentLibraryDropdownLabel: string
   FolderDropdownLabel: string
   ListContentTitle: string
@@ -51,7 +53,11 @@ declare interface IProjectExtensionsStrings {
   OnSubmitSelectionText: string
   PlannerConfigurationErrorMessage: string
   PlannerConfigurationText: string
+  Lists_ProjectTemplateFiles_Title: string,
   PreTaskErrorMessage: string
+  PreTaskContentTypeValidationErrorMessage: string
+  PreTaskTermSetIdValidationErrorMessage: string
+  TermSetDoesNotExistError: string
   ProgressDialogDescription: string
   ProgressDialogLabel: string
   ProgressDialogTitle: string
@@ -80,6 +86,13 @@ declare interface IProjectExtensionsStrings {
   SetupAbortedText: string
   UnknownErrorText: string
   TemplateListContentConfigText: string
+  ProjectAlreadySetupMessage: string
+  ProjectAlreadySetupStack: string
+  ProjectProvisioningSuccessLogText: string
+  ProjectProvisioningStartLogText: string
+  ProvisionTemplateText: string
+  ContinueToProjectText: string
+  RecycleBinText: string
 }
 
 declare module 'ProjectExtensionsStrings' {

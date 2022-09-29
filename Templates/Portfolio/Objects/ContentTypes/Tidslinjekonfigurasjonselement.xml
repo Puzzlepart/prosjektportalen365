@@ -1,0 +1,13 @@
+<pnp:ContentType ID="0x0100DAFD9901A59F445EB29B2CE3D663A87D" Name="{resource:ContentTypes_Timeline_Configuration_Element_Name}" Description="{resource:ContentTypes_Timeline_Configuration_Element_Description}" Group="{resource:ContentTypes_Group}"
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    <pnp:FieldRefs>
+        <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" />
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
+        <pnp:FieldRef ID="aaf7828e-a937-4c7e-834b-406cf1166d77" Name="GtHexColor" />
+        <pnp:FieldRef ID="aff55aa3-49a2-46ef-af10-9ae8031ab1b4" Name="GtTimelineCategory" />
+        <pnp:FieldRef ID="21d70251-03ef-47e6-bd7f-0f01bd15d500" Name="GtElementType" Required="true" />
+        <pnp:FieldRef ID="6ef97f12-3ac3-4ebc-8975-d658eea33571" Name="GtShowElementPortfolio" />
+        <pnp:FieldRef ID="a00b13f6-2761-488d-85d9-37f85879b433" Name="GtShowElementProgram" />
+        <pnp:FieldRef ID="2e70b590-4f03-4292-80a1-766564082f1e" Name="GtTimelineFilter" />
+    </pnp:FieldRefs>
+</pnp:ContentType>

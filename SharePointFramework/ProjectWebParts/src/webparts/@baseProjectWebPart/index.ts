@@ -2,8 +2,8 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
-import * as React from 'react'
-import * as ReactDom from 'react-dom'
+import React from 'react'
+import ReactDom from 'react-dom'
 import HubSiteService, { IHubSite } from 'sp-hubsite-service'
 import { IBaseWebPartComponentProps } from '../../components/BaseWebPartComponent'
 import SPDataAdapter from '../../data'
@@ -44,7 +44,7 @@ export abstract class BaseProjectWebPart<
    */
   private async _setup() {
     sp.setup({ spfxContext: this.context })
-    this._hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext)
+    this._hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
     SPDataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,

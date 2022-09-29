@@ -1,17 +1,17 @@
-import { TypedHash } from '@pnp/common'
+import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
 import { AttachmentFileInfo } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
-import { UserMessage } from 'components/UserMessage'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import domToImage from 'dom-to-image'
 import * as moment from 'moment'
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar'
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectWebPartsStrings'
-import * as React from 'react'
+import React from 'react'
 import { formatDate } from 'pp365-shared/lib/helpers'
 import { SectionModel, SectionType, StatusReport } from 'pp365-shared/lib/models'
 import { PortalDataService } from 'pp365-shared/lib/services'
@@ -69,18 +69,24 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           (report) => report.id === parseInt(selectedReportUrlParam, 10)
         )
       }
+      const newestReportId = data.reports.length > 0 ? data.reports[0].id : 0
+
       this.setState({
         data,
         selectedReport,
         sourceUrl: decodeURIComponent(sourceUrlParam || ''),
-        loading: false
+        loading: false,
+        newestReportId
       })
     } catch (error) {
       this.setState({ error, loading: false })
     }
   }
 
-  public UNSAFE_componentWillUpdate(_: IProjectStatusProps, { selectedReport }: IProjectStatusState) {
+  public UNSAFE_componentWillUpdate(
+    _: IProjectStatusProps,
+    { selectedReport }: IProjectStatusState
+  ) {
     const obj: IProjectStatusHashState = {}
     if (selectedReport) obj.selectedReport = selectedReport.id.toString()
     setUrlHash<IProjectStatusHashState>(obj)
@@ -104,23 +110,33 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       return (
         <div className={styles.projectStatus}>
           <div className={styles.container}>
-            <MessageBar messageBarType={MessageBarType.info}>{this.state.error}</MessageBar>
+            <UserMessage
+              text={this.state.error}
+              type={MessageBarType.info}
+            />
           </div>
         </div>
       )
     }
-
     return (
       <div className={styles.projectStatus}>
         {this._commandBar()}
         <div className={styles.container}>
           {this.state.data.reports.filter((report) => !report.published).length > 0 && (
-            <MessageBar messageBarType={MessageBarType.info}>
-              {strings.UnpublishedStatusReportInfo}
-            </MessageBar>
+            <UserMessage
+              text={strings.UnpublishedStatusReportInfo}
+              type={MessageBarType.info}
+            />
           )}
           <div className={`${styles.header} ${styles.column12}`}>
-            <div className={styles.title}>{this.props.title} {this.state.selectedReport ? moment(this.state.selectedReport.created).format('DD.MM.yyyy') : null} </div>
+            <div className={styles.title}>
+              {this.props.title}{' '}
+              {this.state.selectedReport
+                ? moment(
+                    this.state.selectedReport.publishedDate ?? this.state.selectedReport.created
+                  ).format('DD.MM.yyyy')
+                : null}{' '}
+            </div>
           </div>
           <div className={`${styles.sections} ${styles.column12}`} id='pp-statussection'>
             {this._renderSections()}
@@ -212,7 +228,6 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         disabled: true
       })
     }
-
     return (
       <CommandBar
         items={removeMenuBorder<IContextualMenuItem>(items)}
@@ -246,7 +261,10 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       data: this.state.data,
       hubSiteUrl: this.props.hubSite.url,
       siteId: this.props.siteId,
-      webUrl: this.props.webUrl
+      webUrl: this.props.webUrl,
+      showLists: this.state.data.reports
+        ? this.state.selectedReport.id === this.state.newestReportId
+        : true
     }
     return baseProps
   }
@@ -260,9 +278,13 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
 
     if (!selectedReport)
       return (
-        <UserMessage text={strings.NoStatusReportsMessage} messageBarType={MessageBarType.info} />
+        <UserMessage
+          text={strings.NoStatusReportsMessage}
+          type={MessageBarType.info}
+        />
       )
     return data.sections
+      .filter((sec) => !stringIsNullOrEmpty(selectedReport.getStatusValue(sec.fieldName).value))
       .filter((sec) => sec.showAsSection || sec.type === SectionType.SummarySection)
       .map((sec) => {
         const baseProps = this._getSectionBaseProps(sec)
@@ -302,7 +324,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
                 riskMatrix={{
                   width: riskMatrixWidth,
                   height: riskMatrixHeight,
-                  calloutTemplate: riskMatrixCalloutTemplate
+                  calloutTemplate: riskMatrixCalloutTemplate,
+                  pageContext: this.props.pageContext
                 }}
               />
             )
@@ -418,7 +441,10 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     if (!this.state.isPublishing) {
       try {
         const attachment = await this._captureReport(report.values.Title)
-        const properties = { GtModerationStatus: strings.GtModerationStatus_Choice_Published, GtLastReportDate: moment().format('YYYY-MM-DD HH:mm') }
+        const properties = {
+          GtModerationStatus: strings.GtModerationStatus_Choice_Published,
+          GtLastReportDate: moment().format('YYYY-MM-DD HH:mm')
+        }
         await this._portalDataService.updateStatusReport(report.id, properties, attachment)
       } catch (error) {
         Logger.log({
@@ -437,8 +463,27 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
    */
   private async _deleteReport(report: StatusReport) {
     await this._portalDataService.deleteStatusReport(report.id)
-    window.location.hash = ''
-    document.location.reload()
+    try {
+      const data = await this._fetchData()
+      let [selectedReport] = data.reports
+      const sourceUrlParam = getUrlParam('Source')
+
+      if (data.reports.length > 0) {
+        selectedReport = data.reports[0]
+      }
+
+      const newestReportId = data.reports.length > 0 ? data.reports[0].id : 0
+
+      this.setState({
+        data,
+        selectedReport,
+        sourceUrl: decodeURIComponent(sourceUrlParam || ''),
+        loading: false,
+        newestReportId
+      })
+    } catch (error) {
+      this.setState({ error, loading: false })
+    }
   }
 
   /**

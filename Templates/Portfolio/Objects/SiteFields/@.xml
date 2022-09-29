@@ -9,6 +9,7 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtBudgetTotal.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtChallengeDescription.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtChecklistStatus.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtChildProjects.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtColMinWidth.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtComment.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtCostsTotal.xml" />
@@ -38,6 +39,8 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtIconName.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtInternalName.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtIsGroupable.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtIsParentProject.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtIsProgram.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtIsRefinable.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtKey.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtLastSyncTime.xml" />
@@ -59,6 +62,7 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtMeasurementUnit.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtMeasurementValue.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtOverallStatus.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtParentProjects.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtPiAutomaticRefreshEnabled.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtPiAutomaticRefreshInterval.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtPiCategoryField.xml" />
@@ -111,6 +115,7 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtProjectLogResponsible.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtProjectLogType.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtProjectManager.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtProjectSupport.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtProjectNumber.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtProjectOwner.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtProjectPhase.xml" />
@@ -174,6 +179,7 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtStatusRiskComment.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtStatusTime.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtStatusTimeComment.xml" />
+
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtValue.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtProjectLifecycleStatus.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtModerationStatus.xml" />
@@ -186,4 +192,17 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtSPGroupName.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtPermissionLevel.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtRiskDescription.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtSiteIdLookup.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtTimelineTypeLookup.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtHexColor.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtElementType.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtShowElementProgram.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtShowElementPortfolio.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtTimelineFilter.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtODataQuery.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtProjectContentColumns.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtProjectContentRefiners.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtProjectContentGroupBy.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtTimelineCategory.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtTag.xml" />
 </pnp:SiteFields>

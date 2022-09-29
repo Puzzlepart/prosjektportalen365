@@ -11,7 +11,7 @@ import { IBenefitsOverviewProps } from './types'
 /**
  * Get columns for DetailsList
  *
- * @param {IBenefitsOverviewProps} props Props
+ * @param props Props
  */
 export function getColumns(props: IBenefitsOverviewProps): IAggregatedSearchListColumn[] {
   const columns: IAggregatedSearchListColumn[] = [
@@ -104,7 +104,7 @@ export function getColumns(props: IBenefitsOverviewProps): IAggregatedSearchList
     {
       fieldName: 'BenefitMeasurementsModal',
       key: 'BenefitMeasurementsModal',
-      name: '',
+      name: strings.ShowAllMeasurementsLinkText,
       minWidth: 80,
       maxWidth: 150,
       onRender: (indicator: BenefitMeasurementIndicator) => (

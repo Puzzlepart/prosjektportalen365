@@ -1,13 +1,15 @@
 Install/SiteScripts/*.txt
 Install/InstallLog.txt
+Install/Scripts/UpgradeSites_Log*
+Install/PnP.PowerShell/*
 release/*
 SharePointFramework/**/.vscode/launch.json
 SharePointFramework/**/pnpm-lock.yaml
 SharePointFramework/**/shrinkwrap.yaml
+SharePointFramework/**/config/serve.json
 Templates/Portfolio/*.txt
 Templates/Content/**/ProjectTemplates/*.txt
 Templates/*.txt
 Templates/Resources.json
 .DS_Store
-SharePointFramework/**/config/config.backup.json
 node_modules

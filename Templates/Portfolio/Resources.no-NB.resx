@@ -163,6 +163,12 @@
   <data name="Lists_ProjectColumns_Url" xml:space="preserve">
     <value>Lists/Prosjektkolonner</value>
   </data>
+  <data name="Lists_ProjectContentColumns_Title" xml:space="preserve">
+    <value>Prosjektinnholdskolonner</value>
+  </data>
+  <data name="Lists_ProjectContentColumns_Url" xml:space="preserve">
+    <value>Lists/Prosjektinnholdskolonner</value>
+  </data>
   <data name="Lists_ProjectTemplates_Title" xml:space="preserve">
     <value>Prosjektmaler</value>
   </data>
@@ -202,11 +208,44 @@
   <data name="Lists_Permission_Configuration_Description" xml:space="preserve">
     <value>Tillatelseskonfigurasjon for nye prosjekter. Denne listen må ikke endres på.</value>
   </data>
+  <data name="Lists_TemplateOptions_Title" xml:space="preserve">
+    <value>Maloppsett</value>
+  </data>
+  <data name="Lists_TemplateOptions_Url" xml:space="preserve">
+    <value>Lists/Maloppsett</value>
+  </data>
   <data name="Lists_TimelineContent_Title" xml:space="preserve">
     <value>Tidslinjeinnhold</value>
   </data>
   <data name="Lists_TimelineContent_Url" xml:space="preserve">
     <value>Lists/Tidslinjeinnhold</value>
+  </data>
+  <data name="Lists_TimelineContent_Field_Title_DisplayName" xml:space="preserve">
+    <value>Tittel</value>
+  </data>
+  <data name="Lists_TimelineContent_Field_Title_Description" xml:space="preserve">
+    <value>Et kortfattet navn for å beskrive tidslinje elementet</value>
+  </data>
+  <data name="Lists_TimelineContent_Field_GtBudgetTotal_DisplayName" xml:space="preserve">
+    <value>Hva er totalbudsjettet?</value>
+  </data>
+  <data name="Lists_TimelineContent_Field_GtBudgetTotal_Description" xml:space="preserve">
+    <value>Budsjett for fasen/elementet (dersom aktuelt)</value>
+  </data>
+  <data name="Lists_TimelineContent_Field_GtCostsTotal_DisplayName" xml:space="preserve">
+    <value>Kostnad for fasen/elementet (dersom aktuelt)</value>
+  </data>
+  <data name="Lists_TimelineContent_Field_GtEndDate_DisplayName" xml:space="preserve">
+    <value>Sluttdato (dato for milepæl)</value>
+  </data>
+  <data name="Lists_Timeline_Configuration_Title" xml:space="preserve">
+    <value>Tidslinjekonfigurasjon</value>
+  </data>
+  <data name="Lists_Timeline_Configuration_Url" xml:space="preserve">
+    <value>Lists/Tidslinjekonfigurasjon</value>
+  </data>
+  <data name="Lists_Timeline_Configuration_Field_GtSortOrder_Description" xml:space="preserve">
+    <value>Angi prioritering av elementet under tilhørende gruppe/prosjekt på tidslinjen, benytt f. eks 31 dersom du vil at elementet skal ligge mellom element 30 og 40.</value>
   </data>
   <data name="View_AllItems_DisplayName" xml:space="preserve">
     <value>Alle elementer</value>
@@ -310,6 +349,12 @@
   <data name="ContentTypes_ListSection_Description" xml:space="preserve">
     <value></value>
   </data>
+  <data name="ContentTypes_TimelineSection_Name" xml:space="preserve">
+    <value>Tidslinjeseksjon</value>
+  </data>
+  <data name="ContentTypes_TimelineSection_Description" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="ContentTypes_LogElement_Name" xml:space="preserve">
     <value>Loggelement</value>
   </data>
@@ -344,6 +389,12 @@
     <value>Prosjektkolonne</value>
   </data>
   <data name="ContentTypes_ProjectColumn_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ContentTypes_ProjectContentColumn_Name" xml:space="preserve">
+    <value>Prosjektinnholdskolonne</value>
+  </data>
+  <data name="ContentTypes_ProjectContentColumn_Description" xml:space="preserve">
     <value></value>
   </data>
   <data name="ContentTypes_ProjectColumnConfiguration_Name" xml:space="preserve">
@@ -412,6 +463,18 @@
   <data name="ContentTypes_Permission_Configuration_Element_Description" xml:space="preserve">
     <value>Opprett et nytt tillatelseskonfigurasjonselement</value>
   </data>
+  <data name="ContentTypes_Timeline_Configuration_Element_Name" xml:space="preserve">
+    <value>Tidslinjekonfigurasjonelement</value>
+  </data>
+  <data name="ContentTypes_Timeline_Configuration_Element_Description" xml:space="preserve">
+    <value>Opprett et nytt tidslinjekonfigurasjonelement</value>
+  </data>
+  <data name="ContentTypes_Timeline_Element_Name" xml:space="preserve">
+    <value>Tidslinjeelement</value>
+  </data>
+  <data name="ContentTypes_Timeline_Element_Description" xml:space="preserve">
+    <value>Opprett et nytt tidslinjeelement</value>
+  </data>
   <data name="SiteFields_Project_Group" xml:space="preserve">
     <value>Kolonner for Prosjektportalen (Prosjekt)</value>
   </data>
@@ -465,6 +528,9 @@
   </data>
   <data name="SiteFields_GtProjectManager_DisplayName" xml:space="preserve">
     <value>Prosjektleder</value>
+  </data>
+    <data name="SiteFields_GtProjectSupport_DisplayName" xml:space="preserve">
+    <value>Prosjektstøtte</value>
   </data>
   <data name="SiteFields_GtStatusBudget_DisplayName" xml:space="preserve">
     <value>Status økonomi</value>
@@ -565,6 +631,9 @@
   <data name="SiteFields_GtPortfolioColumns_DisplayName" xml:space="preserve">
     <value>Kolonner</value>
   </data>
+  <data name="SiteFields_GtProjectContentColumns_DisplayName" xml:space="preserve">
+    <value>Kolonner</value>
+  </data>
   <data name="SiteFields_GtPortfolioIsDefaultView_DisplayName" xml:space="preserve">
     <value>Standardvisning</value>
   </data>
@@ -583,7 +652,13 @@
   <data name="SiteFields_GtPortfolioRefiners_DisplayName" xml:space="preserve">
     <value>Filter</value>
   </data>
+  <data name="SiteFields_GtProjectContentRefiners_DisplayName" xml:space="preserve">
+    <value>Filter</value>
+  </data>
   <data name="SiteFields_GtPortfolioGroupBy_DisplayName" xml:space="preserve">
+    <value>Grupper etter</value>
+  </data>
+  <data name="SiteFields_GtProjectContentGroupBy_DisplayName" xml:space="preserve">
     <value>Grupper etter</value>
   </data>
   <data name="SiteFields_GtLccDefault_DisplayName" xml:space="preserve">
@@ -814,6 +889,9 @@
   <data name="SiteFields_GtChecklistStatus_Description" xml:space="preserve">
     <value>Hva er statusen for sjekkpunktet? (Anbefalt status = 'Åpen'. Dette påvirker om man blir etterspurt sjekkpunktet ifm faseendring)</value>
   </data>
+  <data name="SiteFields_GtChildProjects_DisplayName" xml:space="preserve">
+    <value>Underområder</value>
+  </data>
   <data name="SiteFields_GtComment_DisplayName" xml:space="preserve">
     <value>Kommentar</value>
   </data>
@@ -824,7 +902,7 @@
     <value>Kategori</value>
   </data>
   <data name="SiteFields_GtDataSourceCategory_Description" xml:space="preserve">
-    <value></value>
+    <value>Navnet på kategorien som brukes av oversiktssidene. Se Datakilder-listen for eksempler på verdier.</value>
   </data>
   <data name="SiteFields_GtDataSourceDefault_DisplayName" xml:space="preserve">
     <value>Standard for kategori</value>
@@ -926,7 +1004,13 @@
     <value>Ikonnavn</value>
   </data>
   <data name="SiteFields_GtIconName_Description" xml:space="preserve">
-    <value></value>
+    <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
+  </data>
+   <data name="SiteFields_GtIsParentProject_DisplayName" xml:space="preserve">
+    <value>Overordnet</value>
+  </data>
+   <data name="SiteFields_GtIsProgram_DisplayName" xml:space="preserve">
+    <value>Program</value>
   </data>
   <data name="SiteFields_GtKey_DisplayName" xml:space="preserve">
     <value>Key</value>
@@ -993,6 +1077,9 @@
   </data>
   <data name="SiteFields_GtModerationStatus_Description" xml:space="preserve">
     <value></value>
+  </data>
+  <data name="SiteFields_GtParentProjects_DisplayName" xml:space="preserve">
+    <value>Overordnede prosjekter</value>
   </data>
   <data name="SiteFields_GtPrereqProfitAchievement_DisplayName" xml:space="preserve">
     <value>Forutsetninger for gevinstoppnåelse</value>
@@ -1136,7 +1223,7 @@
     <value>Vis i portefølje</value>
   </data>
   <data name="SiteFields_GtShowInPortfolio_Description" xml:space="preserve">
-    <value>Velg 'Ja' dersom usikkerheten skal synliggjøes i den sentrale risikooversikten på porteføljenivå (gjør risikoen synlig for alle med tilgang til prosjektporalen og prosjektet)</value>
+    <value>Velg 'Ja' dersom elementet skal synliggjøres i den sentrale oversikten på porteføljenivå (gjør elementet synlig for alle med tilgang til prosjektportalen og prosjektet)</value>
   </data>
   <data name="SiteFields_GtStakeholderActions_DisplayName" xml:space="preserve">
     <value>Tiltak</value>
@@ -1249,6 +1336,9 @@
   <data name="SiteFields_GtProjectManager_Description" xml:space="preserve">
     <value>Hvem er prosjektleder for prosjektet?</value>
   </data>
+    <data name="SiteFields_GtProjectSupport_Description" xml:space="preserve">
+    <value>Hvem er prosjektstøtte for prosjektet? Dette kan være assisterende prosjektledere eller andre involverte.</value>
+  </data>
   <data name="SiteFields_GtStatusBudget_Description" xml:space="preserve">
     <value>Hva er status på prosjektets økonomi?</value>
   </data>
@@ -1286,7 +1376,7 @@
     <value></value>
   </data>
   <data name="SiteFields_GtSecIcon_Description" xml:space="preserve">
-    <value>Ikon fra https://dev.office.com/fabric#/styles/icons</value>
+    <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
   </data>
   <data name="SiteFields_GtSecShowInNavbar_Description" xml:space="preserve">
     <value></value>
@@ -1316,12 +1406,15 @@
     <value></value>
   </data>
   <data name="SiteFields_GtPortfolioFabricIcon_Description" xml:space="preserve">
-    <value>Ikon fra https://developer.microsoft.com/en-us/fabric#/styles/icons</value>
+    <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
   </data>
   <data name="SiteFields_GtPortfolioColumn_Description" xml:space="preserve">
     <value></value>
   </data>
   <data name="SiteFields_GtPortfolioColumns_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtProjectContentColumns_Description" xml:space="preserve">
     <value></value>
   </data>
   <data name="SiteFields_GtPortfolioIsDefaultView_Description" xml:space="preserve">
@@ -1337,12 +1430,18 @@
     <value>Internt feltnavn for denne kolonnen.</value>
   </data>
   <data name="SiteFields_GtSearchQuery_Description" xml:space="preserve">
-    <value></value>
+    <value>Søkespørringen for å hente data. DepartmentId refererer til Prosjektportalen-huben og bør ikke endres. ContentTypeId refererer til innholdstypen til dataelementet du vil hente. Gå til Datakilder-listen for å se eksempler.</value>
   </data>
   <data name="SiteFields_GtPortfolioRefiners_Description" xml:space="preserve">
     <value></value>
   </data>
+  <data name="SiteFields_GtProjectContentRefiners_Description" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="SiteFields_GtPortfolioGroupBy_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtProjectContentGroupBy_Description" xml:space="preserve">
     <value></value>
   </data>
   <data name="SiteFields_GtLccDefault_Description" xml:space="preserve">
@@ -1502,7 +1601,7 @@
     <value></value>
   </data>
   <data name="SiteFields_GtPortfolioColumnIconName_Description" xml:space="preserve">
-    <value></value>
+    <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
   </data>
   <data name="SiteFields_GtLastSyncTime_Description" xml:space="preserve">
     <value></value>
@@ -1528,11 +1627,71 @@
   <data name="SiteFields_GtPermissionLevel_Description" xml:space="preserve">
     <value>Definerer rettighetsnivå på SharePoint-området til prosjektet.</value>
   </data>
+  <data name="SiteFields_GtLastReportDate_DisplayName" xml:space="preserve">
+    <value>Siste rapporteringsdato</value>
+  </data>
   <data name="SiteFields_GtLastReportDate_Description" xml:space="preserve">
     <value>Siste dato for publisert rapport.</value>
   </data>
-  <data name="SiteFields_GtLastReportDate_DisplayName" xml:space="preserve">
-    <value>Siste rapporteringsdato</value>
+  <data name="SiteFields_GtSiteIdLookup_DisplayName" xml:space="preserve">
+    <value>Prosjekttilknytning</value>
+  </data>
+  <data name="SiteFields_GtSiteIdLookup_Description" xml:space="preserve">
+    <value>Hvilket prosjekt er elementet knyttet til?</value>
+  </data>
+  <data name="SiteFields_GtTag_DisplayName" xml:space="preserve">
+    <value>Etikett</value>
+  </data>
+  <data name="SiteFields_GtTag_Description" xml:space="preserve">
+    <value>Hvilken etikett ønsker du å sette på tidslinje elementet</value>
+  </data>
+  <data name="SiteFields_GtTimelineTypeLookup_DisplayName" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="SiteFields_GtTimelineTypeLookup_Description" xml:space="preserve">
+    <value>Hva slags type tidslinje element er dette?</value>
+  </data>
+  <data name="SiteFields_GtElementType_DisplayName" xml:space="preserve">
+    <value>Elementtype</value>
+  </data>
+  <data name="SiteFields_GtElementType_Description" xml:space="preserve">
+    <value>Hva slags element type/form skal denne ha?</value>
+  </data>
+  <data name="SiteFields_GtHexColor_DisplayName" xml:space="preserve">
+    <value>Farge (hexadesimal verdi)</value>
+  </data>
+  <data name="SiteFields_GtHexColor_Description" xml:space="preserve">
+    <value>Hva er fargen for elementet (hexadesimal verdi)?</value>
+  </data>
+  <data name="SiteFields_GtShowElementPortfolio_DisplayName" xml:space="preserve">
+    <value>Vis på portefølje</value>
+  </data>
+  <data name="SiteFields_GtShowElementPortfolio_Description" xml:space="preserve">
+    <value>Velg 'Ja' dersom elementet skal synliggjøes i på porteføljetidslinjen</value>
+  </data>
+  <data name="SiteFields_GtShowElementProgram_DisplayName" xml:space="preserve">
+    <value>Vis på program</value>
+  </data>
+  <data name="SiteFields_GtShowElementProgram_Description" xml:space="preserve">
+    <value>Velg 'Ja' dersom elementet skal synliggjøes i på programtidslinjen</value>
+  </data>
+  <data name="SiteFields_GtTimelineFilter_DisplayName" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="SiteFields_GtTimelineFilter_Description" xml:space="preserve">
+    <value>Velg 'Ja' dersom elementet skal være filtrerbart i tidslinjen</value>
+  </data>
+  <data name="SiteFields_GtTimelineCategory_DisplayName" xml:space="preserve">
+    <value>Kategori</value>
+  </data>
+  <data name="SiteFields_GtTimelineCategory_Description" xml:space="preserve">
+    <value>Velg kategori for å kategorisere tidslinjeelementer</value>
+  </data>
+  <data name="SiteFields_GtODataQuery_DisplayName" xml:space="preserve">
+    <value>Prosjekt OData-spørring</value>
+  </data>
+  <data name="SiteFields_GtODataQuery_Description" xml:space="preserve">
+    <value>OData-spørring for å filtrere datakilden mot prosjekter. Spørringen brukes mot Prosjekter-listen for å kun vise data fra et utvalg prosjekter. Eksempel: GtProjectPhaseText eq 'Konsept' vil kun returnere data fra prosjekter i konsept-fasen.</value>
   </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>

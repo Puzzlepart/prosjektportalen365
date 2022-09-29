@@ -1,0 +1,14 @@
+<pnp:ContentType ID="0x01006EE320A23C8F4A6C83F3E36A19F076B9" Name="{resource:ContentTypes_Timeline_Element_Name}" Description="{resource:ContentTypes_Timeline_Element_Description}" Group="{resource:ContentTypes_Group}"
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    <pnp:FieldRefs>
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
+        <pnp:FieldRef ID="70623c36-8abd-4430-93ff-9b6172022dde" Name="GtTimelineTypeLookup" Required="true" />
+        <pnp:FieldRef ID="e39c32db-a7da-4c93-9369-8aa5a7bde92d" Name="GtStartDate" />
+        <pnp:FieldRef ID="16623c2a-3fd1-41c2-87e7-958583dd88da" Name="GtEndDate" />
+        <pnp:FieldRef ID="28be4cc9-bc5e-4a55-a557-f652b564ca75" Name="GtBudgetTotal" />
+        <pnp:FieldRef ID="5af54348-bc38-4a18-a11f-0f84a96da4ea" Name="GtCostsTotal" />
+        <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" />
+        <pnp:FieldRef ID="4d342fb6-a0e0-4064-b794-c1d36c922997" Name="GtTag" />
+        <pnp:FieldRef ID="3af32c1e-ff08-4bb4-8fb6-9ed5048a5fa0" Name="GtSiteIdLookup" />
+    </pnp:FieldRefs>
+</pnp:ContentType>

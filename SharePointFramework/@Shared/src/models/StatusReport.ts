@@ -10,16 +10,20 @@ export class StatusReport {
   public id: number
   public created: Date
   public defaultEditFormUrl: string
+  public modified: Date
+  public publishedDate: Date
 
   /**
    * Creates a new instance of StatusReport
    *
-   * @param {TypedHash} item SP item
-   * @param {string} _publishedString Published string
+   * @param _item - SP item
+   * @param _publishedString Published string
    */
   constructor(private _item: TypedHash<any>, private _publishedString?: string) {
     this.id = _item.Id
     this.created = new Date(_item.Created)
+    this.modified = new Date(_item.Modified)
+    this.publishedDate = _item.GtLastReportDate ? new Date(_item.GtLastReportDate) : null
   }
 
   public setDefaultEditFormUrl(defaultEditFormUrl: string) {
@@ -30,7 +34,7 @@ export class StatusReport {
   /**
    * Get url for the report page
    *
-   * @param {string} urlSourceParam Source param
+   * @param urlSourceParam - URL source param
    */
   public url(urlSourceParam: string) {
     return `SitePages/Prosjektstatus.aspx?selectedReport=${this.id}&Source=${encodeURIComponent(
@@ -106,7 +110,7 @@ export class StatusReport {
   /**
    * Get status values from item
    *
-   * @param {string} fieldName Field name
+   * @param fieldName - Field name
    */
   public getStatusValue(fieldName: string): { value: string; comment: string } {
     return { value: this._item[fieldName], comment: this._item[`${fieldName}Comment`] }
@@ -122,7 +126,7 @@ export class StatusReport {
       '?ID=',
       this.id,
       '&Source=',
-      encodeURIComponent(window.location.href)
+      encodeURIComponent(`${window.location.origin}${window.location.pathname}`)
     ].join('')
   }
 }

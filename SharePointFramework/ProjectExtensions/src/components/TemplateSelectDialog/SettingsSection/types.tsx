@@ -9,8 +9,8 @@ export interface ISettingsSectionProps {
   /**
    * On setting change
    *
-   * @param {string} key Key
-   * @param {string} bool Bool
+   * @param key Key
+   * @param bool Bool
    */
   onChange: (key: string, bool: boolean) => void
 }

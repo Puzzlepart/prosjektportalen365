@@ -18,9 +18,9 @@ export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
   /**
    * On input change
    *
-   * @param {React.FormEvent} event Event
-   * @param {string} newValue New value
-   * @param {number} resolveDelay Resolve delay in ms
+   * @param event Event
+   * @param newValue New value
+   * @param resolveDelay Resolve delay in ms
    */
   function onInputChange(
     event: FormEvent<HTMLInputElement | HTMLTextAreaElement>,

@@ -1,14 +1,11 @@
 'use strict'
-const fs = require('fs')
 const path = require('path')
 const gulp = require('gulp')
 const build = require('@microsoft/sp-build-web')
 const tsConfig = require('./tsconfig.json')
-const find = require('find')
 const WebpackBar = require('webpackbar')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const os = require('os')
-const argv = require('yargs').argv
 const log = require('@microsoft/gulp-core-build').log
 const colors = require("colors")
 
@@ -25,22 +22,6 @@ try {
 } catch (error) {
     log(`Missing '${colors.cyan('./build.config.json')}'. Using defaults...`)
 }
-
-gulp.task('versionSync', (done) => {
-    find.file(/\manifest.json$/, path.join(__dirname, "src"), (files) => {
-        var pkgSolution = require('./config/package-solution.json')
-        var newVersionNumber = require('./package.json').version.split('-')[0]
-        pkgSolution.solution.version = newVersionNumber + '.0'
-        fs.writeFile('./config/package-solution.json', JSON.stringify(pkgSolution, null, 4), (_error) => { })
-        for (let i = 0; i < files.length; i++) {
-            let manifest = require(files[i])
-            manifest.version = newVersionNumber
-            log(`[${colors.cyan('versionSync')}] Setting ${colors.cyan('version')} to ${colors.cyan(newVersionNumber)} for ${colors.cyan(manifest.alias)}...`)
-            fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => { })
-        }
-        done()
-    })
-})
 
 build.configureWebpack.mergeConfig({
     additionalConfiguration: (webpack) => {

@@ -5,22 +5,20 @@ import { ProjectTemplate } from '../../../models'
 import { ITemplateSelectorProps } from './types'
 import styles from './TemplateSelector.module.scss'
 
-export const TemplateSelector = (props: ITemplateSelectorProps) => {
+export const TemplateSelector: React.FunctionComponent<ITemplateSelectorProps> = (props) => {
   /**
    * On template selected
    *
-   * @param opt - Option
-   * @param _idx - Index
+   * @param {ProjectTemplate} opt Option
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onTemplateSelected = (opt: ProjectTemplate, _idx: number): void => {
+  const onTemplateSelected = (opt: ProjectTemplate): void => {
     props.onChange(opt)
   }
 
   /**
    * On render option
    *
-   * @param {ProjectTemplate} opt Option
+   * @param opt Option
    */
   const onRenderOption = (option: ProjectTemplate): JSX.Element => {
     return (
@@ -40,7 +38,7 @@ export const TemplateSelector = (props: ITemplateSelectorProps) => {
     <div className={styles.templateSelector}>
       <div className={styles.dropdown}>
         <Dropdown
-          disabled={props.templates.length <= 1}
+          disabled={props.templates?.length <= 1}
           defaultSelectedKey={props.selectedTemplate.key}
           onChanged={onTemplateSelected}
           options={props.templates}

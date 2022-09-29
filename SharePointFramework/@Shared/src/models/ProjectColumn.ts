@@ -4,29 +4,17 @@ import { ProjectColumnConfigDictionary, ProjectColumnConfig } from './ProjectCol
 import { SearchValueType } from '../types/SearchValueType'
 
 export class SPProjectColumnItem {
-  // tslint:disable-next-line:naming-convention
   public Id: number = 0
-  // tslint:disable-next-line:naming-convention
   public Title: string = ''
-  // tslint:disable-next-line:naming-convention
   public GtSortOrder: number = 0
-  // tslint:disable-next-line:naming-convention
   public GtInternalName: string = ''
-  // tslint:disable-next-line:naming-convention
   public GtManagedProperty: string = ''
-  // tslint:disable-next-line:naming-convention
   public GtShowFieldProjectStatus: boolean = false
-  // tslint:disable-next-line:naming-convention
   public GtShowFieldFrontpage: boolean = false
-  // tslint:disable-next-line:naming-convention
   public GtShowFieldPortfolio: boolean = false
-  // tslint:disable-next-line:naming-convention
   public GtFieldDataType: string = ''
-  // tslint:disable-next-line:naming-convention
   public GtColMinWidth: number = 0
-  // tslint:disable-next-line:naming-convention
   public GtIsRefinable: boolean = false
-  // tslint:disable-next-line:naming-convention
   public GtIsGroupable: boolean = false
 }
 
@@ -53,13 +41,13 @@ export class ProjectColumn implements IColumn {
   constructor(private _item?: SPProjectColumnItem) {
     if (_item) {
       this.id = _item.Id
-      this.fieldName = _item.GtManagedProperty
+      this.fieldName = _item.GtManagedProperty || _item.GtInternalName
       this.key = _item.GtManagedProperty
       this.name = _item.Title
       this.sortOrder = _item.GtSortOrder
       this.internalName = _item.GtInternalName
-      this.dataType = _item.GtFieldDataType.toLowerCase()
-      this.isMultiline = this.dataType === 'note'
+      this.dataType = _item.GtFieldDataType && _item.GtFieldDataType.toLowerCase()
+      this.isMultiline = this.dataType === 'note' || this.dataType === 'tags'
       this.isRefinable = _item.GtIsRefinable
       this.isGroupable = _item.GtIsGroupable
       this.isResizable = true
@@ -82,12 +70,12 @@ export class ProjectColumn implements IColumn {
   /**
    * Creates a new ProjectColumn
    *
-   * @param {string} key Key
-   * @param {string} fieldName Field name
-   * @param {string} name Name
-   * @param {string} iconName Icon name
-   * @param {any} onColumnClick On column click
-   * @param {number} minWidth Min width
+   * @param key Key
+   * @param fieldName Field name
+   * @param name Name
+   * @param iconName Icon name
+   * @param onColumnClick On column click
+   * @param minWidth Min width
    */
   public create(
     key: string,
@@ -119,7 +107,7 @@ export class ProjectColumn implements IColumn {
   /**
    * Get search type from field name
    *
-   * @param {string} fieldName Field name
+   * @param fieldName Field name
    */
   private _getSearchType?(fieldName: string): SearchValueType {
     if (fieldName.indexOf('owsdate') !== -1) {

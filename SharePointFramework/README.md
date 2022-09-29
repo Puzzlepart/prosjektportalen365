@@ -2,7 +2,7 @@
 
 _Due to the number of components, we decided to separate the components into 3 different solutions._
 
-## [@Shared](./@Shared/README.md) [![version](https://img.shields.io/badge/version-1.2.9-yellow.svg)](https://semver.org)
+## [@Shared](./@Shared/README.md)
 
 Shared code for the SharePoint Framework solutions in PP365.
 
@@ -10,7 +10,7 @@ Build by `npm` script `build` and watch changes with `watch`.
 
 _Published to **npm** as `pp365-shared`_
 
-## [PortfolioWebParts](./PortfolioWebParts/README.md) [![version](https://img.shields.io/badge/version-1.2.6-yellow.svg)](https://semver.org)
+## [PortfolioWebParts](./PortfolioWebParts/README.md)
 
 | Solution name            | ID                                   |
 | ------------------------ | ------------------------------------ |
@@ -24,9 +24,9 @@ Build by `npm` script `package`.
 
 To package and deploy directly to SharePoint, see `2. Build, package and deploy`.
 
-_Published to **npm** as `pp365-projectwebparts`
+_Published to **npm** as `pp365-projectwebparts`_
 
-## [ProjectExtensions](./ProjectExtensions/README.md) [![version](https://img.shields.io/badge/version-1.2.6-yellow.svg)](https://semver.org)
+## [ProjectExtensions](./ProjectExtensions/README.md)
 
 | Solution name          | ID                                   |
 | ---------------------- | ------------------------------------ |
@@ -42,7 +42,7 @@ To package and deploy directly to SharePoint, see `2. Build, package and deploy`
 
 _Published to **npm** as `pp365-projectextensions`_
 
-## [ProjectWebParts](./ProjectWebParts/README.md) [![version](https://img.shields.io/badge/version-1.2.9-yellow.svg)](https://semver.org)
+## [ProjectWebParts](./ProjectWebParts/README.md)
 
 | Solution name          | ID                                   |
 | ---------------------- | ------------------------------------ |
@@ -77,6 +77,7 @@ _Published to **npm** as `pp365-projectwebparts`_`_
 | ProjectPhasesWebPart        | 4449d3dc-fa58-4982-b87c-5a893114e7b7 |     | ProjectWebParts   |
 | ProjectStatusWebPart        | 681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6 |     | ProjectWebParts   |
 | RiskMatrixWebPart           | e536ae15-0748-4d96-b160-3abb30f1b71e |     | ProjectWebParts   |
+| ProjectTimelineWebPart      | d156652b-9121-47af-89ae-1fe8427c53da |     | ProjectWebParts   |
 
 # 3. Build, package and deploy
 
@@ -88,10 +89,7 @@ To work with the various solutions, you have to to the following
 2. Build the Shared solution. Navigate to "@Shared" and run `pnpm i --shamefully-hoist` followed by `pnpm run-script build`
 3. Navigate to [ProjectWebParts](./ProjectWebParts) and run `npm i` followed by `pnpm run-script package`
 4. Navigate to [PortfolioWebParts](./PortfolioWebParts) and run `npm i` followed by `pnpm run-script package`
-5. Navigate to [ProjectExtensions](./ProjectExtensions) and run `npm i` followed by `pnpm run-script package`
+5. Navigate to [ProjectExtensions](./ProjectExtensions) and run `npm i` followed by `pnpm r
 
-## Package and deploy
-
-To be able to `package` and `deploy` directly you need to create a file `env.json` under `SharePointFramework/{solution}/config`. Take a look at `SharePointFramework/{solution}/config/env.sample.json`.
-
-When `env.json` is filled out and ready to go you can run the `npm` script `package-deploy`.
+# 4. Versioning
+Never update the version of the solutions independently. The version is automatically kept in sync with the other packages.

@@ -1,4 +1,4 @@
-import { UserMessage } from 'components/UserMessage'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { Shimmer } from 'office-ui-fabric-react/lib/Shimmer'
 import * as strings from 'ProjectWebPartsStrings'
@@ -26,7 +26,7 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
   const [state, dispatch] = useReducer(reducer, initState())
 
   useEffect(() => {
-    fetchData(props.phaseField).then((data) => dispatch(INIT_DATA({ data })))
+    fetchData(props).then((data) => dispatch(INIT_DATA({ data })))
   }, [])
 
   if (state.hidden) return null
@@ -46,13 +46,25 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
    */
   const onChangePhase = async () => {
     dispatch(INIT_CHANGE_PHASE())
-    await changePhase(state.confirmPhase, state.data.phaseTextField, props.currentPhaseViewName)
+    await changePhase(
+      state.confirmPhase,
+      state.data.phaseTextField,
+      props,
+      state.data.phaseSitePages
+    )
     dispatch(SET_PHASE({ phase: state.confirmPhase }))
     if (
       props.syncPropertiesAfterPhaseChange === undefined ||
       props.syncPropertiesAfterPhaseChange
     ) {
-      setTimeout(() => (document.location.href = `${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`), 1000)
+      const currentUrlIsPageRelative = document.location.pathname.indexOf(state.data.welcomepage) > -1
+      const welcomepage = !currentUrlIsPageRelative ? `${document.location.pathname}/${state.data.welcomepage}` : document.location.pathname
+      setTimeout(() => {
+        window.location.assign(`${document.location.protocol}//${document.location.hostname}${welcomepage}#syncproperties=1`)
+        if (currentUrlIsPageRelative) {
+          window.location.reload()
+        } 
+      }, 1000)
     }
   }
 

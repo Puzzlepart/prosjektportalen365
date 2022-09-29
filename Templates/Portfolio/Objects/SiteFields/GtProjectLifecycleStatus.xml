@@ -2,6 +2,7 @@
     <Default>Aktivt</Default>
     <CHOICES>
         <CHOICE>Aktivt</CHOICE>
+        <CHOICE>Avventer</CHOICE>
         <CHOICE>Avsluttet</CHOICE>
     </CHOICES>
 </Field>

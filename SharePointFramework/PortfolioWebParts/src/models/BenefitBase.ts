@@ -6,6 +6,7 @@ export class BenefitBase {
   public Id: number
   public Title: string
   public SiteId: string
+  public Properties: any
 
   constructor(result: IBenefitsSearchResult) {
     this.SiteTitle = result.SiteTitle
@@ -13,5 +14,6 @@ export class BenefitBase {
     this.Id = parseInt(result.ListItemId, 10)
     this.Title = result.Title
     this.SiteId = result.SiteId
+    this.Properties = result
   }
 }

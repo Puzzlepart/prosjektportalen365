@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { IStatusSectionFieldProps } from './types'
 import styles from './StatusSectionField.module.scss'
 

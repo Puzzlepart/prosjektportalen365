@@ -3,13 +3,13 @@
   "compilerOptions": {
     "target": "es5",
     "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
     "module": "esnext",
     "moduleResolution": "node",
     "jsx": "react",
     "declaration": true,
     "sourceMap": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "outDir": "lib",
     "inlineSources": false,
@@ -45,5 +45,8 @@
     "src/**/*.ts",
     "src/**/*.tsx"
   ],
-  "exclude": []
+  "exclude": [
+    "node_modules",
+    "lib"
+  ]
 }
