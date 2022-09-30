@@ -93,9 +93,10 @@ function EnsureResourceLoadIsSiteColumn($Url) {
     }
 }
 
+
 function UpgradeSite($Url) {
-    EnsureProjectTimelinePage -Url $Url
-    EnsureResourceLoadIsSiteColumn -Url $Url
+        EnsureProjectTimelinePage -Url $Url
+        EnsureResourceLoadIsSiteColumn -Url $Url
 }
 
 Write-Host "This script will update all existing sites in a Prosjektportalen installation. This requires you to have the SharePoint admin role"

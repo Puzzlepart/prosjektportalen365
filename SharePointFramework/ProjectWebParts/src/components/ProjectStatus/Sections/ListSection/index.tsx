@@ -5,7 +5,8 @@ import {
   IColumn,
   SelectionMode
 } from 'office-ui-fabric-react/lib/DetailsList'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { getObjectValue } from 'pp365-shared/lib/helpers'
 import * as strings from 'ProjectWebPartsStrings'
 import React from 'react'
@@ -57,9 +58,10 @@ export class ListSection extends BaseSection<
     }
     if (this.state.error) {
       return (
-        <MessageBar messageBarType={MessageBarType.error}>
-          {strings.ListSectionDataErrorMessage}
-        </MessageBar>
+        <UserMessage
+          text={strings.ListSectionDataErrorMessage}
+          type={MessageBarType.error}
+        />
       )
     }
     return (

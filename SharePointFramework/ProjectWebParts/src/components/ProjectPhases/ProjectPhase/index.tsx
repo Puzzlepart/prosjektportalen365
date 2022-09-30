@@ -22,12 +22,12 @@ export const ProjectPhase = ({ phase, isCurrentPhase, onOpenCallout }: IProjectP
           <span
             className={styles.phaseLetter}
             ref={targetRef}
-            onMouseOver={() => onOpenCallout(targetRef.current, phase)}>
+            onClick={() => onOpenCallout(targetRef.current, phase)}>
             {phase.letter}
           </span>
           <span
             className={styles.phaseText}
-            onMouseOver={() => onOpenCallout(targetRef.current, phase)}>
+            onClick={() => onOpenCallout(targetRef.current, phase)}>
             {phase.name}
           </span>
           <div

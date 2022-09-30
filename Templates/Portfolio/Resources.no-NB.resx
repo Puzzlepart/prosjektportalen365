@@ -1639,6 +1639,12 @@
   <data name="SiteFields_GtSiteIdLookup_Description" xml:space="preserve">
     <value>Hvilket prosjekt er elementet knyttet til?</value>
   </data>
+  <data name="SiteFields_GtTag_DisplayName" xml:space="preserve">
+    <value>Etikett</value>
+  </data>
+  <data name="SiteFields_GtTag_Description" xml:space="preserve">
+    <value>Hvilken etikett ønsker du å sette på tidslinje elementet</value>
+  </data>
   <data name="SiteFields_GtTimelineTypeLookup_DisplayName" xml:space="preserve">
     <value>Type</value>
   </data>
@@ -1675,11 +1681,17 @@
   <data name="SiteFields_GtTimelineFilter_Description" xml:space="preserve">
     <value>Velg 'Ja' dersom elementet skal være filtrerbart i tidslinjen</value>
   </data>
+  <data name="SiteFields_GtTimelineCategory_DisplayName" xml:space="preserve">
+    <value>Kategori</value>
+  </data>
+  <data name="SiteFields_GtTimelineCategory_Description" xml:space="preserve">
+    <value>Velg kategori for å kategorisere tidslinjeelementer</value>
+  </data>
   <data name="SiteFields_GtODataQuery_DisplayName" xml:space="preserve">
     <value>Prosjekt OData-spørring</value>
   </data>
   <data name="SiteFields_GtODataQuery_Description" xml:space="preserve">
-    <value>OData-spørring for å filtrere datakilden mot prosjekter. Spørringen brukes mot Prosjekter-listen for å kun vise data fra et utvalg prosjekter. Eksempel: "GtProjectPhaseText eq 'Konsept'" vil kun returnere data fra prosjekter i konsept-fasen.</value>
+    <value>OData-spørring for å filtrere datakilden mot prosjekter. Spørringen brukes mot Prosjekter-listen for å kun vise data fra et utvalg prosjekter. Eksempel: GtProjectPhaseText eq 'Konsept' vil kun returnere data fra prosjekter i konsept-fasen.</value>
   </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>

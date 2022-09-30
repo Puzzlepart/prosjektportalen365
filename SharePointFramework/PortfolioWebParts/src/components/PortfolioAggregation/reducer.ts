@@ -88,7 +88,11 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
   filters: [],
   items: [],
   columns: props.columns || [],
+<<<<<<< HEAD
   dataSource: first(props.configuration.views)?.title || props.dataSource,
+=======
+  dataSource: props.configuration === null ? props.dataSource : first(props.configuration.views)?.title || props.dataSource,
+>>>>>>> 5b6e1dbf2da91234d4f1d2a0f0f7c775257940e6
   dataSources: [],
   groups: null,
   addColumnPanel: { isOpen: false },

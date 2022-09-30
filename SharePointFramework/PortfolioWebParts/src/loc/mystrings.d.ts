@@ -77,6 +77,7 @@ declare interface IPortfolioWebPartsStrings {
   DeliveryStatusCommentLabel: string
   DeliveryStatusLabel: string
   DescriptionFieldLabel: string
+  TagFieldLabel: string
   DesiredValueLabel: string
   EditViewText: string
   ErrorText: string
@@ -118,7 +119,9 @@ declare interface IPortfolioWebPartsStrings {
   PropertyPaneDescription: string
   RecommendationLabel: string
   ProjectTimelineInfoText: string
+  ProjectTimelineErrorTransformItemText: string
   ResourceAllocationInfoText: string
+  ResourceAllocationErrorTransformGroupText: string
   ResourceLabel: string
   ResponsibleLabel: string
   RoleLabel: string

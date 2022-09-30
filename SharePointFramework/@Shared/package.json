@@ -3,7 +3,7 @@
   "engines": {
     "node": "^12"
   },
-  "version": "1.6.1",
+  "version": "1.6.1-743.7",
   "description": "Shared utilities, helpers and models",
   "main": "lib/index.js",
   "scripts": {
@@ -33,7 +33,8 @@
     "office-ui-fabric-react": "6.214.0",
     "react": "16.8.5",
     "react-dom": "16.8.5",
-    "react-markdown": "^4.2.2",
+    "react-markdown": "^8.0.3",
+    "rehype-raw": "^6.1.1",
     "scriptjs": "^2.5.9",
     "sp-entityportal-service": "1.3.3",
     "sp-hubsite-service": "0.7.1",
@@ -60,6 +61,6 @@
     "eslint-plugin-react": "7.22.0",
     "eslint-plugin-unused-imports": "1.1.0",
     "prettier": "^2.1.1",
-    "typescript": "~3.3.x"
+    "typescript": "3.9.x"
   }
 }

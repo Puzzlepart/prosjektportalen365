@@ -1,11 +1,11 @@
 import SPDataAdapter from 'data'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react'
+import { MessageBarType } from 'office-ui-fabric-react'
 import Dialog, { DialogType } from 'office-ui-fabric-react/lib/Dialog'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { useContext, useEffect, useReducer } from 'react'
-import * as ReactMarkdown from 'react-markdown/with-html'
 import _ from 'underscore'
 import { ProjectPhasesContext } from '../context'
 import { DISMISS_CHANGE_PHASE_DIALOG } from '../reducer'
@@ -59,20 +59,17 @@ export const ChangePhaseDialog = () => {
         onDismiss={() => context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())}>
         {state.view === View.Confirm && context.props.useDynamicHomepage && (
           <div className={styles.dynamicHomepageContent}>
-            <MessageBar
-              messageBarType={phaseSitePage ? MessageBarType.info : MessageBarType.warning}>
-              <ReactMarkdown
-                escapeHtml={false}
-                source={
-                  phaseSitePage
-                    ? format(
-                        strings.PhaseSitePageFoundDescription,
-                        phaseSitePage && phaseSitePage.fileLeafRef
-                      )
-                    : format(strings.PhaseSitePageNotFoundDescription, confirmPhaseName)
-                }
-              />
-            </MessageBar>
+            <UserMessage
+              text={
+                phaseSitePage
+                  ? format(
+                    strings.PhaseSitePageFoundDescription,
+                    phaseSitePage && phaseSitePage.fileLeafRef
+                  )
+                  : format(strings.PhaseSitePageNotFoundDescription, confirmPhaseName)
+              }
+              type={phaseSitePage ? MessageBarType.info : MessageBarType.warning}
+            />
           </div>
         )}
         <Body />

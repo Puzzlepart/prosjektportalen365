@@ -54,7 +54,7 @@ export const TargetFolderScreen = () => {
         setFolder={setFolder}
       />
       <DetailsList
-        items={folders.sort((a, b) => (a.name > b.name ? 1 : -1)) }
+        items={folders.sort((a, b) => (a.name > b.name ? 1 : -1))}
         columns={columns()}
         selectionMode={SelectionMode.none}
         layoutMode={DetailsListLayoutMode.justified}

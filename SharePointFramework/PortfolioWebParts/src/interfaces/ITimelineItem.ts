@@ -12,6 +12,7 @@ export interface IItemData {
   hexColor?: string
   elementType?: string
   filter?: boolean
+  tag?: string
 }
 export interface ITimelineItem {
   id: number

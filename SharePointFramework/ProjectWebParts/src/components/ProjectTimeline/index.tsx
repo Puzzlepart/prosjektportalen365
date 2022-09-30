@@ -14,7 +14,7 @@ import {
   Selection,
   SelectionMode
 } from 'office-ui-fabric-react/lib/DetailsList'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import {
   FilterPanel,
@@ -24,6 +24,7 @@ import {
 import { DetailsCallout } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/DetailsCallout'
 import { Timeline } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/Timeline'
 import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { tryParseCurrency } from 'pp365-shared/lib/helpers'
 import * as strings from 'ProjectWebPartsStrings'
 import React from 'react'
@@ -82,17 +83,22 @@ export class ProjectTimeline extends BaseWebPartComponent<
 
   public render(): React.ReactElement<IProjectTimelineProps> {
     if (this.state.loading) return null
+
     if (this.state.error) {
       return (
         <div className={styles.root}>
           <div className={styles.container}>
-            <MessageBar messageBarType={MessageBarType.error}>{this.state.error}</MessageBar>
+            <UserMessage
+              text={this.state.error}
+              type={MessageBarType.error}
+            />
           </div>
         </div>
       )
     }
 
     const { groups, items } = this._getFilteredData()
+
     return (
       <div className={styles.root}>
         <div className={styles.container}>
@@ -108,17 +114,16 @@ export class ProjectTimeline extends BaseWebPartComponent<
           )}
           {this.props.showInfoMessage && (
             <div className={styles.infoText}>
-              <MessageBar>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: format(
-                      this.props.infoText
-                        ? this.props.infoText
-                        : strings.ProjectTimelineListInfoText,
-                      encodeURIComponent(window.location.href)
-                    )
-                  }}></div>
-              </MessageBar>
+              <UserMessage
+                text={format(
+                  this.props.infoText
+                    ? this.props.infoText
+                    : strings.ProjectTimelineListInfoText,
+                  encodeURIComponent(window.location.href)
+                )}
+                type={MessageBarType.info}
+                isCompact
+              />
             </div>
           )}
           {this.props.showTimeline && (
@@ -155,6 +160,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
           headerText={strings.FilterText}
           filters={this._getFilters()}
           onFilterChange={this._onFilterChange.bind(this)}
+          isLightDismiss
           onDismiss={() => this.setState({ showFilterPanel: false })}
         />
         {this.state.showDetails && (
@@ -223,7 +229,9 @@ export class ProjectTimeline extends BaseWebPartComponent<
    */
   private _getFilters(): IFilterProps[] {
     const config = this.state.timelineConfiguration
-    const columns = [{ fieldName: 'data.type', name: strings.TypeLabel }]
+    const columns = [
+      { fieldName: 'data.type', name: strings.TypeLabel },
+      { fieldName: 'data.tag', name: strings.TagFieldLabel }]
     const hiddenItems = (config.filter((item) => !item?.GtTimelineFilter)).map((item) => item.Title)
 
     return columns.map((col) => ({
@@ -446,10 +454,6 @@ export class ProjectTimeline extends BaseWebPartComponent<
               config && config.GtTimelineFilter || true,
               item.GtDeliveryStartTime,
               item.GtDeliveryEndTime,
-              null,
-              null,
-              null,
-              null,
               item.GtDeliveryDescription
             )
             return model
@@ -542,6 +546,8 @@ export class ProjectTimeline extends BaseWebPartComponent<
             config && config.GtTimelineFilter,
             item.GtStartDate,
             item.GtEndDate,
+            item.GtDescription,
+            item.GtTag,
             item.GtBudgetTotal,
             item.GtCostsTotal
           )
@@ -630,50 +636,70 @@ export class ProjectTimeline extends BaseWebPartComponent<
   private _transformItems(
     timelineItems: TimelineContentListModel[]
   ): ITimelineItem[] {
-    const items: ITimelineItem[] = timelineItems.map((item, id) => {
-      const style: React.CSSProperties = {
-        color: 'white',
-        border: 'none',
-        cursor: 'auto',
-        outline: 'none',
-        background:
-          item.elementType !== strings.BarLabel
-            ? 'transparent'
-            : item.hexColor || '#f35d69',
-        backgroundColor:
-          item.elementType !== strings.BarLabel
-            ? 'transparent'
-            : item.hexColor || '#f35d69'
-      }
-      return {
-        id,
-        group: 0,
-        title:
-          item.type === strings.ProjectLabel
-            ? format(strings.ProjectTimelineItemInfo, item.title)
-            : item.itemTitle,
-        start_time:
-          item.elementType !== strings.BarLabel
-            ? moment(new Date(item.endDate))
-            : moment(new Date(item.startDate)),
-        end_time: moment(new Date(item.endDate)),
-        itemProps: { style },
-        project: item.title,
-        projectUrl: item.url,
-        data: {
-          phase: item.phase,
-          description: item.description,
-          type: item.type,
-          budgetTotal: item.budgetTotal,
-          costsTotal: item.costsTotal,
-          sortOrder: item.sortOrder,
-          hexColor: item.hexColor,
-          elementType: item.elementType,
-          filter: item.timelineFilter
+    let _project: any
+    let _siteId: any
+    let _itemTitle: any
+    try {
+      const items: ITimelineItem[] = timelineItems.map((item, id) => {
+        _project = item.title
+        _itemTitle = item.itemTitle
+        _siteId = item.siteId || 'N/A'
+
+        const style: React.CSSProperties = {
+          color: 'white',
+          border: 'none',
+          cursor: 'auto',
+          outline: 'none',
+          background:
+            item.elementType !== strings.BarLabel
+              ? 'transparent'
+              : item.hexColor || '#f35d69',
+          backgroundColor:
+            item.elementType !== strings.BarLabel
+              ? 'transparent'
+              : item.hexColor || '#f35d69'
         }
-      } as ITimelineItem
-    })
-    return items
+        return {
+          id,
+          group: 0,
+          title:
+            item.type === strings.ProjectLabel
+              ? format(strings.ProjectTimelineItemInfo, item.title)
+              : item.itemTitle,
+          start_time:
+            item.elementType !== strings.BarLabel
+              ? moment(new Date(item.endDate))
+              : moment(new Date(item.startDate)),
+          end_time: moment(new Date(item.endDate)),
+          itemProps: { style },
+          project: item.title,
+          projectUrl: item.url,
+          data: {
+            phase: item.phase,
+            description: item.description,
+            type: item.type,
+            budgetTotal: item.budgetTotal,
+            costsTotal: item.costsTotal,
+            sortOrder: item.sortOrder,
+            hexColor: item.hexColor,
+            elementType: item.elementType,
+            filter: item.timelineFilter,
+            tag: item.tag
+          }
+        } as ITimelineItem
+      })
+      return items
+    } catch (error) {
+      throw new Error(
+        format(
+          strings.ProjectTimelineErrorTransformItemText,
+          _siteId,
+          _itemTitle ? `${_itemTitle} (${_project})` : _project,
+          error
+        )
+      )
+    }
+
   }
 
   /**
@@ -702,7 +728,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
             'GtShowElementPortfolio',
             'GtShowElementProgram',
             'GtTimelineFilter',
-        )
+          )
           .top(500)
           .get()
       ])
@@ -722,8 +748,14 @@ export class ProjectTimeline extends BaseWebPartComponent<
       }
 
     } catch (error) {
-      this.logError('Failed to retrieve data.', '_fetchData', error)
-      throw error
+      throw new Error(
+        format(
+          strings.ProjectTimelineErrorFetchText,
+          this.props.siteId,
+          this.props.webTitle,
+          error
+        )
+      )
     }
   }
 
@@ -735,7 +767,6 @@ export class ProjectTimeline extends BaseWebPartComponent<
   private async _fetchData(): Promise<[ITimelineData, any]> {
     try {
       const projectData = await this._fetchProjectData()
-
       const project = {
         siteId: this.props.siteId,
         groupId: this.props.siteId,

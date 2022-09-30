@@ -401,6 +401,8 @@ export class DataAdapter {
               config && config.GtTimelineFilter,
               item.GtStartDate,
               item.GtEndDate,
+              item.GtDescription,
+              item.GtTag,
               item.GtBudgetTotal,
               item.GtCostsTotal
             )
@@ -440,12 +442,18 @@ export class DataAdapter {
       this.fetchTimelineConfiguration()
     ])
 
-    const config: any = _.find(timelineConfig, (col) => col.Title === configItemTitle)
+    const config: any = _.find(timelineConfig, (col) => col.Title === (configItemTitle || 'Prosjektleveranse'))
 
     if (config && config.GtShowElementProgram) {
       const [projectDeliveries] = await Promise.all([
         this.configure().then((adapter) => {
-          return adapter.fetchItemsWithSource(dataSourceName, ['Title', 'GtDeliveryDescriptionOWSMTXT', 'GtDeliveryStartTimeOWSDATE', 'GtDeliveryEndTimeOWSDATE'], true)
+          return adapter.fetchItemsWithSource(dataSourceName || 'Alle prosjektleveranser',
+            [
+              'Title',
+              'GtDeliveryDescriptionOWSMTXT',
+              'GtDeliveryStartTimeOWSDATE',
+              'GtDeliveryEndTimeOWSDATE'],
+            true)
             .then((deliveries) => {
               return deliveries
             })
@@ -470,10 +478,6 @@ export class DataAdapter {
             config && config.GtTimelineFilter || true,
             item.GtDeliveryStartTimeOWSDATE,
             item.GtDeliveryEndTimeOWSDATE,
-            null,
-            null,
-            null,
-            null,
             item.GtDeliveryDescriptionOWSMTXT
           )
           return model
