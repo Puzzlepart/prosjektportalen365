@@ -1,11 +1,15 @@
-import { ChildProject } from 'models'
-import { IViewField, SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
+import { SelectionMode } from '@pnp/spfx-controls-react/lib/ListView';
 
 export interface IProjectTableProps {
-  selectionMode?: SelectionMode
-  title?: string
-  width?: string
-  projects: ChildProject[] | []
-  fields: IViewField[]
-  onSelect?: (items: any[]) => void
+  onSelectionChanged: (selected: any[]) => void;
+  items: any[];
+  fields: IListField[];
+  selectionMode: SelectionMode;
+}
+
+export interface IListField {
+  key: string | number;
+  text: string;
+  fieldName: string;
+  onRender?: (item: any, index: number, field: IListField) => JSX.Element;
 }
