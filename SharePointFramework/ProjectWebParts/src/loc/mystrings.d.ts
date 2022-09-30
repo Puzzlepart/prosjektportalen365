@@ -167,6 +167,10 @@ declare interface IProjectWebPartsStrings {
   ProjectDeliveriesGroupName: string
   UseIdeaProcessingFieldLabel: string
   UseIdeaProcessingCalloutText: string
+  IdeaProjectDataTitle: string
+  CancelText: string
+  SynchronizeProjectDataTitle: string
+  SynchronizeProjectDataDescription: string
   GroupLevelProject: string
   GroupLevelPortfolio: string
 }

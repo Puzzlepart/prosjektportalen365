@@ -2,6 +2,7 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
+import { sp } from '@pnp/sp'
 import { PnPClientStorage } from '@pnp/common'
 import { Web } from '@pnp/sp'
 import { taxonomy } from '@pnp/sp-taxonomy'
@@ -80,25 +81,53 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     progressFunc: (props: IProgressIndicatorProps) => void
   ): Promise<void> {
     try {
-      fieldValuesText = Object.keys(fieldValuesText).reduce(
-        (obj, key) => ({ ...obj, [key.replace(/_x005f_/gm, '_')]: fieldValuesText[key] }),
-        {}
-      )
       progressFunc({
         label: strings.SyncProjectPropertiesValuesProgressDescription,
         description: strings.SyncProjectPropertiesValuesProgressDescription
       })
+
+      const properties = await this.getMappedProjectProperties(fieldValues, fieldValuesText, templateParameters)
+      await this.entityService.updateEntityItem(this.settings.siteId, properties)
+      Logger.log({
+        message: `(${this._name}) (syncPropertyItemToHub) Successfully synced item to hub entity.`,
+        data: { properties },
+        level: LogLevel.Info
+      })
+    } catch (error) {
+      throw error
+    }
+  }
+
+  /**
+   * Sync project data from associated hub to site's property item
+   *
+   * @param {TypedHash} fieldValues - Field values for the properties item
+   * @param {TypedHash} fieldValuesText - Field values in text format for the properties item
+   * @param {TypedHash<any>} templateParameters - Template parameters
+   */
+  public async getMappedProjectProperties(
+    fieldValues: TypedHash<any>,
+    fieldValuesText: TypedHash<string>,
+    templateParameters: TypedHash<any>,
+    syncToProject: boolean = false
+  ): Promise<any> {
+    try {
+      fieldValuesText = Object.keys(fieldValuesText).reduce(
+        (obj, key) => ({ ...obj, [key.replace(/_x005f_/gm, '_')]: fieldValuesText[key] }),
+        {}
+      )
       const [fields, siteUsers] = await Promise.all([
         templateParameters.ProjectContentTypeId
           ? this.entityService
             .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
             .getEntityFields()
           : this.entityService.getEntityFields(),
-        this.sp.web.siteUsers.select('Id', 'Email', 'LoginName').get<
+        this.sp.web.siteUsers.select('Id', 'Email', 'LoginName', 'Title').get<
           {
             Id: number
             Email: string
             LoginName: string
+            Title: string
           }[]
         >()
       ])
@@ -110,32 +139,66 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         const fldValueTxt = fieldValuesText[fld.InternalName]
         switch (fld.TypeAsString) {
           case 'TaxonomyFieldType':
+            {
+              if (syncToProject) {
+                const term = { ...fldValue, Label: fldValueTxt }
+                properties[fld.InternalName] = term || null
+              } else {
+                let [textField] = fields.filter((f) => f.InternalName === `${fld.InternalName}Text`)
+                if (textField) properties[textField.InternalName] = fieldValuesText[fld.InternalName]
+                else {
+                  textField = find(fields, (f) => f.Id === fld.TextField)
+                  if (!textField) continue
+                  properties[textField.InternalName] = fieldValuesText[textField.InternalName]
+                }
+              }
+            }
+            break
           case 'TaxonomyFieldTypeMulti':
             {
-              let [textField] = fields.filter((f) => f.InternalName === `${fld.InternalName}Text`)
-              if (textField) properties[textField.InternalName] = fieldValuesText[fld.InternalName]
-              else {
-                textField = find(fields, (f) => f.Id === fld.TextField)
-                if (!textField) continue
-                properties[textField.InternalName] = fieldValuesText[textField.InternalName]
+              if (syncToProject) {
+                // TODO: See SyncProjectModal TODO
+              } else {
+                let [textField] = fields.filter((f) => f.InternalName === `${fld.InternalName}Text`)
+                if (textField) properties[textField.InternalName] = fieldValuesText[fld.InternalName]
+                else {
+                  textField = find(fields, (f) => f.Id === fld.TextField)
+                  if (!textField) continue
+                  properties[textField.InternalName] = fieldValuesText[textField.InternalName]
+                }
               }
             }
             break
           case 'User':
             {
-              const [_user] = siteUsers.filter((u) => u.Id === fieldValues[`${fld.InternalName}Id`])
-              const user = _user ? await this.entityService.web.ensureUser(_user.LoginName) : null
-              properties[`${fld.InternalName}Id`] = user ? user.data.Id : null
+              if (syncToProject) {
+                const [_user] = siteUsers.filter((u) => u.Title === fieldValuesText[fld.InternalName])
+                const user = _user ? await sp.web.ensureUser(_user.LoginName) : null
+                properties[`${fld.InternalName}Id`] = user ? user.data.Id : null
+              } else {
+                const [_user] = siteUsers.filter((u) => u.Id === fieldValues[`${fld.InternalName}Id`])
+                const user = _user ? await this.entityService.web.ensureUser(_user.LoginName) : null
+                properties[`${fld.InternalName}Id`] = user ? user.data.Id : null
+              }
             }
             break
           case 'UserMulti':
             {
-              const userIds = fieldValues[`${fld.InternalName}Id`] || []
-              const users = siteUsers.filter((u) => userIds.indexOf(u.Id) !== -1)
-              const ensured = await Promise.all(
-                users.map(({ LoginName }) => this.entityService.web.ensureUser(LoginName))
-              )
-              properties[`${fld.InternalName}Id`] = { results: ensured.map(({ data }) => data.Id) }
+              if (syncToProject) {
+                const userIds = fieldValuesText[fld.InternalName] || []
+                const users = siteUsers.filter((u) => userIds.indexOf(u.Title) !== -1)
+                const ensured = await Promise.all(
+                  users.map(({ LoginName }) => sp.web.ensureUser(LoginName))
+                )
+                properties[`${fld.InternalName}Id`] = { results: ensured.map(({ data }) => data.Id) }
+              } else {
+                const userIds = fieldValues[`${fld.InternalName}Id`] || []
+                const users = siteUsers.filter((u) => userIds.indexOf(u.Id) !== -1)
+                const ensured = await Promise.all(
+                  users.map(({ LoginName }) => this.entityService.web.ensureUser(LoginName))
+                )
+                properties[`${fld.InternalName}Id`] = { results: ensured.map(({ data }) => data.Id) }
+              }
             }
             break
           case 'DateTime':
@@ -169,12 +232,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
             break
         }
       }
-      await this.entityService.updateEntityItem(this.settings.siteId, properties)
-      Logger.log({
-        message: `(${this._name}) (syncPropertyItemToHub) Successfully synced item to hub entity.`,
-        data: { properties },
-        level: LogLevel.Info
-      })
+
+      return properties
     } catch (error) {
       throw error
     }

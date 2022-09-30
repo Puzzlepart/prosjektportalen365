@@ -59,7 +59,6 @@ export class ProjectInformation extends BaseWebPartComponent<
 
   public render() {
     if (this.state.hidden) return null
-
     return (
       <div className={styles.root}>
         <div className={styles.container}>
@@ -140,10 +139,14 @@ export class ProjectInformation extends BaseWebPartComponent<
             onDismiss={this.onDismissModal.bind(this, 'ParentCreation')}
           />
         )}
-        {this.state.displaySyncProjectModal && (
+        {this.state.displaySyncProjectModal && !this.state.loading && (
           <SyncProjectModal
             isOpen={this.state.displaySyncProjectModal}
             onDismiss={this.onDismissModal.bind(this, 'SyncProject')}
+            data={this.state.data}
+            title={this.props.webTitle}
+            hubSite={this.props.hubSite}
+            context={this.props.webPartContext}
           />
         )}
       </>
