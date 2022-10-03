@@ -153,10 +153,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
               properties[fld.InternalName] = fldValue || null
             }
             break
-          case 'Choice':
           case 'MultiChoice':
             {
-              properties[fld.InternalName] = fldValue || null
+              properties[fld.InternalName] = fldValue ? { results: fldValue } : null
             }
             break
           default:
