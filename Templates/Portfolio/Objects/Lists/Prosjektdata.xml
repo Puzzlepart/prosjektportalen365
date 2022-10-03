@@ -11,8 +11,6 @@
                 <FieldRef Name="GtProjectFinanceName" />
                 <FieldRef Name="GtProjectNumber" />
                 <FieldRef Name="GtArchiveReference" />
-                <FieldRef Name="GtProjectServiceArea" />
-                <FieldRef Name="GtProjectType" />
                 <FieldRef Name="GtProjectPhase" />
                 <FieldRef Name="GtProjectManager" />
                 <FieldRef Name="GtProjectOwner" />
