@@ -327,8 +327,6 @@ export class ProjectInformation extends BaseWebPartComponent<
       const userHasAdminPermission = await SPDataAdapter.checkProjectAdminPermission(data.fieldValues)
       const properties = this._transformProperties(data)
       const allProperties = this._transformProperties(data, false)
-      // eslint-disable-next-line no-console
-      console.log({ userHasAdminPermission })
       return {
         data,
         isParentProject: data.fieldValues?.GtIsParentProject || data.fieldValues?.GtIsProgram,
