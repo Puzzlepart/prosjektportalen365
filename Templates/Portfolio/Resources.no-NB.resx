@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" 
-    xmlns="" 
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-    xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -529,7 +526,7 @@
   <data name="SiteFields_GtProjectManager_DisplayName" xml:space="preserve">
     <value>Prosjektleder</value>
   </data>
-    <data name="SiteFields_GtProjectSupport_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtProjectSupport_DisplayName" xml:space="preserve">
     <value>Prosjektstøtte</value>
   </data>
   <data name="SiteFields_GtStatusBudget_DisplayName" xml:space="preserve">
@@ -997,6 +994,9 @@
   <data name="SiteFields_GtGainsType_DisplayName" xml:space="preserve">
     <value>Gevinsttype</value>
   </data>
+  <data name="SiteFields_GtProjectAdminRoles_DisplayName" xml:space="preserve">
+    <value>Prosjektadministrasjonsroller</value>
+  </data>
   <data name="SiteFields_GtGainsType_Description" xml:space="preserve">
     <value>Direkte (økonomiske - NOK), Indirekte (frigjort tid - årsverk), Kvalitative (f.eks. omdømme)</value>
   </data>
@@ -1006,10 +1006,10 @@
   <data name="SiteFields_GtIconName_Description" xml:space="preserve">
     <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
   </data>
-   <data name="SiteFields_GtIsParentProject_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtIsParentProject_DisplayName" xml:space="preserve">
     <value>Overordnet</value>
   </data>
-   <data name="SiteFields_GtIsProgram_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtIsProgram_DisplayName" xml:space="preserve">
     <value>Program</value>
   </data>
   <data name="SiteFields_GtKey_DisplayName" xml:space="preserve">
@@ -1336,7 +1336,7 @@
   <data name="SiteFields_GtProjectManager_Description" xml:space="preserve">
     <value>Hvem er prosjektleder for prosjektet?</value>
   </data>
-    <data name="SiteFields_GtProjectSupport_Description" xml:space="preserve">
+  <data name="SiteFields_GtProjectSupport_Description" xml:space="preserve">
     <value>Hvem er prosjektstøtte for prosjektet? Dette kan være assisterende prosjektledere eller andre involverte.</value>
   </data>
   <data name="SiteFields_GtStatusBudget_Description" xml:space="preserve">
@@ -1692,6 +1692,9 @@
   </data>
   <data name="SiteFields_GtODataQuery_Description" xml:space="preserve">
     <value>OData-spørring for å filtrere datakilden mot prosjekter. Spørringen brukes mot Prosjekter-listen for å kun vise data fra et utvalg prosjekter. Eksempel: GtProjectPhaseText eq 'Konsept' vil kun returnere data fra prosjekter i konsept-fasen.</value>
+  </data>
+  <data name="SiteFields_GtProjectAdminRoles_Description" xml:space="preserve">
+    <value>Velg hvilke roller som skal kunne administrere prosjektet. Dette inkluderer handlinger som å redigere prosjektegenskaper og fase.</value>
   </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
