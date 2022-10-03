@@ -165,6 +165,8 @@ declare interface IProjectWebPartsStrings {
   ConfigItemTitleFieldLabel: string
   ShowProjectDeliveriesLabel: string
   ProjectDeliveriesGroupName: string
+  GroupLevelProject: string
+  GroupLevelPortfolio: string
 }
 
 declare module 'ProjectWebPartsStrings' {
