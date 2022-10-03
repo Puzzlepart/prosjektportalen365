@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { TypedHash } from '@pnp/common'
+import { dateAdd, TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
+import { PnPClientStorage } from '@pnp/common'
 import { Web } from '@pnp/sp'
 import { taxonomy } from '@pnp/sp-taxonomy'
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator'
@@ -207,57 +208,51 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    *
    * @param fieldValues Project properties field values
    */
-  public async checkProjectAdminPermission(fieldValues: TypedHash<any>) {
-    const currentUser = await Promise.all([
-      this.project.web.ensureUser(this.spfxContext.pageContext.user.email),
-      this.portal.web.ensureUser(this.spfxContext.pageContext.user.email)
-    ])
-    const rolesToCheck = fieldValues.GtProjectAdminRoles
-    const projectAdminRoles = await this.portal.getProjectAdminRoles()
-    for (let i = 0; i < projectAdminRoles.length; i++) {
-      const role = projectAdminRoles[i]
-      if (rolesToCheck.indexOf(role.title) === -1) continue
-      switch (role.type) {
-        case ProjectAdminRoleType.SiteAdmin: {
-          if (this.spfxContext.pageContext.legacyPageContext.isSiteAdmin === true) {
-            console.log(role)
-            return true
+  public async checkProjectAdminPermission(fieldValues: Record<string, any>) {
+    const check = await new PnPClientStorage().session.getOrPut(this.project.getStorageKey('checkProjectAdminPermission'), async () => {
+      const currentUser = await Promise.all([
+        this.project.web.ensureUser(this.spfxContext.pageContext.user.email),
+        this.portal.web.ensureUser(this.spfxContext.pageContext.user.email)
+      ])
+      const rolesToCheck = fieldValues.GtProjectAdminRoles
+      const projectAdminRoles = await this.portal.getProjectAdminRoles()
+      for (let i = 0; i < projectAdminRoles.length; i++) {
+        const role = projectAdminRoles[i]
+        if (rolesToCheck.indexOf(role.title) === -1) continue
+        switch (role.type) {
+          case ProjectAdminRoleType.SiteAdmin: {
+            if (this.spfxContext.pageContext.legacyPageContext.isSiteAdmin === true) return '1'
           }
-        }
-          break
-        case ProjectAdminRoleType.ProjectProperty: {
-          if (fieldValues[role.projectFieldName] === currentUser[0].data.Id) {
-            console.log(role)
-            return true
+            break
+          case ProjectAdminRoleType.ProjectProperty: {
+            if (fieldValues[role.projectFieldName] === currentUser[0].data.Id) return '1'
           }
-        }
-          break
-        case ProjectAdminRoleType.SharePointGroup: {
-          let web: Web = null
-          switch (role.groupLevel) {
-            case strings.GroupLevelProject: web = this.project.web
-              break
-            case strings.GroupLevelPortfolio: web = this.portal.web
-              break
+            break
+          case ProjectAdminRoleType.SharePointGroup: {
+            let web: Web = null
+            switch (role.groupLevel) {
+              case strings.GroupLevelProject: web = this.project.web
+                break
+              case strings.GroupLevelPortfolio: web = this.portal.web
+                break
+            }
+            try {
+              if (
+                (await web
+                  .siteGroups
+                  .getByName(role.groupName)
+                  .users
+                  .filter(`Email eq '${this.spfxContext.pageContext.user.email}'`)
+                  .get()
+                ).length > 0) return '1'
+            } catch { }
           }
-          try {
-            if (
-              (await web
-                .siteGroups
-                .getByName(role.groupName)
-                .users
-                .filter(`Email eq '${this.spfxContext.pageContext.user.email}'`)
-                .get()
-              ).length > 0) {
-                console.log(role)
-                return true
-              }
-          } catch { }
+            break
         }
-          break
       }
-    }
-    return false
+      return '0'
+    }, dateAdd(new Date(), 'minute', 30))
+    return check === '1'
   }
 
   /**

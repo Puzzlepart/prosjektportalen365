@@ -18,7 +18,8 @@ export class ProjectDataService {
   private _storage: PnPClientStore
   private _storageKeys: TypedHash<string> = {
     _getPropertyItemContext: '{0}_propertyitemcontext',
-    getPhases: '{0}_projectphases_terms'
+    getPhases: '{0}_projectphases_terms',
+    checkProjectAdminPermission: '{0}_check_project_admin_permission'
   }
   public web: Web
 
@@ -57,7 +58,7 @@ export class ProjectDataService {
    *
    * @param func Function name
    */
-  private _getStorageKey(func: string) {
+  public getStorageKey(func: string) {
     return this._storageKeys[func]
   }
 
@@ -70,7 +71,7 @@ export class ProjectDataService {
     expire: Date = dateAdd(new Date(), 'minute', 15)
   ): Promise<IPropertyItemContext> {
     const context: Partial<IPropertyItemContext> = await this._storage.getOrPut(
-      this._getStorageKey('_getPropertyItemContext'),
+      this.getStorageKey('_getPropertyItemContext'),
       async () => {
         try {
           Logger.write(
@@ -332,7 +333,7 @@ export class ProjectDataService {
    */
   public clearCache(): void {
     Object.keys(this._storageKeys).forEach((name) => {
-      const key = this._getStorageKey(name)
+      const key = this.getStorageKey(name)
       Logger.write(`(ProjectDataService) Clearing key ${key} from sessionStorage.`)
       sessionStorage.removeItem(key)
     })
