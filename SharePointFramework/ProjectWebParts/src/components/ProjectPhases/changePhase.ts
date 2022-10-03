@@ -8,10 +8,10 @@ import { IPhaseSitePageModel, IProjectPhasesProps } from './types'
 /**
  * Change phase
  *
- * @param {ProjectPhaseModel} phase Phase
- * @param {string} phaseTextField Phase TextField
- * @param {IProjectPhasesProps} props IProjectPhasesProps props
- * @param {IPhaseSitePageModel[]} phaseSitePages Phase SitePages
+ * @param phase Phase
+ * @param phaseTextField Phase TextField
+ * @param props IProjectPhasesProps props
+ * @param phaseSitePages Phase SitePages
  */
 export const changePhase = async (
   phase: ProjectPhaseModel,

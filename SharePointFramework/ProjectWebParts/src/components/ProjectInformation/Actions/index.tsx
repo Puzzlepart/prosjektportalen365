@@ -6,20 +6,21 @@ import { IActionsProps, ActionType } from './types'
 
 export const Actions = (props: IActionsProps) => {
   const actions: ActionType[] = [
-    [strings.ViewVersionHistoryText, props.versionHistoryUrl, 'History', false, !props.isSiteAdmin],
-    [strings.EditPropertiesText, props.editFormUrl, 'Edit', false, !props.isSiteAdmin],
+    [strings.ViewVersionHistoryText, props.versionHistoryUrl, 'History', false, !props.userHasAdminPermission],
+    [strings.EditPropertiesText, props.editFormUrl, 'Edit', false, !props.userHasAdminPermission],
     [
       strings.SyncProjectPropertiesText,
       props.onSyncProperties,
       'Sync',
       false,
-      !props.onSyncProperties || !props.isSiteAdmin
+      !props.onSyncProperties || !props.userHasAdminPermission
     ],
     [
       strings.EditSiteInformationText,
       window['_spLaunchSiteSettings'],
       'Info',
-      !window['_spLaunchSiteSettings'] || !props.isSiteAdmin
+      false,
+      !window['_spLaunchSiteSettings'] || !props.userHasAdminPermission
     ],
     ...(props.customActions || [])
   ]

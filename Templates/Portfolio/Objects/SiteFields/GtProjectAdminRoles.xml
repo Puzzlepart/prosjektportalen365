@@ -1,0 +1,10 @@
+﻿<Field Type="MultiChoice" DisplayName="{resource:SiteFields_GtProjectAdminRoles_DisplayName}" Description="{resource:SiteFields_GtProjectAdminRoles_Description}" Format="Dropdown" FillInChoice="FALSE" Group="{resource:SiteFields_Project_Group}" ID="{664ddf9a-a415-4b0b-a34f-0653547f03f0}" StaticName="GtProjectAdminRoles" Name="GtProjectAdminRoles">
+    <Default>SP områdeadministrator</Default>
+    <CHOICES>
+        <CHOICE>Prosjekteier</CHOICE>
+        <CHOICE>Prosjektleder</CHOICE>
+        <CHOICE>Prosjektstøtte</CHOICE>
+        <CHOICE>Prosjektkontor</CHOICE>
+        <CHOICE>SP områdeadministrator</CHOICE>
+    </CHOICES>
+</Field>

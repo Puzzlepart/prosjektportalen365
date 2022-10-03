@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" 
-    xmlns="" 
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-    xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -219,6 +216,12 @@
   </data>
   <data name="Lists_TimelineContent_Url" xml:space="preserve">
     <value>Lists/Tidslinjeinnhold</value>
+  </data>
+  <data name="Lists_ProjectAdminRoles_Title" xml:space="preserve">
+    <value>Prosjektadministrasjonsroller</value>
+  </data>
+  <data name="Lists_ProjectAdminRoles_Url" xml:space="preserve">
+    <value>Lists/Prosjektadministrasjonsroller</value>
   </data>
   <data name="Lists_TimelineContent_Field_Title_DisplayName" xml:space="preserve">
     <value>Tittel</value>
@@ -529,7 +532,7 @@
   <data name="SiteFields_GtProjectManager_DisplayName" xml:space="preserve">
     <value>Prosjektleder</value>
   </data>
-    <data name="SiteFields_GtProjectSupport_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtProjectSupport_DisplayName" xml:space="preserve">
     <value>Prosjektstøtte</value>
   </data>
   <data name="SiteFields_GtStatusBudget_DisplayName" xml:space="preserve">
@@ -1006,10 +1009,10 @@
   <data name="SiteFields_GtIconName_Description" xml:space="preserve">
     <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
   </data>
-   <data name="SiteFields_GtIsParentProject_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtIsParentProject_DisplayName" xml:space="preserve">
     <value>Overordnet</value>
   </data>
-   <data name="SiteFields_GtIsProgram_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtIsProgram_DisplayName" xml:space="preserve">
     <value>Program</value>
   </data>
   <data name="SiteFields_GtKey_DisplayName" xml:space="preserve">
@@ -1336,7 +1339,7 @@
   <data name="SiteFields_GtProjectManager_Description" xml:space="preserve">
     <value>Hvem er prosjektleder for prosjektet?</value>
   </data>
-    <data name="SiteFields_GtProjectSupport_Description" xml:space="preserve">
+  <data name="SiteFields_GtProjectSupport_Description" xml:space="preserve">
     <value>Hvem er prosjektstøtte for prosjektet? Dette kan være assisterende prosjektledere eller andre involverte.</value>
   </data>
   <data name="SiteFields_GtStatusBudget_Description" xml:space="preserve">
@@ -1692,6 +1695,30 @@
   </data>
   <data name="SiteFields_GtODataQuery_Description" xml:space="preserve">
     <value>OData-spørring for å filtrere datakilden mot prosjekter. Spørringen brukes mot Prosjekter-listen for å kun vise data fra et utvalg prosjekter. Eksempel: GtProjectPhaseText eq 'Konsept' vil kun returnere data fra prosjekter i konsept-fasen.</value>
+  </data>
+  <data name="SiteFields_GtProjectAdminRoles_DisplayName" xml:space="preserve">
+    <value>Prosjektadministrasjonsroller</value>
+  </data>
+  <data name="SiteFields_GtProjectAdminRoles_Description" xml:space="preserve">
+    <value>Velg hvilke roller som skal kunne administrere prosjektet. Dette inkluderer handlinger som å redigere prosjektegenskaper og fase.</value>
+  </data>
+  <data name="SiteFields_GtGroupLevel_DisplayName" xml:space="preserve">
+    <value>Gruppenivå</value>
+  </data>
+  <data name="SiteFields_GtGroupLevel_Description" xml:space="preserve">
+    <value>Velg hvilket nivå SharePoint-gruppen befinner seg på.</value>
+  </data>
+  <data name="SiteFields_GtGroupName_DisplayName" xml:space="preserve">
+    <value>Gruppenavn</value>
+  </data>
+  <data name="SiteFields_GtGroupName_Description" xml:space="preserve">
+    <value>SharePoint-gruppens navn.</value>
+  </data>
+  <data name="SiteFields_GtProjectFieldName_DisplayName" xml:space="preserve">
+    <value>Feltnavn for prosjektegenskap</value>
+  </data>
+  <data name="SiteFields_GtProjectFieldName_Description" xml:space="preserve">
+    <value>Internt feltnavn for prosjektegenskap.</value>
   </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>

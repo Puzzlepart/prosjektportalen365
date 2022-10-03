@@ -1,9 +1,13 @@
+/* eslint-disable no-console */
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { TypedHash } from '@pnp/common'
+import { dateAdd, TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
+import { PnPClientStorage } from '@pnp/common'
+import { Web } from '@pnp/sp'
 import { taxonomy } from '@pnp/sp-taxonomy'
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator'
 import { SPDataAdapterBase } from 'pp365-shared/lib/data'
+import { ProjectAdminRoleType } from 'pp365-shared/lib/models'
 import { ProjectDataService } from 'pp365-shared/lib/services'
 import * as strings from 'ProjectWebPartsStrings'
 import { IEntityField } from 'sp-entityportal-service/types'
@@ -17,8 +21,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   /**
    * Configure the SP data adapter
    *
-   * @param {WebPartContext} spfxContext Context
-   * @param {ISPDataAdapterConfiguration} settings Settings
+   * @param spfxContext Context
+   * @param configuration Configuration
    */
   public configure(spfxContext: WebPartContext, configuration: ISPDataAdapterConfiguration) {
     super.configure(spfxContext, configuration)
@@ -37,8 +41,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   /**
    * Get fields to sync
    *
-   * @param fields - Fields
-   * @param customGroupName - Custom group name
+   * @param fields Fields
+   * @param customGroupName Custom group name
    *
    * @returns Fields to sync
    */
@@ -64,10 +68,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   /**
    * Sync property item from site to associated hub
    *
-   * @param {TypedHash} fieldValues - Field values for the properties item
-   * @param {TypedHash} fieldValuesText - Field values in text format for the properties item
-   * @param {TypedHash<any>} templateParameters - Template parameters
-   * @param {void} progressFunc - Progress function
+   * @param fieldValues Field values for the properties item
+   * @param fieldValuesText Field values in text format for the properties item
+   * @param templateParameters Template parameters
+   * @param progressFunc Progress function
    */
   public async syncPropertyItemToHub(
     fieldValues: TypedHash<any>,
@@ -87,8 +91,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       const [fields, siteUsers] = await Promise.all([
         templateParameters.ProjectContentTypeId
           ? this.entityService
-              .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
-              .getEntityFields()
+            .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
+            .getEntityFields()
           : this.entityService.getEntityFields(),
         this.sp.web.siteUsers.select('Id', 'Email', 'LoginName').get<
           {
@@ -153,6 +157,11 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
               properties[fld.InternalName] = fldValue || null
             }
             break
+          case 'MultiChoice':
+            {
+              properties[fld.InternalName] = fldValue ? { results: fldValue } : null
+            }
+            break
           default:
             {
               properties[fld.InternalName] = fldValueTxt || null
@@ -174,7 +183,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   /**
    * Fetch term field context
    *
-   * @param {string} fieldName Field name for phase
+   * @param fieldName Field name for phase
    */
   public async getTermFieldContext(fieldName: string) {
     const phaseField = await this.sp.web.fields
@@ -195,7 +204,63 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Clear cache
+   * Check project admin permission
+   *
+   * @param fieldValues Project properties field values
+   */
+  public async checkProjectAdminPermission(fieldValues: Record<string, any>) {
+    const check = await new PnPClientStorage().session.getOrPut(this.project.getStorageKey('checkProjectAdminPermission'), async () => {
+      const rolesToCheck = fieldValues.GtProjectAdminRoles
+      if (!rolesToCheck) {
+        if (this.spfxContext.pageContext.legacyPageContext.isSiteAdmin === true) return '1'
+        else return '0'
+      }
+      const currentUser = await Promise.all([
+        this.project.web.ensureUser(this.spfxContext.pageContext.user.email),
+        this.portal.web.ensureUser(this.spfxContext.pageContext.user.email)
+      ])
+      const projectAdminRoles = await this.portal.getProjectAdminRoles()
+      for (let i = 0; i < projectAdminRoles.length; i++) {
+        const role = projectAdminRoles[i]
+        if (rolesToCheck.indexOf(role.title) === -1) continue
+        switch (role.type) {
+          case ProjectAdminRoleType.SiteAdmin: {
+            if (this.spfxContext.pageContext.legacyPageContext.isSiteAdmin === true) return '1'
+          }
+            break
+          case ProjectAdminRoleType.ProjectProperty: {
+            if (fieldValues[role.projectFieldName] === currentUser[0].data.Id) return '1'
+          }
+            break
+          case ProjectAdminRoleType.SharePointGroup: {
+            let web: Web = null
+            switch (role.groupLevel) {
+              case strings.GroupLevelProject: web = this.project.web
+                break
+              case strings.GroupLevelPortfolio: web = this.portal.web
+                break
+            }
+            try {
+              if (
+                (await web
+                  .siteGroups
+                  .getByName(role.groupName)
+                  .users
+                  .filter(`Email eq '${this.spfxContext.pageContext.user.email}'`)
+                  .get()
+                ).length > 0) return '1'
+            } catch { }
+          }
+            break
+        }
+      }
+      return '0'
+    }, dateAdd(new Date(), 'minute', 30))
+    return check === '1'
+  }
+
+  /**
+   * Clear cache for the project.
    */
   public clearCache() {
     this.project.clearCache()

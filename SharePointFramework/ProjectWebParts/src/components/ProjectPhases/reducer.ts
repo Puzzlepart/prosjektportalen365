@@ -23,6 +23,7 @@ export default createReducer(initState(), {
   [INIT_DATA.type]: (state, { payload }: ReturnType<typeof INIT_DATA>) => {
     state.data = payload.data
     state.phase = payload.data.currentPhase
+    state.userHasAdminPermission = payload.data.userHasAdminPermission
     state.loading = false
   },
 

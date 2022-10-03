@@ -5,8 +5,8 @@ import * as strings from 'ProjectWebPartsStrings'
 /**
  * Modify frontpage current phase view
  *
- * @param {string} phaseTermName Phase term name
- * @param {string} currentPhaseViewName Current phase view name
+ * @param phaseTermName Phase term name
+ * @param currentPhaseViewName Current phase view name
  */
 export const modifyCurrentPhaseView = async (
   phaseTermName: string,
