@@ -1708,6 +1708,12 @@
   <data name="SiteFields_GtGroupName_Description" xml:space="preserve">
     <value>SharePoint-gruppens navn.</value>
   </data>
+  <data name="SiteFields_GtProjectFieldName_DisplayName" xml:space="preserve">
+    <value>Feltnavn for prosjektegenskap</value>
+  </data>
+  <data name="SiteFields_GtProjectFieldName_Description" xml:space="preserve">
+    <value>Internt feltnavn for prosjektegenskap.</value>
+  </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
   </data>
