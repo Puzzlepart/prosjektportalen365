@@ -1702,6 +1702,12 @@
   <data name="SiteFields_GtGroupLevel_Description" xml:space="preserve">
     <value>Velg hvilket nivå SharePoint-gruppen befinner seg på.</value>
   </data>
+  <data name="SiteFields_GtGroupName_DisplayName" xml:space="preserve">
+    <value>Gruppenavn</value>
+  </data>
+  <data name="SiteFields_GtGroupName_Description" xml:space="preserve">
+    <value>SharePoint-gruppens navn.</value>
+  </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
   </data>
