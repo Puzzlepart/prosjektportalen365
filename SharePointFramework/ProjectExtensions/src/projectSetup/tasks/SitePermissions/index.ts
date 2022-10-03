@@ -1,6 +1,6 @@
 import { CamlQuery, SiteUserProps } from '@pnp/sp'
 import strings from 'ProjectExtensionsStrings'
-import { IProjectSetupData } from 'extensions/projectSetup'
+import { IProjectSetupData } from 'projectSetup'
 import { isEmpty } from 'underscore'
 import { BaseTask, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'

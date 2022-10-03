@@ -1,6 +1,6 @@
 import { TypedHash } from '@pnp/common'
 import * as strings from 'ProjectExtensionsStrings'
-import { IProjectSetupData } from 'extensions/projectSetup'
+import { IProjectSetupData } from 'projectSetup'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 

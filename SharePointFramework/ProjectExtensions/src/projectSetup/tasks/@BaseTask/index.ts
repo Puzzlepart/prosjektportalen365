@@ -1,6 +1,6 @@
 import { Logger, LogLevel } from '@pnp/logging'
-import { IProjectSetupData } from 'extensions/projectSetup'
-import { IProjectSetupSettings } from 'extensions/projectSetup/ProjectSetupSettings'
+import { IProjectSetupData } from 'projectSetup'
+import { IProjectSetupSettings } from 'projectSetup/ProjectSetupSettings'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 import { IBaseTask } from './IBaseTask'
 import { IBaseTaskParams } from './IBaseTaskParams'

@@ -1,4 +1,4 @@
-import { IProjectSetupData } from 'extensions/projectSetup'
+import { IProjectSetupData } from 'projectSetup'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import { transformFieldXml } from 'pp365-shared/lib/helpers'

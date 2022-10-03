@@ -1,6 +1,6 @@
 import { ITemplateSelectDialogState } from 'components/TemplateSelectDialog'
 import { IHubSite } from 'sp-hubsite-service'
-import { ListContentConfig, ProjectExtension, ProjectTemplate } from '../../models/index'
+import { ListContentConfig, ProjectExtension, ProjectTemplate } from '../models/index'
 
 export interface IProjectSetupProperties {
   /**

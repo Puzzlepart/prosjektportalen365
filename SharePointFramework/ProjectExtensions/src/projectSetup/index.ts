@@ -21,13 +21,13 @@ import {
   ITemplateSelectDialogState,
   ProgressDialog,
   TemplateSelectDialog
-} from '../../components'
+} from '../components'
 import {
   ListContentConfig,
   ProjectExtension,
   ProjectTemplate,
   ProjectTemplateFile
-} from '../../models'
+} from '../models'
 import { deleteCustomizer } from './deleteCustomizer'
 import { ProjectSetupError } from './ProjectSetupError'
 import { ProjectSetupSettings } from './ProjectSetupSettings'

@@ -1,6 +1,6 @@
 import { getObjectValue } from 'pp365-shared/lib/helpers/getObjectValue'
 import * as strings from 'ProjectExtensionsStrings'
-import { IProjectSetupData } from 'extensions/projectSetup'
+import { IProjectSetupData } from 'projectSetup'
 import { ExecuteJsomQuery } from 'spfx-jsom'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 
