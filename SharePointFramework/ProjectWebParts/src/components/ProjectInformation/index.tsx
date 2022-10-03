@@ -1,11 +1,11 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { LogLevel } from '@pnp/logging'
-import { sp } from '@pnp/sp'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel'
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { PortalDataService } from 'pp365-shared/lib/services'
 import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
 import * as strings from 'ProjectWebPartsStrings'
@@ -15,8 +15,6 @@ import { isEmpty } from 'underscore'
 import SPDataAdapter from '../../data'
 import { BaseWebPartComponent } from '../BaseWebPartComponent'
 import { ProgressDialog } from '../ProgressDialog'
-import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
-
 import { Actions } from './Actions'
 import { ActionType } from './Actions/types'
 import { CreateParentModal } from './ParentProjectModal'
@@ -56,7 +54,6 @@ export class ProjectInformation extends BaseWebPartComponent<
     } catch (error) {
       this.setState({ error, loading: false })
     }
-    this.isParentProjectOrProgram()
   }
 
   public render() {
@@ -107,7 +104,7 @@ export class ProjectInformation extends BaseWebPartComponent<
         {(!this.props.hideActions && this.state.message) && <UserMessage {...this.state.message} />}
         <Actions
           hidden={this.props.hideActions || this.props.displayMode === DisplayMode.Edit}
-          isSiteAdmin={this.props.isSiteAdmin}
+          userHasAdminPermission={this.state.userHasAdminPermission}
           versionHistoryUrl={versionHistoryUrl}
           editFormUrl={editFormUrl}
           onSyncProperties={
@@ -154,7 +151,7 @@ export class ProjectInformation extends BaseWebPartComponent<
       },
       'Org',
       false,
-      !this.props.isSiteAdmin
+      !this.state.userHasAdminPermission
     ]
     const transformToParentProject: ActionType = [
       strings.CreateParentProjectLabel,
@@ -163,7 +160,7 @@ export class ProjectInformation extends BaseWebPartComponent<
       },
       'Org',
       false,
-      !this.props.isSiteAdmin
+      !this.state.userHasAdminPermission
     ]
     const viewAllPropertiesAction: ActionType = [
       strings.ViewAllPropertiesLabel,
@@ -181,15 +178,6 @@ export class ProjectInformation extends BaseWebPartComponent<
 
   private onDismissParentModal() {
     this.setState({ displayParentCreationModal: false })
-  }
-
-  public async isParentProjectOrProgram() {
-    const data = await sp.web.lists
-      .getByTitle('Prosjektegenskaper')
-      .items.getById(1)
-      .select('GtIsParentProject', 'GtIsProgram')
-      .get()
-    this.setState({ isParentProject: data?.GtIsParentProject || data?.GtIsProgram })
   }
 
   /**
@@ -222,8 +210,8 @@ export class ProjectInformation extends BaseWebPartComponent<
   /**
    * On sync properties
    *
-   * @param {React.MouseEvent<any>} event Event
-   * @param {boolean} force Force sync of properties
+   * @param event Event
+   * @param force Force sync of properties
    */
   private async _onSyncProperties(
     event?: React.MouseEvent<any>,
@@ -279,7 +267,7 @@ export class ProjectInformation extends BaseWebPartComponent<
       document.location.href =
         sessionStorage.DEBUG || DEBUG ? document.location.href.split('#')[0] : this.props.webUrl
     } catch (error) {
-      this.logError('Failed to synchornize properties to item in hub', '_onSyncProperties', error)
+      this.logError('Failed to synchronize properties to item in hub', '_onSyncProperties', error)
       this._addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning)
     } finally {
       this.setState({ progress: null })
@@ -289,8 +277,8 @@ export class ProjectInformation extends BaseWebPartComponent<
   /**
    * Transform properties from entity item and configuration
    *
-   * @param {IProjectInformationData} data Data
-   * @param {boolean} useVisibleFilter Set to false if all properties should be returned
+   * @param data Data
+   * @param useVisibleFilter Set to false if all properties should be returned
    */
   private _transformProperties(
     { columns, fields, fieldValuesText }: IProjectInformationData,
@@ -336,10 +324,18 @@ export class ProjectInformation extends BaseWebPartComponent<
         columns,
         ...propertiesData
       }
-
+      const userHasAdminPermission = await SPDataAdapter.checkProjectAdminPermission(data.fieldValues)
       const properties = this._transformProperties(data)
       const allProperties = this._transformProperties(data, false)
-      return { data, properties, allProperties }
+      // eslint-disable-next-line no-console
+      console.log({ userHasAdminPermission })
+      return {
+        data,
+        isParentProject: data.fieldValues?.GtIsParentProject || data.fieldValues?.GtIsProgram,
+        properties,
+        allProperties,
+        userHasAdminPermission
+      }
     } catch (error) {
       this.logError('Failed to retrieve data.', '_fetchData', error)
       throw error
@@ -349,3 +345,4 @@ export class ProjectInformation extends BaseWebPartComponent<
 
 export { ProjectInformationModal } from '../ProjectInformationModal'
 export * from './types'
+
