@@ -26,4 +26,5 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Tidslinjeinnhold.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Tidslinjekonfigurasjon.xml" /> 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Maloppsett.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Prosjektadministrasjonsroller.xml" />
 </pnp:Lists>
