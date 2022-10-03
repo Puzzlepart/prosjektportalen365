@@ -141,7 +141,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
           case 'TaxonomyFieldType':
             {
               if (syncToProject) {
-                const term = { ...fldValue, Label: fldValueTxt }
+                const term = { ...fldValue, WssId: -1 ,Label: fldValueTxt }
                 properties[fld.InternalName] = term || null
               } else {
                 let [textField] = fields.filter((f) => f.InternalName === `${fld.InternalName}Text`)

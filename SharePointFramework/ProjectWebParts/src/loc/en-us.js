@@ -166,6 +166,8 @@ define([], function () {
     CancelText: 'Avbryt',
     SynchronizeProjectDataTitle: 'Synkroniser prosjektdata',
     SynchronizeProjectDataDescription: 'Dersom du synkroniserer prosjektdata, vil alle prosjektegenskaper bli erstattet med prosjektegenskaper fra prosjektdata listen. Dette vil også synkroniseres til hubområdet. Dersom du vil fortsette, trykk \'Synkroniser\'.',
+    IdeaProcessingTitle: 'Idébehandling',
+    IdeaProcessingUrlTitle: 'Idebehandling',
     GroupLevelProject: 'Prosjekt',
     GroupLevelPortfolio: 'Portefølje'
   }

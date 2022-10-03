@@ -15,6 +15,7 @@ import { isEmpty } from 'underscore'
 import SPDataAdapter from '../../data'
 import { BaseWebPartComponent } from '../BaseWebPartComponent'
 import { ProgressDialog } from '../ProgressDialog'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { Actions } from './Actions'
 import { ActionType } from './Actions/types'
 import { CreateParentModal } from './ParentProjectModal'
@@ -50,6 +51,10 @@ export class ProjectInformation extends BaseWebPartComponent<
     try {
       const urlHash = parseUrlHash<IProjectInformationUrlHash>(true)
       const data = await this._fetchData()
+      if (this.props.useIdeaProcessing) {
+        const isProjectDataSynced = await this.isProjectDataSynced()
+        this.setState({ isProjectDataSynced })
+      }
       this.setState({ ...data, loading: false })
       if (urlHash.syncproperties === '1') this._onSyncProperties(undefined, urlHash.force === '1')
     } catch (error) {
@@ -144,6 +149,7 @@ export class ProjectInformation extends BaseWebPartComponent<
             isOpen={this.state.displaySyncProjectModal}
             onDismiss={this.onDismissModal.bind(this, 'SyncProject')}
             data={this.state.data}
+            onSyncProperties={this._onSyncProperties.bind(this)}
             title={this.props.webTitle}
             hubSite={this.props.hubSite}
             context={this.props.webPartContext}
@@ -187,7 +193,7 @@ export class ProjectInformation extends BaseWebPartComponent<
       },
       'Sync',
       false,
-      !this.props.useIdeaProcessing
+      !this.props.useIdeaProcessing || this.state.isProjectDataSynced
     ]
     if (this.state.isParentProject) {
       return [administerChildrenAction, viewAllPropertiesAction, syncProjectPropertiesAction]
@@ -199,11 +205,47 @@ export class ProjectInformation extends BaseWebPartComponent<
     switch (type) {
       case 'ParentCreation':
         this.setState({ displayParentCreationModal: false })
-        break;
+        break
       case 'SyncProject':
         this.setState({ displaySyncProjectModal: false })
-        break;
+        break
     }
+  }
+
+  public async isParentProjectOrProgram() {
+    const data = await sp.web.lists
+      .getByTitle('Prosjektegenskaper')
+      .items.getById(1)
+      .select('GtIsParentProject', 'GtIsProgram')
+      .get()
+    this.setState({ isParentProject: data?.GtIsParentProject || data?.GtIsProgram })
+  }
+
+  public async isProjectDataSynced(): Promise<boolean> {
+    let isSynced = false
+
+    const projectDataList = this.props.hubSite.web.lists
+      .getByTitle(strings.IdeaProjectDataTitle)
+
+    const [projectDataItem] = await projectDataList
+      .items
+      .filter(`GtSiteUrl eq '${this.props.webPartContext.pageContext.web.absoluteUrl}'`)
+      .select('Id')
+      .get()
+
+    const ideaProcessingList = this.props.hubSite.web.lists.getByTitle(strings.IdeaProcessingTitle)
+
+    const [ideaProcessingItem] = await ideaProcessingList
+      .items
+      .filter(`GtIdeaProjectDataId eq '${projectDataItem.Id}'`)
+      .select('Id, GtIdeaDecision')
+      .get()
+
+    if (ideaProcessingItem.GtIdeaDecision === 'Godkjent og synkronisert') {
+      isSynced = true
+    }
+
+    return isSynced
   }
 
   /**

@@ -16,12 +16,13 @@ import { TypedHash } from '@pnp/common'
 import { sp } from '@pnp/sp'
 import { Logger, LogLevel } from '@pnp/logging'
 
-export const SyncProjectModal: FunctionComponent<SyncModalProps> = ({ isOpen, onDismiss, data, title, hubSite, context }) => {
+export const SyncProjectModal: FunctionComponent<SyncModalProps> = ({ isOpen, onDismiss, onSyncProperties, data, title, hubSite, context }) => {
   const [isLoading, setLoading] = useState(true)
   const [isSyncing, setSyncing] = useState(false)
   // const [syncError, setSyncError] = useState(false)
   const [hasSynced, setHasSynced] = useState(false)
   const [projectData, setProjectData] = useState({})
+  const [projectDataId, setProjectDataId] = useState(0)
 
   useEffect(() => {
     getProjectData()
@@ -46,7 +47,7 @@ export const SyncProjectModal: FunctionComponent<SyncModalProps> = ({ isOpen, on
             <PrimaryButton
               text='Synkroniser'
               onClick={() => {
-                onSyncProperties(projectData)
+                syncProperties(projectData, projectDataId)
               }}
               disabled={isSyncing}
             />
@@ -64,6 +65,29 @@ export const SyncProjectModal: FunctionComponent<SyncModalProps> = ({ isOpen, on
       </Dialog>
     </>
   )
+
+  async function updateIdeaProcessingItem(projectDataItemId: number) {
+    try {
+      const ideaProcessingList = hubSite.web.lists.getByTitle(strings.IdeaProcessingTitle)
+
+      const [ideaProcessingItem] = await ideaProcessingList
+        .items
+        .filter(`GtIdeaProjectDataId eq '${projectDataItemId}'`)
+        .select('Id')
+        .get()
+
+      const updatedResult = ideaProcessingList
+        .items
+        .getById(ideaProcessingItem.Id)
+        .update({
+          GtIdeaDecision: 'Godkjent og synkronisert'
+        })
+
+      return updatedResult
+    } catch (error) {
+
+    }
+  }
 
   async function getProjectData() {
     try {
@@ -85,16 +109,6 @@ export const SyncProjectModal: FunctionComponent<SyncModalProps> = ({ isOpen, on
         item.get()
       ])
 
-      // filter fieldValues where keys matches data.columns internalName
-      // const filteredFieldValues = Object.keys(fieldValuesText)
-      //   .filter(key => data.columns.some(column => column.internalName === key))
-      //   .reduce((obj, key) => {
-      //     obj[key] = fieldValuesText[key]
-      //     return obj
-      //   }, {})
-
-      // console.log(filteredFieldValues)
-
       const itemProperties = await SPDataAdapter.getMappedProjectProperties(
         fieldValues,
         { ...fieldValuesText, Title: title },
@@ -102,30 +116,18 @@ export const SyncProjectModal: FunctionComponent<SyncModalProps> = ({ isOpen, on
         true
       )
 
-      console.log(itemProperties)
-
-      const projectProperties = await SPDataAdapter.getMappedProjectProperties(
-        data.fieldValues,
-        { ...data.fieldValuesText },
-        data.templateParameters
-      )
-
-      console.log(projectProperties)
-
       setProjectData(itemProperties)
+      setProjectDataId(projectDataItem.Id)
       setLoading(false)
     } catch (error) {
       throw error
     }
   }
 
-  // function to sync properties
-  async function onSyncProperties(properties: TypedHash<any>) {
+  async function syncProperties(properties: TypedHash<any>, projectDataId: number) {
     setSyncing(true)
-    console.log(properties)
 
-    const projectPropertiesList = sp.web.lists
-      .getByTitle(strings.ProjectPropertiesListName)
+    const projectPropertiesList = sp.web.lists.getByTitle(strings.ProjectPropertiesListName)
 
     const [propertiesItem] = await projectPropertiesList
       .items
@@ -144,8 +146,12 @@ export const SyncProjectModal: FunctionComponent<SyncModalProps> = ({ isOpen, on
         .getById(propertiesItem.Id)
         .update(properties)
 
-      setSyncing(false)
-      setHasSynced(true)
+      await updateIdeaProcessingItem(projectDataId).then(() => {
+        setSyncing(false)
+        setHasSynced(true)
+        onSyncProperties(undefined, true)
+        onDismiss()
+      })
     } catch (error) {
       Logger.log({
         message: `(onSyncProperties): Unable to sync properties from 'Prosjektdata' list: ${error.message}`,
