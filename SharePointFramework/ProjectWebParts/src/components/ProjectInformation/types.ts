@@ -86,6 +86,11 @@ export interface IProjectInformationState
    * Show project properties panel
    */
   showProjectPropertiesPanel?: boolean
+
+  /**
+   * Current user has admin permissions
+   */
+   userHasAdminPermission?: boolean
 }
 
 export interface IProjectInformationUrlHash {
