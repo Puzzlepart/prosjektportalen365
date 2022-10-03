@@ -210,11 +210,15 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    */
   public async checkProjectAdminPermission(fieldValues: Record<string, any>) {
     const check = await new PnPClientStorage().session.getOrPut(this.project.getStorageKey('checkProjectAdminPermission'), async () => {
+      const rolesToCheck = fieldValues.GtProjectAdminRoles
+      if (!rolesToCheck) {
+        if (this.spfxContext.pageContext.legacyPageContext.isSiteAdmin === true) return '1'
+        else return '0'
+      }
       const currentUser = await Promise.all([
         this.project.web.ensureUser(this.spfxContext.pageContext.user.email),
         this.portal.web.ensureUser(this.spfxContext.pageContext.user.email)
       ])
-      const rolesToCheck = fieldValues.GtProjectAdminRoles
       const projectAdminRoles = await this.portal.getProjectAdminRoles()
       for (let i = 0; i < projectAdminRoles.length; i++) {
         const role = projectAdminRoles[i]
