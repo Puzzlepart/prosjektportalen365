@@ -1,4 +1,4 @@
-<pnp:ContentType ID="0X010075422AAE3F204BD19CA9EA7AF1EC6C3702" Name="Prosjektadministrasjonsrolle koblet mot SharePoint-gruppe" Description="" Group="{resource:ContentTypes_Group}" xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+<pnp:ContentType ID="0x0100618197F7C782A0459EB2FA5EBF1BDDF202" Name="Prosjektadministrasjonsrolle koblet mot SharePoint-gruppe" Description="" Group="{resource:ContentTypes_Group}" xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
     </pnp:FieldRefs>
