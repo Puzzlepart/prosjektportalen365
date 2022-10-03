@@ -104,7 +104,7 @@ export class ProjectInformation extends BaseWebPartComponent<
           showFieldExternal={this.props.showFieldExternal}
           propertiesList={!stringIsNullOrEmpty(this.state.data.propertiesListId)}
         />
-        {!this.props.hideActions && <UserMessage {...this.state.message} />}
+        {(!this.props.hideActions && this.state.message) && <UserMessage {...this.state.message} />}
         <Actions
           hidden={this.props.hideActions || this.props.displayMode === DisplayMode.Edit}
           isSiteAdmin={this.props.isSiteAdmin}
@@ -195,9 +195,9 @@ export class ProjectInformation extends BaseWebPartComponent<
   /**
    * Add message
    *
-   * @param {string} text Text
-   * @param {MessageBarType} messageBarType Message type
-   * @param {number} duration Duration in seconds (defaults to 5)
+   * @param text Text
+   * @param messageBarType Message type
+   * @param duration Duration in seconds (defaults to 5)
    */
   private _addMessage(
     text: string,
@@ -261,7 +261,7 @@ export class ProjectInformation extends BaseWebPartComponent<
         this.props.webUrl,
         strings.ProjectPropertiesListName,
         this.state.data.templateParameters.ProjectContentTypeId ||
-          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: this.props.webTitle }
       )
       if (!created) {
