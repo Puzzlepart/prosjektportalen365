@@ -8,7 +8,7 @@ import { getWelcomePage } from './getWelcomePage'
 /***
  * Fetch phase terms
  *
- * @param {IProjectPhasesProps} props IProjectPhasesProps props
+ * @param props IProjectPhasesProps props
  */
 export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPhasesData> {
   const { phaseField } = props

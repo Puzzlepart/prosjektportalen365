@@ -33,7 +33,7 @@ export const ChangePhaseDialog = () => {
    * Updates the current checklist item, and dispatches CHECKLIST_ITEM_UPDATED
    * with the properties
    *
-   * @param {Partial<IProjectPhaseChecklistItem>} properties Properties
+   * @param properties Properties
    */
   const nextChecklistItem = async (properties: Partial<IProjectPhaseChecklistItem>) => {
     const currentItem = [...state.checklistItems][state.currentIdx]

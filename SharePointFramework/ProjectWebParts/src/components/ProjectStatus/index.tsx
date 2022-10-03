@@ -40,7 +40,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * Constructor
    *
-   * @param {IProjectStatusProps} props Props
+   * @param props Props
    */
   constructor(props: IProjectStatusProps) {
     super(props)
@@ -239,7 +239,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * Get section base props
    *
-   * @param {SectionModel} sec Section model
+   * @param sec Section model
    */
   private _getSectionBaseProps(sec: SectionModel): IBaseSectionProps {
     const { selectedReport, data } = this.state
@@ -343,7 +343,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * On report changed
    *
-   * @param {StatusReport} selectedReport Selected report
+   * @param selectedReport Selected report
    */
   private _onReportChanged(selectedReport: StatusReport) {
     this.setState({ selectedReport })
@@ -352,7 +352,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * Get report options
    *
-   * @param {IProjectStatusData} data Data
+   * @param data Data
    */
   private _getReportOptions(data: IProjectStatusData): IContextualMenuItem[] {
     const reportOptions: IContextualMenuItem[] = data.reports.map((report) => {
@@ -411,7 +411,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * Creates PNG snapshot
    *
-   * @param {sting} title Report title
+   * @param title Report title
    *
    * @returns PNG file (AttachmentFileInfo) or null
    */
@@ -435,7 +435,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * Publish report
    *
-   * @param {StatusReport} report Report
+   * @param report Report
    */
   private async _publishReport(report: StatusReport) {
     if (!this.state.isPublishing) {
@@ -459,7 +459,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * Delete report
    *
-   * @param {StatusReport} report Report
+   * @param report Report
    */
   private async _deleteReport(report: StatusReport) {
     await this._portalDataService.deleteStatusReport(report.id)

@@ -5,7 +5,7 @@ import { IPhaseSitePageModel } from './types'
 /**
  * Change phase
  *
- * @param {ProjectPhaseModel} phases
+ * @param phases
  */
 export const getPhaseSitePages = async (phases: ProjectPhaseModel[]) => {
   try {

@@ -4,8 +4,8 @@ import * as strings from 'ProjectWebPartsStrings'
 /**
  * Get next index
  *
- * @param {IProjectPhaseChecklistItem[]} checklistItems Checklist items
- * @param {number} startIndex Start index
+ * @param checklistItems Checklist items
+ * @param startIndex Start index
  */
 export const getNextIndex = (
   checklistItems: IProjectPhaseChecklistItem[],
