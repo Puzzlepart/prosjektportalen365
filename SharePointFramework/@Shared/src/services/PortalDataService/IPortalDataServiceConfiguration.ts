@@ -21,6 +21,7 @@ export interface IPortalDataServiceConfiguration extends Object {
     PORTFOLIO_VIEWS: string
     PROJECT_CONTENT_COLUMNS: string
     DATA_SOURCES: string
+    PROJECT_ADMIN_ROLES: string
   }
   templateParametersFieldXml?: string
 }
@@ -33,7 +34,8 @@ export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceCo
     PROJECT_STATUS: 'Prosjektstatus',
     PORTFOLIO_VIEWS: 'Porteføljevisninger',
     PROJECT_CONTENT_COLUMNS: 'Prosjektinnholdskolonner',
-    DATA_SOURCES: 'Datakilder'
+    DATA_SOURCES: 'Datakilder',
+    PROJECT_ADMIN_ROLES: 'Prosjektadministrasjonsroller'
   },
   templateParametersFieldXml:
     '<Field Type="Note" DisplayName="TemplateParameters" ID="{b8854944-7141-471f-b8df-53d93a4395ba}" StaticName="TemplateParameters" Name="TemplateParameters" UnlimitedLengthInDocumentLibrary="TRUE" Hidden="TRUE" />'

@@ -27,18 +27,18 @@ export class ProjectPhaseModel {
   /**
    * Constructor
    *
-   * @param {string} name Term name
-   * @param {string} id Term ID
-   * @param {ProjectPhaseChecklistData} checklistData Checklist data
-   * @param {TypedHash<any>} properties Properties
+   * @param name Term name
+   * @param termId Term ID
+   * @param checklistData Checklist data
+   * @param properties Properties
    */
   constructor(
     public name: string,
-    id: string,
+    termId: string,
     checklistData: ProjectPhaseChecklistData,
     public properties: TypedHash<any>
   ) {
-    this.id = id.substring(6, 42)
+    this.id = termId.substring(6, 42)
     this.checklistData = checklistData || { stats: {}, items: [] }
   }
 
