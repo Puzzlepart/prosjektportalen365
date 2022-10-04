@@ -293,8 +293,9 @@ export class DataAdapter implements IDataAdapter {
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${queryArray ?? ''
-          } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        QueryTemplate: `${
+          queryArray ?? ''
+        } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
         Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
       })
@@ -327,7 +328,12 @@ export class DataAdapter implements IDataAdapter {
         sp.search({
           ...DEFAULT_SEARCH_SETTINGS,
           QueryTemplate: `DepartmentId:{${hubSiteId}} ContentTypeId:${contentType} GtModerationStatusOWSCHCS:Publisert`,
-          SelectProperties: ['Title', 'GtSiteIdOWSTEXT', 'GtCostsTotalOWSCURR', 'GtBudgetTotalOWSCURR']
+          SelectProperties: [
+            'Title',
+            'GtSiteIdOWSTEXT',
+            'GtCostsTotalOWSCURR',
+            'GtBudgetTotalOWSCURR'
+          ]
         })
       ])
 
@@ -350,11 +356,11 @@ export class DataAdapter implements IDataAdapter {
             costsTotal: report && report['GtCostsTotalOWSCURR'],
             budgetTotal: report && report['GtBudgetTotalOWSCURR']
           }
-        }).filter((p) => p)
-      
-      return { reports, configElement }
+        })
+        .filter((p) => p)
 
-    } catch (error) { }
+      return { reports, configElement }
+    } catch (error) {}
   }
 
   /**
@@ -447,7 +453,10 @@ export class DataAdapter implements IDataAdapter {
     dataSourceName: string,
     timelineConfig: any[]
   ) {
-    const config: any = _.find(timelineConfig, (col) => col.Title === (configItemTitle || 'Prosjektleveranse'))
+    const config: any = _.find(
+      timelineConfig,
+      (col) => col.Title === (configItemTitle || 'Prosjektleveranse')
+    )
     if (config && config.GtShowElementPortfolio) {
       const [projectDeliveries] = await Promise.all([
         this.configure().then((adapter) => {
@@ -459,8 +468,10 @@ export class DataAdapter implements IDataAdapter {
               'GtDeliveryEndTimeOWSDATE'
             ])
             .then((deliveries) => {
-              return deliveries
-                .filter((delivery) => delivery.GtDeliveryStartTimeOWSDATE && delivery.GtDeliveryEndTimeOWSDATE)
+              return deliveries.filter(
+                (delivery) =>
+                  delivery.GtDeliveryStartTimeOWSDATE && delivery.GtDeliveryEndTimeOWSDATE
+              )
             })
             .catch((error) => {
               throw error
@@ -615,11 +626,12 @@ export class DataAdapter implements IDataAdapter {
     configuration?: IAggregatedListConfiguration,
     dataSource?: string
   ): Promise<any[]> {
-    const odata = configuration && configuration.views.find((v) => v.title === dataSource)?.odataQuery
+    const odata =
+      configuration && configuration.views.find((v) => v.title === dataSource)?.odataQuery
     let projects
 
     if (odata && !dataSource.includes('(Prosjektnivå)')) {
-      [projects] = await Promise.all([
+      ;[projects] = await Promise.all([
         await sp.web.lists
           .getByTitle(strings.ProjectsListName)
           .items.filter(`${odata}`)
@@ -806,7 +818,12 @@ export class DataAdapter implements IDataAdapter {
    */
   public async fetchProjectContentColumns(dataSourceCategory: string): Promise<any> {
     try {
-      if (isNull(dataSourceCategory) || !dataSourceCategory || dataSourceCategory === '' || dataSourceCategory.includes('(Prosjektnivå)')) {
+      if (
+        isNull(dataSourceCategory) ||
+        !dataSourceCategory ||
+        dataSourceCategory === '' ||
+        dataSourceCategory.includes('(Prosjektnivå)')
+      ) {
         return []
       } else {
         const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
@@ -824,7 +841,6 @@ export class DataAdapter implements IDataAdapter {
           })
         return filteredItems
       }
-
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, dataSourceCategory))
     }
@@ -846,8 +862,7 @@ export class DataAdapter implements IDataAdapter {
       }
 
       const renderAs =
-        properties.data.renderAs.charAt(0).toUpperCase() +
-        properties.data.renderAs.slice(1)
+        properties.data.renderAs.charAt(0).toUpperCase() + properties.data.renderAs.slice(1)
 
       const itemUpdateResult = await list.items.getById(item.Id).update({
         GtFieldDataType: renderAs,
@@ -903,7 +918,11 @@ export class DataAdapter implements IDataAdapter {
    * @param properties Properties
    * @param dataSourceTitle Data source title
    */
-  public async updateDataSourceItem(properties: TypedHash<any>, dataSourceTitle: string, shouldReplace: boolean = false): Promise<ItemUpdateResult> {
+  public async updateDataSourceItem(
+    properties: TypedHash<any>,
+    dataSourceTitle: string,
+    shouldReplace: boolean = false
+  ): Promise<ItemUpdateResult> {
     try {
       const list = sp.web.lists.getByTitle(strings.DataSourceListName)
       const items = await list.items.get()

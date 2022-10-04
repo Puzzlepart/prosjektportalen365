@@ -27,10 +27,7 @@ interface IDialogContentState {
   comment: string
 }
 
-class DialogPrompt extends React.Component<
-  IDialogContentProps,
-  IDialogContentState
-> {
+class DialogPrompt extends React.Component<IDialogContentProps, IDialogContentState> {
   constructor(props: IDialogContentProps | Readonly<IDialogContentProps>) {
     super(props)
 
@@ -87,10 +84,7 @@ class DialogPrompt extends React.Component<
     )
   }
 
-  private _onChoiceChange = (
-    _: React.FormEvent<HTMLDivElement>,
-    choice: IDropdownOption
-  ) => {
+  private _onChoiceChange = (_: React.FormEvent<HTMLDivElement>, choice: IDropdownOption) => {
     this.setState({ choice: choice.text })
   }
 
@@ -110,18 +104,14 @@ export default class RecommendationDialog extends BaseDialog {
 
   public render(): void {
     ReactDOM.render(
-      <DialogPrompt
-        close={this.close}
-        submit={this._submit}
-        ideaTitle={this.ideaTitle}
-      />,
+      <DialogPrompt close={this.close} submit={this._submit} ideaTitle={this.ideaTitle} />,
       this.domElement
     )
   }
 
   public getConfig(): IDialogConfiguration {
     return {
-      isBlocking: false,
+      isBlocking: false
     }
   }
 

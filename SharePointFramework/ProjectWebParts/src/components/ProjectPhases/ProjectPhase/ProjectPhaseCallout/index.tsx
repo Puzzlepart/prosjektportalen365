@@ -54,9 +54,7 @@ export const ProjectPhaseCallout = ({ phase, target }: IProjectPhaseCalloutProps
                   onClick={() => context.dispatch(CHANGE_PHASE())}
                   text={strings.ChangePhaseText}
                   iconProps={{ iconName: 'TransitionPop' }}
-                  disabled={
-                    phase.id === context.state.data?.currentPhase?.id
-                  }
+                  disabled={phase.id === context.state.data?.currentPhase?.id}
                 />
               )}
             </div>

@@ -131,7 +131,7 @@ export const DetailsCallout = ({ timelineItem, onDismiss }: IDetailsCalloutProps
           title={strings.TagFieldLabel}
           className={styles.tag}
           style={{
-            backgroundColor: item.hexColor,
+            backgroundColor: item.hexColor
           }}>
           {item.tag}
         </div>

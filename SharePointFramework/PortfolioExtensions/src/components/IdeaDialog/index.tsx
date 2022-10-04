@@ -27,7 +27,6 @@ class IdeaDialog extends React.Component<IDialogContentProps> {
   }
 
   public render(): JSX.Element {
-
     return (
       <DialogContent
         title={strings.IdeaProjectDataDialogTitle}
@@ -44,9 +43,7 @@ class IdeaDialog extends React.Component<IDialogContentProps> {
               : strings.IdeaProjectDataDialogInfoText,
             encodeURIComponent(window.location.href)
           )}
-          type={this.props.isBlocked
-            ? MessageBarType.warning
-            : MessageBarType.info}
+          type={this.props.isBlocked ? MessageBarType.warning : MessageBarType.info}
         />
         <DialogFooter>
           <DefaultButton
@@ -84,7 +81,7 @@ export default class ProjectDataDialog extends BaseDialog {
 
   public getConfig(): IDialogConfiguration {
     return {
-      isBlocking: false,
+      isBlocking: false
     }
   }
 

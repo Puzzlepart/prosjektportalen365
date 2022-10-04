@@ -10,7 +10,7 @@ export const RiskMatrix: FunctionComponent<IRiskMatrixProps> = ({
   width = 400,
   height = 300,
   calloutTemplate,
-  pageContext,
+  pageContext
 }: IRiskMatrixProps) => {
   const [jsonConfig, setJsonConfig] = React.useState<undefined | []>()
 
@@ -24,7 +24,9 @@ export const RiskMatrix: FunctionComponent<IRiskMatrixProps> = ({
   async function fetchJsonConfiguration() {
     const hubSite = await HubSiteService.GetHubSite(sp, pageContext as any)
     const { ServerRelativeUrl } = await hubSite.web.get()
-    const json = await hubSite.web.getFileByServerRelativeUrl(`/${ServerRelativeUrl}/SiteAssets/custom-cells.txt`).getJSON()
+    const json = await hubSite.web
+      .getFileByServerRelativeUrl(`/${ServerRelativeUrl}/SiteAssets/custom-cells.txt`)
+      .getJSON()
     setJsonConfig(json)
   }
 
@@ -38,6 +40,5 @@ export const RiskMatrix: FunctionComponent<IRiskMatrixProps> = ({
     </div>
   )
 }
-
 
 export * from './types'

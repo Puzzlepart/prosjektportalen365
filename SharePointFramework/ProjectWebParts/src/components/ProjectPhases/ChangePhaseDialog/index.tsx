@@ -63,9 +63,9 @@ export const ChangePhaseDialog = () => {
               text={
                 phaseSitePage
                   ? format(
-                    strings.PhaseSitePageFoundDescription,
-                    phaseSitePage && phaseSitePage.fileLeafRef
-                  )
+                      strings.PhaseSitePageFoundDescription,
+                      phaseSitePage && phaseSitePage.fileLeafRef
+                    )
                   : format(strings.PhaseSitePageNotFoundDescription, confirmPhaseName)
               }
               type={phaseSitePage ? MessageBarType.info : MessageBarType.warning}
