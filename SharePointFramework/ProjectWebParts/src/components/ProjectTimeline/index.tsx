@@ -421,6 +421,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
       ])
 
       if (this.props.showProjectDeliveries) {
+        // eslint-disable-next-line @typescript-eslint/no-extra-semi
         ;[projectDeliveries] = await Promise.all([
           await sp.web.lists
             .getByTitle(this.props.projectDeliveriesListName || 'Prosjektleveranser')
