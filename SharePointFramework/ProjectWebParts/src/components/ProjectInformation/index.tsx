@@ -222,30 +222,32 @@ export class ProjectInformation extends BaseWebPartComponent<
   }
 
   public async isProjectDataSynced(): Promise<boolean> {
-    let isSynced = false
+    try {
+      let isSynced = false
 
-    const projectDataList = this.props.hubSite.web.lists
-      .getByTitle(strings.IdeaProjectDataTitle)
+      const projectDataList = this.props.hubSite.web.lists
+        .getByTitle(strings.IdeaProjectDataTitle)
 
-    const [projectDataItem] = await projectDataList
-      .items
-      .filter(`GtSiteUrl eq '${this.props.webPartContext.pageContext.web.absoluteUrl}'`)
-      .select('Id')
-      .get()
+      const [projectDataItem] = await projectDataList
+        .items
+        .filter(`GtSiteUrl eq '${this.props.webPartContext.pageContext.web.absoluteUrl}'`)
+        .select('Id')
+        .get()
 
-    const ideaProcessingList = this.props.hubSite.web.lists.getByTitle(strings.IdeaProcessingTitle)
+      const ideaProcessingList = this.props.hubSite.web.lists.getByTitle(strings.IdeaProcessingTitle)
 
-    const [ideaProcessingItem] = await ideaProcessingList
-      .items
-      .filter(`GtIdeaProjectDataId eq '${projectDataItem.Id}'`)
-      .select('Id, GtIdeaDecision')
-      .get()
+      const [ideaProcessingItem] = await ideaProcessingList
+        .items
+        .filter(`GtIdeaProjectDataId eq '${projectDataItem.Id}'`)
+        .select('Id, GtIdeaDecision')
+        .get()
 
-    if (ideaProcessingItem.GtIdeaDecision === 'Godkjent og synkronisert') {
-      isSynced = true
-    }
+      if (ideaProcessingItem.GtIdeaDecision === 'Godkjent og synkronisert') {
+        isSynced = true
+      }
 
-    return isSynced
+      return isSynced
+    } catch (error) { }
   }
 
   /**

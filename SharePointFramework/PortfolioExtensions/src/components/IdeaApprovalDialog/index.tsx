@@ -10,11 +10,9 @@ import {
   DefaultButton,
   Dropdown,
   IDropdownOption,
-  TextField,
-  MessageBarType
+  TextField
 } from '@fluentui/react'
 import { format } from '@fluentui/utilities'
-import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import strings from 'PortfolioExtensionsStrings'
 
 interface IDialogContentProps {
@@ -51,10 +49,6 @@ class DialogPrompt extends React.Component<
         onDismiss={this.props.close}
         showCloseButton={true}
       >
-        <UserMessage
-          text={this.props.dialogDescription}
-          type={MessageBarType.info}
-        />
         <Dropdown
           label={strings.ActionLabel}
           placeholder={strings.ActionLabelPlaceholder}
