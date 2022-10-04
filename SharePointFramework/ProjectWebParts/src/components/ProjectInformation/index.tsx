@@ -15,7 +15,6 @@ import { isEmpty } from 'underscore'
 import SPDataAdapter from '../../data'
 import { BaseWebPartComponent } from '../BaseWebPartComponent'
 import { ProgressDialog } from '../ProgressDialog'
-import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { Actions } from './Actions'
 import { ActionType } from './Actions/types'
 import { CreateParentModal } from './ParentProjectModal'
@@ -29,6 +28,7 @@ import {
   IProjectInformationUrlHash
 } from './types'
 import { SyncProjectModal } from './SyncProjectModal'
+import { sp } from '@pnp/sp'
 
 export class ProjectInformation extends BaseWebPartComponent<
   IProjectInformationProps,
