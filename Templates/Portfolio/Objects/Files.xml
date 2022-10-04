@@ -1,3 +1,3 @@
-<pnp:Files xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+<pnp:Files xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:Directory Src="SiteAssets" Folder="" Overwrite="true" IncludedExtensions="*.png" />
 </pnp:Files>
