@@ -1,0 +1,1 @@
+<Field Type="User" DisplayName="{resource:SiteFields_GtIdeaOwner_DisplayName}" Description="{resource:SiteFields_GtIdeaOwner_Description}" Group="{resource:SiteFields_Idea_Group}" ID="{67eba603-1c39-49ae-a91a-29664f0824c8}" StaticName="GtIdeaOwner" Name="GtIdeaOwner" />

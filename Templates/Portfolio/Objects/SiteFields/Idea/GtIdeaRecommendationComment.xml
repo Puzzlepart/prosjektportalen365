@@ -1,0 +1,1 @@
+<Field Type="Note" DisplayName="{resource:SiteFields_GtIdeaRecommendationComment_DisplayName}" Description="{resource:SiteFields_GtIdeaRecommendationComment_Description}" Group="{resource:SiteFields_Idea_Group}" ID="{4a0afef0-8ddf-45a7-a3a3-07b0a8cd615a}" StaticName="GtIdeaRecommendationComment" Name="GtIdeaRecommendationComment" ShowInNewForm="FALSE" ShowInEditForm="FALSE" />

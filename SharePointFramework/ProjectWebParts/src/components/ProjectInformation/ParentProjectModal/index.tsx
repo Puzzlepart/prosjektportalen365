@@ -34,6 +34,7 @@ export const CreateParentModal: FunctionComponent<ParentModalProps> = ({ isOpen,
         }}>
         {!isLoading && (
           <DialogFooter>
+            <DefaultButton text='Avbryt' onClick={() => onDismiss()} />
             <PrimaryButton
               text='Gjør om'
               onClick={() => {
@@ -41,7 +42,6 @@ export const CreateParentModal: FunctionComponent<ParentModalProps> = ({ isOpen,
                 applyCustomAction()
               }}
             />
-            <DefaultButton text='Avbryt' onClick={() => onDismiss()} />
           </DialogFooter>
         )}
         {isLoading && <Spinner size={SpinnerSize.medium} />}

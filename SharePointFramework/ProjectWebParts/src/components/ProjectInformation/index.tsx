@@ -27,6 +27,7 @@ import {
   IProjectInformationState,
   IProjectInformationUrlHash
 } from './types'
+import { SyncProjectModal } from './SyncProjectModal'
 
 export class ProjectInformation extends BaseWebPartComponent<
   IProjectInformationProps,
@@ -49,6 +50,10 @@ export class ProjectInformation extends BaseWebPartComponent<
     try {
       const urlHash = parseUrlHash<IProjectInformationUrlHash>(true)
       const data = await this._fetchData()
+      if (this.props.useIdeaProcessing) {
+        const isProjectDataSynced = await this.isProjectDataSynced()
+        this.setState({ isProjectDataSynced })
+      }
       this.setState({ ...data, loading: false })
       if (urlHash.syncproperties === '1') this._onSyncProperties(undefined, urlHash.force === '1')
     } catch (error) {
@@ -58,7 +63,6 @@ export class ProjectInformation extends BaseWebPartComponent<
 
   public render() {
     if (this.state.hidden) return null
-
     return (
       <div className={styles.root}>
         <div className={styles.container}>
@@ -136,7 +140,18 @@ export class ProjectInformation extends BaseWebPartComponent<
         {this.state.displayParentCreationModal && (
           <CreateParentModal
             isOpen={this.state.displayParentCreationModal}
-            onDismiss={this.onDismissParentModal.bind(this)}
+            onDismiss={this.onDismissModal.bind(this, 'ParentCreation')}
+          />
+        )}
+        {this.state.displaySyncProjectModal && !this.state.loading && (
+          <SyncProjectModal
+            isOpen={this.state.displaySyncProjectModal}
+            onDismiss={this.onDismissModal.bind(this, 'SyncProject')}
+            data={this.state.data}
+            onSyncProperties={this._onSyncProperties.bind(this)}
+            title={this.props.webTitle}
+            hubSite={this.props.hubSite}
+            context={this.props.webPartContext}
           />
         )}
       </>
@@ -170,14 +185,59 @@ export class ProjectInformation extends BaseWebPartComponent<
       'EntryView',
       false
     ]
+    const syncProjectPropertiesAction: ActionType = [
+      strings.SyncProjectPropertiesText,
+      () => {
+        this.setState({ displaySyncProjectModal: true })
+      },
+      'Sync',
+      false,
+      !this.props.useIdeaProcessing || this.state.isProjectDataSynced
+    ]
     if (this.state.isParentProject) {
-      return [administerChildrenAction, viewAllPropertiesAction]
+      return [administerChildrenAction, viewAllPropertiesAction, syncProjectPropertiesAction]
     }
-    return [transformToParentProject, viewAllPropertiesAction]
+    return [transformToParentProject, viewAllPropertiesAction, syncProjectPropertiesAction]
   }
 
-  private onDismissParentModal() {
-    this.setState({ displayParentCreationModal: false })
+  private onDismissModal(type: string) {
+    switch (type) {
+      case 'ParentCreation':
+        this.setState({ displayParentCreationModal: false })
+        break
+      case 'SyncProject':
+        this.setState({ displaySyncProjectModal: false })
+        break
+    }
+  }
+
+  public async isProjectDataSynced(): Promise<boolean> {
+    try {
+      let isSynced = false
+
+      const projectDataList = this.props.hubSite.web.lists
+        .getByTitle(strings.IdeaProjectDataTitle)
+
+      const [projectDataItem] = await projectDataList
+        .items
+        .filter(`GtSiteUrl eq '${this.props.webPartContext.pageContext.web.absoluteUrl}'`)
+        .select('Id')
+        .get()
+
+      const ideaProcessingList = this.props.hubSite.web.lists.getByTitle(strings.IdeaProcessingTitle)
+
+      const [ideaProcessingItem] = await ideaProcessingList
+        .items
+        .filter(`GtIdeaProjectDataId eq '${projectDataItem.Id}'`)
+        .select('Id, GtIdeaDecision')
+        .get()
+
+      if (ideaProcessingItem.GtIdeaDecision === 'Godkjent og synkronisert') {
+        isSynced = true
+      }
+
+      return isSynced
+    } catch (error) {}
   }
 
   /**
