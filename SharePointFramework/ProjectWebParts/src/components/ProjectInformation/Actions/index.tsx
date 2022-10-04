@@ -9,13 +9,6 @@ export const Actions = (props: IActionsProps) => {
     [strings.ViewVersionHistoryText, props.versionHistoryUrl, 'History', false, !props.userHasAdminPermission],
     [strings.EditPropertiesText, props.editFormUrl, 'Edit', false, !props.userHasAdminPermission],
     [
-      strings.SyncProjectPropertiesText,
-      props.onSyncProperties,
-      'Sync',
-      false,
-      !props.onSyncProperties || !props.userHasAdminPermission
-    ],
-    [
       strings.EditSiteInformationText,
       window['_spLaunchSiteSettings'],
       'Info',

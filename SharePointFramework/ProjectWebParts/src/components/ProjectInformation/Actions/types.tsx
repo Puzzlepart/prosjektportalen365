@@ -17,11 +17,6 @@ export interface IActionsProps {
   editFormUrl: string
 
   /**
-   * On sync properties action
-   */
-  onSyncProperties: () => void
-
-  /**
    * Custom actions
    */
   customActions?: ActionType[]
