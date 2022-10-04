@@ -33,14 +33,16 @@ export const ShowHideColumnPanel = () => {
       GtProjectContentColumnsId: columns.map((c) => c['id'])
     }
 
-    await Promise.resolve(props.dataAdapter.configure().then((adapter) => {
-      adapter
-        .updateDataSourceItem(updateItems, state.dataSource, true)
-        .then(() => {
-          dispatch(SHOW_HIDE_COLUMNS({ columns: selectedColumns }))
-        })
-        .catch((error) => (state.error = error))
-    }))
+    await Promise.resolve(
+      props.dataAdapter.configure().then((adapter) => {
+        adapter
+          .updateDataSourceItem(updateItems, state.dataSource, true)
+          .then(() => {
+            dispatch(SHOW_HIDE_COLUMNS({ columns: selectedColumns }))
+          })
+          .catch((error) => (state.error = error))
+      })
+    )
   }
 
   const onDismiss = () => {
@@ -65,24 +67,14 @@ export const ShowHideColumnPanel = () => {
       onDismiss={onDismiss}
       isLightDismiss={true}
       className={styles.root}>
-      <p>
-        {strings.ShowHideColumnsDescription}
-      </p>
+      <p>{strings.ShowHideColumnsDescription}</p>
       {selectedColumns.map((col, idx) => {
         return (
-          <CheckBox
-            key={idx}
-            {...col}
-            onChanged={(_event, checked) => onChange(col, checked)}
-          />
+          <CheckBox key={idx} {...col} onChanged={(_event, checked) => onChange(col, checked)} />
         )
       })}
       <div className={styles.footer}>
-        <PrimaryButton
-          text={strings.SaveButtonLabel}
-          onClick={onSave}
-          disabled={!isChanged}
-        />
+        <PrimaryButton text={strings.SaveButtonLabel} onClick={onSave} disabled={!isChanged} />
         <DefaultButton
           text={strings.CloseButtonLabel}
           style={{ marginLeft: 4 }}

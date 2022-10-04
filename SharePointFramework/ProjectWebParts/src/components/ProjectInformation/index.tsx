@@ -10,9 +10,7 @@ import { CreateParentModal } from './ParentProjectModal'
 import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
 import { SyncProjectModal } from './SyncProjectModal'
-import {
-  IProjectInformationProps
-} from './types'
+import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
 
 export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (props) => {
@@ -78,4 +76,3 @@ ProjectInformation.defaultProps = {
 
 export { ProjectInformationModal } from '../ProjectInformationModal'
 export * from './types'
-

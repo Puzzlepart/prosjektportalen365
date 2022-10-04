@@ -56,13 +56,10 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<
                   onText: 'På',
                   offText: 'Av',
                   calloutWidth: 430,
-                  calloutContent:
-                    [React.createElement(
-                      'h2', {}, strings.UseIdeaProcessingFieldLabel
-                    ),
-                    React.createElement(
-                      'p', {}, strings.UseIdeaProcessingCalloutText
-                    )],
+                  calloutContent: [
+                    React.createElement('h2', {}, strings.UseIdeaProcessingFieldLabel),
+                    React.createElement('p', {}, strings.UseIdeaProcessingCalloutText)
+                  ],
                   checked: this.properties.useIdeaProcessing
                 })
               ]

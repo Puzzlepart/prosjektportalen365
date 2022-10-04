@@ -85,9 +85,9 @@ export interface IItemData {
   type?: string
   budgetTotal?: string
   costsTotal?: string
-  sortOrder?: number,
-  hexColor?: string,
-  elementType?: string,
+  sortOrder?: number
+  hexColor?: string
+  elementType?: string
   filter?: boolean
   tag?: string
 }

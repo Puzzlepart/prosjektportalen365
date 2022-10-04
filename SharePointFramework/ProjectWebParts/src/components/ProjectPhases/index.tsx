@@ -57,13 +57,18 @@ export const ProjectPhases: FunctionComponent<IProjectPhasesProps> = (props) => 
       props.syncPropertiesAfterPhaseChange === undefined ||
       props.syncPropertiesAfterPhaseChange
     ) {
-      const currentUrlIsPageRelative = document.location.pathname.indexOf(state.data.welcomePage) > -1
-      const welcomepage = !currentUrlIsPageRelative ? `${document.location.pathname}/${state.data.welcomePage}` : document.location.pathname
+      const currentUrlIsPageRelative =
+        document.location.pathname.indexOf(state.data.welcomePage) > -1
+      const welcomepage = !currentUrlIsPageRelative
+        ? `${document.location.pathname}/${state.data.welcomePage}`
+        : document.location.pathname
       setTimeout(() => {
-        window.location.assign(`${document.location.protocol}//${document.location.hostname}${welcomepage}#syncproperties=1`)
+        window.location.assign(
+          `${document.location.protocol}//${document.location.hostname}${welcomepage}#syncproperties=1`
+        )
         if (currentUrlIsPageRelative) {
           window.location.reload()
-        } 
+        }
       }, 1000)
     }
   }

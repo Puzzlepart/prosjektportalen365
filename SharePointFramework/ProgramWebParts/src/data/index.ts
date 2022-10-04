@@ -331,7 +331,7 @@ export class DataAdapter {
         SelectProperties: [siteIdProperty, 'GtCostsTotalOWSCURR', 'GtBudgetTotalOWSCURR']
       })
     ])
-    const [data] = (statusReports.map((item) => cleanDeep({ ...item })))
+    const [data] = statusReports.map((item) => cleanDeep({ ...item }))
     const config = _.find(timelineConfig, (col) => col.Title === strings.ProjectLabel)
     return {
       type: strings.ProjectLabel,
@@ -342,7 +342,7 @@ export class DataAdapter {
       elementType: config && config.GtElementType,
       showElementPortfolio: config && config.GtShowElementPortfolio,
       showElementProgram: config && config.GtShowElementProgram,
-      timelineFilter: config && config.GtTimelineFilter,
+      timelineFilter: config && config.GtTimelineFilter
     }
   }
 
@@ -372,7 +372,6 @@ export class DataAdapter {
         .get()
     ])
 
-
     return timelineItems
       .map((item) => {
         const type = item.GtTimelineTypeLookup && item.GtTimelineTypeLookup.Title
@@ -387,7 +386,7 @@ export class DataAdapter {
               item?.GtSiteIdLookup?.GtSiteId === this?.context?.pageContext?.site?.id?.toString()
           )
         ) {
-          if (item.GtSiteIdLookup?.Title && (config && config.GtShowElementProgram)) {
+          if (item.GtSiteIdLookup?.Title && config && config.GtShowElementProgram) {
             const model = new TimelineContentListModel(
               item.GtSiteIdLookup?.GtSiteId,
               item.GtSiteIdLookup?.Title,
@@ -427,7 +426,7 @@ export class DataAdapter {
         'GtElementType',
         'GtShowElementPortfolio',
         'GtShowElementProgram',
-        'GtTimelineFilter',
+        'GtTimelineFilter'
       )
       .top(500)
       .get()
@@ -438,22 +437,27 @@ export class DataAdapter {
    *
    */
   public async fetchTimelineAggregatedContent(configItemTitle: string, dataSourceName: string) {
-    const [timelineConfig] = await Promise.all([
-      this.fetchTimelineConfiguration()
-    ])
+    const [timelineConfig] = await Promise.all([this.fetchTimelineConfiguration()])
 
-    const config: any = _.find(timelineConfig, (col) => col.Title === (configItemTitle || 'Prosjektleveranse'))
+    const config: any = _.find(
+      timelineConfig,
+      (col) => col.Title === (configItemTitle || 'Prosjektleveranse')
+    )
 
     if (config && config.GtShowElementProgram) {
       const [projectDeliveries] = await Promise.all([
         this.configure().then((adapter) => {
-          return adapter.fetchItemsWithSource(dataSourceName || 'Alle prosjektleveranser',
-            [
-              'Title',
-              'GtDeliveryDescriptionOWSMTXT',
-              'GtDeliveryStartTimeOWSDATE',
-              'GtDeliveryEndTimeOWSDATE'],
-            true)
+          return adapter
+            .fetchItemsWithSource(
+              dataSourceName || 'Alle prosjektleveranser',
+              [
+                'Title',
+                'GtDeliveryDescriptionOWSMTXT',
+                'GtDeliveryStartTimeOWSDATE',
+                'GtDeliveryEndTimeOWSDATE'
+              ],
+              true
+            )
             .then((deliveries) => {
               return deliveries
             })
@@ -469,13 +473,13 @@ export class DataAdapter {
             item.SiteId,
             item.SiteTitle,
             item.Title,
-            config && config.Title || configItemTitle,
-            config && config.GtSortOrder || 90,
-            config && config.GtHexColor || '#384f61',
-            config && config.GtElementType || strings.BarLabel,
-            config && config.GtShowElementPortfolio || false,
-            config && config.GtShowElementProgram || false,
-            config && config.GtTimelineFilter || true,
+            (config && config.Title) || configItemTitle,
+            (config && config.GtSortOrder) || 90,
+            (config && config.GtHexColor) || '#384f61',
+            (config && config.GtElementType) || strings.BarLabel,
+            (config && config.GtShowElementPortfolio) || false,
+            (config && config.GtShowElementProgram) || false,
+            (config && config.GtTimelineFilter) || true,
             item.GtDeliveryStartTimeOWSDATE,
             item.GtDeliveryEndTimeOWSDATE,
             item.GtDeliveryDescriptionOWSMTXT
@@ -643,7 +647,11 @@ export class DataAdapter {
    * @param queryTemplate Query template
    * @param selectProperties Select properties
    */
-  private async _fetchItems(queryTemplate: string, selectProperties: string[], includeSelf: boolean = false) {
+  private async _fetchItems(
+    queryTemplate: string,
+    selectProperties: string[],
+    includeSelf: boolean = false
+  ) {
     const siteId = this.context.pageContext.site.id.toString()
     const programFilter = this._childProjects && this.aggregatedQueryBuilder('SiteId')
     if (includeSelf) programFilter.unshift(`SiteId:${siteId}`)
@@ -681,7 +689,11 @@ export class DataAdapter {
    * @param name Data source name
    * @param selectProperties Select properties
    */
-  public async fetchItemsWithSource(name: string, selectProperties: string[], includeSelf: boolean = false): Promise<any> {
+  public async fetchItemsWithSource(
+    name: string,
+    selectProperties: string[],
+    includeSelf: boolean = false
+  ): Promise<any> {
     const dataSrc = await this._dataSourceService.getByName(name)
     if (!dataSrc) {
       throw new Error(format(strings.DataSourceNotFound, name))
