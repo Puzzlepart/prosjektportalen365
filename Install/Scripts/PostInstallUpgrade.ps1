@@ -39,6 +39,13 @@ if ($null -ne $LastInstall) {
             Invoke-PnPQuery
         }
 
+        Remove-PnPField -List "Tidslinjeinnhold" -Identity "SiteIdLookup" -Force -ErrorAction SilentlyContinue
+        Remove-PnPField -List "Tidslinjeinnhold" -Identity "TimelineType" -Force -ErrorAction SilentlyContinue
+        Invoke-PnPQuery
+    }
+    if ($PreviousVersion -lt "1.7.0") {
+        Write-Host "[INFO] In version v1.7.0 we added integrated idea processing and reworked the IdeaProcessing list. Merging data now as part of the upgrade"
+
         $IdeaProcessing = Get-PnPList -Identity "Idebehandling" -ErrorAction SilentlyContinue
         if ($null -ne $IdeaProcessing) {
             $Items = Get-PnPListItem -List "Idebehandling"
@@ -47,15 +54,15 @@ if ($null -ne $LastInstall) {
                 $GtIdeaExecutionResourceNeeds = $Item.FieldValues["GtIdeaExecutionResourceNeeds"]
                 $GtIdeaExecutionSuccessFactors = $Item.FieldValues["GtIdeaExecutionSuccessFactors"]
 
-                if($null -ne $GtIdeaExpectedGain) {
+                if ($null -ne $GtIdeaExpectedGain) {
                     $Item["GtIdeaExpectedGains"] = $GtIdeaExpectedGain
                 }
 
-                if($null -ne $GtIdeaExecutionResourceNeeds) {
+                if ($null -ne $GtIdeaExecutionResourceNeeds) {
                     $Item["GtIdeaExecutionPlanResourceNeeds"] = $GtIdeaExecutionResourceNeeds
                 }
 
-                if($null -ne $GtIdeaExecutionSuccessFactors) {
+                if ($null -ne $GtIdeaExecutionSuccessFactors) {
                     $Item["GtIdeaExecutionPlanSuccessFactors"] = $GtIdeaExecutionSuccessFactors
                 }
                 
@@ -64,13 +71,9 @@ if ($null -ne $LastInstall) {
             }
         }
 
-        Remove-PnPField -List "Tidslinjeinnhold" -Identity "SiteIdLookup" -Force -ErrorAction SilentlyContinue
-        Remove-PnPField -List "Tidslinjeinnhold" -Identity "TimelineType" -Force -ErrorAction SilentlyContinue
         Remove-PnPField -List "Idebehandling" -Identity "GtIdeaExpectedGain" -Force -ErrorAction SilentlyContinue
         Remove-PnPField -List "Idebehandling" -Identity "GtIdeaExecutionResourceNeeds" -Force -ErrorAction SilentlyContinue
         Remove-PnPField -List "Idebehandling" -Identity "GtIdeaExecutionSuccessFactors" -Force -ErrorAction SilentlyContinue
         Invoke-PnPQuery
-
-        Apply-PnPProvisioningTemplate "$BasePath\Navigation.xml" -ErrorAction Stop
     }
 }
