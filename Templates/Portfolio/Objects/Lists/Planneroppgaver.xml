@@ -16,6 +16,7 @@
                 <FieldRef Name="GtCategory" />
                 <FieldRef Name="GtChecklist" />
                 <FieldRef Name="GtAttachments" />
+                <FieldRef Name="GtPlannerPreviewType" />
                 <FieldRef Name="Modified" />
             </ViewFields>
             <RowLimit Paged="TRUE">100</RowLimit>
