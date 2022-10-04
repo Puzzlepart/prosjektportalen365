@@ -21,4 +21,11 @@ if ($null -ne $LastInstall) {
             }
         }
     }
+
+    if ($PreviousVersion -lt "1.7.0") {
+        Write-Host "[INFO] In version v1.6.0 we reworked the aggregated webparts and removed the benefits webpart as this is now handled in the aggregated webpart. Updating pages to use the new aggregated webpart."
+        Write-Host "[INFO] Applying PnP template [UpdatedAggregatedClientSidePages] to [$Url]"
+        Apply-PnPProvisioningTemplate "./pnpFiles/UpdatedAggregatedClientSidePages.pnp" -ErrorAction Stop
+        Write-Host "[SUCCESS] Successfully applied PnP template [UpdatedAggregatedClientSidePages] to [$Url]" -ForegroundColor Green
+    }
 }
