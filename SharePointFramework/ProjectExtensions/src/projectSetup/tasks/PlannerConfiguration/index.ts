@@ -159,7 +159,7 @@ export class PlannerConfiguration extends BaseTask {
    * @param bucket Bucket
    * @param pageContext SP page context
    * @param appliedCategories Categories to apply to the task
-   * @param delay Delay in seconds before updating the plan to ensure it's created properly
+   * @param delay Delay in seconds before updating the task details to ensure it's created properly
    */
   private async _createTasks(
     planId: string,
@@ -197,45 +197,43 @@ export class PlannerConfiguration extends BaseTask {
    * @param taskId Task ID
    * @param taskDetails Task details
    * @param pageContext SP page context
-   * @param delay Delay in seconds before updating the plan to ensure it's created properly
+   * @param delay Delay in seconds before updating the task details to ensure it's created properly
    */
   private async _updateTaskDetails(taskId: any, taskDetails: ITaskDetails, pageContext: PageContext, delay: number = 1) {
-    if (taskDetails.description || taskDetails.checklist || taskDetails.attachments) {
-      this.logInformation(`Sleeping ${delay} seconds before updating task details for ${name}`)
-      await sleep(delay)
-      const taskDetailsJson: Record<string, any> = {
-        description: taskDetails.description ?? '',
-        checklist: taskDetails.checklist
-          ? taskDetails.checklist.reduce(
-            (obj, title) => ({
-              ...obj,
-              [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }
-            }),
-            {}
-          )
-          : {},
-        references: taskDetails.attachments
-          ? taskDetails.attachments.reduce(
-            (obj, attachment) => ({
-              ...obj,
-              [this.replaceUrlTokens(attachment.url, pageContext)]: {
-                '@odata.type': 'microsoft.graph.plannerExternalReference',
-                alias: attachment.alias,
-                type: attachment.type
-              }
-            }),
-            {}
-          )
-          : {},
-        previewType: taskDetails.attachments ? 'reference' : 'checklist'
-      }
-      const eTag = (await MSGraphHelper.Get(`planner/tasks/${taskId}/details`))['@odata.etag']
-      await MSGraphHelper.Patch(
-        `planner/tasks/${taskId}/details`,
-        JSON.stringify(taskDetailsJson),
-        eTag
-      )
+    this.logInformation(`Sleeping ${delay} seconds before updating task details for ${name}`)
+    await sleep(delay)
+    const taskDetailsJson: Record<string, any> = {
+      description: taskDetails.description ?? '',
+      checklist: taskDetails.checklist
+        ? taskDetails.checklist.reduce(
+          (obj, title) => ({
+            ...obj,
+            [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }
+          }),
+          {}
+        )
+        : {},
+      references: taskDetails.attachments
+        ? taskDetails.attachments.reduce(
+          (obj, attachment) => ({
+            ...obj,
+            [this.replaceUrlTokens(attachment.url, pageContext)]: {
+              '@odata.type': 'microsoft.graph.plannerExternalReference',
+              alias: attachment.alias,
+              type: attachment.type
+            }
+          }),
+          {}
+        )
+        : {},
+      previewType: taskDetails.previewType
     }
+    const eTag = (await MSGraphHelper.Get(`planner/tasks/${taskId}/details`))['@odata.etag']
+    await MSGraphHelper.Patch(
+      `planner/tasks/${taskId}/details`,
+      JSON.stringify(taskDetailsJson),
+      eTag
+    )
   }
 
   /**

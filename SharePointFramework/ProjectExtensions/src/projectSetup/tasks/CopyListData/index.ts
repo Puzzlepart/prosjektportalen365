@@ -46,11 +46,13 @@ export class CopyListData extends BaseTask {
                 'GtDescription',
                 'GtCategory',
                 'GtChecklist',
-                'GtAttachments'
+                'GtAttachments',
+                'GtPlannerPreviewType'
               ])
               const configuration = items.reduce((obj, item) => {
                 obj[item.GtCategory] = obj[item.GtCategory] || {}
                 const taskDetails: ITaskDetails = {}
+                taskDetails.previewType = 'automatic'
                 if (!stringIsNullOrEmpty(item.GtDescription)) {
                   taskDetails.description = item.GtDescription
                 }
@@ -63,6 +65,12 @@ export class CopyListData extends BaseTask {
                       .map((str) => new TaskAttachment(str))
                       .filter((attachment) => !stringIsNullOrEmpty(attachment.url))
                   } catch (error) { }
+                }
+                if (!stringIsNullOrEmpty(item.GtPlannerPreviewType)) {
+                  let m: RegExpExecArray
+                  if ((m = /\(([^)]+)\)/.exec(item.GtPlannerPreviewType)) !== null) {
+                    taskDetails.previewType = m[1] ?? 'automatic'
+                  }
                 }
                 obj[item.GtCategory][item.Title] = taskDetails
                 return obj

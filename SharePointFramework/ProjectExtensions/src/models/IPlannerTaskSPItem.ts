@@ -4,4 +4,5 @@ export interface IPlannerTaskSPItem {
   GtCategory: string
   GtChecklist: string
   GtAttachments: string
+  GtPlannerPreviewType: string
 }

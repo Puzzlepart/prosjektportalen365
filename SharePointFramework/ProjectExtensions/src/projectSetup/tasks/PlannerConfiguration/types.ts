@@ -48,6 +48,7 @@ export interface ITaskDetails {
   description?: string
   checklist?: string[]
   attachments?: TaskAttachment[]
+  previewType?: string
 }
 
 export interface IPlannerConfiguration {
