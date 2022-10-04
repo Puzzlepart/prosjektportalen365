@@ -15,4 +15,3 @@ if ($Mac.IsPresent) {
 } else {
   Invoke-PnPSiteTemplate "./pnpFiles/UpdatedAggregatedClientSidePages.pnp" -ErrorAction Stop
 }
-
