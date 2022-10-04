@@ -45,6 +45,7 @@ export class TaskAttachment {
 }
 
 export interface ITaskDetails {
+  description?: string
   checklist?: string[]
   attachments?: TaskAttachment[]
 }

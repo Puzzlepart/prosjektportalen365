@@ -12,6 +12,7 @@
             </Query>
             <ViewFields>
                 <FieldRef Name="Title" />
+                <FieldRef Name="GtDescription" />
                 <FieldRef Name="GtCategory" />
                 <FieldRef Name="GtChecklist" />
                 <FieldRef Name="GtAttachments" />

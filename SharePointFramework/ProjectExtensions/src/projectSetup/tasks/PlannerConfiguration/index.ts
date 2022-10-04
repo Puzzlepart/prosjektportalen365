@@ -170,7 +170,7 @@ export class PlannerConfiguration extends BaseTask {
     const tasks = Object.keys(this._configuration[bucket.name])
     for (let i = 0; i < tasks.length; i++) {
       const name = tasks[i]
-      const { checklist, attachments } = this._configuration[bucket.name][name]
+      const { description, checklist, attachments } = this._configuration[bucket.name][name]
       try {
         this.logInformation(`Creating task ${name} in bucket ${bucket.name}`)
         const task = await MSGraphHelper.Post(
@@ -186,27 +186,28 @@ export class PlannerConfiguration extends BaseTask {
           this.logInformation(`Sleeping ${delay} seconds before updating task details for ${name}`)
           await sleep(delay)
           const taskDetails: Record<string, any> = {
+            description: description ?? '',
             checklist: checklist
               ? checklist.reduce(
-                  (obj, title) => ({
-                    ...obj,
-                    [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }
-                  }),
-                  {}
-                )
+                (obj, title) => ({
+                  ...obj,
+                  [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }
+                }),
+                {}
+              )
               : {},
             references: attachments
               ? attachments.reduce(
-                  (obj, attachment) => ({
-                    ...obj,
-                    [this.replaceUrlTokens(attachment.url, pageContext)]: {
-                      '@odata.type': 'microsoft.graph.plannerExternalReference',
-                      alias: attachment.alias,
-                      type: attachment.type
-                    }
-                  }),
-                  {}
-                )
+                (obj, attachment) => ({
+                  ...obj,
+                  [this.replaceUrlTokens(attachment.url, pageContext)]: {
+                    '@odata.type': 'microsoft.graph.plannerExternalReference',
+                    alias: attachment.alias,
+                    type: attachment.type
+                  }
+                }),
+                {}
+              )
               : {},
             previewType: attachments ? 'reference' : 'checklist'
           }
