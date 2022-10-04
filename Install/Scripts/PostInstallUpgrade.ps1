@@ -44,7 +44,7 @@ if ($null -ne $LastInstall) {
         Invoke-PnPQuery
     }
     if ($PreviousVersion -lt "1.7.0") {
-        Write-Host "[INFO] In version v1.7.0 we added integrated idea processing and reworked the IdeaProcessing list. Merging data now as part of the upgrade"
+        Write-Host "[INFO] In version v1.7.0 we integrated idea processing and reworked the IdeaProcessing list. Merging data now as part of the upgrade"
 
         $IdeaProcessing = Get-PnPList -Identity "Idebehandling" -ErrorAction SilentlyContinue
         if ($null -ne $IdeaProcessing) {
