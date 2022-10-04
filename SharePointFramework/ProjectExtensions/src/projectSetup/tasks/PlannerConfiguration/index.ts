@@ -180,7 +180,12 @@ export class PlannerConfiguration extends BaseTask {
           planId,
           appliedCategories
         })
-        await this._updateTaskDetails(task.id, this._configuration[bucket.name][name], pageContext, delay)
+        await this._updateTaskDetails(
+          task.id,
+          this._configuration[bucket.name][name],
+          pageContext,
+          delay
+        )
         this.logInformation(`Succesfully created task ${name} in bucket ${bucket.name}`, {
           taskId: task.id,
           checklist
@@ -193,39 +198,50 @@ export class PlannerConfiguration extends BaseTask {
 
   /**
    * Update task details
-   * 
+   *
    * @param taskId Task ID
    * @param taskDetails Task details
    * @param pageContext SP page context
    * @param delay Delay in seconds before updating the task details to ensure it's created properly
    */
-  private async _updateTaskDetails(taskId: any, taskDetails: ITaskDetails, pageContext: PageContext, delay: number = 1) {
-    if(!taskDetails.description && !taskDetails.checklist && !taskDetails.attachments && taskDetails.previewType === 'automatic') return
+  private async _updateTaskDetails(
+    taskId: any,
+    taskDetails: ITaskDetails,
+    pageContext: PageContext,
+    delay: number = 1
+  ) {
+    if (
+      !taskDetails.description &&
+      !taskDetails.checklist &&
+      !taskDetails.attachments &&
+      taskDetails.previewType === 'automatic'
+    )
+      return
     this.logInformation(`Sleeping ${delay}s before updating task details for ${taskId}`)
     await sleep(delay)
     const taskDetailsJson: Record<string, any> = {
       description: taskDetails.description ?? '',
       checklist: taskDetails.checklist
         ? taskDetails.checklist.reduce(
-          (obj, title) => ({
-            ...obj,
-            [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }
-          }),
-          {}
-        )
+            (obj, title) => ({
+              ...obj,
+              [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }
+            }),
+            {}
+          )
         : {},
       references: taskDetails.attachments
         ? taskDetails.attachments.reduce(
-          (obj, attachment) => ({
-            ...obj,
-            [this.replaceUrlTokens(attachment.url, pageContext)]: {
-              '@odata.type': 'microsoft.graph.plannerExternalReference',
-              alias: attachment.alias,
-              type: attachment.type
-            }
-          }),
-          {}
-        )
+            (obj, attachment) => ({
+              ...obj,
+              [this.replaceUrlTokens(attachment.url, pageContext)]: {
+                '@odata.type': 'microsoft.graph.plannerExternalReference',
+                alias: attachment.alias,
+                type: attachment.type
+              }
+            }),
+            {}
+          )
         : {},
       previewType: taskDetails.previewType
     }
@@ -243,10 +259,7 @@ export class PlannerConfiguration extends BaseTask {
    * @param task Task JSON
    */
   private async _createTask(task: Record<string, any>) {
-    return await MSGraphHelper.Post(
-      'planner/tasks',
-      JSON.stringify(task)
-    )
+    return await MSGraphHelper.Post('planner/tasks', JSON.stringify(task))
   }
 
   /**
