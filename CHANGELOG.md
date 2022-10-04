@@ -16,6 +16,7 @@ Every change is marked with issue ID.
 - Added 'Description' and 'Tag' as two new default fields to ProjectTimelineContent list #764
 - Added better error handling for Resource allocation #776
 - Added support for description/notes on planner tasks #704
+- Added support for preview type on planner tasks #718
 
 ### Changed
 
