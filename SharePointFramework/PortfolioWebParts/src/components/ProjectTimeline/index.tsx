@@ -60,10 +60,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
       return (
         <div className={styles.root}>
           <div className={styles.container}>
-            <UserMessage
-              text={this.state.error}
-              type={MessageBarType.error}
-            />
+            <UserMessage text={this.state.error} type={MessageBarType.error} />
           </div>
         </div>
       )
@@ -235,19 +232,17 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
       const project = projects.find((project) => project.title === title)
       return {
         title: project.title,
-        siteId: project.siteId,
+        siteId: project.siteId
       }
     })
 
-    const groups: ITimelineGroup[] = mappedProjects.map(
-      (project, id) => {
-        return {
-          id,
-          title: project.title,
-          siteId: project.siteId,
-        }
+    const groups: ITimelineGroup[] = mappedProjects.map((project, id) => {
+      return {
+        id,
+        title: project.title,
+        siteId: project.siteId
       }
-    )
+    })
     return sortArray(groups, ['type', 'title'])
   }
 
@@ -271,8 +266,7 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         const group = _.find(groups, (grp) => item.siteId.indexOf(grp.siteId) !== -1)
         _siteId = group.siteId || 'N/A'
 
-        if (group === null)
-          return
+        if (group === null) return
 
         const style: React.CSSProperties = {
           color: 'white',
@@ -338,12 +332,12 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
 
     try {
       const timelineConfiguration = await data.fetchTimelineConfiguration()
-      
+
       const [
         projects,
         projectData,
         timelineContentItems,
-        timelineAggregatedContent = [],
+        timelineAggregatedContent = []
       ] = await Promise.all([
         data.fetchEnrichedProjects(),
         data.fetchTimelineProjectData(timelineConfiguration),
@@ -352,21 +346,21 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
           this.props.configItemTitle,
           this.props.dataSourceName,
           timelineConfiguration
-          )
-        ])
-        
-        const filteredProjects = projects.filter((project) => {
-          return project.startDate !== null && project.endDate !== null
-        })
-        
-        const filteredTimelineItems = [...timelineContentItems, ...timelineAggregatedContent].filter(
-          (item) => {
-            return filteredProjects.some((project) => {
-              return project.title.indexOf(item.title) !== -1
-            })
-          }
-          )
-      
+        )
+      ])
+
+      const filteredProjects = projects.filter((project) => {
+        return project.startDate !== null && project.endDate !== null
+      })
+
+      const filteredTimelineItems = [...timelineContentItems, ...timelineAggregatedContent].filter(
+        (item) => {
+          return filteredProjects.some((project) => {
+            return project.title.indexOf(item.title) !== -1
+          })
+        }
+      )
+
       let timelineItems: TimelineContentListModel[] = filteredProjects.map((project) => {
         const config = projectData.configElement
         const statusReport = projectData.reports.find((statusReport) => {

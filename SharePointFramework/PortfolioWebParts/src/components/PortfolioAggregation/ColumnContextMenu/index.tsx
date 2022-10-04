@@ -28,7 +28,7 @@ export const ColumnContextMenu = () => {
   )
   const columnEditable =
     props.displayMode === DisplayMode.Edit && columnIndex !== -1 && !props.lockedColumns
-  
+
   const addColumnItems: IContextualMenuItem[] = [
     {
       key: 'AddColumn',
@@ -42,7 +42,7 @@ export const ColumnContextMenu = () => {
       onClick: () => dispatch(TOGGLE_SHOW_HIDE_COLUMN_PANEL({ isOpen: true }))
     }
   ]
-  
+
   const items: IContextualMenuItem[] = [
     {
       key: 'SortDesc',

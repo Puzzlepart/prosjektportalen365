@@ -73,7 +73,7 @@ export interface IProjectPhasesState extends IBaseWebPartComponentState<IProject
   /**
    * Current user has admin permissions
    */
-   userHasAdminPermission?: boolean
+  userHasAdminPermission?: boolean
 }
 
 export type ChecklistData = {
@@ -114,7 +114,7 @@ export interface IProjectPhasesData {
   /**
    * Current user has admin permissions
    */
-   userHasAdminPermission?: boolean
+  userHasAdminPermission?: boolean
 }
 
 export interface IPhaseSitePageModel {

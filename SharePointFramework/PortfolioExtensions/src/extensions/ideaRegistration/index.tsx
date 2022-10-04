@@ -4,7 +4,7 @@ import {
   BaseListViewCommandSet,
   Command,
   IListViewCommandSetExecuteEventParameters,
-  RowAccessor,
+  RowAccessor
 } from '@microsoft/sp-listview-extensibility'
 import { Dialog } from '@microsoft/sp-dialog'
 import DialogPrompt from 'components/IdeaApprovalDialog'
@@ -25,7 +25,7 @@ const LOG_SOURCE: string = 'IdeaRegistrationCommand'
 enum RecommendationType {
   Approved = 'Godkjent for detaljering av idé',
   Consideration = 'Under vurdering',
-  Rejected = 'Avvist',
+  Rejected = 'Avvist'
 }
 
 export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any> {
@@ -43,15 +43,17 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     this._sp = spfi().using(SPFx(this.context))
     this._openCmd = this.tryGetCommand('OPEN_IDEA_REGISTRATION_DIALOG')
     this._openCmd.visible = false
-    this._userAuthorized = await isUserAuthorized(this._sp, strings.IdeaProcessorsSiteGroup, this.context)
+    this._userAuthorized = await isUserAuthorized(
+      this._sp,
+      strings.IdeaProcessorsSiteGroup,
+      this.context
+    )
     this.context.listView.listViewStateChangedEvent.add(this, this._onListViewStateChanged)
     return Promise.resolve()
   }
 
   @override
-  public async onExecute(
-    event: IListViewCommandSetExecuteEventParameters
-  ) {
+  public async onExecute(event: IListViewCommandSetExecuteEventParameters) {
     switch (event.itemId) {
       case this._openCmd.id:
         const dialog: DialogPrompt = new DialogPrompt()
@@ -63,10 +65,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
           this._isIdeaRecommended(row)
             ? Dialog.alert(strings.IdeaAlreadyApproved)
             : this._onSubmit(row, dialog.comment)
-        } else if (
-          dialog.comment &&
-          dialog.selectedChoice === strings.ConsiderationChoice
-        ) {
+        } else if (dialog.comment && dialog.selectedChoice === strings.ConsiderationChoice) {
           this._isIdeaRecommended(row)
             ? Dialog.alert(strings.IdeaAlreadyApproved)
             : this._onSubmitConsideration(row, dialog.comment)
@@ -91,7 +90,8 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
 
     this._openCmd = this.tryGetCommand('OPEN_IDEA_REGISTRATION_DIALOG')
     if (this._openCmd) {
-      this._openCmd.visible = this.context.listView.selectedRows?.length === 1 &&
+      this._openCmd.visible =
+        this.context.listView.selectedRows?.length === 1 &&
         this._userAuthorized &&
         location.href.includes(strings.IdeaRegistrationUrlTitle)
     }
@@ -100,7 +100,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
 
   /**
    * On submit and 'Rejected', fields will be updated
-   * 
+   *
    * @param row Selected row
    * @param comment Comment from the dialog
    */
@@ -111,39 +111,34 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
       .items.getById(rowId)
       .update({
         GtIdeaRecommendation: RecommendationType.Rejected,
-        GtIdeaRecommendationComment: comment,
+        GtIdeaRecommendationComment: comment
       })
       .then(() => Log.info(LOG_SOURCE, 'Updated Idéregistrering: Rejected'))
   }
 
   /**
    * On submit and 'Consideration', fields will be updated
-   * 
+   *
    * @param row Selected row
    * @param comment Comment from the dialog
    */
-  private _onSubmitConsideration(
-    row: RowAccessor,
-    comment: string
-  ) {
+  private _onSubmitConsideration(row: RowAccessor, comment: string) {
     const rowId = row.getValueByName('ID')
     this._sp.web.lists
       .getByTitle(strings.IdeaRegistrationTitle)
       .items.getById(rowId)
       .update({
         GtIdeaRecommendation: RecommendationType.Consideration,
-        GtIdeaRecommendationComment: comment,
+        GtIdeaRecommendationComment: comment
       })
-      .then(() =>
-        Log.info(LOG_SOURCE, 'Updated Idéregistrering: Consideration')
-      )
+      .then(() => Log.info(LOG_SOURCE, 'Updated Idéregistrering: Consideration'))
   }
 
   /**
    * On submit and 'Approved', fields will be updated,
    * - Creates a new item to 'Idebehandling' list
    * - Creates a sitepage for the registration will be created
-   * 
+   *
    * @param row Selected row
    * @param comment Comment from the dialog
    */
@@ -155,7 +150,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
       .items.getById(rowId)
       .update({
         GtIdeaRecommendation: RecommendationType.Approved,
-        GtIdeaRecommendationComment: comment,
+        GtIdeaRecommendationComment: comment
       })
       .then(() => Log.info(LOG_SOURCE, 'Updated Idéregistrering: Approved'))
       .catch((e) => Log.error(LOG_SOURCE, e))
@@ -166,7 +161,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
 
   /**
    * Update the work list with selected values of the registration list
-   * 
+   *
    * @param rowId Id of the row in the registration list
    * @param rowTitle Title of the row in the registration list
    */
@@ -180,7 +175,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
       .items.add({
         Title: rowTitle,
         GtRegistratedIdeaId: rowId,
-        GtIdeaUrl: ideaUrl,
+        GtIdeaUrl: ideaUrl
       })
       .then(() => Log.info(LOG_SOURCE, 'Updated work lits'))
       .catch((e) => Log.error(LOG_SOURCE, e))
@@ -188,7 +183,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
 
   /**
    * Create a site page with the selected values of the registration list
-   * 
+   *
    * @param row Selected row
    */
   private async _createSitePage(row: RowAccessor) {
@@ -268,13 +263,10 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
 
   /**
    * Returns true if the idea is already recommended
-   * 
+   *
    * @param row Selected row
    */
   private _isIdeaRecommended(row: RowAccessor): boolean {
-    return (
-      row.getValueByName('GtIdeaRecommendation') ===
-      RecommendationType.Approved
-    )
+    return row.getValueByName('GtIdeaRecommendation') === RecommendationType.Approved
   }
 }

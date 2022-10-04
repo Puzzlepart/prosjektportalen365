@@ -194,7 +194,6 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
     setState({ ...state, searchTerm: searchTerm.toLowerCase() })
   }
 
-
   /**
    * Get searchbox placeholder text based on `state.selectedView`
    */
