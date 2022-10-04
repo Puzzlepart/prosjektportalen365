@@ -629,7 +629,8 @@ export class DataAdapter implements IDataAdapter {
     let projects = []
 
     if (odata && !dataSource.includes('(Prosjektnivå)')) {
-      [projects] = await Promise.all([
+      // eslint-disable-next-line @typescript-eslint/no-extra-semi
+      ;[projects] = await Promise.all([
         await sp.web.lists
           .getByTitle(strings.ProjectsListName)
           .items.filter(`${odata}`)
