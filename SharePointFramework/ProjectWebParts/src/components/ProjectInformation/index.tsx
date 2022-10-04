@@ -28,7 +28,6 @@ import {
   IProjectInformationUrlHash
 } from './types'
 import { SyncProjectModal } from './SyncProjectModal'
-import { sp } from '@pnp/sp'
 
 export class ProjectInformation extends BaseWebPartComponent<
   IProjectInformationProps,
@@ -212,15 +211,6 @@ export class ProjectInformation extends BaseWebPartComponent<
     }
   }
 
-  public async isParentProjectOrProgram() {
-    const data = await sp.web.lists
-      .getByTitle('Prosjektegenskaper')
-      .items.getById(1)
-      .select('GtIsParentProject', 'GtIsProgram')
-      .get()
-    this.setState({ isParentProject: data?.GtIsParentProject || data?.GtIsProgram })
-  }
-
   public async isProjectDataSynced(): Promise<boolean> {
     try {
       let isSynced = false
@@ -247,7 +237,7 @@ export class ProjectInformation extends BaseWebPartComponent<
       }
 
       return isSynced
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
