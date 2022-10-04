@@ -1,5 +1,5 @@
 <pnp:ContentType ID="0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D04" Name="{resource:ContentTypes_CustomChart_Name}" Description="{resource:ContentTypes_CustomChart_Description}" Group="{resource:ContentTypes_Group}" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" />
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />

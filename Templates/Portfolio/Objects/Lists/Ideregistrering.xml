@@ -1,5 +1,5 @@
 <pnp:ListInstance Title="{resource:Lists_IdeaRegistration_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_IdeaRegistration_Url}" ReadSecurity="0" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false"
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100AAE66CFF1A3F488D843FF7CF96E41DD9" Default="true" />
     </pnp:ContentTypeBindings>

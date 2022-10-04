@@ -1,5 +1,5 @@
 <pnp:ContentType ID="0x0100486B1F8AEA24486FBA1C1BA9146C360C" Name="{resource:ContentTypes_Checkpoint_Name}" Description="{resource:ContentTypes_Checkpoint_Description}" Group="{resource:ContentTypes_Group}" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
         <pnp:FieldRef ID="325543a5-815d-485d-a9a5-e0773ad762e9" Name="GtProjectPhase" Required="true" />
