@@ -157,7 +157,7 @@ export class PlannerConfiguration extends BaseTask {
    *
    * @param planId Plan Id
    * @param bucket Bucket
-   * @param {Record<string, boolean>} appliedCategories Categories to apply to the task
+   * @param appliedCategories Categories to apply to the task
    * @param delay Delay in seconds before updating the plan to ensure it's created properly
    */
   private async _createTasks(
