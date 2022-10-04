@@ -23,6 +23,7 @@ Every change is marked with issue ID.
 - Information messages now uses a newer and stable version to render HTML #762
 - Reduced amount of calls when loading ProjectTimeline, this improves the speed by alot! #743
 - Filterpanel for Timeline: Project is now collapsed by default in the panel #776
+- Restructured configuration page using 3 columns #712
 
 ### Fixed
 

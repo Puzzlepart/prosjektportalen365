@@ -91,10 +91,7 @@ export class ResourceAllocation extends Component<
       return (
         <div className={styles.root}>
           <div className={styles.container}>
-            <UserMessage
-              text={this.state.error}
-              type={MessageBarType.success}
-            />
+            <UserMessage text={this.state.error} type={MessageBarType.success} />
           </div>
         </div>
       )

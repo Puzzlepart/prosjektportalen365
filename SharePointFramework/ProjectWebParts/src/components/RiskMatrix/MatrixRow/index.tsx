@@ -95,7 +95,7 @@ export const MatrixRows = ({ items, calloutTemplate, customCells }) => {
         onText={strings.Yes}
         offText={strings.No}
         onChange={(_event, _showPostAction) => setShowPostAction(_showPostAction)}
-        />
+      />
     </>
   )
 }

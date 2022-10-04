@@ -3,7 +3,7 @@ import {
   BaseListViewCommandSet,
   Command,
   IListViewCommandSetExecuteEventParameters,
-  RowAccessor,
+  RowAccessor
 } from '@microsoft/sp-listview-extensibility'
 import { TypedHash } from '@pnp/common'
 import { SPFI, spfi, SPFx } from '@pnp/sp'
@@ -23,7 +23,6 @@ export interface IIdeaProjectDataCommandProperties {
 Logger.subscribe(ConsoleListener())
 Logger.activeLogLevel = LogLevel.Info
 
-
 export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdeaProjectDataCommandProperties> {
   private _userAuthorized: boolean
   private _openCmd: Command
@@ -39,7 +38,11 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
     this._sp = spfi().using(SPFx(this.context))
     this._openCmd = this.tryGetCommand('OPEN_IDEA_PROJECTDATA_DIALOG')
     this._openCmd.visible = false
-    this._userAuthorized = await isUserAuthorized(this._sp, strings.IdeaProcessorsSiteGroup, this.context)
+    this._userAuthorized = await isUserAuthorized(
+      this._sp,
+      strings.IdeaProcessorsSiteGroup,
+      this.context
+    )
     this.context.listView.listViewStateChangedEvent.add(this, this._onListViewStateChanged)
     return Promise.resolve()
   }
@@ -69,7 +72,8 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
 
     this._openCmd = this.tryGetCommand('OPEN_IDEA_PROJECTDATA_DIALOG')
     if (this._openCmd) {
-      this._openCmd.visible = this.context.listView.selectedRows?.length === 1 &&
+      this._openCmd.visible =
+        this.context.listView.selectedRows?.length === 1 &&
         this._userAuthorized &&
         location.href.includes(strings.IdeaProcessingUrlTitle)
     }
@@ -79,7 +83,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
   /**
    * On submit fields will be updated,
    * - Creates a new item to 'ProsjektData' list
-   * 
+   *
    * @param row Selected row
    */
   private _onSubmit(row: RowAccessor) {
@@ -90,14 +94,14 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
 
   /**
    * Create new item, update selected item and send the user to the edit form for the new item
-   * 
+   *
    * @param rowId: ID of the selected row
    * @param rowTitle: Title of the selected row
    */
   private async _redirectNewItem(rowId: number, rowTitle: string) {
     const properties: TypedHash<any> = {
       Title: rowTitle,
-      GtProjectFinanceName: rowTitle,
+      GtProjectFinanceName: rowTitle
     }
 
     Logger.log({
@@ -120,10 +124,9 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
    */
   public async _updateItem(rowId: number, item: any): Promise<any> {
     const list = this._sp.web.lists.getByTitle(strings.IdeaProcessingTitle)
-    const itemUpdateResult = await list.items.getById(rowId)
-      .update({
-        GtIdeaProjectDataId: item.Id,
-      })
+    const itemUpdateResult = await list.items.getById(rowId).update({
+      GtIdeaProjectDataId: item.Id
+    })
     return itemUpdateResult.data
   }
 
