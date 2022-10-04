@@ -43,37 +43,4 @@ if ($null -ne $LastInstall) {
         Remove-PnPField -List "Tidslinjeinnhold" -Identity "TimelineType" -Force -ErrorAction SilentlyContinue
         Invoke-PnPQuery
     }
-    if ($PreviousVersion -lt "1.7.0") {
-        Write-Host "[INFO] In version v1.7.0 we integrated idea processing and reworked the IdeaProcessing list. Merging data now as part of the upgrade"
-
-        $IdeaProcessing = Get-PnPList -Identity "Idebehandling" -ErrorAction SilentlyContinue
-        if ($null -ne $IdeaProcessing) {
-            $Items = Get-PnPListItem -List "Idebehandling"
-            foreach ($Item in $Items) {
-                $GtIdeaExpectedGain = $Item.FieldValues["GtIdeaExpectedGain"]
-                $GtIdeaExecutionResourceNeeds = $Item.FieldValues["GtIdeaExecutionResourceNeeds"]
-                $GtIdeaExecutionSuccessFactors = $Item.FieldValues["GtIdeaExecutionSuccessFactors"]
-
-                if ($null -ne $GtIdeaExpectedGain) {
-                    $Item["GtIdeaExpectedGains"] = $GtIdeaExpectedGain
-                }
-
-                if ($null -ne $GtIdeaExecutionResourceNeeds) {
-                    $Item["GtIdeaExecutionPlanResourceNeeds"] = $GtIdeaExecutionResourceNeeds
-                }
-
-                if ($null -ne $GtIdeaExecutionSuccessFactors) {
-                    $Item["GtIdeaExecutionPlanSuccessFactors"] = $GtIdeaExecutionSuccessFactors
-                }
-                
-                $Item.Update()
-                Invoke-PnPQuery
-            }
-        }
-
-        Remove-PnPField -List "Idebehandling" -Identity "GtIdeaExpectedGain" -Force -ErrorAction SilentlyContinue
-        Remove-PnPField -List "Idebehandling" -Identity "GtIdeaExecutionResourceNeeds" -Force -ErrorAction SilentlyContinue
-        Remove-PnPField -List "Idebehandling" -Identity "GtIdeaExecutionSuccessFactors" -Force -ErrorAction SilentlyContinue
-        Invoke-PnPQuery
-    }
 }

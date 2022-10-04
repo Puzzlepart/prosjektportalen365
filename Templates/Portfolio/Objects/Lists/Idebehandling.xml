@@ -16,10 +16,10 @@
                 <FieldRef Name="GtRegistratedIdea" />
                 <FieldRef Name="GtIdeaOwner"/>
                 <FieldRef Name="GtIdeaSolutionDescription" />
-                <FieldRef Name="GtIdeaExpectedGains" />
+                <FieldRef Name="GtIdeaExpectedGain" />
                 <FieldRef Name="GtIdeaExecutionPlanApproach" />
-                <FieldRef Name="GtIdeaExecutionPlanResourceNeeds" />
-                <FieldRef Name="GtIdeaExecutionPlanSuccessFactors" />
+                <FieldRef Name="GtIdeaExecutionResourceNeeds" />
+                <FieldRef Name="GtIdeaExecutionSuccessFactors" />
                 <FieldRef Name="GtIdeaReference" />
                 <FieldRef Name="GtIdeaOtherComments" />
                 <FieldRef Name="GtIdeaDecisionComment" />

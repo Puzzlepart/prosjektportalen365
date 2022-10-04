@@ -6,10 +6,10 @@
     <pnp:FieldRef ID="724036b3-ff76-40d7-a7df-9613e6f4e8fa" Name="GtIdeaUrl" Required="true"/>
     <pnp:FieldRef ID="67eba603-1c39-49ae-a91a-29664f0824c8" Name="GtIdeaOwner" Required="true"/>
     <pnp:FieldRef ID="a7e1a8b5-8c93-410f-a84d-45772f37293e" Name="GtIdeaSolutionDescription" Required="true"/>
-    <pnp:FieldRef ID="ed36f477-8bd6-4f4d-91b3-8164eada3d7f" Name="GtIdeaExpectedGains" Required="true"/>
+    <pnp:FieldRef ID="75dfa9cc-7e6b-4b71-bfca-bb1bee9e1f55" Name="GtIdeaExpectedGain" Required="true"/>
     <pnp:FieldRef ID="2081191c-6c4e-452c-9b50-12e80a5047fa" Name="GtIdeaExecutionPlanApproach" Required="true"/>
-    <pnp:FieldRef ID="2bb35030-a089-4506-b6d5-07811db388e6" Name="GtIdeaExecutionPlanResourceNeeds" Required="true"/>
-    <pnp:FieldRef ID="00a5f453-bf62-4ab5-964f-26ee87db799b" Name="GtIdeaExecutionPlanSuccessFactors" Required="true"/>
+    <pnp:FieldRef ID="70f7cd7a-1a5a-430c-9da6-1a2710de7eeb" Name="GtIdeaExecutionResourceNeeds" Required="true"/>
+    <pnp:FieldRef ID="a43b99a2-1b4c-4993-a390-56343004895c" Name="GtIdeaExecutionSuccessFactors" Required="true"/>
     <pnp:FieldRef ID="df578dbf-fb10-4834-be61-6b9355dbc1a9" Name="GtIdeaReference" />
     <pnp:FieldRef ID="86e2c34f-3522-4715-a18b-d0964b5efeb5" Name="GtIdeaDecision" />
     <pnp:FieldRef ID="ebb77296-0d25-42a3-b996-d7396f84d8ce" Name="GtIdeaOtherComments" />
