@@ -3,7 +3,7 @@ import {
   BaseListViewCommandSet,
   Command,
   IListViewCommandSetExecuteEventParameters,
-  RowAccessor,
+  RowAccessor
 } from '@microsoft/sp-listview-extensibility'
 import { SPFI, spfi, SPFx } from '@pnp/sp'
 import '@pnp/sp/webs'
@@ -22,7 +22,7 @@ enum RecommendationType {
   ApprovedSync = 'Godkjent og synkronisert',
   Approved = 'Godkjent for konseptutredning',
   Consideration = 'Under vurdering',
-  Rejected = 'Avvist',
+  Rejected = 'Avvist'
 }
 
 export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
@@ -40,7 +40,11 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
     this._sp = spfi().using(SPFx(this.context))
     this._openCmd = this.tryGetCommand('OPEN_IDEA_PROCESSING_DIALOG')
     this._openCmd.visible = false
-    this._userAuthorized = await isUserAuthorized(this._sp, strings.IdeaProcessorsSiteGroup, this.context)
+    this._userAuthorized = await isUserAuthorized(
+      this._sp,
+      strings.IdeaProcessorsSiteGroup,
+      this.context
+    )
     this.context.listView.listViewStateChangedEvent.add(this, this._onListViewStateChanged)
     return Promise.resolve()
   }
@@ -56,10 +60,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
         dialog.show().then(() => {
           if (dialog.comment && dialog.selectedChoice === strings.ApproveChoice) {
             this._onSubmit(row, dialog.comment)
-          } else if (
-            dialog.comment &&
-            dialog.selectedChoice === strings.ConsiderationChoice
-          ) {
+          } else if (dialog.comment && dialog.selectedChoice === strings.ConsiderationChoice) {
             this._onSubmitConsideration(row, dialog.comment)
           } else if (dialog.comment && dialog.selectedChoice === strings.RejectChoice) {
             this._onSubmitRejected(row, dialog.comment)
@@ -81,7 +82,8 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
 
     this._openCmd = this.tryGetCommand('OPEN_IDEA_PROCESSING_DIALOG')
     if (this._openCmd) {
-      this._openCmd.visible = this.context.listView.selectedRows?.length === 1 &&
+      this._openCmd.visible =
+        this.context.listView.selectedRows?.length === 1 &&
         this._userAuthorized &&
         location.href.includes(strings.IdeaProcessingUrlTitle)
     }
@@ -90,7 +92,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
 
   /**
    * On submit and rejected
-   * 
+   *
    * @param row Selected row
    * @param comment Comment
    */
@@ -101,49 +103,43 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
       .items.getById(rowId)
       .update({
         GtIdeaDecision: RecommendationType.Rejected,
-        GtIdeaDecisionComment: comment,
+        GtIdeaDecisionComment: comment
       })
       .then(() => Logger.log({ message: 'Updated Idébehandling', level: LogLevel.Info }))
   }
 
   /**
    * On submit and concideration
-   * 
+   *
    * @param row Selected row
    * @param comment Comment
    */
-  private _onSubmitConsideration(
-    row: RowAccessor,
-    comment: string
-  ) {
+  private _onSubmitConsideration(row: RowAccessor, comment: string) {
     const rowId = row.getValueByName('ID')
     this._sp.web.lists
       .getByTitle(strings.IdeaProcessingTitle)
       .items.getById(rowId)
       .update({
         GtIdeaDecision: RecommendationType.Consideration,
-        GtIdeaDecisionComment: comment,
+        GtIdeaDecisionComment: comment
       })
       .then(() => Logger.log({ message: 'Updated Idébehandling', level: LogLevel.Info }))
   }
 
   /**
    * On submit and approved
-   * 
+   *
    * @param row Selected row
    * @param comment Comment
    */
-  private _onSubmit(
-    row: RowAccessor,
-    comment: string
-  ) {
+  private _onSubmit(row: RowAccessor, comment: string) {
     const rowId = row.getValueByName('ID')
     this._sp.web.lists
       .getByTitle(strings.IdeaProcessingTitle)
       .items.getById(rowId)
       .update({
         GtIdeaDecision: RecommendationType.Approved,
-        GtIdeaDecisionComment: comment,
+        GtIdeaDecisionComment: comment
       })
       .then(() => Logger.log({ message: 'Updated Idébehandling', level: LogLevel.Info }))
   }

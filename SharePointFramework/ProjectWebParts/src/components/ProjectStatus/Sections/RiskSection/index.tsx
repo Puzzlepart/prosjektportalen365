@@ -53,12 +53,7 @@ export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionStat
   private _renderContent() {
     if (this.state.loading || !this.state.data) return null
     if (this.state.error)
-      return (
-        <UserMessage
-          text={strings.ListSectionDataErrorMessage}
-          type={MessageBarType.error}
-        />
-      )
+      return <UserMessage text={strings.ListSectionDataErrorMessage} type={MessageBarType.error} />
     return (
       <>
         <div className='ms-Grid-col ms-sm12'>

@@ -3,7 +3,7 @@ export interface IRiskMatrixProps {
   items?: RiskElementModel[]
   width?: number | string
   height?: number | string
-  calloutTemplate: string,
+  calloutTemplate: string
   pageContext?: PageContext
 }
 

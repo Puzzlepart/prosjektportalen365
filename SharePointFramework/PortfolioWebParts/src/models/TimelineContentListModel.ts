@@ -39,6 +39,6 @@ export class TimelineContentListModel {
     public budgetTotal?: string,
     public costsTotal?: string,
     public url?: string,
-    public phase?: string,
+    public phase?: string
   ) {}
 }

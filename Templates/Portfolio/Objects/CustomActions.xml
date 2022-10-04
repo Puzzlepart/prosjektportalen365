@@ -1,4 +1,4 @@
-<pnp:CustomActions xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+<pnp:CustomActions xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:WebCustomActions>
         <pnp:CustomAction Group="Customization" Location="Microsoft.SharePoint.SiteSettings" Name="Konfigurasjon av Prosjektportalen" Title="Konfigurasjon av Prosjektportalen" Url="SitePages/Konfigurasjon.aspx" Rights="ManageWeb" Sequence="2001" />
     </pnp:WebCustomActions>

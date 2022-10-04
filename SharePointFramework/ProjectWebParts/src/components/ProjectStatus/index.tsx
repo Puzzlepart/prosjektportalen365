@@ -111,8 +111,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       return (
         <div className={styles.projectStatus}>
           <div className={styles.container}>
-            <UserMessage text={this.state.error} type={MessageBarType.info}
-            />
+            <UserMessage text={this.state.error} type={MessageBarType.info} />
           </div>
         </div>
       )
@@ -122,16 +121,15 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         {this._commandBar()}
         <div className={styles.container}>
           {this.state.data.reports.filter((report) => !report.published).length > 0 && (
-            <UserMessage text={strings.UnpublishedStatusReportInfo} type={MessageBarType.info}
-            />
+            <UserMessage text={strings.UnpublishedStatusReportInfo} type={MessageBarType.info} />
           )}
           <div className={`${styles.header} ${styles.column12}`}>
             <div className={styles.title}>
               {this.props.title}{' '}
               {this.state.selectedReport
                 ? moment(
-                  this.state.selectedReport.publishedDate ?? this.state.selectedReport.created
-                ).format('DD.MM.yyyy')
+                    this.state.selectedReport.publishedDate ?? this.state.selectedReport.created
+                  ).format('DD.MM.yyyy')
                 : null}{' '}
             </div>
           </div>
@@ -153,32 +151,35 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         disabled: data.reports.filter((report) => !report.published).length !== 0,
         onClick: this._redirectNewStatusReport.bind(this)
       },
-      (selectedReport && this.state.userHasAdminPermission) && {
-        key: 'DELETE_REPORT',
-        name: strings.DeleteReportButtonText,
-        iconProps: { iconName: 'Delete' },
-        disabled: selectedReport?.published,
-        onClick: () => {
-          this._deleteReport(selectedReport)
+      selectedReport &&
+        this.state.userHasAdminPermission && {
+          key: 'DELETE_REPORT',
+          name: strings.DeleteReportButtonText,
+          iconProps: { iconName: 'Delete' },
+          disabled: selectedReport?.published,
+          onClick: () => {
+            this._deleteReport(selectedReport)
+          }
+        },
+      selectedReport &&
+        this.state.userHasAdminPermission && {
+          key: 'EDIT_REPORT',
+          name: strings.EditReportButtonText,
+          iconProps: { iconName: 'Edit' },
+          href: selectedReport?.editFormUrl,
+          disabled: selectedReport?.published
+        },
+      selectedReport &&
+        this.state.userHasAdminPermission && {
+          key: 'PUBLISH_REPORT',
+          name: strings.PublishReportButtonText,
+          iconProps: { iconName: 'PublishContent' },
+          disabled: selectedReport?.published,
+          onClick: () => {
+            this._publishReport(selectedReport)
+            this.setState({ isPublishing: true })
+          }
         }
-      },
-      (selectedReport && this.state.userHasAdminPermission) && {
-        key: 'EDIT_REPORT',
-        name: strings.EditReportButtonText,
-        iconProps: { iconName: 'Edit' },
-        href: selectedReport?.editFormUrl,
-        disabled: selectedReport?.published
-      },
-      (selectedReport && this.state.userHasAdminPermission) && {
-        key: 'PUBLISH_REPORT',
-        name: strings.PublishReportButtonText,
-        iconProps: { iconName: 'PublishContent' },
-        disabled: selectedReport?.published,
-        onClick: () => {
-          this._publishReport(selectedReport)
-          this.setState({ isPublishing: true })
-        }
-      }
     ].filter(Boolean)
     const farItems: IContextualMenuItem[] = []
     if (sourceUrl) {
@@ -226,7 +227,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       })
     }
     return (
-      <CommandBar items={removeMenuBorder<IContextualMenuItem>(items)} farItems={removeMenuBorder<IContextualMenuItem>(farItems)}
+      <CommandBar
+        items={removeMenuBorder<IContextualMenuItem>(items)}
+        farItems={removeMenuBorder<IContextualMenuItem>(farItems)}
       />
     )
   }
@@ -272,10 +275,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     const { data, selectedReport } = this.state
 
     if (!selectedReport)
-      return (
-        <UserMessage text={strings.NoStatusReportsMessage} type={MessageBarType.info}
-        />
-      )
+      return <UserMessage text={strings.NoStatusReportsMessage} type={MessageBarType.info} />
     return data.sections
       .filter((sec) => !stringIsNullOrEmpty(selectedReport.getStatusValue(sec.fieldName).value))
       .filter((sec) => sec.showAsSection || sec.type === SectionType.SummarySection)
@@ -285,9 +285,11 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           case SectionType.SummarySection: {
             return (
               <SummarySection
-                {...baseProps} sections={data.sections.filter(
+                {...baseProps}
+                sections={data.sections.filter(
                   (s) => s.showInStatusSection || s.type === SectionType.SummarySection
-                )} columnConfig={data.columnConfig}
+                )}
+                columnConfig={data.columnConfig}
               />
             )
           }
@@ -301,14 +303,18 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           case SectionType.ProjectPropertiesSection: {
             return (
               <ProjectPropertiesSection
-                {...baseProps} fieldValues={{ ...data.properties.fieldValues, ...selectedReport.fieldValues }} fields={[...data.properties.fields, ...data.reportFields]} fieldWidth={this.props.fieldWidth}
+                {...baseProps}
+                fieldValues={{ ...data.properties.fieldValues, ...selectedReport.fieldValues }}
+                fields={[...data.properties.fields, ...data.reportFields]}
+                fieldWidth={this.props.fieldWidth}
               />
             )
           }
           case SectionType.RiskSection: {
             return (
               <RiskSection
-                {...baseProps} riskMatrix={{
+                {...baseProps}
+                riskMatrix={{
                   width: riskMatrixWidth,
                   height: riskMatrixHeight,
                   calloutTemplate: riskMatrixCalloutTemplate,
@@ -512,7 +518,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           "Hidden eq false and Group ne 'Hidden'"
         )
       ])
-      const userHasAdminPermission = await SPDataAdapter.checkProjectAdminPermission(properties.fieldValues)
+      const userHasAdminPermission = await SPDataAdapter.checkProjectAdminPermission(
+        properties.fieldValues
+      )
       const sortedReports = reports
         .map((item) => item.setDefaultEditFormUrl(reportList.DefaultEditFormUrl))
         .sort((a, b) => b.created.getTime() - a.created.getTime())

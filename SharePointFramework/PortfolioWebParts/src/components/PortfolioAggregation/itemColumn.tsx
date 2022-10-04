@@ -80,7 +80,8 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
 /**
  * Get default columns
  */
-export const getDefaultColumns = (isParent?: boolean) => [ // context: IPortfolioAggregationContext, 
+export const getDefaultColumns = (isParent?: boolean) => [
+  // context: IPortfolioAggregationContext,
   {
     key: 'SiteTitle',
     idx: 0,

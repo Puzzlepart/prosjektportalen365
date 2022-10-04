@@ -101,7 +101,7 @@ export interface IProjectInformationState
   /**
    * Current user has admin permissions
    */
-   userHasAdminPermission?: boolean
+  userHasAdminPermission?: boolean
 }
 
 export interface IProjectInformationUrlHash {

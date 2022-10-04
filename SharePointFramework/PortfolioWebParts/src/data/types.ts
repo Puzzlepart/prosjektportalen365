@@ -73,7 +73,7 @@ export interface IDataAdapter {
     hubSiteId: any
   ): Promise<any>
   isUserInGroup?(PortfolioManagerGroupName: string): Promise<boolean>
-  fetchTimelineProjectData?(timelineConfig: any[]): Promise<{ reports: any; configElement: any}>
+  fetchTimelineProjectData?(timelineConfig: any[]): Promise<{ reports: any; configElement: any }>
   fetchTimelineContentItems?(timelineConfig: any[]): Promise<TimelineContentListModel[]>
   fetchTimelineAggregatedContent?(
     configItemTitle: string,
@@ -102,5 +102,9 @@ export interface IDataAdapter {
   updateProjectContentColumn?(properties: TypedHash<any>): Promise<any>
   deleteProjectContentColumn?(property: TypedHash<any>): Promise<any>
   addItemToList?(listName: string, properties: TypedHash<any>): Promise<any[]>
-  updateDataSourceItem?(properties: TypedHash<any>, dataSourceTitle: string, shouldReplace?: boolean): Promise<ItemUpdateResult>
+  updateDataSourceItem?(
+    properties: TypedHash<any>,
+    dataSourceTitle: string,
+    shouldReplace?: boolean
+  ): Promise<ItemUpdateResult>
 }

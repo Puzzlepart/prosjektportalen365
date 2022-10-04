@@ -10,13 +10,11 @@ import { CreateParentModal } from './ParentProjectModal'
 import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
 import { SyncProjectModal } from './SyncProjectModal'
-import {
-  IProjectInformationProps
-} from './types'
+import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
 
 export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (props) => {
-  const { state, setState, getCustomActions ,onSyncProperties} = useProjectInformation(props)
+  const { state, setState, getCustomActions, onSyncProperties } = useProjectInformation(props)
   if (state.hidden) return null
 
   return (
@@ -34,7 +32,7 @@ export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (
               <div>
                 <ProjectProperties properties={state.properties} />
                 {(!props.hideActions && state.message) && <UserMessage {...state.message} />}
-                <Actions   customActions={getCustomActions()}    />
+                <Actions customActions={getCustomActions()} />
                 <ProgressDialog {...state.progress} />
                 {state.confirmActionProps && <ConfirmDialog {...state.confirmActionProps} />}
                 <Panel
@@ -78,4 +76,3 @@ ProjectInformation.defaultProps = {
 
 export { ProjectInformationModal } from '../ProjectInformationModal'
 export * from './types'
-
