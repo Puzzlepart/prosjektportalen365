@@ -7,7 +7,7 @@ import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'projectSetup'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
-import { IPlannerBucket, IPlannerConfiguration, IPlannerPlan } from './types'
+import { IPlannerBucket, IPlannerConfiguration, IPlannerPlan, ITaskDetails } from './types'
 /**
  * @class PlannerConfiguration
  */
@@ -157,6 +157,7 @@ export class PlannerConfiguration extends BaseTask {
    *
    * @param planId Plan Id
    * @param bucket Bucket
+   * @param pageContext SP page context
    * @param appliedCategories Categories to apply to the task
    * @param delay Delay in seconds before updating the plan to ensure it's created properly
    */
@@ -170,58 +171,16 @@ export class PlannerConfiguration extends BaseTask {
     const tasks = Object.keys(this._configuration[bucket.name])
     for (let i = 0; i < tasks.length; i++) {
       const name = tasks[i]
-      const { description, checklist, attachments } = this._configuration[bucket.name][name]
+      const { checklist } = this._configuration[bucket.name][name]
       try {
         this.logInformation(`Creating task ${name} in bucket ${bucket.name}`)
-        const task = await MSGraphHelper.Post(
-          'planner/tasks',
-          JSON.stringify({
-            title: name,
-            bucketId: bucket.id,
-            planId,
-            appliedCategories
-          })
-        )
-        if (checklist || attachments) {
-          this.logInformation(`Sleeping ${delay} seconds before updating task details for ${name}`)
-          await sleep(delay)
-          const taskDetails: Record<string, any> = {
-            description: description ?? '',
-            checklist: checklist
-              ? checklist.reduce(
-                (obj, title) => ({
-                  ...obj,
-                  [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }
-                }),
-                {}
-              )
-              : {},
-            references: attachments
-              ? attachments.reduce(
-                (obj, attachment) => ({
-                  ...obj,
-                  [this.replaceUrlTokens(attachment.url, pageContext)]: {
-                    '@odata.type': 'microsoft.graph.plannerExternalReference',
-                    alias: attachment.alias,
-                    type: attachment.type
-                  }
-                }),
-                {}
-              )
-              : {},
-            previewType: attachments ? 'reference' : 'checklist'
-          }
-          this.logInformation(
-            `Updating task details for ${name} in bucket ${bucket.name}`,
-            taskDetails
-          )
-          const eTag = (await MSGraphHelper.Get(`planner/tasks/${task.id}/details`))['@odata.etag']
-          await MSGraphHelper.Patch(
-            `planner/tasks/${task.id}/details`,
-            JSON.stringify(taskDetails),
-            eTag
-          )
-        }
+        const task = await this._createTask({
+          title: name,
+          bucketId: bucket.id,
+          planId,
+          appliedCategories
+        })
+        await this._updateTaskDetails(task.id, this._configuration[bucket.name][name], pageContext, delay)
         this.logInformation(`Succesfully created task ${name} in bucket ${bucket.name}`, {
           taskId: task.id,
           checklist
@@ -230,6 +189,65 @@ export class PlannerConfiguration extends BaseTask {
         this.logWarning(`Failed to create task ${name} in bucket ${bucket.name}`)
       }
     }
+  }
+
+  /**
+   * Update task details
+   * 
+   * @param taskId Task ID
+   * @param taskDetails Task details
+   * @param pageContext SP page context
+   * @param delay Delay in seconds before updating the plan to ensure it's created properly
+   */
+  private async _updateTaskDetails(taskId: any, taskDetails: ITaskDetails, pageContext: PageContext, delay: number = 1) {
+    if (taskDetails.description || taskDetails.checklist || taskDetails.attachments) {
+      this.logInformation(`Sleeping ${delay} seconds before updating task details for ${name}`)
+      await sleep(delay)
+      const taskDetailsJson: Record<string, any> = {
+        description: taskDetails.description ?? '',
+        checklist: taskDetails.checklist
+          ? taskDetails.checklist.reduce(
+            (obj, title) => ({
+              ...obj,
+              [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }
+            }),
+            {}
+          )
+          : {},
+        references: taskDetails.attachments
+          ? taskDetails.attachments.reduce(
+            (obj, attachment) => ({
+              ...obj,
+              [this.replaceUrlTokens(attachment.url, pageContext)]: {
+                '@odata.type': 'microsoft.graph.plannerExternalReference',
+                alias: attachment.alias,
+                type: attachment.type
+              }
+            }),
+            {}
+          )
+          : {},
+        previewType: taskDetails.attachments ? 'reference' : 'checklist'
+      }
+      const eTag = (await MSGraphHelper.Get(`planner/tasks/${taskId}/details`))['@odata.etag']
+      await MSGraphHelper.Patch(
+        `planner/tasks/${taskId}/details`,
+        JSON.stringify(taskDetailsJson),
+        eTag
+      )
+    }
+  }
+
+  /**
+   * Create task
+   *
+   * @param task Task JSON
+   */
+  private async _createTask(task: Record<string, any>) {
+    return await MSGraphHelper.Post(
+      'planner/tasks',
+      JSON.stringify(task)
+    )
   }
 
   /**
