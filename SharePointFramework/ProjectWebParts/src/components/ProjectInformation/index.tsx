@@ -1,5 +1,4 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
-import { stringIsNullOrEmpty } from '@pnp/common'
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
@@ -21,7 +20,7 @@ export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (
   if (state.hidden) return null
 
   return (
-    <ProjectInformationContext.Provider value={{ props,state }}>
+    <ProjectInformationContext.Provider value={{ props, state }}>
       <div className={styles.root}>
         <div className={styles.container}>
           <div className={styles.header}>
@@ -33,15 +32,7 @@ export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (
             ? null
             : (
               <div>
-                <ProjectProperties
-                  title={props.title}
-                  properties={state.properties}
-                  displayMode={props.displayMode}
-                  isSiteAdmin={props.isSiteAdmin}
-                  onFieldExternalChanged={props.onFieldExternalChanged}
-                  showFieldExternal={props.showFieldExternal}
-                  propertiesList={!stringIsNullOrEmpty(state.data.propertiesListId)}
-                />
+                <ProjectProperties properties={state.properties} />
                 {(!props.hideActions && state.message) && <UserMessage {...state.message} />}
                 <Actions
                   hidden={props.hideActions || props.displayMode === DisplayMode.Edit}
@@ -60,15 +51,7 @@ export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (
                   onLightDismissClick={() => setState({ ...state, showProjectPropertiesPanel: false })}
                   isLightDismiss
                   closeButtonAriaLabel={strings.CloseText}>
-                  <ProjectProperties
-                    title={props.title}
-                    properties={state.allProperties}
-                    displayMode={props.displayMode}
-                    isSiteAdmin={props.isSiteAdmin}
-                    onFieldExternalChanged={props.onFieldExternalChanged}
-                    showFieldExternal={props.showFieldExternal}
-                    propertiesList={!stringIsNullOrEmpty(state.data.propertiesListId)}
-                  />
+                  <ProjectProperties properties={state.allProperties} />
                 </Panel>
                 {state.displayParentCreationModal && (
                   <CreateParentModal
