@@ -9,7 +9,7 @@ export const TemplateSelector: React.FunctionComponent<ITemplateSelectorProps> =
   /**
    * On template selected
    *
-   * @param {ProjectTemplate} opt Option
+   * @param opt Option
    */
   const onTemplateSelected = (opt: ProjectTemplate): void => {
     props.onChange(opt)

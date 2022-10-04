@@ -44,9 +44,13 @@ export class TaskAttachment {
   }
 }
 
+export type TaskPreviewType = 'automatic' | 'noPreview' | 'checklist' | 'description' | 'reference'
+
 export interface ITaskDetails {
+  description?: string
   checklist?: string[]
   attachments?: TaskAttachment[]
+  previewType?: TaskPreviewType
 }
 
 export interface IPlannerConfiguration {
