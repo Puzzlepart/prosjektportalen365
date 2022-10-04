@@ -12,10 +12,10 @@ import { ProjectProperty } from './ProjectProperty'
 import { IProjectPropertiesProps } from './types'
 
 export const ProjectProperties: FunctionComponent<IProjectPropertiesProps> = ({ properties }) => {
-  const { props, state } = useContext(ProjectInformationContext)
+  const context = useContext(ProjectInformationContext)
   const nonEmptyProperties = properties.filter(({ empty }) => !empty)
 
-  if (props.displayMode !== DisplayMode.Edit) {
+  if (context.props.displayMode !== DisplayMode.Edit) {
     if (isEmpty(nonEmptyProperties)) {
       return <UserMessage text={strings.NoPropertiesMessage} />
     }
@@ -30,14 +30,14 @@ export const ProjectProperties: FunctionComponent<IProjectPropertiesProps> = ({ 
     return (
       <div className={styles.projectProperties}>
         <Pivot>
-          <PivotItem headerText={props.title}>
+          <PivotItem headerText={context.props.title}>
             <div className={styles.pivotItem}>
               {nonEmptyProperties.map((model, idx) => (
                 <ProjectProperty key={idx} model={model} />
               ))}
             </div>
           </PivotItem>
-          {props.isSiteAdmin && (
+          {context.props.isSiteAdmin && (
             <PivotItem headerText={strings.ExternalUsersConfigText} itemIcon='FilterSettings'>
               <div className={styles.pivotItem}>
                 <UserMessage
@@ -45,19 +45,19 @@ export const ProjectProperties: FunctionComponent<IProjectPropertiesProps> = ({ 
                   text={strings.ExternalUsersConfigInfoText}
                 />
                 <UserMessage
-                  hidden={!stringIsNullOrEmpty(state.data.propertiesListId)}
+                  hidden={!stringIsNullOrEmpty(context.state.data.propertiesListId)}
                   className={styles.pivotItemUserMessage}
                   text={strings.NoLocalPropertiesListWarningText}
                   type={MessageBarType.warning}
                 />
-                <div hidden={stringIsNullOrEmpty(state.data.propertiesListId)}>
+                <div hidden={stringIsNullOrEmpty(context.state.data.propertiesListId)}>
                   {properties.map((model, idx) => (
                     <ProjectProperty
                       key={idx}
                       model={model}
                       displayMode={DisplayMode.Edit}
-                      onFieldExternalChanged={props.onFieldExternalChanged}
-                      showFieldExternal={props.showFieldExternal}
+                      onFieldExternalChanged={context.props.onFieldExternalChanged}
+                      showFieldExternal={context.props.showFieldExternal}
                     />
                   ))}
                 </div>

@@ -1,4 +1,3 @@
-import { DisplayMode } from '@microsoft/sp-core-library'
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
@@ -35,13 +34,7 @@ export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (
               <div>
                 <ProjectProperties properties={state.properties} />
                 {(!props.hideActions && state.message) && <UserMessage {...state.message} />}
-                <Actions
-                  hidden={props.hideActions || props.displayMode === DisplayMode.Edit}
-                  userHasAdminPermission={state.userHasAdminPermission}
-                  versionHistoryUrl={state.data.versionHistoryUrl}
-                  editFormUrl={state.data.editFormUrl}
-                  customActions={getCustomActions()}
-                />
+                <Actions   customActions={getCustomActions()}    />
                 <ProgressDialog {...state.progress} />
                 {state.confirmActionProps && <ConfirmDialog {...state.confirmActionProps} />}
                 <Panel
