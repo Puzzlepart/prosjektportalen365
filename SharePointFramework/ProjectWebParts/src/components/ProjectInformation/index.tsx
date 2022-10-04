@@ -10,13 +10,14 @@ import { ProjectInformationContext } from './context'
 import { CreateParentModal } from './ParentProjectModal'
 import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
+import { SyncProjectModal } from './SyncProjectModal'
 import {
   IProjectInformationProps
 } from './types'
 import { useProjectInformation } from './useProjectInformation'
 
 export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (props) => {
-  const { state, setState, getCustomActions } = useProjectInformation(props)
+  const { state, setState, getCustomActions ,onSyncProperties} = useProjectInformation(props)
   if (state.hidden) return null
 
   return (
@@ -57,6 +58,17 @@ export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (
                   <CreateParentModal
                     isOpen={state.displayParentCreationModal}
                     onDismiss={() => setState({ ...state, displayParentCreationModal: false })}
+                  />
+                )}
+                {state.displaySyncProjectModal && (
+                  <SyncProjectModal
+                    isOpen={state.displaySyncProjectModal}
+                    onDismiss={() => setState({ ...state, displaySyncProjectModal: false })}
+                    data={state.data}
+                    onSyncProperties={onSyncProperties}
+                    title={props.webTitle}
+                    hubSite={props.hubSite}
+                    context={props.webPartContext}
                   />
                 )}
               </div>

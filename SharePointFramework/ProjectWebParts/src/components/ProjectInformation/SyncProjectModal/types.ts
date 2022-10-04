@@ -6,7 +6,6 @@ export interface SyncModalProps {
   isOpen: boolean
   onDismiss: () => void
   onSyncProperties: (
-    event?: React.MouseEvent<any>,
     force?: boolean
   ) => void
   data?: IProjectInformationData

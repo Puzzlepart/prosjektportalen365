@@ -13,7 +13,7 @@ import { useProjectInformationDataTransform } from './useProjectInformationDataT
  * Component logic hook for `ProjectInformation`
  * 
  * @param props Props
- * @returns 
+ * @returns `state`, `setState`, `getCustomActions`, `onSyncProperties`
  */
 export const useProjectInformation = (props: IProjectInformationProps) => {
     const [state, setState] = useState<IProjectInformationState>({ loading: true })
@@ -54,10 +54,19 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
             'EntryView',
             false
         ]
+        const syncProjectPropertiesAction: ActionType = [
+            strings.SyncProjectPropertiesText,
+            () => {
+                setState({ ...state, displaySyncProjectModal: true })
+            },
+            'Sync',
+            false,
+            !props.useIdeaProcessing || state.isProjectDataSynced
+        ]
         if (state.isParentProject) {
-            return [administerChildrenAction, viewAllPropertiesAction]
+            return [administerChildrenAction, viewAllPropertiesAction, syncProjectPropertiesAction]
         }
-        return [transformToParentProject, viewAllPropertiesAction]
+        return [transformToParentProject, viewAllPropertiesAction, syncProjectPropertiesAction]
     }
 
     const addMessage = (
