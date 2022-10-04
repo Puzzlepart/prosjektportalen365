@@ -12,7 +12,8 @@
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
-    "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent"
+    "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",
+    "publish:temp": "npm install && npm run build && npm publish --tag temp"
   },
   "author": "",
   "license": "ISC",
