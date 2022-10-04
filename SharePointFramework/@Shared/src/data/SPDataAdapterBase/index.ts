@@ -3,6 +3,9 @@ import { sp, SPConfiguration, SPRest, Web } from '@pnp/sp'
 import { SpEntityPortalService } from 'sp-entityportal-service'
 import { PortalDataService } from '../../services/PortalDataService'
 import { ISPDataAdapterBaseConfiguration } from './ISPDataAdapterBaseConfiguration'
+import {WebPartContext} from '@microsoft/sp-webpart-base'
+import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
+import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
 
 export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   public spConfiguration: SPConfiguration = {
@@ -17,14 +20,16 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   public entityService: SpEntityPortalService
   public sp: SPRest
   public isConfigured: boolean = false
+  public spfxContext: ApplicationCustomizerContext | ListViewCommandSetContext | WebPartContext
 
   /**
    * Configure the SP data adapter
    *
-   * @param {ApplicationCustomizerContext | ListViewCommandSetContext} spfxContext Context
-   * @param {T} settings Settings
+   * @param spfxContext Context
+   * @param settings Settings
    */
   public configure(spfxContext: any, settings: T) {
+    this.spfxContext =  spfxContext
     this.settings = settings
     sp.setup({ spfxContext, ...this.spConfiguration })
     this.sp = sp

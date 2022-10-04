@@ -1,0 +1,34 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "idea-projectdata-command-set": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/ideaProjectData/index.js",
+          "manifest": "./src/extensions/ideaProjectData/manifest.json"
+        }
+      ]
+    },
+    "idea-processing-command-set": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/ideaProcessing/index.js",
+          "manifest": "./src/extensions/ideaProcessing/manifest.json"
+        }
+      ]
+    },
+    "idea-registration-command-set": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/ideaRegistration/index.js",
+          "manifest": "./src/extensions/ideaRegistration/manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "PortfolioExtensionsStrings": "lib/loc/{locale}.js"
+  }
+}

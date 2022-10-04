@@ -5,7 +5,7 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "Clean node_modules for all SharePoint Framework solutions")]
     [switch]$Force,
     [Parameter(Mandatory = $false)]
-    [string[]]$Solutions = @("ProjectWebParts", "PortfolioWebParts", "ProjectExtensions", "ProgramWebParts"),
+    [string[]]$Solutions = @("PortfolioExtensions", "PortfolioWebParts", "ProgramWebParts", "ProjectExtensions", "ProjectWebParts"),
     [Parameter(Mandatory = $false, HelpMessage = "CI mode. Installs SharePointPnPPowerShellOnline.")]
     [switch]$CI
 )  

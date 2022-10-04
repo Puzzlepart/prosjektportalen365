@@ -88,10 +88,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
       return (
         <div className={styles.root}>
           <div className={styles.container}>
-            <UserMessage
-              text={this.state.error}
-              type={MessageBarType.error}
-            />
+            <UserMessage text={this.state.error} type={MessageBarType.error} />
           </div>
         </div>
       )
@@ -116,9 +113,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
             <div className={styles.infoText}>
               <UserMessage
                 text={format(
-                  this.props.infoText
-                    ? this.props.infoText
-                    : strings.ProjectTimelineListInfoText,
+                  this.props.infoText ? this.props.infoText : strings.ProjectTimelineListInfoText,
                   encodeURIComponent(window.location.href)
                 )}
                 type={MessageBarType.info}
@@ -231,8 +226,9 @@ export class ProjectTimeline extends BaseWebPartComponent<
     const config = this.state.timelineConfiguration
     const columns = [
       { fieldName: 'data.type', name: strings.TypeLabel },
-      { fieldName: 'data.tag', name: strings.TagFieldLabel }]
-    const hiddenItems = (config.filter((item) => !item?.GtTimelineFilter)).map((item) => item.Title)
+      { fieldName: 'data.tag', name: strings.TagFieldLabel }
+    ]
+    const hiddenItems = config.filter((item) => !item?.GtTimelineFilter).map((item) => item.Title)
 
     return columns.map((col) => ({
       column: { key: col.fieldName, minWidth: 0, ...col },
@@ -418,21 +414,22 @@ export class ProjectTimeline extends BaseWebPartComponent<
             'GtElementType',
             'GtShowElementPortfolio',
             'GtShowElementProgram',
-            'GtTimelineFilter',
+            'GtTimelineFilter'
           )
           .top(500)
           .get()
       ])
 
       if (this.props.showProjectDeliveries) {
-        [projectDeliveries] = await Promise.all([
+        // eslint-disable-next-line @typescript-eslint/no-extra-semi
+        ;[projectDeliveries] = await Promise.all([
           await sp.web.lists
             .getByTitle(this.props.projectDeliveriesListName || 'Prosjektleveranser')
             .items.select(
               'Title',
               'GtDeliveryDescription',
               'GtDeliveryStartTime',
-              'GtDeliveryEndTime',
+              'GtDeliveryEndTime'
             )
             .top(500)
             .get()
@@ -440,18 +437,21 @@ export class ProjectTimeline extends BaseWebPartComponent<
 
         projectDeliveries = projectDeliveries
           .map((item) => {
-            const config = _.find(timelineConfig, (col) => col.Title === (this.props.configItemTitle || 'Prosjektleveranse'))
+            const config = _.find(
+              timelineConfig,
+              (col) => col.Title === (this.props.configItemTitle || 'Prosjektleveranse')
+            )
             const model = new TimelineContentListModel(
               this.props.siteId,
               this.props.webTitle,
               item.Title,
-              config && config.Title || this.props.configItemTitle,
-              config && config.GtSortOrder || 90,
-              config && config.GtHexColor || '#384f61',
-              config && config.GtElementType || strings.BarLabel,
-              config && config.GtShowElementPortfolio || false,
-              config && config.GtShowElementProgram || false,
-              config && config.GtTimelineFilter || true,
+              (config && config.Title) || this.props.configItemTitle,
+              (config && config.GtSortOrder) || 90,
+              (config && config.GtHexColor) || '#384f61',
+              (config && config.GtElementType) || strings.BarLabel,
+              (config && config.GtShowElementPortfolio) || false,
+              (config && config.GtShowElementProgram) || false,
+              (config && config.GtTimelineFilter) || true,
               item.GtDeliveryStartTime,
               item.GtDeliveryEndTime,
               item.GtDeliveryDescription
@@ -459,7 +459,6 @@ export class ProjectTimeline extends BaseWebPartComponent<
             return model
           })
           .filter((t) => t)
-
       }
 
       const [allColumns] = await Promise.all([
@@ -615,14 +614,14 @@ export class ProjectTimeline extends BaseWebPartComponent<
    * @returns Timeline groups
    */
   private _transformGroups(projects: ProjectListModel[]): ITimelineGroup[] {
-    const groups: ITimelineGroup[] = _.uniq(projects
-      .map((project) => project.title))
-      .map((title, id) => {
+    const groups: ITimelineGroup[] = _.uniq(projects.map((project) => project.title)).map(
+      (title, id) => {
         return {
           id,
           title
         }
-      })
+      }
+    )
     return sortArray(groups, ['type', 'title'])
   }
 
@@ -633,9 +632,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
    *
    * @returns Timeline items
    */
-  private _transformItems(
-    timelineItems: TimelineContentListModel[]
-  ): ITimelineItem[] {
+  private _transformItems(timelineItems: TimelineContentListModel[]): ITimelineItem[] {
     let _project: any
     let _siteId: any
     let _itemTitle: any
@@ -651,13 +648,9 @@ export class ProjectTimeline extends BaseWebPartComponent<
           cursor: 'auto',
           outline: 'none',
           background:
-            item.elementType !== strings.BarLabel
-              ? 'transparent'
-              : item.hexColor || '#f35d69',
+            item.elementType !== strings.BarLabel ? 'transparent' : item.hexColor || '#f35d69',
           backgroundColor:
-            item.elementType !== strings.BarLabel
-              ? 'transparent'
-              : item.hexColor || '#f35d69'
+            item.elementType !== strings.BarLabel ? 'transparent' : item.hexColor || '#f35d69'
         }
         return {
           id,
@@ -699,7 +692,6 @@ export class ProjectTimeline extends BaseWebPartComponent<
         )
       )
     }
-
   }
 
   /**
@@ -710,11 +702,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
       const [projectData, timelineConfig] = await Promise.all([
         this.props.hubSite.web.lists
           .getByTitle(strings.ProjectsListName)
-          .items.select(
-            'Id',
-            'GtStartDate',
-            'GtEndDate',
-          )
+          .items.select('Id', 'GtStartDate', 'GtEndDate')
           .filter(`GtSiteId eq '${this.props.siteId}'`)
           .top(500)
           .get(),
@@ -727,7 +715,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
             'GtElementType',
             'GtShowElementPortfolio',
             'GtShowElementProgram',
-            'GtTimelineFilter',
+            'GtTimelineFilter'
           )
           .top(500)
           .get()
@@ -744,17 +732,11 @@ export class ProjectTimeline extends BaseWebPartComponent<
         elementType: config && config.GtElementType,
         showElementPortfolio: config && config.GtShowElementPortfolio,
         showElementProgram: config && config.GtShowElementProgram,
-        timelineFilter: config && config.GtTimelineFilter,
+        timelineFilter: config && config.GtTimelineFilter
       }
-
     } catch (error) {
       throw new Error(
-        format(
-          strings.ProjectTimelineErrorFetchText,
-          this.props.siteId,
-          this.props.webTitle,
-          error
-        )
+        format(strings.ProjectTimelineErrorFetchText, this.props.siteId, this.props.webTitle, error)
       )
     }
   }
@@ -775,7 +757,12 @@ export class ProjectTimeline extends BaseWebPartComponent<
         ...projectData
       }
 
-      const [timelineContentItems, timelineListItems, timelineColumns, timelineConfig] = await this.getTimelineData()
+      const [
+        timelineContentItems,
+        timelineListItems,
+        timelineColumns,
+        timelineConfig
+      ] = await this.getTimelineData()
       const timelineItems = [...timelineContentItems, ...[project]]
       const groups = this._transformGroups([project])
       const items = this._transformItems(timelineItems)

@@ -40,7 +40,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * Constructor
    *
-   * @param {IProjectStatusProps} props Props
+   * @param props Props
    */
   constructor(props: IProjectStatusProps) {
     super(props)
@@ -76,7 +76,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         selectedReport,
         sourceUrl: decodeURIComponent(sourceUrlParam || ''),
         loading: false,
-        newestReportId
+        newestReportId,
+        userHasAdminPermission: data.userHasAdminPermission
       })
     } catch (error) {
       this.setState({ error, loading: false })
@@ -110,10 +111,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
       return (
         <div className={styles.projectStatus}>
           <div className={styles.container}>
-            <UserMessage
-              text={this.state.error}
-              type={MessageBarType.info}
-            />
+            <UserMessage text={this.state.error} type={MessageBarType.info} />
           </div>
         </div>
       )
@@ -123,10 +121,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         {this._commandBar()}
         <div className={styles.container}>
           {this.state.data.reports.filter((report) => !report.published).length > 0 && (
-            <UserMessage
-              text={strings.UnpublishedStatusReportInfo}
-              type={MessageBarType.info}
-            />
+            <UserMessage text={strings.UnpublishedStatusReportInfo} type={MessageBarType.info} />
           )}
           <div className={`${styles.header} ${styles.column12}`}>
             <div className={styles.title}>
@@ -149,40 +144,43 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   private _commandBar() {
     const { data, selectedReport, sourceUrl } = this.state
     const items: IContextualMenuItem[] = [
-      {
+      this.state.userHasAdminPermission && {
         key: 'NEW_STATUS_REPORT',
         name: strings.NewStatusReportModalHeaderText,
         iconProps: { iconName: 'NewFolder' },
         disabled: data.reports.filter((report) => !report.published).length !== 0,
         onClick: this._redirectNewStatusReport.bind(this)
       },
-      selectedReport && {
-        key: 'DELETE_REPORT',
-        name: strings.DeleteReportButtonText,
-        iconProps: { iconName: 'Delete' },
-        disabled: selectedReport?.published,
-        onClick: () => {
-          this._deleteReport(selectedReport)
+      selectedReport &&
+        this.state.userHasAdminPermission && {
+          key: 'DELETE_REPORT',
+          name: strings.DeleteReportButtonText,
+          iconProps: { iconName: 'Delete' },
+          disabled: selectedReport?.published,
+          onClick: () => {
+            this._deleteReport(selectedReport)
+          }
+        },
+      selectedReport &&
+        this.state.userHasAdminPermission && {
+          key: 'EDIT_REPORT',
+          name: strings.EditReportButtonText,
+          iconProps: { iconName: 'Edit' },
+          href: selectedReport?.editFormUrl,
+          disabled: selectedReport?.published
+        },
+      selectedReport &&
+        this.state.userHasAdminPermission && {
+          key: 'PUBLISH_REPORT',
+          name: strings.PublishReportButtonText,
+          iconProps: { iconName: 'PublishContent' },
+          disabled: selectedReport?.published,
+          onClick: () => {
+            this._publishReport(selectedReport)
+            this.setState({ isPublishing: true })
+          }
         }
-      },
-      selectedReport && {
-        key: 'EDIT_REPORT',
-        name: strings.EditReportButtonText,
-        iconProps: { iconName: 'Edit' },
-        href: selectedReport?.editFormUrl,
-        disabled: selectedReport?.published
-      },
-      selectedReport && {
-        key: 'PUBLISH_REPORT',
-        name: strings.PublishReportButtonText,
-        iconProps: { iconName: 'PublishContent' },
-        disabled: selectedReport?.published,
-        onClick: () => {
-          this._publishReport(selectedReport)
-          this.setState({ isPublishing: true })
-        }
-      }
-    ].filter((i) => i)
+    ].filter(Boolean)
     const farItems: IContextualMenuItem[] = []
     if (sourceUrl) {
       farItems.push({
@@ -239,7 +237,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * Get section base props
    *
-   * @param {SectionModel} sec Section model
+   * @param sec Section model
    */
   private _getSectionBaseProps(sec: SectionModel): IBaseSectionProps {
     const { selectedReport, data } = this.state
@@ -277,12 +275,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
     const { data, selectedReport } = this.state
 
     if (!selectedReport)
-      return (
-        <UserMessage
-          text={strings.NoStatusReportsMessage}
-          type={MessageBarType.info}
-        />
-      )
+      return <UserMessage text={strings.NoStatusReportsMessage} type={MessageBarType.info} />
     return data.sections
       .filter((sec) => !stringIsNullOrEmpty(selectedReport.getStatusValue(sec.fieldName).value))
       .filter((sec) => sec.showAsSection || sec.type === SectionType.SummarySection)
@@ -343,7 +336,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * On report changed
    *
-   * @param {StatusReport} selectedReport Selected report
+   * @param selectedReport Selected report
    */
   private _onReportChanged(selectedReport: StatusReport) {
     this.setState({ selectedReport })
@@ -352,7 +345,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * Get report options
    *
-   * @param {IProjectStatusData} data Data
+   * @param data Data
    */
   private _getReportOptions(data: IProjectStatusData): IContextualMenuItem[] {
     const reportOptions: IContextualMenuItem[] = data.reports.map((report) => {
@@ -411,7 +404,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * Creates PNG snapshot
    *
-   * @param {sting} title Report title
+   * @param title Report title
    *
    * @returns PNG file (AttachmentFileInfo) or null
    */
@@ -435,7 +428,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * Publish report
    *
-   * @param {StatusReport} report Report
+   * @param report Report
    */
   private async _publishReport(report: StatusReport) {
     if (!this.state.isPublishing) {
@@ -459,7 +452,7 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
   /**
    * Delete report
    *
-   * @param {StatusReport} report Report
+   * @param report Report
    */
   private async _deleteReport(report: StatusReport) {
     await this._portalDataService.deleteStatusReport(report.id)
@@ -525,6 +518,9 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           "Hidden eq false and Group ne 'Hidden'"
         )
       ])
+      const userHasAdminPermission = await SPDataAdapter.checkProjectAdminPermission(
+        properties.fieldValues
+      )
       const sortedReports = reports
         .map((item) => item.setDefaultEditFormUrl(reportList.DefaultEditFormUrl))
         .sort((a, b) => b.created.getTime() - a.created.getTime())
@@ -535,7 +531,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
         reportEditFormUrl: reportList.DefaultEditFormUrl,
         reports: sortedReports,
         sections: sortedSections,
-        columnConfig
+        columnConfig,
+        userHasAdminPermission
       }
     } catch (error) {
       throw strings.ProjectStatusDataErrorText

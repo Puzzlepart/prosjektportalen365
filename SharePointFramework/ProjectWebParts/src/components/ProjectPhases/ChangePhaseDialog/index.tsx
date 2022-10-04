@@ -33,7 +33,7 @@ export const ChangePhaseDialog = () => {
    * Updates the current checklist item, and dispatches CHECKLIST_ITEM_UPDATED
    * with the properties
    *
-   * @param {Partial<IProjectPhaseChecklistItem>} properties Properties
+   * @param properties Properties
    */
   const nextChecklistItem = async (properties: Partial<IProjectPhaseChecklistItem>) => {
     const currentItem = [...state.checklistItems][state.currentIdx]
@@ -63,9 +63,9 @@ export const ChangePhaseDialog = () => {
               text={
                 phaseSitePage
                   ? format(
-                    strings.PhaseSitePageFoundDescription,
-                    phaseSitePage && phaseSitePage.fileLeafRef
-                  )
+                      strings.PhaseSitePageFoundDescription,
+                      phaseSitePage && phaseSitePage.fileLeafRef
+                    )
                   : format(strings.PhaseSitePageNotFoundDescription, confirmPhaseName)
               }
               type={phaseSitePage ? MessageBarType.info : MessageBarType.warning}

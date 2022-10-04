@@ -15,7 +15,7 @@ export const InitialView = (props: IInitialViewProps) => {
   /**
    * On next check list item
    *
-   * @param {string} statusValue Status value
+   * @param statusValue Status value
    */
   const onNextChecklistItem = (statusValue: string) => {
     nextChecklistItem({

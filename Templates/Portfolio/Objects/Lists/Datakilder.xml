@@ -1,5 +1,5 @@
 ﻿<pnp:ListInstance Title="{resource:Lists_DataSources_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_DataSources_Url}" Hidden="true" RemoveExistingContentTypes="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100A0AB42EFAB986D4A8E8038BC2391BEB2" Default="true" />
     </pnp:ContentTypeBindings>
@@ -26,14 +26,14 @@
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
-        <pnp:FieldRef ID="31e405e0-2890-439d-9c9f-42354154feda" Name="GtSearchQuery" Required="true" />
-        <pnp:FieldRef ID="67a0a4b1-61d7-45c3-9157-7e302450a304" Name="GtDataSourceCategory" Required="true" />
-        <pnp:FieldRef ID="1bfa0248-e65d-4fae-b5cf-fbffeb6c13da" Name="GtDataSourceDefault" Required="true" />
-        <pnp:FieldRef ID="d4236349-e45d-4547-8a5e-9f417e5e50d7" Name="GtProjectContentColumns" />
-        <pnp:FieldRef ID="e0b7c98e-1d80-48d9-b384-2daa795daca8" Name="GtProjectContentRefiners" />
-        <pnp:FieldRef ID="e4223ef9-c549-4038-8652-9ffd71118cb2" Name="GtProjectContentGroupBy" />
-        <pnp:FieldRef ID="40b5cbd9-4d0a-42eb-a790-65d83b9c7035" Name="GtODataQuery" />
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="Tittel" Required="true" />
+        <pnp:FieldRef ID="31e405e0-2890-439d-9c9f-42354154feda" Name="GtSearchQuery" DisplayName="{resource:SiteFields_GtSearchQuery_DisplayName}" Required="true" />
+        <pnp:FieldRef ID="67a0a4b1-61d7-45c3-9157-7e302450a304" Name="GtDataSourceCategory" DisplayName="{resource:SiteFields_GtDataSourceCategory_DisplayName}" Required="true" />
+        <pnp:FieldRef ID="1bfa0248-e65d-4fae-b5cf-fbffeb6c13da" Name="GtDataSourceDefault" DisplayName="{resource:SiteFields_GtDataSourceDefault_DisplayName}" Required="true" />
+        <pnp:FieldRef ID="d4236349-e45d-4547-8a5e-9f417e5e50d7" Name="GtProjectContentColumns" DisplayName="{resource:SiteFields_GtProjectContentColumns_DisplayName}" />
+        <pnp:FieldRef ID="e0b7c98e-1d80-48d9-b384-2daa795daca8" Name="GtProjectContentRefiners" DisplayName="{resource:SiteFields_GtProjectContentRefiners_DisplayName}" />
+        <pnp:FieldRef ID="e4223ef9-c549-4038-8652-9ffd71118cb2" Name="GtProjectContentGroupBy" DisplayName="{resource:SiteFields_GtProjectContentGroupBy_DisplayName}" />
+        <pnp:FieldRef ID="40b5cbd9-4d0a-42eb-a790-65d83b9c7035" Name="GtODataQuery" DisplayName="{resource:SiteFields_GtODataQuery_DisplayName}" />
     </pnp:FieldRefs>
     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
         <pnp:DataRow>

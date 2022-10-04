@@ -2,17 +2,17 @@ import { DisplayMode } from '@microsoft/sp-core-library'
 import { Persona, PersonaSize } from 'office-ui-fabric-react'
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as strings from 'ProjectWebPartsStrings'
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import styles from './ProjectProperty.module.scss'
 import { IProjectPropertyProps } from './types'
 
-export const ProjectProperty = ({
+export const ProjectProperty: FunctionComponent<IProjectPropertyProps> = ({
   model,
   style,
   displayMode = DisplayMode.Read,
   onFieldExternalChanged,
   showFieldExternal
-}: IProjectPropertyProps) => {
+}) => {
   const renderValue = () => {
     switch (model.type) {
       case 'User': {

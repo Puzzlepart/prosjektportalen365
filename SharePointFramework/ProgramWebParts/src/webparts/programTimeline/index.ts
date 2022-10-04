@@ -18,7 +18,6 @@ export interface IProgramTimelineProps extends IBaseWebPartComponentProps {
   webPartTitle: string
   dataSourceName?: string
   configItemTitle?: string
-
 }
 
 export default class ProgramTimelineWebPart extends BaseProgramWebPart<IProgramTimelineProps> {
@@ -65,7 +64,7 @@ export default class ProgramTimelineWebPart extends BaseProgramWebPart<IProgramT
                   label: strings.ConfigItemTitleFieldLabel,
                   description: strings.ConfigItemTitleFieldDescription,
                   value: 'Prosjektleveranse'
-                }),
+                })
               ]
             }
           ]

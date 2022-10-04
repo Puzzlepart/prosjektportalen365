@@ -49,14 +49,14 @@ export const ProjectPhaseCallout = ({ phase, target }: IProjectPhaseCalloutProps
                   iconProps={{ iconName: 'CheckList' }}
                 />
               )}
-              <ActionButton
-                onClick={() => context.dispatch(CHANGE_PHASE())}
-                text={strings.ChangePhaseText}
-                iconProps={{ iconName: 'TransitionPop' }}
-                disabled={
-                  phase.id === context.state.data?.currentPhase?.id || !context.props.isSiteAdmin
-                }
-              />
+              {context.state.userHasAdminPermission && (
+                <ActionButton
+                  onClick={() => context.dispatch(CHANGE_PHASE())}
+                  text={strings.ChangePhaseText}
+                  iconProps={{ iconName: 'TransitionPop' }}
+                  disabled={phase.id === context.state.data?.currentPhase?.id}
+                />
+              )}
             </div>
           </div>
         </div>

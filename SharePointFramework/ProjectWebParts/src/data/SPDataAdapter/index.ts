@@ -1,13 +1,18 @@
+/* eslint-disable no-console */
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { TypedHash } from '@pnp/common'
+import { dateAdd, TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
+import { sp } from '@pnp/sp'
+import { PnPClientStorage } from '@pnp/common'
+import { Web } from '@pnp/sp'
 import { taxonomy } from '@pnp/sp-taxonomy'
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator'
 import { SPDataAdapterBase } from 'pp365-shared/lib/data'
+import { ProjectAdminRoleType } from 'pp365-shared/lib/models'
 import { ProjectDataService } from 'pp365-shared/lib/services'
 import * as strings from 'ProjectWebPartsStrings'
 import { IEntityField } from 'sp-entityportal-service/types'
-import { find } from 'underscore'
+import { find, isArray } from 'underscore'
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
@@ -17,8 +22,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   /**
    * Configure the SP data adapter
    *
-   * @param {WebPartContext} spfxContext Context
-   * @param {ISPDataAdapterConfiguration} settings Settings
+   * @param spfxContext Context
+   * @param configuration Configuration
    */
   public configure(spfxContext: WebPartContext, configuration: ISPDataAdapterConfiguration) {
     super.configure(spfxContext, configuration)
@@ -37,8 +42,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   /**
    * Get fields to sync
    *
-   * @param fields - Fields
-   * @param customGroupName - Custom group name
+   * @param fields Fields
+   * @param customGroupName Custom group name
    *
    * @returns Fields to sync
    */
@@ -64,10 +69,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   /**
    * Sync property item from site to associated hub
    *
-   * @param {TypedHash} fieldValues - Field values for the properties item
-   * @param {TypedHash} fieldValuesText - Field values in text format for the properties item
-   * @param {TypedHash<any>} templateParameters - Template parameters
-   * @param {void} progressFunc - Progress function
+   * @param fieldValues Field values for the properties item
+   * @param fieldValuesText Field values in text format for the properties item
+   * @param templateParameters Template parameters
+   * @param progressFunc Progress function
    */
   public async syncPropertyItemToHub(
     fieldValues: TypedHash<any>,
@@ -76,25 +81,57 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     progressFunc: (props: IProgressIndicatorProps) => void
   ): Promise<void> {
     try {
-      fieldValuesText = Object.keys(fieldValuesText).reduce(
-        (obj, key) => ({ ...obj, [key.replace(/_x005f_/gm, '_')]: fieldValuesText[key] }),
-        {}
-      )
       progressFunc({
         label: strings.SyncProjectPropertiesValuesProgressDescription,
         description: strings.SyncProjectPropertiesValuesProgressDescription
       })
+
+      const properties = await this.getMappedProjectProperties(
+        fieldValues,
+        fieldValuesText,
+        templateParameters
+      )
+      await this.entityService.updateEntityItem(this.settings.siteId, properties)
+      Logger.log({
+        message: `(${this._name}) (syncPropertyItemToHub) Successfully synced item to hub entity.`,
+        data: { properties },
+        level: LogLevel.Info
+      })
+    } catch (error) {
+      throw error
+    }
+  }
+
+  /**
+   * Sync project data from associated hub to site's property item
+   *
+   * @param {TypedHash} fieldValues - Field values for the properties item
+   * @param {TypedHash} fieldValuesText - Field values in text format for the properties item
+   * @param {TypedHash<any>} templateParameters - Template parameters
+   */
+  public async getMappedProjectProperties(
+    fieldValues: TypedHash<any>,
+    fieldValuesText: TypedHash<string>,
+    templateParameters: TypedHash<any>,
+    syncToProject: boolean = false
+  ): Promise<any> {
+    try {
+      fieldValuesText = Object.keys(fieldValuesText).reduce(
+        (obj, key) => ({ ...obj, [key.replace(/_x005f_/gm, '_')]: fieldValuesText[key] }),
+        {}
+      )
       const [fields, siteUsers] = await Promise.all([
         templateParameters.ProjectContentTypeId
           ? this.entityService
               .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
               .getEntityFields()
           : this.entityService.getEntityFields(),
-        this.sp.web.siteUsers.select('Id', 'Email', 'LoginName').get<
+        this.sp.web.siteUsers.select('Id', 'Email', 'LoginName', 'Title').get<
           {
             Id: number
             Email: string
             LoginName: string
+            Title: string
           }[]
         >()
       ])
@@ -106,32 +143,76 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         const fldValueTxt = fieldValuesText[fld.InternalName]
         switch (fld.TypeAsString) {
           case 'TaxonomyFieldType':
+            {
+              if (syncToProject) {
+                const term = { ...fldValue, WssId: -1, Label: fldValueTxt }
+                properties[fld.InternalName] = term || null
+              } else {
+                let [textField] = fields.filter((f) => f.InternalName === `${fld.InternalName}Text`)
+                if (textField)
+                  properties[textField.InternalName] = fieldValuesText[fld.InternalName]
+                else {
+                  textField = find(fields, (f) => f.Id === fld.TextField)
+                  if (!textField) continue
+                  properties[textField.InternalName] = fieldValuesText[textField.InternalName]
+                }
+              }
+            }
+            break
           case 'TaxonomyFieldTypeMulti':
             {
-              let [textField] = fields.filter((f) => f.InternalName === `${fld.InternalName}Text`)
-              if (textField) properties[textField.InternalName] = fieldValuesText[fld.InternalName]
-              else {
-                textField = find(fields, (f) => f.Id === fld.TextField)
-                if (!textField) continue
-                properties[textField.InternalName] = fieldValuesText[textField.InternalName]
+              if (syncToProject) {
+                // TODO: See SyncProjectModal TODO
+              } else {
+                let [textField] = fields.filter((f) => f.InternalName === `${fld.InternalName}Text`)
+                if (textField)
+                  properties[textField.InternalName] = fieldValuesText[fld.InternalName]
+                else {
+                  textField = find(fields, (f) => f.Id === fld.TextField)
+                  if (!textField) continue
+                  properties[textField.InternalName] = fieldValuesText[textField.InternalName]
+                }
               }
             }
             break
           case 'User':
             {
-              const [_user] = siteUsers.filter((u) => u.Id === fieldValues[`${fld.InternalName}Id`])
-              const user = _user ? await this.entityService.web.ensureUser(_user.LoginName) : null
-              properties[`${fld.InternalName}Id`] = user ? user.data.Id : null
+              if (syncToProject) {
+                const [_user] = siteUsers.filter(
+                  (u) => u.Title === fieldValuesText[fld.InternalName]
+                )
+                const user = _user ? await sp.web.ensureUser(_user.LoginName) : null
+                properties[`${fld.InternalName}Id`] = user ? user.data.Id : null
+              } else {
+                const [_user] = siteUsers.filter(
+                  (u) => u.Id === fieldValues[`${fld.InternalName}Id`]
+                )
+                const user = _user ? await this.entityService.web.ensureUser(_user.LoginName) : null
+                properties[`${fld.InternalName}Id`] = user ? user.data.Id : null
+              }
             }
             break
           case 'UserMulti':
             {
-              const userIds = fieldValues[`${fld.InternalName}Id`] || []
-              const users = siteUsers.filter((u) => userIds.indexOf(u.Id) !== -1)
-              const ensured = await Promise.all(
-                users.map(({ LoginName }) => this.entityService.web.ensureUser(LoginName))
-              )
-              properties[`${fld.InternalName}Id`] = { results: ensured.map(({ data }) => data.Id) }
+              if (syncToProject) {
+                const userIds = fieldValuesText[fld.InternalName] || []
+                const users = siteUsers.filter((u) => userIds.indexOf(u.Title) !== -1)
+                const ensured = await Promise.all(
+                  users.map(({ LoginName }) => sp.web.ensureUser(LoginName))
+                )
+                properties[`${fld.InternalName}Id`] = {
+                  results: ensured.map(({ data }) => data.Id)
+                }
+              } else {
+                const userIds = fieldValues[`${fld.InternalName}Id`] || []
+                const users = siteUsers.filter((u) => userIds.indexOf(u.Id) !== -1)
+                const ensured = await Promise.all(
+                  users.map(({ LoginName }) => this.entityService.web.ensureUser(LoginName))
+                )
+                properties[`${fld.InternalName}Id`] = {
+                  results: ensured.map(({ data }) => data.Id)
+                }
+              }
             }
             break
           case 'DateTime':
@@ -153,6 +234,11 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
               properties[fld.InternalName] = fldValue || null
             }
             break
+          case 'MultiChoice':
+            {
+              properties[fld.InternalName] = fldValue ? { results: fldValue } : null
+            }
+            break
           default:
             {
               properties[fld.InternalName] = fldValueTxt || null
@@ -160,12 +246,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
             break
         }
       }
-      await this.entityService.updateEntityItem(this.settings.siteId, properties)
-      Logger.log({
-        message: `(${this._name}) (syncPropertyItemToHub) Successfully synced item to hub entity.`,
-        data: { properties },
-        level: LogLevel.Info
-      })
+
+      return properties
     } catch (error) {
       throw error
     }
@@ -174,7 +256,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   /**
    * Fetch term field context
    *
-   * @param {string} fieldName Field name for phase
+   * @param fieldName Field name for phase
    */
   public async getTermFieldContext(fieldName: string) {
     const phaseField = await this.sp.web.fields
@@ -195,7 +277,78 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Clear cache
+   * Check project admin permission. The result is stored in `sessionStorage`
+   * for 30 minutes to avoid too many requests.
+   *
+   * @param fieldValues Project properties field values
+   */
+  public async checkProjectAdminPermission(fieldValues: Record<string, any>) {
+    const storageKey = this.project.getStorageKey('checkProjectAdminPermission')
+    const storageExpire = dateAdd(new Date(), 'minute', 30)
+    const check = await new PnPClientStorage().session.getOrPut(
+      storageKey,
+      async () => {
+        const rolesToCheck = fieldValues.GtProjectAdminRoles
+        if (!rolesToCheck) {
+          if (this.spfxContext.pageContext.legacyPageContext.isSiteAdmin === true) return '1'
+          else return '0'
+        }
+        const { data: currentUser } = await this.project.web.ensureUser(
+          this.spfxContext.pageContext.user.email
+        )
+        const projectAdminRoles = await this.portal.getProjectAdminRoles()
+        for (let i = 0; i < projectAdminRoles.length; i++) {
+          const role = projectAdminRoles[i]
+          if (rolesToCheck.indexOf(role.title) === -1) continue
+          switch (role.type) {
+            case ProjectAdminRoleType.SiteAdmin:
+              {
+                if (this.spfxContext.pageContext.legacyPageContext.isSiteAdmin === true) return '1'
+              }
+              break
+            case ProjectAdminRoleType.ProjectProperty:
+              {
+                const projectFieldValue = fieldValues[role.projectFieldName]
+                if (isArray(projectFieldValue) && projectFieldValue.indexOf(currentUser.Id) !== -1)
+                  return '1'
+                if (projectFieldValue === currentUser?.Id) return '1'
+              }
+              break
+            case ProjectAdminRoleType.SharePointGroup:
+              {
+                let web: Web = null
+                switch (role.groupLevel) {
+                  case strings.GroupLevelProject:
+                    web = this.project.web
+                    break
+                  case strings.GroupLevelPortfolio:
+                    web = this.portal.web
+                    break
+                }
+                try {
+                  if (
+                    (
+                      await web.siteGroups
+                        .getByName(role.groupName)
+                        .users.filter(`Email eq '${currentUser.Email}'`)
+                        .get()
+                    ).length > 0
+                  )
+                    return '1'
+                } catch {}
+              }
+              break
+          }
+        }
+        return '0'
+      },
+      storageExpire
+    )
+    return check === '1'
+  }
+
+  /**
+   * Clear cache for the project.
    */
   public clearCache() {
     this.project.clearCache()

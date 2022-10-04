@@ -36,8 +36,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
   const layerHostId = getId('layerHost')
 
   useEffect(() => {
-    if (props.dataSourceCategory)
-      dispatch(SET_CURRENT_VIEW)
+    if (props.dataSourceCategory) dispatch(SET_CURRENT_VIEW)
   }, [props.dataSourceCategory, props.defaultViewId])
 
   useEffect(() => {
@@ -125,7 +124,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
               )
             }}
             columns={[
-              ...getDefaultColumns(props.isParent), //ctxValue, 
+              ...getDefaultColumns(props.isParent), //ctxValue,
               ...items.columns,
               !props.lockedColumns && addColumn()
             ].filter((c) => c)}

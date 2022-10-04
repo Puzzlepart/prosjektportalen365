@@ -41,7 +41,9 @@ export const ErrorDialog = ({
       containerClassName={styles.errorDialog}>
       <div style={{ marginTop: 15 }}>
         <MessageBar messageBarType={messageType} className={styles.errorMessage}>
-          <ReactMarkdown linkTarget='_blank' rehypePlugins={[rehypeRaw]}>{error.stack}</ReactMarkdown>
+          <ReactMarkdown linkTarget='_blank' rehypePlugins={[rehypeRaw]}>
+            {error.stack}
+          </ReactMarkdown>
         </MessageBar>
       </div>
     </BaseDialog>

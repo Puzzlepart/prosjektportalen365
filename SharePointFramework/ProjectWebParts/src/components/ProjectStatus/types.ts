@@ -6,7 +6,7 @@ export interface IProjectStatusProps extends IBaseWebPartComponentProps {
   riskMatrixCalloutTemplate: string
   riskMatrixWidth?: number | string
   riskMatrixHeight?: number | string
-  fieldWidth?: number,
+  fieldWidth?: number
   pageContext: PageContext
 }
 
@@ -36,6 +36,11 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
    */
 
   newestReportId?: number
+
+  /**
+   * Current user has admin permissions
+   */
+  userHasAdminPermission?: boolean
 }
 
 export interface IProjectStatusHashState {
@@ -75,4 +80,9 @@ export interface IProjectStatusData {
    * Column configuration
    */
   columnConfig?: ProjectColumnConfig[]
+
+  /**
+   * Current user has admin permissions
+   */
+  userHasAdminPermission?: boolean
 }
