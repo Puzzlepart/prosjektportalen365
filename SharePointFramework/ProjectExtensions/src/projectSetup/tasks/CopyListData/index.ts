@@ -7,7 +7,7 @@ import { SPField } from 'pp365-shared/lib/models/SPField'
 import { IPlannerTaskSPItem, ListContentConfig, ListContentConfigType } from '../../../models'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
-import { ITaskDetails, PlannerConfiguration, TaskAttachment } from '../PlannerConfiguration'
+import { ITaskDetails, PlannerConfiguration, TaskAttachment, TaskPreviewType } from '../PlannerConfiguration'
 
 export class CopyListData extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -69,7 +69,7 @@ export class CopyListData extends BaseTask {
                 if (!stringIsNullOrEmpty(item.GtPlannerPreviewType)) {
                   let m: RegExpExecArray
                   if ((m = /\(([^)]+)\)/.exec(item.GtPlannerPreviewType)) !== null) {
-                    taskDetails.previewType = m[1] ?? 'automatic'
+                    taskDetails.previewType = (m[1] ?? 'automatic') as TaskPreviewType
                   }
                 }
                 obj[item.GtCategory][item.Title] = taskDetails

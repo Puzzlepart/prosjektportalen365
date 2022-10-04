@@ -200,7 +200,8 @@ export class PlannerConfiguration extends BaseTask {
    * @param delay Delay in seconds before updating the task details to ensure it's created properly
    */
   private async _updateTaskDetails(taskId: any, taskDetails: ITaskDetails, pageContext: PageContext, delay: number = 1) {
-    this.logInformation(`Sleeping ${delay} seconds before updating task details for ${name}`)
+    if(!taskDetails.description && !taskDetails.checklist && !taskDetails.attachments && taskDetails.previewType === 'automatic') return
+    this.logInformation(`Sleeping ${delay}s before updating task details for ${taskId}`)
     await sleep(delay)
     const taskDetailsJson: Record<string, any> = {
       description: taskDetails.description ?? '',
