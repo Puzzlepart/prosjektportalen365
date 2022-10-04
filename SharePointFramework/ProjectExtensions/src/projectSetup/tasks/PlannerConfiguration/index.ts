@@ -17,7 +17,7 @@ export class PlannerConfiguration extends BaseTask {
    *
    * @param data Project setup data
    * @param _configuration Planner configuration object
-   * @param {string[]} _labels Planner labels
+   * @param _labels Planner labels
    */
   constructor(
     data: IProjectSetupData,

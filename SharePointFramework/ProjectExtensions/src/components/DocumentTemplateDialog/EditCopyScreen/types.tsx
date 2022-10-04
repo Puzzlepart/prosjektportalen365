@@ -4,7 +4,7 @@ export interface IEditCopyScreenProps {
   /**
    * On start copy callback
    *
-   * @param {TemplateItem[]} templates Templates
+   * @param templates Templates
    */
   onStartCopy: (templates: TemplateItem[]) => void
 }
