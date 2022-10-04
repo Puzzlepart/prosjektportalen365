@@ -438,12 +438,17 @@ export class PortalDataService {
   }
 
   /**
-   * Get project admin roles
+   * Get project admin roles using caching (`sessionStorage` with 1 day expiry)
    */
   public async getProjectAdminRoles(): Promise<ProjectAdminRole[]> {
     const spItems = await this.web.lists
       .getByTitle(this._configuration.listNames.PROJECT_ADMIN_ROLES)
       .items
+      .usingCaching({
+        key: 'project_admin_roles',
+        storeName: 'session',
+        expiration: dateAdd(new Date(), 'day', 1)
+      })
       .get<SPProjectAdminRoleItem[]>()
     return spItems.map((item) => new ProjectAdminRole(item))
   }
