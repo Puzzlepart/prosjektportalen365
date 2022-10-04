@@ -17,6 +17,8 @@ Every change is marked with issue ID.
 - Added better error handling for Resource allocation #776
 - Added support for description/notes on planner tasks #704
 - Added support for preview type on planner tasks #718
+- Script to fix/update aggregated webpart pages, see 'UpdateAggregatedClientSidePages' script #754
+- Integrated IdeaProcessing directly in Prosjektportalen365 with improvements and new additions #777
 
 ### Changed
 
