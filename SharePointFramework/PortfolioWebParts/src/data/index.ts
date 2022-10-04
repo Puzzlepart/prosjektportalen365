@@ -161,7 +161,6 @@ export class DataAdapter implements IDataAdapter {
    * @param configuration
    * @param siteId
    * @returns {Promise<IFetchDataForViewItemResult[]>}
-   * @memberof DataAdapter
    */
   public async fetchDataForView(
     view: PortfolioOverviewView,
@@ -226,7 +225,6 @@ export class DataAdapter implements IDataAdapter {
    * @param siteId
    * @param [siteIdProperty='GtSiteIdOWSTEXT']
    * @returns {Promise<IFetchDataForViewItemResult[]>}
-   * @memberof DataAdapter
    */
   public async fetchDataForManagerView(
     view: PortfolioOverviewView,
@@ -628,10 +626,10 @@ export class DataAdapter implements IDataAdapter {
   ): Promise<any[]> {
     const odata =
       configuration && configuration.views.find((v) => v.title === dataSource)?.odataQuery
-    let projects
+    let projects = []
 
     if (odata && !dataSource.includes('(Prosjektnivå)')) {
-      ;[projects] = await Promise.all([
+      [projects] = await Promise.all([
         await sp.web.lists
           .getByTitle(strings.ProjectsListName)
           .items.filter(`${odata}`)
@@ -649,8 +647,6 @@ export class DataAdapter implements IDataAdapter {
    * @param groupName
    *
    * @returns {Promise<boolean>}
-   *
-   * @memberof DataAdapter
    */
   public async isUserInGroup(groupName: string): Promise<boolean> {
     try {
