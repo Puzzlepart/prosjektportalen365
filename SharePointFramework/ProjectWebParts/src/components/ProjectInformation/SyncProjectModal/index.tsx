@@ -19,7 +19,6 @@ import { Logger, LogLevel } from '@pnp/logging'
 export const SyncProjectModal: FunctionComponent<SyncModalProps> = ({ isOpen, onDismiss, onSyncProperties, data, title, hubSite, context }) => {
   const [isLoading, setLoading] = useState(true)
   const [isSyncing, setSyncing] = useState(false)
-  // const [syncError, setSyncError] = useState(false)
   const [hasSynced, setHasSynced] = useState(false)
   const [projectData, setProjectData] = useState({})
   const [projectDataId, setProjectDataId] = useState(0)
@@ -149,7 +148,7 @@ export const SyncProjectModal: FunctionComponent<SyncModalProps> = ({ isOpen, on
       await updateIdeaProcessingItem(projectDataId).then(() => {
         setSyncing(false)
         setHasSynced(true)
-        onSyncProperties(undefined, true)
+        onSyncProperties(true)
         onDismiss()
       })
     } catch (error) {
