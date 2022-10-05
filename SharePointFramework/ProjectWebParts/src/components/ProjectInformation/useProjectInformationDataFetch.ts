@@ -59,8 +59,6 @@ const projectDataSynced = async (
       isSynced = true
     }
 
-    console.log('isDataSynced', isSynced)
-
     return isSynced
   } catch (error) {
     return false
