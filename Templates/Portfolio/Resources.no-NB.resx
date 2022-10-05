@@ -1897,6 +1897,24 @@
   <data name="SiteFields_GtPlannerPreviewType_Description" xml:space="preserve">
     <value>Velg hva som skal vises i forhåndsvisningen på oppgavekortet i Planner.</value>
   </data>
+  <data name="SiteFields_GtProjectAdminPermission_DisplayName" xml:space="preserve">
+    <value>Internt tilgangsnavn</value>
+  </data>
+  <data name="SiteFields_GtProjectAdminPermission_Description" xml:space="preserve">
+    <value>Internt tilgangsnavn som ikke må redigeres. Redigering kan knekke tilgangsstyringen.</value>
+  </data>
+  <data name="SiteFields_GtProjectAdminPermissionId_DisplayName" xml:space="preserve">
+    <value>GUID</value>
+  </data>
+  <data name="SiteFields_GtProjectAdminPermissionId_Description" xml:space="preserve">
+    <value>Intern ID for tilgangen som ikke må redigeres. Redigering kan knekke tilgangsstyringen.</value>
+  </data>
+  <data name="SiteFields_GtProjectAdminPermissions_DisplayName" xml:space="preserve">
+    <value>Tilganger</value>
+  </data>
+  <data name="SiteFields_GtProjectAdminPermissions_Description" xml:space="preserve">
+    <value>Velg hvilke tilganger denne rollen skal ha.</value>
+  </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
   </data>
