@@ -8,6 +8,9 @@ on:
 jobs:
   spfx-package:
     runs-on: ubuntu-latest
+    concurrency: 
+      group: ${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v1
         with:
