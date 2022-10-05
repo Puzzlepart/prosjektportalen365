@@ -61,7 +61,7 @@ const projectDataSynced = async (
 
     return isSynced
   } catch (error) {
-    return false
+    return true
   }
 }
 
