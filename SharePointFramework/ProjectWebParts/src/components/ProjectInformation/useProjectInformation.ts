@@ -148,5 +148,10 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
     })
   }, [])
 
-  return { state, setState, getCustomActions, onSyncProperties }
+  return {
+    state,
+    setState: (newState: Partial<IProjectInformationState>) => setState({ ...state, ...newState }),
+    getCustomActions,
+    onSyncProperties
+  }
 }

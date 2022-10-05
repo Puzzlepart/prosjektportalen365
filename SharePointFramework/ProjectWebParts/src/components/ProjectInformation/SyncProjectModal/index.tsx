@@ -1,30 +1,24 @@
-import React, { FunctionComponent, useEffect, useState } from 'react'
-import {
-  Dialog,
-  DialogType,
-  DialogFooter,
-  PrimaryButton,
-  DefaultButton,
-  Spinner,
-  SpinnerSize,
-  format
-} from 'office-ui-fabric-react'
-import { SyncModalProps } from './types'
-import SPDataAdapter from 'data'
-import strings from 'ProjectWebPartsStrings'
 import { TypedHash } from '@pnp/common'
-import { sp } from '@pnp/sp'
 import { Logger, LogLevel } from '@pnp/logging'
+import { sp } from '@pnp/sp'
+import SPDataAdapter from 'data'
+import {
+  DefaultButton,
+  Dialog,
+  DialogFooter,
+  DialogType,
+  format,
+  PrimaryButton,
+  Spinner,
+  SpinnerSize
+} from 'office-ui-fabric-react'
+import strings from 'ProjectWebPartsStrings'
+import React, { FunctionComponent, useContext, useEffect, useState } from 'react'
+import { ProjectInformationContext } from '../context'
+import { ISyncModalProps } from './types'
 
-export const SyncProjectModal: FunctionComponent<SyncModalProps> = ({
-  isOpen,
-  onDismiss,
-  onSyncProperties,
-  data,
-  title,
-  hubSite,
-  context
-}) => {
+export const SyncProjectModal: FunctionComponent<ISyncModalProps> = ({ onSyncProperties }) => {
+  const context = useContext(ProjectInformationContext)
   const [isLoading, setLoading] = useState(true)
   const [isSyncing, setSyncing] = useState(false)
   const [hasSynced, setHasSynced] = useState(false)
@@ -38,9 +32,9 @@ export const SyncProjectModal: FunctionComponent<SyncModalProps> = ({
   return (
     <>
       <Dialog
-        hidden={!isOpen}
+        hidden={!context.state.displaySyncProjectModal}
         minWidth={400}
-        onDismiss={onDismiss}
+        onDismiss={() => context.setState({ displaySyncProjectModal: false })}
         dialogContentProps={{
           type: DialogType.largeHeader,
           title: strings.SynchronizeProjectDataTitle,
@@ -62,7 +56,7 @@ export const SyncProjectModal: FunctionComponent<SyncModalProps> = ({
           <DialogFooter>
             <DefaultButton
               text={strings.CancelText}
-              onClick={() => onDismiss()}
+              onClick={() => context.setState({ displaySyncProjectModal: false })}
               disabled={isSyncing}
             />
             <PrimaryButton
@@ -78,7 +72,7 @@ export const SyncProjectModal: FunctionComponent<SyncModalProps> = ({
           <DialogFooter>
             <PrimaryButton
               text={strings.CloseText}
-              onClick={() => onDismiss()}
+              onClick={() => context.setState({ displaySyncProjectModal: false })}
               disabled={isSyncing}
             />
           </DialogFooter>
@@ -89,7 +83,9 @@ export const SyncProjectModal: FunctionComponent<SyncModalProps> = ({
 
   async function updateIdeaProcessingItem(projectDataItemId: number) {
     try {
-      const ideaProcessingList = hubSite.web.lists.getByTitle(strings.IdeaProcessingTitle)
+      const ideaProcessingList = context.props.hubSite.web.lists.getByTitle(
+        strings.IdeaProcessingTitle
+      )
 
       const [ideaProcessingItem] = await ideaProcessingList.items
         .filter(`GtIdeaProjectDataId eq '${projectDataItemId}'`)
@@ -106,10 +102,12 @@ export const SyncProjectModal: FunctionComponent<SyncModalProps> = ({
 
   async function getProjectData() {
     try {
-      const projectDataList = hubSite.web.lists.getByTitle(strings.IdeaProjectDataTitle)
+      const projectDataList = context.props.hubSite.web.lists.getByTitle(
+        strings.IdeaProjectDataTitle
+      )
 
       const [projectDataItem] = await projectDataList.items
-        .filter(`GtSiteUrl eq '${context.pageContext.web.absoluteUrl}'`)
+        .filter(`GtSiteUrl eq '${context.props.webPartContext.pageContext.web.absoluteUrl}'`)
         .select('Id')
         .get()
 
@@ -122,11 +120,10 @@ export const SyncProjectModal: FunctionComponent<SyncModalProps> = ({
 
       const itemProperties = await SPDataAdapter.getMappedProjectProperties(
         fieldValues,
-        { ...fieldValuesText, Title: title },
-        data.templateParameters,
+        { ...fieldValuesText, Title: context.props.webTitle },
+        context.state.data.templateParameters,
         true
       )
-
       setProjectData(itemProperties)
       setProjectDataId(projectDataItem.Id)
       setLoading(false)
@@ -135,17 +132,25 @@ export const SyncProjectModal: FunctionComponent<SyncModalProps> = ({
     }
   }
 
+  /**
+   * TODO: Implement sync of TaxonomyMultiProperties, as of now hidden note fields for the taxonomyMulti fields (ex: 'Prosjekttype_0')
+   * does not exist in 'Prosjektegenskaper' list, therefore we can't find a internalName for the field to update
+   *
+   * - Added a note in the dialog message regarding this.
+   *
+   * **Code example:**
+   *
+   * `projectPropertiesList.fields.getByTitle('Prosjekttype_0').get()`
+   *
+   * @param properties Properties
+   * @param projectDataId Project data ID
+   */
   async function syncProperties(properties: TypedHash<any>, projectDataId: number) {
     setSyncing(true)
 
     const projectPropertiesList = sp.web.lists.getByTitle(strings.ProjectPropertiesListName)
 
     const [propertiesItem] = await projectPropertiesList.items.top(1).select('Id').get()
-
-    // TODO: Implement sync of TaxonomyMultiProperties, as of now hidden note fields for the taxonomyMulti fields (ex: 'Prosjekttype_0')
-    // does not exist in 'Prosjektegenskaper' list, therefore we can't find a internalName for the field to update
-    // - Added a note in the dialog message regarding this.
-    // Code example: projectPropertiesList.fields.getByTitle('Prosjekttype_0').get()
 
     try {
       projectPropertiesList.items.getById(propertiesItem.Id).update(properties)
@@ -154,7 +159,7 @@ export const SyncProjectModal: FunctionComponent<SyncModalProps> = ({
         setSyncing(false)
         setHasSynced(true)
         onSyncProperties(true)
-        onDismiss()
+        context.setState({ ...context.state, displaySyncProjectModal: false })
       })
     } catch (error) {
       Logger.log({

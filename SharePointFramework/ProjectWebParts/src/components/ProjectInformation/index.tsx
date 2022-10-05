@@ -18,7 +18,7 @@ export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (
   if (state.hidden) return null
 
   return (
-    <ProjectInformationContext.Provider value={{ props, state }}>
+    <ProjectInformationContext.Provider value={{ props, state, setState }}>
       <div className={styles.root}>
         <div className={styles.container}>
           <div className={styles.header}>
@@ -26,44 +26,34 @@ export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (
               {props.title}
             </span>
           </div>
-          {state.loading
-            ? null
-            : (
-              <div>
-                <ProjectProperties properties={state.properties} />
-                {(!props.hideActions && state.message) && <UserMessage {...state.message} />}
-                <Actions customActions={getCustomActions()} />
-                <ProgressDialog {...state.progress} />
-                {state.confirmActionProps && <ConfirmDialog {...state.confirmActionProps} />}
-                <Panel
-                  type={PanelType.medium}
-                  headerText={strings.ProjectPropertiesListName}
-                  isOpen={state.showProjectPropertiesPanel}
-                  onDismiss={() => setState({ ...state, showProjectPropertiesPanel: false })}
-                  onLightDismissClick={() => setState({ ...state, showProjectPropertiesPanel: false })}
-                  isLightDismiss
-                  closeButtonAriaLabel={strings.CloseText}>
-                  <ProjectProperties properties={state.allProperties} />
-                </Panel>
-                {state.displayParentCreationModal && (
-                  <CreateParentModal
-                    isOpen={state.displayParentCreationModal}
-                    onDismiss={() => setState({ ...state, displayParentCreationModal: false })}
-                  />
-                )}
-                {state.displaySyncProjectModal && (
-                  <SyncProjectModal
-                    isOpen={state.displaySyncProjectModal}
-                    onDismiss={() => setState({ ...state, displaySyncProjectModal: false })}
-                    data={state.data}
-                    onSyncProperties={onSyncProperties}
-                    title={props.webTitle}
-                    hubSite={props.hubSite}
-                    context={props.webPartContext}
-                  />
-                )}
-              </div>
-            )}
+          {state.loading ? null : (
+            <div>
+              <ProjectProperties properties={state.properties} />
+              {!props.hideActions && state.message && <UserMessage {...state.message} />}
+              <Actions customActions={getCustomActions()} />
+              <ProgressDialog {...state.progress} />
+              {state.confirmActionProps && <ConfirmDialog {...state.confirmActionProps} />}
+              <Panel
+                type={PanelType.medium}
+                headerText={strings.ProjectPropertiesListName}
+                isOpen={state.showProjectPropertiesPanel}
+                onDismiss={() => setState({ showProjectPropertiesPanel: false })}
+                onLightDismissClick={() => setState({ showProjectPropertiesPanel: false })}
+                isLightDismiss
+                closeButtonAriaLabel={strings.CloseText}>
+                <ProjectProperties properties={state.allProperties} />
+              </Panel>
+              {state.displayParentCreationModal && (
+                <CreateParentModal
+                  isOpen={state.displayParentCreationModal}
+                  onDismiss={() => setState({ displayParentCreationModal: false })}
+                />
+              )}
+              {state.displaySyncProjectModal && (
+                <SyncProjectModal onSyncProperties={onSyncProperties} />
+              )}
+            </div>
+          )}
         </div>
       </div>
     </ProjectInformationContext.Provider>
