@@ -23,9 +23,21 @@ if ($null -ne $LastInstall) {
     }
 
     if ($PreviousVersion -lt "1.7.0") {
-        Write-Host "[INFO] In version v1.6.0 we reworked the aggregated webparts and removed the benefits webpart as this is now handled in the aggregated webpart. Updating pages to use the new aggregated webpart."
-        Write-Host "[INFO] Applying PnP template [UpdatedAggregatedClientSidePages] to [$Url]"
-        Apply-PnPProvisioningTemplate "$PSScriptRoot\Scripts\pnpFiles\UpdatedAggregatedClientSidePages.pnp" -ErrorAction Stop
-        Write-Host "[SUCCESS] Successfully applied PnP template [UpdatedAggregatedClientSidePages] to [$Url]" -ForegroundColor Green
+        Write-Host "[INFO] Removing deprecated pages"
+        Write-Host "[INFO] In version v1.7.0 we reworked the aggregated webparts and removed the benefits webpart as this is now handled in the aggregated webpart. Removing pages so that we overwrite the old pages correctly"
+        
+        $PnPClientSidePages = @(
+            "Gevinstoversikt.aspx", 
+            "Erfaringslogg.aspx", 
+            "Leveranseoversikt.aspx", 
+            "Risikooversikt.aspx"
+        )
+
+        $Pages = Get-PnPFolder -Url SitePages -Includes Files | Select-Object -ExpandProperty Files
+        $Pages | ForEach-Object {
+            if ($PnPClientSidePages.Contains($_.Name)) {
+                Remove-PnPClientSidePage -Identity $_.Name -Force -ErrorAction SilentlyContinue
+            }
+        }
     }
 }
