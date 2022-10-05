@@ -55,6 +55,17 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/ProjectStatus/GtStatusRiskComment.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/ProjectStatus/GtStatusTime.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/ProjectStatus/GtStatusTimeComment.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/ProjectStatus/GtSecFieldName.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/ProjectStatus/GtSecIcon.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/ProjectStatus/GtSecList.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/ProjectStatus/GtSecRowLimit.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/ProjectStatus/GtSecShowAsSection.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/ProjectStatus/GtSecShowInNavbar.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/ProjectStatus/GtSecShowInStatusSection.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/ProjectStatus/GtSecShowRiskMatrix.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/ProjectStatus/GtSecSource.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/ProjectStatus/GtSecViewFields.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/ProjectStatus/GtSecViewQuery.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/ProjectLog/GtProjectLogActors.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/ProjectLog/GtProjectLogConsequence.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/ProjectLog/GtProjectLogDescription.xml" />
@@ -187,17 +198,6 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtRiskStatus.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtRiskStrategy.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtSearchQuery.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtSecFieldName.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtSecIcon.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtSecList.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtSecRowLimit.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtSecShowAsSection.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtSecShowInNavbar.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtSecShowInStatusSection.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtSecShowRiskMatrix.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtSecSource.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtSecViewFields.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtSecViewQuery.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtShowFieldFrontpage.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtShowFieldPortfolio.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/GtShowFieldProjectStatus.xml" />
