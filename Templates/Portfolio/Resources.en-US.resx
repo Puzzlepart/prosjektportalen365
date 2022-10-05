@@ -460,6 +460,12 @@
   <data name="ContentTypes_IdeaProcessing_Description" xml:space="preserve">
     <value>Innholdstype for idébehandling (Idébehandling)</value>
   </data>
+   <data name="ContentTypes_HelpContent_Name" xml:space="preserve">
+    <value>Hjelpeinnhold</value>
+  </data>
+  <data name="ContentTypes_HelpContent_Description" xml:space="preserve">
+    <value>Innholdstype for hjelpeinnhold (Hjelpeinnhold)</value>
+  </data>
   <data name="SiteFields_Project_Group" xml:space="preserve">
     <value>Kolonner for Prosjektportalen (Prosjekt)</value>
   </data>
@@ -1800,6 +1806,30 @@
   </data>
   <data name="SiteFields_GtRegistratedIdea_Description" xml:space="preserve">
     <value>Registrert idé tilknytning</value>
+  </data>
+   <data name="SiteFields_GtResourceLink_DisplayName" xml:space="preserve">
+    <value>Link til ressurs</value>
+  </data>
+  <data name="SiteFields_GtResourceLink_Description" xml:space="preserve">
+    <value>Lenk opp en ressurs om ønskelig. Om denne settes, vil det legges til en knapp under teksten.</value>
+  </data>
+  <data name="SiteFields_GtTextContent_DisplayName" xml:space="preserve">
+    <value>Innhold</value>
+  </data>
+  <data name="SiteFields_GtTextContent_Description" xml:space="preserve">
+    <value>Tekst som skal vises.</value>
+  </data>
+  <data name="SiteFields_GtExternalURL_DisplayName" xml:space="preserve">
+    <value>Ekstern URL</value>
+  </data>
+  <data name="SiteFields_GtExternalURL_Description" xml:space="preserve">
+    <value>Ekstern URL. Normalt sett en .md fil fra https://raw.githubusercontent.com/wiki/.</value>
+  </data>
+  <data name="SiteFields_GtURL_DisplayName" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SiteFields_GtURL_Description" xml:space="preserve">
+    <value>URL hvor hjelpeinnholdet skal vises. For eksempel SitePages/Hjem.aspx om du vil at innholdet skal vises på forsiden av prosjektet.</value>
   </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
