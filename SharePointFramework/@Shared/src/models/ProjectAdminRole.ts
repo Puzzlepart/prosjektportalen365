@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import { isArray } from 'underscore'
 
 export class SPProjectAdminRoleItem {
   public ContentTypeId?: string = ''
@@ -7,8 +8,8 @@ export class SPProjectAdminRoleItem {
   public GtGroupName?: string = ''
   public GtGroupLevel?: string = ''
   public GtProjectFieldName?: string = ''
+  public GtProjectAdminPermissions?: string = ''
 }
-
 export enum ProjectAdminRoleType {
   ProjectProperty,
   SharePointGroup,
@@ -21,9 +22,10 @@ export class ProjectAdminRole {
   public groupName: string
   public groupLevel: string
   public projectFieldName: string
+  public permissions: string[] = []
 
   /**
-   * Constructor for ProjectAdminRole
+   * Constructor for `ProjectAdminRole`
    *
    * @param _item Item
    */
@@ -33,6 +35,9 @@ export class ProjectAdminRole {
     this.groupName = _item.GtGroupName
     this.groupLevel = _item.GtGroupLevel
     this.projectFieldName = _item.GtProjectFieldName ? `${_item.GtProjectFieldName}Id` : null
+    if (isArray(_item.GtProjectAdminPermissions)) {
+      this.permissions = _item.GtProjectAdminPermissions.map(p => p.GtProjectAdminPermissionId)
+    }
   }
 
   public get type(): ProjectAdminRoleType {

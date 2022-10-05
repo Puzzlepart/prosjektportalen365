@@ -1,4 +1,5 @@
 import SPDataAdapter from 'data'
+import { ProjectAdminPermission } from 'data/SPDataAdapter/ProjectAdminPermission'
 import * as strings from 'ProjectWebPartsStrings'
 import { IProjectPhasesData, IProjectPhasesProps } from '.'
 import { getPhaseSitePages } from './getPhaseSitePages'
@@ -20,10 +21,13 @@ export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPha
       getWelcomePage(),
       SPDataAdapter.project.getPropertiesData()
     ])
-    const [phases, currentPhaseName, userHasAdminPermission] = await Promise.all([
+    const [phases, currentPhaseName, userHasChangePhasePermission] = await Promise.all([
       SPDataAdapter.project.getPhases(phaseFieldCtx.termSetId, checklistData),
       SPDataAdapter.project.getCurrentPhaseName(phaseFieldCtx.fieldName),
-      SPDataAdapter.checkProjectAdminPermission(properties.fieldValues)
+      SPDataAdapter.getProjectAdminPermissions(
+        ProjectAdminPermission.ChangePhase,
+        properties.fieldValues
+      )
     ])
 
     if (props.useDynamicHomepage) {
@@ -38,7 +42,7 @@ export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPha
       phaseTextField: phaseFieldCtx.phaseTextField,
       phaseSitePages,
       welcomePage,
-      userHasAdminPermission
+      userHasChangePhasePermission
     } as IProjectPhasesData
   } catch (error) {
     throw new Error()

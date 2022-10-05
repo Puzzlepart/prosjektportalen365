@@ -49,7 +49,7 @@ export const ProjectPhaseCallout = ({ phase, target }: IProjectPhaseCalloutProps
                   iconProps={{ iconName: 'CheckList' }}
                 />
               )}
-              {context.state.userHasAdminPermission && (
+              {context.state.data.userHasChangePhasePermission && (
                 <ActionButton
                   onClick={() => context.dispatch(CHANGE_PHASE())}
                   text={strings.ChangePhaseText}

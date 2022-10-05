@@ -1,4 +1,4 @@
-import { dateAdd, PnPClientStorage, PnPClientStore, TypedHash } from '@pnp/common'
+import { dateAdd, PnPClientStorage, PnPClientStore } from '@pnp/common'
 import { ConsoleListener, Logger } from '@pnp/logging'
 import { SPConfiguration, Web } from '@pnp/sp'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
@@ -16,10 +16,10 @@ import { IPropertyItemContext } from './IPropertyItemContext'
 
 export class ProjectDataService {
   private _storage: PnPClientStore
-  private _storageKeys: TypedHash<string> = {
+  private _storageKeys: Record<string, string> = {
     _getPropertyItemContext: '{0}_propertyitemcontext',
     getPhases: '{0}_projectphases_terms',
-    checkProjectAdminPermission: '{0}_check_project_admin_permission'
+    getProjectAdminPermissions: '{0}_project_admin_permissions'
   }
   public web: Web
 
@@ -324,7 +324,7 @@ export class ProjectDataService {
    * @param id Id
    * @param properties Properties
    */
-  public async updateChecklistItem(listName: string, id: number, properties: TypedHash<any>) {
+  public async updateChecklistItem(listName: string, id: number, properties: Record<string, any>) {
     return await this.web.lists.getByTitle(listName).items.getById(id).update(properties)
   }
 

@@ -33,6 +33,7 @@ import {
   IProjectStatusProps,
   IProjectStatusState
 } from './types'
+import { ProjectAdminPermission } from 'data/SPDataAdapter/ProjectAdminPermission'
 
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private _portalDataService: PortalDataService
@@ -518,7 +519,8 @@ export class ProjectStatus extends React.Component<IProjectStatusProps, IProject
           "Hidden eq false and Group ne 'Hidden'"
         )
       ])
-      const userHasAdminPermission = await SPDataAdapter.checkProjectAdminPermission(
+      const userHasAdminPermission = await SPDataAdapter.getProjectAdminPermissions(
+        ProjectAdminPermission.ProjectStatusAdmin,
         properties.fieldValues
       )
       const sortedReports = reports

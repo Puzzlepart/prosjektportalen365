@@ -51,11 +51,6 @@ export interface IBaseWebPartComponentState<T> {
   loading: boolean
 
   /**
-   * Is Project data synced
-   */
-  isProjectDataSynced?: boolean
-
-  /**
    * Data
    */
   data?: T
