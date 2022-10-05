@@ -4,14 +4,14 @@ import SPDataAdapter from 'data'
 import { format, IProgressIndicatorProps, MessageBarType } from 'office-ui-fabric-react'
 import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
 import strings from 'ProjectWebPartsStrings'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ActionType } from './Actions/types'
 import {
   IProjectInformationProps,
   IProjectInformationState,
   IProjectInformationUrlHash
 } from './types'
-import { useProjectInformationDataTransform } from './useProjectInformationDataTransform'
+import {  useProjectInformationDataFetch } from './useProjectInformationDataFetch'
 
 /**
  * Component logic hook for `ProjectInformation`
@@ -29,8 +29,6 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
     logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
   })
 
-  const fetchData = useProjectInformationDataTransform(props)
-
   const getCustomActions = (): ActionType[] => {
     const administerChildrenAction: ActionType = [
       strings.ChildProjectAdminLabel,
@@ -39,7 +37,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
       },
       'Org',
       false,
-      !state.userHasAdminPermission
+      !state.userHasEditPermission
     ]
     const transformToParentProject: ActionType = [
       strings.CreateParentProjectLabel,
@@ -48,7 +46,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
       },
       'Org',
       false,
-      !state.userHasAdminPermission
+      !state.userHasEditPermission
     ]
     const viewAllPropertiesAction: ActionType = [
       strings.ViewAllPropertiesLabel,
@@ -65,7 +63,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
       },
       'Sync',
       false,
-      !props.useIdeaProcessing || state.isProjectDataSynced || !state.userHasAdminPermission
+      !props.useIdeaProcessing || state.isProjectDataSynced || !state.userHasEditPermission
     ]
     if (state.isParentProject) {
       return [administerChildrenAction, viewAllPropertiesAction, syncProjectPropertiesAction]
@@ -140,13 +138,11 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
     }
   }
 
-  useEffect(() => {
+  useProjectInformationDataFetch(props, (data) => {
     const urlHash = parseUrlHash<IProjectInformationUrlHash>(true)
-    fetchData().then((data) => {
       if (urlHash.syncproperties === '1') onSyncProperties(urlHash.force === '1')
       setState({ ...state, ...data, loading: false })
-    })
-  }, [])
+  })
 
   return {
     state,

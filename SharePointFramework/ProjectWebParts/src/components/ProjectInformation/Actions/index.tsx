@@ -14,21 +14,21 @@ export const Actions = (props: IActionsProps) => {
       context.state.data.versionHistoryUrl,
       'History',
       false,
-      !context.state.userHasAdminPermission
+      !context.state.userHasEditPermission
     ],
     [
       strings.EditPropertiesText,
       context.state.data.editFormUrl,
       'Edit',
       false,
-      !context.state.userHasAdminPermission
+      !context.state.userHasEditPermission
     ],
     [
       strings.EditSiteInformationText,
       window['_spLaunchSiteSettings'],
       'Info',
       false,
-      !window['_spLaunchSiteSettings'] || !context.state.userHasAdminPermission
+      !window['_spLaunchSiteSettings'] || !context.state.userHasEditPermission
     ],
     ...(props.customActions || [])
   ]
