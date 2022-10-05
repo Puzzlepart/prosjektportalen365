@@ -43,7 +43,10 @@ const fetchData = async (
       columns,
       ...propertiesData
     }
-    const userHasEditPermission = await SPDataAdapter.getProjectAdminPermissions(ProjectAdminPermission.EditProjectProperties, data.fieldValues)
+    const userHasEditPermission = await SPDataAdapter.getProjectAdminPermissions(
+      ProjectAdminPermission.EditProjectProperties,
+      data.fieldValues
+    )
     const properties = transformProperties(data, props)
     const allProperties = transformProperties(data, props, false)
     return {
@@ -60,11 +63,14 @@ const fetchData = async (
 
 /**
  * Fetch hook for ProjectInformation
- * 
+ *
  * @param props Props
- * @param fetchCallback Fetch callback 
+ * @param fetchCallback Fetch callback
  */
-export const useProjectInformationDataFetch = (props: IProjectInformationProps, fetchCallback: (data: any) => void) => {
+export const useProjectInformationDataFetch = (
+  props: IProjectInformationProps,
+  fetchCallback: (data: any) => void
+) => {
   useEffect(() => {
     fetchData(props).then(fetchCallback)
   }, [])

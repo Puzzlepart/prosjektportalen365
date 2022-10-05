@@ -11,7 +11,7 @@ import {
   IProjectInformationState,
   IProjectInformationUrlHash
 } from './types'
-import {  useProjectInformationDataFetch } from './useProjectInformationDataFetch'
+import { useProjectInformationDataFetch } from './useProjectInformationDataFetch'
 
 /**
  * Component logic hook for `ProjectInformation`
@@ -140,8 +140,8 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
 
   useProjectInformationDataFetch(props, (data) => {
     const urlHash = parseUrlHash<IProjectInformationUrlHash>(true)
-      if (urlHash.syncproperties === '1') onSyncProperties(urlHash.force === '1')
-      setState({ ...state, ...data, loading: false })
+    if (urlHash.syncproperties === '1') onSyncProperties(urlHash.force === '1')
+    setState({ ...state, ...data, loading: false })
   })
 
   return {

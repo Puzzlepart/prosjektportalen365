@@ -121,8 +121,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       const [fields, siteUsers] = await Promise.all([
         templateParameters.ProjectContentTypeId
           ? this.entityService
-            .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
-            .getEntityFields()
+              .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
+              .getEntityFields()
           : this.entityService.getEntityFields(),
         this.sp.web.siteUsers.select('Id', 'Email', 'LoginName', 'Title').get<
           {
@@ -281,7 +281,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param permission Permission to check
    * @param properties Project properties
    */
-  public async getProjectAdminPermissions(permission: ProjectAdminPermission, properties: Record<string, any>) {
+  public async getProjectAdminPermissions(
+    permission: ProjectAdminPermission,
+    properties: Record<string, any>
+  ) {
     const storageKey = this.project.getStorageKey('getProjectAdminPermissions')
     const storageExpire = dateAdd(new Date(), 'minute', 30)
     const permissions = await new PnPClientStorage().session.getOrPut(
@@ -296,19 +299,23 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         const { data: currentUser } = await this.project.web.ensureUser(
           this.spfxContext.pageContext.user.email
         )
-        const projectAdminRoles = (await this.portal.getProjectAdminRoles()).filter(role => rolesToCheck.indexOf(role.title) !== -1)
+        const projectAdminRoles = (await this.portal.getProjectAdminRoles()).filter(
+          (role) => rolesToCheck.indexOf(role.title) !== -1
+        )
         for (let i = 0; i < projectAdminRoles.length; i++) {
           const role = projectAdminRoles[i]
           switch (role.type) {
             case ProjectAdminRoleType.SiteAdmin:
               {
-                if (this.spfxContext.pageContext.legacyPageContext.isSiteAdmin === true) userPermissions.push(...role.permissions)
+                if (this.spfxContext.pageContext.legacyPageContext.isSiteAdmin === true)
+                  userPermissions.push(...role.permissions)
               }
               break
             case ProjectAdminRoleType.ProjectProperty:
               {
                 const projectFieldValue = properties[role.projectFieldName]
-                if (isArray(projectFieldValue) && projectFieldValue.indexOf(currentUser.Id) !== -1) userPermissions.push(...role.permissions)
+                if (isArray(projectFieldValue) && projectFieldValue.indexOf(currentUser.Id) !== -1)
+                  userPermissions.push(...role.permissions)
                 if (projectFieldValue === currentUser?.Id) userPermissions.push(...role.permissions)
               }
               break
@@ -333,12 +340,12 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
                     ).length > 0
                   )
                     userPermissions.push(...role.permissions)
-                } catch { }
+                } catch {}
               }
               break
           }
         }
-        return unique(userPermissions, p => p.id)
+        return unique(userPermissions, (p) => p.id)
       },
       storageExpire
     )

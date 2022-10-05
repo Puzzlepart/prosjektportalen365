@@ -24,7 +24,10 @@ export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPha
     const [phases, currentPhaseName, userHasChangePhasePermission] = await Promise.all([
       SPDataAdapter.project.getPhases(phaseFieldCtx.termSetId, checklistData),
       SPDataAdapter.project.getCurrentPhaseName(phaseFieldCtx.fieldName),
-      SPDataAdapter.getProjectAdminPermissions(ProjectAdminPermission.ChangePhase, properties.fieldValues)
+      SPDataAdapter.getProjectAdminPermissions(
+        ProjectAdminPermission.ChangePhase,
+        properties.fieldValues
+      )
     ])
 
     if (props.useDynamicHomepage) {
