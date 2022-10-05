@@ -25,7 +25,7 @@
                 <Where>
                     <Eq>
                         <FieldRef Name="ContentType" />
-                        <Value Type="Computed">Prosjektadministrasjonsrolle koblet mot prosjektegenskaper</Value>
+                        <Value Type="Computed">{resource:ContentTypes_ProjectAdminRoleProjectInfo_Name}</Value>
                     </Eq>
                 </Where>
             </Query>
@@ -44,7 +44,7 @@
                 <Where>
                     <Eq>
                         <FieldRef Name="ContentType" />
-                        <Value Type="Computed">Prosjektadministrasjonsrolle koblet mot SharePoint-gruppe</Value>
+                        <Value Type="Computed">{resource:ContentTypes_ProjectAdminRoleGroupMembership_Name}</Value>
                     </Eq>
                 </Where>
                 <GroupBy>
