@@ -1,1 +1,1 @@
-<Field DisplayName="" Type="Text" ID="{de8bc08e-0002-43da-b378-1b0c26166aa4}" StaticName="GtProjectAdminPermission" Name="GtProjectAdminPermission" MaxLength="255" />
+<Field DisplayName="Internt tilgangsnavn" Type="Text" ID="{de8bc08e-0002-43da-b378-1b0c26166aa4}" StaticName="GtProjectAdminPermission" Name="GtProjectAdminPermission" MaxLength="255" ShowInEditForm="FALSE" />
