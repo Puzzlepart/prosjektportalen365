@@ -514,6 +514,30 @@
   <data name="ContentTypes_ProjectAdminPermission_Description" xml:space="preserve">
     <value>Innholdstype for prosjektadministratsjonstilganger</value>
   </data>
+  <data name="ContentTypes_ProjectAdminRole_Name" xml:space="preserve">
+    <value>Prosjektadministrasjonsrolle</value>
+  </data>
+  <data name="ContentTypes_ProjectAdminRole_Description" xml:space="preserve">
+    <value>Innholdstype for prosjektadministrasjonsroller</value>
+  </data>
+  <data name="ContentTypes_ProjectAdminRoleGroupMembership_Name" xml:space="preserve">
+    <value>Prosjektadministrasjonsrolle koblet mot SharePoint-gruppe</value>
+  </data>
+  <data name="ContentTypes_ProjectAdminRoleGroupMembership_Description" xml:space="preserve">
+    <value>Innholdstype for en prosjektadministrasjonsrolle som er koblet opp mot en SharePoint-gruppe. Enten på prosjekt- eller porteføljenivå.</value>
+  </data>
+  <data name="ContentTypes_ProjectAdminRoleProjectInfo_Name" xml:space="preserve">
+    <value>Prosjektadministrasjonsrolle koblet mot prosjektegenskaper</value>
+  </data>
+  <data name="ContentTypes_ProjectAdminRoleProjectInfo_Description" xml:space="preserve">
+    <value>Innholdstype for en prosjektadministrasjonsrolle som er koblet opp mot en egenskap på prosjektet.</value>
+  </data>
+  <data name="ContentTypes_ProjectAdminRoleSiteAdmin_Name" xml:space="preserve">
+    <value>Prosjektadministrasjonsrolle - Områdeadministrator</value>
+  </data>
+  <data name="ContentTypes_ProjectAdminRoleSiteAdmin_Description" xml:space="preserve">
+    <value>Innholdstype for en prosjektadministrasjonsrolle som er koblet opp mot områdeadministrator-tilgangen.</value>
+  </data>
   <data name="SiteFields_Project_Group" xml:space="preserve">
     <value>Kolonner for Prosjektportalen (Prosjekt)</value>
   </data>
