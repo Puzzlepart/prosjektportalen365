@@ -97,7 +97,7 @@ export const SyncProjectModal: FunctionComponent<ISyncModalProps> = ({ onSyncPro
       })
 
       return updatedResult
-    } catch (error) {}
+    } catch (error) { }
   }
 
   async function getProjectData() {
