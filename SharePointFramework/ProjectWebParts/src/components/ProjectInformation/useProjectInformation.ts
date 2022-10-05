@@ -65,7 +65,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
       },
       'Sync',
       false,
-      !props.useIdeaProcessing || state.isProjectDataSynced
+      !props.useIdeaProcessing || state.isProjectDataSynced || !state.userHasAdminPermission
     ]
     if (state.isParentProject) {
       return [administerChildrenAction, viewAllPropertiesAction, syncProjectPropertiesAction]
