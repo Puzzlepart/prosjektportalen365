@@ -507,7 +507,13 @@
   </data>
   <data name="ContentTypes_IdeaProcessing_Description" xml:space="preserve">
     <value>Innholdstype for idébehandling (Idébehandling)</value>
-</data>
+  </data>
+  <data name="ContentTypes_ProjectAdminPermission_Name" xml:space="preserve">
+    <value>Prosjektadministrasjonstilgang</value>
+  </data>
+  <data name="ContentTypes_ProjectAdminPermission_Description" xml:space="preserve">
+    <value>Innholdstype for prosjektadministratsjonstilganger</value>
+  </data>
   <data name="SiteFields_Project_Group" xml:space="preserve">
     <value>Kolonner for Prosjektportalen (Prosjekt)</value>
   </data>
