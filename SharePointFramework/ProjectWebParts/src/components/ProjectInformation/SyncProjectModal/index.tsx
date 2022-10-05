@@ -92,6 +92,8 @@ export const SyncProjectModal: FunctionComponent<ISyncModalProps> = ({ onSyncPro
         .select('Id')
         .get()
 
+      console.log(ideaProcessingItem)
+
       const updatedResult = ideaProcessingList.items.getById(ideaProcessingItem.Id).update({
         GtIdeaDecision: 'Godkjent og synkronisert'
       })

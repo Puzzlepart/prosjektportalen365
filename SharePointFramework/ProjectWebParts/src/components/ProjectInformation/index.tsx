@@ -17,6 +17,8 @@ export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (
   const { state, setState, getCustomActions, onSyncProperties } = useProjectInformation(props)
   if (state.hidden) return null
 
+  console.log(state)
+
   return (
     <ProjectInformationContext.Provider value={{ props, state, setState }}>
       <div className={styles.root}>
