@@ -142,7 +142,7 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Portfolio/GtPortfolioColumns.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Portfolio/GtPortfolioColumnValue.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Portfolio/GtPortfolioFabricIcon.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Portfolio//GtPortfolioGroupBy.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Portfolio/GtPortfolioGroupBy.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Portfolio/GtPortfolioIsDefaultView.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Portfolio/GtPortfolioIsPersonalView.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Portfolio/GtPortfolioRefiners.xml" />
