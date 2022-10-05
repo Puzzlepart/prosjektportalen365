@@ -1,0 +1,1 @@
+<Field Type="Note" DisplayName="{resource:SiteFields_GtIdeaExpectedGain_DisplayName}" Description="{resource:SiteFields_GtIdeaExpectedGain_Description}" Group="{resource:SiteFields_Idea_Group}" ID="{75dfa9cc-7e6b-4b71-bfca-bb1bee9e1f55}" StaticName="GtIdeaExpectedGain" Name="GtIdeaExpectedGain" />

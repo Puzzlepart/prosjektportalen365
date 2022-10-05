@@ -15,6 +15,10 @@ Every change is marked with issue ID.
 - Script to fix planner issues, see 'Ensure-PlannerPlans' script #752
 - Added 'Description' and 'Tag' as two new default fields to ProjectTimelineContent list #764
 - Added better error handling for Resource allocation #776
+- Added support for description/notes on planner tasks #704
+- Added support for preview type on planner tasks #718
+- Script to fix/update aggregated webpart pages, see 'UpdateAggregatedClientSidePages' script #754
+- Integrated IdeaProcessing directly in Prosjektportalen365 with improvements and new additions #777
 
 ### Changed
 
@@ -22,6 +26,7 @@ Every change is marked with issue ID.
 - Information messages now uses a newer and stable version to render HTML #762
 - Reduced amount of calls when loading ProjectTimeline, this improves the speed by alot! #743
 - Filterpanel for Timeline: Project is now collapsed by default in the panel #776
+- Restructured configuration page using 3 columns #712
 
 ### Fixed
 

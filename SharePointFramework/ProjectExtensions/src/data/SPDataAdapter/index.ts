@@ -14,7 +14,7 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
   /**
    * Configure the SP data adapter
    *
-   * @param {ApplicationCustomizerContext | ListViewCommandSetContext} spfxContext Context
+   * @param spfxContext Context
    * @param settings Settings
    */
   public configure(

@@ -1711,22 +1711,22 @@
   <data name="SiteFields_GtIdeaExecutionPlanApproach_Description" xml:space="preserve">
     <value>Tilnærming for idéen (Gjennomføringsplan)</value>
   </data>
-  <data name="SiteFields_GtIdeaExecutionPlanResourceNeeds_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtIdeaExecutionResourceNeeds_DisplayName" xml:space="preserve">
     <value>Gjennomføringsplan: Ressursbehov</value>
   </data>
-  <data name="SiteFields_GtIdeaExecutionPlanResourceNeeds_Description" xml:space="preserve">
+  <data name="SiteFields_GtIdeaExecutionResourceNeeds_Description" xml:space="preserve">
     <value>Ressursbehov for idéen (Gjennomføringsplan)</value>
   </data>
-  <data name="SiteFields_GtIdeaExecutionPlanSuccessFactors_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtIdeaExecutionSuccessFactors_DisplayName" xml:space="preserve">
     <value>Gjennomføringsplan: Suksessfaktorer</value>
   </data>
-  <data name="SiteFields_GtIdeaExecutionPlanSuccessFactors_Description" xml:space="preserve">
+  <data name="SiteFields_GtIdeaExecutionSuccessFactors_Description" xml:space="preserve">
     <value>Suksessfaktorer for idéen (Gjennomføringsplan)</value>
   </data>
-  <data name="SiteFields_GtIdeaExpectedGains_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtIdeaExpectedGain_DisplayName" xml:space="preserve">
     <value>Forventede gevinster</value>
   </data>
-  <data name="SiteFields_GtIdeaExpectedGains_Description" xml:space="preserve">
+  <data name="SiteFields_GtIdeaExpectedGain_Description" xml:space="preserve">
     <value>Forventede gevinster for idéen</value>
   </data>
   <data name="SiteFields_GtIdeaIssue_DisplayName" xml:space="preserve">

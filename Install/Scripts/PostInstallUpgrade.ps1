@@ -39,38 +39,8 @@ if ($null -ne $LastInstall) {
             Invoke-PnPQuery
         }
 
-        $IdeaProcessing = Get-PnPList -Identity "Idebehandling" -ErrorAction SilentlyContinue
-        if ($null -ne $IdeaProcessing) {
-            $Items = Get-PnPListItem -List "Idebehandling"
-            foreach ($Item in $Items) {
-                $GtIdeaExpectedGain = $Item.FieldValues["GtIdeaExpectedGain"]
-                $GtIdeaExecutionResourceNeeds = $Item.FieldValues["GtIdeaExecutionResourceNeeds"]
-                $GtIdeaExecutionSuccessFactors = $Item.FieldValues["GtIdeaExecutionSuccessFactors"]
-
-                if($null -ne $GtIdeaExpectedGain) {
-                    $Item["GtIdeaExpectedGains"] = $GtIdeaExpectedGain
-                }
-
-                if($null -ne $GtIdeaExecutionResourceNeeds) {
-                    $Item["GtIdeaExecutionPlanResourceNeeds"] = $GtIdeaExecutionResourceNeeds
-                }
-
-                if($null -ne $GtIdeaExecutionSuccessFactors) {
-                    $Item["GtIdeaExecutionPlanSuccessFactors"] = $GtIdeaExecutionSuccessFactors
-                }
-                
-                $Item.Update()
-                Invoke-PnPQuery
-            }
-        }
-
         Remove-PnPField -List "Tidslinjeinnhold" -Identity "SiteIdLookup" -Force -ErrorAction SilentlyContinue
         Remove-PnPField -List "Tidslinjeinnhold" -Identity "TimelineType" -Force -ErrorAction SilentlyContinue
-        Remove-PnPField -List "Idebehandling" -Identity "GtIdeaExpectedGain" -Force -ErrorAction SilentlyContinue
-        Remove-PnPField -List "Idebehandling" -Identity "GtIdeaExecutionResourceNeeds" -Force -ErrorAction SilentlyContinue
-        Remove-PnPField -List "Idebehandling" -Identity "GtIdeaExecutionSuccessFactors" -Force -ErrorAction SilentlyContinue
         Invoke-PnPQuery
-
-        Apply-PnPProvisioningTemplate "$BasePath\Navigation.xml" -ErrorAction Stop
     }
 }

@@ -36,7 +36,7 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
   /**
    * On copy documents to the selected target URL
    *
-   * @param {TemplateItem[]} templates Templates
+   * @param templates Templates
    */
   async function onStartCopy(templates: TemplateItem[]): Promise<void> {
     dispatch(START_COPY())

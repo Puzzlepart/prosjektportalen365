@@ -46,4 +46,5 @@
             <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF203</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

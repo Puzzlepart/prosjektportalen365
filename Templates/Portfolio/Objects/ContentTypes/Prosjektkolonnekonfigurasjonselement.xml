@@ -1,5 +1,5 @@
 <pnp:ContentType ID="0x01005CC009F95743674DAF31B3531CFFA586" Name="{resource:ContentTypes_ProjectColumnConfiguration_Name}" Description="{resource:ContentTypes_ProjectColumnConfiguration_Description}" Group="{resource:ContentTypes_Group}" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" />
         <pnp:FieldRef ID="6aefa59f-4300-4c22-94af-d77d05d792f6" Name="GtPortfolioColumn" Required="true" />

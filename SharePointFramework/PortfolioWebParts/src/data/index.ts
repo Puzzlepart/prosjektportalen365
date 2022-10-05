@@ -59,7 +59,7 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetch chart data (used by [PortfolioInsights])
+   * Fetch chart data
    *
    * @param view View configuration
    * @param configuration PortfolioOverviewConfiguration
@@ -127,6 +127,11 @@ export class DataAdapter implements IDataAdapter {
     }
   }
 
+  /**
+   * Get aggregated list config
+   * 
+   * @param category Category
+   */
   public async getAggregatedListConfig(category: string): Promise<IAggregatedListConfiguration> {
     let portal = this._portalDataService
 
@@ -363,10 +368,11 @@ export class DataAdapter implements IDataAdapter {
 
   /**
    *  Fetches items from timelinecontent list
-   *
-   * @param timelineConfig
+   * 
    * * Fetching list items
    * * Maps the items to TimelineContentListModel
+   *
+   * @param timelineConfig
    */
   public async fetchTimelineContentItems(timelineConfig: any[]) {
     const [timelineItems] = await Promise.all([
@@ -760,14 +766,13 @@ export class DataAdapter implements IDataAdapter {
    * @param dataSourceName Data source name
    * @param selectProperties Select properties
    * @param dataSourceCategory Data source category
-   *
    */
   public async fetchItemsWithSource(
     dataSourceName: string,
     selectProperties: string[],
     dataSourceCategory?: string
-  ): Promise<any> {
-    let items
+  ): Promise<any[]> {
+    let items: any[]
 
     try {
       const dataSrc = await this.dataSourceService.getByName(dataSourceName)
@@ -874,16 +879,16 @@ export class DataAdapter implements IDataAdapter {
   /**
    * Delete project content column
    *
-   * @param property Property
+   * @param column Column to delete
    */
-  public async deleteProjectContentColumn(property: TypedHash<any>): Promise<any> {
+  public async deleteProjectContentColumn(column: TypedHash<any>): Promise<any> {
     try {
       const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
       const items = await list.items.get()
-      const item = items.find((i) => i.GtManagedProperty === property.fieldName)
+      const item = items.find((i) => i.GtManagedProperty === column.fieldName)
 
       if (!item) {
-        throw new Error(format(strings.ProjectContentColumnItemNotFound, property.fieldName))
+        throw new Error(format(strings.ProjectContentColumnItemNotFound, column.fieldName))
       }
 
       const itemDeleteResult = list.items.getById(item.Id).delete()

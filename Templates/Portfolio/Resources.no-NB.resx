@@ -1777,22 +1777,22 @@
   <data name="SiteFields_GtIdeaExecutionPlanApproach_Description" xml:space="preserve">
     <value>Tilnærming for idéen (Gjennomføringsplan)</value>
   </data>
-  <data name="SiteFields_GtIdeaExecutionPlanResourceNeeds_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtIdeaExecutionResourceNeeds_DisplayName" xml:space="preserve">
     <value>Gjennomføringsplan: Ressursbehov</value>
   </data>
-  <data name="SiteFields_GtIdeaExecutionPlanResourceNeeds_Description" xml:space="preserve">
+  <data name="SiteFields_GtIdeaExecutionResourceNeeds_Description" xml:space="preserve">
     <value>Ressursbehov for idéen (Gjennomføringsplan)</value>
   </data>
-  <data name="SiteFields_GtIdeaExecutionPlanSuccessFactors_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtIdeaExecutionSuccessFactors_DisplayName" xml:space="preserve">
     <value>Gjennomføringsplan: Suksessfaktorer</value>
   </data>
-  <data name="SiteFields_GtIdeaExecutionPlanSuccessFactors_Description" xml:space="preserve">
+  <data name="SiteFields_GtIdeaExecutionSuccessFactors_Description" xml:space="preserve">
     <value>Suksessfaktorer for idéen (Gjennomføringsplan)</value>
   </data>
-  <data name="SiteFields_GtIdeaExpectedGains_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtIdeaExpectedGain_DisplayName" xml:space="preserve">
     <value>Forventede gevinster</value>
   </data>
-  <data name="SiteFields_GtIdeaExpectedGains_Description" xml:space="preserve">
+  <data name="SiteFields_GtIdeaExpectedGain_Description" xml:space="preserve">
     <value>Forventede gevinster for idéen</value>
   </data>
   <data name="SiteFields_GtIdeaIssue_DisplayName" xml:space="preserve">
@@ -1920,6 +1920,11 @@
   </data>
   <data name="SiteFields_GtURL_Description" xml:space="preserve">
     <value>URL hvor hjelpeinnholdet skal vises. For eksempel SitePages/Hjem.aspx om du vil at innholdet skal vises på forsiden av prosjektet.</value>
+  <data name="SiteFields_GtPlannerPreviewType_DisplayName" xml:space="preserve">
+    <value>Forhåndsvisning</value>
+  </data>
+  <data name="SiteFields_GtPlannerPreviewType_Description" xml:space="preserve">
+    <value>Velg hva som skal vises i forhåndsvisningen på oppgavekortet i Planner.</value>
   </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
