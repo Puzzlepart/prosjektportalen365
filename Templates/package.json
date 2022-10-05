@@ -3,8 +3,8 @@
   "main": "generateTemplate.js",
   "scripts": {
     "watch": "chokidar \"./_JsonTemplate.json\" -c \"npm run generateJsonTemplates\"",
-    "generateResxJson": "node ./tasks/generateResxJson",
-    "generateJsonTemplates": "node ./tasks/generateJsonTemplates",
+    "generateResxJson": "node ./.tasks/generateResxJson",
+    "generateJsonTemplates": "node ./.tasks/generateJsonTemplates",
     "pregenerateJsonTemplates": "npm run generateResxJson"
   },
   "dependencies": {
