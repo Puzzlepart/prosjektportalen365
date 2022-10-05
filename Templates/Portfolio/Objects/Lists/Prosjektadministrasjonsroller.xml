@@ -13,6 +13,7 @@
                 <FieldRef Name="GtProjectFieldName" />
                 <FieldRef Name="GtGroupName" />
                 <FieldRef Name="GtGroupLevel" />
+                <FieldRef Name="GtProjectAdminPermissions" />
             </ViewFields>
             <RowLimit Paged="TRUE">30</RowLimit>
             <Aggregations Value="Off" />
@@ -29,9 +30,9 @@
                 </Where>
             </Query>
             <ViewFields>
-                <FieldRef Name="ContentType" />
                 <FieldRef Name="LinkTitle" />
                 <FieldRef Name="GtProjectFieldName" />
+                <FieldRef Name="GtProjectAdminPermissions" />
             </ViewFields>
             <RowLimit Paged="TRUE">30</RowLimit>
             <Aggregations Value="Off" />
@@ -51,10 +52,10 @@
                 </GroupBy>
             </Query>
             <ViewFields>
-                <FieldRef Name="ContentType" />
                 <FieldRef Name="LinkTitle" />
                 <FieldRef Name="GtGroupName" />
                 <FieldRef Name="GtGroupLevel" />
+                <FieldRef Name="GtProjectAdminPermissions" />
             </ViewFields>
             <RowLimit Paged="TRUE">30</RowLimit>
             <Aggregations Value="Off" />

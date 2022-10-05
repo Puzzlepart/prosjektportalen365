@@ -2,5 +2,6 @@
     <pnp:FieldRefs>
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
         <pnp:FieldRef ID="f5e5256a-1f85-4939-a442-f355c2fbe23c" Name="GtProjectFieldName" Required="true" />
+        <pnp:FieldRef ID="90469fa1-c494-418d-8436-1de37b787644" Name="GtProjectAdminPermissions" Required="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>
