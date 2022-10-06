@@ -1,0 +1,29 @@
+<pnp:ListInstance Title="Hjelpeinnhold" Description="" DocumentTemplate="" Hidden="true" TemplateType="100" Url="Lists/Hjelpeinnhold" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" EnableAttachments="false" EnableFolderCreation="false" 
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    <pnp:ContentTypeBindings>
+        <pnp:ContentTypeBinding ContentTypeID="0x01007C1785494A2CAC40B7F7D81A040AC219" Default="true" />
+    </pnp:ContentTypeBindings>
+    <pnp:Views RemoveExistingViews="true">
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Hjelpeinnhold/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+            <Query>
+                <OrderBy>
+                    <FieldRef Name="GtURL" />
+                    <FieldRef Name="GtSortOrder" />
+                </OrderBy>
+            </Query>
+            <ViewFields>
+                <FieldRef Name="GtSortOrder" />
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtIconName" />
+                <FieldRef Name="GtURL" />
+                <FieldRef Name="GtTextContent" />
+                <FieldRef Name="GtResourceLink" />
+                <FieldRef Name="GtExternalURL" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">30</RowLimit>
+            <JSLink>clienttemplates.js</JSLink>
+            <CustomFormatter />
+        </View>
+    </pnp:Views>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
+</pnp:ListInstance>

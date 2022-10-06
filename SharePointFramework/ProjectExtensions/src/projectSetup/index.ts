@@ -153,11 +153,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         level: LogLevel.Info
       })
       data = { ...data, ...provisioningInfo }
-      Logger.log({
-        message: '(ProjectSetup) [_initializeSetup]: Rendering progress modal',
-        data: {},
-        level: LogLevel.Info
-      })
       this._renderProgressDialog({
         text: strings.ProgressDialogLabel,
         subText: strings.ProgressDialogDescription,
@@ -170,7 +165,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         await sp.web.lists
           .getByTitle(strings.ProjectPropertiesListName)
           .items.getById(1)
-          .update({ GtIsParentProject: true, GtChildProjects: '[]' })
+          .update({ GtIsParentProject: true, GtChildProjects: JSON.stringify([]) })
         await this._ensureParentProjectPatch(data)
       }
 
@@ -401,19 +396,19 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         ),
         this.properties.extensionsLibrary
           ? this._portal.getItems(
-            this.properties.extensionsLibrary,
-            ProjectExtension,
-            {
-              ViewXml:
-                '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
-            },
-            ['File', 'FieldValuesAsText']
-          )
+              this.properties.extensionsLibrary,
+              ProjectExtension,
+              {
+                ViewXml:
+                  '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+              },
+              ['File', 'FieldValuesAsText']
+            )
           : Promise.resolve([]),
         this.properties.contentConfigList
           ? this._portal.getItems(this.properties.contentConfigList, ListContentConfig, {}, [
-            'File'
-          ])
+              'File'
+            ])
           : Promise.resolve([]),
         this._portal.getItems(
           strings.Lists_ProjectTemplateFiles_Title,

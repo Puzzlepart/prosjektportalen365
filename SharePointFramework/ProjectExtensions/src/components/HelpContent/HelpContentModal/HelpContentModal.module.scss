@@ -1,0 +1,13 @@
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+
+.root {
+  max-width: 1000px;
+  .body {
+    font-size: initial;
+    padding: 20px;
+
+    .contentItem {
+      margin: 10px 0 0 0;
+    }
+  }
+}
