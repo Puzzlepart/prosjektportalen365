@@ -332,16 +332,21 @@ export class PortalDataService {
     listName: string,
     constructor: new (item: any, web: Web) => T,
     query?: CamlQuery,
-    expands: string[] = []
+    expands?: string[]
   ): Promise<T[]> {
     try {
+      console.log(1, listName, query)
       const list = this.web.lists.getByTitle(listName)
       let items: any[]
+      console.log(2, listName, query)
       if (query) {
-        items = await list.usingCaching().getItemsByCAMLQuery(query, ...expands)
+        console.log(3, expands)
+        items = await list.usingCaching().getItemsByCAMLQuery(query, ...(expands ?? []))
       } else {
+        console.log(3, expands)
         items = await list.usingCaching().items.usingCaching().get()
       }
+      console.log(4)
       return items.map((item) => new constructor(item, this.web))
     } catch (error) {
       throw error

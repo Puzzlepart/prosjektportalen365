@@ -20,9 +20,9 @@ export const HelpContentModal = (props: IHelpContentModalProps) => {
             <PivotItem key={index} headerText={content.title} itemIcon={content.iconName}>
               <div className={styles.contentItem} title={content.title}>
                 <p dangerouslySetInnerHTML={{ __html: content.textContent }}></p>
-                {content.mdContent && (
+                {content.markdownContent && (
                   <ReactMarkdown linkTarget='_blank' rehypePlugins={[rehypeRaw]}>
-                    {content.mdContent}
+                    {content.markdownContent}
                   </ReactMarkdown>
                 )}
                 {content.resourceLink && (

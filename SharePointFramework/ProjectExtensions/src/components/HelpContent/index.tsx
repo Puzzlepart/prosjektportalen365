@@ -1,16 +1,13 @@
 import { ActionButton } from 'office-ui-fabric-react/lib/Button'
-import * as React from 'react'
-import { useState } from 'react'
+import React, { FunctionComponent, useState } from 'react'
 import styles from './HelpContent.module.scss'
 import { HelpContentModal } from './HelpContentModal'
-import { IHelpContentProps } from './IHelpContentProps'
+import { IHelpContentProps } from './types'
 
-// tslint:disable-next-line: naming-convention
-export const HelpContent = (props: IHelpContentProps) => {
+export const HelpContent: FunctionComponent<IHelpContentProps> = (props) => {
   const [showModal, setShowModal] = useState(false)
-
   return (
-    <div className={styles.helpContent}>
+    <div className={styles.root}>
       <ActionButton
         text={props.linkText}
         iconProps={{ iconName: 'Help' }}
@@ -25,4 +22,4 @@ export const HelpContent = (props: IHelpContentProps) => {
   )
 }
 
-export { IHelpContentProps }
+export * from './types'

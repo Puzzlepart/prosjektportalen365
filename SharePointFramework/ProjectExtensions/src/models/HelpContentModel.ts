@@ -9,7 +9,7 @@ export class HelpContentModel {
   public iconName: string
   public urlPattern: string
   public textContent: string
-  public mdContent: string
+  public markdownContent: string
   public resourceLink: { Url: string; Description: string }
   public externalUrl: string
 
@@ -23,9 +23,9 @@ export class HelpContentModel {
   }
 
   /**
-   * Checks if the help content matches the specified url
+   * Checks if the help content matches the specified URL
    *
-   * @param {string} url Url
+   * @param url Url
    */
   public matchPattern(url: string): boolean {
     return decodeURIComponent(url).indexOf(this.urlPattern) !== -1
@@ -37,7 +37,7 @@ export class HelpContentModel {
   public async fetchExternalContent() {
     try {
       const md = await (await fetch(this.externalUrl, { method: 'GET' })).text()
-      this.mdContent = md
+      this.markdownContent = md
     } catch (error) {}
   }
 }

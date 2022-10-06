@@ -153,11 +153,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         level: LogLevel.Info
       })
       data = { ...data, ...provisioningInfo }
-      Logger.log({
-        message: '(ProjectSetup) [_initializeSetup]: Rendering progress modal',
-        data: {},
-        level: LogLevel.Info
-      })
       this._renderProgressDialog({
         text: strings.ProgressDialogLabel,
         subText: strings.ProgressDialogDescription,
@@ -170,7 +165,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         await sp.web.lists
           .getByTitle(strings.ProjectPropertiesListName)
           .items.getById(1)
-          .update({ GtIsParentProject: true, GtChildProjects: '[]' })
+          .update({ GtIsParentProject: true, GtChildProjects: JSON.stringify([]) })
         await this._ensureParentProjectPatch(data)
       }
 
