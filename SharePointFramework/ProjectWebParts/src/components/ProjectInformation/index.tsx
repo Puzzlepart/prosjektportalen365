@@ -18,7 +18,7 @@ export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (
   if (state.hidden) return null
 
   return (
-    <ProjectInformationContext.Provider value={{ props, state, setState }}>
+    <ProjectInformationContext.Provider value={{ props, state, setState, onSyncProperties }}>
       <div className={styles.root}>
         <div className={styles.container}>
           <div className={styles.header}>
@@ -49,9 +49,7 @@ export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (
                   onDismiss={() => setState({ displayParentCreationModal: false })}
                 />
               )}
-              {state.displaySyncProjectModal && (
-                <SyncProjectModal onSyncProperties={onSyncProperties} />
-              )}
+              {state.displaySyncProjectModal && <SyncProjectModal />}
             </div>
           )}
         </div>

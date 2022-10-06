@@ -32,25 +32,20 @@ const transformProperties = (
   return properties
 }
 
-const projectDataSynced = async (
-  props: IProjectInformationProps
-) => {
+const projectDataSynced = async (props: IProjectInformationProps) => {
   try {
     let isSynced = false
 
-    const projectDataList = props.hubSite.web.lists
-      .getByTitle(strings.IdeaProjectDataTitle)
+    const projectDataList = props.hubSite.web.lists.getByTitle(strings.IdeaProjectDataTitle)
 
-    const [projectDataItem] = await projectDataList
-      .items
+    const [projectDataItem] = await projectDataList.items
       .filter(`GtSiteUrl eq '${props.webPartContext.pageContext.web.absoluteUrl}'`)
       .select('Id')
       .get()
 
     const ideaProcessingList = props.hubSite.web.lists.getByTitle(strings.IdeaProcessingTitle)
 
-    const [ideaProcessingItem] = await ideaProcessingList
-      .items
+    const [ideaProcessingItem] = await ideaProcessingList.items
       .filter(`GtIdeaProjectDataId eq '${projectDataItem.Id}'`)
       .select('Id, GtIdeaDecision')
       .get()
@@ -83,7 +78,7 @@ const fetchData = async (
     )
     const properties = transformProperties(data, props)
     const allProperties = transformProperties(data, props, false)
-    const isProjectDataSynced = props.useIdeaProcessing && await projectDataSynced(props)
+    const isProjectDataSynced = props.useIdeaProcessing && (await projectDataSynced(props))
     return {
       data,
       isParentProject: data.fieldValues?.GtIsParentProject || data.fieldValues?.GtIsProgram,

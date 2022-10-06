@@ -15,9 +15,8 @@ import {
 import strings from 'ProjectWebPartsStrings'
 import React, { FunctionComponent, useContext, useEffect, useState } from 'react'
 import { ProjectInformationContext } from '../context'
-import { ISyncModalProps } from './types'
 
-export const SyncProjectModal: FunctionComponent<ISyncModalProps> = ({ onSyncProperties }) => {
+export const SyncProjectModal: FunctionComponent = () => {
   const context = useContext(ProjectInformationContext)
   const [isLoading, setLoading] = useState(true)
   const [isSyncing, setSyncing] = useState(false)
@@ -32,7 +31,7 @@ export const SyncProjectModal: FunctionComponent<ISyncModalProps> = ({ onSyncPro
   return (
     <>
       <Dialog
-        hidden={!context.state.displaySyncProjectModal}
+        hidden={false}
         minWidth={400}
         onDismiss={() => context.setState({ displaySyncProjectModal: false })}
         dialogContentProps={{
@@ -92,12 +91,12 @@ export const SyncProjectModal: FunctionComponent<ISyncModalProps> = ({ onSyncPro
         .select('Id')
         .get()
 
-      const updatedResult = ideaProcessingList.items.getById(ideaProcessingItem.Id).update({
+      const updatedResult = await ideaProcessingList.items.getById(ideaProcessingItem.Id).update({
         GtIdeaDecision: 'Godkjent og synkronisert'
       })
 
       return updatedResult
-    } catch (error) { }
+    } catch (error) {}
   }
 
   async function getProjectData() {
@@ -158,8 +157,8 @@ export const SyncProjectModal: FunctionComponent<ISyncModalProps> = ({ onSyncPro
       await updateIdeaProcessingItem(projectDataId).then(() => {
         setSyncing(false)
         setHasSynced(true)
-        onSyncProperties(true)
-        context.setState({ ...context.state, displaySyncProjectModal: false })
+        context.setState({ displaySyncProjectModal: false })
+        context.onSyncProperties(true)
       })
     } catch (error) {
       Logger.log({
