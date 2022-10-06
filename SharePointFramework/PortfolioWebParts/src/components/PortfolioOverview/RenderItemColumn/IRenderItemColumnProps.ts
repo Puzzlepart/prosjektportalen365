@@ -1,7 +1,8 @@
+import { IColumn } from 'office-ui-fabric-react'
 import { ProjectColumn } from 'pp365-shared/lib/models/ProjectColumn'
 
 export interface IRenderItemColumnProps extends React.HTMLAttributes<HTMLDivElement> {
-  column?: ProjectColumn
+  column?: ProjectColumn | IColumn
   columnValue: string
   valueSeparator?: string
 }

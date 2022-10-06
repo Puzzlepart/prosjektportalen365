@@ -1,7 +1,6 @@
 import { TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
 import { sp } from '@pnp/sp'
-import SPDataAdapter from 'data'
 import {
   DefaultButton,
   Dialog,
@@ -14,6 +13,7 @@ import {
 } from 'office-ui-fabric-react'
 import strings from 'ProjectWebPartsStrings'
 import React, { FunctionComponent, useContext, useEffect, useState } from 'react'
+import SPDataAdapter from '../../../data'
 import { ProjectInformationContext } from '../context'
 
 export const SyncProjectModal: FunctionComponent = () => {

@@ -1,8 +1,7 @@
-import SPDataAdapter from 'data'
-import { ProjectAdminPermission } from 'data/SPDataAdapter/ProjectAdminPermission'
 import strings from 'ProjectWebPartsStrings'
 import { useEffect } from 'react'
 import { isEmpty } from 'underscore'
+import SPDataAdapter, { ProjectAdminPermission } from '../../data'
 import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
 import {
   IProjectInformationData,
@@ -72,13 +71,17 @@ const fetchData = async (
       columns,
       ...propertiesData
     }
-    const userHasEditPermission = await SPDataAdapter.getProjectAdminPermissions(
-      ProjectAdminPermission.EditProjectProperties,
-      data.fieldValues
-    )
     const properties = transformProperties(data, props)
     const allProperties = transformProperties(data, props, false)
-    const isProjectDataSynced = props.useIdeaProcessing && (await projectDataSynced(props))
+    let userHasEditPermission = false
+    let isProjectDataSynced = false
+    if (props.page === 'Frontpage') {
+      userHasEditPermission = await SPDataAdapter.getProjectAdminPermissions(
+        ProjectAdminPermission.EditProjectProperties,
+        data.fieldValues
+      )
+      isProjectDataSynced = props.useIdeaProcessing && (await projectDataSynced(props))
+    }
     return {
       data,
       isParentProject: data.fieldValues?.GtIsParentProject || data.fieldValues?.GtIsProgram,

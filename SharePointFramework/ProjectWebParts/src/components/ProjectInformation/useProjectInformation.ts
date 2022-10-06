@@ -1,10 +1,10 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { LogLevel } from '@pnp/logging'
-import SPDataAdapter from 'data'
 import { format, IProgressIndicatorProps, MessageBarType } from 'office-ui-fabric-react'
 import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
 import strings from 'ProjectWebPartsStrings'
 import { useState } from 'react'
+import SPDataAdapter from '../../data'
 import { ActionType } from './Actions/types'
 import {
   IProjectInformationProps,
@@ -58,7 +58,8 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
         setState({ showProjectPropertiesPanel: true })
       },
       'EntryView',
-      false
+      false,
+      props.hideViewAllPropertiesButton
     ]
     const syncProjectPropertiesAction: ActionType = [
       strings.SyncProjectPropertiesText,
