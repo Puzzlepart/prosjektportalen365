@@ -28,7 +28,12 @@ class ListLogger {
    * @param scope scope
    * @param memberMap Member map
    */
-  public init(list: any, webUrl?: string, scope?: string, memberMap: IListLoggerMemberMap = defaultListLoggerMemberMap) {
+  public init(
+    list: any,
+    webUrl?: string,
+    scope?: string,
+    memberMap: IListLoggerMemberMap = defaultListLoggerMemberMap
+  ) {
     this.list = list
     this.memberMap = memberMap
     this.webUrl = webUrl
@@ -37,7 +42,7 @@ class ListLogger {
 
   /**
    * Log entry to SharePoint list
-   * 
+   *
    * Will fail silently.
    *
    * @param entry Entry
@@ -48,19 +53,23 @@ class ListLogger {
       // eslint-disable-next-line no-console
       console.log(spItem)
       return (this.list as List).items.add(spItem)
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
    * Write message to SharePoint list
-   * 
+   *
    * Will fail silently.
-   * 
+   *
    * @param message Message
    * @param functionName Function name
    * @param level Level (defaults to Info)
    */
-  public write(message: string, functionName?: string, level: ListLoggerEntryLevel = 'Info'): Promise<ItemAddResult> {
+  public write(
+    message: string,
+    functionName?: string,
+    level: ListLoggerEntryLevel = 'Info'
+  ): Promise<ItemAddResult> {
     return this.log({
       message,
       level,
@@ -99,6 +108,5 @@ class ListLogger {
     } as Partial<IListLoggerEntry>
   }
 }
-
 
 export default new ListLogger()

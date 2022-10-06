@@ -1,1 +1,1 @@
-export type ListLoggerEntryLevel = 'Info' | 'Warning' | 'Error';
+export type ListLoggerEntryLevel = 'Info' | 'Warning' | 'Error'
