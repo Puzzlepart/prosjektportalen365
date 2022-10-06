@@ -1,4 +1,4 @@
 export interface IHelpContentApplicationCustomizerProperties {
-    listName: string;
-    linkText: string;
+  listName: string
+  linkText: string
 }

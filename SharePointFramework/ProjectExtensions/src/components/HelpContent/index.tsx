@@ -7,20 +7,22 @@ import { IHelpContentProps } from './IHelpContentProps'
 
 // tslint:disable-next-line: naming-convention
 export const HelpContent = (props: IHelpContentProps) => {
-    const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(false)
 
-    return (
-        <div className={styles.helpContent}>
-            <ActionButton text={props.linkText} iconProps={{ iconName: 'Help' }} onClick={() => setShowModal(true)} />
-            <HelpContentModal
-                isOpen={showModal}
-                onDismiss={() => setShowModal(false)}
-                content={props.content} />
-        </div>
-    )
+  return (
+    <div className={styles.helpContent}>
+      <ActionButton
+        text={props.linkText}
+        iconProps={{ iconName: 'Help' }}
+        onClick={() => setShowModal(true)}
+      />
+      <HelpContentModal
+        isOpen={showModal}
+        onDismiss={() => setShowModal(false)}
+        content={props.content}
+      />
+    </div>
+  )
 }
 
-
-
 export { IHelpContentProps }
-

@@ -10,7 +10,7 @@ export class HelpContentModel {
   public urlPattern: string
   public textContent: string
   public mdContent: string
-  public resourceLink: { Url: string, Description: string }
+  public resourceLink: { Url: string; Description: string }
   public externalUrl: string
 
   constructor(spItem: TypedHash<any>, public web: Web) {
@@ -24,7 +24,7 @@ export class HelpContentModel {
 
   /**
    * Checks if the help content matches the specified url
-   * 
+   *
    * @param {string} url Url
    */
   public matchPattern(url: string): boolean {
@@ -38,8 +38,6 @@ export class HelpContentModel {
     try {
       const md = await (await fetch(this.externalUrl, { method: 'GET' })).text()
       this.mdContent = md
-    } catch (error) {
-
-    }
+    } catch (error) {}
   }
 }
