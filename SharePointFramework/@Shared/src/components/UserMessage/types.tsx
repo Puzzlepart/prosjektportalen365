@@ -6,38 +6,38 @@ import { IMessageBarProps, MessageBarType } from 'office-ui-fabric-react'
 export interface IUserMessageProps extends IMessageBarProps {
   /**
    * Text to show in the message
-   * 
+   *
    * NOTE: Supports markdown and HTML
-  */
-  text?: string;
+   */
+  text?: string
 
   /**
    * On click handler for the message
    */
-  onClick?: (event: React.MouseEvent<any>) => void;
+  onClick?: (event: React.MouseEvent<any>) => void
 
   /**
    * On dismiss handler for the message
    */
-  onDismiss?: () => void;
+  onDismiss?: () => void
 
   /**
    * Type (info, warning, error, etc...)
    */
-  type?: MessageBarType;
+  type?: MessageBarType
 
   /**
    * Container style
    */
-  containerStyle?: React.CSSProperties;
+  containerStyle?: React.CSSProperties
 
   /**
    * To flex the message center, speficy a min height
    */
-  fixedCenter?: number;
+  fixedCenter?: number
 
   /**
    * To reduce size of the message bar and make it compact
    */
-  isCompact?: boolean;
+  isCompact?: boolean
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { find } from '@microsoft/sp-lodash-subset'
 import { dateAdd, stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
@@ -249,7 +250,7 @@ export class PortalDataService {
           fieldToCreate.updateAndPushChanges(true)
         }
         await executeQuery(jsomContext)
-      } catch (error) { }
+      } catch (error) {}
     }
     try {
       Logger.log({
@@ -265,7 +266,7 @@ export class PortalDataService {
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch { }
+    } catch {}
     if (ensureList.created && properties) {
       ensureList.list.items.add(properties)
     }
@@ -331,7 +332,7 @@ export class PortalDataService {
     listName: string,
     constructor: new (item: any, web: Web) => T,
     query?: CamlQuery,
-    expands?: string[]
+    expands: string[] = []
   ): Promise<T[]> {
     try {
       const list = this.web.lists.getByTitle(listName)
@@ -443,8 +444,7 @@ export class PortalDataService {
   public async getProjectAdminRoles(): Promise<ProjectAdminRole[]> {
     const spItems = await this.web.lists
       .getByTitle(this._configuration.listNames.PROJECT_ADMIN_ROLES)
-      .items
-      .usingCaching({
+      .items.usingCaching({
         key: 'project_admin_roles',
         storeName: 'session',
         expiration: dateAdd(new Date(), 'day', 1)

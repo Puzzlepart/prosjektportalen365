@@ -1,4 +1,8 @@
-import { IMessageBarStyleProps, IMessageBarStyles, MessageBar } from 'office-ui-fabric-react/lib/MessageBar'
+import {
+  IMessageBarStyleProps,
+  IMessageBarStyles,
+  MessageBar
+} from 'office-ui-fabric-react/lib/MessageBar'
 import { IStyleFunctionOrObject } from 'office-ui-fabric-react'
 import * as React from 'react'
 import { FunctionComponent } from 'react'
@@ -8,7 +12,7 @@ import { IUserMessageProps } from './types'
 
 /**
  * A component that supports a MessageBar with markdown using react-markdown
- * 
+ *
  * @category UserMessage
  */
 export const UserMessage: FunctionComponent<IUserMessageProps> = (props: IUserMessageProps) => {
@@ -19,7 +23,7 @@ export const UserMessage: FunctionComponent<IUserMessageProps> = (props: IUserMe
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      minHeight: props.fixedCenter,
+      minHeight: props.fixedCenter
     }
   }
 
@@ -36,15 +40,19 @@ export const UserMessage: FunctionComponent<IUserMessageProps> = (props: IUserMe
       className={props.className}
       style={props.containerStyle}
       hidden={props.hidden}
-      onClick={props.onClick}>
+      onClick={props.onClick}
+    >
       <MessageBar
         styles={_styles}
         isMultiline={props.isMultiline}
         messageBarType={props.type}
         onDismiss={props.onDismiss}
-        actions={props.actions}>
+        actions={props.actions}
+      >
         {props.text && (
-          <ReactMarkdown linkTarget='_blank' rehypePlugins={[rehypeRaw]}>{props.text}</ReactMarkdown>
+          <ReactMarkdown linkTarget='_blank' rehypePlugins={[rehypeRaw]}>
+            {props.text}
+          </ReactMarkdown>
         )}
         {props.children && props.children}
       </MessageBar>

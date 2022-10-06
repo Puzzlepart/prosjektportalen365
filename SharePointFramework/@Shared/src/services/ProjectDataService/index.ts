@@ -152,13 +152,19 @@ export class ProjectDataService {
           .filter("substringof('Gt', InternalName)")
           .usingCaching()
           .get(),
-          this.web.rootFolder.select('welcomepage').get()
+        this.web.rootFolder.select('welcomepage').get()
       ])
 
-      urlSource = !urlSource.includes(welcomepage.WelcomePage) ? urlSource.replace('#syncproperties=1', `/${welcomepage.WelcomePage}#syncproperties=1`).replace('//SitePages', '/SitePages') : urlSource
-      
+      urlSource = !urlSource.includes(welcomepage.WelcomePage)
+        ? urlSource
+            .replace('#syncproperties=1', `/${welcomepage.WelcomePage}#syncproperties=1`)
+            .replace('//SitePages', '/SitePages')
+        : urlSource
+
       const editFormUrl = makeUrlAbsolute(
-        `${propertyItemContext.defaultEditFormUrl}?ID=${propertyItemContext.itemId}&Source=${encodeURIComponent(urlSource)}`
+        `${propertyItemContext.defaultEditFormUrl}?ID=${
+          propertyItemContext.itemId
+        }&Source=${encodeURIComponent(urlSource)}`
       )
       const versionHistoryUrl = `${this._params.webUrl}/_layouts/15/versions.aspx?list=${propertyItemContext.listId}&ID=${propertyItemContext.itemId}`
       return {
@@ -178,11 +184,13 @@ export class ProjectDataService {
    * Get properties data
    */
   public async getPropertiesData(): Promise<IGetPropertiesData> {
-    const propertyItem = await this._getPropertyItem(`${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`)
+    const propertyItem = await this._getPropertyItem(
+      `${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`
+    )
 
     if (propertyItem) {
       const templateParameters = tryParseJson(propertyItem.fieldValuesText.TemplateParameters, {})
-      Logger.write('(ProjectDataService) (getPropertiesData) Local property item found.') 
+      Logger.write('(ProjectDataService) (getPropertiesData) Local property item found.')
       return {
         ...propertyItem,
         propertiesListId: propertyItem.propertiesListId,

@@ -15,7 +15,7 @@ export default class HelpContentApplicationCustomizer extends BaseApplicationCus
   @override
   public async onInit(): Promise<void> {
     sp.setup({ spfxContext: this.context })
-    if (!this._topPlaceholder) this._topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top, { onDispose: this._onDispose })
+    if (!this._topPlaceholder) this._topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top, {})
     if (!this._topPlaceholder) return
     if (!this._topPlaceholder.domElement) return
     await this._render()
@@ -35,28 +35,34 @@ export default class HelpContentApplicationCustomizer extends BaseApplicationCus
       this._topPlaceholder.domElement.appendChild(helpContentPlaceholder)
     }
     if (helpContent.length === 0) ReactDOM.render(null, helpContentPlaceholder)
-    else ReactDOM.render(<HelpContent linkText={this.properties.linkText} content={helpContent} />, helpContentPlaceholder)
+    else {
+      ReactDOM.render(
+        <HelpContent linkText={this.properties.linkText} content={helpContent} />
+        , helpContentPlaceholder)
+    }
   }
 
   /**
    * Get help content from the specified list
    * 
-   * @param {string} listName Name of the list
+   * @param listName Name of the list
    */
   private async _getHelpContent(listName: string): Promise<HelpContentModel[]> {
-    const hub = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
-    const portal = new PortalDataService().configure({ urlOrWeb: hub.web })
-    let items = await portal.getItems(listName, HelpContentModel, { ViewXml: '<View><Query><OrderBy><FieldRef Name="SortOrder" /></OrderBy></Query></View>' })
-    items = items.filter(i => i.matchPattern(window.location.pathname)).splice(0, 3)
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].externalUrl) {
-        await items[i].fetchExternalContent()
+    try {
+      const hub = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
+      const portal = new PortalDataService().configure({ urlOrWeb: hub.web })
+      let items = await portal.getItems(listName, HelpContentModel, { ViewXml: '<View><Query><OrderBy><FieldRef Name="SortOrder" /></OrderBy></Query></View>' })
+      items = items.filter(i => i.matchPattern(window.location.pathname)).splice(0, 3)
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].externalUrl) {
+          await items[i].fetchExternalContent()
+        }
       }
+      return items
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e)
+      return []
     }
-    return items
-  }
-
-  private _onDispose(): void {
-    return
   }
 }
