@@ -5,6 +5,7 @@ import { sp, Web } from '@pnp/sp'
 import { taxonomy } from '@pnp/sp-taxonomy'
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator'
 import { SPDataAdapterBase } from 'pp365-shared/lib/data'
+import { ListLogger } from 'pp365-shared/lib/logging'
 import { ProjectAdminRoleType } from 'pp365-shared/lib/models'
 import { ProjectDataService } from 'pp365-shared/lib/services'
 import * as strings from 'ProjectWebPartsStrings'
@@ -34,6 +35,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         taxonomy
       },
       this.spConfiguration
+    )
+    ListLogger.init(
+      this.portal.web.lists.getByTitle('Logg'),
+      this.spfxContext.pageContext.web.absoluteUrl
     )
   }
 
@@ -346,7 +351,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
               break
           }
         }
-        return unique(userPermissions, (p) => p.id)
+        return unique(userPermissions, (p) => p)
       },
       storageExpire
     )

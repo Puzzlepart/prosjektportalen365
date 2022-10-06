@@ -10,7 +10,7 @@ export const defaultListLoggerMemberMap = {
   functionName: 'GtLogFunctionName',
   message: 'GtLogMessage',
   level: 'GtLogLevel',
-  component: 'GtLogComponent',
+  component: 'GtLogComponentName',
 }
 
 class ListLogger {
