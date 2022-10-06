@@ -1,25 +1,8 @@
 /* eslint-disable max-classes-per-file */
 import { ItemAddResult, List } from '@pnp/sp'
-
-export type ListLoggerEntryLevel = 'Info' | 'Warning' | 'Error'
-
-export class IListLoggerEntry {
-  webUrl?: string
-  scope?: string
-  functionName?: string
-  message: string
-  level: ListLoggerEntryLevel
-  component?: string
-}
-
-export class IListLoggerMemberMap {
-  webUrl?: string
-  scope?: string
-  functionName?: string
-  message?: string
-  level?: string
-  component?: string
-}
+import { IListLoggerEntry } from './IListLoggerEntry'
+import { IListLoggerMemberMap } from './IListLoggerMemberMap'
+import { ListLoggerEntryLevel } from './ListLoggerEntryLevel'
 
 export const defaultListLoggerMemberMap = {
   webUrl: 'GtLogWebUrl',
@@ -57,7 +40,7 @@ class ListLogger {
    * @param entry Entry
    */
   public log(entry: IListLoggerEntry): Promise<ItemAddResult> {
-    const spItem = this._getSpItem(entry)
+    const spItem = this._getSpItem({ level: 'Info', ...entry })
     return (this.list as List).items.add(spItem)
   }
 
