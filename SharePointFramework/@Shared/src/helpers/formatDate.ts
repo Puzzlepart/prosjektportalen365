@@ -1,9 +1,9 @@
 /**
  * Format date
  *
- * @param {string | Date} date Date string or object
- * @param {string} fallback Fallback if date is invalid
- * @param {string} locale Locale
+ * @param date Date string or object
+ * @param fallback Fallback if date is invalid
+ * @param locale Locale
  */
 export function formatDate(
   date: string | Date,

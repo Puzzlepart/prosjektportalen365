@@ -79,7 +79,7 @@ export class ProjectPhaseModel {
   /**
    * Get filtered phase checklist view url
    *
-   * @param {string} baseUrl base URL
+   * @param baseUrl base URL
    */
   public getFilteredPhaseChecklistViewUrl = (baseUrl: string): string => {
     return `${baseUrl}?FilterField1=GtProjectPhase&FilterValue1=${this.name}`

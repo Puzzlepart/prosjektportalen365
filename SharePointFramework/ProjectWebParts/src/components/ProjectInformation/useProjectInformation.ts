@@ -1,10 +1,10 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { LogLevel } from '@pnp/logging'
-import SPDataAdapter from 'data'
 import { format, IProgressIndicatorProps, MessageBarType } from 'office-ui-fabric-react'
 import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
 import strings from 'ProjectWebPartsStrings'
 import { useState } from 'react'
+import SPDataAdapter from '../../data'
 import { ActionType } from './Actions/types'
 import {
   IProjectInformationProps,
@@ -20,7 +20,11 @@ import { useProjectInformationDataFetch } from './useProjectInformationDataFetch
  * @returns `state`, `setState`, `getCustomActions`, `onSyncProperties`
  */
 export const useProjectInformation = (props: IProjectInformationProps) => {
-  const [state, setState] = useState<IProjectInformationState>({ loading: true })
+  const [state, $setState] = useState<IProjectInformationState>({ loading: true })
+
+  const setState = (newState: Partial<IProjectInformationState>) => {
+    $setState((_state) => ({ ..._state, ...newState }))
+  }
 
   SPDataAdapter.configure(props.webPartContext, {
     siteId: props.siteId,
@@ -42,7 +46,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
     const transformToParentProject: ActionType = [
       strings.CreateParentProjectLabel,
       () => {
-        setState({ ...state, displayParentCreationModal: true })
+        setState({ displayParentCreationModal: true })
       },
       'Org',
       false,
@@ -51,15 +55,16 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
     const viewAllPropertiesAction: ActionType = [
       strings.ViewAllPropertiesLabel,
       () => {
-        setState({ ...state, showProjectPropertiesPanel: true })
+        setState({ showProjectPropertiesPanel: true })
       },
       'EntryView',
-      false
+      false,
+      props.hideViewAllPropertiesButton
     ]
     const syncProjectPropertiesAction: ActionType = [
       strings.SyncProjectPropertiesText,
       () => {
-        setState({ ...state, displaySyncProjectModal: true })
+        setState({ displaySyncProjectModal: true })
       },
       'Sync',
       false,
@@ -98,15 +103,9 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
       if (lastUpdated > 60 && !force) return
     }
     if (props.skipSyncToHub) return
-    setState({
-      ...state,
-      progress: { title: strings.SyncProjectPropertiesProgressLabel, progress: {} }
-    })
+    setState({ progress: { title: strings.SyncProjectPropertiesProgressLabel, progress: {} } })
     const progressFunc = (progress: IProgressIndicatorProps) =>
-      setState({
-        ...state,
-        progress: { title: strings.SyncProjectPropertiesProgressLabel, progress }
-      })
+      setState({ progress: { title: strings.SyncProjectPropertiesProgressLabel, progress } })
     try {
       progressFunc({
         label: strings.SyncProjectPropertiesListProgressDescription,
@@ -116,7 +115,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
         props.webUrl,
         strings.ProjectPropertiesListName,
         state.data.templateParameters.ProjectContentTypeId ||
-        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: props.webTitle }
       )
       if (!created) {
@@ -134,19 +133,19 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
     } catch (error) {
       addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning)
     } finally {
-      setState({ ...state, progress: null })
+      setState({ progress: null })
     }
   }
 
   useProjectInformationDataFetch(props, (data) => {
     const urlHash = parseUrlHash<IProjectInformationUrlHash>(true)
     if (urlHash.syncproperties === '1') onSyncProperties(urlHash.force === '1')
-    setState({ ...state, ...data, loading: false })
+    setState({ ...data, loading: false })
   })
 
   return {
     state,
-    setState: (newState: Partial<IProjectInformationState>) => setState({ ...state, ...newState }),
+    setState,
     getCustomActions,
     onSyncProperties
   }

@@ -93,32 +93,6 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
   }
 
   /**
-   * Render <ProjectInformationModal />
-   */
-  // function renderProjectInformation() { // TODO: REDO how tooltip is rendered, use panel instead and make this non dependendt of projectWebParts
-  //   if (state.showProjectInfo) {
-  //     return (
-  //       <ProjectInformationModal
-  //         modalProps={{
-  //           isOpen: true,
-  //           onDismiss: () => setState({ ...state, showProjectInfo: null })
-  //         }}
-  //         title={state.showProjectInfo.title}
-  //         webUrl={props.pageContext.site.absoluteUrl}
-  //         hubSite={{
-  //           web: new Web(props.pageContext.site.absoluteUrl),
-  //           url: props.pageContext.site.absoluteUrl
-  //         }}
-  //         siteId={state.showProjectInfo.siteId}
-  //         hideActions={true}
-  //         page='Portfolio'
-  //       />
-  //     )
-  //   }
-  //   return null
-  // }
-
-  /**
    * Get card ations
    *
    * @param project - Project

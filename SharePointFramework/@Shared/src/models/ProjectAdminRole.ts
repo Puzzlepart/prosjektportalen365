@@ -36,7 +36,7 @@ export class ProjectAdminRole {
     this.groupLevel = _item.GtGroupLevel
     this.projectFieldName = _item.GtProjectFieldName ? `${_item.GtProjectFieldName}Id` : null
     if (isArray(_item.GtProjectAdminPermissions)) {
-      this.permissions = _item.GtProjectAdminPermissions.map(p => p.GtProjectAdminPermissionId)
+      this.permissions = _item.GtProjectAdminPermissions.map((p) => p.GtProjectAdminPermissionId)
     }
   }
 

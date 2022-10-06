@@ -10,7 +10,7 @@ import { ActionType } from './Actions/types'
 
 export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   /**
-   * Page
+   * Page property is used to determnine which properties to display
    */
   page: 'Frontpage' | 'ProjectStatus' | 'Portfolio'
 
@@ -49,6 +49,11 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
    * Will show button to sync project properties if turned on.
    */
   useIdeaProcessing?: boolean
+
+  /**
+   * Hide view all properties button
+   */
+  hideViewAllPropertiesButton?: boolean
 }
 
 export interface IProjectInformationState

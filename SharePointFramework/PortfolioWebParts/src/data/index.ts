@@ -129,7 +129,7 @@ export class DataAdapter implements IDataAdapter {
 
   /**
    * Get aggregated list config
-   * 
+   *
    * @param category Category
    */
   public async getAggregatedListConfig(category: string): Promise<IAggregatedListConfiguration> {
@@ -368,7 +368,7 @@ export class DataAdapter implements IDataAdapter {
 
   /**
    *  Fetches items from timelinecontent list
-   * 
+   *
    * * Fetching list items
    * * Maps the items to TimelineContentListModel
    *

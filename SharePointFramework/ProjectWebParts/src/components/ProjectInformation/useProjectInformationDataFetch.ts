@@ -1,8 +1,7 @@
-import SPDataAdapter from 'data'
-import { ProjectAdminPermission } from 'data/SPDataAdapter/ProjectAdminPermission'
 import strings from 'ProjectWebPartsStrings'
 import { useEffect } from 'react'
 import { isEmpty } from 'underscore'
+import SPDataAdapter, { ProjectAdminPermission } from '../../data'
 import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
 import {
   IProjectInformationData,
@@ -32,33 +31,22 @@ const transformProperties = (
   return properties
 }
 
-const projectDataSynced = async (
-  props: IProjectInformationProps
-) => {
+const projectDataSynced = async (props: IProjectInformationProps) => {
   try {
     let isSynced = false
-
-    const projectDataList = props.hubSite.web.lists
-      .getByTitle(strings.IdeaProjectDataTitle)
-
-    const [projectDataItem] = await projectDataList
-      .items
+    const projectDataList = props.hubSite.web.lists.getByTitle(strings.IdeaProjectDataTitle)
+    const [projectDataItem] = await projectDataList.items
       .filter(`GtSiteUrl eq '${props.webPartContext.pageContext.web.absoluteUrl}'`)
       .select('Id')
       .get()
-
     const ideaProcessingList = props.hubSite.web.lists.getByTitle(strings.IdeaProcessingTitle)
-
-    const [ideaProcessingItem] = await ideaProcessingList
-      .items
+    const [ideaProcessingItem] = await ideaProcessingList.items
       .filter(`GtIdeaProjectDataId eq '${projectDataItem.Id}'`)
       .select('Id, GtIdeaDecision')
       .get()
-
     if (ideaProcessingItem.GtIdeaDecision === 'Godkjent og synkronisert') {
       isSynced = true
     }
-
     return isSynced
   } catch (error) {
     return true
@@ -77,13 +65,17 @@ const fetchData = async (
       columns,
       ...propertiesData
     }
-    const userHasEditPermission = await SPDataAdapter.getProjectAdminPermissions(
-      ProjectAdminPermission.EditProjectProperties,
-      data.fieldValues
-    )
     const properties = transformProperties(data, props)
     const allProperties = transformProperties(data, props, false)
-    const isProjectDataSynced = props.useIdeaProcessing && await projectDataSynced(props)
+    let userHasEditPermission = false
+    let isProjectDataSynced = false
+    if (props.page === 'Frontpage') {
+      userHasEditPermission = await SPDataAdapter.getProjectAdminPermissions(
+        ProjectAdminPermission.EditProjectProperties,
+        data.fieldValues
+      )
+      isProjectDataSynced = props.useIdeaProcessing && (await projectDataSynced(props))
+    }
     return {
       data,
       isParentProject: data.fieldValues?.GtIsParentProject || data.fieldValues?.GtIsProgram,

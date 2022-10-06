@@ -31,6 +31,9 @@
     ],
     "baseUrl": "src",
     "paths": {
+      "data": [
+        "data"
+      ],
       "components": [
         "components"
       ],

@@ -34,12 +34,5 @@ export const shimmeredColumns: IColumn[] = [
     isResizable: true,
     maxWidth: 250,
     minWidth: 100
-  },
-  {
-    key: '2',
-    name: 'Site URL',
-    isResizable: true,
-    maxWidth: 250,
-    minWidth: 100
   }
 ]

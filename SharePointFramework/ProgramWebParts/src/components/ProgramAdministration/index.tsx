@@ -1,4 +1,4 @@
-import { IViewField, SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
+import { SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react'
 import { UserMessage } from 'pp365-projectwebparts/lib/components/UserMessage'
 import * as strings from 'ProgramWebPartsStrings'
@@ -7,6 +7,7 @@ import { AddProjectDialog } from './AddProjectDialog'
 import { Commands } from './Commands'
 import styles from './programAdministration.module.scss'
 import { ProjectTable } from './ProjectTable'
+import { IListField } from './ProjectTable/types'
 import { useStore } from './store'
 import { IProgramAdministrationItem, IProgramAdministrationProps, shimmeredColumns } from './types'
 
@@ -60,9 +61,9 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
           {childProjects.length > 0 ? (
             <ProjectTable
               fields={fields}
-              projects={childProjects}
-              onSelect={(selectedItem: any) => setSelected(selectedItem)}
+              items={childProjects}
               selectionMode={SelectionMode.multiple}
+              onSelectionChanged={setSelected}
             />
           ) : (
             <UserMessage text={strings.ProgramAdministration_EmptyMessage} />
@@ -74,19 +75,15 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
   )
 }
 
-export const fields: IViewField[] = [
+export const fields: IListField[] = [
   {
-    name: 'Title',
-    displayName: 'Tittel',
-    isResizable: true,
-    render: (item: IProgramAdministrationItem) => {
-      return (
-        <a href={item.SPWebURL} target='_blank' data-interception='off' rel='noreferrer'>
-          {item.Title}
-        </a>
-      )
-    },
-    sorting: true,
-    maxWidth: 250
+    key: 'Title',
+    text: 'Tittel',
+    fieldName: 'Title',
+    onRender: (item: IProgramAdministrationItem) => (
+      <a href={item.SPWebURL} target={'_blank'} data-interception={'off'} rel={'noreferrer'}>
+        {item.Title}
+      </a>
+    )
   }
 ]
