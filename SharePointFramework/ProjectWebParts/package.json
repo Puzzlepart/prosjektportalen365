@@ -9,6 +9,7 @@
     "serve": "gulp serve-deprecated --locale=nb-no --nobrowser",
     "package": "gulp clean --ship && gulp default --ship && gulp package-solution --ship",
     "package:ci": "gulp clean && gulp default && gulp package-solution",
+    "build": "tsc --build",
     "preserve": "gulp setHiddenToolbox",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
