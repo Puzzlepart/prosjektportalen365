@@ -17,16 +17,16 @@ export const filterItems = (items: IFilterItemProps[], columns: IColumn[], activ
       return arr.filter((i) => {
         const colValue = get<string>(i, key, '')
         return (
-          activeFilters[key].filter((filterValue) => colValue.indexOf(filterValue) !== -1)
-            .length > 0
+          activeFilters[key].filter((filterValue) => colValue.indexOf(filterValue) !== -1).length >
+          0
         )
       })
     }, items)
-  
+
   if (activeFilters.SelectedColumns) {
-    columns = columns.filter(
-      (col) => _.some(activeFilters.SelectedColumns, (c) => c === col.fieldName)
+    columns = columns.filter((col) =>
+      _.some(activeFilters.SelectedColumns, (c) => c === col.fieldName)
     )
   }
-  return {columns, items}
+  return { columns, items }
 }

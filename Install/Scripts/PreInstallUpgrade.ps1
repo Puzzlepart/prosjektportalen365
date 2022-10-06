@@ -22,12 +22,9 @@ if ($null -ne $LastInstall) {
         }
     }
 
-    if ($PreviousVersion -lt "1.6.0") {
-        Get-PnPProvisioningTemplate -Out "$BasePath\Navigation.xml" -Handlers Navigation -Force -Erroraction SilentlyContinue
-        ((Get-Content -path "$BasePath\Navigation.xml" -Raw) -replace 'false', 'true') | Set-Content -Path "$BasePath\Navigation.xml" -Force -ErrorAction SilentlyContinue
-
+    if ($PreviousVersion -lt "1.7.0") {
         Write-Host "[INFO] Removing deprecated pages"
-        Write-Host "[INFO] In version v1.6.0 we reworked the aggregated webparts and removed the benefits webpart as this is now handled in the aggregated webpart. Removing pages so that we overwrite the old pages correctly"
+        Write-Host "[INFO] In version v1.7.0 we reworked the aggregated webparts and removed the benefits webpart as this is now handled in the aggregated webpart. Removing pages so that we overwrite the old pages correctly"
         
         $PnPClientSidePages = @(
             "Gevinstoversikt.aspx", 

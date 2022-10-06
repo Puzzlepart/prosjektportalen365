@@ -1,0 +1,99 @@
+<pnp:ListInstance Title="{resource:Lists_ProjectAdminRoles_Title}" Description="" Hidden="true" TemplateType="100" Url="{resource:Lists_ProjectAdminRoles_Url}" EnableVersioning="true" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableAttachments="false" EnableFolderCreation="false" xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    <pnp:ContentTypeBindings>
+        <pnp:ContentTypeBinding ContentTypeID="0x0100618197F7C782A0459EB2FA5EBF1BDDF201" Default="true" />
+        <pnp:ContentTypeBinding ContentTypeID="0x0100618197F7C782A0459EB2FA5EBF1BDDF202" />
+        <pnp:ContentTypeBinding ContentTypeID="0x0100618197F7C782A0459EB2FA5EBF1BDDF203" />
+    </pnp:ContentTypeBindings>
+    <pnp:Views RemoveExistingViews="true">
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle roller" Url="{site}/{resource:Lists_ProjectAdminRoles_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+            <Query />
+            <ViewFields>
+                <FieldRef Name="ContentType" />
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtProjectFieldName" />
+                <FieldRef Name="GtGroupName" />
+                <FieldRef Name="GtGroupLevel" />
+                <FieldRef Name="GtProjectAdminPermissions" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">30</RowLimit>
+            <Aggregations Value="Off" />
+            <JSLink>clienttemplates.js</JSLink>
+            <ViewData />
+        </View>
+        <View Type="HTML" DisplayName="Prosjektadministrasjonsroller koblet mot prosjektegenskaper" Url="{site}/{resource:Lists_ProjectAdminRoles_Url}/Prosjektegenskaper.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+            <Query>
+                <Where>
+                    <Eq>
+                        <FieldRef Name="ContentType" />
+                        <Value Type="Computed">{resource:ContentTypes_ProjectAdminRoleProjectInfo_Name}</Value>
+                    </Eq>
+                </Where>
+            </Query>
+            <ViewFields>
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtProjectFieldName" />
+                <FieldRef Name="GtProjectAdminPermissions" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">30</RowLimit>
+            <Aggregations Value="Off" />
+            <JSLink>clienttemplates.js</JSLink>
+            <ViewData />
+        </View>
+        <View Type="HTML" DisplayName="Prosjektadministrasjonsroller koblet mot SharePoint-gruppe" Url="{site}/{resource:Lists_ProjectAdminRoles_Url}/Gruppemedlemskap.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+            <Query>
+                <Where>
+                    <Eq>
+                        <FieldRef Name="ContentType" />
+                        <Value Type="Computed">{resource:ContentTypes_ProjectAdminRoleGroupMembership_Name}</Value>
+                    </Eq>
+                </Where>
+                <GroupBy>
+                    <FieldRef Name="GtGroupLevel" Ascending="TRUE" />
+                </GroupBy>
+            </Query>
+            <ViewFields>
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtGroupName" />
+                <FieldRef Name="GtGroupLevel" />
+                <FieldRef Name="GtProjectAdminPermissions" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">30</RowLimit>
+            <Aggregations Value="Off" />
+            <JSLink>clienttemplates.js</JSLink>
+            <ViewData />
+        </View>
+    </pnp:Views>
+    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Prosjektleder</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectFieldName">GtProjectManager</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF201</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Prosjekteier</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectFieldName">GtProjectOwner</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF201</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Prosjektstøtte</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectFieldName">GtProjectSupport</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF201</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Prosjektkontor</pnp:DataValue>
+            <pnp:DataValue FieldName="GtGroupName">Prosjektkontor</pnp:DataValue>
+            <pnp:DataValue FieldName="GtGroupLevel">Prosjekt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF202</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">SP områdeadministrator</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF203</pnp:DataValue>
+        </pnp:DataRow>
+    </pnp:DataRows>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
+</pnp:ListInstance>

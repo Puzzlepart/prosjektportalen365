@@ -32,8 +32,8 @@ export class ProjectPropertyModel {
   /**
    * Creates an instance of ProjectPropertyModel
    *
-   * @param {IEntityField} field Field
-   * @param {string} value Value
+   * @param field Field
+   * @param value Value
    */
   constructor(field: IEntityField, value: string) {
     this.internalName = field.InternalName

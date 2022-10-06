@@ -6,30 +6,38 @@
     </pnp:ContentTypeBindings>
     <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_ProjectStatus_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
-            <Query>
-                <OrderBy>
-                    <FieldRef Name="ID" />
-                </OrderBy>
-                <Where>
-                    <Eq>
-                        <FieldRef Name="ID" />
-                        <Value Type="Counter">0</Value>
-                    </Eq>
-                </Where>
-            </Query>
             <ViewFields>
                 <FieldRef Name="ID" />
+                <FieldRef Name="Title" />
+                <FieldRef Name="GtOverallStatus" />
+                <FieldRef Name="GtBudgetTotal" />
+                <FieldRef Name="GtCostsTotal" />
+                <FieldRef Name="GtProjectForecast" />
+                <FieldRef Name="GtBudgetLastReportDate" />
+                <FieldRef Name="GtStatusTime" />
+                <FieldRef Name="GtStatusTimeComment" />
+                <FieldRef Name="GtStatusBudget" />
+                <FieldRef Name="GtStatusBudgetComment" />
+                <FieldRef Name="GtStatusQuality" />
+                <FieldRef Name="GtStatusQualityComment" />
+                <FieldRef Name="GtStatusRisk" />
+                <FieldRef Name="GtStatusRiskComment" />
+                <FieldRef Name="GtStatusGainAchievement" />
+                <FieldRef Name="GtStatusGainAchievementComment" />
+                <FieldRef Name="GtModerationStatus" />
+                <FieldRef Name="GtSiteId" />
+                <FieldRef Name="GtLastReportDate"/>
             </ViewFields>
-            <RowLimit Paged="TRUE">30</RowLimit>
+            <RowLimit Paged="TRUE">100</RowLimit>
             <JSLink>clienttemplates.js</JSLink>
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="3e90aa95-4d32-4819-823f-10ae2fd412b5" Name="GtOverallStatus" Required="true" />
-        <pnp:FieldRef ID="1447ef51-8e9b-4d16-aa2a-526dc9f1539e" Name="GtStatusTime" Required="true" />
-        <pnp:FieldRef ID="a9902b9d-8aad-40df-9788-ba73c64c3cb5" Name="GtStatusBudget" Required="true" />
-        <pnp:FieldRef ID="0bbe6a84-67e6-4a9c-b26b-a5973dacd473" Name="GtStatusQuality" Required="true" />
-        <pnp:FieldRef ID="fc8a879d-83bc-4670-b1f6-c9817e333614" Name="GtStatusRisk" Required="true" />
-        <pnp:FieldRef ID="b1958607-cd56-4ecb-9ad7-65fb7d3c22c7" Name="GtStatusGainAchievement" Required="true" />
+        <pnp:FieldRef ID="3e90aa95-4d32-4819-823f-10ae2fd412b5" Name="GtOverallStatus" DisplayName="{resource:SiteFields_GtOverallStatus_DisplayName}" Required="true" />
+        <pnp:FieldRef ID="1447ef51-8e9b-4d16-aa2a-526dc9f1539e" Name="GtStatusTime" DisplayName="{resource:SiteFields_GtStatusTime_DisplayName}" Required="true" />
+        <pnp:FieldRef ID="a9902b9d-8aad-40df-9788-ba73c64c3cb5" Name="GtStatusBudget" DisplayName="{resource:SiteFields_GtStatusBudget_DisplayName}" Required="true" />
+        <pnp:FieldRef ID="0bbe6a84-67e6-4a9c-b26b-a5973dacd473" Name="GtStatusQuality" DisplayName="{resource:SiteFields_GtStatusQuality_DisplayName}" Required="true" />
+        <pnp:FieldRef ID="fc8a879d-83bc-4670-b1f6-c9817e333614" Name="GtStatusRisk" DisplayName="{resource:SiteFields_GtStatusRisk_DisplayName}" Required="true" />
+        <pnp:FieldRef ID="b1958607-cd56-4ecb-9ad7-65fb7d3c22c7" Name="GtStatusGainAchievement" DisplayName="{resource:SiteFields_GtStatusGainAchievement_DisplayName}" Required="true" />
     </pnp:FieldRefs>
 </pnp:ListInstance>

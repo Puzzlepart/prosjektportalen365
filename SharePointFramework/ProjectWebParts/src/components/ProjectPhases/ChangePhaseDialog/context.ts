@@ -20,7 +20,7 @@ export interface IChangePhaseDialogContext {
    * Updates the current checklist item, and dispatches CHECKLIST_ITEM_UPDATED
    * with the properties
    *
-   * @param {Partial<IProjectPhaseChecklistItem>} properties Properties
+   * @param properties Properties
    */
   nextChecklistItem: (properties: Partial<IProjectPhaseChecklistItem>) => void
 }

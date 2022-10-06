@@ -94,16 +94,12 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
                   onText: 'På',
                   offText: 'Av',
                   calloutWidth: 430,
-                  calloutContent: React.createElement(
-                    'p',
-                    {},
-                    strings.UsePhaseHooksCalloutText
-                  ),
+                  calloutContent: React.createElement('p', {}, strings.UsePhaseHooksCalloutText),
                   checked: this.properties.usePhaseHooks
                 }),
                 PropertyPaneTextField('hookUrl', {
                   label: strings.HookUrlFieldLabel,
-                  description: strings.HookUrlFieldDescription,
+                  description: strings.HookUrlFieldDescription
                 }),
                 PropertyPaneTextField('hookAuth', {
                   label: strings.HookAuthFieldLabel,

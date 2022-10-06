@@ -42,7 +42,14 @@ if ($null -ne $LastInstall) {
         Remove-PnPField -List "Tidslinjeinnhold" -Identity "SiteIdLookup" -Force -ErrorAction SilentlyContinue
         Remove-PnPField -List "Tidslinjeinnhold" -Identity "TimelineType" -Force -ErrorAction SilentlyContinue
         Invoke-PnPQuery
+    }
 
-        Apply-PnPProvisioningTemplate "$BasePath\Navigation.xml" -ErrorAction Stop
+    if ($PreviousVersion -lt "1.7.0") {
+        Write-Host "[INFO] In version v1.7.0 we reworked the aggregated webparts. Adding these navigation items now as part of the upgrade" 
+        Add-PnPNavigationNode -Location TopNavigationBar -Title "Gevinstoversikt" -Url "$($Uri.LocalPath)/SitePages/Gevinstoversikt.aspx"
+        Add-PnPNavigationNode -Location TopNavigationBar -Title "Erfaringslogg" -Url "$($Uri.LocalPath)/SitePages/Erfaringslogg.aspx"
+        Add-PnPNavigationNode -Location TopNavigationBar -Title "Leveranseoversikt" -Url "$($Uri.LocalPath)/SitePages/Leveranseoversikt.aspx"
+        Add-PnPNavigationNode -Location TopNavigationBar -Title "Risikooversikt" -Url "$($Uri.LocalPath)/SitePages/Risikooversikt.aspx"
+        Write-Host "[SUCCESS] Please adjust navigation order manually"
     }
 }

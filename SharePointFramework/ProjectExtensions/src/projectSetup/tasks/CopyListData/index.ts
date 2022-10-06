@@ -7,7 +7,12 @@ import { SPField } from 'pp365-shared/lib/models/SPField'
 import { IPlannerTaskSPItem, ListContentConfig, ListContentConfigType } from '../../../models'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
-import { ITaskDetails, PlannerConfiguration, TaskAttachment } from '../PlannerConfiguration'
+import {
+  ITaskDetails,
+  PlannerConfiguration,
+  TaskAttachment,
+  TaskPreviewType
+} from '../PlannerConfiguration'
 
 export class CopyListData extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -43,13 +48,19 @@ export class CopyListData extends BaseTask {
             {
               const items = await this._getSourceItems<IPlannerTaskSPItem>(config, [
                 'Title',
+                'GtDescription',
                 'GtCategory',
                 'GtChecklist',
-                'GtAttachments'
+                'GtAttachments',
+                'GtPlannerPreviewType'
               ])
               const configuration = items.reduce((obj, item) => {
                 obj[item.GtCategory] = obj[item.GtCategory] || {}
                 const taskDetails: ITaskDetails = {}
+                taskDetails.previewType = 'automatic'
+                if (!stringIsNullOrEmpty(item.GtDescription)) {
+                  taskDetails.description = item.GtDescription
+                }
                 if (!stringIsNullOrEmpty(item.GtChecklist)) {
                   taskDetails.checklist = item.GtChecklist.split(';')
                 }
@@ -59,6 +70,12 @@ export class CopyListData extends BaseTask {
                       .map((str) => new TaskAttachment(str))
                       .filter((attachment) => !stringIsNullOrEmpty(attachment.url))
                   } catch (error) {}
+                }
+                if (!stringIsNullOrEmpty(item.GtPlannerPreviewType)) {
+                  let m: RegExpExecArray
+                  if ((m = /\(([^)]+)\)/.exec(item.GtPlannerPreviewType)) !== null) {
+                    taskDetails.previewType = (m[1] ?? 'automatic') as TaskPreviewType
+                  }
                 }
                 obj[item.GtCategory][item.Title] = taskDetails
                 return obj
@@ -86,8 +103,8 @@ export class CopyListData extends BaseTask {
   /**
    * Get source items
    *
-   * @param listContentConfig List config
-   * @param {string[]} fields Fields
+   * @param config List content config
+   * @param fields Fields
    */
   private async _getSourceItems<T = any>(
     config: ListContentConfig,
@@ -175,7 +192,7 @@ export class CopyListData extends BaseTask {
    * Get file contents
    *
    * @param web Web
-   * @param {IFile[]} files Files to get content for
+   * @param files Files to get content for
    */
   private async _getFileContents(web: Web, files: any[]): Promise<any[]> {
     try {
@@ -199,7 +216,7 @@ export class CopyListData extends BaseTask {
    * Create folder hierarchy
    *
    * @param config List config
-   * @param {string[]} folders An array of folders to provision
+   * @param folders An array of folders to provision
    * @param progressText Progress text
    */
   private async _provisionFolderHierarchy(
@@ -292,9 +309,9 @@ export class CopyListData extends BaseTask {
   /**
    * Get item properties
    *
-   * @param {string[]} fields Fields
+   * @param fields Fields
    * @param sourceItem Source item
-   * @param {any[]} sourceFields Source fields
+   * @param sourceFields Source fields
    */
   private _getProperties(fields: string[], sourceItem: TypedHash<any>, sourceFields: SPField[]) {
     return fields.reduce((obj: TypedHash<any>, fieldName: string) => {

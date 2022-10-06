@@ -4,7 +4,7 @@ import { IShimmerElement } from 'office-ui-fabric-react/lib/Shimmer'
 /**
  * Get shimmered elements to fill the specified width
  *
- * @param {number} width Width
+ * @param width Width
  */
 export const getShimmerElements = (width: number = 0) => {
   if (width === 0) return []

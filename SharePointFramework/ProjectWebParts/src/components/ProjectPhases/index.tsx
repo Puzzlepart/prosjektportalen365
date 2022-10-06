@@ -1,8 +1,8 @@
-import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { Shimmer } from 'office-ui-fabric-react/lib/Shimmer'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { useEffect, useReducer, useRef } from 'react'
+import React, { FunctionComponent, useEffect, useReducer, useRef } from 'react'
 import { changePhase } from './changePhase'
 import { ChangePhaseDialog } from './ChangePhaseDialog'
 import { ProjectPhasesContext } from './context'
@@ -21,7 +21,7 @@ import reducer, {
 import { getShimmerElements } from './shimmer'
 import { IProjectPhasesProps } from './types'
 
-export const ProjectPhases = (props: IProjectPhasesProps) => {
+export const ProjectPhases: FunctionComponent<IProjectPhasesProps> = (props) => {
   const root = useRef(null)
   const [state, dispatch] = useReducer(reducer, initState())
 
@@ -57,13 +57,18 @@ export const ProjectPhases = (props: IProjectPhasesProps) => {
       props.syncPropertiesAfterPhaseChange === undefined ||
       props.syncPropertiesAfterPhaseChange
     ) {
-      const currentUrlIsPageRelative = document.location.pathname.indexOf(state.data.welcomepage) > -1
-      const welcomepage = !currentUrlIsPageRelative ? `${document.location.pathname}/${state.data.welcomepage}` : document.location.pathname
+      const currentUrlIsPageRelative =
+        document.location.pathname.indexOf(state.data.welcomePage) > -1
+      const welcomepage = !currentUrlIsPageRelative
+        ? `${document.location.pathname}/${state.data.welcomePage}`
+        : document.location.pathname
       setTimeout(() => {
-        window.location.assign(`${document.location.protocol}//${document.location.hostname}${welcomepage}#syncproperties=1`)
+        window.location.assign(
+          `${document.location.protocol}//${document.location.hostname}${welcomepage}#syncproperties=1`
+        )
         if (currentUrlIsPageRelative) {
           window.location.reload()
-        } 
+        }
       }, 1000)
     }
   }

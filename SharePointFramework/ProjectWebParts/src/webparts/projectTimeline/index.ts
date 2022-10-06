@@ -67,7 +67,7 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                 PropertyPaneTextField('configItemTitle', {
                   label: strings.ConfigItemTitleFieldLabel,
                   value: 'Prosjektleveranse'
-                }),
+                })
               ]
             }
           ]

@@ -27,12 +27,13 @@
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="70623c36-8abd-4430-93ff-9b6172022dde" Name="GtTimelineTypeLookup" />
+        <pnp:FieldRef ID="70623c36-8abd-4430-93ff-9b6172022dde" Name="GtTimelineTypeLookup" DisplayName="{resource:Lists_GtTimelineTypeLookup_DisplayName}" />
         <pnp:FieldRef ID="16623c2a-3fd1-41c2-87e7-958583dd88da" Name="GtEndDate" DisplayName="{resource:Lists_TimelineContent_Field_GtEndDate_DisplayName}" />
         <pnp:FieldRef ID="28be4cc9-bc5e-4a55-a557-f652b564ca75" Name="GtBudgetTotal" DisplayName="{resource:Lists_TimelineContent_Field_GtBudgetTotal_Description}" />
         <pnp:FieldRef ID="5af54348-bc38-4a18-a11f-0f84a96da4ea" Name="GtCostsTotal" DisplayName="{resource:Lists_TimelineContent_Field_GtCostsTotal_DisplayName}" />
-        <pnp:FieldRef ID="4d342fb6-a0e0-4064-b794-c1d36c922997" Name="GtTag" />
-        <pnp:FieldRef ID="3af32c1e-ff08-4bb4-8fb6-9ed5048a5fa0" Name="GtSiteIdLookup" />
+        <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" DisplayName="{resource:Lists_GtDescription_DisplayName}" />
+        <pnp:FieldRef ID="4d342fb6-a0e0-4064-b794-c1d36c922997" Name="GtTag" DisplayName="{resource:Lists_GtTag_DisplayName}" />
+        <pnp:FieldRef ID="3af32c1e-ff08-4bb4-8fb6-9ed5048a5fa0" Name="GtSiteIdLookup" DisplayName="{resource:Lists_GtSiteIdLookup_DisplayName}" />
     </pnp:FieldRefs>
     <pnp:Fields>
         <Field Type="Text" Name="Title" StaticName="Title" DisplayName="{resource:Lists_TimelineContent_Field_Title_DisplayName}" Description="{resource:Lists_TimelineContent_Field_Title_Description}" ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}"  />

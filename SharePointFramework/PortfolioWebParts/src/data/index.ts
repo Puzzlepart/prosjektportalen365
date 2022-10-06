@@ -59,7 +59,7 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetch chart data (used by [PortfolioInsights])
+   * Fetch chart data
    *
    * @param view View configuration
    * @param configuration PortfolioOverviewConfiguration
@@ -127,6 +127,11 @@ export class DataAdapter implements IDataAdapter {
     }
   }
 
+  /**
+   * Get aggregated list config
+   * 
+   * @param category Category
+   */
   public async getAggregatedListConfig(category: string): Promise<IAggregatedListConfiguration> {
     let portal = this._portalDataService
 
@@ -161,7 +166,6 @@ export class DataAdapter implements IDataAdapter {
    * @param configuration
    * @param siteId
    * @returns {Promise<IFetchDataForViewItemResult[]>}
-   * @memberof DataAdapter
    */
   public async fetchDataForView(
     view: PortfolioOverviewView,
@@ -226,7 +230,6 @@ export class DataAdapter implements IDataAdapter {
    * @param siteId
    * @param [siteIdProperty='GtSiteIdOWSTEXT']
    * @returns {Promise<IFetchDataForViewItemResult[]>}
-   * @memberof DataAdapter
    */
   public async fetchDataForManagerView(
     view: PortfolioOverviewView,
@@ -293,8 +296,9 @@ export class DataAdapter implements IDataAdapter {
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${queryArray ?? ''
-          } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        QueryTemplate: `${
+          queryArray ?? ''
+        } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
         Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
       })
@@ -327,7 +331,12 @@ export class DataAdapter implements IDataAdapter {
         sp.search({
           ...DEFAULT_SEARCH_SETTINGS,
           QueryTemplate: `DepartmentId:{${hubSiteId}} ContentTypeId:${contentType} GtModerationStatusOWSCHCS:Publisert`,
-          SelectProperties: ['Title', 'GtSiteIdOWSTEXT', 'GtCostsTotalOWSCURR', 'GtBudgetTotalOWSCURR']
+          SelectProperties: [
+            'Title',
+            'GtSiteIdOWSTEXT',
+            'GtCostsTotalOWSCURR',
+            'GtBudgetTotalOWSCURR'
+          ]
         })
       ])
 
@@ -350,19 +359,20 @@ export class DataAdapter implements IDataAdapter {
             costsTotal: report && report['GtCostsTotalOWSCURR'],
             budgetTotal: report && report['GtBudgetTotalOWSCURR']
           }
-        }).filter((p) => p)
-      
-      return { reports, configElement }
+        })
+        .filter((p) => p)
 
-    } catch (error) { }
+      return { reports, configElement }
+    } catch (error) {}
   }
 
   /**
    *  Fetches items from timelinecontent list
-   *
-   * @param timelineConfig
+   * 
    * * Fetching list items
    * * Maps the items to TimelineContentListModel
+   *
+   * @param timelineConfig
    */
   public async fetchTimelineContentItems(timelineConfig: any[]) {
     const [timelineItems] = await Promise.all([
@@ -447,7 +457,10 @@ export class DataAdapter implements IDataAdapter {
     dataSourceName: string,
     timelineConfig: any[]
   ) {
-    const config: any = _.find(timelineConfig, (col) => col.Title === (configItemTitle || 'Prosjektleveranse'))
+    const config: any = _.find(
+      timelineConfig,
+      (col) => col.Title === (configItemTitle || 'Prosjektleveranse')
+    )
     if (config && config.GtShowElementPortfolio) {
       const [projectDeliveries] = await Promise.all([
         this.configure().then((adapter) => {
@@ -459,8 +472,10 @@ export class DataAdapter implements IDataAdapter {
               'GtDeliveryEndTimeOWSDATE'
             ])
             .then((deliveries) => {
-              return deliveries
-                .filter((delivery) => delivery.GtDeliveryStartTimeOWSDATE && delivery.GtDeliveryEndTimeOWSDATE)
+              return deliveries.filter(
+                (delivery) =>
+                  delivery.GtDeliveryStartTimeOWSDATE && delivery.GtDeliveryEndTimeOWSDATE
+              )
             })
             .catch((error) => {
               throw error
@@ -615,11 +630,13 @@ export class DataAdapter implements IDataAdapter {
     configuration?: IAggregatedListConfiguration,
     dataSource?: string
   ): Promise<any[]> {
-    const odata = configuration && configuration.views.find((v) => v.title === dataSource)?.odataQuery
-    let projects
+    const odata =
+      configuration && configuration.views.find((v) => v.title === dataSource)?.odataQuery
+    let projects = []
 
     if (odata && !dataSource.includes('(Prosjektnivå)')) {
-      [projects] = await Promise.all([
+      // eslint-disable-next-line @typescript-eslint/no-extra-semi
+      ;[projects] = await Promise.all([
         await sp.web.lists
           .getByTitle(strings.ProjectsListName)
           .items.filter(`${odata}`)
@@ -637,8 +654,6 @@ export class DataAdapter implements IDataAdapter {
    * @param groupName
    *
    * @returns {Promise<boolean>}
-   *
-   * @memberof DataAdapter
    */
   public async isUserInGroup(groupName: string): Promise<boolean> {
     try {
@@ -751,14 +766,13 @@ export class DataAdapter implements IDataAdapter {
    * @param dataSourceName Data source name
    * @param selectProperties Select properties
    * @param dataSourceCategory Data source category
-   *
    */
   public async fetchItemsWithSource(
     dataSourceName: string,
     selectProperties: string[],
     dataSourceCategory?: string
-  ): Promise<any> {
-    let items
+  ): Promise<any[]> {
+    let items: any[]
 
     try {
       const dataSrc = await this.dataSourceService.getByName(dataSourceName)
@@ -806,7 +820,12 @@ export class DataAdapter implements IDataAdapter {
    */
   public async fetchProjectContentColumns(dataSourceCategory: string): Promise<any> {
     try {
-      if (isNull(dataSourceCategory) || !dataSourceCategory || dataSourceCategory === '' || dataSourceCategory.includes('(Prosjektnivå)')) {
+      if (
+        isNull(dataSourceCategory) ||
+        !dataSourceCategory ||
+        dataSourceCategory === '' ||
+        dataSourceCategory.includes('(Prosjektnivå)')
+      ) {
         return []
       } else {
         const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
@@ -824,7 +843,6 @@ export class DataAdapter implements IDataAdapter {
           })
         return filteredItems
       }
-
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, dataSourceCategory))
     }
@@ -846,8 +864,7 @@ export class DataAdapter implements IDataAdapter {
       }
 
       const renderAs =
-        properties.data.renderAs.charAt(0).toUpperCase() +
-        properties.data.renderAs.slice(1)
+        properties.data.renderAs.charAt(0).toUpperCase() + properties.data.renderAs.slice(1)
 
       const itemUpdateResult = await list.items.getById(item.Id).update({
         GtFieldDataType: renderAs,
@@ -862,16 +879,16 @@ export class DataAdapter implements IDataAdapter {
   /**
    * Delete project content column
    *
-   * @param property Property
+   * @param column Column to delete
    */
-  public async deleteProjectContentColumn(property: TypedHash<any>): Promise<any> {
+  public async deleteProjectContentColumn(column: TypedHash<any>): Promise<any> {
     try {
       const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
       const items = await list.items.get()
-      const item = items.find((i) => i.GtManagedProperty === property.fieldName)
+      const item = items.find((i) => i.GtManagedProperty === column.fieldName)
 
       if (!item) {
-        throw new Error(format(strings.ProjectContentColumnItemNotFound, property.fieldName))
+        throw new Error(format(strings.ProjectContentColumnItemNotFound, column.fieldName))
       }
 
       const itemDeleteResult = list.items.getById(item.Id).delete()
@@ -903,7 +920,11 @@ export class DataAdapter implements IDataAdapter {
    * @param properties Properties
    * @param dataSourceTitle Data source title
    */
-  public async updateDataSourceItem(properties: TypedHash<any>, dataSourceTitle: string, shouldReplace: boolean = false): Promise<ItemUpdateResult> {
+  public async updateDataSourceItem(
+    properties: TypedHash<any>,
+    dataSourceTitle: string,
+    shouldReplace: boolean = false
+  ): Promise<ItemUpdateResult> {
     try {
       const list = sp.web.lists.getByTitle(strings.DataSourceListName)
       const items = await list.items.get()

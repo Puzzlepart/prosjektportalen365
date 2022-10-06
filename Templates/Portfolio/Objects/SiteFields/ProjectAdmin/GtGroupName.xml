@@ -1,0 +1,1 @@
+<Field Type="Text" DisplayName="{resource:SiteFields_GtGroupName_DisplayName}" Description="{resource:SiteFields_GtGroupName_Description}" Group="{resource:SiteFields_Portfolio_Group}" ID="{d7f3aca6-5f3b-4d5d-9dc9-ac272eda0ba2}" StaticName="GtGroupName" Name="GtGroupName" />

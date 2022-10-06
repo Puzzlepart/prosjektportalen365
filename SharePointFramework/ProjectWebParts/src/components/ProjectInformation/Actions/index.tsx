@@ -1,31 +1,42 @@
+import { DisplayMode } from '@microsoft/sp-core-library'
 import { DefaultButton, IButtonProps } from 'office-ui-fabric-react/lib/Button'
 import * as strings from 'ProjectWebPartsStrings'
-import React from 'react'
+import React, { useContext } from 'react'
+import { ProjectInformationContext } from '../context'
 import styles from './Actions.module.scss'
 import { IActionsProps, ActionType } from './types'
 
 export const Actions = (props: IActionsProps) => {
+  const context = useContext(ProjectInformationContext)
   const actions: ActionType[] = [
-    [strings.ViewVersionHistoryText, props.versionHistoryUrl, 'History', false, !props.isSiteAdmin],
-    [strings.EditPropertiesText, props.editFormUrl, 'Edit', false, !props.isSiteAdmin],
     [
-      strings.SyncProjectPropertiesText,
-      props.onSyncProperties,
-      'Sync',
+      strings.ViewVersionHistoryText,
+      context.state.data.versionHistoryUrl,
+      'History',
       false,
-      !props.onSyncProperties || !props.isSiteAdmin
+      !context.state.userHasEditPermission
+    ],
+    [
+      strings.EditPropertiesText,
+      context.state.data.editFormUrl,
+      'Edit',
+      false,
+      !context.state.userHasEditPermission
     ],
     [
       strings.EditSiteInformationText,
       window['_spLaunchSiteSettings'],
       'Info',
-      !window['_spLaunchSiteSettings'] || !props.isSiteAdmin
+      false,
+      !window['_spLaunchSiteSettings'] || !context.state.userHasEditPermission
     ],
     ...(props.customActions || [])
   ]
 
   return (
-    <div className={styles.actions} hidden={props.hidden}>
+    <div
+      className={styles.actions}
+      hidden={context.props.hideActions || context.props.displayMode === DisplayMode.Edit}>
       {actions.map(([text, hrefOrOnClick, iconName, disabled, hidden], idx) => {
         const buttonProps: IButtonProps = { text, iconProps: { iconName }, disabled }
         if (typeof hrefOrOnClick === 'string') buttonProps.href = hrefOrOnClick

@@ -20,7 +20,7 @@
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" />
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="Tittel" Hidden="true" />
     </pnp:FieldRefs>
     <pnp:Fields>
         <Field DisplayName="Gjelder mal(er)" Description="Velg hvilke(n) mal(er) tillatelseskonfigurasjonen skal gjelde for. Om du ikke velger noen, vil konfigurasjonen gjelde alle malene." List="{listid:{resource:Lists_TemplateOptions_Title}}" Mult="TRUE" Name="GtTemplates" ShowField="Title" Title="GtTemplates" Type="LookupMulti" ID="{86d71834-de91-48a8-8482-b349dc42be69}" StaticName="GtTemplates" />

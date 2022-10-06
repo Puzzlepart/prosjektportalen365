@@ -8,6 +8,9 @@ on:
 jobs:
   spfx-package:
     runs-on: ubuntu-latest
+    concurrency: 
+      group: ${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v1
         with:
@@ -17,7 +20,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.19.0
-          
+
       - name: (@Shared) Install npm packages
         working-directory: ./SharePointFramework/@Shared
         run: |
@@ -31,20 +34,20 @@ jobs:
       - name: (@Shared) Run npm script lint
         working-directory: ./SharePointFramework/@Shared
         run: |
-          npm run lint     
+          npm run lint
 
-      - name: (ProjectWebParts) Install npm packages
-        working-directory: ./SharePointFramework/ProjectWebParts
+      - name: (PortfolioExtensions) Install npm packages
+        working-directory: ./SharePointFramework/PortfolioExtensions
         run: |
           npm ci
 
-      - name: (ProjectWebParts) Run npm script package:ci
-        working-directory: ./SharePointFramework/ProjectWebParts
+      - name: (PortfolioExtensions) Run npm script package:ci
+        working-directory: ./SharePointFramework/PortfolioExtensions
         run: |
           npm run package:ci
 
-      - name: (ProjectWebParts) Run npm script lint
-        working-directory: ./SharePointFramework/ProjectWebParts
+      - name: (PortfolioExtensions) Run npm script lint
+        working-directory: ./SharePointFramework/PortfolioExtensions
         run: |
           npm run lint
 
@@ -63,6 +66,21 @@ jobs:
         run: |
           npm run lint
 
+      - name: (ProgramWebParts) Install npm packages
+        working-directory: ./SharePointFramework/ProgramWebParts
+        run: |
+          npm ci
+
+      - name: (ProgramWebParts) Run npm script package:ci
+        working-directory: ./SharePointFramework/ProgramWebParts
+        run: |
+          npm run package:ci
+
+      - name: (ProgramWebParts) Run npm script lint
+        working-directory: ./SharePointFramework/ProgramWebParts
+        run: |
+          npm run lint
+
       - name: (ProjectExtensions) Install npm packages
         working-directory: ./SharePointFramework/ProjectExtensions
         run: |
@@ -78,17 +96,17 @@ jobs:
         run: |
           npm run lint
 
-      - name: (ProgramWebParts) Install npm packages
-        working-directory: ./SharePointFramework/ProgramWebParts
+      - name: (ProjectWebParts) Install npm packages
+        working-directory: ./SharePointFramework/ProjectWebParts
         run: |
           npm ci
 
-      - name: (ProgramWebParts) Run npm script package:ci
-        working-directory: ./SharePointFramework/ProgramWebParts
+      - name: (ProjectWebParts) Run npm script package:ci
+        working-directory: ./SharePointFramework/ProjectWebParts
         run: |
           npm run package:ci
 
-      - name: (ProgramWebParts) Run npm script lint
-        working-directory: ./SharePointFramework/ProgramWebParts
+      - name: (ProjectWebParts) Run npm script lint
+        working-directory: ./SharePointFramework/ProjectWebParts
         run: |
           npm run lint

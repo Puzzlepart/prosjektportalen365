@@ -165,6 +165,16 @@ declare interface IProjectWebPartsStrings {
   ConfigItemTitleFieldLabel: string
   ShowProjectDeliveriesLabel: string
   ProjectDeliveriesGroupName: string
+  UseIdeaProcessingFieldLabel: string
+  UseIdeaProcessingCalloutText: string
+  IdeaProjectDataTitle: string
+  CancelText: string
+  SynchronizeProjectDataTitle: string
+  SynchronizeProjectDataDescription: string
+  IdeaProcessingTitle: string
+  IdeaProcessingUrlTitle: string
+  GroupLevelProject: string
+  GroupLevelPortfolio: string
 }
 
 declare module 'ProjectWebPartsStrings' {

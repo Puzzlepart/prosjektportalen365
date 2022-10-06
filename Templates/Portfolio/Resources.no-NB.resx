@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" 
-    xmlns="" 
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-    xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -151,6 +148,12 @@
   <data name="Lists_Projects_Url" xml:space="preserve">
     <value>Lists/Prosjekter</value>
   </data>
+  <data name="Lists_ProjectData_Title" xml:space="preserve">
+    <value>Prosjektdata</value>
+  </data>
+  <data name="Lists_ProjectData_Url" xml:space="preserve">
+    <value>Lists/Prosjektdata</value>
+  </data>
   <data name="Lists_ProjectColumnConfiguration_Title" xml:space="preserve">
     <value>Prosjektkolonnekonfigurasjon</value>
   </data>
@@ -220,6 +223,18 @@
   <data name="Lists_TimelineContent_Url" xml:space="preserve">
     <value>Lists/Tidslinjeinnhold</value>
   </data>
+  <data name="Lists_ProjectAdminRoles_Title" xml:space="preserve">
+    <value>Prosjektadministrasjonsroller</value>
+  </data>
+  <data name="Lists_ProjectAdminRoles_Url" xml:space="preserve">
+    <value>Lists/Prosjektadministrasjonsroller</value>
+  </data>
+  <data name="Lists_ProjectAdminPermissions_Title" xml:space="preserve">
+    <value>Prosjektadministrasjonstilganger</value>
+  </data>
+  <data name="Lists_ProjectAdminPermissions_Url" xml:space="preserve">
+    <value>Lists/Prosjektadministrasjonstilganger</value>
+  </data>
   <data name="Lists_TimelineContent_Field_Title_DisplayName" xml:space="preserve">
     <value>Tittel</value>
   </data>
@@ -246,6 +261,18 @@
   </data>
   <data name="Lists_Timeline_Configuration_Field_GtSortOrder_Description" xml:space="preserve">
     <value>Angi prioritering av elementet under tilhørende gruppe/prosjekt på tidslinjen, benytt f. eks 31 dersom du vil at elementet skal ligge mellom element 30 og 40.</value>
+  </data>
+  <data name="Lists_IdeaProcessing_Title" xml:space="preserve">
+    <value>Idébehandling</value>
+  </data>
+  <data name="Lists_IdeaProcessing_Url" xml:space="preserve">
+    <value>Lists/Idebehandling</value>
+  </data>
+  <data name="Lists_IdeaRegistration_Title" xml:space="preserve">
+    <value>Idéregistrering</value>
+  </data>
+  <data name="Lists_IdeaRegistration_Url" xml:space="preserve">
+    <value>Lists/Ideregistrering</value>
   </data>
   <data name="View_AllItems_DisplayName" xml:space="preserve">
     <value>Alle elementer</value>
@@ -475,6 +502,48 @@
   <data name="ContentTypes_Timeline_Element_Description" xml:space="preserve">
     <value>Opprett et nytt tidslinjeelement</value>
   </data>
+  <data name="ContentTypes_ProjectIdea_Name" xml:space="preserve">
+    <value>Prosjektidé</value>
+  </data>
+  <data name="ContentTypes_ProjectIdea_Description" xml:space="preserve">
+    <value>Innholdstype for prosjektidéer (Idéregistrering)</value>
+  </data>
+  <data name="ContentTypes_IdeaProcessing_Name" xml:space="preserve">
+    <value>Idébehandling</value>
+  </data>
+  <data name="ContentTypes_IdeaProcessing_Description" xml:space="preserve">
+    <value>Innholdstype for idébehandling (Idébehandling)</value>
+  </data>
+  <data name="ContentTypes_ProjectAdminPermission_Name" xml:space="preserve">
+    <value>Prosjektadministrasjonstilgang</value>
+  </data>
+  <data name="ContentTypes_ProjectAdminPermission_Description" xml:space="preserve">
+    <value>Innholdstype for prosjektadministratsjonstilganger</value>
+  </data>
+  <data name="ContentTypes_ProjectAdminRole_Name" xml:space="preserve">
+    <value>Prosjektadministrasjonsrolle</value>
+  </data>
+  <data name="ContentTypes_ProjectAdminRole_Description" xml:space="preserve">
+    <value>Innholdstype for prosjektadministrasjonsroller</value>
+  </data>
+  <data name="ContentTypes_ProjectAdminRoleGroupMembership_Name" xml:space="preserve">
+    <value>Prosjektadministrasjonsrolle koblet mot SharePoint-gruppe</value>
+  </data>
+  <data name="ContentTypes_ProjectAdminRoleGroupMembership_Description" xml:space="preserve">
+    <value>Innholdstype for en prosjektadministrasjonsrolle som er koblet opp mot en SharePoint-gruppe. Enten på prosjekt- eller porteføljenivå.</value>
+  </data>
+  <data name="ContentTypes_ProjectAdminRoleProjectInfo_Name" xml:space="preserve">
+    <value>Prosjektadministrasjonsrolle koblet mot prosjektegenskaper</value>
+  </data>
+  <data name="ContentTypes_ProjectAdminRoleProjectInfo_Description" xml:space="preserve">
+    <value>Innholdstype for en prosjektadministrasjonsrolle som er koblet opp mot en egenskap på prosjektet.</value>
+  </data>
+  <data name="ContentTypes_ProjectAdminRoleSiteAdmin_Name" xml:space="preserve">
+    <value>Prosjektadministrasjonsrolle - Områdeadministrator</value>
+  </data>
+  <data name="ContentTypes_ProjectAdminRoleSiteAdmin_Description" xml:space="preserve">
+    <value>Innholdstype for en prosjektadministrasjonsrolle som er koblet opp mot områdeadministrator-tilgangen.</value>
+  </data>
   <data name="SiteFields_Project_Group" xml:space="preserve">
     <value>Kolonner for Prosjektportalen (Prosjekt)</value>
   </data>
@@ -483,6 +552,9 @@
   </data>
   <data name="SiteFields_CustomFields_Group" xml:space="preserve">
     <value>Egendefinerte kolonner for Prosjektportalen</value>
+  </data>
+  <data name="SiteFields_Idea_Group" xml:space="preserve">
+    <value>Kolonner for Prosjektportalen (Prosjektideer)</value>
   </data>
   <data name="SiteFields_GtRiskDescription_DisplayName" xml:space="preserve">
     <value>Beskrivelse av usikkerhet</value>
@@ -529,7 +601,7 @@
   <data name="SiteFields_GtProjectManager_DisplayName" xml:space="preserve">
     <value>Prosjektleder</value>
   </data>
-    <data name="SiteFields_GtProjectSupport_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtProjectSupport_DisplayName" xml:space="preserve">
     <value>Prosjektstøtte</value>
   </data>
   <data name="SiteFields_GtStatusBudget_DisplayName" xml:space="preserve">
@@ -1006,10 +1078,10 @@
   <data name="SiteFields_GtIconName_Description" xml:space="preserve">
     <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
   </data>
-   <data name="SiteFields_GtIsParentProject_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtIsParentProject_DisplayName" xml:space="preserve">
     <value>Overordnet</value>
   </data>
-   <data name="SiteFields_GtIsProgram_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtIsProgram_DisplayName" xml:space="preserve">
     <value>Program</value>
   </data>
   <data name="SiteFields_GtKey_DisplayName" xml:space="preserve">
@@ -1336,7 +1408,7 @@
   <data name="SiteFields_GtProjectManager_Description" xml:space="preserve">
     <value>Hvem er prosjektleder for prosjektet?</value>
   </data>
-    <data name="SiteFields_GtProjectSupport_Description" xml:space="preserve">
+  <data name="SiteFields_GtProjectSupport_Description" xml:space="preserve">
     <value>Hvem er prosjektstøtte for prosjektet? Dette kan være assisterende prosjektledere eller andre involverte.</value>
   </data>
   <data name="SiteFields_GtStatusBudget_Description" xml:space="preserve">
@@ -1693,6 +1765,192 @@
   <data name="SiteFields_GtODataQuery_Description" xml:space="preserve">
     <value>OData-spørring for å filtrere datakilden mot prosjekter. Spørringen brukes mot Prosjekter-listen for å kun vise data fra et utvalg prosjekter. Eksempel: GtProjectPhaseText eq 'Konsept' vil kun returnere data fra prosjekter i konsept-fasen.</value>
   </data>
+  <data name="SiteFields_GtIdeaAffectedParties_DisplayName" xml:space="preserve">
+    <value>Berørte parter</value>
+  </data>
+  <data name="SiteFields_GtIdeaAffectedParties_Description" xml:space="preserve">
+    <value>Berørte parter for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaBackground_DisplayName" xml:space="preserve">
+    <value>Bakgrunn</value>
+  </data>
+  <data name="SiteFields_GtIdeaBackground_Description" xml:space="preserve">
+    <value>Bakgrunn for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaCriticalSuccessFactors_DisplayName" xml:space="preserve">
+    <value>Kritiske suksessfaktorer</value>
+  </data>
+  <data name="SiteFields_GtIdeaCriticalSuccessFactors_Description" xml:space="preserve">
+    <value>Kritiske suksessfaktorer for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaDecision_DisplayName" xml:space="preserve">
+    <value>Beslutning</value>
+  </data>
+  <data name="SiteFields_GtIdeaDecision_Description" xml:space="preserve">
+    <value>Beslutning for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaDecisionComment_DisplayName" xml:space="preserve">
+    <value>Kommentar til beslutning</value>
+  </data>
+  <data name="SiteFields_GtIdeaDecisionComment_Description" xml:space="preserve">
+    <value>Kommentar til beslutning for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaExecutionPlan_DisplayName" xml:space="preserve">
+    <value>Overordnet gjennomføringsplan</value>
+  </data>
+  <data name="SiteFields_GtIdeaExecutionPlan_Description" xml:space="preserve">
+    <value>Overordnet gjennomføringsplan for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaExecutionPlanApproach_DisplayName" xml:space="preserve">
+    <value>Gjennomføringsplan: Tilnærming</value>
+  </data>
+  <data name="SiteFields_GtIdeaExecutionPlanApproach_Description" xml:space="preserve">
+    <value>Tilnærming for idéen (Gjennomføringsplan)</value>
+  </data>
+  <data name="SiteFields_GtIdeaExecutionResourceNeeds_DisplayName" xml:space="preserve">
+    <value>Gjennomføringsplan: Ressursbehov</value>
+  </data>
+  <data name="SiteFields_GtIdeaExecutionResourceNeeds_Description" xml:space="preserve">
+    <value>Ressursbehov for idéen (Gjennomføringsplan)</value>
+  </data>
+  <data name="SiteFields_GtIdeaExecutionSuccessFactors_DisplayName" xml:space="preserve">
+    <value>Gjennomføringsplan: Suksessfaktorer</value>
+  </data>
+  <data name="SiteFields_GtIdeaExecutionSuccessFactors_Description" xml:space="preserve">
+    <value>Suksessfaktorer for idéen (Gjennomføringsplan)</value>
+  </data>
+  <data name="SiteFields_GtIdeaExpectedGain_DisplayName" xml:space="preserve">
+    <value>Forventede gevinster</value>
+  </data>
+  <data name="SiteFields_GtIdeaExpectedGain_Description" xml:space="preserve">
+    <value>Forventede gevinster for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaIssue_DisplayName" xml:space="preserve">
+    <value>Problemstilling</value>
+  </data>
+  <data name="SiteFields_GtIdeaIssue_Description" xml:space="preserve">
+    <value>Problemstilling for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaOtherComments_DisplayName" xml:space="preserve">
+    <value>Andre kommentarer</value>
+  </data>
+  <data name="SiteFields_GtIdeaOtherComments_Description" xml:space="preserve">
+    <value>Andre kommentarer for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaOwner_DisplayName" xml:space="preserve">
+    <value>Idéeier</value>
+  </data>
+  <data name="SiteFields_GtIdeaOwner_Description" xml:space="preserve">
+    <value>Eier av idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaPossibleGains_DisplayName" xml:space="preserve">
+    <value>Mulige gevinster</value>
+  </data>
+  <data name="SiteFields_GtIdeaPossibleGains_Description" xml:space="preserve">
+    <value>Mulige gevinster for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaRecommendation_DisplayName" xml:space="preserve">
+    <value>Anbefaling</value>
+  </data>
+  <data name="SiteFields_GtIdeaRecommendation_Description" xml:space="preserve">
+    <value>Anbefaling for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaRecommendationComment_DisplayName" xml:space="preserve">
+    <value>Kommentar til anbefaling</value>
+  </data>
+  <data name="SiteFields_GtIdeaRecommendationComment_Description" xml:space="preserve">
+    <value>Kommentar til anbefaling for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaReference_DisplayName" xml:space="preserve">
+    <value>Referanse</value>
+  </data>
+  <data name="SiteFields_GtIdeaReference_Description" xml:space="preserve">
+    <value>Referanse for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaResourceRequirements_DisplayName" xml:space="preserve">
+    <value>Ressursbehov</value>
+  </data>
+  <data name="SiteFields_GtIdeaResourceRequirements_Description" xml:space="preserve">
+    <value>Ressursbehov for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaSolutionDescription_DisplayName" xml:space="preserve">
+    <value>Overordnet løsningsbeskrivelse</value>
+  </data>
+  <data name="SiteFields_GtIdeaSolutionDescription_Description" xml:space="preserve">
+    <value>Overordnet løsningsbeskrivelse for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaSolutionProposals_DisplayName" xml:space="preserve">
+    <value>Løsningsforslag</value>
+  </data>
+  <data name="SiteFields_GtIdeaSolutionProposals_Description" xml:space="preserve">
+    <value>Løsningsforslag for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaUrl_DisplayName" xml:space="preserve">
+    <value>KUR</value>
+  </data>
+  <data name="SiteFields_GtIdeaUrl_Description" xml:space="preserve">
+    <value>Konsept utredningsrapport (KUR) for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaProjectData_DisplayName" xml:space="preserve">
+    <value>Prosjektdata-tilknytning</value>
+  </data>
+  <data name="SiteFields_GtIdeaProjectData_Description" xml:space="preserve">
+    <value>Hvilken prosjektdata er idéen knyttet til?</value>
+  </data>
+  <data name="SiteFields_GtRegistratedIdea_DisplayName" xml:space="preserve">
+    <value>Registrert idé</value>
+  </data>
+  <data name="SiteFields_GtRegistratedIdea_Description" xml:space="preserve">
+    <value>Registrert idé tilknytning</value>
+  </data>
+  <data name="SiteFields_GtProjectAdminRoles_DisplayName" xml:space="preserve">
+    <value>Prosjektadministrasjonsroller</value>
+  </data>
+  <data name="SiteFields_GtProjectAdminRoles_Description" xml:space="preserve">
+    <value>Velg hvilke roller som skal kunne administrere prosjektet. Dette inkluderer handlinger som å redigere prosjektegenskaper og fase.</value>
+  </data>
+  <data name="SiteFields_GtGroupLevel_DisplayName" xml:space="preserve">
+    <value>Gruppenivå</value>
+  </data>
+  <data name="SiteFields_GtGroupLevel_Description" xml:space="preserve">
+    <value>Velg hvilket nivå SharePoint-gruppen befinner seg på.</value>
+  </data>
+  <data name="SiteFields_GtGroupName_DisplayName" xml:space="preserve">
+    <value>Gruppenavn</value>
+  </data>
+  <data name="SiteFields_GtGroupName_Description" xml:space="preserve">
+    <value>SharePoint-gruppens navn.</value>
+  </data>
+  <data name="SiteFields_GtProjectFieldName_DisplayName" xml:space="preserve">
+    <value>Feltnavn for prosjektegenskap</value>
+  </data>
+  <data name="SiteFields_GtProjectFieldName_Description" xml:space="preserve">
+    <value>Internt feltnavn for prosjektegenskap.</value>
+  </data>
+  <data name="SiteFields_GtPlannerPreviewType_DisplayName" xml:space="preserve">
+    <value>Forhåndsvisning</value>
+  </data>
+  <data name="SiteFields_GtPlannerPreviewType_Description" xml:space="preserve">
+    <value>Velg hva som skal vises i forhåndsvisningen på oppgavekortet i Planner.</value>
+  </data>
+  <data name="SiteFields_GtProjectAdminPermission_DisplayName" xml:space="preserve">
+    <value>Internt tilgangsnavn</value>
+  </data>
+  <data name="SiteFields_GtProjectAdminPermission_Description" xml:space="preserve">
+    <value>Internt tilgangsnavn som ikke må redigeres. Redigering kan knekke tilgangsstyringen.</value>
+  </data>
+  <data name="SiteFields_GtProjectAdminPermissionId_DisplayName" xml:space="preserve">
+    <value>GUID</value>
+  </data>
+  <data name="SiteFields_GtProjectAdminPermissionId_Description" xml:space="preserve">
+    <value>Intern ID for tilgangen som ikke må redigeres. Redigering kan knekke tilgangsstyringen.</value>
+  </data>
+  <data name="SiteFields_GtProjectAdminPermissions_DisplayName" xml:space="preserve">
+    <value>Tilganger</value>
+  </data>
+  <data name="SiteFields_GtProjectAdminPermissions_Description" xml:space="preserve">
+    <value>Velg hvilke tilganger denne rollen skal ha.</value>
+  </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
   </data>
@@ -2014,6 +2272,27 @@
   <data name="Choice_GtResourceAbsence_Other" xml:space="preserve">
     <value>Annet</value>
   </data>
+  <data name="Choice_GtIdeaDecision_ApprovedSync" xml:space="preserve">
+    <value>Godkjent og synkronisert</value>
+  </data>
+  <data name="Choice_GtIdeaDecision_ApprovedConcept" xml:space="preserve">
+    <value>Godkjent for konseptutredning</value>
+  </data>
+  <data name="Choice_GtIdeaDecision_Consideration" xml:space="preserve">
+    <value>Under vurdering</value>
+  </data>
+  <data name="Choice_GtIdeaDecision_Rejected" xml:space="preserve">
+    <value>Avvist</value>
+  </data>
+  <data name="Choice_GtIdeaRecommendation_ApprovedConcept" xml:space="preserve">
+    <value>Godkjent for detaljering av idé</value>
+  </data>
+  <data name="Choice_GtIdeaRecommendation_Consideration" xml:space="preserve">
+    <value>Under vurdering</value>
+  </data>
+  <data name="Choice_GtIdeaRecommendation_Rejected" xml:space="preserve">
+    <value>Avvist</value>
+  </data>
   <data name="DiceCalculator_LessThan10Additional" xml:space="preserve">
     <value>&lt;10% ekstrainnsats</value>
   </data>
@@ -2085,5 +2364,14 @@
   </data>
   <data name="ClientSidePages_ProjectTimeline_Title" xml:space="preserve">
     <value>Prosjekttidslinje</value>
+  </data>
+  <data name="ProjectAdminPermissions_EditProjectProperties" xml:space="preserve">
+    <value>Redigere prosjektegenskaper</value>
+  </data>
+  <data name="ProjectAdminPermissions_ChangePhase" xml:space="preserve">
+    <value>Endre fase</value>
+  </data>
+  <data name="ProjectAdminPermissions_ProjectStatusAdmin" xml:space="preserve">
+    <value>Administrere prosjektstatus</value>
   </data>
 </root>

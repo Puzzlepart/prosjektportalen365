@@ -57,12 +57,7 @@ export class ListSection extends BaseSection<
       return null
     }
     if (this.state.error) {
-      return (
-        <UserMessage
-          text={strings.ListSectionDataErrorMessage}
-          type={MessageBarType.error}
-        />
-      )
+      return <UserMessage text={strings.ListSectionDataErrorMessage} type={MessageBarType.error} />
     }
     return (
       <div className={`${styles.list} ms-Grid-col ms-sm12`}>
