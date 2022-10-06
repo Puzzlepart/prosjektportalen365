@@ -1,7 +1,10 @@
+import { PageContext } from '@microsoft/sp-page-context'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { IColumn, Link, Icon } from 'office-ui-fabric-react/lib'
-import { formatDate, tryParseCurrency, tryParsePercentage } from 'pp365-shared/lib/helpers'
+import { Web } from '@pnp/sp'
+import { IColumn, Icon, Link } from 'office-ui-fabric-react/lib'
 import strings from 'PortfolioWebPartsStrings'
+import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
+import { formatDate, tryParseCurrency, tryParsePercentage } from 'pp365-shared/lib/helpers'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import React from 'react'
 import { isEmpty } from 'underscore'
@@ -79,9 +82,11 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
 
 /**
  * Get default columns
+ *
+ * @param pageContext Page context
+ * @param isParentProject Is parent project
  */
-export const getDefaultColumns = (isParent?: boolean) => [
-  // context: IPortfolioAggregationContext,
+export const getDefaultColumns = (pageContext?: PageContext, isParentProject?: boolean) => [
   {
     key: 'SiteTitle',
     idx: 0,
@@ -91,24 +96,41 @@ export const getDefaultColumns = (isParent?: boolean) => [
     maxWidth: 225,
     isResizable: true,
     onRender: (item: any) => {
-      if (!isParent) {
-        //   return ( // TODO: REDO how tooltip is rendered, use panel instead and make this non dependendt of projectWebParts
-        //     <ProjectInformationTooltip
-        //       key={item.SiteId}
-        //       title={item.SiteTitle}
-        //       siteId={item.SiteId}
-        //       webUrl={item.SPWebURL}
-        //       hubSite={{
-        //         web: new Web(context.props.pageContext.site.absoluteUrl),
-        //         url: context.props.pageContext.site.absoluteUrl
-        //       }}
-        //       page='Portfolio'>
-        //       <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
-        //         {item.SiteTitle}
-        //       </Link>
-        //     </ProjectInformationTooltip>
-        //   )
-        // } else {
+      if (!isParentProject) {
+        return (
+          <>
+            <ProjectInformationPanel
+              key={item.SiteId}
+              title={item.Title}
+              siteId={item.SiteId}
+              webUrl={item.Path}
+              hubSite={{
+                web: new Web(pageContext.site.absoluteUrl),
+                url: pageContext.site.absoluteUrl
+              }}
+              page='Portfolio'
+              hideViewAllPropertiesButton={true}
+              onRenderToggleElement={(onToggle) => (
+                <Icon
+                  iconName='Info'
+                  style={{
+                    color: '666666',
+                    marginLeft: 4,
+                    position: 'relative',
+                    top: '2px',
+                    fontSize: '1.1em',
+                    cursor: 'pointer'
+                  }}
+                  onClick={onToggle}
+                />
+              )}
+            />
+            <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
+              {item.SiteTitle}
+            </Link>
+          </>
+        )
+      } else {
         return item.SPWebURL ? (
           <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
             {item.SiteTitle}
