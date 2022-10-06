@@ -250,7 +250,7 @@ export class PortalDataService {
           fieldToCreate.updateAndPushChanges(true)
         }
         await executeQuery(jsomContext)
-      } catch (error) {}
+      } catch (error) { }
     }
     try {
       Logger.log({
@@ -266,7 +266,7 @@ export class PortalDataService {
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch {}
+    } catch { }
     if (ensureList.created && properties) {
       ensureList.list.items.add(properties)
     }
@@ -439,15 +439,26 @@ export class PortalDataService {
   }
 
   /**
-   * Get project admin roles using caching (`sessionStorage` with 1 day expiry)
+   * Get project admin roles using caching (`sessionStorage` with 60 minutes expiry)
    */
   public async getProjectAdminRoles(): Promise<ProjectAdminRole[]> {
     const spItems = await this.web.lists
       .getByTitle(this._configuration.listNames.PROJECT_ADMIN_ROLES)
-      .items.usingCaching({
+      .items
+      .select(
+        'ContentTypeId',
+        'Id',
+        'Title',
+        'GtGroupName',
+        'GtGroupLevel',
+        'GtProjectFieldName',
+        'GtProjectAdminPermissions/GtProjectAdminPermissionId',
+      )
+      .expand('GtProjectAdminPermissions')
+      .usingCaching({
         key: 'project_admin_roles',
         storeName: 'session',
-        expiration: dateAdd(new Date(), 'day', 1)
+        expiration: dateAdd(new Date(), 'minute', 60)
       })
       .get<SPProjectAdminRoleItem[]>()
     return spItems.map((item) => new ProjectAdminRole(item))

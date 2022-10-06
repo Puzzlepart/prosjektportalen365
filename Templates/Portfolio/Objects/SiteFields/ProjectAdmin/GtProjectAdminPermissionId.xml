@@ -1,0 +1,1 @@
+<Field DisplayName="{resource:SiteFields_GtProjectAdminPermissionId_DisplayName}" Description="{resource:SiteFields_GtProjectAdminPermissionId_Description}"  Type="Text" ID="{f5b30ccc-0849-4b99-b4be-86d5e5c13161}" StaticName="GtProjectAdminPermissionIdId" Name="GtProjectAdminPermissionIdId" MaxLength="50" ShowInEditForm="FALSE" />
