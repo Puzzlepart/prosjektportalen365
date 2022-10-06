@@ -1,0 +1,1 @@
+<Field Description="{resource:SiteFields_GtLogComponentName_Description}" DisplayName="{resource:SiteFields_GtLogComponentName_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{d9e48b68-5809-4ae9-9769-dfd8bb47fab7}" Name="GtLogComponentName" StaticName="GtLogComponentName" Type="Text" />

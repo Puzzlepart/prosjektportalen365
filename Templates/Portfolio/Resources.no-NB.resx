@@ -1096,6 +1096,12 @@
   <data name="SiteFields_GtLogFunctionName_Description" xml:space="preserve">
     <value></value>
   </data>
+  <data name="SiteFields_GtLogComponentName_DisplayName" xml:space="preserve">
+    <value>Component Name</value>
+  </data>
+  <data name="SiteFields_GtLogComponentName_Description" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="SiteFields_GtLogLevel_DisplayName" xml:space="preserve">
     <value>Log Level</value>
   </data>

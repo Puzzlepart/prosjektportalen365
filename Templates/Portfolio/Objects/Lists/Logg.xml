@@ -14,6 +14,7 @@
                 <FieldRef Name="GtLogWebUrl" />
                 <FieldRef Name="GtLogScope" />
                 <FieldRef Name="GtLogFunctionName" />
+                <FieldRef Name="GtLogComponentName" />
                 <FieldRef Name="GtLogMessage" />
                 <FieldRef Name="GtLogLevel" />
                 <FieldRef Name="Modified" />

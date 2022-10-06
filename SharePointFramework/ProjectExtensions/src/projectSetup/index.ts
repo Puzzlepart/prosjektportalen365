@@ -141,7 +141,11 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         level: LogLevel.Info
       })
       let data = await this._fetchData()
-      this._initializeSPListLogging(data.hub.web)
+      ListLogger.init(
+        data.hub.web.lists.getByTitle('Logg'),
+        this.context.pageContext.web.absoluteUrl,
+        'ProjectSetup'
+      )
       const provisioningInfo = await this._getProvisioningInfo(data)
       Logger.log({
         message: '(ProjectSetup) [_initializeSetup]: Template selected by user',
@@ -326,7 +330,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       level: LogLevel.Info
     })
     try {
-      await ListLogger.write(strings.ProjectProvisioningStartLogText, 'Info')
+      await ListLogger.write(strings.ProjectProvisioningStartLogText)
       for (let i = 0; i < tasks.length; i++) {
         const task = tasks[i]
         if (
@@ -340,7 +344,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         })
         taskParams = await task.execute(taskParams, this._onTaskStatusUpdated.bind(this))
       }
-      await ListLogger.write(strings.ProjectProvisioningSuccessLogText, 'Info')
+      await ListLogger.write(strings.ProjectProvisioningSuccessLogText)
     } catch (error) {
       throw error
     }
@@ -397,19 +401,19 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         ),
         this.properties.extensionsLibrary
           ? this._portal.getItems(
-              this.properties.extensionsLibrary,
-              ProjectExtension,
-              {
-                ViewXml:
-                  '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
-              },
-              ['File', 'FieldValuesAsText']
-            )
+            this.properties.extensionsLibrary,
+            ProjectExtension,
+            {
+              ViewXml:
+                '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+            },
+            ['File', 'FieldValuesAsText']
+          )
           : Promise.resolve([]),
         this.properties.contentConfigList
           ? this._portal.getItems(this.properties.contentConfigList, ListContentConfig, {}, [
-              'File'
-            ])
+            'File'
+          ])
           : Promise.resolve([]),
         this._portal.getItems(
           strings.Lists_ProjectTemplateFiles_Title,
@@ -499,27 +503,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       return this._container.appendChild(placeholder)
     }
     return placeholder
-  }
-
-  /**
-   * Init SP list logging
-   *
-   * @param hubWeb - Hub web
-   * @param listName - List name
-   */
-  private _initializeSPListLogging(hubWeb: Web, listName: string = 'Logg') {
-    ListLogger.init(
-      hubWeb.lists.getByTitle(listName),
-      {
-        webUrl: 'GtLogWebUrl',
-        scope: 'GtLogScope',
-        functionName: 'GtLogFunctionName',
-        message: 'GtLogMessage',
-        level: 'GtLogLevel'
-      },
-      this.context.pageContext.web.absoluteUrl,
-      'ProjectSetup'
-    )
   }
 
   /**

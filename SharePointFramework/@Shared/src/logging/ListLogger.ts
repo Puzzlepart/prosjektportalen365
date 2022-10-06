@@ -9,6 +9,7 @@ export class IListLoggerEntry {
   functionName?: string
   message: string
   level: ListLoggerEntryLevel
+  component?: string
 }
 
 export class IListLoggerMemberMap {
@@ -17,9 +18,19 @@ export class IListLoggerMemberMap {
   functionName?: string
   message?: string
   level?: string
+  component?: string
 }
 
-export default new (class ListLogger {
+export const defaultListLoggerMemberMap = {
+  webUrl: 'GtLogWebUrl',
+  scope: 'GtLogScope',
+  functionName: 'GtLogFunctionName',
+  message: 'GtLogMessage',
+  level: 'GtLogLevel',
+  component: 'GtLogComponent',
+}
+
+class ListLogger {
   public list: any
   public memberMap: IListLoggerMemberMap
   public webUrl: string = ''
@@ -29,11 +40,11 @@ export default new (class ListLogger {
    * Initialize ListLogger
    *
    * @param list List
-   * @param memberMap Member map
    * @param webUrl Web URL
    * @param scope scope
+   * @param memberMap Member map
    */
-  public init(list: any, memberMap: IListLoggerMemberMap, webUrl?: string, scope?: string) {
+  public init(list: any, webUrl?: string, scope?: string, memberMap: IListLoggerMemberMap = defaultListLoggerMemberMap) {
     this.list = list
     this.memberMap = memberMap
     this.webUrl = webUrl
@@ -46,7 +57,7 @@ export default new (class ListLogger {
    * @param entry Entry
    */
   public log(entry: IListLoggerEntry): Promise<ItemAddResult> {
-    const spItem = this.getSpItem(entry)
+    const spItem = this._getSpItem(entry)
     return (this.list as List).items.add(spItem)
   }
 
@@ -54,10 +65,10 @@ export default new (class ListLogger {
    * Write message
    *
    * @param message Message
-   * @param level Level
    * @param functionName Function name
+   * @param level Level (defaults to Info)
    */
-  public write(message: string, level: ListLoggerEntryLevel = 'Info', functionName?: string) {
+  public write(message: string, functionName?: string, level: ListLoggerEntryLevel = 'Info') {
     return this.log({ message, level, functionName, webUrl: this.webUrl, scope: this.scope })
   }
 
@@ -66,8 +77,8 @@ export default new (class ListLogger {
    *
    * @param entry Entry
    */
-  public getSpItem(entry: IListLoggerEntry) {
-    let item: { [key: string]: string } = {}
+  private _getSpItem(entry: IListLoggerEntry) {
+    let item: Record<string, any> = {}
 
     if (this.webUrl && this.memberMap.webUrl) {
       item[this.memberMap.webUrl] = this.webUrl
@@ -82,4 +93,7 @@ export default new (class ListLogger {
     }, item)
     return item
   }
-})()
+}
+
+
+export default new ListLogger()
