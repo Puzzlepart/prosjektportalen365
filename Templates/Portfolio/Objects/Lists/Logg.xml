@@ -13,6 +13,7 @@
             <ViewFields>
                 <FieldRef Name="GtLogLevel" />
                 <FieldRef Name="GtLogWebUrl" />
+                <FieldRef Name="GtLogMessage" />
                 <FieldRef Name="GtLogScope" />
                 <FieldRef Name="GtLogFunctionName" />
                 <FieldRef Name="GtLogComponentName" />
@@ -34,6 +35,7 @@
           </Query>
           <ViewFields>
             <FieldRef Name="GtLogWebUrl" />
+            <FieldRef Name="GtLogMessage" />
             <FieldRef Name="GtLogScope" />
             <FieldRef Name="GtLogFunctionName" />
             <FieldRef Name="GtLogComponentName" />
@@ -56,6 +58,7 @@
           <ViewFields>
             <FieldRef Name="GtLogLevel" />
             <FieldRef Name="GtLogWebUrl" />
+            <FieldRef Name="GtLogMessage" />
             <FieldRef Name="GtLogFunctionName" />
             <FieldRef Name="GtLogComponentName" />
             <FieldRef Name="GtLogMessage" />
@@ -76,6 +79,7 @@
           </Query>
           <ViewFields>
             <FieldRef Name="GtLogWebUrl" />
+            <FieldRef Name="GtLogMessage" />
             <FieldRef Name="GtLogScope" />
             <FieldRef Name="GtLogComponentName" />
             <FieldRef Name="GtLogMessage" />
@@ -96,6 +100,7 @@
           </Query>
           <ViewFields>
             <FieldRef Name="GtLogWebUrl" />
+            <FieldRef Name="GtLogMessage" />
             <FieldRef Name="GtLogScope" />
             <FieldRef Name="GtLogFunctionName" />
             <FieldRef Name="GtLogMessage" />
