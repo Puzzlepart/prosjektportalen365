@@ -22,7 +22,10 @@ export const UserColumn: FunctionComponent<IRenderItemColumnProps> = ({ columnVa
       </span>
     )
   }
-  if ((column as ProjectColumn)?.searchType === SearchValueType.OWSUSER || column.fieldName.indexOf('OWSUSER') !== -1) {
+  if (
+    (column as ProjectColumn)?.searchType === SearchValueType.OWSUSER ||
+    column.fieldName.indexOf('OWSUSER') !== -1
+  ) {
     const [email, text] = columnValue.split(' | ')
     return (
       <span>

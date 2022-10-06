@@ -12,7 +12,6 @@ import { isEmpty } from 'underscore'
 import { TagsColumn } from '../PortfolioOverview/RenderItemColumn/TagsColumn'
 import ItemModal from './ItemModal'
 
-
 /**
  * Render item column
  *

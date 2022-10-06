@@ -91,7 +91,7 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
     }
     setState({ ...state, sort: { fieldName: column.fieldName, isSortedDescending } })
   }
-  
+
   /**
    * Get card ations
    *
