@@ -1,3 +1,4 @@
+import { LogLevel } from '@pnp/logging'
 import SPDataAdapter from 'data'
 import { ProjectAdminPermission } from 'data/SPDataAdapter/ProjectAdminPermission'
 import * as strings from 'ProjectWebPartsStrings'
@@ -15,6 +16,12 @@ export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPha
   let phaseSitePages = []
 
   try {
+    SPDataAdapter.configure(props.webPartContext, {
+      siteId: props.siteId,
+      webUrl: props.webUrl,
+      hubSiteUrl: props.hubSite.url,
+      logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+    })
     const [phaseFieldCtx, checklistData, welcomePage, properties] = await Promise.all([
       SPDataAdapter.getTermFieldContext(phaseField),
       SPDataAdapter.project.getChecklistData(strings.PhaseChecklistName),

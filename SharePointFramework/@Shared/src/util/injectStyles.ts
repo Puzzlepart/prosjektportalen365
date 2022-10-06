@@ -1,7 +1,7 @@
 /**
  * Inject styles
  *
- * @param {string} css CSS
+ * @param css CSS
  *
  * @returns {HTMLStyleElement} The style element
  */

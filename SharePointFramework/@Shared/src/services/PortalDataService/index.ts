@@ -249,7 +249,7 @@ export class PortalDataService {
           fieldToCreate.updateAndPushChanges(true)
         }
         await executeQuery(jsomContext)
-      } catch (error) { }
+      } catch (error) {}
     }
     try {
       Logger.log({
@@ -265,7 +265,7 @@ export class PortalDataService {
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch { }
+    } catch {}
     if (ensureList.created && properties) {
       ensureList.list.items.add(properties)
     }
@@ -443,15 +443,14 @@ export class PortalDataService {
   public async getProjectAdminRoles(): Promise<ProjectAdminRole[]> {
     const spItems = await this.web.lists
       .getByTitle(this._configuration.listNames.PROJECT_ADMIN_ROLES)
-      .items
-      .select(
+      .items.select(
         'ContentTypeId',
         'Id',
         'Title',
         'GtGroupName',
         'GtGroupLevel',
         'GtProjectFieldName',
-        'GtProjectAdminPermissions/GtProjectAdminPermissionId',
+        'GtProjectAdminPermissions/GtProjectAdminPermissionId'
       )
       .expand('GtProjectAdminPermissions')
       .usingCaching({

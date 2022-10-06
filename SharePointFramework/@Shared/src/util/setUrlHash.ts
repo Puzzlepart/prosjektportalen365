@@ -1,7 +1,7 @@
 /**
  * Set URL hash
  *
- * @param {T} hashObject Hash object
+ * @param hashObject Hash object
  */
 export function setUrlHash<T>(hashObject: T): void {
   let hash = '#'

@@ -8,7 +8,7 @@ interface IODataError {
 /**
  * Parse odata error
  *
- * @param {string} str Error string
+ * @param str Error string
  */
 function parseODataError(str: any): string {
   try {
@@ -22,7 +22,7 @@ function parseODataError(str: any): string {
 /**
  * Parse error stack which might contain e.g. odata.error object
  *
- * @param {any} stack Stack to parse
+ * @param stack Stack to parse
  */
 export function parseErrorStack(stack: any): string {
   if (stack.toString) {
