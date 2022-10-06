@@ -6,4 +6,5 @@ export class IListLoggerMemberMap {
   message?: string;
   level?: string;
   component?: string;
+  context?: string;
 }

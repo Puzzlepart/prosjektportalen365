@@ -4,13 +4,14 @@ import { IListLoggerEntry } from './IListLoggerEntry'
 import { IListLoggerMemberMap } from './IListLoggerMemberMap'
 import { ListLoggerEntryLevel } from './ListLoggerEntryLevel'
 
-export const defaultListLoggerMemberMap = {
+export const defaultListLoggerMemberMap: Record<string, string> = {
   webUrl: 'GtLogWebUrl',
   scope: 'GtLogScope',
   functionName: 'GtLogFunctionName',
   message: 'GtLogMessage',
   level: 'GtLogLevel',
   component: 'GtLogComponentName',
+  context: 'GtLogContext'
 }
 
 class ListLogger {
@@ -43,7 +44,9 @@ class ListLogger {
    */
   public log(entry: IListLoggerEntry): Promise<ItemAddResult> {
     try {
-      const spItem = this._getSpItem({ level: 'Info', ...entry })
+      const spItem = this._getSpItem({ ...this._getEntryDefaults(), ...entry })
+      // eslint-disable-next-line no-console
+      console.log(spItem)
       return (this.list as List).items.add(spItem)
     } catch (error) { }
   }
@@ -57,8 +60,14 @@ class ListLogger {
    * @param functionName Function name
    * @param level Level (defaults to Info)
    */
-  public write(message: string, functionName?: string, level: ListLoggerEntryLevel = 'Info') {
-    return this.log({ message, level, functionName, webUrl: this.webUrl, scope: this.scope })
+  public write(message: string, functionName?: string, level: ListLoggerEntryLevel = 'Info'): Promise<ItemAddResult> {
+    return this.log({
+      message,
+      level,
+      functionName,
+      webUrl: this.webUrl ?? this._getEntryDefaults().webUrl,
+      scope: this.scope
+    })
   }
 
   /**
@@ -81,6 +90,13 @@ class ListLogger {
       return _item
     }, item)
     return item
+  }
+
+  private _getEntryDefaults(): Partial<IListLoggerEntry> {
+    return {
+      level: 'Info',
+      webUrl: document.location.href.split('/').slice(0, 5).join('/')
+    } as Partial<IListLoggerEntry>
   }
 }
 

@@ -34,25 +34,19 @@ const transformProperties = (
 const projectDataSynced = async (props: IProjectInformationProps) => {
   try {
     let isSynced = false
-
     const projectDataList = props.hubSite.web.lists.getByTitle(strings.IdeaProjectDataTitle)
-
     const [projectDataItem] = await projectDataList.items
       .filter(`GtSiteUrl eq '${props.webPartContext.pageContext.web.absoluteUrl}'`)
       .select('Id')
       .get()
-
     const ideaProcessingList = props.hubSite.web.lists.getByTitle(strings.IdeaProcessingTitle)
-
     const [ideaProcessingItem] = await ideaProcessingList.items
       .filter(`GtIdeaProjectDataId eq '${projectDataItem.Id}'`)
       .select('Id, GtIdeaDecision')
       .get()
-
     if (ideaProcessingItem.GtIdeaDecision === 'Godkjent og synkronisert') {
       isSynced = true
     }
-
     return isSynced
   } catch (error) {
     return true
