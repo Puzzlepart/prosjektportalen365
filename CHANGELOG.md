@@ -34,6 +34,7 @@ Every change is marked with issue ID.
 - Fixed slow loading of project logos #648
 - Fixed a bug where default column values were wiped when importing documents through TemplateSelector dialog #761
 - Fixed a bug where users could't see the callout dialog for ProjectTimeline at the bottom of the page #771
+- Fixed a bug with ProgramAdministration where ProjectTable did not keep selected items while searching #759
 
 ## 1.6.1 - 01.07.2022
 
