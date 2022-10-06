@@ -28,7 +28,7 @@ export const HelpContentModal = (props: IHelpContentModalProps) => {
                 {content.resourceLink && (
                   <ActionButton
                     text={content.resourceLink.Description}
-                    iconProps={{ iconName: 'Page' }}
+                    iconProps={{ iconName: content.resourceLinkIcon }}
                     href={content.resourceLink.Url}
                   />
                 )}

@@ -396,19 +396,19 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         ),
         this.properties.extensionsLibrary
           ? this._portal.getItems(
-            this.properties.extensionsLibrary,
-            ProjectExtension,
-            {
-              ViewXml:
-                '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
-            },
-            ['File', 'FieldValuesAsText']
-          )
+              this.properties.extensionsLibrary,
+              ProjectExtension,
+              {
+                ViewXml:
+                  '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+              },
+              ['File', 'FieldValuesAsText']
+            )
           : Promise.resolve([]),
         this.properties.contentConfigList
           ? this._portal.getItems(this.properties.contentConfigList, ListContentConfig, {}, [
-            'File'
-          ])
+              'File'
+            ])
           : Promise.resolve([]),
         this._portal.getItems(
           strings.Lists_ProjectTemplateFiles_Title,

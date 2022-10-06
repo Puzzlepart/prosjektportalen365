@@ -11,6 +11,7 @@ export class HelpContentModel {
   public textContent: string
   public markdownContent: string
   public resourceLink: { Url: string; Description: string }
+  public resourceLinkIcon: string
   public externalUrl: string
 
   constructor(spItem: TypedHash<any>, public web: Web) {
@@ -19,6 +20,7 @@ export class HelpContentModel {
     this.urlPattern = spItem.GtURL
     this.textContent = spItem.GtTextContent
     this.resourceLink = spItem.GtResourceLink
+    this.resourceLinkIcon = spItem.GtResourceLinkIcon ?? 'Page'
     this.externalUrl = spItem.GtExternalURL
   }
 
