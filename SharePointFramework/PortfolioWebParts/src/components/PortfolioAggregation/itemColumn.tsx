@@ -123,11 +123,11 @@ export const getDefaultColumns = (pageContext?: PageContext, isParentProject?: b
                   }}
                   onClick={onToggle}
                 />
-              )}
-            />
-            <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
-              {item.SiteTitle}
-            </Link>
+              )}>
+              <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
+                {item.SiteTitle}
+              </Link>
+            </ProjectInformationPanel>
           </>
         )
       } else {

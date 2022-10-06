@@ -28,9 +28,6 @@ export const TitleColumn: FunctionComponent<ITitleColumnProps> = ({ item, props 
   if (item.Path && !props.isParentProject) {
     content = (
       <div>
-        <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
-          {item.Title}
-        </Link>
         <ProjectInformationPanel
           key={item.SiteId}
           title={item.Title}
@@ -55,8 +52,11 @@ export const TitleColumn: FunctionComponent<ITitleColumnProps> = ({ item, props 
               }}
               onClick={onToggle}
             />
-          )}
-        />
+          )}>
+          <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
+            {item.Title}
+          </Link>
+        </ProjectInformationPanel>
       </div>
     )
   } else if (item.Path && props.isParentProject) {

@@ -9,6 +9,7 @@ export const ProjectInformationPanel: FunctionComponent<IProjectInformationPanel
   const [showPanel, setShowPanel] = useState(false)
   return (
     <>
+      {props.children}
       {props.onRenderToggleElement(() => setShowPanel(!showPanel))}
       <Panel
         isOpen={showPanel}
