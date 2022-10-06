@@ -1,6 +1,5 @@
-import { IViewField, SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
-import { ChildProject } from 'models'
-import { IColumn, ShimmeredDetailsList } from 'office-ui-fabric-react'
+import { SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
+import { ShimmeredDetailsList } from 'office-ui-fabric-react'
 import { UserMessage } from 'pp365-projectwebparts/lib/components/UserMessage'
 import * as strings from 'ProgramWebPartsStrings'
 import React, { FunctionComponent, useEffect, useState } from 'react'
@@ -45,7 +44,7 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
     )
   }
 
-  if(isLoading) {
+  if (isLoading) {
     return (
       <ShimmeredDetailsList items={[]} shimmerLines={15} columns={shimmeredColumns} enableShimmer />
     )
@@ -78,13 +77,13 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
 
 export const fields: IListField[] = [
   {
-    key: "Title",
-    text: "Tittel",
-    fieldName: "Title",
+    key: 'Title',
+    text: 'Tittel',
+    fieldName: 'Title',
     onRender: (item: IProgramAdministrationItem) => (
-      <a href={item.SPWebURL} target={"_blank"} data-interception={"off"} rel={"noreferrer"}>
+      <a href={item.SPWebURL} target={'_blank'} data-interception={'off'} rel={'noreferrer'}>
         {item.Title}
       </a>
     )
   }
-];
+]

@@ -41,23 +41,23 @@ export const AddProjectDialog: FunctionComponent<IAddProjectProps> = ({ sp, cont
         maxWidth='1000px'
         dialogContentProps={dialogContentProps}>
         <div className={styles.dialogContent}>
-          {isLoading ? 
-            (
-              <ShimmeredDetailsList 
-                items={[]} 
-                shimmerLines={15} 
-                columns={shimmeredColumns} 
-                enableShimmer 
-              />
-            ) : (
-              <ProjectTable
-                fields={fields}
-                items={projects}
-                selectionMode={SelectionMode.multiple}
-                onSelectionChanged={(items: ChildProject[]): void => { selectedItem.current = items; }}
-              />
-            )
-          }
+          {isLoading ? (
+            <ShimmeredDetailsList
+              items={[]}
+              shimmerLines={15}
+              columns={shimmeredColumns}
+              enableShimmer
+            />
+          ) : (
+            <ProjectTable
+              fields={fields}
+              items={projects}
+              selectionMode={SelectionMode.multiple}
+              onSelectionChanged={(items: ChildProject[]): void => {
+                selectedItem.current = items
+              }}
+            />
+          )}
         </div>
         <DialogFooter>
           <PrimaryButton
