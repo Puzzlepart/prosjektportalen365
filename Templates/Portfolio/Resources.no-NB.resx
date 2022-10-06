@@ -1969,6 +1969,12 @@
   <data name="SiteFields_GtURL_Description" xml:space="preserve">
     <value>URL hvor hjelpeinnholdet skal vises. For eksempel SitePages/Hjem.aspx om du vil at innholdet skal vises på forsiden av prosjektet.</value>
   </data>
+  <data name="SiteFields_GtResourceLinkIcon_DisplayName" xml:space="preserve">
+    <value>Ikon for ressurslenke</value>
+  </data>
+  <data name="SiteFields_GtResourceLinkIcon_Description" xml:space="preserve">
+    <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
+  </data>
   <data name="SiteFields_GtPlannerPreviewType_DisplayName" xml:space="preserve">
     <value>Forhåndsvisning</value>
   </data>

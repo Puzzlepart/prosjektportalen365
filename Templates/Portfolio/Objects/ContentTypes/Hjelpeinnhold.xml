@@ -6,6 +6,7 @@
         <pnp:FieldRef ID="a71d534e-9eb7-4ef1-9793-6a978cad8ef1" Name="GtIconName" />
         <pnp:FieldRef ID="dea96897-22ac-48a9-b9ea-9b27ba0ca6da" Name="GtURL" />
         <pnp:FieldRef ID="5a4b9d7f-7219-443b-a517-2d23fb230673" Name="GtResourceLink" />
+        <pnp:FieldRef ID="5c03fa13-308b-4de2-a233-dd713ff473ce" Name="GtResourceLinkIcon" />
         <pnp:FieldRef ID="0aedaa7c-93fd-4a28-abf8-cd406a4a082c" Name="GtTextContent" />
         <pnp:FieldRef ID="cbdc0bb4-9274-4fdb-92a9-bc3ed8ed2fe6" Name="GtExternalURL" />
     </pnp:FieldRefs>

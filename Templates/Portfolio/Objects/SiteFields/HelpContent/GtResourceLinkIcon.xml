@@ -1,0 +1,3 @@
+<Field DisplayName="{resource:SiteFields_GtResourceLinkIcon_DisplayName}" Description="{resource:SiteFields_GtResourceLinkIcon_Description}" Name="GtResourceLinkIcon" Type="Text" ID="{5c03fa13-308b-4de2-a233-dd713ff473ce}" StaticName="GtResourceLinkIcon">
+    <Default>Page</Default>
+</Field>
