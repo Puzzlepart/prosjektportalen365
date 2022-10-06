@@ -285,6 +285,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     permission: ProjectAdminPermission,
     properties: Record<string, any>
   ) {
+    if (!this?.spfxContext?.pageContext) return false
     const storageKey = this.project.getStorageKey('getProjectAdminPermissions')
     const storageExpire = dateAdd(new Date(), 'minute', 30)
     const permissions = await new PnPClientStorage().session.getOrPut(
