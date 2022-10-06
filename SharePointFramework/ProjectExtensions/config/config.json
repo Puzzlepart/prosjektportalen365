@@ -29,8 +29,8 @@
     "help-content-application-customizer": {
       "components": [
         {
-          "entrypoint": "./lib/extensions/helpContent/index.js",
-          "manifest": "./src/extensions/helpContent/manifest.json"
+          "entrypoint": "./lib/helpContent/index.js",
+          "manifest": "./src/helpContent/manifest.json"
         }
       ]
     }
