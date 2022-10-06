@@ -28,10 +28,10 @@ export default new (class ListLogger {
   /**
    * Initialize ListLogger
    *
-   * @param {any} list List
-   * @param {IListLoggerMemberMap} memberMap Member map
-   * @param {string} webUrl Web URL
-   * @param {string} scope scope
+   * @param list List
+   * @param memberMap Member map
+   * @param webUrl Web URL
+   * @param scope scope
    */
   public init(list: any, memberMap: IListLoggerMemberMap, webUrl?: string, scope?: string) {
     this.list = list
@@ -43,7 +43,7 @@ export default new (class ListLogger {
   /**
    * Log entry
    *
-   * @param {IListLoggerEntry} entry Entry
+   * @param entry Entry
    */
   public log(entry: IListLoggerEntry): Promise<ItemAddResult> {
     const spItem = this.getSpItem(entry)
@@ -53,9 +53,9 @@ export default new (class ListLogger {
   /**
    * Write message
    *
-   * @param {string} message Message
-   * @param {ListLoggerEntryLevel} level Level
-   * @param {string} functionName Function name
+   * @param message Message
+   * @param level Level
+   * @param functionName Function name
    */
   public write(message: string, level: ListLoggerEntryLevel = 'Info', functionName?: string) {
     return this.log({ message, level, functionName, webUrl: this.webUrl, scope: this.scope })
@@ -64,7 +64,7 @@ export default new (class ListLogger {
   /**
    * Get sp item for entry
    *
-   * @param {IListLoggerEntry} entry Entry
+   * @param entry Entry
    */
   public getSpItem(entry: IListLoggerEntry) {
     let item: { [key: string]: string } = {}

@@ -21,7 +21,7 @@ export class DataSourceService {
   /**
    * Get by name
    *
-   * @param {string} name Name
+   * @param name Name
    */
   public async getByName(name: string): Promise<DataSource> {
     const [[item], _columns] = await Promise.all([
@@ -42,7 +42,7 @@ export class DataSourceService {
   /**
    * Get by category
    *
-   * @param {string} category Category
+   * @param category Category
    */
   public async getByCategory(category: string): Promise<DataSource[]> {
     const items = await this.list.items

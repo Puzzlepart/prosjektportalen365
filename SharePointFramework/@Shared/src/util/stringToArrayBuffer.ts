@@ -1,7 +1,7 @@
 /**
  * Converts string to array buffer
  *
- * @param {string} str String
+ * @param str String
  */
 export function stringToArrayBuffer(str: string) {
   const buf = new ArrayBuffer(str.length)

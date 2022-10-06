@@ -1,8 +1,8 @@
 /**
  * Redirect to URL
  *
- * @param {string} url Url
- * @param {boolean} appendSource Append source
+ * @param url Url
+ * @param appendSource Append source
  */
 export function redirect(url: string, appendSource: boolean = true): void {
   if (appendSource) {
