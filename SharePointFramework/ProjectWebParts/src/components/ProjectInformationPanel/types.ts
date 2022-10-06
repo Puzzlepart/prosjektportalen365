@@ -3,7 +3,7 @@ import { IProjectInformationProps } from '../ProjectInformation'
 
 export interface IProjectInformationPanelProps extends IProjectInformationProps {
   /**
-   * Props for the tooltip host
+   * Props for the `<Panel />`
    */
   panelProps?: IPanelProps
 }
