@@ -4,6 +4,7 @@ import {
   PlaceholderContent,
   PlaceholderName
 } from '@microsoft/sp-application-base'
+import { dateAdd, PnPClientStorage } from '@pnp/common'
 import { sp } from '@pnp/sp'
 import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
 import * as React from 'react'
@@ -54,24 +55,26 @@ export default class HelpContentApplicationCustomizer extends BaseApplicationCus
   }
 
   /**
-   * Get help content from the specified list
+   * Get help content from the specified list. The content is stored in `sessionStorage` for 4 hours.
    *
    * @param listName Name of the list
    */
   private async _getHelpContent(listName: string): Promise<HelpContentModel[]> {
     try {
-      const hub = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
-      const portal = new PortalDataService().configure({ urlOrWeb: hub.web })
-      let items = await portal.getItems(listName, HelpContentModel, {
-        ViewXml: '<View><Query><OrderBy><FieldRef Name="GtSortOrder" /></OrderBy></Query></View>'
-      })
-      items = items.filter((i) => i.matchPattern(window.location.pathname)).splice(0, 3)
-      for (let i = 0; i < items.length; i++) {
-        if (items[i].externalUrl) {
-          await items[i].fetchExternalContent()
+      return await new PnPClientStorage().session.getOrPut(`pp365_help_content_${window.location.pathname}`, async () => {
+        const hub = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
+        const portal = new PortalDataService().configure({ urlOrWeb: hub.web })
+        let items = await portal.getItems(listName, HelpContentModel, {
+          ViewXml: '<View><Query><OrderBy><FieldRef Name="GtSortOrder" /></OrderBy></Query></View>'
+        })
+        items = items.filter((i) => i.matchPattern(window.location.pathname)).splice(0, 3)
+        for (let i = 0; i < items.length; i++) {
+          if (items[i].externalUrl) {
+            await items[i].fetchExternalContent()
+          }
         }
-      }
-      return items
+        return items
+      }, dateAdd(new Date(), 'hour', 4))
     } catch (e) {
       return []
     }
