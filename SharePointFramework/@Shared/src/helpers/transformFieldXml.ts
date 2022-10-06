@@ -4,9 +4,9 @@ import { TypedHash } from '@pnp/common'
 /**
  * Transform field XML, adding and removing the specified attributes
  *
- * @param {string} schemaXml Schema xml
- * @param {Object} attributes Attributes
- * @param {Object} removeAttributes Attributes to remove
+ * @param schemaXml Schema xml
+ * @param attributes Attributes
+ * @param removeAttributes Attributes to remove
  */
 export function transformFieldXml(
   schemaXml: string,

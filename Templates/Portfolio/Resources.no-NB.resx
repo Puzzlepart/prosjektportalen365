@@ -1090,10 +1090,22 @@
   <data name="SiteFields_GtKey_Description" xml:space="preserve">
     <value></value>
   </data>
+  <data name="SiteFields_GtLogContext_DisplayName" xml:space="preserve">
+    <value>Context</value>
+  </data>
+  <data name="SiteFields_GtLogContext_Description" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="SiteFields_GtLogFunctionName_DisplayName" xml:space="preserve">
     <value>Function Name</value>
   </data>
   <data name="SiteFields_GtLogFunctionName_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtLogComponentName_DisplayName" xml:space="preserve">
+    <value>Component Name</value>
+  </data>
+  <data name="SiteFields_GtLogComponentName_Description" xml:space="preserve">
     <value></value>
   </data>
   <data name="SiteFields_GtLogLevel_DisplayName" xml:space="preserve">

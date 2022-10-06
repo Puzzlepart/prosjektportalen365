@@ -1,7 +1,7 @@
 /**
  * Make url absolute
  *
- * @param {string} serverRelativeUrl Server relative url
+ * @param serverRelativeUrl Server relative url
  */
 export function makeUrlAbsolute(serverRelativeUrl: string) {
   const baseUrl = `${window.location.protocol}//${window.location.hostname}`

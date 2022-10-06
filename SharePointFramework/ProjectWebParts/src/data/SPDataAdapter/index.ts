@@ -346,7 +346,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
               break
           }
         }
-        return unique(userPermissions, (p) => p.id)
+        return unique(userPermissions, (p) => p)
       },
       storageExpire
     )

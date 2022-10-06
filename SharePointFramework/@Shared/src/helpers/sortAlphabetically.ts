@@ -3,10 +3,10 @@ import { getObjectValue } from './'
 /**
  * Sort alphabetically
  *
- * @param {T} a Object a
- * @param {T} b Object b
- * @param {boolean} ascending Sort ascending
- * @param {string} property Property
+ * @param a Object a
+ * @param b Object b
+ * @param ascending Sort ascending
+ * @param property Property
  */
 export function sortAlphabetically<T>(a: T, b: T, ascending?: boolean, property?: string): number {
   const aValue = getObjectValue(a, property, '') || a

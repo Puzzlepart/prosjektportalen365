@@ -5,11 +5,14 @@ import { UserMessage } from '.'
 
 /**
  * Show a temporarily message
- * 
- * @param {number} defaultDuration Default duration
- * @param {IUserMessageProps} defaultProps Default props
+ *
+ * @param defaultDuration Default duration
+ * @param defaultProps Default props
  */
-export function useMessage(defaultDuration: number = 5000, defaultProps: Partial<IUserMessageProps> = {}): [IUserMessageProps, (message: IUserMessageProps, duration?: number) => void] {
+export function useMessage(
+  defaultDuration: number = 5000,
+  defaultProps: Partial<IUserMessageProps> = {}
+): [IUserMessageProps, (message: IUserMessageProps, duration?: number) => void] {
   const [state, setState] = useState<IUserMessageProps | null>(null)
 
   const props = { ...defaultProps, ...state }
@@ -18,8 +21,8 @@ export function useMessage(defaultDuration: number = 5000, defaultProps: Partial
   /**
    * Set message
    *
-   * @param {IUserMessageProps} message Message
-   * @param {number} duration Duration in ms
+   * @param message Message
+   * @param duration Duration in ms
    */
   function set(message: IUserMessageProps, duration: number = defaultDuration) {
     setState(message)

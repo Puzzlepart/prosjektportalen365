@@ -18,8 +18,8 @@ export default new (class ExcelExportService {
   /**
    * Export to Excel
    *
-   * @param {any[]} items Items
-   * @param {IColumn[]} columns Columns
+   * @param items Items
+   * @param columns Columns
    */
   public export(items: any[], columns: IColumn[]) {
     try {
