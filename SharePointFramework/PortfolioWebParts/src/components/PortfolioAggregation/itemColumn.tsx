@@ -1,6 +1,7 @@
 import { PageContext } from '@microsoft/sp-page-context'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { Web } from '@pnp/sp'
+import { UserColumn } from 'components/PortfolioOverview/RenderItemColumn/UserColumn'
 import { IColumn, Icon, Link } from 'office-ui-fabric-react/lib'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
@@ -10,6 +11,7 @@ import React from 'react'
 import { isEmpty } from 'underscore'
 import { TagsColumn } from '../PortfolioOverview/RenderItemColumn/TagsColumn'
 import ItemModal from './ItemModal'
+
 
 /**
  * Render item column
@@ -26,7 +28,7 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
   }
   const columnValue = get(item, column.fieldName, null)
 
-  const type = column?.data ? column?.data?.renderAs : column['dataType']
+  const type = column?.data?.renderAs ?? column['dataType']
 
   switch (type) {
     case 'number':
@@ -42,7 +44,7 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
     case 'datetime':
       return formatDate(columnValue, true)
     case 'user':
-      return columnValue // TODO: Implement user rendering correctly at some point
+      return columnValue && <UserColumn column={column} columnValue={columnValue} />
     case 'list': {
       const values: string[] = columnValue ? columnValue.split(';#') : []
       if (isEmpty(values)) return null
