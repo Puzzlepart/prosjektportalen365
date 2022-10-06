@@ -51,7 +51,7 @@ export default class HelpContentApplicationCustomizer extends BaseApplicationCus
     try {
       const hub = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
       const portal = new PortalDataService().configure({ urlOrWeb: hub.web })
-      let items = await portal.getItems(listName, HelpContentModel, { ViewXml: '<View><Query><OrderBy><FieldRef Name="SortOrder" /></OrderBy></Query></View>' })
+      let items = await portal.getItems(listName, HelpContentModel, { ViewXml: '<View><Query><OrderBy><FieldRef Name="GtSortOrder" /></OrderBy></Query></View>' })
       items = items.filter(i => i.matchPattern(window.location.pathname)).splice(0, 3)
       for (let i = 0; i < items.length; i++) {
         if (items[i].externalUrl) {
@@ -60,8 +60,6 @@ export default class HelpContentApplicationCustomizer extends BaseApplicationCus
       }
       return items
     } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log(e)
       return []
     }
   }

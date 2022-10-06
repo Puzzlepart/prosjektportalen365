@@ -15,11 +15,11 @@ export class HelpContentModel {
 
   constructor(spItem: TypedHash<any>, public web: Web) {
     this.title = spItem.Title
-    this.iconName = spItem.IconName
-    this.urlPattern = spItem.URL
-    this.textContent = spItem.TextContent
-    this.resourceLink = spItem.ResourceLink
-    this.externalUrl = spItem.ExternalURL
+    this.iconName = spItem.GtIconName
+    this.urlPattern = spItem.GtURL
+    this.textContent = spItem.GtTextContent
+    this.resourceLink = spItem.GtResourceLink
+    this.externalUrl = spItem.GtExternalURL
   }
 
   /**
