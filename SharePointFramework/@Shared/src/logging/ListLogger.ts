@@ -35,18 +35,24 @@ class ListLogger {
   }
 
   /**
-   * Log entry
+   * Log entry to SharePoint list
+   * 
+   * Will fail silently.
    *
    * @param entry Entry
    */
   public log(entry: IListLoggerEntry): Promise<ItemAddResult> {
-    const spItem = this._getSpItem({ level: 'Info', ...entry })
-    return (this.list as List).items.add(spItem)
+    try {
+      const spItem = this._getSpItem({ level: 'Info', ...entry })
+      return (this.list as List).items.add(spItem)
+    } catch (error) { }
   }
 
   /**
-   * Write message
-   *
+   * Write message to SharePoint list
+   * 
+   * Will fail silently.
+   * 
    * @param message Message
    * @param functionName Function name
    * @param level Level (defaults to Info)
