@@ -8,5 +8,6 @@
         <pnp:FieldRef ID="d9e48b68-5809-4ae9-9769-dfd8bb47fab7" Name="GtLogComponentName" />
         <pnp:FieldRef ID="4614d809-1d6f-42a4-a9a6-3255d2e1f9b7" Name="GtLogMessage" />
         <pnp:FieldRef ID="d141ee8b-feea-4a9d-9dc1-a6feff4abb72" Name="GtLogLevel" />
+        <pnp:FieldRef ID="bd81900e-6e27-4cd4-ad1b-1b5111ee0745" Name="GtLogContext" />
     </pnp:FieldRefs>
 </pnp:ContentType>
