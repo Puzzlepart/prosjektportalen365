@@ -60,7 +60,8 @@ export async function fetchChildProjects(dataAdapter: DataAdapter): Promise<IChi
 export async function fetchAvailableProjects(siteId: string): Promise<any[]> {
   const [{ GtChildProjects }] = await sp.web.lists
     .getByTitle('Prosjektegenskaper')
-    .items.select('GtChildProjects')
+    .items
+    .select('GtChildProjects')
     .usingCaching()
     .get()
   const childProjects: any[] = await JSON.parse(GtChildProjects)
@@ -86,7 +87,8 @@ export async function fetchAvailableProjects(siteId: string): Promise<any[]> {
 export async function addChildProject(newProjects: IChildProject[]) {
   const [{ GtChildProjects }] = await sp.web.lists
     .getByTitle('Prosjektegenskaper')
-    .items.select('GtChildProjects')
+    .items
+    .select('GtChildProjects')
     .get()
   const projects: IChildProject[] = JSON.parse(GtChildProjects)
   const updatedProjects = [...projects, ...newProjects]

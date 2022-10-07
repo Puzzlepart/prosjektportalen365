@@ -153,9 +153,7 @@ export class DataAdapter {
    * @param view
    * @param configuration
    * @param siteId
-   * @param [siteIdProperty='GtSiteIdOWSTEXT']
-   * @returns {Promise<IFetchDataForViewItemResult[]>}
-   * @memberof DataAdapter
+   * @param siteIdProperty
    */
   public async fetchDataForManagerView(
     view: PortfolioOverviewView,
@@ -170,7 +168,6 @@ export class DataAdapter {
         siteId,
         siteIdProperty
       )
-
       const items = projects.map((project) => {
         const [statusReport] = statusReports.filter(
           (res) => res[siteIdProperty] === project[siteIdProperty]
@@ -198,8 +195,6 @@ export class DataAdapter {
    * @param queryProperty Dependant on whether it is aggregated portfolio or portfolio overview
    * @param maxQueryLength Maximum length of query before pushing to array
    * @param maxProjects Maximum projects required before creating strings
-   * @returns {string[]}
-   * @memberof DataAdapter
    */
   public aggregatedQueryBuilder(
     queryProperty: string,
@@ -228,7 +223,14 @@ export class DataAdapter {
     return queryArray
   }
 
-  // do a dynamic amount of sp.search calls
+  /**
+   *  do a dynamic amount of sp.search calls
+   * 
+   * @param view
+   * @param configuration 
+   * @param siteId 
+   * @returns 
+   */
   public async fetchDataForViewBatch(
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
@@ -263,11 +265,12 @@ export class DataAdapter {
   }
 
   /**
-   *  Fetches data for portfolio views
+   * Fetches data for portfolio views
+   * 
    * @param view
    * @param configuration
    * @param siteId
-   * @param [siteIdProperty='GtSiteIdOWSTEXT']
+   * @param siteIdProperty
    */
 
   private async _fetchDataForView(
@@ -434,7 +437,6 @@ export class DataAdapter {
 
   /**
    * Fetches configuration data for the Projecttimeline
-   *
    */
   public async fetchTimelineAggregatedContent(configItemTitle: string, dataSourceName: string) {
     const [timelineConfig] = await Promise.all([this.fetchTimelineConfiguration()])
@@ -493,9 +495,9 @@ export class DataAdapter {
   /**
    * Fetch project sites
    *
-   * @param rowLimit - Row limit
-   * @param sortProperty - Sort property
-   * @param sortDirection - Sort direction
+   * @param rowLimit Row limit
+   * @param sortProperty Sort property
+   * @param sortDirection Sort direction
    */
   public async fetchProjectSites(
     rowLimit: number,
@@ -533,7 +535,6 @@ export class DataAdapter {
    *
    * @param items Items
    * @param groups Groups
-   * @param photos Photos
    * @param users Users
    */
   private _mapProjects(

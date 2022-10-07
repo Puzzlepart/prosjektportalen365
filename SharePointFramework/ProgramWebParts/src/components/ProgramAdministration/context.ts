@@ -3,8 +3,8 @@ import { createContext } from 'react'
 import { IProgramAdministrationProps, IProgramAdministrationState } from './types'
 
 export interface IProgramAdministrationContext {
-  state: IProgramAdministrationState
   props: IProgramAdministrationProps
+  state: IProgramAdministrationState
   dispatch: React.Dispatch<AnyAction>
 }
 
