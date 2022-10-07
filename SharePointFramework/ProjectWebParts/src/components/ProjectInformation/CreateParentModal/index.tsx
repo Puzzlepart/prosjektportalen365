@@ -1,18 +1,14 @@
-import React, { FunctionComponent, useState } from 'react'
+import { MenuNode, sp } from '@pnp/sp'
 import {
-  Dialog,
-  DialogType,
-  DialogFooter,
-  PrimaryButton,
-  DefaultButton,
-  Spinner,
+  DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, Spinner,
   SpinnerSize
 } from 'office-ui-fabric-react'
-import { sp, MenuNode } from '@pnp/sp'
-import { ParentModalProps } from './types'
-import { ProjectSetupCustomAction } from './types'
+import React, { FunctionComponent, useContext, useState } from 'react'
+import { ProjectInformationContext } from '../context'
+import { ProjectSetupCustomAction } from './ProjectSetupCustomAction'
 
-export const CreateParentModal: FunctionComponent<ParentModalProps> = ({ isOpen, onDismiss }) => {
+export const CreateParentModal: FunctionComponent = () => {
+  const context = useContext(ProjectInformationContext)
   const [isLoading, setLoading] = useState(false)
 
   async function applyCustomAction() {
@@ -24,8 +20,8 @@ export const CreateParentModal: FunctionComponent<ParentModalProps> = ({ isOpen,
   return (
     <>
       <Dialog
-        hidden={!isOpen}
-        onDismiss={onDismiss}
+        hidden={false}
+        onDismiss={() => context.setState({ displayCreateParentModal: false })}
         dialogContentProps={{
           type: DialogType.largeHeader,
           title: 'Overordnet område',
@@ -34,7 +30,7 @@ export const CreateParentModal: FunctionComponent<ParentModalProps> = ({ isOpen,
         }}>
         {!isLoading && (
           <DialogFooter>
-            <DefaultButton text='Avbryt' onClick={() => onDismiss()} />
+            <DefaultButton text='Avbryt' onClick={() => context.setState({ displayCreateParentModal: false })} />
             <PrimaryButton
               text='Gjør om'
               onClick={() => {

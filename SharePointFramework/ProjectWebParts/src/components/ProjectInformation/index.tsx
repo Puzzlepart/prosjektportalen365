@@ -6,7 +6,7 @@ import React, { FunctionComponent } from 'react'
 import { ProgressDialog } from '../ProgressDialog'
 import { Actions } from './Actions'
 import { ProjectInformationContext } from './context'
-import { CreateParentModal } from './ParentProjectModal'
+import { CreateParentModal } from './CreateParentModal'
 import { ParentProjectsList } from './ParentProjectsList'
 import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
@@ -38,19 +38,13 @@ export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (
               <Panel
                 type={PanelType.medium}
                 headerText={strings.ProjectPropertiesListName}
-                isOpen={state.showProjectPropertiesPanel}
-                onDismiss={() => setState({ showProjectPropertiesPanel: false })}
-                onLightDismissClick={() => setState({ showProjectPropertiesPanel: false })}
+                isOpen={state.showAllPropertiesPanel}
+                onDismiss={() => setState({ showAllPropertiesPanel: false })}
                 isLightDismiss
                 closeButtonAriaLabel={strings.CloseText}>
                 <ProjectProperties properties={state.allProperties} />
               </Panel>
-              {state.displayParentCreationModal && (
-                <CreateParentModal
-                  isOpen={state.displayParentCreationModal}
-                  onDismiss={() => setState({ displayParentCreationModal: false })}
-                />
-              )}
+              {state.displayCreateParentModal && <CreateParentModal />}
               {state.displaySyncProjectModal && <SyncProjectModal />}
             </div>
           )}

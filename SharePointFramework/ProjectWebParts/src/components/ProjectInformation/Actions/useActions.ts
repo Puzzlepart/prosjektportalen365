@@ -10,7 +10,7 @@ export const useActions = () => {
   const viewAllPropertiesAction: ActionType = [
     strings.ViewAllPropertiesLabel,
     () => {
-      context.setState({ showProjectPropertiesPanel: true })
+      context.setState({ showAllPropertiesPanel: true })
     },
     'EntryView',
     false,
@@ -49,7 +49,7 @@ export const useActions = () => {
   const transformToParentProject: ActionType = [
     strings.CreateParentProjectLabel,
     () => {
-      context.setState({ displayParentCreationModal: true })
+      context.setState({ displayCreateParentModal: true })
     },
     'Org',
     false,
