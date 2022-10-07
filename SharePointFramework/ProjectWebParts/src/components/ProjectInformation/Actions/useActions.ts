@@ -16,8 +16,7 @@ export const useActions = () => {
       context.setState({ showAllPropertiesPanel: true })
     },
     'EntryView',
-    false,
-    context.props.hideViewAllPropertiesButton
+    false
   ]
   const viewVersionHistoryAction: ActionType = [
     strings.ViewVersionHistoryText,

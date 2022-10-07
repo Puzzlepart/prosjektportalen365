@@ -77,11 +77,6 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   useIdeaProcessing?: boolean
 
   /**
-   * Hide view all properties button
-   */
-  hideViewAllPropertiesButton?: boolean
-
-  /**
    * Hide parent projects section
    */
   hideParentProjects?: boolean
