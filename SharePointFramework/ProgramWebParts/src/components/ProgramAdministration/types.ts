@@ -32,14 +32,9 @@ export interface IChildProjectListItem extends IChildProject {
   SPWebURL: string
 }
 
-export interface IProgramAdministrationItem {
-  Title: string
-  SPWebURL: string
-}
-
 export const shimmeredColumns: IColumn[] = [
   {
-    key: '1',
+    key: 'Title',
     name: 'Tittel',
     isResizable: true,
     maxWidth: 250,

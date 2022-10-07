@@ -12,7 +12,7 @@ import styles from './ProgramAdministration.module.scss'
 import { ProjectTable } from './ProjectTable'
 import { IListField } from './ProjectTable/types'
 import reducer, { DATA_LOADED, initState, SET_SELECTED_TO_DELETE } from './reducer'
-import { IProgramAdministrationItem, IProgramAdministrationProps, shimmeredColumns } from './types'
+import { IProgramAdministrationProps, shimmeredColumns } from './types'
 
 export const ProgramAdministration: FunctionComponent<IProgramAdministrationProps> = (props) => {
   const [state, dispatch] = useReducer(reducer, initState())
@@ -71,7 +71,7 @@ export const fields: IListField[] = [
     key: 'Title',
     text: 'Tittel',
     fieldName: 'Title',
-    onRender: (item: IProgramAdministrationItem) => (
+    onRender: (item) => (
       <Link href={item.SPWebURL} target='_blank' rel='noreferrer'>
         {item.Title}
       </Link>
