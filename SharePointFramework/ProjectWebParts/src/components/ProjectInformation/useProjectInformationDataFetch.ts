@@ -97,7 +97,7 @@ const fetchData = async (
  */
 export const useProjectInformationDataFetch = (
   props: IProjectInformationProps,
-  fetchCallback: (data: any) => void
+  fetchCallback: (data: Partial<IProjectInformationState>) => void
 ) => {
   useEffect(() => {
     fetchData(props).then(fetchCallback)

@@ -3,7 +3,7 @@ import { LogLevel } from '@pnp/logging'
 import { format, IProgressIndicatorProps, MessageBarType } from 'office-ui-fabric-react'
 import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
 import strings from 'ProjectWebPartsStrings'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SPDataAdapter from '../../data'
 import { ActionType } from './Actions/types'
 import {
@@ -33,6 +33,9 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
     logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
   })
 
+  /**
+   * Get custom actions
+   */
   const getCustomActions = (): ActionType[] => {
     const administerChildrenAction: ActionType = [
       strings.ChildProjectAdminLabel,
@@ -76,6 +79,13 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
     return [transformToParentProject, viewAllPropertiesAction, syncProjectPropertiesAction]
   }
 
+  /**
+   * Add message
+   * 
+   * @param text Message text 
+   * @param messageBarType Message type
+   * @param duration Duration in seconds
+   */
   const addMessage = (
     text: string,
     messageBarType: MessageBarType,
@@ -97,6 +107,11 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
     })
   }
 
+  /**
+   * On sync properties
+   * 
+   * @param force Force start sync
+   */
   const onSyncProperties = async (force: boolean = false): Promise<void> => {
     if (!stringIsNullOrEmpty(state.data.propertiesListId)) {
       const lastUpdated = await SPDataAdapter.project.getPropertiesLastUpdated(state.data)
@@ -115,7 +130,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
         props.webUrl,
         strings.ProjectPropertiesListName,
         state.data.templateParameters.ProjectContentTypeId ||
-          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: props.webTitle }
       )
       if (!created) {
@@ -137,11 +152,14 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
     }
   }
 
-  useProjectInformationDataFetch(props, (data) => {
-    const urlHash = parseUrlHash<IProjectInformationUrlHash>(true)
-    if (urlHash.syncproperties === '1') onSyncProperties(urlHash.force === '1')
-    setState({ ...data, loading: false })
-  })
+  useProjectInformationDataFetch(props, (data) => setState({ ...data, loading: false }))
+
+  useEffect(() => {
+    if (state?.data?.fieldValues) {
+      const urlHash = parseUrlHash<IProjectInformationUrlHash>(true)
+      if (urlHash.syncproperties === '1') onSyncProperties(urlHash.force === '1')
+    }
+  }, [state?.data?.fieldValues])
 
   return {
     state,

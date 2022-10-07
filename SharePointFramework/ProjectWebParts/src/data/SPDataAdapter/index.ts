@@ -52,6 +52,11 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         TypeAsString: 'Text',
         TextField: undefined
       },
+      {
+        InternalName: 'GtChildProjects',
+        TypeAsString: 'Note',
+        TextField: undefined
+      },
       ...fields.filter(({ SchemaXml, InternalName, Group }) => {
         const hideFromEditForm = SchemaXml.indexOf('ShowInEditForm="FALSE"') !== -1
         const gtPrefix = InternalName.indexOf('Gt') === 0
@@ -83,7 +88,6 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         label: strings.SyncProjectPropertiesValuesProgressDescription,
         description: strings.SyncProjectPropertiesValuesProgressDescription
       })
-
       const properties = await this.getMappedProjectProperties(
         fieldValues,
         fieldValuesText,
@@ -121,8 +125,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       const [fields, siteUsers] = await Promise.all([
         templateParameters.ProjectContentTypeId
           ? this.entityService
-              .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
-              .getEntityFields()
+            .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
+            .getEntityFields()
           : this.entityService.getEntityFields(),
         this.sp.web.siteUsers.select('Id', 'Email', 'LoginName', 'Title').get<
           {
@@ -234,7 +238,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
             break
           case 'MultiChoice':
             {
-              properties[fld.InternalName] = fldValue ? { results: fldValue } : null
+              if (fldValue) {
+                properties[fld.InternalName] = { results: fldValue }
+              }
             }
             break
           default:
@@ -341,7 +347,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
                     ).length > 0
                   )
                     userPermissions.push(...role.permissions)
-                } catch {}
+                } catch { }
               }
               break
           }
