@@ -1,9 +1,9 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "pp-portfolio-extensions",
+    "name": "Prosjektportalen 365 Portfolio Extensions",
     "id": "a3bf3315-0710-41f9-8836-2b61396d032f",
-    "version": "1.6.1.0",
+    "version": "1.6.1.1",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
@@ -16,10 +16,10 @@
     },
     "metadata": {
       "shortDescription": {
-        "default": "Prosjektportalen - PortfolioExtensions"
+        "default": "Prosjektportalen 365 Portfolio Extension"
       },
       "longDescription": {
-        "default": "Prosjektportalen - PortfolioExtensions: Collection of various extensions used in Prosjektportalen portfolio"
+        "default": "Prosjektportalen 365 Portfolio Extension: Collection of various extensions used in Prosjektportalen portfolio"
       },
       "screenshotPaths": [],
       "videoUrl": "",
