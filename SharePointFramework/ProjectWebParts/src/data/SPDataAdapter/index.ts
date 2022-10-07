@@ -49,13 +49,11 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     const fieldToSync = [
       {
         InternalName: 'Title',
-        TypeAsString: 'Text',
-        TextField: undefined
+        TypeAsString: 'Text'
       },
       {
         InternalName: 'GtChildProjects',
-        TypeAsString: 'Note',
-        TextField: undefined
+        TypeAsString: 'Note'
       },
       ...fields.filter(({ SchemaXml, InternalName, Group }) => {
         const hideFromEditForm = SchemaXml.indexOf('ShowInEditForm="FALSE"') !== -1
@@ -125,8 +123,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       const [fields, siteUsers] = await Promise.all([
         templateParameters.ProjectContentTypeId
           ? this.entityService
-            .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
-            .getEntityFields()
+              .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
+              .getEntityFields()
           : this.entityService.getEntityFields(),
         this.sp.web.siteUsers.select('Id', 'Email', 'LoginName', 'Title').get<
           {
@@ -347,7 +345,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
                     ).length > 0
                   )
                     userPermissions.push(...role.permissions)
-                } catch { }
+                } catch {}
               }
               break
           }
