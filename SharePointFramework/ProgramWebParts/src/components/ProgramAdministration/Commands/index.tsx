@@ -38,12 +38,13 @@ export const Commands: FunctionComponent = () => {
       text: strings.ProgramRemoveChildsButtonText,
       iconProps: { iconName: 'Delete' },
       buttonStyles: { root: { border: 'none' } },
-      disabled: isEmpty(context.state.selectedProjectsToDelete) || !context.props.context.pageContext.legacyPageContext.isSiteAdmin,
+      disabled:
+        isEmpty(context.state.selectedProjectsToDelete) ||
+        !context.props.context.pageContext.legacyPageContext.isSiteAdmin,
       onClick: () => {
-        (async () => {
-          const childProjects = await removeChildProjects(context.state.selectedProjectsToDelete)
+        removeChildProjects(context.state.selectedProjectsToDelete).then((childProjects) => {
           context.dispatch(CHILD_PROJECTS_REMOVED({ childProjects }))
-        })()
+        })
       },
       commandBarButtonAs: getLoadingBar()
     }

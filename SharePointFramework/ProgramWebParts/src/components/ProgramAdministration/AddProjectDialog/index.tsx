@@ -34,8 +34,7 @@ export const AddProjectDialog: FunctionComponent = () => {
         dialogContentProps={{
           type: DialogType.largeHeader,
           title: strings.ProgramAddChildsButtonText
-        }
-        }>
+        }}>
         <div className={styles.dialogContent}>
           {context.state.loading.AddProjectDialog ? (
             <ShimmeredDetailsList
@@ -63,7 +62,10 @@ export const AddProjectDialog: FunctionComponent = () => {
               context.dispatch(CHILD_PROJECTS_ADDED({ childProjects: selectedProjects.current }))
             }}
           />
-          <DefaultButton text={strings.Cancel} onClick={() => context.dispatch(TOGGLE_ADD_PROJECT_DIALOG())} />
+          <DefaultButton
+            text={strings.Cancel}
+            onClick={() => context.dispatch(TOGGLE_ADD_PROJECT_DIALOG())}
+          />
         </DialogFooter>
       </Dialog>
     </>

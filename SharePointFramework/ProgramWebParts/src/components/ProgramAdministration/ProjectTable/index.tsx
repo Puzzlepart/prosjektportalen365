@@ -6,9 +6,7 @@ import React, { FormEvent, FunctionComponent, useEffect, useMemo, useState } fro
 import styles from './ProjectTable.module.scss'
 import { IListField, IProjectTableProps } from './types'
 
-export const ProjectTable: FunctionComponent<IProjectTableProps> = (
-  props
-) => {
+export const ProjectTable: FunctionComponent<IProjectTableProps> = (props) => {
   const [items, setItems] = useState<any[]>([])
   const [selection, setSelection] = useState<any[]>([])
 
@@ -136,9 +134,7 @@ export const ProjectTable: FunctionComponent<IProjectTableProps> = (
 
   return (
     <div className={styles.root}>
-      <SearchBox
-        placeholder={strings.ProgramSearchProjectsText}
-        onChange={handleFilterChanged} />
+      <SearchBox placeholder={strings.ProgramSearchProjectsText} onChange={handleFilterChanged} />
       <div className={styles.scroll}>
         <ol
           className={styles.list}

@@ -60,8 +60,7 @@ export async function fetchChildProjects(dataAdapter: DataAdapter): Promise<IChi
 export async function fetchAvailableProjects(siteId: string): Promise<any[]> {
   const [{ GtChildProjects }] = await sp.web.lists
     .getByTitle('Prosjektegenskaper')
-    .items
-    .select('GtChildProjects')
+    .items.select('GtChildProjects')
     .usingCaching()
     .get()
   const childProjects: any[] = await JSON.parse(GtChildProjects)
@@ -69,8 +68,7 @@ export async function fetchAvailableProjects(siteId: string): Promise<any[]> {
   const availableProjects: any[] = allProjects
     .filter(
       (project) =>
-        !childProjects.some((el) => el.SiteId === project['SiteId']) &&
-        project['SiteId'] !== siteId
+        !childProjects.some((el) => el.SiteId === project['SiteId']) && project['SiteId'] !== siteId
     )
     .filter((project) => project['SPWebURL'])
   return availableProjects.map(({ Title, SiteId, SPWebURL }) => ({
@@ -82,7 +80,7 @@ export async function fetchAvailableProjects(siteId: string): Promise<any[]> {
 
 /**
  * Add child projects
- * 
+ *
  * @param newProjects New projects to add
  */
 export async function addChildProject(newProjects: IChildProject[]) {
@@ -100,16 +98,20 @@ export async function addChildProject(newProjects: IChildProject[]) {
 
 /**
  * Remove child projects
- * 
+ *
  * @param projectToRemove Projects to delete
  */
-export async function removeChildProjects(projectToRemove: IChildProject[]): Promise<IChildProject[]> {
+export async function removeChildProjects(
+  projectToRemove: IChildProject[]
+): Promise<IChildProject[]> {
   const [currentData] = await sp.web.lists
     .getByTitle('Prosjektegenskaper')
     .items.select('GtChildProjects')
     .get()
   const projects: IChildProject[] = JSON.parse(currentData.GtChildProjects)
-  const updatedProjects = projects.filter((p) => !projectToRemove.some((el) => el.SiteId === p.SiteId))
+  const updatedProjects = projects.filter(
+    (p) => !projectToRemove.some((el) => el.SiteId === p.SiteId)
+  )
   await sp.web.lists
     .getByTitle('Prosjektegenskaper')
     .items.getById(1)

@@ -15,7 +15,7 @@ export interface IProgramAdministrationProps {
 
 export interface IProgramAdministrationState {
   loading: {
-    root: boolean,
+    root: boolean
     AddProjectDialog: boolean
   }
   childProjects: IChildProject[]
