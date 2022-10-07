@@ -36,8 +36,8 @@ export const SyncProjectModal: FunctionComponent = () => {
         onDismiss={() => context.setState({ displaySyncProjectModal: false })}
         dialogContentProps={{
           type: DialogType.largeHeader,
-          title: strings.SynchronizeProjectDataTitle,
-          subText: strings.SynchronizeProjectDataDescription
+          title: strings.SyncProjectModalTitle,
+          subText: strings.SyncProjectModalSubText
         }}>
         {isLoading && (
           <Spinner

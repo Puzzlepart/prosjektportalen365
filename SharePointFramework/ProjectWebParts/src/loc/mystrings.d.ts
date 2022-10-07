@@ -176,8 +176,8 @@ declare interface IProjectWebPartsStrings {
   UseIdeaProcessingCalloutText: string
   IdeaProjectDataTitle: string
   CancelText: string
-  SynchronizeProjectDataTitle: string
-  SynchronizeProjectDataDescription: string
+  SyncProjectModalTitle: string
+  SyncProjectModalSubText: string
   IdeaProcessingTitle: string
   IdeaProcessingUrlTitle: string
   GroupLevelProject: string
