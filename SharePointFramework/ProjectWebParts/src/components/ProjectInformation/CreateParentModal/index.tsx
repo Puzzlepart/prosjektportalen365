@@ -1,18 +1,20 @@
-import React, { FunctionComponent, useState } from 'react'
+import { MenuNode, sp } from '@pnp/sp'
 import {
-  Dialog,
-  DialogType,
-  DialogFooter,
-  PrimaryButton,
   DefaultButton,
+  Dialog,
+  DialogFooter,
+  DialogType,
+  PrimaryButton,
   Spinner,
   SpinnerSize
 } from 'office-ui-fabric-react'
-import { sp, MenuNode } from '@pnp/sp'
-import { ParentModalProps } from './types'
-import { ProjectSetupCustomAction } from './types'
+import strings from 'ProjectWebPartsStrings'
+import React, { FunctionComponent, useContext, useState } from 'react'
+import { ProjectInformationContext } from '../context'
+import { ProjectSetupCustomAction } from './ProjectSetupCustomAction'
 
-export const CreateParentModal: FunctionComponent<ParentModalProps> = ({ isOpen, onDismiss }) => {
+export const CreateParentModal: FunctionComponent = () => {
+  const context = useContext(ProjectInformationContext)
   const [isLoading, setLoading] = useState(false)
 
   async function applyCustomAction() {
@@ -24,19 +26,21 @@ export const CreateParentModal: FunctionComponent<ParentModalProps> = ({ isOpen,
   return (
     <>
       <Dialog
-        hidden={!isOpen}
-        onDismiss={onDismiss}
+        hidden={false}
+        onDismiss={() => context.setState({ displayCreateParentModal: false })}
         dialogContentProps={{
           type: DialogType.largeHeader,
-          title: 'Overordnet område',
-          subText:
-            'Ønsker du å gjøre om området til et overordnet område? Denne handlingen er ikke reversibel.'
+          title: strings.CreateParentModalTitle,
+          subText: strings.CreateParentModalSubText
         }}>
         {!isLoading && (
           <DialogFooter>
-            <DefaultButton text='Avbryt' onClick={() => onDismiss()} />
+            <DefaultButton
+              text={strings.CancelText}
+              onClick={() => context.setState({ displayCreateParentModal: false })}
+            />
             <PrimaryButton
-              text='Gjør om'
+              text={strings.RedoText}
               onClick={() => {
                 saveNavigationNodes()
                 applyCustomAction()

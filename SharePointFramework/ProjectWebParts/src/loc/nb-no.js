@@ -1,5 +1,11 @@
 define([], function () {
   return {
+    CreateParentModalTitle: 'Overordnet område',
+    CreateParentModalSubText: 'Ønsker du å gjøre om området til et overordnet område? Denne handlingen er ikke reversibel.',
+    UseFramelessButtonsLabel: 'Rammeløse knapper',
+    HideParentProjectsLabel: 'Skjul overordnede prosjekter',
+    HideActionsLabel: 'Skjul knapper',
+    HideAllActionsLabel: 'Skjul alle knapper',
     ShowSubTextFieldLabel: 'Vis fasetekst',
     SyncPropertiesAfterPhaseChangeFieldLabel: 'Synkroniser prosjektegenskaper etter faseendring',
     SubTextTruncateLengthFieldLabel: 'Max lengde fasetekst',
@@ -19,8 +25,8 @@ define([], function () {
     ConfirmPhaseDialogTitle: 'Endre fase',
     CurrentPhaseViewNameFieldLabel: 'Visningsnavn for gjeldende fase',
     DocumentsListName: 'Dokumenter',
-    EditPropertiesText: 'Rediger egenskaper',
-    ViewAllPropertiesLabel: 'Vis alle egenskaper',
+    EditProjectInformationText: 'Rediger prosjektinformasjon',
+    ShowAllProjectInformationText: 'Vis all prosjektinformasjon',
     EditReportButtonText: 'Rediger status',
     PublishReportButtonText: 'Publiser',
     GetSnapshotButtonText: 'Åpne som øyeblikksbilde',
@@ -171,11 +177,13 @@ define([], function () {
     UseIdeaProcessingCalloutText: 'Dersom idébehandlingsfunksjonalitet brukes for synkronisering av prosjektegenskaper, må dette feltet være aktivert for å kunne synkronisere prosjektegenskaper fra \'Prosjektdata\' listen ned til prosjektet. Dersom det ligger et element i \'Prosjektdata\' listen med samme \'Områdeadresse\', vil det dukke opp en knapp for å sykronisere prosjektegenskaper. Dersom dette ikke er tilfellet, vil det ikke dukke opp noen knapp for å synkronisere prosjektegenskaper.',
     IdeaProjectDataTitle: 'Prosjektdata',
     CancelText: 'Avbryt',
-    SynchronizeProjectDataTitle: 'Synkroniser prosjektdata',
-    SynchronizeProjectDataDescription: 'Dersom du synkroniserer prosjektdata, vil alle prosjektegenskaper bli erstattet med prosjektegenskaper fra prosjektdata listen. Dette vil også synkroniseres til hubområdet. Dersom du vil fortsette, trykk \'Synkroniser\'.',
+    RedoText:'Gjør om',
+    SyncProjectModalTitle: 'Synkroniser prosjektdata',
+    SyncProjectModalSubText: 'Dersom du synkroniserer prosjektdata, vil alle prosjektegenskaper bli erstattet med prosjektegenskaper fra prosjektdata listen. Dette vil også synkroniseres til hubområdet. Dersom du vil fortsette, trykk \'Synkroniser\'.',
     IdeaProcessingTitle: 'Idébehandling',
     IdeaProcessingUrlTitle: 'Idebehandling',
     GroupLevelProject: 'Prosjekt',
-    GroupLevelPortfolio: 'Portefølje'
+    GroupLevelPortfolio: 'Portefølje',
+    ParentProjectsHeaderText: 'Overordnede prosjekter'
   }
 })

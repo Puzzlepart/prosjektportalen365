@@ -49,8 +49,11 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     const fieldToSync = [
       {
         InternalName: 'Title',
-        TypeAsString: 'Text',
-        TextField: undefined
+        TypeAsString: 'Text'
+      },
+      {
+        InternalName: 'GtChildProjects',
+        TypeAsString: 'Note'
       },
       ...fields.filter(({ SchemaXml, InternalName, Group }) => {
         const hideFromEditForm = SchemaXml.indexOf('ShowInEditForm="FALSE"') !== -1
@@ -83,7 +86,6 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         label: strings.SyncProjectPropertiesValuesProgressDescription,
         description: strings.SyncProjectPropertiesValuesProgressDescription
       })
-
       const properties = await this.getMappedProjectProperties(
         fieldValues,
         fieldValuesText,
@@ -234,7 +236,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
             break
           case 'MultiChoice':
             {
-              properties[fld.InternalName] = fldValue ? { results: fldValue } : null
+              if (fldValue) {
+                properties[fld.InternalName] = { results: fldValue }
+              }
             }
             break
           default:

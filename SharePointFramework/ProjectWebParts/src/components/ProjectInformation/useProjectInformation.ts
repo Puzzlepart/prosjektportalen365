@@ -3,9 +3,8 @@ import { LogLevel } from '@pnp/logging'
 import { format, IProgressIndicatorProps, MessageBarType } from 'office-ui-fabric-react'
 import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
 import strings from 'ProjectWebPartsStrings'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SPDataAdapter from '../../data'
-import { ActionType } from './Actions/types'
 import {
   IProjectInformationProps,
   IProjectInformationState,
@@ -33,49 +32,13 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
     logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
   })
 
-  const getCustomActions = (): ActionType[] => {
-    const administerChildrenAction: ActionType = [
-      strings.ChildProjectAdminLabel,
-      () => {
-        window.location.href = `${props.webPartContext.pageContext.web.serverRelativeUrl}/SitePages/${props.adminPageLink}`
-      },
-      'Org',
-      false,
-      !state.userHasEditPermission
-    ]
-    const transformToParentProject: ActionType = [
-      strings.CreateParentProjectLabel,
-      () => {
-        setState({ displayParentCreationModal: true })
-      },
-      'Org',
-      false,
-      !state.userHasEditPermission
-    ]
-    const viewAllPropertiesAction: ActionType = [
-      strings.ViewAllPropertiesLabel,
-      () => {
-        setState({ showProjectPropertiesPanel: true })
-      },
-      'EntryView',
-      false,
-      props.hideViewAllPropertiesButton
-    ]
-    const syncProjectPropertiesAction: ActionType = [
-      strings.SyncProjectPropertiesText,
-      () => {
-        setState({ displaySyncProjectModal: true })
-      },
-      'Sync',
-      false,
-      !props.useIdeaProcessing || state.isProjectDataSynced || !state.userHasEditPermission
-    ]
-    if (state.isParentProject) {
-      return [administerChildrenAction, viewAllPropertiesAction, syncProjectPropertiesAction]
-    }
-    return [transformToParentProject, viewAllPropertiesAction, syncProjectPropertiesAction]
-  }
-
+  /**
+   * Add message
+   *
+   * @param text Message text
+   * @param messageBarType Message type
+   * @param duration Duration in seconds
+   */
   const addMessage = (
     text: string,
     messageBarType: MessageBarType,
@@ -97,6 +60,11 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
     })
   }
 
+  /**
+   * On sync properties
+   *
+   * @param force Force start sync
+   */
   const onSyncProperties = async (force: boolean = false): Promise<void> => {
     if (!stringIsNullOrEmpty(state.data.propertiesListId)) {
       const lastUpdated = await SPDataAdapter.project.getPropertiesLastUpdated(state.data)
@@ -137,16 +105,18 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
     }
   }
 
-  useProjectInformationDataFetch(props, (data) => {
-    const urlHash = parseUrlHash<IProjectInformationUrlHash>(true)
-    if (urlHash.syncproperties === '1') onSyncProperties(urlHash.force === '1')
-    setState({ ...data, loading: false })
-  })
+  useProjectInformationDataFetch(props, (data) => setState({ ...data, loading: false }))
+
+  useEffect(() => {
+    if (state?.data?.fieldValues) {
+      const urlHash = parseUrlHash<IProjectInformationUrlHash>(true)
+      if (urlHash.syncproperties === '1') onSyncProperties(urlHash.force === '1')
+    }
+  }, [state?.data?.fieldValues])
 
   return {
     state,
     setState,
-    getCustomActions,
     onSyncProperties
   }
 }

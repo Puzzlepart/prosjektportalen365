@@ -1,49 +1,27 @@
-import { DisplayMode } from '@microsoft/sp-core-library'
-import { DefaultButton, IButtonProps } from 'office-ui-fabric-react/lib/Button'
-import * as strings from 'ProjectWebPartsStrings'
-import React, { useContext } from 'react'
+import { ActionButton, DefaultButton, IButtonProps } from 'office-ui-fabric-react/lib/Button'
+import React, { FunctionComponent, useContext } from 'react'
+import { isEmpty } from 'underscore'
 import { ProjectInformationContext } from '../context'
 import styles from './Actions.module.scss'
-import { IActionsProps, ActionType } from './types'
+import { useActions } from './useActions'
 
-export const Actions = (props: IActionsProps) => {
+export const Actions: FunctionComponent = () => {
   const context = useContext(ProjectInformationContext)
-  const actions: ActionType[] = [
-    [
-      strings.ViewVersionHistoryText,
-      context.state.data.versionHistoryUrl,
-      'History',
-      false,
-      !context.state.userHasEditPermission
-    ],
-    [
-      strings.EditPropertiesText,
-      context.state.data.editFormUrl,
-      'Edit',
-      false,
-      !context.state.userHasEditPermission
-    ],
-    [
-      strings.EditSiteInformationText,
-      window['_spLaunchSiteSettings'],
-      'Info',
-      false,
-      !window['_spLaunchSiteSettings'] || !context.state.userHasEditPermission
-    ],
-    ...(props.customActions || [])
-  ]
-
+  const actions = useActions()
+  if (isEmpty(actions)) return null
   return (
-    <div
-      className={styles.actions}
-      hidden={context.props.hideActions || context.props.displayMode === DisplayMode.Edit}>
+    <div className={styles.root}>
       {actions.map(([text, hrefOrOnClick, iconName, disabled, hidden], idx) => {
         const buttonProps: IButtonProps = { text, iconProps: { iconName }, disabled }
         if (typeof hrefOrOnClick === 'string') buttonProps.href = hrefOrOnClick
         else buttonProps.onClick = hrefOrOnClick
         return (
           <div key={idx} hidden={hidden}>
-            <DefaultButton {...buttonProps} className={styles.btn} />
+            {context.props.useFramelessButtons ? (
+              <ActionButton {...buttonProps} className={styles.btn} />
+            ) : (
+              <DefaultButton {...buttonProps} className={styles.btn} />
+            )}
           </div>
         )
       })}

@@ -6,31 +6,47 @@ import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
 import {
   IProjectInformationData,
   IProjectInformationProps,
-  IProjectInformationState
+  IProjectInformationState,
+  ProjectInformationParentProject
 } from './types'
 
+/**
+ * Transform properties to model `ProjectPropertyModel`
+ *
+ * @param data Data
+ * @param props Component properties for `ProjectInformation`
+ * @param useVisibleFilter Use visible filter
+ */
 const transformProperties = (
-  { columns, fields, fieldValuesText }: IProjectInformationData,
+  data: IProjectInformationData,
   props: IProjectInformationProps,
   useVisibleFilter: boolean = true
 ) => {
-  const fieldNames: string[] = Object.keys(fieldValuesText).filter((fieldName) => {
-    const [field] = fields.filter((fld) => fld.InternalName === fieldName)
+  const fieldNames: string[] = Object.keys(data.fieldValuesText).filter((fieldName) => {
+    const [field] = data.fields.filter((fld) => fld.InternalName === fieldName)
     if (!field) return false
-    if (isEmpty(columns) && ((props.showFieldExternal || {})[fieldName] || props.skipSyncToHub)) {
+    if (
+      isEmpty(data.columns) &&
+      ((props.showFieldExternal || {})[fieldName] || props.skipSyncToHub)
+    ) {
       return true
     }
-    const [column] = columns.filter((c) => c.internalName === fieldName)
+    const [column] = data.columns.filter((c) => c.internalName === fieldName)
     return column ? (useVisibleFilter ? column.isVisible(props.page) : true) : false
   })
 
   const properties = fieldNames.map((fn) => {
-    const [field] = fields.filter((fld) => fld.InternalName === fn)
-    return new ProjectPropertyModel(field, fieldValuesText[fn])
+    const [field] = data.fields.filter((fld) => fld.InternalName === fn)
+    return new ProjectPropertyModel(field, data.fieldValuesText[fn])
   })
   return properties
 }
 
+/**
+ * Checks if project data is synced
+ *
+ * @param props Component properties for `ProjectInformation`
+ */
 const projectDataSynced = async (props: IProjectInformationProps) => {
   try {
     let isSynced = false
@@ -53,16 +69,26 @@ const projectDataSynced = async (props: IProjectInformationProps) => {
   }
 }
 
+/**
+ * Fetch data for ProjectInformation
+ *
+ * @param props Component properties for `ProjectInformation`
+ */
 const fetchData = async (
   props: IProjectInformationProps
 ): Promise<Partial<IProjectInformationState>> => {
   try {
-    const [columns, propertiesData] = await Promise.all([
+    const [columns, propertiesData, parentProjects] = await Promise.all([
       SPDataAdapter.portal.getProjectColumns(),
-      SPDataAdapter.project.getPropertiesData()
+      SPDataAdapter.project.getPropertiesData(),
+      SPDataAdapter.portal.getParentProjects(
+        props.webPartContext.pageContext.web.absoluteUrl,
+        ProjectInformationParentProject
+      )
     ])
     const data: IProjectInformationData = {
       columns,
+      parentProjects,
       ...propertiesData
     }
     const properties = transformProperties(data, props)
@@ -92,12 +118,12 @@ const fetchData = async (
 /**
  * Fetch hook for ProjectInformation
  *
- * @param props Props
+ * @param props Component properties for `ProjectInformation`
  * @param fetchCallback Fetch callback
  */
 export const useProjectInformationDataFetch = (
   props: IProjectInformationProps,
-  fetchCallback: (data: any) => void
+  fetchCallback: (data: Partial<IProjectInformationState>) => void
 ) => {
   useEffect(() => {
     fetchData(props).then(fetchCallback)

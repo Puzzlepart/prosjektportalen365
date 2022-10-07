@@ -1,6 +1,12 @@
 {
   "name": "pp365-portfoliowebparts",
-  "version": "1.6.1-765.1",
+  "version": "1.6.1-760.3",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
+    "directory": "SharePointFramework/PortfolioWebParts"
+  },
+  "license": "MIT",
   "engines": {
     "node": "^12"
   },
@@ -9,6 +15,7 @@
     "serve": "gulp serve-deprecated --locale=nb-no --nobrowser",
     "package": "gulp clean --ship && gulp default --ship && gulp package-solution --ship",
     "package:ci": "gulp clean && gulp default && gulp package-solution",
+    "build": "tsc --build",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
     "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",

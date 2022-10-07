@@ -38,7 +38,7 @@ export const TitleColumn: FunctionComponent<ITitleColumnProps> = ({ item, props 
             url: props.pageContext.site.absoluteUrl
           }}
           page='Portfolio'
-          hideViewAllPropertiesButton={true}
+          hideAllActions={true}
           onRenderToggleElement={(onToggle) => (
             <Icon
               iconName='Info'

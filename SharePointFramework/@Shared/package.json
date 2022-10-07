@@ -1,9 +1,15 @@
 {
   "name": "pp365-shared",
+  "version": "1.6.1-760.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
+    "directory": "SharePointFramework/@Shared"
+  },
+  "license": "MIT",
   "engines": {
     "node": "^12"
   },
-  "version": "1.6.1-788.3",
   "description": "Shared utilities, helpers and models",
   "main": "lib/index.js",
   "scripts": {
@@ -16,7 +22,6 @@
     "publish:temp": "npm install && npm run build && npm publish --tag temp"
   },
   "author": "",
-  "license": "ISC",
   "dependencies": {
     "@microsoft/sp-core-library": "1.12.1",
     "@microsoft/sp-page-context": "1.12.1",

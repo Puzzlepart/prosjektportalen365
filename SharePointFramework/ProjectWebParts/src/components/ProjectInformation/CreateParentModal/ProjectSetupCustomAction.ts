@@ -1,10 +1,5 @@
 import { TypedHash } from '@pnp/common'
 
-export interface ParentModalProps {
-  isOpen: boolean
-  onDismiss: () => void
-}
-
 export const ProjectSetupCustomAction: TypedHash<string> = {
   Title: 'ProjectSetup',
   Location: 'ClientSideExtension.ApplicationCustomizer',

@@ -7,6 +7,22 @@ import { IEntityField } from 'sp-entityportal-service'
 import * as ProjectDataService from 'pp365-shared/lib/services/ProjectDataService'
 import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
 import { ActionType } from './Actions/types'
+import { Web } from '@pnp/sp'
+
+export class ProjectInformationParentProject {
+  public title: string
+  public url: string
+  public childProjects: any[]
+  public iconName: 'ProductVariant' | 'ProductList'
+
+  constructor(spItem: TypedHash<any>, public web: Web) {
+    this.title = spItem.Title
+    this.url = spItem.GtSiteUrl
+    this.childProjects = (JSON.parse(spItem.GtChildProjects ?? []) as any[]).map((i) => i.SPWebURL)
+    if (spItem.GtIsParentProject) this.iconName = 'ProductVariant'
+    else if (spItem.GtIsProgram) this.iconName = 'ProductList'
+  }
+}
 
 export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   /**
@@ -15,9 +31,19 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   page: 'Frontpage' | 'ProjectStatus' | 'Portfolio'
 
   /**
-   * Hide actions for the web part
+   * Hide all actions for the web part
    */
-  hideActions?: boolean
+  hideAllActions?: boolean
+
+  /**
+   * Hide specific actions for the web part
+   */
+  hideActions?: string[]
+
+  /**
+   * Use frameless buttons (`ActionButton`)
+   */
+  useFramelessButtons?: boolean
 
   /**
    * On field external changed
@@ -51,9 +77,9 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   useIdeaProcessing?: boolean
 
   /**
-   * Hide view all properties button
+   * Hide parent projects section
    */
-  hideViewAllPropertiesButton?: boolean
+  hideParentProjects?: boolean
 }
 
 export interface IProjectInformationState
@@ -84,9 +110,9 @@ export interface IProjectInformationState
   confirmActionProps?: any
 
   /**
-   * Display parent creation modal
+   * Display CreateParentModal
    */
-  displayParentCreationModal?: boolean
+  displayCreateParentModal?: boolean
 
   /**
    * Is the project a parent project
@@ -94,14 +120,14 @@ export interface IProjectInformationState
   isParentProject?: boolean
 
   /**
-   * Display sync modal
+   * Display SyncProjectModal
    */
   displaySyncProjectModal?: boolean
 
   /**
    * Show project properties panel
    */
-  showProjectPropertiesPanel?: boolean
+  showAllPropertiesPanel?: boolean
 
   /**
    * Current user has edit permission (edc568a8-9cfc-4547-9af2-d9d3aeb5aa2a)
@@ -124,6 +150,11 @@ export interface IProjectInformationData extends ProjectDataService.IGetProperti
    * Column configuration
    */
   columns?: ProjectColumn[]
+
+  /**
+   * Parent projects
+   */
+  parentProjects?: ProjectInformationParentProject[]
 
   /**
    * Array of fields from the entity
