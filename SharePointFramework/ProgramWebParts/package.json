@@ -55,8 +55,7 @@
     "react-dom": "16.9.0",
     "react-highcharts": "16.0.2",
     "sp-hubsite-service": "0.7.3",
-    "underscore": "1.9.1",
-    "zustand": "^3.6.4"
+    "underscore": "1.9.1"
   },
   "resolutions": {
     "@types/react": "16.8.8"

@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react'
-import styles from '../programAdministration.module.scss'
+import styles from '../ProgramAdministration.module.scss'
 import * as strings from 'ProgramWebPartsStrings'
 import { IAddProjectProps } from './types'
 import { ProjectTable } from '../ProjectTable'
@@ -36,7 +36,7 @@ export const AddProjectDialog: FunctionComponent<IAddProjectProps> = ({ sp, cont
     <>
       <Dialog
         hidden={false}
-        onDismiss={(): void => toggleProjectDialog()}
+        onDismiss={() => toggleProjectDialog()}
         minWidth='50em'
         maxWidth='1000px'
         dialogContentProps={dialogContentProps}>
