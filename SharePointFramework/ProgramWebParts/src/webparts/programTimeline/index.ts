@@ -3,7 +3,7 @@ import { Version } from '@microsoft/sp-core-library'
 import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
-import { ChildProject } from 'models/ChildProject'
+import { IChildProject } from 'types/IChildProject'
 import { ProgramTimeline } from 'components/ProgramTimeline/ProgramTimeline'
 import { DataAdapter } from 'data'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
@@ -21,7 +21,7 @@ export interface IProgramTimelineProps extends IBaseWebPartComponentProps {
 }
 
 export default class ProgramTimelineWebPart extends BaseProgramWebPart<IProgramTimelineProps> {
-  public childProjects: ChildProject[]
+  public childProjects: IChildProject[]
 
   public async onInit(): Promise<void> {
     await super.onInit()

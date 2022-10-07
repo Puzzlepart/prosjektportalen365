@@ -2,7 +2,10 @@ import { Spinner } from 'office-ui-fabric-react'
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar'
 import * as strings from 'ProgramWebPartsStrings'
 import React, { FunctionComponent, useContext } from 'react'
+import { isEmpty } from 'underscore'
 import { ProgramAdministrationContext } from '../context'
+import { removeChildProjects } from '../data'
+import { CHILD_PROJECTS_REMOVED, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
 
 export const Commands: FunctionComponent = () => {
   const context = useContext(ProgramAdministrationContext)
@@ -18,28 +21,29 @@ export const Commands: FunctionComponent = () => {
         <Spinner />
       </div>
     )
-    if (context.state.loading.ProgramAdministration) {
-      return commandBarButtonAs
-    }
+    return context.state.loading.root ? commandBarButtonAs : null
   }
 
   const _items: ICommandBarItemProps[] = [
     {
-      key: 'newItem',
-      text: strings.ProgramAddProjectButtonText,
+      key: 'ProgramAddChilds',
+      text: strings.ProgramAddChildsButtonText,
       iconProps: { iconName: 'Add' },
       buttonStyles: { root: { border: 'none' } },
-      // onClick: () => toggleProjectDialog(),
-      // disabled: !isSiteAdmin
+      onClick: () => context.dispatch(TOGGLE_ADD_PROJECT_DIALOG()),
+      disabled: !context.props.context.pageContext.legacyPageContext.isSiteAdmin
     },
     {
-      key: 'delete',
-      text: strings.ProgramRemoveChildButtonText,
+      key: 'ProgramRemoveChilds',
+      text: strings.ProgramRemoveChildsButtonText,
       iconProps: { iconName: 'Delete' },
       buttonStyles: { root: { border: 'none' } },
-      // disabled: selectedProjectsToDelete?.length > 0 ? false : true || !isSiteAdmin,
-      onClick: (): any => {
-        // deleteChildProjects(selectedProjectsToDelete, _sp)
+      disabled: isEmpty(context.state.selectedProjectsToDelete) || !context.props.context.pageContext.legacyPageContext.isSiteAdmin,
+      onClick: () => {
+        (async () => {
+          const childProjects = await removeChildProjects(context.props.sp, context.state.selectedProjectsToDelete)
+          context.dispatch(CHILD_PROJECTS_REMOVED({ childProjects }))
+        })()
       },
       commandBarButtonAs: getLoadingBar()
     }

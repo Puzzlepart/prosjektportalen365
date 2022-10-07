@@ -9,7 +9,7 @@ import assign from 'object-assign'
 import React from 'react'
 import * as ReactDom from 'react-dom'
 import HubSiteService, { IHubSite } from 'sp-hubsite-service'
-import { ChildProject } from 'models/ChildProject'
+import { IChildProject } from 'types/IChildProject'
 
 export abstract class BaseProgramWebPart<
   T extends IBaseComponentProps
@@ -18,7 +18,7 @@ export abstract class BaseProgramWebPart<
   public pageTitle: string
   public webPartTitle: string
   public hubSite: IHubSite
-  public childProjects: ChildProject[]
+  public childProjects: IChildProject[]
   public siteIds: string[]
 
   public abstract render(): void
@@ -43,7 +43,7 @@ export abstract class BaseProgramWebPart<
         .getByTitle('Prosjektegenskaper')
         .items.getById(1)
         .get()
-      const childProjects: ChildProject[] = JSON.parse(projectProperties.GtChildProjects)
+      const childProjects: IChildProject[] = JSON.parse(projectProperties.GtChildProjects)
       this.childProjects =
         childProjects.length > 0
           ? childProjects

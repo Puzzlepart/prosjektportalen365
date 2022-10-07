@@ -10,14 +10,14 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { IProgramRiskOverview } from 'components/ProgramRiskOverview/types'
-import { AggreationColumn } from 'models'
+import { IAggreationColumn } from 'types'
 
 interface IProgramRiskProps extends IBaseWebPartComponentProps {
   webPartTitle: string
   dataSource: string
   showExcelExportButton: boolean
   showSearchBox: boolean
-  columns: AggreationColumn[]
+  columns: IAggreationColumn[]
   showCommandBar: boolean
 }
 

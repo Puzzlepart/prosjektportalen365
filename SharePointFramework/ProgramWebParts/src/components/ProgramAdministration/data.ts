@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { SPRest } from '@pnp/sp'
-import { ChildProject } from 'models'
+import { IChildProject } from 'types'
 import _ from 'underscore'
+import { IChildProjectListItem } from './types'
 
 /**
  * Fetches all projects associated with the current hubsite context
@@ -22,7 +23,7 @@ export async function getHubSiteProjects(_sp: SPRest) {
   return PrimarySearchResults
 }
 
-async function batchFetch(sp: SPRest, hubId: string, query: string) {
+async function searchHubSite(sp: SPRest, hubId: string, query: string) {
   const searchData = await sp.search({
     Querytext: `${query} DepartmentId:{${hubId}} contentclass:STS_Site`,
     RowLimit: 500,
@@ -35,16 +36,16 @@ async function batchFetch(sp: SPRest, hubId: string, query: string) {
 }
 
 /**
- * Fetches current child projects
+ * Fetches current child projects using default caching
  *
  * @param sp SPRest instance
  */
-export async function fetchChildProjects(sp: SPRest, dataAdapter: any): Promise<ChildProject[]> {
+export async function fetchChildProjects(sp: SPRest, dataAdapter: any): Promise<IChildProject[]> {
   const queryArray = dataAdapter.aggregatedQueryBuilder('SiteId')
   const hubData = await sp.site.select('HubSiteId').get()
   const searchPromises = []
   for (const query of queryArray) {
-    searchPromises.push(batchFetch(sp, hubData.HubSiteId, query))
+    searchPromises.push(searchHubSite(sp, hubData.HubSiteId, query))
   }
   const responses: any[] = await Promise.all(searchPromises)
   const searchResults = []
@@ -60,41 +61,43 @@ export async function fetchChildProjects(sp: SPRest, dataAdapter: any): Promise<
  * @param sp SPRest instance
  * @param context Web part context
  */
-export async function fetchAvailableProjects(sp: SPRest, context: WebPartContext): Promise<any[]> {
-  const [currentProject] = await sp.web.lists
+export async function fetchAvailableProjects(sp: SPRest, context: WebPartContext): Promise<IChildProjectListItem[]> {
+  const [{ GtChildProjects }] = await sp.web.lists
     .getByTitle('Prosjektegenskaper')
-    .items.select('GtChildProjects')
+    .items
+    .select('GtChildProjects')
+    .usingCaching()
     .get()
-  const childrenSiteIds: any[] = await JSON.parse(currentProject.GtChildProjects)
+  const childProjects: any[] = await JSON.parse(GtChildProjects)
   const allProjects = await getHubSiteProjects(sp)
   const availableProjects: any[] = allProjects
     .filter(
       (project) =>
-        !childrenSiteIds.some((el) => el.SiteId === project['SiteId']) &&
+        !childProjects.some((el) => el.SiteId === project['SiteId']) &&
         project['SiteId'] !== context.pageContext.site.id.toString()
     )
     .filter((project) => project['SPWebURL'])
-  const mappedProjects: any[] = availableProjects.map(({ Title, SiteId, SPWebURL }) => {
-    return {
-      SiteId,
-      Title,
-      SPWebURL
-    }
-  })
+  const mappedProjects: IChildProjectListItem[] = availableProjects.map(({ Title, SiteId, SPWebURL }) => ({
+    SiteId,
+    Title,
+    SPWebURL
+  }))
   return mappedProjects
 }
 
 /**
- * Add a child project
+ * Add child projects
+ * 
+ * @param sp SPRest instance
+ * @param newProjects New projects to add
  */
-export async function addChildProject(sp: SPRest, newProjects: ChildProject[]) {
-  const [currentData] = await sp.web.lists
+export async function addChildProject(sp: SPRest, newProjects: IChildProject[]) {
+  const [{ GtChildProjects }] = await sp.web.lists
     .getByTitle('Prosjektegenskaper')
     .items.select('GtChildProjects')
     .get()
-  const projects: ChildProject[] = JSON.parse(currentData.GtChildProjects)
+  const projects: IChildProject[] = JSON.parse(GtChildProjects)
   const updatedProjects = [...projects, ...newProjects]
-
   await sp.web.lists
     .getByTitle('Prosjektegenskaper')
     .items.getById(1)
@@ -104,15 +107,16 @@ export async function addChildProject(sp: SPRest, newProjects: ChildProject[]) {
 /**
  * Remove child elements
  */
-export async function removeChildProjects(sp: SPRest, toDelete: ChildProject[]) {
+export async function removeChildProjects(sp: SPRest, toDelete: IChildProject[]): Promise<IChildProject[]> {
   const [currentData] = await sp.web.lists
     .getByTitle('Prosjektegenskaper')
     .items.select('GtChildProjects')
     .get()
-  const projects: ChildProject[] = JSON.parse(currentData.GtChildProjects)
+  const projects: IChildProject[] = JSON.parse(currentData.GtChildProjects)
   const updatedProjects = projects.filter((p) => !toDelete.some((el) => el.SiteId === p.SiteId))
   await sp.web.lists
     .getByTitle('Prosjektegenskaper')
     .items.getById(1)
     .update({ GtChildProjects: JSON.stringify(updatedProjects) })
+  return updatedProjects
 }

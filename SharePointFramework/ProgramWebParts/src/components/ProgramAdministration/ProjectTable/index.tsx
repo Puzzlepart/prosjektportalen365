@@ -1,20 +1,19 @@
-import React from 'react'
-import strings from 'ProgramWebPartsStrings'
-import styles from './ProjectTable.module.scss'
-import { IProjectTableProps, IListField } from './types'
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
-import { SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox'
+import { SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
+import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
+import strings from 'ProgramWebPartsStrings'
+import React, { FormEvent, FunctionComponent, useEffect, useMemo, useState } from 'react'
+import styles from './ProjectTable.module.scss'
+import { IListField, IProjectTableProps } from './types'
 
-export const ProjectTable: React.FunctionComponent<IProjectTableProps> = (
-  props: IProjectTableProps
-): JSX.Element => {
-  const [items, setItems] = React.useState<any[]>([])
-  const [selection, setSelection] = React.useState<any[]>([])
+export const ProjectTable: FunctionComponent<IProjectTableProps> = (
+  props
+) => {
+  const [items, setItems] = useState<any[]>([])
+  const [selection, setSelection] = useState<any[]>([])
 
-  React.useEffect((): void => setItems(props.items), [props.items])
-
-  React.useEffect((): void => props.onSelectionChanged(selection), [selection])
+  useEffect(() => setItems(props.items), [props.items])
+  useEffect(() => props.onSelectionChanged(selection), [selection])
 
   const handleItemClicked = (item: any, selecting: boolean): void => {
     if (props.selectionMode === SelectionMode.none) return
@@ -76,7 +75,7 @@ export const ProjectTable: React.FunctionComponent<IProjectTableProps> = (
           root: { top: '50%', transform: 'translateY(-50%)' },
           checkbox: { borderRadius: '16px' }
         }}
-        onChange={(ev: React.FormEvent, newChecked: boolean): void => {
+        onChange={(ev: FormEvent, newChecked: boolean): void => {
           onChange(newChecked)
           ev.stopPropagation()
         }}
@@ -84,16 +83,16 @@ export const ProjectTable: React.FunctionComponent<IProjectTableProps> = (
     )
   }
 
-  const headers: JSX.Element[] = React.useMemo((): JSX.Element[] => {
+  const headers: JSX.Element[] = useMemo((): JSX.Element[] => {
     const checked: boolean =
       props.items && props.items.every((item: any): boolean => selection.indexOf(item) >= 0)
     return [
       <li
         key='checkbox'
         className={styles.column}
-        onClick={(ev: React.MouseEvent): void => {
+        onClick={(event) => {
+          event.preventDefault()
           handleHeaderCheckboxClicked(!checked)
-          ev.preventDefault()
         }}>
         {renderCheckbox(checked, handleHeaderCheckboxClicked)}
       </li>,
@@ -113,9 +112,9 @@ export const ProjectTable: React.FunctionComponent<IProjectTableProps> = (
       <li
         key='checkbox'
         className={styles.column}
-        onClick={(e: React.MouseEvent): void => {
+        onClick={(event): void => {
+          event.preventDefault()
           handleItemClicked(item, !checked)
-          e.preventDefault()
         }}>
         {renderCheckbox(checked, (newChecked: boolean): void =>
           handleItemClicked(item, newChecked)
@@ -137,7 +136,9 @@ export const ProjectTable: React.FunctionComponent<IProjectTableProps> = (
 
   return (
     <div className={styles.root}>
-      <SearchBox placeholder={strings.ProgramSearchProjectsText} onChange={handleFilterChanged} />
+      <SearchBox
+        placeholder={strings.ProgramSearchProjectsText}
+        onChange={handleFilterChanged} />
       <div className={styles.scroll}>
         <ol
           className={styles.list}

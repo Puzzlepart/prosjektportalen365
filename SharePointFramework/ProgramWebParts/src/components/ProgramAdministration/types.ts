@@ -2,7 +2,7 @@ import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { DataAdapter } from 'data'
 import { SPRest } from '@pnp/sp'
 import { IColumn, MessageBarType } from 'office-ui-fabric-react'
-import { ChildProject } from 'models'
+import { IChildProject } from 'types'
 
 export interface IProgramAdministrationProps {
   webPartTitle: string
@@ -13,13 +13,23 @@ export interface IProgramAdministrationProps {
   title: string
 }
 
-export interface UserMessageProps {
-  text: string
-  messageBarType: MessageBarType
+export interface IProgramAdministrationState {
+  loading: {
+    root: boolean,
+    AddProjectDialog: boolean
+  }
+  childProjects: IChildProject[]
+  displayAddProjectDialog: boolean
+  availableProjects: IChildProjectListItem[]
+  selectedProjectsToDelete: IChildProject[]
+  error: {
+    text: string
+    messageBarType: MessageBarType
+  }
 }
 
-export interface ChildProjectListItem extends ChildProject {
-  GtSiteUrl: string
+export interface IChildProjectListItem extends IChildProject {
+  SPWebURL: string
 }
 
 export interface IProgramAdministrationItem {
