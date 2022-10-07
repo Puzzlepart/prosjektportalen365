@@ -1,6 +1,12 @@
 {
   "name": "pp365-portfolioextensions",
-  "version": "1.6.1",
+  "version": "1.6.1-760.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
+    "directory": "SharePointFramework/PortfolioExtensions"
+  },
+  "license": "MIT",
   "engines": {
     "node": "^12"
   },
@@ -11,11 +17,13 @@
     "serve": "gulp serve-deprecated --locale=nb-no",
     "package": "gulp clean && gulp default --ship && gulp package-solution --ship",
     "package:ci": "gulp clean && gulp default && gulp package-solution",
+    "build": "tsc --build",
     "deploy": "gulp uploadAppPkg && gulp deploySppkg",
     "packageAndDeploy": "npm run package && npm run deploy",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
-    "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent"
+    "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",
+    "publish:temp": "npm install && npm run build && npm publish --tag temp"
   },
   "dependencies": {
     "@fluentui/react": "8.96.0",
