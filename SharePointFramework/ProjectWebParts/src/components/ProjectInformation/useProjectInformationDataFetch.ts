@@ -12,7 +12,7 @@ import {
 
 /**
  * Transform properties to model `ProjectPropertyModel`
- * 
+ *
  * @param data Data
  * @param props Component properties for `ProjectInformation`
  * @param useVisibleFilter Use visible filter
@@ -25,7 +25,10 @@ const transformProperties = (
   const fieldNames: string[] = Object.keys(data.fieldValuesText).filter((fieldName) => {
     const [field] = data.fields.filter((fld) => fld.InternalName === fieldName)
     if (!field) return false
-    if (isEmpty(data.columns) && ((props.showFieldExternal || {})[fieldName] || props.skipSyncToHub)) {
+    if (
+      isEmpty(data.columns) &&
+      ((props.showFieldExternal || {})[fieldName] || props.skipSyncToHub)
+    ) {
       return true
     }
     const [column] = data.columns.filter((c) => c.internalName === fieldName)
