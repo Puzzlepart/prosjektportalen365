@@ -34,7 +34,6 @@ export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (
               <ParentProjectsList />
               <Actions />
               <ProgressDialog {...state.progress} />
-              {state.confirmActionProps && <ConfirmDialog {...state.confirmActionProps} />}
               <Panel
                 type={PanelType.medium}
                 headerText={strings.ProjectPropertiesListName}
@@ -44,6 +43,7 @@ export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (
                 closeButtonAriaLabel={strings.CloseText}>
                 <ProjectProperties properties={state.allProperties} />
               </Panel>
+              {state.confirmActionProps && <ConfirmDialog {...state.confirmActionProps} />}
               {state.displayCreateParentModal && <CreateParentModal />}
               {state.displaySyncProjectModal && <SyncProjectModal />}
             </div>

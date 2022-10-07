@@ -29,8 +29,8 @@ declare interface IProjectWebPartsStrings {
   ConfirmPhaseDialogTitle: string
   CurrentPhaseViewNameFieldLabel: string
   DocumentsListName: string
-  EditPropertiesText: string
-  ViewAllPropertiesLabel: string
+  EditProjectInformationText: string
+  ShowAllProjectInformationText: string
   EditReportButtonText: string
   PublishReportButtonText: string
   PublishedStatusReport: string

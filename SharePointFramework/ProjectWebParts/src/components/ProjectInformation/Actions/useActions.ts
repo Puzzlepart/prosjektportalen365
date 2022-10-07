@@ -4,11 +4,14 @@ import { useContext } from 'react'
 import { ProjectInformationContext } from '../context'
 import { ActionType } from './types'
 
+/**
+ * Logic hook for `<Actions />` component.
+ */
 export const useActions = () => {
   const context = useContext(ProjectInformationContext)
   if (context.props.hideAllActions || context.props.displayMode === DisplayMode.Edit) return []
-  const viewAllPropertiesAction: ActionType = [
-    strings.ViewAllPropertiesLabel,
+  const showAllProjectInformationAction: ActionType = [
+    strings.ShowAllProjectInformationText,
     () => {
       context.setState({ showAllPropertiesPanel: true })
     },
@@ -23,8 +26,8 @@ export const useActions = () => {
     false,
     !context.state.userHasEditPermission
   ]
-  const editPropertiesAction: ActionType = [
-    strings.EditPropertiesText,
+  const editProjectInformationAction: ActionType = [
+    strings.EditProjectInformationText,
     context.state.data.editFormUrl,
     'Edit',
     false,
@@ -67,9 +70,9 @@ export const useActions = () => {
       !context.state.userHasEditPermission
   ]
   const actionsMap: Record<string, ActionType> = {
-    viewAllPropertiesAction,
+    showAllProjectInformationAction,
     viewVersionHistoryAction,
-    editPropertiesAction,
+    editProjectInformationAction,
     editSiteInformationAction,
     administerChildrenAction: context.state.isParentProject ? administerChildrenAction : null,
     transformToParentProject: !context.state.isParentProject ? transformToParentProject : null,

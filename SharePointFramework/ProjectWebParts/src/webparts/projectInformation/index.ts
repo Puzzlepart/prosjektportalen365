@@ -51,16 +51,16 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<
                   disabled: this.properties.hideAllActions,
                   options: [
                     {
-                      key: 'viewAllPropertiesAction',
-                      text: strings.ViewAllPropertiesLabel
+                      key: 'showAllProjectInformationAction',
+                      text: strings.ShowAllProjectInformationText
                     },
                     {
                       key: 'viewVersionHistoryAction',
                       text: strings.ViewVersionHistoryText
                     },
                     {
-                      key: 'editPropertiesAction',
-                      text: strings.EditPropertiesText
+                      key: 'editProjectInformationAction',
+                      text: strings.EditProjectInformationText
                     },
                     {
                       key: 'editSiteInformationAction',
