@@ -17,10 +17,11 @@ export const Actions: FunctionComponent = () => {
         else buttonProps.onClick = hrefOrOnClick
         return (
           <div key={idx} hidden={hidden}>
-            {context.props.useFramelessButtons
-              ? <ActionButton {...buttonProps} className={styles.btn} />
-              : <DefaultButton {...buttonProps} className={styles.btn} />
-            }
+            {context.props.useFramelessButtons ? (
+              <ActionButton {...buttonProps} className={styles.btn} />
+            ) : (
+              <DefaultButton {...buttonProps} className={styles.btn} />
+            )}
           </div>
         )
       })}
