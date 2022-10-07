@@ -1,5 +1,5 @@
 import { DataAdapter } from 'data'
-import { IAggregatedPortfolioPropertyPane } from 'models'
+import { IAggregatedPortfolioPropertyPane } from 'types'
 
 export interface IProgramRiskOverview {
   webPartTitle: string

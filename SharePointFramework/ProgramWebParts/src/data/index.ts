@@ -20,19 +20,19 @@ import HubSiteService, { IHubSite } from 'sp-hubsite-service'
 import _ from 'underscore'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
-import { ChildProject } from 'models/ChildProject'
+import { IChildProject } from 'types/IChildProject'
 
 export class DataAdapter {
   private _portalDataService: PortalDataService
   private _dataSourceService: DataSourceService
   private _sp: SPRest
   private _webPartContext: WebPartContext
-  private _childProjects: ChildProject[]
+  private _childProjects: IChildProject[]
 
   constructor(
     public context: WebPartContext,
     public hubSite: IHubSite,
-    childProjects: ChildProject[]
+    childProjects: IChildProject[]
   ) {
     this._webPartContext = context
     this._childProjects = childProjects

@@ -1,6 +1,6 @@
 import { DataAdapter } from 'data'
 import { IPortfolioConfiguration } from 'pp365-portfoliowebparts/lib/interfaces'
-import { ICommandBarProperties } from 'models'
+import { ICommandBarProperties } from 'types'
 
 export interface IProgramStatusProps {
   webPartTitle: string

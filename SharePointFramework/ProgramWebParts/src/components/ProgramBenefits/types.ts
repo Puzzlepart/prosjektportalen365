@@ -1,5 +1,5 @@
 import { DataAdapter } from 'data'
-import { IAggregatedPortfolioPropertyPane } from 'models/PropertyPanes'
+import { IAggregatedPortfolioPropertyPane } from 'types/IAggregatedPortfolioPropertyPane'
 import { IAggregatedSearchListColumn } from 'pp365-portfoliowebparts/lib/interfaces'
 
 export interface IProgramBenefitsProps {
