@@ -1,5 +1,8 @@
 define([], function () {
   return {
+    HideParentProjectsLabel: 'Skjul overordnede prosjekter',
+    HideActionsLabel: 'Skjul knapper',
+    HideAllActionsLabel: 'Skjul alle knapper',
     ShowSubTextFieldLabel: 'Vis fasetekst',
     SyncPropertiesAfterPhaseChangeFieldLabel: 'Synkroniser prosjektegenskaper etter faseendring',
     SubTextTruncateLengthFieldLabel: 'Max lengde fasetekst',
@@ -176,6 +179,7 @@ define([], function () {
     IdeaProcessingTitle: 'Idébehandling',
     IdeaProcessingUrlTitle: 'Idebehandling',
     GroupLevelProject: 'Prosjekt',
-    GroupLevelPortfolio: 'Portefølje'
+    GroupLevelPortfolio: 'Portefølje',
+    ParentProjectsHeaderText: 'Overordnede prosjekter'
   }
 })

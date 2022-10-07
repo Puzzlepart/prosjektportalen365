@@ -1,4 +1,7 @@
 declare interface IProjectWebPartsStrings {
+  HideParentProjectsLabel: string | ReactElement<any, string | JSXElementConstructor<any>>
+  HideAllActionsLabel: string | ReactElement<any, string | JSXElementConstructor<any>>
+  HideActionsLabel: string
   ShowSubTextFieldLabel: string
   SyncPropertiesAfterPhaseChangeFieldLabel: string
   SubTextTruncateLengthFieldLabel: string
@@ -175,6 +178,7 @@ declare interface IProjectWebPartsStrings {
   IdeaProcessingUrlTitle: string
   GroupLevelProject: string
   GroupLevelPortfolio: string
+  ParentProjectsHeaderText: string
 }
 
 declare module 'ProjectWebPartsStrings' {
