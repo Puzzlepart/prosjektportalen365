@@ -53,6 +53,46 @@ export class PortalDataService {
   }
 
   /**
+   * Get parent projects from the projects list in the portfolio site.
+   * 
+   * @note Your model class specified in the constructor param should include a 
+   * property `childProjects` (array of strings which is the web/project URLs).
+   * 
+   * @param webUrl Web URL
+   * @param constructor Constructor / model class
+   */
+  public async getParentProjects<T>(
+    webUrl: string,
+    constructor: new (item: any, web: Web) => T
+  ): Promise<T[]> {
+    try {
+      const projectItems = await this.getItems(
+        this._configuration.listNames.PROJECTS,
+        constructor,
+        {
+          ViewXml: `<View>
+                      <Query>
+                          <OrderBy>
+                              <FieldRef Name="ID" />
+                          </OrderBy>
+                          <Where>
+                              <Contains>
+                                  <FieldRef Name="GtChildProjects" />
+                                  <Value Type="Note">${webUrl}</Value>
+                              </Contains>
+                          </Where>
+                      </Query>
+                  </View>`
+        },
+        []
+      )
+      return projectItems.filter(p => p['childProjects'] ? p['childProjects'].includes(webUrl) : true)
+    } catch (error) {
+      return []
+    }
+  }
+
+  /**
    * Get project columns
    */
   public async getProjectColumns(): Promise<ProjectColumn[]> {
@@ -177,7 +217,7 @@ export class PortalDataService {
   /**
    * Sync list from hub to the specified URL
    *
-   * Skips fields that has ShowInEditForm set to FALSE
+   * Skips fields that has `ShowInEditForm` set to `FALSE`
    *
    * @param url Url
    * @param listName List name
@@ -250,7 +290,7 @@ export class PortalDataService {
           fieldToCreate.updateAndPushChanges(true)
         }
         await executeQuery(jsomContext)
-      } catch (error) {}
+      } catch (error) { }
     }
     try {
       Logger.log({
@@ -266,7 +306,7 @@ export class PortalDataService {
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch {}
+    } catch { }
     if (ensureList.created && properties) {
       ensureList.list.items.add(properties)
     }
@@ -335,18 +375,13 @@ export class PortalDataService {
     expands?: string[]
   ): Promise<T[]> {
     try {
-      console.log(1, listName, query)
       const list = this.web.lists.getByTitle(listName)
       let items: any[]
-      console.log(2, listName, query)
       if (query) {
-        console.log(3, expands)
         items = await list.usingCaching().getItemsByCAMLQuery(query, ...(expands ?? []))
       } else {
-        console.log(3, expands)
         items = await list.usingCaching().items.usingCaching().get()
       }
-      console.log(4)
       return items.map((item) => new constructor(item, this.web))
     } catch (error) {
       throw error
