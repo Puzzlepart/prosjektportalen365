@@ -4,6 +4,7 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader'
+import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/PropertyFieldMultiSelect'
 import { PropertyFieldToggleWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldToggleWithCallout'
 import { IProjectInformationProps, ProjectInformation } from 'components/ProjectInformation'
 import * as strings from 'ProjectWebPartsStrings'
@@ -41,8 +42,50 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<
                 PropertyPaneToggle('skipSyncToHub', {
                   label: strings.SkipSyncToHubLabel
                 }),
+                PropertyPaneToggle('hideAllActions', {
+                  label: strings.HideAllActionsLabel
+                }),
+                PropertyFieldMultiSelect('hideActions', {
+                  key: 'hideActions',
+                  label: strings.HideActionsLabel,
+                  disabled: this.properties.hideAllActions,
+                  options: [
+                    {
+                      key: 'viewAllPropertiesAction',
+                      text: strings.ViewAllPropertiesLabel
+                    },
+                    {
+                      key: 'viewVersionHistoryAction',
+                      text: strings.ViewVersionHistoryText
+                    },
+                    {
+                      key: 'editPropertiesAction',
+                      text: strings.EditPropertiesText
+                    },
+                    {
+                      key: 'editSiteInformationAction',
+                      text: strings.EditSiteInformationText
+                    },
+                    {
+                      key: 'administerChildrenAction',
+                      text: strings.ChildProjectAdminLabel
+                    },
+                    {
+                      key: 'transformToParentProject',
+                      text: strings.CreateParentProjectLabel
+                    },
+                    {
+                      key: 'syncProjectPropertiesAction',
+                      text: strings.SyncProjectPropertiesText
+                    }
+                  ],
+                  selectedKeys: this.properties.hideActions ?? []
+                }),
                 PropertyPaneTextField('adminPageLink', {
                   label: strings.AdminPageLinkLabel
+                }),
+                PropertyPaneToggle('hideParentProjects', {
+                  label: strings.HideParentProjectsLabel
                 })
               ]
             },

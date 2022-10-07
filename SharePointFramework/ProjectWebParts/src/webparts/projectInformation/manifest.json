@@ -25,7 +25,9 @@
       "officeFabricIconFontName": "ProjectCollection",
       "properties": {
         "title": "Prosjektinformasjon",
-        "useIdeaProcessing": false
+        "useIdeaProcessing": false,
+        "hideAllActions": false,
+        "hideActions":[]
       }
     }
   ]
