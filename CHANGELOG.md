@@ -21,6 +21,7 @@ Every change is marked with issue ID.
 - Integrated IdeaProcessing (from prosjektportalen365-addons) directly in Prosjektportalen365 with improvements and new additions #777
   - This also adds sync functionality to synchronize ProjectData to newly created projects based off of ideas
 - Displaying parent projects in Project Information webpart #760
+- Added ability to hide certain parts of the Project Information webpart #670
 
 ### Changed
 
