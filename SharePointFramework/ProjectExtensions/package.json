@@ -18,8 +18,6 @@
     "package": "gulp clean && gulp default --ship && gulp package-solution --ship",
     "package:ci": "gulp clean && gulp default && gulp package-solution",
     "build": "tsc --build",
-    "deploy": "gulp uploadAppPkg && gulp deploySppkg",
-    "packageAndDeploy": "npm run package && npm run deploy",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
     "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",
