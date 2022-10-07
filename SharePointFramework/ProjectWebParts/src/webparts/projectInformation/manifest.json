@@ -27,6 +27,7 @@
         "title": "Prosjektinformasjon",
         "useIdeaProcessing": false,
         "hideAllActions": false,
+        "useFramelessButtons": false,
         "hideActions":[]
       }
     }

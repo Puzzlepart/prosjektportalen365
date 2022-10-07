@@ -27,7 +27,7 @@ export class SummarySection extends BaseSection<ISummarySectionProps, ISummarySe
             siteId={this.props.siteId}
             webUrl={this.props.webUrl}
             page='ProjectStatus'
-            hideActions={true}
+            hideAllActions={true}
           />
         </div>
         <div className={styles.sections}>

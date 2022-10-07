@@ -6,7 +6,8 @@ import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
 import {
   IProjectInformationData,
   IProjectInformationProps,
-  IProjectInformationState
+  IProjectInformationState,
+  ProjectInformationParentProject
 } from './types'
 
 const transformProperties = (
@@ -31,6 +32,11 @@ const transformProperties = (
   return properties
 }
 
+/**
+ * Checks if project data is synced
+ *
+ * @param props Props
+ */
 const projectDataSynced = async (props: IProjectInformationProps) => {
   try {
     let isSynced = false
@@ -53,16 +59,26 @@ const projectDataSynced = async (props: IProjectInformationProps) => {
   }
 }
 
+/**
+ * Fetch data for ProjectInformation
+ *
+ * @param props Props
+ */
 const fetchData = async (
   props: IProjectInformationProps
 ): Promise<Partial<IProjectInformationState>> => {
   try {
-    const [columns, propertiesData] = await Promise.all([
+    const [columns, propertiesData, parentProjects] = await Promise.all([
       SPDataAdapter.portal.getProjectColumns(),
-      SPDataAdapter.project.getPropertiesData()
+      SPDataAdapter.project.getPropertiesData(),
+      SPDataAdapter.portal.getParentProjects(
+        props.webPartContext.pageContext.web.absoluteUrl,
+        ProjectInformationParentProject
+      )
     ])
     const data: IProjectInformationData = {
       columns,
+      parentProjects,
       ...propertiesData
     }
     const properties = transformProperties(data, props)

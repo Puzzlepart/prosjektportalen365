@@ -5,7 +5,6 @@ import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
 import strings from 'ProjectWebPartsStrings'
 import { useEffect, useState } from 'react'
 import SPDataAdapter from '../../data'
-import { ActionType } from './Actions/types'
 import {
   IProjectInformationProps,
   IProjectInformationState,
@@ -34,55 +33,9 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
   })
 
   /**
-   * Get custom actions
-   */
-  const getCustomActions = (): ActionType[] => {
-    const administerChildrenAction: ActionType = [
-      strings.ChildProjectAdminLabel,
-      () => {
-        window.location.href = `${props.webPartContext.pageContext.web.serverRelativeUrl}/SitePages/${props.adminPageLink}`
-      },
-      'Org',
-      false,
-      !state.userHasEditPermission
-    ]
-    const transformToParentProject: ActionType = [
-      strings.CreateParentProjectLabel,
-      () => {
-        setState({ displayParentCreationModal: true })
-      },
-      'Org',
-      false,
-      !state.userHasEditPermission
-    ]
-    const viewAllPropertiesAction: ActionType = [
-      strings.ViewAllPropertiesLabel,
-      () => {
-        setState({ showProjectPropertiesPanel: true })
-      },
-      'EntryView',
-      false,
-      props.hideViewAllPropertiesButton
-    ]
-    const syncProjectPropertiesAction: ActionType = [
-      strings.SyncProjectPropertiesText,
-      () => {
-        setState({ displaySyncProjectModal: true })
-      },
-      'Sync',
-      false,
-      !props.useIdeaProcessing || state.isProjectDataSynced || !state.userHasEditPermission
-    ]
-    if (state.isParentProject) {
-      return [administerChildrenAction, viewAllPropertiesAction, syncProjectPropertiesAction]
-    }
-    return [transformToParentProject, viewAllPropertiesAction, syncProjectPropertiesAction]
-  }
-
-  /**
    * Add message
-   * 
-   * @param text Message text 
+   *
+   * @param text Message text
    * @param messageBarType Message type
    * @param duration Duration in seconds
    */
@@ -109,7 +62,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
 
   /**
    * On sync properties
-   * 
+   *
    * @param force Force start sync
    */
   const onSyncProperties = async (force: boolean = false): Promise<void> => {
@@ -130,7 +83,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
         props.webUrl,
         strings.ProjectPropertiesListName,
         state.data.templateParameters.ProjectContentTypeId ||
-        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: props.webTitle }
       )
       if (!created) {
@@ -164,7 +117,6 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
   return {
     state,
     setState,
-    getCustomActions,
     onSyncProperties
   }
 }

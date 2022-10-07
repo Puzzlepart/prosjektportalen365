@@ -7,6 +7,7 @@ import { ProgressDialog } from '../ProgressDialog'
 import { Actions } from './Actions'
 import { ProjectInformationContext } from './context'
 import { CreateParentModal } from './ParentProjectModal'
+import { ParentProjectsList } from './ParentProjectsList'
 import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
 import { SyncProjectModal } from './SyncProjectModal'
@@ -14,7 +15,7 @@ import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
 
 export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (props) => {
-  const { state, setState, getCustomActions, onSyncProperties } = useProjectInformation(props)
+  const { state, setState, onSyncProperties } = useProjectInformation(props)
   if (state.hidden) return null
 
   return (
@@ -29,8 +30,9 @@ export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (
           {state.loading ? null : (
             <div>
               <ProjectProperties properties={state.properties} />
-              {!props.hideActions && state.message && <UserMessage {...state.message} />}
-              <Actions customActions={getCustomActions()} />
+              {!props.hideAllActions && state.message && <UserMessage {...state.message} />}
+              <ParentProjectsList />
+              <Actions />
               <ProgressDialog {...state.progress} />
               {state.confirmActionProps && <ConfirmDialog {...state.confirmActionProps} />}
               <Panel
@@ -59,7 +61,11 @@ export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (
 }
 
 ProjectInformation.defaultProps = {
-  page: 'Frontpage'
+  page: 'Frontpage',
+  customActions: [],
+  hideActions: [],
+  hideAllActions: false,
+  useFramelessButtons: false
 }
 
 export { ProjectInformationModal } from '../ProjectInformationModal'

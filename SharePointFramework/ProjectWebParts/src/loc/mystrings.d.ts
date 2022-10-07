@@ -1,6 +1,7 @@
 declare interface IProjectWebPartsStrings {
-  HideParentProjectsLabel: string | ReactElement<any, string | JSXElementConstructor<any>>
-  HideAllActionsLabel: string | ReactElement<any, string | JSXElementConstructor<any>>
+  UseFramelessButtonsLabel: string
+  HideParentProjectsLabel: string
+  HideAllActionsLabel: string
   HideActionsLabel: string
   ShowSubTextFieldLabel: string
   SyncPropertiesAfterPhaseChangeFieldLabel: string

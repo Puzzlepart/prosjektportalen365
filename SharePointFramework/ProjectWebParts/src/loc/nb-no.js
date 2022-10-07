@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    UseFramelessButtonsLabel:'Rammeløse knapper',
     HideParentProjectsLabel: 'Skjul overordnede prosjekter',
     HideActionsLabel: 'Skjul knapper',
     HideAllActionsLabel: 'Skjul alle knapper',
