@@ -1,4 +1,7 @@
 declare interface IProjectWebPartsStrings {
+  RedoText: string
+  CreateParentModalSubText: string
+  CreateParentModalTitle: string
   UseFramelessButtonsLabel: string
   HideParentProjectsLabel: string
   HideAllActionsLabel: string
