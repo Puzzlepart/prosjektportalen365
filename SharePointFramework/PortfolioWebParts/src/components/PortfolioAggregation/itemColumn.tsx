@@ -99,37 +99,35 @@ export const getDefaultColumns = (pageContext?: PageContext, isParentProject?: b
     onRender: (item: any) => {
       if (!isParentProject) {
         return (
-          <>
-            <ProjectInformationPanel
-              key={item.SiteId}
-              title={item.Title}
-              siteId={item.SiteId}
-              webUrl={item.Path}
-              hubSite={{
-                web: new Web(pageContext.site.absoluteUrl),
-                url: pageContext.site.absoluteUrl
-              }}
-              page='Portfolio'
-              hideViewAllPropertiesButton={true}
-              onRenderToggleElement={(onToggle) => (
-                <Icon
-                  iconName='Info'
-                  style={{
-                    color: '666666',
-                    marginLeft: 4,
-                    position: 'relative',
-                    top: '2px',
-                    fontSize: '1.1em',
-                    cursor: 'pointer'
-                  }}
-                  onClick={onToggle}
-                />
-              )}>
-              <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
-                {item.SiteTitle}
-              </Link>
-            </ProjectInformationPanel>
-          </>
+          <ProjectInformationPanel
+            key={item.SiteId}
+            title={item.Title}
+            siteId={item.SiteId}
+            webUrl={item.Path}
+            hubSite={{
+              web: new Web(pageContext.site.absoluteUrl),
+              url: pageContext.site.absoluteUrl
+            }}
+            page='Portfolio'
+            hideAllActions={true}
+            onRenderToggleElement={(onToggle) => (
+              <Icon
+                iconName='Info'
+                style={{
+                  color: '666666',
+                  marginLeft: 4,
+                  position: 'relative',
+                  top: '2px',
+                  fontSize: '1.1em',
+                  cursor: 'pointer'
+                }}
+                onClick={onToggle}
+              />
+            )}>
+            <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
+              {item.SiteTitle}
+            </Link>
+          </ProjectInformationPanel>
         )
       } else {
         return item.SPWebURL ? (
