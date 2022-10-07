@@ -1,5 +1,5 @@
 import { DataAdapter } from 'data'
-import { IAggregatedPortfolioPropertyPane } from './PropertyPanes'
+import { IAggregatedPortfolioPropertyPane } from './IAggregatedPortfolioPropertyPane'
 
 export interface IAggregatedPortfolioProps {
   title: string
@@ -9,7 +9,7 @@ export interface IAggregatedPortfolioProps {
   updateProperty: (key: string, value: any) => void
 }
 
-export interface AggreationColumn {
+export interface IAggreationColumn {
   key: string
   fieldName: string
   name: string

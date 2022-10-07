@@ -1,4 +1,4 @@
-export interface ChildProject {
+export interface IChildProject {
   SiteId: string
   Title: string
 }
