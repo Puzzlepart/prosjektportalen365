@@ -19,7 +19,7 @@ export const ParentProjectsList: FunctionComponent = () => {
       {projects.map((p, index) => (
         <div key={index} className={styles.projectItem}>
           <Icon iconName={p.iconName} className={styles.icon} />
-          <Link href={p.url} className={styles.link}>
+          <Link href={p.url} className={styles.link} rel='noopener noreferrer' target='_blank'>
             {p.title}
           </Link>
         </div>
