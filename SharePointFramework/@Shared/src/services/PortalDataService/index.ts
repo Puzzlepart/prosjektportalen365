@@ -54,10 +54,10 @@ export class PortalDataService {
 
   /**
    * Get parent projects from the projects list in the portfolio site.
-   * 
-   * @note Your model class specified in the constructor param should include a 
+   *
+   * @note Your model class specified in the constructor param should include a
    * property `childProjects` (array of strings which is the web/project URLs).
-   * 
+   *
    * @param webUrl Web URL
    * @param constructor Constructor / model class
    */
@@ -86,7 +86,9 @@ export class PortalDataService {
         },
         []
       )
-      return projectItems.filter(p => p['childProjects'] ? p['childProjects'].includes(webUrl) : true)
+      return projectItems.filter((p) =>
+        p['childProjects'] ? p['childProjects'].includes(webUrl) : true
+      )
     } catch (error) {
       return []
     }
@@ -290,7 +292,7 @@ export class PortalDataService {
           fieldToCreate.updateAndPushChanges(true)
         }
         await executeQuery(jsomContext)
-      } catch (error) { }
+      } catch (error) {}
     }
     try {
       Logger.log({
@@ -306,7 +308,7 @@ export class PortalDataService {
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch { }
+    } catch {}
     if (ensureList.created && properties) {
       ensureList.list.items.add(properties)
     }

@@ -1,6 +1,12 @@
 {
   "name": "pp365-projectwebparts",
-  "version": "1.6.1-760.2",
+  "version": "1.6.1-760.3",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
+    "directory": "SharePointFramework/ProjectWebParts"
+  },
+  "license": "MIT",
   "engines": {
     "node": "^12"
   },
