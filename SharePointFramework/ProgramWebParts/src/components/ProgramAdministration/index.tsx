@@ -18,7 +18,7 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
   const [state, dispatch] = useReducer(reducer, initState())
 
   useEffect(() => {
-    fetchChildProjects(props.sp, props.dataAdapter).then(
+    fetchChildProjects(props.dataAdapter).then(
       (childProjects) =>
         dispatch(DATA_LOADED({ data: { childProjects }, scope: 'root' }))
     )

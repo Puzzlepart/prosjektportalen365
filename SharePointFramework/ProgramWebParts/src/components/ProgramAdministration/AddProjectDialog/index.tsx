@@ -18,7 +18,7 @@ export const AddProjectDialog: FunctionComponent = () => {
   const selectedProjects = useRef<IChildProject[]>([])
 
   useEffect(() => {
-    fetchAvailableProjects(context.props.sp, context.props.context).then(
+    fetchAvailableProjects(context.props.context.pageContext.site.id.toString()).then(
       (availableProjects) =>
         context.dispatch(DATA_LOADED({ data: { availableProjects }, scope: AddProjectDialog.name }))
     )
@@ -29,7 +29,7 @@ export const AddProjectDialog: FunctionComponent = () => {
       <Dialog
         hidden={false}
         onDismiss={() => context.dispatch(TOGGLE_ADD_PROJECT_DIALOG())}
-        minWidth='50em'
+        minWidth='60em'
         maxWidth='1000px'
         dialogContentProps={{
           type: DialogType.largeHeader,
@@ -59,7 +59,7 @@ export const AddProjectDialog: FunctionComponent = () => {
           <PrimaryButton
             text={strings.Add}
             onClick={async () => {
-              await addChildProject(context.props.sp, selectedProjects.current)
+              await addChildProject(selectedProjects.current)
               context.dispatch(CHILD_PROJECTS_ADDED({ childProjects: selectedProjects.current }))
             }}
           />

@@ -41,7 +41,7 @@ export const Commands: FunctionComponent = () => {
       disabled: isEmpty(context.state.selectedProjectsToDelete) || !context.props.context.pageContext.legacyPageContext.isSiteAdmin,
       onClick: () => {
         (async () => {
-          const childProjects = await removeChildProjects(context.props.sp, context.state.selectedProjectsToDelete)
+          const childProjects = await removeChildProjects(context.state.selectedProjectsToDelete)
           context.dispatch(CHILD_PROJECTS_REMOVED({ childProjects }))
         })()
       },

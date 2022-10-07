@@ -45,6 +45,7 @@ export default createReducer(initState(), {
   },
   [CHILD_PROJECTS_REMOVED.type]: (state, { payload }: ReturnType<typeof CHILD_PROJECTS_REMOVED>) => {
     state.childProjects = payload.childProjects
+    state.selectedProjectsToDelete = []
   },
   [SET_SELECTED_TO_DELETE.type]: (state, { payload }: ReturnType<typeof SET_SELECTED_TO_DELETE>) => {
     state.selectedProjectsToDelete = payload.selected
