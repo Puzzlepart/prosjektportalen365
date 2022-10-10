@@ -85,9 +85,8 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
  * Get default columns
  *
  * @param pageContext Page context
- * @param isParentProject Is parent project
  */
-export const getDefaultColumns = (pageContext?: PageContext, isParentProject?: boolean) => [
+export const getDefaultColumns = (pageContext?: PageContext) => [
   {
     key: 'SiteTitle',
     idx: 0,
@@ -97,47 +96,37 @@ export const getDefaultColumns = (pageContext?: PageContext, isParentProject?: b
     maxWidth: 225,
     isResizable: true,
     onRender: (item: any) => {
-      if (!isParentProject) {
-        return (
-          <ProjectInformationPanel
-            key={item.SiteId}
-            title={item.Title}
-            siteId={item.SiteId}
-            webUrl={item.Path}
-            hubSite={{
-              web: new Web(pageContext.site.absoluteUrl),
-              url: pageContext.site.absoluteUrl
-            }}
-            page='Portfolio'
-            hideAllActions={true}
-            onRenderToggleElement={(onToggle) => (
-              <Icon
-                iconName='Info'
-                style={{
-                  color: '666666',
-                  marginLeft: 4,
-                  position: 'relative',
-                  top: '2px',
-                  fontSize: '1.1em',
-                  cursor: 'pointer'
-                }}
-                onClick={onToggle}
-              />
-            )}>
-            <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
-              {item.SiteTitle}
-            </Link>
-          </ProjectInformationPanel>
-        )
-      } else {
-        return item.SPWebURL ? (
+      return (
+        <ProjectInformationPanel
+          key={item.SiteId}
+          title={item.Title}
+          siteId={item.SiteId}
+          webUrl={item.Path}
+          hubSite={{
+            web: new Web(pageContext.site.absoluteUrl),
+            url: pageContext.site.absoluteUrl
+          }}
+          page='Portfolio'
+          hideAllActions={true}
+          onRenderToggleElement={(onToggle) => (
+            <Icon
+              iconName='Info'
+              style={{
+                color: '666666',
+                marginLeft: 4,
+                position: 'relative',
+                top: '2px',
+                fontSize: '1.1em',
+                cursor: 'pointer'
+              }}
+              onClick={onToggle}
+            />
+          )}>
           <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
             {item.SiteTitle}
           </Link>
-        ) : (
-          <span>{item.SiteTitle}</span>
-        )
-      }
+        </ProjectInformationPanel>
+      )
     },
     data: { isGroupable: true }
   }
