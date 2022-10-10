@@ -53,57 +53,31 @@ export async function fetchChildProjects(dataAdapter: DataAdapter): Promise<IChi
 }
 
 /**
- * Fetches projects which is not in the children array.
- *
- * @param siteId Site ID
- */
-export async function fetchAvailableProjects(siteId: string): Promise<any[]> {
-  const [{ GtChildProjects }] = await sp.web.lists
-    .getByTitle('Prosjektegenskaper')
-    .items
-    .select('GtChildProjects')
-    .usingCaching()
-    .get()
-  const childProjects: any[] = await JSON.parse(GtChildProjects)
-  const allProjects = await getHubSiteProjects()
-  const availableProjects: any[] = allProjects
-    .filter(
-      (project) =>
-        !childProjects.some((el) => el.SiteId === project['SiteId']) && project['SiteId'] !== siteId
-    )
-    .filter((project) => project['SPWebURL'])
-  return availableProjects.map(({ Title, SiteId, SPWebURL }) => ({
-    SiteId,
-    Title,
-    SPWebURL
-  }))
-}
-
-/**
  * Add child projects
  *
+ * @param dataAdapter Data adapter
  * @param newProjects New projects to add
  */
-export async function addChildProject(newProjects: IChildProject[]) {
+export async function addChildProject(dataAdapter: DataAdapter, newProjects: IChildProject[]) {
   const [{ GtChildProjects }] = await sp.web.lists
     .getByTitle('Prosjektegenskaper')
-    .items
-    .select('GtChildProjects')
+    .items.select('GtChildProjects')
     .get()
   const projects: IChildProject[] = JSON.parse(GtChildProjects)
   const updatedProjects = [...projects, ...newProjects]
-  await sp.web.lists
-    .getByTitle('Prosjektegenskaper')
-    .items.getById(1)
-    .update({ GtChildProjects: JSON.stringify(updatedProjects) })
+  const updateProperties = { GtChildProjects: JSON.stringify(updatedProjects) }
+  await sp.web.lists.getByTitle('Prosjektegenskaper').items.getById(1).update(updateProperties)
+  await dataAdapter.updateProjectInHub(updateProperties)
 }
 
 /**
  * Remove child projects
  *
+ * @param dataAdapter Data adapter
  * @param projectToRemove Projects to delete
  */
 export async function removeChildProjects(
+  dataAdapter: DataAdapter,
   projectToRemove: IChildProject[]
 ): Promise<IChildProject[]> {
   const [currentData] = await sp.web.lists
@@ -114,9 +88,8 @@ export async function removeChildProjects(
   const updatedProjects = projects.filter(
     (p) => !projectToRemove.some((el) => el.SiteId === p.SiteId)
   )
-  await sp.web.lists
-    .getByTitle('Prosjektegenskaper')
-    .items.getById(1)
-    .update({ GtChildProjects: JSON.stringify(updatedProjects) })
+  const updateProperties = { GtChildProjects: JSON.stringify(updatedProjects) }
+  await sp.web.lists.getByTitle('Prosjektegenskaper').items.getById(1).update(updateProperties)
+  await dataAdapter.updateProjectInHub(updateProperties)
   return updatedProjects
 }
