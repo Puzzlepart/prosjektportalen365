@@ -107,9 +107,9 @@
                                 {
                                     "Id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
                                     "Properties": {
-                                        "title": "Underområder - gevinster",
+                                        "title": "Gevinster for underområder",
+                                        "searchBoxPlaceholderText": "Søk i gevinster for underområder...",
                                         "dataSource": "Alle gevinstelementer",
-                                        "searchBoxPlaceholderText": "Søk i gevinster...",
                                         "columns": [
                                             {
                                                 "key": "Benefit.Title",
@@ -251,7 +251,8 @@
                                 {
                                     "Id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
                                     "Properties": {
-                                        "title": "Underområder - leveranser",
+                                        "title": "Leveranser for underområder",
+                                        "searchBoxPlaceholderText": "Søk i leveranser for underområder...",
                                         "dataSource": "Alle prosjektleveranser",
                                         "columns": [
                                             {
@@ -334,7 +335,8 @@
                                 {
                                     "Id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
                                     "Properties": {
-                                        "title": "Underområder - usikkerhet",
+                                        "title": "Usikkerheter for underområder",
+                                        "searchBoxPlaceholderText": "Søk i usikkerheter for underområder...",
                                         "dataSource": "Programrisiko",
                                         "columns": [
                                             {
