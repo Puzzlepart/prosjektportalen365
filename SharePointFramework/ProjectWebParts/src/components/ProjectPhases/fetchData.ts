@@ -1,6 +1,6 @@
 import { LogLevel } from '@pnp/logging'
 import SPDataAdapter from 'data'
-import { ProjectAdminPermission } from 'data/SPDataAdapter/ProjectAdminPermission'
+import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
 import * as strings from 'ProjectWebPartsStrings'
 import { IProjectPhasesData, IProjectPhasesProps } from '.'
 import { getPhaseSitePages } from './getPhaseSitePages'
@@ -31,7 +31,7 @@ export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPha
     const [phases, currentPhaseName, userHasChangePhasePermission] = await Promise.all([
       SPDataAdapter.project.getPhases(phaseFieldCtx.termSetId, checklistData),
       SPDataAdapter.project.getCurrentPhaseName(phaseFieldCtx.fieldName),
-      SPDataAdapter.getProjectAdminPermissions(
+      SPDataAdapter.checkProjectAdminPermissions(
         ProjectAdminPermission.ChangePhase,
         properties.fieldValues
       )

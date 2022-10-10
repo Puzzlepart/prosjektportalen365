@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "Prosjektportalen 365 Portfolio Web Parts",
+    "name": "Prosjektportalen 365 - Portfolio Web Parts",
     "id": "00483367-68e2-4977-9cc3-6cf0de623daa",
     "version": "1.6.1.1",
     "includeClientSideAssets": true,

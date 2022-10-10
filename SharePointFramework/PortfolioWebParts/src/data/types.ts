@@ -91,7 +91,7 @@ export interface IDataAdapter {
   fetchItemsWithSource?(
     dataSourceName: string,
     selectProperties: string[],
-    dataSourceCategory?: string
+    includeSelf?: boolean
   ): Promise<any[]>
   fetchBenefitItemsWithSource?(
     dataSource: DataSource,

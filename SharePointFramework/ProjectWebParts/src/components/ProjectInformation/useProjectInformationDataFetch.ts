@@ -1,7 +1,8 @@
+import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
 import strings from 'ProjectWebPartsStrings'
 import { useEffect } from 'react'
 import { isEmpty } from 'underscore'
-import SPDataAdapter, { ProjectAdminPermission } from '../../data'
+import SPDataAdapter from '../../data'
 import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
 import {
   IProjectInformationData,
@@ -96,7 +97,7 @@ const fetchData = async (
     let userHasEditPermission = false
     let isProjectDataSynced = false
     if (props.page === 'Frontpage') {
-      userHasEditPermission = await SPDataAdapter.getProjectAdminPermissions(
+      userHasEditPermission = await SPDataAdapter.checkProjectAdminPermissions(
         ProjectAdminPermission.EditProjectProperties,
         data.fieldValues
       )

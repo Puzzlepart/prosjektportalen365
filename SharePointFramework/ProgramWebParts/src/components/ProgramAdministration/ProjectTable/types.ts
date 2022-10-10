@@ -1,8 +1,8 @@
 import { SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
 
-export interface IProjectTableProps {
-  onSelectionChanged: (selected: any[]) => void
-  items: any[]
+export interface IProjectTableProps<T = any> {
+  onSelectionChanged: (selected: T[]) => void
+  items: T[]
   fields: IListField[]
   selectionMode: SelectionMode
 }

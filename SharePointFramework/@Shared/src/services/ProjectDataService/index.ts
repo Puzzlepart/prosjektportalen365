@@ -18,8 +18,7 @@ export class ProjectDataService {
   private _storage: PnPClientStore
   private _storageKeys: Record<string, string> = {
     _getPropertyItemContext: '{0}_propertyitemcontext',
-    getPhases: '{0}_projectphases_terms',
-    getProjectAdminPermissions: '{0}_project_admin_permissions'
+    getPhases: '{0}_projectphases_terms'
   }
   public web: Web
 

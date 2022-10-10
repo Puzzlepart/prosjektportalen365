@@ -1,6 +1,5 @@
 define([], function() {
     return {
-        PortfolioAggregationNotConfiguredMessage: 'Webdelen må konfigureres med en datakilde. Rediger webdelen, og legg inn navnet på datakilden du vil bruke.',
         DataSourceCategoryDescription: 'Angi en datakildekategori for å kunne velge mellom flere datakilder i webdelen.',
         DataSourceDescription: 'Navnet på datakilden du vil bruke. Datakildene finner du i listen Datakilder på Portføljeområdet.',
         SearchPropertyDescription: 'Navnet på den forvaltede egenskapen for denne kolonnen.',
@@ -207,10 +206,9 @@ define([], function() {
         ProgramAddProject_SearchBoxLabelText: "Søk i alle områder..",
         ProgramAdministration_EmptyMessage: "Ingen områder er koblet til programmet.",
         ProgramTimelineHeader: "Tidslinje",
-        ProgramAddProject: "Legg til prosjekt",
+        ProgramAddChildsButtonText: "Legg til prosjekter",
         ProgramAdministrationHeader: "Administrasjon av underordnede områder",
-        ProgramAddProjectButtonText: "Legg til område",
-        ProgramRemoveChildButtonText: "Fjern underordnet område",
+        ProgramRemoveChildsButtonText: "Fjern underordnede områder",
         RiskWebPartTitle: "Risikooversikt",
         RiskDataSource: "Programrisiko",
         Add: "Legg til",
@@ -249,6 +247,7 @@ define([], function() {
         ProjectDeliveriesGroupName: 'Prosjektleveranser (beta)',
         ShowProjectDeliveriesLabel: 'Vis prosjektleveranser',
         ConfigItemTitleFieldLabel: 'Element tittel (konfigurasjon)',
-        ConfigItemTitleFieldDescription: 'Dersom det er spesifisert et element med tittelen angitt her i tidslinjekonfigurasjon listen så vil dette vises på tidslinjen.'
+        ConfigItemTitleFieldDescription: 'Dersom det er spesifisert et element med tittelen angitt her i tidslinjekonfigurasjon listen så vil dette vises på tidslinjen.',
+        ProjectContentColumnsListName: 'Prosjektinnholdskolonner'
     }
 })
