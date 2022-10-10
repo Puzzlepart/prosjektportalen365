@@ -2,26 +2,20 @@ import { SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
 import { Link, ShimmeredDetailsList } from 'office-ui-fabric-react'
 import { UserMessage } from 'pp365-projectwebparts/lib/components/UserMessage'
 import * as strings from 'ProgramWebPartsStrings'
-import React, { FunctionComponent, useEffect, useReducer } from 'react'
+import React, { FunctionComponent } from 'react'
 import { isEmpty } from 'underscore'
 import { AddProjectDialog } from './AddProjectDialog'
 import { Commands } from './Commands'
 import { ProgramAdministrationContext } from './context'
-import { fetchChildProjects } from './data'
 import styles from './ProgramAdministration.module.scss'
 import { ProjectTable } from './ProjectTable'
 import { IListField } from './ProjectTable/types'
-import reducer, { DATA_LOADED, initState, SET_SELECTED_TO_DELETE } from './reducer'
+import { SET_SELECTED_TO_DELETE } from './reducer'
 import { IProgramAdministrationProps, shimmeredColumns } from './types'
+import { useProgramAdministration } from './useProgramAdministration'
 
 export const ProgramAdministration: FunctionComponent<IProgramAdministrationProps> = (props) => {
-  const [state, dispatch] = useReducer(reducer, initState())
-
-  useEffect(() => {
-    fetchChildProjects(props.dataAdapter).then((childProjects) =>
-      dispatch(DATA_LOADED({ data: { childProjects }, scope: 'root' }))
-    )
-  }, [])
+  const { state, dispatch } = useProgramAdministration(props)
 
   if (state.error) {
     return (

@@ -42,9 +42,11 @@ export const Commands: FunctionComponent = () => {
         isEmpty(context.state.selectedProjectsToDelete) ||
         !context.props.context.pageContext.legacyPageContext.isSiteAdmin,
       onClick: () => {
-        removeChildProjects(context.state.selectedProjectsToDelete).then((childProjects) => {
-          context.dispatch(CHILD_PROJECTS_REMOVED({ childProjects }))
-        })
+        removeChildProjects(context.props.dataAdapter, context.state.selectedProjectsToDelete).then(
+          (childProjects) => {
+            context.dispatch(CHILD_PROJECTS_REMOVED({ childProjects }))
+          }
+        )
       },
       commandBarButtonAs: getLoadingBar()
     }

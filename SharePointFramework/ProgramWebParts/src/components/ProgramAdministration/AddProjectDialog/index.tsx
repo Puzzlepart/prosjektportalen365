@@ -3,26 +3,19 @@ import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dia
 import { SelectionMode } from 'office-ui-fabric-react/lib/Selection'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList'
 import * as strings from 'ProgramWebPartsStrings'
-import React, { FunctionComponent, useContext, useEffect, useRef } from 'react'
-import { IChildProject } from 'types/IChildProject'
+import React, { FunctionComponent, useContext } from 'react'
 import { ProgramAdministrationContext } from '../context'
-import { addChildProject, fetchAvailableProjects } from '../data'
+import { addChildProject } from '../data'
 import { fields } from '../index'
 import styles from '../ProgramAdministration.module.scss'
 import { ProjectTable } from '../ProjectTable'
-import { CHILD_PROJECTS_ADDED, DATA_LOADED, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
+import { CHILD_PROJECTS_ADDED, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
 import { shimmeredColumns } from '../types'
+import { useAddProjectDialog } from './useAddProjectDialog'
 
 export const AddProjectDialog: FunctionComponent = () => {
   const context = useContext(ProgramAdministrationContext)
-  const selectedProjects = useRef<IChildProject[]>([])
-
-  useEffect(() => {
-    fetchAvailableProjects(context.props.context.pageContext.site.id.toString()).then(
-      (availableProjects) =>
-        context.dispatch(DATA_LOADED({ data: { availableProjects }, scope: AddProjectDialog.name }))
-    )
-  }, [])
+  const { selectedProjects, availableProjects } = useAddProjectDialog()
 
   return (
     <>
@@ -46,9 +39,9 @@ export const AddProjectDialog: FunctionComponent = () => {
           ) : (
             <ProjectTable
               fields={fields}
-              items={context.state.availableProjects}
+              items={availableProjects}
               selectionMode={SelectionMode.multiple}
-              onSelectionChanged={(items: IChildProject[]) => {
+              onSelectionChanged={(items) => {
                 selectedProjects.current = items
               }}
             />
@@ -58,7 +51,7 @@ export const AddProjectDialog: FunctionComponent = () => {
           <PrimaryButton
             text={strings.Add}
             onClick={async () => {
-              await addChildProject(selectedProjects.current)
+              await addChildProject(context.props.dataAdapter, selectedProjects.current)
               context.dispatch(CHILD_PROJECTS_ADDED({ childProjects: selectedProjects.current }))
             }}
           />

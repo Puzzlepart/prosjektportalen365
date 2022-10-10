@@ -20,16 +20,12 @@ export interface IProgramAdministrationState {
   }
   childProjects: IChildProject[]
   displayAddProjectDialog: boolean
-  availableProjects: IChildProjectListItem[]
+  availableProjects: any[]
   selectedProjectsToDelete: IChildProject[]
   error: {
     text: string
     messageBarType: MessageBarType
   }
-}
-
-export interface IChildProjectListItem extends IChildProject {
-  SPWebURL: string
 }
 
 export const shimmeredColumns: IColumn[] = [

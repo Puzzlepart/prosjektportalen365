@@ -10,9 +10,8 @@ export const useAddProjectDialog = () => {
   const selectedProjects = useRef<IChildProject[]>([])
 
   useEffect(() => {
-    getHubSiteProjects().then(
-      (availableProjects) =>
-        context.dispatch(DATA_LOADED({ data: { availableProjects }, scope: AddProjectDialog.name }))
+    getHubSiteProjects().then((availableProjects) =>
+      context.dispatch(DATA_LOADED({ data: { availableProjects }, scope: AddProjectDialog.name }))
     )
   }, [])
 
