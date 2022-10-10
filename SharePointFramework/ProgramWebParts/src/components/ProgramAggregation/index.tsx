@@ -43,10 +43,7 @@ export const ProgramAggregation: FunctionComponent<IProgramAggregationProps> = (
                 })
               )
             }}
-            columns={[
-              ...getDefaultColumns(),
-              ...items.columns,
-            ].filter((c) => c)}
+            columns={[...getDefaultColumns(), ...items.columns].filter((c) => c)}
             groups={state.groups}
             compact={state.isCompact}
           />

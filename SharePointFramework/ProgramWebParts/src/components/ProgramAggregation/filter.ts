@@ -1,4 +1,3 @@
-
 import _ from 'lodash'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { IFilterItemProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel/FilterItem/types'

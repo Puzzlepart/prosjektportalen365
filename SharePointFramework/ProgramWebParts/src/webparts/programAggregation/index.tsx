@@ -1,5 +1,6 @@
 import {
-  IPropertyPaneConfiguration, PropertyPaneTextField,
+  IPropertyPaneConfiguration,
+  PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { IProgramAggregationProps, ProgramAggregation } from 'components/ProgramAggregation'
@@ -9,9 +10,7 @@ import strings from 'ProgramWebPartsStrings'
 import React from 'react'
 import { BaseProgramWebPart } from 'webparts/baseProgramWebPart'
 
-export default class ProgramAggregationWebPart extends BaseProgramWebPart<
-  IProgramAggregationProps
-> {
+export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgramAggregationProps> {
   public render(): void {
     if (!this.properties.dataSource) {
       this.renderComponent<IMessageBarProps>(MessageBar, {

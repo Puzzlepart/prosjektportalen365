@@ -9,5 +9,5 @@ export interface IProgramAggregationWebPartProps extends IBaseComponentProps {
   /**
    * Show search box
    */
-  showSearchBox?: boolean;
+  showSearchBox?: boolean
 }

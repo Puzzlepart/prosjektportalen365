@@ -22,9 +22,6 @@ import _ from 'underscore'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
 
-/**
- *
- */
 export class DataAdapter {
   public dataSourceService: DataSourceService
   private _portalDataService: PortalDataService
@@ -41,6 +38,7 @@ export class DataAdapter {
       urlOrWeb: hubSite.url
     })
     sp.setup({
+      spfxContext: this.context,
       sp: { baseUrl: hubSite.url }
     })
     this._sp = sp
@@ -639,6 +637,9 @@ export class DataAdapter {
     selectProperties: string[],
     includeSelf: boolean = false
   ) {
+    sp.setup({
+      spfxContext: this.context
+    })
     const siteId = this.context.pageContext.site.id.toString()
     const programFilter = this._childProjects && this.aggregatedQueryBuilder('SiteId')
     if (includeSelf) programFilter.unshift(`SiteId:${siteId}`)
@@ -719,6 +720,6 @@ export class DataAdapter {
         .filter(`GtSiteId eq '${this.context.pageContext.site.id.toString()}'`)
         .get()
       await list.items.getById(item.ID).update(properties)
-    } catch (error) { }
+    } catch (error) {}
   }
 }

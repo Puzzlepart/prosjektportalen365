@@ -5,7 +5,7 @@ import React, { useContext } from 'react'
 import { ProgramAggregationContext } from '../context'
 
 export const Commands = () => {
-  const context= useContext(ProgramAggregationContext)
+  const context = useContext(ProgramAggregationContext)
 
   const cmd: ICommandBarProps = {
     items: [],

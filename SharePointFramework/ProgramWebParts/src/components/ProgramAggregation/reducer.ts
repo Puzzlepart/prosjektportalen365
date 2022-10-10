@@ -4,10 +4,7 @@ import { Target } from 'office-ui-fabric-react/lib/Callout'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
 import { indexOf, omit } from 'underscore'
-import {
-  IProgramAggregationProps,
-  IProgramAggregationState
-} from './types'
+import { IProgramAggregationProps, IProgramAggregationState } from './types'
 
 function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
   const _arr = [...arr]
@@ -30,12 +27,8 @@ export const COLUMN_HEADER_CONTEXT_MENU = createAction<{
   target: Target
 }>('COLUMN_HEADER_CONTEXT_MENU')
 export const SET_GROUP_BY = createAction<{ column: IColumn }>('SET_GROUP_BY')
-export const SET_SORT = createAction<{ column: IColumn; sortDesencing: boolean }>(
-  'SET_SORT'
-)
-export const MOVE_COLUMN = createAction<{ column: IColumn; move: number }>(
-  'MOVE_COLUMN'
-)
+export const SET_SORT = createAction<{ column: IColumn; sortDesencing: boolean }>('SET_SORT')
+export const MOVE_COLUMN = createAction<{ column: IColumn; move: number }>('MOVE_COLUMN')
 export const SET_CURRENT_VIEW = createAction('SET_CURRENT_VIEW')
 export const SET_DATA_SOURCE = createAction<{ dataSource: DataSource }>('SET_DATA_SOURCE')
 export const START_FETCH = createAction('START_FETCH')

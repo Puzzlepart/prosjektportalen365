@@ -7,10 +7,7 @@ import { format } from 'office-ui-fabric-react/lib/Utilities'
 import strings from 'ProgramWebPartsStrings'
 import React, { useContext } from 'react'
 import { ProgramAggregationContext } from '../context'
-import {
-  COLUMN_HEADER_CONTEXT_MENU, SET_GROUP_BY,
-  SET_SORT
-} from '../reducer'
+import { COLUMN_HEADER_CONTEXT_MENU, SET_GROUP_BY, SET_SORT } from '../reducer'
 
 export const ColumnContextMenu = () => {
   const context = useContext(ProgramAggregationContext)
@@ -47,7 +44,7 @@ export const ColumnContextMenu = () => {
   return (
     <ContextualMenu
       target={target}
-      items={ items}
+      items={items}
       onDismiss={() => context.dispatch(COLUMN_HEADER_CONTEXT_MENU(null))}
     />
   )

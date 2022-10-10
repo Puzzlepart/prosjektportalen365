@@ -79,14 +79,13 @@ export const getDefaultColumns = () => [
     maxWidth: 225,
     isResizable: true,
     onRender: (item: any) => {
-     
-        return item.SPWebURL ? (
-          <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
-            {item.SiteTitle}
-          </Link>
-        ) : (
-          <span>{item.SiteTitle}</span>
-        )
+      return item.SPWebURL ? (
+        <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
+          {item.SiteTitle}
+        </Link>
+      ) : (
+        <span>{item.SiteTitle}</span>
+      )
     },
     data: { isGroupable: true }
   }
