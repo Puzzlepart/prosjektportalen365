@@ -15,7 +15,6 @@ export abstract class BaseProgramWebPart<
   T extends IBaseProgramWebPartProps
 > extends BaseClientSideWebPart<T> {
   public dataAdapter: SPDataAdapter
-  public webPartTitle: string
   public hubSite: IHubSite
   public childProjects: IChildProject[]
   public siteIds: string[]

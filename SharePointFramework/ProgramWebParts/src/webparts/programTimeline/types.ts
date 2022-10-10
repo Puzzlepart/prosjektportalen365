@@ -8,7 +8,7 @@ export interface IProgramTimelineWebPartProps extends IBaseWebPartComponentProps
   dataAdapter: SPDataAdapter
   childProjects: string[]
   infoText?: string
-  webPartTitle: string
+  title: string
   dataSourceName?: string
   configItemTitle?: string
 }

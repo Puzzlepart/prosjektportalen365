@@ -27,6 +27,7 @@ export default createReducer(initState(), {
   [DATA_LOADED.type]: (state, { payload }: ReturnType<typeof DATA_LOADED>) => {
     state.childProjects = payload.data.childProjects ?? state.childProjects
     state.availableProjects = payload.data.availableProjects ?? state.availableProjects
+    state.userHasManagePermission = payload.data.userHasManagePermission ?? state.userHasManagePermission
     state.loading = {
       ...state.loading,
       [payload.scope]: false

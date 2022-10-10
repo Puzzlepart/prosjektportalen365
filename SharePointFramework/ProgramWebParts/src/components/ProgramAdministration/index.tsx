@@ -39,7 +39,8 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
       <Commands />
       <div className={styles.root}>
         <div className={styles.header}>
-          <div className={styles.title}>{props.webPartTitle}</div>
+          <div className={styles.title}>{props.title}</div>
+          {JSON.stringify(state.userHasManagePermission)}
         </div>
         <div>
           {!isEmpty(state.childProjects) ? (

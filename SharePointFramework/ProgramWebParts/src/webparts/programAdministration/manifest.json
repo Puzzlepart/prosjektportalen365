@@ -16,14 +16,14 @@
         "default": "Other"
       },
       "title": {
-        "default": "Administrasjon av underprosjekter"
+        "default": "Administrasjon av underområder"
       },
       "description": {
-        "default": "Webpart for å administrere (legge til/fjerne) underprosjekter"
+        "default": "Webpart for å administrere (legge til/fjerne) underområder"
       },
       "officeFabricIconFontName": "Org",
       "properties": {
-        "webPartTitle": "Administrasjon"
+        "title": "Administrasjon av underområder"
       }
     }
   ]

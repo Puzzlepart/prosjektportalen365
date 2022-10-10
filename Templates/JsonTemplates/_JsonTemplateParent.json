@@ -55,7 +55,7 @@
                                 {
                                     "Id": "9570e369-21a6-4bf5-8198-13506499de52",
                                     "Properties": {
-                                        "webPartTitle": "Administrasjon av underområder"
+                                        "title": "Administrasjon av underområder"
                                     }
                                 }
                             ]
@@ -78,7 +78,7 @@
                                 {
                                     "Id": "01417142-67c8-498b-a6da-6e78003023dd",
                                     "Properties": {
-                                        "webPartTitle": "Underområder - oversikt",
+                                        "title": "Underområder",
                                         "showCommandBar": true,
                                         "showFilters": true,
                                         "showGroupBy": true,
@@ -226,7 +226,7 @@
                                 {
                                     "Id": "f97a38ab-78c2-400e-899f-b0d4cda76166",
                                     "Properties": {
-                                        "webPartTitle": "Underområder - tidslinje",
+                                        "title": "Tidslinje for underområder",
                                         "infoText": "Her listes alle prosjektene med start- og sluttdato i prosjektet. Prosjekttidslinjen støtter også faser, delfaser og milepæler. Tidslinjeelementer til dette prosjektet opprettes i den<A HREF=\"../sitePages/Prosjekttidslinje.aspx\">lokale tidslinjeinnhold listen</A>. Prosjekter vises med rød farge, faser i blått, delfaser blågrønt, og milepæler i gult. For å zoome inn/ut i tidslinje: ALT+Musehjul",
                                         "dataSource": "Prosjekttidslinje"
                                     }
