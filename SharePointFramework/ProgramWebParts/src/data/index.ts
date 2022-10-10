@@ -23,7 +23,6 @@ import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService, ProjectDataService } from 'pp365-shared/lib/services'
 import * as strings from 'ProgramWebPartsStrings'
 import HubSiteService from 'sp-hubsite-service'
-import { IChildProject } from 'types/IChildProject'
 import _ from 'underscore'
 import { GAINS_DEFAULT_SELECT_PROPERTIES } from './config'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
@@ -32,7 +31,7 @@ import { DEFAULT_SEARCH_SETTINGS } from './types'
 export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfiguration> {
   public project: ProjectDataService
   public dataSourceService: DataSourceService
-  public childProjects: IChildProject[]
+  public childProjects: Array<Record<string, string>>
 
   /**
    * Configure the SP data adapter

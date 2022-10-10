@@ -7,7 +7,6 @@ import assign from 'object-assign'
 import React from 'react'
 import * as ReactDom from 'react-dom'
 import HubSiteService, { IHubSite } from 'sp-hubsite-service'
-import { IChildProject } from 'types/IChildProject'
 import { SPDataAdapter } from '../../data'
 import { IBaseProgramWebPartProps } from './types'
 
@@ -16,7 +15,7 @@ export abstract class BaseProgramWebPart<
 > extends BaseClientSideWebPart<T> {
   public dataAdapter: SPDataAdapter
   public hubSite: IHubSite
-  public childProjects: IChildProject[]
+  public childProjects: Array<Record<string, string>>
   public siteIds: string[]
 
   public abstract render(): void
@@ -35,13 +34,13 @@ export abstract class BaseProgramWebPart<
     ReactDom.render(element, this.domElement)
   }
 
-  public async getChildProjects(): Promise<IChildProject[]> {
+  public async getChildProjects(): Promise<Array<Record<string, string>>> {
     try {
       const projectProperties = await sp.web.lists
         .getByTitle('Prosjektegenskaper')
         .items.getById(1)
         .get()
-      const childProjects: IChildProject[] = JSON.parse(projectProperties.GtChildProjects)
+      const childProjects = JSON.parse(projectProperties.GtChildProjects)
       return childProjects.length > 0
         ? childProjects
         : [{ SiteId: '00000000-0000-0000-0000-000000000000', Title: '' }]

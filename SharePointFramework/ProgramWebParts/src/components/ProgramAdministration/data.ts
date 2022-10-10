@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { sp } from '@pnp/sp'
 import { SPDataAdapter } from 'data'
-import { IChildProject } from 'types/IChildProject'
 import _ from 'underscore'
 
 /**
@@ -37,7 +36,7 @@ async function searchHubSite(hubId: string, query: string) {
  *
  * @param dataAdapter Data adapter
  */
-export async function fetchChildProjects(dataAdapter: SPDataAdapter): Promise<IChildProject[]> {
+export async function fetchChildProjects(dataAdapter: SPDataAdapter): Promise<Array<Record<string, string>>> {
   const queryArray = dataAdapter.aggregatedQueryBuilder('SiteId')
   const hubData = await sp.site.select('HubSiteId').get()
   const searchPromises = []
@@ -58,12 +57,12 @@ export async function fetchChildProjects(dataAdapter: SPDataAdapter): Promise<IC
  * @param dataAdapter Data adapter
  * @param newProjects New projects to add
  */
-export async function addChildProject(dataAdapter: SPDataAdapter, newProjects: IChildProject[]) {
+export async function addChildProject(dataAdapter: SPDataAdapter, newProjects: Array<Record<string, string>>) {
   const [{ GtChildProjects }] = await sp.web.lists
     .getByTitle('Prosjektegenskaper')
     .items.select('GtChildProjects')
     .get()
-  const projects: IChildProject[] = JSON.parse(GtChildProjects)
+  const projects = JSON.parse(GtChildProjects)
   const updatedProjects = [...projects, ...newProjects]
   const updateProperties = { GtChildProjects: JSON.stringify(updatedProjects) }
   await sp.web.lists.getByTitle('Prosjektegenskaper').items.getById(1).update(updateProperties)
@@ -78,13 +77,13 @@ export async function addChildProject(dataAdapter: SPDataAdapter, newProjects: I
  */
 export async function removeChildProjects(
   dataAdapter: SPDataAdapter,
-  projectToRemove: IChildProject[]
-): Promise<IChildProject[]> {
+  projectToRemove: Array<Record<string, string>>
+): Promise<Array<Record<string, string>>> {
   const [currentData] = await sp.web.lists
     .getByTitle('Prosjektegenskaper')
     .items.select('GtChildProjects')
     .get()
-  const projects: IChildProject[] = JSON.parse(currentData.GtChildProjects)
+  const projects: Array<Record<string, string>> = JSON.parse(currentData.GtChildProjects)
   const updatedProjects = projects.filter(
     (p) => !projectToRemove.some((el) => el.SiteId === p.SiteId)
   )

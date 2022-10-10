@@ -1,15 +1,15 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
-import { IChildProject } from 'types/IChildProject'
 import { IProgramAdministrationState } from './types'
 
 export const DATA_LOADED =
   createAction<{ data: Partial<IProgramAdministrationState>; scope: string }>('DATA_LOADED')
 export const TOGGLE_ADD_PROJECT_DIALOG = createAction('TOGGLE_ADD_PROJECT_DIALOG')
 export const CHILD_PROJECTS_ADDED =
-  createAction<{ childProjects: IChildProject[] }>('CHILD_PROJECTS_ADDED')
+  createAction<{ childProjects: Array<Record<string, string>> }>('CHILD_PROJECTS_ADDED')
 export const CHILD_PROJECTS_REMOVED =
-  createAction<{ childProjects: IChildProject[] }>('CHILD_PROJECTS_REMOVED')
-export const SET_SELECTED_TO_DELETE = createAction<{ selected: any[] }>('SET_SELECTED_TO_DELETE')
+  createAction<{ childProjects: Array<Record<string, string>> }>('CHILD_PROJECTS_REMOVED')
+export const SET_SELECTED_TO_DELETE =
+  createAction<{ selected: Array<Record<string, string>> }>('SET_SELECTED_TO_DELETE')
 
 export const initState = (): IProgramAdministrationState => ({
   loading: {

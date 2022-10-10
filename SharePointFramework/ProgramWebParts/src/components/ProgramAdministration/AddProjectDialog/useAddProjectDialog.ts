@@ -1,5 +1,4 @@
 import { useContext, useRef, useEffect } from 'react'
-import { IChildProject } from 'types/IChildProject'
 import { AddProjectDialog } from '.'
 import { ProgramAdministrationContext } from '../context'
 import { getHubSiteProjects } from '../data'
@@ -7,7 +6,7 @@ import { DATA_LOADED } from '../reducer'
 
 export const useAddProjectDialog = () => {
   const context = useContext(ProgramAdministrationContext)
-  const selectedProjects = useRef<IChildProject[]>([])
+  const selectedProjects = useRef<Array<Record<string, string>>>([])
 
   useEffect(() => {
     getHubSiteProjects().then((availableProjects) =>

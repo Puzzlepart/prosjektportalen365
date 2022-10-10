@@ -1,7 +1,7 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { SearchResult } from '@pnp/sp'
 import { SPDataAdapter } from 'data'
 import { IColumn, MessageBarType } from 'office-ui-fabric-react'
-import { IChildProject } from 'types/IChildProject'
 
 export interface IProgramAdministrationProps {
   title: string
@@ -22,7 +22,7 @@ export interface IProgramAdministrationState {
   /**
    * Child projects
    */
-  childProjects: IChildProject[]
+  childProjects: Array<Record<string, string>>
 
   /**
    * True if `AddProjectDialog` should be displayed to the user
@@ -32,12 +32,12 @@ export interface IProgramAdministrationState {
   /**
    * Projects available to add to parent project
    */
-  availableProjects: any[]
+  availableProjects: SearchResult[]
 
   /**
    * Projects selected by user for deletion
    */
-  selectedProjectsToDelete: IChildProject[]
+  selectedProjectsToDelete: Array<Record<string, string>>
 
   /**
    * User has manage permission, meaning `ChildProjectsAdmin`
