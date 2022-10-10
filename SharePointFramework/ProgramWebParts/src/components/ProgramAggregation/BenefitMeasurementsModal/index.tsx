@@ -8,7 +8,7 @@ import { columns } from './columns'
 import { IItemModalProps } from './types'
 
 export const BenefitMeasurementsModal: FunctionComponent<IItemModalProps> = (props) => {
-  const [isOpen,setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
 
   const onRenderItemColumn = (item: any, index: number, column: IColumn) => {
     const fieldNameDisplay: string = get(column, 'data.fieldNameDisplay')
@@ -21,7 +21,7 @@ export const BenefitMeasurementsModal: FunctionComponent<IItemModalProps> = (pro
 
   return (
     <div>
-      <a href='#' onClick={() =>  setIsOpen(true)}>
+      <a href='#' onClick={() => setIsOpen(true)}>
         {strings.ShowAllMeasurementsLinkText}
       </a>
       <Modal

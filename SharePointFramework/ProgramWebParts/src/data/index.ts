@@ -11,7 +11,13 @@ import {
   ISPProjectItem,
   ISPUser
 } from 'pp365-portfoliowebparts/lib/interfaces'
-import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator, ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
+import {
+  Benefit,
+  BenefitMeasurement,
+  BenefitMeasurementIndicator,
+  ProjectListModel,
+  TimelineContentListModel
+} from 'pp365-portfoliowebparts/lib/models'
 import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
@@ -658,10 +664,8 @@ export class DataAdapter implements IDataAdapter {
       )
     })
     const responses = await Promise.all(promises)
-    return flatten(responses.map(r => r.PrimarySearchResults))
+    return flatten(responses.map((r) => r.PrimarySearchResults))
   }
-
-
 
   /**
    * Post transform function for gains items
@@ -707,14 +711,16 @@ export class DataAdapter implements IDataAdapter {
     if (!dataSrc) throw new Error(format(strings.DataSourceNotFound, name))
     try {
       switch (dataSrc.category) {
-        case 'Gevinstoversikt':{
-          selectProperties.push(...GAINS_DEFAULT_SELECT_PROPERTIES)
-        }
-        break
+        case 'Gevinstoversikt':
+          {
+            selectProperties.push(...GAINS_DEFAULT_SELECT_PROPERTIES)
+          }
+          break
       }
       let items = await this._fetchItems(dataSrc.searchQuery, selectProperties, includeSelf)
       switch (dataSrc.category) {
-        case 'Gevinstoversikt': items = this._postTransformGainsItems(items)
+        case 'Gevinstoversikt':
+          items = this._postTransformGainsItems(items)
           break
       }
       return items
@@ -748,6 +754,6 @@ export class DataAdapter implements IDataAdapter {
         .filter(`GtSiteId eq '${this.context.pageContext.site.id.toString()}'`)
         .get()
       await list.items.getById(item.ID).update(properties)
-    } catch (error) { }
+    } catch (error) {}
   }
 }

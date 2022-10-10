@@ -48,7 +48,7 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
       )
     }
     case 'BenefitMeasurementTrend': {
-      if(!columnValue) return null
+      if (!columnValue) return null
       const trendIconProps = get(item, 'Measurements[0].TrendIconProps', {})
       const achievementDisplay = get(item, 'Measurements[0].AchievementDisplay', {})
       return (

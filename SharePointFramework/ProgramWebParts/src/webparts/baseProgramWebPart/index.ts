@@ -37,18 +37,18 @@ export abstract class BaseProgramWebPart<
     ReactDom.render(element, this.domElement)
   }
 
-  public async getChildProjects(): Promise< IChildProject[]> {
+  public async getChildProjects(): Promise<IChildProject[]> {
     try {
       const projectProperties = await sp.web.lists
         .getByTitle('Prosjektegenskaper')
         .items.getById(1)
         .get()
       const childProjects: IChildProject[] = JSON.parse(projectProperties.GtChildProjects)
-     return  childProjects.length > 0
-          ? childProjects
-          : [{ SiteId: '00000000-0000-0000-0000-000000000000', Title: '' }]
+      return childProjects.length > 0
+        ? childProjects
+        : [{ SiteId: '00000000-0000-0000-0000-000000000000', Title: '' }]
     } catch (error) {
-     return []
+      return []
     }
   }
 
@@ -65,7 +65,7 @@ export abstract class BaseProgramWebPart<
           .usingCaching()
           .get<{ Title: string }>()
       ).Title
-    } catch (error) { }
+    } catch (error) {}
   }
 
   public async onInit(): Promise<void> {
