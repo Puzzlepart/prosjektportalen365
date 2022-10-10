@@ -663,15 +663,14 @@ export class DataAdapter implements IDataAdapter {
 
 
   /**
-   * Post transform function for benefit items
+   * Post transform function for gains items
    *
-   * @param results Results
+   * @param results Search result items
    */
-  private _postTransformBenefitItems(results: any[]): any[] {
+  private _postTransformGainsItems(results: any[]): any[] {
     const benefits = results
       .filter((res) => res.ContentTypeID.indexOf('0x01004F466123309D46BAB9D5C6DE89A6CF67') === 0)
       .map((res) => new Benefit(res))
-
     const measurements = results
       .filter((res) => res.ContentTypeID.indexOf('0x010039EAFDC2A1624C1BA1A444FC8FE85DEC') === 0)
       .map((res) => new BenefitMeasurement(res))
@@ -692,7 +691,7 @@ export class DataAdapter implements IDataAdapter {
   /**
    * Fetch items with data source name. If the data source category
    * is "Gevinstoversikt", the items are sent through the method
-   * `_postTransformBenefitItems`.
+   * `_postTransformGainsItems`.
    *
    * @param name Data source name
    * @param selectProperties Select properties
@@ -707,35 +706,38 @@ export class DataAdapter implements IDataAdapter {
     if (!dataSrc) throw new Error(format(strings.DataSourceNotFound, name))
     try {
       switch (dataSrc.category) {
-        case 'Gevinstoversikt': selectProperties.push(...[
-          'Path',
-          'SPWebURL',
-          'Title',
-          'ListItemId',
-          'SiteTitle',
-          'SiteId',
-          'ContentTypeID',
-          'GtDesiredValueOWSNMBR',
-          'GtMeasureIndicatorOWSTEXT',
-          'GtMeasurementUnitOWSCHCS',
-          'GtStartValueOWSNMBR',
-          'GtMeasurementValueOWSNMBR',
-          'GtMeasurementCommentOWSMTXT',
-          'GtMeasurementDateOWSDATE',
-          'GtGainsResponsibleOWSUSER',
-          'GtGainsTurnoverOWSMTXT',
-          'GtGainsTypeOWSCHCS',
-          'GtPrereqProfitAchievementOWSMTXT',
-          'GtRealizationTimeOWSDATE',
-          'GtGainLookupId',
-          'GtMeasureIndicatorLookupId',
-          'GtGainsResponsible',
-          'GtGainsOwner'
-        ])
+        case 'Gevinstoversikt':{
+          selectProperties.push(...[
+            'Path',
+            'SPWebURL',
+            'Title',
+            'ListItemId',
+            'SiteTitle',
+            'SiteId',
+            'ContentTypeID',
+            'GtDesiredValueOWSNMBR',
+            'GtMeasureIndicatorOWSTEXT',
+            'GtMeasurementUnitOWSCHCS',
+            'GtStartValueOWSNMBR',
+            'GtMeasurementValueOWSNMBR',
+            'GtMeasurementCommentOWSMTXT',
+            'GtMeasurementDateOWSDATE',
+            'GtGainsResponsibleOWSUSER',
+            'GtGainsTurnoverOWSMTXT',
+            'GtGainsTypeOWSCHCS',
+            'GtPrereqProfitAchievementOWSMTXT',
+            'GtRealizationTimeOWSDATE',
+            'GtGainLookupId',
+            'GtMeasureIndicatorLookupId',
+            'GtGainsResponsible',
+            'GtGainsOwner'
+          ])
+        }
+        break
       }
       let items = await this._fetchItems(dataSrc.searchQuery, selectProperties, includeSelf)
       switch (dataSrc.category) {
-        case 'Gevinstoversikt': items = this._postTransformBenefitItems(items)
+        case 'Gevinstoversikt': items = this._postTransformGainsItems(items)
           break
       }
       return items

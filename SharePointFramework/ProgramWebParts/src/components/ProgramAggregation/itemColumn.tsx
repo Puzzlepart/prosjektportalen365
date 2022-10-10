@@ -21,7 +21,6 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
     return get(item, column['fieldNameDisplay'], null)
   }
   const columnValue = get(item, column.fieldName, null)
-
   const type = column?.data?.renderAs ?? column['dataType']
 
   switch (type) {
@@ -48,14 +47,14 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
         </ul>
       )
     }
-    case 'trend': {
-      const trend = columnValue ? JSON.parse(columnValue) : null
+    case 'BenefitMeasurementTrend': {
+      if(!columnValue) return null
       return (
         <span>
           <span style={{ display: 'inline-block', width: 20 }}>
-            {trend.TrendIconProps && <Icon {...trend.TrendIconProps} />}
+            {columnValue.TrendIconProps && <Icon {...columnValue.TrendIconProps} />}
           </span>
-          <span>{trend.AchievementDisplay}</span>
+          <span>{columnValue.AchievementDisplay}</span>
         </span>
       )
     }
