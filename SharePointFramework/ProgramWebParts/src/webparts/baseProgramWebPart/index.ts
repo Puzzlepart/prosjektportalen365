@@ -1,15 +1,15 @@
-import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane'
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
-import { IBaseProgramWebPartProps } from './types'
 import { DataAdapter } from 'data'
 import assign from 'object-assign'
 import React from 'react'
 import * as ReactDom from 'react-dom'
 import HubSiteService, { IHubSite } from 'sp-hubsite-service'
 import { IChildProject } from 'types/IChildProject'
+import { IBaseProgramWebPartProps } from './types'
 
 export abstract class BaseProgramWebPart<
   T extends IBaseProgramWebPartProps
@@ -37,19 +37,18 @@ export abstract class BaseProgramWebPart<
     ReactDom.render(element, this.domElement)
   }
 
-  public async getChildProjectSiteIds(): Promise<void> {
+  public async getChildProjects(): Promise< IChildProject[]> {
     try {
       const projectProperties = await sp.web.lists
         .getByTitle('Prosjektegenskaper')
         .items.getById(1)
         .get()
       const childProjects: IChildProject[] = JSON.parse(projectProperties.GtChildProjects)
-      this.childProjects =
-        childProjects.length > 0
+     return  childProjects.length > 0
           ? childProjects
           : [{ SiteId: '00000000-0000-0000-0000-000000000000', Title: '' }]
     } catch (error) {
-      Logger.write(error, LogLevel.Error)
+     return []
     }
   }
 
@@ -72,7 +71,7 @@ export abstract class BaseProgramWebPart<
   public async onInit(): Promise<void> {
     sp.setup({ sp: { baseUrl: this.context.pageContext.web.absoluteUrl } })
     this.hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext)
-    await this.getChildProjectSiteIds()
+    this.childProjects = await this.getChildProjects()
     this.dataAdapter = new DataAdapter(this.context, this.hubSite, this.childProjects)
     this.context.statusRenderer.clearLoadingIndicator(this.domElement)
     await this._setup()

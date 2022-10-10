@@ -5,7 +5,7 @@ import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import strings from 'ProgramWebPartsStrings'
 import React from 'react'
 import { isEmpty } from 'underscore'
-import ItemModal from './ItemModal'
+import BenefitMeasurementsModal from './BenefitMeasurementsModal'
 
 /**
  * Render item column
@@ -59,8 +59,8 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
         </span>
       )
     }
-    case 'modal':
-      return <ItemModal title={item.MeasurementIndicator} value={JSON.parse(columnValue)} />
+    case 'BenefitMeasurementsModal':
+      return <BenefitMeasurementsModal title={item.Title} value={item.Measurements} />
     default:
       return columnValue
   }

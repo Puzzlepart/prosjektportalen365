@@ -1,22 +1,13 @@
 import { get, isEmpty } from '@microsoft/sp-lodash-subset'
 import { DetailsList, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
-import { IModalProps, Modal } from 'office-ui-fabric-react/lib/Modal'
+import { Modal } from 'office-ui-fabric-react/lib/Modal'
 import strings from 'ProgramWebPartsStrings'
 import React, { PureComponent } from 'react'
 import { columns } from './columns'
-import styles from './ItemModal.module.scss'
+import styles from './BenefitMeasurementsModal.module.scss'
+import { IItemModalProps, IItemModalState } from './types'
 
-export interface IItemModalProps extends IModalProps {
-  title: string
-  value: any
-  columns?: IColumn[]
-}
-
-export interface IItemModalState {
-  isOpen?: boolean
-}
-
-export default class ItemModal extends PureComponent<IItemModalProps, IItemModalState> {
+export default class BenefitMeasurementsModal extends PureComponent<IItemModalProps, IItemModalState> {
   public static defaultProps: Partial<IItemModalProps> = {
     columns
   }
@@ -37,7 +28,7 @@ export default class ItemModal extends PureComponent<IItemModalProps, IItemModal
         <Modal
           isOpen={this.state.isOpen}
           isDarkOverlay={true}
-          containerClassName={styles.itemModal}
+          containerClassName={styles.root}
           onDismiss={this._onCloseModal.bind(this)}
           isBlocking={false}>
           <div className={styles.header}>

@@ -4,13 +4,14 @@ import { QueryPropertyValueType, SearchResult, SortDirection, sp, SPRest } from 
 import * as cleanDeep from 'clean-deep'
 import MSGraph from 'msgraph-helper'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { IDataAdapter } from 'pp365-portfoliowebparts/lib/data/types'
 import {
   IGraphGroup,
   IPortfolioConfiguration,
   ISPProjectItem,
   ISPUser
 } from 'pp365-portfoliowebparts/lib/interfaces'
-import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
+import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator, ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
 import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
@@ -22,7 +23,7 @@ import _, { flatten } from 'underscore'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
 
-export class DataAdapter {
+export class DataAdapter implements IDataAdapter {
   public dataSourceService: DataSourceService
   private _portalDataService: PortalDataService
   private _sp: SPRest
@@ -48,7 +49,7 @@ export class DataAdapter {
    * Configuring the DataAdapter enabling use
    * of the DataSourceService.
    */
-  public async configure(): Promise<DataAdapter> {
+  public async configure(): Promise<IDataAdapter> {
     if (this.dataSourceService) return this
     const { web } = await HubSiteService.GetHubSite(this._sp, this.context.pageContext as any)
     this.dataSourceService = new DataSourceService(web)
@@ -142,10 +143,10 @@ export class DataAdapter {
   /**
    * Fetch data for manager view
    *
-   * @param view
-   * @param configuration
-   * @param siteId
-   * @param siteIdProperty
+   * @param view View configuration
+   * @param configuration PortfolioOverviewConfiguration
+   * @param siteId Site ID
+   * @param siteIdProperty Site ID property
    */
   public async fetchDataForManagerView(
     view: PortfolioOverviewView,
@@ -659,11 +660,43 @@ export class DataAdapter {
     return flatten(responses.map(r => r.PrimarySearchResults))
   }
 
+
+
   /**
-   * Fetch items with data source name
+   * Post transform function for benefit items
+   *
+   * @param results Results
+   */
+  private _postTransformBenefitItems(results: any[]): any[] {
+    const benefits = results
+      .filter((res) => res.ContentTypeID.indexOf('0x01004F466123309D46BAB9D5C6DE89A6CF67') === 0)
+      .map((res) => new Benefit(res))
+
+    const measurements = results
+      .filter((res) => res.ContentTypeID.indexOf('0x010039EAFDC2A1624C1BA1A444FC8FE85DEC') === 0)
+      .map((res) => new BenefitMeasurement(res))
+      .sort((a, b) => b.Date.getTime() - a.Date.getTime())
+
+    const indicactors = results
+      .filter((res) => res.ContentTypeID.indexOf('0x010073043EFE3E814A2BBEF96B8457623F95') === 0)
+      .map((res) => {
+        const indicator = new BenefitMeasurementIndicator(res)
+          .setMeasurements(measurements)
+          .setBenefit(benefits)
+        return indicator
+      })
+      .filter((i) => i.Benefit)
+    return indicactors
+  }
+
+  /**
+   * Fetch items with data source name. If the data source category
+   * is "Gevinstoversikt", the items are sent through the method
+   * `_postTransformBenefitItems`.
    *
    * @param name Data source name
    * @param selectProperties Select properties
+   * @param includeSelf Include self (defaults to `false`)
    */
   public async fetchItemsWithSource(
     name: string,
@@ -671,11 +704,40 @@ export class DataAdapter {
     includeSelf: boolean = false
   ): Promise<any> {
     const dataSrc = await this.dataSourceService.getByName(name)
-    if (!dataSrc) {
-      throw new Error(format(strings.DataSourceNotFound, name))
-    }
+    if (!dataSrc) throw new Error(format(strings.DataSourceNotFound, name))
     try {
-      const items = await this._fetchItems(dataSrc.searchQuery, selectProperties, includeSelf)
+      switch (dataSrc.category) {
+        case 'Gevinstoversikt': selectProperties.push(...[
+          'Path',
+          'SPWebURL',
+          'Title',
+          'ListItemId',
+          'SiteTitle',
+          'SiteId',
+          'ContentTypeID',
+          'GtDesiredValueOWSNMBR',
+          'GtMeasureIndicatorOWSTEXT',
+          'GtMeasurementUnitOWSCHCS',
+          'GtStartValueOWSNMBR',
+          'GtMeasurementValueOWSNMBR',
+          'GtMeasurementCommentOWSMTXT',
+          'GtMeasurementDateOWSDATE',
+          'GtGainsResponsibleOWSUSER',
+          'GtGainsTurnoverOWSMTXT',
+          'GtGainsTypeOWSCHCS',
+          'GtPrereqProfitAchievementOWSMTXT',
+          'GtRealizationTimeOWSDATE',
+          'GtGainLookupId',
+          'GtMeasureIndicatorLookupId',
+          'GtGainsResponsible',
+          'GtGainsOwner'
+        ])
+      }
+      let items = await this._fetchItems(dataSrc.searchQuery, selectProperties, includeSelf)
+      switch (dataSrc.category) {
+        case 'Gevinstoversikt': items = this._postTransformBenefitItems(items)
+          break
+      }
       return items
     } catch (error) {
       throw new Error(format(strings.DataSourceError, name))
