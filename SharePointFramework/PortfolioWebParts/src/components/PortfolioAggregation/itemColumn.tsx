@@ -1,7 +1,6 @@
 import { PageContext } from '@microsoft/sp-page-context'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { Web } from '@pnp/sp'
-import { UserColumn } from 'components/PortfolioOverview/RenderItemColumn/UserColumn'
 import { IColumn, Icon, Link } from 'office-ui-fabric-react/lib'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
@@ -10,6 +9,7 @@ import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import React from 'react'
 import { isEmpty } from 'underscore'
 import { TagsColumn } from '../PortfolioOverview/RenderItemColumn/TagsColumn'
+import { UserColumn } from '../PortfolioOverview/RenderItemColumn/UserColumn'
 import ItemModal from './ItemModal'
 
 /**
