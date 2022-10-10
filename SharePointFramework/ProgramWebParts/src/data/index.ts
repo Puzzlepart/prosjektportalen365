@@ -26,7 +26,6 @@ export class DataAdapter {
   private _portalDataService: PortalDataService
   private _dataSourceService: DataSourceService
   private _sp: SPRest
-  private _webPartContext: WebPartContext
   private _childProjects: IChildProject[]
 
   constructor(
@@ -34,7 +33,6 @@ export class DataAdapter {
     public hubSite: IHubSite,
     childProjects: IChildProject[]
   ) {
-    this._webPartContext = context
     this._childProjects = childProjects
     this._portalDataService = new PortalDataService().configure({
       urlOrWeb: hubSite.url
@@ -83,20 +81,16 @@ export class DataAdapter {
   /**
    * Fetch data for view
    *
-   * @description Used by PortfolioOverview and PortfolioInsights
-   *
-   * @param view
-   * @param configuration
-   * @param siteId
-   * @returns {Promise<IFetchDataForViewItemResult[]>}
-   * @memberof DataAdapter
+   * @param view View configuration
+   * @param configuration PortfolioOverviewConfiguration
+   * @param siteId Site ID
    */
   public async fetchDataForView(
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
     siteId: string[]
   ): Promise<IFetchDataForViewItemResult[]> {
-    siteId = this._webPartContext.pageContext.legacyPageContext.departmentId
+    siteId = this.context.pageContext.legacyPageContext.departmentId
     const isCurrentUserInManagerGroup = await this.isUserInGroup(strings.PortfolioManagerGroupName)
     if (isCurrentUserInManagerGroup) {
       return await this.fetchDataForManagerView(view, configuration, siteId)
@@ -107,7 +101,6 @@ export class DataAdapter {
 
   /**
    * Fetch data for regular view
-   *
    *
    * @param view View configuration
    * @param configuration PortfolioOverviewConfiguration
@@ -147,8 +140,6 @@ export class DataAdapter {
 
   /**
    * Fetch data for manager view
-   *
-   * @description Used by PortfolioOverview and PortfolioInsights
    *
    * @param view
    * @param configuration
@@ -190,8 +181,6 @@ export class DataAdapter {
   /**
    * Create queries if number of projects exceeds threshold to avoid 4096 character limitation by SharePoint
    *
-   * @description Used by all postqueries in Program webparts
-   *
    * @param queryProperty Dependant on whether it is aggregated portfolio or portfolio overview
    * @param maxQueryLength Maximum length of query before pushing to array
    * @param maxProjects Maximum projects required before creating strings
@@ -225,11 +214,10 @@ export class DataAdapter {
 
   /**
    *  do a dynamic amount of sp.search calls
-   * 
-   * @param view
-   * @param configuration 
-   * @param siteId 
-   * @returns 
+   *
+   * @param view View configuration
+   * @param configuration PortfolioOverviewConfiguration
+   * @param siteId Site ID
    */
   public async fetchDataForViewBatch(
     view: PortfolioOverviewView,
@@ -266,13 +254,12 @@ export class DataAdapter {
 
   /**
    * Fetches data for portfolio views
-   * 
-   * @param view
-   * @param configuration
-   * @param siteId
-   * @param siteIdProperty
+   *
+   * @param view View configuration
+   * @param configuration PortfolioOverviewConfiguration
+   * @param siteId Site ID
+   * @param siteIdProperty Site ID property
    */
-
   private async _fetchDataForView(
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
@@ -625,10 +612,6 @@ export class DataAdapter {
    * @public
    *
    * @param groupName
-   *
-   * @returns {Promise<boolean>}
-   *
-   * @memberof DataAdapter
    */
   public async isUserInGroup(groupName: string): Promise<boolean> {
     try {
@@ -719,5 +702,20 @@ export class DataAdapter {
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, category))
     }
+  }
+
+  /**
+   * Update project item/entity in hub site (portfolio)
+   *
+   * @param properties Properties to update
+   */
+  public async updateProjectInHub(properties: Record<string, any>): Promise<void> {
+    try {
+      const list = this.hubSite.web.lists.getByTitle('Prosjekter')
+      const [item] = await list.items
+        .filter(`GtSiteId eq '${this.context.pageContext.site.id.toString()}'`)
+        .get()
+      await list.items.getById(item.ID).update(properties)
+    } catch (error) {}
   }
 }
