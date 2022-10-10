@@ -20,6 +20,7 @@ import * as strings from 'ProgramWebPartsStrings'
 import HubSiteService, { IHubSite } from 'sp-hubsite-service'
 import { IChildProject } from 'types/IChildProject'
 import _, { flatten } from 'underscore'
+import { GAINS_DEFAULT_SELECT_PROPERTIES } from './config'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
 
@@ -707,31 +708,7 @@ export class DataAdapter implements IDataAdapter {
     try {
       switch (dataSrc.category) {
         case 'Gevinstoversikt':{
-          selectProperties.push(...[
-            'Path',
-            'SPWebURL',
-            'Title',
-            'ListItemId',
-            'SiteTitle',
-            'SiteId',
-            'ContentTypeID',
-            'GtDesiredValueOWSNMBR',
-            'GtMeasureIndicatorOWSTEXT',
-            'GtMeasurementUnitOWSCHCS',
-            'GtStartValueOWSNMBR',
-            'GtMeasurementValueOWSNMBR',
-            'GtMeasurementCommentOWSMTXT',
-            'GtMeasurementDateOWSDATE',
-            'GtGainsResponsibleOWSUSER',
-            'GtGainsTurnoverOWSMTXT',
-            'GtGainsTypeOWSCHCS',
-            'GtPrereqProfitAchievementOWSMTXT',
-            'GtRealizationTimeOWSDATE',
-            'GtGainLookupId',
-            'GtMeasureIndicatorLookupId',
-            'GtGainsResponsible',
-            'GtGainsOwner'
-          ])
+          selectProperties.push(...GAINS_DEFAULT_SELECT_PROPERTIES)
         }
         break
       }
