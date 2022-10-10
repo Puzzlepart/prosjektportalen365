@@ -5,7 +5,7 @@ import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import strings from 'ProgramWebPartsStrings'
 import React from 'react'
 import { isEmpty } from 'underscore'
-import BenefitMeasurementsModal from './BenefitMeasurementsModal'
+import { BenefitMeasurementsModal } from './BenefitMeasurementsModal'
 
 /**
  * Render item column
