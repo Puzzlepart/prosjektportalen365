@@ -1,4 +1,3 @@
-import { Version } from '@microsoft/sp-core-library'
 import {
   IPropertyPaneConfiguration,
   PropertyPaneTextField,
@@ -7,7 +6,7 @@ import {
 import { PortfolioAggregation } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
 import * as strings from 'ProgramWebPartsStrings'
 import React from 'react'
-import * as ReactDom from 'react-dom'
+import { render, unmountComponentAtNode } from 'react-dom'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { IProgramDeliveriesWebPartProps } from './types'
 
@@ -17,7 +16,7 @@ export default class ProgramDeliveriesWebPart extends BaseProgramWebPart<IProgra
   }
 
   public render(): void {
-    ReactDom.render((
+    render(
       <>
         <PortfolioAggregation
           title={this.pageTitle ?? this.properties.title}
@@ -33,12 +32,13 @@ export default class ProgramDeliveriesWebPart extends BaseProgramWebPart<IProgra
           columns={this.properties.columns}
           isParent={true}
         />
-      </>
-    ), this.domElement)
+      </>,
+      this.domElement
+    )
   }
 
   protected onDispose(): void {
-    ReactDom.unmountComponentAtNode(this.domElement)
+    unmountComponentAtNode(this.domElement)
   }
 
   private _onUpdateProperty(key: string, value: any) {

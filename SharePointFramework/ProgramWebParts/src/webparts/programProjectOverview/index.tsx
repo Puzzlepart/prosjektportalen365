@@ -1,4 +1,3 @@
-import { Version } from '@microsoft/sp-core-library'
 import {
   IPropertyPaneConfiguration,
   IPropertyPaneDropdownOption,
@@ -11,7 +10,7 @@ import { IPortfolioConfiguration } from 'pp365-portfoliowebparts/lib/interfaces'
 import { PROPERTYPANE_CONFIGURATION_PROPS } from 'pp365-portfoliowebparts/lib/webparts/portfolioOverview'
 import * as strings from 'ProgramWebPartsStrings'
 import React from 'react'
-import * as ReactDom from 'react-dom'
+import { render, unmountComponentAtNode } from 'react-dom'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { IProgramProjectOverviewProps } from './types'
 
@@ -24,7 +23,7 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
   }
 
   public render(): void {
-    ReactDom.render((
+    render(
       <>
         <PortfolioOverview
           title={this.pageTitle ?? this.properties.title}
@@ -39,12 +38,13 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
           showSearchBox={this.properties.showSearchBox}
           isParentProject={true}
         />
-      </>
-    ), this.domElement)
+      </>,
+      this.domElement
+    )
   }
 
   protected onDispose(): void {
-    ReactDom.unmountComponentAtNode(this.domElement)
+    unmountComponentAtNode(this.domElement)
   }
 
   protected _getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {

@@ -1,4 +1,3 @@
-import { Version } from '@microsoft/sp-core-library'
 import {
   IPropertyPaneConfiguration,
   PropertyPaneTextField,
@@ -18,7 +17,7 @@ import {
 } from 'pp365-portfoliowebparts/lib/models'
 import * as strings from 'ProgramWebPartsStrings'
 import React from 'react'
-import * as ReactDom from 'react-dom'
+import { render, unmountComponentAtNode } from 'react-dom'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { IProgramBenefitsWebPartProps } from './types'
 
@@ -29,7 +28,7 @@ export default class ProgramBenefitsWebPart extends BaseProgramWebPart<IProgramB
 
   public render(): void {
     const columns = getColumns({ hiddenColumns: [] })
-    ReactDom.render(
+    render(
       <>
         <PortfolioAggregation
           title={this.pageTitle ?? this.properties.title}
@@ -99,7 +98,7 @@ export default class ProgramBenefitsWebPart extends BaseProgramWebPart<IProgramB
   }
 
   protected onDispose(): void {
-    ReactDom.unmountComponentAtNode(this.domElement)
+    unmountComponentAtNode(this.domElement)
   }
 
   private _onUpdateProperty(key: string, value: any) {

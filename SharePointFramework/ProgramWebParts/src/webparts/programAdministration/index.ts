@@ -1,9 +1,8 @@
-import { Version } from '@microsoft/sp-core-library'
 import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane'
 import { sp, SPRest } from '@pnp/sp'
 import { ProgramAdministration } from 'components/ProgramAdministration'
 import { IProgramAdministrationProps } from 'components/ProgramAdministration/types'
-import * as ReactDom from 'react-dom'
+import { unmountComponentAtNode } from 'react-dom'
 import { BaseProgramWebPart } from 'webparts/baseProgramWebPart'
 
 export default class ProgramAdministrationWebPart extends BaseProgramWebPart<IProgramAdministrationProps> {
@@ -27,7 +26,7 @@ export default class ProgramAdministrationWebPart extends BaseProgramWebPart<IPr
   }
 
   protected onDispose(): void {
-    ReactDom.unmountComponentAtNode(this.domElement)
+    unmountComponentAtNode(this.domElement)
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {

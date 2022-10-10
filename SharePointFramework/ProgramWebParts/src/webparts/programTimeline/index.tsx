@@ -1,9 +1,8 @@
-import { Version } from '@microsoft/sp-core-library'
 import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane'
 import { ProjectTimeline } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline'
 import strings from 'ProgramWebPartsStrings'
 import React from 'react'
-import * as ReactDom from 'react-dom'
+import { render, unmountComponentAtNode } from 'react-dom'
 import { IChildProject } from 'types/IChildProject'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { IProgramTimelineWebPartProps } from './types'
@@ -16,7 +15,7 @@ export default class ProgramTimelineWebPart extends BaseProgramWebPart<IProgramT
   }
 
   public render(): void {
-    ReactDom.render(
+    render(
       <>
         <ProjectTimeline
           title={this.pageTitle ?? this.properties.title}
@@ -32,7 +31,7 @@ export default class ProgramTimelineWebPart extends BaseProgramWebPart<IProgramT
   }
 
   protected onDispose(): void {
-    ReactDom.unmountComponentAtNode(this.domElement)
+    unmountComponentAtNode(this.domElement)
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {

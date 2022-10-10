@@ -1,4 +1,3 @@
-import { Version } from '@microsoft/sp-core-library'
 import {
   IPropertyPaneConfiguration,
   PropertyPaneTextField,
@@ -9,7 +8,7 @@ import { IPortfolioConfiguration } from 'pp365-portfoliowebparts/lib/interfaces'
 import { PROPERTYPANE_CONFIGURATION_PROPS } from 'pp365-portfoliowebparts/lib/webparts/portfolioOverview'
 import * as strings from 'ProgramWebPartsStrings'
 import React from 'react'
-import * as ReactDom from 'react-dom'
+import { render, unmountComponentAtNode } from 'react-dom'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { IProgramStatusWebPartProps } from './types'
 
@@ -22,7 +21,7 @@ export default class ProgramStatusWebPart extends BaseProgramWebPart<IProgramSta
   }
 
   public render(): void {
-    ReactDom.render(
+    render(
       <>
         <PortfolioOverview
           title={this.pageTitle ?? this.properties.title}
@@ -44,7 +43,7 @@ export default class ProgramStatusWebPart extends BaseProgramWebPart<IProgramSta
   }
 
   protected onDispose(): void {
-    ReactDom.unmountComponentAtNode(this.domElement)
+    unmountComponentAtNode(this.domElement)
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {

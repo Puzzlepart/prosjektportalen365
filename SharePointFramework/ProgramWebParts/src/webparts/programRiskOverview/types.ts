@@ -2,12 +2,12 @@ import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components
 import { IAggreationColumn } from 'types'
 
 export interface IProgramRiskOverviewWebPartProps extends IBaseWebPartComponentProps {
-  webPartTitle: string;
-  dataSource: string;
-  showExcelExportButton: boolean;
-  showSearchBox: boolean;
-  columns: IAggreationColumn[];
-  showCommandBar: boolean;
+  webPartTitle: string
+  dataSource: string
+  showExcelExportButton: boolean
+  showSearchBox: boolean
+  columns: IAggreationColumn[]
+  showCommandBar: boolean
 }
 
 export const SelectedRiskProperties = [
