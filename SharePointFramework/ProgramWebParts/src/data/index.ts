@@ -22,6 +22,9 @@ import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
 import { IChildProject } from 'types/IChildProject'
 
+/**
+ *
+ */
 export class DataAdapter {
   private _portalDataService: PortalDataService
   private _dataSourceService: DataSourceService

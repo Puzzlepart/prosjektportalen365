@@ -63,6 +63,7 @@ export abstract class BaseProgramWebPart<
           .getById(this.context.pageContext.list.id.toString())
           .items.getById(this.context.pageContext.listItem.id)
           .select('Title')
+          .usingCaching()
           .get<{ Title: string }>()
       ).Title
     } catch (error) {}

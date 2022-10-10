@@ -1,13 +1,14 @@
-import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
 import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane'
-import { BaseProgramWebPart } from '../baseProgramWebPart'
-import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
-import { IChildProject } from 'types/IChildProject'
-import { ProgramTimeline } from 'components/ProgramTimeline/ProgramTimeline'
-import { DataAdapter } from 'data'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { DataAdapter } from 'data'
+import { ProjectTimeline } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline'
+import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
 import strings from 'ProgramWebPartsStrings'
+import React from 'react'
+import * as ReactDom from 'react-dom'
+import { IChildProject } from 'types/IChildProject'
+import { BaseProgramWebPart } from '../baseProgramWebPart'
 
 export interface IProgramTimelineProps extends IBaseWebPartComponentProps {
   description: string
@@ -28,16 +29,19 @@ export default class ProgramTimelineWebPart extends BaseProgramWebPart<IProgramT
   }
 
   public render(): void {
-    this.renderComponent<IProgramTimelineProps>(ProgramTimeline, {
-      description: this.description,
-      context: this.context,
-      dataAdapter: this.dataAdapter,
-      childProjects: this.siteIds,
-      infoText: this.properties.infoText,
-      webPartTitle: this.properties.webPartTitle,
-      dataSourceName: this.properties.dataSourceName,
-      configItemTitle: this.properties.configItemTitle
-    })
+    ReactDom.render(
+      <>
+        <ProjectTimeline
+          title={this.webPartTitle ?? this.properties.webPartTitle}
+          dataAdapter={this.dataAdapter}
+          pageContext={this.context.pageContext}
+          infoText={this.properties.infoText}
+          dataSourceName={this.properties.dataSourceName}
+          configItemTitle={this.properties.configItemTitle}
+        />
+      </>,
+      this.domElement
+    )
   }
 
   protected onDispose(): void {
