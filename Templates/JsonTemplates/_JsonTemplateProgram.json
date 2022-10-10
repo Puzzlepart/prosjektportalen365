@@ -690,7 +690,7 @@
                 "Columns": [{
                     "Factor": 12,
                     "Controls": [{
-                        "Id": "7ff12e9d-1565-4694-b1de-948d1b174487",
+                        "Id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
                         "Properties": {
                             "webPartTitle": "Underområder - leveranser",
                             "dataSource": "Alle prosjektleveranser",
