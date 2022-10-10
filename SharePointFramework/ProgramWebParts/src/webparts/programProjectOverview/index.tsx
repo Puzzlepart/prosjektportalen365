@@ -1,9 +1,7 @@
 import {
   IPropertyPaneConfiguration,
   IPropertyPaneDropdownOption,
-  PropertyPaneDropdown,
-  PropertyPaneTextField,
-  PropertyPaneToggle
+  PropertyPaneDropdown, PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { PortfolioOverview } from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
 import { IPortfolioConfiguration } from 'pp365-portfoliowebparts/lib/interfaces'
@@ -100,27 +98,6 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
                 PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_VIEWSELECTOR, {
                   label: strings.ShowViewSelectorLabel,
                   disabled: !this.properties.showCommandBar
-                })
-              ]
-            }
-          ]
-        },
-        {
-          groups: [
-            {
-              groupName: strings.ConfigurationGroupName,
-              groupFields: [
-                PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.COLUMN_CONFIG_LISTNAME, {
-                  label: strings.ColumnConfigListNameLabel,
-                  disabled: true
-                }),
-                PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.COLUMNS_LISTNAME, {
-                  label: strings.ColumnsListNameLabel,
-                  disabled: true
-                }),
-                PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.VIEWS_LISTNAME, {
-                  label: strings.ViewsListNameLabel,
-                  disabled: true
                 })
               ]
             }
