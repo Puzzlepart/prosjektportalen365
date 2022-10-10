@@ -2,18 +2,27 @@ import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox'
 import { SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
 import strings from 'ProgramWebPartsStrings'
-import React, { FormEvent, FunctionComponent, useEffect, useMemo, useState } from 'react'
+import React, {
+  FormEvent,
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useMemo,
+  useState
+} from 'react'
+import { ProgramAdministrationContext } from '../context'
 import styles from './ProjectTable.module.scss'
 import { IListField, IProjectTableProps } from './types'
 
 export const ProjectTable: FunctionComponent<IProjectTableProps> = (props) => {
+  const context = useContext(ProgramAdministrationContext)
   const [items, setItems] = useState<any[]>([])
   const [selection, setSelection] = useState<any[]>([])
 
   useEffect(() => setItems(props.items), [props.items])
   useEffect(() => props.onSelectionChanged(selection), [selection])
 
-  const handleItemClicked = (item: any, selecting: boolean): void => {
+  const handleItemClicked = (item: any, selecting: boolean) => {
     if (props.selectionMode === SelectionMode.none) return
     let newSelection: any[] = null
     if (selecting) {
@@ -35,7 +44,7 @@ export const ProjectTable: FunctionComponent<IProjectTableProps> = (props) => {
     }
   }
 
-  const handleHeaderCheckboxClicked = (selecting: boolean): void => {
+  const handleHeaderCheckboxClicked = (selecting: boolean) => {
     if (props.selectionMode === SelectionMode.none) return
     let newSelection: any[] = null
     if (selecting) {
@@ -53,7 +62,7 @@ export const ProjectTable: FunctionComponent<IProjectTableProps> = (props) => {
     }
   }
 
-  const handleFilterChanged = (filter: string): void => {
+  const handleFilterChanged = (filter: string) => {
     const filtered: any[] = props.items.filter((item: any): boolean =>
       props.fields
         .map((field: IListField): string => field.fieldName)
@@ -69,11 +78,12 @@ export const ProjectTable: FunctionComponent<IProjectTableProps> = (props) => {
     return (
       <Checkbox
         checked={checked}
+        disabled={!context.state.userHasManagePermission}
         styles={{
           root: { top: '50%', transform: 'translateY(-50%)' },
           checkbox: { borderRadius: '16px' }
         }}
-        onChange={(ev: FormEvent, newChecked: boolean): void => {
+        onChange={(ev: FormEvent, newChecked: boolean) => {
           onChange(newChecked)
           ev.stopPropagation()
         }}
@@ -110,13 +120,11 @@ export const ProjectTable: FunctionComponent<IProjectTableProps> = (props) => {
       <li
         key='checkbox'
         className={styles.column}
-        onClick={(event): void => {
+        onClick={(event) => {
           event.preventDefault()
           handleItemClicked(item, !checked)
         }}>
-        {renderCheckbox(checked, (newChecked: boolean): void =>
-          handleItemClicked(item, newChecked)
-        )}
+        {renderCheckbox(checked, (newChecked: boolean) => handleItemClicked(item, newChecked))}
       </li>,
       ...props.fields.map(
         (field: IListField, index: number): JSX.Element => (

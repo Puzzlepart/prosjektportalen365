@@ -36,18 +36,19 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
 
   return (
     <ProgramAdministrationContext.Provider value={{ props, state, dispatch }}>
-      <Commands />
+      {state.userHasManagePermission && <Commands />}
       <div className={styles.root}>
         <div className={styles.header}>
           <div className={styles.title}>{props.title}</div>
-          {JSON.stringify(state.userHasManagePermission)}
         </div>
         <div>
           {!isEmpty(state.childProjects) ? (
             <ProjectTable
               fields={fields}
               items={state.childProjects}
-              selectionMode={SelectionMode.multiple}
+              selectionMode={
+                state.userHasManagePermission ? SelectionMode.multiple : SelectionMode.none
+              }
               onSelectionChanged={(selected) => dispatch(SET_SELECTED_TO_DELETE({ selected }))}
             />
           ) : (

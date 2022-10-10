@@ -8,15 +8,15 @@ export const useProgramAggregation = (props: IProgramAggregationProps) => {
   const [state, dispatch] = useReducer(reducer, initState(props))
   useEffect(() => {
     dispatch(START_FETCH())
-      props.dataAdapter
-        .fetchItemsWithSource(
-          state.dataSource,
-          props.selectProperties || state.columns.map((col) => col.fieldName)
-        )
-        .then((items) => {
-          dispatch(DATA_FETCHED({ items }))
-        })
-        .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
+    props.dataAdapter
+      .fetchItemsWithSource(
+        state.dataSource,
+        props.selectProperties || state.columns.map((col) => col.fieldName)
+      )
+      .then((items) => {
+        dispatch(DATA_FETCHED({ items }))
+      })
+      .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
   }, [])
 
   const items = useMemo(() => {

@@ -13,10 +13,13 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
   })
 
   useEffect(() => {
-    props.dataAdapter.project.getPropertiesData().then(properties => {
+    props.dataAdapter.project.getPropertiesData().then((properties) => {
       Promise.all([
         fetchChildProjects(props.dataAdapter),
-        props.dataAdapter.checkProjectAdminPermissions(ProjectAdminPermission.ChildProjectsAdmin, properties.fieldValues)
+        props.dataAdapter.checkProjectAdminPermissions(
+          ProjectAdminPermission.ChildProjectsAdmin,
+          properties.fieldValues
+        )
       ]).then(([childProjects, userHasManagePermission]) =>
         dispatch(DATA_LOADED({ data: { childProjects, userHasManagePermission }, scope: 'root' }))
       )

@@ -40,7 +40,10 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    * @param spfxContext Context
    * @param configuration Configuration
    */
-  public async configure(spfxContext: WebPartContext, configuration: ISPDataAdapterBaseConfiguration) {
+  public async configure(
+    spfxContext: WebPartContext,
+    configuration: ISPDataAdapterBaseConfiguration
+  ) {
     super.configure(spfxContext, configuration)
     const { web } = await HubSiteService.GetHubSite(sp, spfxContext.pageContext as any)
     this.dataSourceService = new DataSourceService(web)
@@ -373,7 +376,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
             this.childProjects,
             (child) =>
               child?.SiteId === item?.GtSiteIdLookup?.GtSiteId ||
-              item?.GtSiteIdLookup?.GtSiteId === this?.spfxContext?.pageContext?.site?.id?.toString()
+              item?.GtSiteIdLookup?.GtSiteId ===
+                this?.spfxContext?.pageContext?.site?.id?.toString()
           )
         ) {
           if (item.GtSiteIdLookup?.Title && config && config.GtShowElementProgram) {
@@ -434,16 +438,16 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     )
 
     if (config && config.GtShowElementProgram) {
-      const projectDeliveries = await this  .fetchItemsWithSource(
-          dataSourceName || 'Alle prosjektleveranser',
-          [
-            'Title',
-            'GtDeliveryDescriptionOWSMTXT',
-            'GtDeliveryStartTimeOWSDATE',
-            'GtDeliveryEndTimeOWSDATE'
-          ],
-          true
-        )
+      const projectDeliveries = await this.fetchItemsWithSource(
+        dataSourceName || 'Alle prosjektleveranser',
+        [
+          'Title',
+          'GtDeliveryDescriptionOWSMTXT',
+          'GtDeliveryStartTimeOWSDATE',
+          'GtDeliveryEndTimeOWSDATE'
+        ],
+        true
+      )
 
       return projectDeliveries
         .map((item) => {
@@ -734,6 +738,6 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
         .filter(`GtSiteId eq '${this.spfxContext.pageContext.site.id.toString()}'`)
         .get()
       await list.items.getById(item.ID).update(properties)
-    } catch (error) { }
+    } catch (error) {}
   }
 }
