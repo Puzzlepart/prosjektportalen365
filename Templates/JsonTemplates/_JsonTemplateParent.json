@@ -188,14 +188,20 @@
                                                 "name": "Måloppnåelse",
                                                 "minWidth": 50,
                                                 "maxWidth": 80,
-                                                "isResizable": true
+                                                "isResizable": true,
+                                                "data": {
+                                                    "renderAs": "BenefitMeasurementTrend"
+                                                }
                                             },
                                             {
                                                 "fieldName": "BenefitMeasurementsModal",
                                                 "key": "BenefitMeasurementsModal",
                                                 "name": "Vis alle målinger",
                                                 "minWidth": 80,
-                                                "maxWidth": 150
+                                                "maxWidth": 150,
+                                                "data": {
+                                                    "renderAs": "BenefitMeasurementsModal"
+                                                }
                                             }
                                         ]
                                     }
