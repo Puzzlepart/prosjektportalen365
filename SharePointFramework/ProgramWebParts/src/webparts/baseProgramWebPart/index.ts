@@ -3,7 +3,7 @@ import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
-import { IBaseComponentProps } from 'components/types'
+import { IBaseProgramWebPartProps } from './types'
 import { DataAdapter } from 'data'
 import assign from 'object-assign'
 import React from 'react'
@@ -12,7 +12,7 @@ import HubSiteService, { IHubSite } from 'sp-hubsite-service'
 import { IChildProject } from 'types/IChildProject'
 
 export abstract class BaseProgramWebPart<
-  T extends IBaseComponentProps
+  T extends IBaseProgramWebPartProps
 > extends BaseClientSideWebPart<T> {
   public dataAdapter: DataAdapter
   public pageTitle: string
@@ -66,12 +66,12 @@ export abstract class BaseProgramWebPart<
           .usingCaching()
           .get<{ Title: string }>()
       ).Title
-    } catch (error) {}
+    } catch (error) { }
   }
 
   public async onInit(): Promise<void> {
-    this.hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext)
     sp.setup({ sp: { baseUrl: this.context.pageContext.web.absoluteUrl } })
+    this.hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext)
     await this.getChildProjectSiteIds()
     this.dataAdapter = new DataAdapter(this.context, this.hubSite, this.childProjects)
     this.context.statusRenderer.clearLoadingIndicator(this.domElement)
@@ -82,3 +82,5 @@ export abstract class BaseProgramWebPart<
     return { pages: [] }
   }
 }
+
+export * from './types'

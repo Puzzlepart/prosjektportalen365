@@ -605,15 +605,9 @@
                     "Controls": [{
                         "Id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
                         "Properties": {
-                            "webPartTitle": "Underområder - gevinster",
+                            "title": "Underområder - gevinster",
                             "dataSource": "Alle gevinstelementer",
-                            "searchBoxPlaceholderText": "Søk i gevinster...",
-                            "showCommandBar": true,
-                            "showSearchBox": true,
-                            "showExcelExportButton": true,
-                            "hiddenColumns": [
-                                "siteTitle"
-                            ]
+                            "searchBoxPlaceholderText": "Søk i gevinster..."
                         }
                     }]
                 }]
@@ -692,11 +686,8 @@
                     "Controls": [{
                         "Id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
                         "Properties": {
-                            "webPartTitle": "Underområder - leveranser",
+                            "title": "Underområder - leveranser",
                             "dataSource": "Alle prosjektleveranser",
-                            "showCommandBar": true,
-                            "showSearchBox": true,
-                            "showExcelExportButton": true,
                             "columns": [{
                                     "key": "Title",
                                     "fieldName": "Title",
@@ -771,11 +762,8 @@
                     "Controls": [{
                         "Id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
                         "Properties": {
-                            "webPartTitle": "Underområder - usikkerhet",
+                            "title": "Underområder - usikkerhet",
                             "dataSource": "Programrisiko",
-                            "showCommandBar": true,
-                            "showSearchBox": true,
-                            "showExcelExportButton": true,
                             "columns": [{
                                     "key": "Title",
                                     "fieldName": "Title",

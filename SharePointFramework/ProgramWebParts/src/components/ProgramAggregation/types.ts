@@ -2,7 +2,7 @@ import { Target } from 'office-ui-fabric-react'
 import { IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
-import { IBaseComponentProps } from '../types'
+import { IBaseProgramWebPartProps } from 'webparts/baseProgramWebPart'
 
 export class ProgramAggregationErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -10,7 +10,7 @@ export class ProgramAggregationErrorMessage extends Error {
   }
 }
 
-export interface IProgramAggregationProps extends IBaseComponentProps {
+export interface IProgramAggregationProps extends IBaseProgramWebPartProps {
   /**
    * Data source name
    */
@@ -28,7 +28,7 @@ export interface IProgramAggregationProps extends IBaseComponentProps {
 
   /**
    * Show command bar
-src/components/ProgramAggregation/Commands   */
+   */
   showCommandBar?: boolean
 
   /**

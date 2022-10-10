@@ -18,7 +18,7 @@ import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
 import * as strings from 'ProgramWebPartsStrings'
 import HubSiteService, { IHubSite } from 'sp-hubsite-service'
 import { IChildProject } from 'types/IChildProject'
-import _ from 'underscore'
+import _, { flatten } from 'underscore'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
 
@@ -627,7 +627,7 @@ export class DataAdapter {
   }
 
   /**
-   * Fetch items
+   * Fetch items using the specified `queryTemplate` and `selectProperties`
    *
    * @param queryTemplate Query template
    * @param selectProperties Select properties
@@ -655,20 +655,8 @@ export class DataAdapter {
         })
       )
     })
-    const responses: any[] = await Promise.all(promises)
-    const searchResults = []
-    responses.forEach((element) => {
-      searchResults.push(element.PrimarySearchResults)
-    })
-
-    const duplicateArray = [].concat(...searchResults)
-    // Remove duplicate objects from array
-    // Only needed for development if we have to run queries on the same projects due to lack of data
-    // will be changed to `return responses` in production
-    const uniqueArray = duplicateArray.filter(
-      (obj, index, self) => self.findIndex((t) => t.Path === obj.Path) === index
-    )
-    return uniqueArray
+    const responses = await Promise.all(promises)
+    return flatten(responses.map(r => r.PrimarySearchResults))
   }
 
   /**
@@ -686,7 +674,6 @@ export class DataAdapter {
     if (!dataSrc) {
       throw new Error(format(strings.DataSourceNotFound, name))
     }
-
     try {
       const items = await this._fetchItems(dataSrc.searchQuery, selectProperties, includeSelf)
       return items
@@ -720,6 +707,6 @@ export class DataAdapter {
         .filter(`GtSiteId eq '${this.context.pageContext.site.id.toString()}'`)
         .get()
       await list.items.getById(item.ID).update(properties)
-    } catch (error) {}
+    } catch (error) { }
   }
 }
