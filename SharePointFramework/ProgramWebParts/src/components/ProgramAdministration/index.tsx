@@ -1,6 +1,5 @@
 import { SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
-import { Link, ShimmeredDetailsList } from 'office-ui-fabric-react'
-import { UserMessage } from 'pp365-projectwebparts/lib/components/UserMessage'
+import { Link, MessageBar, ShimmeredDetailsList } from 'office-ui-fabric-react'
 import * as strings from 'ProgramWebPartsStrings'
 import React, { FunctionComponent } from 'react'
 import { isEmpty } from 'underscore'
@@ -22,7 +21,9 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
       <>
         <div className={styles.root}>
           <h2>{strings.ProgramAdministrationHeader}</h2>
-          <UserMessage {...state.error} />
+          <MessageBar messageBarType={state.error.messageBarType}>
+            {state.error.text}
+          </MessageBar>
         </div>
       </>
     )
@@ -52,7 +53,9 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
               onSelectionChanged={(selected) => dispatch(SET_SELECTED_TO_DELETE({ selected }))}
             />
           ) : (
-            <UserMessage text={strings.ProgramAdministration_EmptyMessage} />
+            <MessageBar>
+              {strings.ProgramAdministration_EmptyMessage}
+            </MessageBar>
           )}
         </div>
         {state.displayAddProjectDialog && <AddProjectDialog />}
