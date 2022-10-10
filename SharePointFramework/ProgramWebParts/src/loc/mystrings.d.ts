@@ -1,6 +1,5 @@
 declare interface IProgramWebPartsStrings {
   EditColumnHeaderText: string
-  PortfolioAggregationNotConfiguredMessage: string
   DataSourceCategoryDescription: string
   DataSourceDescription: string
   ColumnRenderOptionTags: string
@@ -250,6 +249,7 @@ declare interface IProgramWebPartsStrings {
   ShowProjectDeliveriesLabel: string
   ConfigItemTitleFieldLabel: string
   ConfigItemTitleFieldDescription: string
+  ProjectContentColumnsListName: string
 }
 
 declare module 'ProgramWebPartsStrings' {

@@ -1,7 +1,9 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd } from '@pnp/common'
-import { QueryPropertyValueType, SearchResult, SortDirection, SPRest, sp } from '@pnp/sp'
+import { QueryPropertyValueType, SearchResult, SortDirection, sp, SPRest } from '@pnp/sp'
 import * as cleanDeep from 'clean-deep'
+import MSGraph from 'msgraph-helper'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 import {
   IGraphGroup,
   IPortfolioConfiguration,
@@ -9,25 +11,23 @@ import {
   ISPUser
 } from 'pp365-portfoliowebparts/lib/interfaces'
 import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
-import MSGraph from 'msgraph-helper'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
-import * as strings from 'ProgramWebPartsStrings'
 import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
 import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
+import * as strings from 'ProgramWebPartsStrings'
 import HubSiteService, { IHubSite } from 'sp-hubsite-service'
+import { IChildProject } from 'types/IChildProject'
 import _ from 'underscore'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
-import { IChildProject } from 'types/IChildProject'
 
 /**
  *
  */
 export class DataAdapter {
+  public dataSourceService: DataSourceService
   private _portalDataService: PortalDataService
-  private _dataSourceService: DataSourceService
   private _sp: SPRest
   private _childProjects: IChildProject[]
 
@@ -51,9 +51,9 @@ export class DataAdapter {
    * of the DataSourceService.
    */
   public async configure(): Promise<DataAdapter> {
-    if (this._dataSourceService) return this
+    if (this.dataSourceService) return this
     const { web } = await HubSiteService.GetHubSite(this._sp, this.context.pageContext as any)
-    this._dataSourceService = new DataSourceService(web)
+    this.dataSourceService = new DataSourceService(web)
     return this
   }
 
@@ -681,7 +681,7 @@ export class DataAdapter {
     selectProperties: string[],
     includeSelf: boolean = false
   ): Promise<any> {
-    const dataSrc = await this._dataSourceService.getByName(name)
+    const dataSrc = await this.dataSourceService.getByName(name)
     if (!dataSrc) {
       throw new Error(format(strings.DataSourceNotFound, name))
     }
@@ -701,7 +701,7 @@ export class DataAdapter {
    */
   public fetchDataSources(category: string): Promise<DataSource[]> {
     try {
-      return this._dataSourceService.getByCategory(category)
+      return this.dataSourceService.getByCategory(category)
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, category))
     }
@@ -719,6 +719,6 @@ export class DataAdapter {
         .filter(`GtSiteId eq '${this.context.pageContext.site.id.toString()}'`)
         .get()
       await list.items.getById(item.ID).update(properties)
-    } catch (error) {}
+    } catch (error) { }
   }
 }
