@@ -410,7 +410,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    *
    */
   public async fetchTimelineConfiguration() {
-    return await sp.web.lists
+    return await this.portal.web.lists
       .getByTitle(strings.TimelineConfigurationListName)
       .items.select(
         'Title',
@@ -429,7 +429,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    * Fetches configuration data for the Projecttimeline
    */
   public async fetchTimelineAggregatedContent(configItemTitle: string, dataSourceName: string) {
-    const [timelineConfig] = await Promise.all([this.fetchTimelineConfiguration()])
+    const timelineConfig = await this.fetchTimelineConfiguration()
 
     const config: any = _.find(
       timelineConfig,
