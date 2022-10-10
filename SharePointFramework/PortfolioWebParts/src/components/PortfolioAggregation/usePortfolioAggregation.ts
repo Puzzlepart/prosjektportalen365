@@ -47,8 +47,7 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
         adapter.dataSourceService.getByName(state.dataSource),
         adapter.fetchItemsWithSource(
           state.dataSource,
-          props.selectProperties || state.columns.map((col) => col.fieldName),
-          props.dataSourceCategory
+          props.selectProperties || state.columns.map((col) => col.fieldName)
         ),
         adapter.fetchProjectContentColumns
           ? adapter.fetchProjectContentColumns(props.dataSourceCategory)

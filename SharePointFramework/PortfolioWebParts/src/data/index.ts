@@ -49,7 +49,7 @@ export class DataAdapter implements IDataAdapter {
 
   /**
    * Configuring the DataAdapter enabling use
-   * of the DataSourceService.
+   * of the `DataSourceService`.
    */
   public async configure(): Promise<DataAdapter> {
     if (this.dataSourceService) return this
@@ -685,9 +685,9 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetch items with data source name
+   * Fetch items with data source
    *
-   * @param dataSourceName Data source name
+   * @param dataSource Data source
    * @param selectProperties Select properties
    */
   public async fetchBenefitItemsWithSource(
@@ -765,12 +765,10 @@ export class DataAdapter implements IDataAdapter {
    *
    * @param dataSourceName Data source name
    * @param selectProperties Select properties
-   * @param dataSourceCategory Data source category
    */
   public async fetchItemsWithSource(
     dataSourceName: string,
-    selectProperties: string[],
-    dataSourceCategory?: string
+    selectProperties: string[]
   ): Promise<any[]> {
     let items: any[]
 
@@ -779,10 +777,8 @@ export class DataAdapter implements IDataAdapter {
       if (!dataSrc) {
         throw new Error(format(strings.DataSourceNotFound, dataSourceName))
       }
-
       const dataSrcProperties = dataSrc.projectColumns.map((col) => col.fieldName) || []
-
-      if (dataSourceCategory === 'Gevinstoversikt') {
+      if (dataSrc.category === 'Gevinstoversikt') {
         items = await this.fetchBenefitItemsWithSource(dataSrc, [
           ...selectProperties,
           ...dataSrcProperties
