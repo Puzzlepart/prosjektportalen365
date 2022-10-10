@@ -1,4 +1,3 @@
-import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
 import {
   IPropertyPaneConfiguration,
@@ -7,25 +6,16 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import * as strings from 'ProgramWebPartsStrings'
-import { ProgramOverview } from '../../components/ProgramProjectOverview/ProgramProjectOverview'
-import { IProjectProgramOverviewProps } from '../../components/ProgramProjectOverview/types'
+import { PortfolioOverview } from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
 import { IPortfolioConfiguration } from 'pp365-portfoliowebparts/lib/interfaces'
-import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { PROPERTYPANE_CONFIGURATION_PROPS } from 'pp365-portfoliowebparts/lib/webparts/portfolioOverview'
-import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
+import * as strings from 'ProgramWebPartsStrings'
+import React from 'react'
+import * as ReactDom from 'react-dom'
+import { BaseProgramWebPart } from '../baseProgramWebPart'
+import { IProgramProjectOverviewProps } from './types'
 
-interface IProgramOverviewProps extends IBaseWebPartComponentProps {
-  webPartTitle: string
-  showCommandBar: boolean
-  showFilters: boolean
-  showViewSelector: boolean
-  showGroupBy: boolean
-  showSearchBox: boolean
-  showExcelExportButton: boolean
-}
-
-export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramOverviewProps> {
+export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramProjectOverviewProps> {
   private _configuration: IPortfolioConfiguration
 
   public async onInit(): Promise<void> {
@@ -34,21 +24,23 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramO
   }
 
   public render(): void {
-    this.renderComponent<IProjectProgramOverviewProps>(ProgramOverview, {
-      webPartTitle: this.properties.webPartTitle,
-      context: this.context,
-      dataAdapter: this.dataAdapter,
-      configuration: this._configuration,
-      commandBarProperties: {
-        showCommandBar: this.properties.showCommandBar,
-        showExcelExportButton: this.properties.showExcelExportButton,
-        showFilters: this.properties.showFilters,
-        showViewSelector: this.properties.showViewSelector,
-        showGroupBy: this.properties.showGroupBy,
-        showSearchBox: this.properties.showSearchBox
-      },
-      isParentProject: true
-    })
+    ReactDom.render((
+      <>
+        <PortfolioOverview
+          title={this.pageTitle ?? this.properties.title}
+          pageContext={this.context.pageContext}
+          configuration={this._configuration}
+          dataAdapter={this.dataAdapter}
+          showCommandBar={this.properties.showCommandBar}
+          showExcelExportButton={this.properties.showExcelExportButton}
+          showFilters={this.properties.showFilters}
+          showViewSelector={this.properties.showViewSelector}
+          showGroupBy={this.properties.showGroupBy}
+          showSearchBox={this.properties.showSearchBox}
+          isParentProject={true}
+        />
+      </>
+    ), this.domElement)
   }
 
   protected onDispose(): void {

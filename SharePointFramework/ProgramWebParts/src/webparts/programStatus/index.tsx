@@ -7,22 +7,11 @@ import {
 import { PortfolioOverview } from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
 import { IPortfolioConfiguration } from 'pp365-portfoliowebparts/lib/interfaces'
 import { PROPERTYPANE_CONFIGURATION_PROPS } from 'pp365-portfoliowebparts/lib/webparts/portfolioOverview'
-import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
 import * as strings from 'ProgramWebPartsStrings'
 import React from 'react'
 import * as ReactDom from 'react-dom'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
-
-interface IProgramStatusWebPartProps extends IBaseWebPartComponentProps {
-  webPartTitle: string
-  showCommandBar: boolean
-  showFilters: boolean
-  showViewSelector: boolean
-  showGroupBy: boolean
-  showSearchBox: boolean
-  showExcelExportButton: boolean
-  defaultViewId: string
-}
+import { IProgramStatusWebPartProps } from './types'
 
 export default class ProgramStatusWebPart extends BaseProgramWebPart<IProgramStatusWebPartProps> {
   private _configuration: IPortfolioConfiguration
@@ -36,7 +25,7 @@ export default class ProgramStatusWebPart extends BaseProgramWebPart<IProgramSta
     ReactDom.render(
       <>
         <PortfolioOverview
-          title={this.webPartTitle ?? this.properties.webPartTitle}
+          title={this.pageTitle ?? this.properties.title}
           pageContext={this.context.pageContext}
           configuration={this._configuration}
           dataAdapter={this.dataAdapter}

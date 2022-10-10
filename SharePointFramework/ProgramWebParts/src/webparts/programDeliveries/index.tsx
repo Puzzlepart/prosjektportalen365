@@ -1,32 +1,15 @@
-import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
-import * as strings from 'ProgramWebPartsStrings'
-import { ProgramDeliveries } from 'components/ProgramDeliveries/ProgramDeliveries'
-import { BaseProgramWebPart } from '../baseProgramWebPart'
-import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
 import {
   IPropertyPaneConfiguration,
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { IProgramDeliveriesProps } from 'components/ProgramDeliveries/types'
-
-interface IProgramDeliveriesWebPartProps extends IBaseWebPartComponentProps {
-  webPartTitle: string
-  dataSource: string
-  showExcelExportButton: boolean
-  showSearchBox: boolean
-  showCommandBar: boolean
-  columns: Array<{
-    key: string
-    fieldName: string
-    name: string
-    minWidth: number
-    maxWidth: number
-    isMultiline: boolean
-    isResizable: boolean
-  }>
-}
+import { PortfolioAggregation } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
+import * as strings from 'ProgramWebPartsStrings'
+import React from 'react'
+import * as ReactDom from 'react-dom'
+import { BaseProgramWebPart } from '../baseProgramWebPart'
+import { IProgramDeliveriesWebPartProps } from './types'
 
 export default class ProgramDeliveriesWebPart extends BaseProgramWebPart<IProgramDeliveriesWebPartProps> {
   public async onInit(): Promise<void> {
@@ -34,20 +17,24 @@ export default class ProgramDeliveriesWebPart extends BaseProgramWebPart<IProgra
   }
 
   public render(): void {
-    this.renderComponent<IProgramDeliveriesProps>(ProgramDeliveries, {
-      webPartTitle: this.properties.webPartTitle,
-      context: this.context,
-      dataAdapter: this.dataAdapter,
-      properties: {
-        dataSource: this.properties.dataSource,
-        showCommandBar: this.properties.showCommandBar,
-        showSearchBox: this.properties.showSearchBox,
-        showExcelExportButton: this.properties.showExcelExportButton,
-        columns: this.properties.columns,
-        displayMode: this.displayMode
-      },
-      onUpdateProperty: this._onUpdateProperty.bind(this)
-    })
+    ReactDom.render((
+      <>
+        <PortfolioAggregation
+          title={this.pageTitle ?? this.properties.title}
+          pageContext={this.context.pageContext}
+          dataAdapter={this.dataAdapter}
+          showCommandBar={this.properties.showCommandBar}
+          showSearchBox={this.properties.showSearchBox}
+          showExcelExportButton={this.properties.showExcelExportButton}
+          lockedColumns={false}
+          displayMode={this.properties.displayMode}
+          onUpdateProperty={this._onUpdateProperty}
+          dataSource={this.properties.dataSource}
+          columns={this.properties.columns}
+          isParent={true}
+        />
+      </>
+    ), this.domElement)
   }
 
   protected onDispose(): void {

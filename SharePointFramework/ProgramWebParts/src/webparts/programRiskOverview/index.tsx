@@ -1,46 +1,38 @@
-import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
-import * as strings from 'ProgramWebPartsStrings'
-import { ProgramRiskOverview } from 'components/ProgramRiskOverview/index'
-import { BaseProgramWebPart } from '../baseProgramWebPart'
-import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
 import {
   IPropertyPaneConfiguration,
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { IProgramRiskOverview } from 'components/ProgramRiskOverview/types'
-import { IAggreationColumn } from 'types'
+import { PortfolioAggregation } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
+import * as strings from 'ProgramWebPartsStrings'
+import React from 'react'
+import * as ReactDom from 'react-dom'
+import { BaseProgramWebPart } from '../baseProgramWebPart'
+import { IProgramRiskOverviewWebPartProps, SelectedRiskProperties } from './types'
 
-interface IProgramRiskProps extends IBaseWebPartComponentProps {
-  webPartTitle: string
-  dataSource: string
-  showExcelExportButton: boolean
-  showSearchBox: boolean
-  columns: IAggreationColumn[]
-  showCommandBar: boolean
-}
-
-export default class ProgramRiskOverviewWebPart extends BaseProgramWebPart<IProgramRiskProps> {
+export default class ProgramRiskOverviewWebPart extends BaseProgramWebPart<IProgramRiskOverviewWebPartProps> {
   public async onInit(): Promise<void> {
     await super.onInit()
   }
 
   public render(): void {
-    this.renderComponent<IProgramRiskOverview>(ProgramRiskOverview, {
-      context: this.context,
-      dataAdapter: this.dataAdapter,
-      properties: {
-        dataSource: this.properties.dataSource,
-        showExcelExportButton: this.properties.showExcelExportButton,
-        showSearchBox: this.properties.showSearchBox,
-        showCommandBar: this.properties.showCommandBar,
-        columns: this.properties.columns,
-        displayMode: this.displayMode
-      },
-      webPartTitle: this.properties.webPartTitle,
-      onUpdateProperty: this._onUpdateProperty.bind(this)
-    })
+    ReactDom.render((
+      <>
+        <PortfolioAggregation
+          title={this.pageTitle ?? this.properties.title}
+          pageContext={this.context.pageContext}
+          dataAdapter={this.dataAdapter}
+          showCommandBar={this.properties.showCommandBar}
+          showExcelExportButton={this.properties.showExcelExportButton}
+          showSearchBox={this.properties.showSearchBox}
+          dataSource={this.properties.dataSource}
+          columns={this.properties.columns}
+          selectProperties={SelectedRiskProperties}
+          onUpdateProperty={this._onUpdateProperty}
+        />
+      </>
+    ), this.domElement)
   }
 
   protected onDispose(): void {

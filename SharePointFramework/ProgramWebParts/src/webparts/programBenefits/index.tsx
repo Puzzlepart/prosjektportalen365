@@ -16,21 +16,13 @@ import {
   BenefitMeasurement,
   BenefitMeasurementIndicator
 } from 'pp365-portfoliowebparts/lib/models'
-import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
 import * as strings from 'ProgramWebPartsStrings'
 import React from 'react'
 import * as ReactDom from 'react-dom'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
+import { IProgramBenefitsWebPartProps } from './types'
 
-interface IProgramBenefitsPropertyPaneProps extends IBaseWebPartComponentProps {
-  webPartTitle: string
-  dataSource: string
-  showExcelExportButton: boolean
-  showSearchBox: boolean
-  showCommandBar: boolean
-}
-
-export default class ProgramBenefitsWebPart extends BaseProgramWebPart<IProgramBenefitsPropertyPaneProps> {
+export default class ProgramBenefitsWebPart extends BaseProgramWebPart<IProgramBenefitsWebPartProps> {
   public async onInit(): Promise<void> {
     await super.onInit()
   }
@@ -40,7 +32,7 @@ export default class ProgramBenefitsWebPart extends BaseProgramWebPart<IProgramB
     ReactDom.render(
       <>
         <PortfolioAggregation
-          title={this.webPartTitle ?? this.properties.webPartTitle}
+          title={this.pageTitle ?? this.properties.title}
           pageContext={this.context.pageContext}
           dataAdapter={this.dataAdapter}
           showCommandBar={this.properties.showCommandBar}

@@ -1,27 +1,14 @@
 import { Version } from '@microsoft/sp-core-library'
 import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane'
-import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { DataAdapter } from 'data'
 import { ProjectTimeline } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline'
-import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
 import strings from 'ProgramWebPartsStrings'
 import React from 'react'
 import * as ReactDom from 'react-dom'
 import { IChildProject } from 'types/IChildProject'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
+import { IProgramTimelineWebPartProps } from './types'
 
-export interface IProgramTimelineProps extends IBaseWebPartComponentProps {
-  description: string
-  context: WebPartContext
-  dataAdapter: DataAdapter
-  childProjects: string[]
-  infoText?: string
-  webPartTitle: string
-  dataSourceName?: string
-  configItemTitle?: string
-}
-
-export default class ProgramTimelineWebPart extends BaseProgramWebPart<IProgramTimelineProps> {
+export default class ProgramTimelineWebPart extends BaseProgramWebPart<IProgramTimelineWebPartProps> {
   public childProjects: IChildProject[]
 
   public async onInit(): Promise<void> {
@@ -32,7 +19,7 @@ export default class ProgramTimelineWebPart extends BaseProgramWebPart<IProgramT
     ReactDom.render(
       <>
         <ProjectTimeline
-          title={this.webPartTitle ?? this.properties.webPartTitle}
+          title={this.pageTitle ?? this.properties.title}
           dataAdapter={this.dataAdapter}
           pageContext={this.context.pageContext}
           infoText={this.properties.infoText}
