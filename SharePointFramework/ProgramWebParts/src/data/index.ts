@@ -21,6 +21,7 @@ import { ISPDataAdapterBaseConfiguration, SPDataAdapterBase } from 'pp365-shared
 import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService, ProjectDataService } from 'pp365-shared/lib/services'
+import { sleep } from 'pp365-shared/lib/util'
 import * as strings from 'ProgramWebPartsStrings'
 import HubSiteService from 'sp-hubsite-service'
 import _ from 'underscore'
@@ -304,6 +305,19 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       sites,
       statusReports
     }
+  }
+
+
+
+  /**
+   * Fetches data for the Projecttimeline project
+   *
+   * @param _timelineConfig
+   */
+   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   public async fetchTimelineProjectData(_timelineConfig: any[]) {
+    await sleep(0.1)
+    return []
   }
 
   /**
