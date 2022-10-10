@@ -4,7 +4,6 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { IProgramAggregationProps, ProgramAggregation } from 'components/ProgramAggregation'
-import { DataAdapter } from 'data'
 import { IMessageBarProps, MessageBar } from 'office-ui-fabric-react/lib/MessageBar'
 import strings from 'ProgramWebPartsStrings'
 import React from 'react'
@@ -19,7 +18,7 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
     } else {
       this.renderComponent<IProgramAggregationProps>(ProgramAggregation, {
         ...this.properties,
-        dataAdapter: new DataAdapter(this.context, this.hubSite, this.childProjects),
+        dataAdapter: this.dataAdapter,
         onUpdateProperty: this._onUpdateProperty.bind(this)
       })
     }

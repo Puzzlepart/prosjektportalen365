@@ -1,21 +1,20 @@
 import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane'
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
-import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
+import { LogLevel } from '@pnp/logging'
 import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
-import { DataAdapter } from 'data'
 import assign from 'object-assign'
 import React from 'react'
 import * as ReactDom from 'react-dom'
 import HubSiteService, { IHubSite } from 'sp-hubsite-service'
 import { IChildProject } from 'types/IChildProject'
+import { SPDataAdapter } from '../../data'
 import { IBaseProgramWebPartProps } from './types'
 
 export abstract class BaseProgramWebPart<
   T extends IBaseProgramWebPartProps
 > extends BaseClientSideWebPart<T> {
-  public dataAdapter: DataAdapter
-  public pageTitle: string
+  public dataAdapter: SPDataAdapter
   public webPartTitle: string
   public hubSite: IHubSite
   public childProjects: IChildProject[]
@@ -27,7 +26,7 @@ export abstract class BaseProgramWebPart<
     component: React.ComponentClass<T> | React.FunctionComponent<T>,
     props?: T
   ): void {
-    const combinedProps = assign({ title: this.pageTitle }, this.properties, props, {
+    const combinedProps = assign(this.properties, props, {
       pageContext: this.context.pageContext,
       dataAdapter: this.dataAdapter,
       displayMode: this.displayMode,
@@ -53,26 +52,19 @@ export abstract class BaseProgramWebPart<
   }
 
   private async _setup() {
-    sp.setup({ spfxContext: this.context })
-    Logger.subscribe(new ConsoleListener())
-    Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-    try {
-      this.pageTitle = (
-        await sp.web.lists
-          .getById(this.context.pageContext.list.id.toString())
-          .items.getById(this.context.pageContext.listItem.id)
-          .select('Title')
-          .usingCaching()
-          .get<{ Title: string }>()
-      ).Title
-    } catch (error) {}
+    await this.dataAdapter.configure(this.context, {
+      siteId: this.context.pageContext.site.id.toString(),
+      webUrl: this.context.pageContext.web.absoluteUrl,
+      hubSiteUrl: this.hubSite.url,
+      logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+    })
   }
 
   public async onInit(): Promise<void> {
-    sp.setup({ sp: { baseUrl: this.context.pageContext.web.absoluteUrl } })
+    sp.setup({ spfxContext: this.context })
     this.hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext)
-    this.childProjects = await this.getChildProjects()
-    this.dataAdapter = new DataAdapter(this.context, this.hubSite, this.childProjects)
+    this.dataAdapter = new SPDataAdapter()
+    this.dataAdapter.childProjects = await this.getChildProjects()
     this.context.statusRenderer.clearLoadingIndicator(this.domElement)
     await this._setup()
   }

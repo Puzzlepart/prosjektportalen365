@@ -12,7 +12,10 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
   })
 
   useEffect(() => {
-    fetchChildProjects(props.dataAdapter).then((childProjects) =>
+   Promise.all([
+    fetchChildProjects(props.dataAdapter),
+    props.dataAdapter
+   ]).then(([childProjects]) =>
       dispatch(DATA_LOADED({ data: { childProjects }, scope: 'root' }))
     )
   }, [])

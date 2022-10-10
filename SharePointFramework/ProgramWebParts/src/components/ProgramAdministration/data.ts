@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { sp } from '@pnp/sp'
-import { DataAdapter } from 'data'
-import { IChildProject } from 'types'
+import { SPDataAdapter } from 'data'
+import { IChildProject } from 'types/IChildProject'
 import _ from 'underscore'
 
 /**
@@ -37,7 +37,7 @@ async function searchHubSite(hubId: string, query: string) {
  *
  * @param dataAdapter Data adapter
  */
-export async function fetchChildProjects(dataAdapter: DataAdapter): Promise<IChildProject[]> {
+export async function fetchChildProjects(dataAdapter: SPDataAdapter): Promise<IChildProject[]> {
   const queryArray = dataAdapter.aggregatedQueryBuilder('SiteId')
   const hubData = await sp.site.select('HubSiteId').get()
   const searchPromises = []
@@ -58,7 +58,7 @@ export async function fetchChildProjects(dataAdapter: DataAdapter): Promise<IChi
  * @param dataAdapter Data adapter
  * @param newProjects New projects to add
  */
-export async function addChildProject(dataAdapter: DataAdapter, newProjects: IChildProject[]) {
+export async function addChildProject(dataAdapter: SPDataAdapter, newProjects: IChildProject[]) {
   const [{ GtChildProjects }] = await sp.web.lists
     .getByTitle('Prosjektegenskaper')
     .items.select('GtChildProjects')
@@ -77,7 +77,7 @@ export async function addChildProject(dataAdapter: DataAdapter, newProjects: ICh
  * @param projectToRemove Projects to delete
  */
 export async function removeChildProjects(
-  dataAdapter: DataAdapter,
+  dataAdapter: SPDataAdapter,
   projectToRemove: IChildProject[]
 ): Promise<IChildProject[]> {
   const [currentData] = await sp.web.lists

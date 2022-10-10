@@ -1,5 +1,5 @@
 import { useContext, useRef, useEffect } from 'react'
-import { IChildProject } from 'types'
+import { IChildProject } from 'types/IChildProject'
 import { AddProjectDialog } from '.'
 import { ProgramAdministrationContext } from '../context'
 import { getHubSiteProjects } from '../data'

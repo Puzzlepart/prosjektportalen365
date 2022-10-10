@@ -1,14 +1,14 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { DataAdapter } from 'data'
+import { SPDataAdapter } from 'data'
 import { SPRest } from '@pnp/sp'
 import { IColumn, MessageBarType } from 'office-ui-fabric-react'
-import { IChildProject } from 'types'
+import { IChildProject } from 'types/IChildProject'
 
 export interface IProgramAdministrationProps {
   webPartTitle: string
   description: string
   context: WebPartContext
-  dataAdapter: DataAdapter
+  dataAdapter: SPDataAdapter
   sp: SPRest
   title: string
 }

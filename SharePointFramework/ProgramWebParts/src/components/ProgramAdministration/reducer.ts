@@ -1,5 +1,5 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
-import { IChildProject } from 'types'
+import { IChildProject } from 'types/IChildProject'
 import { IProgramAdministrationState } from './types'
 
 export const DATA_LOADED =

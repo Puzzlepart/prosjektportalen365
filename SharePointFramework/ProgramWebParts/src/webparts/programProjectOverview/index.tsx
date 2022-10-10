@@ -24,21 +24,19 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
 
   public render(): void {
     render(
-      <>
-        <PortfolioOverview
-          title={this.pageTitle ?? this.properties.title}
-          pageContext={this.context.pageContext}
-          configuration={this._configuration}
-          dataAdapter={this.dataAdapter}
-          showCommandBar={this.properties.showCommandBar}
-          showExcelExportButton={this.properties.showExcelExportButton}
-          showFilters={this.properties.showFilters}
-          showViewSelector={this.properties.showViewSelector}
-          showGroupBy={this.properties.showGroupBy}
-          showSearchBox={this.properties.showSearchBox}
-          isParentProject={true}
-        />
-      </>,
+      <PortfolioOverview
+        title={this.properties.title}
+        pageContext={this.context.pageContext}
+        configuration={this._configuration}
+        dataAdapter={this.dataAdapter}
+        showCommandBar={this.properties.showCommandBar}
+        showExcelExportButton={this.properties.showExcelExportButton}
+        showFilters={this.properties.showFilters}
+        showViewSelector={this.properties.showViewSelector}
+        showGroupBy={this.properties.showGroupBy}
+        showSearchBox={this.properties.showSearchBox}
+        isParentProject={true}
+      />,
       this.domElement
     )
   }

@@ -3,13 +3,10 @@ import { ProjectTimeline } from 'pp365-portfoliowebparts/lib/components/ProjectT
 import strings from 'ProgramWebPartsStrings'
 import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
-import { IChildProject } from 'types/IChildProject'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { IProgramTimelineWebPartProps } from './types'
 
 export default class ProgramTimelineWebPart extends BaseProgramWebPart<IProgramTimelineWebPartProps> {
-  public childProjects: IChildProject[]
-
   public async onInit(): Promise<void> {
     await super.onInit()
   }
@@ -18,7 +15,7 @@ export default class ProgramTimelineWebPart extends BaseProgramWebPart<IProgramT
     render(
       <>
         <ProjectTimeline
-          title={this.pageTitle ?? this.properties.title}
+          title={this.properties.title}
           dataAdapter={this.dataAdapter}
           pageContext={this.context.pageContext}
           infoText={this.properties.infoText}
