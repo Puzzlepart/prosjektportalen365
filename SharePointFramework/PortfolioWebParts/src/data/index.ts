@@ -16,7 +16,7 @@ import {
   Benefit,
   BenefitMeasurement,
   BenefitMeasurementIndicator
-} from 'models'
+} from '../models'
 import MSGraph from 'msgraph-helper'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
