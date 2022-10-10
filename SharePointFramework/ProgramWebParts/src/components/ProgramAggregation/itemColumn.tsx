@@ -49,12 +49,14 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
     }
     case 'BenefitMeasurementTrend': {
       if(!columnValue) return null
+      const trendIconProps = get(item, 'Measurements[0].TrendIconProps', {})
+      const achievementDisplay = get(item, 'Measurements[0].AchievementDisplay', {})
       return (
         <span>
           <span style={{ display: 'inline-block', width: 20 }}>
-            {columnValue.TrendIconProps && <Icon {...columnValue.TrendIconProps} />}
+            {trendIconProps && <Icon {...trendIconProps} />}
           </span>
-          <span>{columnValue.AchievementDisplay}</span>
+          <span>{achievementDisplay}</span>
         </span>
       )
     }
