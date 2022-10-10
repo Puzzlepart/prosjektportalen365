@@ -1,17 +1,17 @@
-import * as ReactDom from 'react-dom'
 import { Version } from '@microsoft/sp-core-library'
 import {
   IPropertyPaneConfiguration,
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import * as strings from 'ProgramWebPartsStrings'
-import { ProgramStatus } from '../../components/ProgramStatus/ProgramStatus'
+import { PortfolioOverview } from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
 import { IPortfolioConfiguration } from 'pp365-portfoliowebparts/lib/interfaces'
-import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { PROPERTYPANE_CONFIGURATION_PROPS } from 'pp365-portfoliowebparts/lib/webparts/portfolioOverview'
 import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
-import { IProgramStatusProps } from 'components/ProgramStatus/types'
+import * as strings from 'ProgramWebPartsStrings'
+import React from 'react'
+import * as ReactDom from 'react-dom'
+import { BaseProgramWebPart } from '../baseProgramWebPart'
 
 interface IProgramStatusWebPartProps extends IBaseWebPartComponentProps {
   webPartTitle: string
@@ -33,21 +33,25 @@ export default class ProgramStatusWebPart extends BaseProgramWebPart<IProgramSta
   }
 
   public render(): void {
-    this.renderComponent<IProgramStatusProps>(ProgramStatus, {
-      webPartTitle: this.properties.webPartTitle,
-      context: this.context,
-      dataAdapter: this.dataAdapter,
-      configuration: this._configuration,
-      defaultViewId: this.properties.defaultViewId,
-      commandBarProperties: {
-        showCommandBar: this.properties.showCommandBar,
-        showExcelExportButton: this.properties.showExcelExportButton,
-        showFilters: this.properties.showFilters,
-        showViewSelector: this.properties.showViewSelector,
-        showGroupBy: this.properties.showGroupBy,
-        showSearchBox: this.properties.showSearchBox
-      }
-    })
+    ReactDom.render(
+      <>
+        <PortfolioOverview
+          title={this.webPartTitle ?? this.properties.webPartTitle}
+          pageContext={this.context.pageContext}
+          configuration={this._configuration}
+          dataAdapter={this.dataAdapter}
+          defaultViewId={this.properties.defaultViewId}
+          showCommandBar={this.properties.showCommandBar}
+          showExcelExportButton={this.properties.showExcelExportButton}
+          showFilters={this.properties.showFilters}
+          showViewSelector={this.properties.showViewSelector}
+          showGroupBy={this.properties.showGroupBy}
+          showSearchBox={this.properties.showSearchBox}
+          isParentProject={true}
+        />
+      </>,
+      this.domElement
+    )
   }
 
   protected onDispose(): void {
