@@ -5,11 +5,11 @@ import {
 } from 'office-ui-fabric-react/lib/ContextualMenu'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import strings from 'ProgramWebPartsStrings'
-import React, { useContext } from 'react'
+import React, { FunctionComponent, useContext } from 'react'
 import { ProgramAggregationContext } from '../context'
 import { COLUMN_HEADER_CONTEXT_MENU, SET_GROUP_BY, SET_SORT } from '../reducer'
 
-export const ColumnContextMenu = () => {
+export const ColumnContextMenu: FunctionComponent = () => {
   const context = useContext(ProgramAggregationContext)
   if (!context.state.columnContextMenu) return null
   const { column, target } = context.state.columnContextMenu

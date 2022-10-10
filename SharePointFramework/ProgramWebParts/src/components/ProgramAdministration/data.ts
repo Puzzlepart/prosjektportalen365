@@ -36,7 +36,9 @@ async function searchHubSite(hubId: string, query: string) {
  *
  * @param dataAdapter Data adapter
  */
-export async function fetchChildProjects(dataAdapter: SPDataAdapter): Promise<Array<Record<string, string>>> {
+export async function fetchChildProjects(
+  dataAdapter: SPDataAdapter
+): Promise<Array<Record<string, string>>> {
   const queryArray = dataAdapter.aggregatedQueryBuilder('SiteId')
   const hubData = await sp.site.select('HubSiteId').get()
   const searchPromises = []
@@ -57,7 +59,10 @@ export async function fetchChildProjects(dataAdapter: SPDataAdapter): Promise<Ar
  * @param dataAdapter Data adapter
  * @param newProjects New projects to add
  */
-export async function addChildProject(dataAdapter: SPDataAdapter, newProjects: Array<Record<string, string>>) {
+export async function addChildProject(
+  dataAdapter: SPDataAdapter,
+  newProjects: Array<Record<string, string>>
+) {
   const [{ GtChildProjects }] = await sp.web.lists
     .getByTitle('Prosjektegenskaper')
     .items.select('GtChildProjects')

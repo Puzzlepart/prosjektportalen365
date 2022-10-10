@@ -25,7 +25,6 @@ export const ON_FILTER_CHANGE = createAction<{
 }>('ON_FILTER_CHANGE')
 export const DATA_FETCH_ERROR = createAction<{ error: Error }>('DATA_FETCH_ERROR')
 
-
 export const initState = (props: IProgramAggregationProps): IProgramAggregationState => ({
   loading: true,
   isCompact: false,
@@ -141,5 +140,5 @@ export default (props: IProgramAggregationProps) =>
         }
         return col
       })
-    },
+    }
   })

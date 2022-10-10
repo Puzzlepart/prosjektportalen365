@@ -1,10 +1,10 @@
 import { CommandBar, ICommandBarProps } from 'office-ui-fabric-react/lib/CommandBar'
 import ExcelExportService from 'pp365-shared/lib/services/ExcelExportService'
 import strings from 'ProgramWebPartsStrings'
-import React, { useContext } from 'react'
+import React, { FunctionComponent, useContext } from 'react'
 import { ProgramAggregationContext } from '../context'
 
-export const Commands = () => {
+export const Commands: FunctionComponent = () => {
   const context = useContext(ProgramAggregationContext)
 
   const cmd: ICommandBarProps = {
