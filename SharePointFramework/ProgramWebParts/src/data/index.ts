@@ -361,7 +361,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   public async fetchTimelineContentItems() {
     const [timelineConfig, timelineItems] = await Promise.all([
       this.fetchTimelineConfiguration(),
-      sp.web.lists
+      this.portal.web.lists
         .getByTitle(strings.TimelineContentListName)
         .items.select(
           'Title',
@@ -573,7 +573,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
     await MSGraph.Init(this.spfxContext.msGraphClientFactory)
     const [items, groups, users] = await Promise.all([
-      sp.web.lists
+      this.portal.web.lists
         .getByTitle(strings.ProjectsListName)
         .items.select(
           'GtGroupId',
