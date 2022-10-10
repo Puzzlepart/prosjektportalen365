@@ -41,10 +41,6 @@ export default class ProgramDeliveriesWebPart extends BaseProgramWebPart<IProgra
     ReactDom.unmountComponentAtNode(this.domElement)
   }
 
-  protected get dataVersion(): Version {
-    return Version.parse('1.0')
-  }
-
   private _onUpdateProperty(key: string, value: any) {
     this.properties[key] = value
     this.context.propertyPane.refresh()

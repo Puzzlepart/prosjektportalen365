@@ -44,10 +44,6 @@ export default class ProgramRiskOverviewWebPart extends BaseProgramWebPart<IProg
     this.context.propertyPane.refresh()
   }
 
-  protected get dataVersion(): Version {
-    return Version.parse('1.0')
-  }
-
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [

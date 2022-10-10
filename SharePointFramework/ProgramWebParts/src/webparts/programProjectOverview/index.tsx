@@ -47,10 +47,6 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
     ReactDom.unmountComponentAtNode(this.domElement)
   }
 
-  protected get dataVersion(): Version {
-    return Version.parse('1.0')
-  }
-
   protected _getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
     // eslint-disable-next-line default-case
     switch (targetProperty) {
