@@ -8,6 +8,7 @@ on:
       - "Install/**"
       - "Templates/**"
       - package.json
+      - .github/workflows/ci-dev.yml
 
 env:
   SP_URL: "https://puzzlepart.sharepoint.com/sites/pp365"
@@ -32,14 +33,15 @@ jobs:
       - name: Run Install/Build-Release.ps1 in CI mode
         run: Install/Build-Release.ps1 -CI
         shell: powershell
-        working-directory: C:/prosjektportalen365
+        with:
+          working-directory: C:/prosjektportalen365
 
       - uses: actions/upload-artifact@v3
-        working-directory: C:/prosjektportalen365
         with:
           name: release-package
           path: release
           retention-days: 3
+          working-directory: C:/prosjektportalen365
 
   upgrade:
     needs: build-release
