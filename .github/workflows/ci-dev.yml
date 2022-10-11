@@ -60,9 +60,10 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: release-package
+          path: release
 
       - name: Upgrade
-        run: Install.ps1 -Url ${{ env.SP_URL }} -Upgrade -CI ${{ secrets.CI_DEV_CREDENTIALS }}
+        run: release/Install.ps1 -Url ${{ env.SP_URL }} -Upgrade -CI ${{ secrets.CI_DEV_CREDENTIALS }}
         shell: powershell
 
       - name: Slack notify
@@ -88,9 +89,10 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: release-package
+          path: release
 
       - name: Install
-        run: Install.ps1 -Url "${{ env.SP_URL }}_${{ needs.build_release_package.outputs.sha_short }}" -Title "Prosjektportalen 365 ${{ needs.build_release_package.outputs.sha_short }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }} -SkipAppPackages -SkipSiteDesign -SkipTaxonomy -SkipSearchConfiguration
+        run: release/Install.ps1 -Url "${{ env.SP_URL }}_${{ needs.build_release_package.outputs.sha_short }}" -Title "Prosjektportalen 365 ${{ needs.build_release_package.outputs.sha_short }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }} -SkipAppPackages -SkipSiteDesign -SkipTaxonomy -SkipSearchConfiguration
         shell: powershell
 
       - name: Slack notify
