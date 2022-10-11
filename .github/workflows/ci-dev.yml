@@ -17,8 +17,6 @@ jobs:
   build-release:
     runs-on: windows-latest
     steps:
-      - name: Make space
-        run: rm -rf /usr/share/dotnet /opt/ghc /usr/local/share/boost "$AGENT_TOOLSDIRECTORY"
       - name: Checkout code
         uses: actions/checkout@v2
 
