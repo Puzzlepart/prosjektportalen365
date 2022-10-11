@@ -1,10 +1,10 @@
 # 1. The SPFx solutions
 
-_Due to the number of components, we decided to separate the components into 3 different solutions._
+_Due to the number of components, we decided to separate the components into 5 different solutions._
 
 ## [@Shared](./@Shared/README.md)
 
-Shared code for the SharePoint Framework solutions in PP365.
+Shared code for the SharePoint Framework solutions in Prosjektportalen 365.
 
 Build by `npm` script `build` and watch changes with `watch`.
 
