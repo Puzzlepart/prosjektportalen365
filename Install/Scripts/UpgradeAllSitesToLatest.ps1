@@ -95,11 +95,7 @@ function EnsureResourceLoadIsSiteColumn($Url) {
 
 function EnsureProgramAggregrationWebPart($Url) {
     Connect-PnPOnline -Url $Url -UseWebLogin
-    $Pages = @{
-        "ProgramLeveranser"   = "7ff12e9d-1565-4694-b1de-948d1b174487";
-        "ProgramUsikkerheter" = "3e189ba9-e1c2-4143-9598-820512e48c47";
-        "ProgramGevinster"    = "1ca1e22e-2a44-490f-9e1b-759f986df0d8"
-    }
+    $Pages = Get-Content ".\EnsureProgramAggregrationWebPart\$.json" -Raw -Encoding UTF8 | ConvertFrom-Json
     foreach ($Page in $Pages.GetEnumerator()) {
         $DeprecatedComponent = Get-PnPClientSideComponent -Page "$($Page.Name).aspx" -ErrorAction SilentlyContinue | Where-Object { $_.WebPartId -eq $Page.Value } | Select-Object -First 1
         if ($null -ne $DeprecatedComponent) {
