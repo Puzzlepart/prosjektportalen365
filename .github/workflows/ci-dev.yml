@@ -17,8 +17,8 @@ jobs:
   build-release:
     runs-on: windows-latest
     steps:
-     - name: Checkout Puzzlepart/prosjektportalen365.git
-       run: |
+      - name: Checkout Puzzlepart/prosjektportalen365.git
+        run: |
           mkdir C:/prosjektportalen365
           git clone https://github.com/Puzzlepart/prosjektportalen365.git C:/prosjektportalen365 --depth 1
         
