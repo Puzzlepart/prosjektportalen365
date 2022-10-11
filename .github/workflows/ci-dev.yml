@@ -30,10 +30,11 @@ jobs:
         run: Install/Build-Release.ps1 -CI
         shell: powershell
 
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v3
         with:
           name: release-package
           path: release
+          retention-days: 3
 
   upgrade:
     needs: build-release

@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
   "id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
-  "alias": "PortfolioAggregationWebPart",
+  "alias": "ProgramAggregationWebPart",
   "componentType": "WebPart",
   "version": "1.6.1",
   "manifestVersion": 2,

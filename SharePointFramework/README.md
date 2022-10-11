@@ -30,7 +30,7 @@ _Published to **npm** as `pp365-portfolioextensions`_
 | ------------------------ | ------------------------------------ |
 | `pp-portfolio-web-parts` | 00483367-68e2-4977-9cc3-6cf0de623daa |
 
-Web parts for `portfolio` level of the portal.
+Web parts for portfolio level of the portal.
 
 Build by `npm` script `package`.
 
@@ -44,7 +44,7 @@ _Published to **npm** as `pp365-projectwebparts`_
 | ---------------------- | ------------------------------------ |
 | `pp-program-web-parts` | 8a9a0f4a-2e2f-4f13-aceb-867f82bd77eb |
 
-Web parts for `program` level of the portal.
+Web parts for project level of the portal.
 
 Build by `npm` script `package`.
 
@@ -58,7 +58,7 @@ _Published to **npm** as `pp365-programwebparts`_`_
 | ---------------------- | ------------------------------------ |
 | `pp-project-extensons` | fe723971-d5c2-4698-91e3-c16e2f72fb5b |
 
-Extension for the `project` level of the portal.
+Extension for the project level of the portal.
 
 Build by `npm` script `package`.
 
@@ -83,35 +83,31 @@ _Published to **npm** as `pp365-projectwebparts`_`_
 
 # 2. Component overview
 
-| Name                        | Id                                   | Solution            |
-| --------------------------- | ------------------------------------ | ------------------- |
-| IdeaProcessingCommand       | 5af28222-4bf8-419c-9533-5a31967b9f20 | PortfolioExtensions |
-| IdeaProjectDataCommand      | b13831c6-c4f8-4bbc-9da3-bd5f960f7e2b | PortfolioExtensions |
-| IdeaRegistrationCommand     | c93a4a2a-f5f0-41ee-9ab6-04ad85004d20 | PortfolioExtensions |
-| BenefitsOverviewWebPart     | 5f925484-cfb4-42ce-9f90-79a874bb8a68 | PortfolioWebParts   |
-| LatestProjectsWebPart       | 941fd73c-b957-41c3-8d4f-082268407f10 | PortfolioWebParts   |
-| PortfolioAggregationWebPart | 6c0e484d-f6da-40d4-81fc-ec1389ef29a8 | PortfolioWebParts   |
-| PortfolioInsightsWebPart    | 875ca87a-e331-4ffb-bc69-0272fdf80e41 | PortfolioWebParts   |
-| PortfolioOverviewWebPart    | e58e3d32-057a-4418-97ce-172b92482ba2 | PortfolioWebParts   |
-| ProjectListWebPart          | 54fbeb7d-e463-4dcc-8873-50a3ab2f0f68 | PortfolioWebParts   |
-| ResourceAllocationWebPart   | 2ef269b2-6370-4841-8b35-2185b7ccb22a | PortfolioWebParts   |
-| ProjectTimelineWebPart      | 7284c568-f66c-4218-bb2c-3734a3cfa581 | PortfolioWebParts   |
-| ???                         | xxx                                  | ProgramWebParts     |
-| ???                         | xxx                                  | ProgramWebParts     |
-| ???                         | xxx                                  | ProgramWebParts     |
-| ???                         | xxx                                  | ProgramWebParts     |
-| ???                         | xxx                                  | ProgramWebParts     |
-| ???                         | xxx                                  | ProgramWebParts     |
-| ProjectSetup                | ce34553d-ab47-4107-8dd1-e980d953996d | ProjectExtensions   |
-| ProjectUpgrade              | 453a6c1e-e1d0-4b12-a3fc-690a36da1f0c | ProjectExtensions   |
-| TemplateSelectorCommand     | c9080212-e63e-47cc-8278-00ad38c3f5a5 | ProjectExtensions   |
-| ProjectInformationWebPart   | b8bec0be-2354-443d-a3ca-24b36e8ea7dc | ProjectWebParts     |
-| ProjectPhasesWebPart        | 4449d3dc-fa58-4982-b87c-5a893114e7b7 | ProjectWebParts     |
-| ProjectStatusWebPart        | 681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6 | ProjectWebParts     |
-| RiskMatrixWebPart           | e536ae15-0748-4d96-b160-3abb30f1b71e | ProjectWebParts     |
-| ProjectTimelineWebPart      | d156652b-9121-47af-89ae-1fe8427c53da | ProjectWebParts     |
-
-TODO: Add Program components
+| Name                          | Id                                   | Solution            |
+| ----------------------------- | ------------------------------------ | ------------------- |
+| IdeaProcessingCommand         | 5af28222-4bf8-419c-9533-5a31967b9f20 | PortfolioExtensions |
+| IdeaProjectDataCommand        | b13831c6-c4f8-4bbc-9da3-bd5f960f7e2b | PortfolioExtensions |
+| IdeaRegistrationCommand       | c93a4a2a-f5f0-41ee-9ab6-04ad85004d20 | PortfolioExtensions |
+| BenefitsOverviewWebPart       | 5f925484-cfb4-42ce-9f90-79a874bb8a68 | PortfolioWebParts   |
+| LatestProjectsWebPart         | 941fd73c-b957-41c3-8d4f-082268407f10 | PortfolioWebParts   |
+| PortfolioAggregationWebPart   | 6c0e484d-f6da-40d4-81fc-ec1389ef29a8 | PortfolioWebParts   |
+| PortfolioInsightsWebPart      | 875ca87a-e331-4ffb-bc69-0272fdf80e41 | PortfolioWebParts   |
+| PortfolioOverviewWebPart      | e58e3d32-057a-4418-97ce-172b92482ba2 | PortfolioWebParts   |
+| ProjectListWebPart            | 54fbeb7d-e463-4dcc-8873-50a3ab2f0f68 | PortfolioWebParts   |
+| ResourceAllocationWebPart     | 2ef269b2-6370-4841-8b35-2185b7ccb22a | PortfolioWebParts   |
+| ProjectTimelineWebPart        | 7284c568-f66c-4218-bb2c-3734a3cfa581 | PortfolioWebParts   |
+| ProgramAdministrationWebpart  | 9570e369-21a6-4bf5-8198-13506499de52 | ProgramWebParts     |
+| ProgramAggregationWebPart     | 6c0e484d-f6da-40d4-81fc-ec1389ef29a8 | ProgramWebParts     |
+| ProgramProjectOverviewWebPart | 01417142-67c8-498b-a6da-6e78003023dd | ProgramWebParts     |
+| ProgramTimelineWebPart        | f97a38ab-78c2-400e-899f-b0d4cda76166 | ProgramWebParts     |
+| ProjectSetup                  | ce34553d-ab47-4107-8dd1-e980d953996d | ProjectExtensions   |
+| ProjectUpgrade                | 453a6c1e-e1d0-4b12-a3fc-690a36da1f0c | ProjectExtensions   |
+| TemplateSelectorCommand       | c9080212-e63e-47cc-8278-00ad38c3f5a5 | ProjectExtensions   |
+| ProjectInformationWebPart     | b8bec0be-2354-443d-a3ca-24b36e8ea7dc | ProjectWebParts     |
+| ProjectPhasesWebPart          | 4449d3dc-fa58-4982-b87c-5a893114e7b7 | ProjectWebParts     |
+| ProjectStatusWebPart          | 681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6 | ProjectWebParts     |
+| RiskMatrixWebPart             | e536ae15-0748-4d96-b160-3abb30f1b71e | ProjectWebParts     |
+| ProjectTimelineWebPart        | d156652b-9121-47af-89ae-1fe8427c53da | ProjectWebParts     |
 
 # 3. Build, package and deploy
 
