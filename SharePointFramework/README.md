@@ -80,7 +80,6 @@ To package and deploy directly to SharePoint, see `2. Build, package and deploy`
 
 _Published to **npm** as `pp365-projectwebparts`_`_
 
-
 # 2. Component overview
 
 | Name                          | Id                                   | Solution            |
