@@ -21,9 +21,7 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
       <>
         <div className={styles.root}>
           <h2>{strings.ProgramAdministrationHeader}</h2>
-          <MessageBar messageBarType={state.error.messageBarType}>
-            {state.error.text}
-          </MessageBar>
+          <MessageBar messageBarType={state.error.messageBarType}>{state.error.text}</MessageBar>
         </div>
       </>
     )
@@ -53,9 +51,7 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
               onSelectionChanged={(selected) => dispatch(SET_SELECTED_TO_DELETE({ selected }))}
             />
           ) : (
-            <MessageBar>
-              {strings.ProgramAdministration_EmptyMessage}
-            </MessageBar>
+            <MessageBar>{strings.ProgramAdministration_EmptyMessage}</MessageBar>
           )}
         </div>
         {state.displayAddProjectDialog && <AddProjectDialog />}

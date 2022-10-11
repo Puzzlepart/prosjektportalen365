@@ -7,7 +7,7 @@ import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { IProgramTimelineWebPartProps } from './types'
 
 export default class ProgramTimelineWebPart extends BaseProgramWebPart<IProgramTimelineWebPartProps> {
-  public async onInit(): Promise<void> {
+  public async onInit() {
     await super.onInit()
   }
 

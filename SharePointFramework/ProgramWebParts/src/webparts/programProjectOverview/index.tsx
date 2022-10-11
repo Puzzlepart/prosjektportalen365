@@ -1,7 +1,8 @@
 import {
   IPropertyPaneConfiguration,
   IPropertyPaneDropdownOption,
-  PropertyPaneDropdown, PropertyPaneToggle
+  PropertyPaneDropdown,
+  PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { PortfolioOverview } from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
 import { IPortfolioConfiguration } from 'pp365-portfoliowebparts/lib/interfaces'
