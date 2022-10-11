@@ -22,7 +22,8 @@ jobs:
       - name: Checkout Puzzlepart/prosjektportalen365.git
         run: |
           mkdir C:/prosjektportalen365
-          git clone https://github.com/Puzzlepart/prosjektportalen365.git C:/prosjektportalen365 --depth 1
+          git clone https://github.com/Puzzlepart/prosjektportalen365.git C:/prosjektportalen365
+          git checkout $GITHUB_SHA
 
       - name: Set sha_short
         id: vars
