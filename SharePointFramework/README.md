@@ -50,7 +50,7 @@ Build by `npm` script `package`.
 
 To package and deploy directly to SharePoint, see `2. Build, package and deploy`.
 
-_Published to **npm** as `pp365-programwebparts`_`_
+_Published to **npm** as `pp365-programwebparts`_
 
 ## [ProjectExtensions](./ProjectExtensions/README.md)
 
@@ -78,7 +78,7 @@ Build by `npm` script `package`.
 
 To package and deploy directly to SharePoint, see `2. Build, package and deploy`.
 
-_Published to **npm** as `pp365-projectwebparts`_`_
+_Published to **npm** as `pp365-projectwebparts`_
 
 # 2. Component overview
 
