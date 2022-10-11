@@ -35,22 +35,49 @@ export class HelpContentModel {
 
   /**
    * Fetch external content
+   *
+   * @param imagesBasePath Images base path
    */
-  public async fetchExternalContent() {
+  public async fetchExternalContent(imagesBasePath?: string) {
     try {
-      const md = await (await fetch(this.externalUrl, { method: 'GET' })).text()
-      this.markdownContent = this._removeJekyllHeader(md)
+      let md = await (await fetch(this.externalUrl, { method: 'GET' })).text()
+      md = this._removeJekyllHeader(md)
+      if (imagesBasePath) md = this._fixImageLinks(md, imagesBasePath)
+      this.markdownContent = md
     } catch (error) {}
   }
 
   /**
+   * Fix image links
+   *
+   * @param markdownContent Markdown content
+   * @param imagesBasePath Images base path
+   */
+  private _fixImageLinks(markdownContent: string, imagesBasePath: string) {
+    let md = markdownContent
+    const regex = /\((\.\/media\/(.+))\)/gm
+    let m: RegExpExecArray
+    while ((m = regex.exec(md)) !== null) {
+      if (m.index === regex.lastIndex) {
+        regex.lastIndex++
+      }
+      const [, imageLink, image] = m
+      const newImageLink = `${imagesBasePath}/${image}`
+      md = md.replace(imageLink, newImageLink)
+    }
+    return md
+  }
+
+  /**
    * Removed Jekyll header data using regex
-   * 
+   *
    * @see https://regex101.com/r/dvc3qc/1
-   * 
+   *
    * @param md Markdown content
    */
   private _removeJekyllHeader(md: string) {
-    return md.replace(/^\-\-\-([\n\w\W\s]+)\-\-\-$/mg, '')
+    // ./media/image19.png
+    // https://puzzlepart.github.io/prosjektportalen-manual/Brukermanual/3%20Portefolje/media/image19.png
+    return md.replace(/^\-\-\-([\n\w\W\s]+)\-\-\-$/gm, '')
   }
 }
