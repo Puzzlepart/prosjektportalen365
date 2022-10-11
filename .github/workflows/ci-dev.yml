@@ -15,13 +15,18 @@ env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
 
 jobs:
-  build-release:
+  build_release_package:
+    name: Build release package
     runs-on: windows-latest
     steps:
       - name: Checkout Puzzlepart/prosjektportalen365.git
         run: |
           mkdir C:/prosjektportalen365
           git clone https://github.com/Puzzlepart/prosjektportalen365.git C:/prosjektportalen365 --depth 1
+
+      - name: Set sha_short
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
         
       - run: Get-PSDrive
 
@@ -39,17 +44,20 @@ jobs:
           name: release-package
           path: C:/prosjektportalen365/release
           retention-days: 3
+    outputs:
+      sha_short: ${{ steps.vars.outputs.sha_short }}
 
   upgrade:
-    needs: build-release
+    needs: build_release_package
+    name: Upgrade
     runs-on: windows-latest
     steps:
-      - uses: actions/download-artifact@v1
+      - uses: actions/download-artifact@v3
         with:
           name: release-package
 
       - name: Upgrade
-        run: release-package/Install.ps1 -Url ${{ env.SP_URL }} -Upgrade -CI ${{ secrets.CI_DEV_CREDENTIALS }}
+        run: Install.ps1 -Url ${{ env.SP_URL }} -Upgrade -CI ${{ secrets.CI_DEV_CREDENTIALS }}
         shell: powershell
 
       - name: Slack notify
@@ -68,15 +76,16 @@ jobs:
             }
 
   install:
-    needs: [build-release, upgrade]
+    needs: [build_release_package, upgrade]
+    name: Install
     runs-on: windows-latest
     steps:
-      - uses: actions/download-artifact@v1
+      - uses: actions/download-artifact@v3
         with:
           name: release-package
 
       - name: Install
-        run: release-package/Install.ps1 -Url "${{ env.SP_URL }}_${{ github.run_id }}" -Title "Prosjektportalen 365 ${{ github.run_id }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }} -SkipAppPackages -SkipSiteDesign -SkipTaxonomy -SkipSearchConfiguration
+        run: Install.ps1 -Url "${{ env.SP_URL }}_${{ needs.build_release_package.outputs.sha_short }}" -Title "Prosjektportalen 365 ${{ needs.build_release_package.outputs.sha_short }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }} -SkipAppPackages -SkipSiteDesign -SkipTaxonomy -SkipSearchConfiguration
         shell: powershell
 
       - name: Slack notify
