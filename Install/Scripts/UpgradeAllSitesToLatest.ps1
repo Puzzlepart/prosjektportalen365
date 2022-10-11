@@ -93,10 +93,18 @@ function EnsureResourceLoadIsSiteColumn($Url) {
     }
 }
 
+function EnsureProgramAggregrationWebPart($Url) {
+    Connect-PnPOnline -Url $Url -UseWebLogin
+    $ProgramLeveranser = Get-PnPClientSideComponent -Page "ProgramLeveranser.aspx" | Where-Object { $_.WebPartId -eq "7ff12e9d-1565-4694-b1de-948d1b174487" } | Select-Object -First 1
+    if($null -ne $ProgramLeveranser) {
+        Add-PnPClientSideWebPart -Page "ProgramLeveranser2.aspx" -Component "6c0e484d-f6da-40d4-81fc-ec1389ef29a8" -WebPartProperties (Get-Content ./ProgramLeveranser.json -Raw) >$null 2>&1
+    }
+}
 
 function UpgradeSite($Url) {
-    EnsureProjectTimelinePage -Url $Url
-    EnsureResourceLoadIsSiteColumn -Url $Url
+    #EnsureProjectTimelinePage -Url $Url
+    #EnsureResourceLoadIsSiteColumn -Url $Url
+    EnsureProgramAggregrationWebPart -Url $Url
 }
 
 Write-Host "This script will update all existing sites in a Prosjektportalen installation. This requires you to have the SharePoint admin role"
@@ -116,7 +124,7 @@ $ctx.ExecuteQuery()
 $UserName = $ctx.Web.CurrentUser.LoginName
 
 $PPHubSite = Get-PnPHubSite -Identity $PortfolioUrl
-$ProjectsInHub = Get-PP365HubSiteChild -Identity $PPHubSite
+$ProjectsInHub = Get-PP365HubSiteChild -Identity $PPHubSite | Where-Object { $_ -eq "https://puzzlepart.sharepoint.com/sites/AgderProgram" }
 
 Write-Host "The following sites were found to be part of the Project Portal hub:"
 $ProjectsInHub | ForEach-Object { Write-Host "`t$_" }
