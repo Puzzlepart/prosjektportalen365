@@ -105,7 +105,7 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Gevinster for underområder",
                                         "searchBoxPlaceholderText": "Søk i gevinster for underområder...",
@@ -249,7 +249,7 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Leveranser for underområder",
                                         "searchBoxPlaceholderText": "Søk i leveranser for underområder...",
@@ -333,7 +333,7 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Usikkerheter for underområder",
                                         "searchBoxPlaceholderText": "Søk i usikkerheter for underområder...",

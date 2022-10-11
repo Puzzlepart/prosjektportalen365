@@ -651,7 +651,7 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Gevinster for underområder",
                                         "dataSource": "Alle gevinstelementer",
@@ -850,7 +850,7 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Leveranser for underområder",
                                         "dataSource": "Alle prosjektleveranser",
@@ -933,7 +933,7 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Usikkerheter for underområder",
                                         "dataSource": "Programrisiko",
