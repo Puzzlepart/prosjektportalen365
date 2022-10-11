@@ -26,6 +26,7 @@ jobs:
 
       - name: Set sha_short
         id: vars
+        working-directory: C:/prosjektportalen365
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
         
       - run: Get-PSDrive
