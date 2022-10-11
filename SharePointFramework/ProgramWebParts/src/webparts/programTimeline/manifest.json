@@ -16,14 +16,14 @@
         "default": "Other"
       },
       "title": {
-        "default": "Program Tidslinje"
+        "default": "Tidslinje for underområder"
       },
       "description": {
-        "default": "programTimeline description"
+        "default": " "
       },
       "officeFabricIconFontName": "Page",
       "properties": {
-        "webPartTitle": "Underområder - tidslinje",
+        "title": "Tidslinje for underområder",
         "dataSourceName": "Alle prosjektleveranser",
         "configItemTitle": "Prosjektleveranse"
       }

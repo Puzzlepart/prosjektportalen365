@@ -328,10 +328,8 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
    * @returns Timeline data and timeline configuration
    */
   private async _fetchData(): Promise<[ITimelineData, any]> {
-    const data = this.props.dataAdapter
-
     try {
-      const timelineConfiguration = await data.fetchTimelineConfiguration()
+      const timelineConfiguration = await this.props.dataAdapter.fetchTimelineConfiguration()
 
       const [
         projects,
@@ -339,10 +337,10 @@ export class ProjectTimeline extends Component<IProjectTimelineProps, IProjectTi
         timelineContentItems,
         timelineAggregatedContent = []
       ] = await Promise.all([
-        data.fetchEnrichedProjects(),
-        data.fetchTimelineProjectData(timelineConfiguration),
-        data.fetchTimelineContentItems(timelineConfiguration),
-        data.fetchTimelineAggregatedContent(
+        this.props.dataAdapter.fetchEnrichedProjects(),
+        this.props.dataAdapter.fetchTimelineProjectData(timelineConfiguration),
+        this.props.dataAdapter.fetchTimelineContentItems(timelineConfiguration),
+        this.props.dataAdapter.fetchTimelineAggregatedContent(
           this.props.configItemTitle,
           this.props.dataSourceName,
           timelineConfiguration

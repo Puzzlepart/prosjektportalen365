@@ -1,100 +1,24 @@
 import { DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList'
-import { getId } from 'office-ui-fabric-react/lib/Utilities'
 import strings from 'PortfolioWebPartsStrings'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
-import React, { useEffect, useMemo, useReducer } from 'react'
+import React, { FunctionComponent } from 'react'
 import { FilterPanel } from '../FilterPanel'
 import { ColumnContextMenu } from './ColumnContextMenu'
 import { addColumn, ColumnFormPanel } from './ColumnFormPanel'
 import { Commands } from './Commands'
 import { PortfolioAggregationContext } from './context'
-import { filterItems } from './filter'
 import { getDefaultColumns, renderItemColumn } from './itemColumn'
 import styles from './PortfolioAggregation.module.scss'
-import createReducer, {
-  COLUMN_HEADER_CONTEXT_MENU,
-  DATA_FETCHED,
-  DATA_FETCH_ERROR,
-  SET_CURRENT_VIEW,
-  GET_FILTERS,
-  initState,
-  ON_FILTER_CHANGE,
-  SET_GROUP_BY,
-  START_FETCH,
-  TOGGLE_FILTER_PANEL
-} from './reducer'
-import { searchItem } from './search'
+import { COLUMN_HEADER_CONTEXT_MENU, ON_FILTER_CHANGE, TOGGLE_FILTER_PANEL } from './reducer'
 import SearchBox from './SearchBox'
 import { ShowHideColumnPanel } from './ShowHideColumnPanel'
 import { IPortfolioAggregationProps } from './types'
+import { usePortfolioAggregation } from './usePortfolioAggregation'
 
-export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
-  const reducer = useMemo(() => createReducer(props), [])
-  const [state, dispatch] = useReducer(reducer, initState(props))
-  const layerHostId = getId('layerHost')
-
-  useEffect(() => {
-    if (props.dataSourceCategory) dispatch(SET_CURRENT_VIEW)
-  }, [props.dataSourceCategory, props.defaultViewId])
-
-  useEffect(() => {
-    if (props.dataSourceCategory) {
-      props.dataAdapter.configure().then((adapter) => {
-        adapter
-          .fetchDataSources(props.dataSourceCategory)
-          .then((dataSources) =>
-            dispatch(
-              DATA_FETCHED({
-                items: null,
-                dataSources
-              })
-            )
-          )
-          .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
-      })
-    }
-  }, [props.dataSourceCategory, props.defaultViewId])
-
-  useEffect(() => {
-    dispatch(START_FETCH())
-    props.dataAdapter.configure().then((adapter) => {
-      Promise.all([
-        adapter.dataSourceService.getByName(state.dataSource),
-        adapter.fetchProjectContentColumns(props.dataSourceCategory),
-        adapter.fetchItemsWithSource(
-          state.dataSource,
-          props.selectProperties || state.columns.map((col) => col.fieldName),
-          props.dataSourceCategory
-        ),
-        adapter.fetchProjects(props.configuration, state.dataSource)
-      ])
-        .then(([dataSrc, projectColumns, items, projects]) => {
-          dispatch(
-            DATA_FETCHED({
-              items,
-              columns: projectColumns,
-              fltColumns: dataSrc.projectColumns,
-              projects
-            })
-          )
-          dispatch(GET_FILTERS({ filters: dataSrc.projectRefiners }))
-          dispatch(SET_GROUP_BY({ column: dataSrc.projectGroupBy }))
-        })
-        .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
-    })
-  }, [state.columnAdded, state.columnDeleted, state.columnShowHide, state.currentView])
-
-  const items = useMemo(() => {
-    const filteredItems = filterItems(state.items, state.columns, state.activeFilters)
-    return {
-      listItems: filteredItems.items.filter((i) => searchItem(i, state.searchTerm, state.columns)),
-      columns: filteredItems.columns
-    }
-  }, [state.columnAdded, state.searchTerm, state.items, state.activeFilters, state.columns])
-
-  const ctxValue = useMemo(() => ({ props, state, dispatch }), [state])
+export const PortfolioAggregation: FunctionComponent<IPortfolioAggregationProps> = (props) => {
+  const { state, dispatch, items, layerHostId, ctxValue } = usePortfolioAggregation(props)
 
   if (state.error) {
     return <UserMessage type={MessageBarType.error} text={state.error.message} />
@@ -124,7 +48,7 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
               )
             }}
             columns={[
-              ...getDefaultColumns(props.pageContext, props.isParent),
+              ...getDefaultColumns(props.pageContext),
               ...items.columns,
               !props.lockedColumns && addColumn()
             ].filter((c) => c)}
@@ -149,6 +73,12 @@ export const PortfolioAggregation = (props: IPortfolioAggregationProps) => {
       </div>
     </PortfolioAggregationContext.Provider>
   )
+}
+
+PortfolioAggregation.defaultProps = {
+  showCommandBar: true,
+  showExcelExportButton: true,
+  showSearchBox: true
 }
 
 export * from './types'

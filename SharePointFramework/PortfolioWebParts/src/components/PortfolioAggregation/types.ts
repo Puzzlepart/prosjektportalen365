@@ -96,11 +96,6 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
    * Transforms the data after it's fetched
    */
   postTransform?: (results: SearchResult[]) => T[]
-
-  /**
-   * Is the component used in a parent project or program
-   */
-  isParent?: boolean
 }
 
 export interface IPortfolioAggregationState {

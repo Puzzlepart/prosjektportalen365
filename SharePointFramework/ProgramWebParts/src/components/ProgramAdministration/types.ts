@@ -1,35 +1,61 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { DataAdapter } from 'data'
-import { SPRest } from '@pnp/sp'
+import { SearchResult } from '@pnp/sp'
+import { SPDataAdapter } from 'data'
 import { IColumn, MessageBarType } from 'office-ui-fabric-react'
-import { ChildProject } from 'models'
 
 export interface IProgramAdministrationProps {
-  webPartTitle: string
+  title: string
   description: string
   context: WebPartContext
-  dataAdapter: DataAdapter
-  sp: SPRest
-  title: string
+  dataAdapter: SPDataAdapter
 }
 
-export interface UserMessageProps {
-  text: string
-  messageBarType: MessageBarType
-}
+export interface IProgramAdministrationState {
+  /**
+   * Loading state
+   */
+  loading: {
+    root: boolean
+    AddProjectDialog: boolean
+  }
 
-export interface ChildProjectListItem extends ChildProject {
-  GtSiteUrl: string
-}
+  /**
+   * Child projects
+   */
+  childProjects: Array<Record<string, string>>
 
-export interface IProgramAdministrationItem {
-  Title: string
-  SPWebURL: string
+  /**
+   * True if `AddProjectDialog` should be displayed to the user
+   */
+  displayAddProjectDialog: boolean
+
+  /**
+   * Projects available to add to parent project
+   */
+  availableProjects: SearchResult[]
+
+  /**
+   * Projects selected by user for deletion
+   */
+  selectedProjectsToDelete: Array<Record<string, string>>
+
+  /**
+   * User has manage permission, meaning `ChildProjectsAdmin`
+   */
+  userHasManagePermission?: boolean
+
+  /**
+   * Error message
+   */
+  error: {
+    text: string
+    messageBarType: MessageBarType
+  }
 }
 
 export const shimmeredColumns: IColumn[] = [
   {
-    key: '1',
+    key: 'Title',
     name: 'Tittel',
     isResizable: true,
     maxWidth: 250,

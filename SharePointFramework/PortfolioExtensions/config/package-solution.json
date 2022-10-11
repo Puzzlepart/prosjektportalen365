@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "Prosjektportalen 365 Portfolio Extensions",
+    "name": "Prosjektportalen 365 - Portfolio Extensions",
     "id": "a3bf3315-0710-41f9-8836-2b61396d032f",
     "version": "1.6.1.1",
     "includeClientSideAssets": true,

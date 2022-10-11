@@ -16,7 +16,7 @@ import {
   Benefit,
   BenefitMeasurement,
   BenefitMeasurementIndicator
-} from 'models'
+} from '../models'
 import MSGraph from 'msgraph-helper'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -49,7 +49,7 @@ export class DataAdapter implements IDataAdapter {
 
   /**
    * Configuring the DataAdapter enabling use
-   * of the DataSourceService.
+   * of the `DataSourceService`.
    */
   public async configure(): Promise<DataAdapter> {
     if (this.dataSourceService) return this
@@ -324,13 +324,10 @@ export class DataAdapter implements IDataAdapter {
    */
   public async fetchTimelineProjectData(timelineConfig: any[]) {
     try {
-      const hubSiteId = this.context.pageContext.legacyPageContext.hubSiteId
-      const contentType = '0x010022252E35737A413FB56A1BA53862F6D5*'
-
       const [{ PrimarySearchResults: statusReports }] = await Promise.all([
         sp.search({
           ...DEFAULT_SEARCH_SETTINGS,
-          QueryTemplate: `DepartmentId:{${hubSiteId}} ContentTypeId:${contentType} GtModerationStatusOWSCHCS:Publisert`,
+          QueryTemplate: `DepartmentId:{${ this.context.pageContext.legacyPageContext.hubSiteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5 GtModerationStatusOWSCHCS:Publisert`,
           SelectProperties: [
             'Title',
             'GtSiteIdOWSTEXT',
@@ -685,9 +682,9 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetch items with data source name
+   * Fetch items with data source
    *
-   * @param dataSourceName Data source name
+   * @param dataSource Data source
    * @param selectProperties Select properties
    */
   public async fetchBenefitItemsWithSource(
@@ -765,12 +762,10 @@ export class DataAdapter implements IDataAdapter {
    *
    * @param dataSourceName Data source name
    * @param selectProperties Select properties
-   * @param dataSourceCategory Data source category
    */
   public async fetchItemsWithSource(
     dataSourceName: string,
-    selectProperties: string[],
-    dataSourceCategory?: string
+    selectProperties: string[]
   ): Promise<any[]> {
     let items: any[]
 
@@ -779,10 +774,8 @@ export class DataAdapter implements IDataAdapter {
       if (!dataSrc) {
         throw new Error(format(strings.DataSourceNotFound, dataSourceName))
       }
-
       const dataSrcProperties = dataSrc.projectColumns.map((col) => col.fieldName) || []
-
-      if (dataSourceCategory === 'Gevinstoversikt') {
+      if (dataSrc.category === 'Gevinstoversikt') {
         items = await this.fetchBenefitItemsWithSource(dataSrc, [
           ...selectProperties,
           ...dataSrcProperties

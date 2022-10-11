@@ -18,12 +18,12 @@ function EnsureProjectTimelinePage($Url) {
         if ($null -eq $existingNode) {
             Write-Host "`t`tAdding project timeline to site"
             Write-Host "`t`t`tAdding project timeline page"
-            $page = Add-PnPClientSidePage -Name "Prosjekttidslinje.aspx" -PromoteAs None -LayoutType SingleWebPartAppPage -CommentsEnabled:$false -Publish
+            Add-PnPClientSidePage -Name "Prosjekttidslinje.aspx" -PromoteAs None -LayoutType SingleWebPartAppPage -CommentsEnabled:$false -Publish >$null 2>&1
             Write-Host "`t`t`tAdding project timeline app"
-            $webpart = Add-PnPClientSideWebPart -Page "Prosjekttidslinje" -Component "Prosjekttidslinje" -WebPartProperties '{"listName":"Tidslinjeinnhold","showFilterButton":true,"showTimeline":true,"showInfoMessage":true,"showCmdTimelineList":true,"showTimelineList":true,"title":"Prosjekttidslinje"}'
-            $page = Set-PnPClientSidePage -Identity "Prosjekttidslinje" -LayoutType SingleWebPartAppPage -HeaderType None -Publish 
+            Add-PnPClientSideWebPart -Page "Prosjekttidslinje" -Component "Prosjekttidslinje" -WebPartProperties '{"listName":"Tidslinjeinnhold","showFilterButton":true,"showTimeline":true,"showInfoMessage":true,"showCmdTimelineList":true,"showTimelineList":true,"title":"Prosjekttidslinje"}' >$null 2>&1
+            Set-PnPClientSidePage -Identity "Prosjekttidslinje" -LayoutType SingleWebPartAppPage -HeaderType None -Publish >$null 2>&1
             Write-Host "`t`t`tAdding project timeline navigation item"
-            $node = Add-PnPNavigationNode -Location QuickLaunch -Title "Prosjekttidslinje" -Url "SitePages/Prosjekttidslinje.aspx"
+            Add-PnPNavigationNode -Location QuickLaunch -Title "Prosjekttidslinje" -Url "SitePages/Prosjekttidslinje.aspx" >$null 2>&1
         }
         else {        
             Write-Host "`t`tThe site already has the project timeline page" -ForegroundColor Green
@@ -52,13 +52,13 @@ function EnsureResourceLoadIsSiteColumn($Url) {
             $ResourceAllocationContentType = Get-PnPContentType -Identity "Ressursallokering" -List "Ressursallokering" -ErrorAction SilentlyContinue
             if ($null -ne $ResourceAllocationContentType) {
                 Write-Host "`t`t`tRemoving old field"
-                $RemovedColumn = Remove-PnPField -Identity $ResourceLoadListColumn -List $ResourceAllocation -Force
+                Remove-PnPField -Identity $ResourceLoadListColumn -List $ResourceAllocation -Force >$null 2>&1
 
                 
                 Write-Host "`t`t`tAdding the site field"
                 $FieldLink = New-Object Microsoft.SharePoint.Client.FieldLinkCreationInformation
                 $FieldLink.Field = $ResourceLoadSiteColumn
-                $Output = $ResourceAllocationContentType.FieldLinks.Add($FieldLink)
+                $ResourceAllocationContentType.FieldLinks.Add($FieldLink) >$null 2>&1
                 $ResourceAllocationContentType.Update($false)
                 $ResourceAllocationContentType.Context.ExecuteQuery()
 
@@ -80,7 +80,7 @@ function EnsureResourceLoadIsSiteColumn($Url) {
                             # Assuming that noone had more than 200% previously
                             $ResourceLoad = ($ResourceLoad / 100) # Convert to percentage if it wasn't previously
                         }
-                        $NewValue = Set-PnPListItem -List $ResourceAllocation -Identity $_.Id -Values @{"GtResourceLoad" = $ResourceLoad } -SystemUpdate
+                        Set-PnPListItem -List $ResourceAllocation -Identity $_.Id -Values @{"GtResourceLoad" = $ResourceLoad } -SystemUpdate >$null 2>&1
                     }
                 }
 
@@ -93,10 +93,24 @@ function EnsureResourceLoadIsSiteColumn($Url) {
     }
 }
 
+function EnsureProgramAggregrationWebPart($Url) {
+    Connect-PnPOnline -Url $Url -UseWebLogin
+    $Pages = Get-Content ".\EnsureProgramAggregrationWebPart\$.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+    foreach ($Page in $Pages.PSObject.Properties.GetEnumerator()) {
+        $DeprecatedComponent = Get-PnPClientSideComponent -Page "$($Page.Name).aspx" -ErrorAction SilentlyContinue | Where-Object { $_.WebPartId -eq $Page.Value } | Select-Object -First 1
+        if ($null -ne $DeprecatedComponent) {
+            Write-Host "`t`tReplacing deprecated component $($Page.Value) for $($Page.Name).aspx"
+            $JsonControlData = Get-Content ".\EnsureProgramAggregrationWebPart\JsonControlData_$($Page.Name).json" -Raw -Encoding UTF8
+            $Title = $JsonControlData | ConvertFrom-Json | Select-Object -ExpandProperty title
+            Apply-PnPProvisioningTemplate -Path .\EnsureProgramAggregrationWebPart\Template_ProgramAggregationWebPart.xml -Parameters @{"JsonControlData" = $JsonControlData; "PageName" = "$($Page.Name).aspx"; "Title" = $Title }
+        }
+    }
+}
 
 function UpgradeSite($Url) {
-        EnsureProjectTimelinePage -Url $Url
-        EnsureResourceLoadIsSiteColumn -Url $Url
+    EnsureProjectTimelinePage -Url $Url
+    EnsureResourceLoadIsSiteColumn -Url $Url
+    EnsureProgramAggregrationWebPart -Url $Url
 }
 
 Write-Host "This script will update all existing sites in a Prosjektportalen installation. This requires you to have the SharePoint admin role"

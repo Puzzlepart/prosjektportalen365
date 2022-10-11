@@ -1,22 +1,28 @@
-import React from 'react'
-import strings from 'ProgramWebPartsStrings'
-import styles from './ProjectTable.module.scss'
-import { IProjectTableProps, IListField } from './types'
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
-import { SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox'
+import { SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
+import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
+import strings from 'ProgramWebPartsStrings'
+import React, {
+  FormEvent,
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useMemo,
+  useState
+} from 'react'
+import { ProgramAdministrationContext } from '../context'
+import styles from './ProjectTable.module.scss'
+import { IListField, IProjectTableProps } from './types'
 
-export const ProjectTable: React.FunctionComponent<IProjectTableProps> = (
-  props: IProjectTableProps
-): JSX.Element => {
-  const [items, setItems] = React.useState<any[]>([])
-  const [selection, setSelection] = React.useState<any[]>([])
+export const ProjectTable: FunctionComponent<IProjectTableProps> = (props) => {
+  const context = useContext(ProgramAdministrationContext)
+  const [items, setItems] = useState<any[]>([])
+  const [selection, setSelection] = useState<any[]>([])
 
-  React.useEffect((): void => setItems(props.items), [props.items])
+  useEffect(() => setItems(props.items), [props.items])
+  useEffect(() => props.onSelectionChanged(selection), [selection])
 
-  React.useEffect((): void => props.onSelectionChanged(selection), [selection])
-
-  const handleItemClicked = (item: any, selecting: boolean): void => {
+  const handleItemClicked = (item: any, selecting: boolean) => {
     if (props.selectionMode === SelectionMode.none) return
     let newSelection: any[] = null
     if (selecting) {
@@ -38,7 +44,7 @@ export const ProjectTable: React.FunctionComponent<IProjectTableProps> = (
     }
   }
 
-  const handleHeaderCheckboxClicked = (selecting: boolean): void => {
+  const handleHeaderCheckboxClicked = (selecting: boolean) => {
     if (props.selectionMode === SelectionMode.none) return
     let newSelection: any[] = null
     if (selecting) {
@@ -56,7 +62,7 @@ export const ProjectTable: React.FunctionComponent<IProjectTableProps> = (
     }
   }
 
-  const handleFilterChanged = (filter: string): void => {
+  const handleFilterChanged = (filter: string) => {
     const filtered: any[] = props.items.filter((item: any): boolean =>
       props.fields
         .map((field: IListField): string => field.fieldName)
@@ -72,11 +78,12 @@ export const ProjectTable: React.FunctionComponent<IProjectTableProps> = (
     return (
       <Checkbox
         checked={checked}
+        disabled={!context.state.userHasManagePermission}
         styles={{
           root: { top: '50%', transform: 'translateY(-50%)' },
           checkbox: { borderRadius: '16px' }
         }}
-        onChange={(ev: React.FormEvent, newChecked: boolean): void => {
+        onChange={(ev: FormEvent, newChecked: boolean) => {
           onChange(newChecked)
           ev.stopPropagation()
         }}
@@ -84,16 +91,16 @@ export const ProjectTable: React.FunctionComponent<IProjectTableProps> = (
     )
   }
 
-  const headers: JSX.Element[] = React.useMemo((): JSX.Element[] => {
+  const headers: JSX.Element[] = useMemo((): JSX.Element[] => {
     const checked: boolean =
       props.items && props.items.every((item: any): boolean => selection.indexOf(item) >= 0)
     return [
       <li
         key='checkbox'
         className={styles.column}
-        onClick={(ev: React.MouseEvent): void => {
+        onClick={(event) => {
+          event.preventDefault()
           handleHeaderCheckboxClicked(!checked)
-          ev.preventDefault()
         }}>
         {renderCheckbox(checked, handleHeaderCheckboxClicked)}
       </li>,
@@ -113,13 +120,11 @@ export const ProjectTable: React.FunctionComponent<IProjectTableProps> = (
       <li
         key='checkbox'
         className={styles.column}
-        onClick={(e: React.MouseEvent): void => {
+        onClick={(event) => {
+          event.preventDefault()
           handleItemClicked(item, !checked)
-          e.preventDefault()
         }}>
-        {renderCheckbox(checked, (newChecked: boolean): void =>
-          handleItemClicked(item, newChecked)
-        )}
+        {renderCheckbox(checked, (newChecked: boolean) => handleItemClicked(item, newChecked))}
       </li>,
       ...props.fields.map(
         (field: IListField, index: number): JSX.Element => (

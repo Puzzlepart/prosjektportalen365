@@ -1,17 +1,15 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { dateAdd, PnPClientStorage, TypedHash } from '@pnp/common'
+import { TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
-import { sp, Web } from '@pnp/sp'
+import { sp } from '@pnp/sp'
 import { taxonomy } from '@pnp/sp-taxonomy'
 import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator'
 import { SPDataAdapterBase } from 'pp365-shared/lib/data'
-import { ProjectAdminRoleType } from 'pp365-shared/lib/models'
 import { ProjectDataService } from 'pp365-shared/lib/services'
 import * as strings from 'ProjectWebPartsStrings'
 import { IEntityField } from 'sp-entityportal-service/types'
-import { contains, find, isArray, unique } from 'underscore'
+import { find } from 'underscore'
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
-import { ProjectAdminPermission } from './ProjectAdminPermission'
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
@@ -276,86 +274,6 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       termSetId: phaseField.TermSetId,
       phaseTextField: phaseTextField.InternalName
     }
-  }
-
-  /**
-   * Get project admin permissions. The result is stored in `sessionStorage`
-   * for 30 minutes to avoid too many requests.
-   *
-   * @param permission Permission to check
-   * @param properties Project properties
-   */
-  public async getProjectAdminPermissions(
-    permission: ProjectAdminPermission,
-    properties: Record<string, any>
-  ) {
-    if (!this?.spfxContext?.pageContext) return false
-    const storageKey = this.project.getStorageKey('getProjectAdminPermissions')
-    const storageExpire = dateAdd(new Date(), 'minute', 30)
-    const permissions = await new PnPClientStorage().session.getOrPut(
-      storageKey,
-      async () => {
-        const userPermissions = []
-        const rolesToCheck = properties.GtProjectAdminRoles
-        if (!rolesToCheck) {
-          if (this.spfxContext.pageContext.legacyPageContext.isSiteAdmin === true) return true
-          else return false
-        }
-        const { data: currentUser } = await this.project.web.ensureUser(
-          this.spfxContext.pageContext.user.email
-        )
-        const projectAdminRoles = (await this.portal.getProjectAdminRoles()).filter(
-          (role) => rolesToCheck.indexOf(role.title) !== -1
-        )
-        for (let i = 0; i < projectAdminRoles.length; i++) {
-          const role = projectAdminRoles[i]
-          switch (role.type) {
-            case ProjectAdminRoleType.SiteAdmin:
-              {
-                if (this.spfxContext.pageContext.legacyPageContext.isSiteAdmin === true)
-                  userPermissions.push(...role.permissions)
-              }
-              break
-            case ProjectAdminRoleType.ProjectProperty:
-              {
-                const projectFieldValue = properties[role.projectFieldName]
-                if (isArray(projectFieldValue) && projectFieldValue.indexOf(currentUser.Id) !== -1)
-                  userPermissions.push(...role.permissions)
-                if (projectFieldValue === currentUser?.Id) userPermissions.push(...role.permissions)
-              }
-              break
-            case ProjectAdminRoleType.SharePointGroup:
-              {
-                let web: Web = null
-                switch (role.groupLevel) {
-                  case strings.GroupLevelProject:
-                    web = this.project.web
-                    break
-                  case strings.GroupLevelPortfolio:
-                    web = this.portal.web
-                    break
-                }
-                try {
-                  if (
-                    (
-                      await web.siteGroups
-                        .getByName(role.groupName)
-                        .users.filter(`Email eq '${currentUser.Email}'`)
-                        .get()
-                    ).length > 0
-                  )
-                    userPermissions.push(...role.permissions)
-                } catch {}
-              }
-              break
-          }
-        }
-        return unique(userPermissions, (p) => p)
-      },
-      storageExpire
-    )
-    if (typeof permissions === 'boolean') return permissions
-    else return contains(permissions, permission.toString())
   }
 
   /**

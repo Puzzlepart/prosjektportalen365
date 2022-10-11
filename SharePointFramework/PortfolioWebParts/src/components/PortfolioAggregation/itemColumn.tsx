@@ -1,7 +1,6 @@
 import { PageContext } from '@microsoft/sp-page-context'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { Web } from '@pnp/sp'
-import { UserColumn } from 'components/PortfolioOverview/RenderItemColumn/UserColumn'
 import { IColumn, Icon, Link } from 'office-ui-fabric-react/lib'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
@@ -10,6 +9,7 @@ import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import React from 'react'
 import { isEmpty } from 'underscore'
 import { TagsColumn } from '../PortfolioOverview/RenderItemColumn/TagsColumn'
+import { UserColumn } from '../PortfolioOverview/RenderItemColumn/UserColumn'
 import ItemModal from './ItemModal'
 
 /**
@@ -85,9 +85,8 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
  * Get default columns
  *
  * @param pageContext Page context
- * @param isParentProject Is parent project
  */
-export const getDefaultColumns = (pageContext?: PageContext, isParentProject?: boolean) => [
+export const getDefaultColumns = (pageContext?: PageContext) => [
   {
     key: 'SiteTitle',
     idx: 0,
@@ -97,47 +96,37 @@ export const getDefaultColumns = (pageContext?: PageContext, isParentProject?: b
     maxWidth: 225,
     isResizable: true,
     onRender: (item: any) => {
-      if (!isParentProject) {
-        return (
-          <ProjectInformationPanel
-            key={item.SiteId}
-            title={item.Title}
-            siteId={item.SiteId}
-            webUrl={item.Path}
-            hubSite={{
-              web: new Web(pageContext.site.absoluteUrl),
-              url: pageContext.site.absoluteUrl
-            }}
-            page='Portfolio'
-            hideAllActions={true}
-            onRenderToggleElement={(onToggle) => (
-              <Icon
-                iconName='Info'
-                style={{
-                  color: '666666',
-                  marginLeft: 4,
-                  position: 'relative',
-                  top: '2px',
-                  fontSize: '1.1em',
-                  cursor: 'pointer'
-                }}
-                onClick={onToggle}
-              />
-            )}>
-            <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
-              {item.SiteTitle}
-            </Link>
-          </ProjectInformationPanel>
-        )
-      } else {
-        return item.SPWebURL ? (
+      return (
+        <ProjectInformationPanel
+          key={item.SiteId}
+          title={item.Title}
+          siteId={item.SiteId}
+          webUrl={item.Path}
+          hubSite={{
+            web: new Web(pageContext.site.absoluteUrl),
+            url: pageContext.site.absoluteUrl
+          }}
+          page='Portfolio'
+          hideAllActions={true}
+          onRenderToggleElement={(onToggle) => (
+            <Icon
+              iconName='Info'
+              style={{
+                color: '666666',
+                marginLeft: 4,
+                position: 'relative',
+                top: '2px',
+                fontSize: '1.1em',
+                cursor: 'pointer'
+              }}
+              onClick={onToggle}
+            />
+          )}>
           <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
             {item.SiteTitle}
           </Link>
-        ) : (
-          <span>{item.SiteTitle}</span>
-        )
-      }
+        </ProjectInformationPanel>
+      )
     },
     data: { isGroupable: true }
   }
