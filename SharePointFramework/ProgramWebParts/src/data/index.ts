@@ -21,7 +21,6 @@ import { ISPDataAdapterBaseConfiguration, SPDataAdapterBase } from 'pp365-shared
 import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService, ProjectDataService } from 'pp365-shared/lib/services'
-import { sleep } from 'pp365-shared/lib/util'
 import * as strings from 'ProgramWebPartsStrings'
 import HubSiteService from 'sp-hubsite-service'
 import _ from 'underscore'
@@ -29,6 +28,11 @@ import { GAINS_DEFAULT_SELECT_PROPERTIES } from './config'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
 
+/**
+ * SPDataAdapter for `ProgramWebParts`.
+ *
+ * @extends SPDataAdapterBase (from package `pp365-shared`)
+ */
 export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfiguration> {
   public project: ProjectDataService
   public dataSourceService: DataSourceService
@@ -59,6 +63,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
 
   /**
    * Get portfolio configuration
+   *
+   * @description Used in `PortfolioOverview`
    */
   public async getPortfolioConfig(): Promise<IPortfolioConfiguration> {
     // eslint-disable-next-line prefer-const
@@ -84,6 +90,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   /**
    * Fetch data for view
    *
+   * @description Used in `PortfolioOverview`
+   *
    * @param view View configuration
    * @param configuration PortfolioOverviewConfiguration
    * @param siteId Site ID
@@ -104,6 +112,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
 
   /**
    * Fetch data for regular view
+   *
+   * @description Used in `PortfolioOverview`
    *
    * @param view View configuration
    * @param configuration PortfolioOverviewConfiguration
@@ -143,6 +153,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
 
   /**
    * Fetch data for manager view
+   *
+   * @description Used in `PortfolioOverview`
    *
    * @param view View configuration
    * @param configuration PortfolioOverviewConfiguration
@@ -218,6 +230,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   /**
    *  do a dynamic amount of sp.search calls
    *
+   * @description Used in `PortfolioOverview`
+   *
    * @param view View configuration
    * @param configuration PortfolioOverviewConfiguration
    * @param siteId Site ID
@@ -257,6 +271,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
 
   /**
    * Fetches data for portfolio views
+   *
+   * @description Used in `PortfolioOverview`
    *
    * @param view View configuration
    * @param configuration PortfolioOverviewConfiguration
@@ -307,21 +323,20 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     }
   }
 
-
-
   /**
-   * Fetches data for the Projecttimeline project
+   * Currently not in use, but it's here to avoid `ProjectTimeline` failing.
    *
-   * @param _timelineConfig
+   * @param _timelineConfig Timeline config (not in use)
    */
-   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-   public async fetchTimelineProjectData(_timelineConfig: any[]) {
-    await sleep(0.1)
-    return []
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public async fetchTimelineProjectData(_timelineConfig: any[]) {
+    return await Promise.resolve([])
   }
 
   /**
-   *  Fetches data for the Projecttimeline project
+   * Fetches project timeline data
+   *
+   * @description Used in `ProjectTimeline`
    *
    * @param siteId - Site ID
    */
@@ -357,6 +372,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    *
    * * Fetching list items
    * * Maps the items to TimelineContentListModel
+   *
+   * @description Used in `ProjectTimeline`
    */
   public async fetchTimelineContentItems() {
     const [timelineConfig, timelineItems] = await Promise.all([
@@ -420,8 +437,9 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   }
 
   /**
-   * Fetches configuration data for the Projecttimeline
+   * Fetches configuration data for the `ProjectTimeline`
    *
+   * @description Used in `ProjectTimeline`
    */
   public async fetchTimelineConfiguration() {
     return await this.portal.web.lists
@@ -440,7 +458,9 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   }
 
   /**
-   * Fetches configuration data for the Projecttimeline
+   * Fetches configuration data for the `ProjectTimeline`
+   *
+   * @description Used in `ProjectTimeline`
    */
   public async fetchTimelineAggregatedContent(configItemTitle: string, dataSourceName: string) {
     const timelineConfig = await this.fetchTimelineConfiguration()
@@ -481,7 +501,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
           )
           return model
         })
-        .filter((t) => t)
+        .filter(Boolean)
     }
   }
 
@@ -565,10 +585,13 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
 
   /**
    * Fetch enriched projects
-   * Fetching project list items
-   * Graph groups
-   * Site users
-   * Combines the data
+   *
+   * Fetching the following:
+   * - Project list items
+   * - Graph groups
+   * - Site users
+   *
+   * Then combines/joins the data
    */
   public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
     await MSGraph.Init(this.spfxContext.msGraphClientFactory)
@@ -703,15 +726,13 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     name: string,
     selectProperties: string[],
     includeSelf: boolean = false
-  ): Promise<any> {
+  ): Promise<any[]> {
     const dataSrc = await this.dataSourceService.getByName(name)
     if (!dataSrc) throw new Error(format(strings.DataSourceNotFound, name))
     try {
       switch (dataSrc.category) {
         case 'Gevinstoversikt':
-          {
-            selectProperties.push(...GAINS_DEFAULT_SELECT_PROPERTIES)
-          }
+          selectProperties.push(...GAINS_DEFAULT_SELECT_PROPERTIES)
           break
       }
       let items = await this._fetchItems(dataSrc.searchQuery, selectProperties, includeSelf)
@@ -746,7 +767,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    */
   public async updateProjectInHub(properties: Record<string, any>): Promise<void> {
     try {
-      const list = this.portal.web.lists.getByTitle('Prosjekter')
+      const list = this.portal.web.lists.getByTitle(strings.ProjectsListName)
       const [item] = await list.items
         .filter(`GtSiteId eq '${this.spfxContext.pageContext.site.id.toString()}'`)
         .get()
