@@ -23,7 +23,10 @@ jobs:
         run: |
           mkdir C:/prosjektportalen365
           git clone https://github.com/Puzzlepart/prosjektportalen365.git C:/prosjektportalen365
-          git checkout $GITHUB_SHA
+
+      - name: Checkout current SHA
+        working-directory: C:/prosjektportalen365
+        run: git checkout $GITHUB_SHA
 
       - name: Set sha_short
         id: vars
