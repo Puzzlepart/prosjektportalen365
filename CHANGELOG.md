@@ -22,6 +22,8 @@ Every change is marked with issue ID.
   - This also adds sync functionality to synchronize ProjectData to newly created projects based off of ideas
 - Displaying parent projects in Project Information webpart #760
 - Added ability to hide certain parts of the Project Information webpart #670
+- Added inline help content function to sitepages and lists #788
+- Added pre populated elements to help content list #799
 
 ### Changed
 

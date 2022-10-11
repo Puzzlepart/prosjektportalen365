@@ -12,7 +12,7 @@ import * as ReactDOM from 'react-dom'
 import { default as HubSiteService } from 'sp-hubsite-service'
 import { HelpContent } from '../components'
 import { HelpContentModel } from '../models/HelpContentModel'
-import { IHelpContentApplicationCustomizerProperties } from './IHelpContentApplicationCustomizerProperties'
+import { IHelpContentApplicationCustomizerProperties } from './types'
 
 export default class HelpContentApplicationCustomizer extends BaseApplicationCustomizer<
   IHelpContentApplicationCustomizerProperties
@@ -61,20 +61,25 @@ export default class HelpContentApplicationCustomizer extends BaseApplicationCus
    */
   private async _getHelpContent(listName: string): Promise<HelpContentModel[]> {
     try {
-      return await new PnPClientStorage().session.getOrPut(`pp365_help_content_${window.location.pathname}`, async () => {
-        const hub = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
-        const portal = new PortalDataService().configure({ urlOrWeb: hub.web })
-        let items = await portal.getItems(listName, HelpContentModel, {
-          ViewXml: '<View><Query><OrderBy><FieldRef Name="GtSortOrder" /></OrderBy></Query></View>'
-        })
-        items = items.filter((i) => i.matchPattern(window.location.pathname)).splice(0, 3)
-        for (let i = 0; i < items.length; i++) {
-          if (items[i].externalUrl) {
-            await items[i].fetchExternalContent()
+      return await new PnPClientStorage().session.getOrPut(
+        `pp365_help_content_${window.location.pathname}`,
+        async () => {
+          const hub = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
+          const portal = new PortalDataService().configure({ urlOrWeb: hub.web })
+          let items = await portal.getItems(listName, HelpContentModel, {
+            ViewXml:
+              '<View><Query><OrderBy><FieldRef Name="GtSortOrder" /></OrderBy></Query></View>'
+          })
+          items = items.filter((i) => i.matchPattern(window.location.pathname)).splice(0, 3)
+          for (let i = 0; i < items.length; i++) {
+            if (items[i].externalUrl) {
+              await items[i].fetchExternalContent(this.properties.publicMediaBasePath)
+            }
           }
-        }
-        return items
-      }, dateAdd(new Date(), 'hour', 4))
+          return items
+        },
+        dateAdd(new Date(), 'hour', 4)
+      )
     } catch (e) {
       return []
     }
