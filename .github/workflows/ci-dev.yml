@@ -22,7 +22,7 @@ jobs:
       - name: Checkout Puzzlepart/prosjektportalen365.git
         run: |
           mkdir C:/prosjektportalen365
-          git clone https://github.com/Puzzlepart/prosjektportalen365.git C:/prosjektportalen365
+          git clone --branch dev https://github.com/Puzzlepart/prosjektportalen365.git C:/prosjektportalen365
 
       - name: Checkout current SHA
         working-directory: C:/prosjektportalen365
