@@ -1,7 +1,7 @@
 import { ActionButton } from 'office-ui-fabric-react/lib/Button'
 import { Modal } from 'office-ui-fabric-react/lib/Modal'
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot'
-import  React, { FunctionComponent } from 'react'
+import React, { FunctionComponent } from 'react'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import styles from './HelpContentModal.module.scss'
@@ -21,7 +21,10 @@ export const HelpContentModal: FunctionComponent<IHelpContentModalProps> = (prop
               <div className={styles.contentItem} title={content.title}>
                 <p dangerouslySetInnerHTML={{ __html: content.textContent }}></p>
                 {content.markdownContent && (
-                  <ReactMarkdown linkTarget='_blank' rehypePlugins={[rehypeRaw]} transformImageUri={null}>
+                  <ReactMarkdown
+                    linkTarget='_blank'
+                    rehypePlugins={[rehypeRaw]}
+                    transformImageUri={null}>
                     {content.markdownContent}
                   </ReactMarkdown>
                 )}

@@ -13,7 +13,6 @@ export class HelpContentModel {
   public resourceLink: { Url: string; Description: string }
   public resourceLinkIcon: string
   public externalUrl: string
-  private _mediaFolderPath: string
   private _publicMediaBasePath: string
 
   constructor(spItem: TypedHash<any>, public web: Web) {
@@ -38,18 +37,16 @@ export class HelpContentModel {
   /**
    * Fetch external content
    *
-   * @param mediaFolderPath Media folder path
    * @param publicMediaBasePath Public media base path
    */
-  public async fetchExternalContent(mediaFolderPath: string, publicMediaBasePath?: string) {
-    this._mediaFolderPath = mediaFolderPath
+  public async fetchExternalContent(publicMediaBasePath?: string) {
     this._publicMediaBasePath = publicMediaBasePath ?? this._getPublicMediaBasePath()
     try {
       let md = await (await fetch(this.externalUrl, { method: 'GET' })).text()
       md = this._removeJekyllHeader(md)
       md = this._fixImageLinks(md)
       this.markdownContent = md
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
@@ -57,7 +54,7 @@ export class HelpContentModel {
    */
   private _getPublicMediaBasePath() {
     const externalUrlParts = this.externalUrl.split('/')
-    return `${externalUrlParts.splice(0, externalUrlParts.length - 1).join('/')}/${this._mediaFolderPath}`
+    return `${externalUrlParts.splice(0, externalUrlParts.length - 1).join('/')}/media`
   }
 
   /**
@@ -67,15 +64,15 @@ export class HelpContentModel {
    */
   private _fixImageLinks(markdownContent: string) {
     let md = markdownContent
-    const regex = new RegExp(`/\((\.\/${this._mediaFolderPath}\/(.+))\)`, 'gm')
+    const regex = /\((\.\/media\/(.+))\)/gm
     let m: RegExpExecArray
     while ((m = regex.exec(md)) !== null) {
       if (m.index === regex.lastIndex) {
         regex.lastIndex++
       }
-      const [, imageLink, image] = m
+      const [, oldImageLink, image] = m
       const newImageLink = `${this._publicMediaBasePath}/${image}`.replace(/ /g, '%20')
-      md = md.replace(imageLink, newImageLink)
+      md = md.replace(oldImageLink, newImageLink)
     }
     return md
   }
