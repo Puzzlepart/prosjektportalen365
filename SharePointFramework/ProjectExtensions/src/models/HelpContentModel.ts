@@ -62,7 +62,7 @@ export class HelpContentModel {
         regex.lastIndex++
       }
       const [, imageLink, image] = m
-      const newImageLink = `${imagesBasePath}/${image}`
+      const newImageLink = `'${imagesBasePath}/${image}'`
       md = md.replace(imageLink, newImageLink)
     }
     return md

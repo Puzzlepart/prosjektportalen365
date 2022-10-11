@@ -21,7 +21,7 @@ export const HelpContentModal: FunctionComponent<IHelpContentModalProps> = (prop
               <div className={styles.contentItem} title={content.title}>
                 <p dangerouslySetInnerHTML={{ __html: content.textContent }}></p>
                 {content.markdownContent && (
-                  <ReactMarkdown linkTarget='_blank' rehypePlugins={[rehypeRaw]}>
+                  <ReactMarkdown linkTarget='_blank' rehypePlugins={[rehypeRaw]} transformImageUri={null}>
                     {content.markdownContent}
                   </ReactMarkdown>
                 )}
