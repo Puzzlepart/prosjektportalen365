@@ -13,6 +13,8 @@ export class HelpContentModel {
   public resourceLink: { Url: string; Description: string }
   public resourceLinkIcon: string
   public externalUrl: string
+  private _mediaFolderPath: string
+  private _publicMediaBasePath: string
 
   constructor(spItem: TypedHash<any>, public web: Web) {
     this.title = spItem.Title
@@ -36,33 +38,43 @@ export class HelpContentModel {
   /**
    * Fetch external content
    *
-   * @param imagesBasePath Images base path
+   * @param mediaFolderPath Media folder path
+   * @param publicMediaBasePath Public media base path
    */
-  public async fetchExternalContent(imagesBasePath?: string) {
+  public async fetchExternalContent(mediaFolderPath: string, publicMediaBasePath?: string) {
+    this._mediaFolderPath = mediaFolderPath
+    this._publicMediaBasePath = publicMediaBasePath ?? this._getPublicMediaBasePath()
     try {
       let md = await (await fetch(this.externalUrl, { method: 'GET' })).text()
       md = this._removeJekyllHeader(md)
-      if (imagesBasePath) md = this._fixImageLinks(md, imagesBasePath)
+      md = this._fixImageLinks(md)
       this.markdownContent = md
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
-   * Fix image links
+   * Get media base path based on `externalUrl
+   */
+  private _getPublicMediaBasePath() {
+    const externalUrlParts = this.externalUrl.split('/')
+    return `${externalUrlParts.splice(0, externalUrlParts.length - 1).join('/')}/${this._mediaFolderPath}`
+  }
+
+  /**
+   * Fix media links
    *
    * @param markdownContent Markdown content
-   * @param imagesBasePath Images base path
    */
-  private _fixImageLinks(markdownContent: string, imagesBasePath: string) {
+  private _fixImageLinks(markdownContent: string) {
     let md = markdownContent
-    const regex = /\((\.\/media\/(.+))\)/gm
+    const regex = new RegExp(`/\((\.\/${this._mediaFolderPath}\/(.+))\)`, 'gm')
     let m: RegExpExecArray
     while ((m = regex.exec(md)) !== null) {
       if (m.index === regex.lastIndex) {
         regex.lastIndex++
       }
       const [, imageLink, image] = m
-      const newImageLink = `'${imagesBasePath}/${image}'`
+      const newImageLink = `${this._publicMediaBasePath}/${image}`.replace(/ /g, '%20')
       md = md.replace(imageLink, newImageLink)
     }
     return md
@@ -76,8 +88,6 @@ export class HelpContentModel {
    * @param md Markdown content
    */
   private _removeJekyllHeader(md: string) {
-    // ./media/image19.png
-    // https://puzzlepart.github.io/prosjektportalen-manual/Brukermanual/3%20Portefolje/media/image19.png
     return md.replace(/^\-\-\-([\n\w\W\s]+)\-\-\-$/gm, '')
   }
 }

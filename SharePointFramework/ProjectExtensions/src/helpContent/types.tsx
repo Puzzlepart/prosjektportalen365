@@ -1,5 +1,6 @@
 export interface IHelpContentApplicationCustomizerProperties {
   listName: string
   linkText: string
-  imagesBasePath: string
+  mediaFolderPath: string
+  publicMediaBasePath: string
 }

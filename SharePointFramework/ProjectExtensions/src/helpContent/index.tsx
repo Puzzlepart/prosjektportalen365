@@ -73,7 +73,7 @@ export default class HelpContentApplicationCustomizer extends BaseApplicationCus
           items = items.filter((i) => i.matchPattern(window.location.pathname)).splice(0, 3)
           for (let i = 0; i < items.length; i++) {
             if (items[i].externalUrl) {
-              await items[i].fetchExternalContent(this.properties.imagesBasePath)
+              await items[i].fetchExternalContent(this.properties.mediaFolderPath ?? 'media', this.properties.publicMediaBasePath)
             }
           }
           return items
