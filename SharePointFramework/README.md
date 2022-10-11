@@ -116,7 +116,7 @@ _Published to **npm** as `pp365-projectwebparts`_`_
 To work with the various solutions, you have to to the following
 
 1. Ensure you have `npm` installed
-2. Build the Shared solution. Navigate to "@Shared" and run `npm i` followed by `pnpm run build`
+2. Build the Shared solution. Navigate to [@Shared](./@Shared) and run `npm i` followed by `pnpm run build`
 3. Navigate to [PortfolioWebParts](./PortfolioWebParts) and run `npm i` followed by `npm run package`
 4. Navigate to [PortfolioExtensions](./PortfolioExtensions) and run `npm i` followed by `npm run package`
 5. Navigate to [ProjectExtensions](./ProjectExtensions) and run `npm i` followed by `npm run package`
