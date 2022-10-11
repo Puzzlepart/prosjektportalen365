@@ -31,17 +31,14 @@ jobs:
           node-version: 12.19.0
 
       - name: Run Install/Build-Release.ps1 in CI mode
-        run: Install/Build-Release.ps1 -CI
+        run: C:/prosjektportalen365/Install/Build-Release.ps1 -CI
         shell: powershell
-        with:
-          working-directory: C:/prosjektportalen365
 
       - uses: actions/upload-artifact@v3
         with:
           name: release-package
-          path: release
+          path: C:/prosjektportalen365/release
           retention-days: 3
-          working-directory: C:/prosjektportalen365
 
   upgrade:
     needs: build-release
