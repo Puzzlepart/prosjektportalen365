@@ -39,7 +39,18 @@ export class HelpContentModel {
   public async fetchExternalContent() {
     try {
       const md = await (await fetch(this.externalUrl, { method: 'GET' })).text()
-      this.markdownContent = md
+      this.markdownContent = this._removeJekyllHeader(md)
     } catch (error) {}
+  }
+
+  /**
+   * Removed Jekyll header data using regex
+   * 
+   * @see https://regex101.com/r/dvc3qc/1
+   * 
+   * @param md Markdown content
+   */
+  private _removeJekyllHeader(md: string) {
+    return md.replace(/^\-\-\-([\n\w\W\s]+)\-\-\-$/mg, '')
   }
 }

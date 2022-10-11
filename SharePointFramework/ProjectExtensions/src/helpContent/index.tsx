@@ -12,7 +12,7 @@ import * as ReactDOM from 'react-dom'
 import { default as HubSiteService } from 'sp-hubsite-service'
 import { HelpContent } from '../components'
 import { HelpContentModel } from '../models/HelpContentModel'
-import { IHelpContentApplicationCustomizerProperties } from './IHelpContentApplicationCustomizerProperties'
+import { IHelpContentApplicationCustomizerProperties } from './types'
 
 export default class HelpContentApplicationCustomizer extends BaseApplicationCustomizer<
   IHelpContentApplicationCustomizerProperties
