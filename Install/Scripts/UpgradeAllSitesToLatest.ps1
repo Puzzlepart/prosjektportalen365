@@ -96,7 +96,7 @@ function EnsureResourceLoadIsSiteColumn($Url) {
 function EnsureProgramAggregrationWebPart($Url) {
     Connect-PnPOnline -Url $Url -UseWebLogin
     $Pages = Get-Content ".\EnsureProgramAggregrationWebPart\$.json" -Raw -Encoding UTF8 | ConvertFrom-Json
-    foreach ($Page in $Pages.GetEnumerator()) {
+    foreach ($Page in $Pages.PSObject.Properties.GetEnumerator()) {
         $DeprecatedComponent = Get-PnPClientSideComponent -Page "$($Page.Name).aspx" -ErrorAction SilentlyContinue | Where-Object { $_.WebPartId -eq $Page.Value } | Select-Object -First 1
         if ($null -ne $DeprecatedComponent) {
             Write-Host "`t`tReplacing deprecated component $($Page.Value) for $($Page.Name).aspx"
