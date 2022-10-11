@@ -324,13 +324,10 @@ export class DataAdapter implements IDataAdapter {
    */
   public async fetchTimelineProjectData(timelineConfig: any[]) {
     try {
-      const hubSiteId = this.context.pageContext.legacyPageContext.hubSiteId
-      const contentType = '0x010022252E35737A413FB56A1BA53862F6D5*'
-
       const [{ PrimarySearchResults: statusReports }] = await Promise.all([
         sp.search({
           ...DEFAULT_SEARCH_SETTINGS,
-          QueryTemplate: `DepartmentId:{${hubSiteId}} ContentTypeId:${contentType} GtModerationStatusOWSCHCS:Publisert`,
+          QueryTemplate: `DepartmentId:{${ this.context.pageContext.legacyPageContext.hubSiteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5 GtModerationStatusOWSCHCS:Publisert`,
           SelectProperties: [
             'Title',
             'GtSiteIdOWSTEXT',

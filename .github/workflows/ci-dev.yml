@@ -17,8 +17,10 @@ jobs:
   build-release:
     runs-on: windows-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+     - name: Checkout Puzzlepart/prosjektportalen365.git
+       run: |
+          mkdir C:/prosjektportalen365
+          git clone https://github.com/Puzzlepart/prosjektportalen365.git C:/prosjektportalen365 --depth 1
         
       - run: Get-PSDrive
 
@@ -30,8 +32,10 @@ jobs:
       - name: Run Install/Build-Release.ps1 in CI mode
         run: Install/Build-Release.ps1 -CI
         shell: powershell
+        working-directory: C:/prosjektportalen365
 
       - uses: actions/upload-artifact@v3
+        working-directory: C:/prosjektportalen365
         with:
           name: release-package
           path: release
