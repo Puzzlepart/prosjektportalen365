@@ -128,13 +128,12 @@ export const useProjectList = (props: IProjectListProps) => {
     Promise.all([
       props.dataAdapter.fetchEnrichedProjects(),
       props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    ]).then(([projects]) => {
+    ]).then(([projects, isUserInPortfolioManagerGroup]) => {
       setState({
         ...state,
         projects,
         loading: false,
-        isUserInPortfolioManagerGroup: false
+        isUserInPortfolioManagerGroup
       })
     })
   }, [])
