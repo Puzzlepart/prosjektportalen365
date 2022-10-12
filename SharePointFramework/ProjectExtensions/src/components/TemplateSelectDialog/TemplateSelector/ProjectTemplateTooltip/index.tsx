@@ -9,25 +9,21 @@ export const ProjectTemplateTooltip: FunctionComponent<IProjectTemplateTooltipPr
   children
 }) => {
   if (stringIsNullOrEmpty(template.subText)) {
-    return (
-      <>
-        {children}
-      </>
-    )
+    return <>{children}</>
   }
   return (
     <TooltipHost
       calloutProps={{
         gapSpace: 40
       }}
-      content={(
+      content={
         <div className={styles.root}>
           <div className={styles.header}>
             <span>{template.text}</span>
           </div>
           <div className={styles.description}>{template.subText}</div>
         </div>
-      )}>
+      }>
       {children}
     </TooltipHost>
   )
