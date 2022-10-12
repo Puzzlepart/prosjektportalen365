@@ -1,13 +1,13 @@
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import * as React from 'react'
+import React, { FunctionComponent } from 'react'
 import { ListContentConfig } from '../../../models'
 import { IListContentSectionProps } from './types'
 import styles from './ListContentSection.module.scss'
 import { ScrollablePane } from 'office-ui-fabric-react'
 
-export const ListContentSection: React.FunctionComponent<IListContentSectionProps> = (props) => {
+export const ListContentSection: FunctionComponent<IListContentSectionProps> = (props) => {
   /**
    * On item toggle
    *
