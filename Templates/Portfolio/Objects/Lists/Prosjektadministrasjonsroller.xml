@@ -91,7 +91,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">SP områdeadministrator</pnp:DataValue>
-            <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3,4</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF203</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
