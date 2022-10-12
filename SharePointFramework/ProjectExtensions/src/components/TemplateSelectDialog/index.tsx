@@ -13,18 +13,10 @@ import styles from './TemplateSelectDialog.module.scss'
 import { TemplateSelector } from './TemplateSelector'
 import { ITemplateSelectDialogProps, ITemplateSelectDialogState } from './types'
 
-/**
- * @class TemplateSelectDialog
- */
 export class TemplateSelectDialog extends React.Component<
   ITemplateSelectDialogProps,
   ITemplateSelectDialogState
 > {
-  /**
-   * Constructor
-   *
-   * @param props Props
-   */
   constructor(props: ITemplateSelectDialogProps) {
     super(props)
     this.state = {
@@ -56,7 +48,7 @@ export class TemplateSelectDialog extends React.Component<
         modalProps={{ isBlocking: true, isDarkOverlay: true }}
         onDismiss={onDismiss}
         onRenderFooter={this._onRenderFooter.bind(this)}
-        containerClassName={styles.templateSelectDialog}>
+        containerClassName={styles.root}>
         <Pivot>
           <PivotItem headerText={strings.TemplateSelectorTitle} itemIcon='ViewListGroup'>
             <TemplateSelector

@@ -1,0 +1,14 @@
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+
+.root {
+  padding: 20px;
+
+  .header {
+    font-size: 16px;
+    margin: 0 0 15px 0;
+  }
+
+  .description {
+    font-size: inherit;
+  }
+}

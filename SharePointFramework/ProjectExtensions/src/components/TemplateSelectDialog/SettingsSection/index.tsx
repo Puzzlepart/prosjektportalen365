@@ -1,11 +1,11 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
-import * as React from 'react'
-import { ISettingsSectionProps } from './types'
-import styles from './SettingsSection.module.scss'
 import { getId } from '@uifabric/utilities'
+import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
+import React, { FunctionComponent } from 'react'
+import styles from './SettingsSection.module.scss'
+import { ISettingsSectionProps } from './types'
 
-export const SettingsSection: React.FunctionComponent<ISettingsSectionProps> = (props) => {
+export const SettingsSection: FunctionComponent<ISettingsSectionProps> = (props) => {
   function onChange(event: React.MouseEvent<HTMLElement, MouseEvent>, checked?: boolean) {
     props.onChange((event.currentTarget as HTMLElement).id, checked)
   }
