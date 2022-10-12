@@ -37,7 +37,7 @@ export const TemplateSelector: FunctionComponent<ITemplateSelectorProps> = ({
         disabled={templates?.length <= 1}
         defaultSelectedKey={selectedTemplate.key}
         onChange={(_evt, opt: IChoiceGroupOption) => {
-          const template = find(templates, t => t.id === opt.id)
+          const template = find(templates, (t) => t.id === opt.id)
           onChange(template)
         }}
         options={options}
