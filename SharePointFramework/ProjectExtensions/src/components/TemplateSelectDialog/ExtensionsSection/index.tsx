@@ -37,7 +37,7 @@ export const ExtensionsSection: FunctionComponent<IExtensionsSectionProps> = (pr
                 onChange={(_event, checked) => onChange(ext, checked)}
               />
               {props.lockDefault && ext.isDefault && (
-                <Icon iconName={'Lock'} className={styles.icon} />
+                <Icon iconName='Lock' className={styles.icon} />
               )}
             </div>
             <div className={styles.subText} hidden={stringIsNullOrEmpty(ext.subText)}>
