@@ -1,6 +1,6 @@
 {
   "name": "pp365-portfolioextensions",
-  "version": "1.6.1-760.1",
+  "version": "1.6.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -17,7 +17,8 @@
     "serve": "gulp serve-deprecated --locale=nb-no",
     "package": "gulp clean && gulp default --ship && gulp package-solution --ship",
     "package:ci": "gulp clean && gulp default && gulp package-solution",
-    "build": "tsc --build", 
+    "build": "tsc --build",
+    "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
     "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",
@@ -33,7 +34,7 @@
     "@pnp/logging": "3.7.0",
     "@pnp/sp": "3.7.0",
     "eslint-plugin-unused-imports": "^2.0.0",
-    "pp365-shared": "temp",
+    "pp365-shared": "1.6.2",
     "tslib": "2.3.1"
   },
   "devDependencies": {

@@ -5,7 +5,7 @@
   "alias": "IdeaRegistrationCommand",
   "componentType": "Extension",
   "extensionType": "ListViewCommandSet",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "manifestVersion": 2,
   "requiresCustomScript": false,
 
