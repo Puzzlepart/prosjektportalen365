@@ -12,7 +12,7 @@ export const TemplateSelector: FunctionComponent<ITemplateSelectorProps> = ({
   const choiceGroupOptionStyles: IChoiceGroupOptionStyles = {
     root: { width: 180, height: 140 },
     choiceFieldWrapper: { width: 180, height: 140 },
-    labelWrapper: { maxWidth: 180 },
+    labelWrapper: { maxWidth: 180, width: 180 },
     field: { padding: 0, width: 180, height: 140 }
   }
 
