@@ -1,6 +1,6 @@
 {
   "name": "pp365-projectwebparts",
-  "version": "1.6.1-760.4",
+  "version": "1.6.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -16,6 +16,7 @@
     "package": "gulp clean --ship && gulp default --ship && gulp package-solution --ship",
     "package:ci": "gulp clean && gulp default && gulp package-solution",
     "build": "tsc --build",
+    "postversion": "tsc && npm publish",
     "preserve": "gulp setHiddenToolbox",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
@@ -45,8 +46,8 @@
     "interactjs": "1.6.2",
     "msgraph-helper": "0.7.1",
     "office-ui-fabric-react": "6.214.0",
-    "pp365-portfoliowebparts": "temp",
-    "pp365-shared": "temp",
+    "pp365-portfoliowebparts": "1.6.1-760.15",
+    "pp365-shared": "1.6.2",
     "pzl-spfx-components": "0.0.11",
     "react": "16.8.5",
     "react-calendar-timeline": "0.26.0",
