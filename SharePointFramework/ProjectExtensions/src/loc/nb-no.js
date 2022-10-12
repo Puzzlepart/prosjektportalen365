@@ -60,7 +60,7 @@ define([], function() {
         SetupProjectInformationText: 'Setter opp prosjektegenskaper',
         SummaryText: '{0} dokument(er) ble kopiert til prosjektområdet.',
         TemplateLibrarySelectModalTitle: 'Hent dokumentmal',
-        TemplateSelectDialogInfoText: 'Oppsettet av prosjektområdet tar omtrent 10 minutter.\n\nIkke lukk nettleservinduet mens området settes opp.',
+        TemplateSelectDialogInfoText: 'Oppsettet av prosjektområdet tar omtrent 10 minutter.Ikke lukk nettleservinduet mens området settes opp. Det anbefales ikke å sette opp flere områder samtidig.',
         TemplateSelectDialogSubmitButtonText: 'Sett opp området',
         TemplateSelectDialogTitle: 'Oppsett av prosjektområde',
         TemplateSelectorTitle: 'Prosjektmal',
