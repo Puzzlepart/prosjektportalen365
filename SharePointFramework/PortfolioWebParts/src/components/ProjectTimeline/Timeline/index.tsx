@@ -128,7 +128,7 @@ export const Timeline: FunctionComponent<ITimelineProps> = (props) => {
     const style: React.CSSProperties = { display: 'block', width: '100%' }
     return (
       <div>
-        <span style={style}>{group.title}</span>
+        <span title={group.title} style={style}>{group.title}</span>
       </div>
     )
   }
@@ -166,7 +166,7 @@ export const Timeline: FunctionComponent<ITimelineProps> = (props) => {
           stackItems={true}
           canMove={false}
           canChangeGroup={false}
-          sidebarWidth={props.groups[0].type === TimelineGroupType.Project ? 0 : 120}
+          sidebarWidth={props.groups[0].type === TimelineGroupType.Project && props.isGroupByEnabled ? 0 : props.isGroupByEnabled ? 120 : 300}
           itemRenderer={itemRenderer.bind(this)}
           groupRenderer={groupRenderer.bind(this)}
           defaultTimeStart={moment().add(...props.defaultTimeStart)}
