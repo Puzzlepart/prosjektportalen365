@@ -128,7 +128,7 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
         </div>
         {state.loading && (
           <div className={styles.spinner}>
-            <Spinner size={SpinnerSize.large} />
+            <Spinner size={SpinnerSize.large} label={strings.ProjectListLoadingText} />
           </div>
         )}
         {!state.loading && isEmpty(projects) && (
