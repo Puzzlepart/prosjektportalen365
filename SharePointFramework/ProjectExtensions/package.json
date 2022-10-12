@@ -1,6 +1,6 @@
 {
   "name": "pp365-projectextensions",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -47,7 +47,7 @@
     "@uifabric/utilities": "6.45.1",
     "msgraph-helper": "0.8.3",
     "office-ui-fabric-react": "6.214.0",
-    "pp365-shared": "1.6.2",
+    "pp365-shared": "1.6.3",
     "react": "16.9.0",
     "react-dom": "16.9.0",
     "react-markdown": "^8.0.3",
