@@ -1,5 +1,4 @@
-import { useContext, useRef, useEffect } from 'react'
-import { AddProjectDialog } from '.'
+import { useContext, useEffect, useRef } from 'react'
 import { ProgramAdministrationContext } from '../context'
 import { getHubSiteProjects } from '../data'
 import { DATA_LOADED } from '../reducer'
@@ -9,9 +8,15 @@ export const useAddProjectDialog = () => {
   const selectedProjects = useRef<Array<Record<string, string>>>([])
 
   useEffect(() => {
-    getHubSiteProjects().then((availableProjects) =>
-      context.dispatch(DATA_LOADED({ data: { availableProjects }, scope: AddProjectDialog.name }))
-    )
+    getHubSiteProjects()
+      .then((availableProjects) =>
+        context.dispatch(DATA_LOADED({ data: { availableProjects }, scope: 'AddProjectDialog' }))
+      )
+      .catch(() =>
+        context.dispatch(
+          DATA_LOADED({ data: { availableProjects: [] }, scope: 'AddProjectDialog' })
+        )
+      )
   }, [])
 
   const availableProjects = context.state.availableProjects
