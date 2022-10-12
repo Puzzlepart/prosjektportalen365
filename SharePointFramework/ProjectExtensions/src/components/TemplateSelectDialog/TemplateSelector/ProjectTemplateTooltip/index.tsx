@@ -14,7 +14,7 @@ export const ProjectTemplateTooltip: FunctionComponent<IProjectTemplateTooltipPr
   return (
     <TooltipHost
       calloutProps={{
-        gapSpace: 40
+        gapSpace: 75
       }}
       content={
         <div className={styles.root}>
