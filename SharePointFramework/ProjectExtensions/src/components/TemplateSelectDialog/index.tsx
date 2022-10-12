@@ -56,7 +56,7 @@ export class TemplateSelectDialog extends React.Component<
         modalProps={{ isBlocking: true, isDarkOverlay: true }}
         onDismiss={onDismiss}
         onRenderFooter={this._onRenderFooter.bind(this)}
-        containerClassName={styles.templateSelectDialog}>
+        containerClassName={styles.root}>
         <Pivot>
           <PivotItem headerText={strings.TemplateSelectorTitle} itemIcon='ViewListGroup'>
             <TemplateSelector

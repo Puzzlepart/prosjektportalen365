@@ -1,6 +1,6 @@
 import { TypedHash } from '@pnp/common'
 import { Web } from '@pnp/sp'
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown'
+import { IChoiceGroupOption, IIconProps } from 'office-ui-fabric-react'
 import { Schema } from 'sp-js-provisioning'
 
 export interface IProjectTemplateSPItem {
@@ -24,15 +24,15 @@ export interface IProjectTemplateSPItem {
   GtProjectPhaseTermId: string
 }
 
-export class ProjectTemplate implements IDropdownOption {
-  public id: number
+export class ProjectTemplate implements IChoiceGroupOption {
+  public id: any
   public key: string
   public text: string
   public subText: string
   public isDefault: boolean
   public isDefaultExtensionsLocked: boolean
   public isDefaultListContentLocked: boolean
-  public iconName: string
+  public iconProps: IIconProps
   public listContentConfigIds: number[]
   public projectTemplateId: number
   public projectTemplateUrl: string
@@ -54,7 +54,7 @@ export class ProjectTemplate implements IDropdownOption {
     this.isDefault = spItem?.IsDefaultTemplate
     this.isDefaultExtensionsLocked = spItem?.IsDefaultExtensionsLocked
     this.isDefaultListContentLocked = spItem?.IsDefaultListContentLocked
-    this.iconName = spItem.IconName
+    this.iconProps = { iconName: spItem.IconName }
     this.listContentConfigIds =
       spItem.ListContentConfigLookupId && spItem.ListContentConfigLookupId.length > 0
         ? spItem.ListContentConfigLookupId
