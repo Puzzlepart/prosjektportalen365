@@ -13,18 +13,10 @@ import styles from './TemplateSelectDialog.module.scss'
 import { TemplateSelector } from './TemplateSelector'
 import { ITemplateSelectDialogProps, ITemplateSelectDialogState } from './types'
 
-/**
- * @class TemplateSelectDialog
- */
 export class TemplateSelectDialog extends React.Component<
   ITemplateSelectDialogProps,
   ITemplateSelectDialogState
 > {
-  /**
-   * Constructor
-   *
-   * @param props Props
-   */
   constructor(props: ITemplateSelectDialogProps) {
     super(props)
     this.state = {
