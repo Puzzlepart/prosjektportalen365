@@ -1,6 +1,6 @@
 {
   "name": "pp365-portfoliowebparts",
-  "version": "1.6.1-760.15",
+  "version": "1.6.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -16,6 +16,7 @@
     "package": "gulp clean --ship && gulp default --ship && gulp package-solution --ship",
     "package:ci": "gulp clean && gulp default && gulp package-solution",
     "build": "tsc --build",
+    "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
     "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",
@@ -47,8 +48,8 @@
     "msgraph-helper": "0.7.3",
     "object-assign": "4.1.1",
     "office-ui-fabric-react": "6.214.0",
-    "pp365-projectwebparts": "temp",
-    "pp365-shared": "temp",
+    "pp365-projectwebparts": "1.6.2",
+    "pp365-shared": "1.6.2",
     "react": "16.8.5",
     "react-calendar-timeline": "0.27.0",
     "react-dom": "16.8.5",
