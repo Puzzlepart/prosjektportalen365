@@ -8,16 +8,16 @@ import * as moment from 'moment'
 import { ProjectColumn } from 'pp365-shared/lib/models'
 import { IEntityField } from 'sp-entityportal-service'
 import { stringIsNullOrEmpty } from '@pnp/common'
+import { IFilterProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
+import { Web } from '@pnp/sp'
 
 export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
-  showTitle?: boolean
+  web?: Web
   listName?: string
   showFilterButton?: boolean
   showTimeline?: boolean
-  showInfoMessage?: boolean
-  showCmdTimelineList?: boolean
   showTimelineList?: boolean
-  isSelectionModeNone?: boolean
+  showCmdTimelineList?: boolean
   infoText?: string
   showProjectDeliveries?: boolean
   projectDeliveriesListName?: string
@@ -26,19 +26,29 @@ export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
 
 export interface IProjectTimelineState extends IBaseWebPartComponentState<IProjectTimelineData> {
   /**
+   * Whether the component is loading
+   */
+  loading: boolean
+
+  /**
+   * Groups
+   */
+  groups?: ITimelineGroups
+
+  /**
    * Properties
    */
   properties?: ProjectPropertyModel[]
 
   /**
-   * Selection
-   */
-  selectedItem?: any[]
-
-  /**
    * Show filter panel
    */
-  showFilterPanel: boolean
+  showFilterPanel?: boolean
+
+  /**
+   * Filters
+   */
+  filters?: IFilterProps[]
 
   /**
    * Active filters
@@ -51,6 +61,11 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<IProje
   data?: any
 
   /**
+   * Filtered data
+   */
+  filteredData?: ITimelineData
+
+  /**
    * Timeline Configuration
    */
   timelineConfiguration?: any
@@ -58,7 +73,7 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<IProje
   /**
    * Error
    */
-  error?: string
+  error?: Error
 
   /**
    * Item to show details for
@@ -73,9 +88,22 @@ export interface ITimelineData {
   timelineColumns?: any[]
 }
 
+export enum TimelineGroupType {
+  Project,
+  Category,
+  Type
+}
+
 export interface ITimelineGroup {
   id: number
   title: string
+  type?: TimelineGroupType
+}
+
+export interface ITimelineGroups {
+  projectGroup: ITimelineGroup[]
+  categoryGroup: ITimelineGroup[]
+  typeGroup: ITimelineGroup[]
 }
 
 export interface IItemData {
@@ -87,6 +115,7 @@ export interface IItemData {
   costsTotal?: string
   sortOrder?: number
   hexColor?: string
+  category?: string
   elementType?: string
   filter?: boolean
   tag?: string

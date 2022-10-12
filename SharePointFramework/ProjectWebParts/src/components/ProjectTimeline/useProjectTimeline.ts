@@ -1,14 +1,18 @@
 import { useState } from 'react'
-import { IProjectTimelineProps, IProjectTimelineState } from './types'
+import {
+  IProjectTimelineProps,
+  IProjectTimelineState,
+  ITimelineData,
+  ITimelineGroup,
+  ITimelineItem
+} from './types'
 import { useProjectTimelineDataFetch } from './useProjectTimelineDataFetch'
-import { ITimelineData, ITimelineGroup, ITimelineItem } from 'interfaces'
 import sortArray from 'array-sort'
 import { get } from '@microsoft/sp-lodash-subset'
-import { IFilterProps } from 'components/FilterPanel/Filter/types'
-import strings from 'PortfolioWebPartsStrings'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
-import { IFilterItemProps } from 'components/FilterPanel/FilterItem/types'
-import { TimelineConfigurationListModel } from 'models'
+import { TimelineConfigurationListModel } from 'pp365-portfoliowebparts/lib/models'
+import { IFilterItemProps, IFilterProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
+import strings from 'ProjectWebPartsStrings'
 
 /**
  * Component logic hook for `ProjectTimeline`
@@ -18,6 +22,7 @@ import { TimelineConfigurationListModel } from 'models'
  */
 export const useProjectTimeline = (props: IProjectTimelineProps) => {
   const [state, $setState] = useState<IProjectTimelineState>({ loading: true, activeFilters: {} })
+  const web = props.web
 
   const setState = (newState: Partial<IProjectTimelineState>) => {
     $setState((_state) => ({ ..._state, ...newState }))
@@ -33,14 +38,6 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
 
     const activeFiltersKeys = Object.keys(activeFilters)
     data.items = sortArray(data.items, 'data.sortOrder')
-
-    const projectId = data.items.find((i) => i?.projectUrl === props.pageContext.site.absoluteUrl)
-      ?.id
-    const topGroup = data.groups.find((i) => i?.id === projectId)
-    projectId &&
-      (data.groups = [topGroup, ...data.groups.filter((grp) => grp?.id !== projectId)].filter(
-        (grp) => grp
-      ))
 
     if (activeFiltersKeys.length > 0) {
       const items = activeFiltersKeys.reduce(
@@ -65,11 +62,6 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     data: ITimelineData
   ): IFilterProps[] => {
     const columns = [
-      config.find((item) => item?.title === strings.ProjectLabel).timelineFilter && {
-        fieldName: 'project',
-        name: strings.SiteTitleLabel,
-        isCollapsed: true
-      },
       { fieldName: 'data.category', name: strings.CategoryFieldLabel },
       { fieldName: 'data.type', name: strings.TypeLabel },
       { fieldName: 'data.tag', name: strings.TagFieldLabel }
@@ -86,8 +78,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
           const filter = state.activeFilters[col.fieldName]
           const selected = filter ? filter.indexOf(name) !== -1 : false
           return { name, value: name, selected }
-        }),
-      defaultCollapsed: col.isCollapsed
+        })
     }))
   }
 
@@ -115,10 +106,10 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
   }
 
   /**
-     * On group change
-     *
-     * @param group any
-     */
+   * On group change
+   *
+   * @param group any
+   */
   const onGroupChange = (group) => {
     let selectedGroup: ITimelineGroup[] = []
     let updatedItems: ITimelineItem[] = []
@@ -164,7 +155,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     const filteredData = getFilteredData({ items: updatedItems, groups: selectedGroup })
 
     setState({
-      data: { items: updatedItems, groups: selectedGroup },
+      data: { ...state.data, items: updatedItems, groups: selectedGroup },
       filteredData
     })
   }
@@ -182,6 +173,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     state,
     setState,
     onFilterChange,
-    onGroupChange
+    onGroupChange,
+    web
   }
 }

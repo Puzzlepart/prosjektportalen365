@@ -123,6 +123,7 @@ declare interface IProjectWebPartsStrings {
   SiteTitleLabel: string
   TypeLabel: string
   TagFieldLabel: string
+  CategoryFieldLabel: string
   DeleteItemLabel: string
   ProjecttimelineGroupName: string
   ProjectTimelineInfoText: string
