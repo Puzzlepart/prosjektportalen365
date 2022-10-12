@@ -1,13 +1,13 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
+import { ScrollablePane } from 'office-ui-fabric-react'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
-import * as React from 'react'
+import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
+import React, { FunctionComponent } from 'react'
 import { ProjectExtension } from '../../../models'
 import styles from './ExtensionsSection.module.scss'
 import { IExtensionsSectionProps } from './types'
-import { ScrollablePane } from 'office-ui-fabric-react'
 
-export const ExtensionsSection: React.FunctionComponent<IExtensionsSectionProps> = (props) => {
+export const ExtensionsSection: FunctionComponent<IExtensionsSectionProps> = (props) => {
   /**
    * On item toggle
    *
