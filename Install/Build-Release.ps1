@@ -52,7 +52,7 @@ Write-Host "DONE" -ForegroundColor Green
 Write-Host "[INFO] Copying Install.ps1, PostInstall.ps1 and site script source files...  " -NoNewline
 Copy-Item -Path "$SITE_SCRIPTS_BASEPATH/*.txt" -Filter *.txt -Destination $RELEASE_PATH_SITESCRIPTS -Force
 Copy-Item -Path "$PSScriptRoot/Install.ps1" -Destination $RELEASE_PATH -Force
-Copy-Item -Path "$PSScriptRoot/Scripts/*.ps1" -Destination $RELEASE_PATH_SCRIPTS -Force
+Copy-Item -Path "$PSScriptRoot/Scripts/*" -Recurse -Destination $RELEASE_PATH_SCRIPTS -Force
 Copy-Item -Path "$PSScriptRoot/SearchConfiguration.xml" -Destination $RELEASE_PATH -Force
 Write-Host "DONE" -ForegroundColor Green
 
