@@ -1,6 +1,6 @@
 import { IBaseComponentProps } from '../types'
 import * as moment from 'moment'
-import { ITimelineData, ITimelineItem } from 'interfaces'
+import { ITimelineData, ITimelineGroups, ITimelineItem } from 'interfaces'
 import { ProjectListModel } from 'models'
 import { IFilterProps } from 'components/FilterPanel/Filter/types'
 
@@ -41,6 +41,11 @@ export interface IProjectTimelineState {
    * Whether the component is loading
    */
   loading: boolean
+
+  /**
+   * Groups
+   */
+  groups?: ITimelineGroups
 
   /**
    * Show filter panel

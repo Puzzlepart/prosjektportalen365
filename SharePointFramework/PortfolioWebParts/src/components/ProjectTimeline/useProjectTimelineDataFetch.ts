@@ -1,24 +1,23 @@
-import { ITimelineGroup, ITimelineItem } from 'interfaces'
+import { ITimelineGroup, ITimelineGroups, ITimelineItem, TimelineGroupType } from 'interfaces'
 import _ from 'lodash'
 import sortArray from 'array-sort'
-import { ProjectListModel, TimelineContentListModel } from 'models'
-import { useContext, useEffect } from 'react'
-import {
-  IProjectTimelineProps,
-  IProjectTimelineState
-} from './types'
+import { ProjectListModel, TimelineConfigurationListModel, TimelineContentListModel } from 'models'
+import { useEffect } from 'react'
+import { IProjectTimelineProps, IProjectTimelineState } from './types'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import strings from 'PortfolioWebPartsStrings'
 import moment from 'moment'
-import { ProjectTimelineContext } from './context'
 
 /**
-   * Creating groups based on projects title
-   *
-   * @param projects Projects
-   * @returns Timeline groups
-   */
-const transformGroups = (projects: ProjectListModel[]): ITimelineGroup[] => {
+ * Creating groups based on projects title
+ *
+ * @param projects Projects
+ * @returns Timeline groups
+ */
+const transformGroups = (
+  projects: ProjectListModel[],
+  timelineConfiguration: TimelineConfigurationListModel[]
+): ITimelineGroups => {
   const mappedProjects = _.uniq(projects.map((project) => project.title)).map((title) => {
     const project = projects.find((project) => project.title === title)
     return {
@@ -27,14 +26,40 @@ const transformGroups = (projects: ProjectListModel[]): ITimelineGroup[] => {
     }
   })
 
-  const groups: ITimelineGroup[] = mappedProjects.map((project, id) => {
+  const projectGroup: ITimelineGroup[] = mappedProjects.map((project, id) => {
     return {
       id,
       title: project.title,
+      type: TimelineGroupType.Project,
       siteId: project.siteId
     }
   })
-  return sortArray(groups, ['type', 'title'])
+
+  const categoryGroup: ITimelineGroup[] = _.uniq(
+    timelineConfiguration.map((item) => item.timelineCategory)
+  ).map((category, id) => {
+    return {
+      id,
+      title: category,
+      type: TimelineGroupType.Category
+    }
+  })
+
+  const typeGroup: ITimelineGroup[] = _.uniq(timelineConfiguration.map((item) => item.title)).map(
+    (type, id) => {
+      return {
+        id,
+        title: type,
+        type: TimelineGroupType.Type
+      }
+    }
+  )
+
+  return {
+    projectGroup: sortArray(projectGroup, ['type', 'title']),
+    categoryGroup,
+    typeGroup
+  }
 }
 
 /**
@@ -91,6 +116,7 @@ const transformItems = (
           costsTotal: item.costsTotal,
           sortOrder: item.sortOrder,
           hexColor: item.hexColor,
+          category: item.timelineCategory,
           elementType: item.elementType,
           filter: item.timelineFilter,
           tag: item.tag
@@ -118,9 +144,7 @@ const transformItems = (
  * @param props Component properties for `ProjectTimeline`
  * @returns `ProjectTimeline` state
  */
-const fetchData = async (
-  props: IProjectTimelineProps
-): Promise<Partial<IProjectTimelineState>> => {
+const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProjectTimelineState>> => {
   try {
     const data = props.dataAdapter
 
@@ -168,10 +192,18 @@ const fetchData = async (
 
     timelineItems = [...timelineItems, ...filteredTimelineItems]
 
-    const groups = transformGroups(filteredProjects)
-    const items = transformItems(timelineItems, groups)
+    const groups = transformGroups(filteredProjects, timelineConfiguration)
 
-    return { data: { items, groups }, timelineConfiguration }
+    const items = transformItems(timelineItems, groups.projectGroup)
+
+    return {
+      data: {
+        items,
+        groups: groups.projectGroup
+      },
+      timelineConfiguration,
+      groups
+    }
   } catch (error) {
     return { error }
   }

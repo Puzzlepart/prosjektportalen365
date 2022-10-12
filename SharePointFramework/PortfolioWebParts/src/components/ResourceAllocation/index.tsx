@@ -7,7 +7,7 @@ import {
   ITimelineData,
   ITimelineGroup,
   ITimelineItem,
-  TimelineGroupType
+  TimelineResourceType
 } from 'interfaces'
 import moment from 'moment'
 import { CommandBar, ICommandBarProps } from 'office-ui-fabric-react/lib/CommandBar'
@@ -253,7 +253,7 @@ export class ResourceAllocation extends Component<
    */
   private _groupRenderer({ group }: ReactCalendarGroupRendererProps<ITimelineGroup>) {
     const style: React.CSSProperties = { display: 'block', width: '100%' }
-    if (group.type === TimelineGroupType.Role) {
+    if (group.resourceType === TimelineResourceType.Role) {
       style.fontStyle = 'italic'
     }
     return (
@@ -297,7 +297,7 @@ export class ResourceAllocation extends Component<
       return {
         id,
         title,
-        type: type === 'R' ? TimelineGroupType.Role : TimelineGroupType.User
+        resourceType: type === 'R' ? TimelineResourceType.Role : TimelineResourceType.User
       }
     })
     groups = sortArray(groups, ['type', 'title'])

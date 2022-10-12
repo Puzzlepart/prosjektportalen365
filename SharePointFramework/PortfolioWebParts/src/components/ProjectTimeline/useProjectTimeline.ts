@@ -1,16 +1,14 @@
 import { useState } from 'react'
-import {
-  IProjectTimelineProps,
-  IProjectTimelineState
-} from './types'
+import { IProjectTimelineProps, IProjectTimelineState } from './types'
 import { useProjectTimelineDataFetch } from './useProjectTimelineDataFetch'
-import { ITimelineData } from 'interfaces'
+import { ITimelineData, ITimelineGroup, ITimelineItem } from 'interfaces'
 import sortArray from 'array-sort'
 import { get } from '@microsoft/sp-lodash-subset'
 import { IFilterProps } from 'components/FilterPanel/Filter/types'
 import strings from 'PortfolioWebPartsStrings'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { IFilterItemProps } from 'components/FilterPanel/FilterItem/types'
+import { TimelineConfigurationListModel } from 'models'
 
 /**
  * Component logic hook for `ProjectTimeline`
@@ -36,9 +34,8 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     const activeFiltersKeys = Object.keys(activeFilters)
     data.items = sortArray(data.items, 'data.sortOrder')
 
-    const projectId = data.items.find(
-      (i) => i?.projectUrl === props.pageContext.site.absoluteUrl
-    )?.id
+    const projectId = data.items.find((i) => i?.projectUrl === props.pageContext.site.absoluteUrl)
+      ?.id
     const topGroup = data.groups.find((i) => i?.id === projectId)
     projectId &&
       (data.groups = [topGroup, ...data.groups.filter((grp) => grp?.id !== projectId)].filter(
@@ -63,17 +60,21 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
    * @param data Timeline data
    * @returns `filters` for `FilterPanel`
    */
-  const getFilters = (config: any, data: ITimelineData): IFilterProps[] => {
+  const getFilters = (
+    config: TimelineConfigurationListModel[],
+    data: ITimelineData
+  ): IFilterProps[] => {
     const columns = [
-      config.find((item: { Title: string }) => item?.Title === strings.ProjectLabel).GtTimelineFilter && {
+      config.find((item) => item?.title === strings.ProjectLabel).timelineFilter && {
         fieldName: 'project',
         name: strings.SiteTitleLabel,
         isCollapsed: true
       },
+      { fieldName: 'data.category', name: strings.CategoryFieldLabel },
       { fieldName: 'data.type', name: strings.TypeLabel },
       { fieldName: 'data.tag', name: strings.TagFieldLabel }
     ]
-    const hiddenItems = config.filter((item: { GtTimelineFilter: any }) => !item?.GtTimelineFilter).map((item: { Title: any }) => item.Title)
+    const hiddenItems = config.filter((item) => !item?.timelineFilter).map((item) => item.title)
 
     return columns.map((col) => ({
       column: { key: col.fieldName, minWidth: 0, ...col },
@@ -113,9 +114,58 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     }
   }
 
+  const onGroupChange = (group) => {
+    let selectedGroup: ITimelineGroup[] = []
+    let updatedItems: ITimelineItem[] = []
+
+    if (state?.data?.items) {
+      switch (group) {
+        case strings.CategoryFieldLabel:
+          {
+            selectedGroup = state.groups.categoryGroup
+            updatedItems = state.data.items.map((item) => {
+              return {
+                ...item,
+                group: selectedGroup.find((g) => g.title === item.data.category).id
+              }
+            })
+          }
+          break
+        case strings.TypeLabel:
+          {
+            selectedGroup = state.groups.typeGroup
+            updatedItems = state.data.items.map((item) => {
+              return {
+                ...item,
+                group: selectedGroup.find((g) => g.title === item.data.type).id
+              }
+            })
+          }
+          break
+        default:
+          {
+            selectedGroup = state.groups.projectGroup
+            updatedItems = state.data.items.map((item) => {
+              return {
+                ...item,
+                group: selectedGroup.find((g) => g.title === item.project).id
+              }
+            })
+          }
+          break
+      }
+    }
+
+    const filteredData = getFilteredData({ items: updatedItems, groups: selectedGroup })
+
+    setState({
+      data: { items: updatedItems, groups: selectedGroup },
+      filteredData
+    })
+  }
+
   useProjectTimelineDataFetch(props, (data) => {
-    if (data.error)
-      setState({ error: data.error, loading: false })
+    if (data.error) setState({ error: data.error, loading: false })
     else {
       const filters = getFilters(data.timelineConfiguration, data.data)
       const filteredData = getFilteredData(data.data)
@@ -126,6 +176,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
   return {
     state,
     setState,
-    onFilterChange
+    onFilterChange,
+    onGroupChange
   }
 }

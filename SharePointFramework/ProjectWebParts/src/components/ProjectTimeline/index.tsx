@@ -6,7 +6,6 @@ import { getId } from '@uifabric/utilities'
 import sortArray from 'array-sort'
 import moment from 'moment'
 import { CommandBar, ICommandBarProps } from 'office-ui-fabric-react/lib/CommandBar'
-import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu'
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -17,11 +16,9 @@ import {
 import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import {
-  FilterPanel,
   IFilterItemProps,
   IFilterProps
 } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
-import { DetailsCallout } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/DetailsCallout'
 import { Timeline } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/Timeline'
 import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
@@ -95,39 +92,22 @@ export class ProjectTimeline extends BaseWebPartComponent<
     }
 
     const { groups, items } = this._getFilteredData()
+    console.log(groups, items)
 
     return (
       <div className={styles.root}>
         <div className={styles.container}>
-          {this.props.showFilterButton && (
-            <div className={styles.commandBar}>
-              <CommandBar {...this._getCommandBarProps()} />
-            </div>
-          )}
-          {this.props.showTitle && (
-            <div className={styles.header}>
-              <div className={styles.title}>{this.props.title}</div>
-            </div>
-          )}
-          {this.props.showInfoMessage && (
-            <div className={styles.infoText}>
-              <UserMessage
-                text={format(
-                  this.props.infoText ? this.props.infoText : strings.ProjectTimelineListInfoText,
-                  encodeURIComponent(window.location.href)
-                )}
-                type={MessageBarType.info}
-                isCompact
-              />
-            </div>
-          )}
           {this.props.showTimeline && (
             <Timeline
               defaultTimeStart={[-6, 'months']}
               defaultTimeEnd={[2, 'years']}
-              _onItemClick={this._onItemClick.bind(this)}
               groups={groups}
               items={items}
+              filters={this._getFilters()}
+              onFilterChange={this._onFilterChange.bind(this)}
+              isGroupByEnabled
+              infoText={strings.ProjectTimelineListInfoText}
+              title={this.props.title}
             />
           )}
           {this.props.showTimelineList && (
@@ -150,20 +130,6 @@ export class ProjectTimeline extends BaseWebPartComponent<
             </div>
           )}
         </div>
-        <FilterPanel
-          isOpen={this.state.showFilterPanel}
-          headerText={strings.FilterText}
-          filters={this._getFilters()}
-          onFilterChange={this._onFilterChange.bind(this)}
-          isLightDismiss
-          onDismiss={() => this.setState({ showFilterPanel: false })}
-        />
-        {this.state.showDetails && (
-          <DetailsCallout
-            timelineItem={this.state.showDetails}
-            onDismiss={() => this.setState({ showDetails: null })}
-          />
-        )}
       </div>
     )
   }
@@ -258,26 +224,6 @@ export class ProjectTimeline extends BaseWebPartComponent<
       delete activeFilters[column.fieldName]
     }
     this.setState({ activeFilters })
-  }
-
-  /**
-   * Get command bar items
-   */
-  private _getCommandBarProps(): ICommandBarProps {
-    const cmd: ICommandBarProps = { items: [], farItems: [] }
-    cmd.farItems.push({
-      key: getId('Filter'),
-      name: strings.FilterText,
-      iconProps: { iconName: 'Filter' },
-      itemType: ContextualMenuItemType.Header,
-      buttonStyles: { root: { border: 'none', height: '40px' } },
-      iconOnly: true,
-      onClick: (ev) => {
-        ev.preventDefault()
-        this.setState({ showFilterPanel: true })
-      }
-    })
-    return cmd
   }
 
   /**
@@ -387,16 +333,6 @@ export class ProjectTimeline extends BaseWebPartComponent<
   }
 
   /**
-   * On item click
-   *
-   * @param event Event
-   * @param item Item
-   */
-  private _onItemClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) {
-    this.setState({ showDetails: { element: event.currentTarget, item } })
-  }
-
-  /**
    * Get timeline items and columns
    */
   public async getTimelineData() {
@@ -411,6 +347,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
             'Title',
             'GtSortOrder',
             'GtHexColor',
+            'GtTimelineCategory',
             'GtElementType',
             'GtShowElementPortfolio',
             'GtShowElementProgram',
@@ -448,6 +385,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
               (config && config.Title) || this.props.configItemTitle,
               (config && config.GtSortOrder) || 90,
               (config && config.GtHexColor) || '#384f61',
+              (config && config.GtTimelineCategory) || 'Styring',
               (config && config.GtElementType) || strings.BarLabel,
               (config && config.GtShowElementPortfolio) || false,
               (config && config.GtShowElementProgram) || false,
@@ -539,6 +477,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
             config && config.Title,
             config && config.GtSortOrder,
             config && config.GtHexColor,
+            config && config.GtTimelineCategory,
             config && config.GtElementType,
             config && config.GtShowElementPortfolio,
             config && config.GtShowElementProgram,
@@ -675,6 +614,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
             costsTotal: item.costsTotal,
             sortOrder: item.sortOrder,
             hexColor: item.hexColor,
+            category: item.timelineCategory,
             elementType: item.elementType,
             filter: item.timelineFilter,
             tag: item.tag
@@ -712,6 +652,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
             'Title',
             'GtSortOrder',
             'GtHexColor',
+            'GtTimelineCategory',
             'GtElementType',
             'GtShowElementPortfolio',
             'GtShowElementProgram',
@@ -729,6 +670,7 @@ export class ProjectTimeline extends BaseWebPartComponent<
         type: strings.ProjectLabel,
         sortOrder: config && config.GtSortOrder,
         hexColor: config && config.GtHexColor,
+        timelineCategory: config && config.GtTimelineCategory,
         elementType: config && config.GtElementType,
         showElementPortfolio: config && config.GtShowElementPortfolio,
         showElementProgram: config && config.GtShowElementProgram,

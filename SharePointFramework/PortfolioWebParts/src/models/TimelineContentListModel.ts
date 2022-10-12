@@ -8,6 +8,7 @@ export class TimelineContentListModel {
    * @param type Type
    * @param sortOrder Sort order
    * @param hexColor Hexadecimal color
+   * @param timelineCategory Category
    * @param elementType Element type
    * @param showElementPortfolio Show element on portfolio timeline
    * @param showElementProgram Show element on program timeline
@@ -28,6 +29,7 @@ export class TimelineContentListModel {
     public type: string,
     public sortOrder: number,
     public hexColor: string,
+    public timelineCategory: string,
     public elementType: any,
     public showElementPortfolio: any,
     public showElementProgram: any,

@@ -8,6 +8,7 @@ export interface IProjectTimelineContext {
   state: IProjectTimelineState
   setState: (newState: Partial<IProjectTimelineState>) => void
   onFilterChange: (column: IColumn, selectedItems: IFilterItemProps[]) => void
+  onGroupChange: (group: string) => void
 }
 
 export const ProjectTimelineContext = React.createContext<IProjectTimelineContext>(null)
