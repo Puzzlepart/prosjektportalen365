@@ -105,7 +105,7 @@ declare interface IPortfolioWebPartsStrings {
   NoGroupingText: string
   NoProjectData: string
   NoProperties: string
-  NoSearchResults: string
+  ProjectListEmptyText: string
   NotSet: string
   PhaseLabel: string
   ProbabilityLabel: string
