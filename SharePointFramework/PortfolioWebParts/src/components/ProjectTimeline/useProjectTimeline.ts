@@ -115,10 +115,10 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
   }
 
   /**
-     * On group change
-     *
-     * @param group any
-     */
+   * On group change
+   *
+   * @param group any
+   */
   const onGroupChange = (group) => {
     let selectedGroup: ITimelineGroup[] = []
     let updatedItems: ITimelineItem[] = []
