@@ -102,10 +102,26 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
             <Pivot
               onLinkClick={({ props }) => setState({ selectedView: props.itemKey })}
               selectedKey={state.selectedView}>
-              <PivotItem headerText={strings.MyProjectsLabel} itemKey='my_projects' />
-              <PivotItem headerText={strings.AllProjectsLabel} itemKey='all_projects' />
-              <PivotItem headerText={strings.ParentProjectLabel} itemKey='parent_projects' />
-              <PivotItem headerText={strings.ProgramLabel} itemKey='program' />
+              <PivotItem
+                headerText={strings.MyProjectsLabel}
+                itemKey='my_projects'
+                itemIcon='FabricUserFolder'
+              />
+              <PivotItem
+                headerText={strings.AllProjectsLabel}
+                itemKey='all_projects'
+                itemIcon='AllApps'
+              />
+              <PivotItem
+                headerText={strings.ParentProjectLabel}
+                itemKey='parent_projects'
+                itemIcon='ProductVariant'
+              />
+              <PivotItem
+                headerText={strings.ProgramLabel}
+                itemKey='program'
+                itemIcon='ProductList'
+              />
             </Pivot>
           </div>
         )}
