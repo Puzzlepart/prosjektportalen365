@@ -1,8 +1,8 @@
 import { IBaseComponentProps } from '../types'
 import * as moment from 'moment'
-import { ITimelineData, ITimelineGroups, ITimelineItem } from 'interfaces'
-import { ProjectListModel } from 'models'
-import { IFilterProps } from 'components/FilterPanel/Filter/types'
+import { ITimelineData, ITimelineGroups, ITimelineItem } from '../../interfaces'
+import { ProjectListModel } from '../../models'
+import { IFilterProps } from '../../components/FilterPanel/Filter/types'
 
 export interface IProjectTimelineProps extends IBaseComponentProps {
   /**

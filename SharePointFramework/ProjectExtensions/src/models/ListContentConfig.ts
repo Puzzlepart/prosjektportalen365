@@ -1,7 +1,7 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { sp, Web, List } from '@pnp/sp'
 import { IListProperties } from './IListProperties'
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown'
+import { IDropdownOption } from '@fluentui/react/lib/Dropdown'
 
 export interface IListContentConfigSPItem {
   ContentTypeId: string
@@ -23,7 +23,7 @@ export enum ListContentConfigType {
 /**
  * @model ListContentConfig
  */
-export class ListContentConfig implements IDropdownOption {
+export class ListContentConfig implements Omit<IDropdownOption, 'id'> {
   public id: number
   public key: string
   public text: string

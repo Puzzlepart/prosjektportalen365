@@ -1,5 +1,5 @@
 import * as strings from 'PortfolioWebPartsStrings'
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
+import { IColumn } from '@fluentui/react/lib/DetailsList'
 
 export const PROJECTLIST_COLUMNS: IColumn[] = [
   {

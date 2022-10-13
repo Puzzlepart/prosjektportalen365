@@ -1,6 +1,4 @@
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox'
-import { SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
+import { SelectionMode, Checkbox, SearchBox } from '@fluentui/react'
 import strings from 'ProgramWebPartsStrings'
 import React, {
   FormEvent,
@@ -62,7 +60,7 @@ export const ProjectTable: FunctionComponent<IProjectTableProps> = (props) => {
     }
   }
 
-  const handleFilterChanged = (filter: string) => {
+  const handleFilterChanged = (_: React.ChangeEvent<HTMLInputElement>, filter: string) => {
     const filtered: any[] = props.items.filter((item: any): boolean =>
       props.fields
         .map((field: IListField): string => field.fieldName)

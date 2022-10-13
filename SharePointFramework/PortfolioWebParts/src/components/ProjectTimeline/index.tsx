@@ -1,6 +1,3 @@
-import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FunctionComponent } from 'react'
 import { Timeline } from './Timeline'
@@ -10,6 +7,7 @@ import './ProjectTimeline.overrides.css'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { useProjectTimeline } from './useProjectTimeline'
 import { ProjectTimelineContext } from './context'
+import { Spinner, format, MessageBarType } from '@fluentui/react'
 
 export const ProjectTimeline: FunctionComponent<IProjectTimelineProps> = (props) => {
   const { state, setState, onFilterChange, onGroupChange } = useProjectTimeline(props)

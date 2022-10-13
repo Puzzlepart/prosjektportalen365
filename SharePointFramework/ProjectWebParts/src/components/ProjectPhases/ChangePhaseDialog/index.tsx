@@ -1,11 +1,9 @@
+import { Dialog, format, DialogType, MessageBarType } from '@fluentui/react'
 import SPDataAdapter from 'data'
-import { MessageBarType } from 'office-ui-fabric-react'
-import Dialog, { DialogType } from 'office-ui-fabric-react/lib/Dialog'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { useContext, useEffect, useReducer } from 'react'
+import React, { FunctionComponent, useContext, useEffect, useReducer } from 'react'
 import _ from 'underscore'
 import { ProjectPhasesContext } from '../context'
 import { DISMISS_CHANGE_PHASE_DIALOG } from '../reducer'
@@ -16,7 +14,7 @@ import { Footer } from './Footer'
 import reducer, { CHECKLIST_ITEM_UPDATED, INIT } from './reducer'
 import { View } from './Views'
 
-export const ChangePhaseDialog = () => {
+export const ChangePhaseDialog: FunctionComponent = () => {
   const context = useContext(ProjectPhasesContext)
   if (!context.state.confirmPhase) return null
   const [state, dispatch] = useReducer(reducer, {})

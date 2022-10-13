@@ -1,7 +1,7 @@
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { sp, Web } from '@pnp/sp'
 import { IProjectSetupData } from 'projectSetup'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import { SPField } from 'pp365-shared/lib/models/SPField'
 import { IPlannerTaskSPItem, ListContentConfig, ListContentConfigType } from '../../../models'

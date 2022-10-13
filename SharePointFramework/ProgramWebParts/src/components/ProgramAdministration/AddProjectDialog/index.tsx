@@ -1,7 +1,4 @@
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
-import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog'
-import { SelectionMode } from 'office-ui-fabric-react/lib/Selection'
-import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList'
+import { Dialog, DialogType, ShimmeredDetailsList, SelectionMode, DialogFooter, PrimaryButton, DefaultButton } from '@fluentui/react'
 import * as strings from 'ProgramWebPartsStrings'
 import React, { FunctionComponent, useContext } from 'react'
 import { ProgramAdministrationContext } from '../context'

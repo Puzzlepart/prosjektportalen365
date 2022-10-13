@@ -1,5 +1,4 @@
-import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import { Shimmer } from 'office-ui-fabric-react/lib/Shimmer'
+import { MessageBarType, Shimmer } from '@fluentui/react'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FunctionComponent, useEffect, useReducer, useRef } from 'react'

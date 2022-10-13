@@ -1,12 +1,14 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection'
-import { IProjectPropertiesSectionProps } from './types'
 import styles from './ProjectPropertiesSection.module.scss'
 import { StatusSectionField } from './StatusSectionField'
+import { IProjectPropertiesSectionProps } from './types'
 
-export const ProjectPropertiesSection = (props: IProjectPropertiesSectionProps) => {
+export const ProjectPropertiesSection: FunctionComponent<IProjectPropertiesSectionProps> = (
+  props
+) => {
   /**
    * Render fields specified in model.viewFields
    */
@@ -19,6 +21,7 @@ export const ProjectPropertiesSection = (props: IProjectPropertiesSectionProps) 
         if (fld && !stringIsNullOrEmpty(props.fieldValues[fieldName])) {
           return (
             <StatusSectionField
+              key={fieldName}
               label={fld.Title}
               value={props.fieldValues[fieldName]}
               width={props.fieldWidth}

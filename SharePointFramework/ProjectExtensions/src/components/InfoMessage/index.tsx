@@ -1,4 +1,4 @@
-import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar'
+import { MessageBar } from '@fluentui/react/lib/MessageBar'
 import React, { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'

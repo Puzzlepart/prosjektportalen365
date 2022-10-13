@@ -11,7 +11,7 @@ import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
 import React from 'react'
 import { IProjectPhasesProps, ProjectPhases } from 'components/ProjectPhases'
-import 'office-ui-fabric-react/dist/css/fabric.min.css'
+import '@fluentui/react/dist/css/fabric.min.css'
 import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
 

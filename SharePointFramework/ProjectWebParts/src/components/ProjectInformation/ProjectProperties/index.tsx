@@ -1,7 +1,6 @@
+import { Pivot, PivotItem, MessageBarType } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FunctionComponent, useContext } from 'react'

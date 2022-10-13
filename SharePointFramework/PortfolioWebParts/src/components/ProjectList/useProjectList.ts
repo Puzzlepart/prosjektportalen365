@@ -1,5 +1,5 @@
 import { ProjectListModel } from 'models'
-import { IButtonProps, IColumn } from 'office-ui-fabric-react'
+import { IButtonProps, IColumn } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import { sortAlphabetically } from 'pp365-shared/lib/helpers'
 import { useEffect, useState } from 'react'

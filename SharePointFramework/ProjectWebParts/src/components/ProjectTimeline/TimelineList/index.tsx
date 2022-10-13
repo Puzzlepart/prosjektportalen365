@@ -14,7 +14,7 @@ import {
   DetailsListLayoutMode,
   Selection,
   SelectionMode
-} from 'office-ui-fabric-react'
+} from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import { Logger, LogLevel } from '@pnp/logging'
 import { ProjectTimelineContext } from '../context'

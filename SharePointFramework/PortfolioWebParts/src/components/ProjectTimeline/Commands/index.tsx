@@ -1,10 +1,6 @@
-import { CommandBar, ICommandBarProps } from 'office-ui-fabric-react/lib/CommandBar'
-import {
-  ContextualMenuItemType,
-  IContextualMenuItem
-} from 'office-ui-fabric-react/lib/ContextualMenu'
+import { ICommandBarProps, ContextualMenuItemType, IContextualMenuItem, CommandBar } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import React, { useState } from 'react'
+import React, { FunctionComponent, useState } from 'react'
 
 export interface ICommandsProps {
   /**
@@ -24,7 +20,7 @@ export interface ICommandsProps {
   isGroupByEnabled?: boolean
 }
 
-export const Commands = (props: ICommandsProps) => {
+export const Commands: FunctionComponent<ICommandsProps> = (props) => {
   const [selectedGroup, setSelectedGroup] = useState<string>(strings.ProjectLabel)
 
   const cmd: ICommandBarProps = {

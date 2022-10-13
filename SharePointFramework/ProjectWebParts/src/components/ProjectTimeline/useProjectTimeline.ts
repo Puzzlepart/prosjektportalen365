@@ -9,7 +9,7 @@ import {
 import { useProjectTimelineDataFetch } from './useProjectTimelineDataFetch'
 import sortArray from 'array-sort'
 import { get } from '@microsoft/sp-lodash-subset'
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
+import { IColumn } from '@fluentui/react/lib/DetailsList'
 import { TimelineConfigurationListModel } from 'pp365-portfoliowebparts/lib/models'
 import { IFilterItemProps, IFilterProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
 import strings from 'ProjectWebPartsStrings'

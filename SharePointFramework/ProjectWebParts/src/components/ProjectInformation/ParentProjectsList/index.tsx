@@ -1,4 +1,4 @@
-import { Icon, Link } from 'office-ui-fabric-react'
+import { Icon, Link } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import React, { FunctionComponent, useContext } from 'react'
 import { isEmpty } from 'underscore'

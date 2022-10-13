@@ -1,4 +1,4 @@
-import { Selection } from 'office-ui-fabric-react/lib/DetailsList'
+import { Selection } from '@fluentui/react/lib/DetailsList'
 
 export interface ISelectScreenProps<ItemType = any> {
   /**

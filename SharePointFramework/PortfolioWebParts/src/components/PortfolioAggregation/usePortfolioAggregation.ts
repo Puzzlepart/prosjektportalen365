@@ -1,4 +1,4 @@
-import { getId } from 'office-ui-fabric-react'
+import { getId } from '@fluentui/react'
 import { useEffect, useMemo, useReducer } from 'react'
 import { filterItems } from './filter'
 import createReducer, {

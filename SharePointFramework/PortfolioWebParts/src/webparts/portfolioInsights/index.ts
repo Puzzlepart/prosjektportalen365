@@ -1,6 +1,6 @@
 import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane'
 import { PortfolioInsights, IPortfolioInsightsProps } from 'components/PortfolioInsights'
-import 'office-ui-fabric-react/dist/css/fabric.min.css'
+import '@fluentui/react/dist/css/fabric.min.css'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 

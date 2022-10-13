@@ -1,5 +1,4 @@
-import { Spinner } from 'office-ui-fabric-react'
-import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar'
+import { Spinner, ICommandBarItemProps, CommandBar } from '@fluentui/react'
 import * as strings from 'ProgramWebPartsStrings'
 import React, { FunctionComponent, useContext } from 'react'
 import { isEmpty } from 'underscore'

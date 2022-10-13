@@ -1,4 +1,4 @@
-import { ChoiceGroup, IChoiceGroupOption, IChoiceGroupOptionStyles } from 'office-ui-fabric-react'
+import { ChoiceGroup, IChoiceGroupOption, IChoiceGroupOptionStyles } from '@fluentui/react'
 import React, { FunctionComponent } from 'react'
 import { find } from 'underscore'
 import { ProjectTemplate } from '../../../models'

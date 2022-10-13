@@ -1,6 +1,4 @@
-import { ActionButton } from 'office-ui-fabric-react/lib/Button'
-import { Modal } from 'office-ui-fabric-react/lib/Modal'
-import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot'
+import { Modal, Pivot, PivotItem, ActionButton } from '@fluentui/react'
 import React, { FunctionComponent } from 'react'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'

@@ -1,6 +1,6 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { LogLevel } from '@pnp/logging'
-import { format, IProgressIndicatorProps, MessageBarType } from 'office-ui-fabric-react'
+import { format, IProgressIndicatorProps, MessageBarType } from '@fluentui/react'
 import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
 import strings from 'ProjectWebPartsStrings'
 import { useEffect, useState } from 'react'

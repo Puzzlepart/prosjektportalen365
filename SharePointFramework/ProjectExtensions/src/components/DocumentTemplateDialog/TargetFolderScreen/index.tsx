@@ -1,17 +1,10 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+import { DetailsList, SelectionMode, DetailsListLayoutMode, ConstrainMode, DialogFooter, ActionButton } from '@fluentui/react'
 import { InfoMessage } from 'components/InfoMessage'
 import { SPDataAdapter } from 'data'
 import { SPFolder } from 'models'
-import { ActionButton } from 'office-ui-fabric-react/lib/Button'
-import {
-  ConstrainMode,
-  DetailsList,
-  DetailsListLayoutMode,
-  SelectionMode
-} from 'office-ui-fabric-react/lib/DetailsList'
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { FunctionComponent, useContext, useEffect, useState } from 'react'
 import { TemplateSelectorContext } from 'templateSelector/context'
 import { isEmpty } from 'underscore'
 import { DocumentTemplateDialogScreen } from '..'
@@ -21,7 +14,7 @@ import { SET_SCREEN, SET_TARGET } from '../reducer'
 import columns from './columns'
 import styles from './TargetFolderScreen.module.scss'
 
-export const TargetFolderScreen = () => {
+export const TargetFolderScreen: FunctionComponent = () => {
   const { state, dispatch } = useContext(DocumentTemplateDialogContext)
   const context = useContext(TemplateSelectorContext)
   const [root, setRoot] = useState(context.currentLibrary)

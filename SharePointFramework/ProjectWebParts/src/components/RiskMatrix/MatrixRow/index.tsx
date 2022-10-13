@@ -1,4 +1,4 @@
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
+import { Toggle } from '@fluentui/react/lib/Toggle'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FunctionComponent } from 'react'
 import { RiskElementModel } from '../'

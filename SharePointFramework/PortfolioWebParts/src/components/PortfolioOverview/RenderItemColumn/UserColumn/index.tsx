@@ -1,4 +1,4 @@
-import { Persona, PersonaPresence, PersonaSize } from 'office-ui-fabric-react/lib/Persona'
+import { Persona, PersonaPresence, PersonaSize } from '@fluentui/react/lib/Persona'
 import { ProjectColumn } from 'pp365-shared/lib/models'
 import React, { FunctionComponent } from 'react'
 import { SearchValueType } from 'types'

@@ -19,7 +19,7 @@ import {
   BenefitMeasurementIndicator
 } from '../models'
 import MSGraph from 'msgraph-helper'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import { isNull } from 'pp365-shared/lib/helpers'
 import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'

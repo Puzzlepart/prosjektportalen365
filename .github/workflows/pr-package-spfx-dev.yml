@@ -6,107 +6,188 @@ on:
       - master
       - dev
 jobs:
-  spfx-package:
+  build_shared:
+    name: Build @Shared
     runs-on: ubuntu-latest
     concurrency: 
-      group: ${{ github.ref }}
+      group: ${{ github.ref }}_build_shared
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Setup Node.js 12.19.0
-        uses: actions/setup-node@v1
+      - name: Setup Node.js 16.13.0
+        uses: actions/setup-node@v3
         with:
-          node-version: 12.19.0
+          node-version: 16.13.0
 
-      - name: (@Shared) Install npm packages
+      - name: Install npm packages
         working-directory: ./SharePointFramework/@Shared
         run: |
-          npm ci
+          npm ci --no-audit --no-fund --loglevel=error
 
-      - name: (@Shared) Run npm script build
+      - name: Run npm run-script build
         working-directory: ./SharePointFramework/@Shared
         run: |
-          npm run build
+          npm run-script build
 
-      - name: (@Shared) Run npm script lint
+      - name: Run 'npm run-script lint'
         working-directory: ./SharePointFramework/@Shared
         run: |
-          npm run lint
+          npm run-script lint
+  
+  package_portfolioextensions:
+    name: Package PortfolioExtensions
+    runs-on: ubuntu-latest
+    concurrency: 
+      group: ${{ github.ref }}_package_portfolioextensions
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
 
-      - name: (PortfolioExtensions) Install npm packages
+      - name: Setup Node.js 16.13.0
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.13.0
+
+      - name: Install npm packages
         working-directory: ./SharePointFramework/PortfolioExtensions
         run: |
-          npm ci
+          npm ci --no-audit --no-fund --loglevel=error
 
-      - name: (PortfolioExtensions) Run npm script package:ci
+      - name: Run 'npm run-script package:debug'
         working-directory: ./SharePointFramework/PortfolioExtensions
         run: |
-          npm run package:ci
+          npm run package:debug
 
-      - name: (PortfolioExtensions) Run npm script lint
+      - name: Run 'npm run-script lint'
         working-directory: ./SharePointFramework/PortfolioExtensions
         run: |
-          npm run lint
+          npm run-script lint
 
-      - name: (PortfolioWebParts) Install npm packages
+  package_portfoliowebparts:
+    name: Package PortfolioWebParts
+    runs-on: ubuntu-latest
+    concurrency: 
+      group: ${{ github.ref }}_package_portfoliowebparts
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node.js 16.13.0
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.13.0
+
+      - name: Install npm packages
         working-directory: ./SharePointFramework/PortfolioWebParts
         run: |
-          npm ci
+          npm ci --no-audit --no-fund --loglevel=error
 
-      - name: (PortfolioWebParts) Run npm script package:ci
+      - name: Run 'npm run-script package:debug'
         working-directory: ./SharePointFramework/PortfolioWebParts
         run: |
-          npm run package:ci
+          npm run-script package:debug
 
-      - name: (PortfolioWebParts) Run npm script lint
+      - name: Run 'npm run-script lint'
         working-directory: ./SharePointFramework/PortfolioWebParts
         run: |
-          npm run lint
+          npm run-script lint
 
-      - name: (ProgramWebParts) Install npm packages
+  package_programwebparts:
+    name: Package ProgramWebParts
+    runs-on: ubuntu-latest
+    concurrency: 
+      group: ${{ github.ref }}_package_programwebparts
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node.js 16.13.0
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.13.0
+
+      - name: Install npm packages
         working-directory: ./SharePointFramework/ProgramWebParts
         run: |
-          npm ci
+          npm ci --no-audit --no-fund --loglevel=error
 
-      - name: (ProgramWebParts) Run npm script package:ci
+      - name: Run 'npm run-script package:debug'
         working-directory: ./SharePointFramework/ProgramWebParts
         run: |
-          npm run package:ci
+          npm run-script package:debug
 
-      - name: (ProgramWebParts) Run npm script lint
+      - name: Run 'npm run-script lint'
         working-directory: ./SharePointFramework/ProgramWebParts
         run: |
-          npm run lint
+          npm run-script lint
 
-      - name: (ProjectExtensions) Install npm packages
+  package_projectextensions:
+    name: Package ProjectExtensions
+    runs-on: ubuntu-latest
+    concurrency: 
+      group: ${{ github.ref }}_package_projectextensions
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node.js 16.13.0
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.13.0
+
+      - name: Install npm packages
         working-directory: ./SharePointFramework/ProjectExtensions
         run: |
-          npm ci
+          npm ci --no-audit --no-fund --loglevel=error
 
-      - name: (ProjectExtensions) Run npm script package:ci
+      - name: Run 'npm run-script package:debug'
         working-directory: ./SharePointFramework/ProjectExtensions
         run: |
-          npm run package:ci
+          npm run package:debug
 
-      - name: (ProjectExtensions) Run npm script lint
+      - name: Run 'npm run-script lint'
         working-directory: ./SharePointFramework/ProjectExtensions
         run: |
-          npm run lint
+          npm run-script lint
 
-      - name: (ProjectWebParts) Install npm packages
+  package_projectwebparts:
+    name: Package ProjectWebParts
+    runs-on: ubuntu-latest
+    concurrency: 
+      group: ${{ github.ref }}_package_projectwebparts
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node.js 16.13.0
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.13.0
+
+      - name: Install npm packages
         working-directory: ./SharePointFramework/ProjectWebParts
         run: |
-          npm ci
+          npm ci --no-audit --no-fund --loglevel=error
 
-      - name: (ProjectWebParts) Run npm script package:ci
+      - name: Run 'npm run-script package:debug'
         working-directory: ./SharePointFramework/ProjectWebParts
         run: |
-          npm run package:ci
+          npm run-script package:debug
 
-      - name: (ProjectWebParts) Run npm script lint
+      - name: Run 'npm run-script lint'
         working-directory: ./SharePointFramework/ProjectWebParts
         run: |
-          npm run lint
+          npm run-script lint

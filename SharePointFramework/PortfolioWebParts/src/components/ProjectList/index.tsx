@@ -1,15 +1,5 @@
+import { ShimmeredDetailsList, SelectionMode, IColumn, MessageBar, MessageBarType, Pivot, PivotItem, SearchBox, Toggle, Spinner, SpinnerSize } from '@fluentui/react'
 import { ProjectListModel } from 'models'
-import {
-  Pivot,
-  PivotItem,
-  ShimmeredDetailsList,
-  Spinner,
-  SpinnerSize
-} from 'office-ui-fabric-react'
-import { IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getObjectValue } from 'pp365-shared/lib/helpers'
 import React, { FunctionComponent } from 'react'

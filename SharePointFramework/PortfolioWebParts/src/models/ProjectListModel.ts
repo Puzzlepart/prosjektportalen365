@@ -1,4 +1,4 @@
-import { IPersonaSharedProps } from 'office-ui-fabric-react/lib/Persona'
+import { IPersonaSharedProps } from '@fluentui/react/lib/Persona'
 
 export class ProjectListModel {
   public siteId: string

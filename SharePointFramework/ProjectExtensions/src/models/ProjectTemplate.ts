@@ -1,6 +1,6 @@
 import { TypedHash } from '@pnp/common'
 import { Web } from '@pnp/sp'
-import { IChoiceGroupOption, IIconProps } from 'office-ui-fabric-react'
+import { IChoiceGroupOption, IIconProps } from '@fluentui/react'
 import { Schema } from 'sp-js-provisioning'
 
 export interface IProjectTemplateSPItem {

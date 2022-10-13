@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
+import { ActionButton, format, MessageBarType, Selection } from '@fluentui/react'
 import { FileAddResult } from '@pnp/sp'
-import { ActionButton } from 'office-ui-fabric-react/lib/Button'
-import { Selection } from 'office-ui-fabric-react/lib/DetailsList'
-import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { useReducer } from 'react'
 import { isEmpty } from 'underscore'

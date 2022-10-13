@@ -1,7 +1,5 @@
+import { Pivot, PivotItem, MessageBar, MessageBarType, DefaultButton, PrimaryButton } from '@fluentui/react'
 import { ProjectTemplate } from 'models'
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot'
 import * as strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
 import { isEmpty } from 'underscore'

@@ -1,5 +1,5 @@
 import { IFetchDataForViewItemResult } from 'data/IFetchDataForViewItemResult'
-import { Icon } from 'office-ui-fabric-react/lib/Icon'
+import { Icon } from '@fluentui/react/lib/Icon'
 import { formatDate, tryParseCurrency } from 'pp365-shared/lib/helpers'
 import { ProjectColumn } from 'pp365-shared/lib/models'
 import React from 'react'

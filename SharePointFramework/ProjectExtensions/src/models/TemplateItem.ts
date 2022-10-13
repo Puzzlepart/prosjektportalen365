@@ -1,7 +1,7 @@
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { FileAddResult, Folder, Web } from '@pnp/sp'
 import { FileIconType, getFileTypeIconProps, IFileTypeIconOptions } from '@uifabric/file-type-icons'
-import { IIconProps } from 'office-ui-fabric-react/lib/Icon'
+import { IIconProps } from '@fluentui/react/lib/Icon'
 import { formatDate } from 'pp365-shared/lib/helpers'
 
 export interface ITemplateSPItem {

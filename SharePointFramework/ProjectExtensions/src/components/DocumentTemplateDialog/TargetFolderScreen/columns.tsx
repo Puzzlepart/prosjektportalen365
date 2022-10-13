@@ -1,3 +1,4 @@
+import { Icon, Link, IColumn } from '@fluentui/react'
 import {
   FileIconType,
   getFileTypeIconProps,
@@ -5,9 +6,6 @@ import {
 } from '@uifabric/file-type-icons'
 import { getId } from '@uifabric/utilities'
 import { SPFolder } from 'models'
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
-import { Icon } from 'office-ui-fabric-react/lib/Icon'
-import { Link } from 'office-ui-fabric-react/lib/Link'
 import * as ProjectExtensionsStrings from 'ProjectExtensionsStrings'
 import React from 'react'
 

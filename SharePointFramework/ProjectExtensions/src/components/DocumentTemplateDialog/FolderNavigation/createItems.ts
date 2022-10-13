@@ -1,4 +1,4 @@
-import { IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb'
+import { IBreadcrumbItem } from '@fluentui/react/lib/Breadcrumb'
 import { IFolderNavigationProps } from './types'
 /**
  * Create breadcrum items

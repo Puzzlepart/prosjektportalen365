@@ -1,10 +1,10 @@
-import { Customizer } from '@uifabric/utilities'
-import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel'
-import * as React from 'react'
+
+import { Customizer, Panel, PanelType } from '@fluentui/react'
+import React, { FunctionComponent } from 'react'
 import { Filter } from './Filter'
 import { IFilterPanelProps } from './types'
 
-export const FilterPanel: React.FunctionComponent<IFilterPanelProps> = (props) => {
+export const FilterPanel: FunctionComponent<IFilterPanelProps> = (props) => {
   return (
     <Customizer scopedSettings={{ Layer: { hostId: props.layerHostId } }}>
       <Panel {...props} type={PanelType.smallFixedFar}>

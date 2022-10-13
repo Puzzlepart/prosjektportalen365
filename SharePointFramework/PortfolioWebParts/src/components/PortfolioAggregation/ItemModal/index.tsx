@@ -1,6 +1,5 @@
+import { IModalProps, IColumn, Modal, DetailsList, SelectionMode } from '@fluentui/react'
 import { get, isEmpty } from '@microsoft/sp-lodash-subset'
-import { DetailsList, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
-import { IModalProps, Modal } from 'office-ui-fabric-react/lib/Modal'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { PureComponent } from 'react'
 import { columns } from './columns'

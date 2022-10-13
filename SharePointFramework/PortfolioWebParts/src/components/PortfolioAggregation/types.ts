@@ -1,12 +1,9 @@
+import { MessageBarType, IGroup, IColumn, IPanelProps, Target } from '@fluentui/react'
 import { SearchResult } from '@pnp/sp'
 import { IFilterProps } from 'components/FilterPanel'
 import { IDataAdapter } from 'data/types'
 import { IAggregatedListConfiguration } from 'interfaces'
 import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
-import { Target } from 'office-ui-fabric-react/lib/Callout'
-import { IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList'
-import { IPanelProps } from 'office-ui-fabric-react/lib/Panel'
-import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
 import { IBaseComponentProps } from '../types'
 

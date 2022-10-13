@@ -1,6 +1,6 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { getId } from '@uifabric/utilities'
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
+import { Toggle } from '@fluentui/react/lib/Toggle'
 import React, { FunctionComponent } from 'react'
 import styles from './SettingsSection.module.scss'
 import { ISettingsSectionProps } from './types'

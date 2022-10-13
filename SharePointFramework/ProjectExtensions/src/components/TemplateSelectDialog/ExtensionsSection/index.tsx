@@ -1,7 +1,5 @@
+import { ScrollablePane, Toggle, Icon } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { ScrollablePane } from 'office-ui-fabric-react'
-import { Icon } from 'office-ui-fabric-react/lib/Icon'
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import React, { FunctionComponent } from 'react'
 import { ProjectExtension } from '../../../models'
 import styles from './ExtensionsSection.module.scss'

@@ -1,6 +1,6 @@
+import { MessageBarType, CommandBar, MessageBar, format, IColumn, ICommandBarProps, getId, ContextualMenuItemType } from '@fluentui/react'
 import { get } from '@microsoft/sp-lodash-subset'
 import { sp } from '@pnp/sp'
-import { getId } from '@uifabric/utilities'
 import sortArray from 'array-sort'
 import {
   IAllocationSearchResult,
@@ -10,11 +10,6 @@ import {
   TimelineResourceType
 } from 'interfaces'
 import moment from 'moment'
-import { CommandBar, ICommandBarProps } from 'office-ui-fabric-react/lib/CommandBar'
-import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu'
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { tryParsePercentage } from 'pp365-shared/lib/helpers'

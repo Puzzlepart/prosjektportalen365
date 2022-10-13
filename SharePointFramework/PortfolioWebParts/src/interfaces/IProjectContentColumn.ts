@@ -1,4 +1,4 @@
-import { IColumn } from 'office-ui-fabric-react'
+import { IColumn } from '@fluentui/react'
 
 export interface IProjectContentColumn extends IColumn {
   id?: number

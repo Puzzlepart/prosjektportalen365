@@ -1,4 +1,4 @@
-import { IPanelProps } from 'office-ui-fabric-react'
+import { IPanelProps } from '@fluentui/react'
 import { IProjectInformationProps } from '../ProjectInformation'
 
 export interface IProjectInformationPanelProps extends IProjectInformationProps {

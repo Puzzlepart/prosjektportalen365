@@ -1,4 +1,4 @@
-import { ITimelineItem, ITimelineGroup, TimelineGroupType } from 'interfaces'
+import { ITimelineItem, ITimelineGroup, TimelineGroupType } from '../../../interfaces'
 import ReactTimeline, {
   ReactCalendarGroupRendererProps,
   ReactCalendarItemRendererProps,
@@ -11,7 +11,7 @@ import styles from './Timeline.module.scss'
 import './Timeline.overrides.css'
 import moment from 'moment'
 import React, { FunctionComponent, useState } from 'react'
-import { format, MessageBar } from 'office-ui-fabric-react'
+import { format, MessageBar } from '@fluentui/react'
 import { Commands } from '../Commands'
 import { DetailsCallout } from '../DetailsCallout'
 import { FilterPanel, IFilterProps } from '../../FilterPanel'

@@ -1,4 +1,4 @@
-import { IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona'
+import { IPersonaSharedProps, Persona, PersonaSize } from '@fluentui/react/lib/Persona'
 import * as strings from 'PortfolioWebPartsStrings'
 import React from 'react'
 import styles from './ProjectCard.module.scss'

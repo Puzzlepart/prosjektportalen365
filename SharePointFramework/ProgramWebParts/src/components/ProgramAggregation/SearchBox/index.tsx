@@ -1,11 +1,10 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
 import React, { useContext } from 'react'
 import { ProgramAggregationContext } from '../context'
 import { SEARCH } from '../reducer'
 import styles from './SearchBox.module.scss'
 import strings from 'ProgramWebPartsStrings'
+import { format, SearchBox } from '@fluentui/react'
 
 export default () => {
   const { props, state, dispatch } = useContext(ProgramAggregationContext)
@@ -27,7 +26,7 @@ export default () => {
     <div className={styles.root} hidden={!props.showSearchBox}>
       <SearchBox
         placeholder={getPlaceholderText()}
-        onChange={(searchTerm) => dispatch(SEARCH({ searchTerm }))}
+        onChange={(_, searchTerm) => dispatch(SEARCH({ searchTerm }))}
       />
     </div>
   )

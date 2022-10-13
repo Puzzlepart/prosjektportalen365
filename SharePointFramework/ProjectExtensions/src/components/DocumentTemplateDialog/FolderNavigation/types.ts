@@ -1,4 +1,4 @@
-import { IBreadcrumbProps } from 'office-ui-fabric-react/lib/Breadcrumb'
+import { IBreadcrumbProps } from '@fluentui/react/lib/Breadcrumb'
 
 export interface IFolderNavigationProps extends Partial<IBreadcrumbProps> {
   /**

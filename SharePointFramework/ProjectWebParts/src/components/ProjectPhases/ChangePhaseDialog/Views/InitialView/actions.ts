@@ -1,5 +1,5 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { IButtonProps } from 'office-ui-fabric-react/lib/Button'
+import { IButtonProps } from '@fluentui/react/lib/Button'
 import * as strings from 'ProjectWebPartsStrings'
 
 /**

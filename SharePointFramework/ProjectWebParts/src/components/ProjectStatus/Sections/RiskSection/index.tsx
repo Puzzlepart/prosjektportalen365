@@ -1,11 +1,4 @@
 import { Web } from '@pnp/sp'
-import {
-  DetailsList,
-  DetailsListLayoutMode,
-  IColumn,
-  SelectionMode
-} from 'office-ui-fabric-react/lib/DetailsList'
-import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import * as strings from 'ProjectWebPartsStrings'
 import React from 'react'
 import { RiskMatrix } from '../../../RiskMatrix'
@@ -15,6 +8,7 @@ import { BaseSection } from '../BaseSection'
 import { IRiskSectionProps, IRiskSectionState, IRiskSectionData } from './types'
 import styles from './RiskSection.module.scss'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
+import { MessageBarType, DetailsList, SelectionMode, DetailsListLayoutMode, IColumn } from '@fluentui/react'
 
 export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionState> {
   constructor(props: IRiskSectionProps) {
