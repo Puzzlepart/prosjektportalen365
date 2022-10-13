@@ -24,5 +24,6 @@ build.configureWebpack.mergeConfig({
 })
 
 build.tslintCmd.enabled = false
+build.lintCmd.enabled = false
 
 build.initialize(gulp)
