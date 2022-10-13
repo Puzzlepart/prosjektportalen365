@@ -12,7 +12,7 @@ export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
   const { state } = useContext(DocumentTemplateDialogContext)
   const nameId = getId('name')
   const titleId = getId('title')
-  let changeTimeout: number
+  let changeTimeout: any
   const [isExpanded, setIsExpanded] = useState(false)
 
   /**

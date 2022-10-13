@@ -10,9 +10,9 @@ import {
   DefaultButton,
   Dropdown,
   IDropdownOption,
-  TextField
+  TextField,
+  format
 } from '@fluentui/react'
-import { format } from '@fluentui/utilities'
 import strings from 'PortfolioExtensionsStrings'
 
 interface IDialogContentProps {
