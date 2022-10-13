@@ -1,5 +1,5 @@
-import { Customizer } from '@uifabric/utilities'
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel'
+import { Customizer } from 'office-ui-fabric-react/lib/Utilities'
 import * as React from 'react'
 import { Filter } from './Filter'
 import { IFilterPanelProps } from './types'

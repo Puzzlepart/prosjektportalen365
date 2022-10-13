@@ -1,6 +1,5 @@
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { getId } from '@uifabric/utilities'
 import sortArray from 'array-sort'
 import * as uniq from 'array-unique'
 import {
@@ -23,7 +22,7 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
 import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList'
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky'
-import { format, IRenderFunction } from 'office-ui-fabric-react/lib/Utilities'
+import { format, getId, IRenderFunction } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import { PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
