@@ -17,10 +17,10 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Setup Node.js 12.22.0
+      - name: Setup Node.js 16.13.0
         uses: actions/setup-node@v1
         with:
-          node-version: 12.22.0
+          node-version: 16.13.0
 
       - name: Install npm packages
         working-directory: ./SharePointFramework/@Shared
@@ -48,10 +48,10 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Setup Node.js 12.22.0
+      - name: Setup Node.js 16.13.0
         uses: actions/setup-node@v1
         with:
-          node-version: 12.22.0
+          node-version: 16.13.0
 
       - name: Install npm packages
         working-directory: ./SharePointFramework/PortfolioExtensions
@@ -79,10 +79,10 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Setup Node.js 12.22.0
+      - name: Setup Node.js 16.13.0
         uses: actions/setup-node@v1
         with:
-          node-version: 12.22.0
+          node-version: 16.13.0
 
       - name: Install npm packages
         working-directory: ./SharePointFramework/PortfolioWebParts
@@ -110,10 +110,10 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Setup Node.js 12.22.0
+      - name: Setup Node.js 16.13.0
         uses: actions/setup-node@v1
         with:
-          node-version: 12.22.0
+          node-version: 16.13.0
 
       - name: Install npm packages
         working-directory: ./SharePointFramework/ProgramWebParts
@@ -141,10 +141,10 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Setup Node.js 12.22.0
+      - name: Setup Node.js 16.13.0
         uses: actions/setup-node@v1
         with:
-          node-version: 12.22.0
+          node-version: 16.13.0
 
       - name: Install npm packages
         working-directory: ./SharePointFramework/ProjectExtensions
@@ -172,10 +172,10 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Setup Node.js 12.22.0
+      - name: Setup Node.js 16.13.0
         uses: actions/setup-node@v1
         with:
-          node-version: 12.22.0
+          node-version: 16.13.0
 
       - name: Install npm packages
         working-directory: ./SharePointFramework/ProjectWebParts
