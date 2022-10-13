@@ -6,8 +6,8 @@ on:
       - master
       - dev
 jobs:
-  spfx-package:
-    name: Package SharePoint Framework solutions
+  build-shared:
+    name: Build @Shared
     runs-on: ubuntu-latest
     concurrency: 
       group: ${{ github.ref }}
@@ -22,92 +22,172 @@ jobs:
         with:
           node-version: 12.22.0
 
-      - name: (@Shared) Install npm packages
+      - name: Install npm packages
         working-directory: ./SharePointFramework/@Shared
         run: |
           npm ci
 
-      - name: (@Shared) Run npm script build
+      - name: Run npm run-script build
         working-directory: ./SharePointFramework/@Shared
         run: |
-          npm run build
+          npm run-script build
 
-      - name: (@Shared) Run npm script lint
+      - name: Run npm run-script lint
         working-directory: ./SharePointFramework/@Shared
         run: |
-          npm run lint
+          npm run-script lint
+  
+  package-portfolioextensions:
+    name: Package PortfolioExtensions
+    runs-on: ubuntu-latest
+    concurrency: 
+      group: ${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          ref: ${{ github.head_ref }}
 
-      - name: (PortfolioExtensions) Install npm packages
+      - name: Setup Node.js 12.22.0
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.22.0
+
+      - name: Install npm packages
         working-directory: ./SharePointFramework/PortfolioExtensions
         run: |
           npm ci
 
-      - name: (PortfolioExtensions) Run npm script package:ci
+      - name: Run npm run-script package:ci
         working-directory: ./SharePointFramework/PortfolioExtensions
         run: |
           npm run package:ci
 
-      - name: (PortfolioExtensions) Run npm script lint
+      - name: Run npm run-script lint
         working-directory: ./SharePointFramework/PortfolioExtensions
         run: |
-          npm run lint
+          npm run-script lint
 
-      - name: (PortfolioWebParts) Install npm packages
+  package-portfoliowebparts:
+    name: Package PortfolioWebParts
+    runs-on: ubuntu-latest
+    concurrency: 
+      group: ${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node.js 12.22.0
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.22.0
+
+      - name: Install npm packages
         working-directory: ./SharePointFramework/PortfolioWebParts
         run: |
           npm ci
 
-      - name: (PortfolioWebParts) Run npm script package:ci
+      - name: Run npm run-script package:ci
         working-directory: ./SharePointFramework/PortfolioWebParts
         run: |
-          npm run package:ci
+          npm run-script package:ci
 
-      - name: (PortfolioWebParts) Run npm script lint
+      - name: Run npm run-script lint
         working-directory: ./SharePointFramework/PortfolioWebParts
         run: |
-          npm run lint
+          npm run-script lint
 
-      - name: (ProgramWebParts) Install npm packages
+  package-programwebparts:
+    name: Package ProgramWebParts
+    runs-on: ubuntu-latest
+    concurrency: 
+      group: ${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node.js 12.22.0
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.22.0
+
+      - name: Install npm packages
         working-directory: ./SharePointFramework/ProgramWebParts
         run: |
           npm ci
 
-      - name: (ProgramWebParts) Run npm script package:ci
+      - name: Run npm run-script package:ci
         working-directory: ./SharePointFramework/ProgramWebParts
         run: |
-          npm run package:ci
+          npm run-script package:ci
 
-      - name: (ProgramWebParts) Run npm script lint
+      - name: Run npm run-script lint
         working-directory: ./SharePointFramework/ProgramWebParts
         run: |
-          npm run lint
+          npm run-script lint
 
-      - name: (ProjectExtensions) Install npm packages
+  package-projectextensions:
+    name: Package ProjectExtensions
+    runs-on: ubuntu-latest
+    concurrency: 
+      group: ${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node.js 12.22.0
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.22.0
+
+      - name: Install npm packages
         working-directory: ./SharePointFramework/ProjectExtensions
         run: |
           npm ci
 
-      - name: (ProjectExtensions) Run npm script package:ci
+      - name: Run npm run-script package:ci
         working-directory: ./SharePointFramework/ProjectExtensions
         run: |
           npm run package:ci
 
-      - name: (ProjectExtensions) Run npm script lint
+      - name: Run npm run-script lint
         working-directory: ./SharePointFramework/ProjectExtensions
         run: |
-          npm run lint
+          npm run-script lint
 
-      - name: (ProjectWebParts) Install npm packages
+  package-projectwebparts:
+    name: Package ProjectWebParts
+    runs-on: ubuntu-latest
+    concurrency: 
+      group: ${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node.js 12.22.0
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.22.0
+
+      - name: Install npm packages
         working-directory: ./SharePointFramework/ProjectWebParts
         run: |
           npm ci
 
-      - name: (ProjectWebParts) Run npm script package:ci
+      - name: Run npm run-script package:ci
         working-directory: ./SharePointFramework/ProjectWebParts
         run: |
-          npm run package:ci
+          npm run-script package:ci
 
-      - name: (ProjectWebParts) Run npm script lint
+      - name: Run npm run-script lint
         working-directory: ./SharePointFramework/ProjectWebParts
         run: |
-          npm run lint
+          npm run-script lint
