@@ -33,7 +33,7 @@
             <pnp:DataValue FieldName="GtURL">SitePages/Home.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://github.com/Puzzlepart/prosjektportalen-manual/blob/master/Brukermanual/3%20Portefolje/3%20Portefoljeniva.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3%20Portefoljeniva.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
