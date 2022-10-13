@@ -7,9 +7,6 @@
     "directory": "SharePointFramework/@Shared"
   },
   "license": "MIT",
-  "engines": {
-    "node": "16.13.0"
-  },
   "description": "Shared utilities, helpers and models",
   "main": "lib/index.js",
   "scripts": {
