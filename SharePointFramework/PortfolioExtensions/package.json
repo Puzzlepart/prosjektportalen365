@@ -8,7 +8,7 @@
   },
   "license": "MIT",
   "engines": {
-    "node": "^12"
+    "node": "12.22.0"
   },
   "main": "lib/index.js",
   "scripts": {
@@ -33,7 +33,6 @@
     "@pnp/core": "^3.7.0",
     "@pnp/logging": "3.7.0",
     "@pnp/sp": "3.7.0",
-    "eslint-plugin-unused-imports": "^2.0.0",
     "pp365-shared": "1.6.3",
     "tslib": "2.3.1"
   },
@@ -50,18 +49,17 @@
     "@types/sharepoint": "^2016.1.10",
     "@types/underscore": "^1.11.4",
     "@types/webpack-env": "1.18.0",
-    "@typescript-eslint/eslint-plugin": "^5.38.0",
-    "@typescript-eslint/parser": "^5.38.0",
     "ajv": "6.12.5",
     "concurrently": "7.4.0",
-    "eslint": "8.23.1",
+    "eslint": "8.25.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prettier": "4.2.1",
-    "eslint-plugin-react": "7.31.8",
+    "eslint-plugin-react": "7.31.10",
+    "eslint-plugin-unused-imports": "2.0.0",
+    "@typescript-eslint/eslint-plugin": "5.40.0",
+    "@typescript-eslint/parser": "5.40.0",
     "gulp": "4.0.2",
     "prettier": "2.7.1",
-    "typescript": "4.5.5",
-    "webpack-bundle-analyzer": "^4.6.1",
-    "webpackbar": "^5.0.2"
+    "typescript": "4.5.5"
   }
 }
