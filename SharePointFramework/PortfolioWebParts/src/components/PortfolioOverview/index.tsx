@@ -78,7 +78,8 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
       this.setState({ error, loading: false })
     }
   }
-
+  
+  // eslint-disable-next-line react/no-deprecated
   public componentWillUpdate(
     _nextProps: IPortfolioOverviewProps,
     { currentView, groupBy }: IPortfolioOverviewState
