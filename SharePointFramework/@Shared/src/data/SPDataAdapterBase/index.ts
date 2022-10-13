@@ -37,10 +37,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   private _initStorage() {
     this._storage = new PnPClientStorage().session
     this._storageKeys = Object.keys(this._storageKeys).reduce((obj, key) => {
-      obj[key] = format(
-        this._storageKeys[key],
-        this.settings.siteId.replace(/-/g, '')
-      )
+      obj[key] = format(this._storageKeys[key], this.settings.siteId.replace(/-/g, ''))
       return obj
     }, {})
     this._storage.deleteExpired()
@@ -147,7 +144,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                     ).length > 0
                   )
                     userPermissions.push(...role.permissions)
-                } catch { }
+                } catch {}
               }
               break
           }
