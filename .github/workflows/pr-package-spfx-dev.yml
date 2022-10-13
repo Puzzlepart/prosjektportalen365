@@ -13,12 +13,12 @@ jobs:
       group: ${{ github.ref }}_build_shared
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
 
       - name: Setup Node.js 16.13.0
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 16.13.0
 
@@ -44,12 +44,12 @@ jobs:
       group: ${{ github.ref }}_package_portfolioextensions
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
 
       - name: Setup Node.js 16.13.0
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 16.13.0
 
@@ -75,12 +75,12 @@ jobs:
       group: ${{ github.ref }}_package_portfoliowebparts
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
 
       - name: Setup Node.js 16.13.0
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 16.13.0
 
@@ -106,12 +106,12 @@ jobs:
       group: ${{ github.ref }}_package_programwebparts
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
 
       - name: Setup Node.js 16.13.0
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 16.13.0
 
@@ -137,12 +137,12 @@ jobs:
       group: ${{ github.ref }}_package_projectextensions
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
 
       - name: Setup Node.js 16.13.0
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 16.13.0
 
@@ -168,12 +168,12 @@ jobs:
       group: ${{ github.ref }}_package_projectwebparts
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
 
       - name: Setup Node.js 16.13.0
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 16.13.0
 
