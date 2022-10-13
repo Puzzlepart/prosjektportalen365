@@ -67,20 +67,20 @@ jobs:
       #   run: |
       #     npm run lint
 
-      - name: (ProgramWebParts) Install npm packages
-        working-directory: ./SharePointFramework/ProgramWebParts
-        run: |
-          npm ci
+      # - name: (ProgramWebParts) Install npm packages
+      #   working-directory: ./SharePointFramework/ProgramWebParts
+      #   run: |
+      #     npm ci
 
-      - name: (ProgramWebParts) Run npm script package:ci
-        working-directory: ./SharePointFramework/ProgramWebParts
-        run: |
-          npm run package:ci
+      # - name: (ProgramWebParts) Run npm script package:ci
+      #   working-directory: ./SharePointFramework/ProgramWebParts
+      #   run: |
+      #     npm run package:ci
 
-      - name: (ProgramWebParts) Run npm script lint
-        working-directory: ./SharePointFramework/ProgramWebParts
-        run: |
-          npm run lint
+      # - name: (ProgramWebParts) Run npm script lint
+      #   working-directory: ./SharePointFramework/ProgramWebParts
+      #   run: |
+      #     npm run lint
 
       - name: (ProjectExtensions) Install npm packages
         working-directory: ./SharePointFramework/ProjectExtensions
