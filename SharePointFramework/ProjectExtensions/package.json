@@ -55,8 +55,7 @@
     "spfx-jsom": "0.6.6",
     "tslib": "2.3.1",
     "underscore": "1.9.1",
-    "valid-filename": "3.1.0",
-    "webpack": "^4.44.2"
+    "valid-filename": "3.1.0"
   },
   "resolutions": {
     "@types/react": "16.8.8"
@@ -90,6 +89,7 @@
     "gulp": "4.0.2",
     "livereload": "0.9.1",
     "prettier": "2.1.1",
-    "typescript": "4.5.5"
+    "typescript": "4.5.5",
+    "webpack": "^4.44.2"
   }
 }
