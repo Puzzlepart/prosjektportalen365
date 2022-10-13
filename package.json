@@ -2,7 +2,7 @@
   "name": "pp365",
   "version": "1.6.3",
   "engines": {
-    "node": "^12"
+    "node": "12.22.0"
   },
   "description": "Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.",
   "scripts": {

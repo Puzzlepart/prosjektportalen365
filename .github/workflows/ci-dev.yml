@@ -33,10 +33,10 @@ jobs:
         
       - run: Get-PSDrive
 
-      - name: Setup Node.js 12.19.0
+      - name: Setup Node.js 12.22.0
         uses: actions/setup-node@v1
         with:
-          node-version: 12.19.0
+          node-version: 12.22.0
 
       - name: Run Install/Build-Release.ps1 in CI mode
         run: C:/prosjektportalen365/Install/Build-Release.ps1 -CI
