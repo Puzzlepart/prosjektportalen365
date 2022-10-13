@@ -39,6 +39,7 @@ declare interface IPortfolioWebPartsStrings {
   IsResizableLabel: string
   SaveButtonLabel: string
   CloseButtonLabel: string
+  GroupByLabel: string
   GroupByColumnLabel: string
   FilterBy: string
   DataSourceCategoryLabel: string
@@ -79,6 +80,7 @@ declare interface IPortfolioWebPartsStrings {
   DeliveryStatusLabel: string
   DescriptionFieldLabel: string
   TagFieldLabel: string
+  CategoryFieldLabel: string
   DesiredValueLabel: string
   EditViewText: string
   ErrorText: string
@@ -172,6 +174,7 @@ declare interface IPortfolioWebPartsStrings {
   MilestoneLabel: string
   ProjectLabel: string
   SubPhaseLabel: string
+  ProjectDeliveryLabel: string
   CurrentPhaseLabel: string
   MilestoneDateLabel: string
   NameLabel: string

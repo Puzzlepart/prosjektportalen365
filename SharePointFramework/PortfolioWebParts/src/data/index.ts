@@ -11,6 +11,7 @@ import {
   DataField,
   ProjectListModel,
   TimelineContentListModel,
+  TimelineConfigurationListModel,
   SPChartConfigurationItem,
   SPContentType,
   Benefit,
@@ -322,7 +323,7 @@ export class DataAdapter implements IDataAdapter {
    *
    * @param timelineConfig
    */
-  public async fetchTimelineProjectData(timelineConfig: any[]) {
+  public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationListModel[]) {
     try {
       const [{ PrimarySearchResults: statusReports }] = await Promise.all([
         sp.search({
@@ -337,16 +338,17 @@ export class DataAdapter implements IDataAdapter {
         })
       ])
 
-      const config = _.find(timelineConfig, (col) => col.Title === strings.ProjectLabel)
+      const config = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
 
       const configElement = {
         type: strings.ProjectLabel,
-        sortOrder: config && config.GtSortOrder,
-        hexColor: config && config.GtHexColor,
-        elementType: config && config.GtElementType,
-        showElementPortfolio: config && config.GtShowElementPortfolio,
-        showElementProgram: config && config.GtShowElementProgram,
-        timelineFilter: config && config.GtTimelineFilter
+        sortOrder: config && config.sortOrder,
+        hexColor: config && config.hexColor,
+        timelineCategory: config && config.timelineCategory,
+        elementType: config && config.elementType,
+        showElementPortfolio: config && config.showElementPortfolio,
+        showElementProgram: config && config.showElementProgram,
+        timelineFilter: config && config.timelineFilter
       }
 
       const reports = statusReports
@@ -371,7 +373,7 @@ export class DataAdapter implements IDataAdapter {
    *
    * @param timelineConfig
    */
-  public async fetchTimelineContentItems(timelineConfig: any[]) {
+  public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationListModel[]) {
     const [timelineItems] = await Promise.all([
       sp.web.lists
         .getByTitle(strings.TimelineContentListName)
@@ -395,20 +397,21 @@ export class DataAdapter implements IDataAdapter {
     return timelineItems
       .map((item) => {
         const type = item.GtTimelineTypeLookup && item.GtTimelineTypeLookup.Title
-        const config = _.find(timelineConfig, (col) => col.Title === type)
+        const config = _.find(timelineConfig, (col) => col.title === type)
 
-        if (item.GtSiteIdLookup?.Title && config && config.GtShowElementPortfolio) {
+        if (item.GtSiteIdLookup?.Title && config && config.showElementPortfolio) {
           const model = new TimelineContentListModel(
             item.GtSiteIdLookup?.GtSiteId,
             item.GtSiteIdLookup?.Title,
             item.Title,
-            config && config.Title,
-            config && config.GtSortOrder,
-            config && config.GtHexColor,
-            config && config.GtElementType,
-            config && config.GtShowElementPortfolio,
-            config && config.GtShowElementProgram,
-            config && config.GtTimelineFilter,
+            config && config.title,
+            config && config.sortOrder,
+            config && config.hexColor,
+            config && config.timelineCategory,
+            config && config.elementType,
+            config && config.showElementPortfolio,
+            config && config.showElementProgram,
+            config && config.timelineFilter,
             item.GtStartDate,
             item.GtEndDate,
             item.GtDescription,
@@ -427,12 +430,13 @@ export class DataAdapter implements IDataAdapter {
    *
    */
   public async fetchTimelineConfiguration() {
-    return await sp.web.lists
+    const timelineConfig = await sp.web.lists
       .getByTitle(strings.TimelineConfigurationListName)
       .items.select(
-        'Title',
         'GtSortOrder',
+        'Title',
         'GtHexColor',
+        'GtTimelineCategory',
         'GtElementType',
         'GtShowElementPortfolio',
         'GtShowElementProgram',
@@ -440,6 +444,22 @@ export class DataAdapter implements IDataAdapter {
       )
       .top(500)
       .get()
+
+    return timelineConfig
+      .map((item) => {
+        const model = new TimelineConfigurationListModel(
+          item.GtSortOrder,
+          item.Title,
+          item.GtHexColor,
+          item.GtTimelineCategory,
+          item.GtElementType,
+          item.GtShowElementPortfolio,
+          item.GtShowElementProgram,
+          item.GtTimelineFilter
+        )
+        return model
+      })
+      .filter((p) => p)
   }
 
   /**
@@ -452,13 +472,13 @@ export class DataAdapter implements IDataAdapter {
   public async fetchTimelineAggregatedContent(
     configItemTitle: string,
     dataSourceName: string,
-    timelineConfig: any[]
+    timelineConfig: TimelineConfigurationListModel[]
   ) {
-    const config: any = _.find(
+    const config = _.find(
       timelineConfig,
-      (col) => col.Title === (configItemTitle || 'Prosjektleveranse')
+      (col) => col.title === (configItemTitle || 'Prosjektleveranse')
     )
-    if (config && config.GtShowElementPortfolio) {
+    if (config && config.showElementPortfolio) {
       const [projectDeliveries] = await Promise.all([
         this.configure().then((adapter) => {
           return adapter
@@ -486,13 +506,14 @@ export class DataAdapter implements IDataAdapter {
             item.SiteId,
             item.SiteTitle,
             item.Title,
-            (config && config.Title) || configItemTitle,
-            (config && config.GtSortOrder) || 90,
-            (config && config.GtHexColor) || '#384f61',
-            (config && config.GtElementType) || strings.BarLabel,
-            (config && config.GtShowElementPortfolio) || false,
-            (config && config.GtShowElementProgram) || false,
-            (config && config.GtTimelineFilter) || true,
+            (config && config.title) || configItemTitle,
+            (config && config.sortOrder) || 90,
+            (config && config.hexColor) || '#384f61',
+            (config && config.timelineCategory) || 'Styring',
+            (config && config.elementType) || strings.BarLabel,
+            (config && config.showElementPortfolio) || false,
+            (config && config.showElementProgram) || false,
+            (config && config.timelineFilter) || true,
             item.GtDeliveryStartTimeOWSDATE,
             item.GtDeliveryEndTimeOWSDATE,
             item.GtDeliveryDescriptionOWSMTXT

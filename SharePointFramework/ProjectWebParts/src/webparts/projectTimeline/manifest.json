@@ -25,9 +25,7 @@
       "officeFabricIconFontName": "TimelineDelivery",
       "properties": {
         "listName": "Tidslinjeinnhold",
-        "showFilterButton": true,
         "showTimeline": true,
-        "showInfoMessage": true,
         "showCmdTimelineList": true,
         "showTimelineList": true,
         "showProjectDeliveries": false,

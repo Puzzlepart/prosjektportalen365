@@ -1,14 +1,38 @@
 import { IBaseComponentProps } from '../types'
 import * as moment from 'moment'
-import { ITimelineData, ITimelineItem } from 'interfaces'
+import { ITimelineData, ITimelineGroups, ITimelineItem } from 'interfaces'
 import { ProjectListModel } from 'models'
+import { IFilterProps } from 'components/FilterPanel/Filter/types'
 
 export interface IProjectTimelineProps extends IBaseComponentProps {
+  /**
+   * Timeline default start time
+   */
   defaultTimeStart?: [number, moment.unitOfTime.DurationConstructor]
+
+  /**
+   * Timeline default end time
+   */
   defaultTimeEnd?: [number, moment.unitOfTime.DurationConstructor]
+
+  /**
+   * Information text
+   */
   infoText?: string
+
+  /**
+   *  Show Project deliveries
+   */
   showProjectDeliveries?: boolean
+
+  /**
+   * DataSource name
+   */
   dataSourceName?: string
+
+  /**
+   * Timeline configuration item title
+   */
   configItemTitle?: string
 }
 
@@ -19,14 +43,24 @@ export interface IProjectTimelineState {
   loading: boolean
 
   /**
+   * Groups
+   */
+  groups?: ITimelineGroups
+
+  /**
    * Show filter panel
    */
-  showFilterPanel: boolean
+  showFilterPanel?: boolean
+
+  /**
+   * Filters
+   */
+  filters?: IFilterProps[]
 
   /**
    * Active filters
    */
-  activeFilters: { [key: string]: string[] }
+  activeFilters?: { [key: string]: string[] }
 
   /**
    * Projects
@@ -39,6 +73,11 @@ export interface IProjectTimelineState {
   data?: ITimelineData
 
   /**
+   * Filtered data
+   */
+  filteredData?: ITimelineData
+
+  /**
    * Timeline Configuration
    */
   timelineConfiguration?: any
@@ -46,7 +85,7 @@ export interface IProjectTimelineState {
   /**
    * Error
    */
-  error?: string
+  error?: Error
 
   /**
    * Item to show details for
