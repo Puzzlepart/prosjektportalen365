@@ -1,5 +1,5 @@
-import { Icon } from 'office-ui-fabric-react/lib/Icon'
-import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator'
+import { Icon } from '@fluentui/react/lib/Icon'
+import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator'
 import * as strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
 import { BaseDialog } from '../@BaseDialog/index'

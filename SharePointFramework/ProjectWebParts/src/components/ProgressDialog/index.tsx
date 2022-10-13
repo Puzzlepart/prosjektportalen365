@@ -1,5 +1,5 @@
-import { Dialog } from 'office-ui-fabric-react/lib/Dialog'
-import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator'
+import { Dialog } from '@fluentui/react/lib/Dialog'
+import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator'
 import React from 'react'
 import { IProgressDialogProps } from './types'
 import styles from './ProgressDialog.module.scss'

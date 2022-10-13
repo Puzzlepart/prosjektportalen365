@@ -1,7 +1,7 @@
 import { createAction, createReducer, current } from '@reduxjs/toolkit'
 import sortArray from 'array-sort'
-import { Target } from 'office-ui-fabric-react/lib/Callout'
-import { IGroup } from 'office-ui-fabric-react/lib/DetailsList'
+import { Target } from '@fluentui/react/lib/Callout'
+import { IGroup } from '@fluentui/react/lib/DetailsList'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
@@ -17,7 +17,7 @@ import _, { filter } from 'lodash'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 import { parseUrlHash, setUrlHash } from 'pp365-shared/lib/util'
-import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { MessageBarType } from '@fluentui/react/lib/MessageBar'
 
 function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
   const _arr = [...arr]

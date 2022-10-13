@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Icon } from 'office-ui-fabric-react/lib/Icon'
-import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator'
+import { Icon } from '@fluentui/react/lib/Icon'
+import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator'
 import * as strings from 'ProjectExtensionsStrings'
 import React from 'react'
 import styles from './CopyProgressScreen.module.scss'

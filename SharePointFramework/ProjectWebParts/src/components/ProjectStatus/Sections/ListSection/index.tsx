@@ -4,8 +4,8 @@ import {
   DetailsListLayoutMode,
   IColumn,
   SelectionMode
-} from 'office-ui-fabric-react/lib/DetailsList'
-import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+} from '@fluentui/react/lib/DetailsList'
+import { MessageBarType } from '@fluentui/react/lib/MessageBar'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { getObjectValue } from 'pp365-shared/lib/helpers'
 import * as strings from 'ProjectWebPartsStrings'

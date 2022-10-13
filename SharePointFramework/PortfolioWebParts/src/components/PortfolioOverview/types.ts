@@ -1,9 +1,9 @@
 import { IPortfolioConfiguration } from 'interfaces'
-import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu'
+import { IContextualMenuProps } from '@fluentui/react/lib/ContextualMenu'
 import { PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
 import { IFilterProps } from '../FilterPanel'
 import { IBaseComponentProps } from '../types'
-import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { MessageBarType } from '@fluentui/react/lib/MessageBar'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 
 export class PortfolioOverviewErrorMessage extends Error {

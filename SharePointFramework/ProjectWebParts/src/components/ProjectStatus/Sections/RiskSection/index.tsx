@@ -4,8 +4,8 @@ import {
   DetailsListLayoutMode,
   IColumn,
   SelectionMode
-} from 'office-ui-fabric-react/lib/DetailsList'
-import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+} from '@fluentui/react/lib/DetailsList'
+import { MessageBarType } from '@fluentui/react/lib/MessageBar'
 import * as strings from 'ProjectWebPartsStrings'
 import React from 'react'
 import { RiskMatrix } from '../../../RiskMatrix'

@@ -5,11 +5,11 @@ import {
   ShimmeredDetailsList,
   Spinner,
   SpinnerSize
-} from 'office-ui-fabric-react'
-import { IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
+} from '@fluentui/react'
+import { IColumn, SelectionMode } from '@fluentui/react/lib/DetailsList'
+import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar'
+import { SearchBox } from '@fluentui/react/lib/SearchBox'
+import { Toggle } from '@fluentui/react/lib/Toggle'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getObjectValue } from 'pp365-shared/lib/helpers'
 import React, { FunctionComponent } from 'react'

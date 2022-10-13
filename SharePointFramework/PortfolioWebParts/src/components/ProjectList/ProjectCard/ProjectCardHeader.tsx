@@ -1,4 +1,4 @@
-import { DocumentCardTitle } from 'office-ui-fabric-react/lib/DocumentCard'
+import { DocumentCardTitle } from '@fluentui/react/lib/DocumentCard'
 import React, { FunctionComponent, useState } from 'react'
 import styles from './ProjectCard.module.scss'
 import { IProjectCardProps } from './types'

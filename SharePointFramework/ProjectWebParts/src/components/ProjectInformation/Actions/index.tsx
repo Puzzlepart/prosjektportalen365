@@ -1,4 +1,4 @@
-import { ActionButton, DefaultButton, IButtonProps } from 'office-ui-fabric-react/lib/Button'
+import { ActionButton, DefaultButton, IButtonProps } from '@fluentui/react/lib/Button'
 import React, { FunctionComponent, useContext } from 'react'
 import { isEmpty } from 'underscore'
 import { ProjectInformationContext } from '../context'

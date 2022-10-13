@@ -5,8 +5,8 @@ import {
   DialogFooter,
   DialogType,
   IDialogContentProps
-} from 'office-ui-fabric-react/lib/Dialog'
-import { IModalProps } from 'office-ui-fabric-react/lib/Modal'
+} from '@fluentui/react/lib/Dialog'
+import { IModalProps } from '@fluentui/react/lib/Modal'
 import { IBaseDialogProps } from './types'
 
 export class BaseDialog extends React.PureComponent<IBaseDialogProps> {

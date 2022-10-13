@@ -1,4 +1,4 @@
-import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel'
+import { Panel, PanelType } from '@fluentui/react/lib/Panel'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
 import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'

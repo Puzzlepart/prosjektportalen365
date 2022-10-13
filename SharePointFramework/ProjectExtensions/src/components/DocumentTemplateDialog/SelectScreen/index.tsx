@@ -5,9 +5,9 @@ import {
   DetailsList,
   DetailsListLayoutMode,
   SelectionMode
-} from 'office-ui-fabric-react/lib/DetailsList'
-import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
+} from '@fluentui/react/lib/DetailsList'
+import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection'
+import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { useContext, useMemo, useState } from 'react'
 import { TemplateSelectorContext } from 'templateSelector/context'

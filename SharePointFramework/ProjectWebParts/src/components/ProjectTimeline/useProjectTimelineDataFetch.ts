@@ -8,12 +8,12 @@ import {
   ITimelineItem,
   TimelineGroupType
 } from './types'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { format } from '@fluentui/react/lib/Utilities'
 import moment from 'moment'
 import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { sp, Web } from '@pnp/sp'
-import { IColumn } from 'office-ui-fabric-react'
+import { IColumn } from '@fluentui/react'
 import { ProjectTimelineContext } from './context'
 
 /**

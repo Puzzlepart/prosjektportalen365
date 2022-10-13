@@ -1,4 +1,4 @@
-import { TextField } from 'office-ui-fabric-react/lib/TextField'
+import { TextField } from '@fluentui/react/lib/TextField'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { useContext, useState } from 'react'
 import { ChangePhaseDialogContext } from '../../context'

@@ -1,7 +1,7 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { sp, Web, List } from '@pnp/sp'
 import { IListProperties } from './IListProperties'
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown'
+import { IDropdownOption } from '@fluentui/react/lib/Dropdown'
 
 export interface IListContentConfigSPItem {
   ContentTypeId: string

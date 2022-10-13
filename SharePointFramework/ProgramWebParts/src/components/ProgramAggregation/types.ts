@@ -1,6 +1,6 @@
-import { Target } from 'office-ui-fabric-react'
-import { IColumn, IGroup } from 'office-ui-fabric-react/lib/DetailsList'
-import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { Target } from '@fluentui/react'
+import { IColumn, IGroup } from '@fluentui/react/lib/DetailsList'
+import { MessageBarType } from '@fluentui/react/lib/MessageBar'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
 import { IBaseProgramWebPartProps } from 'webparts/baseProgramWebPart'
 

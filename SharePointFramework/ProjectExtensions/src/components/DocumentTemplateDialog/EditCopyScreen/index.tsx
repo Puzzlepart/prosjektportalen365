@@ -1,6 +1,6 @@
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
-import { ActionButton } from 'office-ui-fabric-react/lib/Button'
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog'
+import { ActionButton } from '@fluentui/react/lib/Button'
+import { DialogFooter } from '@fluentui/react/lib/Dialog'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { useContext, useState } from 'react'
 import { InfoMessage } from '../../InfoMessage'

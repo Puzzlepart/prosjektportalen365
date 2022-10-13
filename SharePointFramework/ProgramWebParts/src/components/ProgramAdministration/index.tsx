@@ -1,5 +1,5 @@
 import { SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
-import { Link, MessageBar, ShimmeredDetailsList } from 'office-ui-fabric-react'
+import { Link, MessageBar, ShimmeredDetailsList } from '@fluentui/react'
 import * as strings from 'ProgramWebPartsStrings'
 import React, { FunctionComponent } from 'react'
 import { isEmpty } from 'underscore'

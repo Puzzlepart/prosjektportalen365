@@ -1,5 +1,5 @@
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button'
+import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar'
 import * as strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
 import { BaseDialog } from '../@BaseDialog'

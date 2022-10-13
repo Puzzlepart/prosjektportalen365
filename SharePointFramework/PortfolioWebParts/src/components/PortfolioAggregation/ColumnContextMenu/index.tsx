@@ -3,8 +3,8 @@ import {
   ContextualMenu,
   ContextualMenuItemType,
   IContextualMenuItem
-} from 'office-ui-fabric-react/lib/ContextualMenu'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
+} from '@fluentui/react/lib/ContextualMenu'
+import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { useContext } from 'react'
 import { indexOf } from 'underscore'

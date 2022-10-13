@@ -1,5 +1,5 @@
-import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel'
-import { Customizer } from 'office-ui-fabric-react/lib/Utilities'
+import { Panel, PanelType } from '@fluentui/react/lib/Panel'
+import { Customizer } from '@fluentui/react/lib/Utilities'
 import * as React from 'react'
 import { Filter } from './Filter'
 import { IFilterPanelProps } from './types'

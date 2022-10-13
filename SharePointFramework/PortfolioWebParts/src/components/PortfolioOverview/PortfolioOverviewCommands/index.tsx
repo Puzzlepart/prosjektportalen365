@@ -1,9 +1,9 @@
 import { isArray } from '@pnp/common'
-import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar'
+import { CommandBar } from '@fluentui/react/lib/CommandBar'
 import {
   ContextualMenuItemType,
   IContextualMenuItem
-} from 'office-ui-fabric-react/lib/ContextualMenu'
+} from '@fluentui/react/lib/ContextualMenu'
 import * as strings from 'PortfolioWebPartsStrings'
 import ExcelExportService from 'pp365-shared/lib/services/ExcelExportService'
 import { redirect } from 'pp365-shared/lib/util'

@@ -2,14 +2,14 @@
 import { InfoMessage } from 'components/InfoMessage'
 import { SPDataAdapter } from 'data'
 import { SPFolder } from 'models'
-import { ActionButton } from 'office-ui-fabric-react/lib/Button'
+import { ActionButton } from '@fluentui/react/lib/Button'
 import {
   ConstrainMode,
   DetailsList,
   DetailsListLayoutMode,
   SelectionMode
-} from 'office-ui-fabric-react/lib/DetailsList'
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog'
+} from '@fluentui/react/lib/DetailsList'
+import { DialogFooter } from '@fluentui/react/lib/Dialog'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { useContext, useEffect, useState } from 'react'
 import { TemplateSelectorContext } from 'templateSelector/context'

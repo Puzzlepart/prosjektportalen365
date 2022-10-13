@@ -7,7 +7,7 @@ import {
   PrimaryButton,
   Spinner,
   SpinnerSize
-} from 'office-ui-fabric-react'
+} from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import React, { FunctionComponent, useContext, useState } from 'react'
 import { ProjectInformationContext } from '../context'

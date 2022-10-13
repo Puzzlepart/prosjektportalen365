@@ -1,4 +1,4 @@
-import { DocumentCard } from 'office-ui-fabric-react/lib/DocumentCard'
+import { DocumentCard } from '@fluentui/react/lib/DocumentCard'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FunctionComponent } from 'react'
 import styles from './ProjectCard.module.scss'

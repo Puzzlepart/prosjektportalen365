@@ -1,5 +1,5 @@
 import { LogLevel } from '@pnp/logging'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import { Web, WebProvisioner } from 'sp-js-provisioning'
 import * as _ from 'underscore'

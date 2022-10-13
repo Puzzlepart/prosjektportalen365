@@ -1,4 +1,4 @@
-import { DocumentCardActions } from 'office-ui-fabric-react/lib/DocumentCard'
+import { DocumentCardActions } from '@fluentui/react/lib/DocumentCard'
 import React, { FunctionComponent } from 'react'
 import { IProjectCardProps } from './types'
 

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb'
+import { Breadcrumb, IBreadcrumbItem } from '@fluentui/react/lib/Breadcrumb'
 import React, { useMemo } from 'react'
 import { isEmpty } from 'underscore'
 import { createItems } from './createItems'

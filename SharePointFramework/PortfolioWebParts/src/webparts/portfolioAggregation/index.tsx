@@ -9,7 +9,7 @@ import { IPortfolioAggregationProps, PortfolioAggregation } from 'components/Por
 import { DataAdapter } from 'data'
 import { IAggregatedListConfiguration } from 'interfaces'
 import _ from 'lodash'
-import { IMessageBarProps, MessageBar } from 'office-ui-fabric-react/lib/MessageBar'
+import { IMessageBarProps, MessageBar } from '@fluentui/react/lib/MessageBar'
 import * as strings from 'PortfolioWebPartsStrings'
 import React from 'react'
 import { first } from 'underscore'

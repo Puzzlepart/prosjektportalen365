@@ -1,5 +1,5 @@
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
-import { IModalProps } from 'office-ui-fabric-react/lib/Modal'
+import { IColumn } from '@fluentui/react/lib/DetailsList'
+import { IModalProps } from '@fluentui/react/lib/Modal'
 
 export interface IItemModalProps extends IModalProps {
   title: string

@@ -1,5 +1,5 @@
 import { IFilterItemProps } from 'components/FilterPanel/FilterItem/types'
-import { IColumn } from 'office-ui-fabric-react/lib/components/DetailsList'
+import { IColumn } from '@fluentui/react/lib/components/DetailsList'
 import React from 'react'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
 

@@ -1,5 +1,5 @@
 import { Web } from '@pnp/sp'
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown'
+import { IDropdownOption } from '@fluentui/react/lib/Dropdown'
 import { TypedHash } from '@pnp/common'
 import { Schema } from 'sp-js-provisioning'
 

@@ -1,6 +1,6 @@
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox'
-import { SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
+import { Checkbox } from '@fluentui/react/lib/Checkbox'
+import { SelectionMode } from '@fluentui/react/lib/DetailsList'
+import { SearchBox } from '@fluentui/react/lib/SearchBox'
 import strings from 'ProgramWebPartsStrings'
 import React, {
   FormEvent,

@@ -1,6 +1,6 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
+import { format } from '@fluentui/react/lib/Utilities'
+import { SearchBox } from '@fluentui/react/lib/SearchBox'
 import React, { useContext } from 'react'
 import { ProgramAggregationContext } from '../context'
 import { SEARCH } from '../reducer'

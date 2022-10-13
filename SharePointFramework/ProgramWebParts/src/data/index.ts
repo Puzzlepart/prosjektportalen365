@@ -3,7 +3,7 @@ import { dateAdd } from '@pnp/common'
 import { QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
 import * as cleanDeep from 'clean-deep'
 import MSGraph from 'msgraph-helper'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { format } from '@fluentui/react/lib/Utilities'
 import {
   IGraphGroup,
   IPortfolioConfiguration,

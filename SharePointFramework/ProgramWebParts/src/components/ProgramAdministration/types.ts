@@ -1,7 +1,7 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { SearchResult } from '@pnp/sp'
 import { SPDataAdapter } from 'data'
-import { IColumn, MessageBarType } from 'office-ui-fabric-react'
+import { IColumn, MessageBarType } from '@fluentui/react'
 
 export interface IProgramAdministrationProps {
   title: string

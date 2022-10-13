@@ -2,8 +2,8 @@ import {
   ContextualMenu,
   ContextualMenuItemType,
   IContextualMenuItem
-} from 'office-ui-fabric-react/lib/ContextualMenu'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
+} from '@fluentui/react/lib/ContextualMenu'
+import { format } from '@fluentui/react/lib/Utilities'
 import strings from 'ProgramWebPartsStrings'
 import React, { FunctionComponent, useContext } from 'react'
 import { ProgramAggregationContext } from '../context'

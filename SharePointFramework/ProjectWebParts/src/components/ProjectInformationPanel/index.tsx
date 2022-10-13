@@ -1,4 +1,4 @@
-import { Panel, PanelType } from 'office-ui-fabric-react'
+import { Panel, PanelType } from '@fluentui/react'
 import React, { FunctionComponent, useState } from 'react'
 import { ProjectInformation } from '../ProjectInformation'
 import { IProjectInformationPanelProps } from './types'

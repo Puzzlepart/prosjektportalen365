@@ -6,7 +6,7 @@ import {
   ContextualMenu,
   ContextualMenuItemType,
   IContextualMenuProps
-} from 'office-ui-fabric-react/lib/ContextualMenu'
+} from '@fluentui/react/lib/ContextualMenu'
 import {
   ConstrainMode,
   DetailsListLayoutMode,
@@ -14,15 +14,15 @@ import {
   IGroup,
   Selection,
   SelectionMode
-} from 'office-ui-fabric-react/lib/DetailsList'
-import { LayerHost } from 'office-ui-fabric-react/lib/Layer'
-import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane'
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
-import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList'
-import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky'
-import { format, getId, IRenderFunction } from 'office-ui-fabric-react/lib/Utilities'
+} from '@fluentui/react/lib/DetailsList'
+import { LayerHost } from '@fluentui/react/lib/Layer'
+import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection'
+import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar'
+import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react/lib/ScrollablePane'
+import { SearchBox } from '@fluentui/react/lib/SearchBox'
+import { ShimmeredDetailsList } from '@fluentui/react/lib/ShimmeredDetailsList'
+import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky'
+import { format, getId, IRenderFunction } from '@fluentui/react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import { PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'

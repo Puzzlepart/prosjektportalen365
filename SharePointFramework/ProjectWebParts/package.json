@@ -1,6 +1,6 @@
 {
   "name": "pp365-projectwebparts",
-  "version": "1.6.4",
+  "version": "1.6.4-817.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -21,6 +21,7 @@
     "publish:temp": "npm install && npm run build && npm publish --tag temp"
   },
   "dependencies": {
+    "@fluentui/react": "8.98.1",
     "@microsoft/decorators": "1.15.2",
     "@microsoft/sp-adaptive-card-extension-base": "1.15.2",
     "@microsoft/sp-core-library": "1.15.2",
@@ -46,7 +47,6 @@
     "get-value": "3.0.1",
     "interactjs": "1.6.2",
     "msgraph-helper": "0.7.1",
-    "office-ui-fabric-react": "7.185.7",
     "pp365-shared": "1.6.3",
     "pzl-spfx-components": "0.0.11",
     "react": "16.13.1",

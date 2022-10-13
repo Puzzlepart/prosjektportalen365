@@ -6,7 +6,7 @@ import sortArray from 'array-sort'
 import { get } from '@microsoft/sp-lodash-subset'
 import { IFilterProps } from 'components/FilterPanel/Filter/types'
 import strings from 'PortfolioWebPartsStrings'
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
+import { IColumn } from '@fluentui/react/lib/DetailsList'
 import { IFilterItemProps } from 'components/FilterPanel/FilterItem/types'
 import { TimelineConfigurationListModel } from '../../models'
 

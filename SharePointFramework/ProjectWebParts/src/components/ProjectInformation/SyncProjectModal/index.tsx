@@ -10,7 +10,7 @@ import {
   PrimaryButton,
   Spinner,
   SpinnerSize
-} from 'office-ui-fabric-react'
+} from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import React, { FunctionComponent, useContext, useEffect, useState } from 'react'
 import SPDataAdapter from '../../../data'

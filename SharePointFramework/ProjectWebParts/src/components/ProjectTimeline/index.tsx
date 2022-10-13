@@ -1,4 +1,4 @@
-import { format, MessageBarType, Spinner } from 'office-ui-fabric-react'
+import { format, MessageBarType, Spinner } from '@fluentui/react'
 import { Timeline } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/Timeline'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'

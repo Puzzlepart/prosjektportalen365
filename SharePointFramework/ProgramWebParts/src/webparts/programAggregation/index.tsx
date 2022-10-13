@@ -4,7 +4,7 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { IProgramAggregationProps, ProgramAggregation } from 'components/ProgramAggregation'
-import { IMessageBarProps, MessageBar } from 'office-ui-fabric-react/lib/MessageBar'
+import { IMessageBarProps, MessageBar } from '@fluentui/react/lib/MessageBar'
 import strings from 'ProgramWebPartsStrings'
 import React from 'react'
 import { BaseProgramWebPart } from 'webparts/baseProgramWebPart'

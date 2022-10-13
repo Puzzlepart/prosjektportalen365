@@ -1,5 +1,5 @@
-import { ShimmerElementType } from 'office-ui-fabric-react/lib/Shimmer'
-import { IShimmerElement } from 'office-ui-fabric-react/lib/Shimmer'
+import { ShimmerElementType } from '@fluentui/react/lib/Shimmer'
+import { IShimmerElement } from '@fluentui/react/lib/Shimmer'
 
 /**
  * Get shimmered elements to fill the specified width

@@ -1,4 +1,4 @@
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getBreakpoint } from 'pp365-shared/lib/helpers'
 import React, { Component } from 'react'

@@ -8,7 +8,7 @@ import {
 } from '../../models'
 import { useEffect } from 'react'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { format } from '@fluentui/react/lib/Utilities'
 import strings from 'PortfolioWebPartsStrings'
 import moment from 'moment'
 

@@ -1,5 +1,5 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { TooltipHost } from 'office-ui-fabric-react'
+import { TooltipHost } from '@fluentui/react'
 import React, { FunctionComponent } from 'react'
 import styles from './ProjectTemplateTooltip.module.scss'
 import { IProjectTemplateTooltipProps } from './types'

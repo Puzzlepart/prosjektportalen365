@@ -1,5 +1,5 @@
-import { IPanelProps } from 'office-ui-fabric-react/lib/Panel'
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
+import { IPanelProps } from '@fluentui/react/lib/Panel'
+import { IColumn } from '@fluentui/react/lib/DetailsList'
 import { IFilterProps } from './Filter/types'
 import { IFilterItemProps } from './FilterItem/types'
 

@@ -1,5 +1,5 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { IColumn, Icon, Link } from 'office-ui-fabric-react/lib'
+import { IColumn, Icon, Link } from '@fluentui/react/lib'
 import { formatDate, tryParseCurrency, tryParsePercentage } from 'pp365-shared/lib/helpers'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import strings from 'ProgramWebPartsStrings'

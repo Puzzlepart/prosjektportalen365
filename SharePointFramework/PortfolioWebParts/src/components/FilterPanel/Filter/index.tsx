@@ -1,4 +1,4 @@
-import { Icon } from 'office-ui-fabric-react/lib/Icon'
+import { Icon } from '@fluentui/react/lib/Icon'
 import * as React from 'react'
 import { Component } from 'react'
 import { FilterItem } from '../FilterItem'
