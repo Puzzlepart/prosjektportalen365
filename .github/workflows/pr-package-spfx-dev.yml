@@ -22,50 +22,50 @@ jobs:
         with:
           node-version: 12.22.0
 
-      - name: (@Shared) Install npm packages
-        working-directory: ./SharePointFramework/@Shared
-        run: |
-          npm ci
+      # - name: (@Shared) Install npm packages
+      #   working-directory: ./SharePointFramework/@Shared
+      #   run: |
+      #     npm ci
 
-      - name: (@Shared) Run npm script build
-        working-directory: ./SharePointFramework/@Shared
-        run: |
-          npm run build
+      # - name: (@Shared) Run npm script build
+      #   working-directory: ./SharePointFramework/@Shared
+      #   run: |
+      #     npm run build
 
-      - name: (@Shared) Run npm script lint
-        working-directory: ./SharePointFramework/@Shared
-        run: |
-          npm run lint
+      # - name: (@Shared) Run npm script lint
+      #   working-directory: ./SharePointFramework/@Shared
+      #   run: |
+      #     npm run lint
 
-      - name: (PortfolioExtensions) Install npm packages
-        working-directory: ./SharePointFramework/PortfolioExtensions
-        run: |
-          npm ci
+      # - name: (PortfolioExtensions) Install npm packages
+      #   working-directory: ./SharePointFramework/PortfolioExtensions
+      #   run: |
+      #     npm ci
 
-      - name: (PortfolioExtensions) Run npm script package:ci
-        working-directory: ./SharePointFramework/PortfolioExtensions
-        run: |
-          npm run package:ci
+      # - name: (PortfolioExtensions) Run npm script package:ci
+      #   working-directory: ./SharePointFramework/PortfolioExtensions
+      #   run: |
+      #     npm run package:ci
 
-      - name: (PortfolioExtensions) Run npm script lint
-        working-directory: ./SharePointFramework/PortfolioExtensions
-        run: |
-          npm run lint
+      # - name: (PortfolioExtensions) Run npm script lint
+      #   working-directory: ./SharePointFramework/PortfolioExtensions
+      #   run: |
+      #     npm run lint
 
-      - name: (PortfolioWebParts) Install npm packages
-        working-directory: ./SharePointFramework/PortfolioWebParts
-        run: |
-          npm ci
+      # - name: (PortfolioWebParts) Install npm packages
+      #   working-directory: ./SharePointFramework/PortfolioWebParts
+      #   run: |
+      #     npm ci
 
-      - name: (PortfolioWebParts) Run npm script package:ci
-        working-directory: ./SharePointFramework/PortfolioWebParts
-        run: |
-          npm run package:ci
+      # - name: (PortfolioWebParts) Run npm script package:ci
+      #   working-directory: ./SharePointFramework/PortfolioWebParts
+      #   run: |
+      #     npm run package:ci
 
-      - name: (PortfolioWebParts) Run npm script lint
-        working-directory: ./SharePointFramework/PortfolioWebParts
-        run: |
-          npm run lint
+      # - name: (PortfolioWebParts) Run npm script lint
+      #   working-directory: ./SharePointFramework/PortfolioWebParts
+      #   run: |
+      #     npm run lint
 
       - name: (ProgramWebParts) Install npm packages
         working-directory: ./SharePointFramework/ProgramWebParts
