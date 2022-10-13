@@ -24,6 +24,8 @@ Every change is marked with issue ID.
 - Added ability to hide certain parts of the Project Information webpart #670
 - Added inline help content function to sitepages and lists #788
 - Added pre populated elements to help content list #799
+- Added ability to group ProjectTimeline by projects, category and type (Project level) #766
+  - Users can now also filter by category, found in the filter panel
 
 ### Changed
 
