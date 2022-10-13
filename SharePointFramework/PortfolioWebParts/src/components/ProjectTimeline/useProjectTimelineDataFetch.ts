@@ -1,4 +1,4 @@
-import { ITimelineGroup, ITimelineGroups, ITimelineItem, TimelineGroupType } from 'interfaces'
+import { ITimelineGroup, ITimelineGroups, ITimelineItem, TimelineGroupType } from '../../interfaces'
 import _ from 'lodash'
 import sortArray from 'array-sort'
 import { ProjectListModel, TimelineConfigurationListModel, TimelineContentListModel } from 'models'
