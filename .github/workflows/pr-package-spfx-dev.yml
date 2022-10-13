@@ -6,11 +6,11 @@ on:
       - master
       - dev
 jobs:
-  build-shared:
+  build_shared:
     name: Build @Shared
     runs-on: ubuntu-latest
     concurrency: 
-      group: ${{ github.ref }}
+      group: ${{ github.ref }}_build_shared
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v1
@@ -37,11 +37,11 @@ jobs:
         run: |
           npm run-script lint
   
-  package-portfolioextensions:
+  package_portfolioextensions:
     name: Package PortfolioExtensions
     runs-on: ubuntu-latest
     concurrency: 
-      group: ${{ github.ref }}
+      group: ${{ github.ref }}_package_portfolioextensions
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v1
@@ -68,11 +68,11 @@ jobs:
         run: |
           npm run-script lint
 
-  package-portfoliowebparts:
+  package_portfoliowebparts:
     name: Package PortfolioWebParts
     runs-on: ubuntu-latest
     concurrency: 
-      group: ${{ github.ref }}
+      group: ${{ github.ref }}_package_portfoliowebparts
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v1
@@ -99,11 +99,11 @@ jobs:
         run: |
           npm run-script lint
 
-  package-programwebparts:
+  package_programwebparts:
     name: Package ProgramWebParts
     runs-on: ubuntu-latest
     concurrency: 
-      group: ${{ github.ref }}
+      group: ${{ github.ref }}_package_programwebparts
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v1
@@ -130,11 +130,11 @@ jobs:
         run: |
           npm run-script lint
 
-  package-projectextensions:
+  package_projectextensions:
     name: Package ProjectExtensions
     runs-on: ubuntu-latest
     concurrency: 
-      group: ${{ github.ref }}
+      group: ${{ github.ref }}_package_projectextensions
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v1
@@ -161,11 +161,11 @@ jobs:
         run: |
           npm run-script lint
 
-  package-projectwebparts:
+  package_projectwebparts:
     name: Package ProjectWebParts
     runs-on: ubuntu-latest
     concurrency: 
-      group: ${{ github.ref }}
+      group: ${{ github.ref }}_package_projectwebparts
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v1
