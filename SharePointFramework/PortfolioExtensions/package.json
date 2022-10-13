@@ -34,7 +34,8 @@
     "@pnp/logging": "3.7.0",
     "@pnp/sp": "3.7.0",
     "pp365-shared": "1.6.3",
-    "tslib": "2.3.1"
+    "tslib": "2.3.1",
+    "webpack": "^4.44.2"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.15.2",

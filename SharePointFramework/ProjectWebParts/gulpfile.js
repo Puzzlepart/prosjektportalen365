@@ -1,6 +1,3 @@
-/* eslint-disable eqeqeq */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-var-requires */
 'use strict'
 const fs = require('fs')
 const path = require('path')

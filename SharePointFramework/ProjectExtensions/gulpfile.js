@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable prefer-const */
 'use strict'
 const path = require('path')
 const gulp = require('gulp')

@@ -3,7 +3,6 @@ const path = require('path')
 const gulp = require('gulp')
 const build = require('@microsoft/sp-build-web')
 const tsConfig = require('./tsconfig.json')
-const WebpackBar = require('webpackbar')
 const log = require('@microsoft/gulp-core-build').log
 const colors = require('colors')
 
