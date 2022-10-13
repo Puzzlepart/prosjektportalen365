@@ -1,3 +1,5 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-var-requires */
 'use strict'
 const fs = require('fs')
@@ -6,25 +8,17 @@ const find = require('find')
 const gulp = require('gulp')
 const build = require('@microsoft/sp-build-web')
 const tsConfig = require('./tsconfig.json')
-const WebpackBar = require('webpackbar')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const os = require('os')
 const argv = require('yargs').argv
 const log = require('@microsoft/gulp-core-build').log
 const colors = require('colors')
 let buildConfig = {
-    parallel: os.cpus().length - 1,
-    bundleAnalyzerEnabled: false
+    parallel: os.cpus().length - 1
 }
 
 build.addSuppression('Warning - [sass] The local CSS class \'ms-Grid\' is not camelCase and will not be type-safe.')
 build.addSuppression('Warning - [sass] The local CSS class \'-webkit-filter\' is not camelCase and will not be type-safe.')
 
-try {
-    buildConfig = require('./build.config.json')
-} catch (error) {
-    log(`Missing '${colors.cyan('./build.config.json')}'. Using defaults...`)
-}
 
 gulp.task('setHiddenToolbox', (done) => {
     find.file(/\manifest.json$/, path.join(__dirname, 'src'), (files) => {
@@ -52,12 +46,6 @@ build.configureWebpack.mergeConfig({
         }, webpack.resolve.alias)
         webpack.externals = Object.assign(webpack.externals || {}, { 'XLSX': 'XLSX' })
         webpack.plugins = webpack.plugins || []
-        log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('WebpackBar')}...`)
-        webpack.plugins.push(new WebpackBar())
-        if (buildConfig.bundleAnalyzerEnabled) {
-            log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('BundleAnalyzerPlugin')}...`)
-            webpack.plugins.push(new BundleAnalyzerPlugin())
-        }
         if (webpack.optimization && webpack.optimization.minimizer) {
             log(`[${colors.cyan('configure-webpack')}] Setting ${colors.cyan('minimizer')} to run ${colors.cyan(buildConfig.parallel)} processes in parallel and enabling cache...`)
             webpack.optimization.minimizer[0].options.parallel = buildConfig.parallel
