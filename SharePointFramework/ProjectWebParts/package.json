@@ -65,11 +65,7 @@
     "tslib": "2.3.1",
     "underscore": "1.9.1"
   },
-  "resolutions": {
-    "@types/react": "16.8.8"
-  },
   "devDependencies": {
-    "pp365-portfoliowebparts": "1.6.3-766.2",
     "@microsoft/eslint-config-spfx": "1.15.2",
     "@microsoft/eslint-plugin-spfx": "1.15.2",
     "@microsoft/rush-stack-compiler-4.5": "0.2.2",
@@ -96,6 +92,7 @@
     "find": "0.3.0",
     "gulp": "4.0.2",
     "livereload": "0.9.1",
+    "pp365-portfoliowebparts": "1.6.3-766.2",
     "prettier": "2.1.1",
     "typescript": "4.5.5",
     "webpack": "^4.44.2"

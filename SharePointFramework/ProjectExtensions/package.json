@@ -57,9 +57,6 @@
     "underscore": "1.9.1",
     "valid-filename": "3.1.0"
   },
-  "resolutions": {
-    "@types/react": "16.8.8"
-  },
   "devDependencies": {
     "@microsoft/decorators": "1.15.2",
     "@microsoft/eslint-config-spfx": "1.15.2",

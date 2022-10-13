@@ -1,6 +1,6 @@
 {
   "name": "pp365-portfoliowebparts",
-  "version": "1.6.3-817.1",
+  "version": "1.6.3-817.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -52,7 +52,7 @@
     "msgraph-helper": "0.7.3",
     "object-assign": "4.1.1",
     "office-ui-fabric-react": "7.185.7",
-    "pp365-shared": "1.6.3",
+    "pp365-shared": "1.6.4",
     "react": "16.13.1",
     "react-calendar-timeline": "0.27.0",
     "react-dom": "16.13.1",
@@ -60,9 +60,6 @@
     "sp-hubsite-service": "0.7.3",
     "tslib": "2.3.1",
     "underscore": "1.9.1"
-  },
-  "resolutions": {
-    "@types/react": "16.8.8"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.15.2",
