@@ -1,11 +1,10 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { format } from '@fluentui/react/lib/Utilities'
-import { SearchBox } from '@fluentui/react/lib/SearchBox'
 import React, { useContext } from 'react'
 import { ProgramAggregationContext } from '../context'
 import { SEARCH } from '../reducer'
 import styles from './SearchBox.module.scss'
 import strings from 'ProgramWebPartsStrings'
+import { format, SearchBox } from '@fluentui/react'
 
 export default () => {
   const { props, state, dispatch } = useContext(ProgramAggregationContext)

@@ -1,15 +1,10 @@
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
 import { AttachmentFileInfo } from '@pnp/sp'
-import { getId } from '@uifabric/utilities'
+import { format, getId } from '@uifabric/utilities'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import domToImage from 'dom-to-image'
 import * as moment from 'moment'
-import { CommandBar } from '@fluentui/react/lib/CommandBar'
-import { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu'
-import { MessageBarType } from '@fluentui/react/lib/MessageBar'
-import { Spinner } from '@fluentui/react/lib/Spinner'
-import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'ProjectWebPartsStrings'
 import React from 'react'
 import { formatDate } from 'pp365-shared/lib/helpers'
@@ -34,6 +29,7 @@ import {
   IProjectStatusState
 } from './types'
 import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
+import { Spinner, MessageBarType, IContextualMenuItem, CommandBar } from '@fluentui/react'
 
 export class ProjectStatus extends React.Component<IProjectStatusProps, IProjectStatusState> {
   private _portalDataService: PortalDataService

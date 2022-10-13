@@ -1,15 +1,13 @@
+import { Panel, PrimaryButton, DefaultButton, Checkbox } from '@fluentui/react'
 import { IFilterItemProps } from 'components/FilterPanel/FilterItem/types'
 import _ from 'lodash'
-import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button'
-import { Checkbox } from '@fluentui/react/lib/Checkbox'
-import { Panel } from '@fluentui/react/lib/Panel'
 import * as strings from 'PortfolioWebPartsStrings'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { FunctionComponent, useContext, useEffect, useState } from 'react'
 import { PortfolioAggregationContext } from '../context'
 import { SHOW_HIDE_COLUMNS, TOGGLE_SHOW_HIDE_COLUMN_PANEL } from '../reducer'
 import styles from './ShowHideColumnPanel.module.scss'
 
-export const ShowHideColumnPanel = () => {
+export const ShowHideColumnPanel: FunctionComponent = () => {
   const { state, props, dispatch } = useContext(PortfolioAggregationContext)
   const [isChanged, setIsChanged] = useState(false)
   const initialSelection = state.columns.map((column) => {

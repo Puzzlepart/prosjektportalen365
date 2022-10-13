@@ -1,5 +1,4 @@
-import { IIconProps } from '@fluentui/react/lib/Icon'
-import { IProgressIndicatorProps } from '@fluentui/react/lib/ProgressIndicator'
+import { IProgressIndicatorProps, IIconProps } from '@fluentui/react'
 
 export interface ICopyProgressScreenProps extends IProgressIndicatorProps {
   iconProps: IIconProps

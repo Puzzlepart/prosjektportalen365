@@ -1,6 +1,4 @@
-import { Target } from '@fluentui/react'
-import { IColumn, IGroup } from '@fluentui/react/lib/DetailsList'
-import { MessageBarType } from '@fluentui/react/lib/MessageBar'
+import { MessageBarType, IColumn, IGroup, Target } from '@fluentui/react'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
 import { IBaseProgramWebPartProps } from 'webparts/baseProgramWebPart'
 

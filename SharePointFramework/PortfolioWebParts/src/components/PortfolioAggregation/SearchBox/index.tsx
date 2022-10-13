@@ -1,6 +1,5 @@
+import { format, SearchBox } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { format } from '@fluentui/react/lib/Utilities'
-import { SearchBox } from '@fluentui/react/lib/SearchBox'
 import strings from 'PortfolioWebPartsStrings'
 import React, { useContext } from 'react'
 import { PortfolioAggregationContext } from '../context'

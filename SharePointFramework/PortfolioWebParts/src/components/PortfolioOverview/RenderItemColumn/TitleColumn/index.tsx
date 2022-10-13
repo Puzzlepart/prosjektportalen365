@@ -1,7 +1,5 @@
+import { TooltipHost, Icon, Link } from '@fluentui/react'
 import { Web } from '@pnp/sp'
-import { Icon } from '@fluentui/react/lib/Icon'
-import { Link } from '@fluentui/react/lib/Link'
-import { TooltipHost } from '@fluentui/react/lib/Tooltip'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
 import React, { FunctionComponent } from 'react'

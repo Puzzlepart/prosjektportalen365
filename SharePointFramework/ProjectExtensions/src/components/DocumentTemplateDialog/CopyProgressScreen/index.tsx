@@ -1,12 +1,10 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-import { Icon } from '@fluentui/react/lib/Icon'
-import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator'
+import { Icon, ProgressIndicator } from '@fluentui/react'
 import * as strings from 'ProjectExtensionsStrings'
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import styles from './CopyProgressScreen.module.scss'
 import { ICopyProgressScreenProps } from './types'
 
-export const CopyProgressScreen = (props: ICopyProgressScreenProps) => {
+export const CopyProgressScreen: FunctionComponent<ICopyProgressScreenProps> = (props) => {
   return (
     <div className={styles.root}>
       <Icon className={styles.icon} {...props.iconProps} />

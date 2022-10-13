@@ -1,10 +1,9 @@
+import { format, ProgressIndicator } from '@fluentui/react'
 import { ProjectPhasesContext } from 'components/ProjectPhases/context'
-import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator'
-import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { useContext } from 'react'
+import React, { FunctionComponent, useContext } from 'react'
 
-export const ChangingPhaseView = () => {
+export const ChangingPhaseView: FunctionComponent = () => {
   const context = useContext(ProjectPhasesContext)
   return (
     <ProgressIndicator

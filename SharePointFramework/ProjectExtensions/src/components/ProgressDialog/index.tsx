@@ -1,10 +1,9 @@
-import { Icon } from '@fluentui/react/lib/Icon'
-import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator'
 import * as strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
 import { BaseDialog } from '../@BaseDialog/index'
 import { IProgressDialogProps } from './types'
 import styles from './ProgressDialog.module.scss'
+import { Icon, ProgressIndicator } from '@fluentui/react'
 
 export class ProgressDialog extends React.PureComponent<IProgressDialogProps> {
   public render() {

@@ -1,5 +1,4 @@
-import { IColumn } from '@fluentui/react/lib/DetailsList'
-import { IModalProps } from '@fluentui/react/lib/Modal'
+import { IModalProps, IColumn } from '@fluentui/react'
 
 export interface IItemModalProps extends IModalProps {
   title: string

@@ -1,6 +1,4 @@
-import { DetailsListLayoutMode, SelectionMode } from '@fluentui/react/lib/DetailsList'
-import { MessageBarType } from '@fluentui/react/lib/MessageBar'
-import { ShimmeredDetailsList } from '@fluentui/react/lib/ShimmeredDetailsList'
+import { MessageBarType, ShimmeredDetailsList, SelectionMode, DetailsListLayoutMode } from '@fluentui/react'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import React, { FunctionComponent } from 'react'
 import { ColumnContextMenu } from './ColumnContextMenu'

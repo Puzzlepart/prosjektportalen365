@@ -1,6 +1,4 @@
-import { Checkbox } from '@fluentui/react/lib/Checkbox'
-import { SelectionMode } from '@fluentui/react/lib/DetailsList'
-import { SearchBox } from '@fluentui/react/lib/SearchBox'
+import { SelectionMode, Checkbox, SearchBox } from '@fluentui/react'
 import strings from 'ProgramWebPartsStrings'
 import React, {
   FormEvent,

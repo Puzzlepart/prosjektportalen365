@@ -1,5 +1,4 @@
-import { ShimmerElementType } from '@fluentui/react/lib/Shimmer'
-import { IShimmerElement } from '@fluentui/react/lib/Shimmer'
+import { IShimmerElement, ShimmerElementType } from '@fluentui/react'
 
 /**
  * Get shimmered elements to fill the specified width

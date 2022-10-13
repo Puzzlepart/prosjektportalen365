@@ -1,8 +1,7 @@
+import { DialogFooter, ActionButton } from '@fluentui/react'
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
-import { ActionButton } from '@fluentui/react/lib/Button'
-import { DialogFooter } from '@fluentui/react/lib/Dialog'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { useContext, useState } from 'react'
+import React, { FunctionComponent, useContext, useState } from 'react'
 import { InfoMessage } from '../../InfoMessage'
 import { DocumentTemplateDialogContext } from '../context'
 import { SET_SCREEN } from '../reducer'
@@ -11,7 +10,7 @@ import { DocumentTemplateItem } from './DocumentTemplateItem'
 import styles from './EditCopyScreen.module.scss'
 import { IEditCopyScreenProps } from './types'
 
-export const EditCopyScreen = ({ onStartCopy }: IEditCopyScreenProps) => {
+export const EditCopyScreen: FunctionComponent<IEditCopyScreenProps> = ({ onStartCopy }) => {
   const { state, dispatch } = useContext(DocumentTemplateDialogContext)
   const [templates, setTemplates] = useState([...state.selected])
 

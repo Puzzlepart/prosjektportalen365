@@ -1,7 +1,6 @@
+import { Callout, ActionButton } from '@fluentui/react'
 import { ProjectPhasesContext } from 'components/ProjectPhases/context'
 import { CHANGE_PHASE, DISMISS_CALLOUT } from 'components/ProjectPhases/reducer'
-import { ActionButton } from '@fluentui/react/lib/Button'
-import { Callout } from '@fluentui/react/lib/Callout'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { useContext } from 'react'
 import { isEmpty } from 'underscore'

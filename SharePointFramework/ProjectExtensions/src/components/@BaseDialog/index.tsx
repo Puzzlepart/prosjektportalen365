@@ -1,12 +1,6 @@
+import { Dialog, DialogFooter, IModalProps, IDialogContentProps, DialogType } from '@fluentui/react'
 import * as React from 'react'
 import styles from './BaseDialog.module.scss'
-import {
-  Dialog,
-  DialogFooter,
-  DialogType,
-  IDialogContentProps
-} from '@fluentui/react/lib/Dialog'
-import { IModalProps } from '@fluentui/react/lib/Modal'
 import { IBaseDialogProps } from './types'
 
 export class BaseDialog extends React.PureComponent<IBaseDialogProps> {

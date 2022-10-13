@@ -1,11 +1,5 @@
+import { MessageBarType, DetailsList, IColumn, SelectionMode, DetailsListLayoutMode } from '@fluentui/react'
 import { Web } from '@pnp/sp'
-import {
-  DetailsList,
-  DetailsListLayoutMode,
-  IColumn,
-  SelectionMode
-} from '@fluentui/react/lib/DetailsList'
-import { MessageBarType } from '@fluentui/react/lib/MessageBar'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { getObjectValue } from 'pp365-shared/lib/helpers'
 import * as strings from 'ProjectWebPartsStrings'

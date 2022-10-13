@@ -1,8 +1,7 @@
+import { IColumn, Target, IGroup } from '@fluentui/react'
 import { get, uniq } from '@microsoft/sp-lodash-subset'
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import sortArray from 'array-sort'
-import { Target } from '@fluentui/react/lib/Callout'
-import { IColumn, IGroup } from '@fluentui/react/lib/DetailsList'
 import strings from 'ProgramWebPartsStrings'
 import { IProgramAggregationProps, IProgramAggregationState } from './types'
 

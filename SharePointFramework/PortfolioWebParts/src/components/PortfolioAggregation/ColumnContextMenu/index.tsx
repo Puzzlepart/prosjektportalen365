@@ -1,10 +1,5 @@
+import { IContextualMenuItem, ContextualMenuItemType, format, ContextualMenu } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
-import {
-  ContextualMenu,
-  ContextualMenuItemType,
-  IContextualMenuItem
-} from '@fluentui/react/lib/ContextualMenu'
-import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { useContext } from 'react'
 import { indexOf } from 'underscore'

@@ -1,20 +1,19 @@
-import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button'
-import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar'
 import * as strings from 'ProjectExtensionsStrings'
-import * as React from 'react'
+import  React, { FunctionComponent } from 'react'
 import { BaseDialog } from '../@BaseDialog'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import styles from './ErrorDialog.module.scss'
 import { IErrorDialogProps } from './types'
+import { MessageBarType, DefaultButton, PrimaryButton, MessageBar } from '@fluentui/react'
 
-export const ErrorDialog = ({
+export const ErrorDialog: FunctionComponent<IErrorDialogProps> = ({
   error,
   version,
   messageType = MessageBarType.error,
   onDismiss,
   onSetupClick
-}: IErrorDialogProps) => {
+}) => {
   const onRenderFooter = () => {
     if (error.name === 'AlreadySetup') {
       return (

@@ -1,14 +1,13 @@
+import { Icon, TextField } from '@fluentui/react'
 import { getId } from '@uifabric/utilities'
 import { DocumentTemplateDialogContext } from 'components/DocumentTemplateDialog/context'
 import { SPDataAdapter } from 'data'
-import { Icon } from '@fluentui/react/lib/Icon'
-import { TextField } from '@fluentui/react/lib/TextField'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { FormEvent, useContext, useEffect, useState } from 'react'
+import React, { FormEvent, FunctionComponent, useContext, useEffect, useState } from 'react'
 import styles from './DocumentTemplateItem.module.scss'
 import { IDocumentTemplateItemProps } from './types'
 
-export const DocumentTemplateItem = (props: IDocumentTemplateItemProps) => {
+export const DocumentTemplateItem: FunctionComponent<IDocumentTemplateItemProps> = (props) => {
   const { state } = useContext(DocumentTemplateDialogContext)
   const nameId = getId('name')
   const titleId = getId('title')

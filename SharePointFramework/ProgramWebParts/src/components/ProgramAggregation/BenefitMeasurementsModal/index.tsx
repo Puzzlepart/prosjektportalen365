@@ -1,6 +1,5 @@
+import { IColumn, Modal, DetailsList, SelectionMode } from '@fluentui/react'
 import { get, isEmpty } from '@microsoft/sp-lodash-subset'
-import { DetailsList, IColumn, SelectionMode } from '@fluentui/react/lib/DetailsList'
-import { Modal } from '@fluentui/react/lib/Modal'
 import strings from 'ProgramWebPartsStrings'
 import React, { FunctionComponent, useState } from 'react'
 import styles from './BenefitMeasurementsModal.module.scss'

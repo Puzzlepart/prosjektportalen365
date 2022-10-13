@@ -1,28 +1,8 @@
+import { Selection, getId, MessageBar, ScrollablePane, ScrollbarVisibility, MarqueeSelection, ShimmeredDetailsList, ConstrainMode, DetailsListLayoutMode, SelectionMode, LayerHost, ContextualMenu, format, IDetailsHeaderProps, IRenderFunction, Sticky, StickyPositionType, SearchBox, ContextualMenuItemType, IContextualMenuProps, IGroup, MessageBarType } from '@fluentui/react'
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import sortArray from 'array-sort'
 import * as uniq from 'array-unique'
-import {
-  ContextualMenu,
-  ContextualMenuItemType,
-  IContextualMenuProps
-} from '@fluentui/react/lib/ContextualMenu'
-import {
-  ConstrainMode,
-  DetailsListLayoutMode,
-  IDetailsHeaderProps,
-  IGroup,
-  Selection,
-  SelectionMode
-} from '@fluentui/react/lib/DetailsList'
-import { LayerHost } from '@fluentui/react/lib/Layer'
-import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection'
-import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar'
-import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react/lib/ScrollablePane'
-import { SearchBox } from '@fluentui/react/lib/SearchBox'
-import { ShimmeredDetailsList } from '@fluentui/react/lib/ShimmeredDetailsList'
-import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky'
-import { format, getId, IRenderFunction } from '@fluentui/react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import { PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'

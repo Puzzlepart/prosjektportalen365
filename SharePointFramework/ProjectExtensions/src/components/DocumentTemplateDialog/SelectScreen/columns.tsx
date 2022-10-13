@@ -1,9 +1,7 @@
+import { Icon, Link, IColumn } from '@fluentui/react'
 import { initializeFileTypeIcons } from '@uifabric/file-type-icons'
 import { getId } from '@uifabric/utilities'
 import { TemplateItem } from 'models'
-import { IColumn } from '@fluentui/react/lib/DetailsList'
-import { Icon } from '@fluentui/react/lib/Icon'
-import { Link } from '@fluentui/react/lib/Link'
 import * as ProjectExtensionsStrings from 'ProjectExtensionsStrings'
 import React from 'react'
 

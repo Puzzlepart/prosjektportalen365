@@ -1,7 +1,5 @@
+import { Pivot, PivotItem, MessageBar, MessageBarType, DefaultButton, PrimaryButton } from '@fluentui/react'
 import { ProjectTemplate } from 'models'
-import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button'
-import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar'
-import { Pivot, PivotItem } from '@fluentui/react/lib/Pivot'
 import * as strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
 import { isEmpty } from 'underscore'

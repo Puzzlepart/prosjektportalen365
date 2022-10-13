@@ -1,5 +1,4 @@
-import { Icon } from '@fluentui/react'
-import { IColumn } from '@fluentui/react/lib/DetailsList'
+import { IColumn, Icon } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import React from 'react'
 

@@ -1,10 +1,10 @@
-import { Panel, PanelType } from '@fluentui/react/lib/Panel'
-import { Customizer } from '@fluentui/react/lib/Utilities'
-import * as React from 'react'
+
+import { Customizer, Panel, PanelType } from '@fluentui/react'
+import React, { FunctionComponent } from 'react'
 import { Filter } from './Filter'
 import { IFilterPanelProps } from './types'
 
-export const FilterPanel: React.FunctionComponent<IFilterPanelProps> = (props) => {
+export const FilterPanel: FunctionComponent<IFilterPanelProps> = (props) => {
   return (
     <Customizer scopedSettings={{ Layer: { hostId: props.layerHostId } }}>
       <Panel {...props} type={PanelType.smallFixedFar}>
