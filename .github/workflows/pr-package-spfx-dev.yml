@@ -32,7 +32,7 @@ jobs:
         run: |
           npm run-script build
 
-      - name: Run npm run-script lint
+      - name: Run 'npm run-script lint'
         working-directory: ./SharePointFramework/@Shared
         run: |
           npm run-script lint
@@ -58,12 +58,12 @@ jobs:
         run: |
           npm ci --no-audit --no-fund --loglevel=error
 
-      - name: Run npm run-script package:debug
+      - name: Run 'npm run-script package:debug'
         working-directory: ./SharePointFramework/PortfolioExtensions
         run: |
           npm run package:debug
 
-      - name: Run npm run-script lint
+      - name: Run 'npm run-script lint'
         working-directory: ./SharePointFramework/PortfolioExtensions
         run: |
           npm run-script lint
@@ -89,12 +89,12 @@ jobs:
         run: |
           npm ci --no-audit --no-fund --loglevel=error
 
-      - name: Run npm run-script package:debug
+      - name: Run 'npm run-script package:debug'
         working-directory: ./SharePointFramework/PortfolioWebParts
         run: |
           npm run-script package:debug
 
-      - name: Run npm run-script lint
+      - name: Run 'npm run-script lint'
         working-directory: ./SharePointFramework/PortfolioWebParts
         run: |
           npm run-script lint
@@ -120,12 +120,12 @@ jobs:
         run: |
           npm ci --no-audit --no-fund --loglevel=error
 
-      - name: Run npm run-script package:debug
+      - name: Run 'npm run-script package:debug'
         working-directory: ./SharePointFramework/ProgramWebParts
         run: |
           npm run-script package:debug
 
-      - name: Run npm run-script lint
+      - name: Run 'npm run-script lint'
         working-directory: ./SharePointFramework/ProgramWebParts
         run: |
           npm run-script lint
@@ -151,12 +151,12 @@ jobs:
         run: |
           npm ci --no-audit --no-fund --loglevel=error
 
-      - name: Run npm run-script package:debug
+      - name: Run 'npm run-script package:debug'
         working-directory: ./SharePointFramework/ProjectExtensions
         run: |
           npm run package:debug
 
-      - name: Run npm run-script lint
+      - name: Run 'npm run-script lint'
         working-directory: ./SharePointFramework/ProjectExtensions
         run: |
           npm run-script lint
@@ -182,12 +182,12 @@ jobs:
         run: |
           npm ci --no-audit --no-fund --loglevel=error
 
-      - name: Run npm run-script package:debug
+      - name: Run 'npm run-script package:debug'
         working-directory: ./SharePointFramework/ProjectWebParts
         run: |
           npm run-script package:debug
 
-      - name: Run npm run-script lint
+      - name: Run 'npm run-script lint'
         working-directory: ./SharePointFramework/ProjectWebParts
         run: |
           npm run-script lint
