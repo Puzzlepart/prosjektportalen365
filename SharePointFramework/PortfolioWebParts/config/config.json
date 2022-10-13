@@ -71,7 +71,6 @@
   "localizedResources": {
     "ControlStrings": "lib/loc/{locale}.js",
     "PortfolioWebPartsStrings": "lib/loc/{locale}.js",
-    "ProjectWebPartsStrings": "node_modules/pp365-projectwebparts/lib/loc/{locale}.js",
     "PzlSPFxComponentsStrings": "lib/loc/{locale}.js",
     "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js"
   }
