@@ -327,7 +327,7 @@ export class DataAdapter implements IDataAdapter {
       const [{ PrimarySearchResults: statusReports }] = await Promise.all([
         sp.search({
           ...DEFAULT_SEARCH_SETTINGS,
-          QueryTemplate: `DepartmentId:{${ this.context.pageContext.legacyPageContext.hubSiteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5 GtModerationStatusOWSCHCS:Publisert`,
+          QueryTemplate: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5 GtModerationStatusOWSCHCS:Publisert`,
           SelectProperties: [
             'Title',
             'GtSiteIdOWSTEXT',

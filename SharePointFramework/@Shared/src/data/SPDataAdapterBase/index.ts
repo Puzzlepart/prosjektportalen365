@@ -39,7 +39,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
     this._storageKeys = Object.keys(this._storageKeys).reduce((obj, key) => {
       obj[key] = format(
         this._storageKeys[key],
-        this.spfxContext.pageContext.site.id.toString().replace(/-/g, '')
+        this.settings.siteId.replace(/-/g, '')
       )
       return obj
     }, {})
@@ -147,7 +147,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                     ).length > 0
                   )
                     userPermissions.push(...role.permissions)
-                } catch {}
+                } catch { }
               }
               break
           }

@@ -5,7 +5,6 @@ import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { MenuNode, sp, Web } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
 import { default as MSGraphHelper } from 'msgraph-helper'
-import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { ListLogger } from 'pp365-shared/lib/logging'
 import { PortalDataService } from 'pp365-shared/lib/services'
 import * as strings from 'ProjectExtensionsStrings'
@@ -70,31 +69,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             strings.InvalidLanguageErrorMessage,
             strings.InvalidLanguageErrorStack
           )
-        }
-        case ProjectSetupValidation.IsHubSite: {
-          await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, false)
-          throw new ProjectSetupError(
-            'IsHubSite',
-            strings.IsHubSiteErrorMessage,
-            strings.IsHubSiteErrorStack
-          )
-        }
-        case ProjectSetupValidation.NoHubConnection: {
-          throw new ProjectSetupError(
-            'NoHubConnection',
-            strings.NoHubSiteErrorMessage,
-            strings.NoHubSiteErrorStack,
-            MessageBarType.warning
-          )
-        }
-        case ProjectSetupValidation.AlreadySetup: {
-          if (stringIsNullOrEmpty(this.properties.forceTemplate)) {
-            throw new ProjectSetupError(
-              'AlreadySetup',
-              strings.ProjectAlreadySetupMessage,
-              strings.ProjectAlreadySetupStack
-            )
-          }
         }
       }
 

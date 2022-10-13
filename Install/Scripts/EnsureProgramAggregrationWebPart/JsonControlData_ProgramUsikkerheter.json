@@ -1,5 +1,6 @@
 {
     "title": "Usikkerheter for underområder",
+    "searchBoxPlaceholderText": "Søk i usikkerheter for underområder...",
     "dataSource": "Programrisiko",
     "columns": [
         {

@@ -1,4 +1,4 @@
-define([], function() {
+define([], function () {
     return {
         PortfolioAggregationNotConfiguredMessage: 'Webdelen må konfigureres med en datakilde. Rediger webdelen, og legg inn navnet på datakilden du vil bruke.',
         DataSourceCategoryDescription: 'Angi en datakildekategori for å kunne velge mellom flere datakilder i webdelen.',
@@ -104,7 +104,8 @@ define([], function() {
         NoGroupingText: 'Ingen gruppering',
         NoProjectData: 'Kan ikke hente alle data fra prosjektområdet. Det kan være at du ikke har tilgang til selve området. Det kan også være at området nylig er opprettet eller at prosjektegenskaper ikke er utfylt.',
         NoProperties: 'Det er ikke satt noen egenskaper for prosjektet',
-        NoSearchResults: 'Søket ga ingen resultater',
+        ProjectListEmptyText: 'Fant ingen prosjekter å vise.',
+        ProjectListLoadingText: 'Laster prosjekter som du er medlem av...',
         NotSet: 'Ikke satt',
         PhaseLabel: 'Fase',
         ProbabilityLabel: 'Sannsynlighet (S)',

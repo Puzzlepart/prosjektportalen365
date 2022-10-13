@@ -3,7 +3,7 @@
   "id": "b8bec0be-2354-443d-a3ca-24b36e8ea7dc",
   "alias": "ProjectInformationWebPart",
   "componentType": "WebPart",
-  "version": "1.6.1",
+  "version": "1.6.3",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": false,
@@ -28,7 +28,7 @@
         "useIdeaProcessing": false,
         "hideAllActions": false,
         "useFramelessButtons": false,
-        "hideActions":[]
+        "hideActions": []
       }
     }
   ]
