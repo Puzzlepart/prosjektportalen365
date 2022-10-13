@@ -13,7 +13,7 @@
     "serve:nobrowser": "gulp serve-deprecated --nobrowser --locale=nb-no",
     "serve": "gulp serve-deprecated --locale=nb-no",
     "package": "gulp clean && gulp default --ship && gulp package-solution --ship",
-    "package:ci": "gulp clean && gulp default && gulp package-solution",
+    "package:debug": "gulp clean && gulp default && gulp package-solution",
     "build": "tsc --build",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color",
