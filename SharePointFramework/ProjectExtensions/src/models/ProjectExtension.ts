@@ -11,9 +11,9 @@ export interface IProjectExtension {
   File?: { UniqueId: string; Name: string; Title: string; ServerRelativeUrl: string }
 }
 
-export class ProjectExtension implements IDropdownOption {
-  public key: string
+export class ProjectExtension implements Omit<IDropdownOption, 'id'> {
   public id: number
+  public key: string
   public text: string
   public isDefault: boolean
   public subText: string

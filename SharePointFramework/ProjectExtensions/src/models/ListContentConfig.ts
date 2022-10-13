@@ -23,7 +23,7 @@ export enum ListContentConfigType {
 /**
  * @model ListContentConfig
  */
-export class ListContentConfig implements IDropdownOption {
+export class ListContentConfig implements Omit<IDropdownOption, 'id'> {
   public id: number
   public key: string
   public text: string

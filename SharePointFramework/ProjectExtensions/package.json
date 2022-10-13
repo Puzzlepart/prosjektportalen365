@@ -44,7 +44,7 @@
     "@uifabric/utilities": "6.45.1",
     "msgraph-helper": "0.8.3",
     "office-ui-fabric-react": "7.185.7",
-    "pp365-shared": "1.6.3",
+    "pp365-shared": "1.6.3-817.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-markdown": "^8.0.3",
@@ -61,6 +61,7 @@
     "@types/react": "16.8.8"
   },
   "devDependencies": {
+    "@microsoft/decorators": "1.15.2",
     "@microsoft/eslint-config-spfx": "1.15.2",
     "@microsoft/eslint-plugin-spfx": "1.15.2",
     "@microsoft/rush-stack-compiler-4.5": "0.2.2",
