@@ -1,7 +1,7 @@
 import { ITimelineGroup, ITimelineGroups, ITimelineItem, TimelineGroupType } from '../../interfaces'
 import _ from 'lodash'
 import sortArray from 'array-sort'
-import { ProjectListModel, TimelineConfigurationListModel, TimelineContentListModel } from 'models'
+import { ProjectListModel, TimelineConfigurationListModel, TimelineContentListModel } from '../../models'
 import { useEffect } from 'react'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
 import { format } from 'office-ui-fabric-react/lib/Utilities'

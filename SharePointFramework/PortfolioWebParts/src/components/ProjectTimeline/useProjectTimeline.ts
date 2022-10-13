@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
 import { useProjectTimelineDataFetch } from './useProjectTimelineDataFetch'
-import { ITimelineData, ITimelineGroup, ITimelineItem } from 'interfaces'
+import { ITimelineData, ITimelineGroup, ITimelineItem } from '../../interfaces'
 import sortArray from 'array-sort'
 import { get } from '@microsoft/sp-lodash-subset'
 import { IFilterProps } from 'components/FilterPanel/Filter/types'
 import strings from 'PortfolioWebPartsStrings'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { IFilterItemProps } from 'components/FilterPanel/FilterItem/types'
-import { TimelineConfigurationListModel } from 'models'
+import { TimelineConfigurationListModel } from '../../models'
 
 /**
  * Component logic hook for `ProjectTimeline`

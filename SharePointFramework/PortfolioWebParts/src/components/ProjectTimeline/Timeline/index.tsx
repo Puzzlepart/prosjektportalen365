@@ -1,4 +1,4 @@
-import { ITimelineItem, ITimelineGroup, TimelineGroupType } from 'interfaces'
+import { ITimelineItem, ITimelineGroup, TimelineGroupType } from '../../../interfaces'
 import ReactTimeline, {
   ReactCalendarGroupRendererProps,
   ReactCalendarItemRendererProps,
