@@ -211,7 +211,7 @@
                         &quot;imageSources&quot;: {},
                         &quot;links&quot;: {
                             &quot;baseUrl&quot;: &quot;{hosturl}{site}&quot;,
-                            &quot;items[0].sourceItem.url&quot;: &quot;{hosturl}{site}{site}/Lists/Maloppsett&quot;,
+                            &quot;items[0].sourceItem.url&quot;: &quot;{site}/Lists/Maloppsett&quot;,
                             &quot;items[1].sourceItem.url&quot;: &quot;{site}/Prosjektmaler&quot;,
                             &quot;items[2].sourceItem.url&quot;: &quot;{site}/Prosjekttillegg&quot;,
                             &quot;items[3].sourceItem.url&quot;: &quot;{site}/Lists/Listeinnhold&quot;,
