@@ -31,7 +31,8 @@ export const TemplateSelector: FunctionComponent<ITemplateSelectorProps> = ({
   }))
 
   return (
-    <div className={styles.root}>
+    <div
+      className={styles.root}>
       <ChoiceGroup
         className={styles.choiceGroup}
         disabled={templates?.length <= 1}

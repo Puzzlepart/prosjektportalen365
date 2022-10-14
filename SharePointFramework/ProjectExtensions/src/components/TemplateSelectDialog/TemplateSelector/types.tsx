@@ -1,6 +1,7 @@
+import { HTMLProps } from 'react'
 import { ProjectTemplate } from '../../../models'
 
-export interface ITemplateSelectorProps {
+export interface ITemplateSelectorProps extends Omit<HTMLProps<HTMLDivElement>, 'onChange'> {
   /**
    * Project templates
    */

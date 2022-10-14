@@ -35,4 +35,9 @@ export interface ITemplateSelectDialogState {
    * Settings
    */
   settings?: ProjectSetupSettings
+
+  /**
+   * Min height for the dialog needs to be fixed
+   */
+  minHeight?: number
 }
