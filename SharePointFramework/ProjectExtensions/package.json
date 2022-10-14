@@ -11,7 +11,6 @@
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
     "serve": "gulp serve-deprecated --locale=nb-no",
     "serve:nobrowser": "gulp serve-deprecated --nobrowser --locale=nb-no",
-    "serve:helpcontent": "gulp serve-deprecated --config=HelpContent --locale=nb-no",
     "package": "gulp clean && gulp default --ship && gulp package-solution --ship",
     "package:debug": "gulp clean && gulp default && gulp package-solution",
     "build": "tsc --build",

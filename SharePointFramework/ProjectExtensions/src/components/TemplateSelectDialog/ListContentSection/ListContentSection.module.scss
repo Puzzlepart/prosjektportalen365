@@ -1,34 +1,32 @@
 @import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 
-.listContentSection {
+.root {
   @include ms-Grid-col;
   @include ms-sm12;
   padding: 10px 0 10px 0;
+  height: 100%;
 
-  .container {
-    height: 300px;
-    margin: 20px 0 0 0;
-    .item {
-      width: 50%;
-      display: inline-block;
-      vertical-align: top;
-      padding-right: 5px;
-      box-sizing: border-box;
+  .item {
+    width: 50%;
+    display: inline-block;
+    vertical-align: top;
+    padding-right: 5px;
+    box-sizing: border-box;
 
-      .toggle {
-        display: flex;
-        align-items: baseline;
+    .toggle {
+      display: flex;
+      align-items: baseline;
 
-        .icon {
-          padding-left: 5px;
-          color: #a6a6a6;
-        }
+      .icon {
+        padding-left: 5px;
+        color: #a6a6a6;
       }
+    }
 
-      .subText {
-        @include ms-font-s;
-        margin: 5px 0 15px 0;
-      }
+    .subText {
+      @include ms-font-s;
+      color: rgb(96, 94, 92);
+      margin: -6px 0 15px 0;
     }
   }
 }

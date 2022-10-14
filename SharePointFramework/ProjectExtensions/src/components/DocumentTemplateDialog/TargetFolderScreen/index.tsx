@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import {
-  DetailsList,
-  SelectionMode,
-  DetailsListLayoutMode,
   ConstrainMode,
+  DefaultButton,
+  DetailsList,
+  DetailsListLayoutMode,
   DialogFooter,
-  ActionButton
+  PrimaryButton,
+  SelectionMode
 } from '@fluentui/react'
 import { InfoMessage } from 'components/InfoMessage'
 import { SPDataAdapter } from 'data'
@@ -65,19 +66,17 @@ export const TargetFolderScreen: FunctionComponent = () => {
         }}
       />
       <DialogFooter>
-        <ActionButton
-          text={strings.OnGoBackText}
-          iconProps={{ iconName: 'NavigateBack' }}
-          onClick={() => dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select }))}
-        />
-        <ActionButton
+        <PrimaryButton
           text={strings.CopyHereText}
-          iconProps={{ iconName: 'Copy' }}
           disabled={folder === null}
           onClick={() => {
             dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.EditCopy }))
             dispatch(SET_TARGET({ folder: folder || root.url }))
           }}
+        />
+        <DefaultButton
+          text={strings.OnGoBackText}
+          onClick={() => dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select }))}
         />
       </DialogFooter>
     </div>

@@ -11,20 +11,18 @@ export const SettingsSection: FunctionComponent<ISettingsSectionProps> = (props)
   }
 
   return (
-    <div className={styles.settingsSection}>
-      <div className={styles.container}>
-        {props.settings.keys.map((key) => {
-          const toggleProps = props.settings.getToggleProps(key)
-          return (
-            <div id={getId(key)} key={getId(key)} className={styles.item}>
-              <Toggle {...toggleProps} inlineLabel={true} onChange={onChange} />
-              <div className={styles.description} hidden={stringIsNullOrEmpty(toggleProps.title)}>
-                <span>{toggleProps.title}</span>
-              </div>
+    <div className={styles.root}>
+      {props.settings.keys.map((key) => {
+        const toggleProps = props.settings.getToggleProps(key)
+        return (
+          <div id={getId(key)} key={getId(key)} className={styles.item}>
+            <Toggle {...toggleProps} inlineLabel={true} onChange={onChange} />
+            <div className={styles.description} hidden={stringIsNullOrEmpty(toggleProps.title)}>
+              <span>{toggleProps.title}</span>
             </div>
-          )
-        })}
-      </div>
+          </div>
+        )
+      })}
     </div>
   )
 }

@@ -37,7 +37,7 @@ export interface ITemplateSelectDialogState {
   settings?: ProjectSetupSettings
 
   /**
-   * Min height for the dialog needs to be fixed
+   * Height for the Dialog Pivot needs to be fixed
    */
-  minHeight?: number
+  flexibleHeight?: number
 }

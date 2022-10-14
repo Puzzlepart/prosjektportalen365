@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import {
   DefaultButton,
+  DialogFooter,
   MessageBar,
   MessageBarType,
   Pivot,
@@ -25,9 +26,8 @@ export class TemplateSelectDialog extends Component<
 > {
   constructor(props: ITemplateSelectDialogProps) {
     super(props)
-    console.log((props.data.templates.length / 4) * 150, props.data.templates.length / 4)
     this.state = {
-      minHeight: (props.data.templates.length / 4) * 150,
+      flexibleHeight: (props.data.templates.filter(t => !t.isHidden).length / 4) * 150,
       selectedTemplate: this._getDefaultTemplate(),
       selectedExtensions: props.data.extensions.filter(
         (ext) =>
@@ -56,8 +56,8 @@ export class TemplateSelectDialog extends Component<
         }}
         modalProps={{ containerClassName: styles.root, isBlocking: true, isDarkOverlay: true }}
         onDismiss={onDismiss}
-        onRenderFooter={this._onRenderFooter.bind(this)}>
-        <Pivot style={{ minHeight: this.state.minHeight }}>
+        containerClassName={styles.root}>
+        <Pivot style={{ minHeight: 350, height: this.state.flexibleHeight }}>
           <PivotItem headerText={strings.TemplateSelectorTitle} itemIcon='ViewListGroup'>
             <TemplateSelector
               templates={data.templates.filter((t) => !t.isHidden)}
@@ -105,6 +105,13 @@ export class TemplateSelectDialog extends Component<
             </PivotItem>
           )}
         </Pivot>
+        <DialogFooter>
+          <PrimaryButton
+            text={strings.TemplateSelectDialogSubmitButtonText}
+            onClick={this._onSubmit.bind(this)}
+          />
+          <DefaultButton text={strings.CloseModalText} onClick={this.props.onDismiss} />
+        </DialogFooter>
       </BaseDialog>
     )
   }
@@ -135,21 +142,6 @@ export class TemplateSelectDialog extends Component<
     let [defaultTemplate] = this.props.data.templates.filter((tmpl) => tmpl.isDefault)
     if (!defaultTemplate) defaultTemplate = this.props.data.templates[0]
     return defaultTemplate
-  }
-
-  /**
-   * On render footrer
-   */
-  private _onRenderFooter() {
-    return (
-      <>
-        <DefaultButton text={strings.CloseModalText} onClick={this.props.onDismiss} />
-        <PrimaryButton
-          text={strings.TemplateSelectDialogSubmitButtonText}
-          onClick={this._onSubmit.bind(this)}
-        />
-      </>
-    )
   }
 
   /**

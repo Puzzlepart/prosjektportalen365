@@ -1,4 +1,4 @@
-import { Dialog, DialogFooter, DialogType, IDialogContentProps, IModalProps } from '@fluentui/react'
+import { Dialog, DialogType, IDialogContentProps, IModalProps } from '@fluentui/react'
 import React, { FunctionComponent } from 'react'
 import styles from './BaseDialog.module.scss'
 import { IBaseDialogProps } from './types'
@@ -28,7 +28,6 @@ export const BaseDialog: FunctionComponent<IBaseDialogProps> = (props) => {
         v{props.version}
       </span>
       {props.children}
-      {props.onRenderFooter && <DialogFooter>{props.onRenderFooter()}</DialogFooter>}
     </Dialog>
   )
 }

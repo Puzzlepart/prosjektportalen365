@@ -1,4 +1,4 @@
-import { ScrollablePane, Toggle, Icon } from '@fluentui/react'
+import { Icon, Toggle } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import React, { FunctionComponent } from 'react'
 import { ProjectExtension } from '../../../models'
@@ -22,28 +22,24 @@ export const ExtensionsSection: FunctionComponent<IExtensionsSectionProps> = (pr
   const selectedKeys = props.selectedExtensions.map((ext) => ext.key)
 
   return (
-    <div className={styles.extensionsSection}>
-      <ScrollablePane className={styles.container}>
-        {props.extensions.map((ext) => (
-          <div key={ext.key} className={styles.item}>
-            <div className={styles.toggle}>
-              <Toggle
-                label={ext.text}
-                defaultChecked={selectedKeys.indexOf(ext.key) !== -1}
-                disabled={props.lockDefault && ext.isDefault}
-                inlineLabel={true}
-                onChange={(_event, checked) => onChange(ext, checked)}
-              />
-              {props.lockDefault && ext.isDefault && (
-                <Icon iconName='Lock' className={styles.icon} />
-              )}
-            </div>
-            <div className={styles.subText} hidden={stringIsNullOrEmpty(ext.subText)}>
-              <span>{ext.subText}</span>
-            </div>
+    <div className={styles.root}>
+      {props.extensions.map((ext) => (
+        <div key={ext.key} className={styles.item}>
+          <div className={styles.toggle}>
+            <Toggle
+              label={ext.text}
+              defaultChecked={selectedKeys.indexOf(ext.key) !== -1}
+              disabled={props.lockDefault && ext.isDefault}
+              inlineLabel={true}
+              onChange={(_event, checked) => onChange(ext, checked)}
+            />
+            {props.lockDefault && ext.isDefault && <Icon iconName='Lock' className={styles.icon} />}
           </div>
-        ))}
-      </ScrollablePane>
+          <div className={styles.subText} hidden={stringIsNullOrEmpty(ext.subText)}>
+            <span>{ext.subText}</span>
+          </div>
+        </div>
+      ))}
     </div>
   )
 }

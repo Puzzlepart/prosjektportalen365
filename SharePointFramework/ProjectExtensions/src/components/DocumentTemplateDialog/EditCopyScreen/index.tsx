@@ -1,4 +1,4 @@
-import { DialogFooter, ActionButton } from '@fluentui/react'
+import { DefaultButton, DialogFooter, PrimaryButton } from '@fluentui/react'
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { FunctionComponent, useContext, useState } from 'react'
@@ -47,18 +47,16 @@ export const EditCopyScreen: FunctionComponent<IEditCopyScreenProps> = ({ onStar
         <DocumentTemplateItem key={idx} item={item} onInputChanged={onInputChanged} />
       ))}
       <DialogFooter>
-        <ActionButton
+        <PrimaryButton
+          text={strings.OnStartCopyText}
+          disabled={!isFileNamesValid()}
+          onClick={() => onStartCopy(templates)}
+        />
+        <DefaultButton
           text={strings.OnGoBackText}
-          iconProps={{ iconName: 'NavigateBack' }}
           onClick={() =>
             dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.TargetFolder }))
           }
-        />
-        <ActionButton
-          text={strings.OnStartCopyText}
-          iconProps={{ iconName: 'Copy' }}
-          disabled={!isFileNamesValid()}
-          onClick={() => onStartCopy(templates)}
         />
       </DialogFooter>
     </div>
