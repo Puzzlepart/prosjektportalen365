@@ -50,59 +50,59 @@ export class TemplateSelectDialog extends React.Component<
           subText: strings.TemplateSelectDialogInfoText,
           className: styles.content
         }}
-        modalProps={{ isBlocking: true, isDarkOverlay: true }}
+        modalProps={{ containerClassName: styles.root, isBlocking: true, isDarkOverlay: true }}
         onDismiss={onDismiss}
         onRenderFooter={this._onRenderFooter.bind(this)}
         containerClassName={styles.root}>
         <div style={{ minHeight: 450 }}>
           <Pivot>
-          <PivotItem headerText={strings.TemplateSelectorTitle} itemIcon='ViewListGroup'>
-            <TemplateSelector
-              templates={data.templates.filter((t) => !t.isHidden)}
-              selectedTemplate={selectedTemplate}
-              onChange={this._onTemplateChange.bind(this)}
-            />
-            {(selectedTemplate.listContentConfigIds || selectedTemplate.listExtensionIds) && (
-              <MessageBar messageBarType={MessageBarType.info}>
-                {strings.TemplateListContentConfigText}
-              </MessageBar>
+            <PivotItem headerText={strings.TemplateSelectorTitle} itemIcon='ViewListGroup'>
+              <TemplateSelector
+                templates={data.templates.filter((t) => !t.isHidden)}
+                selectedTemplate={selectedTemplate}
+                onChange={this._onTemplateChange.bind(this)}
+              />
+              {(selectedTemplate.listContentConfigIds || selectedTemplate.listExtensionIds) && (
+                <MessageBar messageBarType={MessageBarType.info}>
+                  {strings.TemplateListContentConfigText}
+                </MessageBar>
+              )}
+            </PivotItem>
+            {!isEmpty(data.extensions) && (
+              <PivotItem headerText={strings.ExtensionsTitle} itemIcon='ArrangeBringForward'>
+                {selectedTemplate.listExtensionIds && (
+                  <div style={{ marginTop: 20 }}>
+                    <MessageBar messageBarType={MessageBarType.info}>
+                      {strings.TemplateListContentConfigText}
+                    </MessageBar>
+                  </div>
+                )}
+                <ExtensionsSection
+                  extensions={data.extensions}
+                  selectedExtensions={selectedExtensions}
+                  lockDefault={selectedTemplate.isDefaultExtensionsLocked}
+                  onChange={(s) => this.setState({ selectedExtensions: s })}
+                />
+              </PivotItem>
             )}
-          </PivotItem>
-          {!isEmpty(data.extensions) && (
-            <PivotItem headerText={strings.ExtensionsTitle} itemIcon='ArrangeBringForward'>
-              {selectedTemplate.listExtensionIds && (
-                <div style={{ marginTop: 20 }}>
-                  <MessageBar messageBarType={MessageBarType.info}>
-                    {strings.TemplateListContentConfigText}
-                  </MessageBar>
-                </div>
-              )}
-              <ExtensionsSection
-                extensions={data.extensions}
-                selectedExtensions={selectedExtensions}
-                lockDefault={selectedTemplate.isDefaultExtensionsLocked}
-                onChange={(s) => this.setState({ selectedExtensions: s })}
-              />
-            </PivotItem>
-          )}
-          {!isEmpty(data.listContentConfig) && (
-            <PivotItem headerText={strings.ListContentTitle} itemIcon='ViewList'>
-              {selectedTemplate.listContentConfigIds && (
-                <div style={{ marginTop: 20 }}>
-                  <MessageBar messageBarType={MessageBarType.info}>
-                    {strings.TemplateListContentConfigText}
-                  </MessageBar>
-                </div>
-              )}
-              <ListContentSection
-                listContentConfig={data.listContentConfig}
-                selectedListContentConfig={selectedListContentConfig}
-                lockDefault={selectedTemplate.isDefaultListContentLocked}
-                onChange={(s) => this.setState({ selectedListContentConfig: s })}
-              />
-            </PivotItem>
-          )}
-        </Pivot>
+            {!isEmpty(data.listContentConfig) && (
+              <PivotItem headerText={strings.ListContentTitle} itemIcon='ViewList'>
+                {selectedTemplate.listContentConfigIds && (
+                  <div style={{ marginTop: 20 }}>
+                    <MessageBar messageBarType={MessageBarType.info}>
+                      {strings.TemplateListContentConfigText}
+                    </MessageBar>
+                  </div>
+                )}
+                <ListContentSection
+                  listContentConfig={data.listContentConfig}
+                  selectedListContentConfig={selectedListContentConfig}
+                  lockDefault={selectedTemplate.isDefaultListContentLocked}
+                  onChange={(s) => this.setState({ selectedListContentConfig: s })}
+                />
+              </PivotItem>
+            )}
+          </Pivot>
         </div>
       </BaseDialog>
     )
