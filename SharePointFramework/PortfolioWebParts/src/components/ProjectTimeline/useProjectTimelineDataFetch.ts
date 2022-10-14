@@ -190,7 +190,7 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
       return {
         ...project,
         ...config,
-        ...statusReport,
+        ...statusReport
       }
     })
 

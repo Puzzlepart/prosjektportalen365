@@ -1,4 +1,27 @@
-import { Selection, getId, MessageBar, ScrollablePane, ScrollbarVisibility, MarqueeSelection, ShimmeredDetailsList, ConstrainMode, DetailsListLayoutMode, SelectionMode, LayerHost, ContextualMenu, format, IDetailsHeaderProps, IRenderFunction, Sticky, StickyPositionType, SearchBox, ContextualMenuItemType, IContextualMenuProps, IGroup, MessageBarType } from '@fluentui/react'
+import {
+  Selection,
+  getId,
+  MessageBar,
+  ScrollablePane,
+  ScrollbarVisibility,
+  MarqueeSelection,
+  ShimmeredDetailsList,
+  ConstrainMode,
+  DetailsListLayoutMode,
+  SelectionMode,
+  LayerHost,
+  ContextualMenu,
+  format,
+  IDetailsHeaderProps,
+  IRenderFunction,
+  Sticky,
+  StickyPositionType,
+  SearchBox,
+  ContextualMenuItemType,
+  IContextualMenuProps,
+  IGroup,
+  MessageBarType
+} from '@fluentui/react'
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import sortArray from 'array-sort'

@@ -1,4 +1,9 @@
-import { ICommandBarProps, IContextualMenuItem, ContextualMenuItemType, CommandBar } from '@fluentui/react'
+import {
+  ICommandBarProps,
+  IContextualMenuItem,
+  ContextualMenuItemType,
+  CommandBar
+} from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import ExcelExportService from 'pp365-shared/lib/services/ExcelExportService'
 import { redirect } from 'pp365-shared/lib/util'

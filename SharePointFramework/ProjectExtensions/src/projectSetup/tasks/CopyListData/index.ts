@@ -117,9 +117,7 @@ export class CopyListData extends BaseTask {
         .getAll()
     } catch (error) {
       try {
-        return await config.sourceList.items
-          .select(...(fields || config.fields))
-          .getAll()
+        return await config.sourceList.items.select(...(fields || config.fields)).getAll()
       } catch (error) {
         return []
       }

@@ -1,4 +1,9 @@
-import { ICommandBarProps, ContextualMenuItemType, IContextualMenuItem, CommandBar } from '@fluentui/react'
+import {
+  ICommandBarProps,
+  ContextualMenuItemType,
+  IContextualMenuItem,
+  CommandBar
+} from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FunctionComponent, useState } from 'react'
 

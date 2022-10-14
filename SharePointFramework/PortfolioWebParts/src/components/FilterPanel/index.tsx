@@ -1,4 +1,3 @@
-
 import { Customizer, Panel, PanelType } from '@fluentui/react'
 import React, { FunctionComponent } from 'react'
 import { Filter } from './Filter'

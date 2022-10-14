@@ -1,4 +1,13 @@
-import { MessageBarType, CommandBar, MessageBar, format, IColumn, ICommandBarProps, getId, ContextualMenuItemType } from '@fluentui/react'
+import {
+  MessageBarType,
+  CommandBar,
+  MessageBar,
+  format,
+  IColumn,
+  ICommandBarProps,
+  getId,
+  ContextualMenuItemType
+} from '@fluentui/react'
 import { get } from '@microsoft/sp-lodash-subset'
 import { sp } from '@pnp/sp'
 import sortArray from 'array-sort'
