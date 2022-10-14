@@ -17,7 +17,7 @@ export class BaseDialog extends React.PureComponent<IBaseDialogProps> {
           v{this.props.version}
         </span>
         {this.props.children}
-        <DialogFooter className={styles.footer}>{this.props.onRenderFooter()}</DialogFooter>
+        <DialogFooter>{this.props.onRenderFooter()}</DialogFooter>
       </Dialog>
     )
   }

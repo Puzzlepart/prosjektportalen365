@@ -54,7 +54,8 @@ export class TemplateSelectDialog extends React.Component<
         onDismiss={onDismiss}
         onRenderFooter={this._onRenderFooter.bind(this)}
         containerClassName={styles.root}>
-        <Pivot>
+        <div style={{ minHeight: 450 }}>
+          <Pivot>
           <PivotItem headerText={strings.TemplateSelectorTitle} itemIcon='ViewListGroup'>
             <TemplateSelector
               templates={data.templates.filter((t) => !t.isHidden)}
@@ -102,6 +103,7 @@ export class TemplateSelectDialog extends React.Component<
             </PivotItem>
           )}
         </Pivot>
+        </div>
       </BaseDialog>
     )
   }
