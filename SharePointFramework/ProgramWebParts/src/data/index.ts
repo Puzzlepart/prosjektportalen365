@@ -327,12 +327,11 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   /**
    * Currently not in use, but it's here to avoid `ProjectTimeline` failing.
    *
-   * @param timelineconfig Timeline config (not in use)
+   * @param _timelineConfig Timeline config (not in use)
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public async fetchTimelineProjectData(timelineconfig: TimelineConfigurationListModel[]) {
-    timelineconfig
-    return await Promise.resolve([])
+  public async fetchTimelineProjectData(_timelineConfig: TimelineConfigurationListModel[]) {
+    return await Promise.resolve({})
   }
 
   /**
