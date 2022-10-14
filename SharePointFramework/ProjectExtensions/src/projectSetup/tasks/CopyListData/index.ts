@@ -114,14 +114,12 @@ export class CopyListData extends BaseTask {
       return await config.sourceList.items
         .select(...(fields || config.fields), 'TaxCatchAll/ID', 'TaxCatchAll/Term')
         .expand('TaxCatchAll')
-        .top(500)
-        .get()
+        .getAll()
     } catch (error) {
       try {
         return await config.sourceList.items
           .select(...(fields || config.fields))
-          .top(500)
-          .get()
+          .getAll()
       } catch (error) {
         return []
       }
@@ -265,8 +263,7 @@ export class CopyListData extends BaseTask {
       const spItems = await config.sourceList.items
         .expand('Folder')
         .select('Title', 'LinkFilename', 'FileRef', 'FileDirRef', 'Folder/ServerRelativeUrl')
-        .top(500)
-        .get()
+        .getAll()
 
       const folders: string[] = []
       const files: any[] = []

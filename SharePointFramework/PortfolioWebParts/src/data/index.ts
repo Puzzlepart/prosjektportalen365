@@ -389,9 +389,8 @@ export class DataAdapter implements IDataAdapter {
           'GtSiteIdLookup/Title',
           'GtSiteIdLookup/GtSiteId'
         )
-        .top(500)
         .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-        .get()
+        .getAll()
     ])
 
     return timelineItems
@@ -442,8 +441,7 @@ export class DataAdapter implements IDataAdapter {
         'GtShowElementProgram',
         'GtTimelineFilter'
       )
-      .top(500)
-      .get()
+      .getAll()
 
     return timelineConfig
       .map((item) => {
