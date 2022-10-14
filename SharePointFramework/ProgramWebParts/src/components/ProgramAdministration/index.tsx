@@ -43,7 +43,7 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
         <div>
           {!isEmpty(state.childProjects) ? (
             <ProjectTable
-              fields={fields}
+              fields={fields(true)}
               items={state.childProjects}
               selectionMode={
                 state.userHasManagePermission ? SelectionMode.multiple : SelectionMode.none
@@ -60,15 +60,18 @@ export const ProgramAdministration: FunctionComponent<IProgramAdministrationProp
   )
 }
 
-export const fields: IListField[] = [
+export const fields = (renderAsLink: boolean): IListField[] => [
   {
     key: 'Title',
     text: 'Tittel',
     fieldName: 'Title',
-    onRender: (item) => (
-      <Link href={item.SPWebURL} target='_blank' rel='noreferrer'>
-        {item.Title}
-      </Link>
-    )
+    onRender: (item) =>
+      renderAsLink ? (
+        <Link href={item.SPWebURL} target='_blank' rel='noreferrer'>
+          {item.Title}
+        </Link>
+      ) : (
+        item.Title
+      )
   }
 ]

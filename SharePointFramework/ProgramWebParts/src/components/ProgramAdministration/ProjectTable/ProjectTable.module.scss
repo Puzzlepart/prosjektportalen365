@@ -9,7 +9,7 @@
       list-style: none;
       display: grid;
       padding-left: 0;
-      
+
       .column {
         .headerText {
           font-size: 13px;
@@ -17,11 +17,12 @@
 
         padding: 10px;
         border-bottom: 1px solid #ececec;
+        cursor: pointer;
       }
-  
+
       > li:hover {
         background-color: #faf9f8;
-      }    
+      }
     }
   }
 }

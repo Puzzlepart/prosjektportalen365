@@ -20,6 +20,7 @@ Every change is marked with issue ID.
 - Fix for problems where aggregated webpart pages didn't work properly #754
 - Integrated IdeaProcessing (from prosjektportalen365-addons) directly in Prosjektportalen365 with improvements and new additions #777
   - This also adds sync functionality to synchronize ProjectData to newly created projects based off of ideas
+  - NOTE: Remove old IdeaProcessing webparts if you have used idea processing prior to 1.7.0
 - Displaying parent projects in Project Information webpart #760
 - Added ability to hide certain parts of the Project Information webpart #670
 - Added inline help content function to sitepages and lists #788
