@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { DetailsList, SelectionMode, DetailsListLayoutMode, ConstrainMode, DialogFooter, ActionButton } from '@fluentui/react'
+import {
+  DetailsList,
+  SelectionMode,
+  DetailsListLayoutMode,
+  ConstrainMode,
+  DialogFooter,
+  ActionButton
+} from '@fluentui/react'
 import { InfoMessage } from 'components/InfoMessage'
 import { SPDataAdapter } from 'data'
 import { SPFolder } from 'models'

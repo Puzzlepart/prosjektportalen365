@@ -108,8 +108,7 @@ export const TimelineList: FunctionComponent<ITimelineListProps> = (props) => {
       await context.props.web.lists
         .getByTitle(strings.ProjectsListName)
         .items.select('Id', 'GtSiteId')
-        .top(500)
-        .get()
+        .getAll()
     ).filter(({ GtSiteId }) => GtSiteId === context.props.siteId)
 
     const properties: TypedHash<any> = {

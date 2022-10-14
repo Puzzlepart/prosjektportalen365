@@ -1,6 +1,6 @@
 {
   "name": "pp365-shared",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -18,7 +18,6 @@
     "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",
     "publish:temp": "npm install && npm run build && npm publish --tag temp"
   },
-  "author": "",
   "dependencies": {
     "@microsoft/sp-core-library": "1.15.2",
     "@microsoft/sp-page-context": "1.15.2",

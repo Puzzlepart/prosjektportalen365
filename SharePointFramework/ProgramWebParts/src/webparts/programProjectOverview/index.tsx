@@ -25,7 +25,7 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
     render(
       <PortfolioOverview
         title={this.properties.title}
-        pageContext={this.context.pageContext}
+        pageContext={this.context.pageContext as any}
         configuration={this._configuration}
         dataAdapter={this.dataAdapter}
         showCommandBar={this.properties.showCommandBar}

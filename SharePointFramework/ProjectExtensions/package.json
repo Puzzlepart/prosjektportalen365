@@ -1,6 +1,6 @@
 {
   "name": "pp365-projectextensions",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -19,7 +19,8 @@
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
     "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",
-    "publish:temp": "npm install && npm run build && npm publish --tag temp"
+    "publish:temp": "npm install && npm run build && npm publish --tag temp",
+    "preserve": "node ../.tasks/createServeConfig.js"
   },
   "dependencies": {
     "@fluentui/react": "8.98.1",
@@ -39,7 +40,7 @@
     "@uifabric/file-type-icons": "7.6.27",
     "@uifabric/utilities": "6.45.1",
     "msgraph-helper": "0.8.3",
-    "pp365-shared": "1.6.3-817.1",
+    "pp365-shared": "1.6.5",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-markdown": "^8.0.3",

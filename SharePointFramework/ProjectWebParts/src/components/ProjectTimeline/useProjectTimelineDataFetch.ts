@@ -155,8 +155,7 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
           'GtShowElementProgram',
           'GtTimelineFilter'
         )
-        .top(500)
-        .get()
+        .getAll()
     ])
 
     if (props.showProjectDeliveries) {
@@ -170,8 +169,7 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
             'GtDeliveryStartTime',
             'GtDeliveryEndTime'
           )
-          .top(500)
-          .get()
+          .getAll()
       ])
 
       projectDeliveries = projectDeliveries
@@ -228,9 +226,8 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
           'GtSiteIdLookup/Title',
           'GtSiteIdLookup/GtSiteId'
         )
-        .top(500)
         .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-        .get()
+        .getAll()
     ])
 
     let timelineListItems = timelineContentItems.filter(
@@ -371,8 +368,7 @@ const fetchProjectData = async (props: IProjectTimelineProps): Promise<any> => {
         .getByTitle(strings.ProjectsListName)
         .items.select('Id', 'GtStartDate', 'GtEndDate')
         .filter(`GtSiteId eq '${props.siteId}'`)
-        .top(500)
-        .get(),
+        .getAll(),
       props.hubSite.web.lists
         .getByTitle(strings.TimelineConfigurationListName)
         .items.select(

@@ -1,4 +1,16 @@
-import { ShimmeredDetailsList, SelectionMode, IColumn, MessageBar, MessageBarType, Pivot, PivotItem, SearchBox, Toggle, Spinner, SpinnerSize } from '@fluentui/react'
+import {
+  ShimmeredDetailsList,
+  SelectionMode,
+  IColumn,
+  MessageBar,
+  MessageBarType,
+  Pivot,
+  PivotItem,
+  SearchBox,
+  Toggle,
+  Spinner,
+  SpinnerSize
+} from '@fluentui/react'
 import { ProjectListModel } from 'models'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getObjectValue } from 'pp365-shared/lib/helpers'

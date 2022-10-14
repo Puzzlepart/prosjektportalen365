@@ -1,4 +1,9 @@
-import { IContextualMenuItem, ContextualMenuItemType, format, ContextualMenu } from '@fluentui/react'
+import {
+  IContextualMenuItem,
+  ContextualMenuItemType,
+  format,
+  ContextualMenu
+} from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { useContext } from 'react'

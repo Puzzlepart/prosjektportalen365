@@ -77,7 +77,7 @@ const transformItems = (
   timelineItems: TimelineContentListModel[],
   groups: ITimelineGroup[]
 ): ITimelineItem[] => {
-  let _item, _siteId
+  let _item: TimelineContentListModel, _siteId: string
   try {
     const items: ITimelineItem[] = timelineItems.map((item, id) => {
       _item = item
@@ -184,13 +184,13 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
 
     let timelineItems: TimelineContentListModel[] = filteredProjects.map((project) => {
       const config = projectData.configElement
-      const statusReport = projectData.reports.find((statusReport) => {
+      const statusReport = projectData?.reports?.find((statusReport) => {
         return statusReport.siteId === project.siteId
       })
       return {
         ...project,
-        ...statusReport,
-        ...config
+        ...config,
+        ...statusReport
       }
     })
 

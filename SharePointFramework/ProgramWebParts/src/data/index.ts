@@ -15,6 +15,7 @@ import {
   BenefitMeasurement,
   BenefitMeasurementIndicator,
   ProjectListModel,
+  TimelineConfigurationListModel,
   TimelineContentListModel
 } from 'pp365-portfoliowebparts/lib/models'
 import { ISPDataAdapterBaseConfiguration, SPDataAdapterBase } from 'pp365-shared/lib/data'
@@ -23,10 +24,10 @@ import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService, ProjectDataService } from 'pp365-shared/lib/services'
 import * as strings from 'ProgramWebPartsStrings'
 import HubSiteService from 'sp-hubsite-service'
-import _ from 'underscore'
 import { GAINS_DEFAULT_SELECT_PROPERTIES } from './config'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
+import { flatten } from '@microsoft/sp-lodash-subset'
 
 /**
  * SPDataAdapter for `ProgramWebParts`.
@@ -329,8 +330,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    * @param _timelineConfig Timeline config (not in use)
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public async fetchTimelineProjectData(_timelineConfig: any[]) {
-    return await Promise.resolve([])
+  public async fetchTimelineProjectData(_timelineConfig: TimelineConfigurationListModel[]) {
+    return await Promise.resolve({})
   }
 
   /**
@@ -353,17 +354,17 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       })
     ])
     const [data] = statusReports.map((item) => cleanDeep({ ...item }))
-    const config = _.find(timelineConfig, (col) => col.Title === strings.ProjectLabel)
+    const config = timelineConfig.find((col) => col.title === strings.ProjectLabel)
     return {
       type: strings.ProjectLabel,
       costsTotal: data && data['GtCostsTotalOWSCURR'],
       budgetTotal: data && data['GtBudgetTotalOWSCURR'],
-      sortOrder: config && config.GtSortOrder,
-      hexColor: config && config.GtHexColor,
-      elementType: config && config.GtElementType,
-      showElementPortfolio: config && config.GtShowElementPortfolio,
-      showElementProgram: config && config.GtShowElementProgram,
-      timelineFilter: config && config.GtTimelineFilter
+      sortOrder: config && config.sortOrder,
+      hexColor: config && config.hexColor,
+      elementType: config && config.elementType,
+      showElementPortfolio: config && config.showElementPortfolio,
+      showElementProgram: config && config.showElementProgram,
+      timelineFilter: config && config.timelineFilter
     }
   }
 
@@ -375,9 +376,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    *
    * @description Used in `ProjectTimeline`
    */
-  public async fetchTimelineContentItems() {
-    const [timelineConfig, timelineItems] = await Promise.all([
-      this.fetchTimelineConfiguration(),
+  public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationListModel[]) {
+    const [timelineItems] = await Promise.all([
       this.portal.web.lists
         .getByTitle(strings.TimelineContentListName)
         .items.select(
@@ -387,41 +387,42 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
           'GtEndDate',
           'GtBudgetTotal',
           'GtCostsTotal',
+          'GtDescription',
+          'GtTag',
           'GtSiteIdLookup/Title',
           'GtSiteIdLookup/GtSiteId'
         )
-        .top(500)
         .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-        .get()
+        .getAll()
     ])
 
     return timelineItems
       .map((item) => {
         const type = item.GtTimelineTypeLookup && item.GtTimelineTypeLookup.Title
-        const config = _.find(timelineConfig, (col) => col.Title === type)
+        const config = timelineConfig.find((col) => col.title === type)
 
         if (
           item?.GtSiteIdLookup?.Title &&
-          _.find(
-            this.childProjects,
+          this.childProjects.find(
             (child) =>
               child?.SiteId === item?.GtSiteIdLookup?.GtSiteId ||
               item?.GtSiteIdLookup?.GtSiteId ===
                 this?.spfxContext?.pageContext?.site?.id?.toString()
           )
         ) {
-          if (item.GtSiteIdLookup?.Title && config && config.GtShowElementProgram) {
+          if (item.GtSiteIdLookup?.Title && config && config.showElementPortfolio) {
             const model = new TimelineContentListModel(
               item.GtSiteIdLookup?.GtSiteId,
               item.GtSiteIdLookup?.Title,
               item.Title,
-              config && config.Title,
-              config && config.GtSortOrder,
-              config && config.GtHexColor,
-              config && config.GtElementType,
-              config && config.GtShowElementPortfolio,
-              config && config.GtShowElementProgram,
-              config && config.GtTimelineFilter,
+              config && config.title,
+              config && config.sortOrder,
+              config && config.hexColor,
+              config && config.timelineCategory,
+              config && config.elementType,
+              config && config.showElementPortfolio,
+              config && config.showElementProgram,
+              config && config.timelineFilter,
               item.GtStartDate,
               item.GtEndDate,
               item.GtDescription,
@@ -442,19 +443,35 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    * @description Used in `ProjectTimeline`
    */
   public async fetchTimelineConfiguration() {
-    return await this.portal.web.lists
+    const timelineConfig = await this.portal.web.lists
       .getByTitle(strings.TimelineConfigurationListName)
       .items.select(
-        'Title',
         'GtSortOrder',
+        'Title',
         'GtHexColor',
+        'GtTimelineCategory',
         'GtElementType',
         'GtShowElementPortfolio',
         'GtShowElementProgram',
         'GtTimelineFilter'
       )
-      .top(500)
-      .get()
+      .getAll()
+
+    return timelineConfig
+      .map((item) => {
+        const model = new TimelineConfigurationListModel(
+          item.GtSortOrder,
+          item.Title,
+          item.GtHexColor,
+          item.GtTimelineCategory,
+          item.GtElementType,
+          item.GtShowElementPortfolio,
+          item.GtShowElementProgram,
+          item.GtTimelineFilter
+        )
+        return model
+      })
+      .filter((p) => p)
   }
 
   /**
@@ -462,15 +479,16 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    *
    * @description Used in `ProjectTimeline`
    */
-  public async fetchTimelineAggregatedContent(configItemTitle: string, dataSourceName: string) {
-    const timelineConfig = await this.fetchTimelineConfiguration()
-
-    const config: any = _.find(
-      timelineConfig,
-      (col) => col.Title === (configItemTitle || 'Prosjektleveranse')
+  public async fetchTimelineAggregatedContent(
+    configItemTitle: string,
+    dataSourceName: string,
+    timelineConfig: TimelineConfigurationListModel[]
+  ) {
+    const config = timelineConfig.find(
+      (col) => col.title === (configItemTitle || 'Prosjektleveranse')
     )
 
-    if (config && config.GtShowElementProgram) {
+    if (config && config.showElementPortfolio) {
       const projectDeliveries = await this.fetchItemsWithSource(
         dataSourceName || 'Alle prosjektleveranser',
         [
@@ -481,6 +499,14 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
         ],
         true
       )
+        .then((deliveries) => {
+          return deliveries.filter(
+            (delivery) => delivery.GtDeliveryStartTimeOWSDATE && delivery.GtDeliveryEndTimeOWSDATE
+          )
+        })
+        .catch((error) => {
+          throw error
+        })
 
       return projectDeliveries
         .map((item) => {
@@ -488,13 +514,14 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
             item.SiteId,
             item.SiteTitle,
             item.Title,
-            (config && config.Title) || configItemTitle,
-            (config && config.GtSortOrder) || 90,
-            (config && config.GtHexColor) || '#384f61',
-            (config && config.GtElementType) || strings.BarLabel,
-            (config && config.GtShowElementPortfolio) || false,
-            (config && config.GtShowElementProgram) || false,
-            (config && config.GtTimelineFilter) || true,
+            (config && config.title) || configItemTitle,
+            (config && config.sortOrder) || 90,
+            (config && config.hexColor) || '#384f61',
+            (config && config.timelineCategory) || 'Styring',
+            (config && config.elementType) || strings.BarLabel,
+            (config && config.showElementPortfolio) || false,
+            (config && config.showElementProgram) || false,
+            (config && config.timelineFilter) || true,
             item.GtDeliveryStartTimeOWSDATE,
             item.GtDeliveryEndTimeOWSDATE,
             item.GtDeliveryDescriptionOWSMTXT
@@ -684,7 +711,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       )
     })
     const responses = await Promise.all(promises)
-    return _.flatten(responses.map((r) => r.PrimarySearchResults))
+    return flatten(responses.map((r) => r.PrimarySearchResults))
   }
 
   /**

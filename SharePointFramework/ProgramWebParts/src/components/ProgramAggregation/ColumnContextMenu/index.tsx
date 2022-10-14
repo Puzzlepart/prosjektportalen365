@@ -1,4 +1,9 @@
-import { IContextualMenuItem, ContextualMenuItemType, format, ContextualMenu } from '@fluentui/react'
+import {
+  IContextualMenuItem,
+  ContextualMenuItemType,
+  format,
+  ContextualMenu
+} from '@fluentui/react'
 import strings from 'ProgramWebPartsStrings'
 import React, { FunctionComponent, useContext } from 'react'
 import { ProgramAggregationContext } from '../context'
