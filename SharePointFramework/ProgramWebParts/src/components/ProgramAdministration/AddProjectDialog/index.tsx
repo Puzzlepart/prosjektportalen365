@@ -43,7 +43,7 @@ export const AddProjectDialog: FunctionComponent = () => {
             />
           ) : (
             <ProjectTable
-              fields={fields}
+              fields={fields(false)}
               items={availableProjects}
               selectionMode={SelectionMode.multiple}
               onSelectionChanged={(items) => {

@@ -126,7 +126,13 @@ export const ProjectTable: FunctionComponent<IProjectTableProps> = (props) => {
       </li>,
       ...props.fields.map(
         (field: IListField, index: number): JSX.Element => (
-          <li key={field.key} className={styles.column}>
+          <li
+            key={field.key}
+            className={styles.column}
+            onClick={(event) => {
+              event.preventDefault()
+              handleItemClicked(item, !checked)
+            }}>
             {field.onRender ? (
               field.onRender(item, index, field)
             ) : (
