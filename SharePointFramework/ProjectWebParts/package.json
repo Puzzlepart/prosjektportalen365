@@ -14,11 +14,11 @@
     "package:debug": "gulp clean && gulp default && gulp package-solution",
     "build": "tsc --build",
     "postversion": "tsc && npm publish",
-    "preserve": "gulp setHiddenToolbox",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
     "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",
-    "publish:temp": "npm install && npm run build && npm publish --tag temp"
+    "publish:temp": "npm install && npm run build && npm publish --tag temp",
+    "preserve": "node ../.tasks/createServeConfig.js && gulp setHiddenToolbox"
   },
   "dependencies": {
     "@fluentui/react": "8.98.1",

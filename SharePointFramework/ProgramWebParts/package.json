@@ -20,7 +20,8 @@
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
     "prettier": "prettier --config .prettierrc 'src/**/*.ts*' --write --loglevel silent",
-    "publish:temp": "npm install && npm run build && npm publish --tag temp"
+    "publish:temp": "npm install && npm run build && npm publish --tag temp",
+    "preserve": "node ../.tasks/createServeConfig.js"
   },
   "dependencies": {
     "@fluentui/react": "8.98.1",
