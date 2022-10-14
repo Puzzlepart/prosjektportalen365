@@ -1,4 +1,12 @@
-import { Dialog, DialogType, ShimmeredDetailsList, SelectionMode, DialogFooter, PrimaryButton, DefaultButton } from '@fluentui/react'
+import {
+  Dialog,
+  DialogType,
+  ShimmeredDetailsList,
+  SelectionMode,
+  DialogFooter,
+  PrimaryButton,
+  DefaultButton
+} from '@fluentui/react'
 import * as strings from 'ProgramWebPartsStrings'
 import React, { FunctionComponent, useContext } from 'react'
 import { ProgramAdministrationContext } from '../context'
