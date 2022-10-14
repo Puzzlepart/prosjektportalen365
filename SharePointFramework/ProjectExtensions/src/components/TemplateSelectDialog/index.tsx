@@ -27,7 +27,7 @@ export class TemplateSelectDialog extends Component<
   constructor(props: ITemplateSelectDialogProps) {
     super(props)
     this.state = {
-      flexibleHeight: (props.data.templates.filter(t => !t.isHidden).length / 4) * 150,
+      flexibleHeight: (props.data.templates.filter((t) => !t.isHidden).length / 4) * 150,
       selectedTemplate: this._getDefaultTemplate(),
       selectedExtensions: props.data.extensions.filter(
         (ext) =>
