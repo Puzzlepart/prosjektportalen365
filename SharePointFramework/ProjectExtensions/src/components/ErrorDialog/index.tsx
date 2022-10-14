@@ -1,5 +1,5 @@
 import * as strings from 'ProjectExtensionsStrings'
-import  React, { FunctionComponent } from 'react'
+import React, { FunctionComponent } from 'react'
 import { BaseDialog } from '../@BaseDialog'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'

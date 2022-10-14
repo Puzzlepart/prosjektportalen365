@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { format, MarqueeSelection, DetailsList, SelectionMode, DetailsListLayoutMode, ConstrainMode } from '@fluentui/react'
+import {
+  format,
+  MarqueeSelection,
+  DetailsList,
+  SelectionMode,
+  DetailsListLayoutMode,
+  ConstrainMode
+} from '@fluentui/react'
 import { TemplateItem } from 'models'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { useContext, useMemo, useState } from 'react'
