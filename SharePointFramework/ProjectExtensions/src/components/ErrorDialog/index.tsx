@@ -5,7 +5,13 @@ import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import styles from './ErrorDialog.module.scss'
 import { IErrorDialogProps } from './types'
-import { MessageBarType, DefaultButton, PrimaryButton, MessageBar } from '@fluentui/react'
+import {
+  MessageBarType,
+  DefaultButton,
+  PrimaryButton,
+  MessageBar,
+  DialogFooter
+} from '@fluentui/react'
 
 export const ErrorDialog: FunctionComponent<IErrorDialogProps> = ({
   error,
@@ -34,10 +40,8 @@ export const ErrorDialog: FunctionComponent<IErrorDialogProps> = ({
     <BaseDialog
       version={version}
       dialogContentProps={{ title: error.message }}
-      modalProps={{ isBlocking: false, isDarkOverlay: true }}
-      onRenderFooter={onRenderFooter}
-      onDismiss={onDismiss}
-      containerClassName={styles.errorDialog}>
+      modalProps={{ containerClassName: styles.root, isBlocking: false, isDarkOverlay: true }}
+      onDismiss={onDismiss}>
       <div style={{ marginTop: 15 }}>
         <MessageBar messageBarType={messageType} className={styles.errorMessage}>
           <ReactMarkdown linkTarget='_blank' rehypePlugins={[rehypeRaw]}>
@@ -45,6 +49,7 @@ export const ErrorDialog: FunctionComponent<IErrorDialogProps> = ({
           </ReactMarkdown>
         </MessageBar>
       </div>
+      <DialogFooter>{onRenderFooter()}</DialogFooter>
     </BaseDialog>
   )
 }

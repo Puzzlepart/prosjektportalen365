@@ -22,30 +22,15 @@
               "GtResourceRole": "54da9f47-c64e-4a26-80f3-4d3c3fa1b7b2"
             }
           }
-        }
-      }
-    },
-    "ProjectUpgrade": {
-      "pageUrl": "https://tenant.sharepoint.com/sites/site",
-      "customActions": {
+        },
         "453a6c1e-e1d0-4b12-a3fc-690a36da1f0c": {
           "location": "ClientSideExtension.ApplicationCustomizer",
           "properties": {}
-        }
-      }
-    },
-    "TemplateSelectorCommand": {
-      "pageUrl": "https://tenant.sharepoint.com/sites/site",
-      "customActions": {
+        },
         "c9080212-e63e-47cc-8278-00ad38c3f5a5": {
           "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
           "properties": {}
-        }
-      }
-    },
-    "HelpContent": {
-      "pageUrl": "https://tenant.sharepoint.com/sites/site",
-      "customActions": {
+        },
         "28987406-2a67-48a8-9297-fd2833bf0a09": {
           "location": "ClientSideExtension.ApplicationCustomizer",
           "properties": {
