@@ -205,7 +205,7 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
           .getByTitle(strings.TimelineContentListName)
           .defaultView.fields.select('Items')
           .top(500)
-          .getAll()
+          .get()
       )['Items']
     ])
 
