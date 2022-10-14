@@ -11,7 +11,6 @@ import { Spinner, format, MessageBarType } from '@fluentui/react'
 
 export const ProjectTimeline: FunctionComponent<IProjectTimelineProps> = (props) => {
   const { state, setState, onFilterChange, onGroupChange } = useProjectTimeline(props)
-
   return (
     <ProjectTimelineContext.Provider
       value={{ props, state, setState, onFilterChange, onGroupChange }}>
