@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { flatten } from '@microsoft/sp-lodash-subset'
 import { sp } from '@pnp/sp'
 import { SPDataAdapter } from 'data'
-import _ from 'underscore'
 
 /**
  * Fetches all projects associated with the current hubsite context
@@ -50,7 +50,7 @@ export async function fetchChildProjects(
   responses.forEach((response) => {
     searchResults.push(response.PrimarySearchResults)
   })
-  return _.flatten(searchResults)
+  return flatten(searchResults)
 }
 
 /**

@@ -57,8 +57,7 @@
     "react-dom": "16.13.1",
     "react-highcharts": "16.0.2",
     "sp-hubsite-service": "0.8.0",
-    "tslib": "2.3.1",
-    "underscore": "1.9.1"
+    "tslib": "2.3.1"
   },
   "resolutions": {
     "@types/react": "16.8.8"
@@ -74,7 +73,6 @@
     "@types/react": "16.9.51",
     "@types/react-calendar-timeline": "0.26.0",
     "@types/react-dom": "16.9.8",
-    "@types/underscore": "1.9.2",
     "@types/webpack-env": "1.15.2",
     "@typescript-eslint/eslint-plugin": "5.40.0",
     "@typescript-eslint/parser": "5.40.0",
@@ -89,7 +87,7 @@
     "find": "0.3.0",
     "gulp": "4.0.2",
     "livereload": "0.9.1",
-    "pp365-portfoliowebparts": "1.6.5",
+    "pp365-portfoliowebparts": "1.6.5-807.1",
     "pp365-projectwebparts": "1.6.5",
     "prettier": "2.3.2",
     "typescript": "4.5.5",

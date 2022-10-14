@@ -2,7 +2,6 @@ import { SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
 import { Link, MessageBar, ShimmeredDetailsList } from '@fluentui/react'
 import * as strings from 'ProgramWebPartsStrings'
 import React, { FunctionComponent } from 'react'
-import { isEmpty } from 'underscore'
 import { AddProjectDialog } from './AddProjectDialog'
 import { Commands } from './Commands'
 import { ProgramAdministrationContext } from './context'
@@ -12,6 +11,7 @@ import { IListField } from './ProjectTable/types'
 import { SET_SELECTED_TO_DELETE } from './reducer'
 import { IProgramAdministrationProps, shimmeredColumns } from './types'
 import { useProgramAdministration } from './useProgramAdministration'
+import { isEmpty } from '@microsoft/sp-lodash-subset'
 
 export const ProgramAdministration: FunctionComponent<IProgramAdministrationProps> = (props) => {
   const { state, dispatch } = useProgramAdministration(props)

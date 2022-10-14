@@ -4,8 +4,8 @@ import { formatDate, tryParseCurrency, tryParsePercentage } from 'pp365-shared/l
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import strings from 'ProgramWebPartsStrings'
 import React from 'react'
-import { isEmpty } from 'underscore'
 import { BenefitMeasurementsModal } from './BenefitMeasurementsModal'
+import { isEmpty } from '@microsoft/sp-lodash-subset'
 
 /**
  * Render item column
