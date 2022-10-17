@@ -11,8 +11,10 @@ import {
   Spinner,
   SpinnerSize
 } from '@fluentui/react'
+import { Web } from '@pnp/sp'
 import { ProjectListModel } from 'models'
 import * as strings from 'PortfolioWebPartsStrings'
+import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
 import { getObjectValue } from 'pp365-shared/lib/helpers'
 import React, { FunctionComponent } from 'react'
 import { isEmpty } from 'underscore'
@@ -154,7 +156,23 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
             <MessageBar>{strings.ProjectListEmptyText}</MessageBar>
           </div>
         )}
-        {!isEmpty(projects) && <div className={styles.projects}>{renderProjects(projects)}</div>}
+        {!isEmpty(projects) && (
+          <>
+            <ProjectInformationPanel
+              key={state.showProjectInfo?.siteId}
+              title={state.showProjectInfo?.title}
+              siteId={state.showProjectInfo?.siteId}
+              webUrl={state.showProjectInfo?.url}
+              hubSite={{
+                web: new Web(props.pageContext.site.absoluteUrl),
+                url: props.pageContext.site.absoluteUrl
+              }}
+              page='Portfolio'
+              hidden={!state.showProjectInfo}
+              hideAllActions={true} />
+            <div className={styles.projects}>{renderProjects(projects)}</div>
+          </>
+        )}
       </div>
     </div>
   )

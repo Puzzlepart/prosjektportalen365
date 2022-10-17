@@ -7,7 +7,7 @@ export const ProjectCardHeader: FunctionComponent<IProjectCardProps> = ({
   project,
   showProjectLogo,
   shouldTruncateTitle
-}: IProjectCardProps) => {
+}) => {
   const [isLoaded, setIsLoaded] = useState(false)
   return (
     <div className={styles.header}>

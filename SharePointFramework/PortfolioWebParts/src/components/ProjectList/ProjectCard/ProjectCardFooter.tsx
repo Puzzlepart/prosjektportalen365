@@ -4,6 +4,6 @@ import { IProjectCardProps } from './types'
 
 export const ProjectCardFooter: FunctionComponent<IProjectCardProps> = ({
   actions
-}: IProjectCardProps): JSX.Element => {
+}): JSX.Element => {
   return <DocumentCardActions actions={actions} />
 }
