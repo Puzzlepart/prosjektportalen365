@@ -105,7 +105,7 @@ export const TimelineList: FunctionComponent<ITimelineListProps> = (props) => {
    */
   const redirectNewTimelineItem = async () => {
     const [project] = (
-      await context.props.web.lists
+      await context.props.hubSite.web.lists
         .getByTitle(strings.ProjectsListName)
         .items.select('Id', 'GtSiteId')
         .getAll()
@@ -133,7 +133,7 @@ export const TimelineList: FunctionComponent<ITimelineListProps> = (props) => {
    * @param properties Properties
    */
   const addTimelineItem = async (properties: TypedHash<any>): Promise<any> => {
-    const list = context.props.web.lists.getByTitle(strings.TimelineContentListName)
+    const list = context.props.hubSite.web.lists.getByTitle(strings.TimelineContentListName)
     const itemAddResult = await list.items.add(properties)
     return itemAddResult.data
   }
@@ -144,7 +144,7 @@ export const TimelineList: FunctionComponent<ITimelineListProps> = (props) => {
    * @param item Item
    */
   const deleteTimelineItem = async (item: any) => {
-    const list = context.props.web.lists.getByTitle(strings.TimelineContentListName)
+    const list = context.props.hubSite.web.lists.getByTitle(strings.TimelineContentListName)
     await list.items.getById(item.Id).delete()
     try {
       // TODO: Make this refresh list without reloading the page
@@ -170,6 +170,50 @@ export const TimelineList: FunctionComponent<ITimelineListProps> = (props) => {
     ].join('')
   }
 
+  /**
+   * Copies and sorts items based on columnKey in the timeline detailslist
+   * TODO: Make this work again
+   *
+   * @param items timelineListItems
+   * @param columnKey Column key
+   * @param isSortedDescending Is Sorted Descending?
+   * @returns sorted timeline list items
+   */
+  const copyAndSort = (items: any[], columnKey: string, isSortedDescending?: boolean): any[] => {
+    const key = columnKey as keyof any
+    return items
+      .slice(0)
+      .sort((a: any, b: any) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1))
+  }
+
+  /**
+   * For sorting detailslist on column click
+   * TODO: Make this work again
+   *
+   * @param _event Event
+   * @param column Column
+   */
+  const onColumnHeaderClick = (_event: React.MouseEvent<HTMLElement>, column: IColumn): void => {
+    const newColumns = context.state.data.timelineColumns.map((col: IColumn) => {
+      if (col.key === column.key) {
+        col.isSortedDescending = !col.isSortedDescending
+        col.isSorted = true
+      } else {
+        col.isSorted = false
+        col.isSortedDescending = true
+      }
+      return col
+    })
+    const newItems = copyAndSort(
+      context.state.data.timelineListItems,
+      column.fieldName,
+      column.isSortedDescending
+    )
+    context.setState({
+      data: { ...context.state.data, timelineColumns: newColumns, timelineListItems: newItems }
+    })
+  }
+
   return (
     <>
       <div className={styles.timelineList}>
@@ -185,6 +229,7 @@ export const TimelineList: FunctionComponent<ITimelineListProps> = (props) => {
           selection={selection}
           selectionMode={props.isSelectionModeNone ? SelectionMode.none : SelectionMode.single}
           layoutMode={DetailsListLayoutMode.justified}
+          onColumnHeaderClick={onColumnHeaderClick}
         />
       </div>
     </>

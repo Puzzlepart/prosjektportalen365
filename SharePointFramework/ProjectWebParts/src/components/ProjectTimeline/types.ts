@@ -1,18 +1,15 @@
+import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
+import * as moment from 'moment'
+import { IFilterProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
+import { ProjectColumn } from 'pp365-shared/lib/models'
+import * as ProjectDataService from 'pp365-shared/lib/services/ProjectDataService'
+import { IEntityField } from 'sp-entityportal-service'
 import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState
 } from '../BaseWebPartComponent/types'
-import { TypedHash } from '@pnp/common'
-import * as ProjectDataService from 'pp365-shared/lib/services/ProjectDataService'
-import * as moment from 'moment'
-import { ProjectColumn } from 'pp365-shared/lib/models'
-import { IEntityField } from 'sp-entityportal-service'
-import { stringIsNullOrEmpty } from '@pnp/common'
-import { IFilterProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
-import { Web } from '@pnp/sp'
 
 export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
-  web?: Web
   listName?: string
   showFilterButton?: boolean
   showTimeline?: boolean

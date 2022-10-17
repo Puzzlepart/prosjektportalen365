@@ -1,5 +1,10 @@
+import { format } from '@fluentui/react'
+import { sp } from '@pnp/sp'
 import _ from 'lodash'
-import { useContext, useEffect } from 'react'
+import moment from 'moment'
+import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
+import strings from 'ProjectWebPartsStrings'
+import { useEffect } from 'react'
 import {
   IProjectTimelineProps,
   IProjectTimelineState,
@@ -8,12 +13,6 @@ import {
   ITimelineItem,
   TimelineGroupType
 } from './types'
-import moment from 'moment'
-import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
-import strings from 'ProjectWebPartsStrings'
-import { sp, Web } from '@pnp/sp'
-import { ProjectTimelineContext } from './context'
-import { format, IColumn } from '@fluentui/react'
 
 /**
  * Creating groups based on projects title
@@ -137,8 +136,6 @@ const transformItems = (timelineItems: TimelineContentListModel[]): ITimelineIte
  * Get timeline items and columns
  */
 const getTimelineData = async (props: IProjectTimelineProps) => {
-  props.web = new Web(props.hubSite.url)
-
   let projectDeliveries = []
 
   try {
@@ -201,7 +198,7 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
 
     const [allColumns] = await Promise.all([
       (
-        await props.web.lists
+        await props.hubSite.web.lists
           .getByTitle(strings.TimelineContentListName)
           .defaultView.fields.select('Items')
           .top(500)
@@ -216,7 +213,7 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
     const internalNames: string = await allColumns.map((col: string) => `${col}`).join(',')
 
     let [timelineContentItems] = await Promise.all([
-      await props.web.lists
+      await props.hubSite.web.lists
         .getByTitle(strings.TimelineContentListName)
         .items.select(
           internalNames,
@@ -235,7 +232,7 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
     )
 
     const [timelineColumns] = await Promise.all([
-      await props.web.lists
+      await props.hubSite.web.lists
         .getByTitle(strings.TimelineContentListName)
         .fields.filter(filterstring)
         .select('InternalName', 'Title', 'TypeAsString')
@@ -251,10 +248,8 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
           name: column.Title,
           fieldName: column.InternalName,
           data: { type: column.TypeAsString },
-          onColumnClick: onColumnClick.bind(this),
           minWidth: 150,
           maxWidth: 200,
-          sorting: true,
           isResizable: true
         }
       })
@@ -308,54 +303,6 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
   } catch (error) {
     return []
   }
-}
-
-/**
- * For sorting detailslist on column click
- * TODO: Make this work again
- *
- * @param event Event
- * @param column Column
- */
-const onColumnClick = (event: React.MouseEvent<HTMLElement>, column: IColumn): void => {
-  const context = useContext(ProjectTimelineContext)
-
-  const newColumns: IColumn[] = context.state.data.timelineColumns.slice()
-  const currColumn: IColumn = newColumns.filter((currCol) => column.key === currCol.key)[0]
-  newColumns.forEach((newCol: IColumn) => {
-    if (newCol === currColumn) {
-      currColumn.isSortedDescending = !currColumn.isSortedDescending
-      currColumn.isSorted = true
-    } else {
-      newCol.isSorted = false
-      newCol.isSortedDescending = true
-    }
-  })
-  const newItems = copyAndSort(
-    context.state.data.timelineListItems,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    currColumn.fieldName!,
-    currColumn.isSortedDescending
-  )
-  context.setState({
-    data: { ...context.state.data, timelineColumns: newColumns, timelineListItems: newItems }
-  })
-}
-
-/**
- * Copies and sorts items based on columnKey in the timeline detailslist
- * TODO: Make this work again
- *
- * @param items timelineListItems
- * @param columnKey Column key
- * @param isSortedDescending Is Sorted Descending?
- * @returns sorted timeline list items
- */
-const copyAndSort = (items: any[], columnKey: string, isSortedDescending?: boolean): any[] => {
-  const key = columnKey as keyof any
-  return items
-    .slice(0)
-    .sort((a: any, b: any) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1))
 }
 
 /**

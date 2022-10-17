@@ -22,7 +22,6 @@ import strings from 'ProjectWebPartsStrings'
  */
 export const useProjectTimeline = (props: IProjectTimelineProps) => {
   const [state, $setState] = useState<IProjectTimelineState>({ loading: true, activeFilters: {} })
-  const web = props.web
 
   const setState = (newState: Partial<IProjectTimelineState>) => {
     $setState((_state) => ({ ..._state, ...newState }))
@@ -173,7 +172,6 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     state,
     setState,
     onFilterChange,
-    onGroupChange,
-    web
-  }
+    onGroupChange
+  } as const
 }
