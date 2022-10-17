@@ -1,8 +1,8 @@
 @import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 
-.progressDialog {
+.root {
   .content {
-    min-height: 150px;
+    min-height: 250px;
     .icon {
       @include ms-Grid-col;
       @include ms-sm2;
