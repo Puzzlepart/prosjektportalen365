@@ -1,3 +1,4 @@
+import { MessageBarType } from '@fluentui/react'
 import { override } from '@microsoft/decorators'
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base'
 import { isArray, stringIsNullOrEmpty } from '@pnp/common'
@@ -68,6 +69,22 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             'InvalidWebLanguage',
             strings.InvalidLanguageErrorMessage,
             strings.InvalidLanguageErrorStack
+          )
+        }
+        case ProjectSetupValidation.IsHubSite: {
+          await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, false)
+          throw new ProjectSetupError(
+            'IsHubSite',
+            strings.IsHubSiteErrorMessage,
+            strings.IsHubSiteErrorStack
+          )
+        }
+        case ProjectSetupValidation.NoHubConnection: {
+          throw new ProjectSetupError(
+            'NoHubConnection',
+            strings.NoHubSiteErrorMessage,
+            strings.NoHubSiteErrorStack,
+            MessageBarType.warning
           )
         }
       }
