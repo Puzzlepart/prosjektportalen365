@@ -139,35 +139,31 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
   let projectDeliveries = []
 
   try {
-    const [timelineConfig] = await Promise.all([
-      await props.hubSite.web.lists
-        .getByTitle(strings.TimelineConfigurationListName)
-        .items.select(
-          'Title',
-          'GtSortOrder',
-          'GtHexColor',
-          'GtTimelineCategory',
-          'GtElementType',
-          'GtShowElementPortfolio',
-          'GtShowElementProgram',
-          'GtTimelineFilter'
-        )
-        .getAll()
-    ])
+    const timelineConfig = await props.hubSite.web.lists
+      .getByTitle(strings.TimelineConfigurationListName)
+      .items.select(
+        'Title',
+        'GtSortOrder',
+        'GtHexColor',
+        'GtTimelineCategory',
+        'GtElementType',
+        'GtShowElementPortfolio',
+        'GtShowElementProgram',
+        'GtTimelineFilter'
+      )
+      .getAll()
 
     if (props.showProjectDeliveries) {
       // eslint-disable-next-line @typescript-eslint/no-extra-semi
-      ;[projectDeliveries] = await Promise.all([
-        await sp.web.lists
-          .getByTitle(props.projectDeliveriesListName || 'Prosjektleveranser')
-          .items.select(
-            'Title',
-            'GtDeliveryDescription',
-            'GtDeliveryStartTime',
-            'GtDeliveryEndTime'
-          )
-          .getAll()
-      ])
+      projectDeliveries = await sp.web.lists
+        .getByTitle(props.projectDeliveriesListName || 'Prosjektleveranser')
+        .items.select(
+          'Title',
+          'GtDeliveryDescription',
+          'GtDeliveryStartTime',
+          'GtDeliveryEndTime'
+        )
+        .getAll()
 
       projectDeliveries = projectDeliveries
         .map((item) => {
@@ -196,15 +192,12 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
         .filter((t) => t)
     }
 
-    const [allColumns] = await Promise.all([
-      (
-        await props.hubSite.web.lists
-          .getByTitle(strings.TimelineContentListName)
-          .defaultView.fields.select('Items')
-          .top(500)
-          .get()
-      )['Items']
-    ])
+    const allColumns = (await props.hubSite.web.lists
+      .getByTitle(strings.TimelineContentListName)
+      .defaultView.fields.select('Items')
+      .top(500)
+      .get()
+    )['Items']
 
     const filterstring: string = allColumns
       .map((col: string) => `(InternalName eq '${col}')`)
@@ -212,33 +205,29 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
 
     const internalNames: string = await allColumns.map((col: string) => `${col}`).join(',')
 
-    let [timelineContentItems] = await Promise.all([
-      await props.hubSite.web.lists
-        .getByTitle(strings.TimelineContentListName)
-        .items.select(
-          internalNames,
-          'Id',
-          'GtTimelineTypeLookup/Title',
-          'GtSiteIdLookupId',
-          'GtSiteIdLookup/Title',
-          'GtSiteIdLookup/GtSiteId'
-        )
-        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-        .getAll()
-    ])
+    let timelineContentItems = await props.hubSite.web.lists
+      .getByTitle(strings.TimelineContentListName)
+      .items.select(
+        internalNames,
+        'Id',
+        'GtTimelineTypeLookup/Title',
+        'GtSiteIdLookupId',
+        'GtSiteIdLookup/Title',
+        'GtSiteIdLookup/GtSiteId'
+      )
+      .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+      .getAll()
 
     let timelineListItems = timelineContentItems.filter(
       (item) => item.GtSiteIdLookup.Title === props.webTitle
     )
 
-    const [timelineColumns] = await Promise.all([
-      await props.hubSite.web.lists
-        .getByTitle(strings.TimelineContentListName)
-        .fields.filter(filterstring)
-        .select('InternalName', 'Title', 'TypeAsString')
-        .top(500)
-        .get()
-    ])
+    const timelineColumns = await props.hubSite.web.lists
+      .getByTitle(strings.TimelineContentListName)
+      .fields.filter(filterstring)
+      .select('InternalName', 'Title', 'TypeAsString')
+      .top(500)
+      .get()
 
     const columns: any[] = timelineColumns
       .filter((column) => column.InternalName !== 'GtSiteIdLookup')
