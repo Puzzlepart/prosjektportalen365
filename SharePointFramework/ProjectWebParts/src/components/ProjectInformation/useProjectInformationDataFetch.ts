@@ -82,10 +82,12 @@ const fetchData = async (
     const [columns, propertiesData, parentProjects] = await Promise.all([
       SPDataAdapter.portal.getProjectColumns(),
       SPDataAdapter.project.getPropertiesData(),
-      SPDataAdapter.portal.getParentProjects(
-        props.webPartContext.pageContext.web.absoluteUrl,
-        ProjectInformationParentProject
-      )
+      props.page === 'Frontpage'
+        ? SPDataAdapter.portal.getParentProjects(
+            props.webPartContext?.pageContext?.web?.absoluteUrl,
+            ProjectInformationParentProject
+          )
+        : Promise.resolve([])
     ])
     const data: IProjectInformationData = {
       columns,

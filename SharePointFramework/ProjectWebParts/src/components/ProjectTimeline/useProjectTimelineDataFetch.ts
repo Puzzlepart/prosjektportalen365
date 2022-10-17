@@ -157,12 +157,7 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
       // eslint-disable-next-line @typescript-eslint/no-extra-semi
       projectDeliveries = await sp.web.lists
         .getByTitle(props.projectDeliveriesListName || 'Prosjektleveranser')
-        .items.select(
-          'Title',
-          'GtDeliveryDescription',
-          'GtDeliveryStartTime',
-          'GtDeliveryEndTime'
-        )
+        .items.select('Title', 'GtDeliveryDescription', 'GtDeliveryStartTime', 'GtDeliveryEndTime')
         .getAll()
 
       projectDeliveries = projectDeliveries
@@ -192,11 +187,12 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
         .filter((t) => t)
     }
 
-    const allColumns = (await props.hubSite.web.lists
-      .getByTitle(strings.TimelineContentListName)
-      .defaultView.fields.select('Items')
-      .top(500)
-      .get()
+    const allColumns = (
+      await props.hubSite.web.lists
+        .getByTitle(strings.TimelineContentListName)
+        .defaultView.fields.select('Items')
+        .top(500)
+        .get()
     )['Items']
 
     const filterstring: string = allColumns
