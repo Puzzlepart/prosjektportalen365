@@ -403,9 +403,10 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
  */
 export const useProjectTimelineDataFetch = (
   props: IProjectTimelineProps,
+  refetch: number,
   fetchCallback: (data: Partial<IProjectTimelineState>) => void
 ) => {
   useEffect(() => {
     fetchData(props).then(fetchCallback)
-  }, [])
+  }, [refetch])
 }

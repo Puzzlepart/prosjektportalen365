@@ -21,7 +21,7 @@ export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   configItemTitle?: string
 }
 
-export interface IProjectTimelineState extends IBaseWebPartComponentState<IProjectTimelineData> {
+export interface IProjectTimelineState extends IBaseWebPartComponentState<any> {
   /**
    * Whether the component is loading
    */
@@ -53,11 +53,6 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<IProje
   activeFilters: { [key: string]: string[] }
 
   /**
-   * Data
-   */
-  data?: any
-
-  /**
    * Filtered data
    */
   filteredData?: ITimelineData
@@ -76,6 +71,12 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<IProje
    * Item to show details for
    */
   showDetails?: { item: ITimelineItem; element: HTMLElement }
+
+  /**
+   * Timestamp for refetch. Changing this state variable refetches the data in
+   * `useProjectTimelineDataFetch`.
+   */
+  refetch?: number
 }
 
 export interface ITimelineData {

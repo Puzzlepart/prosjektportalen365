@@ -146,12 +146,9 @@ export const TimelineList: FunctionComponent<ITimelineListProps> = (props) => {
   const deleteTimelineItem = async (item: any) => {
     const list = context.props.hubSite.web.lists.getByTitle(strings.TimelineContentListName)
     await list.items.getById(item.Id).delete()
-    try {
-      // TODO: Make this refresh list without reloading the page
-      document.location.reload()
-    } catch (error) {
-      context.setState({ error, loading: false })
-    }
+    context.setState({
+      refetch: new Date().getTime()
+    })
   }
 
   /**
@@ -171,8 +168,7 @@ export const TimelineList: FunctionComponent<ITimelineListProps> = (props) => {
   }
 
   /**
-   * Copies and sorts items based on columnKey in the timeline detailslist
-   * TODO: Make this work again
+   * Copies and sorts items based on colum key
    *
    * @param items timelineListItems
    * @param columnKey Column key
@@ -187,8 +183,7 @@ export const TimelineList: FunctionComponent<ITimelineListProps> = (props) => {
   }
 
   /**
-   * For sorting detailslist on column click
-   * TODO: Make this work again
+   * Sorting on column header  click
    *
    * @param _event Event
    * @param column Column

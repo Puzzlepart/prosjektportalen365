@@ -21,7 +21,11 @@ import strings from 'ProjectWebPartsStrings'
  * @returns `state`, `setState`, `onFilterChange`
  */
 export const useProjectTimeline = (props: IProjectTimelineProps) => {
-  const [state, $setState] = useState<IProjectTimelineState>({ loading: true, activeFilters: {} })
+  const [state, $setState] = useState<IProjectTimelineState>({
+    loading: true,
+    activeFilters: {},
+    refetch: new Date().getTime()
+  })
 
   const setState = (newState: Partial<IProjectTimelineState>) => {
     $setState((_state) => ({ ..._state, ...newState }))
@@ -159,7 +163,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     })
   }
 
-  useProjectTimelineDataFetch(props, (data) => {
+  useProjectTimelineDataFetch(props, state.refetch, (data) => {
     if (data.error) setState({ error: data.error, loading: false })
     else {
       const filters = getFilters(data.timelineConfiguration, data.data)
