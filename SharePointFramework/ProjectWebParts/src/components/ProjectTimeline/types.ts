@@ -1,18 +1,15 @@
+import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
+import * as moment from 'moment'
+import { IFilterProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
+import { ProjectColumn } from 'pp365-shared/lib/models'
+import * as ProjectDataService from 'pp365-shared/lib/services/ProjectDataService'
+import { IEntityField } from 'sp-entityportal-service'
 import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState
 } from '../BaseWebPartComponent/types'
-import { TypedHash } from '@pnp/common'
-import * as ProjectDataService from 'pp365-shared/lib/services/ProjectDataService'
-import * as moment from 'moment'
-import { ProjectColumn } from 'pp365-shared/lib/models'
-import { IEntityField } from 'sp-entityportal-service'
-import { stringIsNullOrEmpty } from '@pnp/common'
-import { IFilterProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
-import { Web } from '@pnp/sp'
 
 export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
-  web?: Web
   listName?: string
   showFilterButton?: boolean
   showTimeline?: boolean
@@ -24,7 +21,7 @@ export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   configItemTitle?: string
 }
 
-export interface IProjectTimelineState extends IBaseWebPartComponentState<IProjectTimelineData> {
+export interface IProjectTimelineState extends IBaseWebPartComponentState<any> {
   /**
    * Whether the component is loading
    */
@@ -56,11 +53,6 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<IProje
   activeFilters: { [key: string]: string[] }
 
   /**
-   * Data
-   */
-  data?: any
-
-  /**
    * Filtered data
    */
   filteredData?: ITimelineData
@@ -79,6 +71,12 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<IProje
    * Item to show details for
    */
   showDetails?: { item: ITimelineItem; element: HTMLElement }
+
+  /**
+   * Timestamp for refetch. Changing this state variable refetches the data in
+   * `useProjectTimelineDataFetch`.
+   */
+  refetch?: number
 }
 
 export interface ITimelineData {

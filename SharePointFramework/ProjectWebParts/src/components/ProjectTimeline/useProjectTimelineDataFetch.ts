@@ -1,5 +1,10 @@
+import { format } from '@fluentui/react'
+import { sp } from '@pnp/sp'
 import _ from 'lodash'
-import { useContext, useEffect } from 'react'
+import moment from 'moment'
+import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
+import strings from 'ProjectWebPartsStrings'
+import { useEffect } from 'react'
 import {
   IProjectTimelineProps,
   IProjectTimelineState,
@@ -8,12 +13,6 @@ import {
   ITimelineItem,
   TimelineGroupType
 } from './types'
-import moment from 'moment'
-import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
-import strings from 'ProjectWebPartsStrings'
-import { sp, Web } from '@pnp/sp'
-import { ProjectTimelineContext } from './context'
-import { format, IColumn } from '@fluentui/react'
 
 /**
  * Creating groups based on projects title
@@ -137,40 +136,34 @@ const transformItems = (timelineItems: TimelineContentListModel[]): ITimelineIte
  * Get timeline items and columns
  */
 const getTimelineData = async (props: IProjectTimelineProps) => {
-  props.web = new Web(props.hubSite.url)
-
   let projectDeliveries = []
 
   try {
-    const [timelineConfig] = await Promise.all([
-      await props.hubSite.web.lists
-        .getByTitle(strings.TimelineConfigurationListName)
-        .items.select(
-          'Title',
-          'GtSortOrder',
-          'GtHexColor',
-          'GtTimelineCategory',
-          'GtElementType',
-          'GtShowElementPortfolio',
-          'GtShowElementProgram',
-          'GtTimelineFilter'
-        )
-        .getAll()
-    ])
+    const timelineConfig = await props.hubSite.web.lists
+      .getByTitle(strings.TimelineConfigurationListName)
+      .items.select(
+        'Title',
+        'GtSortOrder',
+        'GtHexColor',
+        'GtTimelineCategory',
+        'GtElementType',
+        'GtShowElementPortfolio',
+        'GtShowElementProgram',
+        'GtTimelineFilter'
+      )
+      .getAll()
 
     if (props.showProjectDeliveries) {
       // eslint-disable-next-line @typescript-eslint/no-extra-semi
-      ;[projectDeliveries] = await Promise.all([
-        await sp.web.lists
-          .getByTitle(props.projectDeliveriesListName || 'Prosjektleveranser')
-          .items.select(
-            'Title',
-            'GtDeliveryDescription',
-            'GtDeliveryStartTime',
-            'GtDeliveryEndTime'
-          )
-          .getAll()
-      ])
+      projectDeliveries = await sp.web.lists
+        .getByTitle(props.projectDeliveriesListName || 'Prosjektleveranser')
+        .items.select(
+          'Title',
+          'GtDeliveryDescription',
+          'GtDeliveryStartTime',
+          'GtDeliveryEndTime'
+        )
+        .getAll()
 
       projectDeliveries = projectDeliveries
         .map((item) => {
@@ -199,15 +192,12 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
         .filter((t) => t)
     }
 
-    const [allColumns] = await Promise.all([
-      (
-        await props.web.lists
-          .getByTitle(strings.TimelineContentListName)
-          .defaultView.fields.select('Items')
-          .top(500)
-          .get()
-      )['Items']
-    ])
+    const allColumns = (await props.hubSite.web.lists
+      .getByTitle(strings.TimelineContentListName)
+      .defaultView.fields.select('Items')
+      .top(500)
+      .get()
+    )['Items']
 
     const filterstring: string = allColumns
       .map((col: string) => `(InternalName eq '${col}')`)
@@ -215,33 +205,29 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
 
     const internalNames: string = await allColumns.map((col: string) => `${col}`).join(',')
 
-    let [timelineContentItems] = await Promise.all([
-      await props.web.lists
-        .getByTitle(strings.TimelineContentListName)
-        .items.select(
-          internalNames,
-          'Id',
-          'GtTimelineTypeLookup/Title',
-          'GtSiteIdLookupId',
-          'GtSiteIdLookup/Title',
-          'GtSiteIdLookup/GtSiteId'
-        )
-        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-        .getAll()
-    ])
+    let timelineContentItems = await props.hubSite.web.lists
+      .getByTitle(strings.TimelineContentListName)
+      .items.select(
+        internalNames,
+        'Id',
+        'GtTimelineTypeLookup/Title',
+        'GtSiteIdLookupId',
+        'GtSiteIdLookup/Title',
+        'GtSiteIdLookup/GtSiteId'
+      )
+      .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+      .getAll()
 
     let timelineListItems = timelineContentItems.filter(
       (item) => item.GtSiteIdLookup.Title === props.webTitle
     )
 
-    const [timelineColumns] = await Promise.all([
-      await props.web.lists
-        .getByTitle(strings.TimelineContentListName)
-        .fields.filter(filterstring)
-        .select('InternalName', 'Title', 'TypeAsString')
-        .top(500)
-        .get()
-    ])
+    const timelineColumns = await props.hubSite.web.lists
+      .getByTitle(strings.TimelineContentListName)
+      .fields.filter(filterstring)
+      .select('InternalName', 'Title', 'TypeAsString')
+      .top(500)
+      .get()
 
     const columns: any[] = timelineColumns
       .filter((column) => column.InternalName !== 'GtSiteIdLookup')
@@ -251,10 +237,8 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
           name: column.Title,
           fieldName: column.InternalName,
           data: { type: column.TypeAsString },
-          onColumnClick: onColumnClick.bind(this),
           minWidth: 150,
           maxWidth: 200,
-          sorting: true,
           isResizable: true
         }
       })
@@ -308,54 +292,6 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
   } catch (error) {
     return []
   }
-}
-
-/**
- * For sorting detailslist on column click
- * TODO: Make this work again
- *
- * @param event Event
- * @param column Column
- */
-const onColumnClick = (event: React.MouseEvent<HTMLElement>, column: IColumn): void => {
-  const context = useContext(ProjectTimelineContext)
-
-  const newColumns: IColumn[] = context.state.data.timelineColumns.slice()
-  const currColumn: IColumn = newColumns.filter((currCol) => column.key === currCol.key)[0]
-  newColumns.forEach((newCol: IColumn) => {
-    if (newCol === currColumn) {
-      currColumn.isSortedDescending = !currColumn.isSortedDescending
-      currColumn.isSorted = true
-    } else {
-      newCol.isSorted = false
-      newCol.isSortedDescending = true
-    }
-  })
-  const newItems = copyAndSort(
-    context.state.data.timelineListItems,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    currColumn.fieldName!,
-    currColumn.isSortedDescending
-  )
-  context.setState({
-    data: { ...context.state.data, timelineColumns: newColumns, timelineListItems: newItems }
-  })
-}
-
-/**
- * Copies and sorts items based on columnKey in the timeline detailslist
- * TODO: Make this work again
- *
- * @param items timelineListItems
- * @param columnKey Column key
- * @param isSortedDescending Is Sorted Descending?
- * @returns sorted timeline list items
- */
-const copyAndSort = (items: any[], columnKey: string, isSortedDescending?: boolean): any[] => {
-  const key = columnKey as keyof any
-  return items
-    .slice(0)
-    .sort((a: any, b: any) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1))
 }
 
 /**
@@ -452,13 +388,15 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
  * Fetch hook for ProjectTimeline
  *
  * @param props Component properties for `ProjectTimeline`
+ * @param refetch Timestamp for refetch. Changes to this variable refetches the data in `useEffect`
  * @param fetchCallback Fetch callback
  */
 export const useProjectTimelineDataFetch = (
   props: IProjectTimelineProps,
+  refetch: number,
   fetchCallback: (data: Partial<IProjectTimelineState>) => void
 ) => {
   useEffect(() => {
     fetchData(props).then(fetchCallback)
-  }, [])
+  }, [refetch])
 }
