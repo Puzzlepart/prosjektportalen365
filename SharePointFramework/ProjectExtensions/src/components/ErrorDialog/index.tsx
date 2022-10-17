@@ -29,11 +29,7 @@ export const ErrorDialog: FunctionComponent<IErrorDialogProps> = ({
         </>
       )
     }
-    return (
-      <>
-        <PrimaryButton text={strings.CloseModalText} onClick={onDismiss} />
-      </>
-    )
+    return <PrimaryButton text={strings.CloseModalText} onClick={onDismiss} />
   }
 
   return (
