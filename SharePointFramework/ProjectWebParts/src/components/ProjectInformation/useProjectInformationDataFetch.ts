@@ -84,9 +84,9 @@ const fetchData = async (
       SPDataAdapter.project.getPropertiesData(),
       props.page === 'Frontpage'
         ? SPDataAdapter.portal.getParentProjects(
-          props.webPartContext?.pageContext?.web?.absoluteUrl,
-          ProjectInformationParentProject
-        )
+            props.webPartContext?.pageContext?.web?.absoluteUrl,
+            ProjectInformationParentProject
+          )
         : Promise.resolve([])
     ])
     const data: IProjectInformationData = {

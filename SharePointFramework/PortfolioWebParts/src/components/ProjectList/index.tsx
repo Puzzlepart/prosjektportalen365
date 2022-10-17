@@ -169,7 +169,8 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
               }}
               page='Portfolio'
               hidden={!state.showProjectInfo}
-              hideAllActions={true} />
+              hideAllActions={true}
+            />
             <div className={styles.projects}>{renderProjects(projects)}</div>
           </>
         )}

@@ -1,7 +1,9 @@
 import { IPanelProps } from '@fluentui/react'
 import { IProjectInformationProps } from '../ProjectInformation'
 
-export interface IProjectInformationPanelProps extends IProjectInformationProps, Pick<IPanelProps, 'hidden'> {
+export interface IProjectInformationPanelProps
+  extends IProjectInformationProps,
+    Pick<IPanelProps, 'hidden'> {
   /**
    * On render function for the element that should toggle the panel visibility
    */
