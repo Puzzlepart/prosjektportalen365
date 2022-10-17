@@ -399,6 +399,7 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
  * Fetch hook for ProjectTimeline
  *
  * @param props Component properties for `ProjectTimeline`
+ * @param refetch Timestamp for refetch. Changes to this variable refetches the data in `useEffect`
  * @param fetchCallback Fetch callback
  */
 export const useProjectTimelineDataFetch = (
