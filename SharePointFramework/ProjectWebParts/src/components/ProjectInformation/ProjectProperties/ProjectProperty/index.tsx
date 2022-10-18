@@ -44,10 +44,7 @@ export const ProjectProperty: FunctionComponent<IProjectPropertyProps> = ({
         return (
           <div className={styles.labels}>
             {model.value.split(';').map((text, key) => (
-              <div
-                key={key}
-                title={text}
-                className={styles.label}>
+              <div key={key} title={text} className={styles.termLabel}>
                 {text}
               </div>
             ))}
