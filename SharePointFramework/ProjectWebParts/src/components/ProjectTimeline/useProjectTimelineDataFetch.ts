@@ -105,14 +105,14 @@ const transformItems = (timelineItems: TimelineContentListModel[]): ITimelineIte
         projectUrl: item.url,
         data: {
           phase: item.phase,
-          description: item.description,
-          type: item.type,
+          description: item.description || '',
+          type: item.type || strings.PhaseLabel,
           budgetTotal: item.budgetTotal,
           costsTotal: item.costsTotal,
-          sortOrder: item.sortOrder,
+          sortOrder: item.sortOrder || 99,
           hexColor: item.hexColor,
-          category: item.timelineCategory,
-          elementType: item.elementType,
+          category: item.timelineCategory || 'Styring',
+          elementType: item.elementType || strings.BarLabel,
           filter: item.timelineFilter,
           tag: item.tag
         }
