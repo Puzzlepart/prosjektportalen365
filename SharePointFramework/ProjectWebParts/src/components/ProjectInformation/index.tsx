@@ -30,10 +30,10 @@ export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (
           </div>
           {state.loading ? (
             <>
-              <Shimmer width="65%" className={styles.shimmer} />
-              <Shimmer width="65%" className={styles.shimmer} />
-              <Shimmer width="50%" className={styles.shimmer} />
-              <Shimmer width="45%" className={styles.shimmer} />
+              <Shimmer width='65%' className={styles.shimmer} />
+              <Shimmer width='65%' className={styles.shimmer} />
+              <Shimmer width='50%' className={styles.shimmer} />
+              <Shimmer width='45%' className={styles.shimmer} />
             </>
           ) : (
             <div>
