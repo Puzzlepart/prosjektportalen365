@@ -40,6 +40,20 @@ export const ProjectProperty: FunctionComponent<IProjectPropertyProps> = ({
           </div>
         )
       }
+      case 'TaxonomyFieldTypeMulti': {
+        return (
+          <div className={styles.labels}>
+            {model.value.split(';').map((text, key) => (
+              <div
+                key={key}
+                title={text}
+                className={styles.label}>
+                {text}
+              </div>
+            ))}
+          </div>
+        )
+      }
       default: {
         return (
           <div
