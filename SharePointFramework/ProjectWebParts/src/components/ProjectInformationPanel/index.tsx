@@ -9,7 +9,7 @@ export const ProjectInformationPanel: FunctionComponent<IProjectInformationPanel
   const [showPanel, setShowPanel] = useState(!props.hidden)
 
   useEffect(() => {
-    setShowPanel(!props.hidden)
+    if (!props.onRenderToggleElement) setShowPanel(!props.hidden)
   }, [props.hidden])
 
   return (
@@ -29,7 +29,7 @@ export const ProjectInformationPanel: FunctionComponent<IProjectInformationPanel
 }
 
 ProjectInformationPanel.defaultProps = {
-  hidden: false
+  hidden: true
 }
 
 export * from './types'
