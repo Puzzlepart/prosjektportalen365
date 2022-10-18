@@ -1,4 +1,5 @@
 import { Panel, PanelType } from '@fluentui/react/lib/Panel'
+import { Shimmer } from '@fluentui/react/lib/Shimmer'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
 import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
@@ -27,7 +28,14 @@ export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (
               {props.title}
             </span>
           </div>
-          {state.loading ? null : (
+          {state.loading ? (
+            <>
+              <Shimmer width="65%" className={styles.shimmer} />
+              <Shimmer width="65%" className={styles.shimmer} />
+              <Shimmer width="50%" className={styles.shimmer} />
+              <Shimmer width="45%" className={styles.shimmer} />
+            </>
+          ) : (
             <div>
               <ProjectProperties properties={state.properties} />
               {!props.hideAllActions && state.message && <UserMessage {...state.message} />}
