@@ -10,8 +10,10 @@ jobs:
     name: Build release (CI)
     runs-on: windows-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout Puzzlepart/prosjektportalen365.git
+        run: |
+          mkdir C:/prosjektportalen365_main
+          git clone --branch main https://github.com/Puzzlepart/prosjektportalen365.git C:/prosjektportalen365_main
 
       - name: Setup Node.js 16.18.0
         uses: actions/setup-node@v3
@@ -19,6 +21,7 @@ jobs:
           node-version: 16.18.0
 
       - name: Run Install/Build-Release.ps1 in CI mode
+        working-directory: C:/prosjektportalen365_main
         run: Install/Build-Release.ps1 -CI
         shell: powershell
       
