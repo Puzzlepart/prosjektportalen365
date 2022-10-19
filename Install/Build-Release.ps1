@@ -12,8 +12,6 @@ Param(
 
 $PACKAGE_FILE = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Json
 
-Write-Host "[Building release v$($PACKAGE_FILE.version)]" -ForegroundColor Cyan
-
 #region Paths
 $START_PATH = Get-Location
 $ROOT_PATH = "$PSScriptRoot/.."
@@ -25,6 +23,8 @@ $GIT_HASH = git log --pretty=format:'%h' -n 1
 $RELEASE_NAME = "$($PACKAGE_FILE.name)-$($PACKAGE_FILE.version).$($GIT_HASH)"
 $RELEASE_PATH = "$ROOT_PATH/release/$($RELEASE_NAME)"
 #endregion
+
+Write-Host "[Building release $($RELEASE_NAME)]" -ForegroundColor Cyan
 
 if ($CI.IsPresent) {
     Write-Host "[Running in CI mode. Installing module SharePointPnPPowerShellOnline.]" -ForegroundColor Yellow
