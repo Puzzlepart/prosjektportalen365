@@ -3,6 +3,14 @@ import { sp, SPConfiguration, SPRest, Web } from '@pnp/sp'
 import { SpEntityPortalService } from 'sp-entityportal-service'
 import { PortalDataService } from '../../services/PortalDataService'
 import { ISPDataAdapterBaseConfiguration } from './ISPDataAdapterBaseConfiguration'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
+import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
+import { ProjectAdminRoleType } from '../../models'
+import { ProjectAdminPermission } from './ProjectAdminPermission'
+import { dateAdd, PnPClientStorage, PnPClientStore } from '@pnp/common'
+import { isArray, unique, contains } from 'underscore'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
 
 export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   public spConfiguration: SPConfiguration = {
@@ -17,14 +25,41 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   public entityService: SpEntityPortalService
   public sp: SPRest
   public isConfigured: boolean = false
+  public spfxContext: ApplicationCustomizerContext | ListViewCommandSetContext | WebPartContext
+  private _storage: PnPClientStore
+  private _storageKeys: Record<string, string> = {
+    getProjectAdminPermissions: '{0}_project_admin_permissions'
+  }
+
+  /**
+   * Initialize storage
+   */
+  private _initStorage() {
+    this._storage = new PnPClientStorage().session
+    this._storageKeys = Object.keys(this._storageKeys).reduce((obj, key) => {
+      obj[key] = format(this._storageKeys[key], this.settings.siteId.replace(/-/g, ''))
+      return obj
+    }, {})
+    this._storage.deleteExpired()
+  }
+
+  /**
+   * Get storage key for function
+   *
+   * @param func Function name
+   */
+  public getStorageKey(func: string) {
+    return this._storageKeys[func]
+  }
 
   /**
    * Configure the SP data adapter
    *
-   * @param {ApplicationCustomizerContext | ListViewCommandSetContext} spfxContext Context
-   * @param {T} settings Settings
+   * @param spfxContext Context
+   * @param settings Settings
    */
   public configure(spfxContext: any, settings: T) {
+    this.spfxContext = spfxContext
     this.settings = settings
     sp.setup({ spfxContext, ...this.spConfiguration })
     this.sp = sp
@@ -39,7 +74,87 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
       identityFieldName: 'GtSiteId',
       urlFieldName: 'GtSiteUrl'
     })
+    this._initStorage()
     this.isConfigured = true
+  }
+
+  /**
+   * Check project admin permissions. The result is stored in `sessionStorage`
+   * for 30 minutes to avoid too many requests.
+   *
+   * @param permission Permission to check
+   * @param properties Project properties
+   */
+  public async checkProjectAdminPermissions(
+    permission: ProjectAdminPermission,
+    properties: Record<string, any>
+  ) {
+    const { pageContext } = this.spfxContext
+    if (!pageContext) return false
+    const storageKey = this.getStorageKey('getProjectAdminPermissions')
+    const storageExpire = dateAdd(new Date(), 'minute', 30)
+    const permissions = await new PnPClientStorage().session.getOrPut(
+      storageKey,
+      async () => {
+        const userPermissions = []
+        const rolesToCheck = properties.GtProjectAdminRoles
+        if (!rolesToCheck) {
+          if (pageContext.legacyPageContext.isSiteAdmin === true) return true
+          else return false
+        }
+        const { data: currentUser } = await sp.web.ensureUser(pageContext.user.email)
+        const projectAdminRoles = (await this.portal.getProjectAdminRoles()).filter(
+          (role) => rolesToCheck.indexOf(role.title) !== -1
+        )
+        for (let i = 0; i < projectAdminRoles.length; i++) {
+          const role = projectAdminRoles[i]
+          switch (role.type) {
+            case ProjectAdminRoleType.SiteAdmin:
+              {
+                if (pageContext.legacyPageContext.isSiteAdmin === true)
+                  userPermissions.push(...role.permissions)
+              }
+              break
+            case ProjectAdminRoleType.ProjectProperty:
+              {
+                const projectFieldValue = properties[role.projectFieldName]
+                if (isArray(projectFieldValue) && projectFieldValue.indexOf(currentUser.Id) !== -1)
+                  userPermissions.push(...role.permissions)
+                if (projectFieldValue === currentUser?.Id) userPermissions.push(...role.permissions)
+              }
+              break
+            case ProjectAdminRoleType.SharePointGroup:
+              {
+                let web: Web = null
+                switch (role.groupLevel) {
+                  case 'Prosjekt':
+                    web = sp.web
+                    break
+                  case 'Portefølje':
+                    web = this.portal.web
+                    break
+                }
+                try {
+                  if (
+                    (
+                      await web.siteGroups
+                        .getByName(role.groupName)
+                        .users.filter(`Email eq '${currentUser.Email}'`)
+                        .get()
+                    ).length > 0
+                  )
+                    userPermissions.push(...role.permissions)
+                } catch {}
+              }
+              break
+          }
+        }
+        return unique(userPermissions, (p) => p)
+      },
+      storageExpire
+    )
+    if (typeof permissions === 'boolean') return permissions
+    else return contains(permissions, permission.toString())
   }
 }
 

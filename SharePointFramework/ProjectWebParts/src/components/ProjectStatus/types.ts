@@ -1,12 +1,13 @@
 import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
 import { ProjectColumnConfig, SectionModel, SPField, StatusReport } from 'pp365-shared/lib/models'
 import { IGetPropertiesData } from 'pp365-shared/lib/services'
-
+import { PageContext } from '@microsoft/sp-page-context'
 export interface IProjectStatusProps extends IBaseWebPartComponentProps {
   riskMatrixCalloutTemplate: string
   riskMatrixWidth?: number | string
   riskMatrixHeight?: number | string
   fieldWidth?: number
+  pageContext: PageContext
 }
 
 export interface IProjectStatusState extends IBaseWebPartComponentState<IProjectStatusData> {
@@ -35,6 +36,11 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
    */
 
   newestReportId?: number
+
+  /**
+   * Current user has admin permissions
+   */
+  userHasAdminPermission?: boolean
 }
 
 export interface IProjectStatusHashState {
@@ -74,4 +80,9 @@ export interface IProjectStatusData {
    * Column configuration
    */
   columnConfig?: ProjectColumnConfig[]
+
+  /**
+   * Current user has admin permissions
+   */
+  userHasAdminPermission?: boolean
 }

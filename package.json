@@ -1,19 +1,18 @@
 {
   "name": "pp365",
-  "version": "1.6.1",
-  "engines": {
-    "node": "^12"
-  },
+  "version": "1.7.0",
   "description": "Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.",
   "scripts": {
     "build:release": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1",
     "build:release:force": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -Force",
     "build:pnpTemplates": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./Install/Build-Release.ps1 -SkipBuildSharePointFramework",
-    "sync-version": "node tasks/automatic-versioning.js"
+    "sync-version": "node ./.tasks/automatic-versioning.js",
+    "generate-readme": "npx @appnest/readme generate",
+    "postversion": "npm run generate-readme"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Puzzlepart/prosjektportalen365"
+    "url": "https://github.com/Puzzlepart/prosjektportalen365.git"
   },
   "keywords": [
     "Prosjektportalen",

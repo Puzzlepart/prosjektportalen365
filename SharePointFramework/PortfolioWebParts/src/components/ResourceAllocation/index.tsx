@@ -1,21 +1,26 @@
+import {
+  MessageBarType,
+  CommandBar,
+  MessageBar,
+  format,
+  IColumn,
+  ICommandBarProps,
+  getId,
+  ContextualMenuItemType
+} from '@fluentui/react'
 import { get } from '@microsoft/sp-lodash-subset'
 import { sp } from '@pnp/sp'
-import { getId } from '@uifabric/utilities'
 import sortArray from 'array-sort'
 import {
   IAllocationSearchResult,
   ITimelineData,
   ITimelineGroup,
   ITimelineItem,
-  TimelineGroupType
+  TimelineResourceType
 } from 'interfaces'
 import moment from 'moment'
-import { CommandBar, ICommandBarProps } from 'office-ui-fabric-react/lib/CommandBar'
-import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu'
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { tryParsePercentage } from 'pp365-shared/lib/helpers'
 import { DataSourceService } from 'pp365-shared/lib/services'
 import React, { Component } from 'react'
@@ -85,11 +90,12 @@ export class ResourceAllocation extends Component<
 
   public render(): React.ReactElement<IResourceAllocationProps> {
     if (this.state.loading) return null
+
     if (this.state.error) {
       return (
         <div className={styles.root}>
           <div className={styles.container}>
-            <MessageBar messageBarType={MessageBarType.error}>{this.state.error}</MessageBar>
+            <UserMessage text={this.state.error} type={MessageBarType.success} />
           </div>
         </div>
       )
@@ -251,7 +257,7 @@ export class ResourceAllocation extends Component<
    */
   private _groupRenderer({ group }: ReactCalendarGroupRendererProps<ITimelineGroup>) {
     const style: React.CSSProperties = { display: 'block', width: '100%' }
-    if (group.type === TimelineGroupType.Role) {
+    if (group.resourceType === TimelineResourceType.Role) {
       style.fontStyle = 'italic'
     }
     return (
@@ -282,15 +288,20 @@ export class ResourceAllocation extends Component<
     const groupNames: string[] = searchResults
       .map((res) => {
         const name = res.RefinableString71 || `${res.RefinableString72}|R`
+        if (name === null)
+          this.setState({
+            error: format(strings.ResourceAllocationErrorTransformGroupText, res.SiteTitle)
+          })
         return name
       })
       .filter((value, index, self) => self.indexOf(value) === index)
+
     let groups: ITimelineGroup[] = groupNames.map((name, id) => {
       const [title, type] = name.split('|')
       return {
         id,
         title,
-        type: type === 'R' ? TimelineGroupType.Role : TimelineGroupType.User
+        resourceType: type === 'R' ? TimelineResourceType.Role : TimelineResourceType.User
       }
     })
     groups = sortArray(groups, ['type', 'title'])

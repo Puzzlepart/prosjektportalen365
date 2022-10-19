@@ -35,4 +35,9 @@ export interface ITemplateSelectDialogState {
    * Settings
    */
   settings?: ProjectSetupSettings
+
+  /**
+   * Height for the Dialog Pivot needs to be fixed
+   */
+  flexibleHeight?: number
 }

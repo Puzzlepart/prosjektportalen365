@@ -1,9 +1,16 @@
+/* eslint-disable no-console */
+import {
+  DefaultButton,
+  DialogFooter,
+  MessageBar,
+  MessageBarType,
+  Pivot,
+  PivotItem,
+  PrimaryButton
+} from '@fluentui/react'
 import { ProjectTemplate } from 'models'
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot'
 import * as strings from 'ProjectExtensionsStrings'
-import * as React from 'react'
+import React, { Component, ReactElement } from 'react'
 import { isEmpty } from 'underscore'
 import { ProjectSetupSettings } from '../../projectSetup/ProjectSetupSettings'
 import { BaseDialog } from '../@BaseDialog'
@@ -13,21 +20,14 @@ import styles from './TemplateSelectDialog.module.scss'
 import { TemplateSelector } from './TemplateSelector'
 import { ITemplateSelectDialogProps, ITemplateSelectDialogState } from './types'
 
-/**
- * @class TemplateSelectDialog
- */
-export class TemplateSelectDialog extends React.Component<
+export class TemplateSelectDialog extends Component<
   ITemplateSelectDialogProps,
   ITemplateSelectDialogState
 > {
-  /**
-   * Constructor
-   *
-   * @param props Props
-   */
   constructor(props: ITemplateSelectDialogProps) {
     super(props)
     this.state = {
+      flexibleHeight: (props.data.templates.filter((t) => !t.isHidden).length / 4) * 150,
       selectedTemplate: this._getDefaultTemplate(),
       selectedExtensions: props.data.extensions.filter(
         (ext) =>
@@ -42,9 +42,10 @@ export class TemplateSelectDialog extends React.Component<
     }
   }
 
-  public render(): React.ReactElement<ITemplateSelectDialogProps> {
+  public render(): ReactElement<ITemplateSelectDialogProps> {
     const { version, onDismiss, data } = this.props
     const { selectedTemplate, selectedListContentConfig, selectedExtensions } = this.state
+
     return (
       <BaseDialog
         version={version}
@@ -53,11 +54,10 @@ export class TemplateSelectDialog extends React.Component<
           subText: strings.TemplateSelectDialogInfoText,
           className: styles.content
         }}
-        modalProps={{ isBlocking: true, isDarkOverlay: true }}
+        modalProps={{ containerClassName: styles.root, isBlocking: true, isDarkOverlay: true }}
         onDismiss={onDismiss}
-        onRenderFooter={this._onRenderFooter.bind(this)}
-        containerClassName={styles.templateSelectDialog}>
-        <Pivot>
+        containerClassName={styles.root}>
+        <Pivot style={{ minHeight: 350, height: this.state.flexibleHeight }}>
           <PivotItem headerText={strings.TemplateSelectorTitle} itemIcon='ViewListGroup'>
             <TemplateSelector
               templates={data.templates.filter((t) => !t.isHidden)}
@@ -105,6 +105,13 @@ export class TemplateSelectDialog extends React.Component<
             </PivotItem>
           )}
         </Pivot>
+        <DialogFooter>
+          <PrimaryButton
+            text={strings.TemplateSelectDialogSubmitButtonText}
+            onClick={this._onSubmit.bind(this)}
+          />
+          <DefaultButton text={strings.CloseModalText} onClick={this.props.onDismiss} />
+        </DialogFooter>
       </BaseDialog>
     )
   }
@@ -138,23 +145,7 @@ export class TemplateSelectDialog extends React.Component<
   }
 
   /**
-   * On render footrer
-   */
-  private _onRenderFooter() {
-    return (
-      <>
-        <DefaultButton text={strings.CloseModalText} onClick={this.props.onDismiss} />
-        <PrimaryButton
-          text={strings.TemplateSelectDialogSubmitButtonText}
-          iconProps={{ iconName: 'ChevronRight' }}
-          onClick={this._onSubmit.bind(this)}
-        />
-      </>
-    )
-  }
-
-  /**
-   * On submit the selected configuration
+   * On submit the selected user configuration
    */
   private _onSubmit() {
     const data = { ...this.state }
@@ -165,4 +156,4 @@ export class TemplateSelectDialog extends React.Component<
   }
 }
 
-export { ITemplateSelectDialogProps, ITemplateSelectDialogState }
+export * from './types'

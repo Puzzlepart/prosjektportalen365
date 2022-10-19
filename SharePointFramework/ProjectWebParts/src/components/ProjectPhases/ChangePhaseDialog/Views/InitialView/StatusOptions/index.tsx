@@ -1,4 +1,4 @@
-import { ActionButton } from 'office-ui-fabric-react/lib/Button'
+import { ActionButton } from '@fluentui/react/lib/Button'
 import React from 'react'
 import { IStatusOptionsProps } from './types'
 

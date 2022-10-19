@@ -29,9 +29,24 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   syncPropertiesAfterPhaseChange: boolean
 
   /**
-   * If the site uses a dynamic homepage based off of the phase
+   * Use dynamic homepage when switching phases
    */
   useDynamicHomepage: boolean
+
+  /**
+   * Use and run hooks when switching phases
+   */
+  usePhaseHooks: boolean
+
+  /**
+   * Hook url - for running hooks when switching phases
+   */
+  hookUrl: string
+
+  /**
+   * Hook auth - for authing hooks when switching phases
+   */
+  hookAuth: string
 }
 
 export interface IProjectPhasesState extends IBaseWebPartComponentState<IProjectPhasesData> {
@@ -89,7 +104,12 @@ export interface IProjectPhasesData {
   /**
    * Welcome page of web
    */
-  welcomepage?: string
+  welcomePage?: string
+
+  /**
+   * Current user has change phase permission (75a08ae0-d69a-41b2-adf4-ae233c6bff9f)
+   */
+  userHasChangePhasePermission?: boolean
 }
 
 export interface IPhaseSitePageModel {

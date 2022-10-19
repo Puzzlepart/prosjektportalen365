@@ -1,4 +1,4 @@
-import { Icon } from 'office-ui-fabric-react/lib/Icon'
+import { Icon } from '@fluentui/react/lib/Icon'
 import React from 'react'
 import { IStatusElementProps } from './types'
 import styles from './StatusElement.module.scss'

@@ -10,8 +10,10 @@ export interface IItemData {
   costsTotal?: string
   sortOrder?: number
   hexColor?: string
+  category?: string
   elementType?: string
   filter?: boolean
+  tag?: string
 }
 export interface ITimelineItem {
   id: number

@@ -11,7 +11,7 @@ import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
 import React from 'react'
 import { IProjectPhasesProps, ProjectPhases } from 'components/ProjectPhases'
-import 'office-ui-fabric-react/dist/css/fabric.min.css'
+import '@fluentui/react/dist/css/fabric.min.css'
 import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
 
@@ -86,6 +86,24 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
                     strings.UseDynamicHomepageCalloutText
                   ),
                   checked: this.properties.useDynamicHomepage
+                }),
+                PropertyFieldToggleWithCallout('usePhaseHooks', {
+                  calloutTrigger: CalloutTriggers.Click,
+                  key: 'usePhaseHooksFieldId',
+                  label: strings.UsePhaseHooksFieldLabel,
+                  onText: 'På',
+                  offText: 'Av',
+                  calloutWidth: 430,
+                  calloutContent: React.createElement('p', {}, strings.UsePhaseHooksCalloutText),
+                  checked: this.properties.usePhaseHooks
+                }),
+                PropertyPaneTextField('hookUrl', {
+                  label: strings.HookUrlFieldLabel,
+                  description: strings.HookUrlFieldDescription
+                }),
+                PropertyPaneTextField('hookAuth', {
+                  label: strings.HookAuthFieldLabel,
+                  description: strings.HookAuthFieldDescription
                 })
               ]
             }

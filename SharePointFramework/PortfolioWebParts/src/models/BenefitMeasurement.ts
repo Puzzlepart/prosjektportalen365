@@ -1,6 +1,6 @@
 import { BenefitBase, BenefitMeasurementIndicator } from './'
 import { IBenefitsSearchResult } from 'interfaces'
-import { IIconProps } from 'office-ui-fabric-react/lib/Icon'
+import { IIconProps } from '@fluentui/react/lib/Icon'
 
 export class BenefitMeasurement extends BenefitBase {
   public Date: Date

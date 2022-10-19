@@ -1,44 +1,51 @@
+import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
+import * as moment from 'moment'
+import { IFilterProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
+import { ProjectColumn } from 'pp365-shared/lib/models'
+import * as ProjectDataService from 'pp365-shared/lib/services/ProjectDataService'
+import { IEntityField } from 'sp-entityportal-service'
 import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState
 } from '../BaseWebPartComponent/types'
-import { TypedHash } from '@pnp/common'
-import * as ProjectDataService from 'pp365-shared/lib/services/ProjectDataService'
-import * as moment from 'moment'
-import { ProjectColumn } from 'pp365-shared/lib/models'
-import { IEntityField } from 'sp-entityportal-service'
-import { stringIsNullOrEmpty } from '@pnp/common'
 
 export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
-  showTitle?: boolean
   listName?: string
   showFilterButton?: boolean
   showTimeline?: boolean
-  showInfoMessage?: boolean
-  showCmdTimelineList?: boolean
   showTimelineList?: boolean
-  isSelectionModeNone?: boolean
+  showCmdTimelineList?: boolean
   infoText?: string
   showProjectDeliveries?: boolean
   projectDeliveriesListName?: string
   configItemTitle?: string
 }
 
-export interface IProjectTimelineState extends IBaseWebPartComponentState<IProjectTimelineData> {
+export interface IProjectTimelineState extends IBaseWebPartComponentState<any> {
+  /**
+   * Whether the component is loading
+   */
+  loading: boolean
+
+  /**
+   * Groups
+   */
+  groups?: ITimelineGroups
+
   /**
    * Properties
    */
   properties?: ProjectPropertyModel[]
 
   /**
-   * Selection
-   */
-  selectedItem?: any[]
-
-  /**
    * Show filter panel
    */
-  showFilterPanel: boolean
+  showFilterPanel?: boolean
+
+  /**
+   * Filters
+   */
+  filters?: IFilterProps[]
 
   /**
    * Active filters
@@ -46,9 +53,9 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<IProje
   activeFilters: { [key: string]: string[] }
 
   /**
-   * Data
+   * Filtered data
    */
-  data?: any
+  filteredData?: ITimelineData
 
   /**
    * Timeline Configuration
@@ -58,12 +65,18 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<IProje
   /**
    * Error
    */
-  error?: string
+  error?: Error
 
   /**
    * Item to show details for
    */
   showDetails?: { item: ITimelineItem; element: HTMLElement }
+
+  /**
+   * Timestamp for refetch. Changing this state variable refetches the data in
+   * `useProjectTimelineDataFetch`.
+   */
+  refetch?: number
 }
 
 export interface ITimelineData {
@@ -73,9 +86,22 @@ export interface ITimelineData {
   timelineColumns?: any[]
 }
 
+export enum TimelineGroupType {
+  Project,
+  Category,
+  Type
+}
+
 export interface ITimelineGroup {
   id: number
   title: string
+  type?: TimelineGroupType
+}
+
+export interface ITimelineGroups {
+  projectGroup: ITimelineGroup[]
+  categoryGroup: ITimelineGroup[]
+  typeGroup: ITimelineGroup[]
 }
 
 export interface IItemData {
@@ -85,10 +111,12 @@ export interface IItemData {
   type?: string
   budgetTotal?: string
   costsTotal?: string
-  sortOrder?: number,
-  hexColor?: string,
-  elementType?: string,
+  sortOrder?: number
+  hexColor?: string
+  category?: string
+  elementType?: string
   filter?: boolean
+  tag?: string
 }
 
 export interface ITimelineItem {

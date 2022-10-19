@@ -1,6 +1,5 @@
 declare interface IProgramWebPartsStrings {
   EditColumnHeaderText: string
-  PortfolioAggregationNotConfiguredMessage: string
   DataSourceCategoryDescription: string
   DataSourceDescription: string
   ColumnRenderOptionTags: string
@@ -201,7 +200,7 @@ declare interface IProgramWebPartsStrings {
   ProgramAddProject_ProjectWasAddedToProgram: string
   ProgramAddProject_ProjectsWasAddedToProgram: string
   ProgramAddProject_AddProjectToProgram: string
-  ProgramAddProject: string
+  ProgramAddChildsButtonText: string
   ProgramAddProject_ProjectAlreadyInProgram: string
   ProgramAddProject_ProjectsAlreadyInProgram: string
   ProgramAddProject_AddAllProjectsToProgram: string
@@ -218,8 +217,7 @@ declare interface IProgramWebPartsStrings {
   ProgramPortfolio_ShowCountText: string
   ProgramTimelineHeader: string
   ProgramAdministrationHeader: string
-  ProgramAddProjectButtonText: string
-  ProgramRemoveChildButtonText: string
+  ProgramRemoveChildsButtonText: string
   ProgramSearchProjectsText: string
   Add: string
   Cancel: string
@@ -247,10 +245,11 @@ declare interface IProgramWebPartsStrings {
   ProjectPortfolio_SearchBoxLabelText: string
   ProjectPortfolio_ShowCountText: string
   ProgramStatus_ViewIdLabel: string
-  ProjectDeliveriesGroupName: string;
-  ShowProjectDeliveriesLabel: string;
-  ConfigItemTitleFieldLabel: string;
-  ConfigItemTitleFieldDescription: string;
+  ProjectDeliveriesGroupName: string
+  ShowProjectDeliveriesLabel: string
+  ConfigItemTitleFieldLabel: string
+  ConfigItemTitleFieldDescription: string
+  ProjectContentColumnsListName: string
 }
 
 declare module 'ProgramWebPartsStrings' {

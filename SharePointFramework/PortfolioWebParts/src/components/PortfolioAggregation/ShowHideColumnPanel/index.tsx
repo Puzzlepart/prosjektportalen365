@@ -1,15 +1,13 @@
+import { Panel, PrimaryButton, DefaultButton, Checkbox } from '@fluentui/react'
 import { IFilterItemProps } from 'components/FilterPanel/FilterItem/types'
 import _ from 'lodash'
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox'
-import { Panel } from 'office-ui-fabric-react/lib/Panel'
 import * as strings from 'PortfolioWebPartsStrings'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { FunctionComponent, useContext, useEffect, useState } from 'react'
 import { PortfolioAggregationContext } from '../context'
 import { SHOW_HIDE_COLUMNS, TOGGLE_SHOW_HIDE_COLUMN_PANEL } from '../reducer'
 import styles from './ShowHideColumnPanel.module.scss'
 
-export const ShowHideColumnPanel = () => {
+export const ShowHideColumnPanel: FunctionComponent = () => {
   const { state, props, dispatch } = useContext(PortfolioAggregationContext)
   const [isChanged, setIsChanged] = useState(false)
   const initialSelection = state.columns.map((column) => {
@@ -33,14 +31,16 @@ export const ShowHideColumnPanel = () => {
       GtProjectContentColumnsId: columns.map((c) => c['id'])
     }
 
-    await Promise.resolve(props.dataAdapter.configure().then((adapter) => {
-      adapter
-        .updateDataSourceItem(updateItems, state.dataSource, true)
-        .then(() => {
-          dispatch(SHOW_HIDE_COLUMNS({ columns: selectedColumns }))
-        })
-        .catch((error) => (state.error = error))
-    }))
+    await Promise.resolve(
+      props.dataAdapter.configure().then((adapter) => {
+        adapter
+          .updateDataSourceItem(updateItems, state.dataSource, true)
+          .then(() => {
+            dispatch(SHOW_HIDE_COLUMNS({ columns: selectedColumns }))
+          })
+          .catch((error) => (state.error = error))
+      })
+    )
   }
 
   const onDismiss = () => {
@@ -65,24 +65,14 @@ export const ShowHideColumnPanel = () => {
       onDismiss={onDismiss}
       isLightDismiss={true}
       className={styles.root}>
-      <p>
-        {strings.ShowHideColumnsDescription}
-      </p>
+      <p>{strings.ShowHideColumnsDescription}</p>
       {selectedColumns.map((col, idx) => {
         return (
-          <CheckBox
-            key={idx}
-            {...col}
-            onChanged={(_event, checked) => onChange(col, checked)}
-          />
+          <CheckBox key={idx} {...col} onChanged={(_event, checked) => onChange(col, checked)} />
         )
       })}
       <div className={styles.footer}>
-        <PrimaryButton
-          text={strings.SaveButtonLabel}
-          onClick={onSave}
-          disabled={!isChanged}
-        />
+        <PrimaryButton text={strings.SaveButtonLabel} onClick={onSave} disabled={!isChanged} />
         <DefaultButton
           text={strings.CloseButtonLabel}
           style={{ marginLeft: 4 }}

@@ -21,8 +21,8 @@
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" />
-        <pnp:FieldRef ID="7ec0bc7a-f644-4ddb-86e0-5c8d70e3c16a" Name="GtExtensionDefault" />
+        <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" DisplayName="{resource:SiteFields_GtDescription_DisplayName}" />
+        <pnp:FieldRef ID="7ec0bc7a-f644-4ddb-86e0-5c8d70e3c16a" Name="GtExtensionDefault" DisplayName="{resource:SiteFields_GtExtensionDefault_DisplayName}" />
     </pnp:FieldRefs>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

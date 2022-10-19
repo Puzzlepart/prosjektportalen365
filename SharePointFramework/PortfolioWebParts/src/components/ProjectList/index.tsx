@@ -1,31 +1,39 @@
+import {
+  ShimmeredDetailsList,
+  SelectionMode,
+  IColumn,
+  MessageBar,
+  MessageBarType,
+  Pivot,
+  PivotItem,
+  SearchBox,
+  Toggle,
+  Spinner,
+  SpinnerSize
+} from '@fluentui/react'
 import { Web } from '@pnp/sp'
 import { ProjectListModel } from 'models'
-import MSGraph from 'msgraph-helper'
-import { Pivot, PivotItem, ShimmeredDetailsList } from 'office-ui-fabric-react'
-import { IButtonProps } from 'office-ui-fabric-react/lib/Button'
-import { IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as strings from 'PortfolioWebPartsStrings'
-import { ProjectInformationModal } from 'pp365-projectwebparts/lib/components/ProjectInformation'
-import { getObjectValue, sortAlphabetically } from 'pp365-shared/lib/helpers'
-import React, { FunctionComponent, useEffect, useState } from 'react'
-import { find, isEmpty } from 'underscore'
+import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
+import { getObjectValue } from 'pp365-shared/lib/helpers'
+import React, { FunctionComponent } from 'react'
+import { isEmpty } from 'underscore'
 import { ProjectCard } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
-import { IProjectListProps, IProjectListState } from './types'
+import { IProjectListProps } from './types'
+import { useProjectList } from './useProjectList'
 
 export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
-  const [state, setState] = useState<IProjectListState>({
-    loading: true,
-    searchTerm: '',
-    showAsTiles: props.showAsTiles,
-    selectedView: 'my_projects',
-    projects: [],
-    sort: { fieldName: props.sortBy, isSortedDescending: true }
-  })
+  const {
+    state,
+    setState,
+    projects,
+    getCardActions,
+    getSearchBoxPlaceholder,
+    onListSort,
+    onSearch
+  } = useProjectList(props)
 
   /**
    * Render projects
@@ -82,180 +90,6 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
     return colValue
   }
 
-  /**
-   * Sorting on column header click
-   *
-   * @param _evt - Event
-   * @param column - Column
-   */
-  function onListSort(_evt: React.MouseEvent<any>, column: IColumn): void {
-    let isSortedDescending = column.isSortedDescending
-    if (column.isSorted) {
-      isSortedDescending = !isSortedDescending
-    }
-    setState({ ...state, sort: { fieldName: column.fieldName, isSortedDescending } })
-  }
-
-  /**
-   * Render <ProjectInformationModal />
-   */
-  function renderProjectInformation() {
-    if (state.showProjectInfo) {
-      return (
-        <ProjectInformationModal
-          modalProps={{
-            isOpen: true,
-            onDismiss: () => setState({ ...state, showProjectInfo: null })
-          }}
-          title={state.showProjectInfo.title}
-          webUrl={props.pageContext.site.absoluteUrl}
-          hubSite={{
-            web: new Web(props.pageContext.site.absoluteUrl),
-            url: props.pageContext.site.absoluteUrl
-          }}
-          siteId={state.showProjectInfo.siteId}
-          hideActions={true}
-          page='Portfolio'
-        />
-      )
-    }
-    return null
-  }
-
-  /**
-   * Get card ations
-   *
-   * @param project - Project
-   */
-  function getCardActions(project: ProjectListModel): IButtonProps[] {
-    return [
-      {
-        id: 'ON_SELECT_PROJECT',
-        iconProps: { iconName: 'OpenInNewWindow' },
-        onClick: (event: React.MouseEvent<any>) => onExecuteCardAction(event, project)
-      }
-    ]
-  }
-
-  /**
-   * On execute card action
-   *
-   * @param event - Event
-   * @param project - Project
-   */
-  function onExecuteCardAction(event: React.MouseEvent<any>, project: ProjectListModel) {
-    event.preventDefault()
-    event.stopPropagation()
-    switch (event.currentTarget.id) {
-      case 'ON_SELECT_PROJECT':
-        {
-          setState({ ...state, showProjectInfo: project })
-        }
-        break
-    }
-  }
-
-  /**
-   * Filter projects
-   *
-   * @param projects - Projects
-   */
-  function filterProjets(projects: ProjectListModel[]) {
-    return projects
-      .filter((project) => {
-        if (state.selectedView === 'my_projects') return project.userIsMember
-        if (state.selectedView === 'parent_projects') return project.isParent
-        if (state.selectedView === 'program') return project.isProgram
-        return true
-      })
-      .filter((p) => {
-        const matches = Object.keys(p).filter((key) => {
-          const value = p[key]
-          return (
-            value &&
-            typeof value === 'string' &&
-            value.toLowerCase().indexOf(state.searchTerm) !== -1
-          )
-        }).length
-        return matches > 0
-      })
-      .sort((a, b) =>
-        sortAlphabetically<ProjectListModel>(
-          a,
-          b,
-          state?.sort?.isSortedDescending,
-          state?.sort?.fieldName
-        )
-      )
-  }
-
-  /**
-   * On search
-   *
-   * @param searchTerm - Search term
-   */
-  function onSearch(searchTerm: string) {
-    setState({ ...state, searchTerm: searchTerm.toLowerCase() })
-  }
-
-  /**
-   * Get project logos (group photos)
-   *
-   * @param projects - Projects
-   * @param batchSize - Batch size (defaults to 20)
-   */
-  async function getProjectLogos(projects: ProjectListModel[], batchSize: number = 20) {
-    const batchReq = projects.map((p) => ({
-      id: p.groupId,
-      method: 'GET',
-      url: `groups/${p.groupId}/photo/$value`
-    }))
-    while (!isEmpty(batchReq)) {
-      const { responses } = await MSGraph.Batch(batchReq.splice(0, batchSize))
-      const projects_ = projects.map((p) => {
-        const response = find(responses, (r) => r.id === p.groupId && r.status === 200)
-        if (response) {
-          p.logo = `data:image/png;base64, ${response.body}`
-        }
-        return p
-      })
-      setState((prevState) => ({ ...prevState, projects: projects_ }))
-    }
-  }
-
-  /**
-   * Get searchbox placeholder text based on `state.selectedView`
-   */
-  function getSearchBoxPlaceholder() {
-    switch (state.selectedView) {
-      case 'my_projects':
-        return strings.MyProjectsSearchBoxPlaceholderText
-      case 'all_projects':
-        return strings.AllProjectsSearchBoxPlaceholderText
-      case 'parent_projects':
-        return strings.ParentProjectsSearchBoxPlaceholderText
-      case 'program':
-        return strings.ProgramSearchBoxPlaceholderText
-    }
-  }
-
-  useEffect(() => {
-    Promise.all([
-      props.dataAdapter.fetchEnrichedProjects(),
-      props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName)
-    ]).then(([projects, isUserInPortfolioManagerGroup]) => {
-      setState({
-        ...state,
-        projects,
-        loading: false,
-        isUserInPortfolioManagerGroup
-      })
-      if (props.showProjectLogo) {
-        getProjectLogos(projects, 20)
-      }
-    })
-  }, [])
-
   if (state.error) {
     return (
       <div className={styles.root}>
@@ -264,43 +98,83 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
     )
   }
 
-  const projects = filterProjets(state.projects)
-
   return (
     <div className={styles.root}>
       <div className={styles.container}>
         {state.isUserInPortfolioManagerGroup && (
           <div className={styles.projectDisplaySelect}>
             <Pivot
-              onLinkClick={({ props }) => setState({ ...state, selectedView: props.itemKey })}
+              onLinkClick={({ props }) => setState({ selectedView: props.itemKey })}
               selectedKey={state.selectedView}>
-              <PivotItem headerText={strings.MyProjectsLabel} itemKey='my_projects' />
-              <PivotItem headerText={strings.AllProjectsLabel} itemKey='all_projects' />
-              <PivotItem headerText={strings.ParentProjectLabel} itemKey='parent_projects' />
-              <PivotItem headerText={strings.ProgramLabel} itemKey='program' />
+              <PivotItem
+                headerText={strings.MyProjectsLabel}
+                itemKey='my_projects'
+                itemIcon='FabricUserFolder'
+              />
+              <PivotItem
+                headerText={strings.AllProjectsLabel}
+                itemKey='all_projects'
+                itemIcon='AllApps'
+              />
+              <PivotItem
+                headerText={strings.ParentProjectLabel}
+                itemKey='parent_projects'
+                itemIcon='ProductVariant'
+              />
+              <PivotItem
+                headerText={strings.ProgramLabel}
+                itemKey='program'
+                itemIcon='ProductList'
+              />
             </Pivot>
           </div>
         )}
         <div className={styles.searchBox} hidden={!props.showSearchBox}>
-          <SearchBox placeholder={getSearchBoxPlaceholder()} onChanged={onSearch} />
+          <SearchBox
+            disabled={state.loading || isEmpty(projects)}
+            placeholder={getSearchBoxPlaceholder()}
+            onChanged={onSearch}
+          />
         </div>
         <div className={styles.viewToggle} hidden={!props.showViewSelector}>
           <Toggle
             offText={strings.ShowAsListText}
             onText={strings.ShowAsTilesText}
             defaultChecked={state.showAsTiles}
+            disabled={state.loading || isEmpty(projects)}
             inlineLabel={true}
-            onChanged={(showAsTiles) => setState({ ...state, showAsTiles })}
+            onChanged={(showAsTiles) => setState({ showAsTiles })}
           />
         </div>
-        <div className={styles.emptyMessage} hidden={projects.length > 0}>
-          <MessageBar>{strings.NoSearchResults}</MessageBar>
-        </div>
-        <div className={styles.projects} hidden={projects.length === 0}>
-          {renderProjects(projects)}
-        </div>
+        {state.loading && (
+          <div className={styles.spinner}>
+            <Spinner size={SpinnerSize.large} label={strings.ProjectListLoadingText} />
+          </div>
+        )}
+        {!state.loading && isEmpty(projects) && (
+          <div className={styles.emptyMessage}>
+            <MessageBar>{strings.ProjectListEmptyText}</MessageBar>
+          </div>
+        )}
+        {!isEmpty(projects) && (
+          <>
+            <ProjectInformationPanel
+              key={state.showProjectInfo?.siteId}
+              title={state.showProjectInfo?.title}
+              siteId={state.showProjectInfo?.siteId}
+              webUrl={state.showProjectInfo?.url}
+              hubSite={{
+                web: new Web(props.pageContext.site.absoluteUrl),
+                url: props.pageContext.site.absoluteUrl
+              }}
+              page='Portfolio'
+              hidden={!state.showProjectInfo}
+              hideAllActions={true}
+            />
+            <div className={styles.projects}>{renderProjects(projects)}</div>
+          </>
+        )}
       </div>
-      {renderProjectInformation()}
     </div>
   )
 }

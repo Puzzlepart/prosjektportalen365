@@ -1,18 +1,18 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
-import { Persona, PersonaSize } from 'office-ui-fabric-react'
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
+import { Persona, PersonaSize } from '@fluentui/react'
+import { Toggle } from '@fluentui/react/lib/Toggle'
 import * as strings from 'ProjectWebPartsStrings'
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import styles from './ProjectProperty.module.scss'
 import { IProjectPropertyProps } from './types'
 
-export const ProjectProperty = ({
+export const ProjectProperty: FunctionComponent<IProjectPropertyProps> = ({
   model,
   style,
   displayMode = DisplayMode.Read,
   onFieldExternalChanged,
   showFieldExternal
-}: IProjectPropertyProps) => {
+}) => {
   const renderValue = () => {
     switch (model.type) {
       case 'User': {
@@ -36,6 +36,17 @@ export const ProjectProperty = ({
                 size={PersonaSize.size24}
                 styles={{ root: { marginTop: 6 } }}
               />
+            ))}
+          </div>
+        )
+      }
+      case 'TaxonomyFieldTypeMulti': {
+        return (
+          <div className={styles.labels}>
+            {model.value.split(';').map((text, key) => (
+              <div key={key} title={text} className={styles.termLabel}>
+                {text}
+              </div>
             ))}
           </div>
         )

@@ -3,7 +3,7 @@
     "actions": [
         {
             "verb": "associateExtension",
-            "title": "TemplateSelectorCommandSet",
+            "title": "Malvelger",
             "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
             "clientSideComponentId": "c9080212-e63e-47cc-8278-00ad38c3f5a5",
             "clientSideComponentProperties": "{\"templateLibrary\": \"Malbibliotek\"}",

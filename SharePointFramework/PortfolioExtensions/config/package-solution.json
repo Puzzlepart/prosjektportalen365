@@ -1,0 +1,46 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "Prosjektportalen 365 - Portfolio Extensions",
+    "id": "a3bf3315-0710-41f9-8836-2b61396d032f",
+    "version": "1.7.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "Puzzlepart AS",
+      "mpnId": "",
+      "privacyUrl": "https://puzzlepart.com/",
+      "termsOfUseUrl": "https://puzzlepart.com/",
+      "websiteUrl": "https://puzzlepart.com/"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "Prosjektportalen 365 Portfolio Extension"
+      },
+      "longDescription": {
+        "default": "Prosjektportalen 365 Portfolio Extension: Collection of various extensions used in Prosjektportalen portfolio"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "Application Extension - Deployment of custom action",
+        "description": "Deploys a custom action with ClientSideComponentId association",
+        "id": "22c0b578-0432-4967-a4dd-1b35d329d760",
+        "version": "1.6.2",
+        "assets": {
+          "elementManifests": [
+            "elements.xml",
+            "ClientSideInstance.xml"
+          ]
+        }
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/pp-portfolio-extensions.sppkg"
+  }
+}

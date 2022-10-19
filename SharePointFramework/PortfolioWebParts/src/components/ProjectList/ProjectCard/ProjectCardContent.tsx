@@ -1,6 +1,6 @@
-import { IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona'
+import { IPersonaSharedProps, Persona, PersonaSize } from '@fluentui/react/lib/Persona'
 import * as strings from 'PortfolioWebPartsStrings'
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import styles from './ProjectCard.module.scss'
 import { IProjectCardProps } from './types'
 
@@ -9,11 +9,11 @@ import { IProjectCardProps } from './types'
  *
  * @param props Props
  */
-export const ProjectCardContent = ({
+export const ProjectCardContent: FunctionComponent<IProjectCardProps> = ({
   project,
   showProjectOwner,
   showProjectManager
-}: IProjectCardProps): JSX.Element => {
+}) => {
   const defaultPersonaProps: IPersonaSharedProps = {
     text: strings.NotSet,
     size: PersonaSize.size40,

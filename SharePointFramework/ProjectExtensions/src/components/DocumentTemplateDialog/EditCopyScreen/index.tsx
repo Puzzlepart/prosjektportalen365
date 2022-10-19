@@ -1,8 +1,7 @@
+import { DefaultButton, DialogFooter, PrimaryButton } from '@fluentui/react'
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
-import { ActionButton } from 'office-ui-fabric-react/lib/Button'
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { useContext, useState } from 'react'
+import React, { FunctionComponent, useContext, useState } from 'react'
 import { InfoMessage } from '../../InfoMessage'
 import { DocumentTemplateDialogContext } from '../context'
 import { SET_SCREEN } from '../reducer'
@@ -11,7 +10,7 @@ import { DocumentTemplateItem } from './DocumentTemplateItem'
 import styles from './EditCopyScreen.module.scss'
 import { IEditCopyScreenProps } from './types'
 
-export const EditCopyScreen = ({ onStartCopy }: IEditCopyScreenProps) => {
+export const EditCopyScreen: FunctionComponent<IEditCopyScreenProps> = ({ onStartCopy }) => {
   const { state, dispatch } = useContext(DocumentTemplateDialogContext)
   const [templates, setTemplates] = useState([...state.selected])
 
@@ -48,18 +47,16 @@ export const EditCopyScreen = ({ onStartCopy }: IEditCopyScreenProps) => {
         <DocumentTemplateItem key={idx} item={item} onInputChanged={onInputChanged} />
       ))}
       <DialogFooter>
-        <ActionButton
+        <PrimaryButton
+          text={strings.OnStartCopyText}
+          disabled={!isFileNamesValid()}
+          onClick={() => onStartCopy(templates)}
+        />
+        <DefaultButton
           text={strings.OnGoBackText}
-          iconProps={{ iconName: 'NavigateBack' }}
           onClick={() =>
             dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.TargetFolder }))
           }
-        />
-        <ActionButton
-          text={strings.OnStartCopyText}
-          iconProps={{ iconName: 'Copy' }}
-          disabled={!isFileNamesValid()}
-          onClick={() => onStartCopy(templates)}
         />
       </DialogFooter>
     </div>

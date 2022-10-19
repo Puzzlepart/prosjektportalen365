@@ -14,34 +14,16 @@
                 "manifest": "./src/webparts/programProjectOverview/manifest.json"
             }]
         },
-        "program-benefits-web-part": {
+        "program-aggregation-web-part": {
             "components": [{
-                "entrypoint": "./lib/webparts/programBenefits/index.js",
-                "manifest": "./src/webparts/programBenefits/manifest.json"
-            }]
-        },
-        "program-deliveries-web-part": {
-            "components": [{
-                "entrypoint": "./lib/webparts/programDeliveries/index.js",
-                "manifest": "./src/webparts/programDeliveries/manifest.json"
+                "entrypoint": "./lib/webparts/programAggregation/index.js",
+                "manifest": "./src/webparts/programAggregation/manifest.json"
             }]
         },
         "program-timeline-web-part": {
             "components": [{
                 "entrypoint": "./lib/webparts/programTimeline/index.js",
                 "manifest": "./src/webparts/programTimeline/manifest.json"
-            }]
-        },
-        "program-risk-web-part": {
-            "components": [{
-                "entrypoint": "./lib/webparts/programRiskOverview/index.js",
-                "manifest": "./src/webparts/programRiskOverview/manifest.json"
-            }]
-        },
-        "program-status-web-part": {
-            "components": [{
-                "entrypoint": "./lib/webparts/programStatus/index.js",
-                "manifest": "./src/webparts/programStatus/manifest.json"
             }]
         }
 

@@ -1,8 +1,8 @@
 /**
  * Try parse JSON
  *
- * @param {string} string String to parse
- * @param {ValueType} fallback Fallback value
+ * @param string String to parse
+ * @param fallback Fallback value
  */
 export function tryParseJson<ValueType>(string: string, fallback: ValueType = null): ValueType {
   try {

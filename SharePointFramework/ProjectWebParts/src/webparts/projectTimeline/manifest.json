@@ -3,7 +3,7 @@
   "id": "d156652b-9121-47af-89ae-1fe8427c53da",
   "alias": "ProjectTimelineWebPart",
   "componentType": "WebPart",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": false,
@@ -25,9 +25,7 @@
       "officeFabricIconFontName": "TimelineDelivery",
       "properties": {
         "listName": "Tidslinjeinnhold",
-        "showFilterButton": true,
         "showTimeline": true,
-        "showInfoMessage": true,
         "showCmdTimelineList": true,
         "showTimelineList": true,
         "showProjectDeliveries": false,

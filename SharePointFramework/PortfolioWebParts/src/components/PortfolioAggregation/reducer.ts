@@ -1,18 +1,21 @@
 import { createAction, createReducer, current } from '@reduxjs/toolkit'
 import sortArray from 'array-sort'
-import { Target } from 'office-ui-fabric-react/lib/Callout'
-import { IGroup } from 'office-ui-fabric-react/lib/DetailsList'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
 import { first, indexOf, omit, uniq } from 'underscore'
-import { IPortfolioAggregationHashState, IPortfolioAggregationProps, IPortfolioAggregationState, PortfolioAggregationErrorMessage } from './types'
+import {
+  IPortfolioAggregationHashState,
+  IPortfolioAggregationProps,
+  IPortfolioAggregationState,
+  PortfolioAggregationErrorMessage
+} from './types'
 import { IFilterItemProps } from '../FilterPanel'
 import _, { filter } from 'lodash'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 import { parseUrlHash, setUrlHash } from 'pp365-shared/lib/util'
-import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { Target, IGroup, MessageBarType } from '@fluentui/react'
 
 function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
   const _arr = [...arr]
@@ -26,18 +29,18 @@ function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
   return _arr
 }
 export const DATA_FETCHED = createAction<{
-  items: any[],
-  dataSources?: DataSource[],
-  columns?: IProjectContentColumn[],
-  fltColumns?: IProjectContentColumn[],
+  items: any[]
+  dataSources?: DataSource[]
+  columns?: IProjectContentColumn[]
+  fltColumns?: IProjectContentColumn[]
   projects?: any[]
 }>('DATA_FETCHED')
 export const TOGGLE_COLUMN_FORM_PANEL = createAction<{
-  isOpen: boolean,
+  isOpen: boolean
   column?: IProjectContentColumn
 }>('TOGGLE_COLUMN_FORM_PANEL')
 export const TOGGLE_SHOW_HIDE_COLUMN_PANEL = createAction<{
-  isOpen: boolean,
+  isOpen: boolean
   columns?: IProjectContentColumn[]
 }>('TOGGLE_SHOW_HIDE_COLUMN_PANEL')
 export const TOGGLE_FILTER_PANEL = createAction<{ isOpen: boolean }>('TOGGLE_FILTER_PANEL')
@@ -88,7 +91,9 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
   filters: [],
   items: [],
   columns: props.columns || [],
-  dataSource: first(props.configuration.views)?.title || props.dataSource,
+  dataSource: !props.configuration
+    ? props.dataSource
+    : first(props.configuration.views)?.title || props.dataSource,
   dataSources: [],
   groups: null,
   addColumnPanel: { isOpen: false },
@@ -100,7 +105,7 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
  */
 export default (props: IPortfolioAggregationProps) =>
   createReducer(initState(props), {
-    [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {      
+    [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {
       if (payload.items) {
         state.items = props.postTransform ? props.postTransform(payload.items) : payload.items
         state.items = sortArray(
@@ -122,10 +127,8 @@ export default (props: IPortfolioAggregationProps) =>
         state.loading = false
       }
       if (payload.columns) {
-        if (payload.fltColumns.length > 0)
-          state.fltColumns = payload.fltColumns
-        else
-          state.fltColumns = payload.columns
+        if (payload.fltColumns.length > 0) state.fltColumns = payload.fltColumns
+        else state.fltColumns = payload.columns
 
         if (payload.columns.length > 0) {
           const mergedColumns = state.columns.map((col) => {
@@ -211,9 +214,9 @@ export default (props: IPortfolioAggregationProps) =>
     ) => {
       state.columnContextMenu = payload
         ? {
-          column: payload.column,
-          target: payload.target as any
-        }
+            column: payload.column,
+            target: payload.target as any
+          }
         : null
     },
     [SET_GROUP_BY.type]: (state, { payload }: ReturnType<typeof SET_GROUP_BY>) => {
@@ -269,9 +272,7 @@ export default (props: IPortfolioAggregationProps) =>
     },
     [SET_CURRENT_VIEW.type]: (state) => {
       const hashState = parseUrlHash<IPortfolioAggregationHashState>()
-      const viewIdUrlParam = new URLSearchParams(document.location.href).get(
-        'viewId'
-      )
+      const viewIdUrlParam = new URLSearchParams(document.location.href).get('viewId')
 
       const { configuration, defaultViewId } = props
       const { views } = configuration
@@ -280,17 +281,26 @@ export default (props: IPortfolioAggregationProps) =>
       if (viewIdUrlParam) {
         currentView = _.find(views, (v) => v.id.toString() === viewIdUrlParam)
         if (!currentView) {
-          throw new PortfolioAggregationErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
+          throw new PortfolioAggregationErrorMessage(
+            strings.ViewNotFoundMessage,
+            MessageBarType.error
+          )
         }
       } else if (hashState.viewId) {
         currentView = _.find(views, (v) => v.id.toString() === hashState.viewId)
         if (!currentView) {
-          throw new PortfolioAggregationErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
+          throw new PortfolioAggregationErrorMessage(
+            strings.ViewNotFoundMessage,
+            MessageBarType.error
+          )
         }
       } else if (defaultViewId) {
         currentView = _.find(views, (v) => v.id.toString() === defaultViewId.toString())
         if (!currentView) {
-          throw new PortfolioAggregationErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
+          throw new PortfolioAggregationErrorMessage(
+            strings.ViewNotFoundMessage,
+            MessageBarType.error
+          )
         }
       } else {
         currentView = _.find(views, (v) => v.isDefault)
@@ -367,9 +377,10 @@ export default (props: IPortfolioAggregationProps) =>
           items: current(state).columns.map((col) => ({
             name: col.name,
             value: col.fieldName,
-            selected: current(state).fltColumns.length > 0
-              ? _.some(current(state).fltColumns, (c) => c.fieldName === col.fieldName)
-              : true
+            selected:
+              current(state).fltColumns.length > 0
+                ? _.some(current(state).fltColumns, (c) => c.fieldName === col.fieldName)
+                : true
           })),
           defaultCollapsed: true
         },
@@ -378,9 +389,10 @@ export default (props: IPortfolioAggregationProps) =>
 
       state.activeFilters = {
         ...state.activeFilters,
-        ['SelectedColumns']: current(state).fltColumns.length > 0
-          ? current(state).fltColumns.map((col) => col.fieldName)
-          : current(state).columns.map((col) => col.fieldName)
+        ['SelectedColumns']:
+          current(state).fltColumns.length > 0
+            ? current(state).fltColumns.map((col) => col.fieldName)
+            : current(state).columns.map((col) => col.fieldName)
       }
     },
     [ON_FILTER_CHANGE.type]: (state, { payload }: ReturnType<typeof ON_FILTER_CHANGE>) => {

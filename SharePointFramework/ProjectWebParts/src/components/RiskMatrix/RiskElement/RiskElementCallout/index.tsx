@@ -1,4 +1,4 @@
-import { Callout } from 'office-ui-fabric-react/lib/Callout'
+import { Callout } from '@fluentui/react/lib/Callout'
 import React, { FunctionComponent } from 'react'
 import { replaceTokens } from 'pp365-shared/lib/util/replaceTokens'
 import { IRiskElementCalloutProps } from './types'

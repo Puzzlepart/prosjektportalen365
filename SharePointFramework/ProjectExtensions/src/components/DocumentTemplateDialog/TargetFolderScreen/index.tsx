@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+import {
+  ConstrainMode,
+  DefaultButton,
+  DetailsList,
+  DetailsListLayoutMode,
+  DialogFooter,
+  PrimaryButton,
+  SelectionMode
+} from '@fluentui/react'
 import { InfoMessage } from 'components/InfoMessage'
 import { SPDataAdapter } from 'data'
 import { SPFolder } from 'models'
-import { ActionButton } from 'office-ui-fabric-react/lib/Button'
-import {
-  ConstrainMode,
-  DetailsList,
-  DetailsListLayoutMode,
-  SelectionMode
-} from 'office-ui-fabric-react/lib/DetailsList'
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { FunctionComponent, useContext, useEffect, useState } from 'react'
 import { TemplateSelectorContext } from 'templateSelector/context'
 import { isEmpty } from 'underscore'
 import { DocumentTemplateDialogScreen } from '..'
@@ -21,7 +22,7 @@ import { SET_SCREEN, SET_TARGET } from '../reducer'
 import columns from './columns'
 import styles from './TargetFolderScreen.module.scss'
 
-export const TargetFolderScreen = () => {
+export const TargetFolderScreen: FunctionComponent = () => {
   const { state, dispatch } = useContext(DocumentTemplateDialogContext)
   const context = useContext(TemplateSelectorContext)
   const [root, setRoot] = useState(context.currentLibrary)
@@ -54,7 +55,7 @@ export const TargetFolderScreen = () => {
         setFolder={setFolder}
       />
       <DetailsList
-        items={folders.sort((a, b) => (a.name > b.name ? 1 : -1)) }
+        items={folders.sort((a, b) => (a.name > b.name ? 1 : -1))}
         columns={columns()}
         selectionMode={SelectionMode.none}
         layoutMode={DetailsListLayoutMode.justified}
@@ -65,19 +66,17 @@ export const TargetFolderScreen = () => {
         }}
       />
       <DialogFooter>
-        <ActionButton
-          text={strings.OnGoBackText}
-          iconProps={{ iconName: 'NavigateBack' }}
-          onClick={() => dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select }))}
-        />
-        <ActionButton
+        <PrimaryButton
           text={strings.CopyHereText}
-          iconProps={{ iconName: 'Copy' }}
           disabled={folder === null}
           onClick={() => {
             dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.EditCopy }))
             dispatch(SET_TARGET({ folder: folder || root.url }))
           }}
+        />
+        <DefaultButton
+          text={strings.OnGoBackText}
+          onClick={() => dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select }))}
         />
       </DialogFooter>
     </div>

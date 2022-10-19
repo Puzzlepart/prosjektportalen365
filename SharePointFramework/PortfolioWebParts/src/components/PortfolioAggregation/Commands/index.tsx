@@ -1,17 +1,18 @@
-import { CommandBar, ICommandBarProps } from 'office-ui-fabric-react/lib/CommandBar'
 import {
+  ICommandBarProps,
+  IContextualMenuItem,
   ContextualMenuItemType,
-  IContextualMenuItem
-} from 'office-ui-fabric-react/lib/ContextualMenu'
+  CommandBar
+} from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import ExcelExportService from 'pp365-shared/lib/services/ExcelExportService'
 import { redirect } from 'pp365-shared/lib/util'
-import React, { useContext } from 'react'
+import React, { FunctionComponent, useContext } from 'react'
 import { isEmpty } from 'underscore'
 import { PortfolioAggregationContext } from '../context'
 import { SET_DATA_SOURCE, TOGGLE_COMPACT, TOGGLE_FILTER_PANEL } from '../reducer'
 
-export const Commands = () => {
+export const Commands: FunctionComponent = () => {
   const { props, state, dispatch } = useContext(PortfolioAggregationContext)
 
   const cmd: ICommandBarProps = {

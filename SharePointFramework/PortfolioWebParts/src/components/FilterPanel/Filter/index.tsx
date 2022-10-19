@@ -1,5 +1,6 @@
-import { Icon } from 'office-ui-fabric-react/lib/Icon'
-import React, { Component } from 'react'
+import { Icon } from '@fluentui/react/lib/Icon'
+import * as React from 'react'
+import { Component } from 'react'
 import { FilterItem } from '../FilterItem'
 import { IFilterItemProps } from '../FilterItem/types'
 import styles from './Filter.module.scss'

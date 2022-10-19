@@ -5,9 +5,9 @@ import { IPhaseSitePageModel } from './types'
 /**
  * Change phase
  *
- * @param {string} phaseName
- * @param {string} absoluteUrl absoluteurl
- * @param {IPhaseSitePageModel[]} phaseSitePages Phase SitePages
+ * @param phaseName
+ * @param absoluteUrl absoluteurl
+ * @param phaseSitePages Phase SitePages
  */
 export const changeWelcomePage = async (
   phaseName: string,

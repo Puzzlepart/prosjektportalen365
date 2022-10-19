@@ -1,7 +1,7 @@
 import { FileAddResult } from '@pnp/sp'
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import { TemplateItem } from 'models'
-import { Selection } from 'office-ui-fabric-react/lib/DetailsList'
+import { Selection } from '@fluentui/react/lib/DetailsList'
 import { DocumentTemplateDialogScreen, IDocumentTemplateDialogState } from './types'
 
 /**

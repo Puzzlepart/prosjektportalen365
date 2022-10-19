@@ -2,17 +2,17 @@
   "files.exclude": {
     "**/.git": true,
     "**/.DS_Store": true,
-    "**/bower_components": true,
+    "**/node_modules": true,
     "**/coverage": true,
     "**/lib-amd": true,
     "src/**/*.scss.ts": true,
     "dist": true,
-    "lib": true,
-    "node_modules": true,
     "sharepoint": true,
     "temp": true,
     "teams": true,
-    "release": true
+    "release": true,
+    "src/components/BenefitsOverview": true,
+    "src/webparts/benefitsOverview": true
   },
   "typescript.tsdk": ".\\node_modules\\typescript\\lib"
 }

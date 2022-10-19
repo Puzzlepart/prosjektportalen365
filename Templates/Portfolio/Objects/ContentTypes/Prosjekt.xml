@@ -27,11 +27,11 @@
         <pnp:FieldRef ID="1b9a1571-b300-4cc0-bd32-9311f72e1998" Name="GtProjectPhaseText" />
         <pnp:FieldRef ID="1b87b4e7-b9ed-4a31-96cc-abfaca61eea4" Name="GtProjectServiceAreaText" />
         <pnp:FieldRef ID="7212b9e5-52fc-46cb-8b5e-9bf787dd115f" Name="GtProjectTypeText" />
+        <pnp:FieldRef ID="664ddf9a-a415-4b0b-a34f-0653547f03f0" Name="GtProjectAdminRoles" />
         <pnp:FieldRef ID="4cc4a931-3861-45ad-85de-6db88afe9fa0" Name="GtProjectTemplate" />
         <pnp:FieldRef ID="98e55335-a95a-4755-83a3-6f8b64af2420" Name="GtParentProjects" />
         <pnp:FieldRef ID="e007ef7e-9c47-4bc2-8171-5c32688f3e0c" Name="GtChildProjects"  />
         <pnp:FieldRef ID="8f1f38cb-7eb2-4122-a866-4c9e99b2ebed" Name="GtIsParentProject" />
         <pnp:FieldRef ID="77baede1-38df-454c-a53a-dd7904ba0046" Name="GtIsProgram" />
-        
     </pnp:FieldRefs>
 </pnp:ContentType>

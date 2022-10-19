@@ -10,15 +10,18 @@ jobs:
     name: Build release (CI)
     runs-on: windows-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout Puzzlepart/prosjektportalen365.git
+        run: |
+          mkdir C:/prosjektportalen365_main
+          git clone --branch main https://github.com/Puzzlepart/prosjektportalen365.git C:/prosjektportalen365_main
 
-      - name: Setup Node.js 12.19.0
-        uses: actions/setup-node@v1
+      - name: Setup Node.js 16.18.0
+        uses: actions/setup-node@v3
         with:
-          node-version: 12.19.0
+          node-version: 16.18.0
 
       - name: Run Install/Build-Release.ps1 in CI mode
+        working-directory: C:/prosjektportalen365_main
         run: Install/Build-Release.ps1 -CI
         shell: powershell
       
@@ -86,20 +89,3 @@ jobs:
           asset_path: ./release-package.zip
           asset_name: "pp365-${{ steps.package-node-version.outputs.version }}.zip"
           asset_content_type: application/zip
-
-      - name: Slack notification
-        uses: 8398a7/action-slack@v3
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
-        with:
-          status: custom
-          fields: workflow,job,commit,repo,ref,author,took
-          custom_payload: |
-            {
-              username: 'action-slack',
-              icon_emoji: ':octocat:',
-              attachments: [{
-                color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `A draft release of v${{ steps.package-node-version.outputs.version }} is ready at ${{ steps.create-github-release.outputs.html_url }}. Add the release notes and publish!`,
-              }]
-            }

@@ -7,6 +7,8 @@
         <pnp:FieldRef ID="16623c2a-3fd1-41c2-87e7-958583dd88da" Name="GtEndDate" />
         <pnp:FieldRef ID="28be4cc9-bc5e-4a55-a557-f652b564ca75" Name="GtBudgetTotal" />
         <pnp:FieldRef ID="5af54348-bc38-4a18-a11f-0f84a96da4ea" Name="GtCostsTotal" />
+        <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" />
+        <pnp:FieldRef ID="4d342fb6-a0e0-4064-b794-c1d36c922997" Name="GtTag" />
         <pnp:FieldRef ID="3af32c1e-ff08-4bb4-8fb6-9ed5048a5fa0" Name="GtSiteIdLookup" />
     </pnp:FieldRefs>
 </pnp:ContentType>

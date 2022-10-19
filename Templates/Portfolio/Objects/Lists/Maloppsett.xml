@@ -62,8 +62,8 @@
     </Field>
   </pnp:Fields>
   <pnp:FieldRefs>
-    <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" DisplayName="Beskrivelse" />
-    <pnp:FieldRef ID="77baede1-38df-454c-a53a-dd7904ba0046" Name="GtIsProgram" />
+    <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" DisplayName="{resource:Lists_GtDescription_DisplayName}" />
+    <pnp:FieldRef ID="77baede1-38df-454c-a53a-dd7904ba0046" Name="GtIsProgram" DisplayName="{resource:Lists_GtIsProgram_DisplayName}" />
   </pnp:FieldRefs>
   <pnp:DataRows UpdateBehavior="Overwrite" KeyColumn="Title">
     <pnp:DataRow>
@@ -95,7 +95,7 @@
       <pnp:DataValue FieldName="IsHiddenTemplate">True</pnp:DataValue>
       <pnp:DataValue FieldName="ListContentConfigLookup"></pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">Dette er standardmalen for overordnet prosjekt som følger med Prosjektportalen 365.</pnp:DataValue>
-      <pnp:DataValue FieldName="IconName">Page</pnp:DataValue>
+      <pnp:DataValue FieldName="IconName">ProductVariant</pnp:DataValue>
     </pnp:DataRow>
     <pnp:DataRow>
       <pnp:DataValue FieldName="Title">Programmal</pnp:DataValue>
@@ -111,7 +111,7 @@
       <pnp:DataValue FieldName="GtIsProgram">True</pnp:DataValue>
       <pnp:DataValue FieldName="ListContentConfigLookup"></pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">Dette er standardmalen for program som følger med Prosjektportalen 365.</pnp:DataValue>
-      <pnp:DataValue FieldName="IconName">Page</pnp:DataValue>
+      <pnp:DataValue FieldName="IconName">ProductList</pnp:DataValue>
     </pnp:DataRow>
   </pnp:DataRows>
 </pnp:ListInstance>

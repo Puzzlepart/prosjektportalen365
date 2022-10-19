@@ -1,4 +1,4 @@
-import { IToggleProps } from 'office-ui-fabric-react/lib/Toggle'
+import { IToggleProps } from '@fluentui/react/lib/Toggle'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface IProjectSetupSettings {}

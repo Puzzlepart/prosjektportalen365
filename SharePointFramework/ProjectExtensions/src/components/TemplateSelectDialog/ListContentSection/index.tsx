@@ -1,13 +1,11 @@
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
-import { Icon } from 'office-ui-fabric-react/lib/Icon'
+import { Icon, Toggle } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import * as React from 'react'
+import React, { FunctionComponent } from 'react'
 import { ListContentConfig } from '../../../models'
-import { IListContentSectionProps } from './types'
 import styles from './ListContentSection.module.scss'
-import { ScrollablePane } from 'office-ui-fabric-react'
+import { IListContentSectionProps } from './types'
 
-export const ListContentSection: React.FunctionComponent<IListContentSectionProps> = (props) => {
+export const ListContentSection: FunctionComponent<IListContentSectionProps> = (props) => {
   /**
    * On item toggle
    *
@@ -29,30 +27,28 @@ export const ListContentSection: React.FunctionComponent<IListContentSectionProp
   const selectedKeys = props.selectedListContentConfig.map((lc) => lc.key)
 
   return (
-    <div className={styles.listContentSection}>
-      <ScrollablePane className={styles.container}>
-        {props.listContentConfig
-          .filter((lcc) => !lcc.hidden)
-          .map((lcc) => (
-            <div key={lcc.key} className={styles.item}>
-              <div className={styles.toggle}>
-                <Toggle
-                  label={lcc.text}
-                  defaultChecked={selectedKeys.indexOf(lcc.key) !== -1}
-                  disabled={props.lockDefault && lcc.isDefault}
-                  inlineLabel={true}
-                  onChanged={(checked) => onChanged(lcc, checked)}
-                />
-                {props.lockDefault && lcc.isDefault && (
-                  <Icon iconName={'Lock'} className={styles.icon} />
-                )}
-              </div>
-              <div className={styles.subText} hidden={stringIsNullOrEmpty(lcc.subText)}>
-                <span>{lcc.subText}</span>
-              </div>
+    <div className={styles.root}>
+      {props.listContentConfig
+        .filter((lcc) => !lcc.hidden)
+        .map((lcc) => (
+          <div key={lcc.key} className={styles.item}>
+            <div className={styles.toggle}>
+              <Toggle
+                label={lcc.text}
+                defaultChecked={selectedKeys.indexOf(lcc.key) !== -1}
+                disabled={props.lockDefault && lcc.isDefault}
+                inlineLabel={true}
+                onChanged={(checked) => onChanged(lcc, checked)}
+              />
+              {props.lockDefault && lcc.isDefault && (
+                <Icon iconName={'Lock'} className={styles.icon} />
+              )}
             </div>
-          ))}
-      </ScrollablePane>
+            <div className={styles.subText} hidden={stringIsNullOrEmpty(lcc.subText)}>
+              <span>{lcc.subText}</span>
+            </div>
+          </div>
+        ))}
     </div>
   )
 }

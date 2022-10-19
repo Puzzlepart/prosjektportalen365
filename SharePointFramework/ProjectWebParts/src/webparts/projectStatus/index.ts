@@ -5,7 +5,7 @@ import {
 } from '@microsoft/sp-property-pane'
 import '@pnp/polyfill-ie11'
 import { IProjectStatusProps, ProjectStatus } from 'components/ProjectStatus'
-import 'office-ui-fabric-react/dist/css/fabric.min.css'
+import '@fluentui/react/dist/css/fabric.min.css'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
 import * as strings from 'ProjectWebPartsStrings'
 

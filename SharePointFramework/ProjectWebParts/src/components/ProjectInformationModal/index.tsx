@@ -1,4 +1,4 @@
-import { Modal } from 'office-ui-fabric-react/lib/Modal'
+import { Modal } from '@fluentui/react/lib/Modal'
 import React, { FunctionComponent } from 'react'
 import { ProjectInformation } from '../ProjectInformation'
 import styles from './ProjectInformationModal.module.scss'

@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { TemplateItem } from 'models'
 import {
-  ConstrainMode,
+  format,
+  MarqueeSelection,
   DetailsList,
+  SelectionMode,
   DetailsListLayoutMode,
-  SelectionMode
-} from 'office-ui-fabric-react/lib/DetailsList'
-import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
+  ConstrainMode
+} from '@fluentui/react'
+import { TemplateItem } from 'models'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { useContext, useMemo, useState } from 'react'
 import { TemplateSelectorContext } from 'templateSelector/context'
@@ -25,7 +25,8 @@ export const SelectScreen = (props: ISelectScreenProps) => {
       context.templates
         .filter((item) => {
           return !isEmpty(folder) ? folder === item.parentFolderUrl : item.level === 1
-        }).sort((a, b) => (a.name > b.name ? 1 : -1))
+        })
+        .sort((a, b) => (a.name > b.name ? 1 : -1))
         .sort((a, b) => (a.isFolder === b.isFolder ? 0 : a.isFolder ? -1 : 1)),
     [folder]
   )

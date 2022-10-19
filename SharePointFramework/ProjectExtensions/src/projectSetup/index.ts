@@ -1,3 +1,4 @@
+import { MessageBarType } from '@fluentui/react'
 import { override } from '@microsoft/decorators'
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base'
 import { isArray, stringIsNullOrEmpty } from '@pnp/common'
@@ -5,7 +6,6 @@ import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { MenuNode, sp, Web } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
 import { default as MSGraphHelper } from 'msgraph-helper'
-import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import { ListLogger } from 'pp365-shared/lib/logging'
 import { PortalDataService } from 'pp365-shared/lib/services'
 import * as strings from 'ProjectExtensionsStrings'
@@ -71,6 +71,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             strings.InvalidLanguageErrorStack
           )
         }
+        case ProjectSetupValidation.IsHubSite: {
+          await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, false)
+          throw new ProjectSetupError(
+            'IsHubSite',
+            strings.IsHubSiteErrorMessage,
+            strings.IsHubSiteErrorStack
+          )
+        }
         case ProjectSetupValidation.NoHubConnection: {
           throw new ProjectSetupError(
             'NoHubConnection',
@@ -78,15 +86,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             strings.NoHubSiteErrorStack,
             MessageBarType.warning
           )
-        }
-        case ProjectSetupValidation.AlreadySetup: {
-          if (stringIsNullOrEmpty(this.properties.forceTemplate)) {
-            throw new ProjectSetupError(
-              'AlreadySetup',
-              strings.ProjectAlreadySetupMessage,
-              strings.ProjectAlreadySetupStack
-            )
-          }
         }
       }
 
@@ -133,7 +132,11 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         level: LogLevel.Info
       })
       let data = await this._fetchData()
-      this._initializeSPListLogging(data.hub.web)
+      ListLogger.init(
+        data.hub.web.lists.getByTitle('Logg'),
+        this.context.pageContext.web.absoluteUrl,
+        'ProjectSetup'
+      )
       const provisioningInfo = await this._getProvisioningInfo(data)
       Logger.log({
         message: '(ProjectSetup) [_initializeSetup]: Template selected by user',
@@ -141,11 +144,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         level: LogLevel.Info
       })
       data = { ...data, ...provisioningInfo }
-      Logger.log({
-        message: '(ProjectSetup) [_initializeSetup]: Rendering progress modal',
-        data: {},
-        level: LogLevel.Info
-      })
       this._renderProgressDialog({
         text: strings.ProgressDialogLabel,
         subText: strings.ProgressDialogDescription,
@@ -158,7 +156,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         await sp.web.lists
           .getByTitle(strings.ProjectPropertiesListName)
           .items.getById(1)
-          .update({ GtIsParentProject: true, GtChildProjects: '[]' })
+          .update({ GtIsParentProject: true, GtChildProjects: JSON.stringify([]) })
         await this._ensureParentProjectPatch(data)
       }
 
@@ -318,7 +316,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       level: LogLevel.Info
     })
     try {
-      await ListLogger.write(strings.ProjectProvisioningStartLogText, 'Info')
+      await ListLogger.write(strings.ProjectProvisioningStartLogText)
       for (let i = 0; i < tasks.length; i++) {
         const task = tasks[i]
         if (
@@ -332,7 +330,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         })
         taskParams = await task.execute(taskParams, this._onTaskStatusUpdated.bind(this))
       }
-      await ListLogger.write(strings.ProjectProvisioningSuccessLogText, 'Info')
+      await ListLogger.write(strings.ProjectProvisioningSuccessLogText)
     } catch (error) {
       throw error
     }
@@ -449,6 +447,12 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       return ProjectSetupValidation.InvalidWebLanguage
     if (!this.context.pageContext.legacyPageContext.hubSiteId)
       return ProjectSetupValidation.NoHubConnection
+    if (
+      this.context.pageContext.legacyPageContext.siteId.includes(
+        this.context.pageContext.legacyPageContext.hubSiteId
+      )
+    )
+      return ProjectSetupValidation.IsHubSite
     if (this.isSetup) return ProjectSetupValidation.AlreadySetup
     return ProjectSetupValidation.Ready
   }
@@ -485,27 +489,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       return this._container.appendChild(placeholder)
     }
     return placeholder
-  }
-
-  /**
-   * Init SP list logging
-   *
-   * @param hubWeb - Hub web
-   * @param listName - List name
-   */
-  private _initializeSPListLogging(hubWeb: Web, listName: string = 'Logg') {
-    ListLogger.init(
-      hubWeb.lists.getByTitle(listName),
-      {
-        webUrl: 'GtLogWebUrl',
-        scope: 'GtLogScope',
-        functionName: 'GtLogFunctionName',
-        message: 'GtLogMessage',
-        level: 'GtLogLevel'
-      },
-      this.context.pageContext.web.absoluteUrl,
-      'ProjectSetup'
-    )
   }
 
   /**

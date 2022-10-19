@@ -1,10 +1,10 @@
-import { DisplayMode } from '@microsoft/sp-core-library'
 import {
-  ContextualMenu,
+  IContextualMenuItem,
   ContextualMenuItemType,
-  IContextualMenuItem
-} from 'office-ui-fabric-react/lib/ContextualMenu'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
+  format,
+  ContextualMenu
+} from '@fluentui/react'
+import { DisplayMode } from '@microsoft/sp-core-library'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { useContext } from 'react'
 import { indexOf } from 'underscore'
@@ -28,7 +28,7 @@ export const ColumnContextMenu = () => {
   )
   const columnEditable =
     props.displayMode === DisplayMode.Edit && columnIndex !== -1 && !props.lockedColumns
-  
+
   const addColumnItems: IContextualMenuItem[] = [
     {
       key: 'AddColumn',
@@ -42,7 +42,7 @@ export const ColumnContextMenu = () => {
       onClick: () => dispatch(TOGGLE_SHOW_HIDE_COLUMN_PANEL({ isOpen: true }))
     }
   ]
-  
+
   const items: IContextualMenuItem[] = [
     {
       key: 'SortDesc',

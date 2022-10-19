@@ -1,5 +1,5 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { Icon } from 'office-ui-fabric-react/lib/Icon'
+import { Icon } from '@fluentui/react/lib/Icon'
 import * as strings from 'ProjectWebPartsStrings'
 import React from 'react'
 import { useState } from 'react'

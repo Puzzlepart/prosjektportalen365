@@ -1,22 +1,22 @@
+import { Pivot, PivotItem, MessageBarType } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot'
+import { stringIsNullOrEmpty } from '@pnp/common'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useContext } from 'react'
 import { isEmpty } from 'underscore'
-import { UserMessage } from '../../UserMessage'
+import { ProjectInformationContext } from '../context'
 import styles from './ProjectProperties.module.scss'
 import { ProjectProperty } from './ProjectProperty'
 import { IProjectPropertiesProps } from './types'
 
-export const ProjectProperties: FunctionComponent<IProjectPropertiesProps> = (
-  props: IProjectPropertiesProps
-) => {
-  const nonEmptyProperties = props.properties.filter(({ empty }) => !empty)
+export const ProjectProperties: FunctionComponent<IProjectPropertiesProps> = ({ properties }) => {
+  const context = useContext(ProjectInformationContext)
+  const nonEmptyProperties = properties.filter(({ empty }) => !empty)
 
-  if (props.displayMode !== DisplayMode.Edit) {
+  if (context.props.displayMode !== DisplayMode.Edit) {
     if (isEmpty(nonEmptyProperties)) {
-      return <MessageBar>{strings.NoPropertiesMessage}</MessageBar>
+      return <UserMessage text={strings.NoPropertiesMessage} />
     }
     return (
       <div className={styles.projectProperties}>
@@ -29,14 +29,14 @@ export const ProjectProperties: FunctionComponent<IProjectPropertiesProps> = (
     return (
       <div className={styles.projectProperties}>
         <Pivot>
-          <PivotItem headerText={props.title}>
+          <PivotItem headerText={context.props.title}>
             <div className={styles.pivotItem}>
               {nonEmptyProperties.map((model, idx) => (
                 <ProjectProperty key={idx} model={model} />
               ))}
             </div>
           </PivotItem>
-          {props.isSiteAdmin && (
+          {context.props.isSiteAdmin && (
             <PivotItem headerText={strings.ExternalUsersConfigText} itemIcon='FilterSettings'>
               <div className={styles.pivotItem}>
                 <UserMessage
@@ -44,19 +44,19 @@ export const ProjectProperties: FunctionComponent<IProjectPropertiesProps> = (
                   text={strings.ExternalUsersConfigInfoText}
                 />
                 <UserMessage
-                  hidden={props.propertiesList}
+                  hidden={!stringIsNullOrEmpty(context.state.data.propertiesListId)}
                   className={styles.pivotItemUserMessage}
                   text={strings.NoLocalPropertiesListWarningText}
-                  messageBarType={MessageBarType.warning}
+                  type={MessageBarType.warning}
                 />
-                <div hidden={!props.propertiesList}>
-                  {props.properties.map((model, idx) => (
+                <div hidden={stringIsNullOrEmpty(context.state.data.propertiesListId)}>
+                  {properties.map((model, idx) => (
                     <ProjectProperty
                       key={idx}
                       model={model}
                       displayMode={DisplayMode.Edit}
-                      onFieldExternalChanged={props.onFieldExternalChanged}
-                      showFieldExternal={props.showFieldExternal}
+                      onFieldExternalChanged={context.props.onFieldExternalChanged}
+                      showFieldExternal={context.props.showFieldExternal}
                     />
                   ))}
                 </div>

@@ -26,7 +26,7 @@
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="false" />
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="Beskrivelse" Required="false" />
     </pnp:FieldRefs>
     <pnp:Fields>
         <Field ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Type="Text" Name="Title" StaticName="Title" DisplayName="Beskrivelse" Description="Beskriv kort hensikten med allokeringen" />
