@@ -39,7 +39,8 @@ jobs:
           node-version: 16.18.0
 
       - name: Run Install/Build-Release.ps1 in CI mode
-        run: C:/prosjektportalen365/Install/Build-Release.ps1 -CI
+        working-directory: C:/prosjektportalen365
+        run: Install/Build-Release.ps1 -CI
         shell: powershell
 
       - uses: actions/upload-artifact@v3

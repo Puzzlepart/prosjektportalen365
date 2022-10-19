@@ -81,7 +81,7 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
     Write-Host "[INFO] Building SharePointFramework\@Shared...  " -NoNewline
     Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH\@Shared"
     if ($CI.IsPresent) {  
-        npm ci
+        npm ci --silent --no-audit --no-fund
     }
     else {
         npm install --no-progress --silent --no-audit --no-fund
@@ -96,7 +96,7 @@ $Solutions | ForEach-Object {
     Write-Host "[INFO] Packaging SPFx solution [$_] v$Version...  " -NoNewline
     if (-not $SkipBuildSharePointFramework.IsPresent) {  
         if ($CI.IsPresent) {  
-            npm ci
+            npm ci --silent --no-audit --no-fund
         }
         else {
             npm install --no-progress --silent --no-audit --no-fund
@@ -107,7 +107,6 @@ $Solutions | ForEach-Object {
     Write-Host "DONE" -ForegroundColor Green
 }
 #endregion
-
 
 #region Build PnP templates
 Set-Location $PSScriptRoot
