@@ -27,7 +27,7 @@ jobs:
       - uses: actions/upload-artifact@v1
         with:
           name: release-package
-          path: release
+          path: c:/prosjektportalen365_main/release
 
   create-release:
     name: Create release
