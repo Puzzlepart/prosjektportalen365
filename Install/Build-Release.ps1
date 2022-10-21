@@ -6,7 +6,7 @@ Param(
     [switch]$Force,
     [Parameter(Mandatory = $false)]
     [string[]]$Solutions = @("PortfolioExtensions", "PortfolioWebParts", "ProgramWebParts", "ProjectExtensions", "ProjectWebParts"),
-    [Parameter(Mandatory = $false, HelpMessage = "CI mode. Installs SharePointPnPPowerShellOnline.")]
+    [Parameter(Mandatory = $false, HelpMessage = "CI mode. Installs PnP.PowerShell.")]
     [switch]$CI
 )  
 
@@ -69,7 +69,7 @@ Copy-Item -Path "$PSScriptRoot/Scripts/*" -Recurse -Destination $RELEASE_PATH_SC
 Copy-Item -Path "$PSScriptRoot/SearchConfiguration.xml" -Destination $RELEASE_PATH -Force
 EndAction
 
-StartAction("Copying SharePointPnPPowerShellOnline bundle")
+StartAction("Copying PnP.PowerShell bundle")
 Copy-Item -Path $PNP_BUNDLE_PATH -Filter * -Destination $RELEASE_PATH -Force -Recurse
 EndAction
 
