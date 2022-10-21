@@ -7,7 +7,7 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "Stored credential from Windows Credential Manager")]
     [string]$GenericCredential,
     [Parameter(Mandatory = $false)]
-    [switch]$Interative,
+    [switch]$Interactive,
     [Parameter(Mandatory = $false, HelpMessage = "PowerShell credential to authenticate with")]
     [System.Management.Automation.PSCredential]$PSCredential,
     [Parameter(Mandatory = $false, HelpMessage = "Skip PnP template")]
@@ -40,6 +40,7 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "CI")]
     [string]$CI
 )
+$global:PnPAppAuthAccessToken = @{}
 
 #region Handling installation language
 $LanguageIds = @{
@@ -73,14 +74,18 @@ function Connect-SharePoint {
     )
 
     Try {
+        if($null -ne $global:PnPAppAuthAccessToken[$Url]) {
+            Connect-PnPOnline -Url $Url -AccessToken $global:PnPAppAuthAccessToken[$Url]
+        }
         if (-not [string]::IsNullOrEmpty($CI)) {
             $DecodedCred = ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($CI))).Split("|")
             $Password = ConvertTo-SecureString -String $DecodedCred[1] -AsPlainText -Force
             $Credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $DecodedCred[0], $Password
             Connect-PnPOnline -Url $Url -Credentials $Credentials -ErrorAction Stop  -WarningAction Ignore
         }
-        elseif ($Interative.IsPresent) {
-            Connect-PnPOnline -Url $Url Interative -ErrorAction Stop -WarningAction Ignore
+        elseif ($Interactive.IsPresent) {
+            Connect-PnPOnline -Url $Url -Interactive -ErrorAction Stop -WarningAction Ignore
+            $global:PnPAppAuthAccessToken[$Url] = Get-PnPAppAuthAccessToken
         }
         elseif ($null -ne $PSCredential) {
             Connect-PnPOnline -Url $Url -Credentials $PSCredential -ErrorAction Stop  -WarningAction Ignore
@@ -459,3 +464,4 @@ catch {}
 #endregion
 
 Set-PnPTraceLog -Off
+$global:PnPAppAuthAccessToken = $null
