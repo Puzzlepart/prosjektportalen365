@@ -47,6 +47,7 @@ $LanguageIds = @{
     "English (US)" = 1033;
 }
 
+
 $LanguageCodes = @{
     "Norwegian"    = 'no-NB';
     "English (US)" = 'en-US';
