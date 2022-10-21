@@ -165,7 +165,11 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
    * @param searchTerm Search term
    * @param delay Delay in ms
    */
-  private _onSearch(_event: React.ChangeEvent<HTMLInputElement>, searchTerm: string, delay: number = 600) {
+  private _onSearch(
+    _event: React.ChangeEvent<HTMLInputElement>,
+    searchTerm: string,
+    delay: number = 600
+  ) {
     clearTimeout(this._onSearchDelay)
     this._onSearchDelay = setTimeout(() => {
       this.setState({ searchTerm: searchTerm.toLowerCase() })

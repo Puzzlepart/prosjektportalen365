@@ -3,7 +3,7 @@ import sortArray from 'array-sort'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
-import { first, indexOf, omit, uniq } from 'underscore'
+import { any, first, indexOf, omit, uniq } from 'underscore'
 import {
   IPortfolioAggregationHashState,
   IPortfolioAggregationProps,
@@ -101,29 +101,26 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
 })
 
 /**
- * Create reducer for Projects
+ * Create reducer for `<PortfolioAggregation />`
  */
 export default (props: IPortfolioAggregationProps) =>
   createReducer(initState(props), {
     [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {
       if (payload.items) {
-        state.items = props.postTransform ? props.postTransform(payload.items) : payload.items
-        state.items = sortArray(
-          [...state.items],
+        let items = props.postTransform ? props.postTransform(payload.items) : payload.items
+        items = sortArray(
+          [...items],
           [state.sortBy?.fieldName ? state.sortBy.fieldName : 'SiteTitle'],
           {
             reverse: state.sortBy?.isSortedDescending ? state.sortBy.isSortedDescending : false
           }
         )
-
         if (payload.projects) {
-          state.items = state.items.filter((item) => {
-            return payload.projects.find((project) => {
-              return project.GtSiteId === item.SiteId
-            })
-          })
+          items = items.filter((item) =>
+            any(payload.projects, (project) => project.GtSiteId === item.SiteId)
+          )
         }
-
+        state.items = items
         state.loading = false
       }
       if (payload.columns) {
@@ -161,9 +158,7 @@ export default (props: IPortfolioAggregationProps) =>
           state.columns = props.columns || []
         }
       }
-      if (payload.dataSources) {
-        state.dataSources = payload.dataSources
-      }
+      if (payload.dataSources) state.dataSources = payload.dataSources
     },
     [TOGGLE_COLUMN_FORM_PANEL.type]: (
       state,
@@ -314,7 +309,6 @@ export default (props: IPortfolioAggregationProps) =>
       setUrlHash<IPortfolioAggregationHashState>(obj)
       state.currentView = currentView
       state.dataSource = currentView.title
-      // state.currentView = payload.dataSources.find((ds) => ds.title === state.dataSource)
       state.activeFilters = {}
     },
     [SET_DATA_SOURCE.type]: (state, { payload }: ReturnType<typeof SET_DATA_SOURCE>) => {

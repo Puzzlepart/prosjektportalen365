@@ -51,10 +51,10 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
         ),
         adapter.fetchProjectContentColumns
           ? adapter.fetchProjectContentColumns(props.dataSourceCategory)
-          : Promise.resolve(null),
+          : Promise.resolve(undefined),
         adapter.fetchProjects
           ? adapter.fetchProjects(props.configuration, state.dataSource)
-          : Promise.resolve([])
+          : Promise.resolve(undefined)
       ])
         .then(([dataSrc, items, projectColumns, projects]) => {
           dispatch(
