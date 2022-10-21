@@ -1,4 +1,4 @@
-.baseDialog {
+.root {
   width: 750px;
   max-width: 750px;
   box-sizing: border-box;
@@ -16,9 +16,10 @@
 
   .version {
     position: absolute;
-    top: -90px;
+    top: -60px;
     right: -15px;
     color: #fff;
     font-size: 10px;
+    color: #444;
   }
 }

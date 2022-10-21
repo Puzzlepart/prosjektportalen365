@@ -6,7 +6,7 @@ import { IBaseDialogProps } from './types'
 export const BaseDialog: FunctionComponent<IBaseDialogProps> = (props) => {
   const modalProps: IModalProps = {
     ...props.modalProps,
-    containerClassName: [styles.baseDialog, props.modalProps?.containerClassName]
+    containerClassName: [styles.root, props.modalProps?.containerClassName]
       .filter((c) => c)
       .join(' '),
     onDismiss: props.onDismiss
