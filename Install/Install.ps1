@@ -99,21 +99,21 @@ function Connect-SharePoint {
 }
 
 function LoadBundle() {
-    Import-Module "$PSScriptRoot\SharePointPnPPowerShellOnline\SharePointPnPPowerShellOnline.psd1" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
+    Import-Module "$PSScriptRoot\PnP.PowerShell\PnP.PowerShell.psd1" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
     return (Get-Command Connect-PnPOnline).Version
 }
 
 if (-not [string]::IsNullOrEmpty($CI)) {
-    Write-Host "[Running in CI mode. Installing module SharePointPnPPowerShellOnline.]" -ForegroundColor Yellow
-    Install-Module -Name SharePointPnPPowerShellOnline -Force -Scope CurrentUser -ErrorAction Stop
+    Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
+    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop
 }
 else {
     if (-not $SkipLoadingBundle.IsPresent) {
         $PnPVersion = LoadBundle    
-        Write-Host "[INFO] Loaded [SharePointPnPPowerShellOnline] v.$($PnPVersion) from bundle"
+        Write-Host "[INFO] Loaded [PnP.PowerShell] v.$($PnPVersion) from bundle"
     }
     else {
-        Write-Host "[INFO] Loaded [SharePointPnPPowerShellOnline] v.$((Get-Command Connect-PnPOnline).Version) from your environment"
+        Write-Host "[INFO] Loaded [PnP.PowerShell] v.$((Get-Command Connect-PnPOnline).Version) from your environment"
     }
 }
 
