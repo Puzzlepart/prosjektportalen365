@@ -111,7 +111,7 @@ $Solutions | ForEach-Object {
 #region Build PnP templates
 Set-Location $PSScriptRoot
 Write-Host "[INFO] Building [Portfolio] PnP template...  " -NoNewline
-Convert-PnPFolderToProvisioningTemplate -Out "$RELEASE_PATH_TEMPLATES/Portfolio.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Portfolio" -Force
+Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Portfolio.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Portfolio" -Force
 Write-Host "DONE" -ForegroundColor Green
 
 Write-Host "[INFO] Building PnP content templates...  " -NoNewline
@@ -121,7 +121,7 @@ npm install --no-progress --silent --no-audit --no-fund
 npm run generateJsonTemplates
 
 Get-ChildItem "./Content" -Directory -Filter "*no-NB*" | ForEach-Object {
-    Convert-PnPFolderToProvisioningTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
+    Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
 }
 Write-Host "DONE" -ForegroundColor Green
 
@@ -129,14 +129,14 @@ Write-Host "[INFO] Building PnP upgrade templates...  " -NoNewline
 Set-Location $PNP_TEMPLATES_BASEPATH
 
 Get-ChildItem "./Upgrade" -Directory | ForEach-Object {
-    Convert-PnPFolderToProvisioningTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
+    Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
 }
 Write-Host "DONE" -ForegroundColor Green
 
 Set-Location $PSScriptRoot
 
 Write-Host "[INFO] Building [Taxonomy] PnP template....  " -NoNewline
-Convert-PnPFolderToProvisioningTemplate -Out "$RELEASE_PATH_TEMPLATES/Taxonomy.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Taxonomy" -Force
+Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Taxonomy.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Taxonomy" -Force
 Write-Host "DONE" -ForegroundColor Green
 
 #endregion
