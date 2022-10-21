@@ -16,7 +16,7 @@ env:
 jobs:
   build_release_package:
     name: Build release package
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Puzzlepart/prosjektportalen365.git
         run: |
@@ -42,7 +42,7 @@ jobs:
       - name: Run Install/Build-Release.ps1 in CI mode
         working-directory: C:/prosjektportalen365
         run: Install/Build-Release.ps1 -CI
-        shell: powershell
+        shell: pwsh
 
       - uses: actions/upload-artifact@v3
         with:
@@ -52,16 +52,16 @@ jobs:
     outputs:
       sha_short: ${{ steps.vars.outputs.sha_short }}
 
-  # install:
-  #   needs: [build_release_package]
-  #   name: Install
-  #   runs-on: windows-latest
-  #   steps:
-  #     - uses: actions/download-artifact@v3
-  #       with:
-  #         name: release-package
-  #         path: release
+  install:
+    needs: [build_release_package]
+    name: Install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: release-package
+          path: release
 
-  #     - name: Install
-  #       run: release/Install.ps1 -Url "${{ env.SP_URL }}_${{ needs.build_release_package.outputs.sha_short }}" -Title "Prosjektportalen 365 ${{ needs.build_release_package.outputs.sha_short }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }} -SkipAppPackages -SkipSiteDesign -SkipTaxonomy -SkipSearchConfiguration
-  #       shell: powershell
+      - name: Install
+        run: release/Install.ps1 -Url "${{ env.SP_URL }}_${{ needs.build_release_package.outputs.sha_short }}" -Title "Prosjektportalen 365 ${{ needs.build_release_package.outputs.sha_short }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }} -SkipAppPackages -SkipSiteDesign -SkipTaxonomy -SkipSearchConfiguration
+        shell: pwsh
