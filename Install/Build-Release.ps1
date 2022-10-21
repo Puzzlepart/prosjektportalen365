@@ -12,6 +12,21 @@ Param(
 
 $PACKAGE_FILE = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Json
 
+$sw = [Diagnostics.Stopwatch]::StartNew()
+$global:sw_action = $null
+
+function StartAction($Action) {
+    $global:sw_action = [Diagnostics.Stopwatch]::StartNew()
+    Write-Host "[INFO] $Action...  " -NoNewline
+}
+
+function EndAction() {
+    $global:sw_action.Stop()
+    $Elapsed = ($global:sw_action.ElapsedMilliseconds)/1000
+    Write-Host "Completed in $($Elapsed)s" -ForegroundColor Green
+}
+
+
 #region Paths
 $START_PATH = Get-Location
 $ROOT_PATH = "$PSScriptRoot/.."
@@ -37,20 +52,6 @@ if ($CI.IsPresent) {
 }
 else {
     Import-Module $PNP_BUNDLE_PATH\PnP.PowerShell.psd1 -DisableNameChecking
-}
-
-$sw = [Diagnostics.Stopwatch]::StartNew()
-$global:sw_action = $null
-
-function StartAction($Action) {
-    $global:sw_action = [Diagnostics.Stopwatch]::StartNew()
-    Write-Host "[INFO] $Action...  " -NoNewline
-}
-
-function EndAction() {
-    $global:sw_action.Stop()
-    $Elapsed = ($global:sw_action.ElapsedMilliseconds)/1000
-    Write-Host "Completed in $($Elapsed)s" -ForegroundColor Green
 }
 
 if ($CI.IsPresent) {
