@@ -52,8 +52,9 @@ if ($CI.IsPresent) {
     $RELEASE_PATH = "$ROOT_PATH/release"
 }
 
-StartAction("Creating release folder $RELEASE_PATH")
-$RELEASE_PATH = (New-Item -Path "$RELEASE_PATH" -ItemType Directory -Force).FullName
+$RELEASE_FOLDER = New-Item -Path "$RELEASE_PATH" -ItemType Directory -Force
+$RELEASE_PATH = $RELEASE_FOLDER.FullName
+StartAction("Creating release folder release/$($RELEASE_FOLDER.BaseName)")
 $RELEASE_PATH_TEMPLATES = (New-Item -Path "$RELEASE_PATH/Templates" -ItemType Directory -Force).FullName
 $RELEASE_PATH_SITESCRIPTS = (New-Item -Path "$RELEASE_PATH/SiteScripts" -ItemType Directory -Force).FullName
 $RELEASE_PATH_SCRIPTS = (New-Item -Path "$RELEASE_PATH/Scripts" -ItemType Directory -Force).FullName
