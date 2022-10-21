@@ -27,6 +27,10 @@ $RELEASE_PATH = "$ROOT_PATH/release/$($RELEASE_NAME)"
 Write-Host "[Building release $RELEASE_NAME]" -ForegroundColor Cyan
 
 if ($CI.IsPresent) {
+    Write-Host "[Running in CI mode]" -ForegroundColor Yellow
+}
+
+if ($CI.IsPresent) {
     StartAction("Installing module PnP.PowerShell")
     Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser
     EndAction
