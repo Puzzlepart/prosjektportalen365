@@ -27,8 +27,9 @@ $RELEASE_PATH = "$ROOT_PATH/release/$($RELEASE_NAME)"
 Write-Host "[Building release $RELEASE_NAME]" -ForegroundColor Cyan
 
 if ($CI.IsPresent) {
-    Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
+    StartAction("Installing module PnP.PowerShell")
     Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser
+    EndAction
 }
 else {
     Import-Module $PNP_BUNDLE_PATH\PnP.PowerShell.psd1 -DisableNameChecking
