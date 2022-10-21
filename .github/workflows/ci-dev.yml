@@ -26,8 +26,6 @@ jobs:
       - name: Set sha_short
         id: vars
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-        
-      - run: Get-PSDrive
 
       - name: Setup Node.js 16.18.0
         uses: actions/setup-node@v3
