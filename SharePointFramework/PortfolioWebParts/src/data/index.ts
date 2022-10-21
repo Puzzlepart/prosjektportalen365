@@ -648,16 +648,14 @@ export class DataAdapter implements IDataAdapter {
   ): Promise<any[]> {
     const odata =
       configuration && configuration.views.find((v) => v.title === dataSource)?.odataQuery
-    let projects = []
+    let projects: any[]
 
     if (odata && !dataSource.includes('(Prosjektnivå)')) {
       // eslint-disable-next-line @typescript-eslint/no-extra-semi
-      ;[projects] = await Promise.all([
-        await sp.web.lists
-          .getByTitle(strings.ProjectsListName)
-          .items.filter(`${odata}`)
-          .get<any[]>()
-      ])
+      projects = await sp.web.lists
+        .getByTitle(strings.ProjectsListName)
+        .items.filter(`${odata}`)
+        .get<any[]>()
     }
     return projects
   }
