@@ -18,7 +18,7 @@ $ROOT_PATH = "$PSScriptRoot/.."
 $SHAREPOINT_FRAMEWORK_BASEPATH = "$ROOT_PATH/SharePointFramework"
 $PNP_TEMPLATES_BASEPATH = "$ROOT_PATH/Templates"
 $SITE_SCRIPTS_BASEPATH = "$ROOT_PATH/SiteScripts/Src"
-$PNP_BUNDLE_PATH = "$PSScriptRoot/SharePointPnPPowerShellOnline"
+$PNP_BUNDLE_PATH = "$PSScriptRoot/PnP.PowerShell"
 $GIT_HASH = git log --pretty=format:'%h' -n 1
 $RELEASE_NAME = "$($PACKAGE_FILE.name)-$($PACKAGE_FILE.version).$($GIT_HASH)"
 $RELEASE_PATH = "$ROOT_PATH/release/$($RELEASE_NAME)"
@@ -27,11 +27,11 @@ $RELEASE_PATH = "$ROOT_PATH/release/$($RELEASE_NAME)"
 Write-Host "[Building release $($RELEASE_NAME)]" -ForegroundColor Cyan
 
 if ($CI.IsPresent) {
-    Write-Host "[Running in CI mode. Installing module SharePointPnPPowerShellOnline.]" -ForegroundColor Yellow
-    Install-Module -Name SharePointPnPPowerShellOnline -Force -Scope CurrentUser
+    Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
+    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser
 }
 else {
-    Import-Module $PSScriptRoot\SharePointPnPPowerShellOnline\SharePointPnPPowerShellOnline.psd1 -DisableNameChecking
+    Import-Module $PNP_BUNDLE_PATH\PnP.PowerShell.psd1 -DisableNameChecking
 }
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
