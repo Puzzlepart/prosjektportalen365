@@ -128,7 +128,7 @@ else {
 $ManagedPath = $Uri.Segments[1]
 $Alias = $Uri.Segments[2].TrimEnd('/')
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
-$BasePath = "$PSScriptRoot\Templates"
+$TemplatesBasePath = "$PSScriptRoot/Templates"
 #endregion
 
 #region Print installation user
@@ -331,29 +331,29 @@ if (-not $SkipTemplate.IsPresent) {
         }
         if (-not $SkipTaxonomy.IsPresent -and -not $Upgrade.IsPresent) {
             Write-Host "[INFO] Applying PnP template [Taxonomy] to [$Url]"
-            Invoke-PnPSiteTemplate "$BasePath\Taxonomy.pnp" -ErrorAction Stop
+            Invoke-PnPSiteTemplate "$TemplatesBasePath/Taxonomy.pnp" -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP template [Taxonomy] to [$Url]" -ForegroundColor Green
         }
 
         if ($Upgrade.IsPresent) {
             Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
-            Invoke-PnPSiteTemplate "$BasePath\Portfolio.pnp" -ExcludeHandlers Navigation, SupportedUILanguages -ErrorAction Stop
+            Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers Navigation, SupportedUILanguages -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
 
             Write-Host "[INFO] Applying PnP content template (Handlers:Files) to [$Url]"
-            Invoke-PnPSiteTemplate "$BasePath\Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop
+            Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
         }
         else {
             Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
-            $Instance = Read-PnPProvisioningTemplate "$BasePath\Portfolio.pnp"
+            $Instance = Read-PnPProvisioningTemplate "$TemplatesBasePath/Portfolio.pnp"
             $Instance.SupportedUILanguages[0].LCID = $LanguageId
             Invoke-PnPSiteTemplate -InputInstance $Instance -Handlers SupportedUILanguages
-            Invoke-PnPSiteTemplate "$BasePath\Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
+            Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
 
             Write-Host "[INFO] Applying PnP template [Portfolio_content] to [$Url]"
-            Invoke-PnPSiteTemplate "$BasePath\Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop
+            Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop
             Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
         }
         
