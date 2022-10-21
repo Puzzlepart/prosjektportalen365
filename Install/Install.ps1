@@ -346,7 +346,7 @@ if (-not $SkipTemplate.IsPresent) {
         }
         else {
             Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
-            $Instance = Read-PnPProvisioningTemplate "$TemplatesBasePath/Portfolio.pnp"
+            $Instance = Read-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp"
             $Instance.SupportedUILanguages[0].LCID = $LanguageId
             Invoke-PnPSiteTemplate -InputInstance $Instance -Handlers SupportedUILanguages
             Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
