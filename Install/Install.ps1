@@ -85,7 +85,7 @@ function Connect-SharePoint {
         }
         elseif ($Interactive.IsPresent) {
             Connect-PnPOnline -Url $Url -Interactive -ErrorAction Stop -WarningAction Ignore
-            $global:__InteractiveCachedAccessTokens[$Url] = Get-__InteractiveCachedAccessTokens
+            $global:__InteractiveCachedAccessTokens[$Url] = Get-PnPAppAuthAccessToken
         }
         elseif ($null -ne $PSCredential) {
             Connect-PnPOnline -Url $Url -Credentials $PSCredential -ErrorAction Stop  -WarningAction Ignore
