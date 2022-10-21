@@ -1,5 +1,5 @@
 <pnp:ListInstance Title="Hjelpeinnhold" Description="" DocumentTemplate="" Hidden="true" TemplateType="100" Url="Lists/Hjelpeinnhold" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" EnableAttachments="false" EnableFolderCreation="false"
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x01007C1785494A2CAC40B7F7D81A040AC219" Default="true" />
     </pnp:ContentTypeBindings>

@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_ProjectAdminPermissions_Title}" Description="" Hidden="true" TemplateType="100" Url="{resource:Lists_ProjectAdminPermissions_Url}" EnableVersioning="true" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableAttachments="false" EnableFolderCreation="false" xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+<pnp:ListInstance Title="{resource:Lists_ProjectAdminPermissions_Title}" Description="" Hidden="true" TemplateType="100" Url="{resource:Lists_ProjectAdminPermissions_Url}" EnableVersioning="true" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableAttachments="false" EnableFolderCreation="false" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x010018DB532215EDE34C975F3AC3348948B1" Default="true" />
     </pnp:ContentTypeBindings>

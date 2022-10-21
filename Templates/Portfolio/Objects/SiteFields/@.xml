@@ -1,4 +1,4 @@
-<pnp:SiteFields xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+<pnp:SiteFields xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Idea/GtIdeaAffectedParties.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Idea/GtIdeaBackground.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Idea/GtIdeaCriticalSuccessFactors.xml" />

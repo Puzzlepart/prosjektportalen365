@@ -1,5 +1,5 @@
 <pnp:ListInstance Title="{resource:Lists_TemplateLibrary_Title}" TemplateType="101" Url="{resource:Lists_TemplateLibrary_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableAttachments="false" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllDocuments_DisplayName}" Url="{site}/{resource:Lists_TemplateLibrary_Url}/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
             <Query>
