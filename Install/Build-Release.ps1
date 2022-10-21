@@ -35,50 +35,59 @@ else {
 }
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
+$global:sw_action = $null
 
+function StartAction($Action) {
+    $global:sw_action = [Diagnostics.Stopwatch]::StartNew()
+    Write-Host "[INFO] $Action...  " -NoNewline
+}
+
+function EndAction() {
+    $global:sw_action.Stop()
+    $Elapsed = ($global:sw_action.ElapsedMilliseconds)/1000
+    Write-Host "Completed in $($Elapsed)s" -ForegroundColor Green
+}
 
 if ($CI.IsPresent) {
     $RELEASE_PATH = "$ROOT_PATH/release"
 }
 
-Write-Host "[INFO] Creating release folder $RELEASE_PATH...  " -NoNewline
+StartAction("Creating release folder $RELEASE_PATH")
 $RELEASE_PATH = (New-Item -Path "$RELEASE_PATH" -ItemType Directory -Force).FullName
 $RELEASE_PATH_TEMPLATES = (New-Item -Path "$RELEASE_PATH/Templates" -ItemType Directory -Force).FullName
 $RELEASE_PATH_SITESCRIPTS = (New-Item -Path "$RELEASE_PATH/SiteScripts" -ItemType Directory -Force).FullName
 $RELEASE_PATH_SCRIPTS = (New-Item -Path "$RELEASE_PATH/Scripts" -ItemType Directory -Force).FullName
 $RELEASE_PATH_APPS = (New-Item -Path "$RELEASE_PATH/Apps" -ItemType Directory -Force).FullName
-Write-Host "DONE" -ForegroundColor Green
+EndAction
 
 #region Copying source files
-Write-Host "[INFO] Copying Install.ps1, PostInstall.ps1 and site script source files...  " -NoNewline
+StartAction("Copying Install.ps1, PostInstall.ps1 and site script source files")
 Copy-Item -Path "$SITE_SCRIPTS_BASEPATH/*.txt" -Filter *.txt -Destination $RELEASE_PATH_SITESCRIPTS -Force
 Copy-Item -Path "$PSScriptRoot/Install.ps1" -Destination $RELEASE_PATH -Force
 Copy-Item -Path "$PSScriptRoot/Scripts/*" -Recurse -Destination $RELEASE_PATH_SCRIPTS -Force
 Copy-Item -Path "$PSScriptRoot/SearchConfiguration.xml" -Destination $RELEASE_PATH -Force
-Write-Host "DONE" -ForegroundColor Green
+EndAction
 
-Write-Host "[INFO] Copying SharePointPnPPowerShellOnline bundle...  " -NoNewline
+StartAction("Copying SharePointPnPPowerShellOnline bundle")
 Copy-Item -Path $PNP_BUNDLE_PATH -Filter * -Destination $RELEASE_PATH -Force -Recurse
-Write-Host "DONE" -ForegroundColor Green
+EndAction
 
-Write-Host "[INFO] Replacing VERSION_PLACEHOLDER...  " -NoNewline
 (Get-Content "$RELEASE_PATH/Install.ps1") -Replace 'VERSION_PLACEHOLDER', "$($PACKAGE_FILE.version).$($GIT_HASH)" | Set-Content "$RELEASE_PATH/Install.ps1"
-Write-Host "DONE" -ForegroundColor Green
 #endregion
 
 #region Clean node_modules for all SharePoint Framework solutions
 if ($Force.IsPresent) {
     $Solutions | ForEach-Object {
-        Write-Host "[INFO] Clearing node_modules for SPFx solution [$_]...  " -NoNewline
+        StartAction("Clearing node_modules for SPFx solution [$_]")
         rimraf "$SHAREPOINT_FRAMEWORK_BASEPATH\$_\node_modules\"
-        Write-Host "DONE" -ForegroundColor Green
+        EndAction
     }
 }
 #endregion
 
 #region Package SharePoint Framework solutions
 if (-not $SkipBuildSharePointFramework.IsPresent) {
-    Write-Host "[INFO] Building SharePointFramework\@Shared...  " -NoNewline
+    StartAction("Building SharePointFramework\@Shared")
     Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH\@Shared"
     if ($CI.IsPresent) {  
         npm ci --silent --no-audit --no-fund >$null 2>&1
@@ -87,14 +96,14 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
         npm install --no-progress --silent --no-audit --no-fund >$null 2>&1
     }
     npm run build >$null 2>&1
-    Write-Host "DONE" -ForegroundColor Green
+    EndAction
 }
 
 if (-not $SkipBuildSharePointFramework.IsPresent) {
     $Solutions | ForEach-Object {
         Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH\$_"
         $Version = (Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json).solution.version
-        Write-Host "[INFO] Packaging SPFx solution $_...  " -NoNewline
+        StartAction("Packaging SPFx solution $_")
         if ($CI.IsPresent) {  
             npm ci --silent --no-audit --no-fund >$null 2>&1
         }
@@ -103,18 +112,18 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
         }
         npm run package >$null 2>&1
         Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse -ErrorAction SilentlyContinue | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$RELEASE_PATH/Apps/$_")) } | Copy-Item -Destination $RELEASE_PATH_APPS -Force
-        Write-Host "DONE" -ForegroundColor Green
+        EndAction
     }
 }
 #endregion
 
 #region Build PnP templates
 Set-Location $PSScriptRoot
-Write-Host "[INFO] Building Portfolio PnP template...  " -NoNewline
+StartAction("Building Portfolio PnP template")
 Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Portfolio.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Portfolio" -Force
-Write-Host "DONE" -ForegroundColor Green
+EndAction
 
-Write-Host "[INFO] Building PnP content templates...  " -NoNewline
+StartAction("Building PnP content templates")
 Set-Location $PNP_TEMPLATES_BASEPATH
 
 if ($CI.IsPresent) {  
@@ -128,32 +137,33 @@ npm run generateJsonTemplates >$null 2>&1
 Get-ChildItem "./Content" -Directory -Filter "*no-NB*" | ForEach-Object {
     Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
 }
-Write-Host "DONE" -ForegroundColor Green
+EndAction
 
-Write-Host "[INFO] Building PnP upgrade templates...  " -NoNewline
+StartAction("Building PnP upgrade templates")
 Set-Location $PNP_TEMPLATES_BASEPATH
 
 Get-ChildItem "./Upgrade" -Directory | ForEach-Object {
     Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
 }
-Write-Host "DONE" -ForegroundColor Green
+EndAction
 
 Set-Location $PSScriptRoot
 
-Write-Host "[INFO] Building Taxonomy PnP template....  " -NoNewline
+StartAction("Building Taxonomy PnP template")
 Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Taxonomy.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Taxonomy" -Force
-Write-Host "DONE" -ForegroundColor Green
+EndAction
 
 #endregion
 
-$sw.Stop()
 
 if (-not $CI.IsPresent) {
     Add-Type -Assembly "System.IO.Compression.FileSystem"
     [IO.Compression.ZipFile]::CreateFromDirectory($RELEASE_PATH, "$($RELEASE_PATH).zip")  
-    Write-Host "Done building release $RELEASE_NAME in [$($sw.Elapsed)]" -ForegroundColor Cyan
+    $sw.Stop()
+    Write-Host "Done building release $RELEASE_NAME in $($sw.ElapsedMilliseconds/1000)s" -ForegroundColor Green
     Set-Location $START_PATH
 }
 else {
-    Write-Host "Done building release $RELEASE_NAME in [$($sw.Elapsed)]" -ForegroundColor Cyan
+    $sw.Stop()
+    Write-Host "Done building release $RELEASE_NAME in $($sw.ElapsedMilliseconds/1000)s" -ForegroundColor Green
 }
