@@ -18,18 +18,12 @@ jobs:
     name: Build release package
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Puzzlepart/prosjektportalen365.git
-        run: |
-          mkdir C:/prosjektportalen365
-          git clone --branch feat/upgrade-install-script https://github.com/Puzzlepart/prosjektportalen365.git C:/prosjektportalen365
-
-      - name: Checkout current SHA
-        working-directory: C:/prosjektportalen365
-        run: git checkout $GITHUB_SHA
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Set sha_short
         id: vars
-        working-directory: C:/prosjektportalen365
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
         
       - run: Get-PSDrive
@@ -40,14 +34,12 @@ jobs:
           node-version: 16.18.0
 
       - name: Run Install/Build-Release.ps1 in CI mode
-        working-directory: C:/prosjektportalen365
         run: Install/Build-Release.ps1 -CI
         shell: pwsh
 
       - uses: actions/upload-artifact@v3
         with:
           name: release-package
-          path: C:/prosjektportalen365/release
           retention-days: 3
     outputs:
       sha_short: ${{ steps.vars.outputs.sha_short }}
