@@ -94,7 +94,7 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
     $Solutions | ForEach-Object {
         Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH\$_"
         $Version = (Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json).solution.version
-        Write-Host "[INFO] Packaging SPFx solution [$_] v$Version...  " -NoNewline
+        Write-Host "[INFO] Packaging SPFx solution $_...  " -NoNewline
         if ($CI.IsPresent) {  
             npm ci --silent --no-audit --no-fund >$null 2>&1
         }
