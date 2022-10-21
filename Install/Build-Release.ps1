@@ -24,7 +24,7 @@ $RELEASE_NAME = "$($PACKAGE_FILE.name)-$($PACKAGE_FILE.version).$($GIT_HASH)"
 $RELEASE_PATH = "$ROOT_PATH/release/$($RELEASE_NAME)"
 #endregion
 
-Write-Host "[Building release $($RELEASE_NAME)]" -ForegroundColor Cyan
+Write-Host "[Building release $RELEASE_NAME]" -ForegroundColor Cyan
 
 if ($CI.IsPresent) {
     Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
@@ -81,44 +81,49 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
     Write-Host "[INFO] Building SharePointFramework\@Shared...  " -NoNewline
     Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH\@Shared"
     if ($CI.IsPresent) {  
-        npm ci --silent --no-audit --no-fund
+        npm ci --silent --no-audit --no-fund >$null 2>&1
     }
     else {
-        npm install --no-progress --silent --no-audit --no-fund
+        npm install --no-progress --silent --no-audit --no-fund >$null 2>&1
     }
-    npm run build   
+    npm run build >$null 2>&1
     Write-Host "DONE" -ForegroundColor Green
 }
 
-$Solutions | ForEach-Object {
-    Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH\$_"
-    $Version = (Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json).solution.version
-    Write-Host "[INFO] Packaging SPFx solution [$_] v$Version...  " -NoNewline
-    if (-not $SkipBuildSharePointFramework.IsPresent) {  
+if (-not $SkipBuildSharePointFramework.IsPresent) {
+    $Solutions | ForEach-Object {
+        Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH\$_"
+        $Version = (Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json).solution.version
+        Write-Host "[INFO] Packaging SPFx solution [$_] v$Version...  " -NoNewline
         if ($CI.IsPresent) {  
-            npm ci --silent --no-audit --no-fund
+            npm ci --silent --no-audit --no-fund >$null 2>&1
         }
         else {
-            npm install --no-progress --silent --no-audit --no-fund
+            npm install --no-progress --silent --no-audit --no-fund >$null 2>&1
         }
-        npm run package
+        npm run package >$null 2>&1
+        Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse -ErrorAction SilentlyContinue | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$RELEASE_PATH/Apps/$_")) } | Copy-Item -Destination $RELEASE_PATH_APPS -Force
+        Write-Host "DONE" -ForegroundColor Green
     }
-    Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse -ErrorAction SilentlyContinue | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$RELEASE_PATH/Apps/$_")) } | Copy-Item -Destination $RELEASE_PATH_APPS -Force
-    Write-Host "DONE" -ForegroundColor Green
 }
 #endregion
 
 #region Build PnP templates
 Set-Location $PSScriptRoot
-Write-Host "[INFO] Building [Portfolio] PnP template...  " -NoNewline
+Write-Host "[INFO] Building Portfolio PnP template...  " -NoNewline
 Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Portfolio.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Portfolio" -Force
 Write-Host "DONE" -ForegroundColor Green
 
 Write-Host "[INFO] Building PnP content templates...  " -NoNewline
 Set-Location $PNP_TEMPLATES_BASEPATH
 
-npm install --no-progress --silent --no-audit --no-fund
-npm run generateJsonTemplates
+if ($CI.IsPresent) {  
+    npm ci --silent --no-audit --no-fund >$null 2>&1
+}
+else {
+    npm install --no-progress --silent --no-audit --no-fund >$null 2>&1
+}
+npm run generateJsonTemplates >$null 2>&1
 
 Get-ChildItem "./Content" -Directory -Filter "*no-NB*" | ForEach-Object {
     Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
@@ -135,7 +140,7 @@ Write-Host "DONE" -ForegroundColor Green
 
 Set-Location $PSScriptRoot
 
-Write-Host "[INFO] Building [Taxonomy] PnP template....  " -NoNewline
+Write-Host "[INFO] Building Taxonomy PnP template....  " -NoNewline
 Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Taxonomy.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Taxonomy" -Force
 Write-Host "DONE" -ForegroundColor Green
 
@@ -146,8 +151,9 @@ $sw.Stop()
 if (-not $CI.IsPresent) {
     Add-Type -Assembly "System.IO.Compression.FileSystem"
     [IO.Compression.ZipFile]::CreateFromDirectory($RELEASE_PATH, "$($RELEASE_PATH).zip")  
-    Write-Host "Done building release [v$($PACKAGE_FILE.version)] in [$($sw.Elapsed)]" -ForegroundColor Cyan
+    Write-Host "Done building release $RELEASE_NAME in [$($sw.Elapsed)]" -ForegroundColor Cyan
     Set-Location $START_PATH
-} else {
-    Write-Host "Done building release [v$($PACKAGE_FILE.version)] in [$($sw.Elapsed)]" -ForegroundColor Cyan
+}
+else {
+    Write-Host "Done building release $RELEASE_NAME in [$($sw.Elapsed)]" -ForegroundColor Cyan
 }
