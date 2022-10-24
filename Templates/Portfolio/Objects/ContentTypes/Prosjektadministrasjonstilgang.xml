@@ -1,8 +1,8 @@
 <pnp:ContentType ID="0x010018DB532215EDE34C975F3AC3348948B1" Name="{resource:ContentTypes_ProjectAdminPermission_Name}" Description="{resource:ContentTypes_ProjectAdminPermission_Description}" Group="{resource:ContentTypes_Group}" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" />
-        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
-        <pnp:FieldRef ID="de8bc08e-0002-43da-b378-1b0c26166aa4" Name="GtProjectAdminPermission" Required="true" />
-        <pnp:FieldRef ID="f5b30ccc-0849-4b99-b4be-86d5e5c13161" Name="GtProjectAdminPermissionId" Required="true" />
+        <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="de8bc08e-0002-43da-b378-1b0c26166aa4" Name="GtProjectAdminPermission" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="f5b30ccc-0849-4b99-b4be-86d5e5c13161" Name="GtProjectAdminPermissionId" Required="true" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

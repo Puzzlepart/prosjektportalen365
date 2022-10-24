@@ -1,13 +1,13 @@
 <pnp:ContentType ID="0x0100A39D24CC7FD645868192E61A2376EBFD" Name="{resource:ContentTypes_LogElement_Name}" Description="{resource:ContentTypes_LogElement_Description}" Group="{resource:ContentTypes_Group}" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" />
-        <pnp:FieldRef ID="b9bbd94f-f9c0-4512-ad77-404f8a2c64b1" Name="GtLogWebUrl" />
-        <pnp:FieldRef ID="80dea622-3202-4896-b33f-9720aa19adbc" Name="GtLogScope" />
-        <pnp:FieldRef ID="0b2d3d49-fc49-4818-ac9b-23eda9697d27" Name="GtLogFunctionName" />
-        <pnp:FieldRef ID="d9e48b68-5809-4ae9-9769-dfd8bb47fab7" Name="GtLogComponentName" />
-        <pnp:FieldRef ID="4614d809-1d6f-42a4-a9a6-3255d2e1f9b7" Name="GtLogMessage" />
-        <pnp:FieldRef ID="d141ee8b-feea-4a9d-9dc1-a6feff4abb72" Name="GtLogLevel" />
-        <pnp:FieldRef ID="bd81900e-6e27-4cd4-ad1b-1b5111ee0745" Name="GtLogContext" />
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="b9bbd94f-f9c0-4512-ad77-404f8a2c64b1" Name="GtLogWebUrl" UpdateChildren="true" />
+        <pnp:FieldRef ID="80dea622-3202-4896-b33f-9720aa19adbc" Name="GtLogScope" UpdateChildren="true" />
+        <pnp:FieldRef ID="0b2d3d49-fc49-4818-ac9b-23eda9697d27" Name="GtLogFunctionName" UpdateChildren="true" />
+        <pnp:FieldRef ID="d9e48b68-5809-4ae9-9769-dfd8bb47fab7" Name="GtLogComponentName" UpdateChildren="true" />
+        <pnp:FieldRef ID="4614d809-1d6f-42a4-a9a6-3255d2e1f9b7" Name="GtLogMessage" UpdateChildren="true" />
+        <pnp:FieldRef ID="d141ee8b-feea-4a9d-9dc1-a6feff4abb72" Name="GtLogLevel" UpdateChildren="true" />
+        <pnp:FieldRef ID="bd81900e-6e27-4cd4-ad1b-1b5111ee0745" Name="GtLogContext" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

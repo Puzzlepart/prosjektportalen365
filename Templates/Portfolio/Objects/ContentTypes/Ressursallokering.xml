@@ -1,12 +1,12 @@
 <pnp:ContentType ID="0x010029F45E75BA9CE340A83EFFB2927E11F4" Name="{resource:ContentTypes_ResourceAllocation_Name}" Description="{resource:ContentTypes_ResourceAllocation_Description}" Group="{resource:ContentTypes_Group}" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="88d9b92c-efed-45d0-a586-86d9196b77d0" Name="GtResourceUser" Required="true" />
-        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="false" Required="false" />
-        <pnp:FieldRef ID="e39c32db-a7da-4c93-9369-8aa5a7bde92d" Name="GtStartDate" Required="true" />
-        <pnp:FieldRef ID="16623c2a-3fd1-41c2-87e7-958583dd88da" Name="GtEndDate" Required="true" />
-        <pnp:FieldRef ID="028e49b1-b141-4d35-8998-a17d729960d4" Name="GtResourceAbsence" Required="true" />
-        <pnp:FieldRef ID="08ac9d56-f8eb-4a2c-868f-d39fc012fcd6" Name="GtResourceLoad" Required="true" />
-        <pnp:FieldRef ID="1dd2e8f2-bf4f-4a66-b0dc-ad992d10eb64" Name="GtResourceAbsenceComment" Required="false" />
+        <pnp:FieldRef ID="88d9b92c-efed-45d0-a586-86d9196b77d0" Name="GtResourceUser" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="false" Required="false" UpdateChildren="true" />
+        <pnp:FieldRef ID="e39c32db-a7da-4c93-9369-8aa5a7bde92d" Name="GtStartDate" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="16623c2a-3fd1-41c2-87e7-958583dd88da" Name="GtEndDate" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="028e49b1-b141-4d35-8998-a17d729960d4" Name="GtResourceAbsence" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="08ac9d56-f8eb-4a2c-868f-d39fc012fcd6" Name="GtResourceLoad" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="1dd2e8f2-bf4f-4a66-b0dc-ad992d10eb64" Name="GtResourceAbsenceComment" Required="false" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

@@ -10,10 +10,10 @@
     <pnp:FieldRef ID="2081191c-6c4e-452c-9b50-12e80a5047fa" Name="GtIdeaExecutionPlanApproach" Required="true"/>
     <pnp:FieldRef ID="70f7cd7a-1a5a-430c-9da6-1a2710de7eeb" Name="GtIdeaExecutionResourceNeeds" Required="true"/>
     <pnp:FieldRef ID="a43b99a2-1b4c-4993-a390-56343004895c" Name="GtIdeaExecutionSuccessFactors" Required="true"/>
-    <pnp:FieldRef ID="df578dbf-fb10-4834-be61-6b9355dbc1a9" Name="GtIdeaReference" />
-    <pnp:FieldRef ID="86e2c34f-3522-4715-a18b-d0964b5efeb5" Name="GtIdeaDecision" />
-    <pnp:FieldRef ID="ebb77296-0d25-42a3-b996-d7396f84d8ce" Name="GtIdeaOtherComments" />
-    <pnp:FieldRef ID="01adb50d-0c5a-4e51-9ff6-01fbc71079a9" Name="GtIdeaDecisionComment" />
-    <pnp:FieldRef ID="8ac3248f-1b9c-4270-adeb-097ac9d02874" Name="GtIdeaProjectData" />
+    <pnp:FieldRef ID="df578dbf-fb10-4834-be61-6b9355dbc1a9" Name="GtIdeaReference" UpdateChildren="true" />
+    <pnp:FieldRef ID="86e2c34f-3522-4715-a18b-d0964b5efeb5" Name="GtIdeaDecision" UpdateChildren="true" />
+    <pnp:FieldRef ID="ebb77296-0d25-42a3-b996-d7396f84d8ce" Name="GtIdeaOtherComments" UpdateChildren="true" />
+    <pnp:FieldRef ID="01adb50d-0c5a-4e51-9ff6-01fbc71079a9" Name="GtIdeaDecisionComment" UpdateChildren="true" />
+    <pnp:FieldRef ID="8ac3248f-1b9c-4270-adeb-097ac9d02874" Name="GtIdeaProjectData" UpdateChildren="true" />
   </pnp:FieldRefs>
 </pnp:ContentType>
