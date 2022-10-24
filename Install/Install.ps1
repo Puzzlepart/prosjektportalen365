@@ -61,10 +61,10 @@ $ErrorActionPreference = "Stop"
 $sw = [Diagnostics.Stopwatch]::StartNew()
 $InstallStartTime = (Get-Date -Format o)
 if ($Upgrade.IsPresent) {
-    Write-Host "[INFO] Upgrading [Prosjektportalen 365] to [VERSION_PLACEHOLDER]"
+    Write-Host "[INFO] Upgrading Prosjektportalen 365] to v{VERSION_PLACEHOLDER}"
 }
 else {
-    Write-Host "[INFO] Installing [Prosjektportalen 365] [VERSION_PLACEHOLDER]"
+    Write-Host "[INFO] Installing Prosjektportalen 365 v{VERSION_PLACEHOLDER}"
 }
 
 function Connect-SharePoint {
