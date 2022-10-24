@@ -54,7 +54,7 @@ export class ProjectTemplate implements IDropdownOption {
     this.isDefault = spItem?.IsDefaultTemplate
     this.isDefaultExtensionsLocked = spItem?.IsDefaultExtensionsLocked
     this.isDefaultListContentLocked = spItem?.IsDefaultListContentLocked
-    this.iconName = spItem.IconName 
+    this.iconName = spItem.IconName
     this.listContentConfigIds =
       spItem.ListContentConfigLookupId && spItem.ListContentConfigLookupId.length > 0
         ? spItem.ListContentConfigLookupId

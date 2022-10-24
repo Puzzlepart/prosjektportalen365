@@ -12,7 +12,10 @@ export const TemplateSelector: React.FunctionComponent<ITemplateSelectorProps> =
    * @param _event Event
    * @param option Option
    */
-  const onTemplateSelected = (_event: React.FormEvent<HTMLDivElement>, option: ProjectTemplate): void => {
+  const onTemplateSelected = (
+    _event: React.FormEvent<HTMLDivElement>,
+    option: ProjectTemplate
+  ): void => {
     props.onChange(option)
   }
 
@@ -44,6 +47,10 @@ export const TemplateSelector: React.FunctionComponent<ITemplateSelectorProps> =
           onChange={onTemplateSelected}
           options={props.templates}
           onRenderOption={onRenderOption}
+          styles={{
+            dropdownItem: { minHeight: 50 },
+            dropdownItemSelected: { minHeight: 50 }
+          }}
         />
       </div>
     </div>
