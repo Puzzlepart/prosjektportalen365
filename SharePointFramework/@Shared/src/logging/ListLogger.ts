@@ -50,8 +50,6 @@ class ListLogger {
   public log(entry: IListLoggerEntry): Promise<ItemAddResult> {
     try {
       const spItem = this._getSpItem({ ...this._getEntryDefaults(), ...entry })
-      // eslint-disable-next-line no-console
-      console.log(spItem)
       return (this.list as List).items.add(spItem)
     } catch (error) {}
   }
