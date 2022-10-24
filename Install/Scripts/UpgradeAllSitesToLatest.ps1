@@ -1,13 +1,33 @@
 Param(
-    [Parameter(Mandatory = $true, HelpMessage = "The url to the project portal portfolio site")]
-    [string]$PortfolioUrl
+    [Parameter(Mandatory = $true)]
+    [string]$Url
 )
+
+$global:__InteractiveConnection = $null
 
 $ScriptDir = (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
 . $ScriptDir\PP365Functions.ps1
 
+function Connect-SharePoint {
+    Param(
+        [Parameter(Mandatory = $true)]
+        [string]$Url
+    )
+
+    Try {
+        if ($null -ne $global:__InteractiveConnection.ClientId) {
+            Connect-PnPOnline -Url $Url -Interactive -ErrorAction Stop -WarningAction Ignore -ClientId $global:__InteractiveConnection.ClientId
+        }
+        $global:__InteractiveConnection = Connect-PnPOnline -Url $Url -Interactive -ErrorAction Stop -WarningAction Ignore -ReturnConnection
+    }
+    Catch {
+        Write-Host "[INFO] Failed to connect to [$Url]: $($_.Exception.Message)"
+        throw $_.Exception.Message
+    }
+}
+
 function EnsureProjectTimelinePage($Url) {
-    Connect-PnPOnline -Url $Url -UseWebLogin
+    Connect-SharePoint -Url $Url
         
     $existingNodes = Get-PnPNavigationNode -Location QuickLaunch -ErrorAction SilentlyContinue
     if ($null -eq $existingNodes) {
@@ -33,7 +53,7 @@ function EnsureProjectTimelinePage($Url) {
 }
 
 function EnsureResourceLoadIsSiteColumn($Url) {
-    Connect-PnPOnline -Url $Url -UseWebLogin
+    Connect-SharePoint -Url $Url
 
     $ResourceAllocation = Get-PnPList -Identity "Ressursallokering" -ErrorAction SilentlyContinue
     if ($null -ne $ResourceAllocation) {
@@ -94,7 +114,7 @@ function EnsureResourceLoadIsSiteColumn($Url) {
 }
 
 function EnsureProgramAggregrationWebPart($Url) {
-    Connect-PnPOnline -Url $Url -UseWebLogin
+    Connect-SharePoint -Url $Url
     $Pages = Get-Content ".\EnsureProgramAggregrationWebPart\$.json" -Raw -Encoding UTF8 | ConvertFrom-Json
     foreach ($Page in $Pages.PSObject.Properties.GetEnumerator()) {
         $DeprecatedComponent = Get-PnPClientSideComponent -Page "$($Page.Name).aspx" -ErrorAction SilentlyContinue | Where-Object { $_.WebPartId -eq $Page.Value } | Select-Object -First 1
@@ -118,10 +138,10 @@ Write-Host "This script will update all existing sites in a Prosjektportalen ins
 Set-PnPTraceLog -Off
 Start-Transcript -Path "$PSScriptRoot\UpgradeSites_Log-$((Get-Date).ToString('yyyy-MM-dd-HH-mm')).txt"
 
-[System.Uri]$Uri = $PortfolioUrl
+[System.Uri]$Uri = $Url
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
 
-Connect-PnPOnline -Url $AdminSiteUrl -UseWebLogin -WarningAction Ignore
+Connect-SharePoint -Url $AdminSiteUrl
 
 # Get current logged in user
 $ctx = Get-PnPContext
@@ -129,7 +149,7 @@ $ctx.Load($ctx.Web.CurrentUser)
 $ctx.ExecuteQuery()
 $UserName = $ctx.Web.CurrentUser.LoginName
 
-$PPHubSite = Get-PnPHubSite -Identity $PortfolioUrl
+$PPHubSite = Get-PnPHubSite -Identity $Url
 $ProjectsInHub = Get-PP365HubSiteChild -Identity $PPHubSite
 
 Write-Host "The following sites were found to be part of the Project Portal hub:"
@@ -171,3 +191,4 @@ if ($YesOrNo -eq "y") {
 
 
 Stop-Transcript
+$global:__InteractiveConnection = $null
