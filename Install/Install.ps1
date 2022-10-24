@@ -38,9 +38,7 @@ Param(
     [ValidateSet('Norwegian')]
     [string]$Language = "Norwegian",
     [Parameter(Mandatory = $false, HelpMessage = "CI")]
-    [string]$CI,
-    [Parameter(Mandatory = $false, HelpMessage = "Enable trace logs in console")]
-    [switch]$TraceLog
+    [string]$CI
 )
 $global:__InteractiveCachedAccessTokens = @{}
 
@@ -147,12 +145,7 @@ if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -o
 }
 #endregion
 
-if ($TraceLog.IsPresent) {
-    Set-PnPTraceLog -On -Level Debug
-}
-else {
-    Set-PnPTraceLog -On -Level Debug -LogFile "Install_Log_$([datetime]::Now.Ticks).txt"
-}
+Set-PnPTraceLog -On -Level Debug -LogFile "Install_Log_$([datetime]::Now.Ticks).txt"
 
 #region Create site
 if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
