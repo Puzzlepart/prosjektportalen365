@@ -322,7 +322,7 @@ if (-not $Upgrade.IsPresent) {
         Disconnect-PnPOnline
     }
     Catch {
-        Write-Host "[WARNING] Failed to delete Home.aspx. Please delete it manually." -ForegroundColor Yellow
+        Write-Host "[WARNING] Failed to delete page Home.aspx. Please delete it manually." -ForegroundColor Yellow
     }
 }
 #endregion
