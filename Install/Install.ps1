@@ -40,8 +40,7 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "CI")]
     [string]$CI
 )
-
-$global:__PnPConnection = $null
+$global:__InteractiveCachedAccessTokens = @{}
 
 #region Handling installation language
 $LanguageIds = @{
@@ -75,8 +74,8 @@ function Connect-SharePoint {
     )
 
     Try {
-        if ($null -ne $global:__PnPConnection.ClientId) {
-            Connect-PnPOnline -Url $Url -ClientId $global:__PnPConnection.ClientId -Interactive -ErrorAction Stop -WarningAction Ignore
+        if ($null -ne $global:__InteractiveCachedAccessTokens[$Url]) {
+            Connect-PnPOnline -Url $Url -AccessToken $global:__InteractiveCachedAccessTokens[$Url]
         }
         if (-not [string]::IsNullOrEmpty($CI)) {
             $DecodedCred = ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($CI))).Split("|")
@@ -85,7 +84,8 @@ function Connect-SharePoint {
             Connect-PnPOnline -Url $Url -Credentials $Credentials -ErrorAction Stop  -WarningAction Ignore
         }
         elseif ($Interactive.IsPresent) {
-            $global:__PnPConnection = Connect-PnPOnline -Url $Url -ReturnConnection -Interactive -ErrorAction Stop -WarningAction Ignore
+            Connect-PnPOnline -Url $Url -Interactive -ErrorAction Stop -WarningAction Ignore
+            $global:__InteractiveCachedAccessTokens[$Url] = Get-PnPAppAuthAccessToken
         }
         elseif ($null -ne $PSCredential) {
             Connect-PnPOnline -Url $Url -Credentials $PSCredential -ErrorAction Stop  -WarningAction Ignore
@@ -464,4 +464,4 @@ catch {}
 #endregion
 
 Set-PnPTraceLog -Off
-$global:__PnPConnection = $null
+$global:__InteractiveCachedAccessTokens = $null
