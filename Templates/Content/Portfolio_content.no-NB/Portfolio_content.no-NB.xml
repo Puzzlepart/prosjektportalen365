@@ -4,7 +4,7 @@
     <pnp:Templates ID="CONTAINER-TEMPLATE-PP-PORTFOLIO-CONTENT-NO-NB">
         <pnp:ProvisioningTemplate ID="TEMPLATE-PP-PORTFOLIO-NO-NB" Scope="RootSite">
             <pnp:Files>
-                <pnp:File Src="ProjectTemplates\Standardmal.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
+                <pnp:File Src="ProjectTemplates/Standardmal.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Standardmal" />
                         <pnp:Property Key="GtDescription" Value="Dette er standardmalen for prosjekt som følger med Prosjektportalen 365. Blir overskrevet ved en oppgradering." />
@@ -14,7 +14,7 @@
                         <pnp:Property Key="GtIsParentProject" Value="0" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:File Src="ProjectTemplates\Overordnet.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
+                <pnp:File Src="ProjectTemplates/Overordnet.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Overordnet" />
                         <pnp:Property Key="GtDescription" Value="Dette er standardmalen for overordnet prosjekt som følger med Prosjektportalen 365. Blir overskrevet ved en oppgradering." />
@@ -24,7 +24,7 @@
                         <pnp:Property Key="IsDefaultTemplate" Value="0" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:File Src="ProjectTemplates\Programmal.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
+                <pnp:File Src="ProjectTemplates/Programmal.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Programmal" />
                         <pnp:Property Key="GtDescription" Value="Dette er standardmalen for program som følger med Prosjektportalen 365. Blir overskrevet ved en oppgradering." />

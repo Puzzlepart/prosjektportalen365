@@ -4,7 +4,7 @@
     <pnp:Templates ID="CONTAINER-TEMPLATE-PP-PORTFOLIO-CONTENT-EN-US">
         <pnp:ProvisioningTemplate ID="TEMPLATE-PP-PORTFOLIO-CONTENT-EN-US" Version="1" Scope="RootSite">
             <pnp:Files>
-                <pnp:File Src="ProjectTemplates\DefaultTemplate.txt" Folder="ProjectTemplates" Level="Published" Overwrite="true">
+                <pnp:File Src="ProjectTemplates/DefaultTemplate.txt" Folder="ProjectTemplates" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Default Template" />
                         <pnp:Property Key="GtDescription" Value="" />
