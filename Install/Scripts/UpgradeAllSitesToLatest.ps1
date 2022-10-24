@@ -18,7 +18,8 @@ function Connect-SharePoint {
         if ($null -ne $global:__PnPConnection.ClientId) {
             Connect-PnPOnline -Url $Url -ClientId $global:__PnPConnection.ClientId -Interactive -ErrorAction Stop -WarningAction Ignore
         }
-        $global:__PnPConnection = Connect-PnPOnline -Url $Url -ReturnConnection -Interactive -ErrorAction Stop -WarningAction Ignore
+        Connect-PnPOnline -Url $Url -Interactive -ErrorAction Stop -WarningAction Ignore
+        $global:__PnPConnection = Get-PnPConnection
     }
     Catch {
         Write-Host "[INFO] Failed to connect to [$Url]: $($_.Exception.Message)"
