@@ -115,10 +115,10 @@ if (-not [string]::IsNullOrEmpty($CI)) {
 else {
     if (-not $SkipLoadingBundle.IsPresent) {
         $PnPVersion = LoadBundle    
-        Write-Host "[INFO] Loaded [PnP.PowerShell] v.$($PnPVersion) from bundle"
+        Write-Host "[INFO] Loaded module PnP.PowerShell v$($PnPVersion) from bundle"
     }
     else {
-        Write-Host "[INFO] Loaded [PnP.PowerShell] v.$((Get-Command Connect-PnPOnline).Version) from your environment"
+        Write-Host "[INFO] Loaded module PnP.PowerShell v$((Get-Command Connect-PnPOnline).Version) from your environment"
     }
 }
 
