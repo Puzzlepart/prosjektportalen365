@@ -184,7 +184,7 @@ while ("y", "n" -notcontains $YesOrNo)
 if ($YesOrNo -eq "y") {
     $ProjectsInHub | ForEach-Object {
         Write-Host "`tRemoving access to $_"
-        Connect-PnPOnline -Url $_ -UseWebLogin
+        Connect-SharePoint -Url $_
         Remove-PnPSiteCollectionAdmin -Owners $UserName
     }
 }

@@ -8,7 +8,7 @@
             "script": "${file}",
             "args": [
                 "-Url https://tenant.sharepoint.com/...",
-                "-UseWebLogin"
+                "-Interactive"
             ],
             "cwd": "${file}"
         },
@@ -19,7 +19,7 @@
             "script": "${file}",
             "args": [
                 "-Url https://tenant.sharepoint.com/...",
-                "-UseWebLogin",
+                "-Interactive",
                 "-Upgrade"
             ],
             "cwd": "${file}"
