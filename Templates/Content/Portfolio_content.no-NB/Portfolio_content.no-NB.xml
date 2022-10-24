@@ -34,7 +34,41 @@
                         <pnp:Property Key="IsDefaultTemplate" Value="0" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:Directory Src="Malbibliotek" Folder="Malbibliotek" Overwrite="false" Recursive="false" IncludedExtensions="*.doc,*.docx,*.xls,*.xlsx,*.ppt,*.pptx" />
+                <pnp:File Src="Malbibliotek/Gevinstrealiseringsplan.docx" Folder="Malbibliotek" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Gevinstrealiseringsplan" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Gevinstverktøy.xlsx" Folder="Malbibliotek" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Gevinstverktøy" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Mandat for konseptfasen.docx" Folder="Malbibliotek" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Mandat for konseptfasen" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Prosjektbegrunnelse.docx" Folder="Malbibliotek" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Prosjektbegrunnelse" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Prosjektforslag.docx" Folder="Malbibliotek" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Prosjektforslag" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Sluttrapport.docx" Folder="Malbibliotek" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Sluttrapport" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Styringsdokument.docx" Folder="Malbibliotek" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Styringsdokument" />
+                    </pnp:Properties>
+                </pnp:File>
             </pnp:Files>
             <pnp:Lists>
                 <pnp:ListInstance Title="Fasesjekkliste" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Fasesjekkliste" EnableVersioning="true" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false">
