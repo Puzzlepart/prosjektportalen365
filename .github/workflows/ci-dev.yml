@@ -52,7 +52,7 @@ jobs:
           path: release
 
       - name: Upgrade
-        run: release/Install.ps1 -Url https://puzzlepart.sharepoint.com/sites/pp365_a5e61f5d -Upgrade -CI ${{ secrets.CI_DEV_CREDENTIALS }}
+        run: release/Install.ps1 -Url https://puzzlepart.sharepoint.com/sites/pp365_6f4c643 -Upgrade -CI ${{ secrets.CI_DEV_CREDENTIALS }}
         shell: powershell
 
   install:
