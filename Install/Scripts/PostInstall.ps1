@@ -29,4 +29,4 @@ foreach ($tmpl in $TemplatesMap.GetEnumerator()) {
     }
 }
 
-Write-Host "[SUCCESS] Post-install action: Ensured default project templates"
+Write-Host "[SUCCESS] Post-install action: Ensured default project templates" -ForegroundColor Green
