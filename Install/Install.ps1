@@ -98,7 +98,7 @@ function Connect-SharePoint {
         }
     }
     Catch {
-        Write-Host "[INFO] Failed to connect to [$Url]: $($_.Exception.Message)"
+        Write-Host "[INFO] Failed to connect to $($Url): $($_.Exception.Message)"
         throw $_.Exception.Message
     }
 }
@@ -153,12 +153,12 @@ if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
         Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
         $PortfolioSite = Get-PnPTenantSite -Url $Url -ErrorAction SilentlyContinue
         if ($null -eq $PortfolioSite) {
-            Write-Host "[INFO] Creating portfolio site at [$Url]"
+            Write-Host "[INFO] Creating portfolio site at $Url"
             New-PnPSite -Type TeamSite -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Lcid $LanguageId >$null 2>&1
-            Write-Host "[SUCCESS] Portfolio site created at [$Url]" -ForegroundColor Green
+            Write-Host "[SUCCESS] Portfolio site created at $Url" -ForegroundColor Green
         }
         Register-PnPHubSite -Site $Url -ErrorAction SilentlyContinue
-        Write-Host "[SUCCESS] Portfolio site [$Url] promoted to hub site" -ForegroundColor Green
+        Write-Host "[SUCCESS] Portfolio site $Url promoted to hub site" -ForegroundColor Green
         Disconnect-PnPOnline
     }
     Catch {
@@ -222,7 +222,7 @@ if (-not $SkipSiteDesign.IsPresent) {
     }
 
     Try {
-        Write-Host "[INFO] Creating/updating site design [$SiteDesignName]"   
+        Write-Host "[INFO] Creating/updating site design $SiteDesignName"   
         Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
     
         $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName 
@@ -234,15 +234,15 @@ if (-not $SkipSiteDesign.IsPresent) {
             $SiteDesign = Add-PnPSiteDesign -Title $SiteDesignName -SiteScriptIds $SiteScriptIds -Description $SiteDesignDesc -WebTemplate TeamSite
         }
         if ([string]::IsNullOrEmpty($SiteDesignSecurityGroupId)) {
-            Write-Host "[INFO] You have not specified -SiteDesignSecurityGroupId. Everyone will have View access to site design [$SiteDesignName]" -ForegroundColor Yellow
+            Write-Host "[INFO] You have not specified -SiteDesignSecurityGroupId. Everyone will have View access to site design $SiteDesignName" -ForegroundColor Yellow
         }
         else {            
-            Write-Host "[INFO] Granting group $SiteDesignSecurityGroupId View access to site design [$SiteDesignName]"
+            Write-Host "[INFO] Granting group $SiteDesignSecurityGroupId View access to site design $SiteDesignName"
             Grant-PnPSiteDesignRights -Identity $SiteDesign.Id.Guid -Principals @("c:0t.c|tenant|$SiteDesignSecurityGroupId")
         }
 
         Disconnect-PnPOnline
-        Write-Host "[SUCCESS] Successfully created/updated site design [$SiteDesignName]" -ForegroundColor Green
+        Write-Host "[SUCCESS] Successfully created/updated site design $SiteDesignName" -ForegroundColor Green
     }
     Catch {
         Write-Host "[ERROR] Failed to create/update site design: $($_.Exception.Message)" -ForegroundColor Red
@@ -252,7 +252,7 @@ if (-not $SkipSiteDesign.IsPresent) {
 if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
     Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
     $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName 
-    Write-Host "[INFO] Setting default site design for hub [$Url] to [$SiteDesignName]"
+    Write-Host "[INFO] Setting default site design for hub $Url to $SiteDesignName"
     Set-PnPHubSite -Identity $Url -SiteDesignId $SiteDesign.Id.Guid
     Disconnect-PnPOnline
 }
@@ -286,18 +286,18 @@ if (-not $SkipAppPackages.IsPresent) {
         exit 0 
     }
     Try {
-        Write-Host "[INFO] Installing SharePoint Framework app packages to [$TenantAppCatalogUrl]"
+        Write-Host "[INFO] Installing SharePoint Framework app packages to $TenantAppCatalogUrl"
         foreach ($AppPkg in (Get-ChildItem "$PSScriptRoot\Apps" -ErrorAction SilentlyContinue)) {
             Write-Host "[INFO] Installing $($AppPkg.BaseName)..."  -NoNewline
             Add-PnPApp -Path $AppPkg.FullName -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop >$null 2>&1
             Write-Host " DONE" -ForegroundColor Green
         }
         Disconnect-PnPOnline
-        Write-Host "[SUCCESS] SharePoint Framework app packages successfully installed to [$TenantAppCatalogUrl]" -ForegroundColor Green
+        Write-Host "[SUCCESS] SharePoint Framework app packages successfully installed to $TenantAppCatalogUrl" -ForegroundColor Green
     }
     Catch {
         Write-Host "Error" -ForegroundColor Red
-        Write-Host "[ERROR] Failed to install app packages to [$TenantAppCatalogUrl]: $($_.Exception.Message)" -ForegroundColor Red
+        Write-Host "[ERROR] Failed to install app packages to $($TenantAppCatalogUrl): $($_.Exception.Message)" -ForegroundColor Red
         exit 0
     }
 }
@@ -330,31 +330,31 @@ if (-not $SkipTemplate.IsPresent) {
             throw "Wrong connection identified - you are not connected to the correct site"
         }
         if (-not $SkipTaxonomy.IsPresent -and -not $Upgrade.IsPresent) {
-            Write-Host "[INFO] Applying PnP template [Taxonomy] to [$Url]"
+            Write-Host "[INFO] Applying PnP template Taxonomy to $Url"
             Invoke-PnPSiteTemplate "$TemplatesBasePath/Taxonomy.pnp" -ErrorAction Stop
-            Write-Host "[SUCCESS] Successfully applied PnP template [Taxonomy] to [$Url]" -ForegroundColor Green
+            Write-Host "[SUCCESS] Successfully applied PnP template Taxonomy to $Url" -ForegroundColor Green
         }
 
         if ($Upgrade.IsPresent) {
-            Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
+            Write-Host "[INFO] Applying PnP template Portfolio to $Url"
             Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers Navigation, SupportedUILanguages -ErrorAction Stop
-            Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
+            Write-Host "[SUCCESS] Successfully applied PnP template Portfolio to $Url" -ForegroundColor Green
 
-            Write-Host "[INFO] Applying PnP content template (Handlers:Files) to [$Url]"
+            Write-Host "[INFO] Applying PnP content template with Handlers:Files to $Url"
             Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop
-            Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
+            Write-Host "[SUCCESS] Successfully applied PnP content template to $Url" -ForegroundColor Green
         }
         else {
-            Write-Host "[INFO] Applying PnP template [Portfolio] to [$Url]"
+            Write-Host "[INFO] Applying PnP template Portfolio to $Url"
             $Instance = Read-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp"
             $Instance.SupportedUILanguages[0].LCID = $LanguageId
             Invoke-PnPSiteTemplate -InputInstance $Instance -Handlers SupportedUILanguages
             Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop
-            Write-Host "[SUCCESS] Successfully applied PnP template [Portfolio] to [$Url]" -ForegroundColor Green
+            Write-Host "[SUCCESS] Successfully applied PnP template Portfolio to $Url" -ForegroundColor Green
 
-            Write-Host "[INFO] Applying PnP template [Portfolio_content] to [$Url]"
+            Write-Host "[INFO] Applying PnP content template to $Url"
             Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop
-            Write-Host "[SUCCESS] Successfully applied PnP content template to [$Url]" -ForegroundColor Green
+            Write-Host "[SUCCESS] Successfully applied PnP content template to $Url" -ForegroundColor Green
         }
         
         Disconnect-PnPOnline
@@ -364,7 +364,7 @@ if (-not $SkipTemplate.IsPresent) {
         Disconnect-PnPOnline
     }
     Catch {
-        Write-Host "[ERROR] Failed to apply PnP templates to [$Url]: $($_.Exception.Message)" -ForegroundColor Red
+        Write-Host "[ERROR] Failed to apply PnP templates to $(Url): $($_.Exception.Message)" -ForegroundColor Red
         exit 0
     }
 }
