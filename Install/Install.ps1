@@ -318,10 +318,12 @@ if (-not $SkipAppPackages.IsPresent) {
 if (-not $Upgrade.IsPresent) {
     Try {
         Connect-SharePoint -Url $Url -ErrorAction Stop
-        Remove-PnPFile -ServerRelativeUrl "$($Uri.LocalPath)/SitePages/Home.aspx" -Recycle -Force
+        Remove-PnPClientSidePage -Identity Home.aspx -Force
         Disconnect-PnPOnline
     }
-    Catch {}
+    Catch {
+        Write-Host "[WARNING] Failed to delete Home.aspx. Please delete it manually." -ForegroundColor Yellow
+    }
 }
 #endregion
 
