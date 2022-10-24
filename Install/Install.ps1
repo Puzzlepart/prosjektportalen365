@@ -38,7 +38,9 @@ Param(
     [ValidateSet('Norwegian')]
     [string]$Language = "Norwegian",
     [Parameter(Mandatory = $false, HelpMessage = "CI")]
-    [string]$CI
+    [string]$CI,
+    [Parameter(Mandatory = $false, HelpMessage = "Enable trace logs in console")]
+    [switch]$TraceLog
 )
 $global:__InteractiveCachedAccessTokens = @{}
 
@@ -74,7 +76,7 @@ function Connect-SharePoint {
     )
 
     Try {
-        if($null -ne $global:__InteractiveCachedAccessTokens[$Url]) {
+        if ($null -ne $global:__InteractiveCachedAccessTokens[$Url]) {
             Connect-PnPOnline -Url $Url -AccessToken $global:__InteractiveCachedAccessTokens[$Url]
         }
         if (-not [string]::IsNullOrEmpty($CI)) {
@@ -145,7 +147,12 @@ if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -o
 }
 #endregion
 
-Set-PnPTraceLog -On -Level Debug -LogFile "Install_Log_$([datetime]::Now.Ticks).txt"
+if ($TraceLog.IsPresent) {
+    Set-PnPTraceLog -On -Level Debug
+}
+else {
+    Set-PnPTraceLog -On -Level Debug -LogFile "Install_Log_$([datetime]::Now.Ticks).txt"
+}
 
 #region Create site
 if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
