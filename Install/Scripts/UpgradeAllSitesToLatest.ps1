@@ -3,7 +3,7 @@ Param(
     [string]$Url
 )
 
-$global:__InteractiveConnection = $null
+$global:__PnPConnection = $null
 
 $ScriptDir = (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
 . $ScriptDir\PP365Functions.ps1
@@ -15,10 +15,10 @@ function Connect-SharePoint {
     )
 
     Try {
-        if ($null -ne $global:__InteractiveConnection.ClientId) {
-            Connect-PnPOnline -Url $Url -Interactive -ErrorAction Stop -WarningAction Ignore -ClientId $global:__InteractiveConnection.ClientId
+        if ($null -ne $global:__PnPConnection.ClientId) {
+            Connect-PnPOnline -Url $Url -ClientId $global:__PnPConnection.ClientId -Interactive -ErrorAction Stop -WarningAction Ignore
         }
-        $global:__InteractiveConnection = Connect-PnPOnline -Url $Url -Interactive -ErrorAction Stop -WarningAction Ignore -ReturnConnection
+        $global:__PnPConnection = Connect-PnPOnline -Url $Url -ReturnConnection -Interactive -ErrorAction Stop -WarningAction Ignore
     }
     Catch {
         Write-Host "[INFO] Failed to connect to [$Url]: $($_.Exception.Message)"
@@ -191,4 +191,4 @@ if ($YesOrNo -eq "y") {
 
 
 Stop-Transcript
-$global:__InteractiveConnection = $null
+$global:PnPConnection = $null
