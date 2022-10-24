@@ -2,12 +2,14 @@ name: CI (dev)
 
 on:
   push:
-    branches: [feat/upgrade-install-script]
+    branches:
+      - feat/upgrade-install-script
     paths:
       - "SharePointFramework/**"
       - "Install/**"
       - "Templates/**"
       - package.json
+      - .github/workflows/ci-dev.yml
 
 env:
   SP_URL: "https://puzzlepart.sharepoint.com/sites/pp365"
@@ -41,24 +43,10 @@ jobs:
     outputs:
       sha_short: ${{ steps.vars.outputs.sha_short }}
 
-  upgrade:
-    needs: build_release_package
-    name: Upgrade
-    runs-on: windows-latest
-    steps:
-      - uses: actions/download-artifact@v3
-        with:
-          name: release-package
-          path: release
-
-      - name: Upgrade
-        run: release/Install.ps1 -Url https://puzzlepart.sharepoint.com/sites/pp365_a5e61f5d -Upgrade -CI ${{ secrets.CI_DEV_CREDENTIALS }}
-        shell: powershell
-
   install:
-    needs: [build_release_package, upgrade]
+    needs: [build_release_package]
     name: Install
-    runs-on: windows-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/download-artifact@v3
         with:
@@ -67,4 +55,4 @@ jobs:
 
       - name: Install
         run: release/Install.ps1 -Url "${{ env.SP_URL }}_${{ needs.build_release_package.outputs.sha_short }}" -Title "Prosjektportalen 365 ${{ needs.build_release_package.outputs.sha_short }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }} -SkipAppPackages -SkipSiteDesign -SkipTaxonomy -SkipSearchConfiguration
-        shell: powershell
+        shell: pwsh
