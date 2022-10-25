@@ -1,24 +1,24 @@
 <pnp:ContentType ID="0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D01" Name="{resource:ContentTypes_BarChart_Name}" Description="{resource:ContentTypes_BarChart_Description}" Group="{resource:ContentTypes_Group}" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" />
-        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
-        <pnp:FieldRef ID="fca6d80c-225a-4bb0-a0b6-f4c004f8151c" Name="GtPiSubTitle" />
-        <pnp:FieldRef ID="75f699b2-7ec6-4442-956d-7b35f409b521" Name="GtPiFields" Required="true" />
-        <pnp:FieldRef ID="e3e71da7-e34b-4514-bc8f-5256e1f5c70f" Name="GtPiCategoryField" />
-        <pnp:FieldRef ID="a2d79665-fb4a-4367-830a-c0403bd724f0" Name="GtPiColorsMap" />
-        <pnp:FieldRef ID="15f09408-2ad7-4b9a-8dda-79d7be382a96" Name="GtPiValueOrder" />
-        <pnp:FieldRef ID="69a75937-35ab-4b35-9081-c8f841460d44" Name="GtPiWidthSm" />
-        <pnp:FieldRef ID="d25031a3-9fbb-48b7-8c3a-554805fc4eb9" Name="GtPiWidthMd" />
-        <pnp:FieldRef ID="047c422a-fdcd-407c-839f-e96d7f639082" Name="GtPiWidthLg" />
-        <pnp:FieldRef ID="2a0d7d7e-44f4-40e5-a444-3df1e07ef71d" Name="GtPiWidthXl" />
-        <pnp:FieldRef ID="af569b60-0010-4108-9c92-cb03a90b7498" Name="GtPiWidthXxl" />
-        <pnp:FieldRef ID="41d29afe-b026-4417-9166-3e22dda59d78" Name="GtPiWidthXxxl" />
-        <pnp:FieldRef ID="c990240d-4c3b-4dfe-8abb-b6119b4b9856" Name="GtPiYAxisTitle" />
-        <pnp:FieldRef ID="9a731b59-52ed-4b93-ab7a-3fd56914d0a6" Name="GtPiYMin" />
-        <pnp:FieldRef ID="f7fd2b80-26e4-472c-8629-02e898b2a19f" Name="GtPiYMax" />
-        <pnp:FieldRef ID="60dac89b-70f5-4a49-87a9-b253bd5df7ca" Name="GtPiYTickInterval" />
-        <pnp:FieldRef ID="ed9bac4f-1bd5-4a54-9b9d-ba7d4af8ac5a" Name="GtPiXAxisTitle" />
-        <pnp:FieldRef ID="5b12b6c1-2db4-4280-a52f-d11f62068162" Name="GtPiValueSuffix" />
+        <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="fca6d80c-225a-4bb0-a0b6-f4c004f8151c" Name="GtPiSubTitle" UpdateChildren="true" />
+        <pnp:FieldRef ID="75f699b2-7ec6-4442-956d-7b35f409b521" Name="GtPiFields" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="e3e71da7-e34b-4514-bc8f-5256e1f5c70f" Name="GtPiCategoryField" UpdateChildren="true" />
+        <pnp:FieldRef ID="a2d79665-fb4a-4367-830a-c0403bd724f0" Name="GtPiColorsMap" UpdateChildren="true" />
+        <pnp:FieldRef ID="15f09408-2ad7-4b9a-8dda-79d7be382a96" Name="GtPiValueOrder" UpdateChildren="true" />
+        <pnp:FieldRef ID="69a75937-35ab-4b35-9081-c8f841460d44" Name="GtPiWidthSm" UpdateChildren="true" />
+        <pnp:FieldRef ID="d25031a3-9fbb-48b7-8c3a-554805fc4eb9" Name="GtPiWidthMd" UpdateChildren="true" />
+        <pnp:FieldRef ID="047c422a-fdcd-407c-839f-e96d7f639082" Name="GtPiWidthLg" UpdateChildren="true" />
+        <pnp:FieldRef ID="2a0d7d7e-44f4-40e5-a444-3df1e07ef71d" Name="GtPiWidthXl" UpdateChildren="true" />
+        <pnp:FieldRef ID="af569b60-0010-4108-9c92-cb03a90b7498" Name="GtPiWidthXxl" UpdateChildren="true" />
+        <pnp:FieldRef ID="41d29afe-b026-4417-9166-3e22dda59d78" Name="GtPiWidthXxxl" UpdateChildren="true" />
+        <pnp:FieldRef ID="c990240d-4c3b-4dfe-8abb-b6119b4b9856" Name="GtPiYAxisTitle" UpdateChildren="true" />
+        <pnp:FieldRef ID="9a731b59-52ed-4b93-ab7a-3fd56914d0a6" Name="GtPiYMin" UpdateChildren="true" />
+        <pnp:FieldRef ID="f7fd2b80-26e4-472c-8629-02e898b2a19f" Name="GtPiYMax" UpdateChildren="true" />
+        <pnp:FieldRef ID="60dac89b-70f5-4a49-87a9-b253bd5df7ca" Name="GtPiYTickInterval" UpdateChildren="true" />
+        <pnp:FieldRef ID="ed9bac4f-1bd5-4a54-9b9d-ba7d4af8ac5a" Name="GtPiXAxisTitle" UpdateChildren="true" />
+        <pnp:FieldRef ID="5b12b6c1-2db4-4280-a52f-d11f62068162" Name="GtPiValueSuffix" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

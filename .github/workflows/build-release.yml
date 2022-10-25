@@ -7,12 +7,11 @@ on:
 jobs:
   build-release:
     name: Build release (CI)
-    runs-on: windows-latest
+    runs-on: macos-latest
     steps:
-      - name: Checkout Puzzlepart/prosjektportalen365.git
-        run: |
-          mkdir C:/prosjektportalen365_main
-          git clone --branch main https://github.com/Puzzlepart/prosjektportalen365.git C:/prosjektportalen365_main
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Setup Node.js 16.18.0
         uses: actions/setup-node@v3
@@ -20,11 +19,10 @@ jobs:
           node-version: 16.18.0
 
       - name: Run Install/Build-Release.ps1 in CI mode
-        working-directory: C:/prosjektportalen365_main
         run: Install/Build-Release.ps1 -CI
         shell: powershell
       
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v3
         with:
           name: release-package
-          path: c:/prosjektportalen365_main/release
+          path: release

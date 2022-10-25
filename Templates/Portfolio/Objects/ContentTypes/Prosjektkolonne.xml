@@ -1,16 +1,16 @@
 <pnp:ContentType ID="0x0100248005C277FADD45B7266F9151442472" Name="{resource:ContentTypes_ProjectColumn_Name}" Description="{resource:ContentTypes_ProjectColumn_Description}" Group="{resource:ContentTypes_Group}" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" />
-        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
-        <pnp:FieldRef ID="bfbf2ffe-4960-4752-aab4-7cf20c3a757b" Name="GtInternalName" Required="true" />
-        <pnp:FieldRef ID="14dfd5b2-cf1d-4735-9e1b-7fa0d3658430" Name="GtManagedProperty" Required="true" />
-        <pnp:FieldRef ID="1e99fca0-3e0f-4632-9dd1-901bd09a13bc" Name="GtShowFieldProjectStatus" />
-        <pnp:FieldRef ID="6c72e8a8-1bfa-4323-9103-8baa067bbfb3" Name="GtShowFieldFrontpage" />
-        <pnp:FieldRef ID="7441ace5-d9e4-4c1d-85fc-ce1614b056ca" Name="GtShowFieldPortfolio" />
-        <pnp:FieldRef ID="7463d38f-5f51-4b25-a920-04ea1ec24a26" Name="GtFieldDataType" Required="true" />
-        <pnp:FieldRef ID="a156e8b6-fc02-475c-a377-47c6795fed1d" Name="GtColMinWidth" />
-        <pnp:FieldRef ID="0956cadc-1268-4bc1-9baf-5d2e16190d06" Name="GtIsRefinable" />
-        <pnp:FieldRef ID="b77be89a-346f-4897-b519-e55eedbc0aa9" Name="GtIsGroupable" />
+        <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="bfbf2ffe-4960-4752-aab4-7cf20c3a757b" Name="GtInternalName" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="14dfd5b2-cf1d-4735-9e1b-7fa0d3658430" Name="GtManagedProperty" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="1e99fca0-3e0f-4632-9dd1-901bd09a13bc" Name="GtShowFieldProjectStatus" UpdateChildren="true" />
+        <pnp:FieldRef ID="6c72e8a8-1bfa-4323-9103-8baa067bbfb3" Name="GtShowFieldFrontpage" UpdateChildren="true" />
+        <pnp:FieldRef ID="7441ace5-d9e4-4c1d-85fc-ce1614b056ca" Name="GtShowFieldPortfolio" UpdateChildren="true" />
+        <pnp:FieldRef ID="7463d38f-5f51-4b25-a920-04ea1ec24a26" Name="GtFieldDataType" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="a156e8b6-fc02-475c-a377-47c6795fed1d" Name="GtColMinWidth" UpdateChildren="true" />
+        <pnp:FieldRef ID="0956cadc-1268-4bc1-9baf-5d2e16190d06" Name="GtIsRefinable" UpdateChildren="true" />
+        <pnp:FieldRef ID="b77be89a-346f-4897-b519-e55eedbc0aa9" Name="GtIsGroupable" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

@@ -1,10 +1,12 @@
-Set-PnPList -Identity Prosjektkolonnekonfigurasjon -EnableContentTypes:$false 
-Set-PnPList -Identity Fasesjekkliste -EnableContentTypes:$false 
-Set-PnPList -Identity Konfigurasjon -EnableContentTypes:$false 
-Set-PnPList -Identity Porteføljevisninger -EnableContentTypes:$false 
-Set-PnPList -Identity Prosjektkolonner -EnableContentTypes:$false 
-Set-PnPList -Identity Ressursallokering -EnableContentTypes:$false 
-Set-PnPList -Identity Planneroppgaver -EnableContentTypes:$false 
+Write-Host "[INFO] Post-install action: Disabling content types for lists"
+Set-PnPList -Identity Prosjektkolonnekonfigurasjon -EnableContentTypes:$false >$null 2>&1  
+Set-PnPList -Identity Fasesjekkliste -EnableContentTypes:$false >$null 2>&1  
+Set-PnPList -Identity Konfigurasjon -EnableContentTypes:$false >$null 2>&1  
+Set-PnPList -Identity Porteføljevisninger -EnableContentTypes:$false >$null 2>&1  
+Set-PnPList -Identity Prosjektkolonner -EnableContentTypes:$false >$null 2>&1  
+Set-PnPList -Identity Ressursallokering -EnableContentTypes:$false >$null 2>&1  
+Set-PnPList -Identity Planneroppgaver -EnableContentTypes:$false >$null 2>&1  
+Write-Host "[SUCCESS] Post-install action: Disabling content types for lists" -ForegroundColor Green
 
 Write-Host "[INFO] Post-install action: Ensuring default project templates"
 $TemplateSetups = Get-PnPListItem -List "Maloppsett"
@@ -29,4 +31,4 @@ foreach ($tmpl in $TemplatesMap.GetEnumerator()) {
     }
 }
 
-Write-Host "[SUCCESS] Post-install action: Ensured default project templates"
+Write-Host "[SUCCESS] Post-install action: Ensured default project templates" -ForegroundColor Green

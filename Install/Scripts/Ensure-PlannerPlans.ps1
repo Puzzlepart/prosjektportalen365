@@ -14,19 +14,20 @@ param (
     $GrantPermissions
 )
 
-$groupsWhereAdded = [System.Collections.ArrayList]@()
+$GroupsWhereAdded = [System.Collections.ArrayList]@()
+
 function GrantPermissions ($Url) {
     Write-Host "`tGranting owner permissions to site collection $Url"
     Set-PnPTenantSite -Url $Url -Owners $CurrentUser
     Connect-PnPOnline -Url $Url -TenantAdminUrl $TenantAdminUrl -Interactive
-    $groupId = (Get-PnPSite -Includes GroupId -ErrorAction Ignore).GroupId.toString()
-    Write-Host "`tGranting owner permissions to group $groupId"
-    Set-PnPMicrosoft365Group -Identity $groupId -Owners $CurrentUser -Members $CurrentUser
-    $groupsWhereAdded.Add($groupId) | out-null
+    $GroupId = (Get-PnPSite -Includes GroupId -ErrorAction Ignore).GroupId.toString()
+    Write-Host "`tGranting owner permissions to group $GroupId"
+    Set-PnPMicrosoft365Group -Identity $GroupId -Owners $CurrentUser -Members $CurrentUser
+    $GroupsWhereAdded.Add($GroupId) | out-null
 }
 
 function CleanupPermissions {
-    $groupsWhereAdded | ForEach-Object { Write-Host "`tRemoving $CurrentUser from $_"; Remove-PnPMicrosoft365GroupOwner -Identity $_ -Users $CurrentUser }
+    $GroupsWhereAdded | ForEach-Object { Write-Host "`tRemoving $CurrentUser from $_"; Remove-PnPMicrosoft365GroupOwner -Identity $_ -Users $CurrentUser }
 }
 
 
@@ -43,27 +44,26 @@ if (-not (Get-Module | Where-Object{$_.Name -like "PnP.PowerShell"}) ) {
 
 Connect-PnPOnline -TenantAdminUrl $TenantAdminUrl -Url $PortfolioUrl -Interactive
 
-$children = Get-PnPHubSiteChild
+$Children = Get-PnPHubSiteChild
 
 if($GrantPermissions) {
     Write-Host "Granting permissions to $CurrentUser" -ForegroundColor Green
-    $children | ForEach-Object { GrantPermissions $_ }
+    $Children | ForEach-Object { GrantPermissions $_ }
     Write-Host "[x] Done" -ForegroundColor Green
 } else {
 
-    $children | ForEach-Object {
-        $childSiteUrl = $_
+    $Children | ForEach-Object {
+        $ChildSiteUrl = $_
     
-        Connect-PnPOnline -Url $childSiteUrl -TenantAdminUrl $TenantAdminUrl -Interactive;
-        $groupId = (Get-PnPSite -Includes GroupId -ErrorAction Ignore).GroupId.toString()
-      
-        $plannerPlan = Get-PnPPlannerPlan -Group $groupId 
+        Connect-PnPOnline -Url $ChildSiteUrl -TenantAdminUrl $TenantAdminUrl -Interactive;
+        $GroupId = (Get-PnPSite -Includes GroupId -ErrorAction Ignore).GroupId.toString()
+        $PlannerPlan = Get-PnPPlannerPlan -Group $GroupId 
         
         
-        if ($null -eq $plannerPlan) { 
-             Write-Host "[ ] Gruppen $childSiteUrl ($groupId) har IKKE Planner plan" -ForegroundColor Yellow
+        if ($null -eq $PlannerPlan) { 
+             Write-Host "[ ] Gruppen $ChildSiteUrl ($GroupId) har IKKE Planner plan" -ForegroundColor Yellow
              try {
-                New-PnPPlannerPlan -Group $groupId -Title (Get-PnPWeb).Title -ErrorAction SilentlyContinue | out-null
+                New-PnPPlannerPlan -Group $GroupId -Title (Get-PnPWeb).Title -ErrorAction SilentlyContinue | out-null
                 Write-Host "`t[x] Planner plan opprettet" -ForegroundColor Green
              }
              catch {
@@ -71,7 +71,7 @@ if($GrantPermissions) {
              }
 
         } else {
-            Write-Host "[x] Gruppen $childSiteUrl ($groupId) har plannerPlan" -ForegroundColor Green
+            Write-Host "[x] Gruppen $ChildSiteUrl ($GroupId) har Planner plan" -ForegroundColor Green
         }
     }
 }

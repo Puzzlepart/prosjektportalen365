@@ -1,7 +1,7 @@
-<pnp:ContentType ID="0x0100189583AF4D61934E9E196AF1630A8314" Name="{resource:ContentTypes_Permission_Configuration_Element_Name}" Description="{resource:ContentTypes_Permission_Configuration_Element_Description}" Group="{resource:ContentTypes_Group}" xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+<pnp:ContentType ID="0x0100189583AF4D61934E9E196AF1630A8314" Name="{resource:ContentTypes_Permission_Configuration_Element_Name}" Description="{resource:ContentTypes_Permission_Configuration_Element_Description}" Group="{resource:ContentTypes_Group}" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" />
-        <pnp:FieldRef ID="d307d83e-7cce-4076-b74e-4a725407fbea" Name="GtSPGroupName" Required="true" />
-        <pnp:FieldRef ID="80cdca83-d0da-4f8f-abcd-5695763556e9" Name="GtPermissionLevel" Required="true" />
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="d307d83e-7cce-4076-b74e-4a725407fbea" Name="GtSPGroupName" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="80cdca83-d0da-4f8f-abcd-5695763556e9" Name="GtPermissionLevel" Required="true" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

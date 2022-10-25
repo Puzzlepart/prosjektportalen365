@@ -1,26 +1,45 @@
 Param(
-    [Parameter(Mandatory = $true, HelpMessage = "The url to the project portal portfolio site")]
-    [string]$PortfolioUrl
+    [Parameter(Mandatory = $true)]
+    [string]$Url
 )
 
+$global:__PnPConnection = $null
+
 $ScriptDir = (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
-. $ScriptDir\PP365Functions.ps1
+. $ScriptDir/PP365Functions.ps1
+
+function Connect-SharePoint {
+    Param(
+        [Parameter(Mandatory = $true)]
+        [string]$Url
+    )
+
+    Try {
+        if ($null -ne $global:__PnPConnection.ClientId) {
+            Connect-PnPOnline -Url $Url -Interactive -ClientId $global:__PnPConnection.ClientId -ErrorAction Stop -WarningAction Ignore
+        }
+        Connect-PnPOnline -Url $Url -Interactive -ErrorAction Stop -WarningAction Ignore
+        $global:__PnPConnection = Get-PnPConnection
+    }
+    Catch {
+        Write-Host "[INFO] Failed to connect to [$Url]: $($_.Exception.Message)"
+        throw $_.Exception.Message
+    }
+}
 
 function EnsureProjectTimelinePage($Url) {
-    Connect-PnPOnline -Url $Url -UseWebLogin
-        
-    $existingNodes = Get-PnPNavigationNode -Location QuickLaunch -ErrorAction SilentlyContinue
-    if ($null -eq $existingNodes) {
+    $ExistingNodes = Get-PnPNavigationNode -Location QuickLaunch -ErrorAction SilentlyContinue
+    if ($null -eq $ExistingNodes) {
         Write-Host "`t`tCannot connect to site. Do you have access?" -ForegroundColor Red
     }
     else {
-        $existingNode = $existingNodes | Where-Object { $_.Title -eq "Prosjekttidslinje" -or $_.Title -eq "Programtidslinje" } -ErrorAction SilentlyContinue
-        if ($null -eq $existingNode) {
+        $ExistingNode = $ExistingNodes | Where-Object { $_.Title -eq "Prosjekttidslinje" -or $_.Title -eq "Programtidslinje" } -ErrorAction SilentlyContinue
+        if ($null -eq $ExistingNode) {
             Write-Host "`t`tAdding project timeline to site"
             Write-Host "`t`t`tAdding project timeline page"
-            Add-PnPClientSidePage -Name "Prosjekttidslinje.aspx" -PromoteAs None -LayoutType SingleWebPartAppPage -CommentsEnabled:$false -Publish >$null 2>&1
+            Add-PnPPage -Name "Prosjekttidslinje.aspx" -PromoteAs None -LayoutType SingleWebPartAppPage -CommentsEnabled:$false -Publish >$null 2>&1
             Write-Host "`t`t`tAdding project timeline app"
-            Add-PnPClientSideWebPart -Page "Prosjekttidslinje" -Component "Prosjekttidslinje" -WebPartProperties '{"listName":"Tidslinjeinnhold","showFilterButton":true,"showTimeline":true,"showInfoMessage":true,"showCmdTimelineList":true,"showTimelineList":true,"title":"Prosjekttidslinje"}' >$null 2>&1
+            Add-PnPPageWebPart -Page "Prosjekttidslinje" -Component "Prosjekttidslinje" -WebPartProperties '{"listName":"Tidslinjeinnhold","showFilterButton":true,"showTimeline":true,"showInfoMessage":true,"showCmdTimelineList":true,"showTimelineList":true,"title":"Prosjekttidslinje"}' >$null 2>&1
             Set-PnPClientSidePage -Identity "Prosjekttidslinje" -LayoutType SingleWebPartAppPage -HeaderType None -Publish >$null 2>&1
             Write-Host "`t`t`tAdding project timeline navigation item"
             Add-PnPNavigationNode -Location QuickLaunch -Title "Prosjekttidslinje" -Url "SitePages/Prosjekttidslinje.aspx" >$null 2>&1
@@ -33,8 +52,6 @@ function EnsureProjectTimelinePage($Url) {
 }
 
 function EnsureResourceLoadIsSiteColumn($Url) {
-    Connect-PnPOnline -Url $Url -UseWebLogin
-
     $ResourceAllocation = Get-PnPList -Identity "Ressursallokering" -ErrorAction SilentlyContinue
     if ($null -ne $ResourceAllocation) {
         $ResourceLoadSiteColumn = Get-PnPField -Identity "GtResourceLoad"
@@ -80,7 +97,7 @@ function EnsureResourceLoadIsSiteColumn($Url) {
                             # Assuming that noone had more than 200% previously
                             $ResourceLoad = ($ResourceLoad / 100) # Convert to percentage if it wasn't previously
                         }
-                        Set-PnPListItem -List $ResourceAllocation -Identity $_.Id -Values @{"GtResourceLoad" = $ResourceLoad } -SystemUpdate >$null 2>&1
+                        Set-PnPListItem -List $ResourceAllocation -Identity $_.Id -Values @{"GtResourceLoad" = $ResourceLoad } -UpdateType SystemUpdate >$null 2>&1
                     }
                 }
 
@@ -94,20 +111,20 @@ function EnsureResourceLoadIsSiteColumn($Url) {
 }
 
 function EnsureProgramAggregrationWebPart($Url) {
-    Connect-PnPOnline -Url $Url -UseWebLogin
-    $Pages = Get-Content ".\EnsureProgramAggregrationWebPart\$.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+    $Pages = Get-Content "./EnsureProgramAggregrationWebPart/$.json" -Raw -Encoding UTF8 | ConvertFrom-Json
     foreach ($Page in $Pages.PSObject.Properties.GetEnumerator()) {
-        $DeprecatedComponent = Get-PnPClientSideComponent -Page "$($Page.Name).aspx" -ErrorAction SilentlyContinue | Where-Object { $_.WebPartId -eq $Page.Value } | Select-Object -First 1
+        $DeprecatedComponent = Get-PnPPageComponent -Page "$($Page.Name).aspx" -ErrorAction SilentlyContinue | Where-Object { $_.WebPartId -eq $Page.Value } | Select-Object -First 1
         if ($null -ne $DeprecatedComponent) {
             Write-Host "`t`tReplacing deprecated component $($Page.Value) for $($Page.Name).aspx"
-            $JsonControlData = Get-Content ".\EnsureProgramAggregrationWebPart\JsonControlData_$($Page.Name).json" -Raw -Encoding UTF8
+            $JsonControlData = Get-Content "./EnsureProgramAggregrationWebPart/JsonControlData_$($Page.Name).json" -Raw -Encoding UTF8
             $Title = $JsonControlData | ConvertFrom-Json | Select-Object -ExpandProperty title
-            Apply-PnPProvisioningTemplate -Path .\EnsureProgramAggregrationWebPart\Template_ProgramAggregationWebPart.xml -Parameters @{"JsonControlData" = $JsonControlData; "PageName" = "$($Page.Name).aspx"; "Title" = $Title }
+            Invoke-PnPSiteTemplate -Path ./EnsureProgramAggregrationWebPart/Template_ProgramAggregationWebPart.xml -Parameters @{"JsonControlData" = $JsonControlData; "PageName" = "$($Page.Name).aspx"; "Title" = $Title }
         }
     }
 }
 
 function UpgradeSite($Url) {
+    Connect-SharePoint -Url $Url
     EnsureProjectTimelinePage -Url $Url
     EnsureResourceLoadIsSiteColumn -Url $Url
     EnsureProgramAggregrationWebPart -Url $Url
@@ -116,20 +133,20 @@ function UpgradeSite($Url) {
 Write-Host "This script will update all existing sites in a Prosjektportalen installation. This requires you to have the SharePoint admin role"
 
 Set-PnPTraceLog -Off
-Start-Transcript -Path "$PSScriptRoot\UpgradeSites_Log-$((Get-Date).ToString('yyyy-MM-dd-HH-mm')).txt"
+Start-Transcript -Path "$PSScriptRoot/UpgradeSites_Log-$((Get-Date).ToString('yyyy-MM-dd-HH-mm')).txt"
 
-[System.Uri]$Uri = $PortfolioUrl
+[System.Uri]$Uri = $Url
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
 
-Connect-PnPOnline -Url $AdminSiteUrl -UseWebLogin -WarningAction Ignore
+Connect-SharePoint -Url $AdminSiteUrl
 
 # Get current logged in user
-$ctx = Get-PnPContext
-$ctx.Load($ctx.Web.CurrentUser)
-$ctx.ExecuteQuery()
-$UserName = $ctx.Web.CurrentUser.LoginName
+$Context = Get-PnPContext
+$Context.Load($Context.Web.CurrentUser)
+$Context.ExecuteQuery()
+$UserName = $Context.Web.CurrentUser.LoginName
 
-$PPHubSite = Get-PnPHubSite -Identity $PortfolioUrl
+$PPHubSite = Get-PnPHubSite -Identity $Url
 $ProjectsInHub = Get-PP365HubSiteChild -Identity $PPHubSite
 
 Write-Host "The following sites were found to be part of the Project Portal hub:"
@@ -164,10 +181,11 @@ while ("y", "n" -notcontains $YesOrNo)
 if ($YesOrNo -eq "y") {
     $ProjectsInHub | ForEach-Object {
         Write-Host "`tRemoving access to $_"
-        Connect-PnPOnline -Url $_ -UseWebLogin
+        Connect-SharePoint -Url $_
         Remove-PnPSiteCollectionAdmin -Owners $UserName
     }
 }
 
 
 Stop-Transcript
+$global:PnPConnection = $null

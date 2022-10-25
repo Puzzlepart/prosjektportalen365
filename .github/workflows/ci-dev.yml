@@ -15,23 +15,15 @@ env:
 jobs:
   build_release_package:
     name: Build release package
-    runs-on: windows-latest
+    runs-on: macos-latest
     steps:
-      - name: Checkout Puzzlepart/prosjektportalen365.git
-        run: |
-          mkdir C:/prosjektportalen365
-          git clone --branch dev https://github.com/Puzzlepart/prosjektportalen365.git C:/prosjektportalen365
-
-      - name: Checkout current SHA
-        working-directory: C:/prosjektportalen365
-        run: git checkout $GITHUB_SHA
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Set sha_short
         id: vars
-        working-directory: C:/prosjektportalen365
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-        
-      - run: Get-PSDrive
 
       - name: Setup Node.js 16.18.0
         uses: actions/setup-node@v3
@@ -39,15 +31,13 @@ jobs:
           node-version: 16.18.0
 
       - name: Run Install/Build-Release.ps1 in CI mode
-        working-directory: C:/prosjektportalen365
-        run: Install/Build-Release.ps1 -CI
-        shell: powershell
+        run: Install/Build-Release.ps1 -CI -SkipBundle
+        shell: pwsh
 
       - uses: actions/upload-artifact@v3
         with:
           name: release-package
-          path: C:/prosjektportalen365/release
-          retention-days: 3
+          path: release
     outputs:
       sha_short: ${{ steps.vars.outputs.sha_short }}
 
