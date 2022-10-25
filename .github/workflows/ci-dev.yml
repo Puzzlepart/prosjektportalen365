@@ -44,7 +44,7 @@ jobs:
 
   upgrade:
     needs: build_release_package
-    name: Upgrade ${{ env.SP_URL }}
+    name: Upgrade
     runs-on: windows-latest
     steps:
       - uses: actions/download-artifact@v3
