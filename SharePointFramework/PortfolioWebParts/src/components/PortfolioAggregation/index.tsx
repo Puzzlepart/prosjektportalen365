@@ -66,7 +66,7 @@ export const PortfolioAggregation: FunctionComponent<IPortfolioAggregationProps>
           isOpen={state.showFilterPanel}
           layerHostId={layerHostId}
           headerText={strings.FiltersString}
-          onDismissed={() => dispatch(TOGGLE_FILTER_PANEL({ isOpen: false }))}
+          onDismiss={() => dispatch(TOGGLE_FILTER_PANEL({ isOpen: false }))}
           isLightDismiss={true}
           filters={state.filters}
           onFilterChange={(column, selectedItems) => {
