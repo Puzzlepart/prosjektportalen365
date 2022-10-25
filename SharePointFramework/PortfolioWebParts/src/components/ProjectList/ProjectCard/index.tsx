@@ -1,3 +1,4 @@
+import { Link } from '@fluentui/react'
 import { DocumentCard } from '@fluentui/react/lib/DocumentCard'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FunctionComponent } from 'react'
@@ -14,7 +15,9 @@ export const ProjectCard: FunctionComponent<IProjectCardProps> = (props) => {
       className={styles.projectCard}
       onClickHref={props.project.userIsMember ? props.project.url : '#'}
       style={!props.project.userIsMember ? { opacity: '20%', cursor: 'default' } : {}}>
-      <ProjectCardHeader {...props} />
+      <Link href={props.project.userIsMember ? props.project.url : '#'} target="_blank">
+        <ProjectCardHeader {...props} />
+      </Link>
       <ProjectCardContent {...props} />
       <ProjectCardFooter {...props} />
     </DocumentCard>

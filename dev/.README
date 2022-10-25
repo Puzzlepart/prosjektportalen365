@@ -130,15 +130,27 @@ The SharePoint Framework solutions are published to `npm` independently.
 
 ## Building a new release
 
-To build a new release make sure your on the `main`branch and in sync with **origin**.
+To build a new release make sure your on the `main` branch and in sync with **origin**.
 
-Run the npm script `build:release`:
+Run the PowerShell script `Build-Release.ps1` located in the `Install` directory:
 
 ```powershell
-npm run build:release
+./Install/Build-Release.ps1
 ```
 
 The installation package should be found in the release folder.
+
+## Building only pnp templates
+
+To only build pnp templates make sure your on the `main` branch and in sync with **origin**.
+
+Run the PowerShell script `Build-Release.ps1` located in the `Install` directory:
+
+```powershell
+./Install/Build-Release.ps1 -SkipBuildSharePointFramework
+```
+
+The pnp templates should be found in the release folder.
 
 ## Continuous integration
 
