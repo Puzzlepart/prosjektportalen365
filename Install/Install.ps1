@@ -457,7 +457,7 @@ $InstallEndTime = (Get-Date -Format o)
 $InstallEntry = @{
     InstallStartTime = $InstallStartTime; 
     InstallEndTime   = $InstallEndTime; 
-    InstallVersion   = "VERSION_PLACEHOLDER";
+    InstallVersion   = "{VERSION_PLACEHOLDER}";
     InstallCommand   = $MyInvocation.Line.Substring(2);
 }
 
