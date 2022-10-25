@@ -15,7 +15,7 @@ export const ProjectCard: FunctionComponent<IProjectCardProps> = (props) => {
       className={styles.projectCard}
       onClickHref={props.project.userIsMember ? props.project.url : '#'}
       style={!props.project.userIsMember ? { opacity: '20%', cursor: 'default' } : {}}>
-      <Link href={props.project.userIsMember ? props.project.url : '#'} target="_blank">
+      <Link href={props.project.userIsMember ? props.project.url : '#'} target='_blank'>
         <ProjectCardHeader {...props} />
       </Link>
       <ProjectCardContent {...props} />
