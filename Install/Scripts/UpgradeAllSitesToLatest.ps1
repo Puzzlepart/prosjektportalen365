@@ -101,7 +101,7 @@ function EnsureResourceLoadIsSiteColumn($Url) {
                             # Assuming that noone had more than 200% previously
                             $ResourceLoad = ($ResourceLoad / 100) # Convert to percentage if it wasn't previously
                         }
-                        Set-PnPListItem -List $ResourceAllocation -Identity $_.Id -Values @{"GtResourceLoad" = $ResourceLoad } -SystemUpdate >$null 2>&1
+                        Set-PnPListItem -List $ResourceAllocation -Identity $_.Id -Values @{"GtResourceLoad" = $ResourceLoad } -UpdateType SystemUpdate >$null 2>&1
                     }
                 }
 
