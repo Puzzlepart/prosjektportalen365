@@ -247,11 +247,7 @@ if (-not $SkipSiteDesign.IsPresent) {
         else {
             $SiteDesign = Add-PnPSiteDesign -Title $SiteDesignName -SiteScriptIds $SiteScriptIds -Description $SiteDesignDesc -WebTemplate TeamSite
         }
-        if ([string]::IsNullOrEmpty($SiteDesignSecurityGroupId)) {
-            Write-Host "[INFO] You have not specified -SiteDesignSecurityGroupId. Everyone will have View access to site design $SiteDesignName" -ForegroundColor Yellow
-        }
-        else {            
-            Write-Host "[INFO] Granting group $SiteDesignSecurityGroupId View access to site design $SiteDesignName"
+        if (-not [string]::IsNullOrEmpty($SiteDesignSecurityGroupId)) {         
             Grant-PnPSiteDesignRights -Identity $SiteDesign.Id.Guid -Principals @("c:0t.c|tenant|$SiteDesignSecurityGroupId")
         }
 
