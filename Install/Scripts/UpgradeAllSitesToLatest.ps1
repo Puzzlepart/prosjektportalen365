@@ -6,7 +6,7 @@ Param(
 $global:__PnPConnection = $null
 
 $ScriptDir = (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
-. $ScriptDir\PP365Functions.ps1
+. $ScriptDir/PP365Functions.ps1
 
 function Connect-SharePoint {
     Param(
@@ -28,15 +28,13 @@ function Connect-SharePoint {
 }
 
 function EnsureProjectTimelinePage($Url) {
-    Connect-SharePoint -Url $Url
-        
-    $existingNodes = Get-PnPNavigationNode -Location QuickLaunch -ErrorAction SilentlyContinue
-    if ($null -eq $existingNodes) {
+    $ExistingNodes = Get-PnPNavigationNode -Location QuickLaunch -ErrorAction SilentlyContinue
+    if ($null -eq $ExistingNodes) {
         Write-Host "`t`tCannot connect to site. Do you have access?" -ForegroundColor Red
     }
     else {
-        $existingNode = $existingNodes | Where-Object { $_.Title -eq "Prosjekttidslinje" -or $_.Title -eq "Programtidslinje" } -ErrorAction SilentlyContinue
-        if ($null -eq $existingNode) {
+        $ExistingNode = $ExistingNodes | Where-Object { $_.Title -eq "Prosjekttidslinje" -or $_.Title -eq "Programtidslinje" } -ErrorAction SilentlyContinue
+        if ($null -eq $ExistingNode) {
             Write-Host "`t`tAdding project timeline to site"
             Write-Host "`t`t`tAdding project timeline page"
             Add-PnPClientSidePage -Name "Prosjekttidslinje.aspx" -PromoteAs None -LayoutType SingleWebPartAppPage -CommentsEnabled:$false -Publish >$null 2>&1
@@ -54,8 +52,6 @@ function EnsureProjectTimelinePage($Url) {
 }
 
 function EnsureResourceLoadIsSiteColumn($Url) {
-    Connect-SharePoint -Url $Url
-
     $ResourceAllocation = Get-PnPList -Identity "Ressursallokering" -ErrorAction SilentlyContinue
     if ($null -ne $ResourceAllocation) {
         $ResourceLoadSiteColumn = Get-PnPField -Identity "GtResourceLoad"
@@ -115,20 +111,20 @@ function EnsureResourceLoadIsSiteColumn($Url) {
 }
 
 function EnsureProgramAggregrationWebPart($Url) {
-    Connect-SharePoint -Url $Url
-    $Pages = Get-Content ".\EnsureProgramAggregrationWebPart\$.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+    $Pages = Get-Content "./EnsureProgramAggregrationWebPart/$.json" -Raw -Encoding UTF8 | ConvertFrom-Json
     foreach ($Page in $Pages.PSObject.Properties.GetEnumerator()) {
         $DeprecatedComponent = Get-PnPPageComponent -Page "$($Page.Name).aspx" -ErrorAction SilentlyContinue | Where-Object { $_.WebPartId -eq $Page.Value } | Select-Object -First 1
         if ($null -ne $DeprecatedComponent) {
             Write-Host "`t`tReplacing deprecated component $($Page.Value) for $($Page.Name).aspx"
-            $JsonControlData = Get-Content ".\EnsureProgramAggregrationWebPart\JsonControlData_$($Page.Name).json" -Raw -Encoding UTF8
+            $JsonControlData = Get-Content "./EnsureProgramAggregrationWebPart/JsonControlData_$($Page.Name).json" -Raw -Encoding UTF8
             $Title = $JsonControlData | ConvertFrom-Json | Select-Object -ExpandProperty title
-            Invoke-PnPSiteTemplate -Path .\EnsureProgramAggregrationWebPart\Template_ProgramAggregationWebPart.xml -Parameters @{"JsonControlData" = $JsonControlData; "PageName" = "$($Page.Name).aspx"; "Title" = $Title }
+            Invoke-PnPSiteTemplate -Path ./EnsureProgramAggregrationWebPart/Template_ProgramAggregationWebPart.xml -Parameters @{"JsonControlData" = $JsonControlData; "PageName" = "$($Page.Name).aspx"; "Title" = $Title }
         }
     }
 }
 
 function UpgradeSite($Url) {
+    Connect-SharePoint -Url $Url
     EnsureProjectTimelinePage -Url $Url
     EnsureResourceLoadIsSiteColumn -Url $Url
     EnsureProgramAggregrationWebPart -Url $Url
@@ -137,7 +133,7 @@ function UpgradeSite($Url) {
 Write-Host "This script will update all existing sites in a Prosjektportalen installation. This requires you to have the SharePoint admin role"
 
 Set-PnPTraceLog -Off
-Start-Transcript -Path "$PSScriptRoot\UpgradeSites_Log-$((Get-Date).ToString('yyyy-MM-dd-HH-mm')).txt"
+Start-Transcript -Path "$PSScriptRoot/UpgradeSites_Log-$((Get-Date).ToString('yyyy-MM-dd-HH-mm')).txt"
 
 [System.Uri]$Uri = $Url
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
@@ -145,10 +141,10 @@ $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".share
 Connect-SharePoint -Url $AdminSiteUrl
 
 # Get current logged in user
-$ctx = Get-PnPContext
-$ctx.Load($ctx.Web.CurrentUser)
-$ctx.ExecuteQuery()
-$UserName = $ctx.Web.CurrentUser.LoginName
+$Context = Get-PnPContext
+$Context.Load($Context.Web.CurrentUser)
+$Context.ExecuteQuery()
+$UserName = $Context.Web.CurrentUser.LoginName
 
 $PPHubSite = Get-PnPHubSite -Identity $Url
 $ProjectsInHub = Get-PP365HubSiteChild -Identity $PPHubSite
