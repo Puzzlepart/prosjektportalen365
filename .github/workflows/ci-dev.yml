@@ -8,6 +8,7 @@ on:
       - "Install/**"
       - "Templates/**"
       - package.json
+      - .github/workflows/ci-dev.yml
 
 env:
   SP_URL: "https://puzzlepart.sharepoint.com/sites/pp365"
@@ -43,7 +44,7 @@ jobs:
 
   upgrade:
     needs: build_release_package
-    name: Upgrade
+    name: Upgrade ${{ env.SP_URL }}
     runs-on: windows-latest
     steps:
       - uses: actions/download-artifact@v3
