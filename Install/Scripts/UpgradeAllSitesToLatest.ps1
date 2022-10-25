@@ -16,7 +16,7 @@ function Connect-SharePoint {
 
     Try {
         if ($null -ne $global:__PnPConnection.ClientId) {
-            Connect-PnPOnline -Url $Url -ClientId $global:__PnPConnection.ClientId -Interactive -ErrorAction Stop -WarningAction Ignore
+            Connect-PnPOnline -Url $Url -Interactive -ClientId $global:__PnPConnection.ClientId -ErrorAction Stop -WarningAction Ignore
         }
         Connect-PnPOnline -Url $Url -Interactive -ErrorAction Stop -WarningAction Ignore
         $global:__PnPConnection = Get-PnPConnection
@@ -123,7 +123,7 @@ function EnsureProgramAggregrationWebPart($Url) {
             Write-Host "`t`tReplacing deprecated component $($Page.Value) for $($Page.Name).aspx"
             $JsonControlData = Get-Content ".\EnsureProgramAggregrationWebPart\JsonControlData_$($Page.Name).json" -Raw -Encoding UTF8
             $Title = $JsonControlData | ConvertFrom-Json | Select-Object -ExpandProperty title
-            Apply-PnPProvisioningTemplate -Path .\EnsureProgramAggregrationWebPart\Template_ProgramAggregationWebPart.xml -Parameters @{"JsonControlData" = $JsonControlData; "PageName" = "$($Page.Name).aspx"; "Title" = $Title }
+            Invoke-PnPSiteTemplate -Path .\EnsureProgramAggregrationWebPart\Template_ProgramAggregationWebPart.xml -Parameters @{"JsonControlData" = $JsonControlData; "PageName" = "$($Page.Name).aspx"; "Title" = $Title }
         }
     }
 }
