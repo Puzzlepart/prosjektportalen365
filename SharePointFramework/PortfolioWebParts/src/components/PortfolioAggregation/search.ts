@@ -8,7 +8,6 @@ import { getObjectValue as get } from 'pp365-shared/lib/helpers'
  * @param searchTerm Search term
  * @param columns Columns
  */
-
 export const searchItem = (item: any, searchTerm: string, columns: IColumn[]) => {
   searchTerm = searchTerm.toLowerCase()
   const searchObj = columns.reduce((obj, col) => {

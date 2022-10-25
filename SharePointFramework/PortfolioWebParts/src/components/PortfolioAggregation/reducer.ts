@@ -41,7 +41,6 @@ export const TOGGLE_COLUMN_FORM_PANEL = createAction<{
 }>('TOGGLE_COLUMN_FORM_PANEL')
 export const TOGGLE_SHOW_HIDE_COLUMN_PANEL = createAction<{
   isOpen: boolean
-  columns?: IProjectContentColumn[]
 }>('TOGGLE_SHOW_HIDE_COLUMN_PANEL')
 export const TOGGLE_FILTER_PANEL = createAction<{ isOpen: boolean }>('TOGGLE_FILTER_PANEL')
 export const TOGGLE_COMPACT = createAction<{ isCompact: boolean }>('TOGGLE_COMPACT')
@@ -209,9 +208,9 @@ export default (props: IPortfolioAggregationProps) =>
     ) => {
       state.columnContextMenu = payload
         ? {
-          column: payload.column,
-          target: payload.target as any
-        }
+            column: payload.column,
+            target: payload.target as any
+          }
         : null
     },
     [SET_GROUP_BY.type]: (state, { payload }: ReturnType<typeof SET_GROUP_BY>) => {
