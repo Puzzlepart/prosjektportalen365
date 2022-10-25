@@ -131,7 +131,7 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
         )}
         <div className={styles.searchBox} hidden={!props.showSearchBox}>
           <SearchBox
-            disabled={state.loading || isEmpty(projects)}
+            disabled={state.loading || isEmpty(state.projects)}
             placeholder={getSearchBoxPlaceholder()}
             onChanged={onSearch}
           />
@@ -141,7 +141,7 @@ export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
             offText={strings.ShowAsListText}
             onText={strings.ShowAsTilesText}
             defaultChecked={state.showAsTiles}
-            disabled={state.loading || isEmpty(projects)}
+            disabled={state.loading || isEmpty(state.projects)}
             inlineLabel={true}
             onChanged={(showAsTiles) => setState({ showAsTiles })}
           />
