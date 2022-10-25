@@ -8,7 +8,7 @@ on:
 jobs:
   build_shared:
     name: Build @Shared
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     concurrency: 
       group: ${{ github.ref }}_build_shared
       cancel-in-progress: true
@@ -39,7 +39,7 @@ jobs:
   
   package_portfolioextensions:
     name: Package PortfolioExtensions
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     concurrency: 
       group: ${{ github.ref }}_package_portfolioextensions
       cancel-in-progress: true
@@ -70,7 +70,7 @@ jobs:
 
   package_portfoliowebparts:
     name: Package PortfolioWebParts
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     concurrency: 
       group: ${{ github.ref }}_package_portfoliowebparts
       cancel-in-progress: true
@@ -101,7 +101,7 @@ jobs:
 
   package_programwebparts:
     name: Package ProgramWebParts
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     concurrency: 
       group: ${{ github.ref }}_package_programwebparts
       cancel-in-progress: true
@@ -132,7 +132,7 @@ jobs:
 
   package_projectextensions:
     name: Package ProjectExtensions
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     concurrency: 
       group: ${{ github.ref }}_package_projectextensions
       cancel-in-progress: true
@@ -163,7 +163,7 @@ jobs:
 
   package_projectwebparts:
     name: Package ProjectWebParts
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     concurrency: 
       group: ${{ github.ref }}_package_projectwebparts
       cancel-in-progress: true
