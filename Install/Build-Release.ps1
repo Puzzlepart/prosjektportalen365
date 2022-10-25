@@ -7,7 +7,9 @@ Param(
     [Parameter(Mandatory = $false)]
     [string[]]$Solutions = @("PortfolioExtensions", "PortfolioWebParts", "ProgramWebParts", "ProjectExtensions", "ProjectWebParts"),
     [Parameter(Mandatory = $false, HelpMessage = "CI mode. Installs PnP.PowerShell.")]
-    [switch]$CI
+    [switch]$CI,
+    [Parameter(Mandatory = $false)]
+    [switch]$SkipBundle
 )  
 
 $PACKAGE_FILE = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Json
@@ -75,9 +77,11 @@ Copy-Item -Path "$PSScriptRoot/Scripts/*" -Recurse -Destination $RELEASE_PATH_SC
 Copy-Item -Path "$PSScriptRoot/SearchConfiguration.xml" -Destination $RELEASE_PATH -Force
 EndAction
 
-StartAction("Copying PnP.PowerShell bundle")
-Copy-Item -Path $PNP_BUNDLE_PATH -Filter * -Destination $RELEASE_PATH -Force -Recurse
-EndAction
+if (-not $SkipBundle.IsPresent) {
+    StartAction("Copying PnP.PowerShell bundle")
+    Copy-Item -Path $PNP_BUNDLE_PATH -Filter * -Destination $RELEASE_PATH -Force -Recurse
+    EndAction
+}
 
 (Get-Content "$RELEASE_PATH/Install.ps1") -Replace '{VERSION_PLACEHOLDER}', "$($PACKAGE_FILE.version).$($GIT_HASH)" | Set-Content "$RELEASE_PATH/Install.ps1"
 #endregion
