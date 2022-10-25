@@ -63,10 +63,14 @@ $sw = [Diagnostics.Stopwatch]::StartNew()
 $global:sw_action = $null
 $InstallStartTime = (Get-Date -Format o)
 if ($Upgrade.IsPresent) {
-    Write-Host "[INFO] Upgrading Prosjektportalen 365] to v{VERSION_PLACEHOLDER}"
+    Write-Host "########################################################" -ForegroundColor Cyan
+    Write-Host "### Upgrading Prosjektportalen 365 v{VERSION_PLACEHOLDER} #####" -ForegroundColor Cyan
+    Write-Host "########################################################" -ForegroundColor Cyan
 }
 else {
-    Write-Host "[INFO] Installing Prosjektportalen 365 v{VERSION_PLACEHOLDER}"
+    Write-Host "########################################################" -ForegroundColor Cyan
+    Write-Host "### Installing Prosjektportalen 365 v{VERSION_PLACEHOLDER} ####" -ForegroundColor Cyan
+    Write-Host "########################################################" -ForegroundColor Cyan
 }
 
 function Connect-SharePoint {
