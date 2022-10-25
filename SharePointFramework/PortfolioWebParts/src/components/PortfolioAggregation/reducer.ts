@@ -3,7 +3,7 @@ import sortArray from 'array-sort'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
-import { any, first, indexOf, omit, uniq } from 'underscore'
+import { any, first, indexOf, isEmpty, omit, uniq } from 'underscore'
 import {
   IPortfolioAggregationHashState,
   IPortfolioAggregationProps,
@@ -124,10 +124,10 @@ export default (props: IPortfolioAggregationProps) =>
         state.loading = false
       }
       if (payload.columns) {
-        if (payload.fltColumns.length > 0) state.fltColumns = payload.fltColumns
+        if (!isEmpty(payload.fltColumns)) state.fltColumns = payload.fltColumns
         else state.fltColumns = payload.columns
 
-        if (payload.columns.length > 0) {
+        if (!isEmpty(payload.columns)) {
           const mergedColumns = state.columns.map((col) => {
             const payCol = payload.columns.find((c) => c.key === col.key)
             if (payCol)
@@ -209,9 +209,9 @@ export default (props: IPortfolioAggregationProps) =>
     ) => {
       state.columnContextMenu = payload
         ? {
-            column: payload.column,
-            target: payload.target as any
-          }
+          column: payload.column,
+          target: payload.target as any
+        }
         : null
     },
     [SET_GROUP_BY.type]: (state, { payload }: ReturnType<typeof SET_GROUP_BY>) => {

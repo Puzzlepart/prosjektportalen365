@@ -42,6 +42,7 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
 
   useEffect(() => {
     dispatch(START_FETCH())
+    if(!state.currentView) return
     props.dataAdapter.configure().then((adapter) => {
       Promise.all([
         adapter.dataSourceService.getByName(state.dataSource),
