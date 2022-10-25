@@ -3,7 +3,7 @@ import sortArray from 'array-sort'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
-import { any, first, indexOf, omit, uniq } from 'underscore'
+import { any, first, indexOf, isEmpty, omit, uniq } from 'underscore'
 import {
   IPortfolioAggregationHashState,
   IPortfolioAggregationProps,
@@ -41,7 +41,6 @@ export const TOGGLE_COLUMN_FORM_PANEL = createAction<{
 }>('TOGGLE_COLUMN_FORM_PANEL')
 export const TOGGLE_SHOW_HIDE_COLUMN_PANEL = createAction<{
   isOpen: boolean
-  columns?: IProjectContentColumn[]
 }>('TOGGLE_SHOW_HIDE_COLUMN_PANEL')
 export const TOGGLE_FILTER_PANEL = createAction<{ isOpen: boolean }>('TOGGLE_FILTER_PANEL')
 export const TOGGLE_COMPACT = createAction<{ isCompact: boolean }>('TOGGLE_COMPACT')
@@ -124,10 +123,10 @@ export default (props: IPortfolioAggregationProps) =>
         state.loading = false
       }
       if (payload.columns) {
-        if (payload.fltColumns.length > 0) state.fltColumns = payload.fltColumns
+        if (!isEmpty(payload.fltColumns)) state.fltColumns = payload.fltColumns
         else state.fltColumns = payload.columns
 
-        if (payload.columns.length > 0) {
+        if (!isEmpty(payload.columns)) {
           const mergedColumns = state.columns.map((col) => {
             const payCol = payload.columns.find((c) => c.key === col.key)
             if (payCol)
