@@ -18,10 +18,10 @@ Every change is marked with issue ID.
 - Added support for description/notes on planner tasks #704
 - Added support for preview type on planner tasks #718
 - Fix for problems where aggregated webpart pages didn't work properly #754
-  - Top navigation bar elements ('Erfaringslogg', 'Gevinst-', 'Risiko-' and 'Leveranseoversikt') needs to be checked and fixed manually after upgrade to 1.7.0 ⚠️
+  - Top navigation bar elements ('Erfaringslogg', 'Gevinst-', 'Risiko-' and 'Leveranseoversikt') needs to be checked and fixed manually after upgrade to 1.7.2 ⚠️
 - Integrated IdeaProcessing (from prosjektportalen365-addons) directly in Prosjektportalen365 with improvements and new additions #777
   - This also adds sync functionality to synchronize ProjectData to newly created projects based off of ideas
-  - Remove old IdeaProcessing webparts if you have used idea processing prior to 1.7.0 ⚠️
+  - Remove old IdeaProcessing webparts if you have used idea processing prior to 1.7.2 ⚠️
 - Displaying parent projects in Project Information webpart #760
 - Added ability to hide certain parts of the Project Information webpart #670
 - Added inline help content function to sitepages and lists #788
@@ -31,6 +31,8 @@ Every change is marked with issue ID.
 
 ### Changed
 
+- Installation now uses the new PnP.PowerShell module #417
+  - Use -Interactive instead of -UseWebLogin when upgrading/installing ⚠️
 - Changed phase callout from hover to clickable #734
 - Information messages now uses a newer and stable version to render HTML #762
 - Reduced amount of calls when loading ProjectTimeline, this improves the speed by alot! #743
