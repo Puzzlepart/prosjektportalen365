@@ -1,4 +1,3 @@
-import { IDropdownOption } from '@fluentui/react'
 import { TypedHash } from '@pnp/common'
 import { Web } from '@pnp/sp'
 import { Schema } from 'sp-js-provisioning'
@@ -24,7 +23,7 @@ export interface IProjectTemplateSPItem {
   GtProjectPhaseTermId: string
 }
 
-export class ProjectTemplate implements IDropdownOption {
+export class ProjectTemplate {
   public id: any
   public key: string
   public text: string
