@@ -91,7 +91,7 @@ export const MatrixRows = ({ items, calloutTemplate, customCells }) => {
     <>
       {children}
       <Toggle
-        label={'strings.RiskMatrix_ToggleElements'}
+        label={strings.RiskMatrix_ToggleElements}
         onText={strings.Yes}
         offText={strings.No}
         onChange={(_event, _showPostAction) => setShowPostAction(_showPostAction)}
