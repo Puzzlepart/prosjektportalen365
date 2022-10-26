@@ -1,13 +1,14 @@
 import { ISearchBoxProps, SearchBox } from '@fluentui/react'
 import { ProjectTemplate } from 'models'
 import strings from 'ProjectExtensionsStrings'
-import React, { FunctionComponent, useContext, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Autocomplete from 'react-autocomplete'
 import { TemplateSelectDialogContext } from '../context'
+import { TemplateSelectDialogSectionComponent } from '../types'
 import styles from './TemplateSelector.module.scss'
 import { TemplateSelectorItem } from './TemplateSelectorItem'
 
-export const TemplateSelector: FunctionComponent = () => {
+export const TemplateSelector: TemplateSelectDialogSectionComponent = () => {
   const context = useContext(TemplateSelectDialogContext)
   const [searchValue, setSearchValue] = useState(context.state.selectedTemplate?.text)
 
@@ -43,7 +44,10 @@ export const TemplateSelector: FunctionComponent = () => {
               <TemplateSelectorItem template={template} isHighlighted={isHighlighted} />
             </div>
           )}
-          inputProps={{ className: styles.searchBox, placeholder: strings.TemplateSelectorSearchPlaceholder }}
+          inputProps={{
+            className: styles.searchBox,
+            placeholder: strings.TemplateSelectorSearchPlaceholder
+          }}
           renderInput={(inputProps) => (
             <SearchBox
               {...(inputProps as ISearchBoxProps)}

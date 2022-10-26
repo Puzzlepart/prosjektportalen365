@@ -36,13 +36,13 @@ export const TemplateSelectDialog: FunctionComponent<ITemplateSelectDialogProps>
           {!isEmpty(props.data.extensions) && (
             <PivotItem headerText={strings.ExtensionsTitle} itemIcon='ArrangeBringForward'>
               {state.selectedTemplate?.listExtensionIds && <TemplateListContentConfigMessage />}
-              <ExtensionsSection />
+              <ExtensionsSection style={{ height: 350 }} />
             </PivotItem>
           )}
           {!isEmpty(props.data.listContentConfig) && (
             <PivotItem headerText={strings.ListContentTitle} itemIcon='ViewList'>
               {state.selectedTemplate?.listContentConfigIds && <TemplateListContentConfigMessage />}
-              <ListContentSection />
+              <ListContentSection style={{ height: 350 }} />
             </PivotItem>
           )}
         </Pivot>
