@@ -1,17 +1,16 @@
 @import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 
 .root {
-  width: 400px;
+  width: 500px;
   box-sizing: border-box;
-  margin-top: 5px;
-  padding: 4px 6px;
+  padding: 6px 8px;
 
   &.isHighlighted {
     background-color: $ms-color-themeSecondary;
     color: $ms-color-white;
 
     .subText {
-      color: $ms-color-white;
+      color: $ms-color-white !important;
     }
   }
 
