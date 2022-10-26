@@ -27,7 +27,7 @@ export interface ITemplateSelectDialogState {
   selectedExtensions?: ProjectExtension[]
 
   /**
-   * Currently selected list content config
+   * Currently selected list content configuration
    */
   selectedListContentConfig?: ListContentConfig[]
 

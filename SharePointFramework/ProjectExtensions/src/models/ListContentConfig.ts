@@ -1,4 +1,4 @@
-import { getId } from '@fluentui/react'
+import { getId, IObjectWithKey } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { List, sp, Web } from '@pnp/sp'
 import { IListProperties } from './IListProperties'
@@ -23,7 +23,7 @@ export enum ListContentConfigType {
 /**
  * @model ListContentConfig
  */
-export class ListContentConfig  {
+export class ListContentConfig implements IObjectWithKey {
   public id: number
   public key: string
   public text: string
