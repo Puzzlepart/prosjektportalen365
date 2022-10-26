@@ -1,14 +1,11 @@
-import { DetailsList, SearchBox, SelectionMode } from '@fluentui/react'
+import { DetailsList, ScrollablePane, SearchBox, SelectionMode } from '@fluentui/react'
 import strings from 'ProjectExtensionsStrings'
 import React, { FunctionComponent } from 'react'
 import styles from './ListContentSection.module.scss'
 import { useListContentSection } from './useListContentSection'
 
 export const ListContentSection: FunctionComponent = () => {
-  const { selection, items, onSearch, setKey } = useListContentSection()
-
-  // eslint-disable-next-line no-console
-  console.log(setKey)
+  const { selection, items, onSearch, onRenderRow } = useListContentSection()
 
   return (
     <div className={styles.root}>
@@ -17,27 +14,33 @@ export const ListContentSection: FunctionComponent = () => {
         onChange={(_, newValue) => onSearch(newValue)}
         onSearch={(newValue) => onSearch(newValue)}
       />
-      <DetailsList
-        setKey={setKey}
-        selection={selection}
-        selectionMode={SelectionMode.multiple}
-        items={items}
-        columns={[
-          {
-            key: 'text',
-            fieldName: 'text',
-            name: strings.TitleLabel,
-            minWidth: 150,
-            maxWidth: 150
-          },
-          {
-            key: 'subText',
-            fieldName: 'subText',
-            name: strings.DescriptionLabel,
-            minWidth: 250
-          }
-        ]}
-      />
+      <div style={{ height: 300 }}>
+        <ScrollablePane>
+          <DetailsList
+            setKey='set'
+            selection={selection}
+            selectionMode={SelectionMode.multiple}
+            selectionPreservedOnEmptyClick={true}
+            onRenderRow={onRenderRow}
+            items={items}
+            columns={[
+              {
+                key: 'text',
+                fieldName: 'text',
+                name: strings.TitleLabel,
+                minWidth: 150,
+                maxWidth: 150
+              },
+              {
+                key: 'subText',
+                fieldName: 'subText',
+                name: strings.DescriptionLabel,
+                minWidth: 250
+              }
+            ]}
+          />
+        </ScrollablePane>
+      </div>
     </div>
   )
 }

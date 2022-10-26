@@ -1,6 +1,6 @@
-import { Selection } from '@fluentui/react'
+import { IDetailsRowProps, Selection } from '@fluentui/react'
 import { ListContentConfig } from 'models'
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { TemplateSelectDialogContext } from '../context'
 
 /**
@@ -8,29 +8,31 @@ import { TemplateSelectDialogContext } from '../context'
  */
 export function useListContentSection() {
   const context = useContext(TemplateSelectDialogContext)
-  const selectedKeys = useMemo(() => context.state.selectedListContentConfig.map((lc) => lc.key), [
-    context.state.selectedListContentConfig
-  ])
-  const [selection, setSelection] = useState<Selection<ListContentConfig>>(new Selection())
-  const [searchTerm, setSearchTerm] = useState('')
-  const [setKey, setSetKey] = useState(new Date().getTime().toString())
-
-  function onSelectionChanged() {
-    if (selectedKeys !== selection.getSelection().map((lc) => lc.key)) {
+  const selectedKeys = context.state.selectedListContentConfig.map((lc) => lc.key)
+  const __selection = new Selection<ListContentConfig>({
+    onSelectionChanged: () => {
       context.setState({ selectedListContentConfig: selection.getSelection() })
     }
-  }
+  })
+  const [selection, setSelection] = useState<Selection<ListContentConfig>>(__selection)
+  const [searchTerm, setSearchTerm] = useState<string>('')
 
   useEffect(() => {
-    const _selection = new Selection<ListContentConfig>({ onSelectionChanged })
-    selectedKeys.forEach((key) => _selection.setKeySelected(key, true, true))
-    setSelection(_selection)
-    setSetKey(new Date().getTime().toString())
-  }, [context.state.selectedListContentConfig, searchTerm])
+    __selection.setChangeEvents(false)
+    selectedKeys.forEach((key) => __selection.setKeySelected(key, true, true))
+    __selection.setChangeEvents(true)
+    setSelection(__selection)
+  }, [searchTerm])
 
-  const items = context.props.data.listContentConfig.filter(
-    (lcc) => !lcc.hidden && lcc.text.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1
-  )
+  const items = context.props.data.listContentConfig.filter((lcc) => !lcc.hidden)
 
-  return { selection, items, onSearch: setSearchTerm, setKey } as const
+  function onRenderRow(
+    props: IDetailsRowProps,
+    defaultRender: (props?: IDetailsRowProps) => JSX.Element
+  ) {
+    if (props.item.text.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1) return null
+    return defaultRender(props)
+  }
+
+  return { selection, items, onSearch: setSearchTerm, onRenderRow } as const
 }

@@ -11,7 +11,6 @@ export function useTemplateSelectDialog(props: ITemplateSelectDialogProps) {
     return defaultTemplate
   }
   const [state, $setState] = useState<ITemplateSelectDialogState>({
-    flexibleHeight: (props.data.templates.filter((t) => !t.isHidden).length / 4) * 150,
     selectedTemplate: getDefaultTemplate(),
     selectedExtensions: props.data.extensions.filter(
       (ext) => ext.isDefault || getDefaultTemplate().listExtensionIds?.some((id) => id === ext.id)

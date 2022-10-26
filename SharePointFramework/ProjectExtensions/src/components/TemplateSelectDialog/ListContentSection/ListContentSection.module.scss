@@ -6,6 +6,10 @@
   padding: 10px 0 10px 0;
   height: 100%;
 
+  div[class*="ms-List-cell"] {
+    min-height: 0px;
+  }
+
   .item {
     width: 50%;
     display: inline-block;
