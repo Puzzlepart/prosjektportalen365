@@ -41,7 +41,9 @@ export const ListContentSection: TemplateSelectDialogSectionComponent = (props) 
           )}
           onRenderDetailsFooter={() => (
             <Sticky stickyPosition={StickyPositionType.Footer}>
-              {context.state.selectedTemplate?.listExtensionIds && <TemplateListContentConfigMessage />}
+              {context.state.selectedTemplate?.listExtensionIds && (
+                <TemplateListContentConfigMessage />
+              )}
             </Sticky>
           )}
           items={items}
