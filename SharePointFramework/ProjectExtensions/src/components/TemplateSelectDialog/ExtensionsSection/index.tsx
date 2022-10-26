@@ -17,7 +17,10 @@ export const ExtensionsSection: FunctionComponent = () => {
   function onChange(extension: ProjectExtension, checked: boolean): void {
     let selectedExtensions = []
     if (checked) selectedExtensions = [extension, ...context.state.selectedExtensions]
-    else selectedExtensions = context.state.selectedExtensions.filter((ext) => extension.text !== ext.text)
+    else
+      selectedExtensions = context.state.selectedExtensions.filter(
+        (ext) => extension.text !== ext.text
+      )
     context.setState({ selectedExtensions })
   }
 
@@ -35,7 +38,9 @@ export const ExtensionsSection: FunctionComponent = () => {
               inlineLabel={true}
               onChange={(_event, checked) => onChange(ext, checked)}
             />
-            {(context.state.selectedTemplate?.isDefaultExtensionsLocked && ext.isDefault) && <Icon iconName='Lock' className={styles.icon} />}
+            {context.state.selectedTemplate?.isDefaultExtensionsLocked && ext.isDefault && (
+              <Icon iconName='Lock' className={styles.icon} />
+            )}
           </div>
           <div className={styles.subText} hidden={stringIsNullOrEmpty(ext.subText)}>
             <span>{ext.subText}</span>

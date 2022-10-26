@@ -1,56 +1,39 @@
-import { Icon, Toggle } from '@fluentui/react'
-import { stringIsNullOrEmpty } from '@pnp/common'
-import React, { FunctionComponent, useContext } from 'react'
-import { ListContentConfig } from '../../../models'
-import { TemplateSelectDialogContext } from '../context'
+import { DetailsList, SearchBox, SelectionMode } from '@fluentui/react'
+import strings from 'ProjectExtensionsStrings'
+import React, { FunctionComponent } from 'react'
 import styles from './ListContentSection.module.scss'
+import { useListContentSection } from './useListContentSection'
 
 export const ListContentSection: FunctionComponent = () => {
-  const context = useContext(TemplateSelectDialogContext)
-
-  /**
-   * On item toggle
-   *
-   * @param listContentConfig List content config
-   * @param checked Checked
-   */
-  function onChanged(listContentConfig: ListContentConfig, checked: boolean): void {
-    let selectedListContentConfig = []
-    if (checked) {
-      selectedListContentConfig = [listContentConfig, ...context.state.selectedListContentConfig]
-    } else {
-      selectedListContentConfig = context.state.selectedListContentConfig.filter(
-        (lcc) => listContentConfig.text !== lcc.text
-      )
-    }
-    context.setState({ selectedListContentConfig })
-  }
-
-  const selectedKeys = context.state.selectedListContentConfig.map((lc) => lc.key)
+  const { selection, items, onSearch } = useListContentSection()
 
   return (
     <div className={styles.root}>
-      {context.props.data.listContentConfig
-        .filter((lcc) => !lcc.hidden)
-        .map((lcc) => (
-          <div key={lcc.key} className={styles.item}>
-            <div className={styles.toggle}>
-              <Toggle
-                label={lcc.text}
-                defaultChecked={selectedKeys.indexOf(lcc.key) !== -1}
-                disabled={context.state.selectedTemplate?.isDefaultListContentLocked && lcc.isDefault}
-                inlineLabel={true}
-                onChanged={(checked) => onChanged(lcc, checked)}
-              />
-              {(context.state.selectedTemplate?.isDefaultListContentLocked && lcc.isDefault) && (
-                <Icon iconName={'Lock'} className={styles.icon} />
-              )}
-            </div>
-            <div className={styles.subText} hidden={stringIsNullOrEmpty(lcc.subText)}>
-              <span>{lcc.subText}</span>
-            </div>
-          </div>
-        ))}
+      <SearchBox
+        placeholder={strings.ListContentSectionSearchPlaceholder}
+        onChange={(_, newValue) => onSearch(newValue)}
+        onSearch={(newValue) => onSearch(newValue)}
+      />
+      <DetailsList
+        selection={selection}
+        selectionMode={SelectionMode.multiple}
+        items={items}
+        columns={[
+          {
+            key: 'text',
+            fieldName: 'text',
+            name: strings.TitleLabel,
+            minWidth: 150,
+            maxWidth: 150
+          },
+          {
+            key: 'subText',
+            fieldName: 'subText',
+            name: strings.DescriptionLabel,
+            minWidth: 250
+          }
+        ]}
+      />
     </div>
   )
 }

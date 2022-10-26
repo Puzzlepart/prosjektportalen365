@@ -2,6 +2,7 @@ import { Web } from '@pnp/sp'
 import { IDropdownOption } from '@fluentui/react/lib/Dropdown'
 import { TypedHash } from '@pnp/common'
 import { Schema } from 'sp-js-provisioning'
+import { getId } from '@fluentui/react'
 
 export interface IProjectExtension {
   Id: number
@@ -20,7 +21,7 @@ export class ProjectExtension implements Omit<IDropdownOption, 'id'> {
   public serverRelativeUrl: string
 
   constructor(spItem: IProjectExtension, public web: Web) {
-    this.key = `projecttemplate_${spItem.Id}`
+    this.key = getId(`projecttemplate_${spItem.Id}`)
     this.text = spItem.File.Title
     this.isDefault = spItem.GtExtensionDefault
     this.subText = spItem.FieldValuesAsText.GtDescription

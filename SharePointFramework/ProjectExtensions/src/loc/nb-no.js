@@ -1,5 +1,6 @@
-define([], function() {
+define([], function () {
     return {
+        ListContentSectionSearchPlaceholder: 'Søk i standardinnhold...',
         PermissionConfigurationList: 'Tillatelseskonfigurasjon',
         SitePermissionsText: 'Setter opp tillatelser for området',
         SitePermissionsSubText: 'Kopierer tillatelsekonfigurasjon fra hubområdet.',

@@ -1,4 +1,4 @@
-import { IIconProps } from '@fluentui/react'
+import { getId, IIconProps } from '@fluentui/react'
 import { TypedHash } from '@pnp/common'
 import { Web } from '@pnp/sp'
 import { Schema } from 'sp-js-provisioning'
@@ -48,7 +48,7 @@ export class ProjectTemplate {
 
   constructor(spItem: IProjectTemplateSPItem, public web: Web) {
     this.id = spItem.Id
-    this.key = `Template${this.id}`
+    this.key = getId(`projecttemplate_${this.id}`)
     this.text = spItem.FieldValuesAsText.Title
     this.subText = spItem.FieldValuesAsText.GtDescription
     this.isDefault = spItem?.IsDefaultTemplate

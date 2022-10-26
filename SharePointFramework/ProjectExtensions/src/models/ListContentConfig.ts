@@ -1,7 +1,7 @@
+import { getId } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { sp, Web, List } from '@pnp/sp'
+import { List, sp, Web } from '@pnp/sp'
 import { IListProperties } from './IListProperties'
-import { IDropdownOption } from '@fluentui/react/lib/Dropdown'
 
 export interface IListContentConfigSPItem {
   ContentTypeId: string
@@ -23,7 +23,7 @@ export enum ListContentConfigType {
 /**
  * @model ListContentConfig
  */
-export class ListContentConfig implements Omit<IDropdownOption, 'id'> {
+export class ListContentConfig  {
   public id: number
   public key: string
   public text: string
@@ -37,7 +37,7 @@ export class ListContentConfig implements Omit<IDropdownOption, 'id'> {
 
   constructor(private _spItem: IListContentConfigSPItem, public web: Web) {
     this.id = _spItem.Id
-    this.key = `listcontentconfig_${this.id}`
+    this.key = getId(`listcontentconfig_${this.id}`)
     this.text = _spItem.Title
     this.subText = _spItem.GtDescription
     this.isDefault = _spItem.GtLccDefault
