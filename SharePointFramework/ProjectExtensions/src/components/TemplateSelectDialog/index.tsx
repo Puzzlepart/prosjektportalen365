@@ -27,27 +27,21 @@ export const TemplateSelectDialog: FunctionComponent<ITemplateSelectDialogProps>
         modalProps={{ containerClassName: styles.root, isBlocking: true, isDarkOverlay: true }}
         onDismiss={props.onDismiss}
         containerClassName={styles.root}>
-        <Pivot style={{ minHeight: 450 }}>
+        <Pivot style={{ minHeight: 600 }}>
           <PivotItem headerText={strings.TemplateSelectorTitle} itemIcon='ViewListGroup'>
             <TemplateSelector />
             {(state.selectedTemplate?.listContentConfigIds ||
-              state.selectedTemplate?.listExtensionIds) && (
-              <TemplateListContentConfigMessage selectedTemplate={state.selectedTemplate} />
-            )}
+              state.selectedTemplate?.listExtensionIds) && <TemplateListContentConfigMessage />}
           </PivotItem>
           {!isEmpty(props.data.extensions) && (
             <PivotItem headerText={strings.ExtensionsTitle} itemIcon='ArrangeBringForward'>
-              {state.selectedTemplate?.listExtensionIds && (
-                <TemplateListContentConfigMessage selectedTemplate={state.selectedTemplate} />
-              )}
+              {state.selectedTemplate?.listExtensionIds && <TemplateListContentConfigMessage />}
               <ExtensionsSection />
             </PivotItem>
           )}
           {!isEmpty(props.data.listContentConfig) && (
             <PivotItem headerText={strings.ListContentTitle} itemIcon='ViewList'>
-              {state.selectedTemplate?.listContentConfigIds && (
-                <TemplateListContentConfigMessage selectedTemplate={state.selectedTemplate} />
-              )}
+              {state.selectedTemplate?.listContentConfigIds && <TemplateListContentConfigMessage />}
               <ListContentSection />
             </PivotItem>
           )}
