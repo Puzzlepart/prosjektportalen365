@@ -7,7 +7,7 @@ import React from 'react'
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ITemplateSelectDialogSectionProps extends React.HTMLProps<HTMLDivElement> {}
 
-export type TemplateSelectDialogSectionComponent = React.FunctionComponent<
+export type TemplateSelectDialogSectionComponent = React.FC<
   ITemplateSelectDialogSectionProps
 >
 

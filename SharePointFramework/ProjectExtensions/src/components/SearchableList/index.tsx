@@ -6,12 +6,12 @@ import {
   Sticky,
   StickyPositionType
 } from '@fluentui/react'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import { ISearchableListProps } from './types'
 import styles from './SearchableList.module.scss'
 import { useSearchableList } from './useSearchableList'
 
-export const SearchableList: FunctionComponent<ISearchableListProps> = (props) => {
+export const SearchableList: FC<ISearchableListProps> = (props) => {
   const { selection, onSearch, onRenderRow } = useSearchableList(props)
 
   return (

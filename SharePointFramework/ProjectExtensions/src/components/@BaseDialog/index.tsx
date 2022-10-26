@@ -1,9 +1,9 @@
 import { Dialog, DialogType, IDialogContentProps, IModalProps } from '@fluentui/react'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import styles from './BaseDialog.module.scss'
 import { IBaseDialogProps } from './types'
 
-export const BaseDialog: FunctionComponent<IBaseDialogProps> = (props) => {
+export const BaseDialog: FC<IBaseDialogProps> = (props) => {
   const modalProps: IModalProps = {
     ...props.modalProps,
     containerClassName: [styles.root, props.modalProps?.containerClassName]

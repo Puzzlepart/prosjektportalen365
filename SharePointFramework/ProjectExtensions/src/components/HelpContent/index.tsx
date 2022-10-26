@@ -1,10 +1,10 @@
 import { ActionButton } from '@fluentui/react/lib/Button'
-import React, { FunctionComponent, useState } from 'react'
+import React, { FC, useState } from 'react'
 import styles from './HelpContent.module.scss'
 import { HelpContentModal } from './HelpContentModal'
 import { IHelpContentProps } from './types'
 
-export const HelpContent: FunctionComponent<IHelpContentProps> = (props) => {
+export const HelpContent: FC<IHelpContentProps> = (props) => {
   const [showModal, setShowModal] = useState(false)
   return (
     <div className={styles.root}>

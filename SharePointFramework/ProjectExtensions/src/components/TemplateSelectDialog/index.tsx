@@ -1,18 +1,17 @@
 import { DefaultButton, DialogFooter, Pivot, PivotItem, PrimaryButton } from '@fluentui/react'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import { isEmpty } from 'underscore'
 import { BaseDialog } from '../@BaseDialog'
 import { TemplateSelectDialogContext } from './context'
 import { ExtensionsSection } from './ExtensionsSection'
 import { ListContentSection } from './ListContentSection'
-import { TemplateListContentConfigMessage } from './TemplateListContentConfigMessage'
 import styles from './TemplateSelectDialog.module.scss'
 import { TemplateSelector } from './TemplateSelector'
 import { ITemplateSelectDialogProps } from './types'
 import { useTemplateSelectDialog } from './useTemplateSelectDialog'
 
-export const TemplateSelectDialog: FunctionComponent<ITemplateSelectDialogProps> = (props) => {
+export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
   const { state, setState, onSubmit } = useTemplateSelectDialog(props)
 
   return (
@@ -27,22 +26,18 @@ export const TemplateSelectDialog: FunctionComponent<ITemplateSelectDialogProps>
         modalProps={{ containerClassName: styles.root, isBlocking: true, isDarkOverlay: true }}
         onDismiss={props.onDismiss}
         containerClassName={styles.root}>
-        <Pivot style={{ minHeight: 500 }}>
+        <Pivot style={{ minHeight: 400 }}>
           <PivotItem headerText={strings.TemplateSelectorTitle} itemIcon='ViewListGroup'>
             <TemplateSelector />
-            {(state.selectedTemplate?.listContentConfigIds ||
-              state.selectedTemplate?.listExtensionIds) && <TemplateListContentConfigMessage />}
           </PivotItem>
           {!isEmpty(props.data.extensions) && (
             <PivotItem headerText={strings.ExtensionsTitle} itemIcon='ArrangeBringForward'>
-              {state.selectedTemplate?.listExtensionIds && <TemplateListContentConfigMessage />}
-              <ExtensionsSection style={{ height: 350 }} />
+              <ExtensionsSection style={{ height: 400 }} />
             </PivotItem>
           )}
           {!isEmpty(props.data.listContentConfig) && (
             <PivotItem headerText={strings.ListContentTitle} itemIcon='ViewList'>
-              {state.selectedTemplate?.listContentConfigIds && <TemplateListContentConfigMessage />}
-              <ListContentSection style={{ height: 350 }} />
+              <ListContentSection style={{ height: 400 }} />
             </PivotItem>
           )}
         </Pivot>

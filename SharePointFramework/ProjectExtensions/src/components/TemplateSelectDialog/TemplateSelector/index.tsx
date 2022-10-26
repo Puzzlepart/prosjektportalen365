@@ -4,6 +4,7 @@ import strings from 'ProjectExtensionsStrings'
 import React, { useContext, useState } from 'react'
 import Autocomplete from 'react-autocomplete'
 import { TemplateSelectDialogContext } from '../context'
+import { TemplateListContentConfigMessage } from '../TemplateListContentConfigMessage'
 import { TemplateSelectDialogSectionComponent } from '../types'
 import styles from './TemplateSelector.module.scss'
 import { TemplateSelectorItem } from './TemplateSelectorItem'
@@ -69,6 +70,8 @@ export const TemplateSelector: TemplateSelectDialogSectionComponent = () => {
           }}
           selectOnBlur={true}
         />
+        {(context.state.selectedTemplate?.listContentConfigIds ||
+          context.state.selectedTemplate?.listExtensionIds) && <TemplateListContentConfigMessage />}
       </div>
     </div>
   )

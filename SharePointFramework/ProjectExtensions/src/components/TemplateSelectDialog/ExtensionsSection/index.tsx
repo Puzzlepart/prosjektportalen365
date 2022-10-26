@@ -7,12 +7,15 @@ import {
   StickyPositionType
 } from '@fluentui/react'
 import strings from 'ProjectExtensionsStrings'
-import React from 'react'
+import React, { useContext } from 'react'
+import { TemplateSelectDialogContext } from '../context'
+import { TemplateListContentConfigMessage } from '../TemplateListContentConfigMessage'
 import { TemplateSelectDialogSectionComponent } from '../types'
 import styles from './ExtensionsSection.module.scss'
 import { useExtensionsSection } from './useExtensionsSection'
 
 export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) => {
+  const context = useContext(TemplateSelectDialogContext)
   const { selection, items, onSearch, onRenderRow } = useExtensionsSection()
 
   return (
@@ -34,6 +37,11 @@ export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) =
                 />
               </div>
               {defaultRender(props_)}
+            </Sticky>
+          )}
+          onRenderDetailsFooter={() => (
+            <Sticky stickyPosition={StickyPositionType.Footer}>
+              {context.state.selectedTemplate?.listExtensionIds && <TemplateListContentConfigMessage />}
             </Sticky>
           )}
           items={items}
