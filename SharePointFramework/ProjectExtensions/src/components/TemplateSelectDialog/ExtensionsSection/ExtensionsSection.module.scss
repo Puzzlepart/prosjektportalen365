@@ -6,27 +6,11 @@
   padding: 10px 0 10px 0;
   height: 100%;
 
-  .item {
-    width: 50%;
-    display: inline-block;
-    vertical-align: top;
-    padding-right: 5px;
-    box-sizing: border-box;
+  div[class*="ms-List-cell"] {
+    min-height: 0px;
+  }
 
-    .toggle {
-      display: flex;
-      align-items: baseline;
-
-      .icon {
-        padding-left: 5px;
-        color: #a6a6a6;
-      }
-    }
-
-    .subText {
-      @include ms-font-s;
-      color: rgb(96, 94, 92);
-      margin: -6px 0 15px 0;
-    }
+  .searchBox {
+    margin: 10px 0 0 0;
   }
 }

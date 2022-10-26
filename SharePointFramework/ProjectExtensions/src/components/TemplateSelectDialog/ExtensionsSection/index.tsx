@@ -1,52 +1,52 @@
-import { Icon, Toggle } from '@fluentui/react'
-import { stringIsNullOrEmpty } from '@pnp/common'
-import React, { FunctionComponent, useContext } from 'react'
-import { ProjectExtension } from '../../../models'
-import { TemplateSelectDialogContext } from '../context'
+import { DetailsList, ScrollablePane, SearchBox, SelectionMode, Sticky, StickyPositionType } from '@fluentui/react'
+import strings from 'ProjectExtensionsStrings'
+import React, { FunctionComponent } from 'react'
 import styles from './ExtensionsSection.module.scss'
+import { useExtensionsSection } from './useExtensionsSection'
 
 export const ExtensionsSection: FunctionComponent = () => {
-  const context = useContext(TemplateSelectDialogContext)
-
-  /**
-   * On item toggle
-   *
-   * @param extension Extension
-   * @param checked Checked
-   */
-  function onChange(extension: ProjectExtension, checked: boolean): void {
-    let selectedExtensions = []
-    if (checked) selectedExtensions = [extension, ...context.state.selectedExtensions]
-    else
-      selectedExtensions = context.state.selectedExtensions.filter(
-        (ext) => extension.text !== ext.text
-      )
-    context.setState({ selectedExtensions })
-  }
-
-  const selectedKeys = context.state.selectedExtensions.map((ext) => ext.key)
+  const { selection, items, onSearch, onRenderRow } = useExtensionsSection()
 
   return (
     <div className={styles.root}>
-      {context.props.data.extensions.map((ext) => (
-        <div key={ext.key} className={styles.item}>
-          <div className={styles.toggle}>
-            <Toggle
-              label={ext.text}
-              defaultChecked={selectedKeys.indexOf(ext.key) !== -1}
-              disabled={context.state.selectedTemplate?.isDefaultExtensionsLocked && ext.isDefault}
-              inlineLabel={true}
-              onChange={(_event, checked) => onChange(ext, checked)}
-            />
-            {context.state.selectedTemplate?.isDefaultExtensionsLocked && ext.isDefault && (
-              <Icon iconName='Lock' className={styles.icon} />
+      <div style={{ height: 300 }}>
+        <ScrollablePane>
+          <DetailsList
+            setKey='set'
+            selection={selection}
+            selectionMode={SelectionMode.multiple}
+            selectionPreservedOnEmptyClick={true}
+            onRenderRow={onRenderRow}
+            onRenderDetailsHeader={(props_, defaultRender) => (
+              <Sticky stickyPosition={StickyPositionType.Header} >
+                <SearchBox
+                  className={styles.searchBox}
+                  placeholder={strings.ExtensionsSectionSearchPlaceholder}
+                  onChange={(_, newValue) => onSearch(newValue)}
+                  onSearch={(newValue) => onSearch(newValue)}
+                />
+                {defaultRender(props_)}
+              </Sticky>
             )}
-          </div>
-          <div className={styles.subText} hidden={stringIsNullOrEmpty(ext.subText)}>
-            <span>{ext.subText}</span>
-          </div>
-        </div>
-      ))}
+            items={items}
+            columns={[
+              {
+                key: 'text',
+                fieldName: 'text',
+                name: strings.TitleLabel,
+                minWidth: 150,
+                maxWidth: 150
+              },
+              {
+                key: 'subText',
+                fieldName: 'subText',
+                name: strings.DescriptionLabel,
+                minWidth: 250
+              }
+            ]}
+          />
+        </ScrollablePane>
+      </div>
     </div>
   )
 }
