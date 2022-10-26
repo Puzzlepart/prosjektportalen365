@@ -1,4 +1,11 @@
-import { DetailsList, ScrollablePane, SearchBox, SelectionMode, Sticky, StickyPositionType } from '@fluentui/react'
+import {
+  DetailsList,
+  ScrollablePane,
+  SearchBox,
+  SelectionMode,
+  Sticky,
+  StickyPositionType
+} from '@fluentui/react'
 import strings from 'ProjectExtensionsStrings'
 import React, { FunctionComponent } from 'react'
 import styles from './ExtensionsSection.module.scss'
@@ -18,13 +25,14 @@ export const ExtensionsSection: FunctionComponent = () => {
             selectionPreservedOnEmptyClick={true}
             onRenderRow={onRenderRow}
             onRenderDetailsHeader={(props_, defaultRender) => (
-              <Sticky stickyPosition={StickyPositionType.Header} >
-                <SearchBox
-                  className={styles.searchBox}
-                  placeholder={strings.ExtensionsSectionSearchPlaceholder}
-                  onChange={(_, newValue) => onSearch(newValue)}
-                  onSearch={(newValue) => onSearch(newValue)}
-                />
+              <Sticky stickyPosition={StickyPositionType.Header}>
+                <div className={styles.searchBox} hidden={items.length < 5}>
+                  <SearchBox
+                    placeholder={strings.ExtensionsSectionSearchPlaceholder}
+                    onChange={(_, newValue) => onSearch(newValue)}
+                    onSearch={(newValue) => onSearch(newValue)}
+                  />
+                </div>
                 {defaultRender(props_)}
               </Sticky>
             )}

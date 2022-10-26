@@ -1,4 +1,11 @@
-import { DetailsList, ScrollablePane, SearchBox, SelectionMode, Sticky, StickyPositionType } from '@fluentui/react'
+import {
+  DetailsList,
+  ScrollablePane,
+  SearchBox,
+  SelectionMode,
+  Sticky,
+  StickyPositionType
+} from '@fluentui/react'
 import React, { FunctionComponent } from 'react'
 import { ISearchableListProps } from './types'
 import styles from './SearchableList.module.scss'
@@ -18,7 +25,7 @@ export const SearchableList: FunctionComponent<ISearchableListProps> = (props) =
             selectionPreservedOnEmptyClick={true}
             onRenderRow={onRenderRow}
             onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
-              <Sticky stickyPosition={StickyPositionType.Header} >
+              <Sticky stickyPosition={StickyPositionType.Header}>
                 <SearchBox
                   {...props.searchBox}
                   className={styles.searchBox}
