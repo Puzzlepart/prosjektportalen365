@@ -3,7 +3,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with issue ID.
 
-## 1.7.1 - 25.10.2022
+## 1.7.2 - 26.10.2022
 
 ### Added
 
