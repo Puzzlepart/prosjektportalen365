@@ -1,7 +1,5 @@
 import {
-  DetailsList,
-  Icon,
-  ScrollablePane,
+  DetailsList, ScrollablePane,
   SearchBox,
   SelectAllVisibility,
   SelectionMode,
@@ -18,7 +16,7 @@ import { useListContentSection } from './useListContentSection'
 
 export const ListContentSection: TemplateSelectDialogSectionComponent = (props) => {
   const context = useContext(TemplateSelectDialogContext)
-  const { selection, items, onSearch, onRenderRow } = useListContentSection()
+  const { selection, items, columns, onSearch, onRenderRow } = useListContentSection()
 
   return (
     <div className={styles.root} style={props.style}>
@@ -50,32 +48,7 @@ export const ListContentSection: TemplateSelectDialogSectionComponent = (props) 
             </Sticky>
           )}
           items={items}
-          columns={[
-            {
-              key: 'text',
-              fieldName: 'text',
-              name: strings.TitleLabel,
-              minWidth: 150,
-              maxWidth: 150,
-              onRender: (item) => {
-                const isLocked =
-                  context.state.selectedTemplate?.isDefaultListContentLocked &&
-                  context.state.selectedTemplate?.listContentConfigIds.includes(item.id)
-                return (
-                  <div className={styles.titleColumn}>
-                    {isLocked && <Icon iconName='Lock' className={styles.lockIcon} />}
-                    <span>{item.text}</span>
-                  </div>
-                )
-              }
-            },
-            {
-              key: 'subText',
-              fieldName: 'subText',
-              name: strings.DescriptionLabel,
-              minWidth: 250
-            }
-          ]}
+          columns={columns}
         />
       </ScrollablePane>
     </div>

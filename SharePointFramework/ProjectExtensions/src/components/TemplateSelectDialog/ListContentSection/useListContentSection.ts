@@ -2,6 +2,7 @@ import { IDetailsRowProps, Selection } from '@fluentui/react'
 import { ListContentConfig } from 'models'
 import { useContext, useEffect, useState } from 'react'
 import { TemplateSelectDialogContext } from '../context'
+import { useColumns } from './useColumns'
 
 /**
  * Component logic hook for `ListContentSection`
@@ -40,5 +41,7 @@ export function useListContentSection() {
     return defaultRender(detailsRowProps)
   }
 
-  return { selection, items, onSearch: setSearchTerm, onRenderRow } as const
+  const columns = useColumns()
+
+  return { selection, items, columns, onSearch: setSearchTerm, onRenderRow } as const
 }

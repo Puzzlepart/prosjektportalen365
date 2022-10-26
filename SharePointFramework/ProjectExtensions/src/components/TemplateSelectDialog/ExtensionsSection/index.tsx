@@ -1,7 +1,5 @@
 import {
-  DetailsList,
-  Icon,
-  ScrollablePane,
+  DetailsList, ScrollablePane,
   SearchBox,
   SelectAllVisibility,
   SelectionMode,
@@ -18,7 +16,7 @@ import { useExtensionsSection } from './useExtensionsSection'
 
 export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) => {
   const context = useContext(TemplateSelectDialogContext)
-  const { selection, items, onSearch, onRenderRow } = useExtensionsSection()
+  const { selection, items, columns, onSearch, onRenderRow } = useExtensionsSection()
 
   return (
     <div className={styles.root} style={props.style}>
@@ -50,32 +48,7 @@ export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) =
             </Sticky>
           )}
           items={items}
-          columns={[
-            {
-              key: 'text',
-              fieldName: 'text',
-              name: strings.TitleLabel,
-              minWidth: 150,
-              maxWidth: 150,
-              onRender: (item) => {
-                const isLocked =
-                  context.state.selectedTemplate?.isDefaultExtensionsLocked &&
-                  context.state.selectedTemplate?.extensionIds.includes(item.id)
-                return (
-                  <div className={styles.titleColumn}>
-                    {isLocked && <Icon iconName='Lock' className={styles.lockIcon} />}
-                    <span>{item.text}</span>
-                  </div>
-                )
-              }
-            },
-            {
-              key: 'subText',
-              fieldName: 'subText',
-              name: strings.DescriptionLabel,
-              minWidth: 250
-            }
-          ]}
+          columns={columns}
         />
       </ScrollablePane>
     </div>
