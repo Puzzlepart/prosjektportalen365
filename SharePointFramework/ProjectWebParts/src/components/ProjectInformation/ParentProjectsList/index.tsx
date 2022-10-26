@@ -1,11 +1,11 @@
 import { Icon, Link } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
-import React, { FunctionComponent, useContext } from 'react'
+import React, { FC, useContext } from 'react'
 import { isEmpty } from 'underscore'
 import { ProjectInformationContext } from '../context'
 import styles from './ParentProjectsList.module.scss'
 
-export const ParentProjectsList: FunctionComponent = () => {
+export const ParentProjectsList: FC = () => {
   const context = useContext(ProjectInformationContext)
   const projects = context.state?.data?.parentProjects || []
   if (context.props.hideParentProjects || isEmpty(projects)) return null

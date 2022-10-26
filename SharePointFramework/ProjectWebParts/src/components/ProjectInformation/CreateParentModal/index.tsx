@@ -9,11 +9,11 @@ import {
   SpinnerSize
 } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
-import React, { FunctionComponent, useContext, useState } from 'react'
+import React, { FC, useContext, useState } from 'react'
 import { ProjectInformationContext } from '../context'
 import { ProjectSetupCustomAction } from './ProjectSetupCustomAction'
 
-export const CreateParentModal: FunctionComponent = () => {
+export const CreateParentModal: FC = () => {
   const context = useContext(ProjectInformationContext)
   const [isLoading, setLoading] = useState(false)
 

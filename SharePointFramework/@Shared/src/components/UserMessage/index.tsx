@@ -5,7 +5,7 @@ import {
 } from 'office-ui-fabric-react/lib/MessageBar'
 import { IStyleFunctionOrObject } from 'office-ui-fabric-react'
 import * as React from 'react'
-import { FunctionComponent } from 'react'
+import { FC } from 'react'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import { IUserMessageProps } from './types'
@@ -15,7 +15,7 @@ import { IUserMessageProps } from './types'
  *
  * @category UserMessage
  */
-export const UserMessage: FunctionComponent<IUserMessageProps> = (props: IUserMessageProps) => {
+export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => {
   const _styles: IStyleFunctionOrObject<IMessageBarStyleProps, IMessageBarStyles> = {}
 
   if (props.fixedCenter) {

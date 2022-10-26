@@ -1,7 +1,7 @@
 import { MessageBarType, Shimmer } from '@fluentui/react'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { FunctionComponent, useEffect, useReducer, useRef } from 'react'
+import React, { FC, useEffect, useReducer, useRef } from 'react'
 import { changePhase } from './changePhase'
 import { ChangePhaseDialog } from './ChangePhaseDialog'
 import { ProjectPhasesContext } from './context'
@@ -20,7 +20,7 @@ import reducer, {
 import { getShimmerElements } from './shimmer'
 import { IProjectPhasesProps } from './types'
 
-export const ProjectPhases: FunctionComponent<IProjectPhasesProps> = (props) => {
+export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
   const root = useRef(null)
   const [state, dispatch] = useReducer(reducer, initState())
 

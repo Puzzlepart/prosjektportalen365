@@ -12,11 +12,11 @@ import {
   SpinnerSize
 } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
-import React, { FunctionComponent, useContext, useEffect, useState } from 'react'
+import React, { FC, useContext, useEffect, useState } from 'react'
 import SPDataAdapter from '../../../data'
 import { ProjectInformationContext } from '../context'
 
-export const SyncProjectModal: FunctionComponent = () => {
+export const SyncProjectModal: FC = () => {
   const context = useContext(ProjectInformationContext)
   const [isLoading, setLoading] = useState(true)
   const [isSyncing, setSyncing] = useState(false)

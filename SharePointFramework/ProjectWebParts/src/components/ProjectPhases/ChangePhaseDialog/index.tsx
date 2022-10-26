@@ -3,7 +3,7 @@ import SPDataAdapter from 'data'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { FunctionComponent, useContext, useEffect, useReducer } from 'react'
+import React, { FC, useContext, useEffect, useReducer } from 'react'
 import _ from 'underscore'
 import { ProjectPhasesContext } from '../context'
 import { DISMISS_CHANGE_PHASE_DIALOG } from '../reducer'
@@ -14,7 +14,7 @@ import { Footer } from './Footer'
 import reducer, { CHECKLIST_ITEM_UPDATED, INIT } from './reducer'
 import { View } from './Views'
 
-export const ChangePhaseDialog: FunctionComponent = () => {
+export const ChangePhaseDialog: FC = () => {
   const context = useContext(ProjectPhasesContext)
   if (!context.state.confirmPhase) return null
   const [state, dispatch] = useReducer(reducer, {})

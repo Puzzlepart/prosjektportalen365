@@ -1,10 +1,10 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import { IRenderItemColumnProps } from '../IRenderItemColumnProps'
 import { Tag } from './Tag'
 import styles from './TagsColumn.module.scss'
 
-export const TagsColumn: FunctionComponent<IRenderItemColumnProps> = ({
+export const TagsColumn: FC<IRenderItemColumnProps> = ({
   columnValue,
   valueSeparator = ';',
   style

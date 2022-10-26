@@ -1,12 +1,12 @@
 import { PortfolioAggregation } from 'components/PortfolioAggregation'
 import { Benefit, BenefitMeasurement, BenefitMeasurementIndicator } from 'models'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import styles from './BenefitsOverview.module.scss'
 import { getColumns } from './columns'
 import * as config from './config'
 import { IBenefitsOverviewProps } from './types'
 
-export const BenefitsOverview: FunctionComponent<IBenefitsOverviewProps> = (props) => {
+export const BenefitsOverview: FC<IBenefitsOverviewProps> = (props) => {
   /**
    * Post fetch
    *

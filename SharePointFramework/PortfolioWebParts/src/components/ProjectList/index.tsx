@@ -16,7 +16,7 @@ import { ProjectListModel } from 'models'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
 import { getObjectValue } from 'pp365-shared/lib/helpers'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import { isEmpty } from 'underscore'
 import { ProjectCard } from './ProjectCard'
 import styles from './ProjectList.module.scss'
@@ -24,7 +24,7 @@ import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
 
-export const ProjectList: FunctionComponent<IProjectListProps> = (props) => {
+export const ProjectList: FC<IProjectListProps> = (props) => {
   const {
     state,
     setState,

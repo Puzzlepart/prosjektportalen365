@@ -3,7 +3,7 @@ import { Shimmer } from '@fluentui/react/lib/Shimmer'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
 import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import { ProgressDialog } from '../ProgressDialog'
 import { Actions } from './Actions'
 import { ProjectInformationContext } from './context'
@@ -15,7 +15,7 @@ import { SyncProjectModal } from './SyncProjectModal'
 import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
 
-export const ProjectInformation: FunctionComponent<IProjectInformationProps> = (props) => {
+export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
   const { state, setState, onSyncProperties } = useProjectInformation(props)
   if (state.hidden) return null
 

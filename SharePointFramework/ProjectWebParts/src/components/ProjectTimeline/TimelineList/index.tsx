@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { FunctionComponent } from 'react'
+import { FC } from 'react'
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import styles from './TimelineList.module.scss'
 import { get } from '@microsoft/sp-lodash-subset'
@@ -24,7 +24,7 @@ export interface ITimelineListProps extends IBaseWebPartComponentProps {
   isSelectionModeNone?: boolean
 }
 
-export const TimelineList: FunctionComponent<ITimelineListProps> = (props) => {
+export const TimelineList: FC<ITimelineListProps> = (props) => {
   const context = useContext(ProjectTimelineContext)
   const [selectedItem, setSelectedItem] = useState([])
 

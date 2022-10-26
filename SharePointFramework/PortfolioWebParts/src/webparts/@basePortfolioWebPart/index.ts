@@ -24,7 +24,7 @@ export abstract class BasePortfolioWebPart<
    * @param props Props
    */
   public renderComponent<T = any>(
-    component: React.ComponentClass<T> | React.FunctionComponent<T>,
+    component: React.ComponentClass<T> | React.FC<T>,
     props?: T
   ): void {
     const combinedProps = assign({ title: this._pageTitle }, this.properties, props, {

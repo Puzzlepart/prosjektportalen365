@@ -1,9 +1,9 @@
 import { Panel, PanelType } from '@fluentui/react'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import { Filter } from './Filter'
 import { IFilterPanelProps } from './types'
 
-export const FilterPanel: FunctionComponent<IFilterPanelProps> = (props) => {
+export const FilterPanel: FC<IFilterPanelProps> = (props) => {
   return (
     <Panel {...props} type={PanelType.smallFixedFar}>
       <div>

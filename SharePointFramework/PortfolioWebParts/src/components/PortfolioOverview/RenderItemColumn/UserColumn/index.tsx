@@ -1,10 +1,10 @@
 import { Persona, PersonaPresence, PersonaSize } from '@fluentui/react/lib/Persona'
 import { ProjectColumn } from 'pp365-shared/lib/models'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import { SearchValueType } from 'types'
 import { IRenderItemColumnProps } from '../IRenderItemColumnProps'
 
-export const UserColumn: FunctionComponent<IRenderItemColumnProps> = ({ columnValue, column }) => {
+export const UserColumn: FC<IRenderItemColumnProps> = ({ columnValue, column }) => {
   const isMultiUser = columnValue?.indexOf(';') !== -1
   if (isMultiUser) {
     return (

@@ -3,14 +3,14 @@ import { DisplayMode } from '@microsoft/sp-core-library'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { FunctionComponent, useContext } from 'react'
+import React, { FC, useContext } from 'react'
 import { isEmpty } from 'underscore'
 import { ProjectInformationContext } from '../context'
 import styles from './ProjectProperties.module.scss'
 import { ProjectProperty } from './ProjectProperty'
 import { IProjectPropertiesProps } from './types'
 
-export const ProjectProperties: FunctionComponent<IProjectPropertiesProps> = ({ properties }) => {
+export const ProjectProperties: FC<IProjectPropertiesProps> = ({ properties }) => {
   const context = useContext(ProjectInformationContext)
   const nonEmptyProperties = properties.filter(({ empty }) => !empty)
 
