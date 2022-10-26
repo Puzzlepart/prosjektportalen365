@@ -27,7 +27,7 @@ export const ListContentSection: TemplateSelectDialogSectionComponent = (props) 
           selectionMode={SelectionMode.multiple}
           selectionPreservedOnEmptyClick={true}
           onRenderRow={onRenderRow}
-          onRenderDetailsHeader={(props_, defaultRender) => (
+          onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
             <Sticky stickyPosition={StickyPositionType.Header}>
               <div className={styles.searchBox} hidden={items.length < 5}>
                 <SearchBox
@@ -36,7 +36,7 @@ export const ListContentSection: TemplateSelectDialogSectionComponent = (props) 
                   onSearch={(newValue) => onSearch(newValue)}
                 />
               </div>
-              {defaultRender(props_)}
+              {defaultRender(detailsHeaderProps)}
             </Sticky>
           )}
           onRenderDetailsFooter={() => (
