@@ -5,7 +5,10 @@ import styles from './ListContentSection.module.scss'
 import { useListContentSection } from './useListContentSection'
 
 export const ListContentSection: FunctionComponent = () => {
-  const { selection, items, onSearch } = useListContentSection()
+  const { selection, items, onSearch, setKey } = useListContentSection()
+
+  // eslint-disable-next-line no-console
+  console.log(setKey)
 
   return (
     <div className={styles.root}>
@@ -15,6 +18,7 @@ export const ListContentSection: FunctionComponent = () => {
         onSearch={(newValue) => onSearch(newValue)}
       />
       <DetailsList
+        setKey={setKey}
         selection={selection}
         selectionMode={SelectionMode.multiple}
         items={items}

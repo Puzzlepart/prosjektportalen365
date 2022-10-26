@@ -1,6 +1,6 @@
 import { Selection } from '@fluentui/react'
 import { ListContentConfig } from 'models'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { TemplateSelectDialogContext } from '../context'
 
 /**
@@ -8,32 +8,29 @@ import { TemplateSelectDialogContext } from '../context'
  */
 export function useListContentSection() {
   const context = useContext(TemplateSelectDialogContext)
-  const selectedKeys = context.state.selectedListContentConfig.map((lc) => lc.key)
-  const [selection, setSelection] = useState<Selection<ListContentConfig>>(
-    new Selection({
-      onSelectionChanged
-    })
-  )
-  let onSelectionChangedTimeout = null
-  function onSelectionChanged() {
-    window.clearTimeout(onSelectionChangedTimeout)
-    onSelectionChangedTimeout = window.setTimeout(() => {
-      const selectedListContentConfig = selection.getSelection()
-      if (selectedListContentConfig.map((lc) => lc.key) !== selectedKeys) {
-        context.setState({ selectedListContentConfig })
-      }
-    }, 1000)
-  }
+  const selectedKeys = useMemo(() => context.state.selectedListContentConfig.map((lc) => lc.key), [
+    context.state.selectedListContentConfig
+  ])
+  const [selection, setSelection] = useState<Selection<ListContentConfig>>(new Selection())
   const [searchTerm, setSearchTerm] = useState('')
+  const [setKey, setSetKey] = useState(new Date().getTime().toString())
+
+  function onSelectionChanged() {
+    if (selectedKeys !== selection.getSelection().map((lc) => lc.key)) {
+      context.setState({ selectedListContentConfig: selection.getSelection() })
+    }
+  }
 
   useEffect(() => {
-    for (const key in selectedKeys) selection.setKeySelected(key, true, true)
-    setSelection(selection)
+    const _selection = new Selection<ListContentConfig>({ onSelectionChanged })
+    selectedKeys.forEach((key) => _selection.setKeySelected(key, true, true))
+    setSelection(_selection)
+    setSetKey(new Date().getTime().toString())
   }, [context.state.selectedListContentConfig, searchTerm])
 
   const items = context.props.data.listContentConfig.filter(
     (lcc) => !lcc.hidden && lcc.text.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1
   )
 
-  return { selection, items, onSearch: setSearchTerm } as const
+  return { selection, items, onSearch: setSearchTerm, setKey } as const
 }
