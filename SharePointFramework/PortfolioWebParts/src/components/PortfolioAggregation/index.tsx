@@ -51,7 +51,7 @@ export const PortfolioAggregation: FunctionComponent<IPortfolioAggregationProps>
               )
             }}
             columns={[
-              ...getDefaultColumns(props.pageContext),
+              ...getDefaultColumns(props),
               ...items.columns,
               !props.lockedColumns && addColumn()
             ].filter((c) => c)}

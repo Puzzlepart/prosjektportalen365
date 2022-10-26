@@ -89,7 +89,7 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
   activeFilters: {},
   filters: [],
   items: [],
-  columns: props.columns || [],
+  columns: props.columns ?? [],
   dataSource: !props.configuration
     ? props.dataSource
     : first(props.configuration.views)?.title || props.dataSource,
