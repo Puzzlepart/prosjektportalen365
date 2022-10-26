@@ -24,7 +24,7 @@ export function useExtensionsSection() {
     setSelection(__selection)
   }, [searchTerm])
 
-  const items = context.props.data.extensions
+  const items = context.props.data.extensions.filter((ext) => !ext.hidden)
 
   function onRenderRow(
     detailsRowProps: IDetailsRowProps,
