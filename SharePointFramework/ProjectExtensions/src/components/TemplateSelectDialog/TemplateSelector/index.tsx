@@ -1,5 +1,6 @@
 import { ISearchBoxProps, SearchBox } from '@fluentui/react'
 import { ProjectTemplate } from 'models'
+import strings from 'ProjectExtensionsStrings'
 import React, { FunctionComponent, useContext, useState } from 'react'
 import Autocomplete from 'react-autocomplete'
 import { TemplateSelectDialogContext } from '../context'
@@ -42,7 +43,7 @@ export const TemplateSelector: FunctionComponent = () => {
               <TemplateSelectorItem template={template} isHighlighted={isHighlighted} />
             </div>
           )}
-          inputProps={{ className: styles.searchBox }}
+          inputProps={{ className: styles.searchBox, placeholder: strings.TemplateSelectorSearchPlaceholder }}
           renderInput={(inputProps) => (
             <SearchBox
               {...(inputProps as ISearchBoxProps)}

@@ -16,7 +16,7 @@ export const ListContentSection: FunctionComponent = () => {
 
   return (
     <div className={styles.root}>
-      <div style={{ height: 300 }}>
+      <div style={{ height: 350 }}>
         <ScrollablePane>
           <DetailsList
             setKey='set'
