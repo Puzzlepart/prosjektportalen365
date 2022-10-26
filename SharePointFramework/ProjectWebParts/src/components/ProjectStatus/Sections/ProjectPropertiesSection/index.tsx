@@ -6,9 +6,7 @@ import styles from './ProjectPropertiesSection.module.scss'
 import { StatusSectionField } from './StatusSectionField'
 import { IProjectPropertiesSectionProps } from './types'
 
-export const ProjectPropertiesSection: FC<IProjectPropertiesSectionProps> = (
-  props
-) => {
+export const ProjectPropertiesSection: FC<IProjectPropertiesSectionProps> = (props) => {
   /**
    * Render fields specified in model.viewFields
    */
