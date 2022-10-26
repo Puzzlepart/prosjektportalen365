@@ -3,6 +3,7 @@ import {
   Icon,
   ScrollablePane,
   SearchBox,
+  SelectAllVisibility,
   SelectionMode,
   Sticky,
   StickyPositionType
@@ -37,7 +38,10 @@ export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) =
                   onSearch={(newValue) => onSearch(newValue)}
                 />
               </div>
-              {defaultRender(detailsHeaderProps)}
+              {defaultRender({
+                ...detailsHeaderProps,
+                selectAllVisibility: SelectAllVisibility.hidden
+              })}
             </Sticky>
           )}
           onRenderDetailsFooter={() => (

@@ -33,8 +33,8 @@ export function useListContentSection() {
     const { item } = detailsRowProps
     const { selectedTemplate } = context.state
     const isLocked =
-      (selectedTemplate?.isDefaultListContentLocked &&
-      selectedTemplate?.listContentConfigIds.includes(item.id))
+      selectedTemplate?.isDefaultListContentLocked &&
+      selectedTemplate?.listContentConfigIds.includes(item.id)
     if (isLocked) detailsRowProps.disabled = true
     if (item.text.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1) return null
     return defaultRender(detailsRowProps)

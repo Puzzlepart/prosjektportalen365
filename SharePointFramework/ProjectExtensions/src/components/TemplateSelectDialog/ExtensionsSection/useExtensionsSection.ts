@@ -33,8 +33,8 @@ export function useExtensionsSection() {
     const { item } = detailsRowProps
     const { selectedTemplate } = context.state
     const isLocked =
-      (selectedTemplate?.isDefaultExtensionsLocked &&
-      selectedTemplate?.extensionIds.includes(item.id))
+      selectedTemplate?.isDefaultExtensionsLocked &&
+      selectedTemplate?.extensionIds.includes(item.id)
     if (isLocked) detailsRowProps.disabled = true
     if (item.text.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1) return null
     return defaultRender(detailsRowProps)
