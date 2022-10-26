@@ -31,13 +31,9 @@ export function useExtensionsSection() {
     detailsRowProps: IDetailsRowProps,
     defaultRender: (props?: IDetailsRowProps) => JSX.Element
   ) {
-    const { item } = detailsRowProps
-    const { selectedTemplate } = context.state
-    const isLocked =
-      selectedTemplate?.isDefaultExtensionsLocked &&
-      selectedTemplate?.extensionIds.includes(item.id)
-    if (isLocked) detailsRowProps.disabled = true
-    if (item.text.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1) return null
+    const ext = detailsRowProps.item as ProjectExtension
+    if (ext.isLocked(context.state.selectedTemplate)) detailsRowProps.disabled = true
+    if (ext.text.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1) return null
     return defaultRender(detailsRowProps)
   }
 

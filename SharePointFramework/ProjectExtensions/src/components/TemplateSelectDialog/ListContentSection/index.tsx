@@ -1,5 +1,6 @@
 import {
-  DetailsList, ScrollablePane,
+  DetailsList,
+  ScrollablePane,
   SearchBox,
   SelectAllVisibility,
   SelectionMode,

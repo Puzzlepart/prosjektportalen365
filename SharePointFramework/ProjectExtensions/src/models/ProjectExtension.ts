@@ -2,6 +2,7 @@ import { getId, IObjectWithKey } from '@fluentui/react'
 import { TypedHash } from '@pnp/common'
 import { Web } from '@pnp/sp'
 import { Schema } from 'sp-js-provisioning'
+import { ProjectTemplate } from './ProjectTemplate'
 
 export interface IProjectExtension {
   Id: number
@@ -29,6 +30,15 @@ export class ProjectExtension implements IObjectWithKey {
     this.subText = spItem.FieldValuesAsText.GtDescription
     this.serverRelativeUrl = spItem.File.ServerRelativeUrl
     this.id = spItem.Id
+  }
+
+  /**
+   * Checks if the project extension is locked
+   *
+   * @param template Project template
+   */
+  public isLocked(template: ProjectTemplate): boolean {
+    return template?.isDefaultExtensionsLocked && template?.extensionIds.includes(this.id)
   }
 
   public async getSchema(): Promise<Schema> {

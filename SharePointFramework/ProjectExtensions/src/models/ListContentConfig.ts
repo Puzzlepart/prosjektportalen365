@@ -2,6 +2,7 @@ import { getId, IObjectWithKey } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { List, sp, Web } from '@pnp/sp'
 import { IListProperties } from './IListProperties'
+import { ProjectTemplate } from './ProjectTemplate'
 
 export interface IListContentConfigSPItem {
   ContentTypeId: string
@@ -44,6 +45,15 @@ export class ListContentConfig implements IObjectWithKey {
     this.hidden = _spItem.GtLccHidden
     this._sourceList = _spItem.GtLccSourceList
     this._destinationList = _spItem.GtLccDestinationList
+  }
+
+  /**
+   * Checks if the list content config is locked
+   *
+   * @param template Project template
+   */
+  public isLocked(template: ProjectTemplate): boolean {
+    return template?.isDefaultListContentLocked && template?.listContentConfigIds.includes(this.id)
   }
 
   public get type(): ListContentConfigType {
