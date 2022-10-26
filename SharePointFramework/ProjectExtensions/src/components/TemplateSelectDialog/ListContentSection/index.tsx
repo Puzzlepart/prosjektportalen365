@@ -14,7 +14,7 @@ export const ListContentSection: FunctionComponent = () => {
    * @param listContentConfig List content config
    * @param checked Checked
    */
-  const onChanged = (listContentConfig: ListContentConfig, checked: boolean): void => {
+  function onChanged(listContentConfig: ListContentConfig, checked: boolean): void {
     let selectedListContentConfig = []
     if (checked) {
       selectedListContentConfig = [listContentConfig, ...context.state.selectedListContentConfig]

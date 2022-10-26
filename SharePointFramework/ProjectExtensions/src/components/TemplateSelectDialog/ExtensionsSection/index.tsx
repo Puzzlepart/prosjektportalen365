@@ -7,20 +7,19 @@ import styles from './ExtensionsSection.module.scss'
 
 export const ExtensionsSection: FunctionComponent = () => {
   const context = useContext(TemplateSelectDialogContext)
-  
+
   /**
    * On item toggle
    *
    * @param extension Extension
    * @param checked Checked
    */
-  const onChange = (extension: ProjectExtension, checked: boolean): void => {
+  function onChange(extension: ProjectExtension, checked: boolean): void {
     let selectedExtensions = []
     if (checked) selectedExtensions = [extension, ...context.state.selectedExtensions]
     else selectedExtensions = context.state.selectedExtensions.filter((ext) => extension.text !== ext.text)
     context.setState({ selectedExtensions })
   }
-
 
   const selectedKeys = context.state.selectedExtensions.map((ext) => ext.key)
 
