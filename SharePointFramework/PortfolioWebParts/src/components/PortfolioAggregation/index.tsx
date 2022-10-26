@@ -23,9 +23,6 @@ import { usePortfolioAggregation } from './usePortfolioAggregation'
 export const PortfolioAggregation: FunctionComponent<IPortfolioAggregationProps> = (props) => {
   const { state, dispatch, items, layerHostId, ctxValue } = usePortfolioAggregation(props)
 
-  // eslint-disable-next-line no-console
-  console.log({ items: state.items, columns: state.columns })
-
   if (state.error) {
     return <UserMessage type={MessageBarType.error} text={state.error.message} />
   }
@@ -54,7 +51,7 @@ export const PortfolioAggregation: FunctionComponent<IPortfolioAggregationProps>
               )
             }}
             columns={[
-              ...getDefaultColumns(props.pageContext),
+              ...getDefaultColumns(props),
               ...items.columns,
               !props.lockedColumns && addColumn()
             ].filter((c) => c)}

@@ -10,9 +10,7 @@
     "sharepoint": true,
     "temp": true,
     "teams": true,
-    "release": true,
-    "src/components/BenefitsOverview": true,
-    "src/webparts/benefitsOverview": true
+    "release": true
   },
   "typescript.tsdk": ".\\node_modules\\typescript\\lib"
 }
