@@ -1,10 +1,7 @@
 /* eslint-disable no-console */
 import {
   DefaultButton,
-  DialogFooter,
-  MessageBar,
-  MessageBarType,
-  Pivot,
+  DialogFooter, Pivot,
   PivotItem,
   PrimaryButton
 } from '@fluentui/react'
@@ -16,6 +13,7 @@ import { ProjectSetupSettings } from '../../projectSetup/ProjectSetupSettings'
 import { BaseDialog } from '../@BaseDialog'
 import { ExtensionsSection } from './ExtensionsSection'
 import { ListContentSection } from './ListContentSection'
+import { TemplateListContentConfigMessage } from './TemplateListContentConfigMessage'
 import styles from './TemplateSelectDialog.module.scss'
 import { TemplateSelector } from './TemplateSelector'
 import { ITemplateSelectDialogProps, ITemplateSelectDialogState } from './types'
@@ -65,19 +63,13 @@ export class TemplateSelectDialog extends Component<
               onChange={this._onTemplateChange.bind(this)}
             />
             {(selectedTemplate.listContentConfigIds || selectedTemplate.listExtensionIds) && (
-              <MessageBar messageBarType={MessageBarType.info}>
-                {strings.TemplateListContentConfigText}
-              </MessageBar>
+              <TemplateListContentConfigMessage selectedTemplate={selectedTemplate} />
             )}
           </PivotItem>
           {!isEmpty(data.extensions) && (
             <PivotItem headerText={strings.ExtensionsTitle} itemIcon='ArrangeBringForward'>
               {selectedTemplate.listExtensionIds && (
-                <div style={{ marginTop: 20 }}>
-                  <MessageBar messageBarType={MessageBarType.info}>
-                    {strings.TemplateListContentConfigText}
-                  </MessageBar>
-                </div>
+                <TemplateListContentConfigMessage selectedTemplate={selectedTemplate} />
               )}
               <ExtensionsSection
                 extensions={data.extensions}
@@ -90,11 +82,7 @@ export class TemplateSelectDialog extends Component<
           {!isEmpty(data.listContentConfig) && (
             <PivotItem headerText={strings.ListContentTitle} itemIcon='ViewList'>
               {selectedTemplate.listContentConfigIds && (
-                <div style={{ marginTop: 20 }}>
-                  <MessageBar messageBarType={MessageBarType.info}>
-                    {strings.TemplateListContentConfigText}
-                  </MessageBar>
-                </div>
+                <TemplateListContentConfigMessage selectedTemplate={selectedTemplate} />
               )}
               <ListContentSection
                 listContentConfig={data.listContentConfig}
