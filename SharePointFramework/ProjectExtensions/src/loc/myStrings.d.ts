@@ -1,4 +1,5 @@
 declare interface IProjectExtensionsStrings {
+  TemplateSelectorSearchClearText: string
   TemplateSelectorSearchPlaceholder: string
   ExtensionsSectionSearchPlaceholder: string
   ListContentSectionSearchPlaceholder: string

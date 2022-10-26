@@ -1,5 +1,6 @@
 define([], function () {
     return {
+        TemplateSelectorSearchClearText:'Nullstill valg av prosjektmal',
         TemplateSelectorSearchPlaceholder: 'Søk i prosjektmaler...',
         ExtensionsSectionSearchPlaceholder: 'Søk i prosjekttillegg...',
         ListContentSectionSearchPlaceholder: 'Søk i standardinnhold...',
