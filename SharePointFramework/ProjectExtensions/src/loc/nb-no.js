@@ -1,5 +1,6 @@
 define([], function () {
     return {
+        ExtensionsSectionSearchPlaceholder:'Søk i prosjekttillegg...',
         ListContentSectionSearchPlaceholder: 'Søk i standardinnhold...',
         PermissionConfigurationList: 'Tillatelseskonfigurasjon',
         SitePermissionsText: 'Setter opp tillatelser for området',

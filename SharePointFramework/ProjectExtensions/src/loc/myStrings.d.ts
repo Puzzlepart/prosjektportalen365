@@ -1,4 +1,5 @@
 declare interface IProjectExtensionsStrings {
+  ExtensionsSectionSearchPlaceholder: string
   ListContentSectionSearchPlaceholder: string
   PermissionConfigurationList: string
   SitePermissionsText: string
